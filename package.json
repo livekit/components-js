@@ -1,0 +1,31 @@
+{
+  "name": "@livekit/auth-helpers",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "build:nextjs": "turbo run build --filter=@livekit/auth-helpers-nextjs",
+    "build:react": "turbo run build --filter=@livekit/auth-helpers-react",
+    "build:shared": "turbo run build --filter=@livekit/auth-helpers-shared",
+    "dev": "turbo run dev --parallel",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "docs": "typedoc",
+    "clean:all": "turbo run clean:all"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.22.0",
+    "@changesets/changelog-github": "^0.4.4",
+    "prettier": "^2.5.1",
+    "turbo": "^1.2.3",
+    "typescript": "4.0.x || 4.1.x || 4.2.x || 4.3.x || 4.4.x || 4.5.x || 4.6.x"
+  },
+  "peerDependencies": {
+    "typescript": "4.0.x || 4.1.x || 4.2.x || 4.3.x || 4.4.x || 4.5.x || 4.6.x"
+  },
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ]
+}

@@ -1,6 +1,6 @@
-import React, { ReactNode, useCallback, useContext, useEffect, useState } from 'react';
+import React, { ReactNode, useContext, useEffect, useState } from 'react';
 // import { useParticipant as useParticipantHook } from '@livekit/react-core';
-import { ConnectionState, Room, RoomEvent } from 'livekit-client';
+import { AudioTrack, ConnectionState, Participant, Room, RoomEvent } from 'livekit-client';
 
 type RoomProviderProps = {
   children: Array<ReactNode> | ReactNode;
@@ -9,23 +9,33 @@ type RoomProviderProps = {
 type RoomContextState = {
   room: Room;
   connectionState: ConnectionState;
+  participants: Participant[];
+  audioTracks: AudioTrack[];
 };
 
 const RoomContext = React.createContext<RoomContextState>({
   room: new Room(),
   connectionState: ConnectionState.Disconnected,
+  audioTracks: [],
+  participants: [],
 });
 
 export function useRoom() {
   return useContext(RoomContext);
 }
 
-export function useToken(identity: string, roomName: string) {
+export function useToken(roomName: string, identity: string) {
   const [token, setToken] = useState<string | undefined>(undefined);
-  useCallback(async () => {
-    const res = await fetch(`/api/livekit/token?roomName=${roomName}&identity=${identity}`);
-    const { accessToken } = await res.json();
-    setToken(accessToken);
+  useEffect(() => {
+    const tokenFetcher = async () => {
+      console.log('fetching token');
+      const res = await fetch(
+        process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT + `?roomName=${roomName}&identity=${identity}`,
+      );
+      const { accessToken } = await res.json();
+      setToken(accessToken);
+    };
+    tokenFetcher();
   }, [identity, roomName]);
   return token;
 }
@@ -44,16 +54,45 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
   const [roomState, setRoomState] = useState<RoomContextState>({
     room: room,
     connectionState: ConnectionState.Disconnected,
+    audioTracks: [],
+    participants: [],
   });
 
+  const getAudioTracks = () => {
+    const tracks: AudioTrack[] = [];
+    room.participants.forEach(p => {
+      p.audioTracks.forEach(pub => {
+        if (pub.audioTrack) {
+          tracks.push(pub.audioTrack);
+        }
+      });
+    });
+    return tracks;
+  };
+
   const handleRoomUpdate = () => {
-    setRoomState({ room: room, connectionState: room.state });
+    setRoomState({
+      room: room,
+      connectionState: room.state,
+      audioTracks: getAudioTracks(),
+      participants: [room.localParticipant, ...Array.from(room.participants.values())],
+    });
   };
   useEffect(() => {
     room.on(RoomEvent.ParticipantConnected, handleRoomUpdate);
     room.on(RoomEvent.ParticipantDisconnected, handleRoomUpdate);
     room.on(RoomEvent.RoomMetadataChanged, handleRoomUpdate);
     room.on(RoomEvent.ConnectionStateChanged, handleRoomUpdate);
+    room.on(RoomEvent.TrackSubscribed, handleRoomUpdate);
+    room.on(RoomEvent.TrackUnsubscribed, handleRoomUpdate);
+    return () => {
+      room.off(RoomEvent.ParticipantConnected, handleRoomUpdate);
+      room.off(RoomEvent.ParticipantDisconnected, handleRoomUpdate);
+      room.off(RoomEvent.RoomMetadataChanged, handleRoomUpdate);
+      room.off(RoomEvent.ConnectionStateChanged, handleRoomUpdate);
+      room.off(RoomEvent.TrackSubscribed, handleRoomUpdate);
+      room.off(RoomEvent.TrackUnsubscribed, handleRoomUpdate);
+    };
   });
   console.log('rendering room provider');
   return <RoomContext.Provider value={roomState}>{children}</RoomContext.Provider>;

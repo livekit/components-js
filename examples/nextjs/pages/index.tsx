@@ -1,4 +1,4 @@
-import { useRoom, useToken } from '@livekit/auth-helpers-nextjs';
+import { useRoom, useToken, ParticipantView } from '@livekit/auth-helpers-nextjs';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -17,9 +17,10 @@ const Home: NextPage = () => {
           console.error('no livekit url provided');
           return;
         }
-        roomState.room.connect(process.env.NEXT_PUBLIC_LK_SERVER_URL, token).catch((e: unknown) => {
+        roomState.room.connect(process.env.NEXT_PUBLIC_LK_SERVER_URL, token).then(() => {roomState.room.localParticipant.enableCameraAndMicrophone();}).catch((e: unknown) => {
           console.warn('could not connect', e);
         })
+        
     }, [token]);
   
   return (
@@ -35,6 +36,9 @@ const Home: NextPage = () => {
           Welcome to <a href="https://livekit.io">LiveKit</a> 
         </h1>
         <p>Status: {roomState.connectionState} <br/> Nr. of participants: {roomState.participants.length} </p>
+        <div className='participants'>
+          {roomState.participants.map(p => <ParticipantView participant={p} key={p.identity} />)}
+        </div>
       </main>
       
     </div>

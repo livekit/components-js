@@ -1,6 +1,13 @@
 import React, { ReactNode, useContext, useEffect, useState } from 'react';
 // import { useParticipant as useParticipantHook } from '@livekit/react-core';
-import { AudioTrack, ConnectionState, Participant, Room, RoomEvent } from 'livekit-client';
+import {
+  AudioTrack,
+  ConnectionState,
+  Participant,
+  Room,
+  RoomEvent,
+  setLogLevel,
+} from 'livekit-client';
 
 type RoomProviderProps = {
   children: Array<ReactNode> | ReactNode;
@@ -50,6 +57,7 @@ export function useToken(roomName: string, identity: string) {
 // }
 
 export const RoomProvider = ({ children }: RoomProviderProps) => {
+  setLogLevel('debug');
   const [room] = useState<Room>(new Room());
   const [roomState, setRoomState] = useState<RoomContextState>({
     room: room,
@@ -85,6 +93,8 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
     room.on(RoomEvent.ConnectionStateChanged, handleRoomUpdate);
     room.on(RoomEvent.TrackSubscribed, handleRoomUpdate);
     room.on(RoomEvent.TrackUnsubscribed, handleRoomUpdate);
+    room.on(RoomEvent.LocalTrackPublished, handleRoomUpdate);
+    room.on(RoomEvent.LocalTrackUnpublished, handleRoomUpdate);
     return () => {
       room.off(RoomEvent.ParticipantConnected, handleRoomUpdate);
       room.off(RoomEvent.ParticipantDisconnected, handleRoomUpdate);
@@ -92,6 +102,8 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
       room.off(RoomEvent.ConnectionStateChanged, handleRoomUpdate);
       room.off(RoomEvent.TrackSubscribed, handleRoomUpdate);
       room.off(RoomEvent.TrackUnsubscribed, handleRoomUpdate);
+      room.off(RoomEvent.LocalTrackPublished, handleRoomUpdate);
+      room.off(RoomEvent.LocalTrackUnpublished, handleRoomUpdate);
     };
   });
   console.log('rendering room provider');

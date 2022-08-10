@@ -1,13 +1,15 @@
+import { ConnectionQuality } from '@livekit/auth-helpers-nextjs';
 import { useRoom, useToken, ParticipantView } from '@livekit/auth-helpers-nextjs';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
-  const roomName = 'test-room';
-  const userIdentity = 'test-user';
+  const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
+
+  const roomName = params?.get('room') ?? 'test-room';
+  const userIdentity = params?.get('user') ?? 'test-user';
   const roomState = useRoom();
   const token = useToken(roomName, userIdentity);
 
@@ -37,7 +39,9 @@ const Home: NextPage = () => {
         </h1>
         <p>Status: {roomState.connectionState} <br/> Nr. of participants: {roomState.participants.length} </p>
         <div className='participants'>
-          {roomState.participants.map(p => <ParticipantView participant={p} key={p.identity} />)}
+          {roomState.participants.map(p => <ParticipantView participant={p} key={p.identity}>
+            <ConnectionQuality/>
+          </ParticipantView>)}
         </div>
       </main>
       

@@ -1,10 +1,15 @@
-import React, { CSSProperties, ReactElement } from 'react';
+import React, { createContext, CSSProperties, ReactElement, ReactNode, useContext } from 'react';
 
 import { Property } from 'csstype';
 import { Participant } from 'livekit-client';
-import { useParticipant, VideoRenderer } from '@livekit/react-core';
+import {
+  ParticipantState,
+  useParticipant as useParticipantHook,
+  VideoRenderer,
+} from '@livekit/react-core';
 
 export interface ParticipantProps {
+  children: Array<ReactNode> | ReactNode | undefined;
   participant: Participant;
   displayName?: string;
   // width in CSS
@@ -30,7 +35,18 @@ export interface ParticipantProps {
   onClick?: () => void;
 }
 
+type ParticipantContext = ParticipantState & {
+  identity: string;
+};
+
+const participantContext = createContext<ParticipantContext | null>(null);
+
+export const useParticipant = () => {
+  return useContext(participantContext);
+};
+
 export const ParticipantView = ({
+  children,
   participant,
   width,
   height,
@@ -42,7 +58,9 @@ export const ParticipantView = ({
   onMouseLeave,
   onClick,
 }: ParticipantProps) => {
-  const { cameraPublication, isLocal } = useParticipant(participant);
+  const participantState = useParticipantHook(participant);
+  const { cameraPublication, isLocal } = participantState;
+  const participantContextState = { identity: participant.identity, ...participantState };
 
   const containerStyles: CSSProperties = {
     width: width,
@@ -85,7 +103,7 @@ export const ParticipantView = ({
       />
     );
   } else {
-    mainElement = <div />;
+    mainElement = <div style={{ width: '100%', height: '100%' }}></div>;
   }
 
   return (
@@ -96,6 +114,9 @@ export const ParticipantView = ({
       onClick={onClick}
     >
       {mainElement}
+      <participantContext.Provider value={participantContextState}>
+        {children}
+      </participantContext.Provider>
     </div>
   );
 };

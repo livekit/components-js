@@ -1,0 +1,36 @@
+.signal-icon {
+    height: 18px;
+    width: 18px;
+    /* To show you the power of flexbox! */
+    display: flex;
+    /* Bars should be placed left to right */
+    flex-direction: row;
+    /* Evenly space the bars with space in between */
+    justify-content: space-between;
+    /* Sink the bars to the bottom, so they go up in steps */
+    align-items: baseline;
+  }
+  .signal-icon .signal-bar {
+    /* 4 + 3 + 4 + 3 + 4 = 18px (as set above)
+       4px per bar and 3px margins between */
+    width: 4px;
+    /* All bars faded by default */
+    opacity: 30%;
+    /* Choose a color */
+    background: #aa2200;
+  }
+  
+  /* 3 different heights for 3 different bars */
+  .signal-icon .signal-bar:nth-child(1) { height: 40%; }
+  .signal-icon .signal-bar:nth-child(2) { height: 70%; }
+  .signal-icon .signal-bar:nth-child(3) { height: 100%; }
+  
+  /* Emphasize different bars depending on
+     weak/medium/strong classes */
+  .signal-icon.poor .signal-bar:nth-child(1),
+  .signal-icon.good .signal-bar:nth-child(1),
+  .signal-icon.good .signal-bar:nth-child(2),
+  .signal-icon.excellent .signal-bar:nth-child(1),
+  .signal-icon.excellent .signal-bar:nth-child(2),
+  .signal-icon.excellent .signal-bar:nth-child(3)
+  { opacity: 100%; }

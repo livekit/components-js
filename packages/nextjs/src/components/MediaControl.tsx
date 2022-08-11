@@ -1,19 +1,19 @@
 import { Track } from 'livekit-client';
 import React, { ReactNode, useRef } from 'react';
-import { useRoom } from './RoomProvider';
+import { useRoom } from './LiveKitRoom';
 
 type MediaControlProps = {
   children?: ReactNode | ReactNode[];
-  type: Track.Source;
+  source: Track.Source;
   onChange?: (enabled: boolean) => void;
 };
 
 export const TrackSource = Track.Source;
 
-export const MediaControlButton = ({ type, children, onChange }: MediaControlProps) => {
+export const MediaControlButton = ({ source, children, onChange }: MediaControlProps) => {
   const roomState = useRoom();
   const buttonEl = useRef<HTMLButtonElement | null>(null);
-  const buttonText = `Toggle ${type}`;
+  const buttonText = `Toggle ${source}`;
   const handleClick = async () => {
     const { localParticipant } = roomState.room;
     if (localParticipant) {
@@ -22,7 +22,7 @@ export const MediaControlButton = ({ type, children, onChange }: MediaControlPro
         buttonEl.current.disabled = true;
       }
       try {
-        switch (type) {
+        switch (source) {
           case Track.Source.Camera:
             await localParticipant.setCameraEnabled(!localParticipant.isCameraEnabled);
             isMediaEnabled = localParticipant.isCameraEnabled;

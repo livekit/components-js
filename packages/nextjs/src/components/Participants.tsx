@@ -1,4 +1,4 @@
-import { useRoom } from './RoomProvider';
+import { useRoom } from './LiveKitRoom';
 import React, { ReactNode } from 'react';
 import { Participant } from 'livekit-client';
 

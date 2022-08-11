@@ -9,7 +9,6 @@ const Home: NextPage = () => {
 
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? 'test-user';
-  // const roomState = useRoom();
   const [connect, setConnected] = useState(false);
   
   return (
@@ -26,15 +25,17 @@ const Home: NextPage = () => {
         </h1>
         {/* <p>Status: {roomState.connectionState} <br/> Nr. of participants: {roomState.participants.length} </p> */}
         <button onClick={() => setConnected(!connect)}>{connect ? 'Disconnect' : 'Connect'}</button>
-        <MediaControlButton type={TrackSource.Camera}></MediaControlButton>
-        <MediaControlButton type={TrackSource.Microphone}></MediaControlButton>
-        <MediaControlButton type={TrackSource.ScreenShare}></MediaControlButton>
+       
         <LiveKitRoom roomName={roomName} userIdentity={userIdentity} connect={connect}>
-          <Participants>
-            <ParticipantView >
-              <ConnectionQuality/>
-            </ParticipantView>
-          </Participants>
+          <MediaControlButton source={TrackSource.Camera}>
+          </MediaControlButton>
+          <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
+          <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
+            <Participants>
+              <ParticipantView>
+                <ConnectionQuality/>
+              </ParticipantView>
+            </Participants>
         </LiveKitRoom>
         
       </main>

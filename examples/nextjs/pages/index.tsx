@@ -1,8 +1,7 @@
-import { ConnectionQuality } from '@livekit/auth-helpers-nextjs';
-import { useRoom, useToken, ParticipantView } from '@livekit/auth-helpers-nextjs';
+import { ParticipantView, ConnectionQuality, LiveKitRoom, MediaControlButton, TrackSource, Participants } from '@livekit/auth-helpers-nextjs';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
@@ -10,20 +9,8 @@ const Home: NextPage = () => {
 
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? 'test-user';
-  const roomState = useRoom();
-  const token = useToken(roomName, userIdentity);
-
-  useEffect(() => {
-        if(!token) return;
-        if(!process.env.NEXT_PUBLIC_LK_SERVER_URL) {
-          console.error('no livekit url provided');
-          return;
-        }
-        roomState.room.connect(process.env.NEXT_PUBLIC_LK_SERVER_URL, token).then(() => {roomState.room.localParticipant.enableCameraAndMicrophone();}).catch((e: unknown) => {
-          console.warn('could not connect', e);
-        })
-        
-    }, [token]);
+  // const roomState = useRoom();
+  const [connect, setConnected] = useState(false);
   
   return (
     <div className={styles.container}>
@@ -37,12 +24,19 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://livekit.io">LiveKit</a> 
         </h1>
-        <p>Status: {roomState.connectionState} <br/> Nr. of participants: {roomState.participants.length} </p>
-        <div className='participants'>
-          {roomState.participants.map(p => <ParticipantView participant={p} key={p.identity}>
-            <ConnectionQuality/>
-          </ParticipantView>)}
-        </div>
+        {/* <p>Status: {roomState.connectionState} <br/> Nr. of participants: {roomState.participants.length} </p> */}
+        <button onClick={() => setConnected(!connect)}>{connect ? 'Disconnect' : 'Connect'}</button>
+        <MediaControlButton type={TrackSource.Camera}></MediaControlButton>
+        <MediaControlButton type={TrackSource.Microphone}></MediaControlButton>
+        <MediaControlButton type={TrackSource.ScreenShare}></MediaControlButton>
+        <LiveKitRoom roomName={roomName} userIdentity={userIdentity} connect={connect}>
+          <Participants>
+            <ParticipantView >
+              <ConnectionQuality/>
+            </ParticipantView>
+          </Participants>
+        </LiveKitRoom>
+        
       </main>
       
     </div>

@@ -10,7 +10,7 @@ import {
 
 export interface ParticipantProps {
   children: Array<ReactNode> | ReactNode | undefined;
-  participant: Participant;
+  participant?: Participant;
   displayName?: string;
   // width in CSS
   width?: Property.Width;
@@ -58,6 +58,9 @@ export const ParticipantView = ({
   onMouseLeave,
   onClick,
 }: ParticipantProps) => {
+  if (!participant) {
+    throw Error('need to provide a participant');
+  }
   const participantState = useParticipantHook(participant);
   const { cameraPublication, isLocal } = participantState;
   const participantContextState = { identity: participant.identity, ...participantState };

@@ -6,11 +6,13 @@ import {
   Participant,
   Room,
   RoomEvent,
+  RoomOptions,
   setLogLevel,
 } from 'livekit-client';
 
 type RoomProviderProps = {
   children: Array<ReactNode> | ReactNode;
+  options?: RoomOptions;
 };
 
 type RoomContextState = {
@@ -56,9 +58,9 @@ export function useToken(roomName: string, identity: string) {
 //   return participant ? useParticipantHook(participant) : undefined;
 // }
 
-export const RoomProvider = ({ children }: RoomProviderProps) => {
+export const RoomProvider = ({ children, options }: RoomProviderProps) => {
   setLogLevel('debug');
-  const [room] = useState<Room>(new Room());
+  const [room] = useState<Room>(new Room(options));
   const [roomState, setRoomState] = useState<RoomContextState>({
     room: room,
     connectionState: ConnectionState.Disconnected,

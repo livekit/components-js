@@ -1,58 +1,46 @@
+import { type Participant, ParticipantEvent } from 'livekit-client';
 import { Observable } from 'rxjs';
-import {
-  ConnectionQuality,
-  type Participant,
-  ParticipantEvent,
-  type TrackPublication,
-} from 'livekit-client';
-
-export interface ParticipantState {
-  isSpeaking: boolean;
-  connectionQuality: ConnectionQuality;
-  isLocal: boolean;
-  metadata?: string;
-  publications: TrackPublication[];
-  subscribedTracks: TrackPublication[];
-  cameraPublication?: TrackPublication;
-  microphonePublication?: TrackPublication;
-  screenSharePublication?: TrackPublication;
-}
 
 export function observeParticipant(participant: Participant) {
+  const participantObserver = observeParticipantEvents(
+    participant,
+    ParticipantEvent.TrackMuted,
+    ParticipantEvent.TrackUnmuted,
+    ParticipantEvent.ParticipantMetadataChanged,
+    ParticipantEvent.ParticipantPermissionsChanged,
+    ParticipantEvent.IsSpeakingChanged,
+    ParticipantEvent.TrackPublished,
+    ParticipantEvent.TrackUnpublished,
+    ParticipantEvent.TrackSubscribed,
+    ParticipantEvent.TrackUnsubscribed,
+    ParticipantEvent.LocalTrackPublished,
+    ParticipantEvent.LocalTrackUnpublished,
+    ParticipantEvent.ConnectionQualityChanged,
+  );
+
+  return participantObserver;
+}
+
+export const observeParticipantEvents = (
+  participant: Participant,
+  ...events: ParticipantEvent[]
+) => {
   const observable = new Observable<Participant>((subscribe) => {
     const onParticipantUpdate = () => {
       subscribe.next(participant);
     };
 
-    participant
-      .on(ParticipantEvent.TrackMuted, onParticipantUpdate)
-      .on(ParticipantEvent.TrackUnmuted, onParticipantUpdate)
-      .on(ParticipantEvent.ParticipantMetadataChanged, onParticipantUpdate)
-      .on(ParticipantEvent.IsSpeakingChanged, onParticipantUpdate)
-      .on(ParticipantEvent.TrackPublished, onParticipantUpdate)
-      .on(ParticipantEvent.TrackUnpublished, onParticipantUpdate)
-      .on(ParticipantEvent.TrackSubscribed, onParticipantUpdate)
-      .on(ParticipantEvent.TrackUnsubscribed, onParticipantUpdate)
-      .on(ParticipantEvent.LocalTrackPublished, onParticipantUpdate)
-      .on(ParticipantEvent.LocalTrackUnpublished, onParticipantUpdate)
-      .on(ParticipantEvent.ConnectionQualityChanged, onParticipantUpdate);
+    events.forEach((evt) => {
+      participant.on(evt, onParticipantUpdate);
+    });
 
     const unsubscribe = () => {
-      // cleanup
-      participant
-        .off(ParticipantEvent.TrackMuted, onParticipantUpdate)
-        .off(ParticipantEvent.TrackUnmuted, onParticipantUpdate)
-        .off(ParticipantEvent.ParticipantMetadataChanged, onParticipantUpdate)
-        .off(ParticipantEvent.IsSpeakingChanged, onParticipantUpdate)
-        .off(ParticipantEvent.TrackPublished, onParticipantUpdate)
-        .off(ParticipantEvent.TrackUnpublished, onParticipantUpdate)
-        .off(ParticipantEvent.TrackSubscribed, onParticipantUpdate)
-        .off(ParticipantEvent.TrackUnsubscribed, onParticipantUpdate)
-        .off(ParticipantEvent.LocalTrackPublished, onParticipantUpdate)
-        .off(ParticipantEvent.LocalTrackUnpublished, onParticipantUpdate)
-        .off(ParticipantEvent.ConnectionQualityChanged, onParticipantUpdate);
+      events.forEach((evt) => {
+        participant.off(evt, onParticipantUpdate);
+      });
     };
     return unsubscribe;
   });
+
   return { subscribe: observable.subscribe };
-}
+};

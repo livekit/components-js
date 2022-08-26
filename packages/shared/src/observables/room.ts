@@ -1,5 +1,5 @@
 import { RoomEvent, type Room } from 'livekit-client';
-import { observeRoomEvents } from './selector';
+import { Observable } from 'rxjs';
 
 export const observeRoom = (room: Room) => {
   const { subscribe } = observeRoomEvents(
@@ -16,4 +16,25 @@ export const observeRoom = (room: Room) => {
   );
 
   return { subscribe };
+};
+
+export const observeRoomEvents = (room: Room, ...events: RoomEvent[]) => {
+  const observable = new Observable<Room>((subscribe) => {
+    const onRoomUpdate = () => {
+      subscribe.next(room);
+    };
+
+    events.forEach((evt) => {
+      room.on(evt, onRoomUpdate);
+    });
+
+    const unsubscribe = () => {
+      events.forEach((evt) => {
+        room.off(evt, onRoomUpdate);
+      });
+    };
+    return unsubscribe;
+  });
+
+  return { subscribe: observable.subscribe };
 };

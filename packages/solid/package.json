@@ -1,0 +1,22 @@
+{
+  "name": "@livekit/components",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.7.4",
+    "vite": "^3.0.0",
+    "vite-plugin-solid": "^2.3.0"
+  },
+  "dependencies": {
+    "livekit-client": "^1.2.10",
+    "solid-element": "1.4.8",
+    "solid-js": "^1.4.7"
+  }
+}

@@ -1,7 +1,7 @@
 import React, { createContext, CSSProperties, ReactElement, ReactNode, useContext } from 'react';
 
 import { Property } from 'csstype';
-import { Participant } from 'livekit-client';
+import type { Participant } from 'livekit-client';
 import {
   ParticipantState,
   useParticipant as useParticipantHook,

@@ -42,13 +42,14 @@ export function useRoom() {
   return useContext(RoomContext);
 }
 
-export function useToken(roomName: string, identity: string) {
+export function useToken(roomName: string, identity: string, name?: string, metadata?: string) {
   const [token, setToken] = useState<string | undefined>(undefined);
   useEffect(() => {
     const tokenFetcher = async () => {
       console.log('fetching token');
       const res = await fetch(
-        process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT + `?roomName=${roomName}&identity=${identity}`,
+        process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT +
+          `?roomName=${roomName}&identity=${identity}&name=test&metadata=asdflkj`,
       );
       const { accessToken } = await res.json();
       setToken(accessToken);
@@ -79,8 +80,8 @@ export const LiveKitRoom = ({
 
   const getAudioTracks = () => {
     const tracks: AudioTrack[] = [];
-    room.participants.forEach(p => {
-      p.audioTracks.forEach(pub => {
+    room.participants.forEach((p) => {
+      p.audioTracks.forEach((pub) => {
         if (pub.audioTrack) {
           tracks.push(pub.audioTrack);
         }

@@ -1,8 +1,18 @@
-import { ParticipantView, ConnectionQuality, LiveKitRoom, MediaControlButton, TrackSource, Participants } from '@livekit/auth-helpers-nextjs';
+import {
+  ParticipantView,
+  ConnectionQuality,
+  LiveKitRoom,
+  MediaControlButton,
+  TrackSource,
+  Participants,
+  useToken,
+} from '@livekit/auth-helpers-nextjs';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import styles from '../styles/Home.module.css';
+import { Room } from './Room';
+// import '@livekit/components/dist/livekit-components.mjs';
 
 const Home: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
@@ -10,7 +20,9 @@ const Home: NextPage = () => {
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? 'test-user';
   const [connect, setConnected] = useState(false);
-  
+
+  const token = useToken('myroom', 'myidentity', 'myname');
+
   return (
     <div className={styles.container}>
       <Head>
@@ -21,25 +33,28 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://livekit.io">LiveKit</a> 
+          Welcome to <a href="https://livekit.io">LiveKit</a>
         </h1>
         {/* <p>Status: {roomState.connectionState} <br/> Nr. of participants: {roomState.participants.length} </p> */}
         <button onClick={() => setConnected(!connect)}>{connect ? 'Disconnect' : 'Connect'}</button>
-       
-        <LiveKitRoom roomName={roomName} userIdentity={userIdentity} connect={connect}>
+        {/* <Room connect={connect} /> */}
+        <LiveKitRoom token={token} connect={connect}>
           <MediaControlButton source={TrackSource.Camera}>
+            Microphone
+            {/* <MediaSelection type="microphone"/>  */}
           </MediaControlButton>
+          {/* <ConnectButton/> */}
           <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
           <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
-            <Participants>
+          <div className="participant-grid">
+            <Participants filter={(participants) => []}> {/** filter function for participants to be able to reuse it in multiple locations/styles */}
               <ParticipantView>
-                <ConnectionQuality/>
+                <ConnectionQuality />
               </ParticipantView>
             </Participants>
+          </div>
         </LiveKitRoom>
-        
       </main>
-      
     </div>
   );
 };

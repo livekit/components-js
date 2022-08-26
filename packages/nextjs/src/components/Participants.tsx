@@ -14,6 +14,7 @@ export const Participants = ({ children }: ParticipantsProps) => {
       // Checking isValidElement is the safe way and avoids a typescript
       // error too.
       if (React.isValidElement(child) && React.Children.only(children)) {
+        // @ts-ignore
         return React.cloneElement(child, { participant, key: participant.identity });
       }
       return child;

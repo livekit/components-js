@@ -1,0 +1,64 @@
+{
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test --passWithNoTests",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
+  },
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "name": "react-components",
+  "author": "mail@lukasseiler.de",
+  "module": "dist/react-components.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/react-components.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/react-components.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^8.0.1",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "husky": "^8.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "size-limit": "^8.0.1",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.4.0",
+    "typescript": "^4.8.2"
+  },
+  "dependencies": {
+    "livekit-client": "^1.3.0"
+  }
+}

@@ -64,6 +64,8 @@
   },
   "dependencies": {
     "jose": "^4.8.3",
-    "livekit-server-sdk": "latest"
+    "livekit-client": "latest",
+    "livekit-server-sdk": "latest",
+    "rxjs": "^7.5.6"
   }
 }

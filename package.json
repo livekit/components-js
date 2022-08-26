@@ -19,10 +19,10 @@
     "@changesets/changelog-github": "^0.4.4",
     "prettier": "^2.5.1",
     "turbo": "^1.2.3",
-    "typescript": "4.0.x || 4.1.x || 4.2.x || 4.3.x || 4.4.x || 4.5.x || 4.6.x"
+    "typescript": "4.3.x || 4.4.x || 4.5.x || 4.6.x || 4.7.x"
   },
   "peerDependencies": {
-    "typescript": "4.0.x || 4.1.x || 4.2.x || 4.3.x || 4.4.x || 4.5.x || 4.6.x"
+    "typescript": "4.3.x || 4.4.x || 4.5.x || 4.6.x || 4.7.x"
   },
   "workspaces": [
     "packages/*",

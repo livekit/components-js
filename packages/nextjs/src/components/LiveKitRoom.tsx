@@ -14,8 +14,7 @@ import React, { ReactNode, useContext, useEffect, useState } from 'react';
 
 export type LiveKitRoomProps = {
   children?: ReactNode | ReactNode[];
-  roomName: string;
-  userIdentity: string;
+  token?: string;
   options?: RoomOptions;
   connectOptions?: RoomConnectOptions;
   audio?: AudioCaptureOptions | boolean;
@@ -49,7 +48,7 @@ export function useToken(roomName: string, identity: string, name?: string, meta
       console.log('fetching token');
       const res = await fetch(
         process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT +
-          `?roomName=${roomName}&identity=${identity}&name=test&metadata=asdflkj`,
+          `?roomName=${roomName}&identity=${identity}&name=${name}&metadata=${metadata}`,
       );
       const { accessToken } = await res.json();
       setToken(accessToken);
@@ -60,9 +59,8 @@ export function useToken(roomName: string, identity: string, name?: string, meta
 }
 
 export const LiveKitRoom = ({
-  roomName,
   children,
-  userIdentity,
+  token,
   options,
   connectOptions,
   connect,
@@ -119,7 +117,6 @@ export const LiveKitRoom = ({
     };
   });
   console.log('rendering room provider');
-  const token = useToken(roomName, userIdentity); // TODO add permissions
 
   useEffect(() => {
     if (roomState.connectionState !== ConnectionState.Connected) {

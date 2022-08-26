@@ -2,7 +2,7 @@ import { RoomEvent, type Room } from 'livekit-client';
 import { Observable } from 'rxjs';
 
 export const observeRoom = (room: Room) => {
-  const { subscribe } = observeRoomEvents(
+  const { subscribe } = observeEvents(
     room,
     RoomEvent.ParticipantConnected,
     RoomEvent.ParticipantDisconnected,
@@ -18,7 +18,7 @@ export const observeRoom = (room: Room) => {
   return { subscribe };
 };
 
-export const observeRoomEvents = (room: Room, ...events: RoomEvent[]) => {
+function observeEvents(room: Room, ...events: RoomEvent[]): Pick<Observable<Room>, 'subscribe'> {
   const observable = new Observable<Room>((subscribe) => {
     const onRoomUpdate = () => {
       subscribe.next(room);
@@ -37,4 +37,4 @@ export const observeRoomEvents = (room: Room, ...events: RoomEvent[]) => {
   });
 
   return { subscribe: observable.subscribe };
-};
+}

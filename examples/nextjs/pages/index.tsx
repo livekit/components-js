@@ -11,7 +11,6 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import styles from '../styles/Home.module.css';
-import { Room } from './Room';
 // import '@livekit/components/dist/livekit-components.mjs';
 
 const Home: NextPage = () => {
@@ -47,7 +46,8 @@ const Home: NextPage = () => {
           <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
           <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
           <div className="participant-grid">
-            <Participants filter={(participants) => []}> {/** filter function for participants to be able to reuse it in multiple locations/styles */}
+            <Participants>
+              {/** TODO filter function for participants to be able to reuse it in multiple locations/styles */}
               <ParticipantView>
                 <ConnectionQuality />
               </ParticipantView>

@@ -1,6 +1,7 @@
-import { Track } from 'livekit-client';
-import React, { ReactNode, useRef } from 'react';
-import { useRoom } from './LiveKitRoom';
+import { observeParticipantEvents } from '@livekit/auth-helpers-shared';
+import { LocalParticipant, ParticipantEvent, Room, Track } from 'livekit-client';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import { useRoomContext } from './LiveKitRoom';
 
 type MediaControlProps = {
   children?: ReactNode | ReactNode[];
@@ -10,12 +11,28 @@ type MediaControlProps = {
 
 export const TrackSource = Track.Source;
 
+export const useLocalParticipant = (room?: Room) => {
+  const currentRoom = room ?? useRoomContext();
+  const [localParticipant, setLocalParticipant] = useState(currentRoom.localParticipant);
+  useEffect(() => {
+    const listener = observeParticipantEvents(
+      // TODO use track observer instead of participant observer
+      currentRoom.localParticipant,
+      ParticipantEvent.TrackMuted,
+      ParticipantEvent.TrackUnmuted,
+      ParticipantEvent.LocalTrackPublished,
+      ParticipantEvent.LocalTrackUnpublished,
+    ).subscribe((p) => setLocalParticipant(p as LocalParticipant));
+    return () => listener.unsubscribe();
+  });
+  return localParticipant;
+};
+
 export const MediaControlButton = ({ source, children, onChange }: MediaControlProps) => {
-  const roomState = useRoom();
+  const localParticipant = useLocalParticipant();
   const buttonEl = useRef<HTMLButtonElement | null>(null);
   const buttonText = `Toggle ${source}`;
   const handleClick = async () => {
-    const { localParticipant } = roomState.room;
     if (localParticipant) {
       let isMediaEnabled = false;
       if (buttonEl.current) {

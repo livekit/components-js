@@ -19,7 +19,7 @@ export const observeRoom = (room: Room) => {
   return { subscribe };
 };
 
-function observeRoomEvents(
+export function observeRoomEvents(
   room: Room,
   ...events: RoomEvent[]
 ): Pick<Observable<Room>, 'subscribe'> {

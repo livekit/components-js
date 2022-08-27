@@ -1,6 +1,6 @@
 import { observeParticipantEvents } from '@livekit/auth-helpers-shared';
 import { LocalParticipant, ParticipantEvent, Room, Track } from 'livekit-client';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { useRoomContext } from './LiveKitRoom';
 
 type MediaControlProps = {
@@ -34,9 +34,8 @@ export const useMediaToggle = (source: Track.Source, onChange?: (enabled: boolea
   const [enabled, setEnabled] = useState(!!track?.isEnabled);
   const [pending, setPending] = useState(false);
 
-  const toggle = async () => {
+  const toggle = useCallback(async () => {
     let isMediaEnabled = false;
-
     try {
       setPending(true);
       switch (source) {
@@ -62,7 +61,7 @@ export const useMediaToggle = (source: Track.Source, onChange?: (enabled: boolea
         onChange(isMediaEnabled);
       }
     }
-  };
+  }, [localParticipant, source]);
 
   return { toggle, enabled, pending, track };
 };
@@ -72,7 +71,7 @@ export const MediaControlButton = ({ source, children, onChange }: MediaControlP
   const buttonText = `${enabled ? 'Mute' : 'Unmute'} ${source}`;
 
   return (
-    <button onClick={toggle} disabled={pending}>
+    <button onClick={toggle} disabled={pending} aria-pressed={enabled}>
       {children ?? buttonText}
     </button>
   );

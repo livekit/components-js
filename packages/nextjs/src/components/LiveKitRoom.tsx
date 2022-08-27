@@ -27,9 +27,17 @@ export type LiveKitRoomProps = {
 //   audioTracks: AudioTrack[];
 // };
 
-const RoomContext = React.createContext<Room>(new Room());
+const RoomContext = React.createContext<Room | undefined>(undefined);
 
 export function useRoomContext() {
+  const ctx = useContext(RoomContext);
+  if (!ctx) {
+    throw Error('tried to access room context outside of livekit room component');
+  }
+  return ctx;
+}
+
+export function useTryRoomContext() {
   return useContext(RoomContext);
 }
 

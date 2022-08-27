@@ -3,6 +3,7 @@ import {
   ConnectionQuality,
   LiveKitRoom,
   MediaControlButton,
+  MediaSelect,
   TrackSource,
   Participants,
   ConnectionStatus,
@@ -47,6 +48,9 @@ const Home: NextPage = () => {
           {/* <ConnectButton/> */}
           <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
           <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
+          <MediaSelect kind={'audioinput'} />
+          <MediaSelect kind={'videoinput'} />
+
           <div className="participant-grid">
             <Participants>
               {/** TODO filter function for participants to be able to reuse it in multiple locations/styles */}

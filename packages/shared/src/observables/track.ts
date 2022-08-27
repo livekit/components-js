@@ -32,5 +32,5 @@ export const observeTrackEvents = (track: Track, ...events: TrackEvent[]) => {
     return unsubscribe;
   });
 
-  return { subscribe: observable.subscribe };
+  return observable;
 };

@@ -2,6 +2,7 @@ import { useRoomContext } from './LiveKitRoom';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { Participant, Room, RoomEvent } from 'livekit-client';
 import { observeRoomEvents } from '@livekit/auth-helpers-shared';
+import { useLocalParticipant } from './MediaControl';
 
 type ParticipantsProps = {
   children: ReactNode | ReactNode[];
@@ -22,8 +23,9 @@ export const useRemoteParticipants = (room?: Room) => {
   return participants;
 };
 
-export const RemoteParticipants = ({ children, room }: ParticipantsProps) => {
+export const Participants = ({ children, room }: ParticipantsProps) => {
   const participants = useRemoteParticipants(room);
+  const localParticipant = useLocalParticipant(room);
   const childrenWithProps = (participant: Participant) => {
     return React.Children.map(children, (child) => {
       // Checking isValidElement is the safe way and avoids a typescript
@@ -36,5 +38,7 @@ export const RemoteParticipants = ({ children, room }: ParticipantsProps) => {
     });
   };
 
-  return <>{participants.map((participant) => childrenWithProps(participant))}</>;
+  return (
+    <>{[localParticipant, ...participants].map((participant) => childrenWithProps(participant))}</>
+  );
 };

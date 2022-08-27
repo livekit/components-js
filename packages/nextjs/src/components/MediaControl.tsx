@@ -1,6 +1,6 @@
 import { observeParticipantEvents } from '@livekit/auth-helpers-shared';
 import { LocalParticipant, ParticipantEvent, Room, Track } from 'livekit-client';
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useRoomContext } from './LiveKitRoom';
 
 type MediaControlProps = {
@@ -28,45 +28,51 @@ export const useLocalParticipant = (room?: Room) => {
   return localParticipant;
 };
 
-export const MediaControlButton = ({ source, children, onChange }: MediaControlProps) => {
+export const useMediaToggle = (source: Track.Source, onChange?: (enabled: boolean) => void) => {
   const localParticipant = useLocalParticipant();
-  const buttonEl = useRef<HTMLButtonElement | null>(null);
-  const buttonText = `Toggle ${source}`;
-  const handleClick = async () => {
-    if (localParticipant) {
-      let isMediaEnabled = false;
-      if (buttonEl.current) {
-        buttonEl.current.disabled = true;
+  const track = localParticipant.getTrack(source);
+  const [enabled, setEnabled] = useState(!!track?.isEnabled);
+  const [pending, setPending] = useState(false);
+
+  const toggle = async () => {
+    let isMediaEnabled = false;
+
+    try {
+      setPending(true);
+      switch (source) {
+        case Track.Source.Camera:
+          await localParticipant.setCameraEnabled(!localParticipant.isCameraEnabled);
+          isMediaEnabled = localParticipant.isCameraEnabled;
+          break;
+        case Track.Source.Microphone:
+          await localParticipant.setMicrophoneEnabled(!localParticipant.isMicrophoneEnabled);
+          isMediaEnabled = localParticipant.isMicrophoneEnabled;
+          break;
+        case Track.Source.ScreenShare:
+          await localParticipant.setScreenShareEnabled(!localParticipant.isScreenShareEnabled);
+          isMediaEnabled = localParticipant.isScreenShareEnabled;
+          break;
+        default:
+          break;
       }
-      try {
-        switch (source) {
-          case Track.Source.Camera:
-            await localParticipant.setCameraEnabled(!localParticipant.isCameraEnabled);
-            isMediaEnabled = localParticipant.isCameraEnabled;
-            break;
-          case Track.Source.Microphone:
-            await localParticipant.setMicrophoneEnabled(!localParticipant.isMicrophoneEnabled);
-            isMediaEnabled = localParticipant.isMicrophoneEnabled;
-            break;
-          case Track.Source.ScreenShare:
-            await localParticipant.setScreenShareEnabled(!localParticipant.isScreenShareEnabled);
-            isMediaEnabled = localParticipant.isScreenShareEnabled;
-            break;
-          default:
-            break;
-        }
-      } finally {
-        if (buttonEl.current) {
-          buttonEl.current.disabled = false;
-        }
-        if (onChange) {
-          onChange(isMediaEnabled);
-        }
+    } finally {
+      setEnabled(isMediaEnabled);
+      setPending(false);
+      if (onChange) {
+        onChange(isMediaEnabled);
       }
     }
   };
+
+  return { toggle, enabled, pending, track };
+};
+
+export const MediaControlButton = ({ source, children, onChange }: MediaControlProps) => {
+  const { toggle, enabled, pending } = useMediaToggle(source, onChange);
+  const buttonText = `${enabled ? 'Mute' : 'Unmute'} ${source}`;
+
   return (
-    <button ref={buttonEl} onClick={handleClick}>
+    <button onClick={toggle} disabled={pending}>
       {children ?? buttonText}
     </button>
   );

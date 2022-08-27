@@ -22,5 +22,5 @@ export function useConnectionState(room?: Room) {
 
 export const ConnectionStatus = ({ room }: ConnectionStatusProps) => {
   const connectionState = useConnectionState(room);
-  return <div>{connectionState}</div>;
+  return <p>{connectionState}</p>;
 };

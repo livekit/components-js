@@ -89,9 +89,5 @@ export const LiveKitRoom = ({
     }
   }, [connect, token]);
 
-  return (
-    <RoomContext.Provider value={room}>
-      {room.state === ConnectionState.Connected && children}
-    </RoomContext.Provider>
-  );
+  return <RoomContext.Provider value={room}>{children}</RoomContext.Provider>;
 };

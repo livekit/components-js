@@ -1,9 +1,9 @@
 import React from 'react';
-import { useParticipant } from './ParticipantRenderer';
+import { useParticipantContext } from './ParticipantRenderer';
 import styles from '../Participant.module.css';
 
 export const ConnectionQuality = () => {
-  const participantState = useParticipant();
+  const participantState = useParticipantContext();
   const signalClassName = participantState
     ? styles[participantState?.connectionQuality.toString()]
     : '';

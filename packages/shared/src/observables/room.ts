@@ -3,7 +3,7 @@ import { Room, RoomEvent } from 'livekit-client';
 import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 
 export const observeRoom = (room: Room) => {
-  const { subscribe } = observeRoomEvents(
+  const observable = observeRoomEvents(
     room,
     RoomEvent.ParticipantConnected,
     RoomEvent.ParticipantDisconnected,
@@ -16,10 +16,10 @@ export const observeRoom = (room: Room) => {
     RoomEvent.ConnectionStateChanged,
   );
 
-  return { subscribe };
+  return observable;
 };
 
-function observeRoomEvents(
+export function observeRoomEvents(
   room: Room,
   ...events: RoomEvent[]
 ): Pick<Observable<Room>, 'subscribe'> {
@@ -40,13 +40,15 @@ function observeRoomEvents(
     return unsubscribe;
   });
 
-  return { subscribe: observable.subscribe };
+  return observable;
 }
 
 export function roomEventSelector<T extends RoomEvent>(room: Room, event: T) {
   const observable = new Observable<Parameters<RoomEventCallbacks[T]>>((subscribe) => {
-    const update: RoomEventCallbacks[T] = (...params: Array<any>) => {
-      subscribe.next(...params);
+    type Callback = RoomEventCallbacks[T];
+    const update: Callback = (...params: Array<any>) => {
+      // @ts-ignore
+      subscribe.next(params);
     };
     room.on(event, update);
 
@@ -56,7 +58,7 @@ export function roomEventSelector<T extends RoomEvent>(room: Room, event: T) {
     return unsubscribe;
   });
 
-  return { subscribe: observable.subscribe };
+  return observable;
 }
 
 // const room = new Room();

@@ -42,5 +42,5 @@ export const observeParticipantEvents = (
     return unsubscribe;
   });
 
-  return { subscribe: observable.subscribe };
+  return observable;
 };

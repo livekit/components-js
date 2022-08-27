@@ -4,3 +4,4 @@ export * from './components/ConnectionQuality';
 export * from './components/LiveKitRoom';
 export * from './components/MediaControl';
 export * from './components/Participants';
+export * from './components/ConnectionStatus';

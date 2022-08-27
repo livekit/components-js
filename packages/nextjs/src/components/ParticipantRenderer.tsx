@@ -41,7 +41,7 @@ type ParticipantContext = ParticipantState & {
 
 const participantContext = createContext<ParticipantContext | null>(null);
 
-export const useParticipant = () => {
+export const useParticipantContext = () => {
   return useContext(participantContext);
 };
 

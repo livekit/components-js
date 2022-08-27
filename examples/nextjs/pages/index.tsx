@@ -5,6 +5,7 @@ import {
   MediaControlButton,
   TrackSource,
   Participants,
+  ConnectionStatus,
   useToken,
 } from '@livekit/auth-helpers-nextjs';
 import type { NextPage } from 'next';
@@ -18,9 +19,10 @@ const Home: NextPage = () => {
 
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? 'test-user';
-  const [connect, setConnected] = useState(false);
+  const [connect, setConnected] = useState(true);
 
-  const token = useToken('myroom', 'myidentity', 'myname');
+  const token = useToken(roomName, userIdentity, 'myname');
+  console.log(token);
 
   return (
     <div className={styles.container}>
@@ -38,10 +40,10 @@ const Home: NextPage = () => {
         <button onClick={() => setConnected(!connect)}>{connect ? 'Disconnect' : 'Connect'}</button>
         {/* <Room connect={connect} /> */}
         <LiveKitRoom token={token} connect={connect}>
-          <MediaControlButton source={TrackSource.Camera}>
-            Microphone
-            {/* <MediaSelection type="microphone"/>  */}
-          </MediaControlButton>
+          <ConnectionStatus />
+          {/* <MediaSelection type="microphone"/>  */}
+
+          <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
           {/* <ConnectButton/> */}
           <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
           <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>

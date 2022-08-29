@@ -1,5 +1,5 @@
 import { roomEventSelector } from '@livekit/auth-helpers-shared';
-import { type Room, RoomEvent, ConnectionState, setLogLevel } from 'livekit-client';
+import { ConnectionState, RoomEvent, type Room } from 'livekit-client';
 import React, { useEffect, useState } from 'react';
 import { useRoomContext } from './LiveKitRoom';
 
@@ -11,11 +11,10 @@ type DisconnectButtonProps = {
 function useConnectionState(room?: Room): [ConnectionState, Room] {
   // passed room takes precedence, if not supplied get current room context
   const currentRoom = room ?? useRoomContext();
-  const [connectionState, setConnectionState] = useState(currentRoom.state);
+  const [connectionState, setConnectionState] = useState<ConnectionState>(currentRoom.state);
 
   useEffect(() => {
     const listener = roomEventSelector(currentRoom, RoomEvent.ConnectionStateChanged).subscribe(
-      // @ts-ignore
       ([state]) => setConnectionState(state),
     );
     return () => listener.unsubscribe();

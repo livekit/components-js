@@ -1,8 +1,10 @@
+import { roomEventSelector } from '@livekit/auth-helpers-shared';
 import {
   AudioCaptureOptions,
   ConnectionState,
   Room,
   RoomConnectOptions,
+  RoomEvent,
   RoomOptions,
   ScreenShareCaptureOptions,
   VideoCaptureOptions,
@@ -18,6 +20,8 @@ export type LiveKitRoomProps = {
   video?: VideoCaptureOptions | boolean;
   screen?: ScreenShareCaptureOptions | boolean;
   connect?: boolean;
+  onConnected?: () => void;
+  onDisconnected?: () => void;
 };
 
 // type RoomContextState = {
@@ -67,6 +71,8 @@ export const LiveKitRoom = ({
   audio,
   video,
   screen,
+  onConnected,
+  onDisconnected,
 }: LiveKitRoomProps) => {
   const [room] = useState<Room>(new Room(options));
 
@@ -96,6 +102,26 @@ export const LiveKitRoom = ({
       room.disconnect();
     }
   }, [connect, token]);
+
+  useEffect(() => {
+    const connectionStateChangeListener = roomEventSelector(
+      room,
+      RoomEvent.ConnectionStateChanged,
+    ).subscribe(([state]) => {
+      switch (state) {
+        case ConnectionState.Disconnected:
+          if (onDisconnected) onDisconnected();
+          break;
+        case ConnectionState.Connected:
+          if (onConnected) onConnected();
+          break;
+
+        default:
+          break;
+      }
+    });
+    return () => connectionStateChangeListener.unsubscribe();
+  }, [token]);
 
   return <RoomContext.Provider value={room}>{children}</RoomContext.Provider>;
 };

@@ -41,7 +41,12 @@ const Home: NextPage = () => {
         {/* <p>Status: {roomState.connectionState} <br/> Nr. of participants: {roomState.participants.length} </p> */}
         <button onClick={() => setConnected(!connect)}>{connect ? 'Disconnect' : 'Connect'}</button>
         {/* <Room connect={connect} /> */}
-        <LiveKitRoom token={token} connect={connect}>
+        <LiveKitRoom
+          token={token}
+          connect={connect}
+          onConnected={() => console.log('LiveKitRoom: onConnected Callback')}
+          onDisconnected={() => setConnected(false)}
+        >
           <ConnectionStatus />
           {/* <MediaSelection type="microphone"/>  */}
 

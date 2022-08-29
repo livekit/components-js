@@ -7,6 +7,7 @@ import {
   TrackSource,
   Participants,
   ConnectionStatus,
+  DisconnectButton,
   useToken,
 } from '@livekit/auth-helpers-nextjs';
 import type { NextPage } from 'next';
@@ -50,6 +51,7 @@ const Home: NextPage = () => {
           <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
           <MediaSelect kind={'audioinput'} />
           <MediaSelect kind={'videoinput'} />
+          <DisconnectButton text="Hang up" />
 
           <div className="participant-grid">
             <Participants>

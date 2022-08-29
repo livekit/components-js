@@ -6,3 +6,4 @@ export * from './components/MediaControl';
 export * from './components/MediaSelect';
 export * from './components/Participants';
 export * from './components/ConnectionStatus';
+export * from './components/DisconnectButton';

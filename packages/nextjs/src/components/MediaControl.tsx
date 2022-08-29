@@ -47,7 +47,7 @@ export const useMediaToggle = (source: Track.Source, onChange?: (enabled: boolea
   return { toggle, enabled, pending, track };
 };
 
-export const MediaToggle = ({ source, children, onChange }: MediaControlProps) => {
+export const MediaControlButton = ({ source, children, onChange }: MediaControlProps) => {
   const { toggle, enabled, pending } = useMediaToggle(source, onChange);
   const buttonText = `${enabled ? 'Mute' : 'Unmute'} ${source}`;
 
@@ -57,10 +57,3 @@ export const MediaToggle = ({ source, children, onChange }: MediaControlProps) =
     </button>
   );
 };
-
-export MediaControlButton = () => {
-  return <>
-  <MediaToggle />
-  <MediaSelect/> 
-  </>
-}

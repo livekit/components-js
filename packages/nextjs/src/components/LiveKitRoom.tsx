@@ -37,7 +37,7 @@ export function useRoomContext() {
   return ctx;
 }
 
-export function useTryRoomContext() {
+export function useMaybeRoomContext() {
   return useContext(RoomContext);
 }
 

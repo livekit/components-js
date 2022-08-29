@@ -4,3 +4,4 @@ build/
 .turbo/
 .vscode/
 yarn-error.log
+.DS_Store

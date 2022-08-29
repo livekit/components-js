@@ -1,6 +1,6 @@
 import { Room } from 'livekit-client';
 import React, { ChangeEventHandler, useEffect, useState } from 'react';
-import { useTryRoomContext } from './LiveKitRoom';
+import { useMaybeRoomContext } from './LiveKitRoom';
 
 type MediaSelectProps = React.HTMLAttributes<HTMLSelectElement> & {
   kind: MediaDeviceKind;
@@ -13,7 +13,7 @@ export const useMediaSelect = (
   onDeviceSelect?: (deviceId: string) => void,
 ) => {
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
-  const room = useTryRoomContext();
+  const room = useMaybeRoomContext();
 
   const onChange: ChangeEventHandler<HTMLSelectElement> = async (evt) => {
     await room?.switchActiveDevice(kind, evt.target.value);

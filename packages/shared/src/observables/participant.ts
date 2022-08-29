@@ -1,5 +1,6 @@
-import { type Participant, ParticipantEvent } from 'livekit-client';
+import { Participant, ParticipantEvent, RemoteParticipant, Room, RoomEvent } from 'livekit-client';
 import { Observable } from 'rxjs';
+import { observeRoomEvents } from './room';
 
 export function observeParticipant(participant: Participant) {
   const participantObserver = observeParticipantEvents(
@@ -44,3 +45,19 @@ export const observeParticipantEvents = (
 
   return observable;
 };
+
+export function connectedParticipants(
+  room: Room,
+  onConnectedParticipantsChanged: (participants: RemoteParticipant[]) => void,
+) {
+  const listener = observeRoomEvents(
+    room,
+    RoomEvent.ParticipantConnected,
+    RoomEvent.ParticipantDisconnected,
+    RoomEvent.ConnectionStateChanged,
+  ).subscribe((r) => onConnectedParticipantsChanged(Array.from(r.participants.values())));
+  if (room.participants.size > 0) {
+    onConnectedParticipantsChanged(Array.from(room.participants.values()));
+  }
+  return () => listener.unsubscribe();
+}

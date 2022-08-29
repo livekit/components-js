@@ -6,6 +6,7 @@ import {
   RoomOptions,
   ScreenShareCaptureOptions,
   VideoCaptureOptions,
+  setLogLevel,
 } from 'livekit-client';
 import React, { ReactNode, useContext, useEffect, useState } from 'react';
 
@@ -69,6 +70,7 @@ export const LiveKitRoom = ({
   screen,
 }: LiveKitRoomProps) => {
   const [room] = useState<Room>(new Room(options));
+  setLogLevel('debug');
 
   useEffect(() => {
     if (room.state !== ConnectionState.Connected) {

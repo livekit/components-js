@@ -1,6 +1,6 @@
-import { Room } from 'livekit-client';
 import React, { ChangeEventHandler, useEffect, useState } from 'react';
 import { useMaybeRoomContext } from './LiveKitRoom';
+import { deviceSelect } from '@livekit/auth-helpers-shared';
 
 type MediaSelectProps = React.HTMLAttributes<HTMLSelectElement> & {
   kind: MediaDeviceKind;
@@ -21,28 +21,23 @@ export const useMediaSelect = (
       onDeviceSelect(evt.target.value);
     }
   };
+  // TODO figure out and return initial/current device
 
-  useEffect(() => {
-    Room.getLocalDevices(kind).then((newDevices) => setDevices(newDevices));
-    const listener = async () => {
-      const newDevices = await Room.getLocalDevices(kind);
-      setDevices(newDevices);
-      if (onDevicesChange) {
-        onDevicesChange(devices);
-      }
-    };
-    navigator.mediaDevices.addEventListener('devicechange', listener);
-    return () => navigator.mediaDevices.removeEventListener('devicechange', listener);
-  });
+  const handleDevicesChanged = (newDevices: MediaDeviceInfo[]) => {
+    setDevices(newDevices);
+    onDevicesChange?.(newDevices);
+  };
+
+  useEffect(() => deviceSelect(kind, handleDevicesChanged));
 
   return { devices, onChange };
 };
 
-export const MediaSelect = ({ kind }: MediaSelectProps) => {
+export const MediaSelect = ({ kind, onChange: _, ...rest }: MediaSelectProps) => {
   const { devices, onChange } = useMediaSelect(kind);
 
   return (
-    <select onChange={onChange}>
+    <select onChange={onChange} {...rest}>
       {devices.map((d) => (
         <option value={d.deviceId} key={d.deviceId}>
           {d.label}

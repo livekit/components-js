@@ -7,6 +7,7 @@ export const ConnectionQuality = () => {
   const signalClassName = participantState
     ? styles[participantState?.connectionQuality.toString()]
     : '';
+
   return (
     <div className={styles['signal-icon'] + ` ${signalClassName}`}>
       <div className={styles['signal-bar']}></div>

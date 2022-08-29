@@ -20,7 +20,7 @@ const Home: NextPage = () => {
 
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? 'test-user';
-  const [connect, setConnected] = useState(true);
+  const [connect, setConnected] = useState(false);
 
   const token = useToken(roomName, userIdentity, 'myname');
   console.log(token);

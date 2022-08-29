@@ -1,8 +1,8 @@
 import { useRoomContext } from './LiveKitRoom';
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Participant, Room, RoomEvent } from 'livekit-client';
-import { observeRoomEvents } from '@livekit/auth-helpers-shared';
+import { Participant, Room } from 'livekit-client';
 import { useLocalParticipant } from './MediaControl';
+import { connectedParticipants } from '@livekit/auth-helpers-shared';
 
 type ParticipantsProps = {
   children: ReactNode | ReactNode[];
@@ -11,15 +11,10 @@ type ParticipantsProps = {
 
 export const useRemoteParticipants = (room?: Room) => {
   const currentRoom = room ?? useRoomContext();
-  const [participants, setParticipants] = useState(Array.from(currentRoom.participants.values()));
+  const [participants, setParticipants] = useState<Participant[]>([]);
   useEffect(() => {
-    const listener = observeRoomEvents(
-      currentRoom,
-      RoomEvent.ParticipantConnected,
-      RoomEvent.ParticipantDisconnected,
-    ).subscribe((r) => setParticipants(Array.from(r.participants.values())));
-    return () => listener.unsubscribe();
-  });
+    return connectedParticipants(currentRoom, setParticipants);
+  }, [currentRoom]);
   return participants;
 };
 

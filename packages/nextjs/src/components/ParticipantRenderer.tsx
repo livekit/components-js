@@ -39,10 +39,14 @@ type ParticipantContext = ParticipantState & {
   identity: string;
 };
 
-const participantContext = createContext<ParticipantContext | null>(null);
+const participantContext = createContext<ParticipantContext | undefined>(undefined);
 
 export const useParticipantContext = () => {
-  return useContext(participantContext);
+  const participant = useContext(participantContext);
+  if (!participant) {
+    throw Error('tried to access participant context outside of participant context provider');
+  }
+  return participant;
 };
 
 export const ParticipantView = ({

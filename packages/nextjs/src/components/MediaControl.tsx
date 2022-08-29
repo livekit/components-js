@@ -1,4 +1,4 @@
-import { observeParticipantEvents } from '@livekit/auth-helpers-shared';
+import { observeParticipantEvents, toggleMediaSource } from '@livekit/auth-helpers-shared';
 import { LocalParticipant, ParticipantEvent, Room, Track } from 'livekit-client';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { useRoomContext } from './LiveKitRoom';
@@ -34,39 +34,20 @@ export const useMediaToggle = (source: Track.Source, onChange?: (enabled: boolea
   const [enabled, setEnabled] = useState(!!track?.isEnabled);
   const [pending, setPending] = useState(false);
 
-  const toggle = useCallback(async () => {
-    let isMediaEnabled = false;
-    try {
-      setPending(true);
-      switch (source) {
-        case Track.Source.Camera:
-          await localParticipant.setCameraEnabled(!localParticipant.isCameraEnabled);
-          isMediaEnabled = localParticipant.isCameraEnabled;
-          break;
-        case Track.Source.Microphone:
-          await localParticipant.setMicrophoneEnabled(!localParticipant.isMicrophoneEnabled);
-          isMediaEnabled = localParticipant.isMicrophoneEnabled;
-          break;
-        case Track.Source.ScreenShare:
-          await localParticipant.setScreenShareEnabled(!localParticipant.isScreenShareEnabled);
-          isMediaEnabled = localParticipant.isScreenShareEnabled;
-          break;
-        default:
-          break;
-      }
-    } finally {
-      setEnabled(isMediaEnabled);
-      setPending(false);
-      if (onChange) {
-        onChange(isMediaEnabled);
-      }
-    }
-  }, [localParticipant, source]);
+  const onEnableChange = (isEnabled: boolean) => {
+    setEnabled(isEnabled);
+    onChange?.(isEnabled);
+  };
+
+  const toggle = useCallback(
+    () => toggleMediaSource(source, localParticipant, onEnableChange, setPending),
+    [localParticipant, source],
+  );
 
   return { toggle, enabled, pending, track };
 };
 
-export const MediaControlButton = ({ source, children, onChange }: MediaControlProps) => {
+export const MediaToggle = ({ source, children, onChange }: MediaControlProps) => {
   const { toggle, enabled, pending } = useMediaToggle(source, onChange);
   const buttonText = `${enabled ? 'Mute' : 'Unmute'} ${source}`;
 
@@ -76,3 +57,10 @@ export const MediaControlButton = ({ source, children, onChange }: MediaControlP
     </button>
   );
 };
+
+export MediaControlButton = () => {
+  return <>
+  <MediaToggle />
+  <MediaSelect/> 
+  </>
+}

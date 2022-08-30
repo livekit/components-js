@@ -1,6 +1,6 @@
-import { roomEventSelector } from '@livekit/components-core';
-import { ConnectionState, RoomEvent, type Room } from 'livekit-client';
+import { ConnectionState, type Room } from 'livekit-client';
 import React, { useEffect, useState } from 'react';
+import { DisconnectButtonInterface } from '@livekit/components-core';
 import { useRoomContext } from './LiveKitRoom';
 
 type DisconnectButtonProps = {
@@ -14,7 +14,7 @@ function useConnectionState(room?: Room): [ConnectionState, Room] {
   const [connectionState, setConnectionState] = useState<ConnectionState>(currentRoom.state);
 
   useEffect(() => {
-    const listener = roomEventSelector(currentRoom, RoomEvent.ConnectionStateChanged).subscribe(
+    const listener = DisconnectButtonInterface.connectionStateObserver(currentRoom).subscribe(
       ([state]) => setConnectionState(state),
     );
     return () => listener.unsubscribe();
@@ -31,7 +31,11 @@ export const DisconnectButton = ({ room, text }: DisconnectButtonProps) => {
   };
 
   return (
-    <button onClick={handleClick} disabled={connectionState === ConnectionState.Disconnected}>
+    <button
+      className="lk-disconnect-button"
+      onClick={handleClick}
+      disabled={connectionState === ConnectionState.Disconnected}
+    >
       {text || 'Disconnect'}
     </button>
   );

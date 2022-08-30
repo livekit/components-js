@@ -1,10 +1,9 @@
-import { observeParticipantEvents, toggleMediaSource } from '@livekit/auth-helpers-shared';
+import { observeParticipantEvents, toggleMediaSource } from '@livekit/components-core';
 import { LocalParticipant, ParticipantEvent, Room, Track } from 'livekit-client';
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { HTMLAttributes, MouseEventHandler, useCallback, useEffect, useState } from 'react';
 import { useRoomContext } from './LiveKitRoom';
 
-type MediaControlProps = {
-  children?: ReactNode | ReactNode[];
+type MediaControlProps = HTMLAttributes<HTMLButtonElement> & {
   source: Track.Source;
   onChange?: (enabled: boolean) => void;
 };
@@ -28,7 +27,7 @@ export const useLocalParticipant = (room?: Room) => {
   return localParticipant;
 };
 
-export const useMediaToggle = (source: Track.Source, onChange?: (enabled: boolean) => void) => {
+export const useMediaToggle = ({ source, onChange, ...rest }: MediaControlProps) => {
   const localParticipant = useLocalParticipant();
   const track = localParticipant.getTrack(source);
   const [enabled, setEnabled] = useState(!!track?.isEnabled);
@@ -44,16 +43,25 @@ export const useMediaToggle = (source: Track.Source, onChange?: (enabled: boolea
     [localParticipant, source],
   );
 
-  return { toggle, enabled, pending, track };
+  if (rest.className) {
+    rest.className += `lk-control-button`;
+  }
+  const clickHandler: MouseEventHandler<HTMLButtonElement> = (evt) => {
+    toggle();
+    rest.onClick?.(evt);
+  };
+
+  return {
+    toggle,
+    enabled,
+    pending,
+    track,
+    buttonProps: { ...rest, 'aria-pressed': enabled, disabled: pending, onClick: clickHandler },
+  };
 };
 
-export const MediaControlButton = ({ source, children, onChange }: MediaControlProps) => {
-  const { toggle, enabled, pending } = useMediaToggle(source, onChange);
-  const buttonText = `${enabled ? 'Mute' : 'Unmute'} ${source}`;
-
-  return (
-    <button onClick={toggle} disabled={pending} aria-pressed={enabled}>
-      {children ?? buttonText}
-    </button>
-  );
+export const MediaControlButton = (props: MediaControlProps) => {
+  const { enabled, buttonProps } = useMediaToggle(props);
+  const buttonText = `${enabled ? 'Mute' : 'Unmute'} ${props.source}`;
+  return <button {...buttonProps}>{props.children ?? buttonText}</button>;
 };

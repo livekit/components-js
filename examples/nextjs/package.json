@@ -12,7 +12,7 @@
     "next": "12.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "@livekit/auth-helpers-nextjs": "0.1.0",
+    "@livekit/components-react": "0.1.0",
     "livekit-client": "latest"
   },
   "devDependencies": {

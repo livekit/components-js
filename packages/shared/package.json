@@ -1,11 +1,16 @@
 {
   "version": "0.1.0",
   "license": "MIT",
-  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/components-core.esm.js"
+    }
+  },
   "typings": "dist/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
   "files": [
     "dist",
     "src"
@@ -14,9 +19,9 @@
     "node": ">=10"
   },
   "scripts": {
-    "dev": "tsdx watch",
-    "start": "tsdx watch",
-    "build": "tsdx build",
+    "dev": "tsdx watch --format esm",
+    "start": "tsdx watch --format esm",
+    "build": "tsdx build --format esm",
     "test": "tsdx test",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
@@ -29,9 +34,9 @@
       "pre-commit": "tsdx lint"
     }
   },
-  "name": "@livekit/auth-helpers-shared",
+  "name": "@livekit/components-core",
   "author": "LiveKit",
-  "module": "dist/shared.esm.js",
+  "module": "dist/components-core.esm.js",
   "size-limit": [
     {
       "path": "dist/shared.cjs.production.min.js",

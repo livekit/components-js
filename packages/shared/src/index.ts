@@ -5,3 +5,4 @@ export * from './observables/participant';
 export * from './behaviours/mediaToggle';
 export * from './behaviours/mediaSelect';
 export * from './constants';
+export * from './component-interfaces';

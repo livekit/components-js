@@ -1,6 +1,7 @@
 import React, { ChangeEventHandler, useCallback, useEffect, useState } from 'react';
 import { useMaybeRoomContext } from './LiveKitRoom';
-import { deviceSelect } from '@livekit/components-core';
+import { setupMediaSelect } from '@livekit/components-core';
+import { mergeProps } from 'react-aria';
 
 type MediaSelectProps = React.HTMLAttributes<HTMLSelectElement> & {
   kind: MediaDeviceKind;
@@ -26,9 +27,13 @@ export const useMediaSelect = (props: MediaSelectProps) => {
     props.onDevicesChange?.(newDevices);
   };
 
-  useEffect(() => deviceSelect(props.kind, handleDevicesChanged));
+  const { className, deviceListener } = setupMediaSelect();
 
-  return { devices, selectProps: { ...props, onChange } };
+  const newProps = mergeProps(props, { className });
+
+  useEffect(() => deviceListener(props.kind, handleDevicesChanged));
+
+  return { devices, selectProps: { ...newProps, onChange } };
 };
 
 export const MediaSelect = (props: MediaSelectProps) => {

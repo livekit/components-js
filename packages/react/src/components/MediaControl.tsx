@@ -1,6 +1,7 @@
-import { observeParticipantEvents, toggleMediaSource } from '@livekit/components-core';
+import { observeParticipantEvents, setupToggle } from '@livekit/components-core';
 import { LocalParticipant, ParticipantEvent, Room, Track } from 'livekit-client';
 import React, { HTMLAttributes, MouseEventHandler, useCallback, useEffect, useState } from 'react';
+import { mergeProps } from 'react-aria';
 import { useRoomContext } from './LiveKitRoom';
 
 type MediaControlProps = HTMLAttributes<HTMLButtonElement> & {
@@ -38,25 +39,26 @@ export const useMediaToggle = ({ source, onChange, ...rest }: MediaControlProps)
     onChange?.(isEnabled);
   };
 
-  const toggle = useCallback(
-    () => toggleMediaSource(source, localParticipant, onEnableChange, setPending),
+  const { toggle, className } = setupToggle();
+
+  const handleToggle = useCallback(
+    () => toggle(source, localParticipant, onEnableChange, setPending),
     [localParticipant, source],
   );
 
-  if (rest.className) {
-    rest.className += `lk-control-button`;
-  }
+  const newProps = mergeProps(rest, { className });
+
   const clickHandler: MouseEventHandler<HTMLButtonElement> = (evt) => {
-    toggle();
+    handleToggle();
     rest.onClick?.(evt);
   };
 
   return {
-    toggle,
+    toggle: handleToggle,
     enabled,
     pending,
     track,
-    buttonProps: { ...rest, 'aria-pressed': enabled, disabled: pending, onClick: clickHandler },
+    buttonProps: { ...newProps, 'aria-pressed': enabled, disabled: pending, onClick: clickHandler },
   };
 };
 

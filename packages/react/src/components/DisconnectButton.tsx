@@ -31,7 +31,11 @@ export const DisconnectButton = ({ room, text }: DisconnectButtonProps) => {
   };
 
   return (
-    <button onClick={handleClick} disabled={connectionState === ConnectionState.Disconnected}>
+    <button
+      className="lk-disconnect-button"
+      onClick={handleClick}
+      disabled={connectionState === ConnectionState.Disconnected}
+    >
       {text || 'Disconnect'}
     </button>
   );

@@ -21,11 +21,13 @@ export const observeTrackEvents = (track: Track, ...events: TrackEvent[]) => {
     };
 
     events.forEach((evt) => {
+      // @ts-ignore
       track.on(evt, onTrackUpdate);
     });
 
     const unsubscribe = () => {
       events.forEach((evt) => {
+        // @ts-ignore
         track.off(evt, onTrackUpdate);
       });
     };

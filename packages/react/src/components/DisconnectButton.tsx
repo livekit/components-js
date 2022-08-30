@@ -1,4 +1,4 @@
-import { roomEventSelector } from '@livekit/auth-helpers-shared';
+import { roomEventSelector } from '@livekit/components-core';
 import { ConnectionState, RoomEvent, type Room } from 'livekit-client';
 import React, { useEffect, useState } from 'react';
 import { useRoomContext } from './LiveKitRoom';
@@ -31,7 +31,7 @@ export const DisconnectButton = ({ room, text }: DisconnectButtonProps) => {
   };
 
   return (
-    <button onClick={handleClick} disabled={connectionState !== ConnectionState.Connected}>
+    <button onClick={handleClick} disabled={connectionState === ConnectionState.Disconnected}>
       {text || 'Disconnect'}
     </button>
   );

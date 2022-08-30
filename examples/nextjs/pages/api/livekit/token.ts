@@ -1,4 +1,4 @@
-import { handleToken } from '@livekit/auth-helpers-nextjs';
+import { handleToken } from '@livekit/components-react';
 
 export default handleToken({
   userAllowList: undefined,

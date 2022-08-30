@@ -9,11 +9,12 @@ import {
   ConnectionStatus,
   DisconnectButton,
   useToken,
-} from '@livekit/auth-helpers-nextjs';
+} from '@livekit/components-react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+
 // import '@livekit/components/dist/livekit-components.mjs';
 
 const Home: NextPage = () => {
@@ -62,7 +63,7 @@ const Home: NextPage = () => {
             <Participants>
               {/** TODO filter function for participants to be able to reuse it in multiple locations/styles */}
               <ParticipantView>
-                <ConnectionQuality />
+                <ConnectionQuality className={'lk-signal-icon'} />
               </ParticipantView>
             </Participants>
           </div>

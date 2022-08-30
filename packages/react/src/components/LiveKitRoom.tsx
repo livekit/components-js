@@ -1,4 +1,4 @@
-import { roomEventSelector } from '@livekit/auth-helpers-shared';
+import { roomEventSelector } from '@livekit/components-core';
 import {
   AudioCaptureOptions,
   ConnectionState,

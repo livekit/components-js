@@ -1,4 +1,4 @@
-import { roomEventSelector } from '@livekit/auth-helpers-shared';
+import { roomEventSelector } from '@livekit/components-core';
 import { type Room, RoomEvent } from 'livekit-client';
 import React, { useEffect, useState } from 'react';
 import { useRoomContext } from './LiveKitRoom';

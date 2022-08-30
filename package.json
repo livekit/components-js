@@ -1,12 +1,12 @@
 {
-  "name": "@livekit/auth-helpers",
+  "name": "@livekit/components",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "build:nextjs": "turbo run build --filter=@livekit/auth-helpers-nextjs",
+    "build:nextjs": "turbo run build --filter=@livekit/components-react",
     "build:react": "turbo run build --filter=@livekit/auth-helpers-react",
-    "build:shared": "turbo run build --filter=@livekit/auth-helpers-shared",
+    "build:shared": "turbo run build --filter=@livekit/components-core",
     "dev": "turbo run dev --parallel",
     "start": "turbo run start",
     "lint": "turbo run lint",

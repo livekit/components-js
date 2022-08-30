@@ -2,7 +2,7 @@ import { useRoomContext } from './LiveKitRoom';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { Participant, Room } from 'livekit-client';
 import { useLocalParticipant } from './MediaControl';
-import { connectedParticipants } from '@livekit/auth-helpers-shared';
+import { connectedParticipants } from '@livekit/components-core';
 
 type ParticipantsProps = {
   children: ReactNode | ReactNode[];

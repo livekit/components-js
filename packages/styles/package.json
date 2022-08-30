@@ -1,0 +1,27 @@
+{
+  "name": "livekit-components-styles",
+  "version": "0.1.0",
+  "author": "LiveKit",
+  "license": "MIT",
+  "main": "dist/styles.css",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "dev": "nodemon -e scss -x \"yarn build\"",
+    "build": "sass src/styles.scss dist/styles.css"
+  },
+  "peerDependencies": {},
+  "devDependencies": {},
+  "dependencies": {
+    "nodemon": "^2.0.19",
+    "sass": "^1.54.6"
+  }
+}

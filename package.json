@@ -7,6 +7,7 @@
     "build:nextjs": "turbo run build --filter=@livekit/components-react",
     "build:react": "turbo run build --filter=@livekit/auth-helpers-react",
     "build:shared": "turbo run build --filter=@livekit/components-core",
+    "build:styles": "turbo run build --filter=@livekit/components-styles",
     "dev": "turbo run dev --parallel",
     "start": "turbo run start",
     "lint": "turbo run lint",

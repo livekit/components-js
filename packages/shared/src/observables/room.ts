@@ -1,23 +1,6 @@
 import { Observable } from 'rxjs';
 import { Room, RoomEvent } from 'livekit-client';
-import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
-
-export const observeRoom = (room: Room) => {
-  const observable = observeRoomEvents(
-    room,
-    RoomEvent.ParticipantConnected,
-    RoomEvent.ParticipantDisconnected,
-    RoomEvent.ActiveSpeakersChanged,
-    RoomEvent.TrackSubscribed,
-    RoomEvent.TrackUnsubscribed,
-    RoomEvent.LocalTrackPublished,
-    RoomEvent.LocalTrackUnpublished,
-    RoomEvent.AudioPlaybackStatusChanged,
-    RoomEvent.ConnectionStateChanged,
-  );
-
-  return observable;
-};
+import type { ConnectionState, RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 
 export function observeRoomEvents(
   room: Room,
@@ -61,9 +44,22 @@ export function roomEventSelector<T extends RoomEvent>(room: Room, event: T) {
   return observable;
 }
 
-// const room = new Room();
+export const roomObserver = (room: Room) => {
+  const observable = observeRoomEvents(
+    room,
+    RoomEvent.ParticipantConnected,
+    RoomEvent.ParticipantDisconnected,
+    RoomEvent.ActiveSpeakersChanged,
+    RoomEvent.TrackSubscribed,
+    RoomEvent.TrackUnsubscribed,
+    RoomEvent.LocalTrackPublished,
+    RoomEvent.LocalTrackUnpublished,
+    RoomEvent.AudioPlaybackStatusChanged,
+    RoomEvent.ConnectionStateChanged,
+  );
 
-// let connectionState = ConnectionState.Disconnected;
-// roomEventSelector(room, RoomEvent.ConnectionStateChanged).subscribe(
-//   ([state]) => (connectionState = state),
-// );
+  return observable;
+};
+
+export const connectionStateObserver = (room: Room, cb: (state: ConnectionState) => void) =>
+  roomEventSelector(room, RoomEvent.ConnectionStateChanged).subscribe(([state]) => cb(state));

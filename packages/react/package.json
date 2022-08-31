@@ -42,7 +42,6 @@
   "dependencies": {
     "@livekit/components-core": "0.1.0",
     "@livekit/react-core": "^1.0.1",
-    "@livekit/components-styles": "0.1.0",
     "livekit-client": "^1.2.10",
     "react-aria": "^3.19.0"
   }

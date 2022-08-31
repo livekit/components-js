@@ -15,7 +15,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "dev": "nodemon -e scss -x \"yarn build\"",
+    "dev": "nodemon -e scss -x \"yarn build && yarn generate:types\"",
     "build": "sass src/styles.scss dist/styles.css",
     "generate:types": "cd src && typed-scss-modules './**/*.scss' --exportType default --outputFolder ../dist/types"
   },

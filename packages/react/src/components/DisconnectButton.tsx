@@ -25,5 +25,5 @@ export const useDisconnectButton = (props: DisconnectButtonProps) => {
 
 export const DisconnectButton = (props: DisconnectButtonProps) => {
   const { buttonProps } = useDisconnectButton(props);
-  return <button {...buttonProps}>{props.children || 'Disconnect'}</button>;
+  return <button {...buttonProps}>{props.children}</button>;
 };

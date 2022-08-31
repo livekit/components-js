@@ -5,5 +5,7 @@ export * from './observables/participant';
 export * from './component-interfaces/mediaToggle';
 export * from './component-interfaces/mediaSelect';
 export * from './component-interfaces/disconnectButton';
+export * from './component-interfaces/participantMedia';
 
 export * from './constants';
+export * from './utils';

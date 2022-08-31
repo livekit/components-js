@@ -19,9 +19,9 @@
     "build": "sass src/styles.scss dist/styles.css"
   },
   "peerDependencies": {},
-  "devDependencies": {},
-  "dependencies": {
+  "devDependencies": {
     "nodemon": "^2.0.19",
     "sass": "^1.54.6"
-  }
+  },
+  "dependencies": {}
 }

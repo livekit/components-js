@@ -19,16 +19,11 @@
     "node": ">=10"
   },
   "scripts": {
-    "dev": "tsup src/index.ts --format esm --onSuccess=\"tsc --emitDeclarationOnly --declaration\" --watch",
+    "dev": "tsup src/index.ts --dts --format esm --onSuccess=\"tsc --emitDeclarationOnly --declaration\" --watch",
     "build": "tsup src/index.ts --format esm --onSuccess=\"tsc --emitDeclarationOnly --declaration\""
   },
   "peerDependencies": {
     "react": ">=16"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
   },
   "name": "@livekit/components-react",
   "author": "LiveKit",

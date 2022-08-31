@@ -26,7 +26,8 @@
       "dependsOn": ["^build"]
     },
     "dev": {
-      "cache": false
+      "cache": false,
+      "dependsOn": ["^dev"]
     },
     "deploy": {
       "dependsOn": ["^build"]

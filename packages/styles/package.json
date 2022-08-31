@@ -20,8 +20,12 @@
   },
   "peerDependencies": {},
   "devDependencies": {
+
+    "modern-normalize": "^1.1.0",
     "nodemon": "^2.0.19",
     "sass": "^1.54.6"
   },
   "dependencies": {}
 }
+
+

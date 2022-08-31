@@ -58,7 +58,7 @@ const Home: NextPage = () => {
           <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
           <MediaSelect kind={'audioinput'} />
           <MediaSelect kind={'videoinput'} />
-          <DisconnectButton text="Hang up" />
+          <DisconnectButton>Hang up!</DisconnectButton>
 
           <div className="participant-grid">
             <Participants>

@@ -1,42 +1,29 @@
 import { ConnectionState, type Room } from 'livekit-client';
-import React, { useEffect, useState } from 'react';
-import { DisconnectButtonInterface } from '@livekit/components-core';
+import { setupDisconnectButton } from '@livekit/components-core';
+import React, { HTMLAttributes } from 'react';
+import { mergeProps } from 'react-aria';
 import { useRoomContext } from './LiveKitRoom';
+import { useConnectionState } from './ConnectionStatus';
 
-type DisconnectButtonProps = {
+type DisconnectButtonProps = HTMLAttributes<HTMLButtonElement> & {
   room?: Room;
-  text?: string;
 };
 
-function useConnectionState(room?: Room): [ConnectionState, Room] {
-  // passed room takes precedence, if not supplied get current room context
-  const currentRoom = room ?? useRoomContext();
-  const [connectionState, setConnectionState] = useState<ConnectionState>(currentRoom.state);
+export const useDisconnectButton = (props: DisconnectButtonProps) => {
+  const currentRoom = props.room ?? useRoomContext();
+  const connectionState = useConnectionState(currentRoom);
 
-  useEffect(() => {
-    const listener = DisconnectButtonInterface.connectionStateObserver(currentRoom).subscribe(
-      ([state]) => setConnectionState(state),
-    );
-    return () => listener.unsubscribe();
+  const { className, disconnect: onClick } = setupDisconnectButton(currentRoom);
+  const mergedProps = mergeProps(props, {
+    className,
+    onClick,
+    disabled: connectionState === ConnectionState.Disconnected,
   });
-  return [connectionState, currentRoom];
-}
 
-export const DisconnectButton = ({ room, text }: DisconnectButtonProps) => {
-  const [connectionState, currentRoom] = useConnectionState(room);
+  return { buttonProps: mergedProps };
+};
 
-  const handleClick = (): void => {
-    console.debug('Disconnect button was clicked: ');
-    currentRoom?.disconnect();
-  };
-
-  return (
-    <button
-      className="lk-disconnect-button"
-      onClick={handleClick}
-      disabled={connectionState === ConnectionState.Disconnected}
-    >
-      {text || 'Disconnect'}
-    </button>
-  );
+export const DisconnectButton = (props: DisconnectButtonProps) => {
+  const { buttonProps } = useDisconnectButton(props);
+  return <button {...buttonProps}>{props.children}</button>;
 };

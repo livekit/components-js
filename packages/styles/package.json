@@ -15,15 +15,17 @@
     "node": ">=10"
   },
   "scripts": {
-    "dev": "nodemon -e scss -x \"yarn build\"",
-    "build": "sass src/styles.scss dist/styles.css"
+    "dev": "nodemon -e scss -x \"yarn build && yarn generate:types\"",
+    "build": "sass src/styles.scss dist/styles.css && yarn generate:types",
+    "generate:types": "cd src && typed-scss-modules './**/*.scss' --exportType default --outputFolder ../dist/types"
   },
   "peerDependencies": {},
   "devDependencies": {
 
     "modern-normalize": "^1.1.0",
     "nodemon": "^2.0.19",
-    "sass": "^1.54.6"
+    "sass": "^1.54.6",
+    "typed-scss-modules": "^6.5.0"
   },
   "dependencies": {}
 }

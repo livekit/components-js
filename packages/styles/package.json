@@ -16,7 +16,8 @@
   },
   "scripts": {
     "dev": "nodemon -e scss -x \"yarn build\"",
-    "build": "sass src/styles.scss dist/styles.css"
+    "build": "sass src/styles.scss dist/styles.css",
+    "generate:types": "typed-scss-modules './**/*.scss' --exportType default --outputFolder dist"
   },
   "peerDependencies": {},
   "devDependencies": {

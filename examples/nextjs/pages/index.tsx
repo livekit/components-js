@@ -64,11 +64,10 @@ const Home: NextPage = () => {
             <>
               <div className="control-bar">
                 <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
+                <MediaSelect kind={'videoinput'} />
                 <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
                 <MediaSelect kind={'audioinput'} />
-
                 <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
-                <MediaSelect kind={'videoinput'} />
                 <DisconnectButton>Hang up!</DisconnectButton>
               </div>
               <ScreenShareView />

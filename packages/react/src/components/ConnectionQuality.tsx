@@ -24,11 +24,8 @@ const useConnectionQualityIndicator = (props: HTMLAttributes<HTMLDivElement>) =>
 export const ConnectionQualityIndicator = (props: HTMLAttributes<HTMLDivElement>) => {
   const { divProps, quality } = useConnectionQualityIndicator(props);
   return (
-    <div {...divProps}>
-      {`Q:${quality.valueOf()}`}
-      {/* <div className="lk-signal-bar"></div>
-      <div className="lk-signal-bar"></div>
-      <div className="lk-signal-bar"></div> */}
+    <div {...divProps} className={divProps.className + ` lk-${quality}`}>
+      {props.children}
     </div>
   );
 };

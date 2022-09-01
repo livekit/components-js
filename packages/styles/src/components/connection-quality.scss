@@ -2,9 +2,23 @@
 
 .lk-connection-quality {
   position: absolute;
-  background-color: aqua;
-  width: 20px;
-  height: 20px;
-  bottom: 1rem;
-  left: 1rem;
+  width: 18px;
+  height: 18px;
+  bottom: 8px;
+  left: 8px;
+  border-radius: 99999px;
+
+  // Participant connection quality indicator.
+  &.lk-unknown {
+    background-color: gray;
+  }
+  &.lk-poor {
+    background-color: red;
+  }
+  &.lk-good {
+    background-color: yellow;
+  }
+  &.lk-excellent {
+    background-color: yellowgreen;
+  }
 }

@@ -2,26 +2,6 @@ import { Participant, ParticipantEvent, RemoteParticipant, Room, RoomEvent } fro
 import { Observable } from 'rxjs';
 import { observeRoomEvents } from './room';
 
-export function observeParticipant(participant: Participant) {
-  const participantObserver = observeParticipantEvents(
-    participant,
-    ParticipantEvent.TrackMuted,
-    ParticipantEvent.TrackUnmuted,
-    ParticipantEvent.ParticipantMetadataChanged,
-    ParticipantEvent.ParticipantPermissionsChanged,
-    ParticipantEvent.IsSpeakingChanged,
-    ParticipantEvent.TrackPublished,
-    ParticipantEvent.TrackUnpublished,
-    ParticipantEvent.TrackSubscribed,
-    ParticipantEvent.TrackUnsubscribed,
-    ParticipantEvent.LocalTrackPublished,
-    ParticipantEvent.LocalTrackUnpublished,
-    ParticipantEvent.ConnectionQualityChanged,
-  );
-
-  return participantObserver;
-}
-
 export const observeParticipantEvents = (
   participant: Participant,
   ...events: ParticipantEvent[]
@@ -45,6 +25,24 @@ export const observeParticipantEvents = (
 
   return observable;
 };
+
+export function observeParticipantMedia(participant: Participant) {
+  const participantObserver = observeParticipantEvents(
+    participant,
+    ParticipantEvent.TrackMuted,
+    ParticipantEvent.TrackUnmuted,
+    ParticipantEvent.ParticipantPermissionsChanged,
+    ParticipantEvent.IsSpeakingChanged,
+    ParticipantEvent.TrackPublished,
+    ParticipantEvent.TrackUnpublished,
+    ParticipantEvent.TrackSubscribed,
+    ParticipantEvent.TrackUnsubscribed,
+    ParticipantEvent.LocalTrackPublished,
+    ParticipantEvent.LocalTrackUnpublished,
+  );
+
+  return participantObserver;
+}
 
 export function connectedParticipants(
   room: Room,

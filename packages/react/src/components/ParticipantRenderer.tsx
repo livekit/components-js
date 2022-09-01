@@ -1,129 +1,83 @@
-import React, { createContext, CSSProperties, ReactElement, ReactNode, useContext } from 'react';
+import React, {
+  createContext,
+  HTMLAttributes,
+  RefObject,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
-import { Property } from 'csstype';
-import type { Participant } from 'livekit-client';
-import {
-  ParticipantState,
-  useParticipant as useParticipantHook,
-  VideoRenderer,
-} from '@livekit/react-core';
+import { Participant, Track, TrackPublication } from 'livekit-client';
+import { isLocal, setupParticipantMedia } from '@livekit/components-core';
 
-export interface ParticipantProps {
-  children: Array<ReactNode> | ReactNode | undefined;
+export type ParticipantProps = HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
-  displayName?: string;
-  // width in CSS
-  width?: Property.Width;
-  // height in CSS
-  height?: Property.Height;
-  className?: string;
-  // aspect ratio width, if set, maintains aspect ratio
-  aspectWidth?: number;
-  // aspect ratio height
-  aspectHeight?: number;
-  // determine whether to contain or cover video.
-  // cover mode is used when layout orientation matches video orientation
-  orientation?: 'landscape' | 'portrait';
-  // true if overlay with participant info should be shown
-  showOverlay?: boolean;
-  // true if connection quality should be shown
-  showConnectionQuality?: boolean;
-  // additional classname when participant is currently speaking
-  speakerClassName?: string;
-  onMouseEnter?: () => void;
-  onMouseLeave?: () => void;
-  onClick?: () => void;
-}
-
-type ParticipantContext = ParticipantState & {
-  identity: string;
 };
 
-const participantContext = createContext<ParticipantContext | undefined>(undefined);
+const ParticipantContext = createContext<Participant | undefined>(undefined);
 
 export const useParticipantContext = () => {
-  const participant = useContext(participantContext);
+  const participant = useContext(ParticipantContext);
   if (!participant) {
     throw Error('tried to access participant context outside of participant context provider');
   }
   return participant;
 };
 
-export const ParticipantView = ({
-  children,
-  participant,
-  width,
-  height,
-  aspectWidth,
-  aspectHeight,
-  orientation,
-  displayName,
-  onMouseEnter,
-  onMouseLeave,
-  onClick,
-}: ParticipantProps) => {
+export const useParticipantMedia = (
+  participant: Participant,
+  source: Track.Source,
+  element?: RefObject<HTMLMediaElement>,
+) => {
+  const [publication, setPublication] = useState(participant.getTrack(source));
+  const [isMuted, setMuted] = useState(publication?.isMuted);
+  const [isSubscribed, setSubscribed] = useState(publication?.isSubscribed);
+  const [track, setTrack] = useState(publication?.track);
+  const [className, setClassName] = useState<string | undefined>();
+
+  const handleUpdate = useCallback(
+    (publication: TrackPublication | undefined) => {
+      console.log('setting publication', publication);
+      setPublication(publication);
+      setMuted(publication?.isMuted);
+      setSubscribed(publication?.isSubscribed);
+      setTrack(publication?.track);
+    },
+    [participant, source],
+  );
+
+  useEffect(() => {
+    const { mediaListener, className } = setupParticipantMedia(source);
+    setClassName(className);
+    return mediaListener(participant, handleUpdate, element?.current);
+  }, [participant, source, element]);
+
+  return { publication, isMuted, isSubscribed, track, className };
+};
+
+export const ParticipantView = ({ participant, children, ...htmlProps }: ParticipantProps) => {
   if (!participant) {
     throw Error('need to provide a participant');
   }
-  const participantState = useParticipantHook(participant);
-  const { cameraPublication, isLocal } = participantState;
-  const participantContextState = { identity: participant.identity, ...participantState };
+  const cameraEl = useRef<HTMLVideoElement>(null);
+  const audioEl = useRef<HTMLAudioElement>(null);
 
-  const containerStyles: CSSProperties = {
-    width: width,
-    height: height,
-  };
-
-  // when aspect matches, cover instead
-  let objectFit: Property.ObjectFit = 'contain';
-  let videoOrientation: 'landscape' | 'portrait' | undefined;
-  if (!orientation && aspectWidth && aspectHeight) {
-    orientation = aspectWidth > aspectHeight ? 'landscape' : 'portrait';
-  }
-  if (cameraPublication?.dimensions) {
-    videoOrientation =
-      cameraPublication.dimensions.width > cameraPublication.dimensions.height
-        ? 'landscape'
-        : 'portrait';
-  }
-
-  if (videoOrientation === orientation) {
-    objectFit = 'cover';
-  }
-
-  if (!displayName) {
-    displayName = participant.name || participant.identity;
-    if (isLocal) {
-      displayName += ' (You)';
-    }
-  }
-
-  let mainElement: ReactElement;
-  if (cameraPublication?.isSubscribed && cameraPublication?.track && !cameraPublication?.isMuted) {
-    mainElement = (
-      <VideoRenderer
-        track={cameraPublication.track}
-        isLocal={isLocal}
-        objectFit={objectFit}
-        width="100%"
-        height="100%"
-      />
-    );
-  } else {
-    mainElement = <div style={{ width: '100%', height: '100%' }}></div>;
-  }
+  const { className: videoClass } = useParticipantMedia(participant, Track.Source.Camera, cameraEl);
+  const { className: audioClass } = useParticipantMedia(
+    participant,
+    Track.Source.Microphone,
+    audioEl,
+  );
 
   return (
-    <div
-      style={containerStyles}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      onClick={onClick}
-    >
-      {mainElement}
-      <participantContext.Provider value={participantContextState}>
-        {children}
-      </participantContext.Provider>
+    <div {...htmlProps}>
+      <video ref={cameraEl} style={{ width: '100%', height: '100%' }} className={videoClass}>
+        <p>child of video</p>
+      </video>
+      {!isLocal(participant) && <audio ref={audioEl} className={audioClass}></audio>}
+      {children}
     </div>
   );
 };

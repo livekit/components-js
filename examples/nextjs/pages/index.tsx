@@ -23,10 +23,16 @@ const Home: NextPage = () => {
 
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? 'test-user';
-  const [connect, setConnected] = useState(false);
+  const [connect, setConnect] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
 
   const token = useToken(roomName, userIdentity, 'myname');
   console.log(token);
+
+  const handleDisconnect = () => {
+    setConnect(false);
+    setIsConnected(false);
+  };
 
   return (
     <div className={styles.container}>
@@ -41,33 +47,39 @@ const Home: NextPage = () => {
           Welcome to <a href="https://livekit.io">LiveKit</a>
         </h1>
         {/* <p>Status: {roomState.connectionState} <br/> Nr. of participants: {roomState.participants.length} </p> */}
-        <button onClick={() => setConnected(!connect)}>{connect ? 'Disconnect' : 'Connect'}</button>
+        {!isConnected && (
+          <button onClick={() => setConnect(!connect)}>{connect ? 'Disconnect' : 'Connect'}</button>
+        )}
         {/* <Room connect={connect} /> */}
         <LiveKitRoom
           token={token}
           connect={connect}
-          onConnected={() => console.log('LiveKitRoom: onConnected Callback')}
-          onDisconnected={() => setConnected(false)}
+          onConnected={() => setIsConnected(true)}
+          onDisconnected={handleDisconnect}
         >
           <ConnectionStatus />
           {/* <MediaSelection type="microphone"/>  */}
+          {isConnected && (
+            <>
+              <div className="control-bar">
+                <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
+                <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
+                <MediaSelect kind={'audioinput'} />
 
-          <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
-          {/* <ConnectButton/> */}
-          <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
-          <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
-          <MediaSelect kind={'audioinput'} />
-          <MediaSelect kind={'videoinput'} />
-          <DisconnectButton>Hang up!</DisconnectButton>
-
-          <div className="participant-grid">
-            <Participants>
-              {/** TODO filter function for participants to be able to reuse it in multiple locations/styles */}
-              <ParticipantView>
-                <ConnectionQuality className={'lk-signal-icon'} />
-              </ParticipantView>
-            </Participants>
-          </div>
+                <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
+                <MediaSelect kind={'videoinput'} />
+                <DisconnectButton>Hang up!</DisconnectButton>
+              </div>
+              <div className="participant-grid">
+                <Participants>
+                  {/** TODO filter function for participants to be able to reuse it in multiple locations/styles */}
+                  <ParticipantView>
+                    <ConnectionQuality className={'lk-signal-icon'} />
+                  </ParticipantView>
+                </Participants>
+              </div>{' '}
+            </>
+          )}
         </LiveKitRoom>
       </main>
     </div>

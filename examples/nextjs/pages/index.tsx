@@ -29,6 +29,11 @@ const Home: NextPage = () => {
   const token = useToken(roomName, userIdentity, 'myname');
   console.log(token);
 
+  const handleDisconnect = () => {
+    setConnect(false);
+    setIsConnected(false);
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -42,13 +47,15 @@ const Home: NextPage = () => {
           Welcome to <a href="https://livekit.io">LiveKit</a>
         </h1>
         {/* <p>Status: {roomState.connectionState} <br/> Nr. of participants: {roomState.participants.length} </p> */}
-        <button onClick={() => setConnect(!connect)}>{connect ? 'Disconnect' : 'Connect'}</button>
+        {!isConnected && (
+          <button onClick={() => setConnect(!connect)}>{connect ? 'Disconnect' : 'Connect'}</button>
+        )}
         {/* <Room connect={connect} /> */}
         <LiveKitRoom
           token={token}
           connect={connect}
           onConnected={() => setIsConnected(true)}
-          onDisconnected={() => setIsConnected(false)}
+          onDisconnected={handleDisconnect}
         >
           <ConnectionStatus />
           {/* <MediaSelection type="microphone"/>  */}

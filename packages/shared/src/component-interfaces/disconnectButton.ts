@@ -1,5 +1,4 @@
 import type { Room } from 'livekit-client';
-// import { getCSSClassName } from '../utils';
 import type { BaseSetupReturnType } from './types';
 
 interface SetupDisconnectButton extends BaseSetupReturnType {

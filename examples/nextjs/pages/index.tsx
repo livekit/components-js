@@ -9,6 +9,7 @@ import {
   ConnectionStatus,
   DisconnectButton,
   useToken,
+  ScreenShareView,
 } from '@livekit/components-react';
 
 import type { NextPage } from 'next';
@@ -70,6 +71,7 @@ const Home: NextPage = () => {
                 <MediaSelect kind={'videoinput'} />
                 <DisconnectButton>Hang up!</DisconnectButton>
               </div>
+              <ScreenShareView />
               <div className="participant-grid">
                 <Participants>
                   {/** TODO filter function for participants to be able to reuse it in multiple locations/styles */}

@@ -77,7 +77,7 @@ export const ParticipantView = ({ participant, children, ...htmlProps }: Partici
         <p>child of video</p>
       </video>
       {!isLocal(participant) && <audio ref={audioEl} className={audioClass}></audio>}
-      {children}
+      <ParticipantContext.Provider value={participant}>{children}</ParticipantContext.Provider>
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs';
-import { Room, RoomEvent } from 'livekit-client';
+import { Observable, Subscription } from 'rxjs';
+import { Participant, Room, RoomEvent, Track, TrackPublication } from 'livekit-client';
 import type { ConnectionState, RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 
 export function observeRoomEvents(
@@ -63,3 +63,70 @@ export const roomObserver = (room: Room) => {
 
 export const connectionStateObserver = (room: Room, cb: (state: ConnectionState) => void) =>
   roomEventSelector(room, RoomEvent.ConnectionStateChanged).subscribe(([state]) => cb(state));
+
+export type ScreenShareTrackMap = Array<{
+  participantId: string;
+  tracks: Array<TrackPublication>;
+}>;
+
+export const screenShareObserver = (
+  room: Room,
+  onTracksChanged: (map: ScreenShareTrackMap) => void,
+) => {
+  const screenShareTracks: ScreenShareTrackMap = [];
+  const handleSub = (publication: TrackPublication, participant: Participant) => {
+    if (
+      publication.source !== Track.Source.ScreenShare &&
+      publication.source !== Track.Source.ScreenShareAudio
+    ) {
+      return;
+    }
+    let trackMap = screenShareTracks.find((tr) => tr.participantId === participant.identity);
+    const getScreenShareTracks = (participant: Participant) => {
+      return participant
+        .getTracks()
+        .filter(
+          (track) =>
+            (track.source === Track.Source.ScreenShare ||
+              track.source === Track.Source.ScreenShareAudio) &&
+            track.track,
+        );
+    };
+    if (!trackMap) {
+      trackMap = { participantId: participant.identity, tracks: getScreenShareTracks(participant) };
+    } else {
+      trackMap.tracks = getScreenShareTracks(participant);
+      const index = screenShareTracks.indexOf(trackMap);
+      screenShareTracks.splice(index, 1);
+    }
+    screenShareTracks.push(trackMap);
+
+    onTracksChanged(screenShareTracks);
+  };
+  const observers: Array<Subscription> = [];
+  observers.push(
+    roomEventSelector(room, RoomEvent.TrackSubscribed).subscribe(([_, ...args]) =>
+      handleSub(...args),
+    ),
+  );
+  observers.push(
+    roomEventSelector(room, RoomEvent.TrackUnsubscribed).subscribe(([_, ...args]) =>
+      handleSub(...args),
+    ),
+  );
+  observers.push(
+    roomEventSelector(room, RoomEvent.LocalTrackPublished).subscribe((args) => handleSub(...args)),
+  );
+  observers.push(
+    roomEventSelector(room, RoomEvent.LocalTrackUnpublished).subscribe((args) =>
+      handleSub(...args),
+    ),
+  );
+
+  for (const p of room.participants.values()) {
+    p.getTracks().forEach((track) => {
+      handleSub(track, p);
+    });
+  }
+  return () => observers.forEach((obs) => obs.unsubscribe());
+};

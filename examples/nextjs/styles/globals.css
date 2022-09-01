@@ -15,6 +15,16 @@ a {
   box-sizing: border-box;
 }
 
+.participant-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.control-bar {
+  display: flex;
+  flex-direction: row;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

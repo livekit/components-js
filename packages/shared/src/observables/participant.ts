@@ -39,6 +39,7 @@ export function observeParticipantMedia(participant: Participant) {
     ParticipantEvent.TrackUnsubscribed,
     ParticipantEvent.LocalTrackPublished,
     ParticipantEvent.LocalTrackUnpublished,
+    ParticipantEvent.ConnectionQualityChanged,
   );
 
   return participantObserver;

@@ -1,6 +1,6 @@
 import {
   ParticipantView,
-  ConnectionQuality,
+  ConnectionQualityIndicator,
   LiveKitRoom,
   MediaControlButton,
   MediaSelect,
@@ -76,7 +76,7 @@ const Home: NextPage = () => {
                 <Participants>
                   {/** TODO filter function for participants to be able to reuse it in multiple locations/styles */}
                   <ParticipantView>
-                    <ConnectionQuality className={'lk-signal-icon'} />
+                    <ConnectionQualityIndicator />
                   </ParticipantView>
                 </Participants>
               </div>{' '}

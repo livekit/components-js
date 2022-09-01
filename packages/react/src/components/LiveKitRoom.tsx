@@ -22,6 +22,7 @@ export type LiveKitRoomProps = {
   connect?: boolean;
   onConnected?: () => void;
   onDisconnected?: () => void;
+  onError?: (error: Error) => void;
 };
 
 // type RoomContextState = {
@@ -73,6 +74,7 @@ export const LiveKitRoom = ({
   screen,
   onConnected,
   onDisconnected,
+  onError,
 }: LiveKitRoomProps) => {
   const [room] = useState<Room>(new Room(options));
   // setLogLevel('debug');
@@ -82,23 +84,28 @@ export const LiveKitRoom = ({
       return;
     }
     const localP = room.localParticipant;
-    localP.setMicrophoneEnabled(!!audio, typeof audio !== 'boolean' ? audio : undefined);
-    localP.setCameraEnabled(!!video, typeof video !== 'boolean' ? video : undefined);
-    localP.setScreenShareEnabled(!!screen, typeof screen !== 'boolean' ? screen : undefined);
+    try {
+      localP.setMicrophoneEnabled(!!audio, typeof audio !== 'boolean' ? audio : undefined);
+      localP.setCameraEnabled(!!video, typeof video !== 'boolean' ? video : undefined);
+      localP.setScreenShareEnabled(!!screen, typeof screen !== 'boolean' ? screen : undefined);
+    } catch (e: any) {
+      console.warn(e);
+      onError?.(e as Error);
+    }
   }, [room.state, audio, video, screen]);
 
   useEffect(() => {
     if (!token) return;
     if (!process.env.NEXT_PUBLIC_LK_SERVER_URL) {
-      console.error('no livekit url provided');
+      console.warn('no livekit url provided');
+      onError?.(Error('no livekit url provided'));
       return;
     }
     if (connect) {
-      room
-        .connect(process.env.NEXT_PUBLIC_LK_SERVER_URL, token, connectOptions)
-        .catch((e: unknown) => {
-          console.warn('could not connect', e);
-        });
+      room.connect(process.env.NEXT_PUBLIC_LK_SERVER_URL, token, connectOptions).catch((e: any) => {
+        console.warn(e);
+        onError?.(e as Error);
+      });
     } else {
       room.disconnect();
     }

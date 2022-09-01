@@ -1,6 +1,6 @@
 import { screenShareObserver, ScreenShareTrackMap } from '@livekit/components-core';
 import { Room, Track } from 'livekit-client';
-import React, { HTMLAttributes, RefObject, useEffect, useRef } from 'react';
+import React, { HTMLAttributes, RefObject, useEffect, useRef, useState } from 'react';
 import { useRoomContext } from './LiveKitRoom';
 
 export const useScreenShare = (
@@ -8,10 +8,15 @@ export const useScreenShare = (
   audioEl: RefObject<HTMLMediaElement>,
   room?: Room,
 ) => {
+  const [hide, setHide] = useState(true);
   const currentRoom = room ?? useRoomContext();
   const handleChange = (map: ScreenShareTrackMap) => {
     console.log('screen share change');
-    if (map.length < 1) return;
+    if (map.length < 1) {
+      setHide(true);
+      return;
+    }
+    setHide(false);
     const { participantId, tracks } = map[map.length - 1];
     console.log({ tracks });
     if (!tracks) return;
@@ -39,16 +44,20 @@ export const useScreenShare = (
   useEffect(() => {
     screenShareObserver(currentRoom, handleChange);
   });
+  return { hide };
 };
 
 export const ScreenShareView = ({ children, ...htmlProps }: HTMLAttributes<HTMLDivElement>) => {
   const screenEl = useRef(null);
   const audioEl = useRef(null);
-  useScreenShare(screenEl, audioEl);
+  const { hide } = useScreenShare(screenEl, audioEl);
 
   return (
     <div {...htmlProps}>
-      <video ref={screenEl} style={{ width: '100%', height: '100%' }}></video>
+      <video
+        ref={screenEl}
+        style={{ width: '100%', height: '100%', display: hide ? 'none' : 'block' }}
+      ></video>
       <audio ref={audioEl}></audio>
       {children}
     </div>

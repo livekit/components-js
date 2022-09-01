@@ -1,4 +1,12 @@
 .lk-button {
     padding: 0.3rem;
-    border-radius: 1px;
+    border: none;
+    border-radius: 4px;
+    background: #e0e0e0;
+    
+}
+
+.lk-button[aria-pressed=true] {
+    box-shadow: inset 5px 5px 10px #bebebe,
+    inset -5px -5px 10px #ffffff;
 }

@@ -8,15 +8,15 @@ export const useScreenShare = (
   audioEl: RefObject<HTMLMediaElement>,
   room?: Room,
 ) => {
-  const [hide, setHide] = useState(true);
+  const [hasActiveScreenShare, setHasActiveScreenShare] = useState(false);
   const currentRoom = room ?? useRoomContext();
   const handleChange = (map: ScreenShareTrackMap) => {
     console.log('screen share change');
     if (map.length < 1) {
-      setHide(true);
+      setHasActiveScreenShare(false);
       return;
     }
-    setHide(false);
+    setHasActiveScreenShare(true);
     const { participantId, tracks } = map[map.length - 1];
     console.log({ tracks });
     if (!tracks) return;
@@ -44,19 +44,19 @@ export const useScreenShare = (
   useEffect(() => {
     screenShareObserver(currentRoom, handleChange);
   });
-  return { hide };
+  return { hasActiveScreenShare };
 };
 
 export const ScreenShareView = ({ children, ...htmlProps }: HTMLAttributes<HTMLDivElement>) => {
   const screenEl = useRef(null);
   const audioEl = useRef(null);
-  const { hide } = useScreenShare(screenEl, audioEl);
+  const { hasActiveScreenShare } = useScreenShare(screenEl, audioEl);
 
   return (
     <div {...htmlProps}>
       <video
         ref={screenEl}
-        style={{ width: '100%', height: '100%', display: hide ? 'none' : 'block' }}
+        style={{ width: '100%', height: '100%', display: hasActiveScreenShare ? 'block' : 'none' }}
       ></video>
       <audio ref={audioEl}></audio>
       {children}

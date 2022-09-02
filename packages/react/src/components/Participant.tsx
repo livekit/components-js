@@ -7,6 +7,7 @@ import React, {
   useEffect,
   useRef,
   useState,
+  useMemo,
 } from 'react';
 
 import { Participant, Track, TrackPublication } from 'livekit-client';
@@ -35,7 +36,6 @@ export const useParticipantMedia = (
   const [isMuted, setMuted] = useState(publication?.isMuted);
   const [isSubscribed, setSubscribed] = useState(publication?.isSubscribed);
   const [track, setTrack] = useState(publication?.track);
-  const [className, setClassName] = useState<string | undefined>();
 
   const handleUpdate = useCallback(
     (publication: TrackPublication | undefined) => {
@@ -48,9 +48,9 @@ export const useParticipantMedia = (
     [participant, source],
   );
 
+  const { mediaListener, className } = useMemo(() => setupParticipantMedia(source), [source]);
+
   useEffect(() => {
-    const { mediaListener, className } = setupParticipantMedia(source);
-    setClassName(className);
     return mediaListener(participant, handleUpdate, element?.current);
   }, [participant, source, element]);
 

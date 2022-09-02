@@ -1,6 +1,6 @@
 import { ConnectionState, type Room } from 'livekit-client';
 import { setupDisconnectButton } from '@livekit/components-core';
-import React, { HTMLAttributes } from 'react';
+import React, { HTMLAttributes, useMemo } from 'react';
 import { mergeProps } from 'react-aria';
 import { useRoomContext } from './LiveKitRoom';
 import { useConnectionState } from './ConnectionStatus';
@@ -13,14 +13,17 @@ export const useDisconnectButton = (props: DisconnectButtonProps) => {
   const currentRoom = props.room ?? useRoomContext();
   const connectionState = useConnectionState(currentRoom);
 
-  const { className, disconnect: onClick } = setupDisconnectButton(currentRoom);
-  const mergedProps = mergeProps(props, {
-    className,
-    onClick,
-    disabled: connectionState === ConnectionState.Disconnected,
-  });
+  const buttonProps = useMemo(() => {
+    const { className, disconnect: onClick } = setupDisconnectButton(currentRoom);
+    const mergedProps = mergeProps(props, {
+      className,
+      onClick,
+      disabled: connectionState === ConnectionState.Disconnected,
+    });
+    return mergedProps;
+  }, [currentRoom, connectionState]);
 
-  return { buttonProps: mergedProps };
+  return { buttonProps };
 };
 
 export const DisconnectButton = (props: DisconnectButtonProps) => {

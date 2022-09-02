@@ -33,6 +33,7 @@ export const useConnectionQuality = (
 
   useEffect(() => {
     const subscription = createConnectionQualityObserver(p).subscribe(setQuality);
+    setQuality(p.connectionQuality);
     return () => {
       subscription.unsubscribe();
     };

@@ -1,35 +1,38 @@
 import React, { HTMLAttributes, useEffect, useMemo, useState } from 'react';
-import { setupConnectionQualityIndicator } from '@livekit/components-core';
+import { ConnectionQualityInterface } from '@livekit/components-core';
 import { useParticipantContext } from './Participant';
 import { ConnectionQuality } from 'livekit-client';
 import { mergeProps } from 'react-aria';
 
 interface ConnectionIndicatorProps extends HTMLAttributes<HTMLDivElement> {}
 
-const useConnectionIndicator = (props: ConnectionIndicatorProps) => {
-  const participant = useParticipantContext();
-  const [quality, setQuality] = useState(ConnectionQuality.Unknown);
-  const { className, onConnectionQualityChange } = useMemo(
-    () => setupConnectionQualityIndicator(),
-    [],
-  );
-
-  const divProps = useMemo(() => mergeProps(props, { className }), [props, className]);
-
-  useEffect(() => {
-    return onConnectionQualityChange(participant, (quality) => setQuality(quality));
-  }, [participant]);
-
-  return { divProps, quality };
-};
-
 /**
  * Display the connection quality of a given participant.
  */
-export const ConnectionQualityIndicator = (props: HTMLAttributes<HTMLDivElement>) => {
-  const { divProps, quality } = useConnectionIndicator(props);
+export const ConnectionIndicator = (props: ConnectionIndicatorProps) => {
+  const { className } = ConnectionQualityInterface.setup();
+  const mergedProps = useMemo(() => mergeProps(props, { className }), [props, className]);
+  const participant = useParticipantContext();
+  const [quality, setQuality] = useState(ConnectionQuality.Unknown);
+
+  // Get al create-observer-functions that are needed for a component.
+  const { createConnectionQualityObserver } = useMemo(
+    () => ConnectionQualityInterface.observers(),
+    [participant],
+  );
+
+  // Create and subscribe to observers.
+  useEffect(() => {
+    const subscription = createConnectionQualityObserver(participant).subscribe((quality) => {
+      setQuality(quality);
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [participant]);
+
   return (
-    <div {...divProps} className={divProps.className + ` lk-${quality}`}>
+    <div {...mergedProps} className={className + ` lk-${quality}`}>
       {props.children}
     </div>
   );

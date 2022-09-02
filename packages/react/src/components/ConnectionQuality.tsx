@@ -19,8 +19,8 @@ export const useConnectionQuality = (
   participant?: Participant,
 ) => {
   const p = participant ?? useParticipantContext();
-
   const [quality, setQuality] = useState(ConnectionQuality.Unknown);
+  const [qualityClassName, setQualityClassName] = useState('');
 
   const { staticProps, createConnectionQualityObserver } = useMemo(() => {
     const { className } = ConnectionQualityInterface.setup();
@@ -32,16 +32,18 @@ export const useConnectionQuality = (
   }, []);
 
   useEffect(() => {
-    const subscription = createConnectionQualityObserver(p).subscribe(setQuality);
-    setQuality(p.connectionQuality);
+    const subscription = createConnectionQualityObserver(p).subscribe(({ quality, class_ }) => {
+      setQuality(quality);
+      setQualityClassName(class_);
+    });
     return () => {
       subscription.unsubscribe();
     };
   }, [p]);
 
   const elementProps = useMemo(
-    () => betterMergeProps(props, staticProps, { className: `lk-${quality}` }),
-    [quality, props, staticProps],
+    () => betterMergeProps(props, staticProps, { className: qualityClassName }),
+    [qualityClassName, props, staticProps],
   );
 
   return { elementProps, quality };

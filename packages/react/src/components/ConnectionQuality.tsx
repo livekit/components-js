@@ -1,16 +1,36 @@
-import React, { HTMLAttributes } from 'react';
-// import { useParticipantContext } from './ParticipantRenderer';
+import React, { HTMLAttributes, useEffect, useMemo, useState } from 'react';
+import { setupConnectionQualityIndicator } from '@livekit/components-core';
+import { useParticipantContext } from './ParticipantRenderer';
+import { ConnectionQuality } from 'livekit-client';
+import { mergeProps } from 'react-aria';
 
-export const ConnectionQuality = (props: HTMLAttributes<HTMLDivElement>) => {
-  const { className, ...rest } = props;
-  // const participantState = useParticipantContext();
-  const signalClassName = '';
+interface ConnectionIndicatorProps extends HTMLAttributes<HTMLDivElement> {}
 
+const useConnectionIndicator = (props: ConnectionIndicatorProps) => {
+  const participant = useParticipantContext();
+  const [quality, setQuality] = useState(ConnectionQuality.Unknown);
+  const { className, onConnectionQualityChange } = useMemo(
+    () => setupConnectionQualityIndicator(),
+    [],
+  );
+
+  const divProps = useMemo(() => mergeProps(props, { className }), [props, className]);
+
+  useEffect(() => {
+    return onConnectionQualityChange(participant, (quality) => setQuality(quality));
+  }, [participant]);
+
+  return { divProps, quality };
+};
+
+/**
+ * Display the connection quality of a given participant.
+ */
+export const ConnectionIndicator = (props: HTMLAttributes<HTMLDivElement>) => {
+  const { divProps, quality } = useConnectionIndicator(props);
   return (
-    <div className={className + ` ${signalClassName}`} {...rest}>
-      <div className="lk-signal-bar"></div>
-      <div className="lk-signal-bar"></div>
-      <div className="lk-signal-bar"></div>
+    <div {...divProps} className={divProps.className + ` lk-${quality}`}>
+      {props.children}
     </div>
   );
 };

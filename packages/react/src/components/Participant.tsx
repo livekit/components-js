@@ -95,7 +95,7 @@ export const ParticipantView = ({ participant, children, ...htmlProps }: Partici
   );
 
   return (
-    <div {...htmlProps}>
+    <div {...htmlProps} style={{ position: 'relative' }}>
       <video ref={cameraEl} style={{ width: '100%', height: '100%' }} className={videoClass}>
         <p>child of video</p>
       </video>

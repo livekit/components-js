@@ -1,0 +1,24 @@
+@import '../variables';
+
+.lk-connection-quality {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  bottom: 8px;
+  left: 8px;
+  border-radius: 99999px;
+
+  // Participant connection quality indicator.
+  &.lk-unknown {
+    background-color: gray;
+  }
+  &.lk-poor {
+    background-color: red;
+  }
+  &.lk-good {
+    background-color: yellow;
+  }
+  &.lk-excellent {
+    background-color: yellowgreen;
+  }
+}

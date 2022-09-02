@@ -1,6 +1,6 @@
 import { screenShareObserver, ScreenShareTrackMap } from '@livekit/components-core';
 import { Room, Track } from 'livekit-client';
-import React, { HTMLAttributes, RefObject, useEffect, useRef, useState } from 'react';
+import React, { HTMLAttributes, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { useRoomContext } from './LiveKitRoom';
 
 export const useScreenShare = (

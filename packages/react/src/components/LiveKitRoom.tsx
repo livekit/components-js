@@ -13,6 +13,7 @@ import React, { ReactNode, useContext, useEffect, useState } from 'react';
 
 export type LiveKitRoomProps = {
   children?: ReactNode | ReactNode[];
+  serverUrl?: string;
   token?: string;
   options?: RoomOptions;
   connectOptions?: RoomConnectOptions;
@@ -66,6 +67,7 @@ export function useToken(roomName: string, identity: string, name?: string, meta
 export const LiveKitRoom = ({
   children,
   token,
+  serverUrl,
   options,
   connectOptions,
   connect,
@@ -95,14 +97,16 @@ export const LiveKitRoom = ({
   }, [room.state, audio, video, screen]);
 
   useEffect(() => {
-    if (!token) return;
-    if (!process.env.NEXT_PUBLIC_LK_SERVER_URL) {
+    if (!token) {
+      return;
+    }
+    if (!serverUrl) {
       console.warn('no livekit url provided');
       onError?.(Error('no livekit url provided'));
       return;
     }
     if (connect) {
-      room.connect(process.env.NEXT_PUBLIC_LK_SERVER_URL, token, connectOptions).catch((e: any) => {
+      room.connect(serverUrl, token, connectOptions).catch((e: any) => {
         console.warn(e);
         onError?.(e as Error);
       });

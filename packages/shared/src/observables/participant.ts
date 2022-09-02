@@ -44,6 +44,18 @@ export function observeParticipantMedia(participant: Participant) {
   return participantObserver;
 }
 
+export function participantInfoObserver(
+  participant: Participant,
+  onInfoChange: (p: Participant) => void,
+) {
+  const observer = observeParticipantEvents(
+    participant,
+    ParticipantEvent.ParticipantMetadataChanged,
+  ).subscribe(onInfoChange);
+  onInfoChange(participant);
+  return observer;
+}
+
 export function connectedParticipants(
   room: Room,
   onConnectedParticipantsChanged: (participants: RemoteParticipant[]) => void,

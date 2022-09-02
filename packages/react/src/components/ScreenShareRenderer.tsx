@@ -1,6 +1,6 @@
 import { screenShareObserver, ScreenShareTrackMap } from '@livekit/components-core';
 import { Room, Track } from 'livekit-client';
-import React, { HTMLAttributes, RefObject, useEffect, useRef, useState } from 'react';
+import React, { HTMLAttributes, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { useRoomContext } from './LiveKitRoom';
 
 export const useScreenShare = (
@@ -10,7 +10,7 @@ export const useScreenShare = (
 ) => {
   const [hasActiveScreenShare, setHasActiveScreenShare] = useState(false);
   const currentRoom = room ?? useRoomContext();
-  const handleChange = (map: ScreenShareTrackMap) => {
+  const handleChange = useCallback((map: ScreenShareTrackMap) => {
     console.log('screen share change');
     if (map.length < 1) {
       setHasActiveScreenShare(false);
@@ -39,7 +39,7 @@ export const useScreenShare = (
         }
       }
     });
-  };
+  }, []);
   console.log(audioEl);
   useEffect(() => {
     screenShareObserver(currentRoom, handleChange);

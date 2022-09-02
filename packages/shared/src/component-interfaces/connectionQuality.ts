@@ -28,6 +28,7 @@ export function setupConnectionQualityIndicator(): SetupConnectionQuality {
         callback(quality);
       });
 
+    callback(participant.connectionQuality);
     return () => listener.unsubscribe();
   };
 

@@ -2,6 +2,7 @@ import { Participant, ParticipantEvent, ConnectionQuality } from 'livekit-client
 import { observeParticipantEvents } from '../observables/participant';
 // import { getCSSClassName } from '../utils';
 import type { BaseSetupReturnType } from './types';
+import { map } from 'rxjs';
 
 interface SetupConnectionQuality extends BaseSetupReturnType {
   /**
@@ -21,9 +22,11 @@ export function setupConnectionQualityIndicator(): SetupConnectionQuality {
     const listener = observeParticipantEvents(
       participant,
       ParticipantEvent.ConnectionQualityChanged,
-    ).subscribe((participant) => {
-      callback(participant.connectionQuality);
-    });
+    )
+      .pipe(map((p) => p.connectionQuality))
+      .subscribe((quality) => {
+        callback(quality);
+      });
 
     return () => listener.unsubscribe();
   };

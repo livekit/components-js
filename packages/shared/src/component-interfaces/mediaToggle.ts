@@ -1,7 +1,16 @@
 import { LocalParticipant, Track } from 'livekit-client';
-import { getCSSClassName } from '../utils';
+import type { BaseSetupReturnType } from './types';
 
-export function setupToggle() {
+type ToggleReturnType = BaseSetupReturnType & {
+  toggle: (
+    source: Track.Source,
+    localParticipant: LocalParticipant,
+    onEnableChange?: (enabled: boolean) => void,
+    onPendingChange?: (pending: boolean) => void,
+  ) => Promise<void>;
+};
+
+export function setupToggle(): ToggleReturnType {
   const toggle = async (
     source: Track.Source,
     localParticipant: LocalParticipant,
@@ -32,5 +41,5 @@ export function setupToggle() {
       onEnableChange?.(isMediaEnabled);
     }
   };
-  return { className: getCSSClassName('media-toggle'), toggle };
+  return { className: 'lk-button', toggle };
 }

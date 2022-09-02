@@ -99,7 +99,9 @@ export const screenShareObserver = (
       const index = screenShareTracks.indexOf(trackMap);
       screenShareTracks.splice(index, 1);
     }
-    screenShareTracks.push(trackMap);
+    if (trackMap.tracks.length > 0) {
+      screenShareTracks.push(trackMap);
+    }
 
     onTracksChanged(screenShareTracks);
   };
@@ -118,9 +120,10 @@ export const screenShareObserver = (
     roomEventSelector(room, RoomEvent.LocalTrackPublished).subscribe((args) => handleSub(...args)),
   );
   observers.push(
-    roomEventSelector(room, RoomEvent.LocalTrackUnpublished).subscribe((args) =>
-      handleSub(...args),
-    ),
+    roomEventSelector(room, RoomEvent.LocalTrackUnpublished).subscribe((args) => {
+      console.log('local track unpublished');
+      handleSub(...args);
+    }),
   );
 
   for (const p of room.participants.values()) {

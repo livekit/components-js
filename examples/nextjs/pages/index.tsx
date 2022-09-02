@@ -10,7 +10,9 @@ import {
   DisconnectButton,
   useToken,
   ScreenShareView,
+  ParticipantName,
 } from '@livekit/components-react';
+import { RemoteParticipant } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -28,7 +30,6 @@ const Home: NextPage = () => {
   const [isConnected, setIsConnected] = useState(false);
 
   const token = useToken(roomName, userIdentity, 'myname');
-  console.log(token);
 
   const handleDisconnect = () => {
     setConnect(false);
@@ -54,6 +55,7 @@ const Home: NextPage = () => {
         {/* <Room connect={connect} /> */}
         <LiveKitRoom
           token={token}
+          serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
           connect={connect}
           onConnected={() => setIsConnected(true)}
           onDisconnected={handleDisconnect}
@@ -64,22 +66,24 @@ const Home: NextPage = () => {
             <>
               <div className="control-bar">
                 <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
+                <MediaSelect kind={'videoinput'} />
                 <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
                 <MediaSelect kind={'audioinput'} />
-
                 <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
-                <MediaSelect kind={'videoinput'} />
                 <DisconnectButton>Hang up!</DisconnectButton>
               </div>
               <ScreenShareView />
               <div className="participant-grid">
                 <Participants>
-                  {/** TODO filter function for participants to be able to reuse it in multiple locations/styles */}
+                  {/* <Participants
+                  filter={(participants) => participants.filter((p) => p instanceof RemoteParticipant)}
+                > */}
                   <ParticipantView>
-                    <ConnectionQualityIndicator />
+                    <ConnectionQualityIndicator className={'lk-signal-icon'} />
+                    <ParticipantName />
                   </ParticipantView>
                 </Participants>
-              </div>{' '}
+              </div>
             </>
           )}
         </LiveKitRoom>

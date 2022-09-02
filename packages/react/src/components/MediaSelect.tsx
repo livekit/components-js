@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEventHandler, useCallback, useEffect, useMemo, useState } from 'react';
 import { useMaybeRoomContext } from './LiveKitRoom';
 import { setupMediaSelect } from '@livekit/components-core';
 import { mergeProps } from 'react-aria';
@@ -13,27 +13,32 @@ export const useMediaSelect = (props: MediaSelectProps) => {
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
   const room = useMaybeRoomContext();
 
+  // TODO figure out and return initial/current device
+
   const onChange: ChangeEventHandler<HTMLSelectElement> = useCallback(async (evt) => {
     await room?.switchActiveDevice(props.kind, evt.target.value);
     if (props.onChange) {
       props.onChange(evt);
     }
   }, []);
-  // TODO figure out and return initial/current device
 
-  const handleDevicesChanged = (newDevices: MediaDeviceInfo[]) => {
-    setDevices(newDevices);
+  const handleDevicesChanged = useCallback(
+    (newDevices: MediaDeviceInfo[]) => {
+      setDevices(newDevices);
+      props.onDevicesChange?.(newDevices);
+    },
+    [props],
+  );
 
-    props.onDevicesChange?.(newDevices);
-  };
-
-  const { className, deviceListener } = setupMediaSelect();
-
-  const newProps = mergeProps(props, { className });
+  const { selectProps, deviceListener } = useMemo(() => {
+    const { className, deviceListener } = setupMediaSelect();
+    const selectProps = mergeProps(props, { className });
+    return { deviceListener, selectProps };
+  }, []);
 
   useEffect(() => deviceListener(props.kind, handleDevicesChanged));
 
-  return { devices, selectProps: { ...newProps, onChange } };
+  return { devices, selectProps: { ...selectProps, onChange } };
 };
 
 export const MediaSelect = (props: MediaSelectProps) => {

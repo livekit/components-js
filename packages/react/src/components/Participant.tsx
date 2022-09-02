@@ -7,10 +7,11 @@ import React, {
   useEffect,
   useRef,
   useState,
+  useMemo,
 } from 'react';
 
 import { Participant, Track, TrackPublication } from 'livekit-client';
-import { isLocal, setupParticipantMedia } from '@livekit/components-core';
+import { isLocal, participantInfoObserver, setupParticipantMedia } from '@livekit/components-core';
 
 export type ParticipantProps = HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
@@ -35,7 +36,6 @@ export const useParticipantMedia = (
   const [isMuted, setMuted] = useState(publication?.isMuted);
   const [isSubscribed, setSubscribed] = useState(publication?.isSubscribed);
   const [track, setTrack] = useState(publication?.track);
-  const [className, setClassName] = useState<string | undefined>();
 
   const handleUpdate = useCallback(
     (publication: TrackPublication | undefined) => {
@@ -48,13 +48,36 @@ export const useParticipantMedia = (
     [participant, source],
   );
 
+  const { mediaListener, className } = useMemo(() => setupParticipantMedia(source), [source]);
+
   useEffect(() => {
-    const { mediaListener, className } = setupParticipantMedia(source);
-    setClassName(className);
     return mediaListener(participant, handleUpdate, element?.current);
   }, [participant, source, element]);
 
   return { publication, isMuted, isSubscribed, track, className };
+};
+
+export const useParticipantInfo = (participant: Participant) => {
+  const [identity, setIdentity] = useState(participant.identity);
+  const [name, setName] = useState(participant.name);
+  const [metadata, setMetadata] = useState(participant.metadata);
+
+  const handleUpdate = useCallback(
+    (p: Participant) => {
+      console.log('participant info update', p);
+      setIdentity(p.identity);
+      setName(p.name);
+      setMetadata(p.metadata);
+    },
+    [participant],
+  );
+
+  useEffect(() => {
+    const listener = participantInfoObserver(participant, handleUpdate);
+    return listener.unsubscribe();
+  });
+
+  return { identity, name, metadata };
 };
 
 export const ParticipantView = ({ participant, children, ...htmlProps }: ParticipantProps) => {
@@ -79,5 +102,15 @@ export const ParticipantView = ({ participant, children, ...htmlProps }: Partici
       {!isLocal(participant) && <audio ref={audioEl} className={audioClass}></audio>}
       <ParticipantContext.Provider value={participant}>{children}</ParticipantContext.Provider>
     </div>
+  );
+};
+
+export const ParticipantName = (props: HTMLAttributes<HTMLSpanElement>) => {
+  const participant = useParticipantContext();
+  const { name, identity } = useParticipantInfo(participant);
+  return (
+    <span {...props}>
+      {name !== '' ? name : identity} {props.children}
+    </span>
   );
 };

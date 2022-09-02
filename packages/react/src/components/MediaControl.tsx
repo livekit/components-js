@@ -1,6 +1,13 @@
 import { observeParticipantEvents, setupToggle } from '@livekit/components-core';
 import { LocalParticipant, ParticipantEvent, Room, Track } from 'livekit-client';
-import React, { HTMLAttributes, MouseEventHandler, useCallback, useEffect, useState } from 'react';
+import React, {
+  HTMLAttributes,
+  MouseEventHandler,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { mergeProps } from 'react-aria';
 import { useRoomContext } from './LiveKitRoom';
 
@@ -39,19 +46,22 @@ export const useMediaToggle = ({ source, onChange, ...rest }: MediaControlProps)
     onChange?.(isEnabled);
   };
 
-  const { toggle, className } = setupToggle();
+  const { toggle, className } = useMemo(() => setupToggle(), []);
 
   const handleToggle = useCallback(
     () => toggle(source, localParticipant, onEnableChange, setPending),
     [localParticipant, source],
   );
 
-  const newProps = mergeProps(rest, { className });
+  const newProps = useMemo(() => mergeProps(rest, { className }), [rest, className]);
 
-  const clickHandler: MouseEventHandler<HTMLButtonElement> = (evt) => {
-    handleToggle();
-    rest.onClick?.(evt);
-  };
+  const clickHandler: MouseEventHandler<HTMLButtonElement> = useCallback(
+    (evt) => {
+      handleToggle();
+      rest.onClick?.(evt);
+    },
+    [rest, handleToggle],
+  );
 
   return {
     toggle: handleToggle,

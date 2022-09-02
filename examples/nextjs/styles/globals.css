@@ -23,6 +23,7 @@ a {
 .control-bar {
   display: flex;
   flex-direction: row;
+  gap: 8px;
 }
 
 @media (prefers-color-scheme: dark) {

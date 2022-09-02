@@ -2,38 +2,37 @@ import { Participant, ParticipantEvent, ConnectionQuality } from 'livekit-client
 import { observeParticipantEvents } from '../observables/participant';
 // import { getCSSClassName } from '../utils';
 import type { BaseSetupReturnType } from './types';
-import { map } from 'rxjs';
+import { map, Observable, startWith } from 'rxjs';
 
-interface SetupConnectionQuality extends BaseSetupReturnType {
-  /**
-   *
-   */
-  onConnectionQualityChange: (
-    participant: Participant,
-    callback: (quality: ConnectionQuality) => void,
-  ) => () => void;
-}
-
-export function setupConnectionQualityIndicator(): SetupConnectionQuality {
-  const connectionQualityListener = (
-    participant: Participant,
-    callback: (quality: ConnectionQuality) => void,
-  ) => {
-    const listener = observeParticipantEvents(
-      participant,
-      ParticipantEvent.ConnectionQualityChanged,
-    )
-      .pipe(map((p) => p.connectionQuality))
-      .subscribe((quality) => {
-        callback(quality);
-      });
-
-    callback(participant.connectionQuality);
-    return () => listener.unsubscribe();
-  };
-
+interface SetupConnectionQuality extends BaseSetupReturnType {}
+const setup = (): SetupConnectionQuality => {
   return {
     className: 'lk-connection-quality',
-    onConnectionQualityChange: connectionQualityListener,
-  }; // TODO: add class prefix back
+  };
+};
+
+interface ObserverSetups {
+  createConnectionQualityObserver: (
+    participant: Participant,
+  ) => Observable<{ quality: ConnectionQuality; class_: string }>;
 }
+const observers = (): ObserverSetups => {
+  const createConnectionQualityObserver = (participant: Participant) => {
+    const observer = observeParticipantEvents(
+      participant,
+      ParticipantEvent.ConnectionQualityChanged,
+    ).pipe(
+      map((p) => {
+        return { quality: p.connectionQuality, class_: `lk-${p.connectionQuality}` };
+      }),
+      startWith({
+        quality: participant.connectionQuality,
+        class_: `lk-${participant.connectionQuality}`,
+      }),
+    );
+    return observer;
+  };
+  return { createConnectionQualityObserver };
+};
+
+export { setup, observers };

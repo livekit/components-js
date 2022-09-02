@@ -1,6 +1,6 @@
 import {
   ParticipantView,
-  ConnectionQualityIndicator,
+  ConnectionIndicator,
   LiveKitRoom,
   MediaControlButton,
   MediaSelect,
@@ -79,7 +79,7 @@ const Home: NextPage = () => {
                   filter={(participants) => participants.filter((p) => p instanceof RemoteParticipant)}
                 > */}
                   <ParticipantView>
-                    <ConnectionQualityIndicator className={'lk-signal-icon'} />
+                    <ConnectionIndicator />
                     <ParticipantName />
                   </ParticipantView>
                 </Participants>

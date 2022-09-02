@@ -6,7 +6,7 @@ export * from './component-interfaces/mediaToggle';
 export * from './component-interfaces/mediaSelect';
 export * from './component-interfaces/disconnectButton';
 export * from './component-interfaces/participantMedia';
-export * from './component-interfaces/connectionQuality';
+export * as ConnectionQualityInterface from './component-interfaces/connectionQuality';
 
 export * from './constants';
 export * from './utils';

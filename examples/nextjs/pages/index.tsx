@@ -59,6 +59,8 @@ const Home: NextPage = () => {
           connect={connect}
           onConnected={() => setIsConnected(true)}
           onDisconnected={handleDisconnect}
+          audio={true}
+          video={true}
         >
           <ConnectionStatus />
           {/* <MediaSelection type="microphone"/>  */}

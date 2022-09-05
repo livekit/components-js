@@ -64,8 +64,7 @@ export function useToken(roomName: string, identity: string, name?: string, meta
   return token;
 }
 
-export const LiveKitRoom = ({
-  children,
+export const useRoom = ({
   token,
   serverUrl,
   options,
@@ -82,18 +81,22 @@ export const LiveKitRoom = ({
   // setLogLevel('debug');
 
   useEffect(() => {
-    if (room.state !== ConnectionState.Connected) {
-      return;
-    }
-    const localP = room.localParticipant;
-    try {
-      localP.setMicrophoneEnabled(!!audio, typeof audio !== 'boolean' ? audio : undefined);
-      localP.setCameraEnabled(!!video, typeof video !== 'boolean' ? video : undefined);
-      localP.setScreenShareEnabled(!!screen, typeof screen !== 'boolean' ? screen : undefined);
-    } catch (e: any) {
-      console.warn(e);
-      onError?.(e as Error);
-    }
+    const onSignalConnected = () => {
+      const localP = room.localParticipant;
+      try {
+        localP.setMicrophoneEnabled(!!audio, typeof audio !== 'boolean' ? audio : undefined);
+        localP.setCameraEnabled(!!video, typeof video !== 'boolean' ? video : undefined);
+        localP.setScreenShareEnabled(!!screen, typeof screen !== 'boolean' ? screen : undefined);
+      } catch (e: any) {
+        console.warn(e);
+        onError?.(e as Error);
+      }
+    };
+    room.on(RoomEvent.SignalConnected, onSignalConnected);
+
+    return () => {
+      room.off(RoomEvent.SignalConnected, onSignalConnected);
+    };
   }, [room.state, audio, video, screen]);
 
   useEffect(() => {
@@ -134,6 +137,10 @@ export const LiveKitRoom = ({
     });
     return () => connectionStateChangeListener.unsubscribe();
   }, [token]);
+  return room;
+};
 
-  return <RoomContext.Provider value={room}>{children}</RoomContext.Provider>;
+export const LiveKitRoom = (props: LiveKitRoomProps) => {
+  const room = useRoom(props);
+  return <RoomContext.Provider value={room}>{props.children}</RoomContext.Provider>;
 };

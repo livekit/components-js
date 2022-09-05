@@ -2,17 +2,9 @@ import React, { HTMLAttributes, useEffect, useMemo, useState } from 'react';
 import { ConnectionQualityInterface } from '@livekit/components-core';
 import { useParticipantContext } from './Participant';
 import { ConnectionQuality, Participant } from 'livekit-client';
-import { mergeProps } from 'react-aria';
+import { mergeProps } from '../utils';
 
 interface ConnectionIndicatorProps extends HTMLAttributes<HTMLDivElement> {}
-
-function isProp(prop: HTMLAttributes<any> | undefined): prop is HTMLAttributes<any> {
-  return prop !== undefined;
-}
-
-const betterMergeProps = (...props: Array<HTMLAttributes<any> | undefined>) => {
-  return mergeProps(...props.filter(isProp));
-};
 
 export const useConnectionQuality = (
   props?: ConnectionIndicatorProps,
@@ -26,7 +18,7 @@ export const useConnectionQuality = (
     const { className } = ConnectionQualityInterface.setup();
     const { createConnectionQualityObserver } = ConnectionQualityInterface.observers();
     return {
-      staticProps: betterMergeProps(props, { className }),
+      staticProps: mergeProps(props, { className }),
       createConnectionQualityObserver,
     };
   }, []);
@@ -42,7 +34,7 @@ export const useConnectionQuality = (
   }, [p]);
 
   const elementProps = useMemo(
-    () => betterMergeProps(props, staticProps, { className: qualityClassName }),
+    () => mergeProps(props, staticProps, { className: qualityClassName }),
     [qualityClassName, props, staticProps],
   );
 

@@ -14,8 +14,8 @@
     "node": ">=10"
   },
   "scripts": {
-    "dev": "tsc -w --declaration",
-    "build": "tsc --declaration"
+    "dev": "tsc -w",
+    "build": "tsc"
   },
   "peerDependencies": {
     "livekit-client": "latest"

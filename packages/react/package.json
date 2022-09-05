@@ -19,8 +19,8 @@
     "node": ">=10"
   },
   "scripts": {
-    "dev": "tsup src/index.ts --dts --format esm --onSuccess=\"tsc --emitDeclarationOnly --declaration\" --sourcemap --watch",
-    "build": "tsup src/index.ts --format esm --onSuccess=\"tsc --emitDeclarationOnly --declaration\""
+    "dev": "tsc -w",
+    "build": "tsc"
   },
   "peerDependencies": {
     "react": ">=16",

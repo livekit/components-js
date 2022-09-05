@@ -38,6 +38,7 @@ export const useParticipantMedia = (
   const [isSubscribed, setSubscribed] = useState(publication?.isSubscribed);
   const [track, setTrack] = useState(publication?.track);
 
+  // TODO: refactor from callback to observable.
   const handleUpdate = useCallback(
     (publication: TrackPublication | undefined) => {
       console.log('setting publication', publication);

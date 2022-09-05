@@ -101,7 +101,7 @@ export const ParticipantView = ({ participant, children, ...htmlProps }: Partici
   );
 
   const mergedProps = useMemo(
-    // TODO: move to core.
+    // TODO: move to hook.
     () => mergeProps(htmlProps),
 
     [videoIsMuted, audioIsMuted, htmlProps],

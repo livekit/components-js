@@ -1,7 +1,8 @@
-import { participantInfoObserver } from '@livekit/components-core';
+import { participantInfoObserver, ParticipantNameInterface } from '@livekit/components-core';
 import { Participant } from 'livekit-client';
 import React, { HTMLAttributes, useCallback, useEffect, useState } from 'react';
 import { useParticipantContext } from '../contexts';
+import { mergeProps } from '../utils';
 
 export const useParticipantInfo = (participant: Participant) => {
   const [identity, setIdentity] = useState(participant.identity);
@@ -29,8 +30,10 @@ export const useParticipantInfo = (participant: Participant) => {
 export const ParticipantName = (props: HTMLAttributes<HTMLSpanElement>) => {
   const participant = useParticipantContext();
   const { name, identity } = useParticipantInfo(participant);
+  const { className } = ParticipantNameInterface.setup();
+  const mergedProps = mergeProps(props, { className });
   return (
-    <span {...props}>
+    <span {...mergedProps}>
       {name !== '' ? name : identity} {props.children}
     </span>
   );

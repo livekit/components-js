@@ -7,9 +7,19 @@
 }
 
 .lk-media-muted-indicator-audio {
-  background-color: aquamarine;
+  background-color: greenyellow;
 }
 
 .lk-media-muted-indicator-video {
+  background-color: greenyellow;
+}
+
+.video-muted .lk-media-muted-indicator-video {
+  opacity: 0.2;
+  background-color: red;
+}
+
+.audio-muted .lk-media-muted-indicator-audio {
+  opacity: 0.2;
   background-color: red;
 }

@@ -82,8 +82,8 @@ const Home: NextPage = () => {
                   <ParticipantView>
                     <ConnectionIndicator />
                     <ParticipantName />
-                    <MediaMutedIndicator kind="audio" />
-                    <MediaMutedIndicator kind="video" />
+                    <MediaMutedIndicator kind="audio">Audio</MediaMutedIndicator>
+                    <MediaMutedIndicator kind="video">Video</MediaMutedIndicator>
                   </ParticipantView>
                 </Participants>
               </div>

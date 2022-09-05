@@ -12,6 +12,7 @@ import React, {
 
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import { isLocal, participantInfoObserver, setupParticipantMedia } from '@livekit/components-core';
+import { mergeProps } from '../utils';
 
 export type ParticipantProps = HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
@@ -87,15 +88,29 @@ export const ParticipantView = ({ participant, children, ...htmlProps }: Partici
   const cameraEl = useRef<HTMLVideoElement>(null);
   const audioEl = useRef<HTMLAudioElement>(null);
 
-  const { className: videoClass } = useParticipantMedia(participant, Track.Source.Camera, cameraEl);
-  const { className: audioClass } = useParticipantMedia(
+  const { className: videoClass, isMuted: videoIsMuted } = useParticipantMedia(
+    participant,
+    Track.Source.Camera,
+    cameraEl,
+  );
+  const { className: audioClass, isMuted: audioIsMuted } = useParticipantMedia(
     participant,
     Track.Source.Microphone,
     audioEl,
   );
 
+  const mergedProps = useMemo(
+    () =>
+      mergeProps(htmlProps, {
+        className: `video-${videoIsMuted ? 'muted' : 'unmuted'} audio-${
+          audioIsMuted ? 'muted' : 'unmuted'
+        }`,
+      }),
+    [videoIsMuted, audioIsMuted, htmlProps],
+  );
+
   return (
-    <div {...htmlProps} style={{ position: 'relative' }}>
+    <div {...mergedProps} style={{ position: 'relative' }}>
       <video ref={cameraEl} style={{ width: '100%', height: '100%' }} className={videoClass}>
         <p>child of video</p>
       </video>

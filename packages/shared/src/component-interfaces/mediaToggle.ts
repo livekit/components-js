@@ -1,45 +1,62 @@
 import { LocalParticipant, Track } from 'livekit-client';
-import type { BaseSetupReturnType } from './types';
+import { map, Observable, startWith, Subscriber } from 'rxjs';
+import { observeParticipantMedia } from '../observables/participant';
 
-type ToggleReturnType = BaseSetupReturnType & {
-  toggle: (
-    source: Track.Source,
-    localParticipant: LocalParticipant,
-    onEnableChange?: (enabled: boolean) => void,
-    onPendingChange?: (pending: boolean) => void,
-  ) => Promise<void>;
-};
+export function setupToggle() {
+  const getSourceEnabled = (source: Track.Source, localParticipant: LocalParticipant) => {
+    let isEnabled = false;
+    switch (source) {
+      case Track.Source.Camera:
+        isEnabled = localParticipant.isCameraEnabled;
+        break;
+      case Track.Source.Microphone:
+        isEnabled = localParticipant.isMicrophoneEnabled;
+        break;
+      case Track.Source.ScreenShare:
+        isEnabled = localParticipant.isScreenShareEnabled;
+        break;
+      default:
+        break;
+    }
+    return isEnabled;
+  };
 
-export function setupToggle(): ToggleReturnType {
-  const toggle = async (
-    source: Track.Source,
-    localParticipant: LocalParticipant,
-    onEnableChange?: (enabled: boolean) => void,
-    onPendingChange?: (pending: boolean) => void,
-  ) => {
-    let isMediaEnabled = false;
+  const enabledObserver = (source: Track.Source, localParticipant: LocalParticipant) => {
+    return observeParticipantMedia(localParticipant).pipe(
+      map((p) => {
+        return getSourceEnabled(source, p as LocalParticipant);
+      }),
+      startWith(getSourceEnabled(source, localParticipant)),
+    );
+  };
+
+  let pendingTrigger: Subscriber<boolean>;
+
+  const pendingObserver = new Observable<boolean>((subscribe) => {
+    pendingTrigger = subscribe;
+  });
+
+  const toggle = async (source: Track.Source, localParticipant: LocalParticipant) => {
     try {
-      onPendingChange?.(true);
+      // trigger observable update
+      pendingTrigger.next(true);
       switch (source) {
         case Track.Source.Camera:
           await localParticipant.setCameraEnabled(!localParticipant.isCameraEnabled);
-          isMediaEnabled = localParticipant.isCameraEnabled;
           break;
         case Track.Source.Microphone:
           await localParticipant.setMicrophoneEnabled(!localParticipant.isMicrophoneEnabled);
-          isMediaEnabled = localParticipant.isMicrophoneEnabled;
           break;
         case Track.Source.ScreenShare:
           await localParticipant.setScreenShareEnabled(!localParticipant.isScreenShareEnabled);
-          isMediaEnabled = localParticipant.isScreenShareEnabled;
           break;
         default:
           break;
       }
     } finally {
-      onPendingChange?.(false);
-      onEnableChange?.(isMediaEnabled);
+      pendingTrigger.next(false);
+      // trigger observable update
     }
   };
-  return { className: 'lk-button', toggle };
+  return { className: 'lk-button', toggle, observers: { enabledObserver, pendingObserver } };
 }

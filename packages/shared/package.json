@@ -14,10 +14,12 @@
     "node": ">=10"
   },
   "scripts": {
-    "dev": "tsup src/index.ts --format esm --onSuccess=\"tsc --emitDeclarationOnly --declaration\" --watch",
-    "build": "tsup src/index.ts --format esm --onSuccess=\"tsc --emitDeclarationOnly --declaration\""
+    "dev": "tsc -w --declaration",
+    "build": "tsc --declaration"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "livekit-client": "latest"
+  },
   "name": "@livekit/components-core",
   "author": "LiveKit",
   "module": "dist/index.js",
@@ -40,7 +42,6 @@
   },
   "dependencies": {
     "jose": "^4.8.3",
-    "livekit-client": "latest",
     "livekit-server-sdk": "latest",
     "rxjs": "^7.5.6"
   }

@@ -9,8 +9,8 @@ interface SetupDisconnectButton extends BaseSetupReturnType {
 }
 
 export function setupDisconnectButton(room: Room): SetupDisconnectButton {
-  const disconnect = () => {
-    room.disconnect();
+  const disconnect = (stopTracks?: boolean) => {
+    room.disconnect(stopTracks);
   };
 
   return { className: 'lk-disconnect-button', disconnect }; // TODO: add class prefix back

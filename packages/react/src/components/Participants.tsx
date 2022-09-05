@@ -38,7 +38,7 @@ export const useParticipants = (
 ) => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const remoteParticipants = useRemoteParticipants(undefined, room);
-  const localParticipant = useLocalParticipant(room);
+  const { localParticipant } = useLocalParticipant(room);
 
   useEffect(() => {
     let all = [localParticipant, ...remoteParticipants];

@@ -6,20 +6,20 @@
   height: $indicator_size;
 }
 
-.lk-media-muted-indicator-audio {
+[data-video-is-muted='false'] .lk-media-muted-indicator-video {
   background-color: greenyellow;
 }
 
-.lk-media-muted-indicator-video {
+[data-audio-is-muted='false'] .lk-media-muted-indicator-audio {
   background-color: greenyellow;
 }
 
-.video-muted .lk-media-muted-indicator-video {
-  opacity: 0.2;
+[data-video-is-muted='true'] .lk-media-muted-indicator-video {
+  opacity: 1;
   background-color: red;
 }
 
-.audio-muted .lk-media-muted-indicator-audio {
-  opacity: 0.2;
+[data-audio-is-muted='true'] .lk-media-muted-indicator-audio {
+  opacity: 1;
   background-color: red;
 }

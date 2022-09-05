@@ -100,17 +100,19 @@ export const ParticipantView = ({ participant, children, ...htmlProps }: Partici
   );
 
   const mergedProps = useMemo(
-    () =>
-      mergeProps(htmlProps, {
-        className: `video-${videoIsMuted ? 'muted' : 'unmuted'} audio-${
-          audioIsMuted ? 'muted' : 'unmuted'
-        }`,
-      }),
+    // TODO: move to core.
+    () => mergeProps(htmlProps),
+
     [videoIsMuted, audioIsMuted, htmlProps],
   );
 
   return (
-    <div {...mergedProps} style={{ position: 'relative' }}>
+    <div
+      {...mergedProps}
+      style={{ position: 'relative' }}
+      data-audio-is-muted={audioIsMuted} // TODO: move data properties into core.
+      data-video-is-muted={videoIsMuted}
+    >
       <video ref={cameraEl} style={{ width: '100%', height: '100%' }} className={videoClass}>
         <p>child of video</p>
       </video>

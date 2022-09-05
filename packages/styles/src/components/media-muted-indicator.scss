@@ -1,0 +1,25 @@
+@import '../variables';
+
+.lk-media-muted-indicator-audio,
+.lk-media-muted-indicator-video {
+  width: $indicator_size;
+  height: $indicator_size;
+}
+
+[data-video-is-muted='false'] .lk-media-muted-indicator-video {
+  background-color: greenyellow;
+}
+
+[data-audio-is-muted='false'] .lk-media-muted-indicator-audio {
+  background-color: greenyellow;
+}
+
+[data-video-is-muted='true'] .lk-media-muted-indicator-video {
+  opacity: 1;
+  background-color: red;
+}
+
+[data-audio-is-muted='true'] .lk-media-muted-indicator-audio {
+  opacity: 1;
+  background-color: red;
+}

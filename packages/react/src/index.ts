@@ -8,3 +8,4 @@ export * from './components/Participants';
 export * from './components/ConnectionStatus';
 export * from './components/DisconnectButton';
 export * from './components/ScreenShareRenderer';
+export * from './components/MediaMutedIndicator';

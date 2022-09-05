@@ -9,9 +9,9 @@ import React, {
 } from 'react';
 
 import { Participant, Track, TrackPublication } from 'livekit-client';
-import { isLocal, participantInfoObserver, setupParticipantMedia } from '@livekit/components-core';
+import { isLocal, setupParticipantMedia } from '@livekit/components-core';
 import { mergeProps } from '../utils';
-import { ParticipantContext, useParticipantContext } from '../contexts';
+import { ParticipantContext } from '../contexts';
 
 export type ParticipantProps = HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
@@ -46,29 +46,6 @@ export const useParticipantMedia = (
   }, [participant, source, element]);
 
   return { publication, isMuted, isSubscribed, track, className };
-};
-
-export const useParticipantInfo = (participant: Participant) => {
-  const [identity, setIdentity] = useState(participant.identity);
-  const [name, setName] = useState(participant.name);
-  const [metadata, setMetadata] = useState(participant.metadata);
-
-  const handleUpdate = useCallback(
-    (p: Participant) => {
-      console.log('participant info update', p);
-      setIdentity(p.identity);
-      setName(p.name);
-      setMetadata(p.metadata);
-    },
-    [participant],
-  );
-
-  useEffect(() => {
-    const listener = participantInfoObserver(participant, handleUpdate);
-    return listener.unsubscribe();
-  });
-
-  return { identity, name, metadata };
 };
 
 export const ParticipantView = ({ participant, children, ...htmlProps }: ParticipantProps) => {
@@ -109,15 +86,5 @@ export const ParticipantView = ({ participant, children, ...htmlProps }: Partici
       {!isLocal(participant) && <audio ref={audioEl} className={audioClass}></audio>}
       <ParticipantContext.Provider value={participant}>{children}</ParticipantContext.Provider>
     </div>
-  );
-};
-
-export const ParticipantName = (props: HTMLAttributes<HTMLSpanElement>) => {
-  const participant = useParticipantContext();
-  const { name, identity } = useParticipantInfo(participant);
-  return (
-    <span {...props} data-muted={'test'}>
-      {name !== '' ? name : identity} {props.children}
-    </span>
   );
 };

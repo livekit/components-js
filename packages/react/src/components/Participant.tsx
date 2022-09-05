@@ -109,7 +109,7 @@ export const ParticipantName = (props: HTMLAttributes<HTMLSpanElement>) => {
   const participant = useParticipantContext();
   const { name, identity } = useParticipantInfo(participant);
   return (
-    <span {...props}>
+    <span {...props} data-muted={'test'}>
       {name !== '' ? name : identity} {props.children}
     </span>
   );

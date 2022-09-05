@@ -17,19 +17,18 @@
     "dev": "tsc -w",
     "build": "tsc"
   },
-  "peerDependencies": {
-    "livekit-client": "latest",
-    "livekit-server-sdk": "latest"
-  },
-  "name": "@livekit/components-core",
+  "name": "@livekit/components-vue",
   "author": "LiveKit",
   "module": "dist/index.js",
   "devDependencies": {
-    "livekit-server-sdk": "latest",
-    "typescript": "^4.7.4"
+    "vue": "latest",
+    "rxjs": "^7.5.6"
   },
   "dependencies": {
-    "jose": "^4.8.3",
-    "rxjs": "^7.5.6"
+    "@livekit/components-core": "0.1.0"
+  },
+  "peerDependencies": {
+    "livekit-client": "latest",
+    "vue": "latest"
   }
 }

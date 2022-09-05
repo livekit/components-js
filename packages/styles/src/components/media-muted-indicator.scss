@@ -1,0 +1,15 @@
+@import '../variables';
+
+.lk-media-muted-indicator-audio,
+.lk-media-muted-indicator-video {
+  width: $indicator_size;
+  height: $indicator_size;
+}
+
+.lk-media-muted-indicator-audio {
+  background-color: aquamarine;
+}
+
+.lk-media-muted-indicator-video {
+  background-color: red;
+}

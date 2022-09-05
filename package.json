@@ -8,6 +8,7 @@
     "build:shared": "turbo run build --filter=@livekit/components-core...",
     "build:styles": "turbo run build --filter=@livekit/components-styles...",
     "dev": "turbo run dev --filter=@livekit/components-*",
+    "dev:old": "turbo run dev --parallel",
     "dev:next": "turbo run dev --filter=@livekit/component-example-next... --parallel",
     "dev:vue": "turbo run dev --filter=@livekit/component-example-vue... --parallel",
     "start": "turbo run start",

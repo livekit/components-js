@@ -1,6 +1,6 @@
 import React, { HTMLAttributes, HtmlHTMLAttributes } from 'react';
 import { mergeProps } from '../utils';
-// import { useParticipantContext } from './Participant';
+// import { useParticipantContext } from '../contexts';
 import { MediaMutedIndicatorInterface } from '@livekit/components-core';
 
 interface MediaMutedIndicatorProps extends HTMLAttributes<HTMLDivElement> {

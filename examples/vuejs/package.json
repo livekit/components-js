@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "vue": "^3.2.38",
-    "@livekit/components-vue": "0.1.0"
+    "@livekit/components-vue": "0.1.0",
+    "livekit-client": "latest"
   },
   "devDependencies": {
     "@types/node": "^16.11.56",

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
-import { TestComp } from '@livekit/components-vue';
+import {LiveKitRoom} from '@livekit/components-vue';
 </script>
 
 <template>
@@ -14,7 +14,7 @@ import { TestComp } from '@livekit/components-vue';
   </header>
 
   <main>
-    <TestComp />
+    <LiveKitRoom />
     <TheWelcome />
 
   </main>

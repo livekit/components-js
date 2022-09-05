@@ -1,4 +1,4 @@
-import { createToken, Grant } from '@livekit/components-core';
+import { createToken, Grant } from '@livekit/components-core/dist/token';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export interface HandleTokenOptions {

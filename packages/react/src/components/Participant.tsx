@@ -1,9 +1,7 @@
 import React, {
-  createContext,
   HTMLAttributes,
   RefObject,
   useCallback,
-  useContext,
   useEffect,
   useRef,
   useState,
@@ -13,19 +11,10 @@ import React, {
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import { isLocal, participantInfoObserver, setupParticipantMedia } from '@livekit/components-core';
 import { mergeProps } from '../utils';
+import { ParticipantContext, useParticipantContext } from '../contexts';
 
 export type ParticipantProps = HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
-};
-
-const ParticipantContext = createContext<Participant | undefined>(undefined);
-
-export const useParticipantContext = () => {
-  const participant = useContext(ParticipantContext);
-  if (!participant) {
-    throw Error('tried to access participant context outside of participant context provider');
-  }
-  return participant;
 };
 
 export const useParticipantMedia = (

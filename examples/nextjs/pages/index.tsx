@@ -11,6 +11,7 @@ import {
   useToken,
   ScreenShareView,
   ParticipantName,
+  MediaMutedIndicator,
 } from '@livekit/components-react';
 import { RemoteParticipant } from 'livekit-client';
 
@@ -81,6 +82,8 @@ const Home: NextPage = () => {
                   <ParticipantView>
                     <ConnectionIndicator />
                     <ParticipantName />
+                    <MediaMutedIndicator kind="audio" />
+                    <MediaMutedIndicator kind="video" />
                   </ParticipantView>
                 </Participants>
               </div>

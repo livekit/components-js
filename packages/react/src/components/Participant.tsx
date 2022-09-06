@@ -17,6 +17,7 @@ export const useParticipantMedia = (
   const [isMuted, setMuted] = useState(publication?.isMuted);
   const [isSubscribed, setSubscribed] = useState(publication?.isSubscribed);
   const [track, setTrack] = useState(publication?.track);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   const { setupParticipantMediaObserver } = useMemo(() => {
     return ParticipantMediaInterface.observers;
@@ -32,12 +33,13 @@ export const useParticipantMedia = (
       setMuted(publication?.isMuted);
       setSubscribed(publication?.isSubscribed);
       setTrack(publication?.track);
+      setIsSpeaking(participant.isSpeaking);
     });
     return () => subscription?.unsubscribe();
   }, [setupParticipantMediaObserver, element]);
 
   const className = 'hello-world';
-  return { publication, isMuted, isSubscribed, track, className };
+  return { publication, isMuted, isSubscribed, track, className, isSpeaking };
 };
 
 export const ParticipantView = ({ participant, children, ...htmlProps }: ParticipantProps) => {
@@ -52,15 +54,15 @@ export const ParticipantView = ({ participant, children, ...htmlProps }: Partici
     Track.Source.Camera,
     cameraEl,
   );
-  const { className: audioClass, isMuted: audioIsMuted } = useParticipantMedia(
-    participant,
-    Track.Source.Microphone,
-    audioEl,
-  );
+  const {
+    className: audioClass,
+    isMuted: audioIsMuted,
+    isSpeaking,
+  } = useParticipantMedia(participant, Track.Source.Microphone, audioEl);
 
   const mergedProps = useMemo(
     // TODO: move to hook.
-    () => mergeProps(htmlProps),
+    () => mergeProps(htmlProps, { className: 'lk-participant-view' }),
 
     [videoIsMuted, audioIsMuted, htmlProps],
   );
@@ -71,6 +73,7 @@ export const ParticipantView = ({ participant, children, ...htmlProps }: Partici
       style={{ position: 'relative' }}
       data-audio-is-muted={audioIsMuted} // TODO: move data properties into core.
       data-video-is-muted={videoIsMuted}
+      data-is-speaking={isSpeaking}
     >
       <video ref={cameraEl} style={{ width: '100%', height: '100%' }} className={videoClass}>
         <p>child of video</p>

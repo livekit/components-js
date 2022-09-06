@@ -1,6 +1,6 @@
-import type { Participant, Track, TrackPublication } from 'livekit-client';
-import { map, startWith } from 'rxjs';
-import { observeParticipantMedia } from '../observables/participant';
+import { Participant, ParticipantEvent, Track, TrackPublication } from 'livekit-client';
+import { map, Observable, startWith } from 'rxjs';
+import { observeParticipantEvents, observeParticipantMedia } from '../observables/participant';
 // import { getCSSClassName } from '../utils';
 
 const handleTrackAttachment = (
@@ -19,11 +19,15 @@ const handleTrackAttachment = (
   }
 };
 
+type ParticipantMediaObserverType = Observable<{
+  publication: TrackPublication | undefined;
+}>;
+
 function setupParticipantMediaObserver(
   participant: Participant,
   source: Track.Source,
   element?: HTMLMediaElement | null,
-) {
+): ParticipantMediaObserverType {
   const initialPublication = participant.getTrack(source);
   handleTrackAttachment(initialPublication, element);
 

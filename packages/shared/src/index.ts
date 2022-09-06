@@ -9,6 +9,7 @@ export * as ConnectionQualityInterface from './component-interfaces/connectionQu
 export * as MediaMutedIndicatorInterface from './component-interfaces/mediaMutedIndicator';
 export * as ParticipantNameInterface from './component-interfaces/participantName';
 export * as ParticipantMediaInterface from './component-interfaces/participantMedia';
+export * as ParticipantViewInterface from './component-interfaces/participantView';
 
 export * from './constants';
 export * from './utils';

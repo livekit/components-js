@@ -1,6 +1,7 @@
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import { map, Observable, startWith } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
+import { BaseSetupReturnType } from './types';
 // import { getCSSClassName } from '../utils';
 
 const handleTrackAttachment = (
@@ -45,4 +46,11 @@ const observers = {
   setupParticipantMediaObserver,
 };
 
-export { observers };
+function setup(source: Track.Source): BaseSetupReturnType {
+  return {
+    className:
+      source === Track.Source.Camera ? 'lk-participant-media-camera' : 'lk-participant-media-audio',
+  };
+}
+
+export { setup, observers };

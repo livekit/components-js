@@ -1,6 +1,6 @@
-import { Participant, ParticipantEvent, Track, TrackPublication } from 'livekit-client';
+import { Participant, Track, TrackPublication } from 'livekit-client';
 import { map, Observable, startWith } from 'rxjs';
-import { observeParticipantEvents, observeParticipantMedia } from '../observables/participant';
+import { observeParticipantMedia } from '../observables/participant';
 // import { getCSSClassName } from '../utils';
 
 const handleTrackAttachment = (

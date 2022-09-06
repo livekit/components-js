@@ -79,7 +79,6 @@ export const ParticipantView = ({ participant, children, ...htmlProps }: Partici
   return (
     <div
       {...mergedProps}
-      style={{ position: 'relative' }}
       data-audio-is-muted={audioIsMuted} // TODO: move data properties into core.
       data-video-is-muted={videoIsMuted}
       data-is-speaking={isSpeaking}

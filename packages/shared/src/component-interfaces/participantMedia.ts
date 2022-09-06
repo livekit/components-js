@@ -1,40 +1,44 @@
 import type { Participant, Track, TrackPublication } from 'livekit-client';
+import { map, startWith } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
-import { getCSSClassName } from '../utils';
+// import { getCSSClassName } from '../utils';
 
-export function setupParticipantMedia(source: Track.Source) {
-  console.log('setup participant media');
-  const mediaListener = (
-    participant: Participant,
-    onParticipantMediaChange: (publication: TrackPublication | undefined) => void,
-    element?: HTMLMediaElement | null,
-  ) => {
-    const handleAttachment = (publication: TrackPublication | undefined) => {
-      if (!publication) return;
-      const { isSubscribed, track } = publication;
-      console.log('try attach', { isSubscribed, track, element });
-      if (element && track) {
-        if (isSubscribed) {
-          console.log('attach track to element', source);
-          track.attach(element);
-        } else {
-          track.detach(element);
-        }
-      }
-    };
-    const listener = observeParticipantMedia(participant).subscribe((p) => {
+const handleTrackAttachment = (
+  publication: TrackPublication | undefined,
+  element: HTMLMediaElement | null | undefined,
+) => {
+  if (!publication) return;
+  const { isSubscribed, track } = publication;
+  console.log('try attach', { isSubscribed, track, element });
+  if (element && track) {
+    if (isSubscribed) {
+      track.attach(element);
+    } else {
+      track.detach(element);
+    }
+  }
+};
+
+function setupParticipantMediaObserver(
+  participant: Participant,
+  source: Track.Source,
+  element?: HTMLMediaElement | null,
+) {
+  const initialPublication = participant.getTrack(source);
+  handleTrackAttachment(initialPublication, element);
+
+  return observeParticipantMedia(participant).pipe(
+    map((p) => {
       const publication = p.getTrack(source);
-      console.log('participant media changed', publication);
-
-      handleAttachment(publication);
-      onParticipantMediaChange(publication);
-    });
-    const publication = participant.getTrack(source);
-    handleAttachment(publication);
-    onParticipantMediaChange(publication);
-
-    return () => listener.unsubscribe();
-  };
-
-  return { className: getCSSClassName(`participant-media-${source}`), mediaListener };
+      handleTrackAttachment(publication, element);
+      return { publication };
+    }),
+    startWith({ publication: initialPublication }),
+  );
 }
+
+const observers = {
+  setupParticipantMediaObserver,
+};
+
+export { observers };

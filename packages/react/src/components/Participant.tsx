@@ -1,15 +1,6 @@
-import React, {
-  HTMLAttributes,
-  RefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  useMemo,
-} from 'react';
-
-import { Participant, Track, TrackPublication } from 'livekit-client';
-import { isLocal, setupParticipantMedia } from '@livekit/components-core';
+import React, { HTMLAttributes, RefObject, useEffect, useRef, useState, useMemo } from 'react';
+import { Participant, Track } from 'livekit-client';
+import { isLocal, ParticipantMediaInterface } from '@livekit/components-core';
 import { mergeProps } from '../utils';
 import { ParticipantContext } from '../contexts';
 
@@ -27,24 +18,25 @@ export const useParticipantMedia = (
   const [isSubscribed, setSubscribed] = useState(publication?.isSubscribed);
   const [track, setTrack] = useState(publication?.track);
 
-  // TODO: refactor from callback to observable.
-  const handleUpdate = useCallback(
-    (publication: TrackPublication | undefined) => {
-      console.log('setting publication', publication);
+  const { setupParticipantMediaObserver } = useMemo(() => {
+    return ParticipantMediaInterface.observers;
+  }, []);
+
+  useEffect(() => {
+    const subscription = setupParticipantMediaObserver(
+      participant,
+      source,
+      element?.current,
+    ).subscribe(({ publication }) => {
       setPublication(publication);
       setMuted(publication?.isMuted);
       setSubscribed(publication?.isSubscribed);
       setTrack(publication?.track);
-    },
-    [participant, source],
-  );
+    });
+    return () => subscription?.unsubscribe();
+  }, [setupParticipantMediaObserver, element]);
 
-  const { mediaListener, className } = useMemo(() => setupParticipantMedia(source), [source]);
-
-  useEffect(() => {
-    return mediaListener(participant, handleUpdate, element?.current);
-  }, [participant, source, element]);
-
+  const className = 'hello-world';
   return { publication, isMuted, isSubscribed, track, className };
 };
 

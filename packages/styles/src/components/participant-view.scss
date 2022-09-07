@@ -2,8 +2,10 @@
 
 .lk-participant-view {
   position: relative;
-  transition: box-shadow 0.2s;
+  border: 2px transparent solid;
+  transition: border-color 0.2s;
   &[data-is-speaking='true'] {
-    box-shadow: 0 0 8px green inset;
+    // box-shadow: 0 0 8px green inset;
+    border-color: aquamarine;
   }
 }

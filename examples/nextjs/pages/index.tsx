@@ -82,10 +82,14 @@ const Home: NextPage = () => {
                   filter={(participants) => participants.filter((p) => p instanceof RemoteParticipant)}
                 > */}
                   <ParticipantView>
-                    <ConnectionIndicator />
-                    <ParticipantName />
-                    <MediaMutedIndicator kind="audio">Audio</MediaMutedIndicator>
-                    <MediaMutedIndicator kind="video">Video</MediaMutedIndicator>
+                    <div className="participant-indicators">
+                      <div style={{ display: 'flex' }}>
+                        <MediaMutedIndicator kind="audio"></MediaMutedIndicator>
+                        <MediaMutedIndicator kind="video"></MediaMutedIndicator>
+                      </div>
+                      <ParticipantName />
+                      <ConnectionIndicator />
+                    </div>
                   </ParticipantView>
                 </Participants>
               </div>

@@ -31,6 +31,18 @@ a {
   }
 }
 
+.participant-indicators {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  background-color: white;
+  gap: 4px;
+  padding: 2px;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .control-bar {
   display: flex;
   flex-direction: row;

@@ -1,5 +1,3 @@
-// mouse.js
-import { ref, onMounted, onUnmounted, Ref, unref, isRef, watchEffect, provide } from 'vue';
 import {
   Room,
   RoomEvent,
@@ -12,22 +10,31 @@ import {
 } from 'livekit-client';
 import { roomEventSelector } from '@livekit/components-core';
 import type { Subscription } from 'rxjs';
+import { inject, isRef, onMounted, onUnmounted, Ref, unref, watchEffect } from 'vue';
 
 export type LiveKitRoomProps = {
-  serverUrl: string | Ref<string>;
-  token: string | Ref<string>;
+  serverUrl?: string | Ref<string | undefined>;
+  token?: string | Ref<string | undefined>;
   options?: RoomOptions;
   connectOptions?: RoomConnectOptions;
   audio?: AudioCaptureOptions | boolean;
   video?: VideoCaptureOptions | boolean;
   screen?: ScreenShareCaptureOptions | boolean;
-  connect?: boolean | Ref<boolean>;
+  connect?: boolean | Ref<boolean | undefined>;
   onConnected?: () => void;
   onDisconnected?: () => void;
   onError?: (error: Error) => void;
 };
 
 export const RoomContextKey = 'lk-room';
+
+export function useRoomContext() {
+  const room = inject(RoomContextKey);
+  if (!room) {
+    throw Error('needs to be within room provider');
+  }
+  return room as Room;
+}
 
 // by convention, composable function names start with "use"
 export function useRoom({
@@ -84,15 +91,19 @@ export function useRoom({
   });
 
   function doConnect() {
-    if (unref(connect)) {
-      console.log('connect room');
-      room
-        .connect(unref(serverUrl), unref(token), connectOptions)
-        .then(() => console.log('room connected'));
-    } else {
-      console.log('disconnect room');
+    console.log('running connect', token);
+    if (unref(token) && unref(serverUrl)) {
+      if (unref(connect)) {
+        console.log('connect room');
+        room
+          // @ts-ignore
+          .connect(unref(serverUrl), unref(token), connectOptions)
+          .then(() => console.log('room connected'));
+      } else {
+        console.log('disconnect room');
 
-      room.disconnect();
+        room.disconnect();
+      }
     }
   }
 
@@ -108,16 +119,3 @@ export function useRoom({
   // expose managed state as return value
   return room;
 }
-
-export const LiveKitRoom = {
-  setup() {
-    const token = ref('');
-    const serverUrl = ref('');
-    const connect = ref(true);
-    const room = useRoom({ connect, token, serverUrl });
-
-    provide(RoomContextKey, room);
-  },
-  template: `
-    <slot></slot>`,
-};

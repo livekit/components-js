@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "name": "@livekit/component-example-nuxt",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "nuxt": "3.0.0-rc.9"
+  },
+  "dependencies": {
+    "@livekit/components-vue": "0.1.0"
+  }
+}

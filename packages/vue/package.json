@@ -1,34 +1,23 @@
 {
+  "private": true,
   "version": "0.1.0",
-  "license": "MIT",
-  "typings": "dist/index.d.ts",
-  "publishConfig": {
-    "access": "public"
-  },
-  "type": "module",
-  "files": [
-    "dist",
-    "src"
-  ],
-  "engines": {
-    "node": ">=10"
-  },
-  "scripts": {
-    "dev": "tsc -w",
-    "build": "tsc"
-  },
   "name": "@livekit/components-vue",
-  "author": "LiveKit",
-  "module": "dist/index.js",
-  "devDependencies": {
-    "vue": "latest",
-    "rxjs": "^7.5.6"
+  "type": "module",
+  "main": "dist/components-vue.js",
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
+    "vue": "^3.2.37",
     "@livekit/components-core": "0.1.0"
   },
-  "peerDependencies": {
-    "livekit-client": "latest",
-    "vue": "latest"
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^3.1.0",
+    "typescript": "^4.6.4",
+    "vite": "^3.1.0",
+    "vue-tsc": "^0.40.4",
+    "nuxt": "3.0.0-rc.9"
   }
 }

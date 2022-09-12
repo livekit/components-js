@@ -1,12 +1,13 @@
-import React, { HTMLAttributes, RefObject, useEffect, useRef, useState, useMemo } from 'react';
-import { Participant, Track } from 'livekit-client';
+import React, { HTMLAttributes, RefObject, useEffect, useState, useMemo } from 'react';
+import { Participant, ParticipantEvent, Track } from 'livekit-client';
 import {
-  isLocal,
+  participantEventSelector,
   ParticipantMediaInterface,
   ParticipantViewInterface,
 } from '@livekit/components-core';
 import { mergeProps } from '../utils';
-import { ParticipantContext } from '../contexts';
+import { ParticipantContext, useParticipantContext } from '../contexts';
+import { VideoTrack } from './VideoTrack';
 
 export type ParticipantProps = HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
@@ -23,7 +24,7 @@ export const useParticipantMedia = (
   const [track, setTrack] = useState(publication?.track);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  const mergedProps = useMemo(() => {
+  const elementProps = useMemo(() => {
     const { className } = ParticipantMediaInterface.setup(source);
     return mergeProps(undefined, { className });
   }, [source]);
@@ -47,7 +48,7 @@ export const useParticipantMedia = (
     return () => subscription?.unsubscribe();
   }, [setupParticipantMediaObserver, element]);
 
-  return { publication, isMuted, isSubscribed, track, mergedProps, isSpeaking };
+  return { publication, isMuted, isSubscribed, track, elementProps, isSpeaking };
 };
 
 function useParticipantView(props: HTMLAttributes<HTMLDivElement>) {
@@ -58,35 +59,54 @@ function useParticipantView(props: HTMLAttributes<HTMLDivElement>) {
   return { mergedProps };
 }
 
+export function useIsSpeaking(participant?: Participant) {
+  const p = participant ?? useParticipantContext();
+  const [isSpeaking, setIsSpeaking] = useState(p.isSpeaking);
+
+  useEffect(() => {
+    const listener = participantEventSelector(p, ParticipantEvent.IsSpeakingChanged).subscribe(
+      ([speaking]) => setIsSpeaking(speaking),
+    );
+    return () => listener.unsubscribe();
+  });
+
+  return isSpeaking;
+}
+
+export function useIsMuted(source: Track.Source, participant?: Participant) {
+  const p = participant ?? useParticipantContext();
+  const [isMuted, setIsMuted] = useState(p.isSpeaking);
+
+  useEffect(() => {
+    const listener = participantEventSelector(p, ParticipantEvent.TrackMuted).subscribe(
+      ([publication]) => {
+        if (publication.source === source) setIsMuted(publication.isMuted);
+      },
+    );
+    setIsMuted(!!participant?.getTrack(source)?.isMuted);
+    return () => listener.unsubscribe();
+  });
+
+  return isMuted;
+}
+
 export const ParticipantView = ({ participant, children, ...htmlProps }: ParticipantProps) => {
   if (!participant) {
     throw Error('need to provide a participant');
   }
   const { mergedProps } = useParticipantView(htmlProps);
-  const cameraEl = useRef<HTMLVideoElement>(null);
-  const audioEl = useRef<HTMLAudioElement>(null);
-  const { mergedProps: mergedVideoProps, isMuted: videoIsMuted } = useParticipantMedia(
-    participant,
-    Track.Source.Camera,
-    cameraEl,
-  );
-  const {
-    mergedProps: mergedAudioProps,
-    isMuted: audioIsMuted,
-    isSpeaking,
-  } = useParticipantMedia(participant, Track.Source.Microphone, audioEl);
+  const isVideoMuted = useIsMuted(Track.Source.Camera, participant);
+  const isAudioMuted = useIsMuted(Track.Source.Microphone, participant);
+  const isSpeaking = useIsSpeaking(participant);
 
   return (
     <div
       {...mergedProps}
-      data-audio-is-muted={audioIsMuted} // TODO: move data properties into core.
-      data-video-is-muted={videoIsMuted}
+      data-audio-is-muted={isAudioMuted} // TODO: move data properties into core.
+      data-video-is-muted={isVideoMuted}
       data-is-speaking={isSpeaking}
     >
-      <video ref={cameraEl} {...mergedVideoProps}>
-        <p>child of video</p>
-      </video>
-      {!isLocal(participant) && <audio ref={audioEl} {...mergedAudioProps}></audio>}
+      <VideoTrack participant={participant} source={Track.Source.Camera}></VideoTrack>
       <ParticipantContext.Provider value={participant}>{children}</ParticipantContext.Provider>
     </div>
   );

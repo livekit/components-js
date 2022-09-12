@@ -1,4 +1,5 @@
 import { Participant, ParticipantEvent, RemoteParticipant, Room, RoomEvent } from 'livekit-client';
+import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 import { Observable } from 'rxjs';
 import { observeRoomEvents } from './room';
 
@@ -55,6 +56,27 @@ export function participantInfoObserver(
   ).subscribe(onInfoChange);
   onInfoChange(participant);
   return observer;
+}
+
+export function participantEventSelector<T extends ParticipantEvent>(
+  participant: Participant,
+  event: T,
+) {
+  const observable = new Observable<Parameters<ParticipantEventCallbacks[T]>>((subscribe) => {
+    type Callback = ParticipantEventCallbacks[T];
+    const update: Callback = (...params: Array<any>) => {
+      // @ts-ignore
+      subscribe.next(params);
+    };
+    participant.on(event, update);
+
+    const unsubscribe = () => {
+      participant.off(event, update);
+    };
+    return unsubscribe;
+  });
+
+  return observable;
 }
 
 export function connectedParticipants(

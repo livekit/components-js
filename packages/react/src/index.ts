@@ -10,3 +10,5 @@ export * from './components/DisconnectButton';
 export * from './components/ScreenShareRenderer';
 export * from './components/MediaMutedIndicator';
 export * from './components/ParticipantName';
+export * from './components/RoomName';
+export * from './components/RoomAudioRenderer';

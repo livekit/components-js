@@ -133,3 +133,13 @@ export const screenShareObserver = (
   }
   return () => observers.forEach((obs) => obs.unsubscribe());
 };
+
+export function roomInfoObserver(room: Room, onInfoChange: (r: Room) => void) {
+  const observer = observeRoomEvents(
+    room,
+    RoomEvent.RoomMetadataChanged,
+    RoomEvent.ConnectionStateChanged,
+  ).subscribe(onInfoChange);
+  onInfoChange(room);
+  return observer;
+}

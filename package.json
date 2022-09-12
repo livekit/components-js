@@ -10,7 +10,7 @@
     "dev": "turbo run dev --filter=@livekit/components-*",
     "dev:old": "turbo run dev --parallel",
     "dev:next": "turbo run dev --filter=@livekit/component-example-next... --parallel",
-    "dev:vue": "turbo run dev --filter=@livekit/component-example-vue... --parallel",
+    "dev:vue": "turbo run dev --filter=@livekit/component-example-nuxt... --parallel",
     "start": "turbo run start",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

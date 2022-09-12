@@ -12,6 +12,8 @@ import {
   ScreenShareView,
   ParticipantName,
   MediaMutedIndicator,
+  RoomName,
+  RoomAudioRenderer,
 } from '@livekit/components-react';
 import { RemoteParticipant } from 'livekit-client';
 
@@ -63,7 +65,9 @@ const Home: NextPage = () => {
           audio={true}
           video={true}
         >
+          <RoomName />
           <ConnectionStatus />
+          <RoomAudioRenderer />
           {/* <MediaSelection type="microphone"/>  */}
           {isConnected && (
             <>
@@ -78,10 +82,10 @@ const Home: NextPage = () => {
               <ScreenShareView />
               <div className="participant-grid">
                 <Participants>
-                  {/* <Participants
-                  filter={(participants) => participants.filter((p) => p instanceof RemoteParticipant)}
-                > */}
                   <ParticipantView>
+                    {/* <AudioTrack />
+                    <VideoTrack></VideoTrack> */}
+                    {/* common audio renderer for all participants as an option */}
                     <div className="participant-indicators">
                       <div style={{ display: 'flex' }}>
                         <MediaMutedIndicator kind="audio"></MediaMutedIndicator>

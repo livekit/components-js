@@ -90,7 +90,7 @@ export function useRoom({
     connectionStateChangeListener?.unsubscribe();
   });
 
-  function doConnect() {
+  function doConnect(onCleanup?: (fn: () => void) => void) {
     console.log('running connect', token);
     if (unref(token) && unref(serverUrl)) {
       if (unref(connect)) {
@@ -105,6 +105,7 @@ export function useRoom({
         room.disconnect();
       }
     }
+    onCleanup?.(() => room.disconnect());
   }
 
   if (isRef(serverUrl) || isRef(token) || isRef(connect)) {

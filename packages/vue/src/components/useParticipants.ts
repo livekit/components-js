@@ -16,8 +16,9 @@ export const useRemoteParticipants = (
     }
     participants.value = newParticipants;
   };
-  watchEffect(() => {
-    return connectedParticipants(currentRoom, handleUpdate);
+  watchEffect((onCleanup) => {
+    const unsubscribe = connectedParticipants(currentRoom, handleUpdate);
+    onCleanup(() => unsubscribe());
   });
   return participants;
 };
@@ -56,7 +57,7 @@ export const useLocalParticipant = (room?: Room) => {
     isScreenShareEnabled.value = p.isScreenShareEnabled;
     localParticipant.value = p;
   };
-  watchEffect(() => {
+  watchEffect((onCleanup) => {
     const listener = observeParticipantEvents(
       // TODO use track observer instead of participant observer
       currentRoom.localParticipant,
@@ -65,7 +66,7 @@ export const useLocalParticipant = (room?: Room) => {
       ParticipantEvent.LocalTrackPublished,
       ParticipantEvent.LocalTrackUnpublished,
     ).subscribe((p) => handleUpdate(p as LocalParticipant));
-    return () => listener.unsubscribe();
+    onCleanup(() => listener.unsubscribe());
   });
   return { localParticipant, isMicrophoneEnabled, isScreenShareEnabled, isCameraEnabled };
 };

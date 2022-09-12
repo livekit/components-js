@@ -11,7 +11,7 @@ export const useMediaMutedIndicator = (
   kind: MediaMutedIndicatorProps['kind'],
   props: HtmlHTMLAttributes<HTMLDivElement>,
 ): { mergedProps: HTMLAttributes<HTMLDivElement> } => {
-  //   const participant = useParticipantContext();
+  // const participant = useParticipantContext();
   const { className } = MediaMutedIndicatorInterface.setup(kind);
   const mergedProps = mergeProps(props, {
     className,

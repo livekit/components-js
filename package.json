@@ -5,6 +5,7 @@
   "scripts": {
     "build": "turbo run build",
     "build:react": "turbo run build --filter=@livekit/components-react...",
+    "build:next": "turbo run build --filter=@livekit/component-example-next...",
     "build:shared": "turbo run build --filter=@livekit/components-core...",
     "build:styles": "turbo run build --filter=@livekit/components-styles...",
     "dev": "turbo run dev --filter=@livekit/components-*",

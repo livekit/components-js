@@ -11,7 +11,6 @@
     "dev:old": "turbo run dev --parallel",
     "dev:next": "turbo run dev --filter=@livekit/component-example-next... --parallel",
     "dev:vue": "turbo run dev --filter=@livekit/component-example-nuxt... --parallel",
-    "start": "turbo run start",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "docs": "typedoc",
@@ -32,7 +31,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "prettier": "^2.5.1",
-    "turbo": "^1.2.3",
+    "turbo": "^1.4.6",
     "typescript": "^4.7.4"
   },
   "peerDependencies": {

@@ -106,7 +106,6 @@ export const ParticipantView = ({ participant, children, ...htmlProps }: Partici
       data-video-is-muted={isVideoMuted}
       data-is-speaking={isSpeaking}
     >
-      <VideoTrack participant={participant} source={Track.Source.Camera}></VideoTrack>
       <ParticipantContext.Provider value={participant}>{children}</ParticipantContext.Provider>
     </div>
   );

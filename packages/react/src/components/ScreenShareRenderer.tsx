@@ -6,6 +6,7 @@ import { useRoomContext } from './LiveKitRoom';
 export const useScreenShare = (
   screenEl: RefObject<HTMLVideoElement>,
   audioEl: RefObject<HTMLMediaElement>,
+  onScreenShareChange?: (isActive: boolean) => void,
   room?: Room,
 ) => {
   const [hasActiveScreenShare, setHasActiveScreenShare] = useState(false);
@@ -14,9 +15,12 @@ export const useScreenShare = (
     console.log('screen share change');
     if (map.length < 1) {
       setHasActiveScreenShare(false);
+      onScreenShareChange?.(false);
       return;
     }
     setHasActiveScreenShare(true);
+    onScreenShareChange?.(true);
+
     const { participantId, tracks } = map[map.length - 1];
     console.log({ tracks });
     if (!tracks) return;
@@ -47,27 +51,29 @@ export const useScreenShare = (
   return { hasActiveScreenShare };
 };
 
-export const ScreenShareView = ({ children, ...htmlProps }: HTMLAttributes<HTMLDivElement>) => {
+type ScreenShareProps = HTMLAttributes<HTMLDivElement> & {
+  onScreenShareChange?: (active: boolean) => void;
+};
+
+export const ScreenShareView = ({ children, ...htmlProps }: ScreenShareProps) => {
   const screenEl = useRef(null);
   const audioEl = useRef(null);
-  const { hasActiveScreenShare } = useScreenShare(screenEl, audioEl);
+  const { hasActiveScreenShare } = useScreenShare(screenEl, audioEl, htmlProps.onScreenShareChange);
 
   return (
     <>
-      {hasActiveScreenShare && (
-        <div {...htmlProps}>
-          <video
-            ref={screenEl}
-            style={{
-              width: '100%',
-              height: '100%',
-              display: hasActiveScreenShare ? 'block' : 'none',
-            }}
-          ></video>
-          <audio ref={audioEl}></audio>
-          {children}
-        </div>
-      )}
+      <div {...htmlProps}>
+        <video
+          ref={screenEl}
+          style={{
+            width: '100%',
+            height: '100%',
+            display: hasActiveScreenShare ? 'block' : 'none',
+          }}
+        ></video>
+        <audio ref={audioEl}></audio>
+        {children}
+      </div>
     </>
   );
 };

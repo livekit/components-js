@@ -15,15 +15,13 @@ import {
   RoomName,
   RoomAudioRenderer,
   VideoTrack,
-  isLocal,
-  isRemote,
 } from '@livekit/components-react';
-import { LocalParticipant, RemoteParticipant, Track } from 'livekit-client';
+import { RemoteParticipant, Track } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
-import styles from '../styles/Home.module.css';
+import { useState } from 'react';
+import styles from '../styles/Simple.module.css';
 
 // import '@livekit/components/dist/livekit-components.mjs';
 
@@ -34,11 +32,6 @@ const Home: NextPage = () => {
   const userIdentity = params?.get('user') ?? 'test-user';
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  const [isScreenShareActive, setIsScreenShareActive] = useState(false);
-
-  useEffect(() => {
-    console.log('screenshare active', { isScreenShareActive });
-  }, [isScreenShareActive]);
 
   const token = useToken(roomName, userIdentity, 'myname');
 
@@ -87,44 +80,22 @@ const Home: NextPage = () => {
                 <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
                 <DisconnectButton>Hang up!</DisconnectButton>
               </div>
-              <div className={isScreenShareActive ? styles.focusView : styles.gridView}>
-                <div className={styles.screenShare}>
-                  <ScreenShareView
-                    onScreenShareChange={(active) => setIsScreenShareActive(active)}
-                  />
-                </div>
-                <div className={styles.participantGrid}>
-                  <Participants filter={(participants) => participants.filter(isRemote)}>
-                    <ParticipantView>
-                      <VideoTrack source={Track.Source.Camera}></VideoTrack>
+              <ScreenShareView />
+              <div className={styles.participantGrid}>
+                <Participants>
+                  <ParticipantView>
+                    <VideoTrack source={Track.Source.Camera}></VideoTrack>
 
-                      <div className={styles.participantIndicators}>
-                        <div style={{ display: 'flex' }}>
-                          <MediaMutedIndicator kind="audio"></MediaMutedIndicator>
-                          <MediaMutedIndicator kind="video"></MediaMutedIndicator>
-                        </div>
-                        <ParticipantName />
-                        <ConnectionIndicator />
+                    <div className={styles.participantIndicators}>
+                      <div style={{ display: 'flex' }}>
+                        <MediaMutedIndicator kind="audio"></MediaMutedIndicator>
+                        <MediaMutedIndicator kind="video"></MediaMutedIndicator>
                       </div>
-                    </ParticipantView>
-                  </Participants>
-                </div>
-                <div className={styles.localUser}>
-                  <Participants filter={(participants) => participants.filter(isLocal)}>
-                    <ParticipantView>
-                      <VideoTrack source={Track.Source.Camera}></VideoTrack>
-
-                      <div className={styles.participantIndicators}>
-                        <div style={{ display: 'flex' }}>
-                          <MediaMutedIndicator kind="audio"></MediaMutedIndicator>
-                          <MediaMutedIndicator kind="video"></MediaMutedIndicator>
-                        </div>
-                        <ParticipantName>(You)</ParticipantName>
-                        <ConnectionIndicator />
-                      </div>
-                    </ParticipantView>
-                  </Participants>
-                </div>
+                      <ParticipantName />
+                      <ConnectionIndicator />
+                    </div>
+                  </ParticipantView>
+                </Participants>
               </div>
             </>
           )}

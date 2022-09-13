@@ -15,39 +15,7 @@ a {
   box-sizing: border-box;
 }
 
-.participant-grid {
-  display: grid;
-  gap: 5px;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-}
-@media (min-width: 640px) {
-  .participant-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
-}
-@media (min-width: 1024px) {
-  .participant-grid {
-    grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
-  }
-}
 
-.participant-indicators {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  background-color: white;
-  gap: 4px;
-  padding: 2px;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.control-bar {
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-}
 
 @media (prefers-color-scheme: dark) {
   html {

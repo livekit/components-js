@@ -108,44 +108,11 @@
   margin-left: 0.5rem;
 }
 
-.gridView {
-  display: block; 
-  width: 90vw;
-}
-
-.gridView 
 .participantGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 500px));
-  width: 100%;
+  gap: 5px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
-
-.focusView {
-  display: grid; 
-  grid-template-columns: 5fr 1fr;
-  width: 90vw;
-
-}
-
-.focusView 
-.participantGrid {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  max-height: min(800px, 90vh);
-  overflow-y: auto;
-}
-
-.localUser {
-  display: block;
-  position: fixed;
-  bottom: 40px;
-  left: 40px;
-  width: 400px;
-}
-
-
 @media (min-width: 640px) {
   .participantGrid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));

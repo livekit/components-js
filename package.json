@@ -7,6 +7,7 @@
     "build:react": "turbo run build --filter=@livekit/components-react...",
     "build:shared": "turbo run build --filter=@livekit/components-core...",
     "build:styles": "turbo run build --filter=@livekit/components-styles...",
+    "build:next": "turbo run build --filter=@livekit/component-example-next...",
     "dev": "turbo run dev --filter=@livekit/components-*",
     "dev:old": "turbo run dev --parallel",
     "dev:next": "turbo run dev --filter=@livekit/component-example-next... --parallel",

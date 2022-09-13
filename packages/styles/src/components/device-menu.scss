@@ -1,0 +1,15 @@
+ul.lk-device-list {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    padding-inline-start: 0;
+    background-color: white;
+    border: 2px solid black;
+    &>li {
+        list-style: none;
+        width: max-content;
+        cursor: pointer;
+        &:hover {
+            background-color: lightgray;
+        }
+    }
+}

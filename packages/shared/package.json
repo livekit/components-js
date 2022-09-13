@@ -19,7 +19,8 @@
   },
   "peerDependencies": {
     "livekit-client": "latest",
-    "livekit-server-sdk": "latest"
+    "livekit-server-sdk": "latest",
+    "@livekit/components-styles": "0.1.0"
   },
   "name": "@livekit/components-core",
   "author": "LiveKit",

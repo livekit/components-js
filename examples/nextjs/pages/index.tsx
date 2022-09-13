@@ -3,7 +3,6 @@ import {
   ConnectionIndicator,
   LiveKitRoom,
   MediaControlButton,
-  MediaSelect,
   TrackSource,
   Participants,
   ConnectionStatus,
@@ -18,7 +17,6 @@ import {
   isLocal,
   isRemote,
   DeviceMenu,
-  DeviceList,
 } from '@livekit/components-react';
 import { LocalParticipant, RemoteParticipant, Track } from 'livekit-client';
 

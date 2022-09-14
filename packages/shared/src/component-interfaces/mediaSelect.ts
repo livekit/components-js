@@ -54,13 +54,13 @@ function constructList(devices: MediaDeviceInfo[], kind: MediaDeviceKind, room?:
     li.innerText = device.label;
     li.className = 'lk-device-list-item';
     if (device.deviceId === activeId) {
-      li.classList.add('active');
+      li.classList.add('lk-active');
     }
     li.onclick = () => {
       console.log('switch device');
       room?.switchActiveDevice(kind, device.deviceId);
-      ul.querySelectorAll(`li`)?.forEach((el) => el.classList.remove('active'));
-      li.classList.add('active');
+      ul.querySelectorAll(`li`)?.forEach((el) => el.classList.remove('lk-active'));
+      li.classList.add('lk-active');
     };
     ul.append(li);
   });

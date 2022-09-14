@@ -103,7 +103,6 @@ export function DeviceMenu(props: DeviceMenuProps) {
   useEffect(() => {
     const onClose = (evt: MouseEvent) => {
       if (evt.target !== buttonRef.current) {
-        console.log('closing', evt.target, buttonRef.current);
         setIsOpen(false);
       }
     };

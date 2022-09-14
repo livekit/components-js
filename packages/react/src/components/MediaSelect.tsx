@@ -1,51 +1,88 @@
-import React, { ChangeEventHandler, useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  ChangeEventHandler,
+  HTMLAttributes,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useMaybeRoomContext } from './LiveKitRoom';
-import { setupMediaSelect } from '@livekit/components-core';
+import { setupDeviceMenu, setupDeviceSelect } from '@livekit/components-core';
 import { mergeProps } from 'react-aria';
+import { Room } from 'livekit-client';
 
-type MediaSelectProps = React.HTMLAttributes<HTMLSelectElement> & {
+type DeviceMenuProps = React.HTMLAttributes<HTMLElement> & {
   kind: MediaDeviceKind;
-  onChange?: ChangeEventHandler<HTMLSelectElement>;
+  onChange?: ChangeEventHandler<HTMLSelectElement | HTMLUListElement>;
   onDevicesChange?: (devices: MediaDeviceInfo[]) => void;
 };
 
-export const useMediaSelect = (props: MediaSelectProps) => {
+export const useMediaDevices = (
+  kind: MediaDeviceKind,
+  onChange?: ChangeEventHandler<HTMLElement>,
+  onDevicesChange?: (devices: MediaDeviceInfo[]) => void,
+) => {
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
   const room = useMaybeRoomContext();
 
   // TODO figure out and return initial/current device
 
-  const onChange: ChangeEventHandler<HTMLSelectElement> = useCallback(async (evt) => {
-    await room?.switchActiveDevice(props.kind, evt.target.value);
-    if (props.onChange) {
-      props.onChange(evt);
+  const onChangeHandler: ChangeEventHandler<HTMLSelectElement> = useCallback(async (evt) => {
+    await room?.switchActiveDevice(kind, evt.target.value);
+    if (onChange) {
+      onChange(evt);
     }
   }, []);
 
   const handleDevicesChanged = useCallback(
     (newDevices: MediaDeviceInfo[]) => {
       setDevices(newDevices);
-      props.onDevicesChange?.(newDevices);
+      onDevicesChange?.(newDevices);
     },
-    [props],
+    [onDevicesChange],
   );
 
-  const { selectProps, deviceListener } = useMemo(() => {
-    const { className, deviceListener } = setupMediaSelect();
-    const selectProps = mergeProps(props, { className });
-    return { deviceListener, selectProps };
+  const { deviceListener } = useMemo(() => {
+    const { deviceListener } = setupDeviceSelect();
+    return { deviceListener };
   }, []);
 
-  useEffect(() => deviceListener(props.kind, handleDevicesChanged));
+  useEffect(() => deviceListener(kind, handleDevicesChanged));
 
-  return { devices, selectProps: { ...selectProps, onChange } };
+  return { devices, onChangeHandler };
 };
 
-export const MediaSelect = (props: MediaSelectProps) => {
-  const { devices, selectProps } = useMediaSelect(props);
+export const useDeviceMenu = (
+  kind: MediaDeviceKind,
+  onDevicesChange?: (devices: MediaDeviceInfo[]) => void,
+) => {
+  const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
+  const [listElement, setListElement] = useState<HTMLUListElement>();
+  const room = useMaybeRoomContext();
+  const { deviceListener } = useMemo(() => setupDeviceMenu(), []);
+  const changeHandler = (newDevices: MediaDeviceInfo[], listElement: HTMLUListElement) => {
+    setDevices(newDevices);
+    setListElement(listElement);
+    onDevicesChange?.(newDevices);
+  };
+  useEffect(() => {
+    const unsubscribe = deviceListener(kind, changeHandler, room);
+
+    return () => unsubscribe();
+  }, [kind, room]);
+
+  return { devices, listElement };
+};
+
+export const MediaSelect = (props: DeviceMenuProps) => {
+  const { devices, onChangeHandler } = useMediaDevices(
+    props.kind,
+    props.onChange,
+    props.onDevicesChange,
+  );
 
   return (
-    <select {...selectProps}>
+    <select onChange={onChangeHandler}>
       {devices.map((d) => (
         <option value={d.deviceId} key={d.deviceId}>
           {d.label}
@@ -54,3 +91,46 @@ export const MediaSelect = (props: MediaSelectProps) => {
     </select>
   );
 };
+
+export function DeviceMenu(props: DeviceMenuProps) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const clickHandler = () => {
+    setIsOpen(!isOpen);
+  };
+
+  useEffect(() => {
+    const onClose = (evt: MouseEvent) => {
+      if (evt.target !== buttonRef.current) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('click', onClose);
+
+    return () => {
+      document.removeEventListener('click', onClose);
+    };
+  });
+
+  const { listElement } = useDeviceMenu(props.kind, props.onDevicesChange);
+  const mergedProps = mergeProps(props, { onClick: clickHandler });
+
+  useEffect(() => {
+    if (listElement) {
+      if (isOpen) {
+        containerRef.current?.append(listElement);
+      } else {
+        listElement.remove();
+      }
+    }
+  }, [listElement, isOpen]);
+
+  return (
+    <div ref={containerRef} className="lk-menu-container" style={{ position: 'relative' }}>
+      <button {...mergedProps} ref={buttonRef}>
+        ▼
+      </button>
+    </div>
+  );
+}

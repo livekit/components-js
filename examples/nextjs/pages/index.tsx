@@ -3,7 +3,6 @@ import {
   ConnectionIndicator,
   LiveKitRoom,
   MediaControlButton,
-  MediaSelect,
   TrackSource,
   Participants,
   ConnectionStatus,
@@ -17,6 +16,7 @@ import {
   VideoTrack,
   isLocal,
   isRemote,
+  DeviceMenu,
 } from '@livekit/components-react';
 import { LocalParticipant, RemoteParticipant, Track } from 'livekit-client';
 
@@ -79,14 +79,6 @@ const Home: NextPage = () => {
           {/* <MediaSelection type="microphone"/>  */}
           {isConnected && (
             <>
-              <div className={styles.controlBar}>
-                <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
-                <MediaSelect kind={'videoinput'} />
-                <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
-                <MediaSelect kind={'audioinput'} />
-                <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
-                <DisconnectButton>Hang up!</DisconnectButton>
-              </div>
               <div className={isScreenShareActive ? styles.focusView : styles.gridView}>
                 <div className={styles.screenShare}>
                   <ScreenShareView
@@ -124,6 +116,14 @@ const Home: NextPage = () => {
                       </div>
                     </ParticipantView>
                   </Participants>
+                  <div className={styles.controlBar}>
+                    <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
+                    <DeviceMenu kind="videoinput"></DeviceMenu>
+                    <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
+                    <DeviceMenu kind="audioinput"></DeviceMenu>
+                    <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
+                    <DisconnectButton>Hang up!</DisconnectButton>
+                  </div>
                 </div>
               </div>
             </>

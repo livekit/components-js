@@ -4,7 +4,7 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**"]
+      "outputs": ["dist/**", ".next/**"]
     },
     "lint": {
       "outputs": []
@@ -21,9 +21,6 @@
     },
     "test:watch": {
       "outputs": []
-    },
-    "start": {
-      "dependsOn": ["^build"]
     },
     "dev": {
       "cache": false,

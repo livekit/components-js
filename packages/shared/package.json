@@ -25,11 +25,11 @@
   "author": "LiveKit",
   "module": "dist/index.js",
   "devDependencies": {
-    "@livekit/components-styles": "0.1.0",
     "livekit-server-sdk": "latest",
     "typescript": "^4.7.4"
   },
   "dependencies": {
+    "@livekit/components-styles": "0.1.0",
     "jose": "^4.8.3",
     "rxjs": "^7.5.6"
   }

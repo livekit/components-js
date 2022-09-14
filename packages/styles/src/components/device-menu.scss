@@ -15,5 +15,8 @@ ul.lk-device-list {
         &:hover {
             background-color: lightgray;
         }
+        &.active::after {
+            content: '✅'
+        }
     }
 }

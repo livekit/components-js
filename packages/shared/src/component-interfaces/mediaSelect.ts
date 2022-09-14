@@ -1,4 +1,4 @@
-import { Room } from 'livekit-client';
+import { Room, Track } from 'livekit-client';
 import { getCSSClassName } from '../utils';
 
 export function setupDeviceSelect() {
@@ -42,17 +42,25 @@ export function setupDeviceMenu() {
 }
 
 function constructList(devices: MediaDeviceInfo[], kind: MediaDeviceKind, room?: Room) {
+  const publication = room?.localParticipant.getTrack(
+    kind === 'videoinput' ? Track.Source.Camera : Track.Source.Microphone,
+  );
+  const activeId = publication?.track?.mediaStreamTrack.getSettings().deviceId;
   const ul = document.createElement('ul');
   ul.className = 'lk-device-list';
   devices.forEach((device) => {
     const li = document.createElement('li');
-    // @ts-ignore
-    li.value = device.deviceId;
+    li.id = device.deviceId;
     li.innerText = device.label;
     li.className = 'lk-device-list-item';
+    if (device.deviceId === activeId) {
+      li.classList.add('active');
+    }
     li.onclick = () => {
       console.log('switch device');
       room?.switchActiveDevice(kind, device.deviceId);
+      ul.querySelectorAll(`li`)?.forEach((el) => el.classList.remove('active'));
+      li.classList.add('active');
     };
     ul.append(li);
   });

@@ -50,10 +50,10 @@ function constructList(devices: MediaDeviceInfo[], kind: MediaDeviceKind, room?:
     li.value = device.deviceId;
     li.innerText = device.label;
     li.className = 'lk-device-list-item';
-    li.addEventListener('click', () => {
+    li.onclick = () => {
+      console.log('switch device');
       room?.switchActiveDevice(kind, device.deviceId);
-      // onClose?.();
-    });
+    };
     ul.append(li);
   });
   return ul;

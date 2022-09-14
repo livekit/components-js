@@ -54,7 +54,6 @@ export const useMediaDevices = (
 
 export const useDeviceMenu = (
   kind: MediaDeviceKind,
-  onClose?: () => void,
   onDevicesChange?: (devices: MediaDeviceInfo[]) => void,
 ) => {
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
@@ -67,7 +66,7 @@ export const useDeviceMenu = (
     onDevicesChange?.(newDevices);
   };
   useEffect(() => {
-    const unsubscribe = deviceListener(kind, changeHandler, onClose, room);
+    const unsubscribe = deviceListener(kind, changeHandler, room);
 
     return () => unsubscribe();
   }, [kind, room]);
@@ -94,7 +93,8 @@ export const MediaSelect = (props: DeviceMenuProps) => {
 };
 
 export function DeviceMenu(props: DeviceMenuProps) {
-  const ref = React.useRef<HTMLButtonElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const clickHandler = () => {
     setIsOpen(!isOpen);
@@ -102,8 +102,8 @@ export function DeviceMenu(props: DeviceMenuProps) {
 
   useEffect(() => {
     const onClose = (evt: MouseEvent) => {
-      if (evt.target !== ref.current) {
-        console.log('closing', evt.target, ref.current);
+      if (evt.target !== buttonRef.current) {
+        console.log('closing', evt.target, buttonRef.current);
         setIsOpen(false);
       }
     };
@@ -114,15 +114,24 @@ export function DeviceMenu(props: DeviceMenuProps) {
     };
   });
 
-  const { listElement } = useDeviceMenu(props.kind, () => setIsOpen(false), props.onDevicesChange);
+  const { listElement } = useDeviceMenu(props.kind, props.onDevicesChange);
   const mergedProps = mergeProps(props, { onClick: clickHandler });
 
+  useEffect(() => {
+    if (listElement) {
+      if (isOpen) {
+        containerRef.current?.append(listElement);
+      } else {
+        listElement.remove();
+      }
+    }
+  }, [listElement, isOpen]);
+
   return (
-    <div className="lk-menu-container" style={{ position: 'relative' }}>
-      <button {...mergedProps} ref={ref}>
-        {props['aria-label']}▼
+    <div ref={containerRef} className="lk-menu-container" style={{ position: 'relative' }}>
+      <button {...mergedProps} ref={buttonRef}>
+        ▼
       </button>
-      {isOpen && listElement && <ul dangerouslySetInnerHTML={{ __html: listElement?.innerHTML }} />}
     </div>
   );
 }

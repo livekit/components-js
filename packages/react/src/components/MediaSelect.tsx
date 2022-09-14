@@ -1,19 +1,11 @@
-import React, {
-  ChangeEventHandler,
-  HTMLAttributes,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { ChangeEventHandler, useCallback, useEffect, useMemo, useState } from 'react';
 import { useMaybeRoomContext } from './LiveKitRoom';
 import { setupDeviceMenu, setupDeviceSelect } from '@livekit/components-core';
 import { mergeProps } from 'react-aria';
-import { Room } from 'livekit-client';
 
 type DeviceMenuProps = React.HTMLAttributes<HTMLElement> & {
   kind: MediaDeviceKind;
-  onChange?: ChangeEventHandler<HTMLSelectElement | HTMLUListElement>;
+  onChange?: (device: MediaDeviceInfo) => void;
   onDevicesChange?: (devices: MediaDeviceInfo[]) => void;
 };
 
@@ -54,6 +46,7 @@ export const useMediaDevices = (
 
 export const useDeviceMenu = (
   kind: MediaDeviceKind,
+  onChange?: (info: MediaDeviceInfo) => void,
   onDevicesChange?: (devices: MediaDeviceInfo[]) => void,
 ) => {
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
@@ -66,7 +59,7 @@ export const useDeviceMenu = (
     onDevicesChange?.(newDevices);
   };
   useEffect(() => {
-    const unsubscribe = deviceListener(kind, changeHandler, room);
+    const unsubscribe = deviceListener(kind, onChange, changeHandler, room);
 
     return () => unsubscribe();
   }, [kind, room]);
@@ -113,7 +106,7 @@ export function DeviceMenu(props: DeviceMenuProps) {
     };
   });
 
-  const { listElement } = useDeviceMenu(props.kind, props.onDevicesChange);
+  const { listElement } = useDeviceMenu(props.kind, props.onChange, props.onDevicesChange);
   const mergedProps = mergeProps(props, { onClick: clickHandler });
 
   useEffect(() => {

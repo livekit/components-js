@@ -20,16 +20,17 @@ export function setupDeviceSelect() {
 export function setupDeviceMenu() {
   const deviceListener = (
     kind: MediaDeviceKind,
+    onChange?: (device: MediaDeviceInfo) => void,
     onDevicesChange?: (devices: MediaDeviceInfo[], listElement: HTMLUListElement) => void,
     room?: Room,
   ) => {
     Room.getLocalDevices(kind).then((newDevices) => {
-      const ul = constructList(newDevices, kind, room);
+      const ul = constructList(newDevices, kind, onChange, room);
       onDevicesChange?.(newDevices, ul);
     });
     const listener = async () => {
       const newDevices = await Room.getLocalDevices(kind);
-      const ul = constructList(newDevices, kind, room);
+      const ul = constructList(newDevices, kind, onChange, room);
       onDevicesChange?.(newDevices, ul);
     };
     navigator.mediaDevices.addEventListener('devicechange', listener);
@@ -41,7 +42,12 @@ export function setupDeviceMenu() {
   return { className: getCSSClassName('device-select'), deviceListener };
 }
 
-function constructList(devices: MediaDeviceInfo[], kind: MediaDeviceKind, room?: Room) {
+function constructList(
+  devices: MediaDeviceInfo[],
+  kind: MediaDeviceKind,
+  onChange?: (info: MediaDeviceInfo) => void,
+  room?: Room,
+) {
   const publication = room?.localParticipant.getTrack(
     kind === 'videoinput' ? Track.Source.Camera : Track.Source.Microphone,
   );
@@ -56,11 +62,12 @@ function constructList(devices: MediaDeviceInfo[], kind: MediaDeviceKind, room?:
     if (device.deviceId === activeId) {
       li.classList.add('lk-active');
     }
-    li.onclick = () => {
+    li.onclick = async () => {
       console.log('switch device');
-      room?.switchActiveDevice(kind, device.deviceId);
+      await room?.switchActiveDevice(kind, device.deviceId);
       ul.querySelectorAll(`li`)?.forEach((el) => el.classList.remove('lk-active'));
       li.classList.add('lk-active');
+      onChange?.(device);
     };
     ul.append(li);
   });

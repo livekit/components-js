@@ -33,14 +33,14 @@ export function observeParticipantMedia(participant: Participant) {
     ParticipantEvent.TrackMuted,
     ParticipantEvent.TrackUnmuted,
     ParticipantEvent.ParticipantPermissionsChanged,
-    ParticipantEvent.IsSpeakingChanged,
+    // ParticipantEvent.IsSpeakingChanged,
     ParticipantEvent.TrackPublished,
     ParticipantEvent.TrackUnpublished,
     ParticipantEvent.TrackSubscribed,
     ParticipantEvent.TrackUnsubscribed,
     ParticipantEvent.LocalTrackPublished,
     ParticipantEvent.LocalTrackUnpublished,
-    ParticipantEvent.ConnectionQualityChanged,
+    // ParticipantEvent.ConnectionQualityChanged,
   );
 
   return participantObserver;

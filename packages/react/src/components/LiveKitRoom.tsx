@@ -9,7 +9,8 @@ import {
   ScreenShareCaptureOptions,
   VideoCaptureOptions,
 } from 'livekit-client';
-import React, { ReactNode, useContext, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { RoomContext } from '../contexts';
 
 export type LiveKitRoomProps = {
   children?: ReactNode | ReactNode[];
@@ -33,20 +34,6 @@ export type LiveKitRoomProps = {
 //   audioTracks: AudioTrack[];
 // };
 
-const RoomContext = React.createContext<Room | undefined>(undefined);
-
-export function useRoomContext() {
-  const ctx = useContext(RoomContext);
-  if (!ctx) {
-    throw Error('tried to access room context outside of livekit room component');
-  }
-  return ctx;
-}
-
-export function useMaybeRoomContext() {
-  return useContext(RoomContext);
-}
-
 export function useToken(roomName: string, identity: string, name?: string, metadata?: string) {
   const [token, setToken] = useState<string | undefined>(undefined);
   useEffect(() => {
@@ -63,7 +50,6 @@ export function useToken(roomName: string, identity: string, name?: string, meta
   }, [identity, roomName]);
   return token;
 }
-
 export const useLiveKitRoom = ({
   token,
   serverUrl,

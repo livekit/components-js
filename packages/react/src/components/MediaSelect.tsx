@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler, useCallback, useEffect, useMemo, useState } from 'react';
-import { useMaybeRoomContext } from './LiveKitRoom';
+import { useMaybeRoomContext } from '../contexts';
 import { setupDeviceMenu, setupDeviceSelect } from '@livekit/components-core';
 import { mergeProps } from 'react-aria';
 

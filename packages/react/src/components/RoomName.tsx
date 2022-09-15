@@ -2,7 +2,7 @@ import { roomInfoObserver } from '@livekit/components-core';
 import { Room } from 'livekit-client';
 import React, { HTMLAttributes, useCallback, useEffect, useState } from 'react';
 
-import { useRoomContext } from './LiveKitRoom';
+import { useRoomContext } from '../contexts';
 
 export const useRoomInfo = (room: Room) => {
   const [name, setName] = useState(room.name);

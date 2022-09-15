@@ -1,0 +1,10 @@
+.my-participant-name {
+  color: red;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.my-participant-name:hover {
+  color: darkred;
+}

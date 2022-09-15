@@ -4,10 +4,10 @@ import { useParticipantContext } from '../contexts';
 import { ConnectionQuality, Participant } from 'livekit-client';
 import { mergeProps } from '../utils';
 
-interface ConnectionIndicatorProps extends HTMLAttributes<HTMLDivElement> {}
+interface ConnectionQualityIndicatorProps extends HTMLAttributes<HTMLDivElement> {}
 
-export const useConnectionQuality = (
-  props?: ConnectionIndicatorProps,
+export const useConnectionQualityIndicator = (
+  props?: ConnectionQualityIndicatorProps,
   participant?: Participant,
 ) => {
   const p = participant ?? useParticipantContext();
@@ -42,9 +42,9 @@ export const useConnectionQuality = (
 };
 
 /**
- * Display the connection quality of a given participant.
+ * Indicates the connection quality of the participant.
  */
-export const ConnectionIndicator = (props: ConnectionIndicatorProps) => {
-  const { elementProps } = useConnectionQuality(props);
+export const ConnectionQualityIndicator = (props: ConnectionQualityIndicatorProps) => {
+  const { elementProps } = useConnectionQualityIndicator(props);
   return <div {...elementProps}>{props.children}</div>;
 };

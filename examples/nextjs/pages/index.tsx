@@ -1,6 +1,6 @@
 import {
   ParticipantView,
-  ConnectionIndicator,
+  ConnectionQualityIndicator,
   LiveKitRoom,
   MediaControlButton,
   TrackSource,
@@ -96,7 +96,7 @@ const Home: NextPage = () => {
                           <MediaMutedIndicator kind="video"></MediaMutedIndicator>
                         </div>
                         <ParticipantName />
-                        <ConnectionIndicator />
+                        <ConnectionQualityIndicator />
                       </div>
                     </ParticipantView>
                   </Participants>
@@ -112,7 +112,7 @@ const Home: NextPage = () => {
                           <MediaMutedIndicator kind="video"></MediaMutedIndicator>
                         </div>
                         <ParticipantName>(You)</ParticipantName>
-                        <ConnectionIndicator />
+                        <ConnectionQualityIndicator />
                       </div>
                     </ParticipantView>
                   </Participants>

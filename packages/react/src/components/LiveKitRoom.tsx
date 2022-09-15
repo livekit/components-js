@@ -64,7 +64,7 @@ export function useToken(roomName: string, identity: string, name?: string, meta
   return token;
 }
 
-export const useRoom = ({
+export const useLiveKitRoom = ({
   token,
   serverUrl,
   options,
@@ -141,6 +141,6 @@ export const useRoom = ({
 };
 
 export const LiveKitRoom = (props: LiveKitRoomProps) => {
-  const room = useRoom(props);
+  const room = useLiveKitRoom(props);
   return <RoomContext.Provider value={room}>{props.children}</RoomContext.Provider>;
 };

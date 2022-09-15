@@ -7,7 +7,6 @@ import {
 } from '@livekit/components-core';
 import { mergeProps } from '../../utils';
 import { ParticipantContext, useParticipantContext } from '../../contexts';
-import { VideoTrack } from './VideoTrack';
 
 export type ParticipantProps = HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
@@ -22,7 +21,6 @@ export const useParticipantMedia = (
   const [isMuted, setMuted] = useState(publication?.isMuted);
   const [isSubscribed, setSubscribed] = useState(publication?.isSubscribed);
   const [track, setTrack] = useState(publication?.track);
-  const [isSpeaking, setIsSpeaking] = useState(false);
 
   const elementProps = useMemo(() => {
     const { className } = ParticipantMediaInterface.setup(source);
@@ -43,12 +41,11 @@ export const useParticipantMedia = (
       setMuted(publication?.isMuted);
       setSubscribed(publication?.isSubscribed);
       setTrack(publication?.track);
-      setIsSpeaking(participant.isSpeaking);
     });
     return () => subscription?.unsubscribe();
   }, [setupParticipantMediaObserver, element]);
 
-  return { publication, isMuted, isSubscribed, track, elementProps, isSpeaking };
+  return { publication, isMuted, isSubscribed, track, elementProps };
 };
 
 function useParticipantView(props: HTMLAttributes<HTMLDivElement>) {

@@ -5,8 +5,8 @@ import {
   ParticipantMediaInterface,
   ParticipantViewInterface,
 } from '@livekit/components-core';
-import { mergeProps } from '../utils';
-import { ParticipantContext, useParticipantContext } from '../contexts';
+import { mergeProps } from '../../utils';
+import { ParticipantContext, useParticipantContext } from '../../contexts';
 import { VideoTrack } from './VideoTrack';
 
 export type ParticipantProps = HTMLAttributes<HTMLDivElement> & {

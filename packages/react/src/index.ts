@@ -1,19 +1,19 @@
 import { isLocal, isRemote } from '@livekit/components-core';
 export { default as handleToken } from './handlers/token';
-export * from './components/Participant';
-export * from './components/ConnectionQualityIndicator';
+export * from './components/participant/Participant';
+export * from './components/participant/ConnectionQualityIndicator';
 export * from './components/LiveKitRoom';
-export * from './components/MediaControl';
-export * from './components/MediaSelect';
+export * from './components/controls/MediaControl';
+export * from './components/controls/MediaSelect';
 export * from './components/Participants';
 export * from './components/ConnectionState';
-export * from './components/DisconnectButton';
+export * from './components/controls/DisconnectButton';
 export * from './components/ScreenShareRenderer';
-export * from './components/MediaMutedIndicator';
-export * from './components/ParticipantName';
+export * from './components/participant/MediaMutedIndicator';
+export * from './components/participant/ParticipantName';
 export * from './components/RoomName';
 export * from './components/RoomAudioRenderer';
-export * from './components/AudioTrack';
-export * from './components/VideoTrack';
+export * from './components/participant/AudioTrack';
+export * from './components/participant/VideoTrack';
 
 export { isLocal, isRemote };

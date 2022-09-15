@@ -7,7 +7,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { useMaybeRoomContext } from '../contexts';
+import { useMaybeRoomContext } from '../../contexts';
 import { setupDeviceMenu, setupDeviceSelect } from '@livekit/components-core';
 import { mergeProps } from 'react-aria';
 

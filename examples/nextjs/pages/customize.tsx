@@ -19,12 +19,11 @@ import {
 } from '@livekit/components-react';
 import { ConnectionQuality, Track } from 'livekit-client';
 
+import styles from '../styles/Simple.module.css';
+import myStyles from '../styles/Customize.module.css';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { HTMLAttributes, useState } from 'react';
-import styles from '../styles/Simple.module.css';
-
-// import '@livekit/components/dist/livekit-components.mjs';
 
 const Home: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
@@ -92,8 +91,13 @@ const Home: NextPage = () => {
                         <MediaMutedIndicator kind="audio"></MediaMutedIndicator>
                         <MediaMutedIndicator kind="video"></MediaMutedIndicator>
                       </div>
-                      <ParticipantName />
-                      {/* Here we replace the provided <ConnectionQualityIndicator />  with our own implementation. */}
+                      {/* Overwrite styles: By passing our own class name, we can easily overwrite/extend the existing styles. */}
+                      {/* In addition, we can still specify a style attribute and further customize the styles. */}
+                      <ParticipantName
+                        className={myStyles['my-participant-name']}
+                        // style={{ color: 'blue' }}
+                      />
+                      {/* Custom components: Here we replace the provided <ConnectionQualityIndicator />  with our own implementation. */}
                       <UserDefinedConnectionQualityIndicator />
                     </div>
                   </ParticipantView>
@@ -108,6 +112,10 @@ const Home: NextPage = () => {
 };
 
 export const UserDefinedConnectionQualityIndicator = (props: HTMLAttributes<HTMLSpanElement>) => {
+  /**
+   *  We use the same React hook that is used internally to build our own component.
+   *  By using this hook, we inherit all the state management and logic and can focus on our implementation.
+   */
   const { quality } = useConnectionQualityIndicator();
 
   function qualityToText(quality: ConnectionQuality): string {

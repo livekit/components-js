@@ -55,10 +55,14 @@ type ScreenShareProps = HTMLAttributes<HTMLDivElement> & {
   onScreenShareChange?: (active: boolean) => void;
 };
 
-export const ScreenShareView = ({ children, ...htmlProps }: ScreenShareProps) => {
+export const ScreenShareView = ({
+  children,
+  onScreenShareChange,
+  ...htmlProps
+}: ScreenShareProps) => {
   const screenEl = useRef(null);
   const audioEl = useRef(null);
-  const { hasActiveScreenShare } = useScreenShare(screenEl, audioEl, htmlProps.onScreenShareChange);
+  const { hasActiveScreenShare } = useScreenShare(screenEl, audioEl, onScreenShareChange);
 
   return (
     <>

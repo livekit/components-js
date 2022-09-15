@@ -137,6 +137,12 @@
   overflow-y: auto;
 }
 
+.focusView 
+.participantGrid
+.participantView {
+  max-height: 250px;
+}
+
 .localUser {
   display: block;
   position: fixed;

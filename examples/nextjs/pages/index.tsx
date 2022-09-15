@@ -87,7 +87,7 @@ const Home: NextPage = () => {
                 </div>
                 <div className={styles.participantGrid}>
                   <Participants filter={(participants) => participants.filter(isRemote)}>
-                    <ParticipantView>
+                    <ParticipantView className={styles.participantView}>
                       <VideoTrack source={Track.Source.Camera}></VideoTrack>
 
                       <div className={styles.participantIndicators}>

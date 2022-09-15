@@ -1,4 +1,4 @@
-import { useRoomContext } from './LiveKitRoom';
+import { useRoomContext } from '../contexts';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Participant, Room } from 'livekit-client';
 import { useLocalParticipant } from './MediaControl';

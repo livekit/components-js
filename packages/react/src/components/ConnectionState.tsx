@@ -1,7 +1,7 @@
 import { connectionStateObserver } from '@livekit/components-core';
 import type { Room } from 'livekit-client';
 import React, { useEffect, useState } from 'react';
-import { useRoomContext } from './LiveKitRoom';
+import { useRoomContext } from '../contexts';
 
 type ConnectionStatusProps = {
   room?: Room;

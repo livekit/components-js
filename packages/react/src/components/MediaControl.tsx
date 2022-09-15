@@ -9,7 +9,7 @@ import React, {
   useState,
 } from 'react';
 import { mergeProps } from 'react-aria';
-import { useRoomContext } from './LiveKitRoom';
+import { useRoomContext } from '../contexts';
 
 type MediaControlProps = HTMLAttributes<HTMLButtonElement> & {
   source: Track.Source;

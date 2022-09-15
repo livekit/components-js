@@ -3,7 +3,7 @@ import { setupDisconnectButton } from '@livekit/components-core';
 import React, { HTMLAttributes, useMemo } from 'react';
 import { mergeProps } from 'react-aria';
 import { useRoomContext } from './LiveKitRoom';
-import { useConnectionState } from './ConnectionStatus';
+import { useConnectionState } from './ConnectionState';
 
 type DisconnectButtonProps = HTMLAttributes<HTMLButtonElement> & {
   room?: Room;

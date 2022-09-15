@@ -1,12 +1,12 @@
 import {
   ParticipantView,
-  ConnectionIndicator,
+  ConnectionQualityIndicator,
   LiveKitRoom,
   MediaControlButton,
   MediaSelect,
   TrackSource,
   Participants,
-  ConnectionStatus,
+  ConnectionState,
   DisconnectButton,
   useToken,
   ScreenShareView,
@@ -67,7 +67,7 @@ const Home: NextPage = () => {
           video={true}
         >
           <RoomName />
-          <ConnectionStatus />
+          <ConnectionState />
           <RoomAudioRenderer />
           {/* <MediaSelection type="microphone"/>  */}
           {isConnected && (
@@ -92,7 +92,7 @@ const Home: NextPage = () => {
                         <MediaMutedIndicator kind="video"></MediaMutedIndicator>
                       </div>
                       <ParticipantName />
-                      <ConnectionIndicator />
+                      <ConnectionQualityIndicator />
                     </div>
                   </ParticipantView>
                 </Participants>

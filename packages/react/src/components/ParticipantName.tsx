@@ -4,7 +4,7 @@ import React, { HTMLAttributes, useCallback, useEffect, useState } from 'react';
 import { useParticipantContext } from '../contexts';
 import { mergeProps } from '../utils';
 
-export const useParticipantInfo = (participant: Participant) => {
+export const useParticipantName = (participant: Participant) => {
   const [identity, setIdentity] = useState(participant.identity);
   const [name, setName] = useState(participant.name);
   const [metadata, setMetadata] = useState(participant.metadata);
@@ -29,7 +29,7 @@ export const useParticipantInfo = (participant: Participant) => {
 
 export const ParticipantName = (props: HTMLAttributes<HTMLSpanElement>) => {
   const participant = useParticipantContext();
-  const { name, identity } = useParticipantInfo(participant);
+  const { name, identity } = useParticipantName(participant);
   const { className } = ParticipantNameInterface.setup();
   const mergedProps = mergeProps(props, { className });
   return (

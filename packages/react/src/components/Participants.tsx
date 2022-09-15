@@ -51,6 +51,7 @@ export const useParticipants = (
 
   return participants;
 };
+
 export const Participants = ({ children, room, filter }: ParticipantsProps) => {
   const participants = useParticipants(filter, room);
   const childrenWithProps = (participant: Participant) => {

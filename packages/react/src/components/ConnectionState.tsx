@@ -1,5 +1,5 @@
 import { connectionStateObserver } from '@livekit/components-core';
-import { type Room, ConnectionState } from 'livekit-client';
+import type { Room } from 'livekit-client';
 import React, { useEffect, useState } from 'react';
 import { useRoomContext } from './LiveKitRoom';
 
@@ -7,10 +7,10 @@ type ConnectionStatusProps = {
   room?: Room;
 };
 
-export function useConnectionState(room?: Room): ConnectionState {
+export function useConnectionState(room?: Room) {
   // passed room takes precedence, if not supplied get current room context
   const currentRoom = room ?? useRoomContext();
-  const [connectionState, setConnectionState] = useState<ConnectionState>(currentRoom.state);
+  const [connectionState, setConnectionState] = useState(currentRoom.state);
 
   useEffect(() => {
     const listener = connectionStateObserver(currentRoom, setConnectionState);
@@ -20,7 +20,7 @@ export function useConnectionState(room?: Room): ConnectionState {
   return connectionState;
 }
 
-export const ConnectionStatus = ({ room }: ConnectionStatusProps) => {
+export const ConnectionState = ({ room }: ConnectionStatusProps) => {
   const connectionState = useConnectionState(room);
   return <p>{connectionState}</p>;
 };

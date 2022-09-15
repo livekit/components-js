@@ -1,7 +1,7 @@
 import { Participant, Track } from 'livekit-client';
 import React, { HTMLAttributes, useRef } from 'react';
 import { useParticipantContext } from '../contexts';
-import { ParticipantProps, useParticipantMedia } from './Participant';
+import { useParticipantMedia } from './Participant';
 
 export interface VideoTrackProps extends HTMLAttributes<HTMLVideoElement> {
   participant?: Participant;

@@ -5,7 +5,7 @@ import {
   MediaControlButton,
   TrackSource,
   Participants,
-  ConnectionStatus,
+  ConnectionState,
   DisconnectButton,
   useToken,
   ScreenShareView,
@@ -74,7 +74,7 @@ const Home: NextPage = () => {
           video={true}
         >
           <RoomName />
-          <ConnectionStatus />
+          <ConnectionState />
           <RoomAudioRenderer />
           {/* <MediaSelection type="microphone"/>  */}
           {isConnected && (

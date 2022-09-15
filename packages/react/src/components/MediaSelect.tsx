@@ -1,4 +1,12 @@
-import React, { ChangeEventHandler, useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  ChangeEventHandler,
+  Ref,
+  RefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useMaybeRoomContext } from '../contexts';
 import { setupDeviceMenu, setupDeviceSelect } from '@livekit/components-core';
 import { mergeProps } from 'react-aria';
@@ -46,25 +54,25 @@ export const useMediaDevices = (
 
 export const useDeviceMenu = (
   kind: MediaDeviceKind,
+  menuContainer: RefObject<HTMLElement>,
   onChange?: (info: MediaDeviceInfo) => void,
   onDevicesChange?: (devices: MediaDeviceInfo[]) => void,
 ) => {
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
-  const [listElement, setListElement] = useState<HTMLUListElement>();
   const room = useMaybeRoomContext();
   const { deviceListener } = useMemo(() => setupDeviceMenu(), []);
   const changeHandler = (newDevices: MediaDeviceInfo[], listElement: HTMLUListElement) => {
     setDevices(newDevices);
-    setListElement(listElement);
     onDevicesChange?.(newDevices);
+    menuContainer.current?.replaceChildren(listElement);
   };
   useEffect(() => {
     const unsubscribe = deviceListener(kind, onChange, changeHandler, room);
 
     return () => unsubscribe();
-  }, [kind, room]);
+  }, [kind, room, menuContainer]);
 
-  return { devices, listElement };
+  return { devices };
 };
 
 export const MediaSelect = (props: DeviceMenuProps) => {
@@ -87,6 +95,8 @@ export const MediaSelect = (props: DeviceMenuProps) => {
 
 export function DeviceMenu(props: DeviceMenuProps) {
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const listContainerRef = React.useRef<HTMLDivElement>(null);
+
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const clickHandler = () => {
@@ -106,24 +116,15 @@ export function DeviceMenu(props: DeviceMenuProps) {
     };
   });
 
-  const { listElement } = useDeviceMenu(props.kind, props.onChange, props.onDevicesChange);
+  useDeviceMenu(props.kind, listContainerRef, props.onChange, props.onDevicesChange);
   const mergedProps = mergeProps(props, { onClick: clickHandler });
-
-  useEffect(() => {
-    if (listElement) {
-      if (isOpen) {
-        containerRef.current?.append(listElement);
-      } else {
-        listElement.remove();
-      }
-    }
-  }, [listElement, isOpen]);
 
   return (
     <div ref={containerRef} className="lk-menu-container" style={{ position: 'relative' }}>
       <button {...mergedProps} ref={buttonRef}>
         ▼
       </button>
+      <div style={{ display: isOpen ? 'block' : 'none' }} ref={listContainerRef} />
     </div>
   );
 }

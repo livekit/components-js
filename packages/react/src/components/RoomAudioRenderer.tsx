@@ -1,6 +1,6 @@
 import { RemoteParticipant, Track } from 'livekit-client';
 import React from 'react';
-import { AudioTrack } from './AudioTrack';
+import { AudioTrack } from './participant/AudioTrack';
 import { Participants } from './Participants';
 
 export const RoomAudioRenderer = () => {

@@ -1,8 +1,8 @@
 import React, { HTMLAttributes, useEffect, useMemo, useState } from 'react';
 import { ConnectionQualityInterface } from '@livekit/components-core';
-import { useParticipantContext } from '../contexts';
+import { useParticipantContext } from '../../contexts';
 import { ConnectionQuality, Participant } from 'livekit-client';
-import { mergeProps } from '../utils';
+import { mergeProps } from '../../utils';
 
 interface ConnectionQualityIndicatorProps extends HTMLAttributes<HTMLDivElement> {}
 

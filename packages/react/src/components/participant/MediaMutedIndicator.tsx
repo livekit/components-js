@@ -1,5 +1,5 @@
 import React, { HTMLAttributes, HtmlHTMLAttributes } from 'react';
-import { mergeProps } from '../utils';
+import { mergeProps } from '../../utils';
 // import { useParticipantContext } from '../contexts';
 import { MediaMutedIndicatorInterface } from '@livekit/components-core';
 

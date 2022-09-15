@@ -1,8 +1,8 @@
 import { participantInfoObserver, ParticipantNameInterface } from '@livekit/components-core';
 import { Participant } from 'livekit-client';
 import React, { HTMLAttributes, useCallback, useEffect, useState } from 'react';
-import { useParticipantContext } from '../contexts';
-import { mergeProps } from '../utils';
+import { useParticipantContext } from '../../contexts';
+import { mergeProps } from '../../utils';
 
 export const useParticipantName = (participant: Participant) => {
   const [identity, setIdentity] = useState(participant.identity);

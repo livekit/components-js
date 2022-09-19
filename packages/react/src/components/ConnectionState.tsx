@@ -13,7 +13,9 @@ export function useConnectionState(room?: Room) {
   const [connectionState, setConnectionState] = useState(currentRoom.state);
 
   useEffect(() => {
-    const listener = connectionStateObserver(currentRoom, setConnectionState);
+    const listener = connectionStateObserver(currentRoom).subscribe(([state]) =>
+      setConnectionState(state),
+    );
     return () => listener.unsubscribe();
   });
 

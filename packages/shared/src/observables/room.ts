@@ -61,8 +61,8 @@ export const roomObserver = (room: Room) => {
   return observable;
 };
 
-export const connectionStateObserver = (room: Room, cb: (state: ConnectionState) => void) =>
-  roomEventSelector(room, RoomEvent.ConnectionStateChanged).subscribe(([state]) => cb(state));
+export const connectionStateObserver = (room: Room) =>
+  roomEventSelector(room, RoomEvent.ConnectionStateChanged);
 
 export type ScreenShareTrackMap = Array<{
   participantId: string;

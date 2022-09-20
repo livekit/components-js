@@ -36,7 +36,6 @@ const Home: NextPage = () => {
   const userIdentity = params?.get('user') ?? 'test-user';
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  const [isScreenShareActive, setIsScreenShareActive] = useState(false);
   const [focusPublication, setFocusPublication] = useState<TrackPublication | undefined>(undefined);
 
   const room = useMemo(() => new Room(), []);
@@ -89,7 +88,7 @@ const Home: NextPage = () => {
           {/* <MediaSelection type="microphone"/>  */}
           {isConnected && (
             <>
-              <div className={isScreenShareActive ? styles.focusView : styles.gridView}>
+              <div className={focusPublication ? styles.focusView : styles.gridView}>
                 <div className={styles.screenShare}>
                   <FocusViewRenderer publication={focusPublication}>
                     {focusPublication && (

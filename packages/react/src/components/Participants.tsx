@@ -7,6 +7,7 @@ import { connectedParticipantsObserver } from '@livekit/components-core';
 type ParticipantsProps = {
   children: ReactNode | ReactNode[];
   room?: Room;
+  filterDependencies?: Array<unknown>;
   filter?: (participants: Array<Participant>) => Array<Participant>;
 };
 
@@ -35,6 +36,7 @@ export const useRemoteParticipants = (
 
 export const useParticipants = (
   filter?: (participants: Array<Participant>) => Array<Participant>,
+  filterDependencies: Array<unknown> = [],
   room?: Room,
 ) => {
   const [participants, setParticipants] = useState<Participant[]>([]);
@@ -48,13 +50,13 @@ export const useParticipants = (
       console.log('filtered participants', all);
     }
     setParticipants(all);
-  }, [remoteParticipants, localParticipant, filter]);
+  }, [remoteParticipants, localParticipant, filter, ...filterDependencies]);
 
   return participants;
 };
 
-export const Participants = ({ children, room, filter }: ParticipantsProps) => {
-  const participants = useParticipants(filter, room);
+export const Participants = ({ children, room, filter, filterDependencies }: ParticipantsProps) => {
+  const participants = useParticipants(filter, filterDependencies, room);
   const childrenWithProps = (participant: Participant) => {
     return React.Children.map(children, (child) => {
       // Checking isValidElement is the safe way and avoids a typescript

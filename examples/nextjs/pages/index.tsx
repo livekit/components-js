@@ -20,7 +20,14 @@ import {
   FocusViewRenderer,
   useScreenShare,
 } from '@livekit/components-react';
-import { LocalParticipant, RemoteParticipant, Room, Track, TrackPublication } from 'livekit-client';
+import {
+  LocalParticipant,
+  Participant,
+  RemoteParticipant,
+  Room,
+  Track,
+  TrackPublication,
+} from 'livekit-client';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -36,6 +43,7 @@ const Home: NextPage = () => {
   const userIdentity = params?.get('user') ?? 'test-user';
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+  const [focusedParticipant, setFocusedParticipant] = useState<Participant | undefined>(undefined);
   const [focusPublication, setFocusPublication] = useState<TrackPublication | undefined>(undefined);
 
   const room = useMemo(() => new Room(), []);
@@ -94,7 +102,10 @@ const Home: NextPage = () => {
                     {focusPublication && (
                       <button
                         style={{ position: 'absolute', top: '20px', left: '20px' }}
-                        onClick={() => setFocusPublication(undefined)}
+                        onClick={() => {
+                          setFocusPublication(undefined);
+                          setFocusedParticipant(undefined);
+                        }}
                       >
                         reset focus
                       </button>
@@ -105,11 +116,22 @@ const Home: NextPage = () => {
                   /> */}
                 </div>
                 <div className={styles.participantGrid}>
-                  <Participants filter={(participants) => participants.filter(isRemote)}>
+                  <Participants
+                    filter={(participants) =>
+                      participants
+                        .filter(isRemote)
+                        .filter((p) => p.identity !== focusedParticipant?.identity)
+                    }
+                    filterDependencies={[focusedParticipant]}
+                  >
                     <ParticipantView className={styles.participantView}>
                       <VideoTrack
                         source={Track.Source.Camera}
-                        onClick={(evt) => console.log(evt)}
+                        onClick={(evt) => {
+                          console.log('set focused');
+                          setFocusPublication(evt.publication);
+                          setFocusedParticipant(evt.participant);
+                        }}
                       ></VideoTrack>
 
                       <div className={styles.participantIndicators}>
@@ -126,10 +148,7 @@ const Home: NextPage = () => {
                 <div className={styles.localUser}>
                   <Participants filter={(participants) => participants.filter(isLocal)}>
                     <ParticipantView>
-                      <VideoTrack
-                        source={Track.Source.Camera}
-                        onClick={(evt) => setFocusPublication(evt.publication)}
-                      ></VideoTrack>
+                      <VideoTrack source={Track.Source.Camera}></VideoTrack>
 
                       <div className={styles.participantIndicators}>
                         <div style={{ display: 'flex' }}>

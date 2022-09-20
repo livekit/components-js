@@ -1,6 +1,6 @@
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscriber, Subscription } from 'rxjs';
 import { Participant, Room, RoomEvent, Track, TrackPublication } from 'livekit-client';
-import type { ConnectionState, RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
+import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 
 export function observeRoomEvents(
   room: Room,
@@ -61,18 +61,27 @@ export const roomObserver = (room: Room) => {
   return observable;
 };
 
-export const connectionStateObserver = (room: Room) =>
-  roomEventSelector(room, RoomEvent.ConnectionStateChanged);
-
+export function connectionStateObserver(room: Room) {
+  return roomEventSelector(room, RoomEvent.ConnectionStateChanged);
+}
 export type ScreenShareTrackMap = Array<{
   participantId: string;
   tracks: Array<TrackPublication>;
 }>;
 
-export const screenShareObserver = (
-  room: Room,
-  onTracksChanged: (map: ScreenShareTrackMap) => void,
-) => {
+export function screenShareObserver(room: Room) {
+  let screenShareSubscriber: Subscriber<ScreenShareTrackMap>;
+  const observers: Array<Subscription> = [];
+
+  const observable = new Observable<ScreenShareTrackMap>((subscriber) => {
+    screenShareSubscriber = subscriber;
+    return () => {
+      observers.forEach((observer) => {
+        observer.unsubscribe();
+      });
+    };
+  });
+
   const screenShareTracks: ScreenShareTrackMap = [];
   const handleSub = (publication: TrackPublication, participant: Participant) => {
     if (
@@ -103,9 +112,8 @@ export const screenShareObserver = (
       screenShareTracks.push(trackMap);
     }
 
-    onTracksChanged(screenShareTracks);
+    screenShareSubscriber.next(screenShareTracks);
   };
-  const observers: Array<Subscription> = [];
   observers.push(
     roomEventSelector(room, RoomEvent.TrackSubscribed).subscribe(([_, ...args]) =>
       handleSub(...args),
@@ -131,8 +139,8 @@ export const screenShareObserver = (
       handleSub(track, p);
     });
   }
-  return () => observers.forEach((obs) => obs.unsubscribe());
-};
+  return observable;
+}
 
 export function roomInfoObserver(room: Room, onInfoChange: (r: Room) => void) {
   const observer = observeRoomEvents(

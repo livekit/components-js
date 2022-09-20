@@ -2,7 +2,7 @@ import { useRoomContext } from '../contexts';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Participant, Room } from 'livekit-client';
 import { useLocalParticipant } from './controls/MediaControl';
-import { connectedParticipants } from '@livekit/components-core';
+import { connectedParticipantsObserver } from '@livekit/components-core';
 
 type ParticipantsProps = {
   children: ReactNode | ReactNode[];
@@ -27,7 +27,8 @@ export const useRemoteParticipants = (
     [participants, filter],
   );
   useEffect(() => {
-    return connectedParticipants(currentRoom, handleUpdate);
+    const listener = connectedParticipantsObserver(currentRoom).subscribe(handleUpdate);
+    return () => listener.unsubscribe();
   }, [currentRoom]);
   return participants;
 };

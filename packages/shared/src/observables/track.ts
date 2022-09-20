@@ -1,8 +1,8 @@
-import { type Track, TrackEvent } from 'livekit-client';
+import { TrackEvent, TrackPublication } from 'livekit-client';
 import { Observable } from 'rxjs';
 
-export function observeTrack(track: Track) {
-  const participantObserver = observeTrackEvents(
+export function trackObservable(track: TrackPublication) {
+  const trackObserver = observeTrackEvents(
     track,
     TrackEvent.Muted,
     TrackEvent.Unmuted,
@@ -11,11 +11,11 @@ export function observeTrack(track: Track) {
     TrackEvent.SubscriptionPermissionChanged,
   );
 
-  return participantObserver;
+  return trackObserver;
 }
 
-export const observeTrackEvents = (track: Track, ...events: TrackEvent[]) => {
-  const observable = new Observable<Track>((subscribe) => {
+export const observeTrackEvents = (track: TrackPublication, ...events: TrackEvent[]) => {
+  const observable = new Observable<TrackPublication>((subscribe) => {
     const onTrackUpdate = () => {
       subscribe.next(track);
     };

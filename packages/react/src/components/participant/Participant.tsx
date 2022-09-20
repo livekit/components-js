@@ -5,27 +5,28 @@ import {
   ParticipantMediaInterface,
   ParticipantViewInterface,
 } from '@livekit/components-core';
-import { mergeProps } from '../../utils';
+import { enhanceProps, LKComponentAttributes, mergeProps } from '../../utils';
 import { ParticipantContext, useParticipantContext } from '../../contexts';
+import { MediaTrackProps } from './VideoTrack';
 
-export type ParticipantProps = HTMLAttributes<HTMLDivElement> & {
+export type ParticipantProps = LKComponentAttributes<HTMLDivElement> & {
   participant?: Participant;
 };
 
 export const useParticipantMedia = (
   participant: Participant,
-  source: Track.Source,
+  props: MediaTrackProps,
   element?: RefObject<HTMLMediaElement>,
 ) => {
-  const [publication, setPublication] = useState(participant.getTrack(source));
+  const [publication, setPublication] = useState(participant.getTrack(props.source));
   const [isMuted, setMuted] = useState(publication?.isMuted);
   const [isSubscribed, setSubscribed] = useState(publication?.isSubscribed);
   const [track, setTrack] = useState(publication?.track);
 
   const elementProps = useMemo(() => {
-    const { className } = ParticipantMediaInterface.setup(source);
-    return mergeProps(undefined, { className });
-  }, [source]);
+    const { className } = ParticipantMediaInterface.setup(props.source);
+    return mergeProps(props, { className });
+  }, [props.source]);
 
   const { setupParticipantMediaObserver } = useMemo(() => {
     return ParticipantMediaInterface.observers;
@@ -34,7 +35,7 @@ export const useParticipantMedia = (
   useEffect(() => {
     const subscription = setupParticipantMediaObserver(
       participant,
-      source,
+      props.source,
       element?.current,
     ).subscribe(({ publication }) => {
       setPublication(publication);
@@ -48,7 +49,7 @@ export const useParticipantMedia = (
   return { publication, isMuted, isSubscribed, track, elementProps };
 };
 
-function useParticipantView(props: HTMLAttributes<HTMLDivElement>) {
+function useParticipantView(props: ParticipantProps) {
   const mergedProps = useMemo(() => {
     const { className } = ParticipantViewInterface.setup();
     return mergeProps(props, { className: className });
@@ -87,23 +88,26 @@ export function useIsMuted(source: Track.Source, participant?: Participant) {
   return isMuted;
 }
 
-export const ParticipantView = ({ participant, children, ...htmlProps }: ParticipantProps) => {
-  if (!participant) {
+export const ParticipantView = (props: ParticipantProps) => {
+  if (!props.participant) {
     throw Error('need to provide a participant');
   }
-  const { mergedProps } = useParticipantView(htmlProps);
-  const isVideoMuted = useIsMuted(Track.Source.Camera, participant);
-  const isAudioMuted = useIsMuted(Track.Source.Microphone, participant);
-  const isSpeaking = useIsSpeaking(participant);
+  const { mergedProps } = useParticipantView(props);
+  const { children, ...htmlProps } = mergedProps;
+  const isVideoMuted = useIsMuted(Track.Source.Camera, props.participant);
+  const isAudioMuted = useIsMuted(Track.Source.Microphone, props.participant);
+  const isSpeaking = useIsSpeaking(props.participant);
 
   return (
     <div
-      {...mergedProps}
+      {...htmlProps}
       data-audio-is-muted={isAudioMuted} // TODO: move data properties into core.
       data-video-is-muted={isVideoMuted}
       data-is-speaking={isSpeaking}
     >
-      <ParticipantContext.Provider value={participant}>{children}</ParticipantContext.Provider>
+      <ParticipantContext.Provider value={props.participant}>
+        {children}
+      </ParticipantContext.Provider>
     </div>
   );
 };

@@ -17,12 +17,14 @@ import {
   isLocal,
   isRemote,
   DeviceMenu,
+  FocusViewRenderer,
+  useScreenShare,
 } from '@livekit/components-react';
-import { LocalParticipant, RemoteParticipant, Track } from 'livekit-client';
+import { LocalParticipant, RemoteParticipant, Room, Track, TrackPublication } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from '../styles/Home.module.css';
 
 // import '@livekit/components/dist/livekit-components.mjs';
@@ -35,10 +37,17 @@ const Home: NextPage = () => {
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [isScreenShareActive, setIsScreenShareActive] = useState(false);
+  const [focusPublication, setFocusPublication] = useState<TrackPublication | undefined>(undefined);
+
+  const room = useMemo(() => new Room(), []);
+
+  const { latestScreenShareTrack } = useScreenShare({ room });
 
   useEffect(() => {
-    console.log('screenshare active', { isScreenShareActive });
-  }, [isScreenShareActive]);
+    if (latestScreenShareTrack) {
+      setFocusPublication(latestScreenShareTrack);
+    }
+  }, [latestScreenShareTrack]);
 
   const token = useToken(roomName, userIdentity, 'myname');
 
@@ -66,6 +75,7 @@ const Home: NextPage = () => {
         {/* <Room connect={connect} /> */}
         <LiveKitRoom
           token={token}
+          room={room}
           serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
           connect={connect}
           onConnected={() => setIsConnected(true)}
@@ -81,14 +91,27 @@ const Home: NextPage = () => {
             <>
               <div className={isScreenShareActive ? styles.focusView : styles.gridView}>
                 <div className={styles.screenShare}>
-                  <ScreenShareView
+                  <FocusViewRenderer publication={focusPublication}>
+                    {focusPublication && (
+                      <button
+                        style={{ position: 'absolute', top: '20px', left: '20px' }}
+                        onClick={() => setFocusPublication(undefined)}
+                      >
+                        reset focus
+                      </button>
+                    )}
+                  </FocusViewRenderer>
+                  {/* <ScreenShareView
                     onScreenShareChange={(active) => setIsScreenShareActive(active)}
-                  />
+                  /> */}
                 </div>
                 <div className={styles.participantGrid}>
                   <Participants filter={(participants) => participants.filter(isRemote)}>
                     <ParticipantView className={styles.participantView}>
-                      <VideoTrack source={Track.Source.Camera}></VideoTrack>
+                      <VideoTrack
+                        source={Track.Source.Camera}
+                        onClick={(evt) => console.log(evt)}
+                      ></VideoTrack>
 
                       <div className={styles.participantIndicators}>
                         <div style={{ display: 'flex' }}>
@@ -104,7 +127,10 @@ const Home: NextPage = () => {
                 <div className={styles.localUser}>
                   <Participants filter={(participants) => participants.filter(isLocal)}>
                     <ParticipantView>
-                      <VideoTrack source={Track.Source.Camera}></VideoTrack>
+                      <VideoTrack
+                        source={Track.Source.Camera}
+                        onClick={(evt) => setFocusPublication(evt.publication)}
+                      ></VideoTrack>
 
                       <div className={styles.participantIndicators}>
                         <div style={{ display: 'flex' }}>

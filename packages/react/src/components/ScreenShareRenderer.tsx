@@ -1,15 +1,24 @@
 import { screenShareObserver, ScreenShareTrackMap } from '@livekit/components-core';
-import { Room, Track } from 'livekit-client';
+import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 import React, { HTMLAttributes, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { useRoomContext } from '../contexts';
 
-export const useScreenShare = (
-  screenEl: RefObject<HTMLVideoElement>,
-  audioEl: RefObject<HTMLMediaElement>,
-  onScreenShareChange?: (isActive: boolean) => void,
-  room?: Room,
-) => {
+type ScreenShareOptions = {
+  screenEl?: RefObject<HTMLVideoElement>;
+  audioEl?: RefObject<HTMLMediaElement>;
+  onScreenShareChange?: (
+    isActive: boolean,
+    publication?: TrackPublication,
+    participant?: Participant,
+  ) => void;
+  room?: Room;
+};
+export const useScreenShare = ({ room, onScreenShareChange, screenEl }: ScreenShareOptions) => {
   const [hasActiveScreenShare, setHasActiveScreenShare] = useState(false);
+  const [latestScreenShareTrack, setLatestScreenShareTrack] = useState<
+    TrackPublication | undefined
+  >(undefined);
+
   const currentRoom = room ?? useRoomContext();
   const handleChange = useCallback((map: ScreenShareTrackMap) => {
     console.log('screen share change');
@@ -18,17 +27,18 @@ export const useScreenShare = (
       onScreenShareChange?.(false);
       return;
     }
-    setHasActiveScreenShare(true);
-    onScreenShareChange?.(true);
 
     const { participantId, tracks } = map[map.length - 1];
-    console.log({ tracks });
     if (!tracks) return;
+    let _latestScreenShareTrack: TrackPublication | undefined;
     tracks.forEach((tr) => {
       if (tr.source === Track.Source.ScreenShare) {
-        if (tr.isSubscribed && screenEl.current) {
-          tr.track?.attach(screenEl.current);
-        } else if (screenEl.current && !tr.isSubscribed) {
+        if (tr.isSubscribed) {
+          if (screenEl?.current) {
+            tr.track?.attach(screenEl.current);
+          }
+          _latestScreenShareTrack = tr;
+        } else if (screenEl?.current && !tr.isSubscribed) {
           tr.track?.detach(screenEl.current);
         }
       }
@@ -36,19 +46,28 @@ export const useScreenShare = (
         tr.source === Track.Source.ScreenShareAudio &&
         participantId !== currentRoom.localParticipant.identity
       ) {
-        if (tr.isSubscribed && screenEl.current) {
+        if (tr.isSubscribed && screenEl?.current) {
           tr.track?.attach(screenEl.current);
-        } else if (screenEl.current && !tr.isSubscribed) {
+        } else if (screenEl?.current && !tr.isSubscribed) {
           tr.track?.detach(screenEl.current);
         }
       }
     });
+    setLatestScreenShareTrack(_latestScreenShareTrack);
+    setHasActiveScreenShare(true);
+    onScreenShareChange?.(
+      true,
+      _latestScreenShareTrack,
+      currentRoom.getParticipantByIdentity(participantId),
+    );
   }, []);
-  console.log(audioEl);
   useEffect(() => {
-    screenShareObserver(currentRoom, handleChange);
+    const listener = screenShareObserver(currentRoom).subscribe((screenShareMap) =>
+      handleChange(screenShareMap),
+    );
+    return () => listener.unsubscribe();
   });
-  return { hasActiveScreenShare };
+  return { hasActiveScreenShare, latestScreenShareTrack };
 };
 
 type ScreenShareProps = HTMLAttributes<HTMLDivElement> & {
@@ -62,7 +81,7 @@ export const ScreenShareView = ({
 }: ScreenShareProps) => {
   const screenEl = useRef(null);
   const audioEl = useRef(null);
-  const { hasActiveScreenShare } = useScreenShare(screenEl, audioEl, onScreenShareChange);
+  const { hasActiveScreenShare } = useScreenShare({ screenEl, audioEl, onScreenShareChange });
 
   return (
     <>

@@ -129,9 +129,6 @@
 
 .focusView 
 .participantGrid {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   width: 100%;
   max-height: min(800px, 90vh);
   overflow-y: auto;

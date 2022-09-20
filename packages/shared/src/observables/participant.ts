@@ -1,6 +1,6 @@
 import { Participant, ParticipantEvent, RemoteParticipant, Room, RoomEvent } from 'livekit-client';
 import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
-import { Observable } from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
 import { observeRoomEvents } from './room';
 
 export const observeParticipantEvents = (
@@ -46,15 +46,11 @@ export function observeParticipantMedia(participant: Participant) {
   return participantObserver;
 }
 
-export function participantInfoObserver(
-  participant: Participant,
-  onInfoChange: (p: Participant) => void,
-) {
+export function participantInfoObserver(participant: Participant) {
   const observer = observeParticipantEvents(
     participant,
     ParticipantEvent.ParticipantMetadataChanged,
-  ).subscribe(onInfoChange);
-  onInfoChange(participant);
+  );
   return observer;
 }
 
@@ -79,18 +75,22 @@ export function participantEventSelector<T extends ParticipantEvent>(
   return observable;
 }
 
-export function connectedParticipants(
-  room: Room,
-  onConnectedParticipantsChanged: (participants: RemoteParticipant[]) => void,
-) {
+export function connectedParticipantsObserver(room: Room) {
+  let subscriber: Subscriber<RemoteParticipant[]> | undefined;
+
+  const observable = new Observable<RemoteParticipant[]>((sub) => {
+    subscriber = sub;
+    return () => listener.unsubscribe();
+  });
+
   const listener = observeRoomEvents(
     room,
     RoomEvent.ParticipantConnected,
     RoomEvent.ParticipantDisconnected,
     RoomEvent.ConnectionStateChanged,
-  ).subscribe((r) => onConnectedParticipantsChanged(Array.from(r.participants.values())));
+  ).subscribe((r) => subscriber?.next(Array.from(r.participants.values())));
   if (room.participants.size > 0) {
-    onConnectedParticipantsChanged(Array.from(room.participants.values()));
+    subscriber?.next(Array.from(room.participants.values()));
   }
-  return () => listener.unsubscribe();
+  return observable;
 }

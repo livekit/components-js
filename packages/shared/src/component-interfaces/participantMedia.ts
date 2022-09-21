@@ -10,7 +10,6 @@ const handleTrackAttachment = (
 ) => {
   if (!publication) return;
   const { isSubscribed, track } = publication;
-  console.log('try attach', { isSubscribed, track, element });
   if (element && track) {
     if (isSubscribed) {
       track.attach(element);
@@ -30,7 +29,6 @@ function setupParticipantMediaObserver(
   element?: HTMLMediaElement | null,
 ): ParticipantMediaObserverType {
   const initialPublication = participant.getTrack(source);
-  handleTrackAttachment(initialPublication, element);
 
   return observeParticipantMedia(participant).pipe(
     map((p) => {

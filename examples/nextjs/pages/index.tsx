@@ -8,26 +8,17 @@ import {
   ConnectionState,
   DisconnectButton,
   useToken,
-  ScreenShareView,
   ParticipantName,
   MediaMutedIndicator,
   RoomName,
   RoomAudioRenderer,
-  VideoTrack,
+  MediaTrack,
   isLocal,
   isRemote,
   DeviceMenu,
-  FocusViewRenderer,
   useScreenShare,
 } from '@livekit/components-react';
-import {
-  LocalParticipant,
-  Participant,
-  RemoteParticipant,
-  Room,
-  Track,
-  TrackPublication,
-} from 'livekit-client';
+import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -48,13 +39,19 @@ const Home: NextPage = () => {
 
   const room = useMemo(() => new Room(), []);
 
-  const { latestScreenShareTrack } = useScreenShare({ room });
+  const { screenShareTrack, screenShareParticipant } = useScreenShare({ room });
 
   useEffect(() => {
-    if (latestScreenShareTrack) {
-      setFocusPublication(latestScreenShareTrack);
+    if (
+      !screenShareTrack &&
+      focusPublication &&
+      focusPublication.source !== Track.Source.ScreenShare
+    ) {
+      return;
     }
-  }, [latestScreenShareTrack]);
+    setFocusPublication(screenShareTrack);
+    setFocusedParticipant(screenShareParticipant);
+  }, [screenShareTrack, screenShareParticipant]);
 
   const token = useToken(roomName, userIdentity, 'myname');
 
@@ -98,8 +95,8 @@ const Home: NextPage = () => {
             <>
               <div className={focusPublication ? styles.focusView : styles.gridView}>
                 <div className={styles.screenShare}>
-                  <FocusViewRenderer publication={focusPublication}>
-                    {focusPublication && (
+                  {focusPublication && focusedParticipant && (
+                    <MediaTrack participant={focusedParticipant} source={focusPublication.source}>
                       <button
                         style={{ position: 'absolute', top: '20px', left: '20px' }}
                         onClick={() => {
@@ -109,30 +106,23 @@ const Home: NextPage = () => {
                       >
                         reset focus
                       </button>
-                    )}
-                  </FocusViewRenderer>
-                  {/* <ScreenShareView
-                    onScreenShareChange={(active) => setIsScreenShareActive(active)}
-                  /> */}
+                    </MediaTrack>
+                  )}
                 </div>
                 <div className={styles.participantGrid}>
                   <Participants
-                    filter={(participants) =>
-                      participants
-                        .filter(isRemote)
-                        .filter((p) => p.identity !== focusedParticipant?.identity)
-                    }
+                    filter={(participants) => participants.filter(isRemote)}
                     filterDependencies={[focusedParticipant]}
                   >
                     <ParticipantView className={styles.participantView}>
-                      <VideoTrack
+                      <MediaTrack
                         source={Track.Source.Camera}
                         onClick={(evt) => {
                           console.log('set focused');
                           setFocusPublication(evt.publication);
                           setFocusedParticipant(evt.participant);
                         }}
-                      ></VideoTrack>
+                      ></MediaTrack>
 
                       <div className={styles.participantIndicators}>
                         <div style={{ display: 'flex' }}>
@@ -148,7 +138,7 @@ const Home: NextPage = () => {
                 <div className={styles.localUser}>
                   <Participants filter={(participants) => participants.filter(isLocal)}>
                     <ParticipantView>
-                      <VideoTrack source={Track.Source.Camera}></VideoTrack>
+                      <MediaTrack source={Track.Source.Camera}></MediaTrack>
 
                       <div className={styles.participantIndicators}>
                         <div style={{ display: 'flex' }}>

@@ -1,4 +1,4 @@
-import { useRoomContext } from '../contexts';
+import { ParticipantContext, useRoomContext } from '../contexts';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Participant, Room } from 'livekit-client';
 import { useLocalParticipant } from './controls/MediaControl';
@@ -63,7 +63,11 @@ export const Participants = ({ children, room, filter, filterDependencies }: Par
       // error too.
       if (React.isValidElement(child) && React.Children.only(children)) {
         // @ts-ignore we want to spread those properties on the children no matter what type they are
-        return React.cloneElement(child, { participant, key: participant.identity });
+        return (
+          <ParticipantContext.Provider value={participant}>
+            {React.cloneElement(child, { key: participant.identity })}
+          </ParticipantContext.Provider>
+        );
       }
       return child;
     });

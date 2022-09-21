@@ -14,8 +14,8 @@ import {
   MediaMutedIndicator,
   RoomName,
   RoomAudioRenderer,
-  VideoTrack,
   useConnectionQualityIndicator,
+  MediaTrack,
 } from '@livekit/components-react';
 import { ConnectionQuality, Track } from 'livekit-client';
 
@@ -84,7 +84,7 @@ const Home: NextPage = () => {
               <div className={styles.participantGrid}>
                 <Participants>
                   <ParticipantView>
-                    <VideoTrack source={Track.Source.Camera}></VideoTrack>
+                    <MediaTrack source={Track.Source.Camera}></MediaTrack>
 
                     <div className={styles.participantIndicators}>
                       <div style={{ display: 'flex' }}>

@@ -1,6 +1,6 @@
 import { RemoteParticipant, Track } from 'livekit-client';
 import React from 'react';
-import { AudioTrack } from './participant/AudioTrack';
+import { MediaTrack } from './participant/MediaTrack';
 import { Participants } from './Participants';
 
 export const RoomAudioRenderer = () => {
@@ -8,7 +8,10 @@ export const RoomAudioRenderer = () => {
     <Participants
       filter={(participants) => participants.filter((p) => p instanceof RemoteParticipant)}
     >
-      <AudioTrack source={Track.Source.Microphone} />
+      <div style={{ display: 'hidden' }}>
+        <MediaTrack source={Track.Source.Microphone} />
+        <MediaTrack source={Track.Source.ScreenShareAudio} />
+      </div>
     </Participants>
   );
 };

@@ -15,15 +15,18 @@ type ScreenShareOptions = {
 };
 export const useScreenShare = ({ room, onScreenShareChange, screenEl }: ScreenShareOptions) => {
   const [hasActiveScreenShare, setHasActiveScreenShare] = useState(false);
-  const [latestScreenShareTrack, setLatestScreenShareTrack] = useState<
-    TrackPublication | undefined
-  >(undefined);
+  const [screenShareTrack, setScreenShareTrack] = useState<TrackPublication | undefined>(undefined);
+  const [screenShareParticipant, setScreenShareParticipant] = useState<Participant | undefined>(
+    undefined,
+  );
 
   const currentRoom = room ?? useRoomContext();
   const handleChange = useCallback((map: ScreenShareTrackMap) => {
     console.log('screen share change');
     if (map.length < 1) {
       setHasActiveScreenShare(false);
+      setScreenShareParticipant(undefined);
+      setScreenShareTrack(undefined);
       onScreenShareChange?.(false);
       return;
     }
@@ -53,13 +56,10 @@ export const useScreenShare = ({ room, onScreenShareChange, screenEl }: ScreenSh
         }
       }
     });
-    setLatestScreenShareTrack(_latestScreenShareTrack);
+    setScreenShareTrack(_latestScreenShareTrack);
+    setScreenShareParticipant(currentRoom.getParticipantByIdentity(participantId));
     setHasActiveScreenShare(true);
-    onScreenShareChange?.(
-      true,
-      _latestScreenShareTrack,
-      currentRoom.getParticipantByIdentity(participantId),
-    );
+    onScreenShareChange?.(true, screenShareTrack, screenShareParticipant);
   }, []);
   useEffect(() => {
     const listener = screenShareObserver(currentRoom).subscribe((screenShareMap) =>
@@ -67,7 +67,7 @@ export const useScreenShare = ({ room, onScreenShareChange, screenEl }: ScreenSh
     );
     return () => listener.unsubscribe();
   });
-  return { hasActiveScreenShare, latestScreenShareTrack };
+  return { hasActiveScreenShare, screenShareTrack, screenShareParticipant };
 };
 
 type ScreenShareProps = HTMLAttributes<HTMLDivElement> & {

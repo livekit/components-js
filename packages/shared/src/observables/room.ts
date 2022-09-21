@@ -81,8 +81,8 @@ export function screenShareObserver(room: Room) {
       });
     };
   });
-
   const screenShareTracks: ScreenShareTrackMap = [];
+
   const handleSub = (publication: TrackPublication, participant: Participant) => {
     if (
       publication.source !== Track.Source.ScreenShare &&
@@ -104,9 +104,10 @@ export function screenShareObserver(room: Room) {
     if (!trackMap) {
       trackMap = { participantId: participant.identity, tracks: getScreenShareTracks(participant) };
     } else {
-      trackMap.tracks = getScreenShareTracks(participant);
       const index = screenShareTracks.indexOf(trackMap);
       screenShareTracks.splice(index, 1);
+      console.log('spliced screen share array', screenShareTracks);
+      trackMap.tracks = getScreenShareTracks(participant);
     }
     if (trackMap.tracks.length > 0) {
       screenShareTracks.push(trackMap);
@@ -133,12 +134,27 @@ export function screenShareObserver(room: Room) {
       handleSub(...args);
     }),
   );
+  observers.push(
+    roomEventSelector(room, RoomEvent.TrackMuted).subscribe((args) => {
+      console.log('local track muted');
+      handleSub(...args);
+    }),
+  );
+  observers.push(
+    roomEventSelector(room, RoomEvent.TrackUnmuted).subscribe((args) => {
+      console.log('local track unmuted');
+      handleSub(...args);
+    }),
+  );
+  setTimeout(() => {
+    // TODO find way to avoid this timeout
+    for (const p of room.participants.values()) {
+      p.getTracks().forEach((track) => {
+        handleSub(track, p);
+      });
+    }
+  }, 1);
 
-  for (const p of room.participants.values()) {
-    p.getTracks().forEach((track) => {
-      handleSub(track, p);
-    });
-  }
   return observable;
 }
 

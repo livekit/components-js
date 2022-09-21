@@ -4,10 +4,11 @@ import {
   participantEventSelector,
   ParticipantMediaInterface,
   ParticipantViewInterface,
+  mutedObserver,
 } from '@livekit/components-core';
 import { enhanceProps, LKComponentAttributes, mergeProps } from '../../utils';
 import { ParticipantContext, useParticipantContext } from '../../contexts';
-import { MediaTrackProps } from './VideoTrack';
+import { MediaTrackProps } from './MediaTrack';
 
 export type ParticipantProps = LKComponentAttributes<HTMLDivElement> & {
   participant?: Participant;
@@ -73,15 +74,10 @@ export function useIsSpeaking(participant?: Participant) {
 
 export function useIsMuted(source: Track.Source, participant?: Participant) {
   const p = participant ?? useParticipantContext();
-  const [isMuted, setIsMuted] = useState(p.isSpeaking);
+  const [isMuted, setIsMuted] = useState(p.getTrack(source)?.isMuted);
 
   useEffect(() => {
-    const listener = participantEventSelector(p, ParticipantEvent.TrackMuted).subscribe(
-      ([publication]) => {
-        if (publication.source === source) setIsMuted(publication.isMuted);
-      },
-    );
-    setIsMuted(!!participant?.getTrack(source)?.isMuted);
+    const listener = mutedObserver(p, source).subscribe(setIsMuted);
     return () => listener.unsubscribe();
   });
 
@@ -89,14 +85,12 @@ export function useIsMuted(source: Track.Source, participant?: Participant) {
 }
 
 export const ParticipantView = (props: ParticipantProps) => {
-  if (!props.participant) {
-    throw Error('need to provide a participant');
-  }
+  const participant = props.participant ?? useParticipantContext();
   const { mergedProps } = useParticipantView(props);
   const { children, ...htmlProps } = mergedProps;
-  const isVideoMuted = useIsMuted(Track.Source.Camera, props.participant);
-  const isAudioMuted = useIsMuted(Track.Source.Microphone, props.participant);
-  const isSpeaking = useIsSpeaking(props.participant);
+  const isVideoMuted = useIsMuted(Track.Source.Camera, participant);
+  const isAudioMuted = useIsMuted(Track.Source.Microphone, participant);
+  const isSpeaking = useIsSpeaking(participant);
 
   return (
     <div
@@ -105,9 +99,7 @@ export const ParticipantView = (props: ParticipantProps) => {
       data-video-is-muted={isVideoMuted}
       data-is-speaking={isSpeaking}
     >
-      <ParticipantContext.Provider value={props.participant}>
-        {children}
-      </ParticipantContext.Provider>
+      {children}
     </div>
   );
 };

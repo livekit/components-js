@@ -1,6 +1,13 @@
-import { Participant, ParticipantEvent, RemoteParticipant, Room, RoomEvent } from 'livekit-client';
+import {
+  Participant,
+  ParticipantEvent,
+  RemoteParticipant,
+  Room,
+  RoomEvent,
+  Track,
+} from 'livekit-client';
 import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
-import { Observable, Subscriber } from 'rxjs';
+import { map, Observable, startWith, Subscriber } from 'rxjs';
 import { observeRoomEvents } from './room';
 
 export const observeParticipantEvents = (
@@ -41,7 +48,7 @@ export function observeParticipantMedia(participant: Participant) {
     ParticipantEvent.LocalTrackPublished,
     ParticipantEvent.LocalTrackUnpublished,
     // ParticipantEvent.ConnectionQualityChanged,
-  );
+  ).pipe(startWith(participant));
 
   return participantObserver;
 }
@@ -50,7 +57,7 @@ export function participantInfoObserver(participant: Participant) {
   const observer = observeParticipantEvents(
     participant,
     ParticipantEvent.ParticipantMetadataChanged,
-  );
+  ).pipe(startWith(participant));
   return observer;
 }
 
@@ -75,13 +82,27 @@ export function participantEventSelector<T extends ParticipantEvent>(
   return observable;
 }
 
+export function mutedObserver(participant: Participant, source: Track.Source) {
+  return observeParticipantEvents(
+    participant,
+    ParticipantEvent.TrackMuted,
+    ParticipantEvent.TrackUnmuted,
+  ).pipe(
+    map((participant) => {
+      const pub = participant.getTrack(source);
+      return !!pub?.isMuted;
+    }),
+    startWith(!!participant.getTrack(source)?.isMuted),
+  );
+}
+
 export function connectedParticipantsObserver(room: Room) {
   let subscriber: Subscriber<RemoteParticipant[]> | undefined;
 
   const observable = new Observable<RemoteParticipant[]>((sub) => {
     subscriber = sub;
     return () => listener.unsubscribe();
-  });
+  }).pipe(startWith(Array.from(room.participants.values())));
 
   const listener = observeRoomEvents(
     room,

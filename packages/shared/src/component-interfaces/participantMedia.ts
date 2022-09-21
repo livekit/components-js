@@ -17,8 +17,8 @@ function setupParticipantMediaObserver(
   const initialPublication = participant.getTrack(source);
 
   return observeParticipantMedia(participant).pipe(
-    map((p) => {
-      const publication = p.getTrack(source);
+    map((media) => {
+      const publication = media.participant.getTrack(source);
       attachIfSubscribed(publication, element);
       return { publication };
     }),

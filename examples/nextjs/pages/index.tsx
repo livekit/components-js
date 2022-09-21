@@ -8,24 +8,22 @@ import {
   ConnectionState,
   DisconnectButton,
   useToken,
-  ScreenShareView,
   ParticipantName,
   MediaMutedIndicator,
   RoomName,
   RoomAudioRenderer,
-  VideoTrack,
+  MediaTrack,
   isLocal,
   isRemote,
   DeviceMenu,
+  useScreenShare,
 } from '@livekit/components-react';
-import { LocalParticipant, RemoteParticipant, Track } from 'livekit-client';
+import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from '../styles/Home.module.css';
-
-// import '@livekit/components/dist/livekit-components.mjs';
 
 const Home: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
@@ -34,11 +32,25 @@ const Home: NextPage = () => {
   const userIdentity = params?.get('user') ?? 'test-user';
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  const [isScreenShareActive, setIsScreenShareActive] = useState(false);
+  const [focusedParticipant, setFocusedParticipant] = useState<Participant | undefined>(undefined);
+  const [focusPublication, setFocusPublication] = useState<TrackPublication | undefined>(undefined);
+
+  const room = useMemo(() => new Room(), []);
+
+  const { screenShareTrack, screenShareParticipant } = useScreenShare({ room });
 
   useEffect(() => {
-    console.log('screenshare active', { isScreenShareActive });
-  }, [isScreenShareActive]);
+    if (
+      (!screenShareTrack &&
+        focusPublication &&
+        focusPublication.source !== Track.Source.ScreenShare) ||
+      (screenShareTrack && focusPublication === screenShareTrack)
+    ) {
+      return;
+    }
+    setFocusPublication(screenShareTrack);
+    setFocusedParticipant(screenShareParticipant);
+  }, [screenShareTrack, screenShareParticipant, focusPublication]);
 
   const token = useToken(roomName, userIdentity, 'myname');
 
@@ -66,6 +78,7 @@ const Home: NextPage = () => {
         {/* <Room connect={connect} /> */}
         <LiveKitRoom
           token={token}
+          room={room}
           serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
           connect={connect}
           onConnected={() => setIsConnected(true)}
@@ -76,19 +89,38 @@ const Home: NextPage = () => {
           <RoomName />
           <ConnectionState />
           <RoomAudioRenderer />
-          {/* <MediaSelection type="microphone"/>  */}
           {isConnected && (
             <>
-              <div className={isScreenShareActive ? styles.focusView : styles.gridView}>
+              <div className={focusPublication ? styles.focusView : styles.gridView}>
                 <div className={styles.screenShare}>
-                  <ScreenShareView
-                    onScreenShareChange={(active) => setIsScreenShareActive(active)}
-                  />
+                  {focusPublication && focusedParticipant && (
+                    <MediaTrack participant={focusedParticipant} source={focusPublication.source}>
+                      <button
+                        style={{ position: 'absolute', top: '20px', left: '20px' }}
+                        onClick={() => {
+                          setFocusPublication(undefined);
+                          setFocusedParticipant(undefined);
+                        }}
+                      >
+                        reset focus
+                      </button>
+                    </MediaTrack>
+                  )}
                 </div>
                 <div className={styles.participantGrid}>
-                  <Participants filter={(participants) => participants.filter(isRemote)}>
+                  <Participants
+                    filter={(participants) => participants.filter(isRemote)}
+                    filterDependencies={[focusedParticipant]}
+                  >
                     <ParticipantView className={styles.participantView}>
-                      <VideoTrack source={Track.Source.Camera}></VideoTrack>
+                      <MediaTrack
+                        source={Track.Source.Camera}
+                        onClick={(evt) => {
+                          console.log('set focused');
+                          setFocusPublication(evt.publication);
+                          setFocusedParticipant(evt.participant);
+                        }}
+                      ></MediaTrack>
 
                       <div className={styles.participantIndicators}>
                         <div style={{ display: 'flex' }}>
@@ -104,8 +136,7 @@ const Home: NextPage = () => {
                 <div className={styles.localUser}>
                   <Participants filter={(participants) => participants.filter(isLocal)}>
                     <ParticipantView>
-                      <VideoTrack source={Track.Source.Camera}></VideoTrack>
-
+                      <MediaTrack source={Track.Source.Camera}></MediaTrack>
                       <div className={styles.participantIndicators}>
                         <div style={{ display: 'flex' }}>
                           <MediaMutedIndicator kind="audio"></MediaMutedIndicator>

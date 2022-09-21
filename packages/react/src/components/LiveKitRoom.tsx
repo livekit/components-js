@@ -16,6 +16,7 @@ export type LiveKitRoomProps = {
   children?: ReactNode | ReactNode[];
   serverUrl?: string;
   token?: string;
+  room?: Room;
   options?: RoomOptions;
   connectOptions?: RoomConnectOptions;
   audio?: AudioCaptureOptions | boolean;
@@ -54,6 +55,7 @@ export const useLiveKitRoom = ({
   token,
   serverUrl,
   options,
+  room: passedRoom,
   connectOptions,
   connect,
   audio,
@@ -63,7 +65,7 @@ export const useLiveKitRoom = ({
   onDisconnected,
   onError,
 }: LiveKitRoomProps) => {
-  const [room] = useState<Room>(new Room(options));
+  const [room] = useState<Room>(passedRoom ?? new Room(options));
   // setLogLevel('debug');
 
   useEffect(() => {

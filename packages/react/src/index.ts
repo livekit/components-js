@@ -13,7 +13,7 @@ export * from './components/participant/MediaMutedIndicator';
 export * from './components/participant/ParticipantName';
 export * from './components/RoomName';
 export * from './components/RoomAudioRenderer';
-export * from './components/participant/AudioTrack';
-export * from './components/participant/VideoTrack';
+export * from './components/FocusViewRenderer';
+export * from './components/participant/MediaTrack';
 
 export { isLocal, isRemote };

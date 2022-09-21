@@ -23,8 +23,8 @@ export function setupToggle() {
 
   const enabledObserver = (source: Track.Source, localParticipant: LocalParticipant) => {
     return observeParticipantMedia(localParticipant).pipe(
-      map((p) => {
-        return getSourceEnabled(source, p as LocalParticipant);
+      map((media) => {
+        return getSourceEnabled(source, media.participant as LocalParticipant);
       }),
       startWith(getSourceEnabled(source, localParticipant)),
     );

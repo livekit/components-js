@@ -1,11 +1,8 @@
-import { Observable, Subscription } from 'rxjs';
+import { map, Observable, startWith, Subscriber, Subscription } from 'rxjs';
 import { Participant, Room, RoomEvent, Track, TrackPublication } from 'livekit-client';
-import type { ConnectionState, RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
+import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 
-export function observeRoomEvents(
-  room: Room,
-  ...events: RoomEvent[]
-): Pick<Observable<Room>, 'subscribe'> {
+export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observable<Room> {
   const observable = new Observable<Room>((subscribe) => {
     const onRoomUpdate = () => {
       subscribe.next(room);
@@ -21,7 +18,7 @@ export function observeRoomEvents(
       });
     };
     return unsubscribe;
-  });
+  }).pipe(startWith(room));
 
   return observable;
 }
@@ -56,24 +53,36 @@ export const roomObserver = (room: Room) => {
     RoomEvent.LocalTrackUnpublished,
     RoomEvent.AudioPlaybackStatusChanged,
     RoomEvent.ConnectionStateChanged,
-  );
+  ).pipe(startWith(room));
 
   return observable;
 };
 
-export const connectionStateObserver = (room: Room) =>
-  roomEventSelector(room, RoomEvent.ConnectionStateChanged);
-
+export function connectionStateObserver(room: Room) {
+  return roomEventSelector(room, RoomEvent.ConnectionStateChanged).pipe(
+    map(([connectionState]) => connectionState),
+    startWith(room.state),
+  );
+}
 export type ScreenShareTrackMap = Array<{
   participantId: string;
   tracks: Array<TrackPublication>;
 }>;
 
-export const screenShareObserver = (
-  room: Room,
-  onTracksChanged: (map: ScreenShareTrackMap) => void,
-) => {
+export function screenShareObserver(room: Room) {
+  let screenShareSubscriber: Subscriber<ScreenShareTrackMap>;
+  const observers: Array<Subscription> = [];
+
+  const observable = new Observable<ScreenShareTrackMap>((subscriber) => {
+    screenShareSubscriber = subscriber;
+    return () => {
+      observers.forEach((observer) => {
+        observer.unsubscribe();
+      });
+    };
+  });
   const screenShareTracks: ScreenShareTrackMap = [];
+
   const handleSub = (publication: TrackPublication, participant: Participant) => {
     if (
       publication.source !== Track.Source.ScreenShare &&
@@ -95,17 +104,17 @@ export const screenShareObserver = (
     if (!trackMap) {
       trackMap = { participantId: participant.identity, tracks: getScreenShareTracks(participant) };
     } else {
-      trackMap.tracks = getScreenShareTracks(participant);
       const index = screenShareTracks.indexOf(trackMap);
       screenShareTracks.splice(index, 1);
+      console.log('spliced screen share array', screenShareTracks);
+      trackMap.tracks = getScreenShareTracks(participant);
     }
     if (trackMap.tracks.length > 0) {
       screenShareTracks.push(trackMap);
     }
 
-    onTracksChanged(screenShareTracks);
+    screenShareSubscriber.next(screenShareTracks);
   };
-  const observers: Array<Subscription> = [];
   observers.push(
     roomEventSelector(room, RoomEvent.TrackSubscribed).subscribe(([_, ...args]) =>
       handleSub(...args),
@@ -125,21 +134,39 @@ export const screenShareObserver = (
       handleSub(...args);
     }),
   );
+  observers.push(
+    roomEventSelector(room, RoomEvent.TrackMuted).subscribe((args) => {
+      console.log('local track muted');
+      handleSub(...args);
+    }),
+  );
+  observers.push(
+    roomEventSelector(room, RoomEvent.TrackUnmuted).subscribe((args) => {
+      console.log('local track unmuted');
+      handleSub(...args);
+    }),
+  );
+  setTimeout(() => {
+    // TODO find way to avoid this timeout
+    for (const p of room.participants.values()) {
+      p.getTracks().forEach((track) => {
+        handleSub(track, p);
+      });
+    }
+  }, 1);
 
-  for (const p of room.participants.values()) {
-    p.getTracks().forEach((track) => {
-      handleSub(track, p);
-    });
-  }
-  return () => observers.forEach((obs) => obs.unsubscribe());
-};
+  return observable;
+}
 
-export function roomInfoObserver(room: Room, onInfoChange: (r: Room) => void) {
+export function roomInfoObserver(room: Room) {
   const observer = observeRoomEvents(
     room,
     RoomEvent.RoomMetadataChanged,
     RoomEvent.ConnectionStateChanged,
-  ).subscribe(onInfoChange);
-  onInfoChange(room);
+  ).pipe(
+    map((r) => {
+      return { name: r.name, metadata: r.metadata };
+    }),
+  );
   return observer;
 }

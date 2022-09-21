@@ -1,4 +1,4 @@
-import { connectedParticipants, observeParticipantEvents } from '@livekit/components-core';
+import { connectedParticipantsObserver, observeParticipantEvents } from '@livekit/components-core';
 import { LocalParticipant, Participant, ParticipantEvent, Room } from 'livekit-client';
 import { ref, watchEffect, unref } from 'vue';
 import { useRoomContext } from './useRoom';
@@ -17,8 +17,8 @@ export const useRemoteParticipants = (
     participants.value = newParticipants;
   };
   watchEffect((onCleanup) => {
-    const unsubscribe = connectedParticipants(currentRoom, handleUpdate);
-    onCleanup(() => unsubscribe());
+    const listener = connectedParticipantsObserver(currentRoom).subscribe(handleUpdate);
+    onCleanup(() => listener.unsubscribe());
   });
   return participants;
 };

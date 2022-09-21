@@ -20,7 +20,7 @@ export const useParticipantName = (participant: Participant) => {
   );
 
   useEffect(() => {
-    const listener = participantInfoObserver(participant, handleUpdate);
+    const listener = participantInfoObserver(participant).subscribe(handleUpdate);
     return listener.unsubscribe();
   });
 

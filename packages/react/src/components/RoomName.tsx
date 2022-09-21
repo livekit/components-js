@@ -9,16 +9,16 @@ export const useRoomInfo = (room: Room) => {
   const [metadata, setMetadata] = useState(room.metadata);
 
   const handleUpdate = useCallback(
-    (r: Room) => {
-      console.log('room info update', r);
-      setName(r.name);
-      setMetadata(r.metadata);
+    (info: { name: string; metadata: string | undefined }) => {
+      console.log('room info update', info);
+      setName(info.name);
+      setMetadata(info.metadata);
     },
     [room],
   );
 
   useEffect(() => {
-    const listener = roomInfoObserver(room, handleUpdate);
+    const listener = roomInfoObserver(room).subscribe(handleUpdate);
     return listener.unsubscribe();
   });
 

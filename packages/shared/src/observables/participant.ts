@@ -1,13 +1,23 @@
-import { Participant, ParticipantEvent, RemoteParticipant, Room, RoomEvent } from 'livekit-client';
+import {
+  AudioTrack,
+  Participant,
+  ParticipantEvent,
+  RemoteParticipant,
+  Room,
+  RoomEvent,
+  Track,
+  TrackPublication,
+  VideoTrack,
+} from 'livekit-client';
 import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
-import { Observable } from 'rxjs';
+import { map, Observable, startWith, Subscriber } from 'rxjs';
 import { observeRoomEvents } from './room';
 
-export const observeParticipantEvents = (
-  participant: Participant,
+export function observeParticipantEvents<T extends Participant>(
+  participant: T,
   ...events: ParticipantEvent[]
-) => {
-  const observable = new Observable<Participant>((subscribe) => {
+) {
+  const observable = new Observable<T>((subscribe) => {
     const onParticipantUpdate = () => {
       subscribe.next(participant);
     };
@@ -22,12 +32,21 @@ export const observeParticipantEvents = (
       });
     };
     return unsubscribe;
-  });
+  }).pipe(startWith(participant));
 
   return observable;
-};
+}
 
-export function observeParticipantMedia(participant: Participant) {
+export interface ParticipantMedia<T extends Participant = Participant> {
+  isCameraEnabled: boolean;
+  isMicrophoneEnabled: boolean;
+  isScreenShareEnabled: boolean;
+  microphoneTrack?: TrackPublication;
+  cameraTrack?: TrackPublication;
+  participant: T;
+}
+
+export function observeParticipantMedia<T extends Participant>(participant: T) {
   const participantObserver = observeParticipantEvents(
     participant,
     ParticipantEvent.TrackMuted,
@@ -41,20 +60,31 @@ export function observeParticipantMedia(participant: Participant) {
     ParticipantEvent.LocalTrackPublished,
     ParticipantEvent.LocalTrackUnpublished,
     // ParticipantEvent.ConnectionQualityChanged,
+  ).pipe(
+    map((p) => {
+      const { isMicrophoneEnabled, isCameraEnabled, isScreenShareEnabled } = p;
+      const microphoneTrack = p.getTrack(Track.Source.Microphone);
+      const cameraTrack = p.getTrack(Track.Source.Camera);
+      const participantMedia: ParticipantMedia<T> = {
+        isCameraEnabled,
+        isMicrophoneEnabled,
+        isScreenShareEnabled,
+        cameraTrack,
+        microphoneTrack,
+        participant: p,
+      };
+      return participantMedia;
+    }),
   );
 
   return participantObserver;
 }
 
-export function participantInfoObserver(
-  participant: Participant,
-  onInfoChange: (p: Participant) => void,
-) {
+export function participantInfoObserver(participant: Participant) {
   const observer = observeParticipantEvents(
     participant,
     ParticipantEvent.ParticipantMetadataChanged,
-  ).subscribe(onInfoChange);
-  onInfoChange(participant);
+  ).pipe(startWith(participant));
   return observer;
 }
 
@@ -79,18 +109,36 @@ export function participantEventSelector<T extends ParticipantEvent>(
   return observable;
 }
 
-export function connectedParticipants(
-  room: Room,
-  onConnectedParticipantsChanged: (participants: RemoteParticipant[]) => void,
-) {
+export function mutedObserver(participant: Participant, source: Track.Source) {
+  return observeParticipantEvents(
+    participant,
+    ParticipantEvent.TrackMuted,
+    ParticipantEvent.TrackUnmuted,
+  ).pipe(
+    map((participant) => {
+      const pub = participant.getTrack(source);
+      return !!pub?.isMuted;
+    }),
+    startWith(!!participant.getTrack(source)?.isMuted),
+  );
+}
+
+export function connectedParticipantsObserver(room: Room) {
+  let subscriber: Subscriber<RemoteParticipant[]> | undefined;
+
+  const observable = new Observable<RemoteParticipant[]>((sub) => {
+    subscriber = sub;
+    return () => listener.unsubscribe();
+  }).pipe(startWith(Array.from(room.participants.values())));
+
   const listener = observeRoomEvents(
     room,
     RoomEvent.ParticipantConnected,
     RoomEvent.ParticipantDisconnected,
     RoomEvent.ConnectionStateChanged,
-  ).subscribe((r) => onConnectedParticipantsChanged(Array.from(r.participants.values())));
+  ).subscribe((r) => subscriber?.next(Array.from(r.participants.values())));
   if (room.participants.size > 0) {
-    onConnectedParticipantsChanged(Array.from(room.participants.values()));
+    subscriber?.next(Array.from(room.participants.values()));
   }
-  return () => listener.unsubscribe();
+  return observable;
 }

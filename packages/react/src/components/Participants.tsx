@@ -1,12 +1,13 @@
-import { useRoomContext } from '../contexts';
+import { ParticipantContext, useRoomContext } from '../contexts';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Participant, Room } from 'livekit-client';
 import { useLocalParticipant } from './controls/MediaControl';
-import { connectedParticipants } from '@livekit/components-core';
+import { connectedParticipantsObserver } from '@livekit/components-core';
 
 type ParticipantsProps = {
   children: ReactNode | ReactNode[];
   room?: Room;
+  filterDependencies?: Array<unknown>;
   filter?: (participants: Array<Participant>) => Array<Participant>;
 };
 
@@ -27,13 +28,15 @@ export const useRemoteParticipants = (
     [participants, filter],
   );
   useEffect(() => {
-    return connectedParticipants(currentRoom, handleUpdate);
+    const listener = connectedParticipantsObserver(currentRoom).subscribe(handleUpdate);
+    return () => listener.unsubscribe();
   }, [currentRoom]);
   return participants;
 };
 
 export const useParticipants = (
   filter?: (participants: Array<Participant>) => Array<Participant>,
+  filterDependencies: Array<unknown> = [],
   room?: Room,
 ) => {
   const [participants, setParticipants] = useState<Participant[]>([]);
@@ -47,20 +50,24 @@ export const useParticipants = (
       console.log('filtered participants', all);
     }
     setParticipants(all);
-  }, [remoteParticipants, localParticipant, filter]);
+  }, [remoteParticipants, localParticipant, filter, ...filterDependencies]);
 
   return participants;
 };
 
-export const Participants = ({ children, room, filter }: ParticipantsProps) => {
-  const participants = useParticipants(filter, room);
+export const Participants = ({ children, room, filter, filterDependencies }: ParticipantsProps) => {
+  const participants = useParticipants(filter, filterDependencies, room);
   const childrenWithProps = (participant: Participant) => {
     return React.Children.map(children, (child) => {
       // Checking isValidElement is the safe way and avoids a typescript
       // error too.
       if (React.isValidElement(child) && React.Children.only(children)) {
         // @ts-ignore we want to spread those properties on the children no matter what type they are
-        return React.cloneElement(child, { participant, key: participant.identity });
+        return (
+          <ParticipantContext.Provider value={participant}>
+            {React.cloneElement(child, { key: participant.identity })}
+          </ParticipantContext.Provider>
+        );
       }
       return child;
     });

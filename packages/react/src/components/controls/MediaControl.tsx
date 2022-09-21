@@ -1,5 +1,10 @@
-import { observeParticipantEvents, setupToggle } from '@livekit/components-core';
-import { LocalParticipant, ParticipantEvent, Room, Track } from 'livekit-client';
+import {
+  observeParticipantEvents,
+  observeParticipantMedia,
+  ParticipantMedia,
+  setupToggle,
+} from '@livekit/components-core';
+import { LocalParticipant, ParticipantEvent, Room, Track, TrackPublication } from 'livekit-client';
 import React, {
   HTMLAttributes,
   MouseEventHandler,
@@ -28,25 +33,29 @@ export const useLocalParticipant = (room?: Room) => {
   const [isScreenShareEnabled, setIsScreenShareEnabled] = useState(
     localParticipant.isMicrophoneEnabled,
   );
+  const [microphoneTrack, setMicrophoneTrack] = useState<TrackPublication | undefined>(undefined);
+  const [cameraTrack, setCameraTrack] = useState<TrackPublication | undefined>(undefined);
 
-  const handleUpdate = (p: LocalParticipant) => {
-    setIsCameraEnabled(p.isCameraEnabled);
-    setIsMicrophoneEnabled(p.isMicrophoneEnabled);
-    setIsScreenShareEnabled(p.isScreenShareEnabled);
-    setLocalParticipant(p);
+  const handleUpdate = (media: ParticipantMedia<LocalParticipant>) => {
+    setIsCameraEnabled(media.isCameraEnabled);
+    setIsMicrophoneEnabled(media.isMicrophoneEnabled);
+    setIsScreenShareEnabled(media.isScreenShareEnabled);
+    setCameraTrack(media.cameraTrack);
+    setMicrophoneTrack(media.microphoneTrack);
+    setLocalParticipant(media.participant);
   };
   useEffect(() => {
-    const listener = observeParticipantEvents(
-      // TODO use track observer instead of participant observer
-      currentRoom.localParticipant,
-      ParticipantEvent.TrackMuted,
-      ParticipantEvent.TrackUnmuted,
-      ParticipantEvent.LocalTrackPublished,
-      ParticipantEvent.LocalTrackUnpublished,
-    ).subscribe((p) => handleUpdate(p as LocalParticipant));
+    const listener = observeParticipantMedia(localParticipant).subscribe(handleUpdate);
     return () => listener.unsubscribe();
   });
-  return { localParticipant, isMicrophoneEnabled, isScreenShareEnabled, isCameraEnabled };
+  return {
+    isMicrophoneEnabled,
+    isScreenShareEnabled,
+    isCameraEnabled,
+    microphoneTrack,
+    cameraTrack,
+    localParticipant,
+  };
 };
 
 export const useMediaToggle = ({ source, onChange, ...rest }: MediaControlProps) => {

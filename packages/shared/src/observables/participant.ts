@@ -1,20 +1,23 @@
 import {
+  AudioTrack,
   Participant,
   ParticipantEvent,
   RemoteParticipant,
   Room,
   RoomEvent,
   Track,
+  TrackPublication,
+  VideoTrack,
 } from 'livekit-client';
 import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 import { map, Observable, startWith, Subscriber } from 'rxjs';
 import { observeRoomEvents } from './room';
 
-export const observeParticipantEvents = (
-  participant: Participant,
+export function observeParticipantEvents<T extends Participant>(
+  participant: T,
   ...events: ParticipantEvent[]
-) => {
-  const observable = new Observable<Participant>((subscribe) => {
+) {
+  const observable = new Observable<T>((subscribe) => {
     const onParticipantUpdate = () => {
       subscribe.next(participant);
     };
@@ -29,12 +32,21 @@ export const observeParticipantEvents = (
       });
     };
     return unsubscribe;
-  });
+  }).pipe(startWith(participant));
 
   return observable;
-};
+}
 
-export function observeParticipantMedia(participant: Participant) {
+export interface ParticipantMedia<T extends Participant = Participant> {
+  isCameraEnabled: boolean;
+  isMicrophoneEnabled: boolean;
+  isScreenShareEnabled: boolean;
+  microphoneTrack?: TrackPublication;
+  cameraTrack?: TrackPublication;
+  participant: T;
+}
+
+export function observeParticipantMedia<T extends Participant>(participant: T) {
   const participantObserver = observeParticipantEvents(
     participant,
     ParticipantEvent.TrackMuted,
@@ -48,7 +60,22 @@ export function observeParticipantMedia(participant: Participant) {
     ParticipantEvent.LocalTrackPublished,
     ParticipantEvent.LocalTrackUnpublished,
     // ParticipantEvent.ConnectionQualityChanged,
-  ).pipe(startWith(participant));
+  ).pipe(
+    map((p) => {
+      const { isMicrophoneEnabled, isCameraEnabled, isScreenShareEnabled } = p;
+      const microphoneTrack = p.getTrack(Track.Source.Microphone);
+      const cameraTrack = p.getTrack(Track.Source.Camera);
+      const participantMedia: ParticipantMedia<T> = {
+        isCameraEnabled,
+        isMicrophoneEnabled,
+        isScreenShareEnabled,
+        cameraTrack,
+        microphoneTrack,
+        participant: p,
+      };
+      return participantMedia;
+    }),
+  );
 
   return participantObserver;
 }

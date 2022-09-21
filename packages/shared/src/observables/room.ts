@@ -1,11 +1,8 @@
-import { Observable, Subscriber, Subscription } from 'rxjs';
+import { map, Observable, startWith, Subscriber, Subscription } from 'rxjs';
 import { Participant, Room, RoomEvent, Track, TrackPublication } from 'livekit-client';
 import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 
-export function observeRoomEvents(
-  room: Room,
-  ...events: RoomEvent[]
-): Pick<Observable<Room>, 'subscribe'> {
+export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observable<Room> {
   const observable = new Observable<Room>((subscribe) => {
     const onRoomUpdate = () => {
       subscribe.next(room);
@@ -21,7 +18,7 @@ export function observeRoomEvents(
       });
     };
     return unsubscribe;
-  });
+  }).pipe(startWith(room));
 
   return observable;
 }
@@ -56,13 +53,16 @@ export const roomObserver = (room: Room) => {
     RoomEvent.LocalTrackUnpublished,
     RoomEvent.AudioPlaybackStatusChanged,
     RoomEvent.ConnectionStateChanged,
-  );
+  ).pipe(startWith(room));
 
   return observable;
 };
 
 export function connectionStateObserver(room: Room) {
-  return roomEventSelector(room, RoomEvent.ConnectionStateChanged);
+  return roomEventSelector(room, RoomEvent.ConnectionStateChanged).pipe(
+    map(([connectionState]) => connectionState),
+    startWith(room.state),
+  );
 }
 export type ScreenShareTrackMap = Array<{
   participantId: string;
@@ -158,12 +158,15 @@ export function screenShareObserver(room: Room) {
   return observable;
 }
 
-export function roomInfoObserver(room: Room, onInfoChange: (r: Room) => void) {
+export function roomInfoObserver(room: Room) {
   const observer = observeRoomEvents(
     room,
     RoomEvent.RoomMetadataChanged,
     RoomEvent.ConnectionStateChanged,
-  ).subscribe(onInfoChange);
-  onInfoChange(room);
+  ).pipe(
+    map((r) => {
+      return { name: r.name, metadata: r.metadata };
+    }),
+  );
   return observer;
 }

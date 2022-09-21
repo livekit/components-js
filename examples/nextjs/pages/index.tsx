@@ -25,8 +25,6 @@ import Head from 'next/head';
 import { useEffect, useMemo, useState } from 'react';
 import styles from '../styles/Home.module.css';
 
-// import '@livekit/components/dist/livekit-components.mjs';
-
 const Home: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
 
@@ -43,15 +41,16 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (
-      !screenShareTrack &&
-      focusPublication &&
-      focusPublication.source !== Track.Source.ScreenShare
+      (!screenShareTrack &&
+        focusPublication &&
+        focusPublication.source !== Track.Source.ScreenShare) ||
+      (screenShareTrack && focusPublication === screenShareTrack)
     ) {
       return;
     }
     setFocusPublication(screenShareTrack);
     setFocusedParticipant(screenShareParticipant);
-  }, [screenShareTrack, screenShareParticipant]);
+  }, [screenShareTrack, screenShareParticipant, focusPublication]);
 
   const token = useToken(roomName, userIdentity, 'myname');
 
@@ -90,7 +89,6 @@ const Home: NextPage = () => {
           <RoomName />
           <ConnectionState />
           <RoomAudioRenderer />
-          {/* <MediaSelection type="microphone"/>  */}
           {isConnected && (
             <>
               <div className={focusPublication ? styles.focusView : styles.gridView}>
@@ -139,7 +137,6 @@ const Home: NextPage = () => {
                   <Participants filter={(participants) => participants.filter(isLocal)}>
                     <ParticipantView>
                       <MediaTrack source={Track.Source.Camera}></MediaTrack>
-
                       <div className={styles.participantIndicators}>
                         <div style={{ display: 'flex' }}>
                           <MediaMutedIndicator kind="audio"></MediaMutedIndicator>

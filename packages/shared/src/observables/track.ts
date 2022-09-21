@@ -1,5 +1,5 @@
 import { TrackEvent, TrackPublication } from 'livekit-client';
-import { Observable } from 'rxjs';
+import { Observable, startWith } from 'rxjs';
 
 export function trackObservable(track: TrackPublication) {
   const trackObserver = observeTrackEvents(
@@ -8,7 +8,6 @@ export function trackObservable(track: TrackPublication) {
     TrackEvent.Unmuted,
     TrackEvent.Subscribed,
     TrackEvent.Unsubscribed,
-    TrackEvent.SubscriptionPermissionChanged,
   );
 
   return trackObserver;
@@ -32,7 +31,7 @@ export const observeTrackEvents = (track: TrackPublication, ...events: TrackEven
       });
     };
     return unsubscribe;
-  });
+  }).pipe(startWith(track));
 
   return observable;
 };

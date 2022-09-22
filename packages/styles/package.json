@@ -9,15 +9,15 @@
   },
   "files": [
     "dist",
-    "src"
+    "scss"
   ],
   "engines": {
     "node": ">=10"
   },
   "scripts": {
     "dev": "nodemon -e scss -x \"yarn build && yarn generate:types\"",
-    "build": "sass src/styles.scss dist/styles.css && yarn generate:types",
-    "generate:types": "cd src && typed-scss-modules './**/*.scss' --exportType default --outputFolder ../dist/types --nameFormat kebab"
+    "build": "sass scss/styles.scss dist/styles.css && yarn generate:types",
+    "generate:types": "cd scss && typed-scss-modules './**/*.scss' --exportType default --outputFolder ../dist/types --nameFormat kebab"
   },
   "peerDependencies": {},
   "devDependencies": {

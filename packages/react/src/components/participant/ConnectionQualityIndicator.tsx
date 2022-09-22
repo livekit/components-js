@@ -1,41 +1,34 @@
 import React, { HTMLAttributes, useEffect, useMemo, useState } from 'react';
-import { ConnectionQualityInterface } from '@livekit/components-core';
+import { setupConnectionQualityIndicator } from '@livekit/components-core';
 import { useParticipantContext } from '../../contexts';
 import { ConnectionQuality, Participant } from 'livekit-client';
 import { mergeProps } from '../../utils';
 
-interface ConnectionQualityIndicatorProps extends HTMLAttributes<HTMLDivElement> {}
+interface ConnectionQualityIndicatorProps extends HTMLAttributes<HTMLDivElement> {
+  participant?: Participant;
+}
 
-export const useConnectionQualityIndicator = (
-  props?: ConnectionQualityIndicatorProps,
-  participant?: Participant,
-) => {
-  const p = participant ?? useParticipantContext();
+export const useConnectionQualityIndicator = (props?: ConnectionQualityIndicatorProps) => {
+  const p = props?.participant ?? useParticipantContext();
   const [quality, setQuality] = useState(ConnectionQuality.Unknown);
-  const [qualityClassName, setQualityClassName] = useState('');
 
-  const { staticProps, createConnectionQualityObserver } = useMemo(() => {
-    const { className } = ConnectionQualityInterface.setup();
-    const { createConnectionQualityObserver } = ConnectionQualityInterface.observers();
-    return {
-      staticProps: mergeProps(props, { className }),
-      createConnectionQualityObserver,
-    };
-  }, []);
+  const { className, connectionQualityObserver } = useMemo(
+    () => setupConnectionQualityIndicator(p),
+    [p],
+  );
 
   useEffect(() => {
-    const subscription = createConnectionQualityObserver(p).subscribe(({ quality, class_ }) => {
+    const subscription = connectionQualityObserver.subscribe(({ quality }) => {
       setQuality(quality);
-      setQualityClassName(class_);
     });
     return () => {
       subscription.unsubscribe();
     };
-  }, [p]);
+  }, [connectionQualityObserver]);
 
   const elementProps = useMemo(
-    () => mergeProps(props, staticProps, { className: qualityClassName }),
-    [qualityClassName, props, staticProps],
+    () => mergeProps(props, { className }, { className: quality }),
+    [quality, props, className],
   );
 
   return { elementProps, quality };

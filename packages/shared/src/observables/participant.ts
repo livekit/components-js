@@ -96,6 +96,22 @@ export function participantInfoObserver(participant: Participant) {
   return observer;
 }
 
+export const createConnectionQualityObserver = (participant: Participant) => {
+  const observer = observeParticipantEvents(
+    participant,
+    ParticipantEvent.ConnectionQualityChanged,
+  ).pipe(
+    map((p) => {
+      return { quality: p.connectionQuality, className: `lk-${p.connectionQuality}` };
+    }),
+    startWith({
+      quality: participant.connectionQuality,
+      className: `lk-${participant.connectionQuality}`,
+    }),
+  );
+  return observer;
+};
+
 export function participantEventSelector<T extends ParticipantEvent>(
   participant: Participant,
   event: T,

@@ -14,7 +14,7 @@ export const MediaTrack = (props: MediaTrackProps) => {
   const participant = props.participant ?? useParticipantContext();
 
   const mediaEl = useRef<HTMLVideoElement>(null);
-  const { elementProps, publication } = useParticipantMedia(participant, props, mediaEl);
+  const { elementProps, publication } = useParticipantMedia(participant, props.source, mediaEl);
   const { onClick, ...htmlProps } = elementProps;
 
   return (

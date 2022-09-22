@@ -1,8 +1,9 @@
-import { LocalParticipant, Track } from 'livekit-client';
+import { ClassNames } from '@livekit/components-styles/dist/types/styles.scss';
+import { LocalParticipant, Room, Track } from 'livekit-client';
 import { map, Observable, startWith, Subscriber } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
 
-export function setupToggle() {
+export function setupToggle(source: Track.Source, localParticipant: LocalParticipant) {
   const getSourceEnabled = (source: Track.Source, localParticipant: LocalParticipant) => {
     let isEnabled = false;
     switch (source) {
@@ -21,14 +22,12 @@ export function setupToggle() {
     return isEnabled;
   };
 
-  const enabledObserver = (source: Track.Source, localParticipant: LocalParticipant) => {
-    return observeParticipantMedia(localParticipant).pipe(
-      map((media) => {
-        return getSourceEnabled(source, media.participant as LocalParticipant);
-      }),
-      startWith(getSourceEnabled(source, localParticipant)),
-    );
-  };
+  const enabledObserver = observeParticipantMedia(localParticipant).pipe(
+    map((media) => {
+      return getSourceEnabled(source, media.participant as LocalParticipant);
+    }),
+    startWith(getSourceEnabled(source, localParticipant)),
+  );
 
   let pendingTrigger: Subscriber<boolean>;
 
@@ -36,7 +35,7 @@ export function setupToggle() {
     pendingTrigger = subscribe;
   });
 
-  const toggle = async (source: Track.Source, localParticipant: LocalParticipant) => {
+  const toggle = async () => {
     try {
       // trigger observable update
       pendingTrigger.next(true);
@@ -58,5 +57,6 @@ export function setupToggle() {
       // trigger observable update
     }
   };
-  return { className: 'lk-button', toggle, observers: { enabledObserver, pendingObserver } };
+  const className: ClassNames = 'lk-button';
+  return { className, toggle, enabledObserver, pendingObserver };
 }

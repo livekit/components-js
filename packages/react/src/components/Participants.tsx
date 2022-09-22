@@ -62,7 +62,6 @@ export const Participants = ({ children, room, filter, filterDependencies }: Par
       // Checking isValidElement is the safe way and avoids a typescript
       // error too.
       if (React.isValidElement(child) && React.Children.only(children)) {
-        // @ts-ignore we want to spread those properties on the children no matter what type they are
         return (
           <ParticipantContext.Provider value={participant}>
             {React.cloneElement(child, { key: participant.identity })}

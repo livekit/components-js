@@ -10,11 +10,10 @@ export const useParticipantName = (participant: Participant) => {
   const [metadata, setMetadata] = useState(participant.metadata);
 
   const handleUpdate = useCallback(
-    (p: Participant) => {
-      console.log('participant info update', p);
-      setIdentity(p.identity);
-      setName(p.name);
-      setMetadata(p.metadata);
+    (info: { name?: string; identity: string; metadata?: string }) => {
+      setIdentity(info.identity);
+      setName(info.name);
+      setMetadata(info.metadata);
     },
     [participant],
   );

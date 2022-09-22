@@ -84,7 +84,15 @@ export function participantInfoObserver(participant: Participant) {
   const observer = observeParticipantEvents(
     participant,
     ParticipantEvent.ParticipantMetadataChanged,
-  ).pipe(startWith(participant));
+  ).pipe(
+    map(({ name, identity, metadata }) => {
+      return {
+        name,
+        identity,
+        metadata,
+      };
+    }),
+  );
   return observer;
 }
 

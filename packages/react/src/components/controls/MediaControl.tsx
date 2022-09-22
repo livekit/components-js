@@ -69,7 +69,7 @@ export const useMediaToggle = ({ source, onChange, ...rest }: MediaControlProps)
     onChange?.(isEnabled);
   };
 
-  const { toggle, className, observers } = useMemo(() => setupToggle(), []);
+  const { toggle, className, pendingObserver, enabledObserver } = useMemo(() => setupToggle(), []);
 
   const handleToggle = useCallback(
     () => toggle(source, localParticipant),
@@ -78,8 +78,8 @@ export const useMediaToggle = ({ source, onChange, ...rest }: MediaControlProps)
 
   useEffect(() => {
     const listeners: Array<any> = [];
-    listeners.push(observers.enabledObserver(source, localParticipant).subscribe(onEnableChange));
-    listeners.push(observers.pendingObserver.subscribe(setPending));
+    listeners.push(enabledObserver(source, localParticipant).subscribe(onEnableChange));
+    listeners.push(pendingObserver.subscribe(setPending));
 
     return () => listeners.forEach((l) => l.unsubscribe());
   }, [source, localParticipant]);

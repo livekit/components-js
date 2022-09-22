@@ -1,10 +1,5 @@
-import {
-  observeParticipantEvents,
-  observeParticipantMedia,
-  ParticipantMedia,
-  setupToggle,
-} from '@livekit/components-core';
-import { LocalParticipant, ParticipantEvent, Room, Track, TrackPublication } from 'livekit-client';
+import { observeParticipantMedia, ParticipantMedia, setupToggle } from '@livekit/components-core';
+import { LocalParticipant, Room, Track, TrackPublication } from 'livekit-client';
 import React, {
   HTMLAttributes,
   MouseEventHandler,
@@ -69,33 +64,31 @@ export const useMediaToggle = ({ source, onChange, ...rest }: MediaControlProps)
     onChange?.(isEnabled);
   };
 
-  const { toggle, className, pendingObserver, enabledObserver } = useMemo(() => setupToggle(), []);
-
-  const handleToggle = useCallback(
-    () => toggle(source, localParticipant),
-    [localParticipant, source],
+  const { toggle, className, pendingObserver, enabledObserver } = useMemo(
+    () => setupToggle(source, localParticipant),
+    [source, localParticipant],
   );
 
   useEffect(() => {
     const listeners: Array<any> = [];
-    listeners.push(enabledObserver(source, localParticipant).subscribe(onEnableChange));
+    listeners.push(enabledObserver.subscribe(onEnableChange));
     listeners.push(pendingObserver.subscribe(setPending));
 
     return () => listeners.forEach((l) => l.unsubscribe());
-  }, [source, localParticipant]);
+  }, [enabledObserver, pendingObserver]);
 
   const newProps = useMemo(() => mergeProps(rest, { className }), [rest, className]);
 
   const clickHandler: MouseEventHandler<HTMLButtonElement> = useCallback(
     (evt) => {
-      handleToggle();
+      toggle();
       rest.onClick?.(evt);
     },
-    [rest, handleToggle],
+    [rest, toggle],
   );
 
   return {
-    toggle: handleToggle,
+    toggle,
     enabled,
     pending,
     track,

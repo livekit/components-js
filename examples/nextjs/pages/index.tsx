@@ -94,7 +94,11 @@ const Home: NextPage = () => {
               <div className={focusPublication ? styles.focusView : styles.gridView}>
                 <div className={styles.screenShare}>
                   {focusPublication && focusedParticipant && (
-                    <MediaTrack participant={focusedParticipant} source={focusPublication.source}>
+                    <>
+                      <MediaTrack
+                        participant={focusedParticipant}
+                        source={focusPublication.source}
+                      />
                       <button
                         style={{ position: 'absolute', top: '20px', left: '20px' }}
                         onClick={() => {
@@ -104,7 +108,7 @@ const Home: NextPage = () => {
                       >
                         reset focus
                       </button>
-                    </MediaTrack>
+                    </>
                   )}
                 </div>
                 <div className={styles.participantGrid}>

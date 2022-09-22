@@ -5,7 +5,7 @@ import { LKComponentAttributes } from '../../utils';
 import { useParticipantMedia } from './Participant';
 
 export interface MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
-  extends LKComponentAttributes<T> {
+  extends Omit<LKComponentAttributes<T>, 'children'> {
   participant?: Participant;
   source: Track.Source;
 }
@@ -28,7 +28,6 @@ export const MediaTrack = (props: MediaTrackProps) => {
       ) : (
         <audio ref={mediaEl} {...elementProps}></audio>
       )}
-      {props.children}
     </>
   );
 };

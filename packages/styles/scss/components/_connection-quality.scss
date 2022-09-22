@@ -1,8 +1,8 @@
-@import '../variables';
+@use '../variables' as vars;
 
 .lk-connection-quality {
-  width: $indicator_size;
-  height: $indicator_size;
+  width: vars.$indicator_size;
+  height: vars.$indicator_size;
   border-radius: 99999px;
 
   // Participant connection quality indicator.

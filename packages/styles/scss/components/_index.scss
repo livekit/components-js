@@ -1,2 +1,9 @@
-@import 'button', 'disconnect-button', 'connection-quality', 'media-muted-indicator',
-  'participant-name', 'participant-view', 'participant-media', 'device-menu';
+// Components
+@use 'button';
+@use 'disconnect-button';
+@use 'connection-quality';
+@use 'media-muted-indicator';
+@use 'participant-name';
+@use 'participant-view';
+@use 'participant-media';
+@use 'device-menu';

@@ -9,11 +9,10 @@
 
   // padding: var(--lk-btn-padding-y) var(--lk-btn-padding-x);
   border: none;
-  // border-radius: var(--lk-cool-test);
-  background: var(--lk-primary);
+  background-color: v.$t-primary;
 }
 
 /** active state for toggle buttons **/
 .lk-button[aria-pressed='true'] {
-  // box-shadow: inset 5px 5px 10px #bebebe, inset -5px -5px 10px #ffffff;
+  box-shadow: inset 5px 5px 10px v.$t-primary, inset -5px -5px 10px v.$t-primary;
 }

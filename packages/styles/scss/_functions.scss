@@ -1,0 +1,5 @@
+@use 'sass:string';
+
+@function css-var-with-sass-fallback($var-name, $value) {
+  @return var(--lk-#{string.to-lower-case($var-name)}, $value);
+}

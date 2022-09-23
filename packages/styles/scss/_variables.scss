@@ -1,3 +1,5 @@
+@use 'functions' as fn;
+
 $prefix: 'lk';
 
 // Variables
@@ -19,9 +21,19 @@ $gray-700: #495057 !default;
 $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
 $black: #000 !default;
-// scss-docs-end gray-color-variables
 
-// scss-docs-start color-variables
+$grays: (
+  '100': $gray-100,
+  '200': $gray-200,
+  '300': $gray-300,
+  '400': $gray-400,
+  '500': $gray-500,
+  '600': $gray-600,
+  '700': $gray-700,
+  '800': $gray-800,
+  '900': $gray-900,
+) !default;
+
 $blue: #0d6efd !default;
 $indigo: #6610f2 !default;
 $purple: #6f42c1 !default;
@@ -64,6 +76,9 @@ $light: $gray-100 !default;
 $dark: $gray-900 !default;
 // scss-docs-end theme-color-variables
 
+$t-primary: fn.css-var-with-sass-fallback('primary', $primary);
+$t-secondary: fn.css-var-with-sass-fallback('secondary', $secondary);
+
 // scss-docs-start theme-colors-map
 $theme-colors: (
   'primary': $primary,
@@ -75,4 +90,3 @@ $theme-colors: (
   'light': $light,
   'dark': $dark,
 ) !default;
-// scss-docs-end theme-colors-map

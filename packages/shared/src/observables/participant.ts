@@ -80,6 +80,15 @@ export function observeParticipantMedia<T extends Participant>(participant: T) {
   return participantObserver;
 }
 
+export function createTrackObserver(participant: Participant, source: Track.Source) {
+  return observeParticipantMedia(participant).pipe(
+    map((media) => {
+      const publication = media.participant.getTrack(source);
+      return { publication };
+    }),
+  );
+}
+
 export function participantInfoObserver(participant: Participant) {
   const observer = observeParticipantEvents(
     participant,
@@ -95,6 +104,19 @@ export function participantInfoObserver(participant: Participant) {
   );
   return observer;
 }
+
+export const createConnectionQualityObserver = (participant: Participant) => {
+  const observer = observeParticipantEvents(
+    participant,
+    ParticipantEvent.ConnectionQualityChanged,
+  ).pipe(
+    map((p) => {
+      return p.connectionQuality;
+    }),
+    startWith(participant.connectionQuality),
+  );
+  return observer;
+};
 
 export function participantEventSelector<T extends ParticipantEvent>(
   participant: Participant,
@@ -128,6 +150,12 @@ export function mutedObserver(participant: Participant, source: Track.Source) {
       return !!pub?.isMuted;
     }),
     startWith(!!participant.getTrack(source)?.isMuted),
+  );
+}
+
+export function createIsSpeakingObserver(participant: Participant) {
+  return participantEventSelector(participant, ParticipantEvent.IsSpeakingChanged).pipe(
+    map(([isSpeaking]) => isSpeaking),
   );
 }
 

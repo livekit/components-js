@@ -1,9 +1,8 @@
 import {
   ParticipantView,
-  ConnectionQualityIndicator,
   LiveKitRoom,
   MediaControlButton,
-  MediaSelect,
+  DeviceMenu,
   TrackSource,
   Participants,
   ConnectionState,
@@ -74,9 +73,9 @@ const Home: NextPage = () => {
             <>
               <div className={styles.controlBar}>
                 <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
-                <MediaSelect kind={'videoinput'} />
+                <DeviceMenu kind={'videoinput'} />
                 <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
-                <MediaSelect kind={'audioinput'} />
+                <DeviceMenu kind={'audioinput'} />
                 <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
                 <DisconnectButton>Hang up!</DisconnectButton>
               </div>
@@ -88,8 +87,8 @@ const Home: NextPage = () => {
 
                     <div className={styles.participantIndicators}>
                       <div style={{ display: 'flex' }}>
-                        <MediaMutedIndicator kind="audio"></MediaMutedIndicator>
-                        <MediaMutedIndicator kind="video"></MediaMutedIndicator>
+                        <MediaMutedIndicator source={Track.Source.Microphone}></MediaMutedIndicator>
+                        <MediaMutedIndicator source={Track.Source.Camera}></MediaMutedIndicator>
                       </div>
                       {/* Overwrite styles: By passing our own class name, we can easily overwrite/extend the existing styles. */}
                       {/* In addition, we can still specify a style attribute and further customize the styles. */}

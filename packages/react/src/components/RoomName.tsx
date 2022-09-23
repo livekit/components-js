@@ -3,24 +3,14 @@ import { Room } from 'livekit-client';
 import React, { HTMLAttributes, useCallback, useEffect, useState } from 'react';
 
 import { useRoomContext } from '../contexts';
+import { useObservableState } from '../utils';
 
 export const useRoomInfo = (room: Room) => {
-  const [name, setName] = useState(room.name);
-  const [metadata, setMetadata] = useState(room.metadata);
-
-  const handleUpdate = useCallback(
-    (info: { name: string; metadata: string | undefined }) => {
-      console.log('room info update', info);
-      setName(info.name);
-      setMetadata(info.metadata);
-    },
+  const { name, metadata } = useObservableState(
+    roomInfoObserver(room),
+    { name: room.name, metadata: room.metadata },
     [room],
   );
-
-  useEffect(() => {
-    const listener = roomInfoObserver(room).subscribe(handleUpdate);
-    return listener.unsubscribe();
-  });
 
   return { name, metadata };
 };

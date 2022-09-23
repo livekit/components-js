@@ -170,3 +170,19 @@ export function roomInfoObserver(room: Room) {
   );
   return observer;
 }
+
+export const createMediaDeviceObserver = (kind?: MediaDeviceKind, requestPermissions = true) => {
+  let deviceSubscriber: Subscriber<MediaDeviceInfo[]> | undefined;
+  const onDeviceChange = async () => {
+    const newDevices = await Room.getLocalDevices(kind, requestPermissions);
+    deviceSubscriber?.next(newDevices);
+  };
+  const observable = new Observable<MediaDeviceInfo[]>((subscriber) => {
+    deviceSubscriber = subscriber;
+    navigator.mediaDevices.addEventListener('devicechange', onDeviceChange);
+    return () => navigator.mediaDevices.removeEventListener('devicechange', onDeviceChange);
+  });
+  // because we rely on an async function, trigger the first update instead of using startWith
+  onDeviceChange();
+  return observable;
+};

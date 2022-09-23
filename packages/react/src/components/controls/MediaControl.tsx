@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 import { mergeProps } from 'react-aria';
 import { useRoomContext } from '../../contexts';
+import { useObservableState } from '../../utils';
 
 type MediaControlProps = HTMLAttributes<HTMLButtonElement> & {
   source: Track.Source;
@@ -56,26 +57,18 @@ export const useLocalParticipant = (room?: Room) => {
 export const useMediaToggle = ({ source, onChange, ...rest }: MediaControlProps) => {
   const { localParticipant } = useLocalParticipant();
   const track = localParticipant.getTrack(source);
-  const [enabled, setEnabled] = useState(!!track?.isEnabled);
-  const [pending, setPending] = useState(false);
-
-  const onEnableChange = (isEnabled: boolean) => {
-    setEnabled(isEnabled);
-    onChange?.(isEnabled);
-  };
 
   const { toggle, className, pendingObserver, enabledObserver } = useMemo(
     () => setupToggle(source, localParticipant),
     [source, localParticipant],
   );
 
-  useEffect(() => {
-    const listeners: Array<any> = [];
-    listeners.push(enabledObserver.subscribe(onEnableChange));
-    listeners.push(pendingObserver.subscribe(setPending));
+  const pending = useObservableState(pendingObserver, false);
+  const enabled = useObservableState(enabledObserver, !!track?.isEnabled);
 
-    return () => listeners.forEach((l) => l.unsubscribe());
-  }, [enabledObserver, pendingObserver]);
+  useEffect(() => {
+    onChange?.(enabled);
+  }, [enabled]);
 
   const newProps = useMemo(() => mergeProps(rest, { className }), [rest, className]);
 

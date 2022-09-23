@@ -1,26 +1,15 @@
-import { participantInfoObserver, ParticipantNameInterface } from '@livekit/components-core';
+import { participantInfoObserver, setupParticipantName } from '@livekit/components-core';
 import { Participant } from 'livekit-client';
-import React, { HTMLAttributes, useCallback, useEffect, useState } from 'react';
+import React, { HTMLAttributes, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParticipantContext } from '../../contexts';
-import { mergeProps } from '../../utils';
+import { mergeProps, useObservableState } from '../../utils';
 
-export const useParticipantName = (participant: Participant) => {
-  const [identity, setIdentity] = useState(participant.identity);
-  const [name, setName] = useState(participant.name);
-  const [metadata, setMetadata] = useState(participant.metadata);
-
-  const handleUpdate = useCallback(
-    (info: { name?: string; identity: string; metadata?: string }) => {
-      setIdentity(info.identity);
-      setName(info.name);
-      setMetadata(info.metadata);
-    },
-    [participant],
-  );
-
-  useEffect(() => {
-    const listener = participantInfoObserver(participant).subscribe(handleUpdate);
-    return listener.unsubscribe();
+export const useParticipantInfo = (participant: Participant) => {
+  const infoObserver = useMemo(() => participantInfoObserver(participant), [participant]);
+  const { identity, name, metadata } = useObservableState(infoObserver, {
+    name: participant.name,
+    identity: participant.identity,
+    metadata: participant.metadata,
   });
 
   return { identity, name, metadata };
@@ -28,8 +17,18 @@ export const useParticipantName = (participant: Participant) => {
 
 export const ParticipantName = (props: HTMLAttributes<HTMLSpanElement>) => {
   const participant = useParticipantContext();
-  const { name, identity } = useParticipantName(participant);
-  const { className } = ParticipantNameInterface.setup();
+
+  const { className, infoObserver } = useMemo(
+    () => setupParticipantName(participant),
+    [participant],
+  );
+
+  const { identity, name } = useObservableState(infoObserver, {
+    name: participant.name,
+    identity: participant.identity,
+    metadata: participant.metadata,
+  });
+
   const mergedProps = mergeProps(props, { className });
   return (
     <span {...mergedProps}>

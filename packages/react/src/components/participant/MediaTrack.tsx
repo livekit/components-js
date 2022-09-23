@@ -1,8 +1,8 @@
 import { Participant, Track } from 'livekit-client';
-import React, { HTMLAttributes, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useParticipantContext } from '../../contexts';
 import { LKComponentAttributes } from '../../utils';
-import { useParticipantMedia } from './Participant';
+import { useMediaTrack } from './Participant';
 
 export interface MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
   extends Omit<LKComponentAttributes<T>, 'children'> {
@@ -14,16 +14,15 @@ export const MediaTrack = (props: MediaTrackProps) => {
   const participant = props.participant ?? useParticipantContext();
 
   const mediaEl = useRef<HTMLVideoElement>(null);
-  const { elementProps, publication } = useParticipantMedia(participant, props, mediaEl);
-  const { onClick, ...htmlProps } = elementProps;
+  const { elementProps, publication } = useMediaTrack(participant, props.source, mediaEl);
 
   return (
     <>
       {props.source === Track.Source.Camera || props.source === Track.Source.ScreenShare ? (
         <video
           ref={mediaEl}
-          {...htmlProps}
-          onClick={(evt) => onClick?.({ ...evt, participant, publication })}
+          {...elementProps}
+          onClick={(evt) => props.onClick?.({ ...evt, participant, publication })}
         ></video>
       ) : (
         <audio ref={mediaEl} {...elementProps}></audio>

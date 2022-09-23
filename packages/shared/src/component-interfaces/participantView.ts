@@ -1,11 +1,8 @@
-import { BaseSetupReturnType } from './types';
+import { ClassNames } from '@livekit/components-styles/dist/types/styles.scss';
 
-const observers = {};
-
-function setup(): BaseSetupReturnType {
+export function setupParticipantView() {
+  const className: ClassNames = 'lk-participant-view';
   return {
-    className: 'lk-participant-view',
+    className,
   };
 }
-
-export { setup, observers };

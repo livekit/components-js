@@ -1,6 +1,7 @@
 import { Participant, TrackPublication } from 'livekit-client';
-import React, { HTMLAttributes } from 'react';
+import React, { HTMLAttributes, useEffect, useState } from 'react';
 import { mergeProps as mergePropsReactAria } from 'react-aria';
+import { Observable } from 'rxjs';
 
 interface LKEnhanceProps {
   participant?: Participant;
@@ -34,4 +35,17 @@ function enhanceProps<T extends HTMLElement>(
   }
 }
 
-export { mergeProps, enhanceProps, LKComponentAttributes, LKMouseEvent };
+function useObservableState<T>(
+  observable: Observable<T>,
+  startWith: T,
+  dependencies: Array<any> = [observable],
+) {
+  const [state, setState] = useState<T>(startWith);
+  useEffect(() => {
+    const subscription = observable.subscribe(setState);
+    return () => subscription.unsubscribe();
+  }, dependencies);
+  return state;
+}
+
+export { mergeProps, enhanceProps, LKComponentAttributes, LKMouseEvent, useObservableState };

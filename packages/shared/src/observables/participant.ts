@@ -111,12 +111,9 @@ export const createConnectionQualityObserver = (participant: Participant) => {
     ParticipantEvent.ConnectionQualityChanged,
   ).pipe(
     map((p) => {
-      return { quality: p.connectionQuality, className: `lk-${p.connectionQuality}` };
+      return p.connectionQuality;
     }),
-    startWith({
-      quality: participant.connectionQuality,
-      className: `lk-${participant.connectionQuality}`,
-    }),
+    startWith(participant.connectionQuality),
   );
   return observer;
 };

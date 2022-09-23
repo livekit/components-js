@@ -2,7 +2,7 @@ import React, { HTMLAttributes, useEffect, useMemo, useState } from 'react';
 import { setupConnectionQualityIndicator } from '@livekit/components-core';
 import { useParticipantContext } from '../../contexts';
 import { ConnectionQuality, Participant } from 'livekit-client';
-import { mergeProps } from '../../utils';
+import { mergeProps, useObservableState } from '../../utils';
 
 interface ConnectionQualityIndicatorProps extends HTMLAttributes<HTMLDivElement> {
   participant?: Participant;
@@ -10,21 +10,15 @@ interface ConnectionQualityIndicatorProps extends HTMLAttributes<HTMLDivElement>
 
 export const useConnectionQualityIndicator = (props?: ConnectionQualityIndicatorProps) => {
   const p = props?.participant ?? useParticipantContext();
-  const [quality, setQuality] = useState(ConnectionQuality.Unknown);
 
   const { className, connectionQualityObserver } = useMemo(
     () => setupConnectionQualityIndicator(p),
     [p],
   );
 
-  useEffect(() => {
-    const subscription = connectionQualityObserver.subscribe(({ quality }) => {
-      setQuality(quality);
-    });
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [connectionQualityObserver]);
+  const quality = useObservableState(connectionQualityObserver, ConnectionQuality.Unknown, [
+    connectionQualityObserver,
+  ]);
 
   const elementProps = useMemo(
     () => mergeProps(props, { className }, { className: quality }),

@@ -9,7 +9,7 @@ export function setupMediaTrack(participant: Participant, source: Track.Source) 
     map((media) => {
       const publication = media.participant.getTrack(source);
       // attachIfSubscribed(publication, element);
-      return { publication };
+      return publication;
     }),
   );
   const className: ClassNames =

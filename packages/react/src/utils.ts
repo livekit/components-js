@@ -38,7 +38,7 @@ function enhanceProps<T extends HTMLElement>(
 function useObservableState<T>(
   observable: Observable<T>,
   startWith: T,
-  dependencies: Array<any> = [],
+  dependencies: Array<any> = [observable],
 ) {
   const [state, setState] = useState<T>(startWith);
   useEffect(() => {

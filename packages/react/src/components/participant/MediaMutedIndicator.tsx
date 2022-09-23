@@ -1,5 +1,5 @@
 import React, { HTMLAttributes, HtmlHTMLAttributes, useEffect, useMemo, useState } from 'react';
-import { mergeProps } from '../../utils';
+import { mergeProps, useObservableState } from '../../utils';
 import { setupMediaMutedIndicator } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import { useParticipantContext } from '../../contexts';
@@ -15,7 +15,6 @@ export const useMediaMutedIndicator = (
   props?: HtmlHTMLAttributes<HTMLDivElement>,
 ) => {
   const p = participant ?? useParticipantContext();
-  const [isMuted, setIsMuted] = useState(p.getTrack(source)?.isMuted);
   const { className, mediaMutedObserver } = useMemo(
     () => setupMediaMutedIndicator(p, source),
     [source, participant],
@@ -29,10 +28,9 @@ export const useMediaMutedIndicator = (
     [className, props],
   );
 
-  useEffect(() => {
-    const subscriber = mediaMutedObserver.subscribe(setIsMuted);
-    return () => subscriber.unsubscribe();
-  });
+  const isMuted = useObservableState(mediaMutedObserver, !!p.getTrack(source)?.isMuted, [
+    mediaMutedObserver,
+  ]);
 
   return { isMuted, htmlProps };
 };

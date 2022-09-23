@@ -2,7 +2,7 @@ import React, { RefObject, useEffect, useMemo, useState } from 'react';
 import { useMaybeRoomContext } from '../../contexts';
 import { setupDeviceMenu, createMediaDeviceObserver } from '@livekit/components-core';
 import { mergeProps } from 'react-aria';
-import { Subscription } from 'rxjs';
+import { useObservableState } from '../../utils';
 
 type DeviceMenuProps = React.HTMLAttributes<HTMLElement> & {
   kind: MediaDeviceKind;
@@ -11,35 +11,29 @@ type DeviceMenuProps = React.HTMLAttributes<HTMLElement> & {
 };
 
 export const useMediaDevices = (kind: MediaDeviceKind) => {
-  const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
+  const deviceObserver = useMemo(() => createMediaDeviceObserver(kind), [kind]);
 
-  useEffect(() => {
-    const subscriber = createMediaDeviceObserver(kind).subscribe(setDevices);
-    return () => subscriber.unsubscribe();
-  }, [kind]);
+  const devices = useObservableState(deviceObserver, []);
 
   return { devices };
 };
 
 export const useDeviceMenu = (kind: MediaDeviceKind, menuContainer?: RefObject<HTMLElement>) => {
   const room = useMaybeRoomContext();
-  const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
-  const [activeDevice, setActiveDevice] = useState<MediaDeviceInfo | undefined>(undefined);
+
   const { devicesObservable, listElementObservable, activeDeviceObservable } = useMemo(
     () => setupDeviceMenu(kind, room),
-    [],
+    [kind, room],
   );
-  const updateElement = (listElement: HTMLUListElement) => {
-    menuContainer?.current?.replaceChildren(listElement);
-  };
-  useEffect(() => {
-    const subscriptions: Array<Subscription> = [];
-    subscriptions.push(devicesObservable.subscribe(setDevices));
-    subscriptions.push(activeDeviceObservable.subscribe(setActiveDevice));
-    subscriptions.push(listElementObservable.subscribe(updateElement));
 
-    return () => subscriptions.forEach((sub) => sub.unsubscribe());
-  }, [kind, room, menuContainer]);
+  const devices = useObservableState(devicesObservable, []);
+  const activeDevice = useObservableState(activeDeviceObservable, undefined);
+  const listElement = useObservableState(listElementObservable, undefined);
+  useEffect(() => {
+    if (listElement) {
+      menuContainer?.current?.replaceChildren(listElement);
+    }
+  }, [menuContainer, listElement]);
 
   return { devices, activeDevice };
 };

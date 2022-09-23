@@ -28,7 +28,7 @@ export const useMediaTrack = (
   }, [participant, source]);
 
   useEffect(() => {
-    const subscription = trackObserver.subscribe(({ publication }) => {
+    const subscription = trackObserver.subscribe((publication) => {
       setPublication(publication);
       setMuted(publication?.isMuted);
       setSubscribed(publication?.isSubscribed);

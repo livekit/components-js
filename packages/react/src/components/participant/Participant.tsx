@@ -24,8 +24,8 @@ export const useMediaTrack = (
   const [track, setTrack] = useState(publication?.track);
 
   const { className, trackObserver } = useMemo(() => {
-    return setupMediaTrack(participant, source, element?.current);
-  }, [element]);
+    return setupMediaTrack(participant, source);
+  }, [participant, source]);
 
   useEffect(() => {
     const subscription = trackObserver.subscribe(({ publication }) => {
@@ -35,7 +35,17 @@ export const useMediaTrack = (
       setTrack(publication?.track);
     });
     return () => subscription?.unsubscribe();
-  }, [trackObserver, element]);
+  }, [trackObserver]);
+
+  useEffect(() => {
+    if (track) {
+      if (element?.current) {
+        track.attach(element.current);
+      } else {
+        track.detach();
+      }
+    }
+  }, [track, element]);
 
   return { publication, isMuted, isSubscribed, track, elementProps: { className } };
 };

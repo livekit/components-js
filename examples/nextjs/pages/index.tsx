@@ -128,8 +128,10 @@ const Home: NextPage = () => {
 
                       <div className={styles.participantIndicators}>
                         <div style={{ display: 'flex' }}>
-                          <MediaMutedIndicator kind="audio"></MediaMutedIndicator>
-                          <MediaMutedIndicator kind="video"></MediaMutedIndicator>
+                          <MediaMutedIndicator
+                            source={Track.Source.Microphone}
+                          ></MediaMutedIndicator>
+                          <MediaMutedIndicator source={Track.Source.Camera}></MediaMutedIndicator>
                         </div>
                         <ParticipantName />
                         <ConnectionQualityIndicator />
@@ -143,8 +145,10 @@ const Home: NextPage = () => {
                       <MediaTrack source={Track.Source.Camera}></MediaTrack>
                       <div className={styles.participantIndicators}>
                         <div style={{ display: 'flex' }}>
-                          <MediaMutedIndicator kind="audio"></MediaMutedIndicator>
-                          <MediaMutedIndicator kind="video"></MediaMutedIndicator>
+                          <MediaMutedIndicator
+                            source={Track.Source.Microphone}
+                          ></MediaMutedIndicator>
+                          <MediaMutedIndicator source={Track.Source.Camera}></MediaMutedIndicator>
                         </div>
                         <ParticipantName>(You)</ParticipantName>
                         <ConnectionQualityIndicator />

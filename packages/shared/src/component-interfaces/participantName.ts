@@ -1,7 +1,7 @@
-import { BaseSetupReturnType } from './types';
+import { Participant } from 'livekit-client';
+import { participantInfoObserver } from '../observables/participant';
 
-interface ParticipantNameSetup extends BaseSetupReturnType {}
-function setup(): ParticipantNameSetup {
-  return { className: 'lk-participant-name' };
+export function setupParticipantName(participant: Participant) {
+  const infoObserver = participantInfoObserver(participant);
+  return { className: 'lk-participant-name', infoObserver };
 }
-export { setup };

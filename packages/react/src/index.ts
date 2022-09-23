@@ -4,7 +4,7 @@ export * from './components/participant/Participant';
 export * from './components/participant/ConnectionQualityIndicator';
 export * from './components/LiveKitRoom';
 export * from './components/controls/MediaControl';
-export * from './components/controls/MediaSelect';
+export * from './components/controls/DeviceMenu';
 export * from './components/Participants';
 export * from './components/ConnectionState';
 export * from './components/controls/DisconnectButton';

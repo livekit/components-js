@@ -1,37 +1,9 @@
-import type { BaseSetupReturnType } from './types';
-// import { map, Observable, startWith } from 'rxjs';
+import { Participant, Track } from 'livekit-client';
+import { mutedObserver } from '../observables/participant';
 
-interface MediaMutedIndicator extends BaseSetupReturnType {}
+export function setupMediaMutedIndicator(participant: Participant, source: Track.Source) {
+  const className = `lk-media-muted-indicator-${source}`;
+  const mediaMutedObserver = mutedObserver(participant, source);
 
-const setup = (kind: 'audio' | 'video'): MediaMutedIndicator => {
-  return {
-    className:
-      kind === 'audio' ? `lk-media-muted-indicator-audio` : 'lk-media-muted-indicator-video',
-  };
-};
-
-// interface ObserverSetups {
-//   createConnectionQualityObserver: (
-//     participant: Participant,
-//   ) => Observable<{ muted: boolean; class_: string }>;
-// }
-// const observers = (): ObserverSetups => {
-//   const createConnectionQualityObserver = (participant: Participant) => {
-//     const observer = observeParticipantEvents(
-//       participant,
-//       ParticipantEvent.ConnectionQualityChanged,
-//     ).pipe(
-//       map((p) => {
-//         return { quality: p.connectionQuality, class_: `lk-${p.connectionQuality}` };
-//       }),
-//       startWith({
-//         muted: true, // TODO: dynamic muted
-//         class_: `lk-${participant.connectionQuality}`,
-//       }),
-//     );
-//     return observer;
-//   };
-//   return { createConnectionQualityObserver };
-// };
-
-export { setup };
+  return { className, mediaMutedObserver };
+}

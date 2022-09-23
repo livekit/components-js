@@ -1,14 +1,14 @@
 @use '../variables' as v;
 
 .lk-button {
-  // --lk-btn-padding-x: #{v.$btn-padding-x};
-  // --lk-btn-padding-y: #{v.$btn-padding-y};
+  --lk-btn-padding-y: #{v.$s-1};
+  --lk-btn-padding-x: #{v.$s-2};
   //   --lk-btn-background-color:
 
   // --lk-cool-test: #{var(--lk-btn-padding-x)};
 
-  // padding: var(--lk-btn-padding-y) var(--lk-btn-padding-x);
-  border: none;
+  padding: var(--lk-btn-padding-y) var(--lk-btn-padding-x);
+  border: v.$s-px v.$t-primary solid;
   background-color: v.$t-primary;
 }
 

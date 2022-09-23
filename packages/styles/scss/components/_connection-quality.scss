@@ -7,15 +7,15 @@
 
   // Participant connection quality indicator.
   &.lk-unknown {
-    background-color: gray;
+    background-color: v.$gray-500;
   }
   &.lk-poor {
-    background-color: red;
+    background-color: v.$danger;
   }
   &.lk-good {
-    background-color: yellow;
+    background-color: v.$warning;
   }
   &.lk-excellent {
-    background-color: yellowgreen;
+    background-color: v.$success;
   }
 }

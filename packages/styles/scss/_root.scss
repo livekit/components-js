@@ -9,11 +9,11 @@
   // Generate palettes for full colors, grays, and theme colors.
 
   @each $color, $value in v.$colors {
-    --#{v.$prefix}#{$color}: #{$value};
+    --#{v.$prefix}-#{$color}: #{$value};
   }
 
   @each $color, $value in v.$grays {
-    --#{v.$prefix}gray-#{$color}: #{$value};
+    --#{v.$prefix}-gray-#{$color}: #{$value};
   }
 
   @each $color, $value in v.$theme-colors {

@@ -1,8 +1,8 @@
 @use '../variables' as v;
 
 .lk-connection-quality {
-  width: v.$spacer;
-  height: v.$spacer;
+  width: 20px;
+  height: 20px;
   border-radius: 99999px;
 
   // Participant connection quality indicator.

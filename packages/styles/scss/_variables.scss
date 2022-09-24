@@ -1,7 +1,5 @@
 @use 'functions' as fn;
 
-$prefix: 'lk';
-
 // Variables
 //
 // Variables should follow the `$component-state-property-size` formula for
@@ -76,6 +74,9 @@ $light: $gray-100 !default;
 $dark: $gray-900 !default;
 // scss-docs-end theme-color-variables
 
+//
+// Theme variables
+//
 $t-primary: fn.css-var-with-sass-fallback('primary', $primary);
 $t-secondary: fn.css-var-with-sass-fallback('secondary', $secondary);
 

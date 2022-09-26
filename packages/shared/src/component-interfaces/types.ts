@@ -1,4 +1,4 @@
-import type { ClassNames } from '@livekit/components-styles/dist/types/styles.scss';
+import type { ClassNames } from '@livekit/components-styles/dist/types/styles.css';
 
 /**
  * Base interface for component setup functions.

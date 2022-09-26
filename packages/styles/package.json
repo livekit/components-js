@@ -17,8 +17,8 @@
   "scripts": {
     "dev": "nodemon -e scss,js -x \"yarn build\"",
     "build": "yarn compile:sass && yarn postcss && yarn generate:types",
-    "compile:sass": "sass scss/styles.scss .temp/css/styles.css",
-    "postcss": "postcss .temp/css/styles.css -o ./dist/styles.css",
+    "compile:sass": "sass scss:.temp/css",
+    "postcss": "postcss .temp/css/**/*.css --dir ./dist",
     "generate:types": "cd dist && typed-scss-modules '*.css' --exportType default --outputFolder ../dist/types --nameFormat kebab"
   },
   "peerDependencies": {},

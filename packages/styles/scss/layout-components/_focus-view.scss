@@ -1,0 +1,15 @@
+.participant-focus-view {
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+  width: 90vw;
+
+  & > aside {
+    width: 100%;
+    max-height: min(800px, 90vh);
+    overflow-y: auto;
+
+    & > div {
+      max-height: 250px;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { ClassNames } from '@livekit/components-styles/dist/types/styles.scss';
+import { ClassNames } from '@livekit/components-styles/dist/types/styles.css';
 import { Room, Track } from 'livekit-client';
 import { map, Observable, share, Subscriber } from 'rxjs';
 import { createMediaDeviceObserver } from '../observables/room';

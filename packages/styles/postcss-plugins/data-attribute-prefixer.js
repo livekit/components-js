@@ -3,6 +3,7 @@
  * @type {import('postcss').PluginCreator}
  */
 module.exports = (opts = { prefix: '' }) => {
+  const findRegex = new RegExp(`/[data-(?=[^]${opts.prefix}])/g`);
   return {
     postcssPlugin: 'data-attribute-prefixer',
     Root(root, postcss) {
@@ -10,7 +11,7 @@ module.exports = (opts = { prefix: '' }) => {
     },
 
     Rule(rule) {
-      rule.selector = rule.selector.replace(/\[data-(?=[^\]])/g, `[data-${opts.prefix}`);
+      rule.selector = rule.selector.replace(findRegex, `[data-${opts.prefix}`);
     },
   };
 };

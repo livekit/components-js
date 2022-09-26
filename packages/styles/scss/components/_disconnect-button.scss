@@ -1,8 +1,8 @@
 @use 'button';
 @use '../variables' as v;
 
-.lk-disconnect-button {
-  @extend .lk-button;
+.disconnect-button {
+  @extend .button;
   background-color: v.$t-danger;
   color: white;
 }

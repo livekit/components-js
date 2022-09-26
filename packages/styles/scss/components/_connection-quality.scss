@@ -1,21 +1,21 @@
 @use '../variables' as v;
 
-.lk-connection-quality {
+.connection-quality {
   width: 20px;
   height: 20px;
   border-radius: 99999px;
 
   // Participant connection quality indicator.
-  &.lk-unknown {
+  &.unknown {
     background-color: v.$gray-500;
   }
-  &.lk-poor {
+  &.poor {
     background-color: v.$danger;
   }
-  &.lk-good {
+  &.good {
     background-color: v.$warning;
   }
-  &.lk-excellent {
+  &.excellent {
     background-color: v.$success;
   }
 }

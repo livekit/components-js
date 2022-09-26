@@ -1,4 +1,4 @@
-ul.lk-device-list {
+ul.device-list {
   margin-block-start: 0;
   margin-block-end: 0;
   padding-inline-start: 0;
@@ -15,7 +15,7 @@ ul.lk-device-list {
     &:hover {
       background-color: lightgray;
     }
-    &.lk-active::after {
+    &.active::after {
       content: '✅';
     }
   }

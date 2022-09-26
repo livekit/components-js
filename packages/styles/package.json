@@ -15,14 +15,19 @@
     "node": ">=10"
   },
   "scripts": {
-    "dev": "nodemon -e scss -x \"yarn build && yarn generate:types\"",
-    "build": "sass scss/styles.scss dist/styles.css && yarn generate:types",
+    "dev": "nodemon -e scss -x \"yarn build\"",
+    "build": "yarn compile:sass && yarn postcss && yarn generate:types",
+    "compile:sass": "sass scss/styles.scss .temp/css/styles.css",
+    "postcss": "postcss .temp/css/styles.css -o ./dist/styles.css",
     "generate:types": "cd scss && typed-scss-modules './**/*.scss' --exportType default --outputFolder ../dist/types --nameFormat kebab"
   },
   "peerDependencies": {},
   "devDependencies": {
     "modern-normalize": "^1.1.0",
     "nodemon": "^2.0.19",
+    "postcss": "^8.4.16",
+    "postcss-cli": "^10.0.0",
+    "postcss-variables-prefixer": "^1.2.0",
     "sass": "^1.54.6",
     "typed-scss-modules": "^6.5.0"
   },

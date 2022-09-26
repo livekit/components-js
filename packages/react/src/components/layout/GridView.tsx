@@ -3,6 +3,7 @@ import React, { HTMLAttributes } from 'react';
 import { mergeProps } from '../../utils';
 import { MediaTrack } from '../participant/MediaTrack';
 import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
+import { ParticipantName } from '../participant/ParticipantName';
 import { Participants } from '../Participants';
 
 interface GridViewProps extends HTMLAttributes<HTMLDivElement> {
@@ -11,7 +12,7 @@ interface GridViewProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function GridView({ participants, onParticipantClick, ...props }: GridViewProps) {
-  const elementProps = mergeProps(props, { className: 'lk-participant-grid' });
+  const elementProps = mergeProps(props, { className: 'lk-participant-grid-view' });
   const filter = (ps: Array<Participant>) => participants ?? ps;
   return (
     <div {...elementProps}>
@@ -21,6 +22,7 @@ export function GridView({ participants, onParticipantClick, ...props }: GridVie
             source={Track.Source.Camera}
             onTrackClick={(evt) => onParticipantClick?.(evt)}
           />
+          <ParticipantName />
         </ParticipantView>
       </Participants>
     </div>

@@ -171,6 +171,12 @@ export function roomInfoObserver(room: Room) {
   return observer;
 }
 
+export function activeSpeakerObserver(room: Room) {
+  return roomEventSelector(room, RoomEvent.ActiveSpeakersChanged).pipe(
+    map(([speakers]) => speakers),
+  );
+}
+
 export const createMediaDeviceObserver = (kind?: MediaDeviceKind, requestPermissions = true) => {
   let deviceSubscriber: Subscriber<MediaDeviceInfo[]> | undefined;
   const onDeviceChange = async () => {

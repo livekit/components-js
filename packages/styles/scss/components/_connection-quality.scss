@@ -1,0 +1,29 @@
+@use '../variables' as v;
+
+.connection-quality {
+  width: 20px;
+  height: 20px;
+  border-radius: 99999px;
+
+  // Participant connection quality indicator.
+  // TODO: remove class selectors only keep data attributes.
+  &.unknown,
+  &[data-quality='unknown'] {
+    background-color: v.$gray-500;
+  }
+
+  &.poor,
+  &[data-quality='poor'] {
+    background-color: v.$danger;
+  }
+
+  &.good,
+  &[data-quality='good'] {
+    background-color: v.$warning;
+  }
+
+  &.excellent,
+  &[data-quality='excellent'] {
+    background-color: v.$success;
+  }
+}

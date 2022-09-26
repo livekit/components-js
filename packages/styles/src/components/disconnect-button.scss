@@ -1,8 +1,0 @@
-@use 'button';
-@import '../variables';
-
-.lk-disconnect-button {
-  @extend .lk-button;
-  background-color: $key_color;
-  color: white;
-}

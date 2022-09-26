@@ -1,0 +1,22 @@
+@use 'variables' as v;
+
+:root {
+  // Note: Custom variable values only support SassScript inside `#{}`.
+
+  // --primary-var: #{$theme-color.primary};
+  // Colors
+  //
+  // Generate palettes for full colors, grays, and theme colors.
+
+  @each $color, $value in v.$colors {
+    --#{$color}: #{$value};
+  }
+
+  @each $color, $value in v.$grays {
+    --gray-#{$color}: #{$value};
+  }
+
+  @each $color, $value in v.$theme-colors {
+    --#{$color}: #{$value};
+  }
+}

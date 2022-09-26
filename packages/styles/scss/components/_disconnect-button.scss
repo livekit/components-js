@@ -1,0 +1,8 @@
+@use 'button';
+@use '../variables' as v;
+
+.disconnect-button {
+  @extend .button;
+  background-color: v.$t-danger;
+  color: white;
+}

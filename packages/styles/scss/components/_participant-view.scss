@@ -1,0 +1,10 @@
+@use '../variables' as v;
+
+.participant-view {
+  position: relative;
+  border: 2px transparent solid;
+  transition: border-color 0.2s;
+  &[data-speaking='true'] {
+    border-color: v.$primary;
+  }
+}

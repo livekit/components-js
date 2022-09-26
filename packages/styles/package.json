@@ -19,7 +19,7 @@
     "build": "yarn compile:sass && yarn postcss && yarn generate:types",
     "compile:sass": "sass scss/styles.scss .temp/css/styles.css",
     "postcss": "postcss .temp/css/styles.css -o ./dist/styles.css",
-    "generate:types": "cd scss && typed-scss-modules './**/*.scss' --exportType default --outputFolder ../dist/types --nameFormat kebab"
+    "generate:types": "cd dist && typed-scss-modules '*.css' --exportType default --outputFolder ../dist/types --nameFormat kebab"
   },
   "peerDependencies": {},
   "devDependencies": {

@@ -79,6 +79,12 @@ $dark: $gray-900 !default;
 //
 $t-primary: fn.css-var-with-sass-fallback('primary', $primary);
 $t-secondary: fn.css-var-with-sass-fallback('secondary', $secondary);
+$t-success: fn.css-var-with-sass-fallback('success', $success);
+$t-info: fn.css-var-with-sass-fallback('info', $info);
+$t-warning: fn.css-var-with-sass-fallback('warning', $warning);
+$t-danger: fn.css-var-with-sass-fallback('danger', $danger);
+$t-light: fn.css-var-with-sass-fallback('light', $light);
+$t-dark: fn.css-var-with-sass-fallback('dark', $dark);
 
 // scss-docs-start theme-colors-map
 $theme-colors: (

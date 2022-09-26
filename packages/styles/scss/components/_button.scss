@@ -3,9 +3,6 @@
 .lk-button {
   --btn-padding-y: #{v.$s-1};
   --btn-padding-x: #{v.$s-2};
-  //   --btn-background-color:
-
-  // --cool-test: #{var(--btn-padding-x)};
 
   padding: var(--btn-padding-y) var(--btn-padding-x);
   border: v.$s-px v.$t-primary solid;

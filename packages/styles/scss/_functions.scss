@@ -2,5 +2,5 @@
 
 @function css-var-with-sass-fallback($var-name, $value) {
   // This function expects that the css custom property (css variable) exists.
-  @return var(--lk-#{string.to-lower-case($var-name)}, $value);
+  @return var(--#{string.to-lower-case($var-name)}, $value);
 }

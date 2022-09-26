@@ -1,7 +1,12 @@
+const PREFIX = 'lk';
+
 module.exports = {
   plugins: [
+    require('postcss-prefixer')({
+      prefix: `${PREFIX}-`,
+    }),
     require('postcss-variables-prefixer')({
-      prefix: 'lk-',
+      prefix: `${PREFIX}-`,
     }),
   ],
 };

@@ -1,16 +1,16 @@
 import { roomInfoObserver } from '@livekit/components-core';
 import { Room } from 'livekit-client';
-import React, { HTMLAttributes, useCallback, useEffect, useState } from 'react';
+import React, { HTMLAttributes, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useRoomContext } from '../contexts';
 import { useObservableState } from '../utils';
 
 export const useRoomInfo = (room: Room) => {
-  const { name, metadata } = useObservableState(
-    roomInfoObserver(room),
-    { name: room.name, metadata: room.metadata },
-    [room],
-  );
+  const infoObserver = useMemo(() => roomInfoObserver(room), [room]);
+  const { name, metadata } = useObservableState(infoObserver, {
+    name: room.name,
+    metadata: room.metadata,
+  });
 
   return { name, metadata };
 };

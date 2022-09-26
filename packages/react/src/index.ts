@@ -15,5 +15,7 @@ export * from './components/RoomName';
 export * from './components/RoomAudioRenderer';
 export * from './components/FocusViewRenderer';
 export * from './components/participant/MediaTrack';
+export * from './components/layout/FocusView';
+export * from './components/layout/GridView';
 
 export { isLocal, isRemote };

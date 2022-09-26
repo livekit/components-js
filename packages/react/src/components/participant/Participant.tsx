@@ -1,5 +1,5 @@
 import React, { HTMLAttributes, RefObject, useEffect, useState, useMemo } from 'react';
-import { Participant, ParticipantEvent, Track } from 'livekit-client';
+import { Participant, ParticipantEvent, Track, TrackPublication } from 'livekit-client';
 import {
   mutedObserver,
   createIsSpeakingObserver,
@@ -9,8 +9,14 @@ import {
 import { mergeProps } from '../../utils';
 import { useParticipantContext } from '../../contexts';
 
+export interface ParticipantClickEvent {
+  participant?: Participant;
+  publication?: TrackPublication;
+}
+
 export type ParticipantProps = HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
+  onParticipantClick?: (evt: ParticipantClickEvent) => void;
 };
 
 export const useMediaTrack = (
@@ -50,10 +56,13 @@ export const useMediaTrack = (
   return { publication, isMuted, isSubscribed, track, elementProps: { className } };
 };
 
-function useParticipantView(participant: Participant, props: HTMLAttributes<HTMLDivElement>) {
+function useParticipantView<T extends HTMLAttributes<HTMLElement>>(
+  participant: Participant,
+  props: T,
+) {
   const mergedProps = useMemo(() => {
     const { className } = setupParticipantView();
-    return mergeProps(props, { className: className });
+    return mergeProps(props, { className });
   }, [props]);
   const isVideoMuted = useIsMuted(Track.Source.Camera, participant);
   const isAudioMuted = useIsMuted(Track.Source.Microphone, participant);
@@ -92,9 +101,22 @@ export function useIsMuted(source: Track.Source, participant?: Participant) {
   return isMuted;
 }
 
-export const ParticipantView = ({ participant, children, ...htmlProps }: ParticipantProps) => {
+export const ParticipantView = ({
+  participant,
+  children,
+  onParticipantClick,
+  ...htmlProps
+}: ParticipantProps) => {
   const p = participant ?? useParticipantContext();
   const { elementProps } = useParticipantView(p, htmlProps);
+  const clickHandler = (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    elementProps.onClick?.(evt);
+    onParticipantClick?.({ participant: p });
+  };
 
-  return <div {...elementProps}>{children}</div>;
+  return (
+    <div {...elementProps} onClick={clickHandler}>
+      {children}
+    </div>
+  );
 };

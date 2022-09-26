@@ -1,22 +1,12 @@
 import {
-  ParticipantView,
-  ConnectionQualityIndicator,
   LiveKitRoom,
-  MediaControlButton,
-  TrackSource,
-  Participants,
   ConnectionState,
-  DisconnectButton,
   useToken,
-  ParticipantName,
-  MediaMutedIndicator,
   RoomName,
   RoomAudioRenderer,
-  MediaTrack,
-  isLocal,
-  isRemote,
-  DeviceMenu,
   useScreenShare,
+  GridView,
+  FocusView,
 } from '@livekit/components-react';
 import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 
@@ -91,80 +81,16 @@ const Home: NextPage = () => {
           <RoomAudioRenderer />
           {isConnected && (
             <>
-              <div className={focusPublication ? styles.focusView : styles.gridView}>
-                <div className={styles.screenShare}>
-                  {focusPublication && focusedParticipant && (
-                    <>
-                      <MediaTrack
-                        participant={focusedParticipant}
-                        source={focusPublication.source}
-                      />
-                      <button
-                        style={{ position: 'absolute', top: '20px', left: '20px' }}
-                        onClick={() => {
-                          setFocusPublication(undefined);
-                          setFocusedParticipant(undefined);
-                        }}
-                      >
-                        reset focus
-                      </button>
-                    </>
-                  )}
-                </div>
-                <div className={styles.participantGrid}>
-                  <Participants
-                    filter={(participants) => participants.filter(isRemote)}
-                    filterDependencies={[focusedParticipant]}
-                  >
-                    <ParticipantView className={styles.participantView}>
-                      <MediaTrack
-                        source={Track.Source.Camera}
-                        onClick={(evt) => {
-                          console.log('set focused');
-                          setFocusPublication(evt.publication);
-                          setFocusedParticipant(evt.participant);
-                        }}
-                      ></MediaTrack>
-
-                      <div className={styles.participantIndicators}>
-                        <div style={{ display: 'flex' }}>
-                          <MediaMutedIndicator
-                            source={Track.Source.Microphone}
-                          ></MediaMutedIndicator>
-                          <MediaMutedIndicator source={Track.Source.Camera}></MediaMutedIndicator>
-                        </div>
-                        <ParticipantName />
-                        <ConnectionQualityIndicator />
-                      </div>
-                    </ParticipantView>
-                  </Participants>
-                </div>
-                <div className={styles.localUser}>
-                  <Participants filter={(participants) => participants.filter(isLocal)}>
-                    <ParticipantView>
-                      <MediaTrack source={Track.Source.Camera}></MediaTrack>
-                      <div className={styles.participantIndicators}>
-                        <div style={{ display: 'flex' }}>
-                          <MediaMutedIndicator
-                            source={Track.Source.Microphone}
-                          ></MediaMutedIndicator>
-                          <MediaMutedIndicator source={Track.Source.Camera}></MediaMutedIndicator>
-                        </div>
-                        <ParticipantName>(You)</ParticipantName>
-                        <ConnectionQualityIndicator />
-                      </div>
-                    </ParticipantView>
-                  </Participants>
-                  <div className={styles.controlBar}>
-                    <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
-                    <DeviceMenu kind="videoinput"></DeviceMenu>
-                    <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
-                    <DeviceMenu kind="audioinput"></DeviceMenu>
-                    <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
-                    <DisconnectButton>Hang up!</DisconnectButton>
-                  </div>
-                </div>
-              </div>
+              {focusedParticipant ? (
+                <FocusView focusParticipant={focusedParticipant} />
+              ) : (
+                <GridView
+                  onParticipantClick={({ participant, publication }) => {
+                    setFocusPublication(publication);
+                    setFocusedParticipant(participant);
+                  }}
+                />
+              )}
             </>
           )}
         </LiveKitRoom>

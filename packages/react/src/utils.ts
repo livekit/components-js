@@ -10,17 +10,19 @@ interface LKEnhanceProps {
 
 interface LKMouseEvent<T extends HTMLElement> extends React.MouseEvent<T>, LKEnhanceProps {}
 
-type LKComponentAttributes<T extends HTMLElement> = Omit<HTMLAttributes<T>, 'onClick'> & {
-  onClick?: (evt: LKMouseEvent<T>) => void;
-};
+type LKComponentAttributes<T extends HTMLElement> = HTMLAttributes<T> & {};
 
-function isProp(prop: LKComponentAttributes<any> | undefined): prop is LKComponentAttributes<any> {
+function isProp<U extends HTMLElement, T extends LKComponentAttributes<U>>(
+  prop: T | undefined,
+): prop is T {
   return prop !== undefined;
 }
 
-const mergeProps = (...props: Array<LKComponentAttributes<any> | undefined>) => {
+function mergeProps<U extends HTMLElement, T extends Array<LKComponentAttributes<U> | undefined>>(
+  ...props: T
+) {
   return mergePropsReactAria(...props.filter(isProp));
-};
+}
 
 function enhanceProps<T extends HTMLElement>(
   props: LKComponentAttributes<T>,

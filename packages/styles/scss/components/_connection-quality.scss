@@ -6,16 +6,24 @@
   border-radius: 99999px;
 
   // Participant connection quality indicator.
-  &.unknown {
+  // TODO: remove class selectors only keep data attributes.
+  &.unknown,
+  &[data-quality='unknown'] {
     background-color: v.$gray-500;
   }
-  &.poor {
+
+  &.poor,
+  &[data-quality='poor'] {
     background-color: v.$danger;
   }
-  &.good {
+
+  &.good,
+  &[data-quality='good'] {
     background-color: v.$warning;
   }
-  &.excellent {
+
+  &.excellent,
+  &[data-quality='excellent'] {
     background-color: v.$success;
   }
 }

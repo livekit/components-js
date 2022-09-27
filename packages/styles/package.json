@@ -19,7 +19,9 @@
     "build": "yarn compile:sass && yarn postcss && yarn generate:types",
     "compile:sass": "sass scss:.temp/css",
     "postcss": "postcss .temp/css/**/*.css --dir ./dist",
-    "generate:types": "cd dist && typed-scss-modules '*.css' --exportType default --outputFolder ../dist/types --nameFormat kebab"
+    "generate:types": "yarn generate:types:unprefixed && yarn generate:types:prefixed",
+    "generate:types:unprefixed": "cd scss && typed-scss-modules '*.scss' --exportType default --outputFolder ../dist/types_unprefixed --nameFormat kebab --exportTypeName UnprefixedClassNames",
+    "generate:types:prefixed": "cd dist && typed-scss-modules '*.css' --exportType default --outputFolder ../dist/types --nameFormat kebab"
   },
   "peerDependencies": {},
   "devDependencies": {

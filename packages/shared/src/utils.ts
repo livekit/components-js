@@ -1,10 +1,15 @@
+import { ClassNames } from '@livekit/components-styles/dist/types/styles.css';
+import { UnprefixedClassNames } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
 import { LocalParticipant, Participant, RemoteParticipant, TrackPublication } from 'livekit-client';
 import { cssPrefix } from './constants';
 export const kebabize = (str: string) =>
   str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
 
-export function getCSSClassName(name: string) {
-  return `${cssPrefix}-${kebabize(name)}`;
+/**
+ * Converts a non prefixed CSS class into a prefixed one.
+ */
+export function getCSSClassName(unprefixedClassName: UnprefixedClassNames): ClassNames {
+  return `${cssPrefix}-${unprefixedClassName}`;
 }
 
 export const isLocal = (p: Participant) => p instanceof LocalParticipant;

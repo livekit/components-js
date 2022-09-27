@@ -2,15 +2,14 @@
  *
  * @type {import('postcss').PluginCreator}
  */
-module.exports = (opts = { prefix: '' }) => {
+module.exports = (opts = { prefix: 'NO_PREFIX_DEFINED' }) => {
   return {
     postcssPlugin: 'data-attribute-prefixer',
-    Root(root, postcss) {
-      console.log(' Running Plugin: data-attribute-prefixer');
-    },
-
     Rule(rule) {
-      rule.selector = rule.selector.replace(/\[data-(?=[^\]])/g, `[data-${opts.prefix}`);
+      // Regex tests here: regexr.com/6ut26
+      const findThis = new RegExp('\\[data-(?=[^\\]])(?!' + opts.prefix + ')');
+      const replaceWith = '[data-' + opts.prefix;
+      rule.selector = rule.selector.replace(findThis, replaceWith);
     },
   };
 };

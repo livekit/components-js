@@ -1,7 +1,7 @@
 import React, { HTMLAttributes, RefObject, useEffect, useState, useMemo } from 'react';
 import { Participant, ParticipantEvent, Track, TrackPublication } from 'livekit-client';
 import {
-  mutedObserver,
+  mutedObservable,
   createIsSpeakingObserver,
   setupParticipantView,
   setupMediaTrack,
@@ -95,7 +95,7 @@ export function useIsMuted(source: Track.Source, participant?: Participant) {
   const [isMuted, setIsMuted] = useState(!!p.getTrack(source)?.isMuted);
 
   useEffect(() => {
-    const listener = mutedObserver(p, source).subscribe(setIsMuted);
+    const listener = mutedObservable(p, source).subscribe(setIsMuted);
     return () => listener.unsubscribe();
   });
 

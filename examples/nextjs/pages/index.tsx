@@ -6,7 +6,7 @@ import {
   RoomAudioRenderer,
   useScreenShare,
   GridView,
-  FocusView,
+  FocusViewContainer,
   ParticipantClickEvent,
 } from '@livekit/components-react';
 import { Participant, Room, Track, TrackPublication } from 'livekit-client';
@@ -88,7 +88,7 @@ const Home: NextPage = () => {
           {isConnected && (
             <>
               {focusedParticipant ? (
-                <FocusView
+                <FocusViewContainer
                   focusParticipant={focusedParticipant}
                   onParticipantClick={updateFocusParticipant}
                 />

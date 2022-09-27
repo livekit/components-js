@@ -5,6 +5,7 @@ import { MediaTrack } from '../participant/MediaTrack';
 import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
 import { ParticipantName } from '../participant/ParticipantName';
 import { Participants } from '../Participants';
+import { DefaultParticipantView } from './DefaultParticipantView';
 
 interface GridViewProps extends HTMLAttributes<HTMLDivElement> {
   participants?: Array<Participant>;
@@ -17,13 +18,7 @@ export function GridView({ participants, onParticipantClick, ...props }: GridVie
   return (
     <div {...elementProps}>
       <Participants filter={filter} filterDependencies={[participants]}>
-        <ParticipantView>
-          <MediaTrack
-            source={Track.Source.Camera}
-            onTrackClick={(evt) => onParticipantClick?.(evt)}
-          />
-          <ParticipantName />
-        </ParticipantView>
+        {props.children ?? <DefaultParticipantView onParticipantClick={onParticipantClick} />}
       </Participants>
     </div>
   );

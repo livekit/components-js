@@ -1,13 +1,19 @@
 import { Participant, Track } from 'livekit-client';
-import React, { HTMLAttributes, useEffect, useState } from 'react';
-import { ParticipantContext } from '../../contexts';
-import { mergeProps } from '../../utils';
+import React, { createContext, HTMLAttributes, ReactNode, useEffect, useState } from 'react';
+import {
+  FocusViewContext,
+  FocusViewState,
+  ParticipantContext,
+  useMaybeFocusViewContext,
+} from '../../contexts';
+import { cloneSingleChild, mergeProps } from '../../utils';
 import { MediaTrack } from '../participant/MediaTrack';
 import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
 import { ParticipantName } from '../participant/ParticipantName';
 import { useParticipants, useSortedParticipants } from '../Participants';
+import { DefaultParticipantView } from './DefaultParticipantView';
 
-interface FocusViewProps extends HTMLAttributes<HTMLDivElement> {
+interface FocusViewContainerProps extends HTMLAttributes<HTMLDivElement> {
   focusParticipant?: Participant;
   focusTrackSource?: Track.Source;
   participants?: Array<Participant>;
@@ -15,52 +21,107 @@ interface FocusViewProps extends HTMLAttributes<HTMLDivElement> {
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
 
-export function FocusView({
+// TODO use (loudest) participant in focus, if no focusParticipant is provided
+export function FocusViewContainer({
   showPiP,
   focusParticipant,
   focusTrackSource,
   onParticipantClick,
   ...props
-}: FocusViewProps) {
-  const defaultTrackSource = Track.Source.Camera;
+}: FocusViewContainerProps) {
   const elementProps = mergeProps(props, { className: 'lk-participant-focus-view' });
   const participants = useSortedParticipants(props.participants);
+  const [focusOrLoudest, setFocusOrLoudest] = useState<Participant | undefined>(undefined);
+  const [others, setOthers] = useState<Participant[]>(
+    focusOrLoudest
+      ? participants.filter((p) => p.identity !== focusOrLoudest.identity)
+      : participants,
+  );
 
-  const [others, setOthers] = useState<Participant[]>([]);
+  const [focusViewState, setFocusViewState] = useState<FocusViewState>({
+    focusParticipant: focusOrLoudest,
+    focusTrackSource,
+    others,
+  });
+
   useEffect(() => {
-    setOthers(
-      focusParticipant
-        ? participants.filter((p) => p.identity !== focusParticipant.identity)
-        : participants,
-    );
-  }, [participants, focusParticipant]);
+    const focusTarget = focusParticipant ?? participants[0];
+    setFocusOrLoudest(focusTarget);
+    const otherPs = focusTarget
+      ? participants.filter((p) => p.identity !== focusTarget.identity)
+      : participants;
+    setOthers(otherPs);
+    setFocusViewState({ focusParticipant: focusTarget, focusTrackSource, others: otherPs });
+  }, [participants, focusParticipant, focusTrackSource]);
   return (
     <div {...elementProps}>
-      {focusParticipant && (
-        <div className="lk-focused-participant">
-          <ParticipantContext.Provider value={focusParticipant}>
-            <ParticipantView>
-              <MediaTrack source={focusTrackSource ?? defaultTrackSource} />
-              <ParticipantName />
-              {showPiP && focusTrackSource && focusTrackSource !== defaultTrackSource && (
-                <div className="lk-pip-track">
-                  <MediaTrack source={defaultTrackSource}></MediaTrack>
-                </div>
-              )}
-            </ParticipantView>
-          </ParticipantContext.Provider>
-        </div>
-      )}
-      <aside>
-        {others.map((participant) => (
-          <ParticipantContext.Provider value={participant} key={participant.identity}>
-            <ParticipantView>
-              <MediaTrack source={Track.Source.Camera} onTrackClick={onParticipantClick} />
-              <ParticipantName />
-            </ParticipantView>
-          </ParticipantContext.Provider>
-        ))}
-      </aside>
+      <FocusViewContext.Provider value={focusViewState}>
+        {props.children ?? (
+          <>
+            {focusOrLoudest && (
+              <FocusView participant={focusOrLoudest} trackSource={focusTrackSource} />
+            )}
+            <CarouselView participants={others} onParticipantClick={onParticipantClick} />
+          </>
+        )}
+      </FocusViewContext.Provider>
     </div>
+  );
+}
+
+export interface FocusViewProps extends HTMLAttributes<HTMLElement> {
+  participant?: Participant;
+  trackSource?: Track.Source;
+  showPiP?: boolean;
+  onParticipantClick?: (evt: ParticipantClickEvent) => void;
+}
+
+export function FocusView({
+  participant,
+  trackSource,
+  showPiP,
+  onParticipantClick,
+  ...props
+}: FocusViewProps) {
+  const defaultTrackSource = Track.Source.Camera;
+  return (
+    <div {...props} className="lk-focused-participant">
+      <ParticipantContext.Provider value={participant}>
+        <ParticipantView>
+          <MediaTrack source={trackSource ?? defaultTrackSource} />
+          <ParticipantName />
+          {showPiP && trackSource && trackSource !== defaultTrackSource && (
+            <div className="lk-pip-track">
+              <MediaTrack source={defaultTrackSource}></MediaTrack>
+            </div>
+          )}
+        </ParticipantView>
+      </ParticipantContext.Provider>
+    </div>
+  );
+}
+
+export interface CarouselProps extends HTMLAttributes<HTMLMediaElement> {
+  participants?: Participant[];
+  onParticipantClick?: (evt: ParticipantClickEvent) => void;
+}
+
+export function CarouselView({ participants, onParticipantClick, ...props }: CarouselProps) {
+  const ps = participants ?? useMaybeFocusViewContext()?.others ?? useParticipants();
+  return (
+    <aside {...props}>
+      {ps.map((participant) => (
+        <ParticipantContext.Provider value={participant} key={participant.identity}>
+          {props.children ? (
+            cloneSingleChild(props.children, { onParticipantClick })
+          ) : (
+            <DefaultParticipantView
+              participant={participant}
+              onParticipantClick={onParticipantClick}
+            />
+          )}
+        </ParticipantContext.Provider>
+      ))}
+    </aside>
   );
 }

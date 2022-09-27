@@ -1,0 +1,8 @@
+
+.participant-grid-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 500px));
+    width: 100%;
+}
+      
+      

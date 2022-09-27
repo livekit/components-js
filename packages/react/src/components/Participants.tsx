@@ -1,8 +1,9 @@
 import { ParticipantContext, useRoomContext } from '../contexts';
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { Participant, Room } from 'livekit-client';
 import { useLocalParticipant } from './controls/MediaControl';
-import { connectedParticipantsObserver } from '@livekit/components-core';
+import { connectedParticipantsObserver, activeSpeakerObserver } from '@livekit/components-core';
+import { cloneSingleChild, sortParticipantsByVolume, useObservableState } from '../utils';
 
 type ParticipantsProps = {
   children: ReactNode | ReactNode[];
@@ -55,22 +56,33 @@ export const useParticipants = (
   return participants;
 };
 
+export const useSpeakingParticipants = (room?: Room) => {
+  const currentRoom = room ?? useRoomContext();
+  const speakerObserver = useMemo(() => activeSpeakerObserver(currentRoom), [currentRoom]);
+  const activeSpeakers = useObservableState(speakerObserver, currentRoom.activeSpeakers);
+  return activeSpeakers;
+};
+
+export const useSortedParticipants = (participants?: Array<Participant>, room?: Room) => {
+  const ps = participants ?? useParticipants();
+  const [sortedParticipants, setSortedParticipants] = useState(sortParticipantsByVolume(ps));
+  const activeSpeakers = useSpeakingParticipants(room);
+
+  useEffect(() => {
+    setSortedParticipants(sortParticipantsByVolume(ps));
+  }, [activeSpeakers, ps]);
+  return sortedParticipants;
+};
+
 export const Participants = ({ children, room, filter, filterDependencies }: ParticipantsProps) => {
   const participants = useParticipants(filter, filterDependencies, room);
-  const childrenWithProps = (participant: Participant) => {
-    return React.Children.map(children, (child) => {
-      // Checking isValidElement is the safe way and avoids a typescript
-      // error too.
-      if (React.isValidElement(child) && React.Children.only(children)) {
-        return (
-          <ParticipantContext.Provider value={participant}>
-            {React.cloneElement(child, { key: participant.identity })}
-          </ParticipantContext.Provider>
-        );
-      }
-      return child;
-    });
-  };
-
-  return <>{participants.map((participant) => childrenWithProps(participant))}</>;
+  return (
+    <>
+      {participants.map((participant) => (
+        <ParticipantContext.Provider value={participant} key={participant.identity}>
+          {cloneSingleChild(children)}
+        </ParticipantContext.Provider>
+      ))}
+    </>
+  );
 };

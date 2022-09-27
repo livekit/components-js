@@ -1,4 +1,4 @@
-import type { Room, Participant } from 'livekit-client';
+import type { Room, Participant, Track } from 'livekit-client';
 import { createContext, useContext } from 'react';
 
 const ParticipantContext = createContext<Participant | undefined>(undefined);
@@ -25,10 +25,27 @@ function useMaybeRoomContext() {
   return useContext(RoomContext);
 }
 
+type FocusViewState = {
+  focusParticipant?: Participant;
+  focusTrackSource?: Track.Source;
+  others?: Array<Participant>;
+  showPiP?: boolean;
+};
+
+const FocusViewContext = createContext<FocusViewState | undefined>(undefined);
+
+function useMaybeFocusViewContext() {
+  const ctx = useContext(FocusViewContext);
+  return ctx;
+}
+
 export {
   RoomContext,
   useRoomContext,
   useMaybeRoomContext,
   ParticipantContext,
   useParticipantContext,
+  FocusViewContext,
+  useMaybeFocusViewContext,
+  FocusViewState,
 };

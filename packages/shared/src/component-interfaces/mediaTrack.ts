@@ -1,4 +1,4 @@
-import { ClassNames } from '@livekit/components-styles/dist/types/styles.scss';
+import { ClassNames } from '@livekit/components-styles/dist/types/styles.css';
 import { Participant, Track } from 'livekit-client';
 import { map } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';

@@ -6,7 +6,8 @@ import {
   RoomAudioRenderer,
   useScreenShare,
   GridView,
-  FocusView,
+  FocusViewContainer,
+  ParticipantClickEvent,
 } from '@livekit/components-react';
 import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 
@@ -28,6 +29,11 @@ const Home: NextPage = () => {
   const room = useMemo(() => new Room(), []);
 
   const { screenShareTrack, screenShareParticipant } = useScreenShare({ room });
+
+  const updateFocusParticipant = ({ participant, publication }: ParticipantClickEvent) => {
+    setFocusPublication(publication);
+    setFocusedParticipant(participant);
+  };
 
   useEffect(() => {
     if (
@@ -82,14 +88,12 @@ const Home: NextPage = () => {
           {isConnected && (
             <>
               {focusedParticipant ? (
-                <FocusView focusParticipant={focusedParticipant} />
-              ) : (
-                <GridView
-                  onParticipantClick={({ participant, publication }) => {
-                    setFocusPublication(publication);
-                    setFocusedParticipant(participant);
-                  }}
+                <FocusViewContainer
+                  focusParticipant={focusedParticipant}
+                  onParticipantClick={updateFocusParticipant}
                 />
+              ) : (
+                <GridView onParticipantClick={updateFocusParticipant} />
               )}
             </>
           )}

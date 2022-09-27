@@ -30,19 +30,19 @@ export const useMediaTrack = (
   const [isSubscribed, setSubscribed] = useState(publication?.isSubscribed);
   const [track, setTrack] = useState(publication?.track);
 
-  const { className, trackObserver } = useMemo(() => {
+  const { className, trackObservable } = useMemo(() => {
     return setupMediaTrack(participant, source);
   }, [participant, source]);
 
   useEffect(() => {
-    const subscription = trackObserver.subscribe((publication) => {
+    const subscription = trackObservable.subscribe((publication) => {
       setPublication(publication);
       setMuted(publication?.isMuted);
       setSubscribed(publication?.isSubscribed);
       setTrack(publication?.track);
     });
     return () => subscription?.unsubscribe();
-  }, [trackObserver]);
+  }, [trackObservable]);
 
   useEffect(() => {
     if (track) {

@@ -1,5 +1,5 @@
 import { Participant, TrackPublication, LocalParticipant } from 'livekit-client';
-import React, { HTMLAttributes, useEffect, useState } from 'react';
+import React, { HTMLAttributes, ReactNode, useEffect, useState } from 'react';
 import { mergeProps as mergePropsReactAria } from 'react-aria';
 import { Observable } from 'rxjs';
 
@@ -111,6 +111,21 @@ function sortParticipantsByVolume(participants: Participant[]): Participant[] {
   return sortedParticipants;
 }
 
+function cloneSingleChild(
+  children: ReactNode | ReactNode[],
+  props?: Record<string, any>,
+  key?: any,
+) {
+  return React.Children.map(children, (child) => {
+    // Checking isValidElement is the safe way and avoids a typescript
+    // error too.
+    if (React.isValidElement(child) && React.Children.only(children)) {
+      return React.cloneElement(child, { ...props, key });
+    }
+    return child;
+  });
+}
+
 export {
   mergeProps,
   enhanceProps,
@@ -118,4 +133,5 @@ export {
   LKMouseEvent,
   useObservableState,
   sortParticipantsByVolume,
+  cloneSingleChild,
 };

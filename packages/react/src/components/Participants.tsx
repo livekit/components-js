@@ -3,7 +3,7 @@ import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'rea
 import { Participant, Room } from 'livekit-client';
 import { useLocalParticipant } from './controls/MediaControl';
 import { connectedParticipantsObserver, activeSpeakerObserver } from '@livekit/components-core';
-import { sortParticipantsByVolume, useObservableState } from '../utils';
+import { cloneSingleChild, sortParticipantsByVolume, useObservableState } from '../utils';
 
 type ParticipantsProps = {
   children: ReactNode | ReactNode[];
@@ -76,20 +76,13 @@ export const useSortedParticipants = (participants?: Array<Participant>, room?: 
 
 export const Participants = ({ children, room, filter, filterDependencies }: ParticipantsProps) => {
   const participants = useParticipants(filter, filterDependencies, room);
-  const childrenWithProps = (participant: Participant) => {
-    return React.Children.map(children, (child) => {
-      // Checking isValidElement is the safe way and avoids a typescript
-      // error too.
-      if (React.isValidElement(child) && React.Children.only(children)) {
-        return (
-          <ParticipantContext.Provider value={participant}>
-            {React.cloneElement(child, { key: participant.identity })}
-          </ParticipantContext.Provider>
-        );
-      }
-      return child;
-    });
-  };
-
-  return <>{participants.map((participant) => childrenWithProps(participant))}</>;
+  return (
+    <>
+      {participants.map((participant) => (
+        <ParticipantContext.Provider value={participant} key={participant.identity}>
+          {cloneSingleChild(children)}
+        </ParticipantContext.Provider>
+      ))}
+    </>
+  );
 };

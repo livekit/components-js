@@ -16,6 +16,7 @@ export interface ParticipantClickEvent {
 
 export type ParticipantProps = HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
+  trackSource?: Track.Source;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 };
 

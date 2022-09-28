@@ -80,6 +80,20 @@ const Huddle: NextPage = () => {
               </ParticipantView>
             </Participants>
           </div>
+          <div className={styles.mediaControls}>
+            <div>
+              <MediaControlButton className={styles.audioBtn} source={Track.Source.Microphone}>
+                {' '}
+              </MediaControlButton>
+              <MediaControlButton className={styles.videoBtn} source={Track.Source.Camera}>
+                {' '}
+              </MediaControlButton>
+              <MediaControlButton className={styles.screenBtn} source={Track.Source.ScreenShare}>
+                {' '}
+              </MediaControlButton>
+              <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
+            </div>
+          </div>
         </LiveKitRoom>
       </div>
       <div className={styles.devInfo}>

@@ -120,7 +120,6 @@ const Home: NextPage = () => {
                       <MediaTrack
                         source={Track.Source.Camera}
                         onTrackClick={(evt) => {
-                          console.log('set focused');
                           setFocusPublication(evt.publication);
                           setFocusedParticipant(evt.participant);
                         }}

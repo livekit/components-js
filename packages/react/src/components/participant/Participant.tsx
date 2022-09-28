@@ -24,6 +24,7 @@ export const useMediaTrack = (
   participant: Participant,
   source: Track.Source,
   element?: RefObject<HTMLMediaElement>,
+  attributes?: HTMLAttributes<HTMLVideoElement | HTMLAudioElement>,
 ) => {
   const [publication, setPublication] = useState(participant.getTrack(source));
   const [isMuted, setMuted] = useState(publication?.isMuted);
@@ -59,7 +60,13 @@ export const useMediaTrack = (
     previousElement.current = element?.current;
   }, [track, element]);
 
-  return { publication, isMuted, isSubscribed, track, elementProps: { className } };
+  return {
+    publication,
+    isMuted,
+    isSubscribed,
+    track,
+    elementProps: mergeProps(attributes, { className }),
+  };
 };
 
 function useParticipantView<T extends HTMLAttributes<HTMLElement>>(

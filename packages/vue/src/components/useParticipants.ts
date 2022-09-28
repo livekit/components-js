@@ -36,7 +36,6 @@ export const useParticipants = (
     if (filter) {
       // @ts-ignore
       all = filter(all);
-      console.log('filtered participants', all);
     }
     participants.value = all;
   });

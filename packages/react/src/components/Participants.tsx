@@ -48,7 +48,6 @@ export const useParticipants = (
     let all = [localParticipant, ...remoteParticipants];
     if (filter) {
       all = filter(all);
-      console.log('filtered participants', all);
     }
     setParticipants(all);
   }, [remoteParticipants, localParticipant, filter, ...filterDependencies]);

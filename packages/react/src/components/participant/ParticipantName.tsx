@@ -19,7 +19,6 @@ export const ParticipantName = (props: HTMLAttributes<HTMLSpanElement>) => {
   const participant = useParticipantContext();
 
   const { className, infoObserver } = useMemo(() => {
-    console.log('participantName detected participant change', participant.identity);
     return setupParticipantName(participant);
   }, [participant]);
 

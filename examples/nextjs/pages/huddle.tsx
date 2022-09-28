@@ -61,19 +61,17 @@ const Huddle: NextPage = () => {
 
   return (
     <main className={styles.main}>
-      <h1>Huddle</h1>
-
-      <LiveKitRoom
-        token={token}
-        serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-        connect={true}
-        onConnected={() => setIsConnected(true)}
-        onDisconnected={handleDisconnect}
-        video={true}
-        audio={true}
-      >
-        <RoomAudioRenderer />
-        <div className={styles.participantContainer}>
+      <div className={styles.participantContainer}>
+        <LiveKitRoom
+          token={token}
+          serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
+          connect={true}
+          onConnected={() => setIsConnected(true)}
+          onDisconnected={handleDisconnect}
+          video={true}
+          audio={true}
+        >
+          <RoomAudioRenderer />
           <div className={styles.participantContainerInner}>
             <Participants>
               <ParticipantView className={styles.participantView}>
@@ -82,8 +80,8 @@ const Huddle: NextPage = () => {
               </ParticipantView>
             </Participants>
           </div>
-        </div>
-      </LiveKitRoom>
+        </LiveKitRoom>
+      </div>
       <div className={styles.devInfo}>
         <p>Dev Info:</p>
         <ul>

@@ -1,7 +1,7 @@
 import React, { HTMLAttributes, RefObject, useEffect, useState, useMemo } from 'react';
 import { Participant, ParticipantEvent, Track, TrackPublication } from 'livekit-client';
 import {
-  mutedObserver,
+  mutedObservable,
   createIsSpeakingObserver,
   setupParticipantView,
   setupMediaTrack,
@@ -30,19 +30,19 @@ export const useMediaTrack = (
   const [isSubscribed, setSubscribed] = useState(publication?.isSubscribed);
   const [track, setTrack] = useState(publication?.track);
 
-  const { className, trackObserver } = useMemo(() => {
+  const { className, trackObservable } = useMemo(() => {
     return setupMediaTrack(participant, source);
   }, [participant, source]);
 
   useEffect(() => {
-    const subscription = trackObserver.subscribe((publication) => {
+    const subscription = trackObservable.subscribe((publication) => {
       setPublication(publication);
       setMuted(publication?.isMuted);
       setSubscribed(publication?.isSubscribed);
       setTrack(publication?.track);
     });
     return () => subscription?.unsubscribe();
-  }, [trackObserver]);
+  }, [trackObservable]);
 
   useEffect(() => {
     if (track) {
@@ -65,13 +65,13 @@ function useParticipantView<T extends HTMLAttributes<HTMLElement>>(
     const { className } = setupParticipantView();
     return mergeProps(props, { className });
   }, [props]);
-  const isVideoMuted = useIsMuted(Track.Source.Camera, participant);
-  const isAudioMuted = useIsMuted(Track.Source.Microphone, participant);
+  const isCameraMuted = useIsMuted(Track.Source.Camera, participant);
+  const isMicrophoneMuted = useIsMuted(Track.Source.Microphone, participant);
   const isSpeaking = useIsSpeaking(participant);
   return {
     elementProps: {
-      'data-lk-audio-muted': isAudioMuted,
-      'data-lk-video-muted': isVideoMuted,
+      'data-lk-microphone-muted': isMicrophoneMuted,
+      'data-lk-camera-muted': isCameraMuted,
       'data-lk-speaking': isSpeaking,
       ...mergedProps,
     },
@@ -95,7 +95,7 @@ export function useIsMuted(source: Track.Source, participant?: Participant) {
   const [isMuted, setIsMuted] = useState(!!p.getTrack(source)?.isMuted);
 
   useEffect(() => {
-    const listener = mutedObserver(p, source).subscribe(setIsMuted);
+    const listener = mutedObservable(p, source).subscribe(setIsMuted);
     return () => listener.unsubscribe();
   });
 

@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, RefObject, useEffect, useState, useMemo } from 'react';
+import React, { HTMLAttributes, RefObject, useEffect, useState, useMemo, useRef } from 'react';
 import { Participant, ParticipantEvent, Track, TrackPublication } from 'livekit-client';
 import {
   mutedObserver,
@@ -29,6 +29,7 @@ export const useMediaTrack = (
   const [isMuted, setMuted] = useState(publication?.isMuted);
   const [isSubscribed, setSubscribed] = useState(publication?.isSubscribed);
   const [track, setTrack] = useState(publication?.track);
+  const previousElement = useRef<HTMLMediaElement | undefined | null>();
 
   const { className, trackObserver } = useMemo(() => {
     return setupMediaTrack(participant, source);
@@ -46,12 +47,16 @@ export const useMediaTrack = (
 
   useEffect(() => {
     if (track) {
+      if (previousElement.current) {
+        track.detach(previousElement.current);
+      }
       if (element?.current) {
         track.attach(element.current);
       } else {
         track.detach();
       }
     }
+    previousElement.current = element?.current;
   }, [track, element]);
 
   return { publication, isMuted, isSubscribed, track, elementProps: { className } };

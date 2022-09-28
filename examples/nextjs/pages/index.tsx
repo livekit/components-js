@@ -9,7 +9,7 @@ import {
   FocusViewContainer,
   ParticipantClickEvent,
 } from '@livekit/components-react';
-import { Participant, Room, Track, TrackPublication } from 'livekit-client';
+import { Participant, Room, setLogLevel, Track, TrackPublication } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -27,6 +27,7 @@ const Home: NextPage = () => {
   const [focusPublication, setFocusPublication] = useState<TrackPublication | undefined>(undefined);
 
   const room = useMemo(() => new Room(), []);
+  setLogLevel('debug');
 
   const { screenShareTrack, screenShareParticipant } = useScreenShare({ room });
 

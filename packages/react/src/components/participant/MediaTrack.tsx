@@ -25,7 +25,7 @@ export const MediaTrack = ({ onTrackClick, onClick, ...props }: MediaTrackProps)
   return (
     <>
       {props.source === Track.Source.Camera || props.source === Track.Source.ScreenShare ? (
-        <video ref={mediaEl} {...elementProps} onClick={clickHandler}></video>
+        <video ref={mediaEl} {...elementProps} muted={true} onClick={clickHandler}></video>
       ) : (
         <audio ref={mediaEl} {...elementProps}></audio>
       )}

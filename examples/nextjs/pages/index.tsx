@@ -103,6 +103,7 @@ const Home: NextPage = () => {
               </button>
               {isFocusMode ? (
                 <FocusViewContainer
+                  showPiP={true}
                   focusParticipant={focusedParticipant}
                   onParticipantClick={updateFocusParticipant}
                   focusTrackSource={focusPublication?.source}

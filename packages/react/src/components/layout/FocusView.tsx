@@ -68,7 +68,11 @@ export function FocusViewContainer({
         {props.children ?? (
           <>
             {focusOrLoudest && (
-              <FocusView participant={focusOrLoudest} trackSource={focusTrackSource} />
+              <FocusView
+                participant={focusOrLoudest}
+                trackSource={focusTrackSource}
+                showPiP={showPiP}
+              />
             )}
             <CarouselView participants={others} onParticipantClick={onParticipantClick} />
           </>

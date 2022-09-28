@@ -139,7 +139,7 @@ export function participantEventSelector<T extends ParticipantEvent>(
   return observable;
 }
 
-export function mutedObservable(participant: Participant, source: Track.Source) {
+export function mutedObserver(participant: Participant, source: Track.Source) {
   return observeParticipantEvents(
     participant,
     ParticipantEvent.TrackMuted,

@@ -51,19 +51,38 @@
       .video {
         // border-radius: 2rem;
       }
-      .name {
+      .nameContainer {
         position: absolute;
-        top: 0;
+        bottom: 0;
         left: 0;
         margin: 2%;
         padding: 0.1em 0.4em;
         background-color: whitesmoke;
         border-radius: 99999px;
+      }
+      .name {
         opacity: 0;
+        display: none;
         text-decoration: none;
         transition: opacity 80ms cubic-bezier(0.36, 0.19, 0.29, 1);
       }
+
+      .nameMutedIcon {
+        display: none;
+      }
+
+      &[data-lk-audio-muted='true'] .nameMutedIcon {
+        display: inline-block;
+      }
+
+      // .audioMuteIndicator {
+      //   position: absolute;
+      //   background-color: red;
+      //   width: 10px;
+      //   height: 10px;
+      // }
       &:hover .name {
+        display: inline-block;
         opacity: 100;
       }
     }
@@ -114,8 +133,11 @@
         background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.75 3.75C2.92157 3.75 2.25 4.42157 2.25 5.25V14.75C2.25 15.5784 2.92157 16.25 3.75 16.25H12.25C13.0784 16.25 13.75 15.5784 13.75 14.75V12.1591L17.5005 14.3185C17.8339 14.5104 18.25 14.2698 18.25 13.8852V6.11483C18.25 5.7302 17.8338 5.4896 17.5005 5.68152L13.75 7.84091V5.25C13.75 4.42157 13.0784 3.75 12.25 3.75H3.75Z' stroke='currentColor' stroke-width='1.5' stroke-linejoin='round'%3E%3C/path%3E%3Ccircle class='p-huddle_camera_icon--dot' cx='8' cy='10' r='2.5' fill='currentColor'%3E%3C/circle%3E%3C/svg%3E");
       }
     }
+
     .screenBtn {
+      display: none;
     }
+
     .disconnectBtn {
       background: #e23067;
       box-shadow: 0 1px 4px #0000004d;

@@ -6,6 +6,7 @@ import { mergeProps, useObservableState } from '../../utils';
 
 interface ConnectionQualityIndicatorProps extends HTMLAttributes<HTMLDivElement> {
   participant?: Participant;
+  'data-lk-quality': string;
 }
 
 export const useConnectionQualityIndicator = (props?: ConnectionQualityIndicatorProps) => {
@@ -20,10 +21,9 @@ export const useConnectionQualityIndicator = (props?: ConnectionQualityIndicator
     connectionQualityObserver,
   ]);
 
-  const elementProps = useMemo(
-    () => mergeProps(props, { className }, { className: quality }),
-    [quality, props, className],
-  );
+  const elementProps = useMemo(() => {
+    return { ...mergeProps(props, { className }), 'data-lk-quality': quality };
+  }, [quality, props, className]);
 
   return { elementProps, quality };
 };

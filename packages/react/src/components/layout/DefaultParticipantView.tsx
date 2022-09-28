@@ -13,7 +13,14 @@ export function DefaultParticipantView(props: ParticipantProps) {
   return (
     <ParticipantView {...props}>
       <MediaTrack source={props.trackSource ?? Track.Source.Camera}></MediaTrack>
-      <div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '8px',
+          justifyContent: 'space-between',
+        }}
+      >
         <div style={{ display: 'flex' }}>
           <MediaMutedIndicator source={Track.Source.Microphone}></MediaMutedIndicator>
           <MediaMutedIndicator source={Track.Source.Camera}></MediaMutedIndicator>

@@ -1,9 +1,7 @@
-import { Participant, Track } from 'livekit-client';
+import { Participant } from 'livekit-client';
 import React, { HTMLAttributes } from 'react';
 import { mergeProps } from '../../utils';
-import { MediaTrack } from '../participant/MediaTrack';
-import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
-import { ParticipantName } from '../participant/ParticipantName';
+import { ParticipantClickEvent } from '../participant/Participant';
 import { Participants } from '../Participants';
 import { DefaultParticipantView } from './DefaultParticipantView';
 

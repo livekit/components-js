@@ -106,7 +106,6 @@ export function screenShareObserver(room: Room) {
     } else {
       const index = screenShareTracks.indexOf(trackMap);
       screenShareTracks.splice(index, 1);
-      console.log('spliced screen share array', screenShareTracks);
       trackMap.tracks = getScreenShareTracks(participant);
     }
     if (trackMap.tracks.length > 0) {
@@ -130,19 +129,16 @@ export function screenShareObserver(room: Room) {
   );
   observers.push(
     roomEventSelector(room, RoomEvent.LocalTrackUnpublished).subscribe((args) => {
-      console.log('local track unpublished');
       handleSub(...args);
     }),
   );
   observers.push(
     roomEventSelector(room, RoomEvent.TrackMuted).subscribe((args) => {
-      console.log('local track muted');
       handleSub(...args);
     }),
   );
   observers.push(
     roomEventSelector(room, RoomEvent.TrackUnmuted).subscribe((args) => {
-      console.log('local track unmuted');
       handleSub(...args);
     }),
   );

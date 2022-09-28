@@ -13,6 +13,8 @@ export function setupMediaTrack(participant: Participant, source: Track.Source) 
     }),
   );
   const className: ClassNames =
-    source === Track.Source.Camera ? 'lk-participant-media-camera' : 'lk-participant-media-audio';
+    source === Track.Source.Camera || source === Track.Source.ScreenShare
+      ? 'lk-participant-media-video'
+      : 'lk-participant-media-audio';
   return { className, trackObserver };
 }

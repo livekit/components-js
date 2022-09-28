@@ -7,6 +7,7 @@ import {
   useMaybeFocusViewContext,
 } from '../../contexts';
 import { cloneSingleChild, mergeProps } from '../../utils';
+import { TrackSource } from '../controls/MediaControl';
 import { MediaTrack } from '../participant/MediaTrack';
 import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
 import { ParticipantName } from '../participant/ParticipantName';
@@ -34,7 +35,11 @@ export function FocusViewContainer({
   const [focusOrLoudest, setFocusOrLoudest] = useState<Participant | undefined>(undefined);
   const [others, setOthers] = useState<Participant[]>(
     focusOrLoudest
-      ? participants.filter((p) => p.identity !== focusOrLoudest.identity)
+      ? participants.filter(
+          (p) =>
+            p.identity !== focusOrLoudest.identity ||
+            (focusTrackSource !== Track.Source.Camera && !showPiP),
+        )
       : participants,
   );
 
@@ -48,7 +53,11 @@ export function FocusViewContainer({
     const focusTarget = focusParticipant ?? participants[0];
     setFocusOrLoudest(focusTarget);
     const otherPs = focusTarget
-      ? participants.filter((p) => p.identity !== focusTarget.identity)
+      ? participants.filter(
+          (p) =>
+            p.identity !== focusTarget.identity ||
+            (focusTrackSource !== Track.Source.Camera && !showPiP),
+        )
       : participants;
     setOthers(otherPs);
     setFocusViewState({ focusParticipant: focusTarget, focusTrackSource, others: otherPs });

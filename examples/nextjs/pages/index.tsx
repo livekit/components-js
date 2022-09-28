@@ -8,6 +8,10 @@ import {
   GridView,
   FocusViewContainer,
   ParticipantClickEvent,
+  DeviceMenu,
+  DisconnectButton,
+  MediaControlButton,
+  TrackSource,
 } from '@livekit/components-react';
 import { Participant, Room, setLogLevel, Track, TrackPublication } from 'livekit-client';
 
@@ -25,6 +29,7 @@ const Home: NextPage = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [focusedParticipant, setFocusedParticipant] = useState<Participant | undefined>(undefined);
   const [focusPublication, setFocusPublication] = useState<TrackPublication | undefined>(undefined);
+  const [isFocusMode, setIsFocusMode] = useState(false);
 
   const room = useMemo(() => new Room(), []);
   setLogLevel('debug');
@@ -34,6 +39,7 @@ const Home: NextPage = () => {
   const updateFocusParticipant = ({ participant, publication }: ParticipantClickEvent) => {
     setFocusPublication(publication);
     setFocusedParticipant(participant);
+    setIsFocusMode(true);
   };
 
   useEffect(() => {
@@ -47,6 +53,9 @@ const Home: NextPage = () => {
     }
     setFocusPublication(screenShareTrack);
     setFocusedParticipant(screenShareParticipant);
+    setIsFocusMode(screenShareTrack !== undefined);
+    // TODO fix screen share
+    console.log('screen share change', screenShareTrack, { isFocusMode });
   }, [screenShareTrack, screenShareParticipant, focusPublication]);
 
   const token = useToken(roomName, userIdentity, 'myname');
@@ -72,6 +81,7 @@ const Home: NextPage = () => {
         {!isConnected && (
           <button onClick={() => setConnect(!connect)}>{connect ? 'Disconnect' : 'Connect'}</button>
         )}
+
         {/* <Room connect={connect} /> */}
         <LiveKitRoom
           token={token}
@@ -88,14 +98,28 @@ const Home: NextPage = () => {
           <RoomAudioRenderer />
           {isConnected && (
             <>
-              {focusedParticipant ? (
+              <button onClick={() => setIsFocusMode(!isFocusMode)}>
+                {isFocusMode ? 'grid' : 'focus view'}
+              </button>
+              {isFocusMode ? (
                 <FocusViewContainer
                   focusParticipant={focusedParticipant}
                   onParticipantClick={updateFocusParticipant}
+                  focusTrackSource={focusPublication?.source}
                 />
               ) : (
                 <GridView onParticipantClick={updateFocusParticipant} />
               )}
+              <div className={styles.localUser}>
+                <div className={styles.controlBar}>
+                  <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
+                  <DeviceMenu kind="videoinput"></DeviceMenu>
+                  <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
+                  <DeviceMenu kind="audioinput"></DeviceMenu>
+                  <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
+                  <DisconnectButton>Hang up!</DisconnectButton>
+                </div>
+              </div>
             </>
           )}
         </LiveKitRoom>

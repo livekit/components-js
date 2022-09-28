@@ -7,9 +7,6 @@ import { ParticipantProps, ParticipantView } from '../participant/Participant';
 import { ParticipantName } from '../participant/ParticipantName';
 
 export function DefaultParticipantView(props: ParticipantProps) {
-  useEffect(() => {
-    console.log('default view detected participant change', props.participant?.identity);
-  }, [props.participant]);
   return (
     <ParticipantView {...props}>
       <MediaTrack source={props.trackSource ?? Track.Source.Camera}></MediaTrack>

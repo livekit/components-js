@@ -83,7 +83,7 @@ export function FocusViewContainer({
 }
 
 export interface FocusViewProps extends HTMLAttributes<HTMLElement> {
-  participant?: Participant;
+  participant: Participant;
   trackSource?: Track.Source;
   showPiP?: boolean;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
@@ -103,11 +103,15 @@ export function FocusView({
         <ParticipantView>
           <MediaTrack source={trackSource ?? defaultTrackSource} />
           <ParticipantName />
-          {showPiP && trackSource && trackSource !== defaultTrackSource && (
-            <div className="lk-pip-track">
-              <MediaTrack source={defaultTrackSource}></MediaTrack>
-            </div>
-          )}
+          {showPiP &&
+            trackSource &&
+            // TODO  re-enable once this has landed in livekit-client
+            // && !participant.isLocal
+            trackSource !== defaultTrackSource && (
+              <div className="lk-pip-track">
+                <MediaTrack source={defaultTrackSource}></MediaTrack>
+              </div>
+            )}
         </ParticipantView>
       </ParticipantContext.Provider>
     </div>

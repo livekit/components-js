@@ -8,6 +8,10 @@ import {
 } from '@livekit/components-core';
 import { mergeProps } from '../../utils';
 import { useParticipantContext } from '../../contexts';
+import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
+import { MediaMutedIndicator } from './MediaMutedIndicator';
+import { MediaTrack } from './MediaTrack';
+import { ParticipantName } from './ParticipantName';
 
 export interface ParticipantClickEvent {
   participant?: Participant;
@@ -118,6 +122,7 @@ export const ParticipantView = ({
   participant,
   children,
   onParticipantClick,
+  trackSource,
   ...htmlProps
 }: ParticipantProps) => {
   const p = participant ?? useParticipantContext();
@@ -129,7 +134,26 @@ export const ParticipantView = ({
 
   return (
     <div {...elementProps} onClick={clickHandler}>
-      {children}
+      {children ?? (
+        <>
+          <MediaTrack source={trackSource ?? Track.Source.Camera}></MediaTrack>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: '8px',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div style={{ display: 'flex' }}>
+              <MediaMutedIndicator source={Track.Source.Microphone}></MediaMutedIndicator>
+              <MediaMutedIndicator source={Track.Source.Camera}></MediaMutedIndicator>
+            </div>
+            <ParticipantName />
+            <ConnectionQualityIndicator />
+          </div>
+        </>
+      )}
     </div>
   );
 };

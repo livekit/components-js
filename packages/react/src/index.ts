@@ -1,5 +1,4 @@
 import { isLocal, isRemote } from '@livekit/components-core';
-export { default as handleToken } from './handlers/token';
 export * from './components/participant/Participant';
 export * from './components/participant/ConnectionQualityIndicator';
 export * from './components/LiveKitRoom';
@@ -17,5 +16,5 @@ export * from './components/FocusViewRenderer';
 export * from './components/participant/MediaTrack';
 export * from './components/layout/FocusView';
 export * from './components/layout/GridView';
-
+export * from './token';
 export { isLocal, isRemote };

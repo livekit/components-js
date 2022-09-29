@@ -1,4 +1,12 @@
-import React, { HTMLAttributes, RefObject, useEffect, useState, useMemo, useRef } from 'react';
+import React, {
+  HTMLAttributes,
+  RefObject,
+  useEffect,
+  useState,
+  useMemo,
+  useRef,
+  ReactNode,
+} from 'react';
 import { Participant, ParticipantEvent, Track, TrackPublication } from 'livekit-client';
 import {
   mutedObserver,
@@ -7,7 +15,11 @@ import {
   setupMediaTrack,
 } from '@livekit/components-core';
 import { mergeProps } from '../../utils';
-import { useParticipantContext } from '../../contexts';
+import {
+  ParticipantContext,
+  useMaybeParticipantContext,
+  useParticipantContext,
+} from '../../contexts';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
 import { MediaMutedIndicator } from './MediaMutedIndicator';
 import { MediaTrack } from './MediaTrack';
@@ -118,6 +130,20 @@ export function useIsMuted(source: Track.Source, participant?: Participant) {
   return isMuted;
 }
 
+function ParticipantContextIfNeeded(props: {
+  children?: ReactNode | ReactNode[];
+  participant?: Participant;
+}) {
+  const hasContext = !!useMaybeParticipantContext();
+  return props.participant && !hasContext ? (
+    <ParticipantContext.Provider value={props.participant}>
+      {props.children}
+    </ParticipantContext.Provider>
+  ) : (
+    <>{props.children}</>
+  );
+}
+
 export const ParticipantView = ({
   participant,
   children,
@@ -134,26 +160,28 @@ export const ParticipantView = ({
 
   return (
     <div {...elementProps} onClick={clickHandler}>
-      {children ?? (
-        <>
-          <MediaTrack source={trackSource ?? Track.Source.Camera}></MediaTrack>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              gap: '8px',
-              justifyContent: 'space-between',
-            }}
-          >
-            <div style={{ display: 'flex' }}>
-              <MediaMutedIndicator source={Track.Source.Microphone}></MediaMutedIndicator>
-              <MediaMutedIndicator source={Track.Source.Camera}></MediaMutedIndicator>
+      <ParticipantContextIfNeeded participant={participant}>
+        {children ?? (
+          <>
+            <MediaTrack source={trackSource ?? Track.Source.Camera}></MediaTrack>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: '8px',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div style={{ display: 'flex' }}>
+                <MediaMutedIndicator source={Track.Source.Microphone}></MediaMutedIndicator>
+                <MediaMutedIndicator source={Track.Source.Camera}></MediaMutedIndicator>
+              </div>
+              <ParticipantName />
+              <ConnectionQualityIndicator />
             </div>
-            <ParticipantName />
-            <ConnectionQualityIndicator />
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </ParticipantContextIfNeeded>
     </div>
   );
 };

@@ -11,6 +11,10 @@ function useParticipantContext() {
   return participant;
 }
 
+function useMaybeParticipantContext() {
+  return useContext(ParticipantContext);
+}
+
 const RoomContext = createContext<Room | undefined>(undefined);
 
 function useRoomContext() {
@@ -45,6 +49,7 @@ export {
   useMaybeRoomContext,
   ParticipantContext,
   useParticipantContext,
+  useMaybeParticipantContext,
   FocusViewContext,
   useMaybeFocusViewContext,
   FocusViewState,

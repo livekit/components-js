@@ -12,7 +12,6 @@ import { MediaTrack } from '../participant/MediaTrack';
 import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
 import { ParticipantName } from '../participant/ParticipantName';
 import { useParticipants, useSortedParticipants } from '../Participants';
-import { DefaultParticipantView } from './DefaultParticipantView';
 
 interface FocusViewContainerProps extends HTMLAttributes<HTMLDivElement> {
   focusParticipant?: Participant;
@@ -132,10 +131,7 @@ export function CarouselView({ participants, onParticipantClick, ...props }: Car
           {props.children ? (
             cloneSingleChild(props.children, { onParticipantClick })
           ) : (
-            <DefaultParticipantView
-              participant={participant}
-              onParticipantClick={onParticipantClick}
-            />
+            <ParticipantView participant={participant} onParticipantClick={onParticipantClick} />
           )}
         </ParticipantContext.Provider>
       ))}

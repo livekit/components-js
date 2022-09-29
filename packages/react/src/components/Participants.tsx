@@ -4,6 +4,7 @@ import { Participant, Room } from 'livekit-client';
 import { useLocalParticipant } from './controls/MediaControl';
 import { connectedParticipantsObserver, activeSpeakerObserver } from '@livekit/components-core';
 import { cloneSingleChild, sortParticipantsByVolume, useObservableState } from '../utils';
+import { ParticipantView } from './participant/Participant';
 
 type ParticipantsProps = {
   children: ReactNode | ReactNode[];
@@ -79,7 +80,7 @@ export const Participants = ({ children, room, filter, filterDependencies }: Par
     <>
       {participants.map((participant) => (
         <ParticipantContext.Provider value={participant} key={participant.identity}>
-          {cloneSingleChild(children)}
+          {children ? cloneSingleChild(children) : <ParticipantView />}
         </ParticipantContext.Provider>
       ))}
     </>

@@ -11,6 +11,7 @@ import {
 } from 'livekit-client';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { RoomContext } from '../contexts';
+import { DefaultRoomView } from './layout/DefaultRoomView';
 
 export type LiveKitRoomProps = {
   children?: ReactNode | ReactNode[];
@@ -51,20 +52,27 @@ export function useToken(roomName: string, identity: string, name?: string, meta
   }, [identity, roomName]);
   return token;
 }
-export const useLiveKitRoom = ({
-  token,
-  serverUrl,
-  options,
-  room: passedRoom,
-  connectOptions,
-  connect,
-  audio,
-  video,
-  screen,
-  onConnected,
-  onDisconnected,
-  onError,
-}: LiveKitRoomProps) => {
+
+const defaultRoomProps: LiveKitRoomProps = {
+  connect: true,
+  audio: true,
+  video: true,
+};
+export const useLiveKitRoom = (props: LiveKitRoomProps) => {
+  const {
+    token,
+    serverUrl,
+    options,
+    room: passedRoom,
+    connectOptions,
+    connect,
+    audio,
+    video,
+    screen,
+    onConnected,
+    onDisconnected,
+    onError,
+  } = { ...defaultRoomProps, ...props };
   const [room] = useState<Room>(passedRoom ?? new Room(options));
   // setLogLevel('debug');
 
@@ -130,5 +138,9 @@ export const useLiveKitRoom = ({
 
 export const LiveKitRoom = (props: LiveKitRoomProps) => {
   const room = useLiveKitRoom(props);
-  return <RoomContext.Provider value={room}>{props.children}</RoomContext.Provider>;
+  return (
+    <RoomContext.Provider value={room}>
+      {props.children ?? <DefaultRoomView />}
+    </RoomContext.Provider>
+  );
 };

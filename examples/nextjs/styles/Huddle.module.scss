@@ -20,6 +20,29 @@
   background-color: rgba(128, 128, 128, 0.185);
 }
 
+.participantCount {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: gainsboro;
+  padding: 0.8rem 1rem;
+  display: flex;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  border-radius: 1rem;
+  margin: 0.5rem;
+  justify-items: center;
+  svg {
+    width: 1.2rem;
+    height: 100%;
+    overflow: visible;
+    path {
+      fill: none;
+      stroke: black;
+    }
+  }
+}
+
 .participantContainer {
   // position: absolute;
   // width: 100vw;
@@ -35,7 +58,6 @@
 
     .participantView {
       display: relative;
-      background-color: #e23067;
       width: 25rem;
       height: 25rem;
       border-radius: 12px;
@@ -48,8 +70,8 @@
         box-shadow: 0 0 8px 5px #fff;
         outline: 3px solid #fff;
       }
-      .video {
-        // border-radius: 2rem;
+      video {
+        background-color: #e23067;
       }
       .nameContainer {
         position: absolute;

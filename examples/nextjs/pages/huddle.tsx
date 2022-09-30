@@ -17,12 +17,14 @@ import {
   isRemote,
   DeviceMenu,
   useScreenShare,
+  useParticipants,
+  useParticipantContext,
 } from '@livekit/components-react';
 import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { HTMLAttributes, useEffect, useMemo, useState } from 'react';
 import styles from '../styles/Huddle.module.scss';
 
 const Huddle: NextPage = () => {
@@ -73,6 +75,7 @@ const Huddle: NextPage = () => {
           video={true}
           audio={true}
         >
+          <ParticipantCount className={styles.participantCount} />
           <RoomAudioRenderer />
           <div className={styles.participantContainerInner}>
             <Participants>
@@ -121,6 +124,24 @@ const Huddle: NextPage = () => {
         </ul>
       </div>
     </main>
+  );
+};
+
+const ParticipantCount = (props: HTMLAttributes<HTMLDivElement>) => {
+  const participants = useParticipants();
+  return (
+    <div {...props}>
+      <svg width="100%" height="100%" viewBox="0 -10 10 10">
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          fill="white"
+          stroke="none"
+          d="M 1 0 Q 1 -3 5 -3 Q 9 -3 9 0 L 1 0 Z M 5 -4 A 1 1 0 0 0 5 -8 A 1 1 0 0 0 5 -4"
+        ></path>
+      </svg>
+      <div>{participants.length}</div>
+    </div>
   );
 };
 

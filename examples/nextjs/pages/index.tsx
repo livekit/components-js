@@ -58,7 +58,10 @@ const Home: NextPage = () => {
     console.log('screen share change', screenShareTrack, { isFocusMode });
   }, [screenShareTrack, screenShareParticipant, focusPublication]);
 
-  const token = useToken(roomName, userIdentity, 'myname');
+  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
+    identity: userIdentity,
+    name: 'myname',
+  });
 
   const handleDisconnect = () => {
     setConnect(false);

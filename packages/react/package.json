@@ -3,7 +3,10 @@
   "license": "MIT",
   "exports": {
     ".": {
-      "import": "./dist/index.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
     }
   },
   "typings": "dist/index.d.ts",

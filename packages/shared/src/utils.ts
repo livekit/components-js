@@ -1,5 +1,5 @@
-import { ClassNames } from '@livekit/components-styles/dist/types/styles.css';
-import { UnprefixedClassNames } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
+import type { ClassNames } from '@livekit/components-styles/dist/types/styles.css';
+import type { UnprefixedClassNames } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
 import { LocalParticipant, Participant, RemoteParticipant, TrackPublication } from 'livekit-client';
 import { cssPrefix } from './constants';
 export const kebabize = (str: string) =>
@@ -8,7 +8,7 @@ export const kebabize = (str: string) =>
 /**
  * Converts a non prefixed CSS class into a prefixed one.
  */
-export function getCSSClassName(unprefixedClassName: UnprefixedClassNames): ClassNames {
+export function lkClassName(unprefixedClassName: UnprefixedClassNames): ClassNames {
   return `${cssPrefix}-${unprefixedClassName}`;
 }
 

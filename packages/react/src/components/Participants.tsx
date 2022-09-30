@@ -1,7 +1,7 @@
 import { ParticipantContext, useRoomContext } from '../contexts';
 import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { Participant, Room } from 'livekit-client';
-import { useLocalParticipant } from './controls/MediaControl';
+import { useLocalParticipant } from './controls/MediaControlButton';
 import { connectedParticipantsObserver, activeSpeakerObserver } from '@livekit/components-core';
 import { cloneSingleChild, sortParticipantsByVolume, useObservableState } from '../utils';
 import { ParticipantView } from './participant/Participant';

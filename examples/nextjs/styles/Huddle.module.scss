@@ -81,6 +81,10 @@
         padding: 0.1em 0.4em;
         background-color: whitesmoke;
         border-radius: 99999px;
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
+        height: 1.5rem;
       }
       .name {
         opacity: 0;
@@ -91,18 +95,13 @@
 
       .nameMutedIcon {
         display: none;
+        max-height: 100%;
       }
-
       &[data-lk-audio-muted='true'] .nameMutedIcon {
-        display: inline-block;
+        display: block;
+        max-height: 1rem;
       }
 
-      // .audioMuteIndicator {
-      //   position: absolute;
-      //   background-color: red;
-      //   width: 10px;
-      //   height: 10px;
-      // }
       &:hover .name {
         display: inline-block;
         opacity: 100;

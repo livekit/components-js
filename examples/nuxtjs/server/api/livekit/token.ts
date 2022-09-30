@@ -1,6 +1,14 @@
-import { createToken, Grant } from '@livekit/components-core/dist/token';
+import { createToken, VideoGrant } from '@livekit/components-core/dist/token';
 
-async function handleToken(roomName: string, identity: string, grant?: Omit<Grant, 'room'>) {
+export default defineEventHandler(async (event) => {
+  let { identity, name, metadata, roomName } = useQuery(event);
+  if (Array.isArray(identity)) {
+    identity = identity[0];
+  }
+  if (Array.isArray(roomName)) {
+    roomName = roomName[0];
+  }
+
   try {
     if (typeof identity !== 'string') {
       throw Error('provide one (and only one) identity!');
@@ -8,32 +16,27 @@ async function handleToken(roomName: string, identity: string, grant?: Omit<Gran
     if (typeof roomName !== 'string') {
       throw Error('provide one (and only one) roomName');
     }
+    if (Array.isArray(name)) {
+      throw Error('provide max one name');
+    }
+    if (Array.isArray(metadata)) {
+      throw Error('provide max one metadata string');
+    }
 
     console.log({ identity, roomName });
 
-    const token = createToken(identity, { ...grant, room: roomName });
+    const grant: VideoGrant = {
+      roomJoin: true,
+      canPublish: true,
+      canPublishData: true,
+      canSubscribe: true,
+      room: roomName,
+    };
+
+    const token = createToken({ identity, name, metadata }, grant);
 
     return { status: 200, identity, accessToken: token };
   } catch (e) {
     return { status: 500, error: e };
   }
-}
-export default defineEventHandler(async (event) => {
-  let { identity, roomName } = useQuery(event);
-  if (Array.isArray(identity)) {
-    identity = identity[0];
-  }
-  if (Array.isArray(roomName)) {
-    roomName = roomName[0];
-  }
-  const tokenResponse = await handleToken(roomName, identity, {
-    roomJoin: true,
-    canPublish: true,
-    canPublishData: true,
-    canSubscribe: true,
-  });
-  console.log(tokenResponse);
-  return {
-    ...tokenResponse,
-  };
 });

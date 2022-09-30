@@ -36,20 +36,28 @@ export type LiveKitRoomProps = {
 //   audioTracks: AudioTrack[];
 // };
 
-export function useToken(roomName: string, identity: string, name?: string, metadata?: string) {
+interface UserInfo {
+  identity?: string;
+  name?: string;
+  metadata?: string;
+}
+
+export function useToken(tokenEndpoint: string | undefined, roomName: string, userInfo?: UserInfo) {
   const [token, setToken] = useState<string | undefined>(undefined);
+  if (tokenEndpoint === undefined) {
+    throw Error('token endpoint needs to be defined');
+  }
   useEffect(() => {
     const tokenFetcher = async () => {
       console.log('fetching token');
       const res = await fetch(
-        process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT +
-          `?roomName=${roomName}&identity=${identity}&name=${name}&metadata=${metadata}`,
+        `${tokenEndpoint}?roomName=${roomName}&identity=${userInfo?.identity}&name=${userInfo?.name}&metadata=${userInfo?.metadata}`,
       );
       const { accessToken } = await res.json();
       setToken(accessToken);
     };
     tokenFetcher();
-  }, [identity, roomName]);
+  }, [tokenEndpoint, roomName]);
   return token;
 }
 

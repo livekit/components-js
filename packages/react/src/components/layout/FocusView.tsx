@@ -7,7 +7,7 @@ import {
   useMaybeFocusViewContext,
 } from '../../contexts';
 import { cloneSingleChild, mergeProps } from '../../utils';
-import { TrackSource } from '../controls/MediaControl';
+import { TrackSource } from '../controls/MediaControlButton';
 import { MediaTrack } from '../participant/MediaTrack';
 import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
 import { ParticipantName } from '../participant/ParticipantName';

@@ -12,9 +12,7 @@ type DeviceMenuProps = React.HTMLAttributes<HTMLElement> & {
 
 export const useMediaDevices = (kind: MediaDeviceKind) => {
   const deviceObserver = useMemo(() => createMediaDeviceObserver(kind), [kind]);
-
   const devices = useObservableState(deviceObserver, []);
-
   return { devices };
 };
 

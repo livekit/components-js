@@ -85,12 +85,17 @@ export const useMediaToggle = ({ source, onChange, ...rest }: MediaControlProps)
     enabled,
     pending,
     track,
-    buttonProps: { ...newProps, 'aria-pressed': enabled, disabled: pending, onClick: clickHandler },
+    buttonProps: {
+      ...newProps,
+      'aria-pressed': enabled,
+      'data-lk-enabled': enabled,
+      disabled: pending,
+      onClick: clickHandler,
+    },
   };
 };
 
 export const MediaControlButton = (props: MediaControlProps) => {
-  const { enabled, buttonProps } = useMediaToggle(props);
-  const buttonText = `${enabled ? 'Mute' : 'Unmute'} ${props.source}`;
-  return <button {...buttonProps}>{props.children ?? buttonText}</button>;
+  const { buttonProps } = useMediaToggle(props);
+  return <button {...buttonProps}>{props.children}</button>;
 };

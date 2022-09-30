@@ -2,7 +2,7 @@ import { isLocal, isRemote } from '@livekit/components-core';
 export * from './components/participant/Participant';
 export * from './components/participant/ConnectionQualityIndicator';
 export * from './components/LiveKitRoom';
-export * from './components/controls/MediaControl';
+export * from './components/controls/MediaControlButton';
 export * from './components/controls/DeviceMenu';
 export * from './components/Participants';
 export * from './components/ConnectionState';

@@ -50,9 +50,8 @@ export function useToken(tokenEndpoint: string | undefined, roomName: string, us
   useEffect(() => {
     const tokenFetcher = async () => {
       console.log('fetching token');
-      const res = await fetch(
-        `${tokenEndpoint}?roomName=${roomName}&identity=${userInfo?.identity}&name=${userInfo?.name}&metadata=${userInfo?.metadata}`,
-      );
+      const params = new URLSearchParams({ ...userInfo, roomName });
+      const res = await fetch(`${tokenEndpoint}?${params.toString()}`);
       const { accessToken } = await res.json();
       setToken(accessToken);
     };

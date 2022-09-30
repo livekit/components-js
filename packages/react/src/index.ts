@@ -1,22 +1,6 @@
 import { isLocal, isRemote } from '@livekit/components-core';
-export * from './components/participant/Participant';
-export * from './components/participant/ConnectionQualityIndicator';
-export * from './components/LiveKitRoom';
-export * from './components/controls/MediaControlButton';
-export * from './components/controls/DeviceMenu';
-export * from './components/Participants';
-export * from './components/ConnectionState';
-export * from './components/controls/DisconnectButton';
-export * from './components/ScreenShareRenderer';
-export * from './components/participant/MediaMutedIndicator';
-export * from './components/participant/ParticipantName';
-export * from './components/RoomName';
-export * from './components/RoomAudioRenderer';
-export * from './components/FocusViewRenderer';
-export * from './components/participant/MediaTrack';
-export * from './components/layout/FocusView';
-export * from './components/layout/GridView';
-export * from './token';
+export * from './components';
 export * from './contexts';
+export * from './token';
 
 export { isLocal, isRemote };

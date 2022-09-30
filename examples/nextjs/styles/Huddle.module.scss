@@ -78,7 +78,6 @@
         bottom: 0;
         left: 0;
         margin: 2%;
-        padding: 0.1em 0.4em;
         background-color: white;
         border-radius: 99999px;
         display: flex;
@@ -86,6 +85,11 @@
         gap: 0.2rem;
         height: 1.5rem;
       }
+
+      &[data-lk-audio-muted='true'] .nameContainer {
+        padding: 0.1em 0.4em;
+      }
+
       .name {
         opacity: 0;
         display: none;
@@ -102,9 +106,14 @@
         max-height: 1rem;
       }
 
-      &:hover .name {
-        display: inline-block;
-        opacity: 100;
+      &:hover {
+        .nameContainer {
+          padding: 0.1em 0.4em;
+        }
+        .name {
+          display: inline-block;
+          opacity: 100;
+        }
       }
 
       &[data-lk-video-muted='true'] video {
@@ -190,12 +199,13 @@
     .disconnectBtn {
       background: #e23067;
       box-shadow: 0 1px 4px whitesmoke;
+      border: none;
       color: white;
       border-radius: 8px;
       font-size: 15px;
       height: 100%;
       min-width: 56px;
-      padding: 0 12px 1px;
+      padding: 0 1rem;
       cursor: pointer;
     }
   }

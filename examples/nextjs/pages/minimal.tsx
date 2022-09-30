@@ -10,8 +10,10 @@ const Home: NextPage = () => {
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? 'test-user';
 
-  const token = useToken(roomName, userIdentity, 'myname');
-
+  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
+    identity: userIdentity,
+    name: 'myname',
+  });
   return (
     <div className={styles.container}>
       <Head>

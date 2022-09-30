@@ -1,12 +1,10 @@
 import { onMounted, ref, watchEffect } from 'vue';
-
-export function useToken(
-  apiEndpoint: string,
-  roomName: string,
-  identity: string,
-  name?: string,
-  metadata?: string,
-) {
+interface UserInfo {
+  identity?: string;
+  name?: string;
+  metadata?: string;
+}
+export function useToken(apiEndpoint: string, roomName: string, userInfo?: UserInfo) {
   const token = ref(undefined);
   const isMounted = ref(false);
   onMounted(() => {
@@ -17,7 +15,7 @@ export function useToken(
       console.log('fetching token');
       const res = await fetch(
         apiEndpoint +
-          `?roomName=${roomName}&identity=${identity}&name=${name}&metadata=${metadata}`,
+          `?roomName=${roomName}&identity=${userInfo?.identity}&name=${userInfo?.name}&metadata=${userInfo?.metadata}`,
       );
       const json = await res.json();
       console.log('token', json, res);

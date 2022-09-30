@@ -3,13 +3,20 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handleToken(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { roomName, identity } = req.query;
+    const { roomName, identity, name, metadata } = req.query;
 
     if (typeof identity !== 'string') {
       throw Error('provide one (and only one) identity');
     }
     if (typeof roomName !== 'string') {
       throw Error('provide one (and only one) roomName');
+    }
+
+    if (Array.isArray(name)) {
+      throw Error('provide max one name');
+    }
+    if (Array.isArray(metadata)) {
+      throw Error('provide max one metadata string');
     }
 
     // if (!userSession.isAuthenticated) {
@@ -23,7 +30,7 @@ export default async function handleToken(req: NextApiRequest, res: NextApiRespo
       canPublishData: true,
       canSubscribe: true,
     };
-    const token = createToken(identity, grant);
+    const token = createToken({ identity, name, metadata }, grant);
 
     res.status(200).json({ identity, accessToken: token });
   } catch (e) {

@@ -35,7 +35,7 @@
 
     .participantView {
       display: relative;
-      background-color: aquamarine;
+      background-color: #e23067;
       width: 25rem;
       height: 25rem;
       border-radius: 12px;
@@ -84,6 +84,34 @@
       &:hover .name {
         display: inline-block;
         opacity: 100;
+      }
+
+      &[data-lk-video-muted='true'] video {
+        opacity: 0;
+        transition-delay: 0.3s;
+      }
+      video {
+        opacity: 100;
+        transition: opacity 0.1s linear;
+        transition-delay: 0s;
+      }
+
+      &[data-lk-video-muted='true'] svg {
+        opacity: 100;
+        scale: 1;
+        transition-delay: 0s;
+      }
+      svg {
+        position: absolute;
+        background-color: #e23067;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        scale: 2;
+        transition: opacity 0.1s, scale 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+        transition-delay: 0.3s;
       }
     }
   }

@@ -17,4 +17,6 @@ export * from './components/participant/MediaTrack';
 export * from './components/layout/FocusView';
 export * from './components/layout/GridView';
 export * from './token';
+export * from './contexts';
+
 export { isLocal, isRemote };

@@ -69,8 +69,6 @@ export const useMediaTrack = (
       }
       if (element?.current) {
         track.attach(element.current);
-      } else {
-        track.detach();
       }
     }
     previousElement.current = element?.current;

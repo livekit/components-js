@@ -6,6 +6,10 @@
     "access": "public"
   },
   "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./dist/token": "./dist/token.js"
+  },
   "files": [
     "dist",
     "src"
@@ -30,7 +34,6 @@
   },
   "dependencies": {
     "@livekit/components-styles": "0.1.0",
-    "jose": "^4.8.3",
     "rxjs": "^7.5.6"
   }
 }

@@ -33,8 +33,10 @@ const Home: NextPage = () => {
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
-  const token = useToken(roomName, userIdentity, 'myname');
-
+  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
+    identity: userIdentity,
+    name: 'myname',
+  });
   const handleDisconnect = () => {
     setConnect(false);
     setIsConnected(false);

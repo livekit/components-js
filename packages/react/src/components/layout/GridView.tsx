@@ -1,11 +1,10 @@
 import { Participant } from 'livekit-client';
 import React, { HTMLAttributes } from 'react';
 import { mergeProps } from '../../utils';
-import { ParticipantClickEvent } from '../participant/Participant';
+import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
 import { Participants } from '../Participants';
-import { DefaultParticipantView } from './DefaultParticipantView';
 
-interface GridViewProps extends HTMLAttributes<HTMLDivElement> {
+export interface GridViewProps extends HTMLAttributes<HTMLDivElement> {
   participants?: Array<Participant>;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
@@ -16,7 +15,7 @@ export function GridView({ participants, onParticipantClick, ...props }: GridVie
   return (
     <div {...elementProps}>
       <Participants filter={filter} filterDependencies={[participants]}>
-        {props.children ?? <DefaultParticipantView onParticipantClick={onParticipantClick} />}
+        {props.children ?? <ParticipantView onParticipantClick={onParticipantClick} />}
       </Participants>
     </div>
   );

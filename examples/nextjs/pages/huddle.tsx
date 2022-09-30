@@ -28,8 +28,8 @@ import styles from '../styles/Huddle.module.scss';
 const Huddle: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
 
-  const roomName = params?.get('room') ?? 'test-room';
-  const userIdentity = params?.get('user') ?? 'test-user';
+  const roomName = params?.get('room') || 'test-room';
+  const userIdentity = params?.get('user') || 'test-user';
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [focusedParticipant, setFocusedParticipant] = useState<Participant | undefined>(undefined);
@@ -52,7 +52,9 @@ const Huddle: NextPage = () => {
     setFocusedParticipant(screenShareParticipant);
   }, [screenShareTrack, screenShareParticipant, focusPublication]);
 
-  const token = useToken(roomName, userIdentity, 'myname');
+  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
+    identity: userIdentity,
+  });
 
   const handleDisconnect = () => {
     setConnect(false);

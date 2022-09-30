@@ -5,7 +5,9 @@
   "license": "MIT",
   "main": "dist/styles.css",
   "exports": {
-    "./theme": "./dist/styles.css",
+    "./theme": {
+      "default": "./dist/styles.css"
+    },
     "./layout": "./dist/layout.css"
   },
   "publishConfig": {

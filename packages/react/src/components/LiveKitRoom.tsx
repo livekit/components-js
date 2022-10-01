@@ -62,8 +62,8 @@ export function useToken(tokenEndpoint: string | undefined, roomName: string, us
 
 const defaultRoomProps: LiveKitRoomProps = {
   connect: true,
-  audio: true,
-  video: true,
+  audio: false,
+  video: false,
 };
 export const useLiveKitRoom = (props: LiveKitRoomProps) => {
   const {
@@ -80,6 +80,9 @@ export const useLiveKitRoom = (props: LiveKitRoomProps) => {
     onDisconnected,
     onError,
   } = { ...defaultRoomProps, ...props };
+  if (options && passedRoom) {
+    passedRoom.options = options;
+  }
   const [room] = useState<Room>(passedRoom ?? new Room(options));
   // setLogLevel('debug');
 

@@ -28,7 +28,10 @@ export const ParticipantName = (props: HTMLAttributes<HTMLSpanElement>) => {
     metadata: participant.metadata,
   });
 
-  const mergedProps = mergeProps(props, { className });
+  const mergedProps = useMemo(() => {
+    return mergeProps(props, { className, 'data-lk-participant-name': name });
+  }, [props, className, name]);
+
   return (
     <span {...mergedProps}>
       {name !== '' ? name : identity} {props.children}

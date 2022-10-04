@@ -40,7 +40,7 @@ export const useMediaTrack = (
   participant: Participant,
   source: Track.Source,
   element?: RefObject<HTMLMediaElement>,
-  attributes?: HTMLAttributes<HTMLVideoElement | HTMLAudioElement>,
+  props?: HTMLAttributes<HTMLVideoElement | HTMLAudioElement>,
 ) => {
   const [publication, setPublication] = useState(participant.getTrack(source));
   const [isMuted, setMuted] = useState(publication?.isMuted);
@@ -79,7 +79,7 @@ export const useMediaTrack = (
     isMuted,
     isSubscribed,
     track,
-    elementProps: mergeProps(attributes, { className }),
+    elementProps: mergeProps(props, { className }),
   };
 };
 

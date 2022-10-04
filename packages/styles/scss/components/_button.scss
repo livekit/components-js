@@ -7,9 +7,9 @@
   padding: var(--btn-padding-y) var(--btn-padding-x);
   border: v.$s-px v.$t-primary solid;
   background-color: v.$t-primary;
+  cursor: pointer;
 }
 
 /** active state for toggle buttons **/
 .button[aria-pressed='true'] {
-  box-shadow: inset 5px 5px 10px v.$t-primary, inset -5px -5px 10px v.$t-primary;
 }

@@ -10,6 +10,7 @@ module.exports = (opts = { prefix: 'NO_PREFIX_DEFINED' }) => {
       const findThis = new RegExp('\\[data-(?=[^\\]])(?!' + opts.prefix + ')');
       const replaceWith = '[data-' + opts.prefix;
       rule.selector = rule.selector.replace(findThis, replaceWith);
+      // TODO: Handle cases like `content: attr(data-name);` => `content: attr(data-lk-name);`
     },
   };
 };

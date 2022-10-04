@@ -65,6 +65,7 @@ export const useMediaToggle = ({ source, onChange, ...rest }: MediaControlProps)
 
   const pending = useObservableState(pendingObserver, false);
   const enabled = useObservableState(enabledObserver, !!track?.isEnabled);
+  const trackSubscribed = useMemo(() => track?.isSubscribed, [track]);
 
   useEffect(() => {
     onChange?.(enabled);
@@ -89,7 +90,7 @@ export const useMediaToggle = ({ source, onChange, ...rest }: MediaControlProps)
       ...newProps,
       'aria-pressed': enabled,
       'data-lk-enabled': enabled,
-      disabled: pending,
+      disabled: pending || !trackSubscribed,
       onClick: clickHandler,
     },
   };

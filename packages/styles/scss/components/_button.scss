@@ -13,3 +13,7 @@
 /** active state for toggle buttons **/
 .button[aria-pressed='true'] {
 }
+
+.button:disabled {
+  opacity: 50%;
+}

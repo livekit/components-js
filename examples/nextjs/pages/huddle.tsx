@@ -113,6 +113,7 @@ const Huddle: NextPage = () => {
                 {' '}
               </MediaControlButton>
               <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
+              <DeviceMenu kind="videoinput"></DeviceMenu>
             </div>
           </div>
         </LiveKitRoom>

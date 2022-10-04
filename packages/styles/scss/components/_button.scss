@@ -7,6 +7,7 @@
   padding: var(--btn-padding-y) var(--btn-padding-x);
   border: v.$s-px v.$t-primary solid;
   background-color: v.$t-primary;
+  cursor: pointer;
 }
 
 /** active state for toggle buttons **/

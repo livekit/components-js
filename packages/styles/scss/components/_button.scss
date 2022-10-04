@@ -11,5 +11,4 @@
 
 /** active state for toggle buttons **/
 .button[aria-pressed='true'] {
-  box-shadow: inset 5px 5px 10px v.$t-primary, inset -5px -5px 10px v.$t-primary;
 }

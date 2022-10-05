@@ -82,8 +82,10 @@ const Home: NextPage = () => {
                 <DeviceMenu kind={'audioinput'} />
                 <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
                 <DisconnectButton>Hang up!</DisconnectButton>
-                <DeviceSelector kind={'audioinput'}></DeviceSelector>
-                <DeviceSelector kind={'videoinput'}></DeviceSelector>
+                <div>
+                  <DeviceSelector kind={'audioinput'}></DeviceSelector>
+                  <DeviceSelector kind={'videoinput'}></DeviceSelector>
+                </div>
               </div>
               <ScreenShareView />
               <div className={styles.participantGrid}>

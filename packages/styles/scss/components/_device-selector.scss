@@ -1,16 +1,11 @@
 @use '../variables' as v;
-@mixin reset-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
+
 .device-selector {
   & > div {
     padding: 0.1rem 0.2rem;
     font-size: smaller;
   }
   ul {
-    @include reset-ul;
     li {
       padding: 0.1rem 0.2rem;
       button {

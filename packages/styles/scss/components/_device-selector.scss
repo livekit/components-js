@@ -13,9 +13,20 @@
     @include reset-ul;
     li {
       padding: 0.1rem 0.2rem;
+      button {
+        transition: color 0.2s ease-in-out;
+        transition: opacity 0.1s ease-in-out;
+      }
       &[data-active='true'] {
         & > button {
           color: v.$primary;
+        }
+      }
+      &[data-active='false'] {
+        & > button {
+          &:hover {
+            opacity: 0.5;
+          }
         }
       }
     }

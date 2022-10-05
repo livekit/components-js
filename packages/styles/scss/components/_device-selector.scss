@@ -1,0 +1,21 @@
+@use '../variables' as v;
+@mixin reset-ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.device-selector {
+  & > div {
+    font-weight: bold;
+  }
+  ul {
+    @include reset-ul;
+    li {
+      &[data-active='true'] {
+        & > button {
+          color: v.$primary;
+        }
+      }
+    }
+  }
+}

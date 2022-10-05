@@ -15,6 +15,7 @@ import {
   RoomName,
   RoomAudioRenderer,
   MediaTrack,
+  DeviceSelector,
 } from '@livekit/components-react';
 import { RemoteParticipant, Track } from 'livekit-client';
 
@@ -81,6 +82,8 @@ const Home: NextPage = () => {
                 <DeviceMenu kind={'audioinput'} />
                 <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
                 <DisconnectButton>Hang up!</DisconnectButton>
+                <DeviceSelector kind={'audioinput'}></DeviceSelector>
+                <DeviceSelector kind={'videoinput'}></DeviceSelector>
               </div>
               <ScreenShareView />
               <div className={styles.participantGrid}>

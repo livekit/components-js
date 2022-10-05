@@ -19,6 +19,7 @@ import {
   useScreenShare,
   useParticipants,
   useParticipantContext,
+  DeviceSelector,
 } from '@livekit/components-react';
 import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 
@@ -106,14 +107,10 @@ const Huddle: NextPage = () => {
               <MediaControlButton className={styles.audioBtn} source={Track.Source.Microphone}>
                 {' '}
               </MediaControlButton>
-              <MediaControlButton className={styles.videoBtn} source={Track.Source.Camera}>
-                {' '}
-              </MediaControlButton>
-              <MediaControlButton className={styles.screenBtn} source={Track.Source.ScreenShare}>
-                {' '}
-              </MediaControlButton>
+              <MediaControlButton className={styles.videoBtn} source={Track.Source.Camera} />
+              <MediaControlButton className={styles.screenBtn} source={Track.Source.ScreenShare} />
+              <DeviceSelectButton />
               <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
-              <DeviceMenu kind="videoinput"></DeviceMenu>
             </div>
           </div>
         </LiveKitRoom>
@@ -125,6 +122,32 @@ const Huddle: NextPage = () => {
         </ul>
       </div>
     </main>
+  );
+};
+
+const DeviceSelectButton = (props: HTMLAttributes<HTMLDivElement>) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div style={{ position: 'relative' }}>
+      <button className={styles.mediaBtn} onClick={() => setIsOpen(!isOpen)} />
+      {isOpen && (
+        <div
+          style={{
+            position: 'absolute',
+            margin: '1rem',
+            bottom: '100%',
+            left: '-50%',
+            width: '20rem',
+            backgroundColor: 'white',
+            borderRadius: '0.5rem',
+            padding: '.2rem .3rem',
+          }}
+        >
+          <DeviceSelector kind="audioinput" heading="Audio Inputs:"></DeviceSelector>
+          <DeviceSelector kind="videoinput" heading="Video Inputs:"></DeviceSelector>
+        </div>
+      )}
+    </div>
   );
 };
 

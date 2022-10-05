@@ -6,11 +6,13 @@
 }
 .device-selector {
   & > div {
-    font-weight: bold;
+    padding: 0.1rem 0.2rem;
+    font-size: smaller;
   }
   ul {
     @include reset-ul;
     li {
+      padding: 0.1rem 0.2rem;
       &[data-active='true'] {
         & > button {
           color: v.$primary;

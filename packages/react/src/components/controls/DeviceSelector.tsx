@@ -30,9 +30,10 @@ export const useDeviceSelector = (
 
 interface DeviceSelectorProps extends React.HTMLAttributes<HTMLUListElement> {
   kind: MediaDeviceKind;
+  heading?: string;
 }
 
-export function DeviceSelector({ kind, ...props }: DeviceSelectorProps) {
+export function DeviceSelector({ kind, heading = '', ...props }: DeviceSelectorProps) {
   const room = useRoomContext();
   const { devices, activeDevice, setActiveMediaDevice, mergedProps } = useDeviceSelector(
     kind,
@@ -42,13 +43,7 @@ export function DeviceSelector({ kind, ...props }: DeviceSelectorProps) {
 
   return (
     <div {...mergedProps}>
-      <div>
-        {kind === 'audioinput'
-          ? 'Audio Input'
-          : kind === 'videoinput'
-          ? 'Video Input'
-          : 'Audio Output'}
-      </div>
+      {heading && <div>{heading}</div>}
       <ul>
         {devices.map((device) => (
           <li

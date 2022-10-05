@@ -82,9 +82,19 @@ const Home: NextPage = () => {
                 <DeviceMenu kind={'audioinput'} />
                 <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
                 <DisconnectButton>Hang up!</DisconnectButton>
-                <div>
-                  <DeviceSelector kind={'audioinput'}></DeviceSelector>
-                  <DeviceSelector kind={'videoinput'}></DeviceSelector>
+                <div
+                  style={{
+                    border: '1px lightgray solid',
+                    borderRadius: '0.5rem',
+                    padding: '.5rem',
+                  }}
+                >
+                  <DeviceSelector
+                    style={{ borderBottom: '1px lightgray solid', paddingBottom: '.5rem' }}
+                    kind={'audioinput'}
+                    heading="Audio Inputs:"
+                  ></DeviceSelector>
+                  <DeviceSelector kind={'videoinput'} heading="Video Inputs:"></DeviceSelector>
                 </div>
               </div>
               <ScreenShareView />

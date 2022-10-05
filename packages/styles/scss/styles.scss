@@ -1,3 +1,5 @@
+@use 'preflight'; // Use Tailwinds reset CSS as a basis to build upon.
+
 @use 'variables';
 @use 'root';
 @use 'components';

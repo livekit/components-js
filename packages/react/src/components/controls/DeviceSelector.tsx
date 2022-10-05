@@ -1,4 +1,4 @@
-import React, { Attributes, HTMLAttributes, useEffect, useMemo, useState } from 'react';
+import React, { HTMLAttributes, useMemo, useState } from 'react';
 import { useRoomContext } from '../../contexts';
 import { setupDeviceSelector, createMediaDeviceObserver } from '@livekit/components-core';
 import { mergeProps, useObservableState } from '../../utils';
@@ -7,7 +7,7 @@ import { Room } from 'livekit-client';
 export const useDeviceSelector = (
   kind: MediaDeviceKind,
   room: Room,
-  props: HTMLAttributes<HTMLDivElement>,
+  props: HTMLAttributes<HTMLUListElement>,
 ) => {
   // List of all devices.
   const deviceObserver = useMemo(() => createMediaDeviceObserver(kind), [kind]);
@@ -28,7 +28,7 @@ export const useDeviceSelector = (
   return { devices, mergedProps, activeDevice, setActiveMediaDevice };
 };
 
-interface DeviceSelectorProps extends React.HTMLAttributes<HTMLDivElement> {
+interface DeviceSelectorProps extends React.HTMLAttributes<HTMLUListElement> {
   kind: MediaDeviceKind;
 }
 
@@ -40,29 +40,28 @@ export function DeviceSelector({ kind, ...props }: DeviceSelectorProps) {
     props,
   );
 
-  const headingStyle = { textDecoration: 'underline', fontWeight: 'bold' };
-  const activeStyle = { color: 'red' };
   return (
-    <ul {...mergedProps}>
+    <div {...mergedProps}>
+      <div>
+        {kind === 'audioinput'
+          ? 'Audio Input'
+          : kind === 'videoinput'
+          ? 'Video Input'
+          : 'Audio Output'}
+      </div>
       <ul>
-        <li style={headingStyle}>
-          {kind === 'audioinput'
-            ? 'Audio Input'
-            : kind === 'videoinput'
-            ? 'Video Input'
-            : 'Audio Output'}
-        </li>
         {devices.map((device) => (
-          <li key={device.deviceId} id={device.deviceId}>
-            <button
-              style={device.deviceId === activeDevice ? activeStyle : {}}
-              onClick={() => setActiveMediaDevice(device.kind, device.deviceId)}
-            >
+          <li
+            key={device.deviceId}
+            id={device.deviceId}
+            data-lk-active={device.deviceId === activeDevice}
+          >
+            <button onClick={() => setActiveMediaDevice(device.kind, device.deviceId)}>
               {device.label}
             </button>
           </li>
         ))}
       </ul>
-    </ul>
+    </div>
   );
 }

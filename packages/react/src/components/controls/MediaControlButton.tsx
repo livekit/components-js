@@ -65,7 +65,10 @@ export const useMediaToggle = ({ source, onChange, ...rest }: MediaControlProps)
 
   const pending = useObservableState(pendingObserver, false);
   const enabled = useObservableState(enabledObserver, !!track?.isEnabled);
-  const trackSubscribed = useMemo(() => track?.isSubscribed, [track]);
+  const trackSubscribed = useMemo(
+    () => (source === Track.Source.ScreenShare ? true : track?.isSubscribed),
+    [track],
+  );
 
   useEffect(() => {
     onChange?.(enabled);

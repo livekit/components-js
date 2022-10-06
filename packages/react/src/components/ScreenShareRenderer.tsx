@@ -19,10 +19,12 @@ export const useScreenShare = ({ room, onScreenShareChange, screenEl }: ScreenSh
   const [screenShareParticipant, setScreenShareParticipant] = useState<Participant | undefined>(
     undefined,
   );
+  const [allScreenShares, setAllScreenShares] = useState<ScreenShareTrackMap>([]);
 
   const currentRoom = room ?? useRoomContext();
   const handleChange = useCallback((map: ScreenShareTrackMap) => {
     console.log('screen share change');
+    setAllScreenShares(map);
     if (map.length < 1) {
       setHasActiveScreenShare(false);
       setScreenShareParticipant(undefined);
@@ -31,7 +33,7 @@ export const useScreenShare = ({ room, onScreenShareChange, screenEl }: ScreenSh
       return;
     }
 
-    const { participantId, tracks } = map[map.length - 1];
+    const { participant, tracks } = map[map.length - 1];
     if (!tracks) return;
     let _latestScreenShareTrack: TrackPublication | undefined;
     tracks.forEach((tr) => {
@@ -45,10 +47,7 @@ export const useScreenShare = ({ room, onScreenShareChange, screenEl }: ScreenSh
           tr.track?.detach(screenEl.current);
         }
       }
-      if (
-        tr.source === Track.Source.ScreenShareAudio &&
-        participantId !== currentRoom.localParticipant.identity
-      ) {
+      if (tr.source === Track.Source.ScreenShareAudio && !participant.isLocal) {
         if (tr.isSubscribed && screenEl?.current) {
           tr.track?.attach(screenEl.current);
         } else if (screenEl?.current && !tr.isSubscribed) {
@@ -57,7 +56,7 @@ export const useScreenShare = ({ room, onScreenShareChange, screenEl }: ScreenSh
       }
     });
     setScreenShareTrack(_latestScreenShareTrack);
-    setScreenShareParticipant(currentRoom.getParticipantByIdentity(participantId));
+    setScreenShareParticipant(participant);
     setHasActiveScreenShare(true);
     onScreenShareChange?.(true, screenShareTrack, screenShareParticipant);
   }, []);
@@ -67,7 +66,7 @@ export const useScreenShare = ({ room, onScreenShareChange, screenEl }: ScreenSh
     );
     return () => listener.unsubscribe();
   });
-  return { hasActiveScreenShare, screenShareTrack, screenShareParticipant };
+  return { hasActiveScreenShare, screenShareTrack, screenShareParticipant, allScreenShares };
 };
 
 type ScreenShareProps = HTMLAttributes<HTMLDivElement> & {

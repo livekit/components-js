@@ -141,6 +141,7 @@ const DeviceSelectButton = (props: HTMLAttributes<HTMLDivElement>) => {
             backgroundColor: 'white',
             borderRadius: '0.5rem',
             padding: '.2rem .3rem',
+            boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
           }}
         >
           <DeviceSelector kind="audioinput" heading="Audio Inputs:"></DeviceSelector>

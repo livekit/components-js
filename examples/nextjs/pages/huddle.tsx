@@ -104,9 +104,7 @@ const Huddle: NextPage = () => {
           </div>
           <div className={styles.mediaControls}>
             <div>
-              <MediaControlButton className={styles.audioBtn} source={Track.Source.Microphone}>
-                {' '}
-              </MediaControlButton>
+              <MediaControlButton className={styles.audioBtn} source={Track.Source.Microphone} />
               <MediaControlButton className={styles.videoBtn} source={Track.Source.Camera} />
               <MediaControlButton className={styles.screenBtn} source={Track.Source.ScreenShare} />
               <DeviceSelectButton />
@@ -115,12 +113,12 @@ const Huddle: NextPage = () => {
           </div>
         </LiveKitRoom>
       </div>
-      <div className={styles.devInfo}>
+      {/* <div className={styles.devInfo}>
         <p>Dev Info:</p>
         <ul>
           <li>Connected: {isConnected ? 'true' : 'false'}</li>
         </ul>
-      </div>
+      </div> */}
     </main>
   );
 };
@@ -128,7 +126,7 @@ const Huddle: NextPage = () => {
 const DeviceSelectButton = (props: HTMLAttributes<HTMLDivElement>) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', flexShrink: 0 }}>
       <button className={styles.mediaBtn} onClick={() => setIsOpen(!isOpen)} />
       {isOpen && (
         <div

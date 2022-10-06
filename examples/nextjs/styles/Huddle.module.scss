@@ -24,7 +24,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  background-color: gainsboro;
+  background-color: whitesmoke;
   padding: 0.8rem 1rem;
   display: flex;
   gap: 0.5rem;
@@ -148,6 +148,7 @@
 }
 
 .mediaControls {
+  --size: 3.125rem;
   position: absolute;
   bottom: 0;
   left: 0;
@@ -158,18 +159,14 @@
     display: flex;
     flex-direction: row;
     gap: 1rem;
-    height: 3.135rem;
     margin: 0.5rem;
 
     .videoBtn,
     .audioBtn,
     .screenBtn,
     .mediaBtn {
-      --size: 2rem;
-      // width: var(--size);
-      height: 100%;
-      max-height: 100%;
-      width: auto;
+      width: var(--size);
+      height: var(--size);
       aspect-ratio: 1/1;
       border-radius: 99999px;
       background-color: whitesmoke;
@@ -201,13 +198,13 @@
     }
 
     .disconnectBtn {
+      height: var(--size);
       background: #e23067;
       box-shadow: 0 1px 4px whitesmoke;
       border: none;
       color: white;
       border-radius: 8px;
       font-size: 15px;
-      height: 100%;
       min-width: 56px;
       padding: 0 1rem;
       cursor: pointer;

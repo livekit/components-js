@@ -18,7 +18,7 @@ export const useDisconnectButton = (props: DisconnectButtonProps) => {
     const { className, disconnect } = setupDisconnectButton(currentRoom);
     const mergedProps = mergeProps(props, {
       className,
-      onClick: () => disconnect(props.stopTracks || true),
+      onClick: () => disconnect(props.stopTracks ?? true),
       disabled: connectionState === ConnectionState.Disconnected,
     });
     return mergedProps;

@@ -8,8 +8,13 @@
   border: v.$s-px v.$t-primary solid;
   background-color: v.$t-primary;
   cursor: pointer;
+  transition: opacity 0.15s ease-in-out;
 }
 
 /** active state for toggle buttons **/
 .button[aria-pressed='true'] {
+}
+
+.button:disabled {
+  opacity: 50%;
 }

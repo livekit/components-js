@@ -65,7 +65,7 @@ export function connectionStateObserver(room: Room) {
   );
 }
 export type ScreenShareTrackMap = Array<{
-  participantId: string;
+  participant: Participant;
   tracks: Array<TrackPublication>;
 }>;
 
@@ -90,7 +90,7 @@ export function screenShareObserver(room: Room) {
     ) {
       return;
     }
-    let trackMap = screenShareTracks.find((tr) => tr.participantId === participant.identity);
+    let trackMap = screenShareTracks.find((tr) => tr.participant.identity === participant.identity);
     const getScreenShareTracks = (participant: Participant) => {
       return participant
         .getTracks()
@@ -102,7 +102,10 @@ export function screenShareObserver(room: Room) {
         );
     };
     if (!trackMap) {
-      trackMap = { participantId: participant.identity, tracks: getScreenShareTracks(participant) };
+      trackMap = {
+        participant,
+        tracks: getScreenShareTracks(participant),
+      };
     } else {
       const index = screenShareTracks.indexOf(trackMap);
       screenShareTracks.splice(index, 1);

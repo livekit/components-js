@@ -1,14 +1,17 @@
 .main {
+  box-sizing: border-box;
   position: fixed;
   top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background: url('https://images.unsplash.com/photo-1570475501127-a9413237866c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   min-height: 100vh;
   width: 100vw;
-  display: grid;
-  place-items: center;
+  max-height: 100vh;
 }
 
 .devInfo {
@@ -20,138 +23,156 @@
   background-color: rgba(128, 128, 128, 0.185);
 }
 
-.participantCount {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: whitesmoke;
-  padding: 0.8rem 1rem;
-  display: flex;
-  gap: 0.5rem;
-  font-size: 1.1rem;
-  border-radius: 1rem;
-  margin: 0.5rem;
-  justify-items: center;
-  svg {
-    width: 1.2rem;
-    height: 100%;
-    overflow: visible;
-    path {
-      fill: none;
-      stroke: black;
+.roomLayout {
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(20px, 1fr) 1fr minmax(20px, 1fr);
+  grid-template-rows: min-content min-content 1fr min-content;
+  grid-template-areas:
+    'header header header'
+    '. screenshare .'
+    '. participants .'
+    '. controls .';
+  row-gap: 1rem;
+}
+
+.headerBar {
+  grid-area: header;
+  .participantCount {
+    width: min-content;
+    background-color: whitesmoke;
+    padding: 0.8rem 1rem;
+    display: flex;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    border-radius: 1rem;
+    margin: 0.5rem;
+    justify-items: center;
+    svg {
+      width: 1.2rem;
+      height: 100%;
+      overflow: visible;
+      path {
+        fill: none;
+        stroke: black;
+      }
     }
   }
 }
 
-.participantContainer {
-  // position: absolute;
-  // width: 100vw;
-  // height: 100vh;
-  // background-color: red;
+.screenshareContainer {
+  grid-area: screenshare;
+  place-self: center;
+  display: grid;
+  width: 100%;
+  max-height: 60vh;
+  overflow: hidden;
+}
 
-  .participantContainerInner {
-    // background-color: aqua;
-    display: flex;
-    flex-wrap: wrap;
-    // grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
+.participantContainerInner {
+  place-self: center;
+  grid-area: participants;
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  gap: 1rem;
 
-    .participantView {
-      display: relative;
-      width: 25rem;
-      height: 25rem;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 0;
-      transition: outline, box-shadow 80ms cubic-bezier(0.36, 0.19, 0.29, 1);
-      cursor: pointer;
+  .participantView {
+    place-self: center;
+    display: relative;
+    height: clamp(50px, 10rem, 25rem);
+    max-height: 100%;
+    aspect-ratio: 1 / 1;
+    // width: 25rem;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 0;
+    transition: outline, box-shadow 80ms cubic-bezier(0.36, 0.19, 0.29, 1);
+    cursor: pointer;
 
-      &[data-lk-speaking='true'] {
-        box-shadow: 0 0 8px 5px #fff;
-        outline: 3px solid #fff;
-      }
-      video {
-        background-color: #e23067;
-      }
+    &[data-lk-speaking='true'] {
+      box-shadow: 0 0 8px 5px #fff;
+      outline: 3px solid #fff;
+    }
+    video {
+      background-color: #e23067;
+    }
+    .nameContainer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      margin: 2%;
+      background-color: white;
+      border-radius: 99999px;
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      height: 1.5rem;
+    }
+
+    &[data-lk-audio-muted='true'] .nameContainer {
+      padding: 0.1em 0.4em;
+    }
+
+    .name {
+      opacity: 0;
+      display: none;
+      text-decoration: none;
+      transition: opacity 80ms cubic-bezier(0.36, 0.19, 0.29, 1);
+    }
+
+    .nameMutedIcon {
+      display: none;
+      max-height: 100%;
+    }
+    &[data-lk-audio-muted='true'] .nameMutedIcon {
+      display: block;
+      max-height: 1rem;
+    }
+
+    &:hover {
       .nameContainer {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        margin: 2%;
-        background-color: white;
-        border-radius: 99999px;
-        display: flex;
-        align-items: center;
-        gap: 0.2rem;
-        height: 1.5rem;
-      }
-
-      &[data-lk-audio-muted='true'] .nameContainer {
         padding: 0.1em 0.4em;
       }
-
       .name {
-        opacity: 0;
-        display: none;
-        text-decoration: none;
-        transition: opacity 80ms cubic-bezier(0.36, 0.19, 0.29, 1);
-      }
-
-      .nameMutedIcon {
-        display: none;
-        max-height: 100%;
-      }
-      &[data-lk-audio-muted='true'] .nameMutedIcon {
-        display: block;
-        max-height: 1rem;
-      }
-
-      &:hover {
-        .nameContainer {
-          padding: 0.1em 0.4em;
-        }
-        .name {
-          display: inline-block;
-          opacity: 100;
-        }
-      }
-
-      &[data-lk-video-muted='true'] video {
-        opacity: 0;
-        transition-delay: 0.3s;
-      }
-      video {
+        display: inline-block;
         opacity: 100;
-        transition: opacity 0.1s linear;
-        transition-delay: 0s;
       }
+    }
 
-      &[data-lk-video-muted='true'] svg {
-        opacity: 100;
-        scale: 1;
-        transition-delay: 0s;
-      }
-      svg {
-        position: absolute;
-        background-color: #e23067;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        scale: 2;
-        transition: opacity 0.1s, scale 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
-        transition-delay: 0.3s;
-      }
+    &[data-lk-video-muted='true'] video {
+      opacity: 0;
+      transition-delay: 0.3s;
+    }
+    video {
+      opacity: 100;
+      transition: opacity 0.1s linear;
+      transition-delay: 0s;
+    }
+
+    &[data-lk-video-muted='true'] svg {
+      opacity: 100;
+      scale: 1;
+      transition-delay: 0s;
+    }
+    svg {
+      position: absolute;
+      background-color: #e23067;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      scale: 2;
+      transition: opacity 0.1s, scale 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+      transition-delay: 0.3s;
     }
   }
 }
 
 .mediaControls {
   --size: 3.125rem;
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  grid-area: controls;
   width: 100vw;
   display: grid;
   place-content: center;

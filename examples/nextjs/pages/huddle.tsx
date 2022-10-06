@@ -20,6 +20,7 @@ import {
   useParticipants,
   useParticipantContext,
   DeviceSelector,
+  ScreenShareView,
 } from '@livekit/components-react';
 import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 
@@ -66,18 +67,21 @@ const Huddle: NextPage = () => {
 
   return (
     <main className={styles.main}>
-      <div className={styles.participantContainer}>
-        <LiveKitRoom
-          token={token}
-          serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-          connect={true}
-          onConnected={() => setIsConnected(true)}
-          onDisconnected={handleDisconnect}
-          video={true}
-          audio={true}
-        >
-          <ParticipantCount className={styles.participantCount} />
-          <RoomAudioRenderer />
+      <LiveKitRoom
+        token={token}
+        serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
+        connect={true}
+        onConnected={() => setIsConnected(true)}
+        onDisconnected={handleDisconnect}
+        video={true}
+        audio={true}
+      >
+        <div className={styles.roomLayout}>
+          <div className={styles.headerBar}>
+            <ParticipantCount className={styles.participantCount} />
+          </div>
+          <ScreenShareView className={styles.screenshareContainer} />
+
           <div className={styles.participantContainerInner}>
             <Participants>
               <ParticipantView className={styles.participantView}>
@@ -89,7 +93,6 @@ const Huddle: NextPage = () => {
                   />
                   <ParticipantName className={styles.name}></ParticipantName>
                 </div>
-
                 <svg width="100%" height="100%" viewBox="0 -10 10 10">
                   <path
                     fillRule="evenodd"
@@ -110,9 +113,11 @@ const Huddle: NextPage = () => {
               <DeviceSelectButton />
               <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
             </div>
+
+            <RoomAudioRenderer />
           </div>
-        </LiveKitRoom>
-      </div>
+        </div>
+      </LiveKitRoom>
       {/* <div className={styles.devInfo}>
         <p>Dev Info:</p>
         <ul>

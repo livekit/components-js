@@ -22,7 +22,7 @@
     "build": "tsc"
   },
   "peerDependencies": {
-    "livekit-client": "latest",
+    "livekit-client": "^1.4.2",
     "livekit-server-sdk": "latest"
   },
   "name": "@livekit/components-core",

@@ -39,6 +39,8 @@ const Huddle: NextPage = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [focusedParticipant, setFocusedParticipant] = useState<Participant | undefined>(undefined);
   const [focusPublication, setFocusPublication] = useState<TrackPublication | undefined>(undefined);
+  type Layout = 'grid' | 'focus';
+  const [layout, setLayout] = useState<Layout>('grid');
 
   const room = useMemo(() => new Room(), []);
 

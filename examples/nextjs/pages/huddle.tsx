@@ -1,5 +1,6 @@
 import {
   ParticipantView,
+  StartAudio,
   ConnectionQualityIndicator,
   LiveKitRoom,
   MediaControlButton,
@@ -112,6 +113,7 @@ const Huddle: NextPage = () => {
               <MediaControlButton className={styles.screenBtn} source={Track.Source.ScreenShare} />
               <DeviceSelectButton />
               <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
+              <StartAudio label="Start Audio" />
             </div>
 
             <RoomAudioRenderer />

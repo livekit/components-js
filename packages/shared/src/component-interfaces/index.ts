@@ -8,3 +8,4 @@ export * from './mediaMutedIndicator';
 export * from './participantName';
 export * from './mediaTrack';
 export * from './participantView';
+export * from './startAudio';

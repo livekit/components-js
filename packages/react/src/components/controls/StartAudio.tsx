@@ -16,13 +16,17 @@ const useStartAudio = (room: Room, props: HTMLAttributes<HTMLButtonElement>) => 
     [roomAudioPlaybackAllowedObservable],
   );
 
-  const mergedProps = mergeProps(props, {
-    className,
-    onClick: () => {
-      handleStartAudioPlayback(room);
-    },
-    style: { display: canPlayAudio ? 'none' : 'block' },
-  });
+  const mergedProps = useMemo(
+    () =>
+      mergeProps(props, {
+        className,
+        onClick: () => {
+          handleStartAudioPlayback(room);
+        },
+        style: { display: canPlayAudio ? 'none' : 'block' },
+      }),
+    [props, canPlayAudio],
+  );
 
   return { mergedProps, canPlayAudio };
 };

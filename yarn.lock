@@ -411,7 +411,7 @@
     fs-extra "^7.0.1"
     semver "^5.4.1"
 
-"@changesets/get-github-info@^0.5.1":
+"@changesets/get-github-info@^0.5.0", "@changesets/get-github-info@^0.5.1":
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/@changesets/get-github-info/-/get-github-info-0.5.1.tgz#5a20328b26f301b2193717abb32e73651e8811b7"
   integrity sha512-w2yl3AuG+hFuEEmT6j1zDlg7GQLM/J2UxTmk0uJBMdRqHni4zXGe/vUlPfLom5KfX3cRfHc0hzGvloDPjWFNZw==
@@ -2239,6 +2239,14 @@
     magic-string "^0.26.3"
     svelte-hmr "^0.15.0"
 
+"@svitejs/changesets-changelog-github-compact@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@svitejs/changesets-changelog-github-compact/-/changesets-changelog-github-compact-0.1.1.tgz#ad46b266b96629623184424fe37a018089098dc1"
+  integrity sha512-eBi211CfmKtkxB6tINicaDPBMbolswPbaAy7kCx+uUFL/LxztLm9cB+7jP54TgCrv+mMz8vSJWIs/baH63PjsA==
+  dependencies:
+    "@changesets/get-github-info" "^0.5.0"
+    dotenv "^16.0.0"
+
 "@swc/helpers@0.4.3":
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.4.3.tgz#16593dfc248c53b699d4b5026040f88ddb497012"
@@ -3787,6 +3795,11 @@ dot-prop@^7.2.0:
   integrity sha512-Ol/IPXUARn9CSbkrdV4VJo7uCy1I3VuSiWCaFSg+8BdUOzF9n3jefIpcgAydvUZbTdEBZs2vEiTiS9m61ssiDA==
   dependencies:
     type-fest "^2.11.2"
+
+dotenv@^16.0.0:
+  version "16.0.3"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.3.tgz#115aec42bac5053db3c456db30cc243a5a836a07"
+  integrity sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==
 
 dotenv@^16.0.2:
   version "16.0.2"

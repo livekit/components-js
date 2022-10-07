@@ -1,6 +1,5 @@
 @use '../variables' as v;
 
 .start-audio {
-  @extend .button;
   background-color: v.$t-light;
 }

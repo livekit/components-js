@@ -11,7 +11,7 @@
     "./layout": "./dist/layout.css"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "restricted"
   },
   "files": [
     "dist",

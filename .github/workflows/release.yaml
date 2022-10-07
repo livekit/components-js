@@ -20,8 +20,8 @@ jobs:
         with:
           node-version: 16.x
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.TEMP_NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.TEMP_NPM_TOKEN }}
 
       - name: Install Dependencies
         run: yarn
@@ -34,4 +34,4 @@ jobs:
           publish: yarn release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.TEMP_NPM_TOKEN }}

@@ -1,0 +1,16 @@
+@use 'button';
+
+.chat-container {
+  .chat-messages {
+    height: calc(100% - 1rem);
+    width: 100%;
+    .chat-entry {
+    }
+  }
+  .chat-send-button {
+    @extend .button;
+  }
+
+  .chat-text-input {
+  }
+}

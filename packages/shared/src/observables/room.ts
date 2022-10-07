@@ -191,3 +191,7 @@ export const createMediaDeviceObserver = (kind?: MediaDeviceKind, requestPermiss
   onDeviceChange();
   return observable;
 };
+
+export const createDataObserver = (room: Room) => {
+  return roomEventSelector(room, RoomEvent.DataReceived);
+};

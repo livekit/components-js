@@ -47,6 +47,7 @@ export const useScreenShare = ({ room, onScreenShareChange, screenEl }: ScreenSh
           tr.track?.detach(screenEl.current);
         }
       }
+      // @ts-ignore
       if (tr.source === Track.Source.ScreenShareAudio && !participant.isLocal) {
         if (tr.isSubscribed && screenEl?.current) {
           tr.track?.attach(screenEl.current);

@@ -17,3 +17,4 @@ export * from './layout/FocusView';
 export * from './layout/GridView';
 export * from './controls/DeviceSelector';
 export * from './Chat';
+export * from './controls/StartAudio';

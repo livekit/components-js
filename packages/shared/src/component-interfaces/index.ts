@@ -9,3 +9,4 @@ export * from './participantName';
 export * from './mediaTrack';
 export * from './participantView';
 export * from './chat';
+export * from './startAudio';

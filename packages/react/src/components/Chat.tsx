@@ -46,6 +46,7 @@ export function Chat({ room, ...props }: ChatProps) {
           <li
             key={idx}
             title={new Date(msg.timestamp).toLocaleTimeString()}
+            // @ts-ignore
             data-lk-local-message={!!msg.from?.isLocal}
           >
             {props.children ? (

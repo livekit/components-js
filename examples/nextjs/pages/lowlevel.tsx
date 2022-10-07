@@ -23,7 +23,7 @@ import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React, { useEffect, useMemo, useState } from 'react';
-import styles from '../styles/Home.module.css';
+import styles from '../styles/OldIndex.module.css';
 
 const Home: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;

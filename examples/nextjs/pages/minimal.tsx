@@ -2,7 +2,7 @@ import { LiveKitRoom, useToken } from '@livekit/components-react';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import styles from '../styles/OldIndex.module.css';
 
 const Home: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;

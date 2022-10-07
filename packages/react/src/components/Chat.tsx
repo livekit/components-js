@@ -1,92 +1,21 @@
-/* eslint-disable camelcase */
-import { DataPacket_Kind, Participant, RemoteParticipant, Room, RoomEvent } from 'livekit-client';
-import React, {
-  Children,
-  HTMLAttributes,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { ChatMessage, setupChat } from '@livekit/components-core';
+import { Room } from 'livekit-client';
+import React, { HTMLAttributes, useMemo, useRef } from 'react';
 import { useRoomContext } from '../contexts';
-import { cloneSingleChild } from '../utils';
+import { cloneSingleChild, useObservableState } from '../utils';
 
 export interface ChatProps extends HTMLAttributes<HTMLDivElement> {
   room?: Room;
 }
 
-export const enum MessageType {
-  CHAT,
-}
-
-export interface BaseDataMessage {
-  type: MessageType;
-}
-
-export interface ChatDataMessage extends BaseDataMessage {
-  type: MessageType.CHAT;
-  timestamp: number;
-  message: string;
-}
-
-type DataMessageUnion = ChatDataMessage;
-
-export interface ChatMessage {
-  timestamp: number;
-  message: string;
-  from?: Participant;
-}
-
 export function useChat(room?: Room) {
-  const decoder = useMemo(() => new TextDecoder(), []);
-  const encoder = useMemo(() => new TextEncoder(), []);
-
   const currentRoom = room ?? useRoomContext();
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-  const [isSending, setIsSending] = useState<boolean>(false);
-
-  const onDataReceived = useCallback((payload: Uint8Array, participant?: RemoteParticipant) => {
-    const dataMsg = JSON.parse(decoder.decode(payload)) as DataMessageUnion;
-    if (dataMsg.type === MessageType.CHAT) {
-      const { timestamp, message } = dataMsg;
-      setChatMessages((prevMessages) => [
-        ...prevMessages,
-        { timestamp, message, from: participant },
-      ]);
-    }
-  }, []);
-
-  useEffect(() => {
-    currentRoom.on(RoomEvent.DataReceived, onDataReceived);
-    return () => {
-      currentRoom.off(RoomEvent.DataReceived, onDataReceived);
-    };
-  }, [currentRoom]);
-
-  const send = useCallback(
-    async (message: string) => {
-      const timestamp = Date.now();
-      const chatMsg: ChatDataMessage = {
-        type: MessageType.CHAT,
-        timestamp,
-        message: message,
-      };
-      setIsSending(true);
-      try {
-        const dataMsg = encoder.encode(JSON.stringify(chatMsg));
-        await currentRoom.localParticipant.publishData(dataMsg, DataPacket_Kind.RELIABLE);
-        setChatMessages((prevMessages) => [
-          ...prevMessages,
-          { message, timestamp, from: currentRoom.localParticipant },
-        ]);
-      } finally {
-        setIsSending(false);
-      }
-    },
+  const { isSendingObservable, messageObservable, send } = useMemo(
+    () => setupChat(currentRoom),
     [currentRoom],
   );
-
+  const isSending = useObservableState(isSendingObservable, false);
+  const chatMessages = useObservableState(messageObservable, []);
   return { send, chatMessages, isSending };
 }
 

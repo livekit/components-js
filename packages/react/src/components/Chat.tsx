@@ -40,8 +40,8 @@ export function Chat({ room, ...props }: ChatProps) {
   };
   const inputRef = useRef<HTMLInputElement>(null);
   return (
-    <div {...props}>
-      <ul>
+    <div {...props} className="lk-chat-container">
+      <ul className="lk-chat-messages">
         {chatMessages.map((msg, idx) => (
           <li
             key={idx}
@@ -56,8 +56,8 @@ export function Chat({ room, ...props }: ChatProps) {
           </li>
         ))}
       </ul>
-      <input disabled={isSending} ref={inputRef} type="text"></input>
-      <button disabled={isSending} onClick={handleSend}>
+      <input className="lk-chat-text-input" disabled={isSending} ref={inputRef} type="text"></input>
+      <button className="lk-chat-send-button" disabled={isSending} onClick={handleSend}>
         Send
       </button>
     </div>

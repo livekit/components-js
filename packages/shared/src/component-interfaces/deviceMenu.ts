@@ -1,7 +1,7 @@
-import { ClassNames } from '@livekit/components-styles/dist/types/styles.css';
 import { Room, Track } from 'livekit-client';
 import { map, Observable, share, Subscriber } from 'rxjs';
 import { createMediaDeviceObserver } from '../observables/room';
+import { lkClassName } from '../utils';
 
 export function setupDeviceMenu(kind: MediaDeviceKind, room?: Room) {
   const devicesObservable = createMediaDeviceObserver(kind).pipe(share());
@@ -20,9 +20,7 @@ export function setupDeviceMenu(kind: MediaDeviceKind, room?: Room) {
       return ul;
     }),
   );
-  // FIXME
-  // @ts-ignore
-  const className: ClassNames = 'lk-device-menu';
+  const className = lkClassName('device-menu');
   return { className, devicesObservable, activeDeviceObservable, listElementObservable };
 }
 

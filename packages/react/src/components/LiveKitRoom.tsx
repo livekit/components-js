@@ -44,10 +44,11 @@ interface UserInfo {
 
 export function useToken(tokenEndpoint: string | undefined, roomName: string, userInfo?: UserInfo) {
   const [token, setToken] = useState<string | undefined>(undefined);
-  if (tokenEndpoint === undefined) {
-    throw Error('token endpoint needs to be defined');
-  }
+
   useEffect(() => {
+    if (tokenEndpoint === undefined) {
+      throw Error('token endpoint needs to be defined');
+    }
     const tokenFetcher = async () => {
       console.log('fetching token');
       const params = new URLSearchParams({ ...userInfo, roomName });

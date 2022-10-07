@@ -32,7 +32,7 @@ interface AllowAudioPlaybackProps extends HTMLAttributes<HTMLButtonElement> {
 
 export const StartAudio = ({ label, ...props }: AllowAudioPlaybackProps) => {
   const room = useRoomContext();
-  const { mergedProps, canPlayAudio } = useStartAudio(room, props);
+  const { mergedProps } = useStartAudio(room, props);
 
   return <button {...mergedProps}>Allow Audio</button>;
 };

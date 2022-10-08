@@ -5,6 +5,6 @@
   border: 2px transparent solid;
   transition: border-color 0.2s;
   &[data-speaking='true'] {
-    border-color: v.$primary;
+    border-color: v.$t-primary;
   }
 }

@@ -14,7 +14,7 @@
       }
       &[data-active='true'] {
         & > button {
-          color: v.$primary;
+          color: v.$t-primary;
         }
       }
       &[data-active='false'] {

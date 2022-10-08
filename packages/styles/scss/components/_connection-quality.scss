@@ -14,16 +14,16 @@
 
   &.poor,
   &[data-quality='poor'] {
-    background-color: v.$danger;
+    background-color: v.$t-danger;
   }
 
   &.good,
   &[data-quality='good'] {
-    background-color: v.$warning;
+    background-color: v.$t-warning;
   }
 
   &.excellent,
   &[data-quality='excellent'] {
-    background-color: v.$success;
+    background-color: v.$t-success;
   }
 }

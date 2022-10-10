@@ -31,6 +31,10 @@
 
 .headerBar {
   grid-area: header;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
   .participantCount {
     width: min-content;
     background-color: whitesmoke;
@@ -50,6 +54,13 @@
         stroke: black;
       }
     }
+  }
+
+  .backToGridViewBtn {
+    border-radius: 1rem;
+    background-color: whitesmoke;
+    padding: 0.8rem 1rem;
+    margin: 0.5rem;
   }
 }
 

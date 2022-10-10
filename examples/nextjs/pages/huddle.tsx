@@ -82,6 +82,12 @@ const Huddle: NextPage = () => {
         <div className={styles.roomLayout}>
           <div className={styles.headerBar}>
             <ParticipantCount className={styles.participantCount} />
+            {layout === 'focus' && (
+              <button onClick={() => setLayout('grid')} className={styles.backToGridViewBtn}>
+                {' '}
+                🔙 to grid view
+              </button>
+            )}
           </div>
 
           {layout === 'grid' ? (

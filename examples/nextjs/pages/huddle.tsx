@@ -83,14 +83,14 @@ const Huddle: NextPage = () => {
     if (action.msg === 'pinned_participant_was_set') {
       if (
         state.pinnedParticipant?.identity === action.participant.identity &&
-        state.pinnedSourceTrack === action.source
+        state.pinnedTrackSource === action.source
       ) {
-        return { ...state, pinnedParticipant: undefined, pinnedSourceTrack: undefined };
+        return { ...state, pinnedParticipant: undefined, pinnedTrackSource: undefined };
       } else {
         return {
           ...state,
           pinnedParticipant: action.participant,
-          pinnedSourceTrack: action.source,
+          pinnedTrackSource: action.source,
         };
       }
     } else if (action.msg === 'focus_was_cleared') {
@@ -154,7 +154,6 @@ const Huddle: NextPage = () => {
               <div className={styles.focusLayout}>
                 <div className={styles.screenshareContainer}>
                   <CustomFocus></CustomFocus>
-                  <CustomScreenShareView />
                 </div>
                 <aside>
                   <Participants>
@@ -203,33 +202,13 @@ const Huddle: NextPage = () => {
   );
 };
 
-const CustomScreenShareView = () => {
-  const screenEl = useRef(null);
-  const audioEl = useRef(null);
-  const { hasActiveScreenShare } = useScreenShare({ screenEl, audioEl });
-
-  return (
-    <div>
-      <video
-        ref={screenEl}
-        style={{
-          width: '100%',
-          height: '100%',
-          display: hasActiveScreenShare ? 'block' : 'none',
-        }}
-      ></video>
-      <audio ref={audioEl}></audio>
-    </div>
-  );
-};
-
 const CustomFocus = () => {
   const { state } = useContext(PinContext);
 
   return (
     <>
-      {state?.pinnedParticipant && state.pinnedSourceTrack && (
-        <MediaTrack participant={state?.pinnedParticipant} source={state.pinnedSourceTrack} />
+      {state?.pinnedParticipant && state.pinnedTrackSource && (
+        <MediaTrack participant={state?.pinnedParticipant} source={state.pinnedTrackSource} />
       )}
     </>
   );

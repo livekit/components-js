@@ -23,7 +23,7 @@
   "scripts": {
     "dev": "nodemon -e scss,js -x \"yarn build\"",
     "build": "yarn compile:sass && yarn postcss && yarn generate:types",
-    "compile:sass": "sass scss:.temp/css",
+    "compile:sass": "sass scss:.temp/css --style compressed",
     "postcss": "postcss .temp/css/**/*.css --dir ./dist",
     "generate:types": "yarn generate:types:unprefixed && yarn generate:types:prefixed",
     "generate:types:unprefixed": "cd scss && typed-scss-modules '*.scss' --exportType default --outputFolder ../dist/types_unprefixed --nameFormat kebab --exportTypeName UnprefixedClassNames",

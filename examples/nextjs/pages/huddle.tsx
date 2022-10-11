@@ -1,46 +1,26 @@
 import {
-  ParticipantView,
-  StartAudio,
-  ConnectionQualityIndicator,
+  DeviceSelector,
+  DisconnectButton,
   LiveKitRoom,
   MediaControlButton,
-  TrackSource,
-  Participants,
-  ConnectionState,
-  DisconnectButton,
-  useToken,
-  ParticipantName,
-  MediaMutedIndicator,
-  RoomName,
-  RoomAudioRenderer,
   MediaTrack,
-  isLocal,
-  isRemote,
-  DeviceMenu,
-  useScreenShare,
-  useParticipants,
-  useParticipantContext,
-  DeviceSelector,
-  ScreenShareView,
+  ParticipantName,
+  Participants,
+  ParticipantView,
   PinContext,
-  PinState,
-  PinAction,
   PinContextProvider,
+  PinState,
+  RoomAudioRenderer,
+  StartAudio,
+  useParticipantContext,
+  useParticipants,
+  useScreenShare,
+  useToken,
 } from '@livekit/components-react';
-import { Participant, Room, Track, TrackPublication } from 'livekit-client';
+import { Room, Track } from 'livekit-client';
 
 import type { NextPage } from 'next';
-import Head from 'next/head';
-import React, {
-  createContext,
-  HTMLAttributes,
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from 'react';
+import { HTMLAttributes, useContext, useMemo, useState } from 'react';
 import styles from '../styles/Huddle.module.scss';
 
 const Huddle: NextPage = () => {
@@ -143,12 +123,6 @@ const Huddle: NextPage = () => {
           </div>
         </PinContextProvider>
       </LiveKitRoom>
-      {/* <div className={styles.devInfo}>
-        <p>Dev Info:</p>
-        <ul>
-          <li>Connected: {isConnected ? 'true' : 'false'}</li>
-        </ul>
-      </div> */}
     </main>
   );
 };

@@ -1,1 +1,10 @@
 @import '../../../node_modules/modern-normalize/modern-normalize'; // CSS reset
+
+// custom extensions to modern-normalize
+
+ol,
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}

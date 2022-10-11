@@ -91,7 +91,7 @@ $t-text: fn.css-var-with-sass-fallback('text', $black);
 $t-text-light: fn.css-var-with-sass-fallback('text-light', $white);
 
 // Others
-$t-border-radius: fn.css-var-with-sass-fallback('border-radius', 10%);
+$t-border-radius: fn.css-var-with-sass-fallback('border-radius', 0);
 
 // scss-docs-start theme-colors-map
 $theme-colors: (

@@ -1,4 +1,4 @@
-import { ClassNames } from '@livekit/components-styles/dist/types/styles.css';
+import { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
 import { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
 import { concatMap, map, share } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';

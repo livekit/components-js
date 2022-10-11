@@ -35,7 +35,7 @@ const Huddle: NextPage = () => {
 
   const room = useMemo(() => new Room(), []);
 
-  const { screenShareTrack, allScreenShares } = useScreenShare({ room });
+  const { screenShareTrack } = useScreenShare({ room });
 
   const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
     identity: userIdentity,
@@ -92,7 +92,7 @@ const Huddle: NextPage = () => {
                   </Participants>
                   <Participants
                     filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
-                    filterDependencies={[allScreenShares]}
+                    filterDependencies={[screenShareTrack]}
                   >
                     <CustomParticipantView source={Track.Source.ScreenShare} />
                   </Participants>

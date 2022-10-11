@@ -1,3 +1,5 @@
+@use '../scss/variables' as v;
+
 :root {
-  --border-radius: 20%;
+  #{v.$cp-border-radius}: 20%;
 }

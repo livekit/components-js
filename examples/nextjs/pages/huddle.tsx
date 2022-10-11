@@ -25,6 +25,7 @@ import {
   PinContext,
   PinState,
   PinAction,
+  PinContextProvider,
 } from '@livekit/components-react';
 import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 
@@ -49,67 +50,24 @@ const Huddle: NextPage = () => {
   const userIdentity = params?.get('user') || 'test-user';
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  const [focusedParticipant, setFocusedParticipant] = useState<Participant | undefined>(undefined);
-  const [focusPublication, setFocusPublication] = useState<TrackPublication | undefined>(undefined);
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = useState<Layout>('grid');
 
   const room = useMemo(() => new Room(), []);
 
-  const { hasActiveScreenShare, screenShareTrack, screenShareParticipant, allScreenShares } =
-    useScreenShare({ room });
-
-  useEffect(() => {
-    if (
-      (!screenShareTrack &&
-        focusPublication &&
-        focusPublication.source !== Track.Source.ScreenShare) ||
-      (screenShareTrack && focusPublication === screenShareTrack)
-    ) {
-      return;
-    }
-    console.log('setFocusPublication');
-
-    setFocusPublication(screenShareTrack);
-    setFocusedParticipant(screenShareParticipant);
-  }, [screenShareTrack, screenShareParticipant, focusPublication]);
+  const { screenShareTrack, allScreenShares } = useScreenShare({ room });
 
   const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
     identity: userIdentity,
   });
 
-  function pinReducer(state: PinState, action: PinAction): PinState {
-    console.log(`pinReducer msg:`, action);
-    if (action.msg === 'pinned_participant_was_set') {
-      if (
-        state.pinnedParticipant?.identity === action.participant.identity &&
-        state.pinnedTrackSource === action.source
-      ) {
-        return { ...state, pinnedParticipant: undefined, pinnedTrackSource: undefined };
-      } else {
-        return {
-          ...state,
-          pinnedParticipant: action.participant,
-          pinnedTrackSource: action.source,
-        };
-      }
-    } else if (action.msg === 'focus_was_cleared') {
-      return { ...state, pinnedParticipant: undefined };
-    } else {
-      return { ...state };
-    }
-  }
-  const pinDefaultValue = { pinnedParticipant: undefined };
-  const [pinState, pinDispatch] = useReducer(pinReducer, pinDefaultValue);
-  const pinContextDefault = { dispatch: pinDispatch, state: pinState };
-
-  useEffect(() => {
-    setLayout(pinState.pinnedParticipant ? 'focus' : 'grid');
-  }, [pinState.pinnedParticipant, layout, hasActiveScreenShare, allScreenShares]);
-
   const handleDisconnect = () => {
     setConnect(false);
     setIsConnected(false);
+  };
+
+  const handlePinStateChange = (pinState: PinState) => {
+    setLayout(pinState.pinnedParticipant ? 'focus' : 'grid');
   };
 
   return (
@@ -124,18 +82,11 @@ const Huddle: NextPage = () => {
         video={true}
         audio={true}
       >
-        <PinContext.Provider value={pinContextDefault}>
+        <PinContextProvider onChange={handlePinStateChange}>
           <div className={styles.roomLayout}>
             <div className={styles.headerBar}>
               <ParticipantCount className={styles.participantCount} />
-              {layout === 'focus' && (
-                <button
-                  onClick={() => pinDispatch({ msg: 'focus_was_cleared' })}
-                  className={styles.backToGridViewBtn}
-                >
-                  🔙 to grid view
-                </button>
-              )}
+              {layout === 'focus' && <BackToGridLayoutButton />}
             </div>
 
             {layout === 'grid' ? (
@@ -190,7 +141,7 @@ const Huddle: NextPage = () => {
               <RoomAudioRenderer />
             </div>
           </div>
-        </PinContext.Provider>
+        </PinContextProvider>
       </LiveKitRoom>
       {/* <div className={styles.devInfo}>
         <p>Dev Info:</p>
@@ -199,6 +150,20 @@ const Huddle: NextPage = () => {
         </ul>
       </div> */}
     </main>
+  );
+};
+
+const BackToGridLayoutButton = () => {
+  const { dispatch } = useContext(PinContext);
+  return (
+    <button
+      onClick={() => {
+        if (dispatch) dispatch({ msg: 'focus_was_cleared' });
+      }}
+      className={styles.backToGridViewBtn}
+    >
+      🔙 to grid view
+    </button>
   );
 };
 

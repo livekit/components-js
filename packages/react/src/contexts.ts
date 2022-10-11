@@ -45,7 +45,7 @@ function useMaybeFocusViewContext() {
 
 type PinState = {
   pinnedParticipant?: Participant;
-  pinnedSourceTrack?: Track.Source;
+  pinnedTrackSource?: Track.Source; // TODO: pinnedTrackSource
 };
 type PinAction =
   | {

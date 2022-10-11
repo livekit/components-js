@@ -115,6 +115,7 @@ const Huddle: NextPage = () => {
   return (
     <main className={styles.main}>
       <LiveKitRoom
+        room={room}
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
         connect={true}
@@ -144,7 +145,7 @@ const Huddle: NextPage = () => {
                 </Participants>
                 <Participants
                   filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
-                  filterDependencies={[allScreenShares]}
+                  filterDependencies={[screenShareTrack]}
                 >
                   <CustomParticipantView source={Track.Source.ScreenShare} />
                 </Participants>

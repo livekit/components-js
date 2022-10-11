@@ -39,6 +39,5 @@
     "postcss-variables-prefixer": "^1.2.0",
     "sass": "^1.54.6",
     "typed-scss-modules": "^6.5.0"
-  },
-  "dependencies": {}
+  }
 }

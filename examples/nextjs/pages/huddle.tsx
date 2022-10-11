@@ -22,12 +22,24 @@ import {
   useParticipantContext,
   DeviceSelector,
   ScreenShareView,
+  PinContext,
+  PinState,
+  PinAction,
 } from '@livekit/components-react';
 import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import React, { HTMLAttributes, useEffect, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  HTMLAttributes,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
 import styles from '../styles/Huddle.module.scss';
 
 const Huddle: NextPage = () => {
@@ -44,7 +56,8 @@ const Huddle: NextPage = () => {
 
   const room = useMemo(() => new Room(), []);
 
-  const { screenShareTrack, screenShareParticipant } = useScreenShare({ room });
+  const { hasActiveScreenShare, screenShareTrack, screenShareParticipant, allScreenShares } =
+    useScreenShare({ room });
 
   useEffect(() => {
     if (
@@ -55,6 +68,8 @@ const Huddle: NextPage = () => {
     ) {
       return;
     }
+    console.log('setFocusPublication');
+
     setFocusPublication(screenShareTrack);
     setFocusedParticipant(screenShareParticipant);
   }, [screenShareTrack, screenShareParticipant, focusPublication]);
@@ -62,6 +77,35 @@ const Huddle: NextPage = () => {
   const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
     identity: userIdentity,
   });
+
+  function pinReducer(state: PinState, action: PinAction): PinState {
+    console.log(`pinReducer msg:`, action);
+    if (action.msg === 'pinned_participant_was_set') {
+      if (
+        state.pinnedParticipant?.identity === action.participant.identity &&
+        state.pinnedSourceTrack === action.source
+      ) {
+        return { ...state, pinnedParticipant: undefined, pinnedSourceTrack: undefined };
+      } else {
+        return {
+          ...state,
+          pinnedParticipant: action.participant,
+          pinnedSourceTrack: action.source,
+        };
+      }
+    } else if (action.msg === 'focus_was_cleared') {
+      return { ...state, pinnedParticipant: undefined };
+    } else {
+      return { ...state };
+    }
+  }
+  const pinDefaultValue = { pinnedParticipant: undefined };
+  const [pinState, pinDispatch] = useReducer(pinReducer, pinDefaultValue);
+  const pinContextDefault = { dispatch: pinDispatch, state: pinState };
+
+  useEffect(() => {
+    setLayout(pinState.pinnedParticipant ? 'focus' : 'grid');
+  }, [pinState.pinnedParticipant, layout, hasActiveScreenShare, allScreenShares]);
 
   const handleDisconnect = () => {
     setConnect(false);
@@ -79,54 +123,74 @@ const Huddle: NextPage = () => {
         video={true}
         audio={true}
       >
-        <div className={styles.roomLayout}>
-          <div className={styles.headerBar}>
-            <ParticipantCount className={styles.participantCount} />
-            {layout === 'focus' && (
-              <button onClick={() => setLayout('grid')} className={styles.backToGridViewBtn}>
-                {' '}
-                🔙 to grid view
-              </button>
-            )}
-          </div>
-
-          {layout === 'grid' ? (
-            <div className={styles.gridLayout}>
-              <Participants>
-                <CustomParticipantView />
-              </Participants>
+        <PinContext.Provider value={pinContextDefault}>
+          <div className={styles.roomLayout}>
+            <div className={styles.headerBar}>
+              <ParticipantCount className={styles.participantCount} />
+              {layout === 'focus' && (
+                <button
+                  onClick={() => pinDispatch({ msg: 'focus_was_cleared' })}
+                  className={styles.backToGridViewBtn}
+                >
+                  🔙 to grid view
+                </button>
+              )}
             </div>
-          ) : (
-            <div className={styles.focusLayout}>
-              <div className={styles.screenshareContainer}>
-                <ScreenShareView />
-              </div>
-              <aside>
-                <Participants filter={(ps) => ps.filter((p) => p)}>
+
+            {layout === 'grid' ? (
+              <div className={styles.gridLayout}>
+                <Participants>
                   <CustomParticipantView />
                 </Participants>
-              </aside>
+                <Participants
+                  filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
+                  filterDependencies={[allScreenShares]}
+                >
+                  <CustomParticipantView source={Track.Source.ScreenShare} />
+                </Participants>
+              </div>
+            ) : (
+              <div className={styles.focusLayout}>
+                <div className={styles.screenshareContainer}>
+                  <CustomFocus></CustomFocus>
+                  <CustomScreenShareView />
+                </div>
+                <aside>
+                  <Participants>
+                    <CustomParticipantView />
+                  </Participants>
+                  <Participants
+                    filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
+                    filterDependencies={[allScreenShares]}
+                  >
+                    <CustomParticipantView source={Track.Source.ScreenShare} />
+                  </Participants>
+                </aside>
+              </div>
+            )}
+            <div className={styles.mediaControls}>
+              <div>
+                <MediaControlButton className={styles.audioBtn} source={Track.Source.Microphone} />
+                <MediaControlButton className={styles.videoBtn} source={Track.Source.Camera} />
+                <MediaControlButton
+                  className={styles.screenBtn}
+                  source={Track.Source.ScreenShare}
+                />
+                <DeviceSelectButton />
+                <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
+                <StartAudio label="Start Audio" />
+                <button
+                  onClick={() => {
+                    setLayout(layout === 'focus' ? 'grid' : 'focus');
+                  }}
+                >
+                  Layout: {layout}
+                </button>
+              </div>
+              <RoomAudioRenderer />
             </div>
-          )}
-          <div className={styles.mediaControls}>
-            <div>
-              <MediaControlButton className={styles.audioBtn} source={Track.Source.Microphone} />
-              <MediaControlButton className={styles.videoBtn} source={Track.Source.Camera} />
-              <MediaControlButton className={styles.screenBtn} source={Track.Source.ScreenShare} />
-              <DeviceSelectButton />
-              <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
-              <StartAudio label="Start Audio" />
-              <button
-                onClick={() => {
-                  setLayout(layout === 'focus' ? 'grid' : 'focus');
-                }}
-              >
-                Layout: {layout}
-              </button>
-            </div>
-            <RoomAudioRenderer />
           </div>
-        </div>
+        </PinContext.Provider>
       </LiveKitRoom>
       {/* <div className={styles.devInfo}>
         <p>Dev Info:</p>
@@ -138,10 +202,68 @@ const Huddle: NextPage = () => {
   );
 };
 
-const CustomParticipantView = () => {
+const CustomScreenShareView = () => {
+  const screenEl = useRef(null);
+  const audioEl = useRef(null);
+  const { hasActiveScreenShare } = useScreenShare({ screenEl, audioEl });
+
   return (
-    <ParticipantView className={styles.participantView}>
-      <MediaTrack source={Track.Source.Camera} className={styles.video}></MediaTrack>
+    <div>
+      <video
+        ref={screenEl}
+        style={{
+          width: '100%',
+          height: '100%',
+          display: hasActiveScreenShare ? 'block' : 'none',
+        }}
+      ></video>
+      <audio ref={audioEl}></audio>
+    </div>
+  );
+};
+
+const CustomFocus = () => {
+  const { state } = useContext(PinContext);
+
+  return (
+    <>
+      {state?.pinnedParticipant && state.pinnedSourceTrack && (
+        <MediaTrack participant={state?.pinnedParticipant} source={state.pinnedSourceTrack} />
+      )}
+    </>
+  );
+};
+
+const CustomParticipantView = ({ source }: { source?: Track.Source }) => {
+  const pinContext = useContext(PinContext);
+  const participant = useParticipantContext();
+  const handleParticipantClick = () => {
+    if (pinContext && pinContext.dispatch) {
+      console.log('handleParticipantClick +');
+      pinContext.dispatch({
+        msg: 'pinned_participant_was_set',
+        participant: participant,
+        source:
+          source && source === Track.Source.ScreenShare
+            ? Track.Source.ScreenShare
+            : Track.Source.Camera,
+      });
+    }
+  };
+  return (
+    <ParticipantView
+      participant={participant}
+      onClick={handleParticipantClick}
+      className={styles.participantView}
+    >
+      <MediaTrack
+        source={
+          source && source === Track.Source.ScreenShare
+            ? Track.Source.ScreenShare
+            : Track.Source.Camera
+        }
+        className={styles.video}
+      ></MediaTrack>
       <div className={styles.nameContainer}>
         <img
           className={styles.nameMutedIcon}

@@ -64,12 +64,15 @@
   }
 }
 
-.screenshareContainer {
+.screenShareContainer {
   place-self: center;
-  display: grid;
-  overflow: hidden;
   max-width: 100%;
   max-height: 100%;
+  video {
+    object-fit: contain;
+  }
+}
+.focusView {
 }
 
 .gridLayout {

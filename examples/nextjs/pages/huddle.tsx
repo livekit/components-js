@@ -83,7 +83,7 @@ const Huddle: NextPage = () => {
               </div>
             ) : (
               <div className={styles.focusLayout}>
-                <div className={styles.screenshareContainer}>
+                <div className={styles.screenShareContainer}>
                   <CustomFocus></CustomFocus>
                 </div>
                 <aside>
@@ -147,7 +147,11 @@ const CustomFocus = () => {
   return (
     <>
       {state?.pinnedParticipant && state.pinnedTrackSource && (
-        <MediaTrack participant={state?.pinnedParticipant} source={state.pinnedTrackSource} />
+        <MediaTrack
+          className={styles.focusView}
+          participant={state?.pinnedParticipant}
+          source={state.pinnedTrackSource}
+        />
       )}
     </>
   );

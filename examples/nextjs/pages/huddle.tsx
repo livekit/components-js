@@ -82,22 +82,7 @@ const Huddle: NextPage = () => {
                 </Participants>
               </div>
             ) : (
-              <div className={styles.focusLayout}>
-                <div className={styles.screenShareContainer}>
-                  <CustomFocus></CustomFocus>
-                </div>
-                <aside>
-                  <Participants>
-                    <CustomParticipantView />
-                  </Participants>
-                  <Participants
-                    filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
-                    filterDependencies={[screenShareTrack]}
-                  >
-                    <CustomParticipantView source={Track.Source.ScreenShare} />
-                  </Participants>
-                </aside>
-              </div>
+              <CustomFocusView screenShareTrack={screenShareTrack}></CustomFocusView>
             )}
             <div className={styles.mediaControls}>
               <div>
@@ -124,6 +109,36 @@ const Huddle: NextPage = () => {
         </PinContextProvider>
       </LiveKitRoom>
     </main>
+  );
+};
+const CustomFocusView = ({ screenShareTrack }) => {
+  const { state: pinState } = useContext(PinContext);
+  return (
+    <div className={styles.focusLayout}>
+      <div className={styles.screenShareContainer}>
+        <CustomFocus></CustomFocus>
+      </div>
+      <aside>
+        <Participants>
+          <CustomParticipantView />
+        </Participants>
+        <Participants
+          filter={(ps) =>
+            ps.filter((p) => {
+              console.log(p.identity);
+              console.log({ pinState }, pinState?.pinnedParticipant?.identity);
+
+              return (
+                p.isScreenShareEnabled && pinState?.pinnedTrackSource !== Track.Source.ScreenShare // TODO handle multiple screen shares.
+              );
+            })
+          }
+          filterDependencies={[screenShareTrack]}
+        >
+          <CustomParticipantView source={Track.Source.ScreenShare} />
+        </Participants>
+      </aside>
+    </div>
   );
 };
 

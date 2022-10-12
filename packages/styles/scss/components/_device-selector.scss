@@ -1,4 +1,5 @@
 @use '../variables' as v;
+@use 'button' as button;
 
 .device-selector {
   & > div {
@@ -9,6 +10,7 @@
     li {
       padding: 0.1rem 0.2rem;
       button {
+        @include button.button-reset;
         transition: color 0.2s ease-in-out;
         transition: opacity 0.1s ease-in-out;
       }

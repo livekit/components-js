@@ -1,4 +1,4 @@
-import type { ClassNames } from '@livekit/components-styles/dist/types/styles.css';
+import type { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
 import type { UnprefixedClassNames } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
 import { LocalParticipant, Participant, RemoteParticipant, TrackPublication } from 'livekit-client';
 import { cssPrefix } from './constants';

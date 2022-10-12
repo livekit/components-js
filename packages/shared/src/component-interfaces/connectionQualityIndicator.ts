@@ -1,9 +1,9 @@
 import { Participant } from 'livekit-client';
 import { createConnectionQualityObserver } from '../observables/participant';
-import { ClassNames } from '@livekit/components-styles/dist/types/styles.css';
+import { lkClassName } from '../utils';
 
 export function setupConnectionQualityIndicator(participant: Participant) {
-  const className: ClassNames = 'lk-connection-quality';
+  const className = lkClassName('connection-quality');
   const connectionQualityObserver = createConnectionQualityObserver(participant);
   return { className, connectionQualityObserver };
 }

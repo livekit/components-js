@@ -1,4 +1,4 @@
-import { ClassNames } from '@livekit/components-styles/dist/types/styles.css';
+import { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
 import type { Room } from 'livekit-client';
 
 export function setupDisconnectButton(room: Room) {

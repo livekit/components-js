@@ -1,6 +1,11 @@
 @use 'sass:string';
 
-@function css-var-with-sass-fallback($var-name, $value) {
+@function cp-value-with-sass-fallback($css-var-name, $value) {
   // This function expects that the css custom property (css variable) exists.
-  @return var(--#{string.to-lower-case($var-name)}, $value);
+  @return var(#{$css-var-name}, $value);
+}
+
+@function to-cp($var-name) {
+  // This function expects that the css custom property (css variable) exists.
+  @return (--#{string.to-lower-case($var-name)});
 }

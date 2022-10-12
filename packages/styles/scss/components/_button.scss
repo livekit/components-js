@@ -1,14 +1,22 @@
 @use '../variables' as v;
 
+@mixin button-reset {
+  border: none;
+  background: none;
+}
+
 .button {
   --btn-padding-y: #{v.$s-1};
   --btn-padding-x: #{v.$s-2};
+  --btn-border-radius: #{v.$t-border-radius};
 
   padding: var(--btn-padding-y) var(--btn-padding-x);
   border: v.$s-px v.$t-primary solid;
+  border-radius: var(--btn-border-radius);
   background-color: v.$t-primary;
   cursor: pointer;
   transition: opacity 0.15s ease-in-out;
+  color: v.$t-text-light;
 }
 
 /** active state for toggle buttons **/

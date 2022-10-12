@@ -151,7 +151,7 @@ const BackToGridLayoutButton = () => {
   return (
     <button
       onClick={() => {
-        if (dispatch) dispatch({ msg: 'focus_was_cleared' });
+        if (dispatch) dispatch({ msg: 'clear_pin' });
       }}
       className={styles.backToGridViewBtn}
     >
@@ -183,7 +183,7 @@ const CustomParticipantView = ({ source }: { source?: Track.Source }) => {
     if (pinContext && pinContext.dispatch) {
       console.log('handleParticipantClick +');
       pinContext.dispatch({
-        msg: 'pinned_participant_was_set',
+        msg: 'set_pin',
         participant: participant,
         source:
           source && source === Track.Source.ScreenShare

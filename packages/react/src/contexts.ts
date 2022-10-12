@@ -49,11 +49,11 @@ type PinState = {
 };
 type PinAction =
   | {
-      msg: 'pinned_participant_was_set';
+      msg: 'set_pin';
       participant: Participant;
       source: Track.Source;
     }
-  | { msg: 'focus_was_cleared' };
+  | { msg: 'clear_pin' };
 
 type PinContextType = {
   dispatch?: React.Dispatch<PinAction>;

@@ -4,7 +4,7 @@ import { useScreenShare } from './ScreenShareRenderer';
 
 function pinReducer(state: PinState, action: PinAction): PinState {
   console.log(`pinReducer msg:`, action);
-  if (action.msg === 'pinned_participant_was_set') {
+  if (action.msg === 'set_pin') {
     if (
       state.pinnedParticipant?.identity === action.participant.identity &&
       state.pinnedTrackSource === action.source
@@ -17,7 +17,7 @@ function pinReducer(state: PinState, action: PinAction): PinState {
         pinnedTrackSource: action.source,
       };
     }
-  } else if (action.msg === 'focus_was_cleared') {
+  } else if (action.msg === 'clear_pin') {
     return { ...state, pinnedParticipant: undefined };
   } else {
     return { ...state };
@@ -43,7 +43,7 @@ export const PinContextProvider = ({ onChange, children }: PinContextProviderPro
         return participantExists && participant.isScreenShareEnabled;
       })
     ) {
-      pinDispatch({ msg: 'focus_was_cleared' });
+      pinDispatch({ msg: 'clear_pin' });
     }
   }, [allScreenShares]);
 

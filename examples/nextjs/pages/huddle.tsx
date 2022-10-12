@@ -17,7 +17,7 @@ import {
   useScreenShare,
   useToken,
 } from '@livekit/components-react';
-import { Room, Track } from 'livekit-client';
+import { Room, Track, TrackPublication } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import { HTMLAttributes, useContext, useMemo, useState } from 'react';
@@ -111,7 +111,11 @@ const Huddle: NextPage = () => {
     </main>
   );
 };
-const CustomFocusView = ({ screenShareTrack }: { screenShareTrack: Track }) => {
+const CustomFocusView = ({
+  screenShareTrack,
+}: {
+  screenShareTrack: TrackPublication | undefined;
+}) => {
   const { state: pinState } = useContext(PinContext);
   return (
     <div className={styles.focusLayout}>

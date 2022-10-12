@@ -6,6 +6,5 @@
 }
 
 @function to-cp($var-name) {
-  // This function expects that the css custom property (css variable) exists.
   @return (--#{string.to-lower-case($var-name)});
 }

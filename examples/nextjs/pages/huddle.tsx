@@ -111,7 +111,7 @@ const Huddle: NextPage = () => {
     </main>
   );
 };
-const CustomFocusView = ({ screenShareTrack }) => {
+const CustomFocusView = ({ screenShareTrack }: { screenShareTrack: Track }) => {
   const { state: pinState } = useContext(PinContext);
   return (
     <div className={styles.focusLayout}>

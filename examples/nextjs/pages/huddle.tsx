@@ -17,7 +17,7 @@ import {
   useScreenShare,
   useToken,
 } from '@livekit/components-react';
-import { Room, Track, TrackPublication } from 'livekit-client';
+import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import { HTMLAttributes, useContext, useMemo, useState } from 'react';
@@ -35,7 +35,7 @@ const Huddle: NextPage = () => {
 
   const room = useMemo(() => new Room(), []);
 
-  const { screenShareTrack } = useScreenShare({ room });
+  const { screenShareTrack, allScreenShares } = useScreenShare({ room });
 
   const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
     identity: userIdentity,
@@ -76,7 +76,7 @@ const Huddle: NextPage = () => {
                 </Participants>
                 <Participants
                   filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
-                  filterDependencies={[screenShareTrack]}
+                  filterDependencies={[screenShareTrack, allScreenShares]}
                 >
                   <CustomParticipantView source={Track.Source.ScreenShare} />
                 </Participants>
@@ -111,6 +111,45 @@ const Huddle: NextPage = () => {
     </main>
   );
 };
+
+function isParticipantTrackPinned(
+  participant: Participant,
+  pinState: PinState | undefined,
+  source: Track.Source,
+): boolean {
+  if (pinState === undefined) {
+    console.warn(`pinState not set: `, pinState);
+    return false;
+  }
+
+  if (pinState.pinnedParticipant === undefined || pinState.pinnedTrackSource === undefined) {
+    console.warn(`pinState not set: `, pinState);
+    return false;
+  }
+
+  if (pinState.pinnedTrackSource !== source) {
+    return false;
+  }
+
+  if (pinState.pinnedParticipant.identity === participant.identity) {
+    console.log(`Participant has same identity as pinned.`, pinState);
+    switch (pinState.pinnedTrackSource) {
+      case Track.Source.Camera:
+        return participant.isCameraEnabled;
+        break;
+      case Track.Source.ScreenShare:
+        return participant.isScreenShareEnabled;
+        break;
+
+      default:
+        return false;
+        break;
+    }
+  } else {
+    return false;
+  }
+}
+
 const CustomFocusView = ({
   screenShareTrack,
 }: {
@@ -123,21 +162,23 @@ const CustomFocusView = ({
         <CustomFocus></CustomFocus>
       </div>
       <aside>
-        <Participants>
+        <Participants
+          filter={(ps) =>
+            ps.filter((p) => {
+              return !isParticipantTrackPinned(p, pinState, Track.Source.Camera);
+            })
+          }
+          filterDependencies={[screenShareTrack, pinState]}
+        >
           <CustomParticipantView />
         </Participants>
         <Participants
           filter={(ps) =>
             ps.filter((p) => {
-              console.log(p.identity);
-              console.log({ pinState }, pinState?.pinnedParticipant?.identity);
-
-              return (
-                p.isScreenShareEnabled && pinState?.pinnedTrackSource !== Track.Source.ScreenShare // TODO handle multiple screen shares.
-              );
+              return !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare);
             })
           }
-          filterDependencies={[screenShareTrack]}
+          filterDependencies={[screenShareTrack, pinState]}
         >
           <CustomParticipantView source={Track.Source.ScreenShare} />
         </Participants>

@@ -1,6 +1,6 @@
 @use 'sass:string';
 
-@function cp-value-with-sass-fallback($css-var-name, $value) {
+@function cp-value-with-fallback($css-var-name, $value) {
   // This function expects that the css custom property (css variable) exists.
   @return var(#{$css-var-name}, $value);
 }

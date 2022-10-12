@@ -26,19 +26,19 @@ $_border-radius: 0 !default;
 //
 // Custom Property Definitions
 // Colors
-$cp-primary: fn.to-css-var('primary');
-$cp-secondary: fn.to-css-var('secondary');
-$cp-success: fn.to-css-var('success');
-$cp-info: fn.to-css-var('info');
-$cp-warning: fn.to-css-var('warning');
-$cp-danger: fn.to-css-var('danger');
-$cp-idle: fn.to-css-var('idle');
-$cp-light: fn.to-css-var('light');
-$cp-dark: fn.to-css-var('dark');
-$cp-text: fn.to-css-var('text');
-$cp-text-light: fn.to-css-var('text-light');
+$cp-primary: fn.to-cp('primary');
+$cp-secondary: fn.to-cp('secondary');
+$cp-success: fn.to-cp('success');
+$cp-info: fn.to-cp('info');
+$cp-warning: fn.to-cp('warning');
+$cp-danger: fn.to-cp('danger');
+$cp-idle: fn.to-cp('idle');
+$cp-light: fn.to-cp('light');
+$cp-dark: fn.to-cp('dark');
+$cp-text: fn.to-cp('text');
+$cp-text-light: fn.to-cp('text-light');
 
-$cp-border-radius: fn.to-css-var('border-radius');
+$cp-border-radius: fn.to-cp('border-radius');
 
 // scss-docs-start theme-colors-map
 $theme-options: (
@@ -55,19 +55,19 @@ $theme-options: (
 
 // // Custom Property Values
 // // Colors
-$t-primary: fn.css-var-with-sass-fallback($cp-primary, $_primary);
-$t-secondary: fn.css-var-with-sass-fallback($cp-secondary, $_secondary);
-$t-success: fn.css-var-with-sass-fallback($cp-success, $_success);
-$t-info: fn.css-var-with-sass-fallback($cp-info, $_info);
-$t-warning: fn.css-var-with-sass-fallback($cp-warning, $_warning);
-$t-danger: fn.css-var-with-sass-fallback($cp-danger, $_danger);
-$t-idle: fn.css-var-with-sass-fallback($cp-idle, $_idle);
-$t-light: fn.css-var-with-sass-fallback($cp-light, $_light);
-$t-dark: fn.css-var-with-sass-fallback($cp-dark, $_dark);
-$t-text: fn.css-var-with-sass-fallback($cp-text, $_dark);
-$t-text-light: fn.css-var-with-sass-fallback($cp-text-light, $_light);
+$t-primary: fn.cp-value-with-fallback($cp-primary, $_primary);
+$t-secondary: fn.cp-value-with-fallback($cp-secondary, $_secondary);
+$t-success: fn.cp-value-with-fallback($cp-success, $_success);
+$t-info: fn.cp-value-with-fallback($cp-info, $_info);
+$t-warning: fn.cp-value-with-fallback($cp-warning, $_warning);
+$t-danger: fn.cp-value-with-fallback($cp-danger, $_danger);
+$t-idle: fn.cp-value-with-fallback($cp-idle, $_idle);
+$t-light: fn.cp-value-with-fallback($cp-light, $_light);
+$t-dark: fn.cp-value-with-fallback($cp-dark, $_dark);
+$t-text: fn.cp-value-with-fallback($cp-text, $_dark);
+$t-text-light: fn.cp-value-with-fallback($cp-text-light, $_light);
 
-$t-border-radius: fn.css-var-with-sass-fallback($cp-border-radius, $_border-radius);
+$t-border-radius: fn.cp-value-with-fallback($cp-border-radius, $_border-radius);
 
 $s-0: 0px;
 $s-px: 1px;

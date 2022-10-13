@@ -175,7 +175,10 @@ const CustomFocusView = ({
         <Participants
           filter={(ps) =>
             ps.filter((p) => {
-              return !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare);
+              return (
+                p.isScreenShareEnabled &&
+                !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare)
+              );
             })
           }
           filterDependencies={[screenShareTrack, pinState]}

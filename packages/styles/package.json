@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-styles",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "LiveKit",
   "license": "MIT",
   "main": "dist/styles.css",

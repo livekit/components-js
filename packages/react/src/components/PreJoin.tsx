@@ -165,7 +165,7 @@ export const PreJoin = ({
         </div>
       ) : (
         <div style={{ width: '20rem', height: '11.25rem', backgroundColor: 'red' }}>
-          No Video Track
+          Camera is off
         </div>
       )}
       {localAudioTrack ? (
@@ -175,6 +175,13 @@ export const PreJoin = ({
       ) : (
         <></>
       )}
+      <button onClick={() => setVideoEnabled(!videoEnabled)}>
+        {videoEnabled ? 'Turn off camera' : 'Activate camera'}
+      </button>
+      <button onClick={() => setAudioEnabled(!audioEnabled)}>
+        {audioEnabled ? 'Mute audio' : 'Activate audio'}
+      </button>
+
       <select
         onChange={(value) => {
           const deviceId = value.target.value;
@@ -188,7 +195,6 @@ export const PreJoin = ({
           </option>
         ))}
       </select>
-
       <select
         onChange={(value) => {
           const deviceId = value.target.value;
@@ -214,18 +220,11 @@ export const PreJoin = ({
         />
       </label>
 
-      <button onClick={() => setAudioEnabled(!audioEnabled)}>
-        {audioEnabled ? 'Mute audio' : 'Activate audio'}
-      </button>
-
-      <button onClick={() => setVideoEnabled(!videoEnabled)}>
-        {videoEnabled ? 'Turn off camera' : 'Activate camera'}
-      </button>
       <button onClick={handleJoin} disabled={!isValid}>
         Join
       </button>
 
-      <h1>User Selection:</h1>
+      <strong>User Choices:</strong>
       <ul style={{ overflow: 'hidden', maxWidth: '15rem' }}>
         <li>Username: {`${userChoices.username}`}</li>
         <li>Video Enabled: {`${userChoices.videoEnabled}`}</li>

@@ -1,5 +1,5 @@
 import type { Room, Participant, Track } from 'livekit-client';
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useReducer } from 'react';
 
 const ParticipantContext = createContext<Participant | undefined>(undefined);
 
@@ -43,6 +43,24 @@ function useMaybeFocusViewContext() {
   return ctx;
 }
 
+type PinState = {
+  pinnedParticipant?: Participant;
+  pinnedTrackSource?: Track.Source;
+};
+type PinAction =
+  | {
+      msg: 'set_pin';
+      participant: Participant;
+      source: Track.Source;
+    }
+  | { msg: 'clear_pin' };
+
+type PinContextType = {
+  dispatch?: React.Dispatch<PinAction>;
+  state?: PinState;
+};
+const PinContext = createContext<PinContextType>({});
+
 export {
   RoomContext,
   useRoomContext,
@@ -53,4 +71,7 @@ export {
   FocusViewContext,
   useMaybeFocusViewContext,
   FocusViewState,
+  PinState,
+  PinAction,
+  PinContext,
 };

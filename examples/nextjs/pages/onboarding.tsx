@@ -1,4 +1,4 @@
-import { LiveKitRoom, useToken } from '@livekit/components-react';
+import { LiveKitRoom, Onboarding, useToken } from '@livekit/components-react';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -23,7 +23,18 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <LiveKitRoom token={token} serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL} video={true} />
+        <Onboarding
+          defaults={{
+            username: 'test',
+            videoEnabled: false,
+            videoDeviceId: 'b7f4d1b0500e15d02da15fd8d0f174c0a029944f5d1c5216bdf2bb14cb6ec0cf',
+          }}
+          onSubmit={(values) => {
+            console.log('Joining with: ', values);
+          }}
+        ></Onboarding>
+
+        {/* <LiveKitRoom token={token} serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL} video={true} /> */}
       </main>
     </div>
   );

@@ -1,4 +1,4 @@
-import { LiveKitRoom, Onboarding, useToken } from '@livekit/components-react';
+import { LiveKitRoom, PreJoin, useToken } from '@livekit/components-react';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -23,7 +23,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <Onboarding
+        <PreJoin
           defaults={{
             username: 'test',
             videoEnabled: false,
@@ -32,7 +32,7 @@ const Home: NextPage = () => {
           onSubmit={(values) => {
             console.log('Joining with: ', values);
           }}
-        ></Onboarding>
+        ></PreJoin>
 
         {/* <LiveKitRoom token={token} serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL} video={true} /> */}
       </main>

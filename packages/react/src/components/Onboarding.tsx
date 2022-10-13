@@ -23,17 +23,17 @@ const DEFAULT_USER_CHOICES = {
   audioDeviceId: '',
 };
 
-type OnboardingProps = {
+type PreJoinProps = {
   defaults?: Partial<LocalUserChoices>;
   onValidate?: (values: LocalUserChoices) => boolean;
   onSubmit?: (values: LocalUserChoices) => void;
 };
 
-export const Onboarding = ({
+export const PreJoin = ({
   defaults = DEFAULT_USER_CHOICES,
   onValidate,
   onSubmit,
-}: OnboardingProps) => {
+}: PreJoinProps) => {
   const [userChoices, setUserChoices] = useState(DEFAULT_USER_CHOICES);
   const [username, setUsername] = useState(defaults.username ?? DEFAULT_USER_CHOICES.username);
   const [videoEnabled, setVideoEnabled] = useState<boolean>(

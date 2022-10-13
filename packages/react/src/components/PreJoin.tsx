@@ -55,6 +55,7 @@ export const PreJoin = ({
   const audioEl = useRef(null);
   const [localVideoTrack, setLocalVideoTrack] = useState<LocalVideoTrack>();
   const [localAudioTrack, setLocalAudioTrack] = useState<LocalAudioTrack>();
+  const [isValid, setIsValid] = useState<boolean>();
 
   useEffect(() => {
     updateMediaDeviceList();
@@ -81,13 +82,15 @@ export const PreJoin = ({
   }, [localVideoTrack, videoEl.current, selectedVideoDevice]);
 
   useEffect(() => {
-    setUserChoices({
+    const newUserChoices = {
       username: username,
       videoEnabled: videoEnabled,
       audioEnabled: audioEnabled,
       videoDeviceId: selectedVideoDevice?.deviceId ?? '',
       audioDeviceId: selectedAudioDevice?.deviceId ?? '',
-    });
+    };
+    setUserChoices(newUserChoices);
+    setIsValid(handleValidation(newUserChoices));
   }, [username, videoEnabled, audioEnabled, selectedAudioDevice, selectedVideoDevice]);
 
   async function updateMediaDeviceList() {
@@ -127,7 +130,7 @@ export const PreJoin = ({
   }
 
   function handleJoin() {
-    if (handleValidation()) {
+    if (handleValidation(userChoices)) {
       if (typeof onSubmit === 'function') {
         onSubmit(userChoices);
       }
@@ -136,11 +139,11 @@ export const PreJoin = ({
     }
   }
 
-  function handleValidation(): boolean {
+  function handleValidation(values: LocalUserChoices): boolean {
     if (typeof onValidate === 'function') {
-      return onValidate(userChoices);
+      return onValidate(values);
     } else {
-      return userChoices.username !== '';
+      return values.username !== '';
     }
   }
   return (
@@ -202,7 +205,17 @@ export const PreJoin = ({
         />
       </label>
 
-      <button onClick={handleJoin}>Join</button>
+      <button onClick={() => setAudioEnabled(!audioEnabled)}>
+        {audioEnabled ? 'Mute audio' : 'Activate audio'}
+      </button>
+
+      <button onClick={() => setVideoEnabled(!videoEnabled)}>
+        {audioEnabled ? 'Turn off camera' : 'Activate camera'}
+      </button>
+
+      <button onClick={handleJoin} disabled={!isValid}>
+        Join
+      </button>
 
       <h1>User Selection:</h1>
       <ul>

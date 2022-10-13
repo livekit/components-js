@@ -66,15 +66,26 @@ export const PreJoin = ({
   }, []);
 
   useEffect(() => {
-    createLocalVideoTrack({
-      deviceId: selectedVideoDevice?.deviceId,
-      resolution: VideoPresets.h720.resolution,
-    }).then((track) => setLocalVideoTrack(track));
-  }, [selectedVideoDevice]);
+    if (videoEnabled) {
+      createLocalVideoTrack({
+        deviceId: selectedVideoDevice?.deviceId,
+        resolution: VideoPresets.h720.resolution,
+      }).then((track) => setLocalVideoTrack(track));
+    } else {
+      localVideoTrack?.detach();
+      setLocalVideoTrack(undefined);
+    }
+  }, [selectedVideoDevice, videoEnabled]);
+
   useEffect(() => {
-    createLocalAudioTrack({
-      deviceId: selectedAudioDevice?.deviceId,
-    }).then((track) => setLocalAudioTrack(track));
+    if (audioEnabled) {
+      createLocalAudioTrack({
+        deviceId: selectedAudioDevice?.deviceId,
+      }).then((track) => setLocalAudioTrack(track));
+    } else {
+      localAudioTrack?.detach();
+      setLocalAudioTrack(undefined);
+    }
   }, [selectedAudioDevice]);
 
   useEffect(() => {
@@ -147,7 +158,7 @@ export const PreJoin = ({
     }
   }
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       {localVideoTrack ? (
         <div>
           <video ref={videoEl} style={{ width: '20rem', height: 'auto' }} />
@@ -158,14 +169,13 @@ export const PreJoin = ({
         </div>
       )}
       {localAudioTrack ? (
-        <div>
+        <div style={{ display: 'none' }}>
           <audio ref={audioEl} style={{ width: '20rem', height: 'auto' }} />
         </div>
       ) : (
-        <div style={{ width: '20rem', height: '11.25rem', backgroundColor: 'red' }}></div>
+        <></>
       )}
       <select
-        className="select-css"
         onChange={(value) => {
           const deviceId = value.target.value;
           setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId));
@@ -180,7 +190,6 @@ export const PreJoin = ({
       </select>
 
       <select
-        className="select-css"
         onChange={(value) => {
           const deviceId = value.target.value;
           setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId));
@@ -210,15 +219,14 @@ export const PreJoin = ({
       </button>
 
       <button onClick={() => setVideoEnabled(!videoEnabled)}>
-        {audioEnabled ? 'Turn off camera' : 'Activate camera'}
+        {videoEnabled ? 'Turn off camera' : 'Activate camera'}
       </button>
-
       <button onClick={handleJoin} disabled={!isValid}>
         Join
       </button>
 
       <h1>User Selection:</h1>
-      <ul>
+      <ul style={{ overflow: 'hidden', maxWidth: '15rem' }}>
         <li>Username: {`${userChoices.username}`}</li>
         <li>Video Enabled: {`${userChoices.videoEnabled}`}</li>
         <li>Audio Enabled: {`${userChoices.audioEnabled}`}</li>

@@ -78,7 +78,7 @@ const Huddle: NextPage = () => {
                   filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
                   filterDependencies={[screenShareTrack, allScreenShares]}
                 >
-                  <CustomParticipantView source={Track.Source.ScreenShare} />
+                  <CustomScreenShareView source={Track.Source.ScreenShare} />
                 </Participants>
               </div>
             ) : (
@@ -175,12 +175,15 @@ const CustomFocusView = ({
         <Participants
           filter={(ps) =>
             ps.filter((p) => {
-              return !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare);
+              return (
+                p.isScreenShareEnabled &&
+                !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare)
+              );
             })
           }
           filterDependencies={[screenShareTrack, pinState]}
         >
-          <CustomParticipantView source={Track.Source.ScreenShare} />
+          <CustomScreenShareView source={Track.Source.ScreenShare} />
         </Participants>
       </aside>
     </div>
@@ -217,6 +220,42 @@ const CustomFocus = () => {
   );
 };
 
+const CustomScreenShareView = ({ source }: { source?: Track.Source }) => {
+  const pinContext = useContext(PinContext);
+  const participant = useParticipantContext();
+  const handleParticipantClick = () => {
+    if (pinContext && pinContext.dispatch) {
+      console.log('handleParticipantClick +');
+      pinContext.dispatch({
+        msg: 'set_pin',
+        participant: participant,
+        source: Track.Source.ScreenShare,
+      });
+    }
+  };
+
+  return (
+    <ParticipantView
+      participant={participant}
+      onClick={handleParticipantClick}
+      className={styles.participantView}
+    >
+      <MediaTrack
+        source={
+          source && source === Track.Source.ScreenShare
+            ? Track.Source.ScreenShare
+            : Track.Source.Camera
+        }
+        className={styles.video}
+      ></MediaTrack>
+      <div className={styles.screenShareBanner}>
+        <ParticipantName style={{ display: 'inline' }} />
+        <span>Screen share</span>
+      </div>
+    </ParticipantView>
+  );
+};
+
 const CustomParticipantView = ({ source }: { source?: Track.Source }) => {
   const pinContext = useContext(PinContext);
   const participant = useParticipantContext();
@@ -226,10 +265,7 @@ const CustomParticipantView = ({ source }: { source?: Track.Source }) => {
       pinContext.dispatch({
         msg: 'set_pin',
         participant: participant,
-        source:
-          source && source === Track.Source.ScreenShare
-            ? Track.Source.ScreenShare
-            : Track.Source.Camera,
+        source: Track.Source.Camera,
       });
     }
   };

@@ -269,3 +269,23 @@
     }
   }
 }
+
+.screenShareBanner {
+  background-color: whitesmoke;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: max(3rem, 18%);
+  width: 100%;
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  span {
+    text-decoration: none;
+  }
+
+  span:nth-child(2) {
+    color: gray;
+  }
+}

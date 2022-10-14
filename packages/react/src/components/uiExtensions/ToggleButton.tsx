@@ -1,5 +1,6 @@
 import { mergeProps } from 'react-aria';
 import React, { HTMLAttributes, useEffect, useState } from 'react';
+import { lkClassName } from '@livekit/components-core';
 
 export interface ToggleProps extends Omit<HTMLAttributes<HTMLButtonElement>, 'onChange'> {
   toggle?: () => void;
@@ -17,6 +18,7 @@ export const useToggle = ({ onChange, initialState, ...rest }: ToggleProps) => {
   const buttonProps = mergeProps(rest, {
     onClick: () => setIsEnabled(!isEnabled),
     'aria-pressed': isEnabled,
+    className: lkClassName('button'),
   });
 
   return { buttonProps };

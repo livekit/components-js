@@ -1,19 +1,15 @@
-import { LiveKitRoom, PreJoin, useToken } from '@livekit/components-react';
+import { LiveKitRoom, PreJoin, LocalUserChoices, useToken } from '@livekit/components-react';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { useEffect, useState } from 'react';
 import styles from '../styles/OldIndex.module.css';
 
 const Home: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
-
   const roomName = params?.get('room') ?? 'test-room';
-  const userIdentity = params?.get('user') ?? 'test-user';
+  const [preJoinChoices, setPreJoinChoices] = useState<LocalUserChoices | undefined>(undefined);
 
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    identity: userIdentity,
-    name: 'myname',
-  });
   return (
     <div className={styles.container}>
       <Head>
@@ -23,22 +19,48 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <PreJoin
-          defaults={{
-            username: '',
-            videoEnabled: true,
-            audioEnabled: false,
-            videoDeviceId: 'b7f4d1b0500e15d02da15fd8d0f174c0a029944f5d1c5216bdf2bb14cb6ec0cf',
-          }}
-          onSubmit={(values) => {
-            console.log('Joining with: ', values);
-          }}
-        ></PreJoin>
-
-        {/* <LiveKitRoom token={token} serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL} video={true} /> */}
+        {preJoinChoices ? (
+          <>
+            <LiveKitPage roomName={roomName} userChoices={preJoinChoices}></LiveKitPage>
+            <button
+              onClick={() => {
+                setPreJoinChoices(undefined);
+              }}
+            >
+              Back
+            </button>
+          </>
+        ) : (
+          <PreJoin
+            defaults={{
+              username: '',
+              videoEnabled: true,
+              audioEnabled: false,
+              videoDeviceId: 'b7f4d1b0500e15d02da15fd8d0f174c0a029944f5d1c5216bdf2bb14cb6ec0cf',
+            }}
+            onSubmit={(values) => {
+              console.log('Joining with: ', values);
+              setPreJoinChoices(values);
+            }}
+          ></PreJoin>
+        )}
       </main>
     </div>
   );
 };
 
 export default Home;
+
+type LiveKitPageProps = {
+  userChoices: LocalUserChoices;
+  roomName: string;
+};
+const LiveKitPage = ({ roomName, userChoices }: LiveKitPageProps) => {
+  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
+    identity: userChoices.username,
+    name: userChoices.username,
+  });
+  return (
+    <LiveKitRoom token={token} serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL} video={true} />
+  );
+};

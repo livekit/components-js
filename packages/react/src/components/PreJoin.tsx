@@ -7,7 +7,7 @@ import {
 } from 'livekit-client';
 import React, { useEffect, useRef, useState } from 'react';
 
-type LocalUserChoices = {
+export type LocalUserChoices = {
   username: string;
   videoEnabled: boolean;
   audioEnabled: boolean;

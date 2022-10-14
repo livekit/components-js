@@ -85,8 +85,8 @@ const ActiveRoom = ({ roomName, userChoices }: ActiveRoomProps) => {
     >
       <button onClick={() => setShowChat(!showChat)}>{showChat ? 'Hide Chat' : 'Show Chat'}</button>
       <div style={{ display: 'flex' }}>
-        <DefaultRoomView />
         <Chat style={{ display: showChat ? 'block' : 'none', width: '20rem' }}></Chat>
+        <DefaultRoomView />
       </div>
     </LiveKitRoom>
   );

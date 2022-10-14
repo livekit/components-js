@@ -10,13 +10,17 @@ import { AudioCaptureOptions, VideoCaptureOptions } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 
 const Home: NextPage = () => {
-  const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
-  const roomName = params?.get('room') ?? 'test-room';
-  const [preJoinChoices, setPreJoinChoices] = useState<LocalUserChoices | undefined>(undefined);
+  const router = useRouter();
+  const { name: roomName } = router.query;
 
+  const [preJoinChoices, setPreJoinChoices] = useState<LocalUserChoices | undefined>(undefined);
+  if (!roomName || Array.isArray(roomName)) {
+    return <h2>no room param passed</h2>;
+  }
   return (
     <div>
       <Head>
@@ -82,7 +86,7 @@ const ActiveRoom = ({ roomName, userChoices }: ActiveRoomProps) => {
       <button onClick={() => setShowChat(!showChat)}>{showChat ? 'Hide Chat' : 'Show Chat'}</button>
       <div style={{ display: 'flex' }}>
         <DefaultRoomView />
-        {showChat && <Chat style={{ width: '20rem' }}></Chat>}
+        <Chat style={{ display: showChat ? 'block' : 'none', width: '20rem' }}></Chat>
       </div>
     </LiveKitRoom>
   );

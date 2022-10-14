@@ -1,8 +1,9 @@
 import { LiveKitRoom, PreJoin, LocalUserChoices, useToken } from '@livekit/components-react';
+import { AudioCaptureOptions, VideoCaptureOptions } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from '../styles/OldIndex.module.css';
 
 const Home: NextPage = () => {
@@ -24,7 +25,7 @@ const Home: NextPage = () => {
             <LiveKitPage roomName={roomName} userChoices={preJoinChoices}></LiveKitPage>
             <button
               onClick={() => {
-                setPreJoinChoices(undefined);
+                location.reload();
               }}
             >
               Back
@@ -60,7 +61,26 @@ const LiveKitPage = ({ roomName, userChoices }: LiveKitPageProps) => {
     identity: userChoices.username,
     name: userChoices.username,
   });
+
+  const videoOptions = useMemo((): VideoCaptureOptions => {
+    return {
+      deviceId: userChoices.videoDeviceId ?? undefined,
+    };
+  }, [userChoices]);
+
+  const audioOptions = useMemo((): AudioCaptureOptions => {
+    return {
+      deviceId: userChoices.audioDeviceId ?? undefined,
+    };
+  }, [userChoices]);
+
   return (
-    <LiveKitRoom token={token} serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL} video={true} />
+    <LiveKitRoom
+      token={token}
+      serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
+      options={{ videoCaptureDefaults: videoOptions, audioCaptureDefaults: audioOptions }}
+      video={userChoices.videoEnabled}
+      audio={userChoices.audioEnabled}
+    />
   );
 };

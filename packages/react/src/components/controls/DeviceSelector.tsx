@@ -64,7 +64,7 @@ export function DeviceSelector({ kind, heading = '', ...props }: DeviceSelectorP
 export const DeviceSelectButton = (props: HTMLAttributes<HTMLDivElement>) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div style={{ position: 'relative', flexShrink: 0 }}>
+    <div {...props} style={{ position: 'relative', flexShrink: 0 }}>
       <button onClick={() => setIsOpen(!isOpen)} />
       {isOpen && (
         <div

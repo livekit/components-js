@@ -87,6 +87,7 @@ export function CarouselView({
   ...props
 }: CarouselProps) {
   const { state: pinState } = useContext(PinContext);
+  const sortedParticipants = participants ?? useSortedParticipants();
   return (
     <aside {...props}>
       {showScreenShares && (
@@ -96,7 +97,7 @@ export function CarouselView({
               return !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare);
             })
           }
-          filterDependencies={[pinState]}
+          filterDependencies={[pinState, sortedParticipants]}
         >
           {props.children ?? (
             <ParticipantView

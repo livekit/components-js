@@ -11,6 +11,8 @@ type DeviceMenuProps = React.HTMLAttributes<HTMLElement> & {
 };
 
 export const useMediaDevices = (kind: MediaDeviceKind) => {
+  const isSSR = typeof window === 'undefined';
+  if (isSSR) return { devices: [] };
   const deviceObserver = useMemo(() => createMediaDeviceObserver(kind), [kind]);
   const devices = useObservableState(deviceObserver, []);
   return { devices };

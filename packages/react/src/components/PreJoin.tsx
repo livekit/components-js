@@ -3,12 +3,10 @@ import {
   createLocalVideoTrack,
   LocalAudioTrack,
   LocalVideoTrack,
-  Track,
   VideoPresets,
 } from 'livekit-client';
 import React, { useEffect, useRef, useState } from 'react';
 import { useMediaDevices } from './controls/DeviceMenu';
-import { MediaControlButton } from './controls/MediaControlButton';
 import { ToggleButton } from './uiExtensions';
 
 export type LocalUserChoices = {

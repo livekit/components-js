@@ -1,3 +1,4 @@
+import { Track } from 'livekit-client';
 import React, { ReactNode, useEffect, useReducer } from 'react';
 import { PinAction, PinContext, PinState, useRoomContext } from '../contexts';
 import { useScreenShare } from './ScreenShareRenderer';
@@ -24,6 +25,13 @@ function pinReducer(state: PinState, action: PinAction): PinState {
   }
 }
 
+export function createNewPinContext() {
+  const pinDefaultValue = { pinnedParticipant: undefined };
+  const [pinState, pinDispatch] = useReducer(pinReducer, pinDefaultValue);
+  const pinContextValue = { dispatch: pinDispatch, state: pinState };
+  return pinContextValue;
+}
+
 type PinContextProviderProps = {
   children?: ReactNode | ReactNode[];
   onChange?: (pinState: PinState) => void;
@@ -34,18 +42,18 @@ export const PinContextProvider = ({ onChange, children }: PinContextProviderPro
   const pinDefaultValue = { pinnedParticipant: undefined };
   const [pinState, pinDispatch] = useReducer(pinReducer, pinDefaultValue);
   const pinContextDefault = { dispatch: pinDispatch, state: pinState };
-  const { allScreenShares } = useScreenShare({ room });
+  const { screenShareParticipant } = useScreenShare({ room });
   useEffect(() => {
-    // Clear pin state if screen share track stopped or is gone.
-    if (
-      !allScreenShares.some(({ participant }) => {
-        const participantExists = participant.identity === pinState.pinnedParticipant?.identity;
-        return participantExists && participant.isScreenShareEnabled;
-      })
-    ) {
+    if (screenShareParticipant) {
+      pinDispatch({
+        msg: 'set_pin',
+        participant: screenShareParticipant,
+        source: Track.Source.ScreenShare,
+      });
+    } else {
       pinDispatch({ msg: 'clear_pin' });
     }
-  }, [allScreenShares]);
+  }, [screenShareParticipant]);
 
   useEffect(() => {
     if (onChange) onChange(pinState);

@@ -1,0 +1,15 @@
+.main {
+  display: grid;
+  place-content: center;
+  min-height: 100vh;
+
+  h1 {
+    font-size: 2rem;
+  }
+  ul {
+    list-style: disc;
+    li {
+      padding-left: 1rem;
+    }
+  }
+}

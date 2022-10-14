@@ -27,12 +27,14 @@ type PreJoinProps = {
   defaults?: Partial<LocalUserChoices>;
   onValidate?: (values: LocalUserChoices) => boolean;
   onSubmit?: (values: LocalUserChoices) => void;
+  debug?: boolean;
 };
 
 export const PreJoin = ({
   defaults = DEFAULT_USER_CHOICES,
   onValidate,
   onSubmit,
+  debug,
 }: PreJoinProps) => {
   const [userChoices, setUserChoices] = useState(DEFAULT_USER_CHOICES);
   const [username, setUsername] = useState(defaults.username ?? DEFAULT_USER_CHOICES.username);
@@ -223,15 +225,18 @@ export const PreJoin = ({
       <button onClick={handleJoin} disabled={!isValid}>
         Join
       </button>
-
-      <strong>User Choices:</strong>
-      <ul style={{ overflow: 'hidden', maxWidth: '15rem' }}>
-        <li>Username: {`${userChoices.username}`}</li>
-        <li>Video Enabled: {`${userChoices.videoEnabled}`}</li>
-        <li>Audio Enabled: {`${userChoices.audioEnabled}`}</li>
-        <li>Video Device: {`${userChoices.videoDeviceId}`}</li>
-        <li>Audio Device: {`${userChoices.audioDeviceId}`}</li>
-      </ul>
+      {debug && (
+        <>
+          <strong>User Choices:</strong>
+          <ul style={{ overflow: 'hidden', maxWidth: '15rem' }}>
+            <li>Username: {`${userChoices.username}`}</li>
+            <li>Video Enabled: {`${userChoices.videoEnabled}`}</li>
+            <li>Audio Enabled: {`${userChoices.audioEnabled}`}</li>
+            <li>Video Device: {`${userChoices.videoDeviceId}`}</li>
+            <li>Audio Device: {`${userChoices.audioDeviceId}`}</li>
+          </ul>
+        </>
+      )}
     </div>
   );
 };

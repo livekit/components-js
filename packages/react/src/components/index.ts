@@ -15,6 +15,8 @@ export * from './FocusViewRenderer';
 export * from './participant/MediaTrack';
 export * from './layout/FocusView';
 export * from './layout/GridView';
+export * from './layout/DefaultRoomView';
+export * from './layout/DefaultControls';
 export * from './controls/DeviceSelector';
 export * from './Chat';
 export * from './controls/StartAudio';

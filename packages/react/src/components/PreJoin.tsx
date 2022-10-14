@@ -3,9 +3,13 @@ import {
   createLocalVideoTrack,
   LocalAudioTrack,
   LocalVideoTrack,
+  Track,
   VideoPresets,
 } from 'livekit-client';
 import React, { useEffect, useRef, useState } from 'react';
+import { useMediaDevices } from './controls/DeviceMenu';
+import { MediaControlButton } from './controls/MediaControlButton';
+import { ToggleButton } from './uiExtensions';
 
 export type LocalUserChoices = {
   username: string;
@@ -51,21 +55,14 @@ export const PreJoin = ({
     undefined,
   );
 
-  const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
-  const [audioDevices, setAudioDevices] = useState<MediaDeviceInfo[]>([]);
+  const { devices: videoDevices } = useMediaDevices('videoinput');
+  const { devices: audioDevices } = useMediaDevices('audioinput');
+
   const videoEl = useRef(null);
   const audioEl = useRef(null);
   const [localVideoTrack, setLocalVideoTrack] = useState<LocalVideoTrack>();
   const [localAudioTrack, setLocalAudioTrack] = useState<LocalAudioTrack>();
   const [isValid, setIsValid] = useState<boolean>();
-
-  useEffect(() => {
-    updateMediaDeviceList();
-    navigator.mediaDevices.ondevicechange = updateMediaDeviceList;
-    return () => {
-      navigator.mediaDevices.removeEventListener('ondevicechange', updateMediaDeviceList);
-    };
-  }, []);
 
   useEffect(() => {
     if (videoEnabled) {
@@ -88,7 +85,7 @@ export const PreJoin = ({
       localAudioTrack?.detach();
       setLocalAudioTrack(undefined);
     }
-  }, [selectedAudioDevice]);
+  }, [selectedAudioDevice, audioEnabled]);
 
   useEffect(() => {
     if (videoEl.current) localVideoTrack?.attach(videoEl.current);
@@ -105,42 +102,6 @@ export const PreJoin = ({
     setUserChoices(newUserChoices);
     setIsValid(handleValidation(newUserChoices));
   }, [username, videoEnabled, audioEnabled, selectedAudioDevice, selectedVideoDevice]);
-
-  async function updateMediaDeviceList() {
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    updateDropdownWhileRespectingCurrentlySelectedDevices(devices);
-  }
-
-  function updateDropdownWhileRespectingCurrentlySelectedDevices(devices: MediaDeviceInfo[]) {
-    /** Video */
-    const _videoDevices = devices.filter((device) => device.kind === 'videoinput');
-    setVideoDevices(_videoDevices);
-    if (_videoDevices) {
-      const foundDevice = _videoDevices.find(
-        (device) => device.deviceId === (selectedVideoDevice?.deviceId ?? defaults.videoDeviceId),
-      );
-      if (foundDevice) {
-        setSelectedVideoDevice(foundDevice);
-      } else {
-        setSelectedVideoDevice(_videoDevices[0]);
-      }
-    }
-    // /** Audio */
-    const _audioDevices = devices
-      .filter((device) => device.kind === 'audioinput')
-      .filter((device) => device.deviceId !== 'default');
-    setAudioDevices(_audioDevices);
-    if (_audioDevices) {
-      const foundDevice = _audioDevices.find(
-        (device) => device.deviceId === (selectedAudioDevice?.deviceId ?? defaults.audioDeviceId),
-      );
-      if (foundDevice) {
-        setSelectedAudioDevice(foundDevice);
-      } else {
-        setSelectedAudioDevice(_audioDevices[0]);
-      }
-    }
-  }
 
   function handleJoin() {
     if (handleValidation(userChoices)) {
@@ -177,12 +138,13 @@ export const PreJoin = ({
       ) : (
         <></>
       )}
-      <button onClick={() => setVideoEnabled(!videoEnabled)}>
-        {videoEnabled ? 'Turn off camera' : 'Activate camera'}
-      </button>
-      <button onClick={() => setAudioEnabled(!audioEnabled)}>
-        {audioEnabled ? 'Mute audio' : 'Activate audio'}
-      </button>
+
+      <ToggleButton onClick={() => setVideoEnabled(!videoEnabled)}>
+        {videoEnabled ? 'Disable camera' : 'Enable camera'}
+      </ToggleButton>
+      <ToggleButton onClick={() => setAudioEnabled(!audioEnabled)}>
+        {audioEnabled ? 'Mute microphone' : 'Enable microphone'}
+      </ToggleButton>
 
       <select
         onChange={(value) => {

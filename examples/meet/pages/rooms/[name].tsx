@@ -32,7 +32,7 @@ const Home: NextPage = () => {
             defaults={{
               username: '',
               videoEnabled: true,
-              audioEnabled: false,
+              audioEnabled: true,
               videoDeviceId: 'b7f4d1b0500e15d02da15fd8d0f174c0a029944f5d1c5216bdf2bb14cb6ec0cf',
             }}
             onSubmit={(values) => {

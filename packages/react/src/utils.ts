@@ -1,7 +1,8 @@
-import { Participant, TrackPublication, LocalParticipant } from 'livekit-client';
+import { Participant, TrackPublication, LocalParticipant, Track } from 'livekit-client';
 import React, { HTMLAttributes, ReactNode, useEffect, useState } from 'react';
 import { mergeProps as mergePropsReactAria } from 'react-aria';
 import { Observable } from 'rxjs';
+import { PinState } from './contexts';
 
 interface LKEnhanceProps {
   participant?: Participant;
@@ -126,6 +127,44 @@ function cloneSingleChild(
   });
 }
 
+function isParticipantTrackPinned(
+  participant: Participant,
+  pinState: PinState | undefined,
+  source: Track.Source,
+): boolean {
+  if (pinState === undefined) {
+    console.warn(`pinState not set: `, pinState);
+    return false;
+  }
+
+  if (pinState.pinnedParticipant === undefined || pinState.pinnedTrackSource === undefined) {
+    console.warn(`pinState not set: `, pinState);
+    return false;
+  }
+
+  if (pinState.pinnedTrackSource !== source) {
+    return false;
+  }
+
+  if (pinState.pinnedParticipant.identity === participant.identity) {
+    console.log(`Participant has same identity as pinned.`, pinState);
+    switch (pinState.pinnedTrackSource) {
+      case Track.Source.Camera:
+        return participant.isCameraEnabled;
+        break;
+      case Track.Source.ScreenShare:
+        return participant.isScreenShareEnabled;
+        break;
+
+      default:
+        return false;
+        break;
+    }
+  } else {
+    return false;
+  }
+}
+
 export {
   mergeProps,
   enhanceProps,
@@ -134,4 +173,5 @@ export {
   useObservableState,
   sortParticipantsByVolume,
   cloneSingleChild,
+  isParticipantTrackPinned,
 };

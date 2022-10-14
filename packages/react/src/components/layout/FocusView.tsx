@@ -1,82 +1,52 @@
 import { Participant, Track } from 'livekit-client';
-import React, { createContext, HTMLAttributes, ReactNode, useEffect, useState } from 'react';
-import {
-  FocusViewContext,
-  FocusViewState,
-  ParticipantContext,
-  useMaybeFocusViewContext,
-} from '../../contexts';
-import { cloneSingleChild, mergeProps } from '../../utils';
-import { TrackSource } from '../controls/MediaControlButton';
+import React, { HTMLAttributes, useContext, useEffect } from 'react';
+import { PinContext } from '../../contexts';
+import { isParticipantTrackPinned, mergeProps } from '../../utils';
 import { MediaTrack } from '../participant/MediaTrack';
 import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
-import { ParticipantName } from '../participant/ParticipantName';
-import { useParticipants, useSortedParticipants } from '../Participants';
+import { Participants, useSortedParticipants } from '../Participants';
 
 interface FocusViewContainerProps extends HTMLAttributes<HTMLDivElement> {
   focusParticipant?: Participant;
   focusTrackSource?: Track.Source;
   participants?: Array<Participant>;
-  showPiP?: boolean;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
 
 // TODO use (loudest) participant in focus, if no focusParticipant is provided
 export function FocusViewContainer({
-  showPiP,
   focusParticipant,
   focusTrackSource,
   onParticipantClick,
   ...props
 }: FocusViewContainerProps) {
   const elementProps = mergeProps(props, { className: 'lk-participant-focus-view' });
-  const participants = useSortedParticipants(props.participants);
-  const [focusOrLoudest, setFocusOrLoudest] = useState<Participant | undefined>(undefined);
-  const [others, setOthers] = useState<Participant[]>(
-    focusOrLoudest
-      ? participants.filter(
-          (p) =>
-            p.identity !== focusOrLoudest.identity ||
-            (focusTrackSource !== Track.Source.Camera && !showPiP),
-        )
-      : participants,
-  );
+  // const participants = useSortedParticipants(props.participants);
+  const pinContext = useContext(PinContext);
+  if (!pinContext) {
+    throw new Error('FocusViewContainer needs to be wrapped in a PinContext');
+  }
+  // useEffect(() => {
+  //   const focusTarget = focusParticipant ?? participants[0];
+  //   if (focusTarget !== pinContext.state?.pinnedParticipant) {
+  //     pinContext.dispatch?.({
+  //       msg: 'set_pin',
+  //       participant: focusTarget,
+  //       source: focusTrackSource ?? Track.Source.Camera,
+  //     });
+  //   }
+  // }, [participants]);
 
-  const [focusViewState, setFocusViewState] = useState<FocusViewState>({
-    focusParticipant: focusOrLoudest,
-    focusTrackSource,
-    others,
-  });
-
-  useEffect(() => {
-    const focusTarget = focusParticipant ?? participants[0];
-    setFocusOrLoudest(focusTarget);
-    const otherPs = focusTarget
-      ? participants.filter(
-          (p) =>
-            p.identity !== focusTarget.identity ||
-            (focusTrackSource !== Track.Source.Camera && !showPiP),
-        )
-      : participants;
-    setOthers(otherPs);
-    setFocusViewState({ focusParticipant: focusTarget, focusTrackSource, others: otherPs });
-  }, [participants, focusParticipant, focusTrackSource]);
   return (
     <div {...elementProps}>
-      <FocusViewContext.Provider value={focusViewState}>
-        {props.children ?? (
-          <>
-            {focusOrLoudest && (
-              <FocusView
-                participant={focusOrLoudest}
-                trackSource={focusTrackSource}
-                showPiP={showPiP}
-              />
-            )}
-            <CarouselView participants={others} onParticipantClick={onParticipantClick} />
-          </>
-        )}
-      </FocusViewContext.Provider>
+      {props.children ?? (
+        <>
+          {pinContext.state?.pinnedParticipant && (
+            <FocusView participant={pinContext.state?.pinnedParticipant} />
+          )}
+          <CarouselView />
+        </>
+      )}
     </div>
   );
 }
@@ -84,35 +54,22 @@ export function FocusViewContainer({
 export interface FocusViewProps extends HTMLAttributes<HTMLElement> {
   participant: Participant;
   trackSource?: Track.Source;
-  showPiP?: boolean;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
 
 export function FocusView({
   participant,
   trackSource,
-  showPiP,
   onParticipantClick,
   ...props
 }: FocusViewProps) {
-  const defaultTrackSource = Track.Source.Camera;
+  const { state } = useContext(PinContext);
+
   return (
-    <div {...props} className="lk-focused-participant">
-      <ParticipantContext.Provider value={participant}>
-        <ParticipantView>
-          <MediaTrack source={trackSource ?? defaultTrackSource} />
-          <ParticipantName />
-          {showPiP &&
-            trackSource &&
-            // TODO  re-enable once this has landed in livekit-client
-            // && !participant.isLocal
-            trackSource !== defaultTrackSource && (
-              <div className="lk-pip-track">
-                <MediaTrack source={defaultTrackSource}></MediaTrack>
-              </div>
-            )}
-        </ParticipantView>
-      </ParticipantContext.Provider>
+    <div {...props}>
+      {state?.pinnedParticipant && state.pinnedTrackSource && (
+        <MediaTrack participant={state?.pinnedParticipant} source={state.pinnedTrackSource} />
+      )}
     </div>
   );
 }
@@ -120,21 +77,46 @@ export function FocusView({
 export interface CarouselProps extends HTMLAttributes<HTMLMediaElement> {
   participants?: Participant[];
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
+  showScreenShares?: boolean;
 }
 
-export function CarouselView({ participants, onParticipantClick, ...props }: CarouselProps) {
-  const ps = participants ?? useMaybeFocusViewContext()?.others ?? useParticipants();
+export function CarouselView({
+  participants,
+  showScreenShares,
+  onParticipantClick,
+  ...props
+}: CarouselProps) {
+  const { state: pinState } = useContext(PinContext);
+  const sortedParticipants = participants ?? useSortedParticipants();
   return (
     <aside {...props}>
-      {ps.map((participant) => (
-        <ParticipantContext.Provider value={participant} key={participant.identity}>
-          {props.children ? (
-            cloneSingleChild(props.children, { onParticipantClick })
-          ) : (
-            <ParticipantView participant={participant} onParticipantClick={onParticipantClick} />
+      {showScreenShares && (
+        <Participants
+          filter={(ps) =>
+            ps.filter((p) => {
+              return !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare);
+            })
+          }
+          filterDependencies={[pinState, sortedParticipants]}
+        >
+          {props.children ?? (
+            <ParticipantView
+              trackSource={Track.Source.ScreenShare}
+              onParticipantClick={onParticipantClick}
+            />
           )}
-        </ParticipantContext.Provider>
-      ))}
+        </Participants>
+      )}
+      <Participants
+        filter={(ps) =>
+          ps.filter((p) => {
+            return !isParticipantTrackPinned(p, pinState, Track.Source.Camera);
+          })
+        }
+        filterDependencies={[pinState]}
+      >
+        {props.children ?? <ParticipantView />}
+      </Participants>
     </aside>
   );
 }

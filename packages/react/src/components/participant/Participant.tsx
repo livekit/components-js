@@ -6,6 +6,7 @@ import React, {
   useMemo,
   useRef,
   ReactNode,
+  useContext,
 } from 'react';
 import { Participant, ParticipantEvent, Track, TrackPublication } from 'livekit-client';
 import {
@@ -17,6 +18,7 @@ import {
 import { mergeProps } from '../../utils';
 import {
   ParticipantContext,
+  PinContext,
   useMaybeParticipantContext,
   useParticipantContext,
 } from '../../contexts';
@@ -151,9 +153,20 @@ export const ParticipantView = ({
 }: ParticipantProps) => {
   const p = participant ?? useParticipantContext();
   const { elementProps } = useParticipantView(p, htmlProps);
+
+  const pinContext = useContext(PinContext);
+
   const clickHandler = (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     elementProps.onClick?.(evt);
     onParticipantClick?.({ participant: p });
+    if (pinContext && pinContext.dispatch) {
+      console.log('handleParticipantClick', p);
+      pinContext.dispatch({
+        msg: 'set_pin',
+        participant: p,
+        source: Track.Source.Camera,
+      });
+    }
   };
 
   return (

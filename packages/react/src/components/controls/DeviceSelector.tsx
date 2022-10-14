@@ -60,3 +60,30 @@ export function DeviceSelector({ kind, heading = '', ...props }: DeviceSelectorP
     </div>
   );
 }
+
+export const DeviceSelectButton = (props: HTMLAttributes<HTMLDivElement>) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div {...props} style={{ position: 'relative', flexShrink: 0 }}>
+      <button onClick={() => setIsOpen(!isOpen)} />
+      {isOpen && (
+        <div
+          style={{
+            position: 'absolute',
+            margin: '1rem',
+            bottom: '100%',
+            left: '-50%',
+            width: '20rem',
+            backgroundColor: 'white',
+            borderRadius: '0.5rem',
+            padding: '.2rem .3rem',
+            boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
+          }}
+        >
+          <DeviceSelector kind="audioinput" heading="Audio Inputs:"></DeviceSelector>
+          <DeviceSelector kind="videoinput" heading="Video Inputs:"></DeviceSelector>
+        </div>
+      )}
+    </div>
+  );
+};

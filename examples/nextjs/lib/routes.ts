@@ -5,4 +5,5 @@ export const EXAMPLE_ROUTES = {
   minimal: '/minimal',
   simple: '/simple',
   oldindex: '/oldindex',
+  prejoin: '/prejoin',
 };

@@ -184,7 +184,7 @@ export const PreJoin = ({
         />
       </label>
 
-      <button onClick={handleJoin} disabled={!isValid}>
+      <button className="lk-button" onClick={handleJoin} disabled={!isValid}>
         Join
       </button>
       {debug && (

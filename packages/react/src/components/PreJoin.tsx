@@ -180,18 +180,18 @@ export const PreJoin = ({
             ))}
           </select>
         </div>
-      </div>
 
-      <label htmlFor="username">
-        Username:
-        <input
-          id="username"
-          name="username"
-          type="text"
-          defaultValue={username}
-          onChange={(inputEl) => setUsername(inputEl.target.value)}
-        />
-      </label>
+        <label htmlFor="username">
+          Username:
+          <input
+            id="username"
+            name="username"
+            type="text"
+            defaultValue={username}
+            onChange={(inputEl) => setUsername(inputEl.target.value)}
+          />
+        </label>
+      </div>
 
       <button className="lk-button lk-join-button" onClick={handleJoin} disabled={!isValid}>
         Join

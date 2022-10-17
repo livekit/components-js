@@ -178,25 +178,29 @@ const CustomGridView = ({ room }: { room: Room }) => {
   const participants = useParticipants();
   const gridContainerRef = useRef(null);
 
-  // const props = useMemo(() => {
-  //   const cssProperties = {};
-  //   console.log(`Adjust layout for ${participants.length}`);
-  //   const length = participants.length;
-  //   if (length === 1) {
-  //     // @ts-ignore
-  //     cssProperties['--participant-size'] = '35rem';
-  //   } else if (length > 2) {
-  //     // @ts-ignore
-  //     cssProperties['--participant-size'] = '35rem';
-  //   } else {
-  //     // @ts-ignore
-  //     cssProperties['--participant-size'] = '15rem';
-  //   }
-  //   return cssProperties;
-  // }, [participants]);
+  const props = useMemo(() => {
+    const cssProperties = {};
+    console.log(`Adjust layout for ${participants.length}`);
+    const length = participants.length;
+
+    if (length <= 20) {
+      // @ts-ignore
+      cssProperties['--participant-size'] = '15rem';
+    }
+    if (length <= 10) {
+      // @ts-ignore
+      cssProperties['--participant-size'] = '16rem';
+    }
+    if (length <= 2) {
+      // @ts-ignore
+      cssProperties['--participant-size'] = '24rem';
+    }
+
+    return cssProperties;
+  }, [participants.length]);
 
   return (
-    <div ref={gridContainerRef} className={styles.gridLayout}>
+    <div ref={gridContainerRef} className={styles.gridLayout} style={props}>
       <Participants>
         <CustomParticipantView />
       </Participants>

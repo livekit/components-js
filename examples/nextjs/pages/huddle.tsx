@@ -89,6 +89,7 @@ const Huddle: NextPage = () => {
             videoCaptureDefaults: { deviceId: preJoinChoices.videoDeviceId },
           }}
         >
+          <RoomAudioRenderer />
           <PinContextProvider onChange={handlePinStateChange}>
             <div className={styles.roomLayout}>
               <div className={styles.headerBar}>
@@ -133,7 +134,6 @@ const Huddle: NextPage = () => {
                     Layout: {layout}
                   </button>
                 </div>
-                <RoomAudioRenderer />
               </div>
             </div>
           </PinContextProvider>

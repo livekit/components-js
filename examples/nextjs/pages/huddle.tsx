@@ -88,7 +88,7 @@ function isParticipantTrackPinned(
   }
 }
 
-const CustomGridView = ({ room }: { room: Room }) => {
+const CustomGridView = ({ room }: { room?: Room }) => {
   const { screenShareTrack, allScreenShares } = useScreenShare({ room });
   const participants = useParticipants();
   const gridContainerRef = useRef(null);
@@ -344,7 +344,7 @@ const HuddleRoomView = ({
           </div>
 
           {layout === 'grid' ? (
-            <CustomGridView room={room} />
+            <CustomGridView />
           ) : (
             <CustomFocusView screenShareTrack={screenShareTrack}></CustomFocusView>
           )}

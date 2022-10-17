@@ -78,7 +78,7 @@ const Huddle: NextPage = () => {
                   filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
                   filterDependencies={[screenShareTrack, allScreenShares]}
                 >
-                  <CustomScreenShareView source={Track.Source.ScreenShare} />
+                  <CustomScreenShareView />
                 </Participants>
               </div>
             ) : (

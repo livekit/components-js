@@ -90,8 +90,6 @@
     object-fit: contain;
   }
 }
-.focusView {
-}
 
 .gridLayout {
   --participant-size: 20rem;
@@ -129,26 +127,28 @@
   }
   & > aside {
     grid-area: aside;
-    width: 100%;
-
     max-height: 100%;
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
     place-content: center;
-    max-height: 100%;
-    max-height: 100%;
+    display: grid;
+    section {
+      grid-auto-flow: column;
+      gap: 1rem;
+      overflow-x: auto;
+      overflow-y: hidden;
+      display: grid;
+      gap: 1rem;
+      --participant-size: 8rem;
+    }
   }
 }
 
 .participantView {
-  // --participant-size: 20rem;
   place-self: center;
   display: relative;
   height: var(--participant-size);
+  width: var(--participant-size);
   max-height: 100%;
   aspect-ratio: 1 / 1;
-  // width: 25rem;
   border-radius: 12px;
   overflow: hidden;
   border: 0;

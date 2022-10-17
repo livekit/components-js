@@ -178,22 +178,25 @@ const CustomGridView = ({ room }: { room: Room }) => {
   const participants = useParticipants();
   const gridContainerRef = useRef(null);
 
-  const props = useMemo(() => {
-    const cssProperties = {};
-    console.log(`Adjust layout for ${participants.length}`);
-    const length = participants.length;
-    if (length === 1) {
-      // @ts-ignore
-      cssProperties['--participant-size'] = '35rem';
-    } else {
-      // @ts-ignore
-      cssProperties['--participant-size'] = '15rem';
-    }
-    return cssProperties;
-  }, [participants]);
+  // const props = useMemo(() => {
+  //   const cssProperties = {};
+  //   console.log(`Adjust layout for ${participants.length}`);
+  //   const length = participants.length;
+  //   if (length === 1) {
+  //     // @ts-ignore
+  //     cssProperties['--participant-size'] = '35rem';
+  //   } else if (length > 2) {
+  //     // @ts-ignore
+  //     cssProperties['--participant-size'] = '35rem';
+  //   } else {
+  //     // @ts-ignore
+  //     cssProperties['--participant-size'] = '15rem';
+  //   }
+  //   return cssProperties;
+  // }, [participants]);
 
   return (
-    <div ref={gridContainerRef} className={styles.gridLayout} style={props}>
+    <div ref={gridContainerRef} className={styles.gridLayout}>
       <Participants>
         <CustomParticipantView />
       </Participants>
@@ -219,29 +222,31 @@ const CustomFocusView = ({
         <CustomFocus></CustomFocus>
       </div>
       <aside>
-        <Participants
-          filter={(ps) =>
-            ps.filter((p) => {
-              return !isParticipantTrackPinned(p, pinState, Track.Source.Camera);
-            })
-          }
-          filterDependencies={[screenShareTrack, pinState]}
-        >
-          <CustomParticipantView />
-        </Participants>
-        <Participants
-          filter={(ps) =>
-            ps.filter((p) => {
-              return (
-                p.isScreenShareEnabled &&
-                !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare)
-              );
-            })
-          }
-          filterDependencies={[screenShareTrack, pinState]}
-        >
-          <CustomScreenShareView />
-        </Participants>
+        <section>
+          <Participants
+            filter={(ps) =>
+              ps.filter((p) => {
+                return !isParticipantTrackPinned(p, pinState, Track.Source.Camera);
+              })
+            }
+            filterDependencies={[screenShareTrack, pinState]}
+          >
+            <CustomParticipantView />
+          </Participants>
+          <Participants
+            filter={(ps) =>
+              ps.filter((p) => {
+                return (
+                  p.isScreenShareEnabled &&
+                  !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare)
+                );
+              })
+            }
+            filterDependencies={[screenShareTrack, pinState]}
+          >
+            <CustomScreenShareView />
+          </Participants>
+        </section>
       </aside>
     </div>
   );

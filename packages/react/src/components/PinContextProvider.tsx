@@ -6,20 +6,13 @@ import { useScreenShare } from './ScreenShareRenderer';
 function pinReducer(state: PinState, action: PinAction): PinState {
   console.log(`pinReducer msg:`, action);
   if (action.msg === 'set_pin') {
-    if (
-      state.pinnedParticipant?.identity === action.participant.identity &&
-      state.pinnedTrackSource === action.source
-    ) {
-      return { ...state, pinnedParticipant: undefined, pinnedTrackSource: undefined };
-    } else {
-      return {
-        ...state,
-        pinnedParticipant: action.participant,
-        pinnedTrackSource: action.source,
-      };
-    }
+    return {
+      ...state,
+      pinnedParticipant: action.participant,
+      pinnedTrackSource: action.source,
+    };
   } else if (action.msg === 'clear_pin') {
-    return { ...state, pinnedParticipant: undefined };
+    return { ...state, pinnedParticipant: undefined, pinnedTrackSource: undefined };
   } else {
     return { ...state };
   }

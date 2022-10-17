@@ -344,7 +344,7 @@ const HuddleRoomView = ({
           </div>
 
           {layout === 'grid' ? (
-            <CustomGridView />
+            <CustomGridView room={room} />
           ) : (
             <CustomFocusView screenShareTrack={screenShareTrack}></CustomFocusView>
           )}

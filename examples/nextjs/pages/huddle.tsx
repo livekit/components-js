@@ -183,7 +183,7 @@ const CustomFocusView = ({
           }
           filterDependencies={[screenShareTrack, pinState]}
         >
-          <CustomScreenShareView source={Track.Source.ScreenShare} />
+          <CustomScreenShareView />
         </Participants>
       </aside>
     </div>
@@ -220,34 +220,16 @@ const CustomFocus = () => {
   );
 };
 
-const CustomScreenShareView = ({ source }: { source?: Track.Source }) => {
-  const pinContext = useContext(PinContext);
+const CustomScreenShareView = () => {
   const participant = useParticipantContext();
-  const handleParticipantClick = () => {
-    if (pinContext && pinContext.dispatch) {
-      console.log('handleParticipantClick +');
-      pinContext.dispatch({
-        msg: 'set_pin',
-        participant: participant,
-        source: Track.Source.ScreenShare,
-      });
-    }
-  };
 
   return (
     <ParticipantView
       participant={participant}
-      onClick={handleParticipantClick}
       className={styles.participantView}
+      trackSource={Track.Source.ScreenShare}
     >
-      <MediaTrack
-        source={
-          source && source === Track.Source.ScreenShare
-            ? Track.Source.ScreenShare
-            : Track.Source.Camera
-        }
-        className={styles.video}
-      ></MediaTrack>
+      <MediaTrack source={Track.Source.ScreenShare} className={styles.video}></MediaTrack>
       <div className={styles.screenShareBanner}>
         <ParticipantName style={{ display: 'inline' }} />
         <span>Screen share</span>
@@ -256,33 +238,11 @@ const CustomScreenShareView = ({ source }: { source?: Track.Source }) => {
   );
 };
 
-const CustomParticipantView = ({ source }: { source?: Track.Source }) => {
-  const pinContext = useContext(PinContext);
+const CustomParticipantView = () => {
   const participant = useParticipantContext();
-  const handleParticipantClick = () => {
-    if (pinContext && pinContext.dispatch) {
-      console.log('handleParticipantClick +');
-      pinContext.dispatch({
-        msg: 'set_pin',
-        participant: participant,
-        source: Track.Source.Camera,
-      });
-    }
-  };
   return (
-    <ParticipantView
-      participant={participant}
-      onClick={handleParticipantClick}
-      className={styles.participantView}
-    >
-      <MediaTrack
-        source={
-          source && source === Track.Source.ScreenShare
-            ? Track.Source.ScreenShare
-            : Track.Source.Camera
-        }
-        className={styles.video}
-      ></MediaTrack>
+    <ParticipantView participant={participant} className={styles.participantView}>
+      <MediaTrack source={Track.Source.Camera} className={styles.video}></MediaTrack>
       <div className={styles.nameContainer}>
         <img
           className={styles.nameMutedIcon}

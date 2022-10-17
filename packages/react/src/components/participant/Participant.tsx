@@ -164,7 +164,7 @@ export const ParticipantView = ({
       pinContext.dispatch({
         msg: 'set_pin',
         participant: p,
-        source: Track.Source.Camera,
+        source: trackSource || Track.Source.Camera,
       });
     }
   };

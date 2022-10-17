@@ -78,6 +78,7 @@
     background-color: var(--lk-primary);
     padding: 0.8rem 1rem;
     margin: 0.5rem;
+    border: none;
   }
 }
 
@@ -93,12 +94,20 @@
 }
 
 .gridLayout {
-  --participant-size: 25rem;
-  place-self: center;
+  --participant-size: 20rem;
   grid-area: participants;
-  display: flex;
-  flex-wrap: wrap;
+  place-self: center;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--participant-size), 1fr));
   gap: 1rem;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .focusLayout {
@@ -120,17 +129,20 @@
   }
   & > aside {
     grid-area: aside;
-    display: grid;
-    grid-template-rows: minmax(0, 1fr);
-    grid-auto-columns: minmax(0, min-content);
-    grid-auto-flow: column;
+    width: 100%;
+
+    max-height: 100%;
+    display: flex;
     gap: 1rem;
+    overflow-x: auto;
     place-content: center;
+    max-height: 100%;
+    max-height: 100%;
   }
 }
 
 .participantView {
-  --participant-size: 20rem;
+  // --participant-size: 20rem;
   place-self: center;
   display: relative;
   height: var(--participant-size);

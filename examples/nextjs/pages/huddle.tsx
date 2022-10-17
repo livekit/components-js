@@ -95,13 +95,13 @@ const Huddle: NextPage = () => {
                 <DeviceSelectButton />
                 <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
                 <StartAudio label="Start Audio" />
-                <button
+                {/* <button
                   onClick={() => {
                     setLayout(layout === 'focus' ? 'grid' : 'focus');
                   }}
                 >
                   Layout: {layout}
-                </button>
+                </button> */}
               </div>
               <RoomAudioRenderer />
             </div>

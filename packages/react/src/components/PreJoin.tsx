@@ -61,7 +61,11 @@ export const PreJoin = ({
   const videoEl = useRef(null);
   const audioEl = useRef(null);
   const [localVideoTrack, setLocalVideoTrack] = useState<LocalVideoTrack>();
+  const [localVideoDeviceId, setLocalVideoDeviceId] = useState<string>();
+
   const [localAudioTrack, setLocalAudioTrack] = useState<LocalAudioTrack>();
+  const [localAudioDeviceId, setLocalAudioDeviceId] = useState<string>();
+
   const [isValid, setIsValid] = useState<boolean>();
 
   useEffect(() => {
@@ -69,7 +73,11 @@ export const PreJoin = ({
       createLocalVideoTrack({
         deviceId: selectedVideoDevice?.deviceId,
         resolution: VideoPresets.h720.resolution,
-      }).then((track) => setLocalVideoTrack(track));
+      }).then(async (track) => {
+        setLocalVideoTrack(track);
+        const deviceId = await localVideoTrack?.getDeviceId();
+        setLocalVideoDeviceId(deviceId);
+      });
     } else {
       localVideoTrack?.detach();
       setLocalVideoTrack(undefined);
@@ -80,7 +88,11 @@ export const PreJoin = ({
     if (audioEnabled) {
       createLocalAudioTrack({
         deviceId: selectedAudioDevice?.deviceId,
-      }).then((track) => setLocalAudioTrack(track));
+      }).then(async (track) => {
+        setLocalAudioTrack(track);
+        const deviceId = await localAudioTrack?.getDeviceId();
+        setLocalAudioDeviceId(deviceId);
+      });
     } else {
       localAudioTrack?.detach();
       setLocalAudioTrack(undefined);
@@ -150,7 +162,7 @@ export const PreJoin = ({
               const deviceId = value.target.value;
               setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId));
             }}
-            value={selectedVideoDevice?.deviceId}
+            value={selectedVideoDevice?.deviceId ?? localVideoDeviceId}
           >
             {videoDevices.map((device) => (
               <option key={device.deviceId} value={device.deviceId}>
@@ -171,7 +183,7 @@ export const PreJoin = ({
               const deviceId = value.target.value;
               setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId));
             }}
-            value={selectedAudioDevice?.deviceId}
+            value={selectedAudioDevice?.deviceId ?? localAudioDeviceId}
           >
             {audioDevices.map((device) => (
               <option key={device.deviceId} value={device.deviceId}>

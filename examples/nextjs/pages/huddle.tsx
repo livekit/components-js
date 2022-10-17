@@ -29,7 +29,7 @@ import {
 } from 'livekit-client';
 
 import type { NextPage } from 'next';
-import { HTMLAttributes, useContext, useMemo, useState } from 'react';
+import { HTMLAttributes, useContext, useMemo, useRef, useState } from 'react';
 import styles from '../styles/Huddle.module.scss';
 
 const Huddle: NextPage = () => {
@@ -98,17 +98,7 @@ const Huddle: NextPage = () => {
               </div>
 
               {layout === 'grid' ? (
-                <div className={styles.gridLayout}>
-                  <Participants>
-                    <CustomParticipantView />
-                  </Participants>
-                  <Participants
-                    filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
-                    filterDependencies={[screenShareTrack, allScreenShares]}
-                  >
-                    <CustomScreenShareView />
-                  </Participants>
-                </div>
+                <CustomGridView room={room} />
               ) : (
                 <CustomFocusView screenShareTrack={screenShareTrack}></CustomFocusView>
               )}
@@ -182,6 +172,40 @@ function isParticipantTrackPinned(
     return false;
   }
 }
+
+const CustomGridView = ({ room }: { room: Room }) => {
+  const { screenShareTrack, allScreenShares } = useScreenShare({ room });
+  const participants = useParticipants();
+  const gridContainerRef = useRef(null);
+
+  const props = useMemo(() => {
+    const cssProperties = {};
+    console.log(`Adjust layout for ${participants.length}`);
+    const length = participants.length;
+    if (length === 1) {
+      // @ts-ignore
+      cssProperties['--participant-size'] = '35rem';
+    } else {
+      // @ts-ignore
+      cssProperties['--participant-size'] = '15rem';
+    }
+    return cssProperties;
+  }, [participants]);
+
+  return (
+    <div ref={gridContainerRef} className={styles.gridLayout} style={props}>
+      <Participants>
+        <CustomParticipantView />
+      </Participants>
+      <Participants
+        filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
+        filterDependencies={[screenShareTrack, allScreenShares]}
+      >
+        <CustomScreenShareView />
+      </Participants>
+    </div>
+  );
+};
 
 const CustomFocusView = ({
   screenShareTrack,

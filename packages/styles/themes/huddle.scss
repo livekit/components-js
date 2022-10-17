@@ -1,0 +1,41 @@
+:root {
+  --button-size: 3.125rem;
+  --lk-primary: whitesmoke;
+  --lk-secondary: #e23067;
+}
+
+.button {
+  height: var(--button-size);
+  width: var(--button-size);
+  aspect-ratio: 1/1;
+  border-radius: 99999px;
+  border: 0px;
+  box-shadow: 0 0 1px rgba(var(--sk_foreground_low, 29, 28, 29), 0.13), 0 1px 3px 0 #00000014;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 60%;
+  cursor: pointer;
+}
+
+.disconnect-button {
+  width: calc(1.5 * var(--button-size));
+  height: var(--button-size);
+}
+
+.button[data-source='microphone'] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M5.35086 10.3436C5.12445 9.77312 5 9.15109 5 8.5V8.25C5 7.83579 4.66421 7.5 4.25 7.5C3.83579 7.5 3.5 7.83579 3.5 8.25V8.5C3.5 9.60794 3.7772 10.6511 4.26603 11.564L5.35086 10.3436ZM7.62904 14.554C8.36362 14.8419 9.16335 15 10 15C13.5899 15 16.5 12.0899 16.5 8.5V8.25C16.5 7.83579 16.1642 7.5 15.75 7.5C15.3358 7.5 15 7.83579 15 8.25V8.5C15 11.2614 12.7614 13.5 10 13.5C9.55549 13.5 9.12453 13.442 8.71427 13.3331L7.62904 14.554Z' fill='currentColor'%3E%3C/path%3E%3Cpath d='M10 14.25V17' stroke='currentColor' stroke-width='1.5' stroke-linecap='round'%3E%3C/path%3E%3Cpath d='M12.25 17.25L7.75 17.25' stroke='currentColor' stroke-width='1.5' stroke-linecap='round'%3E%3C/path%3E%3Cpath d='M12.1271 2.72031C11.5376 2.2685 10.8001 2 10 2C8.067 2 6.5 3.567 6.5 5.5V8.5C6.5 8.67302 6.51255 8.84311 6.5368 9.0094L8 7.3633V5.5C8 4.39543 8.89543 3.5 10 3.5C10.4175 3.5 10.8051 3.62793 11.1258 3.84674L12.1271 2.72031ZM9.90052 11.9986C9.93357 11.9995 9.96673 12 10 12C11.933 12 13.5 10.433 13.5 8.5V7.9492L9.90052 11.9986Z' fill='currentColor'%3E%3C/path%3E%3Cpath class='p-huddle_mic_icon__microphone--slash p-huddle_mic_icon__microphone--slash_animated' d='M4 15.25L15.5 2.25' stroke='red' stroke-width='1.5' stroke-linecap='round'%3E%3C/path%3E%3C/svg%3E");
+  &[aria-pressed='true'] {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath class='p-huddle_mic_icon__microphone--input_level' style='transform: scaleY(0.285714);' d='M10 11V3' stroke='transparent' stroke-width='4'%3E%3C/path%3E%3Cpath d='M7.25 5.5C7.25 3.98122 8.48122 2.75 10 2.75V2.75C11.5188 2.75 12.75 3.98122 12.75 5.5V8.5C12.75 10.0188 11.5188 11.25 10 11.25V11.25C8.48122 11.25 7.25 10.0188 7.25 8.5V5.5Z' stroke='currentColor' stroke-width='1.5'%3E%3C/path%3E%3Cpath d='M4.25 8.25V8.5C4.25 11.6756 6.82436 14.25 10 14.25V14.25C13.1756 14.25 15.75 11.6756 15.75 8.5V8.25' stroke='currentColor' stroke-width='1.5' stroke-linecap='round'%3E%3C/path%3E%3Cpath d='M10 14.25V17' stroke='currentColor' stroke-width='1.5' stroke-linecap='round'%3E%3C/path%3E%3Cpath d='M12.25 17.25L7.75 17.25' stroke='currentColor' stroke-width='1.5' stroke-linecap='round'%3E%3C/path%3E%3C/svg%3E");
+  }
+}
+
+.button[data-source='camera'] {
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M14.6694 6.44613L13.0988 8.21302C13.1635 8.32628 13.2578 8.42265 13.3746 8.4902C13.6064 8.62424 13.8922 8.62449 14.1242 8.49088L17.5 6.54725V13.4528L14.1242 11.5091C13.8922 11.3755 13.6064 11.3758 13.3746 11.5098C13.1428 11.6438 13 11.8913 13 12.1591V14.75C13 15.1642 12.6642 15.5 12.25 15.5H6.62151L5.28818 17H12.25C13.4926 17 14.5 15.9926 14.5 14.75V13.4563L17.1263 14.9684C17.9596 15.4482 19 14.8468 19 13.8852V6.11483C19 5.15324 17.9596 4.55176 17.1263 5.03155L14.6694 6.44613ZM1.5 14.4883V5.25C1.5 4.00736 2.50736 3 3.75 3H11.7118L10.3785 4.5H3.75C3.33579 4.5 3 4.83579 3 5.25V12.8008L1.5 14.4883Z' fill='currentColor'%3E%3C/path%3E%3Cpath class='p-huddle_camera_icon--slash p-huddle_camera_icon--slash_animated' d='M2 17.25L15.5 2.25' stroke='red' stroke-width='1.5' stroke-linecap='round'%3E%3C/path%3E%3C/svg%3E");
+  &[aria-pressed='true'] {
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.75 3.75C2.92157 3.75 2.25 4.42157 2.25 5.25V14.75C2.25 15.5784 2.92157 16.25 3.75 16.25H12.25C13.0784 16.25 13.75 15.5784 13.75 14.75V12.1591L17.5005 14.3185C17.8339 14.5104 18.25 14.2698 18.25 13.8852V6.11483C18.25 5.7302 17.8338 5.4896 17.5005 5.68152L13.75 7.84091V5.25C13.75 4.42157 13.0784 3.75 12.25 3.75H3.75Z' stroke='currentColor' stroke-width='1.5' stroke-linejoin='round'%3E%3C/path%3E%3Ccircle class='p-huddle_camera_icon--dot' cx='8' cy='10' r='2.5' fill='green'%3E%3C/circle%3E%3C/svg%3E");
+  }
+}
+
+.join-button {
+  background-color: var(--lk-secondary);
+}

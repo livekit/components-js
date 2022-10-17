@@ -2,6 +2,7 @@ import {
   DeviceSelector,
   DisconnectButton,
   LiveKitRoom,
+  LocalUserChoices,
   MediaControlButton,
   MediaTrack,
   ParticipantName,
@@ -10,6 +11,7 @@ import {
   PinContext,
   PinContextProvider,
   PinState,
+  PreJoin,
   RoomAudioRenderer,
   StartAudio,
   useParticipantContext,
@@ -17,7 +19,14 @@ import {
   useScreenShare,
   useToken,
 } from '@livekit/components-react';
-import { Participant, Room, Track, TrackPublication } from 'livekit-client';
+import {
+  AudioCaptureOptions,
+  Participant,
+  Room,
+  Track,
+  TrackPublication,
+  VideoCaptureOptions,
+} from 'livekit-client';
 
 import type { NextPage } from 'next';
 import { HTMLAttributes, useContext, useMemo, useState } from 'react';
@@ -36,10 +45,23 @@ const Huddle: NextPage = () => {
   const room = useMemo(() => new Room(), []);
 
   const { screenShareTrack, allScreenShares } = useScreenShare({ room });
+  const [preJoinChoices, setPreJoinChoices] = useState<LocalUserChoices | undefined>(undefined);
 
   const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    identity: userIdentity,
+    identity: preJoinChoices?.username,
   });
+
+  const videoOptions = useMemo((): VideoCaptureOptions => {
+    return {
+      deviceId: preJoinChoices?.videoDeviceId,
+    };
+  }, [preJoinChoices]);
+
+  const audioOptions = useMemo((): AudioCaptureOptions => {
+    return {
+      deviceId: preJoinChoices?.audioDeviceId,
+    };
+  }, [preJoinChoices]);
 
   const handleDisconnect = () => {
     setConnect(false);
@@ -52,62 +74,73 @@ const Huddle: NextPage = () => {
 
   return (
     <main className={styles.main}>
-      <LiveKitRoom
-        room={room}
-        token={token}
-        serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-        connect={true}
-        onConnected={() => setIsConnected(true)}
-        onDisconnected={handleDisconnect}
-        video={true}
-        audio={true}
-      >
-        <RoomAudioRenderer />
-        <PinContextProvider onChange={handlePinStateChange}>
-          <div className={styles.roomLayout}>
-            <div className={styles.headerBar}>
-              <ParticipantCount className={styles.participantCount} />
-              {layout === 'focus' && <BackToGridLayoutButton />}
-            </div>
+      {preJoinChoices ? (
+        <LiveKitRoom
+          room={room}
+          token={token}
+          serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
+          connect={true}
+          onConnected={() => setIsConnected(true)}
+          onDisconnected={handleDisconnect}
+          video={preJoinChoices.videoEnabled}
+          audio={preJoinChoices.audioEnabled}
+          options={{
+            audioCaptureDefaults: { deviceId: preJoinChoices.audioDeviceId },
+            videoCaptureDefaults: { deviceId: preJoinChoices.videoDeviceId },
+          }}
+        >
+          <PinContextProvider onChange={handlePinStateChange}>
+            <div className={styles.roomLayout}>
+              <div className={styles.headerBar}>
+                <ParticipantCount className={styles.participantCount} />
+                {layout === 'focus' && <BackToGridLayoutButton />}
+              </div>
 
-            {layout === 'grid' ? (
-              <div className={styles.gridLayout}>
-                <Participants>
-                  <CustomParticipantView />
-                </Participants>
-                <Participants
-                  filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
-                  filterDependencies={[screenShareTrack, allScreenShares]}
-                >
-                  <CustomScreenShareView />
-                </Participants>
-              </div>
-            ) : (
-              <CustomFocusView screenShareTrack={screenShareTrack}></CustomFocusView>
-            )}
-            <div className={styles.mediaControls}>
-              <div>
-                <MediaControlButton className={styles.audioBtn} source={Track.Source.Microphone} />
-                <MediaControlButton className={styles.videoBtn} source={Track.Source.Camera} />
-                <MediaControlButton
-                  className={styles.screenBtn}
-                  source={Track.Source.ScreenShare}
-                />
-                <DeviceSelectButton />
-                <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
-                <StartAudio label="Start Audio" />
-                <button
-                  onClick={() => {
-                    setLayout(layout === 'focus' ? 'grid' : 'focus');
-                  }}
-                >
-                  Layout: {layout}
-                </button>
+              {layout === 'grid' ? (
+                <div className={styles.gridLayout}>
+                  <Participants>
+                    <CustomParticipantView />
+                  </Participants>
+                  <Participants
+                    filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
+                    filterDependencies={[screenShareTrack, allScreenShares]}
+                  >
+                    <CustomScreenShareView />
+                  </Participants>
+                </div>
+              ) : (
+                <CustomFocusView screenShareTrack={screenShareTrack}></CustomFocusView>
+              )}
+              <div className={styles.mediaControls}>
+                <div>
+                  <MediaControlButton
+                    className={styles.audioBtn}
+                    source={Track.Source.Microphone}
+                  />
+                  <MediaControlButton className={styles.videoBtn} source={Track.Source.Camera} />
+                  <MediaControlButton
+                    className={styles.screenBtn}
+                    source={Track.Source.ScreenShare}
+                  />
+                  <DeviceSelectButton />
+                  <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
+                  <StartAudio label="Start Audio" />
+                  <button
+                    onClick={() => {
+                      setLayout(layout === 'focus' ? 'grid' : 'focus');
+                    }}
+                  >
+                    Layout: {layout}
+                  </button>
+                </div>
+                <RoomAudioRenderer />
               </div>
             </div>
-          </div>
-        </PinContextProvider>
-      </LiveKitRoom>
+          </PinContextProvider>
+        </LiveKitRoom>
+      ) : (
+        <PreJoin className={styles.prejoin} onSubmit={setPreJoinChoices} />
+      )}
     </main>
   );
 };
@@ -267,7 +300,7 @@ const DeviceSelectButton = (props: HTMLAttributes<HTMLDivElement>) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div style={{ position: 'relative', flexShrink: 0 }}>
-      <button className={styles.mediaBtn} onClick={() => setIsOpen(!isOpen)} />
+      <button className={`lk-button ${styles.mediaBtn}`} onClick={() => setIsOpen(!isOpen)} />
       {isOpen && (
         <div
           style={{

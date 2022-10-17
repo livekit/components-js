@@ -49,6 +49,9 @@ export function useToken(tokenEndpoint: string | undefined, roomName: string, us
     if (tokenEndpoint === undefined) {
       throw Error('token endpoint needs to be defined');
     }
+    if (userInfo?.identity === undefined) {
+      return;
+    }
     const tokenFetcher = async () => {
       console.log('fetching token');
       const params = new URLSearchParams({ ...userInfo, roomName });
@@ -57,7 +60,7 @@ export function useToken(tokenEndpoint: string | undefined, roomName: string, us
       setToken(accessToken);
     };
     tokenFetcher();
-  }, [tokenEndpoint, roomName]);
+  }, [tokenEndpoint, roomName, userInfo]);
   return token;
 }
 

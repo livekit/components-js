@@ -92,6 +92,7 @@ export const useMediaToggle = ({ source, onChange, ...rest }: MediaControlProps)
     buttonProps: {
       ...newProps,
       'aria-pressed': enabled,
+      'data-lk-source': source,
       'data-lk-enabled': enabled,
       disabled: pending || !trackSubscribed,
       onClick: clickHandler,

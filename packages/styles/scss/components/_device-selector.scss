@@ -16,7 +16,7 @@
       }
       &[data-active='true'] {
         & > button {
-          color: v.$t-primary;
+          color: v.$t-secondary;
         }
       }
       &[data-active='false'] {

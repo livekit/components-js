@@ -60,7 +60,7 @@ export function useToken(tokenEndpoint: string | undefined, roomName: string, us
       setToken(accessToken);
     };
     tokenFetcher();
-  }, [tokenEndpoint, roomName, userInfo]);
+  }, [tokenEndpoint, roomName]);
   return token;
 }
 

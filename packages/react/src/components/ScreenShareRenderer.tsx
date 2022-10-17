@@ -66,7 +66,7 @@ export const useScreenShare = ({ room, onScreenShareChange, screenEl }: ScreenSh
       handleChange(screenShareMap),
     );
     return () => listener.unsubscribe();
-  });
+  }, [currentRoom]);
   return { hasActiveScreenShare, screenShareTrack, screenShareParticipant, allScreenShares };
 };
 

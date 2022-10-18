@@ -2,7 +2,6 @@ export * from './participant/Participant';
 export * from './participant/ConnectionQualityIndicator';
 export * from './LiveKitRoom';
 export * from './controls/MediaControlButton';
-export * from './controls/DeviceMenu';
 export * from './Participants';
 export * from './ConnectionState';
 export * from './controls/DisconnectButton';

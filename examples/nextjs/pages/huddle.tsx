@@ -263,8 +263,14 @@ const DeviceSelectButton = (props: HTMLAttributes<HTMLDivElement>) => {
             boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
           }}
         >
-          <DeviceSelector kind="audioinput" heading="Audio Inputs:"></DeviceSelector>
-          <DeviceSelector kind="videoinput" heading="Video Inputs:"></DeviceSelector>
+          <div>
+            <div>Audio Inputs:</div>
+            <DeviceSelector kind="audioinput"></DeviceSelector>
+          </div>
+          <div>
+            <div>Video Inputs:</div>
+            <DeviceSelector kind="videoinput"></DeviceSelector>
+          </div>
         </div>
       )}
     </div>

@@ -8,10 +8,10 @@ import {
   GridView,
   FocusViewContainer,
   ParticipantClickEvent,
-  DeviceMenu,
   DisconnectButton,
   MediaControlButton,
   TrackSource,
+  DeviceSelectButton,
 } from '@livekit/components-react';
 import { Participant, Room, setLogLevel, Track, TrackPublication } from 'livekit-client';
 
@@ -116,9 +116,9 @@ const Home: NextPage = () => {
               <div className={styles.localUser}>
                 <div className={styles.controlBar}>
                   <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
-                  <DeviceMenu kind="videoinput"></DeviceMenu>
+                  <DeviceSelectButton kind="videoinput"></DeviceSelectButton>
                   <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
-                  <DeviceMenu kind="audioinput"></DeviceMenu>
+                  <DeviceSelectButton kind="audioinput"></DeviceSelectButton>
                   <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
                   <DisconnectButton>Hang up!</DisconnectButton>
                 </div>

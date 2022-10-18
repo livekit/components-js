@@ -7,7 +7,7 @@ import {
   VideoPresets,
 } from 'livekit-client';
 import React, { HTMLAttributes, useEffect, useRef, useState } from 'react';
-import { useMediaDevices } from './controls/DeviceMenu';
+import { DeviceSelectButton, useMediaDevices } from './controls/DeviceSelector';
 import { ToggleButton } from './uiExtensions';
 
 export type LocalUserChoices = {
@@ -55,8 +55,8 @@ export const PreJoin = ({
     undefined,
   );
 
-  const { devices: videoDevices } = useMediaDevices('videoinput');
-  const { devices: audioDevices } = useMediaDevices('audioinput');
+  const videoDevices = useMediaDevices('videoinput');
+  const audioDevices = useMediaDevices('audioinput');
 
   const videoEl = useRef(null);
   const audioEl = useRef(null);
@@ -75,7 +75,7 @@ export const PreJoin = ({
         resolution: VideoPresets.h720.resolution,
       }).then(async (track) => {
         setLocalVideoTrack(track);
-        const deviceId = await localVideoTrack?.getDeviceId();
+        const deviceId = await track.getDeviceId();
         setLocalVideoDeviceId(deviceId);
       });
     } else {
@@ -90,7 +90,7 @@ export const PreJoin = ({
         deviceId: selectedAudioDevice?.deviceId,
       }).then(async (track) => {
         setLocalAudioTrack(track);
-        const deviceId = await localAudioTrack?.getDeviceId();
+        const deviceId = await track.getDeviceId();
         setLocalAudioDeviceId(deviceId);
       });
     } else {
@@ -102,6 +102,14 @@ export const PreJoin = ({
   useEffect(() => {
     if (videoEl.current) localVideoTrack?.attach(videoEl.current);
   }, [localVideoTrack, videoEl.current, selectedVideoDevice]);
+
+  useEffect(() => {
+    setSelectedVideoDevice(videoDevices.find((dev) => dev.deviceId === localVideoDeviceId));
+  }, [localVideoDeviceId, videoDevices]);
+
+  useEffect(() => {
+    setSelectedAudioDevice(audioDevices.find((dev) => dev.deviceId === localAudioDeviceId));
+  }, [localAudioDeviceId, audioDevices]);
 
   useEffect(() => {
     const newUserChoices = {
@@ -157,19 +165,14 @@ export const PreJoin = ({
             data-lk-source={Track.Source.Camera}
             onClick={() => setVideoEnabled(!videoEnabled)}
           ></ToggleButton>
-          <select
-            onChange={(value) => {
-              const deviceId = value.target.value;
-              setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId));
-            }}
-            value={selectedVideoDevice?.deviceId ?? localVideoDeviceId}
+          <DeviceSelectButton
+            kind="videoinput"
+            onActiveDeviceChange={(_, deviceId) =>
+              setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId))
+            }
           >
-            {videoDevices.map((device) => (
-              <option key={device.deviceId} value={device.deviceId}>
-                {device.label}
-              </option>
-            ))}
-          </select>
+            {selectedVideoDevice?.label}
+          </DeviceSelectButton>
         </div>
         <div className="audio">
           <ToggleButton
@@ -177,20 +180,14 @@ export const PreJoin = ({
             onClick={() => setAudioEnabled(!audioEnabled)}
             data-lk-source={Track.Source.Microphone}
           ></ToggleButton>
-
-          <select
-            onChange={(value) => {
-              const deviceId = value.target.value;
-              setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId));
-            }}
-            value={selectedAudioDevice?.deviceId ?? localAudioDeviceId}
+          <DeviceSelectButton
+            kind="audioinput"
+            onActiveDeviceChange={(_, deviceId) =>
+              setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId))
+            }
           >
-            {audioDevices.map((device) => (
-              <option key={device.deviceId} value={device.deviceId}>
-                {device.label}
-              </option>
-            ))}
-          </select>
+            {selectedAudioDevice?.label ?? 'Default'}
+          </DeviceSelectButton>
         </div>
 
         <label htmlFor="username">

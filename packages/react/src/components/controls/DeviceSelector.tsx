@@ -6,10 +6,10 @@ import { Room } from 'livekit-client';
 
 export const useMediaDevices = (kind: MediaDeviceKind) => {
   const isSSR = typeof window === 'undefined';
-  if (isSSR) return { devices: [] };
+  if (isSSR) return [];
   const deviceObserver = useMemo(() => createMediaDeviceObserver(kind), [kind]);
   const devices = useObservableState(deviceObserver, []);
-  return { devices };
+  return devices;
 };
 
 export const useDeviceSelector = (kind: MediaDeviceKind, room?: Room) => {

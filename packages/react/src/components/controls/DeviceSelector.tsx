@@ -90,7 +90,7 @@ export const DeviceSelectButton = ({
     <span style={{ position: 'relative', flexShrink: 0 }}>
       <ToggleButton
         className="lk-secondary"
-        initialState={isOpen}
+        state={isOpen}
         {...props}
         onChange={(enabled) => setIsOpen(enabled)}
       >

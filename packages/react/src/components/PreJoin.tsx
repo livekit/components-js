@@ -164,7 +164,7 @@ export const PreJoin = ({
           style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
         >
           <ToggleButton
-            initialState={videoEnabled}
+            state={videoEnabled}
             data-lk-source={Track.Source.Camera}
             onClick={() => setVideoEnabled(!videoEnabled)}
           ></ToggleButton>
@@ -182,7 +182,7 @@ export const PreJoin = ({
           style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
         >
           <ToggleButton
-            initialState={audioEnabled}
+            state={audioEnabled}
             onClick={() => setAudioEnabled(!audioEnabled)}
             data-lk-source={Track.Source.Microphone}
           ></ToggleButton>

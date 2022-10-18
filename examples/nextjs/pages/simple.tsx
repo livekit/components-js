@@ -89,12 +89,14 @@ const Home: NextPage = () => {
                     padding: '.5rem',
                   }}
                 >
-                  <DeviceSelector
-                    style={{ borderBottom: '1px lightgray solid', paddingBottom: '.5rem' }}
-                    kind={'audioinput'}
-                    heading="Audio Inputs:"
-                  ></DeviceSelector>
-                  <DeviceSelector kind={'videoinput'} heading="Video Inputs:"></DeviceSelector>
+                  <div>
+                    <div>Audio Inputs:</div>
+                    <DeviceSelector kind="audioinput"></DeviceSelector>
+                  </div>
+                  <div>
+                    <div>Video Inputs:</div>
+                    <DeviceSelector kind="videoinput"></DeviceSelector>
+                  </div>
                 </div>
               </div>
               <ScreenShareView />

@@ -123,7 +123,7 @@ export const PreJoin = ({
     setIsValid(handleValidation(newUserChoices));
   }, [username, videoEnabled, audioEnabled, selectedAudioDevice, selectedVideoDevice]);
 
-  function handleJoin() {
+  function handleSubmit() {
     if (handleValidation(userChoices)) {
       if (typeof onSubmit === 'function') {
         onSubmit(userChoices);
@@ -171,7 +171,7 @@ export const PreJoin = ({
               setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId))
             }
           >
-            {selectedVideoDevice?.label}
+            {selectedVideoDevice?.label ?? 'Default'}
           </DeviceSelectButton>
         </div>
         <div className="audio">
@@ -202,7 +202,7 @@ export const PreJoin = ({
         </label>
       </div>
 
-      <button className="lk-button lk-join-button" onClick={handleJoin} disabled={!isValid}>
+      <button className="lk-button lk-join-button" onClick={handleSubmit} disabled={!isValid}>
         Join
       </button>
       {debug && (

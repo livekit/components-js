@@ -5,8 +5,11 @@ import { mergeProps, useObservableState } from '../../utils';
 import { Room } from 'livekit-client';
 
 export const useMediaDevices = (kind: MediaDeviceKind) => {
+  const isSSR = typeof window === 'undefined';
+  if (isSSR) return { devices: [] };
   const deviceObserver = useMemo(() => createMediaDeviceObserver(kind), [kind]);
-  return useObservableState(deviceObserver, []);
+  const devices = useObservableState(deviceObserver, []);
+  return { devices };
 };
 
 export const useDeviceSelector = (kind: MediaDeviceKind, room?: Room) => {

@@ -3,6 +3,7 @@ import { useMaybeRoomContext } from '../../contexts';
 import { setupDeviceSelector, createMediaDeviceObserver } from '@livekit/components-core';
 import { mergeProps, useObservableState } from '../../utils';
 import { Room } from 'livekit-client';
+import { ToggleButton, ToggleProps } from '../uiExtensions';
 
 export const useMediaDevices = (kind: MediaDeviceKind) => {
   const isSSR = typeof window === 'undefined';
@@ -69,7 +70,7 @@ export function DeviceSelector({ kind, onActiveDeviceChange, ...props }: DeviceS
   );
 }
 
-interface DeviceSelectButtonProps extends HTMLAttributes<HTMLButtonElement> {
+interface DeviceSelectButtonProps extends ToggleProps {
   kind?: MediaDeviceKind;
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
 }
@@ -87,9 +88,14 @@ export const DeviceSelectButton = ({
   };
   return (
     <span style={{ position: 'relative', flexShrink: 0 }}>
-      <button {...props} onClick={() => setIsOpen(!isOpen)}>
+      <ToggleButton
+        className="lk-secondary"
+        initialState={isOpen}
+        {...props}
+        onChange={(enabled) => setIsOpen(enabled)}
+      >
         {props.children}
-      </button>
+      </ToggleButton>
       {isOpen && (
         <div
           style={{

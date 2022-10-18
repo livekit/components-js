@@ -10,7 +10,9 @@ export interface ToggleProps extends Omit<HTMLAttributes<HTMLButtonElement>, 'on
 
 export const useToggle = ({ onChange, initialState, ...rest }: ToggleProps) => {
   const [isEnabled, setIsEnabled] = useState(!!initialState);
-
+  useEffect(() => {
+    setIsEnabled(initialState);
+  }, [initialState]);
   useEffect(() => {
     onChange?.(isEnabled);
   }, [isEnabled]);

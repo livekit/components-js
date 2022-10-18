@@ -159,7 +159,10 @@ export const PreJoin = ({
         <></>
       )}
       <div className="media-controls">
-        <div className="video">
+        <div
+          className="video"
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+        >
           <ToggleButton
             initialState={videoEnabled}
             data-lk-source={Track.Source.Camera}
@@ -174,7 +177,10 @@ export const PreJoin = ({
             {selectedVideoDevice?.label ?? 'Default'}
           </DeviceSelectButton>
         </div>
-        <div className="audio">
+        <div
+          className="audio"
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+        >
           <ToggleButton
             initialState={audioEnabled}
             onClick={() => setAudioEnabled(!audioEnabled)}

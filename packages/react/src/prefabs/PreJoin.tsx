@@ -7,8 +7,8 @@ import {
   VideoPresets,
 } from 'livekit-client';
 import React, { HTMLAttributes, useEffect, useRef, useState } from 'react';
-import { DeviceSelectButton, useMediaDevices } from './controls/DeviceSelector';
-import { ToggleButton } from './uiExtensions';
+import { DeviceSelectButton, useMediaDevices } from '../components/controls/DeviceSelector';
+import { ToggleButton } from '../components/uiExtensions';
 
 export type LocalUserChoices = {
   username: string;

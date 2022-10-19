@@ -13,8 +13,6 @@ import {
   RoomName,
   RoomAudioRenderer,
   MediaTrack,
-  isLocal,
-  isRemote,
   useScreenShare,
   DeviceSelectButton,
 } from '@livekit/components-react';
@@ -115,7 +113,7 @@ const Home: NextPage = () => {
                 </div>
                 <div className={styles.participantGrid}>
                   <Participants
-                    filter={(participants) => participants.filter(isRemote)}
+                    filter={(participants) => participants.filter((p) => !p.isLocal)}
                     filterDependencies={[focusedParticipant]}
                   >
                     <ParticipantView className={styles.participantView}>
@@ -141,7 +139,7 @@ const Home: NextPage = () => {
                   </Participants>
                 </div>
                 <div className={styles.localUser}>
-                  <Participants filter={(participants) => participants.filter(isLocal)}>
+                  <Participants filter={(participants) => participants.filter((p) => p.isLocal)}>
                     <ParticipantView>
                       <MediaTrack source={Track.Source.Camera}></MediaTrack>
                       <div className={styles.participantIndicators}>

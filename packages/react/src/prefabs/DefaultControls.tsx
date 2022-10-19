@@ -1,9 +1,9 @@
 import { Track } from 'livekit-client';
 import React from 'react';
-import { DeviceSelectButton } from '../controls/DeviceSelector';
-import { DisconnectButton } from '../controls/DisconnectButton';
-import { MediaControlButton } from '../controls/MediaControlButton';
-import { StartAudio } from '../controls/StartAudio';
+import { DeviceSelectButton } from '../components/controls/DeviceSelector';
+import { DisconnectButton } from '../components/controls/DisconnectButton';
+import { MediaControlButton } from '../components/controls/MediaControlButton';
+import { StartAudio } from '../components/controls/StartAudio';
 
 export function DefaultControls() {
   return (

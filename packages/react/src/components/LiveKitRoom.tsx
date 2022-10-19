@@ -11,7 +11,7 @@ import {
 } from 'livekit-client';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { RoomContext } from '../contexts';
-import { DefaultRoomView } from './layout/DefaultRoomView';
+import { DefaultRoomView } from '../prefabs/DefaultRoomView';
 
 export type LiveKitRoomProps = {
   children?: ReactNode | ReactNode[];

@@ -1,4 +1,4 @@
 export * from './observables';
-export * from './component-interfaces';
+export * from './components';
 export * from './constants';
 export * from './utils';

@@ -7,4 +7,10 @@
   &[data-speaking='true'] {
     border-color: v.$t-primary;
   }
+
+  &[data-local-participant='true'] {
+    video {
+      transform: rotateY(180deg);
+    }
+  }
 }

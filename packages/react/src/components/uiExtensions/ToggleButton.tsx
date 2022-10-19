@@ -5,12 +5,16 @@ import { lkClassName } from '@livekit/components-core';
 export interface ToggleProps extends Omit<HTMLAttributes<HTMLButtonElement>, 'onChange'> {
   toggle?: () => void;
   onChange?: (enabled: boolean) => void;
-  initialState?: boolean;
+  state?: boolean;
 }
 
-export const useToggle = ({ onChange, initialState, ...rest }: ToggleProps) => {
-  const [isEnabled, setIsEnabled] = useState(!!initialState);
-
+export const useToggle = ({ onChange, state, ...rest }: ToggleProps) => {
+  const [isEnabled, setIsEnabled] = useState(!!state);
+  useEffect(() => {
+    if (state !== undefined) {
+      setIsEnabled(state);
+    }
+  }, [state]);
   useEffect(() => {
     onChange?.(isEnabled);
   }, [isEnabled]);

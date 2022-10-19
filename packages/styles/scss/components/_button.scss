@@ -17,12 +17,17 @@
   cursor: pointer;
   transition: opacity 0.15s ease-in-out;
   color: v.$t-text-light;
-}
 
-/** active state for toggle buttons **/
-.button[aria-pressed='true'] {
-}
+  /** active state for toggle buttons **/
+  &[aria-pressed='true'] {
+  }
 
-.button:disabled {
-  opacity: 50%;
+  &:disabled {
+    opacity: 50%;
+  }
+
+  &.secondary {
+    background-color: v.$t-secondary;
+    border-color: v.$t-secondary;
+  }
 }

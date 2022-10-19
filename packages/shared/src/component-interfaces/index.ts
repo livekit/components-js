@@ -1,5 +1,4 @@
 export * from './mediaToggle';
-export * from './deviceMenu';
 export * from './deviceSelector';
 export * from './disconnectButton';
 export * from './mediaTrack';

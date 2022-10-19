@@ -1,14 +1,19 @@
 import React, { HTMLAttributes, useMemo, useState } from 'react';
-import { useRoomContext } from '../../contexts';
+import { useMaybeRoomContext } from '../../contexts';
 import { setupDeviceSelector, createMediaDeviceObserver } from '@livekit/components-core';
 import { mergeProps, useObservableState } from '../../utils';
 import { Room } from 'livekit-client';
+import { ToggleButton, ToggleProps } from '../uiExtensions';
 
-export const useDeviceSelector = (
-  kind: MediaDeviceKind,
-  room: Room,
-  props: HTMLAttributes<HTMLUListElement>,
-) => {
+export const useMediaDevices = (kind: MediaDeviceKind) => {
+  const isSSR = typeof window === 'undefined';
+  if (isSSR) return [];
+  const deviceObserver = useMemo(() => createMediaDeviceObserver(kind), [kind]);
+  const devices = useObservableState(deviceObserver, []);
+  return devices;
+};
+
+export const useDeviceSelector = (kind: MediaDeviceKind, room?: Room) => {
   // List of all devices.
   const deviceObserver = useMemo(() => createMediaDeviceObserver(kind), [kind]);
   const devices = useObservableState(deviceObserver, []);
@@ -22,50 +27,75 @@ export const useDeviceSelector = (
     await room?.switchActiveDevice(kind, id);
     setCurrentDeviceId(id);
   }
-  const activeDevice = useObservableState(activeDeviceObservable, undefined, [currentDeviceId]);
-  // Merge Props
-  const mergedProps = useMemo(() => mergeProps(props, { className }), [props]);
-  return { devices, mergedProps, activeDevice, setActiveMediaDevice };
+  const activeDeviceId = activeDeviceObservable
+    ? useObservableState(activeDeviceObservable, undefined)
+    : currentDeviceId;
+
+  return { devices, className, activeDeviceId, setActiveMediaDevice };
 };
 
 interface DeviceSelectorProps extends React.HTMLAttributes<HTMLUListElement> {
   kind: MediaDeviceKind;
-  heading?: string;
+  onActiveDeviceChange?: (deviceId: string) => void;
 }
 
-export function DeviceSelector({ kind, heading = '', ...props }: DeviceSelectorProps) {
-  const room = useRoomContext();
-  const { devices, activeDevice, setActiveMediaDevice, mergedProps } = useDeviceSelector(
+export function DeviceSelector({ kind, onActiveDeviceChange, ...props }: DeviceSelectorProps) {
+  const room = useMaybeRoomContext();
+  const { devices, activeDeviceId, setActiveMediaDevice, className } = useDeviceSelector(
     kind,
     room,
-    props,
   );
 
+  const handleActiveDeviceChange = (kind: MediaDeviceKind, deviceId: string) => {
+    setActiveMediaDevice(kind, deviceId);
+    onActiveDeviceChange?.(deviceId);
+  };
+  // Merge Props
+  const mergedProps = useMemo(() => mergeProps(props, { className }), [props]);
+
   return (
-    <div {...mergedProps}>
-      {heading && <div>{heading}</div>}
-      <ul>
-        {devices.map((device) => (
-          <li
-            key={device.deviceId}
-            id={device.deviceId}
-            data-lk-active={device.deviceId === activeDevice}
-          >
-            <button onClick={() => setActiveMediaDevice(device.kind, device.deviceId)}>
-              {device.label}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul {...mergedProps}>
+      {devices.map((device) => (
+        <li
+          key={device.deviceId}
+          id={device.deviceId}
+          data-lk-active={device.deviceId === activeDeviceId}
+        >
+          <button onClick={() => handleActiveDeviceChange(device.kind, device.deviceId)}>
+            {device.label}
+          </button>
+        </li>
+      ))}
+    </ul>
   );
 }
 
-export const DeviceSelectButton = (props: HTMLAttributes<HTMLDivElement>) => {
+interface DeviceSelectButtonProps extends ToggleProps {
+  kind?: MediaDeviceKind;
+  onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
+}
+
+export const DeviceSelectButton = ({
+  kind,
+  onActiveDeviceChange,
+  ...props
+}: DeviceSelectButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleActiveDeviceChange = (kind: MediaDeviceKind, deviceId: string) => {
+    setIsOpen(false);
+    onActiveDeviceChange?.(kind, deviceId);
+  };
   return (
-    <div {...props} style={{ position: 'relative', flexShrink: 0 }}>
-      <button onClick={() => setIsOpen(!isOpen)} />
+    <span style={{ position: 'relative', flexShrink: 0 }}>
+      <ToggleButton
+        className="lk-secondary"
+        state={isOpen}
+        {...props}
+        onChange={(enabled) => setIsOpen(enabled)}
+      >
+        {props.children}
+      </ToggleButton>
       {isOpen && (
         <div
           style={{
@@ -80,10 +110,35 @@ export const DeviceSelectButton = (props: HTMLAttributes<HTMLDivElement>) => {
             boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
           }}
         >
-          <DeviceSelector kind="audioinput" heading="Audio Inputs:"></DeviceSelector>
-          <DeviceSelector kind="videoinput" heading="Video Inputs:"></DeviceSelector>
+          {kind ? (
+            <DeviceSelector
+              onActiveDeviceChange={(deviceId) => handleActiveDeviceChange(kind, deviceId)}
+              kind={kind}
+            />
+          ) : (
+            <>
+              <div>
+                <div>Audio Inputs:</div>
+                <DeviceSelector
+                  kind="audioinput"
+                  onActiveDeviceChange={(deviceId) =>
+                    handleActiveDeviceChange('audioinput', deviceId)
+                  }
+                ></DeviceSelector>
+              </div>
+              <div>
+                <div>Video Inputs:</div>
+                <DeviceSelector
+                  kind="videoinput"
+                  onActiveDeviceChange={(deviceId) =>
+                    handleActiveDeviceChange('videoinput', deviceId)
+                  }
+                ></DeviceSelector>
+              </div>
+            </>
+          )}
         </div>
       )}
-    </div>
+    </span>
   );
 };

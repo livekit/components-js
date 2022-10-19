@@ -2,30 +2,30 @@
 @use 'button' as button;
 
 .device-selector {
-  & > div {
+  // & > div {
+  //   padding: 0.1rem 0.2rem;
+  //   font-size: smaller;
+  // }
+  // ul {
+  li {
     padding: 0.1rem 0.2rem;
-    font-size: smaller;
-  }
-  ul {
-    li {
-      padding: 0.1rem 0.2rem;
-      button {
-        @include button.button-reset;
-        transition: color 0.2s ease-in-out;
-        transition: opacity 0.1s ease-in-out;
+    button {
+      @include button.button-reset;
+      transition: color 0.2s ease-in-out;
+      transition: opacity 0.1s ease-in-out;
+    }
+    &[data-active='true'] {
+      & > button {
+        color: v.$t-secondary;
       }
-      &[data-active='true'] {
-        & > button {
-          color: v.$t-secondary;
-        }
-      }
-      &[data-active='false'] {
-        & > button {
-          &:hover {
-            opacity: 0.5;
-          }
+    }
+    &[data-active='false'] {
+      & > button {
+        &:hover {
+          opacity: 0.5;
         }
       }
     }
   }
+  // }
 }

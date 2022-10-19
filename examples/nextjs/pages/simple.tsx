@@ -3,7 +3,6 @@ import {
   ConnectionQualityIndicator,
   LiveKitRoom,
   MediaControlButton,
-  DeviceMenu,
   TrackSource,
   Participants,
   ConnectionState,
@@ -16,6 +15,7 @@ import {
   RoomAudioRenderer,
   MediaTrack,
   DeviceSelector,
+  DeviceSelectButton,
 } from '@livekit/components-react';
 import { RemoteParticipant, Track } from 'livekit-client';
 
@@ -77,9 +77,9 @@ const Home: NextPage = () => {
             <>
               <div className={styles.controlBar}>
                 <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
-                <DeviceMenu kind={'videoinput'} />
+                <DeviceSelectButton kind={'videoinput'} />
                 <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
-                <DeviceMenu kind={'audioinput'} />
+                <DeviceSelectButton kind={'audioinput'} />
                 <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
                 <DisconnectButton>Hang up!</DisconnectButton>
                 <div
@@ -89,12 +89,14 @@ const Home: NextPage = () => {
                     padding: '.5rem',
                   }}
                 >
-                  <DeviceSelector
-                    style={{ borderBottom: '1px lightgray solid', paddingBottom: '.5rem' }}
-                    kind={'audioinput'}
-                    heading="Audio Inputs:"
-                  ></DeviceSelector>
-                  <DeviceSelector kind={'videoinput'} heading="Video Inputs:"></DeviceSelector>
+                  <div>
+                    <div>Audio Inputs:</div>
+                    <DeviceSelector kind="audioinput"></DeviceSelector>
+                  </div>
+                  <div>
+                    <div>Video Inputs:</div>
+                    <DeviceSelector kind="videoinput"></DeviceSelector>
+                  </div>
                 </div>
               </div>
               <ScreenShareView />

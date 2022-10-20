@@ -6,7 +6,7 @@
     "build": "turbo run build",
     "build:react": "turbo run build --filter=@livekit/components-react...",
     "build:svelte": "turbo run build --filter=@livekit/components-svelte...",
-    "build:shared": "turbo run build --filter=@livekit/components-core...",
+    "build:core": "turbo run build --filter=@livekit/components-core...",
     "build:styles": "turbo run build --filter=@livekit/components-styles...",
     "build:next": "turbo run build --filter=@livekit/component-example-next...",
     "build:meet": "turbo run build --filter=@livekit/meet...",

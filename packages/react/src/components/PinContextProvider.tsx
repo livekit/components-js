@@ -1,6 +1,7 @@
+import { PinState } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import React, { ReactNode, useEffect, useReducer } from 'react';
-import { PinAction, PinContext, PinState, useRoomContext } from '../contexts';
+import { PinAction, PinContext, useRoomContext } from '../contexts';
 import { useScreenShare } from './ScreenShareRenderer';
 
 function pinReducer(state: PinState, action: PinAction): PinState {

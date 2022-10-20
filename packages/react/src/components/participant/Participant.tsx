@@ -18,8 +18,8 @@ import {
 import { mergeProps } from '../../utils';
 import {
   ParticipantContext,
-  PinContext,
   useMaybeParticipantContext,
+  useMaybePinContext,
   useParticipantContext,
 } from '../../contexts';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
@@ -159,7 +159,7 @@ export const ParticipantView = ({
   const p = participant ?? useParticipantContext();
   const { elementProps } = useParticipantView(p, htmlProps);
 
-  const pinContext = useContext(PinContext);
+  const pinContext = useMaybePinContext();
 
   const clickHandler = (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     elementProps.onClick?.(evt);

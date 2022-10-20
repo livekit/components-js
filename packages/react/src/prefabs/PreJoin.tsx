@@ -144,7 +144,10 @@ export const PreJoin = ({
     <div {...htmlProps}>
       {localVideoTrack ? (
         <div>
-          <video ref={videoEl} style={{ width: '20rem', height: 'auto' }} />
+          <video
+            ref={videoEl}
+            style={{ width: '20rem', height: 'auto', transform: 'rotateY(180deg)' }}
+          />
         </div>
       ) : (
         <div style={{ width: '20rem', height: '11.25rem', backgroundColor: 'black' }}>

@@ -21,4 +21,3 @@ export * from './Chat';
 export * from './controls/StartAudio';
 export * from './PinContextProvider';
 export * from '../prefabs/PreJoin';
-export * from './uiExtensions';

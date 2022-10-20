@@ -1,15 +1,6 @@
-import { Participant, TrackPublication, LocalParticipant, Track } from 'livekit-client';
 import React, { HTMLAttributes, ReactNode, useEffect, useState } from 'react';
 import { mergeProps as mergePropsReactAria } from 'react-aria';
 import { Observable } from 'rxjs';
-import { PinState } from './contexts';
-
-interface LKEnhanceProps {
-  participant?: Participant;
-  publication?: TrackPublication;
-}
-
-interface LKMouseEvent<T extends HTMLElement> extends React.MouseEvent<T>, LKEnhanceProps {}
 
 type LKComponentAttributes<T extends HTMLElement> = HTMLAttributes<T> & {};
 
@@ -25,19 +16,6 @@ function mergeProps<U extends HTMLElement, T extends Array<LKComponentAttributes
   return mergePropsReactAria(...props.filter(isProp));
 }
 
-function enhanceProps<T extends HTMLElement>(
-  props: LKComponentAttributes<T>,
-  enhanced: LKEnhanceProps,
-) {
-  if (props.onClick) {
-    props.onClick = (evt: LKMouseEvent<T>) => {
-      evt.participant = enhanced.participant;
-      evt.publication = enhanced.publication;
-      props.onClick?.(evt);
-    };
-  }
-}
-
 function useObservableState<T>(
   observable: Observable<T>,
   startWith: T,
@@ -49,67 +27,6 @@ function useObservableState<T>(
     return () => subscription.unsubscribe();
   }, dependencies);
   return state;
-}
-
-/**
- * Default sort for participants, it'll order participants by:
- * 1. dominant speaker (speaker with the loudest audio level)
- * 2. local participant
- * 3. other speakers that are recently active
- * 4. participants with video on
- * 5. by joinedAt
- */
-function sortParticipantsByVolume(participants: Participant[]): Participant[] {
-  const sortedParticipants = [...participants];
-  sortedParticipants.sort((a, b) => {
-    // loudest speaker first
-    if (a.isSpeaking && b.isSpeaking) {
-      return b.audioLevel - a.audioLevel;
-    }
-
-    // speaker goes first
-    if (a.isSpeaking !== b.isSpeaking) {
-      if (a.isSpeaking) {
-        return -1;
-      } else {
-        return 1;
-      }
-    }
-
-    // last active speaker first
-    if (a.lastSpokeAt !== b.lastSpokeAt) {
-      const aLast = a.lastSpokeAt?.getTime() ?? 0;
-      const bLast = b.lastSpokeAt?.getTime() ?? 0;
-      return bLast - aLast;
-    }
-
-    // video on
-    const aVideo = a.videoTracks.size > 0;
-    const bVideo = b.videoTracks.size > 0;
-    if (aVideo !== bVideo) {
-      if (aVideo) {
-        return -1;
-      } else {
-        return 1;
-      }
-    }
-
-    // joinedAt
-    return (a.joinedAt?.getTime() ?? 0) - (b.joinedAt?.getTime() ?? 0);
-  });
-  const localParticipant = sortedParticipants.find((p) => p instanceof LocalParticipant);
-  if (localParticipant) {
-    const localIdx = sortedParticipants.indexOf(localParticipant);
-    if (localIdx >= 0) {
-      sortedParticipants.splice(localIdx, 1);
-      if (sortedParticipants.length > 0) {
-        sortedParticipants.splice(1, 0, localParticipant);
-      } else {
-        sortedParticipants.push(localParticipant);
-      }
-    }
-  }
-  return sortedParticipants;
 }
 
 function cloneSingleChild(
@@ -127,51 +44,4 @@ function cloneSingleChild(
   });
 }
 
-function isParticipantTrackPinned(
-  participant: Participant,
-  pinState: PinState | undefined,
-  source: Track.Source,
-): boolean {
-  if (pinState === undefined) {
-    console.warn(`pinState not set: `, pinState);
-    return false;
-  }
-
-  if (pinState.pinnedParticipant === undefined || pinState.pinnedTrackSource === undefined) {
-    console.warn(`pinState not set: `, pinState);
-    return false;
-  }
-
-  if (pinState.pinnedTrackSource !== source) {
-    return false;
-  }
-
-  if (pinState.pinnedParticipant.identity === participant.identity) {
-    console.log(`Participant has same identity as pinned.`, pinState);
-    switch (pinState.pinnedTrackSource) {
-      case Track.Source.Camera:
-        return participant.isCameraEnabled;
-        break;
-      case Track.Source.ScreenShare:
-        return participant.isScreenShareEnabled;
-        break;
-
-      default:
-        return false;
-        break;
-    }
-  } else {
-    return false;
-  }
-}
-
-export {
-  mergeProps,
-  enhanceProps,
-  LKComponentAttributes,
-  LKMouseEvent,
-  useObservableState,
-  sortParticipantsByVolume,
-  cloneSingleChild,
-  isParticipantTrackPinned,
-};
+export { mergeProps, LKComponentAttributes, useObservableState, cloneSingleChild };

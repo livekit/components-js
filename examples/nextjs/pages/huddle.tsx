@@ -1,3 +1,4 @@
+import { PinState } from '@livekit/components-core';
 import {
   DeviceSelector,
   DisconnectButton,
@@ -8,15 +9,14 @@ import {
   ParticipantName,
   Participants,
   ParticipantView,
-  PinContext,
   PinContextProvider,
-  PinState,
   PreJoin,
   RoomAudioRenderer,
   StartAudio,
   useConnectionState,
   useParticipantContext,
   useParticipants,
+  usePinContext,
   useScreenShare,
   useToken,
 } from '@livekit/components-react';
@@ -31,7 +31,7 @@ import {
 } from 'livekit-client';
 
 import type { NextPage } from 'next';
-import { HTMLAttributes, useContext, useMemo, useRef, useState } from 'react';
+import { HTMLAttributes, useMemo, useRef, useState } from 'react';
 import styles from '../styles/Huddle.module.scss';
 
 const Huddle: NextPage = () => {
@@ -136,7 +136,7 @@ const CustomFocusView = ({
 }: {
   screenShareTrack: TrackPublication | undefined;
 }) => {
-  const { state: pinState } = useContext(PinContext);
+  const { state: pinState } = usePinContext();
   return (
     <div className={styles.focusLayout}>
       <div className={styles.screenShareContainer}>
@@ -174,7 +174,7 @@ const CustomFocusView = ({
 };
 
 const BackToGridLayoutButton = () => {
-  const { dispatch } = useContext(PinContext);
+  const { dispatch } = usePinContext();
   return (
     <button
       onClick={() => {
@@ -188,7 +188,7 @@ const BackToGridLayoutButton = () => {
 };
 
 const CustomFocus = () => {
-  const { state } = useContext(PinContext);
+  const { state } = usePinContext();
 
   return (
     <>

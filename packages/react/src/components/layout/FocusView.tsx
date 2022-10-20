@@ -1,7 +1,8 @@
+import { isParticipantTrackPinned } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import React, { HTMLAttributes, useContext, useEffect } from 'react';
-import { PinContext } from '../../contexts';
-import { isParticipantTrackPinned, mergeProps } from '../../utils';
+import { useMaybePinContext, usePinContext } from '../../contexts';
+import { mergeProps } from '../../utils';
 import { MediaTrack } from '../participant/MediaTrack';
 import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
 import { Participants, useSortedParticipants } from '../Participants';
@@ -21,21 +22,7 @@ export function FocusViewContainer({
   ...props
 }: FocusViewContainerProps) {
   const elementProps = mergeProps(props, { className: 'lk-participant-focus-view' });
-  // const participants = useSortedParticipants(props.participants);
-  const pinContext = useContext(PinContext);
-  if (!pinContext) {
-    throw new Error('FocusViewContainer needs to be wrapped in a PinContext');
-  }
-  // useEffect(() => {
-  //   const focusTarget = focusParticipant ?? participants[0];
-  //   if (focusTarget !== pinContext.state?.pinnedParticipant) {
-  //     pinContext.dispatch?.({
-  //       msg: 'set_pin',
-  //       participant: focusTarget,
-  //       source: focusTrackSource ?? Track.Source.Camera,
-  //     });
-  //   }
-  // }, [participants]);
+  const pinContext = usePinContext();
 
   return (
     <div {...elementProps}>
@@ -63,7 +50,7 @@ export function FocusView({
   onParticipantClick,
   ...props
 }: FocusViewProps) {
-  const { state } = useContext(PinContext);
+  const { state } = useMaybePinContext();
 
   return (
     <div {...props}>
@@ -86,7 +73,7 @@ export function CarouselView({
   onParticipantClick,
   ...props
 }: CarouselProps) {
-  const { state: pinState } = useContext(PinContext);
+  const { state: pinState } = usePinContext();
   const sortedParticipants = participants ?? useSortedParticipants();
   return (
     <aside {...props}>

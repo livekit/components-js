@@ -1,9 +1,10 @@
+import { PinState } from '@livekit/components-core';
 import type { Room, Participant, Track } from 'livekit-client';
 import { createContext, useContext, useReducer } from 'react';
 
-const ParticipantContext = createContext<Participant | undefined>(undefined);
+export const ParticipantContext = createContext<Participant | undefined>(undefined);
 
-function useParticipantContext() {
+export function useParticipantContext() {
   const participant = useContext(ParticipantContext);
   if (!participant) {
     throw Error('tried to access participant context outside of participant context provider');
@@ -11,13 +12,13 @@ function useParticipantContext() {
   return participant;
 }
 
-function useMaybeParticipantContext() {
+export function useMaybeParticipantContext() {
   return useContext(ParticipantContext);
 }
 
-const RoomContext = createContext<Room | undefined>(undefined);
+export const RoomContext = createContext<Room | undefined>(undefined);
 
-function useRoomContext() {
+export function useRoomContext() {
   const ctx = useContext(RoomContext);
   if (!ctx) {
     throw Error('tried to access room context outside of livekit room component');
@@ -25,29 +26,11 @@ function useRoomContext() {
   return ctx;
 }
 
-function useMaybeRoomContext() {
+export function useMaybeRoomContext() {
   return useContext(RoomContext);
 }
 
-type FocusViewState = {
-  focusParticipant?: Participant;
-  focusTrackSource?: Track.Source;
-  others?: Array<Participant>;
-  showPiP?: boolean;
-};
-
-const FocusViewContext = createContext<FocusViewState | undefined>(undefined);
-
-function useMaybeFocusViewContext() {
-  const ctx = useContext(FocusViewContext);
-  return ctx;
-}
-
-type PinState = {
-  pinnedParticipant?: Participant;
-  pinnedTrackSource?: Track.Source;
-};
-type PinAction =
+export type PinAction =
   | {
       msg: 'set_pin';
       participant: Participant;
@@ -59,19 +42,17 @@ type PinContextType = {
   dispatch?: React.Dispatch<PinAction>;
   state?: PinState;
 };
-const PinContext = createContext<PinContextType>({});
 
-export {
-  RoomContext,
-  useRoomContext,
-  useMaybeRoomContext,
-  ParticipantContext,
-  useParticipantContext,
-  useMaybeParticipantContext,
-  FocusViewContext,
-  useMaybeFocusViewContext,
-  FocusViewState,
-  PinState,
-  PinAction,
-  PinContext,
-};
+export const PinContext = createContext<PinContextType>({});
+
+export function usePinContext() {
+  const pinContext = useContext(PinContext);
+  if (!pinContext) {
+    throw Error('tried to access pin context outside of pin context provider');
+  }
+  return pinContext;
+}
+
+export function useMaybePinContext() {
+  return useContext(PinContext);
+}

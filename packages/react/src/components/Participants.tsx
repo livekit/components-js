@@ -2,8 +2,12 @@ import { ParticipantContext, useRoomContext } from '../contexts';
 import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { Participant } from 'livekit-client';
 import { useLocalParticipant } from './controls/MediaControlButton';
-import { connectedParticipantsObserver, activeSpeakerObserver } from '@livekit/components-core';
-import { cloneSingleChild, sortParticipantsByVolume, useObservableState } from '../utils';
+import {
+  connectedParticipantsObserver,
+  activeSpeakerObserver,
+  sortParticipantsByVolume,
+} from '@livekit/components-core';
+import { cloneSingleChild, useObservableState } from '../utils';
 import { ParticipantView } from './participant/Participant';
 
 type ParticipantsProps = {

@@ -1,6 +1,12 @@
 import type { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
 import type { UnprefixedClassNames } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
-import { LocalParticipant, Participant, RemoteParticipant, TrackPublication } from 'livekit-client';
+import {
+  LocalParticipant,
+  Participant,
+  RemoteParticipant,
+  Track,
+  TrackPublication,
+} from 'livekit-client';
 import { cssPrefix } from './constants';
 export const kebabize = (str: string) =>
   str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
@@ -30,3 +36,107 @@ export const attachIfSubscribed = (
     }
   }
 };
+
+export type PinState = {
+  pinnedParticipant?: Participant;
+  pinnedTrackSource?: Track.Source;
+};
+
+export function isParticipantTrackPinned(
+  participant: Participant,
+  pinState: PinState | undefined,
+  source: Track.Source,
+): boolean {
+  if (pinState === undefined) {
+    console.warn(`pinState not set: `, pinState);
+    return false;
+  }
+
+  if (pinState.pinnedParticipant === undefined || pinState.pinnedTrackSource === undefined) {
+    console.warn(`pinState not set: `, pinState);
+    return false;
+  }
+
+  if (pinState.pinnedTrackSource !== source) {
+    return false;
+  }
+
+  if (pinState.pinnedParticipant.identity === participant.identity) {
+    console.log(`Participant has same identity as pinned.`, pinState);
+    switch (pinState.pinnedTrackSource) {
+      case Track.Source.Camera:
+        return participant.isCameraEnabled;
+        break;
+      case Track.Source.ScreenShare:
+        return participant.isScreenShareEnabled;
+        break;
+
+      default:
+        return false;
+        break;
+    }
+  } else {
+    return false;
+  }
+}
+
+/**
+ * Default sort for participants, it'll order participants by:
+ * 1. dominant speaker (speaker with the loudest audio level)
+ * 2. local participant
+ * 3. other speakers that are recently active
+ * 4. participants with video on
+ * 5. by joinedAt
+ */
+export function sortParticipantsByVolume(participants: Participant[]): Participant[] {
+  const sortedParticipants = [...participants];
+  sortedParticipants.sort((a, b) => {
+    // loudest speaker first
+    if (a.isSpeaking && b.isSpeaking) {
+      return b.audioLevel - a.audioLevel;
+    }
+
+    // speaker goes first
+    if (a.isSpeaking !== b.isSpeaking) {
+      if (a.isSpeaking) {
+        return -1;
+      } else {
+        return 1;
+      }
+    }
+
+    // last active speaker first
+    if (a.lastSpokeAt !== b.lastSpokeAt) {
+      const aLast = a.lastSpokeAt?.getTime() ?? 0;
+      const bLast = b.lastSpokeAt?.getTime() ?? 0;
+      return bLast - aLast;
+    }
+
+    // video on
+    const aVideo = a.videoTracks.size > 0;
+    const bVideo = b.videoTracks.size > 0;
+    if (aVideo !== bVideo) {
+      if (aVideo) {
+        return -1;
+      } else {
+        return 1;
+      }
+    }
+
+    // joinedAt
+    return (a.joinedAt?.getTime() ?? 0) - (b.joinedAt?.getTime() ?? 0);
+  });
+  const localParticipant = sortedParticipants.find((p) => p instanceof LocalParticipant);
+  if (localParticipant) {
+    const localIdx = sortedParticipants.indexOf(localParticipant);
+    if (localIdx >= 0) {
+      sortedParticipants.splice(localIdx, 1);
+      if (sortedParticipants.length > 0) {
+        sortedParticipants.splice(1, 0, localParticipant);
+      } else {
+        sortedParticipants.push(localParticipant);
+      }
+    }
+  }
+  return sortedParticipants;
+}

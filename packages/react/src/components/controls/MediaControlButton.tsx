@@ -1,5 +1,10 @@
-import { observeParticipantMedia, ParticipantMedia, setupToggle } from '@livekit/components-core';
-import { LocalParticipant, Room, Track, TrackPublication } from 'livekit-client';
+import {
+  observeParticipantMedia,
+  ParticipantMedia,
+  setupManualToggle,
+  setupMediaToggle,
+} from '@livekit/components-core';
+import { LocalParticipant, Room, Track, TrackPublication, ConnectionState } from 'livekit-client';
 import React, {
   HTMLAttributes,
   MouseEventHandler,
@@ -9,11 +14,13 @@ import React, {
   useState,
 } from 'react';
 import { mergeProps } from 'react-aria';
-import { useRoomContext } from '../../contexts';
+import { useMaybeRoomContext, useRoomContext } from '../../contexts';
 import { useObservableState } from '../../utils';
+import { useConnectionState } from '../ConnectionState';
 
 type MediaControlProps = Omit<HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   source: Track.Source;
+  initialState?: boolean;
   onChange?: (enabled: boolean) => void;
 };
 
@@ -54,21 +61,17 @@ export const useLocalParticipant = (room?: Room) => {
   };
 };
 
-export const useMediaToggle = ({ source, onChange, ...rest }: MediaControlProps) => {
-  const { localParticipant } = useLocalParticipant();
-  const track = localParticipant.getTrack(source);
+export const useMediaToggle = ({ source, onChange, initialState, ...rest }: MediaControlProps) => {
+  const room = useMaybeRoomContext();
+  const track = room?.localParticipant?.getTrack(source);
 
   const { toggle, className, pendingObserver, enabledObserver } = useMemo(
-    () => setupToggle(source, localParticipant),
-    [source, localParticipant],
+    () => (room ? setupMediaToggle(source, room) : setupManualToggle(!!initialState)),
+    [source, room],
   );
 
   const pending = useObservableState(pendingObserver, false);
   const enabled = useObservableState(enabledObserver, !!track?.isEnabled);
-  const trackSubscribed = useMemo(
-    () => (source === Track.Source.ScreenShare ? true : track?.isSubscribed),
-    [track],
-  );
 
   useEffect(() => {
     onChange?.(enabled);
@@ -94,7 +97,7 @@ export const useMediaToggle = ({ source, onChange, ...rest }: MediaControlProps)
       'aria-pressed': enabled,
       'data-lk-source': source,
       'data-lk-enabled': enabled,
-      disabled: pending || !trackSubscribed,
+      disabled: pending,
       onClick: clickHandler,
     },
   };

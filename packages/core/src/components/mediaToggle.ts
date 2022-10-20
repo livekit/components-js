@@ -1,9 +1,11 @@
 import { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
 import { LocalParticipant, Room, Track } from 'livekit-client';
-import { map, Observable, startWith, Subscriber } from 'rxjs';
+import { BehaviorSubject, map, Observable, startWith, Subscriber, tap } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
 
-export function setupToggle(source: Track.Source, localParticipant: LocalParticipant) {
+export function setupMediaToggle(source: Track.Source, room: Room) {
+  const { localParticipant } = room;
+
   const getSourceEnabled = (source: Track.Source, localParticipant: LocalParticipant) => {
     let isEnabled = false;
     switch (source) {
@@ -29,16 +31,11 @@ export function setupToggle(source: Track.Source, localParticipant: LocalPartici
     startWith(getSourceEnabled(source, localParticipant)),
   );
 
-  let pendingTrigger: Subscriber<boolean>;
-
-  const pendingObserver = new Observable<boolean>((subscribe) => {
-    pendingTrigger = subscribe;
-  });
-
+  const pendingSubject = new BehaviorSubject(false);
   const toggle = async () => {
     try {
       // trigger observable update
-      pendingTrigger.next(true);
+      pendingSubject.next(true);
       switch (source) {
         case Track.Source.Camera:
           await localParticipant.setCameraEnabled(!localParticipant.isCameraEnabled);
@@ -53,10 +50,32 @@ export function setupToggle(source: Track.Source, localParticipant: LocalPartici
           break;
       }
     } finally {
-      pendingTrigger.next(false);
+      pendingSubject.next(false);
       // trigger observable update
     }
   };
   const className: ClassNames = 'lk-button';
-  return { className, toggle, enabledObserver, pendingObserver };
+  return { className, toggle, enabledObserver, pendingObserver: pendingSubject.asObservable() };
+}
+
+export function setupManualToggle(initialState: boolean) {
+  let state = initialState;
+
+  const enabledSubject = new BehaviorSubject(state);
+
+  const pendingSubject = new BehaviorSubject(false);
+
+  const toggle = () => {
+    pendingSubject.next(true);
+    state = !state;
+    enabledSubject.next(state);
+    pendingSubject.next(false);
+  };
+  const className: ClassNames = 'lk-button';
+  return {
+    className,
+    toggle,
+    enabledObserver: enabledSubject.asObservable(),
+    pendingObserver: pendingSubject.asObservable(),
+  };
 }

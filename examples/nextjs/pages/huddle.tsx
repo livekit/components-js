@@ -14,6 +14,7 @@ import {
   PreJoin,
   RoomAudioRenderer,
   StartAudio,
+  useConnectionState,
   useParticipantContext,
   useParticipants,
   useScreenShare,
@@ -21,6 +22,7 @@ import {
 } from '@livekit/components-react';
 import {
   AudioCaptureOptions,
+  ConnectionState,
   Participant,
   Room,
   Track,
@@ -330,6 +332,8 @@ const HuddleRoomView = ({
     setLayout(pinState.pinnedParticipant ? 'focus' : 'grid');
   };
 
+  const connectionState = useConnectionState(room);
+
   return (
     <LiveKitRoom
       room={room}
@@ -341,38 +345,50 @@ const HuddleRoomView = ({
       video={userChoices.videoEnabled}
       audio={userChoices.audioEnabled}
     >
-      <RoomAudioRenderer />
-      <PinContextProvider onChange={handlePinStateChange}>
-        <div className={styles.roomLayout}>
-          <div className={styles.headerBar}>
-            <ParticipantCount className={styles.participantCount} />
-            {layout === 'focus' && <BackToGridLayoutButton />}
-          </div>
+      {connectionState !== ConnectionState.Connected ? (
+        <div>{connectionState}</div>
+      ) : (
+        <>
+          <RoomAudioRenderer />
+          <PinContextProvider onChange={handlePinStateChange}>
+            <div className={styles.roomLayout}>
+              <div className={styles.headerBar}>
+                <ParticipantCount className={styles.participantCount} />
+                {layout === 'focus' && <BackToGridLayoutButton />}
+              </div>
 
-          {layout === 'grid' ? (
-            <CustomGridView />
-          ) : (
-            <CustomFocusView screenShareTrack={screenShareTrack}></CustomFocusView>
-          )}
-          <div className={styles.mediaControls}>
-            <div>
-              <MediaControlButton className={styles.audioBtn} source={Track.Source.Microphone} />
-              <MediaControlButton className={styles.videoBtn} source={Track.Source.Camera} />
-              <MediaControlButton className={styles.screenBtn} source={Track.Source.ScreenShare} />
-              <DeviceSelectButton />
-              <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
-              <StartAudio label="Start Audio" />
-              {/* <button
+              {layout === 'grid' ? (
+                <CustomGridView />
+              ) : (
+                <CustomFocusView screenShareTrack={screenShareTrack}></CustomFocusView>
+              )}
+              <div className={styles.mediaControls}>
+                <div>
+                  <MediaControlButton
+                    className={styles.audioBtn}
+                    source={Track.Source.Microphone}
+                  />
+                  <MediaControlButton className={styles.videoBtn} source={Track.Source.Camera} />
+                  <MediaControlButton
+                    className={styles.screenBtn}
+                    source={Track.Source.ScreenShare}
+                  />
+                  <DeviceSelectButton />
+                  <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
+                  <StartAudio label="Start Audio" />
+                  {/* <button
                 onClick={() => {
                   setLayout(layout === 'focus' ? 'grid' : 'focus');
                 }}
               >
                 Layout: {layout}
               </button> */}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </PinContextProvider>
+          </PinContextProvider>
+        </>
+      )}
     </LiveKitRoom>
   );
 };

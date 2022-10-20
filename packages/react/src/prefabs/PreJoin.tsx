@@ -7,8 +7,8 @@ import {
   VideoPresets,
 } from 'livekit-client';
 import React, { HTMLAttributes, useEffect, useRef, useState } from 'react';
+import { MediaControlButton } from '../components';
 import { DeviceSelectButton, useMediaDevices } from '../components/controls/DeviceSelector';
-import { ToggleButton } from '../components/uiExtensions';
 
 export type LocalUserChoices = {
   username: string;
@@ -166,11 +166,11 @@ export const PreJoin = ({
           className="video"
           style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
         >
-          <ToggleButton
-            state={videoEnabled}
-            data-lk-source={Track.Source.Camera}
-            onClick={() => setVideoEnabled(!videoEnabled)}
-          ></ToggleButton>
+          <MediaControlButton
+            initialState={videoEnabled}
+            source={Track.Source.Camera}
+            onChange={(enabled) => setVideoEnabled(enabled)}
+          ></MediaControlButton>
           <DeviceSelectButton
             kind="videoinput"
             onActiveDeviceChange={(_, deviceId) =>
@@ -184,11 +184,11 @@ export const PreJoin = ({
           className="audio"
           style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
         >
-          <ToggleButton
-            state={audioEnabled}
-            onClick={() => setAudioEnabled(!audioEnabled)}
-            data-lk-source={Track.Source.Microphone}
-          ></ToggleButton>
+          <MediaControlButton
+            initialState={videoEnabled}
+            source={Track.Source.Microphone}
+            onChange={(enabled) => setAudioEnabled(enabled)}
+          ></MediaControlButton>
           <DeviceSelectButton
             kind="audioinput"
             onActiveDeviceChange={(_, deviceId) =>

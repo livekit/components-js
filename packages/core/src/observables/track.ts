@@ -1,5 +1,14 @@
-import { TrackEvent, TrackPublication } from 'livekit-client';
-import { Observable, startWith } from 'rxjs';
+import { Participant, ParticipantEvent, TrackEvent, TrackPublication } from 'livekit-client';
+import { map, Observable, startWith } from 'rxjs';
+import { observeParticipantEvents } from './participant';
+
+export function createPublicationsObservable(participant: Participant) {
+  return observeParticipantEvents(
+    participant,
+    ParticipantEvent.TrackPublished,
+    ParticipantEvent.TrackUnpublished,
+  ).pipe(map((p) => p.getTracks()));
+}
 
 export function trackObservable(track: TrackPublication) {
   const trackObserver = observeTrackEvents(

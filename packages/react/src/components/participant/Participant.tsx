@@ -81,7 +81,11 @@ export const useMediaTrack = (
     isMuted,
     isSubscribed,
     track,
-    elementProps: mergeProps(props, { className }),
+    elementProps: mergeProps(props, {
+      className,
+      'data-lk-local-participant': participant.isLocal,
+      'data-lk-source': source,
+    }),
   };
 };
 

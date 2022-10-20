@@ -3,6 +3,11 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
+
+  // Flip the local participant camera video.
+  &[data-local-participant='true'][data-source='camera'] {
+    transform: rotateY(180deg);
+  }
 }
 
 .participant-media-audio {

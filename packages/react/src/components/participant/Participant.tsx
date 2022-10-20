@@ -100,13 +100,12 @@ function useParticipantView<T extends HTMLAttributes<HTMLElement>>(
   const isVideoMuted = useIsMuted(Track.Source.Camera, participant);
   const isAudioMuted = useIsMuted(Track.Source.Microphone, participant);
   const isSpeaking = useIsSpeaking(participant);
-  const isLocal = useIsLocalParticipant(participant);
   return {
     elementProps: {
       'data-lk-audio-muted': isAudioMuted,
       'data-lk-video-muted': isVideoMuted,
       'data-lk-speaking': isSpeaking,
-      'data-lk-local-participant': isLocal,
+      'data-lk-local-participant': participant.isLocal,
       ...mergedProps,
     },
   };
@@ -134,12 +133,6 @@ export function useIsMuted(source: Track.Source, participant?: Participant) {
   });
 
   return isMuted;
-}
-
-export function useIsLocalParticipant(participant?: Participant) {
-  const p = participant ?? useParticipantContext();
-  const isLocal = useMemo(() => p.isLocal, [p]);
-  return isLocal;
 }
 
 function ParticipantContextIfNeeded(props: {

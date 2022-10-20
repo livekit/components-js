@@ -76,8 +76,6 @@ export const useMediaTrack = (
     previousElement.current = element?.current;
   }, [track, element]);
 
-  const isLocal = useIsLocalParticipant(participant);
-
   return {
     publication,
     isMuted,
@@ -85,7 +83,7 @@ export const useMediaTrack = (
     track,
     elementProps: mergeProps(props, {
       className,
-      'data-lk-local-participant': isLocal,
+      'data-lk-local-participant': participant.isLocal,
       'data-lk-source': source,
     }),
   };
@@ -134,12 +132,6 @@ export function useIsMuted(source: Track.Source, participant?: Participant) {
   });
 
   return isMuted;
-}
-
-export function useIsLocalParticipant(participant?: Participant) {
-  const p = participant ?? useParticipantContext();
-  const isLocal = useMemo(() => p.isLocal, [p]);
-  return isLocal;
 }
 
 function ParticipantContextIfNeeded(props: {

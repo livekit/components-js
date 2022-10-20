@@ -4,16 +4,11 @@ import React, { HTMLAttributes, useMemo, useRef } from 'react';
 import { useRoomContext } from '../contexts';
 import { cloneSingleChild, useObservableState } from '../utils';
 
-export interface ChatProps extends HTMLAttributes<HTMLDivElement> {
-  room?: Room;
-}
+export interface ChatProps extends HTMLAttributes<HTMLDivElement> {}
 
-export function useChat(room?: Room) {
-  const currentRoom = room ?? useRoomContext();
-  const { isSendingObservable, messageObservable, send } = useMemo(
-    () => setupChat(currentRoom),
-    [currentRoom],
-  );
+export function useChat() {
+  const room = useRoomContext();
+  const { isSendingObservable, messageObservable, send } = useMemo(() => setupChat(room), [room]);
   const isSending = useObservableState(isSendingObservable, false);
   const chatMessages = useObservableState(messageObservable, []);
   return { send, chatMessages, isSending };
@@ -30,8 +25,8 @@ export function ChatEntry({ entry, ...props }: ChatEntryProps) {
   );
 }
 
-export function Chat({ room, ...props }: ChatProps) {
-  const { send, chatMessages, isSending } = useChat(room);
+export function Chat({ ...props }: ChatProps) {
+  const { send, chatMessages, isSending } = useChat();
   const handleSend = async () => {
     if (inputRef.current && inputRef.current.value.trim() !== '') {
       await send(inputRef.current.value);

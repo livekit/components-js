@@ -5,9 +5,8 @@ import { useRoomContext } from './useRoom';
 
 export const useRemoteParticipants = (
   filter?: (participants: Array<Participant>) => Array<Participant>,
-  room?: Room,
 ) => {
-  const currentRoom = room ?? useRoomContext();
+  const room = useRoomContext();
   const participants = ref<Participant[]>([]);
 
   const handleUpdate = (newParticipants: Participant[]) => {
@@ -17,7 +16,7 @@ export const useRemoteParticipants = (
     participants.value = newParticipants;
   };
   watchEffect((onCleanup) => {
-    const listener = connectedParticipantsObserver(currentRoom).subscribe(handleUpdate);
+    const listener = connectedParticipantsObserver(room).subscribe(handleUpdate);
     onCleanup(() => listener.unsubscribe());
   });
   return participants;
@@ -25,11 +24,10 @@ export const useRemoteParticipants = (
 
 export const useParticipants = (
   filter?: (participants: Array<Participant>) => Array<Participant>,
-  room?: Room,
 ) => {
   const participants = ref<Participant[]>([]);
-  const remoteParticipants = useRemoteParticipants(undefined, room);
-  const { localParticipant } = useLocalParticipant(room);
+  const remoteParticipants = useRemoteParticipants(undefined);
+  const { localParticipant } = useLocalParticipant();
 
   watchEffect(() => {
     let all = [unref(localParticipant), ...unref(remoteParticipants)];
@@ -43,9 +41,9 @@ export const useParticipants = (
   return participants;
 };
 
-export const useLocalParticipant = (room?: Room) => {
-  const currentRoom = room ?? useRoomContext();
-  const localParticipant = ref(currentRoom.localParticipant);
+export const useLocalParticipant = () => {
+  const room = useRoomContext();
+  const localParticipant = ref(room.localParticipant);
   const isMicrophoneEnabled = ref(localParticipant.value.isMicrophoneEnabled);
   const isCameraEnabled = ref(localParticipant.value.isMicrophoneEnabled);
   const isScreenShareEnabled = ref(localParticipant.value.isMicrophoneEnabled);
@@ -59,7 +57,7 @@ export const useLocalParticipant = (room?: Room) => {
   watchEffect((onCleanup) => {
     const listener = observeParticipantEvents(
       // TODO use track observer instead of participant observer
-      currentRoom.localParticipant,
+      room.localParticipant,
       ParticipantEvent.TrackMuted,
       ParticipantEvent.TrackUnmuted,
       ParticipantEvent.LocalTrackPublished,

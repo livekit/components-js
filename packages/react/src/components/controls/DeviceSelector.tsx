@@ -20,7 +20,7 @@ export const useDeviceSelector = (kind: MediaDeviceKind, room?: Room) => {
   const [currentDeviceId, setCurrentDeviceId] = useState<string>('');
   const { className, activeDeviceObservable } = useMemo(
     () => setupDeviceSelector(kind, room),
-    [kind, room],
+    [kind],
   );
   async function setActiveMediaDevice(kind: MediaDeviceKind, id: string) {
     await room?.switchActiveDevice(kind, id);

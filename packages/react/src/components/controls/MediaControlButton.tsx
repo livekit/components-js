@@ -4,7 +4,7 @@ import {
   setupManualToggle,
   setupMediaToggle,
 } from '@livekit/components-core';
-import { LocalParticipant, Room, Track, TrackPublication, ConnectionState } from 'livekit-client';
+import { LocalParticipant, Track, TrackPublication } from 'livekit-client';
 import React, {
   HTMLAttributes,
   MouseEventHandler,
@@ -16,7 +16,6 @@ import React, {
 import { mergeProps } from 'react-aria';
 import { useMaybeRoomContext, useRoomContext } from '../../contexts';
 import { useObservableState } from '../../utils';
-import { useConnectionState } from '../ConnectionState';
 
 type MediaControlProps = Omit<HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   source: Track.Source;
@@ -26,9 +25,9 @@ type MediaControlProps = Omit<HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
 
 export const TrackSource = Track.Source;
 
-export const useLocalParticipant = (room?: Room) => {
-  const currentRoom = room ?? useRoomContext();
-  const [localParticipant, setLocalParticipant] = useState(currentRoom.localParticipant);
+export const useLocalParticipant = () => {
+  const room = useRoomContext();
+  const [localParticipant, setLocalParticipant] = useState(room.localParticipant);
   const [isMicrophoneEnabled, setIsMicrophoneEnabled] = useState(
     localParticipant.isMicrophoneEnabled,
   );

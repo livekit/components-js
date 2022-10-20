@@ -6,23 +6,22 @@ import { useConnectionState } from '../ConnectionState';
 import { mergeProps } from '../../utils';
 
 type DisconnectButtonProps = HTMLAttributes<HTMLButtonElement> & {
-  room?: Room;
   stopTracks?: boolean;
 };
 
 export const useDisconnectButton = (props: DisconnectButtonProps) => {
-  const currentRoom = props.room ?? useRoomContext();
-  const connectionState = useConnectionState(currentRoom);
+  const room = useRoomContext();
+  const connectionState = useConnectionState(room);
 
   const buttonProps = useMemo(() => {
-    const { className, disconnect } = setupDisconnectButton(currentRoom);
+    const { className, disconnect } = setupDisconnectButton(room);
     const mergedProps = mergeProps(props, {
       className,
       onClick: () => disconnect(props.stopTracks ?? true),
       disabled: connectionState === ConnectionState.Disconnected,
     });
     return mergedProps;
-  }, [currentRoom, connectionState]);
+  }, [room, connectionState]);
 
   return { buttonProps };
 };

@@ -10,14 +10,8 @@ type ConnectionStatusProps = {
 
 export function useConnectionState(room?: Room) {
   // passed room takes precedence, if not supplied get current room context
-  const currentRoom = room ?? useRoomContext();
-
-  const connectionState = useObservableState(
-    connectionStateObserver(currentRoom),
-    currentRoom.state,
-    [currentRoom],
-  );
-
+  const r = room ?? useRoomContext();
+  const connectionState = useObservableState(connectionStateObserver(r), r.state, [r]);
   return connectionState;
 }
 

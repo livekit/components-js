@@ -3,11 +3,11 @@ import { Room } from 'livekit-client';
 import { useObservable } from '../lib/utils';
 import { useRoomContext } from './useRoom';
 
-export function useRoomInfo(room?: Room) {
-  const currentRoom = room ?? useRoomContext();
-  const info = useObservable(roomInfoObserver(currentRoom), {
-    name: currentRoom.name,
-    metadata: currentRoom.metadata,
+export function useRoomInfo() {
+  const room = useRoomContext();
+  const info = useObservable(roomInfoObserver(room), {
+    name: room.name,
+    metadata: room.metadata,
   });
   return info;
 }

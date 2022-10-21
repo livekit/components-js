@@ -27,3 +27,43 @@ yarn dev:next
 ```
 
 > NOTE: for the examples to work you'll need to make sure to copy the the contents of .env.example in the specific example folder to a newly created .env.local file and adjust the values accordingly to your livekit server setup.
+
+
+## Architecture Overview
+
+stateDiagram-v2
+    core: components/core
+    react: components/react
+    svelte: components/svelte
+    sdk: livekit/client-sdk-js
+    styles: components/styles
+    internal : Included in this repository
+    external : External dependencies
+    frameworks: Framework specific impelemntations
+    
+    note left of core
+        Transforms events based logic
+        into observables holding state.
+    end note
+    note right of frameworks
+        Consume core observables 
+    end note
+    
+    frameworks --> core : builds on
+    frameworks -->  styles: use styling from
+    core --> external : builds on
+ 
+    state frameworks {
+        svelte
+        react
+    }
+
+    state internal {
+        frameworks
+        core
+        styles
+    }
+
+    state external {
+        sdk
+    }

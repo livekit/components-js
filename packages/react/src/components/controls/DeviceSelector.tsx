@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useMemo, useState } from 'react';
+import React, { HTMLAttributes, useEffect, useMemo, useState } from 'react';
 import { useMaybeRoomContext } from '../../contexts';
 import { setupDeviceSelector, createMediaDeviceObserver } from '@livekit/components-core';
 import { mergeProps, useObservableState } from '../../utils';
@@ -18,19 +18,21 @@ export const useDeviceSelector = (kind: MediaDeviceKind, room?: Room) => {
   const devices = useObservableState(deviceObserver, []);
   // Active device management.
   const [currentDeviceId, setCurrentDeviceId] = useState<string>('');
-  const { className, activeDeviceObservable } = useMemo(
+  const { className, activeDeviceObservable, setActiveMediaDevice } = useMemo(
     () => setupDeviceSelector(kind, room),
-    [kind],
+    [kind, room],
   );
-  async function setActiveMediaDevice(kind: MediaDeviceKind, id: string) {
-    await room?.switchActiveDevice(kind, id);
-    setCurrentDeviceId(id);
-  }
-  const activeDeviceId = activeDeviceObservable
-    ? useObservableState(activeDeviceObservable, undefined)
-    : currentDeviceId;
 
-  return { devices, className, activeDeviceId, setActiveMediaDevice };
+  useEffect(() => {
+    const listener = activeDeviceObservable.subscribe((deviceId) => {
+      if (deviceId) setCurrentDeviceId(deviceId);
+    });
+    return () => {
+      listener?.unsubscribe();
+    };
+  }, [activeDeviceObservable]);
+
+  return { devices, className, activeDeviceId: currentDeviceId, setActiveMediaDevice };
 };
 
 interface DeviceSelectorProps extends React.HTMLAttributes<HTMLUListElement> {
@@ -45,7 +47,7 @@ export function DeviceSelector({ kind, onActiveDeviceChange, ...props }: DeviceS
     room,
   );
 
-  const handleActiveDeviceChange = (kind: MediaDeviceKind, deviceId: string) => {
+  const handleActiveDeviceChange = async (kind: MediaDeviceKind, deviceId: string) => {
     setActiveMediaDevice(kind, deviceId);
     onActiveDeviceChange?.(deviceId);
   };
@@ -95,49 +97,49 @@ export const DeviceSelectButton = ({
       >
         {props.children}
       </button>
-      {isOpen && (
-        <div
-          style={{
-            position: 'absolute',
-            margin: '1rem',
-            bottom: '100%',
-            left: '-50%',
-            width: '20rem',
-            backgroundColor: 'white',
-            borderRadius: '0.5rem',
-            padding: '.2rem .3rem',
-            boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
-          }}
-        >
-          {kind ? (
-            <DeviceSelector
-              onActiveDeviceChange={(deviceId) => handleActiveDeviceChange(kind, deviceId)}
-              kind={kind}
-            />
-          ) : (
-            <>
-              <div>
-                <div>Audio Inputs:</div>
-                <DeviceSelector
-                  kind="audioinput"
-                  onActiveDeviceChange={(deviceId) =>
-                    handleActiveDeviceChange('audioinput', deviceId)
-                  }
-                ></DeviceSelector>
-              </div>
-              <div>
-                <div>Video Inputs:</div>
-                <DeviceSelector
-                  kind="videoinput"
-                  onActiveDeviceChange={(deviceId) =>
-                    handleActiveDeviceChange('videoinput', deviceId)
-                  }
-                ></DeviceSelector>
-              </div>
-            </>
-          )}
-        </div>
-      )}
+
+      <div
+        style={{
+          position: 'absolute',
+          display: isOpen ? 'block' : 'none',
+          margin: '1rem',
+          bottom: '100%',
+          left: '-50%',
+          width: '20rem',
+          backgroundColor: 'white',
+          borderRadius: '0.5rem',
+          padding: '.2rem .3rem',
+          boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
+        }}
+      >
+        {kind ? (
+          <DeviceSelector
+            onActiveDeviceChange={(deviceId) => handleActiveDeviceChange(kind, deviceId)}
+            kind={kind}
+          />
+        ) : (
+          <>
+            <div>
+              <div>Audio Inputs:</div>
+              <DeviceSelector
+                kind="audioinput"
+                onActiveDeviceChange={(deviceId) =>
+                  handleActiveDeviceChange('audioinput', deviceId)
+                }
+              ></DeviceSelector>
+            </div>
+            <div>
+              <div>Video Inputs:</div>
+              <DeviceSelector
+                kind="videoinput"
+                onActiveDeviceChange={(deviceId) =>
+                  handleActiveDeviceChange('videoinput', deviceId)
+                }
+              ></DeviceSelector>
+            </div>
+          </>
+        )}
+      </div>
     </span>
   );
 };

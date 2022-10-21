@@ -8,7 +8,7 @@
 }
 
 .prejoin {
-  background-color: var(--lk-secondary-color);
+  background-color: var(--lk-primary-bg);
   max-height: 80vh;
   width: 40rem;
   display: flex;
@@ -20,7 +20,7 @@
   padding-top: 4rem;
   padding-bottom: 2rem;
 
-  box-shadow: 0 1px 4px var(--lk-secondary-color);
+  box-shadow: 0 1px 4px var(--lk-primary-bg);
 }
 
 .devInfo {
@@ -54,7 +54,7 @@
 
   .participantCount {
     width: min-content;
-    background-color: var(--lk-secondary-color);
+    background-color: var(--lk-primary-bg);
     padding: 0.8rem 1rem;
     display: flex;
     gap: 0.5rem;
@@ -159,8 +159,8 @@
   cursor: pointer;
 
   &[data-lk-speaking='true'] {
-    box-shadow: 0 0 8px 5px var(--lk-secondary-color);
-    outline: 3px solid var(--lk-secondary-color);
+    box-shadow: 0 0 8px 5px var(--lk-primary-bg);
+    outline: 3px solid var(--lk-primary-bg);
   }
   video {
     background-color: var(--lk-primary-color);
@@ -170,7 +170,7 @@
     bottom: 0;
     left: 0;
     margin: 2%;
-    background-color: var(--lk-secondary-color);
+    background-color: var(--lk-primary-bg);
     border-radius: 99999px;
     display: flex;
     align-items: center;
@@ -266,7 +266,7 @@
     .disconnectBtn {
       height: var(--size);
       background: var(--lk-primary-color);
-      box-shadow: 0 1px 4px var(--lk-secondary-color);
+      box-shadow: 0 1px 4px var(--lk-primary-bg);
       border: none;
       color: white;
       border-radius: 8px;
@@ -279,7 +279,7 @@
 }
 
 .screenShareBanner {
-  background-color: var(--lk-secondary-color);
+  background-color: var(--lk-primary-bg);
   position: absolute;
   bottom: 0;
   left: 0;

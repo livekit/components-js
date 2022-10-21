@@ -184,11 +184,13 @@ export const createMediaDeviceObserver = (kind?: MediaDeviceKind, requestPermiss
   };
   const observable = new Observable<MediaDeviceInfo[]>((subscriber) => {
     deviceSubscriber = subscriber;
-    navigator.mediaDevices.addEventListener('devicechange', onDeviceChange);
-    return () => navigator.mediaDevices.removeEventListener('devicechange', onDeviceChange);
+    navigator?.mediaDevices.addEventListener('devicechange', onDeviceChange);
+    return () => navigator?.mediaDevices.removeEventListener('devicechange', onDeviceChange);
   });
   // because we rely on an async function, trigger the first update instead of using startWith
-  onDeviceChange();
+  if (typeof window !== 'undefined') {
+    onDeviceChange();
+  }
   return observable;
 };
 

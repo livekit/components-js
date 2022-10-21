@@ -1,5 +1,8 @@
 @use '../variables' as v;
+@use 'button';
 
-.start-audio {
-  background-color: v.$t-light;
+.start-audio-button {
+  @extend .button;
+  color: v.$t-primary-color;
+  background-color: v.$t-primary-bg;
 }

@@ -8,19 +8,19 @@
 }
 
 .prejoin {
-  background-color: var(--lk-primary);
+  background-color: var(--lk-secondary-color);
   max-height: 80vh;
   width: 40rem;
   display: flex;
   flex-direction: column;
   margin: auto;
   align-items: center;
-  border: 2px solid var(--lk-secondary);
+  border: 2px solid var(--lk-primary-color);
   border-radius: 2rem;
   padding-top: 4rem;
   padding-bottom: 2rem;
 
-  box-shadow: 0 1px 4px var(--lk-primary);
+  box-shadow: 0 1px 4px var(--lk-secondary-color);
 }
 
 .devInfo {
@@ -54,7 +54,7 @@
 
   .participantCount {
     width: min-content;
-    background-color: var(--lk-primary);
+    background-color: var(--lk-secondary-color);
     padding: 0.8rem 1rem;
     display: flex;
     gap: 0.5rem;
@@ -75,7 +75,7 @@
 
   .backToGridViewBtn {
     border-radius: 1rem;
-    background-color: var(--lk-primary);
+    background-color: var(--lk-primary-color);
     padding: 0.8rem 1rem;
     margin: 0.5rem;
     border: none;
@@ -159,18 +159,18 @@
   cursor: pointer;
 
   &[data-lk-speaking='true'] {
-    box-shadow: 0 0 8px 5px var(--lk-primary);
-    outline: 3px solid var(--lk-primary);
+    box-shadow: 0 0 8px 5px var(--lk-secondary-color);
+    outline: 3px solid var(--lk-secondary-color);
   }
   video {
-    background-color: var(--lk-secondary);
+    background-color: var(--lk-primary-color);
   }
   .nameContainer {
     position: absolute;
     bottom: 0;
     left: 0;
     margin: 2%;
-    background-color: var(--lk-primary);
+    background-color: var(--lk-secondary-color);
     border-radius: 99999px;
     display: flex;
     align-items: center;
@@ -225,7 +225,7 @@
   }
   svg {
     position: absolute;
-    background-color: var(--lk-secondary);
+    background-color: var(--lk-primary-color);
     top: 0;
     left: 0;
     width: 100%;
@@ -265,8 +265,8 @@
 
     .disconnectBtn {
       height: var(--size);
-      background: var(--lk-secondary);
-      box-shadow: 0 1px 4px var(--lk-primary);
+      background: var(--lk-primary-color);
+      box-shadow: 0 1px 4px var(--lk-secondary-color);
       border: none;
       color: white;
       border-radius: 8px;
@@ -279,7 +279,7 @@
 }
 
 .screenShareBanner {
-  background-color: var(--lk-primary);
+  background-color: var(--lk-secondary-color);
   position: absolute;
   bottom: 0;
   left: 0;

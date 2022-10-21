@@ -17,6 +17,6 @@ export function setupStartAudio() {
     console.log('Start Audio for room: ', room);
     room.startAudio();
   };
-  const className = lkClassName('start-audio');
+  const className = lkClassName('start-audio-button');
   return { className, roomAudioPlaybackAllowedObservable, handleStartAudioPlayback };
 }

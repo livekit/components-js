@@ -9,21 +9,21 @@
   // TODO: remove class selectors only keep data attributes.
   &.unknown,
   &[data-quality='unknown'] {
-    background-color: v.$t-idle;
+    background-color: v.$t-secondary-color;
   }
 
   &.poor,
   &[data-quality='poor'] {
-    background-color: v.$t-danger;
+    background-color: v.$t-danger-color;
   }
 
   &.good,
   &[data-quality='good'] {
-    background-color: v.$t-warning;
+    background-color: v.$t-warning-color;
   }
 
   &.excellent,
   &[data-quality='excellent'] {
-    background-color: v.$t-success;
+    background-color: v.$t-success-color;
   }
 }

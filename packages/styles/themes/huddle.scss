@@ -1,8 +1,7 @@
 :root {
   --button-size: 3.125rem;
-  --lk-primary: whitesmoke;
-  --lk-secondary: #e23067;
-  --lk-border-radius: 0.5rem;
+  --lk-primary-color: #e23067;
+  --lk-secondary-color: whitesmoke;
 }
 
 .button {
@@ -11,6 +10,7 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: 60%;
+  background-color: var(--lk-secondary-color);
   cursor: pointer;
 }
 
@@ -41,5 +41,5 @@
 }
 
 .join-button {
-  background-color: var(--lk-secondary);
+  background-color: var(--lk-primary-color);
 }

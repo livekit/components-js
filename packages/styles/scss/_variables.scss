@@ -6,101 +6,94 @@
 // consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
 
 // scss-docs-start theme-color-default-values
-$_primary: #6610f2 !default;
-$_secondary: #d63384 !default;
-$_success: #198754 !default;
-$_info: #0dcaf0 !default;
-$_warning: #ffc107 !default;
-$_danger: #dc3545 !default;
-$_idle: gray;
-$_light: #f8f9fa !default;
-$_dark: #212529 !default;
-// scss-docs-end theme-color-variables
 
-// scss-docs-start theme-option-default-values
+/// main theme color, used for focus styles and component active states
+$_primary-color: #ec12e5 !default;
+$_primary-bg: #83038c !default;
+
+/// for disabled component states, dividers and lighter text
+$_secondary-color: #9457aa !default;
+$_secondary-bg: #11115b !default;
+
+/// for component hover colors, accents, wells and text
+$_tertiary-color: #bab8b8 !default;
+$_tertiary-bg: #404040 !default;
+
+/// For higher contrast text
+$_emphasis: #f5f5f5 !default;
+
+/// For component borders, dividers
+$_border-color: #dcdcdc;
 $_border-radius: 0 !default;
-// scss-docs-end theme-color-variables
 
-//
+$_danger-color: #dc4b4b;
+$_warning-color: #db9006;
+$_success-color: #06ac06;
+// scss-docs-end theme-color-default-values
+
 // Theme variables
-//
-// Custom Property Definitions
-// Colors
-$cp-primary: fn.to-cp('primary');
-$cp-secondary: fn.to-cp('secondary');
-$cp-success: fn.to-cp('success');
-$cp-info: fn.to-cp('info');
-$cp-warning: fn.to-cp('warning');
-$cp-danger: fn.to-cp('danger');
-$cp-idle: fn.to-cp('idle');
-$cp-light: fn.to-cp('light');
-$cp-dark: fn.to-cp('dark');
-$cp-text: fn.to-cp('text');
-$cp-text-light: fn.to-cp('text-light');
+// scss-docs-start theme-variable-custom-properties
+$cp-primary-color: fn.to-cp('primary-color');
+$cp-primary-bg: fn.to-cp('primary-bg');
 
+$cp-secondary-color: fn.to-cp('secondary-color');
+$cp-secondary-bg: fn.to-cp('secondary-bg');
+
+$cp-tertiary-color: fn.to-cp('tertiary-color');
+$cp-tertiary-bg: fn.to-cp('tertiary-bg');
+
+$cp-emphasis: fn.to-cp('emphasis');
+
+$cp-border-color: fn.to-cp('border-color');
 $cp-border-radius: fn.to-cp('border-radius');
+
+$cp-danger-color: fn.to-cp('danger-color');
+$cp-warning-color: fn.to-cp('warning-color');
+$cp-success-color: fn.to-cp('success-color');
+
+// scss-docs-end theme-variable-custom-properties
 
 // scss-docs-start theme-colors-map
 $theme-options: (
-  $cp-primary: $_primary,
-  $cp-secondary: $_secondary,
-  $cp-success: $_success,
-  $cp-info: $_info,
-  $cp-warning: $_warning,
-  $cp-danger: $_danger,
-  $cp-light: $_light,
-  $cp-dark: $_dark,
+  $cp-primary-color: $_primary-color,
+  $cp-primary-bg: $_primary-bg,
+
+  $cp-secondary-color: $_secondary-color,
+  $cp-secondary-bg: $_secondary-bg,
+
+  $cp-tertiary-color: $_tertiary-color,
+  $cp-tertiary-bg: $_tertiary-bg,
+
+  $cp-emphasis: $_emphasis,
+
+  $cp-border-color: $_border-color,
   $cp-border-radius: $_border-radius,
+
+  $cp-danger-color: $_danger-color,
+  $cp-warning-color: $_warning-color,
+  $cp-success-color: $_success_color,
 ) !default;
 
 // // Custom Property Values
 // // Colors
-$t-primary: fn.cp-value-with-fallback($cp-primary, $_primary);
-$t-secondary: fn.cp-value-with-fallback($cp-secondary, $_secondary);
-$t-success: fn.cp-value-with-fallback($cp-success, $_success);
-$t-info: fn.cp-value-with-fallback($cp-info, $_info);
-$t-warning: fn.cp-value-with-fallback($cp-warning, $_warning);
-$t-danger: fn.cp-value-with-fallback($cp-danger, $_danger);
-$t-idle: fn.cp-value-with-fallback($cp-idle, $_idle);
-$t-light: fn.cp-value-with-fallback($cp-light, $_light);
-$t-dark: fn.cp-value-with-fallback($cp-dark, $_dark);
-$t-text: fn.cp-value-with-fallback($cp-text, $_dark);
-$t-text-light: fn.cp-value-with-fallback($cp-text-light, $_light);
+$t-primary-color: fn.cp-value-with-fallback($cp-primary-color, $_primary-color);
+$t-primary-bg: fn.cp-value-with-fallback($cp-primary-bg, $_primary-bg);
 
+$t-secondary-color: fn.cp-value-with-fallback($cp-secondary-color, $_secondary-color);
+$t-secondary-bg: fn.cp-value-with-fallback($cp-secondary-bg, $_secondary-bg);
+
+$t-tertiary-color: fn.cp-value-with-fallback($cp-tertiary-color, $_tertiary-color);
+$t-tertiary-bg: fn.cp-value-with-fallback($cp-tertiary-bg, $_tertiary-bg);
+
+$t-emphasis: fn.cp-value-with-fallback($cp-emphasis, $_emphasis);
+
+$t-border-color: fn.cp-value-with-fallback($cp-border-color, $_border-color);
 $t-border-radius: fn.cp-value-with-fallback($cp-border-radius, $_border-radius);
 
-$s-0: 0px;
-$s-px: 1px;
-$s-0_5: 0.125rem; // 2px
-$s-1: 0.25rem; // 4px
-$s-1_5: 0.375rem; // 6px
-$s-2: 0.5rem; // 8px
-$s-2_5: 0.625rem; // 10px
-$s-3: 0.75rem; // 12px
-$s-3_5: 0.875rem; // 14px
-$s-4: 1rem; // 16px
-$s-5: 1.25rem; // 20px
-$s-6: 1.5rem; // 24px
-$s-7: 1.75rem; // 28px
-$s-8: 2rem; // 32px
-$s-9: 2.25rem; // 36px
-$s-10: 2.5rem; // 40px
-$s-11: 2.75rem; // 44px
-$s-12: 3rem; // 48px
-$s-14: 3.5rem; // 56px
-$s-16: 4rem; // 64px
-$s-20: 5rem; // 80px
-$s-24: 6rem; // 96px
-$s-28: 7rem; // 112px
-$s-32: 8rem; // 128px
-$s-36: 9rem; // 144px
-$s-40: 10rem; // 160px
-$s-44: 11rem; // 176px
-$s-48: 12rem; // 192px
-$s-52: 13rem; // 208px
-$s-56: 14rem; // 224px
-$s-60: 15rem; // 240px
-$s-64: 16rem; // 256px
-$s-72: 18rem; // 288px
-$s-80: 20rem; // 320px
-$s-96: 24rem; // 384px
+$t-danger-color: fn.cp-value-with-fallback($cp-danger-color, $_danger-color);
+$t-warning-color: fn.cp-value-with-fallback($cp-warning-color, $_warning-color);
+$t-success-color: fn.cp-value-with-fallback($cp-success-color, $_success-color);
+
+$s-small: 0.75rem;
+$s-medium: 1.5rem;
+$s-large: 3rem;

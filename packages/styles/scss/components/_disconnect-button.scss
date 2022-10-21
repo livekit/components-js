@@ -3,6 +3,6 @@
 
 .disconnect-button {
   @extend .button;
-  background-color: v.$t-danger;
-  border-color: v.$t-danger;
+  background-color: v.$t-danger-color;
+  border-color: v.$t-danger-color;
 }

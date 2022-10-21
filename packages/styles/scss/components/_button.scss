@@ -6,28 +6,22 @@
 }
 
 .button {
-  --btn-padding-y: #{v.$s-1};
-  --btn-padding-x: #{v.$s-2};
+  --btn-padding-y: #{v.$s-small};
+  --btn-padding-x: #{v.$s-small};
   --btn-border-radius: #{v.$t-border-radius};
 
-  padding: var(--btn-padding-y) var(--btn-padding-x);
-  border: v.$s-px v.$t-primary solid;
+  color: v.$t-secondary-color;
+  border-color: v.$t-border-color;
   border-radius: var(--btn-border-radius);
-  background-color: v.$t-primary;
-  cursor: pointer;
-  transition: opacity 0.15s ease-in-out;
-  color: v.$t-text-light;
+  background-color: v.$t-primary-color;
 
-  /** active state for toggle buttons **/
-  &[aria-pressed='true'] {
+  /** inactive state for toggle buttons **/
+  &[aria-pressed='false'] {
+    color: v.$t-tertiary-color;
+    background-color: v.$t-secondary-color;
   }
 
   &:disabled {
     opacity: 50%;
-  }
-
-  &.secondary {
-    background-color: v.$t-secondary;
-    border-color: v.$t-secondary;
   }
 }

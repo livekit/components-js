@@ -16,7 +16,7 @@
   //   --gray-#{$color}: #{$value};
   // }
 
-  @each $option, $value in v.$theme-options {
-    #{$option}: #{$value};
-  }
+  // @each $option, $value in v.$theme-options {
+  //   #{$option}: #{$value};
+  // }
 }

@@ -12,17 +12,16 @@
     button {
       @include button.button-reset;
       transition: color 0.2s ease-in-out;
-      transition: opacity 0.1s ease-in-out;
     }
     &[data-active='true'] {
       & > button {
-        color: v.$t-secondary;
+        color: v.$t-primary-color;
       }
     }
     &[data-active='false'] {
       & > button {
         &:hover {
-          opacity: 0.5;
+          color: v.$t-secondary-color;
         }
       }
     }

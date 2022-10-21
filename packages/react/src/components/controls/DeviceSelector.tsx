@@ -24,7 +24,7 @@ export const useDeviceSelector = (kind: MediaDeviceKind, room?: Room) => {
   );
 
   useEffect(() => {
-    const listener = activeDeviceObservable?.subscribe((deviceId) => {
+    const listener = activeDeviceObservable.subscribe((deviceId) => {
       if (deviceId) setCurrentDeviceId(deviceId);
     });
     return () => {

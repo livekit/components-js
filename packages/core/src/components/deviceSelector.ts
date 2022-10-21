@@ -23,18 +23,11 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
               localTrack = undefined;
               break;
           }
-          console.log(
-            'active device changed',
-            localTrack?.mediaStreamTrack.getSettings()?.deviceId,
-          );
           return localTrack?.mediaStreamTrack.getSettings()?.deviceId;
         }),
         mergeWith(activeDeviceSubject),
       )
     : activeDeviceSubject.asObservable();
-
-  console.log('active device observable', { activeDeviceObservable });
-  const devicesObservable = createMediaDeviceObserver(kind).pipe(share());
 
   const setActiveMediaDevice = async (kind: MediaDeviceKind, id: string) => {
     if (room) {
@@ -45,7 +38,6 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
   const className: ClassNames = lkClassName('device-selector');
   return {
     className,
-    devicesObservable,
     activeDeviceObservable,
     setActiveMediaDevice,
   };

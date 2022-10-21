@@ -24,7 +24,7 @@ function useObservableState<T>(
   const [state, setState] = useState<T>(startWith);
   useEffect(() => {
     // observable state doesn't run in SSR
-    if (typeof window === undefined) return;
+    if (typeof window === 'undefined') return;
     const subscription = observable.subscribe(setState);
     return () => subscription.unsubscribe();
   }, dependencies);

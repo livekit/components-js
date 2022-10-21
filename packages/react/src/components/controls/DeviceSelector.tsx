@@ -32,10 +32,6 @@ export const useDeviceSelector = (kind: MediaDeviceKind, room?: Room) => {
     };
   }, [activeDeviceObservable]);
 
-  useEffect(() => {
-    console.log('active device changed', currentDeviceId);
-  });
-
   return { devices, className, activeDeviceId: currentDeviceId, setActiveMediaDevice };
 };
 

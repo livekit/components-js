@@ -31,39 +31,4 @@ yarn dev:next
 
 ## Architecture Overview
 
-stateDiagram-v2
-    core: components/core
-    react: components/react
-    svelte: components/svelte
-    sdk: livekit/client-sdk-js
-    styles: components/styles
-    internal : Included in this repository
-    external : External dependencies
-    frameworks: Framework specific impelemntations
-    
-    note left of core
-        Transforms events based logic
-        into observables holding state.
-    end note
-    note right of frameworks
-        Consume core observables 
-    end note
-    
-    frameworks --> core : builds on
-    frameworks -->  styles: use styling from
-    core --> external : builds on
- 
-    state frameworks {
-        svelte
-        react
-    }
-
-    state internal {
-        frameworks
-        core
-        styles
-    }
-
-    state external {
-        sdk
-    }
+[![](https://mermaid.ink/img/pako:eNptUz2P2zAM_SuC5rgHdPTQ5XoHdOjUToUXRaITNRJpSLLvgkP--9FSbMuHaDBo8pF8_PqQmgzIVsakEvy06hSUb6bvHQp-mgK0_PUDIWCKT7OimAIonXa2rCnGOIFLe8-iupvNpRXOTnCx6Uk7y4CGdc3_eLenq4O4d8-qYraYIKByohW_ULvRgGGdSGcbmdZA0SYK14KF9xX7sogGBkADqO0Sseei4Y3ChZO-LrKIA2jbWy2sH8CBR26RJbz7lC9SAuGgT4J6sXVnfn-DwthT8FHANBchjioyVUcnqzcYV0OCjhHCpI5coziTMxZPIk_k270MNDlVlTTY0zln3chvQZ-Z5ughM9oFfxTuaw9E0_wonq04jtaZKAgfgtZJjRGyPPPuA_ltfTKumkIdcJk211lH_tjqqLdm3brye-uw9l-XovJ-1Jn9jOq1-hJw5VzTMZcKm8XNOD95kB6CV9bwSWXHTqYzeOhky6KBXo0udbLDG0PVmOjPFbVsUxjhIMfBbEe4KMHM6_y7XGk-1oMcFP4jYkivXITbJ88xPgo?type=png)](https://mermaid-js.github.io/mermaid-live-editor/edit#pako:eNptUz2P2zAM_SuC5rgHdPTQ5XoHdOjUToUXRaITNRJpSLLvgkP--9FSbMuHaDBo8pF8_PqQmgzIVsakEvy06hSUb6bvHQp-mgK0_PUDIWCKT7OimAIonXa2rCnGOIFLe8-iupvNpRXOTnCx6Uk7y4CGdc3_eLenq4O4d8-qYraYIKByohW_ULvRgGGdSGcbmdZA0SYK14KF9xX7sogGBkADqO0Sseei4Y3ChZO-LrKIA2jbWy2sH8CBR26RJbz7lC9SAuGgT4J6sXVnfn-DwthT8FHANBchjioyVUcnqzcYV0OCjhHCpI5coziTMxZPIk_k270MNDlVlTTY0zln3chvQZ-Z5ughM9oFfxTuaw9E0_wonq04jtaZKAgfgtZJjRGyPPPuA_ltfTKumkIdcJk211lH_tjqqLdm3brye-uw9l-XovJ-1Jn9jOq1-hJw5VzTMZcKm8XNOD95kB6CV9bwSWXHTqYzeOhky6KBXo0udbLDG0PVmOjPFbVsUxjhIMfBbEe4KMHM6_y7XGk-1oMcFP4jYkivXITbJ88xPgo)

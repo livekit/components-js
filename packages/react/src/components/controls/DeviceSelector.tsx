@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useMemo, useState } from 'react';
+import React, { HTMLAttributes, useEffect, useMemo, useState } from 'react';
 import { useMaybeRoomContext } from '../../contexts';
 import { setupDeviceSelector, createMediaDeviceObserver } from '@livekit/components-core';
 import { mergeProps, useObservableState } from '../../utils';
@@ -20,17 +20,24 @@ export const useDeviceSelector = (kind: MediaDeviceKind, room?: Room) => {
   const [currentDeviceId, setCurrentDeviceId] = useState<string>('');
   const { className, activeDeviceObservable } = useMemo(
     () => setupDeviceSelector(kind, room),
-    [kind],
+    [kind, room],
   );
   async function setActiveMediaDevice(kind: MediaDeviceKind, id: string) {
     await room?.switchActiveDevice(kind, id);
     setCurrentDeviceId(id);
   }
-  const activeDeviceId = activeDeviceObservable
-    ? useObservableState(activeDeviceObservable, undefined)
-    : currentDeviceId;
 
-  return { devices, className, activeDeviceId, setActiveMediaDevice };
+  useEffect(() => {
+    activeDeviceObservable?.subscribe((deviceId) => {
+      if (deviceId) setCurrentDeviceId(deviceId);
+    });
+  });
+
+  useEffect(() => {
+    console.log('active device changed', currentDeviceId);
+  });
+
+  return { devices, className, activeDeviceId: currentDeviceId, setActiveMediaDevice };
 };
 
 interface DeviceSelectorProps extends React.HTMLAttributes<HTMLUListElement> {

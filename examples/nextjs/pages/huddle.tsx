@@ -259,7 +259,7 @@ const DeviceSelectButton = (props: HTMLAttributes<HTMLDivElement>) => {
             bottom: '100%',
             left: '-50%',
             width: '20rem',
-            backgroundColor: 'white',
+            backgroundColor: 'var(--lk-primary-bg)',
             borderRadius: '0.5rem',
             padding: '.2rem .3rem',
             boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',

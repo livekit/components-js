@@ -2,6 +2,7 @@
 @use 'button' as button;
 
 .device-selector {
+  background-color: v.$t-primary-bg;
   // & > div {
   //   padding: 0.1rem 0.2rem;
   //   font-size: smaller;
@@ -9,7 +10,7 @@
   // ul {
   li {
     padding: 0.1rem 0.2rem;
-    button {
+    & > button {
       @include button.button-reset;
       transition: color 0.2s ease-in-out;
     }
@@ -20,8 +21,10 @@
     }
     &[data-active='false'] {
       & > button {
+        color: v.$t-secondary-color;
+
         &:hover {
-          color: v.$t-secondary-color;
+          color: v.$t-tertiary-color;
         }
       }
     }

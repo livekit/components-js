@@ -20,14 +20,26 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "docs": "typedoc",
     "clean:all": "turbo run clean:all",
-    "release": "turbo run build && changeset publish"
+    "release": "turbo run build && changeset publish",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "devDependencies": {
+    "@babel/core": "^7.19.6",
     "@changesets/changelog-github": "^0.4.4",
     "@changesets/cli": "^2.25.0",
+    "@storybook/addon-actions": "^6.5.13",
+    "@storybook/addon-essentials": "^6.5.13",
+    "@storybook/addon-interactions": "^6.5.13",
+    "@storybook/addon-links": "^6.5.13",
+    "@storybook/builder-webpack5": "^6.5.13",
+    "@storybook/manager-webpack5": "^6.5.13",
+    "@storybook/react": "^6.5.13",
+    "@storybook/testing-library": "^0.0.13",
     "@svitejs/changesets-changelog-github-compact": "^0.1.1",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
+    "babel-loader": "^8.2.5",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^6.7.0",
     "eslint-config-standard": "^14.1.0",
@@ -49,5 +61,6 @@
   "workspaces": [
     "packages/*",
     "examples/*"
-  ]
+  ],
+  "dependencies": {}
 }

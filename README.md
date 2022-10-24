@@ -1,11 +1,15 @@
 # LiveKit Components
 
+Create your LiveKit experience without worrying about state.
+
 ## Monorepo Navigation
 * [Home](/README.md)
-* [Core](/packages/core/README.md)
-* [Styles](/packages/styles/README.md)
-* [React Implementation](/packages/react/README.md)
-* [Vue Implementation](/packages/vue/README.md)
+* **Internals**
+    * [Core](/packages/core/README.md)
+    * [Styles](/packages/styles/README.md)
+* **Framework Implementations**:
+    * [React](/packages/react/README.md)
+    * [Vue](/packages/vue/README.md)
 
 ## Development Setup
 

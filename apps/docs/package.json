@@ -1,5 +1,5 @@
 {
-  "name": "@livekit/components-docs-storybook",
+  "name": "@livekit/component-docs-storybook",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -15,9 +15,16 @@
     "@storybook/testing-library": "^0.0.13",
     "babel-loader": "^8.2.5"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@livekit/components-react": "*",
+    "@livekit/components-styles": "*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
   "scripts": {
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "dev": "start-storybook -p 6006",
+    "build": "build-storybook --docs",
+    "preview-storybook": "serve storybook-static",
+    "clean": "rm -rf .turbo && rm -rf node_modules"
   }
 }

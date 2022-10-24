@@ -1,7 +1,11 @@
 # LiveKit Components
 
-## Packages in this mono repository
+## Monorepo Navigation
+* [Home](/README.md)
 * [Core](/packages/core/README.md)
+* [Styles](/packages/styles/README.md)
+* [React Implementation](/packages/react/README.md)
+* [Vue Implementation](/packages/vue/README.md)
 
 ## Development Setup
 

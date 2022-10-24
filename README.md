@@ -1,5 +1,8 @@
 # LiveKit Components
 
+## Packages in this mono repository
+* [Core](/packages/core/README.md)
+
 ## Development Setup
 
 This repo consists of multiple packages that partly build on top of each other.

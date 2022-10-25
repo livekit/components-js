@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { ComponentMeta } from '@storybook/react';
 
 import { DisconnectButton, LiveKitRoom, useToken } from '@livekit/components-react';
+import { LkRoomContext } from '../.storybook/LkRoomContext';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -10,29 +11,7 @@ export default {
   component: DisconnectButton,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-  decorators: [
-    (Story, args) => {
-      const params = args.parameters;
-      console.log({ params });
-      const [connect, setConnect] = useState(args.parameters.connect);
-
-      return (
-        <>
-          {connect === false && <button onClick={() => setConnect(!connect)}>Connect</button>}
-
-          <LiveKitRoom
-            connect={connect}
-            token={process.env.TEST_TOKEN}
-            serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-            video={true}
-            onDisconnected={() => setConnect(false)}
-          >
-            <Story />
-          </LiveKitRoom>
-        </>
-      );
-    },
-  ],
+  decorators: [LkRoomContext],
 } as ComponentMeta<typeof DisconnectButton>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args

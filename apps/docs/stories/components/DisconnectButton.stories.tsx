@@ -21,6 +21,6 @@ export const Connected = {
 };
 
 export const NotConnected = {
-  args: { stopTracks: true },
-  parameters: { roomContext: { audio: false, video: false, connect: false } },
+  ...Connected,
+  parameters: { roomContext: { ...Connected.parameters, connect: false } },
 };

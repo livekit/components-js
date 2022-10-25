@@ -3,7 +3,7 @@ import React from 'react';
 import { ComponentMeta } from '@storybook/react';
 
 import { DisconnectButton } from '@livekit/components-react';
-import { LkRoomContext, RoomContextSettings } from '../.storybook/LkRoomContext';
+import { LkRoomContext } from '../.storybook/LkRoomContext';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

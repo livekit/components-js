@@ -7,11 +7,17 @@ import { LkRoomContext } from '../.storybook/LkRoomContext';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Prefabs/MediaControlButton',
+  title: 'Prefabs/DisconnectButton',
   component: DisconnectButton,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
   decorators: [LkRoomContext],
+
+  parameters: {
+    actions: {
+      handles: ['click'],
+    },
+  },
 } as ComponentMeta<typeof DisconnectButton>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
@@ -25,4 +31,6 @@ Connected.parameters = {
 };
 
 export const NotConnected = Template.bind({});
-NotConnected.args = {};
+NotConnected.args = {
+  connect: false,
+};

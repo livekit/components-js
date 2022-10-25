@@ -3,7 +3,7 @@ import React from 'react';
 import { ComponentMeta } from '@storybook/react';
 
 import { DisconnectButton } from '@livekit/components-react';
-import { LkRoomContext } from '../.storybook/LkRoomContext';
+import { LkRoomContext, RoomContextSettings } from '../.storybook/LkRoomContext';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -24,12 +24,11 @@ export default {
 const Template = (args: typeof DisconnectButton) => <DisconnectButton>Leave</DisconnectButton>;
 
 export const Connected = Template.bind({ stopTracks: true });
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
 Connected.parameters = {
-  connect: true,
+  roomContext: { audio: false, video: false, connect: true },
 };
 
 export const NotConnected = Template.bind({ stopTracks: true });
 NotConnected.parameters = {
-  connect: false,
+  roomContext: { audio: false, video: false, connect: false },
 };

@@ -3,13 +3,20 @@ import { LiveKitRoom } from '@livekit/components-react';
 import { DecoratorFn } from '@storybook/react';
 import { Room } from 'livekit-client';
 
+export type RoomContextSettings = Partial<{
+  audio: boolean;
+  video: boolean;
+  connect: boolean;
+}>;
+
 /**
  * Wraps a Storybook Story into a LiveKit room context.
  *
  * Note: This component requires some environment variables. Make sure that they are set correctly in your .env file.
  */
 export const LkRoomContext: DecoratorFn = (Story, args) => {
-  const [connect, setConnect] = useState(args.parameters.connect);
+  const roomContextSettings: RoomContextSettings = args.parameters.roomContext;
+  const [connect, setConnect] = useState(roomContextSettings?.connect);
   const [connected, setConnected] = useState(false);
 
   const room = new Room({});
@@ -53,7 +60,8 @@ export const LkRoomContext: DecoratorFn = (Story, args) => {
         connect={connect}
         token={token}
         serverUrl={serverUrl}
-        video={true}
+        video={roomContextSettings.video || false}
+        audio={roomContextSettings.audio || false}
         onConnected={() => {
           setConnected(true);
         }}

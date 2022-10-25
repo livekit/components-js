@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { ComponentMeta } from '@storybook/react';
 
-import { DisconnectButton, LiveKitRoom, useToken } from '@livekit/components-react';
+import { DisconnectButton } from '@livekit/components-react';
 import { LkRoomContext } from '../.storybook/LkRoomContext';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -23,14 +23,16 @@ export default {
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const Template = (args: typeof DisconnectButton) => <DisconnectButton>Leave</DisconnectButton>;
 
-export const Connected = Template.bind({});
+export const Connected = Template.bind({ stopTracks: true });
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-// Connected.args = {};
 Connected.parameters = {
   connect: true,
 };
 
 export const NotConnected = Template.bind({});
 NotConnected.args = {
+  stopTracks: true,
+};
+NotConnected.parameters = {
   connect: false,
 };

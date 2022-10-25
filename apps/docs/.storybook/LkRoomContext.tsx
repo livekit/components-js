@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { LiveKitRoom } from '@livekit/components-react';
 import { DecoratorFn } from '@storybook/react';
+import { Room } from 'livekit-client';
 
 /**
+ * Wraps a Storybook Story into a LiveKit room context.
  *
+ * Note: This component requires some environment variables. Make sure that they are set correctly in your .env file.
  */
 export const LkRoomContext: DecoratorFn = (Story, args) => {
   const [connect, setConnect] = useState(args.parameters.connect);
   const [connected, setConnected] = useState(false);
 
+  const room = new Room({});
+  const token = process.env.TEST_TOKEN;
+  const serverUrl = process.env.NEXT_PUBLIC_LK_SERVER_URL;
+
   useEffect(() => {
     return () => {
-      setConnect(false);
+      room.disconnect();
     };
   }, []);
+
   return (
     <>
       <div
@@ -41,15 +49,15 @@ export const LkRoomContext: DecoratorFn = (Story, args) => {
       </div>
 
       <LiveKitRoom
+        room={room}
         connect={connect}
-        token={process.env.TEST_TOKEN}
-        serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
+        token={token}
+        serverUrl={serverUrl}
         video={true}
         onConnected={() => {
           setConnected(true);
         }}
         onDisconnected={() => {
-          console.log('onDisconnected');
           setConnect(false);
         }}
       >

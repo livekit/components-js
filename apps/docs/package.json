@@ -18,6 +18,7 @@
   "dependencies": {
     "@livekit/components-react": "*",
     "@livekit/components-styles": "*",
+    "livekit-client": "^1.4.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

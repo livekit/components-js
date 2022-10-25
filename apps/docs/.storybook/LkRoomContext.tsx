@@ -60,8 +60,8 @@ export const LkRoomContext: DecoratorFn = (Story, args) => {
         connect={connect}
         token={token}
         serverUrl={serverUrl}
-        video={roomContextSettings.video || false}
-        audio={roomContextSettings.audio || false}
+        video={roomContextSettings?.video || false}
+        audio={roomContextSettings?.audio || false}
         onConnected={() => {
           setConnected(true);
         }}

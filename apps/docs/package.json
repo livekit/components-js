@@ -20,7 +20,8 @@
     "@livekit/components-styles": "*",
     "livekit-client": "^1.4.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "storybook": "^7.0.0-alpha.43"
   },
   "scripts": {
     "dev": "start-storybook -p 6006 --no-open",

@@ -12,6 +12,7 @@
     "build:meet": "turbo run build --filter=@livekit/meet...",
     "dev": "turbo run dev --filter=@livekit/components-*",
     "dev:old": "turbo run dev --parallel",
+    "dev:storybook": "turbo run dev --filter=@livekit/component-docs-storybook... --parallel",
     "dev:next": "turbo run dev --filter=@livekit/component-example-next... --parallel",
     "dev:meet": "turbo run dev --filter=@livekit/meet... --parallel",
     "dev:vue": "turbo run dev --filter=@livekit/component-example-nuxt... --parallel",
@@ -48,6 +49,7 @@
   },
   "workspaces": [
     "packages/*",
-    "examples/*"
+    "examples/*",
+    "apps/*"
   ]
 }

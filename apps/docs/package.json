@@ -1,0 +1,32 @@
+{
+  "name": "@livekit/component-docs-storybook",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.19.6",
+    "@storybook/addon-actions": "^6.5.13",
+    "@storybook/addon-essentials": "^6.5.13",
+    "@storybook/addon-interactions": "^6.5.13",
+    "@storybook/addon-links": "^6.5.13",
+    "@storybook/builder-webpack4": "^6.5.13",
+    "@storybook/manager-webpack4": "^6.5.13",
+    "@storybook/react": "^6.5.13",
+    "@storybook/testing-library": "^0.0.13",
+    "babel-loader": "^8.2.5"
+  },
+  "dependencies": {
+    "@livekit/components-react": "*",
+    "@livekit/components-styles": "*",
+    "livekit-client": "^1.4.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "storybook": "^7.0.0-alpha.43"
+  },
+  "scripts": {
+    "dev": "start-storybook -p 6006 --no-open",
+    "build": "build-storybook --docs",
+    "preview-storybook": "serve storybook-static",
+    "clean": "rm -rf .turbo && rm -rf node_modules"
+  }
+}

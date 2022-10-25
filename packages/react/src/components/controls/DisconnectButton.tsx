@@ -5,7 +5,7 @@ import { useRoomContext } from '../../contexts';
 import { useConnectionState } from '../ConnectionState';
 import { mergeProps } from '../../utils';
 
-type DisconnectButtonProps = HTMLAttributes<HTMLButtonElement> & {
+export type DisconnectButtonProps = HTMLAttributes<HTMLButtonElement> & {
   stopTracks?: boolean;
 };
 

@@ -15,12 +15,23 @@ export const useRoomInfo = (room: Room) => {
   return { name, metadata };
 };
 
-export const RoomName = (props: HTMLAttributes<HTMLSpanElement>) => {
+export interface RoomNameProps extends HTMLAttributes<HTMLSpanElement> {
+  childrenPosition?: 'before' | 'after';
+}
+
+export const RoomName = ({
+  childrenPosition = 'before',
+  children,
+  ...htmlAttributes
+}: RoomNameProps) => {
   const room = useRoomContext();
   const { name } = useRoomInfo(room);
+
   return (
-    <span {...props}>
-      {name} {props.children}
+    <span {...htmlAttributes}>
+      {childrenPosition === 'before' && children}
+      {name}
+      {childrenPosition === 'after' && children}
     </span>
   );
 };

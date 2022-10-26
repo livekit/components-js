@@ -48,9 +48,7 @@ export const LkRoomContext: DecoratorFn = (Story, args) => {
         <div style={{ display: 'flex', gap: '.4rem', alignItems: 'baseline' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '.4rem' }}>
             <span>Connection status: {`${connected ? 'connected' : 'not connected'}`}</span>
-            {connect === false && (
-              <button onClick={() => setConnect(!connect)}>Connect to room</button>
-            )}
+            <button onClick={() => setConnect(!connect)}>Toggle Connection</button>
           </div>
         </div>
       </div>

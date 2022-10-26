@@ -19,7 +19,7 @@ import { useObservableState } from '../../utils';
 
 export type MediaControlProps = Omit<HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   source: Track.Source;
-  initialState?: boolean;
+  initialState?: boolean; // FIXME: initialState false has no effect.
   onChange?: (enabled: boolean) => void;
 };
 

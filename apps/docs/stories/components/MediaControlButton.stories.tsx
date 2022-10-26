@@ -15,17 +15,18 @@ export default {
       options: [TrackSource.Camera, TrackSource.Microphone, TrackSource.ScreenShare],
       control: { type: 'select' },
     },
-  },
-  parameters: {
-    actions: {
-      handles: ['click'],
-    },
+    onChange: { action: 'onchange' },
   },
 };
 
-export const Connected: StoryObj<MediaControlProps> = {
+export const Unmuted: StoryObj<MediaControlProps> = {
   args: { source: TrackSource.Camera, initialState: true },
-  parameters: { roomContext: { audio: false, video: false, connect: true } },
+  parameters: { roomContext: { audio: false, video: true, connect: true } },
+};
+
+export const Muted: StoryObj<MediaControlProps> = {
+  args: { source: TrackSource.Camera, initialState: false },
+  parameters: { roomContext: { audio: false, video: true, connect: true } },
 };
 
 // export const NotConnected: StoryObj<MediaControlProps> = {

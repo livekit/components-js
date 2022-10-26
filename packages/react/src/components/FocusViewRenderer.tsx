@@ -1,8 +1,10 @@
 import { trackObservable } from '@livekit/components-core';
 import { Participant, TrackPublication } from 'livekit-client';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LKComponentAttributes } from '../utils';
+// TODO: Does it make sens to have this hook in a file that is called FocusViewRenderer but there is now component that renders anything?
 
+// TODO: Is this still needed or can we delete it?
 type FocusViewProps = LKComponentAttributes<HTMLDivElement> & {
   participant?: Participant;
   publication?: TrackPublication;

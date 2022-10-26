@@ -19,6 +19,7 @@ export default {
   },
 };
 
+// FIXME: Fix type error for participant.
 export const Default: StoryObj<ChatEntryProps> = {
   args: { entry: { timestamp: 1, message: 'Hello world!', from: participant } },
   parameters: { roomContext: { audio: false, video: false, connect: true } },

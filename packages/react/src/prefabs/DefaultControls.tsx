@@ -9,6 +9,7 @@ export interface DefaultControlsProps extends HTMLAttributes<HTMLDivElement> {}
 
 export function DefaultControls(props: DefaultControlsProps) {
   return (
+    // TODO: Remove styling default styling or move to styles package.
     <div style={{ position: 'fixed', bottom: '30px' }} {...props}>
       <MediaControlButton source={Track.Source.Microphone}>Mic</MediaControlButton>
       <MediaControlButton source={Track.Source.Camera}>Cam</MediaControlButton>

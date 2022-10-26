@@ -8,7 +8,7 @@ export default {
   component: MediaControlButton,
   decorators: [LkRoomContext],
   render: (args: MediaControlProps) => (
-    <MediaControlButton {...args}>Camera Control</MediaControlButton>
+    <MediaControlButton {...args}>{`${args.source}`.toUpperCase()} Control</MediaControlButton>
   ),
   argTypes: {
     source: {
@@ -17,19 +17,29 @@ export default {
     },
     onChange: { action: 'onchange' },
   },
+  parameters: {
+    actions: {
+      handles: ['mouseover button', 'click button'],
+    },
+  },
 };
 
-export const Unmuted: StoryObj<MediaControlProps> = {
+export const CameraUnmuted: StoryObj<MediaControlProps> = {
   args: { source: TrackSource.Camera, initialState: true },
   parameters: { roomContext: { audio: false, video: true, connect: true } },
 };
 
-export const Muted: StoryObj<MediaControlProps> = {
-  args: { source: TrackSource.Camera, initialState: false },
-  parameters: { roomContext: { audio: false, video: true, connect: true } },
+export const CameraMuted: StoryObj<MediaControlProps> = {
+  ...CameraUnmuted,
+  args: { ...CameraUnmuted.args, initialState: false },
 };
 
-// export const NotConnected: StoryObj<MediaControlProps> = {
-//   ...Connected,
-//   parameters: { roomContext: { ...Connected.parameters, connect: false } },
-// };
+export const MicrophoneUnmuted: StoryObj<MediaControlProps> = {
+  args: { source: TrackSource.Microphone, initialState: true },
+  parameters: { roomContext: { audio: true, video: false, connect: true } },
+};
+
+export const MicrophoneMuted: StoryObj<MediaControlProps> = {
+  ...MicrophoneUnmuted,
+  args: { ...MicrophoneUnmuted.args, initialState: false },
+};

@@ -21,11 +21,15 @@ function replaceNavigationBlock(path) {
 
     const findThis = new RegExp('<!--NAV_START-->((.|\\n)+?)<!--NAV_END-->', 'g');
     const newContent = data.replaceAll(findThis, NAVIGATION_BLOCK);
-    // console.log({ newContent });
-    fs.writeFile(path, newContent, 'utf-8', (err) => {
-      if (err) throw err;
-      console.log(`File ${path} was updated.`);
-    });
+    if (data !== newContent) {
+      // console.log({ newContent });
+      fs.writeFile(path, newContent, 'utf-8', (err) => {
+        if (err) throw err;
+        console.log(`File ${path} was updated.`);
+      });
+    } else {
+      console.warn(`Content did't update: ${path}`);
+    }
   });
 }
 
@@ -33,10 +37,9 @@ function main() {
   glob('*/**/README.md', { ignore: ['**/node_modules/**/*', '**/dist/**/*'] }, (err, files) => {
     console.log(files);
     if (err) throw err;
-    // files.map((path) => {
-    //   console.log('Glob found: ', path);
-    //   replaceNavigationBlock(path);
-    // });
+    files.map((path) => {
+      replaceNavigationBlock(path);
+    });
   });
 }
 

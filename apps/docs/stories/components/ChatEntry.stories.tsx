@@ -2,7 +2,7 @@ import React from 'react';
 import { StoryObj } from '@storybook/react';
 
 import { ChatEntry, ChatEntryProps } from '@livekit/components-react';
-import { LkRoomContext } from '../../.storybook/LkRoomContext';
+import { LkRoomContext } from '../../.storybook/LiveKitStorybookContexts';
 import { Participant } from 'livekit-client';
 
 const participant = new Participant('dummy-sid', 'dummy-identity', 'dummy-name', 'dummy-metadata');

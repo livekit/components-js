@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { DefaultRoomView, DefaultRoomViewProps } from '@livekit/components-react';
-import { LkRoomContext } from '../../.storybook/LkRoomContext';
+import { LkRoomContext } from '../../.storybook/LiveKitStorybookContexts';
 
 export default {
   component: DefaultRoomView,

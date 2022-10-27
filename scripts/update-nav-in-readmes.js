@@ -1,7 +1,9 @@
 /**
- * This file has some helper to update shared content in all README.md files in this monorepo.
+ * This file contains some tools to update common content in all README.md files in this monorepo.
  *
- * From project root run it with: `node scripts/<script-name>`.
+ * ## Usage
+ * Update NAVIGATION_BLOCK and YOU_ARE_HERE_ICON and
+ * then from project root run it with: `node scripts/<name-of-this-file>`.
  */
 const fs = require('fs');
 const glob = require('glob');

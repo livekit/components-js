@@ -17,9 +17,9 @@ import { mergeProps } from 'react-aria';
 import { useMaybeRoomContext, useRoomContext } from '../../contexts';
 import { useObservableState } from '../../utils';
 
-type MediaControlProps = Omit<HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
+export type MediaControlProps = Omit<HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   source: Track.Source;
-  initialState?: boolean;
+  initialState?: boolean; // FIXME: initialState false has no effect.
   onChange?: (enabled: boolean) => void;
 };
 

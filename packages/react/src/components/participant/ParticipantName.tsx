@@ -14,8 +14,8 @@ export const useParticipantInfo = (participant: Participant) => {
 
   return { identity, name, metadata };
 };
-
-export const ParticipantName = (props: HTMLAttributes<HTMLSpanElement>) => {
+export interface ParticipantNameProps extends HTMLAttributes<HTMLSpanElement> {}
+export const ParticipantName = ({ ...props }: ParticipantNameProps) => {
   const participant = useParticipantContext();
 
   const { className, infoObserver } = useMemo(() => {

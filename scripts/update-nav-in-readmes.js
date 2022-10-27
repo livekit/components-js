@@ -46,10 +46,12 @@ function replaceNavigationBlock(path) {
     if (data !== newContent) {
       fs.writeFile(path, newContent, 'utf-8', (err) => {
         if (err) throw err;
-        console.log(`✅ File ${path} was updated.`);
+        console.info(`✅ File ${path} was updated.`);
       });
     } else {
-      console.warn(`❗️ Content did't update: ${path}`);
+      console.info(
+        `❗️ The file was not updated because no changes were detected after the script run: ${path}`,
+      );
     }
   });
 }

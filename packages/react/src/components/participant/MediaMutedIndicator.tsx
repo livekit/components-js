@@ -4,7 +4,7 @@ import { setupMediaMutedIndicator } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import { useParticipantContext } from '../../contexts';
 
-interface MediaMutedIndicatorProps extends HTMLAttributes<HTMLDivElement> {
+export interface MediaMutedIndicatorProps extends HTMLAttributes<HTMLDivElement> {
   source: Track.Source;
   participant?: Participant;
 }

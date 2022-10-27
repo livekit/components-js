@@ -50,6 +50,6 @@
   "workspaces": [
     "packages/*",
     "examples/*",
-    "apps/*"
+    "docs/*"
   ]
 }

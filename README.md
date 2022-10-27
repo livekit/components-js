@@ -5,14 +5,14 @@ Create your LiveKit experience without worrying about state.
 <!--NAV_START-->
 ## Monorepo Navigation
 * [Home 👈](/README.md)
-* **Internals**
-    * [Core](/packages/core/README.md)
-    * [Styles](/packages/styles/README.md)
-* **Docs**
-    * [Storybook](/docs/storybook/README.md)
 * **Framework Implementations**:
     * [React](/packages/react/README.md)
     * [Vue](/packages/vue/README.md)
+* **Documentation**
+    * [Storybook](/docs/storybook/README.md)
+* **Internal Packages**
+    * [Core](/packages/core/README.md)
+    * [Styles](/packages/styles/README.md)
 <!--NAV_END-->
 
 ## Development Setup

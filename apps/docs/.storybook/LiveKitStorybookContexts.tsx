@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { LiveKitRoom } from '@livekit/components-react';
+import { LiveKitRoom, Participants } from '@livekit/components-react';
 import { DecoratorFn } from '@storybook/react';
 import { Room } from 'livekit-client';
 
@@ -48,9 +48,7 @@ export const LkRoomContext: DecoratorFn = (Story, args) => {
         <div style={{ display: 'flex', gap: '.4rem', alignItems: 'baseline' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '.4rem' }}>
             <span>Connection status: {`${connected ? 'connected' : 'not connected'}`}</span>
-            {connect === false && (
-              <button onClick={() => setConnect(!connect)}>Connect to room</button>
-            )}
+            <button onClick={() => setConnect(!connect)}>Toggle Connection</button>
           </div>
         </div>
       </div>
@@ -72,5 +70,19 @@ export const LkRoomContext: DecoratorFn = (Story, args) => {
         <Story />
       </LiveKitRoom>
     </>
+  );
+};
+
+/**
+ * Wraps a Storybook Story into a LiveKit participant context.
+ *
+ * Note: When used as a Storybook decorator, this component has to be used in combination with LkRoomContext.
+ * The decorator order matters: `decorators: [LkParticipantContext, LkRoomContext]`
+ */
+export const LkParticipantContext: DecoratorFn = (Story, args) => {
+  return (
+    <Participants>
+      <Story />
+    </Participants>
   );
 };

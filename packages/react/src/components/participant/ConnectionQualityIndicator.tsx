@@ -4,7 +4,7 @@ import { useParticipantContext } from '../../contexts';
 import { ConnectionQuality, Participant } from 'livekit-client';
 import { mergeProps, useObservableState } from '../../utils';
 
-interface ConnectionQualityIndicatorProps extends HTMLAttributes<HTMLDivElement> {
+export interface ConnectionQualityIndicatorProps extends HTMLAttributes<HTMLDivElement> {
   participant?: Participant;
 }
 

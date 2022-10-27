@@ -35,7 +35,7 @@ export const useDeviceSelector = (kind: MediaDeviceKind, room?: Room) => {
   return { devices, className, activeDeviceId: currentDeviceId, setActiveMediaDevice };
 };
 
-interface DeviceSelectorProps extends React.HTMLAttributes<HTMLUListElement> {
+export interface DeviceSelectorProps extends React.HTMLAttributes<HTMLUListElement> {
   kind: MediaDeviceKind;
   onActiveDeviceChange?: (deviceId: string) => void;
 }

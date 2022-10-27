@@ -4,7 +4,7 @@ Create your LiveKit experience without worrying about state.
 
 <!--NAV_START-->
 ## Monorepo Navigation
-* [Home  👈](/README.md)
+* [Home 👈](/README.md)
 * **Internals**
     * [Core](/packages/core/README.md)
     * [Styles](/packages/styles/README.md)

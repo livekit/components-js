@@ -1,7 +1,12 @@
-const { info } = require('console');
+/**
+ * This file has some helper to update shared content in all README.md files in this monorepo.
+ *
+ * From project root run it with: `node scripts/<script-name>`.
+ */
 const fs = require('fs');
 const glob = require('glob');
 
+const YOU_ARE_HERE_ICON = '👈';
 const NAVIGATION_BLOCK = `<!--NAV_START-->
 ## Monorepo Navigation
 * [Home](/README.md)
@@ -16,11 +21,11 @@ const NAVIGATION_BLOCK = `<!--NAV_START-->
 <!--NAV_END-->`;
 
 /**
- * Based on the path determine if an link to that path should be annotated with a emoji.
+ * Based on the path, determine whether a link to that path should have an emoji.
  */
 function getNavigationBlock(path) {
   const findThis = new RegExp('\\[(.*)\\](?=\\(/?' + path + '\\))', 'g');
-  const updatedNavBlock = NAVIGATION_BLOCK.replaceAll(findThis, '[$1 👈]');
+  const updatedNavBlock = NAVIGATION_BLOCK.replaceAll(findThis, `[$1 ${YOU_ARE_HERE_ICON}]`);
   // if (updatedNavBlock !== NAVIGATION_BLOCK) {
   //   console.log(`Updated nav block for: ${path}`);
   // } else {
@@ -30,7 +35,7 @@ function getNavigationBlock(path) {
 }
 
 /**
- * Replace everything between <!--NAV_START--> and <!--NAV_END--> and write it to file.
+ * Replace everything between <!--NAV_START--> and <!--NAV_END--> with NAVIGATION_BLOCK and write it to file.
  */
 function replaceNavigationBlock(path) {
   fs.readFile(path, 'utf-8', (err, data) => {

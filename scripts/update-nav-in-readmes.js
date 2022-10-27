@@ -1,3 +1,4 @@
+const { info } = require('console');
 const fs = require('fs');
 const glob = require('glob');
 
@@ -17,25 +18,25 @@ const NAVIGATION_BLOCK = `<!--NAV_START-->
 function replaceNavigationBlock(path) {
   fs.readFile(path, 'utf-8', (err, data) => {
     if (err) throw err;
-    // console.log(data);
-
     const findThis = new RegExp('<!--NAV_START-->((.|\\n)+?)<!--NAV_END-->', 'g');
     const newContent = data.replaceAll(findThis, NAVIGATION_BLOCK);
     if (data !== newContent) {
-      // console.log({ newContent });
       fs.writeFile(path, newContent, 'utf-8', (err) => {
         if (err) throw err;
-        console.log(`File ${path} was updated.`);
+        console.log(`✅ File ${path} was updated.`);
       });
     } else {
-      console.warn(`Content did't update: ${path}`);
+      console.warn(`❗️ Content did't update: ${path}`);
     }
   });
 }
 
 function main() {
+  console.info(
+    '\nUpdate navigation blocks in all README.md files...\n---------------------------------------------\n',
+  );
   glob('*/**/README.md', { ignore: ['**/node_modules/**/*', '**/dist/**/*'] }, (err, files) => {
-    console.log(files);
+    console.log('📝 Files matching Regex:\n', files);
     if (err) throw err;
     files.map((path) => {
       replaceNavigationBlock(path);

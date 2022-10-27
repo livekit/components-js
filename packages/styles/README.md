@@ -2,14 +2,18 @@
 
 Beautiful base styling for LiveKit components that you can use as is, build upon, or create your own.
 
+<!--NAV_START-->
 ## Monorepo Navigation
 * [Home](/README.md)
 * **Internals**
     * [Core](/packages/core/README.md)
     * [Styles 👈](/packages/styles/README.md)
+* **Docs**
+    * [Storybook](/docs/storybook/README.md)
 * **Framework Implementations**:
     * [React](/packages/react/README.md)
     * [Vue](/packages/vue/README.md)
+<!--NAV_END-->
 
 ### Dev notes
 

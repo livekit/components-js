@@ -67,7 +67,7 @@ export const LkRoomContext: DecoratorFn = (Story, args) => {
           setConnect(false);
         }}
       >
-        <Story />
+        {Story()}
       </LiveKitRoom>
     </>
   );
@@ -80,9 +80,5 @@ export const LkRoomContext: DecoratorFn = (Story, args) => {
  * The decorator order matters: `decorators: [LkParticipantContext, LkRoomContext]`
  */
 export const LkParticipantContext: DecoratorFn = (Story, args) => {
-  return (
-    <Participants>
-      <Story />
-    </Participants>
-  );
+  return <Participants>{Story()}</Participants>;
 };

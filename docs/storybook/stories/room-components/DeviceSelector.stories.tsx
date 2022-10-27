@@ -7,6 +7,7 @@ import { LkRoomContext } from '../../.storybook/LiveKitStorybookContexts';
 const kinds: MediaDeviceKind[] = ['audioinput', 'audiooutput', 'videoinput'];
 
 export default {
+  name: 'DeviceSelector',
   component: DeviceSelector,
   decorators: [LkRoomContext],
   render: (args: DeviceSelectorProps) => <DeviceSelector {...args}>{args.kind} </DeviceSelector>,

@@ -1,17 +1,11 @@
-# @livekit/component-example-sveltekit
+# @livekit/component-docs-storybook
 
-## 0.1.2
+## 1.0.1
 
 ### Patch Changes
 
 - update libs ([`e2c731d`](https://github.com/livekit/components/commit/e2c731d5f15f410680deaa1ffc389a02c6c9b36c))
 
 - Updated dependencies [[`e2c731d`](https://github.com/livekit/components/commit/e2c731d5f15f410680deaa1ffc389a02c6c9b36c)]:
-  - @livekit/components-svelte@0.1.2
-
-## 0.1.1
-
-### Patch Changes
-
-- Updated dependencies []:
-  - @livekit/components-svelte@0.1.1
+  - @livekit/components-react@0.1.2
+  - @livekit/components-styles@0.1.2

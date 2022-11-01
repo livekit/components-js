@@ -1,6 +1,6 @@
 {
   "name": "@livekit/component-docs-storybook",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "private": true,
   "license": "MIT",

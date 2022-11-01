@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "typings": "dist/index.d.ts",
   "publishConfig": {
@@ -31,7 +31,7 @@
   "devDependencies": {
     "livekit-server-sdk": "latest",
     "typescript": "^4.7.4",
-    "@livekit/components-styles": "0.1.1"
+    "@livekit/components-styles": "0.1.2"
   },
   "dependencies": {
     "rxjs": "^7.5.6"

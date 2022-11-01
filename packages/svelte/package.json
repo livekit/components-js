@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-svelte",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "./dist/index.js",
   "private": true,
   "scripts": {
@@ -24,7 +24,7 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
-    "@livekit/components-core": "0.1.1"
+    "@livekit/components-core": "0.1.2"
   },
   "peerDependencies": {
     "livekit-client": "^1.4.3"

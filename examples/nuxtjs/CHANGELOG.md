@@ -1,5 +1,12 @@
 # @livekit/component-example-nuxt
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @livekit/components-vue@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

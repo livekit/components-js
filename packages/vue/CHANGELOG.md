@@ -1,5 +1,12 @@
 # @livekit/components-vue
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [[`8339933`](https://github.com/livekit/components/commit/83399336e03908751c766e194e628a5f210dfe3a)]:
+  - @livekit/components-core@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

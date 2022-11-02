@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --filter=./packages/*",
     "build:react": "turbo run build --filter=@livekit/components-react...",
     "build:svelte": "turbo run build --filter=@livekit/components-svelte...",
     "build:core": "turbo run build --filter=@livekit/components-core...",

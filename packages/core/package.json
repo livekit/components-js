@@ -19,7 +19,7 @@
   },
   "scripts": {
     "dev": "tsc -w",
-    "build": "tsup-node ./src/index.ts"
+    "build": "tsup-node"
   },
   "peerDependencies": {
     "livekit-client": "^1.4.3",

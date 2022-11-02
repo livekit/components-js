@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 0.1.3
+
+### Patch Changes
+
+- bundle react components package with tsup ([#72](https://github.com/livekit/components/pull/72))
+
 ## 0.1.2
 
 ### Patch Changes

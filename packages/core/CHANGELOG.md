@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.1.4
+
+### Patch Changes
+
+- bundle token ([`5d2bd45`](https://github.com/livekit/components/commit/5d2bd453411870786b2f7ccdc22b951a3a058ff6))
+
 ## 0.1.3
 
 ### Patch Changes

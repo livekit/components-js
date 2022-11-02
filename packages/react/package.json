@@ -23,7 +23,7 @@
   },
   "scripts": {
     "dev": "tsc -w",
-    "build": "tsc"
+    "build": "tsup-node src/index.ts"
   },
   "name": "@livekit/components-react",
   "author": "LiveKit",
@@ -35,7 +35,8 @@
     "next": "^12.1.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "rxjs": "^7.5.6"
+    "rxjs": "^7.5.6",
+    "tsup": "latest"
   },
   "dependencies": {
     "@livekit/components-core": "0.1.2",

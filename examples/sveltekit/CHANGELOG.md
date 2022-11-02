@@ -1,5 +1,12 @@
 # @livekit/component-example-sveltekit
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @livekit/components-svelte@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

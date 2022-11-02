@@ -1,5 +1,5 @@
 {
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "MIT",
   "exports": {
     ".": {
@@ -39,7 +39,7 @@
     "tsup": "latest"
   },
   "dependencies": {
-    "@livekit/components-core": "0.1.3",
+    "@livekit/components-core": "0.1.4",
     "react-aria": "^3.19.0"
   },
   "peerDependencies": {

@@ -1,6 +1,6 @@
 {
 	"name": "@livekit/component-example-sveltekit",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
@@ -24,7 +24,7 @@
 		"vite": "^3.1.0"
 	},
 	"dependencies": {
-		"@livekit/components-svelte": "0.1.4"
+		"@livekit/components-svelte": "0.1.5"
 	},
 	"type": "module"
 }

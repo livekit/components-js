@@ -1,5 +1,13 @@
 # @livekit/components-core
 
+## 0.1.5
+
+### Patch Changes
+
+- remove type module
+
+- dont use nested folder exports
+
 ## 0.1.4
 
 ### Patch Changes

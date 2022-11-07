@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 0.1.6
+
+### Patch Changes
+
+- remove type module
+
+- dont use nested folder exports
+
+- Updated dependencies []:
+  - @livekit/components-core@0.1.5
+
 ## 0.1.5
 
 ### Patch Changes

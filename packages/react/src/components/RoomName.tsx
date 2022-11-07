@@ -1,6 +1,6 @@
 import { roomInfoObserver } from '@livekit/components-core';
 import { Room } from 'livekit-client';
-import React, { HTMLAttributes, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { HTMLAttributes, useMemo } from 'react';
 
 import { useRoomContext } from '../contexts';
 import { useObservableState } from '../utils';

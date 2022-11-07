@@ -1,11 +1,10 @@
 {
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "MIT",
   "typings": "dist/index.d.ts",
   "publishConfig": {
     "access": "restricted"
   },
-  "type": "module",
   "exports": {
     ".": "./dist/index.js",
     "./dist/token": "./dist/token.js"

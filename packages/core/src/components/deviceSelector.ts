@@ -1,8 +1,6 @@
-import { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
 import { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
-import { BehaviorSubject, map, merge, mergeWith, share } from 'rxjs';
+import { BehaviorSubject, map, mergeWith } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
-import { createMediaDeviceObserver } from '../observables/room';
 import { lkClassName } from '../utils';
 
 export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
@@ -35,7 +33,7 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
     }
     activeDeviceSubject.next(id);
   };
-  const className: ClassNames = lkClassName('device-selector');
+  const className: string = lkClassName('device-selector');
   return {
     className,
     activeDeviceObservable,

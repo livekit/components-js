@@ -2,6 +2,8 @@
   "version": "0.1.5",
   "license": "MIT",
   "typings": "dist/index.d.ts",
+  "type": "module",
+  "module": "dist/index.js",
   "publishConfig": {
     "access": "restricted"
   },
@@ -26,7 +28,6 @@
   },
   "name": "@livekit/components-core",
   "author": "LiveKit",
-  "module": "dist/index.js",
   "devDependencies": {
     "livekit-server-sdk": "latest",
     "typescript": "^4.7.4",

@@ -1,5 +1,5 @@
 {
-  "version": "0.1.6",
+  "version": "0.1.7",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -43,7 +43,7 @@
     "tsup": "^6.4.0"
   },
   "dependencies": {
-    "@livekit/components-core": "0.1.5",
+    "@livekit/components-core": "0.1.6",
     "react-aria": "^3.19.0"
   },
   "peerDependencies": {

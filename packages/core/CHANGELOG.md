@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.1.6
+
+### Patch Changes
+
+- Better Bundling - [#76](https://github.com/livekit/components/pull/76) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.5
 
 ### Patch Changes

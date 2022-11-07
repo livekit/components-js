@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 0.1.7
+
+### Patch Changes
+
+- Better Bundling - [#76](https://github.com/livekit/components/pull/76) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`fb22bc8`](https://github.com/livekit/components/commit/fb22bc8c4f71110f15f79888dc3e768f9cd7870a)]:
+  - @livekit/components-core@0.1.6
+
 ## 0.1.6
 
 ### Patch Changes

@@ -1,7 +1,7 @@
-import { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
+import { lkClassName } from '../utils';
 
 export function setupParticipantView() {
-  const className: ClassNames = 'lk-participant-view';
+  const className: string = lkClassName('participant-view');
   return {
     className,
   };

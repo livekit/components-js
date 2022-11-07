@@ -1,5 +1,3 @@
-import type { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
-import type { UnprefixedClassNames } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
 import {
   LocalParticipant,
   Participant,
@@ -7,6 +5,8 @@ import {
   Track,
   TrackPublication,
 } from 'livekit-client';
+import type { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
+import type { UnprefixedClassNames } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
 import { cssPrefix } from './constants';
 export const kebabize = (str: string) =>
   str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());

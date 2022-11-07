@@ -1,5 +1,4 @@
 import {
-  AudioTrack,
   Participant,
   ParticipantEvent,
   RemoteParticipant,
@@ -7,11 +6,10 @@ import {
   RoomEvent,
   Track,
   TrackPublication,
-  VideoTrack,
 } from 'livekit-client';
-import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 import { map, Observable, startWith, Subscriber } from 'rxjs';
 import { observeRoomEvents } from './room';
+import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 
 export function observeParticipantEvents<T extends Participant>(
   participant: T,

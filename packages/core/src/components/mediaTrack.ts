@@ -1,8 +1,7 @@
-import { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
 import { Participant, Track } from 'livekit-client';
 import { map } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
-import { attachIfSubscribed } from '../utils';
+import { lkClassName } from '../utils';
 
 export function setupMediaTrack(participant: Participant, source: Track.Source) {
   const trackObserver = observeParticipantMedia(participant).pipe(
@@ -12,9 +11,10 @@ export function setupMediaTrack(participant: Participant, source: Track.Source) 
       return publication;
     }),
   );
-  const className: ClassNames =
+  const className: string = lkClassName(
     source === Track.Source.Camera || source === Track.Source.ScreenShare
-      ? 'lk-participant-media-video'
-      : 'lk-participant-media-audio';
+      ? 'participant-media-video'
+      : 'participant-media-audio',
+  );
   return { className, trackObserver };
 }

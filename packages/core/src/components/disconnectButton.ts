@@ -1,10 +1,10 @@
-import { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
 import type { Room } from 'livekit-client';
+import { lkClassName } from '../utils';
 
 export function setupDisconnectButton(room: Room) {
   const disconnect = (stopTracks?: boolean) => {
     room.disconnect(stopTracks);
   };
-  const className: ClassNames = 'lk-disconnect-button';
+  const className: string = lkClassName('disconnect-button');
   return { className, disconnect };
 }

@@ -34,7 +34,8 @@ export function setupChat(room: Room) {
       const dataMsg = JSON.parse(decoder.decode(payload)) as DataMessageUnion;
       if (dataMsg.type === MessageType.CHAT) {
         const { timestamp, message } = dataMsg;
-        chatMessages = [...chatMessages, { timestamp, message, from: participant }];
+        const newMessage: ChatMessage = { timestamp, message, from: participant };
+        chatMessages = [...chatMessages, newMessage];
         subscriber.next(chatMessages);
       }
     });

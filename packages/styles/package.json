@@ -6,11 +6,15 @@
   "main": "dist/styles.css",
   "exports": {
     ".": {
+      "types": "./dist/types/general/styles.css.d.ts",
       "default": "./dist/general/styles.css"
     },
     "./layout": "./dist/general/layout.css",
     "./themes/*": {
       "default": "./dist/themes/*.css"
+    },
+    "./types": {
+      "types": "./dist/types_unprefixed/styles.scss.d.ts"
     }
   },
   "publishConfig": {

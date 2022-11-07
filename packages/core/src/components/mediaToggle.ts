@@ -1,7 +1,7 @@
-import { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
 import { LocalParticipant, Room, Track } from 'livekit-client';
 import { BehaviorSubject, map, Observable, startWith, Subscriber, tap } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
+import { lkClassName } from '../utils';
 
 export function setupMediaToggle(source: Track.Source, room: Room) {
   const { localParticipant } = room;
@@ -54,7 +54,7 @@ export function setupMediaToggle(source: Track.Source, room: Room) {
       // trigger observable update
     }
   };
-  const className: ClassNames = 'lk-button';
+  const className: string = lkClassName('button');
   return { className, toggle, enabledObserver, pendingObserver: pendingSubject.asObservable() };
 }
 
@@ -71,7 +71,7 @@ export function setupManualToggle(initialState: boolean) {
     enabledSubject.next(state);
     pendingSubject.next(false);
   };
-  const className: ClassNames = 'lk-button';
+  const className: string = lkClassName('button');
   return {
     className,
     toggle,

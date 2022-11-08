@@ -7,7 +7,6 @@ Beautiful base styling for LiveKit components that you can use as is, build upon
 * [Home](/README.md)
 * **Framework Implementations**:
     * [React](/packages/react/README.md)
-    * [Vue](/packages/vue/README.md)
 * **Documentation**
     * [Storybook](/docs/storybook/README.md)
 * **Internal Packages**

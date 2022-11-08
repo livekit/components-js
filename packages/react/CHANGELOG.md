@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 0.1.9
+
+### Patch Changes
+
+- quicker build - [`fdbf77a`](https://github.com/livekit/components/commit/fdbf77a1abcf96a410102459c2d44a41ed73120e) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.8
 
 ### Patch Changes

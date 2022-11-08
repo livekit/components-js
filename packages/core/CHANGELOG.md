@@ -1,5 +1,15 @@
 # @livekit/components-core
 
+## 0.1.7
+
+### Patch Changes
+
+- Fix react hook conditional errors - [#82](https://github.com/livekit/components/pull/82) ([@lukasIO](https://github.com/lukasIO))
+
+- Make core a module - [`725b995`](https://github.com/livekit/components/commit/725b9950b71fa3b633a24c981152f818cd05434c) ([@lukasIO](https://github.com/lukasIO))
+
+- bundle core package - [`324be93`](https://github.com/livekit/components/commit/324be930e9e33afb1c00d765a734c8bb2b53bf8e) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.6
 
 ### Patch Changes

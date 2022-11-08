@@ -1,12 +1,12 @@
 import { roomInfoObserver } from '@livekit/components-core';
 import { Room } from 'livekit-client';
-import React, { HTMLAttributes, useMemo } from 'react';
+import * as React from 'react';
 
 import { useRoomContext } from '../contexts';
 import { useObservableState } from '../utils';
 
 export const useRoomInfo = (room: Room) => {
-  const infoObserver = useMemo(() => roomInfoObserver(room), [room]);
+  const infoObserver = React.useMemo(() => roomInfoObserver(room), [room]);
   const { name, metadata } = useObservableState(infoObserver, {
     name: room.name,
     metadata: room.metadata,
@@ -15,7 +15,7 @@ export const useRoomInfo = (room: Room) => {
   return { name, metadata };
 };
 
-export interface RoomNameProps extends HTMLAttributes<HTMLSpanElement> {
+export interface RoomNameProps extends React.HTMLAttributes<HTMLSpanElement> {
   childrenPosition?: 'before' | 'after';
 }
 

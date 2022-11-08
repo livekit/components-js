@@ -20,7 +20,7 @@ import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import React, { useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
 import styles from '../styles/OldIndex.module.css';
 
 const Home: NextPage = () => {
@@ -28,16 +28,20 @@ const Home: NextPage = () => {
 
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? 'test-user';
-  const [connect, setConnect] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
-  const [focusedParticipant, setFocusedParticipant] = useState<Participant | undefined>(undefined);
-  const [focusPublication, setFocusPublication] = useState<TrackPublication | undefined>(undefined);
+  const [connect, setConnect] = React.useState(false);
+  const [isConnected, setIsConnected] = React.useState(false);
+  const [focusedParticipant, setFocusedParticipant] = React.useState<Participant | undefined>(
+    undefined,
+  );
+  const [focusPublication, setFocusPublication] = React.useState<TrackPublication | undefined>(
+    undefined,
+  );
 
-  const room = useMemo(() => new Room(), []);
+  const room = React.useMemo(() => new Room(), []);
 
   const { screenShareTrack, screenShareParticipant } = useScreenShare({ room });
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (
       (!screenShareTrack &&
         focusPublication &&

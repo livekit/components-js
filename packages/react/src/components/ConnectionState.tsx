@@ -1,16 +1,16 @@
 import { connectionStateObserver } from '@livekit/components-core';
 import type { Room } from 'livekit-client';
-import React, { HTMLAttributes } from 'react';
-import { useRoomContext } from '../contexts';
+import * as React from 'react';
+import { useEnsureRoom } from '../contexts';
 import { useObservableState } from '../utils';
 
-export interface ConnectionStatusProps extends HTMLAttributes<HTMLDivElement> {
+export interface ConnectionStatusProps extends React.HTMLAttributes<HTMLDivElement> {
   room?: Room;
 }
 
 export function useConnectionState(room?: Room) {
   // passed room takes precedence, if not supplied get current room context
-  const r = room ?? useRoomContext();
+  const r = useEnsureRoom(room);
   const connectionState = useObservableState(connectionStateObserver(r), r.state, [r]);
   return connectionState;
 }

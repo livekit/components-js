@@ -1,5 +1,15 @@
-import { createToken, VideoGrant } from '@livekit/components-react';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { AccessToken } from 'livekit-server-sdk';
+import type { AccessTokenOptions, VideoGrant } from 'livekit-server-sdk';
+
+const apiKey = process.env.LK_API_KEY;
+const apiSecret = process.env.LK_API_SECRET;
+
+const createToken = (userInfo: AccessTokenOptions, grant: VideoGrant) => {
+  const at = new AccessToken(apiKey, apiSecret, userInfo);
+  at.addGrant(grant);
+  return at.toJwt();
+};
 
 export default async function handleToken(req: NextApiRequest, res: NextApiResponse) {
   try {

@@ -1,11 +1,11 @@
 import { Track } from 'livekit-client';
-import React, { HTMLAttributes } from 'react';
+import * as React from 'react';
 import { DeviceSelectButton } from '../components/controls/DeviceSelector';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { MediaControlButton } from '../components/controls/MediaControlButton';
 import { StartAudio } from '../components/controls/StartAudio';
 
-export interface DefaultControlsProps extends HTMLAttributes<HTMLDivElement> {}
+export interface DefaultControlsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function DefaultControls(props: DefaultControlsProps) {
   return (

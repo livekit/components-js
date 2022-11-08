@@ -1,10 +1,10 @@
 import { Participant, Track } from 'livekit-client';
-import React, { HTMLAttributes } from 'react';
+import * as React from 'react';
 import { mergeProps } from '../../utils';
-import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
+import { ParticipantView } from '../participant/Participant';
 import { Participants } from '../Participants';
 
-export interface GridViewProps extends HTMLAttributes<HTMLDivElement> {
+export interface GridViewProps extends React.HTMLAttributes<HTMLDivElement> {
   participants?: Array<Participant>;
   showScreenShares?: boolean;
   // TODO maxVisibleParticipants

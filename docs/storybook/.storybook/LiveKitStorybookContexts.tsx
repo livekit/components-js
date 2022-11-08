@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
 import { LiveKitRoom, Participants } from '@livekit/components-react';
 import { DecoratorFn } from '@storybook/react';
 import { Room } from 'livekit-client';
@@ -16,14 +16,14 @@ export type RoomContextSettings = Partial<{
  */
 export const LkRoomContext: DecoratorFn = (Story, args) => {
   const roomContextSettings: RoomContextSettings = args.parameters.roomContext;
-  const [connect, setConnect] = useState(roomContextSettings?.connect);
-  const [connected, setConnected] = useState(false);
+  const [connect, setConnect] = React.useState(roomContextSettings?.connect);
+  const [connected, setConnected] = React.useState(false);
 
   const room = new Room({});
   const token = process.env.TEST_TOKEN;
   const serverUrl = process.env.NEXT_PUBLIC_LK_SERVER_URL;
 
-  useEffect(() => {
+  React.useEffect(() => {
     return () => {
       room.disconnect();
     };

@@ -1,29 +1,27 @@
-import React, { HTMLAttributes, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
 import { useMaybeRoomContext } from '../../contexts';
 import { setupDeviceSelector, createMediaDeviceObserver } from '@livekit/components-core';
 import { mergeProps, useObservableState } from '../../utils';
 import { Room } from 'livekit-client';
 
 export const useMediaDevices = (kind: MediaDeviceKind) => {
-  const isSSR = typeof window === 'undefined';
-  if (isSSR) return [];
-  const deviceObserver = useMemo(() => createMediaDeviceObserver(kind), [kind]);
+  const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
   const devices = useObservableState(deviceObserver, []);
   return devices;
 };
 
 export const useDeviceSelector = (kind: MediaDeviceKind, room?: Room) => {
   // List of all devices.
-  const deviceObserver = useMemo(() => createMediaDeviceObserver(kind), [kind]);
+  const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
   const devices = useObservableState(deviceObserver, []);
   // Active device management.
-  const [currentDeviceId, setCurrentDeviceId] = useState<string>('');
-  const { className, activeDeviceObservable, setActiveMediaDevice } = useMemo(
+  const [currentDeviceId, setCurrentDeviceId] = React.useState<string>('');
+  const { className, activeDeviceObservable, setActiveMediaDevice } = React.useMemo(
     () => setupDeviceSelector(kind, room),
     [kind, room],
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     const listener = activeDeviceObservable.subscribe((deviceId) => {
       if (deviceId) setCurrentDeviceId(deviceId);
     });
@@ -52,7 +50,7 @@ export function DeviceSelector({ kind, onActiveDeviceChange, ...props }: DeviceS
     onActiveDeviceChange?.(deviceId);
   };
   // Merge Props
-  const mergedProps = useMemo(() => mergeProps(props, { className }), [props]);
+  const mergedProps = React.useMemo(() => mergeProps(props, { className }), [props]);
 
   return (
     <ul {...mergedProps}>
@@ -71,7 +69,7 @@ export function DeviceSelector({ kind, onActiveDeviceChange, ...props }: DeviceS
   );
 }
 
-interface DeviceSelectButtonProps extends HTMLAttributes<HTMLButtonElement> {
+interface DeviceSelectButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   kind?: MediaDeviceKind;
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
 }
@@ -81,7 +79,7 @@ export const DeviceSelectButton = ({
   onActiveDeviceChange,
   ...props
 }: DeviceSelectButtonProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const handleActiveDeviceChange = (kind: MediaDeviceKind, deviceId: string) => {
     setIsOpen(false);

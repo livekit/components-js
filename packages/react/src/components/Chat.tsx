@@ -1,20 +1,23 @@
 import { ChatMessage, setupChat } from '@livekit/components-core';
 import { Room } from 'livekit-client';
-import React, { HTMLAttributes, useMemo, useRef } from 'react';
+import * as React from 'react';
 import { useRoomContext } from '../contexts';
 import { cloneSingleChild, useObservableState } from '../utils';
 
-export interface ChatProps extends HTMLAttributes<HTMLDivElement> {}
+export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function useChat() {
   const room = useRoomContext();
-  const { isSendingObservable, messageObservable, send } = useMemo(() => setupChat(room), [room]);
+  const { isSendingObservable, messageObservable, send } = React.useMemo(
+    () => setupChat(room),
+    [room],
+  );
   const isSending = useObservableState(isSendingObservable, false);
   const chatMessages = useObservableState(messageObservable, []);
   return { send, chatMessages, isSending };
 }
 
-export interface ChatEntryProps extends HTMLAttributes<HTMLDivElement> {
+export interface ChatEntryProps extends React.HTMLAttributes<HTMLDivElement> {
   entry: ChatMessage;
 }
 export function ChatEntry({ entry, ...props }: ChatEntryProps) {
@@ -33,7 +36,7 @@ export function Chat({ ...props }: ChatProps) {
       inputRef.current.value = '';
     }
   };
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
   return (
     <div {...props} className="lk-chat-container">
       <ul className="lk-chat-messages">

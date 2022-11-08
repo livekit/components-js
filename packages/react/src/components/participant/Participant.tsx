@@ -1,14 +1,5 @@
-import React, {
-  HTMLAttributes,
-  RefObject,
-  useEffect,
-  useState,
-  useMemo,
-  useRef,
-  ReactNode,
-  useContext,
-} from 'react';
-import { Participant, ParticipantEvent, Track, TrackPublication } from 'livekit-client';
+import * as React from 'react';
+import { Participant, Track, TrackPublication } from 'livekit-client';
 import {
   mutedObserver,
   createIsSpeakingObserver,
@@ -18,9 +9,9 @@ import {
 import { mergeProps } from '../../utils';
 import {
   ParticipantContext,
+  useEnsureParticipant,
   useMaybeParticipantContext,
   useMaybePinContext,
-  useParticipantContext,
 } from '../../contexts';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
 import { MediaMutedIndicator } from './MediaMutedIndicator';
@@ -32,7 +23,7 @@ export interface ParticipantClickEvent {
   publication?: TrackPublication;
 }
 
-export type ParticipantProps = HTMLAttributes<HTMLDivElement> & {
+export type ParticipantProps = React.HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
   trackSource?: Track.Source;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
@@ -41,20 +32,20 @@ export type ParticipantProps = HTMLAttributes<HTMLDivElement> & {
 export const useMediaTrack = (
   participant: Participant,
   source: Track.Source,
-  element?: RefObject<HTMLMediaElement>,
-  props?: HTMLAttributes<HTMLVideoElement | HTMLAudioElement>,
+  element?: React.RefObject<HTMLMediaElement>,
+  props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>,
 ) => {
-  const [publication, setPublication] = useState(participant.getTrack(source));
-  const [isMuted, setMuted] = useState(publication?.isMuted);
-  const [isSubscribed, setSubscribed] = useState(publication?.isSubscribed);
-  const [track, setTrack] = useState(publication?.track);
-  const previousElement = useRef<HTMLMediaElement | undefined | null>();
+  const [publication, setPublication] = React.useState(participant.getTrack(source));
+  const [isMuted, setMuted] = React.useState(publication?.isMuted);
+  const [isSubscribed, setSubscribed] = React.useState(publication?.isSubscribed);
+  const [track, setTrack] = React.useState(publication?.track);
+  const previousElement = React.useRef<HTMLMediaElement | undefined | null>();
 
-  const { className, trackObserver } = useMemo(() => {
+  const { className, trackObserver } = React.useMemo(() => {
     return setupMediaTrack(participant, source);
   }, [participant, source]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const subscription = trackObserver.subscribe((publication) => {
       setPublication(publication);
       setMuted(publication?.isMuted);
@@ -64,7 +55,7 @@ export const useMediaTrack = (
     return () => subscription?.unsubscribe();
   }, [trackObserver]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (track) {
       if (previousElement.current) {
         track.detach(previousElement.current);
@@ -89,11 +80,11 @@ export const useMediaTrack = (
   };
 };
 
-function useParticipantView<T extends HTMLAttributes<HTMLElement>>(
+function useParticipantView<T extends React.HTMLAttributes<HTMLElement>>(
   participant: Participant,
   props: T,
 ) {
-  const mergedProps = useMemo(() => {
+  const mergedProps = React.useMemo(() => {
     const { className } = setupParticipantView();
     return mergeProps(props, { className });
   }, [props]);
@@ -112,10 +103,10 @@ function useParticipantView<T extends HTMLAttributes<HTMLElement>>(
 }
 
 export function useIsSpeaking(participant?: Participant) {
-  const p = participant ?? useParticipantContext();
-  const [isSpeaking, setIsSpeaking] = useState(p.isSpeaking);
+  const p = useEnsureParticipant(participant);
+  const [isSpeaking, setIsSpeaking] = React.useState(p.isSpeaking);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const subscription = createIsSpeakingObserver(p).subscribe(setIsSpeaking);
     return () => subscription.unsubscribe();
   });
@@ -124,10 +115,10 @@ export function useIsSpeaking(participant?: Participant) {
 }
 
 export function useIsMuted(source: Track.Source, participant?: Participant) {
-  const p = participant ?? useParticipantContext();
-  const [isMuted, setIsMuted] = useState(!!p.getTrack(source)?.isMuted);
+  const p = useEnsureParticipant(participant);
+  const [isMuted, setIsMuted] = React.useState(!!p.getTrack(source)?.isMuted);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const listener = mutedObserver(p, source).subscribe(setIsMuted);
     return () => listener.unsubscribe();
   });
@@ -136,7 +127,7 @@ export function useIsMuted(source: Track.Source, participant?: Participant) {
 }
 
 function ParticipantContextIfNeeded(props: {
-  children?: ReactNode | ReactNode[];
+  children?: React.ReactNode | React.ReactNode[];
   participant?: Participant;
 }) {
   const hasContext = !!useMaybeParticipantContext();
@@ -156,7 +147,7 @@ export const ParticipantView = ({
   trackSource,
   ...htmlProps
 }: ParticipantProps) => {
-  const p = participant ?? useParticipantContext();
+  const p = useEnsureParticipant(participant);
   const { elementProps } = useParticipantView(p, htmlProps);
 
   const pinContext = useMaybePinContext();

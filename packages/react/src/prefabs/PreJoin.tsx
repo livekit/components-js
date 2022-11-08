@@ -6,7 +6,7 @@ import {
   Track,
   VideoPresets,
 } from 'livekit-client';
-import React, { HTMLAttributes, useEffect, useRef, useState } from 'react';
+import * as React from 'react';
 import { DeviceSelectButton, useMediaDevices } from '../components/controls/DeviceSelector';
 import { MediaControlButton } from '../components/controls/MediaControlButton';
 
@@ -26,7 +26,7 @@ const DEFAULT_USER_CHOICES = {
   audioDeviceId: '',
 };
 
-type PreJoinProps = Omit<HTMLAttributes<HTMLDivElement>, 'onSubmit'> & {
+type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'> & {
   defaults?: Partial<LocalUserChoices>;
   onValidate?: (values: LocalUserChoices) => boolean;
   onSubmit?: (values: LocalUserChoices) => void;
@@ -40,35 +40,37 @@ export const PreJoin = ({
   debug,
   ...htmlProps
 }: PreJoinProps) => {
-  const [userChoices, setUserChoices] = useState(DEFAULT_USER_CHOICES);
-  const [username, setUsername] = useState(defaults.username ?? DEFAULT_USER_CHOICES.username);
-  const [videoEnabled, setVideoEnabled] = useState<boolean>(
+  const [userChoices, setUserChoices] = React.useState(DEFAULT_USER_CHOICES);
+  const [username, setUsername] = React.useState(
+    defaults.username ?? DEFAULT_USER_CHOICES.username,
+  );
+  const [videoEnabled, setVideoEnabled] = React.useState<boolean>(
     defaults.videoEnabled ?? DEFAULT_USER_CHOICES.videoEnabled,
   );
-  const [audioEnabled, setAudioEnabled] = useState<boolean>(
+  const [audioEnabled, setAudioEnabled] = React.useState<boolean>(
     defaults.audioEnabled ?? DEFAULT_USER_CHOICES.audioEnabled,
   );
-  const [selectedVideoDevice, setSelectedVideoDevice] = useState<MediaDeviceInfo | undefined>(
+  const [selectedVideoDevice, setSelectedVideoDevice] = React.useState<MediaDeviceInfo | undefined>(
     undefined,
   );
-  const [selectedAudioDevice, setSelectedAudioDevice] = useState<MediaDeviceInfo | undefined>(
+  const [selectedAudioDevice, setSelectedAudioDevice] = React.useState<MediaDeviceInfo | undefined>(
     undefined,
   );
 
   const videoDevices = useMediaDevices('videoinput');
   const audioDevices = useMediaDevices('audioinput');
 
-  const videoEl = useRef(null);
-  const audioEl = useRef(null);
-  const [localVideoTrack, setLocalVideoTrack] = useState<LocalVideoTrack>();
-  const [localVideoDeviceId, setLocalVideoDeviceId] = useState<string>();
+  const videoEl = React.useRef(null);
+  const audioEl = React.useRef(null);
+  const [localVideoTrack, setLocalVideoTrack] = React.useState<LocalVideoTrack>();
+  const [localVideoDeviceId, setLocalVideoDeviceId] = React.useState<string>();
 
-  const [localAudioTrack, setLocalAudioTrack] = useState<LocalAudioTrack>();
-  const [localAudioDeviceId, setLocalAudioDeviceId] = useState<string>();
+  const [localAudioTrack, setLocalAudioTrack] = React.useState<LocalAudioTrack>();
+  const [localAudioDeviceId, setLocalAudioDeviceId] = React.useState<string>();
 
-  const [isValid, setIsValid] = useState<boolean>();
+  const [isValid, setIsValid] = React.useState<boolean>();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (videoEnabled) {
       createLocalVideoTrack({
         deviceId: selectedVideoDevice?.deviceId,
@@ -84,7 +86,7 @@ export const PreJoin = ({
     }
   }, [selectedVideoDevice, videoEnabled]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (audioEnabled) {
       createLocalAudioTrack({
         deviceId: selectedAudioDevice?.deviceId,
@@ -99,19 +101,19 @@ export const PreJoin = ({
     }
   }, [selectedAudioDevice, audioEnabled]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (videoEl.current) localVideoTrack?.attach(videoEl.current);
   }, [localVideoTrack, videoEl.current, selectedVideoDevice]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setSelectedVideoDevice(videoDevices.find((dev) => dev.deviceId === localVideoDeviceId));
   }, [localVideoDeviceId, videoDevices]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setSelectedAudioDevice(audioDevices.find((dev) => dev.deviceId === localAudioDeviceId));
   }, [localAudioDeviceId, audioDevices]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const newUserChoices = {
       username: username,
       videoEnabled: videoEnabled,

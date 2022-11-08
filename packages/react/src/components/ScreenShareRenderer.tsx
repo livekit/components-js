@@ -1,11 +1,11 @@
 import { screenShareObserver, ScreenShareTrackMap } from '@livekit/components-core';
 import { Participant, Room, Track, TrackPublication } from 'livekit-client';
-import React, { HTMLAttributes, RefObject, useCallback, useEffect, useRef, useState } from 'react';
-import { useRoomContext } from '../contexts';
+import * as React from 'react';
+import { useMaybeRoomContext } from '../contexts';
 
 type ScreenShareOptions = {
-  screenEl?: RefObject<HTMLVideoElement>;
-  audioEl?: RefObject<HTMLMediaElement>;
+  screenEl?: React.RefObject<HTMLVideoElement>;
+  audioEl?: React.RefObject<HTMLMediaElement>;
   onScreenShareChange?: (
     isActive: boolean,
     publication?: TrackPublication,
@@ -18,15 +18,21 @@ export const useScreenShare = ({
   onScreenShareChange,
   screenEl,
 }: ScreenShareOptions) => {
-  const [hasActiveScreenShare, setHasActiveScreenShare] = useState(false);
-  const [screenShareTrack, setScreenShareTrack] = useState<TrackPublication | undefined>(undefined);
-  const [screenShareParticipant, setScreenShareParticipant] = useState<Participant | undefined>(
+  const [hasActiveScreenShare, setHasActiveScreenShare] = React.useState(false);
+  const [screenShareTrack, setScreenShareTrack] = React.useState<TrackPublication | undefined>(
     undefined,
   );
-  const [allScreenShares, setAllScreenShares] = useState<ScreenShareTrackMap>([]);
+  const [screenShareParticipant, setScreenShareParticipant] = React.useState<
+    Participant | undefined
+  >(undefined);
+  const [allScreenShares, setAllScreenShares] = React.useState<ScreenShareTrackMap>([]);
+  const roomContext = useMaybeRoomContext();
+  const room = passedRoom ?? roomContext;
+  if (!room) {
+    throw new Error('no room provided');
+  }
 
-  const room = passedRoom ?? useRoomContext();
-  const handleChange = useCallback((map: ScreenShareTrackMap) => {
+  const handleChange = React.useCallback((map: ScreenShareTrackMap) => {
     console.log('screen share change');
     setAllScreenShares(map);
     if (map.length < 1) {
@@ -65,16 +71,21 @@ export const useScreenShare = ({
     setHasActiveScreenShare(true);
     onScreenShareChange?.(true, screenShareTrack, screenShareParticipant);
   }, []);
-  useEffect(() => {
-    const listener = screenShareObserver(room).subscribe((screenShareMap) =>
+  React.useEffect(() => {
+    const listener = screenShareObserver(room).subscribe((screenShareMap: ScreenShareTrackMap) =>
       handleChange(screenShareMap),
     );
     return () => listener.unsubscribe();
   }, [room]);
-  return { hasActiveScreenShare, screenShareTrack, screenShareParticipant, allScreenShares };
+  return {
+    hasActiveScreenShare,
+    screenShareTrack,
+    screenShareParticipant,
+    allScreenShares,
+  };
 };
 
-type ScreenShareProps = HTMLAttributes<HTMLDivElement> & {
+type ScreenShareProps = React.HTMLAttributes<HTMLDivElement> & {
   onScreenShareChange?: (active: boolean) => void;
 };
 
@@ -83,9 +94,13 @@ export const ScreenShareView = ({
   onScreenShareChange,
   ...htmlProps
 }: ScreenShareProps) => {
-  const screenEl = useRef(null);
-  const audioEl = useRef(null);
-  const { hasActiveScreenShare } = useScreenShare({ screenEl, audioEl, onScreenShareChange });
+  const screenEl = React.useRef(null);
+  const audioEl = React.useRef(null);
+  const { hasActiveScreenShare } = useScreenShare({
+    screenEl,
+    audioEl,
+    onScreenShareChange,
+  });
 
   return (
     <>

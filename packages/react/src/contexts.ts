@@ -16,6 +16,17 @@ export function useMaybeParticipantContext() {
   return useContext(ParticipantContext);
 }
 
+export function useEnsureParticipant(participant?: Participant) {
+  const context = useMaybeParticipantContext();
+  const p = participant ?? context;
+  if (!p) {
+    throw new Error(
+      'No participant provided, make sure you are inside a participant context or pass the participant explicitly',
+    );
+  }
+  return p;
+}
+
 export const RoomContext = createContext<Room | undefined>(undefined);
 
 export function useRoomContext() {
@@ -28,6 +39,17 @@ export function useRoomContext() {
 
 export function useMaybeRoomContext() {
   return useContext(RoomContext);
+}
+
+export function useEnsureRoom(room?: Room) {
+  const context = useMaybeRoomContext();
+  const r = room ?? context;
+  if (!r) {
+    throw new Error(
+      'No room provided, make sure you are inside a Room context or pass the room explicitly',
+    );
+  }
+  return r;
 }
 
 export type PinAction =

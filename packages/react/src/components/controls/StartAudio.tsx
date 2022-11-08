@@ -1,11 +1,11 @@
 import { setupStartAudio } from '@livekit/components-core';
 import { Room } from 'livekit-client';
-import React, { HTMLAttributes, useMemo } from 'react';
+import * as React from 'react';
 import { useRoomContext } from '../../contexts';
 import { mergeProps, useObservableState } from '../../utils';
 
-const useStartAudio = (room: Room, props: HTMLAttributes<HTMLButtonElement>) => {
-  const { className, roomAudioPlaybackAllowedObservable, handleStartAudioPlayback } = useMemo(
+const useStartAudio = (room: Room, props: React.HTMLAttributes<HTMLButtonElement>) => {
+  const { className, roomAudioPlaybackAllowedObservable, handleStartAudioPlayback } = React.useMemo(
     () => setupStartAudio(),
     [room],
   );
@@ -16,7 +16,7 @@ const useStartAudio = (room: Room, props: HTMLAttributes<HTMLButtonElement>) => 
     [roomAudioPlaybackAllowedObservable],
   );
 
-  const mergedProps = useMemo(
+  const mergedProps = React.useMemo(
     () =>
       mergeProps(props, {
         className,
@@ -30,7 +30,7 @@ const useStartAudio = (room: Room, props: HTMLAttributes<HTMLButtonElement>) => 
 
   return { mergedProps, canPlayAudio };
 };
-interface AllowAudioPlaybackProps extends HTMLAttributes<HTMLButtonElement> {
+interface AllowAudioPlaybackProps extends React.HTMLAttributes<HTMLButtonElement> {
   label: string;
 }
 

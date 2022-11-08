@@ -7,7 +7,7 @@
     "prettier/react",
     "plugin:@typescript-eslint/eslint-recommended"
   ],
-  "plugins": ["svelte3", "@typescript-eslint"],
+  "plugins": ["svelte3", "@typescript-eslint", "react-hooks"],
   "overrides": [{ "files": ["*.svelte"], "processor": "svelte3/svelte3" }],
   "env": {
     "node": true
@@ -32,6 +32,8 @@
     "react/jsx-fragments": 0,
     "react/no-unused-prop-types": 0,
     "no-unused-vars": 0,
-    "import/export": 0
+    "import/export": 0,
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }

@@ -1,5 +1,5 @@
 import { ParticipantContext, useRoomContext } from '../contexts';
-import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
 import { Participant } from 'livekit-client';
 import { useLocalParticipant } from './controls/MediaControlButton';
 import {
@@ -11,7 +11,7 @@ import { cloneSingleChild, useObservableState } from '../utils';
 import { ParticipantView } from './participant/Participant';
 
 type ParticipantsProps = {
-  children: ReactNode | ReactNode[];
+  children: React.ReactNode | React.ReactNode[];
   filterDependencies?: Array<unknown>;
   filter?: (participants: Array<Participant>) => Array<Participant>;
 };
@@ -20,9 +20,9 @@ export const useRemoteParticipants = (
   filter?: (participants: Array<Participant>) => Array<Participant>,
 ) => {
   const room = useRoomContext();
-  const [participants, setParticipants] = useState<Participant[]>([]);
+  const [participants, setParticipants] = React.useState<Participant[]>([]);
 
-  const handleUpdate = useCallback(
+  const handleUpdate = React.useCallback(
     (participants: Participant[]) => {
       if (filter) {
         participants = filter(participants);
@@ -31,7 +31,7 @@ export const useRemoteParticipants = (
     },
     [participants, filter],
   );
-  useEffect(() => {
+  React.useEffect(() => {
     const listener = connectedParticipantsObserver(room).subscribe(handleUpdate);
     return () => listener.unsubscribe();
   }, [room]);
@@ -42,11 +42,11 @@ export const useParticipants = (
   filter?: (participants: Array<Participant>) => Array<Participant>,
   filterDependencies: Array<unknown> = [],
 ) => {
-  const [participants, setParticipants] = useState<Participant[]>([]);
+  const [participants, setParticipants] = React.useState<Participant[]>([]);
   const remoteParticipants = useRemoteParticipants(undefined);
   const { localParticipant } = useLocalParticipant();
 
-  useEffect(() => {
+  React.useEffect(() => {
     let all = [localParticipant, ...remoteParticipants];
     if (filter) {
       all = filter(all);
@@ -59,19 +59,20 @@ export const useParticipants = (
 
 export const useSpeakingParticipants = () => {
   const room = useRoomContext();
-  const speakerObserver = useMemo(() => activeSpeakerObserver(room), [room]);
+  const speakerObserver = React.useMemo(() => activeSpeakerObserver(room), [room]);
   const activeSpeakers = useObservableState(speakerObserver, room.activeSpeakers);
   return activeSpeakers;
 };
 
-export const useSortedParticipants = (participants?: Array<Participant>) => {
-  const ps = participants ?? useParticipants();
-  const [sortedParticipants, setSortedParticipants] = useState(sortParticipantsByVolume(ps));
+export const useSortedParticipants = (participants: Array<Participant>) => {
+  const [sortedParticipants, setSortedParticipants] = React.useState(
+    sortParticipantsByVolume(participants),
+  );
   const activeSpeakers = useSpeakingParticipants();
 
-  useEffect(() => {
-    setSortedParticipants(sortParticipantsByVolume(ps));
-  }, [activeSpeakers, ps]);
+  React.useEffect(() => {
+    setSortedParticipants(sortParticipantsByVolume(participants));
+  }, [activeSpeakers, participants]);
   return sortedParticipants;
 };
 

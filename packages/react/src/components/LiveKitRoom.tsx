@@ -9,12 +9,12 @@ import {
   ScreenShareCaptureOptions,
   VideoCaptureOptions,
 } from 'livekit-client';
-import React, { ReactNode, useEffect, useState } from 'react';
+import * as React from 'react';
 import { RoomContext } from '../contexts';
 import { DefaultRoomView } from '../prefabs/DefaultRoomView';
 
 export type LiveKitRoomProps = {
-  children?: ReactNode | ReactNode[];
+  children?: React.ReactNode | React.ReactNode[];
   serverUrl?: string;
   token?: string;
   room?: Room;
@@ -43,9 +43,9 @@ interface UserInfo {
 }
 
 export function useToken(tokenEndpoint: string | undefined, roomName: string, userInfo?: UserInfo) {
-  const [token, setToken] = useState<string | undefined>(undefined);
+  const [token, setToken] = React.useState<string | undefined>(undefined);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (tokenEndpoint === undefined) {
       throw Error('token endpoint needs to be defined');
     }
@@ -89,10 +89,10 @@ export const useLiveKitRoom = (props: LiveKitRoomProps) => {
       'when using a manually created room, the options object will be ignored. set the desired options directly when creating the room instead.',
     );
   }
-  const [room] = useState<Room>(passedRoom ?? new Room(options));
+  const [room] = React.useState<Room>(passedRoom ?? new Room(options));
   // setLogLevel('debug');
 
-  useEffect(() => {
+  React.useEffect(() => {
     const onSignalConnected = () => {
       const localP = room.localParticipant;
       try {
@@ -111,7 +111,7 @@ export const useLiveKitRoom = (props: LiveKitRoomProps) => {
     };
   }, [room.state, audio, video, screen]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!token) {
       return;
     }
@@ -130,7 +130,7 @@ export const useLiveKitRoom = (props: LiveKitRoomProps) => {
     }
   }, [connect, token]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const connectionStateChangeListener = roomEventSelector(
       room,
       RoomEvent.ConnectionStateChanged,

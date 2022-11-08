@@ -1,10 +1,10 @@
-import React, { HTMLAttributes, HtmlHTMLAttributes, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
 import { mergeProps, useObservableState } from '../../utils';
 import { setupMediaMutedIndicator } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
-import { useParticipantContext } from '../../contexts';
+import { useEnsureParticipant } from '../../contexts';
 
-export interface MediaMutedIndicatorProps extends HTMLAttributes<HTMLDivElement> {
+export interface MediaMutedIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   source: Track.Source;
   participant?: Participant;
 }
@@ -12,15 +12,15 @@ export interface MediaMutedIndicatorProps extends HTMLAttributes<HTMLDivElement>
 export const useMediaMutedIndicator = (
   source: Track.Source,
   participant?: Participant,
-  props?: HtmlHTMLAttributes<HTMLDivElement>,
+  props?: React.HtmlHTMLAttributes<HTMLDivElement>,
 ) => {
-  const p = participant ?? useParticipantContext();
-  const { className, mediaMutedObserver } = useMemo(
+  const p = useEnsureParticipant(participant);
+  const { className, mediaMutedObserver } = React.useMemo(
     () => setupMediaMutedIndicator(p, source),
     [source, participant],
   );
 
-  const htmlProps = useMemo(
+  const htmlProps = React.useMemo(
     () =>
       mergeProps(props, {
         className,

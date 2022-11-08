@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useState } from 'react';
+import * as React from 'react';
 import { PinContextProvider } from '../components/PinContextProvider';
 import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
 import { DefaultControls } from './DefaultControls';
@@ -6,11 +6,11 @@ import { FocusViewContainer } from '../components/layout/FocusView';
 import { GridView } from '../components/layout/GridView';
 import { PinState } from '@livekit/components-core';
 
-export interface DefaultRoomViewProps extends HTMLAttributes<HTMLDivElement> {}
+export interface DefaultRoomViewProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function DefaultRoomView({ ...props }: DefaultRoomViewProps) {
   type Layout = 'grid' | 'focus';
-  const [layout, setLayout] = useState<Layout>('grid');
+  const [layout, setLayout] = React.useState<Layout>('grid');
 
   const handlePinStateChange = (pinState: PinState) => {
     setLayout(pinState.pinnedParticipant ? 'focus' : 'grid');

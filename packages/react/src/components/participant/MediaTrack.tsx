@@ -1,20 +1,19 @@
 import { Participant, Track } from 'livekit-client';
-import React, { useRef } from 'react';
-import { useParticipantContext } from '../../contexts';
-import { LKComponentAttributes } from '../../utils';
+import * as React from 'react';
+import { useEnsureParticipant } from '../../contexts';
 import { ParticipantClickEvent, useMediaTrack } from './Participant';
 
 export interface MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
-  extends Omit<LKComponentAttributes<T>, 'children'> {
+  extends Omit<React.HTMLAttributes<T>, 'children'> {
   participant?: Participant;
   source: Track.Source;
   onTrackClick?: (evt: ParticipantClickEvent) => void;
 }
 
 export const MediaTrack = ({ onTrackClick, onClick, ...props }: MediaTrackProps) => {
-  const participant = props.participant ?? useParticipantContext();
+  const participant = useEnsureParticipant(props.participant);
 
-  const mediaEl = useRef<HTMLVideoElement>(null);
+  const mediaEl = React.useRef<HTMLVideoElement>(null);
   const { elementProps, publication } = useMediaTrack(participant, props.source, mediaEl, props);
 
   const clickHandler = (evt: React.MouseEvent<HTMLMediaElement, MouseEvent>) => {

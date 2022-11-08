@@ -1,13 +1,13 @@
 import { isParticipantTrackPinned } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
-import React, { HTMLAttributes, useContext, useEffect } from 'react';
+import * as React from 'react';
 import { useMaybePinContext, usePinContext } from '../../contexts';
 import { mergeProps } from '../../utils';
 import { MediaTrack } from '../participant/MediaTrack';
 import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
-import { Participants, useSortedParticipants } from '../Participants';
+import { Participants, useParticipants, useSortedParticipants } from '../Participants';
 
-interface FocusViewContainerProps extends HTMLAttributes<HTMLDivElement> {
+interface FocusViewContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   focusParticipant?: Participant;
   focusTrackSource?: Track.Source;
   participants?: Array<Participant>;
@@ -23,6 +23,7 @@ export function FocusViewContainer({
 }: FocusViewContainerProps) {
   const elementProps = mergeProps(props, { className: 'lk-participant-focus-view' });
   const pinContext = usePinContext();
+  const participants = useSortedParticipants(useParticipants());
 
   return (
     <div {...elementProps}>
@@ -31,14 +32,14 @@ export function FocusViewContainer({
           {pinContext.state?.pinnedParticipant && (
             <FocusView participant={pinContext.state?.pinnedParticipant} />
           )}
-          <CarouselView />
+          <CarouselView participants={participants} />
         </>
       )}
     </div>
   );
 }
 
-export interface FocusViewProps extends HTMLAttributes<HTMLElement> {
+export interface FocusViewProps extends React.HTMLAttributes<HTMLElement> {
   participant: Participant;
   trackSource?: Track.Source;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
@@ -61,8 +62,8 @@ export function FocusView({
   );
 }
 
-export interface CarouselProps extends HTMLAttributes<HTMLMediaElement> {
-  participants?: Participant[];
+export interface CarouselProps extends React.HTMLAttributes<HTMLMediaElement> {
+  participants: Participant[];
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
   showScreenShares?: boolean;
 }
@@ -74,7 +75,6 @@ export function CarouselView({
   ...props
 }: CarouselProps) {
   const { state: pinState } = usePinContext();
-  const sortedParticipants = participants ?? useSortedParticipants();
   return (
     <aside {...props}>
       {showScreenShares && (
@@ -84,7 +84,7 @@ export function CarouselView({
               return !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare);
             })
           }
-          filterDependencies={[pinState, sortedParticipants]}
+          filterDependencies={[pinState, participants]}
         >
           {props.children ?? (
             <ParticipantView

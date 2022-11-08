@@ -1,17 +1,17 @@
-import React, { HTMLAttributes, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
 import { setupConnectionQualityIndicator } from '@livekit/components-core';
-import { useParticipantContext } from '../../contexts';
+import { useEnsureParticipant } from '../../contexts';
 import { ConnectionQuality, Participant } from 'livekit-client';
 import { mergeProps, useObservableState } from '../../utils';
 
-export interface ConnectionQualityIndicatorProps extends HTMLAttributes<HTMLDivElement> {
+export interface ConnectionQualityIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   participant?: Participant;
 }
 
 export const useConnectionQualityIndicator = (props?: ConnectionQualityIndicatorProps) => {
-  const p = props?.participant ?? useParticipantContext();
+  const p = useEnsureParticipant(props?.participant);
 
-  const { className, connectionQualityObserver } = useMemo(
+  const { className, connectionQualityObserver } = React.useMemo(
     () => setupConnectionQualityIndicator(p),
     [p],
   );
@@ -20,7 +20,7 @@ export const useConnectionQualityIndicator = (props?: ConnectionQualityIndicator
     connectionQualityObserver,
   ]);
 
-  const elementProps = useMemo(() => {
+  const elementProps = React.useMemo(() => {
     return { ...mergeProps(props, { className }), 'data-lk-quality': quality };
   }, [quality, props, className]);
 

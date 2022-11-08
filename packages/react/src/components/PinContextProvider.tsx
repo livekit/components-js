@@ -1,6 +1,6 @@
 import { PinState } from '@livekit/components-core';
 import { Track } from 'livekit-client';
-import React, { ReactNode, useEffect, useReducer } from 'react';
+import * as React from 'react';
 import { PinAction, PinContext, useRoomContext } from '../contexts';
 import { useScreenShare } from './ScreenShareRenderer';
 
@@ -19,25 +19,18 @@ function pinReducer(state: PinState, action: PinAction): PinState {
   }
 }
 
-export function createNewPinContext() {
-  const pinDefaultValue = { pinnedParticipant: undefined };
-  const [pinState, pinDispatch] = useReducer(pinReducer, pinDefaultValue);
-  const pinContextValue = { dispatch: pinDispatch, state: pinState };
-  return pinContextValue;
-}
-
 type PinContextProviderProps = {
-  children?: ReactNode | ReactNode[];
+  children?: React.ReactNode | React.ReactNode[];
   onChange?: (pinState: PinState) => void;
 };
 
 export const PinContextProvider = ({ onChange, children }: PinContextProviderProps) => {
   const room = useRoomContext();
   const pinDefaultValue = { pinnedParticipant: undefined };
-  const [pinState, pinDispatch] = useReducer(pinReducer, pinDefaultValue);
+  const [pinState, pinDispatch] = React.useReducer(pinReducer, pinDefaultValue);
   const pinContextDefault = { dispatch: pinDispatch, state: pinState };
   const { screenShareParticipant } = useScreenShare({ room });
-  useEffect(() => {
+  React.useEffect(() => {
     if (screenShareParticipant) {
       pinDispatch({
         msg: 'set_pin',
@@ -49,7 +42,7 @@ export const PinContextProvider = ({ onChange, children }: PinContextProviderPro
     }
   }, [screenShareParticipant]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (onChange) onChange(pinState);
   }, [pinState]);
 

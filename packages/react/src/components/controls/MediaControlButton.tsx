@@ -5,19 +5,12 @@ import {
   setupMediaToggle,
 } from '@livekit/components-core';
 import { LocalParticipant, Track, TrackPublication } from 'livekit-client';
-import React, {
-  HTMLAttributes,
-  MouseEventHandler,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { mergeProps } from 'react-aria';
+import * as React from 'react';
+import { mergeProps } from '../../mergeProps';
 import { useMaybeRoomContext, useRoomContext } from '../../contexts';
 import { useObservableState } from '../../utils';
 
-export type MediaControlProps = Omit<HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
+export type MediaControlProps = Omit<React.HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   source: Track.Source;
   initialState?: boolean; // FIXME: initialState false has no effect.
   onChange?: (enabled: boolean) => void;
@@ -27,16 +20,20 @@ export const TrackSource = Track.Source;
 
 export const useLocalParticipant = () => {
   const room = useRoomContext();
-  const [localParticipant, setLocalParticipant] = useState(room.localParticipant);
-  const [isMicrophoneEnabled, setIsMicrophoneEnabled] = useState(
+  const [localParticipant, setLocalParticipant] = React.useState(room.localParticipant);
+  const [isMicrophoneEnabled, setIsMicrophoneEnabled] = React.useState(
     localParticipant.isMicrophoneEnabled,
   );
-  const [isCameraEnabled, setIsCameraEnabled] = useState(localParticipant.isMicrophoneEnabled);
-  const [isScreenShareEnabled, setIsScreenShareEnabled] = useState(
+  const [isCameraEnabled, setIsCameraEnabled] = React.useState(
     localParticipant.isMicrophoneEnabled,
   );
-  const [microphoneTrack, setMicrophoneTrack] = useState<TrackPublication | undefined>(undefined);
-  const [cameraTrack, setCameraTrack] = useState<TrackPublication | undefined>(undefined);
+  const [isScreenShareEnabled, setIsScreenShareEnabled] = React.useState(
+    localParticipant.isMicrophoneEnabled,
+  );
+  const [microphoneTrack, setMicrophoneTrack] = React.useState<TrackPublication | undefined>(
+    undefined,
+  );
+  const [cameraTrack, setCameraTrack] = React.useState<TrackPublication | undefined>(undefined);
 
   const handleUpdate = (media: ParticipantMedia<LocalParticipant>) => {
     setIsCameraEnabled(media.isCameraEnabled);
@@ -46,7 +43,7 @@ export const useLocalParticipant = () => {
     setMicrophoneTrack(media.microphoneTrack);
     setLocalParticipant(media.participant);
   };
-  useEffect(() => {
+  React.useEffect(() => {
     const listener = observeParticipantMedia(localParticipant).subscribe(handleUpdate);
     return () => listener.unsubscribe();
   });
@@ -64,7 +61,7 @@ export const useMediaToggle = ({ source, onChange, initialState, ...rest }: Medi
   const room = useMaybeRoomContext();
   const track = room?.localParticipant?.getTrack(source);
 
-  const { toggle, className, pendingObserver, enabledObserver } = useMemo(
+  const { toggle, className, pendingObserver, enabledObserver } = React.useMemo(
     () => (room ? setupMediaToggle(source, room) : setupManualToggle(!!initialState)),
     [source, room],
   );
@@ -72,13 +69,13 @@ export const useMediaToggle = ({ source, onChange, initialState, ...rest }: Medi
   const pending = useObservableState(pendingObserver, false);
   const enabled = useObservableState(enabledObserver, !!track?.isEnabled);
 
-  useEffect(() => {
+  React.useEffect(() => {
     onChange?.(enabled);
   }, [enabled]);
 
-  const newProps = useMemo(() => mergeProps(rest, { className }), [rest, className]);
+  const newProps = React.useMemo(() => mergeProps(rest, { className }), [rest, className]);
 
-  const clickHandler: MouseEventHandler<HTMLButtonElement> = useCallback(
+  const clickHandler: React.MouseEventHandler<HTMLButtonElement> = React.useCallback(
     (evt) => {
       toggle();
       rest.onClick?.(evt);

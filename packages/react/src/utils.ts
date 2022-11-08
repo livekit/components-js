@@ -1,8 +1,8 @@
-import React, { HTMLAttributes, ReactNode, useEffect, useState } from 'react';
-import { mergeProps as mergePropsReactAria } from 'react-aria';
+import * as React from 'react';
+import { mergeProps as mergePropsReactAria } from './mergeProps';
 import { Observable } from 'rxjs';
 
-type LKComponentAttributes<T extends HTMLElement> = HTMLAttributes<T> & {};
+type LKComponentAttributes<T extends HTMLElement> = React.HTMLAttributes<T> & {};
 
 function isProp<U extends HTMLElement, T extends LKComponentAttributes<U>>(
   prop: T | undefined,
@@ -21,8 +21,8 @@ function useObservableState<T>(
   startWith: T,
   dependencies: Array<any> = [observable],
 ) {
-  const [state, setState] = useState<T>(startWith);
-  useEffect(() => {
+  const [state, setState] = React.useState<T>(startWith);
+  React.useEffect(() => {
     // observable state doesn't run in SSR
     if (typeof window === 'undefined') return;
     const subscription = observable.subscribe(setState);
@@ -32,7 +32,7 @@ function useObservableState<T>(
 }
 
 function cloneSingleChild(
-  children: ReactNode | ReactNode[],
+  children: React.ReactNode | React.ReactNode[],
   props?: Record<string, any>,
   key?: any,
 ) {

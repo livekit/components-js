@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 0.1.8
+
+### Patch Changes
+
+- Fix react hook conditional errors - [#82](https://github.com/livekit/components/pull/82) ([@lukasIO](https://github.com/lukasIO))
+
+- bundle core package - [`324be93`](https://github.com/livekit/components/commit/324be930e9e33afb1c00d765a734c8bb2b53bf8e) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`622b14c`](https://github.com/livekit/components/commit/622b14c4eff002d9ae6de776099284ec0581f7ed), [`725b995`](https://github.com/livekit/components/commit/725b9950b71fa3b633a24c981152f818cd05434c), [`324be93`](https://github.com/livekit/components/commit/324be930e9e33afb1c00d765a734c8bb2b53bf8e)]:
+  - @livekit/components-core@0.1.7
+
 ## 0.1.7
 
 ### Patch Changes

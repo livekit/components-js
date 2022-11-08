@@ -1,6 +1,6 @@
 {
   "name": "@livekit/component-example-next",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@livekit/components-react": "0.1.7",
+    "@livekit/components-react": "0.1.8",
     "@livekit/components-styles": "0.1.3",
     "livekit-client": "^1.5.0",
     "livekit-server-sdk": "^1.0.3",

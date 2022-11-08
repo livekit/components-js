@@ -1,5 +1,5 @@
 {
-  "version": "0.1.7",
+  "version": "0.1.8",
   "publishConfig": {
     "access": "restricted"
   },
@@ -30,7 +30,7 @@
     "build": "tsup --onSuccess \"tsc --declaration --emitDeclarationOnly\""
   },
   "dependencies": {
-    "@livekit/components-core": "0.1.6"
+    "@livekit/components-core": "0.1.7"
   },
   "peerDependencies": {
     "livekit-client": "^1.4.3",

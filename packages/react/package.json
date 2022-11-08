@@ -33,7 +33,7 @@
     "@livekit/components-core": "0.1.7"
   },
   "peerDependencies": {
-    "livekit-client": "^1.4.3",
+    "livekit-client": "^1.5.0",
     "react": ">=18",
     "react-dom": ">=18"
   },

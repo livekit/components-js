@@ -107,7 +107,10 @@ export const createConnectionQualityObserver = (participant: Participant) => {
   const observer = participantEventSelector(
     participant,
     ParticipantEvent.ConnectionQualityChanged,
-  ).pipe(startWith(participant.connectionQuality));
+  ).pipe(
+    map(([quality]) => quality),
+    startWith(participant.connectionQuality),
+  );
   return observer;
 };
 

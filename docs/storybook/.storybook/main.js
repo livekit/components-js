@@ -11,7 +11,13 @@ module.exports = {
     name: '@storybook/react-vite',
     options: {},
   },
+  features: {
+    modernInlineRender: false,
+  },
   docs: {
-    docsPage: true,
+    docsPage: 'automatic', // see below for alternatives
+  },
+  typescript: {
+    reactDocgen: 'react-docgen-typescript',
   },
 };

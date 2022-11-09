@@ -21,6 +21,7 @@ export const useConnectionQualityIndicator = (props?: ConnectionQualityIndicator
   ]);
 
   const elementProps = React.useMemo(() => {
+    console.log('new connection quality', quality);
     return { ...mergeProps(props, { className }), 'data-lk-quality': quality };
   }, [quality, props, className]);
 
@@ -29,6 +30,7 @@ export const useConnectionQualityIndicator = (props?: ConnectionQualityIndicator
 
 /**
  * Indicates the connection quality of the participant.
+ * This is new.
  */
 export const ConnectionQualityIndicator = (props: ConnectionQualityIndicatorProps) => {
   const { elementProps } = useConnectionQualityIndicator(props);

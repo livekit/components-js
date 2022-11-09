@@ -5,31 +5,41 @@ import {
   ConnectionQualityIndicator,
   ConnectionQualityIndicatorProps,
 } from '@livekit/components-react';
-import { LkParticipantContext, LkRoomContext } from '../../.storybook/LiveKitStorybookContexts';
-import { Track } from 'livekit-client';
+import { MockParticipantContext, MockParticipantProps } from '../../.storybook/participantMock';
+import { ConnectionQuality } from 'livekit-client';
 
 export default {
+  /*
+   * This is some docs for connection quality
+   */
   component: ConnectionQualityIndicator,
-  decorators: [LkParticipantContext, LkRoomContext],
-  render: (args: ConnectionQualityIndicatorProps) => (
-    <>
-      <ConnectionQualityIndicator {...args}></ConnectionQualityIndicator>
-    </>
-  ),
+  decorators: [],
+
   argTypes: {
-    source: {
+    connectionQuality: {
       control: { type: 'select' },
-      options: [Track.Source.Camera, Track.Source.Microphone],
+      options: [ConnectionQuality.Excellent, ConnectionQuality.Good],
     },
   },
   parameters: {
     actions: {
       handles: [],
     },
+    docs: {
+      description: {
+        component: 'Some component _markdown_',
+      },
+    },
   },
 };
 
 export const Default: StoryObj<ConnectionQualityIndicatorProps> = {
-  args: {},
-  parameters: { roomContext: { audio: false, video: false, connect: true } },
+  render: (args: Partial<MockParticipantProps>) => (
+    <MockParticipantContext sid="12345678" identity="my-mock-id" {...args}>
+      <ConnectionQualityIndicator></ConnectionQualityIndicator>
+    </MockParticipantContext>
+  ),
+  parameters: {
+    roomContext: { audio: false, video: false, connect: true },
+  },
 };

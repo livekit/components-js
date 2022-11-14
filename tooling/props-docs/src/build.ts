@@ -6,7 +6,6 @@ import { promises as fs } from 'fs';
 import * as docgen from 'react-docgen-typescript';
 import { ComponentDoc } from 'react-docgen-typescript';
 import mkdirp from 'mkdirp';
-import { propNames } from '@chakra-ui/styled-system';
 
 type ComponentInfo = {
   def: ComponentDoc;
@@ -18,7 +17,7 @@ type ComponentInfo = {
 
 const globAsync = promisify(glob);
 
-const excludedPropNames = propNames.concat(['as', 'apply', 'sx', '__css', 'css']);
+// const excludedPropNames = propNames.concat(['as', 'apply', 'sx', '__css', 'css']);
 
 const rootDir = path.join(__dirname, '..', '..', '..');
 const sourcePath = path.join(rootDir, 'packages');
@@ -87,12 +86,13 @@ function parseInfo(filePaths: string[]) {
   const { parse } = docgen.withCustomConfig(tsConfigPath, {
     shouldRemoveUndefinedFromOptional: true,
     propFilter: (prop, component) => {
-      const isStyledSystemProp = excludedPropNames.includes(prop.name);
+      // const isStyledSystemProp = excludedPropNames.includes(prop.name);
       const isHTMLElementProp = prop.parent?.fileName.includes('node_modules') ?? false;
       const isHook = component.name.startsWith('use');
       const isTypeScriptNative = prop.parent?.fileName.includes('node_modules/typescript') ?? false;
 
-      return (isHook && !isTypeScriptNative) || !(isStyledSystemProp || isHTMLElementProp);
+      // return (isHook && !isTypeScriptNative) || !(isStyledSystemProp || isHTMLElementProp);
+      return isHook && !isTypeScriptNative;
     },
   });
 

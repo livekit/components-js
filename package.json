@@ -54,7 +54,8 @@
   "workspaces": [
     "packages/*",
     "examples/*",
-    "docs/*"
+    "docs/*",
+    "tooling/*"
   ],
   "dependencies": {}
 }

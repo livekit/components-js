@@ -33,7 +33,6 @@ const tsConfigPath = path.join(sourcePath, '..', 'tsconfig.json');
 
 export async function main() {
   const componentFiles = await findComponentFiles();
-
   if (componentFiles.length) {
     await mkdirp(outputPath);
   }
@@ -68,14 +67,7 @@ if (require.main === module) {
 async function findComponentFiles() {
   return globAsync('**/src/**/*.@(ts|tsx)', {
     cwd: sourcePath,
-    ignore: [
-      '**/react/**',
-      '**/theme/**',
-      '**/utils/**',
-      '**/system/**',
-      '**/node_modules/**',
-      '**/index.ts',
-    ],
+    ignore: ['**/core/**', '**/node_modules/**', '**/index.ts'],
   });
 }
 
@@ -91,8 +83,7 @@ function parseInfo(filePaths: string[]) {
       const isHook = component.name.startsWith('use');
       const isTypeScriptNative = prop.parent?.fileName.includes('node_modules/typescript') ?? false;
 
-      // return (isHook && !isTypeScriptNative) || !(isStyledSystemProp || isHTMLElementProp);
-      return isHook && !isTypeScriptNative;
+      return (isHook && !isTypeScriptNative && !isHTMLElementProp) || !isHTMLElementProp;
     },
   });
 

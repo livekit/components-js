@@ -22,6 +22,9 @@ export function useChat() {
  * These are the props specific to the ChatEntry component:
  */
 export interface ChatEntryProps extends React.HTMLAttributes<HTMLDivElement> {
+  /**
+   * The chat massage object to display.
+   */
   entry: ChatMessage;
 }
 

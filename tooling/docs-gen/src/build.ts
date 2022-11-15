@@ -99,9 +99,9 @@ function extractComponentInfo(docs: ComponentDoc[]) {
     camelCaseStr.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
 
   return docs.reduce((acc, def) => {
-    if (!Object.keys(def.props || {}).length) {
-      return acc;
-    }
+    // if (!Object.keys(def.props || {}).length) {
+    //   return acc;
+    // }
 
     function createUniqueName(displayName: string) {
       const existing = acc.filter(

@@ -5,6 +5,9 @@ import { useEnsureRoom } from '../contexts';
 import { useObservableState } from '../utils';
 
 export interface ConnectionStatusProps extends React.HTMLAttributes<HTMLDivElement> {
+  /**
+   * The room from which the connection status should be displayed.
+   */
   room?: Room;
 }
 
@@ -15,6 +18,19 @@ export function useConnectionState(room?: Room) {
   return connectionState;
 }
 
+/**
+ * The ConnectionState component displays the connection status in english language of the client-to-room connection.
+ *
+ * @example
+ * ## Import
+ * ```
+ * import { ConnectionState } from '@livekit/components-react';
+ * ```
+ * ## Use
+ * ```
+ * <ConnectionState />
+ * ```
+ */
 export const ConnectionState = ({ room, ...props }: ConnectionStatusProps) => {
   const connectionState = useConnectionState(room);
   return <div {...props}>{connectionState}</div>;

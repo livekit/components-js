@@ -20,7 +20,7 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLDivElement> {
  * import { Chat, ChatEntry } from '@livekit/components-react';
  *
  * <Chat>
- *     <ChatEntry>
+ *     <ChatEntry />
  * </Chat>
  * ```
  *

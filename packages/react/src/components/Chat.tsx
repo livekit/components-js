@@ -17,9 +17,32 @@ export function useChat() {
   return { send, chatMessages, isSending };
 }
 
+/**
+ * ChatEntry composes the HTML div element under the hood, so you can pass all its props.
+ * These are the props specific to the ChatEntry component:
+ */
 export interface ChatEntryProps extends React.HTMLAttributes<HTMLDivElement> {
+  /**
+   * The chat massage object to display.
+   */
   entry: ChatMessage;
 }
+
+/**
+ * The ChatEntry component holds and displays one chat message.
+ *
+ * @examples
+ * ```ts
+ * import { Chat, ChatEntry } from '@livekit/components-react';
+ *
+ * <Chat>
+ *     <ChatEntry>
+ * </Chat>
+ * ```
+ *
+ * @param param0
+ * @returns
+ */
 export function ChatEntry({ entry, ...props }: ChatEntryProps) {
   return (
     <div {...props}>
@@ -28,6 +51,12 @@ export function ChatEntry({ entry, ...props }: ChatEntryProps) {
   );
 }
 
+/**
+ * The Chat component allows the sending of text messages to the entry room.
+ *
+ * @param param0
+ * @returns
+ */
 export function Chat({ ...props }: ChatProps) {
   const { send, chatMessages, isSending } = useChat();
   const handleSend = async () => {

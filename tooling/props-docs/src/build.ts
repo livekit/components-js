@@ -143,9 +143,9 @@ async function writeComponentInfoFiles(componentInfo: ComponentInfo[]) {
  */
 async function writeIndexCJS(componentInfo: ComponentInfo[]) {
   const cjsExports = componentInfo.map(
-    ({ displayName, importPath }) => `module.exports['${displayName}'] = require('${importPath}');`,
+    ({ displayName, importPath }) => `module.exports.${displayName} = require('${importPath}');`,
   );
-  return fs.writeFile(cjsIndexFilePath, cjsExports.join('\n'));
+  return fs.writeFile(cjsIndexFilePath, cjsExports.join('\n') + '\n');
 }
 
 /**
@@ -153,17 +153,17 @@ async function writeIndexCJS(componentInfo: ComponentInfo[]) {
  */
 async function writeIndexESM(componentInfo: ComponentInfo[]) {
   const esmPropImports = componentInfo
-    .map(({ exportName, importPath }) => `import ${exportName}Import from '${importPath}'`)
+    .map(({ exportName, importPath }) => `import ${exportName}Import from '${importPath}';`)
     .join('\n');
 
   const esmPropExports = componentInfo
-    .map(({ exportName }) => `export const ${exportName} = ${exportName}Import`)
+    .map(({ exportName }) => `export const ${exportName} = ${exportName}Import;`)
     .join('\n');
 
   return fs.writeFile(
     esmIndexFilePath,
     `${esmPropImports}
-${esmPropExports}`,
+${esmPropExports}\n`,
   );
 }
 

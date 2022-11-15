@@ -1682,6 +1682,13 @@
     "@changesets/types" "^5.2.0"
     dotenv "^8.1.0"
 
+"@livekit/components-react@workspace:*":
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/@livekit/components-react/-/components-react-0.1.9.tgz#de40f0cd52e95e04834d9795de7c9d89d0c710cb"
+  integrity sha512-OET7OfnzrvsRfiApEh9X+qnqCw07rWYqmi7dBCkLFqUJHjUJxPSKZ3ExZTxusMxcSeNJG7OUtS5mSFG0BgftjA==
+  dependencies:
+    "@livekit/components-core" "0.1.7"
+
 "@manypkg/find-root@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@manypkg/find-root/-/find-root-1.1.0.tgz#a62d8ed1cd7e7d4c11d9d52a8397460b5d4ad29f"
@@ -3058,6 +3065,13 @@
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.2.tgz#ee771e2ba4b3dc5b372935d549fd9617bf345b8c"
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
+
+"@types/mkdirp@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@types/mkdirp/-/mkdirp-1.0.2.tgz#8d0bad7aa793abe551860be1f7ae7f3198c16666"
+  integrity sha512-o0K1tSO0Dx5X6xlU5F1D6625FawhC3dU3iqr25lluNv/+/QIVH8RLNEiVokgIZo+mz+87w/3Mkg/VvQS+J51fQ==
+  dependencies:
+    "@types/node" "*"
 
 "@types/ms@*":
   version "0.7.31"
@@ -8333,6 +8347,11 @@ mkdirp@^0.5.4:
   dependencies:
     minimist "^1.2.6"
 
+mkdirp@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
+  integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
+
 modern-normalize@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/modern-normalize/-/modern-normalize-1.1.0.tgz#da8e80140d9221426bd4f725c6e11283d34f90b7"
@@ -9354,7 +9373,7 @@ react-colorful@^5.1.2:
   resolved "https://registry.yarnpkg.com/react-colorful/-/react-colorful-5.6.1.tgz#7dc2aed2d7c72fac89694e834d179e32f3da563b"
   integrity sha512-1exovf0uGTGyq5mXQT0zgQ80uvj2PCwvF8zY1RN9/vbJVSjSo3fsB/4L3ObbF7u70NduSiK4xu4Y6q1MHoUGEw==
 
-react-docgen-typescript@^2.1.1:
+react-docgen-typescript@^2.1.0, react-docgen-typescript@^2.1.1:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/react-docgen-typescript/-/react-docgen-typescript-2.2.2.tgz#4611055e569edc071204aadb20e1c93e1ab1659c"
   integrity sha512-tvg2ZtOpOi6QDwsb3GZhOjDkkX0h8Z2gipvTg6OVMUyoYoURhEiRNePT8NZItTVCDh39JJHnLdfCOkzoLbFnTg==

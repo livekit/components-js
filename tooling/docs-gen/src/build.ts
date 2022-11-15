@@ -95,6 +95,9 @@ function parseInfo(filePaths: string[]) {
  * Extract meta data of component docs
  */
 function extractComponentInfo(docs: ComponentDoc[]) {
+  const splitCamelCase = (camelCaseStr: string) =>
+    camelCaseStr.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+
   return docs.reduce((acc, def) => {
     if (!Object.keys(def.props || {}).length) {
       return acc;
@@ -116,11 +119,12 @@ function extractComponentInfo(docs: ComponentDoc[]) {
     const fileName = `${exportName}.mdx`;
 
     const mdx = `---
-title: ${def.displayName}
-description: ${def.description} 
+title: ${splitCamelCase(def.displayName)}
+subtitle: ${def.description} 
 ---
 
-${def.description}
+import Usage from "@/components/js-components/Usage"
+import PropsTable from "@/components/js-components/PropsTable"
 
 ## Import
 
@@ -128,9 +132,11 @@ ${def.tags?.examples}
 
 ## Usage
 
+<Usage of='${def.displayName}' />
+
 ## Props
 
-<PropsTable data={${JSON.stringify(def.props)}} />
+<PropsTable data='${JSON.stringify(def.props)}' />
 `;
 
     acc.push({

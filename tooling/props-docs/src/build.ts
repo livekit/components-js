@@ -143,7 +143,7 @@ async function writeComponentInfoFiles(componentInfo: ComponentInfo[]) {
  */
 async function writeIndexCJS(componentInfo: ComponentInfo[]) {
   const cjsExports = componentInfo.map(
-    ({ displayName, importPath }) => `module.exports['${displayName}'] = require('${importPath}')`,
+    ({ displayName, importPath }) => `module.exports['${displayName}'] = require('${importPath}');`,
   );
   return fs.writeFile(cjsIndexFilePath, cjsExports.join('\n'));
 }
@@ -169,44 +169,42 @@ ${esmPropExports}`,
 
 async function writeTypes(componentInfo: ComponentInfo[]) {
   const typeExports = componentInfo
-    .map(({ exportName }) => `export declare const ${exportName}: PropDoc`)
+    .map(({ exportName }) => `export declare const ${exportName}: PropDoc;`)
     .join('\n');
 
-  const baseType = `
-    export interface Parent {
-        fileName: string;
-        name: string;
-    }
+  const baseType = `export interface Parent {
+  fileName: string;
+  name: string;
+}
 
-    export interface Declaration {
-        fileName: string;
-        name: string;
-    }
+export interface Declaration {
+  fileName: string;
+  name: string;
+}
 
-    export interface DefaultProps {
-        defaultValue?: any;
-        description: string | JSX.Element;
-        name: string;
-        parent: Parent;
-        declarations: Declaration[];
-        required: boolean;
-        type: { name: string };
-    }
+export interface DefaultProps {
+  defaultValue?: any;
+  description: string | JSX.Element;
+  name: string;
+  parent: Parent;
+  declarations: Declaration[];
+  required: boolean;
+  type: { name: string };
+}
 
-    export interface PropDoc {
-        tags: { see: string };
-        filePath: string;
-        description: string | JSX.Element;
-        displayName: string;
-        methods: any[];
-        props: {
-          defaultProps?: DefaultProps;
-          components?: DefaultProps;
-        };
-    }
-  `;
+export interface PropDoc {
+  tags: { see: string };
+  filePath: string;
+  description: string | JSX.Element;
+  displayName: string;
+  methods: any[];
+  props: {
+    defaultProps?: DefaultProps;
+    components?: DefaultProps;
+  };
+}`;
 
-  return fs.writeFile(typeFilePath, `${baseType}\n${typeExports}`);
+  return fs.writeFile(typeFilePath, `${baseType}\n${typeExports}\n`);
 }
 
 function log(...args: unknown[]) {

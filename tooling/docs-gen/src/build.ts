@@ -13,6 +13,7 @@ type ComponentInfo = {
   fileName: string;
   exportName: string;
   importPath: string;
+  mdx: string;
 };
 
 const globAsync = promisify(glob);
@@ -25,9 +26,9 @@ const outputPath = path.join(__dirname, '..', 'dist', 'components');
 
 const basePath = path.join(__dirname, '..', 'dist');
 
-const cjsIndexFilePath = path.join(basePath, 'index.cjs.js');
-const esmIndexFilePath = path.join(basePath, 'index.esm.js');
-const typeFilePath = path.join(basePath, 'index.d.ts');
+// const cjsIndexFilePath = path.join(basePath, 'index.cjs.js');
+// const esmIndexFilePath = path.join(basePath, 'index.esm.js');
+// const typeFilePath = path.join(basePath, 'index.d.ts');
 
 const tsConfigPath = path.join(sourcePath, '..', 'tsconfig.json');
 
@@ -46,12 +47,12 @@ export async function main() {
   log('Writing component info files...');
   await writeComponentInfoFiles(componentInfo);
 
-  log('Writing index files...');
-  await Promise.all([
-    writeIndexCJS(componentInfo),
-    writeIndexESM(componentInfo),
-    writeTypes(componentInfo),
-  ]);
+  // log('Writing index files...');
+  // await Promise.all([
+  //   writeIndexCJS(componentInfo),
+  //   writeIndexESM(componentInfo),
+  //   writeTypes(componentInfo),
+  // ]);
 
   log(`Processed ${componentInfo.length} components`);
 }
@@ -112,7 +113,25 @@ function extractComponentInfo(docs: ComponentDoc[]) {
     }
 
     const exportName = createUniqueName(def.displayName);
-    const fileName = `${exportName}.json`;
+    const fileName = `${exportName}.mdx`;
+
+    const mdx = `---
+title: ${def.displayName}
+description: ${def.description} 
+---
+
+${def.description}
+
+## Import
+
+${def.tags?.examples}
+
+## Usage
+
+## Props
+
+<PropsTable data={${JSON.stringify(def.props)}} />
+`;
 
     acc.push({
       def,
@@ -120,6 +139,7 @@ function extractComponentInfo(docs: ComponentDoc[]) {
       fileName,
       exportName,
       importPath: `./components/${fileName}`,
+      mdx,
     });
     return acc;
   }, [] as ComponentInfo[]);
@@ -130,83 +150,85 @@ function extractComponentInfo(docs: ComponentDoc[]) {
  */
 async function writeComponentInfoFiles(componentInfo: ComponentInfo[]) {
   return Promise.all(
-    componentInfo.map((info) => {
-      const filePath = path.join(outputPath, info.fileName);
-      const content = JSON.stringify(info.def);
+    componentInfo.map(async (info) => {
+      const componentDirPath = path.join(outputPath);
+      const filePath = path.join(componentDirPath, info.fileName);
+      const content = info.mdx;
+      await mkdirp(componentDirPath);
       return fs.writeFile(filePath, content);
     }),
   );
 }
 
-/**
- * Create and write the index file in CJS format
- */
-async function writeIndexCJS(componentInfo: ComponentInfo[]) {
-  const cjsExports = componentInfo.map(
-    ({ displayName, importPath }) => `module.exports.${displayName} = require('${importPath}');`,
-  );
-  return fs.writeFile(cjsIndexFilePath, cjsExports.join('\n') + '\n');
-}
+// /**
+//  * Create and write the index file in CJS format
+//  */
+// async function writeIndexCJS(componentInfo: ComponentInfo[]) {
+//   const cjsExports = componentInfo.map(
+//     ({ displayName, importPath }) => `module.exports.${displayName} = require('${importPath}');`,
+//   );
+//   return fs.writeFile(cjsIndexFilePath, cjsExports.join('\n') + '\n');
+// }
 
-/**
- * Create and write the index file in ESM format
- */
-async function writeIndexESM(componentInfo: ComponentInfo[]) {
-  const esmPropImports = componentInfo
-    .map(({ exportName, importPath }) => `import ${exportName}Import from '${importPath}';`)
-    .join('\n');
+// /**
+//  * Create and write the index file in ESM format
+//  */
+// async function writeIndexESM(componentInfo: ComponentInfo[]) {
+//   const esmPropImports = componentInfo
+//     .map(({ exportName, importPath }) => `import ${exportName}Import from '${importPath}';`)
+//     .join('\n');
 
-  const esmPropExports = componentInfo
-    .map(({ exportName }) => `export const ${exportName} = ${exportName}Import;`)
-    .join('\n');
+//   const esmPropExports = componentInfo
+//     .map(({ exportName }) => `export const ${exportName} = ${exportName}Import;`)
+//     .join('\n');
 
-  return fs.writeFile(
-    esmIndexFilePath,
-    `${esmPropImports}
-${esmPropExports}\n`,
-  );
-}
+//   return fs.writeFile(
+//     esmIndexFilePath,
+//     `${esmPropImports}
+// ${esmPropExports}\n`,
+//   );
+// }
 
-async function writeTypes(componentInfo: ComponentInfo[]) {
-  const typeExports = componentInfo
-    .map(({ exportName }) => `export declare const ${exportName}: PropDoc;`)
-    .join('\n');
+// async function writeTypes(componentInfo: ComponentInfo[]) {
+//   const typeExports = componentInfo
+//     .map(({ exportName }) => `export declare const ${exportName}: PropDoc;`)
+//     .join('\n');
 
-  const baseType = `export interface Parent {
-  fileName: string;
-  name: string;
-}
+//   const baseType = `export interface Parent {
+//   fileName: string;
+//   name: string;
+// }
 
-export interface Declaration {
-  fileName: string;
-  name: string;
-}
+// export interface Declaration {
+//   fileName: string;
+//   name: string;
+// }
 
-export interface DefaultProps {
-  defaultValue?: any;
-  description: string | JSX.Element;
-  name: string;
-  parent: Parent;
-  declarations: Declaration[];
-  required: boolean;
-  type: { name: string };
-}
+// export interface DefaultProps {
+//   defaultValue?: any;
+//   description: string | JSX.Element;
+//   name: string;
+//   parent: Parent;
+//   declarations: Declaration[];
+//   required: boolean;
+//   type: { name: string };
+// }
 
-export interface PropDoc {
-  tags: { see: string };
-  filePath: string;
-  description: string | JSX.Element;
-  displayName: string;
-  methods: any[];
-  props: {
-    defaultProps?: DefaultProps;
-    components?: DefaultProps;
-  };
-}`;
+// export interface PropDoc {
+//   tags: { see: string };
+//   filePath: string;
+//   description: string | JSX.Element;
+//   displayName: string;
+//   methods: any[];
+//   props: {
+//     defaultProps?: DefaultProps;
+//     components?: DefaultProps;
+//   };
+// }`;
 
-  return fs.writeFile(typeFilePath, `${baseType}\n${typeExports}\n`);
-}
+//   return fs.writeFile(typeFilePath, `${baseType}\n${typeExports}\n`);
+// }
 
 function log(...args: unknown[]) {
-  console.info(`[props-docs]`, ...args);
+  console.info(`[docs-gen]`, ...args);
 }

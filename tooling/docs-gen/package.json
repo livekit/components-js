@@ -8,7 +8,7 @@
   ],
   "sideEffects": false,
   "author": "Live Kit",
-  "license": "MIT",
+  "license": "Apache 2.0",
   "files": [
     "dist"
   ],

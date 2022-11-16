@@ -7,8 +7,8 @@
     "props"
   ],
   "sideEffects": false,
-  "author": "Live Kit",
-  "license": "MIT",
+  "author": "LiveKit",
+  "license": "Apache 2.0",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",

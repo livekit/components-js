@@ -26,6 +26,17 @@ export const useDisconnectButton = (props: DisconnectButtonProps) => {
   return { buttonProps };
 };
 
+/**
+ * The DisconnectButton is a basic html button with the added ability to disconnect from a LiveKit room.
+ * Normally, it is used by end-users to leave a video or audio call.
+ *
+ * @examples
+ * ```tsx
+ * <LiveKitRoom>
+ *   <DisconnectButton>Leave room</DisconnectButton>
+ * </LiveKitRoom>
+ * ```
+ */
 export const DisconnectButton = (props: DisconnectButtonProps) => {
   const { buttonProps } = useDisconnectButton(props);
   return <button {...buttonProps}>{props.children}</button>;

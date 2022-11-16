@@ -7,7 +7,7 @@
     "props"
   ],
   "sideEffects": false,
-  "author": "Live Kit",
+  "author": "LiveKit",
   "license": "Apache 2.0",
   "files": [
     "dist"

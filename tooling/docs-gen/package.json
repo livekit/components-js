@@ -29,6 +29,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@livekit/components-props-docs": "0.0.1",
     "@livekit/components-react": "0.1.9",
     "glob": "^8.0.0",
     "mkdirp": "^1.0.4",

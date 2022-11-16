@@ -145,7 +145,10 @@ async function writeIndexCJS(componentInfo: ComponentInfo[]) {
   const cjsExports = componentInfo.map(
     ({ displayName, importPath }) => `module.exports.${displayName} = require('${importPath}');`,
   );
-  return fs.writeFile(cjsIndexFilePath, cjsExports.join('\n') + '\n');
+  const cjsAllPropsArrayExports = `module.exports.allComponentProps = [${componentInfo
+    .map((info) => `require('${info.importPath}')`)
+    .join(',')}];`;
+  return fs.writeFile(cjsIndexFilePath, cjsExports.join('\n') + '\n' + cjsAllPropsArrayExports);
 }
 
 /**
@@ -160,10 +163,15 @@ async function writeIndexESM(componentInfo: ComponentInfo[]) {
     .map(({ exportName }) => `export const ${exportName} = ${exportName}Import;`)
     .join('\n');
 
+  const esmAllPropsArrayExports = `export const allComponentProps = [${componentInfo
+    .map((info) => info.exportName)
+    .join(',')}];`;
+
   return fs.writeFile(
     esmIndexFilePath,
     `${esmPropImports}
-${esmPropExports}\n`,
+${esmPropExports}\n
+${esmAllPropsArrayExports}\n`,
   );
 }
 
@@ -171,6 +179,7 @@ async function writeTypes(componentInfo: ComponentInfo[]) {
   const typeExports = componentInfo
     .map(({ exportName }) => `export declare const ${exportName}: PropDoc;`)
     .join('\n');
+  const arrayExport = `export declare const allComponentProps: Array<PropDoc>;`;
 
   const baseType = `export interface Parent {
   fileName: string;
@@ -204,7 +213,7 @@ export interface PropDoc {
   };
 }`;
 
-  return fs.writeFile(typeFilePath, `${baseType}\n${typeExports}\n`);
+  return fs.writeFile(typeFilePath, `${baseType}\n${typeExports}\n${arrayExport}\n`);
 }
 
 function log(...args: unknown[]) {

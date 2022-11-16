@@ -202,7 +202,7 @@ export interface DefaultProps {
 }
 
 export interface PropDoc {
-  tags: { see: string };
+  tags: { see?: string, examples?: string };
   filePath: string;
   description: string | JSX.Element;
   displayName: string;

@@ -1,9 +1,6 @@
 import 'regenerator-runtime/runtime';
-import glob from 'glob';
 import path from 'path';
-import { promisify } from 'util';
 import { promises as fs } from 'fs';
-import * as docgen from 'react-docgen-typescript';
 import mkdirp from 'mkdirp';
 import { allComponentProps, PropDoc } from '@livekit/components-props-docs';
 
@@ -12,21 +9,7 @@ interface ComponentInfo extends PropDoc {
   fileName: string;
 }
 
-const globAsync = promisify(glob);
-
-// const excludedPropNames = propNames.concat(['as', 'apply', 'sx', '__css', 'css']);
-
-const rootDir = path.join(__dirname, '..', '..', '..');
-const sourcePath = path.join(rootDir, 'packages');
 const outputPath = path.join(__dirname, '..', 'dist', 'components');
-
-const basePath = path.join(__dirname, '..', 'dist');
-
-// const cjsIndexFilePath = path.join(basePath, 'index.cjs.js');
-// const esmIndexFilePath = path.join(basePath, 'index.esm.js');
-// const typeFilePath = path.join(basePath, 'index.d.ts');
-
-const tsConfigPath = path.join(sourcePath, '..', 'tsconfig.json');
 
 export async function main() {
   log('Extracting component info...');
@@ -41,35 +24,6 @@ export async function main() {
 if (require.main === module) {
   // run main function if called via cli
   main().catch(console.error);
-}
-
-/**
- * Find all TypeScript files which could contain component definitions
- */
-async function findComponentFiles() {
-  return globAsync('**/src/**/*.@(ts|tsx)', {
-    cwd: sourcePath,
-    ignore: ['**/core/**', '**/node_modules/**', '**/index.ts'],
-  });
-}
-
-/**
- * Parse files with react-doc-gen-typescript
- */
-function parseInfo(filePaths: string[]) {
-  const { parse } = docgen.withCustomConfig(tsConfigPath, {
-    shouldRemoveUndefinedFromOptional: true,
-    propFilter: (prop, component) => {
-      // const isStyledSystemProp = excludedPropNames.includes(prop.name);
-      const isHTMLElementProp = prop.parent?.fileName.includes('node_modules') ?? false;
-      const isHook = component.name.startsWith('use');
-      const isTypeScriptNative = prop.parent?.fileName.includes('node_modules/typescript') ?? false;
-
-      return (isHook && !isTypeScriptNative && !isHTMLElementProp) || !isHTMLElementProp;
-    },
-  });
-
-  return parse(filePaths.flatMap((file) => path.join(sourcePath, file)));
 }
 
 /**

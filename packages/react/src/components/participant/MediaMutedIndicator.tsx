@@ -35,6 +35,21 @@ export const useMediaMutedIndicator = (
   return { isMuted, htmlProps };
 };
 
+/**
+ * The MediaMutedIndicator shows whether the participant's camera or microphone is muted or not.
+ *
+ * @example
+ * ```tsx
+ * {...}
+ *   <ParticipantView>
+ *     <MediaMutedIndicator source={Track.Source.Camera} />
+ *     <MediaMutedIndicator source={Track.Source.Microphone} />
+ *   </ParticipantView>
+ * {...}
+ * ```
+ *
+ * @see `ParticipantView` component
+ */
 export const MediaMutedIndicator = ({
   source,
   participant,

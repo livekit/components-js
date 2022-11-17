@@ -14,9 +14,14 @@ import { RoomContext } from '../contexts';
 import { DefaultRoomView } from '../prefabs/DefaultRoomView';
 
 export type LiveKitRoomProps = {
-  children?: React.ReactNode | React.ReactNode[];
-  serverUrl?: string;
-  token?: string;
+  /**
+   * URL to the LiveKit server.
+   */
+  serverUrl: string;
+  /**
+   * The LiveKit token.
+   */
+  token: string;
   room?: Room;
   options?: RoomOptions;
   connectOptions?: RoomConnectOptions;
@@ -27,6 +32,7 @@ export type LiveKitRoomProps = {
   onConnected?: () => void;
   onDisconnected?: () => void;
   onError?: (error: Error) => void;
+  children?: React.ReactNode | React.ReactNode[];
 };
 
 // type RoomContextState = {
@@ -64,7 +70,7 @@ export function useToken(tokenEndpoint: string | undefined, roomName: string, us
   return token;
 }
 
-const defaultRoomProps: LiveKitRoomProps = {
+const defaultRoomProps: Partial<LiveKitRoomProps> = {
   connect: true,
   audio: false,
   video: false,
@@ -158,7 +164,7 @@ export const useLiveKitRoom = (props: LiveKitRoomProps) => {
  * It provides the room state as a React context to all child components, so you don't have to pass it yourself.
  *
  * @example
- * ```
+ * ```tsx
  * import { LiveKitRoom } from '@livekit/components-react';
  *
  * <LiveKitRoom

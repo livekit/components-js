@@ -120,17 +120,17 @@ function extractComponentInfo(docs: ComponentDoc[]) {
 
     const mdx = `---
 title: ${splitCamelCase(def.displayName)}
-subtitle: ${def.description} 
+subtitle: ${def.description.replaceAll('\n', '')} 
 ---
 
-import Usage from "@/components/js-components/Usage"
-import PropsTable from "@/components/js-components/PropsTable"
+import Usage from '@/components/js-components/Usage';
+import PropsTable from '@/components/js-components/PropsTable';
 
 ## Usage
 
 ${def.tags?.example ? def.tags.example : 'No example yet.'}
 
-<Usage of='${def.displayName}' />
+\`FIXME: <Usage of='${def.displayName}' />\`
 
 ## Props
 

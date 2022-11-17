@@ -126,11 +126,9 @@ subtitle: ${def.description}
 import Usage from "@/components/js-components/Usage"
 import PropsTable from "@/components/js-components/PropsTable"
 
-## Import
-
-${def.tags?.examples}
-
 ## Usage
+
+${def.tags?.example ? def.tags.example : 'No example yet.'}
 
 <Usage of='${def.displayName}' />
 

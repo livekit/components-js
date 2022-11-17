@@ -21,17 +21,53 @@ export type LiveKitRoomProps = {
   /**
    * The LiveKit token.
    */
-  token: string;
-  room?: Room;
-  options?: RoomOptions;
-  connectOptions?: RoomConnectOptions;
+  token: string | undefined;
+  /**
+   * Enable audio capabilities in your LiveKit room.
+   * @defaultValue `true`
+   * @see https://docs.livekit.io/client-sdk-js/interfaces/AudioCaptureOptions.html
+   */
   audio?: AudioCaptureOptions | boolean;
+  /**
+   * Enable video capabilities in your LiveKit room.
+   * @defaultValue `true`
+   * @see https://docs.livekit.io/client-sdk-js/interfaces/VideoCaptureOptions.html
+   */
   video?: VideoCaptureOptions | boolean;
+  /**
+   * Enable screen share capabilities in your LiveKit room.
+   * @defaultValue `true`
+   * @see https://docs.livekit.io/client-sdk-js/interfaces/ScreenShareCaptureOptions.html
+   */
   screen?: ScreenShareCaptureOptions | boolean;
+  /**
+   * If set to true a connection to LiveKit room is initiated.
+   * @defaultValue `true`
+   */
   connect?: boolean;
+  /**
+   * Options for when creating a new room.
+   * When you pass your own room instance to this component, these options have no effect.
+   * Instead, set the options directly in the room instance.
+   *
+   * @see https://docs.livekit.io/client-sdk-js/interfaces/RoomOptions.html
+   */
+  options?: RoomOptions;
+  /**
+   * Define options how to connect to the LiveKit server.
+   *
+   * @see https://docs.livekit.io/client-sdk-js/interfaces/RoomConnectOptions.html
+   */
+  connectOptions?: RoomConnectOptions;
   onConnected?: () => void;
   onDisconnected?: () => void;
   onError?: (error: Error) => void;
+  /**
+   * Optional room instance.
+   * By passing your own room instance you overwrite the `options` parameter,
+   * make sure to set the options directly on the room instance itself.
+   */
+  room?: Room;
   children?: React.ReactNode | React.ReactNode[];
 };
 

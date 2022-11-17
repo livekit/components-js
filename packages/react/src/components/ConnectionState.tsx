@@ -22,13 +22,12 @@ export function useConnectionState(room?: Room) {
  * The ConnectionState component displays the connection status in english language of the client-to-room connection.
  *
  * @example
- * ## Import
  * ```
  * import { ConnectionState } from '@livekit/components-react';
- * ```
- * ## Use
- * ```
- * <ConnectionState />
+ *
+ * <LiveKitRoom>
+ *   <ConnectionState />
+ * </LiveKitRoom>
  * ```
  */
 export const ConnectionState = ({ room, ...props }: ConnectionStatusProps) => {

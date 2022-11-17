@@ -89,9 +89,11 @@ export const useSortedParticipants = (participants: Array<Participant>) => {
  * ```
  * import { Participants } from '@livekit/components-react';
  *
- * <Participants>
- *   {...}
- * <Participants />
+ * {...}
+ *   <Participants>
+ *     {...}
+ *   <Participants />
+ * {...}
  * ```
  *
  * @see `ParticipantView` component

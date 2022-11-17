@@ -10,6 +10,22 @@ export interface MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
   onTrackClick?: (evt: ParticipantClickEvent) => void;
 }
 
+/**
+ * The MediaTrack component is responsible for rendering participant media tracks like `camera`, `microphone` and `screen_share`.
+ * This component must be nested in a `ParticipantView` or you must pass it a `Participant` as a property.
+ *
+ * @example
+ * ```tsx
+ * {...}
+ *   <ParticipantView>
+ *     <MediaTrack source={Track.Source.Camera} />
+ *     <MediaTrack source={Track.Source.Microphone} />
+ *   </ParticipantView>
+ * {...}
+ * ```
+ *
+ * @see `ParticipantView` component
+ */
 export const MediaTrack = ({ onTrackClick, onClick, ...props }: MediaTrackProps) => {
   const participant = useEnsureParticipant(props.participant);
 

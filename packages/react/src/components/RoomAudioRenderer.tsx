@@ -13,7 +13,6 @@ import { Participants } from './Participants';
  *
  * <LiveKitRoom>
  *   <RoomAudioRenderer />
- *   {...}
  * </LiveKitRoom>
  * ```
  */

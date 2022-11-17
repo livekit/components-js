@@ -147,9 +147,11 @@ function ParticipantContextIfNeeded(props: {
  *
  * @example
  * ```tsx
- * <ParticipantView>
- *   {...}
- * </ParticipantView>
+ * {...}
+ *   <ParticipantView>
+ *     {...}
+ *   </ParticipantView>
+ * {...}
  * ```
  *
  * @see `Participants` component

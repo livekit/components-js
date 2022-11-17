@@ -22,6 +22,8 @@ export interface ParticipantNameProps extends React.HTMLAttributes<HTMLSpanEleme
  *
  * @example
  * ```tsx
+ * import { ParticipantName } from '@livekit/components-react';
+ *
  * {...}
  *   <ParticipantView>
  *     <ParticipantName />

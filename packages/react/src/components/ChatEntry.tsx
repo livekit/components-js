@@ -16,12 +16,14 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLDivElement> {
  * The ChatEntry component holds and displays one chat message.
  *
  * @examples
- * ```ts
+ * ```tsx
  * import { Chat, ChatEntry } from '@livekit/components-react';
  *
- * <Chat>
+ * {...}
+ *   <Chat>
  *     <ChatEntry />
- * </Chat>
+ *   </Chat>
+ * {...}
  * ```
  *
  * @param param0

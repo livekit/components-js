@@ -18,10 +18,17 @@ export function useChat() {
 }
 
 /**
- * The Chat component allows the sending of text messages to the entire room.
+ * The Chat component adds a basis chat functionality to the LiveKit room. The messages are distributed to all participants
+ * in the room. Only users who are in the room at the time of dispatch will receive the message.
  *
- * @param param0
- * @returns
+ * @example
+ * ```
+ * import { Chat } from '@livekit/components-react';
+ *
+ * <LiveKitRoom>
+ *   <Chat />
+ * </LiveKitRoom>
+ * ```
  */
 export function Chat({ ...props }: ChatProps) {
   const { send, chatMessages, isSending } = useChat();

@@ -16,10 +16,15 @@ import { DefaultRoomView } from '../prefabs/DefaultRoomView';
 export type LiveKitRoomProps = {
   /**
    * URL to the LiveKit server.
+   * For example: `wss://<domain>.livekit.cloud`
    */
   serverUrl: string;
   /**
-   * The LiveKit token.
+   * A user specific access token for a client to authenticate to the room.
+   * This token is necessary to establish a connection to the room.
+   * To simplify the implementation, `undefined` is also accepted as an intermediate value, but only with a valid string token can the connection be established.
+   *
+   * @see https://docs.livekit.io/cloud/project-management/keys-and-tokens/#generating-access-tokens
    */
   token: string | undefined;
   /**

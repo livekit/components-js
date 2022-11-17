@@ -152,6 +152,24 @@ export const useLiveKitRoom = (props: LiveKitRoomProps) => {
   return room;
 };
 
+/**
+ * The LiveKitRoom component provides the room context to all its child components.
+ * It is generally the starting point of your LiveKit app and the root of the LiveKit component tree.
+ * It provides the room state as a React context to all child components, so you don't have to pass it yourself.
+ *
+ * @example
+ * ```
+ * import { LiveKitRoom } from '@livekit/components-react';
+ *
+ * <LiveKitRoom
+ *  token='<livekit-token>'
+ *  serverUrl='<url-to-livekit-server>'
+ *  connect={true}
+ * >
+ *     {...}
+ * </LiveKitRoom>
+ * ```
+ */
 export const LiveKitRoom = (props: LiveKitRoomProps) => {
   const room = useLiveKitRoom(props);
   return (

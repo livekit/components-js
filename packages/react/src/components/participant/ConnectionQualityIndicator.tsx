@@ -29,8 +29,18 @@ export const useConnectionQualityIndicator = (props?: ConnectionQualityIndicator
 };
 
 /**
- * Indicates the connection quality of the participant.
- * This is new.
+ * The ConnectionQualityIndicator shows the individual connection quality of a participant.
+ *
+ * @example
+ * ```tsx
+ * {...}
+ *   <ParticipantView>
+ *     <ConnectionQualityIndicator />
+ *   </ParticipantView>
+ * {...}
+ * ```
+ *
+ * @see `ParticipantView` component
  */
 export const ConnectionQualityIndicator = (props: ConnectionQualityIndicatorProps) => {
   const { elementProps } = useConnectionQualityIndicator(props);

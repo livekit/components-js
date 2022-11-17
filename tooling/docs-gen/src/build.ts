@@ -99,9 +99,9 @@ function extractComponentInfo(docs: ComponentDoc[]) {
     camelCaseStr.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
 
   return docs.reduce((acc, def) => {
-    if (!Object.keys(def.props || {}).length) {
-      return acc;
-    }
+    // if (!Object.keys(def.props || {}).length) {
+    //   return acc;
+    // }
 
     function createUniqueName(displayName: string) {
       const existing = acc.filter(
@@ -126,11 +126,9 @@ subtitle: ${def.description}
 import Usage from "@/components/js-components/Usage"
 import PropsTable from "@/components/js-components/PropsTable"
 
-## Import
-
-${def.tags?.examples}
-
 ## Usage
+
+${def.tags?.example ? def.tags.example : 'No example yet.'}
 
 <Usage of='${def.displayName}' />
 

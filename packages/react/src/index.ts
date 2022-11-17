@@ -18,6 +18,7 @@ export * from './components/layout/FocusView';
 export * from './components/layout/GridView';
 export * from './components/controls/DeviceSelector';
 export * from './components/Chat';
+export * from './components/ChatEntry';
 export * from './components/controls/StartAudio';
 export * from './components/PinContextProvider';
 

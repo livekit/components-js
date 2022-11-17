@@ -1,8 +1,8 @@
-import { ChatMessage, setupChat } from '@livekit/components-core';
-import { Room } from 'livekit-client';
+import { setupChat } from '@livekit/components-core';
 import * as React from 'react';
 import { useRoomContext } from '../contexts';
 import { cloneSingleChild, useObservableState } from '../utils';
+import { ChatEntry } from './ChatEntry';
 
 export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -18,44 +18,17 @@ export function useChat() {
 }
 
 /**
- * ChatEntry composes the HTML div element under the hood, so you can pass all its props.
- * These are the props specific to the ChatEntry component:
- */
-export interface ChatEntryProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * The chat massage object to display.
-   */
-  entry: ChatMessage;
-}
-
-/**
- * The ChatEntry component holds and displays one chat message.
+ * The Chat component adds a basis chat functionality to the LiveKit room. The messages are distributed to all participants
+ * in the room. Only users who are in the room at the time of dispatch will receive the message.
  *
- * @examples
- * ```ts
- * import { Chat, ChatEntry } from '@livekit/components-react';
- *
- * <Chat>
- *     <ChatEntry>
- * </Chat>
+ * @example
  * ```
+ * import { Chat } from '@livekit/components-react';
  *
- * @param param0
- * @returns
- */
-export function ChatEntry({ entry, ...props }: ChatEntryProps) {
-  return (
-    <div {...props}>
-      <em>{entry.from?.name ?? entry.from?.identity}</em>: {entry.message}
-    </div>
-  );
-}
-
-/**
- * The Chat component allows the sending of text messages to the entry room.
- *
- * @param param0
- * @returns
+ * <LiveKitRoom>
+ *   <Chat />
+ * </LiveKitRoom>
+ * ```
  */
 export function Chat({ ...props }: ChatProps) {
   const { send, chatMessages, isSending } = useChat();

@@ -15,6 +15,24 @@ export const useParticipantInfo = (participant: Participant) => {
   return { identity, name, metadata };
 };
 export interface ParticipantNameProps extends React.HTMLAttributes<HTMLSpanElement> {}
+
+/**
+ * The ParticipantName component displays the name of the participant as a string within an HTML span element.
+ * If no participant name is undefined the participant identity string is displayed.
+ *
+ * @example
+ * ```tsx
+ * import { ParticipantName } from '@livekit/components-react';
+ *
+ * {...}
+ *   <ParticipantView>
+ *     <ParticipantName />
+ *   </ParticipantView>
+ * {...}
+ * ```
+ *
+ * @see `ParticipantView` component
+ */
 export const ParticipantName = ({ ...props }: ParticipantNameProps) => {
   const participant = useParticipantContext();
 

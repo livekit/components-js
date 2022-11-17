@@ -76,6 +76,28 @@ export const useSortedParticipants = (participants: Array<Participant>) => {
   return sortedParticipants;
 };
 
+/**
+ * The Participants component loops over all or a filtered subset of participants to create a visual
+ * representation (`ParticipantView`) and context for every participant. This component takes zero or more children.
+ * By providing your own `ParticipantView` template as a child you have full control over the look and feel of your
+ * participant representations. If no child is provided we render a basic video tile representation for every participant.
+ *
+ * @remarks
+ * Super detailed documentation.
+ *
+ * @example
+ * ```
+ * import { Participants } from '@livekit/components-react';
+ *
+ * {...}
+ *   <Participants>
+ *     {...}
+ *   <Participants />
+ * {...}
+ * ```
+ *
+ * @see `ParticipantView` component
+ */
 export const Participants = ({ children, filter, filterDependencies }: ParticipantsProps) => {
   const participants = useParticipants(filter, filterDependencies);
   return (

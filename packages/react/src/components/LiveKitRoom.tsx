@@ -14,19 +14,67 @@ import { RoomContext } from '../contexts';
 import { DefaultRoomView } from '../prefabs/DefaultRoomView';
 
 export type LiveKitRoomProps = {
-  children?: React.ReactNode | React.ReactNode[];
-  serverUrl?: string;
-  token?: string;
-  room?: Room;
-  options?: RoomOptions;
-  connectOptions?: RoomConnectOptions;
+  /**
+   * URL to the LiveKit server.
+   * For example: `wss://<domain>.livekit.cloud`
+   * To simplify the implementation, `undefined` is also accepted as an intermediate value, but only with a valid string url can the connection be established.
+   */
+  serverUrl: string | undefined;
+  /**
+   * A user specific access token for a client to authenticate to the room.
+   * This token is necessary to establish a connection to the room.
+   * To simplify the implementation, `undefined` is also accepted as an intermediate value, but only with a valid string token can the connection be established.
+   *
+   * @see https://docs.livekit.io/cloud/project-management/keys-and-tokens/#generating-access-tokens
+   */
+  token: string | undefined;
+  /**
+   * Enable audio capabilities in your LiveKit room.
+   * @defaultValue `true`
+   * @see https://docs.livekit.io/client-sdk-js/interfaces/AudioCaptureOptions.html
+   */
   audio?: AudioCaptureOptions | boolean;
+  /**
+   * Enable video capabilities in your LiveKit room.
+   * @defaultValue `true`
+   * @see https://docs.livekit.io/client-sdk-js/interfaces/VideoCaptureOptions.html
+   */
   video?: VideoCaptureOptions | boolean;
+  /**
+   * Enable screen share capabilities in your LiveKit room.
+   * @defaultValue `true`
+   * @see https://docs.livekit.io/client-sdk-js/interfaces/ScreenShareCaptureOptions.html
+   */
   screen?: ScreenShareCaptureOptions | boolean;
+  /**
+   * If set to true a connection to LiveKit room is initiated.
+   * @defaultValue `true`
+   */
   connect?: boolean;
+  /**
+   * Options for when creating a new room.
+   * When you pass your own room instance to this component, these options have no effect.
+   * Instead, set the options directly in the room instance.
+   *
+   * @see https://docs.livekit.io/client-sdk-js/interfaces/RoomOptions.html
+   */
+  options?: RoomOptions;
+  /**
+   * Define options how to connect to the LiveKit server.
+   *
+   * @see https://docs.livekit.io/client-sdk-js/interfaces/RoomConnectOptions.html
+   */
+  connectOptions?: RoomConnectOptions;
   onConnected?: () => void;
   onDisconnected?: () => void;
   onError?: (error: Error) => void;
+  /**
+   * Optional room instance.
+   * By passing your own room instance you overwrite the `options` parameter,
+   * make sure to set the options directly on the room instance itself.
+   */
+  room?: Room;
+  children?: React.ReactNode | React.ReactNode[];
 };
 
 // type RoomContextState = {
@@ -64,7 +112,7 @@ export function useToken(tokenEndpoint: string | undefined, roomName: string, us
   return token;
 }
 
-const defaultRoomProps: LiveKitRoomProps = {
+const defaultRoomProps: Partial<LiveKitRoomProps> = {
   connect: true,
   audio: false,
   video: false,
@@ -158,7 +206,7 @@ export const useLiveKitRoom = (props: LiveKitRoomProps) => {
  * It provides the room state as a React context to all child components, so you don't have to pass it yourself.
  *
  * @example
- * ```
+ * ```tsx
  * import { LiveKitRoom } from '@livekit/components-react';
  *
  * <LiveKitRoom

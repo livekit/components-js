@@ -28,7 +28,7 @@
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
-    "lint": "eslint"
+    "lint": "eslint -f unix \"src/**/*.{ts,tsx}\""
   },
   "peerDependencies": {
     "livekit-client": "^1.5.0"

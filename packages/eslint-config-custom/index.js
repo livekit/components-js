@@ -6,7 +6,6 @@ module.exports = {
     'turbo',
     'prettier',
     'plugin:prettier/recommended',
-    'prettier/react',
     'plugin:@typescript-eslint/recommended',
   ],
   overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],

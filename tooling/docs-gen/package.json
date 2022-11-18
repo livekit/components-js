@@ -27,7 +27,7 @@
     "build": "tsx src/build.ts",
     "clean": "rimraf dist .turbo",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint"
+    "lint": "eslint -f unix \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {
     "@livekit/components-react": "0.1.9",

@@ -26,10 +26,13 @@
     "prebuild": "rimraf dist",
     "build": "tsx src/build.ts",
     "clean": "rimraf dist .turbo",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint -f unix \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {
     "@livekit/components-react": "0.1.9",
+    "eslint-config-custom": "^0.0.0",
+    "eslint-plugin-tsdoc": "^0.2.17",
     "glob": "^8.0.0",
     "mkdirp": "^1.0.4",
     "react-docgen-typescript": "^2.1.0",
@@ -37,6 +40,7 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
+    "eslint-config-custom": "*",
     "@types/glob": "^8.0.0",
     "@types/mkdirp": "^1.0.2"
   }

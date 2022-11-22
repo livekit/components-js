@@ -1,27 +1,43 @@
 @use '../variables' as v;
 
-@mixin button-reset {
-  border: none;
-  background: none;
-}
+// @mixin button-reset {
+//   border: 0;
+//   background-image: none;
+// }
 
 .button {
-  --btn-padding-y: #{v.$s-small};
-  --btn-padding-x: #{v.$s-small};
-  --btn-border-radius: #{v.$t-border-radius};
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem .75rem;
+  color: var(--control-fg);
+  background-image: none;
+  background-color: var(--control-bg);
+  border: 0;
+  border-radius: var(--border-radius);
 
-  color: v.$t-secondary-color;
-  border-color: v.$t-border-color;
-  border-radius: var(--btn-border-radius);
-  background-color: v.$t-primary-color;
-
-  /** inactive state for toggle buttons **/
+  // Inactive state for toggle buttons
   &[aria-pressed='false'] {
-    color: v.$t-tertiary-color;
-    background-color: v.$t-secondary-color;
+    color: var(--fg-tertiary);
+    background-color: var(--bg-tertiary);
   }
 
   &:disabled {
     opacity: 50%;
+  }
+}
+
+.button-menu {
+  &::after {
+    display: inline-block;
+    content: "";
+    width: .5em;
+    height: .5em;
+    margin-top: -.25rem;
+    margin-left: .5rem;
+    border-left: .125em solid;
+    border-bottom: .125em solid;
+    transform: rotate(-45deg);
+    transform-origin: center center;
   }
 }

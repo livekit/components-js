@@ -1,9 +1,8 @@
 @use '../variables' as v;
 
 @mixin base-indicator {
-  --indicator-size: #{v.$s-medium};
-  width: var(--indicator-size);
-  height: var(--indicator-size);
+  width: var(--indicator-size, 1.5rem);
+  height: var(--indicator-size, 1.5rem);
   background-position: center;
   background-size: 75%;
   background-repeat: no-repeat;
@@ -23,7 +22,7 @@
   top: 10%;
   left: 10%;
   box-sizing: border-box;
-  background-image: linear-gradient(-45deg, transparent 46%, v.$t-danger-color, transparent 54%);
+  background-image: linear-gradient(-45deg, transparent 46%, var(--danger-bg), transparent 54%);
 }
 
 .media-muted-indicator-camera {

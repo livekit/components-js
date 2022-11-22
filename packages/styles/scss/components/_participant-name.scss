@@ -1,6 +1,4 @@
 .participant-name {
-  text-decoration: underline;
-
   &::after {
     //TODO: Add this data attribute to the prefixer plugin. Currently this data attribute does not get prefixed.
     content: attr(data-participant-name);

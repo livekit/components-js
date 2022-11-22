@@ -113,7 +113,7 @@ export const DeviceSelectButton = ({
   return (
     <span style={{ position: 'relative', flexShrink: 0 }}>
       <button
-        className="lk-secondary"
+        className="lk-button lk-button-menu"
         aria-pressed={isOpen}
         {...props}
         onClick={() => setIsOpen(!isOpen)}
@@ -121,18 +121,9 @@ export const DeviceSelectButton = ({
         {props.children}
       </button>
 
-      <div
+      <div className="lk-device-menu"
         style={{
-          position: 'absolute',
           display: isOpen ? 'block' : 'none',
-          margin: '1rem',
-          bottom: '100%',
-          left: '-50%',
-          width: '20rem',
-          backgroundColor: 'white',
-          borderRadius: '0.5rem',
-          padding: '.2rem .3rem',
-          boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
         }}
       >
         {kind ? (
@@ -142,24 +133,20 @@ export const DeviceSelectButton = ({
           />
         ) : (
           <>
-            <div>
-              <div>Audio Inputs:</div>
-              <DeviceSelector
-                kind="audioinput"
-                onActiveDeviceChange={(deviceId) =>
-                  handleActiveDeviceChange('audioinput', deviceId)
-                }
-              ></DeviceSelector>
-            </div>
-            <div>
-              <div>Video Inputs:</div>
-              <DeviceSelector
-                kind="videoinput"
-                onActiveDeviceChange={(deviceId) =>
-                  handleActiveDeviceChange('videoinput', deviceId)
-                }
-              ></DeviceSelector>
-            </div>
+            <div className="lk-device-menu-heading">Audio inputs</div>
+            <DeviceSelector
+              kind="audioinput"
+              onActiveDeviceChange={(deviceId) =>
+                handleActiveDeviceChange('audioinput', deviceId)
+              }
+            ></DeviceSelector>
+            <div className="lk-device-menu-heading">Video inputs</div>
+            <DeviceSelector
+              kind="videoinput"
+              onActiveDeviceChange={(deviceId) =>
+                handleActiveDeviceChange('videoinput', deviceId)
+              }
+            ></DeviceSelector>
           </>
         )}
       </div>

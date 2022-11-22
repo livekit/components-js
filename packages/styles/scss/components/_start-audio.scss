@@ -3,6 +3,6 @@
 
 .start-audio-button {
   @extend .button;
-  color: v.$t-primary-color;
-  background-color: v.$t-primary-bg;
+  color: var(--accent-fg);
+  background-color: var(--accent-bg);
 }

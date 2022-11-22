@@ -200,59 +200,64 @@ export const PreJoin = ({
       ) : (
         <></>
       )}
-      <div className="media-controls">
-        <div
-          className="video"
-          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-        >
-          <MediaControlButton
-            initialState={videoEnabled}
-            source={Track.Source.Camera}
-            onChange={(enabled) => setVideoEnabled(enabled)}
-          ></MediaControlButton>
-          <DeviceSelectButton
-            kind="videoinput"
-            onActiveDeviceChange={(_, deviceId) =>
-              setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId))
-            }
-          >
-            {selectedVideoDevice?.label ?? 'Default'}
-          </DeviceSelectButton>
-        </div>
+      <div className="media-controls" style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: '1rem' }}>
         <div
           className="audio"
-          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+          style={{ display: 'flex', gap: '.5rem' }}
         >
           <MediaControlButton
             initialState={videoEnabled}
             source={Track.Source.Microphone}
             onChange={(enabled) => setAudioEnabled(enabled)}
-          ></MediaControlButton>
-          <DeviceSelectButton
-            kind="audioinput"
-            onActiveDeviceChange={(_, deviceId) =>
-              setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId))
-            }
-          >
-            {selectedAudioDevice?.label ?? 'Default'}
-          </DeviceSelectButton>
+          >Mic</MediaControlButton>
+          <div style={{ position: 'relative', display: 'inline-flex' }}>
+            <DeviceSelectButton
+              kind="audioinput"
+              onActiveDeviceChange={(_, deviceId) =>
+                setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId))
+              }
+            >
+              {selectedAudioDevice?.label ?? 'Default'}
+            </DeviceSelectButton>
+          </div>
+        </div>
+        <div
+          className="video"
+          style={{ display: 'flex', gap: '.5rem' }}
+        >
+          <MediaControlButton
+            initialState={videoEnabled}
+            source={Track.Source.Camera}
+            onChange={(enabled) => setVideoEnabled(enabled)}
+          >Camera</MediaControlButton>
+          <div style={{ position: 'relative', display: 'inline-flex' }}>
+            <DeviceSelectButton
+              kind="videoinput"
+              onActiveDeviceChange={(_, deviceId) =>
+                setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId))
+              }
+            >
+              {selectedVideoDevice?.label ?? 'Default'}
+            </DeviceSelectButton>
+          </div>
         </div>
 
-        <label htmlFor="username">
-          Username:
-          <input
-            id="username"
-            name="username"
-            type="text"
-            defaultValue={username}
-            onChange={(inputEl) => setUsername(inputEl.target.value)}
-          />
-        </label>
+        {/* <label htmlFor="username">Username</label> */}
+        <input
+          className="form-control"
+          id="username"
+          name="username"
+          type="text"
+          // defaultValue={username}
+          placeholder="Username"
+          onChange={(inputEl) => setUsername(inputEl.target.value)}
+        />
+
+        <button className="lk-button lk-join-button" onClick={handleSubmit} disabled={!isValid}>
+          Join room
+        </button>
       </div>
 
-      <button className="lk-button lk-join-button" onClick={handleSubmit} disabled={!isValid}>
-        Join
-      </button>
       {debug && (
         <>
           <strong>User Choices:</strong>

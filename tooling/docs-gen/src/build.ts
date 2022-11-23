@@ -99,10 +99,6 @@ function extractComponentInfo(docs: ComponentDoc[]) {
     camelCaseStr.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
 
   return docs.reduce((acc, def) => {
-    // if (!Object.keys(def.props || {}).length) {
-    //   return acc;
-    // }
-
     function createUniqueName(displayName: string) {
       const existing = acc.filter(
         (prev) => String(prev.def.displayName).toLowerCase() === displayName.toLowerCase(),
@@ -117,6 +113,15 @@ function extractComponentInfo(docs: ComponentDoc[]) {
 
     const exportName = createUniqueName(def.displayName);
     const fileName = `${exportName}.mdx`;
+
+    const stringifyProps = (key: string, value: any) => {
+      if (key === 'defaultValue') {
+        // TODO: some `defaultValues` are in a non JSON compatible format and crash when trying to run JSON.parse on them.
+        // At the moment we exclude them from the JSON string.
+        return typeof value === 'object' ? '' : value;
+      }
+      return value;
+    };
 
     const mdx = `---
 title: ${splitCamelCase(def.displayName)}
@@ -134,7 +139,7 @@ ${def.tags?.example ? def.tags.example : 'No example yet.'}
 
 ## Props
 
-<PropsTable data='${JSON.stringify(def.props)}' />
+<PropsTable data='${JSON.stringify(def.props, stringifyProps)}' />
 `;
 
     acc.push({

@@ -44,7 +44,7 @@ export const PinContextProvider = ({ onChange, children }: PinContextProviderPro
 
   React.useEffect(() => {
     if (onChange) onChange(pinState);
-  }, [pinState]);
+  }, [onChange, pinState]);
 
   return <PinContext.Provider value={pinContextDefault}>{children}</PinContext.Provider>;
 };

@@ -6,7 +6,7 @@ import { FocusViewContainer } from '../components/layout/FocusView';
 import { GridView } from '../components/layout/GridView';
 import { PinState } from '@livekit/components-core';
 
-export interface DefaultRoomViewProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type DefaultRoomViewProps = React.HTMLAttributes<HTMLDivElement>;
 
 export function DefaultRoomView({ ...props }: DefaultRoomViewProps) {
   type Layout = 'grid' | 'focus';

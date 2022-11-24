@@ -1,4 +1,4 @@
-import { ConnectionState, type Room } from 'livekit-client';
+import { ConnectionState } from 'livekit-client';
 import { setupDisconnectButton } from '@livekit/components-core';
 import * as React from 'react';
 import { useRoomContext } from '../../contexts';
@@ -21,7 +21,7 @@ export const useDisconnectButton = (props: DisconnectButtonProps) => {
       disabled: connectionState === ConnectionState.Disconnected,
     });
     return mergedProps;
-  }, [room, connectionState]);
+  }, [room, props, connectionState]);
 
   return { buttonProps };
 };

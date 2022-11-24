@@ -50,7 +50,7 @@ export function DeviceSelector({ kind, onActiveDeviceChange, ...props }: DeviceS
     onActiveDeviceChange?.(deviceId);
   };
   // Merge Props
-  const mergedProps = React.useMemo(() => mergeProps(props, { className }), [props]);
+  const mergedProps = React.useMemo(() => mergeProps(props, { className }), [className, props]);
 
   return (
     <ul {...mergedProps}>

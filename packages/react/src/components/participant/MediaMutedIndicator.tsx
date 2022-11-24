@@ -17,7 +17,7 @@ export const useMediaMutedIndicator = (
   const p = useEnsureParticipant(participant);
   const { className, mediaMutedObserver } = React.useMemo(
     () => setupMediaMutedIndicator(p, source),
-    [source, participant],
+    [p, source],
   );
 
   const htmlProps = React.useMemo(

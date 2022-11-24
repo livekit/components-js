@@ -108,7 +108,7 @@ export function useToken(tokenEndpoint: string | undefined, roomName: string, us
       setToken(accessToken);
     };
     tokenFetcher();
-  }, [tokenEndpoint, roomName]);
+  }, [tokenEndpoint, roomName, userInfo]);
   return token;
 }
 
@@ -147,7 +147,7 @@ export const useLiveKitRoom = (props: LiveKitRoomProps) => {
         localP.setMicrophoneEnabled(!!audio, typeof audio !== 'boolean' ? audio : undefined);
         localP.setCameraEnabled(!!video, typeof video !== 'boolean' ? video : undefined);
         localP.setScreenShareEnabled(!!screen, typeof screen !== 'boolean' ? screen : undefined);
-      } catch (e: any) {
+      } catch (e) {
         console.warn(e);
         onError?.(e as Error);
       }
@@ -157,7 +157,7 @@ export const useLiveKitRoom = (props: LiveKitRoomProps) => {
     return () => {
       room.off(RoomEvent.SignalConnected, onSignalConnected);
     };
-  }, [room.state, audio, video, screen]);
+  }, [room, audio, video, screen, onError]);
 
   React.useEffect(() => {
     if (!token) {
@@ -169,14 +169,14 @@ export const useLiveKitRoom = (props: LiveKitRoomProps) => {
       return;
     }
     if (connect) {
-      room.connect(serverUrl, token, connectOptions).catch((e: any) => {
+      room.connect(serverUrl, token, connectOptions).catch((e) => {
         console.warn(e);
         onError?.(e as Error);
       });
     } else {
       room.disconnect();
     }
-  }, [connect, token]);
+  }, [connect, token, connectOptions, room, onError, serverUrl]);
 
   React.useEffect(() => {
     const connectionStateChangeListener = roomEventSelector(
@@ -196,7 +196,7 @@ export const useLiveKitRoom = (props: LiveKitRoomProps) => {
       }
     });
     return () => connectionStateChangeListener.unsubscribe();
-  }, [token]);
+  }, [token, onConnected, onDisconnected, room]);
   return room;
 };
 

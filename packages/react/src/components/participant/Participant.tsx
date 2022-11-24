@@ -109,7 +109,7 @@ export function useIsSpeaking(participant?: Participant) {
   React.useEffect(() => {
     const subscription = createIsSpeakingObserver(p).subscribe(setIsSpeaking);
     return () => subscription.unsubscribe();
-  });
+  }, [p]);
 
   return isSpeaking;
 }
@@ -121,7 +121,7 @@ export function useIsMuted(source: Track.Source, participant?: Participant) {
   React.useEffect(() => {
     const listener = mutedObserver(p, source).subscribe(setIsMuted);
     return () => listener.unsubscribe();
-  });
+  }, [p, source]);
 
   return isMuted;
 }

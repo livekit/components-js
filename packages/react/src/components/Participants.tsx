@@ -86,7 +86,7 @@ export const useSortedParticipants = (participants: Array<Participant>) => {
  * Super detailed documentation.
  *
  * @example
- * ```
+ * ```tsx
  * import { Participants } from '@livekit/components-react';
  *
  * {...}

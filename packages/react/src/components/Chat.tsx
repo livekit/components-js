@@ -22,7 +22,7 @@ export function useChat() {
  * in the room. Only users who are in the room at the time of dispatch will receive the message.
  *
  * @example
- * ```
+ * ```tsx
  * import { Chat } from '@livekit/components-react';
  *
  * <LiveKitRoom>

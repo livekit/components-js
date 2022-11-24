@@ -7,6 +7,21 @@ import { StartAudio } from '../components/controls/StartAudio';
 
 export type DefaultControlsProps = React.HTMLAttributes<HTMLDivElement>;
 
+/**
+ * The DefaultControls prefab component gives the user the basic user interface
+ * to control their media devices and leave the room.
+ *
+ * @remarks
+ * This component is build with other LiveKit components like `MediaControlButton`,
+ * `DeviceSelectorButton`, `DisconnectButton` and `StartAudio`.
+ *
+ * @example
+ * ```tsx
+ * <LiveKitRoom>
+ *   <DefaultControls />
+ * </LiveKitRoom>
+ * ```
+ */
 export function DefaultControls(props: DefaultControlsProps) {
   return (
     // TODO: Remove styling default styling or move to styles package.

@@ -27,12 +27,40 @@ const DEFAULT_USER_CHOICES = {
 };
 
 type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'> & {
-  defaults?: Partial<LocalUserChoices>;
-  onValidate?: (values: LocalUserChoices) => boolean;
+  /**
+   * This function is called with the `LocalUserChoices` if validation is passed.
+   */
   onSubmit?: (values: LocalUserChoices) => void;
+  /**
+   * Provide your custom validation function. Only if validation is successful the user choices are past to the onSubmit callback.
+   */
+  onValidate?: (values: LocalUserChoices) => boolean;
+  /**
+   * Prefill the input form with initial values.
+   */
+  defaults?: Partial<LocalUserChoices>;
+  /**
+   * Display a debug window for your convenience.
+   */
   debug?: boolean;
 };
 
+/**
+ * The PreJoin prefab component is normally presented to the user before he enters a room.
+ * This component allows the user to check and select the preferred media device (camera und microphone).
+ * On submit the user decisions are returned, which can then be passed on to the LiveKitRoom so that the user enters the room with the correct media devices.
+ *
+ * @remarks
+ * This component is independent from the LiveKitRoom component and don't has to be nested inside it.
+ * Because it only access the local media tracks this component is self contained and works without connection to the LiveKit server.
+ *
+ * @example
+ * ```tsx
+ * import { PreJoin } from '@livekit/components-react';
+ *
+ * <PreJoin />
+ * ```
+ */
 export const PreJoin = ({
   defaults = DEFAULT_USER_CHOICES,
   onValidate,

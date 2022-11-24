@@ -15,7 +15,7 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLDivElement> {
 /**
  * The ChatEntry component holds and displays one chat message.
  *
- * @examples
+ * @example
  * ```tsx
  * import { Chat, ChatEntry } from '@livekit/components-react';
  *
@@ -25,9 +25,6 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLDivElement> {
  *   </Chat>
  * {...}
  * ```
- *
- * @param param0
- * @returns
  */
 export function ChatEntry({ entry, ...props }: ChatEntryProps) {
   return (

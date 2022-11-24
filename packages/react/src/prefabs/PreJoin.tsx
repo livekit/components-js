@@ -84,7 +84,7 @@ export const PreJoin = ({
       localVideoTrack?.detach();
       setLocalVideoTrack(undefined);
     }
-  }, [selectedVideoDevice, videoEnabled]);
+  }, [selectedVideoDevice, videoEnabled, localVideoTrack]);
 
   React.useEffect(() => {
     if (audioEnabled) {
@@ -99,11 +99,11 @@ export const PreJoin = ({
       localAudioTrack?.detach();
       setLocalAudioTrack(undefined);
     }
-  }, [selectedAudioDevice, audioEnabled]);
+  }, [selectedAudioDevice, audioEnabled, localAudioTrack]);
 
   React.useEffect(() => {
     if (videoEl.current) localVideoTrack?.attach(videoEl.current);
-  }, [localVideoTrack, videoEl.current, selectedVideoDevice]);
+  }, [localVideoTrack, videoEl, selectedVideoDevice]);
 
   React.useEffect(() => {
     setSelectedVideoDevice(videoDevices.find((dev) => dev.deviceId === localVideoDeviceId));
@@ -112,6 +112,17 @@ export const PreJoin = ({
   React.useEffect(() => {
     setSelectedAudioDevice(audioDevices.find((dev) => dev.deviceId === localAudioDeviceId));
   }, [localAudioDeviceId, audioDevices]);
+
+  const handleValidation = React.useCallback(
+    (values: LocalUserChoices) => {
+      if (typeof onValidate === 'function') {
+        return onValidate(values);
+      } else {
+        return values.username !== '';
+      }
+    },
+    [onValidate],
+  );
 
   React.useEffect(() => {
     const newUserChoices = {
@@ -123,7 +134,14 @@ export const PreJoin = ({
     };
     setUserChoices(newUserChoices);
     setIsValid(handleValidation(newUserChoices));
-  }, [username, videoEnabled, audioEnabled, selectedAudioDevice, selectedVideoDevice]);
+  }, [
+    username,
+    videoEnabled,
+    audioEnabled,
+    selectedAudioDevice,
+    selectedVideoDevice,
+    handleValidation,
+  ]);
 
   function handleSubmit() {
     if (handleValidation(userChoices)) {
@@ -135,13 +153,6 @@ export const PreJoin = ({
     }
   }
 
-  function handleValidation(values: LocalUserChoices): boolean {
-    if (typeof onValidate === 'function') {
-      return onValidate(values);
-    } else {
-      return values.username !== '';
-    }
-  }
   return (
     <div {...htmlProps}>
       {localVideoTrack ? (

@@ -22,7 +22,7 @@ export interface RoomNameProps extends React.HTMLAttributes<HTMLSpanElement> {
 /**
  * The RoomName component renders the name of the connected LiveKit room inside a span tag.
  *
- * @examples
+ * @example
  * ```tsx
  * <LiveKitRoom>
  *   <RoomName />

@@ -29,12 +29,12 @@ export const useRemoteParticipants = (
       }
       setParticipants(participants);
     },
-    [participants, filter],
+    [filter],
   );
   React.useEffect(() => {
     const listener = connectedParticipantsObserver(room).subscribe(handleUpdate);
     return () => listener.unsubscribe();
-  }, [room]);
+  }, [handleUpdate, room]);
   return participants;
 };
 

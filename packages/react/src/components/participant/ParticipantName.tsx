@@ -14,7 +14,7 @@ export const useParticipantInfo = (participant: Participant) => {
 
   return { identity, name, metadata };
 };
-export interface ParticipantNameProps extends React.HTMLAttributes<HTMLSpanElement> {}
+export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement>;
 
 /**
  * The ParticipantName component displays the name of the participant as a string within an HTML span element.

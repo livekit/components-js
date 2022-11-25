@@ -4,7 +4,7 @@ import { useRoomContext } from '../contexts';
 import { cloneSingleChild, useObservableState } from '../utils';
 import { ChatEntry } from './ChatEntry';
 
-export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type ChatProps = React.HTMLAttributes<HTMLDivElement>;
 
 export function useChat() {
   const room = useRoomContext();

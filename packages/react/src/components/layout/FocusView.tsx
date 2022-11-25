@@ -15,6 +15,7 @@ interface FocusViewContainerProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 // TODO use (loudest) participant in focus, if no focusParticipant is provided
+// TODO cleanup props
 export function FocusViewContainer({
   focusParticipant,
   focusTrackSource,

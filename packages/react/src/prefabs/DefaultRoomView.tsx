@@ -6,8 +6,25 @@ import { FocusViewContainer } from '../components/layout/FocusView';
 import { GridView } from '../components/layout/GridView';
 import { PinState } from '@livekit/components-core';
 
-export interface DefaultRoomViewProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type DefaultRoomViewProps = React.HTMLAttributes<HTMLDivElement>;
 
+/**
+ * This component is the default setup of a classic LiveKit video conferencing app.
+ * It provides functionality like switching between participant grid view and focus view.
+ *
+ * @remarks
+ * The component is implemented with other LiveKit components like `PinContextProvider`,
+ * `GridView`, `DefaultControls`, `FocusViewContainer` and `FocusView`.
+ *
+ * @example
+ * ```tsx
+ * import { DefaultRoomView } from '@livekit/components-react';
+ *
+ * <LiveKitRoom>
+ *   <DefaultRoomView />
+ * <LiveKitRoom>
+ * ```
+ */
 export function DefaultRoomView({ ...props }: DefaultRoomViewProps) {
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = React.useState<Layout>('grid');

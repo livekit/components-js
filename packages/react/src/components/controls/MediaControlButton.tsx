@@ -63,7 +63,7 @@ export const useMediaToggle = ({ source, onChange, initialState, ...rest }: Medi
 
   const { toggle, className, pendingObserver, enabledObserver } = React.useMemo(
     () => (room ? setupMediaToggle(source, room) : setupManualToggle(!!initialState)),
-    [source, room],
+    [room, source, initialState],
   );
 
   const pending = useObservableState(pendingObserver, false);
@@ -71,7 +71,7 @@ export const useMediaToggle = ({ source, onChange, initialState, ...rest }: Medi
 
   React.useEffect(() => {
     onChange?.(enabled);
-  }, [enabled]);
+  }, [enabled, onChange]);
 
   const newProps = React.useMemo(() => mergeProps(rest, { className }), [rest, className]);
 

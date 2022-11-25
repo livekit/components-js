@@ -38,6 +38,17 @@ export interface DeviceSelectorProps extends React.HTMLAttributes<HTMLUListEleme
   onActiveDeviceChange?: (deviceId: string) => void;
 }
 
+/**
+ * The DeviceSelector list all media devices of one kind.
+ * Clicking on one of the listed devices make it the active media device.
+ *
+ * @example
+ * ```tsx
+ * <LiveKitRoom>
+ *   <DeviceSelector kind='audioinput' />
+ * </LiveKitRoom>
+ * ```
+ */
 export function DeviceSelector({ kind, onActiveDeviceChange, ...props }: DeviceSelectorProps) {
   const room = useMaybeRoomContext();
   const { devices, activeDeviceId, setActiveMediaDevice, className } = useDeviceSelector(
@@ -50,7 +61,7 @@ export function DeviceSelector({ kind, onActiveDeviceChange, ...props }: DeviceS
     onActiveDeviceChange?.(deviceId);
   };
   // Merge Props
-  const mergedProps = React.useMemo(() => mergeProps(props, { className }), [props]);
+  const mergedProps = React.useMemo(() => mergeProps(props, { className }), [className, props]);
 
   return (
     <ul {...mergedProps}>
@@ -74,6 +85,20 @@ interface DeviceSelectButtonProps extends React.HTMLAttributes<HTMLButtonElement
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
 }
 
+/**
+ * The DeviceSelectButton prefab component is a button that opens a menu that lists
+ * all media devices and allows the user to select them.
+ *
+ * @remarks
+ * This component is implemented with the `DeviceSelector` LiveKit components.
+ *
+ * @example
+ * ```tsx
+ * <LiveKitRoom>
+ *   <DeviceSelectButton />
+ * </LiveKitRoom>
+ * ```
+ */
 export const DeviceSelectButton = ({
   kind,
   onActiveDeviceChange,

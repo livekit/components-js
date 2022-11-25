@@ -25,7 +25,7 @@ export function useTrack(pub?: TrackPublication) {
     setTrack(pub?.track);
     setPublication(pub);
     return () => listener.unsubscribe();
-  }, [pub]);
+  }, [pub, track]);
 
   return { publication, track };
 }

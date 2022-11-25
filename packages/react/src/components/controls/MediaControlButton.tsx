@@ -61,9 +61,10 @@ export const useMediaToggle = ({ source, onChange, initialState, ...rest }: Medi
   const room = useMaybeRoomContext();
   const track = room?.localParticipant?.getTrack(source);
 
+  // FIXME: adding initialState to useMemo dependencies leads to constant toggling of the buttons and browser freeze.
   const { toggle, className, pendingObserver, enabledObserver } = React.useMemo(
     () => (room ? setupMediaToggle(source, room) : setupManualToggle(!!initialState)),
-    [room, source, initialState],
+    [room, source],
   );
 
   const pending = useObservableState(pendingObserver, false);

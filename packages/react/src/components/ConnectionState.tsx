@@ -31,8 +31,6 @@ export function useConnectionState(room?: Room) {
  *
  * @example
  * ```tsx
- * import { ConnectionState } from '@livekit/components-react';
- *
  * <LiveKitRoom>
  *   <ConnectionState />
  * </LiveKitRoom>

@@ -32,8 +32,6 @@ export const useDisconnectButton = (props: DisconnectButtonProps) => {
  *
  * @example
  * ```tsx
- * import { DisconnectButton } from '@livekit/components-react';
- *
  * <LiveKitRoom>
  *   <DisconnectButton>Leave room</DisconnectButton>
  * </LiveKitRoom>

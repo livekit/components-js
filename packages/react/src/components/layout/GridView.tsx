@@ -22,8 +22,6 @@ export interface GridViewProps extends React.HTMLAttributes<HTMLDivElement> {
  *
  * @example
  * ```tsx
- * import { DefaultRoomView } from '@livekit/components-react';
- *
  * <LiveKitRoom>
  *   <DefaultRoomView />
  * <LiveKitRoom>

@@ -6,7 +6,7 @@ import { promises as fs } from 'fs';
 import * as docgen from 'react-docgen-typescript';
 import { ComponentDoc } from 'react-docgen-typescript';
 import mkdirp from 'mkdirp';
-import { mdxTemplate } from './mdx-template';
+import { mdxComponentTemplate, mdxHookTemplate } from './mdx-template';
 
 type ComponentInfo = {
   def: ComponentDoc;
@@ -41,6 +41,7 @@ export async function main() {
 
   log('Parsing files for component types...');
   const parsedInfo = parseInfo(componentFiles);
+  log({ parsedInfo });
 
   log('Extracting component info...');
   const componentInfo = extractComponentInfo(parsedInfo);
@@ -81,6 +82,8 @@ function parseInfo(filePaths: string[]) {
     shouldRemoveUndefinedFromOptional: true,
     propFilter: (prop, component) => {
       // const isStyledSystemProp = excludedPropNames.includes(prop.name);
+      console.log({ prop });
+
       const isHTMLElementProp = prop.parent?.fileName.includes('node_modules') ?? false;
       const isHook = component.name.startsWith('use');
       const isTypeScriptNative = prop.parent?.fileName.includes('node_modules/typescript') ?? false;
@@ -96,22 +99,22 @@ function parseInfo(filePaths: string[]) {
  * Extract meta data of component docs
  */
 function extractComponentInfo(docs: ComponentDoc[]) {
-  return docs.reduce((acc, def) => {
+  return docs.reduce((acc, def, _, allDefs) => {
     function createUniqueName(displayName: string) {
       const existing = acc.filter(
         (prev) => String(prev.def.displayName).toLowerCase() === displayName.toLowerCase(),
       );
-
       if (!existing.length) {
         return displayName;
       }
-
       return `${displayName}${existing.length}`;
     }
 
     const exportName = createUniqueName(def.displayName);
     const fileName = `${exportName}.mdx`;
-    const mdx = mdxTemplate(def);
+    const mdx = def.displayName.startsWith('use')
+      ? mdxHookTemplate(def)
+      : mdxComponentTemplate(def, hasHook(def.displayName, allDefs));
 
     acc.push({
       def,
@@ -124,6 +127,9 @@ function extractComponentInfo(docs: ComponentDoc[]) {
     return acc;
   }, [] as ComponentInfo[]);
 }
+
+const hasHook = (displayName: string, allDefs: ComponentDoc[]) =>
+  allDefs.some((def) => def.displayName === `use${displayName}`);
 
 /**
  * Write component info as JSON to disk

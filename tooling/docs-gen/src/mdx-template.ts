@@ -13,6 +13,8 @@ ${addHookImport(def.displayName, hasHook)}
 
 ## Usage
 
+${addImportExample(def.displayName)}
+
 ${def.tags?.example ? def.tags.example : 'No example yet.'}
 
 <Usage of='${def.displayName}' />
@@ -44,6 +46,8 @@ ${def.description.replaceAll('\n', ' ')}
 
 ### Hook Usage
 
+${addImportExample(def.displayName)}
+
 ${def.tags?.example ? def.tags.example : 'No example yet.'}
 
 <Usage of='${def.displayName}' />
@@ -52,6 +56,9 @@ ${def.tags?.example ? def.tags.example : 'No example yet.'}
 
 <PropsTable data='${JSON.stringify(def.props, stringifyProps)}' />
 `;
+
+const addImportExample = (displayName: string) =>
+  '```tsx\n' + 'import { ' + displayName + " } from '@livekit/components-react'\n```";
 
 const splitCamelCase = (camelCaseStr: string) =>
   camelCaseStr.replace(/([a-z0-9])([A-Z])/g, '$1 $2');

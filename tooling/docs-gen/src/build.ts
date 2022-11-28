@@ -41,7 +41,6 @@ export async function main() {
 
   log('Parsing files for component types...');
   const parsedInfo = parseInfo(componentFiles);
-  log({ parsedInfo });
 
   log('Extracting component info...');
   const componentInfo = extractComponentInfo(parsedInfo);
@@ -81,9 +80,6 @@ function parseInfo(filePaths: string[]) {
   const { parse } = docgen.withCustomConfig(tsConfigPath, {
     shouldRemoveUndefinedFromOptional: true,
     propFilter: (prop, component) => {
-      // const isStyledSystemProp = excludedPropNames.includes(prop.name);
-      console.log({ prop });
-
       const isHTMLElementProp = prop.parent?.fileName.includes('node_modules') ?? false;
       const isHook = component.name.startsWith('use');
       const isTypeScriptNative = prop.parent?.fileName.includes('node_modules/typescript') ?? false;

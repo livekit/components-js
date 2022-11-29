@@ -1,7 +1,7 @@
 {
     "name": "eslint-config-custom",
     "main": "index.js",
-    "private": "true",
+    "private": true,
     "devDependencies": {
         "@changesets/cli": "^2.25.0",
         "@typescript-eslint/eslint-plugin": "^5.22.0",

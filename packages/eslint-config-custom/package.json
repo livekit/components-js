@@ -2,6 +2,9 @@
     "name": "eslint-config-custom",
     "version": "0.0.1",
     "main": "index.js",
+    "publishConfig": {
+        "access": "restricted"
+    },
     "devDependencies": {
         "@changesets/cli": "^2.25.0",
         "@typescript-eslint/eslint-plugin": "^5.22.0",

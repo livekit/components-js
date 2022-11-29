@@ -2,7 +2,7 @@ import React from 'react';
 import { StoryObj } from '@storybook/react';
 
 import { DeviceSelector, DeviceSelectorProps } from '@livekit/components-react';
-import { LkRoomContext } from '../../.storybook/LiveKitStorybookContexts';
+import { LkRoomContext } from '../../.storybook/lk-decorators';
 
 const kinds: MediaDeviceKind[] = ['audioinput', 'audiooutput', 'videoinput'];
 

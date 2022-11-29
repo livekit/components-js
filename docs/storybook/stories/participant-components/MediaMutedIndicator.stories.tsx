@@ -6,7 +6,7 @@ import {
   MediaMutedIndicator,
   MediaMutedIndicatorProps,
 } from '@livekit/components-react';
-import { LkParticipantContext, LkRoomContext } from '../../.storybook/LiveKitStorybookContexts';
+import { LkParticipantContext, LkRoomContext } from '../../.storybook/lk-decorators';
 import { Track } from 'livekit-client';
 
 // eslint-disable-next-line import/no-anonymous-default-export

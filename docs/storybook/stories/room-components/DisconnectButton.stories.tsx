@@ -2,7 +2,7 @@ import React from 'react';
 import { StoryObj } from '@storybook/react';
 
 import { DisconnectButton, DisconnectButtonProps } from '@livekit/components-react';
-import { LkRoomContext } from '../../.storybook/LiveKitStorybookContexts';
+import { LkRoomContext } from '../../.storybook/lk-decorators';
 
 export default {
   component: DisconnectButton,

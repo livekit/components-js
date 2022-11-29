@@ -1,4 +1,5 @@
 {
+  "name": "@livekit/components-react",
   "version": "0.1.9",
   "publishConfig": {
     "access": "restricted"
@@ -38,7 +39,6 @@
     "react": ">=18",
     "react-dom": ">=18"
   },
-  "name": "@livekit/components-react",
   "devDependencies": {
     "eslint-config-custom": "*",
     "@types/react": "^18.0.25",

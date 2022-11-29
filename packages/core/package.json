@@ -1,4 +1,5 @@
 {
+  "name": "@livekit/components-core",
   "version": "0.1.7",
   "publishConfig": {
     "access": "restricted"
@@ -33,7 +34,6 @@
   "peerDependencies": {
     "livekit-client": "^1.5.0"
   },
-  "name": "@livekit/components-core",
   "author": "LiveKit",
   "devDependencies": {
     "eslint-config-custom": "*",

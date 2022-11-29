@@ -13,14 +13,14 @@
     "dist"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted"
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/livekit/components/tree/main/tooling/docs-gen"
   },
   "bugs": {
-    "url": ""
+    "url": "https://github.com/livekit/components/tree/main/tooling/docs-gen"
   },
   "scripts": {
     "prebuild": "rimraf dist",

@@ -29,6 +29,7 @@ export const LkRoomContext: Decorator = (Story, args) => {
     room.on('connected', () => setConnected(true));
     room.on('disconnected', () => setConnected(false));
     return () => {
+      room.removeAllListeners();
       room.disconnect();
     };
   }, []);

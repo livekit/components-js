@@ -8,6 +8,7 @@ import {
 import { MockParticipantContext, MockParticipantProps } from '../../.storybook/participantMock';
 import { ConnectionQuality } from 'livekit-client';
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   /*
    * This is some docs for connection quality
@@ -18,7 +19,13 @@ export default {
   argTypes: {
     connectionQuality: {
       control: { type: 'select' },
-      options: [ConnectionQuality.Excellent, ConnectionQuality.Good],
+      options: [
+        ConnectionQuality.Excellent,
+        ConnectionQuality.Good,
+        ConnectionQuality.Poor,
+        ConnectionQuality.Unknown,
+      ],
+      default: ConnectionQuality.Excellent,
     },
   },
   parameters: {
@@ -26,9 +33,7 @@ export default {
       handles: [],
     },
     docs: {
-      description: {
-        component: 'Some component _markdown_',
-      },
+      page: null,
     },
   },
 };

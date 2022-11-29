@@ -1,3 +1,3 @@
-export * from './lkRoomContext';
-export * from './lkParticipantContext';
+export * from './RoomContext';
+export * from './ParticipantContext';
 export * from './MockParticipantContext';

@@ -5,7 +5,7 @@ import {
   ConnectionQualityIndicator,
   ConnectionQualityIndicatorProps,
 } from '@livekit/components-react';
-import { MockParticipantContext, MockParticipantProps } from '../../.storybook/lk-decorators';
+import { MockParticipantContext } from '../../.storybook/lk-decorators';
 import { ConnectionQuality } from 'livekit-client';
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -14,8 +14,8 @@ export default {
    * This is some docs for connection quality
    */
   component: ConnectionQualityIndicator,
-  decorators: [],
-
+  decorators: [MockParticipantContext],
+  render: (args: ConnectionQualityIndicatorProps) => <ConnectionQualityIndicator {...args} />,
   argTypes: {
     connectionQuality: {
       control: { type: 'select' },
@@ -38,13 +38,4 @@ export default {
   },
 };
 
-export const Default: StoryObj<ConnectionQualityIndicatorProps> = {
-  render: (args: Partial<MockParticipantProps>) => (
-    <MockParticipantContext sid="12345678" identity="my-mock-id" {...args}>
-      <ConnectionQualityIndicator></ConnectionQualityIndicator>
-    </MockParticipantContext>
-  ),
-  parameters: {
-    roomContext: { audio: false, video: false, connect: true },
-  },
-};
+export const Default: StoryObj<ConnectionQualityIndicatorProps> = {};

@@ -1,11 +1,18 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@2.2.0/schema.json",
-  "changelog": ["@livekit/changesets-changelog-github", { "repo": "livekit/components" }],
+  "changelog": [
+    "@livekit/changesets-changelog-github",
+    {
+      "repo": "livekit/components"
+    }
+  ],
   "commit": false,
   "fixed": [],
   "linked": [],
   "access": "restricted",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": []
+  "ignore": [
+    "eslint-config-custom"
+  ]
 }

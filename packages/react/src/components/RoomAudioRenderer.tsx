@@ -9,8 +9,6 @@ import { Participants } from './Participants';
  *
  * @example
  * ```tsx
- * import { RoomAudioRenderer } from '@livekit/components-react';
- *
  * <LiveKitRoom>
  *   <RoomAudioRenderer />
  * </LiveKitRoom>

@@ -22,8 +22,6 @@ export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement>;
  *
  * @example
  * ```tsx
- * import { ParticipantName } from '@livekit/components-react';
- *
  * {...}
  *   <ParticipantView>
  *     <ParticipantName />

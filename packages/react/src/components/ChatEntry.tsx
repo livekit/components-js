@@ -17,8 +17,6 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLDivElement> {
  *
  * @example
  * ```tsx
- * import { Chat, ChatEntry } from '@livekit/components-react';
- *
  * {...}
  *   <Chat>
  *     <ChatEntry />

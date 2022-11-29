@@ -23,8 +23,6 @@ export function useChat() {
  *
  * @example
  * ```tsx
- * import { Chat } from '@livekit/components-react';
- *
  * <LiveKitRoom>
  *   <Chat />
  * </LiveKitRoom>

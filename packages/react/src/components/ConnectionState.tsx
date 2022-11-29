@@ -11,6 +11,14 @@ export interface ConnectionStatusProps extends React.HTMLAttributes<HTMLDivEleme
   room?: Room;
 }
 
+/**
+ * The `useConnectionState` hook allows you to simply implement your own `ConnectionState` component.
+ *
+ * @example
+ * ```tsx
+ * const connectionState = useConnectionState(room);
+ * ```
+ */
 export function useConnectionState(room?: Room) {
   // passed room takes precedence, if not supplied get current room context
   const r = useEnsureRoom(room);
@@ -23,8 +31,6 @@ export function useConnectionState(room?: Room) {
  *
  * @example
  * ```tsx
- * import { ConnectionState } from '@livekit/components-react';
- *
  * <LiveKitRoom>
  *   <ConnectionState />
  * </LiveKitRoom>

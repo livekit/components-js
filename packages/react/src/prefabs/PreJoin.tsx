@@ -56,8 +56,6 @@ type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'> & {
  *
  * @example
  * ```tsx
- * import { PreJoin } from '@livekit/components-react';
- *
  * <PreJoin />
  * ```
  */

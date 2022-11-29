@@ -207,8 +207,6 @@ export const useLiveKitRoom = (props: LiveKitRoomProps) => {
  *
  * @example
  * ```tsx
- * import { LiveKitRoom } from '@livekit/components-react';
- *
  * <LiveKitRoom
  *  token='<livekit-token>'
  *  serverUrl='<url-to-livekit-server>'

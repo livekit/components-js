@@ -1,18 +1,14 @@
 import React from 'react';
 
-import { PreJoin } from '@livekit/components-react';
+import { PreJoin, PreJoinProps } from '@livekit/components-react';
+import { StoryObj } from '@storybook/react';
 
-// More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   title: 'Prefabs/PreJoin',
   component: PreJoin,
-  // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
+  render: (args: PreJoinProps) => <PreJoin {...args} />,
   argTypes: {},
 };
 
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template = (args: typeof PreJoin) => <PreJoin {...args} />;
-
-export const Default = Template.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
-Default.args = { defaults: { username: 'Initial Name' } };
+export const Default: StoryObj<PreJoinProps> = { args: { defaults: { username: 'Initial Name' } } };

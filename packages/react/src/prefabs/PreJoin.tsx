@@ -26,7 +26,7 @@ const DEFAULT_USER_CHOICES = {
   audioDeviceId: '',
 };
 
-type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'> & {
+export type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'> & {
   /**
    * This function is called with the `LocalUserChoices` if validation is passed.
    */

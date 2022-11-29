@@ -28,6 +28,7 @@
   "scripts": {
     "clean": "rm -rf .turbo && rm -rf node_modules",
     "dev": "storybook dev -p 6006",
-    "build": "storybook build"
+    "build": "storybook build",
+    "tsx:check": "tsc --noEmit"
   }
 }

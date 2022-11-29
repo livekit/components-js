@@ -5,7 +5,7 @@ import {
   ConnectionQualityIndicator,
   ConnectionQualityIndicatorProps,
 } from '@livekit/components-react';
-import { MockParticipantContext, MockParticipantProps } from '../../.storybook/participantMock';
+import { MockParticipantContext, MockParticipantProps } from '../../.storybook/lk-decorators';
 import { ConnectionQuality } from 'livekit-client';
 
 // eslint-disable-next-line import/no-anonymous-default-export

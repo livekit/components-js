@@ -23,8 +23,6 @@ export const MockParticipantContext = ({ children, ...props }: MockParticipantPr
   }, [props.connectionQuality, dummyParticipant]);
   console.log({ dummyParticipant });
   return (
-    <>
-      <ParticipantContext.Provider value={dummyParticipant}>{children}</ParticipantContext.Provider>
-    </>
+    <ParticipantContext.Provider value={dummyParticipant}>{children}</ParticipantContext.Provider>
   );
 };

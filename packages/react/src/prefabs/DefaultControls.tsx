@@ -26,10 +26,10 @@ export function DefaultControls(props: DefaultControlsProps) {
   return (
     // TODO: Remove styling default styling or move to styles package.
     <div className="lk-controls" {...props}>
-      <MediaControlButton source={Track.Source.Microphone}>Mic</MediaControlButton>
-      <MediaControlButton source={Track.Source.Camera}>Cam</MediaControlButton>
-      <MediaControlButton source={Track.Source.ScreenShare}>Screen</MediaControlButton>
-      <DeviceSelectButton />
+      <MediaControlButton source={Track.Source.Microphone}>Microphone</MediaControlButton>
+      <MediaControlButton source={Track.Source.Camera}>Camera</MediaControlButton>
+      <MediaControlButton source={Track.Source.ScreenShare}>Share screen</MediaControlButton>
+      <DeviceSelectButton>Settings</DeviceSelectButton>
       <DisconnectButton>Leave</DisconnectButton>
       <StartAudio label="Start Audio" />
     </div>

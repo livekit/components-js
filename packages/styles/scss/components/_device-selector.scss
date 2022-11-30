@@ -1,6 +1,3 @@
-@use '../variables' as v;
-@use 'button' as button;
-
 .device-selector {
   &:not(:last-child) {
     padding-bottom: .5rem;
@@ -13,27 +10,24 @@
     width: 100%;
     align-items: center;
     padding: .375rem .5rem;
+    margin-bottom: .125rem;
     border: 0;
     background: none;
     border-radius: var(--border-radius);
+    color: var(--fg);
   }
 
-  [data-active='true'] {
-    > button {
-      color: var(--accent-fg);
-      background-color: var(--accent-bg);
-      // color: v.$t-primary-color;
+  [data-active="false"] {
+    > button:hover {
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, .05)
     }
   }
 
-  [data-active='false'] {
+  [data-active="true"] {
     > button {
-      color: var(--fg);
-
-      &:hover {
-        cursor: pointer;
-        color: var(--fg-tertiary);
-      }
+      color: var(--accent-fg);
+      background-color: var(--accent-bg);
     }
   }
 }
@@ -50,7 +44,7 @@
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, .15);
   border-radius: .5rem;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  box-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .15);
 }
 
 .device-menu-heading {

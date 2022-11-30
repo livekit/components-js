@@ -1,10 +1,7 @@
 @use 'button';
-@use '../variables' as v;
 
 .disconnect-button {
   @extend .button;
   --control-fg: var(--danger-fg);
-  --control-bg: var(--danger-bg);
-  // background-color: v.$t-danger-color;
-  // border-color: v.$t-danger-color;
+  --control-bg: var(--danger);
 }

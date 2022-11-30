@@ -1,32 +1,30 @@
-@use '../variables' as v;
-
-// @mixin button-reset {
-//   border: 0;
-//   background-image: none;
-// }
-
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: .5rem .75rem;
+  padding: .5rem .875rem;
   color: var(--control-fg);
   background-image: none;
   background-color: var(--control-bg);
   border: 0;
   border-radius: var(--border-radius);
 
-  // Inactive state for toggle buttons
-  &[aria-pressed='false'] {
-    color: var(--fg-tertiary);
-    background-color: var(--bg-tertiary);
+  &[data-lk-enabled="true"] {
+    color: var(--success-text);
+    background-color: var(--success-bg);
+  }
+
+  &[data-lk-enabled="false"]:not([data-lk-source="screen_share"]) {
+    color: var(--danger-text);
+    background-color: var(--danger-bg);
   }
 
   &:disabled {
-    opacity: 50%;
+    opacity: .5;
   }
 }
 
+// Give button menus (like device settings) an indicator that they toggle a menu
 .button-menu {
   &::after {
     display: inline-block;

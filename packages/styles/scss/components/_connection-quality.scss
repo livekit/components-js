@@ -1,29 +1,23 @@
-@use '../variables' as v;
-
 .connection-quality {
-  width: 20px;
-  height: 20px;
-  border-radius: 99999px;
+  --bg: var(--icon-connection-unknown);
 
-  // Participant connection quality indicator.
-  // TODO: remove class selectors only keep data attributes.
-  &.unknown,
-  &[data-quality='unknown'] {
-    background-color: var(--bg-secondary);
-  }
+  width: 1rem;
+  height: 1rem;
+  background-repeat: no-repeat;
+  background-image: var(--bg);
 
   &.poor,
-  &[data-quality='poor'] {
-    background-color: var(--connection-poor);
+  &[data-quality="poor"] {
+    --bg: var(--icon-connection-poor);
   }
 
   &.good,
-  &[data-quality='good'] {
-    background-color: var(--connection-good);
+  &[data-quality="good"] {
+    --bg: var(--icon-connection-good);
   }
 
   &.excellent,
-  &[data-quality='excellent'] {
-    background-color: var(--connection-excellent);
+  &[data-quality="excellent"] {
+    --bg: var(--icon-connection-excellent);
   }
 }

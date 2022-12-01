@@ -3,22 +3,25 @@
  *
  * ## Usage
  * Update NAVIGATION_BLOCK and YOU_ARE_HERE_ICON and
- * then from project root run it with: `node scripts/<name-of-this-file>`.
+ * then from project root run it with: `node path/to-this/file.js`.
  */
 const fs = require('fs');
 const glob = require('glob');
 
 const YOU_ARE_HERE_ICON = '👈';
 const NAVIGATION_BLOCK = `<!--NAV_START-->
+
 ## Monorepo Navigation
-* [Home](/README.md)
-* **Framework Implementations**:
-    * [React](/packages/react/README.md)
-* **Documentation**
-    * [Storybook](/docs/storybook/README.md)
-* **Internal Packages**
-    * [Core](/packages/core/README.md)
-    * [Styles](/packages/styles/README.md)
+
+- [Home](/README.md)
+- **Framework Implementations**:
+  - [React](/packages/react/README.md)
+- **Documentation**
+  - [Storybook](/docs/storybook/README.md)
+- **Internal Packages**
+  - [Core](/packages/core/README.md)
+  - [Styles](/packages/styles/README.md)
+
 <!--NAV_END-->`;
 
 /**

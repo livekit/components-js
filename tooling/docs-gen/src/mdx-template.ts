@@ -64,6 +64,10 @@ const splitCamelCase = (camelCaseStr: string) =>
   camelCaseStr.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
 
 const stringifyProps = (key: string, value: any) => {
+  if (typeof value === 'string') {
+    // Replace special characters to prevent issues with embedded json string in mdx files.
+    value = value.replaceAll('`', '&#96;').replaceAll("'", '&apos;');
+  }
   if (key === 'defaultValue') {
     // TODO: some `defaultValues` are in a non JSON compatible format and crash when trying to run JSON.parse on them.
     // At the moment we exclude them from the JSON string.

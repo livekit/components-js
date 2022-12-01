@@ -24,6 +24,30 @@
   }
 }
 
+.button-group {
+  display: inline-flex;
+  align-items: stretch;
+
+  > .button:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.button-group-menu {
+  position: relative;
+
+  .button {
+    height: 100%;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+
+    &::after {
+      margin-left: 0;
+    }
+  }
+}
+
 // Give button menus (like device settings) an indicator that they toggle a menu
 .button-menu {
   &::after {

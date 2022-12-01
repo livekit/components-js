@@ -180,68 +180,62 @@ export const PreJoin = ({
   }
 
   return (
-    <div {...htmlProps}>
+    <div style={{ maxWidth: '20rem', marginInline: 'auto' }} {...htmlProps}>
       {localVideoTrack ? (
-        <div>
-          <video
-            ref={videoEl}
-            style={{ width: '20rem', height: 'auto', transform: 'rotateY(180deg)' }}
-          />
-        </div>
+        <video
+          ref={videoEl}
+          style={{ display: 'block', width: '100%', height: 'auto', transform: 'rotateY(180deg)', borderRadius: 'var(--lk-border-radius)' }}
+        />
       ) : (
-        <div style={{ width: '20rem', height: '11.25rem', backgroundColor: 'black' }}>
+        <div style={{ width: '100%', height: '11.25rem', backgroundColor: '#000', borderRadius: 'var(--lk-border-radius)' }}>
           Camera is off
         </div>
       )}
       {localAudioTrack ? (
         <div style={{ display: 'none' }}>
-          <audio ref={audioEl} style={{ width: '20rem', height: 'auto' }} />
+          <audio ref={audioEl} style={{ width: '100%', height: 'auto' }} />
         </div>
       ) : (
         <></>
       )}
-      <div className="media-controls" style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: '1rem' }}>
-        <div
-          className="audio"
-          style={{ display: 'flex', gap: '.5rem' }}
-        >
+      <div style={{ display: 'flex', gap: '1rem', marginBlock: '1rem' }}>
+        <div className="lk-button-group audio">
           <MediaControlButton
             initialState={videoEnabled}
             source={Track.Source.Microphone}
             onChange={(enabled) => setAudioEnabled(enabled)}
-          >Mic</MediaControlButton>
-          <div style={{ position: 'relative', display: 'inline-flex' }}>
+          >Microphone</MediaControlButton>
+          <div className="lk-button-group-menu">
             <DeviceSelectButton
               kind="audioinput"
               onActiveDeviceChange={(_, deviceId) =>
                 setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId))
               }
             >
-              {selectedAudioDevice?.label ?? 'Default'}
+              {/* {selectedAudioDevice?.label ?? 'Default'} */}
             </DeviceSelectButton>
           </div>
         </div>
-        <div
-          className="video"
-          style={{ display: 'flex', gap: '.5rem' }}
-        >
+        <div className="lk-button-group video">
           <MediaControlButton
             initialState={videoEnabled}
             source={Track.Source.Camera}
             onChange={(enabled) => setVideoEnabled(enabled)}
           >Camera</MediaControlButton>
-          <div style={{ position: 'relative', display: 'inline-flex' }}>
+          <div className="lk-button-group-menu">
             <DeviceSelectButton
               kind="videoinput"
               onActiveDeviceChange={(_, deviceId) =>
                 setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId))
               }
             >
-              {selectedVideoDevice?.label ?? 'Default'}
+              {/* {selectedVideoDevice?.label ?? 'Default'} */}
             </DeviceSelectButton>
           </div>
         </div>
+      </div>
 
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBlock: '1rem' }}>
         {/* <label htmlFor="username">Username</label> */}
         <input
           className="form-control"
@@ -252,7 +246,6 @@ export const PreJoin = ({
           placeholder="Username"
           onChange={(inputEl) => setUsername(inputEl.target.value)}
         />
-
         <button className="lk-button lk-join-button" onClick={handleSubmit} disabled={!isValid}>
           Join room
         </button>

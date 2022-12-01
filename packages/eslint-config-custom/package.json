@@ -11,7 +11,7 @@
         "eslint-config-prettier": "^8.5.0",
         "eslint-config-standard": "^14.1.0",
         "eslint-config-standard-react": "^9.2.0",
-        "eslint-config-turbo": "^0.0.4",
+        "eslint-config-turbo": "^0.0.6",
         "eslint-plugin-import": "^2.18.2",
         "eslint-plugin-node": "^11.0.0",
         "eslint-plugin-prettier": "^4.0.0",

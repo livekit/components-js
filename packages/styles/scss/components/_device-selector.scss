@@ -35,6 +35,7 @@
 .device-menu {
   position: absolute;
   bottom: 100%;
+  z-index: 5;
   min-width: 10rem;
   padding: .5rem;
   margin-bottom: .25rem;

@@ -3,21 +3,18 @@
 
   width: 1rem;
   height: 1rem;
-  margin-inline-start: 1rem; // Spacer gif to force participant name to center
+  margin-inline-start: 1.5rem; // Spacer gif to force participant name to center
   background-repeat: no-repeat;
   background-image: var(--bg);
 
-  &.poor,
   &[data-quality="poor"] {
     --bg: var(--icon-connection-poor);
   }
 
-  &.good,
   &[data-quality="good"] {
     --bg: var(--icon-connection-good);
   }
 
-  &.excellent,
   &[data-quality="excellent"] {
     --bg: var(--icon-connection-excellent);
   }

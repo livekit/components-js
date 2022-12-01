@@ -1,8 +1,9 @@
 .media-muted-indicator-camera,
 .media-muted-indicator-microphone {
   position: relative;
-  width: var(--indicator-size, 1.5rem);
-  height: var(--indicator-size, 1.5rem);
+  width: var(--indicator-size, 1rem);
+  height: var(--indicator-size, 1rem);
+  margin-inline-end: .25rem;
   background-repeat: no-repeat;
   background-image: var(--bg);
   transition: opacity .25s ease-in-out;

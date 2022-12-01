@@ -3,15 +3,18 @@
 Create your LiveKit experience without worrying about state.
 
 <!--NAV_START-->
+
 ## Monorepo Navigation
-* [Home 👈](/README.md)
-* **Framework Implementations**:
-    * [React](/packages/react/README.md)
-* **Documentation**
-    * [Storybook](/docs/storybook/README.md)
-* **Internal Packages**
-    * [Core](/packages/core/README.md)
-    * [Styles](/packages/styles/README.md)
+
+- [Home 👈](/README.md)
+- **Framework Implementations**:
+  - [React](/packages/react/README.md)
+- **Documentation**
+  - [Storybook](/docs/storybook/README.md)
+- **Internal Packages**
+  - [Core](/packages/core/README.md)
+  - [Styles](/packages/styles/README.md)
+
 <!--NAV_END-->
 
 ## Development Setup
@@ -41,7 +44,6 @@ yarn dev:next
 ```
 
 > NOTE: for the examples to work you'll need to make sure to copy the the contents of .env.example in the specific example folder to a newly created .env.local file and adjust the values accordingly to your livekit server setup.
-
 
 ## Architecture Overview
 

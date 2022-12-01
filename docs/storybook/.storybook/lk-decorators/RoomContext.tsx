@@ -38,22 +38,20 @@ export const LkRoomContext: Decorator = (Story, args) => {
     <>
       <div
         style={{
-          fontSize: '12px',
-          lineHeight: '1rem',
-          background: '',
-          border: '1px dashed gray',
           display: 'flex',
-          flexDirection: 'column',
-          padding: '0.2rem',
-          marginBottom: '1rem',
-          gap: '.2rem',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '1rem',
+          margin: '-1rem -1rem 1rem',
+          fontSize: '.75rem',
+          backgroundColor: 'var(--lk-bg-secondary)',
         }}
       >
         <strong>LiveKit Room Controls</strong>
-        <div style={{ display: 'flex', gap: '.4rem', alignItems: 'baseline' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '.4rem' }}>
-            <span>Connection status: {`${connected ? 'connected' : 'not connected'}`}</span>
-            <button onClick={() => setConnect(!connect)}>Toggle Connection</button>
+        <div>
+          <div style={{ display: 'flex', gap: '.5rem', alignItems: 'center' }}>
+            Connection status
+            <button onClick={() => setConnect(!connect)}>{`${connected ? 'Connected' : 'Not connected'}`}</button>
           </div>
         </div>
       </div>

@@ -26,8 +26,9 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLDivElement> {
  */
 export function ChatEntry({ entry, ...props }: ChatEntryProps) {
   return (
-    <div {...props}>
-      <em>{entry.from?.name ?? entry.from?.identity}</em>: {entry.message}
+    <div className="lk-chat-entry" {...props}>
+      <strong>{entry.from?.name ?? entry.from?.identity}</strong>
+      {entry.message}
     </div>
   );
 }

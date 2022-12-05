@@ -21,6 +21,7 @@ export * from './components/Chat';
 export * from './components/ChatEntry';
 export * from './components/controls/StartAudio';
 export * from './components/PinContextProvider';
+export * from './components/ClearFocusButton';
 
 export * from './prefabs/PreJoin';
 export * from './prefabs/DefaultRoomView';

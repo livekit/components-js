@@ -24,13 +24,16 @@ type PinContextProviderProps = {
   onChange?: (pinState: PinState) => void;
 };
 
+// TODO: Remove the screen sharing handling from this component to separate things.
 export const PinContextProvider = ({ onChange, children }: PinContextProviderProps) => {
   const room = useRoomContext();
-  const pinDefaultValue = { pinnedParticipant: undefined };
+  const pinDefaultValue: PinState = { pinnedParticipant: undefined, pinnedTrackSource: undefined };
   const [pinState, pinDispatch] = React.useReducer(pinReducer, pinDefaultValue);
   const pinContextDefault = { dispatch: pinDispatch, state: pinState };
   const { screenShareParticipant } = useScreenShare({ room });
   React.useEffect(() => {
+    // FIXME: This logic clears the pin if the screenShareParticipant is false.
+    // This is also the case when the hook is executed for the first time and then a unwanted clear_pin message is sent.
     if (screenShareParticipant) {
       pinDispatch({
         msg: 'set_pin',

@@ -1,11 +1,11 @@
-import { setupExitFocusViewButton } from '@livekit/components-core';
+import { setupClearFocusButton } from '@livekit/components-core';
 import * as React from 'react';
 import { mergeProps } from '../utils';
 import { usePinContext } from '../contexts';
 
-export type ExitFocusViewButtonProps = React.HTMLAttributes<HTMLButtonElement>;
+export type ClearFocusButtonProps = React.HTMLAttributes<HTMLButtonElement>;
 
-export const useExitFocusViewButton = (props: ExitFocusViewButtonProps) => {
+export const useClearFocusButton = (props: ClearFocusButtonProps) => {
   const { state, dispatch } = usePinContext();
 
   React.useEffect(() => {
@@ -13,7 +13,7 @@ export const useExitFocusViewButton = (props: ExitFocusViewButtonProps) => {
   }, [state]);
 
   const buttonProps = React.useMemo(() => {
-    const { className } = setupExitFocusViewButton();
+    const { className } = setupClearFocusButton();
     const mergedProps = mergeProps(props, {
       className,
       disabled: state?.pinnedParticipant === undefined,
@@ -28,7 +28,7 @@ export const useExitFocusViewButton = (props: ExitFocusViewButtonProps) => {
 };
 
 /**
- * The ExitFocusViewButton is a basic html button with the added ability to signal
+ * The ClearFocusButton is a basic html button with the added ability to signal
  * the LiveKitRoom that it should display the grid view again.
  *
  * @remarks
@@ -37,11 +37,11 @@ export const useExitFocusViewButton = (props: ExitFocusViewButtonProps) => {
  * @example
  * ```tsx
  * <LiveKitRoom>
- *   <ExitFocusViewButton>Leave room</ExitFocusViewButton>
+ *   <ClearFocusButton>Leave room</ClearFocusButton>
  * </LiveKitRoom>
  * ```
  */
-export const ExitFocusViewButton = (props: ExitFocusViewButtonProps) => {
-  const { buttonProps } = useExitFocusViewButton(props);
+export const ClearFocusButton = (props: ClearFocusButtonProps) => {
+  const { buttonProps } = useClearFocusButton(props);
   return <button {...buttonProps}>{props.children}</button>;
 };

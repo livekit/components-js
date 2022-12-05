@@ -1,15 +1,15 @@
 import React from 'react';
 import { StoryObj } from '@storybook/react';
 
-import { ExitFocusViewButton, ExitFocusViewButtonProps } from '@livekit/components-react';
+import { ClearFocusButton, ClearFocusButtonProps } from '@livekit/components-react';
 import { LkFocusContext, LkRoomContext } from '../../.storybook/lk-decorators';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
-  component: ExitFocusViewButton,
+  component: ClearFocusButton,
   decorators: [LkFocusContext, LkRoomContext],
-  render: (args: ExitFocusViewButtonProps) => (
-    <ExitFocusViewButton {...args}>Back to Grid</ExitFocusViewButton>
+  render: (args: ClearFocusButtonProps) => (
+    <ClearFocusButton {...args}>Back to Grid</ClearFocusButton>
   ),
   argTypes: {
     isPinned: {
@@ -24,7 +24,7 @@ export default {
   },
 };
 
-export const Connected: StoryObj<ExitFocusViewButtonProps> = {
+export const Default: StoryObj<ClearFocusButtonProps> = {
   args: {},
   parameters: {
     roomContext: { audio: false, video: false, connect: true },

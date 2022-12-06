@@ -17,12 +17,12 @@ export * from './components/participant/MediaTrack';
 export * from './components/layout/FocusLayout';
 export * from './components/layout/GridLayout';
 export * from './components/controls/MediaDeviceSelect';
-export * from './components/Chat';
-export * from './components/ChatEntry';
 export * from './components/controls/StartAudio';
 export * from './components/FocusContextProvider';
 export * from './components/ClearFocusButton';
 
+export * from './prefabs/Chat';
+export * from './prefabs/ChatEntry';
 export * from './prefabs/PreJoin';
 export * from './prefabs/VideoConference';
 export * from './prefabs/ControlBar';

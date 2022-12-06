@@ -54,11 +54,9 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://livekit.io">LiveKit</a>
         </h1>
-        {/* <p>Status: {roomState.connectionState} <br/> Nr. of participants: {roomState.participants.length} </p> */}
         {!isConnected && (
           <button onClick={() => setConnect(!connect)}>{connect ? 'Disconnect' : 'Connect'}</button>
         )}
-        {/* <Room connect={connect} /> */}
         <LiveKitRoom
           token={token}
           serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}

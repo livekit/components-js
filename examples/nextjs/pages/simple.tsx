@@ -24,8 +24,6 @@ import Head from 'next/head';
 import { useState } from 'react';
 import styles from '../styles/Simple.module.css';
 
-// import '@livekit/components/dist/livekit-components.mjs';
-
 const Home: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
 
@@ -55,11 +53,9 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://livekit.io">LiveKit</a>
         </h1>
-        {/* <p>Status: {roomState.connectionState} <br/> Nr. of participants: {roomState.participants.length} </p> */}
         {!isConnected && (
           <button onClick={() => setConnect(!connect)}>{connect ? 'Disconnect' : 'Connect'}</button>
         )}
-        {/* <Room connect={connect} /> */}
         <LiveKitRoom
           token={token}
           serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
@@ -72,7 +68,6 @@ const Home: NextPage = () => {
           <RoomName />
           <ConnectionState />
           <RoomAudioRenderer />
-          {/* <MediaSelection type="microphone"/>  */}
           {isConnected && (
             <>
               <div className={styles.controlBar}>

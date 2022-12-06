@@ -142,7 +142,7 @@ function ParticipantContextIfNeeded(props: {
 
 /**
  * The ParticipantView component is the base component or wrapper for displaying a visual representation of a participant.
- * This component can be used as a child of the `Participants` component or independently if a participant is passed as a property.
+ * This component can be used as a child of the `ParticipantsLoop` component or independently if a participant is passed as a property.
  * You can use a combination of LiveKit components and normal HTML elements to design the Participant Representation as you wish.
  *
  * @example
@@ -154,7 +154,7 @@ function ParticipantContextIfNeeded(props: {
  * {...}
  * ```
  *
- * @see `Participants` component
+ * @see `ParticipantsLoop` component
  */
 export const ParticipantView = ({
   participant,

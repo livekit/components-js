@@ -10,7 +10,7 @@ import {
 import { cloneSingleChild, useObservableState } from '../utils';
 import { ParticipantView } from './participant/Participant';
 
-type ParticipantsProps = {
+type ParticipantsLoopProps = {
   children: React.ReactNode | React.ReactNode[];
   filterDependencies?: Array<unknown>;
   filter?: (participants: Array<Participant>) => Array<Participant>;
@@ -76,8 +76,10 @@ export const useSortedParticipants = (participants: Array<Participant>) => {
   return sortedParticipants;
 };
 
+export const useParticipantsLoop = useParticipants;
+
 /**
- * The Participants component loops over all or a filtered subset of participants to create a visual
+ * The ParticipantsLoop component loops over all or a filtered subset of participants to create a visual
  * representation (`ParticipantView`) and context for every participant. This component takes zero or more children.
  * By providing your own `ParticipantView` template as a child you have full control over the look and feel of your
  * participant representations. If no child is provided we render a basic video tile representation for every participant.
@@ -88,16 +90,20 @@ export const useSortedParticipants = (participants: Array<Participant>) => {
  * @example
  * ```tsx
  * {...}
- *   <Participants>
+ *   <ParticipantsLoop>
  *     {...}
- *   <Participants />
+ *   <ParticipantsLoop />
  * {...}
  * ```
  *
  * @see `ParticipantView` component
  */
-export const Participants = ({ children, filter, filterDependencies }: ParticipantsProps) => {
-  const participants = useParticipants(filter, filterDependencies);
+export const ParticipantsLoop = ({
+  children,
+  filter,
+  filterDependencies,
+}: ParticipantsLoopProps) => {
+  const participants = useParticipantsLoop(filter, filterDependencies);
   return (
     <>
       {participants.map((participant) => (

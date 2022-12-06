@@ -2,7 +2,7 @@ import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { mergeProps } from '../../utils';
 import { ParticipantView } from '../participant/Participant';
-import { Participants } from '../Participants';
+import { ParticipantsLoop } from '../ParticipantsLoop';
 
 export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -33,13 +33,13 @@ export function GridLayout({ participants, showScreenShares, ...props }: GridLay
   return (
     <div {...elementProps}>
       {showScreenShares && (
-        <Participants filter={filter} filterDependencies={[participants]}>
+        <ParticipantsLoop filter={filter} filterDependencies={[participants]}>
           {props.children ?? <ParticipantView trackSource={Track.Source.ScreenShare} />}
-        </Participants>
+        </ParticipantsLoop>
       )}
-      <Participants filter={filter} filterDependencies={[participants]}>
+      <ParticipantsLoop filter={filter} filterDependencies={[participants]}>
         {props.children ?? <ParticipantView />}
-      </Participants>
+      </ParticipantsLoop>
     </div>
   );
 }

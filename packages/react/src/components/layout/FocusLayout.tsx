@@ -5,7 +5,7 @@ import { useMaybeFocusContext, useFocusContext } from '../../contexts';
 import { mergeProps } from '../../utils';
 import { MediaTrack } from '../participant/MediaTrack';
 import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
-import { Participants, useParticipants, useSortedParticipants } from '../Participants';
+import { ParticipantsLoop, useParticipants, useSortedParticipants } from '../ParticipantsLoop';
 
 interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   focusParticipant?: Participant;
@@ -79,7 +79,7 @@ export function CarouselView({
   return (
     <aside {...props}>
       {showScreenShares && (
-        <Participants
+        <ParticipantsLoop
           filter={(ps) =>
             ps.filter((p) => {
               return !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare);
@@ -93,9 +93,9 @@ export function CarouselView({
               onParticipantClick={onParticipantClick}
             />
           )}
-        </Participants>
+        </ParticipantsLoop>
       )}
-      <Participants
+      <ParticipantsLoop
         filter={(ps) =>
           ps.filter((p) => {
             return !isParticipantTrackPinned(p, pinState, Track.Source.Camera);
@@ -104,7 +104,7 @@ export function CarouselView({
         filterDependencies={[pinState]}
       >
         {props.children ?? <ParticipantView />}
-      </Participants>
+      </ParticipantsLoop>
     </aside>
   );
 }

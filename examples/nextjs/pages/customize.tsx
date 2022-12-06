@@ -3,7 +3,7 @@ import {
   LiveKitRoom,
   MediaControlButton,
   TrackSource,
-  Participants,
+  ParticipantsLoop,
   ConnectionState,
   DisconnectButton,
   useToken,
@@ -82,7 +82,7 @@ const Home: NextPage = () => {
               </div>
               <ScreenShareView />
               <div className={styles.participantGrid}>
-                <Participants>
+                <ParticipantsLoop>
                   <ParticipantView>
                     <MediaTrack source={Track.Source.Camera}></MediaTrack>
 
@@ -101,7 +101,7 @@ const Home: NextPage = () => {
                       <UserDefinedConnectionQualityIndicator />
                     </div>
                   </ParticipantView>
-                </Participants>
+                </ParticipantsLoop>
               </div>
             </>
           )}

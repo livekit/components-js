@@ -1,7 +1,7 @@
 import { RemoteParticipant, Track } from 'livekit-client';
 import React from 'react';
 import { MediaTrack } from './participant/MediaTrack';
-import { Participants } from './Participants';
+import { ParticipantsLoop } from './ParticipantsLoop';
 
 /**
  * The RoomAudioRenderer component is a drop-in solution for adding audio to your LiveKit app.
@@ -16,13 +16,13 @@ import { Participants } from './Participants';
  */
 export const RoomAudioRenderer = () => {
   return (
-    <Participants
+    <ParticipantsLoop
       filter={(participants) => participants.filter((p) => p instanceof RemoteParticipant)}
     >
       <div style={{ display: 'hidden' }}>
         <MediaTrack source={Track.Source.Microphone} />
         <MediaTrack source={Track.Source.ScreenShareAudio} />
       </div>
-    </Participants>
+    </ParticipantsLoop>
   );
 };

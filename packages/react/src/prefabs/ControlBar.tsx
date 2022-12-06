@@ -2,7 +2,7 @@ import { Track } from 'livekit-client';
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
-import { MediaControlButton } from '../components/controls/TrackToggle';
+import { TrackToggle } from '../components/controls/TrackToggle';
 import { StartAudio } from '../components/controls/StartAudio';
 
 export type ControlBarProps = React.HTMLAttributes<HTMLDivElement>;
@@ -12,7 +12,7 @@ export type ControlBarProps = React.HTMLAttributes<HTMLDivElement>;
  * to control their media devices and leave the room.
  *
  * @remarks
- * This component is build with other LiveKit components like `MediaControlButton`,
+ * This component is build with other LiveKit components like `TrackToggle`,
  * `DeviceSelectorButton`, `DisconnectButton` and `StartAudio`.
  *
  * @example
@@ -26,9 +26,9 @@ export function ControlBar(props: ControlBarProps) {
   return (
     // TODO: Remove styling default styling or move to styles package.
     <div className="lk-controls" {...props}>
-      <MediaControlButton source={Track.Source.Microphone}>Microphone</MediaControlButton>
-      <MediaControlButton source={Track.Source.Camera}>Camera</MediaControlButton>
-      <MediaControlButton source={Track.Source.ScreenShare}>Share screen</MediaControlButton>
+      <TrackToggle source={Track.Source.Microphone}>Microphone</TrackToggle>
+      <TrackToggle source={Track.Source.Camera}>Camera</TrackToggle>
+      <TrackToggle source={Track.Source.ScreenShare}>Share screen</TrackToggle>
       <MediaDeviceMenu>Settings</MediaDeviceMenu>
       <DisconnectButton>Leave</DisconnectButton>
       <StartAudio label="Start Audio" />

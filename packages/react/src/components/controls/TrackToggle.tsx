@@ -1,16 +1,11 @@
-import {
-  observeParticipantMedia,
-  ParticipantMedia,
-  setupManualToggle,
-  setupMediaToggle,
-} from '@livekit/components-core';
-import { LocalParticipant, Track, TrackPublication } from 'livekit-client';
+import { setupManualToggle, setupMediaToggle } from '@livekit/components-core';
+import { Track } from 'livekit-client';
 import * as React from 'react';
 import { mergeProps } from '../../mergeProps';
-import { useMaybeRoomContext, useRoomContext } from '../../contexts';
+import { useMaybeRoomContext } from '../../contexts';
 import { useObservableState } from '../../utils';
 
-export type MediaControlButtonProps = Omit<React.HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
+export type TrackToggleProps = Omit<React.HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   source: Track.Source;
   initialState?: boolean; // FIXME: initialState false has no effect.
   onChange?: (enabled: boolean) => void;
@@ -18,12 +13,7 @@ export type MediaControlButtonProps = Omit<React.HTMLAttributes<HTMLButtonElemen
 
 export const TrackSource = Track.Source;
 
-export const useMediaToggle = ({
-  source,
-  onChange,
-  initialState,
-  ...rest
-}: MediaControlButtonProps) => {
+export const useTrackToggle = ({ source, onChange, initialState, ...rest }: TrackToggleProps) => {
   const room = useMaybeRoomContext();
   const track = room?.localParticipant?.getTrack(source);
 
@@ -67,18 +57,18 @@ export const useMediaToggle = ({
 };
 
 /**
- * With the MediaControlButton component it is possible to mute and unmute your camera and microphone.
+ * With the TrackToggle component it is possible to mute and unmute your camera and microphone.
  * The component uses an html button element under the hood so you can treat it like a button.
  *
  * @example
  * ```tsx
  * <LiveKitRoom>
- *   <MediaControlButton source={Track.Source.Microphone} />
- *   <MediaControlButton source={Track.Source.Camera} />
+ *   <TrackToggle source={Track.Source.Microphone} />
+ *   <TrackToggle source={Track.Source.Camera} />
  * </LiveKitRoom>
  * ```
  */
-export const MediaControlButton = (props: MediaControlButtonProps) => {
-  const { buttonProps } = useMediaToggle(props);
+export const TrackToggle = (props: TrackToggleProps) => {
+  const { buttonProps } = useTrackToggle(props);
   return <button {...buttonProps}>{props.children}</button>;
 };

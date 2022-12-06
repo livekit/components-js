@@ -1,19 +1,15 @@
 import React from 'react';
 import { StoryObj } from '@storybook/react';
 
-import {
-  MediaControlButton,
-  MediaControlButtonProps,
-  TrackSource,
-} from '@livekit/components-react';
+import { TrackToggle, MediaControlButtonProps, TrackSource } from '@livekit/components-react';
 import { LkRoomContext } from '../../.storybook/lk-decorators';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
-  component: MediaControlButton,
+  component: TrackToggle,
   decorators: [LkRoomContext],
   render: (args: MediaControlButtonProps) => (
-    <MediaControlButton {...args}>{`${args.source}`.toUpperCase()} Control</MediaControlButton>
+    <TrackToggle {...args}>{`${args.source}`.toUpperCase()} Control</TrackToggle>
   ),
   argTypes: {
     source: {

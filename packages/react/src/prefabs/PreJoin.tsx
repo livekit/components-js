@@ -9,7 +9,7 @@ import {
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { useMediaDevices } from '../components/controls/MediaDeviceSelect';
-import { MediaControlButton } from '../components/controls/TrackToggle';
+import { TrackToggle } from '../components/controls/TrackToggle';
 
 export type LocalUserChoices = {
   username: string;
@@ -214,13 +214,13 @@ export const PreJoin = ({
       )}
       <div style={{ display: 'flex', gap: '1rem', marginBlock: '1rem' }}>
         <div className="lk-button-group audio">
-          <MediaControlButton
+          <TrackToggle
             initialState={videoEnabled}
             source={Track.Source.Microphone}
             onChange={(enabled) => setAudioEnabled(enabled)}
           >
             Microphone
-          </MediaControlButton>
+          </TrackToggle>
           <div className="lk-button-group-menu">
             <MediaDeviceMenu
               kind="audioinput"
@@ -233,13 +233,13 @@ export const PreJoin = ({
           </div>
         </div>
         <div className="lk-button-group video">
-          <MediaControlButton
+          <TrackToggle
             initialState={videoEnabled}
             source={Track.Source.Camera}
             onChange={(enabled) => setVideoEnabled(enabled)}
           >
             Camera
-          </MediaControlButton>
+          </TrackToggle>
           <div className="lk-button-group-menu">
             <MediaDeviceMenu
               kind="videoinput"

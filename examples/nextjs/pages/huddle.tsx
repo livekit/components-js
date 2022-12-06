@@ -4,7 +4,7 @@ import {
   DisconnectButton,
   LiveKitRoom,
   LocalUserChoices,
-  MediaControlButton,
+  TrackToggle,
   MediaTrack,
   ParticipantName,
   ParticipantsLoop,
@@ -364,15 +364,9 @@ const HuddleRoomView = ({
               )}
               <div className={styles.mediaControls}>
                 <div>
-                  <MediaControlButton
-                    className={styles.audioBtn}
-                    source={Track.Source.Microphone}
-                  />
-                  <MediaControlButton className={styles.videoBtn} source={Track.Source.Camera} />
-                  <MediaControlButton
-                    className={styles.screenBtn}
-                    source={Track.Source.ScreenShare}
-                  />
+                  <TrackToggle className={styles.audioBtn} source={Track.Source.Microphone} />
+                  <TrackToggle className={styles.videoBtn} source={Track.Source.Camera} />
+                  <TrackToggle className={styles.screenBtn} source={Track.Source.ScreenShare} />
                   <MediaDeviceMenu />
                   <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
                   <StartAudio label="Start Audio" />

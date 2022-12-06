@@ -2,7 +2,7 @@ import React from 'react';
 import { StoryObj } from '@storybook/react';
 
 import {
-  MediaControlButton,
+  TrackToggle,
   TrackMutedIndicator,
   MediaMutedIndicatorProps,
 } from '@livekit/components-react';
@@ -16,7 +16,7 @@ export default {
   render: (args: MediaMutedIndicatorProps) => (
     <>
       <TrackMutedIndicator {...args}></TrackMutedIndicator>
-      <MediaControlButton source={args.source}>Toggle Muted</MediaControlButton>
+      <TrackToggle source={args.source}>Toggle Muted</TrackToggle>
       {/* TODO: Move media control into into LkRoomContext */}
     </>
   ),

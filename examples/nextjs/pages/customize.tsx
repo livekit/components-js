@@ -1,7 +1,7 @@
 import {
   ParticipantView,
   LiveKitRoom,
-  MediaControlButton,
+  TrackToggle,
   TrackSource,
   ParticipantsLoop,
   ConnectionState,
@@ -73,11 +73,11 @@ const Home: NextPage = () => {
           {isConnected && (
             <>
               <div className={styles.controlBar}>
-                <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
+                <TrackToggle source={TrackSource.Camera}></TrackToggle>
                 <MediaDeviceMenu kind={'videoinput'} />
-                <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
+                <TrackToggle source={TrackSource.Microphone}></TrackToggle>
                 <MediaDeviceMenu kind={'audioinput'} />
-                <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
+                <TrackToggle source={TrackSource.ScreenShare}></TrackToggle>
                 <DisconnectButton>Hang up!</DisconnectButton>
               </div>
               <ScreenShareView />

@@ -11,7 +11,7 @@ import {
 } from 'livekit-client';
 import * as React from 'react';
 import { RoomContext } from '../contexts';
-import { DefaultRoomView } from '../prefabs/DefaultRoomView';
+import { DefaultRoomView } from '../prefabs/VideoConference';
 
 export type LiveKitRoomProps = {
   /**

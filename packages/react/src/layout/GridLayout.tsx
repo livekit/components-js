@@ -1,8 +1,8 @@
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { mergeProps } from '../../utils';
-import { ParticipantView } from '../participant/Participant';
-import { ParticipantsLoop } from '../ParticipantsLoop';
+import { mergeProps } from '../utils';
+import { ParticipantView } from '../components/participant/Participant';
+import { ParticipantsLoop } from '../components/ParticipantsLoop';
 
 export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   /**

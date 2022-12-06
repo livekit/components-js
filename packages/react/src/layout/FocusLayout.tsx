@@ -1,11 +1,15 @@
 import { isParticipantTrackPinned } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { useMaybeFocusContext, useFocusContext } from '../../contexts';
-import { mergeProps } from '../../utils';
-import { MediaTrack } from '../participant/MediaTrack';
-import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
-import { ParticipantsLoop, useParticipants, useSortedParticipants } from '../ParticipantsLoop';
+import { useMaybeFocusContext, useFocusContext } from '../contexts';
+import { mergeProps } from '../utils';
+import { MediaTrack } from '../components/participant/MediaTrack';
+import { ParticipantClickEvent, ParticipantView } from '../components/participant/Participant';
+import {
+  ParticipantsLoop,
+  useParticipants,
+  useSortedParticipants,
+} from '../components/ParticipantsLoop';
 
 interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   focusParticipant?: Participant;

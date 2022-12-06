@@ -2,8 +2,8 @@ import * as React from 'react';
 import { FocusContextProvider } from '../components/FocusContextProvider';
 import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
 import { ControlBar } from './ControlBar';
-import { FocusLayoutContainer } from '../components/layout/FocusLayout';
-import { GridLayout } from '../components/layout/GridLayout';
+import { FocusLayoutContainer } from '../layout/FocusLayout';
+import { GridLayout } from '../layout/GridLayout';
 import { FocusState } from '@livekit/components-core';
 
 export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;

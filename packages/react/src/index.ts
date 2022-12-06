@@ -14,16 +14,11 @@ export * from './components/RoomName';
 export * from './components/RoomAudioRenderer';
 export * from './components/FocusLayoutRenderer';
 export * from './components/participant/MediaTrack';
-export * from './components/layout/FocusLayout';
-export * from './components/layout/GridLayout';
 export * from './components/controls/MediaDeviceSelect';
 export * from './components/controls/StartAudio';
 export * from './components/FocusContextProvider';
 export * from './components/ClearFocusButton';
 
-export * from './prefabs/Chat';
-export * from './prefabs/ChatEntry';
-export * from './prefabs/PreJoin';
-export * from './prefabs/VideoConference';
-export * from './prefabs/ControlBar';
-export * from './prefabs/MediaDeviceMenu';
+export * from './prefabs';
+
+export * from './layout';

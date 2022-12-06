@@ -191,8 +191,9 @@ export const ParticipantView = ({
               style={{
                 display: 'flex',
                 flexDirection: 'row',
-                gap: '8px',
+                gap: '.5rem',
                 justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
               <div style={{ display: 'flex' }}>

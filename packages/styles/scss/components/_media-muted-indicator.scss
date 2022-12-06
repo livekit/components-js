@@ -1,37 +1,27 @@
-@use '../variables' as v;
-
-@mixin base-indicator {
-  --indicator-size: #{v.$s-medium};
-  width: var(--indicator-size);
-  height: var(--indicator-size);
-  background-position: center;
-  background-size: 75%;
-  background-repeat: no-repeat;
+.media-muted-indicator-camera,
+.media-muted-indicator-microphone {
   position: relative;
-  transition: background-color 0.2s;
-
-  &[data-muted='true']::after {
-    @include muted;
-  }
-}
-
-@mixin muted {
-  position: absolute;
-  content: '';
-  width: 80%;
-  height: 80%;
-  top: 10%;
-  left: 10%;
-  box-sizing: border-box;
-  background-image: linear-gradient(-45deg, transparent 46%, v.$t-danger-color, transparent 54%);
+  width: var(--indicator-size, 1rem);
+  height: var(--indicator-size, 1rem);
+  margin-inline-end: .25rem;
+  background-repeat: no-repeat;
+  background-image: var(--bg);
+  transition: opacity .25s ease-in-out;
 }
 
 .media-muted-indicator-camera {
-  @include base-indicator;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor' class='w-5 h-5'%3E%3Cpath d='M3.25 4A2.25 2.25 0 001 6.25v7.5A2.25 2.25 0 003.25 16h7.5A2.25 2.25 0 0013 13.75v-7.5A2.25 2.25 0 0010.75 4h-7.5zM19 4.75a.75.75 0 00-1.28-.53l-3 3a.75.75 0 00-.22.53v4.5c0 .199.079.39.22.53l3 3a.75.75 0 001.28-.53V4.75z' /%3E%3C/svg%3E%0A");
-}
+  --bg: var(--icon-camera);
 
+  &[data-muted="true"] {
+    opacity: .5;
+    --bg: var(--icon-camera-disabled);
+  }
+}
 .media-muted-indicator-microphone {
-  @include base-indicator;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor' class='w-5 h-5'%3E%3Cpath d='M7 4a3 3 0 016 0v6a3 3 0 11-6 0V4z' /%3E%3Cpath d='M5.5 9.643a.75.75 0 00-1.5 0V10c0 3.06 2.29 5.585 5.25 5.954V17.5h-1.5a.75.75 0 000 1.5h4.5a.75.75 0 000-1.5h-1.5v-1.546A6.001 6.001 0 0016 10v-.357a.75.75 0 00-1.5 0V10a4.5 4.5 0 01-9 0v-.357z' /%3E%3C/svg%3E%0A");
+  --bg: var(--icon-mic);
+
+  &[data-muted="true"] {
+    opacity: .5;
+    --bg: var(--icon-mic-disabled);
+  }
 }

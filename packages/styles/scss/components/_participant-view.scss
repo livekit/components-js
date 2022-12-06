@@ -1,12 +1,8 @@
-@use '../variables' as v;
-
 .participant-view {
   position: relative;
-  border: 2px transparent solid;
-  transition: border-color 0.2s;
-  &[data-speaking='true'] {
-    border-color: v.$t-primary-bg;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: .375rem;
 
   &[data-local-participant='true'] {
     video {

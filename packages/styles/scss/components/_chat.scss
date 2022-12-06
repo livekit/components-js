@@ -1,16 +1,22 @@
-@use 'button';
+.chat-messages {
+  width: 100%;
+  height: calc(100% - 1rem);
+}
 
-.chat-container {
-  .chat-messages {
-    height: calc(100% - 1rem);
-    width: 100%;
-    .chat-entry {
-    }
-  }
-  .chat-send-button {
-    @extend .button;
-  }
+.chat-entry {
+  display: flex;
+  gap: .75rem;
 
-  .chat-text-input {
+  > strong {
+    white-space: nowrap;
   }
+}
+
+.chat-form {
+  display: flex;
+  gap: .5rem;
+}
+
+.chat-form-input {
+  width: 100%;
 }

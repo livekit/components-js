@@ -1,33 +1,56 @@
-@use '../variables' as v;
-@use 'button' as button;
-
 .device-selector {
-  background-color: v.$t-primary-bg;
-  // & > div {
-  //   padding: 0.1rem 0.2rem;
-  //   font-size: smaller;
-  // }
-  // ul {
-  li {
-    padding: 0.1rem 0.2rem;
-    & > button {
-      @include button.button-reset;
-      transition: color 0.2s ease-in-out;
-    }
-    &[data-active='true'] {
-      & > button {
-        color: v.$t-primary-color;
-      }
-    }
-    &[data-active='false'] {
-      & > button {
-        color: v.$t-secondary-color;
+  &:not(:last-child) {
+    padding-bottom: .5rem;
+    margin-bottom: .75rem;
+    border-bottom: 1px solid rgba(0, 0, 0, .15);
+  }
 
-        &:hover {
-          color: v.$t-tertiary-color;
-        }
-      }
+  li > button {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: .375rem .5rem;
+    margin-bottom: .125rem;
+    border: 0;
+    background: none;
+    border-radius: var(--border-radius);
+    color: var(--fg);
+  }
+
+  [data-active="false"] {
+    > button:hover {
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, .05)
     }
   }
-  // }
+
+  [data-active="true"] {
+    > button {
+      color: var(--accent-fg);
+      background-color: var(--accent-bg);
+    }
+  }
+}
+
+.device-menu {
+  position: absolute;
+  bottom: 100%;
+  z-index: 5;
+  min-width: 10rem;
+  padding: .5rem;
+  margin-bottom: .25rem;
+  font-size: .875rem;
+  white-space: nowrap;
+  background-color: var(--bg-secondary);
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, .15);
+  border-radius: .5rem;
+  box-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .15);
+}
+
+.device-menu-heading {
+  margin-bottom: .25rem;
+  padding-inline: .5rem;
+  font-weight: bold;
+  opacity: .8;
 }

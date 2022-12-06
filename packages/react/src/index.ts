@@ -25,5 +25,5 @@ export * from './components/ClearFocusButton';
 
 export * from './prefabs/PreJoin';
 export * from './prefabs/VideoConference';
-export * from './prefabs/DefaultControls';
+export * from './prefabs/ControlBar';
 export * from './prefabs/MediaDeviceMenu';

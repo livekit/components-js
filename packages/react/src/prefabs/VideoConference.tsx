@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FocusContextProvider } from '../components/FocusContextProvider';
 import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
-import { DefaultControls } from './DefaultControls';
+import { DefaultControls } from './ControlBar';
 import { FocusLayoutContainer } from '../components/layout/FocusLayout';
 import { GridLayout } from '../components/layout/GridLayout';
 import { FocusState } from '@livekit/components-core';

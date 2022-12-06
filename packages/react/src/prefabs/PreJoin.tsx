@@ -9,7 +9,7 @@ import {
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { useMediaDevices } from '../components/controls/MediaDeviceSelect';
-import { MediaControlButton } from '../components/controls/MediaControlButton';
+import { MediaControlButton } from '../components/controls/TrackToggle';
 
 export type LocalUserChoices = {
   username: string;

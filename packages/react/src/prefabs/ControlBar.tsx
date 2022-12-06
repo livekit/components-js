@@ -2,7 +2,7 @@ import { Track } from 'livekit-client';
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
-import { MediaControlButton } from '../components/controls/MediaControlButton';
+import { MediaControlButton } from '../components/controls/TrackToggle';
 import { StartAudio } from '../components/controls/StartAudio';
 
 export type ControlBarProps = React.HTMLAttributes<HTMLDivElement>;

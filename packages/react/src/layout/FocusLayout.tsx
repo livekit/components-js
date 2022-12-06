@@ -5,11 +5,8 @@ import { useMaybeFocusContext, useFocusContext } from '../contexts';
 import { mergeProps } from '../utils';
 import { MediaTrack } from '../components/participant/MediaTrack';
 import { ParticipantClickEvent, ParticipantView } from '../components/participant/ParticipantView';
-import {
-  ParticipantsLoop,
-  useParticipants,
-  useSortedParticipants,
-} from '../components/ParticipantsLoop';
+import { useParticipants, useSortedParticipants } from '../hooks';
+import { ParticipantsLoop } from '../components/ParticipantsLoop';
 
 interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   focusParticipant?: Participant;

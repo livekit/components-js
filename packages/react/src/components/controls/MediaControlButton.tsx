@@ -10,7 +10,7 @@ import { mergeProps } from '../../mergeProps';
 import { useMaybeRoomContext, useRoomContext } from '../../contexts';
 import { useObservableState } from '../../utils';
 
-export type MediaControlProps = Omit<React.HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
+export type MediaControlButtonProps = Omit<React.HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   source: Track.Source;
   initialState?: boolean; // FIXME: initialState false has no effect.
   onChange?: (enabled: boolean) => void;
@@ -57,7 +57,12 @@ export const useLocalParticipant = () => {
   };
 };
 
-export const useMediaToggle = ({ source, onChange, initialState, ...rest }: MediaControlProps) => {
+export const useMediaToggle = ({
+  source,
+  onChange,
+  initialState,
+  ...rest
+}: MediaControlButtonProps) => {
   const room = useMaybeRoomContext();
   const track = room?.localParticipant?.getTrack(source);
 
@@ -112,7 +117,7 @@ export const useMediaToggle = ({ source, onChange, initialState, ...rest }: Medi
  * </LiveKitRoom>
  * ```
  */
-export const MediaControlButton = (props: MediaControlProps) => {
+export const MediaControlButton = (props: MediaControlButtonProps) => {
   const { buttonProps } = useMediaToggle(props);
   return <button {...buttonProps}>{props.children}</button>;
 };

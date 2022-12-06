@@ -1,13 +1,18 @@
 import React from 'react';
 import { StoryObj } from '@storybook/react';
 
-import { MediaControlButton, MediaControlProps, TrackSource } from '@livekit/components-react';
+import {
+  MediaControlButton,
+  MediaControlButtonProps,
+  TrackSource,
+} from '@livekit/components-react';
 import { LkRoomContext } from '../../.storybook/lk-decorators';
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   component: MediaControlButton,
   decorators: [LkRoomContext],
-  render: (args: MediaControlProps) => (
+  render: (args: MediaControlButtonProps) => (
     <MediaControlButton {...args}>{`${args.source}`.toUpperCase()} Control</MediaControlButton>
   ),
   argTypes: {
@@ -24,22 +29,22 @@ export default {
   },
 };
 
-export const CameraUnmuted: StoryObj<MediaControlProps> = {
+export const CameraUnmuted: StoryObj<MediaControlButtonProps> = {
   args: { source: TrackSource.Camera, initialState: true },
   parameters: { roomContext: { audio: false, video: true, connect: true } },
 };
 
-export const CameraMuted: StoryObj<MediaControlProps> = {
+export const CameraMuted: StoryObj<MediaControlButtonProps> = {
   ...CameraUnmuted,
   args: { ...CameraUnmuted.args, initialState: false },
 };
 
-export const MicrophoneUnmuted: StoryObj<MediaControlProps> = {
+export const MicrophoneUnmuted: StoryObj<MediaControlButtonProps> = {
   args: { source: TrackSource.Microphone, initialState: true },
   parameters: { roomContext: { audio: true, video: false, connect: true } },
 };
 
-export const MicrophoneMuted: StoryObj<MediaControlProps> = {
+export const MicrophoneMuted: StoryObj<MediaControlButtonProps> = {
   ...MicrophoneUnmuted,
   args: { ...MicrophoneUnmuted.args, initialState: false },
 };

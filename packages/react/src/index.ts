@@ -1,6 +1,6 @@
 export * from './contexts';
 
-export * from './components/participant/Participant';
+export * from './components/participant/ParticipantView';
 export * from './components/participant/ConnectionQualityIndicator';
 export * from './components/LiveKitRoom';
 export * from './components/controls/MediaControlButton';

@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useMaybeFocusContext, useFocusContext } from '../contexts';
 import { mergeProps } from '../utils';
 import { MediaTrack } from '../components/participant/MediaTrack';
-import { ParticipantClickEvent, ParticipantView } from '../components/participant/Participant';
+import { ParticipantClickEvent, ParticipantView } from '../components/participant/ParticipantView';
 import {
   ParticipantsLoop,
   useParticipants,

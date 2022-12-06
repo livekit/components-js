@@ -8,7 +8,7 @@ import {
   sortParticipantsByVolume,
 } from '@livekit/components-core';
 import { cloneSingleChild, useObservableState } from '../utils';
-import { ParticipantView } from './participant/Participant';
+import { ParticipantView } from './participant/ParticipantView';
 
 type ParticipantsLoopProps = {
   children: React.ReactNode | React.ReactNode[];

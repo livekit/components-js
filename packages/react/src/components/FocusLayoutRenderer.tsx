@@ -1,6 +1,6 @@
 import { trackObservable } from '@livekit/components-core';
 import { Participant, TrackPublication } from 'livekit-client';
-import { useEffect, useState } from 'react';
+import * as React from 'react';
 import { LKComponentAttributes } from '../utils';
 // TODO: Does it make sens to have this hook in a file that is called FocusLayoutRenderer but there is now component that renders anything?
 
@@ -11,9 +11,9 @@ type FocusLayoutProps = LKComponentAttributes<HTMLDivElement> & {
 };
 
 export function useTrack(pub?: TrackPublication) {
-  const [publication, setPublication] = useState(pub);
-  const [track, setTrack] = useState(pub?.track);
-  useEffect(() => {
+  const [publication, setPublication] = React.useState(pub);
+  const [track, setTrack] = React.useState(pub?.track);
+  React.useEffect(() => {
     if (!pub) return;
     const listener = trackObservable(pub).subscribe((p) => {
       if (p.track !== track) {

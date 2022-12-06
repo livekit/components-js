@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import * as React from 'react';
 import { Decorator } from '@storybook/react';
 import { FocusContextProvider, TrackSource, useFocusContext } from '@livekit/components-react';
 import { Participant } from 'livekit-client';
@@ -17,10 +17,10 @@ export const LkFocusContext: Decorator = (Story, args) => {
 
   const ContextWrapper = () => {
     const { dispatch } = useFocusContext();
-    const dummyParticipant = useMemo(() => {
+    const dummyParticipant = React.useMemo(() => {
       return new Participant('dummy-sid', 'dummy-identity');
     }, []);
-    useEffect(() => {
+    React.useEffect(() => {
       if (dispatch) {
         if (inFocus) {
           dispatch({ msg: 'set_focus', participant: dummyParticipant, source: TrackSource.Camera });

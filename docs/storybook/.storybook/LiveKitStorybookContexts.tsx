@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { LiveKitRoom, ParticipantsLoop } from '@livekit/components-react';
 import { DecoratorFn } from '@storybook/react';
 import { Room } from 'livekit-client';

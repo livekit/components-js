@@ -1,7 +1,7 @@
 import { ParticipantContext } from '@livekit/components-react';
 import { Decorator } from '@storybook/react';
 import { ConnectionQuality, Participant, ParticipantEvent } from 'livekit-client';
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
 
 /**
  * Collection of static settings to provide to the mock context.
@@ -35,10 +35,10 @@ export const MockParticipantContext: Decorator = (Story, args) => {
     args.parameters.mockParticipantContext ?? DEFAULT_MOCK_PARTICIPANT_PARAMETER;
   const props: Partial<MockParticipantProps> = args.args;
 
-  const [dummyParticipant] = useState(
+  const [dummyParticipant] = React.useState(
     new Participant(config.sid, config.identity, config.name, config.metadata),
   );
-  useEffect(() => {
+  React.useEffect(() => {
     if (!props.connectionQuality) return;
     dummyParticipant.emit(ParticipantEvent.ConnectionQualityChanged, props.connectionQuality);
   }, [props, dummyParticipant]);

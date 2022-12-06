@@ -2,7 +2,7 @@ import * as React from 'react';
 import { mergeProps as mergePropsReactAria } from './mergeProps';
 import { Observable } from 'rxjs';
 
-type LKComponentAttributes<T extends HTMLElement> = React.HTMLAttributes<T> & {};
+type LKComponentAttributes<T extends HTMLElement> = React.HTMLAttributes<T>;
 
 function isProp<U extends HTMLElement, T extends LKComponentAttributes<U>>(
   prop: T | undefined,

@@ -11,7 +11,7 @@ import {
 } from 'livekit-client';
 import * as React from 'react';
 import { RoomContext } from '../contexts';
-import { DefaultRoomView } from '../prefabs/DefaultRoomView';
+import { VideoConference } from '../prefabs/VideoConference';
 
 export type LiveKitRoomProps = {
   /**
@@ -83,34 +83,6 @@ export type LiveKitRoomProps = {
 //   participants: Participant[];
 //   audioTracks: AudioTrack[];
 // };
-
-interface UserInfo {
-  identity?: string;
-  name?: string;
-  metadata?: string;
-}
-
-export function useToken(tokenEndpoint: string | undefined, roomName: string, userInfo?: UserInfo) {
-  const [token, setToken] = React.useState<string | undefined>(undefined);
-
-  React.useEffect(() => {
-    if (tokenEndpoint === undefined) {
-      throw Error('token endpoint needs to be defined');
-    }
-    if (userInfo?.identity === undefined) {
-      return;
-    }
-    const tokenFetcher = async () => {
-      console.log('fetching token');
-      const params = new URLSearchParams({ ...userInfo, roomName });
-      const res = await fetch(`${tokenEndpoint}?${params.toString()}`);
-      const { accessToken } = await res.json();
-      setToken(accessToken);
-    };
-    tokenFetcher();
-  }, [tokenEndpoint, roomName, userInfo]);
-  return token;
-}
 
 const defaultRoomProps: Partial<LiveKitRoomProps> = {
   connect: true,
@@ -220,7 +192,7 @@ export const LiveKitRoom = (props: LiveKitRoomProps) => {
   const room = useLiveKitRoom(props);
   return (
     <RoomContext.Provider value={room}>
-      {props.children ?? <DefaultRoomView />}
+      {props.children ?? <VideoConference />}
     </RoomContext.Provider>
   );
 };

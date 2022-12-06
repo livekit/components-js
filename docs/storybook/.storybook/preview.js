@@ -6,12 +6,5 @@ import '@livekit/components-styles/layout';
 
 export const parameters = {
   viewMode: 'docs',
-  // backgrounds: {
-  //   default: 'white',
-  //   values: [
-  //     { name: 'white', value: '#fff' },
-  //     { name: 'black', value: '#000' },
-  //   ],
-  // },
   controls: { expanded: false },
 };

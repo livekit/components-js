@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { DefaultRoomView, DefaultRoomViewProps } from '@livekit/components-react';
+import { VideoConference, VideoConferenceProps } from '@livekit/components-react';
 import { LkRoomContext } from '../../.storybook/lk-decorators';
 
 export default {
-  component: DefaultRoomView,
+  component: VideoConference,
   decorators: [LkRoomContext],
-  render: (args: DefaultRoomViewProps) => <DefaultRoomView {...args} />,
+  render: (args: VideoConferenceProps) => <VideoConference {...args} />,
   argTypes: {},
 };
 

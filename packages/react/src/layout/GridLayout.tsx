@@ -1,10 +1,10 @@
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { mergeProps } from '../../utils';
-import { ParticipantView } from '../participant/Participant';
-import { Participants } from '../Participants';
+import { mergeProps } from '../utils';
+import { ParticipantView } from '../components/participant/ParticipantView';
+import { ParticipantsLoop } from '../components/ParticipantsLoop';
 
-export interface GridViewProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * If set to `true` screen shares are displayed with the participants.
    */
@@ -18,28 +18,28 @@ export interface GridViewProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * The GridView component displays the nested participants in a grid where every participants has the same size.
+ * The GridLayout component displays the nested participants in a grid where every participants has the same size.
  *
  * @example
  * ```tsx
  * <LiveKitRoom>
- *   <GridView />
+ *   <GridLayout />
  * <LiveKitRoom>
  * ```
  */
-export function GridView({ participants, showScreenShares, ...props }: GridViewProps) {
-  const elementProps = mergeProps(props, { className: 'lk-participant-grid-view' });
+export function GridLayout({ participants, showScreenShares, ...props }: GridLayoutProps) {
+  const elementProps = mergeProps(props, { className: 'lk-grid-layout' });
   const filter = (ps: Array<Participant>) => participants ?? ps;
   return (
     <div {...elementProps}>
       {showScreenShares && (
-        <Participants filter={filter} filterDependencies={[participants]}>
+        <ParticipantsLoop filter={filter} filterDependencies={[participants]}>
           {props.children ?? <ParticipantView trackSource={Track.Source.ScreenShare} />}
-        </Participants>
+        </ParticipantsLoop>
       )}
-      <Participants filter={filter} filterDependencies={[participants]}>
+      <ParticipantsLoop filter={filter} filterDependencies={[participants]}>
         {props.children ?? <ParticipantView />}
-      </Participants>
+      </ParticipantsLoop>
     </div>
   );
 }

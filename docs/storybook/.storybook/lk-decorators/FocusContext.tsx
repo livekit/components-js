@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo } from 'react';
+import * as React from 'react';
 import { Decorator } from '@storybook/react';
-import { PinContextProvider, TrackSource, usePinContext } from '@livekit/components-react';
+import { FocusContextProvider, TrackSource, useFocusContext } from '@livekit/components-react';
 import { Participant } from 'livekit-client';
 
 export type LkFocusContextProps = {
@@ -13,28 +13,28 @@ export type LkFocusContextProps = {
  * Note: This component requires some environment variables. Make sure that they are set correctly in your .env file.
  */
 export const LkFocusContext: Decorator = (Story, args) => {
-  const isPinned = args.args.isPinned;
+  const inFocus = args.args.inFocus;
 
   const ContextWrapper = () => {
-    const { dispatch } = usePinContext();
-    const dummyParticipant = useMemo(() => {
+    const { dispatch } = useFocusContext();
+    const dummyParticipant = React.useMemo(() => {
       return new Participant('dummy-sid', 'dummy-identity');
     }, []);
-    useEffect(() => {
+    React.useEffect(() => {
       if (dispatch) {
-        if (isPinned) {
-          dispatch({ msg: 'set_pin', participant: dummyParticipant, source: TrackSource.Camera });
+        if (inFocus) {
+          dispatch({ msg: 'set_focus', participant: dummyParticipant, source: TrackSource.Camera });
         } else {
-          dispatch({ msg: 'clear_pin' });
+          dispatch({ msg: 'clear_focus' });
         }
       }
-    }, [dispatch, isPinned]);
+    }, [dispatch, inFocus]);
     return Story();
   };
 
   return (
-    <PinContextProvider>
+    <FocusContextProvider>
       <ContextWrapper />
-    </PinContextProvider>
+    </FocusContextProvider>
   );
 };

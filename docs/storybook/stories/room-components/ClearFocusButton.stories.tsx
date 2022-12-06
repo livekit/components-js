@@ -12,7 +12,7 @@ export default {
     <ClearFocusButton {...args}>Back to Grid</ClearFocusButton>
   ),
   argTypes: {
-    isPinned: {
+    inFocus: {
       control: { type: 'boolean' },
       default: true,
     },

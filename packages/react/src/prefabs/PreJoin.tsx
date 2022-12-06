@@ -7,8 +7,9 @@ import {
   VideoPresets,
 } from 'livekit-client';
 import * as React from 'react';
-import { DeviceSelectButton, useMediaDevices } from '../components/controls/DeviceSelector';
-import { MediaControlButton } from '../components/controls/MediaControlButton';
+import { MediaDeviceMenu } from './MediaDeviceMenu';
+import { useMediaDevices } from '../components/controls/MediaDeviceSelect';
+import { TrackToggle } from '../components/controls/TrackToggle';
 
 export type LocalUserChoices = {
   username: string;
@@ -213,41 +214,41 @@ export const PreJoin = ({
       )}
       <div style={{ display: 'flex', gap: '1rem', marginBlock: '1rem' }}>
         <div className="lk-button-group audio">
-          <MediaControlButton
+          <TrackToggle
             initialState={videoEnabled}
             source={Track.Source.Microphone}
             onChange={(enabled) => setAudioEnabled(enabled)}
           >
             Microphone
-          </MediaControlButton>
+          </TrackToggle>
           <div className="lk-button-group-menu">
-            <DeviceSelectButton
+            <MediaDeviceMenu
               kind="audioinput"
               onActiveDeviceChange={(_, deviceId) =>
                 setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId))
               }
             >
               {/* {selectedAudioDevice?.label ?? 'Default'} */}
-            </DeviceSelectButton>
+            </MediaDeviceMenu>
           </div>
         </div>
         <div className="lk-button-group video">
-          <MediaControlButton
+          <TrackToggle
             initialState={videoEnabled}
             source={Track.Source.Camera}
             onChange={(enabled) => setVideoEnabled(enabled)}
           >
             Camera
-          </MediaControlButton>
+          </TrackToggle>
           <div className="lk-button-group-menu">
-            <DeviceSelectButton
+            <MediaDeviceMenu
               kind="videoinput"
               onActiveDeviceChange={(_, deviceId) =>
                 setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId))
               }
             >
               {/* {selectedVideoDevice?.label ?? 'Default'} */}
-            </DeviceSelectButton>
+            </MediaDeviceMenu>
           </div>
         </div>
       </div>

@@ -108,35 +108,30 @@
   margin-left: 0.5rem;
 }
 
-.gridView {
-  display: block; 
+.gridLayout {
+  display: block;
   width: 90vw;
 }
 
-.gridView 
-.participantGrid {
+.gridLayout .participantGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 500px));
   width: 100%;
 }
 
-.focusView {
-  display: grid; 
+.focusLayout {
+  display: grid;
   grid-template-columns: 5fr 1fr;
   width: 90vw;
-
 }
 
-.focusView 
-.participantGrid {
+.focusLayout .participantGrid {
   width: 100%;
   max-height: min(800px, 90vh);
   overflow-y: auto;
 }
 
-.focusView 
-.participantGrid
-.participantView {
+.focusLayout .participantGrid .participantView {
   max-height: 250px;
 }
 
@@ -147,7 +142,6 @@
   left: 40px;
   width: 400px;
 }
-
 
 @media (min-width: 640px) {
   .participantGrid {

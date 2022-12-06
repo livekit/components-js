@@ -1,13 +1,14 @@
 import { isParticipantTrackPinned } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { useMaybePinContext, usePinContext } from '../../contexts';
-import { mergeProps } from '../../utils';
-import { MediaTrack } from '../participant/MediaTrack';
-import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
-import { Participants, useParticipants, useSortedParticipants } from '../Participants';
+import { useMaybeFocusContext, useFocusContext } from '../contexts';
+import { mergeProps } from '../utils';
+import { MediaTrack } from '../components/participant/MediaTrack';
+import { ParticipantClickEvent, ParticipantView } from '../components/participant/ParticipantView';
+import { useParticipants, useSortedParticipants } from '../hooks';
+import { ParticipantsLoop } from '../components/ParticipantsLoop';
 
-interface FocusViewContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   focusParticipant?: Participant;
   focusTrackSource?: Track.Source;
   participants?: Array<Participant>;
@@ -16,22 +17,22 @@ interface FocusViewContainerProps extends React.HTMLAttributes<HTMLDivElement> {
 
 // TODO use (loudest) participant in focus, if no focusParticipant is provided
 // TODO cleanup props
-export function FocusViewContainer({
+export function FocusLayoutContainer({
   focusParticipant,
   focusTrackSource,
   onParticipantClick,
   ...props
-}: FocusViewContainerProps) {
-  const elementProps = mergeProps(props, { className: 'lk-participant-focus-view' });
-  const pinContext = usePinContext();
+}: FocusLayoutContainerProps) {
+  const elementProps = mergeProps(props, { className: 'lk-focus-layout' });
+  const pinContext = useFocusContext();
   const participants = useSortedParticipants(useParticipants());
 
   return (
     <div {...elementProps}>
       {props.children ?? (
         <>
-          {pinContext.state?.pinnedParticipant && (
-            <FocusView participant={pinContext.state?.pinnedParticipant} />
+          {pinContext.state?.participantInFocus && (
+            <FocusLayout participant={pinContext.state?.participantInFocus} />
           )}
           <CarouselView participants={participants} />
         </>
@@ -40,24 +41,24 @@ export function FocusViewContainer({
   );
 }
 
-export interface FocusViewProps extends React.HTMLAttributes<HTMLElement> {
+export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
   participant: Participant;
   trackSource?: Track.Source;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
 
-export function FocusView({
+export function FocusLayout({
   participant,
   trackSource,
   onParticipantClick,
   ...props
-}: FocusViewProps) {
-  const { state } = useMaybePinContext();
+}: FocusLayoutProps) {
+  const { state } = useMaybeFocusContext();
 
   return (
     <div {...props}>
-      {state?.pinnedParticipant && state.pinnedTrackSource && (
-        <MediaTrack participant={state?.pinnedParticipant} source={state.pinnedTrackSource} />
+      {state?.participantInFocus && state.trackInFocus && (
+        <MediaTrack participant={state?.participantInFocus} source={state.trackInFocus} />
       )}
     </div>
   );
@@ -75,11 +76,11 @@ export function CarouselView({
   onParticipantClick,
   ...props
 }: CarouselProps) {
-  const { state: pinState } = usePinContext();
+  const { state: pinState } = useFocusContext();
   return (
     <aside {...props}>
       {showScreenShares && (
-        <Participants
+        <ParticipantsLoop
           filter={(ps) =>
             ps.filter((p) => {
               return !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare);
@@ -93,9 +94,9 @@ export function CarouselView({
               onParticipantClick={onParticipantClick}
             />
           )}
-        </Participants>
+        </ParticipantsLoop>
       )}
-      <Participants
+      <ParticipantsLoop
         filter={(ps) =>
           ps.filter((p) => {
             return !isParticipantTrackPinned(p, pinState, Track.Source.Camera);
@@ -104,7 +105,7 @@ export function CarouselView({
         filterDependencies={[pinState]}
       >
         {props.children ?? <ParticipantView />}
-      </Participants>
+      </ParticipantsLoop>
     </aside>
   );
 }

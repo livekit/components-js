@@ -1,12 +1,12 @@
 import { setupClearFocusButton } from '@livekit/components-core';
 import * as React from 'react';
 import { mergeProps } from '../utils';
-import { usePinContext } from '../contexts';
+import { useFocusContext } from '../contexts';
 
 export type ClearFocusButtonProps = React.HTMLAttributes<HTMLButtonElement>;
 
 export const useClearFocusButton = (props: ClearFocusButtonProps) => {
-  const { state, dispatch } = usePinContext();
+  const { state, dispatch } = useFocusContext();
 
   React.useEffect(() => {
     console.log({ state });
@@ -16,9 +16,9 @@ export const useClearFocusButton = (props: ClearFocusButtonProps) => {
     const { className } = setupClearFocusButton();
     const mergedProps = mergeProps(props, {
       className,
-      disabled: state?.pinnedParticipant === undefined,
+      disabled: state?.participantInFocus === undefined,
       onClick: () => {
-        if (dispatch) dispatch({ msg: 'clear_pin' });
+        if (dispatch) dispatch({ msg: 'clear_focus' });
       },
     });
     return mergedProps;

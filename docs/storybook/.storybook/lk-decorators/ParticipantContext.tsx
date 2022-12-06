@@ -1,5 +1,5 @@
 import React from 'react';
-import { Participants } from '@livekit/components-react';
+import { ParticipantsLoop } from '@livekit/components-react';
 import { Decorator } from '@storybook/react';
 
 /**
@@ -9,5 +9,5 @@ import { Decorator } from '@storybook/react';
  * The decorator order matters: `decorators: [LkParticipantContext, LkRoomContext]`
  */
 export const LkParticipantContext: Decorator = (Story, _) => {
-  return <Participants>{Story()}</Participants>;
+  return <ParticipantsLoop>{Story()}</ParticipantsLoop>;
 };

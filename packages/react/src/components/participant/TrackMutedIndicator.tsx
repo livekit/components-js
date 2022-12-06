@@ -1,22 +1,22 @@
 import * as React from 'react';
 import { mergeProps, useObservableState } from '../../utils';
-import { setupMediaMutedIndicator } from '@livekit/components-core';
+import { setupTrackMutedIndicator } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import { useEnsureParticipant } from '../../contexts';
 
-export interface MediaMutedIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   source: Track.Source;
   participant?: Participant;
 }
 
-export const useMediaMutedIndicator = (
+export const useTrackMutedIndicator = (
   source: Track.Source,
   participant?: Participant,
   props?: React.HtmlHTMLAttributes<HTMLDivElement>,
 ) => {
   const p = useEnsureParticipant(participant);
   const { className, mediaMutedObserver } = React.useMemo(
-    () => setupMediaMutedIndicator(p, source),
+    () => setupTrackMutedIndicator(p, source),
     [p, source],
   );
 
@@ -36,26 +36,26 @@ export const useMediaMutedIndicator = (
 };
 
 /**
- * The MediaMutedIndicator shows whether the participant's camera or microphone is muted or not.
+ * The TrackMutedIndicator shows whether the participant's camera or microphone is muted or not.
  *
  * @example
  * ```tsx
  * {...}
  *   <ParticipantView>
- *     <MediaMutedIndicator source={Track.Source.Camera} />
- *     <MediaMutedIndicator source={Track.Source.Microphone} />
+ *     <TrackMutedIndicator source={Track.Source.Camera} />
+ *     <TrackMutedIndicator source={Track.Source.Microphone} />
  *   </ParticipantView>
  * {...}
  * ```
  *
  * @see `ParticipantView` component
  */
-export const MediaMutedIndicator = ({
+export const TrackMutedIndicator = ({
   source,
   participant,
   ...props
-}: MediaMutedIndicatorProps) => {
-  const { htmlProps, isMuted } = useMediaMutedIndicator(source, participant, props);
+}: TrackMutedIndicatorProps) => {
+  const { htmlProps, isMuted } = useTrackMutedIndicator(source, participant, props);
 
   return (
     <div {...htmlProps} data-lk-muted={isMuted}>

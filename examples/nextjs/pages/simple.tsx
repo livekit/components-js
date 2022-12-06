@@ -2,20 +2,20 @@ import {
   ParticipantView,
   ConnectionQualityIndicator,
   LiveKitRoom,
-  MediaControlButton,
+  TrackToggle,
   TrackSource,
-  Participants,
+  ParticipantsLoop,
   ConnectionState,
   DisconnectButton,
   useToken,
   ScreenShareView,
   ParticipantName,
-  MediaMutedIndicator,
+  TrackMutedIndicator,
   RoomName,
   RoomAudioRenderer,
   MediaTrack,
-  DeviceSelector,
-  DeviceSelectButton,
+  MediaDeviceSelect,
+  MediaDeviceMenu,
 } from '@livekit/components-react';
 import { RemoteParticipant, Track } from 'livekit-client';
 
@@ -71,11 +71,11 @@ const Home: NextPage = () => {
           {isConnected && (
             <>
               <div className={styles.controlBar}>
-                <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
-                <DeviceSelectButton kind={'videoinput'} />
-                <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
-                <DeviceSelectButton kind={'audioinput'} />
-                <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
+                <TrackToggle source={TrackSource.Camera}></TrackToggle>
+                <MediaDeviceMenu kind={'videoinput'} />
+                <TrackToggle source={TrackSource.Microphone}></TrackToggle>
+                <MediaDeviceMenu kind={'audioinput'} />
+                <TrackToggle source={TrackSource.ScreenShare}></TrackToggle>
                 <DisconnectButton>Hang up!</DisconnectButton>
                 <div
                   style={{
@@ -86,30 +86,30 @@ const Home: NextPage = () => {
                 >
                   <div>
                     <div>Audio Inputs:</div>
-                    <DeviceSelector kind="audioinput"></DeviceSelector>
+                    <MediaDeviceSelect kind="audioinput"></MediaDeviceSelect>
                   </div>
                   <div>
                     <div>Video Inputs:</div>
-                    <DeviceSelector kind="videoinput"></DeviceSelector>
+                    <MediaDeviceSelect kind="videoinput"></MediaDeviceSelect>
                   </div>
                 </div>
               </div>
               <ScreenShareView />
               <div className={styles.participantGrid}>
-                <Participants>
+                <ParticipantsLoop>
                   <ParticipantView>
                     <MediaTrack source={Track.Source.Camera}></MediaTrack>
 
                     <div className={styles.participantIndicators}>
                       <div style={{ display: 'flex' }}>
-                        <MediaMutedIndicator source={Track.Source.Camera}></MediaMutedIndicator>
-                        <MediaMutedIndicator source={Track.Source.Microphone}></MediaMutedIndicator>
+                        <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
+                        <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
                       </div>
                       <ParticipantName />
                       <ConnectionQualityIndicator />
                     </div>
                   </ParticipantView>
-                </Participants>
+                </ParticipantsLoop>
               </div>
             </>
           )}

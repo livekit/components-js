@@ -1,20 +1,20 @@
 import {
   ParticipantView,
   LiveKitRoom,
-  MediaControlButton,
+  TrackToggle,
   TrackSource,
-  Participants,
+  ParticipantsLoop,
   ConnectionState,
   DisconnectButton,
   useToken,
   ScreenShareView,
   ParticipantName,
-  MediaMutedIndicator,
+  TrackMutedIndicator,
   RoomName,
   RoomAudioRenderer,
   useConnectionQualityIndicator,
   MediaTrack,
-  DeviceSelectButton,
+  MediaDeviceMenu,
 } from '@livekit/components-react';
 import { ConnectionQuality, Track } from 'livekit-client';
 
@@ -73,23 +73,23 @@ const Home: NextPage = () => {
           {isConnected && (
             <>
               <div className={styles.controlBar}>
-                <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
-                <DeviceSelectButton kind={'videoinput'} />
-                <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
-                <DeviceSelectButton kind={'audioinput'} />
-                <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
+                <TrackToggle source={TrackSource.Camera}></TrackToggle>
+                <MediaDeviceMenu kind={'videoinput'} />
+                <TrackToggle source={TrackSource.Microphone}></TrackToggle>
+                <MediaDeviceMenu kind={'audioinput'} />
+                <TrackToggle source={TrackSource.ScreenShare}></TrackToggle>
                 <DisconnectButton>Hang up!</DisconnectButton>
               </div>
               <ScreenShareView />
               <div className={styles.participantGrid}>
-                <Participants>
+                <ParticipantsLoop>
                   <ParticipantView>
                     <MediaTrack source={Track.Source.Camera}></MediaTrack>
 
                     <div className={styles.participantIndicators}>
                       <div style={{ display: 'flex' }}>
-                        <MediaMutedIndicator source={Track.Source.Microphone}></MediaMutedIndicator>
-                        <MediaMutedIndicator source={Track.Source.Camera}></MediaMutedIndicator>
+                        <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
+                        <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
                       </div>
                       {/* Overwrite styles: By passing our own class name, we can easily overwrite/extend the existing styles. */}
                       {/* In addition, we can still specify a style attribute and further customize the styles. */}
@@ -101,7 +101,7 @@ const Home: NextPage = () => {
                       <UserDefinedConnectionQualityIndicator />
                     </div>
                   </ParticipantView>
-                </Participants>
+                </ParticipantsLoop>
               </div>
             </>
           )}

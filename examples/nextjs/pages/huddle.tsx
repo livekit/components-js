@@ -1,22 +1,22 @@
-import { PinState } from '@livekit/components-core';
+import { FocusState } from '@livekit/components-core';
 import {
-  DeviceSelector,
+  MediaDeviceSelect,
   DisconnectButton,
   LiveKitRoom,
   LocalUserChoices,
-  MediaControlButton,
+  TrackToggle,
   MediaTrack,
   ParticipantName,
-  Participants,
+  ParticipantsLoop,
   ParticipantView,
-  PinContextProvider,
+  FocusContextProvider,
   PreJoin,
   RoomAudioRenderer,
   StartAudio,
   useConnectionState,
   useParticipantContext,
   useParticipants,
-  usePinContext,
+  useFocusContext,
   useScreenShare,
   useToken,
 } from '@livekit/components-react';
@@ -52,28 +52,28 @@ const Huddle: NextPage = () => {
   );
 };
 
-function isParticipantTrackPinned(
+function isParticipantTrackInFocus(
   participant: Participant,
-  pinState: PinState | undefined,
+  focusState: FocusState | undefined,
   source: Track.Source,
 ): boolean {
-  if (pinState === undefined) {
-    console.warn(`pinState not set: `, pinState);
+  if (focusState === undefined) {
+    console.warn(`focusState not set: `, focusState);
     return false;
   }
 
-  if (pinState.pinnedParticipant === undefined || pinState.pinnedTrackSource === undefined) {
-    console.warn(`pinState not set: `, pinState);
+  if (focusState.participantInFocus === undefined || focusState.trackInFocus === undefined) {
+    console.warn(`focusState not set: `, focusState);
     return false;
   }
 
-  if (pinState.pinnedTrackSource !== source) {
+  if (focusState.trackInFocus !== source) {
     return false;
   }
 
-  if (pinState.pinnedParticipant.identity === participant.identity) {
-    console.log(`Participant has same identity as pinned.`, pinState);
-    switch (pinState.pinnedTrackSource) {
+  if (focusState.participantInFocus.identity === participant.identity) {
+    console.log(`Participant has same identity as pinned.`, focusState);
+    switch (focusState.trackInFocus) {
       case Track.Source.Camera:
         return participant.isCameraEnabled;
         break;
@@ -90,7 +90,7 @@ function isParticipantTrackPinned(
   }
 }
 
-const CustomGridView = ({ room }: { room?: Room }) => {
+const CustomGridLayout = ({ room }: { room?: Room }) => {
   const { screenShareTrack, allScreenShares } = useScreenShare({ room });
   const participants = useParticipants();
   const gridContainerRef = useRef(null);
@@ -118,25 +118,25 @@ const CustomGridView = ({ room }: { room?: Room }) => {
 
   return (
     <div ref={gridContainerRef} className={styles.gridLayout} style={props}>
-      <Participants>
+      <ParticipantsLoop>
         <CustomParticipantView />
-      </Participants>
-      <Participants
+      </ParticipantsLoop>
+      <ParticipantsLoop
         filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
         filterDependencies={[screenShareTrack, allScreenShares]}
       >
         <CustomScreenShareView />
-      </Participants>
+      </ParticipantsLoop>
     </div>
   );
 };
 
-const CustomFocusView = ({
+const CustomFocusLayout = ({
   screenShareTrack,
 }: {
   screenShareTrack: TrackPublication | undefined;
 }) => {
-  const { state: pinState } = usePinContext();
+  const { state: focusState } = useFocusContext();
   return (
     <div className={styles.focusLayout}>
       <div className={styles.screenShareContainer}>
@@ -144,29 +144,29 @@ const CustomFocusView = ({
       </div>
       <aside>
         <section>
-          <Participants
+          <ParticipantsLoop
             filter={(ps) =>
               ps.filter((p) => {
-                return !isParticipantTrackPinned(p, pinState, Track.Source.Camera);
+                return !isParticipantTrackInFocus(p, focusState, Track.Source.Camera);
               })
             }
-            filterDependencies={[screenShareTrack, pinState]}
+            filterDependencies={[screenShareTrack, focusState]}
           >
             <CustomParticipantView />
-          </Participants>
-          <Participants
+          </ParticipantsLoop>
+          <ParticipantsLoop
             filter={(ps) =>
               ps.filter((p) => {
                 return (
                   p.isScreenShareEnabled &&
-                  !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare)
+                  !isParticipantTrackInFocus(p, focusState, Track.Source.ScreenShare)
                 );
               })
             }
-            filterDependencies={[screenShareTrack, pinState]}
+            filterDependencies={[screenShareTrack, focusState]}
           >
             <CustomScreenShareView />
-          </Participants>
+          </ParticipantsLoop>
         </section>
       </aside>
     </div>
@@ -174,13 +174,13 @@ const CustomFocusView = ({
 };
 
 const BackToGridLayoutButton = () => {
-  const { dispatch } = usePinContext();
+  const { dispatch } = useFocusContext();
   return (
     <button
       onClick={() => {
-        if (dispatch) dispatch({ msg: 'clear_pin' });
+        if (dispatch) dispatch({ msg: 'clear_focus' });
       }}
-      className={styles.backToGridViewBtn}
+      className={styles.backToGridLayoutBtn}
     >
       🔙 to grid view
     </button>
@@ -188,15 +188,15 @@ const BackToGridLayoutButton = () => {
 };
 
 const CustomFocus = () => {
-  const { state } = usePinContext();
+  const { state } = useFocusContext();
 
   return (
     <>
-      {state?.pinnedParticipant && state.pinnedTrackSource && (
+      {state?.participantInFocus && state.trackInFocus && (
         <MediaTrack
-          className={styles.focusView}
-          participant={state?.pinnedParticipant}
-          source={state.pinnedTrackSource}
+          className={styles.focusLayout}
+          participant={state?.participantInFocus}
+          source={state.trackInFocus}
         />
       )}
     </>
@@ -246,7 +246,7 @@ const CustomParticipantView = () => {
   );
 };
 
-const DeviceSelectButton = (props: HTMLAttributes<HTMLDivElement>) => {
+const MediaDeviceMenu = (props: HTMLAttributes<HTMLDivElement>) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div style={{ position: 'relative', flexShrink: 0 }}>
@@ -267,11 +267,11 @@ const DeviceSelectButton = (props: HTMLAttributes<HTMLDivElement>) => {
         >
           <div>
             <div>Audio Inputs:</div>
-            <DeviceSelector kind="audioinput"></DeviceSelector>
+            <MediaDeviceSelect kind="audioinput"></MediaDeviceSelect>
           </div>
           <div>
             <div>Video Inputs:</div>
-            <DeviceSelector kind="videoinput"></DeviceSelector>
+            <MediaDeviceSelect kind="videoinput"></MediaDeviceSelect>
           </div>
         </div>
       )}
@@ -328,8 +328,8 @@ const HuddleRoomView = ({
     setIsConnected(false);
   };
 
-  const handlePinStateChange = (pinState: PinState) => {
-    setLayout(pinState.pinnedParticipant ? 'focus' : 'grid');
+  const handleFocusStateChange = (focusState: FocusState) => {
+    setLayout(focusState.participantInFocus ? 'focus' : 'grid');
   };
 
   const connectionState = useConnectionState(room);
@@ -350,7 +350,7 @@ const HuddleRoomView = ({
       ) : (
         <>
           <RoomAudioRenderer />
-          <PinContextProvider onChange={handlePinStateChange}>
+          <FocusContextProvider onChange={handleFocusStateChange}>
             <div className={styles.roomLayout}>
               <div className={styles.headerBar}>
                 <ParticipantCount className={styles.participantCount} />
@@ -358,22 +358,16 @@ const HuddleRoomView = ({
               </div>
 
               {layout === 'grid' ? (
-                <CustomGridView />
+                <CustomGridLayout />
               ) : (
-                <CustomFocusView screenShareTrack={screenShareTrack}></CustomFocusView>
+                <CustomFocusLayout screenShareTrack={screenShareTrack}></CustomFocusLayout>
               )}
               <div className={styles.mediaControls}>
                 <div>
-                  <MediaControlButton
-                    className={styles.audioBtn}
-                    source={Track.Source.Microphone}
-                  />
-                  <MediaControlButton className={styles.videoBtn} source={Track.Source.Camera} />
-                  <MediaControlButton
-                    className={styles.screenBtn}
-                    source={Track.Source.ScreenShare}
-                  />
-                  <DeviceSelectButton />
+                  <TrackToggle className={styles.audioBtn} source={Track.Source.Microphone} />
+                  <TrackToggle className={styles.videoBtn} source={Track.Source.Camera} />
+                  <TrackToggle className={styles.screenBtn} source={Track.Source.ScreenShare} />
+                  <MediaDeviceMenu />
                   <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
                   <StartAudio label="Start Audio" />
                   {/* <button
@@ -386,7 +380,7 @@ const HuddleRoomView = ({
                 </div>
               </div>
             </div>
-          </PinContextProvider>
+          </FocusContextProvider>
         </>
       )}
     </LiveKitRoom>

@@ -1,6 +1,6 @@
 import { Track } from 'livekit-client';
 import * as React from 'react';
-import { MediaDeviceMenu } from '../components/controls/MediaDeviceSelect';
+import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { MediaControlButton } from '../components/controls/MediaControlButton';
 import { StartAudio } from '../components/controls/StartAudio';

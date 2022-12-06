@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FocusContextProvider } from '../components/FocusContextProvider';
 import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
-import { DefaultControls } from './ControlBar';
+import { ControlBar } from './ControlBar';
 import { FocusLayoutContainer } from '../components/layout/FocusLayout';
 import { GridLayout } from '../components/layout/GridLayout';
 import { FocusState } from '@livekit/components-core';
@@ -14,7 +14,7 @@ export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
  *
  * @remarks
  * The component is implemented with other LiveKit components like `FocusContextProvider`,
- * `GridLayout`, `DefaultControls`, `FocusLayoutContainer` and `FocusLayout`.
+ * `GridLayout`, `ControlBar`, `FocusLayoutContainer` and `FocusLayout`.
  *
  * @example
  * ```tsx
@@ -36,7 +36,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
       <FocusContextProvider onChange={handleFocusStateChange}>
         {layout === 'grid' ? <GridLayout /> : <FocusLayoutContainer />}
       </FocusContextProvider>
-      <DefaultControls />
+      <ControlBar />
       <RoomAudioRenderer />
     </div>
   );

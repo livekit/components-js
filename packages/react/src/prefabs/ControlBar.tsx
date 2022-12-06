@@ -5,10 +5,10 @@ import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { MediaControlButton } from '../components/controls/MediaControlButton';
 import { StartAudio } from '../components/controls/StartAudio';
 
-export type DefaultControlsProps = React.HTMLAttributes<HTMLDivElement>;
+export type ControlBarProps = React.HTMLAttributes<HTMLDivElement>;
 
 /**
- * The DefaultControls prefab component gives the user the basic user interface
+ * The ControlBar prefab component gives the user the basic user interface
  * to control their media devices and leave the room.
  *
  * @remarks
@@ -18,11 +18,11 @@ export type DefaultControlsProps = React.HTMLAttributes<HTMLDivElement>;
  * @example
  * ```tsx
  * <LiveKitRoom>
- *   <DefaultControls />
+ *   <ControlBar />
  * </LiveKitRoom>
  * ```
  */
-export function DefaultControls(props: DefaultControlsProps) {
+export function ControlBar(props: ControlBarProps) {
   return (
     // TODO: Remove styling default styling or move to styles package.
     <div className="lk-controls" {...props}>

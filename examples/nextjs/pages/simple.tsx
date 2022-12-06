@@ -14,8 +14,8 @@ import {
   RoomName,
   RoomAudioRenderer,
   MediaTrack,
-  DeviceSelector,
-  DeviceSelectButton,
+  MediaDeviceSelect,
+  MediaDeviceMenu,
 } from '@livekit/components-react';
 import { RemoteParticipant, Track } from 'livekit-client';
 
@@ -72,9 +72,9 @@ const Home: NextPage = () => {
             <>
               <div className={styles.controlBar}>
                 <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
-                <DeviceSelectButton kind={'videoinput'} />
+                <MediaDeviceMenu kind={'videoinput'} />
                 <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
-                <DeviceSelectButton kind={'audioinput'} />
+                <MediaDeviceMenu kind={'audioinput'} />
                 <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
                 <DisconnectButton>Hang up!</DisconnectButton>
                 <div
@@ -86,11 +86,11 @@ const Home: NextPage = () => {
                 >
                   <div>
                     <div>Audio Inputs:</div>
-                    <DeviceSelector kind="audioinput"></DeviceSelector>
+                    <MediaDeviceSelect kind="audioinput"></MediaDeviceSelect>
                   </div>
                   <div>
                     <div>Video Inputs:</div>
-                    <DeviceSelector kind="videoinput"></DeviceSelector>
+                    <MediaDeviceSelect kind="videoinput"></MediaDeviceSelect>
                   </div>
                 </div>
               </div>

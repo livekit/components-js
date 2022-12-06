@@ -10,7 +10,7 @@ export const useMediaDevices = (kind: MediaDeviceKind) => {
   return devices;
 };
 
-export const useDeviceSelector = (kind: MediaDeviceKind, room?: Room) => {
+export const useMediaDeviceSelect = (kind: MediaDeviceKind, room?: Room) => {
   // List of all devices.
   const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
   const devices = useObservableState(deviceObserver, []);
@@ -33,25 +33,29 @@ export const useDeviceSelector = (kind: MediaDeviceKind, room?: Room) => {
   return { devices, className, activeDeviceId: currentDeviceId, setActiveMediaDevice };
 };
 
-export interface DeviceSelectorProps extends React.HTMLAttributes<HTMLUListElement> {
+export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListElement> {
   kind: MediaDeviceKind;
   onActiveDeviceChange?: (deviceId: string) => void;
 }
 
 /**
- * The DeviceSelector list all media devices of one kind.
+ * The MediaDeviceSelect list all media devices of one kind.
  * Clicking on one of the listed devices make it the active media device.
  *
  * @example
  * ```tsx
  * <LiveKitRoom>
- *   <DeviceSelector kind='audioinput' />
+ *   <MediaDeviceSelect kind='audioinput' />
  * </LiveKitRoom>
  * ```
  */
-export function DeviceSelector({ kind, onActiveDeviceChange, ...props }: DeviceSelectorProps) {
+export function MediaDeviceSelect({
+  kind,
+  onActiveDeviceChange,
+  ...props
+}: MediaDeviceSelectProps) {
   const room = useMaybeRoomContext();
-  const { devices, activeDeviceId, setActiveMediaDevice, className } = useDeviceSelector(
+  const { devices, activeDeviceId, setActiveMediaDevice, className } = useMediaDeviceSelect(
     kind,
     room,
   );
@@ -80,30 +84,26 @@ export function DeviceSelector({ kind, onActiveDeviceChange, ...props }: DeviceS
   );
 }
 
-interface DeviceSelectButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
+interface MediaDeviceMenuProps extends React.HTMLAttributes<HTMLButtonElement> {
   kind?: MediaDeviceKind;
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
 }
 
 /**
- * The DeviceSelectButton prefab component is a button that opens a menu that lists
+ * The MediaDeviceMenu prefab component is a button that opens a menu that lists
  * all media devices and allows the user to select them.
  *
  * @remarks
- * This component is implemented with the `DeviceSelector` LiveKit components.
+ * This component is implemented with the `MediaDeviceSelect` LiveKit components.
  *
  * @example
  * ```tsx
  * <LiveKitRoom>
- *   <DeviceSelectButton />
+ *   <MediaDeviceMenu />
  * </LiveKitRoom>
  * ```
  */
-export const DeviceSelectButton = ({
-  kind,
-  onActiveDeviceChange,
-  ...props
-}: DeviceSelectButtonProps) => {
+export const MediaDeviceMenu = ({ kind, onActiveDeviceChange, ...props }: MediaDeviceMenuProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const handleActiveDeviceChange = (kind: MediaDeviceKind, deviceId: string) => {
@@ -128,22 +128,22 @@ export const DeviceSelectButton = ({
         }}
       >
         {kind ? (
-          <DeviceSelector
+          <MediaDeviceSelect
             onActiveDeviceChange={(deviceId) => handleActiveDeviceChange(kind, deviceId)}
             kind={kind}
           />
         ) : (
           <>
             <div className="lk-device-menu-heading">Audio inputs</div>
-            <DeviceSelector
+            <MediaDeviceSelect
               kind="audioinput"
               onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('audioinput', deviceId)}
-            ></DeviceSelector>
+            ></MediaDeviceSelect>
             <div className="lk-device-menu-heading">Video inputs</div>
-            <DeviceSelector
+            <MediaDeviceSelect
               kind="videoinput"
               onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('videoinput', deviceId)}
-            ></DeviceSelector>
+            ></MediaDeviceSelect>
           </>
         )}
       </div>

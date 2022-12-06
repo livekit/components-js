@@ -33,7 +33,7 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
     }
     activeDeviceSubject.next(id);
   };
-  const className: string = lkClassName('device-selector');
+  const className: string = lkClassName('media-device-select');
   return {
     className,
     activeDeviceObservable,

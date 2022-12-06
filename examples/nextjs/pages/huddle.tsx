@@ -1,6 +1,6 @@
 import { FocusState } from '@livekit/components-core';
 import {
-  DeviceSelector,
+  MediaDeviceSelect,
   DisconnectButton,
   LiveKitRoom,
   LocalUserChoices,
@@ -246,7 +246,7 @@ const CustomParticipantView = () => {
   );
 };
 
-const DeviceSelectButton = (props: HTMLAttributes<HTMLDivElement>) => {
+const MediaDeviceMenu = (props: HTMLAttributes<HTMLDivElement>) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div style={{ position: 'relative', flexShrink: 0 }}>
@@ -267,11 +267,11 @@ const DeviceSelectButton = (props: HTMLAttributes<HTMLDivElement>) => {
         >
           <div>
             <div>Audio Inputs:</div>
-            <DeviceSelector kind="audioinput"></DeviceSelector>
+            <MediaDeviceSelect kind="audioinput"></MediaDeviceSelect>
           </div>
           <div>
             <div>Video Inputs:</div>
-            <DeviceSelector kind="videoinput"></DeviceSelector>
+            <MediaDeviceSelect kind="videoinput"></MediaDeviceSelect>
           </div>
         </div>
       )}
@@ -373,7 +373,7 @@ const HuddleRoomView = ({
                     className={styles.screenBtn}
                     source={Track.Source.ScreenShare}
                   />
-                  <DeviceSelectButton />
+                  <MediaDeviceMenu />
                   <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
                   <StartAudio label="Start Audio" />
                   {/* <button

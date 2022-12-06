@@ -2,7 +2,7 @@ export * from './constants';
 export * from './utils';
 
 export * from './components/mediaToggle';
-export * from './components/deviceSelector';
+export * from './components/mediaDeviceSelect';
 export * from './components/disconnectButton';
 export * from './components/mediaTrack';
 export * from './components/connectionQualityIndicator';

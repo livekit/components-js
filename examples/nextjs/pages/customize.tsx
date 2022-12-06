@@ -14,7 +14,7 @@ import {
   RoomAudioRenderer,
   useConnectionQualityIndicator,
   MediaTrack,
-  DeviceSelectButton,
+  MediaDeviceMenu,
 } from '@livekit/components-react';
 import { ConnectionQuality, Track } from 'livekit-client';
 
@@ -74,9 +74,9 @@ const Home: NextPage = () => {
             <>
               <div className={styles.controlBar}>
                 <MediaControlButton source={TrackSource.Camera}></MediaControlButton>
-                <DeviceSelectButton kind={'videoinput'} />
+                <MediaDeviceMenu kind={'videoinput'} />
                 <MediaControlButton source={TrackSource.Microphone}></MediaControlButton>
-                <DeviceSelectButton kind={'audioinput'} />
+                <MediaDeviceMenu kind={'audioinput'} />
                 <MediaControlButton source={TrackSource.ScreenShare}></MediaControlButton>
                 <DisconnectButton>Hang up!</DisconnectButton>
               </div>

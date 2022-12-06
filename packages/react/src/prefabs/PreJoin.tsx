@@ -7,7 +7,7 @@ import {
   VideoPresets,
 } from 'livekit-client';
 import * as React from 'react';
-import { DeviceSelectButton, useMediaDevices } from '../components/controls/DeviceSelector';
+import { MediaDeviceMenu, useMediaDevices } from '../components/controls/MediaDeviceSelect';
 import { MediaControlButton } from '../components/controls/MediaControlButton';
 
 export type LocalUserChoices = {
@@ -221,14 +221,14 @@ export const PreJoin = ({
             Microphone
           </MediaControlButton>
           <div className="lk-button-group-menu">
-            <DeviceSelectButton
+            <MediaDeviceMenu
               kind="audioinput"
               onActiveDeviceChange={(_, deviceId) =>
                 setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId))
               }
             >
               {/* {selectedAudioDevice?.label ?? 'Default'} */}
-            </DeviceSelectButton>
+            </MediaDeviceMenu>
           </div>
         </div>
         <div className="lk-button-group video">
@@ -240,14 +240,14 @@ export const PreJoin = ({
             Camera
           </MediaControlButton>
           <div className="lk-button-group-menu">
-            <DeviceSelectButton
+            <MediaDeviceMenu
               kind="videoinput"
               onActiveDeviceChange={(_, deviceId) =>
                 setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId))
               }
             >
               {/* {selectedVideoDevice?.label ?? 'Default'} */}
-            </DeviceSelectButton>
+            </MediaDeviceMenu>
           </div>
         </div>
       </div>

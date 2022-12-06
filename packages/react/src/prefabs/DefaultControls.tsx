@@ -1,6 +1,6 @@
 import { Track } from 'livekit-client';
 import * as React from 'react';
-import { DeviceSelectButton } from '../components/controls/DeviceSelector';
+import { MediaDeviceMenu } from '../components/controls/MediaDeviceSelect';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { MediaControlButton } from '../components/controls/MediaControlButton';
 import { StartAudio } from '../components/controls/StartAudio';
@@ -29,7 +29,7 @@ export function DefaultControls(props: DefaultControlsProps) {
       <MediaControlButton source={Track.Source.Microphone}>Microphone</MediaControlButton>
       <MediaControlButton source={Track.Source.Camera}>Camera</MediaControlButton>
       <MediaControlButton source={Track.Source.ScreenShare}>Share screen</MediaControlButton>
-      <DeviceSelectButton>Settings</DeviceSelectButton>
+      <MediaDeviceMenu>Settings</MediaDeviceMenu>
       <DisconnectButton>Leave</DisconnectButton>
       <StartAudio label="Start Audio" />
     </div>

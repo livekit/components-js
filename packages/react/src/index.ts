@@ -16,7 +16,7 @@ export * from './components/FocusLayoutRenderer';
 export * from './components/participant/MediaTrack';
 export * from './components/layout/FocusLayout';
 export * from './components/layout/GridLayout';
-export * from './components/controls/DeviceSelector';
+export * from './components/controls/MediaDeviceSelect';
 export * from './components/Chat';
 export * from './components/ChatEntry';
 export * from './components/controls/StartAudio';

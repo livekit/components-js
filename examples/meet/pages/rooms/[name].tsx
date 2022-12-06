@@ -3,7 +3,7 @@ import {
   PreJoin,
   LocalUserChoices,
   useToken,
-  DefaultRoomView,
+  VideoConference,
   Chat,
 } from '@livekit/components-react';
 import { AudioCaptureOptions, VideoCaptureOptions } from 'livekit-client';
@@ -86,7 +86,7 @@ const ActiveRoom = ({ roomName, userChoices }: ActiveRoomProps) => {
       <button onClick={() => setShowChat(!showChat)}>{showChat ? 'Hide Chat' : 'Show Chat'}</button>
       <div style={{ display: 'flex' }}>
         <Chat style={{ display: showChat ? 'block' : 'none', width: '20rem' }}></Chat>
-        <DefaultRoomView />
+        <VideoConference />
       </div>
     </LiveKitRoom>
   );

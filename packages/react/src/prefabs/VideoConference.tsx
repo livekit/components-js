@@ -6,7 +6,7 @@ import { FocusLayoutContainer } from '../components/layout/FocusLayout';
 import { GridLayout } from '../components/layout/GridLayout';
 import { FocusState } from '@livekit/components-core';
 
-export type DefaultRoomViewProps = React.HTMLAttributes<HTMLDivElement>;
+export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 
 /**
  * This component is the default setup of a classic LiveKit video conferencing app.
@@ -19,11 +19,11 @@ export type DefaultRoomViewProps = React.HTMLAttributes<HTMLDivElement>;
  * @example
  * ```tsx
  * <LiveKitRoom>
- *   <DefaultRoomView />
+ *   <VideoConference />
  * <LiveKitRoom>
  * ```
  */
-export function DefaultRoomView({ ...props }: DefaultRoomViewProps) {
+export function VideoConference({ ...props }: VideoConferenceProps) {
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = React.useState<Layout>('grid');
 

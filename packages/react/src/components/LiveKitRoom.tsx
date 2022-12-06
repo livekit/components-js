@@ -11,7 +11,7 @@ import {
 } from 'livekit-client';
 import * as React from 'react';
 import { RoomContext } from '../contexts';
-import { DefaultRoomView } from '../prefabs/VideoConference';
+import { VideoConference } from '../prefabs/VideoConference';
 
 export type LiveKitRoomProps = {
   /**
@@ -220,7 +220,7 @@ export const LiveKitRoom = (props: LiveKitRoomProps) => {
   const room = useLiveKitRoom(props);
   return (
     <RoomContext.Provider value={room}>
-      {props.children ?? <DefaultRoomView />}
+      {props.children ?? <VideoConference />}
     </RoomContext.Provider>
   );
 };

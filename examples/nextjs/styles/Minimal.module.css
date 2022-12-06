@@ -119,19 +119,19 @@
   width: 100%;
 }
 
-.focusView {
+.focusLayout {
   display: grid;
   grid-template-columns: 5fr 1fr;
   width: 90vw;
 }
 
-.focusView .participantGrid {
+.focusLayout .participantGrid {
   width: 100%;
   max-height: min(800px, 90vh);
   overflow-y: auto;
 }
 
-.focusView .participantGrid .participantView {
+.focusLayout .participantGrid .participantView {
   max-height: 250px;
 }
 

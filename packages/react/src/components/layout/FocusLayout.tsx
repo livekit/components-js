@@ -7,7 +7,7 @@ import { MediaTrack } from '../participant/MediaTrack';
 import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
 import { Participants, useParticipants, useSortedParticipants } from '../Participants';
 
-interface FocusViewContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   focusParticipant?: Participant;
   focusTrackSource?: Track.Source;
   participants?: Array<Participant>;
@@ -16,13 +16,13 @@ interface FocusViewContainerProps extends React.HTMLAttributes<HTMLDivElement> {
 
 // TODO use (loudest) participant in focus, if no focusParticipant is provided
 // TODO cleanup props
-export function FocusViewContainer({
+export function FocusLayoutContainer({
   focusParticipant,
   focusTrackSource,
   onParticipantClick,
   ...props
-}: FocusViewContainerProps) {
-  const elementProps = mergeProps(props, { className: 'lk-participant-focus-view' });
+}: FocusLayoutContainerProps) {
+  const elementProps = mergeProps(props, { className: 'lk-focus-layout' });
   const pinContext = usePinContext();
   const participants = useSortedParticipants(useParticipants());
 
@@ -31,7 +31,7 @@ export function FocusViewContainer({
       {props.children ?? (
         <>
           {pinContext.state?.pinnedParticipant && (
-            <FocusView participant={pinContext.state?.pinnedParticipant} />
+            <FocusLayout participant={pinContext.state?.pinnedParticipant} />
           )}
           <CarouselView participants={participants} />
         </>
@@ -40,18 +40,18 @@ export function FocusViewContainer({
   );
 }
 
-export interface FocusViewProps extends React.HTMLAttributes<HTMLElement> {
+export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
   participant: Participant;
   trackSource?: Track.Source;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
 
-export function FocusView({
+export function FocusLayout({
   participant,
   trackSource,
   onParticipantClick,
   ...props
-}: FocusViewProps) {
+}: FocusLayoutProps) {
   const { state } = useMaybePinContext();
 
   return (

@@ -131,7 +131,7 @@ const CustomGridLayout = ({ room }: { room?: Room }) => {
   );
 };
 
-const CustomFocusView = ({
+const CustomFocusLayout = ({
   screenShareTrack,
 }: {
   screenShareTrack: TrackPublication | undefined;
@@ -194,7 +194,7 @@ const CustomFocus = () => {
     <>
       {state?.pinnedParticipant && state.pinnedTrackSource && (
         <MediaTrack
-          className={styles.focusView}
+          className={styles.focusLayout}
           participant={state?.pinnedParticipant}
           source={state.pinnedTrackSource}
         />
@@ -360,7 +360,7 @@ const HuddleRoomView = ({
               {layout === 'grid' ? (
                 <CustomGridLayout />
               ) : (
-                <CustomFocusView screenShareTrack={screenShareTrack}></CustomFocusView>
+                <CustomFocusLayout screenShareTrack={screenShareTrack}></CustomFocusLayout>
               )}
               <div className={styles.mediaControls}>
                 <div>

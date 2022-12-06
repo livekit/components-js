@@ -19,7 +19,7 @@ export interface ParticipantClickEvent {
   publication?: TrackPublication;
 }
 
-export type ParticipantProps = React.HTMLAttributes<HTMLDivElement> & {
+export type ParticipantViewProps = React.HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
   trackSource?: Track.Source;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
@@ -83,7 +83,7 @@ export const ParticipantView = ({
   onParticipantClick,
   trackSource,
   ...htmlProps
-}: ParticipantProps) => {
+}: ParticipantViewProps) => {
   const p = useEnsureParticipant(participant);
   const { elementProps } = useParticipantView(p, htmlProps);
 

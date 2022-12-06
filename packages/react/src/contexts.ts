@@ -1,4 +1,4 @@
-import { PinState } from '@livekit/components-core';
+import { FocusState } from '@livekit/components-core';
 import type { Room, Participant, Track } from 'livekit-client';
 import { createContext, useContext, useReducer } from 'react';
 
@@ -52,29 +52,29 @@ export function useEnsureRoom(room?: Room) {
   return r;
 }
 
-export type PinAction =
+export type FocusAction =
   | {
-      msg: 'set_pin';
+      msg: 'set_focus';
       participant: Participant;
       source: Track.Source;
     }
-  | { msg: 'clear_pin' };
+  | { msg: 'clear_focus' };
 
-type PinContextType = {
-  dispatch?: React.Dispatch<PinAction>;
-  state?: PinState;
+type FocusContextType = {
+  dispatch?: React.Dispatch<FocusAction>;
+  state?: FocusState;
 };
 
-export const PinContext = createContext<PinContextType>({});
+export const FocusContext = createContext<FocusContextType>({});
 
-export function usePinContext() {
-  const pinContext = useContext(PinContext);
-  if (!pinContext) {
-    throw Error('tried to access pin context outside of pin context provider');
+export function useFocusContext() {
+  const focusContext = useContext(FocusContext);
+  if (!focusContext) {
+    throw Error('tried to access focus context outside of focus context provider');
   }
-  return pinContext;
+  return focusContext;
 }
 
-export function useMaybePinContext() {
-  return useContext(PinContext);
+export function useMaybeFocusContext() {
+  return useContext(FocusContext);
 }

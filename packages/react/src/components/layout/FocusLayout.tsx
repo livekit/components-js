@@ -1,7 +1,7 @@
 import { isParticipantTrackPinned } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { useMaybePinContext, usePinContext } from '../../contexts';
+import { useMaybeFocusContext, useFocusContext } from '../../contexts';
 import { mergeProps } from '../../utils';
 import { MediaTrack } from '../participant/MediaTrack';
 import { ParticipantClickEvent, ParticipantView } from '../participant/Participant';
@@ -23,15 +23,15 @@ export function FocusLayoutContainer({
   ...props
 }: FocusLayoutContainerProps) {
   const elementProps = mergeProps(props, { className: 'lk-focus-layout' });
-  const pinContext = usePinContext();
+  const pinContext = useFocusContext();
   const participants = useSortedParticipants(useParticipants());
 
   return (
     <div {...elementProps}>
       {props.children ?? (
         <>
-          {pinContext.state?.pinnedParticipant && (
-            <FocusLayout participant={pinContext.state?.pinnedParticipant} />
+          {pinContext.state?.participantInFocus && (
+            <FocusLayout participant={pinContext.state?.participantInFocus} />
           )}
           <CarouselView participants={participants} />
         </>
@@ -52,12 +52,12 @@ export function FocusLayout({
   onParticipantClick,
   ...props
 }: FocusLayoutProps) {
-  const { state } = useMaybePinContext();
+  const { state } = useMaybeFocusContext();
 
   return (
     <div {...props}>
-      {state?.pinnedParticipant && state.pinnedTrackSource && (
-        <MediaTrack participant={state?.pinnedParticipant} source={state.pinnedTrackSource} />
+      {state?.participantInFocus && state.trackInFocus && (
+        <MediaTrack participant={state?.participantInFocus} source={state.trackInFocus} />
       )}
     </div>
   );
@@ -75,7 +75,7 @@ export function CarouselView({
   onParticipantClick,
   ...props
 }: CarouselProps) {
-  const { state: pinState } = usePinContext();
+  const { state: pinState } = useFocusContext();
   return (
     <aside {...props}>
       {showScreenShares && (

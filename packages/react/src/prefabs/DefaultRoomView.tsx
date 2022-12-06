@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { PinContextProvider } from '../components/PinContextProvider';
+import { FocusContextProvider } from '../components/FocusContextProvider';
 import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
 import { DefaultControls } from './DefaultControls';
 import { FocusLayoutContainer } from '../components/layout/FocusLayout';
 import { GridLayout } from '../components/layout/GridLayout';
-import { PinState } from '@livekit/components-core';
+import { FocusState } from '@livekit/components-core';
 
 export type DefaultRoomViewProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -13,7 +13,7 @@ export type DefaultRoomViewProps = React.HTMLAttributes<HTMLDivElement>;
  * It provides functionality like switching between participant grid view and focus view.
  *
  * @remarks
- * The component is implemented with other LiveKit components like `PinContextProvider`,
+ * The component is implemented with other LiveKit components like `FocusContextProvider`,
  * `GridLayout`, `DefaultControls`, `FocusLayoutContainer` and `FocusLayout`.
  *
  * @example
@@ -27,15 +27,15 @@ export function DefaultRoomView({ ...props }: DefaultRoomViewProps) {
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = React.useState<Layout>('grid');
 
-  const handlePinStateChange = (pinState: PinState) => {
-    setLayout(pinState.pinnedParticipant ? 'focus' : 'grid');
+  const handleFocusStateChange = (focusState: FocusState) => {
+    setLayout(focusState.participantInFocus ? 'focus' : 'grid');
   };
 
   return (
     <div {...props}>
-      <PinContextProvider onChange={handlePinStateChange}>
+      <FocusContextProvider onChange={handleFocusStateChange}>
         {layout === 'grid' ? <GridLayout /> : <FocusLayoutContainer />}
-      </PinContextProvider>
+      </FocusContextProvider>
       <DefaultControls />
       <RoomAudioRenderer />
     </div>

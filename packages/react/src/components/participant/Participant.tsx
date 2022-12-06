@@ -11,7 +11,7 @@ import {
   ParticipantContext,
   useEnsureParticipant,
   useMaybeParticipantContext,
-  useMaybePinContext,
+  useMaybeFocusContext,
 } from '../../contexts';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
 import { MediaMutedIndicator } from './MediaMutedIndicator';
@@ -166,7 +166,7 @@ export const ParticipantView = ({
   const p = useEnsureParticipant(participant);
   const { elementProps } = useParticipantView(p, htmlProps);
 
-  const pinContext = useMaybePinContext();
+  const pinContext = useMaybeFocusContext();
 
   const clickHandler = (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     elementProps.onClick?.(evt);
@@ -174,7 +174,7 @@ export const ParticipantView = ({
     if (pinContext && pinContext.dispatch) {
       console.log('handleParticipantClick', p);
       pinContext.dispatch({
-        msg: 'set_pin',
+        msg: 'set_focus',
         participant: p,
         source: trackSource || Track.Source.Camera,
       });

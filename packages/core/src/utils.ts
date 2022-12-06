@@ -37,33 +37,33 @@ export const attachIfSubscribed = (
   }
 };
 
-export type PinState = {
-  pinnedParticipant?: Participant;
-  pinnedTrackSource?: Track.Source;
+export type FocusState = {
+  participantInFocus?: Participant;
+  trackInFocus?: Track.Source;
 };
 
 export function isParticipantTrackPinned(
   participant: Participant,
-  pinState: PinState | undefined,
+  focusState: FocusState | undefined,
   source: Track.Source,
 ): boolean {
-  if (pinState === undefined) {
-    console.warn(`pinState not set: `, pinState);
+  if (focusState === undefined) {
+    console.warn(`focusState not set: `, focusState);
     return false;
   }
 
-  if (pinState.pinnedParticipant === undefined || pinState.pinnedTrackSource === undefined) {
-    console.warn(`pinState not set: `, pinState);
+  if (focusState.participantInFocus === undefined || focusState.trackInFocus === undefined) {
+    console.warn(`focusState not set: `, focusState);
     return false;
   }
 
-  if (pinState.pinnedTrackSource !== source) {
+  if (focusState.trackInFocus !== source) {
     return false;
   }
 
-  if (pinState.pinnedParticipant.identity === participant.identity) {
-    console.log(`Participant has same identity as pinned.`, pinState);
-    switch (pinState.pinnedTrackSource) {
+  if (focusState.participantInFocus.identity === participant.identity) {
+    console.log(`Participant has same identity as pinned.`, focusState);
+    switch (focusState.trackInFocus) {
       case Track.Source.Camera:
         return participant.isCameraEnabled;
         break;

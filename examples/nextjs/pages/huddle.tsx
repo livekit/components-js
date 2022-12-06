@@ -90,7 +90,7 @@ function isParticipantTrackPinned(
   }
 }
 
-const CustomGridView = ({ room }: { room?: Room }) => {
+const CustomGridLayout = ({ room }: { room?: Room }) => {
   const { screenShareTrack, allScreenShares } = useScreenShare({ room });
   const participants = useParticipants();
   const gridContainerRef = useRef(null);
@@ -180,7 +180,7 @@ const BackToGridLayoutButton = () => {
       onClick={() => {
         if (dispatch) dispatch({ msg: 'clear_pin' });
       }}
-      className={styles.backToGridViewBtn}
+      className={styles.backToGridLayoutBtn}
     >
       🔙 to grid view
     </button>
@@ -358,7 +358,7 @@ const HuddleRoomView = ({
               </div>
 
               {layout === 'grid' ? (
-                <CustomGridView />
+                <CustomGridLayout />
               ) : (
                 <CustomFocusView screenShareTrack={screenShareTrack}></CustomFocusView>
               )}

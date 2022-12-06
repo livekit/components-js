@@ -4,7 +4,7 @@ import { mergeProps } from '../../utils';
 import { ParticipantView } from '../participant/Participant';
 import { Participants } from '../Participants';
 
-export interface GridViewProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * If set to `true` screen shares are displayed with the participants.
    */
@@ -18,17 +18,17 @@ export interface GridViewProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * The GridView component displays the nested participants in a grid where every participants has the same size.
+ * The GridLayout component displays the nested participants in a grid where every participants has the same size.
  *
  * @example
  * ```tsx
  * <LiveKitRoom>
- *   <GridView />
+ *   <GridLayout />
  * <LiveKitRoom>
  * ```
  */
-export function GridView({ participants, showScreenShares, ...props }: GridViewProps) {
-  const elementProps = mergeProps(props, { className: 'lk-participant-grid-view' });
+export function GridLayout({ participants, showScreenShares, ...props }: GridLayoutProps) {
+  const elementProps = mergeProps(props, { className: 'lk-grid-layout' });
   const filter = (ps: Array<Participant>) => participants ?? ps;
   return (
     <div {...elementProps}>

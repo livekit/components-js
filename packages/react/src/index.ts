@@ -15,7 +15,7 @@ export * from './components/RoomAudioRenderer';
 export * from './components/FocusViewRenderer';
 export * from './components/participant/MediaTrack';
 export * from './components/layout/FocusView';
-export * from './components/layout/GridView';
+export * from './components/layout/GridLayout';
 export * from './components/controls/DeviceSelector';
 export * from './components/Chat';
 export * from './components/ChatEntry';

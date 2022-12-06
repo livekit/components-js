@@ -3,7 +3,7 @@ import { PinContextProvider } from '../components/PinContextProvider';
 import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
 import { DefaultControls } from './DefaultControls';
 import { FocusViewContainer } from '../components/layout/FocusView';
-import { GridView } from '../components/layout/GridView';
+import { GridLayout } from '../components/layout/GridLayout';
 import { PinState } from '@livekit/components-core';
 
 export type DefaultRoomViewProps = React.HTMLAttributes<HTMLDivElement>;
@@ -14,7 +14,7 @@ export type DefaultRoomViewProps = React.HTMLAttributes<HTMLDivElement>;
  *
  * @remarks
  * The component is implemented with other LiveKit components like `PinContextProvider`,
- * `GridView`, `DefaultControls`, `FocusViewContainer` and `FocusView`.
+ * `GridLayout`, `DefaultControls`, `FocusViewContainer` and `FocusView`.
  *
  * @example
  * ```tsx
@@ -34,7 +34,7 @@ export function DefaultRoomView({ ...props }: DefaultRoomViewProps) {
   return (
     <div {...props}>
       <PinContextProvider onChange={handlePinStateChange}>
-        {layout === 'grid' ? <GridView /> : <FocusViewContainer />}
+        {layout === 'grid' ? <GridLayout /> : <FocusViewContainer />}
       </PinContextProvider>
       <DefaultControls />
       <RoomAudioRenderer />

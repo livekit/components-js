@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { Participant, Track } from 'livekit-client';
-import { useLocalParticipant } from '../components/controls/MediaControlButton';
+import { LocalParticipant, Participant, Track, TrackPublication } from 'livekit-client';
 import {
   connectedParticipantsObserver,
   activeSpeakerObserver,
   sortParticipantsByVolume,
   createIsSpeakingObserver,
   mutedObserver,
+  ParticipantMedia,
+  observeParticipantMedia,
 } from '@livekit/components-core';
 import { useObservableState } from '../utils';
 import { useEnsureParticipant, useRoomContext } from '../contexts';
@@ -32,6 +33,48 @@ export const useParticipants = (
   }, [remoteParticipants, localParticipant, filter, ...filterDependencies]);
 
   return participants;
+};
+
+/**
+ * The useLocalParticipant hook the state of the local participant.
+ */
+export const useLocalParticipant = () => {
+  const room = useRoomContext();
+  const [localParticipant, setLocalParticipant] = React.useState(room.localParticipant);
+  const [isMicrophoneEnabled, setIsMicrophoneEnabled] = React.useState(
+    localParticipant.isMicrophoneEnabled,
+  );
+  const [isCameraEnabled, setIsCameraEnabled] = React.useState(
+    localParticipant.isMicrophoneEnabled,
+  );
+  const [isScreenShareEnabled, setIsScreenShareEnabled] = React.useState(
+    localParticipant.isMicrophoneEnabled,
+  );
+  const [microphoneTrack, setMicrophoneTrack] = React.useState<TrackPublication | undefined>(
+    undefined,
+  );
+  const [cameraTrack, setCameraTrack] = React.useState<TrackPublication | undefined>(undefined);
+
+  const handleUpdate = (media: ParticipantMedia<LocalParticipant>) => {
+    setIsCameraEnabled(media.isCameraEnabled);
+    setIsMicrophoneEnabled(media.isMicrophoneEnabled);
+    setIsScreenShareEnabled(media.isScreenShareEnabled);
+    setCameraTrack(media.cameraTrack);
+    setMicrophoneTrack(media.microphoneTrack);
+    setLocalParticipant(media.participant);
+  };
+  React.useEffect(() => {
+    const listener = observeParticipantMedia(localParticipant).subscribe(handleUpdate);
+    return () => listener.unsubscribe();
+  });
+  return {
+    isMicrophoneEnabled,
+    isScreenShareEnabled,
+    isCameraEnabled,
+    microphoneTrack,
+    cameraTrack,
+    localParticipant,
+  };
 };
 
 /**

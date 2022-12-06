@@ -18,45 +18,6 @@ export type MediaControlButtonProps = Omit<React.HTMLAttributes<HTMLButtonElemen
 
 export const TrackSource = Track.Source;
 
-export const useLocalParticipant = () => {
-  const room = useRoomContext();
-  const [localParticipant, setLocalParticipant] = React.useState(room.localParticipant);
-  const [isMicrophoneEnabled, setIsMicrophoneEnabled] = React.useState(
-    localParticipant.isMicrophoneEnabled,
-  );
-  const [isCameraEnabled, setIsCameraEnabled] = React.useState(
-    localParticipant.isMicrophoneEnabled,
-  );
-  const [isScreenShareEnabled, setIsScreenShareEnabled] = React.useState(
-    localParticipant.isMicrophoneEnabled,
-  );
-  const [microphoneTrack, setMicrophoneTrack] = React.useState<TrackPublication | undefined>(
-    undefined,
-  );
-  const [cameraTrack, setCameraTrack] = React.useState<TrackPublication | undefined>(undefined);
-
-  const handleUpdate = (media: ParticipantMedia<LocalParticipant>) => {
-    setIsCameraEnabled(media.isCameraEnabled);
-    setIsMicrophoneEnabled(media.isMicrophoneEnabled);
-    setIsScreenShareEnabled(media.isScreenShareEnabled);
-    setCameraTrack(media.cameraTrack);
-    setMicrophoneTrack(media.microphoneTrack);
-    setLocalParticipant(media.participant);
-  };
-  React.useEffect(() => {
-    const listener = observeParticipantMedia(localParticipant).subscribe(handleUpdate);
-    return () => listener.unsubscribe();
-  });
-  return {
-    isMicrophoneEnabled,
-    isScreenShareEnabled,
-    isCameraEnabled,
-    microphoneTrack,
-    cameraTrack,
-    localParticipant,
-  };
-};
-
 export const useMediaToggle = ({
   source,
   onChange,

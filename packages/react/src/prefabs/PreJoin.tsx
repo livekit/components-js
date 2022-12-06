@@ -184,10 +184,23 @@ export const PreJoin = ({
       {localVideoTrack ? (
         <video
           ref={videoEl}
-          style={{ display: 'block', width: '100%', height: 'auto', transform: 'rotateY(180deg)', borderRadius: 'var(--lk-border-radius)' }}
+          style={{
+            display: 'block',
+            width: '100%',
+            height: 'auto',
+            transform: 'rotateY(180deg)',
+            borderRadius: 'var(--lk-border-radius)',
+          }}
         />
       ) : (
-        <div style={{ width: '100%', height: '11.25rem', backgroundColor: '#000', borderRadius: 'var(--lk-border-radius)' }}>
+        <div
+          style={{
+            width: '100%',
+            height: '11.25rem',
+            backgroundColor: '#000',
+            borderRadius: 'var(--lk-border-radius)',
+          }}
+        >
           Camera is off
         </div>
       )}
@@ -204,7 +217,9 @@ export const PreJoin = ({
             initialState={videoEnabled}
             source={Track.Source.Microphone}
             onChange={(enabled) => setAudioEnabled(enabled)}
-          >Microphone</MediaControlButton>
+          >
+            Microphone
+          </MediaControlButton>
           <div className="lk-button-group-menu">
             <DeviceSelectButton
               kind="audioinput"
@@ -221,7 +236,9 @@ export const PreJoin = ({
             initialState={videoEnabled}
             source={Track.Source.Camera}
             onChange={(enabled) => setVideoEnabled(enabled)}
-          >Camera</MediaControlButton>
+          >
+            Camera
+          </MediaControlButton>
           <div className="lk-button-group-menu">
             <DeviceSelectButton
               kind="videoinput"

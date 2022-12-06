@@ -51,7 +51,9 @@ export const LkRoomContext: Decorator = (Story, args) => {
         <div>
           <div style={{ display: 'flex', gap: '.5rem', alignItems: 'center' }}>
             Connection status
-            <button onClick={() => setConnect(!connect)}>{`${connected ? 'Connected' : 'Not connected'}`}</button>
+            <button onClick={() => setConnect(!connect)}>{`${
+              connected ? 'Connected' : 'Not connected'
+            }`}</button>
           </div>
         </div>
       </div>

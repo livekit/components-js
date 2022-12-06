@@ -121,7 +121,8 @@ export const DeviceSelectButton = ({
         {props.children}
       </button>
 
-      <div className="lk-device-menu"
+      <div
+        className="lk-device-menu"
         style={{
           display: isOpen ? 'block' : 'none',
         }}
@@ -136,16 +137,12 @@ export const DeviceSelectButton = ({
             <div className="lk-device-menu-heading">Audio inputs</div>
             <DeviceSelector
               kind="audioinput"
-              onActiveDeviceChange={(deviceId) =>
-                handleActiveDeviceChange('audioinput', deviceId)
-              }
+              onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('audioinput', deviceId)}
             ></DeviceSelector>
             <div className="lk-device-menu-heading">Video inputs</div>
             <DeviceSelector
               kind="videoinput"
-              onActiveDeviceChange={(deviceId) =>
-                handleActiveDeviceChange('videoinput', deviceId)
-              }
+              onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('videoinput', deviceId)}
             ></DeviceSelector>
           </>
         )}

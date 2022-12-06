@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { Participant } from 'livekit-client';
+import { Participant, Track } from 'livekit-client';
 import { useLocalParticipant } from '../components/controls/MediaControlButton';
 import {
   connectedParticipantsObserver,
   activeSpeakerObserver,
   sortParticipantsByVolume,
+  createIsSpeakingObserver,
+  mutedObserver,
 } from '@livekit/components-core';
 import { useObservableState } from '../utils';
-import { useRoomContext } from '../contexts';
+import { useEnsureParticipant, useRoomContext } from '../contexts';
 
 /**
  * The useParticipants hook returns all participants of the current room.
@@ -81,3 +83,27 @@ export const useSortedParticipants = (participants: Array<Participant>) => {
   }, [activeSpeakers, participants]);
   return sortedParticipants;
 };
+
+export function useIsSpeaking(participant?: Participant) {
+  const p = useEnsureParticipant(participant);
+  const [isSpeaking, setIsSpeaking] = React.useState(p.isSpeaking);
+
+  React.useEffect(() => {
+    const subscription = createIsSpeakingObserver(p).subscribe(setIsSpeaking);
+    return () => subscription.unsubscribe();
+  }, [p]);
+
+  return isSpeaking;
+}
+
+export function useIsMuted(source: Track.Source, participant?: Participant) {
+  const p = useEnsureParticipant(participant);
+  const [isMuted, setIsMuted] = React.useState(!!p.getTrack(source)?.isMuted);
+
+  React.useEffect(() => {
+    const listener = mutedObserver(p, source).subscribe(setIsMuted);
+    return () => listener.unsubscribe();
+  }, [p, source]);
+
+  return isMuted;
+}

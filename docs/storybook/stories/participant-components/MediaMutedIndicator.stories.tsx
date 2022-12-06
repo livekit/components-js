@@ -3,7 +3,7 @@ import { StoryObj } from '@storybook/react';
 
 import {
   MediaControlButton,
-  MediaMutedIndicator,
+  TrackMutedIndicator,
   MediaMutedIndicatorProps,
 } from '@livekit/components-react';
 import { LkParticipantContext, LkRoomContext } from '../../.storybook/lk-decorators';
@@ -11,11 +11,11 @@ import { Track } from 'livekit-client';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
-  component: MediaMutedIndicator,
+  component: TrackMutedIndicator,
   decorators: [LkParticipantContext, LkRoomContext],
   render: (args: MediaMutedIndicatorProps) => (
     <>
-      <MediaMutedIndicator {...args}></MediaMutedIndicator>
+      <TrackMutedIndicator {...args}></TrackMutedIndicator>
       <MediaControlButton source={args.source}>Toggle Muted</MediaControlButton>
       {/* TODO: Move media control into into LkRoomContext */}
     </>

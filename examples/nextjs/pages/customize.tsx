@@ -9,7 +9,7 @@ import {
   useToken,
   ScreenShareView,
   ParticipantName,
-  MediaMutedIndicator,
+  TrackMutedIndicator,
   RoomName,
   RoomAudioRenderer,
   useConnectionQualityIndicator,
@@ -88,8 +88,8 @@ const Home: NextPage = () => {
 
                     <div className={styles.participantIndicators}>
                       <div style={{ display: 'flex' }}>
-                        <MediaMutedIndicator source={Track.Source.Microphone}></MediaMutedIndicator>
-                        <MediaMutedIndicator source={Track.Source.Camera}></MediaMutedIndicator>
+                        <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
+                        <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
                       </div>
                       {/* Overwrite styles: By passing our own class name, we can easily overwrite/extend the existing styles. */}
                       {/* In addition, we can still specify a style attribute and further customize the styles. */}

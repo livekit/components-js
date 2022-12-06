@@ -10,7 +10,7 @@ import {
   useToken,
   ScreenShareView,
   ParticipantName,
-  MediaMutedIndicator,
+  TrackMutedIndicator,
   RoomName,
   RoomAudioRenderer,
   MediaTrack,
@@ -102,8 +102,8 @@ const Home: NextPage = () => {
 
                     <div className={styles.participantIndicators}>
                       <div style={{ display: 'flex' }}>
-                        <MediaMutedIndicator source={Track.Source.Camera}></MediaMutedIndicator>
-                        <MediaMutedIndicator source={Track.Source.Microphone}></MediaMutedIndicator>
+                        <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
+                        <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
                       </div>
                       <ParticipantName />
                       <ConnectionQualityIndicator />

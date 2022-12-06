@@ -6,7 +6,7 @@ export * from './components/deviceSelector';
 export * from './components/disconnectButton';
 export * from './components/mediaTrack';
 export * from './components/connectionQualityIndicator';
-export * from './components/mediaMutedIndicator';
+export * from './components/trackMutedIndicator';
 export * from './components/participantName';
 export * from './components/mediaTrack';
 export * from './components/participantView';

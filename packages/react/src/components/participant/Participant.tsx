@@ -14,7 +14,7 @@ import {
   useMaybeFocusContext,
 } from '../../contexts';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
-import { MediaMutedIndicator } from './MediaMutedIndicator';
+import { TrackMutedIndicator } from './TrackMutedIndicator';
 import { MediaTrack } from './MediaTrack';
 import { ParticipantName } from './ParticipantName';
 
@@ -197,8 +197,8 @@ export const ParticipantView = ({
               }}
             >
               <div style={{ display: 'flex' }}>
-                <MediaMutedIndicator source={Track.Source.Microphone}></MediaMutedIndicator>
-                <MediaMutedIndicator source={Track.Source.Camera}></MediaMutedIndicator>
+                <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
+                <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
               </div>
               <ParticipantName />
               <ConnectionQualityIndicator />

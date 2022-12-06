@@ -8,7 +8,7 @@ export * from './components/Participants';
 export * from './components/ConnectionState';
 export * from './components/controls/DisconnectButton';
 export * from './components/ScreenShareRenderer';
-export * from './components/participant/MediaMutedIndicator';
+export * from './components/participant/TrackMutedIndicator';
 export * from './components/participant/ParticipantName';
 export * from './components/RoomName';
 export * from './components/RoomAudioRenderer';

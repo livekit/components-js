@@ -1,5 +1,5 @@
-import React from 'react';
-import { ParticipantsLoop } from '@livekit/components-react';
+import React, { HTMLAttributes } from 'react';
+import { ParticipantContext, useLocalParticipant } from '@livekit/components-react';
 import { Decorator } from '@storybook/react';
 
 /**
@@ -9,5 +9,15 @@ import { Decorator } from '@storybook/react';
  * The decorator order matters: `decorators: [LkParticipantContext, LkRoomContext]`
  */
 export const LkParticipantContext: Decorator = (Story, _) => {
-  return <ParticipantsLoop>{Story()}</ParticipantsLoop>;
+  return <LocalParticipantContext>{Story()}</LocalParticipantContext>;
+};
+
+const LocalParticipantContext = (props: HTMLAttributes<HTMLDivElement>) => {
+  const p = useLocalParticipant();
+
+  return (
+    <ParticipantContext.Provider value={p.localParticipant}>
+      {props.children}
+    </ParticipantContext.Provider>
+  );
 };

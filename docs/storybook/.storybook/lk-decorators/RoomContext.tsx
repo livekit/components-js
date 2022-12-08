@@ -14,63 +14,30 @@ export type RoomContextSettings = Partial<{
  *
  * Note: This component requires some environment variables. Make sure that they are set correctly in your .env file.
  */
-export const LkRoomContext: Decorator = (Story, args) => {
-  const roomContextSettings: RoomContextSettings = args.parameters.roomContext;
-  const [connect, setConnect] = React.useState(roomContextSettings?.connect);
-  const [connected, setConnected] = React.useState(false);
+export const LkRoomContext: Decorator = (Story, { globals, args }) => {
+  const roomContextSettings: RoomContextSettings = args;
 
   const room = new Room({});
-  const token = import.meta.env.VITE_PUBLIC_TEST_TOKEN;
-  const serverUrl = import.meta.env.VITE_PUBLIC_LK_SERVER_URL;
+  // const token = import.meta.env.VITE_PUBLIC_TEST_TOKEN;
+  // const serverUrl = import.meta.env.VITE_PUBLIC_LK_SERVER_URL;
 
-  console.log({ connect, connected, token, serverUrl });
+  // console.log({ connect, connected, token, serverUrl });
 
   React.useEffect(() => {
-    room.on('connected', () => setConnected(true));
-    room.on('disconnected', () => setConnected(false));
     return () => {
-      room.removeAllListeners();
       room.disconnect();
     };
   }, []);
 
   return (
     <>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '1rem',
-          margin: '-1rem -1rem 1rem',
-          fontSize: '.75rem',
-          backgroundColor: 'var(--lk-bg-secondary)',
-        }}
-      >
-        <strong>LiveKit Room Controls</strong>
-        <div>
-          <div style={{ display: 'flex', gap: '.5rem', alignItems: 'center' }}>
-            Connection status
-            <button onClick={() => setConnect(!connect)}>{`${
-              connected ? 'Connected' : 'Not connected'
-            }`}</button>
-          </div>
-        </div>
-      </div>
-
       <LiveKitRoom
         room={room}
-        connect={connect}
-        token={token}
-        serverUrl={serverUrl}
+        token={undefined}
+        serverUrl={undefined}
+        simulateParticipants={globals.participantCount}
         video={roomContextSettings?.video || false}
-        audio={roomContextSettings?.audio || false}
-        onConnected={() => {
-          setConnected(true);
-        }}
-        onDisconnected={() => {
-          setConnect(false);
-        }}
+        audio={false}
       >
         {Story()}
       </LiveKitRoom>

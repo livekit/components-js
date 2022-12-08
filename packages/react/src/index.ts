@@ -19,8 +19,8 @@ export * from './components/controls/StartAudio';
 export * from './components/FocusContextProvider';
 export * from './components/ClearFocusButton';
 
+export * from './hooks';
+
 export * from './prefabs';
 
 export * from './layout';
-
-export * from './hooks';

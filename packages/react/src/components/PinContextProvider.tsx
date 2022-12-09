@@ -1,34 +1,34 @@
-import { FocusState } from '@livekit/components-core';
+import { PinState } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
-import { FocusAction, FocusContext, useRoomContext } from '../contexts';
+import { PinAction, PinContext, useRoomContext } from '../contexts';
 import { useScreenShare } from './ScreenShareRenderer';
 
-function focusReducer(state: FocusState, action: FocusAction): FocusState {
+function pinReducer(state: PinState, action: PinAction): PinState {
   console.log(`pinReducer msg:`, action);
-  if (action.msg === 'set_focus') {
+  if (action.msg === 'set_pin') {
     return {
       ...state,
-      participantInFocus: action.participant,
-      trackInFocus: action.source,
+      pinnedParticipant: action.participant,
+      pinnedSource: action.source,
     };
-  } else if (action.msg === 'clear_focus') {
-    return { ...state, participantInFocus: undefined, trackInFocus: undefined };
+  } else if (action.msg === 'clear_pin') {
+    return { ...state, pinnedParticipant: undefined, pinnedSource: undefined };
   } else {
     return { ...state };
   }
 }
 
-type FocusContextProviderProps = {
+type PinContextProviderProps = {
   children?: React.ReactNode | React.ReactNode[];
-  onChange?: (pinState: FocusState) => void;
+  onChange?: (pinState: PinState) => void;
 };
 
 // TODO: Remove the screen sharing handling from this component to separate things.
-export const FocusContextProvider = ({ onChange, children }: FocusContextProviderProps) => {
+export function PinContextProvider({ onChange, children }: PinContextProviderProps) {
   const room = useRoomContext();
-  const pinDefaultValue: FocusState = { participantInFocus: undefined, trackInFocus: undefined };
-  const [pinState, pinDispatch] = React.useReducer(focusReducer, pinDefaultValue);
+  const pinDefaultValue: PinState = { pinnedParticipant: undefined, pinnedSource: undefined };
+  const [pinState, pinDispatch] = React.useReducer(pinReducer, pinDefaultValue);
   const pinContextDefault = { dispatch: pinDispatch, state: pinState };
   const { screenShareParticipant } = useScreenShare({ room });
   React.useEffect(() => {
@@ -36,12 +36,12 @@ export const FocusContextProvider = ({ onChange, children }: FocusContextProvide
     // This is also the case when the hook is executed for the first time and then a unwanted clear_focus message is sent.
     if (screenShareParticipant) {
       pinDispatch({
-        msg: 'set_focus',
+        msg: 'set_pin',
         participant: screenShareParticipant,
         source: Track.Source.ScreenShare,
       });
     } else {
-      pinDispatch({ msg: 'clear_focus' });
+      pinDispatch({ msg: 'clear_pin' });
     }
   }, [screenShareParticipant]);
 
@@ -49,5 +49,5 @@ export const FocusContextProvider = ({ onChange, children }: FocusContextProvide
     if (onChange) onChange(pinState);
   }, [onChange, pinState]);
 
-  return <FocusContext.Provider value={pinContextDefault}>{children}</FocusContext.Provider>;
-};
+  return <PinContext.Provider value={pinContextDefault}>{children}</PinContext.Provider>;
+}

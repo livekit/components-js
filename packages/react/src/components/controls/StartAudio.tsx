@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useRoomContext } from '../../contexts';
 import { mergeProps, useObservableState } from '../../utils';
 
-const useStartAudio = (room: Room, props: React.HTMLAttributes<HTMLButtonElement>) => {
+function useStartAudio(room: Room, props: React.HTMLAttributes<HTMLButtonElement>) {
   const { className, roomAudioPlaybackAllowedObservable, handleStartAudioPlayback } = React.useMemo(
     () => setupStartAudio(),
     [],
@@ -29,7 +29,7 @@ const useStartAudio = (room: Room, props: React.HTMLAttributes<HTMLButtonElement
   );
 
   return { mergedProps, canPlayAudio };
-};
+}
 interface AllowAudioPlaybackProps extends React.HTMLAttributes<HTMLButtonElement> {
   label: string;
 }
@@ -48,9 +48,9 @@ interface AllowAudioPlaybackProps extends React.HTMLAttributes<HTMLButtonElement
  *
  * @see Autoplay policy on MDN web docs: {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices#autoplay_policy}
  */
-export const StartAudio = ({ label = 'Allow Audio', ...props }: AllowAudioPlaybackProps) => {
+export function StartAudio({ label = 'Allow Audio', ...props }: AllowAudioPlaybackProps) {
   const room = useRoomContext();
   const { mergedProps } = useStartAudio(room, props);
 
   return <button {...mergedProps}>{label}</button>;
-};
+}

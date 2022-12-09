@@ -8,9 +8,10 @@ import {
 import type { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
 import type { UnprefixedClassNames } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
 import { cssPrefix } from './constants';
-export const kebabize = (str: string) =>
-  str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
-
+import { PinState } from './types';
+export function kebabize(str: string) {
+  return str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
+}
 /**
  * Converts a non prefixed CSS class into a prefixed one.
  */
@@ -18,9 +19,13 @@ export function lkClassName(unprefixedClassName: UnprefixedClassNames): ClassNam
   return `${cssPrefix}-${unprefixedClassName}`;
 }
 
-export const isLocal = (p: Participant) => p instanceof LocalParticipant;
+export function isLocal(p: Participant) {
+  return p instanceof LocalParticipant;
+}
 
-export const isRemote = (p: Participant) => p instanceof RemoteParticipant;
+export function isRemote(p: Participant) {
+  return p instanceof RemoteParticipant;
+}
 
 export const attachIfSubscribed = (
   publication: TrackPublication | undefined,
@@ -37,14 +42,9 @@ export const attachIfSubscribed = (
   }
 };
 
-export type FocusState = {
-  participantInFocus?: Participant;
-  trackInFocus?: Track.Source;
-};
-
 export function isParticipantTrackPinned(
   participant: Participant,
-  focusState: FocusState | undefined,
+  focusState: PinState | undefined,
   source: Track.Source,
 ): boolean {
   if (focusState === undefined) {
@@ -52,18 +52,18 @@ export function isParticipantTrackPinned(
     return false;
   }
 
-  if (focusState.participantInFocus === undefined || focusState.trackInFocus === undefined) {
+  if (focusState.pinnedParticipant === undefined || focusState.pinnedSource === undefined) {
     console.warn(`focusState not set: `, focusState);
     return false;
   }
 
-  if (focusState.trackInFocus !== source) {
+  if (focusState.pinnedSource !== source) {
     return false;
   }
 
-  if (focusState.participantInFocus.identity === participant.identity) {
+  if (focusState.pinnedParticipant.identity === participant.identity) {
     console.log(`Participant has same identity as pinned.`, focusState);
-    switch (focusState.trackInFocus) {
+    switch (focusState.pinnedSource) {
       case Track.Source.Camera:
         return participant.isCameraEnabled;
         break;

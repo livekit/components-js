@@ -1,7 +1,7 @@
 import { isParticipantTrackPinned } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { useMaybeFocusContext, useFocusContext } from '../contexts';
+import { useMaybePinContext, usePinContext } from '../contexts';
 import { mergeProps } from '../utils';
 import { MediaTrack } from '../components/participant/MediaTrack';
 import { ParticipantClickEvent, ParticipantView } from '../components/participant/ParticipantView';
@@ -24,16 +24,21 @@ export function FocusLayoutContainer({
   ...props
 }: FocusLayoutContainerProps) {
   const elementProps = mergeProps(props, { className: 'lk-focus-layout' });
-  const pinContext = useFocusContext();
+  const pinContext = usePinContext();
   const participants = useSortedParticipants(useParticipants());
+
+  const clearPin = () => {
+    pinContext.dispatch?.({ msg: 'clear_pin' });
+  };
 
   return (
     <div {...elementProps}>
       {props.children ?? (
         <>
-          {pinContext.state?.participantInFocus && (
-            <FocusLayout participant={pinContext.state?.participantInFocus} />
+          {pinContext.state?.pinnedParticipant && (
+            <FocusLayout participant={pinContext.state?.pinnedParticipant} />
           )}
+          <button onClick={clearPin}>Back to Grid</button>
           <CarouselView participants={participants} />
         </>
       )}
@@ -53,12 +58,12 @@ export function FocusLayout({
   onParticipantClick,
   ...props
 }: FocusLayoutProps) {
-  const { state } = useMaybeFocusContext();
+  const { state } = useMaybePinContext();
 
   return (
     <div {...props}>
-      {state?.participantInFocus && state.trackInFocus && (
-        <MediaTrack participant={state?.participantInFocus} source={state.trackInFocus} />
+      {state?.pinnedParticipant && state.pinnedSource && (
+        <MediaTrack participant={state?.pinnedParticipant} source={state.pinnedSource} />
       )}
     </div>
   );
@@ -76,7 +81,7 @@ export function CarouselView({
   onParticipantClick,
   ...props
 }: CarouselProps) {
-  const { state: pinState } = useFocusContext();
+  const { state: pinState } = usePinContext();
   return (
     <aside {...props}>
       {showScreenShares && (

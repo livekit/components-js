@@ -27,7 +27,7 @@ export function useConnectionState(room?: Room) {
 }
 
 /**
- * The ConnectionState component displays the connection status in english language of the client-to-room connection.
+ * The ConnectionState component displays the connection status of the room in written form.
  *
  * @example
  * ```tsx
@@ -36,7 +36,7 @@ export function useConnectionState(room?: Room) {
  * </LiveKitRoom>
  * ```
  */
-export const ConnectionState = ({ room, ...props }: ConnectionStatusProps) => {
+export function ConnectionState({ room, ...props }: ConnectionStatusProps) {
   const connectionState = useConnectionState(room);
   return <div {...props}>{connectionState}</div>;
-};
+}

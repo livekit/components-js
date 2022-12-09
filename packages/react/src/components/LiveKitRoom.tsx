@@ -89,7 +89,7 @@ const defaultRoomProps: Partial<LiveKitRoomProps> = {
   audio: false,
   video: false,
 };
-export const useLiveKitRoom = (props: LiveKitRoomProps) => {
+export function useLiveKitRoom(props: LiveKitRoomProps) {
   const {
     token,
     serverUrl,
@@ -148,6 +148,9 @@ export const useLiveKitRoom = (props: LiveKitRoomProps) => {
     } else {
       room.disconnect();
     }
+    return () => {
+      room.disconnect();
+    };
   }, [connect, token, connectOptions, room, onError, serverUrl]);
 
   React.useEffect(() => {
@@ -170,7 +173,7 @@ export const useLiveKitRoom = (props: LiveKitRoomProps) => {
     return () => connectionStateChangeListener.unsubscribe();
   }, [token, onConnected, onDisconnected, room]);
   return room;
-};
+}
 
 /**
  * The LiveKitRoom component provides the room context to all its child components.
@@ -188,11 +191,11 @@ export const useLiveKitRoom = (props: LiveKitRoomProps) => {
  * </LiveKitRoom>
  * ```
  */
-export const LiveKitRoom = (props: LiveKitRoomProps) => {
+export function LiveKitRoom(props: LiveKitRoomProps) {
   const room = useLiveKitRoom(props);
   return (
     <RoomContext.Provider value={room}>
       {props.children ?? <VideoConference />}
     </RoomContext.Provider>
   );
-};
+}

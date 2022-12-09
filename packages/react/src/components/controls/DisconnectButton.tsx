@@ -9,7 +9,7 @@ export type DisconnectButtonProps = React.HTMLAttributes<HTMLButtonElement> & {
   stopTracks?: boolean;
 };
 
-export const useDisconnectButton = (props: DisconnectButtonProps) => {
+export function useDisconnectButton(props: DisconnectButtonProps) {
   const room = useRoomContext();
   const connectionState = useConnectionState(room);
 
@@ -24,7 +24,7 @@ export const useDisconnectButton = (props: DisconnectButtonProps) => {
   }, [room, props, connectionState]);
 
   return { buttonProps };
-};
+}
 
 /**
  * The DisconnectButton is a basic html button with the added ability to disconnect from a LiveKit room.
@@ -37,7 +37,7 @@ export const useDisconnectButton = (props: DisconnectButtonProps) => {
  * </LiveKitRoom>
  * ```
  */
-export const DisconnectButton = (props: DisconnectButtonProps) => {
+export function DisconnectButton(props: DisconnectButtonProps) {
   const { buttonProps } = useDisconnectButton(props);
   return <button {...buttonProps}>{props.children}</button>;
-};
+}

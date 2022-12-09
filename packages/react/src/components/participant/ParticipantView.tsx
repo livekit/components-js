@@ -6,7 +6,7 @@ import {
   ParticipantContext,
   useEnsureParticipant,
   useMaybeParticipantContext,
-  useMaybeFocusContext,
+  useMaybePinContext,
 } from '../../contexts';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
 import { TrackMutedIndicator } from './TrackMutedIndicator';
@@ -33,8 +33,8 @@ function useParticipantView<T extends React.HTMLAttributes<HTMLElement>>(
     const { className } = setupParticipantView();
     return mergeProps(props, { className });
   }, [props]);
-  const isVideoMuted = useIsMuted(Track.Source.Camera, participant);
-  const isAudioMuted = useIsMuted(Track.Source.Microphone, participant);
+  const isVideoMuted = useIsMuted({ source: Track.Source.Camera, participant });
+  const isAudioMuted = useIsMuted({ source: Track.Source.Microphone, participant });
   const isSpeaking = useIsSpeaking(participant);
   return {
     elementProps: {
@@ -62,9 +62,8 @@ function ParticipantContextIfNeeded(props: {
 }
 
 /**
- * The ParticipantView component is the base component or wrapper for displaying a visual representation of a participant.
+ * The ParticipantView component is the base utility wrapper for displaying a visual representation of a participant.
  * This component can be used as a child of the `ParticipantsLoop` component or independently if a participant is passed as a property.
- * You can use a combination of LiveKit components and normal HTML elements to design the Participant Representation as you wish.
  *
  * @example
  * ```tsx
@@ -87,7 +86,7 @@ export const ParticipantView = ({
   const p = useEnsureParticipant(participant);
   const { elementProps } = useParticipantView(p, htmlProps);
 
-  const pinContext = useMaybeFocusContext();
+  const pinContext = useMaybePinContext();
 
   const clickHandler = (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     elementProps.onClick?.(evt);
@@ -95,7 +94,7 @@ export const ParticipantView = ({
     if (pinContext && pinContext.dispatch) {
       console.log('handleParticipantClick', p);
       pinContext.dispatch({
-        msg: 'set_focus',
+        msg: 'set_pin',
         participant: p,
         source: trackSource || Track.Source.Camera,
       });

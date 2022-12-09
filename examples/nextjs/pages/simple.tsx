@@ -7,7 +7,7 @@ import {
   ParticipantsLoop,
   ConnectionState,
   DisconnectButton,
-  useToken,
+  UseTokenProps,
   ScreenShareView,
   ParticipantName,
   TrackMutedIndicator,
@@ -16,6 +16,7 @@ import {
   MediaTrack,
   MediaDeviceSelect,
   MediaDeviceMenu,
+  useToken,
 } from '@livekit/components-react';
 import { RemoteParticipant, Track } from 'livekit-client';
 
@@ -32,9 +33,13 @@ const Home: NextPage = () => {
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    identity: userIdentity,
-    name: 'myname',
+  const token = useToken({
+    tokenEndpoint: process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT,
+    roomName,
+    userInfo: {
+      identity: userIdentity,
+      name: 'myname',
+    },
   });
   const handleDisconnect = () => {
     setConnect(false);

@@ -115,7 +115,7 @@ export const useSpeakingParticipants = () => {
 /**
  * The useSortedParticipants hook returns the only the active speakers of all participants.
  */
-export const useSortedParticipants = (participants: Array<Participant>) => {
+export function useSortedParticipants(participants: Array<Participant>) {
   const [sortedParticipants, setSortedParticipants] = React.useState(
     sortParticipantsByVolume(participants),
   );
@@ -125,7 +125,7 @@ export const useSortedParticipants = (participants: Array<Participant>) => {
     setSortedParticipants(sortParticipantsByVolume(participants));
   }, [activeSpeakers, participants]);
   return sortedParticipants;
-};
+}
 
 export function useIsSpeaking(participant?: Participant) {
   const p = useEnsureParticipant(participant);
@@ -139,7 +139,12 @@ export function useIsSpeaking(participant?: Participant) {
   return isSpeaking;
 }
 
-export function useIsMuted(source: Track.Source, participant?: Participant) {
+export interface UseIsMutedProps {
+  source: Track.Source;
+  participant?: Participant;
+}
+
+export function useIsMuted({ source, participant }: UseIsMutedProps) {
   const p = useEnsureParticipant(participant);
   const [isMuted, setIsMuted] = React.useState(!!p.getTrack(source)?.isMuted);
 

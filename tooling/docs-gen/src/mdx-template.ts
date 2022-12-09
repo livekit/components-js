@@ -1,6 +1,6 @@
 import { ComponentDoc } from 'react-docgen-typescript';
 
-export const mdxComponentTemplate = (def: ComponentDoc, hasHook: boolean) => `---
+export function mdxComponentTemplate(def: ComponentDoc, hasHook: boolean) `---
 title: ${splitCamelCase(def.displayName)}
 subtitle: ${def.description.replaceAll('\n', ' ')} 
 ---
@@ -31,7 +31,7 @@ const addHookImport = (displayName: string, hasHook: boolean) =>
 const renderHook = (displayName: string, hasHook: boolean) =>
   hasHook ? `<Use${displayName} />` : '';
 
-export const mdxHookTemplate = (def: ComponentDoc) => `---
+export function mdxHookTemplate(def: ComponentDoc) `---
 noLayout: true
 ---
 

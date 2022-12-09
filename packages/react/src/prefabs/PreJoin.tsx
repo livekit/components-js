@@ -1,6 +1,8 @@
 import {
   createLocalAudioTrack,
   createLocalVideoTrack,
+  getEmptyAudioStreamTrack,
+  getEmptyVideoStreamTrack,
   LocalAudioTrack,
   LocalVideoTrack,
   Track,
@@ -97,40 +99,70 @@ export const PreJoin = ({
 
   const [isValid, setIsValid] = React.useState<boolean>();
 
+  const createVideoTrack = async (deviceId?: string | undefined) => {
+    const track = await createLocalVideoTrack({
+      deviceId: deviceId,
+      resolution: VideoPresets.h720.resolution,
+    });
+
+    const newDeviceId = await track.getDeviceId();
+    setLocalVideoTrack(track);
+    if (deviceId !== newDeviceId) {
+      setLocalVideoDeviceId(newDeviceId);
+    }
+  };
+
+  const createAudioTrack = async (deviceId?: string | undefined) => {
+    const track = await createLocalAudioTrack({
+      deviceId: deviceId,
+    });
+
+    const newDeviceId = await track.getDeviceId();
+    setLocalAudioTrack(track);
+    if (deviceId !== newDeviceId) {
+      setLocalAudioDeviceId(newDeviceId);
+    }
+  };
+
   React.useEffect(() => {
     if (videoEnabled) {
-      createLocalVideoTrack({
-        deviceId: selectedVideoDevice?.deviceId,
-        resolution: VideoPresets.h720.resolution,
-      }).then(async (track) => {
-        setLocalVideoTrack(track);
-        const deviceId = await track.getDeviceId();
-        setLocalVideoDeviceId(deviceId);
-      });
+      if (!localVideoTrack) {
+        setLocalVideoTrack(new LocalVideoTrack(getEmptyVideoStreamTrack()));
+        createVideoTrack();
+      } else {
+        localVideoTrack?.restartTrack({
+          deviceId: selectedVideoDevice?.deviceId,
+        });
+      }
     } else {
-      localVideoTrack?.detach();
-      setLocalVideoTrack(undefined);
+      localVideoTrack?.mute();
     }
-  }, [selectedVideoDevice, videoEnabled, localVideoTrack]);
+    return () => {
+      localVideoTrack?.stop();
+    };
+  }, [videoEnabled, localVideoTrack, selectedVideoDevice]);
 
   React.useEffect(() => {
     if (audioEnabled) {
-      createLocalAudioTrack({
-        deviceId: selectedAudioDevice?.deviceId,
-      }).then(async (track) => {
-        setLocalAudioTrack(track);
-        const deviceId = await track.getDeviceId();
-        setLocalAudioDeviceId(deviceId);
-      });
+      if (!localAudioTrack) {
+        setLocalAudioTrack(new LocalAudioTrack(getEmptyAudioStreamTrack()));
+        createAudioTrack();
+      } else {
+        localAudioTrack?.restartTrack({
+          deviceId: selectedAudioDevice?.deviceId,
+        });
+      }
     } else {
-      localAudioTrack?.detach();
-      setLocalAudioTrack(undefined);
+      localAudioTrack?.mute();
     }
-  }, [selectedAudioDevice, audioEnabled, localAudioTrack]);
+    return () => {
+      localAudioTrack?.stop();
+    };
+  }, [audioEnabled, localAudioTrack, selectedAudioDevice]);
 
   React.useEffect(() => {
     if (videoEl.current) localVideoTrack?.attach(videoEl.current);
-  }, [localVideoTrack, videoEl, selectedVideoDevice]);
+  }, [localVideoTrack, videoEl]);
 
   React.useEffect(() => {
     setSelectedVideoDevice(videoDevices.find((dev) => dev.deviceId === localVideoDeviceId));
@@ -222,14 +254,17 @@ export const PreJoin = ({
             Microphone
           </TrackToggle>
           <div className="lk-button-group-menu">
-            <MediaDeviceMenu
-              kind="audioinput"
-              onActiveDeviceChange={(_, deviceId) =>
-                setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId))
-              }
-            >
-              {/* {selectedAudioDevice?.label ?? 'Default'} */}
-            </MediaDeviceMenu>
+            {selectedAudioDevice?.deviceId && (
+              <MediaDeviceMenu
+                kind="audioinput"
+                initialSelection={selectedAudioDevice.deviceId}
+                onActiveDeviceChange={(_, deviceId) =>
+                  setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId))
+                }
+              >
+                {/* {selectedAudioDevice?.label ?? 'Default'} */}
+              </MediaDeviceMenu>
+            )}
           </div>
         </div>
         <div className="lk-button-group video">
@@ -241,14 +276,15 @@ export const PreJoin = ({
             Camera
           </TrackToggle>
           <div className="lk-button-group-menu">
-            <MediaDeviceMenu
-              kind="videoinput"
-              onActiveDeviceChange={(_, deviceId) =>
-                setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId))
-              }
-            >
-              {/* {selectedVideoDevice?.label ?? 'Default'} */}
-            </MediaDeviceMenu>
+            {selectedVideoDevice?.deviceId && (
+              <MediaDeviceMenu
+                initialSelection={selectedVideoDevice.deviceId}
+                kind="videoinput"
+                onActiveDeviceChange={(_, deviceId) =>
+                  setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId))
+                }
+              />
+            )}
           </div>
         </div>
       </div>

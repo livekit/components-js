@@ -6,7 +6,6 @@ import {
   ParticipantsLoop,
   ConnectionState,
   DisconnectButton,
-  useToken,
   ScreenShareView,
   ParticipantName,
   TrackMutedIndicator,
@@ -15,6 +14,7 @@ import {
   useConnectionQualityIndicator,
   MediaTrack,
   MediaDeviceMenu,
+  useToken,
 } from '@livekit/components-react';
 import { ConnectionQuality, Track } from 'livekit-client';
 
@@ -32,9 +32,13 @@ const Home: NextPage = () => {
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    identity: userIdentity,
-    name: 'myname',
+  const token = useToken({
+    tokenEndpoint: process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT,
+    roomName,
+    userInfo: {
+      identity: userIdentity,
+      name: 'myname',
+    },
   });
 
   const handleDisconnect = () => {
@@ -111,7 +115,7 @@ const Home: NextPage = () => {
   );
 };
 
-export const UserDefinedConnectionQualityIndicator = (props: HTMLAttributes<HTMLSpanElement>) => {
+export function UserDefinedConnectionQualityIndicator(props: HTMLAttributes<HTMLSpanElement>) {
   /**
    *  We use the same React hook that is used internally to build our own component.
    *  By using this hook, we inherit all the state management and logic and can focus on our implementation.
@@ -132,6 +136,6 @@ export const UserDefinedConnectionQualityIndicator = (props: HTMLAttributes<HTML
   }
 
   return <span {...props}> {qualityToText(quality)} </span>;
-};
+}
 
 export default Home;

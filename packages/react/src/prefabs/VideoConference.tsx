@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { FocusContextProvider } from '../components/FocusContextProvider';
+import { PinContextProvider } from '../components/PinContextProvider';
 import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
 import { ControlBar } from './ControlBar';
 import { FocusLayoutContainer } from '../layout/FocusLayout';
 import { GridLayout } from '../layout/GridLayout';
-import { FocusState } from '@livekit/components-core';
+import { PinState } from '@livekit/components-core';
 
 export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -27,15 +27,15 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = React.useState<Layout>('grid');
 
-  const handleFocusStateChange = (focusState: FocusState) => {
-    setLayout(focusState.participantInFocus ? 'focus' : 'grid');
+  const handleFocusStateChange = (pinState: PinState) => {
+    setLayout(pinState.pinnedParticipant ? 'focus' : 'grid');
   };
 
   return (
     <div {...props}>
-      <FocusContextProvider onChange={handleFocusStateChange}>
+      <PinContextProvider onChange={handleFocusStateChange}>
         {layout === 'grid' ? <GridLayout /> : <FocusLayoutContainer />}
-      </FocusContextProvider>
+      </PinContextProvider>
       <ControlBar />
       <RoomAudioRenderer />
     </div>

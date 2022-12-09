@@ -4,13 +4,18 @@ import { setupDeviceSelector, createMediaDeviceObserver } from '@livekit/compone
 import { mergeProps, useObservableState } from '../../utils';
 import { Room } from 'livekit-client';
 
-export const useMediaDevices = (kind: MediaDeviceKind) => {
+export function useMediaDevices(kind: MediaDeviceKind) {
   const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
   const devices = useObservableState(deviceObserver, []);
   return devices;
-};
+}
 
-export const useMediaDeviceSelect = (kind: MediaDeviceKind, room?: Room) => {
+export interface UseMediaDeviceSelectProps {
+  kind: MediaDeviceKind;
+  room?: Room;
+}
+
+export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps) {
   // List of all devices.
   const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
   const devices = useObservableState(deviceObserver, []);
@@ -31,11 +36,12 @@ export const useMediaDeviceSelect = (kind: MediaDeviceKind, room?: Room) => {
   }, [activeDeviceObservable]);
 
   return { devices, className, activeDeviceId: currentDeviceId, setActiveMediaDevice };
-};
+}
 
 export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListElement> {
   kind: MediaDeviceKind;
   onActiveDeviceChange?: (deviceId: string) => void;
+  initialSelection?: string;
 }
 
 /**
@@ -51,17 +57,23 @@ export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListEl
  */
 export function MediaDeviceSelect({
   kind,
+  initialSelection,
   onActiveDeviceChange,
   ...props
 }: MediaDeviceSelectProps) {
   const room = useMaybeRoomContext();
-  const { devices, activeDeviceId, setActiveMediaDevice, className } = useMediaDeviceSelect(
+  const { devices, activeDeviceId, setActiveMediaDevice, className } = useMediaDeviceSelect({
     kind,
     room,
-  );
+  });
+  React.useEffect(() => {
+    if (initialSelection) {
+      setActiveMediaDevice(initialSelection);
+    }
+  });
 
-  const handleActiveDeviceChange = async (kind: MediaDeviceKind, deviceId: string) => {
-    setActiveMediaDevice(kind, deviceId);
+  const handleActiveDeviceChange = async (deviceId: string) => {
+    setActiveMediaDevice(deviceId);
     onActiveDeviceChange?.(deviceId);
   };
   // Merge Props
@@ -75,9 +87,7 @@ export function MediaDeviceSelect({
           id={device.deviceId}
           data-lk-active={device.deviceId === activeDeviceId}
         >
-          <button onClick={() => handleActiveDeviceChange(device.kind, device.deviceId)}>
-            {device.label}
-          </button>
+          <button onClick={() => handleActiveDeviceChange(device.deviceId)}>{device.label}</button>
         </li>
       ))}
     </ul>

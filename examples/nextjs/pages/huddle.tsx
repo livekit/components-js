@@ -19,6 +19,7 @@ import {
   usePinContext,
   useScreenShare,
   useToken,
+  ClearPinButton,
 } from '@livekit/components-react';
 import { ConnectionState, Participant, Room, Track, TrackPublication } from 'livekit-client';
 
@@ -162,20 +163,6 @@ const CustomFocusLayout = ({
         </section>
       </aside>
     </div>
-  );
-};
-
-const BackToGridLayoutButton = () => {
-  const { dispatch } = usePinContext();
-  return (
-    <button
-      onClick={() => {
-        if (dispatch) dispatch({ msg: 'clear_pin' });
-      }}
-      className={styles.backToGridLayoutBtn}
-    >
-      🔙 to grid view
-    </button>
   );
 };
 
@@ -350,7 +337,7 @@ const HuddleRoomView = ({
             <div className={styles.roomLayout}>
               <div className={styles.headerBar}>
                 <ParticipantCount className={styles.participantCount} />
-                {layout === 'focus' && <BackToGridLayoutButton />}
+                {layout === 'focus' && <ClearPinButton>back to grid</ClearPinButton>}
               </div>
 
               {layout === 'grid' ? (

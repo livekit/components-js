@@ -7,6 +7,7 @@ import { MediaTrack } from '../components/participant/MediaTrack';
 import { ParticipantClickEvent, ParticipantView } from '../components/participant/ParticipantView';
 import { useParticipants, useSortedParticipants } from '../hooks';
 import { ParticipantsLoop } from '../components/ParticipantsLoop';
+import { ClearPinButton } from '../components/ClearPinButton';
 
 interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   focusParticipant?: Participant;
@@ -27,22 +28,20 @@ export function FocusLayoutContainer({
   const pinContext = usePinContext();
   const participants = useSortedParticipants(useParticipants());
 
-  const clearPin = () => {
-    pinContext.dispatch?.({ msg: 'clear_pin' });
-  };
-
   return (
-    <div {...elementProps}>
-      {props.children ?? (
-        <>
-          {pinContext.state?.pinnedParticipant && (
-            <FocusLayout participant={pinContext.state?.pinnedParticipant} />
-          )}
-          <button onClick={clearPin}>Back to Grid</button>
-          <CarouselView participants={participants} />
-        </>
-      )}
-    </div>
+    <>
+      <div {...elementProps}>
+        {props.children ?? (
+          <>
+            {pinContext.state?.pinnedParticipant && (
+              <FocusLayout participant={pinContext.state?.pinnedParticipant} />
+            )}
+            <CarouselView participants={participants} />
+          </>
+        )}
+      </div>
+      <ClearPinButton>Back to Grid</ClearPinButton>
+    </>
   );
 }
 

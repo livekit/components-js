@@ -10,16 +10,12 @@ export const useMediaDevices = (kind: MediaDeviceKind) => {
   return devices;
 };
 
-export const useMediaDeviceSelect = (
-  kind: MediaDeviceKind,
-  initialSelection?: string,
-  room?: Room,
-) => {
+export const useMediaDeviceSelect = (kind: MediaDeviceKind, room?: Room) => {
   // List of all devices.
   const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
   const devices = useObservableState(deviceObserver, []);
   // Active device management.
-  const [currentDeviceId, setCurrentDeviceId] = React.useState<string>(initialSelection ?? '');
+  const [currentDeviceId, setCurrentDeviceId] = React.useState<string>('');
   const { className, activeDeviceObservable, setActiveMediaDevice } = React.useMemo(
     () => setupDeviceSelector(kind, room),
     [kind, room],
@@ -63,12 +59,16 @@ export function MediaDeviceSelect({
   const room = useMaybeRoomContext();
   const { devices, activeDeviceId, setActiveMediaDevice, className } = useMediaDeviceSelect(
     kind,
-    initialSelection,
     room,
   );
+  React.useEffect(() => {
+    if (initialSelection) {
+      setActiveMediaDevice(initialSelection);
+    }
+  });
 
-  const handleActiveDeviceChange = async (kind: MediaDeviceKind, deviceId: string) => {
-    setActiveMediaDevice(kind, deviceId);
+  const handleActiveDeviceChange = async (deviceId: string) => {
+    setActiveMediaDevice(deviceId);
     onActiveDeviceChange?.(deviceId);
   };
   // Merge Props
@@ -82,9 +82,7 @@ export function MediaDeviceSelect({
           id={device.deviceId}
           data-lk-active={device.deviceId === activeDeviceId}
         >
-          <button onClick={() => handleActiveDeviceChange(device.kind, device.deviceId)}>
-            {device.label}
-          </button>
+          <button onClick={() => handleActiveDeviceChange(device.deviceId)}>{device.label}</button>
         </li>
       ))}
     </ul>

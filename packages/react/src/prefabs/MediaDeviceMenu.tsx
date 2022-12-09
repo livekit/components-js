@@ -52,6 +52,7 @@ export const MediaDeviceMenu = ({
       >
         {kind ? (
           <MediaDeviceSelect
+            initialSelection={initialSelection}
             onActiveDeviceChange={(deviceId) => handleActiveDeviceChange(kind, deviceId)}
             kind={kind}
           />
@@ -59,14 +60,12 @@ export const MediaDeviceMenu = ({
           <>
             <div className="lk-device-menu-heading">Audio inputs</div>
             <MediaDeviceSelect
-              initialSelection={initialSelection}
               kind="audioinput"
               onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('audioinput', deviceId)}
             ></MediaDeviceSelect>
             <div className="lk-device-menu-heading">Video inputs</div>
             <MediaDeviceSelect
               kind="videoinput"
-              initialSelection={initialSelection}
               onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('videoinput', deviceId)}
             ></MediaDeviceSelect>
           </>

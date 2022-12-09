@@ -1,6 +1,7 @@
 import {
   createLocalAudioTrack,
   createLocalVideoTrack,
+  getEmptyAudioStreamTrack,
   getEmptyVideoStreamTrack,
   LocalAudioTrack,
   LocalVideoTrack,
@@ -98,35 +99,70 @@ export const PreJoin = ({
 
   const [isValid, setIsValid] = React.useState<boolean>();
 
-  const createTrack = async (deviceId?: string | undefined) => {
+  const createVideoTrack = async (deviceId?: string | undefined) => {
     const track = await createLocalVideoTrack({
       deviceId: deviceId,
       resolution: VideoPresets.h720.resolution,
     });
+
     const newDeviceId = await track.getDeviceId();
     setLocalVideoTrack(track);
-    console.log(newDeviceId);
-    setLocalVideoDeviceId(newDeviceId);
+    if (deviceId !== newDeviceId) {
+      setLocalVideoDeviceId(newDeviceId);
+    }
+  };
+
+  const createAudioTrack = async (deviceId?: string | undefined) => {
+    const track = await createLocalAudioTrack({
+      deviceId: deviceId,
+    });
+
+    const newDeviceId = await track.getDeviceId();
+    setLocalAudioTrack(track);
+    if (deviceId !== newDeviceId) {
+      setLocalAudioDeviceId(newDeviceId);
+    }
   };
 
   React.useEffect(() => {
-    if (!localVideoTrack) {
-      setLocalVideoTrack(new LocalVideoTrack(getEmptyVideoStreamTrack()));
-      createTrack();
-    }
-  }, [localVideoTrack]);
-
-  React.useEffect(() => {
     if (videoEnabled) {
-      localVideoTrack?.unmute();
+      if (!localVideoTrack) {
+        setLocalVideoTrack(new LocalVideoTrack(getEmptyVideoStreamTrack()));
+        createVideoTrack();
+      } else {
+        localVideoTrack?.restartTrack({
+          deviceId: selectedVideoDevice?.deviceId,
+        });
+      }
     } else {
       localVideoTrack?.mute();
     }
-  }, [videoEnabled, localVideoTrack]);
+    return () => {
+      localVideoTrack?.stop();
+    };
+  }, [videoEnabled, localVideoTrack, selectedVideoDevice]);
+
+  React.useEffect(() => {
+    if (audioEnabled) {
+      if (!localAudioTrack) {
+        setLocalAudioTrack(new LocalAudioTrack(getEmptyAudioStreamTrack()));
+        createAudioTrack();
+      } else {
+        localAudioTrack?.restartTrack({
+          deviceId: selectedAudioDevice?.deviceId,
+        });
+      }
+    } else {
+      localAudioTrack?.mute();
+    }
+    return () => {
+      localAudioTrack?.stop();
+    };
+  }, [audioEnabled, localAudioTrack, selectedAudioDevice]);
 
   React.useEffect(() => {
     if (videoEl.current) localVideoTrack?.attach(videoEl.current);
-  }, [localVideoTrack, videoEl, selectedVideoDevice]);
+  }, [localVideoTrack, videoEl]);
 
   React.useEffect(() => {
     setSelectedVideoDevice(videoDevices.find((dev) => dev.deviceId === localVideoDeviceId));
@@ -218,14 +254,17 @@ export const PreJoin = ({
             Microphone
           </TrackToggle>
           <div className="lk-button-group-menu">
-            <MediaDeviceMenu
-              kind="audioinput"
-              onActiveDeviceChange={(_, deviceId) =>
-                setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId))
-              }
-            >
-              {/* {selectedAudioDevice?.label ?? 'Default'} */}
-            </MediaDeviceMenu>
+            {selectedAudioDevice?.deviceId && (
+              <MediaDeviceMenu
+                kind="audioinput"
+                initialSelection={selectedAudioDevice.deviceId}
+                onActiveDeviceChange={(_, deviceId) =>
+                  setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId))
+                }
+              >
+                {/* {selectedAudioDevice?.label ?? 'Default'} */}
+              </MediaDeviceMenu>
+            )}
           </div>
         </div>
         <div className="lk-button-group video">
@@ -237,7 +276,7 @@ export const PreJoin = ({
             Camera
           </TrackToggle>
           <div className="lk-button-group-menu">
-            {selectedVideoDevice && (
+            {selectedVideoDevice?.deviceId && (
               <MediaDeviceMenu
                 initialSelection={selectedVideoDevice.deviceId}
                 kind="videoinput"

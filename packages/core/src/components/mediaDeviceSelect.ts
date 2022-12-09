@@ -27,7 +27,7 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
       )
     : activeDeviceSubject.asObservable();
 
-  const setActiveMediaDevice = async (kind: MediaDeviceKind, id: string) => {
+  const setActiveMediaDevice = async (id: string) => {
     if (room) {
       await room?.switchActiveDevice(kind, id);
     }

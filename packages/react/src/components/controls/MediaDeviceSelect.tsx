@@ -10,12 +10,16 @@ export const useMediaDevices = (kind: MediaDeviceKind) => {
   return devices;
 };
 
-export const useMediaDeviceSelect = (kind: MediaDeviceKind, room?: Room) => {
+export const useMediaDeviceSelect = (
+  kind: MediaDeviceKind,
+  initialSelection?: string,
+  room?: Room,
+) => {
   // List of all devices.
   const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
   const devices = useObservableState(deviceObserver, []);
   // Active device management.
-  const [currentDeviceId, setCurrentDeviceId] = React.useState<string>('');
+  const [currentDeviceId, setCurrentDeviceId] = React.useState<string>(initialSelection ?? '');
   const { className, activeDeviceObservable, setActiveMediaDevice } = React.useMemo(
     () => setupDeviceSelector(kind, room),
     [kind, room],
@@ -36,6 +40,7 @@ export const useMediaDeviceSelect = (kind: MediaDeviceKind, room?: Room) => {
 export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListElement> {
   kind: MediaDeviceKind;
   onActiveDeviceChange?: (deviceId: string) => void;
+  initialSelection?: string;
 }
 
 /**
@@ -51,12 +56,14 @@ export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListEl
  */
 export function MediaDeviceSelect({
   kind,
+  initialSelection,
   onActiveDeviceChange,
   ...props
 }: MediaDeviceSelectProps) {
   const room = useMaybeRoomContext();
   const { devices, activeDeviceId, setActiveMediaDevice, className } = useMediaDeviceSelect(
     kind,
+    initialSelection,
     room,
   );
 

@@ -16,8 +16,8 @@ export * from './components/FocusLayoutRenderer';
 export * from './components/participant/MediaTrack';
 export * from './components/controls/MediaDeviceSelect';
 export * from './components/controls/StartAudio';
-export * from './components/FocusContextProvider';
-export * from './components/ClearFocusButton';
+export * from './components/PinContextProvider';
+export * from './components/ClearPinButton';
 
 export * from './prefabs';
 

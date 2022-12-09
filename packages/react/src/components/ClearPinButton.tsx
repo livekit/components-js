@@ -1,24 +1,24 @@
-import { setupClearFocusButton } from '@livekit/components-core';
+import { setupClearPinButton } from '@livekit/components-core';
 import * as React from 'react';
 import { mergeProps } from '../utils';
-import { useFocusContext } from '../contexts';
+import { usePinContext } from '../contexts';
 
 export type ClearFocusButtonProps = React.HTMLAttributes<HTMLButtonElement>;
 
-export const useClearFocusButton = (props: ClearFocusButtonProps) => {
-  const { state, dispatch } = useFocusContext();
+export const useClearPinButton = (props: ClearFocusButtonProps) => {
+  const { state, dispatch } = usePinContext();
 
   React.useEffect(() => {
     console.log({ state });
   }, [state]);
 
   const buttonProps = React.useMemo(() => {
-    const { className } = setupClearFocusButton();
+    const { className } = setupClearPinButton();
     const mergedProps = mergeProps(props, {
       className,
-      disabled: state?.participantInFocus === undefined,
+      disabled: state?.pinnedParticipant === undefined,
       onClick: () => {
-        if (dispatch) dispatch({ msg: 'clear_focus' });
+        if (dispatch) dispatch({ msg: 'clear_pin' });
       },
     });
     return mergedProps;
@@ -28,7 +28,7 @@ export const useClearFocusButton = (props: ClearFocusButtonProps) => {
 };
 
 /**
- * The ClearFocusButton is a basic html button with the added ability to signal
+ * The ClearPinButton is a basic html button with the added ability to signal
  * the LiveKitRoom that it should display the grid view again.
  *
  * @remarks
@@ -37,11 +37,11 @@ export const useClearFocusButton = (props: ClearFocusButtonProps) => {
  * @example
  * ```tsx
  * <LiveKitRoom>
- *   <ClearFocusButton>Leave room</ClearFocusButton>
+ *   <ClearPinButton>Leave room</ClearPinButton>
  * </LiveKitRoom>
  * ```
  */
-export const ClearFocusButton = (props: ClearFocusButtonProps) => {
-  const { buttonProps } = useClearFocusButton(props);
+export const ClearPinButton = (props: ClearFocusButtonProps) => {
+  const { buttonProps } = useClearPinButton(props);
   return <button {...buttonProps}>{props.children}</button>;
 };

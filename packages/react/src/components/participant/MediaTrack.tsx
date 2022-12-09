@@ -13,7 +13,7 @@ export interface MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
 
 /**
  * The MediaTrack component is responsible for rendering participant media tracks like `camera`, `microphone` and `screen_share`.
- * This component must be nested in a `ParticipantView` or you must pass it a `Participant` as a property.
+ * This component must have access to the participant's context, or alternatively pass it a `Participant` as a property.
  *
  * @example
  * ```tsx

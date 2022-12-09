@@ -3,6 +3,7 @@ import { MediaDeviceSelect } from '../components/controls/MediaDeviceSelect';
 
 interface MediaDeviceMenuProps extends React.HTMLAttributes<HTMLButtonElement> {
   kind?: MediaDeviceKind;
+  initialSelection?: string;
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
 }
 
@@ -20,7 +21,12 @@ interface MediaDeviceMenuProps extends React.HTMLAttributes<HTMLButtonElement> {
  * </LiveKitRoom>
  * ```
  */
-export const MediaDeviceMenu = ({ kind, onActiveDeviceChange, ...props }: MediaDeviceMenuProps) => {
+export const MediaDeviceMenu = ({
+  kind,
+  initialSelection,
+  onActiveDeviceChange,
+  ...props
+}: MediaDeviceMenuProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const handleActiveDeviceChange = (kind: MediaDeviceKind, deviceId: string) => {
@@ -53,12 +59,14 @@ export const MediaDeviceMenu = ({ kind, onActiveDeviceChange, ...props }: MediaD
           <>
             <div className="lk-device-menu-heading">Audio inputs</div>
             <MediaDeviceSelect
+              initialSelection={initialSelection}
               kind="audioinput"
               onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('audioinput', deviceId)}
             ></MediaDeviceSelect>
             <div className="lk-device-menu-heading">Video inputs</div>
             <MediaDeviceSelect
               kind="videoinput"
+              initialSelection={initialSelection}
               onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('videoinput', deviceId)}
             ></MediaDeviceSelect>
           </>

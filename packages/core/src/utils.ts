@@ -8,6 +8,7 @@ import {
 import type { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
 import type { UnprefixedClassNames } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
 import { cssPrefix } from './constants';
+import { PinState } from './types';
 export const kebabize = (str: string) =>
   str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
 
@@ -37,14 +38,9 @@ export const attachIfSubscribed = (
   }
 };
 
-export type FocusState = {
-  participantInFocus?: Participant;
-  trackInFocus?: Track.Source;
-};
-
 export function isParticipantTrackPinned(
   participant: Participant,
-  focusState: FocusState | undefined,
+  focusState: PinState | undefined,
   source: Track.Source,
 ): boolean {
   if (focusState === undefined) {
@@ -52,18 +48,18 @@ export function isParticipantTrackPinned(
     return false;
   }
 
-  if (focusState.participantInFocus === undefined || focusState.trackInFocus === undefined) {
+  if (focusState.pinnedParticipant === undefined || focusState.pinnedSource === undefined) {
     console.warn(`focusState not set: `, focusState);
     return false;
   }
 
-  if (focusState.trackInFocus !== source) {
+  if (focusState.pinnedSource !== source) {
     return false;
   }
 
-  if (focusState.participantInFocus.identity === participant.identity) {
+  if (focusState.pinnedParticipant.identity === participant.identity) {
     console.log(`Participant has same identity as pinned.`, focusState);
-    switch (focusState.trackInFocus) {
+    switch (focusState.pinnedSource) {
       case Track.Source.Camera:
         return participant.isCameraEnabled;
         break;

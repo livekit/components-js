@@ -58,9 +58,13 @@ type ActiveRoomProps = {
 };
 const ActiveRoom = ({ roomName, userChoices }: ActiveRoomProps) => {
   const [showChat, setShowChat] = useState(false);
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    identity: userChoices.username,
-    name: userChoices.username,
+  const token = useToken({
+    tokenEndpoint: process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT,
+    roomName,
+    userInfo: {
+      identity: userChoices.username,
+      name: userChoices.username,
+    },
   });
 
   const videoOptions = useMemo((): VideoCaptureOptions => {

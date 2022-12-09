@@ -10,7 +10,12 @@ export function useMediaDevices(kind: MediaDeviceKind) {
   return devices;
 }
 
-export function useMediaDeviceSelect(kind: MediaDeviceKind, room?: Room) {
+export interface UseMediaDeviceSelectProps {
+  kind: MediaDeviceKind;
+  room?: Room;
+}
+
+export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps) {
   // List of all devices.
   const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
   const devices = useObservableState(deviceObserver, []);
@@ -57,10 +62,10 @@ export function MediaDeviceSelect({
   ...props
 }: MediaDeviceSelectProps) {
   const room = useMaybeRoomContext();
-  const { devices, activeDeviceId, setActiveMediaDevice, className } = useMediaDeviceSelect(
+  const { devices, activeDeviceId, setActiveMediaDevice, className } = useMediaDeviceSelect({
     kind,
     room,
-  );
+  });
   React.useEffect(() => {
     if (initialSelection) {
       setActiveMediaDevice(initialSelection);

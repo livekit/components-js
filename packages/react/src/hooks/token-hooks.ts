@@ -5,7 +5,13 @@ interface UserInfo {
   metadata?: string;
 }
 
-export function useToken(tokenEndpoint: string | undefined, roomName: string, userInfo?: UserInfo) {
+export interface UseTokenProps {
+  tokenEndpoint?: string;
+  roomName: string;
+  userInfo?: UserInfo;
+}
+
+export function useToken({ tokenEndpoint, userInfo, roomName }: UseTokenProps) {
   const [token, setToken] = React.useState<string | undefined>(undefined);
 
   React.useEffect(() => {

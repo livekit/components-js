@@ -139,7 +139,12 @@ export function useIsSpeaking(participant?: Participant) {
   return isSpeaking;
 }
 
-export function useIsMuted(source: Track.Source, participant?: Participant) {
+export interface UseIsMutedProps {
+  source: Track.Source;
+  participant?: Participant;
+}
+
+export function useIsMuted({ source, participant }: UseIsMutedProps) {
   const p = useEnsureParticipant(participant);
   const [isMuted, setIsMuted] = React.useState(!!p.getTrack(source)?.isMuted);
 

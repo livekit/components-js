@@ -33,8 +33,8 @@ function useParticipantView<T extends React.HTMLAttributes<HTMLElement>>(
     const { className } = setupParticipantView();
     return mergeProps(props, { className });
   }, [props]);
-  const isVideoMuted = useIsMuted(Track.Source.Camera, participant);
-  const isAudioMuted = useIsMuted(Track.Source.Microphone, participant);
+  const isVideoMuted = useIsMuted({ source: Track.Source.Camera, participant });
+  const isAudioMuted = useIsMuted({ source: Track.Source.Microphone, participant });
   const isSpeaking = useIsSpeaking(participant);
   return {
     elementProps: {

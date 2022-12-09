@@ -20,15 +20,7 @@ import {
   useScreenShare,
   useToken,
 } from '@livekit/components-react';
-import {
-  AudioCaptureOptions,
-  ConnectionState,
-  Participant,
-  Room,
-  Track,
-  TrackPublication,
-  VideoCaptureOptions,
-} from 'livekit-client';
+import { ConnectionState, Participant, Room, Track, TrackPublication } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import { HTMLAttributes, useMemo, useRef, useState } from 'react';
@@ -319,8 +311,12 @@ const HuddleRoomView = ({
 
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = useState<Layout>('grid');
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    identity: userChoices.username,
+  const token = useToken({
+    tokenEndpoint: process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT,
+    roomName,
+    userInfo: {
+      identity: userChoices.username,
+    },
   });
 
   const handleDisconnect = () => {

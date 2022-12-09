@@ -1,4 +1,4 @@
-import { LiveKitRoom, useToken } from '@livekit/components-react';
+import { LiveKitRoom, useToken, UseTokenProps } from '@livekit/components-react';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -10,9 +10,13 @@ const Home: NextPage = () => {
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? 'test-user';
 
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    identity: userIdentity,
-    name: 'myname',
+  const token = useToken({
+    tokenEndpoint: process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT,
+    roomName,
+    userInfo: {
+      identity: userIdentity,
+      name: 'myname',
+    },
   });
   return (
     <div className={styles.container}>

@@ -22,7 +22,7 @@ export function useConnectionQualityIndicator(props?: ConnectionQualityIndicator
 
   const elementProps = React.useMemo(() => {
     console.log('new connection quality', quality);
-    return { ...mergeProps(props, { className }), 'data-lk-quality': quality };
+    return { ...mergeProps(props, { className: className as string }), 'data-lk-quality': quality };
   }, [quality, props, className]);
 
   return { elementProps, quality };

@@ -75,6 +75,7 @@ export type LiveKitRoomProps = {
    */
   room?: Room;
   children?: React.ReactNode | React.ReactNode[];
+  simulateParticipants?: number | undefined;
 };
 
 // type RoomContextState = {
@@ -103,6 +104,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
     onConnected,
     onDisconnected,
     onError,
+    simulateParticipants,
   } = { ...defaultRoomProps, ...props };
   if (options && passedRoom) {
     console.warn(
@@ -132,6 +134,13 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
   }, [room, audio, video, screen, onError]);
 
   React.useEffect(() => {
+    if (simulateParticipants) {
+      room.simulateParticipants({
+        participants: {
+          count: simulateParticipants,
+        },
+      });
+    }
     if (!token) {
       return;
     }

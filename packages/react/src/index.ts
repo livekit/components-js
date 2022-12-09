@@ -19,8 +19,8 @@ export * from './components/controls/StartAudio';
 export * from './components/PinContextProvider';
 export * from './components/ClearPinButton';
 
+export * from './hooks';
+
 export * from './prefabs';
 
 export * from './layout';
-
-export * from './hooks';

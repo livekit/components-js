@@ -30,7 +30,7 @@ export const DEFAULT_MOCK_PARTICIPANT_PARAMETER: MockParticipantParameter = {
   sid: '123456789',
 };
 
-export const MockParticipantContext: Decorator = (Story, args) => {
+export function MockParticipantContext: Decorator(Story, args) {
   const config: MockParticipantParameter =
     args.parameters.mockParticipantContext ?? DEFAULT_MOCK_PARTICIPANT_PARAMETER;
   const props: Partial<MockParticipantProps> = args.args;

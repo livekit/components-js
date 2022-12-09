@@ -14,7 +14,7 @@ export type RoomContextSettings = Partial<{
  *
  * Note: This component requires some environment variables. Make sure that they are set correctly in your .env file.
  */
-export const LkRoomContext: Decorator = (Story, args) => {
+export function LkRoomContext: Decorator(Story, args) {
   const roomContextSettings: RoomContextSettings = args.parameters.roomContext;
   const [connect, setConnect] = React.useState(roomContextSettings?.connect);
   const [connected, setConnected] = React.useState(false);

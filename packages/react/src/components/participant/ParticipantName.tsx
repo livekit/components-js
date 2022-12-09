@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useParticipantContext } from '../../contexts';
 import { mergeProps, useObservableState } from '../../utils';
 
-export const useParticipantInfo = (participant: Participant) => {
+export function useParticipantInfo(participant: Participant) {
   const infoObserver = React.useMemo(() => participantInfoObserver(participant), [participant]);
   const { identity, name, metadata } = useObservableState(infoObserver, {
     name: participant.name,
@@ -13,7 +13,7 @@ export const useParticipantInfo = (participant: Participant) => {
   });
 
   return { identity, name, metadata };
-};
+}
 export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement>;
 
 /**
@@ -31,7 +31,7 @@ export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement>;
  *
  * @see `ParticipantView` component
  */
-export const ParticipantName = ({ ...props }: ParticipantNameProps) => {
+export function ParticipantName({ ...props }: ParticipantNameProps) {
   const participant = useParticipantContext();
 
   const { className, infoObserver } = React.useMemo(() => {
@@ -53,4 +53,4 @@ export const ParticipantName = ({ ...props }: ParticipantNameProps) => {
       {name !== '' ? name : identity} {props.children}
     </span>
   );
-};
+}

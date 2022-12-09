@@ -103,7 +103,7 @@ export function participantInfoObserver(participant: Participant) {
   return observer;
 }
 
-export const createConnectionQualityObserver = (participant: Participant) => {
+export function createConnectionQualityObserver(participant: Participant) {
   const observer = participantEventSelector(
     participant,
     ParticipantEvent.ConnectionQualityChanged,
@@ -112,7 +112,7 @@ export const createConnectionQualityObserver = (participant: Participant) => {
     startWith(participant.connectionQuality),
   );
   return observer;
-};
+}
 
 export function participantEventSelector<T extends ParticipantEvent>(
   participant: Participant,

@@ -9,7 +9,7 @@ import type { ClassNames } from '@livekit/components-styles/dist/types/general/s
 import type { UnprefixedClassNames } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
 import { cssPrefix } from './constants';
 import { PinState } from './types';
-export const kebabize = (str: string) =>
+export function kebabize(str: string)
   str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
 
 /**
@@ -19,9 +19,9 @@ export function lkClassName(unprefixedClassName: UnprefixedClassNames): ClassNam
   return `${cssPrefix}-${unprefixedClassName}`;
 }
 
-export const isLocal = (p: Participant) => p instanceof LocalParticipant;
+export function isLocal(p: Participant) p instanceof LocalParticipant;
 
-export const isRemote = (p: Participant) => p instanceof RemoteParticipant;
+export function isRemote(p: Participant) p instanceof RemoteParticipant;
 
 export const attachIfSubscribed = (
   publication: TrackPublication | undefined,

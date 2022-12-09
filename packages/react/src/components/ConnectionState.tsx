@@ -36,7 +36,7 @@ export function useConnectionState(room?: Room) {
  * </LiveKitRoom>
  * ```
  */
-export const ConnectionState = ({ room, ...props }: ConnectionStatusProps) => {
+export function ConnectionState({ room, ...props }: ConnectionStatusProps) {
   const connectionState = useConnectionState(room);
   return <div {...props}>{connectionState}</div>;
-};
+}

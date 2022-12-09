@@ -8,7 +8,7 @@ export interface ConnectionQualityIndicatorProps extends React.HTMLAttributes<HT
   participant?: Participant;
 }
 
-export const useConnectionQualityIndicator = (props?: ConnectionQualityIndicatorProps) => {
+export function useConnectionQualityIndicator(props?: ConnectionQualityIndicatorProps) {
   const p = useEnsureParticipant(props?.participant);
 
   const { className, connectionQualityObserver } = React.useMemo(
@@ -26,7 +26,7 @@ export const useConnectionQualityIndicator = (props?: ConnectionQualityIndicator
   }, [quality, props, className]);
 
   return { elementProps, quality };
-};
+}
 
 /**
  * The ConnectionQualityIndicator shows the individual connection quality of a participant.
@@ -42,7 +42,7 @@ export const useConnectionQualityIndicator = (props?: ConnectionQualityIndicator
  *
  * @see `ParticipantView` component
  */
-export const ConnectionQualityIndicator = (props: ConnectionQualityIndicatorProps) => {
+export function ConnectionQualityIndicator(props: ConnectionQualityIndicatorProps) {
   const { elementProps } = useConnectionQualityIndicator(props);
   return <div {...elementProps}>{props.children}</div>;
-};
+}

@@ -40,7 +40,7 @@ export function roomEventSelector<T extends RoomEvent>(room: Room, event: T) {
   return observable;
 }
 
-export const roomObserver = (room: Room) => {
+export function roomObserver(room: Room) {
   const observable = observeRoomEvents(
     room,
     RoomEvent.ParticipantConnected,
@@ -55,7 +55,7 @@ export const roomObserver = (room: Room) => {
   ).pipe(startWith(room));
 
   return observable;
-};
+}
 
 export function connectionStateObserver(room: Room) {
   return roomEventSelector(room, RoomEvent.ConnectionStateChanged).pipe(
@@ -175,7 +175,7 @@ export function activeSpeakerObserver(room: Room) {
   );
 }
 
-export const createMediaDeviceObserver = (kind?: MediaDeviceKind, requestPermissions = true) => {
+export function createMediaDeviceObserver(kind?: MediaDeviceKind, requestPermissions = true) {
   let deviceSubscriber: Subscriber<MediaDeviceInfo[]> | undefined;
   const onDeviceChange = async () => {
     const newDevices = await Room.getLocalDevices(kind, requestPermissions);
@@ -191,8 +191,8 @@ export const createMediaDeviceObserver = (kind?: MediaDeviceKind, requestPermiss
     onDeviceChange();
   }
   return observable;
-};
+}
 
-export const createDataObserver = (room: Room) => {
+export function createDataObserver(room: Room) {
   return roomEventSelector(room, RoomEvent.DataReceived);
-};
+}

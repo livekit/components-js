@@ -5,7 +5,7 @@ import * as React from 'react';
 import { useRoomContext } from '../contexts';
 import { useObservableState } from '../utils';
 
-export const useRoomInfo = (room: Room) => {
+export function useRoomInfo(room: Room) {
   const infoObserver = React.useMemo(() => roomInfoObserver(room), [room]);
   const { name, metadata } = useObservableState(infoObserver, {
     name: room.name,
@@ -13,7 +13,7 @@ export const useRoomInfo = (room: Room) => {
   });
 
   return { name, metadata };
-};
+}
 
 export interface RoomNameProps extends React.HTMLAttributes<HTMLSpanElement> {
   childrenPosition?: 'before' | 'after';

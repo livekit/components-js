@@ -27,7 +27,7 @@ export interface MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
  *
  * @see `ParticipantView` component
  */
-export const MediaTrack = ({ onTrackClick, onClick, ...props }: MediaTrackProps) => {
+export function MediaTrack({ onTrackClick, onClick, ...props }: MediaTrackProps) {
   const participant = useEnsureParticipant(props.participant);
 
   const mediaEl = React.useRef<HTMLVideoElement>(null);
@@ -47,4 +47,4 @@ export const MediaTrack = ({ onTrackClick, onClick, ...props }: MediaTrackProps)
       )}
     </>
   );
-};
+}

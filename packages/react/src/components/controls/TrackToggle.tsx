@@ -13,7 +13,7 @@ export type TrackToggleProps = Omit<React.HTMLAttributes<HTMLButtonElement>, 'on
 
 export const TrackSource = Track.Source;
 
-export const useTrackToggle = ({ source, onChange, initialState, ...rest }: TrackToggleProps) => {
+export function useTrackToggle({ source, onChange, initialState, ...rest }: TrackToggleProps) {
   const room = useMaybeRoomContext();
   const track = room?.localParticipant?.getTrack(source);
 
@@ -54,7 +54,7 @@ export const useTrackToggle = ({ source, onChange, initialState, ...rest }: Trac
       onClick: clickHandler,
     },
   };
-};
+}
 
 /**
  * With the TrackToggle component it is possible to mute and unmute your camera and microphone.
@@ -68,7 +68,7 @@ export const useTrackToggle = ({ source, onChange, initialState, ...rest }: Trac
  * </LiveKitRoom>
  * ```
  */
-export const TrackToggle = (props: TrackToggleProps) => {
+export function TrackToggle(props: TrackToggleProps) {
   const { buttonProps } = useTrackToggle(props);
   return <button {...buttonProps}>{props.children}</button>;
-};
+}

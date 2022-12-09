@@ -13,7 +13,7 @@ export function trackObservable(track: TrackPublication) {
   return trackObserver;
 }
 
-export const observeTrackEvents = (track: TrackPublication, ...events: TrackEvent[]) => {
+export function observeTrackEvents(track: TrackPublication, ...events: TrackEvent[]) {
   const observable = new Observable<TrackPublication>((subscribe) => {
     const onTrackUpdate = () => {
       subscribe.next(track);
@@ -34,4 +34,4 @@ export const observeTrackEvents = (track: TrackPublication, ...events: TrackEven
   }).pipe(startWith(track));
 
   return observable;
-};
+}

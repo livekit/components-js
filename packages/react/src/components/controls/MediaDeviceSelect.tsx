@@ -4,13 +4,13 @@ import { setupDeviceSelector, createMediaDeviceObserver } from '@livekit/compone
 import { mergeProps, useObservableState } from '../../utils';
 import { Room } from 'livekit-client';
 
-export const useMediaDevices = (kind: MediaDeviceKind) => {
+export function useMediaDevices(kind: MediaDeviceKind) {
   const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
   const devices = useObservableState(deviceObserver, []);
   return devices;
-};
+}
 
-export const useMediaDeviceSelect = (kind: MediaDeviceKind, room?: Room) => {
+export function useMediaDeviceSelect(kind: MediaDeviceKind, room?: Room) {
   // List of all devices.
   const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
   const devices = useObservableState(deviceObserver, []);
@@ -31,7 +31,7 @@ export const useMediaDeviceSelect = (kind: MediaDeviceKind, room?: Room) => {
   }, [activeDeviceObservable]);
 
   return { devices, className, activeDeviceId: currentDeviceId, setActiveMediaDevice };
-};
+}
 
 export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListElement> {
   kind: MediaDeviceKind;

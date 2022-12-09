@@ -5,7 +5,7 @@ import { usePinContext } from '../contexts';
 
 export type ClearFocusButtonProps = React.HTMLAttributes<HTMLButtonElement>;
 
-export const useClearPinButton = (props: ClearFocusButtonProps) => {
+export function useClearPinButton(props: ClearFocusButtonProps) {
   const { state, dispatch } = usePinContext();
 
   React.useEffect(() => {
@@ -25,7 +25,7 @@ export const useClearPinButton = (props: ClearFocusButtonProps) => {
   }, [props, dispatch, state]);
 
   return { buttonProps };
-};
+}
 
 /**
  * The ClearPinButton is a basic html button with the added ability to signal
@@ -41,7 +41,7 @@ export const useClearPinButton = (props: ClearFocusButtonProps) => {
  * </LiveKitRoom>
  * ```
  */
-export const ClearPinButton = (props: ClearFocusButtonProps) => {
+export function ClearPinButton(props: ClearFocusButtonProps) {
   const { buttonProps } = useClearPinButton(props);
   return <button {...buttonProps}>{props.children}</button>;
-};
+}

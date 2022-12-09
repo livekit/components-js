@@ -8,6 +8,6 @@ import { Decorator } from '@storybook/react';
  * Note: When used as a Storybook decorator, this component has to be used in combination with LkRoomContext.
  * The decorator order matters: `decorators: [LkParticipantContext, LkRoomContext]`
  */
-export const LkParticipantContext: Decorator = (Story, _) => {
+export function LkParticipantContext: Decorator(Story, _) {
   return <ParticipantsLoop>{Story()}</ParticipantsLoop>;
 };

@@ -8,7 +8,6 @@ import {
 import { MockParticipantContext } from '../../.storybook/lk-decorators';
 import { ConnectionQuality } from 'livekit-client';
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   /*
    * This is some docs for connection quality

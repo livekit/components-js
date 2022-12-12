@@ -1,16 +1,13 @@
 import React from 'react';
 import { StoryObj } from '@storybook/react';
 
-import { ClearFocusButton, ClearFocusButtonProps } from '@livekit/components-react';
+import { ClearPinButton, ClearPinButtonProps } from '@livekit/components-react';
 import { LkFocusContext, LkRoomContext } from '../../.storybook/lk-decorators';
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default {
-  component: ClearFocusButton,
+  component: ClearPinButton,
   decorators: [LkFocusContext, LkRoomContext],
-  render: (args: ClearFocusButtonProps) => (
-    <ClearFocusButton {...args}>Back to Grid</ClearFocusButton>
-  ),
+  render: (args: ClearPinButtonProps) => <ClearPinButton {...args}>Back to Grid</ClearPinButton>,
   argTypes: {
     inFocus: {
       control: { type: 'boolean' },
@@ -24,7 +21,7 @@ export default {
   },
 };
 
-export const Default: StoryObj<ClearFocusButtonProps> = {
+export const Default: StoryObj<ClearPinButtonProps> = {
   args: {},
   parameters: {
     roomContext: { audio: false, video: false, connect: true },

@@ -4,16 +4,15 @@ import { StoryObj } from '@storybook/react';
 import {
   TrackToggle,
   TrackMutedIndicator,
-  MediaMutedIndicatorProps,
+  TrackMutedIndicatorProps,
 } from '@livekit/components-react';
 import { LkParticipantContext, LkRoomContext } from '../../.storybook/lk-decorators';
 import { Track } from 'livekit-client';
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   component: TrackMutedIndicator,
   decorators: [LkParticipantContext, LkRoomContext],
-  render: (args: MediaMutedIndicatorProps) => (
+  render: (args: TrackMutedIndicatorProps) => (
     <>
       <TrackMutedIndicator {...args}></TrackMutedIndicator>
       <TrackToggle source={args.source}>Toggle Muted</TrackToggle>
@@ -33,12 +32,12 @@ export default {
   },
 };
 
-export const Camera: StoryObj<MediaMutedIndicatorProps> = {
+export const Camera: StoryObj<TrackMutedIndicatorProps> = {
   args: { source: Track.Source.Camera },
   parameters: { roomContext: { audio: false, video: true, connect: true } },
 };
 
-export const Microphone: StoryObj<MediaMutedIndicatorProps> = {
+export const Microphone: StoryObj<TrackMutedIndicatorProps> = {
   args: { source: Track.Source.Microphone },
   parameters: { roomContext: { audio: true, video: false, connect: true } },
 };

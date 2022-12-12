@@ -3,7 +3,6 @@ import { StoryObj } from '@storybook/react';
 
 import { ParticipantName, ParticipantNameProps } from '@livekit/components-react';
 import { LkParticipantContext, LkRoomContext } from '../../.storybook/lk-decorators';
-import { Track } from 'livekit-client';
 
 export default {
   component: ParticipantName,

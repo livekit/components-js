@@ -5,4 +5,12 @@
 module.exports = {
   root: true,
   extends: ['custom'],
+  rules: {
+    'import/no-anonymous-default-export': [
+      'warn',
+      {
+        allowObject: true, // Storybook uses export default in every story.
+      },
+    ],
+  },
 };

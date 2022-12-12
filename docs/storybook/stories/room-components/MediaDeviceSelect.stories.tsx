@@ -6,7 +6,6 @@ import { LkRoomContext } from '../../.storybook/lk-decorators';
 
 const kinds: MediaDeviceKind[] = ['audioinput', 'audiooutput', 'videoinput'];
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   name: 'MediaDeviceSelect',
   component: MediaDeviceSelect,

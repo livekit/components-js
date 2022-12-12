@@ -4,7 +4,6 @@ import { StoryObj } from '@storybook/react';
 import { ClearFocusButton, ClearFocusButtonProps } from '@livekit/components-react';
 import { LkFocusContext, LkRoomContext } from '../../.storybook/lk-decorators';
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   component: ClearFocusButton,
   decorators: [LkFocusContext, LkRoomContext],

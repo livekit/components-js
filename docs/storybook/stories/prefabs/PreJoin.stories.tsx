@@ -3,7 +3,6 @@ import React from 'react';
 import { PreJoin, PreJoinProps } from '@livekit/components-react';
 import { StoryObj } from '@storybook/react';
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   title: 'Prefabs/PreJoin',
   component: PreJoin,

@@ -4,7 +4,6 @@ import { StoryObj } from '@storybook/react';
 import { TrackToggle, MediaControlButtonProps, TrackSource } from '@livekit/components-react';
 import { LkRoomContext } from '../../.storybook/lk-decorators';
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   component: TrackToggle,
   decorators: [LkRoomContext],

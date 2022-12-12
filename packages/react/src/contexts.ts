@@ -1,6 +1,6 @@
 import { PinState } from '@livekit/components-core';
 import type { Room, Participant, Track } from 'livekit-client';
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext } from 'react';
 
 export const ParticipantContext = createContext<Participant | undefined>(undefined);
 

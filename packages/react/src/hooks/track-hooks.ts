@@ -1,5 +1,5 @@
-import { setupMediaTrack } from '@livekit/components-core';
-import { Participant, Track } from 'livekit-client';
+import { setupMediaTrack, trackObservable } from '@livekit/components-core';
+import { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
 import { mergeProps } from '../utils';
 
@@ -53,3 +53,23 @@ export const useMediaTrack = (
     }),
   };
 };
+
+export function useTrack(pub?: TrackPublication) {
+  const [publication, setPublication] = React.useState(pub);
+  const [track, setTrack] = React.useState(pub?.track);
+  React.useEffect(() => {
+    if (!pub) return;
+    const listener = trackObservable(pub).subscribe((p) => {
+      if (p.track !== track) {
+        track?.detach();
+      }
+      setPublication(p);
+      setTrack(p.isSubscribed ? p.track : undefined);
+    });
+    setTrack(pub?.track);
+    setPublication(pub);
+    return () => listener.unsubscribe();
+  }, [pub, track]);
+
+  return { publication, track };
+}

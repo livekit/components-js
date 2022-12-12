@@ -12,7 +12,6 @@ export * from './components/participant/TrackMutedIndicator';
 export * from './components/participant/ParticipantName';
 export * from './components/RoomName';
 export * from './components/RoomAudioRenderer';
-export * from './components/FocusLayoutRenderer';
 export * from './components/participant/MediaTrack';
 export * from './components/controls/MediaDeviceSelect';
 export * from './components/controls/StartAudio';

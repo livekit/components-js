@@ -16,8 +16,6 @@ interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement>
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
 
-// TODO use (loudest) participant in focus, if no focusParticipant is provided
-// TODO cleanup props
 export function FocusLayoutContainer({
   focusParticipant,
   focusTrackSource,

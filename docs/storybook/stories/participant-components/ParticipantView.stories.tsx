@@ -1,10 +1,10 @@
-import React from 'react';
-import { StoryObj } from '@storybook/react';
-
 import { ParticipantView, ParticipantViewProps } from '@livekit/components-react';
-import { LkParticipantContext, LkRoomContext } from '../../.storybook/lk-decorators';
+import { StoryObj } from '@storybook/react';
 import { Track } from 'livekit-client';
+import React from 'react';
+import { LkParticipantContext, LkRoomContext } from '../../.storybook/lk-decorators';
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   component: ParticipantView,
   decorators: [LkParticipantContext, LkRoomContext],

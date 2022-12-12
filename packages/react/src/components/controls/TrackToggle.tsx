@@ -7,7 +7,7 @@ import { useObservableState } from '../../utils';
 
 export type TrackToggleProps = Omit<React.HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   source: Track.Source;
-  initialState?: boolean; // FIXME: initialState false has no effect.
+  initialState?: boolean;
   onChange?: (enabled: boolean) => void;
 };
 
@@ -17,9 +17,8 @@ export function useTrackToggle({ source, onChange, initialState, ...rest }: Trac
   const room = useMaybeRoomContext();
   const track = room?.localParticipant?.getTrack(source);
 
-  // FIXME: adding initialState to useMemo dependencies leads to constant toggling of the buttons and browser freeze.
   const { toggle, className, pendingObserver, enabledObserver } = React.useMemo(
-    () => (room ? setupMediaToggle(source, room) : setupManualToggle(!!initialState)),
+    () => (room ? setupMediaToggle(source, room) : setupManualToggle()),
     [room, source],
   );
 
@@ -29,6 +28,14 @@ export function useTrackToggle({ source, onChange, initialState, ...rest }: Trac
   React.useEffect(() => {
     onChange?.(enabled);
   }, [enabled, onChange]);
+
+  React.useEffect(() => {
+    if (initialState) {
+      toggle(initialState);
+    }
+    // only execute once at the beginning
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const newProps = React.useMemo(() => mergeProps(rest, { className }), [rest, className]);
 

@@ -1,5 +1,5 @@
 import { LocalParticipant, Room, Track } from 'livekit-client';
-import { BehaviorSubject, map, Observable, startWith, Subscriber, tap } from 'rxjs';
+import { BehaviorSubject, map, startWith } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
 import { lkClassName } from '../utils';
 
@@ -32,19 +32,23 @@ export function setupMediaToggle(source: Track.Source, room: Room) {
   );
 
   const pendingSubject = new BehaviorSubject(false);
-  const toggle = async () => {
+  const toggle = async (forceState?: boolean) => {
     try {
       // trigger observable update
       pendingSubject.next(true);
       switch (source) {
         case Track.Source.Camera:
-          await localParticipant.setCameraEnabled(!localParticipant.isCameraEnabled);
+          await localParticipant.setCameraEnabled(forceState ?? !localParticipant.isCameraEnabled);
           break;
         case Track.Source.Microphone:
-          await localParticipant.setMicrophoneEnabled(!localParticipant.isMicrophoneEnabled);
+          await localParticipant.setMicrophoneEnabled(
+            forceState ?? !localParticipant.isMicrophoneEnabled,
+          );
           break;
         case Track.Source.ScreenShare:
-          await localParticipant.setScreenShareEnabled(!localParticipant.isScreenShareEnabled);
+          await localParticipant.setScreenShareEnabled(
+            forceState ?? !localParticipant.isScreenShareEnabled,
+          );
           break;
         default:
           break;
@@ -54,20 +58,21 @@ export function setupMediaToggle(source: Track.Source, room: Room) {
       // trigger observable update
     }
   };
+
   const className: string = lkClassName('button');
   return { className, toggle, enabledObserver, pendingObserver: pendingSubject.asObservable() };
 }
 
-export function setupManualToggle(initialState: boolean) {
-  let state = initialState;
+export function setupManualToggle() {
+  let state = false;
 
   const enabledSubject = new BehaviorSubject(state);
 
   const pendingSubject = new BehaviorSubject(false);
 
-  const toggle = () => {
+  const toggle = (forceState?: boolean) => {
     pendingSubject.next(true);
-    state = !state;
+    state = forceState ?? !state;
     enabledSubject.next(state);
     pendingSubject.next(false);
   };

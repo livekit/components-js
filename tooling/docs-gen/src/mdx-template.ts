@@ -1,6 +1,7 @@
 import { ComponentDoc } from 'react-docgen-typescript';
 
-export function mdxComponentTemplate(def: ComponentDoc, hasHook: boolean) `---
+export function mdxComponentTemplate(def: ComponentDoc, hasHook: boolean) {
+  return `---
 title: ${splitCamelCase(def.displayName)}
 subtitle: ${def.description.replaceAll('\n', ' ')} 
 ---
@@ -25,13 +26,15 @@ ${def.tags?.example ? def.tags.example : 'No example yet.'}
 
 ${renderHook(def.displayName, hasHook)}
 `;
+}
 
 const addHookImport = (displayName: string, hasHook: boolean) =>
   hasHook ? `import Use${displayName} from './use${displayName}.mdx';` : '';
 const renderHook = (displayName: string, hasHook: boolean) =>
   hasHook ? `<Use${displayName} />` : '';
 
-export function mdxHookTemplate(def: ComponentDoc) `---
+export function mdxHookTemplate(def: ComponentDoc) {
+  return `---
 noLayout: true
 ---
 
@@ -56,6 +59,7 @@ ${def.tags?.example ? def.tags.example : 'No example yet.'}
 
 <PropsTable data='${JSON.stringify(def.props, stringifyProps)}' />
 `;
+}
 
 const addImportExample = (displayName: string) =>
   '```tsx\n' + 'import { ' + displayName + " } from '@livekit/components-react'\n```";

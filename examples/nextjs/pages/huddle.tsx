@@ -1,6 +1,5 @@
 import { PinState } from '@livekit/components-core';
 import {
-  MediaDeviceSelect,
   DisconnectButton,
   LiveKitRoom,
   LocalUserChoices,
@@ -20,6 +19,7 @@ import {
   useScreenShare,
   useToken,
   ClearPinButton,
+  MediaDeviceMenu,
 } from '@livekit/components-react';
 import { ConnectionState, Participant, Room, Track, TrackPublication } from 'livekit-client';
 
@@ -39,7 +39,7 @@ const Huddle: NextPage = () => {
       {preJoinChoices ? (
         <HuddleRoomView userChoices={preJoinChoices} roomName={roomName} />
       ) : (
-        <PreJoin className={styles.prejoin} onSubmit={setPreJoinChoices} />
+        <PreJoin onSubmit={setPreJoinChoices} />
       )}
     </main>
   );
@@ -225,39 +225,6 @@ const CustomParticipantView = () => {
   );
 };
 
-const MediaDeviceMenu = (props: HTMLAttributes<HTMLDivElement>) => {
-  const [isOpen, setIsOpen] = useState(false);
-  return (
-    <div style={{ position: 'relative', flexShrink: 0 }}>
-      <button className={`lk-button ${styles.mediaBtn}`} onClick={() => setIsOpen(!isOpen)} />
-      {isOpen && (
-        <div
-          style={{
-            position: 'absolute',
-            margin: '1rem',
-            bottom: '100%',
-            left: '-50%',
-            width: '20rem',
-            backgroundColor: 'var(--lk-primary-bg)',
-            borderRadius: '0.5rem',
-            padding: '.2rem .3rem',
-            boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
-          }}
-        >
-          <div>
-            <div>Audio Inputs:</div>
-            <MediaDeviceSelect kind="audioinput"></MediaDeviceSelect>
-          </div>
-          <div>
-            <div>Video Inputs:</div>
-            <MediaDeviceSelect kind="videoinput"></MediaDeviceSelect>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
 const ParticipantCount = (props: HTMLAttributes<HTMLDivElement>) => {
   const participants = useParticipants();
   return (
@@ -350,16 +317,9 @@ const HuddleRoomView = ({
                   <TrackToggle className={styles.audioBtn} source={Track.Source.Microphone} />
                   <TrackToggle className={styles.videoBtn} source={Track.Source.Camera} />
                   <TrackToggle className={styles.screenBtn} source={Track.Source.ScreenShare} />
-                  <MediaDeviceMenu />
+                  <MediaDeviceMenu className={styles.mediaBtn}></MediaDeviceMenu>
                   <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
                   <StartAudio label="Start Audio" />
-                  {/* <button
-                onClick={() => {
-                  setLayout(layout === 'focus' ? 'grid' : 'focus');
-                }}
-              >
-                Layout: {layout}
-              </button> */}
                 </div>
               </div>
             </div>

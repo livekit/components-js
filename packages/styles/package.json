@@ -9,6 +9,9 @@
       "types": "./dist/types/general/styles.css.d.ts",
       "default": "./dist/general/styles.css"
     },
+    "./icons/*": {
+      "default": "./icons/*"
+    },
     "./layout": "./dist/general/layout.css",
     "./themes/*": {
       "default": "./dist/themes/*.css"
@@ -22,7 +25,8 @@
   },
   "files": [
     "dist",
-    "scss"
+    "scss",
+    "icons"
   ],
   "engines": {
     "node": ">=10"

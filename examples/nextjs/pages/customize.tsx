@@ -17,7 +17,7 @@ import myStyles from '../styles/Customize.module.css';
 import type { NextPage } from 'next';
 import { HTMLAttributes, useState } from 'react';
 
-const Home: NextPage = () => {
+const CustomizeExample: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? 'test-identity';
@@ -113,4 +113,4 @@ export function UserDefinedConnectionQualityIndicator(props: HTMLAttributes<HTML
   return <span {...props}> {qualityToText(quality)} </span>;
 }
 
-export default Home;
+export default CustomizeExample;

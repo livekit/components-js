@@ -39,7 +39,7 @@ const Huddle: NextPage = () => {
       {preJoinChoices ? (
         <HuddleRoomView userChoices={preJoinChoices} roomName={roomName} />
       ) : (
-        <PreJoin className={styles.prejoin} onSubmit={setPreJoinChoices} />
+        <PreJoin onSubmit={setPreJoinChoices} />
       )}
     </main>
   );

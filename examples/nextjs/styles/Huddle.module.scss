@@ -7,22 +7,6 @@
   color: black;
 }
 
-.prejoin {
-  background-color: var(--lk-primary-bg);
-  max-height: 80vh;
-  width: 40rem;
-  display: flex;
-  flex-direction: column;
-  margin: auto;
-  align-items: center;
-  border: 2px solid var(--lk-primary-color);
-  border-radius: 2rem;
-  padding-top: 4rem;
-  padding-bottom: 2rem;
-
-  box-shadow: 0 1px 4px var(--lk-primary-bg);
-}
-
 .devInfo {
   position: absolute;
   top: 0px;

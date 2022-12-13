@@ -1,15 +1,19 @@
 .main {
+  min-height: 100vh;
+  margin: 2%;
   display: grid;
   place-content: center;
-  min-height: 100vh;
-
   h1 {
     font-size: 2rem;
   }
   ul {
     list-style: disc;
     li {
-      padding-left: 1rem;
+      margin-top: 1rem;
+      margin-left: 1rem;
+      a {
+        text-decoration: underline;
+      }
     }
   }
 }

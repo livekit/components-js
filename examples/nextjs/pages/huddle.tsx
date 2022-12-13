@@ -32,7 +32,11 @@ const Huddle: NextPage = () => {
 
   const [roomName] = useState(params?.get('room') || 'test-room');
 
-  const [preJoinChoices, setPreJoinChoices] = useState<LocalUserChoices | undefined>(undefined);
+  const [preJoinChoices, setPreJoinChoices] = useState<LocalUserChoices | undefined>({
+    username: 'test',
+    videoEnabled: true,
+    audioEnabled: true,
+  });
 
   return (
     <main className={styles.main}>
@@ -353,13 +357,6 @@ const HuddleRoomView = ({
                   <MediaDeviceMenu />
                   <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
                   <StartAudio label="Start Audio" />
-                  {/* <button
-                onClick={() => {
-                  setLayout(layout === 'focus' ? 'grid' : 'focus');
-                }}
-              >
-                Layout: {layout}
-              </button> */}
                 </div>
               </div>
             </div>

@@ -3,6 +3,7 @@ import { setupConnectionQualityIndicator } from '@livekit/components-core';
 import { useEnsureParticipant } from '../../contexts';
 import { ConnectionQuality, Participant } from 'livekit-client';
 import { mergeProps, useObservableState } from '../../utils';
+import { getConnectionQualityIcon } from '../../icons/util';
 
 export interface ConnectionQualityIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   participant?: Participant;
@@ -43,6 +44,6 @@ export function useConnectionQualityIndicator(props?: ConnectionQualityIndicator
  * @see `ParticipantView` component
  */
 export function ConnectionQualityIndicator(props: ConnectionQualityIndicatorProps) {
-  const { elementProps } = useConnectionQualityIndicator(props);
-  return <div {...elementProps}>{props.children}</div>;
+  const { elementProps, quality } = useConnectionQualityIndicator(props);
+  return <div {...elementProps}>{props.children ?? getConnectionQualityIcon(quality)}</div>;
 }

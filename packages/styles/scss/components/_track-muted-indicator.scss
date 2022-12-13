@@ -4,17 +4,17 @@
   width: var(--indicator-size, 1rem);
   height: var(--indicator-size, 1rem);
   margin-inline-end: 0.25rem;
-  background-repeat: no-repeat;
-  background-image: var(--bg);
+  // background-repeat: no-repeat;
+  // background-image: var(--bg);
   transition: opacity 0.25s ease-in-out;
 }
 
 .track-muted-indicator-camera {
-  --bg: var(--icon-camera);
+  // --bg: var(--icon-camera);
 
   &[data-muted='true'] {
     opacity: 0.5;
-    --bg: var(--icon-camera-disabled);
+    // --bg: var(--icon-camera-disabled);
   }
 }
 .track-muted-indicator-microphone {
@@ -22,6 +22,6 @@
 
   &[data-muted='true'] {
     opacity: 0.5;
-    --bg: var(--icon-mic-disabled);
+    // --bg: var(--icon-mic-disabled);
   }
 }

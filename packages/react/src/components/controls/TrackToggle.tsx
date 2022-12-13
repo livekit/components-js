@@ -4,6 +4,7 @@ import * as React from 'react';
 import { mergeProps } from '../../mergeProps';
 import { useMaybeRoomContext } from '../../contexts';
 import { useObservableState } from '../../utils';
+import { getSourceIcon } from '../../icons/util';
 
 export type TrackToggleProps = Omit<React.HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   source: Track.Source;
@@ -76,6 +77,6 @@ export function useTrackToggle({ source, onChange, initialState, ...rest }: Trac
  * ```
  */
 export function TrackToggle(props: TrackToggleProps) {
-  const { buttonProps } = useTrackToggle(props);
-  return <button {...buttonProps}>{props.children}</button>;
+  const { buttonProps, enabled } = useTrackToggle(props);
+  return <button {...buttonProps}>{props.children ?? getSourceIcon(props.source, enabled)}</button>;
 }

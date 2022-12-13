@@ -34,7 +34,7 @@ export function FocusLayoutContainer({
             {pinContext.state?.pinnedParticipant && (
               <FocusLayout participant={pinContext.state?.pinnedParticipant} />
             )}
-            <CarouselView participants={participants} />
+            <CarouselView participants={participants} showScreenShares={true} />
           </>
         )}
       </div>
@@ -85,7 +85,10 @@ export function CarouselView({
         <ParticipantsLoop
           filter={(ps) =>
             ps.filter((p) => {
-              return !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare);
+              return (
+                !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare) &&
+                p.getTrack(Track.Source.ScreenShare)
+              );
             })
           }
           filterDependencies={[pinState, participants]}

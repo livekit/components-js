@@ -5,6 +5,7 @@
   background-size: cover;
   min-height: 100vh;
   color: black;
+  --primary-bg: white;
 }
 
 .devInfo {
@@ -38,7 +39,7 @@
 
   .participantCount {
     width: min-content;
-    background-color: var(--lk-primary-bg);
+    background-color: var(--primary-bg);
     padding: 0.8rem 1rem;
     display: flex;
     gap: 0.5rem;
@@ -141,20 +142,21 @@
   border: 0;
   transition: outline, box-shadow 80ms cubic-bezier(0.36, 0.19, 0.29, 1);
   cursor: pointer;
+  background-color: red;
 
   &[data-lk-speaking='true'] {
-    box-shadow: 0 0 8px 5px var(--lk-primary-bg);
-    outline: 3px solid var(--lk-primary-bg);
+    box-shadow: 0 0 8px 5px var(--primary-bg);
+    outline: 3px solid var(--primary-bg);
   }
   video {
-    background-color: var(--lk-primary-color);
+    object-fit: cover;
   }
   .nameContainer {
     position: absolute;
     bottom: 0;
     left: 0;
     margin: 2%;
-    background-color: var(--lk-primary-bg);
+    background-color: var(--primary-bg);
     border-radius: 99999px;
     display: flex;
     align-items: center;
@@ -263,7 +265,7 @@ button.mediaBtn {
 }
 
 .screenShareBanner {
-  background-color: var(--lk-primary-bg);
+  background-color: var(--primary-bg);
   position: absolute;
   bottom: 0;
   left: 0;

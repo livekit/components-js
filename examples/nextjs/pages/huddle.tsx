@@ -32,11 +32,7 @@ const Huddle: NextPage = () => {
 
   const [roomName] = useState(params?.get('room') || 'test-room');
 
-  const [preJoinChoices, setPreJoinChoices] = useState<LocalUserChoices | undefined>({
-    username: 'test',
-    videoEnabled: true,
-    audioEnabled: true,
-  });
+  const [preJoinChoices, setPreJoinChoices] = useState<LocalUserChoices | undefined>(undefined);
 
   return (
     <main className={styles.main}>

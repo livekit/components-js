@@ -8,7 +8,10 @@ export default {
   component: TrackToggle,
   decorators: [LkRoomContext],
   render: (args: TrackToggleProps) => (
-    <TrackToggle {...args}>{`${args.source}`.toUpperCase()} Control</TrackToggle>
+    <>
+      <TrackToggle {...args}>{`${args.source}`.toUpperCase()} Control</TrackToggle>
+      <TrackToggle {...args} />
+    </>
   ),
   argTypes: {
     source: {
@@ -24,22 +27,17 @@ export default {
   },
 };
 
-export const CameraUnmuted: StoryObj<TrackToggleProps> = {
+export const Camera: StoryObj<TrackToggleProps> = {
   args: { source: TrackSource.Camera, initialState: true },
   parameters: { roomContext: { audio: false, video: true, connect: true } },
 };
 
-export const CameraMuted: StoryObj<TrackToggleProps> = {
-  ...CameraUnmuted,
-  args: { ...CameraUnmuted.args, initialState: false },
-};
-
-export const MicrophoneUnmuted: StoryObj<TrackToggleProps> = {
+export const Microphone: StoryObj<TrackToggleProps> = {
   args: { source: TrackSource.Microphone, initialState: true },
   parameters: { roomContext: { audio: true, video: false, connect: true } },
 };
 
-export const MicrophoneMuted: StoryObj<TrackToggleProps> = {
-  ...MicrophoneUnmuted,
-  args: { ...MicrophoneUnmuted.args, initialState: false },
+export const ScreenShare: StoryObj<TrackToggleProps> = {
+  args: { source: TrackSource.ScreenShare, initialState: false },
+  parameters: { roomContext: { audio: true, video: false, connect: true } },
 };

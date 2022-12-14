@@ -3,12 +3,14 @@ import { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
 import { mergeProps } from '../utils';
 
-export const useMediaTrack = (
-  participant: Participant,
-  source: Track.Source,
-  element?: React.RefObject<HTMLMediaElement>,
-  props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>,
-) => {
+interface UseMediaTrackProps {
+  participant: Participant;
+  source: Track.Source;
+  element?: React.RefObject<HTMLMediaElement>;
+  props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
+}
+
+export const useMediaTrack = ({ participant, source, element, props }: UseMediaTrackProps) => {
   const [publication, setPublication] = React.useState(participant.getTrack(source));
   const [isMuted, setMuted] = React.useState(publication?.isMuted);
   const [isSubscribed, setSubscribed] = React.useState(publication?.isSubscribed);
@@ -54,7 +56,11 @@ export const useMediaTrack = (
   };
 };
 
-export function useTrack(pub?: TrackPublication) {
+interface UseTrackProps {
+  pub?: TrackPublication;
+}
+
+export function useTrack({ pub }: UseTrackProps) {
   const [publication, setPublication] = React.useState(pub);
   const [track, setTrack] = React.useState(pub?.track);
   React.useEffect(() => {

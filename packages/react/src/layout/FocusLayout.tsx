@@ -24,7 +24,7 @@ export function FocusLayoutContainer({
 }: FocusLayoutContainerProps) {
   const elementProps = mergeProps(props, { className: 'lk-focus-layout' });
   const pinContext = usePinContext();
-  const participants = useSortedParticipants(useParticipants());
+  const participants = useSortedParticipants({ participants: useParticipants({}) });
 
   return (
     <>

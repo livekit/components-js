@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useParticipantContext } from '../../contexts';
 import { mergeProps, useObservableState } from '../../utils';
 
-export function useParticipantInfo(participant: Participant) {
+export function useParticipantInfo({ participant }: { participant: Participant }) {
   const infoObserver = React.useMemo(() => participantInfoObserver(participant), [participant]);
   const { identity, name, metadata } = useObservableState(infoObserver, {
     name: participant.name,

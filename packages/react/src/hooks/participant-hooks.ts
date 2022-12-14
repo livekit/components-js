@@ -12,25 +12,31 @@ import {
 import { useObservableState } from '../utils';
 import { useEnsureParticipant, useRoomContext } from '../contexts';
 
+export interface UseParticipantsProps {
+  filter?: (participants: Array<Participant>) => Array<Participant>;
+  filterDependencies?: Array<unknown>;
+}
+
 /**
  * The useParticipants hook returns all participants of the current room.
  * It is possible to filter the participants.
  */
-export const useParticipants = (
-  filter?: (participants: Array<Participant>) => Array<Participant>,
-  filterDependencies: Array<unknown> = [],
-) => {
+export const useParticipants = (props?: UseParticipantsProps) => {
   const [participants, setParticipants] = React.useState<Participant[]>([]);
-  const remoteParticipants = useRemoteParticipants(undefined);
+  const remoteParticipants = useRemoteParticipants({ filter: undefined });
   const { localParticipant } = useLocalParticipant();
+  const filterDependencies = React.useMemo(
+    () => props?.filterDependencies ?? [],
+    [props?.filterDependencies],
+  );
 
   React.useEffect(() => {
     let all = [localParticipant, ...remoteParticipants];
-    if (filter) {
-      all = filter(all);
+    if (props?.filter) {
+      all = props.filter(all);
     }
     setParticipants(all);
-  }, [remoteParticipants, localParticipant, filter, ...filterDependencies]);
+  }, [remoteParticipants, localParticipant, props?.filter, ...filterDependencies]);
 
   return participants;
 };
@@ -80,9 +86,11 @@ export const useLocalParticipant = () => {
 /**
  * The useRemoteParticipants
  */
-export const useRemoteParticipants = (
-  filter?: (participants: Array<Participant>) => Array<Participant>,
-) => {
+export const useRemoteParticipants = ({
+  filter,
+}: {
+  filter?: (participants: Array<Participant>) => Array<Participant>;
+}) => {
   const room = useRoomContext();
   const [participants, setParticipants] = React.useState<Participant[]>([]);
 
@@ -115,7 +123,7 @@ export const useSpeakingParticipants = () => {
 /**
  * The useSortedParticipants hook returns the only the active speakers of all participants.
  */
-export function useSortedParticipants(participants: Array<Participant>) {
+export function useSortedParticipants({ participants }: { participants: Array<Participant> }) {
   const [sortedParticipants, setSortedParticipants] = React.useState(
     sortParticipantsByVolume(participants),
   );

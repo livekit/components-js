@@ -86,8 +86,8 @@ export const PreJoin = ({
     undefined,
   );
 
-  const videoDevices = useMediaDevices('videoinput');
-  const audioDevices = useMediaDevices('audioinput');
+  const videoDevices = useMediaDevices({ kind: 'videoinput' });
+  const audioDevices = useMediaDevices({ kind: 'audioinput' });
 
   const videoEl = React.useRef(null);
   const audioEl = React.useRef(null);

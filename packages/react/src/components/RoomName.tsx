@@ -5,7 +5,7 @@ import * as React from 'react';
 import { useRoomContext } from '../contexts';
 import { useObservableState } from '../utils';
 
-export function useRoomInfo(room: Room) {
+export function useRoomInfo({ room }: { room: Room }) {
   const infoObserver = React.useMemo(() => roomInfoObserver(room), [room]);
   const { name, metadata } = useObservableState(infoObserver, {
     name: room.name,
@@ -35,7 +35,7 @@ export const RoomName = ({
   ...htmlAttributes
 }: RoomNameProps) => {
   const room = useRoomContext();
-  const { name } = useRoomInfo(room);
+  const { name } = useRoomInfo({ room });
 
   return (
     <span {...htmlAttributes}>

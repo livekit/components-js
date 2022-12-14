@@ -25,10 +25,13 @@ export type ParticipantViewProps = React.HTMLAttributes<HTMLDivElement> & {
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 };
 
-function useParticipantView<T extends React.HTMLAttributes<HTMLElement>>(
-  participant: Participant,
-  props: T,
-) {
+function useParticipantView<T extends React.HTMLAttributes<HTMLElement>>({
+  participant,
+  props,
+}: {
+  participant: Participant;
+  props: T;
+}) {
   const mergedProps = React.useMemo(() => {
     const { className } = setupParticipantView();
     return mergeProps(props, { className });
@@ -84,7 +87,7 @@ export const ParticipantView = ({
   ...htmlProps
 }: ParticipantViewProps) => {
   const p = useEnsureParticipant(participant);
-  const { elementProps } = useParticipantView(p, htmlProps);
+  const { elementProps } = useParticipantView({ participant: p, props: htmlProps });
 
   const pinContext = useMaybePinContext();
 
@@ -92,7 +95,6 @@ export const ParticipantView = ({
     elementProps.onClick?.(evt);
     onParticipantClick?.({ participant: p });
     if (pinContext && pinContext.dispatch) {
-      console.log('handleParticipantClick', p);
       pinContext.dispatch({
         msg: 'set_pin',
         participant: p,

@@ -10,11 +10,17 @@ export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivEl
   participant?: Participant;
 }
 
-export const useTrackMutedIndicator = (
-  source: Track.Source,
-  participant?: Participant,
-  props?: React.HtmlHTMLAttributes<HTMLDivElement>,
-) => {
+interface UseTrackMutedIndicatorProps {
+  source: Track.Source;
+  participant?: Participant;
+  props?: React.HtmlHTMLAttributes<HTMLDivElement>;
+}
+
+export const useTrackMutedIndicator = ({
+  source,
+  participant,
+  props,
+}: UseTrackMutedIndicatorProps) => {
   const p = useEnsureParticipant(participant);
   const { className, mediaMutedObserver } = React.useMemo(
     () => setupTrackMutedIndicator(p, source),
@@ -56,7 +62,7 @@ export const TrackMutedIndicator = ({
   participant,
   ...props
 }: TrackMutedIndicatorProps) => {
-  const { htmlProps, isMuted } = useTrackMutedIndicator(source, participant, props);
+  const { htmlProps, isMuted } = useTrackMutedIndicator({ source, participant, props });
 
   return (
     <div {...htmlProps} data-lk-muted={isMuted}>

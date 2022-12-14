@@ -31,7 +31,12 @@ export function MediaTrack({ onTrackClick, onClick, ...props }: MediaTrackProps)
   const participant = useEnsureParticipant(props.participant);
 
   const mediaEl = React.useRef<HTMLVideoElement>(null);
-  const { elementProps, publication } = useMediaTrack(participant, props.source, mediaEl, props);
+  const { elementProps, publication } = useMediaTrack({
+    participant,
+    source: props.source,
+    element: mediaEl,
+    props,
+  });
 
   const clickHandler = (evt: React.MouseEvent<HTMLMediaElement, MouseEvent>) => {
     onClick?.(evt);

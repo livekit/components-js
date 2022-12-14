@@ -11,8 +11,6 @@ type ParticipantsLoopProps = {
   filter?: (participants: Array<Participant>) => Array<Participant>;
 };
 
-export const useParticipantsLoop = useParticipants;
-
 /**
  * The ParticipantsLoop component loops over all or a filtered subset of participants to create a visual
  * representation (`ParticipantView`) and context for every participant. This component takes zero or more children.
@@ -38,7 +36,7 @@ export const ParticipantsLoop = ({
   filter,
   filterDependencies,
 }: ParticipantsLoopProps) => {
-  const participants = useParticipantsLoop(filter, filterDependencies);
+  const participants = useParticipants({ filter, filterDependencies });
   return (
     <>
       {participants.map((participant) => (

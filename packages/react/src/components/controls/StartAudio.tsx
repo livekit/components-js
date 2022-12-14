@@ -4,7 +4,12 @@ import * as React from 'react';
 import { useRoomContext } from '../../contexts';
 import { mergeProps, useObservableState } from '../../utils';
 
-function useStartAudio(room: Room, props: React.HTMLAttributes<HTMLButtonElement>) {
+interface UseStartAudioProps {
+  room: Room;
+  props: React.HTMLAttributes<HTMLButtonElement>;
+}
+
+function useStartAudio({ room, props }: UseStartAudioProps) {
   const { className, roomAudioPlaybackAllowedObservable, handleStartAudioPlayback } = React.useMemo(
     () => setupStartAudio(),
     [],
@@ -50,7 +55,7 @@ interface AllowAudioPlaybackProps extends React.HTMLAttributes<HTMLButtonElement
  */
 export function StartAudio({ label = 'Allow Audio', ...props }: AllowAudioPlaybackProps) {
   const room = useRoomContext();
-  const { mergedProps } = useStartAudio(room, props);
+  const { mergedProps } = useStartAudio({ room, props });
 
   return <button {...mergedProps}>{label}</button>;
 }

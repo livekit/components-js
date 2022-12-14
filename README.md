@@ -45,8 +45,7 @@ E.g. to test and automatically rebuild package dependencies for the nextjs examp
 yarn dev:next
 ```
 
-> **Note**
-> For the examples to work you'll need to make sure to copy the the contents of .env.example in the specific example folder to a newly created .env.local file and adjust the values accordingly to your livekit server setup.
+> **Note** for the examples to work you'll need to make sure to copy the the contents of .env.example in the specific example folder to a newly created .env.local file and adjust the values accordingly to your livekit server setup.
 
 ## Architecture Overview
 

@@ -17,6 +17,12 @@ A LiveKit Components implementation in [React](https://reactjs.org/).
 
 <!--NAV_END-->
 
+## Install
+
+```bash
+yarn install @livekit/components-react
+```
+
 ## Architecture Overview
 
 ![React specific implementation of LiveKit Components](./../../.github/assets/components-react-implementation.png)

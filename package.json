@@ -16,7 +16,8 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "clean:all": "turbo run clean:all",
-    "release": "turbo run build --filter=./packages/* && changeset publish"
+    "release": "turbo run build --filter=./packages/* && changeset publish",
+    "tooling:update-readme-nav": "node tooling/readme-manager/update-nav-in-readmes.js"
   },
   "devDependencies": {
     "@changesets/cli": "^2.25.0",

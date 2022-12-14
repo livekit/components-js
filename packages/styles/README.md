@@ -9,8 +9,8 @@ Beautiful base styling for LiveKit components that you can use as is, build upon
 - [Home](/README.md)
 - **Framework Implementations**:
   - [React](/packages/react/README.md)
-- **Documentation**
-  - [Storybook](/docs/storybook/README.md)
+- **Examples**
+  - [Next.js](/examples/nextjs/README.md)
 - **Internal Packages**
   - [Core](/packages/core/README.md)
   - [Styles 👈](/packages/styles/README.md)

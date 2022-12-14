@@ -9,7 +9,7 @@ import { useParticipants, useSortedParticipants } from '../hooks';
 import { ParticipantsLoop } from '../components/ParticipantsLoop';
 import { ClearPinButton } from '../components/ClearPinButton';
 
-interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   focusParticipant?: Participant;
   focusTrackSource?: Track.Source;
   participants?: Array<Participant>;

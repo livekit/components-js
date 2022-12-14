@@ -66,7 +66,7 @@ export function FocusLayout({
   );
 }
 
-export interface CarouselProps extends React.HTMLAttributes<HTMLMediaElement> {
+export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement> {
   participants: Participant[];
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
   showScreenShares?: boolean;
@@ -77,7 +77,7 @@ export function CarouselView({
   showScreenShares,
   onParticipantClick,
   ...props
-}: CarouselProps) {
+}: CarouselViewProps) {
   const { state: pinState } = usePinContext();
   return (
     <aside {...props}>

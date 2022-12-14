@@ -1,4 +1,8 @@
-`<!--NAV_START-->
+# LiveKit Components **React**
+
+A LiveKit Components implementation in [React](https://reactjs.org/).
+
+<!--NAV_START-->
 
 ## Monorepo Navigation
 
@@ -12,3 +16,7 @@
   - [Styles](/packages/styles/README.md)
 
 <!--NAV_END-->
+
+## Architecture Overview
+
+![React specific implementation of LiveKit Components](./../../.github/assets/components-react-implementation.png)

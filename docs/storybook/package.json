@@ -2,7 +2,7 @@
   "name": "@livekit/component-docs-storybook",
   "version": "1.0.2",
   "main": "index.js",
-  "private": "true",
+  "private": true,
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.20.2",

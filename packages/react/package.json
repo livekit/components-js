@@ -2,7 +2,7 @@
   "name": "@livekit/components-react",
   "version": "0.1.9",
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",

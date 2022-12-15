@@ -3,6 +3,7 @@
  *  You can also import styles on a per story level. */
 import '@livekit/components-styles';
 import '@livekit/components-styles/layout';
+import '@livekit/components-styles/prefabs';
 
 export const parameters = {
   viewMode: 'docs',

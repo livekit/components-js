@@ -13,6 +13,7 @@
       "default": "./icons/*"
     },
     "./layout": "./dist/general/layout.css",
+    "./prefabs": "./dist/general/prefabs.css",
     "./themes/*": {
       "default": "./dist/themes/*.css"
     },

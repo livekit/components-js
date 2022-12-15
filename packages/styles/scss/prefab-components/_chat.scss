@@ -1,3 +1,7 @@
+.chat {
+  max-width: 40rem;
+}
+
 .chat-messages {
   width: 100%;
   height: calc(100% - 1rem);
@@ -5,7 +9,7 @@
 
 .chat-entry {
   display: flex;
-  gap: .75rem;
+  gap: 0.75rem;
 
   > strong {
     white-space: nowrap;
@@ -14,7 +18,7 @@
 
 .chat-form {
   display: flex;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 
 .chat-form-input {

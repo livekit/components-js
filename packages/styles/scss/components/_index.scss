@@ -1,6 +1,5 @@
 // Components
 @use 'button';
-@use 'controls';
 @use 'disconnect-button';
 @use 'connection-quality';
 @use 'track-muted-indicator';
@@ -8,5 +7,4 @@
 @use 'participant-view';
 @use 'participant-media';
 @use 'media-device-select';
-@use 'chat';
 @use 'start-audio';

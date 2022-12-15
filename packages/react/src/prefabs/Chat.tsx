@@ -38,7 +38,7 @@ export function Chat({ ...props }: ChatProps) {
   };
   const inputRef = React.useRef<HTMLInputElement>(null);
   return (
-    <div {...props} className="lk-chat-container">
+    <div {...props} className="lk-chat">
       <ul className="lk-chat-messages">
         {chatMessages.map((msg, idx) => (
           <li

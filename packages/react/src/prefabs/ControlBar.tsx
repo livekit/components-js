@@ -25,7 +25,7 @@ export type ControlBarProps = React.HTMLAttributes<HTMLDivElement>;
 export function ControlBar(props: ControlBarProps) {
   return (
     // TODO: Remove styling default styling or move to styles package.
-    <div className="lk-controls" {...props}>
+    <div className="lk-control-bar" {...props}>
       <TrackToggle source={Track.Source.Microphone}>Microphone</TrackToggle>
       <TrackToggle source={Track.Source.Camera}>Camera</TrackToggle>
       <TrackToggle source={Track.Source.ScreenShare}>Share screen</TrackToggle>

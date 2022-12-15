@@ -32,7 +32,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
   };
 
   return (
-    <div {...props}>
+    <div className="lk-video-conference" {...props}>
       <PinContextProvider onChange={handleFocusStateChange}>
         {layout === 'grid' ? <GridLayout /> : <FocusLayoutContainer />}
       </PinContextProvider>

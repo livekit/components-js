@@ -3,9 +3,9 @@ import * as React from 'react';
 import { mergeProps } from '../utils';
 import { usePinContext } from '../contexts';
 
-export type ClearFocusButtonProps = React.HTMLAttributes<HTMLButtonElement>;
+export type ClearPinButtonProps = React.HTMLAttributes<HTMLButtonElement>;
 
-export function useClearPinButton(props: ClearFocusButtonProps) {
+export function useClearPinButton(props: ClearPinButtonProps) {
   const { state, dispatch } = usePinContext();
 
   React.useEffect(() => {
@@ -41,7 +41,7 @@ export function useClearPinButton(props: ClearFocusButtonProps) {
  * </LiveKitRoom>
  * ```
  */
-export function ClearPinButton(props: ClearFocusButtonProps) {
+export function ClearPinButton(props: ClearPinButtonProps) {
   const { buttonProps } = useClearPinButton(props);
   return <button {...buttonProps}>{props.children}</button>;
 }

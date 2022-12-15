@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { FocusLayoutContainerProps, FocusLayoutContainer } from '@livekit/components-react';
-import { LkRoomContext } from '../../.storybook/lk-decorators';
+import { LkPinContext, LkRoomContext } from '../../.storybook/lk-decorators';
 
 export default {
   component: FocusLayoutContainer,
-  decorators: [LkRoomContext],
+  decorators: [LkPinContext, LkRoomContext],
   render: (args: FocusLayoutContainerProps) => <FocusLayoutContainer {...args} />,
   argTypes: {},
 };

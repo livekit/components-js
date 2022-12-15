@@ -213,38 +213,20 @@ export const PreJoin = ({
   }
 
   return (
-    <div style={{ maxWidth: '20rem', marginInline: 'auto' }} {...htmlProps}>
+    <div className="lk-prejoin" {...htmlProps}>
       {localVideoTrack ? (
-        <video
-          ref={videoEl}
-          style={{
-            display: 'block',
-            width: '100%',
-            height: 'auto',
-            transform: 'rotateY(180deg)',
-            borderRadius: 'var(--lk-border-radius)',
-          }}
-        />
+        <video ref={videoEl} />
       ) : (
-        <div
-          style={{
-            width: '100%',
-            height: '11.25rem',
-            backgroundColor: '#000',
-            borderRadius: 'var(--lk-border-radius)',
-          }}
-        >
-          Camera is off
-        </div>
+        <div className="lk-camera-off-note">Camera is off</div>
       )}
       {localAudioTrack ? (
-        <div style={{ display: 'none' }}>
-          <audio ref={audioEl} style={{ width: '100%', height: 'auto' }} />
+        <div className="lk-audio-container">
+          <audio ref={audioEl} />
         </div>
       ) : (
         <></>
       )}
-      <div style={{ display: 'flex', gap: '1rem', marginBlock: '1rem' }}>
+      <div className="lk-button-group-container">
         <div className="lk-button-group audio">
           <TrackToggle
             initialState={videoEnabled}
@@ -289,7 +271,7 @@ export const PreJoin = ({
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBlock: '1rem' }}>
+      <div className="lk-username-container">
         {/* <label htmlFor="username">Username</label> */}
         <input
           className="form-control"

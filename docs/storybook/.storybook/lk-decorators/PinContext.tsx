@@ -12,7 +12,7 @@ export type LkFocusContextProps = {
  *
  * Note: This component requires some environment variables. Make sure that they are set correctly in your .env file.
  */
-export const LkFocusContext: Decorator = (Story, args) => {
+export const LkPinContext: Decorator = (Story, args) => {
   const inFocus = args.args.inFocus;
 
   const ContextWrapper = () => {

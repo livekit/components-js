@@ -103,19 +103,17 @@ export const ScreenShareView = ({
   });
 
   return (
-    <>
-      <div {...htmlProps}>
-        <video
-          ref={screenEl}
-          style={{
-            width: '100%',
-            height: '100%',
-            display: hasActiveScreenShare ? 'block' : 'none',
-          }}
-        ></video>
-        <audio ref={audioEl}></audio>
-        {children}
-      </div>
-    </>
+    <div {...htmlProps}>
+      <video
+        ref={screenEl}
+        style={{
+          width: '100%',
+          height: '100%',
+          display: hasActiveScreenShare ? 'block' : 'none',
+        }}
+      ></video>
+      <audio ref={audioEl}></audio>
+      {children}
+    </div>
   );
 };

@@ -20,12 +20,14 @@ function pinReducer(state: PinState, action: PinAction): PinState {
 }
 
 type PinContextProviderProps = {
-  children?: React.ReactNode | React.ReactNode[];
   onChange?: (pinState: PinState) => void;
 };
 
 // TODO: Remove the screen sharing handling from this component to separate things.
-export function PinContextProvider({ onChange, children }: PinContextProviderProps) {
+export function PinContextProvider({
+  onChange,
+  children,
+}: React.PropsWithChildren<PinContextProviderProps>) {
   const room = useRoomContext();
   const pinDefaultValue: PinState = { pinnedParticipant: undefined, pinnedSource: undefined };
   const [pinState, pinDispatch] = React.useReducer(pinReducer, pinDefaultValue);

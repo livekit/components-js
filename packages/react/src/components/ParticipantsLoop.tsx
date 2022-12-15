@@ -6,7 +6,6 @@ import { cloneSingleChild } from '../utils';
 import { ParticipantView } from './participant/ParticipantView';
 
 type ParticipantsLoopProps = {
-  children: React.ReactNode | React.ReactNode[];
   filterDependencies?: Array<unknown>;
   filter?: (participants: Array<Participant>) => Array<Participant>;
 };
@@ -35,7 +34,7 @@ export const ParticipantsLoop = ({
   children,
   filter,
   filterDependencies,
-}: ParticipantsLoopProps) => {
+}: React.PropsWithChildren<ParticipantsLoopProps>) => {
   const participants = useParticipants({ filter, filterDependencies });
   return (
     <>

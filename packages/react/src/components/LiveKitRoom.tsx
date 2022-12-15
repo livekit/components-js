@@ -74,7 +74,6 @@ export type LiveKitRoomProps = {
    * make sure to set the options directly on the room instance itself.
    */
   room?: Room;
-  children?: React.ReactNode | React.ReactNode[];
   simulateParticipants?: number | undefined;
 };
 
@@ -197,7 +196,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
  * </LiveKitRoom>
  * ```
  */
-export function LiveKitRoom(props: LiveKitRoomProps) {
+export function LiveKitRoom(props: React.PropsWithChildren<LiveKitRoomProps>) {
   const room = useLiveKitRoom(props);
   return (
     <RoomContext.Provider value={room}>

@@ -50,10 +50,11 @@ function useParticipantView<T extends React.HTMLAttributes<HTMLElement>>({
   };
 }
 
-function ParticipantContextIfNeeded(props: {
-  children?: React.ReactNode | React.ReactNode[];
-  participant?: Participant;
-}) {
+function ParticipantContextIfNeeded(
+  props: React.PropsWithChildren<{
+    participant?: Participant;
+  }>,
+) {
   const hasContext = !!useMaybeParticipantContext();
   return props.participant && !hasContext ? (
     <ParticipantContext.Provider value={props.participant}>

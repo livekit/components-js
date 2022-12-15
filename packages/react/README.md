@@ -23,6 +23,14 @@ A LiveKit Components implementation in [React](https://reactjs.org/).
 yarn install @livekit/components-react
 ```
 
+## Usage
+
+```tsx
+import { LiveKitRoom } from '@livekit/components-react';
+
+<LiveKitRoom token="<livekit-token>" serverUrl="<url-to-livekit-server>" connect={true} />;
+```
+
 ## Architecture Overview
 
 ![React specific implementation of LiveKit Components](./../../.github/assets/components-react-implementation.png)

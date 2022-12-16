@@ -1,5 +1,6 @@
 import { Participant } from 'livekit-client';
 import * as React from 'react';
+import { ParticipantsLoop } from '../components/ParticipantsLoop';
 import { mergeProps } from '../utils';
 
 export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -23,5 +24,5 @@ export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
  */
 export function GridLayout({ participants, ...props }: GridLayoutProps) {
   const elementProps = mergeProps(props, { className: 'lk-grid-layout' });
-  return <div {...elementProps}>{props.children}</div>;
+  return <div {...elementProps}>{props.children ?? <ParticipantsLoop />}</div>;
 }

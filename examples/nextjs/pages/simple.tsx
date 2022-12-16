@@ -64,11 +64,7 @@ const SimpleExample: NextPage = () => {
           {isConnected && (
             <>
               <ScreenShareView />
-              <GridLayout>
-                <ParticipantsLoop>
-                  <ParticipantView />
-                </ParticipantsLoop>
-              </GridLayout>
+              <GridLayout />
             </>
           )}
           <ControlBar />

@@ -34,7 +34,6 @@ export function FocusLayoutContainer({
               <FocusLayout participant={pinContext.state?.pinnedParticipant} />
             )}
             <CarouselView participants={participants}>
-              TODO: Add option to display screen shares.
               <ParticipantsLoop includeScreenShares={true} />
             </CarouselView>
           </>
@@ -74,5 +73,5 @@ export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement
 }
 
 export function CarouselView({ participants, onParticipantClick, ...props }: CarouselViewProps) {
-  return <aside {...props}>{props.children}</aside>;
+  return <aside {...props}>{props.children ?? <ParticipantsLoop />}</aside>;
 }

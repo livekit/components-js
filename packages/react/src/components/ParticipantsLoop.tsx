@@ -1,11 +1,16 @@
-import { Participant } from 'livekit-client';
+import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../contexts';
 import { useParticipants } from '../hooks';
 import { cloneSingleChild } from '../utils';
 import { ParticipantView } from './participant/ParticipantView';
+import { useScreenShare } from './ScreenShareRenderer';
 
 type ParticipantsLoopProps = {
+  /**
+   * Set to `true` if screen share tracks should be included in the participant loop?
+   */
+  includeScreenShares?: boolean;
   filterDependencies?: Array<unknown>;
   filter?: (participants: Array<Participant>) => Array<Participant>;
 };
@@ -31,16 +36,39 @@ type ParticipantsLoopProps = {
  * @see `ParticipantView` component
  */
 export const ParticipantsLoop = ({
-  children,
   filter,
   filterDependencies,
+  includeScreenShares: includeScreeShares = true,
+  ...props
 }: React.PropsWithChildren<ParticipantsLoopProps>) => {
   const participants = useParticipants({ filter, filterDependencies });
+  //TODO: Remove useScreenShare as a way to trigger re-render after scree share has stopped.
+  const { allScreenShares, screenShareParticipant } = useScreenShare({});
+
+  type TrackSourceParticipantPair = { source: Track.Source; participant: Participant };
+
+  const participantSourceMix: TrackSourceParticipantPair[] = React.useMemo(() => {
+    const mix: TrackSourceParticipantPair[] = [];
+    console.log({ allScreenShares });
+
+    participants.forEach((p) => {
+      mix.push({ source: Track.Source.Camera, participant: p });
+      if (p.isScreenShareEnabled) {
+        mix.push({ source: Track.Source.ScreenShare, participant: p });
+      }
+    });
+    return mix;
+  }, [participants, allScreenShares, screenShareParticipant]);
+
   return (
     <>
-      {participants.map((participant) => (
+      {participantSourceMix.map(({ source, participant }) => (
         <ParticipantContext.Provider value={participant} key={participant.identity}>
-          {children ? cloneSingleChild(children) : <ParticipantView />}
+          {props.children ? (
+            cloneSingleChild(props.children)
+          ) : (
+            <ParticipantView trackSource={source} />
+          )}
         </ParticipantContext.Provider>
       ))}
     </>

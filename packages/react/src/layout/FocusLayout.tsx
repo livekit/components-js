@@ -1,13 +1,12 @@
-import { isParticipantTrackPinned } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useMaybePinContext, usePinContext } from '../contexts';
 import { mergeProps } from '../utils';
 import { MediaTrack } from '../components/participant/MediaTrack';
-import { ParticipantClickEvent, ParticipantView } from '../components/participant/ParticipantView';
+import { ParticipantClickEvent } from '../components/participant/ParticipantView';
 import { useParticipants, useSortedParticipants } from '../hooks';
-import { ParticipantsLoop } from '../components/ParticipantsLoop';
 import { ClearPinButton } from '../components/ClearPinButton';
+import { ParticipantsLoop } from '../components/ParticipantsLoop';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   focusParticipant?: Participant;
@@ -34,7 +33,9 @@ export function FocusLayoutContainer({
             {pinContext.state?.pinnedParticipant && (
               <FocusLayout participant={pinContext.state?.pinnedParticipant} />
             )}
-            <CarouselView participants={participants} showScreenShares={true} />
+            <CarouselView participants={participants}>
+              <ParticipantsLoop includeScreenShares={true} />
+            </CarouselView>
           </>
         )}
       </div>
@@ -69,48 +70,8 @@ export function FocusLayout({
 export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement> {
   participants: Participant[];
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
-  showScreenShares?: boolean;
 }
 
-export function CarouselView({
-  participants,
-  showScreenShares,
-  onParticipantClick,
-  ...props
-}: CarouselViewProps) {
-  const { state: pinState } = usePinContext();
-  return (
-    <aside {...props}>
-      {showScreenShares && (
-        <ParticipantsLoop
-          filter={(ps) =>
-            ps.filter((p) => {
-              return (
-                !isParticipantTrackPinned(p, pinState, Track.Source.ScreenShare) &&
-                p.getTrack(Track.Source.ScreenShare)
-              );
-            })
-          }
-          filterDependencies={[pinState, participants]}
-        >
-          {props.children ?? (
-            <ParticipantView
-              trackSource={Track.Source.ScreenShare}
-              onParticipantClick={onParticipantClick}
-            />
-          )}
-        </ParticipantsLoop>
-      )}
-      <ParticipantsLoop
-        filter={(ps) =>
-          ps.filter((p) => {
-            return !isParticipantTrackPinned(p, pinState, Track.Source.Camera);
-          })
-        }
-        filterDependencies={[pinState]}
-      >
-        {props.children ?? <ParticipantView />}
-      </ParticipantsLoop>
-    </aside>
-  );
+export function CarouselView({ participants, onParticipantClick, ...props }: CarouselViewProps) {
+  return <aside {...props}>{props.children ?? <ParticipantsLoop />}</aside>;
 }

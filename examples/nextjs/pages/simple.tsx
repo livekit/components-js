@@ -12,6 +12,7 @@ import {
   useToken,
   ControlBar,
   GridLayout,
+  ParticipantsLoop,
 } from '@livekit/components-react';
 import { Track } from 'livekit-client';
 import type { NextPage } from 'next';
@@ -63,9 +64,7 @@ const SimpleExample: NextPage = () => {
           {isConnected && (
             <>
               <ScreenShareView />
-              <GridLayout>
-                <ParticipantView />
-              </GridLayout>
+              <GridLayout />
             </>
           )}
           <ControlBar />

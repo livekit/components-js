@@ -10,6 +10,7 @@ import {
   useToken,
   ControlBar,
   GridLayout,
+  ParticipantsLoop,
 } from '@livekit/components-react';
 import { ConnectionQuality, Track } from 'livekit-client';
 import styles from '../styles/Simple.module.css';
@@ -61,24 +62,28 @@ const CustomizeExample: NextPage = () => {
               <ScreenShareView />
               <div className={styles.participantGrid}>
                 <GridLayout>
-                  <ParticipantView>
-                    <MediaTrack source={Track.Source.Camera}></MediaTrack>
+                  <ParticipantsLoop>
+                    <ParticipantView>
+                      <MediaTrack source={Track.Source.Camera}></MediaTrack>
 
-                    <div className={myStyles['participant-indicators']}>
-                      <div style={{ display: 'flex' }}>
-                        <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
-                        <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
+                      <div className={myStyles['participant-indicators']}>
+                        <div style={{ display: 'flex' }}>
+                          <TrackMutedIndicator
+                            source={Track.Source.Microphone}
+                          ></TrackMutedIndicator>
+                          <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
+                        </div>
+                        {/* Overwrite styles: By passing class names, we can easily overwrite/extend the existing styles. */}
+                        {/* In addition, we can still specify a style attribute and further customize the styles. */}
+                        <ParticipantName
+                          className={myStyles['my-participant-name']}
+                          // style={{ color: 'blue' }}
+                        />
+                        {/* Custom components: Here we replace the provided <ConnectionQualityIndicator />  with our own implementation. */}
+                        <UserDefinedConnectionQualityIndicator />
                       </div>
-                      {/* Overwrite styles: By passing class names, we can easily overwrite/extend the existing styles. */}
-                      {/* In addition, we can still specify a style attribute and further customize the styles. */}
-                      <ParticipantName
-                        className={myStyles['my-participant-name']}
-                        // style={{ color: 'blue' }}
-                      />
-                      {/* Custom components: Here we replace the provided <ConnectionQualityIndicator />  with our own implementation. */}
-                      <UserDefinedConnectionQualityIndicator />
-                    </div>
-                  </ParticipantView>
+                    </ParticipantView>
+                  </ParticipantsLoop>
                 </GridLayout>
               </div>
             </>

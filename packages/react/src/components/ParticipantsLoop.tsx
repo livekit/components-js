@@ -35,6 +35,7 @@ export const ParticipantsLoop = ({
   filter,
   filterDependencies,
 }: React.PropsWithChildren<ParticipantsLoopProps>) => {
+  // TODO: Display screen shares also in the loop.
   const participants = useParticipants({ filter, filterDependencies });
   return (
     <>

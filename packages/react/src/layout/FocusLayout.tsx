@@ -35,7 +35,7 @@ export function FocusLayoutContainer({
             )}
             <CarouselView participants={participants}>
               TODO: Add option to display screen shares.
-              <ParticipantsLoop />
+              <ParticipantsLoop includeScreenShares={true} />
             </CarouselView>
           </>
         )}

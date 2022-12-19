@@ -1,12 +1,17 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import styles from '../styles/Home.module.scss';
+import { faker } from '@faker-js/faker';
 
 const EXAMPLE_ROUTES = {
   minimal: { title: 'Minimal example', href: '/minimal' },
   simple: { title: 'Simple example', href: '/simple' },
   customize: { title: 'Simple example with custom components', href: '/customize' },
   huddle: { title: 'Huddle clone build with LiveKit components', href: '/huddle' },
+  clubhouse: {
+    title: 'Clubhouse clone build with LiveKit components',
+    href: `/clubhouse?user=${faker.name.fullName()}`,
+  },
 } as const;
 
 const Home: NextPage = () => {

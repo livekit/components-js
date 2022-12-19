@@ -25,7 +25,7 @@
 
   border-top-left-radius: 2rem;
   border-top-right-radius: 2rem;
-  background-color: whitesmoke;
+  background-color: var(--lk-bg-tertiary);
   transition: bottom 1s;
 }
 
@@ -57,13 +57,13 @@ section.participant-view {
   }
   .mic-container {
     position: absolute;
-    background-color: beige;
+    background-color: var(--lk-danger);
 
     bottom: 7%;
     right: 7%;
     border-radius: 999999px;
     transition: opacity 0.2s ease-in-out;
-    border: 2px white solid;
+    border: 2px var(--lk-bg-tertiary) solid;
     padding: 0.2rem;
     div {
       aspect-ratio: 1/1;

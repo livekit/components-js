@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-props-docs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Extracts prop types for documentation purposes",
   "keywords": [
     "docs",
@@ -33,7 +33,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@livekit/components-react": "0.1.9",
+    "@livekit/components-react": "0.1.10",
     "glob": "^8.0.0",
     "mkdirp": "^1.0.4",
     "react-docgen-typescript": "^2.1.0",

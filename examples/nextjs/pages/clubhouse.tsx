@@ -13,7 +13,7 @@ import {
 } from '@livekit/components-react';
 import styles from '../styles/Clubhouse.module.scss';
 import { Track } from 'livekit-client';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 const Clubhouse = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
@@ -29,21 +29,45 @@ const Clubhouse = () => {
     },
   });
 
+  const [tryToConnect, setTryToConnect] = useState(false);
+  const [connected, setConnected] = useState(false);
+
   return (
     <div className={styles.container}>
       <LiveKitRoom
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
+        connect={tryToConnect}
         video={false}
         audio={true}
-        simulateParticipants={5}
+        // simulateParticipants={5}
+        onConnected={() => setConnected(true)}
+        onDisconnected={() => {
+          setTryToConnect(false);
+          setConnected(false);
+        }}
       >
-        <GridLayout className={styles.grid}>
-          <ParticipantsLoop>
-            <CustomParticipantView></CustomParticipantView>
-          </ParticipantsLoop>
-        </GridLayout>
-        <ControlBar></ControlBar>
+        {connected ? (
+          <>
+            <GridLayout className={styles.grid}>
+              <ParticipantsLoop>
+                <CustomParticipantView></CustomParticipantView>
+              </ParticipantsLoop>
+            </GridLayout>
+            <ControlBar></ControlBar>
+          </>
+        ) : (
+          <div style={{ display: 'grid', placeContent: 'center', height: '100%' }}>
+            <button
+              className="lk-button"
+              onClick={() => {
+                setTryToConnect(true);
+              }}
+            >
+              Enter Room
+            </button>
+          </div>
+        )}
       </LiveKitRoom>
     </div>
   );

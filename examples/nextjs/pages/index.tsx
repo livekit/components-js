@@ -7,6 +7,7 @@ const EXAMPLE_ROUTES = {
   simple: { title: 'Simple example', href: '/simple' },
   customize: { title: 'Simple example with custom components', href: '/customize' },
   huddle: { title: 'Huddle clone build with LiveKit components', href: '/huddle' },
+  clubhouse: { title: 'Clubhouse clone build with LiveKit components', href: '/clubhouse' },
 } as const;
 
 const Home: NextPage = () => {

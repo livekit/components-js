@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-core",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "publishConfig": {
     "access": "public"
   },
@@ -36,7 +36,7 @@
   },
   "author": "LiveKit",
   "devDependencies": {
-    "@livekit/components-styles": "0.1.3",
+    "@livekit/components-styles": "0.1.4",
     "eslint-config-custom": "*",
     "tsup": "^6.5.0",
     "typescript": "^4.7.4"

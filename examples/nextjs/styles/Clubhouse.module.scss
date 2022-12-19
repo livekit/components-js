@@ -1,6 +1,8 @@
 .container {
   position: relative;
   height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 .grid {
@@ -9,8 +11,24 @@
   justify-content: unset;
 }
 
+.slider {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  max-width: 50rem;
+  height: 80%;
+  padding: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  background-color: antiquewhite;
+  transition: bottom 1s;
+}
+
 section.participant-view {
-  --size: 10rem;
+  --size: 6rem;
   position: relative;
   width: var(--size);
   height: var(--size);

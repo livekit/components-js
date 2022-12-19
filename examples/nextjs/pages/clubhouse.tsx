@@ -5,6 +5,7 @@ import {
   ParticipantName,
   ParticipantsLoop,
   ParticipantView,
+  RoomName,
   TrackMutedIndicator,
   useIsMuted,
   useIsSpeaking,
@@ -25,7 +26,7 @@ const Clubhouse = () => {
     roomName: roomName,
     userInfo: {
       identity: userIdentity,
-      name: 'my-name',
+      name: userIdentity,
     },
   });
 
@@ -40,34 +41,35 @@ const Clubhouse = () => {
         connect={tryToConnect}
         video={false}
         audio={true}
-        // simulateParticipants={5}
+        // simulateParticipants={15}
         onConnected={() => setConnected(true)}
         onDisconnected={() => {
           setTryToConnect(false);
           setConnected(false);
         }}
       >
-        {connected ? (
-          <>
-            <GridLayout className={styles.grid}>
-              <ParticipantsLoop>
-                <CustomParticipantView></CustomParticipantView>
-              </ParticipantsLoop>
-            </GridLayout>
-            <ControlBar></ControlBar>
-          </>
-        ) : (
-          <div style={{ display: 'grid', placeContent: 'center', height: '100%' }}>
-            <button
-              className="lk-button"
-              onClick={() => {
-                setTryToConnect(true);
-              }}
-            >
-              Enter Room
-            </button>
-          </div>
-        )}
+        <div style={{ display: 'grid', placeContent: 'center', height: '100%' }}>
+          <button
+            className="lk-button"
+            onClick={() => {
+              setTryToConnect(true);
+            }}
+          >
+            Enter Room
+          </button>
+        </div>
+
+        <div className={styles.slider} style={{ bottom: connected ? '0px' : '-100%' }}>
+          <h1>
+            <RoomName></RoomName>
+          </h1>
+          <GridLayout className={styles.grid}>
+            <ParticipantsLoop>
+              <CustomParticipantView></CustomParticipantView>
+            </ParticipantsLoop>
+          </GridLayout>
+          <ControlBar></ControlBar>
+        </div>
       </LiveKitRoom>
     </div>
   );
@@ -81,7 +83,7 @@ const CustomParticipantView = () => {
   const id = useMemo(() => participant.identity, [participant]);
 
   return (
-    <section className={styles['participant-view']}>
+    <section className={styles['participant-view']} title={participant.name}>
       <div
         // className={`rounded-full border-2 p-0.5 transition-colors duration-1000 ${
         className={styles['avatar-container']}

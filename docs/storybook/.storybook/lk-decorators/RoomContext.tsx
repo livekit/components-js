@@ -10,18 +10,11 @@ export type RoomContextSettings = Partial<{
 }>;
 
 /**
- * Wraps a Storybook Story into a LiveKit room context.
- *
- * Note: This component requires some environment variables. Make sure that they are set correctly in your .env file.
+ * Wraps a Storybook Story into a simulated LiveKit room context.
  */
 export const LkRoomContext: Decorator = (Story, { globals, args }) => {
   const roomContextSettings: RoomContextSettings = args;
-
   const room = new Room({});
-  // const token = import.meta.env.VITE_PUBLIC_TEST_TOKEN;
-  // const serverUrl = import.meta.env.VITE_PUBLIC_LK_SERVER_URL;
-
-  // console.log({ connect, connected, token, serverUrl });
 
   React.useEffect(() => {
     return () => {
@@ -38,6 +31,75 @@ export const LkRoomContext: Decorator = (Story, { globals, args }) => {
         simulateParticipants={globals.participantCount}
         video={roomContextSettings?.video || false}
         audio={false}
+      >
+        {Story()}
+      </LiveKitRoom>
+    </>
+  );
+};
+
+/**
+ * Wraps a Storybook Story into a live LiveKit room context.
+ * This will connect to a actual LiveKit server.
+ * This context is intended for local testing, for stories use `LkRoomContext` instead.
+ *
+ * Note: This context requires some environment variables to be set. Make sure that they are set correctly in your .env file.
+ */
+export const LkRoomContextLive: Decorator = (Story, args) => {
+  const roomContextSettings: RoomContextSettings = args.parameters.roomContext;
+  const [connect, setConnect] = React.useState(roomContextSettings?.connect);
+  const [connected, setConnected] = React.useState(false);
+
+  const room = new Room({});
+  const token = import.meta.env.VITE_PUBLIC_TEST_TOKEN;
+  const serverUrl = import.meta.env.VITE_PUBLIC_LK_SERVER_URL;
+
+  React.useEffect(() => {
+    room.on('connected', () => setConnected(true));
+    room.on('disconnected', () => setConnected(false));
+    return () => {
+      room.removeAllListeners();
+      room.disconnect();
+    };
+  }, []);
+
+  return (
+    <>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '1rem',
+          margin: '-1rem -1rem 1rem',
+          fontSize: '.75rem',
+          backgroundColor: 'var(--lk-bg-secondary)',
+        }}
+      >
+        <strong>LiveKit Room Controls</strong>
+        <div>
+          <div style={{ display: 'flex', gap: '.5rem', alignItems: 'center' }}>
+            Connection status
+            <button onClick={() => setConnect(!connect)}>{`${
+              connected ? 'Connected' : 'Not connected'
+            }`}</button>
+          </div>
+        </div>
+      </div>
+
+      <LiveKitRoom
+        room={room}
+        connect={connect}
+        token={token}
+        serverUrl={serverUrl}
+        video={roomContextSettings?.video || false}
+        audio={roomContextSettings?.audio || false}
+        onConnected={() => {
+          setConnected(true);
+        }}
+        onDisconnected={() => {
+          setConnect(false);
+        }}
       >
         {Story()}
       </LiveKitRoom>

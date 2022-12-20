@@ -11,7 +11,7 @@ const MinimalExample: NextPage = () => {
     roomName: roomName,
     userInfo: {
       identity: userIdentity,
-      name: 'my-name',
+      name: userIdentity,
     },
   });
 

@@ -1,6 +1,6 @@
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { ParticipantContext } from '../contexts';
+import { ParticipantContext, usePinContext } from '../contexts';
 import { useParticipants } from '../hooks';
 import { cloneSingleChild } from '../utils';
 import { ParticipantView } from './participant/ParticipantView';
@@ -11,6 +11,7 @@ type ParticipantsLoopProps = {
    * Set to `true` if screen share tracks should be included in the participant loop?
    */
   includeScreenShares?: boolean;
+  excludePinnedTrack?: boolean;
   filterDependencies?: Array<unknown>;
   filter?: (participants: Array<Participant>) => Array<Participant>;
 };
@@ -38,31 +39,43 @@ type ParticipantsLoopProps = {
 export const ParticipantsLoop = ({
   filter,
   filterDependencies,
-  includeScreenShares: includeScreeShares = true,
+  includeScreenShares = true,
+  excludePinnedTrack = false,
   ...props
 }: React.PropsWithChildren<ParticipantsLoopProps>) => {
   const participants = useParticipants({ filter, filterDependencies });
   //TODO: Remove useScreenShare as a way to trigger re-render after scree share has stopped.
   const { allScreenShares, screenShareParticipant } = useScreenShare({});
 
+  const pinContext = usePinContext();
+
   type TrackSourceParticipantPair = { source: Track.Source; participant: Participant };
 
-  const participantSourceMix: TrackSourceParticipantPair[] = React.useMemo(() => {
-    const mix: TrackSourceParticipantPair[] = [];
-    console.log({ allScreenShares });
+  const trackSourceParticipantPairs: TrackSourceParticipantPair[] = React.useMemo(() => {
+    let pairs: TrackSourceParticipantPair[] = [];
 
     participants.forEach((p) => {
-      mix.push({ source: Track.Source.Camera, participant: p });
+      pairs.push({ source: Track.Source.Camera, participant: p });
       if (p.isScreenShareEnabled) {
-        mix.push({ source: Track.Source.ScreenShare, participant: p });
+        pairs.push({ source: Track.Source.ScreenShare, participant: p });
       }
     });
-    return mix;
-  }, [participants, allScreenShares, screenShareParticipant]);
+
+    if (excludePinnedTrack) {
+      pairs = pairs.filter(({ source, participant }) =>
+        pinContext.state?.pinnedSource === source &&
+        participant === pinContext.state.pinnedParticipant
+          ? false
+          : true,
+      );
+    }
+
+    return pairs;
+  }, [participants, allScreenShares, screenShareParticipant, pinContext]);
 
   return (
     <>
-      {participantSourceMix.map(({ source, participant }) => (
+      {trackSourceParticipantPairs.map(({ source, participant }) => (
         <ParticipantContext.Provider value={participant} key={participant.identity}>
           {props.children ? (
             cloneSingleChild(props.children)

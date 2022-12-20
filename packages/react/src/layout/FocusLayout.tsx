@@ -34,7 +34,7 @@ export function FocusLayoutContainer({
               <FocusLayout participant={pinContext.state?.pinnedParticipant} />
             )}
             <CarouselView participants={participants}>
-              <ParticipantsLoop includeScreenShares={true} />
+              <ParticipantsLoop includeScreenShares={true} excludePinnedTrack={true} />
             </CarouselView>
           </>
         )}

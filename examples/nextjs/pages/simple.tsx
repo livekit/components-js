@@ -1,20 +1,13 @@
 import {
-  ParticipantView,
-  ConnectionQualityIndicator,
   LiveKitRoom,
   ConnectionState,
   ScreenShareView,
-  ParticipantName,
-  TrackMutedIndicator,
   RoomName,
   RoomAudioRenderer,
-  MediaTrack,
   useToken,
   ControlBar,
   GridLayout,
-  ParticipantsLoop,
 } from '@livekit/components-react';
-import { Track } from 'livekit-client';
 import type { NextPage } from 'next';
 import { useState } from 'react';
 import styles from '../styles/Simple.module.css';

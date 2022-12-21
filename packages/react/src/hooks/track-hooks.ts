@@ -82,8 +82,8 @@ export function useTrack({ pub }: UseTrackProps) {
   return { publication, track };
 }
 
-export type TrackSourceParticipantPair = { source: Track.Source; participant: Participant };
-export type TracksFilter = Parameters<TrackSourceParticipantPair[]['filter']>['0'];
+export type TrackParticipantPair = { track: TrackPublication; participant: Participant };
+export type TracksFilter = Parameters<TrackParticipantPair[]['filter']>['0'];
 type UseTracksProps = {
   sources: Track.Source[];
   excludePinnedTracks?: boolean;
@@ -109,8 +109,8 @@ export function useTracks({
   const participants = useParticipants();
   const pinContext = usePinContext();
 
-  const pairs: TrackSourceParticipantPair[] = React.useMemo(() => {
-    let sourceParticipantPairs: TrackSourceParticipantPair[] = [];
+  const pairs: TrackParticipantPair[] = React.useMemo(() => {
+    let sourceParticipantPairs: TrackParticipantPair[] = [];
     console.log('sources', { sources });
     if (sources.length === 0) {
       console.warn(`You used the 'useTracks' hook with an empty sources array – no tracks will be returned.
@@ -122,29 +122,44 @@ export function useTracks({
     participants.forEach((p) => {
       // Add camera track
       if (sources.includes(Track.Source.Camera) && p.isCameraEnabled) {
-        sourceParticipantPairs.push({ source: Track.Source.Camera, participant: p });
+        const track = p.getTrack(Track.Source.Camera);
+        if (track) {
+          sourceParticipantPairs.push({ track: track, participant: p });
+        }
       }
       // Add screen share track
       if (sources.includes(Track.Source.ScreenShare) && p.isScreenShareEnabled) {
-        sourceParticipantPairs.push({ source: Track.Source.ScreenShare, participant: p });
+        const track = p.getTrack(Track.Source.ScreenShare);
+        if (track) {
+          sourceParticipantPairs.push({ track: track, participant: p });
+        }
       }
       // Add microphone track
       if (sources.includes(Track.Source.Microphone) && p.isMicrophoneEnabled) {
-        sourceParticipantPairs.push({ source: Track.Source.Microphone, participant: p });
+        const track = p.getTrack(Track.Source.Microphone);
+        if (track) {
+          sourceParticipantPairs.push({ track: track, participant: p });
+        }
       }
       // Add screen share audio track
       if (sources.includes(Track.Source.ScreenShareAudio) && p.isScreenShareEnabled) {
-        sourceParticipantPairs.push({ source: Track.Source.ScreenShareAudio, participant: p });
+        const track = p.getTrack(Track.Source.ScreenShareAudio);
+        if (track) {
+          sourceParticipantPairs.push({ track: track, participant: p });
+        }
       }
       // Add unknown track
       if (sources.includes(Track.Source.Unknown)) {
-        sourceParticipantPairs.push({ source: Track.Source.Unknown, participant: p });
+        const track = p.getTrack(Track.Source.Unknown);
+        if (track) {
+          sourceParticipantPairs.push({ track: track, participant: p });
+        }
       }
     });
 
     if (excludePinnedTracks) {
-      sourceParticipantPairs = sourceParticipantPairs.filter(({ source, participant }) =>
-        pinContext.state?.pinnedSource === source &&
+      sourceParticipantPairs = sourceParticipantPairs.filter(({ track, participant }) =>
+        pinContext.state?.pinnedSource === track.source &&
         participant === pinContext.state.pinnedParticipant
           ? false
           : true,

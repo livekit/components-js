@@ -46,12 +46,15 @@ export const TrackLoop = ({
 
   return (
     <>
-      {trackSourceParticipantPairs.map(({ source, participant }) => (
-        <ParticipantContext.Provider value={participant} key={`${participant.identity}_${source}`}>
+      {trackSourceParticipantPairs.map(({ track, participant }) => (
+        <ParticipantContext.Provider
+          value={participant}
+          key={`${participant.identity}_${track.source}`}
+        >
           {props.children ? (
             cloneSingleChild(props.children)
           ) : (
-            <ParticipantView trackSource={source} />
+            <ParticipantView trackSource={track.source} />
           )}
         </ParticipantContext.Provider>
       ))}

@@ -88,9 +88,18 @@ type UseVideoTracksProps = {
   excludePinnedTracks?: boolean;
 };
 
+/**
+ * The useVideoTracks hook returns a array of objects containing the track source `camera` or `screen_share` and the participant.
+ * This is helpful for looping over all camera and screen_share tracks.
+ *
+ * @example
+ * ```ts
+ * const pairs = useVideoTracks({includeScreenShareTracks: true, excludePinnedTracks: false})
+ * ```
+ */
 export function useVideoTracks({
-  includeScreenShareTracks: includeScreenShare = true,
-  excludePinnedTracks: excludePinnedTrack = true,
+  includeScreenShareTracks = true,
+  excludePinnedTracks = true,
 }: UseVideoTracksProps) {
   const participants = useParticipants();
   const pinContext = usePinContext();
@@ -100,12 +109,12 @@ export function useVideoTracks({
 
     participants.forEach((p) => {
       sourceParticipantPairs.push({ source: Track.Source.Camera, participant: p });
-      if (includeScreenShare && p.isScreenShareEnabled) {
+      if (includeScreenShareTracks && p.isScreenShareEnabled) {
         sourceParticipantPairs.push({ source: Track.Source.ScreenShare, participant: p });
       }
     });
 
-    if (excludePinnedTrack) {
+    if (excludePinnedTracks) {
       sourceParticipantPairs = sourceParticipantPairs.filter(({ source, participant }) =>
         pinContext.state?.pinnedSource === source &&
         participant === pinContext.state.pinnedParticipant
@@ -115,7 +124,7 @@ export function useVideoTracks({
     }
 
     return sourceParticipantPairs;
-  }, [participants, pinContext, excludePinnedTrack, includeScreenShare]);
+  }, [participants, pinContext, excludePinnedTracks, includeScreenShareTracks]);
 
   return pairs;
 }

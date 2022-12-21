@@ -82,10 +82,13 @@ export function useTrack({ pub }: UseTrackProps) {
   return { publication, track };
 }
 
-type TrackSourceParticipantPair = { source: Track.Source; participant: Participant };
+export type TrackSourceParticipantPair = { source: Track.Source; participant: Participant };
+export type TracksFilter = Parameters<TrackSourceParticipantPair[]['filter']>['0'];
 type UseTracksProps = {
   sources: Track.Source[];
   excludePinnedTracks?: boolean;
+  filter?: TracksFilter;
+  filterDependencies?: Array<any>;
 };
 
 /**
@@ -97,7 +100,12 @@ type UseTracksProps = {
  * const pairs = useVideoTracks({excludePinnedTracks: false})
  * ```
  */
-export function useTracks({ sources, excludePinnedTracks = true }: UseTracksProps) {
+export function useTracks({
+  sources,
+  excludePinnedTracks = true,
+  filter,
+  filterDependencies = [],
+}: UseTracksProps) {
   const participants = useParticipants();
   const pinContext = usePinContext();
 
@@ -143,8 +151,12 @@ export function useTracks({ sources, excludePinnedTracks = true }: UseTracksProp
       );
     }
 
+    if (filter) {
+      sourceParticipantPairs = sourceParticipantPairs.filter(filter);
+    }
+
     return sourceParticipantPairs;
-  }, [participants, pinContext, excludePinnedTracks, sources]);
+  }, [participants, pinContext, excludePinnedTracks, sources, filter, ...filterDependencies]);
 
   return pairs;
 }

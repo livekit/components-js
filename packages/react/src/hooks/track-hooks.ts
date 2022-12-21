@@ -83,8 +83,8 @@ export function useTrack({ pub }: UseTrackProps) {
 }
 
 type TrackSourceParticipantPair = { source: Track.Source; participant: Participant };
-type UseVideoTracksProps = {
-  includeScreenShareTracks?: boolean;
+type UseTracksProps = {
+  sources: Track.Source[];
   excludePinnedTracks?: boolean;
 };
 
@@ -94,23 +94,43 @@ type UseVideoTracksProps = {
  *
  * @example
  * ```ts
- * const pairs = useVideoTracks({includeScreenShareTracks: true, excludePinnedTracks: false})
+ * const pairs = useVideoTracks({excludePinnedTracks: false})
  * ```
  */
-export function useVideoTracks({
-  includeScreenShareTracks = true,
-  excludePinnedTracks = true,
-}: UseVideoTracksProps) {
+export function useTracks({ sources, excludePinnedTracks = true }: UseTracksProps) {
   const participants = useParticipants();
   const pinContext = usePinContext();
 
   const pairs: TrackSourceParticipantPair[] = React.useMemo(() => {
     let sourceParticipantPairs: TrackSourceParticipantPair[] = [];
+    console.log('sources', { sources });
+    if (sources.length === 0) {
+      console.warn(`You used the 'useTracks' hook with an empty sources array – no tracks will be returned.
+    This is probably not intended. Make sure you pass all the wanted tracks to the sources array.
+    `);
+      return [];
+    }
 
     participants.forEach((p) => {
-      sourceParticipantPairs.push({ source: Track.Source.Camera, participant: p });
-      if (includeScreenShareTracks && p.isScreenShareEnabled) {
+      // Add camera track
+      if (sources.includes(Track.Source.Camera) && p.isCameraEnabled) {
+        sourceParticipantPairs.push({ source: Track.Source.Camera, participant: p });
+      }
+      // Add screen share track
+      if (sources.includes(Track.Source.ScreenShare) && p.isScreenShareEnabled) {
         sourceParticipantPairs.push({ source: Track.Source.ScreenShare, participant: p });
+      }
+      // Add microphone track
+      if (sources.includes(Track.Source.Microphone) && p.isMicrophoneEnabled) {
+        sourceParticipantPairs.push({ source: Track.Source.Microphone, participant: p });
+      }
+      // Add screen share audio track
+      if (sources.includes(Track.Source.ScreenShareAudio) && p.isScreenShareEnabled) {
+        sourceParticipantPairs.push({ source: Track.Source.ScreenShareAudio, participant: p });
+      }
+      // Add unknown track
+      if (sources.includes(Track.Source.Unknown)) {
+        sourceParticipantPairs.push({ source: Track.Source.Unknown, participant: p });
       }
     });
 
@@ -124,7 +144,7 @@ export function useVideoTracks({
     }
 
     return sourceParticipantPairs;
-  }, [participants, pinContext, excludePinnedTracks, includeScreenShareTracks]);
+  }, [participants, pinContext, excludePinnedTracks, sources]);
 
   return pairs;
 }

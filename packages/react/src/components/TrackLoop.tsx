@@ -1,14 +1,18 @@
+import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../contexts';
-import { useVideoTracks } from '../hooks';
+import { useTracks } from '../hooks';
 import { cloneSingleChild } from '../utils';
 import { ParticipantView } from './participant/ParticipantView';
 
-type VideoTrackLoopProps = {
+type TrackLoopProps = {
   /**
-   * Set to `true` if screen share tracks should be included in the participant loop?
+   * Array of all track sources that should be included as an item in the loop.
    */
-  includeScreenShareTracks?: boolean;
+  sources: Track.Source[];
+  /**
+   * Set to `true` if pinned tracks should be included in the participant loop?
+   */
   excludePinnedTracks?: boolean;
 };
 
@@ -24,13 +28,13 @@ type VideoTrackLoopProps = {
  * {...}
  * ```
  */
-export const VideoTrackLoop = ({
-  includeScreenShareTracks = true,
+export const TrackLoop = ({
+  sources = [Track.Source.Camera],
   excludePinnedTracks = false,
   ...props
-}: React.PropsWithChildren<VideoTrackLoopProps>) => {
-  const trackSourceParticipantPairs = useVideoTracks({
-    includeScreenShareTracks,
+}: React.PropsWithChildren<TrackLoopProps>) => {
+  const trackSourceParticipantPairs = useTracks({
+    sources,
     excludePinnedTracks,
   });
 

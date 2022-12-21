@@ -5,7 +5,7 @@ import { mergeProps } from '../utils';
 import { MediaTrack } from '../components/participant/MediaTrack';
 import { ParticipantClickEvent } from '../components/participant/ParticipantView';
 import { ClearPinButton } from '../components/ClearPinButton';
-import { VideoTrackLoop } from '../components/VideoTrackLoop';
+import { TrackLoop } from '../components/TrackLoop';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   focusParticipant?: Participant;
@@ -32,7 +32,10 @@ export function FocusLayoutContainer({
               <FocusLayout participant={pinContext.state?.pinnedParticipant} />
             )}
             <CarouselView>
-              <VideoTrackLoop includeScreenShareTracks={true} excludePinnedTracks={true} />
+              <TrackLoop
+                sources={[Track.Source.Camera, Track.Source.ScreenShare]}
+                excludePinnedTracks={true}
+              />
             </CarouselView>
           </>
         )}
@@ -73,9 +76,7 @@ export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement
 export function CarouselView({ ...props }: CarouselViewProps) {
   return (
     <aside {...props}>
-      {props.children ?? (
-        <VideoTrackLoop includeScreenShareTracks={false} excludePinnedTracks={true} />
-      )}
+      {props.children ?? <TrackLoop sources={[Track.Source.Camera]} excludePinnedTracks={true} />}
     </aside>
   );
 }

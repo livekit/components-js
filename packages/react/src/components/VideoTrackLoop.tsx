@@ -8,8 +8,8 @@ type VideoTrackLoopProps = {
   /**
    * Set to `true` if screen share tracks should be included in the participant loop?
    */
-  includeScreenShares?: boolean;
-  excludePinnedTrack?: boolean;
+  includeScreenShareTracks?: boolean;
+  excludePinnedTracks?: boolean;
 };
 
 /**
@@ -25,16 +25,19 @@ type VideoTrackLoopProps = {
  * ```
  */
 export const VideoTrackLoop = ({
-  includeScreenShares = true,
-  excludePinnedTrack = false,
+  includeScreenShareTracks = true,
+  excludePinnedTracks = false,
   ...props
 }: React.PropsWithChildren<VideoTrackLoopProps>) => {
-  const trackSourceParticipantPairs = useVideoTracks({});
+  const trackSourceParticipantPairs = useVideoTracks({
+    includeScreenShareTracks,
+    excludePinnedTracks,
+  });
 
   return (
     <>
       {trackSourceParticipantPairs.map(({ source, participant }) => (
-        <ParticipantContext.Provider value={participant} key={participant.identity}>
+        <ParticipantContext.Provider value={participant} key={`${participant.identity}_${source}`}>
           {props.children ? (
             cloneSingleChild(props.children)
           ) : (

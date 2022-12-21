@@ -5,7 +5,7 @@ import { ControlBar } from './ControlBar';
 import { FocusLayoutContainer } from '../layout/FocusLayout';
 import { GridLayout } from '../layout/GridLayout';
 import { PinState } from '@livekit/components-core';
-import { ParticipantsLoop } from '../components/ParticipantsLoop';
+import { VideoTrackLoop } from '../components/VideoTrackLoop';
 
 export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -37,7 +37,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
       <PinContextProvider onChange={handleFocusStateChange}>
         {layout === 'grid' ? (
           <GridLayout>
-            <ParticipantsLoop />
+            <VideoTrackLoop includeScreenShares={true} excludePinnedTrack={false} />
           </GridLayout>
         ) : (
           <FocusLayoutContainer />

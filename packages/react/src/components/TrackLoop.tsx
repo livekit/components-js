@@ -19,14 +19,16 @@ type TrackLoopProps = {
 };
 
 /**
- * The VideoTrackLoop component loops over all participant camera and screen share tracks.
+ * The TrackLoop component loops over tracks. It is for example a easy way to loop over all participant camera and screen share tracks.
+ * Only tracks with a the same source specified via the sources property get included in the loop.
+ * Further narrowing the loop items is possible by providing a filter function to the component.
  *
  * @example
  * ```tsx
  * {...}
- *   <VideoTrackLoop>
+ *   <TrackLoop sources=[Track.Source.Camera, Track.Source.ScreenShare]>
  *     {...}
- *   <VideoTrackLoop />
+ *   <TrackLoop />
  * {...}
  * ```
  */

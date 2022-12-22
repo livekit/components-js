@@ -115,7 +115,7 @@ const CustomGridLayout = ({ room }: { room?: Room }) => {
         <CustomParticipantView />
       </ParticipantLoop>
       <ParticipantLoop
-        filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
+        filter={(participant) => participant.isScreenShareEnabled}
         filterDependencies={[screenShareTrack, allScreenShares]}
       >
         <CustomScreenShareView />
@@ -138,23 +138,17 @@ const CustomFocusLayout = ({
       <aside>
         <section>
           <ParticipantLoop
-            filter={(ps) =>
-              ps.filter((p) => {
-                return !isParticipantTrackInFocus(p, focusState, Track.Source.Camera);
-              })
+            filter={(participant) =>
+              !isParticipantTrackInFocus(participant, focusState, Track.Source.Camera)
             }
             filterDependencies={[screenShareTrack, focusState]}
           >
             <CustomParticipantView />
           </ParticipantLoop>
           <ParticipantLoop
-            filter={(ps) =>
-              ps.filter((p) => {
-                return (
-                  p.isScreenShareEnabled &&
-                  !isParticipantTrackInFocus(p, focusState, Track.Source.ScreenShare)
-                );
-              })
+            filter={(participant) =>
+              participant.isScreenShareEnabled &&
+              !isParticipantTrackInFocus(participant, focusState, Track.Source.Camera)
             }
             filterDependencies={[screenShareTrack, focusState]}
           >

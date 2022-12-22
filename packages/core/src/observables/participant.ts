@@ -91,6 +91,7 @@ export function participantInfoObserver(participant: Participant) {
   const observer = observeParticipantEvents(
     participant,
     ParticipantEvent.ParticipantMetadataChanged,
+    // ParticipantEvent.LocalTrackPublished,
   ).pipe(
     map(({ name, identity, metadata }) => {
       return {
@@ -98,6 +99,11 @@ export function participantInfoObserver(participant: Participant) {
         identity,
         metadata,
       };
+    }),
+    startWith({
+      name: participant.name,
+      identity: participant.identity,
+      metadata: participant.metadata,
     }),
   );
   return observer;

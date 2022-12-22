@@ -92,12 +92,13 @@ type UseTracksProps = {
 };
 
 /**
- * The useVideoTracks hook returns a array of objects containing the track source `camera` or `screen_share` and the participant.
- * This is helpful for looping over all camera and screen_share tracks.
+ * The useTracks hook returns Array<TrackParticipantPair> which combine the track and the corresponding participant of the track.
+ * Only tracks with a the same source specified via the sources property get included in the loop.
+ * Further narrowing the loop items is possible by providing a `filter` function or setting the `excludePinnedTrack` property.
  *
  * @example
  * ```ts
- * const pairs = useVideoTracks({excludePinnedTracks: false})
+ * const pairs = useTracks({sources: [Track.Source.Camera], excludePinnedTracks: false})
  * ```
  */
 export function useTracks({

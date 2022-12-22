@@ -1,14 +1,8 @@
-import {
-  LocalParticipant,
-  Participant,
-  RemoteParticipant,
-  Track,
-  TrackPublication,
-} from 'livekit-client';
+import { LocalParticipant, Participant, RemoteParticipant, TrackPublication } from 'livekit-client';
 import type { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
 import type { UnprefixedClassNames } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
 import { cssPrefix } from './constants';
-import { PinState } from './types';
+import { PinState, TrackParticipantPair } from './types';
 export function kebabize(str: string) {
   return str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
 }
@@ -43,41 +37,16 @@ export const attachIfSubscribed = (
 };
 
 export function isParticipantTrackPinned(
-  participant: Participant,
-  focusState: PinState | undefined,
-  source: Track.Source,
+  trackParticipantPair: TrackParticipantPair,
+  pinState: PinState | undefined,
 ): boolean {
-  if (focusState === undefined) {
-    console.warn(`focusState not set: `, focusState);
+  const { track, participant } = trackParticipantPair;
+
+  if (pinState === undefined) {
     return false;
   }
 
-  if (focusState.pinnedParticipant === undefined || focusState.pinnedSource === undefined) {
-    console.warn(`focusState not set: `, focusState);
-    return false;
-  }
-
-  if (focusState.pinnedSource !== source) {
-    return false;
-  }
-
-  if (focusState.pinnedParticipant.identity === participant.identity) {
-    console.log(`Participant has same identity as pinned.`, focusState);
-    switch (focusState.pinnedSource) {
-      case Track.Source.Camera:
-        return participant.isCameraEnabled;
-        break;
-      case Track.Source.ScreenShare:
-        return participant.isScreenShareEnabled;
-        break;
-
-      default:
-        return false;
-        break;
-    }
-  } else {
-    return false;
-  }
+  return pinState.pinnedSource === track.source && pinState.pinnedParticipant === participant;
 }
 
 /**

@@ -10,7 +10,7 @@ import {
   useToken,
   ControlBar,
   GridLayout,
-  ParticipantsLoop,
+  ParticipantLoop,
 } from '@livekit/components-react';
 import { ConnectionQuality, Track } from 'livekit-client';
 import styles from '../styles/Simple.module.css';
@@ -62,7 +62,7 @@ const CustomizeExample: NextPage = () => {
               <ScreenShareView />
               <div className={styles.participantGrid}>
                 <GridLayout>
-                  <ParticipantsLoop>
+                  <ParticipantLoop>
                     <ParticipantView>
                       <MediaTrack source={Track.Source.Camera}></MediaTrack>
 
@@ -83,7 +83,7 @@ const CustomizeExample: NextPage = () => {
                         <UserDefinedConnectionQualityIndicator />
                       </div>
                     </ParticipantView>
-                  </ParticipantsLoop>
+                  </ParticipantLoop>
                 </GridLayout>
               </div>
             </>

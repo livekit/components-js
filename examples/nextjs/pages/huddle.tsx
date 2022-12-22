@@ -6,7 +6,7 @@ import {
   TrackToggle,
   MediaTrack,
   ParticipantName,
-  ParticipantsLoop,
+  ParticipantLoop,
   ParticipantView,
   PinContextProvider,
   PreJoin,
@@ -111,15 +111,15 @@ const CustomGridLayout = ({ room }: { room?: Room }) => {
 
   return (
     <div ref={gridContainerRef} className={styles.gridLayout} style={props}>
-      <ParticipantsLoop>
+      <ParticipantLoop>
         <CustomParticipantView />
-      </ParticipantsLoop>
-      <ParticipantsLoop
+      </ParticipantLoop>
+      <ParticipantLoop
         filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
         filterDependencies={[screenShareTrack, allScreenShares]}
       >
         <CustomScreenShareView />
-      </ParticipantsLoop>
+      </ParticipantLoop>
     </div>
   );
 };
@@ -137,7 +137,7 @@ const CustomFocusLayout = ({
       </div>
       <aside>
         <section>
-          <ParticipantsLoop
+          <ParticipantLoop
             filter={(ps) =>
               ps.filter((p) => {
                 return !isParticipantTrackInFocus(p, focusState, Track.Source.Camera);
@@ -146,8 +146,8 @@ const CustomFocusLayout = ({
             filterDependencies={[screenShareTrack, focusState]}
           >
             <CustomParticipantView />
-          </ParticipantsLoop>
-          <ParticipantsLoop
+          </ParticipantLoop>
+          <ParticipantLoop
             filter={(ps) =>
               ps.filter((p) => {
                 return (
@@ -159,7 +159,7 @@ const CustomFocusLayout = ({
             filterDependencies={[screenShareTrack, focusState]}
           >
             <CustomScreenShareView />
-          </ParticipantsLoop>
+          </ParticipantLoop>
         </section>
       </aside>
     </div>

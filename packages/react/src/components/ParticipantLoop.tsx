@@ -5,13 +5,13 @@ import { useParticipants } from '../hooks';
 import { cloneSingleChild } from '../utils';
 import { ParticipantView } from './participant/ParticipantView';
 
-type ParticipantsLoopProps = {
+type ParticipantLoopProps = {
   filterDependencies?: Array<unknown>;
   filter?: (participants: Array<Participant>) => Array<Participant>;
 };
 
 /**
- * The ParticipantsLoop component loops over all or a filtered subset of participants to create a visual
+ * The ParticipantLoop component loops over all or a filtered subset of participants to create a visual
  * representation (`ParticipantView`) and context for every participant. This component takes zero or more children.
  * By providing your own `ParticipantView` template as a child you have full control over the look and feel of your
  * participant representations.
@@ -22,19 +22,19 @@ type ParticipantsLoopProps = {
  * @example
  * ```tsx
  * {...}
- *   <ParticipantsLoop>
+ *   <ParticipantLoop>
  *     {...}
- *   <ParticipantsLoop />
+ *   <ParticipantLoop />
  * {...}
  * ```
  *
  * @see `ParticipantView` component
  */
-export const ParticipantsLoop = ({
+export const ParticipantLoop = ({
   filter,
   filterDependencies,
   ...props
-}: React.PropsWithChildren<ParticipantsLoopProps>) => {
+}: React.PropsWithChildren<ParticipantLoopProps>) => {
   const participants = useParticipants({ filter, filterDependencies });
 
   return (

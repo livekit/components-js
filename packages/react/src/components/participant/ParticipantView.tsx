@@ -67,7 +67,7 @@ function ParticipantContextIfNeeded(
 
 /**
  * The ParticipantView component is the base utility wrapper for displaying a visual representation of a participant.
- * This component can be used as a child of the `ParticipantsLoop` component or independently if a participant is passed as a property.
+ * This component can be used as a child of the `ParticipantLoop` component or independently if a participant is passed as a property.
  *
  * @example
  * ```tsx
@@ -78,7 +78,7 @@ function ParticipantContextIfNeeded(
  * {...}
  * ```
  *
- * @see `ParticipantsLoop` component
+ * @see `ParticipantLoop` component
  */
 export const ParticipantView = ({
   participant,

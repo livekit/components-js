@@ -17,7 +17,7 @@ const MinimalExample: NextPage = () => {
 
   return (
     <div style={{ padding: '2rem' }}>
-      <LiveKitRoom token={token} serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL} />
+      <LiveKitRoom video={true} token={token} serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL} />
     </div>
   );
 };

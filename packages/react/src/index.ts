@@ -5,6 +5,7 @@ export * from './components/participant/ConnectionQualityIndicator';
 export * from './components/LiveKitRoom';
 export * from './components/controls/TrackToggle';
 export * from './components/ParticipantsLoop';
+export * from './components/TrackLoop';
 export * from './components/ConnectionState';
 export * from './components/controls/DisconnectButton';
 export * from './components/ScreenShareRenderer';

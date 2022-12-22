@@ -1,6 +1,6 @@
-import { Participant } from 'livekit-client';
+import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { ParticipantsLoop } from '../components/ParticipantsLoop';
+import { TrackLoop } from '../components/TrackLoop';
 import { mergeProps } from '../utils';
 
 export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -24,5 +24,9 @@ export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
  */
 export function GridLayout({ participants, ...props }: GridLayoutProps) {
   const elementProps = mergeProps(props, { className: 'lk-grid-layout' });
-  return <div {...elementProps}>{props.children ?? <ParticipantsLoop />}</div>;
+  return (
+    <div {...elementProps}>
+      {props.children ?? <TrackLoop sources={[Track.Source.Camera, Track.Source.ScreenShare]} />}
+    </div>
+  );
 }

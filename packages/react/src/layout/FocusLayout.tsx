@@ -4,9 +4,8 @@ import { useMaybePinContext, usePinContext } from '../contexts';
 import { mergeProps } from '../utils';
 import { MediaTrack } from '../components/participant/MediaTrack';
 import { ParticipantClickEvent } from '../components/participant/ParticipantView';
-import { useParticipants, useSortedParticipants } from '../hooks';
 import { ClearPinButton } from '../components/ClearPinButton';
-import { ParticipantsLoop } from '../components/ParticipantsLoop';
+import { TrackLoop } from '../components/TrackLoop';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   focusParticipant?: Participant;
@@ -23,7 +22,6 @@ export function FocusLayoutContainer({
 }: FocusLayoutContainerProps) {
   const elementProps = mergeProps(props, { className: 'lk-focus-layout' });
   const pinContext = usePinContext();
-  const participants = useSortedParticipants({ participants: useParticipants({}) });
 
   return (
     <>
@@ -33,8 +31,11 @@ export function FocusLayoutContainer({
             {pinContext.state?.pinnedParticipant && (
               <FocusLayout participant={pinContext.state?.pinnedParticipant} />
             )}
-            <CarouselView participants={participants}>
-              <ParticipantsLoop includeScreenShares={true} excludePinnedTrack={true} />
+            <CarouselView>
+              <TrackLoop
+                sources={[Track.Source.Camera, Track.Source.ScreenShare]}
+                excludePinnedTracks={true}
+              />
             </CarouselView>
           </>
         )}
@@ -68,10 +69,14 @@ export function FocusLayout({
 }
 
 export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement> {
-  participants: Participant[];
-  onParticipantClick?: (evt: ParticipantClickEvent) => void;
+  // participants: Participant[];
+  // onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
 
-export function CarouselView({ participants, onParticipantClick, ...props }: CarouselViewProps) {
-  return <aside {...props}>{props.children ?? <ParticipantsLoop />}</aside>;
+export function CarouselView({ ...props }: CarouselViewProps) {
+  return (
+    <aside {...props}>
+      {props.children ?? <TrackLoop sources={[Track.Source.Camera]} excludePinnedTracks={true} />}
+    </aside>
+  );
 }

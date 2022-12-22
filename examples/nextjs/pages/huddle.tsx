@@ -6,7 +6,7 @@ import {
   TrackToggle,
   MediaTrack,
   ParticipantName,
-  ParticipantsLoop,
+  ParticipantLoop,
   ParticipantView,
   PinContextProvider,
   PreJoin,
@@ -111,15 +111,15 @@ const CustomGridLayout = ({ room }: { room?: Room }) => {
 
   return (
     <div ref={gridContainerRef} className={styles.gridLayout} style={props}>
-      <ParticipantsLoop>
+      <ParticipantLoop>
         <CustomParticipantView />
-      </ParticipantsLoop>
-      <ParticipantsLoop
-        filter={(ps) => ps.filter((p) => p.isScreenShareEnabled)}
+      </ParticipantLoop>
+      <ParticipantLoop
+        filter={(participant) => participant.isScreenShareEnabled}
         filterDependencies={[screenShareTrack, allScreenShares]}
       >
         <CustomScreenShareView />
-      </ParticipantsLoop>
+      </ParticipantLoop>
     </div>
   );
 };
@@ -137,29 +137,23 @@ const CustomFocusLayout = ({
       </div>
       <aside>
         <section>
-          <ParticipantsLoop
-            filter={(ps) =>
-              ps.filter((p) => {
-                return !isParticipantTrackInFocus(p, focusState, Track.Source.Camera);
-              })
+          <ParticipantLoop
+            filter={(participant) =>
+              !isParticipantTrackInFocus(participant, focusState, Track.Source.Camera)
             }
             filterDependencies={[screenShareTrack, focusState]}
           >
             <CustomParticipantView />
-          </ParticipantsLoop>
-          <ParticipantsLoop
-            filter={(ps) =>
-              ps.filter((p) => {
-                return (
-                  p.isScreenShareEnabled &&
-                  !isParticipantTrackInFocus(p, focusState, Track.Source.ScreenShare)
-                );
-              })
+          </ParticipantLoop>
+          <ParticipantLoop
+            filter={(participant) =>
+              participant.isScreenShareEnabled &&
+              !isParticipantTrackInFocus(participant, focusState, Track.Source.Camera)
             }
             filterDependencies={[screenShareTrack, focusState]}
           >
             <CustomScreenShareView />
-          </ParticipantsLoop>
+          </ParticipantLoop>
         </section>
       </aside>
     </div>

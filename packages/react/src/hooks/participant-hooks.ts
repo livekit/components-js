@@ -12,8 +12,9 @@ import {
 import { useObservableState } from '../utils';
 import { useEnsureParticipant, useRoomContext } from '../contexts';
 
+export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
 export interface UseParticipantsProps {
-  filter?: (participants: Array<Participant>) => Array<Participant>;
+  filter?: ParticipantFilter;
   filterDependencies?: Array<unknown>;
 }
 
@@ -33,7 +34,7 @@ export const useParticipants = (props?: UseParticipantsProps) => {
   React.useEffect(() => {
     let all = [localParticipant, ...remoteParticipants];
     if (props?.filter) {
-      all = props.filter(all);
+      all = all.filter(props.filter);
     }
     setParticipants(all);
   }, [remoteParticipants, localParticipant, props?.filter, ...filterDependencies]);

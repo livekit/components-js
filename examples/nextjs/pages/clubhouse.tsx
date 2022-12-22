@@ -3,7 +3,7 @@ import {
   GridLayout,
   LiveKitRoom,
   ParticipantName,
-  ParticipantsLoop,
+  ParticipantLoop,
   ParticipantView,
   RoomName,
   TrackMutedIndicator,
@@ -64,9 +64,9 @@ const Clubhouse = () => {
             <RoomName></RoomName>
           </h1>
           <GridLayout className={styles.grid}>
-            <ParticipantsLoop>
+            <ParticipantLoop>
               <CustomParticipantView></CustomParticipantView>
-            </ParticipantsLoop>
+            </ParticipantLoop>
           </GridLayout>
           <ControlBar></ControlBar>
         </div>

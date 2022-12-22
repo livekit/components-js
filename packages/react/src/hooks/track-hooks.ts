@@ -1,7 +1,7 @@
 import { setupMediaTrack, trackObservable } from '@livekit/components-core';
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
-import { usePinContext } from '../contexts';
+import { useMaybePinContext } from '../contexts';
 import { mergeProps } from '../utils';
 import { useParticipants } from './participant-hooks';
 
@@ -107,7 +107,7 @@ export function useTracks({
   filterDependencies = [],
 }: UseTracksProps) {
   const participants = useParticipants();
-  const pinContext = usePinContext();
+  const pinContext = useMaybePinContext();
 
   const pairs: TrackParticipantPair[] = React.useMemo(() => {
     let sourceParticipantPairs: TrackParticipantPair[] = [];
@@ -157,7 +157,7 @@ export function useTracks({
       }
     });
 
-    if (excludePinnedTracks) {
+    if (excludePinnedTracks && pinContext) {
       sourceParticipantPairs = sourceParticipantPairs.filter(({ track, participant }) =>
         pinContext.state?.pinnedSource === track.source &&
         participant === pinContext.state.pinnedParticipant

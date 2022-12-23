@@ -38,7 +38,6 @@
   "devDependencies": {
     "@livekit/components-styles": "0.1.4",
     "eslint-config-custom": "*",
-    "jest": "^29.3.1",
     "tsup": "^6.5.0",
     "typescript": "^4.7.4"
   },

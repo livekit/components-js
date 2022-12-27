@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-docs-gen",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Generate component docs.",
   "keywords": [
     "docs",
@@ -31,7 +31,7 @@
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {
-    "@livekit/components-react": "0.1.10",
+    "@livekit/components-react": "0.1.11",
     "eslint-config-custom": "^0.0.0",
     "eslint-plugin-tsdoc": "^0.2.17",
     "glob": "^8.0.0",

@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 0.1.11
+
+### Patch Changes
+
+- Icon fixes - [#130](https://github.com/livekit/components/pull/130) ([@mdo](https://github.com/mdo))
+
 ## 0.1.10
 
 ### Patch Changes

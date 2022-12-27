@@ -116,7 +116,6 @@ export function useTracks({
 
   const pairs: TrackParticipantPair[] = React.useMemo(() => {
     let sourceParticipantPairs: TrackParticipantPair[] = [];
-    console.log('sources', { sources });
     if (sources.length === 0) {
       console.warn(`You used the 'useTracks' hook with an empty sources array – no tracks will be returned.
     This is probably not intended. Make sure you pass all the wanted tracks to the sources array.

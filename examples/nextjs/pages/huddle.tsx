@@ -20,6 +20,7 @@ import {
   useToken,
   ClearPinButton,
   MediaDeviceMenu,
+  FocusLayout,
 } from '@livekit/components-react';
 import { ConnectionState, Participant, Room, Track, TrackPublication } from 'livekit-client';
 
@@ -44,44 +45,6 @@ const Huddle: NextPage = () => {
     </main>
   );
 };
-
-function isParticipantTrackInFocus(
-  participant: Participant,
-  focusState: PinState | undefined,
-  source: Track.Source,
-): boolean {
-  if (focusState === undefined) {
-    console.warn(`focusState not set: `, focusState);
-    return false;
-  }
-
-  if (focusState.pinnedParticipant === undefined || focusState.pinnedSource === undefined) {
-    console.warn(`focusState not set: `, focusState);
-    return false;
-  }
-
-  if (focusState.pinnedSource !== source) {
-    return false;
-  }
-
-  if (focusState.pinnedParticipant.identity === participant.identity) {
-    console.log(`Participant has same identity as pinned.`, focusState);
-    switch (focusState.pinnedSource) {
-      case Track.Source.Camera:
-        return participant.isCameraEnabled;
-        break;
-      case Track.Source.ScreenShare:
-        return participant.isScreenShareEnabled;
-        break;
-
-      default:
-        return false;
-        break;
-    }
-  } else {
-    return false;
-  }
-}
 
 const CustomGridLayout = ({ room }: { room?: Room }) => {
   const { screenShareTrack, allScreenShares } = useScreenShare({ room });
@@ -137,7 +100,7 @@ const CustomFocusLayout = ({
       </div>
       <aside>
         <section>
-          <ParticipantLoop
+          {/* <ParticipantLoop
             filter={(participant) =>
               !isParticipantTrackInFocus(participant, focusState, Track.Source.Camera)
             }
@@ -153,7 +116,7 @@ const CustomFocusLayout = ({
             filterDependencies={[screenShareTrack, focusState]}
           >
             <CustomScreenShareView />
-          </ParticipantLoop>
+          </ParticipantLoop> */}
         </section>
       </aside>
     </div>
@@ -164,15 +127,16 @@ const CustomFocus = () => {
   const { state } = usePinContext();
 
   return (
-    <>
-      {state?.pinnedParticipant && state.pinnedSource && (
-        <MediaTrack
-          className={styles.focusLayout}
-          participant={state?.pinnedParticipant}
-          source={state.pinnedSource}
-        />
-      )}
-    </>
+    <FocusLayout></FocusLayout>
+    // <>
+    //   {state?.pinnedParticipant && state.pinnedSource && (
+    //     <MediaTrack
+    //       className={styles.focusLayout}
+    //       participant={state?.pinnedParticipant}
+    //       source={state.pinnedSource}
+    //     />
+    //   )}
+    // </>
   );
 };
 
@@ -273,7 +237,7 @@ const HuddleRoomView = ({
   };
 
   const handleFocusStateChange = (focusState: PinState) => {
-    setLayout(focusState.pinnedParticipant ? 'focus' : 'grid');
+    setLayout(focusState.length >= 1 ? 'focus' : 'grid');
   };
 
   const connectionState = useConnectionState(room);

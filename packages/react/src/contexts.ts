@@ -1,5 +1,5 @@
-import { PinState } from '@livekit/components-core';
-import type { Room, Participant, Track } from 'livekit-client';
+import { PinState, TrackParticipantPair } from '@livekit/components-core';
+import type { Room, Participant } from 'livekit-client';
 import { createContext, useContext } from 'react';
 
 export const ParticipantContext = createContext<Participant | undefined>(undefined);
@@ -55,8 +55,7 @@ export function useEnsureRoom(room?: Room) {
 export type PinAction =
   | {
       msg: 'set_pin';
-      participant: Participant;
-      source: Track.Source;
+      trackParticipantPair: TrackParticipantPair;
     }
   | { msg: 'clear_pin' };
 

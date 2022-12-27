@@ -1,11 +1,8 @@
-import type { Participant, Track, TrackPublication } from 'livekit-client';
-
-export type PinState = {
-  pinnedParticipant?: Participant;
-  pinnedSource?: Track.Source;
-};
+import type { Participant, TrackPublication } from 'livekit-client';
 
 export type TrackParticipantPair = {
   track: TrackPublication;
   participant: Participant;
 };
+
+export type PinState = Array<TrackParticipantPair>;

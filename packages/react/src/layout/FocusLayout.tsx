@@ -6,6 +6,7 @@ import { MediaTrack } from '../components/participant/MediaTrack';
 import { ParticipantClickEvent } from '../components/participant/ParticipantView';
 import { ClearPinButton } from '../components/ClearPinButton';
 import { TrackLoop } from '../components/TrackLoop';
+import { TrackParticipantPair } from '@livekit/components-core';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   focusParticipant?: Participant;
@@ -28,8 +29,8 @@ export function FocusLayoutContainer({
       <div {...elementProps}>
         {props.children ?? (
           <>
-            {pinContext.state?.pinnedParticipant && (
-              <FocusLayout participant={pinContext.state?.pinnedParticipant} />
+            {pinContext?.state?.length && (
+              <FocusLayout trackParticipantPair={pinContext.state[0]} />
             )}
             <CarouselView>
               <TrackLoop
@@ -46,24 +47,30 @@ export function FocusLayoutContainer({
 }
 
 export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
-  participant: Participant;
-  trackSource?: Track.Source;
+  trackParticipantPair?: TrackParticipantPair;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
 
 export function FocusLayout({
-  participant,
-  trackSource,
+  trackParticipantPair,
   onParticipantClick,
   ...props
 }: FocusLayoutProps) {
   const { state } = useMaybePinContext();
 
+  const pair: TrackParticipantPair | null = React.useMemo(() => {
+    if (trackParticipantPair) {
+      return trackParticipantPair;
+    }
+    if (state) {
+      return state[0];
+    }
+    return null;
+  }, [state, trackParticipantPair]);
+
   return (
     <div {...props}>
-      {state?.pinnedParticipant && state.pinnedSource && (
-        <MediaTrack participant={state?.pinnedParticipant} source={state.pinnedSource} />
-      )}
+      {pair && <MediaTrack participant={pair.participant} source={pair.track.source} />}
     </div>
   );
 }

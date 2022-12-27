@@ -36,17 +36,17 @@ export const attachIfSubscribed = (
   }
 };
 
+/**
+ * Check if the participant track is pinned.
+ */
 export function isParticipantTrackPinned(
   trackParticipantPair: TrackParticipantPair,
   pinState: PinState | undefined,
 ): boolean {
-  const { track, participant } = trackParticipantPair;
-
   if (pinState === undefined) {
     return false;
   }
-
-  return pinState.pinnedSource === track.source && pinState.pinnedParticipant === participant;
+  return pinState.some((pair) => pair === trackParticipantPair);
 }
 
 /**

@@ -124,41 +124,12 @@ export function useTracks({
     }
 
     participants.forEach((p) => {
-      // Add camera track
-      if (sources.includes(Track.Source.Camera) && p.isCameraEnabled) {
-        const track = p.getTrack(Track.Source.Camera);
+      sources.forEach((source) => {
+        const track = p.getTrack(source);
         if (track) {
           sourceParticipantPairs.push({ track: track, participant: p });
         }
-      }
-      // Add screen share track
-      if (sources.includes(Track.Source.ScreenShare) && p.isScreenShareEnabled) {
-        const track = p.getTrack(Track.Source.ScreenShare);
-        if (track) {
-          sourceParticipantPairs.push({ track: track, participant: p });
-        }
-      }
-      // Add microphone track
-      if (sources.includes(Track.Source.Microphone) && p.isMicrophoneEnabled) {
-        const track = p.getTrack(Track.Source.Microphone);
-        if (track) {
-          sourceParticipantPairs.push({ track: track, participant: p });
-        }
-      }
-      // Add screen share audio track
-      if (sources.includes(Track.Source.ScreenShareAudio) && p.isScreenShareEnabled) {
-        const track = p.getTrack(Track.Source.ScreenShareAudio);
-        if (track) {
-          sourceParticipantPairs.push({ track: track, participant: p });
-        }
-      }
-      // Add unknown track
-      if (sources.includes(Track.Source.Unknown)) {
-        const track = p.getTrack(Track.Source.Unknown);
-        if (track) {
-          sourceParticipantPairs.push({ track: track, participant: p });
-        }
-      }
+      });
     });
 
     if (excludePinnedTracks && pinContext) {

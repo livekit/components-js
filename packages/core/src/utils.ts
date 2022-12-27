@@ -46,7 +46,14 @@ export function isParticipantTrackPinned(
   if (pinState === undefined) {
     return false;
   }
-  return pinState.some((pair) => pair === trackParticipantPair);
+
+  const { track, participant } = trackParticipantPair;
+
+  return pinState.some(
+    ({ track: pinnedTrack, participant: pinnedParticipant }) =>
+      pinnedTrack.trackSid === track.trackSid &&
+      pinnedParticipant.identity === participant.identity,
+  );
 }
 
 /**

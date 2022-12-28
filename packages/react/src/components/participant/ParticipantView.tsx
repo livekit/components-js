@@ -95,12 +95,17 @@ export const ParticipantView = ({
   const clickHandler = (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     elementProps.onClick?.(evt);
     onParticipantClick?.({ participant: p });
-    if (pinContext && pinContext.dispatch) {
-      pinContext.dispatch({
-        msg: 'set_pin',
-        participant: p,
-        source: trackSource || Track.Source.Camera,
-      });
+    if (pinContext.dispatch && trackSource) {
+      const track = p.getTrack(trackSource);
+      if (track) {
+        pinContext.dispatch({
+          msg: 'set_pin',
+          trackParticipantPair: {
+            participant: p,
+            track,
+          },
+        });
+      }
     }
   };
 

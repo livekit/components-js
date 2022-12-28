@@ -30,7 +30,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
   const [layout, setLayout] = React.useState<Layout>('grid');
 
   const handleFocusStateChange = (pinState: PinState) => {
-    setLayout(pinState.pinnedParticipant ? 'focus' : 'grid');
+    setLayout(pinState.length >= 1 ? 'focus' : 'grid');
   };
 
   return (

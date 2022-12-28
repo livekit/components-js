@@ -16,7 +16,7 @@ export function useClearPinButton(props: ClearPinButtonProps) {
     const { className } = setupClearPinButton();
     const mergedProps = mergeProps(props, {
       className,
-      disabled: state?.pinnedParticipant === undefined,
+      disabled: !state?.length,
       onClick: () => {
         if (dispatch) dispatch({ msg: 'clear_pin' });
       },

@@ -7,7 +7,12 @@ export default {
   component: FocusLayoutContainer,
   decorators: [LkPinContext, LkRoomContext],
   render: (args: FocusLayoutContainerProps) => <FocusLayoutContainer {...args} />,
-  argTypes: {},
+  argTypes: {
+    hasFocus: {
+      control: { type: 'boolean' },
+      default: true,
+    },
+  },
 };
 
 export const Default = {

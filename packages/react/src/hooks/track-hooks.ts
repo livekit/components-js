@@ -133,8 +133,8 @@ export function useTracks({
     });
 
     if (excludePinnedTracks && pinContext) {
-      sourceParticipantPairs = sourceParticipantPairs.filter((trackParticipantPair) =>
-        isParticipantTrackPinned(trackParticipantPair, pinContext.state),
+      sourceParticipantPairs = sourceParticipantPairs.filter(
+        (trackParticipantPair) => !isParticipantTrackPinned(trackParticipantPair, pinContext.state),
       );
     }
 

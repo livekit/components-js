@@ -1,19 +1,14 @@
 import { PinState } from '@livekit/components-core';
-import { Track } from 'livekit-client';
 import * as React from 'react';
 import { PinAction, PinContext, useRoomContext } from '../contexts';
 import { useScreenShare } from './ScreenShareRenderer';
 
-function pinReducer(state: PinState, action: PinAction): PinState {
-  console.log(`pinReducer msg:`, action);
+export function pinReducer(state: PinState, action: PinAction): PinState {
+  console.log(`pinReducer msg: ${action.msg}`, { action }, { state });
   if (action.msg === 'set_pin') {
-    return {
-      ...state,
-      pinnedParticipant: action.participant,
-      pinnedSource: action.source,
-    };
+    return [action.trackParticipantPair];
   } else if (action.msg === 'clear_pin') {
-    return { ...state, pinnedParticipant: undefined, pinnedSource: undefined };
+    return [];
   } else {
     return { ...state };
   }
@@ -29,23 +24,21 @@ export function PinContextProvider({
   children,
 }: React.PropsWithChildren<PinContextProviderProps>) {
   const room = useRoomContext();
-  const pinDefaultValue: PinState = { pinnedParticipant: undefined, pinnedSource: undefined };
-  const [pinState, pinDispatch] = React.useReducer(pinReducer, pinDefaultValue);
+  const [pinState, pinDispatch] = React.useReducer(pinReducer, []);
   const pinContextDefault = { dispatch: pinDispatch, state: pinState };
-  const { screenShareParticipant } = useScreenShare({ room });
+  const { screenShareParticipant, screenShareTrack } = useScreenShare({ room });
   React.useEffect(() => {
     // FIXME: This logic clears the focus if the screenShareParticipant is false.
     // This is also the case when the hook is executed for the first time and then a unwanted clear_focus message is sent.
-    if (screenShareParticipant) {
+    if (screenShareParticipant && screenShareTrack) {
       pinDispatch({
         msg: 'set_pin',
-        participant: screenShareParticipant,
-        source: Track.Source.ScreenShare,
+        trackParticipantPair: { track: screenShareTrack, participant: screenShareParticipant },
       });
     } else {
       pinDispatch({ msg: 'clear_pin' });
     }
-  }, [screenShareParticipant]);
+  }, [screenShareParticipant, screenShareTrack]);
 
   React.useEffect(() => {
     if (onChange) onChange(pinState);

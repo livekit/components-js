@@ -14,6 +14,7 @@ export * from './components/participantView';
 export * from './components/chat';
 export * from './components/startAudio';
 export * from './components/clearPinButton';
+export * from './components/room';
 
 export * from './observables/room';
 export * from './observables/participant';

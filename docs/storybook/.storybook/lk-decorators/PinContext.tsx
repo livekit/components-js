@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Decorator } from '@storybook/react';
-import { PinContextProvider, TrackSource, usePinContext } from '@livekit/components-react';
-import { Participant } from 'livekit-client';
+import { PinContextProvider, usePinContext } from '@livekit/components-react';
 
 export type LkFocusContextProps = {
   hasFocus: boolean;
@@ -13,28 +12,30 @@ export type LkFocusContextProps = {
  * Note: This component requires some environment variables. Make sure that they are set correctly in your .env file.
  */
 export const LkPinContext: Decorator = (Story, args) => {
-  const inFocus = args.args.inFocus;
-
-  const ContextWrapper = () => {
-    const { dispatch } = usePinContext();
-    const dummyParticipant = React.useMemo(() => {
-      return new Participant('dummy-sid', 'dummy-identity');
-    }, []);
-    React.useEffect(() => {
-      if (dispatch) {
-        if (inFocus) {
-          dispatch({ msg: 'set_pin', participant: dummyParticipant, source: TrackSource.Camera });
-        } else {
-          dispatch({ msg: 'clear_pin' });
-        }
-      }
-    }, [dispatch, inFocus]);
-    return Story();
-  };
+  const hasFocus = (args.args as LkFocusContextProps).hasFocus;
 
   return (
     <PinContextProvider>
-      <ContextWrapper />
+      <ContextWrapper hasFocus={hasFocus}>{Story()}</ContextWrapper>
     </PinContextProvider>
   );
+};
+
+const ContextWrapper = ({
+  hasFocus: inFocus,
+  children,
+}: React.PropsWithChildren<{ hasFocus: boolean }>) => {
+  const { dispatch, state } = usePinContext();
+  React.useEffect(() => {
+    if (dispatch) {
+      if (inFocus) {
+        // TODO: Pin a dummy participant on start.
+        // dispatch({ msg: 'set_pin', trackParticipantPair: dummyPair });
+      } else {
+        dispatch({ msg: 'clear_pin' });
+      }
+    }
+  }, [inFocus, dispatch, state]);
+
+  return <>{children}</>;
 };

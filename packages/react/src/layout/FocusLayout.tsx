@@ -9,28 +9,29 @@ import { TrackLoop } from '../components/TrackLoop';
 import { TrackParticipantPair } from '@livekit/components-core';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
-  focusParticipant?: Participant;
-  focusTrackSource?: Track.Source;
+  trackParticipantPair?: TrackParticipantPair;
   participants?: Array<Participant>;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
 
 export function FocusLayoutContainer({
-  focusParticipant,
-  focusTrackSource,
+  trackParticipantPair,
   onParticipantClick,
   ...props
 }: FocusLayoutContainerProps) {
   const elementProps = mergeProps(props, { className: 'lk-focus-layout' });
   const pinContext = usePinContext();
+  const hasFocus = React.useMemo(() => {
+    return pinContext.state && pinContext.state.length >= 1;
+  }, [pinContext]);
 
   return (
     <>
       <div {...elementProps}>
         {props.children ?? (
           <>
-            {pinContext?.state?.length && (
-              <FocusLayout trackParticipantPair={pinContext.state[0]} />
+            {(hasFocus || trackParticipantPair) && (
+              <FocusLayout trackParticipantPair={trackParticipantPair} />
             )}
             <CarouselView>
               <TrackLoop
@@ -62,7 +63,7 @@ export function FocusLayout({
     if (trackParticipantPair) {
       return trackParticipantPair;
     }
-    if (state) {
+    if (state !== undefined && state.length >= 1) {
       return state[0];
     }
     return null;

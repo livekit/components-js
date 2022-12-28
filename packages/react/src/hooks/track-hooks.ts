@@ -3,10 +3,11 @@ import {
   setupMediaTrack,
   trackObservable,
   TrackParticipantPair,
+  trackParticipantPairsObservable,
 } from '@livekit/components-core';
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
-import { useMaybePinContext } from '../contexts';
+import { useMaybePinContext, useRoomContext } from '../contexts';
 import { mergeProps } from '../utils';
 import { useParticipants } from './participant-hooks';
 
@@ -111,39 +112,37 @@ export function useTracks({
   filter,
   filterDependencies = [],
 }: UseTracksProps) {
-  const participants = useParticipants();
+  const room = useRoomContext();
+  // const participants = useParticipants();
   const pinContext = useMaybePinContext();
 
-  const pairs: TrackParticipantPair[] = React.useMemo(() => {
-    let sourceParticipantPairs: TrackParticipantPair[] = [];
-    if (sources.length === 0) {
-      console.warn(`You used the 'useTracks' hook with an empty sources array – no tracks will be returned.
+  const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
+
+  React.useEffect(() => {
+    const listener = trackParticipantPairsObservable(room, sources).subscribe(
+      (trackParticipantPairs: TrackParticipantPair[]) => {
+        if (sources.length === 0) {
+          console.warn(`You used the 'useTracks' hook with an empty sources array – no tracks will be returned.
     This is probably not intended. Make sure you pass all the wanted tracks to the sources array.
     `);
-      return [];
-    }
-
-    participants.forEach((p) => {
-      sources.forEach((source) => {
-        const track = p.getTrack(source);
-        if (track) {
-          sourceParticipantPairs.push({ track: track, participant: p });
+          setPairs([]);
         }
-      });
-    });
+        if (excludePinnedTracks && pinContext) {
+          trackParticipantPairs = trackParticipantPairs.filter(
+            (trackParticipantPair) =>
+              !isParticipantTrackPinned(trackParticipantPair, pinContext.state),
+          );
+        }
+        if (filter) {
+          trackParticipantPairs = trackParticipantPairs.filter(filter);
+        }
+        setPairs(trackParticipantPairs);
+      },
+    );
+    return () => listener.unsubscribe();
+  }, [excludePinnedTracks, filter, pinContext, room, sources]);
 
-    if (excludePinnedTracks && pinContext) {
-      sourceParticipantPairs = sourceParticipantPairs.filter(
-        (trackParticipantPair) => !isParticipantTrackPinned(trackParticipantPair, pinContext.state),
-      );
-    }
-
-    if (filter) {
-      sourceParticipantPairs = sourceParticipantPairs.filter(filter);
-    }
-
-    return sourceParticipantPairs;
-  }, [participants, pinContext, excludePinnedTracks, sources, filter, ...filterDependencies]);
+  React.useDebugValue(`Pairs count: ${pairs.length}`);
 
   return pairs;
 }

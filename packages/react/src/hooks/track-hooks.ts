@@ -9,7 +9,6 @@ import { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
 import { useMaybePinContext, useRoomContext } from '../contexts';
 import { mergeProps } from '../utils';
-import { useParticipants } from './participant-hooks';
 
 interface UseMediaTrackProps {
   participant: Participant;
@@ -140,7 +139,7 @@ export function useTracks({
       },
     );
     return () => listener.unsubscribe();
-  }, [excludePinnedTracks, filter, pinContext, room, sources]);
+  }, [excludePinnedTracks, filter, pinContext, room, sources, ...filterDependencies]);
 
   React.useDebugValue(`Pairs count: ${pairs.length}`);
 

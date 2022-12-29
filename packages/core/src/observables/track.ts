@@ -54,14 +54,15 @@ export function trackParticipantPairsObservable(
     };
   });
 
-  function handleSub(sources: Track.Source[], publication: TrackPublication, ...args: any[]) {
-    if (!sources.includes(publication.source)) {
-      return;
-    }
-
+  function updateTrackParticipantPairs(
+    sources: Track.Source[],
+    // publication: TrackPublication,
+    ...args: any[]
+  ): void {
     const localParticipant = room.localParticipant;
     const allParticipants = [localParticipant, ...Array.from(room.participants.values())];
     const initTrackParticipantPairs: TrackParticipantPair[] = [];
+
     allParticipants.forEach((p) => {
       sources.forEach((source) => {
         const track = p.getTrack(source);
@@ -77,42 +78,42 @@ export function trackParticipantPairsObservable(
   // Listen to room events related to track changes and call the handler function.
   roomEventSubscriptions.push(
     roomEventSelector(room, RoomEvent.TrackSubscribed).subscribe(([_, ...args]) => {
-      handleSub(sources, ...args);
+      updateTrackParticipantPairs(sources, ...args);
     }),
   );
   roomEventSubscriptions.push(
     roomEventSelector(room, RoomEvent.TrackUnsubscribed).subscribe(([_, ...args]) =>
-      handleSub(sources, ...args),
+      updateTrackParticipantPairs(sources, ...args),
     ),
   );
   roomEventSubscriptions.push(
     roomEventSelector(room, RoomEvent.LocalTrackPublished).subscribe((args) =>
-      handleSub(sources, ...args),
+      updateTrackParticipantPairs(sources, ...args),
     ),
   );
   roomEventSubscriptions.push(
     roomEventSelector(room, RoomEvent.LocalTrackUnpublished).subscribe((args) => {
-      handleSub(sources, ...args);
+      updateTrackParticipantPairs(sources, ...args);
     }),
   );
   roomEventSubscriptions.push(
     roomEventSelector(room, RoomEvent.TrackMuted).subscribe((args) => {
-      handleSub(sources, ...args);
+      updateTrackParticipantPairs(sources, ...args);
     }),
   );
   roomEventSubscriptions.push(
     roomEventSelector(room, RoomEvent.TrackUnmuted).subscribe((args) => {
-      handleSub(sources, ...args);
+      updateTrackParticipantPairs(sources, ...args);
     }),
   );
-  // setTimeout(() => {
-  //   // TODO find way to avoid this timeout
-  //   for (const p of room.participants.values()) {
-  //     p.getTracks().forEach((track) => {
-  //       handleSub(sources, 'set', track, p);
-  //     });
-  //   }
-  // }, 1);
+  setTimeout(() => {
+    // TODO find way to avoid this timeout
+    // for (const p of room.participants.values()) {
+    //   p.getTracks().forEach((publication) => {
+    updateTrackParticipantPairs(sources);
+    //   });
+    // }
+  }, 1);
 
   return observable;
 }

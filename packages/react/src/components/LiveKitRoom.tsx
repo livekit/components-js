@@ -1,4 +1,4 @@
-import { roomEventSelector } from '@livekit/components-core';
+import { roomEventSelector, setupLiveKitRoom } from '@livekit/components-core';
 import {
   AudioCaptureOptions,
   ConnectionState,
@@ -113,6 +113,8 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
   const [room] = React.useState<Room>(passedRoom ?? new Room(options));
   // setLogLevel('debug');
 
+  const htmlProps = React.useMemo(() => setupLiveKitRoom(), []);
+
   React.useEffect(() => {
     const onSignalConnected = () => {
       const localP = room.localParticipant;
@@ -177,7 +179,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
     });
     return () => connectionStateChangeListener.unsubscribe();
   }, [token, onConnected, onDisconnected, room]);
-  return room;
+  return { room, htmlProps };
 }
 
 /**
@@ -197,10 +199,12 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
  * ```
  */
 export function LiveKitRoom(props: React.PropsWithChildren<LiveKitRoomProps>) {
-  const room = useLiveKitRoom(props);
+  const { room, htmlProps } = useLiveKitRoom(props);
   return (
-    <RoomContext.Provider value={room}>
-      {props.children ?? <VideoConference />}
-    </RoomContext.Provider>
+    <div {...htmlProps}>
+      <RoomContext.Provider value={room}>
+        {props.children ?? <VideoConference />}
+      </RoomContext.Provider>
+    </div>
   );
 }

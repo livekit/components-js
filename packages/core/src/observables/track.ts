@@ -44,56 +44,62 @@ export function observeTrackEvents(track: TrackPublication, ...events: TrackEven
 function getTrackParticipantPairs(room: Room, sources: Track.Source[]): TrackParticipantPair[] {
   const localParticipant = room.localParticipant;
   const allParticipants = [localParticipant, ...Array.from(room.participants.values())];
-  const initTrackParticipantPairs: TrackParticipantPair[] = [];
+  const pairs: TrackParticipantPair[] = [];
 
-  allParticipants.forEach((p) => {
+  allParticipants.forEach((participant) => {
     sources.forEach((source) => {
-      const track = p.getTrack(source);
+      const track = participant.getTrack(source);
       if (track) {
-        initTrackParticipantPairs.push({ track: track, participant: p });
+        pairs.push({ track: track, participant: participant });
       }
     });
   });
 
-  return initTrackParticipantPairs;
+  return pairs;
 }
 
 export function trackParticipantPairsObservable(
   room: Room,
   sources: Track.Source[],
 ): Observable<TrackParticipantPair[]> {
-  let trackParticipantPairSubscriber: Subscriber<TrackParticipantPair[]>;
   const roomEventSubscriptions: Subscription[] = [];
 
   const observable = new Observable<TrackParticipantPair[]>((subscribe) => {
-    trackParticipantPairSubscriber = subscribe;
+    // Get and emit initial values.
+    const initPairs = getTrackParticipantPairs(room, sources);
+    subscribe.next(initPairs);
+
+    // Listen to room events related to track changes and emit new pairs.
+    const roomEventsToListenFor = [
+      RoomEvent.TrackSubscribed,
+      RoomEvent.TrackUnsubscribed,
+      RoomEvent.LocalTrackPublished,
+      RoomEvent.LocalTrackUnpublished,
+      RoomEvent.TrackMuted,
+      RoomEvent.TrackUnmuted,
+    ];
+    roomEventsToListenFor.forEach((roomEvent) => {
+      roomEventSubscriptions.push(
+        roomEventSelector(room, roomEvent).subscribe(() => {
+          const pairs = getTrackParticipantPairs(room, sources);
+          console.log(
+            `Trigger observer update by \nRoomEvent: ${roomEvent}\nPairs: ${pairs.length}`,
+          );
+
+          if (subscribe) {
+            subscribe.next(pairs);
+          }
+        }),
+      );
+    });
+
+    /** Observable cleanup. */
     return () => {
       roomEventSubscriptions.forEach((roomEventSubscription) =>
         roomEventSubscription.unsubscribe(),
       );
     };
   });
-
-  const roomEventsToListenFor = [
-    RoomEvent.TrackSubscribed,
-    RoomEvent.TrackUnsubscribed,
-    RoomEvent.LocalTrackPublished,
-    RoomEvent.LocalTrackUnpublished,
-    RoomEvent.TrackMuted,
-    RoomEvent.TrackUnmuted,
-  ];
-
-  // Listen to room events related to track changes and call the handler function.
-  roomEventsToListenFor.forEach((roomEvent) => {
-    roomEventSelector(room, roomEvent).subscribe(() => {
-      const pairs = getTrackParticipantPairs(room, sources);
-      trackParticipantPairSubscriber.next(pairs);
-    });
-  });
-
-  setTimeout(() => {
-    getTrackParticipantPairs(room, sources);
-  }, 1);
 
   return observable;
 }

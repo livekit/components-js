@@ -115,31 +115,36 @@ export function useTracks({
   // const participants = useParticipants();
   const pinContext = useMaybePinContext();
 
+  const [unfilteredPairs, setUnfilteredPairs] = React.useState<TrackParticipantPair[]>([]);
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
 
   React.useEffect(() => {
-    const listener = trackParticipantPairsObservable(room, sources).subscribe(
-      (trackParticipantPairs: TrackParticipantPair[]) => {
-        if (sources.length === 0) {
-          console.warn(`You used the 'useTracks' hook with an empty sources array – no tracks will be returned.
-    This is probably not intended. Make sure you pass all the wanted tracks to the sources array.
+    if (sources.length === 0) {
+      console.warn(`You used the 'useTracks' hook with an empty sources array – no tracks will be returned.
+    This is probably not intended. Make sure you pass all the wanted track sources to the sources array.
     `);
-          setPairs([]);
-        }
-        if (excludePinnedTracks && pinContext) {
-          trackParticipantPairs = trackParticipantPairs.filter(
-            (trackParticipantPair) =>
-              !isParticipantTrackPinned(trackParticipantPair, pinContext.state),
-          );
-        }
-        if (filter) {
-          trackParticipantPairs = trackParticipantPairs.filter(filter);
-        }
-        setPairs(trackParticipantPairs);
+      setUnfilteredPairs([]);
+    }
+    const subscription = trackParticipantPairsObservable(room, sources).subscribe(
+      (trackParticipantPairs: TrackParticipantPair[]) => {
+        setUnfilteredPairs(trackParticipantPairs);
       },
     );
-    return () => listener.unsubscribe();
-  }, [excludePinnedTracks, filter, pinContext, room, sources, ...filterDependencies]);
+    return () => subscription.unsubscribe();
+  }, [room, sources]);
+
+  React.useEffect(() => {
+    let trackParticipantPairs: TrackParticipantPair[] = unfilteredPairs;
+    if (excludePinnedTracks && pinContext) {
+      trackParticipantPairs = trackParticipantPairs.filter(
+        (trackParticipantPair) => !isParticipantTrackPinned(trackParticipantPair, pinContext.state),
+      );
+    }
+    if (filter) {
+      trackParticipantPairs = trackParticipantPairs.filter(filter);
+    }
+    setPairs(trackParticipantPairs);
+  }, [unfilteredPairs, excludePinnedTracks, filter, pinContext, ...filterDependencies]);
 
   React.useDebugValue(`Pairs count: ${pairs.length}`);
 

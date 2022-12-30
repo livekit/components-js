@@ -1,5 +1,5 @@
 import { Room, RoomEvent, Track, TrackEvent, TrackPublication } from 'livekit-client';
-import { Observable, startWith, Subscriber, Subscription } from 'rxjs';
+import { Observable, startWith, Subscription } from 'rxjs';
 import { TrackParticipantPair } from '../types';
 import { roomEventSelector } from './room';
 

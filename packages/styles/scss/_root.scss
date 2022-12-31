@@ -1,7 +1,10 @@
 :root {
+  color-scheme: dark;
+
   --bg: #111;
   --bg-secondary: #222;
   --bg-tertiary: #333;
+  --bg-quarternary: #444;
 
   --fg: #fff;
   --fg-secondary: #f5f5f5;
@@ -22,6 +25,8 @@
 
   --control-fg: var(--fg);
   --control-bg: var(--bg-secondary);
+  --control-hover-bg: var(--bg-tertiary);
+  --control-active-bg: var(--bg-quarternary);
 
   --connection-excellent: #06db4d;
   --connection-good: #f9b11f;
@@ -34,22 +39,22 @@
   --control-bar-height: 70px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --fg: #fff;
-    --fg-secondary: #eee;
-    --fg-tertiary: #f5f5f5;
+// @media (prefers-color-scheme: dark) {
+//   :root {
+//     --fg: #fff;
+//     --fg-secondary: #eee;
+//     --fg-tertiary: #f5f5f5;
 
-    --bg: #111;
-    --bg-secondary: #222;
-    --bg-tertiary: #555;
+//     --bg: #111;
+//     --bg-secondary: #222;
+//     --bg-tertiary: #555;
 
-    --danger: #f91f31;
-    --danger-text: #f91f31;
-    --danger-bg: #6d0311;
+//     --danger: #f91f31;
+//     --danger-text: #f91f31;
+//     --danger-bg: #6d0311;
 
-    --success: #1ff968;
-    --success-text: #1ff968;
-    --success-bg: #036d26;
-  }
-}
+//     --success: #1ff968;
+//     --success-text: #1ff968;
+//     --success-bg: #036d26;
+//   }
+// }

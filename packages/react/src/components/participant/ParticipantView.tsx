@@ -110,13 +110,17 @@ export const ParticipantView = ({
   };
 
   return (
-    <div {...elementProps} onClick={clickHandler}>
+    <div style={{ position: 'relative' }} {...elementProps} onClick={clickHandler}>
       <ParticipantContextIfNeeded participant={participant}>
         {children ?? (
           <>
             <MediaTrack source={trackSource ?? Track.Source.Camera}></MediaTrack>
             <div
               style={{
+                position: 'absolute',
+                right: '.25rem',
+                bottom: '.25rem',
+                left: '.25rem',
                 display: 'flex',
                 flexDirection: 'row',
                 gap: '.5rem',
@@ -124,12 +128,13 @@ export const ParticipantView = ({
                 alignItems: 'center',
               }}
             >
-              <div style={{ display: 'flex' }}>
+              <div style={{ display: 'flex', alignItems: 'center', padding: '.25rem .375rem .25rem .25rem', backgroundColor: 'rgba(0,0,0,.15)', borderRadius: '.25rem' }}>
                 <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
-                <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
+                <ParticipantName />
               </div>
-              <ParticipantName />
-              <ConnectionQualityIndicator />
+              <div style={{ display: 'flex', alignItems: 'center', padding: '.25rem', backgroundColor: 'rgba(0,0,0,.15)', borderRadius: '.25rem' }}>
+                <ConnectionQualityIndicator />
+              </div>
             </div>
           </>
         )}

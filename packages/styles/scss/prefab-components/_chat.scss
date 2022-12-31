@@ -16,11 +16,7 @@
   }
 
   &[data-message-origin='local'] {
-    background-color: var(--bg-secondary);
-  }
-
-  &[data-message-origin='remote'] {
-    background-color: var(--bg-tertiary);
+    background-color: rgba(205, 230, 254, .5);;
   }
 }
 

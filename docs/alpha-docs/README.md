@@ -1,6 +1,6 @@
 # LiveKit Components **Docs**
 
-Documentation and Guides to get you started with LiveKit components.
+Documentation and Guides to get you started with LiveKit components for React.
 
 > **Warning** This is an early, preliminary and under construction version of LiveKit Components. The shiny official documentation will be available upon release.
 
@@ -19,3 +19,12 @@ Documentation and Guides to get you started with LiveKit components.
   - [Styles](/packages/styles/README.md)
 
 <!--NAV_END-->
+
+## Docs Structure
+
+- [About LiveKit Components](guides/about-livekit-components.md): What is the goal of LiveKit Components and how does it improve your development experience.
+- [Getting Started with LiveKit Components](guides/getting-started.md): Learn how add LiveKit Components to your React project and build your first VideoConference app in minutes.
+- [Style LiveKit Components](guides/style-livekit-components.md): Learn how to modify the look and style of LiveKit Components.
+- [Custom components](guides/custom-components.md): Modify existing components or simply build your own.
+  <!-- - [All LiveKit Components](components/livekit-components-list.md): List of our LiveKit Components with detail pages for every component. -->
+  <!-- - [LiveKit Component Hooks](hooks/livekit-hooks-list.md) -->

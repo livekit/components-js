@@ -7,6 +7,7 @@ A LiveKit Components implementation in [React](https://reactjs.org/).
 ## Monorepo Navigation
 
 - [Home](/README.md)
+- [**Docs**](/docs/alpha-docs/README.md)
 - **Framework Implementations**:
   - [React 👈](/packages/react/README.md)
 - **Examples**

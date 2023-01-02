@@ -26,3 +26,7 @@ For your frontend to work properly, we need a LiveKit Server. There are two equa
 **Option A: [LiveKit Cloud](setup-a-livekit-cloud-project.md)**
 
 **Option B: [Host LiveKit Server your self](https://github.com/livekit/livekit)**
+
+## First LiveKit Components app
+
+https://github.com/livekit/components/blob/9715093e61b2607cd840185ea2bf06f1e0e98a19/examples/nextjs/pages/minimal.tsx#L18-L22

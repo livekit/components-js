@@ -29,7 +29,9 @@ For your frontend to work properly, we need a LiveKit Server. There are two equa
 
 ## Build your first LiveKit Components app
 
-With the setup out of our way, let's get started. In your React app create a new component that will holds your LiveKit app.
+With the setup out of our way, let's get started. In your React app create a new component that will hold your LiveKit app.
+
+> **Info** If you don't want to setup your own React app. You can follow along with the examples included in the monorepo. To setup the examples head over to [examples](../../../examples/nextjs/README.md). The example closest to the here show code can be found [here](../../../examples/nextjs/pages/minimal.tsx)
 
 ```tsx
 export const MyFirstLiveKitApp = () => {

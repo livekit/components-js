@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { SVGProps } from 'react';
 const SvgQualityUnkownIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg width={16} height={1} fill="currentColor" xmlns="http://www.w3.org/2000/svg" {...props}>
-    <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1h-3A.5.5 0 0 1 0 .5ZM6 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3A.5.5 0 0 1 6 .5ZM12 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5Z" />
-    <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1h-3A.5.5 0 0 1 0 .5ZM6 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3A.5.5 0 0 1 6 .5ZM12 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5Z" />
+  <svg width={16} height={16} fill="currentColor" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <g opacity=".25">
+      <path d="M0 11.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4ZM6 6.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-9ZM12 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V.5Z"/>
+      <path d="M0 11.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4ZM6 6.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-9ZM12 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V.5Z"/>
+    </g>
   </svg>
 );
 export default SvgQualityUnkownIcon;

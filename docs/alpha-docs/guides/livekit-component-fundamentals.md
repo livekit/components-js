@@ -82,9 +82,17 @@ The RoomContext provides the [Room](https://docs.livekit.io/client-sdk-js/classe
 
 The ParticipantContext provides a [Participant](https://docs.livekit.io/client-sdk-js/classes/Room.html) object to all child components.
 
+```tsx
+/* 1️⃣ ParticipantView provides the ParticipantContext. */
+<ParticipantView>
+  {/* 2️⃣ ParticipantName uses the ParticipantContext to get the participant name. */}
+  <ParticipantName />
+</ParticipantView>
+```
+
 ## Loops
 
-In LiveKit Components loops are used for two things.
+In LiveKit Components loops are used for two things:
 
 1. Loop over all or a filtered subset of participants
 2. Loop over all or a filtered subset of tracks
@@ -100,10 +108,10 @@ The Participant Loop allows you to loop over all or a subset of participants.
  */
 <ParticipantLoop>
 {/* 2️⃣ The child tree is the template for every participant in the loop. */ }
-    <ParticipantView>
-        {/* 3️⃣ ParticipantView provides an individual ParticipantContext for every participant in the loop and ParticipantName uses this context to display the correct participant name. */}
-        <ParticipantName/>
-    </ ParticipantView>
+ <ParticipantView>
+  {/* 3️⃣ ParticipantView provides an individual ParticipantContext for every participant in the loop and ParticipantName uses this context to display the correct participant name. */}
+    <ParticipantName/>
+  </ ParticipantView>
 <ParticipantLoop />
 ```
 

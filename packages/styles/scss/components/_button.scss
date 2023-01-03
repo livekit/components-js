@@ -8,15 +8,19 @@
   background-color: var(--control-bg);
   border: 0;
   border-radius: var(--border-radius);
+  cursor: pointer;
 
   &:not(:disabled):hover {
     background-color: var(--control-hover-bg);
   }
 
   // &:not(:disabled):active,
-  &[aria-pressed='true'],
-  &[aria-pressed='true']:hover {
+  &[aria-pressed='true'] {
     background-color: var(--control-active-bg);
+
+    &:hover {
+      background-color: var(--control-active-hover-bg);
+    }
   }
 
   // &[data-lk-enabled="true"] {

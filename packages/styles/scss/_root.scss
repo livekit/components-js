@@ -1,14 +1,25 @@
+@use "sass:color";
+
+$bg: #111;
+$fg: #fff;
+$danger: #f91f31;
+$success: #1ff968;
+$warning: #f9b11f;
+
 :root {
   color-scheme: dark;
 
-  --bg: #111;
-  --bg-secondary: #222;
-  --bg-tertiary: #333;
-  --bg-quarternary: #444;
+  --bg: #{$bg};
+  --bg2: #{color.adjust($bg, $lightness: 5%)};
+  --bg3: #{color.adjust($bg, $lightness: 10%)};
+  --bg4: #{color.adjust($bg, $lightness: 15%)};
+  --bg5: #{color.adjust($bg, $lightness: 20%)};
 
   --fg: #fff;
-  --fg-secondary: #f5f5f5;
-  --fg-tertiary: #fafafa;
+  --fg2: #{color.adjust($fg, $lightness: -4%)};
+  --fg3: #{color.adjust($fg, $lightness: -8%)};
+  --fg4: #{color.adjust($fg, $lightness: -12%)};
+  --fg5: #{color.adjust($fg, $lightness: -16%)};
 
   --accent-fg: #fff;
   --accent-bg: #1f8cf9;
@@ -18,15 +29,20 @@
   --danger-text: #6d0311;
   --danger-bg: #fecdd4;
 
+  --danger-secondary: #{color.adjust($danger, $lightness: 8%)};
+  --danger-tertiary: #{color.adjust($danger, $lightness: 12%)};
+  --danger-quarternary: #{color.adjust($danger, $lightness: 16%)};
+
   --success-fg: #fff;
   --success: #1ff968;
   --success-text: #036d26;
   --success-bg: #cdfedd;
 
   --control-fg: var(--fg);
-  --control-bg: var(--bg-secondary);
-  --control-hover-bg: var(--bg-tertiary);
-  --control-active-bg: var(--bg-quarternary);
+  --control-bg: var(--bg2);
+  --control-hover-bg: var(--bg3);
+  --control-active-bg: var(--bg4);
+  --control-active-hover-bg: var(--bg5);
 
   --connection-excellent: #06db4d;
   --connection-good: #f9b11f;

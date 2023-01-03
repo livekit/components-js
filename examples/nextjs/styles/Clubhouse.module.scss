@@ -25,7 +25,7 @@
 
   border-top-left-radius: 2rem;
   border-top-right-radius: 2rem;
-  background-color: var(--lk-bg-tertiary);
+  background-color: var(--lk-bg3);
   transition: bottom 1s;
 }
 
@@ -63,7 +63,7 @@ section.participant-view {
     right: 7%;
     border-radius: 999999px;
     transition: opacity 0.2s ease-in-out;
-    border: 2px var(--lk-bg-tertiary) solid;
+    border: 2px var(--lk-bg3) solid;
     padding: 0.2rem;
     div {
       aspect-ratio: 1/1;

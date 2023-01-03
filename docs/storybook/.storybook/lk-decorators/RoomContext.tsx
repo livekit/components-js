@@ -73,7 +73,7 @@ export const LkRoomContextLive: Decorator = (Story, args) => {
           padding: '1rem',
           margin: '-1rem -1rem 1rem',
           fontSize: '.75rem',
-          backgroundColor: 'var(--lk-bg-secondary)',
+          backgroundColor: 'var(--lk-bg2)',
         }}
       >
         <strong>LiveKit Room Controls</strong>

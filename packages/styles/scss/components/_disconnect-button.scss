@@ -4,4 +4,8 @@
   @extend .button;
   --control-fg: var(--danger-fg);
   --control-bg: var(--danger);
+
+  &:not(:disabled):hover {
+    --lk-control-hover-bg: var(--danger-secondary);
+  }
 }

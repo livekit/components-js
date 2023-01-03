@@ -17,3 +17,14 @@
   - [Styles](/packages/styles/README.md)
 
 <!--NAV_END-->
+
+## Start Storybook
+
+1. Follow the short [Setup Monorepo](../../README.md#setup-monorepo) guide.
+2. From the root of the monorepo run:
+
+```bash
+yarn dev:storybook
+```
+
+This should open storybook in the default browser under `http://localhost:6006`

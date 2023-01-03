@@ -9,7 +9,9 @@ Documentation and Guides to get you started with LiveKit components for React.
 ## Monorepo Navigation
 
 - [Home](/README.md)
-- [**Docs** 👈](/docs/alpha-docs/README.md)
+- **Docs**
+  - [Docs 👈](/docs/alpha-docs/README.md)
+  - [Storybook](/docs/storybook/README.md)
 - **Framework Implementations**:
   - [React](/packages/react/README.md)
 - **Examples**

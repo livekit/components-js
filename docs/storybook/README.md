@@ -1,5 +1,7 @@
 # LiveKit Components Docs **Storybook**
 
+This Storybook gives a good overview over all* (*work in progress) LiveKit components and prefabs.
+
 <!--NAV_START-->
 
 ## Monorepo Navigation

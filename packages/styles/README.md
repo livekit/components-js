@@ -7,6 +7,9 @@ Beautiful base styling for LiveKit components that you can use as is, build upon
 ## Monorepo Navigation
 
 - [Home](/README.md)
+- **Docs**
+  - [Docs](/docs/alpha-docs/README.md)
+  - [Storybook](/docs/storybook/README.md)
 - **Framework Implementations**:
   - [React](/packages/react/README.md)
 - **Examples**

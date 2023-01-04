@@ -7,6 +7,9 @@ A collection of small examples bundled in a [Next.js](https://nextjs.org/) app. 
 ## Monorepo Navigation
 
 - [Home](/README.md)
+- **Docs**
+  - [Docs](/docs/alpha-docs/README.md)
+  - [Storybook](/docs/storybook/README.md)
 - **Framework Implementations**:
   - [React](/packages/react/README.md)
 - **Examples**

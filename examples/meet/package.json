@@ -1,6 +1,6 @@
 {
   "name": "@livekit/meet",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@livekit/components-react": "0.1.11",
+    "@livekit/components-react": "0.1.12",
     "@livekit/components-styles": "0.1.4",
     "livekit-client": "^1.6.0",
     "livekit-server-sdk": "^1.0.3",

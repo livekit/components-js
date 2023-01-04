@@ -1,27 +1,72 @@
 # Custom Components
 
-## Building your own video chat
+In this short guide you will learn:
 
-In this guide we are going to build up a Video conferencing app from the previous getting starte example. But instead of using the LiveKitRoom component alone we are going to use more LiveKit components to build it ourselves. What's the point of building the same app again you may ask? By building the up the Component tree ourself we gain full flexibility about how parts of the app will look like. Using the default LiveKitRoom works but we guess it will often only be the starting point on your way to build your custom app.
+- how to create your own component
+- how to use LiveKit Component hooks
 
-### Setup
+We try to offer a comprehensive set of components that allow you to build something valuable quickly. But we are aware that it would be utopian to think that a limited set of components can cover all wishes and ideas. This is why we made extensibility and customization a central part of LiveKit Components.
 
-Let's start with the basis setup from the last getting starte guide.
+## React hooks
 
-<EmbedSourceFile code={setupExample} language="tsx" />
+Almost every component is accompanied by a React hook with the same name, prefixed with the word `use`. For example, the `ConnectionQualityIndicator` is being built with the `useConnectionQualityIndicator` hook. The same hooks that are used to create LiveKit components can also be used for custom components. The best way to see how easy it is to create a custom component is to give a quick example. Let's create a "CustomConnectionQualityIndicator" to replace the existing "ConnectionQualityIndicator".
 
-If we now add a child element to `LiveKitRoom`, let's start with a good old `<div>Hello World</div>`, the default LiveKit app should now be gone and instead we see "Hello World".
+The default indicator uses icons to indicate how good a subscriber's connection quality is, and we could use it like this:
 
-<EmbedSourceFile code={overwriteDefaultsExample} language="tsx" range={{ start: 6, end: -2 }} />
+```tsx
+//...
+<ParticipantView>
+  <ParticipantName />
+  <ConnectionQualityIndicator />
+</ParticipantView>
+//...
+```
 
-We see that in the moment where we add children to components with defaults we overwrite those default. Lets now recreate the default LiveKit video app with other existing LiveKit components. You will see, its as simple as plug and play.
+This would display the name of the participant and the quality of the connection as a icon. Suppose that instead of an icon representation, we want a textual representation of the connection status. If a user Ana has a good connection quality, we want it to say "Ana has a good connection quality".
 
-### Add Participants
+This can be easily achieved with a custom LiveKit component:
 
-The central part of every video conferencing app are the participants. Lets start by adding some components to display their video streams.
+```tsx
+// 1️⃣ Import the react hook.
+import { useConnectionQualityIndicator } from '@livekit/components-react';
 
-<EmbedSourceFile code={addParticipantsExample} language="tsx" range={{ start: 11, end: -2 }} />
+// 2️⃣ Define a custom React component.
+export function CustomConnectionQualityIndicator(props: HTMLAttributes<HTMLSpanElement>) {
+  /**
+   *  3️⃣ By using this hook, we inherit all the state management and logic and can focus on our implementation.
+   */
+  const { quality } = useConnectionQualityIndicator();
 
-What is happening here? Lets go through it component by component starting from the most outer component. As we already know the `LiveKitRoom` component is always the root for all the other components. As a child of `LiveKitRoom` we added the `Participants` component. The `Participants` component accepts zero or one child components. The child component is used as a template to render all participants of the room. If no template component is provided it falls back to a default participant view. Try commenting out everting inside of `Participants` to see the defaults.
+  // We create a little helper function to convert the ConnectionQuality to a string.
+  function qualityToText(quality: ConnectionQuality): string {
+    switch (quality) {
+      case ConnectionQuality.Unknown:
+        return 'unknown';
+      case ConnectionQuality.Poor:
+        return 'poor';
+      case ConnectionQuality.Good:
+        return 'good';
+      case ConnectionQuality.Excellent:
+        return 'excellent';
+    }
+  }
 
-We don't want to use the defaults, therefore we provided our own `ParticipantView` with a `ParticipantName` as a child. The `ParticipantView` is responsible to render the participants video and the `ParticipantName` simply displays the name of the participant on top of the video.
+  return <span {...props}>{` has a ${qualityToText(quality)} connection quality.`} </span>;
+}
+```
+
+Now we can replace the default quality indicator with our new `CustomConnectionQualityIndicator` as follows:
+
+```tsx
+//...
+<ParticipantView>
+  <ParticipantName />
+  {/* Custom component: Here we replace the provided <ConnectionQualityIndicator />  with our own implementation. */}
+  <CustomConnectionQualityIndicator />
+</ParticipantView>
+//...
+```
+
+As you can see, it's super easy to create your own components in no time. 🚀
+
+> **Info** If you want to replace a component, as we did here. Often the quickest way is to copy the current implementation and use it as a starting point for your implementation.

@@ -2,7 +2,7 @@
 
 Documentation and Guides to get you started with LiveKit components for React.
 
-> **Warning** This is an early, preliminary and under construction version of LiveKit Components. The shiny official documentation will be available upon release.
+> **Warning** This is an early, preliminary and under construction version of the LiveKit Components documentation. The shiny official docs website will be available upon release.
 
 <!--NAV_START-->
 

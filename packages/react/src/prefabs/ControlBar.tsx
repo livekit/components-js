@@ -4,7 +4,6 @@ import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { TrackToggle } from '../components/controls/TrackToggle';
 import { StartAudio } from '../components/controls/StartAudio';
-import { MediaDeviceSelect } from '../components/controls/MediaDeviceSelect';
 
 export type ControlBarProps = React.HTMLAttributes<HTMLDivElement>;
 

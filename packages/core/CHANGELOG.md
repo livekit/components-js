@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.1.9
+
+### Patch Changes
+
+- Bugfixes - [`fa3cf1c`](https://github.com/livekit/components/commit/fa3cf1cf7ff74acff5d6e4629faf46218c411432) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.8
 
 ### Patch Changes

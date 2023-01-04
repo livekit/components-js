@@ -1,5 +1,12 @@
 # @livekit/components-react
 
+## 0.1.12
+
+### Patch Changes
+
+- Updated dependencies [[`fa3cf1c`](https://github.com/livekit/components/commit/fa3cf1cf7ff74acff5d6e4629faf46218c411432)]:
+  - @livekit/components-core@0.1.9
+
 ## 0.1.11
 
 ### Patch Changes

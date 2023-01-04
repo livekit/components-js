@@ -1,5 +1,14 @@
 # @livekit/component-docs-storybook
 
+## 1.0.5
+
+### Patch Changes
+
+- Focus participant by default in FocusLayout - [#151](https://github.com/livekit/components/pull/151) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies []:
+  - @livekit/components-react@0.1.12
+
 ## 1.0.4
 
 ### Patch Changes

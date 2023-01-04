@@ -1,12 +1,8 @@
 .control-bar {
-  // position: absolute;
-  // right: 0;
-  // bottom: calc(var(--control-bar-offset) * -1);
-  // left: 0;
   display: flex;
   gap: .5rem;
   padding: .75rem;
   align-items: center;
   justify-content: center;
-  background-color: var(--bg2);
+  border-top: 1px solid var(--border-color);
 }

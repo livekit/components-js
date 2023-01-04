@@ -25,7 +25,7 @@ Documentation and Guides to get you started with LiveKit components for React.
 ## Docs Structure
 
 - [About LiveKit Components](guides/about-livekit-components.md): What is the goal of LiveKit Components and how does it improve your development experience.
-- [Getting Started](guides/getting-started.md): Learn how add LiveKit Components to your React project and build your first VideoConference app in minutes.
+- [Getting Started](guides/getting-started.md): Learn how to add LiveKit Components to your React project and build your first VideoConference app in minutes.
 - [LiveKit Components fundamentals](guides/livekit-component-fundamentals.md): Learn the basics of how to nest, loop and combine components to build a LiveKit app.
 - [Style LiveKit Components](guides/style-livekit-components.md): Learn how to modify the look and style of LiveKit Components.
 - [Custom components](guides/custom-components.md): Learn how to create your own component using the included React hooks.

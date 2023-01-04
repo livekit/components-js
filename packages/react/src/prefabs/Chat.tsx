@@ -44,7 +44,7 @@ export function Chat({ ...props }: ChatProps) {
           <li
             key={idx}
             title={new Date(msg.timestamp).toLocaleTimeString()}
-            data-lk-local-message={!!msg.from?.isLocal}
+            data-lk-message-origin={msg.from?.isLocal ? 'local' : 'remote'}
           >
             {props.children ? (
               cloneSingleChild(props.children, { entry: msg })

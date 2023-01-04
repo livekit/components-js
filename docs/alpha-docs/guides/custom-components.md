@@ -1,9 +1,9 @@
 # Custom Components
 
-In this short guide you will learn:
-
-- how to create your own component
-- how to use LiveKit Component hooks
+> **Info** In this short guide you will learn
+>
+> - how to create your own component
+> - how to use LiveKit Component hooks
 
 We try to offer a comprehensive set of components that allow you to build something valuable quickly. But we are aware that it would be utopian to think that a limited set of components can cover all wishes and ideas. This is why we made extensibility and customization a central part of LiveKit Components.
 

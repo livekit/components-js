@@ -2,14 +2,18 @@
 
 > **Info** In this short guide you will learn
 >
-> - how to create your own component
 > - how to use LiveKit Component hooks
+> - how to create your own component
 
 We try to offer a comprehensive set of components that allow you to build something valuable quickly. But we are aware that it would be utopian to think that a limited set of components can cover all wishes and ideas. This is why we made extensibility and customization a central part of LiveKit Components.
 
 ## React hooks
 
-Almost every component is accompanied by a React hook with the same name, prefixed with the word `use`. For example, the `ConnectionQualityIndicator` is being built with the `useConnectionQualityIndicator` hook. The same hooks that are used to create LiveKit components can also be used for custom components. The best way to see how easy it is to create a custom component is to give a quick example. Let's create a "CustomConnectionQualityIndicator" to replace the existing "ConnectionQualityIndicator".
+Almost every component is accompanied by a React hook with the same name, prefixed with the word `use`. For example, the `ConnectionQualityIndicator` is being built with the `useConnectionQualityIndicator` hook. The same hooks that are used to create LiveKit components can also be used for custom components.
+
+## Custom component example
+
+The best way to see how easy it is to create a custom component is to give a quick example. Let's create a "CustomConnectionQualityIndicator" to replace the existing "ConnectionQualityIndicator".
 
 The default indicator uses icons to indicate how good a subscriber's connection quality is, and we could use it like this:
 

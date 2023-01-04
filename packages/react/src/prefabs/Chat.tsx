@@ -40,19 +40,11 @@ export function Chat({ ...props }: ChatProps) {
   return (
     <div {...props} className="lk-chat">
       <ul className="lk-chat-messages">
-        {chatMessages.map((msg, idx) => (
-          <li
-            key={idx}
-            title={new Date(msg.timestamp).toLocaleTimeString()}
-            data-lk-local-message={!!msg.from?.isLocal}
-          >
-            {props.children ? (
-              cloneSingleChild(props.children, { entry: msg })
-            ) : (
-              <ChatEntry entry={msg} />
-            )}
-          </li>
-        ))}
+        {props.children
+          ? chatMessages.map((msg, idx) =>
+              cloneSingleChild(props.children, { entry: msg, key: idx }),
+            )
+          : chatMessages.map((msg, idx) => <ChatEntry key={idx} entry={msg} />)}
       </ul>
       <div className="lk-chat-form">
         <input

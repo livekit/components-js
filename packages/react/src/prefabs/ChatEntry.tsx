@@ -5,7 +5,7 @@ import * as React from 'react';
  * ChatEntry composes the HTML div element under the hood, so you can pass all its props.
  * These are the props specific to the ChatEntry component:
  */
-export interface ChatEntryProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
   /**
    * The chat massage object to display.
    */
@@ -26,9 +26,14 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLDivElement> {
  */
 export function ChatEntry({ entry, ...props }: ChatEntryProps) {
   return (
-    <div className="lk-chat-entry" {...props}>
+    <li
+      className="lk-chat-entry"
+      title={new Date(entry.timestamp).toLocaleTimeString()}
+      data-lk-message-origin={entry.from?.isLocal ? 'local' : 'remote'}
+      {...props}
+    >
       <strong>{entry.from?.name ?? entry.from?.identity}</strong>
       {entry.message}
-    </div>
+    </li>
   );
 }

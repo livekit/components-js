@@ -54,3 +54,36 @@ All components share a small but carefully selected color palette. Each color fr
   --connection-poor: #f91f31;
   ...
 ```
+
+## Use of HTML custom data attributes in LiveKit Components
+
+[Custom data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes) are an easy way to store additional information on standard HTML elements. We use data attributes on many elements to show what state the component is in, or to provide additional information that can be used for styling.
+
+> **Info** All data attributes in LiveKit Components start with `data-lk-`
+
+For example, the `ConnectionQualityIndicator` shows the connection quality of a participant. The component renders an HTML div element and we add the custom data attribute `data-lk-quality` to it. The value of the custom data attribute is updated according to the current connection quality and can take the values "unknown", " poor", "good" and "excellent".
+
+```tsx
+// Participant with a excellent connection.
+<div data-lk-quality="excellent">
+  {/* ... */}
+</div>
+
+// Participant with a excellent poor.
+<div data-lk-quality="poor">
+  {/* ... */}
+</div>
+```
+
+The data attributes are simple HTML attributes, so we can access them via CSS. For example, to update the ConnectionQualityIndicator background, we can use the attribute selector to change the styles according to the value of the data attribute:
+
+```css
+[data-lk-quality='excellent'] {
+  background-color: green;
+}
+[data-lk-quality='poor'] {
+  background-color: red;
+}
+```
+
+> **Warning** Currently it is not documented which data attribute is used for which component. At the moment it is best to open the inspector and check which data attribute is used.

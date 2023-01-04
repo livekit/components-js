@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Decorator } from '@storybook/react';
-import { PinContextProvider, usePinContext } from '@livekit/components-react';
+import { PinContextProvider, useParticipants, usePinContext } from '@livekit/components-react';
+import { Track } from 'livekit-client';
 
 export type LkFocusContextProps = {
   hasFocus: boolean;
@@ -25,17 +26,22 @@ const ContextWrapper = ({
   hasFocus: inFocus,
   children,
 }: React.PropsWithChildren<{ hasFocus: boolean }>) => {
-  const { dispatch, state } = usePinContext();
+  const { dispatch } = usePinContext();
+
+  const participants = useParticipants();
   React.useEffect(() => {
     if (dispatch) {
       if (inFocus) {
-        // TODO: Pin a dummy participant on start.
-        // dispatch({ msg: 'set_pin', trackParticipantPair: dummyPair });
+        const participant = participants[0];
+        if (participant) {
+          const track = participant.getTrack(Track.Source.Camera)!;
+          dispatch({ msg: 'set_pin', trackParticipantPair: { participant, track } });
+        }
       } else {
         dispatch({ msg: 'clear_pin' });
       }
     }
-  }, [inFocus, dispatch, state]);
+  }, [inFocus, dispatch, participants]);
 
   return <>{children}</>;
 };

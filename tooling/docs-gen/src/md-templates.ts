@@ -49,7 +49,7 @@ function generateMarkdownPropsTable(props: ComponentDoc['props']): string {
       typeof item.defaultValue && item.defaultValue === 'object'
         ? ` \`${JSON.stringify(item.defaultValue)}\``
         : '';
-    const description = `${item.description}`;
+    const description = `${item.description.replaceAll('\n', ' ')}`;
 
     const row = `| ${name} | ${type} | ${defaultValue} | ${description} |`;
     return row;

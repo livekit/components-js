@@ -13,6 +13,5 @@ The GridLayout component displays the nested participants in a grid where every 
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| participants | `Participant[]` |  | The grid shows all room participants. If only a subset of the participants
-should be visible, they can be passed here. |
+| participants | `Participant[]` |  | The grid shows all room participants. If only a subset of the participants should be visible, they can be passed here. |
 

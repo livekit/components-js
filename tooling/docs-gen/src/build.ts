@@ -67,7 +67,7 @@ if (require.main === module) {
 async function findFiles() {
   return globAsync('**/src/**/*.@(ts|tsx)', {
     cwd: sourcePath,
-    ignore: ['**/core/**', '**/node_modules/**', '**/index.ts'],
+    ignore: ['**/core/**', '**/node_modules/**', '**/index.ts', '**/icons/**'],
   });
 }
 
@@ -78,7 +78,7 @@ function parseInfo(filePaths: string[]) {
   const { parse } = docgen.withCustomConfig(tsConfigPath, {
     shouldRemoveUndefinedFromOptional: true,
     propFilter: (prop, component) => {
-      const isHTMLElementProp = prop.parent?.fileName.includes('node_modules') ?? false;
+      const isHTMLElementProp: boolean = prop.parent?.fileName.includes('node_modules') ?? false;
       const isHook = component.name.startsWith('use');
       const isTypeScriptNative = prop.parent?.fileName.includes('node_modules/typescript') ?? false;
 
@@ -127,6 +127,11 @@ function extractComponentInfoMdx(docs: ComponentDoc[]) {
  */
 function extractComponentInfoMd(docs: ComponentDoc[]) {
   return docs.reduce((acc, def, _, allDefs) => {
+    /** Skip if docstring contains @internal tag. */
+    if (typeof def.tags === 'object' && Object.keys(def.tags).includes('internal')) {
+      return acc;
+    }
+
     function createUniqueName(displayName: string) {
       const existing = acc.filter(
         (prev) => String(prev.def.displayName).toLowerCase() === displayName.toLowerCase(),

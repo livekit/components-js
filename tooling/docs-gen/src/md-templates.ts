@@ -17,14 +17,17 @@ function addDescription(def: ComponentDoc) {
 }
 
 function addUsage(def: ComponentDoc) {
-  if (!def.tags?.example) {
-    return '<!--USAGE_INSERT_MARKER-->';
-  }
-  return `## Usage
+  def.tags?.example
+    ? `## Usage
 
 ${def.tags?.example}
 
 <!--USAGE_INSERT_MARKER-->
+
+`
+    : `## Usage
+
+<!--USAGE_INSERT_MARKER->
 
 `;
 }

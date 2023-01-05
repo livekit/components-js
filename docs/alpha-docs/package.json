@@ -21,10 +21,10 @@
     "url": "https://github.com/livekit/components/tree/main/docs/alpha-docs"
   },
   "scripts": {
-    "syncGenFiles": "rsync -a ./../../tooling/docs-gen/generated/markdown/components components && rsync -a ../../tooling/docs-gen/generated/markdown/hooks hooks"
+    "gen:docs": "rsync -a ./../../tooling/docs-gen/generated/markdown/components components && rsync -a ../../tooling/docs-gen/generated/markdown/hooks hooks"
   },
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "@livekit/components-props-docs": "workspace:*"
-  },
-  "devDependencies": {}
+  }
 }

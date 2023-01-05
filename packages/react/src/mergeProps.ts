@@ -14,6 +14,7 @@ import clsx from 'clsx';
 
 /**
  * Calls all functions in the order they were chained with the same arguments.
+ * @internal
  */
 export function chain(...callbacks: any[]): (...args: any[]) => void {
   return (...args: any[]) => {

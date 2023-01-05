@@ -27,10 +27,6 @@ const outputPath = path.join(__dirname, '..', 'dist', 'components');
 
 const basePath = path.join(__dirname, '..', 'dist');
 
-// const cjsIndexFilePath = path.join(basePath, 'index.cjs.js');
-// const esmIndexFilePath = path.join(basePath, 'index.esm.js');
-// const typeFilePath = path.join(basePath, 'index.d.ts');
-
 const tsConfigPath = path.join(sourcePath, '..', 'tsconfig.json');
 
 export async function main() {
@@ -47,13 +43,6 @@ export async function main() {
 
   log('Writing component info files...');
   await writeComponentInfoFiles(componentInfo);
-
-  // log('Writing index files...');
-  // await Promise.all([
-  //   writeIndexCJS(componentInfo),
-  //   writeIndexESM(componentInfo),
-  //   writeTypes(componentInfo),
-  // ]);
 
   log(`Processed ${componentInfo.length} components`);
 }
@@ -141,75 +130,6 @@ async function writeComponentInfoFiles(componentInfo: ComponentInfo[]) {
     }),
   );
 }
-
-// /**
-//  * Create and write the index file in CJS format
-//  */
-// async function writeIndexCJS(componentInfo: ComponentInfo[]) {
-//   const cjsExports = componentInfo.map(
-//     ({ displayName, importPath }) => `module.exports.${displayName} = require('${importPath}');`,
-//   );
-//   return fs.writeFile(cjsIndexFilePath, cjsExports.join('\n') + '\n');
-// }
-
-// /**
-//  * Create and write the index file in ESM format
-//  */
-// async function writeIndexESM(componentInfo: ComponentInfo[]) {
-//   const esmPropImports = componentInfo
-//     .map(({ exportName, importPath }) => `import ${exportName}Import from '${importPath}';`)
-//     .join('\n');
-
-//   const esmPropExports = componentInfo
-//     .map(({ exportName }) => `export const ${exportName} = ${exportName}Import;`)
-//     .join('\n');
-
-//   return fs.writeFile(
-//     esmIndexFilePath,
-//     `${esmPropImports}
-// ${esmPropExports}\n`,
-//   );
-// }
-
-// async function writeTypes(componentInfo: ComponentInfo[]) {
-//   const typeExports = componentInfo
-//     .map(({ exportName }) => `export declare const ${exportName}: PropDoc;`)
-//     .join('\n');
-
-//   const baseType = `export interface Parent {
-//   fileName: string;
-//   name: string;
-// }
-
-// export interface Declaration {
-//   fileName: string;
-//   name: string;
-// }
-
-// export interface DefaultProps {
-//   defaultValue?: any;
-//   description: string | JSX.Element;
-//   name: string;
-//   parent: Parent;
-//   declarations: Declaration[];
-//   required: boolean;
-//   type: { name: string };
-// }
-
-// export interface PropDoc {
-//   tags: { see: string };
-//   filePath: string;
-//   description: string | JSX.Element;
-//   displayName: string;
-//   methods: any[];
-//   props: {
-//     defaultProps?: DefaultProps;
-//     components?: DefaultProps;
-//   };
-// }`;
-
-//   return fs.writeFile(typeFilePath, `${baseType}\n${typeExports}\n`);
-// }
 
 function log(...args: unknown[]) {
   console.info(`[docs-gen]`, ...args);

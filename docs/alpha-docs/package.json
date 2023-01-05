@@ -21,7 +21,7 @@
     "url": "https://github.com/livekit/components/tree/main/docs/alpha-docs"
   },
   "scripts": {
-    "copyGenFiles": "cp ./../../tooling/docs-gen/generated/markdown/components/* components && cp ../../tooling/docs-gen/generated/markdown/hooks/* hooks"
+    "syncGenFiles": "rsync -a ./../../tooling/docs-gen/generated/markdown/components components && rsync -a ../../tooling/docs-gen/generated/markdown/hooks hooks"
   },
   "dependencies": {
     "@livekit/components-props-docs": "workspace:*"

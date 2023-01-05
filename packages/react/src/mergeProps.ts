@@ -41,6 +41,7 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
  * will trigger a side-effect and re-render components hooked up with `useId`.
  * For all other props, the last prop object overrides all previous ones.
  * @param args - Multiple sets of props to merge together.
+ * @internal
  */
 export function mergeProps<T extends Props[]>(...args: T): UnionToIntersection<TupleTypes<T>> {
   // Start with a base clone of the first argument. This is a lot faster than starting

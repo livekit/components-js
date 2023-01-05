@@ -4,18 +4,27 @@ import { Observable } from 'rxjs';
 
 type LKComponentAttributes<T extends HTMLElement> = React.HTMLAttributes<T>;
 
+/**
+ * @internal
+ */
 function isProp<U extends HTMLElement, T extends LKComponentAttributes<U>>(
   prop: T | undefined,
 ): prop is T {
   return prop !== undefined;
 }
 
+/**
+ * @internal
+ */
 function mergeProps<U extends HTMLElement, T extends Array<LKComponentAttributes<U> | undefined>>(
   ...props: T
 ) {
   return mergePropsReactAria(...props.filter(isProp));
 }
 
+/**
+ * @internal
+ */
 function useObservableState<T>(
   observable: Observable<T>,
   startWith: T,
@@ -31,6 +40,9 @@ function useObservableState<T>(
   return state;
 }
 
+/**
+ * @internal
+ */
 function cloneSingleChild(
   children: React.ReactNode | React.ReactNode[],
   props?: Record<string, any>,

@@ -25,6 +25,7 @@ function addUsage(def: ComponentDoc) {
 ${def.tags?.example}
 
 <!--USAGE_INSERT_MARKER-->
+
 `;
 }
 

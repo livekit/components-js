@@ -13,5 +13,5 @@ The RoomName component renders the name of the connected LiveKit room inside a s
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| childrenPosition | `"before" | "after"` |  |  |
+| childrenPosition | `"before" \| "after"` |  |  |
 

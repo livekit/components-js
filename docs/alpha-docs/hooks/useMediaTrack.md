@@ -14,5 +14,5 @@ The contents of this file can be replaced at any time which would lead to the lo
 | participant | `Participant` |  |  |
 | source | `Source` |  |  |
 | element | `RefObject<HTMLMediaElement>` |  |  |
-| props | `HTMLAttributes<HTMLVideoElement | HTMLAudioElement>` |  |  |
+| props | `HTMLAttributes<HTMLVideoElement \| HTMLAudioElement>` |  |  |
 

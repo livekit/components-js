@@ -18,12 +18,12 @@ The contents of this file can be replaced at any time which would lead to the lo
 | sid | `string` |  | server assigned unique room id |
 | name | `string` |  | user assigned name, derived from JWT token |
 | localParticipant | `LocalParticipant` |  | the current participant |
-| metadata | `string | undefined` |  | room metadata |
+| metadata | `string \| undefined` |  | room metadata |
 | options | `InternalRoomOptions` |  | options of room |
 | prepareConnection | `(url: string) => Promise<void>` |  | prepares the connection to the livekit server by sending a HEAD request in order to 1. speed up DNS resolution 2. speed up TLS setup on the actual connection request throws an error if server is not reachable after the request timeout @experimental |
-| connect | `(url: string, token: string, opts?: RoomConnectOptions | undefined) => Promise<void>` |  |  |
-| disconnect | `(stopTracks?: boolean | undefined) => Promise<void>` |  | disconnects the room, emits [[RoomEvent.Disconnected]] |
-| getParticipantByIdentity | `(identity: string) => Participant | undefined` |  | retrieves a participant by identity @param identity @returns |
+| connect | `(url: string, token: string, opts?: RoomConnectOptions \| undefined) => Promise<void>` |  |  |
+| disconnect | `(stopTracks?: boolean \| undefined) => Promise<void>` |  | disconnects the room, emits [[RoomEvent.Disconnected]] |
+| getParticipantByIdentity | `(identity: string) => Participant \| undefined` |  | retrieves a participant by identity @param identity @returns |
 | isRecording | `boolean` |  | if the current room has a participant with `recorder: true` in its JWT grant |
 | simulateScenario | `(scenario: string) => Promise<void>` |  | @internal for testing |
 | startAudio | `() => Promise<void>` |  | Browsers have different policies regarding audio playback. Most requiring some form of user interaction (click/tap/etc). In those cases, audio will be silent until a click/tap triggering one of the following - `startAudio` - `getUserMedia` |

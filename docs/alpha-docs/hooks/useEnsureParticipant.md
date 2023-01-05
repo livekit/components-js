@@ -23,14 +23,14 @@ The contents of this file can be replaced at any time which would lead to the lo
 | lastSpokeAt | `Date` |  |  |
 | permissions | `ParticipantPermission` |  |  |
 | getTracks | `() => TrackPublication[]` |  |  |
-| getTrack | `(source: Source) => TrackPublication | undefined` |  | Finds the first track that matches the source filter, for example, getting the user's camera track with getTrackBySource(Track.Source.Camera). @param source @returns |
-| getTrackByName | `(name: string) => TrackPublication | undefined` |  | Finds the first track that matches the track's name. @param name @returns |
+| getTrack | `(source: Source) => TrackPublication \| undefined` |  | Finds the first track that matches the source filter, for example, getting the user's camera track with getTrackBySource(Track.Source.Camera). @param source @returns |
+| getTrackByName | `(name: string) => TrackPublication \| undefined` |  | Finds the first track that matches the track's name. @param name @returns |
 | connectionQuality | `ConnectionQuality` |  |  |
 | isCameraEnabled | `boolean` |  |  |
 | isMicrophoneEnabled | `boolean` |  |  |
 | isScreenShareEnabled | `boolean` |  |  |
 | isLocal | `boolean` |  |  |
-| joinedAt | `Date | undefined` |  | when participant joined the room |
+| joinedAt | `Date \| undefined` |  | when participant joined the room |
 | updateInfo | `(info: ParticipantInfo) => void` |  | @internal |
 | setMetadata | `(md: string) => void` |  | @internal |
 | setPermissions | `(permissions: ParticipantPermission) => boolean` |  | @internal |

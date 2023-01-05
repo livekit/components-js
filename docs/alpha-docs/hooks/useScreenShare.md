@@ -13,6 +13,6 @@ The contents of this file can be replaced at any time which would lead to the lo
 | --- | --- | --- | --- |
 | screenEl | `RefObject<HTMLVideoElement>` |  |  |
 | audioEl | `RefObject<HTMLMediaElement>` |  |  |
-| onScreenShareChange | `((isActive: boolean, publication?: TrackPublication, participant?: Participant) => void) | undefined` |  |  |
+| onScreenShareChange | `((isActive: boolean, publication?: TrackPublication, participant?: Participant) => void) \| undefined` |  |  |
 | room | `Room` |  |  |
 

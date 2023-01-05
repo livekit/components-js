@@ -44,12 +44,12 @@ ${generateMarkdownPropsTable(props)}
 function generateMarkdownPropsTable(props: ComponentDoc['props']): string {
   function renderRow(item: PropItem) {
     const name = `${item.name}`;
-    const type = `\`${item.type.name}\``;
+    const type = `\`${item.type.name.replaceAll('|', '\\|')}\``;
     const defaultValue =
       typeof item.defaultValue && item.defaultValue === 'object'
         ? ` \`${JSON.stringify(item.defaultValue)}\``
         : '';
-    const description = `${item.description.replaceAll('\n', ' ')}`;
+    const description = `${item.description.replaceAll('\n', ' ').replaceAll('|', '\\|')}`;
 
     const row = `| ${name} | ${type} | ${defaultValue} | ${description} |`;
     return row;

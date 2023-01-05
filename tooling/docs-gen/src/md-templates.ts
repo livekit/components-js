@@ -18,11 +18,13 @@ function addDescription(def: ComponentDoc) {
 
 function addUsage(def: ComponentDoc) {
   if (!def.tags?.example) {
-    return '';
+    return '<!--USAGE_INSERT_MARKER-->';
   }
   return `## Usage
 
-${def.tags?.example ? def.tags.example : 'No example yet.'}
+${def.tags?.example}
+
+<!--USAGE_INSERT_MARKER-->
 `;
 }
 

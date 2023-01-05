@@ -4,6 +4,7 @@ import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { TrackToggle } from '../components/controls/TrackToggle';
 import { StartAudio } from '../components/controls/StartAudio';
+import { LeaveIcon, ScreenShareIcon } from '../icons';
 
 export type ControlBarProps = React.HTMLAttributes<HTMLDivElement> & {
   variation?: 'minimal' | 'verbose' | 'textOnly';
@@ -51,9 +52,13 @@ export function ControlBar(props: ControlBarProps) {
         <MediaDeviceMenu kind="videoinput" />
       </span>
       <TrackToggle source={Track.Source.ScreenShare} showIcon={showIcon}>
+        {showIcon && <ScreenShareIcon />}
         {showText && 'Share screen'}
       </TrackToggle>
-      <DisconnectButton>Leave</DisconnectButton>
+      <DisconnectButton>
+        {showIcon && <LeaveIcon />}
+        {showText && 'Leave'}
+      </DisconnectButton>
       <StartAudio label="Start Audio" />
     </div>
   );

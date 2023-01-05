@@ -29,5 +29,5 @@ Documentation and Guides to get you started with LiveKit components for React.
 - [LiveKit Components fundamentals](guides/livekit-component-fundamentals.md): Learn the basics of how to nest, loop and combine components to build a LiveKit app.
 - [Style LiveKit Components](guides/style-livekit-components.md): Learn how to modify the look and style of LiveKit Components.
 - [Custom components](guides/custom-components.md): Learn how to create your own component using the included React hooks.
-  <!-- - [All LiveKit Components](components/livekit-components-list.md): List of our LiveKit Components with detail pages for every component. -->
-  <!-- - [LiveKit Component Hooks](hooks/livekit-hooks-list.md) -->
+- [All LiveKit Components](components): All LiveKit Components with detail pages for every component.
+- [All LiveKit Component Hooks](hooks): All React hooks with detail pages for every hook.

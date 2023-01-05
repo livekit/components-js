@@ -27,6 +27,9 @@ ${def.tags?.example ? def.tags.example : 'No example yet.'}
 }
 
 function addProps(props: ComponentDoc['props']): string {
+  if (Object.values(props).length === 0) {
+    return '';
+  }
   return `## Props
 ${generateMarkdownPropsTable(props)}
 `;

@@ -20,3 +20,13 @@ export const Default: StoryObj<ControlBarProps> = {
   args: {},
   parameters: { roomContext: { audio: true, video: true, connect: true } },
 };
+
+export const Minimal: StoryObj<ControlBarProps> = {
+  args: { variation: 'minimal' },
+  parameters: { roomContext: { audio: true, video: true, connect: true } },
+};
+
+export const TextOnly: StoryObj<ControlBarProps> = {
+  args: { variation: 'textOnly' },
+  parameters: { roomContext: { audio: true, video: true, connect: true } },
+};

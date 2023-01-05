@@ -8,6 +8,7 @@ import { getSourceIcon } from '../../icons/util';
 
 export type TrackToggleProps = Omit<React.HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   source: Track.Source;
+  showIcon?: boolean;
   initialState?: boolean;
   onChange?: (enabled: boolean) => void;
 };
@@ -78,5 +79,10 @@ export function useTrackToggle({ source, onChange, initialState, ...rest }: Trac
  */
 export function TrackToggle(props: TrackToggleProps) {
   const { buttonProps, enabled } = useTrackToggle(props);
-  return <button {...buttonProps}>{props.children ?? getSourceIcon(props.source, enabled)}</button>;
+  return (
+    <button {...buttonProps}>
+      {(props.showIcon ?? true) && getSourceIcon(props.source, enabled)}
+      {props.children}
+    </button>
+  );
 }

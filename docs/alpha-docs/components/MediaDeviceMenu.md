@@ -8,6 +8,16 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The MediaDeviceMenu prefab component is a button that opens a menu that lists all media devices and allows the user to select them.
 
+## Usage
+
+```tsx
+<LiveKitRoom>
+  <MediaDeviceMenu />
+</LiveKitRoom>
+```
+
+<!--USAGE_INSERT_MARKER-->
+
 
 ## Props
 

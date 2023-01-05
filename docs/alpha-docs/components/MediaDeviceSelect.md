@@ -8,6 +8,16 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The MediaDeviceSelect list all media devices of one kind. Clicking on one of the listed devices make it the active media device.
 
+## Usage
+
+```tsx
+<LiveKitRoom>
+  <MediaDeviceSelect kind='audioinput' />
+</LiveKitRoom>
+```
+
+<!--USAGE_INSERT_MARKER-->
+
 
 ## Props
 

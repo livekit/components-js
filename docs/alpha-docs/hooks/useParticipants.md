@@ -8,6 +8,10 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The useParticipants hook returns all participants of the current room. It is possible to filter the participants.
 
+## Usage
+
+<!--USAGE_INSERT_MARKER->
+
 
 ## Props
 

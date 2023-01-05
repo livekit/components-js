@@ -8,6 +8,14 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The `useConnectionState` hook allows you to simply implement your own `ConnectionState` component.
 
+## Usage
+
+```tsx
+const connectionState = useConnectionState(room);
+```
+
+<!--USAGE_INSERT_MARKER-->
+
 
 ## Props
 

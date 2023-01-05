@@ -8,6 +8,16 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The RoomName component renders the name of the connected LiveKit room inside a span tag.
 
+## Usage
+
+```tsx
+<LiveKitRoom>
+  <RoomName />
+</LiveKitRoom>
+```
+
+<!--USAGE_INSERT_MARKER-->
+
 
 ## Props
 

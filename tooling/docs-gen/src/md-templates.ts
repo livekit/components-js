@@ -17,7 +17,7 @@ function addDescription(def: ComponentDoc) {
 }
 
 function addUsage(def: ComponentDoc) {
-  def.tags?.example
+  return def.tags?.example
     ? `## Usage
 
 ${def.tags?.example}

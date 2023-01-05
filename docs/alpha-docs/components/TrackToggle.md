@@ -8,6 +8,17 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 With the TrackToggle component it is possible to mute and unmute your camera and microphone. The component uses an html button element under the hood so you can treat it like a button.
 
+## Usage
+
+```tsx
+<LiveKitRoom>
+  <TrackToggle source={Track.Source.Microphone} />
+  <TrackToggle source={Track.Source.Camera} />
+</LiveKitRoom>
+```
+
+<!--USAGE_INSERT_MARKER-->
+
 
 ## Props
 

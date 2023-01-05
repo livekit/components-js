@@ -8,6 +8,14 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The PreJoin prefab component is normally presented to the user before he enters a room. This component allows the user to check and select the preferred media device (camera und microphone). On submit the user decisions are returned, which can then be passed on to the LiveKitRoom so that the user enters the room with the correct media devices.
 
+## Usage
+
+```tsx
+<PreJoin />
+```
+
+<!--USAGE_INSERT_MARKER-->
+
 
 ## Props
 

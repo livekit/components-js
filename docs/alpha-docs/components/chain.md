@@ -8,3 +8,7 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 Calls all functions in the order they were chained with the same arguments.
 
+## Usage
+
+<!--USAGE_INSERT_MARKER->
+

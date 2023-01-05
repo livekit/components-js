@@ -8,6 +8,16 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The DisconnectButton is a basic html button with the added ability to disconnect from a LiveKit room. Normally, it is used by end-users to leave a video or audio call.
 
+## Usage
+
+```tsx
+<LiveKitRoom>
+  <DisconnectButton>Leave room</DisconnectButton>
+</LiveKitRoom>
+```
+
+<!--USAGE_INSERT_MARKER-->
+
 
 ## Props
 

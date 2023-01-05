@@ -8,6 +8,18 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The TrackLoop component loops over tracks. It is for example a easy way to loop over all participant camera and screen share tracks. Only tracks with a the same source specified via the sources property get included in the loop. Further narrowing the loop items is possible by providing a filter function to the component.
 
+## Usage
+
+```tsx
+{...}
+  <TrackLoop sources=[Track.Source.Camera, Track.Source.ScreenShare]>
+    {...}
+  <TrackLoop />
+{...}
+```
+
+<!--USAGE_INSERT_MARKER-->
+
 
 ## Props
 

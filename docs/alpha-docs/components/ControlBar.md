@@ -8,3 +8,13 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The ControlBar prefab component gives the user the basic user interface to control their media devices and leave the room.
 
+## Usage
+
+```tsx
+<LiveKitRoom>
+  <ControlBar />
+</LiveKitRoom>
+```
+
+<!--USAGE_INSERT_MARKER-->
+

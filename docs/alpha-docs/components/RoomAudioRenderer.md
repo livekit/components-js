@@ -8,3 +8,13 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The RoomAudioRenderer component is a drop-in solution for adding audio to your LiveKit app. It takes care of handling remote participants’ audio tracks and makes sure that microphones and screen share are audible.
 
+## Usage
+
+```tsx
+<LiveKitRoom>
+  <RoomAudioRenderer />
+</LiveKitRoom>
+```
+
+<!--USAGE_INSERT_MARKER-->
+

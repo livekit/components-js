@@ -6,6 +6,10 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 # useDisconnectButton
 
+## Usage
+
+<!--USAGE_INSERT_MARKER->
+
 
 ## Props
 

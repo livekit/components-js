@@ -8,6 +8,18 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The ConnectionQualityIndicator shows the individual connection quality of a participant.
 
+## Usage
+
+```tsx
+{...}
+  <ParticipantView>
+    <ConnectionQualityIndicator />
+  </ParticipantView>
+{...}
+```
+
+<!--USAGE_INSERT_MARKER-->
+
 
 ## Props
 

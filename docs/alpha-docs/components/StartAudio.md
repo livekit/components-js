@@ -8,6 +8,16 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The StartAudio component is only visible when the browser blocks audio playback. This is due to some browser implemented autoplay policies. To start audio playback, the user must perform a user-initiated event such as clicking this button. As soon as audio playback starts, the button hides itself again.
 
+## Usage
+
+```tsx
+<LiveKitRoom>
+  <StartAudio>Click to allow audio playback</StartAudio>
+</LiveKitRoom>
+```
+
+<!--USAGE_INSERT_MARKER-->
+
 
 ## Props
 

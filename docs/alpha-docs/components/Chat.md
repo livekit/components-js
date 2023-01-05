@@ -8,3 +8,13 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The Chat component adds a basis chat functionality to the LiveKit room. The messages are distributed to all participants in the room. Only users who are in the room at the time of dispatch will receive the message.
 
+## Usage
+
+```tsx
+<LiveKitRoom>
+  <Chat />
+</LiveKitRoom>
+```
+
+<!--USAGE_INSERT_MARKER-->
+

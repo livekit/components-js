@@ -8,3 +8,7 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 Merges multiple props objects together. Event handlers are chained, classNames are combined, and ids are deduplicated - different ids will trigger a side-effect and re-render components hooked up with `useId`. For all other props, the last prop object overrides all previous ones.
 
+## Usage
+
+<!--USAGE_INSERT_MARKER->
+

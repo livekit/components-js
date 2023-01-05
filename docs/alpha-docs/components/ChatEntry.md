@@ -8,6 +8,18 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The ChatEntry component holds and displays one chat message.
 
+## Usage
+
+```tsx
+{...}
+  <Chat>
+    <ChatEntry />
+  </Chat>
+{...}
+```
+
+<!--USAGE_INSERT_MARKER-->
+
 
 ## Props
 

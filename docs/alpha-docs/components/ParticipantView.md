@@ -8,6 +8,18 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The ParticipantView component is the base utility wrapper for displaying a visual representation of a participant. This component can be used as a child of the `ParticipantLoop` component or independently if a participant is passed as a property.
 
+## Usage
+
+```tsx
+{...}
+  <ParticipantView>
+    {...}
+  </ParticipantView>
+{...}
+```
+
+<!--USAGE_INSERT_MARKER-->
+
 
 ## Props
 

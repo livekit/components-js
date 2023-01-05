@@ -8,3 +8,13 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 This component is the default setup of a classic LiveKit video conferencing app. It provides functionality like switching between participant grid view and focus view.
 
+## Usage
+
+```tsx
+<LiveKitRoom>
+  <VideoConference />
+<LiveKitRoom>
+```
+
+<!--USAGE_INSERT_MARKER-->
+

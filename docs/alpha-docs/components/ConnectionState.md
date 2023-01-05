@@ -8,6 +8,16 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The ConnectionState component displays the connection status of the room in written form.
 
+## Usage
+
+```tsx
+<LiveKitRoom>
+  <ConnectionState />
+</LiveKitRoom>
+```
+
+<!--USAGE_INSERT_MARKER-->
+
 
 ## Props
 

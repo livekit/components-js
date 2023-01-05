@@ -8,6 +8,20 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The LiveKitRoom component provides the room context to all its child components. It is generally the starting point of your LiveKit app and the root of the LiveKit component tree. It provides the room state as a React context to all child components, so you don't have to pass it yourself.
 
+## Usage
+
+```tsx
+<LiveKitRoom
+ token='<livekit-token>'
+ serverUrl='<url-to-livekit-server>'
+ connect={true}
+>
+    {...}
+</LiveKitRoom>
+```
+
+<!--USAGE_INSERT_MARKER-->
+
 
 ## Props
 

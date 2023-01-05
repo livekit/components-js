@@ -8,6 +8,10 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The useSortedParticipants hook returns the only the active speakers of all participants.
 
+## Usage
+
+<!--USAGE_INSERT_MARKER->
+
 
 ## Props
 

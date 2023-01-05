@@ -8,3 +8,7 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The useSpeakingParticipants hook returns the only the active speakers of all participants.
 
+## Usage
+
+<!--USAGE_INSERT_MARKER->
+

@@ -8,6 +8,16 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The GridLayout component displays the nested participants in a grid where every participants has the same size.
 
+## Usage
+
+```tsx
+<LiveKitRoom>
+  <GridLayout />
+<LiveKitRoom>
+```
+
+<!--USAGE_INSERT_MARKER-->
+
 
 ## Props
 

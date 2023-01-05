@@ -8,3 +8,13 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 The ClearPinButton is a basic html button with the added ability to signal the LiveKitRoom that it should display the grid view again.
 
+## Usage
+
+```tsx
+<LiveKitRoom>
+  <ClearPinButton>Leave room</ClearPinButton>
+</LiveKitRoom>
+```
+
+<!--USAGE_INSERT_MARKER-->
+

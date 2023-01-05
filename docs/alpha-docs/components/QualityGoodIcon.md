@@ -6,3 +6,7 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 # QualityGoodIcon
 
+## Usage
+
+<!--USAGE_INSERT_MARKER->
+

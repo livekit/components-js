@@ -31,7 +31,7 @@ const TARGET: 'mdx' | 'md' = 'md';
 const globAsync = promisify(glob);
 const rootDir = path.join(__dirname, '..', '..', '..');
 const sourcePath = path.join(rootDir, 'packages');
-const outputPath = path.join(__dirname, '..', 'dist');
+const outputPath = path.join(__dirname, '..', 'generated');
 const tsConfigPath = path.join(sourcePath, '..', 'tsconfig.json');
 
 export async function main() {
@@ -178,7 +178,7 @@ async function writeComponentInfoFilesMdx(componentInfo: ComponentInfo[]) {
 async function writeComponentInfoFilesMd(componentInfo: GenInfoMarkdown[]) {
   return Promise.all(
     componentInfo.map(async (info) => {
-      const dirPath = path.join(outputPath, info.isHook ? 'hooks' : 'components');
+      const dirPath = path.join(outputPath, 'markdown', info.isHook ? 'hooks' : 'components');
       const filePath = path.join(dirPath, info.fileName);
       const content = info.md;
       await mkdirp(dirPath);

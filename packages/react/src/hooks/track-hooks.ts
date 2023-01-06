@@ -89,7 +89,7 @@ export function useTrack({ pub }: UseTrackProps) {
 
 export type TracksFilter = Parameters<TrackParticipantPair[]['filter']>['0'];
 type UseTracksProps = {
-  sources: Track.Source[];
+  sources: [Track.Source, Track.Source[]];
   excludePinnedTracks?: boolean;
   filter?: TracksFilter;
   filterDependencies?: Array<any>;
@@ -119,12 +119,6 @@ export function useTracks({
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
 
   React.useEffect(() => {
-    if (sources.length === 0) {
-      console.warn(`You used the 'useTracks' hook with an empty sources array – no tracks will be returned.
-    This is probably not intended. Make sure you pass all the wanted track sources to the sources array.
-    `);
-      setUnfilteredPairs([]);
-    }
     const subscription = trackParticipantPairsObservable(room, sources).subscribe(
       (trackParticipantPairs: TrackParticipantPair[]) => {
         setUnfilteredPairs(trackParticipantPairs);

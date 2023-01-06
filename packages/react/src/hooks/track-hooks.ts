@@ -3,12 +3,12 @@ import {
   setupMediaTrack,
   trackObservable,
   TrackParticipantPair,
+  trackParticipantPairsObservable,
 } from '@livekit/components-core';
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
-import { useMaybePinContext } from '../contexts';
+import { useMaybePinContext, useRoomContext } from '../contexts';
 import { mergeProps } from '../utils';
-import { useParticipants } from './participant-hooks';
 
 interface UseMediaTrackProps {
   participant: Participant;
@@ -89,7 +89,7 @@ export function useTrack({ pub }: UseTrackProps) {
 
 export type TracksFilter = Parameters<TrackParticipantPair[]['filter']>['0'];
 type UseTracksProps = {
-  sources: Track.Source[];
+  sources: [Track.Source, ...Track.Source[]];
   excludePinnedTracks?: boolean;
   filter?: TracksFilter;
   filterDependencies?: Array<any>;
@@ -111,39 +111,36 @@ export function useTracks({
   filter,
   filterDependencies = [],
 }: UseTracksProps) {
-  const participants = useParticipants();
+  const room = useRoomContext();
+  // const participants = useParticipants();
   const pinContext = useMaybePinContext();
 
-  const pairs: TrackParticipantPair[] = React.useMemo(() => {
-    let sourceParticipantPairs: TrackParticipantPair[] = [];
-    if (sources.length === 0) {
-      console.warn(`You used the 'useTracks' hook with an empty sources array – no tracks will be returned.
-    This is probably not intended. Make sure you pass all the wanted tracks to the sources array.
-    `);
-      return [];
-    }
+  const [unfilteredPairs, setUnfilteredPairs] = React.useState<TrackParticipantPair[]>([]);
+  const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
 
-    participants.forEach((p) => {
-      sources.forEach((source) => {
-        const track = p.getTrack(source);
-        if (track) {
-          sourceParticipantPairs.push({ track: track, participant: p });
-        }
-      });
-    });
+  React.useEffect(() => {
+    const subscription = trackParticipantPairsObservable(room, sources).subscribe(
+      (trackParticipantPairs: TrackParticipantPair[]) => {
+        setUnfilteredPairs(trackParticipantPairs);
+      },
+    );
+    return () => subscription.unsubscribe();
+  }, [room, sources]);
 
+  React.useEffect(() => {
+    let trackParticipantPairs: TrackParticipantPair[] = unfilteredPairs;
     if (excludePinnedTracks && pinContext) {
-      sourceParticipantPairs = sourceParticipantPairs.filter(
+      trackParticipantPairs = trackParticipantPairs.filter(
         (trackParticipantPair) => !isParticipantTrackPinned(trackParticipantPair, pinContext.state),
       );
     }
-
     if (filter) {
-      sourceParticipantPairs = sourceParticipantPairs.filter(filter);
+      trackParticipantPairs = trackParticipantPairs.filter(filter);
     }
+    setPairs(trackParticipantPairs);
+  }, [unfilteredPairs, excludePinnedTracks, filter, pinContext, ...filterDependencies]);
 
-    return sourceParticipantPairs;
-  }, [participants, pinContext, excludePinnedTracks, sources, filter, ...filterDependencies]);
+  React.useDebugValue(`Pairs count: ${pairs.length}`);
 
   return pairs;
 }

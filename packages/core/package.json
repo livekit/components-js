@@ -30,7 +30,8 @@
     "dev": "tsup --watch",
     "build": "tsup --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
-    "test": "vitest"
+    "test": "vitest --run",
+    "test:watch": "vitest"
   },
   "peerDependencies": {
     "livekit-client": "^1.6.0"

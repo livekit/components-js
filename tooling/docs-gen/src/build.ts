@@ -7,6 +7,7 @@ import * as docgen from 'react-docgen-typescript';
 import { ComponentDoc } from 'react-docgen-typescript';
 import mkdirp from 'mkdirp';
 import { mdxComponentTemplate, mdxHookTemplate } from './mdx-template';
+import { mdComponentTemplate, mdHookTemplate } from './md-templates';
 
 type ComponentInfo = {
   def: ComponentDoc;
@@ -17,45 +18,42 @@ type ComponentInfo = {
   mdx: string;
 };
 
+type GenInfoMarkdown = {
+  def: ComponentDoc;
+  displayName: string;
+  fileName: string;
+  exportName: string;
+  isHook: boolean;
+  md: string;
+};
+
+const TARGET: 'mdx' | 'md' = 'md';
 const globAsync = promisify(glob);
-
-// const excludedPropNames = propNames.concat(['as', 'apply', 'sx', '__css', 'css']);
-
 const rootDir = path.join(__dirname, '..', '..', '..');
 const sourcePath = path.join(rootDir, 'packages');
-const outputPath = path.join(__dirname, '..', 'dist', 'components');
-
-const basePath = path.join(__dirname, '..', 'dist');
-
-// const cjsIndexFilePath = path.join(basePath, 'index.cjs.js');
-// const esmIndexFilePath = path.join(basePath, 'index.esm.js');
-// const typeFilePath = path.join(basePath, 'index.d.ts');
-
+const outputPath = path.join(__dirname, '..', 'generated');
 const tsConfigPath = path.join(sourcePath, '..', 'tsconfig.json');
 
 export async function main() {
-  const componentFiles = await findComponentFiles();
+  const componentFiles = await findFiles();
   if (componentFiles.length) {
     await mkdirp(outputPath);
   }
-
   log('Parsing files for component types...');
+  log(`Generation TARGET is: ${TARGET}`);
   const parsedInfo = parseInfo(componentFiles);
-
   log('Extracting component info...');
-  const componentInfo = extractComponentInfo(parsedInfo);
-
-  log('Writing component info files...');
-  await writeComponentInfoFiles(componentInfo);
-
-  // log('Writing index files...');
-  // await Promise.all([
-  //   writeIndexCJS(componentInfo),
-  //   writeIndexESM(componentInfo),
-  //   writeTypes(componentInfo),
-  // ]);
-
-  log(`Processed ${componentInfo.length} components`);
+  if (TARGET === 'md') {
+    const componentInfo = extractComponentInfoMd(parsedInfo);
+    log('Writing component info files...');
+    await writeComponentInfoFilesMd(componentInfo);
+    log(`Processed ${componentInfo.length} files.`);
+  } else if (TARGET === 'mdx') {
+    const componentInfo = extractComponentInfoMdx(parsedInfo);
+    log('Writing component info files...');
+    await writeComponentInfoFilesMdx(componentInfo);
+    log(`Processed ${componentInfo.length} files.`);
+  }
 }
 
 if (require.main === module) {
@@ -66,10 +64,10 @@ if (require.main === module) {
 /**
  * Find all TypeScript files which could contain component definitions
  */
-async function findComponentFiles() {
+async function findFiles() {
   return globAsync('**/src/**/*.@(ts|tsx)', {
     cwd: sourcePath,
-    ignore: ['**/core/**', '**/node_modules/**', '**/index.ts'],
+    ignore: ['**/core/**', '**/node_modules/**', '**/index.ts', '**/icons/**'],
   });
 }
 
@@ -80,7 +78,7 @@ function parseInfo(filePaths: string[]) {
   const { parse } = docgen.withCustomConfig(tsConfigPath, {
     shouldRemoveUndefinedFromOptional: true,
     propFilter: (prop, component) => {
-      const isHTMLElementProp = prop.parent?.fileName.includes('node_modules') ?? false;
+      const isHTMLElementProp: boolean = prop.parent?.fileName.includes('node_modules') ?? false;
       const isHook = component.name.startsWith('use');
       const isTypeScriptNative = prop.parent?.fileName.includes('node_modules/typescript') ?? false;
 
@@ -94,7 +92,7 @@ function parseInfo(filePaths: string[]) {
 /**
  * Extract meta data of component docs
  */
-function extractComponentInfo(docs: ComponentDoc[]) {
+function extractComponentInfoMdx(docs: ComponentDoc[]) {
   return docs.reduce((acc, def, _, allDefs) => {
     function createUniqueName(displayName: string) {
       const existing = acc.filter(
@@ -110,7 +108,7 @@ function extractComponentInfo(docs: ComponentDoc[]) {
     const fileName = `${exportName}.mdx`;
     const mdx = def.displayName.startsWith('use')
       ? mdxHookTemplate(def)
-      : mdxComponentTemplate(def, hasHook(def.displayName, allDefs));
+      : mdxComponentTemplate(def);
 
     acc.push({
       def,
@@ -124,13 +122,50 @@ function extractComponentInfo(docs: ComponentDoc[]) {
   }, [] as ComponentInfo[]);
 }
 
+/**
+ * Extract meta data of component docs
+ */
+function extractComponentInfoMd(docs: ComponentDoc[]) {
+  return docs.reduce((acc, def, _, allDefs) => {
+    /** Skip if docstring contains @internal tag. */
+    if (typeof def.tags === 'object' && Object.keys(def.tags).includes('internal')) {
+      return acc;
+    }
+
+    function createUniqueName(displayName: string) {
+      const existing = acc.filter(
+        (prev) => String(prev.def.displayName).toLowerCase() === displayName.toLowerCase(),
+      );
+      if (!existing.length) {
+        return displayName;
+      }
+      return `${displayName}${existing.length}`;
+    }
+
+    const isHook = def.displayName.startsWith('use');
+    const exportName = createUniqueName(def.displayName);
+    const fileName = `${exportName}.md`;
+    const md = isHook ? mdHookTemplate(def) : mdComponentTemplate(def);
+
+    acc.push({
+      def,
+      displayName: def.displayName,
+      fileName,
+      exportName,
+      isHook,
+      md: md,
+    });
+    return acc;
+  }, [] as GenInfoMarkdown[]);
+}
+
 const hasHook = (displayName: string, allDefs: ComponentDoc[]) =>
   allDefs.some((def) => def.displayName === `use${displayName}`);
 
 /**
- * Write component info as JSON to disk
+ * Write doc files as .mdx files.
  */
-async function writeComponentInfoFiles(componentInfo: ComponentInfo[]) {
+async function writeComponentInfoFilesMdx(componentInfo: ComponentInfo[]) {
   return Promise.all(
     componentInfo.map(async (info) => {
       const componentDirPath = path.join(outputPath);
@@ -142,74 +177,20 @@ async function writeComponentInfoFiles(componentInfo: ComponentInfo[]) {
   );
 }
 
-// /**
-//  * Create and write the index file in CJS format
-//  */
-// async function writeIndexCJS(componentInfo: ComponentInfo[]) {
-//   const cjsExports = componentInfo.map(
-//     ({ displayName, importPath }) => `module.exports.${displayName} = require('${importPath}');`,
-//   );
-//   return fs.writeFile(cjsIndexFilePath, cjsExports.join('\n') + '\n');
-// }
-
-// /**
-//  * Create and write the index file in ESM format
-//  */
-// async function writeIndexESM(componentInfo: ComponentInfo[]) {
-//   const esmPropImports = componentInfo
-//     .map(({ exportName, importPath }) => `import ${exportName}Import from '${importPath}';`)
-//     .join('\n');
-
-//   const esmPropExports = componentInfo
-//     .map(({ exportName }) => `export const ${exportName} = ${exportName}Import;`)
-//     .join('\n');
-
-//   return fs.writeFile(
-//     esmIndexFilePath,
-//     `${esmPropImports}
-// ${esmPropExports}\n`,
-//   );
-// }
-
-// async function writeTypes(componentInfo: ComponentInfo[]) {
-//   const typeExports = componentInfo
-//     .map(({ exportName }) => `export declare const ${exportName}: PropDoc;`)
-//     .join('\n');
-
-//   const baseType = `export interface Parent {
-//   fileName: string;
-//   name: string;
-// }
-
-// export interface Declaration {
-//   fileName: string;
-//   name: string;
-// }
-
-// export interface DefaultProps {
-//   defaultValue?: any;
-//   description: string | JSX.Element;
-//   name: string;
-//   parent: Parent;
-//   declarations: Declaration[];
-//   required: boolean;
-//   type: { name: string };
-// }
-
-// export interface PropDoc {
-//   tags: { see: string };
-//   filePath: string;
-//   description: string | JSX.Element;
-//   displayName: string;
-//   methods: any[];
-//   props: {
-//     defaultProps?: DefaultProps;
-//     components?: DefaultProps;
-//   };
-// }`;
-
-//   return fs.writeFile(typeFilePath, `${baseType}\n${typeExports}\n`);
-// }
+/**
+ * Write doc files as .md files.
+ */
+async function writeComponentInfoFilesMd(componentInfo: GenInfoMarkdown[]) {
+  return Promise.all(
+    componentInfo.map(async (info) => {
+      const dirPath = path.join(outputPath, 'markdown', info.isHook ? 'hooks' : 'components');
+      const filePath = path.join(dirPath, info.fileName);
+      const content = info.md;
+      await mkdirp(dirPath);
+      return fs.writeFile(filePath, content);
+    }),
+  );
+}
 
 function log(...args: unknown[]) {
   console.info(`[docs-gen]`, ...args);

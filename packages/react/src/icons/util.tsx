@@ -12,6 +12,9 @@ import {
   QualityPoorIcon,
 } from './index';
 
+/**
+ * @internal
+ */
 export function getSourceIcon(source: Track.Source, enabled: boolean) {
   switch (source) {
     case Track.Source.Microphone:
@@ -23,6 +26,9 @@ export function getSourceIcon(source: Track.Source, enabled: boolean) {
   }
 }
 
+/**
+ * @internal
+ */
 export function getConnectionQualityIcon(quality: ConnectionQuality) {
   switch (quality) {
     case ConnectionQuality.Excellent:

@@ -24,9 +24,9 @@
     "url": "https://github.com/livekit/components/tree/main/tooling/docs-gen"
   },
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf generated",
     "build": "tsx src/build.ts",
-    "clean": "rimraf dist .turbo",
+    "clean": "rimraf generated .turbo",
     "typecheck": "tsc --noEmit",
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\""
   },

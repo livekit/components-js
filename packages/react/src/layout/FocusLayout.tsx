@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useMaybePinContext, usePinContext } from '../contexts';
 import { mergeProps } from '../utils';
 import { MediaTrack } from '../components/participant/MediaTrack';
-import { ParticipantClickEvent } from '../components/participant/ParticipantView';
+import { ParticipantClickEvent, ParticipantView } from '../components/participant/ParticipantView';
 import { ClearPinButton } from '../components/ClearPinButton';
 import { TrackLoop } from '../components/TrackLoop';
 import { TrackParticipantPair } from '@livekit/components-core';
@@ -70,9 +70,11 @@ export function FocusLayout({
   }, [state, trackParticipantPair]);
 
   return (
-    <div {...props}>
-      {pair && <MediaTrack participant={pair.participant} source={pair.track.source} />}
-    </div>
+    <ParticipantView
+      {...props}
+      participant={pair?.participant}
+      trackSource={pair?.track.source}
+    ></ParticipantView>
   );
 }
 

@@ -13,6 +13,7 @@ import { TrackMutedIndicator } from './TrackMutedIndicator';
 import { MediaTrack } from './MediaTrack';
 import { ParticipantName } from './ParticipantName';
 import { useIsMuted, useIsSpeaking } from '../../hooks';
+import { AudioVisualizer } from './AudioVisualizer';
 
 export interface ParticipantClickEvent {
   participant?: Participant;
@@ -128,11 +129,27 @@ export const ParticipantView = ({
                 alignItems: 'center',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', padding: '.25rem .375rem .25rem .25rem', backgroundColor: 'rgba(0,0,0,.15)', borderRadius: '.25rem' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '.25rem .375rem .25rem .25rem',
+                  backgroundColor: 'rgba(0,0,0,.15)',
+                  borderRadius: '.25rem',
+                }}
+              >
                 <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
                 <ParticipantName />
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', padding: '.25rem', backgroundColor: 'rgba(0,0,0,.15)', borderRadius: '.25rem' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '.25rem',
+                  backgroundColor: 'rgba(0,0,0,.15)',
+                  borderRadius: '.25rem',
+                }}
+              >
                 <ConnectionQualityIndicator />
               </div>
             </div>

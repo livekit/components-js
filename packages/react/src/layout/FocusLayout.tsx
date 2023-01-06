@@ -69,11 +69,15 @@ export function FocusLayout({
   }, [state, trackParticipantPair]);
 
   return (
-    <ParticipantView
-      {...props}
-      participant={pair?.participant}
-      trackSource={pair?.track.source}
-    ></ParticipantView>
+    <>
+      {pair && pair.track && (
+        <ParticipantView
+          {...props}
+          participant={pair.participant}
+          trackSource={pair.track.source}
+        />
+      )}
+    </>
   );
 }
 

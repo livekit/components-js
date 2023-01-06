@@ -1,3 +1,4 @@
+import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../contexts';
 import { ParticipantFilter, useParticipants } from '../hooks';
@@ -40,7 +41,11 @@ export const ParticipantLoop = ({
     <>
       {participants.map((participant) => (
         <ParticipantContext.Provider value={participant} key={participant.identity}>
-          {props.children ? cloneSingleChild(props.children) : <ParticipantView />}
+          {props.children ? (
+            cloneSingleChild(props.children)
+          ) : (
+            <ParticipantView trackSource={Track.Source.Camera} />
+          )}
         </ParticipantContext.Provider>
       ))}
     </>

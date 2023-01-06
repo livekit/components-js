@@ -25,6 +25,6 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@livekit/components-props-docs": "workspace:*"
+    "@livekit/components-props-docs": "*"
   }
 }

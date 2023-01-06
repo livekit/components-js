@@ -1,5 +1,5 @@
 import {
-  ParticipantView,
+  ParticipantTile,
   LiveKitRoom,
   ScreenShareView,
   ParticipantName,
@@ -63,7 +63,7 @@ const CustomizeExample: NextPage = () => {
               <div className={styles.participantGrid}>
                 <GridLayout>
                   <ParticipantLoop>
-                    <ParticipantView>
+                    <ParticipantTile>
                       <MediaTrack source={Track.Source.Camera}></MediaTrack>
 
                       <div className={myStyles['participant-indicators']}>
@@ -82,7 +82,7 @@ const CustomizeExample: NextPage = () => {
                         {/* Custom components: Here we replace the provided <ConnectionQualityIndicator />  with our own implementation. */}
                         <UserDefinedConnectionQualityIndicator />
                       </div>
-                    </ParticipantView>
+                    </ParticipantTile>
                   </ParticipantLoop>
                 </GridLayout>
               </div>

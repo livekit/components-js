@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ParticipantContext } from '../contexts';
 import { TracksFilter, useTracks } from '../hooks';
 import { cloneSingleChild } from '../utils';
-import { ParticipantTile } from './participant/ParticipantView';
+import { ParticipantTile } from './participant/ParticipantTile';
 
 type TrackLoopProps = {
   /**

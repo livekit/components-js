@@ -2,7 +2,7 @@ import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useMaybePinContext, usePinContext } from '../contexts';
 import { mergeProps } from '../utils';
-import { ParticipantClickEvent, ParticipantTile } from '../components/participant/ParticipantView';
+import { ParticipantClickEvent, ParticipantTile } from '../components/participant/ParticipantTile';
 import { ClearPinButton } from '../components/ClearPinButton';
 import { TrackLoop } from '../components/TrackLoop';
 import { TrackParticipantPair } from '@livekit/components-core';

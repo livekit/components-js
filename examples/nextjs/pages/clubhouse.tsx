@@ -63,7 +63,7 @@ const Clubhouse = () => {
           </h1>
           <GridLayout className={styles.grid}>
             <ParticipantLoop>
-              <CustomParticipantView></CustomParticipantView>
+              <CustomParticipantTile></CustomParticipantTile>
             </ParticipantLoop>
           </GridLayout>
           <ControlBar></ControlBar>
@@ -73,7 +73,7 @@ const Clubhouse = () => {
   );
 };
 
-const CustomParticipantView = () => {
+const CustomParticipantTile = () => {
   const participant = useParticipantContext();
   const isSpeaking = useIsSpeaking(participant);
   const isMuted = useIsMuted({ source: Track.Source.Microphone, participant: participant });

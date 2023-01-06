@@ -1,6 +1,6 @@
 import { lkClassName } from '../utils';
 
-export function setupParticipantView() {
+export function setupParticipantTile() {
   const className: string = lkClassName('participant-view');
   return {
     className,

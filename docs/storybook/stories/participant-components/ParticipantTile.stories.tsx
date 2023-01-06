@@ -1,13 +1,13 @@
-import { ParticipantView, ParticipantViewProps } from '@livekit/components-react';
+import { ParticipantTile, ParticipantTileProps } from '@livekit/components-react';
 import { StoryObj } from '@storybook/react';
 import { Track } from 'livekit-client';
 import React from 'react';
 import { LkParticipantContext, LkRoomContext } from '../../.storybook/lk-decorators';
 
 export default {
-  component: ParticipantView,
+  component: ParticipantTile,
   decorators: [LkParticipantContext, LkRoomContext],
-  render: (args: ParticipantViewProps) => <ParticipantView {...args}></ParticipantView>,
+  render: (args: ParticipantTileProps) => <ParticipantTile {...args}></ParticipantTile>,
   argTypes: {
     trackSource: {
       control: { type: 'select' },
@@ -21,7 +21,7 @@ export default {
   },
 };
 
-export const Default: StoryObj<ParticipantViewProps> = {
+export const Default: StoryObj<ParticipantTileProps> = {
   args: { trackSource: Track.Source.Camera },
   parameters: { roomContext: { audio: true, video: true, connect: true } },
 };

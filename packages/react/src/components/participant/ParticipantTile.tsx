@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Participant, Track, TrackPublication } from 'livekit-client';
-import { setupParticipantView } from '@livekit/components-core';
+import { setupParticipantTile } from '@livekit/components-core';
 import { mergeProps } from '../../utils';
 import {
   ParticipantContext,
@@ -21,11 +21,11 @@ export interface ParticipantClickEvent {
 
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
-  trackSource: Track.Source;
+  trackSource?: Track.Source;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 };
 
-function useParticipantView<T extends React.HTMLAttributes<HTMLElement>>({
+function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>({
   participant,
   props,
 }: {
@@ -33,7 +33,7 @@ function useParticipantView<T extends React.HTMLAttributes<HTMLElement>>({
   props: T;
 }) {
   const mergedProps = React.useMemo(() => {
-    const { className } = setupParticipantView();
+    const { className } = setupParticipantTile();
     return mergeProps(props, { className });
   }, [props]);
   const isVideoMuted = useIsMuted({ source: Track.Source.Camera, participant });
@@ -66,15 +66,15 @@ function ParticipantContextIfNeeded(
 }
 
 /**
- * The ParticipantView component is the base utility wrapper for displaying a visual representation of a participant.
+ * The ParticipantTile component is the base utility wrapper for displaying a visual representation of a participant.
  * This component can be used as a child of the `ParticipantLoop` component or independently if a participant is passed as a property.
  *
  * @example
  * ```tsx
  * {...}
- *   <ParticipantView>
+ *   <ParticipantTile>
  *     {...}
- *   </ParticipantView>
+ *   </ParticipantTile>
  * {...}
  * ```
  *
@@ -88,7 +88,7 @@ export const ParticipantTile = ({
   ...htmlProps
 }: ParticipantTileProps) => {
   const p = useEnsureParticipant(participant);
-  const { elementProps } = useParticipantView({ participant: p, props: htmlProps });
+  const { elementProps } = useParticipantTile({ participant: p, props: htmlProps });
 
   const pinContext = useMaybePinContext();
 

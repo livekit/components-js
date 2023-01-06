@@ -18,3 +18,10 @@ The ControlBar prefab component gives the user the basic user interface to contr
 
 <!--USAGE_INSERT_MARKER-->
 
+
+## Props
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| variation | `"minimal" \| "verbose" \| "textOnly"` |  |  |
+

@@ -10,7 +10,7 @@ export * from './components/connectionQualityIndicator';
 export * from './components/trackMutedIndicator';
 export * from './components/participantName';
 export * from './components/mediaTrack';
-export * from './components/participantView';
+export * from './components/participantTile';
 export * from './components/chat';
 export * from './components/startAudio';
 export * from './components/clearPinButton';

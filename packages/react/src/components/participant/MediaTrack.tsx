@@ -2,7 +2,7 @@ import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureParticipant } from '../../contexts';
 import { useMediaTrack } from '../../hooks';
-import { ParticipantClickEvent } from './ParticipantView';
+import { ParticipantClickEvent } from './ParticipantTile';
 
 export interface MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
   extends Omit<React.HTMLAttributes<T>, 'children'> {
@@ -18,14 +18,14 @@ export interface MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
  * @example
  * ```tsx
  * {...}
- *   <ParticipantView>
+ *   <ParticipantTile>
  *     <MediaTrack source={Track.Source.Camera} />
  *     <MediaTrack source={Track.Source.Microphone} />
- *   </ParticipantView>
+ *   </ParticipantTile>
  * {...}
  * ```
  *
- * @see `ParticipantView` component
+ * @see `ParticipantTile` component
  */
 export function MediaTrack({ onTrackClick, onClick, ...props }: MediaTrackProps) {
   const participant = useEnsureParticipant(props.participant);

@@ -4,17 +4,17 @@ This file was created by @livekit/components-docs-gen and should not be changed 
 The contents of this file can be replaced at any time which would lead to the loss of all manual changes.
 -->
 
-# ParticipantView
+# ParticipantTile
 
-The ParticipantView component is the base utility wrapper for displaying a visual representation of a participant. This component can be used as a child of the `ParticipantLoop` component or independently if a participant is passed as a property.
+The ParticipantTile component is the base utility wrapper for displaying a visual representation of a participant. This component can be used as a child of the `ParticipantLoop` component or independently if a participant is passed as a property.
 
 ## Usage
 
 ```tsx
 {...}
-  <ParticipantView>
+  <ParticipantTile>
     {...}
-  </ParticipantView>
+  </ParticipantTile>
 {...}
 ```
 

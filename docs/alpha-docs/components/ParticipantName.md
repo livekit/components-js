@@ -12,9 +12,9 @@ The ParticipantName component displays the name of the participant as a string w
 
 ```tsx
 {...}
-  <ParticipantView>
+  <ParticipantTile>
     <ParticipantName />
-  </ParticipantView>
+  </ParticipantTile>
 {...}
 ```
 

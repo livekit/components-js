@@ -2,7 +2,7 @@ import {
   LiveKitRoom,
   ParticipantName,
   Participants,
-  ParticipantView,
+  ParticipantTile,
 } from '@livekit/components-react';
 
 const MyLiveKitApp = () => {
@@ -11,9 +11,9 @@ const MyLiveKitApp = () => {
   return (
     <LiveKitRoom serverUrl={serverUrl} token={accessToken} connect={true}>
       <Participants>
-        <ParticipantView>
+        <ParticipantTile>
           <ParticipantName />
-        </ParticipantView>
+        </ParticipantTile>
       </Participants>
     </LiveKitRoom>
   );

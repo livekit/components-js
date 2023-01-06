@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ParticipantContext } from '../contexts';
 import { TracksFilter, useTracks } from '../hooks';
 import { cloneSingleChild } from '../utils';
-import { ParticipantView } from './participant/ParticipantView';
+import { ParticipantTile } from './participant/ParticipantTile';
 
 type TrackLoopProps = {
   /**
@@ -56,7 +56,7 @@ export const TrackLoop = ({
           {props.children ? (
             cloneSingleChild(props.children)
           ) : (
-            <ParticipantView trackSource={track.source} />
+            <ParticipantTile trackSource={track.source} />
           )}
         </ParticipantContext.Provider>
       ))}

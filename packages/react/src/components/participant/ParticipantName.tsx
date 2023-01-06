@@ -23,13 +23,13 @@ export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement>;
  * @example
  * ```tsx
  * {...}
- *   <ParticipantView>
+ *   <ParticipantTile>
  *     <ParticipantName />
- *   </ParticipantView>
+ *   </ParticipantTile>
  * {...}
  * ```
  *
- * @see `ParticipantView` component
+ * @see `ParticipantTile` component
  */
 export function ParticipantName({ ...props }: ParticipantNameProps) {
   const participant = useParticipantContext();

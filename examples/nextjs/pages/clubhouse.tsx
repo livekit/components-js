@@ -2,9 +2,7 @@ import {
   ControlBar,
   GridLayout,
   LiveKitRoom,
-  ParticipantName,
   ParticipantLoop,
-  ParticipantView,
   RoomName,
   TrackMutedIndicator,
   useIsMuted,
@@ -65,7 +63,7 @@ const Clubhouse = () => {
           </h1>
           <GridLayout className={styles.grid}>
             <ParticipantLoop>
-              <CustomParticipantView></CustomParticipantView>
+              <CustomParticipantTile></CustomParticipantTile>
             </ParticipantLoop>
           </GridLayout>
           <ControlBar></ControlBar>
@@ -75,7 +73,7 @@ const Clubhouse = () => {
   );
 };
 
-const CustomParticipantView = () => {
+const CustomParticipantTile = () => {
   const participant = useParticipantContext();
   const isSpeaking = useIsSpeaking(participant);
   const isMuted = useIsMuted({ source: Track.Source.Microphone, participant: participant });
@@ -83,7 +81,7 @@ const CustomParticipantView = () => {
   const id = useMemo(() => participant.identity, [participant]);
 
   return (
-    <section className={styles['participant-view']} title={participant.name}>
+    <section className={styles['participant-tile']} title={participant.name}>
       <div
         // className={`rounded-full border-2 p-0.5 transition-colors duration-1000 ${
         className={styles['avatar-container']}

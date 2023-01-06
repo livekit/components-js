@@ -7,7 +7,7 @@ import {
   MediaTrack,
   ParticipantName,
   ParticipantLoop,
-  ParticipantView,
+  ParticipantTile,
   PinContextProvider,
   PreJoin,
   RoomAudioRenderer,
@@ -75,7 +75,7 @@ const CustomGridLayout = ({ room }: { room?: Room }) => {
   return (
     <div ref={gridContainerRef} className={styles.gridLayout} style={props}>
       <ParticipantLoop>
-        <CustomParticipantView />
+        <CustomParticipantTile />
       </ParticipantLoop>
       <ParticipantLoop
         filter={(participant) => participant.isScreenShareEnabled}
@@ -106,7 +106,7 @@ const CustomFocusLayout = ({
             }
             filterDependencies={[screenShareTrack, focusState]}
           >
-            <CustomParticipantView />
+            <CustomParticipantTile />
           </ParticipantLoop>
           <ParticipantLoop
             filter={(participant) =>
@@ -144,7 +144,7 @@ const CustomScreenShareView = () => {
   const participant = useParticipantContext();
 
   return (
-    <ParticipantView
+    <ParticipantTile
       participant={participant}
       className={styles.participantView}
       trackSource={Track.Source.ScreenShare}
@@ -154,14 +154,14 @@ const CustomScreenShareView = () => {
         <ParticipantName style={{ display: 'inline' }} />
         <span>Screen share</span>
       </div>
-    </ParticipantView>
+    </ParticipantTile>
   );
 };
 
-const CustomParticipantView = () => {
+const CustomParticipantTile = () => {
   const participant = useParticipantContext();
   return (
-    <ParticipantView participant={participant} className={styles.participantView}>
+    <ParticipantTile participant={participant} className={styles.participantView}>
       <MediaTrack source={Track.Source.Camera} className={styles.video}></MediaTrack>
       <div className={styles.nameContainer}>
         <img
@@ -179,7 +179,7 @@ const CustomParticipantView = () => {
           d="M 1 0 Q 1 -3 5 -3 Q 9 -3 9 0 L 1 0 Z M 5 -4 A 1 1 0 0 0 5 -8 A 1 1 0 0 0 5 -4"
         ></path>
       </svg>
-    </ParticipantView>
+    </ParticipantTile>
   );
 };
 

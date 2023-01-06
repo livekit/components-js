@@ -34,13 +34,13 @@ export function useConnectionQualityIndicator(props?: ConnectionQualityIndicator
  * @example
  * ```tsx
  * {...}
- *   <ParticipantView>
+ *   <ParticipantTile>
  *     <ConnectionQualityIndicator />
- *   </ParticipantView>
+ *   </ParticipantTile>
  * {...}
  * ```
  *
- * @see `ParticipantView` component
+ * @see `ParticipantTile` component
  */
 export function ConnectionQualityIndicator(props: ConnectionQualityIndicatorProps) {
   const { elementProps, quality } = useConnectionQualityIndicator(props);

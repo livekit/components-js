@@ -12,9 +12,9 @@ The ConnectionQualityIndicator shows the individual connection quality of a part
 
 ```tsx
 {...}
-  <ParticipantView>
+  <ParticipantTile>
     <ConnectionQualityIndicator />
-  </ParticipantView>
+  </ParticipantTile>
 {...}
 ```
 

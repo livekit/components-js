@@ -86,6 +86,8 @@ export function MediaDeviceSelect({
           key={device.deviceId}
           id={device.deviceId}
           data-lk-active={device.deviceId === activeDeviceId}
+          aria-selected={device.deviceId === activeDeviceId}
+          role="option"
         >
           <button onClick={() => handleActiveDeviceChange(device.deviceId)}>{device.label}</button>
         </li>

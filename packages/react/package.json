@@ -37,6 +37,7 @@
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {
+    "@floating-ui/react": "^0.15.1",
     "@livekit/components-core": "0.1.9",
     "clsx": "^1.2.1"
   },

@@ -12,10 +12,10 @@ The TrackMutedIndicator shows whether the participant's camera or microphone is 
 
 ```tsx
 {...}
-  <ParticipantView>
+  <ParticipantTile>
     <TrackMutedIndicator source={Track.Source.Camera} />
     <TrackMutedIndicator source={Track.Source.Microphone} />
-  </ParticipantView>
+  </ParticipantTile>
 {...}
 ```
 

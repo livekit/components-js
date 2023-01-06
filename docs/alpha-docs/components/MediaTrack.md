@@ -12,10 +12,10 @@ The MediaTrack component is responsible for rendering participant media tracks l
 
 ```tsx
 {...}
-  <ParticipantView>
+  <ParticipantTile>
     <MediaTrack source={Track.Source.Camera} />
     <MediaTrack source={Track.Source.Microphone} />
-  </ParticipantView>
+  </ParticipantTile>
 {...}
 ```
 

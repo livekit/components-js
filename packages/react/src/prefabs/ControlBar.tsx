@@ -39,18 +39,22 @@ export function ControlBar(props: ControlBarProps) {
   return (
     // TODO: Remove styling default styling or move to styles package.
     <div className="lk-control-bar" {...props}>
-      <span>
+      <div className="lk-button-group">
         <TrackToggle source={Track.Source.Microphone} showIcon={showIcon}>
           {showText && 'Microphone'}
         </TrackToggle>
-        <MediaDeviceMenu kind="audioinput" />
-      </span>
-      <span>
+        <div className="lk-button-group-menu">
+          <MediaDeviceMenu kind="audioinput" />
+        </div>
+      </div>
+      <div className="lk-button-group">
         <TrackToggle source={Track.Source.Camera} showIcon={showIcon}>
           {showText && 'Camera'}
         </TrackToggle>
-        <MediaDeviceMenu kind="videoinput" />
-      </span>
+        <div className="lk-button-group-menu">
+          <MediaDeviceMenu kind="videoinput" />
+        </div>
+      </div>
       <TrackToggle source={Track.Source.ScreenShare} showIcon={showIcon}>
         {showIcon && <ScreenShareIcon />}
         {showText && 'Share screen'}

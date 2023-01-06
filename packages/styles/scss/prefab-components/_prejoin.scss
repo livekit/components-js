@@ -1,10 +1,16 @@
 .prejoin {
-  max-width: 20rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
   margin-inline: auto;
+  background-color: var(--bg);
 
   video {
     display: block;
-    width: 100%;
+    width: 480px;
+    max-width: 100%;
     height: auto;
     transform: rotateY(180deg);
     border-radius: var(--lk-border-radius);
@@ -28,13 +34,27 @@
   .button-group-container {
     display: flex;
     gap: 1rem;
-    margin-block: 1rem;
+    width: 480px;
+    max-width: 100%;
+
+    > .button-group {
+      width: 50%;
+
+      > .button {
+        justify-content: left;
+      }
+
+      > .button:first-child {
+        width: 100%;
+      }
+    }
   }
 
   .username-container {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin-block: 1rem;
+    width: 480px;
+    max-width: 100%;
   }
 }

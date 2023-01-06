@@ -1,5 +1,12 @@
-.lk-room-container {
-  // FIXME maybe we need some min defaults here? Unsure what they should be
+.room-container {
+  position: relative;
   width: 100%;
   height: 100%;
+  // padding-bottom: var(--control-bar-offset);
+  font-size: var(--font-size);
+  background-color: var(--bg);
+
+  * {
+    box-sizing: border-box;
+  }
 }

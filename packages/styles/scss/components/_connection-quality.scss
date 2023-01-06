@@ -1,21 +1,4 @@
 .connection-quality {
-  // --bg: var(--icon-connection-unknown);
-
   width: 1rem;
   height: 1rem;
-  margin-inline-start: 1.5rem; // Spacer gif to force participant name to center
-  // background-repeat: no-repeat;
-  // background-image: var(--bg);
-
-  // &[data-quality="poor"] {
-  //   --bg: var(--icon-connection-poor);
-  // }
-
-  // &[data-quality="good"] {
-  //   --bg: var(--icon-connection-good);
-  // }
-
-  // &[data-quality="excellent"] {
-  //   --bg: var(--icon-connection-excellent);
-  // }
 }

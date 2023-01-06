@@ -2,22 +2,37 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: .5rem;
   padding: .5rem .875rem;
   color: var(--control-fg);
   background-image: none;
   background-color: var(--control-bg);
   border: 0;
   border-radius: var(--border-radius);
+  cursor: pointer;
 
-  &[data-lk-enabled="true"] {
-    color: var(--success-text);
-    background-color: var(--success-bg);
+  &:not(:disabled):hover {
+    background-color: var(--control-hover-bg);
   }
 
-  &[data-lk-enabled="false"]:not([data-lk-source="screen_share"]) {
-    color: var(--danger-text);
-    background-color: var(--danger-bg);
+  // &:not(:disabled):active,
+  &[aria-pressed='true'] {
+    background-color: var(--control-active-bg);
+
+    &:hover {
+      background-color: var(--control-active-hover-bg);
+    }
   }
+
+  // &[data-lk-enabled="true"] {
+  //   color: var(--bg);
+  //   background-color: var(--fg);
+  // }
+
+  // &[data-lk-enabled="false"]:not([data-lk-source="screen_share"]) {
+  //   color: var(--danger-text);
+  //   background-color: var(--danger-bg);
+  // }
 
   &:disabled {
     opacity: .5;

@@ -4,4 +4,12 @@
   @extend .button;
   --control-fg: var(--danger-fg);
   --control-bg: var(--danger);
+  font-weight: 600;
+
+  &:not(:disabled):hover {
+    --lk-control-hover-bg: var(--danger2);
+  }
+  &:not(:disabled):active {
+    --lk-control-hover-bg: var(--danger3);
+  }
 }

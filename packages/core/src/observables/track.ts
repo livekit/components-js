@@ -75,8 +75,6 @@ export function trackParticipantPairsObservable(
       RoomEvent.TrackUnsubscribed,
       RoomEvent.LocalTrackPublished,
       RoomEvent.LocalTrackUnpublished,
-      RoomEvent.TrackMuted,
-      RoomEvent.TrackUnmuted,
     ];
     roomEventsToListenFor.forEach((roomEvent) => {
       roomEventSubscriptions.push(

@@ -81,7 +81,7 @@ const CustomParticipantTile = () => {
   const id = useMemo(() => participant.identity, [participant]);
 
   return (
-    <section className={styles['participant-view']} title={participant.name}>
+    <section className={styles['participant-tile']} title={participant.name}>
       <div
         // className={`rounded-full border-2 p-0.5 transition-colors duration-1000 ${
         className={styles['avatar-container']}

@@ -146,12 +146,16 @@ export function mutedObserver(participant: Participant, source: Track.Source) {
     participant,
     ParticipantEvent.TrackMuted,
     ParticipantEvent.TrackUnmuted,
+    ParticipantEvent.TrackSubscribed,
+    ParticipantEvent.TrackUnsubscribed,
+    ParticipantEvent.LocalTrackPublished,
+    ParticipantEvent.LocalTrackUnpublished,
   ).pipe(
     map((participant) => {
       const pub = participant.getTrack(source);
-      return !!pub?.isMuted;
+      return pub?.isMuted ?? true;
     }),
-    startWith(!!participant.getTrack(source)?.isMuted),
+    startWith(participant.getTrack(source)?.isMuted ?? true),
   );
 }
 

@@ -89,7 +89,7 @@ export function useTrack({ pub }: UseTrackProps) {
 
 export type TracksFilter = Parameters<TrackParticipantPair[]['filter']>['0'];
 type UseTracksProps = {
-  sources: [Track.Source, Track.Source[]];
+  sources: [Track.Source, ...Track.Source[]];
   excludePinnedTracks?: boolean;
   filter?: TracksFilter;
   filterDependencies?: Array<any>;

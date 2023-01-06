@@ -19,7 +19,7 @@ export interface ParticipantClickEvent {
   publication?: TrackPublication;
 }
 
-export type ParticipantViewProps = React.HTMLAttributes<HTMLDivElement> & {
+export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
   trackSource: Track.Source;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
@@ -80,13 +80,13 @@ function ParticipantContextIfNeeded(
  *
  * @see `ParticipantLoop` component
  */
-export const ParticipantView = ({
+export const ParticipantTile = ({
   participant,
   children,
   onParticipantClick,
   trackSource,
   ...htmlProps
-}: ParticipantViewProps) => {
+}: ParticipantTileProps) => {
   const p = useEnsureParticipant(participant);
   const { elementProps } = useParticipantView({ participant: p, props: htmlProps });
 

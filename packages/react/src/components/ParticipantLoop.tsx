@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ParticipantContext } from '../contexts';
 import { ParticipantFilter, useParticipants } from '../hooks';
 import { cloneSingleChild } from '../utils';
-import { ParticipantView } from './participant/ParticipantView';
+import { ParticipantTile } from './participant/ParticipantView';
 
 type ParticipantLoopProps = {
   filterDependencies?: Array<unknown>;
@@ -44,7 +44,7 @@ export const ParticipantLoop = ({
           {props.children ? (
             cloneSingleChild(props.children)
           ) : (
-            <ParticipantView trackSource={Track.Source.Camera} />
+            <ParticipantTile trackSource={Track.Source.Camera} />
           )}
         </ParticipantContext.Provider>
       ))}

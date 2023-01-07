@@ -138,6 +138,7 @@ export const ParticipantTile = ({
                 }}
               >
                 <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
+                <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
                 <ParticipantName />
               </div>
               <div

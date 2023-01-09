@@ -115,7 +115,8 @@ export const ParticipantView = ({
       <ParticipantContextIfNeeded participant={participant}>
         {children ?? (
           <>
-            <MediaTrack source={trackSource ?? Track.Source.Camera}></MediaTrack>
+            <AudioVisualizer />
+            {/* <MediaTrack source={trackSource ?? Track.Source.Camera}></MediaTrack>
             <div
               style={{
                 position: 'absolute',
@@ -152,7 +153,7 @@ export const ParticipantView = ({
               >
                 <ConnectionQualityIndicator />
               </div>
-            </div>
+            </div> */}
           </>
         )}
       </ParticipantContextIfNeeded>

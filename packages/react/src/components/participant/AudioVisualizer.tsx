@@ -13,7 +13,7 @@ export function AudioVisualizer({ participant, ...props }: AudioVisualizerProps)
 
   const svgWidth = 200;
   const svgHeight = 90;
-  const barWidth = 10;
+  const barWidth = 8;
   const barSpacing = 4;
   const volMultiplier = 50;
   const barCount = 7;
@@ -26,21 +26,35 @@ export function AudioVisualizer({ participant, ...props }: AudioVisualizerProps)
       return;
     }
     // @ts-ignore TODO fix type in livekit-client - should only be Local/RemoteAudioTrack
-    const { analyser, cleanup } = createAudioAnalyser(track, { smoothingTimeConstant: 0.75 });
+    const { analyser, cleanup } = createAudioAnalyser(track, {
+      smoothingTimeConstant: 0.8,
+      fftSize: 32,
+    });
 
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
     const calculateBars = () => {
       analyser.getByteFrequencyData(dataArray);
       const sums: Array<number> = new Array(barCount).fill(0);
-      //   dataArray.slice(100, dataArray.length - 500);
-      for (let i = 0; i < barCount; i += 1) {
-        // set bin sizes logarithmically
-        const binSize = Math.floor(Math.pow(i + 5, 2));
+      dataArray.slice(1);
+      const binSize = 2;
+
+      for (let i = 0; i < barCount / 2; i += 1) {
+        const id = Math.floor(barCount / 2 - i);
         for (let k = 0; k < binSize; k += 1) {
-          sums[i] += Math.pow(dataArray[i * binSize + k] / 255, 2);
+          sums[id] += Math.pow(dataArray[i * binSize + k] / 255, 2);
         }
-        sums[i] /= binSize;
+        sums[id] /= binSize;
+      }
+      for (let i = 0; i < barCount / 2; i += 1) {
+        const id = Math.floor(barCount / 2 + i);
+        if (sums[id] !== 0) {
+          continue;
+        }
+        for (let k = 0; k < binSize; k += 1) {
+          sums[id] += Math.pow(dataArray[i * binSize + k] / 255, 2);
+        }
+        sums[id] /= binSize;
       }
       return sums.map((s) => s * volMultiplier);
     };
@@ -66,8 +80,10 @@ export function AudioVisualizer({ participant, ...props }: AudioVisualizerProps)
       >
         {volumeBars.map((vol, idx) => (
           <rect
+            style={{ transition: `height 100ms ease-out, y 100ms ease-out` }}
             key={idx}
             x={idx * (barWidth + barSpacing)}
+            rx={4}
             y={svgHeight / 2 - vol / 2}
             width={barWidth}
             height={vol}

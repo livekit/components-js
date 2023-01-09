@@ -7497,10 +7497,9 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-livekit-client@^1.6.1:
+"livekit-client@https://github.com/livekit/client-sdk-js":
   version "1.6.1"
-  resolved "https://registry.yarnpkg.com/livekit-client/-/livekit-client-1.6.1.tgz#d3e84660ca214d4e5d1475d576cf4139134b0d39"
-  integrity sha512-bjvgAvpD5DkDGYJRCKfnVc/H4igUYhsQkV46go0919wVr4QSt6luXbIsxAvDqVvkKDEoCNTMP0xcs/Y9pGKoKw==
+  resolved "https://github.com/livekit/client-sdk-js#a1b34d2af7b7e101041b37a9154663a0210c8cfe"
   dependencies:
     async-await-queue "^1.2.1"
     events "^3.3.0"

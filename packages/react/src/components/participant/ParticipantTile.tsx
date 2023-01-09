@@ -115,13 +115,13 @@ export const ParticipantTile = ({
         {children ?? (
           <>
             <MediaTrack source={trackSource ?? Track.Source.Camera}></MediaTrack>
-            <div className="participant-metadata">
-              <div className="participant-metadata-item">
+            <div className="lk-participant-metadata">
+              <div className="lk-participant-metadata-item">
                 <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
                 <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
                 <ParticipantName />
               </div>
-              <div className="participant-metadata-item">
+              <div className="lk-participant-metadata-item">
                 <ConnectionQualityIndicator />
               </div>
             </div>

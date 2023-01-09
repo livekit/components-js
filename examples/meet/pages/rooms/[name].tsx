@@ -30,14 +30,17 @@ const Home: NextPage = () => {
 
       <main>
         {preJoinChoices ? (
-          <ActiveRoom roomName={roomName} userChoices={preJoinChoices}></ActiveRoom>
+          <ActiveRoom
+            roomName={roomName}
+            userChoices={preJoinChoices}
+            onLeave={() => setPreJoinChoices(undefined)}
+          ></ActiveRoom>
         ) : (
           <PreJoin
             defaults={{
               username: '',
               videoEnabled: true,
               audioEnabled: true,
-              videoDeviceId: 'b7f4d1b0500e15d02da15fd8d0f174c0a029944f5d1c5216bdf2bb14cb6ec0cf',
             }}
             onSubmit={(values) => {
               console.log('Joining with: ', values);
@@ -55,8 +58,9 @@ export default Home;
 type ActiveRoomProps = {
   userChoices: LocalUserChoices;
   roomName: string;
+  onLeave?: () => void;
 };
-const ActiveRoom = ({ roomName, userChoices }: ActiveRoomProps) => {
+const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
   const [showChat, setShowChat] = useState(false);
   const token = useToken({
     tokenEndpoint: process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT,
@@ -86,6 +90,7 @@ const ActiveRoom = ({ roomName, userChoices }: ActiveRoomProps) => {
       options={{ videoCaptureDefaults: videoOptions, audioCaptureDefaults: audioOptions }}
       video={userChoices.videoEnabled}
       audio={userChoices.audioEnabled}
+      onDisconnected={onLeave}
     >
       <button onClick={() => setShowChat(!showChat)}>{showChat ? 'Hide Chat' : 'Show Chat'}</button>
       <div style={{ display: 'flex' }}>

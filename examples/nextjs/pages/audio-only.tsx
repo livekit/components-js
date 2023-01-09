@@ -18,7 +18,7 @@ const AudioExample: NextPage = () => {
   return (
     <div style={{ padding: '2rem' }}>
       <LiveKitRoom
-        video={true}
+        video={false}
         audio={true}
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}

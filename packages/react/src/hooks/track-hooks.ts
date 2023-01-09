@@ -48,6 +48,11 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
       }
     }
     previousElement.current = element?.current;
+    return () => {
+      if (previousElement.current) {
+        track?.detach(previousElement.current);
+      }
+    };
   }, [track, element]);
 
   return {

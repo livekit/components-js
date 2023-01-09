@@ -115,41 +115,13 @@ export const ParticipantTile = ({
         {children ?? (
           <>
             <MediaTrack source={trackSource ?? Track.Source.Camera}></MediaTrack>
-            <div
-              style={{
-                position: 'absolute',
-                right: '.25rem',
-                bottom: '.25rem',
-                left: '.25rem',
-                display: 'flex',
-                flexDirection: 'row',
-                gap: '.5rem',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '.25rem .375rem .25rem .25rem',
-                  backgroundColor: 'rgba(0,0,0,.15)',
-                  borderRadius: '.25rem',
-                }}
-              >
+            <div className="lk-participant-metadata">
+              <div className="lk-participant-metadata-item">
                 <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
                 <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
                 <ParticipantName />
               </div>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '.25rem',
-                  backgroundColor: 'rgba(0,0,0,.15)',
-                  borderRadius: '.25rem',
-                }}
-              >
+              <div className="lk-participant-metadata-item">
                 <ConnectionQualityIndicator />
               </div>
             </div>

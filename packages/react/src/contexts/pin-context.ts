@@ -8,7 +8,11 @@ export type PinAction =
     }
   | { msg: 'clear_pin' };
 
-type PinContextType = {
+export function isPinContextAction(action: { msg: string }): action is PinAction {
+  return (action as PinAction).msg === 'set_pin' || (action as PinAction).msg === 'clear_pin';
+}
+
+export type PinContextType = {
   dispatch?: React.Dispatch<PinAction>;
   state?: PinState;
 };

@@ -3,7 +3,14 @@ import * as React from 'react';
 
 export type ChatContextAction = { msg: 'show_chat' } | { msg: 'hide_chat' };
 
-type ChatContextType = {
+export function isChatContextAction(action: { msg: string }): action is ChatContextAction {
+  return (
+    (action as ChatContextAction).msg === 'show_chat' ||
+    (action as ChatContextAction).msg === 'hide_chat'
+  );
+}
+
+export type ChatContextType = {
   dispatch?: React.Dispatch<ChatContextAction>;
   state?: ChatContextState;
 };

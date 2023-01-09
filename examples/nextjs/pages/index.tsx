@@ -4,9 +4,16 @@ import styles from '../styles/Home.module.scss';
 import { faker } from '@faker-js/faker';
 
 const EXAMPLE_ROUTES = {
-  minimal: { title: 'Minimal example', href: '/minimal' },
-  simple: { title: 'Simple example', href: '/simple' },
-  customize: { title: 'Simple example with custom components', href: '/customize' },
+  minimal: { title: 'Minimal example', href: `/minimal?user=${faker.name.fullName()}` },
+  simple: { title: 'Simple example', href: `/simple?user=${faker.name.fullName()}` },
+  audioOnly: {
+    title: 'Audio only example',
+    href: `/audio-only?user=${faker.name.fullName()}`,
+  },
+  customize: {
+    title: 'Simple example with custom components',
+    href: `/customize?user=${faker.name.fullName()}`,
+  },
   huddle: { title: 'Huddle clone build with LiveKit components', href: '/huddle' },
   clubhouse: {
     title: 'Clubhouse clone build with LiveKit components',

@@ -1,69 +1,17 @@
 import * as React from 'react';
-import { Participant, Track, TrackPublication } from 'livekit-client';
-import { setupParticipantTile } from '@livekit/components-core';
-import { mergeProps } from '../utils';
+import { Track } from 'livekit-client';
+
 import { ConnectionQualityIndicator } from '../components/participant/ConnectionQualityIndicator';
 import { MediaTrack } from '../components/participant/MediaTrack';
 import { ParticipantName } from '../components/participant/ParticipantName';
 import { TrackMutedIndicator } from '../components/participant/TrackMutedIndicator';
+import { useEnsureParticipant } from '../contexts';
 import {
-  useMaybeParticipantContext,
-  ParticipantContext,
-  useEnsureParticipant,
-  useMaybePinContext,
-} from '../contexts';
-import { useIsMuted, useIsSpeaking } from '../hooks';
-
-export interface ParticipantClickEvent {
-  participant?: Participant;
-  publication?: TrackPublication;
-}
-
-export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
-  participant?: Participant;
-  trackSource?: Track.Source;
-  onParticipantClick?: (evt: ParticipantClickEvent) => void;
-};
-
-function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>({
-  participant,
-  props,
-}: {
-  participant: Participant;
-  props: T;
-}) {
-  const mergedProps = React.useMemo(() => {
-    const { className } = setupParticipantTile();
-    return mergeProps(props, { className });
-  }, [props]);
-  const isVideoMuted = useIsMuted({ source: Track.Source.Camera, participant });
-  const isAudioMuted = useIsMuted({ source: Track.Source.Microphone, participant });
-  const isSpeaking = useIsSpeaking(participant);
-  return {
-    elementProps: {
-      'data-lk-audio-muted': isAudioMuted,
-      'data-lk-video-muted': isVideoMuted,
-      'data-lk-speaking': isSpeaking,
-      'data-lk-local-participant': participant.isLocal,
-      ...mergedProps,
-    },
-  };
-}
-
-function ParticipantContextIfNeeded(
-  props: React.PropsWithChildren<{
-    participant?: Participant;
-  }>,
-) {
-  const hasContext = !!useMaybeParticipantContext();
-  return props.participant && !hasContext ? (
-    <ParticipantContext.Provider value={props.participant}>
-      {props.children}
-    </ParticipantContext.Provider>
-  ) : (
-    <>{props.children}</>
-  );
-}
+  ParticipantContextIfNeeded,
+  ParticipantTileProps,
+  useParticipantTile,
+} from '../components/participant/ParticipantTile';
+import { AudioVisualizer } from '../components/participant/AudioVisualizer';
 
 /**
  * The ParticipantTile component is the base utility wrapper for displaying a visual representation of a participant.
@@ -80,33 +28,18 @@ function ParticipantContextIfNeeded(
  *
  * @see `ParticipantLoop` component
  */
-export const ParticipantTile = ({
+export const ParticipantAudioTile = ({
   participant,
   children,
   onParticipantClick,
-  trackSource,
   ...htmlProps
 }: ParticipantTileProps) => {
   const p = useEnsureParticipant(participant);
   const { elementProps } = useParticipantTile({ participant: p, props: htmlProps });
 
-  const pinContext = useMaybePinContext();
-
   const clickHandler = (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     elementProps.onClick?.(evt);
     onParticipantClick?.({ participant: p });
-    if (pinContext.dispatch && trackSource) {
-      const track = p.getTrack(trackSource);
-      if (track) {
-        pinContext.dispatch({
-          msg: 'set_pin',
-          trackParticipantPair: {
-            participant: p,
-            track,
-          },
-        });
-      }
-    }
   };
 
   return (
@@ -114,11 +47,11 @@ export const ParticipantTile = ({
       <ParticipantContextIfNeeded participant={participant}>
         {children ?? (
           <>
-            <MediaTrack source={trackSource ?? Track.Source.Camera}></MediaTrack>
+            <MediaTrack source={Track.Source.Microphone}></MediaTrack>
+            <AudioVisualizer></AudioVisualizer>
             <div className="lk-participant-metadata">
               <div className="lk-participant-metadata-item">
                 <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
-                <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
                 <ParticipantName />
               </div>
               <div className="lk-participant-metadata-item">

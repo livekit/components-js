@@ -1,4 +1,5 @@
 import {
+  isLocal,
   isParticipantTrackPinned,
   setupMediaTrack,
   trackObservable,
@@ -43,7 +44,7 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
       if (previousElement.current) {
         track.detach(previousElement.current);
       }
-      if (element?.current) {
+      if (element?.current && !(isLocal(participant) && track?.kind === 'audio')) {
         track.attach(element.current);
       }
     }

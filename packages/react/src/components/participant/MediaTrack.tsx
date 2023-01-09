@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useEnsureParticipant } from '../../contexts';
 import { useMediaTrack } from '../../hooks';
 import { UserSilhouetteIcon } from '../../icons';
+import { AudioVisualizer } from './AudioVisualizer';
 import { ParticipantClickEvent } from './ParticipantTile';
 
 export interface MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement>

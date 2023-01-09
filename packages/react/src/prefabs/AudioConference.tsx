@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { PinContextProvider } from '../components/PinContextProvider';
-import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
 import { ControlBar } from './ControlBar';
 import { FocusLayoutContainer } from '../layout/FocusLayout';
 import { GridLayout } from '../layout/GridLayout';
 import { PinState } from '@livekit/components-core';
 import { TrackLoop } from '../components/TrackLoop';
 import { Track } from 'livekit-client';
-import { ParticipantName } from '../components/participant/ParticipantName';
+import { ParticipantAudioTile } from './ParticipantAudioTile';
 
 export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -40,14 +39,14 @@ export function AudioConference({ ...props }: AudioConferenceProps) {
         {layout === 'grid' ? (
           <GridLayout>
             <TrackLoop sources={[Track.Source.Microphone]} excludePinnedTracks={false}>
-              <ParticipantName></ParticipantName>
+              <ParticipantAudioTile />
             </TrackLoop>
           </GridLayout>
         ) : (
           <FocusLayoutContainer />
         )}
       </PinContextProvider>
-      <ControlBar />
+      <ControlBar controls={{ microphone: true, screenShare: false, camera: false }} />
     </div>
   );
 }

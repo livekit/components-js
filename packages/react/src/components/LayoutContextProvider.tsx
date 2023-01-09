@@ -1,7 +1,7 @@
 import {
   CHAT_CONTEXT_DEFAULT_STATE,
   PIN_CONTEXT_DEFAULT_STATE,
-  PinState,
+  PinContextState,
   ChatContextState,
 } from '@livekit/components-core';
 import * as React from 'react';
@@ -9,7 +9,7 @@ import { chatReducer, pinReducer } from '../contexts';
 import { LayoutContext, LayoutContextType } from '../contexts/layout-context';
 
 type LayoutContextProviderProps = {
-  onPinChange?: (state: PinState) => void;
+  onPinChange?: (state: PinContextState) => void;
   onChatChange?: (state: ChatContextState) => void;
 };
 

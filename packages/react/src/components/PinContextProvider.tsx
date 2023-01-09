@@ -1,10 +1,10 @@
-import { PinState } from '@livekit/components-core';
+import { PinContextState } from '@livekit/components-core';
 import * as React from 'react';
 import { pinReducer, PinContext, useRoomContext } from '../contexts';
 import { useScreenShare } from './ScreenShareRenderer';
 
 type PinContextProviderProps = {
-  onChange?: (pinState: PinState) => void;
+  onChange?: (pinState: PinContextState) => void;
 };
 
 // TODO: Remove the screen sharing handling from this component to separate things.

@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import { setupParticipantTile } from '@livekit/components-core';
-import { mergeProps } from '../../utils';
+import { mergeProps } from '../utils';
+import { ConnectionQualityIndicator } from '../components/participant/ConnectionQualityIndicator';
+import { MediaTrack } from '../components/participant/MediaTrack';
+import { ParticipantName } from '../components/participant/ParticipantName';
+import { TrackMutedIndicator } from '../components/participant/TrackMutedIndicator';
 import {
+  useMaybeParticipantContext,
   ParticipantContext,
   useEnsureParticipant,
-  useMaybeParticipantContext,
   useMaybePinContext,
-} from '../../contexts';
-import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
-import { TrackMutedIndicator } from './TrackMutedIndicator';
-import { MediaTrack } from './MediaTrack';
-import { ParticipantName } from './ParticipantName';
-import { useIsMuted, useIsSpeaking } from '../../hooks';
+} from '../contexts';
+import { useIsMuted, useIsSpeaking } from '../hooks';
 
 export interface ParticipantClickEvent {
   participant?: Participant;
@@ -114,7 +114,6 @@ export const ParticipantTile = ({
       <ParticipantContextIfNeeded participant={participant}>
         {children ?? (
           <>
-            {/* <AudioVisualizer /> */}
             <MediaTrack source={trackSource ?? Track.Source.Camera}></MediaTrack>
             <div className="lk-participant-metadata">
               <div className="lk-participant-metadata-item">

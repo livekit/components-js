@@ -2,6 +2,7 @@ export * from './contexts';
 
 export * from './components/participant/ParticipantTile';
 export * from './components/participant/ConnectionQualityIndicator';
+export * from './components/participant/AudioVisualizer';
 export * from './components/LiveKitRoom';
 export * from './components/controls/TrackToggle';
 export * from './components/ParticipantLoop';

@@ -1,4 +1,12 @@
-import { Room, RoomEvent, Track, TrackEvent, TrackPublication } from 'livekit-client';
+import {
+  LocalTrack,
+  LocalTrackPublication,
+  Room,
+  RoomEvent,
+  Track,
+  TrackEvent,
+  TrackPublication,
+} from 'livekit-client';
 import { Observable, startWith, Subscription } from 'rxjs';
 import { TrackParticipantPair } from '../types';
 import { roomEventSelector } from './room';
@@ -49,7 +57,7 @@ function getTrackParticipantPairs(room: Room, sources: Track.Source[]): TrackPar
   allParticipants.forEach((participant) => {
     sources.forEach((source) => {
       const track = participant.getTrack(source);
-      if (track) {
+      if (track && (track instanceof LocalTrackPublication || track?.isDesired)) {
         pairs.push({ track: track, participant: participant });
       }
     });
@@ -75,6 +83,7 @@ export function trackParticipantPairsObservable(
       RoomEvent.TrackUnsubscribed,
       RoomEvent.LocalTrackPublished,
       RoomEvent.LocalTrackUnpublished,
+      RoomEvent.TrackSubscriptionStatusChanged,
     ];
     roomEventsToListenFor.forEach((roomEvent) => {
       roomEventSubscriptions.push(

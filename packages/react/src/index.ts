@@ -1,5 +1,3 @@
-export * from './contexts';
-
 export * from './components/participant/ParticipantTile';
 export * from './components/participant/ConnectionQualityIndicator';
 export * from './components/LiveKitRoom';
@@ -24,3 +22,5 @@ export * from './hooks';
 export * from './prefabs';
 
 export * from './layout';
+
+export * from './contexts';

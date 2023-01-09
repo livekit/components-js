@@ -22,6 +22,25 @@ const MyLiveKitApp = () => {
 };
 ```
 
+## Differences between Components, Prefabs and Layouts
+
+We developed a simple mental model for the LiveKit Components system.
+
+### Component
+
+Components are the basic building blocks and often just a wrapper around a standard HTML element. All standard HTML attributes are passed directly to the underlying component. So you can pass `classNames`, `style` and any other attributes to achieve the look you want.
+All Components live [here](../../../packages/react/src/components/)
+
+### Prefab (Prefabricated-Components)
+
+Prefabs use components under the hood and add additional features, styles, but also reasonable defaults. Some Prefabs come with variations that you can choose. They are designed opinionated and are not meant to be extended. You can do it, we just don't build them with that intention in mind.
+All Prefabs live [here](../../../packages/react/src/prefabs/)
+
+### Layout
+
+Layouts are wrappers that provide a certain layout for its children. At the moment it is mainly focused around participant layouts like grid or focus layout.
+All Layouts live [here](../../../packages/react/src/layout/)
+
 ## Component default children
 
 When ever sensible LiveKit Components render a default child component or a tree of components. This allows you to quickly sketch or test some ideas with sensible and good looking defaults. If you have your own ideas you can simply overwrite the defaults by nesting other LiveKit Components or a regular HTML element inside it.

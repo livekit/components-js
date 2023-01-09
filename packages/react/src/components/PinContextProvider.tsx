@@ -1,18 +1,7 @@
 import { PinState } from '@livekit/components-core';
 import * as React from 'react';
-import { PinAction, PinContext, useRoomContext } from '../contexts';
+import { pinReducer, PinContext, useRoomContext } from '../contexts';
 import { useScreenShare } from './ScreenShareRenderer';
-
-export function pinReducer(state: PinState, action: PinAction): PinState {
-  console.log(`pinReducer msg: ${action.msg}`, { action }, { state });
-  if (action.msg === 'set_pin') {
-    return [action.trackParticipantPair];
-  } else if (action.msg === 'clear_pin') {
-    return [];
-  } else {
-    return { ...state };
-  }
-}
 
 type PinContextProviderProps = {
   onChange?: (pinState: PinState) => void;

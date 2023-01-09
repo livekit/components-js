@@ -13,6 +13,16 @@ type PinContextType = {
   state?: PinState;
 };
 
+export function pinReducer(state: PinState, action: PinAction): PinState {
+  if (action.msg === 'set_pin') {
+    return [action.trackParticipantPair];
+  } else if (action.msg === 'clear_pin') {
+    return [];
+  } else {
+    return { ...state };
+  }
+}
+
 export const PinContext = React.createContext<PinContextType>({});
 
 export function usePinContext() {

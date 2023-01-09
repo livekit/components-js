@@ -1,7 +1,7 @@
-import { LiveKitRoom, useToken } from '@livekit/components-react';
+import { AudioConference, LiveKitRoom, useToken } from '@livekit/components-react';
 import type { NextPage } from 'next';
 
-const MinimalExample: NextPage = () => {
+const AudioExample: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? 'test-identity';
@@ -18,13 +18,15 @@ const MinimalExample: NextPage = () => {
   return (
     <div style={{ padding: '2rem' }}>
       <LiveKitRoom
-        video={true}
+        video={false}
         audio={true}
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-      />
+      >
+        <AudioConference />
+      </LiveKitRoom>
     </div>
   );
 };
 
-export default MinimalExample;
+export default AudioExample;

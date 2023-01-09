@@ -50,7 +50,7 @@
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
     "eslint-config-custom": "*",
-    "livekit-client": "^1.6.0",
+    "livekit-client": "^1.6.2",
     "tsup": "^6.5.0"
   }
 }

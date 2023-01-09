@@ -13,7 +13,6 @@ import { TrackMutedIndicator } from './TrackMutedIndicator';
 import { MediaTrack } from './MediaTrack';
 import { ParticipantName } from './ParticipantName';
 import { useIsMuted, useIsSpeaking } from '../../hooks';
-import { AudioVisualizer } from './AudioVisualizer';
 
 export interface ParticipantClickEvent {
   participant?: Participant;
@@ -115,8 +114,8 @@ export const ParticipantView = ({
       <ParticipantContextIfNeeded participant={participant}>
         {children ?? (
           <>
-            <AudioVisualizer />
-            {/* <MediaTrack source={trackSource ?? Track.Source.Camera}></MediaTrack>
+            {/* <AudioVisualizer /> */}
+            <MediaTrack source={trackSource ?? Track.Source.Camera}></MediaTrack>
             <div
               style={{
                 position: 'absolute',
@@ -153,7 +152,7 @@ export const ParticipantView = ({
               >
                 <ConnectionQualityIndicator />
               </div>
-            </div> */}
+            </div>
           </>
         )}
       </ParticipantContextIfNeeded>

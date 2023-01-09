@@ -1,5 +1,4 @@
 import {
-  LocalTrack,
   LocalTrackPublication,
   Room,
   RoomEvent,

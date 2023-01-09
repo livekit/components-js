@@ -6,3 +6,7 @@ export type TrackParticipantPair = {
 };
 
 export type PinState = Array<TrackParticipantPair>;
+export type ChatContextState = {
+  showChat: boolean;
+};
+export const CHAT_CONTEXT_DEFAULT_STATE: ChatContextState = { showChat: false };

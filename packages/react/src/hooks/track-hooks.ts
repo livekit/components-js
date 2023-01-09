@@ -118,7 +118,6 @@ export function useTracks({
   filterDependencies = [],
 }: UseTracksProps) {
   const room = useRoomContext();
-  // const participants = useParticipants();
   const pinContext = useMaybePinContext();
 
   const [unfilteredPairs, setUnfilteredPairs] = React.useState<TrackParticipantPair[]>([]);

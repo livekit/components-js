@@ -1,24 +1,38 @@
-import { LayoutContextState, LAYOUT_CONTEXT_DEFAULT_STATE } from '@livekit/components-core';
+import {
+  CHAT_CONTEXT_DEFAULT_STATE,
+  PIN_CONTEXT_DEFAULT_STATE,
+  PinState,
+  ChatContextState,
+} from '@livekit/components-core';
 import * as React from 'react';
-import { LayoutContext, LayoutContextType, layoutReducer } from '../contexts/layout-context';
+import { chatReducer, pinReducer } from '../contexts';
+import { LayoutContext, LayoutContextType } from '../contexts/layout-context';
 
 type LayoutContextProviderProps = {
-  onChange?: (layoutContextState: LayoutContextState) => void;
+  onPinChange?: (state: PinState) => void;
+  onChatChange?: (state: ChatContextState) => void;
 };
 
 export function LayoutContextProvider({
-  onChange,
+  onPinChange,
+  onChatChange,
   children,
 }: React.PropsWithChildren<LayoutContextProviderProps>) {
-  const [layoutState, layoutDispatch] = React.useReducer(
-    layoutReducer,
-    LAYOUT_CONTEXT_DEFAULT_STATE,
-  );
-  const layoutContextDefault: LayoutContextType = { dispatch: layoutDispatch, state: layoutState };
+  const [pinState, pinDispatch] = React.useReducer(pinReducer, PIN_CONTEXT_DEFAULT_STATE);
+  const [chatState, chatDispatch] = React.useReducer(chatReducer, CHAT_CONTEXT_DEFAULT_STATE);
+
+  const layoutContextDefault: LayoutContextType = {
+    pin: { dispatch: pinDispatch, state: pinState },
+    chat: { dispatch: chatDispatch, state: chatState },
+  };
 
   React.useEffect(() => {
-    if (onChange) onChange(layoutState);
-  }, [onChange, layoutState]);
+    if (onPinChange) onPinChange(pinState);
+  }, [onPinChange, pinState]);
+
+  React.useEffect(() => {
+    if (onChatChange) onChatChange(chatState);
+  }, [onChatChange, chatState]);
 
   return <LayoutContext.Provider value={layoutContextDefault}>{children}</LayoutContext.Provider>;
 }

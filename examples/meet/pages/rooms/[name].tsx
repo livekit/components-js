@@ -87,7 +87,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
     <LiveKitRoom
       token={token}
       serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-      options={{ videoCaptureDefaults: videoOptions, audioCaptureDefaults: audioOptions }}
+      // options={{ videoCaptureDefaults: videoOptions, audioCaptureDefaults: audioOptions }}
       video={userChoices.videoEnabled}
       audio={userChoices.audioEnabled}
       onDisconnected={onLeave}

@@ -34,12 +34,18 @@ export function MediaTrack({ onTrackClick, onClick, ...props }: MediaTrackProps)
   const participant = useEnsureParticipant(props.participant);
 
   const mediaEl = React.useRef<HTMLVideoElement>(null);
-  const { elementProps, publication, track, isMuted } = useMediaTrack({
+  const { elementProps, publication, isMuted } = useMediaTrack({
     participant,
     source: props.source,
     element: mediaEl,
     props,
   });
+
+  React.useEffect(() => {
+    if (!isMuted) {
+      mediaEl.current?.play();
+    }
+  }, [isMuted, mediaEl]);
 
   const clickHandler = (evt: React.MouseEvent<HTMLMediaElement, MouseEvent>) => {
     onClick?.(evt);
@@ -47,22 +53,16 @@ export function MediaTrack({ onTrackClick, onClick, ...props }: MediaTrackProps)
   };
 
   return (
-    <>
+    <div style={{ display: 'contents' }}>
       {props.source === Track.Source.Camera || props.source === Track.Source.ScreenShare ? (
-        !track || isMuted ? (
-          <div {...elementProps}>
-            {props.children ?? (
-              <UserSilhouetteIcon
-                style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }}
-              />
-            )}
-          </div>
-        ) : (
+        <>
           <video ref={mediaEl} {...elementProps} muted={true} onClick={clickHandler}></video>
-        )
+          {/* {!track ||
+            (isMuted && <div {...elementProps}>{props.children ?? <UserSilhouetteIcon />}</div>)} */}
+        </>
       ) : (
         <audio ref={mediaEl} {...elementProps}></audio>
       )}
-    </>
+    </div>
   );
 }

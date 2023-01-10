@@ -40,6 +40,6 @@ const connectionState = useConnectionState(room);
 | canPlaybackAudio | `boolean` |  | Returns true if audio playback is enabled |
 | getActiveAudioOutputDevice | `() => string` |  | Returns the active audio output device used in this room.  Note: to get the active `audioinput` or `videoinput` use [[LocalTrack.getDeviceId()]] @return the previously successfully set audio output device ID or an empty string if the default device is used. |
 | switchActiveDevice | `(kind: MediaDeviceKind, deviceId: string) => Promise<void>` |  | Switches all active devices used in this room to the given device.  Note: setting AudioOutput is not supported on some browsers. See [setSinkId](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/setSinkId#browser_compatibility) @param kind use `videoinput` for camera track, `audioinput` for microphone track, `audiooutput` to set speaker for all incoming audio tracks @param deviceId |
-| simulateParticipants | `(options: SimulationOptions) => void` |  | Allows to populate a room with simulated participants. No actual connection to a server will be established, all state is @experimental |
+| simulateParticipants | `(options: SimulationOptions) => Promise<void>` |  | Allows to populate a room with simulated participants. No actual connection to a server will be established, all state is @experimental |
 | emit | `<E extends keyof RoomEventCallbacks>(event: E, ...args: Parameters<RoomEventCallbacks[E]>) => boolean` |  |  |
 

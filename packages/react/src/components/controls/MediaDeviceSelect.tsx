@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMaybeRoomContext } from '../../contexts';
+import { useMaybeRoomContext } from '../../context';
 import { setupDeviceSelector, createMediaDeviceObserver } from '@livekit/components-core';
 import { mergeProps, useObservableState } from '../../utils';
 import { Room } from 'livekit-client';

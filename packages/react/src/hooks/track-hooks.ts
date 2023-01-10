@@ -8,7 +8,7 @@ import {
 } from '@livekit/components-core';
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
-import { useMaybePinContext, useRoomContext } from '../contexts';
+import { useMaybeLayoutContext, useRoomContext } from '../context';
 import { mergeProps } from '../utils';
 
 interface UseMediaTrackProps {
@@ -123,8 +123,8 @@ export function useTracks({
 }: UseTracksProps) {
   const room = useRoomContext();
   filterDependencies ??= useTracksDefaults.filterDependencies;
+  const { pin: pinContext } = useMaybeLayoutContext();
 
-  const pinContext = useMaybePinContext();
   const [unfilteredPairs, setUnfilteredPairs] = React.useState<TrackParticipantPair[]>([]);
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
 

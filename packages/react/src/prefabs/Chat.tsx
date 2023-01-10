@@ -1,6 +1,6 @@
 import { setupChat } from '@livekit/components-core';
 import * as React from 'react';
-import { useRoomContext } from '../contexts';
+import { useRoomContext } from '../context';
 import { cloneSingleChild, useObservableState } from '../utils';
 import { ChatEntry } from './ChatEntry';
 

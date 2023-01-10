@@ -10,7 +10,7 @@ import {
   observeParticipantMedia,
 } from '@livekit/components-core';
 import { useObservableState } from '../utils';
-import { useEnsureParticipant, useRoomContext } from '../contexts';
+import { useEnsureParticipant, useRoomContext } from '../context';
 
 export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
 export interface UseParticipantsProps {

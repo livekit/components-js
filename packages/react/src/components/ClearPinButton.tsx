@@ -1,12 +1,12 @@
 import { setupClearPinButton } from '@livekit/components-core';
 import * as React from 'react';
 import { mergeProps } from '../utils';
-import { usePinContext } from '../contexts';
+import { useLayoutContext } from '../context';
 
 export type ClearPinButtonProps = React.HTMLAttributes<HTMLButtonElement>;
 
 export function useClearPinButton(props: ClearPinButtonProps) {
-  const { state, dispatch } = usePinContext();
+  const { state, dispatch } = useLayoutContext().pin;
 
   React.useEffect(() => {
     console.log({ state });

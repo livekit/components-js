@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PinContextProvider } from '../components/PinContextProvider';
+import { LayoutContextProvider } from '../components/LayoutContextProvider';
 import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
 import { ControlBar } from './ControlBar';
 import { FocusLayoutContainer } from '../layout/FocusLayout';
@@ -34,7 +34,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
 
   return (
     <div className="lk-video-conference" {...props}>
-      <PinContextProvider onChange={handleFocusStateChange}>
+      <LayoutContextProvider onPinChange={handleFocusStateChange}>
         {layout === 'grid' ? (
           <GridLayout>
             <TileLoop />
@@ -42,7 +42,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
         ) : (
           <FocusLayoutContainer />
         )}
-      </PinContextProvider>
+      </LayoutContextProvider>
       <ControlBar />
       <RoomAudioRenderer />
     </div>

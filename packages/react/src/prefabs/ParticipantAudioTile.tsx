@@ -5,7 +5,7 @@ import { ConnectionQualityIndicator } from '../components/participant/Connection
 import { MediaTrack } from '../components/participant/MediaTrack';
 import { ParticipantName } from '../components/participant/ParticipantName';
 import { TrackMutedIndicator } from '../components/participant/TrackMutedIndicator';
-import { useEnsureParticipant } from '../contexts';
+import { useEnsureParticipant } from '../context';
 import {
   ParticipantContextIfNeeded,
   ParticipantTileProps,

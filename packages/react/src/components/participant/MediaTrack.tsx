@@ -1,6 +1,6 @@
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureParticipant } from '../../contexts';
+import { useEnsureParticipant } from '../../context';
 import { useMediaTrack } from '../../hooks';
 import { ParticipantClickEvent } from './ParticipantTile';
 

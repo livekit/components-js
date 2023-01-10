@@ -1,7 +1,7 @@
 import { isParticipantSourcePinned } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
-import { ParticipantContext, useMaybePinContext } from '../contexts';
+import { ParticipantContext, useMaybeLayoutContext } from '../context';
 import { useParticipants, useTracks } from '../hooks';
 import { cloneSingleChild } from '../utils';
 import { ParticipantTile } from './participant/ParticipantTile';
@@ -49,7 +49,7 @@ export const TileLoop = ({
   secondarySources ??= TileLoopDefaults.secondarySources;
   excludePinnedTracks ??= false;
   const participants = useParticipants();
-  const { state: pinState } = useMaybePinContext();
+  const { state: pinState } = useMaybeLayoutContext().pin;
 
   const secondaryPairs = useTracks({
     sources: secondarySources,

@@ -2,7 +2,7 @@ import { setupManualToggle, setupMediaToggle } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { mergeProps } from '../../mergeProps';
-import { useMaybeRoomContext } from '../../contexts';
+import { useMaybeRoomContext } from '../../context';
 import { useObservableState } from '../../utils';
 import { getSourceIcon } from '../../icons/util';
 

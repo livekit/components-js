@@ -3,7 +3,7 @@ import { Decorator } from '@storybook/react';
 import {
   LayoutContextProvider,
   useParticipants,
-  // useLayoutContext,
+  useLayoutContext,
 } from '@livekit/components-react';
 import { Track } from 'livekit-client';
 
@@ -16,7 +16,7 @@ export type LkFocusContextProps = {
  *
  * Note: This component requires some environment variables. Make sure that they are set correctly in your .env file.
  */
-export const LkPinContext: Decorator = (Story, args) => {
+export const LkLayoutContext: Decorator = (Story, args) => {
   const hasFocus = (args.args as LkFocusContextProps).hasFocus;
 
   return (

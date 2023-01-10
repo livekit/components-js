@@ -43,11 +43,13 @@ const defaultSources: [Track.Source, ...Track.Source[]] = [
   Track.Source.ScreenShare,
 ];
 
-export const TileLoop = ({
-  sources,
+export function TileLoop({
+  sources = defaultSources,
   excludePinnedTracks,
   ...props
-}: React.PropsWithChildren<TileLoopProps>) => {
+}: React.PropsWithChildren<TileLoopProps>): React.FunctionComponentElement<
+  React.PropsWithChildren<TileLoopProps>
+> {
   const [mainSource] = React.useState(sources?.[0] ?? defaultSources[0]);
   const [secondarySources] = React.useState(sources?.slice(1) ?? defaultSources.slice(1));
   const participants = useParticipants();
@@ -84,4 +86,8 @@ export const TileLoop = ({
       ))}
     </>
   );
-};
+}
+
+TileLoop.defaultProps = {
+  sources: [Track.Source.Camera],
+} as TileLoopProps;

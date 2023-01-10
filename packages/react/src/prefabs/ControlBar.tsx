@@ -57,7 +57,6 @@ export function ControlBar(props: ControlBarProps) {
     [variation],
   );
   return (
-    // TODO: Remove styling default styling or move to styles package.
     <div className="lk-control-bar" {...props}>
       {visibleControls.microphone && (
         <div className="lk-button-group">

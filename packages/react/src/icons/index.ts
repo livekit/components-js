@@ -9,4 +9,5 @@ export { default as QualityGoodIcon } from './QualityGoodIcon';
 export { default as QualityPoorIcon } from './QualityPoorIcon';
 export { default as QualityUnkownIcon } from './QualityUnkownIcon';
 export { default as ScreenShareIcon } from './ScreenShareIcon';
+export { default as SpinnerIcon } from './SpinnerIcon';
 export { default as UserSilhouetteIcon } from './UserSilhouetteIcon';

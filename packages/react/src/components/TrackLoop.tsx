@@ -9,7 +9,7 @@ type TrackLoopProps = {
   /**
    * Array of all track sources that should be included as an item in the loop.
    */
-  sources: [Track.Source, ...Track.Source[]];
+  sources?: Track.Source[];
   /**
    * Set to `true` if pinned tracks should be included in the participant loop?
    */
@@ -40,7 +40,7 @@ export const TrackLoop = ({
   ...props
 }: React.PropsWithChildren<TrackLoopProps>) => {
   const trackSourceParticipantPairs = useTracks({
-    sources,
+    sources: sources,
     excludePinnedTracks,
     filter,
     filterDependencies,

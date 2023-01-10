@@ -38,10 +38,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
       <PinContextProvider onChange={handleFocusStateChange}>
         {layout === 'grid' ? (
           <GridLayout>
-            <TrackLoop
-              sources={[Track.Source.Camera, Track.Source.ScreenShare]}
-              excludePinnedTracks={false}
-            />
+            <TrackLoop excludePinnedTracks={false} />
           </GridLayout>
         ) : (
           <FocusLayoutContainer />

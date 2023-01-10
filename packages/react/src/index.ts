@@ -19,6 +19,7 @@ export * from './components/controls/MediaDeviceSelect';
 export * from './components/controls/StartAudio';
 export * from './components/PinContextProvider';
 export * from './components/ClearPinButton';
+export * from './components/TileLoop';
 
 export * from './hooks';
 

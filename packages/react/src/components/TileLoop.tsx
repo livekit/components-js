@@ -44,20 +44,23 @@ const defaultSources: [Track.Source, ...Track.Source[]] = [
 ];
 
 export const TileLoop = ({
-  sources = defaultSources,
-  excludePinnedTracks = false,
-  filter,
-  filterDependencies,
+  sources,
+  excludePinnedTracks,
   ...props
 }: React.PropsWithChildren<TileLoopProps>) => {
-  const [mainSource, ...secondarySources] = sources;
-  const participants = useParticipants({ filter, filterDependencies });
+  const [mainSource] = React.useState(sources?.[0] ?? defaultSources[0]);
+  const [secondarySources] = React.useState(sources?.slice(1) ?? defaultSources.slice(1));
+  const participants = useParticipants();
   const { state: pinState } = useMaybeLayoutContext().pin;
 
   const secondaryPairs = useTracks({
     sources: secondarySources,
     excludePinnedTracks,
   });
+
+  React.useEffect(() => {
+    console.log('sources');
+  }, [secondarySources]);
 
   return (
     <>

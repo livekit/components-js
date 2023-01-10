@@ -117,7 +117,7 @@ export function useTracks({
   sources,
   excludePinnedTracks,
   filter,
-  filterDependencies = defaultFilterDependencies,
+  filterDependencies = [],
 }: UseTracksProps) {
   const room = useRoomContext();
   const { pin: pinContext } = useMaybeLayoutContext();

@@ -22,7 +22,7 @@ const Home: NextPage = () => {
     return <h2>no room param passed</h2>;
   }
   return (
-    <div>
+    <>
       <Head>
         <title>LiveKit Meet</title>
         <link rel="icon" href="/favicon.ico" />
@@ -49,7 +49,7 @@ const Home: NextPage = () => {
           ></PreJoin>
         )}
       </main>
-    </div>
+    </>
   );
 };
 

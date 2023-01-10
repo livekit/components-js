@@ -2,53 +2,56 @@ import { isParticipantSourcePinned } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext, useMaybeLayoutContext } from '../context';
-import { useParticipants, useTracks } from '../hooks';
+import { ParticipantFilter, useParticipants, useTracks } from '../hooks';
 import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
 interface TileLoopProps {
-  //   participants: Participant[];
-  mainSource?: Track.Source;
-  secondarySources?: Track.Source[];
+  sources?: [Track.Source, ...Track.Source[]];
   excludePinnedTracks?: boolean;
+  filter?: ParticipantFilter;
+  filterDependencies?: [];
 }
 
 /**
- * The ParticipantLoop component loops over all or a filtered subset of participants to create a visual
+ * The TileLoop component loops all participants (or a filtered subset) to create a visual
  * representation (`ParticipantTile`) and context for every participant. This component takes zero or more children.
  * By providing your own `ParticipantTile` template as a child you have full control over the look and feel of your
  * participant representations.
  *
+ * The first element of the sources array will always create a participant tile. The following sources will only show up
+ * if there's a track present for that source. This makes it possible for a ParticipantTile to always show up also
+ * when a participant hasn't yet published a camera track.
+ *
  * @remarks
- * If you are looking for a way to loop over camera and screen share tracks use the VideoTrackLoop instead.
+ * If you are looking for a way to loop over tracks more granularly use the TrackLoop instead.
  *
  * @example
  * ```tsx
  * {...}
- *   <ParticipantLoop>
+ *   <TileLoop>
  *     {...}
- *   <ParticipantLoop />
+ *   <TileLoop />
  * {...}
  * ```
  *
  * @see `ParticipantTile` component
  */
 
-const TileLoopDefaults = {
-  mainSource: Track.Source.Camera,
-  secondarySources: [Track.Source.ScreenShare],
-};
+const defaultSources: [Track.Source, ...Track.Source[]] = [
+  Track.Source.Camera,
+  Track.Source.ScreenShare,
+];
 
 export const TileLoop = ({
-  mainSource,
-  secondarySources,
-  excludePinnedTracks,
+  sources = defaultSources,
+  excludePinnedTracks = false,
+  filter,
+  filterDependencies,
   ...props
 }: React.PropsWithChildren<TileLoopProps>) => {
-  mainSource ??= TileLoopDefaults.mainSource;
-  secondarySources ??= TileLoopDefaults.secondarySources;
-  excludePinnedTracks ??= false;
-  const participants = useParticipants();
+  const [mainSource, ...secondarySources] = sources;
+  const participants = useParticipants({ filter, filterDependencies });
   const { state: pinState } = useMaybeLayoutContext().pin;
 
   const secondaryPairs = useTracks({
@@ -61,11 +64,9 @@ export const TileLoop = ({
       {participants.map((participant) => (
         <ParticipantContext.Provider value={participant} key={participant.identity}>
           {(!excludePinnedTracks ||
-            !isParticipantSourcePinned(
-              participant,
-              mainSource ?? TileLoopDefaults.mainSource,
-              pinState,
-            )) && <ParticipantTile trackSource={mainSource} />}
+            !isParticipantSourcePinned(participant, mainSource, pinState)) && (
+            <ParticipantTile trackSource={mainSource} />
+          )}
 
           {secondaryPairs
             .filter(({ participant: p }) => p.identity === participant.identity)

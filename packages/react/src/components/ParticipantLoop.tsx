@@ -12,18 +12,20 @@ type ParticipantLoopProps = {
 
 /**
  * The ParticipantLoop component loops over all or a filtered subset of participants to create a visual
- * representation (`ParticipantTile`) and context for every participant. This component takes zero or more children.
- * By providing your own `ParticipantTile` template as a child you have full control over the look and feel of your
+ * representation and context for every participant. This component takes zero or more children.
+ * By providing your own template as a child you have full control over the look and feel of your
  * participant representations.
+ * You could use this for example to create a list of participants.
  *
  * @remarks
- * If you are looking for a way to loop over camera and screen share tracks use the VideoTrackLoop instead.
+ * If you are looking for a way to have tiles for each participant that work for all video tracks at the same time out of the box
+ * have a look at the `TileLoop`.
  *
  * @example
  * ```tsx
  * {...}
  *   <ParticipantLoop>
- *     {...}
+ *     <ParticipantName />
  *   <ParticipantLoop />
  * {...}
  * ```

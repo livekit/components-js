@@ -3,8 +3,8 @@ import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext, useMaybeLayoutContext } from '../context';
 import { useParticipants, useTracks } from '../hooks';
+import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
-import { ParticipantTile } from './participant/ParticipantTile';
 
 interface TileLoopProps {
   //   participants: Participant[];

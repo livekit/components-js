@@ -2,8 +2,8 @@ import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
 import { ParticipantFilter, useParticipants } from '../hooks';
+import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
-import { ParticipantTile } from './participant/ParticipantTile';
 
 type ParticipantLoopProps = {
   filterDependencies?: Array<unknown>;

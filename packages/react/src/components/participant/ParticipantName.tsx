@@ -50,7 +50,8 @@ export function ParticipantName({ ...props }: ParticipantNameProps) {
 
   return (
     <span {...mergedProps}>
-      {name !== '' ? name : identity} {props.children}
+      {name !== '' ? name : identity}
+      {props.children}
     </span>
   );
 }

@@ -2,7 +2,7 @@ import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureParticipant } from '../../context';
 import { useMediaTrack } from '../../hooks';
-import { ParticipantClickEvent } from './ParticipantTile';
+import { ParticipantClickEvent } from '../../prefabs';
 
 export interface MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
   extends React.HTMLAttributes<T> {

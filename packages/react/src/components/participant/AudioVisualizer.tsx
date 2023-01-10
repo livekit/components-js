@@ -6,7 +6,7 @@ import {
   Track,
 } from 'livekit-client';
 import React from 'react';
-import { useEnsureParticipant } from '../../contexts';
+import { useEnsureParticipant } from '../../context';
 import { useMediaTrack } from '../../hooks';
 
 export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {

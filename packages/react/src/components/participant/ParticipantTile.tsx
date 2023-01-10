@@ -6,7 +6,7 @@ import {
   ParticipantContext,
   useEnsureParticipant,
   useMaybeParticipantContext,
-  useMaybePinContext,
+  useMaybeLayoutContext,
 } from '../../contexts';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
 import { TrackMutedIndicator } from './TrackMutedIndicator';
@@ -90,7 +90,7 @@ export const ParticipantTile = ({
   const p = useEnsureParticipant(participant);
   const { elementProps } = useParticipantTile({ participant: p, props: htmlProps });
 
-  const pinContext = useMaybePinContext();
+  const pinContext = useMaybeLayoutContext().pin;
 
   const clickHandler = (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     elementProps.onClick?.(evt);

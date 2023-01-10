@@ -14,7 +14,7 @@ export * from './components/RoomAudioRenderer';
 export * from './components/participant/MediaTrack';
 export * from './components/controls/MediaDeviceSelect';
 export * from './components/controls/StartAudio';
-export * from './components/PinContextProvider';
+export * from './components/LayoutContextProvider';
 export * from './components/ClearPinButton';
 
 export * from './hooks';

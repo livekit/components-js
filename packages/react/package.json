@@ -21,6 +21,11 @@
       "types": "./dist/prefabs/index.d.ts",
       "import": "./dist/prefabs/index.mjs",
       "require": "./dist/prefabs/index.js"
+    },
+    "./contexts": {
+      "types": "./dist/contexts/index.d.ts",
+      "import": "./dist/contexts/index.mjs",
+      "require": "./dist/contexts/index.js"
     }
   },
   "typings": "dist/index.d.ts",

@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { Decorator } from '@storybook/react';
-import { PinContextProvider, useParticipants, usePinContext } from '@livekit/components-react';
+import {
+  LayoutContextProvider,
+  useParticipants,
+  // useLayoutContext,
+} from '@livekit/components-react';
 import { Track } from 'livekit-client';
 
 export type LkFocusContextProps = {
@@ -16,9 +20,9 @@ export const LkPinContext: Decorator = (Story, args) => {
   const hasFocus = (args.args as LkFocusContextProps).hasFocus;
 
   return (
-    <PinContextProvider>
+    <LayoutContextProvider>
       <ContextWrapper hasFocus={hasFocus}>{Story()}</ContextWrapper>
-    </PinContextProvider>
+    </LayoutContextProvider>
   );
 };
 
@@ -26,7 +30,7 @@ const ContextWrapper = ({
   hasFocus: inFocus,
   children,
 }: React.PropsWithChildren<{ hasFocus: boolean }>) => {
-  const { dispatch } = usePinContext();
+  const { dispatch } = useLayoutContext().pin;
 
   const participants = useParticipants();
   React.useEffect(() => {

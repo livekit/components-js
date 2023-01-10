@@ -5,8 +5,13 @@ import {
   ChatContextState,
 } from '@livekit/components-core';
 import * as React from 'react';
-import { chatReducer, pinReducer, useRoomContext } from '../contexts';
-import { LayoutContext, LayoutContextType } from '../contexts/layout-context';
+import {
+  LayoutContext,
+  LayoutContextType,
+  chatReducer,
+  pinReducer,
+  useRoomContext,
+} from '../context';
 import { useScreenShare } from './ScreenShareRenderer';
 
 type LayoutContextProviderProps = {

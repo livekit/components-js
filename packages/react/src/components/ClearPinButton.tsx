@@ -1,7 +1,7 @@
 import { setupClearPinButton } from '@livekit/components-core';
 import * as React from 'react';
 import { mergeProps } from '../utils';
-import { useLayoutContext } from '../contexts';
+import { useLayoutContext } from '../context';
 
 export type ClearPinButtonProps = React.HTMLAttributes<HTMLButtonElement>;
 

@@ -7,7 +7,7 @@ import {
 } from '@livekit/components-core';
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
-import { useMaybeLayoutContext, useRoomContext } from '../contexts';
+import { useMaybeLayoutContext, useRoomContext } from '../context';
 import { mergeProps } from '../utils';
 
 interface UseMediaTrackProps {

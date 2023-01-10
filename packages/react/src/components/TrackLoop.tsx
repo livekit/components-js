@@ -1,6 +1,6 @@
 import { Track } from 'livekit-client';
 import * as React from 'react';
-import { ParticipantContext } from '../contexts';
+import { ParticipantContext } from '../context';
 import { TracksFilter, useTracks } from '../hooks';
 import { cloneSingleChild } from '../utils';
 import { ParticipantTile } from './participant/ParticipantTile';

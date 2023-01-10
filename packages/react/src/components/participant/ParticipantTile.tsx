@@ -7,7 +7,7 @@ import {
   useEnsureParticipant,
   useMaybeParticipantContext,
   useMaybeLayoutContext,
-} from '../../contexts';
+} from '../../context';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
 import { TrackMutedIndicator } from './TrackMutedIndicator';
 import { MediaTrack } from './MediaTrack';

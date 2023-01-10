@@ -1,7 +1,7 @@
 import { participantInfoObserver, setupParticipantName } from '@livekit/components-core';
 import { Participant } from 'livekit-client';
 import * as React from 'react';
-import { useParticipantContext } from '../../contexts';
+import { useParticipantContext } from '../../context';
 import { mergeProps, useObservableState } from '../../utils';
 
 export function useParticipantInfo({ participant }: { participant: Participant }) {

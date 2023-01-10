@@ -6,7 +6,7 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 # MediaTrack
 
-The MediaTrack component is responsible for rendering participant media tracks like `camera`, `microphone` and `screen_share`. This component must have access to the participant's context, or alternatively pass it a `Participant` as a property.
+The MediaTrack component is responsible for rendering participant media tracks like `camera`, `microphone` and `screen_share`. This component must have access to the participant's context, or alternatively pass it a `Participant` as a property.  Children of this component are used as placeholders when the underlying (video) track is muted or not available
 
 ## Usage
 

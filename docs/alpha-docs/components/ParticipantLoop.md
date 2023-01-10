@@ -6,14 +6,14 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 # ParticipantLoop
 
-The ParticipantLoop component loops over all or a filtered subset of participants to create a visual representation (`ParticipantTile`) and context for every participant. This component takes zero or more children. By providing your own `ParticipantTile` template as a child you have full control over the look and feel of your participant representations.
+The ParticipantLoop component loops over all or a filtered subset of participants to create a visual representation and context for every participant. This component takes zero or more children. By providing your own template as a child you have full control over the look and feel of your participant representations. You could use this for example to create a list of participants.
 
 ## Usage
 
 ```tsx
 {...}
   <ParticipantLoop>
-    {...}
+    <ParticipantName />
   <ParticipantLoop />
 {...}
 ```

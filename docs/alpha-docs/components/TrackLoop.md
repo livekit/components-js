@@ -25,7 +25,7 @@ The TrackLoop component loops over tracks. It is for example a easy way to loop 
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| sources | `Source[]` |  | Array of all track sources that should be included as an item in the loop. |
+| sources | `[Source, ...Source[]]` |  | Array of all track sources that should be included as an item in the loop. |
 | excludePinnedTracks | `boolean` |  | Set to `true` if pinned tracks should be included in the participant loop? |
 | filter | `((value: TrackParticipantPair, index: number, array: TrackParticipantPair[]) => unknown)` |  |  |
 | filterDependencies | `any[]` |  |  |

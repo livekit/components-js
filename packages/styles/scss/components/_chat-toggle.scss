@@ -1,7 +1,7 @@
-@use 'button';
-
 .chat-toggle-button {
-  @extend .button;
-  color: var(--accent-fg);
-  background-color: var(--accent-bg);
+  --control-fg: var(--accent-fg);
+  --control-bg: var(--accent-bg);
+  --control-hover-bg: var(--accent2);
+  --control-active-bg: var(--accent3);
+  --control-active-hover-bg: var(--accent4);
 }

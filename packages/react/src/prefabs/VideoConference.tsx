@@ -37,7 +37,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
   return (
     <div className="lk-video-conference" {...props}>
       <LayoutContextProvider onPinChange={handleFocusStateChange} onChatChange={setChatState}>
-        <section>
+        <div className="lk-video-conference-stage">
           {layout === 'grid' ? (
             <GridLayout>
               <TileLoop />
@@ -45,9 +45,9 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
           ) : (
             <FocusLayoutContainer />
           )}
-        </section>
+          <ControlBar controls={{ chat: true }} />
+        </div>
         {chatState.showChat && <Chat />}
-        <ControlBar controls={{ chat: true }} />
       </LayoutContextProvider>
       <RoomAudioRenderer />
     </div>

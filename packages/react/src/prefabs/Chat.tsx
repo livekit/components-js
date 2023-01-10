@@ -48,10 +48,11 @@ export function Chat({ ...props }: ChatProps) {
       </ul>
       <div className="lk-chat-form">
         <input
-          className="lk-chat-form-input"
+          className="lk-form-control lk-chat-form-input"
           disabled={isSending}
           ref={inputRef}
           type="text"
+          placeholder="Enter a message..."
         ></input>
         <button className="lk-button lk-chat-form-button" disabled={isSending} onClick={handleSend}>
           Send

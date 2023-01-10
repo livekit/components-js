@@ -140,6 +140,10 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
         participants: {
           count: simulateParticipants,
         },
+        publish: {
+          audio: true,
+          useRealTracks: true,
+        },
       });
     }
     if (!token) {

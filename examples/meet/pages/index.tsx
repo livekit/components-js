@@ -1,3 +1,4 @@
+import { GridLayout } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 
@@ -8,7 +9,13 @@ const Home: NextPage = () => {
   };
 
   return (
-    <main>
+    <main
+      style={{
+        display: 'grid',
+        placeItems: 'center',
+        columnCount: 2,
+      }}
+    >
       <h2>LiveKit Meet</h2>
       <button onClick={startMeeting}>Start Meeting</button>
     </main>

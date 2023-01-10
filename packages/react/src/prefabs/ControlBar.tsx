@@ -6,8 +6,25 @@ import { TrackToggle } from '../components/controls/TrackToggle';
 import { StartAudio } from '../components/controls/StartAudio';
 import { LeaveIcon, ScreenShareIcon } from '../icons';
 
+type ControlBarControls = {
+  microphone?: boolean;
+  camera?: boolean;
+  chat?: boolean;
+  screenShare?: boolean;
+  leave?: boolean;
+};
+
+const defaultControls: ControlBarControls = {
+  microphone: true,
+  camera: true,
+  chat: true,
+  screenShare: true,
+  leave: true,
+} as const;
+
 export type ControlBarProps = React.HTMLAttributes<HTMLDivElement> & {
   variation?: 'minimal' | 'verbose' | 'textOnly';
+  controls?: ControlBarControls;
 };
 
 /**
@@ -26,7 +43,9 @@ export type ControlBarProps = React.HTMLAttributes<HTMLDivElement> & {
  * ```
  */
 export function ControlBar(props: ControlBarProps) {
-  const { variation = 'verbose' } = props;
+  const { variation = 'verbose', controls } = props;
+
+  const visibleControls = { ...defaultControls, ...controls };
 
   const showIcon = React.useMemo(
     () => variation === 'minimal' || variation === 'verbose',
@@ -39,30 +58,38 @@ export function ControlBar(props: ControlBarProps) {
   return (
     // TODO: Remove styling default styling or move to styles package.
     <div className="lk-control-bar" {...props}>
-      <div className="lk-button-group">
-        <TrackToggle source={Track.Source.Microphone} showIcon={showIcon}>
-          {showText && 'Microphone'}
-        </TrackToggle>
-        <div className="lk-button-group-menu">
-          <MediaDeviceMenu kind="audioinput" />
+      {visibleControls.microphone && (
+        <div className="lk-button-group">
+          <TrackToggle source={Track.Source.Microphone} showIcon={showIcon}>
+            {showText && 'Microphone'}
+          </TrackToggle>
+          <div className="lk-button-group-menu">
+            <MediaDeviceMenu kind="audioinput" />
+          </div>
         </div>
-      </div>
-      <div className="lk-button-group">
-        <TrackToggle source={Track.Source.Camera} showIcon={showIcon}>
-          {showText && 'Camera'}
-        </TrackToggle>
-        <div className="lk-button-group-menu">
-          <MediaDeviceMenu kind="videoinput" />
+      )}
+      {visibleControls.camera && (
+        <div className="lk-button-group">
+          <TrackToggle source={Track.Source.Camera} showIcon={showIcon}>
+            {showText && 'Camera'}
+          </TrackToggle>
+          <div className="lk-button-group-menu">
+            <MediaDeviceMenu kind="videoinput" />
+          </div>
         </div>
-      </div>
-      <TrackToggle source={Track.Source.ScreenShare} showIcon={showIcon}>
-        {showIcon && <ScreenShareIcon />}
-        {showText && 'Share screen'}
-      </TrackToggle>
-      <DisconnectButton>
-        {showIcon && <LeaveIcon />}
-        {showText && 'Leave'}
-      </DisconnectButton>
+      )}
+      {visibleControls.screenShare && (
+        <TrackToggle source={Track.Source.ScreenShare} showIcon={showIcon}>
+          {showIcon && <ScreenShareIcon />}
+          {showText && 'Share screen'}
+        </TrackToggle>
+      )}
+      {visibleControls.leave && (
+        <DisconnectButton>
+          {showIcon && <LeaveIcon />}
+          {showText && 'Leave'}
+        </DisconnectButton>
+      )}
       <StartAudio label="Start Audio" />
     </div>
   );

@@ -21,7 +21,7 @@
   "dependencies": {
     "@livekit/components-react": "0.1.12",
     "@livekit/components-styles": "0.1.4",
-    "livekit-client": "^1.6.0",
+    "livekit-client": "^1.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

@@ -34,7 +34,7 @@
     "test:watch": "vitest"
   },
   "peerDependencies": {
-    "livekit-client": "^1.6.0"
+    "livekit-client": "^1.6.2"
   },
   "author": "LiveKit",
   "devDependencies": {

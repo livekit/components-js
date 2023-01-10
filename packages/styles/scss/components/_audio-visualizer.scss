@@ -1,0 +1,11 @@
+.audio-visualizer {
+  & > rect {
+    fill: var(--bg2);
+    rx: 0.5rem;
+  }
+  & > g > rect {
+    fill: var(--fg);
+    transition: height 100ms ease-out, y 100ms ease-out;
+    rx: 0.25rem;
+  }
+}

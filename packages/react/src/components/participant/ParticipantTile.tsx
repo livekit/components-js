@@ -25,7 +25,7 @@ export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 };
 
-function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>({
+export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>({
   participant,
   props,
 }: {
@@ -50,7 +50,7 @@ function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>({
   };
 }
 
-function ParticipantContextIfNeeded(
+export function ParticipantContextIfNeeded(
   props: React.PropsWithChildren<{
     participant?: Participant;
   }>,
@@ -114,6 +114,7 @@ export const ParticipantTile = ({
       <ParticipantContextIfNeeded participant={participant}>
         {children ?? (
           <>
+            {/* <AudioVisualizer /> */}
             <MediaTrack source={trackSource ?? Track.Source.Camera}></MediaTrack>
             <div className="lk-participant-metadata">
               <div className="lk-participant-metadata-item">

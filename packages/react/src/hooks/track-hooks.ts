@@ -1,4 +1,5 @@
 import {
+  isLocal,
   isParticipantTrackPinned,
   setupMediaTrack,
   trackObservable,
@@ -43,11 +44,16 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
       if (previousElement.current) {
         track.detach(previousElement.current);
       }
-      if (element?.current) {
+      if (element?.current && !(isLocal(participant) && track?.kind === 'audio')) {
         track.attach(element.current);
       }
     }
     previousElement.current = element?.current;
+    return () => {
+      if (previousElement.current) {
+        track?.detach(previousElement.current);
+      }
+    };
   }, [track, element]);
 
   return {
@@ -112,7 +118,6 @@ export function useTracks({
   filterDependencies = [],
 }: UseTracksProps) {
   const room = useRoomContext();
-  // const participants = useParticipants();
   const pinContext = useMaybeLayoutContext().pin;
 
   const [unfilteredPairs, setUnfilteredPairs] = React.useState<TrackParticipantPair[]>([]);

@@ -18,7 +18,7 @@ type ControlBarControls = {
 const defaultControls: ControlBarControls = {
   microphone: true,
   camera: true,
-  chat: true,
+  chat: false,
   screenShare: true,
   leave: true,
 } as const;

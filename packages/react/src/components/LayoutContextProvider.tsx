@@ -27,10 +27,12 @@ export function LayoutContextProvider({
   };
 
   React.useEffect(() => {
+    console.log('PinState Updated', { pinState });
     if (onPinChange) onPinChange(pinState);
   }, [onPinChange, pinState]);
 
   React.useEffect(() => {
+    console.log('ChatState Updated', { chatState });
     if (onChatChange) onChatChange(chatState);
   }, [onChatChange, chatState]);
 

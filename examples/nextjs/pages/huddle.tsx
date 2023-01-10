@@ -15,7 +15,7 @@ import {
   useConnectionState,
   useParticipantContext,
   useParticipants,
-  // useLayoutContext, FIXME can't import.
+  useLayoutContext,
   useScreenShare,
   useToken,
   ClearPinButton,
@@ -124,7 +124,7 @@ const CustomFocusLayout = ({
 };
 
 const CustomFocus = () => {
-  // const { state } = useLayoutContext().pin;
+  const { state } = useLayoutContext().pin;
 
   return (
     <FocusLayout></FocusLayout>

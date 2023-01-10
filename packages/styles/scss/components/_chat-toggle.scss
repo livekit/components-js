@@ -1,0 +1,7 @@
+@use 'button';
+
+.chat-toggle-button {
+  @extend .button;
+  color: var(--accent-fg);
+  background-color: var(--accent-bg);
+}

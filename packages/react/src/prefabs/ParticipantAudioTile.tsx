@@ -6,12 +6,13 @@ import { MediaTrack } from '../components/participant/MediaTrack';
 import { ParticipantName } from '../components/participant/ParticipantName';
 import { TrackMutedIndicator } from '../components/participant/TrackMutedIndicator';
 import { useEnsureParticipant } from '../context';
+
+import { AudioVisualizer } from '../components/participant/AudioVisualizer';
 import {
-  ParticipantContextIfNeeded,
   ParticipantTileProps,
   useParticipantTile,
-} from '../components/participant/ParticipantTile';
-import { AudioVisualizer } from '../components/participant/AudioVisualizer';
+  ParticipantContextIfNeeded,
+} from './ParticipantTile';
 
 /**
  * The ParticipantTile component is the base utility wrapper for displaying a visual representation of a participant.

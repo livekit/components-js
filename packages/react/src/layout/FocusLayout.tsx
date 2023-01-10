@@ -2,10 +2,11 @@ import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useMaybeLayoutContext, useLayoutContext } from '../context';
 import { mergeProps } from '../utils';
-import { ParticipantClickEvent, ParticipantTile } from '../components/participant/ParticipantTile';
 import { ClearPinButton } from '../components/ClearPinButton';
 import { TrackLoop } from '../components/TrackLoop';
 import { TrackParticipantPair } from '@livekit/components-core';
+import { TileLoop } from '../components/TileLoop';
+import { ParticipantClickEvent, ParticipantTile } from '../prefabs/ParticipantTile';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   trackParticipantPair?: TrackParticipantPair;
@@ -33,10 +34,7 @@ export function FocusLayoutContainer({
               <FocusLayout trackParticipantPair={trackParticipantPair} />
             )}
             <CarouselView>
-              <TrackLoop
-                sources={[Track.Source.Camera, Track.Source.ScreenShare]}
-                excludePinnedTracks={true}
-              />
+              <TileLoop excludePinnedTracks={true} />
             </CarouselView>
           </>
         )}

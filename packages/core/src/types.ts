@@ -5,10 +5,10 @@ export type TrackParticipantPair = {
   participant: Participant;
 };
 
-export type PinContextState = Array<TrackParticipantPair>;
-export const PIN_CONTEXT_DEFAULT_STATE: PinContextState = [];
+export type PinState = Array<TrackParticipantPair>;
+export const PIN_DEFAULT_STATE: PinState = [];
 
-export type ChatContextState = {
+export type WidgetState = {
   showChat: boolean;
 };
-export const CHAT_CONTEXT_DEFAULT_STATE: ChatContextState = { showChat: false };
+export const WIDGET_DEFAULT_STATE: WidgetState = { showChat: false };

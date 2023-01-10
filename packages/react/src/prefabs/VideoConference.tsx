@@ -4,9 +4,8 @@ import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
 import { ControlBar } from './ControlBar';
 import { FocusLayoutContainer } from '../layout/FocusLayout';
 import { GridLayout } from '../layout/GridLayout';
-import { PinContextState } from '@livekit/components-core';
-import { TrackLoop } from '../components/TrackLoop';
-import { Track } from 'livekit-client';
+import { PinState } from '@livekit/components-core';
+import { TileLoop } from '../components/TileLoop';
 
 export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -29,7 +28,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = React.useState<Layout>('grid');
 
-  const handleFocusStateChange = (pinState: PinContextState) => {
+  const handleFocusStateChange = (pinState: PinState) => {
     setLayout(pinState.length >= 1 ? 'focus' : 'grid');
   };
 
@@ -38,10 +37,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
       <LayoutContextProvider onPinChange={handleFocusStateChange}>
         {layout === 'grid' ? (
           <GridLayout>
-            <TrackLoop
-              sources={[Track.Source.Camera, Track.Source.ScreenShare]}
-              excludePinnedTracks={false}
-            />
+            <TileLoop />
           </GridLayout>
         ) : (
           <FocusLayoutContainer />

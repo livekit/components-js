@@ -1,4 +1,4 @@
-import { PinContextState } from '@livekit/components-core';
+import { PinState } from '@livekit/components-core';
 import {
   DisconnectButton,
   LiveKitRoom,
@@ -236,7 +236,7 @@ const HuddleRoomView = ({
     setIsConnected(false);
   };
 
-  const handleFocusStateChange = (focusState: PinContextState) => {
+  const handleFocusStateChange = (focusState: PinState) => {
     setLayout(focusState.length >= 1 ? 'focus' : 'grid');
   };
 

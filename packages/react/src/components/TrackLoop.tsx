@@ -2,20 +2,26 @@ import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
 import { TracksFilter, useTracks } from '../hooks';
+import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
-import { ParticipantTile } from './participant/ParticipantTile';
 
 type TrackLoopProps = {
   /**
    * Array of all track sources that should be included as an item in the loop.
    */
-  sources: [Track.Source, ...Track.Source[]];
+  sources?: [Track.Source, ...Track.Source[]];
   /**
    * Set to `true` if pinned tracks should be included in the participant loop?
    */
   excludePinnedTracks?: boolean;
   filter?: TracksFilter;
   filterDependencies?: Array<any>;
+};
+
+const trackLoopDefaults = {
+  sources: [Track.Source.Camera],
+  excludePinnedTracks: false,
+  filterDependencies: [],
 };
 
 /**
@@ -33,17 +39,17 @@ type TrackLoopProps = {
  * ```
  */
 export const TrackLoop = ({
-  sources = [Track.Source.Camera],
-  excludePinnedTracks = false,
+  sources,
+  excludePinnedTracks,
   filter,
   filterDependencies,
   ...props
 }: React.PropsWithChildren<TrackLoopProps>) => {
   const trackSourceParticipantPairs = useTracks({
-    sources,
-    excludePinnedTracks,
+    sources: sources ?? trackLoopDefaults.sources,
+    excludePinnedTracks: excludePinnedTracks ?? trackLoopDefaults.excludePinnedTracks,
     filter,
-    filterDependencies,
+    filterDependencies: filterDependencies ?? trackLoopDefaults.filterDependencies,
   });
 
   return (

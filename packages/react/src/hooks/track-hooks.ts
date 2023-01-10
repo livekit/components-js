@@ -95,10 +95,14 @@ export function useTrack({ pub }: UseTrackProps) {
 
 export type TracksFilter = Parameters<TrackParticipantPair[]['filter']>['0'];
 type UseTracksProps = {
-  sources: [Track.Source, ...Track.Source[]];
+  sources?: Track.Source[];
   excludePinnedTracks?: boolean;
   filter?: TracksFilter;
   filterDependencies?: Array<any>;
+};
+
+const useTracksDefaults = {
+  filterDependencies: [],
 };
 
 /**
@@ -113,22 +117,29 @@ type UseTracksProps = {
  */
 export function useTracks({
   sources,
-  excludePinnedTracks = true,
+  excludePinnedTracks,
   filter,
-  filterDependencies = [],
+  filterDependencies,
 }: UseTracksProps) {
   const room = useRoomContext();
-  const pinContext = useMaybeLayoutContext().pin;
+  filterDependencies ??= useTracksDefaults.filterDependencies;
+  const { pin: pinContext } = useMaybeLayoutContext();
 
   const [unfilteredPairs, setUnfilteredPairs] = React.useState<TrackParticipantPair[]>([]);
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
 
   React.useEffect(() => {
+    if (!sources) {
+      console.warn('no sources provided');
+      return;
+    }
     const subscription = trackParticipantPairsObservable(room, sources).subscribe(
       (trackParticipantPairs: TrackParticipantPair[]) => {
         setUnfilteredPairs(trackParticipantPairs);
       },
     );
+    console.log('first hook', sources);
+
     return () => subscription.unsubscribe();
   }, [room, sources]);
 
@@ -143,6 +154,7 @@ export function useTracks({
       trackParticipantPairs = trackParticipantPairs.filter(filter);
     }
     setPairs(trackParticipantPairs);
+    console.log('second hook');
   }, [unfilteredPairs, excludePinnedTracks, filter, pinContext, ...filterDependencies]);
 
   React.useDebugValue(`Pairs count: ${pairs.length}`);

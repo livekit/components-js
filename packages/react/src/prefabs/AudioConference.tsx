@@ -6,7 +6,7 @@ import { TrackLoop } from '../components/TrackLoop';
 import { Track } from 'livekit-client';
 import { ParticipantAudioTile } from './ParticipantAudioTile';
 import { LayoutContextProvider } from '../components/LayoutContextProvider';
-import { PinContextState } from '@livekit/components-core';
+import { PinState } from '@livekit/components-core';
 
 export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -29,7 +29,7 @@ export function AudioConference({ ...props }: AudioConferenceProps) {
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = React.useState<Layout>('grid');
 
-  const handlePinStateChange = (pinState: PinContextState) => {
+  const handlePinStateChange = (pinState: PinState) => {
     setLayout(pinState.length >= 1 ? 'focus' : 'grid');
   };
 

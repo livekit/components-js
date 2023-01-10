@@ -1,8 +1,8 @@
 import {
-  CHAT_CONTEXT_DEFAULT_STATE,
-  PIN_CONTEXT_DEFAULT_STATE,
-  PinContextState,
-  ChatContextState,
+  WIDGET_DEFAULT_STATE,
+  PIN_DEFAULT_STATE,
+  PinState,
+  WidgetState,
 } from '@livekit/components-core';
 import * as React from 'react';
 import {
@@ -15,8 +15,8 @@ import {
 import { useScreenShare } from './ScreenShareRenderer';
 
 type LayoutContextProviderProps = {
-  onPinChange?: (state: PinContextState) => void;
-  onChatChange?: (state: ChatContextState) => void;
+  onPinChange?: (state: PinState) => void;
+  onChatChange?: (state: WidgetState) => void;
 };
 
 export function LayoutContextProvider({
@@ -26,8 +26,8 @@ export function LayoutContextProvider({
 }: React.PropsWithChildren<LayoutContextProviderProps>) {
   const room = useRoomContext();
   const { screenShareParticipant, screenShareTrack } = useScreenShare({ room });
-  const [pinState, pinDispatch] = React.useReducer(pinReducer, PIN_CONTEXT_DEFAULT_STATE);
-  const [chatState, chatDispatch] = React.useReducer(chatReducer, CHAT_CONTEXT_DEFAULT_STATE);
+  const [pinState, pinDispatch] = React.useReducer(pinReducer, PIN_DEFAULT_STATE);
+  const [chatState, chatDispatch] = React.useReducer(chatReducer, WIDGET_DEFAULT_STATE);
 
   const layoutContextDefault: LayoutContextType = {
     pin: { dispatch: pinDispatch, state: pinState },

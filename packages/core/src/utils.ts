@@ -1,8 +1,14 @@
-import { LocalParticipant, Participant, RemoteParticipant, TrackPublication } from 'livekit-client';
+import {
+  LocalParticipant,
+  Participant,
+  RemoteParticipant,
+  Track,
+  TrackPublication,
+} from 'livekit-client';
 import type { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
 import type { UnprefixedClassNames } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
 import { cssPrefix } from './constants';
-import { PinContextState, TrackParticipantPair } from './types';
+import { PinState, TrackParticipantPair } from './types';
 export function kebabize(str: string) {
   return str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
 }
@@ -41,7 +47,7 @@ export const attachIfSubscribed = (
  */
 export function isParticipantTrackPinned(
   trackParticipantPair: TrackParticipantPair,
-  pinState: PinContextState | undefined,
+  pinState: PinState | undefined,
 ): boolean {
   if (pinState === undefined) {
     return false;
@@ -53,6 +59,24 @@ export function isParticipantTrackPinned(
     ({ track: pinnedTrack, participant: pinnedParticipant }) =>
       pinnedTrack.trackSid === track.trackSid &&
       pinnedParticipant.identity === participant.identity,
+  );
+}
+
+/**
+ * Check if the participant track source is pinned.
+ */
+export function isParticipantSourcePinned(
+  participant: Participant,
+  source: Track.Source,
+  pinState: PinState | undefined,
+): boolean {
+  if (pinState === undefined) {
+    return false;
+  }
+
+  return pinState.some(
+    ({ track: pinnedTrack, participant: pinnedParticipant }) =>
+      pinnedTrack.source === source && pinnedParticipant.identity === participant.identity,
   );
 }
 

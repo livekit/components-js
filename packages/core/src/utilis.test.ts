@@ -1,6 +1,6 @@
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import { describe, it, expect } from 'vitest';
-import { PinContextState, TrackParticipantPair } from './types';
+import { PinState, TrackParticipantPair } from './types';
 import { isParticipantTrackPinned } from './utils';
 
 describe('Test isParticipantTrackPinned', () => {
@@ -13,20 +13,20 @@ describe('Test isParticipantTrackPinned', () => {
   const pairC: TrackParticipantPair = { participant: participantB, track: trackA };
 
   it('If the pair is in the pin state the function should always return true.', () => {
-    const pinState: PinContextState = [pairA];
+    const pinState: PinState = [pairA];
     expect(isParticipantTrackPinned(pairA, pinState)).toBe(true);
 
-    const pinState2: PinContextState = [pairA, pairB, pairC];
+    const pinState2: PinState = [pairA, pairB, pairC];
     expect(isParticipantTrackPinned(pairA, pinState2)).toBe(true);
   });
 
   it('If the pair is not in the pin state the function should return false.', () => {
-    const pinState: PinContextState = [pairB, pairC];
+    const pinState: PinState = [pairB, pairC];
     expect(isParticipantTrackPinned(pairA, pinState)).toBe(false);
   });
 
   it('Empty pin state should always return false.', () => {
-    const pinState: PinContextState = [];
+    const pinState: PinState = [];
     expect(isParticipantTrackPinned(pairA, pinState)).toBe(false);
     expect(isParticipantTrackPinned(pairB, pinState)).toBe(false);
   });

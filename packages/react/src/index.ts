@@ -1,4 +1,3 @@
-export * from './components/participant/ParticipantTile';
 export * from './components/participant/ConnectionQualityIndicator';
 export * from './components/participant/AudioVisualizer';
 export * from './components/LiveKitRoom';
@@ -17,6 +16,7 @@ export * from './components/controls/MediaDeviceSelect';
 export * from './components/controls/StartAudio';
 export * from './components/LayoutContextProvider';
 export * from './components/ClearPinButton';
+export * from './components/TileLoop';
 
 export * from './hooks';
 

@@ -7,6 +7,7 @@ import { GridLayout } from '../layout/GridLayout';
 import { PinState } from '@livekit/components-core';
 import { TrackLoop } from '../components/TrackLoop';
 import { Track } from 'livekit-client';
+import { TileLoop } from '../components/TileLoop';
 
 export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -38,7 +39,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
       <PinContextProvider onChange={handleFocusStateChange}>
         {layout === 'grid' ? (
           <GridLayout>
-            <TrackLoop excludePinnedTracks={false} />
+            <TileLoop />
           </GridLayout>
         ) : (
           <FocusLayoutContainer />

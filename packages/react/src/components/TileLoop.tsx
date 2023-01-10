@@ -6,12 +6,12 @@ import { useParticipants, useTracks } from '../hooks';
 import { cloneSingleChild } from '../utils';
 import { ParticipantTile } from './participant/ParticipantTile';
 
-type TileLoopProps = {
+interface TileLoopProps {
   //   participants: Participant[];
   mainSource?: Track.Source;
   secondarySources?: Track.Source[];
   excludePinnedTracks?: boolean;
-};
+}
 
 /**
  * The ParticipantLoop component loops over all or a filtered subset of participants to create a visual
@@ -34,34 +34,40 @@ type TileLoopProps = {
  * @see `ParticipantTile` component
  */
 
-const secondarySourcesDefault = [Track.Source.ScreenShare];
+const TileLoopDefaults = {
+  mainSource: Track.Source.Camera,
+  secondarySources: [Track.Source.ScreenShare],
+};
+
 export const TileLoop = ({
-  mainSource = Track.Source.Camera,
-  secondarySources = [Track.Source.ScreenShare],
+  mainSource,
+  secondarySources,
   excludePinnedTracks,
+  ...props
 }: React.PropsWithChildren<TileLoopProps>) => {
+  mainSource ??= TileLoopDefaults.mainSource;
+  secondarySources ??= TileLoopDefaults.secondarySources;
+  excludePinnedTracks ??= false;
   const participants = useParticipants();
   const { state: pinState } = useMaybePinContext();
 
   const secondaryPairs = useTracks({
-    sources: secondarySources ?? secondarySourcesDefault,
-    excludePinnedTracks: false,
+    sources: secondarySources,
+    excludePinnedTracks,
   });
-
-  React.useEffect(() => {
-    console.log(mainSource, secondarySources);
-  }, [mainSource, secondarySources]);
 
   return (
     <>
       {participants.map((participant) => (
         <ParticipantContext.Provider value={participant} key={participant.identity}>
           {(!excludePinnedTracks ||
-            !isParticipantSourcePinned(participant, mainSource, pinState)) && (
-            <ParticipantTile trackSource={mainSource} />
-          )}
+            !isParticipantSourcePinned(
+              participant,
+              mainSource ?? TileLoopDefaults.mainSource,
+              pinState,
+            )) && <ParticipantTile trackSource={mainSource} />}
 
-          {/* {secondaryPairs
+          {secondaryPairs
             .filter(({ participant: p }) => p.identity === participant.identity)
             .map(({ track }, index) =>
               props.children ? (
@@ -69,7 +75,7 @@ export const TileLoop = ({
               ) : (
                 <ParticipantTile key={index} trackSource={track.source} />
               ),
-            )} */}
+            )}
         </ParticipantContext.Provider>
       ))}
     </>

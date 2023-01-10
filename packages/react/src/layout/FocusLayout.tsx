@@ -6,6 +6,7 @@ import { ParticipantClickEvent, ParticipantTile } from '../components/participan
 import { ClearPinButton } from '../components/ClearPinButton';
 import { TrackLoop } from '../components/TrackLoop';
 import { TrackParticipantPair } from '@livekit/components-core';
+import { TileLoop } from '../components/TileLoop';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   trackParticipantPair?: TrackParticipantPair;
@@ -33,10 +34,7 @@ export function FocusLayoutContainer({
               <FocusLayout trackParticipantPair={trackParticipantPair} />
             )}
             <CarouselView>
-              <TrackLoop
-                sources={[Track.Source.Camera, Track.Source.ScreenShare]}
-                excludePinnedTracks={true}
-              />
+              <TileLoop excludePinnedTracks={true} />
             </CarouselView>
           </>
         )}

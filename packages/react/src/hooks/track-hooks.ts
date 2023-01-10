@@ -101,8 +101,6 @@ type UseTracksProps = {
   filterDependencies?: Array<any>;
 };
 
-const defaultFilterDependencies: Array<any> = [];
-
 /**
  * The useTracks hook returns Array<TrackParticipantPair> which combine the track and the corresponding participant of the track.
  * Only tracks with a the same source specified via the sources property get included in the loop.

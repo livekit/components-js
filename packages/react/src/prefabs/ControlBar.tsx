@@ -4,7 +4,8 @@ import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { TrackToggle } from '../components/controls/TrackToggle';
 import { StartAudio } from '../components/controls/StartAudio';
-import { LeaveIcon, ScreenShareIcon } from '../icons';
+import { ChatIcon, LeaveIcon, ScreenShareIcon } from '../icons';
+import { ChatToggle } from '../components/controls/ChatToggle';
 
 type ControlBarControls = {
   microphone?: boolean;
@@ -83,6 +84,12 @@ export function ControlBar(props: ControlBarProps) {
           {showIcon && <ScreenShareIcon />}
           {showText && 'Share screen'}
         </TrackToggle>
+      )}
+      {visibleControls.chat && (
+        <ChatToggle>
+          {showIcon && <ChatIcon />}
+          {showText && 'Chat'}
+        </ChatToggle>
       )}
       {visibleControls.leave && (
         <DisconnectButton>

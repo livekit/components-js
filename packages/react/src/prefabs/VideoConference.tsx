@@ -6,6 +6,7 @@ import { FocusLayoutContainer } from '../layout/FocusLayout';
 import { GridLayout } from '../layout/GridLayout';
 import { PinState } from '@livekit/components-core';
 import { TileLoop } from '../components/TileLoop';
+import { ConnectionStateToast } from '../components/Toast';
 
 export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -45,6 +46,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
       </LayoutContextProvider>
       <ControlBar />
       <RoomAudioRenderer />
+      <ConnectionStateToast />
     </div>
   );
 }

@@ -16,6 +16,7 @@ export function kebabize(str: string) {
  * Converts a non prefixed CSS class into a prefixed one.
  */
 export function lkClassName(unprefixedClassName: UnprefixedClassNames): ClassNames {
+  // @ts-ignore
   return `${cssPrefix}-${unprefixedClassName}`;
 }
 

@@ -2,6 +2,7 @@ export * from './components/participant/ConnectionQualityIndicator';
 export * from './components/participant/AudioVisualizer';
 export * from './components/LiveKitRoom';
 export * from './components/controls/TrackToggle';
+export * from './components/controls/ChatToggle';
 export * from './components/ParticipantLoop';
 export * from './components/TrackLoop';
 export * from './components/ConnectionState';

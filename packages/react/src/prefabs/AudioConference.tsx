@@ -45,8 +45,10 @@ export function AudioConference({ ...props }: AudioConferenceProps) {
         ) : (
           <FocusLayoutContainer />
         )}
+        <ControlBar
+          controls={{ microphone: true, screenShare: false, camera: false, chat: true }}
+        />
       </LayoutContextProvider>
-      <ControlBar controls={{ microphone: true, screenShare: false, camera: false }} />
     </div>
   );
 }

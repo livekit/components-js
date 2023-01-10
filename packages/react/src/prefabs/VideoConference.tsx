@@ -42,8 +42,8 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
         ) : (
           <FocusLayoutContainer />
         )}
+        <ControlBar controls={{ chat: true }} />
       </LayoutContextProvider>
-      <ControlBar />
       <RoomAudioRenderer />
     </div>
   );

@@ -24,17 +24,3 @@ export function chatReducer(state: ChatContextState, action: ChatContextAction):
     return { ...state };
   }
 }
-
-export const ChatContext = React.createContext<ChatContextType>({});
-
-export function useChatContext() {
-  const chatContext = React.useContext(ChatContext);
-  if (!chatContext) {
-    throw Error('Tried to access ChatContext context outside a ChatContextProvider provider.');
-  }
-  return chatContext;
-}
-
-export function useMaybeChatContext() {
-  return React.useContext(ChatContext);
-}

@@ -26,5 +26,3 @@ export function pinReducer(state: PinContextState, action: PinAction): PinContex
     return { ...state };
   }
 }
-
-export const PinContext = React.createContext<PinContextType>({});

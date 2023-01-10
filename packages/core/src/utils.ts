@@ -2,7 +2,7 @@ import { LocalParticipant, Participant, RemoteParticipant, TrackPublication } fr
 import type { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
 import type { UnprefixedClassNames } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
 import { cssPrefix } from './constants';
-import { PinState, TrackParticipantPair } from './types';
+import { PinContextState, TrackParticipantPair } from './types';
 export function kebabize(str: string) {
   return str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
 }
@@ -41,7 +41,7 @@ export const attachIfSubscribed = (
  */
 export function isParticipantTrackPinned(
   trackParticipantPair: TrackParticipantPair,
-  pinState: PinState | undefined,
+  pinState: PinContextState | undefined,
 ): boolean {
   if (pinState === undefined) {
     return false;

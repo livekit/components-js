@@ -1,6 +1,6 @@
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { useMaybePinContext, usePinContext } from '../contexts';
+import { useMaybeLayoutContext, useLayoutContext } from '../context';
 import { mergeProps } from '../utils';
 import { ParticipantClickEvent, ParticipantTile } from '../components/participant/ParticipantTile';
 import { ClearPinButton } from '../components/ClearPinButton';
@@ -19,7 +19,7 @@ export function FocusLayoutContainer({
   ...props
 }: FocusLayoutContainerProps) {
   const elementProps = mergeProps(props, { className: 'lk-focus-layout' });
-  const pinContext = usePinContext();
+  const pinContext = useLayoutContext().pin;
   const hasFocus = React.useMemo(() => {
     return pinContext.state && pinContext.state.length >= 1;
   }, [pinContext]);
@@ -56,7 +56,7 @@ export function FocusLayout({
   onParticipantClick,
   ...props
 }: FocusLayoutProps) {
-  const { state } = useMaybePinContext();
+  const { state } = useMaybeLayoutContext().pin;
 
   const pair: TrackParticipantPair | null = React.useMemo(() => {
     if (trackParticipantPair) {

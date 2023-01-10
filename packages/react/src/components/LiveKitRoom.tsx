@@ -10,7 +10,7 @@ import {
   VideoCaptureOptions,
 } from 'livekit-client';
 import * as React from 'react';
-import { RoomContext } from '../contexts';
+import { RoomContext } from '../context';
 import { VideoConference } from '../prefabs/VideoConference';
 
 export type LiveKitRoomProps = {

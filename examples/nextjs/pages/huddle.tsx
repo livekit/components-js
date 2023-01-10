@@ -1,4 +1,4 @@
-import { PinState } from '@livekit/components-core';
+import { PinContextState } from '@livekit/components-core';
 import {
   DisconnectButton,
   LiveKitRoom,
@@ -8,14 +8,14 @@ import {
   ParticipantName,
   ParticipantLoop,
   ParticipantTile,
-  PinContextProvider,
+  LayoutContextProvider,
   PreJoin,
   RoomAudioRenderer,
   StartAudio,
   useConnectionState,
   useParticipantContext,
   useParticipants,
-  usePinContext,
+  useLayoutContext,
   useScreenShare,
   useToken,
   ClearPinButton,
@@ -92,7 +92,7 @@ const CustomFocusLayout = ({
 }: {
   screenShareTrack: TrackPublication | undefined;
 }) => {
-  const { state: focusState } = usePinContext();
+  // const { state: focusState } = useLayoutContext().pin;
   return (
     <div className={styles.focusLayout}>
       <div className={styles.screenShareContainer}>
@@ -124,7 +124,7 @@ const CustomFocusLayout = ({
 };
 
 const CustomFocus = () => {
-  const { state } = usePinContext();
+  const { state } = useLayoutContext().pin;
 
   return (
     <FocusLayout></FocusLayout>
@@ -236,7 +236,7 @@ const HuddleRoomView = ({
     setIsConnected(false);
   };
 
-  const handleFocusStateChange = (focusState: PinState) => {
+  const handleFocusStateChange = (focusState: PinContextState) => {
     setLayout(focusState.length >= 1 ? 'focus' : 'grid');
   };
 
@@ -258,7 +258,7 @@ const HuddleRoomView = ({
       ) : (
         <>
           <RoomAudioRenderer />
-          <PinContextProvider onChange={handleFocusStateChange}>
+          <LayoutContextProvider onPinChange={handleFocusStateChange}>
             <div className={styles.roomLayout}>
               <div className={styles.headerBar}>
                 <ParticipantCount className={styles.participantCount} />
@@ -281,7 +281,7 @@ const HuddleRoomView = ({
                 </div>
               </div>
             </div>
-          </PinContextProvider>
+          </LayoutContextProvider>
         </>
       )}
     </LiveKitRoom>

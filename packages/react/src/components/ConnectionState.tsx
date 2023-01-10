@@ -1,7 +1,7 @@
 import { connectionStateObserver } from '@livekit/components-core';
 import type { Room } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureRoom } from '../contexts';
+import { useEnsureRoom } from '../context';
 import { useObservableState } from '../utils';
 
 export interface ConnectionStatusProps extends React.HTMLAttributes<HTMLDivElement> {

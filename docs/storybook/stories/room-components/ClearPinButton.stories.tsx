@@ -2,11 +2,11 @@ import React from 'react';
 import { StoryObj } from '@storybook/react';
 
 import { ClearPinButton, ClearPinButtonProps } from '@livekit/components-react';
-import { LkPinContext, LkRoomContext } from '../../.storybook/lk-decorators';
+import { LkLayoutContext, LkRoomContext } from '../../.storybook/lk-decorators';
 
 export default {
   component: ClearPinButton,
-  decorators: [LkPinContext, LkRoomContext],
+  decorators: [LkLayoutContext, LkRoomContext],
   render: (args: ClearPinButtonProps) => <ClearPinButton {...args}>Back to Grid</ClearPinButton>,
   argTypes: {
     inFocus: {

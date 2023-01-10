@@ -1,5 +1,3 @@
-export * from './contexts';
-
 export * from './components/participant/ParticipantTile';
 export * from './components/participant/ConnectionQualityIndicator';
 export * from './components/participant/AudioVisualizer';
@@ -17,7 +15,7 @@ export * from './components/RoomAudioRenderer';
 export * from './components/participant/MediaTrack';
 export * from './components/controls/MediaDeviceSelect';
 export * from './components/controls/StartAudio';
-export * from './components/PinContextProvider';
+export * from './components/LayoutContextProvider';
 export * from './components/ClearPinButton';
 
 export * from './hooks';
@@ -25,3 +23,5 @@ export * from './hooks';
 export * from './prefabs';
 
 export * from './layout';
+
+export * from './context';

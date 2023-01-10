@@ -2,7 +2,7 @@ import { roomInfoObserver } from '@livekit/components-core';
 import { Room } from 'livekit-client';
 import * as React from 'react';
 
-import { useRoomContext } from '../contexts';
+import { useRoomContext } from '../context';
 import { useObservableState } from '../utils';
 
 export function useRoomInfo({ room }: { room: Room }) {

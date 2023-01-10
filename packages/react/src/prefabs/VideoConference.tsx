@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { PinContextProvider } from '../components/PinContextProvider';
+import { LayoutContextProvider } from '../components/LayoutContextProvider';
 import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
 import { ControlBar } from './ControlBar';
 import { FocusLayoutContainer } from '../layout/FocusLayout';
 import { GridLayout } from '../layout/GridLayout';
-import { PinState } from '@livekit/components-core';
+import { PinContextState } from '@livekit/components-core';
 import { TrackLoop } from '../components/TrackLoop';
 import { Track } from 'livekit-client';
 
@@ -29,13 +29,13 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = React.useState<Layout>('grid');
 
-  const handleFocusStateChange = (pinState: PinState) => {
+  const handleFocusStateChange = (pinState: PinContextState) => {
     setLayout(pinState.length >= 1 ? 'focus' : 'grid');
   };
 
   return (
     <div className="lk-video-conference" {...props}>
-      <PinContextProvider onChange={handleFocusStateChange}>
+      <LayoutContextProvider onPinChange={handleFocusStateChange}>
         {layout === 'grid' ? (
           <GridLayout>
             <TrackLoop
@@ -46,7 +46,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
         ) : (
           <FocusLayoutContainer />
         )}
-      </PinContextProvider>
+      </LayoutContextProvider>
       <ControlBar />
       <RoomAudioRenderer />
     </div>

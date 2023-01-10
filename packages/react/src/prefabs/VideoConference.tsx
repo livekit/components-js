@@ -5,8 +5,6 @@ import { ControlBar } from './ControlBar';
 import { FocusLayoutContainer } from '../layout/FocusLayout';
 import { GridLayout } from '../layout/GridLayout';
 import { PinState } from '@livekit/components-core';
-import { TrackLoop } from '../components/TrackLoop';
-import { Track } from 'livekit-client';
 import { TileLoop } from '../components/TileLoop';
 
 export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;

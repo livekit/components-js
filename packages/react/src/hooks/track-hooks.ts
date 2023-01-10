@@ -101,6 +101,10 @@ type UseTracksProps = {
   filterDependencies?: Array<any>;
 };
 
+const useTracksDefaults = {
+  filterDependencies: [],
+};
+
 /**
  * The useTracks hook returns Array<TrackParticipantPair> which combine the track and the corresponding participant of the track.
  * Only tracks with a the same source specified via the sources property get included in the loop.
@@ -113,13 +117,14 @@ type UseTracksProps = {
  */
 export function useTracks({
   sources,
-  excludePinnedTracks = true,
+  excludePinnedTracks,
   filter,
-  filterDependencies = [],
+  filterDependencies,
 }: UseTracksProps) {
   const room = useRoomContext();
-  const pinContext = useMaybePinContext();
+  filterDependencies ??= useTracksDefaults.filterDependencies;
 
+  const pinContext = useMaybePinContext();
   const [unfilteredPairs, setUnfilteredPairs] = React.useState<TrackParticipantPair[]>([]);
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
 

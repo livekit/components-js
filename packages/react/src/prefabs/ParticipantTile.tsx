@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { Participant, Track } from 'livekit-client';
-import { isParticipantSourcePinned, setupParticipantTile } from '@livekit/components-core';
+import {
+  isParticipantSourcePinned,
+  ParticipantClickEvent,
+  setupParticipantTile,
+} from '@livekit/components-core';
 import { ConnectionQualityIndicator } from '../components/participant/ConnectionQualityIndicator';
 import { MediaTrack } from '../components/participant/MediaTrack';
 import { ParticipantName } from '../components/participant/ParticipantName';
@@ -18,18 +22,33 @@ import { FocusToggle } from '../components/controls/FocusToggle';
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
   trackSource?: Track.Source;
+  onParticipantClick?: (event: ParticipantClickEvent) => void;
 };
 
 export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>({
   participant,
+  trackSource,
+  onParticipantClick,
   props,
 }: {
   participant: Participant;
+  trackSource: Track.Source;
+  onParticipantClick?: (event: ParticipantClickEvent) => void;
   props: T;
 }) {
+  const p = useEnsureParticipant(participant);
   const mergedProps = React.useMemo(() => {
     const { className } = setupParticipantTile();
-    return mergeProps(props, { className });
+    return mergeProps(props, {
+      className,
+      onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        props.onClick?.(event);
+        if (typeof onParticipantClick === 'function') {
+          const track = p.getTrack(trackSource);
+          onParticipantClick({ participant: p, track });
+        }
+      },
+    });
   }, [props]);
   const isVideoMuted = useIsMuted({ source: Track.Source.Camera, participant });
   const isAudioMuted = useIsMuted({ source: Track.Source.Microphone, participant });
@@ -79,10 +98,18 @@ export const ParticipantTile = ({
   participant,
   children,
   trackSource,
+  onParticipantClick,
   ...htmlProps
 }: ParticipantTileProps) => {
+  const trackSource_ = trackSource ?? Track.Source.Camera;
   const p = useEnsureParticipant(participant);
-  const { elementProps } = useParticipantTile({ participant: p, props: htmlProps });
+
+  const { elementProps } = useParticipantTile({
+    participant: p,
+    props: htmlProps,
+    trackSource: trackSource_,
+    onParticipantClick,
+  });
 
   const pinContext = useMaybeLayoutContext().pin;
 
@@ -99,7 +126,6 @@ export const ParticipantTile = ({
     },
     [p, pinContext, trackSource],
   );
-  const trackSource_ = trackSource ?? Track.Source.Camera;
 
   return (
     <div style={{ position: 'relative' }} {...elementProps}>

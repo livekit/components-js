@@ -56,6 +56,13 @@ export function ControlBar(props: ControlBarProps) {
     () => variation === 'textOnly' || variation === 'verbose',
     [variation],
   );
+
+  const [isScreenShareEnabled, setIsScreenShareEnabled] = React.useState(false);
+
+  const onScreenShareChange = (enabled: boolean) => {
+    setIsScreenShareEnabled(enabled);
+  };
+
   return (
     <div className="lk-control-bar" {...props}>
       {visibleControls.microphone && (
@@ -79,9 +86,12 @@ export function ControlBar(props: ControlBarProps) {
         </div>
       )}
       {visibleControls.screenShare && (
-        <TrackToggle source={Track.Source.ScreenShare} showIcon={showIcon}>
-          {showIcon && <ScreenShareIcon />}
-          {showText && 'Share screen'}
+        <TrackToggle
+          source={Track.Source.ScreenShare}
+          showIcon={showIcon}
+          onChange={onScreenShareChange}
+        >
+          {showText && (isScreenShareEnabled ? 'Stop screen share' : 'Share screen')}
         </TrackToggle>
       )}
       {visibleControls.chat && (

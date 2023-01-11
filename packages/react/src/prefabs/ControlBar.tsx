@@ -4,7 +4,7 @@ import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { TrackToggle } from '../components/controls/TrackToggle';
 import { StartAudio } from '../components/controls/StartAudio';
-import { LeaveIcon, ScreenShareIcon } from '../icons';
+import { LeaveIcon } from '../icons';
 
 type ControlBarControls = {
   microphone?: boolean;
@@ -55,6 +55,13 @@ export function ControlBar(props: ControlBarProps) {
     () => variation === 'textOnly' || variation === 'verbose',
     [variation],
   );
+
+  const [isScreenShareEnabled, setIsScreenShareEnabled] = React.useState(false);
+
+  const onScreenShareChange = (enabled: boolean) => {
+    setIsScreenShareEnabled(enabled);
+  };
+
   return (
     // TODO: Remove styling default styling or move to styles package.
     <div className="lk-control-bar" {...props}>
@@ -79,9 +86,12 @@ export function ControlBar(props: ControlBarProps) {
         </div>
       )}
       {visibleControls.screenShare && (
-        <TrackToggle source={Track.Source.ScreenShare} showIcon={showIcon}>
-          {showIcon && <ScreenShareIcon />}
-          {showText && 'Share screen'}
+        <TrackToggle
+          source={Track.Source.ScreenShare}
+          showIcon={showIcon}
+          onChange={onScreenShareChange}
+        >
+          {showText && (isScreenShareEnabled ? 'Stop screen share' : 'Share screen')}
         </TrackToggle>
       )}
       {visibleControls.leave && (

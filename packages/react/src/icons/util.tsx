@@ -10,6 +10,8 @@ import {
   QualityExcellentIcon,
   QualityGoodIcon,
   QualityPoorIcon,
+  ScreenShareIcon,
+  ScreenShareStopIcon,
 } from './index';
 
 /**
@@ -21,6 +23,8 @@ export function getSourceIcon(source: Track.Source, enabled: boolean) {
       return enabled ? <MicIcon /> : <MicDisabledIcon />;
     case Track.Source.Camera:
       return enabled ? <CameraIcon /> : <CameraDisabledIcon />;
+    case Track.Source.ScreenShare:
+      return enabled ? <ScreenShareStopIcon /> : <ScreenShareIcon />;
     default:
       return undefined;
   }

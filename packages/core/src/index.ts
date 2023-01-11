@@ -14,6 +14,7 @@ export * from './components/participantTile';
 export * from './components/chat';
 export * from './components/startAudio';
 export * from './components/chatToggle';
+export * from './components/focusToggle';
 export * from './components/clearPinButton';
 export * from './components/room';
 

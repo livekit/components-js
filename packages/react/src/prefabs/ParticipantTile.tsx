@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Participant, Track, TrackPublication } from 'livekit-client';
+import { Participant, Track } from 'livekit-client';
 import { isParticipantSourcePinned, setupParticipantTile } from '@livekit/components-core';
 import { ConnectionQualityIndicator } from '../components/participant/ConnectionQualityIndicator';
 import { MediaTrack } from '../components/participant/MediaTrack';
@@ -13,16 +13,11 @@ import {
 } from '../context';
 import { useIsMuted, useIsSpeaking } from '../hooks';
 import { mergeProps } from '../utils';
-
-export interface ParticipantClickEvent {
-  participant?: Participant;
-  publication?: TrackPublication;
-}
+import { FocusToggle } from '../components/controls/FocusToggle';
 
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
   trackSource?: Track.Source;
-  onParticipantClick?: (evt: ParticipantClickEvent) => void;
 };
 
 export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>({
@@ -83,7 +78,6 @@ export function ParticipantContextIfNeeded(
 export const ParticipantTile = ({
   participant,
   children,
-  onParticipantClick,
   trackSource,
   ...htmlProps
 }: ParticipantTileProps) => {
@@ -91,26 +85,6 @@ export const ParticipantTile = ({
   const { elementProps } = useParticipantTile({ participant: p, props: htmlProps });
 
   const pinContext = useMaybeLayoutContext().pin;
-
-  const clickHandler = React.useCallback(
-    (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      elementProps.onClick?.(evt);
-      onParticipantClick?.({ participant: p });
-      if (pinContext.dispatch && trackSource) {
-        const track = p.getTrack(trackSource);
-        if (track) {
-          pinContext.dispatch({
-            msg: 'set_pin',
-            trackParticipantPair: {
-              participant: p,
-              track,
-            },
-          });
-        }
-      }
-    },
-    [p, trackSource, onParticipantClick, elementProps, pinContext],
-  );
 
   const handleSubscribe = React.useCallback(
     (subscribed: boolean) => {
@@ -125,19 +99,20 @@ export const ParticipantTile = ({
     },
     [p, pinContext, trackSource],
   );
+  const trackSource_ = trackSource ?? Track.Source.Camera;
 
   return (
-    <div style={{ position: 'relative' }} {...elementProps} onClick={clickHandler}>
+    <div style={{ position: 'relative' }} {...elementProps}>
       <ParticipantContextIfNeeded participant={participant}>
         {children ?? (
           <>
             <MediaTrack
-              source={trackSource ?? Track.Source.Camera}
+              source={trackSource_}
               onSubscriptionStatusChanged={handleSubscribe}
             ></MediaTrack>
             <div className="lk-participant-metadata">
               <div className="lk-participant-metadata-item">
-                {trackSource === Track.Source.Camera ? (
+                {trackSource_ === Track.Source.Camera ? (
                   <>
                     <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
                     <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
@@ -153,7 +128,12 @@ export const ParticipantTile = ({
             </div>
           </>
         )}
+        <FocusToggle trackSource={trackSource_} />
       </ParticipantContextIfNeeded>
     </div>
   );
+};
+
+ParticipantTile.defaultProps = {
+  trackSource: Track.Source.Camera,
 };

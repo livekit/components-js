@@ -39,7 +39,6 @@ export function FocusLayoutContainer({
           </>
         )}
       </div>
-      <ClearPinButton>Back to Grid</ClearPinButton>
     </>
   );
 }

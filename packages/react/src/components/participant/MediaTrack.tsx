@@ -1,3 +1,4 @@
+import { isParticipantTrackPinned } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureParticipant } from '../../context';
@@ -9,6 +10,7 @@ export interface MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
   participant?: Participant;
   source: Track.Source;
   onTrackClick?: (evt: ParticipantClickEvent) => void;
+  onSubscriptionStatusChanged?: (subscribed: boolean) => void;
 }
 
 /**
@@ -29,11 +31,16 @@ export interface MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
  *
  * @see `ParticipantTile` component
  */
-export function MediaTrack({ onTrackClick, onClick, ...props }: MediaTrackProps) {
+export function MediaTrack({
+  onTrackClick,
+  onClick,
+  onSubscriptionStatusChanged,
+  ...props
+}: MediaTrackProps) {
   const participant = useEnsureParticipant(props.participant);
 
   const mediaEl = React.useRef<HTMLVideoElement>(null);
-  const { elementProps, publication, isMuted } = useMediaTrack({
+  const { elementProps, publication, isMuted, isSubscribed } = useMediaTrack({
     participant,
     source: props.source,
     element: mediaEl,
@@ -45,6 +52,10 @@ export function MediaTrack({ onTrackClick, onClick, ...props }: MediaTrackProps)
       mediaEl.current?.play();
     }
   }, [isMuted, mediaEl]);
+
+  React.useEffect(() => {
+    onSubscriptionStatusChanged?.(!!isSubscribed);
+  }, [isSubscribed, onSubscriptionStatusChanged]);
 
   const clickHandler = (evt: React.MouseEvent<HTMLMediaElement, MouseEvent>) => {
     onClick?.(evt);

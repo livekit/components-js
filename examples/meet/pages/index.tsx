@@ -13,13 +13,14 @@ const Home: NextPage = () => {
       style={{
         display: 'grid',
         placeItems: 'center',
-        columnCount: 2,
         width: '100%',
         height: '100%',
       }}
     >
-      <h2>LiveKit Meet</h2>
-      <button onClick={startMeeting}>Start Meeting</button>
+      <div style={{ textAlign: 'center' }}>
+        <h1>LiveKit Meet</h1>
+        <button onClick={startMeeting}>Start Meeting</button>
+      </div>
     </main>
   );
 };

@@ -1,11 +1,16 @@
 import * as React from 'react';
 import { Participant, Track } from 'livekit-client';
-import { setupParticipantTile } from '@livekit/components-core';
+import { isParticipantSourcePinned, setupParticipantTile } from '@livekit/components-core';
 import { ConnectionQualityIndicator } from '../components/participant/ConnectionQualityIndicator';
 import { MediaTrack } from '../components/participant/MediaTrack';
 import { ParticipantName } from '../components/participant/ParticipantName';
 import { TrackMutedIndicator } from '../components/participant/TrackMutedIndicator';
-import { useMaybeParticipantContext, ParticipantContext, useEnsureParticipant } from '../context';
+import {
+  useMaybeParticipantContext,
+  ParticipantContext,
+  useEnsureParticipant,
+  useMaybeLayoutContext,
+} from '../context';
 import { useIsMuted, useIsSpeaking } from '../hooks';
 import { mergeProps } from '../utils';
 import { FocusToggle } from '../components/controls/FocusToggle';
@@ -78,6 +83,22 @@ export const ParticipantTile = ({
 }: ParticipantTileProps) => {
   const p = useEnsureParticipant(participant);
   const { elementProps } = useParticipantTile({ participant: p, props: htmlProps });
+
+  const pinContext = useMaybeLayoutContext().pin;
+
+  const handleSubscribe = React.useCallback(
+    (subscribed: boolean) => {
+      if (
+        trackSource &&
+        !subscribed &&
+        pinContext.dispatch &&
+        isParticipantSourcePinned(p, trackSource, pinContext.state)
+      ) {
+        pinContext.dispatch({ msg: 'clear_pin' });
+      }
+    },
+    [p, pinContext, trackSource],
+  );
   const trackSource_ = trackSource ?? Track.Source.Camera;
 
   return (
@@ -85,8 +106,10 @@ export const ParticipantTile = ({
       <ParticipantContextIfNeeded participant={participant}>
         {children ?? (
           <>
-            {/* <AudioVisualizer /> */}
-            <MediaTrack source={trackSource_}></MediaTrack>
+            <MediaTrack
+              source={trackSource_}
+              onSubscriptionStatusChanged={handleSubscribe}
+            ></MediaTrack>
             <div className="lk-participant-metadata">
               <div className="lk-participant-metadata-item">
                 {trackSource_ === Track.Source.Camera ? (

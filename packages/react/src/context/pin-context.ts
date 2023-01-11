@@ -1,5 +1,5 @@
 import { PinState, TrackParticipantPair } from '@livekit/components-core';
-import React from 'react';
+import * as React from 'react';
 
 export type PinAction =
   | {

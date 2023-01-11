@@ -1,5 +1,5 @@
 import { RemoteParticipant, Track } from 'livekit-client';
-import React from 'react';
+import * as React from 'react';
 import { MediaTrack } from './participant/MediaTrack';
 import { TrackLoop } from './TrackLoop';
 

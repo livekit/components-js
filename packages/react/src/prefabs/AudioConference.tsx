@@ -38,19 +38,21 @@ export function AudioConference({ ...props }: AudioConferenceProps) {
   return (
     <div className="lk-audio-conference" {...props}>
       <LayoutContextProvider onPinChange={handlePinStateChange} onChatChange={setChatState}>
-        {layout === 'grid' ? (
-          <GridLayout>
-            <TrackLoop sources={[Track.Source.Microphone]} excludePinnedTracks={false}>
-              <ParticipantAudioTile />
-            </TrackLoop>
-          </GridLayout>
-        ) : (
-          <FocusLayoutContainer />
-        )}
+        <div className="lk-audio-conference-stage">
+          {layout === 'grid' ? (
+            <GridLayout>
+              <TrackLoop sources={[Track.Source.Microphone]} excludePinnedTracks={false}>
+                <ParticipantAudioTile />
+              </TrackLoop>
+            </GridLayout>
+          ) : (
+            <FocusLayoutContainer />
+          )}
+          <ControlBar
+            controls={{ microphone: true, screenShare: false, camera: false, chat: true }}
+          />
+        </div>
         {chatState.showChat && <Chat />}
-        <ControlBar
-          controls={{ microphone: true, screenShare: false, camera: false, chat: true }}
-        />
       </LayoutContextProvider>
     </div>
   );

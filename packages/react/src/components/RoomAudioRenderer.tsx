@@ -16,7 +16,7 @@ import { TrackLoop } from './TrackLoop';
  */
 export const RoomAudioRenderer = () => {
   return (
-    <div style={{ display: 'hidden' }}>
+    <div style={{ display: 'none' }}>
       <TrackLoop
         sources={[Track.Source.Microphone, Track.Source.ScreenShareAudio]}
         filter={({ participant }) => {

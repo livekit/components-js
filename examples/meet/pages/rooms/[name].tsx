@@ -36,17 +36,19 @@ const Home: NextPage = () => {
             onLeave={() => setPreJoinChoices(undefined)}
           ></ActiveRoom>
         ) : (
-          <PreJoin
-            defaults={{
-              username: '',
-              videoEnabled: true,
-              audioEnabled: true,
-            }}
-            onSubmit={(values) => {
-              console.log('Joining with: ', values);
-              setPreJoinChoices(values);
-            }}
-          ></PreJoin>
+          <div style={{ display: 'grid', placeItems: 'center', height: '100%' }}>
+            <PreJoin
+              defaults={{
+                username: '',
+                videoEnabled: true,
+                audioEnabled: true,
+              }}
+              onSubmit={(values) => {
+                console.log('Joining with: ', values);
+                setPreJoinChoices(values);
+              }}
+            ></PreJoin>
+          </div>
         )}
       </main>
     </>
@@ -92,11 +94,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
       audio={userChoices.audioEnabled}
       onDisconnected={onLeave}
     >
-      <button onClick={() => setShowChat(!showChat)}>{showChat ? 'Hide Chat' : 'Show Chat'}</button>
-      <div style={{ display: 'flex' }}>
-        <Chat style={{ display: showChat ? 'block' : 'none', width: '20rem' }}></Chat>
-        <VideoConference />
-      </div>
+      <VideoConference />
     </LiveKitRoom>
   );
 };

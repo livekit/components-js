@@ -29,14 +29,18 @@ export function useChat() {
  * ```
  */
 export function Chat({ ...props }: ChatProps) {
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const { send, chatMessages, isSending } = useChat();
-  const handleSend = async () => {
+
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
     if (inputRef.current && inputRef.current.value.trim() !== '') {
       await send(inputRef.current.value);
       inputRef.current.value = '';
+      inputRef.current.focus();
     }
-  };
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  }
+
   return (
     <div {...props} className="lk-chat">
       <ul className="lk-chat-messages">
@@ -46,18 +50,18 @@ export function Chat({ ...props }: ChatProps) {
             )
           : chatMessages.map((msg, idx) => <ChatEntry key={idx} entry={msg} />)}
       </ul>
-      <div className="lk-chat-form">
+      <form className="lk-chat-form" onSubmit={handleSubmit}>
         <input
           className="lk-form-control lk-chat-form-input"
           disabled={isSending}
           ref={inputRef}
           type="text"
           placeholder="Enter a message..."
-        ></input>
-        <button className="lk-button lk-chat-form-button" disabled={isSending} onClick={handleSend}>
+        />
+        <button type="submit" className="lk-button lk-chat-form-button" disabled={isSending}>
           Send
         </button>
-      </div>
+      </form>
     </div>
   );
 }

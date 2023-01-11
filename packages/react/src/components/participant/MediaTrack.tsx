@@ -1,9 +1,8 @@
-import { isParticipantTrackPinned } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureParticipant } from '../../context';
 import { useMediaTrack } from '../../hooks';
-import { ParticipantClickEvent } from '../../prefabs';
+import { ParticipantClickEvent } from '@livekit/components-core';
 
 export interface MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
   extends React.HTMLAttributes<T> {
@@ -59,7 +58,7 @@ export function MediaTrack({
 
   const clickHandler = (evt: React.MouseEvent<HTMLMediaElement, MouseEvent>) => {
     onClick?.(evt);
-    onTrackClick?.({ participant, publication });
+    onTrackClick?.({ participant, track: publication });
   };
 
   return (

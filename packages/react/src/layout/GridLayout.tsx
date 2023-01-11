@@ -1,6 +1,7 @@
 import { Participant } from 'livekit-client';
 import * as React from 'react';
 import { TileLoop } from '../components/TileLoop';
+import { useParticipants } from '../hooks';
 import { mergeProps } from '../utils';
 
 export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -22,10 +23,21 @@ export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
  * <LiveKitRoom>
  * ```
  */
-export function GridLayout({ participants, ...props }: GridLayoutProps) {
+export function GridLayout({ ...props }: GridLayoutProps) {
+  const participants = useParticipants();
+
+  const gridEl = React.createRef<HTMLDivElement>();
+
+  React.useEffect(() => {
+    gridEl.current?.style.setProperty('--lk-p-count', participants.length.toFixed(0));
+  }, [participants, gridEl]);
   const elementProps = React.useMemo(
     () => mergeProps(props, { className: 'lk-grid-layout' }),
     [props],
   );
-  return <div {...elementProps}>{props.children ?? <TileLoop />}</div>;
+  return (
+    <div ref={gridEl} {...elementProps}>
+      {props.children ?? <TileLoop />}
+    </div>
+  );
 }

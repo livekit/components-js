@@ -2,7 +2,6 @@ import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useMaybeLayoutContext, useLayoutContext } from '../context';
 import { mergeProps } from '../utils';
-import { ClearPinButton } from '../components/ClearPinButton';
 import { TrackLoop } from '../components/TrackLoop';
 import { TrackParticipantPair } from '@livekit/components-core';
 import { TileLoop } from '../components/TileLoop';

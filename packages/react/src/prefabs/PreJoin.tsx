@@ -63,7 +63,7 @@ export type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'
  * ```
  */
 export const PreJoin = ({
-  defaults = DEFAULT_USER_CHOICES,
+  defaults = {},
   onValidate,
   onSubmit,
   debug,
@@ -100,6 +100,7 @@ export const PreJoin = ({
   const [isValid, setIsValid] = React.useState<boolean>();
 
   const createVideoTrack = async (deviceId?: string | undefined) => {
+    console.log('creating video track');
     const track = await createLocalVideoTrack({
       deviceId: deviceId,
       resolution: VideoPresets.h720.resolution,
@@ -124,36 +125,51 @@ export const PreJoin = ({
     }
   };
 
+  const prevVideoId = React.useRef(localVideoDeviceId);
+
   React.useEffect(() => {
     if (videoEnabled) {
       if (!localVideoTrack) {
         setLocalVideoTrack(new LocalVideoTrack(getEmptyVideoStreamTrack()));
         createVideoTrack();
-      } else {
+      } else if (prevVideoId.current !== selectedVideoDevice?.deviceId) {
+        console.log('restarting video');
         localVideoTrack?.restartTrack({
           deviceId: selectedVideoDevice?.deviceId,
         });
+        prevVideoId.current = selectedVideoDevice?.deviceId;
+      } else {
+        localVideoTrack.unmute();
       }
     } else {
-      localVideoTrack?.mute();
+      if (localVideoTrack) {
+        console.log('disabling video');
+
+        localVideoTrack.mute();
+      }
     }
     return () => {
+      localVideoTrack?.mute();
       localVideoTrack?.stop();
     };
-  }, [videoEnabled, localVideoTrack, selectedVideoDevice]);
+  }, [videoEnabled, selectedVideoDevice, localVideoTrack]);
+
+  const prevAudioId = React.useRef(localAudioDeviceId);
 
   React.useEffect(() => {
     if (audioEnabled) {
       if (!localAudioTrack) {
         setLocalAudioTrack(new LocalAudioTrack(getEmptyAudioStreamTrack()));
         createAudioTrack();
-      } else {
+      } else if (prevAudioId.current !== selectedAudioDevice?.deviceId) {
         localAudioTrack?.restartTrack({
           deviceId: selectedAudioDevice?.deviceId,
         });
+      } else {
+        localAudioTrack.unmute();
       }
     } else {
-      localAudioTrack?.mute();
+      localAudioTrack?.stop();
     }
     return () => {
       localAudioTrack?.stop();
@@ -162,6 +178,10 @@ export const PreJoin = ({
 
   React.useEffect(() => {
     if (videoEl.current) localVideoTrack?.attach(videoEl.current);
+
+    return () => {
+      localVideoTrack?.detach();
+    };
   }, [localVideoTrack, videoEl]);
 
   React.useEffect(() => {
@@ -229,7 +249,7 @@ export const PreJoin = ({
       <div className="lk-button-group-container">
         <div className="lk-button-group audio">
           <TrackToggle
-            initialState={videoEnabled}
+            initialState={audioEnabled}
             source={Track.Source.Microphone}
             onChange={(enabled) => setAudioEnabled(enabled)}
           >

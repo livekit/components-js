@@ -9,9 +9,7 @@
     "lint": {
       "outputs": []
     },
-    "start": {
-      "dependsOn": ["build"]
-    },
+    "start": {},
     "test": {
       "dependsOn": ["^build"],
       "outputs": []

@@ -5,7 +5,8 @@ import { mergeProps } from '../utils';
 import { TrackLoop } from '../components/TrackLoop';
 import { TrackParticipantPair } from '@livekit/components-core';
 import { TileLoop } from '../components/TileLoop';
-import { ParticipantClickEvent, ParticipantTile } from '../prefabs/ParticipantTile';
+import { ParticipantTile } from '../prefabs/ParticipantTile';
+import { ParticipantClickEvent } from '@livekit/components-core';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   trackParticipantPair?: TrackParticipantPair;

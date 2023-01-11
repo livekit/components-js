@@ -12,3 +12,8 @@ export type WidgetState = {
   showChat: boolean;
 };
 export const WIDGET_DEFAULT_STATE: WidgetState = { showChat: false };
+
+export interface ParticipantClickEvent {
+  participant: Participant;
+  track?: TrackPublication;
+}

@@ -36,20 +36,20 @@ export const ParticipantAudioTile = ({
   ...htmlProps
 }: ParticipantTileProps) => {
   const p = useEnsureParticipant(participant);
-  const { elementProps } = useParticipantTile({ participant: p, props: htmlProps });
-
-  const clickHandler = (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    elementProps.onClick?.(evt);
-    onParticipantClick?.({ participant: p });
-  };
+  const { elementProps } = useParticipantTile({
+    participant: p,
+    props: htmlProps,
+    trackSource: Track.Source.Microphone,
+    onParticipantClick,
+  });
 
   return (
-    <div style={{ position: 'relative' }} {...elementProps} onClick={clickHandler}>
+    <div style={{ position: 'relative' }} {...elementProps}>
       <ParticipantContextIfNeeded participant={participant}>
         {children ?? (
           <>
             <MediaTrack source={Track.Source.Microphone}></MediaTrack>
-            <AudioVisualizer></AudioVisualizer>
+            <AudioVisualizer />
             <div className="lk-participant-metadata">
               <div className="lk-participant-metadata-item">
                 <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>

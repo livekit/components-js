@@ -1,5 +1,5 @@
 import { Participant } from 'livekit-client';
-import React from 'react';
+import * as React from 'react';
 
 export const ParticipantContext = React.createContext<Participant | undefined>(undefined);
 

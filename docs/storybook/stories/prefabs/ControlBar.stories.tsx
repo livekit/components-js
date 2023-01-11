@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { StoryObj } from '@storybook/react';
 
 import { ControlBar, ControlBarProps } from '@livekit/components-react';

@@ -1,5 +1,5 @@
 import { LiveKitRoom } from '@livekit/components-react';
-import React from 'react';
+import * as React from 'react';
 
 const MyLiveKitApp = () => {
   const serverUrl = '';

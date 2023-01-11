@@ -4,7 +4,7 @@ import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { TrackToggle } from '../components/controls/TrackToggle';
 import { StartAudio } from '../components/controls/StartAudio';
-import { ChatIcon, LeaveIcon, ScreenShareIcon } from '../icons';
+import { ChatIcon, LeaveIcon } from '../icons';
 import { ChatToggle } from '../components/controls/ChatToggle';
 
 type ControlBarControls = {

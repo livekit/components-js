@@ -1,8 +1,9 @@
 .control-bar {
   display: flex;
   gap: .5rem;
-  padding: .75rem;
   align-items: center;
   justify-content: center;
+  // width: 100%;
+  padding: .75rem;
   border-top: 1px solid var(--border-color);
 }

@@ -23,6 +23,7 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
   const [isMuted, setMuted] = React.useState(publication?.isMuted);
   const [isSubscribed, setSubscribed] = React.useState(publication?.isSubscribed);
   const [track, setTrack] = React.useState(publication?.track);
+  const [orientation, setOrientation] = React.useState<'landscape' | 'portrait'>('landscape');
   const previousElement = React.useRef<HTMLMediaElement | undefined | null>();
 
   const { className, trackObserver } = React.useMemo(() => {
@@ -35,6 +36,20 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
       setMuted(publication?.isMuted);
       setSubscribed(publication?.isSubscribed);
       setTrack(publication?.track);
+      track?.receiver?.getStats().then((stats) => {
+        stats?.forEach((val) => {
+          if (val.type !== 'inbound-rtp') {
+            return;
+          }
+          if (typeof val.frameWidth === 'number' && typeof val.frameHeight === 'number') {
+            console.log(`SET ORIENTATION on ${participant.identity}:`, { val });
+
+            setOrientation(val.frameWidth > val.frameHeight ? 'landscape' : 'portrait');
+          }
+        });
+
+        // setTrackSettings(stats);
+      });
     });
     return () => subscription?.unsubscribe();
   }, [trackObserver]);
@@ -56,6 +71,17 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
     };
   }, [track, element]);
 
+  // const orientation: 'landscape' | 'portrait' = React.useMemo(() => {
+  //   console.log(`TrackSettings of ${participant.identity}:`, trackSettings);
+
+  //   if (trackSettings && trackSettings.width && trackSettings.height) {
+  //     return trackSettings.width > trackSettings.height ? 'landscape' : 'portrait';
+  //   } else {
+  //     console.warn(`No TrackSettings on track: ${participant.identity}`);
+  //     return 'landscape';
+  //   }
+  // }, [trackSettings]);
+
   return {
     publication,
     isMuted,
@@ -65,6 +91,7 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
       className,
       'data-lk-local-participant': participant.isLocal,
       'data-lk-source': source,
+      'data-lk-orientation': orientation,
     }),
   };
 };

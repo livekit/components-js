@@ -7,6 +7,7 @@ import { GridLayout } from '../layout/GridLayout';
 import { PinState, WidgetState } from '@livekit/components-core';
 import { TileLoop } from '../components/TileLoop';
 import { Chat } from './Chat';
+import { ConnectionStateToast } from '../components/Toast';
 
 export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -50,6 +51,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
         {chatState.showChat && <Chat />}
       </LayoutContextProvider>
       <RoomAudioRenderer />
+      <ConnectionStateToast />
     </div>
   );
 }

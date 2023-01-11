@@ -4,7 +4,7 @@ This file was created by @livekit/components-docs-gen and should not be changed 
 The contents of this file can be replaced at any time which would lead to the loss of all manual changes.
 -->
 
-# PinContextProvider
+# isChatContextAction
 
 ## Usage
 
@@ -15,5 +15,5 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| onChange | `((pinState: PinState) => void)` |  |  |
+| msg | `string` |  |  |
 

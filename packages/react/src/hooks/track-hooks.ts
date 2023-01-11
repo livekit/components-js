@@ -101,10 +101,6 @@ type UseTracksProps = {
   filterDependencies?: Array<any>;
 };
 
-const useTracksDefaults = {
-  filterDependencies: [],
-};
-
 /**
  * The useTracks hook returns Array<TrackParticipantPair> which combine the track and the corresponding participant of the track.
  * Only tracks with a the same source specified via the sources property get included in the loop.
@@ -119,10 +115,9 @@ export function useTracks({
   sources,
   excludePinnedTracks,
   filter,
-  filterDependencies,
+  filterDependencies = [],
 }: UseTracksProps) {
   const room = useRoomContext();
-  filterDependencies ??= useTracksDefaults.filterDependencies;
   const { pin: pinContext } = useMaybeLayoutContext();
 
   const [unfilteredPairs, setUnfilteredPairs] = React.useState<TrackParticipantPair[]>([]);
@@ -138,7 +133,6 @@ export function useTracks({
         setUnfilteredPairs(trackParticipantPairs);
       },
     );
-    console.log('first hook', sources);
 
     return () => subscription.unsubscribe();
   }, [room, sources]);
@@ -154,10 +148,9 @@ export function useTracks({
       trackParticipantPairs = trackParticipantPairs.filter(filter);
     }
     setPairs(trackParticipantPairs);
-    console.log('second hook');
   }, [unfilteredPairs, excludePinnedTracks, filter, pinContext, ...filterDependencies]);
 
-  React.useDebugValue(`Pairs count: ${pairs.length}`);
+  // React.useDebugValue(`Pairs count: ${pairs.length}`);
 
   return pairs;
 }

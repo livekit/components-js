@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Participant, Track, TrackPublication } from 'livekit-client';
-import { setupParticipantTile } from '@livekit/components-core';
+import { isParticipantSourcePinned, setupParticipantTile } from '@livekit/components-core';
 import { ConnectionQualityIndicator } from '../components/participant/ConnectionQualityIndicator';
 import { MediaTrack } from '../components/participant/MediaTrack';
 import { ParticipantName } from '../components/participant/ParticipantName';
@@ -92,30 +92,49 @@ export const ParticipantTile = ({
 
   const pinContext = useMaybeLayoutContext().pin;
 
-  const clickHandler = (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    elementProps.onClick?.(evt);
-    onParticipantClick?.({ participant: p });
-    if (pinContext.dispatch && trackSource) {
-      const track = p.getTrack(trackSource);
-      if (track) {
-        pinContext.dispatch({
-          msg: 'set_pin',
-          trackParticipantPair: {
-            participant: p,
-            track,
-          },
-        });
+  const clickHandler = React.useCallback(
+    (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      elementProps.onClick?.(evt);
+      onParticipantClick?.({ participant: p });
+      if (pinContext.dispatch && trackSource) {
+        const track = p.getTrack(trackSource);
+        if (track) {
+          pinContext.dispatch({
+            msg: 'set_pin',
+            trackParticipantPair: {
+              participant: p,
+              track,
+            },
+          });
+        }
       }
-    }
-  };
+    },
+    [p, trackSource, onParticipantClick, elementProps, pinContext],
+  );
+
+  const handleSubscribe = React.useCallback(
+    (subscribed: boolean) => {
+      if (
+        trackSource &&
+        !subscribed &&
+        pinContext.dispatch &&
+        isParticipantSourcePinned(p, trackSource, pinContext.state)
+      ) {
+        pinContext.dispatch({ msg: 'clear_pin' });
+      }
+    },
+    [p, pinContext, trackSource],
+  );
 
   return (
     <div style={{ position: 'relative' }} {...elementProps} onClick={clickHandler}>
       <ParticipantContextIfNeeded participant={participant}>
         {children ?? (
           <>
-            {/* <AudioVisualizer /> */}
-            <MediaTrack source={trackSource ?? Track.Source.Camera}></MediaTrack>
+            <MediaTrack
+              source={trackSource ?? Track.Source.Camera}
+              onSubscriptionStatusChanged={handleSubscribe}
+            ></MediaTrack>
             <div className="lk-participant-metadata">
               <div className="lk-participant-metadata-item">
                 {trackSource === Track.Source.Camera ? (

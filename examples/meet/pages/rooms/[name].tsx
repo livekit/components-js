@@ -63,7 +63,6 @@ type ActiveRoomProps = {
   onLeave?: () => void;
 };
 const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
-  const [showChat, setShowChat] = useState(false);
   const token = useToken({
     tokenEndpoint: process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT,
     roomName,
@@ -89,7 +88,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
     <LiveKitRoom
       token={token}
       serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-      // options={{ videoCaptureDefaults: videoOptions, audioCaptureDefaults: audioOptions }}
+      options={{ videoCaptureDefaults: videoOptions, audioCaptureDefaults: audioOptions }}
       video={userChoices.videoEnabled}
       audio={userChoices.audioEnabled}
       onDisconnected={onLeave}

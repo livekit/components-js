@@ -19,6 +19,7 @@ export * from './components/LayoutContextProvider';
 export * from './components/ClearPinButton';
 export * from './components/TileLoop';
 export * from './components/Toast';
+export * from './components/controls/FocusToggle';
 
 export * from './hooks';
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { StoryObj } from '@storybook/react';
 
 import { DisconnectButton, DisconnectButtonProps } from '@livekit/components-react';

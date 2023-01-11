@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { PreJoin, PreJoinProps } from '@livekit/components-react';
 import { StoryObj } from '@storybook/react';

@@ -25,7 +25,8 @@ export const LayoutContext = React.createContext<LayoutContextType>({ pin: {}, c
 
 export function useLayoutContext() {
   const layoutContext = React.useContext(LayoutContext);
-  if (!layoutContext) {
+
+  if (!layoutContext.chat.dispatch || !layoutContext.pin.dispatch) {
     throw Error('Tried to access LayoutContext context outside a LayoutContextProvider provider.');
   }
   return layoutContext;

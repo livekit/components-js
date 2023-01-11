@@ -6,7 +6,8 @@ import { TrackLoop } from '../components/TrackLoop';
 import { Track } from 'livekit-client';
 import { ParticipantAudioTile } from './ParticipantAudioTile';
 import { LayoutContextProvider } from '../components/LayoutContextProvider';
-import { PinState } from '@livekit/components-core';
+import { PinState, WidgetState } from '@livekit/components-core';
+import { Chat } from './Chat';
 
 export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -28,6 +29,7 @@ export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 export function AudioConference({ ...props }: AudioConferenceProps) {
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = React.useState<Layout>('grid');
+  const [chatState, setChatState] = React.useState<WidgetState>({ showChat: false });
 
   const handlePinStateChange = (pinState: PinState) => {
     setLayout(pinState.length >= 1 ? 'focus' : 'grid');
@@ -35,18 +37,23 @@ export function AudioConference({ ...props }: AudioConferenceProps) {
 
   return (
     <div className="lk-audio-conference" {...props}>
-      <LayoutContextProvider onPinChange={handlePinStateChange}>
-        {layout === 'grid' ? (
-          <GridLayout>
-            <TrackLoop sources={[Track.Source.Microphone]} excludePinnedTracks={false}>
-              <ParticipantAudioTile />
-            </TrackLoop>
-          </GridLayout>
-        ) : (
-          <FocusLayoutContainer />
-        )}
+      <LayoutContextProvider onPinChange={handlePinStateChange} onChatChange={setChatState}>
+        <div className="lk-audio-conference-stage">
+          {layout === 'grid' ? (
+            <GridLayout>
+              <TrackLoop sources={[Track.Source.Microphone]} excludePinnedTracks={false}>
+                <ParticipantAudioTile />
+              </TrackLoop>
+            </GridLayout>
+          ) : (
+            <FocusLayoutContainer />
+          )}
+          <ControlBar
+            controls={{ microphone: true, screenShare: false, camera: false, chat: true }}
+          />
+        </div>
+        {chatState.showChat && <Chat />}
       </LayoutContextProvider>
-      <ControlBar controls={{ microphone: true, screenShare: false, camera: false }} />
     </div>
   );
 }

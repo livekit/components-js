@@ -4,7 +4,8 @@ import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { TrackToggle } from '../components/controls/TrackToggle';
 import { StartAudio } from '../components/controls/StartAudio';
-import { LeaveIcon } from '../icons';
+import { ChatIcon, LeaveIcon, ScreenShareIcon } from '../icons';
+import { ChatToggle } from '../components/controls/ChatToggle';
 
 type ControlBarControls = {
   microphone?: boolean;
@@ -17,7 +18,7 @@ type ControlBarControls = {
 const defaultControls: ControlBarControls = {
   microphone: true,
   camera: true,
-  chat: true,
+  chat: false,
   screenShare: true,
   leave: true,
 } as const;
@@ -63,7 +64,6 @@ export function ControlBar(props: ControlBarProps) {
   };
 
   return (
-    // TODO: Remove styling default styling or move to styles package.
     <div className="lk-control-bar" {...props}>
       {visibleControls.microphone && (
         <div className="lk-button-group">
@@ -93,6 +93,12 @@ export function ControlBar(props: ControlBarProps) {
         >
           {showText && (isScreenShareEnabled ? 'Stop screen share' : 'Share screen')}
         </TrackToggle>
+      )}
+      {visibleControls.chat && (
+        <ChatToggle>
+          {showIcon && <ChatIcon />}
+          {showText && 'Chat'}
+        </ChatToggle>
       )}
       {visibleControls.leave && (
         <DisconnectButton>

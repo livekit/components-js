@@ -4,8 +4,9 @@ import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
 import { ControlBar } from './ControlBar';
 import { FocusLayoutContainer } from '../layout/FocusLayout';
 import { GridLayout } from '../layout/GridLayout';
-import { PinState } from '@livekit/components-core';
+import { PinState, WidgetState } from '@livekit/components-core';
 import { TileLoop } from '../components/TileLoop';
+import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
 
 export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
@@ -28,6 +29,7 @@ export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 export function VideoConference({ ...props }: VideoConferenceProps) {
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = React.useState<Layout>('grid');
+  const [chatState, setChatState] = React.useState<WidgetState>({ showChat: false });
 
   const handleFocusStateChange = (pinState: PinState) => {
     setLayout(pinState.length >= 1 ? 'focus' : 'grid');
@@ -35,16 +37,19 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
 
   return (
     <div className="lk-video-conference" {...props}>
-      <LayoutContextProvider onPinChange={handleFocusStateChange}>
-        {layout === 'grid' ? (
-          <GridLayout>
-            <TileLoop />
-          </GridLayout>
-        ) : (
-          <FocusLayoutContainer />
-        )}
+      <LayoutContextProvider onPinChange={handleFocusStateChange} onChatChange={setChatState}>
+        <div className="lk-video-conference-stage">
+          {layout === 'grid' ? (
+            <GridLayout>
+              <TileLoop />
+            </GridLayout>
+          ) : (
+            <FocusLayoutContainer />
+          )}
+          <ControlBar controls={{ chat: true }} />
+        </div>
+        {chatState.showChat && <Chat />}
       </LayoutContextProvider>
-      <ControlBar />
       <RoomAudioRenderer />
       <ConnectionStateToast />
     </div>

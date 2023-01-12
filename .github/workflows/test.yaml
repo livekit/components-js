@@ -1,0 +1,42 @@
+name: Test
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            ~/.config/yarn/global
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Yarn
+        run: |
+          npm install -g yarn
+          yarn install
+
+      - name: Build Packages
+        run: yarn build
+
+      - name: ESLint
+        run: yarn lint
+
+      - name: Prettier
+        run: yarn format
+
+      - name: Run Tests
+        run: yarn test

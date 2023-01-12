@@ -67,7 +67,7 @@ if (require.main === module) {
 async function findFiles() {
   return globAsync('**/src/**/*.@(ts|tsx)', {
     cwd: sourcePath,
-    ignore: ['**/core/**', '**/node_modules/**', '**/index.ts', '**/icons/**'],
+    ignore: ['**/core/**', '**/node_modules/**', '**/index.ts', '**/assets/**'],
   });
 }
 

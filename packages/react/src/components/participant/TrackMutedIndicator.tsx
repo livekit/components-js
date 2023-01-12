@@ -3,7 +3,7 @@ import { mergeProps, useObservableState } from '../../utils';
 import { setupTrackMutedIndicator } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import { useEnsureParticipant } from '../../context';
-import { getSourceIcon } from '../../icons/util';
+import { getSourceIcon } from '../../assets/icons/util';
 
 export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   source: Track.Source;

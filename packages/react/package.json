@@ -33,8 +33,11 @@
   },
   "scripts": {
     "dev": "tsup --watch",
-    "build": "svgr --out-dir ./src/icons --typescript ../styles/icons  && tsup --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
-    "lint": "eslint -f unix \"src/**/*.{ts,tsx}\""
+    "build": "yarn gen:svg && tsup --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
+    "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
+    "gen:svg": "yarn gen:images && yarn gen:icons",
+    "gen:images": "svgr --out-dir ./src/assets/images --typescript --no-svgo ../styles/assets/images",
+    "gen:icons": "svgr --out-dir ./src/assets/icons --typescript ../styles/assets/icons"
   },
   "dependencies": {
     "@floating-ui/react": "^0.15.1",

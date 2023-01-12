@@ -1,14 +1,22 @@
+.focus-layout-wrapper {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  width: 100%;
+  height: calc(100% - 62px);
+}
+
 .focus-layout {
   display: grid;
   grid-template-columns: 1fr 5fr;
   gap: 0.5rem;
-  padding: 1rem;
+  padding: 0.5rem;
 
   & > aside {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
-    max-height: min(800px, 90vh);
+    gap: 0.5rem;
     overflow-y: auto;
   }
 }

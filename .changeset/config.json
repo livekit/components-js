@@ -12,7 +12,5 @@
   "access": "restricted",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": [
-    "eslint-config-custom"
-  ]
+  "ignore": ["eslint-config-lk-custom"]
 }

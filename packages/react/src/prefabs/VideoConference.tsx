@@ -8,6 +8,7 @@ import { PinState, WidgetState } from '@livekit/components-core';
 import { TileLoop } from '../components/TileLoop';
 import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
+import { useMediaQuery } from '../hooks/utiltity-hooks';
 
 export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -35,21 +36,24 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
     setLayout(pinState.length >= 1 ? 'focus' : 'grid');
   };
 
+  const isMobile = useMediaQuery(`(max-width: 600px)`);
+
   return (
     <div className="lk-video-conference" {...props}>
       <LayoutContextProvider onPinChange={handleFocusStateChange} onWidgetChange={setWidgetState}>
         <div className="lk-video-conference-inner">
           {layout === 'grid' ? (
-            <GridLayout>
-              <TileLoop />
-            </GridLayout>
+            <div className="lk-grid-layout-wrapper">
+              <GridLayout>
+                <TileLoop />
+              </GridLayout>
+            </div>
           ) : (
-            <FocusLayoutContainer />
+            <div className="lk-focus-layout-wrapper">
+              <FocusLayoutContainer />
+            </div>
           )}
-          <ControlBar
-            controls={{ chat: true }}
-            style={{ position: 'absolute', bottom: '.75rem', width: '100%' }}
-          />
+          <ControlBar variation={isMobile ? 'minimal' : 'verbose'} controls={{ chat: true }} />
         </div>
         <Chat style={{ display: widgetState.showChat ? 'flex' : 'none' }} />
       </LayoutContextProvider>

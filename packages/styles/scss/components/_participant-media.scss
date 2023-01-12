@@ -22,7 +22,9 @@
     object-fit: cover;
   }
 
-  &[data-orientation='portrait'] {
+  // Don't cut off videos in portrait mode or if it is a screen share.
+  &[data-orientation='portrait'],
+  &[data-source='screen_share'] {
     object-fit: contain;
     background-color: var(--bg2);
   }

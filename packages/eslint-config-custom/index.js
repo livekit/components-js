@@ -34,6 +34,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'error',
     'import/export': 0,
     '@typescript-eslint/ban-ts-comment': 'warn',
+    '@typescript-eslint/no-empty-interface': 'warn',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
   },

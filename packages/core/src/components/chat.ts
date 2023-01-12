@@ -2,6 +2,7 @@
 import { DataPacket_Kind, Participant, Room } from 'livekit-client';
 import { Observable, Subscriber } from 'rxjs';
 import { createDataObserver } from '../observables/room';
+
 export const enum MessageType {
   CHAT,
 }

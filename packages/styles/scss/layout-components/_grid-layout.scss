@@ -22,7 +22,7 @@
   display: grid;
   --lk-p-count: 2;
   grid-template-columns: repeat(min(calc(var(--lk-p-count) / 4 + 1), 4), 1fr);
-  grid-template-rows: repeat(calc(var(--lk-p-count) / 4), 1fr);
+  grid-template-rows: repeat(calc(var(--lk-p-count) / 4), minmax(0px, 1fr));
   grid-gap: 0.5rem;
   height: 100%;
 

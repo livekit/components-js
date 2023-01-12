@@ -29,13 +29,13 @@ export function observeTrackEvents(track: TrackPublication, ...events: TrackEven
     };
 
     events.forEach((evt) => {
-      // @ts-ignore
+      // @ts-expect-error type of `TrackEvent` and `PublicationCallbacks` are congruent
       track.on(evt, onTrackUpdate);
     });
 
     const unsubscribe = () => {
       events.forEach((evt) => {
-        // @ts-ignore
+        // @ts-expect-error type of `TrackEvent` and `PublicationCallbacks` are congruent
         track.off(evt, onTrackUpdate);
       });
     };

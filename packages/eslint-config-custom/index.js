@@ -1,7 +1,6 @@
 module.exports = {
   plugins: ['@typescript-eslint/eslint-plugin', 'eslint-plugin-tsdoc', 'svelte3', 'react-hooks'],
   extends: [
-    'standard',
     'next',
     'turbo',
     'prettier',
@@ -32,8 +31,10 @@ module.exports = {
     'react/jsx-handler-names': 0,
     'react/jsx-fragments': 0,
     'react/no-unused-prop-types': 0,
-    'no-unused-vars': 0,
+    '@typescript-eslint/no-unused-vars': 'error',
     'import/export': 0,
+    '@typescript-eslint/ban-ts-comment': 'warn',
+    '@typescript-eslint/no-empty-interface': 'warn',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
   },

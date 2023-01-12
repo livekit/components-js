@@ -2,8 +2,12 @@
   position: relative;
   display: flex;
   align-items: stretch;
+  height: 100vh;
 }
 
 .video-conference-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   width: 100%;
 }

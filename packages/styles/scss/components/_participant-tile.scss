@@ -3,8 +3,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
-  overflow: hidden; // Clip rounded corners
-  border-radius: var(--border-radius);
   box-shadow: 0 0 0 1px var(--bg), 0 0 0 4px transparent;
   transition: box-shadow 0.2s ease-in-out;
 

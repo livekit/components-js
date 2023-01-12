@@ -30,12 +30,12 @@ export function FocusLayoutContainer({
       <div {...elementProps}>
         {props.children ?? (
           <>
-            {(hasFocus || trackParticipantPair) && (
-              <FocusLayout trackParticipantPair={trackParticipantPair} />
-            )}
             <CarouselView>
               <TileLoop excludePinnedTracks={true} />
             </CarouselView>
+            {(hasFocus || trackParticipantPair) && (
+              <FocusLayout trackParticipantPair={trackParticipantPair} />
+            )}
           </>
         )}
       </div>

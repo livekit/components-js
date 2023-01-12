@@ -9,8 +9,8 @@
       "types": "./dist/types/general/styles.css.d.ts",
       "default": "./dist/general/styles.css"
     },
-    "./icons/*": {
-      "default": "./icons/*"
+    "./assets/icons/*": {
+      "default": "./assets/icons/*"
     },
     "./layout": "./dist/general/layout.css",
     "./prefabs": "./dist/general/prefabs.css",

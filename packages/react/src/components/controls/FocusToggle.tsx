@@ -2,7 +2,7 @@ import { isParticipantTrackPinned, setupFocusToggle } from '@livekit/components-
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureParticipant, useLayoutContext } from '../../context';
-import { FocusToggleIcon, UnfocusToggleIcon } from '../../icons';
+import { FocusToggleIcon, UnfocusToggleIcon } from '../../assets/icons';
 import { mergeProps } from '../../utils';
 
 interface useFocusToggleProps {

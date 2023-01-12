@@ -1,6 +1,6 @@
 import { ConnectionState, Room } from 'livekit-client';
 import * as React from 'react';
-import { SpinnerIcon } from '../icons';
+import { SpinnerIcon } from '../assets/icons';
 import { mergeProps } from '../utils';
 import { useConnectionState } from './ConnectionState';
 

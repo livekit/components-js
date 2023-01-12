@@ -4,7 +4,7 @@ import * as React from 'react';
 import { mergeProps } from '../../mergeProps';
 import { useMaybeRoomContext } from '../../context';
 import { useObservableState } from '../../utils';
-import { getSourceIcon } from '../../icons/util';
+import { getSourceIcon } from '../../assets/icons/util';
 
 export type TrackToggleProps = Omit<React.HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   source: Track.Source;

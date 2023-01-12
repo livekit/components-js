@@ -18,6 +18,7 @@ import {
 import { useIsMuted, useIsSpeaking } from '../hooks';
 import { mergeProps } from '../utils';
 import { FocusToggle } from '../components/controls/FocusToggle';
+import { ParticipantPlaceholder } from '../assets/images';
 
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
@@ -156,6 +157,9 @@ export const ParticipantTile = ({
         )}
         <FocusToggle trackSource={trackSource_} />
       </ParticipantContextIfNeeded>
+      <div className="lk-participant-placeholder">
+        <ParticipantPlaceholder />
+      </div>
     </div>
   );
 };

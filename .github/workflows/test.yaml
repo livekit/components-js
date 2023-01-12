@@ -8,21 +8,18 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
 
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
-
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.npm
-            ~/.config/yarn/global
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: 'yarn'
 
       - name: Install Yarn
         run: |

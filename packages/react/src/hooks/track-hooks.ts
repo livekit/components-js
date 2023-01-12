@@ -36,23 +36,9 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
       setMuted(publication?.isMuted);
       setSubscribed(publication?.isSubscribed);
       setTrack(publication?.track);
-      track?.receiver?.getStats().then((stats) => {
-        stats?.forEach((val) => {
-          if (val.type !== 'inbound-rtp') {
-            return;
-          }
-          if (typeof val.frameWidth === 'number' && typeof val.frameHeight === 'number') {
-            console.log(`SET ORIENTATION on ${participant.identity}:`, { val });
-
-            setOrientation(val.frameWidth > val.frameHeight ? 'landscape' : 'portrait');
-          }
-        });
-
-        // setTrackSettings(stats);
-      });
     });
     return () => subscription?.unsubscribe();
-  }, [trackObserver]);
+  }, [source, trackObserver]);
 
   React.useEffect(() => {
     if (track) {
@@ -71,16 +57,22 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
     };
   }, [track, element]);
 
-  // const orientation: 'landscape' | 'portrait' = React.useMemo(() => {
-  //   console.log(`TrackSettings of ${participant.identity}:`, trackSettings);
-
-  //   if (trackSettings && trackSettings.width && trackSettings.height) {
-  //     return trackSettings.width > trackSettings.height ? 'landscape' : 'portrait';
-  //   } else {
-  //     console.warn(`No TrackSettings on track: ${participant.identity}`);
-  //     return 'landscape';
-  //   }
-  // }, [trackSettings]);
+  React.useEffect(() => {
+    // Set the orientation of the video track.
+    // TODO: This does not handle changes in orientation after a track got published (e.g when rotating a phone camera from portrait to landscape).
+    if (
+      typeof publication?.dimensions?.width === 'number' &&
+      typeof publication?.dimensions?.height === 'number'
+    ) {
+      const orientation_ =
+        publication.dimensions.width > publication.dimensions.height ? 'landscape' : 'portrait';
+      setOrientation(orientation_);
+      // console.log(
+      //   `SET ORIENTATION on ${participant.identity} ${source} ${orientation_}:`,
+      //   publication.dimensions,
+      // );
+    }
+  }, [publication, source]);
 
   return {
     publication,
@@ -91,7 +83,9 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
       className,
       'data-lk-local-participant': participant.isLocal,
       'data-lk-source': source,
-      'data-lk-orientation': orientation,
+      ...(source === Track.Source.Camera || source === Track.Source.ScreenShare
+        ? { 'data-lk-orientation': orientation }
+        : {}),
     }),
   };
 };

@@ -39,7 +39,7 @@ export function MediaTrack({
   const participant = useEnsureParticipant(props.participant);
 
   const mediaEl = React.useRef<HTMLVideoElement>(null);
-  const { elementProps, publication, isMuted, isSubscribed } = useMediaTrack({
+  const { elementProps, publication, isSubscribed } = useMediaTrack({
     participant,
     source: props.source,
     element: mediaEl,

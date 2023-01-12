@@ -117,12 +117,12 @@ export function screenShareObserver(room: Room) {
     screenShareSubscriber.next(screenShareTracks);
   };
   observers.push(
-    roomEventSelector(room, RoomEvent.TrackSubscribed).subscribe(([_, ...args]) =>
+    roomEventSelector(room, RoomEvent.TrackSubscribed).subscribe(([, ...args]) =>
       handleSub(...args),
     ),
   );
   observers.push(
-    roomEventSelector(room, RoomEvent.TrackUnsubscribed).subscribe(([_, ...args]) =>
+    roomEventSelector(room, RoomEvent.TrackUnsubscribed).subscribe(([, ...args]) =>
       handleSub(...args),
     ),
   );

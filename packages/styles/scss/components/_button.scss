@@ -38,6 +38,7 @@
     opacity: .5;
   }
 
+  // Todo: Replace this with a swap to the compact mode instead of a media query?
   @media (max-width: 660px) {
     > span { display: none; }
   }

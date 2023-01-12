@@ -47,12 +47,6 @@ export function MediaTrack({
   });
 
   React.useEffect(() => {
-    if (!isMuted) {
-      mediaEl.current?.play();
-    }
-  }, [isMuted, mediaEl]);
-
-  React.useEffect(() => {
     onSubscriptionStatusChanged?.(!!isSubscribed);
   }, [isSubscribed, onSubscriptionStatusChanged]);
 

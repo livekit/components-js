@@ -17,6 +17,17 @@
   [data-speaking='true'] > & {
     box-shadow: 0 0 0 1px var(--bg), 0 0 0 3px var(--accent-bg);
   }
+
+  &[data-orientation='landscape'] {
+    object-fit: cover;
+  }
+
+  // Don't cut off videos in portrait mode or if it is a screen share.
+  &[data-orientation='portrait'],
+  &[data-source='screen_share'] {
+    object-fit: contain;
+    background-color: var(--bg2);
+  }
 }
 
 .participant-media-audio {

@@ -23,6 +23,7 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
   const [isMuted, setMuted] = React.useState(publication?.isMuted);
   const [isSubscribed, setSubscribed] = React.useState(publication?.isSubscribed);
   const [track, setTrack] = React.useState(publication?.track);
+  const [orientation, setOrientation] = React.useState<'landscape' | 'portrait'>('landscape');
   const previousElement = React.useRef<HTMLMediaElement | undefined | null>();
 
   const { className, trackObserver } = React.useMemo(() => {
@@ -37,7 +38,7 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
       setTrack(publication?.track);
     });
     return () => subscription?.unsubscribe();
-  }, [trackObserver]);
+  }, [source, trackObserver]);
 
   React.useEffect(() => {
     if (track) {
@@ -56,6 +57,23 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
     };
   }, [track, element]);
 
+  React.useEffect(() => {
+    // Set the orientation of the video track.
+    // TODO: This does not handle changes in orientation after a track got published (e.g when rotating a phone camera from portrait to landscape).
+    if (
+      typeof publication?.dimensions?.width === 'number' &&
+      typeof publication?.dimensions?.height === 'number'
+    ) {
+      const orientation_ =
+        publication.dimensions.width > publication.dimensions.height ? 'landscape' : 'portrait';
+      setOrientation(orientation_);
+      // console.log(
+      //   `SET ORIENTATION on ${participant.identity} ${source} ${orientation_}:`,
+      //   publication.dimensions,
+      // );
+    }
+  }, [publication, source]);
+
   return {
     publication,
     isMuted,
@@ -65,6 +83,9 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
       className,
       'data-lk-local-participant': participant.isLocal,
       'data-lk-source': source,
+      ...(source === Track.Source.Camera || source === Track.Source.ScreenShare
+        ? { 'data-lk-orientation': orientation }
+        : {}),
     }),
   };
 };

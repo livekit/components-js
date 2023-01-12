@@ -4,20 +4,25 @@
   align-items: stretch;
   justify-content: center;
   width: 100%;
-  height: calc(100% - 62px);
+  height: calc(100% - var(--control-bar-height));
 }
 
 .focus-layout {
   display: grid;
   grid-template-columns: 1fr 5fr;
-  gap: 0.5rem;
-  padding: 0.5rem;
+  gap: var(--grid-gap);
+  padding: var(--grid-gap);
 
-  & > aside {
+  > aside {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--grid-gap);
     overflow-y: auto;
+  }
+
+  // Prevent screenshare from expanding out of bounds
+  > div {
+    max-height: calc(100vh - var(--control-bar-height) - (var(--grid-gap) * 2));
   }
 }
 

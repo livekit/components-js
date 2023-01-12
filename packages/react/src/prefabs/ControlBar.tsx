@@ -68,7 +68,7 @@ export function ControlBar(props: ControlBarProps) {
       {visibleControls.microphone && (
         <div className="lk-button-group">
           <TrackToggle source={Track.Source.Microphone} showIcon={showIcon}>
-            {showText && 'Microphone'}
+            <span>{showText && 'Microphone'}</span>
           </TrackToggle>
           <div className="lk-button-group-menu">
             <MediaDeviceMenu kind="audioinput" />
@@ -78,7 +78,7 @@ export function ControlBar(props: ControlBarProps) {
       {visibleControls.camera && (
         <div className="lk-button-group">
           <TrackToggle source={Track.Source.Camera} showIcon={showIcon}>
-            {showText && 'Camera'}
+            <span>{showText && 'Camera'}</span>
           </TrackToggle>
           <div className="lk-button-group-menu">
             <MediaDeviceMenu kind="videoinput" />
@@ -91,19 +91,19 @@ export function ControlBar(props: ControlBarProps) {
           showIcon={showIcon}
           onChange={onScreenShareChange}
         >
-          {showText && (isScreenShareEnabled ? 'Stop screen share' : 'Share screen')}
+          <span>{showText && (isScreenShareEnabled ? 'Stop screen share' : 'Share screen')}</span>
         </TrackToggle>
       )}
       {visibleControls.chat && (
         <ChatToggle>
           {showIcon && <ChatIcon />}
-          {showText && 'Chat'}
+          <span>{showText && 'Chat'}</span>
         </ChatToggle>
       )}
       {visibleControls.leave && (
         <DisconnectButton>
           {showIcon && <LeaveIcon />}
-          {showText && 'Leave'}
+          <span>{showText && 'Leave'}</span>
         </DisconnectButton>
       )}
       <StartAudio label="Start Audio" />

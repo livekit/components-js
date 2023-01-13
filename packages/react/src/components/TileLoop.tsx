@@ -47,7 +47,7 @@ export function TileLoop({
   const [mainSource] = React.useState(sources![0]);
   const [secondarySources] = React.useState(sources!.slice(1));
   const participants = useParticipants();
-  const { state: pinState } = useMaybeLayoutContext().pin;
+  const layoutContext = useMaybeLayoutContext();
 
   const secondaryPairs = useTracks({
     sources: secondarySources,
@@ -63,7 +63,7 @@ export function TileLoop({
       {participants.map((participant) => (
         <ParticipantContext.Provider value={participant} key={participant.identity}>
           {(!excludePinnedTracks ||
-            !isParticipantSourcePinned(participant, mainSource, pinState)) && (
+            !isParticipantSourcePinned(participant, mainSource, layoutContext?.pin.state)) && (
             <ParticipantTile trackSource={mainSource} />
           )}
 

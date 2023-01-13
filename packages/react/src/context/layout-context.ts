@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { ChatContextType, PinContextType } from './index';
 
-// export type LayoutContextAction = ChatContextAction | PinAction;
-
 export type LayoutContextType = {
   pin: PinContextType;
   widget: ChatContextType;
@@ -21,17 +19,16 @@ export type LayoutContextType = {
 //   }
 // }
 
-export const LayoutContext = React.createContext<LayoutContextType>({ pin: {}, widget: {} });
+export const LayoutContext = React.createContext<LayoutContextType | undefined>(undefined);
 
-export function useLayoutContext() {
+export function useLayoutContext(): LayoutContextType {
   const layoutContext = React.useContext(LayoutContext);
-
-  if (!layoutContext.widget.dispatch || !layoutContext.pin.dispatch) {
+  if (!layoutContext) {
     throw Error('Tried to access LayoutContext context outside a LayoutContextProvider provider.');
   }
   return layoutContext;
 }
 
-export function useMaybeLayoutContext() {
+export function useMaybeLayoutContext(): LayoutContextType | undefined {
   return React.useContext(LayoutContext);
 }

@@ -112,20 +112,21 @@ export const ParticipantTile = ({
     onParticipantClick,
   });
 
-  const pinContext = useMaybeLayoutContext().pin;
+  const layoutContext = useMaybeLayoutContext();
 
   const handleSubscribe = React.useCallback(
     (subscribed: boolean) => {
       if (
         trackSource &&
         !subscribed &&
-        pinContext.dispatch &&
-        isParticipantSourcePinned(p, trackSource, pinContext.state)
+        layoutContext &&
+        layoutContext.pin.dispatch &&
+        isParticipantSourcePinned(p, trackSource, layoutContext.pin.state)
       ) {
-        pinContext.dispatch({ msg: 'clear_pin' });
+        layoutContext.pin.dispatch({ msg: 'clear_pin' });
       }
     },
-    [p, pinContext, trackSource],
+    [p, layoutContext, trackSource],
   );
 
   return (

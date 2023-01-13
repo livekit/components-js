@@ -3,7 +3,7 @@ import { ChatContextType, PinContextType } from './index';
 
 export type LayoutContextType = {
   pin: PinContextType;
-  chat: ChatContextType;
+  widget: ChatContextType;
 };
 
 // export function layoutReducer(

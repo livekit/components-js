@@ -16,22 +16,22 @@ import { useScreenShare } from './ScreenShareRenderer';
 
 type LayoutContextProviderProps = {
   onPinChange?: (state: PinState) => void;
-  onChatChange?: (state: WidgetState) => void;
+  onWidgetChange?: (state: WidgetState) => void;
 };
 
 export function LayoutContextProvider({
   onPinChange,
-  onChatChange,
+  onWidgetChange,
   children,
 }: React.PropsWithChildren<LayoutContextProviderProps>) {
   const room = useRoomContext();
   const { screenShareParticipant, screenShareTrack } = useScreenShare({ room });
   const [pinState, pinDispatch] = React.useReducer(pinReducer, PIN_DEFAULT_STATE);
-  const [chatState, chatDispatch] = React.useReducer(chatReducer, WIDGET_DEFAULT_STATE);
+  const [widgetState, widgetDispatch] = React.useReducer(chatReducer, WIDGET_DEFAULT_STATE);
 
   const layoutContextDefault: LayoutContextType = {
     pin: { dispatch: pinDispatch, state: pinState },
-    chat: { dispatch: chatDispatch, state: chatState },
+    widget: { dispatch: widgetDispatch, state: widgetState },
   };
 
   React.useEffect(() => {
@@ -40,9 +40,9 @@ export function LayoutContextProvider({
   }, [onPinChange, pinState]);
 
   React.useEffect(() => {
-    console.log('ChatState Updated', { chatState });
-    if (onChatChange) onChatChange(chatState);
-  }, [onChatChange, chatState]);
+    console.log('Widget Updated', { widgetState });
+    if (onWidgetChange) onWidgetChange(widgetState);
+  }, [onWidgetChange, widgetState]);
 
   React.useEffect(() => {
     // FIXME: This logic clears the focus if the screenShareParticipant is false.

@@ -38,6 +38,8 @@ export type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'
    * Provide your custom validation function. Only if validation is successful the user choices are past to the onSubmit callback.
    */
   onValidate?: (values: LocalUserChoices) => boolean;
+
+  onError?: (error: Error) => void;
   /**
    * Prefill the input form with initial values.
    */
@@ -66,6 +68,7 @@ export const PreJoin = ({
   defaults = {},
   onValidate,
   onSubmit,
+  onError,
   debug,
   ...htmlProps
 }: PreJoinProps) => {
@@ -86,6 +89,9 @@ export const PreJoin = ({
     undefined,
   );
 
+  const [deviceError, setDeviceError] = React.useState<Error | null>(null);
+  const [audioDeviceError, setAudioDeviceError] = React.useState<Error | null>(null);
+
   const videoDevices = useMediaDevices({ kind: 'videoinput' });
   const audioDevices = useMediaDevices({ kind: 'audioinput' });
 
@@ -100,28 +106,41 @@ export const PreJoin = ({
   const [isValid, setIsValid] = React.useState<boolean>();
 
   const createVideoTrack = async (deviceId?: string | undefined) => {
-    console.log('creating video track');
-    const track = await createLocalVideoTrack({
-      deviceId: deviceId,
-      resolution: VideoPresets.h720.resolution,
-    });
+    try {
+      const track = await createLocalVideoTrack({
+        deviceId: deviceId,
+        resolution: VideoPresets.h720.resolution,
+      });
 
-    const newDeviceId = await track.getDeviceId();
-    setLocalVideoTrack(track);
-    if (deviceId !== newDeviceId) {
-      setLocalVideoDeviceId(newDeviceId);
+      const newDeviceId = await track.getDeviceId();
+      setLocalVideoTrack(track);
+      if (deviceId !== newDeviceId) {
+        setLocalVideoDeviceId(newDeviceId);
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        setDeviceError(e);
+        onError?.(e);
+      }
     }
   };
 
   const createAudioTrack = async (deviceId?: string | undefined) => {
-    const track = await createLocalAudioTrack({
-      deviceId: deviceId,
-    });
+    try {
+      const track = await createLocalAudioTrack({
+        deviceId: deviceId,
+      });
 
-    const newDeviceId = await track.getDeviceId();
-    setLocalAudioTrack(track);
-    if (deviceId !== newDeviceId) {
-      setLocalAudioDeviceId(newDeviceId);
+      const newDeviceId = await track.getDeviceId();
+      setLocalAudioTrack(track);
+      if (deviceId !== newDeviceId) {
+        setLocalAudioDeviceId(newDeviceId);
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        setAudioDeviceError(e);
+        onError?.(e);
+      }
     }
   };
 
@@ -129,17 +148,19 @@ export const PreJoin = ({
 
   React.useEffect(() => {
     if (videoEnabled) {
-      if (!localVideoTrack) {
+      if (!localVideoTrack && !deviceError) {
         setLocalVideoTrack(new LocalVideoTrack(getEmptyVideoStreamTrack()));
         createVideoTrack();
       } else if (prevVideoId.current !== selectedVideoDevice?.deviceId) {
         console.log('restarting video');
-        localVideoTrack?.restartTrack({
-          deviceId: selectedVideoDevice?.deviceId,
-        });
+        localVideoTrack
+          ?.restartTrack({
+            deviceId: selectedVideoDevice?.deviceId,
+          })
+          .catch((e) => setAudioDeviceError(e));
         prevVideoId.current = selectedVideoDevice?.deviceId;
       } else {
-        localVideoTrack.unmute();
+        localVideoTrack?.unmute();
       }
     } else {
       if (localVideoTrack) {
@@ -152,21 +173,23 @@ export const PreJoin = ({
       localVideoTrack?.mute();
       localVideoTrack?.stop();
     };
-  }, [videoEnabled, selectedVideoDevice, localVideoTrack]);
+  }, [videoEnabled, selectedVideoDevice, localVideoTrack, deviceError]);
 
   const prevAudioId = React.useRef(localAudioDeviceId);
 
   React.useEffect(() => {
     if (audioEnabled) {
-      if (!localAudioTrack) {
+      if (!localAudioTrack && !audioDeviceError) {
         setLocalAudioTrack(new LocalAudioTrack(getEmptyAudioStreamTrack()));
         createAudioTrack();
       } else if (prevAudioId.current !== selectedAudioDevice?.deviceId) {
-        localAudioTrack?.restartTrack({
-          deviceId: selectedAudioDevice?.deviceId,
-        });
+        localAudioTrack
+          ?.restartTrack({
+            deviceId: selectedAudioDevice?.deviceId,
+          })
+          .catch((e) => setAudioDeviceError(e));
       } else {
-        localAudioTrack.unmute();
+        localAudioTrack?.unmute();
       }
     } else {
       localAudioTrack?.stop();
@@ -174,7 +197,7 @@ export const PreJoin = ({
     return () => {
       localAudioTrack?.stop();
     };
-  }, [audioEnabled, localAudioTrack, selectedAudioDevice]);
+  }, [audioEnabled, localAudioTrack, selectedAudioDevice, audioDeviceError]);
 
   React.useEffect(() => {
     if (videoEl.current) localVideoTrack?.attach(videoEl.current);

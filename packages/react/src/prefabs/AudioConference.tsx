@@ -29,7 +29,7 @@ export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 export function AudioConference({ ...props }: AudioConferenceProps) {
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = React.useState<Layout>('grid');
-  const [chatState, setChatState] = React.useState<WidgetState>({ showChat: false });
+  const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });
 
   const handlePinStateChange = (pinState: PinState) => {
     setLayout(pinState.length >= 1 ? 'focus' : 'grid');
@@ -37,7 +37,7 @@ export function AudioConference({ ...props }: AudioConferenceProps) {
 
   return (
     <div className="lk-audio-conference" {...props}>
-      <LayoutContextProvider onPinChange={handlePinStateChange} onChatChange={setChatState}>
+      <LayoutContextProvider onPinChange={handlePinStateChange} onWidgetChange={setWidgetState}>
         <div className="lk-audio-conference-stage">
           {layout === 'grid' ? (
             <GridLayout>
@@ -52,7 +52,7 @@ export function AudioConference({ ...props }: AudioConferenceProps) {
             controls={{ microphone: true, screenShare: false, camera: false, chat: true }}
           />
         </div>
-        {chatState.showChat && <Chat />}
+        {widgetState.showChat && <Chat />}
       </LayoutContextProvider>
     </div>
   );

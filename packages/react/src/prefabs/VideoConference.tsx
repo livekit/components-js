@@ -55,7 +55,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
           )}
           <ControlBar variation={isMobile ? 'minimal' : 'verbose'} controls={{ chat: true }} />
         </div>
-        <Chat style={{ display: widgetState.showChat ? 'flex' : 'none' }} />
+        <Chat style={{ visibility: widgetState.showChat ? 'visible' : 'hidden', transform: widgetState.showChat ? 'translate3d(0, 0, 0)' : ''  }} />
       </LayoutContextProvider>
       <RoomAudioRenderer />
       <ConnectionStateToast />

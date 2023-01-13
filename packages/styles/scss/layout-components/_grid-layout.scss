@@ -13,7 +13,7 @@
 
   display: grid;
   grid-template-columns: repeat(min(calc(var(--lk-p-count) / 4 + 1), 4), 1fr);
-  grid-template-rows: repeat(calc(var(--lk-p-count) / 4), minmax(1fr, 1fr));
+  grid-template-rows: repeat(calc(var(--lk-p-count) / 4), minmax(0px, 1fr));
   grid-gap: var(--grid-gap);
   max-height: 100%;
   padding: var(--grid-gap);
@@ -26,6 +26,6 @@
 
   @media (max-width: 660px) {
     grid-template-columns: repeat(min(calc(var(--lk-p-count) / 2), 2), 1fr);
-    grid-template-rows: repeat(calc(var(--lk-p-count) / 2), minmax(1fr, 1fr));
+    grid-template-rows: repeat(calc(var(--lk-p-count) / 2), minmax(0px, 1fr));
   }
 }

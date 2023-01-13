@@ -47,17 +47,17 @@ export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export function FocusLayout({ trackParticipantPair, ...props }: FocusLayoutProps) {
-  const { state } = useMaybeLayoutContext().pin;
+  const layoutContext = useMaybeLayoutContext();
 
   const pair: TrackParticipantPair | null = React.useMemo(() => {
     if (trackParticipantPair) {
       return trackParticipantPair;
     }
-    if (state !== undefined && state.length >= 1) {
-      return state[0];
+    if (layoutContext?.pin.state !== undefined && layoutContext.pin.state.length >= 1) {
+      return layoutContext.pin.state[0];
     }
     return null;
-  }, [state, trackParticipantPair]);
+  }, [layoutContext, trackParticipantPair]);
 
   return (
     <>

@@ -38,6 +38,7 @@ const Home: NextPage = () => {
         ) : (
           <div style={{ display: 'grid', placeItems: 'center', height: '100%' }}>
             <PreJoin
+              onError={(err) => console.log('error while setting up prejoin', err)}
               defaults={{
                 username: '',
                 videoEnabled: true,

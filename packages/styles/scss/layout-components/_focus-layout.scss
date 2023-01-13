@@ -37,3 +37,21 @@
     height: auto;
   }
 }
+
+@media (max-width: 600px) {
+  .focus-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 5fr 1fr;
+
+    > aside {
+      flex-direction: row;
+      overflow-y: hidden;
+      overflow-x: auto;
+      order: 1;
+
+      > div {
+        flex-shrink: 0;
+      }
+    }
+  }
+}

@@ -39,7 +39,7 @@ export type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'
    */
   onValidate?: (values: LocalUserChoices) => boolean;
 
-  onError?: (error: Error) => boolean;
+  onError?: (error: Error) => void;
   /**
    * Prefill the input form with initial values.
    */

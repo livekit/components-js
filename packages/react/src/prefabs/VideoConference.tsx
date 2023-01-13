@@ -29,7 +29,7 @@ export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 export function VideoConference({ ...props }: VideoConferenceProps) {
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = React.useState<Layout>('grid');
-  const [chatState, setChatState] = React.useState<WidgetState>({ showChat: false });
+  const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });
 
   const handleFocusStateChange = (pinState: PinState) => {
     setLayout(pinState.length >= 1 ? 'focus' : 'grid');
@@ -37,11 +37,8 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
 
   return (
     <div className="lk-video-conference" {...props}>
-      <LayoutContextProvider onPinChange={handleFocusStateChange} onChatChange={setChatState}>
-        <div
-          className="lk-video-conference-stage"
-          style={{ position: 'relative', height: '100%', flexGrow: 1 }}
-        >
+      <LayoutContextProvider onPinChange={handleFocusStateChange} onWidgetChange={setWidgetState}>
+        <div className="lk-video-conference-inner">
           {layout === 'grid' ? (
             <GridLayout>
               <TileLoop />
@@ -54,7 +51,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
             style={{ position: 'absolute', bottom: '.75rem', width: '100%' }}
           />
         </div>
-        <Chat style={{ display: chatState.showChat ? 'block' : 'none' }} />
+        <Chat style={{ display: widgetState.showChat ? 'flex' : 'none' }} />
       </LayoutContextProvider>
       <RoomAudioRenderer />
       <ConnectionStateToast />

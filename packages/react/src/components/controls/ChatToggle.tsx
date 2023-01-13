@@ -8,7 +8,7 @@ interface UseToggleChatProps {
 }
 
 function useToggleChat({ props }: UseToggleChatProps) {
-  const { dispatch } = useLayoutContext().chat;
+  const { dispatch } = useLayoutContext().widget;
   const { className } = React.useMemo(() => setupChatToggle(), []);
 
   const mergedProps = React.useMemo(

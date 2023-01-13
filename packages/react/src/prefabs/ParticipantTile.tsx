@@ -134,10 +134,10 @@ export const ParticipantTile = ({
       <ParticipantContextIfNeeded participant={participant}>
         {children ?? (
           <>
-            <MediaTrack
-              source={trackSource_}
-              onSubscriptionStatusChanged={handleSubscribe}
-            ></MediaTrack>
+            <MediaTrack source={trackSource_} onSubscriptionStatusChanged={handleSubscribe} />
+            <div className="lk-participant-placeholder">
+              <ParticipantPlaceholder />
+            </div>
             <div className="lk-participant-metadata">
               <div className="lk-participant-metadata-item">
                 {trackSource_ === Track.Source.Camera ? (
@@ -158,9 +158,6 @@ export const ParticipantTile = ({
         )}
         <FocusToggle trackSource={trackSource_} />
       </ParticipantContextIfNeeded>
-      <div className="lk-participant-placeholder">
-        <ParticipantPlaceholder />
-      </div>
     </div>
   );
 };

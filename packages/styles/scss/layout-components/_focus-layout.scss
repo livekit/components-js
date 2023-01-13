@@ -1,15 +1,28 @@
+.focus-layout-wrapper {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  width: 100%;
+  height: calc(100% - var(--control-bar-height));
+}
+
 .focus-layout {
   display: grid;
   grid-template-columns: 1fr 5fr;
-  gap: 0.5rem;
-  padding: 1rem;
+  gap: var(--grid-gap);
+  padding: var(--grid-gap);
 
-  & > aside {
+  > aside {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
-    max-height: min(800px, 90vh);
+    gap: var(--grid-gap);
     overflow-y: auto;
+  }
+
+  // Prevent screenshare from expanding out of bounds
+  > div {
+    max-height: calc(100vh - var(--control-bar-height) - (var(--grid-gap) * 2));
   }
 }
 
@@ -22,5 +35,23 @@
     right: 10px;
     width: 20%;
     height: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .focus-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 5fr 1fr;
+
+    > aside {
+      flex-direction: row;
+      overflow-y: hidden;
+      overflow-x: auto;
+      order: 1;
+
+      > div {
+        flex-shrink: 0;
+      }
+    }
   }
 }

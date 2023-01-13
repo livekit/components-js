@@ -139,7 +139,7 @@ export function useTracks({
   filterDependencies = [],
 }: UseTracksProps) {
   const room = useRoomContext();
-  const { pin: pinContext } = useMaybeLayoutContext();
+  const layoutContext = useMaybeLayoutContext();
 
   const [unfilteredPairs, setUnfilteredPairs] = React.useState<TrackParticipantPair[]>([]);
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
@@ -160,16 +160,17 @@ export function useTracks({
 
   React.useEffect(() => {
     let trackParticipantPairs: TrackParticipantPair[] = unfilteredPairs;
-    if (excludePinnedTracks && pinContext) {
+    if (excludePinnedTracks && layoutContext) {
       trackParticipantPairs = trackParticipantPairs.filter(
-        (trackParticipantPair) => !isParticipantTrackPinned(trackParticipantPair, pinContext.state),
+        (trackParticipantPair) =>
+          !isParticipantTrackPinned(trackParticipantPair, layoutContext.pin.state),
       );
     }
     if (filter) {
       trackParticipantPairs = trackParticipantPairs.filter(filter);
     }
     setPairs(trackParticipantPairs);
-  }, [unfilteredPairs, excludePinnedTracks, filter, pinContext, ...filterDependencies]);
+  }, [unfilteredPairs, excludePinnedTracks, filter, layoutContext, ...filterDependencies]);
 
   // React.useDebugValue(`Pairs count: ${pairs.length}`);
 

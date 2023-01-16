@@ -88,7 +88,7 @@ export function ControlBar(props: ControlBarProps) {
           </div>
         </div>
       )}
-      {visibleControls.screenShare && isMobile && (
+      {visibleControls.screenShare && !isMobile && (
         <TrackToggle
           source={Track.Source.ScreenShare}
           showIcon={showIcon}

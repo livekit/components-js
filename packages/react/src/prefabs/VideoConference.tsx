@@ -36,7 +36,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
     setLayout(pinState.length >= 1 ? 'focus' : 'grid');
   };
 
-  const isMobile = useMediaQuery(`(max-width: 600px)`);
+  const isMobile = useMediaQuery(`(max-width: 660px)`);
 
   return (
     <div className="lk-video-conference" {...props}>

@@ -149,6 +149,7 @@ export const PreJoin = ({
   React.useEffect(() => {
     if (videoEnabled) {
       if (!localVideoTrack && !deviceError) {
+        console.log('starting video');
         setLocalVideoTrack(new LocalVideoTrack(getEmptyVideoStreamTrack()));
         createVideoTrack();
       } else if (prevVideoId.current !== selectedVideoDevice?.deviceId) {

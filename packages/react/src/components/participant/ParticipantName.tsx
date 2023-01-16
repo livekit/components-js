@@ -1,20 +1,25 @@
 import { participantInfoObserver, setupParticipantName } from '@livekit/components-core';
 import { Participant } from 'livekit-client';
 import * as React from 'react';
-import { useParticipantContext } from '../../context';
+import { useEnsureParticipant } from '../../context';
 import { mergeProps, useObservableState } from '../../utils';
 
-export function useParticipantInfo({ participant }: { participant: Participant }) {
-  const infoObserver = React.useMemo(() => participantInfoObserver(participant), [participant]);
+export function useParticipantInfo({ participant }: ParticipantInfoProps) {
+  const p = useEnsureParticipant(participant);
+  const infoObserver = React.useMemo(() => participantInfoObserver(p), [p]);
   const { identity, name, metadata } = useObservableState(infoObserver, {
-    name: participant.name,
-    identity: participant.identity,
-    metadata: participant.metadata,
+    name: p.name,
+    identity: p.identity,
+    metadata: p.metadata,
   });
 
   return { identity, name, metadata };
 }
-export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement>;
+
+export type ParticipantInfoProps = {
+  participant?: Participant;
+};
+export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement> & ParticipantInfoProps;
 
 /**
  * The ParticipantName component displays the name of the participant as a string within an HTML span element.
@@ -31,17 +36,17 @@ export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement>;
  *
  * @see `ParticipantTile` component
  */
-export function ParticipantName({ ...props }: ParticipantNameProps) {
-  const participant = useParticipantContext();
+export function ParticipantName({ participant, ...props }: ParticipantNameProps) {
+  const p = useEnsureParticipant(participant);
 
   const { className, infoObserver } = React.useMemo(() => {
-    return setupParticipantName(participant);
-  }, [participant]);
+    return setupParticipantName(p);
+  }, [p]);
 
   const { identity, name } = useObservableState(infoObserver, {
-    name: participant.name,
-    identity: participant.identity,
-    metadata: participant.metadata,
+    name: p.name,
+    identity: p.identity,
+    metadata: p.metadata,
   });
 
   const mergedProps = React.useMemo(() => {

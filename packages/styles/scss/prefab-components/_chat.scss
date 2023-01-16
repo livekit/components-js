@@ -4,7 +4,6 @@
   align-items: stretch;
   min-width: 260px;
   max-width: 40rem;
-  visibility: hidden;
   background-color: var(--bg2);
   border-left: 1px solid var(--border-color);
 }
@@ -48,7 +47,5 @@
     right: 0;
     max-width: 100%;
     bottom: var(--control-bar-height);
-    transform: translate3d(100%, 0, 0);
-    transition: transform .2s ease-in-out;
   }
 }

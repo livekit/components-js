@@ -6,7 +6,7 @@ import {
   VideoConference,
   Chat,
 } from '@livekit/components-react';
-import { AudioCaptureOptions, VideoCaptureOptions } from 'livekit-client';
+import { AudioCaptureOptions, RoomOptions, VideoCaptureOptions } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -73,15 +73,16 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
     },
   });
 
-  const videoOptions = useMemo((): VideoCaptureOptions => {
+  const roomOptions = useMemo((): RoomOptions => {
     return {
-      deviceId: userChoices.videoDeviceId ?? undefined,
-    };
-  }, [userChoices]);
-
-  const audioOptions = useMemo((): AudioCaptureOptions => {
-    return {
-      deviceId: userChoices.audioDeviceId ?? undefined,
+      videoCaptureDefaults: {
+        deviceId: userChoices.videoDeviceId ?? undefined,
+      },
+      audioCaptureDefaults: {
+        deviceId: userChoices.audioDeviceId ?? undefined,
+      },
+      adaptiveStream: { pixelDensity: 'screen' },
+      dynacast: true,
     };
   }, [userChoices]);
 
@@ -89,7 +90,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
     <LiveKitRoom
       token={token}
       serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-      options={{ videoCaptureDefaults: videoOptions, audioCaptureDefaults: audioOptions }}
+      options={roomOptions}
       video={userChoices.videoEnabled}
       audio={userChoices.audioEnabled}
       onDisconnected={onLeave}

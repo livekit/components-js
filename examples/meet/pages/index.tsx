@@ -9,19 +9,35 @@ const Home: NextPage = () => {
   };
 
   return (
-    <main
-      style={{
-        display: 'grid',
-        placeItems: 'center',
-        width: '100%',
-        height: '100%',
-      }}
-    >
-      <div style={{ textAlign: 'center' }}>
-        <h1>LiveKit Meet</h1>
-        <button onClick={startMeeting}>Start Meeting</button>
-      </div>
-    </main>
+    <>
+      <main>
+        <div className="header">
+          <img src="/images/livekit-meet-home.svg" alt="LiveKit Meet" />
+          <h2>
+            Open source video conferencing app built on LiveKit&nbsp;Components, LiveKit&nbsp;Cloud,
+            and Next.js.
+          </h2>
+        </div>
+        <button style={{ fontSize: '1.5rem' }} className="lk-button" onClick={startMeeting}>
+          Start Meeting
+        </button>
+      </main>
+      <footer>
+        Hosted on{' '}
+        <a href="https://livekit.io/cloud?ref=meet" target="_blank" rel="noreferrer">
+          LiveKit Cloud
+        </a>
+        . Source code on{' '}
+        <a
+          href="https://github.com/livekit/components-js?ref=meet"
+          target="_blank"
+          rel="noreferrer"
+        >
+          GitHub
+        </a>
+        .
+      </footer>
+    </>
   );
 };
 

@@ -22,7 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           url: 'https://meet.livekit.io',
           images: [
             {
-              url: '/images/livekit-meet-open-graph.png',
+              url: 'https://meet.livekit.io/images/livekit-meet-open-graph.png',
               width: 2000,
               height: 1000,
               type: 'image/png',

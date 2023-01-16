@@ -6,6 +6,7 @@ import { TrackToggle } from '../components/controls/TrackToggle';
 import { StartAudio } from '../components/controls/StartAudio';
 import { ChatIcon, LeaveIcon } from '../assets/icons';
 import { ChatToggle } from '../components/controls/ChatToggle';
+import { isMobile } from 'livekit-client/dist/src/room/utils';
 
 type ControlBarControls = {
   microphone?: boolean;
@@ -57,6 +58,10 @@ export function ControlBar(props: ControlBarProps) {
     [variation],
   );
 
+  const isMobileBrowser = React.useMemo(() => {
+    return isMobile();
+  }, [window]);
+
   const [isScreenShareEnabled, setIsScreenShareEnabled] = React.useState(false);
 
   const onScreenShareChange = (enabled: boolean) => {
@@ -85,7 +90,7 @@ export function ControlBar(props: ControlBarProps) {
           </div>
         </div>
       )}
-      {visibleControls.screenShare && (
+      {visibleControls.screenShare && isMobileBrowser && (
         <TrackToggle
           source={Track.Source.ScreenShare}
           showIcon={showIcon}

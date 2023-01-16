@@ -2,8 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  min-width: 260px;
-  max-width: 40rem;
+  width: 280px;
   background-color: var(--bg2);
   border-left: 1px solid var(--border-color);
 }
@@ -18,7 +17,7 @@
 .chat-entry {
   display: flex;
   gap: 0.75rem;
-  padding-block: 0.25rem;
+  padding: .25rem .75rem;
 
   > strong {
     white-space: nowrap;
@@ -38,4 +37,14 @@
 
 .chat-form-input {
   width: 100%;
+}
+
+@media (max-width: 600px) {
+  .chat {
+    position: fixed;
+    top: 0;
+    right: 0;
+    max-width: 100%;
+    bottom: var(--control-bar-height);
+  }
 }

@@ -16,8 +16,13 @@
   > aside {
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
     gap: var(--grid-gap);
     overflow-y: auto;
+
+    .participant-tile {
+      flex-shrink: 0;
+    }
   }
 
   // Prevent screenshare from expanding out of bounds

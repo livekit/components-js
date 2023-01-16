@@ -11,6 +11,7 @@
   display: grid;
   grid-template-columns: 1fr 5fr;
   gap: var(--grid-gap);
+  width: 100%;
   padding: var(--grid-gap);
 
   > aside {
@@ -27,6 +28,7 @@
 
   // Prevent screenshare from expanding out of bounds
   > div {
+    width: 100%;
     max-height: calc(100vh - var(--control-bar-height) - (var(--grid-gap) * 2));
   }
 }

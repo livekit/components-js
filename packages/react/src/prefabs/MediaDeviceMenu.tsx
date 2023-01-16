@@ -13,7 +13,7 @@ import {
   FloatingFocusManager,
 } from '@floating-ui/react';
 
-interface MediaDeviceMenuProps extends React.HTMLAttributes<HTMLButtonElement> {
+interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   kind?: MediaDeviceKind;
   initialSelection?: string;
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;

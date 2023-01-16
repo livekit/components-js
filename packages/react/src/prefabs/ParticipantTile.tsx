@@ -19,6 +19,7 @@ import { useIsMuted, useIsSpeaking } from '../hooks';
 import { mergeProps } from '../utils';
 import { FocusToggle } from '../components/controls/FocusToggle';
 import { ParticipantPlaceholder } from '../assets/images';
+import { ScreenShareIcon } from '../assets/icons';
 
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
@@ -147,7 +148,10 @@ export const ParticipantTile = ({
                     <ParticipantName />
                   </>
                 ) : (
-                  <ParticipantName>&apos;s screen share</ParticipantName>
+                  <>
+                    <ScreenShareIcon style={{ marginRight: '0.25rem' }} />
+                    <ParticipantName>&apos;s screen</ParticipantName>
+                  </>
                 )}
               </div>
               <div className="lk-participant-metadata-item">

@@ -245,7 +245,8 @@ export const PreJoin = ({
     handleValidation,
   ]);
 
-  function handleSubmit() {
+  function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
     if (handleValidation(userChoices)) {
       if (typeof onSubmit === 'function') {
         onSubmit(userChoices);
@@ -279,17 +280,14 @@ export const PreJoin = ({
             Microphone
           </TrackToggle>
           <div className="lk-button-group-menu">
-            {selectedAudioDevice?.deviceId && (
-              <MediaDeviceMenu
-                kind="audioinput"
-                initialSelection={selectedAudioDevice.deviceId}
-                onActiveDeviceChange={(_, deviceId) =>
-                  setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId))
-                }
-              >
-                {/* {selectedAudioDevice?.label ?? 'Default'} */}
-              </MediaDeviceMenu>
-            )}
+            <MediaDeviceMenu
+              kind="audioinput"
+              initialSelection={selectedAudioDevice?.deviceId}
+              onActiveDeviceChange={(_, deviceId) =>
+                setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId))
+              }
+              disabled={!!!selectedAudioDevice}
+            />
           </div>
         </div>
         <div className="lk-button-group video">
@@ -301,34 +299,37 @@ export const PreJoin = ({
             Camera
           </TrackToggle>
           <div className="lk-button-group-menu">
-            {selectedVideoDevice?.deviceId && (
-              <MediaDeviceMenu
-                initialSelection={selectedVideoDevice.deviceId}
-                kind="videoinput"
-                onActiveDeviceChange={(_, deviceId) =>
-                  setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId))
-                }
-              />
-            )}
+            <MediaDeviceMenu
+              initialSelection={selectedVideoDevice?.deviceId}
+              kind="videoinput"
+              onActiveDeviceChange={(_, deviceId) =>
+                setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId))
+              }
+              disabled={!!!selectedVideoDevice}
+            />
           </div>
         </div>
       </div>
 
-      <div className="lk-username-container">
-        {/* <label htmlFor="username">Username</label> */}
+      <form className="lk-username-container">
         <input
           className="form-control"
           id="username"
           name="username"
           type="text"
-          // defaultValue={username}
           placeholder="Username"
           onChange={(inputEl) => setUsername(inputEl.target.value)}
+          autoComplete="off"
         />
-        <button className="lk-button lk-join-button" onClick={handleSubmit} disabled={!isValid}>
+        <button
+          className="lk-button lk-join-button"
+          type="submit"
+          onClick={handleSubmit}
+          disabled={!isValid}
+        >
           Join room
         </button>
-      </div>
+      </form>
 
       {debug && (
         <>

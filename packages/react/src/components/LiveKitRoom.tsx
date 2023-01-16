@@ -12,8 +12,9 @@ import {
 import * as React from 'react';
 import { RoomContext } from '../context';
 import { VideoConference } from '../prefabs/VideoConference';
+import { mergeProps } from '../utils';
 
-export type LiveKitRoomProps = {
+export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onError'> {
   /**
    * URL to the LiveKit server.
    * For example: `wss://<domain>.livekit.cloud`
@@ -75,7 +76,7 @@ export type LiveKitRoomProps = {
    */
   room?: Room;
   simulateParticipants?: number | undefined;
-};
+}
 
 // type RoomContextState = {
 //   room: Room;
@@ -104,6 +105,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
     onDisconnected,
     onError,
     simulateParticipants,
+    ...rest
   } = { ...defaultRoomProps, ...props };
   if (options && passedRoom) {
     console.warn(
@@ -113,7 +115,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
   const [room] = React.useState<Room>(passedRoom ?? new Room(options));
   // setLogLevel('debug');
 
-  const htmlProps = React.useMemo(() => setupLiveKitRoom(), []);
+  const htmlProps = React.useMemo(() => mergeProps(rest, setupLiveKitRoom()), [rest]);
 
   React.useEffect(() => {
     const onSignalConnected = () => {

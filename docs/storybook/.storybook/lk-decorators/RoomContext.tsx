@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { LiveKitRoom, ParticipantLoop } from '@livekit/components-react';
+import { LiveKitRoom } from '@livekit/components-react';
 import { Decorator } from '@storybook/react';
 import { Room } from 'livekit-client';
 
@@ -31,6 +31,7 @@ export const LkRoomContext: Decorator = (Story, { globals, args }) => {
         simulateParticipants={globals.participantCount}
         video={roomContextSettings?.video || false}
         audio={false}
+        style={{ height: '100%', width: '100%' }}
       >
         {Story()}
       </LiveKitRoom>

@@ -29,6 +29,10 @@ export function GridLayout({ filter, filterDependencies, ...props }: GridLayoutP
 
   React.useEffect(() => {
     gridEl.current?.style.setProperty('--lk-p-count', participants.length.toFixed(0));
+    gridEl.current?.style.setProperty(
+      '--lk-col-count',
+      Math.ceil(Math.sqrt(participants.length)).toString(),
+    );
   }, [participants, gridEl]);
   const elementProps = React.useMemo(
     () => mergeProps(props, { className: 'lk-grid-layout' }),

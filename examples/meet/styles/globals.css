@@ -53,13 +53,14 @@ footer {
   color: rgba(255, 255, 255, 0.6);
   background-color: var(--lk-bg);
   border-top: 1px solid rgba(255, 255, 255, .15);
+}
 
-  a {
-    color: #ff6352;
-    text-decoration-color: #a33529;
-    text-underline-offset: 0.125em;
-  }
-  a:hover {
-    text-decoration-color: #ff6352;
-  }
+footer a {
+  color: #ff6352;
+  text-decoration-color: #a33529;
+  text-underline-offset: 0.125em;
+}
+
+footer a:hover {
+  text-decoration-color: #ff6352;
 }

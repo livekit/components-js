@@ -279,17 +279,14 @@ export const PreJoin = ({
             Microphone
           </TrackToggle>
           <div className="lk-button-group-menu">
-            {selectedAudioDevice?.deviceId && (
-              <MediaDeviceMenu
-                kind="audioinput"
-                initialSelection={selectedAudioDevice.deviceId}
-                onActiveDeviceChange={(_, deviceId) =>
-                  setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId))
-                }
-              >
-                {/* {selectedAudioDevice?.label ?? 'Default'} */}
-              </MediaDeviceMenu>
-            )}
+            <MediaDeviceMenu
+              kind="audioinput"
+              initialSelection={selectedAudioDevice?.deviceId}
+              onActiveDeviceChange={(_, deviceId) =>
+                setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId))
+              }
+              disabled={!!!selectedAudioDevice}
+            />
           </div>
         </div>
         <div className="lk-button-group video">
@@ -301,15 +298,14 @@ export const PreJoin = ({
             Camera
           </TrackToggle>
           <div className="lk-button-group-menu">
-            {selectedVideoDevice?.deviceId && (
-              <MediaDeviceMenu
-                initialSelection={selectedVideoDevice.deviceId}
-                kind="videoinput"
-                onActiveDeviceChange={(_, deviceId) =>
-                  setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId))
-                }
-              />
-            )}
+            <MediaDeviceMenu
+              initialSelection={selectedVideoDevice?.deviceId}
+              kind="videoinput"
+              onActiveDeviceChange={(_, deviceId) =>
+                setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId))
+              }
+              disabled={!!!selectedVideoDevice}
+            />
           </div>
         </div>
       </div>

@@ -11,6 +11,8 @@
 .chat-messages {
   width: 100%;
   flex-grow: 1;
+  max-height: 100%;
+  overflow: auto;
 }
 
 .chat-entry {

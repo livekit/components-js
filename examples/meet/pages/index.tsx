@@ -12,13 +12,13 @@ const Home: NextPage = () => {
     <>
       <main>
         <div className="header">
-          <img src="/images/livekit-meet-home.svg" alt="LiveKit Meet" />
+          <img src="/images/livekit-meet-home.svg" alt="LiveKit Meet" width="480" height="60" />
           <h2>
             Open source video conferencing app built on LiveKit&nbsp;Components, LiveKit&nbsp;Cloud,
             and Next.js.
           </h2>
         </div>
-        <button style={{ fontSize: '1.5rem' }} className="lk-button" onClick={startMeeting}>
+        <button style={{ fontSize: '1.25rem', paddingInline: '1.25rem' }} className="lk-button" onClick={startMeeting}>
           Start Meeting
         </button>
       </main>

@@ -1,5 +1,19 @@
 # @livekit/components-styles
 
+## 0.1.5
+
+### Patch Changes
+
+- Rename ParticipantView to ParticipantTile and use it in FocusLayout - [#158](https://github.com/livekit/components-js/pull/158) ([@Ocupe](https://github.com/Ocupe))
+
+- Add ConnectionStateToast - [#173](https://github.com/livekit/components-js/pull/173) ([@lukasIO](https://github.com/lukasIO))
+
+- Add FocusToggle component to ParticipantTile. - [#178](https://github.com/livekit/components-js/pull/178) ([@Ocupe](https://github.com/Ocupe))
+
+- Use @floating-ui/react package for MediaDeviceMenu - [#161](https://github.com/livekit/components-js/pull/161) ([@Ocupe](https://github.com/Ocupe))
+
+- Add chat to audio and video conference prefabs. - [#171](https://github.com/livekit/components-js/pull/171) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.1.4
 
 ### Patch Changes

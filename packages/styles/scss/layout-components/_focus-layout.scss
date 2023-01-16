@@ -4,7 +4,7 @@
   align-items: stretch;
   justify-content: center;
   width: 100%;
-  height: calc(100% - var(--control-bar-height));
+  height: calc(100vh - var(--control-bar-height));
 }
 
 .focus-layout {
@@ -12,13 +12,14 @@
   grid-template-columns: 1fr 5fr;
   gap: var(--grid-gap);
   width: 100%;
+  max-height: 100%;
   padding: var(--grid-gap);
 
   > aside {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
     gap: var(--grid-gap);
+    max-height: 100%;
     overflow-y: auto;
 
     .participant-tile {

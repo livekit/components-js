@@ -5,7 +5,6 @@
   object-position: center;
   aspect-ratio: 16 / 10;
   background-color: #000;
-  border-radius: var(--border-radius);
 
   // Flip the local participant camera video.
   &[data-local-participant='true'][data-source='camera'] {

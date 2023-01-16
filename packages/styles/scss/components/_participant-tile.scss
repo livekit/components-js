@@ -1,20 +1,30 @@
 .participant-tile {
+  --speaking-indicator-width: 2.5px;
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
-  box-shadow: 0 0 0 1px var(--bg), 0 0 0 4px transparent;
-  transition: box-shadow 0.2s ease-in-out;
+  overflow: hidden;
+  border: var(--speaking-indicator-width) solid transparent;
+  border-radius: var(--border-radius);
 
+  transition-property: border-color;
+  transition-timing-function: ease-in-out;
+  // When participant stops talking the transition longer and starts with a delay.
+  transition-delay: 0.5s;
+  transition-duration: 0.8s;
   &[data-speaking='true'] {
-    box-shadow: 0 0 0 1px var(--bg), 0 0 0 3px var(--accent-bg);
+    // When participant starts talking the transition short and without delay.
+    transition-delay: 0s;
+    transition-duration: 0.3s;
+    border: var(--speaking-indicator-width) solid var(--accent-bg);
   }
 
   .focus-toggle-button {
     position: absolute;
     top: 0.25rem;
     right: 0.25rem;
-    padding: .25rem;
+    padding: 0.25rem;
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: calc(var(--border-radius) / 2);
     opacity: 0;
@@ -69,7 +79,7 @@
 .participant-metadata-item {
   display: flex;
   align-items: center;
-  padding: .25rem;
+  padding: 0.25rem;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: calc(var(--border-radius) / 2);
 }

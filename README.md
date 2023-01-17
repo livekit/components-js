@@ -71,11 +71,27 @@ export function App() {
 }
 ```
 
-### Examples
+## Examples
 
 We have a fully featured video conferencing application in our [examples](/examples/meet/) that powers https://meet.livekit.io.
 
 Additionally there are some basic example on how to use and customize LiveKit Components in the [nextjs example folder](/examples/next/)
+
+In order to set the examples up locally follow the [development guide](#development-setup).
+
+## FAQ
+
+### Why is there a @livekit/components-core package?
+
+By abstracting most of the state handling logic into a common core we wanted to make sure that other framework implementations can be created with minimal code duplication. We chose observables as the main data structure for this core as its concepts translate really well to for example React's hooks, solid's signals, Svelte's stores, Vue's composables, and angular loves observables out of the box.
+
+### Did you consider using Custom Elements?
+
+Yes, we did consider building LK Components with custom elements (web components). We ultimately decided against it in order to give users the option to develop within the constraints of their chosen framework with all its specific concepts (e.g. in the case of react hooks, context etc.). That said the road towards supporting custom elements isn't entirely closed off. If the adoption of custom elements gains traction we can imagine providing a framework implementation that additionally compiles to custom elements (e.g. solid or svelte).
+
+### Will there be an implementation for my favorite framework?
+
+The highest priority is currently to get the core and react packages to a stable version that people love to work with. Once this is done we will decide on what other frameworks we might to support officially. If you want to develop an implementation for your favorite framework based on the core package we'd love to talk to you about it!
 
 ## Development Setup
 
@@ -106,10 +122,6 @@ yarn dev:next
 ```
 
 > **Note** for the examples to work you'll need to make sure to copy the the contents of .env.example in the specific example folder to a newly created .env.local file and adjust the values accordingly to your livekit server setup.
-
-## Architecture Overview
-
-![](./.github/assets/components-architecture.png)
 
 <!--NAV_START-->
 

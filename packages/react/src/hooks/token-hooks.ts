@@ -1,3 +1,4 @@
+import { log } from '@livekit/components-core';
 import * as React from 'react';
 interface UserInfo {
   identity?: string;
@@ -22,7 +23,7 @@ export function useToken({ tokenEndpoint, userInfo, roomName }: UseTokenProps) {
       return;
     }
     const tokenFetcher = async () => {
-      console.log('fetching token');
+      log.debug('fetching token');
       const params = new URLSearchParams({ ...userInfo, roomName });
       const res = await fetch(`${tokenEndpoint}?${params.toString()}`);
       const { accessToken } = await res.json();

@@ -1,4 +1,4 @@
-import { screenShareObserver, ScreenShareTrackMap } from '@livekit/components-core';
+import { log, screenShareObserver, ScreenShareTrackMap } from '@livekit/components-core';
 import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
 import { useMaybeRoomContext } from '../context';
@@ -33,7 +33,7 @@ export const useScreenShare = ({
   }
 
   const handleChange = React.useCallback((map: ScreenShareTrackMap) => {
-    console.log('screen share change');
+    log.debug('screen share change', map);
     setAllScreenShares(map);
     if (map.length < 1) {
       setHasActiveScreenShare(false);

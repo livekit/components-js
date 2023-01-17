@@ -54,10 +54,6 @@ export function TileLoop({
     excludePinnedTracks,
   });
 
-  React.useEffect(() => {
-    console.log('sources');
-  }, [secondarySources]);
-
   return (
     <>
       {participants.map((participant) => (

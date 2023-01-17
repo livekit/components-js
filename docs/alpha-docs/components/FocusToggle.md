@@ -4,18 +4,16 @@ This file was created by @livekit/components-docs-gen and should not be changed 
 The contents of this file can be replaced at any time which would lead to the loss of all manual changes.
 -->
 
-# ParticipantName
+# FocusToggle
 
-The ParticipantName component displays the name of the participant as a string within an HTML span element. If no participant name is undefined the participant identity string is displayed.
+The FocusToggle puts the ParticipantTile in focus or removes it from focus.
 
 ## Usage
 
 ```tsx
-{...}
-  <ParticipantTile>
-    <ParticipantName />
-  </ParticipantTile>
-{...}
+<ParticipantTile>
+  <FocusToggle />
+</ParticipantTile>
 ```
 
 <!--USAGE_INSERT_MARKER-->
@@ -25,5 +23,6 @@ The ParticipantName component displays the name of the participant as a string w
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
+| trackSource | `Source` |  |  |
 | participant | `Participant` |  |  |
 

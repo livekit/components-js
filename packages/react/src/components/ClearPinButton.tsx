@@ -3,7 +3,7 @@ import * as React from 'react';
 import { mergeProps } from '../utils';
 import { useLayoutContext } from '../context';
 
-export type ClearPinButtonProps = React.HTMLAttributes<HTMLButtonElement>;
+export type ClearPinButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export function useClearPinButton(props: ClearPinButtonProps) {
   const { state, dispatch } = useLayoutContext().pin;

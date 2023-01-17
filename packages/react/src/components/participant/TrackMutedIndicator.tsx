@@ -8,6 +8,7 @@ import { getSourceIcon } from '../../assets/icons/util';
 export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   source: Track.Source;
   participant?: Participant;
+  showMutedOnly?: boolean;
 }
 
 interface UseTrackMutedIndicatorProps {
@@ -60,13 +61,20 @@ export const useTrackMutedIndicator = ({
 export const TrackMutedIndicator = ({
   source,
   participant,
+  showMutedOnly,
   ...props
 }: TrackMutedIndicatorProps) => {
   const { htmlProps, isMuted } = useTrackMutedIndicator({ source, participant, props });
 
   return (
-    <div {...htmlProps} data-lk-muted={isMuted}>
-      {props.children ?? getSourceIcon(source, !isMuted)}
-    </div>
+    <>
+      {!showMutedOnly || isMuted ? (
+        <div {...htmlProps} data-lk-muted={isMuted}>
+          {props.children ?? getSourceIcon(source, !isMuted)}
+        </div>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };

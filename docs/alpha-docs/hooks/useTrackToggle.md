@@ -15,8 +15,7 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| source | `Source` |  |  |
-| showIcon | `boolean` |  |  |
-| initialState | `boolean` |  |  |
 | onChange | `((enabled: boolean) => void)` |  |  |
+| source | `Source` |  |  |
+| initialState | `boolean` |  |  |
 

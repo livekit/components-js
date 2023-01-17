@@ -6,7 +6,7 @@ import { useMaybeRoomContext } from '../../context';
 import { useObservableState } from '../../utils';
 import { getSourceIcon } from '../../assets/icons/util';
 
-export type TrackToggleProps = Omit<React.HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
+export type TrackToggleProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   source: Track.Source;
   showIcon?: boolean;
   initialState?: boolean;
@@ -15,7 +15,9 @@ export type TrackToggleProps = Omit<React.HTMLAttributes<HTMLButtonElement>, 'on
 
 export const TrackSource = Track.Source;
 
-export function useTrackToggle({ source, onChange, initialState, ...rest }: TrackToggleProps) {
+export type UseTrackToggleProps = Omit<TrackToggleProps, 'showIcon'>;
+
+export function useTrackToggle({ source, onChange, initialState, ...rest }: UseTrackToggleProps) {
   const room = useMaybeRoomContext();
   const track = room?.localParticipant?.getTrack(source);
 
@@ -77,11 +79,11 @@ export function useTrackToggle({ source, onChange, initialState, ...rest }: Trac
  * </LiveKitRoom>
  * ```
  */
-export function TrackToggle(props: TrackToggleProps) {
+export function TrackToggle({ showIcon, ...props }: TrackToggleProps) {
   const { buttonProps, enabled } = useTrackToggle(props);
   return (
     <button {...buttonProps}>
-      {(props.showIcon ?? true) && getSourceIcon(props.source, enabled)}
+      {(showIcon ?? true) && getSourceIcon(props.source, enabled)}
       {props.children}
     </button>
   );

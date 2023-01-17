@@ -3,15 +3,23 @@
   "baseBranch": "origin/main",
   "pipeline": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "storybook-static/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "storybook-static/**"
+      ]
     },
     "lint": {
       "outputs": []
     },
     "start": {},
     "test": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "outputs": []
     },
     "test:build": {
@@ -28,11 +36,15 @@
       "persistent": true
     },
     "deploy": {
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
     },
     "gen:docs": {
-      "cache": true,
-      "dependsOn": ["^build"]
+      "cache": false,
+      "dependsOn": [
+        "^build"
+      ]
     }
   }
 }

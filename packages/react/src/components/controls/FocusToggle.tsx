@@ -6,7 +6,7 @@ import { FocusToggleIcon, UnfocusToggleIcon } from '../../assets/icons';
 import { mergeProps } from '../../utils';
 
 interface useFocusToggleProps {
-  props: React.HTMLAttributes<HTMLButtonElement>;
+  props: React.ButtonHTMLAttributes<HTMLButtonElement>;
   trackSource: Track.Source;
   participant?: Participant;
 }
@@ -57,7 +57,7 @@ function useFocusToggle({ trackSource, participant, props }: useFocusToggleProps
 
   return { mergedProps, inFocus };
 }
-interface FocusToggleProps extends React.HTMLAttributes<HTMLButtonElement> {
+interface FocusToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   trackSource: Track.Source;
   participant?: Participant;
 }

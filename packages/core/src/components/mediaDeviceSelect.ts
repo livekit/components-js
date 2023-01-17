@@ -1,5 +1,6 @@
 import { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
 import { BehaviorSubject, map, mergeWith } from 'rxjs';
+import log from '../logger';
 import { observeParticipantMedia } from '../observables/participant';
 import { lkClassName } from '../utils';
 
@@ -29,7 +30,10 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
 
   const setActiveMediaDevice = async (id: string) => {
     if (room) {
-      await room?.switchActiveDevice(kind, id);
+      log.debug('switching device', kind, id);
+      await room.switchActiveDevice(kind, id);
+    } else {
+      log.debug('room not available, skipping device switch');
     }
     activeDeviceSubject.next(id);
   };

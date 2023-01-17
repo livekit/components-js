@@ -1,6 +1,7 @@
 import {
   isLocal,
   isParticipantTrackPinned,
+  log,
   setupMediaTrack,
   trackObservable,
   TrackParticipantPair,
@@ -67,10 +68,6 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
       const orientation_ =
         publication.dimensions.width > publication.dimensions.height ? 'landscape' : 'portrait';
       setOrientation(orientation_);
-      // console.log(
-      //   `SET ORIENTATION on ${participant.identity} ${source} ${orientation_}:`,
-      //   publication.dimensions,
-      // );
     }
   }, [publication, source]);
 
@@ -146,7 +143,7 @@ export function useTracks({
 
   React.useEffect(() => {
     if (!sources) {
-      console.warn('no sources provided');
+      log.warn('no sources provided');
       return;
     }
     const subscription = trackParticipantPairsObservable(room, sources).subscribe(

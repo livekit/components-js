@@ -45,6 +45,7 @@
     "vitest": "^0.26.2"
   },
   "dependencies": {
+    "loglevel": "^1.8.1",
     "rxjs": "^7.5.6"
   }
 }

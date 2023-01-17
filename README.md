@@ -1,3 +1,7 @@
+<a href="https://livekit.io"><img src="./.github/assets/livekit.svg" width="132" height="30" alt="LiveKit logo" /></a>
+
+<br>
+
 # LiveKit Components
 
 Create your [LiveKit](https://livekit.io) WebRTC experience without worrying about state.

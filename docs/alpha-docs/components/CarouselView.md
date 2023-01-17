@@ -10,3 +10,11 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 <!--USAGE_INSERT_MARKER->
 
+
+## Props
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| filter | `((value: Participant, index: number, array: Participant[]) => unknown)` |  |  |
+| filterDependencies | `[]` |  |  |
+

@@ -8,10 +8,6 @@ export type ClearPinButtonProps = React.HTMLAttributes<HTMLButtonElement>;
 export function useClearPinButton(props: ClearPinButtonProps) {
   const { state, dispatch } = useLayoutContext().pin;
 
-  React.useEffect(() => {
-    console.log({ state });
-  }, [state]);
-
   const buttonProps = React.useMemo(() => {
     const { className } = setupClearPinButton();
     const mergedProps = mergeProps(props, {

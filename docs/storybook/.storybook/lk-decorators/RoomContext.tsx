@@ -31,7 +31,7 @@ export const LkRoomContext: Decorator = (Story, { globals, args }) => {
         simulateParticipants={globals.participantCount}
         video={roomContextSettings?.video || false}
         audio={false}
-        style={{ height: '100%', width: '100%' }}
+        style={{ height: '100vh', width: '100vw' }}
       >
         {Story()}
       </LiveKitRoom>

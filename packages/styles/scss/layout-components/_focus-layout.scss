@@ -4,7 +4,7 @@
   align-items: stretch;
   justify-content: center;
   width: 100%;
-  height: calc(100vh - var(--control-bar-height));
+  height: calc(100% - var(--control-bar-height));
 }
 
 .focus-layout {
@@ -30,7 +30,7 @@
   // Prevent screenshare from expanding out of bounds
   > div {
     width: 100%;
-    max-height: calc(100vh - var(--control-bar-height) - (var(--grid-gap) * 2));
+    max-height: calc(100% - var(--control-bar-height) - (var(--grid-gap) * 2));
   }
 }
 

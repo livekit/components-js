@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: calc(100vh - var(--control-bar-height));
+  height: calc(100% - var(--control-bar-height));
 }
 
 .grid-layout {

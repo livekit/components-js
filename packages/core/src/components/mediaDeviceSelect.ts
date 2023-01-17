@@ -29,7 +29,11 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
 
   const setActiveMediaDevice = async (id: string) => {
     if (room) {
-      await room?.switchActiveDevice(kind, id);
+      console.log('switching device', kind, id);
+
+      await room.switchActiveDevice(kind, id);
+    } else {
+      console.log('room not available, skipping device switch');
     }
     activeDeviceSubject.next(id);
   };

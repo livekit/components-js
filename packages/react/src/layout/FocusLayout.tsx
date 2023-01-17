@@ -2,11 +2,10 @@ import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useMaybeLayoutContext, useLayoutContext } from '../context';
 import { mergeProps } from '../utils';
-import { TrackParticipantPair } from '@livekit/components-core';
+import { TileFilter, TrackParticipantPair } from '@livekit/components-core';
 import { TileLoop } from '../components/TileLoop';
 import { ParticipantTile } from '../prefabs/ParticipantTile';
 import { ParticipantClickEvent } from '@livekit/components-core';
-import { ParticipantFilter } from '../hooks/participant-hooks';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   trackParticipantPair?: TrackParticipantPair;
@@ -73,7 +72,7 @@ export function FocusLayout({ trackParticipantPair, ...props }: FocusLayoutProps
 }
 
 export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement> {
-  filter?: ParticipantFilter;
+  filter?: TileFilter;
   filterDependencies?: [];
 }
 

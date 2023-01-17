@@ -1,6 +1,7 @@
+import { TileFilter } from '@livekit/components-core';
 import * as React from 'react';
 import { TileLoop } from '../components/TileLoop';
-import { ParticipantFilter, useParticipants } from '../hooks';
+import { useTiles } from '../hooks';
 import { mergeProps } from '../utils';
 
 export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -8,7 +9,7 @@ export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
    * The grid shows all room participants. If only a subset of the participants
    * should be visible, they can be filtered.
    */
-  filter?: ParticipantFilter;
+  filter?: TileFilter;
   filterDependencies?: [];
   // TODO maxVisibleParticipants
 }
@@ -24,7 +25,7 @@ export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
  * ```
  */
 export function GridLayout({ filter, filterDependencies, ...props }: GridLayoutProps) {
-  const participants = useParticipants({ filter, filterDependencies });
+  const participants = useTiles({ filter, filterDependencies });
   const gridEl = React.createRef<HTMLDivElement>();
 
   React.useEffect(() => {

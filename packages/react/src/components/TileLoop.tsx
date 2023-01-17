@@ -1,15 +1,15 @@
-import { isParticipantSourcePinned } from '@livekit/components-core';
+import { isTrackParticipantPair, TileFilter } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
-import { ParticipantContext, useMaybeLayoutContext } from '../context';
-import { ParticipantFilter, useParticipants, useTracks } from '../hooks';
+import { ParticipantContext } from '../context';
+import { useTiles } from '../hooks';
 import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
 interface TileLoopProps {
   sources?: [Track.Source, ...Track.Source[]];
   excludePinnedTracks?: boolean;
-  filter?: ParticipantFilter;
+  filter?: TileFilter;
   filterDependencies?: [];
 }
 
@@ -40,44 +40,36 @@ interface TileLoopProps {
 export function TileLoop({
   sources,
   excludePinnedTracks,
+  filter,
+  filterDependencies,
   ...props
 }: React.PropsWithChildren<TileLoopProps>): React.FunctionComponentElement<
   React.PropsWithChildren<TileLoopProps>
 > {
-  const [mainSource] = React.useState(sources![0]);
-  const [secondarySources] = React.useState(sources!.slice(1));
-  const participants = useParticipants();
-  const layoutContext = useMaybeLayoutContext();
-
-  const secondaryPairs = useTracks({
-    sources: secondarySources,
+  const pairsWithPlaceholders = useTiles({
+    sources: sources ? sources : [Track.Source.Camera],
     excludePinnedTracks,
+    filter,
+    filterDependencies,
   });
-
-  React.useEffect(() => {
-    console.log('sources');
-  }, [secondarySources]);
 
   return (
     <>
-      {participants.map((participant) => (
-        <ParticipantContext.Provider value={participant} key={participant.identity}>
-          {(!excludePinnedTracks ||
-            !isParticipantSourcePinned(participant, mainSource, layoutContext?.pin.state)) && (
-            <ParticipantTile trackSource={mainSource} />
-          )}
-
-          {secondaryPairs
-            .filter(({ participant: p }) => p.identity === participant.identity)
-            .map(({ track }, index) =>
-              props.children ? (
-                cloneSingleChild(props.children, { trackSource: track.source }, index)
-              ) : (
-                <ParticipantTile key={index} trackSource={track.source} />
-              ),
+      {pairsWithPlaceholders.map((pair) => {
+        const trackSource = isTrackParticipantPair(pair) ? pair.track.source : Track.Source.Camera;
+        return (
+          <ParticipantContext.Provider
+            value={pair.participant}
+            key={`${pair.participant.identity}_${trackSource}`}
+          >
+            {props.children ? (
+              cloneSingleChild(props.children)
+            ) : (
+              <ParticipantTile trackSource={trackSource} />
             )}
-        </ParticipantContext.Provider>
-      ))}
+          </ParticipantContext.Provider>
+        );
+      })}
     </>
   );
 }

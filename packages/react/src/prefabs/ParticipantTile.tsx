@@ -61,6 +61,7 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
       'data-lk-video-muted': isVideoMuted,
       'data-lk-speaking': isSpeaking,
       'data-lk-local-participant': participant.isLocal,
+      'data-lk-source': trackSource,
       ...mergedProps,
     },
   };

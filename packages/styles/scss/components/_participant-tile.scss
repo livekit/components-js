@@ -56,7 +56,7 @@
     }
   }
 
-  &[data-video-muted='true'] .participant-placeholder {
+  &[data-video-muted='true'][data-source='camera'] .participant-placeholder {
     opacity: 1;
   }
 }

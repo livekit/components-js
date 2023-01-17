@@ -7,20 +7,29 @@
   margin-inline: auto;
   background-color: var(--bg);
 
-  video {
-    display: block;
+  .video-container {
     width: 480px;
     max-width: 100%;
-    height: auto;
-    transform: rotateY(180deg);
     border-radius: var(--lk-border-radius);
-  }
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
 
-  .camera-off-note {
-    width: 100%;
-    height: 11.25rem;
-    background-color: #000;
-    border-radius: var(--lk-border-radius);
+    video {
+      max-height: 100%;
+      display: block;
+      transform: rotateY(180deg);
+      object-fit: cover;
+    }
+
+    .placeholder {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-content: center;
+      svg {
+        padding: 20%;
+      }
+    }
   }
 
   .audio-container {

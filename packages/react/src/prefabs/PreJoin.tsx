@@ -259,11 +259,14 @@ export const PreJoin = ({
 
   return (
     <div className="lk-prejoin" {...htmlProps}>
-      {localVideoTrack ? (
-        <video ref={videoEl} />
-      ) : (
-        <div className="lk-camera-off-note">Camera is off</div>
-      )}
+      <div className="lk-video-container">
+        {localVideoTrack && <video ref={videoEl} />}
+        {/* {localVideoTrack?.isMuted === true && (
+          <div className="lk-placeholder">
+            <ParticipantPlaceholder />
+          </div>
+        )} */}
+      </div>
       {localAudioTrack ? (
         <div className="lk-audio-container">
           <audio ref={audioEl} />
@@ -314,7 +317,7 @@ export const PreJoin = ({
 
       <form className="lk-username-container">
         <input
-          className="form-control"
+          className="lk-form-control"
           id="username"
           name="username"
           type="text"

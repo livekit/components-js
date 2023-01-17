@@ -6,7 +6,7 @@ import { mergeProps, useObservableState } from '../../utils';
 
 interface UseStartAudioProps {
   room: Room;
-  props: React.HTMLAttributes<HTMLButtonElement>;
+  props: React.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
 function useStartAudio({ room, props }: UseStartAudioProps) {
@@ -35,7 +35,7 @@ function useStartAudio({ room, props }: UseStartAudioProps) {
 
   return { mergedProps, canPlayAudio };
 }
-interface AllowAudioPlaybackProps extends React.HTMLAttributes<HTMLButtonElement> {
+interface AllowAudioPlaybackProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
 }
 

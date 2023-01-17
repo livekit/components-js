@@ -5,7 +5,7 @@ import { useRoomContext } from '../../context';
 import { useConnectionState } from '../ConnectionState';
 import { mergeProps } from '../../utils';
 
-export type DisconnectButtonProps = React.HTMLAttributes<HTMLButtonElement> & {
+export type DisconnectButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   stopTracks?: boolean;
 };
 

@@ -6,7 +6,7 @@ import { useMaybeRoomContext } from '../../context';
 import { useObservableState } from '../../utils';
 import { getSourceIcon } from '../../assets/icons/util';
 
-export type TrackToggleProps = Omit<React.HTMLAttributes<HTMLButtonElement>, 'onChange'> & {
+export type TrackToggleProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   source: Track.Source;
   showIcon?: boolean;
   initialState?: boolean;

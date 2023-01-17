@@ -4,7 +4,7 @@ import { useLayoutContext } from '../../context';
 import { mergeProps } from '../../utils';
 
 interface UseToggleChatProps {
-  props: React.HTMLAttributes<HTMLButtonElement>;
+  props: React.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
 function useToggleChat({ props }: UseToggleChatProps) {
@@ -24,7 +24,7 @@ function useToggleChat({ props }: UseToggleChatProps) {
 
   return { mergedProps };
 }
-interface ChatToggleProps extends React.HTMLAttributes<HTMLButtonElement> {}
+interface ChatToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 /**
  * The ToggleChat component shows and hides the chat.

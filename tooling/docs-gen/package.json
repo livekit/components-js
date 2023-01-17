@@ -28,7 +28,8 @@
     "build": "tsx src/build.ts",
     "clean": "rimraf generated .turbo",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint -f unix \"src/**/*.{ts,tsx}\""
+    "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
+    "gen:docs": "yarn build"
   },
   "dependencies": {
     "@livekit/components-react": "0.1.13",

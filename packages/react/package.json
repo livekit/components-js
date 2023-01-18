@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-react",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "publishConfig": {
     "access": "public"
   },
@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.15.1",
-    "@livekit/components-core": "0.1.11",
+    "@livekit/components-core": "0.1.12",
     "clsx": "^1.2.1"
   },
   "peerDependencies": {

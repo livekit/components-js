@@ -1,6 +1,6 @@
 {
   "name": "@livekit/component-docs-storybook",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "main": "index.js",
   "private": true,
   "license": "MIT",
@@ -19,7 +19,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "@livekit/components-react": "0.1.15",
+    "@livekit/components-react": "0.1.16",
     "@livekit/components-styles": "0.1.6",
     "livekit-client": "^1.6.2",
     "react": "^18.2.0",

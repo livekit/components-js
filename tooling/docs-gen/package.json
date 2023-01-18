@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-docs-gen",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Generate component docs.",
   "keywords": [
     "docs",
@@ -32,7 +32,7 @@
     "gen:docs": "yarn build"
   },
   "dependencies": {
-    "@livekit/components-react": "0.1.15",
+    "@livekit/components-react": "0.1.16",
     "eslint-config-custom": "^0.0.0",
     "eslint-plugin-tsdoc": "^0.2.17",
     "glob": "^8.0.0",

@@ -1,6 +1,9 @@
 {
   "name": "@livekit/component-docs-storybook",
+<<<<<<< Updated upstream
   "version": "1.0.11",
+=======
+>>>>>>> Stashed changes
   "main": "index.js",
   "private": true,
   "license": "MIT",

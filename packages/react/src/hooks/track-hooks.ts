@@ -4,7 +4,7 @@ import {
   log,
   setupMediaTrack,
   TileFilter,
-  TracksFilter,
+  TrackFilter,
   trackObservable,
   TrackParticipantPair,
   TrackParticipantPairPlaceholder,
@@ -118,7 +118,7 @@ export function useTrack({ pub }: UseTrackProps) {
 type UseTracksProps = {
   sources?: Track.Source[];
   excludePinnedTracks?: boolean;
-  filter?: TracksFilter;
+  filter?: TrackFilter;
   filterDependencies?: Array<any>;
 };
 

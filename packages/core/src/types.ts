@@ -31,7 +31,7 @@ export function isTrackParticipantPlaceholder(
 }
 
 export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
-export type TracksFilter = Parameters<TrackParticipantPair[]['filter']>['0'];
+export type TrackFilter = Parameters<TrackParticipantPair[]['filter']>['0'];
 export type TileFilter = Parameters<
   (TrackParticipantPair | TrackParticipantPairPlaceholder)[]['filter']
 >['0'];

@@ -36,3 +36,15 @@ export const LongMessage: StoryObj<ChatEntryProps> = {
     },
   },
 };
+
+export const MessageWithLinks: StoryObj<ChatEntryProps> = {
+  ...Default,
+  args: {
+    entry: {
+      timestamp: 1,
+      message:
+        'a message google.com with links support@livekit.io',
+      from: participant,
+    },
+  },
+};

@@ -50,10 +50,14 @@
   },
   "devDependencies": {
     "@svgr/cli": "^6.5.1",
+    "@types/prismjs": "^1.26.0",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
+    "email-regex": "^5.0.0",
     "eslint-config-lk-custom": "0.1.0",
     "livekit-client": "^1.6.2",
-    "tsup": "^6.5.0"
+    "prismjs": "^1.29.0",
+    "tsup": "^6.5.0",
+    "url-regex": "^5.0.0"
   }
 }

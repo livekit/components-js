@@ -21,13 +21,12 @@
     "gen:docs": "turbo run gen:docs"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.25.0",
+    "@changesets/cli": "^2.26.0",
     "@livekit/changesets-changelog-github": "^0.0.3",
-    "glob": "^8.0.3",
-    "prettier": "^2.5.1",
-    "prettier-plugin-svelte": "^2.7.0",
-    "turbo": "^1.4.6",
-    "typescript": "^4.7.4"
+    "glob": "^8.1.0",
+    "prettier": "^2.8.3",
+    "turbo": "^1.7.0",
+    "typescript": "^4.9.4"
   },
   "peerDependencies": {
     "typescript": "^4.7.4"

@@ -125,12 +125,16 @@ function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
       log.debug(`switching ${kind} device from`, prevDeviceId.current, selectedDevice.deviceId);
       switchDevice(localTrack, selectedDevice.deviceId);
     } else {
+      log.debug(`unmuting local ${kind} track`);
       localTrack?.unmute();
     }
 
     return () => {
-      localTrack?.stop();
-      localTrack?.mute();
+      if (localTrack) {
+        log.debug(`stopping local ${kind} track`);
+        localTrack.stop();
+        localTrack.mute();
+      }
     };
   }, [localTrack, selectedDevice, enabled, kind]);
 

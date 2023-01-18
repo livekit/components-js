@@ -1,4 +1,4 @@
-import { setupManualToggle, setupMediaToggle } from '@livekit/components-core';
+import { log, setupManualToggle, setupMediaToggle } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { mergeProps } from '../../mergeProps';
@@ -34,7 +34,8 @@ export function useTrackToggle({ source, onChange, initialState, ...rest }: UseT
   }, [enabled, onChange]);
 
   React.useEffect(() => {
-    if (initialState) {
+    if (initialState !== undefined) {
+      log.debug('forcing initial toggle state', source, initialState);
       toggle(initialState);
     }
     // only execute once at the beginning

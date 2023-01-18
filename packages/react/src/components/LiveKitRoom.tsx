@@ -113,7 +113,6 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
     );
   }
   const [room] = React.useState<Room>(passedRoom ?? new Room(options));
-  // setLogLevel('debug');
 
   const htmlProps = React.useMemo(() => mergeProps(rest, setupLiveKitRoom()), [rest]);
 
@@ -121,6 +120,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
     const onSignalConnected = () => {
       const localP = room.localParticipant;
       try {
+        log.debug('trying to publish local tracks');
         localP.setMicrophoneEnabled(!!audio, typeof audio !== 'boolean' ? audio : undefined);
         localP.setCameraEnabled(!!video, typeof video !== 'boolean' ? video : undefined);
         localP.setScreenShareEnabled(!!screen, typeof screen !== 'boolean' ? screen : undefined);
@@ -164,6 +164,11 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
     } else {
       room.disconnect();
     }
+
+    return () => {
+      log.debug('disconnecting on onmount');
+      room.disconnect();
+    };
   }, [connect, token, connectOptions, room, onError, serverUrl]);
 
   React.useEffect(() => {

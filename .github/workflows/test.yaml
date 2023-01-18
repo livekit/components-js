@@ -26,14 +26,14 @@ jobs:
           npm install -g yarn
           yarn install
 
-      - name: Build Packages
-        run: yarn build
-
       - name: ESLint
         run: yarn lint
 
       - name: Prettier
         run: yarn format
+
+      - name: Build Packages
+        run: yarn build
 
       - name: Run Tests
         run: yarn test

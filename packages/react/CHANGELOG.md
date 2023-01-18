@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 0.1.17
+
+### Patch Changes
+
+- Fix prejoin bugs - [#229](https://github.com/livekit/components-js/pull/229) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.16
 
 ### Patch Changes

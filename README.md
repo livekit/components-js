@@ -1,15 +1,9 @@
 <a href="https://livekit.io/">
-  <img src="./.github/assets/livekit-mark.png" alt="LiveKit logo" width="170" height="170">
+  <img src="./.github/assets/livekit-mark.png" alt="LiveKit logo" width="100" height="100">
 </a>
 
 <h1>
   LiveKit Components
-  <br>
-  <small>
-    <small>
-      Create your LiveKit WebRTC experience without worrying about state.
-    </small>
-  </small>
 </h1>
 
 <p>
@@ -21,6 +15,8 @@
 </p>
 
 <br>
+
+Create your [LiveKit](https://livekit.io) WebRTC experience without worrying about state.
 
 > **Disclaimer** This is project is in active development and open sourced as a developer preview. While APIs are unlikely to drastically change from here onwards, there's still the chance that some things might need tweaking after an update. We appreciate feedback from the community and are planning to incorporate your feedback to get to a stable version as soon as possible!
 

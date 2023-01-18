@@ -1,6 +1,6 @@
-import { getLogger } from 'loglevel';
+import loglevel from 'loglevel';
 
-const log = getLogger('lk-components-js');
+const log = loglevel.getLogger('lk-components-js');
 log.setDefaultLevel('DEBUG');
 
 export default log;

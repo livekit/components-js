@@ -1,5 +1,19 @@
 # @livekit/components-react
 
+## 0.1.14
+
+### Patch Changes
+
+- Remove the unused showIcon prop from the usTrackToggle hook. - [#220](https://github.com/livekit/components-js/pull/220) ([@Ocupe](https://github.com/Ocupe))
+
+- Update participant screen share with icon - [#206](https://github.com/livekit/components-js/pull/206) ([@Ocupe](https://github.com/Ocupe))
+
+- Make Chat component scrollable. - [`f0ff603`](https://github.com/livekit/components-js/commit/f0ff6033beec8d12bcd25b85b7fe3b92c8ba5bee) ([@Ocupe](https://github.com/Ocupe))
+
+- Fix wrong overlay on screen share when muting camera. - [#217](https://github.com/livekit/components-js/pull/217) ([@Ocupe](https://github.com/Ocupe))
+
+- Better auto-grid layout - [#203](https://github.com/livekit/components-js/pull/203) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.13
 
 ### Patch Changes

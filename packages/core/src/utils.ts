@@ -13,8 +13,6 @@ export function kebabize(str: string) {
   return str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
 }
 
-// TODO: If we have utils/helper, we should structure it better to prevent this thing from turning into a dumping ground for all sorts of things.
-
 /**
  * Converts a non prefixed CSS class into a prefixed one.
  */

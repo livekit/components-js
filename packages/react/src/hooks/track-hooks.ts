@@ -33,6 +33,7 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
 
   React.useEffect(() => {
     const subscription = trackObserver.subscribe((publication) => {
+      log.debug('update track', publication);
       setPublication(publication);
       setMuted(publication?.isMuted);
       setSubscribed(publication?.isSubscribed);
@@ -54,6 +55,10 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
     return () => {
       if (previousElement.current) {
         track?.detach(previousElement.current);
+      }
+      if (track) {
+        log.debug('stopping track', source);
+        track?.stop();
       }
     };
   }, [track, element]);

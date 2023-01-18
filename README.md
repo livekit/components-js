@@ -20,7 +20,7 @@
 
 > **Disclaimer —** This is project is in active development and open sourced as a developer preview. While APIs are unlikely to drastically change from here onwards, there's still the chance that some things might need tweaking after an update. We appreciate feedback from the community and are planning to incorporate your feedback to get to a stable version as soon as possible!
 
-![LiveKit Components Preview](./.github/assets/components-preview-grid.png)
+![LiveKit Components Preview](./.github/assets/livekit-meet.jpg)
 
 ## About LiveKit Components
 

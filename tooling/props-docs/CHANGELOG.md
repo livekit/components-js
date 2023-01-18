@@ -1,5 +1,12 @@
 # @livekit/components-props-docs
 
+## 0.0.10
+
+### Patch Changes
+
+- Updated dependencies [[`ce026b9`](https://github.com/livekit/components-js/commit/ce026b96b7c9fbfd0c0f1b24c763a35f0f311240), [`ce026b9`](https://github.com/livekit/components-js/commit/ce026b96b7c9fbfd0c0f1b24c763a35f0f311240)]:
+  - @livekit/components-react@0.1.18
+
 ## 0.0.9
 
 ### Patch Changes

@@ -132,7 +132,7 @@ function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
       localTrack?.stop();
       localTrack?.mute();
     };
-  }, [localTrack, selectedDevice, enabled]);
+  }, [localTrack, selectedDevice, enabled, kind]);
 
   React.useEffect(() => {
     setSelectedDevice(devices.find((dev) => dev.deviceId === localDeviceId));
@@ -215,12 +215,12 @@ export const PreJoin = ({
     if (audio.deviceError) {
       onError?.(audio.deviceError);
     }
-  }, audio.deviceError);
+  }, [audio.deviceError, onError]);
   React.useEffect(() => {
     if (video.deviceError) {
       onError?.(video.deviceError);
     }
-  }, [video.deviceError]);
+  }, [video.deviceError, onError]);
 
   React.useEffect(() => {
     const newUserChoices = {
@@ -232,7 +232,14 @@ export const PreJoin = ({
     };
     setUserChoices(newUserChoices);
     setIsValid(handleValidation(newUserChoices));
-  }, [username, videoEnabled, video.selectedDevice, handleValidation]);
+  }, [
+    username,
+    videoEnabled,
+    video.selectedDevice,
+    handleValidation,
+    audioEnabled,
+    audio.selectedDevice,
+  ]);
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();

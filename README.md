@@ -1,10 +1,22 @@
-<a href="https://livekit.io"><img src="./.github/assets/livekit.svg" width="132" height="30" alt="LiveKit logo" /></a>
+<p align="center">
+  <a href="https://livekit.io/">
+    <img src="./.github/assets/livekit-mark.png" alt="LiveKit logo" width="170" height="170">
+  </a>
+</p>
+
+<h1 align="center">LiveKit Components</h1>
+
+<p align="center">
+  Create your LiveKit WebRTC experience without worrying about state.
+  <br>
+  <a href="https://docs.livekit.io/"><strong>LiveKit Docs »</strong></a>
+  ·
+  <a href="https://livekit.io/cloud">LiveKit Cloud</a>
+  ·
+  <a href="https://blog.livekit.io/">Blog</a>
+</p>
 
 <br>
-
-# LiveKit Components
-
-Create your [LiveKit](https://livekit.io) WebRTC experience without worrying about state.
 
 > **Disclaimer** This is project is in active development and open sourced as a developer preview. While APIs are unlikely to drastically change from here onwards, there's still the chance that some things might need tweaking after an update. We appreciate feedback from the community and are planning to incorporate your feedback to get to a stable version as soon as possible!
 

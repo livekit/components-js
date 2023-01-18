@@ -3,6 +3,7 @@ import {
   PIN_DEFAULT_STATE,
   PinState,
   WidgetState,
+  log,
 } from '@livekit/components-core';
 import * as React from 'react';
 import {
@@ -35,12 +36,12 @@ export function LayoutContextProvider({
   };
 
   React.useEffect(() => {
-    console.log('PinState Updated', { pinState });
+    log.debug('PinState Updated', { pinState });
     if (onPinChange) onPinChange(pinState);
   }, [onPinChange, pinState]);
 
   React.useEffect(() => {
-    console.log('Widget Updated', { widgetState });
+    log.debug('Widget Updated', { widgetState });
     if (onWidgetChange) onWidgetChange(widgetState);
   }, [onWidgetChange, widgetState]);
 

@@ -7,6 +7,7 @@ import {
   TrackPublication,
 } from 'livekit-client';
 import { Observable, startWith, Subscription } from 'rxjs';
+import log from '../logger';
 import { TrackParticipantPair } from '../types';
 import { roomEventSelector } from './room';
 
@@ -88,9 +89,7 @@ export function trackParticipantPairsObservable(
       roomEventSubscriptions.push(
         roomEventSelector(room, roomEvent).subscribe(() => {
           const pairs = getTrackParticipantPairs(room, sources);
-          console.log(
-            `Trigger observer update by \nRoomEvent: ${roomEvent}\nPairs: ${pairs.length}`,
-          );
+          log.debug(`Trigger observer update by \nRoomEvent: ${roomEvent}\nPairs: ${pairs.length}`);
 
           if (subscribe) {
             subscribe.next(pairs);

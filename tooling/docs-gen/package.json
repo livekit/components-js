@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-docs-gen",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Generate component docs.",
   "keywords": [
     "docs",
@@ -28,10 +28,11 @@
     "build": "tsx src/build.ts",
     "clean": "rimraf generated .turbo",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint -f unix \"src/**/*.{ts,tsx}\""
+    "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
+    "gen:docs": "yarn build"
   },
   "dependencies": {
-    "@livekit/components-react": "0.1.13",
+    "@livekit/components-react": "0.1.14",
     "eslint-config-custom": "^0.0.0",
     "eslint-plugin-tsdoc": "^0.2.17",
     "glob": "^8.0.0",

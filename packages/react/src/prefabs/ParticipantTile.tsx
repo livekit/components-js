@@ -61,6 +61,7 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
       'data-lk-video-muted': isVideoMuted,
       'data-lk-speaking': isSpeaking,
       'data-lk-local-participant': participant.isLocal,
+      'data-lk-source': trackSource,
       ...mergedProps,
     },
   };
@@ -143,8 +144,10 @@ export const ParticipantTile = ({
               <div className="lk-participant-metadata-item">
                 {trackSource_ === Track.Source.Camera ? (
                   <>
-                    <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
-                    <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
+                    <TrackMutedIndicator
+                      source={Track.Source.Microphone}
+                      showMutedOnly={true}
+                    ></TrackMutedIndicator>
                     <ParticipantName />
                   </>
                 ) : (
@@ -154,9 +157,7 @@ export const ParticipantTile = ({
                   </>
                 )}
               </div>
-              <div className="lk-participant-metadata-item">
-                <ConnectionQualityIndicator />
-              </div>
+              <ConnectionQualityIndicator className="lk-participant-metadata-item" />
             </div>
           </>
         )}

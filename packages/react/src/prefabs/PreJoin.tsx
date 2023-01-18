@@ -12,6 +12,7 @@ import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { useMediaDevices } from '../components/controls/MediaDeviceSelect';
 import { TrackToggle } from '../components/controls/TrackToggle';
+import { log } from '@livekit/components-core';
 
 export type LocalUserChoices = {
   username: string;
@@ -149,11 +150,11 @@ export const PreJoin = ({
   React.useEffect(() => {
     if (videoEnabled) {
       if (!localVideoTrack && !deviceError) {
-        console.log('starting video');
+        log.debug('starting video');
         setLocalVideoTrack(new LocalVideoTrack(getEmptyVideoStreamTrack()));
         createVideoTrack();
       } else if (prevVideoId.current !== selectedVideoDevice?.deviceId) {
-        console.log('restarting video');
+        log.debug('restarting video');
         localVideoTrack
           ?.restartTrack({
             deviceId: selectedVideoDevice?.deviceId,
@@ -165,8 +166,7 @@ export const PreJoin = ({
       }
     } else {
       if (localVideoTrack) {
-        console.log('disabling video');
-
+        log.debug('disabling video');
         localVideoTrack.mute();
       }
     }
@@ -253,7 +253,7 @@ export const PreJoin = ({
         onSubmit(userChoices);
       }
     } else {
-      console.warn('Validation failed with: ', userChoices);
+      log.warn('Validation failed with: ', userChoices);
     }
   }
 

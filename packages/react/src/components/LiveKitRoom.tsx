@@ -1,4 +1,4 @@
-import { roomEventSelector, setupLiveKitRoom } from '@livekit/components-core';
+import { log, roomEventSelector, setupLiveKitRoom } from '@livekit/components-core';
 import {
   AudioCaptureOptions,
   ConnectionState,
@@ -108,7 +108,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
     ...rest
   } = { ...defaultRoomProps, ...props };
   if (options && passedRoom) {
-    console.warn(
+    log.warn(
       'when using a manually created room, the options object will be ignored. set the desired options directly when creating the room instead.',
     );
   }
@@ -125,7 +125,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
         localP.setCameraEnabled(!!video, typeof video !== 'boolean' ? video : undefined);
         localP.setScreenShareEnabled(!!screen, typeof screen !== 'boolean' ? screen : undefined);
       } catch (e) {
-        console.warn(e);
+        log.warn(e);
         onError?.(e as Error);
       }
     };
@@ -152,13 +152,13 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
       return;
     }
     if (!serverUrl) {
-      console.warn('no livekit url provided');
+      log.warn('no livekit url provided');
       onError?.(Error('no livekit url provided'));
       return;
     }
     if (connect) {
       room.connect(serverUrl, token, connectOptions).catch((e) => {
-        console.warn(e);
+        log.warn(e);
         onError?.(e as Error);
       });
     } else {

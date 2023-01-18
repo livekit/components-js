@@ -1,18 +1,30 @@
-<a href="https://livekit.io"><img src="./.github/assets/livekit.svg" width="132" height="30" alt="LiveKit logo" /></a>
+<a href="https://livekit.io/">
+  <img src="./.github/assets/livekit-mark.png" alt="LiveKit logo" width="100" height="100">
+</a>
+
+<h1>
+  LiveKit Components
+</h1>
+
+<p>
+  <a href="#get-started"><strong>Get started</strong></a>
+  •
+  <a href="https://docs.livekit.io/">LiveKit Docs</a>
+  •
+  <a href="https://livekit.io/cloud">LiveKit Cloud</a>
+  •
+  <a href="https://blog.livekit.io/">Blog</a>
+</p>
 
 <br>
 
-# LiveKit Components
-
-Create your [LiveKit](https://livekit.io) WebRTC experience without worrying about state.
-
-> **Disclaimer** This is project is in active development and open sourced as a developer preview. While APIs are unlikely to drastically change from here onwards, there's still the chance that some things might need tweaking after an update. We appreciate feedback from the community and are planning to incorporate your feedback to get to a stable version as soon as possible!
+> **Disclaimer —** This is project is in active development and open sourced as a developer preview. While APIs are unlikely to drastically change from here onwards, there's still the chance that some things might need tweaking after an update. We appreciate feedback from the community and are planning to incorporate your feedback to get to a stable version as soon as possible!
 
 ![LiveKit Components Preview](./.github/assets/components-preview-grid.png)
 
 ## About LiveKit Components
 
-LiveKit Components give you a declarative way to build your real-time LiveKit audio/video frontend with React.
+Create your [LiveKit](https://livekit.io) WebRTC experience without worrying about state. LiveKit Components give you a declarative way to build your real-time LiveKit audio/video frontend with React.
 
 Every use case is different and apps in the real world are individual and unique. We don't pretend to have the perfect solution that fits all use cases. Instead, we've taken an approach where we give you reasonable defaults, without taking away full control over each component if you want it.
 
@@ -53,7 +65,7 @@ On top of that we provide a handful of pre-defined css variables to easily theme
 
 The component we offer does not fit your requirements? We have the solution for you! Each component comes with its own React hook that allows you to create your own component with minimal boilerplate. Of course, you can also combine your own component with our pre-built components. It's common to start with our components to quickly sketch out a concept, and then replace some of them with your own components to build something we could never have imagined.
 
-### Get started
+## Get started
 
 The best way to get started is to use the [`@livekit/components-react`](/packages/react/) package and install it.
 

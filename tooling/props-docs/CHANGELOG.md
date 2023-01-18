@@ -1,5 +1,12 @@
 # @livekit/components-props-docs
 
+## 0.0.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @livekit/components-react@0.1.15
+
 ## 0.0.6
 
 ### Patch Changes

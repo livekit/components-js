@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 0.1.8
+
+### Patch Changes
+
+- Fix prejoin bugs - [#231](https://github.com/livekit/components-js/pull/231) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.7
 
 ### Patch Changes

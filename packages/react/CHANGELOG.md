@@ -1,5 +1,13 @@
 # @livekit/components-react
 
+## 0.1.18
+
+### Patch Changes
+
+- Fix mic dropdown on prejoin page - [#231](https://github.com/livekit/components-js/pull/231) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix prejoin bugs - [#231](https://github.com/livekit/components-js/pull/231) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.17
 
 ### Patch Changes

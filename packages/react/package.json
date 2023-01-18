@@ -54,6 +54,7 @@
     "@types/react-dom": "^18.0.8",
     "eslint-config-lk-custom": "0.1.0",
     "livekit-client": "^1.6.2",
-    "tsup": "^6.5.0"
+    "tsup": "^6.5.0",
+    "typescript": "^4.9.4"
   }
 }

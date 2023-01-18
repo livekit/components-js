@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.1.12
+
+### Patch Changes
+
+- Fix logger export - [`5977a9c`](https://github.com/livekit/components-js/commit/5977a9c881c7b520bad0209cbe9e3182d3a1ffbe) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.11
 
 ### Patch Changes

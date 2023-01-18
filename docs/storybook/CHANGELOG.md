@@ -1,5 +1,12 @@
 # @livekit/component-docs-storybook
 
+## 1.0.9
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @livekit/components-react@0.1.16
+
 ## 1.0.8
 
 ### Patch Changes

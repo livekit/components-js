@@ -117,6 +117,8 @@ type UseTracksProps = {
   excludePinnedTracks?: boolean;
   filter?: TracksFilter;
   filterDependencies?: Array<any>;
+  sort?: (a: TrackParticipantPair, b: TrackParticipantPair) => number;
+  sortDependencies?: Array<unknown>;
 };
 
 /**
@@ -134,6 +136,8 @@ export function useTracks({
   excludePinnedTracks,
   filter,
   filterDependencies = [],
+  sort,
+  sortDependencies = [],
 }: UseTracksProps) {
   const room = useRoomContext();
   const layoutContext = useMaybeLayoutContext();
@@ -166,8 +170,19 @@ export function useTracks({
     if (filter) {
       trackParticipantPairs = trackParticipantPairs.filter(filter);
     }
+    if (sort) {
+      trackParticipantPairs.sort(sort);
+    }
     setPairs(trackParticipantPairs);
-  }, [unfilteredPairs, excludePinnedTracks, filter, layoutContext, ...filterDependencies]);
+  }, [
+    unfilteredPairs,
+    excludePinnedTracks,
+    filter,
+    layoutContext,
+    sort,
+    ...filterDependencies,
+    ...sortDependencies,
+  ]);
 
   // React.useDebugValue(`Pairs count: ${pairs.length}`);
 

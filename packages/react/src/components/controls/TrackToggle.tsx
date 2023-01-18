@@ -27,7 +27,7 @@ export function useTrackToggle({ source, onChange, initialState, ...rest }: UseT
   );
 
   const pending = useObservableState(pendingObserver, false);
-  const enabled = useObservableState(enabledObserver, !!track?.isEnabled);
+  const enabled = useObservableState(enabledObserver, initialState ?? !!track?.isEnabled);
 
   React.useEffect(() => {
     onChange?.(enabled);

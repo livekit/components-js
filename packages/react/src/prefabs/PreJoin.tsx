@@ -53,7 +53,7 @@ export type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'
 function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   enabled: boolean,
   deviceId: string,
-  kind: Omit<MediaDeviceKind, 'audiooutput'>,
+  kind: 'videoinput' | 'audioinput',
 ) {
   const [deviceError, setDeviceError] = React.useState<Error | null>(null);
 
@@ -69,7 +69,7 @@ function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
     setLocalDeviceId(deviceId);
   }, [deviceId]);
 
-  const createTrack = async (deviceId: string, kind: MediaDeviceKind) => {
+  const createTrack = async (deviceId: string, kind: 'videoinput' | 'audioinput') => {
     try {
       const track =
         kind === 'videoinput'
@@ -112,7 +112,7 @@ function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   React.useEffect(() => {
     if (!enabled) {
       if (localTrack) {
-        log.debug('muting video track');
+        log.debug(`muting ${kind} track`);
         localTrack.mute().then(() => log.debug(localTrack.mediaStreamTrack));
       }
       return;
@@ -122,7 +122,7 @@ function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
       selectedDevice?.deviceId &&
       prevDeviceId.current !== selectedDevice?.deviceId
     ) {
-      log.debug('switching video device from', prevDeviceId.current, selectedDevice.deviceId);
+      log.debug(`switching ${kind} device from`, prevDeviceId.current, selectedDevice.deviceId);
       switchDevice(localTrack, selectedDevice.deviceId);
     } else {
       localTrack?.unmute();

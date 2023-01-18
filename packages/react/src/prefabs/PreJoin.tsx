@@ -57,7 +57,7 @@ function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
 ) {
   const [deviceError, setDeviceError] = React.useState<Error | null>(null);
 
-  const devices = useMediaDevices({ kind: 'videoinput' });
+  const devices = useMediaDevices({ kind });
   const [selectedDevice, setSelectedDevice] = React.useState<MediaDeviceInfo | undefined>(
     undefined,
   );
@@ -274,7 +274,7 @@ export const PreJoin = ({
           <div className="lk-button-group-menu">
             <MediaDeviceMenu
               initialSelection={audio.selectedDevice?.deviceId}
-              kind="videoinput"
+              kind="audioinput"
               onActiveDeviceChange={(_, deviceId) => {
                 log.warn('active device chanaged', deviceId);
                 setAudioDeviceId(deviceId);

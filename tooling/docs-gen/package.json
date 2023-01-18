@@ -1,9 +1,5 @@
 {
   "name": "@livekit/components-docs-gen",
-<<<<<<< Updated upstream
-  "version": "0.0.10",
-=======
->>>>>>> Stashed changes
   "description": "Generate component docs.",
   "keywords": [
     "docs",

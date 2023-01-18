@@ -1,14 +1,18 @@
-<p align="center">
-  <a href="https://livekit.io/">
-    <img src="./.github/assets/livekit-mark.png" alt="LiveKit logo" width="170" height="170">
-  </a>
-</p>
+<a href="https://livekit.io/">
+  <img src="./.github/assets/livekit-mark.png" alt="LiveKit logo" width="170" height="170">
+</a>
 
-<h1 align="center">LiveKit Components</h1>
-
-<p align="center">
-  Create your LiveKit WebRTC experience without worrying about state.
+<h1>
+  LiveKit Components
   <br>
+  <small>
+    <small>
+      Create your LiveKit WebRTC experience without worrying about state.
+    </small>
+  </small>
+</h1>
+
+<p>
   <a href="https://docs.livekit.io/"><strong>LiveKit Docs »</strong></a>
   ·
   <a href="https://livekit.io/cloud">LiveKit Cloud</a>

@@ -1,8 +1,6 @@
 import {
   createLocalAudioTrack,
   createLocalVideoTrack,
-  getEmptyAudioStreamTrack,
-  getEmptyVideoStreamTrack,
   LocalAudioTrack,
   LocalVideoTrack,
   Track,
@@ -13,6 +11,7 @@ import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { useMediaDevices } from '../components/controls/MediaDeviceSelect';
 import { TrackToggle } from '../components/controls/TrackToggle';
 import { log } from '@livekit/components-core';
+import { ParticipantPlaceholder } from '../assets/images';
 
 export type LocalUserChoices = {
   username: string;
@@ -51,6 +50,101 @@ export type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'
   debug?: boolean;
 };
 
+function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
+  enabled: boolean,
+  deviceId: string,
+  kind: 'videoinput' | 'audioinput',
+) {
+  const [deviceError, setDeviceError] = React.useState<Error | null>(null);
+
+  const devices = useMediaDevices({ kind: 'videoinput' });
+  const [selectedDevice, setSelectedDevice] = React.useState<MediaDeviceInfo | undefined>(
+    undefined,
+  );
+
+  const [localTrack, setLocalTrack] = React.useState<T>();
+  const [localDeviceId, setLocalDeviceId] = React.useState<string>(deviceId);
+
+  React.useEffect(() => {
+    setLocalDeviceId(deviceId);
+  }, [deviceId]);
+
+  const createTrack = async (deviceId: string, kind: 'videoinput' | 'audioinput') => {
+    try {
+      const track =
+        kind === 'videoinput'
+          ? await createLocalVideoTrack({
+              deviceId: deviceId,
+              resolution: VideoPresets.h720.resolution,
+            })
+          : await createLocalAudioTrack({ deviceId });
+
+      const newDeviceId = await track.getDeviceId();
+      if (newDeviceId && deviceId !== newDeviceId) {
+        prevDeviceId.current = newDeviceId;
+        setLocalDeviceId(newDeviceId);
+      }
+      setLocalTrack(track as T);
+    } catch (e) {
+      if (e instanceof Error) {
+        setDeviceError(e);
+      }
+    }
+  };
+
+  const switchDevice = async (track: LocalVideoTrack | LocalAudioTrack, id: string) => {
+    await track.restartTrack({
+      deviceId: id,
+    });
+    prevDeviceId.current = id;
+  };
+
+  const prevDeviceId = React.useRef(localDeviceId);
+
+  React.useEffect(() => {
+    if (enabled && !localTrack && !deviceError) {
+      log.debug('creating track', kind);
+      createTrack(localDeviceId, kind);
+    }
+  }, [enabled, localTrack, deviceError]);
+
+  // switch camera device
+  React.useEffect(() => {
+    if (!enabled) {
+      if (localTrack) {
+        log.debug(`muting ${kind} track`);
+        localTrack.mute().then(() => log.debug(localTrack.mediaStreamTrack));
+      }
+      return;
+    }
+    if (
+      localTrack &&
+      selectedDevice?.deviceId &&
+      prevDeviceId.current !== selectedDevice?.deviceId
+    ) {
+      log.debug(`switching ${kind} device from`, prevDeviceId.current, selectedDevice.deviceId);
+      switchDevice(localTrack, selectedDevice.deviceId);
+    } else {
+      localTrack?.unmute();
+    }
+
+    return () => {
+      localTrack?.stop();
+      localTrack?.mute();
+    };
+  }, [localTrack, selectedDevice, enabled, kind]);
+
+  React.useEffect(() => {
+    setSelectedDevice(devices.find((dev) => dev.deviceId === localDeviceId));
+  }, [localDeviceId, devices]);
+
+  return {
+    selectedDevice,
+    localTrack,
+    deviceError,
+  };
+}
+
 /**
  * The PreJoin prefab component is normally presented to the user before he enters a room.
  * This component allows the user to check and select the preferred media device (camera und microphone).
@@ -80,141 +174,31 @@ export const PreJoin = ({
   const [videoEnabled, setVideoEnabled] = React.useState<boolean>(
     defaults.videoEnabled ?? DEFAULT_USER_CHOICES.videoEnabled,
   );
+  const [videoDeviceId, setVideoDeviceId] = React.useState<string>(
+    defaults.videoDeviceId ?? DEFAULT_USER_CHOICES.videoDeviceId,
+  );
   const [audioEnabled, setAudioEnabled] = React.useState<boolean>(
     defaults.audioEnabled ?? DEFAULT_USER_CHOICES.audioEnabled,
   );
-  const [selectedVideoDevice, setSelectedVideoDevice] = React.useState<MediaDeviceInfo | undefined>(
-    undefined,
-  );
-  const [selectedAudioDevice, setSelectedAudioDevice] = React.useState<MediaDeviceInfo | undefined>(
-    undefined,
+  const [audioDeviceId, setAudioDeviceId] = React.useState<string>(
+    defaults.audioDeviceId ?? DEFAULT_USER_CHOICES.audioDeviceId,
   );
 
-  const [deviceError, setDeviceError] = React.useState<Error | null>(null);
-  const [audioDeviceError, setAudioDeviceError] = React.useState<Error | null>(null);
-
-  const videoDevices = useMediaDevices({ kind: 'videoinput' });
-  const audioDevices = useMediaDevices({ kind: 'audioinput' });
+  const video = usePreviewDevice(videoEnabled, videoDeviceId, 'videoinput');
 
   const videoEl = React.useRef(null);
-  const audioEl = React.useRef(null);
-  const [localVideoTrack, setLocalVideoTrack] = React.useState<LocalVideoTrack>();
-  const [localVideoDeviceId, setLocalVideoDeviceId] = React.useState<string>();
 
-  const [localAudioTrack, setLocalAudioTrack] = React.useState<LocalAudioTrack>();
-  const [localAudioDeviceId, setLocalAudioDeviceId] = React.useState<string>();
+  React.useEffect(() => {
+    if (videoEl.current) video.localTrack?.attach(videoEl.current);
+
+    return () => {
+      video.localTrack?.detach();
+    };
+  }, [video.localTrack, videoEl]);
+
+  const audio = usePreviewDevice(audioEnabled, audioDeviceId, 'audioinput');
 
   const [isValid, setIsValid] = React.useState<boolean>();
-
-  const createVideoTrack = async (deviceId?: string | undefined) => {
-    try {
-      const track = await createLocalVideoTrack({
-        deviceId: deviceId,
-        resolution: VideoPresets.h720.resolution,
-      });
-
-      const newDeviceId = await track.getDeviceId();
-      setLocalVideoTrack(track);
-      if (deviceId !== newDeviceId) {
-        setLocalVideoDeviceId(newDeviceId);
-      }
-    } catch (e) {
-      if (e instanceof Error) {
-        setDeviceError(e);
-        onError?.(e);
-      }
-    }
-  };
-
-  const createAudioTrack = async (deviceId?: string | undefined) => {
-    try {
-      const track = await createLocalAudioTrack({
-        deviceId: deviceId,
-      });
-
-      const newDeviceId = await track.getDeviceId();
-      setLocalAudioTrack(track);
-      if (deviceId !== newDeviceId) {
-        setLocalAudioDeviceId(newDeviceId);
-      }
-    } catch (e) {
-      if (e instanceof Error) {
-        setAudioDeviceError(e);
-        onError?.(e);
-      }
-    }
-  };
-
-  const prevVideoId = React.useRef(localVideoDeviceId);
-
-  React.useEffect(() => {
-    if (videoEnabled) {
-      if (!localVideoTrack && !deviceError) {
-        log.debug('starting video');
-        setLocalVideoTrack(new LocalVideoTrack(getEmptyVideoStreamTrack()));
-        createVideoTrack();
-      } else if (prevVideoId.current !== selectedVideoDevice?.deviceId) {
-        log.debug('restarting video');
-        localVideoTrack
-          ?.restartTrack({
-            deviceId: selectedVideoDevice?.deviceId,
-          })
-          .catch((e) => setAudioDeviceError(e));
-        prevVideoId.current = selectedVideoDevice?.deviceId;
-      } else {
-        localVideoTrack?.unmute();
-      }
-    } else {
-      if (localVideoTrack) {
-        log.debug('disabling video');
-        localVideoTrack.mute();
-      }
-    }
-    return () => {
-      localVideoTrack?.mute();
-      localVideoTrack?.stop();
-    };
-  }, [videoEnabled, selectedVideoDevice, localVideoTrack, deviceError]);
-
-  const prevAudioId = React.useRef(localAudioDeviceId);
-
-  React.useEffect(() => {
-    if (audioEnabled) {
-      if (!localAudioTrack && !audioDeviceError) {
-        setLocalAudioTrack(new LocalAudioTrack(getEmptyAudioStreamTrack()));
-        createAudioTrack();
-      } else if (prevAudioId.current !== selectedAudioDevice?.deviceId) {
-        localAudioTrack
-          ?.restartTrack({
-            deviceId: selectedAudioDevice?.deviceId,
-          })
-          .catch((e) => setAudioDeviceError(e));
-      } else {
-        localAudioTrack?.unmute();
-      }
-    } else {
-      localAudioTrack?.stop();
-    }
-    return () => {
-      localAudioTrack?.stop();
-    };
-  }, [audioEnabled, localAudioTrack, selectedAudioDevice, audioDeviceError]);
-
-  React.useEffect(() => {
-    if (videoEl.current) localVideoTrack?.attach(videoEl.current);
-
-    return () => {
-      localVideoTrack?.detach();
-    };
-  }, [localVideoTrack, videoEl]);
-
-  React.useEffect(() => {
-    setSelectedVideoDevice(videoDevices.find((dev) => dev.deviceId === localVideoDeviceId));
-  }, [localVideoDeviceId, videoDevices]);
-
-  React.useEffect(() => {
-    setSelectedAudioDevice(audioDevices.find((dev) => dev.deviceId === localAudioDeviceId));
-  }, [localAudioDeviceId, audioDevices]);
 
   const handleValidation = React.useCallback(
     (values: LocalUserChoices) => {
@@ -228,22 +212,33 @@ export const PreJoin = ({
   );
 
   React.useEffect(() => {
+    if (audio.deviceError) {
+      onError?.(audio.deviceError);
+    }
+  }, [audio.deviceError, onError]);
+  React.useEffect(() => {
+    if (video.deviceError) {
+      onError?.(video.deviceError);
+    }
+  }, [video.deviceError, onError]);
+
+  React.useEffect(() => {
     const newUserChoices = {
       username: username,
       videoEnabled: videoEnabled,
+      videoDeviceId: video.selectedDevice?.deviceId ?? '',
       audioEnabled: audioEnabled,
-      videoDeviceId: selectedVideoDevice?.deviceId ?? '',
-      audioDeviceId: selectedAudioDevice?.deviceId ?? '',
+      audioDeviceId: audio.selectedDevice?.deviceId ?? '',
     };
     setUserChoices(newUserChoices);
     setIsValid(handleValidation(newUserChoices));
   }, [
     username,
     videoEnabled,
-    audioEnabled,
-    selectedAudioDevice,
-    selectedVideoDevice,
+    video.selectedDevice,
     handleValidation,
+    audioEnabled,
+    audio.selectedDevice,
   ]);
 
   function handleSubmit(event: React.FormEvent) {
@@ -259,18 +254,14 @@ export const PreJoin = ({
 
   return (
     <div className="lk-prejoin" {...htmlProps}>
-      {localVideoTrack ? (
-        <video ref={videoEl} />
-      ) : (
-        <div className="lk-camera-off-note">Camera is off</div>
-      )}
-      {localAudioTrack ? (
-        <div className="lk-audio-container">
-          <audio ref={audioEl} />
-        </div>
-      ) : (
-        <></>
-      )}
+      <div className="lk-video-container">
+        {video.localTrack && <video ref={videoEl} width="1280" height="720" />}
+        {(!video.localTrack || !videoEnabled) && (
+          <div className="lk-camera-off-note">
+            <ParticipantPlaceholder />
+          </div>
+        )}
+      </div>
       <div className="lk-button-group-container">
         <div className="lk-button-group audio">
           <TrackToggle
@@ -282,12 +273,13 @@ export const PreJoin = ({
           </TrackToggle>
           <div className="lk-button-group-menu">
             <MediaDeviceMenu
-              kind="audioinput"
-              initialSelection={selectedAudioDevice?.deviceId}
-              onActiveDeviceChange={(_, deviceId) =>
-                setSelectedAudioDevice(audioDevices.find((d) => d.deviceId === deviceId))
-              }
-              disabled={!!!selectedAudioDevice}
+              initialSelection={audio.selectedDevice?.deviceId}
+              kind="videoinput"
+              onActiveDeviceChange={(_, deviceId) => {
+                log.warn('active device chanaged', deviceId);
+                setAudioDeviceId(deviceId);
+              }}
+              disabled={!!!audio.selectedDevice}
             />
           </div>
         </div>
@@ -301,12 +293,13 @@ export const PreJoin = ({
           </TrackToggle>
           <div className="lk-button-group-menu">
             <MediaDeviceMenu
-              initialSelection={selectedVideoDevice?.deviceId}
+              initialSelection={video.selectedDevice?.deviceId}
               kind="videoinput"
-              onActiveDeviceChange={(_, deviceId) =>
-                setSelectedVideoDevice(videoDevices.find((d) => d.deviceId === deviceId))
-              }
-              disabled={!!!selectedVideoDevice}
+              onActiveDeviceChange={(_, deviceId) => {
+                log.warn('active device chanaged', deviceId);
+                setVideoDeviceId(deviceId);
+              }}
+              disabled={!!!video.selectedDevice}
             />
           </div>
         </div>

@@ -1,8 +1,7 @@
 .participant-name {
-  font-size: .875rem;
+  font-size: 0.875rem;
 
   &::after {
-    // TODO: Add this data attribute to the prefixer plugin. Currently this data attribute does not get prefixed.
     content: attr(data-participant-name);
   }
 }

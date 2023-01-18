@@ -212,6 +212,17 @@ export const PreJoin = ({
   );
 
   React.useEffect(() => {
+    if (audio.deviceError) {
+      onError?.(audio.deviceError);
+    }
+  }, audio.deviceError);
+  React.useEffect(() => {
+    if (video.deviceError) {
+      onError?.(video.deviceError);
+    }
+  }, [video.deviceError]);
+
+  React.useEffect(() => {
     const newUserChoices = {
       username: username,
       videoEnabled: videoEnabled,

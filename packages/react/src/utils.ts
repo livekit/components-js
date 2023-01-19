@@ -77,13 +77,13 @@ export const useSize = (target: React.RefObject<HTMLDivElement>) => {
 export type TokenizeGrammar = { [type: string]: RegExp };
 
 export function tokenize(message: string, grammar: TokenizeGrammar) {
-  let matches = Object.entries(grammar)
+  const matches = Object.entries(grammar)
     .map(([type, rx], weight) =>
       Array.from(message.matchAll(rx)).map((match) => ({ type, weight, match })),
     )
     .flat()
     .sort((a, b) => {
-      let d = a.match.index - b.match.index;
+      const d = a.match.index - b.match.index;
       return d != 0 ? d : a.weight - b.weight;
     })
     .filter(({ match }, i, arr) => {

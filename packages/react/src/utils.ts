@@ -79,25 +79,30 @@ export type TokenizeGrammar = { [type: string]: RegExp };
 export function tokenize(message: string, grammar: TokenizeGrammar) {
   const matches = Object.entries(grammar)
     .map(([type, rx], weight) =>
-      Array.from(message.matchAll(rx)).map((match) => ({ type, weight, match })),
+      Array.from(message.matchAll(rx)).map(({ index, 0: content }) => ({
+        type,
+        weight,
+        content,
+        index: index ?? 0,
+      })),
     )
     .flat()
     .sort((a, b) => {
-      const d = a.match.index - b.match.index;
+      const d = a.index - b.index;
       return d != 0 ? d : a.weight - b.weight;
     })
-    .filter(({ match }, i, arr) => {
+    .filter(({ index }, i, arr) => {
       if (i === 0) return true;
-      const prev = arr[i - 1].match;
-      return prev.index + prev[0].length <= match.index;
+      const prev = arr[i - 1];
+      return prev.index + prev.content.length <= index;
     });
 
   const tokens = [];
   let pos = 0;
-  for (const { type, match } of matches) {
-    if (match.index > pos) tokens.push(message.substring(pos, match.index));
-    tokens.push({ type, content: match[0] });
-    pos = match.index + match[0].length;
+  for (const { type, content, index } of matches) {
+    if (index > pos) tokens.push(message.substring(pos, index));
+    tokens.push({ type, content });
+    pos = index + content.length;
   }
   return tokens;
 }

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { mergeProps as mergePropsReactAria } from './mergeProps';
 import { Observable } from 'rxjs';
+import useResizeObserver from '@react-hook/resize-observer';
 
 type LKComponentAttributes<T extends HTMLElement> = React.HTMLAttributes<T>;
 
@@ -58,4 +59,18 @@ function cloneSingleChild(
   });
 }
 
-export { mergeProps, LKComponentAttributes, useObservableState, cloneSingleChild };
+const useSize = (target: React.RefObject<HTMLDivElement>) => {
+  const [size, setSize] = React.useState({ width: 0, height: 0 });
+  React.useLayoutEffect(() => {
+    if (target?.current) {
+      const { width, height } = target.current.getBoundingClientRect();
+      setSize({ width, height });
+    }
+  }, [target.current]);
+
+  // Where the magic happens
+  useResizeObserver(target, (entry) => setSize(entry.contentRect));
+  return size;
+};
+
+export { mergeProps, LKComponentAttributes, useObservableState, cloneSingleChild, useSize };

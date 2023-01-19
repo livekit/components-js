@@ -38,6 +38,7 @@
   "dependencies": {
     "@floating-ui/react": "^0.15.1",
     "@livekit/components-core": "0.1.12",
+    "@react-hook/resize-observer": "^1.2.6",
     "clsx": "^1.2.1"
   },
   "peerDependencies": {

@@ -43,11 +43,9 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
       <LayoutContextProvider onPinChange={handleFocusStateChange} onWidgetChange={setWidgetState}>
         <div className="lk-video-conference-inner">
           {layout === 'grid' ? (
-            <div className="lk-grid-layout-wrapper">
-              <GridLayout>
-                <TileLoop />
-              </GridLayout>
-            </div>
+            <GridLayout>
+              <TileLoop />
+            </GridLayout>
           ) : (
             <div className="lk-focus-layout-wrapper">
               <FocusLayoutContainer />

@@ -9,36 +9,23 @@
 }
 
 .grid-layout {
-  --lk-p-count: 2;
-  --lk-max-col-count: 5;
-  --lk-col-count: min(
-    calc(var(--lk-p-count) / var(--lk-max-col-count) + 1),
-    var(--lk-max-col-count)
-  );
+  --lk-col-count: 2;
   display: grid;
   grid-template-columns: repeat(var(--lk-col-count), minmax(0, 1fr));
-  grid-template-rows: repeat(auto-fit, minmax(min-content, 1fr));
+  grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
   grid-gap: var(--grid-gap);
   width: 100%;
-  // width: fit-content;
   height: 100%;
   max-width: 100%;
   max-height: 100%;
   padding: var(--grid-gap);
 
   > * {
-    // height: 100%;
-    // width: 100%;
-    max-width: 100%;
-    max-height: 100%;
-    aspect-ratio: 16 / 10;
-    object-fit: cover;
-
-    // margin: auto;
-    // justify-self: center;
-  }
-
-  @media (max-width: 660px) {
-    grid-template-columns: repeat(calc(var(--lk-col-count) / 1.5), 1fr);
+    height: 100%;
+    width: 100%;
+    // max-width: 100%;
+    // max-height: 100%;
+    // aspect-ratio: 16 / 10;
+    // object-fit: cover;
   }
 }

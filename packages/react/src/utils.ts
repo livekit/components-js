@@ -89,7 +89,7 @@ export function tokenize(message: string, grammar: TokenizeGrammar) {
     .flat()
     .sort((a, b) => {
       const d = a.index - b.index;
-      return d != 0 ? d : a.weight - b.weight;
+      return d !== 0 ? d : a.weight - b.weight;
     })
     .filter(({ index }, i, arr) => {
       if (i === 0) return true;

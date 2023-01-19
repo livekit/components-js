@@ -89,7 +89,7 @@ export function App() {
 
 ## Examples
 
-There are some basic example on how to use and customize LiveKit Components in the [nextjs example folder](/tree/main/examples/nextjs/)
+There are some basic example on how to use and customize LiveKit Components in the [nextjs example folder](./examples/nextjs/)
 
 In order to set the examples up locally follow the [development guide](#development-setup).
 

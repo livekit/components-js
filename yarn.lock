@@ -7096,7 +7096,7 @@ lines-and-columns@^1.1.6:
 
 livekit-client@^1.6.2:
   version "1.6.2"
-  resolved "https://registry.npmjs.org/livekit-client/-/livekit-client-1.6.2.tgz"
+  resolved "https://registry.yarnpkg.com/livekit-client/-/livekit-client-1.6.2.tgz#a5452ac557e67da099642d01d5fe571254bdedef"
   integrity sha512-OJIcBY8fzS8tf4vvBL/LNjmEHMFRLivnRjBDjbSiJ8nqV7UB7iSN40RMAejp/OPjhB5ys1u8tt6m3RIXrG2TJA==
   dependencies:
     async-await-queue "^1.2.1"

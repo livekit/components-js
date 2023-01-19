@@ -1,5 +1,13 @@
 # @livekit/components-styles
 
+## 0.1.9
+
+### Patch Changes
+
+- Internal revisions of the component and prefab structure. - [#241](https://github.com/livekit/components-js/pull/241) ([@Ocupe](https://github.com/Ocupe))
+
+- Monorepo-wide package updates and cleanups. - [#235](https://github.com/livekit/components-js/pull/235) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.1.8
 
 ### Patch Changes

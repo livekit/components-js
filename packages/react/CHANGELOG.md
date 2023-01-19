@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 0.1.19
+
+### Patch Changes
+
+- Internal revisions of the component and prefab structure. - [#241](https://github.com/livekit/components-js/pull/241) ([@Ocupe](https://github.com/Ocupe))
+
+- Monorepo-wide package updates and cleanups. - [#235](https://github.com/livekit/components-js/pull/235) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`1e53f58`](https://github.com/livekit/components-js/commit/1e53f58901c56224bc1a060210baf5d5beb9d17f), [`6a13879`](https://github.com/livekit/components-js/commit/6a13879d8a7092aa566f500f43e2e2057a3dcd8a)]:
+  - @livekit/components-core@0.1.13
+
 ## 0.1.18
 
 ### Patch Changes

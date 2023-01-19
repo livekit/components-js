@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-react",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "license": "Apache-2.0",
   "author": "LiveKit",
   "exports": {
@@ -37,7 +37,7 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@floating-ui/react": "^0.15.1",
-    "@livekit/components-core": "0.1.12",
+    "@livekit/components-core": "0.1.13",
     "@react-hook/resize-observer": "^1.2.6",
     "clsx": "^1.2.1"
   },
@@ -49,7 +49,7 @@
     "@svgr/cli": "^6.5.1",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
-    "eslint-config-lk-custom": "0.1.0",
+    "eslint-config-lk-custom": "0.1.1",
     "livekit-client": "^1.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -1,5 +1,11 @@
 # @livekit/components-alpha-docs
 
+## 0.0.3
+
+### Patch Changes
+
+- Monorepo-wide package updates and cleanups. - [#235](https://github.com/livekit/components-js/pull/235) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.0.2
 
 ### Patch Changes

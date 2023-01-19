@@ -11,7 +11,6 @@ import {
 } from 'livekit-client';
 import * as React from 'react';
 import { RoomContext } from '../context';
-import { VideoConference } from '../prefabs/VideoConference';
 import { mergeProps } from '../utils';
 
 export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onError'> {

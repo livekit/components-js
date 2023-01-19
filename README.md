@@ -89,11 +89,11 @@ export function App() {
 
 ## Examples
 
-We have a fully featured video conferencing application in our [examples](/examples/meet/) that powers https://meet.livekit.io.
-
-Additionally there are some basic example on how to use and customize LiveKit Components in the [nextjs example folder](/examples/next/)
+There are some basic example on how to use and customize LiveKit Components in the [nextjs example folder](/tree/main/examples/nextjs/)
 
 In order to set the examples up locally follow the [development guide](#development-setup).
+
+We also have a fully featured video conferencing application built on top of LiveKit Components [here](https://github.com/livekit/meet) that powers https://meet.livekit.io.
 
 ## FAQ
 

@@ -1,1 +1,1 @@
-export { lkClassName } from './class-prefixer';
+export { prefixClass } from './class-prefixer';

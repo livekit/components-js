@@ -13,11 +13,11 @@ type UnprefixedClassNames =
 type Classes = PrefabClasses | ComponentClasses | LayoutClasses;
 
 /**
- * Converts a non prefixed CSS class into a prefixed one.
- *
+ * This function is a type safe way to add a prefix to a HTML class attribute.
+ * Only classes defined in the styles module are valid, any other class produces a ts error.
  * @internal
  */
-export function lkClassName(unprefixedClassName: UnprefixedClassNames): Classes {
+export function prefixClass(unprefixedClassName: UnprefixedClassNames): Classes {
   // @ts-ignore
   return `${cssPrefix}-${unprefixedClassName}`;
 }

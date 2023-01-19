@@ -5,7 +5,6 @@
 @use 'connection-quality';
 @use 'track-muted-indicator';
 @use 'participant-name';
-@use 'participant-tile';
 @use 'participant-media';
 @use 'media-device-select';
 @use 'start-audio';
@@ -13,3 +12,5 @@
 @use 'audio-visualizer';
 @use 'chat-toggle';
 @use 'toast';
+@use 'focus-layout';
+@use 'grid-layout';

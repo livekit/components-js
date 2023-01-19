@@ -1,7 +1,7 @@
-import { lkClassName } from '../utils';
+import { prefixClass } from '../styles-interface';
 
 export function setupParticipantTile() {
-  const className: string = lkClassName('participant-tile');
+  const className: string = prefixClass('participant-tile');
   return {
     className,
   };

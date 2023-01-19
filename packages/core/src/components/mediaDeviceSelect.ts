@@ -2,7 +2,7 @@ import { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
 import { BehaviorSubject, map, mergeWith } from 'rxjs';
 import log from '../logger';
 import { observeParticipantMedia } from '../observables/participant';
-import { lkClassName } from '../utils';
+import { prefixClass } from '../styles-interface';
 
 export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
   const activeDeviceSubject = new BehaviorSubject<string | undefined>(undefined);
@@ -37,7 +37,7 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
     }
     activeDeviceSubject.next(id);
   };
-  const className: string = lkClassName('media-device-select');
+  const className: string = prefixClass('media-device-select');
   return {
     className,
     activeDeviceObservable,

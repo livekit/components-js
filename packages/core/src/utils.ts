@@ -5,21 +5,7 @@ import {
   Track,
   TrackPublication,
 } from 'livekit-client';
-import type { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
-import type { UnprefixedClassNames } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
-import { cssPrefix } from './constants';
 import { PinState, TrackParticipantPair } from './types';
-export function kebabize(str: string) {
-  return str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
-}
-
-/**
- * Converts a non prefixed CSS class into a prefixed one.
- */
-export function lkClassName(unprefixedClassName: UnprefixedClassNames): ClassNames {
-  // @ts-ignore
-  return `${cssPrefix}-${unprefixedClassName}`;
-}
 
 export function isLocal(p: Participant) {
   return p instanceof LocalParticipant;

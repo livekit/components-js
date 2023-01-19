@@ -1,8 +1,8 @@
 import { log } from '@livekit/components-core';
 import * as React from 'react';
-import { TileLoop } from '../components/TileLoop';
-import { ParticipantFilter, useParticipants } from '../hooks';
-import { mergeProps, useSize } from '../utils';
+import { TileLoop } from '../TileLoop';
+import { ParticipantFilter, useParticipants } from '../../hooks';
+import { mergeProps, useSize } from '../../utils';
 
 export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   /**

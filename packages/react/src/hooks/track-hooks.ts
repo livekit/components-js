@@ -56,10 +56,6 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
       if (previousElement.current) {
         track?.detach(previousElement.current);
       }
-      if (track) {
-        log.debug('stopping track', source);
-        track?.stop();
-      }
     };
   }, [track, element]);
 

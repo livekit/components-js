@@ -3,7 +3,7 @@
   "name": "@livekit/components-alpha-docs",
   "version": "0.0.2",
   "description": "Preliminary alpha docs for LiveKit components.",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "author": "LiveKit",
   "repository": {
     "type": "git",

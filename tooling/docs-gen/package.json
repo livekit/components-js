@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@livekit/components-react": "0.1.18",
-    "eslint-config-custom": "^0.0.0",
+    "eslint-config-lk-custom": "*",
     "eslint-plugin-tsdoc": "^0.2.17",
     "glob": "^8.0.0",
     "mkdirp": "^1.0.4",
@@ -42,7 +42,6 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "eslint-config-custom": "*",
     "@types/glob": "^8.0.0",
     "@types/mkdirp": "^1.0.2"
   }

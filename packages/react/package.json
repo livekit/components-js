@@ -49,6 +49,8 @@
     "react-dom": ">=18"
   },
   "devDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "@svgr/cli": "^6.5.1",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",

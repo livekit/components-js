@@ -36,9 +36,8 @@ export function GridLayout({ filter, filterDependencies, ...props }: GridLayoutP
     const tileRatio = 16 / 10;
     const colAdjust = Math.sqrt(containerRatio / tileRatio);
     const colFraction = Math.sqrt(participants.length) * colAdjust;
-    const cols = Math.max(2, Math.round(colFraction));
+    const cols = Math.max(participants.length === 1 ? 1 : 2, Math.round(colFraction));
     const widthAdjust = Math.min(100, 100 + (cols > colFraction ? 1 : -1) * (colFraction % 1) * 50);
-    log.debug(colAdjust, Math.round(Math.sqrt(participants.length)), cols, widthAdjust);
     if (gridEl.current) {
       gridEl.current.style.setProperty('--lk-col-count', cols.toString());
       gridEl.current.style.width = `${widthAdjust}%`;

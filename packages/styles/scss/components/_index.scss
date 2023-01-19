@@ -1,16 +1,24 @@
 // Components
-@use 'button';
-@use 'disconnect-button';
-@use 'focus-toggle';
-@use 'connection-quality';
-@use 'track-muted-indicator';
-@use 'participant-name';
-@use 'participant-media';
-@use 'media-device-select';
-@use 'start-audio';
-@use 'room';
-@use 'audio-visualizer';
-@use 'chat-toggle';
+
+// Controls
+@use './controls/button';
+@use './controls/disconnect-button';
+@use './controls/focus-toggle';
+@use './controls/chat-toggle';
+@use './controls/media-device-select';
+@use './controls/start-audio';
+
+// Layout
+@use './layout/focus-layout';
+@use './layout/grid-layout';
+
+// Participant
+@use './participant/connection-quality';
+@use './participant/track-muted-indicator';
+@use './participant/participant-name';
+@use './participant/participant-media';
+@use './participant/audio-visualizer';
+
+// General
 @use 'toast';
-@use 'focus-layout';
-@use 'grid-layout';
+@use 'room';

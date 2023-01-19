@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ControlBar } from './ControlBar';
-import { FocusLayoutContainer } from '../layout/FocusLayout';
-import { GridLayout } from '../layout/GridLayout';
+import { FocusLayoutContainer } from '../components/layout/FocusLayout';
+import { GridLayout } from '../components/layout/GridLayout';
 import { TrackLoop } from '../components/TrackLoop';
 import { Track } from 'livekit-client';
 import { ParticipantAudioTile } from './ParticipantAudioTile';

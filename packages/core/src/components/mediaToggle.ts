@@ -1,7 +1,7 @@
 import { LocalParticipant, Room, Track } from 'livekit-client';
 import { BehaviorSubject, map, startWith } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
-import { lkClassName } from '../utils';
+import { prefixClass } from '../styles-interface';
 
 export function setupMediaToggle(source: Track.Source, room: Room) {
   const { localParticipant } = room;
@@ -59,7 +59,7 @@ export function setupMediaToggle(source: Track.Source, room: Room) {
     }
   };
 
-  const className: string = lkClassName('button');
+  const className: string = prefixClass('button');
   return { className, toggle, enabledObserver, pendingObserver: pendingSubject.asObservable() };
 }
 
@@ -76,7 +76,7 @@ export function setupManualToggle() {
     enabledSubject.next(state);
     pendingSubject.next(false);
   };
-  const className: string = lkClassName('button');
+  const className: string = prefixClass('button');
   return {
     className,
     toggle,

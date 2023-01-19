@@ -2,7 +2,7 @@ import { Room, RoomEvent } from 'livekit-client';
 import { map } from 'rxjs';
 import log from '../logger';
 import { observeRoomEvents } from '../observables/room';
-import { lkClassName } from '../utils';
+import { prefixClass } from '../styles-interface';
 
 function roomAudioPlaybackAllowedObservable(room: Room) {
   const observable = observeRoomEvents(room, RoomEvent.AudioPlaybackStatusChanged).pipe(
@@ -18,6 +18,6 @@ export function setupStartAudio() {
     log.info('Start Audio for room: ', room);
     await room.startAudio();
   };
-  const className: string = lkClassName('start-audio-button');
+  const className: string = prefixClass('start-audio-button');
   return { className, roomAudioPlaybackAllowedObservable, handleStartAudioPlayback };
 }

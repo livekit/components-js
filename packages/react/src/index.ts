@@ -25,6 +25,6 @@ export * from './hooks';
 
 export * from './prefabs';
 
-export * from './layout';
+export * from './components/layout';
 
 export * from './context';

@@ -76,10 +76,10 @@ export const useSize = (target: React.RefObject<HTMLDivElement>) => {
 
 export type TokenizeGrammar = { [type: string]: RegExp };
 
-export function tokenize(message: string, grammar: TokenizeGrammar) {
+export function tokenize(input: string, grammar: TokenizeGrammar) {
   const matches = Object.entries(grammar)
     .map(([type, rx], weight) =>
-      Array.from(message.matchAll(rx)).map(({ index, 0: content }) => ({
+      Array.from(input.matchAll(rx)).map(({ index, 0: content }) => ({
         type,
         weight,
         content,
@@ -100,7 +100,7 @@ export function tokenize(message: string, grammar: TokenizeGrammar) {
   const tokens = [];
   let pos = 0;
   for (const { type, content, index } of matches) {
-    if (index > pos) tokens.push(message.substring(pos, index));
+    if (index > pos) tokens.push(input.substring(pos, index));
     tokens.push({ type, content });
     pos = index + content.length;
   }

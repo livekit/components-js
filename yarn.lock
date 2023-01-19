@@ -1605,27 +1605,6 @@
     "@changesets/types" "^5.2.0"
     dotenv "^8.1.0"
 
-"@livekit/components-core@0.1.10":
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/@livekit/components-core/-/components-core-0.1.10.tgz#486e5ffa02e73298e169b481f113cd863a9ea139"
-  integrity sha512-HHbuhtNgfL1Ip5xIzMEsOyry53D/AEPFMRfefpQcIpM7LYoATjAilbJgAAtJmZH3aTm/EwyBS5SMgcQC/+vDwA==
-  dependencies:
-    rxjs "^7.5.6"
-
-"@livekit/components-react@0.1.14":
-  version "0.1.14"
-  resolved "https://registry.yarnpkg.com/@livekit/components-react/-/components-react-0.1.14.tgz#e1b240626369e6031e38e45afadc0b4178d9467e"
-  integrity sha512-GY6Nh9DHroiTUV5j1/kKyTx7tCOnz4H+PWW7QwnjPgKVRhCKUYSP3OfV/EEVRHJZvKiJ5TM+3xNIESLFYHAMaw==
-  dependencies:
-    "@floating-ui/react" "^0.15.1"
-    "@livekit/components-core" "0.1.10"
-    clsx "^1.2.1"
-
-"@livekit/components-styles@0.1.6":
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/@livekit/components-styles/-/components-styles-0.1.6.tgz#cc961f78662290cfed6ff264a705ad412c36a849"
-  integrity sha512-8ZpabmWy+oZR3gaDB5ptLiP5Ln2iKuZadaa5DkcinNiHYSFcRlmsx2ESddvS/4+ObD+R0HINe3xUYX/WLS6kzA==
-
 "@manypkg/find-root@^1.1.0":
   version "1.1.0"
   resolved "https://registry.npmjs.org/@manypkg/find-root/-/find-root-1.1.0.tgz"
@@ -9371,7 +9350,7 @@ run-parallel@^1.1.9:
   dependencies:
     queue-microtask "^1.2.2"
 
-rxjs@^7.5.2, rxjs@^7.5.6, rxjs@^7.8.0:
+rxjs@^7.5.2, rxjs@^7.8.0:
   version "7.8.0"
   resolved "https://registry.npmjs.org/rxjs/-/rxjs-7.8.0.tgz"
   integrity sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==

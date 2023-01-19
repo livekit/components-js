@@ -1,24 +1,10 @@
 {
+  "private": true,
   "name": "@livekit/components-props-docs",
   "version": "0.0.10",
   "description": "Extracts prop types for documentation purposes",
-  "keywords": [
-    "docs",
-    "props"
-  ],
-  "sideEffects": false,
+  "license": "Apache-2.0",
   "author": "LiveKit",
-  "license": "Apache 2.0",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "private": true,
-  "publishConfig": {
-    "access": "restricted"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/livekit/components/tree/main/tooling/props-docs"
@@ -26,12 +12,19 @@
   "bugs": {
     "url": "https://github.com/livekit/components/tree/main/tooling/props-docs"
   },
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsx src/build.ts",
     "clean": "rimraf dist .turbo",
     "typecheck": "tsc --noEmit"
   },
+  "sideEffects": false,
+  "types": "dist/index.d.ts",
   "dependencies": {
     "@livekit/components-react": "0.1.18",
     "glob": "^8.0.0",
@@ -43,5 +36,12 @@
   "devDependencies": {
     "@types/glob": "^8.0.0",
     "@types/mkdirp": "^1.0.2"
+  },
+  "keywords": [
+    "docs",
+    "props"
+  ],
+  "publishConfig": {
+    "access": "restricted"
   }
 }

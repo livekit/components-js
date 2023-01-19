@@ -1,9 +1,8 @@
 {
   "name": "@livekit/components-styles",
   "version": "0.1.8",
+  "license": "Apache-2.0",
   "author": "LiveKit",
-  "license": "MIT",
-  "main": "dist/styles.css",
   "exports": {
     ".": {
       "types": "./dist/types/general/styles.css.d.ts",
@@ -21,25 +20,20 @@
       "types": "./dist/types_unprefixed/styles.scss.d.ts"
     }
   },
-  "publishConfig": {
-    "access": "public"
-  },
+  "main": "dist/styles.css",
   "files": [
     "dist",
-    "scss",
-    "icons"
+    "icons",
+    "scss"
   ],
-  "engines": {
-    "node": ">=10"
-  },
   "scripts": {
-    "dev": "nodemon -e scss,js -x \"yarn build\"",
     "build": "yarn compile:sass && yarn postcss && yarn generate:types",
     "compile:sass": "sass scss:.temp/general themes:.temp/themes --style compressed",
-    "postcss": "postcss .temp/**/*.css --base .temp --dir ./dist",
+    "dev": "nodemon -e scss,js -x \"yarn build\"",
     "generate:types": "yarn generate:types:unprefixed && yarn generate:types:prefixed",
+    "generate:types:prefixed": "cd dist && typed-scss-modules '**/*.css' --exportType default --outputFolder ../dist/types --nameFormat kebab",
     "generate:types:unprefixed": "cd scss && typed-scss-modules '**/*.scss' --exportType default --outputFolder ../dist/types_unprefixed --nameFormat kebab --exportTypeName UnprefixedClassNames",
-    "generate:types:prefixed": "cd dist && typed-scss-modules '**/*.css' --exportType default --outputFolder ../dist/types --nameFormat kebab"
+    "postcss": "postcss .temp/**/*.css --base .temp --dir ./dist"
   },
   "peerDependencies": {},
   "devDependencies": {
@@ -51,5 +45,11 @@
     "postcss-variables-prefixer": "^1.2.0",
     "sass": "^1.54.6",
     "typed-scss-modules": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

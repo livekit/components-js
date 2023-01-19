@@ -1,37 +1,26 @@
 {
+  "private": true,
   "name": "@livekit/components",
   "version": "0.0.0",
-  "private": true,
+  "license": "Apache-2.0",
+  "author": "LiveKit",
   "scripts": {
     "build": "turbo run build",
-    "build:react": "turbo run build --filter=@livekit/components-react...",
     "build:core": "turbo run build --filter=@livekit/components-core...",
-    "build:styles": "turbo run build --filter=@livekit/components-styles...",
     "build:next": "turbo run build --filter=@livekit/component-example-next...",
+    "build:react": "turbo run build --filter=@livekit/components-react...",
     "build:storybook": "turbo run build --filter=@livekit/component-docs-storybook...",
-    "dev:storybook": "turbo run dev --filter=@livekit/component-docs-storybook...",
+    "build:styles": "turbo run build --filter=@livekit/components-styles...",
     "dev:next": "turbo run dev --filter=@livekit/component-example-next...",
-    "start:next": "turbo run start --filter=@livekit/component-example-next...",
-    "lint": "turbo run lint",
-    "test": "turbo run test",
-    "format": "prettier --check \"**/src/**/*.{ts,tsx,md}\"",
+    "dev:storybook": "turbo run dev --filter=@livekit/component-docs-storybook...",
+    "format:check": "prettier --check \"**/src/**/*.{ts,tsx,md}\"",
     "format:write": "prettier --write \"**/src/**/*.{ts,tsx,md}\"",
-    "clean:all": "turbo run clean:all",
+    "gen:docs": "turbo run gen:docs",
+    "lint": "turbo run lint",
     "release": "turbo run build --filter=./packages/* && changeset publish",
-    "tooling:update-readme-nav": "node tooling/readme-manager/update-nav-in-readmes.js",
-    "gen:docs": "turbo run gen:docs"
-  },
-  "devDependencies": {
-    "@changesets/cli": "^2.25.0",
-    "@livekit/changesets-changelog-github": "^0.0.3",
-    "glob": "^8.0.3",
-    "prettier": "^2.5.1",
-    "prettier-plugin-svelte": "^2.7.0",
-    "turbo": "^1.4.6",
-    "typescript": "^4.7.4"
-  },
-  "peerDependencies": {
-    "typescript": "^4.7.4"
+    "start:next": "turbo run start --filter=@livekit/component-example-next...",
+    "test": "turbo run test",
+    "tooling:update-readme-nav": "node tooling/readme-manager/update-nav-in-readmes.js"
   },
   "workspaces": [
     "packages/*",
@@ -39,5 +28,16 @@
     "docs/*",
     "tooling/*"
   ],
-  "dependencies": {}
+  "dependencies": {},
+  "peerDependencies": {
+    "typescript": "^4.9.4"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.26.0",
+    "@livekit/changesets-changelog-github": "^0.0.3",
+    "glob": "^8.1.0",
+    "prettier": "^2.8.3",
+    "turbo": "^1.7.0",
+    "typescript": "^4.9.4"
+  }
 }

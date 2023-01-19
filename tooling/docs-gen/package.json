@@ -1,21 +1,10 @@
 {
+  "private": true,
   "name": "@livekit/components-docs-gen",
   "version": "0.0.10",
   "description": "Generate component docs.",
-  "keywords": [
-    "docs",
-    "props"
-  ],
-  "sideEffects": false,
-  "author": "LiveKit",
   "license": "Apache 2.0",
-  "files": [
-    "dist"
-  ],
-  "private": true,
-  "publishConfig": {
-    "access": "restricted"
-  },
+  "author": "LiveKit",
   "repository": {
     "type": "git",
     "url": "https://github.com/livekit/components/tree/main/tooling/docs-gen"
@@ -23,17 +12,21 @@
   "bugs": {
     "url": "https://github.com/livekit/components/tree/main/tooling/docs-gen"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "prebuild": "rimraf generated",
     "build": "tsx src/build.ts",
     "clean": "rimraf generated .turbo",
-    "typecheck": "tsc --noEmit",
+    "gen:docs": "yarn build",
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
-    "gen:docs": "yarn build"
+    "typecheck": "tsc --noEmit"
   },
+  "sideEffects": false,
   "dependencies": {
     "@livekit/components-react": "0.1.18",
-    "eslint-config-custom": "^0.0.0",
+    "eslint-config-lk-custom": "*",
     "eslint-plugin-tsdoc": "^0.2.17",
     "glob": "^8.0.0",
     "mkdirp": "^1.0.4",
@@ -42,8 +35,14 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "eslint-config-custom": "*",
     "@types/glob": "^8.0.0",
     "@types/mkdirp": "^1.0.2"
+  },
+  "keywords": [
+    "docs",
+    "props"
+  ],
+  "publishConfig": {
+    "access": "restricted"
   }
 }

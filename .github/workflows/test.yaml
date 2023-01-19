@@ -18,8 +18,8 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
-          cache: 'yarn'
+          node-version: "16.x"
+          cache: "yarn"
 
       - name: Install Yarn
         run: |
@@ -30,7 +30,7 @@ jobs:
         run: yarn lint
 
       - name: Prettier
-        run: yarn format
+        run: yarn format:check
 
       - name: Build Packages
         run: yarn build

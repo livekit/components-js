@@ -93,7 +93,7 @@ function parseInfo(filePaths: string[]) {
  * Extract meta data of component docs
  */
 function extractComponentInfoMdx(docs: ComponentDoc[]) {
-  return docs.reduce((acc, def, _, allDefs) => {
+  return docs.reduce((acc, def) => {
     function createUniqueName(displayName: string) {
       const existing = acc.filter(
         (prev) => String(prev.def.displayName).toLowerCase() === displayName.toLowerCase(),
@@ -126,7 +126,7 @@ function extractComponentInfoMdx(docs: ComponentDoc[]) {
  * Extract meta data of component docs
  */
 function extractComponentInfoMd(docs: ComponentDoc[]) {
-  return docs.reduce((acc, def, _, allDefs) => {
+  return docs.reduce((acc, def) => {
     /** Skip if docstring contains @internal tag. */
     if (typeof def.tags === 'object' && Object.keys(def.tags).includes('internal')) {
       return acc;
@@ -159,8 +159,8 @@ function extractComponentInfoMd(docs: ComponentDoc[]) {
   }, [] as GenInfoMarkdown[]);
 }
 
-const hasHook = (displayName: string, allDefs: ComponentDoc[]) =>
-  allDefs.some((def) => def.displayName === `use${displayName}`);
+// const hasHook = (displayName: string, allDefs: ComponentDoc[]) =>
+//   allDefs.some((def) => def.displayName === `use${displayName}`);
 
 /**
  * Write doc files as .mdx files.

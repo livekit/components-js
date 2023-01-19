@@ -1,9 +1,9 @@
 import { ComponentDoc, PropItem } from 'react-docgen-typescript';
 
-const splitCamelCase = (camelCaseStr: string) =>
-  camelCaseStr.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+// const splitCamelCase = (camelCaseStr: string) =>
+//   camelCaseStr.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
 
-function addTitle(def: ComponentDoc, isHook: boolean = false): string {
+function addTitle(def: ComponentDoc, isHook = false): string {
   if (isHook) {
     return `# ${def.displayName} Hook\n`;
   } else {

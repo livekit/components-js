@@ -2,6 +2,8 @@
   "private": true,
   "name": "@livekit/components",
   "version": "0.0.0",
+  "license": "MIT",
+  "author": "LiveKit",
   "scripts": {
     "build": "turbo run build",
     "build:core": "turbo run build --filter=@livekit/components-core...",

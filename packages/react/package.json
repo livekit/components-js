@@ -1,6 +1,8 @@
 {
   "name": "@livekit/components-react",
   "version": "0.1.18",
+  "license": "MIT",
+  "author": "LiveKit",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

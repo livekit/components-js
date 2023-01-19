@@ -1,6 +1,7 @@
 {
   "name": "@livekit/components-core",
   "version": "0.1.12",
+  "license": "MIT",
   "author": "LiveKit",
   "exports": {
     ".": {

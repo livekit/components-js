@@ -2,6 +2,8 @@
   "private": true,
   "name": "eslint-config-lk-custom",
   "version": "0.1.0",
+  "license": "MIT",
+  "author": "LiveKit",
   "main": "index.js",
   "devDependencies": {
     "@changesets/cli": "^2.26.0",

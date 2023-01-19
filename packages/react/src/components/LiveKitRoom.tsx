@@ -213,9 +213,7 @@ export function LiveKitRoom(props: React.PropsWithChildren<LiveKitRoomProps>) {
   const { room, htmlProps } = useLiveKitRoom(props);
   return (
     <div {...htmlProps}>
-      <RoomContext.Provider value={room}>
-        {props.children ?? <VideoConference />}
-      </RoomContext.Provider>
+      <RoomContext.Provider value={room}>{props.children}</RoomContext.Provider>
     </div>
   );
 }

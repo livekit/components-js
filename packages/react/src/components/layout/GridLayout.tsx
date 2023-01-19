@@ -1,4 +1,3 @@
-import { log } from '@livekit/components-core';
 import * as React from 'react';
 import { TileLoop } from '../TileLoop';
 import { ParticipantFilter, useParticipants } from '../../hooks';

@@ -1,7 +1,7 @@
 import { LocalParticipant, Room, Track } from 'livekit-client';
 import { BehaviorSubject, map, startWith } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
-import { lkClassName } from '../utils';
+import { lkClassName } from '../styles-interface';
 
 export function setupMediaToggle(source: Track.Source, room: Room) {
   const { localParticipant } = room;

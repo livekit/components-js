@@ -1,7 +1,7 @@
 import { Participant, Track } from 'livekit-client';
 import { map, startWith } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
-import { lkClassName } from '../utils';
+import { lkClassName } from '../styles-interface';
 
 export function setupMediaTrack(participant: Participant, source: Track.Source) {
   const trackObserver = observeParticipantMedia(participant).pipe(

@@ -2,7 +2,7 @@ import { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
 import { BehaviorSubject, map, mergeWith } from 'rxjs';
 import log from '../logger';
 import { observeParticipantMedia } from '../observables/participant';
-import { lkClassName } from '../utils';
+import { lkClassName } from '../styles-interface';
 
 export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
   const activeDeviceSubject = new BehaviorSubject<string | undefined>(undefined);

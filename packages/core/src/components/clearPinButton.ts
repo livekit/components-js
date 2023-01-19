@@ -1,4 +1,4 @@
-// import { lkClassName } from '../utils';
+// import { lkClassName } from '../styles-interface';
 
 export function setupClearPinButton() {
   // const className = lkClassName('clear-pin-button');

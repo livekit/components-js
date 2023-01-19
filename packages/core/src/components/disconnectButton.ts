@@ -1,5 +1,5 @@
 import type { Room } from 'livekit-client';
-import { lkClassName } from '../utils';
+import { lkClassName } from '../styles-interface';
 
 export function setupDisconnectButton(room: Room) {
   const disconnect = (stopTracks?: boolean) => {

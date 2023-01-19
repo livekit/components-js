@@ -3,12 +3,12 @@ import { mergeProps as mergePropsReactAria } from './mergeProps';
 import { Observable } from 'rxjs';
 import useResizeObserver from '@react-hook/resize-observer';
 
-type LKComponentAttributes<T extends HTMLElement> = React.HTMLAttributes<T>;
+export type LKComponentAttributes<T extends HTMLElement> = React.HTMLAttributes<T>;
 
 /**
  * @internal
  */
-function isProp<U extends HTMLElement, T extends LKComponentAttributes<U>>(
+export function isProp<U extends HTMLElement, T extends LKComponentAttributes<U>>(
   prop: T | undefined,
 ): prop is T {
   return prop !== undefined;
@@ -17,16 +17,17 @@ function isProp<U extends HTMLElement, T extends LKComponentAttributes<U>>(
 /**
  * @internal
  */
-function mergeProps<U extends HTMLElement, T extends Array<LKComponentAttributes<U> | undefined>>(
-  ...props: T
-) {
+export function mergeProps<
+  U extends HTMLElement,
+  T extends Array<LKComponentAttributes<U> | undefined>,
+>(...props: T) {
   return mergePropsReactAria(...props.filter(isProp));
 }
 
 /**
  * @internal
  */
-function useObservableState<T>(
+export function useObservableState<T>(
   observable: Observable<T>,
   startWith: T,
   dependencies: Array<any> = [observable],
@@ -44,7 +45,7 @@ function useObservableState<T>(
 /**
  * @internal
  */
-function cloneSingleChild(
+export function cloneSingleChild(
   children: React.ReactNode | React.ReactNode[],
   props?: Record<string, any>,
   key?: any,
@@ -59,7 +60,7 @@ function cloneSingleChild(
   });
 }
 
-const useSize = (target: React.RefObject<HTMLDivElement>) => {
+export const useSize = (target: React.RefObject<HTMLDivElement>) => {
   const [size, setSize] = React.useState({ width: 0, height: 0 });
   React.useLayoutEffect(() => {
     if (target?.current) {
@@ -73,4 +74,30 @@ const useSize = (target: React.RefObject<HTMLDivElement>) => {
   return size;
 };
 
-export { mergeProps, LKComponentAttributes, useObservableState, cloneSingleChild, useSize };
+export type TokenizeGrammar = { [type: string]: RegExp };
+
+export function tokenize(message: string, grammar: TokenizeGrammar) {
+  let matches = Object.entries(grammar)
+    .map(([type, rx], weight) =>
+      Array.from(message.matchAll(rx)).map((match) => ({ type, weight, match })),
+    )
+    .flat()
+    .sort((a, b) => {
+      let d = a.match.index - b.match.index;
+      return d != 0 ? d : a.weight - b.weight;
+    })
+    .filter(({ match }, i, arr) => {
+      if (i === 0) return true;
+      const prev = arr[i - 1].match;
+      return prev.index + prev[0].length <= match.index;
+    });
+
+  const tokens = [];
+  let pos = 0;
+  for (const { type, match } of matches) {
+    if (match.index > pos) tokens.push(message.substring(pos, match.index));
+    tokens.push({ type, content: match[0] });
+    pos = match.index + match[0].length;
+  }
+  return tokens;
+}

@@ -9,8 +9,11 @@ import { TileLoop } from '../components/TileLoop';
 import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
 import { useMediaQuery } from '../hooks/utiltity-hooks';
+import { MessageFormatter } from './ChatEntry';
 
-export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
+export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
+  formatChatMessage?: MessageFormatter;
+}
 
 /**
  * This component is the default setup of a classic LiveKit video conferencing app.
@@ -27,7 +30,7 @@ export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
  * <LiveKitRoom>
  * ```
  */
-export function VideoConference({ ...props }: VideoConferenceProps) {
+export function VideoConference({ formatChatMessage, ...props }: VideoConferenceProps) {
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = React.useState<Layout>('grid');
   const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });
@@ -53,7 +56,10 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
           )}
           <ControlBar variation={isMobile ? 'minimal' : 'verbose'} controls={{ chat: true }} />
         </div>
-        <Chat style={{ display: widgetState.showChat ? 'flex' : 'none' }} />
+        <Chat
+          style={{ display: widgetState.showChat ? 'flex' : 'none' }}
+          formatMessage={formatChatMessage}
+        />
       </LayoutContextProvider>
       <RoomAudioRenderer />
       <ConnectionStateToast />

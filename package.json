@@ -1,24 +1,34 @@
 {
+  "private": true,
   "name": "@livekit/components",
   "version": "0.0.0",
-  "private": true,
   "scripts": {
     "build": "turbo run build",
-    "build:react": "turbo run build --filter=@livekit/components-react...",
     "build:core": "turbo run build --filter=@livekit/components-core...",
-    "build:styles": "turbo run build --filter=@livekit/components-styles...",
     "build:next": "turbo run build --filter=@livekit/component-example-next...",
+    "build:react": "turbo run build --filter=@livekit/components-react...",
     "build:storybook": "turbo run build --filter=@livekit/component-docs-storybook...",
-    "dev:storybook": "turbo run dev --filter=@livekit/component-docs-storybook...",
+    "build:styles": "turbo run build --filter=@livekit/components-styles...",
     "dev:next": "turbo run dev --filter=@livekit/component-example-next...",
-    "start:next": "turbo run start --filter=@livekit/component-example-next...",
-    "lint": "turbo run lint",
-    "test": "turbo run test",
+    "dev:storybook": "turbo run dev --filter=@livekit/component-docs-storybook...",
     "format:check": "prettier --check \"**/src/**/*.{ts,tsx,md}\"",
     "format:write": "prettier --write \"**/src/**/*.{ts,tsx,md}\"",
+    "gen:docs": "turbo run gen:docs",
+    "lint": "turbo run lint",
     "release": "turbo run build --filter=./packages/* && changeset publish",
-    "tooling:update-readme-nav": "node tooling/readme-manager/update-nav-in-readmes.js",
-    "gen:docs": "turbo run gen:docs"
+    "start:next": "turbo run start --filter=@livekit/component-example-next...",
+    "test": "turbo run test",
+    "tooling:update-readme-nav": "node tooling/readme-manager/update-nav-in-readmes.js"
+  },
+  "workspaces": [
+    "packages/*",
+    "examples/*",
+    "docs/*",
+    "tooling/*"
+  ],
+  "dependencies": {},
+  "peerDependencies": {
+    "typescript": "^4.9.4"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.0",
@@ -27,15 +37,5 @@
     "prettier": "^2.8.3",
     "turbo": "^1.7.0",
     "typescript": "^4.9.4"
-  },
-  "peerDependencies": {
-    "typescript": "^4.9.4"
-  },
-  "workspaces": [
-    "packages/*",
-    "examples/*",
-    "docs/*",
-    "tooling/*"
-  ],
-  "dependencies": {}
+  }
 }

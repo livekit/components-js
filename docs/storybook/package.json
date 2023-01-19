@@ -1,9 +1,22 @@
 {
+  "private": true,
   "name": "@livekit/component-docs-storybook",
   "version": "1.0.11",
-  "main": "index.js",
-  "private": true,
   "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "build": "storybook build",
+    "clean": "rm -rf .turbo && rm -rf node_modules",
+    "dev": "storybook dev -p 6006",
+    "tsx:check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@livekit/components-react": "0.1.18",
+    "@livekit/components-styles": "0.1.8",
+    "livekit-client": "^1.6.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.20.12",
     "@storybook/addon-essentials": "^7.0.0-beta.30",
@@ -19,18 +32,5 @@
     "typescript": "^4.9.4",
     "vite": "^4.0.4",
     "webpack": "^5.75.0"
-  },
-  "dependencies": {
-    "@livekit/components-react": "0.1.18",
-    "@livekit/components-styles": "0.1.8",
-    "livekit-client": "^1.6.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "scripts": {
-    "clean": "rm -rf .turbo && rm -rf node_modules",
-    "dev": "storybook dev -p 6006",
-    "build": "storybook build",
-    "tsx:check": "tsc --noEmit"
   }
 }

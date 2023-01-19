@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 0.1.20
+
+### Patch Changes
+
+- Don't stop track on unmount - [#245](https://github.com/livekit/components-js/pull/245) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.19
 
 ### Patch Changes

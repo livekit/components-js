@@ -11,7 +11,6 @@ import {
 } from 'livekit-client';
 import * as React from 'react';
 import { RoomContext } from '../context';
-import { VideoConference } from '../prefabs/VideoConference';
 import { mergeProps } from '../utils';
 
 export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onError'> {
@@ -213,9 +212,7 @@ export function LiveKitRoom(props: React.PropsWithChildren<LiveKitRoomProps>) {
   const { room, htmlProps } = useLiveKitRoom(props);
   return (
     <div {...htmlProps}>
-      <RoomContext.Provider value={room}>
-        {props.children ?? <VideoConference />}
-      </RoomContext.Provider>
+      <RoomContext.Provider value={room}>{props.children}</RoomContext.Provider>
     </div>
   );
 }

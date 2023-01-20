@@ -2,9 +2,11 @@ import { setupChat } from '@livekit/components-core';
 import * as React from 'react';
 import { useRoomContext } from '../context';
 import { cloneSingleChild, useObservableState } from '../utils';
-import { ChatEntry } from './ChatEntry';
+import { ChatEntry, MessageFormatter } from './ChatEntry';
 
-export type ChatProps = React.HTMLAttributes<HTMLDivElement>;
+export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
+  messageFormatter?: MessageFormatter;
+}
 
 export function useChat() {
   const room = useRoomContext();
@@ -28,7 +30,7 @@ export function useChat() {
  * </LiveKitRoom>
  * ```
  */
-export function Chat({ ...props }: ChatProps) {
+export function Chat({ messageFormatter, ...props }: ChatProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const ulRef = React.useRef<HTMLUListElement>(null);
   const { send, chatMessages, isSending } = useChat();
@@ -53,9 +55,15 @@ export function Chat({ ...props }: ChatProps) {
       <ul className="lk-chat-messages" ref={ulRef}>
         {props.children
           ? chatMessages.map((msg, idx) =>
-              cloneSingleChild(props.children, { entry: msg, key: idx }),
+              cloneSingleChild(props.children, {
+                entry: msg,
+                key: idx,
+                messageFormatter,
+              }),
             )
-          : chatMessages.map((msg, idx) => <ChatEntry key={idx} entry={msg} />)}
+          : chatMessages.map((msg, idx) => (
+              <ChatEntry key={idx} entry={msg} messageFormatter={messageFormatter} />
+            ))}
       </ul>
       <form className="lk-chat-form" onSubmit={handleSubmit}>
         <input

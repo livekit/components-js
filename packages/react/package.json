@@ -39,7 +39,9 @@
     "@floating-ui/react": "^0.15.1",
     "@livekit/components-core": "0.1.13",
     "@react-hook/resize-observer": "^1.2.6",
-    "clsx": "^1.2.1"
+    "clsx": "^1.2.1",
+    "email-regex": "^5.0.0",
+    "url-regex": "^5.0.0"
   },
   "peerDependencies": {
     "react": ">=18",

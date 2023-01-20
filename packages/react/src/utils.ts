@@ -3,12 +3,12 @@ import { mergeProps as mergePropsReactAria } from './mergeProps';
 import { Observable } from 'rxjs';
 import useResizeObserver from '@react-hook/resize-observer';
 
-type LKComponentAttributes<T extends HTMLElement> = React.HTMLAttributes<T>;
+export type LKComponentAttributes<T extends HTMLElement> = React.HTMLAttributes<T>;
 
 /**
  * @internal
  */
-function isProp<U extends HTMLElement, T extends LKComponentAttributes<U>>(
+export function isProp<U extends HTMLElement, T extends LKComponentAttributes<U>>(
   prop: T | undefined,
 ): prop is T {
   return prop !== undefined;
@@ -17,16 +17,17 @@ function isProp<U extends HTMLElement, T extends LKComponentAttributes<U>>(
 /**
  * @internal
  */
-function mergeProps<U extends HTMLElement, T extends Array<LKComponentAttributes<U> | undefined>>(
-  ...props: T
-) {
+export function mergeProps<
+  U extends HTMLElement,
+  T extends Array<LKComponentAttributes<U> | undefined>,
+>(...props: T) {
   return mergePropsReactAria(...props.filter(isProp));
 }
 
 /**
  * @internal
  */
-function useObservableState<T>(
+export function useObservableState<T>(
   observable: Observable<T>,
   startWith: T,
   dependencies: Array<any> = [observable],
@@ -44,7 +45,7 @@ function useObservableState<T>(
 /**
  * @internal
  */
-function cloneSingleChild(
+export function cloneSingleChild(
   children: React.ReactNode | React.ReactNode[],
   props?: Record<string, any>,
   key?: any,
@@ -59,7 +60,7 @@ function cloneSingleChild(
   });
 }
 
-const useSize = (target: React.RefObject<HTMLDivElement>) => {
+export const useSize = (target: React.RefObject<HTMLDivElement>) => {
   const [size, setSize] = React.useState({ width: 0, height: 0 });
   React.useLayoutEffect(() => {
     if (target?.current) {
@@ -72,5 +73,3 @@ const useSize = (target: React.RefObject<HTMLDivElement>) => {
   useResizeObserver(target, (entry) => setSize(entry.contentRect));
   return size;
 };
-
-export { mergeProps, LKComponentAttributes, useObservableState, cloneSingleChild, useSize };

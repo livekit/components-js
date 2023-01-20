@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-react",
-  "version": "0.1.20",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "author": "LiveKit",
   "exports": {
@@ -37,7 +37,7 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@floating-ui/react": "^0.15.1",
-    "@livekit/components-core": "0.1.13",
+    "@livekit/components-core": "0.2.0",
     "@react-hook/resize-observer": "^1.2.6",
     "clsx": "^1.2.1",
     "email-regex": "^5.0.0",

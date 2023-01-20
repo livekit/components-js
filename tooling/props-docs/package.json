@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@livekit/components-props-docs",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Extracts prop types for documentation purposes",
   "license": "Apache-2.0",
   "author": "LiveKit",
@@ -26,7 +26,7 @@
   "sideEffects": false,
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@livekit/components-react": "~0.1.20",
+    "@livekit/components-react": "~0.2.0",
     "glob": "^8.0.0",
     "mkdirp": "^1.0.4",
     "react-docgen-typescript": "^2.1.0",

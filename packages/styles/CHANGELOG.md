@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 0.1.10
+
+### Patch Changes
+
+- Fix: break long words in a chat message - [#252](https://github.com/livekit/components-js/pull/252) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.1.9
 
 ### Patch Changes

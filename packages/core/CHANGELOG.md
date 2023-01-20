@@ -1,5 +1,15 @@
 # @livekit/components-core
 
+## 0.2.0
+
+### Minor Changes
+
+- add formatter for chat messages - [#247](https://github.com/livekit/components-js/pull/247) ([@paulwe](https://github.com/paulwe))
+
+### Patch Changes
+
+- Update dependencies - [#253](https://github.com/livekit/components-js/pull/253) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.13
 
 ### Patch Changes

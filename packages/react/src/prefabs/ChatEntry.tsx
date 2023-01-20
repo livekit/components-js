@@ -1,8 +1,7 @@
-import { ChatMessage } from '@livekit/components-core';
+import { ChatMessage, tokenize, TokenizeGrammar } from '@livekit/components-core';
 import * as React from 'react';
 import createEmailRegExp from 'email-regex';
 import createUrlRegExp from 'url-regex';
-import { tokenize, TokenizeGrammar } from '../utils';
 
 export type MessageFormatter = (message: string) => React.ReactNode;
 
@@ -18,7 +17,7 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
   /**
    * An optional formatter for the message body.
    */
-  formatMessage?: MessageFormatter;
+  messageFormatter?: MessageFormatter;
 }
 
 /**
@@ -33,10 +32,10 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
  * {...}
  * ```
  */
-export function ChatEntry({ entry, formatMessage, ...props }: ChatEntryProps) {
+export function ChatEntry({ entry, messageFormatter, ...props }: ChatEntryProps) {
   const formattedMessage = React.useMemo(() => {
-    return formatMessage ? formatMessage(entry.message) : entry.message;
-  }, [entry.message, formatMessage]);
+    return messageFormatter ? messageFormatter(entry.message) : entry.message;
+  }, [entry.message, messageFormatter]);
 
   return (
     <li

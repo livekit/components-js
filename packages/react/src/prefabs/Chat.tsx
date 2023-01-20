@@ -5,7 +5,7 @@ import { cloneSingleChild, useObservableState } from '../utils';
 import { ChatEntry, MessageFormatter } from './ChatEntry';
 
 export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
-  formatMessage?: MessageFormatter;
+  messageFormatter?: MessageFormatter;
 }
 
 export function useChat() {
@@ -30,7 +30,7 @@ export function useChat() {
  * </LiveKitRoom>
  * ```
  */
-export function Chat({ formatMessage, ...props }: ChatProps) {
+export function Chat({ messageFormatter, ...props }: ChatProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const ulRef = React.useRef<HTMLUListElement>(null);
   const { send, chatMessages, isSending } = useChat();
@@ -55,10 +55,14 @@ export function Chat({ formatMessage, ...props }: ChatProps) {
       <ul className="lk-chat-messages" ref={ulRef}>
         {props.children
           ? chatMessages.map((msg, idx) =>
-              cloneSingleChild(props.children, { entry: msg, key: idx, formatMessage }),
+              cloneSingleChild(props.children, {
+                entry: msg,
+                key: idx,
+                messageFormatter,
+              }),
             )
           : chatMessages.map((msg, idx) => (
-              <ChatEntry key={idx} entry={msg} formatMessage={formatMessage} />
+              <ChatEntry key={idx} entry={msg} messageFormatter={messageFormatter} />
             ))}
       </ul>
       <form className="lk-chat-form" onSubmit={handleSubmit}>

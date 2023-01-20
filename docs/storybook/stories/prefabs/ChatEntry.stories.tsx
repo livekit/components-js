@@ -33,6 +33,7 @@ export const LongMessage: StoryObj<ChatEntryProps> = {
         'Niklas tog tag i datorn och lyfte den mot himmeln. Så nu tar vi en paus och inväntar resultatet av dagens skrivande. Sociala nätverk kan aldrig fånga en fisk. Kan vi få fram något resultat på hur många som kom idag? En annan sak är att man ibland går ensam till de olika festerna.',
       from: participant,
     },
+    messageFormatter: formatChatMessageLinks,
   },
 };
 
@@ -44,6 +45,6 @@ export const MessageWithLinks: StoryObj<ChatEntryProps> = {
       message: 'a google.com message with links support@livekit.io',
       from: participant,
     },
-    formatMessage: formatChatMessageLinks,
+    messageFormatter: formatChatMessageLinks,
   },
 };

@@ -12,7 +12,7 @@ import { useMediaQuery } from '../hooks/utiltity-hooks';
 import { MessageFormatter } from './ChatEntry';
 
 export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
-  formatChatMessage?: MessageFormatter;
+  chatMessageFormatter?: MessageFormatter;
 }
 
 /**
@@ -30,7 +30,7 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
  * <LiveKitRoom>
  * ```
  */
-export function VideoConference({ formatChatMessage, ...props }: VideoConferenceProps) {
+export function VideoConference({ chatMessageFormatter, ...props }: VideoConferenceProps) {
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = React.useState<Layout>('grid');
   const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });
@@ -58,7 +58,7 @@ export function VideoConference({ formatChatMessage, ...props }: VideoConference
         </div>
         <Chat
           style={{ display: widgetState.showChat ? 'flex' : 'none' }}
-          formatMessage={formatChatMessage}
+          messageFormatter={chatMessageFormatter}
         />
       </LayoutContextProvider>
       <RoomAudioRenderer />

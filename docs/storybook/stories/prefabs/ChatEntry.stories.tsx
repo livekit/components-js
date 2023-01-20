@@ -42,7 +42,7 @@ export const MessageWithLinks: StoryObj<ChatEntryProps> = {
   args: {
     entry: {
       timestamp: 1,
-      message: 'a google.com message with links support@livekit.io',
+      message: 'a google.com message with links support@livekit.io.',
       from: participant,
     },
     messageFormatter: formatChatMessageLinks,

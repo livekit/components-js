@@ -159,6 +159,6 @@ export function tokenize(input: string, grammar: TokenizeGrammar) {
     tokens.push({ type, content });
     pos = index + content.length;
   }
-  if (input.length > pos) tokens.push(input.substring(pos, input.length));
+  if (input.length > pos) tokens.push(input.substring(pos));
   return tokens;
 }

@@ -163,7 +163,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
     } else {
       room.disconnect();
     }
-  }, [connect, token, connectOptions, room, onError, serverUrl]);
+  }, [connect, token, connectOptions, room, onError, serverUrl, simulateParticipants]);
 
   React.useEffect(() => {
     return () => {

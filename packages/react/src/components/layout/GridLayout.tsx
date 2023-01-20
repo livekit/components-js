@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { TileLoop } from '../TileLoop';
 import { ParticipantFilter, useParticipants } from '../../hooks';
-import { mergeProps, useSize } from '../../utils';
+import { mergeProps } from '../../utils';
+import { useSize } from '../../hooks/utiltity-hooks';
 
 export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   /**

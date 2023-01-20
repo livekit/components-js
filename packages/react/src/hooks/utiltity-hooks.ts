@@ -1,6 +1,25 @@
 // Utility hooks are not meant to be exposed to the user, that's why this file doesn't get included in hooks/index.tsx
 import * as React from 'react';
 import useLatest from '@react-hook/latest';
+import { Observable } from 'rxjs';
+
+/**
+ * @internal
+ */
+export function useObservableState<T>(
+  observable: Observable<T>,
+  startWith: T,
+  dependencies: Array<any> = [observable],
+) {
+  const [state, setState] = React.useState<T>(startWith);
+  React.useEffect(() => {
+    // observable state doesn't run in SSR
+    if (typeof window === 'undefined') return;
+    const subscription = observable.subscribe(setState);
+    return () => subscription.unsubscribe();
+  }, dependencies);
+  return state;
+}
 
 /**
  * Implementation used from https://github.com/juliencrn/usehooks-ts
@@ -52,8 +71,6 @@ export function useMediaQuery(query: string): boolean {
 /**
  * A React hook that fires a callback whenever ResizeObserver detects a change to its size
  * code extracted from https://github.com/jaredLunde/react-hook/blob/master/packages/resize-observer/src/index.tsx in order to not include the polyfill for resize-observer
- *
- *   the `target` resizes
  */
 export function useResizeObserver<T extends HTMLElement>(
   target: React.RefObject<T> | T | null,
@@ -72,15 +89,15 @@ export function useResizeObserver<T extends HTMLElement>(
       storedCallback.current(entry, observer);
     }
 
-    resizeObserver.subscribe(targetEl as HTMLElement, cb);
+    resizeObserver?.subscribe(targetEl as HTMLElement, cb);
 
     return () => {
       didUnsubscribe = true;
-      resizeObserver.unsubscribe(targetEl as HTMLElement, cb);
+      resizeObserver?.unsubscribe(targetEl as HTMLElement, cb);
     };
   }, [target, resizeObserver, storedCallback]);
 
-  return resizeObserver.observer;
+  return resizeObserver?.observer;
 }
 
 function createResizeObserver() {
@@ -88,6 +105,10 @@ function createResizeObserver() {
   let allEntries: ResizeObserverEntry[] = [];
 
   const callbacks: Map<unknown, Array<UseResizeObserverCallback>> = new Map();
+
+  if (typeof window === 'undefined') {
+    return;
+  }
 
   const observer = new ResizeObserver((entries: ResizeObserverEntry[], obs: ResizeObserver) => {
     allEntries = allEntries.concat(entries);
@@ -138,3 +159,17 @@ export type UseResizeObserverCallback = (
   entry: ResizeObserverEntry,
   observer: ResizeObserver,
 ) => unknown;
+
+export const useSize = (target: React.RefObject<HTMLDivElement>) => {
+  const [size, setSize] = React.useState({ width: 0, height: 0 });
+  React.useLayoutEffect(() => {
+    if (target?.current) {
+      const { width, height } = target.current.getBoundingClientRect();
+      setSize({ width, height });
+    }
+  }, [target.current]);
+
+  // Where the magic happens
+  useResizeObserver(target, (entry) => setSize(entry.contentRect));
+  return size;
+};

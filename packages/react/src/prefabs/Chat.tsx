@@ -1,7 +1,8 @@
 import { setupChat } from '@livekit/components-core';
 import * as React from 'react';
 import { useRoomContext } from '../context';
-import { cloneSingleChild, useObservableState } from '../utils';
+import { useObservableState } from '../hooks/utiltity-hooks';
+import { cloneSingleChild } from '../utils';
 import { ChatEntry, MessageFormatter } from './ChatEntry';
 
 export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {

@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { mergeProps as mergePropsReactAria } from './mergeProps';
-import { Observable } from 'rxjs';
-import useResizeObserver from '@react-hook/resize-observer';
 
 export type LKComponentAttributes<T extends HTMLElement> = React.HTMLAttributes<T>;
 
@@ -27,24 +25,6 @@ export function mergeProps<
 /**
  * @internal
  */
-export function useObservableState<T>(
-  observable: Observable<T>,
-  startWith: T,
-  dependencies: Array<any> = [observable],
-) {
-  const [state, setState] = React.useState<T>(startWith);
-  React.useEffect(() => {
-    // observable state doesn't run in SSR
-    if (typeof window === 'undefined') return;
-    const subscription = observable.subscribe(setState);
-    return () => subscription.unsubscribe();
-  }, dependencies);
-  return state;
-}
-
-/**
- * @internal
- */
 export function cloneSingleChild(
   children: React.ReactNode | React.ReactNode[],
   props?: Record<string, any>,
@@ -59,17 +39,3 @@ export function cloneSingleChild(
     return child;
   });
 }
-
-export const useSize = (target: React.RefObject<HTMLDivElement>) => {
-  const [size, setSize] = React.useState({ width: 0, height: 0 });
-  React.useLayoutEffect(() => {
-    if (target?.current) {
-      const { width, height } = target.current.getBoundingClientRect();
-      setSize({ width, height });
-    }
-  }, [target.current]);
-
-  // Where the magic happens
-  useResizeObserver(target, (entry) => setSize(entry.contentRect));
-  return size;
-};

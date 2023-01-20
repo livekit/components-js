@@ -3,8 +3,8 @@ import { Track } from 'livekit-client';
 import * as React from 'react';
 import { mergeProps } from '../../mergeProps';
 import { useMaybeRoomContext } from '../../context';
-import { useObservableState } from '../../utils';
 import { getSourceIcon } from '../../assets/icons/util';
+import { useObservableState } from '../../hooks/utiltity-hooks';
 
 export type TrackToggleProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   source: Track.Source;

@@ -7,7 +7,6 @@
   overflow: hidden;
   border: var(--speaking-indicator-width) solid transparent;
   border-radius: var(--border-radius);
-
   transition-property: border-color;
   transition-timing-function: ease-in-out;
   // When participant stops talking the transition longer and starts with a delay.

@@ -2,7 +2,8 @@ import { setupStartAudio } from '@livekit/components-core';
 import { Room } from 'livekit-client';
 import * as React from 'react';
 import { useRoomContext } from '../../context';
-import { mergeProps, useObservableState } from '../../utils';
+import { useObservableState } from '../../hooks/utiltity-hooks';
+import { mergeProps } from '../../utils';
 
 interface UseStartAudioProps {
   room: Room;

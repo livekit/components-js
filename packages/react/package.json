@@ -38,7 +38,7 @@
   "dependencies": {
     "@floating-ui/react": "^0.15.1",
     "@livekit/components-core": "0.2.0",
-    "@react-hook/resize-observer": "^1.2.6",
+    "@react-hook/latest": "^1.0.3",
     "clsx": "^1.2.1",
     "email-regex": "^5.0.0",
     "url-regex": "^5.0.0"

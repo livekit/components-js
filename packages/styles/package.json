@@ -19,7 +19,7 @@
       "types": "./dist/types_unprefixed/styles.scss.d.ts"
     }
   },
-  "main": "dist/styles.css",
+  "main": "dist/general/styles.css",
   "files": [
     "dist",
     "icons",

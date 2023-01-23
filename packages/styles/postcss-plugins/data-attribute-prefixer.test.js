@@ -2,12 +2,6 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import postcss from 'postcss';
 import plugin from './data-attribute-prefixer';
 
-// declare module 'vitest' {
-//   export interface TestContext {
-//     processor: Processor;
-//   }
-// }
-
 describe.concurrent('Test data-attribute-prefixer PostCSS plugin:', () => {
   beforeEach(async (context) => {
     context.processor = postcss([plugin({ prefix: 'lk-' })]);
@@ -35,9 +29,30 @@ describe.concurrent('Test data-attribute-prefixer PostCSS plugin:', () => {
     );
   });
 
-  it('Handle prefix later in selector.', async ({ processor }) => {
+  it('Handle prefix later in selector:', async ({ processor }) => {
     expect((await processor.process("[data-word-lk-selector='value'] {}")).css).toBe(
       "[data-lk-word-lk-selector='value'] {}",
     );
+  });
+
+  it('Handle use of data attributes in attr() function:', async ({ processor }) => {
+    expect(
+      (await processor.process('&::after { content: attr(data-participant-name); }')).css,
+    ).toBe('&::after { content: attr(data-lk-participant-name); }');
+    expect(
+      (await processor.process('.selector-name { content: attr(data-participant-name); }')).css,
+    ).toBe('.selector-name { content: attr(data-lk-participant-name); }');
+  });
+
+  it('Handle data attribute as selector and declaration in the same block.', async ({
+    processor,
+  }) => {
+    expect(
+      (await processor.process('[data-my-attr] { content: attr(data-participant-name); }')).css,
+    ).toBe('[data-lk-my-attr] { content: attr(data-lk-participant-name); }');
+    expect(
+      (await processor.process('[data-my-attr="cool"] { content: attr(data-participant-name); }'))
+        .css,
+    ).toBe('[data-lk-my-attr="cool"] { content: attr(data-lk-participant-name); }');
   });
 });

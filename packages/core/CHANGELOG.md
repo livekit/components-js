@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.2.1
+
+### Patch Changes
+
+- Refactor loop filter into core and rename TracksFilter to TrackFilter. - [#257](https://github.com/livekit/components-js/pull/257) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.2.0
 
 ### Minor Changes

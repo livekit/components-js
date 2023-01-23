@@ -1,5 +1,13 @@
 # @livekit/components-styles
 
+## 0.1.11
+
+### Patch Changes
+
+- Use explicit aspect ratio in focus-aside - [#255](https://github.com/livekit/components-js/pull/255) ([@lukasIO](https://github.com/lukasIO))
+
+- Add support for prefixing data attributes in css attr() function. - [#258](https://github.com/livekit/components-js/pull/258) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.1.10
 
 ### Patch Changes

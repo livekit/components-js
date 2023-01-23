@@ -1,7 +1,8 @@
+import { ParticipantFilter } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
-import { ParticipantFilter, useParticipants } from '../hooks';
+import { useParticipants } from '../hooks';
 import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 

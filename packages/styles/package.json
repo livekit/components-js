@@ -33,7 +33,8 @@
     "generate:types:prefixed": "cd dist && typed-scss-modules '**/*.css' --exportType default --outputFolder ../dist/types --nameFormat kebab",
     "generate:types:unprefixed": "cd scss && typed-scss-modules '**/*.scss' --exportType default --outputFolder ../dist/types_unprefixed --nameFormat kebab --exportTypeName UnprefixedClassNames",
     "postcss": "postcss .temp/**/*.css --base .temp --dir ./dist",
-    "test": "vitest"
+    "test": "vitest --run",
+    "test:watch": "vitest"
   },
   "peerDependencies": {},
   "devDependencies": {

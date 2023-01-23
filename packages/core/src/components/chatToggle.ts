@@ -1,6 +1,6 @@
-import { lkClassName } from '../utils';
+import { prefixClass } from '../styles-interface';
 
 export function setupChatToggle() {
-  const className: string = [lkClassName('button'), lkClassName('chat-toggle-button')].join(' ');
+  const className: string = [prefixClass('button'), prefixClass('chat-toggle')].join(' ');
   return { className };
 }

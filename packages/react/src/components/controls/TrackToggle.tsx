@@ -1,10 +1,10 @@
-import { setupManualToggle, setupMediaToggle } from '@livekit/components-core';
+import { log, setupManualToggle, setupMediaToggle } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { mergeProps } from '../../mergeProps';
 import { useMaybeRoomContext } from '../../context';
-import { useObservableState } from '../../utils';
 import { getSourceIcon } from '../../assets/icons/util';
+import { useObservableState } from '../../hooks/utiltity-hooks';
 
 export type TrackToggleProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> & {
   source: Track.Source;
@@ -27,14 +27,15 @@ export function useTrackToggle({ source, onChange, initialState, ...rest }: UseT
   );
 
   const pending = useObservableState(pendingObserver, false);
-  const enabled = useObservableState(enabledObserver, !!track?.isEnabled);
+  const enabled = useObservableState(enabledObserver, initialState ?? !!track?.isEnabled);
 
   React.useEffect(() => {
     onChange?.(enabled);
   }, [enabled, onChange]);
 
   React.useEffect(() => {
-    if (initialState) {
+    if (initialState !== undefined) {
+      log.debug('forcing initial toggle state', source, initialState);
       toggle(initialState);
     }
     // only execute once at the beginning

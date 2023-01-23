@@ -1,5 +1,31 @@
 # @livekit/components-styles
 
+## 0.1.10
+
+### Patch Changes
+
+- Fix: break long words in a chat message - [#252](https://github.com/livekit/components-js/pull/252) ([@Ocupe](https://github.com/Ocupe))
+
+## 0.1.9
+
+### Patch Changes
+
+- Internal revisions of the component and prefab structure. - [#241](https://github.com/livekit/components-js/pull/241) ([@Ocupe](https://github.com/Ocupe))
+
+- Monorepo-wide package updates and cleanups. - [#235](https://github.com/livekit/components-js/pull/235) ([@Ocupe](https://github.com/Ocupe))
+
+## 0.1.8
+
+### Patch Changes
+
+- Fix prejoin bugs - [#231](https://github.com/livekit/components-js/pull/231) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.1.7
+
+### Patch Changes
+
+- Fix prejoin bugs - [#229](https://github.com/livekit/components-js/pull/229) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.6
 
 ### Patch Changes

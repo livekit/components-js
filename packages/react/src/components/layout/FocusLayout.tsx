@@ -1,11 +1,10 @@
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { useMaybeLayoutContext, useLayoutContext } from '../context';
-import { mergeProps } from '../utils';
-import { TileFilter, TrackParticipantPair } from '@livekit/components-core';
-import { TileLoop } from '../components/TileLoop';
-import { ParticipantTile } from '../prefabs/ParticipantTile';
-import { ParticipantClickEvent } from '@livekit/components-core';
+import { useMaybeLayoutContext, useLayoutContext } from '../../context';
+import { mergeProps } from '../../mergeProps';
+import { TileFilter, ParticipantClickEvent, TrackParticipantPair } from '@livekit/components-core';
+import { TileLoop } from '../';
+import { ParticipantTile } from '../..';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   trackParticipantPair?: TrackParticipantPair;

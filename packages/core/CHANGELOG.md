@@ -1,5 +1,35 @@
 # @livekit/components-core
 
+## 0.2.0
+
+### Minor Changes
+
+- add formatter for chat messages - [#247](https://github.com/livekit/components-js/pull/247) ([@paulwe](https://github.com/paulwe))
+
+### Patch Changes
+
+- Update dependencies - [#253](https://github.com/livekit/components-js/pull/253) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.1.13
+
+### Patch Changes
+
+- Internal revisions of the component and prefab structure. - [#241](https://github.com/livekit/components-js/pull/241) ([@Ocupe](https://github.com/Ocupe))
+
+- Monorepo-wide package updates and cleanups. - [#235](https://github.com/livekit/components-js/pull/235) ([@Ocupe](https://github.com/Ocupe))
+
+## 0.1.12
+
+### Patch Changes
+
+- Fix logger export - [`5977a9c`](https://github.com/livekit/components-js/commit/5977a9c881c7b520bad0209cbe9e3182d3a1ffbe) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.1.11
+
+### Patch Changes
+
+- Expose log method - [`f5984ef`](https://github.com/livekit/components-js/commit/f5984efa3a53eb9bcc389e644e0b91695f17a9d7) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.10
 
 ### Patch Changes

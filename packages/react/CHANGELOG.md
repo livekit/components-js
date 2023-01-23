@@ -1,5 +1,65 @@
 # @livekit/components-react
 
+## 0.2.0
+
+### Minor Changes
+
+- add formatter for chat messages - [#247](https://github.com/livekit/components-js/pull/247) ([@paulwe](https://github.com/paulwe))
+
+### Patch Changes
+
+- Fix: Only disconnect on onmount or if room changes - [#250](https://github.com/livekit/components-js/pull/250) ([@lukasIO](https://github.com/lukasIO))
+
+- Update dependencies - [#253](https://github.com/livekit/components-js/pull/253) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`bcd4fdb`](https://github.com/livekit/components-js/commit/bcd4fdb886d48018309dacd4ea8e1e554b758aaa), [`1a7a098`](https://github.com/livekit/components-js/commit/1a7a09863df1fa79b15cfa1716213c3d2da0ac0d)]:
+  - @livekit/components-core@0.2.0
+
+## 0.1.20
+
+### Patch Changes
+
+- Don't stop track on unmount - [#245](https://github.com/livekit/components-js/pull/245) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.1.19
+
+### Patch Changes
+
+- Internal revisions of the component and prefab structure. - [#241](https://github.com/livekit/components-js/pull/241) ([@Ocupe](https://github.com/Ocupe))
+
+- Monorepo-wide package updates and cleanups. - [#235](https://github.com/livekit/components-js/pull/235) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`1e53f58`](https://github.com/livekit/components-js/commit/1e53f58901c56224bc1a060210baf5d5beb9d17f), [`6a13879`](https://github.com/livekit/components-js/commit/6a13879d8a7092aa566f500f43e2e2057a3dcd8a)]:
+  - @livekit/components-core@0.1.13
+
+## 0.1.18
+
+### Patch Changes
+
+- Fix mic dropdown on prejoin page - [#231](https://github.com/livekit/components-js/pull/231) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix prejoin bugs - [#231](https://github.com/livekit/components-js/pull/231) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.1.17
+
+### Patch Changes
+
+- Fix prejoin bugs - [#229](https://github.com/livekit/components-js/pull/229) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.1.16
+
+### Patch Changes
+
+- Updated dependencies [[`5977a9c`](https://github.com/livekit/components-js/commit/5977a9c881c7b520bad0209cbe9e3182d3a1ffbe)]:
+  - @livekit/components-core@0.1.12
+
+## 0.1.15
+
+### Patch Changes
+
+- Updated dependencies [[`f5984ef`](https://github.com/livekit/components-js/commit/f5984efa3a53eb9bcc389e644e0b91695f17a9d7)]:
+  - @livekit/components-core@0.1.11
+
 ## 0.1.14
 
 ### Patch Changes

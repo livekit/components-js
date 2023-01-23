@@ -1,7 +1,7 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
-  "schedule": "before 6am on the first day of the month",
+  "schedule": "on the first day of the month",
+  "rangeStrategy": "auto",
   "packageRules": [
     {
       "matchDepTypes": ["devDependencies"],

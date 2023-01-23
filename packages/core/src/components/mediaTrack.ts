@@ -1,7 +1,7 @@
 import { Participant, Track } from 'livekit-client';
 import { map, startWith } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
-import { lkClassName } from '../utils';
+import { prefixClass } from '../styles-interface';
 
 export function setupMediaTrack(participant: Participant, source: Track.Source) {
   const trackObserver = observeParticipantMedia(participant).pipe(
@@ -12,7 +12,7 @@ export function setupMediaTrack(participant: Participant, source: Track.Source) 
     }),
     startWith(participant.getTrack(source)),
   );
-  const className: string = lkClassName(
+  const className: string = prefixClass(
     source === Track.Source.Camera || source === Track.Source.ScreenShare
       ? 'participant-media-video'
       : 'participant-media-audio',

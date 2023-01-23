@@ -5,23 +5,7 @@ import {
   Track,
   TrackPublication,
 } from 'livekit-client';
-import type { ClassNames } from '@livekit/components-styles/dist/types/general/styles.css';
-import type { UnprefixedClassNames } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
-import { cssPrefix } from './constants';
 import { PinState, TrackParticipantPair } from './types';
-export function kebabize(str: string) {
-  return str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase());
-}
-
-// TODO: If we have utils/helper, we should structure it better to prevent this thing from turning into a dumping ground for all sorts of things.
-
-/**
- * Converts a non prefixed CSS class into a prefixed one.
- */
-export function lkClassName(unprefixedClassName: UnprefixedClassNames): ClassNames {
-  // @ts-ignore
-  return `${cssPrefix}-${unprefixedClassName}`;
-}
 
 export function isLocal(p: Participant) {
   return p instanceof LocalParticipant;
@@ -143,4 +127,38 @@ export function sortParticipantsByVolume(participants: Participant[]): Participa
     }
   }
   return sortedParticipants;
+}
+
+export type TokenizeGrammar = { [type: string]: RegExp };
+
+export function tokenize(input: string, grammar: TokenizeGrammar) {
+  const matches = Object.entries(grammar)
+    .map(([type, rx], weight) =>
+      Array.from(input.matchAll(rx)).map(({ index, 0: content }) => ({
+        type,
+        weight,
+        content,
+        index: index ?? 0,
+      })),
+    )
+    .flat()
+    .sort((a, b) => {
+      const d = a.index - b.index;
+      return d !== 0 ? d : a.weight - b.weight;
+    })
+    .filter(({ index }, i, arr) => {
+      if (i === 0) return true;
+      const prev = arr[i - 1];
+      return prev.index + prev.content.length <= index;
+    });
+
+  const tokens = [];
+  let pos = 0;
+  for (const { type, content, index } of matches) {
+    if (index > pos) tokens.push(input.substring(pos, index));
+    tokens.push({ type, content });
+    pos = index + content.length;
+  }
+  if (input.length > pos) tokens.push(input.substring(pos));
+  return tokens;
 }

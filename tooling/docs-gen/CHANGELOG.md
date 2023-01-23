@@ -1,5 +1,59 @@
 # @livekit/components-docs-gen
 
+## 0.0.13
+
+### Patch Changes
+
+- Update dependencies - [#253](https://github.com/livekit/components-js/pull/253) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`ecdbece`](https://github.com/livekit/components-js/commit/ecdbece0386ccbdb50be5d4620830cd059f55606), [`bcd4fdb`](https://github.com/livekit/components-js/commit/bcd4fdb886d48018309dacd4ea8e1e554b758aaa), [`1a7a098`](https://github.com/livekit/components-js/commit/1a7a09863df1fa79b15cfa1716213c3d2da0ac0d)]:
+  - @livekit/components-react@0.2.0
+
+## 0.0.12
+
+### Patch Changes
+
+- Updated dependencies [[`2ff32cc`](https://github.com/livekit/components-js/commit/2ff32cc50682f623adf8c314b13e97fe5d1fbeb5)]:
+  - @livekit/components-react@0.1.20
+
+## 0.0.11
+
+### Patch Changes
+
+- Monorepo-wide package updates and cleanups. - [#235](https://github.com/livekit/components-js/pull/235) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`1e53f58`](https://github.com/livekit/components-js/commit/1e53f58901c56224bc1a060210baf5d5beb9d17f), [`6a13879`](https://github.com/livekit/components-js/commit/6a13879d8a7092aa566f500f43e2e2057a3dcd8a)]:
+  - @livekit/components-react@0.1.19
+  - eslint-config-lk-custom@0.1.1
+
+## 0.0.10
+
+### Patch Changes
+
+- Updated dependencies [[`ce026b9`](https://github.com/livekit/components-js/commit/ce026b96b7c9fbfd0c0f1b24c763a35f0f311240), [`ce026b9`](https://github.com/livekit/components-js/commit/ce026b96b7c9fbfd0c0f1b24c763a35f0f311240)]:
+  - @livekit/components-react@0.1.18
+
+## 0.0.9
+
+### Patch Changes
+
+- Updated dependencies [[`ecf7ebd`](https://github.com/livekit/components-js/commit/ecf7ebd2ce7a97db91e8b7dcdcabfba06849f31e)]:
+  - @livekit/components-react@0.1.17
+
+## 0.0.8
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @livekit/components-react@0.1.16
+
+## 0.0.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @livekit/components-react@0.1.15
+
 ## 0.0.6
 
 ### Patch Changes

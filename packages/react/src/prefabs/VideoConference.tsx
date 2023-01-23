@@ -2,15 +2,18 @@ import * as React from 'react';
 import { LayoutContextProvider } from '../components/LayoutContextProvider';
 import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
 import { ControlBar } from './ControlBar';
-import { FocusLayoutContainer } from '../layout/FocusLayout';
-import { GridLayout } from '../layout/GridLayout';
+import { FocusLayoutContainer } from '../components/layout/FocusLayout';
+import { GridLayout } from '../components/layout/GridLayout';
 import { PinState, WidgetState } from '@livekit/components-core';
 import { TileLoop } from '../components/TileLoop';
 import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
 import { useMediaQuery } from '../hooks/utiltity-hooks';
+import { MessageFormatter } from './ChatEntry';
 
-export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
+export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
+  chatMessageFormatter?: MessageFormatter;
+}
 
 /**
  * This component is the default setup of a classic LiveKit video conferencing app.
@@ -27,7 +30,7 @@ export type VideoConferenceProps = React.HTMLAttributes<HTMLDivElement>;
  * <LiveKitRoom>
  * ```
  */
-export function VideoConference({ ...props }: VideoConferenceProps) {
+export function VideoConference({ chatMessageFormatter, ...props }: VideoConferenceProps) {
   type Layout = 'grid' | 'focus';
   const [layout, setLayout] = React.useState<Layout>('grid');
   const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });
@@ -43,11 +46,9 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
       <LayoutContextProvider onPinChange={handleFocusStateChange} onWidgetChange={setWidgetState}>
         <div className="lk-video-conference-inner">
           {layout === 'grid' ? (
-            <div className="lk-grid-layout-wrapper">
-              <GridLayout>
-                <TileLoop />
-              </GridLayout>
-            </div>
+            <GridLayout>
+              <TileLoop />
+            </GridLayout>
           ) : (
             <div className="lk-focus-layout-wrapper">
               <FocusLayoutContainer />
@@ -55,7 +56,10 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
           )}
           <ControlBar variation={isMobile ? 'minimal' : 'verbose'} controls={{ chat: true }} />
         </div>
-        <Chat style={{ display: widgetState.showChat ? 'flex' : 'none' }} />
+        <Chat
+          style={{ display: widgetState.showChat ? 'flex' : 'none' }}
+          messageFormatter={chatMessageFormatter}
+        />
       </LayoutContextProvider>
       <RoomAudioRenderer />
       <ConnectionStateToast />

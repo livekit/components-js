@@ -1,4 +1,4 @@
-import { LiveKitRoom, useToken } from '@livekit/components-react';
+import { LiveKitRoom, useToken, VideoConference } from '@livekit/components-react';
 import type { NextPage } from 'next';
 
 const MinimalExample: NextPage = () => {
@@ -22,7 +22,9 @@ const MinimalExample: NextPage = () => {
         audio={true}
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-      />
+      >
+        <VideoConference />
+      </LiveKitRoom>
     </div>
   );
 };

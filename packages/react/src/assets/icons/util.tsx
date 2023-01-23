@@ -6,7 +6,7 @@ import {
   MicDisabledIcon,
   CameraIcon,
   CameraDisabledIcon,
-  QualityUnkownIcon,
+  QualityUnknownIcon,
   QualityExcellentIcon,
   QualityGoodIcon,
   QualityPoorIcon,
@@ -42,6 +42,6 @@ export function getConnectionQualityIcon(quality: ConnectionQuality) {
     case ConnectionQuality.Poor:
       return <QualityPoorIcon />;
     default:
-      return <QualityUnkownIcon />;
+      return <QualityUnknownIcon />;
   }
 }

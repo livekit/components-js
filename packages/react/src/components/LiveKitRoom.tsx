@@ -11,7 +11,6 @@ import {
 } from 'livekit-client';
 import * as React from 'react';
 import { RoomContext } from '../context';
-import { VideoConference } from '../prefabs/VideoConference';
 import { mergeProps } from '../utils';
 
 export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onError'> {
@@ -113,7 +112,6 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
     );
   }
   const [room] = React.useState<Room>(passedRoom ?? new Room(options));
-  // setLogLevel('debug');
 
   const htmlProps = React.useMemo(() => mergeProps(rest, setupLiveKitRoom()), [rest]);
 
@@ -121,6 +119,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
     const onSignalConnected = () => {
       const localP = room.localParticipant;
       try {
+        log.debug('trying to publish local tracks');
         localP.setMicrophoneEnabled(!!audio, typeof audio !== 'boolean' ? audio : undefined);
         localP.setCameraEnabled(!!video, typeof video !== 'boolean' ? video : undefined);
         localP.setScreenShareEnabled(!!screen, typeof screen !== 'boolean' ? screen : undefined);
@@ -164,7 +163,14 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
     } else {
       room.disconnect();
     }
-  }, [connect, token, connectOptions, room, onError, serverUrl]);
+  }, [connect, token, connectOptions, room, onError, serverUrl, simulateParticipants]);
+
+  React.useEffect(() => {
+    return () => {
+      log.debug('disconnecting on onmount');
+      room.disconnect();
+    };
+  }, [room]);
 
   React.useEffect(() => {
     const connectionStateChangeListener = roomEventSelector(
@@ -208,9 +214,7 @@ export function LiveKitRoom(props: React.PropsWithChildren<LiveKitRoomProps>) {
   const { room, htmlProps } = useLiveKitRoom(props);
   return (
     <div {...htmlProps}>
-      <RoomContext.Provider value={room}>
-        {props.children ?? <VideoConference />}
-      </RoomContext.Provider>
+      <RoomContext.Provider value={room}>{props.children}</RoomContext.Provider>
     </div>
   );
 }

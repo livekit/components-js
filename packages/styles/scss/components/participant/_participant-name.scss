@@ -1,0 +1,7 @@
+.participant-name {
+  font-size: 0.875rem;
+
+  &::after {
+    content: attr(data-participant-name);
+  }
+}

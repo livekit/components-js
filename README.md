@@ -20,7 +20,7 @@
 
 > **Disclaimer —** This is project is in active development and open sourced as a developer preview. While APIs are unlikely to drastically change from here onwards, there's still the chance that some things might need tweaking after an update. We appreciate feedback from the community and are planning to incorporate your feedback to get to a stable version as soon as possible!
 
-![LiveKit Components Preview](./.github/assets/components-preview-grid.png)
+![LiveKit Components Preview](./.github/assets/livekit-meet.jpg)
 
 ## About LiveKit Components
 
@@ -89,11 +89,11 @@ export function App() {
 
 ## Examples
 
-We have a fully featured video conferencing application in our [examples](/examples/meet/) that powers https://meet.livekit.io.
-
-Additionally there are some basic example on how to use and customize LiveKit Components in the [nextjs example folder](/examples/next/)
+There are some basic example on how to use and customize LiveKit Components in the [nextjs example folder](./examples/nextjs/)
 
 In order to set the examples up locally follow the [development guide](#development-setup).
+
+We also have a fully featured video conferencing application built on top of LiveKit Components [here](https://github.com/livekit/meet) that powers https://meet.livekit.io.
 
 ## FAQ
 

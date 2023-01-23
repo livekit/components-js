@@ -32,7 +32,9 @@
     "generate:types": "yarn generate:types:unprefixed && yarn generate:types:prefixed",
     "generate:types:prefixed": "cd dist && typed-scss-modules '**/*.css' --exportType default --outputFolder ../dist/types --nameFormat kebab",
     "generate:types:unprefixed": "cd scss && typed-scss-modules '**/*.scss' --exportType default --outputFolder ../dist/types_unprefixed --nameFormat kebab --exportTypeName UnprefixedClassNames",
-    "postcss": "postcss .temp/**/*.css --base .temp --dir ./dist"
+    "postcss": "postcss .temp/**/*.css --base .temp --dir ./dist",
+    "test": "vitest --run",
+    "test:watch": "vitest"
   },
   "peerDependencies": {},
   "devDependencies": {
@@ -43,7 +45,8 @@
     "postcss-prefixer": "^2.1.3",
     "postcss-variables-prefixer": "^1.2.0",
     "sass": "^1.54.6",
-    "typed-scss-modules": "^7.0.0"
+    "typed-scss-modules": "^7.0.0",
+    "vitest": "^0.28.1"
   },
   "engines": {
     "node": ">=10"

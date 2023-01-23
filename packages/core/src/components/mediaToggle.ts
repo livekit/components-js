@@ -1,5 +1,5 @@
 import { LocalParticipant, Room, Track } from 'livekit-client';
-import { BehaviorSubject, map, startWith } from 'rxjs';
+import Observable from 'zen-observable';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 
@@ -24,18 +24,22 @@ export function setupMediaToggle(source: Track.Source, room: Room) {
     return isEnabled;
   };
 
-  const enabledObserver = observeParticipantMedia(localParticipant).pipe(
-    map((media) => {
+  const enabledObserver = Observable.of(getSourceEnabled(source, localParticipant)).concat(
+    observeParticipantMedia(localParticipant).map((media) => {
       return getSourceEnabled(source, media.participant as LocalParticipant);
     }),
-    startWith(getSourceEnabled(source, localParticipant)),
   );
 
-  const pendingSubject = new BehaviorSubject(false);
+  let pendingSubscriptionObserver: ZenObservable.SubscriptionObserver<boolean>;
+  const pendingObservable = Observable.of(false).concat(
+    new Observable<boolean>((subscribe) => {
+      pendingSubscriptionObserver = subscribe;
+    }),
+  );
   const toggle = async (forceState?: boolean) => {
     try {
       // trigger observable update
-      pendingSubject.next(true);
+      pendingSubscriptionObserver.next(true);
       switch (source) {
         case Track.Source.Camera:
           await localParticipant.setCameraEnabled(forceState ?? !localParticipant.isCameraEnabled);
@@ -54,33 +58,41 @@ export function setupMediaToggle(source: Track.Source, room: Room) {
           break;
       }
     } finally {
-      pendingSubject.next(false);
+      pendingSubscriptionObserver.next(false);
       // trigger observable update
     }
   };
 
   const className: string = prefixClass('button');
-  return { className, toggle, enabledObserver, pendingObserver: pendingSubject.asObservable() };
+  return { className, toggle, enabledObserver, pendingObserver: pendingObservable };
 }
 
 export function setupManualToggle() {
   let state = false;
 
-  const enabledSubject = new BehaviorSubject(state);
-
-  const pendingSubject = new BehaviorSubject(false);
-
+  let enabledSubscriptionObserver: ZenObservable.SubscriptionObserver<boolean>;
+  const enabledObservable = Observable.of(false).concat(
+    new Observable<boolean>((subscribe) => {
+      pendingSubscriptionObserver = subscribe;
+    }),
+  );
+  let pendingSubscriptionObserver: ZenObservable.SubscriptionObserver<boolean>;
+  const pendingObservable = Observable.of(false).concat(
+    new Observable<boolean>((subscribe) => {
+      pendingSubscriptionObserver = subscribe;
+    }),
+  );
   const toggle = (forceState?: boolean) => {
-    pendingSubject.next(true);
+    pendingSubscriptionObserver.next(true);
     state = forceState ?? !state;
-    enabledSubject.next(state);
-    pendingSubject.next(false);
+    enabledSubscriptionObserver.next(state);
+    pendingSubscriptionObserver.next(false);
   };
   const className: string = prefixClass('button');
   return {
     className,
     toggle,
-    enabledObserver: enabledSubject.asObservable(),
-    pendingObserver: pendingSubject.asObservable(),
+    enabledObserver: enabledObservable,
+    pendingObserver: pendingObservable,
   };
 }

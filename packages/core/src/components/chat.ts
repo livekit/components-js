@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { DataPacket_Kind, Participant, Room } from 'livekit-client';
-import { Observable, Subscriber } from 'rxjs';
 import { createDataObserver } from '../observables/room';
+import Observable from 'zen-observable';
 
 export const enum MessageType {
   CHAT,
@@ -28,7 +28,7 @@ export function setupChat(room: Room) {
   let chatMessages: Array<ChatMessage> = [];
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
-  let chatMessageSubscriber: Subscriber<ChatMessage[]>;
+  let chatMessageSubscriber: ZenObservable.SubscriptionObserver<ChatMessage[]>;
   const messageObservable = new Observable<ChatMessage[]>((subscriber) => {
     chatMessageSubscriber = subscriber;
     const subscription = createDataObserver(room).subscribe(([payload, participant]) => {
@@ -43,7 +43,7 @@ export function setupChat(room: Room) {
     return () => subscription.unsubscribe();
   });
 
-  let isSendingSubscriber: Subscriber<boolean>;
+  let isSendingSubscriber: ZenObservable.SubscriptionObserver<boolean>;
   const isSendingObservable = new Observable<boolean>((subscriber) => {
     isSendingSubscriber = subscriber;
   });

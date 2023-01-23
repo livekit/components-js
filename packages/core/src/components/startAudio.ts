@@ -1,15 +1,12 @@
 import { Room, RoomEvent } from 'livekit-client';
-import { map } from 'rxjs';
 import log from '../logger';
 import { observeRoomEvents } from '../observables/room';
 import { prefixClass } from '../styles-interface';
 
 function roomAudioPlaybackAllowedObservable(room: Room) {
-  const observable = observeRoomEvents(room, RoomEvent.AudioPlaybackStatusChanged).pipe(
-    map((room) => {
-      return { canPlayAudio: room.canPlaybackAudio };
-    }),
-  );
+  const observable = observeRoomEvents(room, RoomEvent.AudioPlaybackStatusChanged).map((room) => {
+    return { canPlayAudio: room.canPlaybackAudio };
+  });
   return observable;
 }
 

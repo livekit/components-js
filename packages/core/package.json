@@ -31,12 +31,13 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "loglevel": "^1.8.1",
-    "rxjs": "^7.8.0"
+    "zen-observable": "^0.10.0"
   },
   "peerDependencies": {
     "livekit-client": "^1.6.2"
   },
   "devDependencies": {
+    "@types/zen-observable": "^0.8.3",
     "@livekit/components-styles": "~0.1.10",
     "eslint-config-lk-custom": "^0.1.1",
     "livekit-client": "^1.6.2",

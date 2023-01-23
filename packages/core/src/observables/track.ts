@@ -6,7 +6,7 @@ import {
   TrackEvent,
   TrackPublication,
 } from 'livekit-client';
-import { Observable, startWith, Subscription } from 'rxjs';
+import Observable from 'zen-observable';
 import log from '../logger';
 import { TrackParticipantPair } from '../types';
 import { roomEventSelector } from './room';
@@ -24,24 +24,26 @@ export function trackObservable(track: TrackPublication) {
 }
 
 export function observeTrackEvents(track: TrackPublication, ...events: TrackEvent[]) {
-  const observable = new Observable<TrackPublication>((subscribe) => {
-    const onTrackUpdate = () => {
-      subscribe.next(track);
-    };
+  const observable = Observable.of(track).concat(
+    new Observable<TrackPublication>((subscribe) => {
+      const onTrackUpdate = () => {
+        subscribe.next(track);
+      };
 
-    events.forEach((evt) => {
-      // @ts-expect-error type of `TrackEvent` and `PublicationCallbacks` are congruent
-      track.on(evt, onTrackUpdate);
-    });
-
-    const unsubscribe = () => {
       events.forEach((evt) => {
         // @ts-expect-error type of `TrackEvent` and `PublicationCallbacks` are congruent
-        track.off(evt, onTrackUpdate);
+        track.on(evt, onTrackUpdate);
       });
-    };
-    return unsubscribe;
-  }).pipe(startWith(track));
+
+      const unsubscribe = () => {
+        events.forEach((evt) => {
+          // @ts-expect-error type of `TrackEvent` and `PublicationCallbacks` are congruent
+          track.off(evt, onTrackUpdate);
+        });
+      };
+      return unsubscribe;
+    }),
+  );
 
   return observable;
 }
@@ -70,7 +72,7 @@ export function trackParticipantPairsObservable(
   room: Room,
   sources: Track.Source[],
 ): Observable<TrackParticipantPair[]> {
-  const roomEventSubscriptions: Subscription[] = [];
+  const roomEventSubscriptions: ZenObservable.Subscription[] = [];
 
   const observable = new Observable<TrackParticipantPair[]>((subscribe) => {
     // Get and emit initial values.

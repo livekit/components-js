@@ -7,6 +7,7 @@
   "scripts": {
     "build": "turbo run build",
     "build:core": "turbo run build --filter=@livekit/components-core...",
+    "build:bundle": "turbo run build --filter=@livekit/component-bundle-test...",
     "build:next": "turbo run build --filter=@livekit/component-example-next...",
     "build:react": "turbo run build --filter=@livekit/components-react...",
     "build:storybook": "turbo run build --filter=@livekit/component-docs-storybook...",

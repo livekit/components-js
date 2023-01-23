@@ -1,15 +1,17 @@
 import { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
-import { BehaviorSubject, map, mergeWith } from 'rxjs';
+import Observable from 'zen-observable';
 import log from '../logger';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 
 export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
-  const activeDeviceSubject = new BehaviorSubject<string | undefined>(undefined);
-
+  let activeDeviceSubscriptionObserver: ZenObservable.SubscriptionObserver<string | undefined>;
+  const manualObservable = new Observable<string | undefined>((subscribe) => {
+    activeDeviceSubscriptionObserver = subscribe;
+  });
   const activeDeviceObservable = room
-    ? observeParticipantMedia(room.localParticipant).pipe(
-        map((participantMedia) => {
+    ? observeParticipantMedia(room.localParticipant)
+        .map((participantMedia) => {
           let localTrack: LocalAudioTrack | LocalVideoTrack | undefined;
           switch (kind) {
             case 'videoinput':
@@ -23,10 +25,9 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
               break;
           }
           return localTrack?.mediaStreamTrack.getSettings()?.deviceId;
-        }),
-        mergeWith(activeDeviceSubject),
-      )
-    : activeDeviceSubject.asObservable();
+        })
+        .concat(manualObservable)
+    : manualObservable;
 
   const setActiveMediaDevice = async (id: string) => {
     if (room) {
@@ -35,7 +36,7 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
     } else {
       log.debug('room not available, skipping device switch');
     }
-    activeDeviceSubject.next(id);
+    activeDeviceSubscriptionObserver.next(id);
   };
   const className: string = prefixClass('media-device-select');
   return {

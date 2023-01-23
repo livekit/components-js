@@ -1,23 +1,25 @@
-import { map, Observable, startWith, Subscriber, Subscription } from 'rxjs';
+import Observable from 'zen-observable';
 import { Participant, Room, RoomEvent, Track, TrackPublication } from 'livekit-client';
 import { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observable<Room> {
-  const observable = new Observable<Room>((subscribe) => {
-    const onRoomUpdate = () => {
-      subscribe.next(room);
-    };
+  const observable = Observable.of(room).concat(
+    new Observable<Room>((subscribe) => {
+      const onRoomUpdate = () => {
+        subscribe.next(room);
+      };
 
-    events.forEach((evt) => {
-      room.on(evt, onRoomUpdate);
-    });
-
-    const unsubscribe = () => {
       events.forEach((evt) => {
-        room.off(evt, onRoomUpdate);
+        room.on(evt, onRoomUpdate);
       });
-    };
-    return unsubscribe;
-  }).pipe(startWith(room));
+
+      const unsubscribe = () => {
+        events.forEach((evt) => {
+          room.off(evt, onRoomUpdate);
+        });
+      };
+      return unsubscribe;
+    }),
+  );
 
   return observable;
 }
@@ -41,26 +43,29 @@ export function roomEventSelector<T extends RoomEvent>(room: Room, event: T) {
 }
 
 export function roomObserver(room: Room) {
-  const observable = observeRoomEvents(
-    room,
-    RoomEvent.ParticipantConnected,
-    RoomEvent.ParticipantDisconnected,
-    RoomEvent.ActiveSpeakersChanged,
-    RoomEvent.TrackSubscribed,
-    RoomEvent.TrackUnsubscribed,
-    RoomEvent.LocalTrackPublished,
-    RoomEvent.LocalTrackUnpublished,
-    RoomEvent.AudioPlaybackStatusChanged,
-    RoomEvent.ConnectionStateChanged,
-  ).pipe(startWith(room));
+  const observable = Observable.of(room).concat(
+    observeRoomEvents(
+      room,
+      RoomEvent.ParticipantConnected,
+      RoomEvent.ParticipantDisconnected,
+      RoomEvent.ActiveSpeakersChanged,
+      RoomEvent.TrackSubscribed,
+      RoomEvent.TrackUnsubscribed,
+      RoomEvent.LocalTrackPublished,
+      RoomEvent.LocalTrackUnpublished,
+      RoomEvent.AudioPlaybackStatusChanged,
+      RoomEvent.ConnectionStateChanged,
+    ),
+  );
 
   return observable;
 }
 
 export function connectionStateObserver(room: Room) {
-  return roomEventSelector(room, RoomEvent.ConnectionStateChanged).pipe(
-    map(([connectionState]) => connectionState),
-    startWith(room.state),
+  return Observable.of(room.state).concat(
+    roomEventSelector(room, RoomEvent.ConnectionStateChanged).map(
+      ([connectionState]) => connectionState,
+    ),
   );
 }
 export type ScreenShareTrackMap = Array<{
@@ -69,8 +74,8 @@ export type ScreenShareTrackMap = Array<{
 }>;
 
 export function screenShareObserver(room: Room) {
-  let screenShareSubscriber: Subscriber<ScreenShareTrackMap>;
-  const observers: Array<Subscription> = [];
+  let screenShareSubscriber: ZenObservable.SubscriptionObserver<ScreenShareTrackMap>;
+  const observers: ZenObservable.Subscription[] = [];
 
   const observable = new Observable<ScreenShareTrackMap>((subscriber) => {
     screenShareSubscriber = subscriber;
@@ -161,22 +166,18 @@ export function roomInfoObserver(room: Room) {
     room,
     RoomEvent.RoomMetadataChanged,
     RoomEvent.ConnectionStateChanged,
-  ).pipe(
-    map((r) => {
-      return { name: r.name, metadata: r.metadata };
-    }),
-  );
+  ).map((r) => {
+    return { name: r.name, metadata: r.metadata };
+  });
   return observer;
 }
 
 export function activeSpeakerObserver(room: Room) {
-  return roomEventSelector(room, RoomEvent.ActiveSpeakersChanged).pipe(
-    map(([speakers]) => speakers),
-  );
+  return roomEventSelector(room, RoomEvent.ActiveSpeakersChanged).map(([speakers]) => speakers);
 }
 
 export function createMediaDeviceObserver(kind?: MediaDeviceKind, requestPermissions = true) {
-  let deviceSubscriber: Subscriber<MediaDeviceInfo[]> | undefined;
+  let deviceSubscriber: ZenObservable.SubscriptionObserver<MediaDeviceInfo[]> | undefined;
   const onDeviceChange = async () => {
     const newDevices = await Room.getLocalDevices(kind, requestPermissions);
     deviceSubscriber?.next(newDevices);

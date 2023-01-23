@@ -1,8 +1,7 @@
 // Utility hooks are not meant to be exposed to the user, that's why this file doesn't get included in hooks/index.tsx
 import * as React from 'react';
 import useLatest from '@react-hook/latest';
-import { Observable } from 'rxjs';
-
+import type Observable from 'zen-observable';
 /**
  * @internal
  */

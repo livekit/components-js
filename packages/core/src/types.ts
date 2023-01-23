@@ -18,5 +18,5 @@ export interface ParticipantClickEvent {
   track?: TrackPublication;
 }
 
-export type TracksFilter = Parameters<TrackParticipantPair[]['filter']>['0'];
+export type TrackFilter = Parameters<TrackParticipantPair[]['filter']>['0'];
 export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];

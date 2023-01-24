@@ -111,11 +111,17 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
       'when using a manually created room, the options object will be ignored. set the desired options directly when creating the room instead.',
     );
   }
-  const [room] = React.useState<Room>(passedRoom ?? new Room(options));
+
+  const [room, setRoom] = React.useState<Room | undefined>();
+
+  React.useEffect(() => {
+    setRoom(passedRoom ?? new Room(options));
+  }, [options, passedRoom]);
 
   const htmlProps = React.useMemo(() => mergeProps(rest, setupLiveKitRoom()), [rest]);
 
   React.useEffect(() => {
+    if (!room) return;
     const onSignalConnected = () => {
       const localP = room.localParticipant;
       try {
@@ -136,6 +142,8 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
   }, [room, audio, video, screen, onError]);
 
   React.useEffect(() => {
+    if (!room) return;
+
     if (simulateParticipants) {
       room.simulateParticipants({
         participants: {
@@ -148,6 +156,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
       });
     }
     if (!token) {
+      log.debug('no token yet');
       return;
     }
     if (!serverUrl) {
@@ -156,23 +165,27 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
       return;
     }
     if (connect) {
+      log.debug('connecting');
       room.connect(serverUrl, token, connectOptions).catch((e) => {
         log.warn(e);
         onError?.(e as Error);
       });
     } else {
+      log.debug('disconnecting because connect is false');
       room.disconnect();
     }
   }, [connect, token, connectOptions, room, onError, serverUrl, simulateParticipants]);
 
   React.useEffect(() => {
+    if (!room) return;
     return () => {
       log.debug('disconnecting on onmount');
       room.disconnect();
     };
-  }, [room]);
+  }, []);
 
   React.useEffect(() => {
+    if (!room) return;
     const connectionStateChangeListener = roomEventSelector(
       room,
       RoomEvent.ConnectionStateChanged,
@@ -214,7 +227,7 @@ export function LiveKitRoom(props: React.PropsWithChildren<LiveKitRoomProps>) {
   const { room, htmlProps } = useLiveKitRoom(props);
   return (
     <div {...htmlProps}>
-      <RoomContext.Provider value={room}>{props.children}</RoomContext.Provider>
+      {room && <RoomContext.Provider value={room}>{props.children}</RoomContext.Provider>}
     </div>
   );
 }

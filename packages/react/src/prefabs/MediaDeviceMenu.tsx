@@ -51,7 +51,7 @@ export const MediaDeviceMenu = ({
     }
   }, [button, tooltip, isOpen]);
 
-  function handleClickOutside(event): void {
+  function handleClickOutside(event: MouseEvent): void {
     if (!tooltip.current) {
       return;
     }

@@ -1417,26 +1417,10 @@
 
 "@floating-ui/dom@^1.1.0":
   version "1.1.0"
-  resolved "https://registry.npmjs.org/@floating-ui/dom/-/dom-1.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.1.0.tgz#29fea1344fdef15b6ba270a733d20b7134fee5c2"
   integrity sha512-TSogMPVxbRe77QCj1dt8NmRiJasPvuc+eT5jnJ6YpLqgOD2zXc5UA3S1qwybN+GVCDNdKfpKy1oj8RpzLJvh6A==
   dependencies:
     "@floating-ui/core" "^1.0.5"
-
-"@floating-ui/react-dom@^1.1.0":
-  version "1.2.1"
-  resolved "https://registry.npmjs.org/@floating-ui/react-dom/-/react-dom-1.2.1.tgz"
-  integrity sha512-YCLlqibZtgUhxUpxkSp1oekvYgH/jI4KdZEJv85E62twlZHN43xdlQNe6JcF4ROD3/Zu6juNHN+aOygN+6yZjg==
-  dependencies:
-    "@floating-ui/dom" "^1.1.0"
-
-"@floating-ui/react@^0.15.1":
-  version "0.15.1"
-  resolved "https://registry.npmjs.org/@floating-ui/react/-/react-0.15.1.tgz"
-  integrity sha512-fbzUt+JM9o7z/uTBIvTvxUOGXAx8JlCFNpcWen7IjQqqOISkZq1IT7u8wwR+u2emE8wAZoRuoUvny7UMcCGXbw==
-  dependencies:
-    "@floating-ui/react-dom" "^1.1.0"
-    aria-hidden "^1.1.3"
-    tabbable "^6.0.1"
 
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
@@ -3619,13 +3603,6 @@ argparse@^2.0.1:
   version "2.0.1"
   resolved "https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz"
   integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
-
-aria-hidden@^1.1.3:
-  version "1.2.2"
-  resolved "https://registry.npmjs.org/aria-hidden/-/aria-hidden-1.2.2.tgz"
-  integrity sha512-6y/ogyDTk/7YAe91T3E2PR1ALVKyM2QbTio5HwM+N1Q6CMlCKhvClyIjkckBswa0f2xJhjsfzIGa1yVSe1UMVA==
-  dependencies:
-    tslib "^2.0.0"
 
 aria-query@^5.0.0, aria-query@^5.1.3:
   version "5.1.3"
@@ -10051,11 +10028,6 @@ synckit@^0.8.4:
     "@pkgr/utils" "^2.3.1"
     tslib "^2.4.0"
 
-tabbable@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.npmjs.org/tabbable/-/tabbable-6.0.1.tgz"
-  integrity sha512-SYJSIgeyXW7EuX1ytdneO5e8jip42oHWg9xl/o3oTYhmXusZVgiA+VlPvjIN+kHii9v90AmzTZEBcsEvuAY+TA==
-
 tapable@^2.1.1, tapable@^2.2.0:
   version "2.2.1"
   resolved "https://registry.npmjs.org/tapable/-/tapable-2.2.1.tgz"
@@ -10317,7 +10289,7 @@ tslib@^1.8.1:
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.0, tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.4.0:
+tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.4.0:
   version "2.4.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.4.1.tgz"
   integrity sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==

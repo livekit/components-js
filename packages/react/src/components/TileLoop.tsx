@@ -1,8 +1,8 @@
-import { isParticipantSourcePinned } from '@livekit/components-core';
+import { isParticipantSourcePinned, ParticipantFilter } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext, useMaybeLayoutContext } from '../context';
-import { ParticipantFilter, useParticipants, useTracks } from '../hooks';
+import { useParticipants, useTracks } from '../hooks';
 import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 

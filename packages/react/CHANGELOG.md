@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 0.2.1
+
+### Patch Changes
+
+- Refactor loop filter into core and rename TracksFilter to TrackFilter. - [#257](https://github.com/livekit/components-js/pull/257) ([@Ocupe](https://github.com/Ocupe))
+
+- Remove ResizeObserver polyfill dependency - [#254](https://github.com/livekit/components-js/pull/254) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`1144b2c`](https://github.com/livekit/components-js/commit/1144b2c5c762ebbc3ff919114e18f8a11f52cf46)]:
+  - @livekit/components-core@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

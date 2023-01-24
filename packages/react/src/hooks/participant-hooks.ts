@@ -8,11 +8,11 @@ import {
   mutedObserver,
   ParticipantMedia,
   observeParticipantMedia,
+  ParticipantFilter,
 } from '@livekit/components-core';
 import { useObservableState } from '../hooks/utiltity-hooks';
 import { useEnsureParticipant, useRoomContext } from '../context';
 
-export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
 export interface UseParticipantsProps {
   filter?: ParticipantFilter;
   filterDependencies?: Array<unknown>;

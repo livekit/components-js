@@ -6,6 +6,7 @@ import {
   trackObservable,
   TrackParticipantPair,
   trackParticipantPairsObservable,
+  TrackFilter,
 } from '@livekit/components-core';
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
@@ -112,11 +113,10 @@ export function useTrack({ pub }: UseTrackProps) {
   return { publication, track };
 }
 
-export type TracksFilter = Parameters<TrackParticipantPair[]['filter']>['0'];
 type UseTracksProps = {
   sources?: Track.Source[];
   excludePinnedTracks?: boolean;
-  filter?: TracksFilter;
+  filter?: TrackFilter;
   filterDependencies?: Array<any>;
 };
 

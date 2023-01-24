@@ -1,17 +1,6 @@
 import * as React from 'react';
 import { MediaDeviceSelect } from '../components/controls/MediaDeviceSelect';
-import {
-  useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
-  useClick,
-  useDismiss,
-  useRole,
-  useInteractions,
-  FloatingFocusManager,
-} from '@floating-ui/react';
+import { computePosition, flip, offset, shift } from '@floating-ui/dom';
 
 interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   kind?: MediaDeviceKind;
@@ -46,20 +35,39 @@ export const MediaDeviceMenu = ({
     onActiveDeviceChange?.(kind, deviceId);
   };
 
-  const { x, y, reference, floating, strategy, context } = useFloating({
-    placement: 'top',
-    open: isOpen,
-    onOpenChange: setIsOpen,
-    middleware: [offset(10), flip(), shift()],
-    whileElementsMounted: autoUpdate,
-  });
+  const button = React.useRef<HTMLButtonElement>(null);
+  const tooltip = React.useRef<HTMLDivElement>(null);
 
-  const click = useClick(context);
-  const dismiss = useDismiss(context);
-  const role = useRole(context, { role: 'listbox' });
+  React.useEffect(() => {
+    if (button.current && tooltip.current) {
+      computePosition(button.current, tooltip.current, {
+        placement: 'top',
+        middleware: [offset(6), flip(), shift({ padding: 5 })],
+      }).then(({ x, y }) => {
+        if (tooltip.current) {
+          Object.assign(tooltip.current.style, { left: `${x}px`, top: `${y}px` });
+        }
+      });
+    }
+  }, [button, tooltip, isOpen]);
 
-  // Merge all the interactions into prop getters
-  const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role]);
+  function handleClickOutside(event): void {
+    if (!tooltip.current) {
+      return;
+    }
+    if (tooltip.current && !tooltip.current.contains(event.target as Node)) {
+      setIsOpen(false);
+    }
+  }
+
+  React.useEffect(() => {
+    // document.addEventListener('keydown', handleHideDropdown, true);
+    document.addEventListener<'click'>('click', handleClickOutside, true);
+    return () => {
+      // document.removeEventListener('keydown', handleHideDropdown, true);
+      document.removeEventListener<'click'>('click', handleClickOutside, true);
+    };
+  }, []);
 
   return (
     <span style={{ position: 'relative', flexShrink: 0 }}>
@@ -68,50 +76,38 @@ export const MediaDeviceMenu = ({
         aria-pressed={isOpen}
         {...props}
         onClick={() => setIsOpen(!isOpen)}
-        ref={reference}
-        {...getReferenceProps()}
+        ref={button}
       >
         {props.children}
       </button>
 
       {isOpen && (
-        <FloatingFocusManager context={context} modal={false}>
-          <div
-            className="lk-device-menu"
-            ref={floating}
-            style={{
-              position: strategy,
-              top: y ?? 0,
-              left: x ?? 0,
-            }}
-            {...getFloatingProps()}
-          >
-            {kind ? (
+        <div className="lk-device-menu" ref={tooltip}>
+          {kind ? (
+            <MediaDeviceSelect
+              initialSelection={initialSelection}
+              onActiveDeviceChange={(deviceId) => handleActiveDeviceChange(kind, deviceId)}
+              kind={kind}
+            />
+          ) : (
+            <>
+              <div className="lk-device-menu-heading">Audio inputs</div>
               <MediaDeviceSelect
-                initialSelection={initialSelection}
-                onActiveDeviceChange={(deviceId) => handleActiveDeviceChange(kind, deviceId)}
-                kind={kind}
-              />
-            ) : (
-              <>
-                <div className="lk-device-menu-heading">Audio inputs</div>
-                <MediaDeviceSelect
-                  kind="audioinput"
-                  onActiveDeviceChange={(deviceId) =>
-                    handleActiveDeviceChange('audioinput', deviceId)
-                  }
-                ></MediaDeviceSelect>
-                <div className="lk-device-menu-heading">Video inputs</div>
-                <MediaDeviceSelect
-                  kind="videoinput"
-                  onActiveDeviceChange={(deviceId) =>
-                    handleActiveDeviceChange('videoinput', deviceId)
-                  }
-                ></MediaDeviceSelect>
-              </>
-            )}
-          </div>
-        </FloatingFocusManager>
+                kind="audioinput"
+                onActiveDeviceChange={(deviceId) =>
+                  handleActiveDeviceChange('audioinput', deviceId)
+                }
+              ></MediaDeviceSelect>
+              <div className="lk-device-menu-heading">Video inputs</div>
+              <MediaDeviceSelect
+                kind="videoinput"
+                onActiveDeviceChange={(deviceId) =>
+                  handleActiveDeviceChange('videoinput', deviceId)
+                }
+              ></MediaDeviceSelect>
+            </>
+          )}
+        </div>
       )}
     </span>
   );

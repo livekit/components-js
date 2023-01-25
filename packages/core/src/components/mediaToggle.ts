@@ -1,6 +1,7 @@
 import { LocalParticipant, Room, Track } from 'livekit-client';
 import Observable from 'zen-observable';
 import { observeParticipantMedia } from '../observables/participant';
+import { observableWithDefault, observableWithTrigger } from '../observables/utils';
 import { prefixClass } from '../styles-interface';
 
 export function setupMediaToggle(source: Track.Source, room: Room) {
@@ -24,18 +25,16 @@ export function setupMediaToggle(source: Track.Source, room: Room) {
     return isEnabled;
   };
 
-  const enabledObserver = Observable.of(getSourceEnabled(source, localParticipant)).concat(
+  const enabledObserver = observableWithDefault(
     observeParticipantMedia(localParticipant).map((media) => {
       return getSourceEnabled(source, media.participant as LocalParticipant);
     }),
+    getSourceEnabled(source, localParticipant),
   );
 
-  let pendingSubscriptionObserver: ZenObservable.SubscriptionObserver<boolean>;
-  const pendingObservable = Observable.of(false).concat(
-    new Observable<boolean>((subscribe) => {
-      pendingSubscriptionObserver = subscribe;
-    }),
-  );
+  const { trigger: pendingSubscriptionObserver, observable: pendingObservable } =
+    observableWithTrigger(false);
+
   const toggle = async (forceState?: boolean) => {
     try {
       // trigger observable update
@@ -71,16 +70,18 @@ export function setupManualToggle() {
   let state = false;
 
   let enabledSubscriptionObserver: ZenObservable.SubscriptionObserver<boolean>;
-  const enabledObservable = Observable.of(false).concat(
+  const enabledObservable = observableWithDefault(
     new Observable<boolean>((subscribe) => {
       pendingSubscriptionObserver = subscribe;
     }),
+    false,
   );
   let pendingSubscriptionObserver: ZenObservable.SubscriptionObserver<boolean>;
-  const pendingObservable = Observable.of(false).concat(
+  const pendingObservable = observableWithDefault(
     new Observable<boolean>((subscribe) => {
       pendingSubscriptionObserver = subscribe;
     }),
+    false,
   );
   const toggle = (forceState?: boolean) => {
     pendingSubscriptionObserver.next(true);

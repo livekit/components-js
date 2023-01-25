@@ -10,6 +10,7 @@ import {
 import Observable from 'zen-observable';
 import { observeRoomEvents } from './room';
 import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
+import { observableWithDefault } from './utils';
 
 export function observeParticipantEvents<T extends Participant>(
   participant: T,
@@ -85,11 +86,7 @@ export function createTrackObserver(participant: Participant, source: Track.Sour
 }
 
 export function participantInfoObserver(participant: Participant) {
-  const observer = Observable.of({
-    name: participant.name,
-    identity: participant.identity,
-    metadata: participant.metadata,
-  }).concat(
+  const observer = observableWithDefault(
     observeParticipantEvents(
       participant,
       ParticipantEvent.ParticipantMetadataChanged,
@@ -101,15 +98,21 @@ export function participantInfoObserver(participant: Participant) {
         metadata,
       };
     }),
+    {
+      name: participant.name,
+      identity: participant.identity,
+      metadata: participant.metadata,
+    },
   );
   return observer;
 }
 
 export function createConnectionQualityObserver(participant: Participant) {
-  const observer = Observable.of(participant.connectionQuality).concat(
+  const observer = observableWithDefault(
     participantEventSelector(participant, ParticipantEvent.ConnectionQualityChanged).map(
       ([quality]) => quality,
     ),
+    participant.connectionQuality,
   );
   return observer;
 }
@@ -136,7 +139,7 @@ export function participantEventSelector<T extends ParticipantEvent>(
 }
 
 export function mutedObserver(participant: Participant, source: Track.Source) {
-  return Observable.of(participant.getTrack(source)?.isMuted ?? true).concat(
+  return observableWithDefault(
     observeParticipantEvents(
       participant,
       ParticipantEvent.TrackMuted,
@@ -149,6 +152,7 @@ export function mutedObserver(participant: Participant, source: Track.Source) {
       const pub = participant.getTrack(source);
       return pub?.isMuted ?? true;
     }),
+    participant.getTrack(source)?.isMuted ?? true,
   );
 }
 
@@ -161,11 +165,12 @@ export function createIsSpeakingObserver(participant: Participant) {
 export function connectedParticipantsObserver(room: Room) {
   let subscriber: ZenObservable.SubscriptionObserver<RemoteParticipant[]> | undefined;
 
-  const observable = Observable.of(Array.from(room.participants.values())).concat(
+  const observable = observableWithDefault(
     new Observable<RemoteParticipant[]>((sub) => {
       subscriber = sub;
       return () => listener.unsubscribe();
     }),
+    Array.from(room.participants.values()),
   );
 
   const listener = observeRoomEvents(

@@ -10,6 +10,7 @@ import Observable from 'zen-observable';
 import log from '../logger';
 import { TrackParticipantPair } from '../types';
 import { roomEventSelector } from './room';
+import { observableWithDefault } from './utils';
 
 export function trackObservable(track: TrackPublication) {
   const trackObserver = observeTrackEvents(
@@ -24,7 +25,7 @@ export function trackObservable(track: TrackPublication) {
 }
 
 export function observeTrackEvents(track: TrackPublication, ...events: TrackEvent[]) {
-  const observable = Observable.of(track).concat(
+  const observable = observableWithDefault(
     new Observable<TrackPublication>((subscribe) => {
       const onTrackUpdate = () => {
         subscribe.next(track);
@@ -43,6 +44,7 @@ export function observeTrackEvents(track: TrackPublication, ...events: TrackEven
       };
       return unsubscribe;
     }),
+    track,
   );
 
   return observable;

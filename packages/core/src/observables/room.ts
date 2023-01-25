@@ -1,6 +1,7 @@
 import Observable from 'zen-observable';
 import { Participant, Room, RoomEvent, Track, TrackPublication } from 'livekit-client';
 import { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
+import { observableWithDefault } from './utils';
 export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observable<Room> {
   const observable = Observable.of(room).concat(
     new Observable<Room>((subscribe) => {
@@ -43,7 +44,7 @@ export function roomEventSelector<T extends RoomEvent>(room: Room, event: T) {
 }
 
 export function roomObserver(room: Room) {
-  const observable = Observable.of(room).concat(
+  const observable = observableWithDefault(
     observeRoomEvents(
       room,
       RoomEvent.ParticipantConnected,
@@ -56,16 +57,18 @@ export function roomObserver(room: Room) {
       RoomEvent.AudioPlaybackStatusChanged,
       RoomEvent.ConnectionStateChanged,
     ),
+    room,
   );
 
   return observable;
 }
 
 export function connectionStateObserver(room: Room) {
-  return Observable.of(room.state).concat(
+  return observableWithDefault(
     roomEventSelector(room, RoomEvent.ConnectionStateChanged).map(
       ([connectionState]) => connectionState,
     ),
+    room.state,
   );
 }
 export type ScreenShareTrackMap = Array<{

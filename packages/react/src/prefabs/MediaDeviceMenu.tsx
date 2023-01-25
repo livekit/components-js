@@ -1,6 +1,6 @@
+import { computeMenuPosition, wasClickOutside } from '@livekit/components-core';
 import * as React from 'react';
 import { MediaDeviceSelect } from '../components/controls/MediaDeviceSelect';
-import { computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { log } from '@livekit/components-core';
 
 interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -43,10 +43,7 @@ export const MediaDeviceMenu = ({
 
   React.useEffect(() => {
     if (button.current && tooltip.current && devices) {
-      computePosition(button.current, tooltip.current, {
-        placement: 'top',
-        middleware: [offset(6), flip(), shift({ padding: 5 })],
-      }).then(({ x, y }) => {
+      computeMenuPosition(button.current, tooltip.current).then(({ x, y }) => {
         if (tooltip.current) {
           Object.assign(tooltip.current.style, { left: `${x}px`, top: `${y}px` });
         }
@@ -54,25 +51,27 @@ export const MediaDeviceMenu = ({
     }
   }, [button, tooltip, devices]);
 
-  function handleClickOutside(event: MouseEvent): void {
-    if (!tooltip.current) {
-      return;
-    }
-    if (
-      tooltip.current &&
-      !tooltip.current.contains(event.target as Node) &&
-      event.target !== button.current
-    ) {
-      setIsOpen(false);
-    }
-  }
+  const handleClickOutside = React.useCallback(
+    (event: MouseEvent) => {
+      if (!tooltip.current) {
+        return;
+      }
+      if (event.target === button.current) {
+        return;
+      }
+      if (isOpen && wasClickOutside(tooltip.current, event)) {
+        setIsOpen(false);
+      }
+    },
+    [isOpen, tooltip, button],
+  );
 
   React.useEffect(() => {
-    document.addEventListener<'click'>('click', handleClickOutside, true);
+    document.addEventListener<'click'>('click', handleClickOutside);
     return () => {
-      document.removeEventListener<'click'>('click', handleClickOutside, true);
+      document.removeEventListener<'click'>('click', handleClickOutside);
     };
-  }, []);
+  }, [handleClickOutside]);
 
   return (
     <span style={{ position: 'relative', flexShrink: 0 }}>

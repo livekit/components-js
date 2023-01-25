@@ -30,6 +30,7 @@
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
+    "@floating-ui/dom": "^1.1.0",
     "loglevel": "^1.8.1",
     "rxjs": "^7.8.0"
   },

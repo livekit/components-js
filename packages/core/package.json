@@ -26,21 +26,28 @@
     "dev": "tsup --watch",
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
     "test": "vitest --run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "size": "size-limit"
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@floating-ui/dom": "^1.1.0",
     "loglevel": "^1.8.1",
-    "rxjs": "^7.8.0"
+    "rxjs": "^7.8.0",
+    "email-regex": "^5.0.0",
+    "ip-regex": "^5.0.0",
+    "tlds": "^1.236.0"
   },
   "peerDependencies": {
     "livekit-client": "^1.6.2"
   },
   "devDependencies": {
     "@livekit/components-styles": "~0.1.11",
+    "@size-limit/file": "^8.1.2",
+    "@size-limit/webpack": "^8.1.2",
     "eslint-config-lk-custom": "^0.1.1",
     "livekit-client": "^1.6.2",
+    "size-limit": "^8.1.2",
     "tsup": "^6.5.0",
     "typescript": "^4.9.4",
     "vitest": "^0.26.3"

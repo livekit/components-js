@@ -1813,6 +1813,21 @@
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.24.51.tgz#645f33fe4e02defe26f2f5c0410e1c094eac7f5f"
   integrity sha512-1P1OROm/rdubP5aFDSZQILU0vrLCJ4fvHt6EoqHEM+2D/G5MK3bIaymUKLit8Js9gbns5UyJnkP/TZROLw4tUA==
 
+"@size-limit/file@^8.1.2":
+  version "8.1.2"
+  resolved "https://registry.yarnpkg.com/@size-limit/file/-/file-8.1.2.tgz#f733b05acd168ee1ddd467f059d62b30c1667607"
+  integrity sha512-cjtGk1GejrmT+ik3LjXpRe+zrS/U15h+Py3L8sYN0XGat0+Y6pPbli1VuRRRcdXZNegpiW+UcxDxPN1AuZC5qA==
+  dependencies:
+    semver "7.3.8"
+
+"@size-limit/webpack@^8.1.2":
+  version "8.1.2"
+  resolved "https://registry.yarnpkg.com/@size-limit/webpack/-/webpack-8.1.2.tgz#d0a25cb6eaa5f8c33bfd51857d90c74dab66d90b"
+  integrity sha512-rgKIqhPP73QiWHaH8Ef4nre9w2UZLiYsaHi0ZP6jGwr2Lxw5pE5aG6Sl9ahlVHhY/nWUnTwJHA5KmgRcZRg3Bg==
+  dependencies:
+    nanoid "^3.3.4"
+    webpack "^5.75.0"
+
 "@storybook/addon-actions@7.0.0-beta.30":
   version "7.0.0-beta.30"
   resolved "https://registry.yarnpkg.com/@storybook/addon-actions/-/addon-actions-7.0.0-beta.30.tgz#feea3f3e95ce68f655a2cab35bf9f4b9f5f37c94"
@@ -4017,6 +4032,11 @@ bundle-require@^3.0.4, bundle-require@^3.1.2:
   integrity sha512-Of6l6JBAxiyQ5axFxUM6dYeP/W7X2Sozeo/4EYB9sJhL+dqL7TKjg+shwxp6jlu/6ZSERfsYtIpSJ1/x3XkAEA==
   dependencies:
     load-tsconfig "^0.2.0"
+
+bytes-iec@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/bytes-iec/-/bytes-iec-3.1.1.tgz#94cd36bf95c2c22a82002c247df8772d1d591083"
+  integrity sha512-fey6+4jDK7TFtFg/klGSvNKJctyU7n2aQdnM+CO0ruLPbqqMOM8Tio0Pc+deqUeVKX1tL5DQep1zQ7+37aTAsA==
 
 bytes@3.0.0:
   version "3.0.0"
@@ -6759,10 +6779,10 @@ interpret@^1.0.0:
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.4.0.tgz#665ab8bc4da27a774a40584e812e3e0fa45b1a1e"
   integrity sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==
 
-ip-regex@^4.1.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/ip-regex/-/ip-regex-4.3.0.tgz#687275ab0f57fa76978ff8f4dddc8a23d5990db5"
-  integrity sha512-B9ZWJxHHOHUhUjCPrMpLD4xEq35bUTClHM1S6CBU5ixQnkZmwipwgc96vAd7AAGM9TGHvJR+Uss+/Ak6UphK+Q==
+ip-regex@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/ip-regex/-/ip-regex-5.0.0.tgz#cd313b2ae9c80c07bd3851e12bf4fa4dc5480632"
+  integrity sha512-fOCG6lhoKKakwv+C6KdsOnGvgXnmgfmp0myi3bcNwj3qfwPAxRKWEuFhvEFF7ceYIz6+1jRZ+yguLFAmUNPEfw==
 
 ip@^2.0.0:
   version "2.0.0"
@@ -7492,7 +7512,7 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-lilconfig@^2.0.5:
+lilconfig@^2.0.5, lilconfig@^2.0.6:
   version "2.0.6"
   resolved "https://registry.npmjs.org/lilconfig/-/lilconfig-2.0.6.tgz"
   integrity sha512-9JROoBW7pobfsx+Sq2JsASvCo6Pfo6WWoUW79HuB1BCoBXD4PLWJPqDF6fNj67pqBYTbAHkE57M1kS/+L1neOg==
@@ -8058,6 +8078,13 @@ nanomatch@^1.2.9:
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
+
+nanospinner@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/nanospinner/-/nanospinner-1.1.0.tgz#d17ff621cb1784b0a206b400da88a0ef6db39b97"
+  integrity sha512-yFvNYMig4AthKYfHFl1sLj7B2nkHL4lzdig4osvl9/LdGbXwrdFRoqBS98gsEsOakr0yH+r5NZ/1Y9gdVB8trA==
+  dependencies:
+    picocolors "^1.0.0"
 
 natural-compare-lite@^1.4.0:
   version "1.4.0"
@@ -9430,17 +9457,17 @@ sdp@^3.0.2:
   resolved "https://registry.npmjs.org/semver/-/semver-5.7.1.tgz"
   integrity sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==
 
-semver@^6.0.0, semver@^6.1.0, semver@^6.1.1, semver@^6.1.2, semver@^6.3.0:
-  version "6.3.0"
-  resolved "https://registry.npmjs.org/semver/-/semver-6.3.0.tgz"
-  integrity sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==
-
-semver@^7.0.0, semver@^7.3.7, semver@^7.3.8:
+semver@7.3.8, semver@^7.0.0, semver@^7.3.7, semver@^7.3.8:
   version "7.3.8"
   resolved "https://registry.npmjs.org/semver/-/semver-7.3.8.tgz"
   integrity sha512-NB1ctGL5rlHrPJtFDVIVzTyQylMLu9N9VICA6HSFJo8MCGVTMW6gfpicwKmmK/dAjTOrqu5l63JJOpDSrAis3A==
   dependencies:
     lru-cache "^6.0.0"
+
+semver@^6.0.0, semver@^6.1.0, semver@^6.1.1, semver@^6.1.2, semver@^6.3.0:
+  version "6.3.0"
+  resolved "https://registry.npmjs.org/semver/-/semver-6.3.0.tgz"
+  integrity sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==
 
 semver@~7.0.0:
   version "7.0.0"
@@ -9593,6 +9620,18 @@ sisteransi@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/sisteransi/-/sisteransi-1.0.5.tgz#134d681297756437cc05ca01370d3a7a571075ed"
   integrity sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==
+
+size-limit@^8.1.2:
+  version "8.1.2"
+  resolved "https://registry.yarnpkg.com/size-limit/-/size-limit-8.1.2.tgz#dee99a39442e96092ab143d620d679215901abe2"
+  integrity sha512-/EfKz9I/K2ouBN+BcrTX2WiaPTOX5yiCXtM07jYpuVtyzX9r4FDUsuCq13nNmoWqRFYbtH/7wqgRLvF40AGKoQ==
+  dependencies:
+    bytes-iec "^3.1.1"
+    chokidar "^3.5.3"
+    globby "^11.1.0"
+    lilconfig "^2.0.6"
+    nanospinner "^1.1.0"
+    picocolors "^1.0.0"
 
 slash@^3.0.0:
   version "3.0.0"
@@ -10171,7 +10210,7 @@ tinyspy@^1.0.2:
   resolved "https://registry.npmjs.org/tinyspy/-/tinyspy-1.0.2.tgz"
   integrity sha512-bSGlgwLBYf7PnUsQ6WOc6SJ3pGOcd+d8AA6EUnLDDM0kWEstC1JIlSZA3UNliDXhd9ABoS7hiRBDCu+XP/sf1Q==
 
-tlds@^1.203.0:
+tlds@^1.236.0:
   version "1.236.0"
   resolved "https://registry.yarnpkg.com/tlds/-/tlds-1.236.0.tgz#a118eebe33261c577e3a3025144faeabb7dd813c"
   integrity sha512-oP2PZ3KeGlgpHgsEfrtva3/K9kzsJUNliQSbCfrJ7JMCWFoCdtG+9YMq/g2AnADQ1v5tVlbtvKJZ4KLpy/P6MA==
@@ -10660,14 +10699,6 @@ urix@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/urix/-/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
   integrity sha512-Am1ousAhSLBeB9cG/7k7r2R0zj50uDRlZHPGbazid5s9rlF1F/QKYObEKSIunSjIOkJZqwRRLpvewjEkM7pSqg==
-
-url-regex@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/url-regex/-/url-regex-5.0.0.tgz#8f5456ab83d898d18b2f91753a702649b873273a"
-  integrity sha512-O08GjTiAFNsSlrUWfqF1jH0H1W3m35ZyadHrGv5krdnmPPoxP27oDTqux/579PtaroiSGm5yma6KT1mHFH6Y/g==
-  dependencies:
-    ip-regex "^4.1.0"
-    tlds "^1.203.0"
 
 use-sync-external-store@1.2.0:
   version "1.2.0"

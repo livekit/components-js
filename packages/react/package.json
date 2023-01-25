@@ -32,21 +32,22 @@
     "gen:icons": "svgr --out-dir ./src/assets/icons --typescript ../styles/assets/icons",
     "gen:images": "svgr --out-dir ./src/assets/images --typescript --no-svgo ../styles/assets/images",
     "gen:svg": "yarn gen:images && yarn gen:icons",
-    "lint": "eslint -f unix \"src/**/*.{ts,tsx}\""
+    "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
+    "size": "size-limit"
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@livekit/components-core": "0.2.1",
     "@react-hook/latest": "^1.0.3",
-    "clsx": "^1.2.1",
-    "email-regex": "^5.0.0",
-    "url-regex": "^5.0.0"
+    "clsx": "^1.2.1"
   },
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
   },
   "devDependencies": {
+    "@size-limit/file": "^8.1.2",
+    "@size-limit/webpack": "^8.1.2",
     "@svgr/cli": "^6.5.1",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
@@ -54,6 +55,7 @@
     "livekit-client": "^1.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "size-limit": "^8.1.2",
     "tsup": "^6.5.0",
     "typescript": "^4.9.4"
   },

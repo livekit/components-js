@@ -1,7 +1,11 @@
-import { ChatMessage, tokenize, TokenizeGrammar } from '@livekit/components-core';
+import {
+  ChatMessage,
+  tokenize,
+  TokenizeGrammar,
+  createUrlRegExp,
+  createEmailRegExp,
+} from '@livekit/components-core';
 import * as React from 'react';
-import createEmailRegExp from 'email-regex';
-import createUrlRegExp from 'url-regex';
 
 export type MessageFormatter = (message: string) => React.ReactNode;
 

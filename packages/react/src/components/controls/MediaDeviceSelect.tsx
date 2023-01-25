@@ -42,6 +42,7 @@ export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps) 
 export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListElement> {
   kind: MediaDeviceKind;
   onActiveDeviceChange?: (deviceId: string) => void;
+  onDeviceListChange?: (devices: MediaDeviceInfo[]) => void;
   initialSelection?: string;
 }
 
@@ -60,6 +61,7 @@ export function MediaDeviceSelect({
   kind,
   initialSelection,
   onActiveDeviceChange,
+  onDeviceListChange,
   ...props
 }: MediaDeviceSelectProps) {
   const room = useMaybeRoomContext();
@@ -72,6 +74,12 @@ export function MediaDeviceSelect({
       setActiveMediaDevice(initialSelection);
     }
   });
+
+  React.useEffect(() => {
+    if (typeof onDeviceListChange === 'function') {
+      onDeviceListChange(devices);
+    }
+  }, [onDeviceListChange, devices]);
 
   const handleActiveDeviceChange = async (deviceId: string) => {
     setActiveMediaDevice(deviceId);

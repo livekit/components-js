@@ -2,7 +2,7 @@ import * as React from 'react';
 import { TileLoop } from '../TileLoop';
 import { useParticipants } from '../../hooks';
 import { mergeProps } from '../../utils';
-import { useSize } from '../../hooks/utiltity-hooks';
+import { useSize } from '../../helper/resizeObserver';
 import { ParticipantFilter } from '@livekit/components-core';
 
 export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {

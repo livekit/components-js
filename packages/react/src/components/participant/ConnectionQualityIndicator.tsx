@@ -4,7 +4,7 @@ import { useEnsureParticipant } from '../../context';
 import { ConnectionQuality, Participant } from 'livekit-client';
 import { mergeProps } from '../../utils';
 import { getConnectionQualityIcon } from '../../assets/icons/util';
-import { useObservableState } from '../../hooks/utiltity-hooks';
+import { useObservableState } from '../../helper/useObservableState';
 
 export interface ConnectionQualityIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   participant?: Participant;

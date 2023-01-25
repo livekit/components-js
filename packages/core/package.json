@@ -22,11 +22,12 @@
     "src"
   ],
   "scripts": {
-    "build": "tsup --onSuccess \"tsc --declaration --emitDeclarationOnly\" && size-limit",
+    "build": "tsup --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
     "dev": "tsup --watch",
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
     "test": "vitest --run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "size": "size-limit"
   },
   "typings": "dist/index.d.ts",
   "dependencies": {

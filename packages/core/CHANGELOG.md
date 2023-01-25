@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.2.3
+
+### Patch Changes
+
+- Mark packages as side-effect free - [#268](https://github.com/livekit/components-js/pull/268) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.2.2
 
 ### Patch Changes

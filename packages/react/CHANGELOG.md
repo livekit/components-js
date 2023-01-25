@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 0.2.3
+
+### Patch Changes
+
+- Mark packages as side-effect free - [#268](https://github.com/livekit/components-js/pull/268) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`4d742bf`](https://github.com/livekit/components-js/commit/4d742bf5465bae7cc39215150b78c5f3d2ba3283)]:
+  - @livekit/components-core@0.2.3
+
 ## 0.2.2
 
 ### Patch Changes

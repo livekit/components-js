@@ -4,7 +4,7 @@ import { setupTrackMutedIndicator } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import { useEnsureParticipant } from '../../context';
 import { getSourceIcon } from '../../assets/icons/util';
-import { useObservableState } from '../../hooks/utiltity-hooks';
+import { useObservableState } from '../../helper/useObservableState';
 
 export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   source: Track.Source;

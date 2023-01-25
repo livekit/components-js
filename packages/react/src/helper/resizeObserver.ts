@@ -1,72 +1,7 @@
-// Utility hooks are not meant to be exposed to the user, that's why this file doesn't get included in hooks/index.tsx
-import * as React from 'react';
-import useLatest from '@react-hook/latest';
-import { Observable } from 'rxjs';
-
-/**
- * @internal
- */
-export function useObservableState<T>(
-  observable: Observable<T>,
-  startWith: T,
-  dependencies: Array<any> = [observable],
-) {
-  const [state, setState] = React.useState<T>(startWith);
-  React.useEffect(() => {
-    // observable state doesn't run in SSR
-    if (typeof window === 'undefined') return;
-    const subscription = observable.subscribe(setState);
-    return () => subscription.unsubscribe();
-  }, dependencies);
-  return state;
-}
-
-/**
- * Implementation used from https://github.com/juliencrn/usehooks-ts
- */
-export function useMediaQuery(query: string): boolean {
-  const getMatches = (query: string): boolean => {
-    // Prevents SSR issues
-    if (typeof window !== 'undefined') {
-      return window.matchMedia(query).matches;
-    }
-    return false;
-  };
-
-  const [matches, setMatches] = React.useState<boolean>(getMatches(query));
-
-  function handleChange() {
-    setMatches(getMatches(query));
-  }
-
-  React.useEffect(() => {
-    const matchMedia = window.matchMedia(query);
-
-    // Triggered at the first client-side load and if query changes
-    handleChange();
-
-    // Listen matchMedia
-    if (matchMedia.addListener) {
-      matchMedia.addListener(handleChange);
-    } else {
-      matchMedia.addEventListener('change', handleChange);
-    }
-
-    return () => {
-      if (matchMedia.removeListener) {
-        matchMedia.removeListener(handleChange);
-      } else {
-        matchMedia.removeEventListener('change', handleChange);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
-
-  return matches;
-}
-
 /* eslint-disable no-return-assign */
 /* eslint-disable no-underscore-dangle */
+import * as React from 'react';
+import useLatest from '@react-hook/latest';
 
 /**
  * A React hook that fires a callback whenever ResizeObserver detects a change to its size

@@ -1,10 +1,4 @@
-import {
-  ChatMessage,
-  tokenize,
-  TokenizeGrammar,
-  createUrlRegExp,
-  createEmailRegExp,
-} from '@livekit/components-core';
+import { ChatMessage, tokenize, defaultGrammar } from '@livekit/components-core';
 import * as React from 'react';
 
 export type MessageFormatter = (message: string) => React.ReactNode;
@@ -55,11 +49,7 @@ export function ChatEntry({ entry, messageFormatter, ...props }: ChatEntryProps)
 }
 
 export function formatChatMessageLinks(message: string): React.ReactNode {
-  const grammar: TokenizeGrammar = {
-    email: createEmailRegExp(),
-    url: createUrlRegExp({ strict: false }),
-  };
-  return tokenize(message, grammar).map((tok, i) => {
+  return tokenize(message, defaultGrammar).map((tok, i) => {
     if (typeof tok === `string`) {
       return tok;
     } else {

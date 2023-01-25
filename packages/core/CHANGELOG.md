@@ -1,5 +1,13 @@
 # @livekit/components-core
 
+## 0.2.2
+
+### Patch Changes
+
+- Move link regex into core - [#265](https://github.com/livekit/components-js/pull/265) ([@lukasIO](https://github.com/lukasIO))
+
+- Make tokenizer typesafe and move to separate file - [#267](https://github.com/livekit/components-js/pull/267) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.2.1
 
 ### Patch Changes

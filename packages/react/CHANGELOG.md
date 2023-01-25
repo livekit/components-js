@@ -1,5 +1,20 @@
 # @livekit/components-react
 
+## 0.2.2
+
+### Patch Changes
+
+- Move link regex into core - [#265](https://github.com/livekit/components-js/pull/265) ([@lukasIO](https://github.com/lukasIO))
+
+- Make tokenizer typesafe and move to separate file - [#267](https://github.com/livekit/components-js/pull/267) ([@lukasIO](https://github.com/lukasIO))
+
+- Only populate room in useEffect to avoid strict mode disconnecting - [#264](https://github.com/livekit/components-js/pull/264) ([@lukasIO](https://github.com/lukasIO))
+
+- Replace floating-ui/react with floating-ui/dom and fix the position problem with the MediaDeviceMenu component. - [#266](https://github.com/livekit/components-js/pull/266) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`8b1e826`](https://github.com/livekit/components-js/commit/8b1e826a08fc1fa45993108c82edc8e68684b92c), [`39be24c`](https://github.com/livekit/components-js/commit/39be24c17b3c3b6a0f15efb28a622766abdf2fa2)]:
+  - @livekit/components-core@0.2.2
+
 ## 0.2.1
 
 ### Patch Changes

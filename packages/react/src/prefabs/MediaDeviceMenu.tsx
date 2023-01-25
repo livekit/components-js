@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { MediaDeviceSelect } from '../components/controls/MediaDeviceSelect';
 import { computePosition, flip, offset, shift } from '@floating-ui/dom';
+import { log } from '@livekit/components-core';
 
 interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   kind?: MediaDeviceKind;
@@ -32,6 +33,7 @@ export const MediaDeviceMenu = ({
   const [devices, setDevices] = React.useState<MediaDeviceInfo[]>([]);
 
   const handleActiveDeviceChange = (kind: MediaDeviceKind, deviceId: string) => {
+    log.debug('handle device change');
     setIsOpen(false);
     onActiveDeviceChange?.(kind, deviceId);
   };
@@ -56,16 +58,18 @@ export const MediaDeviceMenu = ({
     if (!tooltip.current) {
       return;
     }
-    if (tooltip.current && !tooltip.current.contains(event.target as Node)) {
+    if (
+      tooltip.current &&
+      !tooltip.current.contains(event.target as Node) &&
+      event.target !== button.current
+    ) {
       setIsOpen(false);
     }
   }
 
   React.useEffect(() => {
-    document.addEventListener('keydown', () => setIsOpen(false), true);
     document.addEventListener<'click'>('click', handleClickOutside, true);
     return () => {
-      document.removeEventListener('keydown', () => setIsOpen(false), true);
       document.removeEventListener<'click'>('click', handleClickOutside, true);
     };
   }, []);

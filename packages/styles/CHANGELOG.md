@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 0.1.12
+
+### Patch Changes
+
+- Fix participant name getting duplicated. - [#261](https://github.com/livekit/components-js/pull/261) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.1.11
 
 ### Patch Changes

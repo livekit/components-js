@@ -29,6 +29,7 @@ export const MediaDeviceMenu = ({
   ...props
 }: MediaDeviceMenuProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [devices, setDevices] = React.useState<MediaDeviceInfo[]>([]);
 
   const handleActiveDeviceChange = (kind: MediaDeviceKind, deviceId: string) => {
     setIsOpen(false);
@@ -39,7 +40,7 @@ export const MediaDeviceMenu = ({
   const tooltip = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    if (button.current && tooltip.current) {
+    if (button.current && tooltip.current && devices) {
       computePosition(button.current, tooltip.current, {
         placement: 'top',
         middleware: [offset(6), flip(), shift({ padding: 5 })],
@@ -49,7 +50,7 @@ export const MediaDeviceMenu = ({
         }
       });
     }
-  }, [button, tooltip, isOpen]);
+  }, [button, tooltip, devices]);
 
   function handleClickOutside(event: MouseEvent): void {
     if (!tooltip.current) {
@@ -61,10 +62,10 @@ export const MediaDeviceMenu = ({
   }
 
   React.useEffect(() => {
-    // document.addEventListener('keydown', handleHideDropdown, true);
+    document.addEventListener('keydown', () => setIsOpen(false), true);
     document.addEventListener<'click'>('click', handleClickOutside, true);
     return () => {
-      // document.removeEventListener('keydown', handleHideDropdown, true);
+      document.removeEventListener('keydown', () => setIsOpen(false), true);
       document.removeEventListener<'click'>('click', handleClickOutside, true);
     };
   }, []);
@@ -81,34 +82,35 @@ export const MediaDeviceMenu = ({
         {props.children}
       </button>
 
-      {isOpen && (
-        <div className="lk-device-menu" ref={tooltip}>
-          {kind ? (
+      <div
+        className="lk-device-menu"
+        ref={tooltip}
+        style={{ visibility: isOpen ? 'visible' : 'hidden' }}
+      >
+        {kind ? (
+          <MediaDeviceSelect
+            initialSelection={initialSelection}
+            onActiveDeviceChange={(deviceId) => handleActiveDeviceChange(kind, deviceId)}
+            onDeviceListChange={setDevices}
+            kind={kind}
+          />
+        ) : (
+          <>
+            <div className="lk-device-menu-heading">Audio inputs</div>
             <MediaDeviceSelect
-              initialSelection={initialSelection}
-              onActiveDeviceChange={(deviceId) => handleActiveDeviceChange(kind, deviceId)}
-              kind={kind}
+              kind="audioinput"
+              onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('audioinput', deviceId)}
+              onDeviceListChange={setDevices}
             />
-          ) : (
-            <>
-              <div className="lk-device-menu-heading">Audio inputs</div>
-              <MediaDeviceSelect
-                kind="audioinput"
-                onActiveDeviceChange={(deviceId) =>
-                  handleActiveDeviceChange('audioinput', deviceId)
-                }
-              ></MediaDeviceSelect>
-              <div className="lk-device-menu-heading">Video inputs</div>
-              <MediaDeviceSelect
-                kind="videoinput"
-                onActiveDeviceChange={(deviceId) =>
-                  handleActiveDeviceChange('videoinput', deviceId)
-                }
-              ></MediaDeviceSelect>
-            </>
-          )}
-        </div>
-      )}
+            <div className="lk-device-menu-heading">Video inputs</div>
+            <MediaDeviceSelect
+              kind="videoinput"
+              onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('videoinput', deviceId)}
+              onDeviceListChange={setDevices}
+            />
+          </>
+        )}
+      </div>
     </span>
   );
 };

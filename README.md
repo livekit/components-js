@@ -70,7 +70,7 @@ The component we offer does not fit your requirements? We have the solution for 
 The best way to get started is to use the [`@livekit/components-react`](/packages/react/) package and install it.
 
 ```bash
-yarn install @livekit/components-react
+yarn add @livekit/components-react
 ```
 
 Creating a full fledged video conference is as easy as

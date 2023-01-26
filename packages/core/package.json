@@ -54,7 +54,7 @@
     "vitest": "^0.26.3"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=14"
   },
   "publishConfig": {
     "access": "public"

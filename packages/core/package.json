@@ -3,6 +3,10 @@
   "version": "0.2.4",
   "license": "Apache-2.0",
   "author": "LiveKit",
+  "repository": {
+    "url": "https://github.com/livekit/components-js",
+    "type": "git"
+  },
   "exports": {
     ".": {
       "import": {

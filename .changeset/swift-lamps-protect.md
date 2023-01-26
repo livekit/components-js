@@ -2,4 +2,4 @@
 '@livekit/components-core': patch
 ---
 
-Add import assertion to support recent nodeJS versions
+Replace tlds dependency with global-tld-list in order to avoid having to deal with JSON imports

@@ -1,5 +1,13 @@
 # @livekit/components-core
 
+## 0.2.4
+
+### Patch Changes
+
+- Fix floating-ui shift middleware and style and responsiveness updates on PreJoin component. - [#271](https://github.com/livekit/components-js/pull/271) ([@Ocupe](https://github.com/Ocupe))
+
+- Replace tlds dependency with global-tld-list in order to avoid having to deal with JSON imports - [#274](https://github.com/livekit/components-js/pull/274) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.2.3
 
 ### Patch Changes

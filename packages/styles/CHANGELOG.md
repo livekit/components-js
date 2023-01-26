@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 0.1.13
+
+### Patch Changes
+
+- Fix floating-ui shift middleware and style and responsiveness updates on PreJoin component. - [#271](https://github.com/livekit/components-js/pull/271) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.1.12
 
 ### Patch Changes

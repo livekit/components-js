@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 import ipRegex from 'ip-regex';
-import tlds from 'tlds';
+import tlds from 'tlds' assert { type: 'json' };
 
 interface RegExOptions {
   /**

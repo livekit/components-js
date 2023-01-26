@@ -58,6 +58,7 @@
 
   .button-group-container {
     display: flex;
+    flex-wrap: nowrap;
     gap: 1rem;
 
     > .button-group {
@@ -68,6 +69,14 @@
       }
 
       > .button:first-child {
+        width: 100%;
+      }
+    }
+  }
+  @media (max-width: 400px) {
+    .button-group-container {
+      flex-wrap: wrap;
+      > .button-group {
         width: 100%;
       }
     }

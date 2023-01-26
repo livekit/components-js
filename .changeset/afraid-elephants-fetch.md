@@ -3,4 +3,4 @@
 '@livekit/components-core': patch
 ---
 
-Fix floating-ui shit middleware and style and responsiveness updates on PreJoin component.
+Fix floating-ui shift middleware and style and responsiveness updates on PreJoin component.

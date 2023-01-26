@@ -31,6 +31,7 @@ export const MediaDeviceMenu = ({
 }: MediaDeviceMenuProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [devices, setDevices] = React.useState<MediaDeviceInfo[]>([]);
+  const [updateRequired, setUpdateRequired] = React.useState<boolean>(true);
 
   const handleActiveDeviceChange = (kind: MediaDeviceKind, deviceId: string) => {
     log.debug('handle device change');
@@ -41,15 +42,16 @@ export const MediaDeviceMenu = ({
   const button = React.useRef<HTMLButtonElement>(null);
   const tooltip = React.useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
-    if (button.current && tooltip.current && devices) {
+  React.useLayoutEffect(() => {
+    if (button.current && tooltip.current && (devices || updateRequired)) {
       computeMenuPosition(button.current, tooltip.current).then(({ x, y }) => {
         if (tooltip.current) {
           Object.assign(tooltip.current.style, { left: `${x}px`, top: `${y}px` });
         }
       });
     }
-  }, [button, tooltip, devices]);
+    setUpdateRequired(false);
+  }, [button, tooltip, devices, updateRequired]);
 
   const handleClickOutside = React.useCallback(
     (event: MouseEvent) => {
@@ -68,10 +70,12 @@ export const MediaDeviceMenu = ({
 
   React.useEffect(() => {
     document.addEventListener<'click'>('click', handleClickOutside);
+    window.addEventListener<'resize'>('resize', () => setUpdateRequired(true));
     return () => {
       document.removeEventListener<'click'>('click', handleClickOutside);
+      window.removeEventListener<'resize'>('resize', () => setUpdateRequired(true));
     };
-  }, [handleClickOutside]);
+  }, [handleClickOutside, setUpdateRequired]);
 
   return (
     <span style={{ position: 'relative', flexShrink: 0 }}>

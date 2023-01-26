@@ -6,7 +6,7 @@ export async function computeMenuPosition(
 ): Promise<{ x: number; y: number }> {
   const { x, y } = await computePosition(button, menu, {
     placement: 'top',
-    middleware: [offset(6), shift({ padding: 5 }), flip()],
+    middleware: [offset(6), flip(), shift({ padding: 5 })],
   });
   return { x, y };
 }

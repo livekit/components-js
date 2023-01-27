@@ -1,30 +1,26 @@
 /* eslint-disable camelcase */
-import { DataPacket_Kind, Participant, Room } from 'livekit-client';
+import { DataPacket_Kind, LocalParticipant, RemoteParticipant, Room } from 'livekit-client';
 import { BehaviorSubject, map, Observable, Subscriber } from 'rxjs';
 import {
   BaseDataMessage,
-  MessageType,
+  MessageChannel,
   sendMessage,
   setupDataMessageHandler,
 } from '../observables/dataChannel';
 
 export interface ChatDataMessage extends BaseDataMessage {
-  type: MessageType.CHAT;
-  payload: {
-    timestamp: number;
-    message: string;
-  };
+  channelId: MessageChannel.CHAT;
+  payload: ChatMessage;
 }
 
 export interface ChatMessage {
   timestamp: number;
   message: string;
-  from?: Participant;
 }
 
 export function setupChat(room: Room) {
-  let chatMessages: Array<ChatMessage> = [];
-  const { messageObservable } = setupDataMessageHandler<ChatDataMessage>(room, MessageType.CHAT);
+  let chatMessages: Array<ChatMessage & { from?: RemoteParticipant | LocalParticipant }> = [];
+  const { messageObservable } = setupDataMessageHandler<ChatDataMessage>(room, MessageChannel.CHAT);
   const chatMessageBehavior = new BehaviorSubject(chatMessages);
   const allMessagesObservable = messageObservable.pipe(
     map((msg) => {
@@ -43,7 +39,7 @@ export function setupChat(room: Room) {
   const send = async (message: string) => {
     const timestamp = Date.now();
     const chatMsg: ChatDataMessage = {
-      type: MessageType.CHAT,
+      channelId: MessageChannel.CHAT,
       payload: {
         timestamp,
         message: message,

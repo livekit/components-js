@@ -2,7 +2,7 @@ import { DataPacket_Kind, LocalParticipant, RemoteParticipant, Room } from 'live
 import { Observable, Subscriber } from 'rxjs';
 import { createDataObserver } from './room';
 
-export const enum MessageType {
+export const enum MessageChannel {
   CHAT = 'lk-chat-message',
 }
 
@@ -77,7 +77,7 @@ export async function sendMessage<T extends BaseDataMessage>(
   kind: DataPacket_Kind,
   destination?: string[],
 ) {
-  const rawType = getRawMessageType(message.type);
+  const rawType = getRawMessageType(message.channelId);
   const payload = message.payload;
   let payloadType: PayloadType;
   let encodedPayload: Uint8Array;
@@ -115,19 +115,19 @@ export function parseMessage(payload: Uint8Array) {
 export type DataPayload = Uint8Array | object | string;
 
 export interface BaseDataMessage {
-  type: string;
+  channelId: string;
   payload: DataPayload;
 }
 
 export function setupDataMessageHandler<T extends BaseDataMessage>(
   room: Room,
-  types: T['type'] | [T['type'], ...T['type'][]],
+  channelIds: T['channelId'] | [T['channelId'], ...T['channelId'][]],
 ) {
   let dataSubscriber: Subscriber<T & { from?: RemoteParticipant }>;
   const messageObservable = new Observable<T & { from?: RemoteParticipant }>((subscriber) => {
     dataSubscriber = subscriber;
     const messageHandler = (
-      type: T['type'],
+      type: T['channelId'],
       payload: Uint8Array,
       participant?: RemoteParticipant,
     ) => {
@@ -141,11 +141,11 @@ export function setupDataMessageHandler<T extends BaseDataMessage>(
       }
     };
     const subscription = createDataObserver(room).subscribe(([payload, participant]) => {
-      Array.isArray(types)
-        ? types.forEach((type) => {
+      Array.isArray(channelIds)
+        ? channelIds.forEach((type) => {
             messageHandler(type, payload, participant);
           })
-        : messageHandler(types, payload, participant);
+        : messageHandler(channelIds, payload, participant);
     });
     return () => subscription.unsubscribe();
   });

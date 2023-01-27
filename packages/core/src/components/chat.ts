@@ -32,6 +32,7 @@ export function setupChat(room: Room) {
       return chatMessages;
     }),
   );
+  // FIXME this potentially leads to a memory leak because the `unsubscribe` method of allMessagesObservable is never invoked
   allMessagesObservable.subscribe(chatMessageBehavior);
 
   let isSendingSubscriber: Subscriber<boolean>;

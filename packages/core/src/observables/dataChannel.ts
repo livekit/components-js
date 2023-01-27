@@ -123,24 +123,33 @@ export interface BaseDataMessage {
 
 export function setupDataMessageHandler<T extends BaseDataMessage>(
   room: Room,
-  ...types: [T['type'], ...T['type'][]]
+  types: T['type'] | [T['type'], ...T['type'][]],
 ) {
   let dataSubscriber: Subscriber<T & { from?: RemoteParticipant }>;
   const messageObservable = new Observable<T & { from?: RemoteParticipant }>((subscriber) => {
     dataSubscriber = subscriber;
+    const messageHandler = (
+      type: T['type'],
+      payload: Uint8Array,
+      participant?: RemoteParticipant,
+    ) => {
+      if (isMessageType(type, payload)) {
+        log.debug('getting correct data message of type', type);
+        const dataMsg = parseMessage(readMessagePayload(payload)) as T['payload'];
+        const receiveMessage = {
+          payload: dataMsg,
+          from: participant,
+        } as T & { from?: RemoteParticipant };
+        dataSubscriber.next(receiveMessage);
+      }
+    };
     const subscription = createDataObserver(room).subscribe(([payload, participant]) => {
       log.debug(`receive message type`, readMessageType(payload));
-      types.forEach((type) => {
-        if (isMessageType(type, payload)) {
-          log.debug('getting correct data message of type', type);
-          const dataMsg = parseMessage(readMessagePayload(payload)) as T['payload'];
-          const receiveMessage = {
-            payload: dataMsg,
-            from: participant,
-          } as T & { from?: RemoteParticipant };
-          dataSubscriber.next(receiveMessage);
-        }
-      });
+      Array.isArray(types)
+        ? types.forEach((type) => {
+            messageHandler(type, payload, participant);
+          })
+        : messageHandler(types, payload, participant);
     });
     return () => subscription.unsubscribe();
   });

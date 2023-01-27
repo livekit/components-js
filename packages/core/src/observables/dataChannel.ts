@@ -1,6 +1,5 @@
 import { DataPacket_Kind, LocalParticipant, RemoteParticipant, Room } from 'livekit-client';
 import { Observable, Subscriber } from 'rxjs';
-import log from '../logger';
 import { createDataObserver } from './room';
 
 export const enum MessageType {
@@ -16,7 +15,6 @@ export const enum MessageType {
 export function getRawMessageType(identifier: string) {
   const hash = hashCode(identifier);
   const rawType = new Uint8Array(toBytesInt32(hash));
-  log.debug('hashed', identifier, rawType);
   return rawType;
 }
 
@@ -134,7 +132,6 @@ export function setupDataMessageHandler<T extends BaseDataMessage>(
       participant?: RemoteParticipant,
     ) => {
       if (isMessageType(type, payload)) {
-        log.debug('getting correct data message of type', type);
         const dataMsg = parseMessage(readMessagePayload(payload)) as T['payload'];
         const receiveMessage = {
           payload: dataMsg,
@@ -144,7 +141,6 @@ export function setupDataMessageHandler<T extends BaseDataMessage>(
       }
     };
     const subscription = createDataObserver(room).subscribe(([payload, participant]) => {
-      log.debug(`receive message type`, readMessageType(payload));
       Array.isArray(types)
         ? types.forEach((type) => {
             messageHandler(type, payload, participant);

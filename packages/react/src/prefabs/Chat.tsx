@@ -46,7 +46,6 @@ export function Chat({ messageFormatter, ...props }: ChatProps) {
   }
 
   React.useEffect(() => {
-    console.log('chat messages', chatMessages);
     if (ulRef) {
       ulRef.current?.scrollTo({ top: ulRef.current.scrollHeight });
     }

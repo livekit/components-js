@@ -1,4 +1,5 @@
 import { ChatMessage, tokenize, defaultGrammar } from '@livekit/components-core';
+import { LocalParticipant, RemoteParticipant } from 'livekit-client';
 import * as React from 'react';
 
 export type MessageFormatter = (message: string) => React.ReactNode;
@@ -11,7 +12,7 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
   /**
    * The chat massage object to display.
    */
-  entry: ChatMessage;
+  entry: ChatMessage & { from?: RemoteParticipant | LocalParticipant };
   /**
    * An optional formatter for the message body.
    */

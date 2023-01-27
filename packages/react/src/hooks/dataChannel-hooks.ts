@@ -11,15 +11,17 @@ export function useDataChannelMessages<T extends BaseDataMessage>(
   props: DataChannelMessageProps<T>,
 ) {
   const room = useRoomContext();
-  const { send, messageObservable } = React.useMemo(
+  const { send, messageObservable, isSendingObservable } = React.useMemo(
     () => setupDataMessageHandler(room, props.type),
     [room, props.type],
   );
 
   const message = useObservableState(messageObservable, undefined);
+  const isSending = useObservableState(isSendingObservable, false);
 
   return {
     message,
     send,
+    isSending,
   };
 }

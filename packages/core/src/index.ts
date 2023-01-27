@@ -22,6 +22,7 @@ export * from './components/room';
 export * from './observables/room';
 export * from './observables/participant';
 export * from './observables/track';
+export * from './observables/dataChannel';
 
 import logger from './logger';
 export const log = logger;

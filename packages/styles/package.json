@@ -3,6 +3,11 @@
   "version": "0.1.13",
   "license": "Apache-2.0",
   "author": "LiveKit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/livekit/components-js.git",
+    "directory": "/packages/styles"
+  },
   "exports": {
     ".": {
       "types": "./dist/types/general/styles.css.d.ts",

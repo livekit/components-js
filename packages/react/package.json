@@ -3,6 +3,11 @@
   "version": "0.2.4",
   "license": "Apache-2.0",
   "author": "LiveKit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/livekit/components-js.git",
+    "directory": "/packages/react"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

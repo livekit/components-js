@@ -1,6 +1,7 @@
-import { map, Observable, startWith, Subscriber, Subscription } from 'rxjs';
+import { BehaviorSubject, map, Observable, startWith, Subscriber, Subscription } from 'rxjs';
 import { Participant, Room, RoomEvent, Track, TrackPublication } from 'livekit-client';
 import { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
+import log from '../logger';
 export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observable<Room> {
   const observable = new Observable<Room>((subscribe) => {
     const onRoomUpdate = () => {
@@ -176,21 +177,24 @@ export function activeSpeakerObserver(room: Room) {
 }
 
 export function createMediaDeviceObserver(kind?: MediaDeviceKind, requestPermissions = true) {
-  let deviceSubscriber: Subscriber<MediaDeviceInfo[]> | undefined;
+  const deviceBehavior = new BehaviorSubject<MediaDeviceInfo[]>([]);
   const onDeviceChange = async () => {
     const newDevices = await Room.getLocalDevices(kind, requestPermissions);
-    deviceSubscriber?.next(newDevices);
+    log.warn('firing new devices found', newDevices, deviceBehavior);
+    deviceBehavior.next(newDevices);
   };
-  const observable = new Observable<MediaDeviceInfo[]>((subscriber) => {
-    deviceSubscriber = subscriber;
+  // FIXME potential memory leak because observable.unsubscribe is never called
+  const observable = new Observable<MediaDeviceInfo[]>(() => {
     navigator?.mediaDevices.addEventListener('devicechange', onDeviceChange);
     return () => navigator?.mediaDevices.removeEventListener('devicechange', onDeviceChange);
   });
+  observable.subscribe(deviceBehavior);
+
   // because we rely on an async function, trigger the first update instead of using startWith
   if (typeof window !== 'undefined') {
     onDeviceChange();
   }
-  return observable;
+  return deviceBehavior.asObservable();
 }
 
 export function createDataObserver(room: Room) {

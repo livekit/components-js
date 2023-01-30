@@ -1,5 +1,13 @@
 # @livekit/components-core
 
+## 0.2.5
+
+### Patch Changes
+
+- Fix timing issue when device observable first gets set up - [#279](https://github.com/livekit/components-js/pull/279) ([@lukasIO](https://github.com/lukasIO))
+
+- Add useDataChannelMessages hook and generalise core data channel usage - [#277](https://github.com/livekit/components-js/pull/277) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.2.4
 
 ### Patch Changes

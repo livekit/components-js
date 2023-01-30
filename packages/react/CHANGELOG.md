@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 0.2.5
+
+### Patch Changes
+
+- Make ParticipantInfoProps optional in useParticipantInfo hook - [#276](https://github.com/livekit/components-js/pull/276) ([@lukasIO](https://github.com/lukasIO))
+
+- Add useDataChannelMessages hook and generalise core data channel usage - [#277](https://github.com/livekit/components-js/pull/277) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`c023b8a`](https://github.com/livekit/components-js/commit/c023b8aa65b54567af082a1e2b87ea18f426e955), [`7e13007`](https://github.com/livekit/components-js/commit/7e130075f7b83176a46bdb366c280275785d4fa3)]:
+  - @livekit/components-core@0.2.5
+
 ## 0.2.4
 
 ### Patch Changes

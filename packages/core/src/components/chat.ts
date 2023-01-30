@@ -1,47 +1,35 @@
 /* eslint-disable camelcase */
-import { DataPacket_Kind, Participant, Room } from 'livekit-client';
-import { Observable, Subscriber } from 'rxjs';
-import { createDataObserver } from '../observables/room';
-
-export const enum MessageType {
-  CHAT,
-}
-
-export interface BaseDataMessage {
-  type: MessageType;
-}
+import { DataPacket_Kind, LocalParticipant, RemoteParticipant, Room } from 'livekit-client';
+import { BehaviorSubject, map, Observable, Subscriber } from 'rxjs';
+import {
+  BaseDataMessage,
+  MessageChannel,
+  sendMessage,
+  setupDataMessageHandler,
+} from '../observables/dataChannel';
 
 export interface ChatDataMessage extends BaseDataMessage {
-  type: MessageType.CHAT;
-  timestamp: number;
-  message: string;
+  channelId: MessageChannel.CHAT;
+  payload: ChatMessage;
 }
 
-type DataMessageUnion = ChatDataMessage;
 export interface ChatMessage {
   timestamp: number;
   message: string;
-  from?: Participant;
 }
 
 export function setupChat(room: Room) {
-  let chatMessages: Array<ChatMessage> = [];
-  const decoder = new TextDecoder();
-  const encoder = new TextEncoder();
-  let chatMessageSubscriber: Subscriber<ChatMessage[]>;
-  const messageObservable = new Observable<ChatMessage[]>((subscriber) => {
-    chatMessageSubscriber = subscriber;
-    const subscription = createDataObserver(room).subscribe(([payload, participant]) => {
-      const dataMsg = JSON.parse(decoder.decode(payload)) as DataMessageUnion;
-      if (dataMsg.type === MessageType.CHAT) {
-        const { timestamp, message } = dataMsg;
-        const newMessage: ChatMessage = { timestamp, message, from: participant };
-        chatMessages = [...chatMessages, newMessage];
-        subscriber.next(chatMessages);
-      }
-    });
-    return () => subscription.unsubscribe();
-  });
+  let chatMessages: Array<ChatMessage & { from?: RemoteParticipant | LocalParticipant }> = [];
+  const { messageObservable } = setupDataMessageHandler<ChatDataMessage>(room, MessageChannel.CHAT);
+  const chatMessageBehavior = new BehaviorSubject(chatMessages);
+  const allMessagesObservable = messageObservable.pipe(
+    map((msg) => {
+      chatMessages = [...chatMessages, { ...msg.payload, from: msg.from }];
+      return chatMessages;
+    }),
+  );
+  // FIXME this potentially leads to a memory leak because the `unsubscribe` method of allMessagesObservable is never invoked
+  allMessagesObservable.subscribe(chatMessageBehavior);
 
   let isSendingSubscriber: Subscriber<boolean>;
   const isSendingObservable = new Observable<boolean>((subscriber) => {
@@ -51,20 +39,21 @@ export function setupChat(room: Room) {
   const send = async (message: string) => {
     const timestamp = Date.now();
     const chatMsg: ChatDataMessage = {
-      type: MessageType.CHAT,
-      timestamp,
-      message: message,
+      channelId: MessageChannel.CHAT,
+      payload: {
+        timestamp,
+        message: message,
+      },
     };
     isSendingSubscriber.next(true);
     try {
-      const dataMsg = encoder.encode(JSON.stringify(chatMsg));
-      await room.localParticipant.publishData(dataMsg, DataPacket_Kind.RELIABLE);
+      await sendMessage<ChatDataMessage>(room.localParticipant, chatMsg, DataPacket_Kind.RELIABLE);
       chatMessages = [...chatMessages, { message, timestamp, from: room.localParticipant }];
-      chatMessageSubscriber.next(chatMessages);
+      chatMessageBehavior.next(chatMessages);
     } finally {
       isSendingSubscriber.next(false);
     }
   };
 
-  return { messageObservable, isSendingObservable, send };
+  return { messageObservable: chatMessageBehavior.asObservable(), isSendingObservable, send };
 }

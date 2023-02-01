@@ -7,6 +7,8 @@ import { StartAudio } from '../components/controls/StartAudio';
 import { ChatIcon, LeaveIcon } from '../assets/icons';
 import { ChatToggle } from '../components/controls/ChatToggle';
 import { isMobileBrowser } from '@livekit/components-core';
+import { useLocalParticipantPermissions } from '../hooks';
+import { useRoomContext } from '../context';
 
 type ControlBarControls = {
   microphone?: boolean;
@@ -16,13 +18,13 @@ type ControlBarControls = {
   leave?: boolean;
 };
 
-const defaultControls: ControlBarControls = {
-  microphone: true,
-  camera: true,
-  chat: false,
-  screenShare: true,
-  leave: true,
-} as const;
+// const defaultControls: ControlBarControls = {
+//   microphone: true,
+//   camera: true,
+//   chat: false,
+//   screenShare: true,
+//   leave: true,
+// } as const;
 
 export type ControlBarProps = React.HTMLAttributes<HTMLDivElement> & {
   variation?: 'minimal' | 'verbose' | 'textOnly';
@@ -47,7 +49,25 @@ export type ControlBarProps = React.HTMLAttributes<HTMLDivElement> & {
 export function ControlBar(props: ControlBarProps) {
   const { variation = 'verbose', controls } = props;
 
-  const visibleControls = { ...defaultControls, ...controls };
+  const visibleControls = { leave: true, ...controls };
+
+  const { localParticipant } = useRoomContext();
+  // @ts-ignore
+  window.localParticipant = localParticipant;
+
+  const localPermissions = useLocalParticipantPermissions();
+
+  if (!localPermissions) {
+    visibleControls.camera = false;
+    visibleControls.chat = false;
+    visibleControls.microphone = false;
+    visibleControls.screenShare = false;
+  } else {
+    visibleControls.camera ??= localPermissions.canPublish;
+    visibleControls.microphone ??= localPermissions.canPublish;
+    visibleControls.screenShare ??= localPermissions.canPublish;
+    visibleControls.chat ??= localPermissions.canPublishData;
+  }
 
   const showIcon = React.useMemo(
     () => variation === 'minimal' || variation === 'verbose',

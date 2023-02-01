@@ -8,7 +8,6 @@ import { ChatIcon, LeaveIcon } from '../assets/icons';
 import { ChatToggle } from '../components/controls/ChatToggle';
 import { isMobileBrowser } from '@livekit/components-core';
 import { useLocalParticipantPermissions } from '../hooks';
-import { useRoomContext } from '../context';
 
 type ControlBarControls = {
   microphone?: boolean;
@@ -17,14 +16,6 @@ type ControlBarControls = {
   screenShare?: boolean;
   leave?: boolean;
 };
-
-// const defaultControls: ControlBarControls = {
-//   microphone: true,
-//   camera: true,
-//   chat: false,
-//   screenShare: true,
-//   leave: true,
-// } as const;
 
 export type ControlBarProps = React.HTMLAttributes<HTMLDivElement> & {
   variation?: 'minimal' | 'verbose' | 'textOnly';
@@ -50,10 +41,6 @@ export function ControlBar(props: ControlBarProps) {
   const { variation = 'verbose', controls } = props;
 
   const visibleControls = { leave: true, ...controls };
-
-  const { localParticipant } = useRoomContext();
-  // @ts-ignore
-  window.localParticipant = localParticipant;
 
   const localPermissions = useLocalParticipantPermissions();
 

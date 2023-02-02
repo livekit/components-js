@@ -4,7 +4,7 @@ import { useRoomContext } from '../context';
 import { useObservableState } from '../helper';
 
 export interface DataChannelMessageProps<T extends BaseDataMessage> {
-  channelId: T['channelId'] | [T['channelId'], ...T['channelId'][]];
+  channelId: T['channelId'];
 }
 
 export function useDataChannelMessages<T extends BaseDataMessage>(

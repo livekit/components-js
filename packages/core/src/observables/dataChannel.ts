@@ -121,7 +121,7 @@ export interface BaseDataMessage {
 
 export function setupDataMessageHandler<T extends BaseDataMessage>(
   room: Room,
-  channelIds: T['channelId'] | [T['channelId'], ...T['channelId'][]],
+  channelId: T['channelId'],
 ) {
   let dataSubscriber: Subscriber<T & { from?: RemoteParticipant }>;
   const messageObservable = new Observable<T & { from?: RemoteParticipant }>((subscriber) => {
@@ -135,17 +135,14 @@ export function setupDataMessageHandler<T extends BaseDataMessage>(
         const dataMsg = parseMessage(readMessagePayload(payload)) as T['payload'];
         const receiveMessage = {
           payload: dataMsg,
+          channelId: channelId,
           from: participant,
         } as T & { from?: RemoteParticipant };
         dataSubscriber.next(receiveMessage);
       }
     };
     const subscription = createDataObserver(room).subscribe(([payload, participant]) => {
-      Array.isArray(channelIds)
-        ? channelIds.forEach((type) => {
-            messageHandler(type, payload, participant);
-          })
-        : messageHandler(channelIds, payload, participant);
+      messageHandler(channelId, payload, participant);
     });
     return () => subscription.unsubscribe();
   });
@@ -155,10 +152,14 @@ export function setupDataMessageHandler<T extends BaseDataMessage>(
     isSendingSubscriber = subscriber;
   });
 
-  const send = async (message: T, kind = DataPacket_Kind.LOSSY) => {
+  const send = async (payload: T['payload'], kind = DataPacket_Kind.LOSSY) => {
     isSendingSubscriber.next(true);
     try {
-      await sendMessage(room.localParticipant, message, kind ?? DataPacket_Kind.RELIABLE);
+      await sendMessage(
+        room.localParticipant,
+        { channelId, payload },
+        kind ?? DataPacket_Kind.RELIABLE,
+      );
     } finally {
       isSendingSubscriber.next(false);
     }

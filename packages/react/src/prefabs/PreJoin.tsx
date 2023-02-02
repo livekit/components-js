@@ -48,6 +48,14 @@ export type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'
    * Display a debug window for your convenience.
    */
   debug?: boolean;
+
+  joinLabel?: string;
+
+  micLabel?: string;
+
+  camLabel?: string;
+
+  userLabel?: string;
 };
 
 function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
@@ -169,6 +177,10 @@ export const PreJoin = ({
   onSubmit,
   onError,
   debug,
+  joinLabel = 'Join Room',
+  micLabel = 'Microphone',
+  camLabel = 'Camera',
+  userLabel = 'Username',
   ...htmlProps
 }: PreJoinProps) => {
   const [userChoices, setUserChoices] = React.useState(DEFAULT_USER_CHOICES);
@@ -273,7 +285,7 @@ export const PreJoin = ({
             source={Track.Source.Microphone}
             onChange={(enabled) => setAudioEnabled(enabled)}
           >
-            Microphone
+            {micLabel}
           </TrackToggle>
           <div className="lk-button-group-menu">
             <MediaDeviceMenu
@@ -293,7 +305,7 @@ export const PreJoin = ({
             source={Track.Source.Camera}
             onChange={(enabled) => setVideoEnabled(enabled)}
           >
-            Camera
+            {camLabel}
           </TrackToggle>
           <div className="lk-button-group-menu">
             <MediaDeviceMenu
@@ -315,7 +327,7 @@ export const PreJoin = ({
           id="username"
           name="username"
           type="text"
-          placeholder="Username"
+          placeholder={userLabel}
           onChange={(inputEl) => setUsername(inputEl.target.value)}
           autoComplete="off"
         />
@@ -325,7 +337,7 @@ export const PreJoin = ({
           onClick={handleSubmit}
           disabled={!isValid}
         >
-          Join room
+          {joinLabel}
         </button>
       </form>
 

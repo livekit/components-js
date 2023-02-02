@@ -54,6 +54,8 @@ export type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'
   micLabel: string;
 
   camLabel: string;
+
+  userLabel: string;
 };
 
 function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
@@ -178,6 +180,7 @@ export const PreJoin = ({
   joinLabel = 'Join Room',
   micLabel = 'Microphone',
   camLabel = 'Camera',
+  userLabel = 'Username',
   ...htmlProps
 }: PreJoinProps) => {
   const [userChoices, setUserChoices] = React.useState(DEFAULT_USER_CHOICES);
@@ -324,7 +327,7 @@ export const PreJoin = ({
           id="username"
           name="username"
           type="text"
-          placeholder="Username"
+          placeholder={userLabel}
           onChange={(inputEl) => setUsername(inputEl.target.value)}
           autoComplete="off"
         />

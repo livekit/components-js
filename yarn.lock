@@ -6459,10 +6459,10 @@ glob@^8.0.0, glob@^8.0.3, glob@^8.1.0:
     minimatch "^5.0.1"
     once "^1.3.0"
 
-global-tld-list@^0.0.995:
-  version "0.0.995"
-  resolved "https://registry.yarnpkg.com/global-tld-list/-/global-tld-list-0.0.995.tgz#8fdb70ee00e37e747c469f3cf8e6a2390207df3f"
-  integrity sha512-9XkQgCi748sER/Opllw71Q85qjNpFv+ILBiURoEnFMQYfNmBO/xstBLhTYft9ArbLAV1DVDpVxmsXQ3xED42Dw==
+global-tld-list@^0.0.1002:
+  version "0.0.1002"
+  resolved "https://registry.yarnpkg.com/global-tld-list/-/global-tld-list-0.0.1002.tgz#56a33120c33773837d5d4bec18ae3c83929ae6f0"
+  integrity sha512-11yCbAiy37cLCsb4EZElHdgK08gqJinBLrlWifycRG+8cSymU+SvZ6lBHzfKXwYl/e4hB3o+RCnl1rnR/rkAYA==
 
 global@^4.4.0:
   version "4.4.0"

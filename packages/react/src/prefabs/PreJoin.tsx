@@ -49,13 +49,13 @@ export type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'
    */
   debug?: boolean;
 
-  joinLabel: string;
+  joinLabel?: string;
 
-  micLabel: string;
+  micLabel?: string;
 
-  camLabel: string;
+  camLabel?: string;
 
-  userLabel: string;
+  userLabel?: string;
 };
 
 function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(

@@ -28,7 +28,7 @@
   "dependencies": {
     "@livekit/components-react": "~0.2.0",
     "glob": "^8.0.0",
-    "mkdirp": "^1.0.4",
+    "mkdirp": "^2.0.0",
     "react-docgen-typescript": "^2.1.0",
     "regenerator-runtime": "^0.13.7",
     "rimraf": "^4.0.0"

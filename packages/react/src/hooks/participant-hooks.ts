@@ -9,7 +9,7 @@ import {
   ParticipantMedia,
   observeParticipantMedia,
   ParticipantFilter,
-  localParticipantPermissionObserver,
+  participantPermissionObserver,
 } from '@livekit/components-core';
 import { useEnsureParticipant, useRoomContext } from '../context';
 import { useObservableState } from '../helper/useObservableState';
@@ -169,9 +169,23 @@ export function useIsMuted({ source, participant }: UseIsMutedProps) {
 
 export function useLocalParticipantPermissions() {
   const room = useRoomContext();
-  const permissionObserver = React.useMemo(() => localParticipantPermissionObserver(room), [room]);
+  const permissionObserver = React.useMemo(
+    () => participantPermissionObserver(room.localParticipant),
+    [room],
+  );
 
   const permissions = useObservableState(permissionObserver, room.localParticipant.permissions);
 
+  return permissions;
+}
+
+export interface UseParticipantPermissionsProps {
+  participant?: Participant;
+}
+
+export function useParticipantPermissions(props?: UseParticipantPermissionsProps) {
+  const p = useEnsureParticipant(props?.participant);
+  const permissionObserver = React.useMemo(() => participantPermissionObserver(p), [p]);
+  const permissions = useObservableState(permissionObserver, p.permissions);
   return permissions;
 }

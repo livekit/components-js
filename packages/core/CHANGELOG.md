@@ -1,5 +1,15 @@
 # @livekit/components-core
 
+## 0.2.6
+
+### Patch Changes
+
+- Simplify data channel usage, only allow one `channelId` - [#290](https://github.com/livekit/components-js/pull/290) ([@lukasIO](https://github.com/lukasIO))
+
+- Make permissions observer participant based - [#292](https://github.com/livekit/components-js/pull/292) ([@lukasIO](https://github.com/lukasIO))
+
+- Add localParticipantPermissionsObserver - [#285](https://github.com/livekit/components-js/pull/285) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.2.5
 
 ### Patch Changes

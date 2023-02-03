@@ -45,14 +45,13 @@
     "global-tld-list": "^0.0.1002"
   },
   "peerDependencies": {
-    "livekit-client": "^1.6.2"
+    "livekit-client": "^1.6.4"
   },
   "devDependencies": {
     "@livekit/components-styles": "~0.1.13",
     "@size-limit/file": "^8.1.2",
     "@size-limit/webpack": "^8.1.2",
     "eslint-config-lk-custom": "^0.1.1",
-    "livekit-client": "^1.6.2",
     "size-limit": "^8.1.2",
     "tsup": "^6.5.0",
     "typescript": "^4.9.4",

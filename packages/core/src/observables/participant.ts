@@ -185,14 +185,13 @@ export function connectedParticipantsObserver(room: Room) {
   return observable;
 }
 
-export function localParticipantPermissionObserver(room: Room) {
-  const observer = observeRoomEvents(
-    room,
-    RoomEvent.ConnectionStateChanged,
-    RoomEvent.ParticipantPermissionsChanged,
+export function participantPermissionObserver(participant: Participant) {
+  const observer = participantEventSelector(
+    participant,
+    ParticipantEvent.ParticipantPermissionsChanged,
   ).pipe(
-    map((r) => r.localParticipant.permissions),
-    startWith(room.localParticipant.permissions),
+    map(() => participant.permissions),
+    startWith(participant.permissions),
   );
   return observer;
 }

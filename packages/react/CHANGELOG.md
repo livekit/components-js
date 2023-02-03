@@ -1,5 +1,22 @@
 # @livekit/components-react
 
+## 0.2.6
+
+### Patch Changes
+
+- Specify livekit-client as peer dependency in react package - [#287](https://github.com/livekit/components-js/pull/287) ([@lukasIO](https://github.com/lukasIO))
+
+- Add button label props for PreJoin component - [#289](https://github.com/livekit/components-js/pull/289) ([@lukasIO](https://github.com/lukasIO))
+
+- Simplify data channel usage, only allow one `channelId` - [#290](https://github.com/livekit/components-js/pull/290) ([@lukasIO](https://github.com/lukasIO))
+
+- Show/hide controls based on participant permissions by default - [#285](https://github.com/livekit/components-js/pull/285) ([@lukasIO](https://github.com/lukasIO))
+
+- Add useParticipantPermissions hook additionally to useLocalParticipantPermissions - [#292](https://github.com/livekit/components-js/pull/292) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`77f2b34`](https://github.com/livekit/components-js/commit/77f2b34f7dae248a58963a01c7023b106749f4ec), [`317d50d`](https://github.com/livekit/components-js/commit/317d50db678f92ff9bc04b76757e7708a3bfa2ff), [`c5b0aca`](https://github.com/livekit/components-js/commit/c5b0aca7dd85ee0b51c43113a72fd5861f0fb4a7)]:
+  - @livekit/components-core@0.2.6
+
 ## 0.2.5
 
 ### Patch Changes

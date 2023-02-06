@@ -100,11 +100,11 @@ export function ParticipantContextIfNeeded(
 export const ParticipantTile = ({
   participant,
   children,
-  trackSource,
+  trackSource = Track.Source.Camera,
   onParticipantClick,
   ...htmlProps
 }: ParticipantTileProps) => {
-  const trackSource_ = trackSource ?? Track.Source.Camera;
+  const trackSource_ = trackSource;
   const p = useEnsureParticipant(participant);
 
   const { elementProps } = useParticipantTile({
@@ -165,8 +165,4 @@ export const ParticipantTile = ({
       </ParticipantContextIfNeeded>
     </div>
   );
-};
-
-ParticipantTile.defaultProps = {
-  trackSource: Track.Source.Camera,
 };

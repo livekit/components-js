@@ -25,5 +25,6 @@ The ChatEntry component holds and displays one chat message.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| entry | `ChatMessage` |  | The chat massage object to display. |
+| entry | `ChatMessage & { from?: RemoteParticipant \| LocalParticipant \| undefined; }` |  | The chat massage object to display. |
+| messageFormatter | `MessageFormatter` |  | An optional formatter for the message body. |
 

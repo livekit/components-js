@@ -25,4 +25,8 @@ The PreJoin prefab component is normally presented to the user before he enters 
 | onValidate | `((values: LocalUserChoices) => boolean)` |  | Provide your custom validation function. Only if validation is successful the user choices are past to the onSubmit callback. |
 | defaults | `Partial<LocalUserChoices>` |  | Prefill the input form with initial values. |
 | debug | `boolean` |  | Display a debug window for your convenience. |
+| joinLabel | `string` |  |  |
+| micLabel | `string` |  |  |
+| camLabel | `string` |  |  |
+| userLabel | `string` |  |  |
 

@@ -28,4 +28,5 @@ The TrackMutedIndicator shows whether the participant's camera or microphone is 
 | --- | --- | --- | --- |
 | source | `Source` |  |  |
 | participant | `Participant` |  |  |
+| showMutedOnly | `boolean` |  |  |
 

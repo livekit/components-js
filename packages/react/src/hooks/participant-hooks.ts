@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { LocalParticipant, Participant, Track, TrackPublication } from 'livekit-client';
+import {
+  LocalParticipant,
+  Participant,
+  RemoteParticipant,
+  Track,
+  TrackPublication,
+} from 'livekit-client';
 import {
   connectedParticipantsObserver,
   activeSpeakerObserver,
@@ -86,13 +92,23 @@ export const useLocalParticipant = () => {
   };
 };
 
+export const useRemoteParticipant = ({
+  identity,
+}: {
+  identity: string;
+}): RemoteParticipant | undefined => {
+  const filterFn = React.useCallback((p: Participant) => p.identity === identity, [identity]);
+  const remoteParticipants = useRemoteParticipants({ filter: filterFn });
+  return remoteParticipants[0] as RemoteParticipant;
+};
+
 /**
  * The useRemoteParticipants
  */
 export const useRemoteParticipants = ({
   filter,
 }: {
-  filter?: (participants: Array<Participant>) => Array<Participant>;
+  filter?: (participant: Participant) => boolean;
 }) => {
   const room = useRoomContext();
   const [participants, setParticipants] = React.useState<Participant[]>([]);
@@ -100,7 +116,7 @@ export const useRemoteParticipants = ({
   const handleUpdate = React.useCallback(
     (participants: Participant[]) => {
       if (filter) {
-        participants = filter(participants);
+        participants = participants.filter(filter);
       }
       setParticipants(participants);
     },

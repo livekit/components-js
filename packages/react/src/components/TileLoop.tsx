@@ -13,6 +13,10 @@ interface TileLoopProps {
   filterDependencies?: [];
 }
 
+const DefaultTileLoopProps = {
+  sources: [Track.Source.Camera, Track.Source.ScreenShare],
+} satisfies TileLoopProps;
+
 /**
  * The TileLoop component loops all participants (or a filtered subset) to create a visual
  * representation (`ParticipantTile`) and context for every participant. This component takes zero or more children.
@@ -44,8 +48,10 @@ export function TileLoop({
 }: React.PropsWithChildren<TileLoopProps>): React.FunctionComponentElement<
   React.PropsWithChildren<TileLoopProps>
 > {
-  const [mainSource] = React.useState(sources![0]);
-  const [secondarySources] = React.useState(sources!.slice(1));
+  const [mainSource] = React.useState(sources ? sources[0] : DefaultTileLoopProps.sources[0]);
+  const [secondarySources] = React.useState(
+    sources ? sources.slice(1) : DefaultTileLoopProps.sources.slice(1),
+  );
   const participants = useParticipants();
   const layoutContext = useMaybeLayoutContext();
 
@@ -77,7 +83,3 @@ export function TileLoop({
     </>
   );
 }
-
-TileLoop.defaultProps = {
-  sources: [Track.Source.Camera, Track.Source.ScreenShare],
-} as TileLoopProps;

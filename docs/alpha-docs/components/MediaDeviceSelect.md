@@ -25,5 +25,6 @@ The MediaDeviceSelect list all media devices of one kind. Clicking on one of the
 | --- | --- | --- | --- |
 | kind | `MediaDeviceKind` |  |  |
 | onActiveDeviceChange | `((deviceId: string) => void)` |  |  |
+| onDeviceListChange | `((devices: MediaDeviceInfo[]) => void)` |  |  |
 | initialSelection | `string` |  |  |
 

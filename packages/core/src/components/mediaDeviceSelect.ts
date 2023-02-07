@@ -1,5 +1,5 @@
 import { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
-import Observable from 'zen-observable';
+import { Observable, merge } from 'zen-observable/esm';
 import log from '../logger';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
@@ -10,8 +10,8 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
     activeDeviceSubscriptionObserver = subscribe;
   });
   const activeDeviceObservable = room
-    ? observeParticipantMedia(room.localParticipant)
-        .map((participantMedia) => {
+    ? merge(
+        observeParticipantMedia(room.localParticipant).map((participantMedia) => {
           let localTrack: LocalAudioTrack | LocalVideoTrack | undefined;
           switch (kind) {
             case 'videoinput':
@@ -25,8 +25,9 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
               break;
           }
           return localTrack?.mediaStreamTrack.getSettings()?.deviceId;
-        })
-        .concat(manualObservable)
+        }),
+        manualObservable,
+      )
     : manualObservable;
 
   const setActiveMediaDevice = async (id: string) => {

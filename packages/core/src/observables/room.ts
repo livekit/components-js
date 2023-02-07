@@ -1,4 +1,4 @@
-import Observable from 'zen-observable';
+import { merge, Observable } from 'zen-observable/esm';
 import { Participant, Room, RoomEvent, Track, TrackPublication } from 'livekit-client';
 import { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 import { observableWithDefault } from './utils';
@@ -61,6 +61,19 @@ export function roomObserver(room: Room) {
   );
 
   return observable;
+}
+
+export function allRoomEvents(room: Room) {
+  return merge(
+    roomEventSelector(room, RoomEvent.ActiveSpeakersChanged),
+    roomEventSelector(room, RoomEvent.ConnectionStateChanged),
+    roomEventSelector(room, RoomEvent.ConnectionStateChanged),
+    roomEventSelector(room, RoomEvent.ConnectionStateChanged),
+    roomEventSelector(room, RoomEvent.ConnectionStateChanged),
+    roomEventSelector(room, RoomEvent.ConnectionStateChanged),
+    roomEventSelector(room, RoomEvent.ConnectionStateChanged),
+    roomEventSelector(room, RoomEvent.ConnectionStateChanged),
+  );
 }
 
 export function connectionStateObserver(room: Room) {

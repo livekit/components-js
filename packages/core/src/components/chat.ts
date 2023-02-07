@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { DataPacket_Kind, Participant, Room } from 'livekit-client';
 import { createDataObserver } from '../observables/room';
-import Observable from 'zen-observable';
+import { Observable } from 'zen-observable/esm';
 
 export const enum MessageType {
   CHAT,

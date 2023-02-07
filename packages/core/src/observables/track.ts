@@ -6,7 +6,7 @@ import {
   TrackEvent,
   TrackPublication,
 } from 'livekit-client';
-import Observable from 'zen-observable';
+import { Observable } from 'zen-observable/esm';
 import log from '../logger';
 import { TrackParticipantPair } from '../types';
 import { roomEventSelector } from './room';

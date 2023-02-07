@@ -18,3 +18,10 @@ This component is the default setup of a classic LiveKit video conferencing app.
 
 <!--USAGE_INSERT_MARKER-->
 
+
+## Props
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| chatMessageFormatter | `MessageFormatter` |  |  |
+

@@ -3,7 +3,7 @@ import { Room } from 'livekit-client';
 import * as React from 'react';
 
 import { useRoomContext } from '../context';
-import { useObservableState } from '../hooks/utiltity-hooks';
+import { useObservableState } from '../helper/useObservableState';
 
 export function useRoomInfo({ room }: { room: Room }) {
   const infoObserver = React.useMemo(() => roomInfoObserver(room), [room]);

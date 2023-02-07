@@ -1,5 +1,45 @@
 # @livekit/components-core
 
+## 0.2.6
+
+### Patch Changes
+
+- Simplify data channel usage, only allow one `channelId` - [#290](https://github.com/livekit/components-js/pull/290) ([@lukasIO](https://github.com/lukasIO))
+
+- Make permissions observer participant based - [#292](https://github.com/livekit/components-js/pull/292) ([@lukasIO](https://github.com/lukasIO))
+
+- Add localParticipantPermissionsObserver - [#285](https://github.com/livekit/components-js/pull/285) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.2.5
+
+### Patch Changes
+
+- Fix timing issue when device observable first gets set up - [#279](https://github.com/livekit/components-js/pull/279) ([@lukasIO](https://github.com/lukasIO))
+
+- Add useDataChannelMessages hook and generalise core data channel usage - [#277](https://github.com/livekit/components-js/pull/277) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.2.4
+
+### Patch Changes
+
+- Fix floating-ui shift middleware and style and responsiveness updates on PreJoin component. - [#271](https://github.com/livekit/components-js/pull/271) ([@Ocupe](https://github.com/Ocupe))
+
+- Replace tlds dependency with global-tld-list in order to avoid having to deal with JSON imports - [#274](https://github.com/livekit/components-js/pull/274) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.2.3
+
+### Patch Changes
+
+- Mark packages as side-effect free - [#268](https://github.com/livekit/components-js/pull/268) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.2.2
+
+### Patch Changes
+
+- Move link regex into core - [#265](https://github.com/livekit/components-js/pull/265) ([@lukasIO](https://github.com/lukasIO))
+
+- Make tokenizer typesafe and move to separate file - [#267](https://github.com/livekit/components-js/pull/267) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.2.1
 
 ### Patch Changes

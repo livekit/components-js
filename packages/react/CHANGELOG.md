@@ -1,5 +1,64 @@
 # @livekit/components-react
 
+## 0.2.6
+
+### Patch Changes
+
+- Specify livekit-client as peer dependency in react package - [#287](https://github.com/livekit/components-js/pull/287) ([@lukasIO](https://github.com/lukasIO))
+
+- Add button label props for PreJoin component - [#289](https://github.com/livekit/components-js/pull/289) ([@lukasIO](https://github.com/lukasIO))
+
+- Simplify data channel usage, only allow one `channelId` - [#290](https://github.com/livekit/components-js/pull/290) ([@lukasIO](https://github.com/lukasIO))
+
+- Show/hide controls based on participant permissions by default - [#285](https://github.com/livekit/components-js/pull/285) ([@lukasIO](https://github.com/lukasIO))
+
+- Add useParticipantPermissions hook additionally to useLocalParticipantPermissions - [#292](https://github.com/livekit/components-js/pull/292) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`77f2b34`](https://github.com/livekit/components-js/commit/77f2b34f7dae248a58963a01c7023b106749f4ec), [`317d50d`](https://github.com/livekit/components-js/commit/317d50db678f92ff9bc04b76757e7708a3bfa2ff), [`c5b0aca`](https://github.com/livekit/components-js/commit/c5b0aca7dd85ee0b51c43113a72fd5861f0fb4a7)]:
+  - @livekit/components-core@0.2.6
+
+## 0.2.5
+
+### Patch Changes
+
+- Make ParticipantInfoProps optional in useParticipantInfo hook - [#276](https://github.com/livekit/components-js/pull/276) ([@lukasIO](https://github.com/lukasIO))
+
+- Add useDataChannelMessages hook and generalise core data channel usage - [#277](https://github.com/livekit/components-js/pull/277) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`c023b8a`](https://github.com/livekit/components-js/commit/c023b8aa65b54567af082a1e2b87ea18f426e955), [`7e13007`](https://github.com/livekit/components-js/commit/7e130075f7b83176a46bdb366c280275785d4fa3)]:
+  - @livekit/components-core@0.2.5
+
+## 0.2.4
+
+### Patch Changes
+
+- Updated dependencies [[`480808a`](https://github.com/livekit/components-js/commit/480808a6d024391f474b0f3bdb997e49259a3860), [`cb9e2b6`](https://github.com/livekit/components-js/commit/cb9e2b6595514f35145dc8e9124324531a3979e0)]:
+  - @livekit/components-core@0.2.4
+
+## 0.2.3
+
+### Patch Changes
+
+- Mark packages as side-effect free - [#268](https://github.com/livekit/components-js/pull/268) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`4d742bf`](https://github.com/livekit/components-js/commit/4d742bf5465bae7cc39215150b78c5f3d2ba3283)]:
+  - @livekit/components-core@0.2.3
+
+## 0.2.2
+
+### Patch Changes
+
+- Move link regex into core - [#265](https://github.com/livekit/components-js/pull/265) ([@lukasIO](https://github.com/lukasIO))
+
+- Make tokenizer typesafe and move to separate file - [#267](https://github.com/livekit/components-js/pull/267) ([@lukasIO](https://github.com/lukasIO))
+
+- Only populate room in useEffect to avoid strict mode disconnecting - [#264](https://github.com/livekit/components-js/pull/264) ([@lukasIO](https://github.com/lukasIO))
+
+- Replace floating-ui/react with floating-ui/dom and fix the position problem with the MediaDeviceMenu component. - [#266](https://github.com/livekit/components-js/pull/266) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`8b1e826`](https://github.com/livekit/components-js/commit/8b1e826a08fc1fa45993108c82edc8e68684b92c), [`39be24c`](https://github.com/livekit/components-js/commit/39be24c17b3c3b6a0f15efb28a622766abdf2fa2)]:
+  - @livekit/components-core@0.2.2
+
 ## 0.2.1
 
 ### Patch Changes

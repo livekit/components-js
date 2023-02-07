@@ -8,7 +8,7 @@ import { PinState, WidgetState } from '@livekit/components-core';
 import { TileLoop } from '../components/TileLoop';
 import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
-import { useMediaQuery } from '../hooks/utiltity-hooks';
+import { useMediaQuery } from '../helper/useMediaQuery';
 import { MessageFormatter } from './ChatEntry';
 
 export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {

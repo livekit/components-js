@@ -9,9 +9,10 @@ import {
   ParticipantMedia,
   observeParticipantMedia,
   ParticipantFilter,
+  participantPermissionObserver,
 } from '@livekit/components-core';
-import { useObservableState } from '../hooks/utiltity-hooks';
 import { useEnsureParticipant, useRoomContext } from '../context';
+import { useObservableState } from '../helper/useObservableState';
 
 export interface UseParticipantsProps {
   filter?: ParticipantFilter;
@@ -73,7 +74,8 @@ export const useLocalParticipant = () => {
   React.useEffect(() => {
     const listener = observeParticipantMedia(localParticipant).subscribe(handleUpdate);
     return () => listener.unsubscribe();
-  });
+  }, [localParticipant, observeParticipantMedia]);
+
   return {
     isMicrophoneEnabled,
     isScreenShareEnabled,
@@ -163,4 +165,27 @@ export function useIsMuted({ source, participant }: UseIsMutedProps) {
   }, [p, source]);
 
   return isMuted;
+}
+
+export function useLocalParticipantPermissions() {
+  const room = useRoomContext();
+  const permissionObserver = React.useMemo(
+    () => participantPermissionObserver(room.localParticipant),
+    [room],
+  );
+
+  const permissions = useObservableState(permissionObserver, room.localParticipant.permissions);
+
+  return permissions;
+}
+
+export interface UseParticipantPermissionsProps {
+  participant?: Participant;
+}
+
+export function useParticipantPermissions(props?: UseParticipantPermissionsProps) {
+  const p = useEnsureParticipant(props?.participant);
+  const permissionObserver = React.useMemo(() => participantPermissionObserver(p), [p]);
+  const permissions = useObservableState(permissionObserver, p.permissions);
+  return permissions;
 }

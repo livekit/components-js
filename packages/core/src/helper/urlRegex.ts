@@ -21,8 +21,7 @@
 // THE SOFTWARE.
 
 import ipRegex from 'ip-regex';
-import tlds from 'tlds';
-
+import { TLDs } from 'global-tld-list';
 interface RegExOptions {
   /**
 		Only match an exact string. Useful with `RegExp#test` to check if a string is a URL.
@@ -51,7 +50,7 @@ export const createUrlRegExp = (options: RegExOptions) => {
   const tld = `(?:\\.${
     options.strict
       ? '(?:[a-z\\u00a1-\\uffff]{2,})'
-      : `(?:${tlds.sort((a, b) => b.length - a.length).join('|')})`
+      : `(?:${TLDs.sort((a, b) => b.length - a.length).join('|')})`
   })\\.?`;
   const port = '(?::\\d{2,5})?';
   const path = '(?:[/?#][^\\s"]*)?';

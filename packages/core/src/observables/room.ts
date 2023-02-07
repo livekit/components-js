@@ -1,7 +1,8 @@
-import { merge, Observable } from 'zen-observable/esm';
+import { Observable } from 'zen-observable/esm';
 import { Participant, Room, RoomEvent, Track, TrackPublication } from 'livekit-client';
 import { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
-import { observableWithDefault } from './utils';
+import { observableWithDefault, ofAsync } from './utils';
+
 export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observable<Room> {
   const observable = Observable.of(room).concat(
     new Observable<Room>((subscribe) => {
@@ -61,19 +62,6 @@ export function roomObserver(room: Room) {
   );
 
   return observable;
-}
-
-export function allRoomEvents(room: Room) {
-  return merge(
-    roomEventSelector(room, RoomEvent.ActiveSpeakersChanged),
-    roomEventSelector(room, RoomEvent.ConnectionStateChanged),
-    roomEventSelector(room, RoomEvent.ConnectionStateChanged),
-    roomEventSelector(room, RoomEvent.ConnectionStateChanged),
-    roomEventSelector(room, RoomEvent.ConnectionStateChanged),
-    roomEventSelector(room, RoomEvent.ConnectionStateChanged),
-    roomEventSelector(room, RoomEvent.ConnectionStateChanged),
-    roomEventSelector(room, RoomEvent.ConnectionStateChanged),
-  );
 }
 
 export function connectionStateObserver(room: Room) {
@@ -193,20 +181,22 @@ export function activeSpeakerObserver(room: Room) {
 }
 
 export function createMediaDeviceObserver(kind?: MediaDeviceKind, requestPermissions = true) {
-  let deviceSubscriber: ZenObservable.SubscriptionObserver<MediaDeviceInfo[]> | undefined;
-  const onDeviceChange = async () => {
-    const newDevices = await Room.getLocalDevices(kind, requestPermissions);
-    deviceSubscriber?.next(newDevices);
+  const onDeviceChange = (subscriber: ZenObservable.SubscriptionObserver<MediaDeviceInfo[]>) => {
+    return async () => {
+      const newDevices = await Room.getLocalDevices(kind, requestPermissions);
+      subscriber.next(newDevices);
+    };
   };
-  const observable = new Observable<MediaDeviceInfo[]>((subscriber) => {
-    deviceSubscriber = subscriber;
-    navigator?.mediaDevices.addEventListener('devicechange', onDeviceChange);
-    return () => navigator?.mediaDevices.removeEventListener('devicechange', onDeviceChange);
+  let observable = new Observable<MediaDeviceInfo[]>((subscriber) => {
+    const deviceChangeHandler = onDeviceChange(subscriber);
+    navigator?.mediaDevices.addEventListener('devicechange', deviceChangeHandler);
+    return () => navigator?.mediaDevices.removeEventListener('devicechange', deviceChangeHandler);
   });
-  // because we rely on an async function, trigger the first update instead of using startWith
+
   if (typeof window !== 'undefined') {
-    onDeviceChange();
+    observable = ofAsync(Room.getLocalDevices(kind, requestPermissions)).concat(observable);
   }
+
   return observable;
 }
 

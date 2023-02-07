@@ -184,3 +184,13 @@ export function connectedParticipantsObserver(room: Room) {
   }
   return observable;
 }
+
+export function participantPermissionObserver(participant: Participant) {
+  const observer = observableWithDefault(
+    participantEventSelector(participant, ParticipantEvent.ParticipantPermissionsChanged).map(
+      () => participant.permissions,
+    ),
+    participant.permissions,
+  );
+  return observer;
+}

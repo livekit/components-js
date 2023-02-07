@@ -1,8 +1,13 @@
 {
   "name": "@livekit/components-styles",
-  "version": "0.1.11",
+  "version": "0.1.13",
   "license": "Apache-2.0",
   "author": "LiveKit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/livekit/components-js.git",
+    "directory": "/packages/styles"
+  },
   "exports": {
     ".": {
       "types": "./dist/types/general/styles.css.d.ts",
@@ -46,10 +51,10 @@
     "postcss-variables-prefixer": "^1.2.0",
     "sass": "^1.54.6",
     "typed-scss-modules": "^7.0.0",
-    "vitest": "^0.28.1"
+    "vitest": "^0.28.3"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=14"
   },
   "publishConfig": {
     "access": "public"

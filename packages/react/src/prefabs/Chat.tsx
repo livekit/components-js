@@ -1,7 +1,7 @@
 import { setupChat } from '@livekit/components-core';
 import * as React from 'react';
 import { useRoomContext } from '../context';
-import { useObservableState } from '../hooks/utiltity-hooks';
+import { useObservableState } from '../helper/useObservableState';
 import { cloneSingleChild } from '../utils';
 import { ChatEntry, MessageFormatter } from './ChatEntry';
 

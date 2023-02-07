@@ -18,3 +18,10 @@ The Chat component adds a basis chat functionality to the LiveKit room. The mess
 
 <!--USAGE_INSERT_MARKER-->
 
+
+## Props
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| messageFormatter | `MessageFormatter` |  |  |
+

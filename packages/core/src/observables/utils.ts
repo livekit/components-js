@@ -19,3 +19,14 @@ export function observableWithTrigger<T>(startValue: T) {
   }
   return { trigger: subObserver, observable };
 }
+
+export function ofAsync<T>(promise: Promise<T>) {
+  const handler = async (subscriber: ZenObservable.SubscriptionObserver<T>) => {
+    const result = await promise;
+    subscriber.next(result);
+    subscriber.complete();
+  };
+  return new Observable((subscriber) => {
+    handler(subscriber);
+  });
+}

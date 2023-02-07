@@ -1,7 +1,7 @@
 import { LocalParticipant, Room, Track } from 'livekit-client';
 import { Observable } from 'zen-observable/esm';
 import { observeParticipantMedia } from '../observables/participant';
-import { observableWithDefault, observableWithTrigger } from '../observables/utils';
+import { observableWithStartValue, observableWithTrigger } from '../observables/utils';
 import { prefixClass } from '../styles-interface';
 
 export function setupMediaToggle(source: Track.Source, room: Room) {
@@ -25,7 +25,7 @@ export function setupMediaToggle(source: Track.Source, room: Room) {
     return isEnabled;
   };
 
-  const enabledObserver = observableWithDefault(
+  const enabledObserver = observableWithStartValue(
     observeParticipantMedia(localParticipant).map((media) => {
       return getSourceEnabled(source, media.participant as LocalParticipant);
     }),
@@ -70,14 +70,14 @@ export function setupManualToggle() {
   let state = false;
 
   let enabledSubscriptionObserver: ZenObservable.SubscriptionObserver<boolean>;
-  const enabledObservable = observableWithDefault(
+  const enabledObservable = observableWithStartValue(
     new Observable<boolean>((subscribe) => {
       pendingSubscriptionObserver = subscribe;
     }),
     false,
   );
   let pendingSubscriptionObserver: ZenObservable.SubscriptionObserver<boolean>;
-  const pendingObservable = observableWithDefault(
+  const pendingObservable = observableWithStartValue(
     new Observable<boolean>((subscribe) => {
       pendingSubscriptionObserver = subscribe;
     }),

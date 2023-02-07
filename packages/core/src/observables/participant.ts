@@ -10,7 +10,7 @@ import {
 import { Observable } from 'zen-observable/esm';
 import { observeRoomEvents } from './room';
 import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
-import { observableWithDefault } from './utils';
+import { observableWithStartValue } from './utils';
 
 export function observeParticipantEvents<T extends Participant>(
   participant: T,
@@ -86,7 +86,7 @@ export function createTrackObserver(participant: Participant, source: Track.Sour
 }
 
 export function participantInfoObserver(participant: Participant) {
-  const observer = observableWithDefault(
+  const observer = observableWithStartValue(
     observeParticipantEvents(
       participant,
       ParticipantEvent.ParticipantMetadataChanged,
@@ -108,7 +108,7 @@ export function participantInfoObserver(participant: Participant) {
 }
 
 export function createConnectionQualityObserver(participant: Participant) {
-  const observer = observableWithDefault(
+  const observer = observableWithStartValue(
     participantEventSelector(participant, ParticipantEvent.ConnectionQualityChanged).map(
       ([quality]) => quality,
     ),
@@ -139,7 +139,7 @@ export function participantEventSelector<T extends ParticipantEvent>(
 }
 
 export function mutedObserver(participant: Participant, source: Track.Source) {
-  return observableWithDefault(
+  return observableWithStartValue(
     observeParticipantEvents(
       participant,
       ParticipantEvent.TrackMuted,
@@ -165,7 +165,7 @@ export function createIsSpeakingObserver(participant: Participant) {
 export function connectedParticipantsObserver(room: Room) {
   let subscriber: ZenObservable.SubscriptionObserver<RemoteParticipant[]> | undefined;
 
-  const observable = observableWithDefault(
+  const observable = observableWithStartValue(
     new Observable<RemoteParticipant[]>((sub) => {
       subscriber = sub;
       return () => listener.unsubscribe();
@@ -186,7 +186,7 @@ export function connectedParticipantsObserver(room: Room) {
 }
 
 export function participantPermissionObserver(participant: Participant) {
-  const observer = observableWithDefault(
+  const observer = observableWithStartValue(
     participantEventSelector(participant, ParticipantEvent.ParticipantPermissionsChanged).map(
       () => participant.permissions,
     ),

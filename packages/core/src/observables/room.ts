@@ -1,7 +1,7 @@
 import { Observable } from 'zen-observable/esm';
 import { Participant, Room, RoomEvent, Track, TrackPublication } from 'livekit-client';
 import { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
-import { observableWithDefault, ofAsync } from './utils';
+import { observableWithStartValue, ofAsync } from './utils';
 
 export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observable<Room> {
   const observable = Observable.of(room).concat(
@@ -45,7 +45,7 @@ export function roomEventSelector<T extends RoomEvent>(room: Room, event: T) {
 }
 
 export function roomObserver(room: Room) {
-  const observable = observableWithDefault(
+  const observable = observableWithStartValue(
     observeRoomEvents(
       room,
       RoomEvent.ParticipantConnected,
@@ -65,7 +65,7 @@ export function roomObserver(room: Room) {
 }
 
 export function connectionStateObserver(room: Room) {
-  return observableWithDefault(
+  return observableWithStartValue(
     roomEventSelector(room, RoomEvent.ConnectionStateChanged).map(
       ([connectionState]) => connectionState,
     ),

@@ -1,10 +1,10 @@
 import { Participant, Track } from 'livekit-client';
 import { observeParticipantMedia } from '../observables/participant';
-import { observableWithDefault } from '../observables/utils';
+import { observableWithStartValue } from '../observables/utils';
 import { prefixClass } from '../styles-interface';
 
 export function setupMediaTrack(participant: Participant, source: Track.Source) {
-  const trackObserver = observableWithDefault(
+  const trackObserver = observableWithStartValue(
     observeParticipantMedia(participant).map((media) => {
       const publication = media.participant.getTrack(source);
       // attachIfSubscribed(publication, element);

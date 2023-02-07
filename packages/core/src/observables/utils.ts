@@ -1,6 +1,6 @@
 import { Observable } from 'zen-observable/esm';
 
-export function observableWithDefault<T>(observable: Observable<T>, startValue: T) {
+export function observableWithStartValue<T>(observable: Observable<T>, startValue: T) {
   return Observable.of(startValue).concat(observable);
 }
 

@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 0.2.7
+
+### Patch Changes
+
+- Add useRemoteParticipant hook - [#295](https://github.com/livekit/components-js/pull/295) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`56ee42f`](https://github.com/livekit/components-js/commit/56ee42f153e1e85baa5272f309ba24dd6fb7634b)]:
+  - @livekit/components-core@0.2.7
+
 ## 0.2.6
 
 ### Patch Changes

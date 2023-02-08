@@ -185,6 +185,17 @@ export function connectedParticipantsObserver(room: Room) {
   return observable;
 }
 
+export function connectedParticipantObserver(room: Room, identity: string) {
+  const observable = observeRoomEvents(
+    room,
+    RoomEvent.ParticipantConnected,
+    RoomEvent.ParticipantDisconnected,
+    RoomEvent.ConnectionStateChanged,
+  ).pipe(map((r) => r.getParticipantByIdentity(identity) as RemoteParticipant | undefined));
+
+  return observable;
+}
+
 export function participantPermissionObserver(participant: Participant) {
   const observer = participantEventSelector(
     participant,

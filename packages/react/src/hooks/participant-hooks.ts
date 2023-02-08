@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { LocalParticipant, Participant, Track, TrackPublication } from 'livekit-client';
+import {
+  LocalParticipant,
+  Participant,
+  RemoteParticipant,
+  Track,
+  TrackPublication,
+} from 'livekit-client';
 import {
   connectedParticipantsObserver,
   activeSpeakerObserver,
@@ -10,6 +16,7 @@ import {
   observeParticipantMedia,
   ParticipantFilter,
   participantPermissionObserver,
+  connectedParticipantObserver,
 } from '@livekit/components-core';
 import { useEnsureParticipant, useRoomContext } from '../context';
 import { useObservableState } from '../helper/useObservableState';
@@ -86,21 +93,34 @@ export const useLocalParticipant = () => {
   };
 };
 
+export const useRemoteParticipant = (identity: string): RemoteParticipant | undefined => {
+  const room = useRoomContext();
+  const observable = React.useMemo(
+    () => connectedParticipantObserver(room, identity),
+    [room, identity],
+  );
+  const participant = useObservableState(
+    observable,
+    room.getParticipantByIdentity(identity) as RemoteParticipant | undefined,
+  );
+  return participant;
+};
+
 /**
  * The useRemoteParticipants
  */
 export const useRemoteParticipants = ({
   filter,
 }: {
-  filter?: (participants: Array<Participant>) => Array<Participant>;
+  filter?: (participant: RemoteParticipant) => boolean;
 }) => {
   const room = useRoomContext();
-  const [participants, setParticipants] = React.useState<Participant[]>([]);
+  const [participants, setParticipants] = React.useState<RemoteParticipant[]>([]);
 
   const handleUpdate = React.useCallback(
-    (participants: Participant[]) => {
+    (participants: RemoteParticipant[]) => {
       if (filter) {
-        participants = filter(participants);
+        participants = participants.filter(filter);
       }
       setParticipants(participants);
     },

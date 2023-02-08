@@ -19,9 +19,7 @@ const Clubhouse = () => {
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? 'test-identity';
 
-  const token = useToken({
-    tokenEndpoint: process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT,
-    roomName: roomName,
+  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
     userInfo: {
       identity: userIdentity,
       name: userIdentity,
@@ -76,7 +74,7 @@ const Clubhouse = () => {
 const CustomParticipantTile = () => {
   const participant = useParticipantContext();
   const isSpeaking = useIsSpeaking(participant);
-  const isMuted = useIsMuted({ source: Track.Source.Microphone, participant: participant });
+  const isMuted = useIsMuted(Track.Source.Microphone);
 
   const id = useMemo(() => participant.identity, [participant]);
 

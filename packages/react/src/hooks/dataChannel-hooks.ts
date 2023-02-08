@@ -3,17 +3,11 @@ import * as React from 'react';
 import { useRoomContext } from '../context';
 import { useObservableState } from '../helper';
 
-export interface DataChannelMessageProps<T extends BaseDataMessage> {
-  channelId: T['channelId'];
-}
-
-export function useDataChannelMessages<T extends BaseDataMessage>(
-  props: DataChannelMessageProps<T>,
-) {
+export function useDataChannelMessages<T extends BaseDataMessage>(channelId: T['channelId']) {
   const room = useRoomContext();
   const { send, messageObservable, isSendingObservable } = React.useMemo(
-    () => setupDataMessageHandler(room, props.channelId),
-    [room, props.channelId],
+    () => setupDataMessageHandler(room, channelId),
+    [room, channelId],
   );
 
   const message = useObservableState(messageObservable, undefined);

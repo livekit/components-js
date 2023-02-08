@@ -52,8 +52,8 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
       },
     });
   }, [props]);
-  const isVideoMuted = useIsMuted({ source: Track.Source.Camera, participant });
-  const isAudioMuted = useIsMuted({ source: Track.Source.Microphone, participant });
+  const isVideoMuted = useIsMuted(Track.Source.Camera, { participant });
+  const isAudioMuted = useIsMuted(Track.Source.Microphone, { participant });
   const isSpeaking = useIsSpeaking(participant);
   return {
     elementProps: {

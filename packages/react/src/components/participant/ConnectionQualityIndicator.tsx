@@ -6,12 +6,15 @@ import { mergeProps } from '../../utils';
 import { getConnectionQualityIcon } from '../../assets/icons/util';
 import { useObservableState } from '../../helper/useObservableState';
 
-export interface ConnectionQualityIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ConnectionQualityIndicatorOpts {
   participant?: Participant;
 }
 
-export function useConnectionQualityIndicator(props?: ConnectionQualityIndicatorProps) {
-  const p = useEnsureParticipant(props?.participant);
+export type ConnectionQualityIndicatorProps = React.HTMLAttributes<HTMLDivElement> &
+  ConnectionQualityIndicatorOpts;
+
+export function useConnectionQualityIndicator(opts?: ConnectionQualityIndicatorOpts) {
+  const p = useEnsureParticipant(opts?.participant);
 
   const { className, connectionQualityObserver } = React.useMemo(
     () => setupConnectionQualityIndicator(p),
@@ -20,11 +23,7 @@ export function useConnectionQualityIndicator(props?: ConnectionQualityIndicator
 
   const quality = useObservableState(connectionQualityObserver, ConnectionQuality.Unknown);
 
-  const elementProps = React.useMemo(() => {
-    return { ...mergeProps(props, { className: className as string }), 'data-lk-quality': quality };
-  }, [quality, props, className]);
-
-  return { elementProps, quality };
+  return { className, quality };
 }
 
 /**
@@ -42,6 +41,9 @@ export function useConnectionQualityIndicator(props?: ConnectionQualityIndicator
  * @see `ParticipantTile` component
  */
 export function ConnectionQualityIndicator(props: ConnectionQualityIndicatorProps) {
-  const { elementProps, quality } = useConnectionQualityIndicator(props);
+  const { className, quality } = useConnectionQualityIndicator(props);
+  const elementProps = React.useMemo(() => {
+    return { ...mergeProps(props, { className: className as string }), 'data-lk-quality': quality };
+  }, [quality, props, className]);
   return <div {...elementProps}>{props.children ?? getConnectionQualityIcon(quality)}</div>;
 }

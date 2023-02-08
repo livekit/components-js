@@ -146,7 +146,7 @@ export const useSpeakingParticipants = () => {
 /**
  * The useSortedParticipants hook returns the only the active speakers of all participants.
  */
-export function useSortedParticipants({ participants }: { participants: Array<Participant> }) {
+export function useSortedParticipants(participants: Array<Participant>) {
   const [sortedParticipants, setSortedParticipants] = React.useState(
     sortParticipantsByVolume(participants),
   );
@@ -166,13 +166,12 @@ export function useIsSpeaking(participant?: Participant) {
   return isSpeaking;
 }
 
-export interface UseIsMutedProps {
-  source: Track.Source;
+export interface UseIsMutedOpts {
   participant?: Participant;
 }
 
-export function useIsMuted({ source, participant }: UseIsMutedProps) {
-  const p = useEnsureParticipant(participant);
+export function useIsMuted(source: Track.Source, opts?: UseIsMutedOpts) {
+  const p = useEnsureParticipant(opts?.participant);
   const [isMuted, setIsMuted] = React.useState(!!p.getTrack(source)?.isMuted);
 
   React.useEffect(() => {
@@ -199,8 +198,8 @@ export interface UseParticipantPermissionsProps {
   participant?: Participant;
 }
 
-export function useParticipantPermissions(props?: UseParticipantPermissionsProps) {
-  const p = useEnsureParticipant(props?.participant);
+export function useParticipantPermissions(opts?: UseParticipantPermissionsProps) {
+  const p = useEnsureParticipant(opts?.participant);
   const permissionObserver = React.useMemo(() => participantPermissionObserver(p), [p]);
   const permissions = useObservableState(permissionObserver, p.permissions);
   return permissions;

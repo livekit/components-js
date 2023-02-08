@@ -1,13 +1,13 @@
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureParticipant } from '../../context';
 import { useMediaTrack } from '../../hooks';
 import { ParticipantClickEvent } from '@livekit/components-core';
+import { useEnsureParticipant } from '../../context';
 
 export interface MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
   extends React.HTMLAttributes<T> {
-  participant?: Participant;
   source: Track.Source;
+  participant?: Participant;
   onTrackClick?: (evt: ParticipantClickEvent) => void;
   onSubscriptionStatusChanged?: (subscribed: boolean) => void;
 }
@@ -36,12 +36,10 @@ export function MediaTrack({
   onSubscriptionStatusChanged,
   ...props
 }: MediaTrackProps) {
-  const participant = useEnsureParticipant(props.participant);
-
   const mediaEl = React.useRef<HTMLVideoElement>(null);
-  const { elementProps, publication, isSubscribed } = useMediaTrack({
+  const participant = useEnsureParticipant(props.participant);
+  const { elementProps, publication, isSubscribed } = useMediaTrack(props.source, {
     participant,
-    source: props.source,
     element: mediaEl,
     props,
   });

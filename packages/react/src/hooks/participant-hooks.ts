@@ -20,7 +20,6 @@ import {
 } from '@livekit/components-core';
 import { useEnsureParticipant, useRoomContext } from '../context';
 import { useObservableState } from '../helper/useObservableState';
-import { idText } from 'typescript';
 
 export interface UseParticipantsProps {
   filter?: ParticipantFilter;

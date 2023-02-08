@@ -1,16 +1,6 @@
-import {
-  Subject,
-  map,
-  Observable,
-  startWith,
-  Subscriber,
-  Subscription,
-  merge,
-  finalize,
-} from 'rxjs';
+import { Subject, map, Observable, startWith, Subscriber, Subscription, finalize } from 'rxjs';
 import { Participant, Room, RoomEvent, Track, TrackPublication } from 'livekit-client';
 import { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
-import log from '../logger';
 export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observable<Room> {
   const observable = new Observable<Room>((subscribe) => {
     const onRoomUpdate = () => {

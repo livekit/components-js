@@ -160,12 +160,8 @@ export function useSortedParticipants({ participants }: { participants: Array<Pa
 
 export function useIsSpeaking(participant?: Participant) {
   const p = useEnsureParticipant(participant);
-  const [isSpeaking, setIsSpeaking] = React.useState(p.isSpeaking);
-
-  React.useEffect(() => {
-    const subscription = createIsSpeakingObserver(p).subscribe(setIsSpeaking);
-    return () => subscription.unsubscribe();
-  }, [p]);
+  const observable = React.useMemo(() => createIsSpeakingObserver(p), [p]);
+  const isSpeaking = useObservableState(observable, p.isSpeaking);
 
   return isSpeaking;
 }

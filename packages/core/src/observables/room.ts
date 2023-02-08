@@ -1,7 +1,6 @@
-import { BehaviorSubject, map, Observable, startWith, Subscriber, Subscription } from 'rxjs';
+import { Subject, map, Observable, startWith, Subscriber, Subscription, finalize } from 'rxjs';
 import { Participant, Room, RoomEvent, Track, TrackPublication } from 'livekit-client';
 import { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
-import log from '../logger';
 export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observable<Room> {
   const observable = new Observable<Room>((subscribe) => {
     const onRoomUpdate = () => {
@@ -177,24 +176,24 @@ export function activeSpeakerObserver(room: Room) {
 }
 
 export function createMediaDeviceObserver(kind?: MediaDeviceKind, requestPermissions = true) {
-  const deviceBehavior = new BehaviorSubject<MediaDeviceInfo[]>([]);
   const onDeviceChange = async () => {
     const newDevices = await Room.getLocalDevices(kind, requestPermissions);
-    log.warn('firing new devices found', newDevices, deviceBehavior);
-    deviceBehavior.next(newDevices);
+    deviceSubject.next(newDevices);
   };
-  // FIXME potential memory leak because observable.unsubscribe is never called
-  const observable = new Observable<MediaDeviceInfo[]>(() => {
-    navigator?.mediaDevices.addEventListener('devicechange', onDeviceChange);
-    return () => navigator?.mediaDevices.removeEventListener('devicechange', onDeviceChange);
-  });
-  observable.subscribe(deviceBehavior);
+  const deviceSubject = new Subject<MediaDeviceInfo[]>();
 
-  // because we rely on an async function, trigger the first update instead of using startWith
+  const observable = deviceSubject.pipe(
+    finalize(() => {
+      navigator?.mediaDevices.removeEventListener('devicechange', onDeviceChange);
+    }),
+  );
+
   if (typeof window !== 'undefined') {
+    navigator?.mediaDevices.addEventListener('devicechange', onDeviceChange);
+    // because we rely on an async function, trigger the first update instead of using startWith
     onDeviceChange();
   }
-  return deviceBehavior.asObservable();
+  return observable;
 }
 
 export function createDataObserver(room: Room) {

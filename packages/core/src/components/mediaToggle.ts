@@ -1,5 +1,5 @@
 import { LocalParticipant, Room, Track } from 'livekit-client';
-import { BehaviorSubject, map, startWith } from 'rxjs';
+import { Subject, map, startWith } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 
@@ -31,7 +31,7 @@ export function setupMediaToggle(source: Track.Source, room: Room) {
     startWith(getSourceEnabled(source, localParticipant)),
   );
 
-  const pendingSubject = new BehaviorSubject(false);
+  const pendingSubject = new Subject<boolean>();
   const toggle = async (forceState?: boolean) => {
     try {
       // trigger observable update
@@ -66,9 +66,9 @@ export function setupMediaToggle(source: Track.Source, room: Room) {
 export function setupManualToggle() {
   let state = false;
 
-  const enabledSubject = new BehaviorSubject(state);
+  const enabledSubject = new Subject<boolean>();
 
-  const pendingSubject = new BehaviorSubject(false);
+  const pendingSubject = new Subject<boolean>();
 
   const toggle = (forceState?: boolean) => {
     pendingSubject.next(true);

@@ -1,5 +1,5 @@
 import { LocalParticipant, Room, Track } from 'livekit-client';
-import { Observable } from 'zen-observable/esm';
+import Observable from 'zen-observable';
 import { observeParticipantMedia } from '../observables/participant';
 import { observableWithStartValue, observableWithTrigger } from '../observables/utils';
 import { prefixClass } from '../styles-interface';

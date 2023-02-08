@@ -1,5 +1,5 @@
 import { DataPacket_Kind, LocalParticipant, RemoteParticipant, Room } from 'livekit-client';
-import { Observable } from 'zen-observable/esm';
+import Observable from 'zen-observable';
 import { createDataObserver } from './room';
 
 export const enum MessageChannel {

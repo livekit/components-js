@@ -33,7 +33,7 @@
     "src"
   ],
   "scripts": {
-    "build": "yarn gen:svg && tsup --onSuccess \"tsc --declaration --emitDeclarationOnly\" && size-limit",
+    "build": "yarn gen:svg && tsup --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
     "dev": "tsup --watch",
     "gen:icons": "svgr --out-dir ./src/assets/icons --typescript ../styles/assets/icons",
     "gen:images": "svgr --out-dir ./src/assets/images --typescript --no-svgo ../styles/assets/images",

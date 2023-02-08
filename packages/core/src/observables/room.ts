@@ -1,4 +1,4 @@
-import { Observable } from 'zen-observable/esm';
+import Observable from 'zen-observable';
 import { Participant, Room, RoomEvent, Track, TrackPublication } from 'livekit-client';
 import { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 import { observableWithStartValue, ofAsync } from './utils';

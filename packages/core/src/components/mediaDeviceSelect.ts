@@ -1,5 +1,6 @@
 import { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
-import { Observable, merge } from 'zen-observable/esm';
+import Observable from 'zen-observable';
+import { merge } from 'zen-observable/extras';
 import log from '../logger';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';

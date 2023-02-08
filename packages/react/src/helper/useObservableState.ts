@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Observable } from 'rxjs';
-
+import Observable from 'zen-observable';
 /**
  * @internal
  */

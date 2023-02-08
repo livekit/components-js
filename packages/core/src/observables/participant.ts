@@ -7,7 +7,7 @@ import {
   Track,
   TrackPublication,
 } from 'livekit-client';
-import { Observable } from 'zen-observable/esm';
+import Observable from 'zen-observable';
 import { observeRoomEvents } from './room';
 import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 import { observableWithStartValue } from './utils';

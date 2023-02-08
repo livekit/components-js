@@ -18,9 +18,7 @@ export function useConnectionQualityIndicator(props?: ConnectionQualityIndicator
     [p],
   );
 
-  const quality = useObservableState(connectionQualityObserver, ConnectionQuality.Unknown, [
-    connectionQualityObserver,
-  ]);
+  const quality = useObservableState(connectionQualityObserver, ConnectionQuality.Unknown);
 
   const elementProps = React.useMemo(() => {
     return { ...mergeProps(props, { className: className as string }), 'data-lk-quality': quality };

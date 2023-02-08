@@ -22,7 +22,8 @@ export interface ConnectionStatusProps extends React.HTMLAttributes<HTMLDivEleme
 export function useConnectionState(room?: Room) {
   // passed room takes precedence, if not supplied get current room context
   const r = useEnsureRoom(room);
-  const connectionState = useObservableState(connectionStateObserver(r), r.state, [r]);
+  const observable = React.useMemo(() => connectionStateObserver(r), [r]);
+  const connectionState = useObservableState(observable, r.state);
   return connectionState;
 }
 

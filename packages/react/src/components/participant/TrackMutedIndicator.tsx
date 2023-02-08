@@ -37,9 +37,7 @@ export const useTrackMutedIndicator = ({
     [className, props],
   );
 
-  const isMuted = useObservableState(mediaMutedObserver, !!p.getTrack(source)?.isMuted, [
-    mediaMutedObserver,
-  ]);
+  const isMuted = useObservableState(mediaMutedObserver, !!p.getTrack(source)?.isMuted);
 
   return { isMuted, htmlProps };
 };

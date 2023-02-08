@@ -15,12 +15,11 @@ function useStartAudio({ room, props }: UseStartAudioProps) {
     () => setupStartAudio(),
     [],
   );
-
-  const { canPlayAudio } = useObservableState(
-    roomAudioPlaybackAllowedObservable(room),
-    { canPlayAudio: false },
-    [roomAudioPlaybackAllowedObservable],
+  const observable = React.useMemo(
+    () => roomAudioPlaybackAllowedObservable(room),
+    [room, roomAudioPlaybackAllowedObservable],
   );
+  const { canPlayAudio } = useObservableState(observable, { canPlayAudio: false });
 
   const mergedProps = React.useMemo(
     () =>

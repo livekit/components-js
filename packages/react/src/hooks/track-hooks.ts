@@ -19,8 +19,8 @@ interface UseMediaTrackProps {
   props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
 }
 
-export const useMediaTrack = (source: Track.Source, opts?: UseMediaTrackProps) => {
-  const participant = useEnsureParticipant(opts?.participant);
+export const useMediaTrack = (source: Track.Source, options?: UseMediaTrackProps) => {
+  const participant = useEnsureParticipant(options?.participant);
   const [publication, setPublication] = React.useState(participant.getTrack(source));
   const [isMuted, setMuted] = React.useState(publication?.isMuted);
   const [isSubscribed, setSubscribed] = React.useState(publication?.isSubscribed);
@@ -48,17 +48,17 @@ export const useMediaTrack = (source: Track.Source, opts?: UseMediaTrackProps) =
       if (previousElement.current) {
         track.detach(previousElement.current);
       }
-      if (opts?.element?.current && !(isLocal(participant) && track?.kind === 'audio')) {
-        track.attach(opts.element.current);
+      if (options?.element?.current && !(isLocal(participant) && track?.kind === 'audio')) {
+        track.attach(options.element.current);
       }
     }
-    previousElement.current = opts?.element?.current;
+    previousElement.current = options?.element?.current;
     return () => {
       if (previousElement.current) {
         track?.detach(previousElement.current);
       }
     };
-  }, [track, opts?.element]);
+  }, [track, options?.element]);
 
   React.useEffect(() => {
     // Set the orientation of the video track.
@@ -78,7 +78,7 @@ export const useMediaTrack = (source: Track.Source, opts?: UseMediaTrackProps) =
     isMuted,
     isSubscribed,
     track,
-    elementProps: mergeProps(opts?.props, {
+    elementProps: mergeProps(options?.props, {
       className,
       'data-lk-local-participant': participant.isLocal,
       'data-lk-source': source,
@@ -109,7 +109,7 @@ export function useTrack(pub: TrackPublication) {
   return { publication, track };
 }
 
-type UseTracksOpts = {
+type UseTracksOptions = {
   excludePinnedTracks?: boolean;
   filter?: TrackFilter;
   filterDependencies?: Array<any>;
@@ -125,7 +125,7 @@ type UseTracksOpts = {
  * const pairs = useTracks({sources: [Track.Source.Camera], excludePinnedTracks: false})
  * ```
  */
-export function useTracks(sources: Array<Track.Source>, opts?: UseTracksOpts) {
+export function useTracks(sources: Array<Track.Source>, options?: UseTracksOptions) {
   const room = useRoomContext();
   const layoutContext = useMaybeLayoutContext();
 
@@ -144,22 +144,22 @@ export function useTracks(sources: Array<Track.Source>, opts?: UseTracksOpts) {
 
   React.useEffect(() => {
     let trackParticipantPairs: TrackParticipantPair[] = unfilteredPairs;
-    if (opts?.excludePinnedTracks && layoutContext) {
+    if (options?.excludePinnedTracks && layoutContext) {
       trackParticipantPairs = trackParticipantPairs.filter(
         (trackParticipantPair) =>
           !isParticipantTrackPinned(trackParticipantPair, layoutContext.pin.state),
       );
     }
-    if (opts?.filter) {
-      trackParticipantPairs = trackParticipantPairs.filter(opts.filter);
+    if (options?.filter) {
+      trackParticipantPairs = trackParticipantPairs.filter(options.filter);
     }
     setPairs(trackParticipantPairs);
   }, [
     unfilteredPairs,
-    opts?.filter,
-    opts?.excludePinnedTracks,
+    options?.filter,
+    options?.excludePinnedTracks,
     layoutContext,
-    opts?.filterDependencies,
+    options?.filterDependencies,
   ]);
 
   // React.useDebugValue(`Pairs count: ${pairs.length}`);

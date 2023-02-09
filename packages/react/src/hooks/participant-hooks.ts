@@ -166,12 +166,12 @@ export function useIsSpeaking(participant?: Participant) {
   return isSpeaking;
 }
 
-export interface UseIsMutedOpts {
+export interface UseIsMutedOptions {
   participant?: Participant;
 }
 
-export function useIsMuted(source: Track.Source, opts?: UseIsMutedOpts) {
-  const p = useEnsureParticipant(opts?.participant);
+export function useIsMuted(source: Track.Source, options?: UseIsMutedOptions) {
+  const p = useEnsureParticipant(options?.participant);
   const [isMuted, setIsMuted] = React.useState(!!p.getTrack(source)?.isMuted);
 
   React.useEffect(() => {
@@ -198,8 +198,8 @@ export interface UseParticipantPermissionsProps {
   participant?: Participant;
 }
 
-export function useParticipantPermissions(opts?: UseParticipantPermissionsProps) {
-  const p = useEnsureParticipant(opts?.participant);
+export function useParticipantPermissions(options?: UseParticipantPermissionsProps) {
+  const p = useEnsureParticipant(options?.participant);
   const permissionObserver = React.useMemo(() => participantPermissionObserver(p), [p]);
   const permissions = useObservableState(permissionObserver, p.permissions);
   return permissions;

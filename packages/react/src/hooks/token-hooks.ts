@@ -6,14 +6,14 @@ interface UserInfo {
   metadata?: string;
 }
 
-export interface UseTokenOpts {
+export interface UseTokenOptions {
   userInfo?: UserInfo;
 }
 
 export function useToken(
   tokenEndpoint: string | undefined,
   roomName: string,
-  options?: UseTokenOpts,
+  options?: UseTokenOptions,
 ) {
   const [token, setToken] = React.useState<string | undefined>(undefined);
 

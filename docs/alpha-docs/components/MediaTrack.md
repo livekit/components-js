@@ -26,8 +26,8 @@ The MediaTrack component is responsible for rendering participant media tracks l
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| participant | `Participant` |  |  |
 | source | `Source` |  |  |
+| participant | `Participant` |  |  |
 | onTrackClick | `((evt: ParticipantClickEvent) => void)` |  |  |
 | onSubscriptionStatusChanged | `((subscribed: boolean) => void)` |  |  |
 

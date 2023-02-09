@@ -17,5 +17,5 @@ The useRemoteParticipants
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| filter | `((participants: Participant[]) => Participant[])` |  |  |
+| filter | `((participant: RemoteParticipant) => boolean)` |  |  |
 

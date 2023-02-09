@@ -12,10 +12,3 @@ The useSortedParticipants hook returns the only the active speakers of all parti
 
 <!--USAGE_INSERT_MARKER->
 
-
-## Props
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| participants | `Participant[]` |  |  |
-

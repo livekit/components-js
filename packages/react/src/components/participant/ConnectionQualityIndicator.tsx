@@ -6,15 +6,15 @@ import { mergeProps } from '../../utils';
 import { getConnectionQualityIcon } from '../../assets/icons/util';
 import { useObservableState } from '../../helper/useObservableState';
 
-export interface ConnectionQualityIndicatorOpts {
+export interface ConnectionQualityIndicatorOptions {
   participant?: Participant;
 }
 
 export type ConnectionQualityIndicatorProps = React.HTMLAttributes<HTMLDivElement> &
-  ConnectionQualityIndicatorOpts;
+  ConnectionQualityIndicatorOptions;
 
-export function useConnectionQualityIndicator(opts?: ConnectionQualityIndicatorOpts) {
-  const p = useEnsureParticipant(opts?.participant);
+export function useConnectionQualityIndicator(options?: ConnectionQualityIndicatorOptions) {
+  const p = useEnsureParticipant(options?.participant);
 
   const { className, connectionQualityObserver } = React.useMemo(
     () => setupConnectionQualityIndicator(p),

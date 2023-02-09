@@ -15,5 +15,23 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| pub | `TrackPublication` |  |  |
+| kind | `Kind` |  |  |
+| trackName | `string` |  |  |
+| trackSid | `string` |  |  |
+| track | `Track` |  |  |
+| source | `Source` |  |  |
+| mimeType | `string` |  | MimeType of the published track |
+| dimensions | `Dimensions` |  | dimension of the original published stream, video-only |
+| simulcasted | `boolean` |  | true if track was simulcasted to server, video-only |
+| trackInfo | `TrackInfo` |  | @internal |
+| metadataMuted | `boolean` |  |  |
+| setTrack | `(track?: Track \| undefined) => void` |  | @internal |
+| isMuted | `boolean` |  |  |
+| isEnabled | `boolean` |  |  |
+| isSubscribed | `boolean` |  |  |
+| audioTrack | `LocalAudioTrack \| RemoteAudioTrack \| undefined` |  | an [AudioTrack] if this publication holds an audio track |
+| videoTrack | `LocalVideoTrack \| RemoteVideoTrack \| undefined` |  | an [VideoTrack] if this publication holds a video track |
+| handleMuted | `() => void` |  |  |
+| handleUnmuted | `() => void` |  |  |
+| updateInfo | `(info: TrackInfo) => void` |  | @internal |
 

@@ -12,34 +12,23 @@ export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivEl
   showMutedOnly?: boolean;
 }
 
-interface UseTrackMutedIndicatorProps {
-  source: Track.Source;
+interface UseTrackMutedIndicatorOptions {
   participant?: Participant;
-  props?: React.HtmlHTMLAttributes<HTMLDivElement>;
 }
 
-export const useTrackMutedIndicator = ({
-  source,
-  participant,
-  props,
-}: UseTrackMutedIndicatorProps) => {
-  const p = useEnsureParticipant(participant);
+export const useTrackMutedIndicator = (
+  source: Track.Source,
+  options: UseTrackMutedIndicatorOptions = {},
+) => {
+  const p = useEnsureParticipant(options.participant);
   const { className, mediaMutedObserver } = React.useMemo(
     () => setupTrackMutedIndicator(p, source),
     [p, source],
   );
 
-  const htmlProps = React.useMemo(
-    () =>
-      mergeProps(props, {
-        className,
-      }),
-    [className, props],
-  );
-
   const isMuted = useObservableState(mediaMutedObserver, !!p.getTrack(source)?.isMuted);
 
-  return { isMuted, htmlProps };
+  return { isMuted, className };
 };
 
 /**
@@ -63,7 +52,15 @@ export const TrackMutedIndicator = ({
   showMutedOnly,
   ...props
 }: TrackMutedIndicatorProps) => {
-  const { htmlProps, isMuted } = useTrackMutedIndicator({ source, participant, props });
+  const { className, isMuted } = useTrackMutedIndicator(source, { participant });
+
+  const htmlProps = React.useMemo(
+    () =>
+      mergeProps(props, {
+        className,
+      }),
+    [className, props],
+  );
 
   return (
     <>

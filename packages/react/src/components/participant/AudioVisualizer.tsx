@@ -6,7 +6,6 @@ import {
   Track,
 } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureParticipant } from '../../context';
 import { useMediaTrack } from '../../hooks';
 
 export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
@@ -14,7 +13,6 @@ export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
 }
 
 export function AudioVisualizer({ participant, ...props }: AudioVisualizerProps) {
-  const p = useEnsureParticipant(participant);
   const [volumeBars, setVolumeBars] = React.useState<Array<number>>([]);
 
   const svgWidth = 200;
@@ -24,7 +22,7 @@ export function AudioVisualizer({ participant, ...props }: AudioVisualizerProps)
   const volMultiplier = 50;
   const barCount = 7;
 
-  const { track } = useMediaTrack({ participant: p, source: Track.Source.Microphone });
+  const { track } = useMediaTrack(Track.Source.Microphone, { participant });
 
   React.useEffect(() => {
     if (!track || !(track instanceof LocalAudioTrack || track instanceof RemoteAudioTrack)) {

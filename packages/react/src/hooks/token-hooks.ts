@@ -6,30 +6,32 @@ interface UserInfo {
   metadata?: string;
 }
 
-export interface UseTokenProps {
-  tokenEndpoint?: string;
-  roomName: string;
+export interface UseTokenOptions {
   userInfo?: UserInfo;
 }
 
-export function useToken({ tokenEndpoint, userInfo, roomName }: UseTokenProps) {
+export function useToken(
+  tokenEndpoint: string | undefined,
+  roomName: string,
+  options: UseTokenOptions = {},
+) {
   const [token, setToken] = React.useState<string | undefined>(undefined);
 
   React.useEffect(() => {
     if (tokenEndpoint === undefined) {
       throw Error('token endpoint needs to be defined');
     }
-    if (userInfo?.identity === undefined) {
+    if (options.userInfo?.identity === undefined) {
       return;
     }
     const tokenFetcher = async () => {
       log.debug('fetching token');
-      const params = new URLSearchParams({ ...userInfo, roomName });
+      const params = new URLSearchParams({ ...options.userInfo, roomName });
       const res = await fetch(`${tokenEndpoint}?${params.toString()}`);
       const { accessToken } = await res.json();
       setToken(accessToken);
     };
     tokenFetcher();
-  }, [tokenEndpoint, roomName, userInfo]);
+  }, [tokenEndpoint, roomName, options]);
   return token;
 }

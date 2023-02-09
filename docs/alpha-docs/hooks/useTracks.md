@@ -16,13 +16,3 @@ const pairs = useTracks({sources: [Track.Source.Camera], excludePinnedTracks: fa
 
 <!--USAGE_INSERT_MARKER-->
 
-
-## Props
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| sources | `Source[]` |  |  |
-| excludePinnedTracks | `boolean` |  |  |
-| filter | `((value: TrackParticipantPair, index: number, array: TrackParticipantPair[]) => unknown)` |  |  |
-| filterDependencies | `any[]` |  |  |
-

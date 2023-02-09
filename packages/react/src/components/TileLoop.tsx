@@ -55,10 +55,7 @@ export function TileLoop({
   const participants = useParticipants();
   const layoutContext = useMaybeLayoutContext();
 
-  const secondaryPairs = useTracks({
-    sources: secondarySources,
-    excludePinnedTracks,
-  });
+  const secondaryPairs = useTracks(secondarySources, { excludePinnedTracks });
 
   return (
     <>

@@ -1,7 +1,7 @@
 import { log, screenShareObserver, ScreenShareTrackMap } from '@livekit/components-core';
 import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
-import { useMaybeRoomContext } from '../context';
+import { useEnsureRoom } from '../context';
 
 type ScreenShareOptions = {
   screenEl?: React.RefObject<HTMLVideoElement>;
@@ -26,8 +26,7 @@ export const useScreenShare = ({
     Participant | undefined
   >(undefined);
   const [allScreenShares, setAllScreenShares] = React.useState<ScreenShareTrackMap>([]);
-  const roomContext = useMaybeRoomContext();
-  const room = passedRoom ?? roomContext;
+  const room = useEnsureRoom(passedRoom);
   if (!room) {
     throw new Error('no room provided');
   }

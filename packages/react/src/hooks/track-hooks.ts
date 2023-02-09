@@ -10,17 +10,17 @@ import {
 } from '@livekit/components-core';
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
-import { useMaybeLayoutContext, useRoomContext } from '../context';
+import { useEnsureParticipant, useMaybeLayoutContext, useRoomContext } from '../context';
 import { mergeProps } from '../utils';
 
 interface UseMediaTrackProps {
-  participant: Participant;
-  source: Track.Source;
+  participant?: Participant;
   element?: React.RefObject<HTMLMediaElement>;
   props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
 }
 
-export const useMediaTrack = ({ participant, source, element, props }: UseMediaTrackProps) => {
+export const useMediaTrack = (source: Track.Source, options: UseMediaTrackProps = {}) => {
+  const participant = useEnsureParticipant(options.participant);
   const [publication, setPublication] = React.useState(participant.getTrack(source));
   const [isMuted, setMuted] = React.useState(publication?.isMuted);
   const [isSubscribed, setSubscribed] = React.useState(publication?.isSubscribed);
@@ -48,17 +48,17 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
       if (previousElement.current) {
         track.detach(previousElement.current);
       }
-      if (element?.current && !(isLocal(participant) && track?.kind === 'audio')) {
-        track.attach(element.current);
+      if (options.element?.current && !(isLocal(participant) && track?.kind === 'audio')) {
+        track.attach(options.element.current);
       }
     }
-    previousElement.current = element?.current;
+    previousElement.current = options.element?.current;
     return () => {
       if (previousElement.current) {
         track?.detach(previousElement.current);
       }
     };
-  }, [track, element]);
+  }, [track, options.element]);
 
   React.useEffect(() => {
     // Set the orientation of the video track.
@@ -78,7 +78,7 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
     isMuted,
     isSubscribed,
     track,
-    elementProps: mergeProps(props, {
+    elementProps: mergeProps(options.props, {
       className,
       'data-lk-local-participant': participant.isLocal,
       'data-lk-source': source,
@@ -89,11 +89,7 @@ export const useMediaTrack = ({ participant, source, element, props }: UseMediaT
   };
 };
 
-interface UseTrackProps {
-  pub?: TrackPublication;
-}
-
-export function useTrack({ pub }: UseTrackProps) {
+export function useTrack(pub: TrackPublication) {
   const [publication, setPublication] = React.useState(pub);
   const [track, setTrack] = React.useState(pub?.track);
   React.useEffect(() => {
@@ -113,8 +109,7 @@ export function useTrack({ pub }: UseTrackProps) {
   return { publication, track };
 }
 
-type UseTracksProps = {
-  sources?: Track.Source[];
+type UseTracksOptions = {
   excludePinnedTracks?: boolean;
   filter?: TrackFilter;
   filterDependencies?: Array<any>;
@@ -130,12 +125,7 @@ type UseTracksProps = {
  * const pairs = useTracks({sources: [Track.Source.Camera], excludePinnedTracks: false})
  * ```
  */
-export function useTracks({
-  sources,
-  excludePinnedTracks,
-  filter,
-  filterDependencies = [],
-}: UseTracksProps) {
+export function useTracks(sources: Array<Track.Source>, options: UseTracksOptions = {}) {
   const room = useRoomContext();
   const layoutContext = useMaybeLayoutContext();
 
@@ -143,10 +133,6 @@ export function useTracks({
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
 
   React.useEffect(() => {
-    if (!sources) {
-      log.warn('no sources provided');
-      return;
-    }
     const subscription = trackParticipantPairsObservable(room, sources).subscribe(
       (trackParticipantPairs: TrackParticipantPair[]) => {
         setUnfilteredPairs(trackParticipantPairs);
@@ -158,17 +144,23 @@ export function useTracks({
 
   React.useEffect(() => {
     let trackParticipantPairs: TrackParticipantPair[] = unfilteredPairs;
-    if (excludePinnedTracks && layoutContext) {
+    if (options?.excludePinnedTracks && layoutContext) {
       trackParticipantPairs = trackParticipantPairs.filter(
         (trackParticipantPair) =>
           !isParticipantTrackPinned(trackParticipantPair, layoutContext.pin.state),
       );
     }
-    if (filter) {
-      trackParticipantPairs = trackParticipantPairs.filter(filter);
+    if (options?.filter) {
+      trackParticipantPairs = trackParticipantPairs.filter(options.filter);
     }
     setPairs(trackParticipantPairs);
-  }, [unfilteredPairs, excludePinnedTracks, filter, layoutContext, ...filterDependencies]);
+  }, [
+    unfilteredPairs,
+    options?.filter,
+    options?.excludePinnedTracks,
+    layoutContext,
+    options?.filterDependencies,
+  ]);
 
   // React.useDebugValue(`Pairs count: ${pairs.length}`);
 

@@ -46,8 +46,7 @@ export const TrackLoop = ({
   filterDependencies,
   ...props
 }: React.PropsWithChildren<TrackLoopProps>) => {
-  const trackSourceParticipantPairs = useTracks({
-    sources: sources ?? trackLoopDefaults.sources,
+  const trackSourceParticipantPairs = useTracks(sources ?? trackLoopDefaults.sources, {
     excludePinnedTracks: excludePinnedTracks ?? trackLoopDefaults.excludePinnedTracks,
     filter,
     filterDependencies: filterDependencies ?? trackLoopDefaults.filterDependencies,

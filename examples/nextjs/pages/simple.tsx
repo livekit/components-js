@@ -19,9 +19,7 @@ const SimpleExample: NextPage = () => {
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
-  const token = useToken({
-    tokenEndpoint: process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT,
-    roomName,
+  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
     userInfo: {
       identity: userIdentity,
       name: 'my-name',

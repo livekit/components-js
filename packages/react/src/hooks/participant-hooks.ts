@@ -21,7 +21,7 @@ import {
 import { useEnsureParticipant, useRoomContext } from '../context';
 import { useObservableState } from '../helper/useObservableState';
 
-export interface UseParticipantsProps {
+export interface UseParticipantsOptions {
   filter?: ParticipantFilter;
   filterDependencies?: Array<unknown>;
 }
@@ -30,22 +30,22 @@ export interface UseParticipantsProps {
  * The useParticipants hook returns all participants of the current room.
  * It is possible to filter the participants.
  */
-export const useParticipants = (props?: UseParticipantsProps) => {
+export const useParticipants = (options: UseParticipantsOptions = {}) => {
   const [participants, setParticipants] = React.useState<Participant[]>([]);
   const remoteParticipants = useRemoteParticipants({ filter: undefined });
   const { localParticipant } = useLocalParticipant();
   const filterDependencies = React.useMemo(
-    () => props?.filterDependencies ?? [],
-    [props?.filterDependencies],
+    () => options?.filterDependencies ?? [],
+    [options?.filterDependencies],
   );
 
   React.useEffect(() => {
     let all = [localParticipant, ...remoteParticipants];
-    if (props?.filter) {
-      all = all.filter(props.filter);
+    if (options?.filter) {
+      all = all.filter(options.filter);
     }
     setParticipants(all);
-  }, [remoteParticipants, localParticipant, props?.filter, ...filterDependencies]);
+  }, [remoteParticipants, localParticipant, options?.filter, ...filterDependencies]);
 
   return participants;
 };
@@ -106,25 +106,25 @@ export const useRemoteParticipant = (identity: string): RemoteParticipant | unde
   return participant;
 };
 
+export interface UseRemoteParticipantsOptions {
+  filter?: (participant: RemoteParticipant) => boolean;
+}
+
 /**
  * The useRemoteParticipants
  */
-export const useRemoteParticipants = ({
-  filter,
-}: {
-  filter?: (participant: RemoteParticipant) => boolean;
-}) => {
+export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}) => {
   const room = useRoomContext();
   const [participants, setParticipants] = React.useState<RemoteParticipant[]>([]);
 
   const handleUpdate = React.useCallback(
     (participants: RemoteParticipant[]) => {
-      if (filter) {
-        participants = participants.filter(filter);
+      if (options.filter) {
+        participants = participants.filter(options.filter);
       }
       setParticipants(participants);
     },
-    [filter],
+    [options.filter],
   );
   React.useEffect(() => {
     const listener = connectedParticipantsObserver(room).subscribe(handleUpdate);
@@ -146,7 +146,7 @@ export const useSpeakingParticipants = () => {
 /**
  * The useSortedParticipants hook returns the only the active speakers of all participants.
  */
-export function useSortedParticipants({ participants }: { participants: Array<Participant> }) {
+export function useSortedParticipants(participants: Array<Participant>) {
   const [sortedParticipants, setSortedParticipants] = React.useState(
     sortParticipantsByVolume(participants),
   );
@@ -166,13 +166,12 @@ export function useIsSpeaking(participant?: Participant) {
   return isSpeaking;
 }
 
-export interface UseIsMutedProps {
-  source: Track.Source;
+export interface UseIsMutedOptions {
   participant?: Participant;
 }
 
-export function useIsMuted({ source, participant }: UseIsMutedProps) {
-  const p = useEnsureParticipant(participant);
+export function useIsMuted(source: Track.Source, options: UseIsMutedOptions = {}) {
+  const p = useEnsureParticipant(options.participant);
   const [isMuted, setIsMuted] = React.useState(!!p.getTrack(source)?.isMuted);
 
   React.useEffect(() => {
@@ -199,8 +198,8 @@ export interface UseParticipantPermissionsProps {
   participant?: Participant;
 }
 
-export function useParticipantPermissions(props?: UseParticipantPermissionsProps) {
-  const p = useEnsureParticipant(props?.participant);
+export function useParticipantPermissions(options: UseParticipantPermissionsProps = {}) {
+  const p = useEnsureParticipant(options.participant);
   const permissionObserver = React.useMemo(() => participantPermissionObserver(p), [p]);
   const permissions = useObservableState(permissionObserver, p.permissions);
   return permissions;

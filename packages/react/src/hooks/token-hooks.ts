@@ -13,7 +13,7 @@ export interface UseTokenOptions {
 export function useToken(
   tokenEndpoint: string | undefined,
   roomName: string,
-  options?: UseTokenOptions,
+  options: UseTokenOptions = {},
 ) {
   const [token, setToken] = React.useState<string | undefined>(undefined);
 
@@ -21,7 +21,7 @@ export function useToken(
     if (tokenEndpoint === undefined) {
       throw Error('token endpoint needs to be defined');
     }
-    if (options?.userInfo?.identity === undefined) {
+    if (options.userInfo?.identity === undefined) {
       return;
     }
     const tokenFetcher = async () => {

@@ -18,9 +18,9 @@ interface UseTrackMutedIndicatorOptions {
 
 export const useTrackMutedIndicator = (
   source: Track.Source,
-  options?: UseTrackMutedIndicatorOptions,
+  options: UseTrackMutedIndicatorOptions = {},
 ) => {
-  const p = useEnsureParticipant(options?.participant);
+  const p = useEnsureParticipant(options.participant);
   const { className, mediaMutedObserver } = React.useMemo(
     () => setupTrackMutedIndicator(p, source),
     [p, source],

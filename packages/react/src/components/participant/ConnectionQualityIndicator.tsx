@@ -13,8 +13,8 @@ export interface ConnectionQualityIndicatorOptions {
 export type ConnectionQualityIndicatorProps = React.HTMLAttributes<HTMLDivElement> &
   ConnectionQualityIndicatorOptions;
 
-export function useConnectionQualityIndicator(options?: ConnectionQualityIndicatorOptions) {
-  const p = useEnsureParticipant(options?.participant);
+export function useConnectionQualityIndicator(options: ConnectionQualityIndicatorOptions = {}) {
+  const p = useEnsureParticipant(options.participant);
 
   const { className, connectionQualityObserver } = React.useMemo(
     () => setupConnectionQualityIndicator(p),

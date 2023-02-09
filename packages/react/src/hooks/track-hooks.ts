@@ -19,8 +19,8 @@ interface UseMediaTrackProps {
   props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
 }
 
-export const useMediaTrack = (source: Track.Source, options?: UseMediaTrackProps) => {
-  const participant = useEnsureParticipant(options?.participant);
+export const useMediaTrack = (source: Track.Source, options: UseMediaTrackProps = {}) => {
+  const participant = useEnsureParticipant(options.participant);
   const [publication, setPublication] = React.useState(participant.getTrack(source));
   const [isMuted, setMuted] = React.useState(publication?.isMuted);
   const [isSubscribed, setSubscribed] = React.useState(publication?.isSubscribed);
@@ -48,17 +48,17 @@ export const useMediaTrack = (source: Track.Source, options?: UseMediaTrackProps
       if (previousElement.current) {
         track.detach(previousElement.current);
       }
-      if (options?.element?.current && !(isLocal(participant) && track?.kind === 'audio')) {
+      if (options.element?.current && !(isLocal(participant) && track?.kind === 'audio')) {
         track.attach(options.element.current);
       }
     }
-    previousElement.current = options?.element?.current;
+    previousElement.current = options.element?.current;
     return () => {
       if (previousElement.current) {
         track?.detach(previousElement.current);
       }
     };
-  }, [track, options?.element]);
+  }, [track, options.element]);
 
   React.useEffect(() => {
     // Set the orientation of the video track.
@@ -78,7 +78,7 @@ export const useMediaTrack = (source: Track.Source, options?: UseMediaTrackProps
     isMuted,
     isSubscribed,
     track,
-    elementProps: mergeProps(options?.props, {
+    elementProps: mergeProps(options.props, {
       className,
       'data-lk-local-participant': participant.isLocal,
       'data-lk-source': source,
@@ -125,7 +125,7 @@ type UseTracksOptions = {
  * const pairs = useTracks({sources: [Track.Source.Camera], excludePinnedTracks: false})
  * ```
  */
-export function useTracks(sources: Array<Track.Source>, options?: UseTracksOptions) {
+export function useTracks(sources: Array<Track.Source>, options: UseTracksOptions = {}) {
   const room = useRoomContext();
   const layoutContext = useMaybeLayoutContext();
 

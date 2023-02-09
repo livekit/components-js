@@ -5,8 +5,8 @@ import { useEnsureParticipant } from '../../context';
 import { useObservableState } from '../../helper/useObservableState';
 import { mergeProps } from '../../utils';
 
-export function useParticipantInfo(props?: ParticipantInfoProps) {
-  const p = useEnsureParticipant(props?.participant);
+export function useParticipantInfo(props: UseParticipantInfoOptions = {}) {
+  const p = useEnsureParticipant(props.participant);
   const infoObserver = React.useMemo(() => participantInfoObserver(p), [p]);
   const { identity, name, metadata } = useObservableState(infoObserver, {
     name: p.name,
@@ -17,10 +17,11 @@ export function useParticipantInfo(props?: ParticipantInfoProps) {
   return { identity, name, metadata };
 }
 
-export type ParticipantInfoProps = {
+export type UseParticipantInfoOptions = {
   participant?: Participant;
 };
-export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement> & ParticipantInfoProps;
+export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement> &
+  UseParticipantInfoOptions;
 
 /**
  * The ParticipantName component displays the name of the participant as a string within an HTML span element.

@@ -2,7 +2,7 @@ import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useMaybeLayoutContext, useLayoutContext } from '../../context';
 import { mergeProps } from '../../utils';
-import { ParticipantFilter, TrackParticipantPair } from '@livekit/components-core';
+import { IParticipantFilter, TrackParticipantPair } from '@livekit/components-core';
 import { TileLoop } from '../TileLoop';
 import { ParticipantTile } from '../../prefabs/ParticipantTile';
 import { ParticipantClickEvent } from '@livekit/components-core';
@@ -72,18 +72,16 @@ export function FocusLayout({ trackParticipantPair, ...props }: FocusLayoutProps
 }
 
 export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement> {
-  filter?: ParticipantFilter;
-  filterDependencies?: [];
+  filters?: IParticipantFilter[];
 }
 
-export function CarouselView({ filter, filterDependencies, ...props }: CarouselViewProps) {
+export function CarouselView({ filters, ...props }: CarouselViewProps) {
   return (
     <aside {...props}>
       {props.children ?? (
         <TileLoop
           sources={[Track.Source.Camera, Track.Source.ScreenShare]}
-          filter={filter}
-          filterDependencies={filterDependencies}
+          filters={filters}
           excludePinnedTracks={true}
         />
       )}

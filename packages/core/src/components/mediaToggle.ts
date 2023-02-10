@@ -1,28 +1,11 @@
 import { LocalParticipant, Room, Track } from 'livekit-client';
 import { Subject, map, startWith } from 'rxjs';
+import { getSourceEnabled } from '../helper/sources';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 
 export function setupMediaToggle(source: Track.Source, room: Room) {
   const { localParticipant } = room;
-
-  const getSourceEnabled = (source: Track.Source, localParticipant: LocalParticipant) => {
-    let isEnabled = false;
-    switch (source) {
-      case Track.Source.Camera:
-        isEnabled = localParticipant.isCameraEnabled;
-        break;
-      case Track.Source.Microphone:
-        isEnabled = localParticipant.isMicrophoneEnabled;
-        break;
-      case Track.Source.ScreenShare:
-        isEnabled = localParticipant.isScreenShareEnabled;
-        break;
-      default:
-        break;
-    }
-    return isEnabled;
-  };
 
   const enabledObserver = observeParticipantMedia(localParticipant).pipe(
     map((media) => {

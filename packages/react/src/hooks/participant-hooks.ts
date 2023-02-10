@@ -4,7 +4,6 @@ import {
   Participant,
   RemoteParticipant,
   Room,
-  RoomEvent,
   Track,
   TrackPublication,
 } from 'livekit-client';
@@ -18,6 +17,7 @@ import {
   observeParticipantMedia,
   participantPermissionObserver,
   connectedParticipantObserver,
+  IParticipantFilter,
 } from '@livekit/components-core';
 import { useEnsureParticipant, useRoomContext } from '../context';
 import { useObservableState } from '../helper/useObservableState';
@@ -32,17 +32,18 @@ export interface UseParticipantsOptions {
  */
 export const useParticipants = (options: UseParticipantsOptions = {}) => {
   const [participants, setParticipants] = React.useState<Participant[]>([]);
-  const remoteParticipants = useRemoteParticipants({
-    filters: options.filters,
-  });
+  const remoteParticipants = useRemoteParticipants();
   const { localParticipant } = useLocalParticipant();
+  const room = useRoomContext();
 
   React.useEffect(() => {
     const all = [localParticipant, ...remoteParticipants];
     setParticipants(all);
   }, [remoteParticipants, localParticipant]);
 
-  return participants;
+  const filteredParticipants = useParticipantsFilter(room, participants, options.filters);
+
+  return filteredParticipants;
 };
 
 /**
@@ -101,97 +102,76 @@ export const useRemoteParticipant = (identity: string): RemoteParticipant | unde
   return participant;
 };
 
-export interface UseRemoteParticipantsOptions {
-  filters?: IParticipantFilter[];
-}
+const useParticipantsFilter = <T extends Participant>(
+  room: Room,
+  participants: T[],
+  filters?: IParticipantFilter[],
+) => {
+  const [filteredParticipants, setFilteredParticipants] = React.useState(participants);
+  const [dirty, setDirty] = React.useState<boolean>(true);
 
-/**
- * Filter participants by:
- * - speaking (is currently speaking)
- * - viewer (no permissions to publish)
- * - publisher (is actively publishing)
- * - published source
- * - identity
- * - metadata
- * - muted state
- */
-
-export interface IParticipantFilter {
-  subscribe: (room: Room, onNeedsUpdate: () => void) => () => void;
-  filter: (participants: RemoteParticipant[]) => RemoteParticipant[];
-}
-
-export const viewerFilter = (): IParticipantFilter => {
-  const filter = (participants: RemoteParticipant[]) => {
-    participants.filter((p) => p.permissions?.canSubscribe && !p.permissions.canPublishData);
-    return participants;
-  };
-
-  const subscribe = (room: Room, onNeedsUpdate: () => void) => {
-    room.on(RoomEvent.ParticipantPermissionsChanged, onNeedsUpdate);
+  React.useEffect(() => {
+    const unsubs: Array<() => void> = [];
+    filters?.forEach((filter) => {
+      if (filter.subscribe) {
+        unsubs.push(filter.subscribe(room, () => setDirty(true)));
+      }
+    });
     return () => {
-      room.off(RoomEvent.ParticipantPermissionsChanged, onNeedsUpdate);
+      unsubs.forEach((unsubscribe) => unsubscribe());
     };
-  };
+  }, [filters, room]);
 
-  return { subscribe, filter };
-};
+  const filter = React.useCallback(
+    (ps: T[]) => {
+      if (filters) {
+        console.log('applying filters', filters, ps);
+        const filteredParticipants = filters.reduce((d, f) => {
+          console.log('current value', d);
+          const filtered = f.filter(d);
+          console.log('new value', filtered);
+          return filtered;
+        }, ps);
+        console.log(
+          'filtered',
+          filteredParticipants,
+          filteredParticipants.some((p) => p.isScreenShareEnabled),
+        );
+        setFilteredParticipants(filteredParticipants);
+      } else {
+        console.log('setting ps without filter', ps);
+        setFilteredParticipants(ps);
+      }
+    },
+    [filters],
+  );
 
-export const metadataFilter = (predicate: (metadata?: string) => boolean): IParticipantFilter => {
-  const filter = (participants: RemoteParticipant[]) => {
-    participants.filter((p) => predicate(p.metadata));
-    return participants;
-  };
+  React.useEffect(() => {
+    console.log('reapplying filter');
+    filter(participants);
+    if (dirty) {
+      setDirty(false);
+    }
+  }, [dirty, participants, filter]);
 
-  const subscribe = (room: Room, onNeedsUpdate: () => void) => {
-    room.on(RoomEvent.ParticipantMetadataChanged, onNeedsUpdate);
-    return () => {
-      room.off(RoomEvent.ParticipantMetadataChanged, onNeedsUpdate);
-    };
-  };
-
-  return { subscribe, filter };
+  return filteredParticipants;
 };
 
 /**
  * The useRemoteParticipants
  */
-export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}) => {
+export const useRemoteParticipants = (options: UseParticipantsOptions = {}) => {
   const room = useRoomContext();
   const [participants, setParticipants] = React.useState<RemoteParticipant[]>([]);
-  const [dirty, setDirty] = React.useState<boolean>(true);
+
+  const filteredParticipants = useParticipantsFilter(room, participants, options.filters);
 
   React.useEffect(() => {
-    const unsubs: Array<() => void> = [];
-    options.filters?.forEach((filter) => {
-      unsubs.push(filter.subscribe(room, () => setDirty(true)));
-    });
-    return () => {
-      unsubs.forEach((unsubscribe) => unsubscribe());
-    };
-  });
-
-  const filter = React.useCallback(
-    (participants: RemoteParticipant[]) => {
-      if (options.filters) {
-        const filteredParticipants = options.filters?.reduce((d, f) => f.filter(d), participants);
-        setParticipants(filteredParticipants);
-      }
-    },
-    [options.filters],
-  );
-
-  React.useEffect(() => {
-    if (dirty) {
-      filter(Array.from(room.participants.values()));
-    }
-  }, [dirty]);
-
-  React.useEffect(() => {
-    const listener = connectedParticipantsObserver(room).subscribe(filter);
+    const listener = connectedParticipantsObserver(room).subscribe(setParticipants);
     return () => listener.unsubscribe();
-  }, [filter, room]);
-  return participants;
+  }, [room]);
+
+  return filteredParticipants;
 };
 
 /**

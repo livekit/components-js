@@ -1,4 +1,4 @@
-import { PinState } from '@livekit/components-core';
+import { ParticipantFilter, PinState } from '@livekit/components-core';
 import {
   DisconnectButton,
   LiveKitRoom,
@@ -77,10 +77,7 @@ const CustomGridLayout = ({ room }: { room?: Room }) => {
       <ParticipantLoop>
         <CustomParticipantTile />
       </ParticipantLoop>
-      <ParticipantLoop
-        filter={(participant) => participant.isScreenShareEnabled}
-        filterDependencies={[screenShareTrack, allScreenShares]}
-      >
+      <ParticipantLoop filters={[ParticipantFilter.sourceEnabled(Track.Source.ScreenShare)]}>
         <CustomScreenShareView />
       </ParticipantLoop>
     </div>

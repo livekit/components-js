@@ -24,5 +24,7 @@ export * from './observables/participant';
 export * from './observables/track';
 export * from './observables/dataChannel';
 
+export * from './participant-filters';
+
 import logger from './logger';
 export const log = logger;

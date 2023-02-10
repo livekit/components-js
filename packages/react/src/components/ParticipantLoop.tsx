@@ -1,4 +1,4 @@
-import { ParticipantFilter } from '@livekit/components-core';
+import { IParticipantFilter } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
@@ -7,8 +7,7 @@ import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
 type ParticipantLoopProps = {
-  filterDependencies?: Array<unknown>;
-  filter?: ParticipantFilter;
+  filters?: IParticipantFilter[];
 };
 
 /**
@@ -34,12 +33,10 @@ type ParticipantLoopProps = {
  * @see `ParticipantTile` component
  */
 export const ParticipantLoop = ({
-  filter,
-  filterDependencies,
+  filters,
   ...props
 }: React.PropsWithChildren<ParticipantLoopProps>) => {
-  const participants = useParticipants({ filter, filterDependencies });
-
+  const participants = useParticipants({ filters });
   return (
     <>
       {participants.map((participant) => (

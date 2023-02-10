@@ -1,4 +1,4 @@
-import { isParticipantSourcePinned, ParticipantFilter } from '@livekit/components-core';
+import { IParticipantFilter, isParticipantSourcePinned } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext, useMaybeLayoutContext } from '../context';
@@ -9,8 +9,7 @@ import { cloneSingleChild } from '../utils';
 interface TileLoopProps {
   sources?: [Track.Source, ...Track.Source[]];
   excludePinnedTracks?: boolean;
-  filter?: ParticipantFilter;
-  filterDependencies?: [];
+  filters?: IParticipantFilter[];
 }
 
 const DefaultTileLoopProps = {
@@ -44,6 +43,7 @@ const DefaultTileLoopProps = {
 export function TileLoop({
   sources,
   excludePinnedTracks,
+  filters,
   ...props
 }: React.PropsWithChildren<TileLoopProps>): React.FunctionComponentElement<
   React.PropsWithChildren<TileLoopProps>
@@ -52,7 +52,7 @@ export function TileLoop({
   const [secondarySources] = React.useState(
     sources ? sources.slice(1) : DefaultTileLoopProps.sources.slice(1),
   );
-  const participants = useParticipants();
+  const participants = useParticipants({ filters });
   const layoutContext = useMaybeLayoutContext();
 
   const secondaryPairs = useTracks(secondarySources, { excludePinnedTracks });

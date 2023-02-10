@@ -23,7 +23,7 @@ describe.skipIf(SKIP_PERFORMANCE_TESTS)('Basic performance test setup', () => {
     'Test VideoConference: no RoomEvents emitted',
     async ({ onRender }) =>
       new Promise<void>((done) => {
-        const room = new Room({});
+        const room = new Room();
         render(
           <Profiler id="_" onRender={onRender}>
             <LiveKitRoom token="" serverUrl="" room={room}>
@@ -38,24 +38,23 @@ describe.skipIf(SKIP_PERFORMANCE_TESTS)('Basic performance test setup', () => {
 
   it(
     'Test VideoConference: RoomEvents ParticipantConnected emitted.',
-    async ({ onRender }) =>
+    async ({ onRender, logNote }) =>
       new Promise<void>((done) => {
-        const room = new Room({});
+        const room = new Room();
         render(
-          <Profiler id="_" onRender={onRender}>
+          <Profiler id="room" onRender={onRender}>
             <LiveKitRoom token="" serverUrl="" room={room}>
               <VideoConference></VideoConference>
             </LiveKitRoom>
           </Profiler>,
         );
         room.on(RoomEvent.ParticipantConnected, () => {
-          console.log('Hello callback');
           done();
         });
         act(() => {
+          logNote('fire ParticipantConnected');
           room.emit(RoomEvent.ParticipantConnected, new RemoteParticipant());
         });
-        // done();
       }),
     100,
   );

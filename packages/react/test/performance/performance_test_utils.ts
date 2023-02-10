@@ -32,7 +32,14 @@ export const beforeEachPerformanceTest = async (context: TestContext) => {
   ) {
     context.logs.push(new Row(id, phase, actualDuration, baseDuration));
   }
+  function logNote(note: string) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    /** @ts-ignore */
+    context.logs.push({ id: note, phase: '---', actualDuration: '---', baseDuration: '---' });
+  }
+
   context.onRender = logRenderResults;
+  context.logNote = logNote;
   context.logs = [];
   global.ResizeObserver = ResizeObserver;
   return context;

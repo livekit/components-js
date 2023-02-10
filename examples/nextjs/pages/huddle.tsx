@@ -77,7 +77,7 @@ const CustomGridLayout = ({ room }: { room?: Room }) => {
       <ParticipantLoop>
         <CustomParticipantTile />
       </ParticipantLoop>
-      <ParticipantLoop filters={[ParticipantFilter.sourceEnabled(Track.Source.ScreenShare)]}>
+      <ParticipantLoop filters={[ParticipantFilter.sourcesEnabled([Track.Source.ScreenShare])]}>
         <CustomScreenShareView />
       </ParticipantLoop>
     </div>

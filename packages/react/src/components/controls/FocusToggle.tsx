@@ -18,8 +18,11 @@ function useFocusToggle({ trackSource, participant, props }: useFocusToggleProps
 
   const inFocus: boolean = React.useMemo(() => {
     const track = p.getTrack(trackSource);
-    if (layoutContext?.pin.state && track) {
-      return isParticipantTrackPinned({ participant: p, track: track }, layoutContext.pin.state);
+    if (layoutContext?.pin.observable.getValue() && track) {
+      return isParticipantTrackPinned(
+        { participant: p, track: track },
+        layoutContext.pin.observable.getValue(),
+      );
     } else {
       return false;
     }
@@ -35,19 +38,16 @@ function useFocusToggle({ trackSource, participant, props }: useFocusToggleProps
 
           // Set or clear focus based on current focus state.
           const track = p.getTrack(trackSource);
-          if (layoutContext?.pin.dispatch && track) {
+          if (layoutContext?.pin && track) {
             if (inFocus) {
-              layoutContext.pin.dispatch({
-                msg: 'clear_pin',
-              });
+              layoutContext.pin.observable.next([]);
             } else {
-              layoutContext.pin.dispatch({
-                msg: 'set_pin',
-                trackParticipantPair: {
+              layoutContext.pin.observable.next([
+                {
                   participant: p,
                   track,
                 },
-              });
+              ]);
             }
           }
         },

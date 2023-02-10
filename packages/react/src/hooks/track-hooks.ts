@@ -11,6 +11,7 @@ import {
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureParticipant, useMaybeLayoutContext, useRoomContext } from '../context';
+import { useObservableState } from '../helper';
 import { mergeProps } from '../utils';
 
 interface UseMediaTrackProps {
@@ -127,7 +128,8 @@ type UseTracksOptions = {
  */
 export function useTracks(sources: Array<Track.Source>, options: UseTracksOptions = {}) {
   const room = useRoomContext();
-  const layoutContext = useMaybeLayoutContext();
+  const pinContext = useMaybeLayoutContext()?.pin;
+  const pinState = useObservableState(pinContext?.observable, pinContext?.observable.getValue());
 
   const [unfilteredPairs, setUnfilteredPairs] = React.useState<TrackParticipantPair[]>([]);
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
@@ -144,10 +146,9 @@ export function useTracks(sources: Array<Track.Source>, options: UseTracksOption
 
   React.useEffect(() => {
     let trackParticipantPairs: TrackParticipantPair[] = unfilteredPairs;
-    if (options?.excludePinnedTracks && layoutContext) {
+    if (options?.excludePinnedTracks && pinState) {
       trackParticipantPairs = trackParticipantPairs.filter(
-        (trackParticipantPair) =>
-          !isParticipantTrackPinned(trackParticipantPair, layoutContext.pin.state),
+        (trackParticipantPair) => !isParticipantTrackPinned(trackParticipantPair, pinState),
       );
     }
     if (options?.filter) {
@@ -158,7 +159,7 @@ export function useTracks(sources: Array<Track.Source>, options: UseTracksOption
     unfilteredPairs,
     options?.filter,
     options?.excludePinnedTracks,
-    layoutContext,
+    pinState,
     options?.filterDependencies,
   ]);
 

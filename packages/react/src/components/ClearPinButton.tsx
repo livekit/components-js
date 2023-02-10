@@ -2,11 +2,14 @@ import { setupClearPinButton } from '@livekit/components-core';
 import * as React from 'react';
 import { mergeProps } from '../utils';
 import { useLayoutContext } from '../context';
+import { useObservableState } from '../helper';
 
 export type ClearPinButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export function useClearPinButton(props: ClearPinButtonProps) {
-  const { state, dispatch } = useLayoutContext().pin;
+  const { observable } = useLayoutContext().pin;
+
+  const state = useObservableState(observable, observable?.getValue());
 
   const buttonProps = React.useMemo(() => {
     const { className } = setupClearPinButton();
@@ -14,11 +17,11 @@ export function useClearPinButton(props: ClearPinButtonProps) {
       className,
       disabled: !state?.length,
       onClick: () => {
-        if (dispatch) dispatch({ msg: 'clear_pin' });
+        observable.next([]);
       },
     });
     return mergedProps;
-  }, [props, dispatch, state]);
+  }, [props, state]);
 
   return { buttonProps };
 }

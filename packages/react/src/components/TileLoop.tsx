@@ -2,6 +2,7 @@ import { IParticipantFilter, isParticipantSourcePinned } from '@livekit/componen
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext, useMaybeLayoutContext } from '../context';
+import { useObservableState } from '../helper';
 import { useParticipants, useTracks } from '../hooks';
 import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
@@ -54,6 +55,7 @@ export function TileLoop({
   );
   const participants = useParticipants({ filters });
   const layoutContext = useMaybeLayoutContext();
+  const pinState = useObservableState(layoutContext?.pin.observable, undefined);
 
   const secondaryPairs = useTracks(secondarySources, { excludePinnedTracks });
 
@@ -62,7 +64,7 @@ export function TileLoop({
       {participants.map((participant) => (
         <ParticipantContext.Provider value={participant} key={participant.identity}>
           {(!excludePinnedTracks ||
-            !isParticipantSourcePinned(participant, mainSource, layoutContext?.pin.state)) && (
+            !isParticipantSourcePinned(participant, mainSource, pinState)) && (
             <ParticipantTile trackSource={mainSource} />
           )}
 

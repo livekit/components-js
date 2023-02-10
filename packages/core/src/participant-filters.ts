@@ -17,10 +17,10 @@ export interface IParticipantFilter {
   filter: <T extends Participant>(participants: T[]) => T[];
 }
 
-const filterByEnabledSource = (source: Track.Source): IParticipantFilter => {
+const filterByEnabledSources = (sources: Track.Source[]): IParticipantFilter => {
   const filter = <T extends Participant>(participants: T[]) => {
     // console.log('filter by enabled source', source);
-    return participants.filter((p) => getSourceEnabled(source, p));
+    return participants.filter((p) => sources.some((source) => getSourceEnabled(source, p)));
   };
 
   const subscribe = (room: Room, onNeedsUpdate: () => void) => {
@@ -80,27 +80,9 @@ const filterBySubscriptions = (): IParticipantFilter => {
   return { subscribe, filter };
 };
 
-// const filterByPublishedSource = (sources: Track.Source[]): IParticipantFilter => {
-//   const filter = <T extends Participant>(participants: T[]) => {
-//     participants.filter((p) => p.getTracks().some((track) => sources.includes(track.source)));
-//     return participants;
-//   };
-
-//   const subscribe = (room: Room, onNeedsUpdate: () => void) => {
-//     room.on(RoomEvent.TrackPublished, onNeedsUpdate);
-//     room.on(RoomEvent.TrackUnpublished, onNeedsUpdate);
-//     return () => {
-//       room.off(RoomEvent.TrackPublished, onNeedsUpdate);
-//       room.off(RoomEvent.TrackUnpublished, onNeedsUpdate);
-//     };
-//   };
-
-//   return { subscribe, filter };
-// };
-
 export const ParticipantFilter = {
   metaData: filterByMetadata,
   identity: filterByIdentity,
   subscribed: filterBySubscriptions,
-  sourceEnabled: filterByEnabledSource,
+  sourcesEnabled: filterByEnabledSources,
 };

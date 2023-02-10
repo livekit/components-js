@@ -20,6 +20,7 @@ import { mergeProps } from '../utils';
 import { FocusToggle } from '../components/controls/FocusToggle';
 import { ParticipantPlaceholder } from '../assets/images';
 import { ScreenShareIcon } from '../assets/icons';
+import { useObservableState } from '../helper';
 
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
@@ -114,21 +115,21 @@ export const ParticipantTile = ({
     onParticipantClick,
   });
 
-  const layoutContext = useMaybeLayoutContext();
+  const pinContext = useMaybeLayoutContext()?.pin;
+  const pinState = useObservableState(pinContext?.observable, pinContext?.observable.getValue());
 
   const handleSubscribe = React.useCallback(
     (subscribed: boolean) => {
       if (
         trackSource &&
         !subscribed &&
-        layoutContext &&
-        layoutContext.pin.dispatch &&
-        isParticipantSourcePinned(p, trackSource, layoutContext.pin.state)
+        pinState &&
+        isParticipantSourcePinned(p, trackSource, pinState)
       ) {
-        layoutContext.pin.dispatch({ msg: 'clear_pin' });
+        pinContext?.observable.next([]);
       }
     },
-    [p, layoutContext, trackSource],
+    [p, pinState, pinContext?.observable, trackSource],
   );
 
   return (

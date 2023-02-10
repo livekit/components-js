@@ -1,11 +1,12 @@
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { useMaybeLayoutContext, useLayoutContext } from '../../context';
+import { useLayoutContext } from '../../context';
 import { mergeProps } from '../../utils';
 import { IParticipantFilter, TrackParticipantPair } from '@livekit/components-core';
 import { TileLoop } from '../TileLoop';
 import { ParticipantTile } from '../../prefabs/ParticipantTile';
 import { ParticipantClickEvent } from '@livekit/components-core';
+import { useObservableState } from '../../helper';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   trackParticipantPair?: TrackParticipantPair;
@@ -17,10 +18,11 @@ export function FocusLayoutContainer({
   ...props
 }: FocusLayoutContainerProps) {
   const elementProps = mergeProps(props, { className: 'lk-focus-layout' });
-  const pinContext = useLayoutContext().pin;
+  const { observable } = useLayoutContext().pin;
+  const pinState = useObservableState(observable, observable.getValue());
   const hasFocus = React.useMemo(() => {
-    return pinContext.state && pinContext.state.length >= 1;
-  }, [pinContext]);
+    return pinState && pinState.length >= 1;
+  }, [pinState]);
 
   return (
     <>
@@ -46,17 +48,21 @@ export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export function FocusLayout({ trackParticipantPair, ...props }: FocusLayoutProps) {
-  const layoutContext = useMaybeLayoutContext();
+  const layoutContext = useLayoutContext();
+  const state = useObservableState(
+    layoutContext.pin.observable,
+    layoutContext.pin.observable.getValue(),
+  );
 
   const pair: TrackParticipantPair | null = React.useMemo(() => {
     if (trackParticipantPair) {
       return trackParticipantPair;
     }
-    if (layoutContext?.pin.state !== undefined && layoutContext.pin.state.length >= 1) {
-      return layoutContext.pin.state[0];
+    if (state !== undefined && state.length >= 1) {
+      return state[0];
     }
     return null;
-  }, [layoutContext, trackParticipantPair]);
+  }, [state, trackParticipantPair]);
 
   return (
     <>

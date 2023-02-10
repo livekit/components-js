@@ -19,6 +19,7 @@ export * from './components/focusToggle';
 export * from './components/clearPinButton';
 export * from './components/room';
 
+export * from './observables/layout';
 export * from './observables/room';
 export * from './observables/participant';
 export * from './observables/track';

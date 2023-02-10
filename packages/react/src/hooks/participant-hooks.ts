@@ -17,14 +17,55 @@ import {
   observeParticipantMedia,
   participantPermissionObserver,
   connectedParticipantObserver,
+  ParticipantFilter as CoreParticipantFilter,
   IParticipantFilter,
+  PinState,
+  isParticipantTrackPinned,
 } from '@livekit/components-core';
 import { useEnsureParticipant, useRoomContext } from '../context';
 import { useObservableState } from '../helper/useObservableState';
+import type { BehaviorSubject } from 'rxjs';
 
 export interface UseParticipantsOptions {
   filters?: IParticipantFilter[];
 }
+
+const filterByPinned = (
+  pinnedSource = Track.Source.Camera,
+  pinObservable: BehaviorSubject<PinState>,
+): IParticipantFilter => {
+  const filter = <T extends Participant>(participants: T[]) => {
+    return participants.filter((participant) => {
+      const track = participant.getTrack(pinnedSource);
+      return (
+        track &&
+        isParticipantTrackPinned(
+          {
+            participant,
+            track,
+          },
+          pinObservable.getValue(),
+        )
+      );
+    });
+  };
+
+  const subscribe = (_: Room, onNeedsUpdate: () => void) => {
+    const listener = pinObservable.subscribe(() => {
+      onNeedsUpdate();
+    });
+    return () => {
+      listener.unsubscribe();
+    };
+  };
+
+  return { filter, subscribe };
+};
+
+export const ParticipantFilter = {
+  ...CoreParticipantFilter,
+  pinned: filterByPinned,
+};
 
 /**
  * The useParticipants hook returns all participants of the current room.

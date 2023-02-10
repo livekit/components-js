@@ -1,6 +1,6 @@
 ---
-"@livekit/components-core": patch
-"@livekit/components-react": patch
+'@livekit/components-core': minor
+'@livekit/components-react': minor
 ---
 
 Rework participant filter logic and supply dedicated filter options

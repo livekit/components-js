@@ -5,7 +5,7 @@ import * as React from 'react';
 export function useMediaQuery(query: string): boolean {
   const getMatches = (query: string): boolean => {
     // Prevents SSR issues
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && window.matchMedia) {
       return window.matchMedia(query).matches;
     }
     return false;
@@ -18,6 +18,7 @@ export function useMediaQuery(query: string): boolean {
   }
 
   React.useEffect(() => {
+    if (!window || !window.matchMedia) return;
     const matchMedia = window.matchMedia(query);
 
     // Triggered at the first client-side load and if query changes

@@ -1,5 +1,6 @@
 import { cleanup } from '@testing-library/react';
 import { TestContext } from 'vitest';
+import ResizeObserver from 'resize-observer-polyfill';
 
 export function Row(
   id: string,
@@ -33,5 +34,6 @@ export const beforeEachPerformanceTest = async (context: TestContext) => {
   }
   context.onRender = logRenderResults;
   context.logs = [];
+  global.ResizeObserver = ResizeObserver;
   return context;
 };

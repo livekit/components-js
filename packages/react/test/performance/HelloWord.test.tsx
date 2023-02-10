@@ -22,22 +22,24 @@ describe.skipIf(SKIP_PERFORMANCE_TESTS)('Basic performance test setup', () => {
         ))}
       </Profiler>,
     );
-
-    screen.debug();
+    // screen.debug(); /* Print the HTML tree to console. */
   });
 
   it('Test render time with button click', async (context) => {
     const Component = () => {
       const [, setState] = React.useState(0);
-      return <button onClick={() => setState((value) => value + 1)}>Button</button>;
+      return (
+        <button data-testid="button" onClick={() => setState((value) => value + 1)}>
+          Button
+        </button>
+      );
     };
     render(
       <Profiler id="click" onRender={context.onRender}>
         <Component />
       </Profiler>,
     );
-
-    const button = screen.getByText('Button');
+    const button = screen.getByTestId('button');
     await userEvent.click(button);
     await userEvent.click(button);
     await userEvent.click(button);

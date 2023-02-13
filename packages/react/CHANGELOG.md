@@ -1,5 +1,13 @@
 # @livekit/components-react
 
+## 0.3.0
+
+### Minor Changes
+
+- Use consistent parameters style for hooks - [#298](https://github.com/livekit/components-js/pull/298) ([@lukasIO](https://github.com/lukasIO))
+
+- Replace `showMutedOnly` with `show={'muted' | 'unmuted' | 'always'}` - [#305](https://github.com/livekit/components-js/pull/305) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.2.7
 
 ### Patch Changes

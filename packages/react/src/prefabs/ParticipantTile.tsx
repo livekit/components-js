@@ -146,7 +146,7 @@ export const ParticipantTile = ({
                   <>
                     <TrackMutedIndicator
                       source={Track.Source.Microphone}
-                      showMutedOnly={true}
+                      show={'muted'}
                     ></TrackMutedIndicator>
                     <ParticipantName />
                   </>

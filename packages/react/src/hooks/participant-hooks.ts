@@ -3,6 +3,7 @@ import {
   LocalParticipant,
   Participant,
   RemoteParticipant,
+  RoomEvent,
   Track,
   TrackPublication,
 } from 'livekit-client';
@@ -21,9 +22,26 @@ import {
 import { useEnsureParticipant, useRoomContext } from '../context';
 import { useObservableState } from '../helper/useObservableState';
 
+// export const ParticipantUpdate = {
+//   /** Subscribe to track updates. */
+//   identity: [RoomEvent.ConnectionStateChanged, RoomEvent.ParticipantMetadataChanged],
+//   /** Subscribe to track updates. */
+//   trackUpdates: [
+//     RoomEvent.TrackMuted,
+//     RoomEvent.TrackUnmuted,
+//     RoomEvent.TrackPublished,
+//     RoomEvent.TrackUnpublished,
+//     RoomEvent.TrackSubscribed,
+//     RoomEvent.TrackUnsubscribed,
+//   ],
+//   participant: [RoomEvent.ParticipantConnected, RoomEvent.ParticipantDisconnected],
+//   metadata: [RoomEvent.ParticipantMetadataChanged],
+// };
+
 export interface UseParticipantsOptions {
   filter?: ParticipantFilter;
   filterDependencies?: Array<unknown>;
+  updateOn?: RoomEvent[];
 }
 
 /**
@@ -32,7 +50,10 @@ export interface UseParticipantsOptions {
  */
 export const useParticipants = (options: UseParticipantsOptions = {}) => {
   const [participants, setParticipants] = React.useState<Participant[]>([]);
-  const remoteParticipants = useRemoteParticipants({ filter: undefined });
+  const remoteParticipants = useRemoteParticipants({
+    filter: undefined,
+    updateOn: options.updateOn ?? [],
+  });
   const { localParticipant } = useLocalParticipant();
   const filterDependencies = React.useMemo(
     () => options?.filterDependencies ?? [],
@@ -108,6 +129,7 @@ export const useRemoteParticipant = (identity: string): RemoteParticipant | unde
 
 export interface UseRemoteParticipantsOptions {
   filter?: (participant: RemoteParticipant) => boolean;
+  updateOn?: RoomEvent[];
 }
 
 /**
@@ -127,9 +149,11 @@ export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}
     [options.filter],
   );
   React.useEffect(() => {
-    const listener = connectedParticipantsObserver(room).subscribe(handleUpdate);
+    const listener = connectedParticipantsObserver(room, {
+      extraRoomEvents: options.updateOn ?? [],
+    }).subscribe(handleUpdate);
     return () => listener.unsubscribe();
-  }, [handleUpdate, room]);
+  }, [handleUpdate, room, options.updateOn]);
   return participants;
 };
 

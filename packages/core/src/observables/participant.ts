@@ -165,7 +165,14 @@ export function createIsSpeakingObserver(participant: Participant) {
   );
 }
 
-export function connectedParticipantsObserver(room: Room) {
+type ConnectedParticipantsObserverOptions = {
+  extraRoomEvents?: RoomEvent[];
+};
+
+export function connectedParticipantsObserver(
+  room: Room,
+  options: ConnectedParticipantsObserverOptions = {},
+) {
   let subscriber: Subscriber<RemoteParticipant[]> | undefined;
 
   const observable = new Observable<RemoteParticipant[]>((sub) => {
@@ -173,12 +180,15 @@ export function connectedParticipantsObserver(room: Room) {
     return () => listener.unsubscribe();
   }).pipe(startWith(Array.from(room.participants.values())));
 
-  const listener = observeRoomEvents(
-    room,
+  const roomEvents = [
     RoomEvent.ParticipantConnected,
     RoomEvent.ParticipantDisconnected,
     RoomEvent.ConnectionStateChanged,
-  ).subscribe((r) => subscriber?.next(Array.from(r.participants.values())));
+  ].concat(options.extraRoomEvents ?? []);
+
+  const listener = observeRoomEvents(room, ...roomEvents).subscribe((r) =>
+    subscriber?.next(Array.from(r.participants.values())),
+  );
   if (room.participants.size > 0) {
     subscriber?.next(Array.from(room.participants.values()));
   }

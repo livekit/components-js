@@ -1,5 +1,5 @@
 import { ParticipantFilter } from '@livekit/components-core';
-import { Track } from 'livekit-client';
+import { RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
 import { useParticipants } from '../hooks';
@@ -7,8 +7,9 @@ import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
 type ParticipantLoopProps = {
-  filterDependencies?: Array<unknown>;
   filter?: ParticipantFilter;
+  filterDependencies?: Array<unknown>;
+  updateOn?: RoomEvent[];
 };
 
 /**
@@ -36,9 +37,10 @@ type ParticipantLoopProps = {
 export const ParticipantLoop = ({
   filter,
   filterDependencies,
+  updateOn,
   ...props
 }: React.PropsWithChildren<ParticipantLoopProps>) => {
-  const participants = useParticipants({ filter, filterDependencies });
+  const participants = useParticipants({ filter, filterDependencies, updateOn });
 
   return (
     <>

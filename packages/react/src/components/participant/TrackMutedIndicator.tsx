@@ -49,7 +49,7 @@ export const useTrackMutedIndicator = (
 export const TrackMutedIndicator = ({
   source,
   participant,
-  show,
+  show = 'always',
   ...props
 }: TrackMutedIndicatorProps) => {
   const { className, isMuted } = useTrackMutedIndicator(source, { participant });

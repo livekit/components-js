@@ -26,7 +26,14 @@ export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
  * ```
  */
 export function GridLayout({ filter, filterDependencies, ...props }: GridLayoutProps) {
-  const participants = useParticipants({ filter, filterDependencies });
+  const participants_ = useParticipants();
+  const participants = React.useMemo(() => {
+    if (!filter) {
+      return participants_;
+    }
+    return participants_.filter(filter);
+  }, [filter, participants_, filterDependencies]);
+
   const containerEl = React.createRef<HTMLDivElement>();
   const gridEl = React.createRef<HTMLDivElement>();
 
@@ -43,7 +50,7 @@ export function GridLayout({ filter, filterDependencies, ...props }: GridLayoutP
       gridEl.current.style.setProperty('--lk-col-count', cols.toString());
       gridEl.current.style.width = `${widthAdjust}%`;
     }
-  }, [width, height, participants, gridEl.current]);
+  }, [width, height, participants, gridEl]);
 
   const elementProps = React.useMemo(
     () => mergeProps(props, { className: 'lk-grid-layout' }),

@@ -104,7 +104,7 @@ export const useRemoteParticipant = (identity: string): RemoteParticipant | unde
 };
 
 export interface UseRemoteParticipantsOptions {
-  updateOnlyOn?: RoomEvent[];
+  updateOnlyOn?: UpdateOnlyOn;
 }
 
 /**
@@ -117,7 +117,7 @@ export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}
 
   React.useEffect(() => {
     const listener = connectedParticipantsObserver(room, {
-      extraRoomEvents: updateOnlyOn ?? RoomEventGroup.all,
+      extraRoomEvents: updateOnlyOn ? toRoomEvents(updateOnlyOn) : RoomEventGroup.all,
     }).subscribe(setParticipants);
     return () => listener.unsubscribe();
   }, [room, updateOnlyOn]);

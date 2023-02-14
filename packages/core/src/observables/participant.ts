@@ -181,14 +181,15 @@ export function connectedParticipantsObserver(
     return () => listener.unsubscribe();
   }).pipe(startWith(Array.from(room.participants.values())));
 
+  const additionalRoomEvents = options.additionalRoomEvents ?? allRemoteParticipantRoomEvents;
+
   const roomEvents = Array.from(
-    new Set(
-      [
-        RoomEvent.ParticipantConnected,
-        RoomEvent.ParticipantDisconnected,
-        RoomEvent.ConnectionStateChanged,
-      ].concat(options.additionalRoomEvents ?? allRemoteParticipantRoomEvents),
-    ),
+    new Set([
+      RoomEvent.ParticipantConnected,
+      RoomEvent.ParticipantDisconnected,
+      RoomEvent.ConnectionStateChanged,
+      ...additionalRoomEvents,
+    ]),
   );
 
   const listener = observeRoomEvents(room, ...roomEvents).subscribe((r) =>

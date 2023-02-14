@@ -3,6 +3,7 @@ import {
   LocalParticipant,
   Participant,
   RemoteParticipant,
+  RoomEvent,
   Track,
   TrackPublication,
 } from 'livekit-client';
@@ -14,7 +15,6 @@ import {
   mutedObserver,
   ParticipantMedia,
   observeParticipantMedia,
-  ParticipantFilter,
   participantPermissionObserver,
   connectedParticipantObserver,
 } from '@livekit/components-core';
@@ -22,32 +22,24 @@ import { useEnsureParticipant, useRoomContext } from '../context';
 import { useObservableState } from '../helper/useObservableState';
 
 export interface UseParticipantsOptions {
-  filter?: ParticipantFilter;
-  filterDependencies?: Array<unknown>;
+  /**
+   * To optimize performance, you can use the `updateOnlyOn` property to take control of when the hook updates.
+   * By default the hook updates on all relevant RoomEvents to keep the returned participants array up to date.
+   */
+  updateOnlyOn?: RoomEvent[];
 }
 
 /**
- * The useParticipants hook returns all participants of the current room.
- * It is possible to filter the participants.
+ * The useParticipants hook returns all participants (local and remote) of the current room.
  */
 export const useParticipants = (options: UseParticipantsOptions = {}) => {
-  const [participants, setParticipants] = React.useState<Participant[]>([]);
-  const remoteParticipants = useRemoteParticipants({ filter: undefined });
+  const { updateOnlyOn } = options;
+  const remoteParticipants = useRemoteParticipants({
+    updateOnlyOn,
+  });
   const { localParticipant } = useLocalParticipant();
-  const filterDependencies = React.useMemo(
-    () => options?.filterDependencies ?? [],
-    [options?.filterDependencies],
-  );
 
-  React.useEffect(() => {
-    let all = [localParticipant, ...remoteParticipants];
-    if (options?.filter) {
-      all = all.filter(options.filter);
-    }
-    setParticipants(all);
-  }, [remoteParticipants, localParticipant, options?.filter, ...filterDependencies]);
-
-  return participants;
+  return [localParticipant, ...remoteParticipants];
 };
 
 /**
@@ -80,8 +72,9 @@ export const useLocalParticipant = () => {
   };
   React.useEffect(() => {
     const listener = observeParticipantMedia(localParticipant).subscribe(handleUpdate);
+    // TODO also listen to permission and metadata etc. events
     return () => listener.unsubscribe();
-  }, [localParticipant, observeParticipantMedia]);
+  }, [localParticipant]);
 
   return {
     isMicrophoneEnabled,
@@ -107,7 +100,7 @@ export const useRemoteParticipant = (identity: string): RemoteParticipant | unde
 };
 
 export interface UseRemoteParticipantsOptions {
-  filter?: (participant: RemoteParticipant) => boolean;
+  updateOnlyOn?: RoomEvent[];
 }
 
 /**
@@ -116,20 +109,14 @@ export interface UseRemoteParticipantsOptions {
 export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}) => {
   const room = useRoomContext();
   const [participants, setParticipants] = React.useState<RemoteParticipant[]>([]);
+  const { updateOnlyOn } = options;
 
-  const handleUpdate = React.useCallback(
-    (participants: RemoteParticipant[]) => {
-      if (options.filter) {
-        participants = participants.filter(options.filter);
-      }
-      setParticipants(participants);
-    },
-    [options.filter],
-  );
   React.useEffect(() => {
-    const listener = connectedParticipantsObserver(room).subscribe(handleUpdate);
+    const listener = connectedParticipantsObserver(room, {
+      additionalRoomEvents: updateOnlyOn,
+    }).subscribe(setParticipants);
     return () => listener.unsubscribe();
-  }, [handleUpdate, room]);
+  }, [room, updateOnlyOn]);
   return participants;
 };
 

@@ -26,7 +26,12 @@ export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
  * ```
  */
 export function GridLayout({ filter, filterDependencies, ...props }: GridLayoutProps) {
-  const participants = useParticipants({ filter, filterDependencies });
+  const participants = useParticipants();
+  const filterDependenciesArray = filterDependencies ?? [];
+  const filteredParticipants = React.useMemo(() => {
+    return filter ? participants.filter(filter) : participants;
+  }, [filter, participants, ...filterDependenciesArray]);
+
   const containerEl = React.createRef<HTMLDivElement>();
   const gridEl = React.createRef<HTMLDivElement>();
 
@@ -36,14 +41,14 @@ export function GridLayout({ filter, filterDependencies, ...props }: GridLayoutP
     const containerRatio = width / height;
     const tileRatio = 16 / 10;
     const colAdjust = Math.sqrt(containerRatio / tileRatio);
-    const colFraction = Math.sqrt(participants.length) * colAdjust;
-    const cols = Math.max(participants.length === 1 ? 1 : 2, Math.round(colFraction));
+    const colFraction = Math.sqrt(filteredParticipants.length) * colAdjust;
+    const cols = Math.max(filteredParticipants.length === 1 ? 1 : 2, Math.round(colFraction));
     const widthAdjust = Math.min(100, 100 + (cols > colFraction ? 1 : -1) * (colFraction % 1) * 50);
     if (gridEl.current) {
       gridEl.current.style.setProperty('--lk-col-count', cols.toString());
       gridEl.current.style.width = `${widthAdjust}%`;
     }
-  }, [width, height, participants, gridEl.current]);
+  }, [width, height, filteredParticipants, gridEl.current]);
 
   const elementProps = React.useMemo(
     () => mergeProps(props, { className: 'lk-grid-layout' }),

@@ -3,3 +3,4 @@ export * from './urlRegex';
 export * from './emailRegex';
 export * from './floating-menu';
 export * from './tokenizer';
+export * from './eventGroups';

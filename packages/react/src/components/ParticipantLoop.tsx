@@ -1,5 +1,5 @@
 import { ParticipantFilter } from '@livekit/components-core';
-import { Track } from 'livekit-client';
+import { RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
 import { useParticipants } from '../hooks';
@@ -7,8 +7,9 @@ import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
 type ParticipantLoopProps = {
-  filterDependencies?: Array<unknown>;
   filter?: ParticipantFilter;
+  filterDependencies?: Array<unknown>;
+  updateOnlyOn?: RoomEvent[];
 };
 
 /**
@@ -36,13 +37,18 @@ type ParticipantLoopProps = {
 export const ParticipantLoop = ({
   filter,
   filterDependencies,
+  updateOnlyOn,
   ...props
 }: React.PropsWithChildren<ParticipantLoopProps>) => {
-  const participants = useParticipants({ filter, filterDependencies });
+  const participants = useParticipants({ updateOnlyOn });
+  const filterDependenciesArray = filterDependencies ?? [];
+  const filteredParticipants = React.useMemo(() => {
+    return filter ? participants.filter(filter) : participants;
+  }, [participants, filter, ...filterDependenciesArray]);
 
   return (
     <>
-      {participants.map((participant) => (
+      {filteredParticipants.map((participant) => (
         <ParticipantContext.Provider value={participant} key={participant.identity}>
           {props.children ? (
             cloneSingleChild(props.children)

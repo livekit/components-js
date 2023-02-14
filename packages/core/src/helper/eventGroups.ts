@@ -1,9 +1,21 @@
 import { RoomEvent } from 'livekit-client';
 
-export const RoomEventGroup = {
-  /** Subscribe to track updates. */
+export type UpdateOnlyOn = (RoomEvent[] | RoomEvent)[];
+
+/**
+ * RoomEventGroup is a helper object of RoomEvents that are logically grouped together.
+ * The intention is to provide a high-level way to get all the RoomEvents needed to subscribe to certain state changes.
+ *
+ * @example
+ * ```tsx
+ *   // Get all events needed to listen to tack updates.
+ *   const events = RoomEventGroup.trackUpdates
+ * ```
+ */
+export const RoomEventGroup: Record<string, RoomEvent[]> = {
+  /**  */
   identity: [RoomEvent.ParticipantMetadataChanged],
-  /** Subscribe to track updates. */
+  /** Update on participant track updates. */
   trackUpdates: [
     RoomEvent.TrackMuted,
     RoomEvent.TrackUnmuted,
@@ -12,7 +24,7 @@ export const RoomEventGroup = {
     RoomEvent.TrackSubscribed,
     RoomEvent.TrackUnsubscribed,
   ],
-  /** Collection of events around participant connection. */
+  /** Update on participants joining and leaving the room. */
   participant: [
     RoomEvent.ParticipantConnected,
     RoomEvent.ParticipantDisconnected,
@@ -22,4 +34,4 @@ export const RoomEventGroup = {
   metadata: [RoomEvent.ParticipantMetadataChanged],
   /** Collection of all RoomEvents.  */
   all: [],
-} as const;
+};

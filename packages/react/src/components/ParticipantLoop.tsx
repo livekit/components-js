@@ -40,7 +40,17 @@ export const ParticipantLoop = ({
   updateOnlyOn,
   ...props
 }: React.PropsWithChildren<ParticipantLoopProps>) => {
-  const participants = useParticipants({ filter, filterDependencies, updateOnlyOn });
+  const participants_ = useParticipants({ updateOnlyOn });
+  const filterDependenciesArray = React.useMemo(
+    () => filterDependencies ?? [],
+    [filterDependencies],
+  );
+  const participants = React.useMemo(() => {
+    if (filter) {
+      return participants_.filter(filter);
+    }
+    return participants_;
+  }, [participants_, filter, ...filterDependenciesArray]);
 
   return (
     <>

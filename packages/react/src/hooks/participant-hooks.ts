@@ -15,7 +15,6 @@ import {
   mutedObserver,
   ParticipantMedia,
   observeParticipantMedia,
-  ParticipantFilter,
   participantPermissionObserver,
   connectedParticipantObserver,
 } from '@livekit/components-core';
@@ -23,32 +22,28 @@ import { useEnsureParticipant, useRoomContext } from '../context';
 import { useObservableState } from '../helper/useObservableState';
 
 export interface UseParticipantsOptions {
-  filter?: ParticipantFilter;
-  filterDependencies?: Array<unknown>;
   updateOnlyOn?: RoomEvent[];
 }
 
 /**
- * The useParticipants hook returns all participants of the current room.
- * It is possible to filter the participants.
+ * The useParticipants hook returns all participants (local and remote) of the current room.
+ *
+ * @remarks
+ * To optimize performance, you can use the `updateOnlyOn` property to take control of when the hook updates.
+ * By default the hook updates on all relevant RoomEvents to keep the returned participants array up to date.
  */
 export const useParticipants = (options: UseParticipantsOptions = {}) => {
   const [participants, setParticipants] = React.useState<Participant[]>([]);
-  const { filter, updateOnlyOn, filterDependencies: filterDependencies_ } = options;
+  const { updateOnlyOn } = options;
   const remoteParticipants = useRemoteParticipants({
     filter: undefined,
     updateOn: updateOnlyOn ?? [],
   });
   const { localParticipant } = useLocalParticipant();
-  const filterDependencies = React.useMemo(() => filterDependencies_ ?? [], [filterDependencies_]);
 
   React.useEffect(() => {
-    let all = [localParticipant, ...remoteParticipants];
-    if (filter) {
-      all = all.filter(filter);
-    }
-    setParticipants(all);
-  }, [remoteParticipants, localParticipant, filter, ...filterDependencies]);
+    setParticipants([localParticipant, ...remoteParticipants]);
+  }, [remoteParticipants, localParticipant]);
 
   return participants;
 };

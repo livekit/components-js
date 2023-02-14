@@ -45,5 +45,16 @@ export const RoomEventGroup: Record<string, RoomEvent[]> = {
   /** Collection of events around participant metadata updates.  */
   metadata: [RoomEvent.ParticipantMetadataChanged],
   /** Collection of all RoomEvents.  */
-  all: [],
+  all: [
+    RoomEvent.ParticipantConnected,
+    RoomEvent.ParticipantDisconnected,
+    RoomEvent.ParticipantPermissionsChanged,
+    RoomEvent.TrackMuted,
+    RoomEvent.TrackUnmuted,
+    RoomEvent.TrackPublished,
+    RoomEvent.TrackUnpublished,
+    RoomEvent.TrackSubscribed,
+    RoomEvent.TrackUnsubscribed,
+    RoomEvent.ParticipantMetadataChanged,
+  ],
 };

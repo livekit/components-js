@@ -10,6 +10,7 @@ import {
 import { map, Observable, startWith, Subscriber } from 'rxjs';
 import { observeRoomEvents } from './room';
 import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
+import { RoomEventGroup } from '../helper';
 
 export function observeParticipantEvents<T extends Participant>(
   participant: T,
@@ -186,7 +187,7 @@ export function connectedParticipantsObserver(
         RoomEvent.ParticipantConnected,
         RoomEvent.ParticipantDisconnected,
         RoomEvent.ConnectionStateChanged,
-      ].concat(options.extraRoomEvents ?? []),
+      ].concat(options.extraRoomEvents ?? RoomEventGroup.all),
     ),
   );
 

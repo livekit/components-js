@@ -3,7 +3,6 @@ import {
   LocalParticipant,
   Participant,
   RemoteParticipant,
-  RoomEvent,
   Track,
   TrackPublication,
 } from 'livekit-client';

@@ -106,7 +106,6 @@ export const useRemoteParticipant = (identity: string): RemoteParticipant | unde
 };
 
 export interface UseRemoteParticipantsOptions {
-  filter?: (participant: RemoteParticipant) => boolean;
   updateOnlyOn?: RoomEvent[];
 }
 
@@ -116,23 +115,14 @@ export interface UseRemoteParticipantsOptions {
 export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}) => {
   const room = useRoomContext();
   const [participants, setParticipants] = React.useState<RemoteParticipant[]>([]);
-  const { filter, updateOnlyOn } = options;
+  const { updateOnlyOn } = options;
 
-  const handleUpdate = React.useCallback(
-    (participants: RemoteParticipant[]) => {
-      if (filter) {
-        participants = participants.filter(filter);
-      }
-      setParticipants(participants);
-    },
-    [filter],
-  );
   React.useEffect(() => {
     const listener = connectedParticipantsObserver(room, {
       extraRoomEvents: updateOnlyOn ?? [],
-    }).subscribe(handleUpdate);
+    }).subscribe(setParticipants);
     return () => listener.unsubscribe();
-  }, [handleUpdate, room, updateOnlyOn]);
+  }, [room, updateOnlyOn]);
   return participants;
 };
 

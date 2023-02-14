@@ -36,18 +36,15 @@ export interface UseParticipantsOptions {
  * By default the hook updates on all relevant RoomEvents to keep the returned participants array up to date.
  */
 export const useParticipants = (options: UseParticipantsOptions = {}) => {
-  const [participants, setParticipants] = React.useState<Participant[]>([]);
   const { updateOnlyOn } = options;
   const remoteParticipants = useRemoteParticipants({
     updateOnlyOn: updateOnlyOn ? toRoomEvents(updateOnlyOn) : [],
   });
   const { localParticipant } = useLocalParticipant();
 
-  React.useEffect(() => {
-    setParticipants([localParticipant, ...remoteParticipants]);
+  return React.useMemo(() => {
+    return [localParticipant, ...remoteParticipants];
   }, [remoteParticipants, localParticipant]);
-
-  return participants;
 };
 
 /**

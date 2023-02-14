@@ -7,6 +7,7 @@ import {
   TrackPublication,
 } from 'livekit-client';
 import { Observable, startWith, Subscription } from 'rxjs';
+import { allRemoteParticipantRoomEvents } from '../helper';
 import log from '../logger';
 import { TrackParticipantPair } from '../types';
 import { roomEventSelector } from './room';
@@ -66,9 +67,14 @@ function getTrackParticipantPairs(room: Room, sources: Track.Source[]): TrackPar
   return pairs;
 }
 
+type TrackParticipantPairsObservableOptions = {
+  additionalRoomEvents?: RoomEvent[];
+};
+
 export function trackParticipantPairsObservable(
   room: Room,
   sources: Track.Source[],
+  options: TrackParticipantPairsObservableOptions,
 ): Observable<TrackParticipantPair[]> {
   const roomEventSubscriptions: Subscription[] = [];
 
@@ -77,14 +83,16 @@ export function trackParticipantPairsObservable(
     const initPairs = getTrackParticipantPairs(room, sources);
     subscribe.next(initPairs);
 
+    const additionalRoomEvents = options.additionalRoomEvents ?? allRemoteParticipantRoomEvents;
     // Listen to room events related to track changes and emit new pairs.
-    const roomEventsToListenFor = [
-      RoomEvent.TrackSubscribed,
-      RoomEvent.TrackUnsubscribed,
-      RoomEvent.LocalTrackPublished,
-      RoomEvent.LocalTrackUnpublished,
-      RoomEvent.TrackSubscriptionStatusChanged,
-    ];
+    const roomEventsToListenFor = Array.from(
+      new Set([
+        RoomEvent.LocalTrackPublished,
+        RoomEvent.LocalTrackUnpublished,
+        RoomEvent.TrackSubscriptionStatusChanged,
+        ...additionalRoomEvents,
+      ]),
+    );
     roomEventsToListenFor.forEach((roomEvent) => {
       roomEventSubscriptions.push(
         roomEventSelector(room, roomEvent).subscribe(() => {

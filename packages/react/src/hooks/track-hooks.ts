@@ -6,9 +6,8 @@ import {
   trackObservable,
   TrackParticipantPair,
   trackParticipantPairsObservable,
-  TrackFilter,
 } from '@livekit/components-core';
-import { Participant, Track, TrackPublication } from 'livekit-client';
+import { Participant, RoomEvent, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureParticipant, useMaybeLayoutContext, useRoomContext } from '../context';
 import { mergeProps } from '../utils';
@@ -111,8 +110,7 @@ export function useTrack(pub: TrackPublication) {
 
 type UseTracksOptions = {
   excludePinnedTracks?: boolean;
-  filter?: TrackFilter;
-  filterDependencies?: Array<any>;
+  updateOnlyOn?: RoomEvent[];
 };
 
 /**
@@ -126,43 +124,30 @@ type UseTracksOptions = {
  * ```
  */
 export function useTracks(sources: Array<Track.Source>, options: UseTracksOptions = {}) {
+  const { updateOnlyOn, excludePinnedTracks } = options;
   const room = useRoomContext();
   const layoutContext = useMaybeLayoutContext();
 
-  const [unfilteredPairs, setUnfilteredPairs] = React.useState<TrackParticipantPair[]>([]);
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
 
   React.useEffect(() => {
-    const subscription = trackParticipantPairsObservable(room, sources).subscribe(
-      (trackParticipantPairs: TrackParticipantPair[]) => {
-        setUnfilteredPairs(trackParticipantPairs);
-      },
-    );
+    const subscription = trackParticipantPairsObservable(room, sources, {
+      additionalRoomEvents: updateOnlyOn,
+    }).subscribe((trackParticipantPairs: TrackParticipantPair[]) => {
+      setPairs(trackParticipantPairs);
+    });
 
     return () => subscription.unsubscribe();
-  }, [room, sources]);
+  }, [room, sources, updateOnlyOn]);
 
-  React.useEffect(() => {
-    let trackParticipantPairs: TrackParticipantPair[] = unfilteredPairs;
-    if (options?.excludePinnedTracks && layoutContext) {
+  return React.useMemo(() => {
+    let trackParticipantPairs: TrackParticipantPair[] = pairs;
+    if (excludePinnedTracks && layoutContext) {
       trackParticipantPairs = trackParticipantPairs.filter(
         (trackParticipantPair) =>
           !isParticipantTrackPinned(trackParticipantPair, layoutContext.pin.state),
       );
     }
-    if (options?.filter) {
-      trackParticipantPairs = trackParticipantPairs.filter(options.filter);
-    }
-    setPairs(trackParticipantPairs);
-  }, [
-    unfilteredPairs,
-    options?.filter,
-    options?.excludePinnedTracks,
-    layoutContext,
-    options?.filterDependencies,
-  ]);
-
-  // React.useDebugValue(`Pairs count: ${pairs.length}`);
-
-  return pairs;
+    return trackParticipantPairs;
+  }, [pairs, excludePinnedTracks, layoutContext]);
 }

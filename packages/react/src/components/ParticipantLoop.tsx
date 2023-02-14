@@ -9,7 +9,7 @@ import { cloneSingleChild } from '../utils';
 type ParticipantLoopProps = {
   filter?: ParticipantFilter;
   filterDependencies?: Array<unknown>;
-  updateOn?: RoomEvent[];
+  updateOnlyOn?: RoomEvent[];
 };
 
 /**
@@ -37,10 +37,10 @@ type ParticipantLoopProps = {
 export const ParticipantLoop = ({
   filter,
   filterDependencies,
-  updateOn,
+  updateOnlyOn,
   ...props
 }: React.PropsWithChildren<ParticipantLoopProps>) => {
-  const participants = useParticipants({ filter, filterDependencies, updateOn });
+  const participants = useParticipants({ filter, filterDependencies, updateOnlyOn });
 
   return (
     <>

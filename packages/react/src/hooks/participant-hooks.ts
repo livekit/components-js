@@ -22,26 +22,10 @@ import {
 import { useEnsureParticipant, useRoomContext } from '../context';
 import { useObservableState } from '../helper/useObservableState';
 
-// export const ParticipantUpdate = {
-//   /** Subscribe to track updates. */
-//   identity: [RoomEvent.ConnectionStateChanged, RoomEvent.ParticipantMetadataChanged],
-//   /** Subscribe to track updates. */
-//   trackUpdates: [
-//     RoomEvent.TrackMuted,
-//     RoomEvent.TrackUnmuted,
-//     RoomEvent.TrackPublished,
-//     RoomEvent.TrackUnpublished,
-//     RoomEvent.TrackSubscribed,
-//     RoomEvent.TrackUnsubscribed,
-//   ],
-//   participant: [RoomEvent.ParticipantConnected, RoomEvent.ParticipantDisconnected],
-//   metadata: [RoomEvent.ParticipantMetadataChanged],
-// };
-
 export interface UseParticipantsOptions {
   filter?: ParticipantFilter;
   filterDependencies?: Array<unknown>;
-  updateOn?: RoomEvent[];
+  updateOnlyOn?: RoomEvent[];
 }
 
 /**
@@ -50,23 +34,21 @@ export interface UseParticipantsOptions {
  */
 export const useParticipants = (options: UseParticipantsOptions = {}) => {
   const [participants, setParticipants] = React.useState<Participant[]>([]);
+  const { filter, updateOnlyOn, filterDependencies: filterDependencies_ } = options;
   const remoteParticipants = useRemoteParticipants({
     filter: undefined,
-    updateOn: options.updateOn ?? [],
+    updateOn: updateOnlyOn ?? [],
   });
   const { localParticipant } = useLocalParticipant();
-  const filterDependencies = React.useMemo(
-    () => options?.filterDependencies ?? [],
-    [options?.filterDependencies],
-  );
+  const filterDependencies = React.useMemo(() => filterDependencies_ ?? [], [filterDependencies_]);
 
   React.useEffect(() => {
     let all = [localParticipant, ...remoteParticipants];
-    if (options?.filter) {
-      all = all.filter(options.filter);
+    if (filter) {
+      all = all.filter(filter);
     }
     setParticipants(all);
-  }, [remoteParticipants, localParticipant, options?.filter, ...filterDependencies]);
+  }, [remoteParticipants, localParticipant, filter, ...filterDependencies]);
 
   return participants;
 };

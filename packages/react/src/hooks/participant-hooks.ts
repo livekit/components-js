@@ -3,6 +3,7 @@ import {
   LocalParticipant,
   Participant,
   RemoteParticipant,
+  RoomEvent,
   Track,
   TrackPublication,
 } from 'livekit-client';
@@ -16,15 +17,12 @@ import {
   observeParticipantMedia,
   participantPermissionObserver,
   connectedParticipantObserver,
-  UpdateOnlyOn,
-  toRoomEvents,
-  RoomEventGroup,
 } from '@livekit/components-core';
 import { useEnsureParticipant, useRoomContext } from '../context';
 import { useObservableState } from '../helper/useObservableState';
 
 export interface UseParticipantsOptions {
-  updateOnlyOn?: UpdateOnlyOn;
+  updateOnlyOn?: RoomEvent[];
 }
 
 /**
@@ -37,7 +35,7 @@ export interface UseParticipantsOptions {
 export const useParticipants = (options: UseParticipantsOptions = {}) => {
   const { updateOnlyOn } = options;
   const remoteParticipants = useRemoteParticipants({
-    updateOnlyOn: updateOnlyOn ? toRoomEvents(updateOnlyOn) : [],
+    updateOnlyOn,
   });
   const { localParticipant } = useLocalParticipant();
 
@@ -76,6 +74,7 @@ export const useLocalParticipant = () => {
   };
   React.useEffect(() => {
     const listener = observeParticipantMedia(localParticipant).subscribe(handleUpdate);
+    // TODO also listen to permission and metadata etc. events
     return () => listener.unsubscribe();
   }, [localParticipant]);
 
@@ -103,7 +102,7 @@ export const useRemoteParticipant = (identity: string): RemoteParticipant | unde
 };
 
 export interface UseRemoteParticipantsOptions {
-  updateOnlyOn?: UpdateOnlyOn;
+  updateOnlyOn?: RoomEvent[];
 }
 
 /**
@@ -116,7 +115,7 @@ export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}
 
   React.useEffect(() => {
     const listener = connectedParticipantsObserver(room, {
-      additionalRoomEvents: updateOnlyOn ? toRoomEvents(updateOnlyOn) : RoomEventGroup.all,
+      additionalRoomEvents: updateOnlyOn,
     }).subscribe(setParticipants);
     return () => listener.unsubscribe();
   }, [room, updateOnlyOn]);

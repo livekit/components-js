@@ -1,5 +1,5 @@
-import { ParticipantFilter, UpdateOnlyOn } from '@livekit/components-core';
-import { Track } from 'livekit-client';
+import { ParticipantFilter } from '@livekit/components-core';
+import { RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
 import { useParticipants } from '../hooks';
@@ -9,7 +9,7 @@ import { cloneSingleChild } from '../utils';
 type ParticipantLoopProps = {
   filter?: ParticipantFilter;
   filterDependencies?: Array<unknown>;
-  updateOnlyOn?: UpdateOnlyOn;
+  updateOnlyOn?: RoomEvent[];
 };
 
 /**

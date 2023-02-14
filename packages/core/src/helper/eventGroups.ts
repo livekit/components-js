@@ -1,4 +1,4 @@
-import { RoomEvent } from 'livekit-client';
+import { ParticipantEvent, RoomEvent } from 'livekit-client';
 
 export const allRemoteParticipantRoomEvents = [
   RoomEvent.ConnectionStateChanged,
@@ -20,4 +20,20 @@ export const allRemoteParticipantRoomEvents = [
   RoomEvent.TrackSubscriptionFailed,
   RoomEvent.TrackSubscriptionPermissionChanged,
   RoomEvent.TrackSubscriptionStatusChanged,
+];
+
+export const allRemoteParticipantEvents = [
+  ParticipantEvent.ConnectionQualityChanged,
+  ParticipantEvent.IsSpeakingChanged,
+  ParticipantEvent.ParticipantMetadataChanged,
+  ParticipantEvent.ParticipantPermissionsChanged,
+
+  ParticipantEvent.TrackMuted,
+  ParticipantEvent.TrackUnmuted,
+  ParticipantEvent.TrackPublished,
+  ParticipantEvent.TrackUnpublished,
+  ParticipantEvent.TrackStreamStateChanged,
+  ParticipantEvent.TrackSubscriptionFailed,
+  ParticipantEvent.TrackSubscriptionPermissionChanged,
+  ParticipantEvent.TrackSubscriptionStatusChanged,
 ];

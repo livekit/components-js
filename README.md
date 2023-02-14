@@ -24,7 +24,7 @@
 
 ## About LiveKit Components
 
-Create your [LiveKit](https://livekit.io) WebRTC experience without worrying about state. LiveKit Components give you a declarative way to build your real-time LiveKit audio/video frontend with React.
+Build your real-time application without worrying about state. LiveKit Components give you a declarative way to build your real-time video and/or audio frontend with React.
 
 Every use case is different and apps in the real world are individual and unique. We don't pretend to have the perfect solution that fits all use cases. Instead, we've taken an approach where we give you reasonable defaults, without taking away full control over each component if you want it.
 

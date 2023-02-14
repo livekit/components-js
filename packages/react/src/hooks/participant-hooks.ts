@@ -19,6 +19,7 @@ import {
   connectedParticipantObserver,
   UpdateOnlyOn,
   toRoomEvents,
+  RoomEventGroup,
 } from '@livekit/components-core';
 import { useEnsureParticipant, useRoomContext } from '../context';
 import { useObservableState } from '../helper/useObservableState';
@@ -119,7 +120,7 @@ export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}
 
   React.useEffect(() => {
     const listener = connectedParticipantsObserver(room, {
-      extraRoomEvents: updateOnlyOn ?? [],
+      extraRoomEvents: updateOnlyOn ?? RoomEventGroup.all,
     }).subscribe(setParticipants);
     return () => listener.unsubscribe();
   }, [room, updateOnlyOn]);

@@ -102,7 +102,7 @@ export const useLocalParticipant = () => {
   React.useEffect(() => {
     const listener = observeParticipantMedia(localParticipant).subscribe(handleUpdate);
     return () => listener.unsubscribe();
-  }, [localParticipant, observeParticipantMedia]);
+  }, [localParticipant]);
 
   return {
     isMicrophoneEnabled,
@@ -138,22 +138,23 @@ export interface UseRemoteParticipantsOptions {
 export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}) => {
   const room = useRoomContext();
   const [participants, setParticipants] = React.useState<RemoteParticipant[]>([]);
+  const { filter, updateOn } = options;
 
   const handleUpdate = React.useCallback(
     (participants: RemoteParticipant[]) => {
-      if (options.filter) {
-        participants = participants.filter(options.filter);
+      if (filter) {
+        participants = participants.filter(filter);
       }
       setParticipants(participants);
     },
-    [options.filter],
+    [filter],
   );
   React.useEffect(() => {
     const listener = connectedParticipantsObserver(room, {
-      extraRoomEvents: options.updateOn ?? [],
+      extraRoomEvents: updateOn ?? [],
     }).subscribe(handleUpdate);
     return () => listener.unsubscribe();
-  }, [handleUpdate, room, options.updateOn]);
+  }, [handleUpdate, room, updateOn]);
   return participants;
 };
 

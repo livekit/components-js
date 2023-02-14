@@ -167,7 +167,7 @@ export function createIsSpeakingObserver(participant: Participant) {
 }
 
 type ConnectedParticipantsObserverOptions = {
-  extraRoomEvents?: RoomEvent[];
+  additionalRoomEvents?: RoomEvent[];
 };
 
 export function connectedParticipantsObserver(
@@ -187,7 +187,7 @@ export function connectedParticipantsObserver(
         RoomEvent.ParticipantConnected,
         RoomEvent.ParticipantDisconnected,
         RoomEvent.ConnectionStateChanged,
-      ].concat(options.extraRoomEvents ?? RoomEventGroup.all),
+      ].concat(options.additionalRoomEvents ?? RoomEventGroup.all),
     ),
   );
 

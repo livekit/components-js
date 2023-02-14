@@ -116,7 +116,7 @@ export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}
 
   React.useEffect(() => {
     const listener = connectedParticipantsObserver(room, {
-      extraRoomEvents: updateOnlyOn ? toRoomEvents(updateOnlyOn) : RoomEventGroup.all,
+      additionalRoomEvents: updateOnlyOn ? toRoomEvents(updateOnlyOn) : RoomEventGroup.all,
     }).subscribe(setParticipants);
     return () => listener.unsubscribe();
   }, [room, updateOnlyOn]);

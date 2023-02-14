@@ -17,12 +17,14 @@ import {
   observeParticipantMedia,
   participantPermissionObserver,
   connectedParticipantObserver,
+  UpdateOnlyOn,
+  toRoomEvents,
 } from '@livekit/components-core';
 import { useEnsureParticipant, useRoomContext } from '../context';
 import { useObservableState } from '../helper/useObservableState';
 
 export interface UseParticipantsOptions {
-  updateOnlyOn?: RoomEvent[];
+  updateOnlyOn?: UpdateOnlyOn;
 }
 
 /**
@@ -36,8 +38,7 @@ export const useParticipants = (options: UseParticipantsOptions = {}) => {
   const [participants, setParticipants] = React.useState<Participant[]>([]);
   const { updateOnlyOn } = options;
   const remoteParticipants = useRemoteParticipants({
-    filter: undefined,
-    updateOn: updateOnlyOn ?? [],
+    updateOnlyOn: updateOnlyOn ? toRoomEvents(updateOnlyOn) : [],
   });
   const { localParticipant } = useLocalParticipant();
 
@@ -106,7 +107,7 @@ export const useRemoteParticipant = (identity: string): RemoteParticipant | unde
 
 export interface UseRemoteParticipantsOptions {
   filter?: (participant: RemoteParticipant) => boolean;
-  updateOn?: RoomEvent[];
+  updateOnlyOn?: RoomEvent[];
 }
 
 /**
@@ -115,7 +116,7 @@ export interface UseRemoteParticipantsOptions {
 export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}) => {
   const room = useRoomContext();
   const [participants, setParticipants] = React.useState<RemoteParticipant[]>([]);
-  const { filter, updateOn } = options;
+  const { filter, updateOnlyOn } = options;
 
   const handleUpdate = React.useCallback(
     (participants: RemoteParticipant[]) => {
@@ -128,10 +129,10 @@ export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}
   );
   React.useEffect(() => {
     const listener = connectedParticipantsObserver(room, {
-      extraRoomEvents: updateOn ?? [],
+      extraRoomEvents: updateOnlyOn ?? [],
     }).subscribe(handleUpdate);
     return () => listener.unsubscribe();
-  }, [handleUpdate, room, updateOn]);
+  }, [handleUpdate, room, updateOnlyOn]);
   return participants;
 };
 

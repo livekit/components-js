@@ -2,6 +2,18 @@ import { RoomEvent } from 'livekit-client';
 
 export type UpdateOnlyOn = (RoomEvent[] | RoomEvent)[];
 
+export function toRoomEvents(updateOnlyOn: UpdateOnlyOn): RoomEvent[] {
+  const events: RoomEvent[] = [];
+  updateOnlyOn.forEach((value) => {
+    if (Array.isArray(value)) {
+      events.concat(value);
+    } else {
+      events.push(value);
+    }
+  });
+  return events;
+}
+
 /**
  * RoomEventGroup is a helper object of RoomEvents that are logically grouped together.
  * The intention is to provide a high-level way to get all the RoomEvents needed to subscribe to certain state changes.

@@ -52,7 +52,7 @@ export function TileLoop({
   const [secondarySources] = React.useState(
     sources ? sources.slice(1) : DefaultTileLoopProps.sources.slice(1),
   );
-  const participants = useParticipants();
+  const participants = useParticipants({ updateOnlyOn: [] });
   const layoutContext = useMaybeLayoutContext();
 
   const secondaryPairs = useTracks(secondarySources, { excludePinnedTracks });

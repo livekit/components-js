@@ -22,15 +22,15 @@ import { useEnsureParticipant, useRoomContext } from '../context';
 import { useObservableState } from '../helper/useObservableState';
 
 export interface UseParticipantsOptions {
+  /**
+   * To optimize performance, you can use the `updateOnlyOn` property to take control of when the hook updates.
+   * By default the hook updates on all relevant RoomEvents to keep the returned participants array up to date.
+   */
   updateOnlyOn?: RoomEvent[];
 }
 
 /**
  * The useParticipants hook returns all participants (local and remote) of the current room.
- *
- * @remarks
- * To optimize performance, you can use the `updateOnlyOn` property to take control of when the hook updates.
- * By default the hook updates on all relevant RoomEvents to keep the returned participants array up to date.
  */
 export const useParticipants = (options: UseParticipantsOptions = {}) => {
   const { updateOnlyOn } = options;

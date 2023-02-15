@@ -49,8 +49,6 @@ const DefaultTileLoopProps = {
 export function TileLoop({
   sources,
   excludePinnedTracks,
-  filter,
-  filterDependencies,
   ...props
 }: React.PropsWithChildren<TileLoopProps>): React.FunctionComponentElement<
   React.PropsWithChildren<TileLoopProps>

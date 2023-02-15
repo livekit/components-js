@@ -1,5 +1,5 @@
 import { TrackFilter } from '@livekit/components-core';
-import { Track } from 'livekit-client';
+import { RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
 import { useTracks } from '../hooks';
@@ -16,7 +16,14 @@ type TrackLoopProps = {
    */
   excludePinnedTracks?: boolean;
   filter?: TrackFilter;
-  filterDependencies?: Array<any>;
+  filterDependencies?: Array<unknown>;
+  /**
+   * To optimize performance, you can use the updateOnlyOn property to decide on
+   * what RoomEvents the hook updates. By default it updates on all relevant RoomEvents
+   * to keep all loop items up-to-date.
+   * The minimal set of non-overwriteable RoomEvents is:  `[RoomEvent.LocalTrackPublished, RoomEvent.LocalTrackUnpublished, RoomEvent.TrackSubscriptionStatusChanged]`
+   */
+  updateOnlyOn?: RoomEvent[];
 };
 
 const trackLoopDefaults = {
@@ -44,17 +51,21 @@ export const TrackLoop = ({
   excludePinnedTracks,
   filter,
   filterDependencies,
+  updateOnlyOn,
   ...props
 }: React.PropsWithChildren<TrackLoopProps>) => {
   const trackSourceParticipantPairs = useTracks(sources ?? trackLoopDefaults.sources, {
     excludePinnedTracks: excludePinnedTracks ?? trackLoopDefaults.excludePinnedTracks,
-    filter,
-    filterDependencies: filterDependencies ?? trackLoopDefaults.filterDependencies,
+    updateOnlyOn,
   });
+  const filterDependenciesArray = filterDependencies ?? [];
+  const filteredPairs = React.useMemo(() => {
+    return filter ? trackSourceParticipantPairs.filter(filter) : trackSourceParticipantPairs;
+  }, [filter, trackSourceParticipantPairs, ...filterDependenciesArray]);
 
   return (
     <>
-      {trackSourceParticipantPairs.map(({ track, participant }) => (
+      {filteredPairs.map(({ track, participant }) => (
         <ParticipantContext.Provider
           value={participant}
           key={`${participant.identity}_${track.source}`}

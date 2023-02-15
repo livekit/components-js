@@ -1,4 +1,4 @@
-import { Participant } from 'livekit-client';
+import type { Participant } from 'livekit-client';
 import * as React from 'react';
 
 export const ParticipantContext = React.createContext<Participant | undefined>(undefined);

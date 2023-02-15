@@ -109,7 +109,6 @@ export function useTrack(pub: TrackPublication) {
 }
 
 type UseTracksOptions = {
-  excludePinnedTracks?: boolean;
   updateOnlyOn?: RoomEvent[];
 };
 
@@ -124,30 +123,17 @@ type UseTracksOptions = {
  * ```
  */
 export function useTracks(sources: Array<Track.Source>, options: UseTracksOptions = {}) {
-  const { updateOnlyOn, excludePinnedTracks } = options;
+  const { updateOnlyOn } = options;
   const room = useRoomContext();
-  const layoutContext = useMaybeLayoutContext();
-
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
 
   React.useEffect(() => {
     const subscription = trackParticipantPairsObservable(room, sources, {
       additionalRoomEvents: updateOnlyOn,
-    }).subscribe((trackParticipantPairs: TrackParticipantPair[]) => {
-      setPairs(trackParticipantPairs);
-    });
+    }).subscribe(setPairs);
 
     return () => subscription.unsubscribe();
   }, [room, sources, updateOnlyOn]);
 
-  return React.useMemo(() => {
-    let trackParticipantPairs: TrackParticipantPair[] = pairs;
-    if (excludePinnedTracks && layoutContext) {
-      trackParticipantPairs = trackParticipantPairs.filter(
-        (trackParticipantPair) =>
-          !isParticipantTrackPinned(trackParticipantPair, layoutContext.pin.state),
-      );
-    }
-    return trackParticipantPairs;
-  }, [pairs, excludePinnedTracks, layoutContext]);
+  return pairs;
 }

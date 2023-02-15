@@ -1,4 +1,9 @@
-import { isParticipantSourcePinned, ParticipantFilter } from '@livekit/components-core';
+import {
+  isParticipantSourcePinned,
+  isParticipantTrackPinned,
+  ParticipantFilter,
+  TrackParticipantPair,
+} from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext, useMaybeLayoutContext } from '../context';
@@ -44,6 +49,8 @@ const DefaultTileLoopProps = {
 export function TileLoop({
   sources,
   excludePinnedTracks,
+  filter,
+  filterDependencies,
   ...props
 }: React.PropsWithChildren<TileLoopProps>): React.FunctionComponentElement<
   React.PropsWithChildren<TileLoopProps>
@@ -55,7 +62,19 @@ export function TileLoop({
   const participants = useParticipants({ updateOnlyOn: [] });
   const layoutContext = useMaybeLayoutContext();
 
-  const secondaryPairs = useTracks(secondarySources, { excludePinnedTracks });
+  const secondaryPairs = useTracks(secondarySources);
+  const filteredSecondaryPairs = React.useMemo(() => {
+    let tempPairs: TrackParticipantPair[] = secondaryPairs;
+    if (excludePinnedTracks && layoutContext?.pin?.state) {
+      const pinState = layoutContext.pin.state;
+      tempPairs = tempPairs.filter((pair) => !isParticipantTrackPinned(pair, pinState));
+    }
+    // TODO: filter is not working as expected
+    // if (filter) {
+    //   tempPairs = tempPairs.filter(filter);
+    // }
+    return tempPairs;
+  }, [excludePinnedTracks, layoutContext, secondaryPairs]);
 
   return (
     <>
@@ -66,7 +85,7 @@ export function TileLoop({
             <ParticipantTile trackSource={mainSource} />
           )}
 
-          {secondaryPairs
+          {filteredSecondaryPairs
             .filter(({ participant: p }) => p.identity === participant.identity)
             .map(({ track }, index) =>
               props.children ? (

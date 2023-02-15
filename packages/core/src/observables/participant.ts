@@ -7,7 +7,7 @@ import {
   Track,
   TrackPublication,
 } from 'livekit-client';
-import { map, mergeMap, Observable, startWith, Subscriber } from 'rxjs';
+import { map, switchMap, Observable, startWith, Subscriber } from 'rxjs';
 import { observeRoomEvents } from './room';
 import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 import { allRemoteParticipantEvents, allRemoteParticipantRoomEvents } from '../helper/eventGroups';
@@ -217,7 +217,7 @@ export function connectedParticipantObserver(
     RoomEvent.ParticipantDisconnected,
     RoomEvent.ConnectionStateChanged,
   ).pipe(
-    mergeMap((r) => {
+    switchMap((r) => {
       const participant = r.getParticipantByIdentity(identity) as RemoteParticipant | undefined;
       if (participant) {
         return observeParticipantEvents(participant, ...additionalEvents);

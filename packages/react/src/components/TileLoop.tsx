@@ -49,6 +49,8 @@ const DefaultTileLoopProps = {
 export function TileLoop({
   sources,
   excludePinnedTracks,
+  filter,
+  filterDependencies = [],
   ...props
 }: React.PropsWithChildren<TileLoopProps>): React.FunctionComponentElement<
   React.PropsWithChildren<TileLoopProps>
@@ -58,6 +60,9 @@ export function TileLoop({
     sources ? sources.slice(1) : DefaultTileLoopProps.sources.slice(1),
   );
   const participants = useParticipants({ updateOnlyOn: [] });
+  const filteredParticipants = React.useMemo(() => {
+    return filter ? participants.filter(filter) : participants;
+  }, [filter, participants, ...filterDependencies]);
   const layoutContext = useMaybeLayoutContext();
 
   const secondaryPairs = useTracks(secondarySources);
@@ -67,16 +72,12 @@ export function TileLoop({
       const pinState = layoutContext.pin.state;
       tempPairs = tempPairs.filter((pair) => !isParticipantTrackPinned(pair, pinState));
     }
-    // TODO: filter is not working as expected
-    // if (filter) {
-    //   tempPairs = tempPairs.filter(filter);
-    // }
     return tempPairs;
   }, [excludePinnedTracks, layoutContext, secondaryPairs]);
 
   return (
     <>
-      {participants.map((participant) => (
+      {filteredParticipants.map((participant) => (
         <ParticipantContext.Provider value={participant} key={participant.identity}>
           {(!excludePinnedTracks ||
             !isParticipantSourcePinned(participant, mainSource, layoutContext?.pin.state)) && (

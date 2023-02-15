@@ -1,7 +1,11 @@
-import { TrackFilter } from '@livekit/components-core';
+import {
+  isParticipantTrackPinned,
+  TrackFilter,
+  TrackParticipantPair,
+} from '@livekit/components-core';
 import { RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
-import { ParticipantContext } from '../context';
+import { ParticipantContext, useMaybeLayoutContext } from '../context';
 import { useTracks } from '../hooks';
 import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
@@ -54,14 +58,22 @@ export const TrackLoop = ({
   updateOnlyOn,
   ...props
 }: React.PropsWithChildren<TrackLoopProps>) => {
-  const trackSourceParticipantPairs = useTracks(sources ?? trackLoopDefaults.sources, {
-    excludePinnedTracks: excludePinnedTracks ?? trackLoopDefaults.excludePinnedTracks,
+  const pairs = useTracks(sources ?? trackLoopDefaults.sources, {
     updateOnlyOn,
   });
+  const layoutContext = useMaybeLayoutContext();
   const filterDependenciesArray = filterDependencies ?? [];
   const filteredPairs = React.useMemo(() => {
-    return filter ? trackSourceParticipantPairs.filter(filter) : trackSourceParticipantPairs;
-  }, [filter, trackSourceParticipantPairs, ...filterDependenciesArray]);
+    let tempPairs: TrackParticipantPair[] = pairs;
+    if (excludePinnedTracks && layoutContext?.pin?.state) {
+      const pinState = layoutContext.pin.state;
+      tempPairs = tempPairs.filter((pair) => !isParticipantTrackPinned(pair, pinState));
+    }
+    if (filter) {
+      tempPairs = tempPairs.filter(filter);
+    }
+    return tempPairs;
+  }, [excludePinnedTracks, filter, layoutContext, pairs, ...filterDependenciesArray]);
 
   return (
     <>

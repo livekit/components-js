@@ -1,6 +1,5 @@
 import {
   isLocal,
-  isParticipantTrackPinned,
   log,
   setupMediaTrack,
   trackObservable,
@@ -9,7 +8,7 @@ import {
 } from '@livekit/components-core';
 import { Participant, RoomEvent, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureParticipant, useMaybeLayoutContext, useRoomContext } from '../context';
+import { useEnsureParticipant, useRoomContext } from '../context';
 import { mergeProps } from '../utils';
 
 interface UseMediaTrackProps {
@@ -109,7 +108,6 @@ export function useTrack(pub: TrackPublication) {
 }
 
 type UseTracksOptions = {
-  excludePinnedTracks?: boolean;
   updateOnlyOn?: RoomEvent[];
 };
 
@@ -124,30 +122,17 @@ type UseTracksOptions = {
  * ```
  */
 export function useTracks(sources: Array<Track.Source>, options: UseTracksOptions = {}) {
-  const { updateOnlyOn, excludePinnedTracks } = options;
+  const { updateOnlyOn } = options;
   const room = useRoomContext();
-  const layoutContext = useMaybeLayoutContext();
-
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
 
   React.useEffect(() => {
     const subscription = trackParticipantPairsObservable(room, sources, {
       additionalRoomEvents: updateOnlyOn,
-    }).subscribe((trackParticipantPairs: TrackParticipantPair[]) => {
-      setPairs(trackParticipantPairs);
-    });
+    }).subscribe(setPairs);
 
     return () => subscription.unsubscribe();
   }, [room, sources, updateOnlyOn]);
 
-  return React.useMemo(() => {
-    let trackParticipantPairs: TrackParticipantPair[] = pairs;
-    if (excludePinnedTracks && layoutContext) {
-      trackParticipantPairs = trackParticipantPairs.filter(
-        (trackParticipantPair) =>
-          !isParticipantTrackPinned(trackParticipantPair, layoutContext.pin.state),
-      );
-    }
-    return trackParticipantPairs;
-  }, [pairs, excludePinnedTracks, layoutContext]);
+  return pairs;
 }

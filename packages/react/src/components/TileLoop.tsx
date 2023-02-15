@@ -1,4 +1,9 @@
-import { isParticipantSourcePinned, ParticipantFilter } from '@livekit/components-core';
+import {
+  isParticipantSourcePinned,
+  isParticipantTrackPinned,
+  ParticipantFilter,
+  TrackParticipantPair,
+} from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext, useMaybeLayoutContext } from '../context';
@@ -44,6 +49,8 @@ const DefaultTileLoopProps = {
 export function TileLoop({
   sources,
   excludePinnedTracks,
+  filter,
+  filterDependencies = [],
   ...props
 }: React.PropsWithChildren<TileLoopProps>): React.FunctionComponentElement<
   React.PropsWithChildren<TileLoopProps>
@@ -53,20 +60,31 @@ export function TileLoop({
     sources ? sources.slice(1) : DefaultTileLoopProps.sources.slice(1),
   );
   const participants = useParticipants({ updateOnlyOn: [] });
+  const filteredParticipants = React.useMemo(() => {
+    return filter ? participants.filter(filter) : participants;
+  }, [filter, participants, ...filterDependencies]);
   const layoutContext = useMaybeLayoutContext();
 
-  const secondaryPairs = useTracks(secondarySources, { excludePinnedTracks });
+  const secondaryPairs = useTracks(secondarySources);
+  const filteredSecondaryPairs = React.useMemo(() => {
+    let tempPairs: TrackParticipantPair[] = secondaryPairs;
+    if (excludePinnedTracks && layoutContext?.pin?.state) {
+      const pinState = layoutContext.pin.state;
+      tempPairs = tempPairs.filter((pair) => !isParticipantTrackPinned(pair, pinState));
+    }
+    return tempPairs;
+  }, [excludePinnedTracks, layoutContext, secondaryPairs]);
 
   return (
     <>
-      {participants.map((participant) => (
+      {filteredParticipants.map((participant) => (
         <ParticipantContext.Provider value={participant} key={participant.identity}>
           {(!excludePinnedTracks ||
             !isParticipantSourcePinned(participant, mainSource, layoutContext?.pin.state)) && (
             <ParticipantTile trackSource={mainSource} />
           )}
 
-          {secondaryPairs
+          {filteredSecondaryPairs
             .filter(({ participant: p }) => p.identity === participant.identity)
             .map(({ track }, index) =>
               props.children ? (

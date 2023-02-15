@@ -5,6 +5,8 @@ import { useObservableState } from '../helper/useObservableState';
 import { cloneSingleChild } from '../utils';
 import { ChatEntry, MessageFormatter } from './ChatEntry';
 
+export type ChatMessages = ReturnType<typeof useChat>['chatMessages'];
+
 export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
   messageFormatter?: MessageFormatter;
 }

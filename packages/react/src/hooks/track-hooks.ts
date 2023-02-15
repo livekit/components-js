@@ -1,6 +1,5 @@
 import {
   isLocal,
-  isParticipantTrackPinned,
   log,
   setupMediaTrack,
   trackObservable,
@@ -9,7 +8,7 @@ import {
 } from '@livekit/components-core';
 import { Participant, RoomEvent, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureParticipant, useMaybeLayoutContext, useRoomContext } from '../context';
+import { useEnsureParticipant, useRoomContext } from '../context';
 import { mergeProps } from '../utils';
 
 interface UseMediaTrackProps {

@@ -7,10 +7,10 @@ import {
   Track,
   TrackPublication,
 } from 'livekit-client';
-import { map, Observable, startWith, Subscriber } from 'rxjs';
+import { map, switchMap, Observable, startWith, Subscriber } from 'rxjs';
 import { observeRoomEvents } from './room';
 import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
-import { allRemoteParticipantRoomEvents } from '../helper/eventGroups';
+import { allRemoteParticipantEvents, allRemoteParticipantRoomEvents } from '../helper/eventGroups';
 
 export function observeParticipantEvents<T extends Participant>(
   participant: T,
@@ -201,13 +201,32 @@ export function connectedParticipantsObserver(
   return observable;
 }
 
-export function connectedParticipantObserver(room: Room, identity: string) {
+export type ConnectedParticipantObserverOptions = {
+  additionalEvents?: ParticipantEvent[];
+};
+
+export function connectedParticipantObserver(
+  room: Room,
+  identity: string,
+  options: ConnectedParticipantObserverOptions = {},
+) {
+  const additionalEvents = options.additionalEvents ?? allRemoteParticipantEvents;
   const observable = observeRoomEvents(
     room,
     RoomEvent.ParticipantConnected,
     RoomEvent.ParticipantDisconnected,
     RoomEvent.ConnectionStateChanged,
-  ).pipe(map((r) => r.getParticipantByIdentity(identity) as RemoteParticipant | undefined));
+  ).pipe(
+    switchMap((r) => {
+      const participant = r.getParticipantByIdentity(identity) as RemoteParticipant | undefined;
+      if (participant) {
+        return observeParticipantEvents(participant, ...additionalEvents);
+      } else {
+        return new Observable<undefined>((subscribe) => subscribe.next(undefined));
+      }
+    }),
+    startWith(room.getParticipantByIdentity(identity) as RemoteParticipant | undefined),
+  );
 
   return observable;
 }

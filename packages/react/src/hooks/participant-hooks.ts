@@ -2,6 +2,7 @@ import * as React from 'react';
 import {
   LocalParticipant,
   Participant,
+  ParticipantEvent,
   RemoteParticipant,
   RoomEvent,
   Track,
@@ -86,11 +87,20 @@ export const useLocalParticipant = () => {
   };
 };
 
-export const useRemoteParticipant = (identity: string): RemoteParticipant | undefined => {
+export interface UseRemoteParticipantOptions {
+  updateOnlyOn?: ParticipantEvent[];
+}
+
+export const useRemoteParticipant = (
+  identity: string,
+  options: UseRemoteParticipantOptions = {},
+): RemoteParticipant | undefined => {
   const room = useRoomContext();
+  const { updateOnlyOn } = options;
+
   const observable = React.useMemo(
-    () => connectedParticipantObserver(room, identity),
-    [room, identity],
+    () => connectedParticipantObserver(room, identity, { additionalEvents: updateOnlyOn }),
+    [room, identity, updateOnlyOn],
   );
   const participant = useObservableState(
     observable,

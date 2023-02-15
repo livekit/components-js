@@ -17,14 +17,15 @@ export interface UseMediaDeviceSelectProps {
 }
 
 export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps) {
+  const roomContext = useMaybeRoomContext();
   // List of all devices.
   const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
   const devices = useObservableState(deviceObserver, []);
   // Active device management.
   const [currentDeviceId, setCurrentDeviceId] = React.useState<string>('');
   const { className, activeDeviceObservable, setActiveMediaDevice } = React.useMemo(
-    () => setupDeviceSelector(kind, room),
-    [kind, room],
+    () => setupDeviceSelector(kind, room ?? roomContext),
+    [kind, room, roomContext],
   );
 
   React.useEffect(() => {

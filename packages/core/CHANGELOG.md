@@ -1,5 +1,17 @@
 # @livekit/components-core
 
+## 0.3.0
+
+### Minor Changes
+
+- apply updateOnlyOn logic for remote participant hook - [#308](https://github.com/livekit/components-js/pull/308) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Export ChatMessage type from package/react. - [#319](https://github.com/livekit/components-js/pull/319) ([@Ocupe](https://github.com/Ocupe))
+
+- Add option to get mediatrack by name - [#317](https://github.com/livekit/components-js/pull/317) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.2.7
 
 ### Patch Changes

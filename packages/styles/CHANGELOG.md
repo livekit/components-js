@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 0.1.14
+
+### Patch Changes
+
+- Export css files directly additionally via exports map - [#312](https://github.com/livekit/components-js/pull/312) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.13
 
 ### Patch Changes

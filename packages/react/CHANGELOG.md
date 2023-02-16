@@ -1,5 +1,28 @@
 # @livekit/components-react
 
+## 0.4.0
+
+### Minor Changes
+
+- apply updateOnlyOn logic for remote participant hook - [#308](https://github.com/livekit/components-js/pull/308) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Export ChatMessage type from package/react. - [#319](https://github.com/livekit/components-js/pull/319) ([@Ocupe](https://github.com/Ocupe))
+
+- Add option to get mediatrack by name - [#317](https://github.com/livekit/components-js/pull/317) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix TileLoop child (template) not used for main source. - [#320](https://github.com/livekit/components-js/pull/320) ([@Ocupe](https://github.com/Ocupe))
+
+- Remove useTrack in favor of focusing on useMediaTrack - [#313](https://github.com/livekit/components-js/pull/313) ([@lukasIO](https://github.com/lukasIO))
+
+- Remove the excludePinnedTracks property from the useTracks hook. PinState handling must be accomplished outside the hook. - [#311](https://github.com/livekit/components-js/pull/311) ([@Ocupe](https://github.com/Ocupe))
+
+- Fix infinite render loop in custom participant hooks. - [#315](https://github.com/livekit/components-js/pull/315) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`08b6b6a`](https://github.com/livekit/components-js/commit/08b6b6a50ce371f5103b56d33f221c5038e98ca7), [`dc65553`](https://github.com/livekit/components-js/commit/dc65553508783665542ddc9a808c4dcee6ee3804), [`37eff03`](https://github.com/livekit/components-js/commit/37eff03c87ff8087c932826ebb03a7db1292a05d)]:
+  - @livekit/components-core@0.3.0
+
 ## 0.3.0
 
 ### Minor Changes

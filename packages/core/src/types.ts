@@ -1,4 +1,4 @@
-import type { Participant, TrackPublication } from 'livekit-client';
+import type { Participant, Track, TrackPublication } from 'livekit-client';
 
 export type TrackParticipantPair = {
   track: TrackPublication;
@@ -20,3 +20,17 @@ export interface ParticipantClickEvent {
 
 export type TrackFilter = Parameters<TrackParticipantPair[]['filter']>['0'];
 export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
+
+export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
+  {
+    [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>>;
+  }[Keys];
+
+export type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
+  {
+    [K in Keys]-?: Required<Pick<T, K>> & Partial<Record<Exclude<Keys, K>, undefined>>;
+  }[Keys];
+
+export type TrackObserverOptions =
+  | { source: Track.Source; name?: undefined }
+  | { source?: undefined; name: string };

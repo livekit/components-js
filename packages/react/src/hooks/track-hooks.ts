@@ -2,6 +2,7 @@ import {
   isLocal,
   log,
   setupMediaTrack,
+  TrackObserverOptions,
   TrackParticipantPair,
   trackParticipantPairsObservable,
 } from '@livekit/components-core';
@@ -16,9 +17,25 @@ interface UseMediaTrackProps {
   props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
 }
 
+export const useMediaTrackByName = (name: string, options: UseMediaTrackProps = {}) => {
+  return useMediaTrackBySourceOrName({ name }, options);
+};
+
 export const useMediaTrack = (source: Track.Source, options: UseMediaTrackProps = {}) => {
+  return useMediaTrackBySourceOrName({ source }, options);
+};
+
+/**
+ * @internal
+ */
+export const useMediaTrackBySourceOrName = (
+  { source, name }: TrackObserverOptions,
+  options: UseMediaTrackProps = {},
+) => {
   const participant = useEnsureParticipant(options.participant);
-  const [publication, setPublication] = React.useState(participant.getTrack(source));
+  const [publication, setPublication] = React.useState(
+    source ? participant.getTrack(source) : participant.getTrackByName(name),
+  );
   const [isMuted, setMuted] = React.useState(publication?.isMuted);
   const [isSubscribed, setSubscribed] = React.useState(publication?.isSubscribed);
   const [track, setTrack] = React.useState(publication?.track);
@@ -26,8 +43,8 @@ export const useMediaTrack = (source: Track.Source, options: UseMediaTrackProps 
   const previousElement = React.useRef<HTMLMediaElement | undefined | null>();
 
   const { className, trackObserver } = React.useMemo(() => {
-    return setupMediaTrack(participant, source);
-  }, [participant, source]);
+    return setupMediaTrack(participant, source ? { source } : { name });
+  }, [participant, source, name]);
 
   React.useEffect(() => {
     const subscription = trackObserver.subscribe((publication) => {
@@ -38,7 +55,7 @@ export const useMediaTrack = (source: Track.Source, options: UseMediaTrackProps 
       setTrack(publication?.track);
     });
     return () => subscription?.unsubscribe();
-  }, [source, trackObserver]);
+  }, [trackObserver]);
 
   React.useEffect(() => {
     if (track) {
@@ -68,7 +85,7 @@ export const useMediaTrack = (source: Track.Source, options: UseMediaTrackProps 
         publication.dimensions.width > publication.dimensions.height ? 'landscape' : 'portrait';
       setOrientation(orientation_);
     }
-  }, [publication, source]);
+  }, [publication]);
 
   return {
     publication,

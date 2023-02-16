@@ -18,8 +18,12 @@ export interface ChatMessage {
   message: string;
 }
 
+export interface ReceivedChatMessage extends ChatMessage {
+  from?: RemoteParticipant | LocalParticipant;
+}
+
 export function setupChat(room: Room) {
-  let chatMessages: Array<ChatMessage & { from?: RemoteParticipant | LocalParticipant }> = [];
+  let chatMessages: ReceivedChatMessage[] = [];
   const { messageObservable } = setupDataMessageHandler<ChatDataMessage>(room, MessageChannel.CHAT);
   const chatMessageBehavior = new BehaviorSubject(chatMessages);
   const allMessagesObservable = messageObservable.pipe(

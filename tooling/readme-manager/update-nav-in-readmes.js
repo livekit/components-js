@@ -32,13 +32,18 @@ const NAVIGATION_BLOCK = `<!--NAV_START-->
  */
 function getNavigationBlock(path) {
   const findThis = new RegExp('\\[(.*)\\](?=\\(/?' + path + '\\))', 'g');
-  const updatedNavBlock = NAVIGATION_BLOCK.replaceAll(findThis, `[$1 ${YOU_ARE_HERE_ICON}]`);
-  // if (updatedNavBlock !== NAVIGATION_BLOCK) {
-  //   console.log(`Updated nav block for: ${path}`);
-  // } else {
-  //   console.log(`\t No match was found for regex: ${findThis}`);
-  // }
-  return updatedNavBlock;
+  let updatedNavBlock = NAVIGATION_BLOCK.replaceAll(findThis, `[$1 ${YOU_ARE_HERE_ICON}]`);
+
+  // Make links relative to monorepo root so that links work also outside GitHub (e.g. https://www.npmjs.com/package/@livekit/components-react).
+  const levelsDeep = path.split('/').length - 1;
+  const prefixToMakeRelative = new Array(levelsDeep).fill('..').join('/');
+
+  const findNavEntry = new RegExp('(\\[.*\\])\\((.*)\\)', 'g');
+  const relativeNavBlock = updatedNavBlock.replaceAll(
+    findNavEntry,
+    `$1(${prefixToMakeRelative}$2)`,
+  );
+  return relativeNavBlock;
 }
 
 /**

@@ -7,7 +7,7 @@ import { ParticipantFilter } from '@livekit/components-core';
 
 export interface GridLayoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    UseParticipantsOptions {
+    Pick<UseParticipantsOptions, 'updateOnlyOn'> {
   /**
    * The grid shows all room participants. If only a subset of the participants
    * should be visible, they can be filtered.

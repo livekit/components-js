@@ -9,7 +9,7 @@
 }
 
 .grid-layout {
-  --lk-col-count: 2;
+  --lk-col-count: 1;
   display: grid;
   grid-template-columns: repeat(var(--lk-col-count), minmax(0, 1fr));
   grid-template-rows: repeat(auto-fit, minmax(0, 1fr));

@@ -80,17 +80,34 @@ export function TileLoop({
       {filteredParticipants.map((participant) => (
         <ParticipantContext.Provider value={participant} key={participant.identity}>
           {(!excludePinnedTracks ||
-            !isParticipantSourcePinned(participant, mainSource, layoutContext?.pin.state)) && (
-            <ParticipantTile trackSource={mainSource} />
-          )}
+            !isParticipantSourcePinned(participant, mainSource, layoutContext?.pin.state)) &&
+            (props.children ? (
+              cloneSingleChild(
+                props.children,
+                { trackSource: mainSource },
+                `${participant.identity}-${mainSource}-main`,
+              )
+            ) : (
+              <ParticipantTile
+                key={`${participant.identity}-${mainSource}-main`}
+                trackSource={mainSource}
+              />
+            ))}
 
           {filteredSecondaryPairs
             .filter(({ participant: p }) => p.identity === participant.identity)
-            .map(({ track }, index) =>
+            .map(({ track }) =>
               props.children ? (
-                cloneSingleChild(props.children, { trackSource: track.source }, index)
+                cloneSingleChild(
+                  props.children,
+                  { trackSource: track.source },
+                  `${participant.identity}-${track.source}-secondary`,
+                )
               ) : (
-                <ParticipantTile key={index} trackSource={track.source} />
+                <ParticipantTile
+                  key={`${participant.identity}-${track.source}-secondary`}
+                  trackSource={track.source}
+                />
               ),
             )}
         </ParticipantContext.Provider>

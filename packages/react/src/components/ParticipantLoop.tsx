@@ -8,7 +8,18 @@ import { cloneSingleChild } from '../utils';
 
 type ParticipantLoopProps = {
   filter?: ParticipantFilter;
+  /**
+   * If your filter function is dependent on some external state, and you want it to be re-filtered
+   * whenever that external state changes, you will need to provide a dependency array with all of
+   * the external dependencies, just as you would on a React useEffect hook.
+   */
   filterDependencies?: Array<unknown>;
+  /**
+   * To optimize performance, you can use the updateOnlyOn property to decide on
+   * what RoomEvents the hook updates. By default it updates on all relevant RoomEvents
+   * to keep the returned participants array up to date.
+   * The minimal set of non-overwriteable RoomEvents is: [RoomEvent.ParticipantConnected, RoomEvent.ParticipantDisconnected, RoomEvent.ConnectionStateChanged]
+   */
   updateOnlyOn?: RoomEvent[];
 };
 

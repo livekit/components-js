@@ -16,6 +16,9 @@
     "./assets/icons/*": {
       "default": "./assets/icons/*"
     },
+    "./*": {
+      "default": "./dist/general/*"
+    },
     "./prefabs": "./dist/general/prefabs.css",
     "./themes/*": {
       "default": "./dist/themes/*.css"

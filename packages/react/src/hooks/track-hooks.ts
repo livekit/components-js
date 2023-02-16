@@ -1,16 +1,13 @@
 import {
   isLocal,
-  isParticipantTrackPinned,
   log,
   setupMediaTrack,
-  trackObservable,
   TrackParticipantPair,
   trackParticipantPairsObservable,
-  TrackFilter,
 } from '@livekit/components-core';
-import { Participant, Track, TrackPublication } from 'livekit-client';
+import { Participant, RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureParticipant, useMaybeLayoutContext, useRoomContext } from '../context';
+import { useEnsureParticipant, useRoomContext } from '../context';
 import { mergeProps } from '../utils';
 
 interface UseMediaTrackProps {
@@ -89,30 +86,8 @@ export const useMediaTrack = (source: Track.Source, options: UseMediaTrackProps 
   };
 };
 
-export function useTrack(pub: TrackPublication) {
-  const [publication, setPublication] = React.useState(pub);
-  const [track, setTrack] = React.useState(pub?.track);
-  React.useEffect(() => {
-    if (!pub) return;
-    const listener = trackObservable(pub).subscribe((p) => {
-      if (p.track !== track) {
-        track?.detach();
-      }
-      setPublication(p);
-      setTrack(p.isSubscribed ? p.track : undefined);
-    });
-    setTrack(pub?.track);
-    setPublication(pub);
-    return () => listener.unsubscribe();
-  }, [pub, track]);
-
-  return { publication, track };
-}
-
 type UseTracksOptions = {
-  excludePinnedTracks?: boolean;
-  filter?: TrackFilter;
-  filterDependencies?: Array<any>;
+  updateOnlyOn?: RoomEvent[];
 };
 
 /**
@@ -126,43 +101,17 @@ type UseTracksOptions = {
  * ```
  */
 export function useTracks(sources: Array<Track.Source>, options: UseTracksOptions = {}) {
+  const { updateOnlyOn } = options;
   const room = useRoomContext();
-  const layoutContext = useMaybeLayoutContext();
-
-  const [unfilteredPairs, setUnfilteredPairs] = React.useState<TrackParticipantPair[]>([]);
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
 
   React.useEffect(() => {
-    const subscription = trackParticipantPairsObservable(room, sources).subscribe(
-      (trackParticipantPairs: TrackParticipantPair[]) => {
-        setUnfilteredPairs(trackParticipantPairs);
-      },
-    );
+    const subscription = trackParticipantPairsObservable(room, sources, {
+      additionalRoomEvents: updateOnlyOn,
+    }).subscribe(setPairs);
 
     return () => subscription.unsubscribe();
-  }, [room, sources]);
-
-  React.useEffect(() => {
-    let trackParticipantPairs: TrackParticipantPair[] = unfilteredPairs;
-    if (options?.excludePinnedTracks && layoutContext) {
-      trackParticipantPairs = trackParticipantPairs.filter(
-        (trackParticipantPair) =>
-          !isParticipantTrackPinned(trackParticipantPair, layoutContext.pin.state),
-      );
-    }
-    if (options?.filter) {
-      trackParticipantPairs = trackParticipantPairs.filter(options.filter);
-    }
-    setPairs(trackParticipantPairs);
-  }, [
-    unfilteredPairs,
-    options?.filter,
-    options?.excludePinnedTracks,
-    layoutContext,
-    options?.filterDependencies,
-  ]);
-
-  // React.useDebugValue(`Pairs count: ${pairs.length}`);
+  }, [room, sources, updateOnlyOn]);
 
   return pairs;
 }

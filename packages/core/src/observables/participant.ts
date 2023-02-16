@@ -11,6 +11,7 @@ import { map, switchMap, Observable, startWith, Subscriber } from 'rxjs';
 import { observeRoomEvents } from './room';
 import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 import { allRemoteParticipantEvents, allRemoteParticipantRoomEvents } from '../helper/eventGroups';
+import { TrackObserverOptions } from '../types';
 
 export function observeParticipantEvents<T extends Participant>(
   participant: T,
@@ -79,10 +80,12 @@ export function observeParticipantMedia<T extends Participant>(participant: T) {
   return participantObserver;
 }
 
-export function createTrackObserver(participant: Participant, source: Track.Source) {
+export function createTrackObserver(participant: Participant, options: TrackObserverOptions) {
   return observeParticipantMedia(participant).pipe(
     map((media) => {
-      const publication = media.participant.getTrack(source);
+      const publication = options.source
+        ? media.participant.getTrack(options.source)
+        : media.participant.getTrackByName(options.name);
       return { publication };
     }),
   );

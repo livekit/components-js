@@ -5,7 +5,9 @@ import { mergeProps } from '../../utils';
 import { useSize } from '../../helper/resizeObserver';
 import { ParticipantFilter } from '@livekit/components-core';
 
-export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface GridLayoutProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    UseParticipantsOptions {
   /**
    * The grid shows all room participants. If only a subset of the participants
    * should be visible, they can be filtered.
@@ -25,13 +27,15 @@ export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
  * <LiveKitRoom>
  * ```
  */
-export function GridLayout({ filter, filterDependencies = [], ...props }: GridLayoutProps) {
-  const participantOptions: UseParticipantsOptions = React.useMemo(() => {
-    return { updateOnlyOn: [] };
-  }, []);
-
-  const participants = useParticipants(participantOptions);
-
+export function GridLayout({
+  filter,
+  updateOnlyOn = [],
+  filterDependencies = [],
+  ...props
+}: GridLayoutProps) {
+  const participants = useParticipants({
+    updateOnlyOn: filter && updateOnlyOn.length === 0 ? undefined : updateOnlyOn,
+  });
   const filteredParticipants = React.useMemo(
     () => (filter ? participants.filter(filter) : participants),
     [filter, participants, ...filterDependencies],

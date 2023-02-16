@@ -39,10 +39,7 @@ export const useParticipants = (options: UseParticipantsOptions = {}) => {
   const remoteParticipants = useRemoteParticipants(cachedOptions);
   const { localParticipant } = useLocalParticipant();
 
-  return React.useMemo(
-    () => [localParticipant, ...remoteParticipants],
-    [localParticipant, remoteParticipants],
-  );
+  return [localParticipant, ...remoteParticipants];
 };
 
 /**

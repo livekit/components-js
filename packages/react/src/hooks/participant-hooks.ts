@@ -35,12 +35,14 @@ export interface UseParticipantsOptions {
  * The useParticipants hook returns all participants (local and remote) of the current room.
  */
 export const useParticipants = (options: UseParticipantsOptions = {}) => {
-  const remoteParticipants = useRemoteParticipants({
-    updateOnlyOn: options.updateOnlyOn,
-  });
+  const [cachedOptions] = React.useState(options);
+  const remoteParticipants = useRemoteParticipants(cachedOptions);
   const { localParticipant } = useLocalParticipant();
 
-  return [localParticipant, ...remoteParticipants];
+  return React.useMemo(
+    () => [localParticipant, ...remoteParticipants],
+    [localParticipant, remoteParticipants],
+  );
 };
 
 /**

@@ -48,7 +48,7 @@ type ParticipantLoopProps = {
 export const ParticipantLoop = ({
   filter,
   filterDependencies,
-  updateOnlyOn,
+  updateOnlyOn = [],
   ...props
 }: React.PropsWithChildren<ParticipantLoopProps>) => {
   const participants = useParticipants({ updateOnlyOn });

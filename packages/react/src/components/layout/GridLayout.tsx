@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TileLoop } from '../TileLoop';
-import { useParticipants } from '../../hooks';
+import { useParticipants, UseParticipantsOptions } from '../../hooks';
 import { mergeProps } from '../../utils';
 import { useSize } from '../../helper/resizeObserver';
 import { ParticipantFilter } from '@livekit/components-core';
@@ -25,12 +25,24 @@ export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
  * <LiveKitRoom>
  * ```
  */
-export function GridLayout({ filter, filterDependencies, ...props }: GridLayoutProps) {
-  const participants = useParticipants();
-  const filterDependenciesArray = filterDependencies ?? [];
-  const filteredParticipants = React.useMemo(() => {
-    return filter ? participants.filter(filter) : participants;
-  }, [filter, participants, ...filterDependenciesArray]);
+export function GridLayout({ filter, filterDependencies = [], ...props }: GridLayoutProps) {
+  const participantOptions: UseParticipantsOptions = React.useMemo(() => {
+    return { updateOnlyOn: [] };
+  }, []);
+  const participants = useParticipants(participantOptions);
+  const [filteredParticipants, setFilteredParticipants] = React.useState(participants);
+  React.useEffect(() => {
+    console.log('rerun filter');
+    if (filter) {
+      setFilteredParticipants(participants.filter(filter));
+    }
+  }, [filter, participants, ...filterDependencies]);
+  // React.useEffect(() => {
+  //   console.log('participants');
+  // }, [participants]);
+  // React.useEffect(() => {
+  //   console.log('filter');
+  // }, [filter]);
 
   const containerEl = React.createRef<HTMLDivElement>();
   const gridEl = React.createRef<HTMLDivElement>();

@@ -1,11 +1,11 @@
-import { setupChat } from '@livekit/components-core';
+import { setupChat, ChatMessage } from '@livekit/components-core';
 import * as React from 'react';
 import { useRoomContext } from '../context';
 import { useObservableState } from '../helper/useObservableState';
 import { cloneSingleChild } from '../utils';
 import { ChatEntry, MessageFormatter } from './ChatEntry';
 
-export type ChatMessages = ReturnType<typeof useChat>['chatMessages'];
+export type { ChatMessage };
 
 export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
   messageFormatter?: MessageFormatter;

@@ -6,17 +6,17 @@ Beautiful base styling for LiveKit components that you can use as is, build upon
 
 ## Monorepo Navigation
 
-- [Home](/README.md)
+- [Home](../../README.md)
 - **Docs**
-  - [Docs](/docs/alpha-docs/README.md)
-  - [Storybook](/docs/storybook/README.md)
+  - [Docs](../../docs/alpha-docs/README.md)
+  - [Storybook](../../docs/storybook/README.md)
 - **Framework Implementations**:
-  - [React](/packages/react/README.md)
+  - [React](../../packages/react/README.md)
 - **Examples**
-  - [Next.js](/examples/nextjs/README.md)
+  - [Next.js](../../examples/nextjs/README.md)
 - **Internal Packages**
-  - [Core](/packages/core/README.md)
-  - [Styles 👈](/packages/styles/README.md)
+  - [Core](../../packages/core/README.md)
+  - [Styles 👈](../../packages/styles/README.md)
 
 <!--NAV_END-->
 

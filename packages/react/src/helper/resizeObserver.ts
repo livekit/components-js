@@ -8,7 +8,7 @@ import useLatest from '@react-hook/latest';
  * code extracted from https://github.com/jaredLunde/react-hook/blob/master/packages/resize-observer/src/index.tsx in order to not include the polyfill for resize-observer
  */
 export function useResizeObserver<T extends HTMLElement>(
-  target: React.RefObject<T> | T | null,
+  target: React.RefObject<T>,
   callback: UseResizeObserverCallback,
 ) {
   const resizeObserver = getResizeObserver();
@@ -16,7 +16,8 @@ export function useResizeObserver<T extends HTMLElement>(
 
   React.useLayoutEffect(() => {
     let didUnsubscribe = false;
-    const targetEl = target && 'current' in target ? target.current : target;
+
+    const targetEl = target.current;
     if (!targetEl) return;
 
     function cb(entry: ResizeObserverEntry, observer: ResizeObserver) {
@@ -30,7 +31,7 @@ export function useResizeObserver<T extends HTMLElement>(
       didUnsubscribe = true;
       resizeObserver?.unsubscribe(targetEl as HTMLElement, cb);
     };
-  }, [target, resizeObserver, storedCallback]);
+  }, [target.current, resizeObserver, storedCallback]);
 
   return resizeObserver?.observer;
 }
@@ -98,13 +99,17 @@ export type UseResizeObserverCallback = (
 export const useSize = (target: React.RefObject<HTMLDivElement>) => {
   const [size, setSize] = React.useState({ width: 0, height: 0 });
   React.useLayoutEffect(() => {
-    if (target?.current) {
+    if (target.current) {
       const { width, height } = target.current.getBoundingClientRect();
       setSize({ width, height });
     }
   }, [target.current]);
 
+  const resizeCallback = React.useCallback(
+    (entry: ResizeObserverEntry) => setSize(entry.contentRect),
+    [],
+  );
   // Where the magic happens
-  useResizeObserver(target, (entry) => setSize(entry.contentRect));
+  useResizeObserver(target, resizeCallback);
   return size;
 };

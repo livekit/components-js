@@ -29,38 +29,31 @@ export function GridLayout({ filter, filterDependencies = [], ...props }: GridLa
   const participantOptions: UseParticipantsOptions = React.useMemo(() => {
     return { updateOnlyOn: [] };
   }, []);
+
   const participants = useParticipants(participantOptions);
-  const [filteredParticipants, setFilteredParticipants] = React.useState(participants);
-  React.useEffect(() => {
-    console.log('rerun filter');
-    if (filter) {
-      setFilteredParticipants(participants.filter(filter));
-    }
-  }, [filter, participants, ...filterDependencies]);
-  // React.useEffect(() => {
-  //   console.log('participants');
-  // }, [participants]);
-  // React.useEffect(() => {
-  //   console.log('filter');
-  // }, [filter]);
+
+  const filteredParticipants = React.useMemo(
+    () => (filter ? participants.filter(filter) : participants),
+    [filter, participants, ...filterDependencies],
+  );
 
   const containerEl = React.createRef<HTMLDivElement>();
   const gridEl = React.createRef<HTMLDivElement>();
 
   const { width, height } = useSize(containerEl);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const containerRatio = width / height;
     const tileRatio = 16 / 10;
     const colAdjust = Math.sqrt(containerRatio / tileRatio);
     const colFraction = Math.sqrt(filteredParticipants.length) * colAdjust;
     const cols = Math.max(filteredParticipants.length === 1 ? 1 : 2, Math.round(colFraction));
-    const widthAdjust = Math.min(100, 100 + (cols > colFraction ? 1 : -1) * (colFraction % 1) * 50);
+    // const widthAdjust = Math.min(100, 100 + (cols > colFraction ? 1 : -1) * (colFraction % 1) * 50);
     if (gridEl.current) {
       gridEl.current.style.setProperty('--lk-col-count', cols.toString());
-      gridEl.current.style.width = `${widthAdjust}%`;
+      // gridEl.current.style.width = `${widthAdjust}%`;
     }
-  }, [width, height, filteredParticipants, gridEl.current]);
+  }, [width, height, filteredParticipants, gridEl]);
 
   const elementProps = React.useMemo(
     () => mergeProps(props, { className: 'lk-grid-layout' }),

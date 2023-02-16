@@ -53,7 +53,7 @@ export function ControlBar(props: ControlBarProps) {
     visibleControls.camera ??= localPermissions.canPublish;
     visibleControls.microphone ??= localPermissions.canPublish;
     visibleControls.screenShare ??= localPermissions.canPublish;
-    visibleControls.chat ??= localPermissions.canPublishData;
+    visibleControls.chat ??= localPermissions.canPublishData && controls?.chat;
   }
 
   const showIcon = React.useMemo(

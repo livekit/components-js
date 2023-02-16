@@ -10,17 +10,20 @@ import {
 
 export interface ChatDataMessage extends BaseDataMessage {
   channelId: MessageChannel.CHAT;
-  payload: Omit<ChatMessage, 'from'>;
+  payload: ChatMessage;
 }
 
 export interface ChatMessage {
   timestamp: number;
   message: string;
+}
+
+export interface ReceivedChatMessage extends ChatMessage {
   from?: RemoteParticipant | LocalParticipant;
 }
 
 export function setupChat(room: Room) {
-  let chatMessages: ChatMessage[] = [];
+  let chatMessages: ReceivedChatMessage[] = [];
   const { messageObservable } = setupDataMessageHandler<ChatDataMessage>(room, MessageChannel.CHAT);
   const chatMessageBehavior = new BehaviorSubject(chatMessages);
   const allMessagesObservable = messageObservable.pipe(

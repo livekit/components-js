@@ -120,10 +120,7 @@ type UseTracksOptions = {
 export function useTracks(sources: Array<Track.Source>, options: UseTracksOptions = {}) {
   const room = useRoomContext();
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
-  console.warn('use tracks');
   React.useEffect(() => {
-    console.warn('use tracks');
-
     const subscription = trackParticipantPairsObservable(room, sources, {
       additionalRoomEvents: options.updateOnlyOn,
     }).subscribe(setPairs);

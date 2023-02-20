@@ -30,12 +30,12 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
 
   const setActiveMediaDevice = async (id: string) => {
     if (room) {
-      log.debug('switching device', kind, id);
+      log.debug(`Switching active device of kind "${kind}" with id ${id}.`);
       await room.switchActiveDevice(kind, id);
     } else {
-      log.debug('room not available, skipping device switch');
-      activeDeviceSubject.next(id);
+      log.debug('Skip the device switch because the room object is not available. ');
     }
+    activeDeviceSubject.next(id);
   };
   const className: string = prefixClass('media-device-select');
   return {

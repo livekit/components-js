@@ -9,7 +9,7 @@ import { useObservableState } from '../../helper/useObservableState';
 export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   source: Track.Source;
   participant?: Participant;
-  showMutedOnly?: boolean;
+  show?: 'always' | 'muted' | 'unmuted';
 }
 
 interface UseTrackMutedIndicatorOptions {
@@ -49,10 +49,13 @@ export const useTrackMutedIndicator = (
 export const TrackMutedIndicator = ({
   source,
   participant,
-  showMutedOnly,
+  show = 'always',
   ...props
 }: TrackMutedIndicatorProps) => {
   const { className, isMuted } = useTrackMutedIndicator(source, { participant });
+
+  const showIndicator =
+    show === 'always' || (show === 'muted' && isMuted) || (show === 'unmuted' && !isMuted);
 
   const htmlProps = React.useMemo(
     () =>
@@ -62,15 +65,13 @@ export const TrackMutedIndicator = ({
     [className, props],
   );
 
+  if (!showIndicator) {
+    return null;
+  }
+
   return (
-    <>
-      {!showMutedOnly || isMuted ? (
-        <div {...htmlProps} data-lk-muted={isMuted}>
-          {props.children ?? getSourceIcon(source, !isMuted)}
-        </div>
-      ) : (
-        <></>
-      )}
-    </>
+    <div {...htmlProps} data-lk-muted={isMuted}>
+      {props.children ?? getSourceIcon(source, !isMuted)}
+    </div>
   );
 };

@@ -1,5 +1,5 @@
 import { ParticipantFilter } from '@livekit/components-core';
-import { Track } from 'livekit-client';
+import { RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
 import { useParticipants } from '../hooks';
@@ -7,8 +7,20 @@ import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
 type ParticipantLoopProps = {
-  filterDependencies?: Array<unknown>;
   filter?: ParticipantFilter;
+  /**
+   * If your filter function is dependent on some external state, and you want it to be re-filtered
+   * whenever that external state changes, you will need to provide a dependency array with all of
+   * the external dependencies, just as you would on a React useEffect hook.
+   */
+  filterDependencies?: Array<unknown>;
+  /**
+   * To optimize performance, you can use the updateOnlyOn property to decide on
+   * what RoomEvents the hook updates. By default it updates on all relevant RoomEvents
+   * to keep the returned participants array up to date.
+   * The minimal set of non-overwriteable RoomEvents is: [RoomEvent.ParticipantConnected, RoomEvent.ParticipantDisconnected, RoomEvent.ConnectionStateChanged]
+   */
+  updateOnlyOn?: RoomEvent[];
 };
 
 /**
@@ -36,13 +48,20 @@ type ParticipantLoopProps = {
 export const ParticipantLoop = ({
   filter,
   filterDependencies,
+  updateOnlyOn = [],
   ...props
 }: React.PropsWithChildren<ParticipantLoopProps>) => {
-  const participants = useParticipants({ filter, filterDependencies });
+  const participants = useParticipants({
+    updateOnlyOn: filter && updateOnlyOn.length === 0 ? undefined : updateOnlyOn,
+  });
+  const filterDependenciesArray = filterDependencies ?? [];
+  const filteredParticipants = React.useMemo(() => {
+    return filter ? participants.filter(filter) : participants;
+  }, [participants, filter, ...filterDependenciesArray]);
 
   return (
     <>
-      {participants.map((participant) => (
+      {filteredParticipants.map((participant) => (
         <ParticipantContext.Provider value={participant} key={participant.identity}>
           {props.children ? (
             cloneSingleChild(props.children)

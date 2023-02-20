@@ -48,7 +48,7 @@ const Huddle: NextPage = () => {
 
 const CustomGridLayout = ({ room }: { room?: Room }) => {
   const { screenShareTrack, allScreenShares } = useScreenShare({ room });
-  const participants = useParticipants();
+  const participants = useParticipants({ updateOnlyOn: [] });
   const gridContainerRef = useRef(null);
 
   const props = useMemo(() => {
@@ -184,7 +184,7 @@ const CustomParticipantTile = () => {
 };
 
 const ParticipantCount = (props: HTMLAttributes<HTMLDivElement>) => {
-  const participants = useParticipants();
+  const participants = useParticipants({ updateOnlyOn: [] });
   return (
     <div {...props}>
       <svg width="100%" height="100%" viewBox="0 -10 10 10">

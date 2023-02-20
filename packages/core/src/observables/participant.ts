@@ -7,9 +7,11 @@ import {
   Track,
   TrackPublication,
 } from 'livekit-client';
-import { map, Observable, startWith, Subscriber } from 'rxjs';
+import { map, switchMap, Observable, startWith, Subscriber } from 'rxjs';
 import { observeRoomEvents } from './room';
 import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
+import { allRemoteParticipantEvents, allRemoteParticipantRoomEvents } from '../helper/eventGroups';
+import { TrackObserverOptions } from '../types';
 
 export function observeParticipantEvents<T extends Participant>(
   participant: T,
@@ -78,10 +80,12 @@ export function observeParticipantMedia<T extends Participant>(participant: T) {
   return participantObserver;
 }
 
-export function createTrackObserver(participant: Participant, source: Track.Source) {
+export function createTrackObserver(participant: Participant, options: TrackObserverOptions) {
   return observeParticipantMedia(participant).pipe(
     map((media) => {
-      const publication = media.participant.getTrack(source);
+      const publication = options.source
+        ? media.participant.getTrack(options.source)
+        : media.participant.getTrackByName(options.name);
       return { publication };
     }),
   );
@@ -165,7 +169,14 @@ export function createIsSpeakingObserver(participant: Participant) {
   );
 }
 
-export function connectedParticipantsObserver(room: Room) {
+type ConnectedParticipantsObserverOptions = {
+  additionalRoomEvents?: RoomEvent[];
+};
+
+export function connectedParticipantsObserver(
+  room: Room,
+  options: ConnectedParticipantsObserverOptions = {},
+) {
   let subscriber: Subscriber<RemoteParticipant[]> | undefined;
 
   const observable = new Observable<RemoteParticipant[]>((sub) => {
@@ -173,25 +184,52 @@ export function connectedParticipantsObserver(room: Room) {
     return () => listener.unsubscribe();
   }).pipe(startWith(Array.from(room.participants.values())));
 
-  const listener = observeRoomEvents(
-    room,
-    RoomEvent.ParticipantConnected,
-    RoomEvent.ParticipantDisconnected,
-    RoomEvent.ConnectionStateChanged,
-  ).subscribe((r) => subscriber?.next(Array.from(r.participants.values())));
+  const additionalRoomEvents = options.additionalRoomEvents ?? allRemoteParticipantRoomEvents;
+
+  const roomEvents = Array.from(
+    new Set([
+      RoomEvent.ParticipantConnected,
+      RoomEvent.ParticipantDisconnected,
+      RoomEvent.ConnectionStateChanged,
+      ...additionalRoomEvents,
+    ]),
+  );
+
+  const listener = observeRoomEvents(room, ...roomEvents).subscribe((r) =>
+    subscriber?.next(Array.from(r.participants.values())),
+  );
   if (room.participants.size > 0) {
     subscriber?.next(Array.from(room.participants.values()));
   }
   return observable;
 }
 
-export function connectedParticipantObserver(room: Room, identity: string) {
+export type ConnectedParticipantObserverOptions = {
+  additionalEvents?: ParticipantEvent[];
+};
+
+export function connectedParticipantObserver(
+  room: Room,
+  identity: string,
+  options: ConnectedParticipantObserverOptions = {},
+) {
+  const additionalEvents = options.additionalEvents ?? allRemoteParticipantEvents;
   const observable = observeRoomEvents(
     room,
     RoomEvent.ParticipantConnected,
     RoomEvent.ParticipantDisconnected,
     RoomEvent.ConnectionStateChanged,
-  ).pipe(map((r) => r.getParticipantByIdentity(identity) as RemoteParticipant | undefined));
+  ).pipe(
+    switchMap((r) => {
+      const participant = r.getParticipantByIdentity(identity) as RemoteParticipant | undefined;
+      if (participant) {
+        return observeParticipantEvents(participant, ...additionalEvents);
+      } else {
+        return new Observable<undefined>((subscribe) => subscribe.next(undefined));
+      }
+    }),
+    startWith(room.getParticipantByIdentity(identity) as RemoteParticipant | undefined),
+  );
 
   return observable;
 }

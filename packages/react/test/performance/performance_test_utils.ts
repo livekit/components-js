@@ -2,23 +2,28 @@ import { cleanup } from '@testing-library/react';
 import { TestContext } from 'vitest';
 import ResizeObserver from 'resize-observer-polyfill';
 
+/** Performance table row. */
 export function Row(
   id: string,
-  phase: 'mount' | 'update',
-  actualDuration: number,
-  baseDuration: number,
+  phase: string,
+  actualDuration: number | string,
+  baseDuration: number | string,
+  note?: string,
 ) {
   this.id = id;
   this.phase = phase;
-  this.actualDuration = `${actualDuration.toFixed(4)}ms`;
-  this.baseDuration = `${baseDuration.toFixed(4)}ms`;
+  this.actualDuration =
+    typeof actualDuration === 'number' ? `${actualDuration.toFixed(4)}ms` : actualDuration;
+  this.baseDuration =
+    typeof baseDuration === 'number' ? `${baseDuration.toFixed(4)}ms` : baseDuration;
+  this.note = note || '';
 }
 
 /**
  * @see https://beta.reactjs.org/reference/react/Profiler#onrender-parameters
  */
 export const afterEachPerformanceTest = async (context: TestContext) => {
-  console.log(`\n==> Render times for: ${context.meta.name}`);
+  console.log(`\n==> Render times for:\n${context.meta.name}`);
   console.table(context.logs);
   cleanup();
 };
@@ -33,9 +38,7 @@ export const beforeEachPerformanceTest = async (context: TestContext) => {
     context.logs.push(new Row(id, phase, actualDuration, baseDuration));
   }
   function logNote(note: string) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    /** @ts-ignore */
-    context.logs.push({ id: note, phase: '---', actualDuration: '---', baseDuration: '---' });
+    context.logs.push(new Row('---', '---', '---', '---', note));
   }
 
   context.onRender = logRenderResults;

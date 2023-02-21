@@ -1,14 +1,12 @@
 import { SKIP_PERFORMANCE_TESTS } from '../env';
 import * as React from 'react';
 import { describe, it, beforeEach, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render } from '@testing-library/react';
 import { Profiler } from 'react';
 import { afterEachPerformanceTest, beforeEachPerformanceTest } from './performance_test_utils';
 import { LiveKitRoom } from './../../src/components';
 import { VideoConference } from './../../src/prefabs';
-import { ConnectionQuality, Participant, RemoteParticipant, Room, RoomEvent } from 'livekit-client';
-import { log } from '@livekit/components-core';
+import { Participant, RemoteParticipant, Room, RoomEvent } from 'livekit-client';
 import { act } from 'react-dom/test-utils';
 
 describe.skipIf(SKIP_PERFORMANCE_TESTS)('Basic performance test setup', () => {
@@ -53,7 +51,7 @@ describe.skipIf(SKIP_PERFORMANCE_TESTS)('Basic performance test setup', () => {
         });
         act(() => {
           logNote('fire ParticipantConnected');
-          room.emit(RoomEvent.ParticipantConnected, new RemoteParticipant());
+          room.emit(RoomEvent.ParticipantConnected, new Participant(''));
         });
       }),
     100,

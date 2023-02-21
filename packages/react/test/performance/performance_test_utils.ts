@@ -3,20 +3,21 @@ import { TestContext } from 'vitest';
 import ResizeObserver from 'resize-observer-polyfill';
 
 /** Performance table row. */
-export function Row(
+export function row(
   id: string,
   phase: string,
   actualDuration: number | string,
   baseDuration: number | string,
   note?: string,
 ) {
-  this.id = id;
-  this.phase = phase;
-  this.actualDuration =
-    typeof actualDuration === 'number' ? `${actualDuration.toFixed(4)}ms` : actualDuration;
-  this.baseDuration =
-    typeof baseDuration === 'number' ? `${baseDuration.toFixed(4)}ms` : baseDuration;
-  this.note = note || '';
+  return {
+    id: id,
+    phase: phase,
+    actualDuration:
+      typeof actualDuration === 'number' ? `${actualDuration.toFixed(4)}ms` : actualDuration,
+    baseDuration: typeof baseDuration === 'number' ? `${baseDuration.toFixed(4)}ms` : baseDuration,
+    note: note || '',
+  };
 }
 
 /**
@@ -38,10 +39,10 @@ export const beforeEachPerformanceTest = async (context: TestContext) => {
     actualDuration: number,
     baseDuration: number,
   ) {
-    context.logs.push(new Row(id, phase, actualDuration, baseDuration));
+    context.logs.push(row(id, phase, actualDuration, baseDuration));
   }
   function logNote(note: string) {
-    context.logs.push(new Row('---', '---', '---', '---', note));
+    context.logs.push(row('---', '---', '---', '---', note));
   }
 
   context.onRender = logRenderResults;

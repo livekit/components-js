@@ -28,6 +28,9 @@ export const afterEachPerformanceTest = async (context: TestContext) => {
   cleanup();
 };
 
+/**
+ * Setup the tests context with some helper functions to log react `<Profiler />` `onRender` callbacks.
+ */
 export const beforeEachPerformanceTest = async (context: TestContext) => {
   function logRenderResults(
     id: string,
@@ -49,7 +52,7 @@ export const beforeEachPerformanceTest = async (context: TestContext) => {
 };
 
 /**
- * Simple helper function to be used in conjunction with the <Profiler> component.
+ * Simple helper function to be used in conjunction with the React `<Profiler>` component to log the `onRender` callback to console.
  * Copy and past when needed.
  *
  * @param id - The string id prop of the <Profiler> tree that has just committed. This lets you identify which part of the tree was committed if you are using multiple profilers.

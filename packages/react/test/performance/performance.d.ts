@@ -1,4 +1,4 @@
-import { row } from './performance/performance_test_utils';
+import { row } from './performance_test_utils';
 
 declare module 'vitest' {
   export interface TestContext {

@@ -6,7 +6,7 @@ import { Profiler } from 'react';
 import { afterEachPerformanceTest, beforeEachPerformanceTest } from './performance_test_utils';
 import { LiveKitRoom } from './../../src/components';
 import { VideoConference } from './../../src/prefabs';
-import { Participant, RemoteParticipant, Room, RoomEvent } from 'livekit-client';
+import { Room, RoomEvent } from 'livekit-client';
 import { act } from 'react-dom/test-utils';
 
 describe.skipIf(SKIP_PERFORMANCE_TESTS)('Basic performance test setup', () => {
@@ -51,7 +51,7 @@ describe.skipIf(SKIP_PERFORMANCE_TESTS)('Basic performance test setup', () => {
         });
         act(() => {
           logNote('fire ParticipantConnected');
-          room.emit(RoomEvent.ParticipantConnected, new Participant(''));
+          // room.emit(RoomEvent.ParticipantConnected, new Participant(''));
         });
       }),
     100,

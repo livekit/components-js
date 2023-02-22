@@ -114,21 +114,19 @@ type UseTracksOptions = {
  *
  * @example
  * ```ts
- * const pairs = useTracks({sources: [Track.Source.Camera], excludePinnedTracks: false})
+ * const pairs = useTracks(sources: [Track.Source.Camera])
  * ```
  */
 export function useTracks(sources: Array<Track.Source>, options: UseTracksOptions = {}) {
-  const { updateOnlyOn } = options;
   const room = useRoomContext();
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
-
   React.useEffect(() => {
     const subscription = trackParticipantPairsObservable(room, sources, {
-      additionalRoomEvents: updateOnlyOn,
+      additionalRoomEvents: options.updateOnlyOn,
     }).subscribe(setPairs);
 
     return () => subscription.unsubscribe();
-  }, [room, sources, updateOnlyOn]);
+  }, [room, JSON.stringify(options.updateOnlyOn), JSON.stringify(sources)]);
 
   return pairs;
 }

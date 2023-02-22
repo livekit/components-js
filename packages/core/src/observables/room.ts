@@ -184,12 +184,17 @@ export function createMediaDeviceObserver(kind?: MediaDeviceKind, requestPermiss
 
   const observable = deviceSubject.pipe(
     finalize(() => {
-      navigator?.mediaDevices.removeEventListener('devicechange', onDeviceChange);
+      navigator?.mediaDevices?.removeEventListener('devicechange', onDeviceChange);
     }),
   );
 
   if (typeof window !== 'undefined') {
-    navigator?.mediaDevices.addEventListener('devicechange', onDeviceChange);
+    if (!window.isSecureContext) {
+      throw new Error(
+        `Accessing media devices is available only in secure contexts (HTTPS and localhost), in some or all supporting browsers. See: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mediaDevices`,
+      );
+    }
+    navigator?.mediaDevices?.addEventListener('devicechange', onDeviceChange);
     // because we rely on an async function, trigger the first update instead of using startWith
     onDeviceChange();
   }

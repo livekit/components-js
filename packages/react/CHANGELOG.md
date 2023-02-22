@@ -1,5 +1,12 @@
 # @livekit/components-react
 
+## 0.4.1
+
+### Patch Changes
+
+- Updated dependencies [[`369db26`](https://github.com/livekit/components-js/commit/369db26143c06d449d9c698dd6b82ba9a7f29122), [`50edb66`](https://github.com/livekit/components-js/commit/50edb6698de4f70a04b2d6b75f6ef566da3fa6fb)]:
+  - @livekit/components-core@0.3.1
+
 ## 0.4.0
 
 ### Minor Changes

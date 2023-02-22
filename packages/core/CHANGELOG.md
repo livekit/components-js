@@ -1,5 +1,13 @@
 # @livekit/components-core
 
+## 0.3.1
+
+### Patch Changes
+
+- Fix regression in `mediaDeviceSelect` observable where switching the media device would not update the UI. - [#323](https://github.com/livekit/components-js/pull/323) ([@Ocupe](https://github.com/Ocupe))
+
+- Throw an error if the application is running in an unsecure context. - [#325](https://github.com/livekit/components-js/pull/325) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.3.0
 
 ### Minor Changes

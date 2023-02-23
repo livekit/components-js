@@ -4,3 +4,4 @@ export * from './emailRegex';
 export * from './floating-menu';
 export * from './tokenizer';
 export * from './eventGroups';
+export { selectLayout, LAYOUTS } from './grid-layouts';

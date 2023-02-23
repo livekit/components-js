@@ -3,7 +3,7 @@ import { TileLoop } from '../TileLoop';
 import { useParticipants, UseParticipantsOptions } from '../../hooks';
 import { mergeProps } from '../../utils';
 import { useSize } from '../../helper/resizeObserver';
-import { ParticipantFilter } from '@livekit/components-core';
+import { LAYOUTS, ParticipantFilter, selectLayout } from '@livekit/components-core';
 
 export interface GridLayoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -46,18 +46,16 @@ export function GridLayout({
 
   const { width, height } = useSize(containerEl);
 
-  React.useLayoutEffect(() => {
-    const containerRatio = width / height;
-    const tileRatio = 16 / 10;
-    const colAdjust = Math.sqrt(containerRatio / tileRatio);
-    const colFraction = Math.sqrt(filteredParticipants.length) * colAdjust;
-    const cols = Math.max(filteredParticipants.length === 1 ? 1 : 2, Math.round(colFraction));
-    // const widthAdjust = Math.min(100, 100 + (cols > colFraction ? 1 : -1) * (colFraction % 1) * 50);
-    if (gridEl.current) {
-      gridEl.current.style.setProperty('--lk-col-count', cols.toString());
-      // gridEl.current.style.width = `${widthAdjust}%`;
+  React.useEffect(() => {
+    const desiredVisibleParticipantCount = filteredParticipants.length;
+
+    if (width > 0 && height > 0) {
+      const layout = selectLayout(LAYOUTS, desiredVisibleParticipantCount, width, height);
+      if (gridEl.current && layout) {
+        gridEl.current.style.setProperty('--lk-col-count', layout?.columns.toString());
+      }
     }
-  }, [width, height, filteredParticipants, gridEl]);
+  }, [filteredParticipants, gridEl, height, width]);
 
   const elementProps = React.useMemo(
     () => mergeProps(props, { className: 'lk-grid-layout' }),

@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { LAYOUTS, selectLayout } from './grid-layouts';
+import { Layout, LAYOUTS, selectLayout } from './grid-layouts';
 
 describe('Test correct layout for participant count with no screen size limits:', () => {
   test.each([{ participantCount: 1, expected: '1x1' }])(
@@ -44,5 +44,21 @@ describe('Test correct layout for participant count with no screen size limits:'
   ])('Layout for $participantCount should be -> $expected', ({ participantCount, expected }) => {
     const layout = selectLayout(LAYOUTS, participantCount, 9999, 9999);
     expect(layout.name).toBe(expected);
+  });
+});
+
+function is_same(array1: Layout[], array2: Layout[]) {
+  return (
+    array1.length == array2.length &&
+    array1.every((element, index) => {
+      return element === array2[index];
+    })
+  );
+}
+describe('Test defined LAYOUTS valid', () => {
+  test('LAYOUTS should be ordered by layout.maxParticipants', () => {
+    const layouts = [...LAYOUTS];
+    layouts.sort((a, b) => a.maxParticipants - b.maxParticipants);
+    expect(is_same(layouts, LAYOUTS)).toBe(true);
   });
 });

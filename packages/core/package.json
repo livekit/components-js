@@ -38,11 +38,11 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@floating-ui/dom": "^1.1.0",
-    "loglevel": "^1.8.1",
-    "rxjs": "^7.8.0",
     "email-regex": "^5.0.0",
+    "global-tld-list": "^0.0.1002",
     "ip-regex": "^5.0.0",
-    "global-tld-list": "^0.0.1002"
+    "loglevel": "^1.8.1",
+    "rxjs": "^7.8.0"
   },
   "peerDependencies": {
     "livekit-client": "^1.6.4"
@@ -55,7 +55,7 @@
     "size-limit": "^8.1.2",
     "tsup": "^6.5.0",
     "typescript": "^4.9.4",
-    "vitest": "^0.28.3"
+    "vitest": "^0.28.5"
   },
   "engines": {
     "node": ">=14"

@@ -36,6 +36,7 @@ export function GridLayout({
   const participants = useParticipants({
     updateOnlyOn: filter && updateOnlyOn.length === 0 ? undefined : updateOnlyOn,
   });
+  const [, setGridLayout] = React.useState(GRID_LAYOUTS[0]);
   const filteredParticipants = React.useMemo(
     () => (filter ? participants.filter(filter) : participants),
     [filter, participants, ...filterDependencies],
@@ -48,14 +49,17 @@ export function GridLayout({
 
   React.useEffect(() => {
     const desiredVisibleParticipantCount = filteredParticipants.length;
-
     if (width > 0 && height > 0) {
       const layout = selectGridLayout(GRID_LAYOUTS, desiredVisibleParticipantCount, width, height);
       if (gridEl.current && layout) {
         gridEl.current.style.setProperty('--lk-col-count', layout?.columns.toString());
       }
+      setGridLayout(layout);
     }
   }, [filteredParticipants, gridEl, height, width]);
+
+  // TODO: 1. Use the selected gridLayout.maxParticipants to limit the number of displayed participants.
+  // TODO: 2. Add pagination to handle participant overflow due to the limited number of visible participants.
 
   const elementProps = React.useMemo(
     () => mergeProps(props, { className: 'lk-grid-layout' }),

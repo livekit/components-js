@@ -1,9 +1,12 @@
 import * as React from 'react';
-import { TileLoop } from '../TileLoop';
+// import { TileLoop } from '../TileLoop';
 import { useParticipants, UseParticipantsOptions } from '../../hooks';
 import { mergeProps } from '../../utils';
 import { useSize } from '../../helper/resizeObserver';
 import { GRID_LAYOUTS, ParticipantFilter, selectGridLayout } from '@livekit/components-core';
+import { ParticipantContext } from '../../context';
+import { Track } from 'livekit-client';
+import { ParticipantTile } from '../../prefabs';
 
 export interface GridLayoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -36,7 +39,7 @@ export function GridLayout({
   const participants = useParticipants({
     updateOnlyOn: filter && updateOnlyOn.length === 0 ? undefined : updateOnlyOn,
   });
-  const [, setGridLayout] = React.useState(GRID_LAYOUTS[0]);
+  const [gridLayout, setGridLayout] = React.useState(GRID_LAYOUTS[0]);
   const filteredParticipants = React.useMemo(
     () => (filter ? participants.filter(filter) : participants),
     [filter, participants, ...filterDependencies],
@@ -58,7 +61,6 @@ export function GridLayout({
     }
   }, [filteredParticipants, gridEl, height, width]);
 
-  // TODO: 1. Use the selected gridLayout.maxParticipants to limit the number of displayed participants.
   // TODO: 2. Add pagination to handle participant overflow due to the limited number of visible participants.
 
   const elementProps = React.useMemo(
@@ -68,7 +70,21 @@ export function GridLayout({
   return (
     <div ref={containerEl} className="lk-grid-layout-wrapper">
       <div ref={gridEl} {...elementProps}>
-        {props.children ?? <TileLoop filter={filter} filterDependencies={filterDependencies} />}
+        {props.children ?? (
+          <>
+            {filteredParticipants.slice(0, gridLayout.maxParticipants).map((participant) => (
+              <ParticipantContext.Provider value={participant} key={participant.identity}>
+                <ParticipantTile
+                  key={`${participant.identity}-${Track.Source.Camera}-main`}
+                  trackSource={Track.Source.Camera}
+                />
+                {/*  TODO: 3. Use TileLoop when it is ready to accept participants.
+                 {props.children ?? <TileLoop filter={filter} filterDependencies={filterDependencies} />}
+                  */}
+              </ParticipantContext.Provider>
+            ))}
+          </>
+        )}
       </div>
     </div>
   );

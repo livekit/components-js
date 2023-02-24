@@ -1,4 +1,4 @@
-export type Layout = {
+export type GridLayout = {
   name: string;
   columns: number;
   rows: number;
@@ -15,7 +15,7 @@ export type Layout = {
   minHeight: number;
 };
 
-export const LAYOUTS: Layout[] = [
+export const GRID_LAYOUTS: GridLayout[] = [
   {
     columns: 1,
     rows: 1,
@@ -81,12 +81,12 @@ export const LAYOUTS: Layout[] = [
   },
 ];
 
-export function selectLayout(
-  layouts: Layout[],
+export function selectGridLayout(
+  layouts: GridLayout[],
   participantCount: number,
   width: number,
   height: number,
-): Layout {
+): GridLayout {
   console.log('xxx', { participantCount }, { width }, { height });
 
   let currentLayoutIndex = 0;
@@ -117,7 +117,7 @@ export function selectLayout(
     if (currentLayoutIndex > 0) {
       const smallerLayout = layouts[currentLayoutIndex - 1];
       console.log(`xxx ${smallerLayout.maxParticipants} instead of ${layout.maxParticipants}`);
-      layout = selectLayout(
+      layout = selectGridLayout(
         layouts.slice(0, currentLayoutIndex),
         smallerLayout.maxParticipants,
         width,

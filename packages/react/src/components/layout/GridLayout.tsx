@@ -3,7 +3,12 @@ import * as React from 'react';
 import { useParticipants, UseParticipantsOptions } from '../../hooks';
 import { mergeProps } from '../../utils';
 import { useSize } from '../../helper/resizeObserver';
-import { GRID_LAYOUTS, ParticipantFilter, selectGridLayout } from '@livekit/components-core';
+import {
+  GRID_LAYOUTS,
+  ParticipantFilter,
+  selectGridLayout,
+  sortParticipantsByVolume,
+} from '@livekit/components-core';
 import { ParticipantContext } from '../../context';
 import { Track } from 'livekit-client';
 import { ParticipantTile } from '../../prefabs';
@@ -40,15 +45,13 @@ export function GridLayout({
     updateOnlyOn: filter && updateOnlyOn.length === 0 ? undefined : updateOnlyOn,
   });
   const [gridLayout, setGridLayout] = React.useState(GRID_LAYOUTS[0]);
+  const containerEl = React.createRef<HTMLDivElement>();
+  const gridEl = React.createRef<HTMLDivElement>();
+  const { width, height } = useSize(containerEl);
   const filteredParticipants = React.useMemo(
     () => (filter ? participants.filter(filter) : participants),
     [filter, participants, ...filterDependencies],
   );
-
-  const containerEl = React.createRef<HTMLDivElement>();
-  const gridEl = React.createRef<HTMLDivElement>();
-
-  const { width, height } = useSize(containerEl);
 
   React.useEffect(() => {
     const desiredVisibleParticipantCount = filteredParticipants.length;
@@ -63,6 +66,15 @@ export function GridLayout({
 
   // TODO: 2. Add pagination to handle participant overflow due to the limited number of visible participants.
 
+  const visibleParticipants = React.useMemo(() => {
+    const sortedParticipants = sortParticipantsByVolume(filteredParticipants);
+    const visibleParticipants_ = sortedParticipants.slice(0, gridLayout.maxParticipants);
+    console.log(
+      `Grid displays ${visibleParticipants_.length} of all ${filteredParticipants.length} participants.`,
+    );
+    return visibleParticipants_;
+  }, [filteredParticipants, gridLayout.maxParticipants]);
+
   const elementProps = React.useMemo(
     () => mergeProps(props, { className: 'lk-grid-layout' }),
     [props],
@@ -72,7 +84,7 @@ export function GridLayout({
       <div ref={gridEl} {...elementProps}>
         {props.children ?? (
           <>
-            {filteredParticipants.slice(0, gridLayout.maxParticipants).map((participant) => (
+            {visibleParticipants.map((participant) => (
               <ParticipantContext.Provider value={participant} key={participant.identity}>
                 <ParticipantTile
                   key={`${participant.identity}-${Track.Source.Camera}-main`}

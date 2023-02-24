@@ -40,7 +40,7 @@ export const GRID_LAYOUTS: GridLayout[] = [
     name: '2x1',
     minParticipants: 2,
     maxParticipants: 2,
-    minWidth: 500,
+    minWidth: 800,
     minHeight: 0,
   },
   {

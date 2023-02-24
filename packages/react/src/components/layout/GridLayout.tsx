@@ -3,7 +3,7 @@ import { TileLoop } from '../TileLoop';
 import { useParticipants, UseParticipantsOptions } from '../../hooks';
 import { mergeProps } from '../../utils';
 import { useSize } from '../../helper/resizeObserver';
-import { LAYOUTS, ParticipantFilter, selectLayout } from '@livekit/components-core';
+import { GRID_LAYOUTS, ParticipantFilter, selectLayout } from '@livekit/components-core';
 
 export interface GridLayoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -50,7 +50,7 @@ export function GridLayout({
     const desiredVisibleParticipantCount = filteredParticipants.length;
 
     if (width > 0 && height > 0) {
-      const layout = selectLayout(LAYOUTS, desiredVisibleParticipantCount, width, height);
+      const layout = selectLayout(GRID_LAYOUTS, desiredVisibleParticipantCount, width, height);
       if (gridEl.current && layout) {
         gridEl.current.style.setProperty('--lk-col-count', layout?.columns.toString());
       }

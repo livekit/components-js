@@ -49,7 +49,7 @@ export const LAYOUTS: Layout[] = [
     name: '2x2',
     minParticipants: 3,
     maxParticipants: 4,
-    minWidth: 0,
+    minWidth: 560,
     minHeight: 0,
   },
   {
@@ -58,7 +58,7 @@ export const LAYOUTS: Layout[] = [
     name: '3x3',
     minParticipants: 5,
     maxParticipants: 9,
-    minWidth: 0,
+    minWidth: 700,
     minHeight: 0,
   },
   {
@@ -67,7 +67,7 @@ export const LAYOUTS: Layout[] = [
     name: '4x4',
     minParticipants: 10,
     maxParticipants: 16,
-    minWidth: 0,
+    minWidth: 960,
     minHeight: 0,
   },
   {
@@ -76,7 +76,7 @@ export const LAYOUTS: Layout[] = [
     name: '5x5',
     minParticipants: 17,
     maxParticipants: 25,
-    minWidth: 0,
+    minWidth: 1100,
     minHeight: 0,
   },
 ];

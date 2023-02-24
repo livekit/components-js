@@ -70,8 +70,8 @@ export function isParticipantSourcePinned(
 
 /**
  * Default sort for participants, it'll order participants by:
- * 1. dominant speaker (speaker with the loudest audio level)
- * 2. local participant
+ * 1. local participant
+ * 2. dominant speaker (speaker with the loudest audio level)
  * 3. other speakers that are recently active
  * 4. participants with video on
  * 5. by joinedAt
@@ -120,7 +120,7 @@ export function sortParticipantsByVolume(participants: Participant[]): Participa
     if (localIdx >= 0) {
       sortedParticipants.splice(localIdx, 1);
       if (sortedParticipants.length > 0) {
-        sortedParticipants.splice(1, 0, localParticipant);
+        sortedParticipants.splice(0, 0, localParticipant);
       } else {
         sortedParticipants.push(localParticipant);
       }

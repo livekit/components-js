@@ -87,24 +87,18 @@ export function selectGridLayout(
   width: number,
   height: number,
 ): GridLayout {
-  console.log('xxx', { participantCount }, { width }, { height });
-
-  let currentLayoutIndex = 0;
-
   // Find the best layout to fit all participants.
+  let currentLayoutIndex = 0;
   let layout = layouts.find((layout_, index, allLayouts) => {
     currentLayoutIndex = index;
-
-    const biggerLayoutWithSameMaxParticipants = allLayouts.findIndex(
-      (l, i) =>
-        i > index && l.name !== layout_.name && l.maxParticipants === layout_.maxParticipants,
-    );
-
-    return (
-      layout_.maxParticipants >= participantCount && biggerLayoutWithSameMaxParticipants === -1
-    );
+    const isBiggerLayoutAvailable =
+      allLayouts.findIndex((l, i) => {
+        const layoutIsBiggerThanCurrent = i > index;
+        const layoutFitsSameAmountOfParticipants = l.maxParticipants === layout_.maxParticipants;
+        return layoutIsBiggerThanCurrent && layoutFitsSameAmountOfParticipants;
+      }) !== -1;
+    return layout_.maxParticipants >= participantCount && !isBiggerLayoutAvailable;
   });
-  console.log(`Found layout with index`, { layout }, { currentLayoutIndex });
 
   if (layout === undefined)
     throw new Error(
@@ -116,7 +110,6 @@ export function selectGridLayout(
     // const currentLayoutIndex = layouts.indexOf(layout);
     if (currentLayoutIndex > 0) {
       const smallerLayout = layouts[currentLayoutIndex - 1];
-      console.log(`xxx ${smallerLayout.maxParticipants} instead of ${layout.maxParticipants}`);
       layout = selectGridLayout(
         layouts.slice(0, currentLayoutIndex),
         smallerLayout.maxParticipants,

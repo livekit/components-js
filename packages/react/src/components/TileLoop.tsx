@@ -1,11 +1,12 @@
 import {
+  InputSourceType,
   isParticipantTrackPinned,
   isTrackParticipantPair,
   TileFilter,
 } from '@livekit/components-core';
 import * as React from 'react';
 import { ParticipantContext, useMaybeLayoutContext } from '../context';
-import { InputSourceType, useTiles } from '../hooks';
+import { useTiles } from '../hooks';
 import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 

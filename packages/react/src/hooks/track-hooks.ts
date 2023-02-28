@@ -6,6 +6,10 @@ import {
   TrackObserverOptions,
   TrackParticipantPair,
   trackParticipantPairsObservable,
+  TrackSourceWithOptions,
+  InputSourceType,
+  isSourceWitOptions,
+  isSourcesWithOptions,
 } from '@livekit/components-core';
 import { Participant, RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
@@ -133,28 +137,11 @@ export function useTracks(sources: Array<Track.Source>, options: UseTracksOption
   return pairs;
 }
 
-export type TrackSourceWithOptions = { source: Track.Source; withPlaceholder: boolean };
-export type InputSourceType = Track.Source[] | TrackSourceWithOptions[];
-
-type HookReturnType<T> = T extends Track.Source[]
+type UseTilesHookReturnType<T> = T extends Track.Source[]
   ? TrackParticipantPair[]
   : T extends TrackSourceWithOptions[]
   ? MaybeTrackParticipantPair[]
   : never;
-
-export function isSourceWitOptions(
-  source: InputSourceType[number],
-): source is TrackSourceWithOptions {
-  return typeof source === 'object';
-}
-export function isSourcesWithOptions(
-  sources: InputSourceType,
-): sources is TrackSourceWithOptions[] {
-  return (
-    Array.isArray(sources) &&
-    (sources as TrackSourceWithOptions[]).filter(isSourceWitOptions).length > 0
-  );
-}
 
 type UseTilesOptions = {
   updateOnlyOn?: RoomEvent[];
@@ -172,7 +159,7 @@ type UseTilesOptions = {
 export function useTiles<T extends InputSourceType>(
   sources: T,
   options: UseTilesOptions = {},
-): HookReturnType<T> {
+): UseTilesHookReturnType<T> {
   const participants = useParticipants();
   const sources_ = React.useMemo(() => {
     return sources.map((s) => (isSourceWitOptions(s) ? s.source : s));
@@ -206,7 +193,7 @@ export function useTiles<T extends InputSourceType>(
     return placeholderMap;
   }, [sources, participants, sources_]);
 
-  const tiles = React.useMemo<HookReturnType<T>>(() => {
+  const tiles = React.useMemo<UseTilesHookReturnType<T>>(() => {
     if (isSourcesWithOptions(sources)) {
       const pairs_ = Array.from(pairs) as MaybeTrackParticipantPair[];
       participants.forEach((participant) => {
@@ -221,9 +208,9 @@ export function useTiles<T extends InputSourceType>(
         }
       });
       //TODO: Find a way to avoid type casting.
-      return pairs_ as HookReturnType<T>;
+      return pairs_ as UseTilesHookReturnType<T>;
     } else {
-      return pairs as HookReturnType<T>;
+      return pairs as UseTilesHookReturnType<T>;
     }
   }, [pairs, participants, requirePlaceholder, sources]);
 

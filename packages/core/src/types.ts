@@ -31,6 +31,24 @@ export type TrackParticipantPlaceholder = {
 
 export type MaybeTrackParticipantPair = TrackParticipantPair | TrackParticipantPlaceholder;
 
+export type TrackSourceWithOptions = { source: Track.Source; withPlaceholder: boolean };
+export type InputSourceType = Track.Source[] | TrackSourceWithOptions[];
+
+export function isSourceWitOptions(
+  source: InputSourceType[number],
+): source is TrackSourceWithOptions {
+  return typeof source === 'object';
+}
+
+export function isSourcesWithOptions(
+  sources: InputSourceType,
+): sources is TrackSourceWithOptions[] {
+  return (
+    Array.isArray(sources) &&
+    (sources as TrackSourceWithOptions[]).filter(isSourceWitOptions).length > 0
+  );
+}
+
 export function isTrackParticipantPair(
   item: MaybeTrackParticipantPair,
 ): item is TrackParticipantPair {
@@ -40,7 +58,7 @@ export function isTrackParticipantPair(
 export function isTrackParticipantPlaceholder(
   item: MaybeTrackParticipantPair,
 ): item is TrackParticipantPlaceholder {
-  return item.track === undefined;
+  return item.track === undefined && item.hasOwnProperty('source');
 }
 
 export type TrackFilter = Parameters<TrackParticipantPair[]['filter']>['0'];

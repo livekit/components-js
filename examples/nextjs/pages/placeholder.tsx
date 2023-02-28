@@ -1,7 +1,7 @@
 import {
   ControlBar,
   LiveKitRoom,
-  TrackTileLoop,
+  NewTileLoop,
   useToken,
   VideoConference,
 } from '@livekit/components-react';
@@ -28,12 +28,12 @@ const Placeholder: NextPage = () => {
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
       >
-        <TrackTileLoop
+        <NewTileLoop
           sources={[
             { source: Track.Source.Camera, withPlaceholder: true },
             { source: Track.Source.ScreenShare, withPlaceholder: true },
           ]}
-        ></TrackTileLoop>
+        ></NewTileLoop>
         <ControlBar />
       </LiveKitRoom>
     </div>

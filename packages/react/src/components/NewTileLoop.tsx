@@ -1,7 +1,10 @@
-import { isTrackParticipantPair, TileFilter } from '@livekit/components-core';
-import { Track } from 'livekit-client';
+import {
+  isParticipantTrackPinned,
+  isTrackParticipantPair,
+  TileFilter,
+} from '@livekit/components-core';
 import * as React from 'react';
-import { ParticipantContext } from '../context';
+import { ParticipantContext, useMaybeLayoutContext } from '../context';
 import { InputSourceType, useTiles } from '../hooks';
 import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
@@ -44,7 +47,7 @@ interface TrackTileLoopProps {
  *
  * @see `ParticipantTile` component
  */
-export function TrackTileLoop({
+export function NewTileLoop({
   sources,
   excludePinnedTracks,
   ...props
@@ -57,26 +60,35 @@ export function TrackTileLoop({
   // ]);
   // console.log(justPairs, parisWithPlaceholders, excludePinnedTracks);
   console.log(excludePinnedTracks);
+  const layoutContext = useMaybeLayoutContext();
 
   const pairsWithPlaceholders = useTiles(sources);
 
   return (
     <>
-      {pairsWithPlaceholders.map((pair) => {
-        const trackSource = isTrackParticipantPair(pair) ? pair.track.source : pair.source;
-        return (
-          <ParticipantContext.Provider
-            value={pair.participant}
-            key={`${pair.participant.identity}_${trackSource}`}
-          >
-            {props.children ? (
-              cloneSingleChild(props.children)
-            ) : (
-              <ParticipantTile trackSource={trackSource} />
-            )}
-          </ParticipantContext.Provider>
-        );
-      })}
+      {pairsWithPlaceholders
+        .filter((pair) => {
+          if (!layoutContext?.pin.state || !isTrackParticipantPair(pair)) {
+            return true;
+          } else {
+            return !isParticipantTrackPinned(pair, layoutContext.pin.state);
+          }
+        })
+        .map((pair) => {
+          const trackSource = isTrackParticipantPair(pair) ? pair.track.source : pair.source;
+          return (
+            <ParticipantContext.Provider
+              value={pair.participant}
+              key={`${pair.participant.identity}_${trackSource}`}
+            >
+              {props.children ? (
+                cloneSingleChild(props.children)
+              ) : (
+                <ParticipantTile trackSource={trackSource} />
+              )}
+            </ParticipantContext.Provider>
+          );
+        })}
     </>
   );
 }

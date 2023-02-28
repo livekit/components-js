@@ -21,4 +21,4 @@ export * from './ScreenShareRenderer';
 export * from './TileLoop';
 export * from './Toast';
 export * from './TrackLoop';
-export * from './TrackTileLoop';
+export * from './NewTileLoop';

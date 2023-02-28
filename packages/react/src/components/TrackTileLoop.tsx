@@ -1,7 +1,8 @@
 import { isTrackParticipantPair, TileFilter } from '@livekit/components-core';
+import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
-import { InputSourceType, useTrackTiles } from '../hooks';
+import { InputSourceType, useTiles } from '../hooks';
 import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
@@ -57,7 +58,7 @@ export function TrackTileLoop({
   // console.log(justPairs, parisWithPlaceholders, excludePinnedTracks);
   console.log(excludePinnedTracks);
 
-  const pairsWithPlaceholders = useTrackTiles(sources);
+  const pairsWithPlaceholders = useTiles(sources);
 
   return (
     <>

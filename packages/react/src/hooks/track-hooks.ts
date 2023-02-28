@@ -156,10 +156,12 @@ export function isSourcesWithOptions(
   );
 }
 
+type UseTilesOptions = {
+  updateOnlyOn?: RoomEvent[];
+};
 /**
- * The useTrackTiles hook returns an array of `TrackParticipantPair` | `TrackParticipantPlaceholder`.
- * Unlike `useTracks`, this hook also returns participants without published camera tracks, so they can appear as tiles even without a published track.
- * Only tracks with a the same source specified via the sources property get included in the loop.
+ * The useTiles hook allows the looping over subscribed tracks.
+ * Unlike `useTracks`, this hook can also return placeholders alongside `TrackParticipantPair`'s, so they can appear as tiles even without a subscribed track.
  * Further narrowing the loop items is possible by providing a `filter` function or setting the `excludePinnedTrack` property.
  *
  * @example
@@ -167,13 +169,16 @@ export function isSourcesWithOptions(
  * const pairs = useTracks({sources: [Track.Source.Camera], excludePinnedTracks: false})
  * ```
  */
-export function useTrackTiles<T extends InputSourceType>(sources: T): HookReturnType<T> {
+export function useTiles<T extends InputSourceType>(
+  sources: T,
+  options: UseTilesOptions = {},
+): HookReturnType<T> {
   const participants = useParticipants();
   const sources_ = React.useMemo(() => {
     return sources.map((s) => (isSourceWitOptions(s) ? s.source : s));
   }, [JSON.stringify(sources)]);
 
-  const pairs = useTracks(sources_);
+  const pairs = useTracks(sources_, { updateOnlyOn: options.updateOnlyOn });
 
   const requirePlaceholder = React.useMemo(() => {
     const placeholderMap = new Map<Participant['identity'], Track.Source[]>();

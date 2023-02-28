@@ -28,21 +28,23 @@ export type TrackParticipantPairPlaceholder = {
   participant: Participant;
 };
 
-export type TrackTile = TrackParticipantPair | TrackParticipantPairPlaceholder;
+export type MaybeTrackParticipantPair = TrackParticipantPair | TrackParticipantPairPlaceholder;
 
-export function isTrackParticipantPair(item: TrackTile): item is TrackParticipantPair {
+export function isTrackParticipantPair(
+  item: MaybeTrackParticipantPair,
+): item is TrackParticipantPair {
   return item.track !== undefined;
 }
 
 export function isTrackParticipantPlaceholder(
-  item: TrackTile,
+  item: MaybeTrackParticipantPair,
 ): item is TrackParticipantPairPlaceholder {
   return item.track === undefined;
 }
 
 export type TrackFilter = Parameters<TrackParticipantPair[]['filter']>['0'];
 export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
-export type TileFilter = Parameters<TrackTile[]['filter']>['0'];
+export type TileFilter = Parameters<MaybeTrackParticipantPair[]['filter']>['0'];
 
 export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
   {

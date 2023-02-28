@@ -3,7 +3,7 @@ import {
   isParticipantTrackPinned,
   log,
   setupMediaTrack,
-  TrackTile,
+  MaybeTrackParticipantPair,
   TileFilter,
   TrackObserverOptions,
   TrackParticipantPair,
@@ -135,12 +135,15 @@ export function useTracks(sources: Array<Track.Source>, options: UseTracksOption
   return pairs;
 }
 
-type UseTilesProps = {
-  sources: Track.Source[];
-  excludePinnedTracks?: boolean;
-  filter?: TileFilter;
-  filterDependencies?: Array<any>;
-};
+type TrackTileSource = { source: Track.Source; withPlaceholder: boolean };
+
+type InputSourceType = Track.Source[] | TrackTileSource[];
+type HookReturnType<T> = T extends Track.Source[]
+  ? TrackParticipantPair[]
+  : T extends TrackTileSource[]
+  ? MaybeTrackParticipantPair[]
+  : never;
+
 /**
  * The useTrackTiles hook returns an array of `TrackParticipantPair` | `TrackParticipantPlaceholder`.
  * Unlike `useTracks`, this hook also returns participants without published camera tracks, so they can appear as tiles even without a published track.
@@ -152,12 +155,7 @@ type UseTilesProps = {
  * const pairs = useTracks({sources: [Track.Source.Camera], excludePinnedTracks: false})
  * ```
  */
-export function useTrackTiles({
-  sources,
-  excludePinnedTracks,
-  filter,
-  filterDependencies = [],
-}: UseTilesProps): TrackTile[] {
+export function useTrackTiles<T extends InputSourceType>(sources: T): HookReturnType<T> {
   const participants = useParticipants();
   const pairs = useTracks(sources);
   const layoutContext = useMaybeLayoutContext();
@@ -170,8 +168,8 @@ export function useTrackTiles({
     );
   }, [pairs]);
 
-  const tiles = React.useMemo<TrackTile[]>(() => {
-    let pairs_: TrackTile[] = Array.from(pairs);
+  const tiles = React.useMemo<MaybeTrackParticipantPair[]>(() => {
+    let pairs_: MaybeTrackParticipantPair[] = Array.from(pairs);
     participants.forEach((participant) => {
       if (!participantIdsWithCameraTrack.has(participant.identity)) {
         if (participant.isLocal) {
@@ -182,26 +180,12 @@ export function useTrackTiles({
       }
     });
 
-    if (excludePinnedTracks && layoutContext) {
-      pairs_ = pairs_.filter((pairs_) =>
-        pairs_.track ? !isParticipantTrackPinned(pairs_, layoutContext.pin.state) : true,
-      );
-    }
-
     if (filter) {
       pairs_ = pairs.filter(filter);
     }
 
     return pairs_;
-  }, [
-    pairs,
-    participantIdsWithCameraTrack,
-    participants,
-    layoutContext,
-    filter,
-    excludePinnedTracks,
-    ...filterDependencies,
-  ]);
+  }, [pairs, participantIdsWithCameraTrack, participants, layoutContext]);
 
   return tiles;
 }

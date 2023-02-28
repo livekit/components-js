@@ -10,6 +10,7 @@ import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
 import { useMediaQuery } from '../helper/useMediaQuery';
 import { MessageFormatter } from './ChatEntry';
+import { Track } from 'livekit-client';
 
 export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
   chatMessageFormatter?: MessageFormatter;
@@ -47,7 +48,12 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
         <div className="lk-video-conference-inner">
           {layout === 'grid' ? (
             <GridLayout>
-              <TileLoop />
+              <TileLoop
+                sources={[
+                  { source: Track.Source.Camera, withPlaceholder: true },
+                  { source: Track.Source.ScreenShare, withPlaceholder: false },
+                ]}
+              />
             </GridLayout>
           ) : (
             <div className="lk-focus-layout-wrapper">

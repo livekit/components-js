@@ -1,26 +1,20 @@
 import {
-  isParticipantSourcePinned,
   isParticipantTrackPinned,
-  ParticipantFilter,
-  TrackParticipantPair,
+  isTrackParticipantPair,
+  TileFilter,
 } from '@livekit/components-core';
-import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext, useMaybeLayoutContext } from '../context';
-import { useParticipants, useTracks } from '../hooks';
+import { InputSourceType, useTiles } from '../hooks';
 import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
 interface TileLoopProps {
-  sources?: [Track.Source, ...Track.Source[]];
+  sources: InputSourceType;
   excludePinnedTracks?: boolean;
-  filter?: ParticipantFilter;
+  filter?: TileFilter;
   filterDependencies?: [];
 }
-
-const DefaultTileLoopProps = {
-  sources: [Track.Source.Camera, Track.Source.ScreenShare],
-} satisfies TileLoopProps;
 
 /**
  * The TileLoop component loops all participants (or a filtered subset) to create a visual
@@ -35,83 +29,63 @@ const DefaultTileLoopProps = {
  * @remarks
  * If you are looking for a way to loop over tracks more granularly use the TrackLoop instead.
  *
- * @example
+ * @example Track loop only shows subscribed tracks.
  * ```tsx
- * {...}
- *   <TileLoop>
+ *   <TileLoop sources=[Track.Source.Camera]>
  *     {...}
  *   <TileLoop />
- * {...}
+ * ```
+ * @example Loop shows placeholder if participant camera track is not subscribed yet.
+ * Screen share track is only visible when subscribed.
+ * ```tsx
+ *   <TileLoop
+ *     sources={[
+ *       {source: Track.Source.Camera, withPlaceholder: true},
+ *       {source: Track.Source.ScreenShare, withPlaceholder: false}]}
+ *   />
  * ```
  *
  * @see `ParticipantTile` component
  */
 export function TileLoop({
   sources,
-  excludePinnedTracks,
-  filter,
-  filterDependencies = [],
+  excludePinnedTracks = true,
   ...props
 }: React.PropsWithChildren<TileLoopProps>): React.FunctionComponentElement<
   React.PropsWithChildren<TileLoopProps>
 > {
-  const [mainSource] = React.useState(sources ? sources[0] : DefaultTileLoopProps.sources[0]);
-  const [secondarySources] = React.useState(
-    sources ? sources.slice(1) : DefaultTileLoopProps.sources.slice(1),
-  );
-  const participants = useParticipants({ updateOnlyOn: [] });
-  const filteredParticipants = React.useMemo(() => {
-    return filter ? participants.filter(filter) : participants;
-  }, [filter, participants, ...filterDependencies]);
   const layoutContext = useMaybeLayoutContext();
-
-  const secondaryPairs = useTracks(secondarySources);
-  const filteredSecondaryPairs = React.useMemo(() => {
-    let tempPairs: TrackParticipantPair[] = secondaryPairs;
-    if (excludePinnedTracks && layoutContext?.pin?.state) {
-      const pinState = layoutContext.pin.state;
-      tempPairs = tempPairs.filter((pair) => !isParticipantTrackPinned(pair, pinState));
-    }
-    return tempPairs;
-  }, [excludePinnedTracks, layoutContext, secondaryPairs]);
+  const pairsWithPlaceholders = useTiles(sources);
 
   return (
     <>
-      {filteredParticipants.map((participant) => (
-        <ParticipantContext.Provider value={participant} key={participant.identity}>
-          {(!excludePinnedTracks ||
-            !isParticipantSourcePinned(participant, mainSource, layoutContext?.pin.state)) &&
-            (props.children ? (
-              cloneSingleChild(
-                props.children,
-                { trackSource: mainSource },
-                `${participant.identity}-${mainSource}-main`,
-              )
-            ) : (
-              <ParticipantTile
-                key={`${participant.identity}-${mainSource}-main`}
-                trackSource={mainSource}
-              />
-            ))}
-
-          {filteredSecondaryPairs
-            .filter(({ participant: p }) => p.identity === participant.identity)
-            .map(({ track }) =>
-              props.children ? (
-                cloneSingleChild(
-                  props.children,
-                  { trackSource: track.source },
-                  `${participant.identity}-${track.source}-secondary`,
-                )
+      {pairsWithPlaceholders
+        .filter((pair) => {
+          if (
+            excludePinnedTracks === false ||
+            !layoutContext?.pin.state ||
+            !isTrackParticipantPair(pair)
+          ) {
+            return true;
+          } else {
+            return !isParticipantTrackPinned(pair, layoutContext.pin.state);
+          }
+        })
+        .map((pair) => {
+          const trackSource = isTrackParticipantPair(pair) ? pair.track.source : pair.source;
+          return (
+            <ParticipantContext.Provider
+              value={pair.participant}
+              key={`${pair.participant.identity}_${trackSource}`}
+            >
+              {props.children ? (
+                cloneSingleChild(props.children, { trackSource })
               ) : (
-                <ParticipantTile
-                  key={`${participant.identity}-${track.source}-secondary`}
-                  trackSource={track.source}
-                />
-              ),
-            )}
-        </ParticipantContext.Provider>
-      ))}
+                <ParticipantTile trackSource={trackSource} />
+              )}
+            </ParticipantContext.Provider>
+          );
+        })}
     </>
   );
 }

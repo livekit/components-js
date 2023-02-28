@@ -25,13 +25,20 @@ interface TrackTileLoopProps {
  * @remarks
  * If you are looking for a way to loop over tracks more granularly use the TrackLoop instead.
  *
- * @example
+ * @example Track loop only shows subscribed tracks.
  * ```tsx
- * {...}
- *   <TrackTileLoop>
+ *   <TrackTileLoop sources=[Track.Source.Camera]>
  *     {...}
  *   <TrackTileLoop />
- * {...}
+ * ```
+ * @example Loop shows placeholder if participant camera track is not subscribed yet.
+ * Screen share track is only visible when subscribed.
+ * ```tsx
+ *   <TrackTileLoop
+ *     sources=[
+ *       {source: Track.Source.Camera, withPlaceholder: true},
+ *       {source: Track.Source.ScreenShare, withPlaceholder: false}]
+ *   />
  * ```
  *
  * @see `ParticipantTile` component

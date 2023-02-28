@@ -18,8 +18,31 @@ export interface ParticipantClickEvent {
   track?: TrackPublication;
 }
 
+/**
+ * A participant with no published tracks.
+ * @remarks
+ * Useful if you want to have a representation for participants without a published track.
+ */
+export type TrackParticipantPairPlaceholder = {
+  track: undefined;
+  participant: Participant;
+};
+
+export type TrackTile = TrackParticipantPair | TrackParticipantPairPlaceholder;
+
+export function isTrackParticipantPair(item: TrackTile): item is TrackParticipantPair {
+  return item.track !== undefined;
+}
+
+export function isTrackParticipantPlaceholder(
+  item: TrackTile,
+): item is TrackParticipantPairPlaceholder {
+  return item.track === undefined;
+}
+
 export type TrackFilter = Parameters<TrackParticipantPair[]['filter']>['0'];
 export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
+export type TileFilter = Parameters<TrackTile[]['filter']>['0'];
 
 export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
   {

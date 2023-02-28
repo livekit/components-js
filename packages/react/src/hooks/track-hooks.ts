@@ -1,15 +1,19 @@
 import {
   isLocal,
+  isParticipantTrackPinned,
   log,
   setupMediaTrack,
+  TrackTile,
+  TileFilter,
   TrackObserverOptions,
   TrackParticipantPair,
   trackParticipantPairsObservable,
 } from '@livekit/components-core';
 import { Participant, RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureParticipant, useRoomContext } from '../context';
+import { useEnsureParticipant, useMaybeLayoutContext, useRoomContext } from '../context';
 import { mergeProps } from '../utils';
+import { useParticipants } from './participant-hooks';
 
 interface UseMediaTrackProps {
   participant?: Participant;
@@ -129,4 +133,75 @@ export function useTracks(sources: Array<Track.Source>, options: UseTracksOption
   }, [room, JSON.stringify(options.updateOnlyOn), JSON.stringify(sources)]);
 
   return pairs;
+}
+
+type UseTilesProps = {
+  sources: Track.Source[];
+  excludePinnedTracks?: boolean;
+  filter?: TileFilter;
+  filterDependencies?: Array<any>;
+};
+/**
+ * The useTrackTiles hook returns an array of `TrackParticipantPair` | `TrackParticipantPlaceholder`.
+ * Unlike `useTracks`, this hook also returns participants without published camera tracks, so they can appear as tiles even without a published track.
+ * Only tracks with a the same source specified via the sources property get included in the loop.
+ * Further narrowing the loop items is possible by providing a `filter` function or setting the `excludePinnedTrack` property.
+ *
+ * @example
+ * ```ts
+ * const pairs = useTracks({sources: [Track.Source.Camera], excludePinnedTracks: false})
+ * ```
+ */
+export function useTrackTiles({
+  sources,
+  excludePinnedTracks,
+  filter,
+  filterDependencies = [],
+}: UseTilesProps): TrackTile[] {
+  const participants = useParticipants();
+  const pairs = useTracks(sources);
+  const layoutContext = useMaybeLayoutContext();
+
+  const participantIdsWithCameraTrack: Set<Participant['identity']> = React.useMemo(() => {
+    return new Set(
+      pairs
+        .filter((participant) => participant.track.source === Track.Source.Camera)
+        .map(({ participant }) => participant.identity),
+    );
+  }, [pairs]);
+
+  const tiles = React.useMemo<TrackTile[]>(() => {
+    let pairs_: TrackTile[] = Array.from(pairs);
+    participants.forEach((participant) => {
+      if (!participantIdsWithCameraTrack.has(participant.identity)) {
+        if (participant.isLocal) {
+          pairs_ = [{ participant, track: undefined }, ...pairs];
+        } else {
+          pairs_.push({ participant, track: undefined });
+        }
+      }
+    });
+
+    if (excludePinnedTracks && layoutContext) {
+      pairs_ = pairs_.filter((pairs_) =>
+        pairs_.track ? !isParticipantTrackPinned(pairs_, layoutContext.pin.state) : true,
+      );
+    }
+
+    if (filter) {
+      pairs_ = pairs.filter(filter);
+    }
+
+    return pairs_;
+  }, [
+    pairs,
+    participantIdsWithCameraTrack,
+    participants,
+    layoutContext,
+    filter,
+    excludePinnedTracks,
+    ...filterDependencies,
+  ]);
+
+  return tiles;
 }

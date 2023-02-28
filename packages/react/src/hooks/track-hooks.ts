@@ -1,17 +1,15 @@
 import {
   isLocal,
-  isParticipantTrackPinned,
   log,
   setupMediaTrack,
   MaybeTrackParticipantPair,
-  TileFilter,
   TrackObserverOptions,
   TrackParticipantPair,
   trackParticipantPairsObservable,
 } from '@livekit/components-core';
 import { Participant, RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureParticipant, useMaybeLayoutContext, useRoomContext } from '../context';
+import { useEnsureParticipant, useRoomContext } from '../context';
 import { mergeProps } from '../utils';
 import { useParticipants } from './participant-hooks';
 
@@ -135,14 +133,28 @@ export function useTracks(sources: Array<Track.Source>, options: UseTracksOption
   return pairs;
 }
 
-type TrackTileSource = { source: Track.Source; withPlaceholder: boolean };
+export type TrackSourceWithOptions = { source: Track.Source; withPlaceholder: boolean };
+export type InputSourceType = Track.Source[] | TrackSourceWithOptions[];
 
-type InputSourceType = Track.Source[] | TrackTileSource[];
 type HookReturnType<T> = T extends Track.Source[]
   ? TrackParticipantPair[]
-  : T extends TrackTileSource[]
+  : T extends TrackSourceWithOptions[]
   ? MaybeTrackParticipantPair[]
   : never;
+
+export function isSourceWitOptions(
+  source: InputSourceType[number],
+): source is TrackSourceWithOptions {
+  return typeof source === 'object';
+}
+export function isSourcesWithOptions(
+  sources: InputSourceType,
+): sources is TrackSourceWithOptions[] {
+  return (
+    Array.isArray(sources) &&
+    (sources as TrackSourceWithOptions[]).filter(isSourceWitOptions).length > 0
+  );
+}
 
 /**
  * The useTrackTiles hook returns an array of `TrackParticipantPair` | `TrackParticipantPlaceholder`.
@@ -157,35 +169,61 @@ type HookReturnType<T> = T extends Track.Source[]
  */
 export function useTrackTiles<T extends InputSourceType>(sources: T): HookReturnType<T> {
   const participants = useParticipants();
-  const pairs = useTracks(sources);
-  const layoutContext = useMaybeLayoutContext();
+  const sources_ = React.useMemo(() => {
+    return sources.map((s) => (isSourceWitOptions(s) ? s.source : s));
+  }, [JSON.stringify(sources)]);
 
-  const participantIdsWithCameraTrack: Set<Participant['identity']> = React.useMemo(() => {
-    return new Set(
-      pairs
-        .filter((participant) => participant.track.source === Track.Source.Camera)
-        .map(({ participant }) => participant.identity),
-    );
-  }, [pairs]);
+  const pairs = useTracks(sources_);
 
-  const tiles = React.useMemo<MaybeTrackParticipantPair[]>(() => {
-    let pairs_: MaybeTrackParticipantPair[] = Array.from(pairs);
-    participants.forEach((participant) => {
-      if (!participantIdsWithCameraTrack.has(participant.identity)) {
-        if (participant.isLocal) {
-          pairs_ = [{ participant, track: undefined }, ...pairs];
-        } else {
-          pairs_.push({ participant, track: undefined });
+  const requirePlaceholder = React.useMemo(() => {
+    const placeholderMap = new Map<Participant['identity'], Track.Source[]>();
+    if (sources.length > 1 && isSourceWitOptions(sources[0])) {
+      participants.forEach((participant) => {
+        const sourcesOfSubscribedTracks = participant
+          .getTracks()
+          .map((pub) => pub.track?.source)
+          .filter((trackSource): trackSource is Track.Source => trackSource !== undefined);
+
+        const placeholderNeededForSources = Array.from(
+          difference(new Set(sources_), new Set(sourcesOfSubscribedTracks)),
+        );
+
+        if (placeholderNeededForSources.length > 0) {
+          placeholderMap.set(participant.identity, placeholderNeededForSources);
         }
-      }
-    });
-
-    if (filter) {
-      pairs_ = pairs.filter(filter);
+      });
     }
+    return placeholderMap;
+  }, [sources, participants, sources_]);
 
-    return pairs_;
-  }, [pairs, participantIdsWithCameraTrack, participants, layoutContext]);
+  const tiles = React.useMemo<HookReturnType<T>>(() => {
+    if (isSourcesWithOptions(sources)) {
+      const pairs_ = Array.from(pairs) as MaybeTrackParticipantPair[];
+      participants.forEach((participant) => {
+        if (requirePlaceholder.has(participant.identity)) {
+          const sourcesToAddPlaceholder = requirePlaceholder.get(participant.identity) ?? [];
+          sourcesToAddPlaceholder.forEach((placeholderSource) => {
+            console.log(
+              `Add placeholder source for participant ${participant.identity} source: ${placeholderSource}`,
+            );
+            pairs_.push({ participant, track: undefined });
+          });
+        }
+      });
+      //TODO: Find a way to avoid type casting.
+      return pairs_ as HookReturnType<T>;
+    } else {
+      return pairs as HookReturnType<T>;
+    }
+  }, [pairs, participants, requirePlaceholder, sources]);
 
   return tiles;
+}
+
+function difference<T>(setA: Set<T>, setB: Set<T>): Set<T> {
+  const _difference = new Set(setA);
+  for (const elem of setB) {
+    _difference.delete(elem);
+  }
+  return _difference;
 }

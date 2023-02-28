@@ -2,19 +2,19 @@ import { isTrackParticipantPair, TileFilter } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
-import { useTiles, useTrackTiles } from '../hooks';
+import { InputSourceType, useTrackTiles } from '../hooks';
 import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
-interface TileLoopProps {
-  sources?: [Track.Source, ...Track.Source[]];
+interface TrackTileLoopProps {
+  sources: InputSourceType;
   excludePinnedTracks?: boolean;
   filter?: TileFilter;
   filterDependencies?: [];
 }
 
 /**
- * The TileLoop component loops all participants (or a filtered subset) to create a visual
+ * The TrackTileLoop component loops all participants (or a filtered subset) to create a visual
  * representation (`ParticipantTile`) and context for every participant. This component takes zero or more children.
  * By providing your own `ParticipantTile` template as a child you have full control over the look and feel of your
  * participant representations.
@@ -29,36 +29,29 @@ interface TileLoopProps {
  * @example
  * ```tsx
  * {...}
- *   <TileLoop>
+ *   <TrackTileLoop>
  *     {...}
- *   <TileLoop />
+ *   <TrackTileLoop />
  * {...}
  * ```
  *
  * @see `ParticipantTile` component
  */
-export function TileLoop({
+export function TrackTileLoop({
   sources,
   excludePinnedTracks,
-  filter,
-  filterDependencies,
   ...props
-}: React.PropsWithChildren<TileLoopProps>): React.FunctionComponentElement<
-  React.PropsWithChildren<TileLoopProps>
+}: React.PropsWithChildren<TrackTileLoopProps>): React.FunctionComponentElement<
+  React.PropsWithChildren<TrackTileLoopProps>
 > {
   const justPairs = useTrackTiles([Track.Source.Camera]);
   const parisWithPlaceholders = useTrackTiles([
     { source: Track.Source.Camera, withPlaceholder: true },
   ]);
 
-  console.log(justPairs, parisWithPlaceholders);
+  console.log(justPairs, parisWithPlaceholders, excludePinnedTracks);
 
-  const pairsWithPlaceholders = useTiles({
-    sources: sources ? sources : [Track.Source.Camera],
-    excludePinnedTracks,
-    filter,
-    filterDependencies,
-  });
+  const pairsWithPlaceholders = useTrackTiles(sources);
 
   return (
     <>

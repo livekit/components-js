@@ -54,21 +54,18 @@ export function NewTileLoop({
 }: React.PropsWithChildren<TrackTileLoopProps>): React.FunctionComponentElement<
   React.PropsWithChildren<TrackTileLoopProps>
 > {
-  // const justPairs = useTrackTiles([Track.Source.Camera]);
-  // const parisWithPlaceholders = useTrackTiles([
-  //   { source: Track.Source.Camera, withPlaceholder: true },
-  // ]);
-  // console.log(justPairs, parisWithPlaceholders, excludePinnedTracks);
-  console.log(excludePinnedTracks);
   const layoutContext = useMaybeLayoutContext();
-
   const pairsWithPlaceholders = useTiles(sources);
 
   return (
     <>
       {pairsWithPlaceholders
         .filter((pair) => {
-          if (!layoutContext?.pin.state || !isTrackParticipantPair(pair)) {
+          if (
+            excludePinnedTracks === false ||
+            !layoutContext?.pin.state ||
+            !isTrackParticipantPair(pair)
+          ) {
             return true;
           } else {
             return !isParticipantTrackPinned(pair, layoutContext.pin.state);
@@ -82,7 +79,7 @@ export function NewTileLoop({
               key={`${pair.participant.identity}_${trackSource}`}
             >
               {props.children ? (
-                cloneSingleChild(props.children)
+                cloneSingleChild(props.children, { trackSource })
               ) : (
                 <ParticipantTile trackSource={trackSource} />
               )}

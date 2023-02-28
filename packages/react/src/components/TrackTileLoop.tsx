@@ -1,5 +1,4 @@
 import { isTrackParticipantPair, TileFilter } from '@livekit/components-core';
-import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
 import { InputSourceType, useTrackTiles } from '../hooks';
@@ -44,19 +43,19 @@ export function TrackTileLoop({
 }: React.PropsWithChildren<TrackTileLoopProps>): React.FunctionComponentElement<
   React.PropsWithChildren<TrackTileLoopProps>
 > {
-  const justPairs = useTrackTiles([Track.Source.Camera]);
-  const parisWithPlaceholders = useTrackTiles([
-    { source: Track.Source.Camera, withPlaceholder: true },
-  ]);
-
-  console.log(justPairs, parisWithPlaceholders, excludePinnedTracks);
+  // const justPairs = useTrackTiles([Track.Source.Camera]);
+  // const parisWithPlaceholders = useTrackTiles([
+  //   { source: Track.Source.Camera, withPlaceholder: true },
+  // ]);
+  // console.log(justPairs, parisWithPlaceholders, excludePinnedTracks);
+  console.log(excludePinnedTracks);
 
   const pairsWithPlaceholders = useTrackTiles(sources);
 
   return (
     <>
       {pairsWithPlaceholders.map((pair) => {
-        const trackSource = isTrackParticipantPair(pair) ? pair.track.source : Track.Source.Camera;
+        const trackSource = isTrackParticipantPair(pair) ? pair.track.source : pair.source;
         return (
           <ParticipantContext.Provider
             value={pair.participant}

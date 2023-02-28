@@ -177,22 +177,27 @@ export function useTrackTiles<T extends InputSourceType>(sources: T): HookReturn
 
   const requirePlaceholder = React.useMemo(() => {
     const placeholderMap = new Map<Participant['identity'], Track.Source[]>();
-    if (sources.length > 1 && isSourceWitOptions(sources[0])) {
+    if (isSourcesWithOptions(sources)) {
+      const sourcesThatNeedPlaceholder = sources
+        .filter((sourceWithOption) => sourceWithOption.withPlaceholder)
+        .map((sourceWithOption) => sourceWithOption.source);
+
       participants.forEach((participant) => {
         const sourcesOfSubscribedTracks = participant
           .getTracks()
           .map((pub) => pub.track?.source)
           .filter((trackSource): trackSource is Track.Source => trackSource !== undefined);
-
-        const placeholderNeededForSources = Array.from(
-          difference(new Set(sources_), new Set(sourcesOfSubscribedTracks)),
+        const placeholderNeededForThisParticipant = Array.from(
+          difference(new Set(sourcesThatNeedPlaceholder), new Set(sourcesOfSubscribedTracks)),
         );
-
-        if (placeholderNeededForSources.length > 0) {
-          placeholderMap.set(participant.identity, placeholderNeededForSources);
+        // If the participant needs placeholder add it to the placeholder map.
+        if (placeholderNeededForThisParticipant.length > 0) {
+          placeholderMap.set(participant.identity, placeholderNeededForThisParticipant);
         }
       });
     }
+    console.log({ placeholderMap });
+
     return placeholderMap;
   }, [sources, participants, sources_]);
 
@@ -204,9 +209,9 @@ export function useTrackTiles<T extends InputSourceType>(sources: T): HookReturn
           const sourcesToAddPlaceholder = requirePlaceholder.get(participant.identity) ?? [];
           sourcesToAddPlaceholder.forEach((placeholderSource) => {
             console.log(
-              `Add placeholder source for participant ${participant.identity} source: ${placeholderSource}`,
+              `Add ${placeholderSource} placeholder for participant ${participant.identity}.`,
             );
-            pairs_.push({ participant, track: undefined });
+            pairs_.push({ participant, track: undefined, source: placeholderSource });
           });
         }
       });
@@ -216,6 +221,8 @@ export function useTrackTiles<T extends InputSourceType>(sources: T): HookReturn
       return pairs as HookReturnType<T>;
     }
   }, [pairs, participants, requirePlaceholder, sources]);
+
+  console.log('xxx', { tiles });
 
   return tiles;
 }

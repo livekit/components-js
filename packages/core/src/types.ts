@@ -23,12 +23,13 @@ export interface ParticipantClickEvent {
  * @remarks
  * Useful if you want to have a representation for participants without a published track.
  */
-export type TrackParticipantPairPlaceholder = {
+export type TrackParticipantPlaceholder = {
   track: undefined;
+  source: Track.Source;
   participant: Participant;
 };
 
-export type MaybeTrackParticipantPair = TrackParticipantPair | TrackParticipantPairPlaceholder;
+export type MaybeTrackParticipantPair = TrackParticipantPair | TrackParticipantPlaceholder;
 
 export function isTrackParticipantPair(
   item: MaybeTrackParticipantPair,
@@ -38,7 +39,7 @@ export function isTrackParticipantPair(
 
 export function isTrackParticipantPlaceholder(
   item: MaybeTrackParticipantPair,
-): item is TrackParticipantPairPlaceholder {
+): item is TrackParticipantPlaceholder {
   return item.track === undefined;
 }
 

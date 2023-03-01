@@ -23,13 +23,17 @@ type UseTracksHookReturnType<T> = T extends Track.Source[]
   : never;
 
 /**
- * The useTracks hook returns Array<TrackParticipantPair> which combine the track and the corresponding participant of the track.
+ * The `useTracks` hook returns an array of TrackParticipantPairs which combine the participant, publication and a track.
  * Only tracks with a the same source specified via the sources property get included in the loop.
- * Further narrowing the loop items is possible by providing a `filter` function or setting the `excludePinnedTrack` property.
+ * This hook can also return placeholders alongside `TrackParticipantPair`'s, so they can appear as tiles even without a subscribed track.
  *
  * @example
  * ```ts
  * const pairs = useTracks(sources: [Track.Source.Camera])
+ * ```
+ * @example
+ * ```ts
+ * const pairs = useTracks(sources: [{source: Track.Source.Camera, withPlaceholder: true}])
  * ```
  */
 export function useTracks<T extends SourcesArray>(
@@ -86,7 +90,7 @@ function difference<T>(setA: Set<T>, setB: Set<T>): Set<T> {
   return _difference;
 }
 
-function requiredPlaceholders<T extends SourcesArray>(
+export function requiredPlaceholders<T extends SourcesArray>(
   sources: T,
   participants: Participant[],
 ): Map<Participant['identity'], Track.Source[]> {

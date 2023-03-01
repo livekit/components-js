@@ -35,7 +35,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.26.0",
     "@livekit/changesets-changelog-github": "^0.0.3",
-    "glob": "^8.1.0",
+    "glob": "^9.0.0",
     "prettier": "^2.8.3",
     "turbo": "^1.7.0",
     "typescript": "^4.9.4"

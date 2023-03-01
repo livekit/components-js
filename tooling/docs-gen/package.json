@@ -28,7 +28,7 @@
     "@livekit/components-react": "~0.4.0",
     "eslint-config-lk-custom": "*",
     "eslint-plugin-tsdoc": "^0.2.17",
-    "glob": "^8.0.0",
+    "glob": "^9.0.0",
     "mkdirp": "^2.0.0",
     "react-docgen-typescript": "^2.1.0",
     "regenerator-runtime": "^0.13.7",

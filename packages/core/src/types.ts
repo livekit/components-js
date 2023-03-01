@@ -1,23 +1,20 @@
 import type { Participant, Track, TrackPublication } from 'livekit-client';
 
-export type TrackParticipantPair = {
-  track: TrackPublication;
-  participant: Participant;
-};
-
+// ## PinState Type
 export type PinState = Array<TrackParticipantPair>;
 export const PIN_DEFAULT_STATE: PinState = [];
 
+// ## WidgetState Types
 export type WidgetState = {
   showChat: boolean;
 };
 export const WIDGET_DEFAULT_STATE: WidgetState = { showChat: false };
 
-export interface ParticipantClickEvent {
+// ## TrackParticipantPair Types
+export type TrackParticipantPair = {
+  track: TrackPublication;
   participant: Participant;
-  track?: TrackPublication;
-}
-
+};
 /**
  * A participant with no published tracks.
  * @remarks
@@ -28,12 +25,27 @@ export type TrackParticipantPlaceholder = {
   source: Track.Source;
   participant: Participant;
 };
-
 export type MaybeTrackParticipantPair = TrackParticipantPair | TrackParticipantPlaceholder;
 
+// ### TrackParticipantPair Type Predicates
+export function isTrackParticipantPair(
+  item: MaybeTrackParticipantPair,
+): item is TrackParticipantPair {
+  return item.track !== undefined;
+}
+
+export function isTrackParticipantPlaceholder(
+  item: MaybeTrackParticipantPair,
+): item is TrackParticipantPlaceholder {
+  return item.track === undefined && item.hasOwnProperty('source');
+}
+
+// ## Track Source Types
 export type TrackSourceWithOptions = { source: Track.Source; withPlaceholder: boolean };
+
 export type InputSourceType = Track.Source[] | TrackSourceWithOptions[];
 
+// ### Track Source Type Predicates
 export function isSourceWitOptions(
   source: InputSourceType[number],
 ): source is TrackSourceWithOptions {
@@ -49,22 +61,22 @@ export function isSourcesWithOptions(
   );
 }
 
-export function isTrackParticipantPair(
-  item: MaybeTrackParticipantPair,
-): item is TrackParticipantPair {
-  return item.track !== undefined;
-}
-
-export function isTrackParticipantPlaceholder(
-  item: MaybeTrackParticipantPair,
-): item is TrackParticipantPlaceholder {
-  return item.track === undefined && item.hasOwnProperty('source');
-}
-
+// ## Loop Filter Types
 export type TrackFilter = Parameters<TrackParticipantPair[]['filter']>['0'];
 export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
 export type TileFilter = Parameters<MaybeTrackParticipantPair[]['filter']>['0'];
 
+// ## Other Types
+export interface ParticipantClickEvent {
+  participant: Participant;
+  track?: TrackPublication;
+}
+
+export type TrackObserverOptions =
+  | { source: Track.Source; name?: undefined }
+  | { source?: undefined; name: string };
+
+// ## Util Types
 export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
   {
     [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>>;
@@ -74,7 +86,3 @@ export type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<
   {
     [K in Keys]-?: Required<Pick<T, K>> & Partial<Record<Exclude<Keys, K>, undefined>>;
   }[Keys];
-
-export type TrackObserverOptions =
-  | { source: Track.Source; name?: undefined }
-  | { source?: undefined; name: string };

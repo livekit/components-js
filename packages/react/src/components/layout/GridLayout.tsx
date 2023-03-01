@@ -1,10 +1,15 @@
 import * as React from 'react';
-import { TileLoop } from '../TileLoop';
+// import { TileLoop } from '../TileLoop';
 import { useParticipants, UseParticipantsOptions } from '../../hooks';
 import { mergeProps } from '../../utils';
 import { useSize } from '../../helper/resizeObserver';
-import { TileFilter } from '@livekit/components-core';
-import { Track } from 'livekit-client';
+import {
+  // isParticipantTrackPinned,
+  // isTrackParticipantPair,
+  TileFilter,
+} from '@livekit/components-core';
+// import { Track } from 'livekit-client';
+// import { useMaybeLayoutContext } from '../../context';
 
 export interface GridLayoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -70,16 +75,9 @@ export function GridLayout({
   return (
     <div ref={containerEl} className="lk-grid-layout-wrapper">
       <div ref={gridEl} {...elementProps}>
-        {props.children ?? (
-          <TileLoop
-            sources={[
-              { source: Track.Source.Camera, withPlaceholder: true },
-              { source: Track.Source.ScreenShare, withPlaceholder: false },
-            ]}
-            filter={filter}
-            filterDependencies={filterDependencies}
-          />
-        )}
+        {/* // TODO: UPDATED GridComponent Resolved with https://github.com/livekit/components-js/pull/326 */}
+        {props.children}
+        {/* ?? <TileLoop tiles={tiles} /> */}
       </div>
     </div>
   );

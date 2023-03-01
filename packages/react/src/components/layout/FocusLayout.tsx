@@ -2,10 +2,16 @@ import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useMaybeLayoutContext, useLayoutContext } from '../../context';
 import { mergeProps } from '../../utils';
-import { TileFilter, TrackParticipantPair } from '@livekit/components-core';
+import {
+  isParticipantTrackPinned,
+  isTrackParticipantPair,
+  TileFilter,
+  TrackParticipantPair,
+} from '@livekit/components-core';
 import { TileLoop } from '../TileLoop';
 import { ParticipantTile } from '../../prefabs/ParticipantTile';
 import { ParticipantClickEvent } from '@livekit/components-core';
+import { useTiles } from '../../hooks';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   trackParticipantPair?: TrackParticipantPair;
@@ -27,14 +33,7 @@ export function FocusLayoutContainer({
       <div {...elementProps}>
         {props.children ?? (
           <>
-            <CarouselView>
-              <TileLoop
-                sources={[
-                  { source: Track.Source.Camera, withPlaceholder: true },
-                  { source: Track.Source.ScreenShare, withPlaceholder: false },
-                ]}
-              />
-            </CarouselView>
+            <CarouselView />
             {(hasFocus || trackParticipantPair) && (
               <FocusLayout trackParticipantPair={trackParticipantPair} />
             )}
@@ -81,17 +80,21 @@ export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement
   filterDependencies?: [];
 }
 
-export function CarouselView({ filter, filterDependencies, ...props }: CarouselViewProps) {
-  return (
-    <aside {...props}>
-      {props.children ?? (
-        <TileLoop
-          sources={[Track.Source.Camera, Track.Source.ScreenShare]}
-          filter={filter}
-          filterDependencies={filterDependencies}
-          excludePinnedTracks={true}
-        />
-      )}
-    </aside>
-  );
+export function CarouselView({ filter, filterDependencies = [], ...props }: CarouselViewProps) {
+  const layoutContext = useMaybeLayoutContext();
+  const tiles = useTiles([
+    { source: Track.Source.Camera, withPlaceholder: true },
+    { source: Track.Source.ScreenShare, withPlaceholder: false },
+  ]);
+  const filteredTiles = React.useMemo(() => {
+    const tilesWithoutPinned = tiles.filter(
+      (tile) =>
+        !layoutContext?.pin.state ||
+        !isTrackParticipantPair(tile) ||
+        !isParticipantTrackPinned(tile, layoutContext.pin.state),
+    );
+    return filter ? tilesWithoutPinned.filter(filter) : tilesWithoutPinned;
+  }, [filter, layoutContext?.pin.state, tiles, ...filterDependencies]);
+
+  return <aside {...props}>{props.children ?? <TileLoop tiles={filteredTiles} />}</aside>;
 }

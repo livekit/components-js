@@ -43,18 +43,14 @@ export function isTrackParticipantPlaceholder(
 // ## Track Source Types
 export type TrackSourceWithOptions = { source: Track.Source; withPlaceholder: boolean };
 
-export type InputSourceType = Track.Source[] | TrackSourceWithOptions[];
+export type SourcesArray = Track.Source[] | TrackSourceWithOptions[];
 
 // ### Track Source Type Predicates
-export function isSourceWitOptions(
-  source: InputSourceType[number],
-): source is TrackSourceWithOptions {
+export function isSourceWitOptions(source: SourcesArray[number]): source is TrackSourceWithOptions {
   return typeof source === 'object';
 }
 
-export function isSourcesWithOptions(
-  sources: InputSourceType,
-): sources is TrackSourceWithOptions[] {
+export function isSourcesWithOptions(sources: SourcesArray): sources is TrackSourceWithOptions[] {
   return (
     Array.isArray(sources) &&
     (sources as TrackSourceWithOptions[]).filter(isSourceWitOptions).length > 0

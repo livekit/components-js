@@ -7,7 +7,7 @@ import {
   TrackParticipantPair,
   trackParticipantPairsObservable,
   TrackSourceWithOptions,
-  InputSourceType,
+  SourcesArray,
   isSourceWitOptions,
   isSourcesWithOptions,
 } from '@livekit/components-core';
@@ -156,7 +156,7 @@ type UseTilesOptions = {
  * const pairs = useTracks({sources: [Track.Source.Camera], excludePinnedTracks: false})
  * ```
  */
-export function useTiles<T extends InputSourceType>(
+export function useTiles<T extends SourcesArray>(
   sources: T,
   options: UseTilesOptions = {},
 ): UseTilesHookReturnType<T> {

@@ -1,11 +1,24 @@
-import { TrackParticipantPair, trackParticipantPairsObservable } from '@livekit/components-core';
-import { RoomEvent, Track } from 'livekit-client';
+import {
+  isSourceWitOptions,
+  MaybeTrackParticipantPair,
+  SourcesArray,
+  TrackParticipantPair,
+  trackParticipantPairsObservable,
+  TrackSourceWithOptions,
+} from '@livekit/components-core';
+import { Participant, RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
 import { useRoomContext } from '../context';
 
 type UseTracksOptions = {
   updateOnlyOn?: RoomEvent[];
 };
+
+type UseTracksHookReturnType<T> = T extends Track.Source[]
+  ? TrackParticipantPair[]
+  : T extends TrackSourceWithOptions[]
+  ? MaybeTrackParticipantPair[]
+  : never;
 
 /**
  * The useTracks hook returns Array<TrackParticipantPair> which combine the track and the corresponding participant of the track.
@@ -17,16 +30,27 @@ type UseTracksOptions = {
  * const pairs = useTracks(sources: [Track.Source.Camera])
  * ```
  */
-export function useTracks(sources: Array<Track.Source>, options: UseTracksOptions = {}) {
+export function useTracks<T extends SourcesArray>(
+  sources: T,
+  options: UseTracksOptions = {},
+): UseTracksHookReturnType<T> {
   const room = useRoomContext();
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
-  React.useEffect(() => {
-    const subscription = trackParticipantPairsObservable(room, sources, {
-      additionalRoomEvents: options.updateOnlyOn,
-    }).subscribe(setPairs);
+  const [, setParticipants] = React.useState<Participant[]>([]);
 
+  const sources_ = React.useMemo(() => {
+    return sources.map((s) => (isSourceWitOptions(s) ? s.source : s));
+  }, [JSON.stringify(sources)]);
+
+  React.useEffect(() => {
+    const subscription = trackParticipantPairsObservable(room, sources_, {
+      additionalRoomEvents: options.updateOnlyOn,
+    }).subscribe(({ trackBundles, participants }) => {
+      setPairs(trackBundles);
+      setParticipants(participants);
+    });
     return () => subscription.unsubscribe();
   }, [room, JSON.stringify(options.updateOnlyOn), JSON.stringify(sources)]);
 
-  return pairs;
+  return pairs as UseTracksHookReturnType<T>;
 }

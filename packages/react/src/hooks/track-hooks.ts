@@ -188,7 +188,7 @@ export function useTiles<T extends SourcesArray>(
         }
       });
     }
-    console.log({ placeholderMap });
+    log.debug({ placeholderMap });
 
     return placeholderMap;
   }, [sources, participants, sources_]);
@@ -200,7 +200,7 @@ export function useTiles<T extends SourcesArray>(
         if (requirePlaceholder.has(participant.identity)) {
           const sourcesToAddPlaceholder = requirePlaceholder.get(participant.identity) ?? [];
           sourcesToAddPlaceholder.forEach((placeholderSource) => {
-            console.log(
+            log.debug(
               `Add ${placeholderSource} placeholder for participant ${participant.identity}.`,
             );
             pairs_.push({ participant, track: undefined, source: placeholderSource });
@@ -213,8 +213,6 @@ export function useTiles<T extends SourcesArray>(
       return pairs as UseTilesHookReturnType<T>;
     }
   }, [pairs, participants, requirePlaceholder, sources]);
-
-  console.log('xxx', { tiles });
 
   return tiles;
 }

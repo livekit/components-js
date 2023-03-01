@@ -1,21 +1,8 @@
-import {
-  isLocal,
-  log,
-  setupMediaTrack,
-  MaybeTrackParticipantPair,
-  TrackObserverOptions,
-  TrackParticipantPair,
-  TrackSourceWithOptions,
-  SourcesArray,
-  isSourceWitOptions,
-  isSourcesWithOptions,
-} from '@livekit/components-core';
-import { Participant, RoomEvent, Track } from 'livekit-client';
+import { isLocal, log, setupMediaTrack, TrackObserverOptions } from '@livekit/components-core';
+import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureParticipant } from '../context';
 import { mergeProps } from '../utils';
-import { useParticipants } from './participant-hooks';
-import { useTracks } from './useTracks';
 
 interface UseMediaTrackProps {
   participant?: Participant;
@@ -108,91 +95,3 @@ export const useMediaTrackBySourceOrName = (
     }),
   };
 };
-
-type UseTilesHookReturnType<T> = T extends Track.Source[]
-  ? TrackParticipantPair[]
-  : T extends TrackSourceWithOptions[]
-  ? MaybeTrackParticipantPair[]
-  : never;
-
-type UseTilesOptions = {
-  updateOnlyOn?: RoomEvent[];
-};
-/**
- * The useTiles hook allows the looping over subscribed tracks.
- * Unlike `useTracks`, this hook can also return placeholders alongside `TrackParticipantPair`'s, so they can appear as tiles even without a subscribed track.
- * Further narrowing the loop items is possible by providing a `filter` function or setting the `excludePinnedTrack` property.
- *
- * @example
- * ```ts
- * const pairs = useTracks({sources: [Track.Source.Camera], excludePinnedTracks: false})
- * ```
- */
-export function useTiles<T extends SourcesArray>(
-  sources: T,
-  options: UseTilesOptions = {},
-): UseTilesHookReturnType<T> {
-  const participants = useParticipants();
-  const sources_ = React.useMemo(() => {
-    return sources.map((s) => (isSourceWitOptions(s) ? s.source : s));
-  }, [JSON.stringify(sources)]);
-
-  const pairs = useTracks(sources_, { updateOnlyOn: options.updateOnlyOn });
-
-  const requirePlaceholder = React.useMemo(() => {
-    const placeholderMap = new Map<Participant['identity'], Track.Source[]>();
-    if (isSourcesWithOptions(sources)) {
-      const sourcesThatNeedPlaceholder = sources
-        .filter((sourceWithOption) => sourceWithOption.withPlaceholder)
-        .map((sourceWithOption) => sourceWithOption.source);
-
-      participants.forEach((participant) => {
-        const sourcesOfSubscribedTracks = participant
-          .getTracks()
-          .map((pub) => pub.track?.source)
-          .filter((trackSource): trackSource is Track.Source => trackSource !== undefined);
-        const placeholderNeededForThisParticipant = Array.from(
-          difference(new Set(sourcesThatNeedPlaceholder), new Set(sourcesOfSubscribedTracks)),
-        );
-        // If the participant needs placeholder add it to the placeholder map.
-        if (placeholderNeededForThisParticipant.length > 0) {
-          placeholderMap.set(participant.identity, placeholderNeededForThisParticipant);
-        }
-      });
-    }
-    log.debug({ placeholderMap });
-
-    return placeholderMap;
-  }, [sources, participants, sources_]);
-
-  const tiles = React.useMemo<UseTilesHookReturnType<T>>(() => {
-    if (isSourcesWithOptions(sources)) {
-      const pairs_ = Array.from(pairs) as MaybeTrackParticipantPair[];
-      participants.forEach((participant) => {
-        if (requirePlaceholder.has(participant.identity)) {
-          const sourcesToAddPlaceholder = requirePlaceholder.get(participant.identity) ?? [];
-          sourcesToAddPlaceholder.forEach((placeholderSource) => {
-            log.debug(
-              `Add ${placeholderSource} placeholder for participant ${participant.identity}.`,
-            );
-            pairs_.push({ participant, track: undefined, source: placeholderSource });
-          });
-        }
-      });
-      //TODO: Find a way to avoid type casting.
-      return pairs_ as UseTilesHookReturnType<T>;
-    } else {
-      return pairs as UseTilesHookReturnType<T>;
-    }
-  }, [pairs, participants, requirePlaceholder, sources]);
-
-  return tiles;
-}
-
-function difference<T>(setA: Set<T>, setB: Set<T>): Set<T> {
-  const _difference = new Set(setA);
-  for (const elem of setB) {
-    _difference.delete(elem);
-  }
-  return _difference;
-}

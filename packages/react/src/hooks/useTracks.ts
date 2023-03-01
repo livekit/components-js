@@ -1,5 +1,7 @@
 import {
+  isSourcesWithOptions,
   isSourceWitOptions,
+  log,
   MaybeTrackParticipantPair,
   SourcesArray,
   TrackParticipantPair,
@@ -36,7 +38,7 @@ export function useTracks<T extends SourcesArray>(
 ): UseTracksHookReturnType<T> {
   const room = useRoomContext();
   const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
-  const [, setParticipants] = React.useState<Participant[]>([]);
+  const [participants, setParticipants] = React.useState<Participant[]>([]);
 
   const sources_ = React.useMemo(() => {
     return sources.map((s) => (isSourceWitOptions(s) ? s.source : s));
@@ -52,5 +54,61 @@ export function useTracks<T extends SourcesArray>(
     return () => subscription.unsubscribe();
   }, [room, JSON.stringify(options.updateOnlyOn), JSON.stringify(sources)]);
 
-  return pairs as UseTracksHookReturnType<T>;
+  const maybeTrackBundles = React.useMemo(() => {
+    if (isSourcesWithOptions(sources)) {
+      const requirePlaceholder = requiredPlaceholders(sources, participants);
+      const pairs_ = Array.from(pairs) as MaybeTrackParticipantPair[];
+      participants.forEach((participant) => {
+        if (requirePlaceholder.has(participant.identity)) {
+          const sourcesToAddPlaceholder = requirePlaceholder.get(participant.identity) ?? [];
+          sourcesToAddPlaceholder.forEach((placeholderSource) => {
+            log.debug(
+              `Add ${placeholderSource} placeholder for participant ${participant.identity}.`,
+            );
+            pairs_.push({ participant, track: undefined, source: placeholderSource });
+          });
+        }
+      });
+      return pairs_;
+    } else {
+      return pairs;
+    }
+  }, [pairs, participants, sources]);
+
+  return maybeTrackBundles as UseTracksHookReturnType<T>;
+}
+
+function difference<T>(setA: Set<T>, setB: Set<T>): Set<T> {
+  const _difference = new Set(setA);
+  for (const elem of setB) {
+    _difference.delete(elem);
+  }
+  return _difference;
+}
+
+function requiredPlaceholders<T extends SourcesArray>(
+  sources: T,
+  participants: Participant[],
+): Map<Participant['identity'], Track.Source[]> {
+  const placeholderMap = new Map<Participant['identity'], Track.Source[]>();
+  if (isSourcesWithOptions(sources)) {
+    const sourcesThatNeedPlaceholder = sources
+      .filter((sourceWithOption) => sourceWithOption.withPlaceholder)
+      .map((sourceWithOption) => sourceWithOption.source);
+
+    participants.forEach((participant) => {
+      const sourcesOfSubscribedTracks = participant
+        .getTracks()
+        .map((pub) => pub.track?.source)
+        .filter((trackSource): trackSource is Track.Source => trackSource !== undefined);
+      const placeholderNeededForThisParticipant = Array.from(
+        difference(new Set(sourcesThatNeedPlaceholder), new Set(sourcesOfSubscribedTracks)),
+      );
+      // If the participant needs placeholder add it to the placeholder map.
+      if (placeholderNeededForThisParticipant.length > 0) {
+        placeholderMap.set(participant.identity, placeholderNeededForThisParticipant);
+      }
+    });
+  }
+  return placeholderMap;
 }

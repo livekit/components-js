@@ -11,7 +11,7 @@ import {
 import { TileLoop } from '../TileLoop';
 import { ParticipantTile } from '../../prefabs/ParticipantTile';
 import { ParticipantClickEvent } from '@livekit/components-core';
-import { useTiles } from '../../hooks';
+import { useTracks } from '../../hooks';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   trackParticipantPair?: TrackParticipantPair;
@@ -82,7 +82,7 @@ export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement
 
 export function CarouselView({ filter, filterDependencies = [], ...props }: CarouselViewProps) {
   const layoutContext = useMaybeLayoutContext();
-  const tiles = useTiles([
+  const tiles = useTracks([
     { source: Track.Source.Camera, withPlaceholder: true },
     { source: Track.Source.ScreenShare, withPlaceholder: false },
   ]);

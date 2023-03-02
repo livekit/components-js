@@ -14,6 +14,7 @@ import { useRoomContext } from '../context';
 
 type UseTracksOptions = {
   updateOnlyOn?: RoomEvent[];
+  onlySubscribed?: boolean;
 };
 
 type UseTracksHookReturnType<T> = T extends Track.Source[]
@@ -50,6 +51,7 @@ export function useTracks<T extends SourcesArray>(
   React.useEffect(() => {
     const subscription = trackBundlesObservable(room, sources_, {
       additionalRoomEvents: options.updateOnlyOn,
+      onlySubscribed: options.onlySubscribed,
     }).subscribe(({ trackBundles, participants }) => {
       setTrackBundles(trackBundles);
       setParticipants(participants);

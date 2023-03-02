@@ -54,6 +54,7 @@ export function observeTrackEvents(track: TrackPublication, ...events: TrackEven
 function getTrackBundles(
   room: Room,
   sources: Track.Source[],
+  onlySubscribedTracks: boolean,
 ): { trackBundles: TrackBundle[]; participants: Participant[] } {
   const localParticipant = room.localParticipant;
   const allParticipants = [localParticipant, ...Array.from(room.participants.values())];
@@ -62,9 +63,14 @@ function getTrackBundles(
   allParticipants.forEach((participant) => {
     sources.forEach((source) => {
       const track = participant.getTrack(source);
-
-      if (track && (track instanceof LocalTrackPublication || track?.isDesired)) {
-        trackBundles.push({ participant, source, publication: track, track: track });
+      if (track) {
+        if (track.isSubscribed || track instanceof LocalTrackPublication) {
+          // Include subscribed `TrackPublications`.
+          trackBundles.push({ participant, source, publication: track, track: track });
+        } else if (!onlySubscribedTracks) {
+          // Include also `TrackPublications` that are not subscribed.
+          trackBundles.push({ participant, source, publication: track });
+        }
       }
     });
   });
@@ -74,6 +80,7 @@ function getTrackBundles(
 
 type TrackBundlesObservableOptions = {
   additionalRoomEvents?: RoomEvent[];
+  onlySubscribed?: boolean;
 };
 
 export function trackBundlesObservable(
@@ -81,6 +88,8 @@ export function trackBundlesObservable(
   sources: Track.Source[],
   options: TrackBundlesObservableOptions,
 ): Observable<{ trackBundles: TrackBundle[]; participants: Participant[] }> {
+  const additionalRoomEvents = options.additionalRoomEvents ?? allRemoteParticipantRoomEvents;
+  const onlySubscribedTracks: boolean = options.onlySubscribed ?? false;
   const roomEventSubscriptions: Subscription[] = [];
 
   const observable = new Observable<{
@@ -88,10 +97,9 @@ export function trackBundlesObservable(
     participants: Participant[];
   }>((subscribe) => {
     // Get and emit initial values.
-    const initData = getTrackBundles(room, sources);
+    const initData = getTrackBundles(room, sources, onlySubscribedTracks);
     subscribe.next(initData);
 
-    const additionalRoomEvents = options.additionalRoomEvents ?? allRemoteParticipantRoomEvents;
     // Listen to room events related to track changes and emit new `TrackBundles`.
     const roomEventsToListenFor = Array.from(
       new Set([
@@ -104,7 +112,7 @@ export function trackBundlesObservable(
     roomEventsToListenFor.forEach((roomEvent) => {
       roomEventSubscriptions.push(
         roomEventSelector(room, roomEvent).subscribe(() => {
-          const data = getTrackBundles(room, sources);
+          const data = getTrackBundles(room, sources, onlySubscribedTracks);
           log.debug(
             `Because of RoomEvent: "${roomEvent}", TrackBundle[] was updated. (length ${data.trackBundles.length})`,
           );

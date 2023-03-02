@@ -1,39 +1,26 @@
-// @import '../../../node_modules/modern-normalize/modern-normalize'; // CSS reset
-
-// custom extensions to modern-normalize
-
-html {
-  font: 16px/1.5 var(--font-family);
+%container-style {
+  font-size: var(--font-size);
+  font-family: var(--font-family);
   line-height: 1.5;
-	tab-size: 2;
-  -webkit-text-size-adjust: 100%;
-}
-
-html,
-body {
   color: var(--fg);
   background-color: var(--bg);
 }
 
-body {
-  margin: 0;
-}
-
-button {
+.button {
   font: inherit;
   user-select: none;
 }
 
-ol,
-ul {
+.list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-input {
+.form-control {
   font: inherit;
-  padding: .375rem .75rem;
-  border: 1px solid rgba(0, 0, 0, .15);
+  padding: 0.375rem 0.75rem;
+  background-color: var(--control-bg);
+  border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
 }

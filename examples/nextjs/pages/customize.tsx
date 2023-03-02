@@ -43,7 +43,9 @@ const CustomizeExample: NextPage = () => {
           Welcome to <a href="https://livekit.io">LiveKit</a>
         </h1>
         {!isConnected && (
-          <button onClick={() => setConnect(!connect)}>{connect ? 'Disconnect' : 'Connect'}</button>
+          <button className="lk-button" onClick={() => setConnect(!connect)}>
+            {connect ? 'Disconnect' : 'Connect'}
+          </button>
         )}
         <LiveKitRoom
           token={token}

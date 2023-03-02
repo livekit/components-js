@@ -87,7 +87,10 @@ export function MediaDeviceSelect({
     onActiveDeviceChange?.(deviceId);
   };
   // Merge Props
-  const mergedProps = React.useMemo(() => mergeProps(props, { className }), [className, props]);
+  const mergedProps = React.useMemo(
+    () => mergeProps(props, { className }, { className: 'lk-list' }),
+    [className, props],
+  );
 
   return (
     <ul {...mergedProps}>
@@ -99,7 +102,9 @@ export function MediaDeviceSelect({
           aria-selected={device.deviceId === activeDeviceId}
           role="option"
         >
-          <button onClick={() => handleActiveDeviceChange(device.deviceId)}>{device.label}</button>
+          <button className="lk-button" onClick={() => handleActiveDeviceChange(device.deviceId)}>
+            {device.label}
+          </button>
         </li>
       ))}
     </ul>

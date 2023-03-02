@@ -8,6 +8,7 @@ import { ParticipantAudioTile } from './ParticipantAudioTile';
 import { LayoutContextProvider } from '../components/LayoutContextProvider';
 import { PinState, WidgetState } from '@livekit/components-core';
 import { Chat } from './Chat';
+import { useTracks } from '../hooks';
 
 export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -35,13 +36,15 @@ export function AudioConference({ ...props }: AudioConferenceProps) {
     setLayout(pinState.length >= 1 ? 'focus' : 'grid');
   };
 
+  const pairs = useTracks([Track.Source.Microphone]);
+
   return (
     <div className="lk-audio-conference" {...props}>
       <LayoutContextProvider onPinChange={handlePinStateChange} onWidgetChange={setWidgetState}>
         <div className="lk-audio-conference-stage">
           {layout === 'grid' ? (
             <GridLayout>
-              <TrackLoop sources={[Track.Source.Microphone]} excludePinnedTracks={false}>
+              <TrackLoop pairs={pairs}>
                 <ParticipantAudioTile />
               </TrackLoop>
             </GridLayout>

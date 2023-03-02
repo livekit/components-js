@@ -18,6 +18,5 @@ export * from './ParticipantLoop';
 export * from './RoomAudioRenderer';
 export * from './RoomName';
 export * from './ScreenShareRenderer';
-export * from './TileLoop';
 export * from './Toast';
 export * from './TrackLoop';

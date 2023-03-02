@@ -8,10 +8,10 @@ import {
   TileFilter,
   TrackParticipantPair,
 } from '@livekit/components-core';
-import { TileLoop } from '../TileLoop';
 import { ParticipantTile } from '../../prefabs/ParticipantTile';
 import { ParticipantClickEvent } from '@livekit/components-core';
 import { useTracks } from '../../hooks';
+import { TrackLoop } from '../TrackLoop';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   trackParticipantPair?: TrackParticipantPair;
@@ -96,5 +96,5 @@ export function CarouselView({ filter, filterDependencies = [], ...props }: Caro
     return filter ? tilesWithoutPinned.filter(filter) : tilesWithoutPinned;
   }, [filter, layoutContext?.pin.state, tiles, ...filterDependencies]);
 
-  return <aside {...props}>{props.children ?? <TileLoop tiles={filteredTiles} />}</aside>;
+  return <aside {...props}>{props.children ?? <TrackLoop pairs={filteredTiles} />}</aside>;
 }

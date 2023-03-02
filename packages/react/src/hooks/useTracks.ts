@@ -7,6 +7,7 @@ import {
   TrackBundleWithPlaceholder,
   trackBundlesObservable,
   TrackSourceWithOptions,
+  TrackBundlePlaceholder,
 } from '@livekit/components-core';
 import { Participant, RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
@@ -70,11 +71,11 @@ export function useTracks<T extends SourcesArray>(
             log.debug(
               `Add ${placeholderSource} placeholder for participant ${participant.identity}.`,
             );
-            trackBundlesWithPlaceholders.push({
+            const placeholder: TrackBundlePlaceholder = {
               participant,
-              track: undefined,
               source: placeholderSource,
-            });
+            };
+            trackBundlesWithPlaceholders.push(placeholder);
           });
         }
       });

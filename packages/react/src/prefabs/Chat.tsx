@@ -55,7 +55,7 @@ export function Chat({ messageFormatter, ...props }: ChatProps) {
 
   return (
     <div {...props} className="lk-chat">
-      <ul className="lk-chat-messages" ref={ulRef}>
+      <ul className="lk-list lk-chat-messages" ref={ulRef}>
         {props.children
           ? chatMessages.map((msg, idx) =>
               cloneSingleChild(props.children, {

@@ -344,7 +344,7 @@ export const PreJoin = ({
       {debug && (
         <>
           <strong>User Choices:</strong>
-          <ul style={{ overflow: 'hidden', maxWidth: '15rem' }}>
+          <ul className="lk-list" style={{ overflow: 'hidden', maxWidth: '15rem' }}>
             <li>Username: {`${userChoices.username}`}</li>
             <li>Video Enabled: {`${userChoices.videoEnabled}`}</li>
             <li>Audio Enabled: {`${userChoices.audioEnabled}`}</li>

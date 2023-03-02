@@ -35,7 +35,7 @@ const Home: NextPage = () => {
           <h1>LiveKit Components examples</h1>
           <p>Some simple sample apps to help you get started working with LiveKit Components.</p>
         </header>
-        <ul>
+        <ul className="lk-list">
           {Object.values(EXAMPLE_ROUTES).map(({ title, href }, index) => {
             return (
               <li key={index}>

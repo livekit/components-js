@@ -1,9 +1,10 @@
+@import '../preflight';
+
 .room-container {
+  @extend %container-style;
   position: relative;
   width: 100%;
   height: 100%;
-  font-size: var(--font-size);
-  background-color: var(--bg);
 
   * {
     box-sizing: border-box;

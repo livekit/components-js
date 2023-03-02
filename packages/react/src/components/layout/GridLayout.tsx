@@ -1,17 +1,16 @@
 import * as React from 'react';
-// import { TileLoop } from '../TileLoop';
-import { useParticipants, UseParticipantsOptions } from '../../hooks';
+import { UseParticipantsOptions, useTracks } from '../../hooks';
 import { mergeProps } from '../../utils';
 import { useSize } from '../../helper/resizeObserver';
 import {
   GRID_LAYOUTS,
-  ParticipantFilter,
   selectGridLayout,
-  sortParticipantsByVolume,
+  sortTrackParticipantPairs,
+  TrackBundleFilter,
+  TrackBundleWithPlaceholder,
 } from '@livekit/components-core';
-import { ParticipantContext } from '../../context';
 import { Track } from 'livekit-client';
-import { ParticipantTile } from '../../prefabs';
+import { TrackLoop } from '../TrackLoop';
 
 export interface GridLayoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -20,7 +19,7 @@ export interface GridLayoutProps
    * The grid shows all room participants. If only a subset of the participants
    * should be visible, they can be filtered.
    */
-  filter?: ParticipantFilter;
+  filter?: TrackBundleFilter;
   filterDependencies?: [];
   // TODO maxVisibleParticipants
 }
@@ -41,39 +40,45 @@ export function GridLayout({
   filterDependencies = [],
   ...props
 }: GridLayoutProps) {
-  const participants = useParticipants({
-    updateOnlyOn: filter && updateOnlyOn.length === 0 ? undefined : updateOnlyOn,
-  });
+  const trackBundles = useTracks(
+    [
+      { source: Track.Source.Camera, withPlaceholder: true },
+      { source: Track.Source.ScreenShare, withPlaceholder: false },
+    ],
+    { updateOnlyOn },
+  );
+  console.log({ trackBundles });
+
   const [gridLayout, setGridLayout] = React.useState(GRID_LAYOUTS[0]);
   const containerEl = React.createRef<HTMLDivElement>();
   const gridEl = React.createRef<HTMLDivElement>();
   const { width, height } = useSize(containerEl);
-  const filteredParticipants = React.useMemo(
-    () => (filter ? participants.filter(filter) : participants),
-    [filter, participants, ...filterDependencies],
+  const filteredTrackBundles = React.useMemo(
+    () => (filter ? trackBundles.filter(filter) : trackBundles),
+    [filter, trackBundles, ...filterDependencies],
   );
 
   React.useEffect(() => {
-    const desiredVisibleParticipantCount = filteredParticipants.length;
     if (width > 0 && height > 0) {
-      const layout = selectGridLayout(GRID_LAYOUTS, desiredVisibleParticipantCount, width, height);
+      const layout = selectGridLayout(GRID_LAYOUTS, filteredTrackBundles.length, width, height);
       if (gridEl.current && layout) {
         gridEl.current.style.setProperty('--lk-col-count', layout?.columns.toString());
       }
       setGridLayout(layout);
     }
-  }, [filteredParticipants, gridEl, height, width]);
+  }, [filteredTrackBundles, gridEl, height, width]);
 
   // TODO: 2. Add pagination to handle participant overflow due to the limited number of visible participants.
 
-  const visibleParticipants = React.useMemo(() => {
-    const sortedParticipants = sortParticipantsByVolume(filteredParticipants);
-    const visibleParticipants_ = sortedParticipants.slice(0, gridLayout.maxParticipants);
+  const visibleTiles = React.useMemo<TrackBundleWithPlaceholder[]>(() => {
+    // const sortedTrackBundles = sortParticipantsByVolume(filteredTrackBundles);
+    const sortedTrackBundles = sortTrackParticipantPairs(filteredTrackBundles);
+    const visibleTrackBundles = sortedTrackBundles.slice(0, gridLayout.maxParticipants);
     console.log(
-      `Grid displays ${visibleParticipants_.length} of all ${filteredParticipants.length} participants.`,
+      `Grid displays ${visibleTrackBundles.length} of all ${filteredTrackBundles.length} participants.`,
     );
-    return visibleParticipants_;
-  }, [filteredParticipants, gridLayout.maxParticipants]);
+    return visibleTrackBundles;
+  }, [filteredTrackBundles, gridLayout.maxParticipants]);
 
   const elementProps = React.useMemo(
     () => mergeProps(props, { className: 'lk-grid-layout' }),
@@ -82,21 +87,7 @@ export function GridLayout({
   return (
     <div ref={containerEl} className="lk-grid-layout-wrapper">
       <div ref={gridEl} {...elementProps}>
-        {props.children ?? (
-          <>
-            {visibleParticipants.map((participant) => (
-              <ParticipantContext.Provider value={participant} key={participant.identity}>
-                <ParticipantTile
-                  key={`${participant.identity}-${Track.Source.Camera}-main`}
-                  trackSource={Track.Source.Camera}
-                />
-                {/*  TODO: 3. Use TileLoop when it is ready to accept participants.
-                 {props.children ?? <TileLoop filter={filter} filterDependencies={filterDependencies} />}
-                  */}
-              </ParticipantContext.Provider>
-            ))}
-          </>
-        )}
+        {props.children ?? <>{props.children ?? <TrackLoop trackBundles={visibleTiles} />}</>}
       </div>
     </div>
   );

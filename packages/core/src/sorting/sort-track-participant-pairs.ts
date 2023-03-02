@@ -1,3 +1,4 @@
+import log from '../logger';
 import { TrackBundleWithPlaceholder } from '../types';
 import {
   sortParticipantsByAudioLevel,
@@ -22,35 +23,50 @@ export function sortTrackBundles(
   trackBundles: TrackBundleWithPlaceholder[],
 ): TrackBundleWithPlaceholder[] {
   const trackBundles_ = [...trackBundles];
+  log.debug('xxx sorting...');
   trackBundles_.sort(({ participant: a }, { participant: b }) => {
-    // loudest speaker first
-    if (a.isSpeaking && b.isSpeaking) {
-      return sortParticipantsByAudioLevel(a, b);
-    }
-
-    // speaker goes first
-    if (a.isSpeaking !== b.isSpeaking) {
-      return sortParticipantsByIsSpeaking(a, b);
-    }
-
-    // last active speaker first
-    if (a.lastSpokeAt !== b.lastSpokeAt) {
-      return sortParticipantsByLastSpokenAT(a, b);
-    }
-
-    // video on
-    const aVideo = a.videoTracks.size > 0;
-    const bVideo = b.videoTracks.size > 0;
-    if (aVideo !== bVideo) {
-      if (aVideo) {
+    log.debug('xxx isLocal...');
+    if (a.isLocal || b.isLocal) {
+      if (a.isLocal) {
         return -1;
       } else {
         return 1;
       }
     }
 
+    log.debug('xxx isSpeaking volume...');
+    // loudest speaker first
+    if (a.isSpeaking && b.isSpeaking) {
+      return sortParticipantsByAudioLevel(a, b);
+    }
+
+    log.debug('xxx isSpeaking...');
+    // speaker goes first
+    if (a.isSpeaking !== b.isSpeaking) {
+      return sortParticipantsByIsSpeaking(a, b);
+    }
+
+    log.debug('xxx lastSpokeAt...');
+    // last active speaker first
+    if (a.lastSpokeAt !== b.lastSpokeAt) {
+      return sortParticipantsByLastSpokenAT(a, b);
+    }
+
+    // video on
+    // const aVideo = a.videoTracks.size > 0;
+    // const bVideo = b.videoTracks.size > 0;
+    // if (aVideo !== bVideo) {
+    //   if (aVideo) {
+    //     return -1;
+    //   } else {
+    //     return 1;
+    //   }
+    // }
+
     // joinedAt
-    return (a.joinedAt?.getTime() ?? 0) - (b.joinedAt?.getTime() ?? 0);
+    // return (a.joinedAt?.getTime() ?? 0) - (b.joinedAt?.getTime() ?? 0);
+    log.debug('xxx This should never happen 😬');
+    return 0;
   });
-  return trackBundles;
+  return trackBundles_;
 }

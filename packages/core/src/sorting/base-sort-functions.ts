@@ -4,7 +4,7 @@ export function sortParticipantsByAudioLevel(
   a: Pick<Participant, 'audioLevel'>,
   b: Pick<Participant, 'audioLevel'>,
 ): number {
-  return a.audioLevel - b.audioLevel;
+  return b.audioLevel - a.audioLevel;
 }
 
 export function sortParticipantsByIsSpeaking(
@@ -14,7 +14,7 @@ export function sortParticipantsByIsSpeaking(
   if (a.isSpeaking === b.isSpeaking) {
     return 0;
   } else {
-    return a.isSpeaking ? 1 : -1;
+    return a.isSpeaking ? -1 : 1;
   }
 }
 
@@ -23,7 +23,7 @@ export function sortParticipantsByLastSpokenAT(
   b: Pick<Participant, 'lastSpokeAt'>,
 ): number {
   if (a.lastSpokeAt !== undefined || b.lastSpokeAt !== undefined) {
-    return (a.lastSpokeAt?.getTime() ?? 0) - (b.lastSpokeAt?.getTime() ?? 0);
+    return (b.lastSpokeAt?.getTime() ?? 0) - (a.lastSpokeAt?.getTime() ?? 0);
   } else {
     return 0;
   }

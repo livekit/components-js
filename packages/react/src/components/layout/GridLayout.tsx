@@ -36,7 +36,7 @@ export interface GridLayoutProps
  */
 export function GridLayout({
   filter,
-  updateOnlyOn = [],
+  updateOnlyOn,
   filterDependencies = [],
   ...props
 }: GridLayoutProps) {
@@ -45,7 +45,7 @@ export function GridLayout({
       { source: Track.Source.Camera, withPlaceholder: true },
       { source: Track.Source.ScreenShare, withPlaceholder: false },
     ],
-    { updateOnlyOn },
+    { updateOnlyOn: updateOnlyOn ? updateOnlyOn : undefined },
   );
   console.log({ trackBundles });
 
@@ -78,7 +78,7 @@ export function GridLayout({
       `Grid displays ${visibleTrackBundles.length} of all ${filteredTrackBundles.length} participants.`,
     );
     return visibleTrackBundles;
-  }, [filteredTrackBundles, gridLayout.maxParticipants]);
+  }, [filteredTrackBundles, gridLayout.maxParticipants, trackBundles]);
 
   const elementProps = React.useMemo(
     () => mergeProps(props, { className: 'lk-grid-layout' }),

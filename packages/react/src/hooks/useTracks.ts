@@ -4,7 +4,7 @@ import {
   log,
   MaybeTrackParticipantPair,
   SourcesArray,
-  TrackParticipantPair,
+  TrackBundle,
   trackParticipantPairsObservable,
   TrackSourceWithOptions,
 } from '@livekit/components-core';
@@ -17,15 +17,14 @@ type UseTracksOptions = {
 };
 
 type UseTracksHookReturnType<T> = T extends Track.Source[]
-  ? TrackParticipantPair[]
+  ? TrackBundle[]
   : T extends TrackSourceWithOptions[]
   ? MaybeTrackParticipantPair[]
   : never;
 
 /**
- * The `useTracks` hook returns an array of TrackParticipantPairs which combine the participant, publication and a track.
+ * The `useTracks` hook returns an array of `TrackBundle` which combine the participant, trackSource, publication and a track.
  * Only tracks with a the same source specified via the sources property get included in the loop.
- * This hook can also return placeholders alongside `TrackParticipantPair`'s, so they can appear as tiles even without a subscribed track.
  *
  * @example
  * ```ts
@@ -41,7 +40,7 @@ export function useTracks<T extends SourcesArray>(
   options: UseTracksOptions = {},
 ): UseTracksHookReturnType<T> {
   const room = useRoomContext();
-  const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
+  const [pairs, setPairs] = React.useState<TrackBundle[]>([]);
   const [participants, setParticipants] = React.useState<Participant[]>([]);
 
   const sources_ = React.useMemo(() => {

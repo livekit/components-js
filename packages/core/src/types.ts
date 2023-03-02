@@ -1,7 +1,7 @@
 import type { Participant, Track, TrackPublication } from 'livekit-client';
 
 // ## PinState Type
-export type PinState = Array<TrackParticipantPair>;
+export type PinState = Array<TrackBundle>;
 export const PIN_DEFAULT_STATE: PinState = [];
 
 // ## WidgetState Types
@@ -10,8 +10,8 @@ export type WidgetState = {
 };
 export const WIDGET_DEFAULT_STATE: WidgetState = { showChat: false };
 
-// ## TrackParticipantPair Types
-export type TrackParticipantPair = {
+// ## TrackBundle Types
+export type TrackBundle = {
   track: TrackPublication;
   participant: Participant;
 };
@@ -25,12 +25,10 @@ export type TrackParticipantPlaceholder = {
   source: Track.Source;
   participant: Participant;
 };
-export type MaybeTrackParticipantPair = TrackParticipantPair | TrackParticipantPlaceholder;
+export type MaybeTrackParticipantPair = TrackBundle | TrackParticipantPlaceholder;
 
-// ### TrackParticipantPair Type Predicates
-export function isTrackParticipantPair(
-  item: MaybeTrackParticipantPair,
-): item is TrackParticipantPair {
+// ### TrackBundle Type Predicates
+export function isTrackParticipantPair(item: MaybeTrackParticipantPair): item is TrackBundle {
   return item.track !== undefined;
 }
 
@@ -58,7 +56,7 @@ export function isSourcesWithOptions(sources: SourcesArray): sources is TrackSou
 }
 
 // ## Loop Filter Types
-export type TrackFilter = Parameters<TrackParticipantPair[]['filter']>['0'];
+export type TrackFilter = Parameters<TrackBundle[]['filter']>['0'];
 export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
 export type TileFilter = Parameters<MaybeTrackParticipantPair[]['filter']>['0'];
 

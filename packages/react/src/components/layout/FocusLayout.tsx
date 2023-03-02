@@ -6,7 +6,7 @@ import {
   isParticipantTrackPinned,
   isTrackParticipantPair,
   TileFilter,
-  TrackParticipantPair,
+  TrackBundle,
 } from '@livekit/components-core';
 import { ParticipantTile } from '../../prefabs/ParticipantTile';
 import { ParticipantClickEvent } from '@livekit/components-core';
@@ -14,7 +14,7 @@ import { useTracks } from '../../hooks';
 import { TrackLoop } from '../TrackLoop';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
-  trackParticipantPair?: TrackParticipantPair;
+  trackParticipantPair?: TrackBundle;
   participants?: Array<Participant>;
 }
 
@@ -45,14 +45,14 @@ export function FocusLayoutContainer({
 }
 
 export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
-  trackParticipantPair?: TrackParticipantPair;
+  trackParticipantPair?: TrackBundle;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
 
 export function FocusLayout({ trackParticipantPair, ...props }: FocusLayoutProps) {
   const layoutContext = useMaybeLayoutContext();
 
-  const pair: TrackParticipantPair | null = React.useMemo(() => {
+  const pair: TrackBundle | null = React.useMemo(() => {
     if (trackParticipantPair) {
       return trackParticipantPair;
     }

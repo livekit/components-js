@@ -5,7 +5,7 @@ import {
   Track,
   TrackPublication,
 } from 'livekit-client';
-import { PinState, TrackParticipantPair } from './types';
+import { PinState, TrackBundle } from './types';
 
 export function isLocal(p: Participant) {
   return p instanceof LocalParticipant;
@@ -34,7 +34,7 @@ export const attachIfSubscribed = (
  * Check if the participant track is pinned.
  */
 export function isParticipantTrackPinned(
-  trackParticipantPair: TrackParticipantPair,
+  trackParticipantPair: TrackBundle,
   pinState: PinState | undefined,
 ): boolean {
   if (pinState === undefined) {

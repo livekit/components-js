@@ -10,7 +10,7 @@ import {
 import { Observable, startWith, Subscription } from 'rxjs';
 import { allRemoteParticipantRoomEvents } from '../helper';
 import log from '../logger';
-import { TrackParticipantPair } from '../types';
+import { TrackBundle } from '../types';
 import { roomEventSelector } from './room';
 
 export function trackObservable(track: TrackPublication) {
@@ -54,10 +54,10 @@ export function observeTrackEvents(track: TrackPublication, ...events: TrackEven
 function getTrackParticipantPairs(
   room: Room,
   sources: Track.Source[],
-): { trackBundles: TrackParticipantPair[]; participants: Participant[] } {
+): { trackBundles: TrackBundle[]; participants: Participant[] } {
   const localParticipant = room.localParticipant;
   const allParticipants = [localParticipant, ...Array.from(room.participants.values())];
-  const pairs: TrackParticipantPair[] = [];
+  const pairs: TrackBundle[] = [];
 
   allParticipants.forEach((participant) => {
     sources.forEach((source) => {
@@ -79,11 +79,11 @@ export function trackParticipantPairsObservable(
   room: Room,
   sources: Track.Source[],
   options: TrackParticipantPairsObservableOptions,
-): Observable<{ trackBundles: TrackParticipantPair[]; participants: Participant[] }> {
+): Observable<{ trackBundles: TrackBundle[]; participants: Participant[] }> {
   const roomEventSubscriptions: Subscription[] = [];
 
   const observable = new Observable<{
-    trackBundles: TrackParticipantPair[];
+    trackBundles: TrackBundle[];
     participants: Participant[];
   }>((subscribe) => {
     // Get and emit initial values.

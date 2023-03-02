@@ -1,10 +1,10 @@
-import { PinState, TrackParticipantPair } from '@livekit/components-core';
+import { PinState, TrackBundle } from '@livekit/components-core';
 import * as React from 'react';
 
 export type PinAction =
   | {
       msg: 'set_pin';
-      trackParticipantPair: TrackParticipantPair;
+      trackParticipantPair: TrackBundle;
     }
   | { msg: 'clear_pin' };
 

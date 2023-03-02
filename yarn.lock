@@ -6641,10 +6641,10 @@ glob@^8.0.0, glob@^8.0.3, glob@^8.1.0:
     minimatch "^5.0.1"
     once "^1.3.0"
 
-global-tld-list@^0.0.1002:
-  version "0.0.1002"
-  resolved "https://registry.yarnpkg.com/global-tld-list/-/global-tld-list-0.0.1002.tgz#56a33120c33773837d5d4bec18ae3c83929ae6f0"
-  integrity sha512-11yCbAiy37cLCsb4EZElHdgK08gqJinBLrlWifycRG+8cSymU+SvZ6lBHzfKXwYl/e4hB3o+RCnl1rnR/rkAYA==
+global-tld-list@^0.0.1030:
+  version "0.0.1030"
+  resolved "https://registry.yarnpkg.com/global-tld-list/-/global-tld-list-0.0.1030.tgz#9910fbb3fd52f23f3e878ababb0645246f9cc2b3"
+  integrity sha512-uV9gNIGv1jDHSzewV/8Mnnkn+/JeoLnI3iY4p3XLauBt5J8xzqP4qAXQQvlkbTQoh1e3M8P0VcGDCz1lH42upA==
 
 global@^4.4.0:
   version "4.4.0"
@@ -10609,7 +10609,7 @@ turbo-windows-arm64@1.8.3:
   resolved "https://registry.yarnpkg.com/turbo-windows-arm64/-/turbo-windows-arm64-1.8.3.tgz#db5739fe1d6907d07874779f6d5fac87b3f3ca6a"
   integrity sha512-ulIiItNm2w/zYJdD5/oAzjzNns1IjbpweRzpsE8tLXaWwo6+fnXXkyloUug0IUhcd2k6fJXfoiDZfygqpOVuXg==
 
-turbo@^1.8.3:
+turbo@^1.7.0:
   version "1.8.3"
   resolved "https://registry.yarnpkg.com/turbo/-/turbo-1.8.3.tgz#6fe1ce749a38b54f15f0fcb24ee45baefa98e948"
   integrity sha512-zGrkU1EuNFmkq6iky6LcMqD4h0OLE8XysVFxQWRIZbcTNnf0XAycbsbeEyiJpiWeqb7qtg2bVuY9EYcNoNhVuQ==

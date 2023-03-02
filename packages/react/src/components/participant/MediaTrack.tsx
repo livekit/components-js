@@ -16,7 +16,7 @@ export type MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
     };
 
 /**
- * @deprecated Use `AudioTrack` or `VideoTrack` instead
+ * @deprecated This component will be removed in the next version. Use `AudioTrack` or `VideoTrack` instead
  */
 export function MediaTrack({
   onTrackClick,

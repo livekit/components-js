@@ -10,6 +10,7 @@ export type AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
     ({ source: AudioSource; name?: undefined } | { name: string; source?: undefined }) & {
       participant?: Participant;
       onSubscriptionStatusChanged?: (subscribed: boolean) => void;
+      /** by the default the range is between 0 and 1 */
       volume?: number;
     };
 
@@ -19,11 +20,9 @@ export type AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
  *
  * @example
  * ```tsx
- * {...}
  *   <ParticipantTile>
  *     <AudioTrack source={Track.Source.Microphone} />
  *   </ParticipantTile>
- * {...}
  * ```
  *
  * @see `ParticipantTile` component

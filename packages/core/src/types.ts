@@ -41,11 +41,11 @@ export function isTrackBundle(bundle: TrackBundleWithPlaceholder): bundle is Tra
   );
 }
 
-export function isTrackBundleSubscribed(bundle: TrackBundle): bundle is TrackBundleSubscribed {
+function isTrackBundleSubscribed(bundle: TrackBundle): bundle is TrackBundleSubscribed {
   return bundle.hasOwnProperty('track');
 }
 
-export function isTrackBundlePublished(bundle: TrackBundle): bundle is TrackBundlePublished {
+function isTrackBundlePublished(bundle: TrackBundle): bundle is TrackBundlePublished {
   return bundle.hasOwnProperty('publication') && !bundle.hasOwnProperty('track');
 }
 

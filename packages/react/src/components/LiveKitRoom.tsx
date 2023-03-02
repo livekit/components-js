@@ -178,14 +178,6 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
 
   React.useEffect(() => {
     if (!room) return;
-    return () => {
-      log.debug('disconnecting on onmount');
-      room.disconnect();
-    };
-  }, []);
-
-  React.useEffect(() => {
-    if (!room) return;
     const connectionStateChangeListener = roomEventSelector(
       room,
       RoomEvent.ConnectionStateChanged,
@@ -204,6 +196,15 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
     });
     return () => connectionStateChangeListener.unsubscribe();
   }, [token, onConnected, onDisconnected, room]);
+
+  React.useEffect(() => {
+    if (!room) return;
+    return () => {
+      log.info('disconnecting on onmount');
+      room.disconnect();
+    };
+  }, [room]);
+
   return { room, htmlProps };
 }
 

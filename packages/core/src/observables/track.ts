@@ -1,5 +1,6 @@
 import {
   LocalTrackPublication,
+  Participant,
   Room,
   RoomEvent,
   Track,
@@ -50,7 +51,10 @@ export function observeTrackEvents(track: TrackPublication, ...events: TrackEven
 /**
  * Create `TrackParticipantPairs` for all tracks that are included in the sources property.
  *  */
-function getTrackParticipantPairs(room: Room, sources: Track.Source[]): TrackParticipantPair[] {
+function getTrackParticipantPairs(
+  room: Room,
+  sources: Track.Source[],
+): { trackBundles: TrackParticipantPair[]; participants: Participant[] } {
   const localParticipant = room.localParticipant;
   const allParticipants = [localParticipant, ...Array.from(room.participants.values())];
   const pairs: TrackParticipantPair[] = [];
@@ -64,7 +68,7 @@ function getTrackParticipantPairs(room: Room, sources: Track.Source[]): TrackPar
     });
   });
 
-  return pairs;
+  return { trackBundles: pairs, participants: allParticipants };
 }
 
 type TrackParticipantPairsObservableOptions = {
@@ -75,13 +79,16 @@ export function trackParticipantPairsObservable(
   room: Room,
   sources: Track.Source[],
   options: TrackParticipantPairsObservableOptions,
-): Observable<TrackParticipantPair[]> {
+): Observable<{ trackBundles: TrackParticipantPair[]; participants: Participant[] }> {
   const roomEventSubscriptions: Subscription[] = [];
 
-  const observable = new Observable<TrackParticipantPair[]>((subscribe) => {
+  const observable = new Observable<{
+    trackBundles: TrackParticipantPair[];
+    participants: Participant[];
+  }>((subscribe) => {
     // Get and emit initial values.
-    const initPairs = getTrackParticipantPairs(room, sources);
-    subscribe.next(initPairs);
+    const initData = getTrackParticipantPairs(room, sources);
+    subscribe.next(initData);
 
     const additionalRoomEvents = options.additionalRoomEvents ?? allRemoteParticipantRoomEvents;
     // Listen to room events related to track changes and emit new pairs.
@@ -96,11 +103,13 @@ export function trackParticipantPairsObservable(
     roomEventsToListenFor.forEach((roomEvent) => {
       roomEventSubscriptions.push(
         roomEventSelector(room, roomEvent).subscribe(() => {
-          const pairs = getTrackParticipantPairs(room, sources);
-          log.debug(`Trigger observer update by \nRoomEvent: ${roomEvent}\nPairs: ${pairs.length}`);
+          const data = getTrackParticipantPairs(room, sources);
+          log.debug(
+            `Trigger observer update by \nRoomEvent: ${roomEvent}\nPairs: ${data.trackBundles.length}`,
+          );
 
           if (subscribe) {
-            subscribe.next(pairs);
+            subscribe.next(data);
           }
         }),
       );

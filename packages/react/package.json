@@ -39,6 +39,8 @@
     "gen:images": "svgr --out-dir ./src/assets/images --typescript --no-svgo ../styles/assets/images",
     "gen:svg": "yarn gen:images && yarn gen:icons",
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
+    "test": "vitest --run",
+    "test:watch": "vitest",
     "size": "size-limit"
   },
   "typings": "dist/index.d.ts",

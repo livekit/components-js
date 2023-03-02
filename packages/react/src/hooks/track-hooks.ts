@@ -1,14 +1,7 @@
-import {
-  isLocal,
-  log,
-  setupMediaTrack,
-  TrackObserverOptions,
-  TrackParticipantPair,
-  trackParticipantPairsObservable,
-} from '@livekit/components-core';
-import { Participant, RoomEvent, Track } from 'livekit-client';
+import { isLocal, log, setupMediaTrack, TrackObserverOptions } from '@livekit/components-core';
+import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureParticipant, useRoomContext } from '../context';
+import { useEnsureParticipant } from '../context';
 import { mergeProps } from '../utils';
 
 interface UseMediaTrackProps {
@@ -102,31 +95,3 @@ export const useMediaTrackBySourceOrName = (
     }),
   };
 };
-
-type UseTracksOptions = {
-  updateOnlyOn?: RoomEvent[];
-};
-
-/**
- * The useTracks hook returns Array<TrackParticipantPair> which combine the track and the corresponding participant of the track.
- * Only tracks with a the same source specified via the sources property get included in the loop.
- * Further narrowing the loop items is possible by providing a `filter` function or setting the `excludePinnedTrack` property.
- *
- * @example
- * ```ts
- * const pairs = useTracks(sources: [Track.Source.Camera])
- * ```
- */
-export function useTracks(sources: Array<Track.Source>, options: UseTracksOptions = {}) {
-  const room = useRoomContext();
-  const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
-  React.useEffect(() => {
-    const subscription = trackParticipantPairsObservable(room, sources, {
-      additionalRoomEvents: options.updateOnlyOn,
-    }).subscribe(setPairs);
-
-    return () => subscription.unsubscribe();
-  }, [room, JSON.stringify(options.updateOnlyOn), JSON.stringify(sources)]);
-
-  return pairs;
-}

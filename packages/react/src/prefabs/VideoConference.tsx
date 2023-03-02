@@ -5,7 +5,6 @@ import { ControlBar } from './ControlBar';
 import { FocusLayoutContainer } from '../components/layout/FocusLayout';
 import { GridLayout } from '../components/layout/GridLayout';
 import { PinState, WidgetState } from '@livekit/components-core';
-import { TileLoop } from '../components/TileLoop';
 import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
 import { useMediaQuery } from '../helper/useMediaQuery';
@@ -46,9 +45,7 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
       <LayoutContextProvider onPinChange={handleFocusStateChange} onWidgetChange={setWidgetState}>
         <div className="lk-video-conference-inner">
           {layout === 'grid' ? (
-            <GridLayout>
-              <TileLoop />
-            </GridLayout>
+            <GridLayout />
           ) : (
             <div className="lk-focus-layout-wrapper">
               <FocusLayoutContainer />

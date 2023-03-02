@@ -1,9 +1,15 @@
 import * as React from 'react';
-import { TileLoop } from '../TileLoop';
+// import { TileLoop } from '../TileLoop';
 import { useParticipants, UseParticipantsOptions } from '../../hooks';
 import { mergeProps } from '../../utils';
 import { useSize } from '../../helper/resizeObserver';
-import { ParticipantFilter } from '@livekit/components-core';
+import {
+  // isParticipantTrackPinned,
+  // isTrackParticipantPair,
+  TileFilter,
+} from '@livekit/components-core';
+// import { Track } from 'livekit-client';
+// import { useMaybeLayoutContext } from '../../context';
 
 export interface GridLayoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -12,7 +18,7 @@ export interface GridLayoutProps
    * The grid shows all room participants. If only a subset of the participants
    * should be visible, they can be filtered.
    */
-  filter?: ParticipantFilter;
+  filter?: TileFilter;
   filterDependencies?: [];
   // TODO maxVisibleParticipants
 }
@@ -36,10 +42,13 @@ export function GridLayout({
   const participants = useParticipants({
     updateOnlyOn: filter && updateOnlyOn.length === 0 ? undefined : updateOnlyOn,
   });
-  const filteredParticipants = React.useMemo(
-    () => (filter ? participants.filter(filter) : participants),
-    [filter, participants, ...filterDependencies],
-  );
+  const filteredParticipants = React.useMemo(() => {
+    if (filter) {
+      // TODO: Resolved with https://github.com/livekit/components-js/pull/326
+      throw new Error('filter currently not working');
+    }
+    return participants;
+  }, [filter, participants, ...filterDependencies]);
 
   const containerEl = React.createRef<HTMLDivElement>();
   const gridEl = React.createRef<HTMLDivElement>();
@@ -66,7 +75,9 @@ export function GridLayout({
   return (
     <div ref={containerEl} className="lk-grid-layout-wrapper">
       <div ref={gridEl} {...elementProps}>
-        {props.children ?? <TileLoop filter={filter} filterDependencies={filterDependencies} />}
+        {/* // TODO: UPDATED GridComponent Resolved with https://github.com/livekit/components-js/pull/326 */}
+        {props.children}
+        {/* ?? <TileLoop tiles={tiles} /> */}
       </div>
     </div>
   );

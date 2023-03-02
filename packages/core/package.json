@@ -43,7 +43,7 @@
     "rxjs": "^7.8.0",
     "email-regex": "^5.0.0",
     "ip-regex": "^5.0.0",
-    "global-tld-list": "^0.0.1002"
+    "global-tld-list": "^0.0.1030"
   },
   "peerDependencies": {
     "livekit-client": "^1.6.4"

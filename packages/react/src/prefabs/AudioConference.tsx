@@ -36,7 +36,7 @@ export function AudioConference({ ...props }: AudioConferenceProps) {
     setLayout(pinState.length >= 1 ? 'focus' : 'grid');
   };
 
-  const pairs = useTracks([Track.Source.Microphone]);
+  const trackBundles = useTracks([Track.Source.Microphone]);
 
   return (
     <div className="lk-audio-conference" {...props}>
@@ -44,7 +44,7 @@ export function AudioConference({ ...props }: AudioConferenceProps) {
         <div className="lk-audio-conference-stage">
           {layout === 'grid' ? (
             <GridLayout>
-              <TrackLoop pairs={pairs}>
+              <TrackLoop trackBundles={trackBundles}>
                 <ParticipantAudioTile />
               </TrackLoop>
             </GridLayout>

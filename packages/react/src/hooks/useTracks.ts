@@ -2,10 +2,10 @@ import {
   isSourcesWithOptions,
   isSourceWitOptions,
   log,
-  MaybeTrackParticipantPair,
   SourcesArray,
   TrackBundle,
-  trackParticipantPairsObservable,
+  TrackBundleWithPlaceholder,
+  trackBundlesObservable,
   TrackSourceWithOptions,
 } from '@livekit/components-core';
 import { Participant, RoomEvent, Track } from 'livekit-client';
@@ -19,7 +19,7 @@ type UseTracksOptions = {
 type UseTracksHookReturnType<T> = T extends Track.Source[]
   ? TrackBundle[]
   : T extends TrackSourceWithOptions[]
-  ? MaybeTrackParticipantPair[]
+  ? TrackBundleWithPlaceholder[]
   : never;
 
 /**
@@ -28,11 +28,11 @@ type UseTracksHookReturnType<T> = T extends Track.Source[]
  *
  * @example
  * ```ts
- * const pairs = useTracks(sources: [Track.Source.Camera])
+ * const trackBundles = useTracks(sources: [Track.Source.Camera])
  * ```
  * @example
  * ```ts
- * const pairs = useTracks(sources: [{source: Track.Source.Camera, withPlaceholder: true}])
+ * const trackBundlesWithPlaceholders = useTracks(sources: [{source: Track.Source.Camera, withPlaceholder: true}])
  * ```
  */
 export function useTracks<T extends SourcesArray>(
@@ -40,7 +40,7 @@ export function useTracks<T extends SourcesArray>(
   options: UseTracksOptions = {},
 ): UseTracksHookReturnType<T> {
   const room = useRoomContext();
-  const [pairs, setPairs] = React.useState<TrackBundle[]>([]);
+  const [trackBundles, setTrackBundles] = React.useState<TrackBundle[]>([]);
   const [participants, setParticipants] = React.useState<Participant[]>([]);
 
   const sources_ = React.useMemo(() => {
@@ -48,10 +48,10 @@ export function useTracks<T extends SourcesArray>(
   }, [JSON.stringify(sources)]);
 
   React.useEffect(() => {
-    const subscription = trackParticipantPairsObservable(room, sources_, {
+    const subscription = trackBundlesObservable(room, sources_, {
       additionalRoomEvents: options.updateOnlyOn,
     }).subscribe(({ trackBundles, participants }) => {
-      setPairs(trackBundles);
+      setTrackBundles(trackBundles);
       setParticipants(participants);
     });
     return () => subscription.unsubscribe();
@@ -60,7 +60,7 @@ export function useTracks<T extends SourcesArray>(
   const maybeTrackBundles = React.useMemo(() => {
     if (isSourcesWithOptions(sources)) {
       const requirePlaceholder = requiredPlaceholders(sources, participants);
-      const pairs_ = Array.from(pairs) as MaybeTrackParticipantPair[];
+      const trackBundlesWithPlaceholders = Array.from(trackBundles) as TrackBundleWithPlaceholder[];
       participants.forEach((participant) => {
         if (requirePlaceholder.has(participant.identity)) {
           const sourcesToAddPlaceholder = requirePlaceholder.get(participant.identity) ?? [];
@@ -68,15 +68,19 @@ export function useTracks<T extends SourcesArray>(
             log.debug(
               `Add ${placeholderSource} placeholder for participant ${participant.identity}.`,
             );
-            pairs_.push({ participant, track: undefined, source: placeholderSource });
+            trackBundlesWithPlaceholders.push({
+              participant,
+              track: undefined,
+              source: placeholderSource,
+            });
           });
         }
       });
-      return pairs_;
+      return trackBundlesWithPlaceholders;
     } else {
-      return pairs;
+      return trackBundles;
     }
-  }, [pairs, participants, sources]);
+  }, [trackBundles, participants, sources]);
 
   return maybeTrackBundles as UseTracksHookReturnType<T>;
 }

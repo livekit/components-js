@@ -1,7 +1,7 @@
 import type { Participant, Track, TrackPublication } from 'livekit-client';
 
 // ## PinState Type
-export type PinState = Array<TrackBundle>;
+export type PinState = TrackBundle[];
 export const PIN_DEFAULT_STATE: PinState = [];
 
 // ## WidgetState Types
@@ -11,31 +11,55 @@ export type WidgetState = {
 export const WIDGET_DEFAULT_STATE: WidgetState = { showChat: false };
 
 // ## TrackBundle Types
-export type TrackBundle = {
-  track: TrackPublication;
+
+export type TrackBundleSubscribed = {
   participant: Participant;
-};
-/**
- * A participant with no published tracks.
- * @remarks
- * Useful if you want to have a representation for participants without a published track.
- */
-export type TrackParticipantPlaceholder = {
-  track: undefined;
   source: Track.Source;
-  participant: Participant;
+  publication: TrackPublication;
+  track: TrackPublication;
 };
-export type MaybeTrackParticipantPair = TrackBundle | TrackParticipantPlaceholder;
+
+export type TrackBundlePublished = {
+  participant: Participant;
+  source: Track.Source;
+  publication: TrackPublication;
+};
+
+export type TrackBundlePlaceholder = {
+  participant: Participant;
+  source: Track.Source;
+};
+
+export type TrackBundle = TrackBundleSubscribed | TrackBundlePublished;
+export type TrackBundleWithPlaceholder =
+  | TrackBundleSubscribed
+  | TrackBundlePublished
+  | TrackBundlePlaceholder;
 
 // ### TrackBundle Type Predicates
-export function isTrackParticipantPair(item: MaybeTrackParticipantPair): item is TrackBundle {
-  return item.track !== undefined;
+export function isTrackBundle(bundle: TrackBundleWithPlaceholder): bundle is TrackBundle {
+  return (
+    isTrackBundleSubscribed(bundle as TrackBundle) || isTrackBundlePublished(bundle as TrackBundle)
+  );
 }
 
-export function isTrackParticipantPlaceholder(
-  item: MaybeTrackParticipantPair,
-): item is TrackParticipantPlaceholder {
-  return item.track === undefined && item.hasOwnProperty('source');
+export function isTrackBundleSubscribed(bundle: TrackBundle): bundle is TrackBundleSubscribed {
+  return bundle.hasOwnProperty('track');
+}
+
+export function isTrackBundlePublished(bundle: TrackBundle): bundle is TrackBundlePublished {
+  return bundle.hasOwnProperty('publication') && !bundle.hasOwnProperty('track');
+}
+
+export function isTrackBundlePlaceholder(
+  bundle: TrackBundleWithPlaceholder,
+): bundle is TrackBundlePlaceholder {
+  return (
+    bundle.hasOwnProperty('participant') &&
+    bundle.hasOwnProperty('source') &&
+    !bundle.hasOwnProperty('publication') &&
+    !bundle.hasOwnProperty('track')
+  );
 }
 
 // ## Track Source Types
@@ -56,9 +80,8 @@ export function isSourcesWithOptions(sources: SourcesArray): sources is TrackSou
 }
 
 // ## Loop Filter Types
-export type TrackFilter = Parameters<TrackBundle[]['filter']>['0'];
+export type TrackBundleFilter = Parameters<TrackBundleWithPlaceholder[]['filter']>['0'];
 export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
-export type TileFilter = Parameters<MaybeTrackParticipantPair[]['filter']>['0'];
 
 // ## Other Types
 export interface ParticipantClickEvent {

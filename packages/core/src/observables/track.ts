@@ -89,7 +89,7 @@ export function trackBundlesObservable(
   options: TrackBundlesObservableOptions,
 ): Observable<{ trackBundles: TrackBundle[]; participants: Participant[] }> {
   const additionalRoomEvents = options.additionalRoomEvents ?? allRemoteParticipantRoomEvents;
-  const onlySubscribedTracks: boolean = options.onlySubscribed ?? false;
+  const onlySubscribedTracks: boolean = options.onlySubscribed ?? true;
   const roomEventSubscriptions: Subscription[] = [];
 
   const observable = new Observable<{

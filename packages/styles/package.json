@@ -54,7 +54,7 @@
     "postcss-variables-prefixer": "^1.2.0",
     "sass": "^1.54.6",
     "typed-scss-modules": "^7.0.0",
-    "vitest": "^0.28.3"
+    "vitest": "^0.29.0"
   },
   "engines": {
     "node": ">=14"

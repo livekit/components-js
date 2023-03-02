@@ -2,10 +2,10 @@ import {
   isSourcesWithOptions,
   isSourceWitOptions,
   log,
-  MaybeTrackParticipantPair,
   SourcesArray,
-  TrackParticipantPair,
-  trackParticipantPairsObservable,
+  TrackBundle,
+  TrackBundleWithPlaceholder,
+  trackBundlesObservable,
   TrackSourceWithOptions,
 } from '@livekit/components-core';
 import { Participant, RoomEvent, Track } from 'livekit-client';
@@ -14,26 +14,26 @@ import { useRoomContext } from '../context';
 
 type UseTracksOptions = {
   updateOnlyOn?: RoomEvent[];
+  onlySubscribed?: boolean;
 };
 
 type UseTracksHookReturnType<T> = T extends Track.Source[]
-  ? TrackParticipantPair[]
+  ? TrackBundle[]
   : T extends TrackSourceWithOptions[]
-  ? MaybeTrackParticipantPair[]
+  ? TrackBundleWithPlaceholder[]
   : never;
 
 /**
- * The `useTracks` hook returns an array of TrackParticipantPairs which combine the participant, publication and a track.
+ * The `useTracks` hook returns an array of `TrackBundle` which combine the participant, trackSource, publication and a track.
  * Only tracks with a the same source specified via the sources property get included in the loop.
- * This hook can also return placeholders alongside `TrackParticipantPair`'s, so they can appear as tiles even without a subscribed track.
  *
  * @example
  * ```ts
- * const pairs = useTracks(sources: [Track.Source.Camera])
+ * const trackBundles = useTracks(sources: [Track.Source.Camera])
  * ```
  * @example
  * ```ts
- * const pairs = useTracks(sources: [{source: Track.Source.Camera, withPlaceholder: true}])
+ * const trackBundlesWithPlaceholders = useTracks(sources: [{source: Track.Source.Camera, withPlaceholder: true}])
  * ```
  */
 export function useTracks<T extends SourcesArray>(
@@ -41,7 +41,7 @@ export function useTracks<T extends SourcesArray>(
   options: UseTracksOptions = {},
 ): UseTracksHookReturnType<T> {
   const room = useRoomContext();
-  const [pairs, setPairs] = React.useState<TrackParticipantPair[]>([]);
+  const [trackBundles, setTrackBundles] = React.useState<TrackBundle[]>([]);
   const [participants, setParticipants] = React.useState<Participant[]>([]);
 
   const sources_ = React.useMemo(() => {
@@ -49,10 +49,11 @@ export function useTracks<T extends SourcesArray>(
   }, [JSON.stringify(sources)]);
 
   React.useEffect(() => {
-    const subscription = trackParticipantPairsObservable(room, sources_, {
+    const subscription = trackBundlesObservable(room, sources_, {
       additionalRoomEvents: options.updateOnlyOn,
+      onlySubscribed: options.onlySubscribed,
     }).subscribe(({ trackBundles, participants }) => {
-      setPairs(trackBundles);
+      setTrackBundles(trackBundles);
       setParticipants(participants);
     });
     return () => subscription.unsubscribe();
@@ -61,7 +62,7 @@ export function useTracks<T extends SourcesArray>(
   const maybeTrackBundles = React.useMemo(() => {
     if (isSourcesWithOptions(sources)) {
       const requirePlaceholder = requiredPlaceholders(sources, participants);
-      const pairs_ = Array.from(pairs) as MaybeTrackParticipantPair[];
+      const trackBundlesWithPlaceholders = Array.from(trackBundles) as TrackBundleWithPlaceholder[];
       participants.forEach((participant) => {
         if (requirePlaceholder.has(participant.identity)) {
           const sourcesToAddPlaceholder = requirePlaceholder.get(participant.identity) ?? [];
@@ -69,15 +70,19 @@ export function useTracks<T extends SourcesArray>(
             log.debug(
               `Add ${placeholderSource} placeholder for participant ${participant.identity}.`,
             );
-            pairs_.push({ participant, track: undefined, source: placeholderSource });
+            trackBundlesWithPlaceholders.push({
+              participant,
+              track: undefined,
+              source: placeholderSource,
+            });
           });
         }
       });
-      return pairs_;
+      return trackBundlesWithPlaceholders;
     } else {
-      return pairs;
+      return trackBundles;
     }
-  }, [pairs, participants, sources]);
+  }, [trackBundles, participants, sources]);
 
   return maybeTrackBundles as UseTracksHookReturnType<T>;
 }

@@ -1,10 +1,10 @@
-import { PinState, TrackParticipantPair } from '@livekit/components-core';
+import { PinState, TrackBundle } from '@livekit/components-core';
 import * as React from 'react';
 
 export type PinAction =
   | {
       msg: 'set_pin';
-      trackParticipantPair: TrackParticipantPair;
+      trackBundle: TrackBundle;
     }
   | { msg: 'clear_pin' };
 
@@ -19,7 +19,7 @@ export type PinContextType = {
 
 export function pinReducer(state: PinState, action: PinAction): PinState {
   if (action.msg === 'set_pin') {
-    return [action.trackParticipantPair];
+    return [action.trackBundle];
   } else if (action.msg === 'clear_pin') {
     return [];
   } else {

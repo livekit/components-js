@@ -1,11 +1,11 @@
-import { isTrackParticipantPair, MaybeTrackParticipantPair } from '@livekit/components-core';
+import { isTrackBundle, TrackBundle, TrackBundleWithPlaceholder } from '@livekit/components-core';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
 import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
 type TrackLoopProps = {
-  pairs: MaybeTrackParticipantPair[];
+  trackBundles: TrackBundle[] | TrackBundleWithPlaceholder[];
 };
 
 /**
@@ -16,19 +16,21 @@ type TrackLoopProps = {
  * @example
  * ```tsx
  * const trackBundles = useTracks([Track.Source.Camera]);
- * <TrackLoop pairs={trackBundles} >
+ * <TrackLoop trackBundles={trackBundles} >
  * <TrackLoop />
  * ```
  */
-export const TrackLoop = ({ pairs, ...props }: React.PropsWithChildren<TrackLoopProps>) => {
+export const TrackLoop = ({ trackBundles, ...props }: React.PropsWithChildren<TrackLoopProps>) => {
   return (
     <>
-      {pairs.map((pair) => {
-        const trackSource = isTrackParticipantPair(pair) ? pair.track.source : pair.source;
+      {trackBundles.map((trackBundle) => {
+        const trackSource = isTrackBundle(trackBundle)
+          ? trackBundle.publication.source
+          : trackBundle.source;
         return (
           <ParticipantContext.Provider
-            value={pair.participant}
-            key={`${pair.participant.identity}_${trackSource}`}
+            value={trackBundle.participant}
+            key={`${trackBundle.participant.identity}_${trackSource}`}
           >
             {props.children ? (
               cloneSingleChild(props.children)

@@ -4,9 +4,9 @@ import { useParticipants, UseParticipantsOptions } from '../../hooks';
 import { mergeProps } from '../../utils';
 import { useSize } from '../../helper/resizeObserver';
 import {
-  // isParticipantTrackPinned,
+  // isTrackBundlePinned,
   // isTrackParticipantPair,
-  TileFilter,
+  TrackBundleFilter,
 } from '@livekit/components-core';
 // import { Track } from 'livekit-client';
 // import { useMaybeLayoutContext } from '../../context';
@@ -18,7 +18,7 @@ export interface GridLayoutProps
    * The grid shows all room participants. If only a subset of the participants
    * should be visible, they can be filtered.
    */
-  filter?: TileFilter;
+  filter?: TrackBundleFilter;
   filterDependencies?: [];
   // TODO maxVisibleParticipants
 }

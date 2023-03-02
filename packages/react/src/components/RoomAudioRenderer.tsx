@@ -16,11 +16,11 @@ import { TrackLoop } from './TrackLoop';
  * ```
  */
 export const RoomAudioRenderer = () => {
-  const pairs = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio]);
+  const trackBundles = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio]);
   return (
     <div style={{ display: 'none' }}>
       <TrackLoop
-        pairs={pairs.filter(({ participant }) => {
+        trackBundles={trackBundles.filter(({ participant }) => {
           return participant instanceof RemoteParticipant;
         })}
       >

@@ -16,7 +16,7 @@ export type TrackBundleSubscribed = {
   participant: Participant;
   source: Track.Source;
   publication: TrackPublication;
-  track: TrackPublication;
+  track: NonNullable<TrackPublication['track']>;
 };
 
 export type TrackBundlePublished = {

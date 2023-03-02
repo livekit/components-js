@@ -62,14 +62,19 @@ function getTrackBundles(
 
   allParticipants.forEach((participant) => {
     sources.forEach((source) => {
-      const track = participant.getTrack(source);
-      if (track) {
-        if (track.isSubscribed || track instanceof LocalTrackPublication) {
+      const publication = participant.getTrack(source);
+      if (publication) {
+        if (publication.isSubscribed || publication instanceof LocalTrackPublication) {
           // Include subscribed `TrackPublications`.
-          trackBundles.push({ participant, source, publication: track, track: track });
+          trackBundles.push({
+            participant,
+            source,
+            publication,
+            track: publication.track,
+          });
         } else if (!onlySubscribedTracks) {
           // Include also `TrackPublications` that are not subscribed.
-          trackBundles.push({ participant, source, publication: track });
+          trackBundles.push({ participant, source, publication });
         }
       }
     });

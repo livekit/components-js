@@ -68,13 +68,12 @@ function getTrackBundles(
           // Include subscribed `TrackPublications`.
           trackBundles.push({
             participant,
-            source,
             publication,
             track: publication.track,
           });
         } else if (!onlySubscribedTracks) {
           // Include also `TrackPublications` that are not subscribed.
-          trackBundles.push({ participant, source, publication });
+          trackBundles.push({ participant, publication });
         }
       }
     });

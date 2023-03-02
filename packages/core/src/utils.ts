@@ -49,13 +49,13 @@ export function isTrackBundlePinned(
     return pinState.some(
       (pinnedTrackBundle) =>
         pinnedTrackBundle.participant.identity === trackBundle.participant.identity &&
-        pinnedTrackBundle.source === trackBundle.source &&
         pinnedTrackBundle.publication.trackSid === trackBundle.publication.trackSid,
     );
   } else if (isTrackBundlePlaceholder(trackBundle)) {
     return pinState.some(
       (pinnedTrackBundle) =>
         pinnedTrackBundle.participant.identity === trackBundle.participant.identity &&
+        isTrackBundlePlaceholder(pinnedTrackBundle) &&
         pinnedTrackBundle.source === trackBundle.source,
     );
   } else {

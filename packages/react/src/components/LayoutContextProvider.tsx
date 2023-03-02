@@ -53,7 +53,6 @@ export function LayoutContextProvider({
         msg: 'set_pin',
         trackBundle: {
           participant: screenShareParticipant,
-          source: screenShareTrack.source,
           publication: screenShareTrack,
         },
       });

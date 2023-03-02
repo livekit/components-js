@@ -1,4 +1,4 @@
-import { TrackBundle, TrackBundleWithPlaceholder } from '@livekit/components-core';
+import { isTrackBundle, TrackBundle, TrackBundleWithPlaceholder } from '@livekit/components-core';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
 import { ParticipantTile } from '../prefabs';
@@ -24,7 +24,9 @@ export const TrackLoop = ({ trackBundles, ...props }: React.PropsWithChildren<Tr
   return (
     <>
       {trackBundles.map((trackBundle) => {
-        const trackSource = trackBundle.source;
+        const trackSource = isTrackBundle(trackBundle)
+          ? trackBundle.publication.source
+          : trackBundle.source;
         return (
           <ParticipantContext.Provider
             value={trackBundle.participant}

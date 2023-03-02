@@ -48,7 +48,6 @@ function useFocusToggle({ trackSource, participant, props }: useFocusToggleProps
                 msg: 'set_pin',
                 trackBundle: {
                   participant: p,
-                  source: track.source,
                   publication: track,
                 },
               });

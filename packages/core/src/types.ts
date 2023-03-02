@@ -14,14 +14,12 @@ export const WIDGET_DEFAULT_STATE: WidgetState = { showChat: false };
 
 export type TrackBundleSubscribed = {
   participant: Participant;
-  source: Track.Source;
   publication: TrackPublication;
   track: NonNullable<TrackPublication['track']>;
 };
 
 export type TrackBundlePublished = {
   participant: Participant;
-  source: Track.Source;
   publication: TrackPublication;
 };
 

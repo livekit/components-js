@@ -35,8 +35,7 @@ export interface UseParticipantsOptions {
  * The useParticipants hook returns all participants (local and remote) of the current room.
  */
 export const useParticipants = (options: UseParticipantsOptions = {}) => {
-  const [cachedOptions] = React.useState(options);
-  const remoteParticipants = useRemoteParticipants(cachedOptions);
+  const remoteParticipants = useRemoteParticipants(options);
   const { localParticipant } = useLocalParticipant();
 
   return [localParticipant, ...remoteParticipants];
@@ -118,14 +117,13 @@ export interface UseRemoteParticipantsOptions {
 export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}) => {
   const room = useRoomContext();
   const [participants, setParticipants] = React.useState<RemoteParticipant[]>([]);
-  const [updateOnlyOn] = React.useState(options.updateOnlyOn);
 
   React.useEffect(() => {
     const listener = connectedParticipantsObserver(room, {
-      additionalRoomEvents: updateOnlyOn,
+      additionalRoomEvents: options.updateOnlyOn,
     }).subscribe(setParticipants);
     return () => listener.unsubscribe();
-  }, [room, updateOnlyOn]);
+  }, [room, JSON.stringify(options.updateOnlyOn)]);
   return participants;
 };
 

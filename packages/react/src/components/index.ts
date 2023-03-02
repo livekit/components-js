@@ -12,6 +12,8 @@ export * from './LiveKitRoom';
 export * from './participant/AudioVisualizer';
 export * from './participant/ConnectionQualityIndicator';
 export * from './participant/MediaTrack';
+export * from './participant/AudioTrack';
+export * from './participant/VideoTrack';
 export * from './participant/ParticipantName';
 export * from './participant/TrackMutedIndicator';
 export * from './ParticipantLoop';

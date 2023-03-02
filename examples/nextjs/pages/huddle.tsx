@@ -4,7 +4,6 @@ import {
   LiveKitRoom,
   LocalUserChoices,
   TrackToggle,
-  MediaTrack,
   ParticipantName,
   ParticipantLoop,
   ParticipantTile,
@@ -21,8 +20,9 @@ import {
   ClearPinButton,
   MediaDeviceMenu,
   FocusLayout,
+  VideoTrack,
 } from '@livekit/components-react';
-import { ConnectionState, Participant, Room, Track, TrackPublication } from 'livekit-client';
+import { ConnectionState, Room, Track, TrackPublication } from 'livekit-client';
 
 import type { NextPage } from 'next';
 import { HTMLAttributes, useMemo, useRef, useState } from 'react';
@@ -126,18 +126,7 @@ const CustomFocusLayout = ({
 const CustomFocus = () => {
   const { state } = useLayoutContext().pin;
 
-  return (
-    <FocusLayout></FocusLayout>
-    // <>
-    //   {state?.pinnedParticipant && state.pinnedSource && (
-    //     <MediaTrack
-    //       className={styles.focusLayout}
-    //       participant={state?.pinnedParticipant}
-    //       source={state.pinnedSource}
-    //     />
-    //   )}
-    // </>
-  );
+  return <FocusLayout></FocusLayout>;
 };
 
 const CustomScreenShareView = () => {
@@ -149,7 +138,7 @@ const CustomScreenShareView = () => {
       className={styles.participantView}
       trackSource={Track.Source.ScreenShare}
     >
-      <MediaTrack source={Track.Source.ScreenShare} className={styles.video}></MediaTrack>
+      <VideoTrack source={Track.Source.ScreenShare} className={styles.video}></VideoTrack>
       <div className={styles.screenShareBanner}>
         <ParticipantName style={{ display: 'inline' }} />
         <span>Screen share</span>
@@ -162,7 +151,7 @@ const CustomParticipantTile = () => {
   const participant = useParticipantContext();
   return (
     <ParticipantTile participant={participant} className={styles.participantView}>
-      <MediaTrack source={Track.Source.Camera} className={styles.video}></MediaTrack>
+      <VideoTrack source={Track.Source.Camera} className={styles.video}></VideoTrack>
       <div className={styles.nameContainer}>
         <img
           className={styles.nameMutedIcon}

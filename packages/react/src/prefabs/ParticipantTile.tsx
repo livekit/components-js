@@ -136,6 +136,7 @@ export const ParticipantTile = ({
       <ParticipantContextIfNeeded participant={participant}>
         {children ?? (
           <>
+            {/** TODO remove MediaTrack in favor of the equivalent Audio/Video Track. need to figure out how to differentiate here */}
             <MediaTrack source={trackSource_} onSubscriptionStatusChanged={handleSubscribe} />
             <div className="lk-participant-placeholder">
               <ParticipantPlaceholder />

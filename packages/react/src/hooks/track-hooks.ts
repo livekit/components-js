@@ -1,4 +1,11 @@
-import { isLocal, log, setupMediaTrack, TrackObserverOptions } from '@livekit/components-core';
+import {
+  AudioSource,
+  isLocal,
+  log,
+  setupMediaTrack,
+  TrackObserverOptions,
+  VideoSource,
+} from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureParticipant } from '../context';
@@ -14,7 +21,10 @@ export const useMediaTrackByName = (name: string, options: UseMediaTrackProps = 
   return useMediaTrackBySourceOrName({ name }, options);
 };
 
-export const useMediaTrack = (source: Track.Source, options: UseMediaTrackProps = {}) => {
+export const useMediaTrack = (
+  source: VideoSource | AudioSource,
+  options: UseMediaTrackProps = {},
+) => {
   return useMediaTrackBySourceOrName({ source }, options);
 };
 

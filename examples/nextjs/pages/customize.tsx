@@ -6,7 +6,7 @@ import {
   TrackMutedIndicator,
   RoomAudioRenderer,
   useConnectionQualityIndicator,
-  MediaTrack,
+  VideoTrack,
   useToken,
   ControlBar,
   GridLayout,
@@ -64,7 +64,7 @@ const CustomizeExample: NextPage = () => {
                 <GridLayout>
                   <ParticipantLoop>
                     <ParticipantTile>
-                      <MediaTrack source={Track.Source.Camera}></MediaTrack>
+                      <VideoTrack source={Track.Source.Camera}></VideoTrack>
 
                       <div className={myStyles['participant-indicators']}>
                         <div style={{ display: 'flex' }}>

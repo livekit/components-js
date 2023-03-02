@@ -1,7 +1,7 @@
 import { RemoteParticipant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useTracks } from '../hooks';
-import { MediaTrack } from './participant/MediaTrack';
+import { AudioTrack } from './participant/AudioTrack';
 import { TrackLoop } from './TrackLoop';
 
 /**
@@ -24,8 +24,8 @@ export const RoomAudioRenderer = () => {
           return participant instanceof RemoteParticipant;
         })}
       >
-        {/* TODO: How to handel screen share audio? Currently it is rendered as microphone source.         */}
-        <MediaTrack source={Track.Source.Microphone} />
+        {/* TODO: How to handle screen share audio? Currently it is rendered as microphone source.         */}
+        <AudioTrack source={Track.Source.Microphone} />
       </TrackLoop>
     </div>
   );

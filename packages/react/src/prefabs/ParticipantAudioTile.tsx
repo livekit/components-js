@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Track } from 'livekit-client';
 
 import { ConnectionQualityIndicator } from '../components/participant/ConnectionQualityIndicator';
-import { MediaTrack } from '../components/participant/MediaTrack';
 import { ParticipantName } from '../components/participant/ParticipantName';
 import { TrackMutedIndicator } from '../components/participant/TrackMutedIndicator';
 import { useEnsureParticipant } from '../context';
@@ -13,6 +12,7 @@ import {
   useParticipantTile,
   ParticipantContextIfNeeded,
 } from './ParticipantTile';
+import { AudioTrack } from '../components/participant/AudioTrack';
 
 /**
  * The ParticipantTile component is the base utility wrapper for displaying a visual representation of a participant.
@@ -48,7 +48,7 @@ export const ParticipantAudioTile = ({
       <ParticipantContextIfNeeded participant={participant}>
         {children ?? (
           <>
-            <MediaTrack source={Track.Source.Microphone}></MediaTrack>
+            <AudioTrack source={Track.Source.Microphone}></AudioTrack>
             <AudioVisualizer />
             <div className="lk-participant-metadata">
               <div className="lk-participant-metadata-item">

@@ -2,4 +2,4 @@
 '@livekit/components-react': patch
 ---
 
-Use sringify array effect deps
+Use stringify array effect deps

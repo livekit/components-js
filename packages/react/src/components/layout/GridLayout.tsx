@@ -5,7 +5,7 @@ import { useSize } from '../../helper/resizeObserver';
 import {
   GRID_LAYOUTS,
   selectGridLayout,
-  sortTrackParticipantPairs,
+  sortTrackBundles,
   TrackBundleFilter,
   TrackBundleWithPlaceholder,
 } from '@livekit/components-core';
@@ -72,7 +72,7 @@ export function GridLayout({
 
   const visibleTiles = React.useMemo<TrackBundleWithPlaceholder[]>(() => {
     // const sortedTrackBundles = sortParticipantsByVolume(filteredTrackBundles);
-    const sortedTrackBundles = sortTrackParticipantPairs(filteredTrackBundles);
+    const sortedTrackBundles = sortTrackBundles(filteredTrackBundles);
     const visibleTrackBundles = sortedTrackBundles.slice(0, gridLayout.maxParticipants);
     console.log(
       `Grid displays ${visibleTrackBundles.length} of all ${filteredTrackBundles.length} participants.`,

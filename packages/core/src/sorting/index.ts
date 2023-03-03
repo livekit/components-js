@@ -1,2 +1,2 @@
-export { sortTrackBundles as sortTrackParticipantPairs } from './sort-track-participant-pairs';
+export { sortTrackBundles } from './sort-track-bundles';
 export { sortParticipantsByVolume } from './sort-participants';

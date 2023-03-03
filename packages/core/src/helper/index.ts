@@ -5,3 +5,4 @@ export * from './floating-menu';
 export * from './tokenizer';
 export * from './eventGroups';
 export { selectGridLayout, GRID_LAYOUTS } from './grid-layouts';
+export { difference } from './set-helper';

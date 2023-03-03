@@ -10,7 +10,7 @@ import {
  *
  *
  * Default sort for TrackParticipantPairs, it'll order participants by:
- * 1. local camera track
+ * 1. local camera track (publication.isLocal)
  * 2. remote screen_share track
  * 3. local screen_share track
  * 4. remote dominant speaker camera track (sorted by speaker with the loudest audio level)

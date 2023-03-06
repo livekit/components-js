@@ -8,9 +8,9 @@
 // }
 
 // import { Track } from 'livekit-client';
-import { difference } from '../helper';
+import { setDifference } from '../helper';
 import { isTrackBundle, TrackBundleWithPlaceholder } from '../types';
-import { chunk, zip } from 'lodash';
+import { chunk, zip, difference } from 'lodash';
 
 type Changes<T> = {
   dropped: T[];
@@ -28,8 +28,8 @@ export function visualPageChange<T>(state: T[], next: T[]): Changes<T> {
   //TDOO: probably need to update this when switching to TrackBundles
   const stateSet = new Set(state);
   const nextSet = new Set(next);
-  const droppedMembers = Array.from(difference(stateSet, nextSet));
-  const addedMembers = Array.from(difference(nextSet, stateSet));
+  const droppedMembers = Array.from(setDifference(stateSet, nextSet));
+  const addedMembers = Array.from(setDifference(nextSet, stateSet));
 
   return {
     dropped: droppedMembers,
@@ -79,6 +79,10 @@ export function dropItem<T>(itemToDrop: T, list: T[]): T[] {
   return list;
 }
 
+function addItem<T>(itemToAdd: T, list: T[]): T[] {
+  return [...list, itemToAdd];
+}
+
 export function divideIntoPages<T>(elements: T[], maxElementsOnPage: number): Array<T[]> {
   const pages = chunk(elements, maxElementsOnPage);
   return pages;
@@ -87,6 +91,13 @@ export function divideIntoPages<T>(elements: T[], maxElementsOnPage: number): Ar
 /** Divide the list of elements into pages and and check if pages need updating. */
 export function updatePages<T>(currentList: T[], nextList: T[], maxItemsOnPage: number): T[] {
   let updatedList = [...currentList];
+
+  if (currentList.length < nextList.length) {
+    // Items got added: Find newly added items and add them to the end of the list.
+    const addedItems = difference(nextList, currentList);
+    console.log(`Newly added items to the list: `, addedItems);
+    updatedList = [...updatedList, ...addedItems];
+  }
   const currentPages = divideIntoPages(currentList, maxItemsOnPage);
   const nextPages = divideIntoPages(nextList, maxItemsOnPage);
 
@@ -124,6 +135,12 @@ export function updatePages<T>(currentList: T[], nextList: T[], maxItemsOnPage: 
             console.log(`Before drop action: `, updatedList);
             updatedList = dropItem(item, updatedList);
             console.log(`After drop action: `, updatedList);
+          });
+        }
+        // ## Handle Item added
+        if (changes.added.length > 0 && changes.dropped.length === 0) {
+          changes.added.forEach((item) => {
+            updatedList = addItem(item, updatedList);
           });
         }
       }

@@ -68,7 +68,7 @@ describe('Test dividing list into pages.', () => {
   });
 });
 
-describe.only('Test updating the list based while considering pages.', () => {
+describe('Test updating the list based while considering pages.', () => {
   test.each([
     {
       state: [1, 2, 3, 4, 5, 6],
@@ -108,8 +108,51 @@ describe.only('Test updating the list based while considering pages.', () => {
       expected: [1, 2, 5, 4, 6],
       itemsOnPage: 2,
     },
-  ])('', ({ state, next, itemsOnPage, expected }) => {
+  ])('Test removing items from list:', ({ state, next, itemsOnPage, expected }) => {
     const result = updatePages<number>(state, next, itemsOnPage);
+    expect(result).toHaveLength(next.length);
+    expect(result).toStrictEqual(expected);
+  });
+
+  test.each([
+    {
+      state: [1, 2, 3],
+      next: [1, 2, 3, 4],
+      // 4 got added
+      expected: [1, 2, 3, 4],
+      itemsOnPage: 2,
+    },
+    {
+      state: [1, 2, 3, 4],
+      next: [1, 5, 2, 3, 4],
+      // 4 got added
+      expected: [1, 5, 3, 2, 4],
+      itemsOnPage: 2,
+    },
+    {
+      state: [1, 2, 3, 4],
+      next: [1, 5, 2, 3, 4],
+      // 5 got added
+      expected: [1, 5, 3, 2, 4],
+      itemsOnPage: 2,
+    },
+    {
+      state: [1, 2],
+      next: [1, 2, 3, 4],
+      // 3,4 got added
+      expected: [1, 2, 3, 4],
+      itemsOnPage: 2,
+    },
+    {
+      state: [1, 2, 3, 4],
+      next: [1, 2, 5, 6, 3, 4],
+      // 5, 6 got added
+      expected: [1, 2, 5, 6, 3, 4],
+      itemsOnPage: 2,
+    },
+  ])('Test adding items:', ({ state, next, itemsOnPage, expected }) => {
+    const result = updatePages<number>(state, next, itemsOnPage);
+    expect(result).toHaveLength(next.length);
     expect(result).toStrictEqual(expected);
   });
 });

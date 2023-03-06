@@ -7,6 +7,14 @@ type Changes<T> = {
   added: T[];
 };
 
+function trackBundleId(trackBundle: TrackBundleWithPlaceholder): string {
+  if (isTrackBundle(trackBundle)) {
+    return `${trackBundle.participant.identity}_${trackBundle.publication.source}`;
+  } else {
+    return `${trackBundle.participant.identity}_${trackBundle.source}_placeholder`;
+  }
+}
+
 /** Check if something visually change on the page. */
 export function visualPageChange<T>(state: T[], next: T[]): Changes<T> {
   //TDOO: probably need to update this when switching to TrackBundles
@@ -28,12 +36,9 @@ function listNeedsUpdating<T>(changes: Changes<T>): boolean {
 export function findTrackBundleIndex(
   trackBundle: TrackBundleWithPlaceholder,
   trackBundles: TrackBundleWithPlaceholder[],
-) {
+): number {
   const indexToReplace = trackBundles.findIndex(
-    (trackBundle_) =>
-      trackBundle_.participant.identity === trackBundle.participant.identity &&
-      (isTrackBundle(trackBundle_) ? trackBundle_.publication.source : trackBundle_.source) ===
-        (isTrackBundle(trackBundle) ? trackBundle.publication.source : trackBundle.source),
+    (trackBundle_) => trackBundleId(trackBundle_) === trackBundleId(trackBundle),
   );
   if (indexToReplace === -1) {
     throw new Error(

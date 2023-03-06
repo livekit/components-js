@@ -148,18 +148,45 @@ describe.concurrent('Test sorting track bundles by type.', () => {
     {
       unsorted: [
         mockTrackBundlePlaceholder('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Kind.Video),
+        mockTrackBundleSubscribed('B', Track.Source.Camera),
       ],
       expected: [
-        mockTrackBundleSubscribed('B', Track.Kind.Video),
+        mockTrackBundleSubscribed('B', Track.Source.Camera),
         mockTrackBundlePlaceholder('A', Track.Source.Camera),
       ],
     },
-  ])(
-    'Test that the higher audio levels get sorted to the front of the array.',
-    ({ unsorted, expected }) => {
-      unsorted.sort(sortTrackBundlesByType);
-      expect(flatTrackBundleArray(unsorted)).toStrictEqual(flatTrackBundleArray(expected));
+    {
+      unsorted: [
+        mockTrackBundlePlaceholder('A', Track.Source.Camera),
+        mockTrackBundlePlaceholder('B', Track.Source.Camera),
+      ],
+      expected: [
+        mockTrackBundlePlaceholder('A', Track.Source.Camera),
+        mockTrackBundlePlaceholder('B', Track.Source.Camera),
+      ],
     },
-  );
+    {
+      unsorted: [
+        mockTrackBundleSubscribed('A', Track.Source.Camera),
+        mockTrackBundleSubscribed('B', Track.Source.Camera),
+      ],
+      expected: [
+        mockTrackBundleSubscribed('A', Track.Source.Camera),
+        mockTrackBundleSubscribed('B', Track.Source.Camera),
+      ],
+    },
+    {
+      unsorted: [
+        mockTrackBundleSubscribed('A', Track.Source.Camera),
+        mockTrackBundleSubscribed('B', Track.Source.ScreenShare),
+      ],
+      expected: [
+        mockTrackBundleSubscribed('A', Track.Source.Camera),
+        mockTrackBundleSubscribed('B', Track.Source.ScreenShare),
+      ],
+    },
+  ])('TrackBundle should be for TrackBundlePlaceholders', ({ unsorted, expected }) => {
+    unsorted.sort(sortTrackBundlesByType);
+    expect(flatTrackBundleArray(unsorted)).toStrictEqual(flatTrackBundleArray(expected));
+  });
 });

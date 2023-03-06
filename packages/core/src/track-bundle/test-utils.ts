@@ -12,19 +12,32 @@ export const mockTrackBundlePlaceholder = (
   id: string,
   source: Track.Source,
 ): TrackBundlePlaceholder => {
-  return { participant: new Participant(`sid_${id}`, `identity_${id}`), source };
+  return { participant: new Participant(`${id}`, `${id}`), source };
 };
 
-export const mockTrackBundlePublished = (id: string, kind: Track.Kind): TrackBundlePublished => {
+export const mockTrackBundlePublished = (
+  id: string,
+  source: Track.Source,
+): TrackBundlePublished => {
+  const kind = [Track.Source.Camera, Track.Source.ScreenShare].includes(source)
+    ? Track.Kind.Video
+    : Track.Kind.Audio;
   return {
-    participant: new Participant(`sid_${id}`, `identity_${id}`),
-    publication: new TrackPublication(kind, `id_${id}`, `name_${id}`),
+    participant: new Participant(`${id}`, `${id}`),
+    publication: new TrackPublication(kind, `${id}`, `${id}`),
   };
 };
-export const mockTrackBundleSubscribed = (id: string, kind: Track.Kind): TrackBundleSubscribed => {
+
+export const mockTrackBundleSubscribed = (
+  id: string,
+  source: Track.Source,
+): TrackBundleSubscribed => {
+  const kind = [Track.Source.Camera, Track.Source.ScreenShare].includes(source)
+    ? Track.Kind.Video
+    : Track.Kind.Audio;
   return {
-    participant: new Participant(`sid_${id}`, `identity_${id}`),
-    publication: new TrackPublication(kind, `id_${id}`, `name_${id}`),
+    participant: new Participant(`${id}`, `${id}`),
+    publication: new TrackPublication(kind, `${id}`, `${id}`),
     track: {} as Track,
   };
 };

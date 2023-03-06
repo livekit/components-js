@@ -1,10 +1,10 @@
 import { Participant, Track, TrackPublication } from 'livekit-client';
+import { UpdatableItem } from '../sorting/tile-array-update';
 import {
   trackBundleId,
   TrackBundlePlaceholder,
   TrackBundlePublished,
   TrackBundleSubscribed,
-  TrackBundleWithPlaceholder,
 } from './track-bundle.types';
 
 // Test function:
@@ -42,6 +42,12 @@ export const mockTrackBundleSubscribed = (
   };
 };
 
-export function flatTrackBundleArray(list: TrackBundleWithPlaceholder[]): string[] {
-  return list.map((trackBundle) => trackBundleId(trackBundle));
+export function flatTrackBundleArray<T extends UpdatableItem>(list: T[]): string[] {
+  return list.map((item) => {
+    if (typeof item === 'string' || typeof item === 'number') {
+      return `${item}`;
+    } else {
+      return trackBundleId(item);
+    }
+  });
 }

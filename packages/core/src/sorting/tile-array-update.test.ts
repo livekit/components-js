@@ -1,4 +1,6 @@
+import { Track } from 'livekit-client';
 import { describe, test, expect } from 'vitest';
+import { flatTrackBundleArray, mockTrackBundleSubscribed } from '../track-bundle/test-utils';
 import { divideIntoPages, swapItems, updatePages, visualPageChange } from './tile-array-update';
 
 describe('Test visualPageChange function.', () => {
@@ -176,9 +178,57 @@ describe('Test updating the list based while considering pages.', () => {
       expected: [1, 2, 5, 6, 3, 4],
       itemsOnPage: 2,
     },
+    {
+      state: [1, 2],
+      next: [1, 3, 2],
+      // 5, 6 got added
+      expected: [1, 2, 3],
+      itemsOnPage: 3,
+    },
   ])('Test adding items:', ({ state, next, itemsOnPage, expected }) => {
-    const result = updatePages<number>(state, next, itemsOnPage);
+    const result = updatePages(state, next, itemsOnPage);
     expect(result).toHaveLength(next.length);
     expect(result).toStrictEqual(expected);
+  });
+
+  test.only.each([
+    {
+      state: [
+        mockTrackBundleSubscribed('A', Track.Source.Camera),
+        mockTrackBundleSubscribed('B', Track.Source.Camera),
+      ],
+      next: [
+        mockTrackBundleSubscribed('A', Track.Source.Camera),
+        mockTrackBundleSubscribed('B', Track.Source.Camera),
+        mockTrackBundleSubscribed('C', Track.Source.Camera),
+      ],
+      expected: [
+        mockTrackBundleSubscribed('A', Track.Source.Camera),
+        mockTrackBundleSubscribed('B', Track.Source.Camera),
+        mockTrackBundleSubscribed('C', Track.Source.Camera),
+      ],
+      itemsOnPage: 2,
+    },
+    // {
+    //   state: [
+    //     mockTrackBundleSubscribed('A', Track.Source.Camera),
+    //     mockTrackBundleSubscribed('B', Track.Source.Camera),
+    //   ],
+    //   next: [
+    //     mockTrackBundleSubscribed('A', Track.Source.Camera),
+    //     mockTrackBundleSubscribed('C', Track.Source.Camera),
+    //     mockTrackBundleSubscribed('B', Track.Source.Camera),
+    //   ],
+    //   expected: [
+    //     mockTrackBundleSubscribed('A', Track.Source.Camera),
+    //     mockTrackBundleSubscribed('B', Track.Source.Camera),
+    //     mockTrackBundleSubscribed('C', Track.Source.Camera),
+    //   ],
+    //   itemsOnPage: 3,
+    // },
+  ])('Test adding items:', ({ state, next, itemsOnPage, expected }) => {
+    const result = updatePages(state, next, itemsOnPage);
+    expect(result).toHaveLength(next.length);
+    expect(flatTrackBundleArray(result)).toStrictEqual(flatTrackBundleArray(expected));
   });
 });

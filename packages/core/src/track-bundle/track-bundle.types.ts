@@ -55,8 +55,10 @@ export function isTrackBundlePlaceholder(
 }
 
 /** Returns a id to identify a track bundle based on participant and source. */
-export function trackBundleId(trackBundle: TrackBundleWithPlaceholder): string {
-  if (isTrackBundle(trackBundle)) {
+export function trackBundleId(trackBundle: TrackBundleWithPlaceholder | number | string): string {
+  if (typeof trackBundle === 'string' || typeof trackBundle === 'number') {
+    return `${trackBundle}`;
+  } else if (isTrackBundle(trackBundle)) {
     return `${trackBundle.participant.identity}_${trackBundle.publication.source}`;
   } else {
     return `${trackBundle.participant.identity}_${trackBundle.source}_placeholder`;

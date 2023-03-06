@@ -1,8 +1,8 @@
-import { chunk, zip, difference, differenceBy, remove } from 'lodash';
+import { chunk, zip, differenceBy, remove } from 'lodash';
 import { trackBundleId, TrackBundleWithPlaceholder } from '../track-bundle';
 import { flatTrackBundleArray } from '../track-bundle/test-utils';
 
-type Changes<T> = {
+type VisualChanges<T> = {
   dropped: T[];
   added: T[];
 };
@@ -10,21 +10,18 @@ type Changes<T> = {
 export type UpdatableItem = TrackBundleWithPlaceholder | number;
 
 /** Check if something visually change on the page. */
-export function visualPageChange<T extends UpdatableItem>(state: T[], next: T[]): Changes<T> {
+export function visualPageChange<T extends UpdatableItem>(state: T[], next: T[]): VisualChanges<T> {
   return {
     dropped: differenceBy<T, T>(state, next, trackBundleId),
     added: differenceBy<T, T>(next, state, trackBundleId),
   };
 }
 
-function listNeedsUpdating<T>(changes: Changes<T>): boolean {
+function listNeedsUpdating<T>(changes: VisualChanges<T>): boolean {
   return changes.added.length !== 0 || changes.dropped.length !== 0;
 }
 
-export function findTrackBundleIndex<T extends UpdatableItem>(
-  trackBundle: T,
-  trackBundles: T[],
-): number {
+export function findIndex<T extends UpdatableItem>(trackBundle: T, trackBundles: T[]): number {
   const indexToReplace = trackBundles.findIndex(
     (trackBundle_) => trackBundleId(trackBundle_) === trackBundleId(trackBundle),
   );
@@ -56,7 +53,7 @@ export function swapItems<T extends UpdatableItem>(
 }
 
 export function dropItem<T extends UpdatableItem>(itemToDrop: T, list: T[]): T[] {
-  const indexOfElementToDrop = findTrackBundleIndex(itemToDrop, list);
+  const indexOfElementToDrop = findIndex(itemToDrop, list);
   // const indexOfElementToDrop = list.findIndex((item) => item === itemToDrop, list);
   list.splice(indexOfElementToDrop, 1);
   return list;
@@ -81,8 +78,8 @@ export function updatePages<T extends UpdatableItem>(
 
   if (currentList.length < nextList.length) {
     // Items got added: Find newly added items and add them to the end of the list.
-    const addedItems = difference<UpdatableItem>(nextList, currentList);
-    console.log(`Newly added items to the list: `, addedItems);
+    const addedItems = differenceBy<T, T>(nextList, currentList, trackBundleId);
+    console.log(`Newly added items to the list: `, flatTrackBundleArray(addedItems));
     updatedList = [...updatedList, ...addedItems] as T[];
   }
   const currentPages = divideIntoPages(currentList, maxItemsOnPage);
@@ -98,7 +95,7 @@ export function updatePages<T extends UpdatableItem>(
         console.log(
           `Detected visual changes on page: ${pageIndex}, current: ${flatTrackBundleArray(
             currentPage,
-          )}, next: ${nextPage}`,
+          )}, next: ${flatTrackBundleArray(nextPage)}`,
           { changes },
         );
         // ## Swap Items
@@ -110,7 +107,7 @@ export function updatePages<T extends UpdatableItem>(
             if (added && dropped) {
               console.log(`Before swap action: `, flatTrackBundleArray<T>(updatedList));
               updatedList = swapItems<T>(added, dropped, updatedList);
-              console.log(`After swap action: `, updatedList);
+              console.log(`After swap action: `, flatTrackBundleArray(updatedList));
             } else {
               throw new Error(
                 `For a swap action we need a addition and a removal one is missing: ${added}, ${dropped}`,
@@ -121,9 +118,9 @@ export function updatePages<T extends UpdatableItem>(
         // ## Handle Drop Items
         if (changes.added.length === 0 && changes.dropped.length > 0) {
           changes.dropped.forEach((item) => {
-            console.log(`Before drop action: `, updatedList);
+            console.log(`Before drop action: `, flatTrackBundleArray(updatedList));
             updatedList = dropItem<T>(item as T, updatedList);
-            console.log(`After drop action: `, updatedList);
+            console.log(`After drop action: `, flatTrackBundleArray(updatedList));
           });
         }
         // ## Handle Item added
@@ -138,8 +135,8 @@ export function updatePages<T extends UpdatableItem>(
 
   if (updatedList.length > nextList.length) {
     // Items got removed: Find items that got completely removed from the list.
-    const missingItems = difference<UpdatableItem>(currentList, nextList);
-    console.log(`Items that are no longer part of the list: `, missingItems);
+    const missingItems = differenceBy<T, T>(currentList, nextList, trackBundleId);
+    console.log(`Items that are no longer part of the list: `, flatTrackBundleArray(missingItems));
     remove(updatedList, (item) => missingItems.map(trackBundleId).includes(trackBundleId(item)));
   }
 

@@ -209,23 +209,23 @@ describe('Test updating the list based while considering pages.', () => {
       ],
       itemsOnPage: 2,
     },
-    // {
-    //   state: [
-    //     mockTrackBundleSubscribed('A', Track.Source.Camera),
-    //     mockTrackBundleSubscribed('B', Track.Source.Camera),
-    //   ],
-    //   next: [
-    //     mockTrackBundleSubscribed('A', Track.Source.Camera),
-    //     mockTrackBundleSubscribed('C', Track.Source.Camera),
-    //     mockTrackBundleSubscribed('B', Track.Source.Camera),
-    //   ],
-    //   expected: [
-    //     mockTrackBundleSubscribed('A', Track.Source.Camera),
-    //     mockTrackBundleSubscribed('B', Track.Source.Camera),
-    //     mockTrackBundleSubscribed('C', Track.Source.Camera),
-    //   ],
-    //   itemsOnPage: 3,
-    // },
+    {
+      state: [
+        mockTrackBundleSubscribed('A', Track.Source.Camera),
+        mockTrackBundleSubscribed('B', Track.Source.Camera),
+      ],
+      next: [
+        mockTrackBundleSubscribed('A', Track.Source.Camera),
+        mockTrackBundleSubscribed('C', Track.Source.Camera),
+        mockTrackBundleSubscribed('B', Track.Source.Camera),
+      ],
+      expected: [
+        mockTrackBundleSubscribed('A', Track.Source.Camera),
+        mockTrackBundleSubscribed('B', Track.Source.Camera),
+        mockTrackBundleSubscribed('C', Track.Source.Camera),
+      ],
+      itemsOnPage: 3,
+    },
   ])('Test adding items:', ({ state, next, itemsOnPage, expected }) => {
     const result = updatePages(state, next, itemsOnPage);
     expect(result).toHaveLength(next.length);

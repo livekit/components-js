@@ -1,13 +1,3 @@
-// export function updateArray<T>(
-//   currentArray: T[],
-//   newArray: any[],
-//   currentItemsPerPage: number,
-//   newItemsPerPage: number,
-// ): T[] {
-//   return currentArray;
-// }
-
-// import { Track } from 'livekit-client';
 import { setDifference } from '../helper';
 import { isTrackBundle, TrackBundleWithPlaceholder } from '../types';
 import { chunk, zip, difference } from 'lodash';
@@ -19,12 +9,6 @@ type Changes<T> = {
 
 /** Check if something visually change on the page. */
 export function visualPageChange<T>(state: T[], next: T[]): Changes<T> {
-  //   if (state.length !== next.length) {
-  //     throw new Error(
-  //       `This function can only compare arrays with the same number of elements. Got arrays with length: ${state.length} !== ${next.length}.`,
-  //     );
-  //   }
-
   //TDOO: probably need to update this when switching to TrackBundles
   const stateSet = new Set(state);
   const nextSet = new Set(next);

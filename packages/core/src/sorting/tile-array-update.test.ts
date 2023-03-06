@@ -68,7 +68,7 @@ describe('Test dividing list into pages.', () => {
   });
 });
 
-describe.only('Test updating pages only if needed', () => {
+describe.only('Test updating the list based while considering pages.', () => {
   test.each([
     {
       state: [1, 2, 3, 4, 5, 6],

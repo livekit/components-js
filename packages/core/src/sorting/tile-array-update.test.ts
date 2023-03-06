@@ -108,11 +108,37 @@ describe('Test updating the list based while considering pages.', () => {
       expected: [1, 2, 5, 4, 6],
       itemsOnPage: 2,
     },
-  ])('Test removing items from list:', ({ state, next, itemsOnPage, expected }) => {
+  ])('Test removing exactly one items from list:', ({ state, next, itemsOnPage, expected }) => {
     const result = updatePages<number>(state, next, itemsOnPage);
-    expect(result).toHaveLength(next.length);
     expect(result).toStrictEqual(expected);
   });
+
+  test.each([
+    {
+      state: [1, 2, 3, 4, 5, 6],
+      next: [1, 2, 5, 6],
+      expected: [1, 2, 5, 6],
+      itemsOnPage: 2,
+    },
+    {
+      state: [1, 2, 3, 4, 5, 6],
+      next: [1, 2, 5],
+      expected: [1, 2, 5],
+      itemsOnPage: 2,
+    },
+    {
+      state: [1, 2, 3, 4, 5, 6],
+      next: [],
+      expected: [],
+      itemsOnPage: 2,
+    },
+  ])(
+    'Test removing more than one item from the list:',
+    ({ state, next, itemsOnPage, expected }) => {
+      const result = updatePages<number>(state, next, itemsOnPage);
+      expect(result).toStrictEqual(expected);
+    },
+  );
 
   test.each([
     {

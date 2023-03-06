@@ -1,6 +1,6 @@
 import { setDifference } from '../helper';
 import { isTrackBundle, TrackBundleWithPlaceholder } from '../types';
-import { chunk, zip, difference } from 'lodash';
+import { chunk, zip, difference, remove } from 'lodash';
 
 type Changes<T> = {
   dropped: T[];
@@ -130,6 +130,13 @@ export function updatePages<T>(currentList: T[], nextList: T[], maxItemsOnPage: 
       }
     }
   });
+
+  if (updatedList.length > nextList.length) {
+    // Items got removed: Find items that got completely removed from the list.
+    const missingItems = difference(currentList, nextList);
+    console.log(`Items that are no longer part of the list: `, missingItems);
+    remove(updatedList, (item) => missingItems.includes(item));
+  }
 
   return updatedList;
 }

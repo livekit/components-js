@@ -4,6 +4,7 @@ import {
   TrackBundlePlaceholder,
   TrackBundlePublished,
   TrackBundleSubscribed,
+  TrackBundleWithPlaceholder,
 } from './track-bundle.types';
 
 // Test function:
@@ -28,6 +29,6 @@ export const mockTrackBundleSubscribed = (id: string, kind: Track.Kind): TrackBu
   };
 };
 
-export function flatTrackBundleArray(list: TrackBundlePlaceholder[]): string[] {
+export function flatTrackBundleArray(list: TrackBundleWithPlaceholder[]): string[] {
   return list.map((trackBundle) => trackBundleId(trackBundle));
 }

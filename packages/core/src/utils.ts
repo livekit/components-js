@@ -8,9 +8,9 @@ import {
 import {
   isTrackBundle,
   isTrackBundlePlaceholder,
-  PinState,
   TrackBundleWithPlaceholder,
-} from './types';
+} from './track-bundle';
+import { PinState } from './types';
 
 export function isLocal(p: Participant) {
   return p instanceof LocalParticipant;

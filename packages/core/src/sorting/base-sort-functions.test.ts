@@ -1,8 +1,11 @@
+import { Track } from 'livekit-client';
 import { describe, test, expect } from 'vitest';
+import { mockTrackBundlePlaceholder, mockTrackBundleSubscribed } from '../track-bundle/test-utils';
 import {
   sortParticipantsByAudioLevel,
   sortParticipantsByIsSpeaking,
   sortParticipantsByLastSpokenAT,
+  sortTrackBundlesByType,
 } from './base-sort-functions';
 
 describe.concurrent('Test sorting participants by isSpeaking:', () => {
@@ -134,4 +137,25 @@ describe.concurrent('Test sorting participants by audioLevel.', () => {
     unsorted.sort(sortParticipantsByAudioLevel);
     expect(unsorted).toStrictEqual(expected);
   });
+});
+
+describe.concurrent('Test sorting track bundles by type.', () => {
+  test.each([
+    {
+      unsorted: [
+        mockTrackBundlePlaceholder('A', Track.Source.Camera),
+        mockTrackBundleSubscribed('B', Track.Kind.Video),
+      ],
+      expected: [
+        mockTrackBundleSubscribed('B', Track.Kind.Video),
+        mockTrackBundlePlaceholder('A', Track.Source.Camera),
+      ],
+    },
+  ])(
+    'Test that the higher audio levels get sorted to the front of the array.',
+    ({ unsorted, expected }) => {
+      unsorted.sort(sortTrackBundlesByType);
+      expect(unsorted).toStrictEqual(expected);
+    },
+  );
 });

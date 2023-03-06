@@ -1,19 +1,11 @@
 import { setDifference } from '../helper';
-import { isTrackBundle, TrackBundleWithPlaceholder } from '../types';
 import { chunk, zip, difference, remove } from 'lodash';
+import { trackBundleId, TrackBundleWithPlaceholder } from '../track-bundle';
 
 type Changes<T> = {
   dropped: T[];
   added: T[];
 };
-
-function trackBundleId(trackBundle: TrackBundleWithPlaceholder): string {
-  if (isTrackBundle(trackBundle)) {
-    return `${trackBundle.participant.identity}_${trackBundle.publication.source}`;
-  } else {
-    return `${trackBundle.participant.identity}_${trackBundle.source}_placeholder`;
-  }
-}
 
 /** Check if something visually change on the page. */
 export function visualPageChange<T>(state: T[], next: T[]): Changes<T> {

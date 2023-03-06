@@ -1,9 +1,10 @@
 import log from '../logger';
-import { TrackBundleWithPlaceholder } from '../types';
+import { isTrackBundle, TrackBundleWithPlaceholder } from '../track-bundle';
 import {
   sortParticipantsByAudioLevel,
   sortParticipantsByIsSpeaking,
   sortParticipantsByLastSpokenAT,
+  sortTrackBundlesByType,
 } from './base-sort-functions';
 
 /**
@@ -24,10 +25,10 @@ export function sortTrackBundles(
 ): TrackBundleWithPlaceholder[] {
   const trackBundles_ = [...trackBundles];
   log.debug('xxx sorting...');
-  trackBundles_.sort(({ participant: a }, { participant: b }) => {
+  trackBundles_.sort((a, b) => {
     log.debug('xxx isLocal...');
-    if (a.isLocal || b.isLocal) {
-      if (a.isLocal) {
+    if (a.participant.isLocal || b.participant.isLocal) {
+      if (a.participant.isLocal) {
         return -1;
       } else {
         return 1;
@@ -36,20 +37,24 @@ export function sortTrackBundles(
 
     log.debug('xxx isSpeaking volume...');
     // loudest speaker first
-    if (a.isSpeaking && b.isSpeaking) {
-      return sortParticipantsByAudioLevel(a, b);
+    if (a.participant.isSpeaking && b.participant.isSpeaking) {
+      return sortParticipantsByAudioLevel(a.participant, b.participant);
     }
 
     log.debug('xxx isSpeaking...');
     // speaker goes first
-    if (a.isSpeaking !== b.isSpeaking) {
-      return sortParticipantsByIsSpeaking(a, b);
+    if (a.participant.isSpeaking !== b.participant.isSpeaking) {
+      return sortParticipantsByIsSpeaking(a.participant, b.participant);
     }
 
     log.debug('xxx lastSpokeAt...');
     // last active speaker first
-    if (a.lastSpokeAt !== b.lastSpokeAt) {
-      return sortParticipantsByLastSpokenAT(a, b);
+    if (a.participant.lastSpokeAt !== b.participant.lastSpokeAt) {
+      return sortParticipantsByLastSpokenAT(a.participant, b.participant);
+    }
+
+    if (isTrackBundle(a) !== isTrackBundle(b)) {
+      return sortTrackBundlesByType(a, b);
     }
 
     // video on

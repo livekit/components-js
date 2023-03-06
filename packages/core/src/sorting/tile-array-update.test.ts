@@ -88,12 +88,26 @@ describe.only('Test updating pages only if needed', () => {
       expected: [1, 2, 3],
       itemsOnPage: 2,
     },
-    // {
-    //   state: [1, 2, 3],
-    //   next: [1, 2, 3, 4],
-    //   expected: [1, 2, 3, 4],
-    //   itemsOnPage: 2,
-    // },
+    {
+      state: [1, 2, 3, 4],
+      next: [2, 3, 4],
+      expected: [3, 2, 4],
+      itemsOnPage: 2,
+    },
+    {
+      state: [1, 2, 3, 4, 5, 6],
+      next: [1, 2, 3, 5, 6],
+      // 4 got dropped
+      expected: [1, 2, 3, 5, 6],
+      itemsOnPage: 2,
+    },
+    {
+      state: [1, 2, 3, 4, 5, 6],
+      next: [1, 2, 4, 5, 6],
+      // 3 got dropped
+      expected: [1, 2, 5, 4, 6],
+      itemsOnPage: 2,
+    },
   ])('', ({ state, next, itemsOnPage, expected }) => {
     const result = updatePages<number>(state, next, itemsOnPage);
     expect(result).toStrictEqual(expected);

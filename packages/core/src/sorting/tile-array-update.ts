@@ -41,10 +41,8 @@ export function swapItems<T extends UpdatableItem>(
   moveBack: T,
   trackBundles: T[],
 ): T[] {
-  //   const indexToReplace = findTrackBundleIndex(toReplace, trackBundles);
-  //   const indexReplaceWith = findTrackBundleIndex(replaceWith, trackBundles);
-  const indexToReplace = trackBundles.findIndex((bundle) => bundle === moveForward);
-  const indexReplaceWith = trackBundles.findIndex((bundle) => bundle === moveBack);
+  const indexToReplace = findIndex(moveForward, trackBundles);
+  const indexReplaceWith = findIndex(moveBack, trackBundles);
 
   trackBundles.splice(indexToReplace, 1, moveBack);
   trackBundles.splice(indexReplaceWith, 1, moveForward);

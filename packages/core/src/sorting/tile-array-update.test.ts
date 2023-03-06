@@ -3,6 +3,9 @@ import { describe, test, expect } from 'vitest';
 import { flatTrackBundleArray, mockTrackBundleSubscribed } from '../track-bundle/test-utils';
 import { divideIntoPages, swapItems, updatePages, visualPageChange } from './tile-array-update';
 
+const stateNextExpectedString = (text: string) =>
+  `${text}:\n$state \t\t<= t\n$next \t\t<= t+1\n--------\n$expected  \t<= expected result`;
+
 describe('Test visualPageChange function.', () => {
   test.each([
     { state: [], next: [], expected: { dropped: [], added: [] } },
@@ -110,10 +113,53 @@ describe('Test updating the list based while considering pages.', () => {
       expected: [1, 2, 5, 4, 6],
       itemsOnPage: 2,
     },
+    {
+      state: [1, 2, 3, 4],
+      next: [2, 3, 4],
+      expected: [3, 2, 4],
+      itemsOnPage: 2,
+    },
   ])('Test removing exactly one items from list:', ({ state, next, itemsOnPage, expected }) => {
     const result = updatePages<number>(state, next, itemsOnPage);
     expect(result).toStrictEqual(expected);
   });
+
+  test.each([
+    {
+      state: [
+        mockTrackBundleSubscribed('A', Track.Source.Camera),
+        mockTrackBundleSubscribed('B', Track.Source.Camera),
+      ],
+      next: [mockTrackBundleSubscribed('B', Track.Source.Camera)],
+      expected: [mockTrackBundleSubscribed('B', Track.Source.Camera)],
+      itemsOnPage: 3,
+    },
+    {
+      state: [
+        mockTrackBundleSubscribed('A', Track.Source.Camera),
+        mockTrackBundleSubscribed('B', Track.Source.Camera),
+        mockTrackBundleSubscribed('C', Track.Source.Camera),
+        mockTrackBundleSubscribed('D', Track.Source.Camera),
+      ],
+      next: [
+        mockTrackBundleSubscribed('B', Track.Source.Camera),
+        mockTrackBundleSubscribed('C', Track.Source.Camera),
+        mockTrackBundleSubscribed('D', Track.Source.Camera),
+      ],
+      expected: [
+        mockTrackBundleSubscribed('C', Track.Source.Camera),
+        mockTrackBundleSubscribed('B', Track.Source.Camera),
+        mockTrackBundleSubscribed('D', Track.Source.Camera),
+      ],
+      itemsOnPage: 2,
+    },
+  ])(
+    'Test removing exactly one items from list: (trackBundle version)',
+    ({ state, next, itemsOnPage, expected }) => {
+      const result = updatePages(state, next, itemsOnPage);
+      expect(flatTrackBundleArray(result)).toStrictEqual(flatTrackBundleArray(expected));
+    },
+  );
 
   test.each([
     {
@@ -185,13 +231,13 @@ describe('Test updating the list based while considering pages.', () => {
       expected: [1, 2, 3],
       itemsOnPage: 3,
     },
-  ])('Test adding items:', ({ state, next, itemsOnPage, expected }) => {
+  ])(stateNextExpectedString('Add item(s) to array'), ({ state, next, itemsOnPage, expected }) => {
     const result = updatePages(state, next, itemsOnPage);
     expect(result).toHaveLength(next.length);
     expect(result).toStrictEqual(expected);
   });
 
-  test.only.each([
+  test.each([
     {
       state: [
         mockTrackBundleSubscribed('A', Track.Source.Camera),

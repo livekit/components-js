@@ -1,6 +1,10 @@
 import { Track } from 'livekit-client';
 import { describe, test, expect } from 'vitest';
-import { mockTrackBundlePlaceholder, mockTrackBundleSubscribed } from '../track-bundle/test-utils';
+import {
+  flatTrackBundleArray,
+  mockTrackBundlePlaceholder,
+  mockTrackBundleSubscribed,
+} from '../track-bundle/test-utils';
 import {
   sortParticipantsByAudioLevel,
   sortParticipantsByIsSpeaking,
@@ -155,7 +159,7 @@ describe.concurrent('Test sorting track bundles by type.', () => {
     'Test that the higher audio levels get sorted to the front of the array.',
     ({ unsorted, expected }) => {
       unsorted.sort(sortTrackBundlesByType);
-      expect(unsorted).toStrictEqual(expected);
+      expect(flatTrackBundleArray(unsorted)).toStrictEqual(flatTrackBundleArray(expected));
     },
   );
 });

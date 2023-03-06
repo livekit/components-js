@@ -25,17 +25,15 @@ export async function sendMessage(
   });
 }
 
-export interface BaseDataMessage {
-  topic?: string;
+export interface BaseDataMessage<T extends string | undefined> {
+  topic?: T;
   payload: Uint8Array;
 }
 
-export function setupDataMessageHandler(room: Room, topic?: string) {
-  let dataSubscriber: Subscriber<
-    BaseDataMessage & { topic: typeof topic; from?: RemoteParticipant }
-  >;
+export function setupDataMessageHandler<T extends string>(room: Room, topic?: T) {
+  let dataSubscriber: Subscriber<BaseDataMessage<typeof topic> & { from?: RemoteParticipant }>;
   const messageObservable = new Observable<
-    BaseDataMessage & { topic: typeof topic; from?: RemoteParticipant }
+    BaseDataMessage<typeof topic> & { from?: RemoteParticipant }
   >((subscriber) => {
     dataSubscriber = subscriber;
     const messageHandler = (
@@ -48,7 +46,7 @@ export function setupDataMessageHandler(room: Room, topic?: string) {
           payload,
           topic: topic,
           from: participant,
-        } as BaseDataMessage & { topic: typeof topic; from?: RemoteParticipant };
+        };
         dataSubscriber.next(receiveMessage);
       }
     };

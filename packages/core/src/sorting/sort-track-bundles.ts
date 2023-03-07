@@ -1,4 +1,6 @@
+import { Track } from 'livekit-client';
 import { getTrackBundleSource, isTrackBundle, TrackBundleWithPlaceholder } from '../track-bundle';
+import { flatTrackBundleArray } from '../track-bundle/test-utils';
 import {
   sortParticipantsByAudioLevel,
   sortParticipantsByIsSpeaking,
@@ -26,8 +28,11 @@ export function sortTrackBundles(
 ): TrackBundleWithPlaceholder[] {
   const trackBundles_ = [...trackBundles];
   trackBundles_.sort((a, b) => {
-    // Local participant before remote participants.
-    if (a.participant.isLocal || b.participant.isLocal) {
+    // Local camera track bundle before remote.
+    if (
+      (a.participant.isLocal && getTrackBundleSource(a) === Track.Source.Camera) ||
+      (b.participant.isLocal && getTrackBundleSource(b) === Track.Source.Camera)
+    ) {
       if (a.participant.isLocal) {
         return -1;
       } else {
@@ -36,7 +41,10 @@ export function sortTrackBundles(
     }
 
     // Screen share tracks before camera tracks
-    if (getTrackBundleSource(a) !== getTrackBundleSource(b)) {
+    if (
+      (getTrackBundleSource(a) === Track.Source.ScreenShare && getTrackBundleSource(b)) ===
+      Track.Source.ScreenShare
+    ) {
       return sortTrackBundlesByScreenShare(a, b);
     }
 
@@ -73,5 +81,7 @@ export function sortTrackBundles(
     // A participant that joined a long time ago goes before one that joined recently.
     return sortParticipantsByJoinedAt(a.participant, b.participant);
   });
+  console.log('xxx After sorting', flatTrackBundleArray(trackBundles_));
+
   return trackBundles_;
 }

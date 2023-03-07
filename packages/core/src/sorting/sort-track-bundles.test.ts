@@ -1,20 +1,54 @@
-import { Participant, Track, TrackPublication } from 'livekit-client';
+import { Track } from 'livekit-client';
 import { describe, test, expect } from 'vitest';
+import { flatTrackBundleArray, mockTrackBundleSubscribed } from '../track-bundle/test-utils';
 import { sortTrackBundles } from './sort-track-bundles';
 
-describe.concurrent('Test subparts of track participant pair sort.', () => {
-  test('Basic tests for sortTrackBundles fn.', () => {
-    const trackBundle_A = {
-      participant: new Participant('sid_A', 'identity_A'),
-      publication: new TrackPublication(Track.Kind.Video, 'id_A', 'name_A'),
-    };
-    const trackBundle_B = {
-      participant: new Participant('sid_A', 'identity_A'),
-      publication: new TrackPublication(Track.Kind.Video, 'id_B', 'name_B'),
-    };
-    const trackBundles = [trackBundle_B, trackBundle_A];
-    const sorted = sortTrackBundles(trackBundles);
-    expect(sorted.length).toBe(2);
-    expect(sorted[0].participant.identity).toBe('identity_A');
+describe.concurrent('Test sorting track bundles by source and isLocal.', () => {
+  test.each([
+    {
+      unsorted: [
+        mockTrackBundleSubscribed('B', Track.Source.ScreenShare, {
+          mockPublication: true,
+          mockParticipant: true,
+          mockIsLocal: true,
+        }),
+        mockTrackBundleSubscribed('C', Track.Source.ScreenShare, {
+          mockPublication: true,
+          mockParticipant: true,
+          mockIsLocal: false,
+        }),
+        mockTrackBundleSubscribed('A', Track.Source.Camera, {
+          mockPublication: true,
+          mockParticipant: true,
+          mockIsLocal: true,
+        }),
+        mockTrackBundleSubscribed('D', Track.Source.Camera, {
+          mockPublication: true,
+          mockParticipant: true,
+          mockIsLocal: false,
+        }),
+      ],
+      expected: [
+        mockTrackBundleSubscribed('A', Track.Source.Camera, {
+          mockPublication: true,
+          mockParticipant: true,
+          mockIsLocal: true,
+        }),
+        mockTrackBundleSubscribed('C', Track.Source.ScreenShare, { mockPublication: true }),
+        mockTrackBundleSubscribed('B', Track.Source.ScreenShare, {
+          mockPublication: true,
+          mockParticipant: true,
+          mockIsLocal: true,
+        }),
+        mockTrackBundleSubscribed('D', Track.Source.Camera, {
+          mockPublication: true,
+          mockParticipant: true,
+          mockIsLocal: false,
+        }),
+      ],
+    },
+  ])('ScreenShare should come before Camera sources.', ({ unsorted, expected }) => {
+    const result = sortTrackBundles(unsorted);
+    expect(flatTrackBundleArray(result)).toStrictEqual(flatTrackBundleArray(expected));
   });
 });

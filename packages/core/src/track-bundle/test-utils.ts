@@ -30,7 +30,10 @@ export const mockTrackBundlePublished = (
 
 type mockTrackBundleSubscribedOptions = {
   mockPublication?: boolean;
+  mockParticipant?: boolean;
+  mockIsLocal?: boolean;
 };
+
 export const mockTrackBundleSubscribed = (
   id: string,
   source: Track.Source,
@@ -40,22 +43,39 @@ export const mockTrackBundleSubscribed = (
     ? Track.Kind.Video
     : Track.Kind.Audio;
   return {
-    participant: new Participant(`${id}`, `${id}`),
+    participant: options.mockParticipant
+      ? (mockParticipant(id, options.mockIsLocal ?? false) as Participant)
+      : new Participant(`${id}`, `${id}`),
     publication: options.mockPublication
-      ? mockTrackPublication(id, kind, source)
+      ? (mockTrackPublication(id, kind, source) as TrackPublication)
       : new TrackPublication(kind, `${id}`, `${id}`),
     track: {} as Track,
   };
 };
 
-const mockTrackPublication = (id: string, kind: Track.Kind, source: Track.Source) => {
+const mockTrackPublication = (
+  id: string,
+  kind: Track.Kind,
+  source: Track.Source,
+): Pick<TrackPublication, 'kind' | 'trackSid' | 'trackName' | 'source'> => {
   return {
     kind,
     trackSid: id,
     trackName: `name_${id}`,
     source: source,
-  } as TrackPublication;
+  };
 };
+
+function mockParticipant(
+  id: string,
+  isLocal: boolean,
+): Pick<Participant, 'sid' | 'identity' | 'isLocal'> {
+  return {
+    sid: `${id}_sid`,
+    identity: `${id}`,
+    isLocal: isLocal,
+  };
+}
 
 export function flatTrackBundleArray<T extends UpdatableItem>(list: T[]): string[] {
   return list.map((item) => {

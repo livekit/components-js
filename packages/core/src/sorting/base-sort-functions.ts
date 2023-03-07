@@ -63,6 +63,13 @@ export function sortTrackBundlesByScreenShare(
   const sourceB = getTrackBundleSource(b);
 
   if (sourceA === sourceB) {
+    if (sourceA === Track.Source.ScreenShare) {
+      if (a.participant.isLocal === b.participant.isLocal) {
+        return 0;
+      } else {
+        return a.participant.isLocal ? 1 : -1;
+      }
+    }
     return 0;
   } else if (sourceA === Track.Source.ScreenShare) {
     return -1;

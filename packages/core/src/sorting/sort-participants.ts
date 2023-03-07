@@ -1,4 +1,10 @@
 import { LocalParticipant, Participant } from 'livekit-client';
+import {
+  sortParticipantsByAudioLevel,
+  sortParticipantsByIsSpeaking,
+  sortParticipantsByJoinedAt,
+  sortParticipantsByLastSpokenAT,
+} from './base-sort-functions';
 
 /**
  * Default sort for participants, it'll order participants by:
@@ -13,23 +19,17 @@ export function sortParticipants(participants: Participant[]): Participant[] {
   sortedParticipants.sort((a, b) => {
     // loudest speaker first
     if (a.isSpeaking && b.isSpeaking) {
-      return b.audioLevel - a.audioLevel;
+      return sortParticipantsByAudioLevel(a, b);
     }
 
     // speaker goes first
     if (a.isSpeaking !== b.isSpeaking) {
-      if (a.isSpeaking) {
-        return -1;
-      } else {
-        return 1;
-      }
+      return sortParticipantsByIsSpeaking(a, b);
     }
 
     // last active speaker first
     if (a.lastSpokeAt !== b.lastSpokeAt) {
-      const aLast = a.lastSpokeAt?.getTime() ?? 0;
-      const bLast = b.lastSpokeAt?.getTime() ?? 0;
-      return bLast - aLast;
+      return sortParticipantsByLastSpokenAT(a, b);
     }
 
     // video on
@@ -44,7 +44,7 @@ export function sortParticipants(participants: Participant[]): Participant[] {
     }
 
     // joinedAt
-    return (a.joinedAt?.getTime() ?? 0) - (b.joinedAt?.getTime() ?? 0);
+    return sortParticipantsByJoinedAt(a, b);
   });
   const localParticipant = sortedParticipants.find((p) => p instanceof LocalParticipant);
   if (localParticipant) {

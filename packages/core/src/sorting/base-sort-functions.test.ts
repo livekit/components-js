@@ -10,6 +10,7 @@ import {
   sortParticipantsByIsSpeaking,
   sortParticipantsByJoinedAt,
   sortParticipantsByLastSpokenAT,
+  sortTrackBundlesByScreenShare,
   sortTrackBundlesByType,
 } from './base-sort-functions';
 
@@ -192,7 +193,7 @@ describe.concurrent('Test sorting track bundles by type.', () => {
   });
 });
 
-describe.only.concurrent('Test sorting participants by joinedAt:', () => {
+describe.concurrent('Test sorting participants by joinedAt:', () => {
   test.each([
     {
       unsorted: [
@@ -252,4 +253,22 @@ describe.only.concurrent('Test sorting participants by joinedAt:', () => {
       expect(unsorted).toStrictEqual(expected);
     },
   );
+});
+
+describe.concurrent('Test sorting track bundles by source.', () => {
+  test.each([
+    {
+      unsorted: [
+        mockTrackBundleSubscribed('A', Track.Source.Camera, { mockPublication: true }),
+        mockTrackBundleSubscribed('B', Track.Source.ScreenShare, { mockPublication: true }),
+      ],
+      expected: [
+        mockTrackBundleSubscribed('B', Track.Source.ScreenShare, { mockPublication: true }),
+        mockTrackBundleSubscribed('A', Track.Source.Camera, { mockPublication: true }),
+      ],
+    },
+  ])('ScreenShare should come before Camera sources.', ({ unsorted, expected }) => {
+    unsorted.sort(sortTrackBundlesByScreenShare);
+    expect(flatTrackBundleArray(unsorted)).toStrictEqual(flatTrackBundleArray(expected));
+  });
 });

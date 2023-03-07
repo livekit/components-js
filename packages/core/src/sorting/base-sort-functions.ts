@@ -1,5 +1,5 @@
-import { Participant } from 'livekit-client';
-import { isTrackBundle, TrackBundleWithPlaceholder } from '../track-bundle';
+import { Participant, Track } from 'livekit-client';
+import { getTrackBundleSource, isTrackBundle, TrackBundleWithPlaceholder } from '../track-bundle';
 
 export function sortParticipantsByAudioLevel(
   a: Pick<Participant, 'audioLevel'>,
@@ -48,6 +48,25 @@ export function sortTrackBundlesByType(
       return -1;
     }
   } else if (isTrackBundle(b)) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+/** TrackBundle with screen share source goes first. */
+export function sortTrackBundlesByScreenShare(
+  a: TrackBundleWithPlaceholder,
+  b: TrackBundleWithPlaceholder,
+): number {
+  const sourceA = getTrackBundleSource(a);
+  const sourceB = getTrackBundleSource(b);
+
+  if (sourceA === sourceB) {
+    return 0;
+  } else if (sourceA === Track.Source.ScreenShare) {
+    return -1;
+  } else if (sourceB === Track.Source.ScreenShare) {
     return 1;
   } else {
     return 0;

@@ -1,9 +1,10 @@
-import { isTrackBundle, TrackBundleWithPlaceholder } from '../track-bundle';
+import { getTrackBundleSource, isTrackBundle, TrackBundleWithPlaceholder } from '../track-bundle';
 import {
   sortParticipantsByAudioLevel,
   sortParticipantsByIsSpeaking,
   sortParticipantsByJoinedAt,
   sortParticipantsByLastSpokenAT,
+  sortTrackBundlesByScreenShare,
   sortTrackBundlesByType,
 } from './base-sort-functions';
 
@@ -32,6 +33,11 @@ export function sortTrackBundles(
       } else {
         return 1;
       }
+    }
+
+    // Screen share tracks before camera tracks
+    if (getTrackBundleSource(a) !== getTrackBundleSource(b)) {
+      return sortTrackBundlesByScreenShare(a, b);
     }
 
     // Participant with higher audio level goes first.

@@ -28,18 +28,33 @@ export const mockTrackBundlePublished = (
   };
 };
 
+type mockTrackBundleSubscribedOptions = {
+  mockPublication?: boolean;
+};
 export const mockTrackBundleSubscribed = (
   id: string,
   source: Track.Source,
+  options: mockTrackBundleSubscribedOptions = {},
 ): TrackBundleSubscribed => {
   const kind = [Track.Source.Camera, Track.Source.ScreenShare].includes(source)
     ? Track.Kind.Video
     : Track.Kind.Audio;
   return {
     participant: new Participant(`${id}`, `${id}`),
-    publication: new TrackPublication(kind, `${id}`, `${id}`),
+    publication: options.mockPublication
+      ? mockTrackPublication(id, kind, source)
+      : new TrackPublication(kind, `${id}`, `${id}`),
     track: {} as Track,
   };
+};
+
+const mockTrackPublication = (id: string, kind: Track.Kind, source: Track.Source) => {
+  return {
+    kind,
+    trackSid: id,
+    trackName: `name_${id}`,
+    source: source,
+  } as TrackPublication;
 };
 
 export function flatTrackBundleArray<T extends UpdatableItem>(list: T[]): string[] {

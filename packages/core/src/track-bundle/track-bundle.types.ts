@@ -64,3 +64,12 @@ export function trackBundleId(trackBundle: TrackBundleWithPlaceholder | number):
     return `${trackBundle.participant.identity}_${trackBundle.source}`;
   }
 }
+
+/** Returns the Source of the TrackBundle. */
+export function getTrackBundleSource(trackBundle: TrackBundleWithPlaceholder): Track.Source {
+  if (isTrackBundle(trackBundle)) {
+    return trackBundle.publication.source;
+  } else {
+    return trackBundle.source;
+  }
+}

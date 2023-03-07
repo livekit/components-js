@@ -1,7 +1,7 @@
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import { UpdatableItem } from '../sorting/tile-array-update';
 import {
-  trackBundleId,
+  getTrackBundleId,
   TrackBundlePlaceholder,
   TrackBundlePublished,
   TrackBundleSubscribed,
@@ -82,7 +82,7 @@ export function flatTrackBundleArray<T extends UpdatableItem>(list: T[]): string
     if (typeof item === 'string' || typeof item === 'number') {
       return `${item}`;
     } else {
-      return trackBundleId(item);
+      return getTrackBundleId(item);
     }
   });
 }

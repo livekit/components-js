@@ -1,6 +1,6 @@
 import { chunk, zip, differenceBy, remove } from 'lodash';
 import log from '../logger';
-import { trackBundleId, TrackBundleWithPlaceholder } from '../track-bundle';
+import { getTrackBundleId, TrackBundleWithPlaceholder } from '../track-bundle';
 import { flatTrackBundleArray } from '../track-bundle/test-utils';
 
 type VisualChanges<T> = {
@@ -13,8 +13,8 @@ export type UpdatableItem = TrackBundleWithPlaceholder | number;
 /** Check if something visually change on the page. */
 export function visualPageChange<T extends UpdatableItem>(state: T[], next: T[]): VisualChanges<T> {
   return {
-    dropped: differenceBy<T, T>(state, next, trackBundleId),
-    added: differenceBy<T, T>(next, state, trackBundleId),
+    dropped: differenceBy<T, T>(state, next, getTrackBundleId),
+    added: differenceBy<T, T>(next, state, getTrackBundleId),
   };
 }
 
@@ -24,13 +24,13 @@ function listNeedsUpdating<T>(changes: VisualChanges<T>): boolean {
 
 export function findIndex<T extends UpdatableItem>(trackBundle: T, trackBundles: T[]): number {
   const indexToReplace = trackBundles.findIndex(
-    (trackBundle_) => trackBundleId(trackBundle_) === trackBundleId(trackBundle),
+    (trackBundle_) => getTrackBundleId(trackBundle_) === getTrackBundleId(trackBundle),
   );
   if (indexToReplace === -1) {
     throw new Error(
-      `Element not part of the array: ${trackBundleId(trackBundle)} not in ${flatTrackBundleArray(
-        trackBundles,
-      )}`,
+      `Element not part of the array: ${getTrackBundleId(
+        trackBundle,
+      )} not in ${flatTrackBundleArray(trackBundles)}`,
     );
   }
   return indexToReplace;
@@ -77,7 +77,7 @@ export function updatePages<T extends UpdatableItem>(
 
   if (currentList.length < nextList.length) {
     // Items got added: Find newly added items and add them to the end of the list.
-    const addedItems = differenceBy<T, T>(nextList, currentList, trackBundleId);
+    const addedItems = differenceBy<T, T>(nextList, currentList, getTrackBundleId);
     updatedList = [...updatedList, ...addedItems] as T[];
   }
   const currentPages = divideIntoPages(currentList, maxItemsOnPage);
@@ -126,8 +126,10 @@ export function updatePages<T extends UpdatableItem>(
 
   if (updatedList.length > nextList.length) {
     // Items got removed: Find items that got completely removed from the list.
-    const missingItems = differenceBy<T, T>(currentList, nextList, trackBundleId);
-    remove(updatedList, (item) => missingItems.map(trackBundleId).includes(trackBundleId(item)));
+    const missingItems = differenceBy<T, T>(currentList, nextList, getTrackBundleId);
+    remove(updatedList, (item) =>
+      missingItems.map(getTrackBundleId).includes(getTrackBundleId(item)),
+    );
   }
 
   return updatedList;

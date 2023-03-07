@@ -1,3 +1,5 @@
+import log from '../logger';
+
 export type GridLayout = {
   name: string;
   columns: number;
@@ -99,11 +101,16 @@ export function selectGridLayout(
       }) !== -1;
     return layout_.maxParticipants >= participantCount && !isBiggerLayoutAvailable;
   });
-
-  if (layout === undefined)
-    throw new Error(
-      `No layout found for: participantCount: ${participantCount}, width/height: ${width}/${height} `,
-    );
+  if (layout === undefined) {
+    layout = layouts[layouts.length - 1];
+    if (layout) {
+      log.warn(
+        `No layout found for: participantCount: ${participantCount}, width/height: ${width}/${height} fallback to biggest available layout (${layout.name}).`,
+      );
+    } else {
+      throw new Error(`No layout or fallback layout found.`);
+    }
+  }
 
   // Check if the layout fits into the screen constraints. If not, recursively check the next smaller layout.
   if (width < layout.minWidth || height < layout.minHeight) {

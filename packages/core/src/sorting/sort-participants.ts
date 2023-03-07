@@ -8,7 +8,7 @@ import { LocalParticipant, Participant } from 'livekit-client';
  * 4. participants with video on
  * 5. by joinedAt
  */
-export function sortParticipantsByVolume(participants: Participant[]): Participant[] {
+export function sortParticipants(participants: Participant[]): Participant[] {
   const sortedParticipants = [...participants];
   sortedParticipants.sort((a, b) => {
     // loudest speaker first

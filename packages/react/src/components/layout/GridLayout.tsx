@@ -69,12 +69,10 @@ export function GridLayout({
     layout.maxParticipants !== maxTilesOnPage.current
       ? nextSortedTrackBundles
       : updatePages(stateTrackBundles.current, nextSortedTrackBundles, layout.maxParticipants);
-  if (stateTrackBundles.current) {
-    stateTrackBundles.current = trackBundles;
-  }
-  if (maxTilesOnPage) {
-    maxTilesOnPage.current = layout.maxParticipants;
-  }
+
+  // Save info for next render to update with minimal visual change.
+  stateTrackBundles.current = trackBundles;
+  maxTilesOnPage.current = layout.maxParticipants;
 
   React.useEffect(() => {
     if (gridEl.current && layout) {

@@ -50,6 +50,7 @@ export function GridLayout({
   );
 
   const stateTrackBundles = React.useRef<TrackBundleWithPlaceholder[]>([]);
+  const maxTilesOnPage = React.useRef<number>(1);
   const containerEl = React.createRef<HTMLDivElement>();
   const gridEl = React.createRef<HTMLDivElement>();
   const { width, height } = useSize(containerEl);
@@ -64,13 +65,15 @@ export function GridLayout({
     [filter, rawTrackBundles, ...filterDependencies],
   );
   const nextSortedTrackBundles = sortTrackBundles(filteredTrackBundles);
-  const trackBundles = updatePages(
-    stateTrackBundles.current,
-    nextSortedTrackBundles,
-    layout.maxParticipants,
-  );
+  const trackBundles =
+    layout.maxParticipants !== maxTilesOnPage.current
+      ? nextSortedTrackBundles
+      : updatePages(stateTrackBundles.current, nextSortedTrackBundles, layout.maxParticipants);
   if (stateTrackBundles.current) {
     stateTrackBundles.current = trackBundles;
+  }
+  if (maxTilesOnPage) {
+    maxTilesOnPage.current = layout.maxParticipants;
   }
 
   React.useEffect(() => {

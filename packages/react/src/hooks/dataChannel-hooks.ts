@@ -1,13 +1,13 @@
-import { BaseDataMessage, setupDataMessageHandler } from '@livekit/components-core';
+import { setupDataMessageHandler } from '@livekit/components-core';
 import * as React from 'react';
 import { useRoomContext } from '../context';
 import { useObservableState } from '../helper';
 
-export function useDataChannelMessages<T extends BaseDataMessage>(channelId: T['channelId']) {
+export function useDataChannel(topic?: string) {
   const room = useRoomContext();
   const { send, messageObservable, isSendingObservable } = React.useMemo(
-    () => setupDataMessageHandler(room, channelId),
-    [room, channelId],
+    () => setupDataMessageHandler(room, topic),
+    [room, topic],
   );
 
   const message = useObservableState(messageObservable, undefined);

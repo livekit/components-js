@@ -2,148 +2,60 @@ import { DataPacket_Kind, LocalParticipant, RemoteParticipant, Room } from 'live
 import { Observable, Subscriber } from 'rxjs';
 import { createDataObserver } from './room';
 
-export const enum MessageChannel {
-  CHAT = 'lk-chat-message',
-}
+export const DataTopic = {
+  CHAT: 'lk-chat-topic',
+} as const;
 
-/**
- * Creates a hash used to differentiate data message types.
- * Identifiers starting with `lk-` are reserved for internal use.
- * @param identifier - message identifier, e.g. "my-data-message"
- * @returns
- */
-export function getRawMessageType(identifier: string) {
-  const hash = hashCode(identifier);
-  const rawType = new Uint8Array(toBytesInt32(hash));
-  return rawType;
-}
+export type DataSendOptions = {
+  kind?: DataPacket_Kind;
+  destination?: string[];
+};
 
-/**
- * Returns a hash code from a string
- * @param str - The string to hash.
- * @see http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
- */
-function hashCode(str: string) {
-  let hash = 0;
-  for (let i = 0, len = str.length; i < len; i++) {
-    const chr = str.charCodeAt(i);
-    hash = (hash << 5) - hash + chr;
-    hash |= 0; // Convert to 32bit integer
-  }
-  return hash;
-}
-
-const TYPE_BYTE_LENGTH = 4;
-
-function toBytesInt32(num: number) {
-  const arr = new ArrayBuffer(4); // an Int32 takes 4 bytes
-  const view = new DataView(arr);
-  view.setUint32(0, num, false); // byteOffset = 0; litteEndian = false
-  return arr;
-}
-
-export function extractRawMessage(rawData: Uint8Array) {
-  return [readMessageType(rawData), readMessagePayload(rawData)] as const;
-}
-
-function readMessageType(rawData: Uint8Array) {
-  return rawData.slice(0, TYPE_BYTE_LENGTH);
-}
-
-export function readMessagePayload(rawData: Uint8Array) {
-  return rawData.slice(TYPE_BYTE_LENGTH);
-}
-
-function areEqual(first: Uint8Array, second: Uint8Array) {
-  return first.length === second.length && first.every((value, index) => value === second[index]);
-}
-
-export function isMessageType(identifier: string, data: Uint8Array) {
-  return areEqual(readMessageType(data), getRawMessageType(identifier));
-}
-
-const encoder = new TextEncoder();
-const decoder = new TextDecoder();
-
-enum PayloadType {
-  RAW,
-  STRING,
-  OBJECT,
-}
-
-export async function sendMessage<T extends BaseDataMessage>(
+export async function sendMessage(
   localParticipant: LocalParticipant,
-  message: T,
-  kind: DataPacket_Kind,
-  destination?: string[],
+  payload: Uint8Array,
+  topic?: string,
+  options: DataSendOptions = {},
 ) {
-  const rawType = getRawMessageType(message.channelId);
-  const payload = message.payload;
-  let payloadType: PayloadType;
-  let encodedPayload: Uint8Array;
-  if (payload instanceof Uint8Array) {
-    encodedPayload = payload;
-    payloadType = PayloadType.RAW;
-  } else if (typeof payload === 'string') {
-    encodedPayload = encoder.encode(payload);
-    payloadType = PayloadType.STRING;
-  } else {
-    encodedPayload = encoder.encode(JSON.stringify(payload));
-    payloadType = PayloadType.OBJECT;
-  }
-  const msg = new Uint8Array(rawType.length + encodedPayload.length + 1);
-  msg.set(rawType);
-  msg.set([payloadType], rawType.length);
-  msg.set(encodedPayload, rawType.length + 1);
-  await localParticipant.publishData(msg, kind, destination);
+  const { kind, destination } = options;
+
+  await localParticipant.publishData(payload, kind ?? DataPacket_Kind.RELIABLE, {
+    destination,
+    topic,
+  });
 }
 
-export function parseMessage(payload: Uint8Array) {
-  const payloadType = payload.slice(0, 1)[0] as PayloadType;
-  const content = payload.slice(1);
-  let msg: DataPayload;
-  if (payloadType === PayloadType.RAW) {
-    msg = content;
-  } else if (payloadType === PayloadType.STRING) {
-    msg = decoder.decode(content);
-  } else {
-    msg = JSON.parse(decoder.decode(content));
-  }
-  return msg;
+export interface BaseDataMessage<T extends string | undefined> {
+  topic?: T;
+  payload: Uint8Array;
 }
 
-export type DataPayload = Uint8Array | object | string;
-
-export interface BaseDataMessage {
-  channelId: string;
-  payload: DataPayload;
-}
-
-export function setupDataMessageHandler<T extends BaseDataMessage>(
-  room: Room,
-  channelId: T['channelId'],
-) {
-  let dataSubscriber: Subscriber<T & { from?: RemoteParticipant }>;
-  const messageObservable = new Observable<T & { from?: RemoteParticipant }>((subscriber) => {
+export function setupDataMessageHandler<T extends string>(room: Room, topic?: T) {
+  let dataSubscriber: Subscriber<BaseDataMessage<typeof topic> & { from?: RemoteParticipant }>;
+  const messageObservable = new Observable<
+    BaseDataMessage<typeof topic> & { from?: RemoteParticipant }
+  >((subscriber) => {
     dataSubscriber = subscriber;
     const messageHandler = (
-      type: T['channelId'],
+      messageTopic: string | undefined,
       payload: Uint8Array,
       participant?: RemoteParticipant,
     ) => {
-      if (isMessageType(type, payload)) {
-        const dataMsg = parseMessage(readMessagePayload(payload)) as T['payload'];
+      if (!topic || messageTopic === topic) {
         const receiveMessage = {
-          payload: dataMsg,
-          channelId: channelId,
+          payload,
+          topic: topic,
           from: participant,
-        } as T & { from?: RemoteParticipant };
+        };
         dataSubscriber.next(receiveMessage);
       }
     };
-    const subscription = createDataObserver(room).subscribe(([payload, participant]) => {
-      messageHandler(channelId, payload, participant);
-    });
+    const subscription = createDataObserver(room).subscribe(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      ([payload, participant, _, messageTopic]) => {
+        messageHandler(messageTopic, payload, participant);
+      },
+    );
     return () => subscription.unsubscribe();
   });
 
@@ -152,14 +64,10 @@ export function setupDataMessageHandler<T extends BaseDataMessage>(
     isSendingSubscriber = subscriber;
   });
 
-  const send = async (payload: T['payload'], kind = DataPacket_Kind.LOSSY) => {
+  const send = async (payload: Uint8Array, options: DataSendOptions = {}) => {
     isSendingSubscriber.next(true);
     try {
-      await sendMessage(
-        room.localParticipant,
-        { channelId, payload },
-        kind ?? DataPacket_Kind.RELIABLE,
-      );
+      await sendMessage(room.localParticipant, payload, topic, options);
     } finally {
       isSendingSubscriber.next(false);
     }

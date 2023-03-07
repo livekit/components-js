@@ -1,17 +1,7 @@
 /* eslint-disable camelcase */
 import { DataPacket_Kind, LocalParticipant, RemoteParticipant, Room } from 'livekit-client';
 import { BehaviorSubject, map, Observable, Subscriber } from 'rxjs';
-import {
-  BaseDataMessage,
-  MessageChannel,
-  sendMessage,
-  setupDataMessageHandler,
-} from '../observables/dataChannel';
-
-export interface ChatDataMessage extends BaseDataMessage {
-  channelId: MessageChannel.CHAT;
-  payload: ChatMessage;
-}
+import { DataTopic, sendMessage, setupDataMessageHandler } from '../observables/dataChannel';
 
 export interface ChatMessage {
   timestamp: number;
@@ -22,13 +12,17 @@ export interface ReceivedChatMessage extends ChatMessage {
   from?: RemoteParticipant | LocalParticipant;
 }
 
+const encoder = new TextEncoder();
+const decoder = new TextDecoder();
+
 export function setupChat(room: Room) {
   let chatMessages: ReceivedChatMessage[] = [];
-  const { messageObservable } = setupDataMessageHandler<ChatDataMessage>(room, MessageChannel.CHAT);
+  const { messageObservable } = setupDataMessageHandler(room, DataTopic.CHAT);
   const chatMessageBehavior = new BehaviorSubject(chatMessages);
   const allMessagesObservable = messageObservable.pipe(
     map((msg) => {
-      chatMessages = [...chatMessages, { ...msg.payload, from: msg.from }];
+      const parsedMessage = JSON.parse(decoder.decode(msg.payload)) as ChatMessage;
+      chatMessages = [...chatMessages, { ...parsedMessage, from: msg.from }];
       return chatMessages;
     }),
   );
@@ -42,16 +36,12 @@ export function setupChat(room: Room) {
 
   const send = async (message: string) => {
     const timestamp = Date.now();
-    const chatMsg: ChatDataMessage = {
-      channelId: MessageChannel.CHAT,
-      payload: {
-        timestamp,
-        message: message,
-      },
-    };
+    const encodedMsg = encoder.encode(JSON.stringify({ timestamp, message }));
     isSendingSubscriber.next(true);
     try {
-      await sendMessage<ChatDataMessage>(room.localParticipant, chatMsg, DataPacket_Kind.RELIABLE);
+      await sendMessage(room.localParticipant, encodedMsg, DataTopic.CHAT, {
+        kind: DataPacket_Kind.RELIABLE,
+      });
       chatMessages = [...chatMessages, { message, timestamp, from: room.localParticipant }];
       chatMessageBehavior.next(chatMessages);
     } finally {

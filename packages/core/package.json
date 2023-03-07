@@ -46,7 +46,7 @@
     "global-tld-list": "^0.0.1030"
   },
   "peerDependencies": {
-    "livekit-client": "^1.6.4"
+    "livekit-client": "^1.6.8"
   },
   "devDependencies": {
     "@livekit/components-styles": "~0.1.14",

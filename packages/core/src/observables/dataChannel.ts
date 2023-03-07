@@ -2,9 +2,9 @@ import { DataPacket_Kind, LocalParticipant, RemoteParticipant, Room } from 'live
 import { Observable, Subscriber } from 'rxjs';
 import { createDataObserver } from './room';
 
-export const enum DataTopic {
-  CHAT = 'lk-chat-topic',
-}
+export const DataTopic = {
+  CHAT: 'lk-chat-topic',
+} as const;
 
 export type DataSendOptions = {
   kind?: DataPacket_Kind;

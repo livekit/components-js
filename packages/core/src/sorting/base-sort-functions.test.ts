@@ -8,6 +8,7 @@ import {
 import {
   sortParticipantsByAudioLevel,
   sortParticipantsByIsSpeaking,
+  sortParticipantsByJoinedAt,
   sortParticipantsByLastSpokenAT,
   sortTrackBundlesByType,
 } from './base-sort-functions';
@@ -189,4 +190,66 @@ describe.concurrent('Test sorting track bundles by type.', () => {
     unsorted.sort(sortTrackBundlesByType);
     expect(flatTrackBundleArray(unsorted)).toStrictEqual(flatTrackBundleArray(expected));
   });
+});
+
+describe.only.concurrent('Test sorting participants by joinedAt:', () => {
+  test.each([
+    {
+      unsorted: [
+        { joinedAt: new Date(0), id: 'A' },
+        { joinedAt: new Date(1), id: 'B' },
+      ],
+      expected: [
+        { joinedAt: new Date(0), id: 'A' },
+        { joinedAt: new Date(1), id: 'B' },
+      ],
+    },
+    {
+      unsorted: [
+        { joinedAt: new Date(1), id: 'B' },
+        { joinedAt: new Date(0), id: 'A' },
+        { joinedAt: new Date(2), id: 'B' },
+      ],
+      expected: [
+        { joinedAt: new Date(0), id: 'A' },
+        { joinedAt: new Date(1), id: 'B' },
+        { joinedAt: new Date(2), id: 'B' },
+      ],
+    },
+  ])(
+    'Test that participants that are longer in the room than others come first.',
+    ({ unsorted, expected }) => {
+      unsorted.sort(sortParticipantsByJoinedAt);
+      expect(unsorted).toStrictEqual(expected);
+    },
+  );
+
+  test.each([
+    {
+      unsorted: [
+        { joinedAt: new Date(0), id: 'A' },
+        { joinedAt: undefined, id: 'B' },
+      ],
+      expected: [
+        { joinedAt: new Date(0), id: 'A' },
+        { joinedAt: undefined, id: 'B' },
+      ],
+    },
+    {
+      unsorted: [
+        { joinedAt: undefined, id: 'A' },
+        { joinedAt: undefined, id: 'B' },
+      ],
+      expected: [
+        { joinedAt: undefined, id: 'A' },
+        { joinedAt: undefined, id: 'B' },
+      ],
+    },
+  ])(
+    'Test edge cases for participants that are longer in the room than others come first.',
+    ({ unsorted, expected }) => {
+      unsorted.sort(sortParticipantsByJoinedAt);
+      expect(unsorted).toStrictEqual(expected);
+    },
+  );
 });

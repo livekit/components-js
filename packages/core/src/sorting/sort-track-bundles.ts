@@ -3,6 +3,7 @@ import { isTrackBundle, TrackBundleWithPlaceholder } from '../track-bundle';
 import {
   sortParticipantsByAudioLevel,
   sortParticipantsByIsSpeaking,
+  sortParticipantsByJoinedAt,
   sortParticipantsByLastSpokenAT,
   sortTrackBundlesByType,
 } from './base-sort-functions';
@@ -24,9 +25,8 @@ export function sortTrackBundles(
   trackBundles: TrackBundleWithPlaceholder[],
 ): TrackBundleWithPlaceholder[] {
   const trackBundles_ = [...trackBundles];
-  log.debug('xxx sorting...');
   trackBundles_.sort((a, b) => {
-    log.debug('xxx isLocal...');
+    // Local participant before remote participants.
     if (a.participant.isLocal || b.participant.isLocal) {
       if (a.participant.isLocal) {
         return -1;
@@ -35,20 +35,17 @@ export function sortTrackBundles(
       }
     }
 
-    log.debug('xxx isSpeaking volume...');
-    // loudest speaker first
+    // Participant with higher audio level goes first.
     if (a.participant.isSpeaking && b.participant.isSpeaking) {
       return sortParticipantsByAudioLevel(a.participant, b.participant);
     }
 
-    log.debug('xxx isSpeaking...');
-    // speaker goes first
+    // A speaking participant goes before one that is not speaking.
     if (a.participant.isSpeaking !== b.participant.isSpeaking) {
       return sortParticipantsByIsSpeaking(a.participant, b.participant);
     }
 
-    log.debug('xxx lastSpokeAt...');
-    // last active speaker first
+    // A participant that spoke recently goes before a participant that spoke a while back.
     if (a.participant.lastSpokeAt !== b.participant.lastSpokeAt) {
       return sortParticipantsByLastSpokenAT(a.participant, b.participant);
     }
@@ -68,10 +65,8 @@ export function sortTrackBundles(
     //   }
     // }
 
-    // joinedAt
-    // return (a.joinedAt?.getTime() ?? 0) - (b.joinedAt?.getTime() ?? 0);
-    log.debug('xxx This should never happen 😬');
-    return 0;
+    // A participant that joined a long time ago goes before one that joined recently.
+    return sortParticipantsByJoinedAt(a.participant, b.participant);
   });
   return trackBundles_;
 }

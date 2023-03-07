@@ -30,6 +30,13 @@ export function sortParticipantsByLastSpokenAT(
   }
 }
 
+export function sortParticipantsByJoinedAt(
+  a: Pick<Participant, 'joinedAt'>,
+  b: Pick<Participant, 'joinedAt'>,
+) {
+  return (a.joinedAt?.getTime() ?? 0) - (b.joinedAt?.getTime() ?? 0);
+}
+
 export function sortTrackBundlesByType(
   a: TrackBundleWithPlaceholder,
   b: TrackBundleWithPlaceholder,

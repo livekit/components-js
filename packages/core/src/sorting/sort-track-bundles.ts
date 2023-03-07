@@ -1,4 +1,3 @@
-import log from '../logger';
 import { isTrackBundle, TrackBundleWithPlaceholder } from '../track-bundle';
 import {
   sortParticipantsByAudioLevel,

@@ -1,6 +1,5 @@
 import { Track } from 'livekit-client';
 import { getTrackBundleSource, isTrackBundle, TrackBundleWithPlaceholder } from '../track-bundle';
-import { flatTrackBundleArray } from '../track-bundle/test-utils';
 import {
   sortParticipantsByAudioLevel,
   sortParticipantsByIsSpeaking,

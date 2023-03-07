@@ -81,7 +81,6 @@ export function sortTrackBundles(
     // A participant that joined a long time ago goes before one that joined recently.
     return sortParticipantsByJoinedAt(a.participant, b.participant);
   });
-  console.log('xxx After sorting', flatTrackBundleArray(trackBundles_));
 
   return trackBundles_;
 }

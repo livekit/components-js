@@ -27,9 +27,9 @@ export function findIndex<T extends UpdatableItem>(trackBundle: T, trackBundles:
   );
   if (indexToReplace === -1) {
     throw new Error(
-      `Element not part of the array: ${
-        typeof trackBundle === 'number' ? `${trackBundle}` : trackBundle.participant.identity
-      } not in ${trackBundles}`,
+      `Element not part of the array: ${trackBundleId(trackBundle)} not in ${flatTrackBundleArray(
+        trackBundles,
+      )}`,
     );
   }
   return indexToReplace;

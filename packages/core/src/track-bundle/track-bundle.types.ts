@@ -61,6 +61,6 @@ export function trackBundleId(trackBundle: TrackBundleWithPlaceholder | number):
   } else if (isTrackBundle(trackBundle)) {
     return `${trackBundle.participant.identity}_${trackBundle.publication.source}`;
   } else {
-    return `${trackBundle.participant.identity}_${trackBundle.source}_placeholder`;
+    return `${trackBundle.participant.identity}_${trackBundle.source}`;
   }
 }

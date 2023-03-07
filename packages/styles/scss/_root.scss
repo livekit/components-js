@@ -1,4 +1,4 @@
-@use "sass:color";
+@use 'sass:color';
 
 $bg: #111;
 $fg: #fff;
@@ -7,7 +7,7 @@ $success: #1ff968;
 $warning: #f9b11f;
 $accent: #1f8cf9;
 
-:root {
+[data-theme='default'] {
   color-scheme: dark;
 
   --bg: #{$bg};
@@ -22,7 +22,7 @@ $accent: #1f8cf9;
   --fg4: #{color.adjust($fg, $lightness: -12%)};
   --fg5: #{color.adjust($fg, $lightness: -16%)};
 
-  --border-color: rgba(255, 255, 255, .1);
+  --border-color: rgba(255, 255, 255, 0.1);
 
   --accent-fg: #fff;
   --accent-bg: #1f8cf9;
@@ -56,18 +56,12 @@ $accent: #1f8cf9;
   --connection-good: #f9b11f;
   --connection-poor: #f91f31;
 
-  --font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji';
   --font-size: 14px;
   --border-radius: 0.375rem;
   --box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15);
 
   --grid-gap: 0.5rem;
   --control-bar-height: 62px;
-}
-
-.form-control {
-  font: inherit;
-  background-color: var(--control-bg);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
 }

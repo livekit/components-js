@@ -14,7 +14,7 @@ const AudioExample: NextPage = () => {
   });
 
   return (
-    <div style={{ padding: '2rem' }}>
+    <div data-lk-theme="default">
       <LiveKitRoom
         video={false}
         audio={true}

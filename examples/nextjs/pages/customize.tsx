@@ -37,7 +37,7 @@ const CustomizeExample: NextPage = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-lk-theme="default">
       <main className={styles.main}>
         <h1 className={styles.title}>
           Welcome to <a href="https://livekit.io">LiveKit</a>

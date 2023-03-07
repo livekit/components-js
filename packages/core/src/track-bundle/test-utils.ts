@@ -1,11 +1,17 @@
+/**
+ * Internal test function.
+ *
+ * @internal
+ */
+
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import { UpdatableItem } from '../sorting/tile-array-update';
 import {
-  getTrackBundleId,
   TrackBundlePlaceholder,
   TrackBundlePublished,
   TrackBundleSubscribed,
 } from './track-bundle.types';
+import { getTrackBundleId } from './track-bundle.utils';
 
 // Test function:
 export const mockTrackBundlePlaceholder = (

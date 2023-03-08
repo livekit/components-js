@@ -48,7 +48,7 @@ export function usePagination(itemPerPage: number, totalItemCount: number) {
     setPage: goToPage,
     firstItemIndex,
     lastItemIndex,
-    page: currentPage,
+    currentPage,
   };
 }
 

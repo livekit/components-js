@@ -6,6 +6,7 @@ import {
 import * as React from 'react';
 
 interface UseVisualStableUpdateOptions {
+  /** Overwrites the default sort function. */
   customSortFunction?: (trackBundles: TrackBundleWithPlaceholder[]) => TrackBundleWithPlaceholder[];
 }
 

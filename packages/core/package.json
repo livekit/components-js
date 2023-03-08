@@ -39,11 +39,11 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@floating-ui/dom": "^1.1.0",
-    "loglevel": "^1.8.1",
-    "rxjs": "^7.8.0",
     "email-regex": "^5.0.0",
+    "global-tld-list": "^0.0.1030",
     "ip-regex": "^5.0.0",
-    "global-tld-list": "^0.0.1030"
+    "loglevel": "^1.8.1",
+    "rxjs": "^7.8.0"
   },
   "peerDependencies": {
     "livekit-client": "^1.6.8"

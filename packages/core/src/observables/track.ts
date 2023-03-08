@@ -10,7 +10,7 @@ import {
 import { Observable, startWith, Subscription } from 'rxjs';
 import { allRemoteParticipantRoomEvents } from '../helper';
 import log from '../logger';
-import { TrackBundle } from '../types';
+import { TrackBundle } from '../track-bundle';
 import { roomEventSelector } from './room';
 
 export function trackObservable(track: TrackPublication) {

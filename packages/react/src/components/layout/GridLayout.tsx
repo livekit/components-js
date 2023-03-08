@@ -1,15 +1,17 @@
 import * as React from 'react';
-// import { TileLoop } from '../TileLoop';
-import { useParticipants, UseParticipantsOptions } from '../../hooks';
+import { UseParticipantsOptions, useTracks } from '../../hooks';
 import { mergeProps } from '../../utils';
 import { useSize } from '../../helper/resizeObserver';
 import {
-  // isTrackBundlePinned,
-  // isTrackParticipantPair,
+  GRID_LAYOUTS,
+  selectGridLayout,
+  sortTrackBundles,
   TrackBundleFilter,
+  TrackBundleWithPlaceholder,
+  updatePages,
 } from '@livekit/components-core';
-// import { Track } from 'livekit-client';
-// import { useMaybeLayoutContext } from '../../context';
+import { Track } from 'livekit-client';
+import { TrackLoop } from '../TrackLoop';
 
 export interface GridLayoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -35,38 +37,48 @@ export interface GridLayoutProps
  */
 export function GridLayout({
   filter,
-  updateOnlyOn = [],
+  updateOnlyOn,
   filterDependencies = [],
   ...props
 }: GridLayoutProps) {
-  const participants = useParticipants({
-    updateOnlyOn: filter && updateOnlyOn.length === 0 ? undefined : updateOnlyOn,
-  });
-  const filteredParticipants = React.useMemo(() => {
-    if (filter) {
-      // TODO: Resolved with https://github.com/livekit/components-js/pull/326
-      throw new Error('filter currently not working');
-    }
-    return participants;
-  }, [filter, participants, ...filterDependencies]);
+  const rawTrackBundles = useTracks(
+    [
+      { source: Track.Source.Camera, withPlaceholder: true },
+      { source: Track.Source.ScreenShare, withPlaceholder: false },
+    ],
+    { updateOnlyOn: updateOnlyOn ? updateOnlyOn : undefined },
+  );
 
+  const stateTrackBundles = React.useRef<TrackBundleWithPlaceholder[]>([]);
+  const maxTilesOnPage = React.useRef<number>(1);
   const containerEl = React.createRef<HTMLDivElement>();
   const gridEl = React.createRef<HTMLDivElement>();
-
   const { width, height } = useSize(containerEl);
 
-  React.useLayoutEffect(() => {
-    const containerRatio = width / height;
-    const tileRatio = 16 / 10;
-    const colAdjust = Math.sqrt(containerRatio / tileRatio);
-    const colFraction = Math.sqrt(filteredParticipants.length) * colAdjust;
-    const cols = Math.max(filteredParticipants.length === 1 ? 1 : 2, Math.round(colFraction));
-    // const widthAdjust = Math.min(100, 100 + (cols > colFraction ? 1 : -1) * (colFraction % 1) * 50);
-    if (gridEl.current) {
-      gridEl.current.style.setProperty('--lk-col-count', cols.toString());
-      // gridEl.current.style.width = `${widthAdjust}%`;
+  const layout =
+    width > 0 && height > 0
+      ? selectGridLayout(GRID_LAYOUTS, rawTrackBundles.length, width, height)
+      : GRID_LAYOUTS[0];
+
+  const filteredTrackBundles = React.useMemo(
+    () => (filter ? rawTrackBundles.filter(filter) : rawTrackBundles),
+    [filter, rawTrackBundles, ...filterDependencies],
+  );
+  const nextSortedTrackBundles = sortTrackBundles(filteredTrackBundles);
+  const trackBundles =
+    layout.maxParticipants !== maxTilesOnPage.current
+      ? nextSortedTrackBundles
+      : updatePages(stateTrackBundles.current, nextSortedTrackBundles, layout.maxParticipants);
+
+  // Save info for next render to update with minimal visual change.
+  stateTrackBundles.current = trackBundles;
+  maxTilesOnPage.current = layout.maxParticipants;
+
+  React.useEffect(() => {
+    if (gridEl.current && layout) {
+      gridEl.current.style.setProperty('--lk-col-count', layout?.columns.toString());
     }
-  }, [width, height, filteredParticipants, gridEl]);
+  }, [gridEl, layout]);
 
   const elementProps = React.useMemo(
     () => mergeProps(props, { className: 'lk-grid-layout' }),
@@ -75,9 +87,13 @@ export function GridLayout({
   return (
     <div ref={containerEl} className="lk-grid-layout-wrapper">
       <div ref={gridEl} {...elementProps}>
-        {/* // TODO: UPDATED GridComponent Resolved with https://github.com/livekit/components-js/pull/326 */}
-        {props.children}
-        {/* ?? <TileLoop tiles={tiles} /> */}
+        {props.children ?? (
+          <>
+            {props.children ?? (
+              <TrackLoop trackBundles={trackBundles.slice(0, layout.maxParticipants)} />
+            )}
+          </>
+        )}
       </div>
     </div>
   );

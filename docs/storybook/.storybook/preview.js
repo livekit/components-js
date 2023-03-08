@@ -19,7 +19,7 @@ export const globalTypes = {
        * https://storybook.js.org/docs/riot/workflows/faq#what-icons-are-available-for-my-toolbar-or-my-addon
        */
       icon: 'circlehollow',
-      items: ['1', '2', '3', '4', '9', '12', '15'],
+      items: ['1', '2', '3', '4', '9', '12', '15', '16', '17', '25', '26', '30'],
       // Should "Container size" be shown, or just the "circlehollow" icon
       showName: true,
     },

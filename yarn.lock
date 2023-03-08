@@ -3519,6 +3519,17 @@
     picocolors "^1.0.0"
     pretty-format "^27.5.1"
 
+"@vitest/utils@0.28.5":
+  version "0.28.5"
+  resolved "https://registry.yarnpkg.com/@vitest/utils/-/utils-0.28.5.tgz#7b82b528df86adfbd4a1f6a3b72c39790e81de0d"
+  integrity sha512-UyZdYwdULlOa4LTUSwZ+Paz7nBHGTT72jKwdFSV4IjHF1xsokp+CabMdhjvVhYwkLfO88ylJT46YMilnkSARZA==
+  dependencies:
+    cli-truncate "^3.1.0"
+    diff "^5.1.0"
+    loupe "^2.3.6"
+    picocolors "^1.0.0"
+    pretty-format "^27.5.1"
+
 "@webassemblyjs/ast@1.11.1":
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.11.1.tgz#2bfd767eae1a6996f432ff7e8d7fc75679c0b6a7"
@@ -11023,6 +11034,20 @@ vite-node@0.29.2:
     picocolors "^1.0.0"
     vite "^3.0.0 || ^4.0.0"
 
+vite-node@0.28.5:
+  version "0.28.5"
+  resolved "https://registry.yarnpkg.com/vite-node/-/vite-node-0.28.5.tgz#56d0f78846ea40fddf2e28390899df52a4738006"
+  integrity sha512-LmXb9saMGlrMZbXTvOveJKwMTBTNUH66c8rJnQ0ZPNX+myPEol64+szRzXtV5ORb0Hb/91yq+/D3oERoyAt6LA==
+  dependencies:
+    cac "^6.7.14"
+    debug "^4.3.4"
+    mlly "^1.1.0"
+    pathe "^1.1.0"
+    picocolors "^1.0.0"
+    source-map "^0.6.1"
+    source-map-support "^0.5.21"
+    vite "^3.0.0 || ^4.0.0"
+
 "vite@^3.0.0 || ^4.0.0", vite@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/vite/-/vite-4.0.4.tgz#4612ce0b47bbb233a887a54a4ae0c6e240a0da31"
@@ -11063,6 +11088,36 @@ vitest@^0.29.0:
     tinyspy "^1.0.2"
     vite "^3.0.0 || ^4.0.0"
     vite-node "0.29.2"
+    why-is-node-running "^2.2.2"
+
+vitest@^0.28.5:
+  version "0.28.5"
+  resolved "https://registry.yarnpkg.com/vitest/-/vitest-0.28.5.tgz#94410a8924cd7189e4f1adffa8c5cde809cbf2f9"
+  integrity sha512-pyCQ+wcAOX7mKMcBNkzDwEHRGqQvHUl0XnoHR+3Pb1hytAHISgSxv9h0gUiSiYtISXUU3rMrKiKzFYDrI6ZIHA==
+  dependencies:
+    "@types/chai" "^4.3.4"
+    "@types/chai-subset" "^1.3.3"
+    "@types/node" "*"
+    "@vitest/expect" "0.28.5"
+    "@vitest/runner" "0.28.5"
+    "@vitest/spy" "0.28.5"
+    "@vitest/utils" "0.28.5"
+    acorn "^8.8.1"
+    acorn-walk "^8.2.0"
+    cac "^6.7.14"
+    chai "^4.3.7"
+    debug "^4.3.4"
+    local-pkg "^0.4.2"
+    pathe "^1.1.0"
+    picocolors "^1.0.0"
+    source-map "^0.6.1"
+    std-env "^3.3.1"
+    strip-literal "^1.0.0"
+    tinybench "^2.3.1"
+    tinypool "^0.3.1"
+    tinyspy "^1.0.2"
+    vite "^3.0.0 || ^4.0.0"
+    vite-node "0.28.5"
     why-is-node-running "^2.2.2"
 
 walker@^1.0.8:

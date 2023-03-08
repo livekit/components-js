@@ -11,7 +11,7 @@ import {
 import {
   connectedParticipantsObserver,
   activeSpeakerObserver,
-  sortParticipantsByVolume,
+  sortParticipants,
   createIsSpeakingObserver,
   mutedObserver,
   ParticipantMedia,
@@ -142,12 +142,12 @@ export const useSpeakingParticipants = () => {
  */
 export function useSortedParticipants(participants: Array<Participant>) {
   const [sortedParticipants, setSortedParticipants] = React.useState(
-    sortParticipantsByVolume(participants),
+    sortParticipants(participants),
   );
   const activeSpeakers = useSpeakingParticipants();
 
   React.useEffect(() => {
-    setSortedParticipants(sortParticipantsByVolume(participants));
+    setSortedParticipants(sortParticipants(participants));
   }, [activeSpeakers, participants]);
   return sortedParticipants;
 }

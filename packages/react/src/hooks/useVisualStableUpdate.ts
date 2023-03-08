@@ -1,4 +1,5 @@
 import {
+  log,
   sortTrackBundles,
   TrackBundleWithPlaceholder,
   updatePages,
@@ -31,13 +32,23 @@ export function useVisualStableUpdate(
       ? options.customSortFunction(trackBundles)
       : sortTrackBundles(trackBundles);
 
-  const updatedTrackBundles =
-    maxItemsOnPage !== maxTilesOnPage.current
-      ? nextSortedTrackBundles
-      : updatePages(stateTrackBundles.current, nextSortedTrackBundles, maxItemsOnPage);
+  let updatedTrackBundles: TrackBundleWithPlaceholder[] = nextSortedTrackBundles;
+  if (maxItemsOnPage === maxTilesOnPage.current) {
+    try {
+      updatedTrackBundles = updatePages(
+        stateTrackBundles.current,
+        nextSortedTrackBundles,
+        maxItemsOnPage,
+      );
+    } catch (error) {
+      log.error('Error while running updatePages(): ', error);
+    }
+  }
 
-  // Save info for next render to update with minimal visual change.
-  stateTrackBundles.current = trackBundles;
+  maxItemsOnPage !== maxTilesOnPage.current
+    ? nextSortedTrackBundles
+    : // Save info for next render to update with minimal visual change.
+      (stateTrackBundles.current = trackBundles);
   maxTilesOnPage.current = maxItemsOnPage;
 
   return updatedTrackBundles;

@@ -16,7 +16,7 @@ export function useVisualStableUpdate(
   /** `TrackBundle`s to display in the grid.  */
   trackBundles: TrackBundleWithPlaceholder[],
   maxItemsOnPage: number,
-): { trackBundles: TrackBundleWithPlaceholder[] } {
+): TrackBundleWithPlaceholder[] {
   const stateTrackBundles = React.useRef<TrackBundleWithPlaceholder[]>([]);
   const maxTilesOnPage = React.useRef<number>(-1);
 
@@ -30,7 +30,5 @@ export function useVisualStableUpdate(
   stateTrackBundles.current = trackBundles;
   maxTilesOnPage.current = maxItemsOnPage;
 
-  return {
-    trackBundles: updatedTrackBundles,
-  };
+  return updatedTrackBundles;
 }

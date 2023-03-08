@@ -3,11 +3,11 @@ import {
   selectGridLayout,
   sortTrackBundles,
   TrackBundleWithPlaceholder,
-  updatePages,
 } from '@livekit/components-core';
 import { GridLayout } from '@livekit/components-core/dist/helper/grid-layouts';
 import * as React from 'react';
 import { useSize } from '../helper';
+import { useVisualStableUpdate } from './useVisualStableUpdate';
 
 /**
  * The useGridLayout hook tries to select the best layout to fit all tiles.
@@ -24,8 +24,6 @@ export function useGridLayout(
   /** `TrackBundle`s to display in the grid.  */
   trackBundles: TrackBundleWithPlaceholder[],
 ): { layout: GridLayout; trackBundles: TrackBundleWithPlaceholder[] } {
-  const stateTrackBundles = React.useRef<TrackBundleWithPlaceholder[]>([]);
-  const maxTilesOnPage = React.useRef<number>(-1);
   const { width, height } = useSize(containerElement);
 
   const layout =
@@ -33,15 +31,8 @@ export function useGridLayout(
       ? selectGridLayout(GRID_LAYOUTS, trackBundles.length, width, height)
       : GRID_LAYOUTS[0];
 
-  const nextSortedTrackBundles = sortTrackBundles(trackBundles);
-  const updatedTrackBundles =
-    layout.maxParticipants !== maxTilesOnPage.current
-      ? nextSortedTrackBundles
-      : updatePages(stateTrackBundles.current, nextSortedTrackBundles, layout.maxParticipants);
-
-  // Save info for next render to update with minimal visual change.
-  stateTrackBundles.current = trackBundles;
-  maxTilesOnPage.current = layout.maxParticipants;
+  const sortedTrackBundles = sortTrackBundles(trackBundles);
+  const updatedTrackBundles = useVisualStableUpdate(sortedTrackBundles, layout.maxParticipants);
 
   React.useEffect(() => {
     if (gridElement.current && layout) {

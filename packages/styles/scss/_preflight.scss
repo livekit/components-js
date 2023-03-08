@@ -6,21 +6,23 @@
   background-color: var(--bg);
 }
 
-.button {
-  font: inherit;
-  user-select: none;
-}
+[data-theme] {
+  .button {
+    font-family: var(--font-family);
+    user-select: none;
+  }
 
-.list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
 
-.form-control {
-  font: inherit;
-  padding: 0.375rem 0.75rem;
-  background-color: var(--control-bg);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
+  .form-control {
+    font-family: var(--font-family);
+    padding: 0.375rem 0.75rem;
+    background-color: var(--control-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+  }
 }

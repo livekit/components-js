@@ -14,7 +14,7 @@ const ChatExample: NextPage = () => {
   });
 
   return (
-    <div style={{ padding: '2rem' }}>
+    <div style={{ padding: '2rem' }} data-lk-theme="default">
       <LiveKitRoom video={false} token={token} serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}>
         <Chat />
       </LiveKitRoom>

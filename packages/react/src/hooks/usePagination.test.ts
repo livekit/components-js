@@ -3,6 +3,18 @@ import { renderHook } from '@testing-library/react';
 import usePagination from './usePagination';
 
 describe('Test hook', () => {
+  test('Test basic assumptions of the usePagination hook return values.', () => {
+    const itemPerPage = 4;
+    const totalItemCount = 12;
+    const { result } = renderHook(() => usePagination(itemPerPage, totalItemCount));
+
+    expect(result.current.page).toBe(1);
+    expect(result.current.totalPageCount).toBe(3);
+    expect(result.current.firstItemIndex).toBe(0);
+    expect(result.current.lastItemIndex).toBe(4);
+    expect(result.current.prevPage).toBeTypeOf('function');
+    expect(result.current.nextPage).toBeTypeOf('function');
+  });
   test('Test moving to pages works as expected.', () => {
     const itemPerPage = 4;
     const totalItemCount = 12;

@@ -11,14 +11,14 @@ import { useState } from 'react';
  */
 export function usePagination(itemPerPage: number, totalItemCount: number) {
   const [page, setPage] = useState(1);
-  const pageCount = Math.ceil(totalItemCount / itemPerPage);
+  const totalPageCount = Math.ceil(totalItemCount / itemPerPage);
   const lastItemIndex = page * itemPerPage;
   const firstItemIndex = lastItemIndex - itemPerPage;
 
   const changePage = (direction: 'next' | 'previous') => {
     setPage((state) => {
       if (direction === 'next') {
-        if (state === pageCount) {
+        if (state === totalPageCount) {
           return state;
         }
         return state + 1;
@@ -32,8 +32,8 @@ export function usePagination(itemPerPage: number, totalItemCount: number) {
   };
 
   const setPage_ = (num: number) => {
-    if (num > pageCount) {
-      setPage(pageCount);
+    if (num > totalPageCount) {
+      setPage(totalPageCount);
     } else if (num < 1) {
       setPage(1);
     } else {
@@ -42,7 +42,7 @@ export function usePagination(itemPerPage: number, totalItemCount: number) {
   };
 
   return {
-    totalPages: pageCount,
+    totalPageCount,
     nextPage: () => changePage('next'),
     prevPage: () => changePage('previous'),
     setPage: setPage_,

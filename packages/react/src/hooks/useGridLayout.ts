@@ -31,8 +31,7 @@ export function useGridLayout(
       ? selectGridLayout(GRID_LAYOUTS, trackBundles.length, width, height)
       : GRID_LAYOUTS[0];
 
-  const sortedTrackBundles = sortTrackBundles(trackBundles);
-  const updatedTrackBundles = useVisualStableUpdate(sortedTrackBundles, layout.maxParticipants);
+  const updatedTrackBundles = useVisualStableUpdate(trackBundles, layout.maxParticipants);
 
   React.useEffect(() => {
     if (gridElement.current && layout) {

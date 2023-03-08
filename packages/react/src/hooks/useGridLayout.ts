@@ -1,7 +1,6 @@
 import {
   GRID_LAYOUTS,
   selectGridLayout,
-  sortTrackBundles,
   TrackBundleWithPlaceholder,
 } from '@livekit/components-core';
 import { GridLayout } from '@livekit/components-core/dist/helper/grid-layouts';

@@ -5,6 +5,10 @@ import {
 } from '@livekit/components-core';
 import * as React from 'react';
 
+interface UseVisualStableUpdateOptions {
+  customSortFunction?: (trackBundles: TrackBundleWithPlaceholder[]) => TrackBundleWithPlaceholder[];
+}
+
 /**
  * The useVisualStableUpdate hook tries to keep visual updates of the TackBundles array to a minimum,
  * while still trying to display important tiles such as speaking participants or screen shares.
@@ -16,11 +20,16 @@ export function useVisualStableUpdate(
   /** `TrackBundle`s to display in the grid.  */
   trackBundles: TrackBundleWithPlaceholder[],
   maxItemsOnPage: number,
+  options: UseVisualStableUpdateOptions = {},
 ): TrackBundleWithPlaceholder[] {
   const stateTrackBundles = React.useRef<TrackBundleWithPlaceholder[]>([]);
   const maxTilesOnPage = React.useRef<number>(-1);
 
-  const nextSortedTrackBundles = sortTrackBundles(trackBundles);
+  const nextSortedTrackBundles =
+    typeof options.customSortFunction === 'function'
+      ? options.customSortFunction(trackBundles)
+      : sortTrackBundles(trackBundles);
+
   const updatedTrackBundles =
     maxItemsOnPage !== maxTilesOnPage.current
       ? nextSortedTrackBundles

@@ -1,5 +1,14 @@
 import { useState } from 'react';
 
+/**
+ * The `usePagination` hook implements simple pagination logic for use with arrays.
+ * @example
+ * ```tsx
+ * const { firstItemIndex, lastItemIndex } = usePagination(3, 9);
+ * const itemsOnPage = items.slice(firsItemIndex, lastItemIndex)
+ * ```
+ * @internal
+ */
 export function usePagination(itemPerPage: number, totalItemCount: number) {
   const [page, setPage] = useState(1);
   const pageCount = Math.ceil(totalItemCount / itemPerPage);

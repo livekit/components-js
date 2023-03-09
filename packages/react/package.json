@@ -58,14 +58,19 @@
     "@size-limit/file": "^8.1.2",
     "@size-limit/webpack": "^8.1.2",
     "@svgr/cli": "^6.5.1",
+    "@testing-library/react": "^14.0.0",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
+    "@vitejs/plugin-react": "^3.1.0",
     "eslint-config-lk-custom": "~0.1.1",
+    "jsdom": "^21.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "size-limit": "^8.1.2",
     "tsup": "^6.5.0",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "vite": "^4.1.4",
+    "vitest": "^0.29.2"
   },
   "engines": {
     "node": ">=14"

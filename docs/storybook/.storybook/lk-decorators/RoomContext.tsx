@@ -25,6 +25,7 @@ export const LkRoomContext: Decorator = (Story, { globals, args }) => {
   return (
     <>
       <LiveKitRoom
+        data-lk-theme="default"
         room={room}
         token={undefined}
         serverUrl={undefined}
@@ -87,8 +88,8 @@ export const LkRoomContextLive: Decorator = (Story, args) => {
           </div>
         </div>
       </div>
-
       <LiveKitRoom
+        data-lk-theme="default"
         room={room}
         connect={connect}
         token={token}

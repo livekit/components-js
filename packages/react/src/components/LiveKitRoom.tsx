@@ -154,6 +154,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
           useRealTracks: true,
         },
       });
+      return;
     }
     if (!token) {
       log.debug('no token yet');

@@ -10,7 +10,7 @@ import {
 import { map, switchMap, Observable, startWith, Subscriber } from 'rxjs';
 import { observeRoomEvents } from './room';
 import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
-import { allRemoteParticipantEvents, allRemoteParticipantRoomEvents } from '../helper/eventGroups';
+import { allParticipantEvents, allParticipantRoomEvents } from '../helper/eventGroups';
 import { TrackObserverOptions } from '../types';
 
 export function observeParticipantEvents<T extends Participant>(
@@ -184,7 +184,7 @@ export function connectedParticipantsObserver(
     return () => listener.unsubscribe();
   }).pipe(startWith(Array.from(room.participants.values())));
 
-  const additionalRoomEvents = options.additionalRoomEvents ?? allRemoteParticipantRoomEvents;
+  const additionalRoomEvents = options.additionalRoomEvents ?? allParticipantRoomEvents;
 
   const roomEvents = Array.from(
     new Set([
@@ -213,7 +213,7 @@ export function connectedParticipantObserver(
   identity: string,
   options: ConnectedParticipantObserverOptions = {},
 ) {
-  const additionalEvents = options.additionalEvents ?? allRemoteParticipantEvents;
+  const additionalEvents = options.additionalEvents ?? allParticipantEvents;
   const observable = observeRoomEvents(
     room,
     RoomEvent.ParticipantConnected,

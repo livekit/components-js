@@ -16,17 +16,18 @@ import { TrackLoop } from './TrackLoop';
  * ```
  */
 export const RoomAudioRenderer = () => {
-  const trackBundles = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio]);
-  return (
-    <div style={{ display: 'none' }}>
-      <TrackLoop
-        trackBundles={trackBundles.filter(({ participant }) => {
-          return participant instanceof RemoteParticipant;
-        })}
-      >
-        {/* TODO: How to handle screen share audio? Currently it is rendered as microphone source.         */}
-        <AudioTrack source={Track.Source.Microphone} />
-      </TrackLoop>
-    </div>
-  );
+  // const trackBundles = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio]);
+  // return (
+  //   <div style={{ display: 'none' }}>
+  //     <TrackLoop
+  //       trackBundles={trackBundles.filter(({ participant }) => {
+  //         return participant instanceof RemoteParticipant;
+  //       })}
+  //     >
+  //       {/* TODO: How to handle screen share audio? Currently it is rendered as microphone source.         */}
+  //       <AudioTrack source={Track.Source.Microphone} />
+  //     </TrackLoop>
+  //   </div>
+  // );
+  return <></>;
 };

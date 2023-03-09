@@ -1,14 +1,19 @@
 %container-style {
-  font-size: var(--font-size);
-  font-family: var(--font-family);
-  color: var(--fg);
-  line-height: var(--line-height);
   background-color: var(--bg);
+  line-height: var(--line-height);
 }
 
 [data-theme] {
+  font-size: var(--font-size);
+  font-family: var(--font-family);
+  color: var(--fg);
+
+  .button,
+  input {
+    line-height: var(--line-height);
+  }
+
   .button {
-    font-family: var(--font-family);
     user-select: none;
   }
 
@@ -24,9 +29,5 @@
     background-color: var(--control-bg);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-
-    input {
-      line-height: var(--line-height);
-    }
   }
 }

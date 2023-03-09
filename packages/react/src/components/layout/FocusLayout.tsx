@@ -100,6 +100,7 @@ export function CarouselView({ filter, filterDependencies = [], ...props }: Caro
     tileCount = Math.floor(width / tileWidth);
   }
   const sortedTiles = useVisualStableUpdate(filteredTiles, tileCount);
+  // const sortedTiles = sortTrackBundles(trackBundles);
 
   return (
     <aside ref={asideEl} {...props}>

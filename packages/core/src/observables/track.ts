@@ -91,8 +91,18 @@ export function trackBundlesObservable(
 ): Observable<{ trackBundles: TrackBundle[]; participants: Participant[] }> {
   const additionalRoomEvents = options.additionalRoomEvents ?? allParticipantRoomEvents;
   const onlySubscribedTracks: boolean = options.onlySubscribed ?? true;
+  const roomEvents = Array.from(
+    new Set([
+      RoomEvent.LocalTrackPublished,
+      RoomEvent.LocalTrackUnpublished,
+      RoomEvent.TrackPublished,
+      RoomEvent.TrackUnpublished,
+      RoomEvent.TrackSubscriptionStatusChanged,
+      ...additionalRoomEvents,
+    ]).values(),
+  );
 
-  const observable = observeRoomEvents(room, ...additionalRoomEvents).pipe(
+  const observable = observeRoomEvents(room, ...roomEvents).pipe(
     map((room) => {
       const data = getTrackBundles(room, sources, onlySubscribedTracks);
       log.debug(`TrackBundle[] was updated. (length ${data.trackBundles.length})`, data);

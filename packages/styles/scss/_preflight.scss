@@ -8,6 +8,11 @@
   font-family: var(--font-family);
   color: var(--fg);
 
+  .button,
+  input {
+    line-height: var(--line-height);
+  }
+
   .button {
     user-select: none;
   }
@@ -24,8 +29,5 @@
     background-color: var(--control-bg);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-  }
-  input {
-    line-height: var(--line-height);
   }
 }

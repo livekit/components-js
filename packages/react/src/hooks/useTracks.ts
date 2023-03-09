@@ -37,7 +37,7 @@ type UseTracksHookReturnType<T> = T extends Track.Source[]
  * const trackBundlesWithPlaceholders = useTracks(sources: [{source: Track.Source.Camera, withPlaceholder: true}])
  * ```
  */
-export function useTracks<T extends SourcesArray>(
+export function useTracks<T extends SourcesArray = SourcesArray>(
   sources: T,
   options: UseTracksOptions = {},
 ): UseTracksHookReturnType<T> {
@@ -54,6 +54,7 @@ export function useTracks<T extends SourcesArray>(
       additionalRoomEvents: options.updateOnlyOn,
       onlySubscribed: options.onlySubscribed,
     }).subscribe(({ trackBundles, participants }) => {
+      log.debug('setting track bundles', trackBundles, participants);
       setTrackBundles(trackBundles);
       setParticipants(participants);
     });
@@ -68,6 +69,14 @@ export function useTracks<T extends SourcesArray>(
         if (requirePlaceholder.has(participant.identity)) {
           const sourcesToAddPlaceholder = requirePlaceholder.get(participant.identity) ?? [];
           sourcesToAddPlaceholder.forEach((placeholderSource) => {
+            if (
+              trackBundles.find(
+                ({ participant: p, publication }) =>
+                  participant.identity === p.identity && publication.source === placeholderSource,
+              )
+            ) {
+              return;
+            }
             log.debug(
               `Add ${placeholderSource} placeholder for participant ${participant.identity}.`,
             );

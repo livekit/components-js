@@ -22,6 +22,12 @@ export const allRemoteParticipantRoomEvents = [
   RoomEvent.TrackSubscriptionStatusChanged,
 ];
 
+export const allParticipantRoomEvents = [
+  ...allRemoteParticipantRoomEvents,
+  RoomEvent.LocalTrackPublished,
+  RoomEvent.LocalTrackUnpublished,
+];
+
 export const allRemoteParticipantEvents = [
   ParticipantEvent.ConnectionQualityChanged,
   ParticipantEvent.IsSpeakingChanged,
@@ -36,4 +42,10 @@ export const allRemoteParticipantEvents = [
   ParticipantEvent.TrackSubscriptionFailed,
   ParticipantEvent.TrackSubscriptionPermissionChanged,
   ParticipantEvent.TrackSubscriptionStatusChanged,
+];
+
+export const allParticipantEvents = [
+  ...allRemoteParticipantEvents,
+  ParticipantEvent.LocalTrackPublished,
+  ParticipantEvent.LocalTrackUnpublished,
 ];

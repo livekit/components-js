@@ -32,7 +32,6 @@ export function GridLayout({
   filterDependencies = [],
   ...props
 }: GridLayoutProps) {
-  const containerEl = React.createRef<HTMLDivElement>();
   const gridEl = React.createRef<HTMLDivElement>();
   const rawTrackBundles = useTracks(
     [
@@ -52,10 +51,10 @@ export function GridLayout({
     [filter, rawTrackBundles, ...filterDependencies],
   );
 
-  const { layout, trackBundles } = useGridLayout(containerEl, gridEl, filteredTrackBundles);
+  const { layout, trackBundles } = useGridLayout(gridEl, filteredTrackBundles);
 
   return (
-    <div ref={containerEl} className="lk-grid-layout-wrapper">
+    <div className="lk-grid-layout-wrapper">
       <div ref={gridEl} {...elementProps}>
         {props.children ?? (
           <>

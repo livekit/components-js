@@ -16,14 +16,12 @@ import { useVisualStableUpdate } from './useVisualStableUpdate';
  * while trying to display important tiles such as speaking participants or screen shares.
  */
 export function useGridLayout(
-  /** HTML element that contains the gird. */
-  containerElement: React.RefObject<HTMLDivElement>,
-  /** Direct child of the `containerElement`. */
+  /** HTML element that contains the grid. */
   gridElement: React.RefObject<HTMLDivElement>,
   /** `TrackBundle`s to display in the grid.  */
   trackBundles: TrackBundleWithPlaceholder[],
 ): { layout: GridLayout; trackBundles: TrackBundleWithPlaceholder[] } {
-  const { width, height } = useSize(containerElement);
+  const { width, height } = useSize(gridElement);
 
   const layout =
     width > 0 && height > 0

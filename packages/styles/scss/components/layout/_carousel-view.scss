@@ -1,0 +1,24 @@
+.carousel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-gap);
+  max-height: 100%;
+  overflow-y: auto;
+
+  > * {
+    // Style the direct children of the carousel.
+    flex-shrink: 0;
+    aspect-ratio: 16 / 10;
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: row;
+    overflow-y: hidden;
+    overflow-x: auto;
+    order: 1;
+
+    > div {
+      flex-shrink: 0;
+    }
+  }
+}

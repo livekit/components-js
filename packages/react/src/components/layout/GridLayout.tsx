@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useGridLayout, UseParticipantsOptions, useTracks } from '../../hooks';
+import { useGridLayout, usePagination, UseParticipantsOptions, useTracks } from '../../hooks';
 import { mergeProps } from '../../utils';
 import { TrackBundleFilter } from '@livekit/components-core';
 import { Track } from 'livekit-client';
@@ -52,6 +52,8 @@ export function GridLayout({
   );
 
   const { layout, trackBundles } = useGridLayout(gridEl, filteredTrackBundles);
+  const { totalPageCount, nextPage, prevPage, currentPage, firstItemIndex, lastItemIndex } =
+    usePagination(layout.maxParticipants, trackBundles.length);
 
   return (
     <div className="lk-grid-layout-wrapper">
@@ -59,7 +61,17 @@ export function GridLayout({
         {props.children ?? (
           <>
             {props.children ?? (
-              <TrackLoop trackBundles={trackBundles.slice(0, layout.maxParticipants)} />
+              <>
+                <TrackLoop trackBundles={trackBundles.slice(firstItemIndex, lastItemIndex)} />
+
+                {trackBundles.length > layout.maxParticipants && (
+                  <div>
+                    <button onClick={prevPage}>{'<'}</button>
+                    {`${currentPage}/${totalPageCount}`}
+                    <button onClick={nextPage}>{'>'}</button>
+                  </div>
+                )}
+              </>
             )}
           </>
         )}

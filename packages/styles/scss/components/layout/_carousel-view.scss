@@ -1,34 +1,34 @@
 .carousel {
-  --carousel-is-vertical: 1;
-  --carousel-is-horizontal: calc(var(--carousel-is-vertical) * -1 + 1);
-  --max-visible-tiles: 1;
+  // --max-visible-tiles: attr(data-max-visible-tiles string, 1);
 
   display: flex;
   flex-direction: column;
   gap: var(--grid-gap);
   max-height: 100%;
   overflow-y: auto;
-  scroll-snap-type: y mandatory;
 
   > * {
     // Style the direct children of the carousel.
     flex-shrink: 0;
     aspect-ratio: 16 / 10;
-    // If the carousel is vertical 100% width, if horizontal limit width.
-    --width-minus-gaps: calc(100% - var(--grid-gap) * (var(--max-visible-tiles) - 1));
-    width: max(
-      calc(var(--carousel-is-vertical) * 100%),
-      calc(var(--carousel-is-horizontal) * calc(var(--width-minus-gaps) / var(--max-visible-tiles)))
-    );
-
-    // If the carousel is vertical limit height if horizontal 100%.
-    --height-minus-gaps: calc(100% - calc(var(--grid-gap) * calc(var(--max-visible-tiles) - 1)));
-    height: max(
-      calc(var(--carousel-is-vertical) * calc(var(--height-minus-gaps) / var(--max-visible-tiles))),
-      calc(var(--carousel-is-horizontal) * 100%)
-    );
-
     scroll-snap-align: start;
+  }
+  &[data-orientation='vertical'] {
+    scroll-snap-type: y mandatory;
+    > * {
+      --height-minus-gaps: calc(100% - calc(var(--grid-gap) * calc(var(--max-visible-tiles) - 1)));
+      width: 100%;
+      height: calc(var(--height-minus-gaps) / var(--max-visible-tiles));
+    }
+  }
+
+  &[data-orientation='horizontal'] {
+    scroll-snap-type: x mandatory;
+    > * {
+      --width-minus-gaps: calc(100% - var(--grid-gap) * (var(--max-visible-tiles) - 1));
+      width: calc(var(--width-minus-gaps) / var(--max-visible-tiles));
+      height: 100%;
+    }
   }
 
   @media (max-width: 600px) {
@@ -36,7 +36,6 @@
     overflow-y: hidden;
     overflow-x: auto;
     order: 1;
-    scroll-snap-type: x mandatory;
 
     > div {
       flex-shrink: 0;

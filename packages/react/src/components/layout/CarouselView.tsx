@@ -28,19 +28,22 @@ export function CarouselView({ filter, filterDependencies = [], ...props }: Caro
   }, [filter, layoutContext?.pin.state, trackBundles, ...filterDependencies]);
 
   const { width, height } = useSize(asideEl);
-  const isVertical = height >= width;
-  const maxVisibleTiles = isVertical
-    ? Math.max(1, Math.floor(height / MIN_HEIGHT))
-    : Math.floor(width / MIN_WIDTH);
+  const orientation = height >= width ? 'vertical' : 'horizontal';
+  const maxVisibleTiles =
+    orientation === 'vertical'
+      ? Math.max(1, Math.floor(height / MIN_HEIGHT))
+      : Math.floor(width / MIN_WIDTH);
 
   const sortedTiles = useVisualStableUpdate(filteredTiles, maxVisibleTiles);
 
   React.useEffect(() => {
+    console.log('xxx ', { maxVisibleTiles });
+
     if (asideEl.current) {
+      asideEl.current.dataset.lkOrientation = orientation;
       asideEl.current.style.setProperty('--lk-max-visible-tiles', maxVisibleTiles.toString());
-      asideEl.current.style.setProperty('--lk-carousel-is-vertical', Number(isVertical).toString());
     }
-  }, [isVertical, maxVisibleTiles]);
+  }, [maxVisibleTiles, orientation]);
 
   return (
     <aside className="lk-carousel" ref={asideEl} {...props}>

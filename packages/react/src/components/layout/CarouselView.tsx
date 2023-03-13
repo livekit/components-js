@@ -39,10 +39,6 @@ export function CarouselView({ filter, filterDependencies = [], ...props }: Caro
     if (asideEl.current) {
       asideEl.current.style.setProperty('--lk-max-visible-tiles', maxVisibleTiles.toString());
       asideEl.current.style.setProperty('--lk-carousel-is-vertical', Number(isVertical).toString());
-      asideEl.current.style.setProperty(
-        '--lk-carousel-is-horizontal',
-        Number(!isVertical).toString(),
-      );
     }
   }, [isVertical, maxVisibleTiles]);
 

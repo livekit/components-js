@@ -37,8 +37,6 @@ export function CarouselView({ filter, filterDependencies = [], ...props }: Caro
   const sortedTiles = useVisualStableUpdate(filteredTiles, maxVisibleTiles);
 
   React.useEffect(() => {
-    console.log('xxx ', { maxVisibleTiles });
-
     if (asideEl.current) {
       asideEl.current.dataset.lkOrientation = orientation;
       asideEl.current.style.setProperty('--lk-max-visible-tiles', maxVisibleTiles.toString());

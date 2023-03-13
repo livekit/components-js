@@ -1,5 +1,32 @@
 # @livekit/components-react
 
+## 0.5.0
+
+### Minor Changes
+
+- Deprecate MediaTrack and split into AudioTrack and VideoTrack #336 - [#337](https://github.com/livekit/components-js/pull/337) ([@lukasIO](https://github.com/lukasIO))
+
+- Remove TileLoop in favor of TrackLoop. Simplify the TrackLoop component by removing the filter functionality. - [#327](https://github.com/livekit/components-js/pull/327) ([@Ocupe](https://github.com/Ocupe))
+
+### Patch Changes
+
+- GridLayout Revision. - [#326](https://github.com/livekit/components-js/pull/326) ([@Ocupe](https://github.com/Ocupe))
+
+  Renaming:
+
+  - `sortParticipantsByVolume` -> `sortParticipants`
+
+- Include room in dependency array in order to disconnect on room unmount - [#332](https://github.com/livekit/components-js/pull/332) ([@lukasIO](https://github.com/lukasIO))
+
+- CraouselView revision: Add a visually stable update to the carousel component. Limit the maximum visible tiles. Add snap scrolling to better align the tiles. - [#346](https://github.com/livekit/components-js/pull/346) ([@Ocupe](https://github.com/Ocupe))
+
+- Use stringify array effect deps - [#338](https://github.com/livekit/components-js/pull/338) ([@lukasIO](https://github.com/lukasIO))
+
+- Rework useDataChannel API - [#340](https://github.com/livekit/components-js/pull/340) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`2ff6f78`](https://github.com/livekit/components-js/commit/2ff6f78edbc186cb63d353ae2ae688d3317976c8), [`53aafaa`](https://github.com/livekit/components-js/commit/53aafaaba03c6cfe403555e3b01db374b7bcd14c), [`bed7516`](https://github.com/livekit/components-js/commit/bed7516196df8d59d7b464ca524a831a7d3b6351)]:
+  - @livekit/components-core@0.4.0
+
 ## 0.4.1
 
 ### Patch Changes

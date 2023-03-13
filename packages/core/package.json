@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-core",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "license": "Apache-2.0",
   "author": "LiveKit",
   "repository": {
@@ -49,7 +49,7 @@
     "livekit-client": "^1.6.8"
   },
   "devDependencies": {
-    "@livekit/components-styles": "~0.1.14",
+    "@livekit/components-styles": "~0.2.0",
     "@size-limit/file": "^8.1.2",
     "@size-limit/webpack": "^8.1.2",
     "eslint-config-lk-custom": "^0.1.1",

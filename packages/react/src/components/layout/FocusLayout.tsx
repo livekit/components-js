@@ -2,12 +2,7 @@ import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useMaybeLayoutContext, useLayoutContext } from '../../context';
 import { mergeProps } from '../../utils';
-import {
-  isTrackBundlePinned,
-  TrackBundleFilter,
-  TrackBundle,
-  sortTrackBundles,
-} from '@livekit/components-core';
+import { isTrackBundlePinned, TrackBundleFilter, TrackBundle } from '@livekit/components-core';
 import { ParticipantTile } from '../../prefabs/ParticipantTile';
 import { ParticipantClickEvent } from '@livekit/components-core';
 import { useTracks, useVisualStableUpdate } from '../../hooks';
@@ -100,7 +95,6 @@ export function CarouselView({ filter, filterDependencies = [], ...props }: Caro
     tileCount = Math.floor(width / tileWidth);
   }
   const sortedTiles = useVisualStableUpdate(filteredTiles, tileCount);
-  // const sortedTiles = sortTrackBundles(trackBundles);
 
   return (
     <aside ref={asideEl} {...props}>

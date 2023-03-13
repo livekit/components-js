@@ -1,5 +1,19 @@
 # @livekit/components-styles
 
+## 0.2.0
+
+### Minor Changes
+
+- Scope styles to elements using data theme attribute - [#341](https://github.com/livekit/components-js/pull/341) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Set font style for all elements within theme - [#345](https://github.com/livekit/components-js/pull/345) ([@lukasIO](https://github.com/lukasIO))
+
+- CraouselView revision: Add a visually stable update to the carousel component. Limit the maximum visible tiles. Add snap scrolling to better align the tiles. - [#346](https://github.com/livekit/components-js/pull/346) ([@Ocupe](https://github.com/Ocupe))
+
+- Export css files directly additionally via exports map - [#314](https://github.com/livekit/components-js/pull/314) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.14
 
 ### Patch Changes

@@ -1,0 +1,44 @@
+.carousel {
+  // --max-visible-tiles: attr(data-max-visible-tiles string, 1);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-gap);
+  max-height: 100%;
+  overflow-y: auto;
+
+  > * {
+    // Style the direct children of the carousel.
+    flex-shrink: 0;
+    aspect-ratio: 16 / 10;
+    scroll-snap-align: start;
+  }
+  &[data-orientation='vertical'] {
+    scroll-snap-type: y mandatory;
+    > * {
+      --height-minus-gaps: calc(100% - calc(var(--grid-gap) * calc(var(--max-visible-tiles) - 1)));
+      width: 100%;
+      height: calc(var(--height-minus-gaps) / var(--max-visible-tiles));
+    }
+  }
+
+  &[data-orientation='horizontal'] {
+    scroll-snap-type: x mandatory;
+    > * {
+      --width-minus-gaps: calc(100% - var(--grid-gap) * (var(--max-visible-tiles) - 1));
+      width: calc(var(--width-minus-gaps) / var(--max-visible-tiles));
+      height: 100%;
+    }
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: row;
+    overflow-y: hidden;
+    overflow-x: auto;
+    order: 1;
+
+    > div {
+      flex-shrink: 0;
+    }
+  }
+}

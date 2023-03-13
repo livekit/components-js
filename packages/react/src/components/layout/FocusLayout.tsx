@@ -1,12 +1,11 @@
-import { Participant, Track } from 'livekit-client';
+import { Participant } from 'livekit-client';
 import * as React from 'react';
 import { useMaybeLayoutContext, useLayoutContext } from '../../context';
 import { mergeProps } from '../../utils';
-import { isTrackBundlePinned, TrackBundleFilter, TrackBundle } from '@livekit/components-core';
+import { TrackBundle } from '@livekit/components-core';
 import { ParticipantTile } from '../../prefabs/ParticipantTile';
 import { ParticipantClickEvent } from '@livekit/components-core';
-import { useTracks } from '../../hooks';
-import { TrackLoop } from '../TrackLoop';
+import { CarouselView } from './CarouselView';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   trackBundle?: TrackBundle;
@@ -63,25 +62,4 @@ export function FocusLayout({ trackBundle, ...props }: FocusLayoutProps) {
       )}
     </>
   );
-}
-
-export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement> {
-  filter?: TrackBundleFilter;
-  filterDependencies?: [];
-}
-
-export function CarouselView({ filter, filterDependencies = [], ...props }: CarouselViewProps) {
-  const layoutContext = useMaybeLayoutContext();
-  const trackBundles = useTracks([
-    { source: Track.Source.Camera, withPlaceholder: true },
-    { source: Track.Source.ScreenShare, withPlaceholder: false },
-  ]);
-  const filteredTiles = React.useMemo(() => {
-    const tilesWithoutPinned = trackBundles.filter(
-      (tile) => !layoutContext?.pin.state || !isTrackBundlePinned(tile, layoutContext.pin.state),
-    );
-    return filter ? tilesWithoutPinned.filter(filter) : tilesWithoutPinned;
-  }, [filter, layoutContext?.pin.state, trackBundles, ...filterDependencies]);
-
-  return <aside {...props}>{props.children ?? <TrackLoop trackBundles={filteredTiles} />}</aside>;
 }

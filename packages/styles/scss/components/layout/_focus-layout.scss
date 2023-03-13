@@ -15,19 +15,6 @@
   max-height: 100%;
   padding: var(--grid-gap);
 
-  > aside {
-    display: flex;
-    flex-direction: column;
-    gap: var(--grid-gap);
-    max-height: 100%;
-    overflow-y: auto;
-
-    .participant-tile {
-      flex-shrink: 0;
-      aspect-ratio: 16 / 10;
-    }
-  }
-
   // Prevent screenshare from expanding out of bounds
   > div {
     width: 100%;
@@ -51,16 +38,5 @@
   .focus-layout {
     grid-template-columns: 1fr;
     grid-template-rows: 5fr 1fr;
-
-    > aside {
-      flex-direction: row;
-      overflow-y: hidden;
-      overflow-x: auto;
-      order: 1;
-
-      > div {
-        flex-shrink: 0;
-      }
-    }
   }
 }

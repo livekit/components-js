@@ -17,7 +17,7 @@
     scroll-snap-type: y mandatory;
     > * {
       --height-minus-gaps: calc(100% - calc(var(--grid-gap) * calc(var(--max-visible-tiles) - 1)));
-      width: 100%;
+      width: unset;
       height: calc(var(--height-minus-gaps) / var(--max-visible-tiles));
     }
   }
@@ -27,7 +27,7 @@
     > * {
       --width-minus-gaps: calc(100% - var(--grid-gap) * (var(--max-visible-tiles) - 1));
       width: calc(var(--width-minus-gaps) / var(--max-visible-tiles));
-      height: 100%;
+      height: unset;
     }
   }
 

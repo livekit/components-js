@@ -6,8 +6,11 @@ import { useSize } from '../../helper';
 import { useTracks, useVisualStableUpdate } from '../../hooks';
 import { TrackLoop } from '../TrackLoop';
 
-const MIN_HEIGHT = 120;
-const MIN_WIDTH = 150;
+const MIN_HEIGHT = 130;
+const MIN_WIDTH = 140;
+const ASPECT_RATIO = 16 / 10;
+const ASPECT_RATIO_INVERT = (1 - ASPECT_RATIO) * -1;
+
 export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement> {
   filter?: TrackBundleFilter;
   filterDependencies?: [];
@@ -29,10 +32,13 @@ export function CarouselView({ filter, filterDependencies = [], ...props }: Caro
 
   const { width, height } = useSize(asideEl);
   const orientation = height >= width ? 'vertical' : 'horizontal';
+  const tileHeight = Math.max(width * ASPECT_RATIO_INVERT, MIN_HEIGHT);
+  const tileWidth = Math.max(height * ASPECT_RATIO, MIN_WIDTH);
+
   const maxVisibleTiles =
     orientation === 'vertical'
-      ? Math.max(1, Math.floor(height / MIN_HEIGHT))
-      : Math.floor(width / MIN_WIDTH);
+      ? Math.max(1, Math.floor(height / tileHeight))
+      : Math.floor(width / tileWidth);
 
   const sortedTiles = useVisualStableUpdate(filteredTiles, maxVisibleTiles);
 

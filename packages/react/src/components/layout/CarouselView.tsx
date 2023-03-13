@@ -6,13 +6,15 @@ import { useSize } from '../../helper';
 import { useTracks, useVisualStableUpdate } from '../../hooks';
 import { TrackLoop } from '../TrackLoop';
 
+const MIN_HEIGHT = 120;
+const MIN_WIDTH = 150;
 export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement> {
   filter?: TrackBundleFilter;
   filterDependencies?: [];
 }
 
 export function CarouselView({ filter, filterDependencies = [], ...props }: CarouselViewProps) {
-  const asideEl = React.useRef(null);
+  const asideEl = React.useRef<HTMLDivElement>(null);
   const layoutContext = useMaybeLayoutContext();
   const trackBundles = useTracks([
     { source: Track.Source.Camera, withPlaceholder: true },
@@ -25,16 +27,24 @@ export function CarouselView({ filter, filterDependencies = [], ...props }: Caro
     return filter ? tilesWithoutPinned.filter(filter) : tilesWithoutPinned;
   }, [filter, layoutContext?.pin.state, trackBundles, ...filterDependencies]);
 
-  let tileCount = 5;
   const { width, height } = useSize(asideEl);
-  if (height >= width) {
-    const tileHeight = width * 0.5625; // Based on the width calculate the tile hight for a 16/9 tile.
-    tileCount = Math.max(1, Math.floor(height / Math.max(tileHeight, 1)) - 1);
-  } else {
-    const tileWidth = height * 1.777777777777777; // Based on the height calculate the tile hight for a 16/9 tile.
-    tileCount = Math.floor(width / tileWidth);
-  }
-  const sortedTiles = useVisualStableUpdate(filteredTiles, tileCount);
+  const isVertical = height >= width;
+  const maxVisibleTiles = isVertical
+    ? Math.max(1, Math.floor(height / MIN_HEIGHT))
+    : Math.floor(width / MIN_WIDTH);
+
+  const sortedTiles = useVisualStableUpdate(filteredTiles, maxVisibleTiles);
+
+  React.useEffect(() => {
+    if (asideEl.current) {
+      asideEl.current.style.setProperty('--lk-max-visible-tiles', maxVisibleTiles.toString());
+      asideEl.current.style.setProperty('--lk-carousel-is-vertical', Number(isVertical).toString());
+      asideEl.current.style.setProperty(
+        '--lk-carousel-is-horizontal',
+        Number(!isVertical).toString(),
+      );
+    }
+  }, [isVertical, maxVisibleTiles]);
 
   return (
     <aside className="lk-carousel" ref={asideEl} {...props}>

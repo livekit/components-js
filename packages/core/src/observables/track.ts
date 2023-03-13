@@ -1,17 +1,9 @@
-import {
-  LocalTrackPublication,
-  Participant,
-  Room,
-  RoomEvent,
-  Track,
-  TrackEvent,
-  TrackPublication,
-} from 'livekit-client';
-import { Observable, startWith, Subscription } from 'rxjs';
-import { allRemoteParticipantRoomEvents } from '../helper';
+import { Participant, Room, RoomEvent, Track, TrackEvent, TrackPublication } from 'livekit-client';
+import { map, Observable, startWith } from 'rxjs';
+import { allParticipantRoomEvents } from '../helper';
 import log from '../logger';
 import { TrackBundle } from '../track-bundle';
-import { roomEventSelector } from './room';
+import { observeRoomEvents } from './room';
 
 export function trackObservable(track: TrackPublication) {
   const trackObserver = observeTrackEvents(
@@ -54,7 +46,7 @@ export function observeTrackEvents(track: TrackPublication, ...events: TrackEven
 function getTrackBundles(
   room: Room,
   sources: Track.Source[],
-  onlySubscribedTracks: boolean,
+  onlySubscribedTracks = true,
 ): { trackBundles: TrackBundle[]; participants: Participant[] } {
   const localParticipant = room.localParticipant;
   const allParticipants = [localParticipant, ...Array.from(room.participants.values())];
@@ -64,7 +56,7 @@ function getTrackBundles(
     sources.forEach((source) => {
       const publication = participant.getTrack(source);
       if (publication) {
-        if (publication.isSubscribed || publication instanceof LocalTrackPublication) {
+        if (publication.track) {
           // Include subscribed `TrackPublications`.
           trackBundles.push({
             participant,
@@ -76,6 +68,11 @@ function getTrackBundles(
           trackBundles.push({ participant, publication });
         }
       }
+      log.debug(
+        `getting participant ${participant.identity}, source ${source}, exists: ${
+          publication !== undefined
+        }, subscribed: ${publication?.track !== undefined} `,
+      );
     });
   });
 
@@ -92,49 +89,27 @@ export function trackBundlesObservable(
   sources: Track.Source[],
   options: TrackBundlesObservableOptions,
 ): Observable<{ trackBundles: TrackBundle[]; participants: Participant[] }> {
-  const additionalRoomEvents = options.additionalRoomEvents ?? allRemoteParticipantRoomEvents;
+  const additionalRoomEvents = options.additionalRoomEvents ?? allParticipantRoomEvents;
   const onlySubscribedTracks: boolean = options.onlySubscribed ?? true;
-  const roomEventSubscriptions: Subscription[] = [];
+  const roomEvents = Array.from(
+    new Set([
+      RoomEvent.LocalTrackPublished,
+      RoomEvent.LocalTrackUnpublished,
+      RoomEvent.TrackPublished,
+      RoomEvent.TrackUnpublished,
+      RoomEvent.TrackSubscriptionStatusChanged,
+      ...additionalRoomEvents,
+    ]).values(),
+  );
 
-  const observable = new Observable<{
-    trackBundles: TrackBundle[];
-    participants: Participant[];
-  }>((subscribe) => {
-    // Get and emit initial values.
-    const initData = getTrackBundles(room, sources, onlySubscribedTracks);
-    subscribe.next(initData);
-
-    // Listen to room events related to track changes and emit new `TrackBundles`.
-    const roomEventsToListenFor = Array.from(
-      new Set([
-        RoomEvent.LocalTrackPublished,
-        RoomEvent.LocalTrackUnpublished,
-        RoomEvent.TrackSubscriptionStatusChanged,
-        ...additionalRoomEvents,
-      ]),
-    );
-    roomEventsToListenFor.forEach((roomEvent) => {
-      roomEventSubscriptions.push(
-        roomEventSelector(room, roomEvent).subscribe(() => {
-          const data = getTrackBundles(room, sources, onlySubscribedTracks);
-          log.debug(
-            `Because of RoomEvent: "${roomEvent}", TrackBundle[] was updated. (length ${data.trackBundles.length})`,
-          );
-
-          if (subscribe) {
-            subscribe.next(data);
-          }
-        }),
-      );
-    });
-
-    /** Observable cleanup. */
-    return () => {
-      roomEventSubscriptions.forEach((roomEventSubscription) =>
-        roomEventSubscription.unsubscribe(),
-      );
-    };
-  });
+  const observable = observeRoomEvents(room, ...roomEvents).pipe(
+    map((room) => {
+      const data = getTrackBundles(room, sources, onlySubscribedTracks);
+      log.debug(`TrackBundle[] was updated. (length ${data.trackBundles.length})`, data);
+      return data;
+    }),
+    startWith(getTrackBundles(room, sources, onlySubscribedTracks)),
+  );
 
   return observable;
 }

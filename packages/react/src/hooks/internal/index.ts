@@ -6,5 +6,5 @@
  */
 
 export * from './useMediaQuery';
-export * from './resizeObserver';
+export * from './useResizeObserver';
 export * from './useObservableState';

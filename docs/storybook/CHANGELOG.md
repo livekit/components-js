@@ -1,5 +1,15 @@
 # @livekit/component-docs-storybook
 
+## 1.0.17
+
+### Patch Changes
+
+- Rework useDataChannel API - [#340](https://github.com/livekit/components-js/pull/340) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`2ff6f78`](https://github.com/livekit/components-js/commit/2ff6f78edbc186cb63d353ae2ae688d3317976c8), [`e15cf8a`](https://github.com/livekit/components-js/commit/e15cf8a4af4cbb2388b9457e830cc4231b29fd15), [`c96e3eb`](https://github.com/livekit/components-js/commit/c96e3eb8a3a89cbf3c90a14c76fc61b0625884da), [`9badf67`](https://github.com/livekit/components-js/commit/9badf67a20b3584fc33dbb6498d5b8c478a247cb), [`db63ec4`](https://github.com/livekit/components-js/commit/db63ec4219e92014536fc0fd907ceafa362953c1), [`dc39898`](https://github.com/livekit/components-js/commit/dc398983e4ef51bb4b2cae6e1c73b4f873e00c7f), [`9b7e95d`](https://github.com/livekit/components-js/commit/9b7e95dde3c379961ebf92ea5b53dc05027104a8), [`7a3f064`](https://github.com/livekit/components-js/commit/7a3f064686abd319e31794621d728d472f0e479f), [`53aafaa`](https://github.com/livekit/components-js/commit/53aafaaba03c6cfe403555e3b01db374b7bcd14c), [`bed7516`](https://github.com/livekit/components-js/commit/bed7516196df8d59d7b464ca524a831a7d3b6351)]:
+  - @livekit/components-react@0.5.0
+  - @livekit/components-styles@0.2.0
+
 ## 1.0.16
 
 ### Patch Changes

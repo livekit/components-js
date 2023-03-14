@@ -1,5 +1,21 @@
 # @livekit/components-core
 
+## 0.4.0
+
+### Minor Changes
+
+- Remove TileLoop in favor of TrackLoop. Simplify the TrackLoop component by removing the filter functionality. - [#327](https://github.com/livekit/components-js/pull/327) ([@Ocupe](https://github.com/Ocupe))
+
+### Patch Changes
+
+- GridLayout Revision. - [#326](https://github.com/livekit/components-js/pull/326) ([@Ocupe](https://github.com/Ocupe))
+
+  Renaming:
+
+  - `sortParticipantsByVolume` -> `sortParticipants`
+
+- Rework useDataChannel API - [#340](https://github.com/livekit/components-js/pull/340) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.3.1
 
 ### Patch Changes

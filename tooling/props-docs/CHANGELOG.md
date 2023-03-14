@@ -1,5 +1,12 @@
 # @livekit/components-props-docs
 
+## 0.0.16
+
+### Patch Changes
+
+- Updated dependencies [[`2ff6f78`](https://github.com/livekit/components-js/commit/2ff6f78edbc186cb63d353ae2ae688d3317976c8), [`c96e3eb`](https://github.com/livekit/components-js/commit/c96e3eb8a3a89cbf3c90a14c76fc61b0625884da), [`9badf67`](https://github.com/livekit/components-js/commit/9badf67a20b3584fc33dbb6498d5b8c478a247cb), [`dc39898`](https://github.com/livekit/components-js/commit/dc398983e4ef51bb4b2cae6e1c73b4f873e00c7f), [`9b7e95d`](https://github.com/livekit/components-js/commit/9b7e95dde3c379961ebf92ea5b53dc05027104a8), [`53aafaa`](https://github.com/livekit/components-js/commit/53aafaaba03c6cfe403555e3b01db374b7bcd14c), [`bed7516`](https://github.com/livekit/components-js/commit/bed7516196df8d59d7b464ca524a831a7d3b6351)]:
+  - @livekit/components-react@0.5.0
+
 ## 0.0.15
 
 ### Patch Changes

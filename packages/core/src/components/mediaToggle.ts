@@ -1,9 +1,18 @@
-import { LocalParticipant, Room, Track } from 'livekit-client';
+import {
+  AudioCaptureOptions,
+  LocalParticipant,
+  Room,
+  ScreenShareCaptureOptions,
+  Track,
+  VideoCaptureOptions,
+} from 'livekit-client';
 import { Subject, map, startWith } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 
-export function setupMediaToggle(source: Track.Source, room: Room) {
+export function setupMediaToggle<
+  T extends VideoCaptureOptions | AudioCaptureOptions | ScreenShareCaptureOptions,
+>(source: Track.Source, room: Room, options?: T) {
   const { localParticipant } = room;
 
   const getSourceEnabled = (source: Track.Source, localParticipant: LocalParticipant) => {
@@ -32,22 +41,27 @@ export function setupMediaToggle(source: Track.Source, room: Room) {
   );
 
   const pendingSubject = new Subject<boolean>();
-  const toggle = async (forceState?: boolean) => {
+  const toggle = async (forceState?: boolean, captureOptions?: T) => {
     try {
       // trigger observable update
       pendingSubject.next(true);
       switch (source) {
         case Track.Source.Camera:
-          await localParticipant.setCameraEnabled(forceState ?? !localParticipant.isCameraEnabled);
+          await localParticipant.setCameraEnabled(
+            forceState ?? !localParticipant.isCameraEnabled,
+            captureOptions ?? options,
+          );
           break;
         case Track.Source.Microphone:
           await localParticipant.setMicrophoneEnabled(
             forceState ?? !localParticipant.isMicrophoneEnabled,
+            captureOptions ?? options,
           );
           break;
         case Track.Source.ScreenShare:
           await localParticipant.setScreenShareEnabled(
             forceState ?? !localParticipant.isScreenShareEnabled,
+            captureOptions ?? options,
           );
           break;
         default:

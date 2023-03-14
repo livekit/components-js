@@ -13,8 +13,6 @@ export type TrackToggleProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement
   onChange?: (enabled: boolean) => void;
 };
 
-export const TrackSource = Track.Source;
-
 export type UseTrackToggleProps = Omit<TrackToggleProps, 'showIcon'>;
 
 export function useTrackToggle({ source, onChange, initialState, ...rest }: UseTrackToggleProps) {

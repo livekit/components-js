@@ -323,7 +323,7 @@ export const PreJoin = ({
 
       <form className="lk-username-container">
         <input
-          className="form-control"
+          className="lk-form-control"
           id="username"
           name="username"
           type="text"

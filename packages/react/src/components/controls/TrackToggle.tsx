@@ -19,6 +19,7 @@ export type TrackToggleProps<T extends Track.Source> = Omit<
   showIcon?: boolean;
   initialState?: boolean;
   onChange?: (enabled: boolean) => void;
+  captureOptions?: CaptureOptionsBySource<T>;
 };
 
 export type UseTrackToggleProps<T extends Track.Source> = Omit<TrackToggleProps<T>, 'showIcon'>;
@@ -27,14 +28,15 @@ export function useTrackToggle<T extends Track.Source>({
   source,
   onChange,
   initialState,
+  captureOptions,
   ...rest
 }: UseTrackToggleProps<T>) {
   const room = useMaybeRoomContext();
   const track = room?.localParticipant?.getTrack(source);
 
   const { toggle, className, pendingObserver, enabledObserver } = React.useMemo(
-    () => (room ? setupMediaToggle<T>(source, room) : setupManualToggle()),
-    [room, source],
+    () => (room ? setupMediaToggle<T>(source, room, captureOptions) : setupManualToggle()),
+    [room, source, JSON.stringify(captureOptions)],
   );
 
   const pending = useObservableState(pendingObserver, false);
@@ -91,7 +93,7 @@ export function useTrackToggle<T extends Track.Source>({
  * </LiveKitRoom>
  * ```
  */
-export function TrackToggle({ showIcon, ...props }: TrackToggleProps) {
+export function TrackToggle<T extends Track.Source>({ showIcon, ...props }: TrackToggleProps<T>) {
   const { buttonProps, enabled } = useTrackToggle(props);
   return (
     <button {...buttonProps}>

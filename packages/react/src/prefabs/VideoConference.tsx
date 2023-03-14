@@ -7,7 +7,7 @@ import { GridLayout } from '../components/layout/GridLayout';
 import { PinState, WidgetState } from '@livekit/components-core';
 import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
-import { useMediaQuery } from '../helper/useMediaQuery';
+import { useMediaQuery } from '../hooks/internal/useMediaQuery';
 import { MessageFormatter } from './ChatEntry';
 
 export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {

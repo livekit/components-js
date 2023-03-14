@@ -1,7 +1,7 @@
 import { activeSpeakerObserver } from '@livekit/components-core';
 import * as React from 'react';
 import { useRoomContext } from '../context';
-import { useObservableState } from '../helper';
+import { useObservableState } from './internal';
 
 /**
  * The useSpeakingParticipants hook returns the only the active speakers of all participants.

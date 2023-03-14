@@ -2,7 +2,7 @@ import { isTrackBundlePinned, TrackBundleFilter } from '@livekit/components-core
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { useMaybeLayoutContext } from '../../context';
-import { useSize } from '../../helper';
+import { useSize } from '../../hooks/internal';
 import { useTracks, useVisualStableUpdate } from '../../hooks';
 import { TrackLoop } from '../TrackLoop';
 

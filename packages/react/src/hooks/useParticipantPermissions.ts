@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Participant } from 'livekit-client';
 import { participantPermissionObserver } from '@livekit/components-core';
 import { useEnsureParticipant } from '../context';
-import { useObservableState } from '../helper/useObservableState';
+import { useObservableState } from './internal/useObservableState';
 
 export interface UseParticipantPermissionsOptions {
   participant?: Participant;

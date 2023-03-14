@@ -4,7 +4,7 @@ import { useEnsureParticipant } from '../../context';
 import { ConnectionQuality, Participant } from 'livekit-client';
 import { mergeProps } from '../../utils';
 import { getConnectionQualityIcon } from '../../assets/icons/util';
-import { useObservableState } from '../../helper/useObservableState';
+import { useObservableState } from '../../hooks/internal/useObservableState';
 
 export interface ConnectionQualityIndicatorOptions {
   participant?: Participant;

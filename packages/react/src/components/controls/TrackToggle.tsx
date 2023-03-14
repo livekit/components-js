@@ -1,4 +1,9 @@
-import { log, setupManualToggle, setupMediaToggle } from '@livekit/components-core';
+import {
+  CaptureOptionsBySource,
+  log,
+  setupManualToggle,
+  setupMediaToggle,
+} from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { mergeProps } from '../../mergeProps';
@@ -6,21 +11,29 @@ import { useMaybeRoomContext } from '../../context';
 import { getSourceIcon } from '../../assets/icons/util';
 import { useObservableState } from '../../helper/useObservableState';
 
-export type TrackToggleProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> & {
-  source: Track.Source;
+export type TrackToggleProps<T extends Track.Source> = Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'onChange'
+> & {
+  source: T;
   showIcon?: boolean;
   initialState?: boolean;
   onChange?: (enabled: boolean) => void;
 };
 
-export type UseTrackToggleProps = Omit<TrackToggleProps, 'showIcon'>;
+export type UseTrackToggleProps<T extends Track.Source> = Omit<TrackToggleProps<T>, 'showIcon'>;
 
-export function useTrackToggle({ source, onChange, initialState, ...rest }: UseTrackToggleProps) {
+export function useTrackToggle<T extends Track.Source>({
+  source,
+  onChange,
+  initialState,
+  ...rest
+}: UseTrackToggleProps<T>) {
   const room = useMaybeRoomContext();
   const track = room?.localParticipant?.getTrack(source);
 
   const { toggle, className, pendingObserver, enabledObserver } = React.useMemo(
-    () => (room ? setupMediaToggle(source, room) : setupManualToggle()),
+    () => (room ? setupMediaToggle<T>(source, room) : setupManualToggle()),
     [room, source],
   );
 

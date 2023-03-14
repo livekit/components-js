@@ -6,7 +6,11 @@ import { StoryObj } from '@storybook/react';
 export default {
   title: 'Prefabs/PreJoin',
   component: PreJoin,
-  render: (args: PreJoinProps) => <PreJoin {...args} />,
+  render: (args: PreJoinProps) => (
+    <div data-lk-theme="default">
+      <PreJoin {...args} />
+    </div>
+  ),
   argTypes: {},
 };
 

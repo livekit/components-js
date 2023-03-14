@@ -1,40 +1,22 @@
-import {
-  AudioSource,
-  isLocal,
-  log,
-  setupMediaTrack,
-  TrackObserverOptions,
-  VideoSource,
-} from '@livekit/components-core';
+import { TrackObserverOptions, setupMediaTrack, log, isLocal } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
-import * as React from 'react';
+import React from 'react';
 import { useEnsureParticipant } from '../context';
 import { mergeProps } from '../utils';
 
-interface UseMediaTrackProps {
+export interface UseMediaTrackOptions {
   participant?: Participant;
   element?: React.RefObject<HTMLMediaElement>;
   props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
 }
 
-export const useMediaTrackByName = (name: string, options: UseMediaTrackProps = {}) => {
-  return useMediaTrackBySourceOrName({ name }, options);
-};
-
-export const useMediaTrack = (
-  source: VideoSource | AudioSource,
-  options: UseMediaTrackProps = {},
-) => {
-  return useMediaTrackBySourceOrName({ source }, options);
-};
-
 /**
  * @internal
  */
-export const useMediaTrackBySourceOrName = (
+export function useMediaTrackBySourceOrName(
   { source, name }: TrackObserverOptions,
-  options: UseMediaTrackProps = {},
-) => {
+  options: UseMediaTrackOptions = {},
+) {
   const participant = useEnsureParticipant(options.participant);
   const [publication, setPublication] = React.useState(
     source ? participant.getTrack(source) : participant.getTrackByName(name),
@@ -104,4 +86,4 @@ export const useMediaTrackBySourceOrName = (
         : {}),
     }),
   };
-};
+}

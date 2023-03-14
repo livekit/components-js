@@ -1,6 +1,6 @@
 import { Participant } from 'livekit-client';
 import * as React from 'react';
-import { useMediaTrackBySourceOrName } from '../../hooks';
+import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
 import { AudioSource, log } from '@livekit/components-core';
 import { useEnsureParticipant } from '../../context';
 import { RemoteAudioTrack } from 'livekit-client';

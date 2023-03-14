@@ -5,7 +5,7 @@ import {
 } from '@livekit/components-core';
 import { GridLayout } from '@livekit/components-core/dist/helper/grid-layouts';
 import * as React from 'react';
-import { useSize } from '../helper';
+import { useSize } from './internal';
 import { useVisualStableUpdate } from './useVisualStableUpdate';
 
 /**

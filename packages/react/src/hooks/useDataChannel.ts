@@ -1,7 +1,7 @@
 import { setupDataMessageHandler } from '@livekit/components-core';
 import * as React from 'react';
 import { useRoomContext } from '../context';
-import { useObservableState } from '../helper';
+import { useObservableState } from './internal';
 
 export function useDataChannel(topic?: string) {
   const room = useRoomContext();

@@ -3,7 +3,7 @@ import { useMaybeRoomContext } from '../../context';
 import { setupDeviceSelector, createMediaDeviceObserver } from '@livekit/components-core';
 import { mergeProps } from '../../utils';
 import { Room } from 'livekit-client';
-import { useObservableState } from '../../helper/useObservableState';
+import { useObservableState } from '../../hooks/internal/useObservableState';
 
 export function useMediaDevices({ kind }: { kind: MediaDeviceKind }) {
   const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);

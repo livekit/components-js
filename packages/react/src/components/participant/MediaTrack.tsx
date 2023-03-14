@@ -1,6 +1,6 @@
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { useMediaTrackBySourceOrName } from '../../hooks';
+import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
 import { ParticipantClickEvent } from '@livekit/components-core';
 import { useEnsureParticipant } from '../../context';
 

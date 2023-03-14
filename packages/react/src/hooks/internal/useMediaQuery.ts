@@ -1,6 +1,8 @@
 import * as React from 'react';
 /**
  * Implementation used from https://github.com/juliencrn/usehooks-ts
+ *
+ * @internal
  */
 export function useMediaQuery(query: string): boolean {
   const getMatches = (query: string): boolean => {

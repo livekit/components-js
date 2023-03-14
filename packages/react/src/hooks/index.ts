@@ -1,5 +1,5 @@
 export * from './participant-hooks';
-export * from './token-hooks';
+export { useToken, UseTokenOptions } from './useToken';
 export { useDataChannel } from './useDataChannel';
 export { useTracks } from './useTracks';
 export { useGridLayout } from './useGridLayout';

@@ -31,33 +31,32 @@ export interface BaseDataMessage<T extends string | undefined> {
 }
 
 export function setupDataMessageHandler<T extends string>(room: Room, topic?: T) {
-  let dataSubscriber: Subscriber<BaseDataMessage<typeof topic> & { from?: RemoteParticipant }>;
-  const messageObservable = new Observable<
-    BaseDataMessage<typeof topic> & { from?: RemoteParticipant }
-  >((subscriber) => {
-    dataSubscriber = subscriber;
-    const messageHandler = (
-      messageTopic: string | undefined,
-      payload: Uint8Array,
-      participant?: RemoteParticipant,
-    ) => {
-      if (!topic || messageTopic === topic) {
-        const receiveMessage = {
-          payload,
-          topic: topic,
-          from: participant,
-        };
-        dataSubscriber.next(receiveMessage);
-      }
-    };
-    const subscription = createDataObserver(room).subscribe(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      ([payload, participant, _, messageTopic]) => {
-        messageHandler(messageTopic, payload, participant);
-      },
-    );
-    return () => subscription.unsubscribe();
-  });
+  let dataSubscriber: Subscriber<BaseDataMessage<T> & { from?: RemoteParticipant }>;
+  const messageObservable = new Observable<BaseDataMessage<T> & { from?: RemoteParticipant }>(
+    (subscriber) => {
+      dataSubscriber = subscriber;
+      const messageHandler = (
+        messageTopic: string | undefined,
+        payload: Uint8Array,
+        participant?: RemoteParticipant,
+      ) => {
+        if (!topic || messageTopic === topic) {
+          const receiveMessage = {
+            payload,
+            topic: topic,
+            from: participant,
+          };
+          dataSubscriber.next(receiveMessage);
+        }
+      };
+      const subscription = createDataObserver(room).subscribe(
+        ([payload, participant, , messageTopic]) => {
+          messageHandler(messageTopic, payload, participant);
+        },
+      );
+      return () => subscription.unsubscribe();
+    },
+  );
 
   let isSendingSubscriber: Subscriber<boolean>;
   const isSendingObservable = new Observable<boolean>((subscriber) => {

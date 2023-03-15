@@ -20,3 +20,28 @@
   max-height: 100%;
   padding: var(--grid-gap);
 }
+
+.grid-pagination {
+  display: flex;
+  align-items: stretch;
+  background-color: var(--lk-control-bg);
+  border-radius: var(--lk-border-radius);
+
+  > .button:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+
+    > svg {
+      transform: rotate(180deg);
+    }
+  }
+  > .button:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
+.grid-pagination-count {
+  padding: .5rem .875rem;
+  border-inline: 1px solid var(--lk-bg);
+}

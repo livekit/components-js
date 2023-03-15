@@ -8,15 +8,24 @@ import { TrackLoop } from '../TrackLoop';
 
 const MIN_HEIGHT = 130;
 const MIN_WIDTH = 140;
+const MIN_VISIBLE_TILES = 1;
 const ASPECT_RATIO = 16 / 10;
 const ASPECT_RATIO_INVERT = (1 - ASPECT_RATIO) * -1;
 
 export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement> {
   filter?: TrackBundleFilter;
   filterDependencies?: [];
+  /** Place the tiles vertically or horizontally next to each other.
+   * If undefined orientation is guessed by the dimensions of the container. */
+  orientation?: 'vertical' | 'horizontal';
 }
 
-export function CarouselView({ filter, filterDependencies = [], ...props }: CarouselViewProps) {
+export function CarouselView({
+  filter,
+  filterDependencies = [],
+  orientation,
+  ...props
+}: CarouselViewProps) {
   const asideEl = React.useRef<HTMLDivElement>(null);
   const layoutContext = useMaybeLayoutContext();
   const trackBundles = useTracks([
@@ -31,26 +40,30 @@ export function CarouselView({ filter, filterDependencies = [], ...props }: Caro
   }, [filter, layoutContext?.pin.state, trackBundles, ...filterDependencies]);
 
   const { width, height } = useSize(asideEl);
-  const orientation = height >= width ? 'vertical' : 'horizontal';
+  const carouselOrientation = orientation
+    ? orientation
+    : height >= width
+    ? 'vertical'
+    : 'horizontal';
   const tileHeight = Math.max(width * ASPECT_RATIO_INVERT, MIN_HEIGHT);
   const tileWidth = Math.max(height * ASPECT_RATIO, MIN_WIDTH);
 
   const maxVisibleTiles =
-    orientation === 'vertical'
-      ? Math.max(1, Math.floor(height / tileHeight))
-      : Math.floor(width / tileWidth);
+    carouselOrientation === 'vertical'
+      ? Math.max(Math.floor(height / tileHeight), MIN_VISIBLE_TILES)
+      : Math.max(Math.floor(width / tileWidth), MIN_VISIBLE_TILES);
 
   const sortedTiles = useVisualStableUpdate(filteredTiles, maxVisibleTiles);
 
   React.useEffect(() => {
     if (asideEl.current) {
-      asideEl.current.dataset.lkOrientation = orientation;
+      asideEl.current.dataset.lkOrientation = carouselOrientation;
       asideEl.current.style.setProperty('--lk-max-visible-tiles', maxVisibleTiles.toString());
     }
-  }, [maxVisibleTiles, orientation]);
+  }, [maxVisibleTiles, carouselOrientation]);
 
   return (
-    <aside className="lk-carousel" ref={asideEl} {...props}>
+    <aside key={carouselOrientation} className="lk-carousel" ref={asideEl} {...props}>
       {props.children ?? <TrackLoop trackBundles={sortedTiles} />}
     </aside>
   );

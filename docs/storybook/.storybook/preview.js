@@ -7,6 +7,7 @@ import '@livekit/components-styles/prefabs';
 export const parameters = {
   viewMode: 'docs',
   controls: { expanded: false },
+  layout: 'fullscreen',
 };
 
 export const globalTypes = {

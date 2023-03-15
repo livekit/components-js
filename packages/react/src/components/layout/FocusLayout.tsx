@@ -20,16 +20,14 @@ export function FocusLayoutContainer({ trackBundle, ...props }: FocusLayoutConta
   }, [pinContext]);
 
   return (
-    <>
-      <div {...elementProps}>
-        {props.children ?? (
-          <>
-            <CarouselView />
-            {(hasFocus || trackBundle) && <FocusLayout trackBundle={trackBundle} />}
-          </>
-        )}
-      </div>
-    </>
+    <div {...elementProps}>
+      {props.children ?? (
+        <>
+          <CarouselView />
+          {(hasFocus || trackBundle) && <FocusLayout trackBundle={trackBundle} />}
+        </>
+      )}
+    </div>
   );
 }
 

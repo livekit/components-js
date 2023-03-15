@@ -8,6 +8,7 @@ import { TrackLoop } from '../TrackLoop';
 
 const MIN_HEIGHT = 130;
 const MIN_WIDTH = 140;
+const MIN_VISIBLE_TILES = 1;
 const ASPECT_RATIO = 16 / 10;
 const ASPECT_RATIO_INVERT = (1 - ASPECT_RATIO) * -1;
 
@@ -49,8 +50,8 @@ export function CarouselView({
 
   const maxVisibleTiles =
     carouselOrientation === 'vertical'
-      ? Math.max(1, Math.floor(height / tileHeight))
-      : Math.floor(width / tileWidth);
+      ? Math.max(Math.floor(height / tileHeight), MIN_VISIBLE_TILES)
+      : Math.max(Math.floor(width / tileWidth), MIN_VISIBLE_TILES);
 
   const sortedTiles = useVisualStableUpdate(filteredTiles, maxVisibleTiles);
 

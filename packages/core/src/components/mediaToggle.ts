@@ -1,9 +1,35 @@
-import { LocalParticipant, Room, Track } from 'livekit-client';
-import { Subject, map, startWith } from 'rxjs';
+import {
+  AudioCaptureOptions,
+  LocalParticipant,
+  Room,
+  ScreenShareCaptureOptions,
+  Track,
+  VideoCaptureOptions,
+} from 'livekit-client';
+import { Subject, map, startWith, Observable } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 
-export function setupMediaToggle(source: Track.Source, room: Room) {
+export type CaptureOptionsBySource<T extends Track.Source> = T extends Track.Source.Camera
+  ? VideoCaptureOptions
+  : T extends Track.Source.Microphone
+  ? AudioCaptureOptions
+  : T extends Track.Source.ScreenShare
+  ? ScreenShareCaptureOptions
+  : never;
+
+export type MediaToggleType<T extends Track.Source> = {
+  pendingObserver: Observable<boolean>;
+  toggle: (forceState?: boolean, captureOptions?: CaptureOptionsBySource<T>) => Promise<void>;
+  className: string;
+  enabledObserver: Observable<boolean>;
+};
+
+export function setupMediaToggle<T extends Track.Source>(
+  source: T,
+  room: Room,
+  options?: CaptureOptionsBySource<T>,
+): MediaToggleType<T> {
   const { localParticipant } = room;
 
   const getSourceEnabled = (source: Track.Source, localParticipant: LocalParticipant) => {
@@ -32,22 +58,28 @@ export function setupMediaToggle(source: Track.Source, room: Room) {
   );
 
   const pendingSubject = new Subject<boolean>();
-  const toggle = async (forceState?: boolean) => {
+  const toggle = async (forceState?: boolean, captureOptions?: CaptureOptionsBySource<T>) => {
     try {
+      captureOptions ??= options;
       // trigger observable update
       pendingSubject.next(true);
       switch (source) {
         case Track.Source.Camera:
-          await localParticipant.setCameraEnabled(forceState ?? !localParticipant.isCameraEnabled);
+          await localParticipant.setCameraEnabled(
+            forceState ?? !localParticipant.isCameraEnabled,
+            captureOptions as VideoCaptureOptions,
+          );
           break;
         case Track.Source.Microphone:
           await localParticipant.setMicrophoneEnabled(
             forceState ?? !localParticipant.isMicrophoneEnabled,
+            captureOptions as AudioCaptureOptions,
           );
           break;
         case Track.Source.ScreenShare:
           await localParticipant.setScreenShareEnabled(
             forceState ?? !localParticipant.isScreenShareEnabled,
+            captureOptions as ScreenShareCaptureOptions,
           );
           break;
         default:
@@ -60,7 +92,12 @@ export function setupMediaToggle(source: Track.Source, room: Room) {
   };
 
   const className: string = prefixClass('button');
-  return { className, toggle, enabledObserver, pendingObserver: pendingSubject.asObservable() };
+  return {
+    className,
+    toggle,
+    enabledObserver,
+    pendingObserver: pendingSubject.asObservable(),
+  };
 }
 
 export function setupManualToggle() {

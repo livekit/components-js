@@ -1,4 +1,9 @@
-import { log, setupManualToggle, setupMediaToggle } from '@livekit/components-core';
+import {
+  CaptureOptionsBySource,
+  log,
+  setupManualToggle,
+  setupMediaToggle,
+} from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { mergeProps } from '../../mergeProps';
@@ -6,24 +11,32 @@ import { useMaybeRoomContext } from '../../context';
 import { getSourceIcon } from '../../assets/icons/util';
 import { useObservableState } from '../../hooks/internal/useObservableState';
 
-export type TrackToggleProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> & {
-  source: Track.Source;
+export type TrackToggleProps<T extends Track.Source> = Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'onChange'
+> & {
+  source: T;
   showIcon?: boolean;
   initialState?: boolean;
   onChange?: (enabled: boolean) => void;
+  captureOptions?: CaptureOptionsBySource<T>;
 };
 
-export const TrackSource = Track.Source;
+export type UseTrackToggleProps<T extends Track.Source> = Omit<TrackToggleProps<T>, 'showIcon'>;
 
-export type UseTrackToggleProps = Omit<TrackToggleProps, 'showIcon'>;
-
-export function useTrackToggle({ source, onChange, initialState, ...rest }: UseTrackToggleProps) {
+export function useTrackToggle<T extends Track.Source>({
+  source,
+  onChange,
+  initialState,
+  captureOptions,
+  ...rest
+}: UseTrackToggleProps<T>) {
   const room = useMaybeRoomContext();
   const track = room?.localParticipant?.getTrack(source);
 
   const { toggle, className, pendingObserver, enabledObserver } = React.useMemo(
-    () => (room ? setupMediaToggle(source, room) : setupManualToggle()),
-    [room, source],
+    () => (room ? setupMediaToggle<T>(source, room, captureOptions) : setupManualToggle()),
+    [room, source, JSON.stringify(captureOptions)],
   );
 
   const pending = useObservableState(pendingObserver, false);
@@ -80,7 +93,7 @@ export function useTrackToggle({ source, onChange, initialState, ...rest }: UseT
  * </LiveKitRoom>
  * ```
  */
-export function TrackToggle({ showIcon, ...props }: TrackToggleProps) {
+export function TrackToggle<T extends Track.Source>({ showIcon, ...props }: TrackToggleProps<T>) {
   const { buttonProps, enabled } = useTrackToggle(props);
   return (
     <button {...buttonProps}>

@@ -1,4 +1,4 @@
-import { DataPacket_Kind, LocalParticipant, RemoteParticipant, Room } from 'livekit-client';
+import { DataPacket_Kind, LocalParticipant, Room } from 'livekit-client';
 import { Observable, Subscriber } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { createDataObserver } from './room';

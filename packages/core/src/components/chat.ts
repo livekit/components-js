@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
-import { DataPacket_Kind, LocalParticipant, RemoteParticipant, Room } from 'livekit-client';
-import { BehaviorSubject, map, Observable, Subscriber } from 'rxjs';
+import { DataPacket_Kind, Participant, Room } from 'livekit-client';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { scan, map } from 'rxjs/operators';
 import { DataTopic, sendMessage, setupDataMessageHandler } from '../observables/dataChannel';
 
 export interface ChatMessage {
@@ -9,45 +10,52 @@ export interface ChatMessage {
 }
 
 export interface ReceivedChatMessage extends ChatMessage {
-  from?: RemoteParticipant | LocalParticipant;
+  from?: Participant;
 }
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
 export function setupChat(room: Room) {
-  let chatMessages: ReceivedChatMessage[] = [];
+  const subject$ = new Subject<{
+    payload: Uint8Array;
+    topic: string | undefined;
+    from: Participant | undefined;
+  }>();
+
+  /** Subscribe to all messages send over the wire. */
   const { messageObservable } = setupDataMessageHandler(room, DataTopic.CHAT);
-  const chatMessageBehavior = new BehaviorSubject(chatMessages);
-  const allMessagesObservable = messageObservable.pipe(
+  messageObservable.subscribe(subject$);
+
+  /** Build up the message array over time. */
+  const messages$ = subject$.pipe(
     map((msg) => {
       const parsedMessage = JSON.parse(decoder.decode(msg.payload)) as ChatMessage;
-      chatMessages = [...chatMessages, { ...parsedMessage, from: msg.from }];
-      return chatMessages;
+      const newMessage: ReceivedChatMessage = { ...parsedMessage, from: msg.from };
+      return newMessage;
     }),
+    scan<ReceivedChatMessage, ReceivedChatMessage[]>((acc, value) => [...acc, value], []),
   );
-  // FIXME this potentially leads to a memory leak because the `unsubscribe` method of allMessagesObservable is never invoked
-  allMessagesObservable.subscribe(chatMessageBehavior);
 
-  let isSendingSubscriber: Subscriber<boolean>;
-  const isSendingObservable = new Observable<boolean>((subscriber) => {
-    isSendingSubscriber = subscriber;
-  });
+  const isSending$ = new BehaviorSubject<boolean>(false);
 
   const send = async (message: string) => {
     const timestamp = Date.now();
     const encodedMsg = encoder.encode(JSON.stringify({ timestamp, message }));
-    isSendingSubscriber.next(true);
+    isSending$.next(true);
     try {
       await sendMessage(room.localParticipant, encodedMsg, DataTopic.CHAT, {
         kind: DataPacket_Kind.RELIABLE,
       });
-      chatMessages = [...chatMessages, { message, timestamp, from: room.localParticipant }];
-      chatMessageBehavior.next(chatMessages);
+      subject$.next({
+        payload: encodedMsg,
+        topic: DataTopic.CHAT,
+        from: room.localParticipant,
+      });
     } finally {
-      isSendingSubscriber.next(false);
+      isSending$.next(false);
     }
   };
 
-  return { messageObservable: chatMessageBehavior.asObservable(), isSendingObservable, send };
+  return { messageObservable: messages$, isSendingObservable: isSending$, send };
 }

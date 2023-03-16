@@ -98,6 +98,7 @@ export function ControlBar(props: ControlBarProps) {
       {visibleControls.screenShare && !isMobile && (
         <TrackToggle
           source={Track.Source.ScreenShare}
+          captureOptions={{ audio: true, selfBrowserSurface: 'include' }}
           showIcon={showIcon}
           onChange={onScreenShareChange}
         >

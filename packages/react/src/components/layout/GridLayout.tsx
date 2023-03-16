@@ -4,6 +4,7 @@ import { mergeProps } from '../../utils';
 import { TrackBundleFilter } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import { TrackLoop } from '../TrackLoop';
+import SvgChevron from '../../assets/icons/Chevron';
 
 export interface GridLayoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -75,13 +76,13 @@ export function GridLayout({
                     }}
                   >
                     <button className="lk-button" onClick={prevPage}>
-                      <svg fill="none" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="m5.29289 2.29289c.39053-.39052 1.02369-.39052 1.41422 0l4.82319 4.82323c.4882.48815.4882 1.27961 0 1.76776l-4.82319 4.82322c-.39053.3905-1.02369.3905-1.41422 0-.39052-.3905-.39052-1.0237 0-1.4142l4.2929-4.2929-4.2929-4.29289c-.39052-.39053-.39052-1.02369 0-1.41422z" fill="currentcolor" fill-rule="evenodd"/></svg>
+                      <SvgChevron />
                     </button>
                     <span className="lk-grid-pagination-count">
                       {`${currentPage} of ${totalPageCount}`}
                     </span>
                     <button className="lk-button" onClick={nextPage}>
-                      <svg fill="none" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="m5.29289 2.29289c.39053-.39052 1.02369-.39052 1.41422 0l4.82319 4.82323c.4882.48815.4882 1.27961 0 1.76776l-4.82319 4.82322c-.39053.3905-1.02369.3905-1.41422 0-.39052-.3905-.39052-1.0237 0-1.4142l4.2929-4.2929-4.2929-4.29289c-.39052-.39053-.39052-1.02369 0-1.41422z" fill="currentcolor" fill-rule="evenodd"/></svg>
+                      <SvgChevron />
                     </button>
                   </div>
                 )}

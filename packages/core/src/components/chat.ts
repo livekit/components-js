@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { DataPacket_Kind, Participant, Room } from 'livekit-client';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { scan, map } from 'rxjs/operators';
+import { scan, map, takeUntil } from 'rxjs/operators';
 import { DataTopic, sendMessage, setupDataMessageHandler } from '../observables/dataChannel';
 
 export interface ChatMessage {
@@ -17,6 +17,8 @@ const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
 export function setupChat(room: Room) {
+  console.log('xxx setupChat()');
+  const onDestroy$ = new Subject<void>();
   const subject$ = new Subject<{
     payload: Uint8Array;
     topic: string | undefined;
@@ -25,7 +27,7 @@ export function setupChat(room: Room) {
 
   /** Subscribe to all messages send over the wire. */
   const { messageObservable } = setupDataMessageHandler(room, DataTopic.CHAT);
-  messageObservable.subscribe(subject$);
+  messageObservable.pipe(takeUntil(onDestroy$)).subscribe(subject$);
 
   /** Build up the message array over time. */
   const messages$ = subject$.pipe(
@@ -35,6 +37,7 @@ export function setupChat(room: Room) {
       return newMessage;
     }),
     scan<ReceivedChatMessage, ReceivedChatMessage[]>((acc, value) => [...acc, value], []),
+    takeUntil(onDestroy$),
   );
 
   const isSending$ = new BehaviorSubject<boolean>(false);
@@ -57,5 +60,11 @@ export function setupChat(room: Room) {
     }
   };
 
-  return { messageObservable: messages$, isSendingObservable: isSending$, send };
+  function destroy() {
+    console.log('xxx destroy()');
+    onDestroy$.next();
+    onDestroy$.complete();
+  }
+
+  return { messageObservable: messages$, isSendingObservable: isSending$, send, destroy };
 }

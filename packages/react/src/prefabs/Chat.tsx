@@ -1,5 +1,6 @@
 import { setupChat, ChatMessage, ReceivedChatMessage } from '@livekit/components-core';
 import * as React from 'react';
+import { from, of } from 'rxjs';
 import { useRoomContext } from '../context';
 import { useObservableState } from '../hooks/internal/useObservableState';
 import { cloneSingleChild } from '../utils';
@@ -13,13 +14,17 @@ export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function useChat() {
   const room = useRoomContext();
-  const { isSendingObservable, messageObservable, send } = React.useMemo(
-    () => setupChat(room),
-    [room],
-  );
-  const isSending = useObservableState(isSendingObservable, false);
-  const chatMessages = useObservableState(messageObservable, []);
-  return { send, chatMessages, isSending };
+  const [setup, setSetup] = React.useState<ReturnType<typeof setupChat>>();
+  const isSending = useObservableState(setup?.isSendingObservable ?? of(false), false);
+  const chatMessages = useObservableState(setup?.messageObservable ?? from([]), []);
+
+  React.useEffect(() => {
+    const setupChatReturn = setupChat(room);
+    setSetup(setupChatReturn);
+    return setupChatReturn.destroy;
+  }, [room]);
+
+  return { send: setup?.send, chatMessages, isSending };
 }
 
 /**
@@ -41,9 +46,11 @@ export function Chat({ messageFormatter, ...props }: ChatProps) {
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     if (inputRef.current && inputRef.current.value.trim() !== '') {
-      await send(inputRef.current.value);
-      inputRef.current.value = '';
-      inputRef.current.focus();
+      if (send) {
+        await send(inputRef.current.value);
+        inputRef.current.value = '';
+        inputRef.current.focus();
+      }
     }
   }
 

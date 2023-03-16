@@ -1,5 +1,6 @@
-import { DataPacket_Kind, LocalParticipant, RemoteParticipant, Room } from 'livekit-client';
+import { DataPacket_Kind, LocalParticipant, Room } from 'livekit-client';
 import { Observable, Subscriber } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { createDataObserver } from './room';
 
 export const DataTopic = {
@@ -11,6 +12,7 @@ export type DataSendOptions = {
   destination?: string[];
 };
 
+/** Publish data from the LocalParticipant. */
 export async function sendMessage(
   localParticipant: LocalParticipant,
   payload: Uint8Array,
@@ -31,33 +33,17 @@ export interface BaseDataMessage<T extends string | undefined> {
 }
 
 export function setupDataMessageHandler<T extends string>(room: Room, topic?: T) {
-  let dataSubscriber: Subscriber<BaseDataMessage<typeof topic> & { from?: RemoteParticipant }>;
-  const messageObservable = new Observable<
-    BaseDataMessage<typeof topic> & { from?: RemoteParticipant }
-  >((subscriber) => {
-    dataSubscriber = subscriber;
-    const messageHandler = (
-      messageTopic: string | undefined,
-      payload: Uint8Array,
-      participant?: RemoteParticipant,
-    ) => {
-      if (!topic || messageTopic === topic) {
-        const receiveMessage = {
-          payload,
-          topic: topic,
-          from: participant,
-        };
-        dataSubscriber.next(receiveMessage);
-      }
-    };
-    const subscription = createDataObserver(room).subscribe(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      ([payload, participant, _, messageTopic]) => {
-        messageHandler(messageTopic, payload, participant);
-      },
-    );
-    return () => subscription.unsubscribe();
-  });
+  /** Setup a Observable that returns all data messages belonging to a topic. */
+  const messageObservable = createDataObserver(room).pipe(
+    filter(([, , , messageTopic]) => messageTopic === undefined || messageTopic === topic),
+    map(([payload, participant, , messageTopic]) => {
+      return {
+        payload,
+        topic: messageTopic,
+        from: participant,
+      };
+    }),
+  );
 
   let isSendingSubscriber: Subscriber<boolean>;
   const isSendingObservable = new Observable<boolean>((subscriber) => {

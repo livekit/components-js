@@ -17,8 +17,8 @@ const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
 export function setupChat(room: Room) {
-  const onDestroy$ = new Subject<void>();
-  const subject$ = new Subject<{
+  const onDestroyObservable = new Subject<void>();
+  const messageSubject = new Subject<{
     payload: Uint8Array;
     topic: string | undefined;
     from: Participant | undefined;
@@ -26,17 +26,17 @@ export function setupChat(room: Room) {
 
   /** Subscribe to all messages send over the wire. */
   const { messageObservable } = setupDataMessageHandler(room, DataTopic.CHAT);
-  messageObservable.pipe(takeUntil(onDestroy$)).subscribe(subject$);
+  messageObservable.pipe(takeUntil(onDestroyObservable)).subscribe(messageSubject);
 
   /** Build up the message array over time. */
-  const messages$ = subject$.pipe(
+  const messagesObservable = messageSubject.pipe(
     map((msg) => {
       const parsedMessage = JSON.parse(decoder.decode(msg.payload)) as ChatMessage;
       const newMessage: ReceivedChatMessage = { ...parsedMessage, from: msg.from };
       return newMessage;
     }),
     scan<ReceivedChatMessage, ReceivedChatMessage[]>((acc, value) => [...acc, value], []),
-    takeUntil(onDestroy$),
+    takeUntil(onDestroyObservable),
   );
 
   const isSending$ = new BehaviorSubject<boolean>(false);
@@ -49,7 +49,7 @@ export function setupChat(room: Room) {
       await sendMessage(room.localParticipant, encodedMsg, DataTopic.CHAT, {
         kind: DataPacket_Kind.RELIABLE,
       });
-      subject$.next({
+      messageSubject.next({
         payload: encodedMsg,
         topic: DataTopic.CHAT,
         from: room.localParticipant,
@@ -60,9 +60,9 @@ export function setupChat(room: Room) {
   };
 
   function destroy() {
-    onDestroy$.next();
-    onDestroy$.complete();
+    onDestroyObservable.next();
+    onDestroyObservable.complete();
   }
 
-  return { messageObservable: messages$, isSendingObservable: isSending$, send, destroy };
+  return { messageObservable: messagesObservable, isSendingObservable: isSending$, send, destroy };
 }

@@ -4,7 +4,7 @@ import { mergeProps } from '../../utils';
 import { TrackBundleFilter } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import { TrackLoop } from '../TrackLoop';
-import SvgChevron from '../../assets/icons/Chevron';
+import { PaginationControl } from '../controls/PaginationControl';
 
 export interface GridLayoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -53,8 +53,7 @@ export function GridLayout({
   );
 
   const { layout, trackBundles } = useGridLayout(gridEl, filteredTrackBundles);
-  const { totalPageCount, nextPage, prevPage, currentPage, firstItemIndex, lastItemIndex } =
-    usePagination(layout.maxParticipants, trackBundles.length);
+  const pagination = usePagination(layout.maxParticipants, trackBundles.length);
 
   return (
     <div className="lk-grid-layout-wrapper">
@@ -63,28 +62,14 @@ export function GridLayout({
           <>
             {props.children ?? (
               <>
-                <TrackLoop trackBundles={trackBundles.slice(firstItemIndex, lastItemIndex)} />
-
+                <TrackLoop
+                  trackBundles={trackBundles.slice(
+                    pagination.firstItemIndex,
+                    pagination.lastItemIndex,
+                  )}
+                />
                 {trackBundles.length > layout.maxParticipants && (
-                  <div
-                    className="lk-grid-pagination"
-                    style={{
-                      position: 'absolute',
-                      bottom: '1rem',
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                    }}
-                  >
-                    <button className="lk-button" onClick={prevPage}>
-                      <SvgChevron />
-                    </button>
-                    <span className="lk-grid-pagination-count">
-                      {`${currentPage} of ${totalPageCount}`}
-                    </span>
-                    <button className="lk-button" onClick={nextPage}>
-                      <SvgChevron />
-                    </button>
-                  </div>
+                  <PaginationControl {...pagination} />
                 )}
               </>
             )}

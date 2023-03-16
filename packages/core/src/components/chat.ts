@@ -17,7 +17,6 @@ const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
 export function setupChat(room: Room) {
-  console.log('xxx setupChat()');
   const onDestroy$ = new Subject<void>();
   const subject$ = new Subject<{
     payload: Uint8Array;
@@ -61,7 +60,6 @@ export function setupChat(room: Room) {
   };
 
   function destroy() {
-    console.log('xxx destroy()');
     onDestroy$.next();
     onDestroy$.complete();
   }

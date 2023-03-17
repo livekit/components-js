@@ -32,16 +32,12 @@ $accent: #1f8cf9;
 
   --danger-fg: #fff;
   --danger: #f91f31;
-  // --danger-text: #6d0311;
-  // --danger-bg: #fecdd4;
   --danger2: #{color.adjust($danger, $lightness: 4%)};
   --danger3: #{color.adjust($danger, $lightness: 8%)};
   --danger4: #{color.adjust($danger, $lightness: 12%)};
 
   --success-fg: #fff;
   --success: #1ff968;
-  // --success-text: #036d26;
-  // --success-bg: #cdfedd;
   --success2: #{color.adjust($success, $lightness: 4%)};
   --success3: #{color.adjust($success, $lightness: 8%)};
   --success4: #{color.adjust($success, $lightness: 12%)};

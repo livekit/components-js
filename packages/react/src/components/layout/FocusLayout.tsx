@@ -20,16 +20,14 @@ export function FocusLayoutContainer({ trackBundle, ...props }: FocusLayoutConta
   }, [pinContext]);
 
   return (
-    <>
-      <div {...elementProps}>
-        {props.children ?? (
-          <>
-            <CarouselView />
-            {(hasFocus || trackBundle) && <FocusLayout trackBundle={trackBundle} />}
-          </>
-        )}
-      </div>
-    </>
+    <div {...elementProps}>
+      {props.children ?? (
+        <>
+          <CarouselView />
+          {(hasFocus || trackBundle) && <FocusLayout trackBundle={trackBundle} />}
+        </>
+      )}
+    </div>
   );
 }
 
@@ -41,25 +39,21 @@ export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
 export function FocusLayout({ trackBundle, ...props }: FocusLayoutProps) {
   const layoutContext = useMaybeLayoutContext();
 
-  const trackBundle_: TrackBundle | null = React.useMemo(() => {
+  const trackBundleInFocus: TrackBundle | undefined = React.useMemo(() => {
     if (trackBundle) {
       return trackBundle;
     }
     if (layoutContext?.pin.state !== undefined && layoutContext.pin.state.length >= 1) {
       return layoutContext.pin.state[0];
     }
-    return null;
+    return undefined;
   }, [layoutContext, trackBundle]);
 
   return (
-    <>
-      {trackBundle_ && trackBundle_.publication && (
-        <ParticipantTile
-          {...props}
-          participant={trackBundle_.participant}
-          trackSource={trackBundle_.publication.source}
-        />
-      )}
-    </>
+    <ParticipantTile
+      {...props}
+      participant={trackBundleInFocus?.participant}
+      trackSource={trackBundleInFocus?.publication.source}
+    />
   );
 }

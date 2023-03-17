@@ -55,7 +55,7 @@ export function CarouselView({
 
   const sortedTiles = useVisualStableUpdate(filteredTiles, maxVisibleTiles);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (asideEl.current) {
       asideEl.current.dataset.lkOrientation = carouselOrientation;
       asideEl.current.style.setProperty('--lk-max-visible-tiles', maxVisibleTiles.toString());

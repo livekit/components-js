@@ -1,5 +1,5 @@
 import { Track } from 'livekit-client';
-import { isTrackBundle, TrackBundleWithPlaceholder } from './track-bundle.types';
+import { isTrackBundle, TrackBundleWithPlaceholder } from './track-reference.types';
 
 /** Returns a id to identify a track bundle based on participant and source. */
 export function getTrackBundleId(trackBundle: TrackBundleWithPlaceholder | number): string {

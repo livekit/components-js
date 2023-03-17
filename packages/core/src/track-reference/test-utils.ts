@@ -10,8 +10,8 @@ import {
   TrackBundlePlaceholder,
   TrackBundlePublished,
   TrackBundleSubscribed,
-} from './track-bundle.types';
-import { getTrackBundleId } from './track-bundle.utils';
+} from './track-reference.types';
+import { getTrackBundleId } from './track-reference.utils';
 
 // Test function:
 export const mockTrackBundlePlaceholder = (

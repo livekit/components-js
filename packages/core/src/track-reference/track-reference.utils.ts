@@ -1,7 +1,7 @@
 import { Track } from 'livekit-client';
 import { isTrackReference, TrackReferenceWithPlaceholder } from './track-reference.types';
 
-/** Returns a id to identify a track bundle based on participant and source. */
+/** Returns a id to identify the `TrackReference` based on participant and source. */
 export function getTrackReferenceId(
   trackReference: TrackReferenceWithPlaceholder | number,
 ): string {

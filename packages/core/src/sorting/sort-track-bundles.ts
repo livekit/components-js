@@ -31,7 +31,7 @@ export function sortTrackReferences(
 ): TrackReferenceWithPlaceholder[] {
   const trackReferences_ = [...trackReferences];
   trackReferences_.sort((a, b) => {
-    // Local camera track bundle before remote.
+    // Local camera TrackReference before remote.
     if (
       (a.participant.isLocal && getTrackReferenceSource(a) === Track.Source.Camera) ||
       (b.participant.isLocal && getTrackReferenceSource(b) === Track.Source.Camera)

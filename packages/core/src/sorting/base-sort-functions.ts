@@ -1,5 +1,9 @@
 import { Participant, Track } from 'livekit-client';
-import { getTrackBundleSource, isTrackBundle, TrackBundleWithPlaceholder } from '../track-bundle';
+import {
+  getTrackBundleSource,
+  isTrackBundle,
+  TrackBundleWithPlaceholder,
+} from '../track-reference';
 
 export function sortParticipantsByAudioLevel(
   a: Pick<Participant, 'audioLevel'>,

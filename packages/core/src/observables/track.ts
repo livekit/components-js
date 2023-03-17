@@ -2,7 +2,7 @@ import { Participant, Room, RoomEvent, Track, TrackEvent, TrackPublication } fro
 import { map, Observable, startWith } from 'rxjs';
 import { allParticipantRoomEvents } from '../helper';
 import log from '../logger';
-import { TrackBundle } from '../track-bundle';
+import { TrackBundle } from '../track-reference';
 import { observeRoomEvents } from './room';
 
 export function trackObservable(track: TrackPublication) {

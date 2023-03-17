@@ -4,7 +4,7 @@ import {
   flatTrackBundleArray,
   mockTrackBundlePlaceholder,
   mockTrackBundleSubscribed,
-} from '../track-bundle/test-utils';
+} from '../track-reference/test-utils';
 import {
   sortParticipantsByAudioLevel,
   sortParticipantsByIsSpeaking,

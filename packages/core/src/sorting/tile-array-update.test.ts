@@ -1,6 +1,6 @@
 import { Track } from 'livekit-client';
 import { describe, test, expect } from 'vitest';
-import { flatTrackBundleArray, mockTrackBundleSubscribed } from '../track-bundle/test-utils';
+import { flatTrackBundleArray, mockTrackBundleSubscribed } from '../track-reference/test-utils';
 import { divideIntoPages, swapItems, updatePages, visualPageChange } from './tile-array-update';
 
 const stateNextExpectedString = (text: string) =>

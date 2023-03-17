@@ -1,5 +1,9 @@
 import { Track } from 'livekit-client';
-import { getTrackBundleSource, isTrackBundle, TrackBundleWithPlaceholder } from '../track-bundle';
+import {
+  getTrackBundleSource,
+  isTrackBundle,
+  TrackBundleWithPlaceholder,
+} from '../track-reference';
 import {
   sortParticipantsByAudioLevel,
   sortParticipantsByIsSpeaking,

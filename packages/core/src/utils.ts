@@ -9,7 +9,7 @@ import {
   isTrackBundle,
   isTrackBundlePlaceholder,
   TrackBundleWithPlaceholder,
-} from './track-bundle';
+} from './track-reference';
 import { PinState } from './types';
 
 export function isLocal(p: Participant) {

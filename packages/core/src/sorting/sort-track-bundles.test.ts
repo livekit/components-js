@@ -1,6 +1,6 @@
 import { Track } from 'livekit-client';
 import { describe, test, expect } from 'vitest';
-import { flatTrackBundleArray, mockTrackBundleSubscribed } from '../track-bundle/test-utils';
+import { flatTrackBundleArray, mockTrackBundleSubscribed } from '../track-reference/test-utils';
 import { sortTrackBundles } from './sort-track-bundles';
 
 describe.concurrent('Test sorting track bundles by source and isLocal.', () => {

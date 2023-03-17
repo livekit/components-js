@@ -1,7 +1,7 @@
 import { chunk, zip, differenceBy, remove } from 'lodash';
 import log from '../logger';
-import { getTrackBundleId, TrackBundleWithPlaceholder } from '../track-bundle';
-import { flatTrackBundleArray } from '../track-bundle/test-utils';
+import { getTrackBundleId, TrackBundleWithPlaceholder } from '../track-reference';
+import { flatTrackBundleArray } from '../track-reference/test-utils';
 
 type VisualChanges<T> = {
   dropped: T[];

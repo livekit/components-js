@@ -1,5 +1,5 @@
 import type { Participant, Track, TrackPublication } from 'livekit-client';
-import { TrackBundle, TrackBundleWithPlaceholder } from './track-bundle';
+import { TrackBundle, TrackBundleWithPlaceholder } from './track-reference';
 
 // ## PinState Type
 export type PinState = TrackBundle[];

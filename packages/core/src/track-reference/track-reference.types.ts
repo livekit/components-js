@@ -29,28 +29,34 @@ export type TrackReferenceWithPlaceholder =
   | TrackReferencePlaceholder;
 
 // ### TrackReference Type Predicates
-export function isTrackReference(bundle: TrackReferenceWithPlaceholder): bundle is TrackReference {
+export function isTrackReference(
+  trackReference: TrackReferenceWithPlaceholder,
+): trackReference is TrackReference {
   return (
-    isTrackReferenceSubscribed(bundle as TrackReference) ||
-    isTrackReferencePublished(bundle as TrackReference)
+    isTrackReferenceSubscribed(trackReference as TrackReference) ||
+    isTrackReferencePublished(trackReference as TrackReference)
   );
 }
 
-function isTrackReferenceSubscribed(bundle: TrackReference): bundle is TrackReferenceSubscribed {
-  return bundle.hasOwnProperty('track');
+function isTrackReferenceSubscribed(
+  trackReference: TrackReference,
+): trackReference is TrackReferenceSubscribed {
+  return trackReference.hasOwnProperty('track');
 }
 
-function isTrackReferencePublished(bundle: TrackReference): bundle is TrackReferencePublished {
-  return bundle.hasOwnProperty('publication') && !bundle.hasOwnProperty('track');
+function isTrackReferencePublished(
+  trackReference: TrackReference,
+): trackReference is TrackReferencePublished {
+  return trackReference.hasOwnProperty('publication') && !trackReference.hasOwnProperty('track');
 }
 
 export function isTrackReferencePlaceholder(
-  bundle: TrackReferenceWithPlaceholder,
-): bundle is TrackReferencePlaceholder {
+  trackReference: TrackReferenceWithPlaceholder,
+): trackReference is TrackReferencePlaceholder {
   return (
-    bundle.hasOwnProperty('participant') &&
-    bundle.hasOwnProperty('source') &&
-    !bundle.hasOwnProperty('publication') &&
-    !bundle.hasOwnProperty('track')
+    trackReference.hasOwnProperty('participant') &&
+    trackReference.hasOwnProperty('source') &&
+    !trackReference.hasOwnProperty('publication') &&
+    !trackReference.hasOwnProperty('track')
   );
 }

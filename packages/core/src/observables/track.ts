@@ -94,7 +94,7 @@ export function trackBundlesObservable(
   const roomEvents = Array.from(
     new Set([
       RoomEvent.ParticipantConnected,
-      RoomEvent.Connected,
+      RoomEvent.ConnectionStateChanged,
       RoomEvent.LocalTrackPublished,
       RoomEvent.LocalTrackUnpublished,
       RoomEvent.TrackPublished,

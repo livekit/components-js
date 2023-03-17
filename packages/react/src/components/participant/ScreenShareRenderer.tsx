@@ -1,7 +1,7 @@
 import { log, screenShareObserver, ScreenShareTrackMap } from '@livekit/components-core';
 import { Participant, Room, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureRoom } from '../context';
+import { useEnsureRoom } from '../../context';
 
 type ScreenShareOptions = {
   screenEl?: React.RefObject<HTMLVideoElement>;

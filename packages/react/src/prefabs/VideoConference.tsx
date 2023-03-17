@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { LayoutContextProvider } from '../components/LayoutContextProvider';
+import { LayoutContextProvider } from '../components/layout/LayoutContextProvider';
 import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
 import { ControlBar } from './ControlBar';
 import { FocusLayoutContainer } from '../components/layout/FocusLayout';
@@ -8,7 +8,7 @@ import { PinState, WidgetState } from '@livekit/components-core';
 import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
 import { useMediaQuery } from '../hooks/internal/useMediaQuery';
-import { MessageFormatter } from './ChatEntry';
+import { MessageFormatter } from '../components/ChatEntry';
 
 export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
   chatMessageFormatter?: MessageFormatter;

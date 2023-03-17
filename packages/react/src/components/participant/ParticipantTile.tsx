@@ -5,21 +5,21 @@ import {
   ParticipantClickEvent,
   setupParticipantTile,
 } from '@livekit/components-core';
-import { ConnectionQualityIndicator } from '../components/participant/ConnectionQualityIndicator';
-import { MediaTrack } from '../components/participant/MediaTrack';
-import { ParticipantName } from '../components/participant/ParticipantName';
-import { TrackMutedIndicator } from '../components/participant/TrackMutedIndicator';
+import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
+import { MediaTrack } from './MediaTrack';
+import { ParticipantName } from './ParticipantName';
+import { TrackMutedIndicator } from './TrackMutedIndicator';
 import {
   useMaybeParticipantContext,
   ParticipantContext,
   useEnsureParticipant,
   useMaybeLayoutContext,
-} from '../context';
-import { useIsMuted, useIsSpeaking } from '../hooks';
-import { mergeProps } from '../utils';
-import { FocusToggle } from '../components/controls/FocusToggle';
-import { ParticipantPlaceholder } from '../assets/images';
-import { ScreenShareIcon } from '../assets/icons';
+} from '../../context';
+import { useIsMuted, useIsSpeaking } from '../../hooks';
+import { mergeProps } from '../../utils';
+import { FocusToggle } from '../controls/FocusToggle';
+import { ParticipantPlaceholder } from '../../assets/images';
+import { ScreenShareIcon } from '../../assets/icons';
 
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;

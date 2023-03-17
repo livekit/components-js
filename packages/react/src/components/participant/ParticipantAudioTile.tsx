@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { Track } from 'livekit-client';
 
-import { ConnectionQualityIndicator } from '../components/participant/ConnectionQualityIndicator';
-import { ParticipantName } from '../components/participant/ParticipantName';
-import { TrackMutedIndicator } from '../components/participant/TrackMutedIndicator';
-import { useEnsureParticipant } from '../context';
+import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
+import { ParticipantName } from './ParticipantName';
+import { TrackMutedIndicator } from './TrackMutedIndicator';
+import { useEnsureParticipant } from '../../context';
 
-import { AudioVisualizer } from '../components/participant/AudioVisualizer';
+import { AudioVisualizer } from './AudioVisualizer';
 import {
   ParticipantTileProps,
   useParticipantTile,
   ParticipantContextIfNeeded,
 } from './ParticipantTile';
-import { AudioTrack } from '../components/participant/AudioTrack';
+import { AudioTrack } from './AudioTrack';
 
 /**
  * The ParticipantTile component is the base utility wrapper for displaying a visual representation of a participant.

@@ -3,11 +3,11 @@ import {
   isSourceWitOptions,
   log,
   SourcesArray,
-  TrackBundle,
-  TrackBundleWithPlaceholder,
-  trackBundlesObservable,
+  TrackReference,
+  TrackReferenceWithPlaceholder,
+  trackReferencesObservable,
   TrackSourceWithOptions,
-  TrackBundlePlaceholder,
+  TrackReferencePlaceholder,
 } from '@livekit/components-core';
 import { Participant, RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
@@ -19,22 +19,22 @@ type UseTracksOptions = {
 };
 
 type UseTracksHookReturnType<T> = T extends Track.Source[]
-  ? TrackBundle[]
+  ? TrackReference[]
   : T extends TrackSourceWithOptions[]
-  ? TrackBundleWithPlaceholder[]
+  ? TrackReferenceWithPlaceholder[]
   : never;
 
 /**
- * The `useTracks` hook returns an array of `TrackBundle` which combine the participant, trackSource, publication and a track.
+ * The `useTracks` hook returns an array of `TrackReference` which combine the participant, trackSource, publication and a track.
  * Only tracks with a the same source specified via the sources property get included in the loop.
  *
  * @example
  * ```ts
- * const trackBundles = useTracks(sources: [Track.Source.Camera])
+ * const trackReferences = useTracks(sources: [Track.Source.Camera])
  * ```
  * @example
  * ```ts
- * const trackBundlesWithPlaceholders = useTracks(sources: [{source: Track.Source.Camera, withPlaceholder: true}])
+ * const trackReferencesWithPlaceholders = useTracks(sources: [{source: Track.Source.Camera, withPlaceholder: true}])
  * ```
  */
 export function useTracks<T extends SourcesArray = SourcesArray>(
@@ -42,7 +42,7 @@ export function useTracks<T extends SourcesArray = SourcesArray>(
   options: UseTracksOptions = {},
 ): UseTracksHookReturnType<T> {
   const room = useRoomContext();
-  const [trackBundles, setTrackBundles] = React.useState<TrackBundle[]>([]);
+  const [trackReferences, setTrackReferences] = React.useState<TrackReference[]>([]);
   const [participants, setParticipants] = React.useState<Participant[]>([]);
 
   const sources_ = React.useMemo(() => {
@@ -50,27 +50,29 @@ export function useTracks<T extends SourcesArray = SourcesArray>(
   }, [JSON.stringify(sources)]);
 
   React.useEffect(() => {
-    const subscription = trackBundlesObservable(room, sources_, {
+    const subscription = trackReferencesObservable(room, sources_, {
       additionalRoomEvents: options.updateOnlyOn,
       onlySubscribed: options.onlySubscribed,
-    }).subscribe(({ trackBundles, participants }) => {
-      log.debug('setting track bundles', trackBundles, participants);
-      setTrackBundles(trackBundles);
+    }).subscribe(({ trackReferences, participants }) => {
+      log.debug('setting track bundles', trackReferences, participants);
+      setTrackReferences(trackReferences);
       setParticipants(participants);
     });
     return () => subscription.unsubscribe();
   }, [room, JSON.stringify(options.updateOnlyOn), JSON.stringify(sources)]);
 
-  const maybeTrackBundles = React.useMemo(() => {
+  const maybeTrackReferences = React.useMemo(() => {
     if (isSourcesWithOptions(sources)) {
       const requirePlaceholder = requiredPlaceholders(sources, participants);
-      const trackBundlesWithPlaceholders = Array.from(trackBundles) as TrackBundleWithPlaceholder[];
+      const trackReferencesWithPlaceholders = Array.from(
+        trackReferences,
+      ) as TrackReferenceWithPlaceholder[];
       participants.forEach((participant) => {
         if (requirePlaceholder.has(participant.identity)) {
           const sourcesToAddPlaceholder = requirePlaceholder.get(participant.identity) ?? [];
           sourcesToAddPlaceholder.forEach((placeholderSource) => {
             if (
-              trackBundles.find(
+              trackReferences.find(
                 ({ participant: p, publication }) =>
                   participant.identity === p.identity && publication.source === placeholderSource,
               )
@@ -80,21 +82,21 @@ export function useTracks<T extends SourcesArray = SourcesArray>(
             log.debug(
               `Add ${placeholderSource} placeholder for participant ${participant.identity}.`,
             );
-            const placeholder: TrackBundlePlaceholder = {
+            const placeholder: TrackReferencePlaceholder = {
               participant,
               source: placeholderSource,
             };
-            trackBundlesWithPlaceholders.push(placeholder);
+            trackReferencesWithPlaceholders.push(placeholder);
           });
         }
       });
-      return trackBundlesWithPlaceholders;
+      return trackReferencesWithPlaceholders;
     } else {
-      return trackBundles;
+      return trackReferences;
     }
-  }, [trackBundles, participants, sources]);
+  }, [trackReferences, participants, sources]);
 
-  return maybeTrackBundles as UseTracksHookReturnType<T>;
+  return maybeTrackReferences as UseTracksHookReturnType<T>;
 }
 
 function difference<T>(setA: Set<T>, setB: Set<T>): Set<T> {

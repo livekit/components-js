@@ -7,24 +7,24 @@
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import { UpdatableItem } from '../sorting/tile-array-update';
 import {
-  TrackBundlePlaceholder,
-  TrackBundlePublished,
-  TrackBundleSubscribed,
-} from './track-bundle.types';
-import { getTrackBundleId } from './track-bundle.utils';
+  TrackReferencePlaceholder,
+  TrackReferencePublished,
+  TrackReferenceSubscribed,
+} from './track-reference.types';
+import { getTrackReferenceId } from './track-reference.utils';
 
 // Test function:
-export const mockTrackBundlePlaceholder = (
+export const mockTrackReferencePlaceholder = (
   id: string,
   source: Track.Source,
-): TrackBundlePlaceholder => {
+): TrackReferencePlaceholder => {
   return { participant: new Participant(`${id}`, `${id}`), source };
 };
 
-export const mockTrackBundlePublished = (
+export const mockTrackReferencePublished = (
   id: string,
   source: Track.Source,
-): TrackBundlePublished => {
+): TrackReferencePublished => {
   const kind = [Track.Source.Camera, Track.Source.ScreenShare].includes(source)
     ? Track.Kind.Video
     : Track.Kind.Audio;
@@ -34,17 +34,17 @@ export const mockTrackBundlePublished = (
   };
 };
 
-type mockTrackBundleSubscribedOptions = {
+type mockTrackReferenceSubscribedOptions = {
   mockPublication?: boolean;
   mockParticipant?: boolean;
   mockIsLocal?: boolean;
 };
 
-export const mockTrackBundleSubscribed = (
+export const mockTrackReferenceSubscribed = (
   id: string,
   source: Track.Source,
-  options: mockTrackBundleSubscribedOptions = {},
-): TrackBundleSubscribed => {
+  options: mockTrackReferenceSubscribedOptions = {},
+): TrackReferenceSubscribed => {
   const kind = [Track.Source.Camera, Track.Source.ScreenShare].includes(source)
     ? Track.Kind.Video
     : Track.Kind.Audio;
@@ -83,12 +83,12 @@ function mockParticipant(
   };
 }
 
-export function flatTrackBundleArray<T extends UpdatableItem>(list: T[]): string[] {
+export function flatTrackReferenceArray<T extends UpdatableItem>(list: T[]): string[] {
   return list.map((item) => {
     if (typeof item === 'string' || typeof item === 'number') {
       return `${item}`;
     } else {
-      return getTrackBundleId(item);
+      return getTrackReferenceId(item);
     }
   });
 }

@@ -3,7 +3,7 @@ export * from './utils';
 export * from './helper';
 export * from './types';
 export * from './sorting';
-export * from './track-bundle';
+export * from './track-reference';
 
 export * from './components/mediaToggle';
 export * from './components/mediaDeviceSelect';

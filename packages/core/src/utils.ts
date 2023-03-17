@@ -6,10 +6,10 @@ import {
   TrackPublication,
 } from 'livekit-client';
 import {
-  isTrackBundle,
-  isTrackBundlePlaceholder,
-  TrackBundleWithPlaceholder,
-} from './track-bundle';
+  isTrackReference,
+  isTrackReferencePlaceholder,
+  TrackReferenceWithPlaceholder,
+} from './track-reference';
 import { PinState } from './types';
 
 export function isLocal(p: Participant) {
@@ -36,27 +36,27 @@ export const attachIfSubscribed = (
 };
 
 /**
- * Check if the `TrackBundle` is pinned.
+ * Check if the `TrackReference` is pinned.
  */
-export function isTrackBundlePinned(
-  trackBundle: TrackBundleWithPlaceholder,
+export function isTrackReferencePinned(
+  trackReference: TrackReferenceWithPlaceholder,
   pinState: PinState | undefined,
 ): boolean {
   if (pinState === undefined) {
     return false;
   }
-  if (isTrackBundle(trackBundle)) {
+  if (isTrackReference(trackReference)) {
     return pinState.some(
-      (pinnedTrackBundle) =>
-        pinnedTrackBundle.participant.identity === trackBundle.participant.identity &&
-        pinnedTrackBundle.publication.trackSid === trackBundle.publication.trackSid,
+      (pinnedTrackReference) =>
+        pinnedTrackReference.participant.identity === trackReference.participant.identity &&
+        pinnedTrackReference.publication.trackSid === trackReference.publication.trackSid,
     );
-  } else if (isTrackBundlePlaceholder(trackBundle)) {
+  } else if (isTrackReferencePlaceholder(trackReference)) {
     return pinState.some(
-      (pinnedTrackBundle) =>
-        pinnedTrackBundle.participant.identity === trackBundle.participant.identity &&
-        isTrackBundlePlaceholder(pinnedTrackBundle) &&
-        pinnedTrackBundle.source === trackBundle.source,
+      (pinnedTrackReference) =>
+        pinnedTrackReference.participant.identity === trackReference.participant.identity &&
+        isTrackReferencePlaceholder(pinnedTrackReference) &&
+        pinnedTrackReference.source === trackReference.source,
     );
   } else {
     return false;

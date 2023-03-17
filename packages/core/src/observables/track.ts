@@ -2,7 +2,7 @@ import { Participant, Room, RoomEvent, Track, TrackEvent, TrackPublication } fro
 import { map, Observable, startWith } from 'rxjs';
 import { allParticipantRoomEvents } from '../helper';
 import log from '../logger';
-import { TrackBundle } from '../track-bundle';
+import { TrackReference } from '../track-reference';
 import { observeRoomEvents } from './room';
 
 export function trackObservable(track: TrackPublication) {
@@ -41,16 +41,16 @@ export function observeTrackEvents(track: TrackPublication, ...events: TrackEven
 }
 
 /**
- * Create `TrackBundles` for all tracks that are included in the sources property.
+ * Create `TrackReferences` for all tracks that are included in the sources property.
  *  */
-function getTrackBundles(
+function getTrackReferences(
   room: Room,
   sources: Track.Source[],
   onlySubscribedTracks = true,
-): { trackBundles: TrackBundle[]; participants: Participant[] } {
+): { trackReferences: TrackReference[]; participants: Participant[] } {
   const localParticipant = room.localParticipant;
   const allParticipants = [localParticipant, ...Array.from(room.participants.values())];
-  const trackBundles: TrackBundle[] = [];
+  const trackReferences: TrackReference[] = [];
 
   allParticipants.forEach((participant) => {
     sources.forEach((source) => {
@@ -58,14 +58,14 @@ function getTrackBundles(
       if (publication) {
         if (publication.track) {
           // Include subscribed `TrackPublications`.
-          trackBundles.push({
+          trackReferences.push({
             participant,
             publication,
             track: publication.track,
           });
         } else if (!onlySubscribedTracks) {
           // Include also `TrackPublications` that are not subscribed.
-          trackBundles.push({ participant, publication });
+          trackReferences.push({ participant, publication });
         }
       }
       log.debug(
@@ -76,19 +76,19 @@ function getTrackBundles(
     });
   });
 
-  return { trackBundles, participants: allParticipants };
+  return { trackReferences, participants: allParticipants };
 }
 
-type TrackBundlesObservableOptions = {
+type TrackReferencesObservableOptions = {
   additionalRoomEvents?: RoomEvent[];
   onlySubscribed?: boolean;
 };
 
-export function trackBundlesObservable(
+export function trackReferencesObservable(
   room: Room,
   sources: Track.Source[],
-  options: TrackBundlesObservableOptions,
-): Observable<{ trackBundles: TrackBundle[]; participants: Participant[] }> {
+  options: TrackReferencesObservableOptions,
+): Observable<{ trackReferences: TrackReference[]; participants: Participant[] }> {
   const additionalRoomEvents = options.additionalRoomEvents ?? allParticipantRoomEvents;
   const onlySubscribedTracks: boolean = options.onlySubscribed ?? true;
   const roomEvents = Array.from(
@@ -106,11 +106,11 @@ export function trackBundlesObservable(
 
   const observable = observeRoomEvents(room, ...roomEvents).pipe(
     map((room) => {
-      const data = getTrackBundles(room, sources, onlySubscribedTracks);
-      log.debug(`TrackBundle[] was updated. (length ${data.trackBundles.length})`, data);
+      const data = getTrackReferences(room, sources, onlySubscribedTracks);
+      log.debug(`TrackReference[] was updated. (length ${data.trackReferences.length})`, data);
       return data;
     }),
-    startWith(getTrackBundles(room, sources, onlySubscribedTracks)),
+    startWith(getTrackReferences(room, sources, onlySubscribedTracks)),
   );
 
   return observable;

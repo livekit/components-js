@@ -1,5 +1,9 @@
 import { Participant, Track } from 'livekit-client';
-import { getTrackBundleSource, isTrackBundle, TrackBundleWithPlaceholder } from '../track-bundle';
+import {
+  getTrackReferenceSource,
+  isTrackReference,
+  TrackReferenceWithPlaceholder,
+} from '../track-reference';
 
 export function sortParticipantsByAudioLevel(
   a: Pick<Participant, 'audioLevel'>,
@@ -37,30 +41,30 @@ export function sortParticipantsByJoinedAt(
   return (a.joinedAt?.getTime() ?? 0) - (b.joinedAt?.getTime() ?? 0);
 }
 
-export function sortTrackBundlesByType(
-  a: TrackBundleWithPlaceholder,
-  b: TrackBundleWithPlaceholder,
+export function sortTrackReferencesByType(
+  a: TrackReferenceWithPlaceholder,
+  b: TrackReferenceWithPlaceholder,
 ) {
-  if (isTrackBundle(a)) {
-    if (isTrackBundle(b)) {
+  if (isTrackReference(a)) {
+    if (isTrackReference(b)) {
       return 0;
     } else {
       return -1;
     }
-  } else if (isTrackBundle(b)) {
+  } else if (isTrackReference(b)) {
     return 1;
   } else {
     return 0;
   }
 }
 
-/** TrackBundle with screen share source goes first. */
-export function sortTrackBundlesByScreenShare(
-  a: TrackBundleWithPlaceholder,
-  b: TrackBundleWithPlaceholder,
+/** TrackReference with screen share source goes first. */
+export function sortTrackReferencesByScreenShare(
+  a: TrackReferenceWithPlaceholder,
+  b: TrackReferenceWithPlaceholder,
 ): number {
-  const sourceA = getTrackBundleSource(a);
-  const sourceB = getTrackBundleSource(b);
+  const sourceA = getTrackReferenceSource(a);
+  const sourceB = getTrackReferenceSource(b);
 
   if (sourceA === sourceB) {
     if (sourceA === Track.Source.ScreenShare) {

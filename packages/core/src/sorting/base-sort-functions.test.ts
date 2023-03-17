@@ -1,17 +1,17 @@
 import { Track } from 'livekit-client';
 import { describe, test, expect } from 'vitest';
 import {
-  flatTrackBundleArray,
-  mockTrackBundlePlaceholder,
-  mockTrackBundleSubscribed,
-} from '../track-bundle/test-utils';
+  flatTrackReferenceArray,
+  mockTrackReferencePlaceholder,
+  mockTrackReferenceSubscribed,
+} from '../track-reference/test-utils';
 import {
   sortParticipantsByAudioLevel,
   sortParticipantsByIsSpeaking,
   sortParticipantsByJoinedAt,
   sortParticipantsByLastSpokenAT,
-  sortTrackBundlesByScreenShare,
-  sortTrackBundlesByType,
+  sortTrackReferencesByScreenShare,
+  sortTrackReferencesByType,
 } from './base-sort-functions';
 
 describe.concurrent('Test sorting participants by isSpeaking:', () => {
@@ -149,47 +149,47 @@ describe.concurrent('Test sorting track bundles by type.', () => {
   test.each([
     {
       unsorted: [
-        mockTrackBundlePlaceholder('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
+        mockTrackReferencePlaceholder('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
       ],
       expected: [
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
-        mockTrackBundlePlaceholder('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
+        mockTrackReferencePlaceholder('A', Track.Source.Camera),
       ],
     },
     {
       unsorted: [
-        mockTrackBundlePlaceholder('A', Track.Source.Camera),
-        mockTrackBundlePlaceholder('B', Track.Source.Camera),
+        mockTrackReferencePlaceholder('A', Track.Source.Camera),
+        mockTrackReferencePlaceholder('B', Track.Source.Camera),
       ],
       expected: [
-        mockTrackBundlePlaceholder('A', Track.Source.Camera),
-        mockTrackBundlePlaceholder('B', Track.Source.Camera),
+        mockTrackReferencePlaceholder('A', Track.Source.Camera),
+        mockTrackReferencePlaceholder('B', Track.Source.Camera),
       ],
     },
     {
       unsorted: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
       ],
       expected: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
       ],
     },
     {
       unsorted: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.ScreenShare),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.ScreenShare),
       ],
       expected: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.ScreenShare),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.ScreenShare),
       ],
     },
-  ])('TrackBundle should be for TrackBundlePlaceholders', ({ unsorted, expected }) => {
-    unsorted.sort(sortTrackBundlesByType);
-    expect(flatTrackBundleArray(unsorted)).toStrictEqual(flatTrackBundleArray(expected));
+  ])('TrackReference should be for TrackReferencePlaceholders', ({ unsorted, expected }) => {
+    unsorted.sort(sortTrackReferencesByType);
+    expect(flatTrackReferenceArray(unsorted)).toStrictEqual(flatTrackReferenceArray(expected));
   });
 });
 
@@ -259,16 +259,16 @@ describe.concurrent('Test sorting track bundles by source.', () => {
   test.each([
     {
       unsorted: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera, { mockPublication: true }),
-        mockTrackBundleSubscribed('B', Track.Source.ScreenShare, { mockPublication: true }),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera, { mockPublication: true }),
+        mockTrackReferenceSubscribed('B', Track.Source.ScreenShare, { mockPublication: true }),
       ],
       expected: [
-        mockTrackBundleSubscribed('B', Track.Source.ScreenShare, { mockPublication: true }),
-        mockTrackBundleSubscribed('A', Track.Source.Camera, { mockPublication: true }),
+        mockTrackReferenceSubscribed('B', Track.Source.ScreenShare, { mockPublication: true }),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera, { mockPublication: true }),
       ],
     },
   ])('ScreenShare should come before Camera sources.', ({ unsorted, expected }) => {
-    unsorted.sort(sortTrackBundlesByScreenShare);
-    expect(flatTrackBundleArray(unsorted)).toStrictEqual(flatTrackBundleArray(expected));
+    unsorted.sort(sortTrackReferencesByScreenShare);
+    expect(flatTrackReferenceArray(unsorted)).toStrictEqual(flatTrackReferenceArray(expected));
   });
 });

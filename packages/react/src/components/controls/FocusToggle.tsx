@@ -1,4 +1,4 @@
-import { isTrackBundlePinned, setupFocusToggle } from '@livekit/components-core';
+import { isTrackReferencePinned, setupFocusToggle } from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { LayoutContext, useEnsureParticipant, useMaybeLayoutContext } from '../../context';
@@ -19,7 +19,7 @@ function useFocusToggle({ trackSource, participant, props }: useFocusToggleProps
   const inFocus: boolean = React.useMemo(() => {
     const track = p.getTrack(trackSource);
     if (layoutContext?.pin.state && track) {
-      return isTrackBundlePinned(
+      return isTrackReferencePinned(
         { participant: p, source: trackSource, publication: track },
         layoutContext.pin.state,
       );
@@ -46,7 +46,7 @@ function useFocusToggle({ trackSource, participant, props }: useFocusToggleProps
             } else {
               layoutContext.pin.dispatch({
                 msg: 'set_pin',
-                trackBundle: {
+                trackReference: {
                   participant: p,
                   publication: track,
                 },

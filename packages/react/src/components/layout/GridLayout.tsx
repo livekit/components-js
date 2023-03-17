@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useGridLayout, usePagination, UseParticipantsOptions, useTracks } from '../../hooks';
 import { mergeProps } from '../../utils';
-import { TrackBundleFilter, createInteractingObservable } from '@livekit/components-core';
+import { TrackReferenceFilter, createInteractingObservable } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import { TrackLoop } from '../TrackLoop';
 import { PaginationControl } from '../controls/PaginationControl';
@@ -13,7 +13,7 @@ export interface GridLayoutProps
    * The grid shows all room participants. If only a subset of the participants
    * should be visible, they can be filtered.
    */
-  filter?: TrackBundleFilter;
+  filter?: TrackReferenceFilter;
   filterDependencies?: [];
 }
 
@@ -34,7 +34,7 @@ export function GridLayout({
   ...props
 }: GridLayoutProps) {
   const gridEl = React.createRef<HTMLDivElement>();
-  const rawTrackBundles = useTracks(
+  const rawTrackReferences = useTracks(
     [
       { source: Track.Source.Camera, withPlaceholder: true },
       { source: Track.Source.ScreenShare, withPlaceholder: false },
@@ -47,13 +47,13 @@ export function GridLayout({
     [props],
   );
 
-  const filteredTrackBundles = React.useMemo(
-    () => (filter ? rawTrackBundles.filter(filter) : rawTrackBundles),
-    [filter, rawTrackBundles, ...filterDependencies],
+  const filteredTrackReferences = React.useMemo(
+    () => (filter ? rawTrackReferences.filter(filter) : rawTrackReferences),
+    [filter, rawTrackReferences, ...filterDependencies],
   );
 
-  const { layout, trackBundles } = useGridLayout(gridEl, filteredTrackBundles);
-  const pagination = usePagination(layout.maxParticipants, trackBundles.length);
+  const { layout, trackReferences } = useGridLayout(gridEl, filteredTrackReferences);
+  const pagination = usePagination(layout.maxParticipants, trackReferences.length);
 
   const [interactive, setInteractive] = React.useState(false);
   React.useEffect(() => {
@@ -73,12 +73,12 @@ export function GridLayout({
             {props.children ?? (
               <>
                 <TrackLoop
-                  trackBundles={trackBundles.slice(
+                  trackReferences={trackReferences.slice(
                     pagination.firstItemIndex,
                     pagination.lastItemIndex,
                   )}
                 />
-                {trackBundles.length > layout.maxParticipants && (
+                {trackReferences.length > layout.maxParticipants && (
                   <PaginationControl {...pagination} />
                 )}
               </>

@@ -1,14 +1,16 @@
 import {
   log,
-  sortTrackBundles,
-  TrackBundleWithPlaceholder,
+  sortTrackReferences,
+  TrackReferenceWithPlaceholder,
   updatePages,
 } from '@livekit/components-core';
 import * as React from 'react';
 
 interface UseVisualStableUpdateOptions {
   /** Overwrites the default sort function. */
-  customSortFunction?: (trackBundles: TrackBundleWithPlaceholder[]) => TrackBundleWithPlaceholder[];
+  customSortFunction?: (
+    trackReferences: TrackReferenceWithPlaceholder[],
+  ) => TrackReferenceWithPlaceholder[];
 }
 
 /**
@@ -19,25 +21,25 @@ interface UseVisualStableUpdateOptions {
  * they will be moved to the first page by replacing the least active/interesting participant on the first page.
  */
 export function useVisualStableUpdate(
-  /** `TrackBundle`s to display in the grid.  */
-  trackBundles: TrackBundleWithPlaceholder[],
+  /** `TrackReference`s to display in the grid.  */
+  trackReferences: TrackReferenceWithPlaceholder[],
   maxItemsOnPage: number,
   options: UseVisualStableUpdateOptions = {},
-): TrackBundleWithPlaceholder[] {
-  const stateTrackBundles = React.useRef<TrackBundleWithPlaceholder[]>([]);
+): TrackReferenceWithPlaceholder[] {
+  const stateTrackReferences = React.useRef<TrackReferenceWithPlaceholder[]>([]);
   const maxTilesOnPage = React.useRef<number>(-1);
 
-  const nextSortedTrackBundles =
+  const nextSortedTrackReferences =
     typeof options.customSortFunction === 'function'
-      ? options.customSortFunction(trackBundles)
-      : sortTrackBundles(trackBundles);
+      ? options.customSortFunction(trackReferences)
+      : sortTrackReferences(trackReferences);
 
-  let updatedTrackBundles: TrackBundleWithPlaceholder[] = nextSortedTrackBundles;
+  let updatedTrackReferences: TrackReferenceWithPlaceholder[] = nextSortedTrackReferences;
   if (maxItemsOnPage === maxTilesOnPage.current) {
     try {
-      updatedTrackBundles = updatePages(
-        stateTrackBundles.current,
-        nextSortedTrackBundles,
+      updatedTrackReferences = updatePages(
+        stateTrackReferences.current,
+        nextSortedTrackReferences,
         maxItemsOnPage,
       );
     } catch (error) {
@@ -46,10 +48,10 @@ export function useVisualStableUpdate(
   }
 
   maxItemsOnPage !== maxTilesOnPage.current
-    ? nextSortedTrackBundles
+    ? nextSortedTrackReferences
     : // Save info for next render to update with minimal visual change.
-      (stateTrackBundles.current = trackBundles);
+      (stateTrackReferences.current = trackReferences);
   maxTilesOnPage.current = maxItemsOnPage;
 
-  return updatedTrackBundles;
+  return updatedTrackReferences;
 }

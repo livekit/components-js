@@ -1,20 +1,20 @@
 import { chunk, zip, differenceBy, remove } from 'lodash';
 import log from '../logger';
-import { getTrackBundleId, TrackBundleWithPlaceholder } from '../track-bundle';
-import { flatTrackBundleArray } from '../track-bundle/test-utils';
+import { getTrackReferenceId, TrackReferenceWithPlaceholder } from '../track-reference';
+import { flatTrackReferenceArray } from '../track-reference/test-utils';
 
 type VisualChanges<T> = {
   dropped: T[];
   added: T[];
 };
 
-export type UpdatableItem = TrackBundleWithPlaceholder | number;
+export type UpdatableItem = TrackReferenceWithPlaceholder | number;
 
 /** Check if something visually change on the page. */
 export function visualPageChange<T extends UpdatableItem>(state: T[], next: T[]): VisualChanges<T> {
   return {
-    dropped: differenceBy<T, T>(state, next, getTrackBundleId),
-    added: differenceBy<T, T>(next, state, getTrackBundleId),
+    dropped: differenceBy<T, T>(state, next, getTrackReferenceId),
+    added: differenceBy<T, T>(next, state, getTrackReferenceId),
   };
 }
 
@@ -22,15 +22,19 @@ function listNeedsUpdating<T>(changes: VisualChanges<T>): boolean {
   return changes.added.length !== 0 || changes.dropped.length !== 0;
 }
 
-export function findIndex<T extends UpdatableItem>(trackBundle: T, trackBundles: T[]): number {
-  const indexToReplace = trackBundles.findIndex(
-    (trackBundle_) => getTrackBundleId(trackBundle_) === getTrackBundleId(trackBundle),
+export function findIndex<T extends UpdatableItem>(
+  trackReference: T,
+  trackReferences: T[],
+): number {
+  const indexToReplace = trackReferences.findIndex(
+    (trackReference_) =>
+      getTrackReferenceId(trackReference_) === getTrackReferenceId(trackReference),
   );
   if (indexToReplace === -1) {
     throw new Error(
-      `Element not part of the array: ${getTrackBundleId(
-        trackBundle,
-      )} not in ${flatTrackBundleArray(trackBundles)}`,
+      `Element not part of the array: ${getTrackReferenceId(
+        trackReference,
+      )} not in ${flatTrackReferenceArray(trackReferences)}`,
     );
   }
   return indexToReplace;
@@ -40,15 +44,15 @@ export function findIndex<T extends UpdatableItem>(trackBundle: T, trackBundles:
 export function swapItems<T extends UpdatableItem>(
   moveForward: T,
   moveBack: T,
-  trackBundles: T[],
+  trackReferences: T[],
 ): T[] {
-  const indexToReplace = findIndex(moveForward, trackBundles);
-  const indexReplaceWith = findIndex(moveBack, trackBundles);
+  const indexToReplace = findIndex(moveForward, trackReferences);
+  const indexReplaceWith = findIndex(moveBack, trackReferences);
 
-  trackBundles.splice(indexToReplace, 1, moveBack);
-  trackBundles.splice(indexReplaceWith, 1, moveForward);
+  trackReferences.splice(indexToReplace, 1, moveBack);
+  trackReferences.splice(indexReplaceWith, 1, moveForward);
 
-  return trackBundles;
+  return trackReferences;
 }
 
 export function dropItem<T extends UpdatableItem>(itemToDrop: T, list: T[]): T[] {
@@ -77,7 +81,7 @@ export function updatePages<T extends UpdatableItem>(
 
   if (currentList.length < nextList.length) {
     // Items got added: Find newly added items and add them to the end of the list.
-    const addedItems = differenceBy<T, T>(nextList, currentList, getTrackBundleId);
+    const addedItems = differenceBy<T, T>(nextList, currentList, getTrackReferenceId);
     updatedList = [...updatedList, ...addedItems] as T[];
   }
   const currentPages = divideIntoPages(currentList, maxItemsOnPage);
@@ -91,9 +95,9 @@ export function updatePages<T extends UpdatableItem>(
 
       if (listNeedsUpdating(changes)) {
         log.debug(
-          `Detected visual changes on page: ${pageIndex}, current: ${flatTrackBundleArray(
+          `Detected visual changes on page: ${pageIndex}, current: ${flatTrackReferenceArray(
             currentPage,
-          )}, next: ${flatTrackBundleArray(nextPage)}`,
+          )}, next: ${flatTrackReferenceArray(nextPage)}`,
           { changes },
         );
         // ## Swap Items
@@ -126,9 +130,9 @@ export function updatePages<T extends UpdatableItem>(
 
   if (updatedList.length > nextList.length) {
     // Items got removed: Find items that got completely removed from the list.
-    const missingItems = differenceBy<T, T>(currentList, nextList, getTrackBundleId);
+    const missingItems = differenceBy<T, T>(currentList, nextList, getTrackReferenceId);
     remove(updatedList, (item) =>
-      missingItems.map(getTrackBundleId).includes(getTrackBundleId(item)),
+      missingItems.map(getTrackReferenceId).includes(getTrackReferenceId(item)),
     );
   }
 

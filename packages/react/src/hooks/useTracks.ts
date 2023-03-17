@@ -3,11 +3,11 @@ import {
   isSourceWitOptions,
   log,
   SourcesArray,
-  TrackBundle,
-  TrackBundleWithPlaceholder,
+  TrackReference,
+  TrackReferenceWithPlaceholder,
   trackBundlesObservable,
   TrackSourceWithOptions,
-  TrackBundlePlaceholder,
+  TrackReferencePlaceholder,
 } from '@livekit/components-core';
 import { Participant, RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
@@ -19,13 +19,13 @@ type UseTracksOptions = {
 };
 
 type UseTracksHookReturnType<T> = T extends Track.Source[]
-  ? TrackBundle[]
+  ? TrackReference[]
   : T extends TrackSourceWithOptions[]
-  ? TrackBundleWithPlaceholder[]
+  ? TrackReferenceWithPlaceholder[]
   : never;
 
 /**
- * The `useTracks` hook returns an array of `TrackBundle` which combine the participant, trackSource, publication and a track.
+ * The `useTracks` hook returns an array of `TrackReference` which combine the participant, trackSource, publication and a track.
  * Only tracks with a the same source specified via the sources property get included in the loop.
  *
  * @example
@@ -42,7 +42,7 @@ export function useTracks<T extends SourcesArray = SourcesArray>(
   options: UseTracksOptions = {},
 ): UseTracksHookReturnType<T> {
   const room = useRoomContext();
-  const [trackBundles, setTrackBundles] = React.useState<TrackBundle[]>([]);
+  const [trackBundles, setTrackReferences] = React.useState<TrackReference[]>([]);
   const [participants, setParticipants] = React.useState<Participant[]>([]);
 
   const sources_ = React.useMemo(() => {
@@ -55,16 +55,18 @@ export function useTracks<T extends SourcesArray = SourcesArray>(
       onlySubscribed: options.onlySubscribed,
     }).subscribe(({ trackBundles, participants }) => {
       log.debug('setting track bundles', trackBundles, participants);
-      setTrackBundles(trackBundles);
+      setTrackReferences(trackBundles);
       setParticipants(participants);
     });
     return () => subscription.unsubscribe();
   }, [room, JSON.stringify(options.updateOnlyOn), JSON.stringify(sources)]);
 
-  const maybeTrackBundles = React.useMemo(() => {
+  const maybeTrackReferences = React.useMemo(() => {
     if (isSourcesWithOptions(sources)) {
       const requirePlaceholder = requiredPlaceholders(sources, participants);
-      const trackBundlesWithPlaceholders = Array.from(trackBundles) as TrackBundleWithPlaceholder[];
+      const trackBundlesWithPlaceholders = Array.from(
+        trackBundles,
+      ) as TrackReferenceWithPlaceholder[];
       participants.forEach((participant) => {
         if (requirePlaceholder.has(participant.identity)) {
           const sourcesToAddPlaceholder = requirePlaceholder.get(participant.identity) ?? [];
@@ -80,7 +82,7 @@ export function useTracks<T extends SourcesArray = SourcesArray>(
             log.debug(
               `Add ${placeholderSource} placeholder for participant ${participant.identity}.`,
             );
-            const placeholder: TrackBundlePlaceholder = {
+            const placeholder: TrackReferencePlaceholder = {
               participant,
               source: placeholderSource,
             };
@@ -94,7 +96,7 @@ export function useTracks<T extends SourcesArray = SourcesArray>(
     }
   }, [trackBundles, participants, sources]);
 
-  return maybeTrackBundles as UseTracksHookReturnType<T>;
+  return maybeTrackReferences as UseTracksHookReturnType<T>;
 }
 
 function difference<T>(setA: Set<T>, setB: Set<T>): Set<T> {

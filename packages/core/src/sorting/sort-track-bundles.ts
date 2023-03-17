@@ -1,16 +1,16 @@
 import { Track } from 'livekit-client';
 import {
-  getTrackBundleSource,
-  isTrackBundle,
-  TrackBundleWithPlaceholder,
+  getTrackReferenceSource,
+  isTrackReference,
+  TrackReferenceWithPlaceholder,
 } from '../track-reference';
 import {
   sortParticipantsByAudioLevel,
   sortParticipantsByIsSpeaking,
   sortParticipantsByJoinedAt,
   sortParticipantsByLastSpokenAT,
-  sortTrackBundlesByScreenShare,
-  sortTrackBundlesByType,
+  sortTrackReferencesByScreenShare,
+  sortTrackReferencesByType,
 } from './base-sort-functions';
 
 /**
@@ -26,15 +26,15 @@ import {
  * 7. remote unmuted microphone tracks
  * 8. remote tracks sorted by joinedAt
  */
-export function sortTrackBundles(
-  trackBundles: TrackBundleWithPlaceholder[],
-): TrackBundleWithPlaceholder[] {
+export function sortTrackReferences(
+  trackBundles: TrackReferenceWithPlaceholder[],
+): TrackReferenceWithPlaceholder[] {
   const trackBundles_ = [...trackBundles];
   trackBundles_.sort((a, b) => {
     // Local camera track bundle before remote.
     if (
-      (a.participant.isLocal && getTrackBundleSource(a) === Track.Source.Camera) ||
-      (b.participant.isLocal && getTrackBundleSource(b) === Track.Source.Camera)
+      (a.participant.isLocal && getTrackReferenceSource(a) === Track.Source.Camera) ||
+      (b.participant.isLocal && getTrackReferenceSource(b) === Track.Source.Camera)
     ) {
       if (a.participant.isLocal) {
         return -1;
@@ -45,10 +45,10 @@ export function sortTrackBundles(
 
     // Screen share tracks before camera tracks
     if (
-      (getTrackBundleSource(a) === Track.Source.ScreenShare && getTrackBundleSource(b)) ===
+      (getTrackReferenceSource(a) === Track.Source.ScreenShare && getTrackReferenceSource(b)) ===
       Track.Source.ScreenShare
     ) {
-      return sortTrackBundlesByScreenShare(a, b);
+      return sortTrackReferencesByScreenShare(a, b);
     }
 
     // Participant with higher audio level goes first.
@@ -66,8 +66,8 @@ export function sortTrackBundles(
       return sortParticipantsByLastSpokenAT(a.participant, b.participant);
     }
 
-    if (isTrackBundle(a) !== isTrackBundle(b)) {
-      return sortTrackBundlesByType(a, b);
+    if (isTrackReference(a) !== isTrackReference(b)) {
+      return sortTrackReferencesByType(a, b);
     }
 
     // video on

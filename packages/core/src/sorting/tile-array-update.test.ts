@@ -1,6 +1,9 @@
 import { Track } from 'livekit-client';
 import { describe, test, expect } from 'vitest';
-import { flatTrackBundleArray, mockTrackBundleSubscribed } from '../track-reference/test-utils';
+import {
+  flatTrackReferenceArray,
+  mockTrackReferenceSubscribed,
+} from '../track-reference/test-utils';
 import { divideIntoPages, swapItems, updatePages, visualPageChange } from './tile-array-update';
 
 const stateNextExpectedString = (text: string) =>
@@ -125,29 +128,29 @@ describe('Test updating the list based while considering pages.', () => {
   test.each([
     {
       state: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
       ],
-      next: [mockTrackBundleSubscribed('B', Track.Source.Camera)],
-      expected: [mockTrackBundleSubscribed('B', Track.Source.Camera)],
+      next: [mockTrackReferenceSubscribed('B', Track.Source.Camera)],
+      expected: [mockTrackReferenceSubscribed('B', Track.Source.Camera)],
       itemsOnPage: 3,
     },
     {
       state: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
-        mockTrackBundleSubscribed('C', Track.Source.Camera),
-        mockTrackBundleSubscribed('D', Track.Source.Camera),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('C', Track.Source.Camera),
+        mockTrackReferenceSubscribed('D', Track.Source.Camera),
       ],
       next: [
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
-        mockTrackBundleSubscribed('C', Track.Source.Camera),
-        mockTrackBundleSubscribed('D', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('C', Track.Source.Camera),
+        mockTrackReferenceSubscribed('D', Track.Source.Camera),
       ],
       expected: [
-        mockTrackBundleSubscribed('C', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
-        mockTrackBundleSubscribed('D', Track.Source.Camera),
+        mockTrackReferenceSubscribed('C', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('D', Track.Source.Camera),
       ],
       itemsOnPage: 2,
     },
@@ -155,7 +158,7 @@ describe('Test updating the list based while considering pages.', () => {
     'Test removing exactly one items from list: (trackBundle version)',
     ({ state, next, itemsOnPage, expected }) => {
       const result = updatePages(state, next, itemsOnPage);
-      expect(flatTrackBundleArray(result)).toStrictEqual(flatTrackBundleArray(expected));
+      expect(flatTrackReferenceArray(result)).toStrictEqual(flatTrackReferenceArray(expected));
     },
   );
 
@@ -189,44 +192,44 @@ describe('Test updating the list based while considering pages.', () => {
   test.each([
     {
       state: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
-        mockTrackBundleSubscribed('C', Track.Source.Camera),
-        mockTrackBundleSubscribed('D', Track.Source.Camera),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('C', Track.Source.Camera),
+        mockTrackReferenceSubscribed('D', Track.Source.Camera),
       ],
       next: [
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
-        mockTrackBundleSubscribed('D', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('D', Track.Source.Camera),
       ],
       expected: [
-        mockTrackBundleSubscribed('D', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('D', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
       ],
       itemsOnPage: 2,
     },
     {
       state: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
-        mockTrackBundleSubscribed('C', Track.Source.Camera),
-        mockTrackBundleSubscribed('D', Track.Source.Camera),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('C', Track.Source.Camera),
+        mockTrackReferenceSubscribed('D', Track.Source.Camera),
       ],
       next: [
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
-        mockTrackBundleSubscribed('C', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('C', Track.Source.Camera),
       ],
       expected: [
-        mockTrackBundleSubscribed('C', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('C', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
       ],
       itemsOnPage: 2,
     },
     {
       state: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
-        mockTrackBundleSubscribed('C', Track.Source.Camera),
-        mockTrackBundleSubscribed('D', Track.Source.Camera),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('C', Track.Source.Camera),
+        mockTrackReferenceSubscribed('D', Track.Source.Camera),
       ],
       next: [],
       expected: [],
@@ -236,7 +239,7 @@ describe('Test updating the list based while considering pages.', () => {
     'Test removing more than one item from the list (trackBundle version): ',
     ({ state, next, itemsOnPage, expected }) => {
       const result = updatePages(state, next, itemsOnPage);
-      expect(flatTrackBundleArray(result)).toStrictEqual(flatTrackBundleArray(expected));
+      expect(flatTrackReferenceArray(result)).toStrictEqual(flatTrackReferenceArray(expected));
     },
   );
 
@@ -295,41 +298,41 @@ describe('Test updating the list based while considering pages.', () => {
   test.each([
     {
       state: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
       ],
       next: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
-        mockTrackBundleSubscribed('C', Track.Source.Camera),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('C', Track.Source.Camera),
       ],
       expected: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
-        mockTrackBundleSubscribed('C', Track.Source.Camera),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('C', Track.Source.Camera),
       ],
       itemsOnPage: 2,
     },
     {
       state: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
       ],
       next: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('C', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('C', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
       ],
       expected: [
-        mockTrackBundleSubscribed('A', Track.Source.Camera),
-        mockTrackBundleSubscribed('B', Track.Source.Camera),
-        mockTrackBundleSubscribed('C', Track.Source.Camera),
+        mockTrackReferenceSubscribed('A', Track.Source.Camera),
+        mockTrackReferenceSubscribed('B', Track.Source.Camera),
+        mockTrackReferenceSubscribed('C', Track.Source.Camera),
       ],
       itemsOnPage: 3,
     },
   ])('Test adding items:', ({ state, next, itemsOnPage, expected }) => {
     const result = updatePages(state, next, itemsOnPage);
     expect(result).toHaveLength(next.length);
-    expect(flatTrackBundleArray(result)).toStrictEqual(flatTrackBundleArray(expected));
+    expect(flatTrackReferenceArray(result)).toStrictEqual(flatTrackReferenceArray(expected));
   });
 });

@@ -1,51 +1,52 @@
 /**
- * The TrackBundle type is a logical grouping of participant publication and/or subscribed track.
+ * The TrackReference type is a logical grouping of participant publication and/or subscribed track.
  *
  */
 
 import { Participant, Track, TrackPublication } from 'livekit-client';
-// ## TrackBundle Types
+// ## TrackReference Types
 
-export type TrackBundleSubscribed = {
+export type TrackReferenceSubscribed = {
   participant: Participant;
   publication: TrackPublication;
   track: NonNullable<TrackPublication['track']>;
 };
 
-export type TrackBundlePublished = {
+export type TrackReferencePublished = {
   participant: Participant;
   publication: TrackPublication;
 };
 
-export type TrackBundlePlaceholder = {
+export type TrackReferencePlaceholder = {
   participant: Participant;
   source: Track.Source;
 };
 
-export type TrackBundle = TrackBundleSubscribed | TrackBundlePublished;
-export type TrackBundleWithPlaceholder =
-  | TrackBundleSubscribed
-  | TrackBundlePublished
-  | TrackBundlePlaceholder;
+export type TrackReference = TrackReferenceSubscribed | TrackReferencePublished;
+export type TrackReferenceWithPlaceholder =
+  | TrackReferenceSubscribed
+  | TrackReferencePublished
+  | TrackReferencePlaceholder;
 
-// ### TrackBundle Type Predicates
-export function isTrackBundle(bundle: TrackBundleWithPlaceholder): bundle is TrackBundle {
+// ### TrackReference Type Predicates
+export function isTrackReference(bundle: TrackReferenceWithPlaceholder): bundle is TrackReference {
   return (
-    isTrackBundleSubscribed(bundle as TrackBundle) || isTrackBundlePublished(bundle as TrackBundle)
+    isTrackReferenceSubscribed(bundle as TrackReference) ||
+    isTrackReferencePublished(bundle as TrackReference)
   );
 }
 
-function isTrackBundleSubscribed(bundle: TrackBundle): bundle is TrackBundleSubscribed {
+function isTrackReferenceSubscribed(bundle: TrackReference): bundle is TrackReferenceSubscribed {
   return bundle.hasOwnProperty('track');
 }
 
-function isTrackBundlePublished(bundle: TrackBundle): bundle is TrackBundlePublished {
+function isTrackReferencePublished(bundle: TrackReference): bundle is TrackReferencePublished {
   return bundle.hasOwnProperty('publication') && !bundle.hasOwnProperty('track');
 }
 
-export function isTrackBundlePlaceholder(
-  bundle: TrackBundleWithPlaceholder,
-): bundle is TrackBundlePlaceholder {
+export function isTrackReferencePlaceholder(
+  bundle: TrackReferenceWithPlaceholder,
+): bundle is TrackReferencePlaceholder {
   return (
     bundle.hasOwnProperty('participant') &&
     bundle.hasOwnProperty('source') &&

@@ -1,11 +1,15 @@
-import { isTrackBundle, TrackBundle, TrackBundleWithPlaceholder } from '@livekit/components-core';
+import {
+  isTrackReference,
+  TrackReference,
+  TrackReferenceWithPlaceholder,
+} from '@livekit/components-core';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
 import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
 type TrackLoopProps = {
-  trackBundles: TrackBundle[] | TrackBundleWithPlaceholder[];
+  trackBundles: TrackReference[] | TrackReferenceWithPlaceholder[];
 };
 
 /**
@@ -24,7 +28,7 @@ export const TrackLoop = ({ trackBundles, ...props }: React.PropsWithChildren<Tr
   return (
     <>
       {trackBundles.map((trackBundle) => {
-        const trackSource = isTrackBundle(trackBundle)
+        const trackSource = isTrackReference(trackBundle)
           ? trackBundle.publication.source
           : trackBundle.source;
         return (

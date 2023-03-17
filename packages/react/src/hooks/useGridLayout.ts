@@ -1,7 +1,7 @@
 import {
   GRID_LAYOUTS,
   selectGridLayout,
-  TrackBundleWithPlaceholder,
+  TrackReferenceWithPlaceholder,
 } from '@livekit/components-core';
 import { GridLayout } from '@livekit/components-core/dist/helper/grid-layouts';
 import * as React from 'react';
@@ -18,9 +18,9 @@ import { useVisualStableUpdate } from './useVisualStableUpdate';
 export function useGridLayout(
   /** HTML element that contains the grid. */
   gridElement: React.RefObject<HTMLDivElement>,
-  /** `TrackBundle`s to display in the grid.  */
-  trackBundles: TrackBundleWithPlaceholder[],
-): { layout: GridLayout; trackBundles: TrackBundleWithPlaceholder[] } {
+  /** `TrackReference`s to display in the grid.  */
+  trackBundles: TrackReferenceWithPlaceholder[],
+): { layout: GridLayout; trackBundles: TrackReferenceWithPlaceholder[] } {
   const { width, height } = useSize(gridElement);
 
   const layout =
@@ -28,7 +28,7 @@ export function useGridLayout(
       ? selectGridLayout(GRID_LAYOUTS, trackBundles.length, width, height)
       : GRID_LAYOUTS[0];
 
-  const updatedTrackBundles = useVisualStableUpdate(trackBundles, layout.maxParticipants);
+  const updatedTrackReferences = useVisualStableUpdate(trackBundles, layout.maxParticipants);
 
   React.useEffect(() => {
     if (gridElement.current && layout) {
@@ -39,6 +39,6 @@ export function useGridLayout(
 
   return {
     layout,
-    trackBundles: updatedTrackBundles,
+    trackBundles: updatedTrackReferences,
   };
 }

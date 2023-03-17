@@ -2,13 +2,13 @@ import { Participant } from 'livekit-client';
 import * as React from 'react';
 import { useMaybeLayoutContext, useLayoutContext } from '../../context';
 import { mergeProps } from '../../utils';
-import { TrackBundle } from '@livekit/components-core';
+import { TrackReference } from '@livekit/components-core';
 import { ParticipantTile } from '../participant/ParticipantTile';
 import { ParticipantClickEvent } from '@livekit/components-core';
 import { CarouselView } from './CarouselView';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
-  trackBundle?: TrackBundle;
+  trackBundle?: TrackReference;
   participants?: Array<Participant>;
 }
 
@@ -32,14 +32,14 @@ export function FocusLayoutContainer({ trackBundle, ...props }: FocusLayoutConta
 }
 
 export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
-  trackBundle?: TrackBundle;
+  trackBundle?: TrackReference;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
 
 export function FocusLayout({ trackBundle, ...props }: FocusLayoutProps) {
   const layoutContext = useMaybeLayoutContext();
 
-  const trackBundleInFocus: TrackBundle | undefined = React.useMemo(() => {
+  const trackBundleInFocus: TrackReference | undefined = React.useMemo(() => {
     if (trackBundle) {
       return trackBundle;
     }

@@ -1,9 +1,9 @@
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import { describe, it, expect } from 'vitest';
 import { PinState } from './types';
-import { isTrackBundlePinned } from './utils';
+import { isTrackReferencePinned } from './utils';
 
-describe('Test isTrackBundlePinned', () => {
+describe('Test isTrackReferencePinned', () => {
   const participantA = new Participant('dummy-participant', 'A_id', 'track_A_name');
   const trackA = new TrackPublication(Track.Kind.Video, 'track_A_id', 'track_A_name');
   const participantB = new Participant('participant_B', 'B_id', 'B_name');
@@ -24,22 +24,22 @@ describe('Test isTrackBundlePinned', () => {
     publication: trackA,
   };
 
-  it('If the TrackBundle is in the pin state the function should always return true.', () => {
+  it('If the TrackReference is in the pin state the function should always return true.', () => {
     const pinState: PinState = [trackBundleA];
-    expect(isTrackBundlePinned(trackBundleA, pinState)).toBe(true);
+    expect(isTrackReferencePinned(trackBundleA, pinState)).toBe(true);
 
     const pinState2: PinState = [trackBundleA, trackBundleB, trackBundleC];
-    expect(isTrackBundlePinned(trackBundleA, pinState2)).toBe(true);
+    expect(isTrackReferencePinned(trackBundleA, pinState2)).toBe(true);
   });
 
-  it('If the TrackBundle is not in the pin state the function should return false.', () => {
+  it('If the TrackReference is not in the pin state the function should return false.', () => {
     const pinState: PinState = [trackBundleB, trackBundleC];
-    expect(isTrackBundlePinned(trackBundleA, pinState)).toBe(false);
+    expect(isTrackReferencePinned(trackBundleA, pinState)).toBe(false);
   });
 
   it('Empty pin state should always return false.', () => {
     const pinState: PinState = [];
-    expect(isTrackBundlePinned(trackBundleA, pinState)).toBe(false);
-    expect(isTrackBundlePinned(trackBundleB, pinState)).toBe(false);
+    expect(isTrackReferencePinned(trackBundleA, pinState)).toBe(false);
+    expect(isTrackReferencePinned(trackBundleB, pinState)).toBe(false);
   });
 });

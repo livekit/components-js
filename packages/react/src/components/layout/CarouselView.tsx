@@ -1,4 +1,4 @@
-import { isTrackBundlePinned, TrackBundleFilter } from '@livekit/components-core';
+import { isTrackReferencePinned, TrackReferenceFilter } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { useMaybeLayoutContext } from '../../context';
@@ -13,7 +13,7 @@ const ASPECT_RATIO = 16 / 10;
 const ASPECT_RATIO_INVERT = (1 - ASPECT_RATIO) * -1;
 
 export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement> {
-  filter?: TrackBundleFilter;
+  filter?: TrackReferenceFilter;
   filterDependencies?: [];
   /** Place the tiles vertically or horizontally next to each other.
    * If undefined orientation is guessed by the dimensions of the container. */
@@ -34,7 +34,7 @@ export function CarouselView({
   ]);
   const filteredTiles = React.useMemo(() => {
     const tilesWithoutPinned = trackBundles.filter(
-      (tile) => !layoutContext?.pin.state || !isTrackBundlePinned(tile, layoutContext.pin.state),
+      (tile) => !layoutContext?.pin.state || !isTrackReferencePinned(tile, layoutContext.pin.state),
     );
     return filter ? tilesWithoutPinned.filter(filter) : tilesWithoutPinned;
   }, [filter, layoutContext?.pin.state, trackBundles, ...filterDependencies]);

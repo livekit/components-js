@@ -2,21 +2,25 @@ import { Track } from 'livekit-client';
 import { isTrackReference, TrackReferenceWithPlaceholder } from './track-reference.types';
 
 /** Returns a id to identify a track bundle based on participant and source. */
-export function getTrackReferenceId(trackBundle: TrackReferenceWithPlaceholder | number): string {
-  if (typeof trackBundle === 'string' || typeof trackBundle === 'number') {
-    return `${trackBundle}`;
-  } else if (isTrackReference(trackBundle)) {
-    return `${trackBundle.participant.identity}_${trackBundle.publication.source}`;
+export function getTrackReferenceId(
+  trackReference: TrackReferenceWithPlaceholder | number,
+): string {
+  if (typeof trackReference === 'string' || typeof trackReference === 'number') {
+    return `${trackReference}`;
+  } else if (isTrackReference(trackReference)) {
+    return `${trackReference.participant.identity}_${trackReference.publication.source}`;
   } else {
-    return `${trackBundle.participant.identity}_${trackBundle.source}`;
+    return `${trackReference.participant.identity}_${trackReference.source}`;
   }
 }
 
 /** Returns the Source of the TrackReference. */
-export function getTrackReferenceSource(trackBundle: TrackReferenceWithPlaceholder): Track.Source {
-  if (isTrackReference(trackBundle)) {
-    return trackBundle.publication.source;
+export function getTrackReferenceSource(
+  trackReference: TrackReferenceWithPlaceholder,
+): Track.Source {
+  if (isTrackReference(trackReference)) {
+    return trackReference.publication.source;
   } else {
-    return trackBundle.source;
+    return trackReference.source;
   }
 }

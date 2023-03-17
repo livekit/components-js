@@ -22,15 +22,19 @@ function listNeedsUpdating<T>(changes: VisualChanges<T>): boolean {
   return changes.added.length !== 0 || changes.dropped.length !== 0;
 }
 
-export function findIndex<T extends UpdatableItem>(trackBundle: T, trackBundles: T[]): number {
-  const indexToReplace = trackBundles.findIndex(
-    (trackBundle_) => getTrackReferenceId(trackBundle_) === getTrackReferenceId(trackBundle),
+export function findIndex<T extends UpdatableItem>(
+  trackReference: T,
+  trackReferences: T[],
+): number {
+  const indexToReplace = trackReferences.findIndex(
+    (trackReference_) =>
+      getTrackReferenceId(trackReference_) === getTrackReferenceId(trackReference),
   );
   if (indexToReplace === -1) {
     throw new Error(
       `Element not part of the array: ${getTrackReferenceId(
-        trackBundle,
-      )} not in ${flatTrackReferenceArray(trackBundles)}`,
+        trackReference,
+      )} not in ${flatTrackReferenceArray(trackReferences)}`,
     );
   }
   return indexToReplace;
@@ -40,15 +44,15 @@ export function findIndex<T extends UpdatableItem>(trackBundle: T, trackBundles:
 export function swapItems<T extends UpdatableItem>(
   moveForward: T,
   moveBack: T,
-  trackBundles: T[],
+  trackReferences: T[],
 ): T[] {
-  const indexToReplace = findIndex(moveForward, trackBundles);
-  const indexReplaceWith = findIndex(moveBack, trackBundles);
+  const indexToReplace = findIndex(moveForward, trackReferences);
+  const indexReplaceWith = findIndex(moveBack, trackReferences);
 
-  trackBundles.splice(indexToReplace, 1, moveBack);
-  trackBundles.splice(indexReplaceWith, 1, moveForward);
+  trackReferences.splice(indexToReplace, 1, moveBack);
+  trackReferences.splice(indexReplaceWith, 1, moveForward);
 
-  return trackBundles;
+  return trackReferences;
 }
 
 export function dropItem<T extends UpdatableItem>(itemToDrop: T, list: T[]): T[] {

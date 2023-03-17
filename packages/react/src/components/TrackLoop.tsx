@@ -9,7 +9,7 @@ import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
 type TrackLoopProps = {
-  trackBundles: TrackReference[] | TrackReferenceWithPlaceholder[];
+  trackReferences: TrackReference[] | TrackReferenceWithPlaceholder[];
 };
 
 /**
@@ -19,22 +19,25 @@ type TrackLoopProps = {
  *
  * @example
  * ```tsx
- * const trackBundles = useTracks([Track.Source.Camera]);
- * <TrackLoop trackBundles={trackBundles} >
+ * const trackReferences = useTracks([Track.Source.Camera]);
+ * <TrackLoop trackReferences={trackReferences} >
  * <TrackLoop />
  * ```
  */
-export const TrackLoop = ({ trackBundles, ...props }: React.PropsWithChildren<TrackLoopProps>) => {
+export const TrackLoop = ({
+  trackReferences,
+  ...props
+}: React.PropsWithChildren<TrackLoopProps>) => {
   return (
     <>
-      {trackBundles.map((trackBundle) => {
-        const trackSource = isTrackReference(trackBundle)
-          ? trackBundle.publication.source
-          : trackBundle.source;
+      {trackReferences.map((trackReference) => {
+        const trackSource = isTrackReference(trackReference)
+          ? trackReference.publication.source
+          : trackReference.source;
         return (
           <ParticipantContext.Provider
-            value={trackBundle.participant}
-            key={`${trackBundle.participant.identity}_${trackSource}`}
+            value={trackReference.participant}
+            key={`${trackReference.participant.identity}_${trackSource}`}
           >
             {props.children ? (
               cloneSingleChild(props.children)

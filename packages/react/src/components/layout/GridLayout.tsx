@@ -52,8 +52,8 @@ export function GridLayout({
     [filter, rawTrackReferences, ...filterDependencies],
   );
 
-  const { layout, trackBundles } = useGridLayout(gridEl, filteredTrackReferences);
-  const pagination = usePagination(layout.maxParticipants, trackBundles.length);
+  const { layout, trackReferences } = useGridLayout(gridEl, filteredTrackReferences);
+  const pagination = usePagination(layout.maxParticipants, trackReferences.length);
 
   const [interactive, setInteractive] = React.useState(false);
   React.useEffect(() => {
@@ -73,12 +73,12 @@ export function GridLayout({
             {props.children ?? (
               <>
                 <TrackLoop
-                  trackBundles={trackBundles.slice(
+                  trackReferences={trackReferences.slice(
                     pagination.firstItemIndex,
                     pagination.lastItemIndex,
                   )}
                 />
-                {trackBundles.length > layout.maxParticipants && (
+                {trackReferences.length > layout.maxParticipants && (
                   <PaginationControl {...pagination} />
                 )}
               </>

@@ -155,7 +155,7 @@ describe('Test updating the list based while considering pages.', () => {
       itemsOnPage: 2,
     },
   ])(
-    'Test removing exactly one items from list: (trackBundle version)',
+    'Test removing exactly one items from list: (trackReference version)',
     ({ state, next, itemsOnPage, expected }) => {
       const result = updatePages(state, next, itemsOnPage);
       expect(flatTrackReferenceArray(result)).toStrictEqual(flatTrackReferenceArray(expected));
@@ -236,7 +236,7 @@ describe('Test updating the list based while considering pages.', () => {
       itemsOnPage: 2,
     },
   ])(
-    'Test removing more than one item from the list (trackBundle version): ',
+    'Test removing more than one item from the list (trackReference version): ',
     ({ state, next, itemsOnPage, expected }) => {
       const result = updatePages(state, next, itemsOnPage);
       expect(flatTrackReferenceArray(result)).toStrictEqual(flatTrackReferenceArray(expected));

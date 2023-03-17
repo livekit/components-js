@@ -9,7 +9,7 @@ import * as React from 'react';
 interface UseVisualStableUpdateOptions {
   /** Overwrites the default sort function. */
   customSortFunction?: (
-    trackBundles: TrackReferenceWithPlaceholder[],
+    trackReferences: TrackReferenceWithPlaceholder[],
   ) => TrackReferenceWithPlaceholder[];
 }
 
@@ -22,7 +22,7 @@ interface UseVisualStableUpdateOptions {
  */
 export function useVisualStableUpdate(
   /** `TrackReference`s to display in the grid.  */
-  trackBundles: TrackReferenceWithPlaceholder[],
+  trackReferences: TrackReferenceWithPlaceholder[],
   maxItemsOnPage: number,
   options: UseVisualStableUpdateOptions = {},
 ): TrackReferenceWithPlaceholder[] {
@@ -31,8 +31,8 @@ export function useVisualStableUpdate(
 
   const nextSortedTrackReferences =
     typeof options.customSortFunction === 'function'
-      ? options.customSortFunction(trackBundles)
-      : sortTrackReferences(trackBundles);
+      ? options.customSortFunction(trackReferences)
+      : sortTrackReferences(trackReferences);
 
   let updatedTrackReferences: TrackReferenceWithPlaceholder[] = nextSortedTrackReferences;
   if (maxItemsOnPage === maxTilesOnPage.current) {
@@ -50,7 +50,7 @@ export function useVisualStableUpdate(
   maxItemsOnPage !== maxTilesOnPage.current
     ? nextSortedTrackReferences
     : // Save info for next render to update with minimal visual change.
-      (stateTrackReferences.current = trackBundles);
+      (stateTrackReferences.current = trackReferences);
   maxTilesOnPage.current = maxItemsOnPage;
 
   return updatedTrackReferences;

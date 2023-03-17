@@ -28,16 +28,16 @@ export function CarouselView({
 }: CarouselViewProps) {
   const asideEl = React.useRef<HTMLDivElement>(null);
   const layoutContext = useMaybeLayoutContext();
-  const trackBundles = useTracks([
+  const trackReferences = useTracks([
     { source: Track.Source.Camera, withPlaceholder: true },
     { source: Track.Source.ScreenShare, withPlaceholder: false },
   ]);
   const filteredTiles = React.useMemo(() => {
-    const tilesWithoutPinned = trackBundles.filter(
+    const tilesWithoutPinned = trackReferences.filter(
       (tile) => !layoutContext?.pin.state || !isTrackReferencePinned(tile, layoutContext.pin.state),
     );
     return filter ? tilesWithoutPinned.filter(filter) : tilesWithoutPinned;
-  }, [filter, layoutContext?.pin.state, trackBundles, ...filterDependencies]);
+  }, [filter, layoutContext?.pin.state, trackReferences, ...filterDependencies]);
 
   const { width, height } = useSize(asideEl);
   const carouselOrientation = orientation
@@ -64,7 +64,7 @@ export function CarouselView({
 
   return (
     <aside key={carouselOrientation} className="lk-carousel" ref={asideEl} {...props}>
-      {props.children ?? <TrackLoop trackBundles={sortedTiles} />}
+      {props.children ?? <TrackLoop trackReferences={sortedTiles} />}
     </aside>
   );
 }

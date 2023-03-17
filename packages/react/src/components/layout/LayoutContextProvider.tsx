@@ -51,7 +51,7 @@ export function LayoutContextProvider({
     if (screenShareParticipant && screenShareTrack) {
       pinDispatch({
         msg: 'set_pin',
-        trackBundle: {
+        trackReference: {
           participant: screenShareParticipant,
           publication: screenShareTrack,
         },

@@ -27,10 +27,10 @@ import {
  * 8. remote tracks sorted by joinedAt
  */
 export function sortTrackReferences(
-  trackBundles: TrackReferenceWithPlaceholder[],
+  trackReferences: TrackReferenceWithPlaceholder[],
 ): TrackReferenceWithPlaceholder[] {
-  const trackBundles_ = [...trackBundles];
-  trackBundles_.sort((a, b) => {
+  const trackReferences_ = [...trackReferences];
+  trackReferences_.sort((a, b) => {
     // Local camera track bundle before remote.
     if (
       (a.participant.isLocal && getTrackReferenceSource(a) === Track.Source.Camera) ||
@@ -85,5 +85,5 @@ export function sortTrackReferences(
     return sortParticipantsByJoinedAt(a.participant, b.participant);
   });
 
-  return trackBundles_;
+  return trackReferences_;
 }

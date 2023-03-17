@@ -39,24 +39,24 @@ export const attachIfSubscribed = (
  * Check if the `TrackReference` is pinned.
  */
 export function isTrackReferencePinned(
-  trackBundle: TrackReferenceWithPlaceholder,
+  trackReference: TrackReferenceWithPlaceholder,
   pinState: PinState | undefined,
 ): boolean {
   if (pinState === undefined) {
     return false;
   }
-  if (isTrackReference(trackBundle)) {
+  if (isTrackReference(trackReference)) {
     return pinState.some(
       (pinnedTrackReference) =>
-        pinnedTrackReference.participant.identity === trackBundle.participant.identity &&
-        pinnedTrackReference.publication.trackSid === trackBundle.publication.trackSid,
+        pinnedTrackReference.participant.identity === trackReference.participant.identity &&
+        pinnedTrackReference.publication.trackSid === trackReference.publication.trackSid,
     );
-  } else if (isTrackReferencePlaceholder(trackBundle)) {
+  } else if (isTrackReferencePlaceholder(trackReference)) {
     return pinState.some(
       (pinnedTrackReference) =>
-        pinnedTrackReference.participant.identity === trackBundle.participant.identity &&
+        pinnedTrackReference.participant.identity === trackReference.participant.identity &&
         isTrackReferencePlaceholder(pinnedTrackReference) &&
-        pinnedTrackReference.source === trackBundle.source,
+        pinnedTrackReference.source === trackReference.source,
     );
   } else {
     return false;

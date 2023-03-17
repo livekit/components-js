@@ -46,7 +46,7 @@ function useFocusToggle({ trackSource, participant, props }: useFocusToggleProps
             } else {
               layoutContext.pin.dispatch({
                 msg: 'set_pin',
-                trackBundle: {
+                trackReference: {
                   participant: p,
                   publication: track,
                 },

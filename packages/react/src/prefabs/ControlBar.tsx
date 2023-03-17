@@ -87,7 +87,7 @@ export function ControlBar(props: ControlBarProps) {
       )}
       {visibleControls.camera && (
         <div className="lk-button-group">
-          <TrackToggle source={Track.Source.Camera} showIcon={showIcon}>
+          <TrackToggle source={Track.Source.ScreenShare} showIcon={showIcon}>
             {showText && 'Camera'}
           </TrackToggle>
           <div className="lk-button-group-menu">

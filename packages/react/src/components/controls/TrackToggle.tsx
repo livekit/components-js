@@ -3,15 +3,15 @@ import {
   log,
   setupManualToggle,
   setupMediaToggle,
+  ToggleSource,
 } from '@livekit/components-core';
-import { Track } from 'livekit-client';
 import * as React from 'react';
 import { mergeProps } from '../../mergeProps';
 import { useMaybeRoomContext } from '../../context';
 import { getSourceIcon } from '../../assets/icons/util';
 import { useObservableState } from '../../hooks/internal/useObservableState';
 
-export type TrackToggleProps<T extends Track.Source> = Omit<
+export type TrackToggleProps<T extends ToggleSource> = Omit<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   'onChange'
 > & {
@@ -22,9 +22,9 @@ export type TrackToggleProps<T extends Track.Source> = Omit<
   captureOptions?: CaptureOptionsBySource<T>;
 };
 
-export type UseTrackToggleProps<T extends Track.Source> = Omit<TrackToggleProps<T>, 'showIcon'>;
+export type UseTrackToggleProps<T extends ToggleSource> = Omit<TrackToggleProps<T>, 'showIcon'>;
 
-export function useTrackToggle<T extends Track.Source>({
+export function useTrackToggle<T extends ToggleSource>({
   source,
   onChange,
   initialState,
@@ -93,7 +93,7 @@ export function useTrackToggle<T extends Track.Source>({
  * </LiveKitRoom>
  * ```
  */
-export function TrackToggle<T extends Track.Source>({ showIcon, ...props }: TrackToggleProps<T>) {
+export function TrackToggle<T extends ToggleSource>({ showIcon, ...props }: TrackToggleProps<T>) {
   const { buttonProps, enabled } = useTrackToggle(props);
   return (
     <button {...buttonProps}>

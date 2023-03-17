@@ -18,7 +18,6 @@
   // Prevent screenshare from expanding out of bounds
   > div {
     width: 100%;
-    max-height: calc(100% - var(--control-bar-height) - (var(--grid-gap) * 2));
   }
 }
 

@@ -33,6 +33,7 @@ export function useGridLayout(
   React.useEffect(() => {
     if (gridElement.current && layout) {
       gridElement.current.style.setProperty('--lk-col-count', layout?.columns.toString());
+      gridElement.current.style.setProperty('--lk-row-count', layout?.rows.toString());
     }
   }, [gridElement, layout]);
 

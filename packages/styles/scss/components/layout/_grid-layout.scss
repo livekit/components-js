@@ -10,9 +10,10 @@
 
 .grid-layout {
   --lk-col-count: 1;
+  --lk-row-count: 1;
   display: grid;
   grid-template-columns: repeat(var(--lk-col-count), minmax(0, 1fr));
-  grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
+  grid-template-rows: repeat(var(--lk-row-count), minmax(0, 1fr));
   grid-gap: var(--grid-gap);
   width: 100%;
   height: 100%;

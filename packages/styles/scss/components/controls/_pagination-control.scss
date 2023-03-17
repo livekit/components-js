@@ -1,0 +1,38 @@
+.pagination-control {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: stretch;
+  background-color: var(--lk-control-bg);
+  border-radius: var(--lk-border-radius);
+  transition: opacity ease-in-out 0.15s;
+  opacity: 0;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  > .button:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+
+    > svg {
+      transform: rotate(180deg);
+    }
+  }
+  > .button:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
+.pagination-count {
+  padding: 0.5rem 0.875rem;
+  border-inline: 1px solid var(--lk-bg);
+}
+
+[data-user-interaction='true'] .pagination-control {
+  opacity: 1;
+}

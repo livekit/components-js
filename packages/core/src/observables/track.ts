@@ -93,6 +93,8 @@ export function trackBundlesObservable(
   const onlySubscribedTracks: boolean = options.onlySubscribed ?? true;
   const roomEvents = Array.from(
     new Set([
+      RoomEvent.ParticipantConnected,
+      RoomEvent.ParticipantDisconnected,
       RoomEvent.LocalTrackPublished,
       RoomEvent.LocalTrackUnpublished,
       RoomEvent.TrackPublished,

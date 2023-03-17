@@ -46,7 +46,7 @@
     "rxjs": "^7.8.0"
   },
   "peerDependencies": {
-    "livekit-client": "^1.6.8"
+    "livekit-client": "^1.7.0"
   },
   "devDependencies": {
     "@livekit/components-styles": "~0.2.0",

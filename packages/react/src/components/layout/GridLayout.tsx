@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useGridLayout, usePagination, UseParticipantsOptions, useTracks } from '../../hooks';
 import { mergeProps } from '../../utils';
-import { TrackBundleFilter } from '@livekit/components-core';
+import { TrackBundleFilter, createInteractingObservable } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import { TrackLoop } from '../TrackLoop';
 import { PaginationControl } from '../controls/PaginationControl';
@@ -55,8 +55,18 @@ export function GridLayout({
   const { layout, trackBundles } = useGridLayout(gridEl, filteredTrackBundles);
   const pagination = usePagination(layout.maxParticipants, trackBundles.length);
 
+  const [interactive, setInteractive] = React.useState(false);
+  React.useEffect(() => {
+    const subscription = createInteractingObservable(gridEl.current, 1000).subscribe(
+      setInteractive,
+    );
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [gridEl]);
+
   return (
-    <div className="lk-grid-layout-wrapper">
+    <div className="lk-grid-layout-wrapper" data-lk-user-interaction={interactive}>
       <div ref={gridEl} {...elementProps}>
         {props.children ?? (
           <>

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useMaybeLayoutContext, useLayoutContext } from '../../context';
 import { mergeProps } from '../../utils';
 import { TrackBundle } from '@livekit/components-core';
-import { ParticipantTile } from '../../prefabs/ParticipantTile';
+import { ParticipantTile } from '../participant/ParticipantTile';
 import { ParticipantClickEvent } from '@livekit/components-core';
 import { CarouselView } from './CarouselView';
 

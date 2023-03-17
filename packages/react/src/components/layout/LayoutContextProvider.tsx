@@ -12,8 +12,8 @@ import {
   chatReducer,
   pinReducer,
   useRoomContext,
-} from '../context';
-import { useScreenShare } from './ScreenShareRenderer';
+} from '../../context';
+import { useScreenShare } from '../participant/ScreenShareRenderer';
 
 type LayoutContextProviderProps = {
   onPinChange?: (state: PinState) => void;

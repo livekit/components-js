@@ -4,7 +4,7 @@ import { from, of } from 'rxjs';
 import { useRoomContext } from '../context';
 import { useObservableState } from '../hooks/internal/useObservableState';
 import { cloneSingleChild } from '../utils';
-import { ChatEntry, MessageFormatter } from './ChatEntry';
+import { ChatEntry, MessageFormatter } from '../components/ChatEntry';
 
 export type { ChatMessage, ReceivedChatMessage };
 

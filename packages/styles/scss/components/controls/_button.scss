@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.875rem;
+  padding: 0.625rem 1rem;
   color: var(--control-fg);
   background-image: none;
   background-color: var(--control-bg);
@@ -51,8 +51,9 @@
 
 .button-group-menu {
   position: relative;
+  flex-shrink: 0;
 
-  .button {
+  > .button {
     height: 100%;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;

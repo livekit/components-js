@@ -78,7 +78,7 @@ export const MediaDeviceMenu = ({
   }, [handleClickOutside, setUpdateRequired]);
 
   return (
-    <span style={{ position: 'relative', flexShrink: 0 }}>
+    <>
       <button
         className="lk-button lk-button-menu"
         aria-pressed={isOpen}
@@ -118,6 +118,6 @@ export const MediaDeviceMenu = ({
           </>
         )}
       </div>
-    </span>
+    </>
   );
 };

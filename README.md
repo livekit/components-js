@@ -61,6 +61,21 @@ Because most of the components are merely wrappers around standard HTML-Elements
 
 On top of that we provide a handful of pre-defined css variables to easily theme LiveKit Components to your needs.
 
+To add styling from our @livekit/components-styles package:
+
+Import styles and prefabs
+
+```ts
+import '@livekit/components-styles';
+import '@livekit/components-styles/prefabs';
+```
+
+And add a theme data attribute to the <LiveKitRoom/> or any HTML container, to gain access to default LiveKit styles.
+
+```html
+<div data-lk-theme="default"...
+```
+
 ### 📈 Room to grow: create your own components
 
 The component we offer does not fit your requirements? We have the solution for you! Each component comes with its own React hook that allows you to create your own component with minimal boilerplate. Of course, you can also combine your own component with our pre-built components. It's common to start with our components to quickly sketch out a concept, and then replace some of them with your own components to build something we could never have imagined.

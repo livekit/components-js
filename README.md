@@ -70,7 +70,7 @@ import '@livekit/components-styles';
 import '@livekit/components-styles/prefabs';
 ```
 
-And add a theme data attribute to the <LiveKitRoom/> or any HTML container, to gain access to default LiveKit styles.
+And add a theme data attribute to the `<LiveKitRoom/>` or any HTML container, to gain access to default LiveKit styles.
 
 ```html
 <div data-lk-theme="default"...

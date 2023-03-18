@@ -1,5 +1,17 @@
 # @livekit/component-docs-storybook
 
+## 1.0.18
+
+### Patch Changes
+
+- add orientation prop to CarouselView - [#355](https://github.com/livekit/components-js/pull/355) ([@Ocupe](https://github.com/Ocupe))
+
+- Bump minimum livekit-client version to 1.7.0 - [#369](https://github.com/livekit/components-js/pull/369) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`0ec7042`](https://github.com/livekit/components-js/commit/0ec7042649071b0e5d98c0096c912fdc775ca40f), [`1ec607d`](https://github.com/livekit/components-js/commit/1ec607debf2dd8e555e3ddea28a359d757b27842), [`a011fdd`](https://github.com/livekit/components-js/commit/a011fdda0550cb4ac9e380022ddb3cbb0c57dc7d), [`2a926be`](https://github.com/livekit/components-js/commit/2a926be324fbe4f4b0d7dfe662a2407f149ec58f), [`acfd91e`](https://github.com/livekit/components-js/commit/acfd91e1de07b3b30dc1b87a38d07ec4b8f30722), [`9accef1`](https://github.com/livekit/components-js/commit/9accef114bf77c7fc7ac2b9f711cd38256dc8bd7), [`493d49c`](https://github.com/livekit/components-js/commit/493d49cad3b7286ba6ffc9b03f2ecf0a28d86702), [`9cf77c6`](https://github.com/livekit/components-js/commit/9cf77c641f425d18a4edefbbf27602119e6fe17f), [`f5707d0`](https://github.com/livekit/components-js/commit/f5707d016225abd2520b20221b30b6dd834511e7)]:
+  - @livekit/components-styles@0.2.1
+  - @livekit/components-react@0.6.0
+
 ## 1.0.17
 
 ### Patch Changes

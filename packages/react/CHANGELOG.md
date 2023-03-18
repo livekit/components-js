@@ -1,5 +1,30 @@
 # @livekit/components-react
 
+## 0.6.0
+
+### Minor Changes
+
+- Rename TrackBundle to TrackReference. - [#365](https://github.com/livekit/components-js/pull/365) ([@Ocupe](https://github.com/Ocupe))
+
+- Exclude unknown and screenShareAudio from toggle sources - [#370](https://github.com/livekit/components-js/pull/370) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- add orientation prop to CarouselView - [#355](https://github.com/livekit/components-js/pull/355) ([@Ocupe](https://github.com/Ocupe))
+
+- Include screen share audio in control bar capture defaults - [#361](https://github.com/livekit/components-js/pull/361) ([@lukasIO](https://github.com/lukasIO))
+
+- add pagination to GridLayout component - [#350](https://github.com/livekit/components-js/pull/350) ([@Ocupe](https://github.com/Ocupe))
+
+- Fix data channel memory leak - [#360](https://github.com/livekit/components-js/pull/360) ([@Ocupe](https://github.com/Ocupe))
+
+- Bump minimum livekit-client version to 1.7.0 - [#369](https://github.com/livekit/components-js/pull/369) ([@lukasIO](https://github.com/lukasIO))
+
+- Add capture options to toggle - [#356](https://github.com/livekit/components-js/pull/356) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`a011fdd`](https://github.com/livekit/components-js/commit/a011fdda0550cb4ac9e380022ddb3cbb0c57dc7d), [`9accef1`](https://github.com/livekit/components-js/commit/9accef114bf77c7fc7ac2b9f711cd38256dc8bd7), [`ec2c7a3`](https://github.com/livekit/components-js/commit/ec2c7a3ac33f58334d16d0c8241c475710e80f2b), [`493d49c`](https://github.com/livekit/components-js/commit/493d49cad3b7286ba6ffc9b03f2ecf0a28d86702), [`9cf77c6`](https://github.com/livekit/components-js/commit/9cf77c641f425d18a4edefbbf27602119e6fe17f), [`f5707d0`](https://github.com/livekit/components-js/commit/f5707d016225abd2520b20221b30b6dd834511e7)]:
+  - @livekit/components-core@0.5.0
+
 ## 0.5.0
 
 ### Minor Changes

@@ -1,5 +1,23 @@
 # @livekit/components-core
 
+## 0.5.0
+
+### Minor Changes
+
+- Rename TrackBundle to TrackReference. - [#365](https://github.com/livekit/components-js/pull/365) ([@Ocupe](https://github.com/Ocupe))
+
+- Exclude unknown and screenShareAudio from toggle sources - [#370](https://github.com/livekit/components-js/pull/370) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Fix data channel memory leak - [#360](https://github.com/livekit/components-js/pull/360) ([@Ocupe](https://github.com/Ocupe))
+
+- Listen to ParticipantConnected events in trackBundleObservable - [#364](https://github.com/livekit/components-js/pull/364) ([@lukasIO](https://github.com/lukasIO))
+
+- Bump minimum livekit-client version to 1.7.0 - [#369](https://github.com/livekit/components-js/pull/369) ([@lukasIO](https://github.com/lukasIO))
+
+- Add capture options to toggle - [#356](https://github.com/livekit/components-js/pull/356) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.4.0
 
 ### Minor Changes

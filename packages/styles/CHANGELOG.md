@@ -1,5 +1,15 @@
 # @livekit/components-styles
 
+## 0.2.1
+
+### Patch Changes
+
+- CSS tweaks #367 - [#368](https://github.com/livekit/components-js/pull/368) ([@lukasIO](https://github.com/lukasIO))
+
+- add orientation prop to CarouselView - [#355](https://github.com/livekit/components-js/pull/355) ([@Ocupe](https://github.com/Ocupe))
+
+- add pagination to GridLayout component - [#350](https://github.com/livekit/components-js/pull/350) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.2.0
 
 ### Minor Changes

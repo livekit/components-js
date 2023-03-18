@@ -10,7 +10,7 @@ import { Subject, map, startWith, Observable } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 
-export type CaptureOptionsBySource<T extends Track.Source> = T extends Track.Source.Camera
+export type CaptureOptionsBySource<T extends ToggleSource> = T extends Track.Source.Camera
   ? VideoCaptureOptions
   : T extends Track.Source.Microphone
   ? AudioCaptureOptions
@@ -18,21 +18,26 @@ export type CaptureOptionsBySource<T extends Track.Source> = T extends Track.Sou
   ? ScreenShareCaptureOptions
   : never;
 
-export type MediaToggleType<T extends Track.Source> = {
+export type MediaToggleType<T extends ToggleSource> = {
   pendingObserver: Observable<boolean>;
   toggle: (forceState?: boolean, captureOptions?: CaptureOptionsBySource<T>) => Promise<void>;
   className: string;
   enabledObserver: Observable<boolean>;
 };
 
-export function setupMediaToggle<T extends Track.Source>(
+export type ToggleSource = Exclude<
+  Track.Source,
+  Track.Source.ScreenShareAudio | Track.Source.Unknown
+>;
+
+export function setupMediaToggle<T extends ToggleSource>(
   source: T,
   room: Room,
   options?: CaptureOptionsBySource<T>,
 ): MediaToggleType<T> {
   const { localParticipant } = room;
 
-  const getSourceEnabled = (source: Track.Source, localParticipant: LocalParticipant) => {
+  const getSourceEnabled = (source: ToggleSource, localParticipant: LocalParticipant) => {
     let isEnabled = false;
     switch (source) {
       case Track.Source.Camera:

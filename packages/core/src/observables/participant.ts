@@ -12,6 +12,7 @@ import { observeRoomEvents } from './room';
 import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 import { allParticipantEvents, allParticipantRoomEvents } from '../helper/eventGroups';
 import { TrackIdentifier } from '../types';
+import { getTrackByIdentifier } from '../components/mediaTrack';
 
 export function observeParticipantEvents<T extends Participant>(
   participant: T,
@@ -83,10 +84,7 @@ export function observeParticipantMedia<T extends Participant>(participant: T) {
 export function createTrackObserver(participant: Participant, options: TrackIdentifier) {
   return observeParticipantMedia(participant).pipe(
     map((media) => {
-      const publication = options.source
-        ? media.participant.getTrack(options.source)
-        : media.participant.getTrackByName(options.name);
-      return { publication };
+      return { publication: getTrackByIdentifier(media.participant, options) };
     }),
   );
 }

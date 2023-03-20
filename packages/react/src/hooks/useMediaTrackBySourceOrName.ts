@@ -36,7 +36,7 @@ export function useMediaTrackBySourceOrName(
 
   const { className, trackObserver } = React.useMemo(() => {
     return setupMediaTrack(participant, observerOptions);
-  }, [participant, JSON.stringify(observerOptions)]);
+  }, [participant, observerOptions]);
 
   React.useEffect(() => {
     const subscription = trackObserver.subscribe((publication) => {

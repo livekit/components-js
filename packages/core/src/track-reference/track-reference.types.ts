@@ -29,9 +29,7 @@ export type TrackReferenceWithPlaceholder =
   | TrackReferencePlaceholder;
 
 // ### TrackReference Type Predicates
-export function isTrackReference(
-  trackReference: TrackReferenceWithPlaceholder,
-): trackReference is TrackReference {
+export function isTrackReference(trackReference: unknown): trackReference is TrackReference {
   return (
     isTrackReferenceSubscribed(trackReference as TrackReference) ||
     isTrackReferencePublished(trackReference as TrackReference)

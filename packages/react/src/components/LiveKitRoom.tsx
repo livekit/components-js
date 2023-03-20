@@ -74,6 +74,11 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    * make sure to set the options directly on the room instance itself.
    */
   room?: Room;
+  /**
+   * room reference
+   */
+  ref?: React.RefObject<Room>;
+
   simulateParticipants?: number | undefined;
 }
 

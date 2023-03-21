@@ -1,8 +1,8 @@
-import { RemoteParticipant, Track } from 'livekit-client';
+import { isLocal } from '@livekit/components-core';
+import { Track } from 'livekit-client';
 import * as React from 'react';
 import { useTracks } from '../hooks';
 import { AudioTrack } from './participant/AudioTrack';
-import { TrackLoop } from './TrackLoop';
 
 /**
  * The RoomAudioRenderer component is a drop-in solution for adding audio to your LiveKit app.
@@ -16,17 +16,14 @@ import { TrackLoop } from './TrackLoop';
  * ```
  */
 export const RoomAudioRenderer = () => {
-  const trackReferences = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio]);
+  const trackReferences = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio], {
+    updateOnlyOn: [],
+  }).filter((ref) => !isLocal(ref.participant));
   return (
     <div style={{ display: 'none' }}>
-      <TrackLoop
-        trackReferences={trackReferences.filter(({ participant }) => {
-          return participant instanceof RemoteParticipant;
-        })}
-      >
-        {/* TODO: How to handle screen share audio? Currently it is rendered as microphone source.         */}
-        <AudioTrack source={Track.Source.Microphone} />
-      </TrackLoop>
+      {trackReferences.map((trackRef) => (
+        <AudioTrack key={trackRef.publication.trackSid} trackReference={trackRef} />
+      ))}
     </div>
   );
 };

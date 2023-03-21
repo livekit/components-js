@@ -1,4 +1,10 @@
-import { TrackObserverOptions, setupMediaTrack, log, isLocal } from '@livekit/components-core';
+import {
+  TrackIdentifier,
+  setupMediaTrack,
+  log,
+  isLocal,
+  getTrackByIdentifier,
+} from '@livekit/components-core';
 import { Participant, Track } from 'livekit-client';
 import React from 'react';
 import { useEnsureParticipant } from '../context';
@@ -14,13 +20,14 @@ export interface UseMediaTrackOptions {
  * @internal
  */
 export function useMediaTrackBySourceOrName(
-  { source, name }: TrackObserverOptions,
+  observerOptions: TrackIdentifier,
   options: UseMediaTrackOptions = {},
 ) {
   const participant = useEnsureParticipant(options.participant);
   const [publication, setPublication] = React.useState(
-    source ? participant.getTrack(source) : participant.getTrackByName(name),
+    getTrackByIdentifier(participant, observerOptions),
   );
+
   const [isMuted, setMuted] = React.useState(publication?.isMuted);
   const [isSubscribed, setSubscribed] = React.useState(publication?.isSubscribed);
   const [track, setTrack] = React.useState(publication?.track);
@@ -28,8 +35,8 @@ export function useMediaTrackBySourceOrName(
   const previousElement = React.useRef<HTMLMediaElement | undefined | null>();
 
   const { className, trackObserver } = React.useMemo(() => {
-    return setupMediaTrack(participant, source ? { source } : { name });
-  }, [participant, source, name]);
+    return setupMediaTrack(participant, observerOptions);
+  }, [participant, observerOptions]);
 
   React.useEffect(() => {
     const subscription = trackObserver.subscribe((publication) => {
@@ -80,8 +87,9 @@ export function useMediaTrackBySourceOrName(
     elementProps: mergeProps(options.props, {
       className,
       'data-lk-local-participant': participant.isLocal,
-      'data-lk-source': source,
-      ...(source === Track.Source.Camera || source === Track.Source.ScreenShare
+      'data-lk-source': publication?.source,
+      ...(publication?.source === Track.Source.Camera ||
+      publication?.source === Track.Source.ScreenShare
         ? { 'data-lk-orientation': orientation }
         : {}),
     }),

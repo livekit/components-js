@@ -1,11 +1,15 @@
 import { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
-import { ParticipantClickEvent } from '@livekit/components-core';
+import { ParticipantClickEvent, TrackReference, TrackSource } from '@livekit/components-core';
 import { useEnsureParticipant } from '../../context';
 
+type VideoTrackSource =
+  | (TrackSource<Track.Source> & { trackReference?: undefined })
+  | { source?: undefined; name?: undefined; trackReference: TrackReference };
+
 export type VideoTrackProps = React.HTMLAttributes<HTMLVideoElement> &
-  ({ source: Track.Source; name?: undefined } | { name: string; source?: undefined }) & {
+  VideoTrackSource & {
     participant?: Participant;
     onTrackClick?: (evt: ParticipantClickEvent) => void;
     onSubscriptionStatusChanged?: (subscribed: boolean) => void;
@@ -32,20 +36,16 @@ export function VideoTrack({
   onTrackClick,
   onClick,
   onSubscriptionStatusChanged,
+  name,
+  source,
+  trackReference,
   ...props
 }: VideoTrackProps) {
-  let source: Track.Source | undefined;
-  let name: string | undefined;
-  if (props.source !== undefined) {
-    source = props.source;
-  } else {
-    name = props.name;
-  }
   const mediaEl = React.useRef<HTMLVideoElement>(null);
   const participant = useEnsureParticipant(props.participant);
   const { elementProps, publication, isSubscribed } = useMediaTrackBySourceOrName(
-    // @ts-expect-error only one of this is defined, but ts complains that both might be
-    { source, name },
+    // @ts-expect-error this is an exhaustive check for VideoTrackProps, but typescript doesn't pick it up
+    source || name ? { source, name } : trackReference,
     {
       participant,
       element: mediaEl,

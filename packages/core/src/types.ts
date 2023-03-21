@@ -38,12 +38,22 @@ export interface ParticipantClickEvent {
   track?: TrackPublication;
 }
 
-export type TrackObserverOptions =
-  | { source: Track.Source; name?: undefined }
-  | { source?: undefined; name: string };
+export type TrackSource<T extends Track.Source> = RequireAtLeastOne<
+  { source: T; name: string },
+  'name' | 'source'
+>;
+
+/**
+ * The TrackIdentifier type is used to select Tracks either based on
+ * - Track.Source and/or name of the track, e.g. `{source: Track.Source.Camera}` or `{name: "my-track"}`
+ * - TrackReference (participant and publication)
+ */
+export type TrackIdentifier<T extends Track.Source = Track.Source> =
+  | TrackSource<T>
+  | TrackReference;
 
 // ## Util Types
-export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
+type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
   {
     [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>>;
   }[Keys];

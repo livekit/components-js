@@ -1,13 +1,17 @@
 import { Participant } from 'livekit-client';
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
-import { AudioSource, log } from '@livekit/components-core';
+import { AudioSource, log, TrackReference, TrackSource } from '@livekit/components-core';
 import { useEnsureParticipant } from '../../context';
 import { RemoteAudioTrack } from 'livekit-client';
 
+type AudioTrackSource =
+  | (TrackSource<AudioSource> & { trackReference?: undefined })
+  | { source?: undefined; name?: undefined; trackReference: TrackReference };
+
 export type AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
   React.HTMLAttributes<T> &
-    ({ source: AudioSource; name?: undefined } | { name: string; source?: undefined }) & {
+    AudioTrackSource & {
       participant?: Participant;
       onSubscriptionStatusChanged?: (subscribed: boolean) => void;
       /** by the default the range is between 0 and 1 */
@@ -28,18 +32,13 @@ export type AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
  * @see `ParticipantTile` component
  */
 export function AudioTrack({ onSubscriptionStatusChanged, volume, ...props }: AudioTrackProps) {
-  let source: AudioSource | undefined = undefined;
-  let name: string | undefined = undefined;
-  if (props.source !== undefined) {
-    source = props.source;
-  } else {
-    name = props.name;
-  }
+  const { source, name, trackReference } = props;
   const mediaEl = React.useRef<HTMLAudioElement>(null);
   const participant = useEnsureParticipant(props.participant);
+
   const { elementProps, isSubscribed, track } = useMediaTrackBySourceOrName(
-    // @ts-expect-error only one of this is defined, but ts complains that both might be
-    { source, name },
+    // @ts-expect-error this is an exhaustive check for AudioTrackProps, but typescript doesn't pick it up
+    source || name ? { source, name } : trackReference,
     {
       participant,
       element: mediaEl,

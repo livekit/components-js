@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 0.6.1
+
+### Patch Changes
+
+- Enable trackReferences to be used on audio/video track - [#374](https://github.com/livekit/components-js/pull/374) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`a423d48`](https://github.com/livekit/components-js/commit/a423d483ee1d92d658a04c4c9ff2142aa388d2d0)]:
+  - @livekit/components-core@0.5.1
+
 ## 0.6.0
 
 ### Minor Changes

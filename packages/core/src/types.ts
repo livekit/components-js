@@ -43,6 +43,11 @@ export type TrackSource<T extends Track.Source> = RequireAtLeastOne<
   'name' | 'source'
 >;
 
+/**
+ * The TrackIdentifier type is used to select Tracks either based on
+ * - Track.Source and/or name of the track
+ * - TrackReference (participant and publication)
+ */
 export type TrackIdentifier<T extends Track.Source = Track.Source> =
   | TrackSource<T>
   | TrackReference;

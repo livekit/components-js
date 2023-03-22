@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Observable } from 'rxjs';
+import type { Observable } from 'rxjs';
 
 /**
  * @internal

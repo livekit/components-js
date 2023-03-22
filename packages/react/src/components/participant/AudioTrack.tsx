@@ -34,7 +34,7 @@ export type AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
 export function AudioTrack({ onSubscriptionStatusChanged, volume, ...props }: AudioTrackProps) {
   const { source, name, trackReference } = props;
   const mediaEl = React.useRef<HTMLAudioElement>(null);
-  const participant = useEnsureParticipant(props.participant);
+  const participant = useEnsureParticipant(props.participant || trackReference?.participant);
 
   const { elementProps, isSubscribed, track } = useMediaTrackBySourceOrName(
     // @ts-expect-error this is an exhaustive check for AudioTrackProps, but typescript doesn't pick it up

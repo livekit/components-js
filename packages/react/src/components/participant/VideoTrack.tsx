@@ -42,7 +42,7 @@ export function VideoTrack({
   ...props
 }: VideoTrackProps) {
   const mediaEl = React.useRef<HTMLVideoElement>(null);
-  const participant = useEnsureParticipant(props.participant);
+  const participant = useEnsureParticipant(props.participant || trackReference?.participant);
   const { elementProps, publication, isSubscribed } = useMediaTrackBySourceOrName(
     // @ts-expect-error this is an exhaustive check for VideoTrackProps, but typescript doesn't pick it up
     source || name ? { source, name } : trackReference,

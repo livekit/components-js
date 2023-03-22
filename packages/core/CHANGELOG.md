@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.5.1
+
+### Patch Changes
+
+- Enable trackReferences to be used on audio/video track - [#374](https://github.com/livekit/components-js/pull/374) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.5.0
 
 ### Minor Changes

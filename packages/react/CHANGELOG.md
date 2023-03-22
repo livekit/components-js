@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 0.6.2
+
+### Patch Changes
+
+- Use trackReference.participant as fallback for rendering track - [#377](https://github.com/livekit/components-js/pull/377) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.6.1
 
 ### Patch Changes

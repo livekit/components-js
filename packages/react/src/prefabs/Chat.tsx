@@ -1,6 +1,5 @@
 import { setupChat, ChatMessage, ReceivedChatMessage } from '@livekit/components-core';
 import * as React from 'react';
-import { from, of } from 'rxjs';
 import { useRoomContext } from '../context';
 import { useObservableState } from '../hooks/internal/useObservableState';
 import { cloneSingleChild } from '../utils';
@@ -15,8 +14,8 @@ export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
 export function useChat() {
   const room = useRoomContext();
   const [setup, setSetup] = React.useState<ReturnType<typeof setupChat>>();
-  const isSending = useObservableState(setup?.isSendingObservable ?? of(false), false);
-  const chatMessages = useObservableState(setup?.messageObservable ?? from([]), []);
+  const isSending = useObservableState(setup?.isSendingObservable, false);
+  const chatMessages = useObservableState(setup?.messageObservable, []);
 
   React.useEffect(() => {
     const setupChatReturn = setupChat(room);

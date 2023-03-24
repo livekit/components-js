@@ -1,12 +1,3 @@
-.focus-layout-wrapper {
-  position: relative;
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  width: 100%;
-  height: calc(100% - var(--control-bar-height));
-}
-
 .focus-layout {
   display: grid;
   grid-template-columns: 1fr 5fr;

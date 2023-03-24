@@ -43,13 +43,17 @@ export function AudioConference({ ...props }: AudioConferenceProps) {
       <LayoutContextProvider onPinChange={handlePinStateChange} onWidgetChange={setWidgetState}>
         <div className="lk-audio-conference-stage">
           {layout === 'grid' ? (
-            <GridLayout>
-              <TrackLoop trackReferences={trackReferences}>
-                <ParticipantAudioTile />
-              </TrackLoop>
-            </GridLayout>
+            <div className="lk-grid-layout-wrapper">
+              <GridLayout>
+                <TrackLoop trackReferences={trackReferences}>
+                  <ParticipantAudioTile />
+                </TrackLoop>
+              </GridLayout>
+            </div>
           ) : (
-            <FocusLayoutContainer />
+            <div className="lk-focus-layout-wrapper">
+              <FocusLayoutContainer />
+            </div>
           )}
           <ControlBar
             controls={{ microphone: true, screenShare: false, camera: false, chat: true }}

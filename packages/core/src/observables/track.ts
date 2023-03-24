@@ -63,29 +63,24 @@ function getTrackReferences(
 
   allParticipants.forEach((participant) => {
     sources.forEach((source) => {
-      const publications = Array.from<RemoteTrackPublication | LocalTrackPublication>(
+      const sourceReferences = Array.from<RemoteTrackPublication | LocalTrackPublication>(
         participant.tracks.values(),
-      ).filter((track) => track.source === source);
-      publications.forEach((publication) => {
-        if (publication) {
-          if (publication.track) {
-            // Include subscribed `TrackPublications`.
-            trackReferences.push({
-              participant,
-              publication,
-              track: publication.track,
-            });
-          } else if (!onlySubscribedTracks) {
-            // Include also `TrackPublications` that are not subscribed.
-            trackReferences.push({ participant, publication });
-          }
-        }
-        log.debug(
-          `getting participant ${participant.identity}, source ${source}, exists: ${
-            publication !== undefined
-          }, subscribed: ${publication?.track !== undefined} `,
-        );
-      });
+      )
+        .filter(
+          (track) =>
+            track.source === source &&
+            // either return all or only the ones that are subscribed
+            (!onlySubscribedTracks || track.track),
+        )
+        .map((track) => {
+          return {
+            participant: participant,
+            publication: track,
+            track: track.track,
+          };
+        });
+
+      trackReferences.push(...sourceReferences);
     });
   });
 

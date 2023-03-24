@@ -12,6 +12,7 @@ import {
 import { Participant, RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
 import { useRoomContext } from '../context';
+import { useObservableState } from './internal';
 
 type UseTracksOptions = {
   updateOnlyOn?: RoomEvent[];
@@ -37,8 +38,14 @@ type UseTracksHookReturnType<T> = T extends Track.Source[]
  * const trackReferencesWithPlaceholders = useTracks(sources: [{source: Track.Source.Camera, withPlaceholder: true}])
  * ```
  */
-export function useTracks<T extends SourcesArray = SourcesArray>(
-  sources: T,
+export function useTracks<T extends SourcesArray = Track.Source[]>(
+  sources: T = [
+    Track.Source.Camera,
+    Track.Source.Microphone,
+    Track.Source.ScreenShare,
+    Track.Source.ScreenShareAudio,
+    Track.Source.Unknown,
+  ] as T,
   options: UseTracksOptions = {},
 ): UseTracksHookReturnType<T> {
   const room = useRoomContext();

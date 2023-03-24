@@ -12,7 +12,6 @@ import {
 import { Participant, RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
 import { useRoomContext } from '../context';
-import { useObservableState } from './internal';
 
 type UseTracksOptions = {
   updateOnlyOn?: RoomEvent[];

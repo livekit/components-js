@@ -4,7 +4,7 @@ import {
   log,
   SourcesArray,
   TrackReference,
-  TrackReferenceWithPlaceholder,
+  TrackReferenceOrPlaceholder,
   trackReferencesObservable,
   TrackSourceWithOptions,
   TrackReferencePlaceholder,
@@ -21,7 +21,7 @@ type UseTracksOptions = {
 type UseTracksHookReturnType<T> = T extends Track.Source[]
   ? TrackReference[]
   : T extends TrackSourceWithOptions[]
-  ? TrackReferenceWithPlaceholder[]
+  ? TrackReferenceOrPlaceholder[]
   : never;
 
 /**
@@ -66,7 +66,7 @@ export function useTracks<T extends SourcesArray = SourcesArray>(
       const requirePlaceholder = requiredPlaceholders(sources, participants);
       const trackReferencesWithPlaceholders = Array.from(
         trackReferences,
-      ) as TrackReferenceWithPlaceholder[];
+      ) as TrackReferenceOrPlaceholder[];
       participants.forEach((participant) => {
         if (requirePlaceholder.has(participant.identity)) {
           const sourcesToAddPlaceholder = requirePlaceholder.get(participant.identity) ?? [];

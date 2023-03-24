@@ -1,5 +1,5 @@
 import type { Participant, Track, TrackPublication } from 'livekit-client';
-import { TrackReference, TrackReferenceWithPlaceholder } from './track-reference';
+import { TrackReference, TrackReferenceOrPlaceholder } from './track-reference';
 
 // ## PinState Type
 export type PinState = TrackReference[];
@@ -29,7 +29,7 @@ export function isSourcesWithOptions(sources: SourcesArray): sources is TrackSou
 }
 
 // ## Loop Filter Types
-export type TrackReferenceFilter = Parameters<TrackReferenceWithPlaceholder[]['filter']>['0'];
+export type TrackReferenceFilter = Parameters<TrackReferenceOrPlaceholder[]['filter']>['0'];
 export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
 
 // ## Other Types

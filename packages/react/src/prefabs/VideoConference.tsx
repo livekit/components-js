@@ -2,13 +2,17 @@ import * as React from 'react';
 import { LayoutContextProvider } from '../components/layout/LayoutContextProvider';
 import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
 import { ControlBar } from './ControlBar';
-import { FocusLayoutContainer } from '../components/layout/FocusLayout';
+import { FocusLayout, FocusLayoutContainer } from '../components/layout/FocusLayout';
 import { GridLayout } from '../components/layout/GridLayout';
 import { PinState, WidgetState } from '@livekit/components-core';
 import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
 import { useMediaQuery } from '../hooks/internal/useMediaQuery';
 import { MessageFormatter } from '../components/ChatEntry';
+import { Track } from 'livekit-client';
+import { useTracks } from '../hooks/useTracks';
+import { usePinnedTracks } from '../hooks/usePinnedTracks';
+import { CarouselView } from '../components/layout/CarouselView';
 
 export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
   chatMessageFormatter?: MessageFormatter;
@@ -40,15 +44,30 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
 
   const isMobile = useMediaQuery(`(max-width: 660px)`);
 
+  const tracks = useTracks([
+    { source: Track.Source.Camera, withPlaceholder: true },
+    { source: Track.Source.ScreenShare, withPlaceholder: false },
+  ]);
+
+  // TODO
+  // const pinnedTracks = usePinnedTracks();
+  // const otherTracks = diff(pinnedTracks, tracks);
+
+  const focusTrack = usePinnedTracks()?.[0];
+  const carouselTracks = tracks.filter((track) => track !== focusTrack);
+
   return (
     <div className="lk-video-conference" {...props}>
       <LayoutContextProvider onPinChange={handleFocusStateChange} onWidgetChange={setWidgetState}>
         <div className="lk-video-conference-inner">
           {layout === 'grid' ? (
-            <GridLayout />
+            <GridLayout tracks={tracks} />
           ) : (
             <div className="lk-focus-layout-wrapper">
-              <FocusLayoutContainer />
+              <FocusLayoutContainer>
+                <CarouselView tracks={carouselTracks} />
+                {focusTrack && <FocusLayout track={focusTrack} />}
+              </FocusLayoutContainer>
             </div>
           )}
           <ControlBar variation={isMobile ? 'minimal' : 'verbose'} controls={{ chat: true }} />

@@ -23,7 +23,7 @@ export type TrackReferencePlaceholder = {
 };
 
 export type TrackReference = TrackReferenceSubscribed | TrackReferencePublished;
-export type TrackReferenceWithPlaceholder =
+export type TrackReferenceOrPlaceholder =
   | TrackReferenceSubscribed
   | TrackReferencePublished
   | TrackReferencePlaceholder;
@@ -49,7 +49,7 @@ function isTrackReferencePublished(
 }
 
 export function isTrackReferencePlaceholder(
-  trackReference: TrackReferenceWithPlaceholder,
+  trackReference: TrackReferenceOrPlaceholder,
 ): trackReference is TrackReferencePlaceholder {
   return (
     trackReference.hasOwnProperty('participant') &&

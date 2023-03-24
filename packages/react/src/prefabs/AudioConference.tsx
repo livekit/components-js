@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { ControlBar } from './ControlBar';
-import { FocusLayoutContainer } from '../components/layout/FocusLayout';
 import { GridLayout } from '../components/layout/GridLayout';
-import { TrackLoop } from '../components/TrackLoop';
 import { Track } from 'livekit-client';
 import { ParticipantAudioTile } from '../components/participant/ParticipantAudioTile';
 import { LayoutContextProvider } from '../components/layout/LayoutContextProvider';
-import { PinState, WidgetState } from '@livekit/components-core';
+import { WidgetState } from '@livekit/components-core';
 import { Chat } from './Chat';
 import { useTracks } from '../hooks';
 
@@ -28,29 +26,19 @@ export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
  * ```
  */
 export function AudioConference({ ...props }: AudioConferenceProps) {
-  type Layout = 'grid' | 'focus';
-  const [layout, setLayout] = React.useState<Layout>('grid');
   const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });
-
-  const handlePinStateChange = (pinState: PinState) => {
-    setLayout(pinState.length >= 1 ? 'focus' : 'grid');
-  };
 
   const trackReferences = useTracks([Track.Source.Microphone]);
 
   return (
     <div className="lk-audio-conference" {...props}>
-      <LayoutContextProvider onPinChange={handlePinStateChange} onWidgetChange={setWidgetState}>
+      <LayoutContextProvider onWidgetChange={setWidgetState}>
         <div className="lk-audio-conference-stage">
-          {layout === 'grid' ? (
-            <GridLayout>
-              <TrackLoop trackReferences={trackReferences}>
-                <ParticipantAudioTile />
-              </TrackLoop>
+          <div className="lk-grid-wrapper">
+            <GridLayout tracks={trackReferences}>
+              <ParticipantAudioTile />
             </GridLayout>
-          ) : (
-            <FocusLayoutContainer />
-          )}
+          </div>
           <ControlBar
             controls={{ microphone: true, screenShare: false, camera: false, chat: true }}
           />

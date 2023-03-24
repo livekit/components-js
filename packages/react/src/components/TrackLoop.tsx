@@ -1,7 +1,7 @@
 import {
   isTrackReference,
   TrackReference,
-  TrackReferenceWithPlaceholder,
+  TrackReferenceOrPlaceholder,
 } from '@livekit/components-core';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
@@ -9,7 +9,7 @@ import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
 type TrackLoopProps = {
-  trackReferences: TrackReference[] | TrackReferenceWithPlaceholder[];
+  trackReferences: TrackReference[] | TrackReferenceOrPlaceholder[];
 };
 
 /**

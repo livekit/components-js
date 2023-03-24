@@ -8,7 +8,7 @@ import {
 import {
   isTrackReference,
   isTrackReferencePlaceholder,
-  TrackReferenceWithPlaceholder,
+  TrackReferenceOrPlaceholder,
 } from './track-reference';
 import { PinState } from './types';
 
@@ -39,7 +39,7 @@ export const attachIfSubscribed = (
  * Check if the `TrackReference` is pinned.
  */
 export function isTrackReferencePinned(
-  trackReference: TrackReferenceWithPlaceholder,
+  trackReference: TrackReferenceOrPlaceholder,
   pinState: PinState | undefined,
 ): boolean {
   if (pinState === undefined) {

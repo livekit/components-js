@@ -45,7 +45,9 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
       <LayoutContextProvider onPinChange={handleFocusStateChange} onWidgetChange={setWidgetState}>
         <div className="lk-video-conference-inner">
           {layout === 'grid' ? (
-            <GridLayout />
+            <div className="lk-grid-layout-wrapper">
+              <GridLayout />
+            </div>
           ) : (
             <div className="lk-focus-layout-wrapper">
               <FocusLayoutContainer />

@@ -66,26 +66,24 @@ export function GridLayout({
   }, [gridEl]);
 
   return (
-    <div className="lk-grid-layout-wrapper" data-lk-user-interaction={interactive}>
-      <div ref={gridEl} {...elementProps}>
-        {props.children ?? (
-          <>
-            {props.children ?? (
-              <>
-                <TrackLoop
-                  trackReferences={trackReferences.slice(
-                    pagination.firstItemIndex,
-                    pagination.lastItemIndex,
-                  )}
-                />
-                {trackReferences.length > layout.maxParticipants && (
-                  <PaginationControl {...pagination} />
+    <div ref={gridEl} {...elementProps} data-lk-user-interaction={interactive}>
+      {props.children ?? (
+        <>
+          {props.children ?? (
+            <>
+              <TrackLoop
+                trackReferences={trackReferences.slice(
+                  pagination.firstItemIndex,
+                  pagination.lastItemIndex,
                 )}
-              </>
-            )}
-          </>
-        )}
-      </div>
+              />
+              {trackReferences.length > layout.maxParticipants && (
+                <PaginationControl {...pagination} />
+              )}
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 }

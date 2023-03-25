@@ -28,14 +28,14 @@ export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 export function AudioConference({ ...props }: AudioConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });
 
-  const trackReferences = useTracks([Track.Source.Microphone]);
+  const tracks = useTracks([Track.Source.Microphone]);
 
   return (
     <div className="lk-audio-conference" {...props}>
       <LayoutContextProvider onWidgetChange={setWidgetState}>
         <div className="lk-audio-conference-stage">
           <div className="lk-grid-wrapper">
-            <GridLayout tracks={trackReferences}>
+            <GridLayout tracks={tracks}>
               <ParticipantAudioTile />
             </GridLayout>
           </div>

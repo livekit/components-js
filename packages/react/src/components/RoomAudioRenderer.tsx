@@ -16,12 +16,12 @@ import { AudioTrack } from './participant/AudioTrack';
  * ```
  */
 export const RoomAudioRenderer = () => {
-  const trackReferences = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio], {
+  const tracks = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio], {
     updateOnlyOn: [],
   }).filter((ref) => !isLocal(ref.participant));
   return (
     <div style={{ display: 'none' }}>
-      {trackReferences.map((trackRef) => (
+      {tracks.map((trackRef) => (
         <AudioTrack key={trackRef.publication.trackSid} trackReference={trackRef} />
       ))}
     </div>

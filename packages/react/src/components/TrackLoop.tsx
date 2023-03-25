@@ -9,7 +9,7 @@ import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
 type TrackLoopProps = {
-  trackReferences: TrackReference[] | TrackReferenceOrPlaceholder[];
+  tracks: TrackReference[] | TrackReferenceOrPlaceholder[];
 };
 
 /**
@@ -19,18 +19,15 @@ type TrackLoopProps = {
  *
  * @example
  * ```tsx
- * const trackReferences = useTracks([Track.Source.Camera]);
- * <TrackLoop trackReferences={trackReferences} >
+ * const tracks = useTracks([Track.Source.Camera]);
+ * <TrackLoop tracks={tracks} >
  * <TrackLoop />
  * ```
  */
-export const TrackLoop = ({
-  trackReferences,
-  ...props
-}: React.PropsWithChildren<TrackLoopProps>) => {
+export const TrackLoop = ({ tracks, ...props }: React.PropsWithChildren<TrackLoopProps>) => {
   return (
     <>
-      {trackReferences.map((trackReference) => {
+      {tracks.map((trackReference) => {
         const trackSource = isTrackReference(trackReference)
           ? trackReference.publication.source
           : trackReference.source;

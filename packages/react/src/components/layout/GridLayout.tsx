@@ -45,10 +45,7 @@ export function GridLayout({ tracks, ...props }: GridLayoutProps) {
     <div className="lk-grid-layout-wrapper" data-lk-user-interaction={interactive}>
       <div ref={gridEl} {...elementProps}>
         <TrackLoop
-          trackReferences={trackReferences.slice(
-            pagination.firstItemIndex,
-            pagination.lastItemIndex,
-          )}
+          tracks={trackReferences.slice(pagination.firstItemIndex, pagination.lastItemIndex)}
         >
           {props.children}
         </TrackLoop>

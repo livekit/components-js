@@ -78,7 +78,9 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
       >
         <div className="lk-video-conference-inner">
           {!focusTrack ? (
-            <GridLayout tracks={tracks} />
+            <div className="lk-grid-layout-wrapper">
+              <GridLayout tracks={tracks} />
+            </div>
           ) : (
             <div className="lk-focus-layout-wrapper">
               <FocusLayoutContainer>

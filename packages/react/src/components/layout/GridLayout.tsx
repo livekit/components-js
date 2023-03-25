@@ -42,15 +42,13 @@ export function GridLayout({ tracks, ...props }: GridLayoutProps) {
   }, [gridEl]);
 
   return (
-    <div className="lk-grid-layout-wrapper" data-lk-user-interaction={interactive}>
-      <div ref={gridEl} {...elementProps}>
-        <TrackLoop
-          tracks={trackReferences.slice(pagination.firstItemIndex, pagination.lastItemIndex)}
-        >
-          {props.children}
-        </TrackLoop>
-        {trackReferences.length > layout.maxParticipants && <PaginationControl {...pagination} />}
-      </div>
+    <div ref={gridEl} {...elementProps} data-lk-user-interaction={interactive}>
+      <TrackLoop
+        tracks={trackReferences.slice(pagination.firstItemIndex, pagination.lastItemIndex)}
+      >
+        {props.children}
+      </TrackLoop>
+      {trackReferences.length > layout.maxParticipants && <PaginationControl {...pagination} />}
     </div>
   );
 }

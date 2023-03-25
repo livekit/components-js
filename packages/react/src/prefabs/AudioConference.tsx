@@ -34,7 +34,7 @@ export function AudioConference({ ...props }: AudioConferenceProps) {
     <div className="lk-audio-conference" {...props}>
       <LayoutContextProvider onWidgetChange={setWidgetState}>
         <div className="lk-audio-conference-stage">
-          <div className="lk-grid-wrapper">
+          <div className="lk-grid-layout-wrapper">
             <GridLayout tracks={tracks}>
               <ParticipantAudioTile />
             </GridLayout>

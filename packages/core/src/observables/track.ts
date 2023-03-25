@@ -62,10 +62,11 @@ function getTrackReferences(
             participant,
             publication,
             track: publication.track,
+            source: publication.source,
           });
         } else if (!onlySubscribedTracks) {
           // Include also `TrackPublications` that are not subscribed.
-          trackReferences.push({ participant, publication });
+          trackReferences.push({ participant, publication, source: publication.source });
         }
       }
       log.debug(

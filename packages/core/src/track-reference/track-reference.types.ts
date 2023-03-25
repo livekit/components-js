@@ -10,11 +10,13 @@ export type TrackReferenceSubscribed = {
   participant: Participant;
   publication: TrackPublication;
   track: NonNullable<TrackPublication['track']>;
+  source: Track.Source;
 };
 
 export type TrackReferencePublished = {
   participant: Participant;
   publication: TrackPublication;
+  source: Track.Source;
 };
 
 export type TrackReferencePlaceholder = {

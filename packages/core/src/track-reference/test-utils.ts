@@ -31,6 +31,7 @@ export const mockTrackReferencePublished = (
   return {
     participant: new Participant(`${id}`, `${id}`),
     publication: new TrackPublication(kind, `${id}`, `${id}`),
+    source: source,
   };
 };
 
@@ -56,6 +57,7 @@ export const mockTrackReferenceSubscribed = (
       ? (mockTrackPublication(id, kind, source) as TrackPublication)
       : new TrackPublication(kind, `${id}`, `${id}`),
     track: {} as Track,
+    source,
   };
 };
 

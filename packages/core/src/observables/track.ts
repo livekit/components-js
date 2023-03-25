@@ -1,4 +1,13 @@
-import { Participant, Room, RoomEvent, Track, TrackEvent, TrackPublication } from 'livekit-client';
+import {
+  LocalTrackPublication,
+  Participant,
+  RemoteTrackPublication,
+  Room,
+  RoomEvent,
+  Track,
+  TrackEvent,
+  TrackPublication,
+} from 'livekit-client';
 import { map, Observable, startWith } from 'rxjs';
 import { allParticipantRoomEvents } from '../helper';
 import log from '../logger';
@@ -54,25 +63,24 @@ function getTrackReferences(
 
   allParticipants.forEach((participant) => {
     sources.forEach((source) => {
-      const publication = participant.getTrack(source);
-      if (publication) {
-        if (publication.track) {
-          // Include subscribed `TrackPublications`.
-          trackReferences.push({
-            participant,
-            publication,
-            track: publication.track,
-          });
-        } else if (!onlySubscribedTracks) {
-          // Include also `TrackPublications` that are not subscribed.
-          trackReferences.push({ participant, publication });
-        }
-      }
-      log.debug(
-        `getting participant ${participant.identity}, source ${source}, exists: ${
-          publication !== undefined
-        }, subscribed: ${publication?.track !== undefined} `,
-      );
+      const sourceReferences = Array.from<RemoteTrackPublication | LocalTrackPublication>(
+        participant.tracks.values(),
+      )
+        .filter(
+          (track) =>
+            track.source === source &&
+            // either return all or only the ones that are subscribed
+            (!onlySubscribedTracks || track.track),
+        )
+        .map((track) => {
+          return {
+            participant: participant,
+            publication: track,
+            track: track.track,
+          };
+        });
+
+      trackReferences.push(...sourceReferences);
     });
   });
 

@@ -16,29 +16,45 @@ import {
 import { useScreenShare } from '../participant/ScreenShareRenderer';
 
 type LayoutContextProviderProps = {
+  value?: LayoutContextType;
   onPinChange?: (state: PinState) => void;
   onWidgetChange?: (state: WidgetState) => void;
 };
 
+export function useCreateLayoutContext(): LayoutContextType {
+  const [pinState, pinDispatch] = React.useReducer(pinReducer, PIN_DEFAULT_STATE);
+  const [widgetState, widgetDispatch] = React.useReducer(chatReducer, WIDGET_DEFAULT_STATE);
+  return {
+    pin: { dispatch: pinDispatch, state: pinState },
+    widget: { dispatch: widgetDispatch, state: widgetState },
+  };
+}
+
 export function LayoutContextProvider({
+  value,
   onPinChange,
   onWidgetChange,
   children,
 }: React.PropsWithChildren<LayoutContextProviderProps>) {
   const room = useRoomContext();
   const { screenShareParticipant, screenShareTrack } = useScreenShare({ room });
+
   const [pinState, pinDispatch] = React.useReducer(pinReducer, PIN_DEFAULT_STATE);
   const [widgetState, widgetDispatch] = React.useReducer(chatReducer, WIDGET_DEFAULT_STATE);
 
-  const layoutContextDefault: LayoutContextType = {
-    pin: { dispatch: pinDispatch, state: pinState },
-    widget: { dispatch: widgetDispatch, state: widgetState },
-  };
+  const layoutContextValue: LayoutContextType = React.useMemo(
+    () =>
+      value ?? {
+        pin: { dispatch: pinDispatch, state: pinState },
+        widget: { dispatch: widgetDispatch, state: widgetState },
+      },
+    [value],
+  );
 
   React.useEffect(() => {
-    log.debug('PinState Updated', { pinState });
-    if (onPinChange) onPinChange(pinState);
-  }, [onPinChange, pinState]);
+    log.debug('PinState Updated', { state: layoutContextValue.pin.state });
+    if (onPinChange && layoutContextValue.pin.state) onPinChange(layoutContextValue.pin.state);
+  }, [layoutContextValue.pin.state, onPinChange]);
 
   React.useEffect(() => {
     log.debug('Widget Updated', { widgetState });
@@ -61,5 +77,5 @@ export function LayoutContextProvider({
     }
   }, [screenShareParticipant, screenShareTrack]);
 
-  return <LayoutContext.Provider value={layoutContextDefault}>{children}</LayoutContext.Provider>;
+  return <LayoutContext.Provider value={layoutContextValue}>{children}</LayoutContext.Provider>;
 }

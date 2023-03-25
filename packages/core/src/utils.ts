@@ -35,6 +35,18 @@ export const attachIfSubscribed = (
   }
 };
 
+export function isEqualTrackRef(
+  a?: TrackReferenceOrPlaceholder,
+  b?: TrackReferenceOrPlaceholder,
+): boolean {
+  if (isTrackReference(a) && isTrackReference(b)) {
+    return a.publication.trackSid === b.publication.trackSid;
+  } else if (isTrackReferencePlaceholder(a) && isTrackReferencePlaceholder(b)) {
+    return a.participant.identity === b.participant.identity && a.source === b.source;
+  }
+  return false;
+}
+
 /**
  * Check if the `TrackReference` is pinned.
  */

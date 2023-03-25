@@ -30,27 +30,36 @@ export type TrackReferenceOrPlaceholder =
 
 // ### TrackReference Type Predicates
 export function isTrackReference(trackReference: unknown): trackReference is TrackReference {
-  return (
-    isTrackReferenceSubscribed(trackReference as TrackReference) ||
-    isTrackReferencePublished(trackReference as TrackReference)
-  );
+  if (!trackReference) {
+    return false;
+  }
+  return isTrackReferenceSubscribed(trackReference) || isTrackReferencePublished(trackReference);
 }
 
 function isTrackReferenceSubscribed(
-  trackReference: TrackReference,
+  trackReference: unknown,
 ): trackReference is TrackReferenceSubscribed {
+  if (!trackReference) {
+    return false;
+  }
   return trackReference.hasOwnProperty('track');
 }
 
 function isTrackReferencePublished(
-  trackReference: TrackReference,
+  trackReference: unknown,
 ): trackReference is TrackReferencePublished {
+  if (!trackReference) {
+    return false;
+  }
   return trackReference.hasOwnProperty('publication') && !trackReference.hasOwnProperty('track');
 }
 
 export function isTrackReferencePlaceholder(
-  trackReference: TrackReferenceOrPlaceholder,
+  trackReference: unknown,
 ): trackReference is TrackReferencePlaceholder {
+  if (!trackReference) {
+    return false;
+  }
   return (
     trackReference.hasOwnProperty('participant') &&
     trackReference.hasOwnProperty('source') &&

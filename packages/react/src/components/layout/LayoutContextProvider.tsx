@@ -6,14 +6,7 @@ import {
   log,
 } from '@livekit/components-core';
 import * as React from 'react';
-import {
-  LayoutContext,
-  LayoutContextType,
-  chatReducer,
-  pinReducer,
-  useRoomContext,
-} from '../../context';
-import { useScreenShare } from '../participant/ScreenShareRenderer';
+import { LayoutContext, LayoutContextType, chatReducer, pinReducer } from '../../context';
 
 type LayoutContextProviderProps = {
   value?: LayoutContextType;
@@ -36,9 +29,6 @@ export function LayoutContextProvider({
   onWidgetChange,
   children,
 }: React.PropsWithChildren<LayoutContextProviderProps>) {
-  const room = useRoomContext();
-  const { screenShareParticipant, screenShareTrack } = useScreenShare({ room });
-
   const [pinState, pinDispatch] = React.useReducer(pinReducer, PIN_DEFAULT_STATE);
   const [widgetState, widgetDispatch] = React.useReducer(chatReducer, WIDGET_DEFAULT_STATE);
 
@@ -60,22 +50,6 @@ export function LayoutContextProvider({
     log.debug('Widget Updated', { widgetState });
     if (onWidgetChange) onWidgetChange(widgetState);
   }, [onWidgetChange, widgetState]);
-
-  React.useEffect(() => {
-    // FIXME: This logic clears the focus if the screenShareParticipant is false.
-    // This is also the case when the hook is executed for the first time and then a unwanted clear_focus message is sent.
-    if (screenShareParticipant && screenShareTrack) {
-      pinDispatch({
-        msg: 'set_pin',
-        trackReference: {
-          participant: screenShareParticipant,
-          publication: screenShareTrack,
-        },
-      });
-    } else {
-      pinDispatch({ msg: 'clear_pin' });
-    }
-  }, [screenShareParticipant, screenShareTrack]);
 
   return <LayoutContext.Provider value={layoutContextValue}>{children}</LayoutContext.Provider>;
 }

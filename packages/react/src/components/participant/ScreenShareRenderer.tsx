@@ -13,6 +13,12 @@ type ScreenShareOptions = {
   ) => void;
   room?: Room;
 };
+
+/**
+ * @deprecated use `useTracks([Track.Source.ScreenShare])` instead
+ * @param param0
+ * @returns
+ */
 export const useScreenShare = ({
   room: passedRoom,
   onScreenShareChange,

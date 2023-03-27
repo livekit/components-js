@@ -70,13 +70,12 @@ const Clubhouse = () => {
 
 const Stage = () => {
   return (
-    <div
-      className="lk-grid-layout-wrapper"
-      style={{ display: 'grid', gridTemplateColumns: '4', gridTemplateRows: '4' }}
-    >
-      <ParticipantLoop>
-        <CustomParticipantTile></CustomParticipantTile>
-      </ParticipantLoop>
+    <div className="lk-grid-layout-wrapper">
+      <div className={styles.stageGrid}>
+        <ParticipantLoop>
+          <CustomParticipantTile></CustomParticipantTile>
+        </ParticipantLoop>
+      </div>
     </div>
   );
 };

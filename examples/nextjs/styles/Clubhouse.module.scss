@@ -13,6 +13,15 @@
   justify-content: unset;
 }
 
+.stageGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: auto;
+  height: 100%;
+  width: 100%;
+  justify-items: center;
+}
+
 .slider {
   position: absolute;
   bottom: 0;

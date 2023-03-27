@@ -58,7 +58,7 @@ const SimpleExample: NextPage = () => {
         >
           <RoomName />
           <ConnectionState />
-          <RoomAudioRenderer />
+          {/* <RoomAudioRenderer /> */}
           {isConnected && <Stage />}
           <ControlBar />
         </LiveKitRoom>
@@ -73,7 +73,7 @@ function Stage() {
 
   return (
     <>
-      <ParticipantTile {...screenShareTrack} />
+      {screenShareTrack && <ParticipantTile {...screenShareTrack} />}
       <GridLayout tracks={cameraTracks} />
     </>
   );

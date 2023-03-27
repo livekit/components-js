@@ -1,4 +1,4 @@
-import { Participant, Track } from 'livekit-client';
+import { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
 import { ParticipantClickEvent } from '@livekit/components-core';
@@ -8,12 +8,14 @@ import { useEnsureParticipant } from '../../context';
  * @deprecated Use `AudioTrack` or `VideoTrack` instead
  */
 export type MediaTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
-  React.HTMLAttributes<T> &
-    ({ source: Track.Source } | { name: string; kind: Track.Kind }) & {
-      participant?: Participant;
-      onTrackClick?: (evt: ParticipantClickEvent) => void;
-      onSubscriptionStatusChanged?: (subscribed: boolean) => void;
-    };
+  React.HTMLAttributes<T> & {
+    source: Track.Source;
+    name?: string;
+    participant?: Participant;
+    publication?: TrackPublication;
+    onTrackClick?: (evt: ParticipantClickEvent) => void;
+    onSubscriptionStatusChanged?: (subscribed: boolean) => void;
+  };
 
 /**
  * @deprecated This component will be removed in the next version. Use `AudioTrack` or `VideoTrack` instead
@@ -22,27 +24,28 @@ export function MediaTrack({
   onTrackClick,
   onClick,
   onSubscriptionStatusChanged,
+  source,
+  name,
+  participant,
+  publication,
   ...props
 }: MediaTrackProps) {
-  let source: Track.Source | undefined;
-  let kind: Track.Kind | undefined;
-  let name: string | undefined;
-  if ('source' in props) {
-    source = props.source;
-  } else {
-    kind = props.kind;
-    name = props.name;
-  }
   const mediaEl = React.useRef<HTMLVideoElement>(null);
-  const participant = useEnsureParticipant(props.participant);
-  const { elementProps, publication, isSubscribed } = useMediaTrackBySourceOrName(
-    // @ts-expect-error only one of this is defined, but ts complains that both might be
-    { source, name },
+  const p = useEnsureParticipant(participant);
+  const kind =
+    source === Track.Source.Camera || source == Track.Source.ScreenShare ? 'video' : 'audio';
+  const {
+    elementProps,
+    publication: pub,
+    isSubscribed,
+  } = useMediaTrackBySourceOrName(
     {
-      participant,
-      element: mediaEl,
-      props,
+      name,
+      source,
+      participant: p,
+      publication,
     },
+    { element: mediaEl, props },
   );
 
   React.useEffect(() => {
@@ -51,7 +54,7 @@ export function MediaTrack({
 
   const clickHandler = (evt: React.MouseEvent<HTMLMediaElement, MouseEvent>) => {
     onClick?.(evt);
-    onTrackClick?.({ participant, track: publication });
+    onTrackClick?.({ participant: p, track: pub });
   };
 
   return (

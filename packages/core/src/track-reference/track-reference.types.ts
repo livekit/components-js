@@ -44,7 +44,10 @@ function isTrackReferenceSubscribed(
   return (
     trackReference.hasOwnProperty('participant') &&
     trackReference.hasOwnProperty('source') &&
-    trackReference.hasOwnProperty('track')
+    trackReference.hasOwnProperty('track') &&
+    // @ts-ignore
+
+    trackReference.track
   );
 }
 
@@ -58,7 +61,8 @@ function isTrackReferencePublished(
     trackReference.hasOwnProperty('participant') &&
     trackReference.hasOwnProperty('source') &&
     trackReference.hasOwnProperty('publication') &&
-    !trackReference.hasOwnProperty('track')
+    // @ts-ignore
+    !trackReference.track
   );
 }
 
@@ -71,7 +75,9 @@ export function isTrackReferencePlaceholder(
   return (
     trackReference.hasOwnProperty('participant') &&
     trackReference.hasOwnProperty('source') &&
-    !trackReference.hasOwnProperty('publication') &&
-    !trackReference.hasOwnProperty('track')
+    // @ts-ignore
+    !trackReference.publication &&
+    // @ts-ignore
+    !trackReference.track
   );
 }

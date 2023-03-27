@@ -108,13 +108,12 @@ export const ParticipantTile = ({
   publication,
   ...htmlProps
 }: ParticipantTileProps) => {
-  const trackSource_ = source;
   const p = useEnsureParticipant(participant);
 
   const { elementProps } = useParticipantTile({
     participant: p,
     props: htmlProps,
-    source: trackSource_,
+    source,
     publication,
     onParticipantClick,
   });
@@ -138,17 +137,22 @@ export const ParticipantTile = ({
 
   return (
     <div style={{ position: 'relative' }} {...elementProps}>
-      <ParticipantContextIfNeeded participant={participant}>
+      <ParticipantContextIfNeeded participant={p}>
         {children ?? (
           <>
             {/** TODO remove MediaTrack in favor of the equivalent Audio/Video Track. need to figure out how to differentiate here */}
-            <MediaTrack source={trackSource_} onSubscriptionStatusChanged={handleSubscribe} />
+            <MediaTrack
+              source={source}
+              publication={publication}
+              participant={participant}
+              onSubscriptionStatusChanged={handleSubscribe}
+            />
             <div className="lk-participant-placeholder">
               <ParticipantPlaceholder />
             </div>
             <div className="lk-participant-metadata">
               <div className="lk-participant-metadata-item">
-                {trackSource_ === Track.Source.Camera ? (
+                {source === Track.Source.Camera ? (
                   <>
                     <TrackMutedIndicator
                       source={Track.Source.Microphone}
@@ -167,7 +171,7 @@ export const ParticipantTile = ({
             </div>
           </>
         )}
-        <FocusToggle trackSource={trackSource_} />
+        <FocusToggle trackSource={source} />
       </ParticipantContextIfNeeded>
     </div>
   );

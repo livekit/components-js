@@ -1,5 +1,6 @@
 import { Track } from 'livekit-client';
 import { map, startWith } from 'rxjs';
+import log from '../logger';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 import { isTrackReference } from '../track-reference/track-reference.types';
@@ -22,18 +23,17 @@ export function setupMediaTrack(trackIdentifier: TrackIdentifier) {
 }
 
 export function getTrackByIdentifier(options: TrackIdentifier) {
+  log.debug('get track by', options);
   if (isTrackReference(options)) {
     return options.publication;
   } else {
-    const { source, name } = options;
+    const { source, name, participant } = options;
     if (source && name) {
-      return options.participant
-        .getTracks()
-        .find((pub) => pub.source === source && pub.trackName === name);
+      return participant.getTracks().find((pub) => pub.source === source && pub.trackName === name);
     } else if (name) {
-      return options.participant.getTrackByName(name);
+      return participant.getTrackByName(name);
     } else if (source) {
-      return options.participant.getTrack(source);
+      return participant.getTrack(source);
     } else {
       throw new Error('At least one of source and name needs to be defined');
     }

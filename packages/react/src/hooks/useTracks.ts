@@ -9,13 +9,14 @@ import {
   TrackSourceWithOptions,
   TrackReferencePlaceholder,
 } from '@livekit/components-core';
-import { Participant, RoomEvent, Track } from 'livekit-client';
+import { Participant, Room, RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
-import { useRoomContext } from '../context';
+import { useEnsureRoom } from '../context';
 
 type UseTracksOptions = {
   updateOnlyOn?: RoomEvent[];
   onlySubscribed?: boolean;
+  room?: Room;
 };
 
 type UseTracksHookReturnType<T> = T extends Track.Source[]
@@ -47,7 +48,7 @@ export function useTracks<T extends SourcesArray = Track.Source[]>(
   ] as T,
   options: UseTracksOptions = {},
 ): UseTracksHookReturnType<T> {
-  const room = useRoomContext();
+  const room = useEnsureRoom(options.room);
   const [trackReferences, setTrackReferences] = React.useState<TrackReference[]>([]);
   const [participants, setParticipants] = React.useState<Participant[]>([]);
 

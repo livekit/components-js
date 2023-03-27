@@ -22,7 +22,7 @@ export const RoomAudioRenderer = () => {
   return (
     <div style={{ display: 'none' }}>
       {tracks.map((trackRef) => (
-        <AudioTrack key={trackRef.publication.trackSid} trackReference={trackRef} />
+        <AudioTrack key={trackRef.publication.trackSid} {...trackRef} />
       ))}
     </div>
   );

@@ -4,7 +4,7 @@ import {
   TrackReferenceOrPlaceholder,
 } from '@livekit/components-core';
 import * as React from 'react';
-import { ParticipantContext } from '../context';
+import { TrackContext } from '../context/track-context';
 import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
@@ -32,16 +32,16 @@ export const TrackLoop = ({ tracks, ...props }: React.PropsWithChildren<TrackLoo
           ? trackReference.publication.source
           : trackReference.source;
         return (
-          <ParticipantContext.Provider
-            value={trackReference.participant}
+          <TrackContext.Provider
+            value={trackReference}
             key={`${trackReference.participant.identity}_${trackSource}`}
           >
             {props.children ? (
               cloneSingleChild(props.children)
             ) : (
-              <ParticipantTile trackSource={trackSource} />
+              <ParticipantTile source={trackSource} />
             )}
-          </ParticipantContext.Provider>
+          </TrackContext.Provider>
         );
       })}
     </>

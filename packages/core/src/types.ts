@@ -39,7 +39,7 @@ export interface ParticipantClickEvent {
 }
 
 export type TrackSource<T extends Track.Source> = RequireAtLeastOne<
-  { source: T; name: string },
+  { source: T; name: string; participant: Participant },
   'name' | 'source'
 >;
 

@@ -9,6 +9,7 @@ import {
   useIsSpeaking,
   useParticipantContext,
   useToken,
+  useTracks,
 } from '@livekit/components-react';
 import styles from '../styles/Clubhouse.module.scss';
 import { Track } from 'livekit-client';
@@ -59,14 +60,23 @@ const Clubhouse = () => {
           <h1>
             <RoomName></RoomName>
           </h1>
-          <GridLayout className={styles.grid}>
-            <ParticipantLoop>
-              <CustomParticipantTile></CustomParticipantTile>
-            </ParticipantLoop>
-          </GridLayout>
+          <Stage />
           <ControlBar></ControlBar>
         </div>
       </LiveKitRoom>
+    </div>
+  );
+};
+
+const Stage = () => {
+  return (
+    <div
+      className="lk-grid-layout-wrapper"
+      style={{ display: 'grid', gridTemplateColumns: '4', gridTemplateRows: '4' }}
+    >
+      <ParticipantLoop>
+        <CustomParticipantTile></CustomParticipantTile>
+      </ParticipantLoop>
     </div>
   );
 };

@@ -1,19 +1,17 @@
-import { Participant, Track } from 'livekit-client';
+import { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
-import { ParticipantClickEvent, TrackReference, TrackSource } from '@livekit/components-core';
+import { ParticipantClickEvent } from '@livekit/components-core';
 import { useEnsureParticipant } from '../../context';
 
-type VideoTrackSource =
-  | (TrackSource<Track.Source> & { trackReference?: undefined })
-  | { source?: undefined; name?: undefined; trackReference: TrackReference };
-
-export type VideoTrackProps = React.HTMLAttributes<HTMLVideoElement> &
-  VideoTrackSource & {
-    participant?: Participant;
-    onTrackClick?: (evt: ParticipantClickEvent) => void;
-    onSubscriptionStatusChanged?: (subscribed: boolean) => void;
-  };
+export type VideoTrackProps = React.HTMLAttributes<HTMLVideoElement> & {
+  source: Track.Source;
+  name?: string;
+  participant?: Participant;
+  publication?: TrackPublication;
+  onTrackClick?: (evt: ParticipantClickEvent) => void;
+  onSubscriptionStatusChanged?: (subscribed: boolean) => void;
+};
 
 /**
  * The VideoTrack component is responsible for rendering participant video tracks like `camera` and `screen_share`.
@@ -37,17 +35,19 @@ export function VideoTrack({
   onClick,
   onSubscriptionStatusChanged,
   name,
+  publication,
   source,
-  trackReference,
   ...props
 }: VideoTrackProps) {
   const mediaEl = React.useRef<HTMLVideoElement>(null);
-  const participant = useEnsureParticipant(props.participant || trackReference?.participant);
-  const { elementProps, publication, isSubscribed } = useMediaTrackBySourceOrName(
-    // @ts-expect-error this is an exhaustive check for VideoTrackProps, but typescript doesn't pick it up
-    source || name ? { source, name } : trackReference,
+  const participant = useEnsureParticipant(props.participant);
+  const {
+    elementProps,
+    publication: pub,
+    isSubscribed,
+  } = useMediaTrackBySourceOrName(
+    { participant, name, source, publication },
     {
-      participant,
       element: mediaEl,
       props,
     },
@@ -59,14 +59,8 @@ export function VideoTrack({
 
   const clickHandler = (evt: React.MouseEvent<HTMLVideoElement, MouseEvent>) => {
     onClick?.(evt);
-    onTrackClick?.({ participant, track: publication });
+    onTrackClick?.({ participant, track: pub });
   };
 
-  return (
-    <div style={{ display: 'contents' }}>
-      <video ref={mediaEl} {...elementProps} muted={true} onClick={clickHandler}></video>
-      {/* {!track ||
-            (isMuted && <div {...elementProps}>{props.children ?? <UserSilhouetteIcon />}</div>)} */}
-    </div>
-  );
+  return <video ref={mediaEl} {...elementProps} muted={true} onClick={clickHandler}></video>;
 }

@@ -25,10 +25,7 @@ export type TrackReferencePlaceholder = {
 };
 
 export type TrackReference = TrackReferenceSubscribed | TrackReferencePublished;
-export type TrackReferenceOrPlaceholder =
-  | TrackReferenceSubscribed
-  | TrackReferencePublished
-  | TrackReferencePlaceholder;
+export type TrackReferenceOrPlaceholder = TrackReference | TrackReferencePlaceholder;
 
 // ### TrackReference Type Predicates
 export function isTrackReference(trackReference: unknown): trackReference is TrackReference {
@@ -44,7 +41,11 @@ function isTrackReferenceSubscribed(
   if (!trackReference) {
     return false;
   }
-  return trackReference.hasOwnProperty('track');
+  return (
+    trackReference.hasOwnProperty('participant') &&
+    trackReference.hasOwnProperty('source') &&
+    trackReference.hasOwnProperty('track')
+  );
 }
 
 function isTrackReferencePublished(
@@ -53,7 +54,12 @@ function isTrackReferencePublished(
   if (!trackReference) {
     return false;
   }
-  return trackReference.hasOwnProperty('publication') && !trackReference.hasOwnProperty('track');
+  return (
+    trackReference.hasOwnProperty('participant') &&
+    trackReference.hasOwnProperty('source') &&
+    trackReference.hasOwnProperty('publication') &&
+    !trackReference.hasOwnProperty('track')
+  );
 }
 
 export function isTrackReferencePlaceholder(

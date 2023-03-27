@@ -136,7 +136,7 @@ const CustomScreenShareView = () => {
     <ParticipantTile
       participant={participant}
       className={styles.participantView}
-      trackSource={Track.Source.ScreenShare}
+      source={Track.Source.ScreenShare}
     >
       <VideoTrack source={Track.Source.ScreenShare} className={styles.video}></VideoTrack>
       <div className={styles.screenShareBanner}>

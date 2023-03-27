@@ -36,7 +36,7 @@ export function isTrackReference(trackReference: unknown): trackReference is Tra
 }
 
 function isTrackReferenceSubscribed(
-  trackReference: unknown,
+  trackReference: any,
 ): trackReference is TrackReferenceSubscribed {
   if (!trackReference) {
     return false;
@@ -45,15 +45,11 @@ function isTrackReferenceSubscribed(
     trackReference.hasOwnProperty('participant') &&
     trackReference.hasOwnProperty('source') &&
     trackReference.hasOwnProperty('track') &&
-    // @ts-ignore
-
-    trackReference.track
+    typeof trackReference.track !== 'undefined'
   );
 }
 
-function isTrackReferencePublished(
-  trackReference: unknown,
-): trackReference is TrackReferencePublished {
+function isTrackReferencePublished(trackReference: any): trackReference is TrackReferencePublished {
   if (!trackReference) {
     return false;
   }
@@ -61,13 +57,12 @@ function isTrackReferencePublished(
     trackReference.hasOwnProperty('participant') &&
     trackReference.hasOwnProperty('source') &&
     trackReference.hasOwnProperty('publication') &&
-    // @ts-ignore
-    !trackReference.track
+    typeof trackReference.track !== 'undefined'
   );
 }
 
 export function isTrackReferencePlaceholder(
-  trackReference: unknown,
+  trackReference: any,
 ): trackReference is TrackReferencePlaceholder {
   if (!trackReference) {
     return false;
@@ -75,9 +70,7 @@ export function isTrackReferencePlaceholder(
   return (
     trackReference.hasOwnProperty('participant') &&
     trackReference.hasOwnProperty('source') &&
-    // @ts-ignore
-    !trackReference.publication &&
-    // @ts-ignore
-    !trackReference.track
+    typeof trackReference.publication !== 'undefined' &&
+    typeof trackReference.track !== 'undefined'
   );
 }

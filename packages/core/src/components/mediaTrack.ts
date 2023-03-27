@@ -1,6 +1,5 @@
 import { Track } from 'livekit-client';
 import { map, startWith } from 'rxjs';
-import log from '../logger';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 import { isTrackReference } from '../track-reference/track-reference.types';
@@ -23,7 +22,6 @@ export function setupMediaTrack(trackIdentifier: TrackIdentifier) {
 }
 
 export function getTrackByIdentifier(options: TrackIdentifier) {
-  log.debug('get track by', options);
   if (isTrackReference(options)) {
     return options.publication;
   } else {

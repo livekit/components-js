@@ -45,7 +45,7 @@ export function isTrackReferencePinned(
   trackReference: TrackReferenceOrPlaceholder,
   pinState: PinState | undefined,
 ): boolean {
-  if (pinState === undefined) {
+  if (typeof pinState === 'undefined') {
     return false;
   }
   if (isTrackReference(trackReference)) {

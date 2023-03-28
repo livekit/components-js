@@ -29,7 +29,7 @@ export type TrackReferenceOrPlaceholder = TrackReference | TrackReferencePlaceho
 
 // ### TrackReference Type Predicates
 export function isTrackReference(trackReference: unknown): trackReference is TrackReference {
-  if (!trackReference) {
+  if (typeof trackReference === 'undefined') {
     return false;
   }
   return isTrackReferenceSubscribed(trackReference) || isTrackReferencePublished(trackReference);
@@ -57,7 +57,7 @@ function isTrackReferencePublished(trackReference: any): trackReference is Track
     trackReference.hasOwnProperty('participant') &&
     trackReference.hasOwnProperty('source') &&
     trackReference.hasOwnProperty('publication') &&
-    typeof trackReference.track !== 'undefined'
+    typeof trackReference.publication !== 'undefined'
   );
 }
 

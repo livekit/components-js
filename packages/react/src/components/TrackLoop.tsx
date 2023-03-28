@@ -15,12 +15,16 @@ type TrackLoopProps = {
 /**
  * The TrackLoop component loops over tracks. It is for example a easy way to loop over all participant camera and screen share tracks.
  * Only tracks with a the same source specified via the sources property get included in the loop.
- * Further narrowing the loop items is possible by providing a filter function to the component.
+ * TrackLoop creates a TrackContext for each track that you can use to e.g. render the track.
+ * Further narrowing the loop items is possible by simply filtering the returned array.
  *
  * @example
  * ```tsx
  * const tracks = useTracks([Track.Source.Camera]);
  * <TrackLoop tracks={tracks} >
+ *  <TrackContext.Consumer>
+ *    {(track) => track && <VideoTrack {...track}/>}
+ *  </TrackContext.Consumer>
  * <TrackLoop />
  * ```
  */

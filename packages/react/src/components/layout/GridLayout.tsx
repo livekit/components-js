@@ -17,7 +17,7 @@ export interface GridLayoutProps
  * @example
  * ```tsx
  * <LiveKitRoom>
- *   <GridLayout />
+ *   <GridLayout track={tracks} />
  * <LiveKitRoom>
  * ```
  */

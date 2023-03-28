@@ -1,13 +1,15 @@
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import { describe, it, expect } from 'vitest';
+import { isTrackReferencePinned } from './track-reference';
 import { PinState } from './types';
-import { isTrackReferencePinned } from './utils';
 
 describe('Test isTrackReferencePinned', () => {
   const participantA = new Participant('dummy-participant', 'A_id', 'track_A_name');
   const trackA = new TrackPublication(Track.Kind.Video, 'track_A_id', 'track_A_name');
+  trackA.trackSid = 'track_a_sid';
   const participantB = new Participant('participant_B', 'B_id', 'B_name');
   const trackB = new TrackPublication(Track.Kind.Video, 'track_B_id', 'track_B_name');
+  trackB.trackSid = 'track_b_sid';
   const trackReferenceA = {
     participant: participantA,
     source: Track.Source.Camera,

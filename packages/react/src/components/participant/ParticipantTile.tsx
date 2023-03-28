@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Participant, Track } from 'livekit-client';
+import { Participant, Track, TrackPublication } from 'livekit-client';
 import {
   isParticipantSourcePinned,
   ParticipantClickEvent,
@@ -23,18 +23,21 @@ import { ScreenShareIcon } from '../../assets/icons';
 
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   participant?: Participant;
-  trackSource?: Track.Source;
+  source?: Track.Source;
+  publication?: TrackPublication;
   onParticipantClick?: (event: ParticipantClickEvent) => void;
 };
 
 export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>({
   participant,
-  trackSource,
+  source,
+  publication,
   onParticipantClick,
   props,
 }: {
   participant: Participant;
-  trackSource: Track.Source;
+  source: Track.Source;
+  publication?: TrackPublication;
   onParticipantClick?: (event: ParticipantClickEvent) => void;
   props: T;
 }) {
@@ -46,12 +49,12 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
       onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         props.onClick?.(event);
         if (typeof onParticipantClick === 'function') {
-          const track = p.getTrack(trackSource);
+          const track = publication ?? p.getTrack(source);
           onParticipantClick({ participant: p, track });
         }
       },
     });
-  }, [props]);
+  }, [props, source, onParticipantClick, p, publication]);
   const isVideoMuted = useIsMuted(Track.Source.Camera, { participant });
   const isAudioMuted = useIsMuted(Track.Source.Microphone, { participant });
   const isSpeaking = useIsSpeaking(participant);
@@ -61,7 +64,7 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
       'data-lk-video-muted': isVideoMuted,
       'data-lk-speaking': isSpeaking,
       'data-lk-local-participant': participant.isLocal,
-      'data-lk-source': trackSource,
+      'data-lk-source': source,
       ...mergedProps,
     },
   };
@@ -100,17 +103,18 @@ export function ParticipantContextIfNeeded(
 export const ParticipantTile = ({
   participant,
   children,
-  trackSource = Track.Source.Camera,
+  source = Track.Source.Camera,
   onParticipantClick,
+  publication,
   ...htmlProps
 }: ParticipantTileProps) => {
-  const trackSource_ = trackSource;
   const p = useEnsureParticipant(participant);
 
   const { elementProps } = useParticipantTile({
     participant: p,
     props: htmlProps,
-    trackSource: trackSource_,
+    source,
+    publication,
     onParticipantClick,
   });
 
@@ -119,31 +123,36 @@ export const ParticipantTile = ({
   const handleSubscribe = React.useCallback(
     (subscribed: boolean) => {
       if (
-        trackSource &&
+        source &&
         !subscribed &&
         layoutContext &&
         layoutContext.pin.dispatch &&
-        isParticipantSourcePinned(p, trackSource, layoutContext.pin.state)
+        isParticipantSourcePinned(p, source, layoutContext.pin.state)
       ) {
         layoutContext.pin.dispatch({ msg: 'clear_pin' });
       }
     },
-    [p, layoutContext, trackSource],
+    [p, layoutContext, source],
   );
 
   return (
     <div style={{ position: 'relative' }} {...elementProps}>
-      <ParticipantContextIfNeeded participant={participant}>
+      <ParticipantContextIfNeeded participant={p}>
         {children ?? (
           <>
             {/** TODO remove MediaTrack in favor of the equivalent Audio/Video Track. need to figure out how to differentiate here */}
-            <MediaTrack source={trackSource_} onSubscriptionStatusChanged={handleSubscribe} />
+            <MediaTrack
+              source={source}
+              publication={publication}
+              participant={participant}
+              onSubscriptionStatusChanged={handleSubscribe}
+            />
             <div className="lk-participant-placeholder">
               <ParticipantPlaceholder />
             </div>
             <div className="lk-participant-metadata">
               <div className="lk-participant-metadata-item">
-                {trackSource_ === Track.Source.Camera ? (
+                {source === Track.Source.Camera ? (
                   <>
                     <TrackMutedIndicator
                       source={Track.Source.Microphone}
@@ -162,7 +171,7 @@ export const ParticipantTile = ({
             </div>
           </>
         )}
-        <FocusToggle trackSource={trackSource_} />
+        <FocusToggle trackSource={source} />
       </ParticipantContextIfNeeded>
     </div>
   );

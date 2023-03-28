@@ -29,6 +29,15 @@ export function useLayoutContext(): LayoutContextType {
   return layoutContext;
 }
 
+export function useEnsureLayoutContext(layoutContext?: LayoutContextType) {
+  const layout = useMaybeLayoutContext();
+  layoutContext ??= layout;
+  if (!layoutContext) {
+    throw Error('Tried to access LayoutContext context outside a LayoutContextProvider provider.');
+  }
+  return layoutContext;
+}
+
 export function useMaybeLayoutContext(): LayoutContextType | undefined {
   return React.useContext(LayoutContext);
 }

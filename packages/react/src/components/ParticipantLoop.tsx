@@ -66,7 +66,7 @@ export const ParticipantLoop = ({
           {props.children ? (
             cloneSingleChild(props.children)
           ) : (
-            <ParticipantTile trackSource={Track.Source.Camera} />
+            <ParticipantTile source={Track.Source.Camera} />
           )}
         </ParticipantContext.Provider>
       ))}

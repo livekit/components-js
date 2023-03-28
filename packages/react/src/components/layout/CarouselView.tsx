@@ -1,9 +1,7 @@
-import { isTrackReferencePinned, TrackReferenceFilter } from '@livekit/components-core';
-import { Track } from 'livekit-client';
+import { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import * as React from 'react';
-import { useMaybeLayoutContext } from '../../context';
 import { useSize } from '../../hooks/internal';
-import { useTracks, useVisualStableUpdate } from '../../hooks';
+import { useVisualStableUpdate } from '../../hooks';
 import { TrackLoop } from '../TrackLoop';
 
 const MIN_HEIGHT = 130;
@@ -13,31 +11,15 @@ const ASPECT_RATIO = 16 / 10;
 const ASPECT_RATIO_INVERT = (1 - ASPECT_RATIO) * -1;
 
 export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement> {
-  filter?: TrackReferenceFilter;
-  filterDependencies?: [];
+  tracks: TrackReferenceOrPlaceholder[];
+
   /** Place the tiles vertically or horizontally next to each other.
    * If undefined orientation is guessed by the dimensions of the container. */
   orientation?: 'vertical' | 'horizontal';
 }
 
-export function CarouselView({
-  filter,
-  filterDependencies = [],
-  orientation,
-  ...props
-}: CarouselViewProps) {
+export function CarouselView({ tracks, orientation, ...props }: CarouselViewProps) {
   const asideEl = React.useRef<HTMLDivElement>(null);
-  const layoutContext = useMaybeLayoutContext();
-  const trackReferences = useTracks([
-    { source: Track.Source.Camera, withPlaceholder: true },
-    { source: Track.Source.ScreenShare, withPlaceholder: false },
-  ]);
-  const filteredTiles = React.useMemo(() => {
-    const tilesWithoutPinned = trackReferences.filter(
-      (tile) => !layoutContext?.pin.state || !isTrackReferencePinned(tile, layoutContext.pin.state),
-    );
-    return filter ? tilesWithoutPinned.filter(filter) : tilesWithoutPinned;
-  }, [filter, layoutContext?.pin.state, trackReferences, ...filterDependencies]);
 
   const { width, height } = useSize(asideEl);
   const carouselOrientation = orientation
@@ -53,7 +35,7 @@ export function CarouselView({
       ? Math.max(Math.floor(height / tileHeight), MIN_VISIBLE_TILES)
       : Math.max(Math.floor(width / tileWidth), MIN_VISIBLE_TILES);
 
-  const sortedTiles = useVisualStableUpdate(filteredTiles, maxVisibleTiles);
+  const sortedTiles = useVisualStableUpdate(tracks, maxVisibleTiles);
 
   React.useLayoutEffect(() => {
     if (asideEl.current) {
@@ -64,7 +46,7 @@ export function CarouselView({
 
   return (
     <aside key={carouselOrientation} className="lk-carousel" ref={asideEl} {...props}>
-      {props.children ?? <TrackLoop trackReferences={sortedTiles} />}
+      {props.children ?? <TrackLoop tracks={sortedTiles} />}
     </aside>
   );
 }

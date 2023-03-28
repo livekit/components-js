@@ -77,6 +77,7 @@ function getTrackReferences(
             participant: participant,
             publication: track,
             track: track.track,
+            source: track.source,
           };
         });
 

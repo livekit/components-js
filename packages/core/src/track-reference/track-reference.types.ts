@@ -10,11 +10,13 @@ export type TrackReferenceSubscribed = {
   participant: Participant;
   publication: TrackPublication;
   track: NonNullable<TrackPublication['track']>;
+  source: Track.Source;
 };
 
 export type TrackReferencePublished = {
   participant: Participant;
   publication: TrackPublication;
+  source: Track.Source;
 };
 
 export type TrackReferencePlaceholder = {
@@ -23,38 +25,52 @@ export type TrackReferencePlaceholder = {
 };
 
 export type TrackReference = TrackReferenceSubscribed | TrackReferencePublished;
-export type TrackReferenceWithPlaceholder =
-  | TrackReferenceSubscribed
-  | TrackReferencePublished
-  | TrackReferencePlaceholder;
+export type TrackReferenceOrPlaceholder = TrackReference | TrackReferencePlaceholder;
 
 // ### TrackReference Type Predicates
 export function isTrackReference(trackReference: unknown): trackReference is TrackReference {
-  return (
-    isTrackReferenceSubscribed(trackReference as TrackReference) ||
-    isTrackReferencePublished(trackReference as TrackReference)
-  );
+  if (typeof trackReference === 'undefined') {
+    return false;
+  }
+  return isTrackReferenceSubscribed(trackReference) || isTrackReferencePublished(trackReference);
 }
 
 function isTrackReferenceSubscribed(
-  trackReference: TrackReference,
+  trackReference: any,
 ): trackReference is TrackReferenceSubscribed {
-  return trackReference.hasOwnProperty('track');
-}
-
-function isTrackReferencePublished(
-  trackReference: TrackReference,
-): trackReference is TrackReferencePublished {
-  return trackReference.hasOwnProperty('publication') && !trackReference.hasOwnProperty('track');
-}
-
-export function isTrackReferencePlaceholder(
-  trackReference: TrackReferenceWithPlaceholder,
-): trackReference is TrackReferencePlaceholder {
+  if (!trackReference) {
+    return false;
+  }
   return (
     trackReference.hasOwnProperty('participant') &&
     trackReference.hasOwnProperty('source') &&
-    !trackReference.hasOwnProperty('publication') &&
-    !trackReference.hasOwnProperty('track')
+    trackReference.hasOwnProperty('track') &&
+    typeof trackReference.track !== 'undefined'
+  );
+}
+
+function isTrackReferencePublished(trackReference: any): trackReference is TrackReferencePublished {
+  if (!trackReference) {
+    return false;
+  }
+  return (
+    trackReference.hasOwnProperty('participant') &&
+    trackReference.hasOwnProperty('source') &&
+    trackReference.hasOwnProperty('publication') &&
+    typeof trackReference.publication !== 'undefined'
+  );
+}
+
+export function isTrackReferencePlaceholder(
+  trackReference: any,
+): trackReference is TrackReferencePlaceholder {
+  if (!trackReference) {
+    return false;
+  }
+  return (
+    trackReference.hasOwnProperty('participant') &&
+    trackReference.hasOwnProperty('source') &&
+    typeof trackReference.publication !== 'undefined' &&
+    typeof trackReference.track !== 'undefined'
   );
 }

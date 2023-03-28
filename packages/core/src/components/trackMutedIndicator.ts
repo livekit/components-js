@@ -1,4 +1,4 @@
-import { Styles } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
+import type { Styles } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
 import { Participant, Track } from 'livekit-client';
 import { mutedObserver } from '../observables/participant';
 import { prefixClass } from '../styles-interface';

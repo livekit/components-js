@@ -1,7 +1,7 @@
 import {
   log,
   sortTrackReferences,
-  TrackReferenceWithPlaceholder,
+  TrackReferenceOrPlaceholder,
   updatePages,
 } from '@livekit/components-core';
 import * as React from 'react';
@@ -9,8 +9,8 @@ import * as React from 'react';
 interface UseVisualStableUpdateOptions {
   /** Overwrites the default sort function. */
   customSortFunction?: (
-    trackReferences: TrackReferenceWithPlaceholder[],
-  ) => TrackReferenceWithPlaceholder[];
+    trackReferences: TrackReferenceOrPlaceholder[],
+  ) => TrackReferenceOrPlaceholder[];
 }
 
 /**
@@ -22,11 +22,11 @@ interface UseVisualStableUpdateOptions {
  */
 export function useVisualStableUpdate(
   /** `TrackReference`s to display in the grid.  */
-  trackReferences: TrackReferenceWithPlaceholder[],
+  trackReferences: TrackReferenceOrPlaceholder[],
   maxItemsOnPage: number,
   options: UseVisualStableUpdateOptions = {},
-): TrackReferenceWithPlaceholder[] {
-  const stateTrackReferences = React.useRef<TrackReferenceWithPlaceholder[]>([]);
+): TrackReferenceOrPlaceholder[] {
+  const stateTrackReferences = React.useRef<TrackReferenceOrPlaceholder[]>([]);
   const maxTilesOnPage = React.useRef<number>(-1);
 
   const nextSortedTrackReferences =
@@ -34,7 +34,7 @@ export function useVisualStableUpdate(
       ? options.customSortFunction(trackReferences)
       : sortTrackReferences(trackReferences);
 
-  let updatedTrackReferences: TrackReferenceWithPlaceholder[] = nextSortedTrackReferences;
+  let updatedTrackReferences: TrackReferenceOrPlaceholder[] = nextSortedTrackReferences;
   if (maxItemsOnPage === maxTilesOnPage.current) {
     try {
       updatedTrackReferences = updatePages(

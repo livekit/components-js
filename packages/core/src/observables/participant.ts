@@ -83,8 +83,8 @@ export function observeParticipantMedia<T extends Participant>(participant: T) {
 
 export function createTrackObserver(participant: Participant, options: TrackIdentifier) {
   return observeParticipantMedia(participant).pipe(
-    map((media) => {
-      return { publication: getTrackByIdentifier(media.participant, options) };
+    map(() => {
+      return { publication: getTrackByIdentifier(options) };
     }),
   );
 }

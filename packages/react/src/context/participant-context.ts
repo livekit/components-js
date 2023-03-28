@@ -1,5 +1,6 @@
 import type { Participant } from 'livekit-client';
 import * as React from 'react';
+import { useMaybeTrackContext } from './track-context';
 
 export const ParticipantContext = React.createContext<Participant | undefined>(undefined);
 
@@ -17,7 +18,8 @@ export function useMaybeParticipantContext() {
 
 export function useEnsureParticipant(participant?: Participant) {
   const context = useMaybeParticipantContext();
-  const p = participant ?? context;
+  const trackContext = useMaybeTrackContext();
+  const p = participant ?? context ?? trackContext?.participant;
   if (!p) {
     throw new Error(
       'No participant provided, make sure you are inside a participant context or pass the participant explicitly',

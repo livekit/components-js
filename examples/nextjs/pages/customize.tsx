@@ -1,5 +1,4 @@
 import {
-  ParticipantTile,
   LiveKitRoom,
   ScreenShareView,
   ParticipantName,
@@ -10,13 +9,15 @@ import {
   useToken,
   ControlBar,
   GridLayout,
-  ParticipantLoop,
+  useTracks,
+  TrackContext,
 } from '@livekit/components-react';
-import { ConnectionQuality, Track } from 'livekit-client';
+import { ConnectionQuality, Room, Track } from 'livekit-client';
 import styles from '../styles/Simple.module.css';
 import myStyles from '../styles/Customize.module.css';
 import type { NextPage } from 'next';
 import { HTMLAttributes, useState } from 'react';
+import { isTrackReference, isTrackReferencePlaceholder } from '@livekit/components-core';
 
 const CustomizeExample: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
@@ -25,9 +26,11 @@ const CustomizeExample: NextPage = () => {
   const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
     userInfo: {
       identity: userIdentity,
-      name: 'my-name',
+      name: userIdentity,
     },
   });
+
+  const [room] = useState(new Room());
 
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
@@ -48,6 +51,7 @@ const CustomizeExample: NextPage = () => {
           </button>
         )}
         <LiveKitRoom
+          room={room}
           token={token}
           serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
           connect={connect}
@@ -57,43 +61,50 @@ const CustomizeExample: NextPage = () => {
           video={true}
         >
           <RoomAudioRenderer />
-          {isConnected && (
-            <>
-              <ScreenShareView />
-              <div className={styles.participantGrid}>
-                <GridLayout>
-                  <ParticipantLoop>
-                    <ParticipantTile>
-                      <VideoTrack source={Track.Source.Camera}></VideoTrack>
-
-                      <div className={myStyles['participant-indicators']}>
-                        <div style={{ display: 'flex' }}>
-                          <TrackMutedIndicator
-                            source={Track.Source.Microphone}
-                          ></TrackMutedIndicator>
-                          <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
-                        </div>
-                        {/* Overwrite styles: By passing class names, we can easily overwrite/extend the existing styles. */}
-                        {/* In addition, we can still specify a style attribute and further customize the styles. */}
-                        <ParticipantName
-                          className={myStyles['my-participant-name']}
-                          // style={{ color: 'blue' }}
-                        />
-                        {/* Custom components: Here we replace the provided <ConnectionQualityIndicator />  with our own implementation. */}
-                        <UserDefinedConnectionQualityIndicator />
-                      </div>
-                    </ParticipantTile>
-                  </ParticipantLoop>
-                </GridLayout>
-              </div>
-            </>
-          )}
+          {/* Render a custom Stage component once connected */}
+          {isConnected && <Stage />}
           <ControlBar />
         </LiveKitRoom>
       </main>
     </div>
   );
 };
+
+export function Stage() {
+  const cameraTracks = useTracks([Track.Source.Camera]);
+  return (
+    <>
+      <ScreenShareView />
+      <div className={styles.participantGrid}>
+        <GridLayout tracks={cameraTracks}>
+          <TrackContext.Consumer>
+            {(track) =>
+              track && (
+                <div className="my-tile">
+                  {isTrackReference(track) ? <VideoTrack {...track} /> : <p>Camera placeholder</p>}
+                  <div className={myStyles['participant-indicators']}>
+                    <div style={{ display: 'flex' }}>
+                      <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
+                      <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
+                    </div>
+                    {/* Overwrite styles: By passing class names, we can easily overwrite/extend the existing styles. */}
+                    {/* In addition, we can still specify a style attribute and further customize the styles. */}
+                    <ParticipantName
+                      className={myStyles['my-participant-name']}
+                      // style={{ color: 'blue' }}
+                    />
+                    {/* Custom components: Here we replace the provided <ConnectionQualityIndicator />  with our own implementation. */}
+                    <UserDefinedConnectionQualityIndicator />
+                  </div>
+                </div>
+              )
+            }
+          </TrackContext.Consumer>
+        </GridLayout>
+      </div>
+    </>
+  );
+}
 
 export function UserDefinedConnectionQualityIndicator(props: HTMLAttributes<HTMLSpanElement>) {
   /**

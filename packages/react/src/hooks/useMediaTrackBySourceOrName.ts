@@ -5,13 +5,11 @@ import {
   isLocal,
   getTrackByIdentifier,
 } from '@livekit/components-core';
-import { Participant, Track } from 'livekit-client';
+import { Track } from 'livekit-client';
 import React from 'react';
-import { useEnsureParticipant } from '../context';
 import { mergeProps } from '../utils';
 
 export interface UseMediaTrackOptions {
-  participant?: Participant;
   element?: React.RefObject<HTMLMediaElement>;
   props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
 }
@@ -23,10 +21,7 @@ export function useMediaTrackBySourceOrName(
   observerOptions: TrackIdentifier,
   options: UseMediaTrackOptions = {},
 ) {
-  const participant = useEnsureParticipant(options.participant);
-  const [publication, setPublication] = React.useState(
-    getTrackByIdentifier(participant, observerOptions),
-  );
+  const [publication, setPublication] = React.useState(getTrackByIdentifier(observerOptions));
 
   const [isMuted, setMuted] = React.useState(publication?.isMuted);
   const [isSubscribed, setSubscribed] = React.useState(publication?.isSubscribed);
@@ -35,8 +30,8 @@ export function useMediaTrackBySourceOrName(
   const previousElement = React.useRef<HTMLMediaElement | undefined | null>();
 
   const { className, trackObserver } = React.useMemo(() => {
-    return setupMediaTrack(participant, observerOptions);
-  }, [participant, observerOptions]);
+    return setupMediaTrack(observerOptions);
+  }, [observerOptions]);
 
   React.useEffect(() => {
     const subscription = trackObserver.subscribe((publication) => {
@@ -54,7 +49,10 @@ export function useMediaTrackBySourceOrName(
       if (previousElement.current) {
         track.detach(previousElement.current);
       }
-      if (options.element?.current && !(isLocal(participant) && track?.kind === 'audio')) {
+      if (
+        options.element?.current &&
+        !(isLocal(observerOptions.participant) && track?.kind === 'audio')
+      ) {
         track.attach(options.element.current);
       }
     }
@@ -86,7 +84,7 @@ export function useMediaTrackBySourceOrName(
     track,
     elementProps: mergeProps(options.props, {
       className,
-      'data-lk-local-participant': participant.isLocal,
+      'data-lk-local-participant': observerOptions.participant.isLocal,
       'data-lk-source': publication?.source,
       ...(publication?.source === Track.Source.Camera ||
       publication?.source === Track.Source.ScreenShare

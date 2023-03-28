@@ -22,7 +22,7 @@ export function AudioVisualizer({ participant, ...props }: AudioVisualizerProps)
   const volMultiplier = 50;
   const barCount = 7;
 
-  const { track } = useMediaTrack(Track.Source.Microphone, { participant });
+  const { track } = useMediaTrack(Track.Source.Microphone, participant);
 
   React.useEffect(() => {
     if (!track || !(track instanceof LocalAudioTrack || track instanceof RemoteAudioTrack)) {

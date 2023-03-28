@@ -49,6 +49,7 @@ function useFocusToggle({ trackSource, participant, props }: useFocusToggleProps
                 trackReference: {
                   participant: p,
                   publication: track,
+                  source: track.source,
                 },
               });
             }

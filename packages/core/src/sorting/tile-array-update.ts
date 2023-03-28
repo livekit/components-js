@@ -1,6 +1,6 @@
 import { chunk, zip, differenceBy, remove } from 'lodash';
 import log from '../logger';
-import { getTrackReferenceId, TrackReferenceWithPlaceholder } from '../track-reference';
+import { getTrackReferenceId, TrackReferenceOrPlaceholder } from '../track-reference';
 import { flatTrackReferenceArray } from '../track-reference/test-utils';
 
 type VisualChanges<T> = {
@@ -8,7 +8,7 @@ type VisualChanges<T> = {
   added: T[];
 };
 
-export type UpdatableItem = TrackReferenceWithPlaceholder | number;
+export type UpdatableItem = TrackReferenceOrPlaceholder | number;
 
 /** Check if something visually change on the page. */
 export function visualPageChange<T extends UpdatableItem>(state: T[], next: T[]): VisualChanges<T> {

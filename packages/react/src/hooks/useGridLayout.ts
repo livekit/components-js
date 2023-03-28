@@ -1,7 +1,7 @@
 import {
   GRID_LAYOUTS,
   selectGridLayout,
-  TrackReferenceWithPlaceholder,
+  TrackReferenceOrPlaceholder,
 } from '@livekit/components-core';
 import { GridLayout } from '@livekit/components-core/dist/helper/grid-layouts';
 import * as React from 'react';
@@ -19,8 +19,8 @@ export function useGridLayout(
   /** HTML element that contains the grid. */
   gridElement: React.RefObject<HTMLDivElement>,
   /** `TrackReference`s to display in the grid.  */
-  trackReferences: TrackReferenceWithPlaceholder[],
-): { layout: GridLayout; trackReferences: TrackReferenceWithPlaceholder[] } {
+  trackReferences: TrackReferenceOrPlaceholder[],
+): { layout: GridLayout; trackReferences: TrackReferenceOrPlaceholder[] } {
   const { width, height } = useSize(gridElement);
 
   const layout =

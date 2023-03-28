@@ -1,22 +1,20 @@
-import { Participant } from 'livekit-client';
+import { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
-import { AudioSource, log, TrackReference, TrackSource } from '@livekit/components-core';
+import { log } from '@livekit/components-core';
 import { useEnsureParticipant } from '../../context';
 import { RemoteAudioTrack } from 'livekit-client';
 
-type AudioTrackSource =
-  | (TrackSource<AudioSource> & { trackReference?: undefined })
-  | { source?: undefined; name?: undefined; trackReference: TrackReference };
-
 export type AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
-  React.HTMLAttributes<T> &
-    AudioTrackSource & {
-      participant?: Participant;
-      onSubscriptionStatusChanged?: (subscribed: boolean) => void;
-      /** by the default the range is between 0 and 1 */
-      volume?: number;
-    };
+  React.HTMLAttributes<T> & {
+    source: Track.Source;
+    name?: string;
+    participant?: Participant;
+    publication?: TrackPublication;
+    onSubscriptionStatusChanged?: (subscribed: boolean) => void;
+    /** by the default the range is between 0 and 1 */
+    volume?: number;
+  };
 
 /**
  * The AudioTrack component is responsible for rendering participant audio tracks.
@@ -32,15 +30,13 @@ export type AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
  * @see `ParticipantTile` component
  */
 export function AudioTrack({ onSubscriptionStatusChanged, volume, ...props }: AudioTrackProps) {
-  const { source, name, trackReference } = props;
+  const { source, name, publication } = props;
   const mediaEl = React.useRef<HTMLAudioElement>(null);
-  const participant = useEnsureParticipant(props.participant || trackReference?.participant);
+  const participant = useEnsureParticipant(props.participant);
 
   const { elementProps, isSubscribed, track } = useMediaTrackBySourceOrName(
-    // @ts-expect-error this is an exhaustive check for AudioTrackProps, but typescript doesn't pick it up
-    source || name ? { source, name } : trackReference,
+    { source, name, participant, publication },
     {
-      participant,
       element: mediaEl,
       props,
     },

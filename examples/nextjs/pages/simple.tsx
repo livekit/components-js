@@ -7,7 +7,12 @@ import {
   useToken,
   ControlBar,
   GridLayout,
+  useTracks,
+  VideoTrack,
+  TrackLoop,
+  ParticipantTile,
 } from '@livekit/components-react';
+import { Track } from 'livekit-client';
 import type { NextPage } from 'next';
 import { useState } from 'react';
 import styles from '../styles/Simple.module.css';
@@ -53,18 +58,25 @@ const SimpleExample: NextPage = () => {
         >
           <RoomName />
           <ConnectionState />
-          <RoomAudioRenderer />
-          {isConnected && (
-            <>
-              <ScreenShareView />
-              <GridLayout />
-            </>
-          )}
+          {/* <RoomAudioRenderer /> */}
+          {isConnected && <Stage />}
           <ControlBar />
         </LiveKitRoom>
       </main>
     </div>
   );
 };
+
+function Stage() {
+  const cameraTracks = useTracks([Track.Source.Camera]);
+  const screenShareTrack = useTracks([Track.Source.ScreenShare])[0];
+
+  return (
+    <>
+      {screenShareTrack && <ParticipantTile {...screenShareTrack} />}
+      <GridLayout tracks={cameraTracks} />
+    </>
+  );
+}
 
 export default SimpleExample;

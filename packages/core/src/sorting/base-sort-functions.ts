@@ -2,7 +2,7 @@ import { Participant, Track } from 'livekit-client';
 import {
   getTrackReferenceSource,
   isTrackReference,
-  TrackReferenceWithPlaceholder,
+  TrackReferenceOrPlaceholder,
 } from '../track-reference';
 
 export function sortParticipantsByAudioLevel(
@@ -42,8 +42,8 @@ export function sortParticipantsByJoinedAt(
 }
 
 export function sortTrackReferencesByType(
-  a: TrackReferenceWithPlaceholder,
-  b: TrackReferenceWithPlaceholder,
+  a: TrackReferenceOrPlaceholder,
+  b: TrackReferenceOrPlaceholder,
 ) {
   if (isTrackReference(a)) {
     if (isTrackReference(b)) {
@@ -60,8 +60,8 @@ export function sortTrackReferencesByType(
 
 /** TrackReference with screen share source goes first. */
 export function sortTrackReferencesByScreenShare(
-  a: TrackReferenceWithPlaceholder,
-  b: TrackReferenceWithPlaceholder,
+  a: TrackReferenceOrPlaceholder,
+  b: TrackReferenceOrPlaceholder,
 ): number {
   const sourceA = getTrackReferenceSource(a);
   const sourceB = getTrackReferenceSource(b);

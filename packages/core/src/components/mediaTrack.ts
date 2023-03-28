@@ -1,15 +1,15 @@
-import { Participant, Track } from 'livekit-client';
+import { Track } from 'livekit-client';
 import { map, startWith } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 import { isTrackReference } from '../track-reference/track-reference.types';
 import { TrackIdentifier } from '../types';
 
-export function setupMediaTrack(participant: Participant, trackIdentifier: TrackIdentifier) {
-  const initialPub = getTrackByIdentifier(participant, trackIdentifier);
-  const trackObserver = observeParticipantMedia(participant).pipe(
-    map((media) => {
-      return getTrackByIdentifier(media.participant, trackIdentifier);
+export function setupMediaTrack(trackIdentifier: TrackIdentifier) {
+  const initialPub = getTrackByIdentifier(trackIdentifier);
+  const trackObserver = observeParticipantMedia(trackIdentifier.participant).pipe(
+    map(() => {
+      return getTrackByIdentifier(trackIdentifier);
     }),
     startWith(initialPub),
   );
@@ -21,11 +21,11 @@ export function setupMediaTrack(participant: Participant, trackIdentifier: Track
   return { className, trackObserver };
 }
 
-export function getTrackByIdentifier(participant: Participant, options: TrackIdentifier) {
+export function getTrackByIdentifier(options: TrackIdentifier) {
   if (isTrackReference(options)) {
     return options.publication;
   } else {
-    const { source, name } = options;
+    const { source, name, participant } = options;
     if (source && name) {
       return participant.getTracks().find((pub) => pub.source === source && pub.trackName === name);
     } else if (name) {

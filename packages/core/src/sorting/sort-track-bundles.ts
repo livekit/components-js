@@ -2,7 +2,7 @@ import { Track } from 'livekit-client';
 import {
   getTrackReferenceSource,
   isTrackReference,
-  TrackReferenceWithPlaceholder,
+  TrackReferenceOrPlaceholder,
 } from '../track-reference';
 import {
   sortParticipantsByAudioLevel,
@@ -27,10 +27,10 @@ import {
  * 8. remote tracks sorted by joinedAt
  */
 export function sortTrackReferences(
-  trackReferences: TrackReferenceWithPlaceholder[],
-): TrackReferenceWithPlaceholder[] {
-  const trackReferences_ = [...trackReferences];
-  trackReferences_.sort((a, b) => {
+  tracks: TrackReferenceOrPlaceholder[],
+): TrackReferenceOrPlaceholder[] {
+  const trackReferences = [...tracks];
+  trackReferences.sort((a, b) => {
     // Local camera TrackReference before remote.
     if (
       (a.participant.isLocal && getTrackReferenceSource(a) === Track.Source.Camera) ||
@@ -85,5 +85,5 @@ export function sortTrackReferences(
     return sortParticipantsByJoinedAt(a.participant, b.participant);
   });
 
-  return trackReferences_;
+  return trackReferences;
 }

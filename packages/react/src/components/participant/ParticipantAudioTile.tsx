@@ -32,6 +32,7 @@ import { AudioTrack } from './AudioTrack';
 export const ParticipantAudioTile = ({
   participant,
   children,
+  publication,
   onParticipantClick,
   ...htmlProps
 }: ParticipantTileProps) => {
@@ -39,7 +40,8 @@ export const ParticipantAudioTile = ({
   const { elementProps } = useParticipantTile({
     participant: p,
     props: htmlProps,
-    trackSource: Track.Source.Microphone,
+    source: Track.Source.Microphone,
+    publication,
     onParticipantClick,
   });
 

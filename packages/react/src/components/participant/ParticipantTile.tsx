@@ -23,7 +23,7 @@ import { ParticipantPlaceholder } from '../../assets/images';
 import { ScreenShareIcon } from '../../assets/icons';
 
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
-  showSpeakingIndicator?: boolean;
+  disableSpeakingIndicator?: boolean;
   participant?: Participant;
   source?: Track.Source;
   publication?: TrackPublication;
@@ -32,7 +32,7 @@ export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
 
 export type UseParticipantTileProps<T extends React.HTMLAttributes<HTMLElement>> =
   TrackReferenceOrPlaceholder & {
-    showSpeakingIndicator?: boolean;
+    disableSpeakingIndicator?: boolean;
     publication?: TrackPublication;
     onParticipantClick?: (event: ParticipantClickEvent) => void;
     htmlProps: T;
@@ -43,7 +43,7 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
   source,
   publication,
   onParticipantClick,
-  showSpeakingIndicator,
+  disableSpeakingIndicator,
   htmlProps,
 }: UseParticipantTileProps<T>) {
   const p = useEnsureParticipant(participant);
@@ -67,7 +67,7 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
     elementProps: {
       'data-lk-audio-muted': isAudioMuted,
       'data-lk-video-muted': isVideoMuted,
-      'data-lk-speaking': showSpeakingIndicator ?? isSpeaking,
+      'data-lk-speaking': disableSpeakingIndicator === true ? false : isSpeaking,
       'data-lk-local-participant': participant.isLocal,
       'data-lk-source': source,
       ...mergedProps,
@@ -111,7 +111,7 @@ export const ParticipantTile = ({
   source = Track.Source.Camera,
   onParticipantClick,
   publication,
-  showSpeakingIndicator,
+  disableSpeakingIndicator,
   ...htmlProps
 }: ParticipantTileProps) => {
   const p = useEnsureParticipant(participant);
@@ -121,7 +121,7 @@ export const ParticipantTile = ({
     htmlProps,
     source,
     publication,
-    showSpeakingIndicator,
+    disableSpeakingIndicator,
     onParticipantClick,
   });
 

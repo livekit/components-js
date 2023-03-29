@@ -33,13 +33,15 @@ export const ParticipantAudioTile = ({
   participant,
   children,
   publication,
+  disableSpeakingIndicator,
   onParticipantClick,
   ...htmlProps
 }: ParticipantTileProps) => {
   const p = useEnsureParticipant(participant);
   const { elementProps } = useParticipantTile({
     participant: p,
-    props: htmlProps,
+    htmlProps,
+    disableSpeakingIndicator,
     source: Track.Source.Microphone,
     publication,
     onParticipantClick,

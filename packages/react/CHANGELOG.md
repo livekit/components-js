@@ -1,5 +1,22 @@
 # @livekit/components-react
 
+## 0.7.0
+
+### Minor Changes
+
+- Make trackReferences required for layout comps - [#383](https://github.com/livekit/components-js/pull/383) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Remove rxjs imports to keep bundle size down - [#379](https://github.com/livekit/components-js/pull/379) ([@lukasIO](https://github.com/lukasIO))
+
+- Add prop to disable speaking indicator on tile - [#387](https://github.com/livekit/components-js/pull/387) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix: Prevent pagination from getting stuck on a page that no longer exists #385 - [#385](https://github.com/livekit/components-js/pull/385) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`f0602fc`](https://github.com/livekit/components-js/commit/f0602fcf06eca39f0ac9b8bb4612c63328d9da4d)]:
+  - @livekit/components-core@0.6.0
+
 ## 0.6.2
 
 ### Patch Changes

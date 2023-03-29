@@ -4,6 +4,7 @@ import { mergeProps } from '../../utils';
 import { TrackReference } from '@livekit/components-core';
 import { ParticipantTile } from '../participant/ParticipantTile';
 import { ParticipantClickEvent } from '@livekit/components-core';
+import { TrackContext } from '../../context';
 
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   focusTrack?: TrackReference;
@@ -21,6 +22,6 @@ export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
 
-export function FocusLayout(props: FocusLayoutProps) {
-  return <ParticipantTile {...props} />;
+export function FocusLayout({ track, ...htmlProps }: FocusLayoutProps) {
+  return <ParticipantTile {...track} {...htmlProps} />;
 }

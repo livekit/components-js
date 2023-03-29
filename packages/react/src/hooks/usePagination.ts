@@ -11,7 +11,10 @@ import { useState } from 'react';
  */
 export function usePagination(itemPerPage: number, totalItemCount: number) {
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPageCount = Math.ceil(totalItemCount / itemPerPage);
+  const totalPageCount = Math.max(Math.ceil(totalItemCount / itemPerPage), 1);
+  if (currentPage > totalPageCount) {
+    setCurrentPage(totalPageCount);
+  }
   const lastItemIndex = currentPage * itemPerPage;
   const firstItemIndex = lastItemIndex - itemPerPage;
 

@@ -21,6 +21,6 @@ export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
 
-export function FocusLayout(props: FocusLayoutProps) {
-  return <ParticipantTile {...props} />;
+export function FocusLayout({ track, onParticipantClick }: FocusLayoutProps) {
+  return <ParticipantTile {...track} onParticipantClick={onParticipantClick} />;
 }

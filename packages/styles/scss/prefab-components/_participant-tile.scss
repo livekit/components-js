@@ -5,18 +5,18 @@
   flex-direction: column;
   gap: 0.375rem;
   overflow: hidden;
-  border: var(--speaking-indicator-width) solid transparent;
   border-radius: var(--border-radius);
-  transition-property: border-color;
+  transition-property: box-shadow;
   transition-timing-function: ease-in-out;
   // When participant stops talking the transition longer and starts with a delay.
   transition-delay: 0.5s;
   transition-duration: 0.8s;
+  box-shadow: 0px 0px 0px 0 transparent;
   &[data-speaking='true'] {
     // When participant starts talking the transition short and without delay.
     transition-delay: 0s;
     transition-duration: 0.3s;
-    border: var(--speaking-indicator-width) solid var(--accent-bg);
+    box-shadow: 0px 0px 0px var(--speaking-indicator-width) var(--lk-accent-bg);
   }
 
   .focus-toggle-button {

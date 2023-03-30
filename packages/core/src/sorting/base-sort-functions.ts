@@ -83,3 +83,21 @@ export function sortTrackReferencesByScreenShare(
     return 0;
   }
 }
+
+export function sortTrackRefsByIsCameraEnabled(
+  a: { participant: { isCameraEnabled: boolean } },
+  b: { participant: { isCameraEnabled: boolean } },
+) {
+  const aVideo = a.participant.isCameraEnabled;
+  const bVideo = b.participant.isCameraEnabled;
+
+  if (aVideo !== bVideo) {
+    if (aVideo) {
+      return -1;
+    } else {
+      return 1;
+    }
+  } else {
+    return 0;
+  }
+}

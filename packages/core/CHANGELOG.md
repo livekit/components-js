@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.6.0
+
+### Minor Changes
+
+- Make trackReferences required for layout comps - [#383](https://github.com/livekit/components-js/pull/383) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.5.1
 
 ### Patch Changes

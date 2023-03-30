@@ -4,6 +4,7 @@ import {
   isParticipantSourcePinned,
   ParticipantClickEvent,
   setupParticipantTile,
+  TrackReferenceOrPlaceholder,
 } from '@livekit/components-core';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
 import { MediaTrack } from './MediaTrack';
@@ -22,39 +23,43 @@ import { ParticipantPlaceholder } from '../../assets/images';
 import { ScreenShareIcon } from '../../assets/icons';
 
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
+  disableSpeakingIndicator?: boolean;
   participant?: Participant;
   source?: Track.Source;
   publication?: TrackPublication;
   onParticipantClick?: (event: ParticipantClickEvent) => void;
 };
 
+export type UseParticipantTileProps<T extends React.HTMLAttributes<HTMLElement>> =
+  TrackReferenceOrPlaceholder & {
+    disableSpeakingIndicator?: boolean;
+    publication?: TrackPublication;
+    onParticipantClick?: (event: ParticipantClickEvent) => void;
+    htmlProps: T;
+  };
+
 export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>({
   participant,
   source,
   publication,
   onParticipantClick,
-  props,
-}: {
-  participant: Participant;
-  source: Track.Source;
-  publication?: TrackPublication;
-  onParticipantClick?: (event: ParticipantClickEvent) => void;
-  props: T;
-}) {
+  disableSpeakingIndicator,
+  htmlProps,
+}: UseParticipantTileProps<T>) {
   const p = useEnsureParticipant(participant);
   const mergedProps = React.useMemo(() => {
     const { className } = setupParticipantTile();
-    return mergeProps(props, {
+    return mergeProps(htmlProps, {
       className,
       onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        props.onClick?.(event);
+        htmlProps.onClick?.(event);
         if (typeof onParticipantClick === 'function') {
           const track = publication ?? p.getTrack(source);
           onParticipantClick({ participant: p, track });
         }
       },
     });
-  }, [props, source, onParticipantClick, p, publication]);
+  }, [htmlProps, source, onParticipantClick, p, publication]);
   const isVideoMuted = useIsMuted(Track.Source.Camera, { participant });
   const isAudioMuted = useIsMuted(Track.Source.Microphone, { participant });
   const isSpeaking = useIsSpeaking(participant);
@@ -62,7 +67,7 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
     elementProps: {
       'data-lk-audio-muted': isAudioMuted,
       'data-lk-video-muted': isVideoMuted,
-      'data-lk-speaking': isSpeaking,
+      'data-lk-speaking': disableSpeakingIndicator === true ? false : isSpeaking,
       'data-lk-local-participant': participant.isLocal,
       'data-lk-source': source,
       ...mergedProps,
@@ -106,15 +111,17 @@ export const ParticipantTile = ({
   source = Track.Source.Camera,
   onParticipantClick,
   publication,
+  disableSpeakingIndicator,
   ...htmlProps
 }: ParticipantTileProps) => {
   const p = useEnsureParticipant(participant);
 
   const { elementProps } = useParticipantTile({
     participant: p,
-    props: htmlProps,
+    htmlProps,
     source,
     publication,
+    disableSpeakingIndicator,
     onParticipantClick,
   });
 

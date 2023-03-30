@@ -12,6 +12,7 @@ import {
   sortParticipantsByLastSpokenAT,
   sortTrackReferencesByScreenShare,
   sortTrackReferencesByType,
+  sortTrackRefsByIsCameraEnabled,
 } from './base-sort-functions';
 
 describe.concurrent('Test sorting participants by isSpeaking:', () => {
@@ -271,4 +272,45 @@ describe.concurrent('Test sorting track bundles by source.', () => {
     unsorted.sort(sortTrackReferencesByScreenShare);
     expect(flatTrackReferenceArray(unsorted)).toStrictEqual(flatTrackReferenceArray(expected));
   });
+});
+
+describe.concurrent('Test sorting track bundles by isCameraEnabled.', () => {
+  test.each([
+    {
+      unsorted: [
+        { participant: { isCameraEnabled: true }, testId: 'A' },
+        { participant: { isCameraEnabled: false }, testId: 'B' },
+      ],
+      expected: [
+        { participant: { isCameraEnabled: true }, testId: 'A' },
+        { participant: { isCameraEnabled: false }, testId: 'B' },
+      ],
+    },
+    {
+      unsorted: [
+        { participant: { isCameraEnabled: false }, testId: 'A' },
+        { participant: { isCameraEnabled: true }, testId: 'B' },
+      ],
+      expected: [
+        { participant: { isCameraEnabled: true }, testId: 'B' },
+        { participant: { isCameraEnabled: false }, testId: 'A' },
+      ],
+    },
+    {
+      unsorted: [
+        { participant: { isCameraEnabled: true }, testId: 'A' },
+        { participant: { isCameraEnabled: true }, testId: 'B' },
+      ],
+      expected: [
+        { participant: { isCameraEnabled: true }, testId: 'A' },
+        { participant: { isCameraEnabled: true }, testId: 'B' },
+      ],
+    },
+  ])(
+    'Track bundles with camera on should come before once with camera off.',
+    ({ unsorted, expected }) => {
+      unsorted.sort(sortTrackRefsByIsCameraEnabled);
+      expect(unsorted).toStrictEqual(expected);
+    },
+  );
 });

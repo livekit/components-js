@@ -12,7 +12,7 @@
   transition-delay: 0.5s;
   transition-duration: 0.8s;
   box-shadow: 0px 0px 0px 0 transparent;
-  &[data-speaking='true'] {
+  &[data-speaking='true']:not([data-source='screen_share']) {
     // When participant starts talking the transition short and without delay.
     transition-delay: 0s;
     transition-duration: 0.3s;

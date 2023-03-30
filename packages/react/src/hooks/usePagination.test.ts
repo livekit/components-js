@@ -1,12 +1,13 @@
 import { describe, test, expect } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import usePagination from './usePagination';
+import { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 
 describe('Test hook', () => {
   test('Test basic assumptions of the usePagination hook return values.', () => {
     const itemPerPage = 4;
-    const totalItemCount = 12;
-    const { result } = renderHook(() => usePagination(itemPerPage, totalItemCount));
+    const totalTrackRefs = new Array(12) as TrackReferenceOrPlaceholder[];
+    const { result } = renderHook(() => usePagination(itemPerPage, totalTrackRefs));
 
     expect(result.current.currentPage).toBe(1);
     expect(result.current.totalPageCount).toBe(3);
@@ -17,8 +18,8 @@ describe('Test hook', () => {
   });
   test('Test moving to pages works as expected.', () => {
     const itemPerPage = 4;
-    const totalItemCount = 12;
-    const { result, rerender } = renderHook(() => usePagination(itemPerPage, totalItemCount));
+    const totalTrackRefs = new Array(12) as TrackReferenceOrPlaceholder[];
+    const { result, rerender } = renderHook(() => usePagination(itemPerPage, totalTrackRefs));
 
     expect(result.current.currentPage).toBe(1);
 
@@ -51,8 +52,8 @@ describe('Test hook', () => {
 
   test('Test jumping to pages works as expected.', () => {
     const itemPerPage = 4;
-    const totalItemCount = 12;
-    const { result, rerender } = renderHook(() => usePagination(itemPerPage, totalItemCount));
+    const totalTrackRefs = new Array(12) as TrackReferenceOrPlaceholder[];
+    const { result, rerender } = renderHook(() => usePagination(itemPerPage, totalTrackRefs));
     expect(result.current.currentPage).toBe(1);
 
     result.current.setPage(3);

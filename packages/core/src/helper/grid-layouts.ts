@@ -6,10 +6,10 @@ export type GridLayout = {
   rows: number;
   // # Constraints that have to be meet to use this layout.
   // ## 1. Participant range:
-  /** Minimum number of participants needed to use this layout. */
-  minParticipants: number;
-  /** Maximum participants that fit into this layout. */
-  maxParticipants: number;
+  /** Minimum number of tiles needed to use this layout. */
+  minTiles: number;
+  /** Maximum tiles that fit into this layout. */
+  maxTiles: number;
   // ## 2. Screen size limits:
   /** Minimum width required to use this layout. */
   minWidth: number;
@@ -22,8 +22,8 @@ export const GRID_LAYOUTS: GridLayout[] = [
     columns: 1,
     rows: 1,
     name: '1x1',
-    minParticipants: 1,
-    maxParticipants: 1,
+    minTiles: 1,
+    maxTiles: 1,
     minWidth: 0,
     minHeight: 0,
   },
@@ -31,8 +31,8 @@ export const GRID_LAYOUTS: GridLayout[] = [
     columns: 1,
     rows: 2,
     name: '1x2',
-    minParticipants: 2,
-    maxParticipants: 2,
+    minTiles: 2,
+    maxTiles: 2,
     minWidth: 0,
     minHeight: 0,
   },
@@ -40,8 +40,8 @@ export const GRID_LAYOUTS: GridLayout[] = [
     columns: 2,
     rows: 1,
     name: '2x1',
-    minParticipants: 2,
-    maxParticipants: 2,
+    minTiles: 2,
+    maxTiles: 2,
     minWidth: 800,
     minHeight: 0,
   },
@@ -49,8 +49,8 @@ export const GRID_LAYOUTS: GridLayout[] = [
     columns: 2,
     rows: 2,
     name: '2x2',
-    minParticipants: 3,
-    maxParticipants: 4,
+    minTiles: 3,
+    maxTiles: 4,
     minWidth: 560,
     minHeight: 0,
   },
@@ -58,8 +58,8 @@ export const GRID_LAYOUTS: GridLayout[] = [
     columns: 3,
     rows: 3,
     name: '3x3',
-    minParticipants: 5,
-    maxParticipants: 9,
+    minTiles: 5,
+    maxTiles: 9,
     minWidth: 700,
     minHeight: 0,
   },
@@ -67,8 +67,8 @@ export const GRID_LAYOUTS: GridLayout[] = [
     columns: 4,
     rows: 4,
     name: '4x4',
-    minParticipants: 10,
-    maxParticipants: 16,
+    minTiles: 10,
+    maxTiles: 16,
     minWidth: 960,
     minHeight: 0,
   },
@@ -76,8 +76,8 @@ export const GRID_LAYOUTS: GridLayout[] = [
     columns: 5,
     rows: 5,
     name: '5x5',
-    minParticipants: 17,
-    maxParticipants: 25,
+    minTiles: 17,
+    maxTiles: 25,
     minWidth: 1100,
     minHeight: 0,
   },
@@ -96,10 +96,10 @@ export function selectGridLayout(
     const isBiggerLayoutAvailable =
       allLayouts.findIndex((l, i) => {
         const layoutIsBiggerThanCurrent = i > index;
-        const layoutFitsSameAmountOfParticipants = l.maxParticipants === layout_.maxParticipants;
+        const layoutFitsSameAmountOfParticipants = l.maxTiles === layout_.maxTiles;
         return layoutIsBiggerThanCurrent && layoutFitsSameAmountOfParticipants;
       }) !== -1;
-    return layout_.maxParticipants >= participantCount && !isBiggerLayoutAvailable;
+    return layout_.maxTiles >= participantCount && !isBiggerLayoutAvailable;
   });
   if (layout === undefined) {
     layout = layouts[layouts.length - 1];
@@ -119,7 +119,7 @@ export function selectGridLayout(
       const smallerLayout = layouts[currentLayoutIndex - 1];
       layout = selectGridLayout(
         layouts.slice(0, currentLayoutIndex),
-        smallerLayout.maxParticipants,
+        smallerLayout.maxTiles,
         width,
         height,
       );

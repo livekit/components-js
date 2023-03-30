@@ -1,12 +1,7 @@
-import {
-  GRID_LAYOUTS,
-  selectGridLayout,
-  TrackReferenceOrPlaceholder,
-} from '@livekit/components-core';
+import { GRID_LAYOUTS, selectGridLayout } from '@livekit/components-core';
 import { GridLayout } from '@livekit/components-core/dist/helper/grid-layouts';
 import * as React from 'react';
 import { useSize } from './internal';
-import { useVisualStableUpdate } from './useVisualStableUpdate';
 
 /**
  * The useGridLayout hook tries to select the best layout to fit all tiles.
@@ -18,17 +13,15 @@ import { useVisualStableUpdate } from './useVisualStableUpdate';
 export function useGridLayout(
   /** HTML element that contains the grid. */
   gridElement: React.RefObject<HTMLDivElement>,
-  /** `TrackReference`s to display in the grid.  */
-  trackReferences: TrackReferenceOrPlaceholder[],
-): { layout: GridLayout; trackReferences: TrackReferenceOrPlaceholder[] } {
+  /** Count of tracks that should get layed out */
+  trackCount: number,
+): { layout: GridLayout } {
   const { width, height } = useSize(gridElement);
 
   const layout =
     width > 0 && height > 0
-      ? selectGridLayout(GRID_LAYOUTS, trackReferences.length, width, height)
+      ? selectGridLayout(GRID_LAYOUTS, trackCount, width, height)
       : GRID_LAYOUTS[0];
-
-  const updatedTrackReferences = useVisualStableUpdate(trackReferences, layout.maxParticipants);
 
   React.useEffect(() => {
     if (gridElement.current && layout) {
@@ -39,6 +32,5 @@ export function useGridLayout(
 
   return {
     layout,
-    trackReferences: updatedTrackReferences,
   };
 }

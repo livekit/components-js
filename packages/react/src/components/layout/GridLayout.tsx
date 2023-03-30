@@ -28,8 +28,8 @@ export function GridLayout({ tracks, ...props }: GridLayoutProps) {
     () => mergeProps(props, { className: 'lk-grid-layout' }),
     [props],
   );
-  const { layout, trackReferences } = useGridLayout(gridEl, tracks);
-  const pagination = usePagination(layout.maxParticipants, trackReferences.length);
+  const { layout } = useGridLayout(gridEl, tracks.length);
+  const pagination = usePagination(layout.maxTiles, tracks);
 
   const [interactive, setInteractive] = React.useState(false);
   React.useEffect(() => {
@@ -43,12 +43,8 @@ export function GridLayout({ tracks, ...props }: GridLayoutProps) {
 
   return (
     <div ref={gridEl} {...elementProps} data-lk-user-interaction={interactive}>
-      <TrackLoop
-        tracks={trackReferences.slice(pagination.firstItemIndex, pagination.lastItemIndex)}
-      >
-        {props.children}
-      </TrackLoop>
-      {trackReferences.length > layout.maxParticipants && <PaginationControl {...pagination} />}
+      <TrackLoop tracks={pagination.tracks}>{props.children}</TrackLoop>
+      {tracks.length > layout.maxTiles && <PaginationControl {...pagination} />}
     </div>
   );
 }

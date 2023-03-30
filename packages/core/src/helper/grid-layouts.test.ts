@@ -58,7 +58,7 @@ function is_same(array1: GridLayout[], array2: GridLayout[]) {
 describe.concurrent('Test defined GRID_LAYOUTS array is valid', () => {
   test('GRID_LAYOUTS should be ordered by layout.maxParticipants', () => {
     const layouts = [...GRID_LAYOUTS];
-    layouts.sort((a, b) => a.maxParticipants - b.maxParticipants);
+    layouts.sort((a, b) => a.maxTiles - b.maxTiles);
     expect(is_same(layouts, GRID_LAYOUTS)).toBe(true);
   });
 });
@@ -81,7 +81,7 @@ describe.concurrent(
         const widthToSmallForDesiredLayout = desiredLayout.minWidth - 1;
         const layout = selectGridLayout(
           GRID_LAYOUTS,
-          desiredLayout.maxParticipants,
+          desiredLayout.maxTiles,
           widthToSmallForDesiredLayout,
           9999,
         );

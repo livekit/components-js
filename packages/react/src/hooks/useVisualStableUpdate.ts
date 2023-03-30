@@ -26,32 +26,31 @@ export function useVisualStableUpdate(
   maxItemsOnPage: number,
   options: UseVisualStableUpdateOptions = {},
 ): TrackReferenceOrPlaceholder[] {
-  const stateTrackReferences = React.useRef<TrackReferenceOrPlaceholder[]>([]);
-  const maxTilesOnPage = React.useRef<number>(-1);
+  const lastTrackRefs = React.useRef<TrackReferenceOrPlaceholder[]>([]);
+  const lastMaxItemsOnPage = React.useRef<number>(-1);
+  const layoutChanged = maxItemsOnPage !== lastMaxItemsOnPage.current;
 
-  const nextSortedTrackReferences =
+  const sortedTrackRefs =
     typeof options.customSortFunction === 'function'
       ? options.customSortFunction(trackReferences)
       : sortTrackReferences(trackReferences);
 
-  let updatedTrackReferences: TrackReferenceOrPlaceholder[] = nextSortedTrackReferences;
-  if (maxItemsOnPage === maxTilesOnPage.current) {
+  let updatedTrackRefs: TrackReferenceOrPlaceholder[] = [...sortedTrackRefs];
+  if (layoutChanged === false) {
     try {
-      updatedTrackReferences = updatePages(
-        stateTrackReferences.current,
-        nextSortedTrackReferences,
-        maxItemsOnPage,
-      );
+      updatedTrackRefs = updatePages(lastTrackRefs.current, sortedTrackRefs, maxItemsOnPage);
     } catch (error) {
       log.error('Error while running updatePages(): ', error);
     }
   }
 
-  maxItemsOnPage !== maxTilesOnPage.current
-    ? nextSortedTrackReferences
-    : // Save info for next render to update with minimal visual change.
-      (stateTrackReferences.current = trackReferences);
-  maxTilesOnPage.current = maxItemsOnPage;
+  // Save info for to compare against in the next update cycle.
+  if (layoutChanged) {
+    lastTrackRefs.current = sortedTrackRefs;
+  } else {
+    lastTrackRefs.current = updatedTrackRefs;
+  }
+  lastMaxItemsOnPage.current = maxItemsOnPage;
 
-  return updatedTrackReferences;
+  return updatedTrackRefs;
 }

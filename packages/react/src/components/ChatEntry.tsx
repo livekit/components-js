@@ -50,7 +50,7 @@ export function ChatEntry({
       {!hideMetaData && (
         <span className="lk-meta-data" style={{ display: 'flex', justifyContent: 'space-between' }}>
           <strong>{entry.from?.name ?? entry.from?.identity}</strong>{' '}
-          <span>{time.toLocaleTimeString(navigator.language, { timeStyle: 'short' })}</span>
+          <span>{time.toLocaleTimeString(locale, { timeStyle: 'short' })}</span>
         </span>
       )}
       <span className="lk-message-body">{formattedMessage}</span>

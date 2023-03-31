@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  width: 280px;
+  width: clamp(200px, 55ch, 60ch);
   background-color: var(--bg2);
   border-left: 1px solid var(--border-color);
 }
@@ -12,20 +12,50 @@
   flex-grow: 1;
   max-height: 100%;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem !important;
 }
 
 .chat-entry {
   display: flex;
-  gap: 0.75rem;
-  padding: 0.25rem 0.75rem;
-  word-break: break-word;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0 0.25rem;
 
-  > strong {
+  .meta-data {
+    font-size: 0.75rem;
+    color: var(--fg5);
     white-space: nowrap;
+    padding: 0 0.3rem;
+    display: flex;
+    .participant-name {
+      margin-top: 1rem;
+    }
+    .timestamp {
+      margin-left: auto;
+      align-self: flex-end;
+    }
+  }
+
+  .message-body {
+    border-radius: 15px;
+    padding: 0.25rem 0.75rem;
+    word-break: break-word;
+    width: fit-content;
   }
 
   &[data-message-origin='local'] {
-    background-color: rgba(3, 56, 109, 0.5);
+    .message-body {
+      background-color: var(--bg5);
+    }
+  }
+  &[data-message-origin='remote'] {
+    .message-body {
+      background-color: var(--accent4);
+    }
   }
 }
 

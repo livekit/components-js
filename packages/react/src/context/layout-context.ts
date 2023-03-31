@@ -1,5 +1,6 @@
+import { PIN_DEFAULT_STATE, WIDGET_DEFAULT_STATE } from '@livekit/components-core';
 import * as React from 'react';
-import { ChatContextType, PinContextType } from './index';
+import { ChatContextType, chatReducer, PinContextType, pinReducer } from './index';
 
 export type LayoutContextType = {
   pin: PinContextType;
@@ -36,6 +37,26 @@ export function useEnsureLayoutContext(layoutContext?: LayoutContextType) {
     throw Error('Tried to access LayoutContext context outside a LayoutContextProvider provider.');
   }
   return layoutContext;
+}
+
+export function useCreateLayoutContext(): LayoutContextType {
+  const [pinState, pinDispatch] = React.useReducer(pinReducer, PIN_DEFAULT_STATE);
+  const [widgetState, widgetDispatch] = React.useReducer(chatReducer, WIDGET_DEFAULT_STATE);
+  return {
+    pin: { dispatch: pinDispatch, state: pinState },
+    widget: { dispatch: widgetDispatch, state: widgetState },
+  };
+}
+
+export function useEnsureCreateLayoutContext(layoutContext?: LayoutContextType): LayoutContextType {
+  const [pinState, pinDispatch] = React.useReducer(pinReducer, PIN_DEFAULT_STATE);
+  const [widgetState, widgetDispatch] = React.useReducer(chatReducer, WIDGET_DEFAULT_STATE);
+  return (
+    layoutContext ?? {
+      pin: { dispatch: pinDispatch, state: pinState },
+      widget: { dispatch: widgetDispatch, state: widgetState },
+    }
+  );
 }
 
 export function useMaybeLayoutContext(): LayoutContextType | undefined {

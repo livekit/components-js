@@ -1,13 +1,10 @@
 import * as React from 'react';
-import {
-  LayoutContextProvider,
-  useCreateLayoutContext,
-} from '../components/layout/LayoutContextProvider';
+import { LayoutContextProvider } from '../components/layout/LayoutContextProvider';
 import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
 import { ControlBar } from './ControlBar';
 import { FocusLayout, FocusLayoutContainer } from '../components/layout/FocusLayout';
 import { GridLayout } from '../components/layout/GridLayout';
-import { isEqualTrackRef, isTrackReference, WidgetState } from '@livekit/components-core';
+import { isEqualTrackRef, isTrackReference, log, WidgetState } from '@livekit/components-core';
 import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
 import { useMediaQuery } from '../hooks/internal/useMediaQuery';
@@ -16,6 +13,7 @@ import { Track } from 'livekit-client';
 import { useTracks } from '../hooks/useTracks';
 import { usePinnedTracks } from '../hooks/usePinnedTracks';
 import { CarouselView } from '../components/layout/CarouselView';
+import { useCreateLayoutContext } from '../context/layout-context';
 
 export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
   chatMessageFormatter?: MessageFormatter;
@@ -49,6 +47,11 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
     { updateOnlyOn: [] },
   );
 
+  const widgetUpdate = (state: WidgetState) => {
+    log.debug('updating widget state', state);
+    setWidgetState(state);
+  };
+
   const layoutContext = useCreateLayoutContext();
 
   const screenShareTracks = tracks
@@ -74,7 +77,7 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
       <LayoutContextProvider
         value={layoutContext}
         // onPinChange={handleFocusStateChange}
-        onWidgetChange={setWidgetState}
+        onWidgetChange={widgetUpdate}
       >
         <div className="lk-video-conference-inner">
           {!focusTrack ? (

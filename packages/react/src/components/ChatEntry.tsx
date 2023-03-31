@@ -8,13 +8,11 @@ export type MessageFormatter = (message: string) => React.ReactNode;
  * These are the props specific to the ChatEntry component:
  */
 export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
-  /**
-   * The chat massage object to display.
-   */
+  /** The chat massage object to display. */
   entry: ReceivedChatMessage;
-  /**
-   * An optional formatter for the message body.
-   */
+  /** Hide name and time. Useful when displaying multiple consecutive chat messages from the same person. */
+  hideMetaData?: boolean;
+  /** An optional formatter for the message body. */
   messageFormatter?: MessageFormatter;
 }
 
@@ -30,20 +28,32 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
  * {...}
  * ```
  */
-export function ChatEntry({ entry, messageFormatter, ...props }: ChatEntryProps) {
+export function ChatEntry({
+  entry,
+  hideMetaData = false,
+  messageFormatter,
+  ...props
+}: ChatEntryProps) {
   const formattedMessage = React.useMemo(() => {
     return messageFormatter ? messageFormatter(entry.message) : entry.message;
   }, [entry.message, messageFormatter]);
+  const time = new Date(entry.timestamp);
+  const locale = navigator ? navigator.language : 'en-US';
 
   return (
     <li
       className="lk-chat-entry"
-      title={new Date(entry.timestamp).toLocaleTimeString()}
+      title={time.toLocaleTimeString(locale, { timeStyle: 'full' })}
       data-lk-message-origin={entry.from?.isLocal ? 'local' : 'remote'}
       {...props}
     >
-      <strong>{entry.from?.name ?? entry.from?.identity}</strong>
-      <span>{formattedMessage}</span>
+      {!hideMetaData && (
+        <span className="lk-meta-data" style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <strong>{entry.from?.name ?? entry.from?.identity}</strong>{' '}
+          <span>{time.toLocaleTimeString(navigator.language, { timeStyle: 'short' })}</span>
+        </span>
+      )}
+      <span className="lk-message-body">{formattedMessage}</span>
     </li>
   );
 }

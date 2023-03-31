@@ -70,9 +70,17 @@ export function Chat({ messageFormatter, ...props }: ChatProps) {
                 messageFormatter,
               }),
             )
-          : chatMessages.map((msg, idx) => (
-              <ChatEntry key={idx} entry={msg} messageFormatter={messageFormatter} />
-            ))}
+          : chatMessages.map((msg, idx, allMsg) => {
+              const hideMetaData = idx >= 1 && allMsg[idx - 1].from === msg.from;
+              return (
+                <ChatEntry
+                  key={idx}
+                  hideMetaData={hideMetaData}
+                  entry={msg}
+                  messageFormatter={messageFormatter}
+                />
+              );
+            })}
       </ul>
       <form className="lk-chat-form" onSubmit={handleSubmit}>
         <input

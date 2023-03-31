@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  width: 280px;
+  width: clamp(200px, 55ch, 60ch);
   background-color: var(--bg2);
   border-left: 1px solid var(--border-color);
 }

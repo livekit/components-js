@@ -10,8 +10,10 @@ export type MessageFormatter = (message: string) => React.ReactNode;
 export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
   /** The chat massage object to display. */
   entry: ReceivedChatMessage;
-  /** Hide name and time. Useful when displaying multiple consecutive chat messages from the same person. */
-  hideMetaData?: boolean;
+  /** Hide sender name. Useful when displaying multiple consecutive chat messages from the same person. */
+  hideName?: boolean;
+  /** Hide message timestamp. */
+  hideTimestamp?: boolean;
   /** An optional formatter for the message body. */
   messageFormatter?: MessageFormatter;
 }
@@ -30,7 +32,8 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
  */
 export function ChatEntry({
   entry,
-  hideMetaData = false,
+  hideName = false,
+  hideTimestamp = false,
   messageFormatter,
   ...props
 }: ChatEntryProps) {
@@ -47,10 +50,18 @@ export function ChatEntry({
       data-lk-message-origin={entry.from?.isLocal ? 'local' : 'remote'}
       {...props}
     >
-      {!hideMetaData && (
-        <span className="lk-meta-data" style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <strong>{entry.from?.name ?? entry.from?.identity}</strong>{' '}
-          <span>{time.toLocaleTimeString(locale, { timeStyle: 'short' })}</span>
+      {(!hideTimestamp || !hideName) && (
+        <span className="lk-meta-data">
+          {!hideName && (
+            <strong className="lk-participant-name">
+              {entry.from?.name ?? entry.from?.identity}
+            </strong>
+          )}
+          {!hideTimestamp && (
+            <span className="lk-timestamp">
+              {time.toLocaleTimeString(locale, { timeStyle: 'short' })}
+            </span>
+          )}
         </span>
       )}
       <span className="lk-message-body">{formattedMessage}</span>

@@ -71,11 +71,15 @@ export function Chat({ messageFormatter, ...props }: ChatProps) {
               }),
             )
           : chatMessages.map((msg, idx, allMsg) => {
-              const hideMetaData = idx >= 1 && allMsg[idx - 1].from === msg.from;
+              const hideName = idx >= 1 && allMsg[idx - 1].from === msg.from;
+              // If the time delta between two messages is bigger than 60s show timestamp.
+              const hideTimestamp = idx >= 1 && msg.timestamp - allMsg[idx - 1].timestamp < 60_0000;
+
               return (
                 <ChatEntry
                   key={idx}
-                  hideMetaData={hideMetaData}
+                  hideName={hideName}
+                  hideTimestamp={hideName === false ? false : hideTimestamp} // If we show the name always show the timestamp as well.
                   entry={msg}
                   messageFormatter={messageFormatter}
                 />

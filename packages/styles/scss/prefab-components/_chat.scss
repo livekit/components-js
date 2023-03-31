@@ -22,15 +22,22 @@
 .chat-entry {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
   margin: 0 0.25rem;
 
   .meta-data {
-    margin-top: 1rem;
     font-size: 0.75rem;
     color: var(--fg5);
     white-space: nowrap;
     padding: 0 0.3rem;
+    display: flex;
+    .participant-name {
+      margin-top: 1rem;
+    }
+    .timestamp {
+      margin-left: auto;
+      align-self: flex-end;
+    }
   }
 
   .message-body {

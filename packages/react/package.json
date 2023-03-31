@@ -34,7 +34,7 @@
   ],
   "scripts": {
     "build": "yarn gen:svg && tsup --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
-    "dev": "tsup --watch",
+    "dev": "tsup --watch --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
     "gen:icons": "svgr --out-dir ./src/assets/icons --typescript ../styles/assets/icons",
     "gen:images": "svgr --out-dir ./src/assets/images --typescript --no-svgo ../styles/assets/images",
     "gen:svg": "yarn gen:images && yarn gen:icons",

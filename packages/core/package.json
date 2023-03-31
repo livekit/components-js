@@ -30,7 +30,7 @@
   ],
   "scripts": {
     "build": "tsup --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
-    "dev": "tsup --watch",
+    "dev": "tsup --watch --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
     "test": "vitest --run",
     "test:watch": "vitest",

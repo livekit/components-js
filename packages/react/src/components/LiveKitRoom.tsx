@@ -2,6 +2,7 @@ import { log, roomEventSelector, setupLiveKitRoom } from '@livekit/components-co
 import {
   AudioCaptureOptions,
   ConnectionState,
+  MediaDeviceFailure,
   Room,
   RoomConnectOptions,
   RoomEvent,
@@ -68,6 +69,7 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   onConnected?: () => void;
   onDisconnected?: () => void;
   onError?: (error: Error) => void;
+  onMediaDeviceFailure?: (failure?: MediaDeviceFailure) => void;
   /**
    * Optional room instance.
    * By passing your own room instance you overwrite the `options` parameter,
@@ -104,6 +106,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
     onConnected,
     onDisconnected,
     onError,
+    onMediaDeviceFailure,
     simulateParticipants,
     ...rest
   } = { ...defaultRoomProps, ...props };
@@ -135,10 +138,17 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
         onError?.(e as Error);
       }
     };
+
+    const onMediaDeviceError = (e: Error) => {
+      const mediaDeviceFailure = MediaDeviceFailure.getFailure(e);
+      onMediaDeviceFailure?.(mediaDeviceFailure);
+    };
     room.on(RoomEvent.SignalConnected, onSignalConnected);
+    room.on(RoomEvent.MediaDevicesError, onMediaDeviceError);
 
     return () => {
       room.off(RoomEvent.SignalConnected, onSignalConnected);
+      room.off(RoomEvent.MediaDevicesError, onMediaDeviceError);
     };
   }, [room, audio, video, screen, onError]);
 

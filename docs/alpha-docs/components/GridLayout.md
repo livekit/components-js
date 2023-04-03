@@ -12,7 +12,7 @@ The GridLayout component displays the nested participants in a grid where every 
 
 ```tsx
 <LiveKitRoom>
-  <GridLayout />
+  <GridLayout track={tracks} />
 <LiveKitRoom>
 ```
 
@@ -23,6 +23,6 @@ The GridLayout component displays the nested participants in a grid where every 
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| filter | `((value: Participant, index: number, array: Participant[]) => unknown)` |  | The grid shows all room participants. If only a subset of the participants should be visible, they can be filtered. |
-| filterDependencies | `[]` |  |  |
+| tracks | `TrackReferenceOrPlaceholder[]` |  |  |
+| updateOnlyOn | `RoomEvent[]` |  | To optimize performance, you can use the `updateOnlyOn` property to decide on what RoomEvents the hook updates. By default it updates on all relevant RoomEvents to keep the returned participants array up to date. The minimal set of non-overwriteable `RoomEvents` is: `[RoomEvent.ParticipantConnected, RoomEvent.ParticipantDisconnected, RoomEvent.ConnectionStateChanged]` |
 

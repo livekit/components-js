@@ -25,6 +25,8 @@ The ChatEntry component holds and displays one chat message.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| entry | `ChatMessage & { from?: RemoteParticipant \| LocalParticipant \| undefined; }` |  | The chat massage object to display. |
+| entry | `ReceivedChatMessage` |  | The chat massage object to display. |
+| hideName | `boolean` |  | Hide sender name. Useful when displaying multiple consecutive chat messages from the same person. |
+| hideTimestamp | `boolean` |  | Hide message timestamp. |
 | messageFormatter | `MessageFormatter` |  | An optional formatter for the message body. |
 

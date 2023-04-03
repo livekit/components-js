@@ -6,16 +6,17 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 # TrackLoop
 
-The TrackLoop component loops over tracks. It is for example a easy way to loop over all participant camera and screen share tracks. Only tracks with a the same source specified via the sources property get included in the loop. Further narrowing the loop items is possible by providing a filter function to the component.
+The TrackLoop component loops over tracks. It is for example a easy way to loop over all participant camera and screen share tracks. Only tracks with a the same source specified via the sources property get included in the loop. TrackLoop creates a TrackContext for each track that you can use to e.g. render the track. Further narrowing the loop items is possible by simply filtering the returned array.
 
 ## Usage
 
 ```tsx
-{...}
-  <TrackLoop sources=[Track.Source.Camera, Track.Source.ScreenShare]>
-    {...}
-  <TrackLoop />
-{...}
+const tracks = useTracks([Track.Source.Camera]);
+<TrackLoop tracks={tracks} >
+ <TrackContext.Consumer>
+   {(track) => track && <VideoTrack {...track}/>}
+ </TrackContext.Consumer>
+<TrackLoop />
 ```
 
 <!--USAGE_INSERT_MARKER-->
@@ -25,8 +26,5 @@ The TrackLoop component loops over tracks. It is for example a easy way to loop 
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| sources | `[Source, ...Source[]]` |  | Array of all track sources that should be included as an item in the loop. |
-| excludePinnedTracks | `boolean` |  | Set to `true` if pinned tracks should be included in the participant loop? |
-| filter | `((value: TrackParticipantPair, index: number, array: TrackParticipantPair[]) => unknown)` |  |  |
-| filterDependencies | `any[]` |  |  |
+| tracks | `TrackReferenceOrPlaceholder[] \| TrackReference[]` |  |  |
 

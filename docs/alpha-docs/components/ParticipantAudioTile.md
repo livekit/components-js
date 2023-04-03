@@ -25,7 +25,9 @@ The ParticipantTile component is the base utility wrapper for displaying a visua
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
+| disableSpeakingIndicator | `boolean` |  |  |
 | participant | `Participant` |  |  |
-| trackSource | `Source` |  |  |
+| source | `Source` |  |  |
+| publication | `TrackPublication` |  |  |
 | onParticipantClick | `((event: ParticipantClickEvent) => void)` |  |  |
 

@@ -16,7 +16,10 @@ The contents of this file can be replaced at any time which would lead to the lo
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | participant | `Participant` |  |  |
-| trackSource | `Source` |  |  |
+| publication | `TrackPublication` |  |  |
+| track | `Track` |  |  |
+| source | `Source` |  |  |
+| disableSpeakingIndicator | `boolean` |  |  |
 | onParticipantClick | `((event: ParticipantClickEvent) => void)` |  |  |
-| props | `HTMLAttributes<HTMLElement>` |  |  |
+| htmlProps | `HTMLAttributes<HTMLElement>` |  |  |
 

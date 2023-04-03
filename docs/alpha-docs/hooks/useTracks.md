@@ -6,12 +6,15 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 # useTracks
 
-The useTracks hook returns Array<TrackParticipantPair> which combine the track and the corresponding participant of the track. Only tracks with a the same source specified via the sources property get included in the loop. Further narrowing the loop items is possible by providing a `filter` function or setting the `excludePinnedTrack` property.
+The `useTracks` hook returns an array of `TrackReference` which combine the participant, trackSource, publication and a track. Only tracks with a the same source specified via the sources property get included in the loop.
 
 ## Usage
 
 ```ts
-const pairs = useTracks({sources: [Track.Source.Camera], excludePinnedTracks: false})
+const trackReferences = useTracks(sources: [Track.Source.Camera])
+```
+```ts
+const trackReferencesWithPlaceholders = useTracks(sources: [{source: Track.Source.Camera, withPlaceholder: true}])
 ```
 
 <!--USAGE_INSERT_MARKER-->

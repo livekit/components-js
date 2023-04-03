@@ -4,18 +4,16 @@ This file was created by @livekit/components-docs-gen and should not be changed 
 The contents of this file can be replaced at any time which would lead to the loss of all manual changes.
 -->
 
-# ParticipantTile
+# AudioTrack
 
-The ParticipantTile component is the base utility wrapper for displaying a visual representation of a participant. This component can be used as a child of the `ParticipantLoop` component or independently if a participant is passed as a property.
+The AudioTrack component is responsible for rendering participant audio tracks. This component must have access to the participant's context, or alternatively pass it a `Participant` as a property.
 
 ## Usage
 
 ```tsx
-{...}
   <ParticipantTile>
-    {...}
+    <AudioTrack source={Track.Source.Microphone} />
   </ParticipantTile>
-{...}
 ```
 
 <!--USAGE_INSERT_MARKER-->
@@ -25,9 +23,10 @@ The ParticipantTile component is the base utility wrapper for displaying a visua
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| disableSpeakingIndicator | `boolean` |  |  |
-| participant | `Participant` |  |  |
 | source | `Source` |  |  |
+| name | `string` |  |  |
+| participant | `Participant` |  |  |
 | publication | `TrackPublication` |  |  |
-| onParticipantClick | `((event: ParticipantClickEvent) => void)` |  |  |
+| onSubscriptionStatusChanged | `((subscribed: boolean) => void)` |  |  |
+| volume | `number` |  | by the default the range is between 0 and 1 |
 

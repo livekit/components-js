@@ -38,6 +38,7 @@ The LiveKitRoom component provides the room context to all its child components.
 | onConnected | `(() => void)` |  |  |
 | onDisconnected | `(() => void)` |  |  |
 | onError | `((error: Error) => void)` |  |  |
+| onMediaDeviceFailure | `((failure?: MediaDeviceFailure) => void)` |  |  |
 | room | `Room` |  | Optional room instance. By passing your own room instance you overwrite the `options` parameter, make sure to set the options directly on the room instance itself. |
 | simulateParticipants | `number` |  |  |
 

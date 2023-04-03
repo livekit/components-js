@@ -15,6 +15,6 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| filter | `((value: Participant, index: number, array: Participant[]) => unknown)` |  |  |
-| filterDependencies | `[]` |  |  |
+| tracks | `TrackReferenceOrPlaceholder[]` |  |  |
+| orientation | `"horizontal" \| "vertical"` |  | Place the tiles vertically or horizontally next to each other. If undefined orientation is guessed by the dimensions of the container. |
 

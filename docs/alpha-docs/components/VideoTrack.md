@@ -4,11 +4,21 @@ This file was created by @livekit/components-docs-gen and should not be changed 
 The contents of this file can be replaced at any time which would lead to the loss of all manual changes.
 -->
 
-# MediaTrack
+# VideoTrack
+
+The VideoTrack component is responsible for rendering participant video tracks like `camera` and `screen_share`. This component must have access to the participant's context, or alternatively pass it a `Participant` as a property.  Children of this component are used as placeholders when the underlying (video) track is muted or not available
 
 ## Usage
 
-<!--USAGE_INSERT_MARKER->
+```tsx
+{...}
+  <ParticipantTile>
+    <VideoTrack source={Track.Source.Camera} />
+  </ParticipantTile>
+{...}
+```
+
+<!--USAGE_INSERT_MARKER-->
 
 
 ## Props

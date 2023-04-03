@@ -17,5 +17,5 @@ The useRemoteParticipants
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| filter | `((participant: RemoteParticipant) => boolean)` |  |  |
+| updateOnlyOn | `RoomEvent[]` |  |  |
 

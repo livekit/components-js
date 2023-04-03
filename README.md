@@ -64,11 +64,10 @@ On top of that we provide a handful of pre-defined css variables to easily theme
 
 To add styling from our @livekit/components-styles package:
 
-Import styles and prefabs
+Import all styles including the default theme
 
 ```ts
 import '@livekit/components-styles';
-import '@livekit/components-styles/prefabs';
 ```
 
 And add a theme data attribute to the `<LiveKitRoom/>` or any HTML container, to gain access to default LiveKit styles.

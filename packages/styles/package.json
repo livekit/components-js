@@ -9,38 +9,68 @@
     "directory": "/packages/styles"
   },
   "exports": {
-    ".": {
-      "types": "./dist/types/general/styles.css.d.ts",
-      "default": "./dist/general/styles.css"
+    "./types": {
+      "types": "./dist/types_unprefixed/index.scss.d.ts"
     },
     "./assets/icons/*": {
-      "default": "./assets/icons/*"
+      "import": "./assets/icons/*",
+      "require": "./assets/icons/*"
+    },
+    "./themes/*": {
+      "import": "./dist/general/themes/*.css",
+      "require": "./dist/general/themes/*.css",
+      "types": "./dist/types/general/themes/*.scss.d.ts"
+    },
+    "./components": {
+      "import": "./dist/general/components/index.css",
+      "require": "./dist/general/components/index.css",
+      "types": "./dist/types/general/components/index.scss.d.ts"
+    },
+    "./components/participant": {
+      "import": "./dist/general/components/participant/index.css",
+      "require": "./dist/general/components/participant/index.css",
+      "types": "./dist/types/general/components/participant/index.scss.d.ts"
+    },
+    "./components/controls": {
+      "import": "./dist/general/components/controls/index.css",
+      "require": "./dist/general/components/controls/index.css",
+      "types": "./dist/types/general/components/controls/index.scss.d.ts"
+    },
+    "./components/layout": {
+      "import": "./dist/general/components/layout/index.css",
+      "require": "./dist/general/components/layout/index.css",
+      "types": "./dist/types/general/components/layout/index.scss.d.ts"
+    },
+    "./prefabs": {
+      "import": "./dist/general/prefabs/index.css",
+      "require": "./dist/general/prefabs/index.css",
+      "types": "./dist/types/general/prefabs/index.scss.d.ts"
     },
     "./*": {
-      "default": "./dist/general/*"
+      "import": "./dist/general/*",
+      "require": "./dist/general/*",
+      "types": "./dist/types/general/*.scss.d.ts"
     },
-    "./prefabs": "./dist/general/prefabs.css",
-    "./themes/*": {
-      "default": "./dist/themes/*.css"
-    },
-    "./types": {
-      "types": "./dist/types_unprefixed/styles.scss.d.ts"
+    ".": {
+      "types": "./dist/types/general/index.css.d.ts",
+      "import": "./dist/general/index.css",
+      "require": "./dist/general/index.css"
     }
   },
-  "main": "dist/general/styles.css",
+  "main": "dist/general/index.css",
   "files": [
     "dist",
-    "icons",
-    "scss"
+    "assets"
   ],
   "scripts": {
+    "prebuild": "rimraf .temp dist",
     "build": "yarn compile:sass && yarn postcss && yarn generate:types",
-    "compile:sass": "sass scss:.temp/general themes:.temp/themes --style compressed",
+    "compile:sass": "sass scss:.temp/general --style compressed",
     "dev": "nodemon -e scss,js -x \"yarn build\"",
     "generate:types": "yarn generate:types:unprefixed && yarn generate:types:prefixed",
     "generate:types:prefixed": "cd dist && typed-scss-modules '**/*.css' --exportType default --outputFolder ../dist/types --nameFormat kebab",
     "generate:types:unprefixed": "cd scss && typed-scss-modules '**/*.scss' --exportType default --outputFolder ../dist/types_unprefixed --nameFormat kebab --exportTypeName UnprefixedClassNames",
-    "postcss": "postcss .temp/**/*.css --base .temp --dir ./dist",
+    "postcss": "postcss \".temp/**/*.css\" --base .temp -d ./dist",
     "test": "vitest --run",
     "test:watch": "vitest"
   },
@@ -52,6 +82,7 @@
     "postcss-cli": "^10.0.0",
     "postcss-prefixer": "^2.1.3",
     "postcss-variables-prefixer": "^1.2.0",
+    "rimraf": "^4.4.1",
     "sass": "^1.54.6",
     "typed-scss-modules": "^7.0.0",
     "vitest": "^0.29.0"

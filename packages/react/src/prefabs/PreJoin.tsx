@@ -1,11 +1,5 @@
-import {
-  createLocalAudioTrack,
-  createLocalVideoTrack,
-  LocalAudioTrack,
-  LocalVideoTrack,
-  Track,
-  VideoPresets,
-} from 'livekit-client';
+import type { LocalAudioTrack, LocalVideoTrack } from 'livekit-client';
+import { createLocalAudioTrack, createLocalVideoTrack, Track, VideoPresets } from 'livekit-client';
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { useMediaDevices } from '../components/controls/MediaDeviceSelect';

@@ -1,9 +1,7 @@
-import { Participant, Track } from 'livekit-client';
-import {
-  getTrackReferenceSource,
-  isTrackReference,
-  TrackReferenceOrPlaceholder,
-} from '../track-reference';
+import type { Participant } from 'livekit-client';
+import { Track } from 'livekit-client';
+import type { TrackReferenceOrPlaceholder } from '../track-reference';
+import { getTrackReferenceSource, isTrackReference } from '../track-reference';
 
 export function sortParticipantsByAudioLevel(
   a: Pick<Participant, 'audioLevel'>,

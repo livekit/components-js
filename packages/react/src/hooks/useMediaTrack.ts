@@ -1,7 +1,8 @@
-import { VideoSource, AudioSource } from '@livekit/components-core';
-import { Participant } from 'livekit-client';
+import type { VideoSource, AudioSource } from '@livekit/components-core';
+import type { Participant } from 'livekit-client';
 import { useEnsureParticipant } from '../context/participant-context';
-import { UseMediaTrackOptions, useMediaTrackBySourceOrName } from './useMediaTrackBySourceOrName';
+import type { UseMediaTrackOptions } from './useMediaTrackBySourceOrName';
+import { useMediaTrackBySourceOrName } from './useMediaTrackBySourceOrName';
 
 export function useMediaTrack(
   source: VideoSource | AudioSource,

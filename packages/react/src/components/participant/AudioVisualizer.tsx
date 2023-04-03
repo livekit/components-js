@@ -1,10 +1,5 @@
-import {
-  createAudioAnalyser,
-  LocalAudioTrack,
-  Participant,
-  RemoteAudioTrack,
-  Track,
-} from 'livekit-client';
+import type { Participant } from 'livekit-client';
+import { createAudioAnalyser, LocalAudioTrack, RemoteAudioTrack, Track } from 'livekit-client';
 import * as React from 'react';
 import { useMediaTrack } from '../../hooks';
 

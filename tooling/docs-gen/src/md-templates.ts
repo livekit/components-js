@@ -1,4 +1,4 @@
-import { ComponentDoc, PropItem } from 'react-docgen-typescript';
+import type { ComponentDoc, PropItem } from 'react-docgen-typescript';
 
 // const splitCamelCase = (camelCaseStr: string) =>
 //   camelCaseStr.replace(/([a-z0-9])([A-Z])/g, '$1 $2');

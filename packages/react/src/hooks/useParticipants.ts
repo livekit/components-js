@@ -1,4 +1,4 @@
-import { RoomEvent } from 'livekit-client';
+import type { RoomEvent } from 'livekit-client';
 import { useLocalParticipant } from './useLocalParticipant';
 import { useRemoteParticipants } from './useRemoteParticipants';
 

@@ -1,5 +1,5 @@
 import { connectedParticipantObserver } from '@livekit/components-core';
-import { ParticipantEvent, RemoteParticipant } from 'livekit-client';
+import type { ParticipantEvent, RemoteParticipant } from 'livekit-client';
 import * as React from 'react';
 import { useRoomContext } from '../context';
 import { useObservableState } from './internal';

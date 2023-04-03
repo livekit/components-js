@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { setupConnectionQualityIndicator } from '@livekit/components-core';
 import { useEnsureParticipant } from '../../context';
-import { ConnectionQuality, Participant } from 'livekit-client';
+import type { Participant } from 'livekit-client';
+import { ConnectionQuality } from 'livekit-client';
 import { mergeProps } from '../../utils';
 import { getConnectionQualityIcon } from '../../assets/icons/util';
 import { useObservableState } from '../../hooks/internal/useObservableState';

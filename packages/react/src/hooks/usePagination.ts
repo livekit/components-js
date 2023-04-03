@@ -1,4 +1,4 @@
-import { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { useState } from 'react';
 import { useVisualStableUpdate } from './useVisualStableUpdate';
 

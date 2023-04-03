@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SVGProps } from 'react';
+import type { SVGProps } from 'react';
 const SvgUserSilhouetteIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg width={278} height={300} fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
     <path

@@ -1,4 +1,5 @@
-import { tokenize, defaultGrammar, ReceivedChatMessage } from '@livekit/components-core';
+import type { ReceivedChatMessage } from '@livekit/components-core';
+import { tokenize, defaultGrammar } from '@livekit/components-core';
 import * as React from 'react';
 
 export type MessageFormatter = (message: string) => React.ReactNode;

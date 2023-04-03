@@ -1,6 +1,7 @@
-import { DataPacket_Kind, LocalParticipant, Room } from 'livekit-client';
-import { Observable, Subscriber } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import type { LocalParticipant, Room } from 'livekit-client';
+import { DataPacket_Kind } from 'livekit-client';
+import type { Subscriber } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
 import { createDataObserver } from './room';
 
 export const DataTopic = {

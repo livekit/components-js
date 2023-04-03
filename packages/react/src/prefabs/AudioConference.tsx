@@ -4,7 +4,7 @@ import { GridLayout } from '../components/layout/GridLayout';
 import { Track } from 'livekit-client';
 import { ParticipantAudioTile } from '../components/participant/ParticipantAudioTile';
 import { LayoutContextProvider } from '../components/layout/LayoutContextProvider';
-import { WidgetState } from '@livekit/components-core';
+import type { WidgetState } from '@livekit/components-core';
 import { Chat } from './Chat';
 import { useTracks } from '../hooks';
 

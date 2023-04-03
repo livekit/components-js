@@ -8,7 +8,7 @@ import type { WidgetState } from '@livekit/components-core';
 import { isEqualTrackRef, isTrackReference, log } from '@livekit/components-core';
 import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
-import { useMediaQuery } from '../hooks/internal/useMediaQuery';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import type { MessageFormatter } from '../components/ChatEntry';
 import { Track } from 'livekit-client';
 import { useTracks } from '../hooks/useTracks';

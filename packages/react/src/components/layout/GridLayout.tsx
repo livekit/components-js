@@ -3,7 +3,6 @@ import type { UseParticipantsOptions } from '../../hooks';
 import { useGridLayout, usePagination } from '../../hooks';
 import { mergeProps } from '../../utils';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
-import { createInteractingObservable } from '@livekit/components-core';
 import { TrackLoop } from '../TrackLoop';
 import { PaginationControl } from '../controls/PaginationControl';
 
@@ -33,20 +32,12 @@ export function GridLayout({ tracks, ...props }: GridLayoutProps) {
   const { layout } = useGridLayout(gridEl, tracks.length);
   const pagination = usePagination(layout.maxTiles, tracks);
 
-  const [interactive, setInteractive] = React.useState(false);
-  React.useEffect(() => {
-    const subscription = createInteractingObservable(gridEl.current, 1000).subscribe(
-      setInteractive,
-    );
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [gridEl]);
-
   return (
-    <div ref={gridEl} {...elementProps} data-lk-user-interaction={interactive}>
+    <div ref={gridEl} {...elementProps}>
       <TrackLoop tracks={pagination.tracks}>{props.children}</TrackLoop>
-      {tracks.length > layout.maxTiles && <PaginationControl {...pagination} />}
+      {tracks.length > layout.maxTiles && (
+        <PaginationControl pagesContainer={gridEl} {...pagination} />
+      )}
     </div>
   );
 }

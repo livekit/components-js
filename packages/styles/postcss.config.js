@@ -4,7 +4,7 @@ module.exports = {
   plugins: [
     require('postcss-prefixer')({
       prefix: `${PREFIX}-`,
-      ignore: [/\[class\*=" lk-"\]/],
+      ignore: [`\\[class\\*=" ${PREFIX}-"\\]`],
     }),
     require('postcss-variables-prefixer')({
       prefix: `${PREFIX}-`,

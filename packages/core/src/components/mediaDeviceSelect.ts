@@ -1,4 +1,5 @@
-import { LocalAudioTrack, LocalVideoTrack, Room, Track } from 'livekit-client';
+import type { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
+import { Track } from 'livekit-client';
 import { BehaviorSubject, map, mergeWith } from 'rxjs';
 import log from '../logger';
 import { observeParticipantMedia } from '../observables/participant';

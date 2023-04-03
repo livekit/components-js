@@ -1,17 +1,11 @@
-import {
-  Participant,
-  ParticipantEvent,
-  RemoteParticipant,
-  Room,
-  RoomEvent,
-  Track,
-  TrackPublication,
-} from 'livekit-client';
-import { map, switchMap, Observable, startWith, Subscriber } from 'rxjs';
+import type { Participant, RemoteParticipant, Room, TrackPublication } from 'livekit-client';
+import { ParticipantEvent, RoomEvent, Track } from 'livekit-client';
+import type { Subscriber } from 'rxjs';
+import { map, switchMap, Observable, startWith } from 'rxjs';
 import { observeRoomEvents } from './room';
-import { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
+import type { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 import { allParticipantEvents, allParticipantRoomEvents } from '../helper/eventGroups';
-import { TrackIdentifier } from '../types';
+import type { TrackIdentifier } from '../types';
 import { getTrackByIdentifier } from '../components/mediaTrack';
 
 export function observeParticipantEvents<T extends Participant>(

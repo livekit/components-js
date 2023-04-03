@@ -5,8 +5,8 @@
  */
 
 import { Participant, Track, TrackPublication } from 'livekit-client';
-import { UpdatableItem } from '../sorting/tile-array-update';
-import {
+import type { UpdatableItem } from '../sorting/tile-array-update';
+import type {
   TrackReferencePlaceholder,
   TrackReferencePublished,
   TrackReferenceSubscribed,

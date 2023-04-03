@@ -1,5 +1,6 @@
 import { describe, test, expect } from 'vitest';
-import { GridLayout, GRID_LAYOUTS, selectGridLayout } from './grid-layouts';
+import type { GridLayout } from './grid-layouts';
+import { GRID_LAYOUTS, selectGridLayout } from './grid-layouts';
 
 describe.concurrent('Test correct layout for participant count with no screen size limits:', () => {
   test.each([{ participantCount: 1, expected: '1x1' }])(

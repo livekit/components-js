@@ -1,12 +1,13 @@
-import {
+import type {
   AudioCaptureOptions,
   LocalParticipant,
   Room,
   ScreenShareCaptureOptions,
-  Track,
   VideoCaptureOptions,
 } from 'livekit-client';
-import { Subject, map, startWith, Observable } from 'rxjs';
+import { Track } from 'livekit-client';
+import type { Observable } from 'rxjs';
+import { Subject, map, startWith } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 

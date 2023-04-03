@@ -40,7 +40,7 @@
   "dependencies": {
     "@floating-ui/dom": "^1.1.0",
     "email-regex": "^5.0.0",
-    "global-tld-list": "^0.0.1030",
+    "global-tld-list": "^0.0.1061",
     "ip-regex": "^5.0.0",
     "loglevel": "^1.8.1",
     "rxjs": "^7.8.0"

@@ -1,5 +1,6 @@
 import type { Styles } from '@livekit/components-styles/dist/types_unprefixed/styles.scss';
-import { Participant, Track } from 'livekit-client';
+import type { Participant } from 'livekit-client';
+import { Track } from 'livekit-client';
 import { mutedObserver } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 

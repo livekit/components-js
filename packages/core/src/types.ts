@@ -1,5 +1,5 @@
 import type { Participant, Track, TrackPublication } from 'livekit-client';
-import { TrackReference, TrackReferenceOrPlaceholder } from './track-reference';
+import type { TrackReference, TrackReferenceOrPlaceholder } from './track-reference';
 
 // ## PinState Type
 export type PinState = TrackReference[];

@@ -1,5 +1,5 @@
-import { WidgetState } from '@livekit/components-core';
-import * as React from 'react';
+import type { WidgetState } from '@livekit/components-core';
+import type * as React from 'react';
 
 export type ChatContextAction =
   | { msg: 'show_chat' }

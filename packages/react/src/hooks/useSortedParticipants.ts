@@ -1,5 +1,5 @@
 import { sortParticipants } from '@livekit/components-core';
-import { Participant } from 'livekit-client';
+import type { Participant } from 'livekit-client';
 import * as React from 'react';
 import { useSpeakingParticipants } from './useSpeakingParticipants';
 

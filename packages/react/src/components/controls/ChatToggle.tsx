@@ -24,7 +24,7 @@ function useToggleChat({ props }: UseToggleChatProps) {
 
   return { mergedProps };
 }
-interface ChatToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+type ChatToggleProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 /**
  * The ChatToggle component toggles the visibility of the chat component.

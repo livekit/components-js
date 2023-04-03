@@ -1,12 +1,7 @@
-import {
-  LocalParticipant,
-  Participant,
-  RemoteParticipant,
-  Track,
-  TrackPublication,
-} from 'livekit-client';
+import type { Participant, Track, TrackPublication } from 'livekit-client';
+import { LocalParticipant, RemoteParticipant } from 'livekit-client';
 
-import { PinState } from './types';
+import type { PinState } from './types';
 
 export function isLocal(p: Participant) {
   return p instanceof LocalParticipant;

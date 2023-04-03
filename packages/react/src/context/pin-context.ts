@@ -1,5 +1,5 @@
-import { PinState, TrackReference } from '@livekit/components-core';
-import * as React from 'react';
+import type { PinState, TrackReference } from '@livekit/components-core';
+import type * as React from 'react';
 
 export type PinAction =
   | {

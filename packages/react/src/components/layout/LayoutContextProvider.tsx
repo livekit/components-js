@@ -1,6 +1,8 @@
-import { PinState, WidgetState, log } from '@livekit/components-core';
+import type { PinState, WidgetState } from '@livekit/components-core';
+import { log } from '@livekit/components-core';
 import * as React from 'react';
-import { LayoutContext, LayoutContextType, useEnsureCreateLayoutContext } from '../../context';
+import type { LayoutContextType } from '../../context';
+import { LayoutContext, useEnsureCreateLayoutContext } from '../../context';
 
 type LayoutContextProviderProps = {
   value?: LayoutContextType;

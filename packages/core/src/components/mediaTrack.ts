@@ -3,7 +3,7 @@ import { map, startWith } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 import { isTrackReference } from '../track-reference/track-reference.types';
-import { TrackIdentifier } from '../types';
+import type { TrackIdentifier } from '../types';
 
 export function setupMediaTrack(trackIdentifier: TrackIdentifier) {
   const initialPub = getTrackByIdentifier(trackIdentifier);

@@ -1,4 +1,4 @@
-import { ComponentDoc } from 'react-docgen-typescript';
+import type { ComponentDoc } from 'react-docgen-typescript';
 
 export function mdxComponentTemplate(def: ComponentDoc) {
   return `---

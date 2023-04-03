@@ -3,7 +3,7 @@
  *
  */
 
-import { Participant, Track, TrackPublication } from 'livekit-client';
+import type { Participant, Track, TrackPublication } from 'livekit-client';
 // ## TrackReference Types
 
 export type TrackReferenceSubscribed = {

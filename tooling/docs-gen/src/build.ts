@@ -4,7 +4,7 @@ import path from 'path';
 import { promisify } from 'util';
 import { promises as fs } from 'fs';
 import * as docgen from 'react-docgen-typescript';
-import { ComponentDoc } from 'react-docgen-typescript';
+import type { ComponentDoc } from 'react-docgen-typescript';
 import mkdirp from 'mkdirp';
 import { mdxComponentTemplate, mdxHookTemplate } from './mdx-template';
 import { mdComponentTemplate, mdHookTemplate } from './md-templates';

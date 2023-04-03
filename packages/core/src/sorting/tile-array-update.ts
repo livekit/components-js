@@ -1,6 +1,7 @@
 import { chunk, zip, differenceBy, remove } from 'lodash';
 import log from '../logger';
-import { getTrackReferenceId, TrackReferenceOrPlaceholder } from '../track-reference';
+import type { TrackReferenceOrPlaceholder } from '../track-reference';
+import { getTrackReferenceId } from '../track-reference';
 import { flatTrackReferenceArray } from '../track-reference/test-utils';
 
 type VisualChanges<T> = {

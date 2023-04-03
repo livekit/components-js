@@ -1,5 +1,5 @@
 import { setupStartAudio } from '@livekit/components-core';
-import { Room } from 'livekit-client';
+import type { Room } from 'livekit-client';
 import * as React from 'react';
 import { useRoomContext } from '../../context';
 import { useObservableState } from '../../hooks/internal/useObservableState';

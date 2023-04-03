@@ -1,4 +1,4 @@
-import { Participant } from 'livekit-client';
+import type { Participant } from 'livekit-client';
 import { createConnectionQualityObserver } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 

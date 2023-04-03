@@ -1,5 +1,6 @@
 import { Track } from 'livekit-client';
-import { isTrackReference, TrackReferenceOrPlaceholder } from '../track-reference';
+import type { TrackReferenceOrPlaceholder } from '../track-reference';
+import { isTrackReference } from '../track-reference';
 import {
   sortParticipantsByAudioLevel,
   sortParticipantsByIsSpeaking,

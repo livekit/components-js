@@ -1,13 +1,5 @@
-import {
-  concat,
-  distinctUntilChanged,
-  fromEvent,
-  map,
-  Observable,
-  of,
-  skipUntil,
-  timeout,
-} from 'rxjs';
+import type { Observable } from 'rxjs';
+import { concat, distinctUntilChanged, fromEvent, map, of, skipUntil, timeout } from 'rxjs';
 
 /**
  * Returns true if the user is interacting with the HTML element,

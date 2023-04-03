@@ -1,5 +1,7 @@
-import { log, screenShareObserver, ScreenShareTrackMap } from '@livekit/components-core';
-import { Participant, Room, Track, TrackPublication } from 'livekit-client';
+import type { ScreenShareTrackMap } from '@livekit/components-core';
+import { log, screenShareObserver } from '@livekit/components-core';
+import type { Participant, Room, TrackPublication } from 'livekit-client';
+import { Track } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureRoom } from '../../context';
 

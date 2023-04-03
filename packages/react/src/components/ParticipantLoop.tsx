@@ -1,5 +1,6 @@
-import { ParticipantFilter } from '@livekit/components-core';
-import { RoomEvent, Track } from 'livekit-client';
+import type { ParticipantFilter } from '@livekit/components-core';
+import type { RoomEvent } from 'livekit-client';
+import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
 import { useParticipants } from '../hooks';

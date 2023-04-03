@@ -1,6 +1,6 @@
 import * as React from 'react';
 import SvgChevron from '../../assets/icons/Chevron';
-import { usePagination } from '../../hooks';
+import type { usePagination } from '../../hooks';
 
 export function PaginationControl({
   totalPageCount,

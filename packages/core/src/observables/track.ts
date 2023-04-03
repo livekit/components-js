@@ -1,17 +1,16 @@
-import {
+import type {
   LocalTrackPublication,
   Participant,
   RemoteTrackPublication,
   Room,
-  RoomEvent,
   Track,
-  TrackEvent,
   TrackPublication,
 } from 'livekit-client';
+import { RoomEvent, TrackEvent } from 'livekit-client';
 import { map, Observable, startWith } from 'rxjs';
 import { allParticipantRoomEvents } from '../helper';
 import log from '../logger';
-import { TrackReference } from '../track-reference';
+import type { TrackReference } from '../track-reference';
 import { observeRoomEvents } from './room';
 
 export function trackObservable(track: TrackPublication) {

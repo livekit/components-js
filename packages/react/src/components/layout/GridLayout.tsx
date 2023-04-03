@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { useGridLayout, usePagination, UseParticipantsOptions } from '../../hooks';
+import type { UseParticipantsOptions } from '../../hooks';
+import { useGridLayout, usePagination } from '../../hooks';
 import { mergeProps } from '../../utils';
-import { createInteractingObservable, TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import { createInteractingObservable } from '@livekit/components-core';
 import { TrackLoop } from '../TrackLoop';
 import { PaginationControl } from '../controls/PaginationControl';
 

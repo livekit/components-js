@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import usePagination from './usePagination';
-import { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 
 describe('Test hook', () => {
   test('Test basic assumptions of the usePagination hook return values.', () => {

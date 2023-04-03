@@ -1,4 +1,4 @@
-import { Participant } from 'livekit-client';
+import type { Participant } from 'livekit-client';
 import { participantInfoObserver } from '../observables/participant';
 
 export function setupParticipantName(participant: Participant) {

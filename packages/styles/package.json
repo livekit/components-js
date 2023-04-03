@@ -41,6 +41,11 @@
       "require": "./dist/general/components/layout/index.css",
       "types": "./dist/types/general/components/layout/index.scss.d.ts"
     },
+    "./components/prefabs": {
+      "import": "./dist/general/components/prefabs/index.css",
+      "require": "./dist/general/components/prefabs/index.css",
+      "types": "./dist/types/general/components/prefabs/index.scss.d.ts"
+    },
     "./*": {
       "import": "./dist/general/*",
       "require": "./dist/general/*",

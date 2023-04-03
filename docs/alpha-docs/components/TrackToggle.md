@@ -24,8 +24,9 @@ With the TrackToggle component it is possible to mute and unmute your camera and
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| source | `Source` |  |  |
+| source | `ToggleSource` |  |  |
 | showIcon | `boolean` |  |  |
 | initialState | `boolean` |  |  |
 | onChange | `((enabled: boolean) => void)` |  |  |
+| captureOptions | `VideoCaptureOptions \| AudioCaptureOptions \| ScreenShareCaptureOptions` |  |  |
 

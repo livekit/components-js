@@ -26,6 +26,7 @@ The contents of this file can be replaced at any time which would lead to the lo
 | onConnected | `(() => void)` |  |  |
 | onDisconnected | `(() => void)` |  |  |
 | onError | `((error: Error) => void)` |  |  |
+| onMediaDeviceFailure | `((failure?: MediaDeviceFailure) => void)` |  |  |
 | room | `Room` |  | Optional room instance. By passing your own room instance you overwrite the `options` parameter, make sure to set the options directly on the room instance itself. |
 | simulateParticipants | `number` |  |  |
 

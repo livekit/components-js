@@ -4,7 +4,7 @@ This file was created by @livekit/components-docs-gen and should not be changed 
 The contents of this file can be replaced at any time which would lead to the loss of all manual changes.
 -->
 
-# useTrackToggle
+# useEnsureCreateLayoutContext
 
 ## Usage
 
@@ -15,8 +15,6 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| onChange | `((enabled: boolean) => void)` |  |  |
-| source | `ToggleSource` |  |  |
-| initialState | `boolean` |  |  |
-| captureOptions | `VideoCaptureOptions \| AudioCaptureOptions \| ScreenShareCaptureOptions` |  |  |
+| pin | `PinContextType` |  |  |
+| widget | `ChatContextType` |  |  |
 

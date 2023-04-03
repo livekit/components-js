@@ -15,6 +15,6 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| trackParticipantPair | `TrackParticipantPair` |  |  |
+| focusTrack | `TrackReference` |  |  |
 | participants | `Participant[]` |  |  |
 

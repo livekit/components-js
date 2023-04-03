@@ -6,7 +6,7 @@ The contents of this file can be replaced at any time which would lead to the lo
 
 # useParticipants
 
-The useParticipants hook returns all participants of the current room. It is possible to filter the participants.
+The useParticipants hook returns all participants (local and remote) of the current room.
 
 ## Usage
 
@@ -17,6 +17,5 @@ The useParticipants hook returns all participants of the current room. It is pos
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| filter | `((value: Participant, index: number, array: Participant[]) => unknown)` |  |  |
-| filterDependencies | `unknown[]` |  |  |
+| updateOnlyOn | `RoomEvent[]` |  | To optimize performance, you can use the `updateOnlyOn` property to decide on what RoomEvents the hook updates. By default it updates on all relevant RoomEvents to keep the returned participants array up to date. The minimal set of non-overwriteable `RoomEvents` is: `[RoomEvent.ParticipantConnected, RoomEvent.ParticipantDisconnected, RoomEvent.ConnectionStateChanged]` |
 

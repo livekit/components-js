@@ -25,6 +25,7 @@ The ParticipantLoop component loops over all or a filtered subset of participant
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| filterDependencies | `unknown[]` |  |  |
 | filter | `((value: Participant, index: number, array: Participant[]) => unknown)` |  |  |
+| filterDependencies | `unknown[]` |  | If your filter function is dependent on some external state, and you want it to be re-filtered whenever that external state changes, you will need to provide a dependency array with all of the external dependencies, just as you would on a React useEffect hook. |
+| updateOnlyOn | `RoomEvent[]` |  | To optimize performance, you can use the updateOnlyOn property to decide on what RoomEvents the hook updates. By default it updates on all relevant RoomEvents to keep the returned participants array up to date. The minimal set of non-overwriteable RoomEvents is: [RoomEvent.ParticipantConnected, RoomEvent.ParticipantDisconnected, RoomEvent.ConnectionStateChanged] |
 

@@ -4,9 +4,17 @@ This file was created by @livekit/components-docs-gen and should not be changed 
 The contents of this file can be replaced at any time which would lead to the loss of all manual changes.
 -->
 
-# useDataChannelMessages
+# useEnsureLayoutContext
 
 ## Usage
 
 <!--USAGE_INSERT_MARKER->
+
+
+## Props
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| pin | `PinContextType` |  |  |
+| widget | `ChatContextType` |  |  |
 

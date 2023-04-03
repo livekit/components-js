@@ -1,5 +1,5 @@
 import { isTrackReferencePinned, setupFocusToggle } from '@livekit/components-core';
-import { Participant, Track } from 'livekit-client';
+import type { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { LayoutContext, useEnsureParticipant, useMaybeLayoutContext } from '../../context';
 import { FocusToggleIcon, UnfocusToggleIcon } from '../../assets/icons';

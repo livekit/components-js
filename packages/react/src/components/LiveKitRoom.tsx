@@ -1,15 +1,12 @@
 import { log, roomEventSelector, setupLiveKitRoom } from '@livekit/components-core';
-import {
+import type {
   AudioCaptureOptions,
-  ConnectionState,
-  MediaDeviceFailure,
-  Room,
   RoomConnectOptions,
-  RoomEvent,
   RoomOptions,
   ScreenShareCaptureOptions,
   VideoCaptureOptions,
 } from 'livekit-client';
+import { ConnectionState, MediaDeviceFailure, Room, RoomEvent } from 'livekit-client';
 import * as React from 'react';
 import { RoomContext } from '../context';
 import { mergeProps } from '../utils';

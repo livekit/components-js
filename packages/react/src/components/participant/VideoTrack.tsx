@@ -1,7 +1,7 @@
-import { Participant, Track, TrackPublication } from 'livekit-client';
+import type { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
-import { ParticipantClickEvent } from '@livekit/components-core';
+import type { ParticipantClickEvent } from '@livekit/components-core';
 import { useEnsureParticipant } from '../../context';
 
 export type VideoTrackProps = React.HTMLAttributes<HTMLVideoElement> & {

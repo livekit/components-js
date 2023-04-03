@@ -1,15 +1,18 @@
+import type {
+  SourcesArray,
+  TrackReference,
+  TrackReferenceOrPlaceholder,
+  TrackSourceWithOptions,
+  TrackReferencePlaceholder,
+} from '@livekit/components-core';
 import {
   isSourcesWithOptions,
   isSourceWitOptions,
   log,
-  SourcesArray,
-  TrackReference,
-  TrackReferenceOrPlaceholder,
   trackReferencesObservable,
-  TrackSourceWithOptions,
-  TrackReferencePlaceholder,
 } from '@livekit/components-core';
-import { Participant, Room, RoomEvent, Track } from 'livekit-client';
+import type { Participant, Room, RoomEvent } from 'livekit-client';
+import { Track } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureRoom } from '../context';
 

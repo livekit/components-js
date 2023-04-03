@@ -1,6 +1,7 @@
-import { TrackReference } from '@livekit/components-core';
+import type { TrackReference } from '@livekit/components-core';
 import React from 'react';
-import { LayoutContextType, useEnsureLayoutContext } from '../context';
+import type { LayoutContextType } from '../context';
+import { useEnsureLayoutContext } from '../context';
 
 export function usePinnedTracks(layoutContext?: LayoutContextType): TrackReference[] {
   layoutContext = useEnsureLayoutContext(layoutContext);

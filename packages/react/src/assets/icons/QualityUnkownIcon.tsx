@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SVGProps } from 'react';
+import type { SVGProps } from 'react';
 const SvgQualityUnkownIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg width={16} height={16} fill="currentColor" xmlns="http://www.w3.org/2000/svg" {...props}>
     <g opacity={0.25}>

@@ -1,5 +1,6 @@
-import { ParticipantMedia, observeParticipantMedia } from '@livekit/components-core';
-import { TrackPublication, LocalParticipant } from 'livekit-client';
+import type { ParticipantMedia } from '@livekit/components-core';
+import { observeParticipantMedia } from '@livekit/components-core';
+import type { TrackPublication, LocalParticipant } from 'livekit-client';
 import * as React from 'react';
 import { useRoomContext } from '../context';
 

@@ -7,11 +7,8 @@ import { TrackMutedIndicator } from './TrackMutedIndicator';
 import { useEnsureParticipant } from '../../context';
 
 import { AudioVisualizer } from './AudioVisualizer';
-import {
-  ParticipantTileProps,
-  useParticipantTile,
-  ParticipantContextIfNeeded,
-} from './ParticipantTile';
+import type { ParticipantTileProps } from './ParticipantTile';
+import { useParticipantTile, ParticipantContextIfNeeded } from './ParticipantTile';
 import { AudioTrack } from './AudioTrack';
 
 /**

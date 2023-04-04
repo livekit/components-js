@@ -1,5 +1,5 @@
 ---
-"@livekit/components-react": patch
+'@livekit/components-react': patch
 ---
 
-Export usePinnedTracks and useMediaQuery
+Export usePinnedTracks

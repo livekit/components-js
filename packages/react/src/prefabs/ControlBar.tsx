@@ -8,6 +8,7 @@ import { ChatIcon, LeaveIcon } from '../assets/icons';
 import { ChatToggle } from '../components/controls/ChatToggle';
 import { isMobileBrowser } from '@livekit/components-core';
 import { useLocalParticipantPermissions } from '../hooks';
+import { useMediaQuery } from '../hooks/internal';
 
 type ControlBarControls = {
   microphone?: boolean;
@@ -37,8 +38,10 @@ export type ControlBarProps = React.HTMLAttributes<HTMLDivElement> & {
  * </LiveKitRoom>
  * ```
  */
-export function ControlBar(props: ControlBarProps) {
-  const { variation = 'verbose', controls } = props;
+export function ControlBar({ variation, controls, ...props }: ControlBarProps) {
+  const defaultVariation = useMediaQuery(`(max-width: 660px)`) ? 'minimal' : 'verbose';
+
+  variation ??= defaultVariation;
 
   const visibleControls = { leave: true, ...controls };
 

@@ -8,7 +8,6 @@ import type { WidgetState } from '@livekit/components-core';
 import { isEqualTrackRef, isTrackReference, log } from '@livekit/components-core';
 import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
-import { useMediaQuery } from '../hooks/useMediaQuery';
 import type { MessageFormatter } from '../components/ChatEntry';
 import { Track } from 'livekit-client';
 import { useTracks } from '../hooks/useTracks';
@@ -37,8 +36,6 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
  */
 export function VideoConference({ chatMessageFormatter, ...props }: VideoConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });
-
-  const isMobile = useMediaQuery(`(max-width: 660px)`);
 
   const tracks = useTracks(
     [
@@ -93,7 +90,7 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
               </FocusLayoutContainer>
             </div>
           )}
-          <ControlBar variation={isMobile ? 'minimal' : 'verbose'} controls={{ chat: true }} />
+          <ControlBar controls={{ chat: true }} />
         </div>
         <Chat
           style={{ display: widgetState.showChat ? 'flex' : 'none' }}

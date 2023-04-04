@@ -7,3 +7,4 @@
 
 export * from './useResizeObserver';
 export * from './useObservableState';
+export * from './useMediaQuery';

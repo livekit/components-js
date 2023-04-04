@@ -20,4 +20,3 @@ export { useToken, UseTokenOptions } from './useToken';
 export { useTracks } from './useTracks';
 export { useVisualStableUpdate } from './useVisualStableUpdate';
 export { usePinnedTracks } from './usePinnedTracks';
-export { useMediaQuery } from './useMediaQuery';

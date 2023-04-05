@@ -9,6 +9,7 @@ import { ChatToggle } from '../components/controls/ChatToggle';
 import { isMobileBrowser } from '@livekit/components-core';
 import { useLocalParticipantPermissions } from '../hooks';
 import { useMediaQuery } from '../hooks/internal';
+import { useMaybeLayoutContext } from '../context';
 
 type ControlBarControls = {
   microphone?: boolean;
@@ -39,8 +40,16 @@ export type ControlBarProps = React.HTMLAttributes<HTMLDivElement> & {
  * ```
  */
 export function ControlBar({ variation, controls, ...props }: ControlBarProps) {
-  const defaultVariation = useMediaQuery(`(max-width: 660px)`) ? 'minimal' : 'verbose';
+  const [isChatOpen, setIsChatOpen] = React.useState(false);
+  const layoutContext = useMaybeLayoutContext();
+  React.useEffect(() => {
+    if (layoutContext?.widget.state?.showChat !== undefined) {
+      setIsChatOpen(layoutContext?.widget.state?.showChat);
+    }
+  }, [layoutContext?.widget.state?.showChat]);
+  const isTooLittleSpace = useMediaQuery(`(max-width: ${isChatOpen ? 1000 : 760}px)`);
 
+  const defaultVariation = isTooLittleSpace ? 'minimal' : 'verbose';
   variation ??= defaultVariation;
 
   const visibleControls = { leave: true, ...controls };

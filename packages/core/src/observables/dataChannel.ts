@@ -1,4 +1,4 @@
-import type { LocalParticipant, Room } from 'livekit-client';
+import type { LocalParticipant, Participant, Room } from 'livekit-client';
 import { DataPacket_Kind } from 'livekit-client';
 import type { Subscriber } from 'rxjs';
 import { Observable, filter, map } from 'rxjs';
@@ -33,16 +33,27 @@ export interface BaseDataMessage<T extends string | undefined> {
   payload: Uint8Array;
 }
 
-export function setupDataMessageHandler<T extends string>(room: Room, topic?: T) {
+export interface ReceivedDataMessage<T extends string | undefined = string>
+  extends BaseDataMessage<T> {
+  from?: Participant;
+}
+
+export function setupDataMessageHandler<T extends string>(
+  room: Room,
+  topic?: T,
+  onMessage?: (msg: ReceivedDataMessage<T>) => void,
+) {
   /** Setup a Observable that returns all data messages belonging to a topic. */
   const messageObservable = createDataObserver(room).pipe(
     filter(([, , , messageTopic]) => messageTopic === undefined || messageTopic === topic),
     map(([payload, participant, , messageTopic]) => {
-      return {
+      const msg = {
         payload,
-        topic: messageTopic,
+        topic: messageTopic as T,
         from: participant,
-      };
+      } satisfies ReceivedDataMessage<T>;
+      onMessage?.(msg);
+      return msg;
     }),
   );
 

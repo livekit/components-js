@@ -1,5 +1,19 @@
 # @livekit/components-styles
 
+## 0.3.0
+
+### Minor Changes
+
+- Granular exports of style package - [#411](https://github.com/livekit/components-js/pull/411) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Apply resets only on lk- class elements - [#414](https://github.com/livekit/components-js/pull/414) ([@lukasIO](https://github.com/lukasIO))
+
+- Chat revision: add property to hide chat metadata in a ChatEntry and update ChatEntry styling. - [#397](https://github.com/livekit/components-js/pull/397) ([@Ocupe](https://github.com/Ocupe))
+
+- Don't show speaking indicator on screen_share tiles - [#386](https://github.com/livekit/components-js/pull/386) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.2.1
 
 ### Patch Changes

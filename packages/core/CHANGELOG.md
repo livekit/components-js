@@ -1,5 +1,13 @@
 # @livekit/components-core
 
+## 0.6.1
+
+### Patch Changes
+
+- Add data callback to useDataChannel - [#417](https://github.com/livekit/components-js/pull/417) ([@lukasIO](https://github.com/lukasIO))
+
+- Move track filter logic into pagination hook - [#392](https://github.com/livekit/components-js/pull/392) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.6.0
 
 ### Minor Changes

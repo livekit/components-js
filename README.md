@@ -1,4 +1,4 @@
-<!-- BEGIN HEADER IMAGE --><!-- END HEADER IMAGE -->
+<!--BEGIN_BANNER_IMAGE--><!--END_BANNER_IMAGE-->
 <a href="https://livekit.io/">
   <img src="./.github/assets/livekit-mark.png" alt="LiveKit logo" width="100" height="100">
 </a>
@@ -177,4 +177,4 @@ yarn dev:next
   - [Styles](/packages/styles/README.md)
 
 <!--NAV_END-->
-<!-- BEGIN REPO NAV --><!-- END REPO NAV -->
+<!--BEGIN_REPO_NAV--><!--END_REPO_NAV-->

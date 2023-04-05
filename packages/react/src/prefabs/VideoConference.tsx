@@ -9,7 +9,7 @@ import { isEqualTrackRef, isTrackReference, log } from '@livekit/components-core
 import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
 import type { MessageFormatter } from '../components/ChatEntry';
-import { Track } from 'livekit-client';
+import { RoomEvent, Track } from 'livekit-client';
 import { useTracks } from '../hooks/useTracks';
 import { usePinnedTracks } from '../hooks/usePinnedTracks';
 import { CarouselView } from '../components/layout/CarouselView';
@@ -42,7 +42,7 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
       { source: Track.Source.Camera, withPlaceholder: true },
       { source: Track.Source.ScreenShare, withPlaceholder: false },
     ],
-    { updateOnlyOn: [] },
+    { updateOnlyOn: [RoomEvent.ActiveSpeakersChanged] },
   );
 
   const widgetUpdate = (state: WidgetState) => {

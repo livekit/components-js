@@ -10,6 +10,7 @@
   border: 0;
   border-radius: var(--border-radius);
   cursor: pointer;
+  white-space: nowrap;
 
   &:not(:disabled):hover {
     background-color: var(--control-hover-bg);

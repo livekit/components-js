@@ -1,5 +1,24 @@
 # @livekit/components-react
 
+## 0.7.1
+
+### Patch Changes
+
+- Export usePinnedTracks - [#413](https://github.com/livekit/components-js/pull/413) ([@lukasIO](https://github.com/lukasIO))
+
+- Surface media device failure - [#398](https://github.com/livekit/components-js/pull/398) ([@lukasIO](https://github.com/lukasIO))
+
+- Add data callback to useDataChannel - [#417](https://github.com/livekit/components-js/pull/417) ([@lukasIO](https://github.com/lukasIO))
+
+- Move track filter logic into pagination hook - [#392](https://github.com/livekit/components-js/pull/392) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix chat toggle not working - [#395](https://github.com/livekit/components-js/pull/395) ([@lukasIO](https://github.com/lukasIO))
+
+- Chat revision: add property to hide chat metadata in a ChatEntry and update ChatEntry styling. - [#397](https://github.com/livekit/components-js/pull/397) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`e786dc9`](https://github.com/livekit/components-js/commit/e786dc98f571f125794b27305bf89cbf5ee30c63), [`5992c42`](https://github.com/livekit/components-js/commit/5992c429371a5516e724c59b80584df8badd2e95)]:
+  - @livekit/components-core@0.6.1
+
 ## 0.7.0
 
 ### Minor Changes

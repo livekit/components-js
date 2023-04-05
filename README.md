@@ -7,6 +7,7 @@
   LiveKit Components
 </h1>
 
+<!--BEGIN_DESCRIPTION-->
 <p>
   <a href="#get-started"><strong>Get started</strong></a>
   •
@@ -16,6 +17,7 @@
   •
   <a href="https://blog.livekit.io/">Blog</a>
 </p>
+<!--END_DESCRIPTION-->
 
 <br>
 

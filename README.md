@@ -1,15 +1,14 @@
-<!--BEGIN_BANNER_IMAGE--><!--END_BANNER_IMAGE-->
-
+<!--BEGIN_BANNER_IMAGE-->
 <a href="https://livekit.io/">
   <img src="./.github/assets/livekit-mark.png" alt="LiveKit logo" width="100" height="100">
 </a>
+<!--END_BANNER_IMAGE-->
 
 <h1>
   LiveKit Components
 </h1>
 
-<!--BEGIN_DESCRIPTION--><!--END_DESCRIPTION-->
-
+<!--BEGIN_DESCRIPTION-->
 <p>
   <a href="#get-started"><strong>Get started</strong></a>
   •
@@ -19,6 +18,7 @@
   •
   <a href="https://blog.livekit.io/">Blog</a>
 </p>
+<!--END_DESCRIPTION-->
 
 <br>
 

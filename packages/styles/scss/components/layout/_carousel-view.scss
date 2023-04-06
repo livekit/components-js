@@ -24,15 +24,10 @@
 
   &[data-orientation='horizontal'] {
     scroll-snap-type: x mandatory;
-    writing-mode: vertical-rl; // trick css to think this is vertical text in order to apply the scrollbar gutter horizontally
-    flex-direction: column; // this is needed because of the vertical hack above
-    scrollbar-gutter: stable;
     overflow-y: hidden;
     overflow-x: auto;
 
     > * {
-      writing-mode: horizontal-tb; // reset text orientation hack
-
       --width-minus-gaps: calc(100% - var(--grid-gap) * (var(--max-visible-tiles) - 1));
       width: calc(var(--width-minus-gaps) / var(--max-visible-tiles));
     }

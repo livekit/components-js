@@ -36,11 +36,13 @@ export function CarouselView({ tracks, orientation, ...props }: CarouselViewProp
       : Math.max(Math.floor(width / tileWidth), MIN_VISIBLE_TILES);
 
   // To avoid an unstable UI state, on overflow, we need to consider the scrollbar wide.
-  const scrollBarWidth = tracks.length > maxVisibleTiles ? getScrollBarWidth() : 0;
-  maxVisibleTiles =
-    carouselOrientation === 'vertical'
-      ? Math.max(Math.floor(height / (tileHeight - scrollBarWidth)), MIN_VISIBLE_TILES)
-      : Math.max(Math.floor(width / (tileWidth - scrollBarWidth)), MIN_VISIBLE_TILES);
+  if (tracks.length > maxVisibleTiles) {
+    const scrollBarWidth = getScrollBarWidth();
+    maxVisibleTiles =
+      carouselOrientation === 'vertical'
+        ? Math.max(Math.floor(height / (tileHeight - scrollBarWidth)), MIN_VISIBLE_TILES)
+        : Math.max(Math.floor(width / (tileWidth - scrollBarWidth)), MIN_VISIBLE_TILES);
+  }
 
   const sortedTiles = useVisualStableUpdate(tracks, maxVisibleTiles);
 

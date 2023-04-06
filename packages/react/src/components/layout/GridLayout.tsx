@@ -33,8 +33,8 @@ export function GridLayout({ tracks, ...props }: GridLayoutProps) {
   const pagination = usePagination(layout.maxTiles, tracks);
 
   const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe(
-    pagination.prevPage,
     pagination.nextPage,
+    pagination.prevPage,
   );
 
   return (

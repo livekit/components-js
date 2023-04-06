@@ -46,14 +46,14 @@ export function observeParticipantMedia<T extends Participant>(participant: T) {
     participant,
     ParticipantEvent.TrackMuted,
     ParticipantEvent.TrackUnmuted,
-    ParticipantEvent.ParticipantPermissionsChanged,
     // ParticipantEvent.IsSpeakingChanged,
     ParticipantEvent.TrackPublished,
     ParticipantEvent.TrackUnpublished,
-    ParticipantEvent.TrackSubscribed,
-    ParticipantEvent.TrackUnsubscribed,
     ParticipantEvent.LocalTrackPublished,
     ParticipantEvent.LocalTrackUnpublished,
+    ParticipantEvent.TrackSubscriptionStatusChanged,
+    ParticipantEvent.TrackStreamStateChanged,
+    ParticipantEvent.TrackSubscriptionPermissionChanged,
     // ParticipantEvent.ConnectionQualityChanged,
   ).pipe(
     map((p) => {

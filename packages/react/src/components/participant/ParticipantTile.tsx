@@ -4,6 +4,7 @@ import { Track } from 'livekit-client';
 import type { ParticipantClickEvent, TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { isParticipantSourcePinned, setupParticipantTile } from '@livekit/components-core';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
+import type { DebugTrackInfo } from './MediaTrack';
 import { MediaTrack } from './MediaTrack';
 import { ParticipantName } from './ParticipantName';
 import { TrackMutedIndicator } from './TrackMutedIndicator';
@@ -18,6 +19,8 @@ import { mergeProps } from '../../utils';
 import { FocusToggle } from '../controls/FocusToggle';
 import { ParticipantPlaceholder } from '../../assets/images';
 import { ScreenShareIcon } from '../../assets/icons';
+import { JSONTree } from 'react-json-tree';
+import { DebugView } from './DebugView';
 
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   disableSpeakingIndicator?: boolean;
@@ -25,6 +28,7 @@ export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   source?: Track.Source;
   publication?: TrackPublication;
   onParticipantClick?: (event: ParticipantClickEvent) => void;
+  showDebugOverlay?: boolean;
 };
 
 export type UseParticipantTileProps<T extends React.HTMLAttributes<HTMLElement>> =
@@ -109,9 +113,12 @@ export const ParticipantTile = ({
   onParticipantClick,
   publication,
   disableSpeakingIndicator,
+  showDebugOverlay,
   ...htmlProps
 }: ParticipantTileProps) => {
   const p = useEnsureParticipant(participant);
+  const [debugInfo, setDebugInfo] = React.useState<DebugTrackInfo | undefined>(undefined);
+  const [showDebugPopup, setShowDebugPopup] = React.useState<boolean>(false);
 
   const { elementProps } = useParticipantTile({
     participant: p,
@@ -150,6 +157,7 @@ export const ParticipantTile = ({
               publication={publication}
               participant={participant}
               onSubscriptionStatusChanged={handleSubscribe}
+              onDebugInfo={showDebugOverlay ? setDebugInfo : undefined}
             />
             <div className="lk-participant-placeholder">
               <ParticipantPlaceholder />
@@ -171,12 +179,22 @@ export const ParticipantTile = ({
                   </>
                 )}
               </div>
+              {showDebugOverlay && debugInfo && (
+                <div
+                  className="lk-button lk-participant-metatadata-item"
+                  onClick={() => setShowDebugPopup((val) => !val)}
+                >
+                  debug
+                </div>
+              )}
+
               <ConnectionQualityIndicator className="lk-participant-metadata-item" />
             </div>
           </>
         )}
         <FocusToggle trackSource={source} />
       </ParticipantContextIfNeeded>
+      {showDebugPopup && debugInfo && <DebugView debugInfo={debugInfo} />}
     </div>
   );
 };

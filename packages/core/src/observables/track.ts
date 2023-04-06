@@ -18,8 +18,9 @@ export function trackObservable(track: TrackPublication) {
     track,
     TrackEvent.Muted,
     TrackEvent.Unmuted,
-    TrackEvent.Subscribed,
-    TrackEvent.Unsubscribed,
+    TrackEvent.SubscriptionStatusChanged,
+    TrackEvent.SubscriptionPermissionChanged,
+    TrackEvent.Restarted,
   );
 
   return trackObserver;

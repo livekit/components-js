@@ -1,4 +1,5 @@
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import { getScrollBarWidth } from '@livekit/components-core';
 import * as React from 'react';
 import { useSize } from '../../hooks/internal';
 import { useVisualStableUpdate } from '../../hooks';
@@ -30,10 +31,19 @@ export function CarouselView({ tracks, orientation, ...props }: CarouselViewProp
   const tileHeight = Math.max(width * ASPECT_RATIO_INVERT, MIN_HEIGHT);
   const tileWidth = Math.max(height * ASPECT_RATIO, MIN_WIDTH);
 
-  const maxVisibleTiles =
+  let maxVisibleTiles =
     carouselOrientation === 'vertical'
       ? Math.max(Math.floor(height / tileHeight), MIN_VISIBLE_TILES)
       : Math.max(Math.floor(width / tileWidth), MIN_VISIBLE_TILES);
+
+  // To avoid an unstable UI state, on overflow, we need to consider the scrollbar wide.
+  if (tracks.length > maxVisibleTiles) {
+    const scrollBarWidth = getScrollBarWidth();
+    maxVisibleTiles =
+      carouselOrientation === 'vertical'
+        ? Math.max(Math.floor(height / (tileHeight - scrollBarWidth)), MIN_VISIBLE_TILES)
+        : Math.max(Math.floor(width / (tileWidth - scrollBarWidth)), MIN_VISIBLE_TILES);
+  }
 
   const sortedTiles = useVisualStableUpdate(tracks, maxVisibleTiles);
 

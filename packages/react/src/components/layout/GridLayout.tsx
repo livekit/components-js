@@ -32,19 +32,13 @@ export function GridLayout({ tracks, ...props }: GridLayoutProps) {
   const { layout } = useGridLayout(gridEl, tracks.length);
   const pagination = usePagination(layout.maxTiles, tracks);
 
-  const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe(
-    pagination.nextPage,
-    pagination.prevPage,
-  );
+  useSwipe(gridEl, {
+    onLeftSwipe: pagination.nextPage,
+    onRightSwipe: pagination.prevPage,
+  });
 
   return (
-    <div
-      ref={gridEl}
-      {...elementProps}
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-    >
+    <div ref={gridEl} {...elementProps}>
       <TrackLoop tracks={pagination.tracks}>{props.children}</TrackLoop>
       {tracks.length > layout.maxTiles && (
         <PaginationControl pagesContainer={gridEl} {...pagination} />

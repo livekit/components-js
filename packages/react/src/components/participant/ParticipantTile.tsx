@@ -19,7 +19,6 @@ import { mergeProps } from '../../utils';
 import { FocusToggle } from '../controls/FocusToggle';
 import { ParticipantPlaceholder } from '../../assets/images';
 import { ScreenShareIcon } from '../../assets/icons';
-import { JSONTree } from 'react-json-tree';
 import { DebugView } from './DebugView';
 
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {

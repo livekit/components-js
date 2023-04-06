@@ -22,24 +22,26 @@ export function useSwipe(
   onRightSwipe: () => void,
   options: UseSwipeOptions = {},
 ) {
-  const [touchStart, setTouchStart] = React.useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = React.useState<number | null>(null);
+  const touchStart = React.useRef<number | null>(null);
+  const touchEnd = React.useRef<number | null>(null);
 
-  // the required distance between touchStart and touchEnd to be detected as a swipe
+  // The required distance between touchStart and touchEnd to be detected as a swipe.
   const minSwipeDistance = options.minSwipeDistance ?? 50;
 
   const onTouchStart = (event: React.TouchEvent<HTMLElement>) => {
-    setTouchEnd(null); // otherwise the swipe is fired even with usual touch events
-    setTouchStart(event.targetTouches[0].clientX);
+    touchEnd.current = null; // Otherwise the swipe is fired even with usual touch events.
+    touchStart.current = event.targetTouches[0].clientX;
   };
 
   const onTouchMove = (event: React.TouchEvent<HTMLElement>) => {
-    setTouchEnd(event.targetTouches[0].clientX);
+    touchEnd.current = event.targetTouches[0].clientX;
   };
 
   const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
+    if (!touchStart.current || !touchEnd.current) {
+      return;
+    }
+    const distance = touchStart.current - touchEnd.current;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
     if (isLeftSwipe || isRightSwipe) console.log('swipe', isLeftSwipe ? 'left' : 'right');

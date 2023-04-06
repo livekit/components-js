@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { UseParticipantsOptions } from '../../hooks';
-import { useGridLayout, usePagination } from '../../hooks';
+import { useGridLayout, usePagination, useSwipe } from '../../hooks';
 import { mergeProps } from '../../utils';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { TrackLoop } from '../TrackLoop';
@@ -32,8 +32,19 @@ export function GridLayout({ tracks, ...props }: GridLayoutProps) {
   const { layout } = useGridLayout(gridEl, tracks.length);
   const pagination = usePagination(layout.maxTiles, tracks);
 
+  const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe(
+    pagination.prevPage,
+    pagination.nextPage,
+  );
+
   return (
-    <div ref={gridEl} {...elementProps}>
+    <div
+      ref={gridEl}
+      {...elementProps}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
       <TrackLoop tracks={pagination.tracks}>{props.children}</TrackLoop>
       {tracks.length > layout.maxTiles && (
         <PaginationControl pagesContainer={gridEl} {...pagination} />

@@ -5,7 +5,7 @@ import {
   ConnectionQualityIndicator,
   ConnectionQualityIndicatorProps,
 } from '@livekit/components-react';
-import { MockParticipantContext } from '../../.storybook/lk-decorators';
+import { MockParticipantContext } from '../../../.storybook/lk-decorators';
 import { ConnectionQuality } from 'livekit-client';
 
 export default {

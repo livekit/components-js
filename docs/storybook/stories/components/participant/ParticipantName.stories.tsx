@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StoryObj } from '@storybook/react';
 
 import { ParticipantName, ParticipantNameProps } from '@livekit/components-react';
-import { LkParticipantContext, LkRoomContext } from '../../.storybook/lk-decorators';
+import { LkParticipantContext, LkRoomContext } from '../../../.storybook/lk-decorators';
 
 export default {
   component: ParticipantName,

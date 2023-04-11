@@ -31,15 +31,21 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <header>
-          <h1>LiveKit Components examples</h1>
+        <header style={{ maxWidth: '48ch' }}>
+          <img
+            style={{ width: '100%' }}
+            src="livekit-components-logo.png"
+            alt="LiveKit components text logo."
+          />
           <p>Some simple sample apps to help you get started working with LiveKit Components.</p>
         </header>
-        <ul className="lk-list">
+        <ul className="example-list">
           {Object.values(EXAMPLE_ROUTES).map(({ title, href }, index) => {
             return (
-              <li key={index}>
-                <a href={href}>{title}</a>
+              <li className={styles.listItem} key={index}>
+                <a className={styles.link} href={href}>
+                  {title}
+                </a>
               </li>
             );
           })}

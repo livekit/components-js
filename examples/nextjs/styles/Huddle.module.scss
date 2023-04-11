@@ -80,6 +80,7 @@
 
 .gridLayout {
   --participant-size: 20rem;
+  aspect-ratio: 1 / 1;
   grid-area: participants;
   place-self: center;
   width: 100%;
@@ -95,6 +96,12 @@
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
+  }
+
+  .lk-participant-tile .lk-focus-toggle-button {
+    background-color: red;
+    width: 2rem !important;
+    height: 2rem !important;
   }
 }
 
@@ -135,8 +142,6 @@
 .participantView {
   place-self: center;
   display: relative;
-  height: var(--participant-size);
-  width: var(--participant-size);
   max-height: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 12px;
@@ -273,6 +278,7 @@ button.mediaBtn {
   left: 0;
   height: max(3rem, 18%);
   width: 100%;
+  white-space: nowrap;
   padding: 0.5em;
   display: flex;
   flex-direction: column;

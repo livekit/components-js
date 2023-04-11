@@ -56,9 +56,7 @@ export const ParticipantAudioTile = ({
                 <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
                 <ParticipantName />
               </div>
-              <div className="lk-participant-metadata-item">
-                <ConnectionQualityIndicator />
-              </div>
+              <ConnectionQualityIndicator className="lk-participant-metadata-item" />
             </div>
           </>
         )}

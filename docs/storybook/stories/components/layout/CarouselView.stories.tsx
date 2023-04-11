@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { CarouselView, CarouselViewProps } from '@livekit/components-react';
-import { LkRoomContext } from '../../.storybook/lk-decorators';
+import { LkRoomContext } from '../../../.storybook/lk-decorators';
 
 export default {
   component: CarouselView,

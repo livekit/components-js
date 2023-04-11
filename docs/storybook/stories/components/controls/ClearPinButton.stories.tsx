@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StoryObj } from '@storybook/react';
 
 import { ClearPinButton, ClearPinButtonProps } from '@livekit/components-react';
-import { LkLayoutContext, LkRoomContext } from '../../.storybook/lk-decorators';
+import { LkLayoutContext, LkRoomContext } from '../../../.storybook/lk-decorators';
 
 export default {
   component: ClearPinButton,

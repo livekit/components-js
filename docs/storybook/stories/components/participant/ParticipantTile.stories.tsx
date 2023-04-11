@@ -2,7 +2,7 @@ import { ParticipantTile, ParticipantTileProps } from '@livekit/components-react
 import { StoryObj } from '@storybook/react';
 import { Track } from 'livekit-client';
 import * as React from 'react';
-import { LkParticipantContext, LkRoomContext } from '../../.storybook/lk-decorators';
+import { LkParticipantContext, LkRoomContext } from '../../../.storybook/lk-decorators';
 
 export default {
   component: ParticipantTile,

@@ -3,13 +3,11 @@ import {
   LiveKitRoom,
   ParticipantLoop,
   RoomName,
-  TrackLoop,
   TrackMutedIndicator,
   useIsMuted,
   useIsSpeaking,
   useParticipantContext,
   useToken,
-  useTracks,
 } from '@livekit/components-react';
 import styles from '../styles/Clubhouse.module.scss';
 import { Track } from 'livekit-client';

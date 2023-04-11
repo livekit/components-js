@@ -79,12 +79,11 @@
 }
 
 .gridLayout {
-  --participant-size: 20rem;
   aspect-ratio: 1 / 1;
   grid-area: participants;
   place-self: center;
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
   max-height: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -98,12 +97,6 @@
     display: none;
   }
 
-  .lk-participant-tile .lk-focus-toggle-button {
-    background-color: red;
-    width: 2rem !important;
-    height: 2rem !important;
-  }
-}
 
 .focusLayout {
   grid-area: participants;
@@ -231,7 +224,7 @@
 }
 
 .mediaControls {
-  --size: 3.125rem;
+  --size: 3.7rem;
   grid-area: controls;
   display: grid;
   place-content: center;

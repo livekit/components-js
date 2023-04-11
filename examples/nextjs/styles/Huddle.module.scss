@@ -5,7 +5,9 @@
   background-size: cover;
   min-height: 100vh;
   color: black;
-  --primary-bg: white;
+  --primary-bg: rgb(250, 250, 250);
+  display: grid;
+  align-content: center;
 }
 
 .devInfo {

@@ -36,11 +36,14 @@ const Huddle: NextPage = () => {
   const [preJoinChoices, setPreJoinChoices] = useState<LocalUserChoices | undefined>(undefined);
 
   return (
-    <main className={styles.main}>
+    <main className={styles.main} data-lk-theme="default">
       {preJoinChoices ? (
         <HuddleRoomView userChoices={preJoinChoices} roomName={roomName} />
       ) : (
-        <PreJoin onSubmit={setPreJoinChoices} />
+        <PreJoin
+          onSubmit={setPreJoinChoices}
+          style={{ background: 'var(--primary-bg)', borderRadius: '0.7rem' }}
+        />
       )}
     </main>
   );
@@ -239,6 +242,7 @@ const HuddleRoomView = ({
       onDisconnected={handleDisconnect}
       video={userChoices.videoEnabled}
       audio={userChoices.audioEnabled}
+      style={{ background: 'transparent' }}
     >
       {connectionState !== ConnectionState.Connected ? (
         <div>{connectionState}</div>

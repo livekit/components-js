@@ -31,11 +31,13 @@
   padding: 1rem;
   left: 50%;
   transform: translateX(-50%);
-
   border-top-left-radius: 2rem;
   border-top-right-radius: 2rem;
   background-color: var(--lk-bg3);
   transition: bottom 1s;
+
+  display: grid;
+  grid-template-rows: min-content 1fr min-content;
 }
 
 section.participant-tile {

@@ -1,9 +1,9 @@
 import {
   ControlBar,
-  GridLayout,
   LiveKitRoom,
   ParticipantLoop,
   RoomName,
+  TrackLoop,
   TrackMutedIndicator,
   useIsMuted,
   useIsSpeaking,
@@ -31,7 +31,7 @@ const Clubhouse = () => {
   const [connected, setConnected] = useState(false);
 
   return (
-    <div className={styles.container}>
+    <div data-lk-theme="default" className={styles.container}>
       <LiveKitRoom
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
@@ -58,10 +58,13 @@ const Clubhouse = () => {
 
         <div className={styles.slider} style={{ bottom: connected ? '0px' : '-100%' }}>
           <h1>
-            <RoomName></RoomName>
+            <RoomName />
           </h1>
           <Stage />
-          <ControlBar></ControlBar>
+          <ControlBar
+            variation="minimal"
+            controls={{ microphone: true, camera: false, screenShare: false }}
+          />
         </div>
       </LiveKitRoom>
     </div>
@@ -70,7 +73,7 @@ const Clubhouse = () => {
 
 const Stage = () => {
   return (
-    <div className="lk-grid-layout-wrapper">
+    <div className="">
       <div className={styles.stageGrid}>
         <ParticipantLoop>
           <CustomParticipantTile></CustomParticipantTile>
@@ -99,7 +102,7 @@ const CustomParticipantTile = () => {
           // className="z-10 grid aspect-square items-center overflow-hidden rounded-full bg-beige transition-all will-change-transform"
         >
           <img
-            src={`https://avatars.dicebear.com/api/avataaars/${id}.svg`}
+            src={`https://avatars.dicebear.com/api/avataaars/${id}.svg?mouth=default,smile,tongue&eyes=default,happy,hearts&eyebrows=default,defaultNatural,flatNatural`}
             className="fade-in"
             width={150}
             height={150}

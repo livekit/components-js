@@ -47,7 +47,8 @@
   "dependencies": {
     "@livekit/components-core": "0.6.1",
     "@react-hook/latest": "^1.0.3",
-    "clsx": "^1.2.1"
+    "clsx": "^1.2.1",
+    "react-json-tree": "^0.18.0"
   },
   "peerDependencies": {
     "livekit-client": "^1.7.0",

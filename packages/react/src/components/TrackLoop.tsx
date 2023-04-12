@@ -40,7 +40,7 @@ export const TrackLoop = ({ tracks, ...props }: React.PropsWithChildren<TrackLoo
             {props.children ? (
               cloneSingleChild(props.children)
             ) : (
-              <ParticipantTile {...trackReference} />
+              <ParticipantTile {...trackReference} showDebugOverlay={true} />
             )}
           </TrackContext.Provider>
         );

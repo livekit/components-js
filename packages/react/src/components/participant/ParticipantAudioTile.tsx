@@ -46,7 +46,7 @@ export const ParticipantAudioTile = ({
 
   return (
     <div style={{ position: 'relative' }} {...elementProps}>
-      <ParticipantContextIfNeeded participant={participant}>
+      <ParticipantContextIfNeeded participant={p}>
         {children ?? (
           <>
             <AudioTrack source={Track.Source.Microphone}></AudioTrack>

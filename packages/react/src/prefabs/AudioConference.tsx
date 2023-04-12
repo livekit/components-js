@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { ControlBar } from './ControlBar';
-import { GridLayout } from '../components/layout/GridLayout';
-import { Track } from 'livekit-client';
+
 import { ParticipantAudioTile } from '../components/participant/ParticipantAudioTile';
 import { LayoutContextProvider } from '../components/layout/LayoutContextProvider';
 import type { WidgetState } from '@livekit/components-core';
 import { Chat } from './Chat';
-import { useTracks } from '../hooks';
+import { ParticipantLoop } from '../components';
 
 export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -28,23 +27,19 @@ export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 export function AudioConference({ ...props }: AudioConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });
 
-  const tracks = useTracks([Track.Source.Microphone]);
-
   return (
-    <div className="lk-audio-conference" {...props}>
-      <LayoutContextProvider onWidgetChange={setWidgetState}>
+    <LayoutContextProvider onWidgetChange={setWidgetState}>
+      <div className="lk-audio-conference" {...props}>
         <div className="lk-audio-conference-stage">
-          <div className="lk-grid-layout-wrapper">
-            <GridLayout tracks={tracks}>
-              <ParticipantAudioTile />
-            </GridLayout>
-          </div>
-          <ControlBar
-            controls={{ microphone: true, screenShare: false, camera: false, chat: true }}
-          />
+          <ParticipantLoop>
+            <ParticipantAudioTile />
+          </ParticipantLoop>
         </div>
+        <ControlBar
+          controls={{ microphone: true, screenShare: false, camera: false, chat: true }}
+        />
         {widgetState.showChat && <Chat />}
-      </LayoutContextProvider>
-    </div>
+      </div>
+    </LayoutContextProvider>
   );
 }

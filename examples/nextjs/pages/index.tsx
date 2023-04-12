@@ -14,7 +14,6 @@ const EXAMPLE_ROUTES = {
     title: 'Simple example with custom components',
     href: `/customize?user=${faker.name.fullName()}`,
   },
-  huddle: { title: 'Huddle clone build with LiveKit components', href: '/huddle' },
   clubhouse: {
     title: 'Clubhouse clone build with LiveKit components',
     href: `/clubhouse?user=${faker.name.fullName()}`,

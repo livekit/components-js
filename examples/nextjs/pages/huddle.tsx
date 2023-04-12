@@ -200,9 +200,13 @@ const HuddleRoomView = ({
               )}
               <div className={styles.mediaControls}>
                 <div>
-                  <TrackToggle className={styles.audioBtn} source={Track.Source.Microphone} />
-                  <TrackToggle className={styles.videoBtn} source={Track.Source.Camera} />
-                  <TrackToggle className={styles.screenBtn} source={Track.Source.ScreenShare} />
+                  <TrackToggle source={Track.Source.Microphone} />
+                  <TrackToggle source={Track.Source.Camera} />
+                  <TrackToggle
+                    showIcon={false}
+                    className={styles.screenBtn}
+                    source={Track.Source.ScreenShare}
+                  />
                   <MediaDeviceMenu className={styles.mediaBtn}></MediaDeviceMenu>
                   <DisconnectButton className={styles.disconnectBtn}>Leave</DisconnectButton>
                   <StartAudio label="Start Audio" />

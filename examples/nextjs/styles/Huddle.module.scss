@@ -142,7 +142,6 @@
   border: 0;
   transition: outline, box-shadow 80ms cubic-bezier(0.36, 0.19, 0.29, 1);
   cursor: pointer;
-  background-color: red;
 
   &[data-lk-speaking='true'] {
     box-shadow: 0 0 8px 5px var(--primary-bg);
@@ -225,6 +224,8 @@
 
 .mediaControls {
   --size: 3.7rem;
+  --lk-control-bg: white;
+  --lk-control-active-bg: white;
   grid-area: controls;
   display: grid;
   place-content: center;
@@ -243,12 +244,12 @@
   background-size: 2rem;
   background-repeat: no-repeat;
   background-position: center;
-}
-button.disconnectBtn {
-  height: var(--size);
-  width: auto;
-  border-radius: 8px;
-  cursor: pointer;
+  color: var(--lk-control-active-fg);
+  background-color: var(--lk-control-fg);
+
+  &:hover {
+    background-color: var(--lk-danger);
+  }
 }
 button.screenBtn {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' fill='%23000000' viewBox='0 0 256 256'%3E%3Crect width='256' height='256' fill='none'%3E%3C/rect%3E%3Crect x='32' y='48' width='192' height='144' rx='16' transform='translate(256 240) rotate(180)' fill='none' stroke='%23000000' stroke-linecap='round' stroke-linejoin='round' stroke-width='16'%3E%3C/rect%3E%3Cline x1='160' y1='224' x2='96' y2='224' fill='none' stroke='%23000000' stroke-linecap='round' stroke-linejoin='round' stroke-width='16'%3E%3C/line%3E%3C/svg%3E");
@@ -262,6 +263,14 @@ button.mediaBtn {
   &::after {
     display: none;
   }
+}
+button.disconnectBtn {
+  background-color: var(--lk-danger);
+  color: var(--lk-fg);
+  height: var(--size);
+  width: auto;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 .screenShareBanner {

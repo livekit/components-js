@@ -1,0 +1,28 @@
+.pagination-indicator {
+  position: absolute;
+  height: var(--grid-gap);
+  background-color: var(--bg2);
+  width: fit-content;
+  padding: 0.2rem 0.5rem;
+  bottom: calc(var(--grid-gap) / 2);
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2rem;
+  opacity: 1;
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+  span {
+    display: inline-block;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 9999999px;
+    background-color: var(--fg);
+    opacity: 0.35;
+    transition: opacity linear 0.2s;
+
+    &[data-active] {
+      opacity: 0.9;
+    }
+  }
+}

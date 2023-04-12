@@ -6,8 +6,6 @@ export type PaginationIndicatorProps = {
 };
 
 export function PaginationIndicator({ totalPageCount, currentPage }: PaginationIndicatorProps) {
-  console.log('xxx', { totalPageCount }, { currentPage });
-
   const bubbles = new Array(totalPageCount).fill('').map((_, index) => {
     if (index + 1 === currentPage) {
       return <span data-lk-active key={index} />;

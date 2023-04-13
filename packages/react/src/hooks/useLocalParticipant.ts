@@ -1,14 +1,21 @@
 import type { ParticipantMedia } from '@livekit/components-core';
 import { observeParticipantMedia } from '@livekit/components-core';
-import type { TrackPublication, LocalParticipant } from 'livekit-client';
+import type { TrackPublication, LocalParticipant, Room } from 'livekit-client';
 import * as React from 'react';
-import { useRoomContext } from '../context';
+import { useEnsureRoom } from '../context';
+
+export interface UseLocalParticipantOptions {
+  /**
+   * The room to use. If not provided, the hook will use the room from the context.
+   */
+  room?: Room;
+}
 
 /**
  * The useLocalParticipant hook the state of the local participant.
  */
-export const useLocalParticipant = () => {
-  const room = useRoomContext();
+export const useLocalParticipant = (options: UseLocalParticipantOptions = {}) => {
+  const room = useEnsureRoom(options.room);
   const [localParticipant, setLocalParticipant] = React.useState(room.localParticipant);
   const [isMicrophoneEnabled, setIsMicrophoneEnabled] = React.useState(
     localParticipant.isMicrophoneEnabled,

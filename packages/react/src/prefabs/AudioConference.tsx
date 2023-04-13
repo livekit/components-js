@@ -6,6 +6,7 @@ import { LayoutContextProvider } from '../components/layout/LayoutContextProvide
 import type { WidgetState } from '@livekit/components-core';
 import { Chat } from './Chat';
 import { ParticipantLoop } from '../components';
+import { useParticipants } from '../hooks';
 
 export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -26,12 +27,13 @@ export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
  */
 export function AudioConference({ ...props }: AudioConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });
+  const participants = useParticipants();
 
   return (
     <LayoutContextProvider onWidgetChange={setWidgetState}>
       <div className="lk-audio-conference" {...props}>
         <div className="lk-audio-conference-stage">
-          <ParticipantLoop>
+          <ParticipantLoop participants={participants}>
             <ParticipantAudioTile />
           </ParticipantLoop>
         </div>

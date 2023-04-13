@@ -1,5 +1,13 @@
 # @livekit/components-styles
 
+## 0.3.1
+
+### Patch Changes
+
+- add pagination indicator to GridLayout component - [#431](https://github.com/livekit/components-js/pull/431) ([@Ocupe](https://github.com/Ocupe))
+
+- Fix the carousel component for iOS and fix a possible unstable UI condition. - [#422](https://github.com/livekit/components-js/pull/422) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.3.0
 
 ### Minor Changes

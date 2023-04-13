@@ -1,16 +1,12 @@
 import {
-  LiveKitRoom,
   ConnectionState,
-  ScreenShareView,
-  RoomName,
-  RoomAudioRenderer,
-  useToken,
   ControlBar,
   GridLayout,
-  useTracks,
-  VideoTrack,
-  TrackLoop,
+  LiveKitRoom,
   ParticipantTile,
+  RoomName,
+  useToken,
+  useTracks,
 } from '@livekit/components-react';
 import { Track } from 'livekit-client';
 import type { NextPage } from 'next';

@@ -1,4 +1,4 @@
-import type { TrackIdentifier } from '@livekit/components-core';
+import { TrackIdentifier, isTrackReference } from '@livekit/components-core';
 import { setupMediaTrack, log, isLocal, getTrackByIdentifier } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import React from 'react';
@@ -26,7 +26,11 @@ export function useMediaTrackBySourceOrName(
 
   const { className, trackObserver } = React.useMemo(() => {
     return setupMediaTrack(observerOptions);
-  }, [observerOptions]);
+  }, [
+    observerOptions.participant.identity,
+    observerOptions.source,
+    isTrackReference(observerOptions) && observerOptions.publication.trackSid,
+  ]);
 
   React.useEffect(() => {
     const subscription = trackObserver.subscribe((publication) => {

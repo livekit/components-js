@@ -1,15 +1,14 @@
 import {
   ControlBar,
-  GridLayout,
   LiveKitRoom,
   ParticipantLoop,
+  RoomAudioRenderer,
   RoomName,
   TrackMutedIndicator,
   useIsMuted,
   useIsSpeaking,
   useParticipantContext,
   useToken,
-  useTracks,
 } from '@livekit/components-react';
 import styles from '../styles/Clubhouse.module.scss';
 import { Track } from 'livekit-client';
@@ -31,7 +30,7 @@ const Clubhouse = () => {
   const [connected, setConnected] = useState(false);
 
   return (
-    <div className={styles.container}>
+    <div data-lk-theme="default" className={styles.container}>
       <LiveKitRoom
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
@@ -58,10 +57,14 @@ const Clubhouse = () => {
 
         <div className={styles.slider} style={{ bottom: connected ? '0px' : '-100%' }}>
           <h1>
-            <RoomName></RoomName>
+            <RoomName />
           </h1>
           <Stage />
-          <ControlBar></ControlBar>
+          <ControlBar
+            variation="minimal"
+            controls={{ microphone: true, camera: false, screenShare: false }}
+          />
+          <RoomAudioRenderer />
         </div>
       </LiveKitRoom>
     </div>
@@ -70,7 +73,7 @@ const Clubhouse = () => {
 
 const Stage = () => {
   return (
-    <div className="lk-grid-layout-wrapper">
+    <div className="">
       <div className={styles.stageGrid}>
         <ParticipantLoop>
           <CustomParticipantTile></CustomParticipantTile>
@@ -99,7 +102,7 @@ const CustomParticipantTile = () => {
           // className="z-10 grid aspect-square items-center overflow-hidden rounded-full bg-beige transition-all will-change-transform"
         >
           <img
-            src={`https://avatars.dicebear.com/api/avataaars/${id}.svg`}
+            src={`https://avatars.dicebear.com/api/avataaars/${id}.svg?mouth=default,smile,tongue&eyes=default,happy,hearts&eyebrows=default,defaultNatural,flatNatural`}
             className="fade-in"
             width={150}
             height={150}
@@ -108,14 +111,8 @@ const CustomParticipantTile = () => {
         </div>
       </div>
 
-      <div
-        style={{ opacity: isMuted ? 1 : 0 }}
-        className={styles['mic-container']}
-        // className={`absolute bottom-[7%] right-[7%] h-[17%] min-h-[1.3rem] w-[17%] min-w-[1.3rem]  rounded-full bg-btnColor transition-opacity`}
-      >
-        <div
-        // className="translate grid h-full place-items-center py-[15%]"
-        >
+      <div style={{ opacity: isMuted ? 1 : 0 }} className={styles['mic-container']}>
+        <div>
           <TrackMutedIndicator
             className={styles.mic}
             source={Track.Source.Microphone}

@@ -14,7 +14,7 @@ const MinimalExample: NextPage = () => {
   });
 
   return (
-    <div data-lk-theme="default">
+    <div data-lk-theme="default" style={{ height: '100vh' }}>
       <LiveKitRoom
         video={true}
         audio={true}

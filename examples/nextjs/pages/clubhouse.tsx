@@ -2,6 +2,7 @@ import {
   ControlBar,
   LiveKitRoom,
   ParticipantLoop,
+  RoomAudioRenderer,
   RoomName,
   TrackMutedIndicator,
   useIsMuted,
@@ -63,6 +64,7 @@ const Clubhouse = () => {
             variation="minimal"
             controls={{ microphone: true, camera: false, screenShare: false }}
           />
+          <RoomAudioRenderer />
         </div>
       </LiveKitRoom>
     </div>
@@ -109,14 +111,8 @@ const CustomParticipantTile = () => {
         </div>
       </div>
 
-      <div
-        style={{ opacity: isMuted ? 1 : 0 }}
-        className={styles['mic-container']}
-        // className={`absolute bottom-[7%] right-[7%] h-[17%] min-h-[1.3rem] w-[17%] min-w-[1.3rem]  rounded-full bg-btnColor transition-opacity`}
-      >
-        <div
-        // className="translate grid h-full place-items-center py-[15%]"
-        >
+      <div style={{ opacity: isMuted ? 1 : 0 }} className={styles['mic-container']}>
+        <div>
           <TrackMutedIndicator
             className={styles.mic}
             source={Track.Source.Microphone}

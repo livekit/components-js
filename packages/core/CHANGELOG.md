@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.6.2
+
+### Patch Changes
+
+- Fix the carousel component for iOS and fix a possible unstable UI condition. - [#422](https://github.com/livekit/components-js/pull/422) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.6.1
 
 ### Patch Changes

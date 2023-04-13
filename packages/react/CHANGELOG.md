@@ -1,5 +1,18 @@
 # @livekit/components-react
 
+## 0.7.2
+
+### Patch Changes
+
+- Add swipe detection to switch pages in the GridLayout. - [#423](https://github.com/livekit/components-js/pull/423) ([@Ocupe](https://github.com/Ocupe))
+
+- add pagination indicator to GridLayout component - [#431](https://github.com/livekit/components-js/pull/431) ([@Ocupe](https://github.com/Ocupe))
+
+- Fix the carousel component for iOS and fix a possible unstable UI condition. - [#422](https://github.com/livekit/components-js/pull/422) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`1f14b38`](https://github.com/livekit/components-js/commit/1f14b386d676cf3548117f781129e467ab67c48f)]:
+  - @livekit/components-core@0.6.2
+
 ## 0.7.1
 
 ### Patch Changes

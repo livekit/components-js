@@ -5,6 +5,7 @@ import { mergeProps } from '../../utils';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { TrackLoop } from '../TrackLoop';
 import { PaginationControl } from '../controls/PaginationControl';
+import { PaginationIndicator } from '../controls/PaginationIndicator';
 
 export interface GridLayoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -38,10 +39,16 @@ export function GridLayout({ tracks, ...props }: GridLayoutProps) {
   });
 
   return (
-    <div ref={gridEl} {...elementProps}>
+    <div ref={gridEl} data-lk-pagination={pagination.totalPageCount > 1} {...elementProps}>
       <TrackLoop tracks={pagination.tracks}>{props.children}</TrackLoop>
       {tracks.length > layout.maxTiles && (
-        <PaginationControl pagesContainer={gridEl} {...pagination} />
+        <>
+          <PaginationIndicator
+            totalPageCount={pagination.totalPageCount}
+            currentPage={pagination.currentPage}
+          />
+          <PaginationControl pagesContainer={gridEl} {...pagination} />
+        </>
       )}
     </div>
   );

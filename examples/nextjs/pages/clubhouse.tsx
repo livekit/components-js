@@ -8,6 +8,7 @@ import {
   useIsMuted,
   useIsSpeaking,
   useParticipantContext,
+  useParticipants,
   useToken,
 } from '@livekit/components-react';
 import styles from '../styles/Clubhouse.module.scss';
@@ -72,10 +73,11 @@ const Clubhouse = () => {
 };
 
 const Stage = () => {
+  const participants = useParticipants();
   return (
     <div className="">
       <div className={styles.stageGrid}>
-        <ParticipantLoop>
+        <ParticipantLoop participants={participants}>
           <CustomParticipantTile></CustomParticipantTile>
         </ParticipantLoop>
       </div>

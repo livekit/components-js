@@ -1,4 +1,4 @@
-import type { RoomEvent } from 'livekit-client';
+import type { Room, RoomEvent } from 'livekit-client';
 import { useLocalParticipant } from './useLocalParticipant';
 import { useRemoteParticipants } from './useRemoteParticipants';
 
@@ -9,6 +9,10 @@ export interface UseParticipantsOptions {
    * The minimal set of non-overwriteable `RoomEvents` is: `[RoomEvent.ParticipantConnected, RoomEvent.ParticipantDisconnected, RoomEvent.ConnectionStateChanged]`
    */
   updateOnlyOn?: RoomEvent[];
+  /**
+   * The room to use. If not provided, the hook will use the room from the context.
+   */
+  room?: Room;
 }
 
 /**
@@ -16,7 +20,7 @@ export interface UseParticipantsOptions {
  */
 export const useParticipants = (options: UseParticipantsOptions = {}) => {
   const remoteParticipants = useRemoteParticipants(options);
-  const { localParticipant } = useLocalParticipant();
+  const { localParticipant } = useLocalParticipant(options);
 
   return [localParticipant, ...remoteParticipants];
 };

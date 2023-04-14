@@ -1,4 +1,4 @@
-import type { Track } from 'livekit-client';
+import type { Participant, Track, TrackPublication } from 'livekit-client';
 import type { PinState } from '../types';
 import type { TrackReferenceOrPlaceholder } from './track-reference.types';
 import { isTrackReference, isTrackReferencePlaceholder } from './track-reference.types';
@@ -61,4 +61,30 @@ export function isTrackReferencePinned(
   } else {
     return false;
   }
+}
+
+/**
+ * Simple way to create a `TrackReference` from its parts.
+ */
+export function trackReference(
+  participant: Participant,
+  source: Track.Source,
+  publication?: TrackPublication,
+  track?: Track,
+): TrackReferenceOrPlaceholder {
+  const trackPublication: TrackPublication | undefined =
+    publication ?? participant.getTrack(source);
+  let trackRef: TrackReferenceOrPlaceholder = { participant, source };
+  if (trackPublication) {
+    trackRef = { participant, source, publication: trackPublication };
+    if (track || trackPublication.track) {
+      trackRef = {
+        participant,
+        source,
+        publication: trackPublication,
+        track: track ?? trackPublication.track,
+      };
+    }
+  }
+  return trackRef;
 }

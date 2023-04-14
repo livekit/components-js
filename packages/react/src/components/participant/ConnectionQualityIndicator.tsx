@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { setupConnectionQualityIndicator } from '@livekit/components-core';
-import { useEnsureParticipant } from '../../context';
+import { setupConnectionQualityIndicator, trackReference } from '@livekit/components-core';
+import { useEnsureTrackReference } from '../../context';
+import { Track } from 'livekit-client';
 import type { Participant } from 'livekit-client';
 import { ConnectionQuality } from 'livekit-client';
 import { mergeProps } from '../../utils';
@@ -15,11 +16,14 @@ export type ConnectionQualityIndicatorProps = React.HTMLAttributes<HTMLDivElemen
   ConnectionQualityIndicatorOptions;
 
 export function useConnectionQualityIndicator(options: ConnectionQualityIndicatorOptions = {}) {
-  const p = useEnsureParticipant(options.participant);
+  const maybeTrackRef = options.participant
+    ? trackReference(options.participant, Track.Source.Unknown)
+    : undefined;
+  const { participant } = useEnsureTrackReference(maybeTrackRef);
 
   const { className, connectionQualityObserver } = React.useMemo(
-    () => setupConnectionQualityIndicator(p),
-    [p],
+    () => setupConnectionQualityIndicator(participant),
+    [participant],
   );
 
   const quality = useObservableState(connectionQualityObserver, ConnectionQuality.Unknown);

@@ -19,9 +19,7 @@ export type VideoTrackProps = React.HTMLAttributes<HTMLVideoElement> & {
  *
  * @example
  * ```tsx
- * <ParticipantTile>
- *   <VideoTrack source={Track.Source.Camera} />
- * </ParticipantTile>
+ * <VideoTrack source={Track.Source.Camera} />
  * ```
  * @see `ParticipantTile`
  */

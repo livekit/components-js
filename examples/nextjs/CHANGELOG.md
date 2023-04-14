@@ -1,5 +1,14 @@
 # @livekit/component-example-next
 
+## 0.1.24
+
+### Patch Changes
+
+- Remove filter from `ParticipantLoop` and add option to pass room to `useParticipants`, `useLocalParticipant` and `useRemoteParticipants`. - [#435](https://github.com/livekit/components-js/pull/435) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`5d2ecb2`](https://github.com/livekit/components-js/commit/5d2ecb24246f5562fffa51025f32fd5142903dad)]:
+  - @livekit/components-react@0.7.3
+
 ## 0.1.23
 
 ### Patch Changes

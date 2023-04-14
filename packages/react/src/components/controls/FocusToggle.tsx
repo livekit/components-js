@@ -1,7 +1,7 @@
 import { isTrackReferencePinned, setupFocusToggle } from '@livekit/components-core';
 import type { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { LayoutContext, useEnsureParticipant, useMaybeLayoutContext } from '../../context';
+import { LayoutContext, useEnsureTrackReference, useMaybeLayoutContext } from '../../context';
 import { FocusToggleIcon, UnfocusToggleIcon } from '../../assets/icons';
 import { mergeProps } from '../../utils';
 
@@ -12,7 +12,8 @@ interface useFocusToggleProps {
 }
 
 function useFocusToggle({ trackSource, participant, props }: useFocusToggleProps) {
-  const p = useEnsureParticipant(participant);
+  const trackRef = participant ? { participant, source: trackSource } : undefined;
+  const { participant: p } = useEnsureTrackReference(trackRef);
   const layoutContext = useMaybeLayoutContext();
   const { className } = React.useMemo(() => setupFocusToggle(), []);
 

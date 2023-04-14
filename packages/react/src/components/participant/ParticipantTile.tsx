@@ -2,6 +2,7 @@ import * as React from 'react';
 import type { Participant, TrackPublication } from 'livekit-client';
 import { Track } from 'livekit-client';
 import type { ParticipantClickEvent, TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import { trackReference } from '@livekit/components-core';
 import { isParticipantSourcePinned, setupParticipantTile } from '@livekit/components-core';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
 import { MediaTrack } from './MediaTrack';
@@ -10,8 +11,8 @@ import { TrackMutedIndicator } from './TrackMutedIndicator';
 import {
   useMaybeParticipantContext,
   ParticipantContext,
-  useEnsureParticipant,
   useMaybeLayoutContext,
+  useEnsureTrackReference,
 } from '../../context';
 import { useIsMuted, useIsSpeaking } from '../../hooks';
 import { mergeProps } from '../../utils';
@@ -43,7 +44,7 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
   disableSpeakingIndicator,
   htmlProps,
 }: UseParticipantTileProps<T>) {
-  const p = useEnsureParticipant(participant);
+  const trackRef = useEnsureTrackReference({ participant, source, publication });
   const mergedProps = React.useMemo(() => {
     const { className } = setupParticipantTile();
     return mergeProps(htmlProps, {
@@ -51,12 +52,11 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
       onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         htmlProps.onClick?.(event);
         if (typeof onParticipantClick === 'function') {
-          const track = publication ?? p.getTrack(source);
-          onParticipantClick({ participant: p, track });
+          onParticipantClick(trackRef);
         }
       },
     });
-  }, [htmlProps, source, onParticipantClick, p, publication]);
+  }, [htmlProps, onParticipantClick, trackRef]);
   const isVideoMuted = useIsMuted(Track.Source.Camera, { participant });
   const isAudioMuted = useIsMuted(Track.Source.Microphone, { participant });
   const isSpeaking = useIsSpeaking(participant);
@@ -105,10 +105,11 @@ export const ParticipantTile = ({
   disableSpeakingIndicator,
   ...htmlProps
 }: ParticipantTileProps) => {
-  const p = useEnsureParticipant(participant);
+  const maybeTrackRef = participant ? trackReference(participant, source, publication) : undefined;
+  const trackRef = useEnsureTrackReference(maybeTrackRef);
 
   const { elementProps } = useParticipantTile({
-    participant: p,
+    participant: trackRef.participant,
     htmlProps,
     source,
     publication,
@@ -125,17 +126,17 @@ export const ParticipantTile = ({
         !subscribed &&
         layoutContext &&
         layoutContext.pin.dispatch &&
-        isParticipantSourcePinned(p, source, layoutContext.pin.state)
+        isParticipantSourcePinned(trackRef.participant, source, layoutContext.pin.state)
       ) {
         layoutContext.pin.dispatch({ msg: 'clear_pin' });
       }
     },
-    [p, layoutContext, source],
+    [layoutContext, source, trackRef.participant],
   );
 
   return (
     <div style={{ position: 'relative' }} {...elementProps}>
-      <ParticipantContextIfNeeded participant={p}>
+      <ParticipantContextIfNeeded participant={trackRef.participant}>
         {children ?? (
           <>
             {/** TODO remove MediaTrack in favor of the equivalent Audio/Video Track. need to figure out how to differentiate here */}

@@ -3,6 +3,10 @@ import * as React from 'react';
 
 export const RoomContext = React.createContext<Room | undefined>(undefined);
 
+/**
+ * Ensures that a room is provided via context.
+ * If no room is provided, an error is thrown.
+ */
 export function useRoomContext() {
   const ctx = React.useContext(RoomContext);
   if (!ctx) {
@@ -11,10 +15,17 @@ export function useRoomContext() {
   return ctx;
 }
 
+/**
+ * Returns the room context if it exists, otherwise undefined.
+ */
 export function useMaybeRoomContext() {
   return React.useContext(RoomContext);
 }
 
+/**
+ * Ensures that a room is provided, either via context or explicitly as a parameter.
+ * If no room is provided, an error is thrown.
+ */
 export function useEnsureRoom(room?: Room) {
   const context = useMaybeRoomContext();
   const r = room ?? context;

@@ -2,8 +2,8 @@ import type { Participant, TrackPublication } from 'livekit-client';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
-import type { ParticipantClickEvent } from '@livekit/components-core';
-import { useEnsureParticipant } from '../../context';
+import { ParticipantClickEvent, trackReference } from '@livekit/components-core';
+import { useEnsureTrackReference } from '../../context';
 
 /**
  * @deprecated Use `AudioTrack` or `VideoTrack` instead
@@ -32,7 +32,8 @@ export function MediaTrack({
   ...props
 }: MediaTrackProps) {
   const mediaEl = React.useRef<HTMLVideoElement>(null);
-  const p = useEnsureParticipant(participant);
+  const maybeTrackRef = participant ? trackReference(participant, source, publication) : undefined;
+  const { participant: p } = useEnsureTrackReference(maybeTrackRef);
   const kind =
     source === Track.Source.Camera || source == Track.Source.ScreenShare ? 'video' : 'audio';
   const {

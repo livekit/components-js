@@ -12,23 +12,19 @@ import { useParticipantTile, ParticipantContextIfNeeded } from './ParticipantTil
 import { AudioTrack } from './AudioTrack';
 
 /**
- * The ParticipantTile component is the base utility wrapper for displaying a visual representation of a participant.
- * This component can be used as a child of the `ParticipantLoop` component or independently if a participant is passed as a property.
+ * The ParticipantAudioTile component is the base utility wrapper for displaying a visual representation of a participant.
+ * This component can be used as a child of the `TileLoop` or independently if a participant is passed as a property.
  *
  * @example
  * ```tsx
- * {...}
- *   <ParticipantTile>
- *     {...}
- *   </ParticipantTile>
- * {...}
+ * <ParticipantAudioTile />
  * ```
- *
  * @see `ParticipantLoop` component
  */
 export const ParticipantAudioTile = ({
   participant,
   children,
+  source,
   publication,
   disableSpeakingIndicator,
   onParticipantClick,
@@ -49,7 +45,7 @@ export const ParticipantAudioTile = ({
       <ParticipantContextIfNeeded participant={p}>
         {children ?? (
           <>
-            <AudioTrack source={Track.Source.Microphone}></AudioTrack>
+            <AudioTrack source={source ?? Track.Source.Microphone}></AudioTrack>
             <AudioVisualizer />
             <div className="lk-participant-metadata">
               <div className="lk-participant-metadata-item">

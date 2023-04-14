@@ -3,6 +3,10 @@ import * as React from 'react';
 
 export const TrackContext = React.createContext<TrackReferenceOrPlaceholder | undefined>(undefined);
 
+/**
+ * Ensures that a track reference is provided via context.
+ * If not inside a `TrackContext`, an error is thrown.
+ */
 export function useTrackContext() {
   const trackReference = React.useContext(TrackContext);
   if (!trackReference) {
@@ -11,10 +15,17 @@ export function useTrackContext() {
   return trackReference;
 }
 
+/**
+ * Returns a track reference from the `TrackContext` if it exists, otherwise `undefined`.
+ */
 export function useMaybeTrackContext() {
   return React.useContext(TrackContext);
 }
 
+/**
+ * Ensures that a track reference is provided, either via context or explicitly as a parameter.
+ * If not inside a `TrackContext` and no track reference is provided, an error is thrown.
+ */
 export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder) {
   const context = useMaybeTrackContext();
   const trackRef = track ?? context;

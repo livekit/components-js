@@ -93,14 +93,8 @@ export function ParticipantContextIfNeeded(
  *
  * @example
  * ```tsx
- * {...}
- *   <ParticipantTile>
- *     {...}
- *   </ParticipantTile>
- * {...}
+ * <ParticipantTile source={Track.Source.Camera} />
  * ```
- *
- * @see `ParticipantLoop` component
  */
 export const ParticipantTile = ({
   participant,

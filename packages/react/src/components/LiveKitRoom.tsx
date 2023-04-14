@@ -229,7 +229,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
  *  serverUrl='<url-to-livekit-server>'
  *  connect={true}
  * >
- *     {...}
+ *     ...
  * </LiveKitRoom>
  * ```
  */

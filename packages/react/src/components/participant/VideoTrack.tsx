@@ -17,18 +17,11 @@ export type VideoTrackProps = React.HTMLAttributes<HTMLVideoElement> & {
  * The VideoTrack component is responsible for rendering participant video tracks like `camera` and `screen_share`.
  * This component must have access to the participant's context, or alternatively pass it a `Participant` as a property.
  *
- * Children of this component are used as placeholders when the underlying (video) track is muted or not available
- *
  * @example
  * ```tsx
- * {...}
- *   <ParticipantTile>
- *     <VideoTrack source={Track.Source.Camera} />
- *   </ParticipantTile>
- * {...}
+ * <VideoTrack source={Track.Source.Camera} />
  * ```
- *
- * @see `ParticipantTile` component
+ * @see `ParticipantTile`
  */
 export function VideoTrack({
   onTrackClick,

@@ -32,14 +32,8 @@ export function useConnectionQualityIndicator(options: ConnectionQualityIndicato
  *
  * @example
  * ```tsx
- * {...}
- *   <ParticipantTile>
- *     <ConnectionQualityIndicator />
- *   </ParticipantTile>
- * {...}
+ * <ConnectionQualityIndicator />
  * ```
- *
- * @see `ParticipantTile` component
  */
 export function ConnectionQualityIndicator(props: ConnectionQualityIndicatorProps) {
   const { className, quality } = useConnectionQualityIndicator(props);

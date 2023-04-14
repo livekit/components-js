@@ -4,6 +4,10 @@ import { useMaybeTrackContext } from './track-context';
 
 export const ParticipantContext = React.createContext<Participant | undefined>(undefined);
 
+/**
+ * Ensures that a participant is provided via context.
+ * If not inside a `ParticipantContext`, an error is thrown.
+ */
 export function useParticipantContext() {
   const participant = React.useContext(ParticipantContext);
   if (!participant) {
@@ -12,10 +16,17 @@ export function useParticipantContext() {
   return participant;
 }
 
+/**
+ * Returns a participant from the `ParticipantContext` if it exists, otherwise `undefined`.
+ */
 export function useMaybeParticipantContext() {
   return React.useContext(ParticipantContext);
 }
 
+/**
+ * Ensures that a participant is provided, either via context or explicitly as a parameter.
+ * If not inside a `ParticipantContext` and no participant is provided, an error is thrown.
+ */
 export function useEnsureParticipant(participant?: Participant) {
   const context = useMaybeParticipantContext();
   const trackContext = useMaybeTrackContext();

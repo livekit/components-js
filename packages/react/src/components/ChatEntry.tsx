@@ -20,16 +20,15 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
 }
 
 /**
- * The ChatEntry component holds and displays one chat message.
+ * The `ChatEntry` component holds and displays one chat message.
  *
  * @example
  * ```tsx
- * {...}
- *   <Chat>
- *     <ChatEntry />
- *   </Chat>
- * {...}
+ * <Chat>
+ *   <ChatEntry />
+ * </Chat>
  * ```
+ * @see `Chat`
  */
 export function ChatEntry({
   entry,

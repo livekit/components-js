@@ -29,16 +29,18 @@ type UseTracksHookReturnType<T> = T extends Track.Source[]
   : never;
 
 /**
- * The `useTracks` hook returns an array of `TrackReference` which combine the participant, trackSource, publication and a track.
- * Only tracks with a the same source specified via the sources property get included in the loop.
- *
+ * The `useTracks` hook returns an array of `TrackReference` or `TrackReferenceOrPlaceholder` depending on the provided `sources` property.
+ * If only subscribed tracks are desired, set the `onlySubscribed` property to `true`.
  * @example
  * ```ts
- * const trackReferences = useTracks(sources: [Track.Source.Camera])
+ * // Return all camera track publications.
+ * const trackReferences: TrackReference[] = useTracks([Track.Source.Camera])
  * ```
  * @example
  * ```ts
- * const trackReferencesWithPlaceholders = useTracks(sources: [{source: Track.Source.Camera, withPlaceholder: true}])
+ * // Return all subscribed camera tracks as well as placeholders for
+ * // participants without a camera subscription.
+ * const trackReferencesWithPlaceholders: TrackReferenceOrPlaceholder[] = useTracks([{source: Track.Source.Camera, withPlaceholder: true}])
  * ```
  */
 export function useTracks<T extends SourcesArray = Track.Source[]>(

@@ -19,6 +19,18 @@ export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement
   orientation?: 'vertical' | 'horizontal';
 }
 
+/**
+ * The `CarouselView` displays a list of tracks horizontally or vertically.
+ * Depending on the size of the container, the carousel will display as many tiles as possible and overflows the rest.
+ * The CarouselView uses the `useVisualStableUpdate` hook to ensure that tile reordering due to track updates
+ * is visually stable but still moves the important tiles (speaking participants) to the front.
+ *
+ * @example
+ * ```tsx
+ * const tracks = useTracks();
+ * <CarouselView tracks={tracks}>
+ * ```
+ */
 export function CarouselView({ tracks, orientation, ...props }: CarouselViewProps) {
   const asideEl = React.useRef<HTMLDivElement>(null);
 
@@ -36,7 +48,7 @@ export function CarouselView({ tracks, orientation, ...props }: CarouselViewProp
       ? Math.max(Math.floor(height / tileHeight), MIN_VISIBLE_TILES)
       : Math.max(Math.floor(width / tileWidth), MIN_VISIBLE_TILES);
 
-  // To avoid an unstable UI state, on overflow, we need to consider the scrollbar wide.
+  // To avoid an unstable UI state, on overflow, we need to consider the scrollbar wide and calculate the `maxVisibleTiles` again.
   if (tracks.length > maxVisibleTiles) {
     const scrollBarWidth = getScrollBarWidth();
     maxVisibleTiles =

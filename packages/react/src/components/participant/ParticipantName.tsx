@@ -29,14 +29,8 @@ export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement> &
  *
  * @example
  * ```tsx
- * {...}
- *   <ParticipantTile>
- *     <ParticipantName />
- *   </ParticipantTile>
- * {...}
+ * <ParticipantName />
  * ```
- *
- * @see `ParticipantTile` component
  */
 export function ParticipantName({ participant, ...props }: ParticipantNameProps) {
   const p = useEnsureParticipant(participant);

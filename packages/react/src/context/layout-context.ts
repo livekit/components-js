@@ -23,6 +23,10 @@ export type LayoutContextType = {
 
 export const LayoutContext = React.createContext<LayoutContextType | undefined>(undefined);
 
+/**
+ * Ensures that a layout context is provided via context.
+ * If no layout context is provided, an error is thrown.
+ */
 export function useLayoutContext(): LayoutContextType {
   const layoutContext = React.useContext(LayoutContext);
   if (!layoutContext) {
@@ -31,6 +35,10 @@ export function useLayoutContext(): LayoutContextType {
   return layoutContext;
 }
 
+/**
+ * Ensures that a layout context is provided, either via context or explicitly as a parameter.
+ * If not inside a `LayoutContext` and no layout context is provided, an error is thrown.
+ */
 export function useEnsureLayoutContext(layoutContext?: LayoutContextType) {
   const layout = useMaybeLayoutContext();
   layoutContext ??= layout;
@@ -60,6 +68,9 @@ export function useEnsureCreateLayoutContext(layoutContext?: LayoutContextType):
   );
 }
 
+/**
+ * Returns a layout context from the `LayoutContext` if it exists, otherwise `undefined`.
+ */
 export function useMaybeLayoutContext(): LayoutContextType | undefined {
   return React.useContext(LayoutContext);
 }

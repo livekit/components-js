@@ -93,14 +93,11 @@ export function ParticipantContextIfNeeded(
  *
  * @example
  * ```tsx
- * {...}
- *   <ParticipantTile>
- *     {...}
- *   </ParticipantTile>
- * {...}
+ * <ParticipantTile>
+ *   ...
+ * </ParticipantTile>
  * ```
- *
- * @see `ParticipantLoop` component
+ * @see `ParticipantLoop`
  */
 export const ParticipantTile = ({
   participant,

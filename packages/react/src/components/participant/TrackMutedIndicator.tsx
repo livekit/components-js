@@ -36,15 +36,12 @@ export const useTrackMutedIndicator = (
  *
  * @example
  * ```tsx
- * {...}
- *   <ParticipantTile>
- *     <TrackMutedIndicator source={Track.Source.Camera} />
- *     <TrackMutedIndicator source={Track.Source.Microphone} />
- *   </ParticipantTile>
- * {...}
+ * <ParticipantTile>
+ *   <TrackMutedIndicator source={Track.Source.Camera} />
+ *   <TrackMutedIndicator source={Track.Source.Microphone} />
+ * </ParticipantTile>
  * ```
- *
- * @see `ParticipantTile` component
+ * @see `ParticipantTile`
  */
 export const TrackMutedIndicator = ({
   source,

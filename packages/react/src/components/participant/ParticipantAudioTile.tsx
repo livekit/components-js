@@ -12,18 +12,15 @@ import { useParticipantTile, ParticipantContextIfNeeded } from './ParticipantTil
 import { AudioTrack } from './AudioTrack';
 
 /**
- * The ParticipantTile component is the base utility wrapper for displaying a visual representation of a participant.
- * This component can be used as a child of the `ParticipantLoop` component or independently if a participant is passed as a property.
+ * The ParticipantAudioTile component is the base utility wrapper for displaying a visual representation of a participant.
+ * This component can be used as a child of the `TileLoop` or independently if a participant is passed as a property.
  *
  * @example
  * ```tsx
- * {...}
- *   <ParticipantTile>
- *     {...}
- *   </ParticipantTile>
- * {...}
+ * <ParticipantAudioTile>
+ *   ...
+ * </ParticipantAudioTile>
  * ```
- *
  * @see `ParticipantLoop` component
  */
 export const ParticipantAudioTile = ({

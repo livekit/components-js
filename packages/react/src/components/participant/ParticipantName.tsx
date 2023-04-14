@@ -1,17 +1,28 @@
-import { participantInfoObserver, setupParticipantName } from '@livekit/components-core';
+import {
+  participantInfoObserver,
+  setupParticipantName,
+  trackReference,
+} from '@livekit/components-core';
 import type { Participant } from 'livekit-client';
+import { Track } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureParticipant } from '../../context';
+import { useEnsureTrackReference } from '../../context';
 import { useObservableState } from '../../hooks/internal/useObservableState';
 import { mergeProps } from '../../utils';
 
 export function useParticipantInfo(props: UseParticipantInfoOptions = {}) {
-  const p = useEnsureParticipant(props.participant);
-  const infoObserver = React.useMemo(() => participantInfoObserver(p), [p]);
+  const maybeTrackRef = props.participant
+    ? trackReference(props.participant, Track.Source.Unknown)
+    : undefined;
+  const trackRef = useEnsureTrackReference(maybeTrackRef);
+  const infoObserver = React.useMemo(
+    () => participantInfoObserver(trackRef.participant),
+    [trackRef.participant],
+  );
   const { identity, name, metadata } = useObservableState(infoObserver, {
-    name: p.name,
-    identity: p.identity,
-    metadata: p.metadata,
+    name: trackRef.participant.name,
+    identity: trackRef.participant.identity,
+    metadata: trackRef.participant.metadata,
   });
 
   return { identity, name, metadata };
@@ -33,16 +44,17 @@ export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement> &
  * ```
  */
 export function ParticipantName({ participant, ...props }: ParticipantNameProps) {
-  const p = useEnsureParticipant(participant);
+  const maybeTrackRef = participant ? trackReference(participant, Track.Source.Unknown) : undefined;
+  const trackRef = useEnsureTrackReference(maybeTrackRef);
 
   const { className, infoObserver } = React.useMemo(() => {
-    return setupParticipantName(p);
-  }, [p]);
+    return setupParticipantName(trackRef.participant);
+  }, [trackRef.participant]);
 
   const { identity, name } = useObservableState(infoObserver, {
-    name: p.name,
-    identity: p.identity,
-    metadata: p.metadata,
+    name: trackRef.participant.name,
+    identity: trackRef.participant.identity,
+    metadata: trackRef.participant.metadata,
   });
 
   const mergedProps = React.useMemo(() => {

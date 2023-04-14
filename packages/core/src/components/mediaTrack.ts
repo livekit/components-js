@@ -14,7 +14,8 @@ export function setupMediaTrack(trackIdentifier: TrackIdentifier) {
     startWith(initialPub),
   );
   const className: string = prefixClass(
-    initialPub?.source === Track.Source.Camera || initialPub?.source === Track.Source.ScreenShare
+    trackIdentifier.source === Track.Source.Camera ||
+      trackIdentifier.source === Track.Source.ScreenShare
       ? 'participant-media-video'
       : 'participant-media-audio',
   );

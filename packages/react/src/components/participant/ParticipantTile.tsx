@@ -9,10 +9,10 @@ import { MediaTrack } from './MediaTrack';
 import { ParticipantName } from './ParticipantName';
 import { TrackMutedIndicator } from './TrackMutedIndicator';
 import {
-  useMaybeParticipantContext,
-  ParticipantContext,
   useMaybeLayoutContext,
   useEnsureTrackReference,
+  TrackContext,
+  useMaybeTrackContext,
 } from '../../context';
 import { useIsMuted, useIsSpeaking } from '../../hooks';
 import { mergeProps } from '../../utils';
@@ -72,16 +72,14 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
   };
 }
 
-export function ParticipantContextIfNeeded(
+export function TrackRefContextIfNeeded(
   props: React.PropsWithChildren<{
-    participant?: Participant;
+    trackRef: TrackReferenceOrPlaceholder;
   }>,
 ) {
-  const hasContext = !!useMaybeParticipantContext();
-  return props.participant && !hasContext ? (
-    <ParticipantContext.Provider value={props.participant}>
-      {props.children}
-    </ParticipantContext.Provider>
+  const hasContext = !!useMaybeTrackContext();
+  return props.trackRef && !hasContext ? (
+    <TrackContext.Provider value={props.trackRef}>{props.children}</TrackContext.Provider>
   ) : (
     <>{props.children}</>
   );
@@ -136,7 +134,7 @@ export const ParticipantTile = ({
 
   return (
     <div style={{ position: 'relative' }} {...elementProps}>
-      <ParticipantContextIfNeeded participant={trackRef.participant}>
+      <TrackRefContextIfNeeded trackRef={trackRef}>
         {children ?? (
           <>
             {/** TODO remove MediaTrack in favor of the equivalent Audio/Video Track. need to figure out how to differentiate here */}
@@ -171,7 +169,7 @@ export const ParticipantTile = ({
           </>
         )}
         <FocusToggle trackSource={source} />
-      </ParticipantContextIfNeeded>
+      </TrackRefContextIfNeeded>
     </div>
   );
 };

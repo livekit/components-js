@@ -6,7 +6,7 @@ import { ParticipantName } from './ParticipantName';
 import { TrackMutedIndicator } from './TrackMutedIndicator';
 import { useEnsureTrackReference } from '../../context';
 import { AudioVisualizer } from './AudioVisualizer';
-import { useParticipantTile, ParticipantContextIfNeeded } from './ParticipantTile';
+import { useParticipantTile, TrackRefContextIfNeeded } from './ParticipantTile';
 import { AudioTrack } from './AudioTrack';
 import type { ParticipantClickEvent } from '@livekit/components-core';
 import { trackReference } from '@livekit/components-core';
@@ -52,7 +52,7 @@ export const ParticipantAudioTile = ({
 
   return (
     <div style={{ position: 'relative' }} {...elementProps}>
-      <ParticipantContextIfNeeded participant={trackRef.participant}>
+      <TrackRefContextIfNeeded trackRef={trackRef}>
         {children ?? (
           <>
             <AudioTrack source={source ?? Track.Source.Microphone}></AudioTrack>
@@ -66,7 +66,7 @@ export const ParticipantAudioTile = ({
             </div>
           </>
         )}
-      </ParticipantContextIfNeeded>
+      </TrackRefContextIfNeeded>
     </div>
   );
 };

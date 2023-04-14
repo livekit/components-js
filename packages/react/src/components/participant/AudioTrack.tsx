@@ -1,8 +1,8 @@
 import type { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
-import { log } from '@livekit/components-core';
-import { useEnsureParticipant } from '../../context';
+import { log, trackReference } from '@livekit/components-core';
+import { useEnsureTrackReference } from '../../context';
 import { RemoteAudioTrack } from 'livekit-client';
 
 export type AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
@@ -30,12 +30,13 @@ export type AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
  * @see `ParticipantTile` component
  */
 export function AudioTrack({ onSubscriptionStatusChanged, volume, ...props }: AudioTrackProps) {
-  const { source, name, publication } = props;
+  const { source, participant, name, publication } = props;
   const mediaEl = React.useRef<HTMLAudioElement>(null);
-  const participant = useEnsureParticipant(props.participant);
+  const maybeTrackRef = participant ? trackReference(participant, source, publication) : undefined;
+  const trackRef = useEnsureTrackReference(maybeTrackRef);
 
   const { elementProps, isSubscribed, track } = useMediaTrackBySourceOrName(
-    { source, name, participant, publication },
+    { source, name, participant: trackRef.participant, publication },
     {
       element: mediaEl,
       props,

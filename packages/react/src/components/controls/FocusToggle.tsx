@@ -1,4 +1,4 @@
-import { isTrackReferencePinned, setupFocusToggle } from '@livekit/components-core';
+import { isTrackReferencePinned, setupFocusToggle, trackReference } from '@livekit/components-core';
 import type { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { LayoutContext, useEnsureTrackReference, useMaybeLayoutContext } from '../../context';
@@ -12,22 +12,22 @@ interface useFocusToggleProps {
 }
 
 function useFocusToggle({ trackSource, participant, props }: useFocusToggleProps) {
-  const trackRef = participant ? { participant, source: trackSource } : undefined;
-  const { participant: p } = useEnsureTrackReference(trackRef);
+  const maybeTrackRef = participant ? trackReference(participant, trackSource) : undefined;
+  const trackRef = useEnsureTrackReference(maybeTrackRef);
   const layoutContext = useMaybeLayoutContext();
   const { className } = React.useMemo(() => setupFocusToggle(), []);
 
   const inFocus: boolean = React.useMemo(() => {
-    const track = p.getTrack(trackSource);
+    const track = trackRef.participant.getTrack(trackSource);
     if (layoutContext?.pin.state && track) {
       return isTrackReferencePinned(
-        { participant: p, source: trackSource, publication: track },
+        { participant: trackRef.participant, source: trackSource, publication: track },
         layoutContext.pin.state,
       );
     } else {
       return false;
     }
-  }, [p, trackSource, layoutContext]);
+  }, [trackRef.participant, trackSource, layoutContext]);
 
   const mergedProps = React.useMemo(
     () =>
@@ -38,7 +38,7 @@ function useFocusToggle({ trackSource, participant, props }: useFocusToggleProps
           props.onClick?.(event);
 
           // Set or clear focus based on current focus state.
-          const track = p.getTrack(trackSource);
+          const track = trackRef.participant.getTrack(trackSource);
           if (layoutContext?.pin.dispatch && track) {
             if (inFocus) {
               layoutContext.pin.dispatch({
@@ -48,7 +48,7 @@ function useFocusToggle({ trackSource, participant, props }: useFocusToggleProps
               layoutContext.pin.dispatch({
                 msg: 'set_pin',
                 trackReference: {
-                  participant: p,
+                  participant: trackRef.participant,
                   publication: track,
                   source: track.source,
                 },
@@ -57,7 +57,7 @@ function useFocusToggle({ trackSource, participant, props }: useFocusToggleProps
           }
         },
       }),
-    [props, className, p, trackSource, inFocus, layoutContext],
+    [props, className, trackRef.participant, trackSource, inFocus, layoutContext],
   );
 
   return { mergedProps, inFocus };

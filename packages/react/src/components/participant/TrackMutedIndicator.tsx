@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { mergeProps } from '../../utils';
-import { setupTrackMutedIndicator } from '@livekit/components-core';
+import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import { setupTrackMutedIndicator, trackReference } from '@livekit/components-core';
 import type { Participant, Track } from 'livekit-client';
-import { useEnsureParticipant } from '../../context';
+import { useEnsureTrackReference } from '../../context';
 import { getSourceIcon } from '../../assets/icons/util';
 import { useObservableState } from '../../hooks/internal/useObservableState';
 
@@ -12,21 +13,17 @@ export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivEl
   show?: 'always' | 'muted' | 'unmuted';
 }
 
-interface UseTrackMutedIndicatorOptions {
-  participant?: Participant;
-}
-
-export const useTrackMutedIndicator = (
-  source: Track.Source,
-  options: UseTrackMutedIndicatorOptions = {},
-) => {
-  const p = useEnsureParticipant(options.participant);
+export const useTrackMutedIndicator = (maybeTrackRef?: TrackReferenceOrPlaceholder) => {
+  const trackRef = useEnsureTrackReference(maybeTrackRef);
   const { className, mediaMutedObserver } = React.useMemo(
-    () => setupTrackMutedIndicator(p, source),
-    [p, source],
+    () => setupTrackMutedIndicator(trackRef.participant, trackRef.source),
+    [trackRef.participant, trackRef.source],
   );
 
-  const isMuted = useObservableState(mediaMutedObserver, !!p.getTrack(source)?.isMuted);
+  const isMuted = useObservableState(
+    mediaMutedObserver,
+    !!trackRef.participant.getTrack(trackRef.source)?.isMuted,
+  );
 
   return { isMuted, className };
 };
@@ -46,7 +43,8 @@ export const TrackMutedIndicator = ({
   show = 'always',
   ...props
 }: TrackMutedIndicatorProps) => {
-  const { className, isMuted } = useTrackMutedIndicator(source, { participant });
+  const maybeTrackRef = participant ? trackReference(participant, source) : undefined;
+  const { className, isMuted } = useTrackMutedIndicator(maybeTrackRef);
 
   const showIndicator =
     show === 'always' || (show === 'muted' && isMuted) || (show === 'unmuted' && !isMuted);

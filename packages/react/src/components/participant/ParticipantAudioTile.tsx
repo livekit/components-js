@@ -17,7 +17,7 @@ import { AudioTrack } from './AudioTrack';
  *
  * @example
  * ```tsx
- * <ParticipantAudioTile>
+ * <ParticipantAudioTile />
  * ```
  * @see `ParticipantLoop` component
  */

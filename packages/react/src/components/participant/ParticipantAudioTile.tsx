@@ -18,14 +18,13 @@ import { AudioTrack } from './AudioTrack';
  * @example
  * ```tsx
  * <ParticipantAudioTile>
- *   ...
- * </ParticipantAudioTile>
  * ```
  * @see `ParticipantLoop` component
  */
 export const ParticipantAudioTile = ({
   participant,
   children,
+  source,
   publication,
   disableSpeakingIndicator,
   onParticipantClick,
@@ -46,7 +45,7 @@ export const ParticipantAudioTile = ({
       <ParticipantContextIfNeeded participant={p}>
         {children ?? (
           <>
-            <AudioTrack source={Track.Source.Microphone}></AudioTrack>
+            <AudioTrack source={source ?? Track.Source.Microphone}></AudioTrack>
             <AudioVisualizer />
             <div className="lk-participant-metadata">
               <div className="lk-participant-metadata-item">

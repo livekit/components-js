@@ -2,7 +2,8 @@ import type { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
 import type { ParticipantClickEvent } from '@livekit/components-core';
-import { useEnsureParticipant } from '../../context';
+import { trackReference } from '@livekit/components-core';
+import { useEnsureTrackReference } from '../../context';
 
 export type VideoTrackProps = React.HTMLAttributes<HTMLVideoElement> & {
   source: Track.Source;
@@ -33,13 +34,14 @@ export function VideoTrack({
   ...props
 }: VideoTrackProps) {
   const mediaEl = React.useRef<HTMLVideoElement>(null);
-  const participant = useEnsureParticipant(props.participant);
+  const maybeTrackRef = props.participant ? trackReference(props.participant, source) : undefined;
+  const trackRef = useEnsureTrackReference(maybeTrackRef);
   const {
     elementProps,
     publication: pub,
     isSubscribed,
   } = useMediaTrackBySourceOrName(
-    { participant, name, source, publication },
+    { participant: trackRef.participant, name, source, publication },
     {
       element: mediaEl,
       props,
@@ -52,7 +54,7 @@ export function VideoTrack({
 
   const clickHandler = (evt: React.MouseEvent<HTMLVideoElement, MouseEvent>) => {
     onClick?.(evt);
-    onTrackClick?.({ participant, track: pub });
+    onTrackClick?.({ participant: trackRef.participant, track: pub });
   };
 
   return <video ref={mediaEl} {...elementProps} muted={true} onClick={clickHandler}></video>;

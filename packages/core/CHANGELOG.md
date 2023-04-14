@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.6.3
+
+### Patch Changes
+
+- Fix source media class on video tracks - [#438](https://github.com/livekit/components-js/pull/438) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.6.2
 
 ### Patch Changes

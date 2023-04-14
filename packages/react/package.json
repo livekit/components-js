@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-react",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "license": "Apache-2.0",
   "author": "LiveKit",
   "repository": {
@@ -45,7 +45,7 @@
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@livekit/components-core": "0.6.2",
+    "@livekit/components-core": "0.6.3",
     "@react-hook/latest": "^1.0.3",
     "clsx": "^1.2.1"
   },

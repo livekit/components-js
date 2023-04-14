@@ -2,7 +2,8 @@ import type { Participant, TrackPublication } from 'livekit-client';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
-import { ParticipantClickEvent, trackReference } from '@livekit/components-core';
+import type { ParticipantClickEvent } from '@livekit/components-core';
+import { trackReference } from '@livekit/components-core';
 import { useEnsureTrackReference } from '../../context';
 
 /**

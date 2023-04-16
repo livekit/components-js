@@ -6,8 +6,8 @@ import { useEnsureTrackReference } from '../context';
 import { useObservableState } from './internal';
 
 export function useIsSpeaking(participant?: Participant) {
-  const maybeTrack = participant ? trackReference(participant, Track.Source.Unknown) : undefined;
-  const trackRef = useEnsureTrackReference(maybeTrack);
+  const maybeTrackRef = participant ? trackReference(participant, Track.Source.Unknown) : undefined;
+  const trackRef = useEnsureTrackReference(maybeTrackRef);
   const observable = React.useMemo(
     () => createIsSpeakingObserver(trackRef.participant),
     [trackRef.participant],

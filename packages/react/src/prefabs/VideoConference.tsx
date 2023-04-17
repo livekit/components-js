@@ -4,8 +4,7 @@ import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
 import { ControlBar } from './ControlBar';
 import { FocusLayout, FocusLayoutContainer } from '../components/layout/FocusLayout';
 import { GridLayout } from '../components/layout/GridLayout';
-import type { WidgetState } from '@livekit/components-core';
-import { isEqualTrackRef, isTrackReference, log } from '@livekit/components-core';
+import { isEqualTrackRef, isTrackReference } from '@livekit/components-core';
 import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
 import type { MessageFormatter } from '../components/ChatEntry';
@@ -13,7 +12,7 @@ import { RoomEvent, Track } from 'livekit-client';
 import { useTracks } from '../hooks/useTracks';
 import { usePinnedTracks } from '../hooks/usePinnedTracks';
 import { CarouselView } from '../components/layout/CarouselView';
-import { useCreateLayoutContext } from '../context/layout-context';
+import { LayoutContext, useCreateLayoutContext } from '../context/layout-context';
 
 export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
   chatMessageFormatter?: MessageFormatter;
@@ -35,8 +34,6 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
  * ```
  */
 export function VideoConference({ chatMessageFormatter, ...props }: VideoConferenceProps) {
-  const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });
-
   const tracks = useTracks(
     [
       { source: Track.Source.Camera, withPlaceholder: true },
@@ -44,11 +41,6 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
     ],
     { updateOnlyOn: [RoomEvent.ActiveSpeakersChanged] },
   );
-
-  const widgetUpdate = (state: WidgetState) => {
-    log.debug('updating widget state', state);
-    setWidgetState(state);
-  };
 
   const layoutContext = useCreateLayoutContext();
 
@@ -62,21 +54,17 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
   React.useEffect(() => {
     // if screen share tracks are published, and no pin is set explicitly, auto set the screen share
     if (
-      (layoutContext.pin.state && layoutContext.pin.state?.length > 0) ||
+      (layoutContext.state && layoutContext.state.pin.length > 0) ||
       screenShareTracks.length === 0
     ) {
       return;
     }
-    layoutContext.pin.dispatch?.({ msg: 'set_pin', trackReference: screenShareTracks[0] });
+    layoutContext.dispatch?.({ msg: 'set_pin', trackReference: screenShareTracks[0] });
   }, [JSON.stringify(screenShareTracks.map((ref) => ref.publication.trackSid))]);
 
   return (
     <div className="lk-video-conference" {...props}>
-      <LayoutContextProvider
-        value={layoutContext}
-        // onPinChange={handleFocusStateChange}
-        onWidgetChange={widgetUpdate}
-      >
+      <LayoutContextProvider value={layoutContext}>
         <div className="lk-video-conference-inner">
           {!focusTrack ? (
             <div className="lk-grid-layout-wrapper">
@@ -92,10 +80,15 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
           )}
           <ControlBar controls={{ chat: true }} />
         </div>
-        <Chat
-          style={{ display: widgetState.showChat ? 'flex' : 'none' }}
-          messageFormatter={chatMessageFormatter}
-        />
+
+        <LayoutContext.Consumer>
+          {(layoutContext) => (
+            <Chat
+              style={{ display: layoutContext?.state?.chat === 'open' ? 'flex' : 'none' }}
+              messageFormatter={chatMessageFormatter}
+            />
+          )}
+        </LayoutContext.Consumer>
       </LayoutContextProvider>
       <RoomAudioRenderer />
       <ConnectionStateToast />

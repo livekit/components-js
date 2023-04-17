@@ -124,10 +124,10 @@ export const ParticipantTile = ({
         source &&
         !subscribed &&
         layoutContext &&
-        layoutContext.pin.dispatch &&
-        isParticipantSourcePinned(p, source, layoutContext.pin.state)
+        layoutContext.dispatch &&
+        isParticipantSourcePinned(p, source, layoutContext.state?.pin)
       ) {
-        layoutContext.pin.dispatch({ msg: 'clear_pin' });
+        layoutContext.dispatch({ msg: 'clear_pin' });
       }
     },
     [p, layoutContext, source],

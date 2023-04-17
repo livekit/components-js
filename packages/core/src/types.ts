@@ -1,16 +1,6 @@
 import type { Participant, Track, TrackPublication } from 'livekit-client';
 import type { TrackReference, TrackReferenceOrPlaceholder } from './track-reference';
 
-// ## PinState Type
-export type PinState = TrackReference[];
-export const PIN_DEFAULT_STATE: PinState = [];
-
-// ## WidgetState Types
-export type WidgetState = {
-  showChat: boolean;
-};
-export const WIDGET_DEFAULT_STATE: WidgetState = { showChat: false };
-
 // ## Track Source Types
 export type TrackSourceWithOptions = { source: Track.Source; withPlaceholder: boolean };
 

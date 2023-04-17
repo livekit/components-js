@@ -6,6 +6,7 @@ import { TrackToggle } from '../components/controls/TrackToggle';
 import { StartAudio } from '../components/controls/StartAudio';
 import { ChatIcon, LeaveIcon } from '../assets/icons';
 import { ChatToggle } from '../components/controls/ChatToggle';
+import type { ChatState } from '@livekit/components-core';
 import { isMobileBrowser } from '@livekit/components-core';
 import { useLocalParticipantPermissions } from '../hooks';
 import { useMediaQuery } from '../hooks/internal';
@@ -40,14 +41,14 @@ export type ControlBarProps = React.HTMLAttributes<HTMLDivElement> & {
  * ```
  */
 export function ControlBar({ variation, controls, ...props }: ControlBarProps) {
-  const [isChatOpen, setIsChatOpen] = React.useState(false);
+  const [chatState, setChatState] = React.useState<ChatState>('closed');
   const layoutContext = useMaybeLayoutContext();
   React.useEffect(() => {
-    if (layoutContext?.widget.state?.showChat !== undefined) {
-      setIsChatOpen(layoutContext?.widget.state?.showChat);
+    if (layoutContext?.state) {
+      setChatState(layoutContext?.state?.chat);
     }
-  }, [layoutContext?.widget.state?.showChat]);
-  const isTooLittleSpace = useMediaQuery(`(max-width: ${isChatOpen ? 1000 : 760}px)`);
+  }, [layoutContext?.state]);
+  const isTooLittleSpace = useMediaQuery(`(max-width: ${chatState ? 1000 : 760}px)`);
 
   const defaultVariation = isTooLittleSpace ? 'minimal' : 'verbose';
   variation ??= defaultVariation;

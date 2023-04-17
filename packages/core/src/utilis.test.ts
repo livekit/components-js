@@ -1,7 +1,7 @@
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import { describe, it, expect } from 'vitest';
 import { isTrackReferencePinned } from './track-reference';
-import type { PinState } from './types';
+import type { PinState } from './ui-layout';
 
 describe('Test isTrackReferencePinned', () => {
   const participantA = new Participant('dummy-participant', 'A_id', 'track_A_name');

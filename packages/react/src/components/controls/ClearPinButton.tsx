@@ -6,13 +6,13 @@ import { useLayoutContext } from '../../context';
 export type ClearPinButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export function useClearPinButton(props: ClearPinButtonProps) {
-  const { state, dispatch } = useLayoutContext().pin;
+  const { state, dispatch } = useLayoutContext();
 
   const buttonProps = React.useMemo(() => {
     const { className } = setupClearPinButton();
     const mergedProps = mergeProps(props, {
       className,
-      disabled: !state?.length,
+      disabled: !state?.pin.length,
       onClick: () => {
         if (dispatch) dispatch({ msg: 'clear_pin' });
       },

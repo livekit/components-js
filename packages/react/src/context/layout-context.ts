@@ -1,25 +1,38 @@
-import { PIN_DEFAULT_STATE, WIDGET_DEFAULT_STATE } from '@livekit/components-core';
+import type { LayoutContextState, TrackReference } from '@livekit/components-core';
+import { LAYOUT_DEFAULT_STATE } from '@livekit/components-core';
 import * as React from 'react';
-import type { ChatContextType, PinContextType } from './index';
-import { chatReducer, pinReducer } from './index';
+
+export type LayoutContextAction =
+  | { msg: 'set_pin'; trackReference: TrackReference }
+  | { msg: 'clear_pin' }
+  | { msg: 'show_chat' }
+  | { msg: 'hide_chat' }
+  | { msg: 'toggle_chat' };
+
+export function layoutReducer(
+  state: LayoutContextState,
+  action: LayoutContextAction,
+): LayoutContextState {
+  switch (action.msg) {
+    case 'set_pin':
+      return { ...state, pin: [action.trackReference] };
+    case 'clear_pin':
+      return { ...state, pin: [] };
+    case 'show_chat':
+      return { ...state, chat: 'open' };
+    case 'hide_chat':
+      return { ...state, chat: 'closed' };
+    case 'toggle_chat':
+      return { ...state, chat: state.chat === 'open' ? 'closed' : 'open' };
+    default:
+      return { ...state };
+  }
+}
 
 export type LayoutContextType = {
-  pin: PinContextType;
-  widget: ChatContextType;
+  dispatch?: React.Dispatch<LayoutContextAction>;
+  state?: LayoutContextState;
 };
-
-// export function layoutReducer(
-//   state: LayoutContextState,
-//   action: LayoutContextAction,
-// ): LayoutContextState {
-//   if (isChatContextAction(action)) {
-//     return { ...state, chat: chatReducer(state.chat, action) };
-//   } else if (isPinContextAction(action)) {
-//     return { ...state, pin: pinReducer(state.pin, action) };
-//   } else {
-//     return { ...state };
-//   }
-// }
 
 export const LayoutContext = React.createContext<LayoutContextType | undefined>(undefined);
 
@@ -49,21 +62,19 @@ export function useEnsureLayoutContext(layoutContext?: LayoutContextType) {
 }
 
 export function useCreateLayoutContext(): LayoutContextType {
-  const [pinState, pinDispatch] = React.useReducer(pinReducer, PIN_DEFAULT_STATE);
-  const [widgetState, widgetDispatch] = React.useReducer(chatReducer, WIDGET_DEFAULT_STATE);
+  const [state, dispatch] = React.useReducer(layoutReducer, LAYOUT_DEFAULT_STATE);
   return {
-    pin: { dispatch: pinDispatch, state: pinState },
-    widget: { dispatch: widgetDispatch, state: widgetState },
+    dispatch,
+    state,
   };
 }
 
 export function useEnsureCreateLayoutContext(layoutContext?: LayoutContextType): LayoutContextType {
-  const [pinState, pinDispatch] = React.useReducer(pinReducer, PIN_DEFAULT_STATE);
-  const [widgetState, widgetDispatch] = React.useReducer(chatReducer, WIDGET_DEFAULT_STATE);
+  const [state, dispatch] = React.useReducer(layoutReducer, LAYOUT_DEFAULT_STATE);
   return (
     layoutContext ?? {
-      pin: { dispatch: pinDispatch, state: pinState },
-      widget: { dispatch: widgetDispatch, state: widgetState },
+      dispatch,
+      state,
     }
   );
 }

@@ -3,12 +3,15 @@ import { ControlBar } from './ControlBar';
 
 import { ParticipantAudioTile } from '../components/participant/ParticipantAudioTile';
 import { LayoutContextProvider } from '../components/layout/LayoutContextProvider';
-import type { WidgetState } from '@livekit/components-core';
 import { Chat } from './Chat';
 import { ParticipantLoop } from '../components';
 import { useParticipants } from '../hooks';
+import { LayoutContext } from '../context';
+import type { MessageFormatter } from '../components/ChatEntry';
 
-export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
+export interface AudioConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
+  chatMessageFormatter?: MessageFormatter;
+}
 
 /**
  * This component is the default setup of a classic LiveKit audio conferencing app.
@@ -25,12 +28,11 @@ export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
  * <LiveKitRoom>
  * ```
  */
-export function AudioConference({ ...props }: AudioConferenceProps) {
-  const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });
+export function AudioConference({ chatMessageFormatter, ...props }: AudioConferenceProps) {
   const participants = useParticipants();
 
   return (
-    <LayoutContextProvider onWidgetChange={setWidgetState}>
+    <LayoutContextProvider>
       <div className="lk-audio-conference" {...props}>
         <div className="lk-audio-conference-stage">
           <ParticipantLoop participants={participants}>
@@ -40,7 +42,14 @@ export function AudioConference({ ...props }: AudioConferenceProps) {
         <ControlBar
           controls={{ microphone: true, screenShare: false, camera: false, chat: true }}
         />
-        {widgetState.showChat && <Chat />}
+        <LayoutContext.Consumer>
+          {(layoutContext) => (
+            <Chat
+              style={{ display: layoutContext?.state?.chat === 'open' ? 'flex' : 'none' }}
+              messageFormatter={chatMessageFormatter}
+            />
+          )}
+        </LayoutContext.Consumer>
       </div>
     </LayoutContextProvider>
   );

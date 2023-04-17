@@ -31,7 +31,8 @@
     transition-delay: 0.2s;
   }
 
-  &:hover .focus-toggle-button {
+  &:hover .focus-toggle-button,
+  &:focus .focus-toggle-button {
     opacity: 1;
     transition-delay: 0;
   }
@@ -47,7 +48,8 @@
     }
   }
 
-  &:hover .connection-quality {
+  &:hover .connection-quality,
+  &:focus .connection-quality {
     opacity: 1;
     transition-delay: 0;
   }

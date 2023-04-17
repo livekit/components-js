@@ -34,11 +34,16 @@ export type LayoutContextType = {
   state?: LayoutContextState;
 };
 
+/**
+ * The layout context holds the state of the layout, such as the pinned tracks and the chat visibility.
+ */
 export const LayoutContext = React.createContext<LayoutContextType | undefined>(undefined);
 
 /**
  * Ensures that a layout context is provided via context.
  * If no layout context is provided, an error is thrown.
+ *
+ * @throws Error if not inside a `LayoutContext`.
  */
 export function useLayoutContext(): LayoutContextType {
   const layoutContext = React.useContext(LayoutContext);
@@ -51,6 +56,8 @@ export function useLayoutContext(): LayoutContextType {
 /**
  * Ensures that a layout context is provided, either via context or explicitly as a parameter.
  * If not inside a `LayoutContext` and no layout context is provided, an error is thrown.
+ *
+ * @throws Error if no layout context is provided and not inside a `LayoutContext`.
  */
 export function useEnsureLayoutContext(layoutContext?: LayoutContextType) {
   const layout = useMaybeLayoutContext();
@@ -69,6 +76,10 @@ export function useCreateLayoutContext(): LayoutContextType {
   };
 }
 
+/**
+ * Ensures that a layout context is available, either through the creation of a new layout context
+ * or by passing it explicitly as a parameter.
+ */
 export function useEnsureCreateLayoutContext(layoutContext?: LayoutContextType): LayoutContextType {
   const [state, dispatch] = React.useReducer(layoutReducer, LAYOUT_DEFAULT_STATE);
   return (

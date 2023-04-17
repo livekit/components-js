@@ -41,11 +41,11 @@ function useFocusToggle({ trackSource, participant, props }: useFocusToggleProps
           if (layoutContext?.dispatch && track) {
             if (inFocus) {
               layoutContext.dispatch({
-                msg: 'clear_pin',
+                msg: 'pin.clear',
               });
             } else {
               layoutContext.dispatch({
-                msg: 'set_pin',
+                msg: 'pin.set',
                 trackReference: {
                   participant: p,
                   publication: track,

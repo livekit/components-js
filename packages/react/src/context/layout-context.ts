@@ -3,26 +3,26 @@ import { LAYOUT_DEFAULT_STATE } from '@livekit/components-core';
 import * as React from 'react';
 
 export type LayoutContextAction =
-  | { msg: 'set_pin'; trackReference: TrackReference }
-  | { msg: 'clear_pin' }
-  | { msg: 'show_chat' }
-  | { msg: 'hide_chat' }
-  | { msg: 'toggle_chat' };
+  | { msg: 'pin.set'; trackReference: TrackReference }
+  | { msg: 'pin.clear' }
+  | { msg: 'chat.show' }
+  | { msg: 'chat.hide' }
+  | { msg: 'chat.toggle' };
 
 export function layoutReducer(
   state: LayoutContextState,
   action: LayoutContextAction,
 ): LayoutContextState {
   switch (action.msg) {
-    case 'set_pin':
+    case 'pin.set':
       return { ...state, pin: [action.trackReference] };
-    case 'clear_pin':
+    case 'pin.clear':
       return { ...state, pin: [] };
-    case 'show_chat':
+    case 'chat.show':
       return { ...state, chat: 'open' };
-    case 'hide_chat':
+    case 'chat.hide':
       return { ...state, chat: 'closed' };
-    case 'toggle_chat':
+    case 'chat.toggle':
       return { ...state, chat: state.chat === 'open' ? 'closed' : 'open' };
     default:
       return { ...state };

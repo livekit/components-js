@@ -59,7 +59,7 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
     ) {
       return;
     }
-    layoutContext.dispatch?.({ msg: 'set_pin', trackReference: screenShareTracks[0] });
+    layoutContext.dispatch?.({ msg: 'pin.set', trackReference: screenShareTracks[0] });
   }, [JSON.stringify(screenShareTracks.map((ref) => ref.publication.trackSid))]);
 
   return (

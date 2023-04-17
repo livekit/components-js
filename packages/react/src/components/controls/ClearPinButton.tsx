@@ -14,7 +14,7 @@ export function useClearPinButton(props: ClearPinButtonProps) {
       className,
       disabled: !state?.pin.length,
       onClick: () => {
-        if (dispatch) dispatch({ msg: 'clear_pin' });
+        if (dispatch) dispatch({ msg: 'pin.clear' });
       },
     });
     return mergedProps;

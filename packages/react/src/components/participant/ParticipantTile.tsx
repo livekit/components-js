@@ -127,7 +127,7 @@ export const ParticipantTile = ({
         layoutContext.dispatch &&
         isParticipantSourcePinned(p, source, layoutContext.state?.pin)
       ) {
-        layoutContext.dispatch({ msg: 'clear_pin' });
+        layoutContext.dispatch({ msg: 'pin.clear' });
       }
     },
     [p, layoutContext, source],

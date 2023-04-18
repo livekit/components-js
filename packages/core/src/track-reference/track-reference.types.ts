@@ -6,38 +6,32 @@
 import type { Participant, Track, TrackPublication } from 'livekit-client';
 // ## TrackReference Types
 
-export type TrackReferenceSubscribed = {
-  participant: Participant;
-  publication: TrackPublication;
-  track: NonNullable<TrackPublication['track']>;
-  source: Track.Source;
-};
-
-export type TrackReferencePublished = {
-  participant: Participant;
-  publication: TrackPublication;
-  source: Track.Source;
-};
-
 export type TrackReferencePlaceholder = {
   participant: Participant;
+  publication: never;
+  track: never;
   source: Track.Source;
 };
 
-export type TrackReference = TrackReferenceSubscribed | TrackReferencePublished;
+export type TrackReference = {
+  participant: Participant;
+  publication: TrackPublication;
+  source: Track.Source;
+};
+
 export type TrackReferenceOrPlaceholder = TrackReference | TrackReferencePlaceholder;
 
 // ### TrackReference Type Predicates
-export function isTrackReference(trackReference: unknown): trackReference is TrackReference {
+export function isTrackReference(
+  trackReference: TrackReferenceOrPlaceholder,
+): trackReference is TrackReference {
   if (typeof trackReference === 'undefined') {
     return false;
   }
   return isTrackReferenceSubscribed(trackReference) || isTrackReferencePublished(trackReference);
 }
 
-function isTrackReferenceSubscribed(
-  trackReference: any,
-): trackReference is TrackReferenceSubscribed {
+function isTrackReferenceSubscribed(trackReference: TrackReferenceOrPlaceholder): boolean {
   if (!trackReference) {
     return false;
   }
@@ -45,11 +39,11 @@ function isTrackReferenceSubscribed(
     trackReference.hasOwnProperty('participant') &&
     trackReference.hasOwnProperty('source') &&
     trackReference.hasOwnProperty('track') &&
-    typeof trackReference.track !== 'undefined'
+    typeof trackReference.publication.track !== 'undefined'
   );
 }
 
-function isTrackReferencePublished(trackReference: any): trackReference is TrackReferencePublished {
+function isTrackReferencePublished(trackReference: TrackReferenceOrPlaceholder): boolean {
   if (!trackReference) {
     return false;
   }
@@ -62,7 +56,7 @@ function isTrackReferencePublished(trackReference: any): trackReference is Track
 }
 
 export function isTrackReferencePlaceholder(
-  trackReference: any,
+  trackReference: TrackReferenceOrPlaceholder,
 ): trackReference is TrackReferencePlaceholder {
   if (!trackReference) {
     return false;
@@ -70,7 +64,6 @@ export function isTrackReferencePlaceholder(
   return (
     trackReference.hasOwnProperty('participant') &&
     trackReference.hasOwnProperty('source') &&
-    typeof trackReference.publication !== 'undefined' &&
-    typeof trackReference.track !== 'undefined'
+    typeof trackReference.publication === 'undefined'
   );
 }

@@ -3,10 +3,12 @@ import { createUrlRegExp } from './urlRegex';
 
 export type TokenizeGrammar = { [type: string]: RegExp };
 
-export const defaultGrammar = {
-  email: createEmailRegExp(),
-  url: createUrlRegExp({ strict: false }),
-} satisfies TokenizeGrammar;
+export const createDefaultGrammar = () => {
+  return {
+    email: createEmailRegExp(),
+    url: createUrlRegExp({ strict: false }),
+  } satisfies TokenizeGrammar;
+};
 
 export function tokenize<T extends TokenizeGrammar>(input: string, grammar: T) {
   const matches = Object.entries(grammar)

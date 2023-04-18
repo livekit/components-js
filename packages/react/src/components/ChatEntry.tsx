@@ -1,5 +1,5 @@
 import type { ReceivedChatMessage } from '@livekit/components-core';
-import { tokenize, defaultGrammar } from '@livekit/components-core';
+import { tokenize, createDefaultGrammar } from '@livekit/components-core';
 import * as React from 'react';
 
 export type MessageFormatter = (message: string) => React.ReactNode;
@@ -70,7 +70,7 @@ export function ChatEntry({
 }
 
 export function formatChatMessageLinks(message: string): React.ReactNode {
-  return tokenize(message, defaultGrammar).map((tok, i) => {
+  return tokenize(message, createDefaultGrammar()).map((tok, i) => {
     if (typeof tok === `string`) {
       return tok;
     } else {

@@ -89,7 +89,7 @@ export function ParticipantContextIfNeeded(
 
 /**
  * The ParticipantTile component is the base utility wrapper for displaying a visual representation of a participant.
- * This component can be used as a child of the `ParticipantLoop` component or independently if a participant is passed as a property.
+ * This component can be used as a child of the `TrackLoop` component or spread a track reference as properties.
  *
  * @example
  * ```tsx

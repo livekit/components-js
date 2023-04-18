@@ -2,10 +2,10 @@ import type { TrackReference, TrackReferenceOrPlaceholder } from '@livekit/compo
 import { isTrackReference } from '@livekit/components-core';
 import * as React from 'react';
 import { TrackContext } from '../context/track-context';
-import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
 type TrackLoopProps = {
+  children: React.ReactNode;
   tracks: TrackReference[] | TrackReferenceOrPlaceholder[];
 };
 
@@ -37,11 +37,7 @@ export const TrackLoop = ({ tracks, ...props }: React.PropsWithChildren<TrackLoo
             value={trackReference}
             key={`${trackReference.participant.identity}_${trackSource}`}
           >
-            {props.children ? (
-              cloneSingleChild(props.children)
-            ) : (
-              <ParticipantTile {...trackReference} />
-            )}
+            {props.children && cloneSingleChild(props.children)}
           </TrackContext.Provider>
         );
       })}

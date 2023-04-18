@@ -1,13 +1,12 @@
 import type { Participant } from 'livekit-client';
-import { Track } from 'livekit-client';
 import * as React from 'react';
 import { ParticipantContext } from '../context';
-import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
 type ParticipantLoopProps = {
   /** The participants to loop over. If not provided, the participants from the current room context are used. */
   participants: Participant[];
+  children: React.ReactNode;
 };
 
 /**
@@ -35,11 +34,7 @@ export const ParticipantLoop = ({
     <>
       {participants.map((participant) => (
         <ParticipantContext.Provider value={participant} key={participant.identity}>
-          {props.children ? (
-            cloneSingleChild(props.children)
-          ) : (
-            <ParticipantTile source={Track.Source.Camera} />
-          )}
+          {props.children && cloneSingleChild(props.children)}
         </ParticipantContext.Provider>
       ))}
     </>

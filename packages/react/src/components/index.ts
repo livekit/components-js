@@ -22,3 +22,5 @@ export * from './RoomName';
 export * from './participant/ScreenShareRenderer';
 export * from './Toast';
 export * from './TrackLoop';
+export * from './participant/ParticipantTile';
+export * from './participant/ParticipantAudioTile';

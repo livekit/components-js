@@ -11,27 +11,34 @@ const MIN_VISIBLE_TILES = 1;
 const ASPECT_RATIO = 16 / 10;
 const ASPECT_RATIO_INVERT = (1 - ASPECT_RATIO) * -1;
 
-export interface CarouselViewProps extends React.HTMLAttributes<HTMLMediaElement> {
+export interface CarouselLayoutProps extends React.HTMLAttributes<HTMLMediaElement> {
   tracks: TrackReferenceOrPlaceholder[];
-
+  children: React.ReactNode;
   /** Place the tiles vertically or horizontally next to each other.
    * If undefined orientation is guessed by the dimensions of the container. */
   orientation?: 'vertical' | 'horizontal';
 }
 
 /**
- * The `CarouselView` displays a list of tracks horizontally or vertically.
+ * @deprecated Renamed to [[CarouselLayout]]
+ */
+export const CarouselView = CarouselLayout;
+
+/**
+ * The `CarouselLayout` displays a list of tracks horizontally or vertically.
  * Depending on the size of the container, the carousel will display as many tiles as possible and overflows the rest.
- * The CarouselView uses the `useVisualStableUpdate` hook to ensure that tile reordering due to track updates
+ * The CarouselLayout uses the `useVisualStableUpdate` hook to ensure that tile reordering due to track updates
  * is visually stable but still moves the important tiles (speaking participants) to the front.
  *
  * @example
  * ```tsx
  * const tracks = useTracks();
- * <CarouselView tracks={tracks}>
+ * <CarouselLayout tracks={tracks}>
+ *   <ParticipantTile />
+ * </CarouselLayout>
  * ```
  */
-export function CarouselView({ tracks, orientation, ...props }: CarouselViewProps) {
+export function CarouselLayout({ tracks, orientation, ...props }: CarouselLayoutProps) {
   const asideEl = React.useRef<HTMLDivElement>(null);
 
   const { width, height } = useSize(asideEl);
@@ -68,7 +75,7 @@ export function CarouselView({ tracks, orientation, ...props }: CarouselViewProp
 
   return (
     <aside key={carouselOrientation} className="lk-carousel" ref={asideEl} {...props}>
-      {props.children ?? <TrackLoop tracks={sortedTiles} />}
+      <TrackLoop tracks={sortedTiles}>{props.children}</TrackLoop>
     </aside>
   );
 }

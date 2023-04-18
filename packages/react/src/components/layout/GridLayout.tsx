@@ -10,6 +10,7 @@ import { PaginationIndicator } from '../controls/PaginationIndicator';
 export interface GridLayoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
     Pick<UseParticipantsOptions, 'updateOnlyOn'> {
+  children: React.ReactNode;
   tracks: TrackReferenceOrPlaceholder[];
 }
 
@@ -19,7 +20,9 @@ export interface GridLayoutProps
  * @example
  * ```tsx
  * <LiveKitRoom>
- *   <GridLayout track={tracks} />
+ *   <GridLayout tracks={tracks}>
+ *     <ParticipantTile />
+ *   </GridLayout>
  * <LiveKitRoom>
  * ```
  */

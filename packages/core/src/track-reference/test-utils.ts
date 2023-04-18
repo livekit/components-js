@@ -6,11 +6,7 @@
 
 import { Participant, Track, TrackPublication } from 'livekit-client';
 import type { UpdatableItem } from '../sorting/tile-array-update';
-import type {
-  TrackReferencePlaceholder,
-  TrackReferencePublished,
-  TrackReferenceSubscribed,
-} from './track-reference.types';
+import type { TrackReference, TrackReferencePlaceholder } from './track-reference.types';
 import { getTrackReferenceId } from './track-reference.utils';
 
 // Test function:
@@ -21,10 +17,7 @@ export const mockTrackReferencePlaceholder = (
   return { participant: new Participant(`${id}`, `${id}`), source };
 };
 
-export const mockTrackReferencePublished = (
-  id: string,
-  source: Track.Source,
-): TrackReferencePublished => {
+export const mockTrackReferencePublished = (id: string, source: Track.Source): TrackReference => {
   const kind = [Track.Source.Camera, Track.Source.ScreenShare].includes(source)
     ? Track.Kind.Video
     : Track.Kind.Audio;
@@ -45,18 +38,21 @@ export const mockTrackReferenceSubscribed = (
   id: string,
   source: Track.Source,
   options: mockTrackReferenceSubscribedOptions = {},
-): TrackReferenceSubscribed => {
+): TrackReference => {
   const kind = [Track.Source.Camera, Track.Source.ScreenShare].includes(source)
     ? Track.Kind.Video
     : Track.Kind.Audio;
+
+  const publication = new TrackPublication(kind, `${id}`, `${id}`);
+  // @ts-expect-error
+  publication.track = {};
   return {
     participant: options.mockParticipant
       ? (mockParticipant(id, options.mockIsLocal ?? false) as Participant)
       : new Participant(`${id}`, `${id}`),
     publication: options.mockPublication
       ? (mockTrackPublication(id, kind, source) as TrackPublication)
-      : new TrackPublication(kind, `${id}`, `${id}`),
-    track: {} as Track,
+      : publication,
     source,
   };
 };

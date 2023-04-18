@@ -2,7 +2,7 @@ import type { Participant, Track, TrackPublication } from 'livekit-client';
 import type { TrackReference, TrackReferenceOrPlaceholder } from './track-reference';
 
 // ## PinState Type
-export type PinState = TrackReference[];
+export type PinState = TrackReferenceOrPlaceholder[];
 export const PIN_DEFAULT_STATE: PinState = [];
 
 // ## WidgetState Types

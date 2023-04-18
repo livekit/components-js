@@ -8,7 +8,7 @@ import type { Participant, Track, TrackPublication } from 'livekit-client';
 
 export type TrackReferencePlaceholder = {
   participant: Participant;
-  publication: never;
+  publication?: never;
   source: Track.Source;
 };
 
@@ -39,7 +39,7 @@ function isTrackReferenceSubscribed(trackReference?: TrackReferenceOrPlaceholder
     trackReference.hasOwnProperty('participant') &&
     trackReference.hasOwnProperty('source') &&
     trackReference.hasOwnProperty('track') &&
-    typeof trackReference.publication.track !== 'undefined'
+    typeof trackReference.publication?.track !== 'undefined'
   );
 }
 
@@ -56,7 +56,7 @@ function isTrackReferencePublished(trackReference?: TrackReferenceOrPlaceholder)
 }
 
 export function isTrackReferencePlaceholder(
-  trackReference: TrackReferenceOrPlaceholder,
+  trackReference?: TrackReferenceOrPlaceholder,
 ): trackReference is TrackReferencePlaceholder {
   if (!trackReference) {
     return false;

@@ -21,16 +21,17 @@ export type TrackReference = {
 export type TrackReferenceOrPlaceholder = TrackReference | TrackReferencePlaceholder;
 
 // ### TrackReference Type Predicates
-export function isTrackReference(
-  trackReference: TrackReferenceOrPlaceholder,
-): trackReference is TrackReference {
+export function isTrackReference(trackReference: unknown): trackReference is TrackReference {
   if (typeof trackReference === 'undefined') {
     return false;
   }
-  return isTrackReferenceSubscribed(trackReference) || isTrackReferencePublished(trackReference);
+  return (
+    isTrackReferenceSubscribed(trackReference as TrackReference) ||
+    isTrackReferencePublished(trackReference as TrackReference)
+  );
 }
 
-function isTrackReferenceSubscribed(trackReference: TrackReferenceOrPlaceholder): boolean {
+function isTrackReferenceSubscribed(trackReference?: TrackReferenceOrPlaceholder): boolean {
   if (!trackReference) {
     return false;
   }
@@ -42,7 +43,7 @@ function isTrackReferenceSubscribed(trackReference: TrackReferenceOrPlaceholder)
   );
 }
 
-function isTrackReferencePublished(trackReference: TrackReferenceOrPlaceholder): boolean {
+function isTrackReferencePublished(trackReference?: TrackReferenceOrPlaceholder): boolean {
   if (!trackReference) {
     return false;
   }

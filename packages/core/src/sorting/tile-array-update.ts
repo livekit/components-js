@@ -96,7 +96,7 @@ export function updatePages<T extends UpdatableItem>(
   if (currentList.length < nextList.length) {
     // Items got added: Find newly added items and add them to the end of the list.
     const addedItems = differenceBy(nextList, currentList, getTrackReferenceId);
-    updatedList = [...updatedList, ...addedItems] as T[];
+    updatedList = [...updatedList, ...addedItems];
   }
   const currentPages = divideIntoPages(currentList, maxItemsOnPage);
   const nextPages = divideIntoPages(nextList, maxItemsOnPage);
@@ -116,7 +116,7 @@ export function updatePages<T extends UpdatableItem>(
         );
         // ## Swap Items
         if (changes.added.length === changes.dropped.length) {
-          zip(changes.added as T[], changes.dropped as T[]).forEach(([added, dropped]) => {
+          zip(changes.added, changes.dropped).forEach(([added, dropped]) => {
             if (added && dropped) {
               updatedList = swapItems<T>(added, dropped, updatedList);
             } else {
@@ -129,13 +129,13 @@ export function updatePages<T extends UpdatableItem>(
         // ## Handle Drop Items
         if (changes.added.length === 0 && changes.dropped.length > 0) {
           changes.dropped.forEach((item) => {
-            updatedList = dropItem<T>(item as T, updatedList);
+            updatedList = dropItem<T>(item, updatedList);
           });
         }
         // ## Handle Item added
         if (changes.added.length > 0 && changes.dropped.length === 0) {
           changes.added.forEach((item) => {
-            updatedList = addItem<T>(item as T, updatedList);
+            updatedList = addItem<T>(item, updatedList);
           });
         }
       }

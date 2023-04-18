@@ -2,18 +2,18 @@ import type { TrackReference, TrackReferenceOrPlaceholder } from '@livekit/compo
 import { isTrackReference } from '@livekit/components-core';
 import * as React from 'react';
 import { TrackContext } from '../context/track-context';
-import { ParticipantTile } from '../prefabs';
 import { cloneSingleChild } from '../utils';
 
 type TrackLoopProps = {
+  /** Track references to loop over. */
   tracks: TrackReference[] | TrackReferenceOrPlaceholder[];
+  /** The template component to be used in the loop. */
+  children: React.ReactNode;
 };
 
 /**
  * The TrackLoop component loops over tracks. It is for example a easy way to loop over all participant camera and screen share tracks.
- * Only tracks with a the same source specified via the sources property get included in the loop.
  * TrackLoop creates a TrackContext for each track that you can use to e.g. render the track.
- * Further narrowing the loop items is possible by simply filtering the returned array.
  *
  * @example
  * ```tsx
@@ -25,7 +25,7 @@ type TrackLoopProps = {
  * <TrackLoop />
  * ```
  */
-export const TrackLoop = ({ tracks, ...props }: React.PropsWithChildren<TrackLoopProps>) => {
+export const TrackLoop = ({ tracks, ...props }: TrackLoopProps) => {
   return (
     <>
       {tracks.map((trackReference) => {
@@ -37,11 +37,7 @@ export const TrackLoop = ({ tracks, ...props }: React.PropsWithChildren<TrackLoo
             value={trackReference}
             key={`${trackReference.participant.identity}_${trackSource}`}
           >
-            {props.children ? (
-              cloneSingleChild(props.children)
-            ) : (
-              <ParticipantTile {...trackReference} />
-            )}
+            {cloneSingleChild(props.children)}
           </TrackContext.Provider>
         );
       })}

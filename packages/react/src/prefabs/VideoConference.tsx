@@ -12,8 +12,9 @@ import type { MessageFormatter } from '../components/ChatEntry';
 import { RoomEvent, Track } from 'livekit-client';
 import { useTracks } from '../hooks/useTracks';
 import { usePinnedTracks } from '../hooks/usePinnedTracks';
-import { CarouselView } from '../components/layout/CarouselView';
+import { CarouselLayout } from '../components/layout/CarouselLayout';
 import { useCreateLayoutContext } from '../context/layout-context';
+import { ParticipantTile } from '../components';
 
 export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
   chatMessageFormatter?: MessageFormatter;
@@ -90,12 +91,16 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
         <div className="lk-video-conference-inner">
           {!focusTrack ? (
             <div className="lk-grid-layout-wrapper">
-              <GridLayout tracks={tracks} />
+              <GridLayout tracks={tracks}>
+                <ParticipantTile />
+              </GridLayout>
             </div>
           ) : (
             <div className="lk-focus-layout-wrapper">
               <FocusLayoutContainer>
-                <CarouselView tracks={carouselTracks} />
+                <CarouselLayout tracks={carouselTracks}>
+                  <ParticipantTile />
+                </CarouselLayout>
                 {focusTrack && <FocusLayout track={focusTrack} />}
               </FocusLayoutContainer>
             </div>

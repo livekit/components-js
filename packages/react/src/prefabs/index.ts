@@ -5,5 +5,3 @@ export * from './VideoConference';
 export * from './ControlBar';
 export * from './MediaDeviceMenu';
 export * from './AudioConference';
-export * from '../components/participant/ParticipantTile';
-export * from '../components/participant/ParticipantAudioTile';

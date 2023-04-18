@@ -11,8 +11,9 @@ import type { MessageFormatter } from '../components/ChatEntry';
 import { RoomEvent, Track } from 'livekit-client';
 import { useTracks } from '../hooks/useTracks';
 import { usePinnedTracks } from '../hooks/usePinnedTracks';
-import { CarouselView } from '../components/layout/CarouselView';
+import { CarouselLayout } from '../components/layout/CarouselLayout';
 import { LayoutContext, useCreateLayoutContext } from '../context/layout-context';
+import { ParticipantTile } from '../components';
 
 export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
   chatMessageFormatter?: MessageFormatter;
@@ -52,15 +53,25 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
   const carouselTracks = tracks.filter((track) => !isEqualTrackRef(track, focusTrack));
 
   React.useEffect(() => {
-    // if screen share tracks are published, and no pin is set explicitly, auto set the screen share
-    if (
-      (layoutContext.state && layoutContext.state.pin.length > 0) ||
-      screenShareTracks.length === 0
-    ) {
+    if (!layoutContext.state?.pin) {
       return;
     }
-    layoutContext.dispatch?.({ msg: 'pin.set', trackReference: screenShareTracks[0] });
-  }, [JSON.stringify(screenShareTracks.map((ref) => ref.publication.trackSid))]);
+    const pinState = layoutContext.state.pin;
+    const pinnedTrack = pinState.length > 0 ? pinState[0] : undefined;
+    // if screen share tracks are published, and no pin is set explicitly, auto set the screen share
+    if (screenShareTracks.length > 0 && pinnedTrack === undefined) {
+      layoutContext.dispatch?.({ msg: 'pin.set', trackReference: screenShareTracks[0] });
+    } else if (
+      (screenShareTracks.length === 0 && pinnedTrack?.source === Track.Source.ScreenShare) ||
+      tracks.length <= 1
+    ) {
+      layoutContext.dispatch?.({ msg: 'pin.clear' });
+    }
+  }, [
+    JSON.stringify(screenShareTracks.map((ref) => ref.publication.trackSid)),
+    layoutContext.state?.pin,
+    tracks.length,
+  ]);
 
   return (
     <div className="lk-video-conference" {...props}>
@@ -68,12 +79,16 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
         <div className="lk-video-conference-inner">
           {!focusTrack ? (
             <div className="lk-grid-layout-wrapper">
-              <GridLayout tracks={tracks} />
+              <GridLayout tracks={tracks}>
+                <ParticipantTile />
+              </GridLayout>
             </div>
           ) : (
             <div className="lk-focus-layout-wrapper">
               <FocusLayoutContainer>
-                <CarouselView tracks={carouselTracks} />
+                <CarouselLayout tracks={carouselTracks}>
+                  <ParticipantTile />
+                </CarouselLayout>
                 {focusTrack && <FocusLayout track={focusTrack} />}
               </FocusLayoutContainer>
             </div>

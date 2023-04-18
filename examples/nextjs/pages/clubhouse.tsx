@@ -1,15 +1,15 @@
 import {
   ControlBar,
   LiveKitRoom,
-  ParticipantLoop,
   RoomAudioRenderer,
   RoomName,
+  TrackLoop,
   TrackMutedIndicator,
   useIsMuted,
   useIsSpeaking,
-  useParticipantContext,
-  useParticipants,
   useToken,
+  useTrackContext,
+  useTracks,
 } from '@livekit/components-react';
 import styles from '../styles/Clubhouse.module.scss';
 import { Track } from 'livekit-client';
@@ -73,22 +73,22 @@ const Clubhouse = () => {
 };
 
 const Stage = () => {
-  const participants = useParticipants();
+  const tracksReferences = useTracks([Track.Source.Microphone]);
   return (
     <div className="">
       <div className={styles.stageGrid}>
-        <ParticipantLoop participants={participants}>
+        <TrackLoop tracks={tracksReferences}>
           <CustomParticipantTile></CustomParticipantTile>
-        </ParticipantLoop>
+        </TrackLoop>
       </div>
     </div>
   );
 };
 
 const CustomParticipantTile = () => {
-  const participant = useParticipantContext();
+  const { participant, source } = useTrackContext();
   const isSpeaking = useIsSpeaking(participant);
-  const isMuted = useIsMuted(Track.Source.Microphone);
+  const isMuted = useIsMuted(source);
 
   const id = useMemo(() => participant.identity, [participant]);
 
@@ -115,10 +115,7 @@ const CustomParticipantTile = () => {
 
       <div style={{ opacity: isMuted ? 1 : 0 }} className={styles['mic-container']}>
         <div>
-          <TrackMutedIndicator
-            className={styles.mic}
-            source={Track.Source.Microphone}
-          ></TrackMutedIndicator>
+          <TrackMutedIndicator className={styles.mic} source={source}></TrackMutedIndicator>
         </div>
       </div>
     </section>

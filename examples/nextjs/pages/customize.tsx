@@ -17,7 +17,7 @@ import styles from '../styles/Simple.module.css';
 import myStyles from '../styles/Customize.module.css';
 import type { NextPage } from 'next';
 import { HTMLAttributes, useState } from 'react';
-import { isTrackReference, isTrackReferencePlaceholder } from '@livekit/components-core';
+import { isTrackReference } from '@livekit/components-core';
 
 const CustomizeExample: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;

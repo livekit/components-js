@@ -9,7 +9,6 @@ import type { Participant, Track, TrackPublication } from 'livekit-client';
 export type TrackReferencePlaceholder = {
   participant: Participant;
   publication: never;
-  track: never;
   source: Track.Source;
 };
 

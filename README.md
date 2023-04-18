@@ -14,8 +14,6 @@
 
 <br>
 
-> **Disclaimer —** This is project is in active development and open sourced as a developer preview. While APIs are unlikely to drastically change from here onwards, there's still the chance that some things might need tweaking after an update. We appreciate feedback from the community and are planning to incorporate your feedback to get to a stable version as soon as possible!
-
 ![LiveKit Components Preview](./.github/assets/livekit-meet.jpg)
 
 ## About LiveKit Components
@@ -173,7 +171,9 @@ yarn dev:next
 
 <!--NAV_END-->
 <!--BEGIN_REPO_NAV-->
+
 <br/><table>
+
 <thead><tr><th colspan="2">LiveKit Ecosystem</th></tr></thead>
 <tbody>
 <tr><td>Core Infra</td><td><a href="https://github.com/livekit/livekit">livekit</a> · <a href="https://github.com/livekit/egress">egress</a> · <a href="https://github.com/livekit/ingress">ingress</a> · <a href="https://github.com/livekit/livekit-cli">livekit-cli</a></td></tr><tr></tr>

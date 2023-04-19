@@ -4,7 +4,7 @@ module.exports = [
     path: 'dist/index.mjs',
     import: '{ LiveKitRoom }',
     limit: '10 kB',
-    ignore: ['livekit-client', 'react', 'react-dom'],
+    ignore: ['livekit-client', 'react', 'react-dom', 'loglevel'],
   },
   {
     name: 'Room with defaults',

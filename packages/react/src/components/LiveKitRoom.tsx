@@ -1,4 +1,4 @@
-import { log, roomEventSelector, setupLiveKitRoom } from '@livekit/components-core';
+import { log, setupLiveKitRoom } from '@livekit/components-core';
 import type {
   AudioCaptureOptions,
   RoomConnectOptions,
@@ -187,10 +187,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
 
   React.useEffect(() => {
     if (!room) return;
-    const connectionStateChangeListener = roomEventSelector(
-      room,
-      RoomEvent.ConnectionStateChanged,
-    ).subscribe(([state]) => {
+    const connectionStateChangeListener = (state: ConnectionState) => {
       switch (state) {
         case ConnectionState.Disconnected:
           if (onDisconnected) onDisconnected();
@@ -202,8 +199,11 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
         default:
           break;
       }
-    });
-    return () => connectionStateChangeListener.unsubscribe();
+    };
+    room.on(RoomEvent.ConnectionStateChanged, connectionStateChangeListener);
+    return () => {
+      room.off(RoomEvent.ConnectionStateChanged, connectionStateChangeListener);
+    };
   }, [token, onConnected, onDisconnected, room]);
 
   React.useEffect(() => {

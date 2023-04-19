@@ -1,5 +1,5 @@
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
-import { useState } from 'react';
+import * as React from 'react';
 import { useVisualStableUpdate } from './useVisualStableUpdate';
 
 /**
@@ -12,7 +12,7 @@ import { useVisualStableUpdate } from './useVisualStableUpdate';
  * @internal
  */
 export function usePagination(itemPerPage: number, trackReferences: TrackReferenceOrPlaceholder[]) {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = React.useState(1);
   const totalPageCount = Math.max(Math.ceil(trackReferences.length / itemPerPage), 1);
   if (currentPage > totalPageCount) {
     setCurrentPage(totalPageCount);

@@ -321,6 +321,7 @@ export const PreJoin = ({
           id="username"
           name="username"
           type="text"
+          defaultValue={username}
           placeholder={userLabel}
           onChange={(inputEl) => setUsername(inputEl.target.value)}
           autoComplete="off"

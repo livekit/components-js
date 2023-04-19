@@ -15,5 +15,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           package_manager: yarn
+          script: cd ./packages/react && yarn size --json
           build_script: build:react
-          script: cd ./packages/react && yarn size

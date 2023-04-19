@@ -1,4 +1,4 @@
-import type { TrackReference } from '../track-reference';
+import type { TrackReferenceOrPlaceholder } from '../track-reference';
 
 export type LayoutContextState = {
   pin: PinState;
@@ -11,6 +11,6 @@ export const LAYOUT_DEFAULT_STATE: LayoutContextState = {
 };
 
 // ## PinState Type
-export type PinState = TrackReference[];
+export type PinState = TrackReferenceOrPlaceholder[];
 // ## ChatState Types
 export type ChatState = 'open' | 'closed';

@@ -1,8 +1,8 @@
 module.exports = [
   {
     path: 'dist/index.mjs',
-    import: '*',
-    ignore: ['tlds', 'email-regex'],
+    import: '{ setupLiveKitRoom }',
+    ignore: ['global-tld-list', 'email-regex'],
     limit: '13 kB',
   },
 ];

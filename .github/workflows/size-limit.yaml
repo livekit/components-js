@@ -14,6 +14,6 @@ jobs:
       - uses: andresz1/size-limit-action@v1.7.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          script: cd ./packages/react && yarn size --json
+          script: yarn size-limit:react
           package_manager: yarn
           build_script: build:react

@@ -41,7 +41,7 @@
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
     "test": "vitest --run",
     "test:watch": "vitest",
-    "size": "size-limit"
+    "size": "size-limit --json"
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -55,8 +55,8 @@
     "react-dom": ">=18"
   },
   "devDependencies": {
-    "@size-limit/file": "^8.1.2",
-    "@size-limit/webpack": "^8.1.2",
+    "@size-limit/file": "^8.2.4",
+    "@size-limit/webpack": "^8.2.4",
     "@svgr/cli": "^7.0.0",
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.0.25",
@@ -66,8 +66,8 @@
     "jsdom": "^21.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "size-limit": "^8.1.2",
-    "tsup": "^6.5.0",
+    "size-limit": "^8.2.4",
+    "tsup": "^6.7.0",
     "typescript": "^5.0.0",
     "vite": "^4.1.4",
     "vitest": "^0.29.2"

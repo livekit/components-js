@@ -1,4 +1,4 @@
-import { chunk, zip, differenceBy, remove } from 'lodash';
+import { differenceBy, chunk, zip } from '../helper/array-helper';
 import log from '../logger';
 import type { TrackReferenceOrPlaceholder } from '../track-reference';
 import { getTrackReferenceId } from '../track-reference';
@@ -14,8 +14,8 @@ export type UpdatableItem = TrackReferenceOrPlaceholder | number;
 /** Check if something visually change on the page. */
 export function visualPageChange<T extends UpdatableItem>(state: T[], next: T[]): VisualChanges<T> {
   return {
-    dropped: differenceBy<T, T>(state, next, getTrackReferenceId),
-    added: differenceBy<T, T>(next, state, getTrackReferenceId),
+    dropped: differenceBy(state, next, getTrackReferenceId),
+    added: differenceBy(next, state, getTrackReferenceId),
   };
 }
 
@@ -82,13 +82,13 @@ export function updatePages<T extends UpdatableItem>(
 
   if (currentList.length < nextList.length) {
     // Items got added: Find newly added items and add them to the end of the list.
-    const addedItems = differenceBy<T, T>(nextList, currentList, getTrackReferenceId);
-    updatedList = [...updatedList, ...addedItems] as T[];
+    const addedItems = differenceBy(nextList, currentList, getTrackReferenceId);
+    updatedList = [...updatedList, ...addedItems];
   }
   const currentPages = divideIntoPages(currentList, maxItemsOnPage);
   const nextPages = divideIntoPages(nextList, maxItemsOnPage);
 
-  zip<T[], T[]>(currentPages, nextPages).forEach(([currentPage, nextPage], pageIndex) => {
+  zip(currentPages, nextPages).forEach(([currentPage, nextPage], pageIndex) => {
     if (currentPage && nextPage) {
       // 1) Identify  missing tile.
       const updatedPage = divideIntoPages(updatedList, maxItemsOnPage)[pageIndex];
@@ -103,7 +103,7 @@ export function updatePages<T extends UpdatableItem>(
         );
         // ## Swap Items
         if (changes.added.length === changes.dropped.length) {
-          zip<T>(changes.added as T[], changes.dropped as T[]).forEach(([added, dropped]) => {
+          zip(changes.added, changes.dropped).forEach(([added, dropped]) => {
             if (added && dropped) {
               updatedList = swapItems<T>(added, dropped, updatedList);
             } else {
@@ -116,13 +116,13 @@ export function updatePages<T extends UpdatableItem>(
         // ## Handle Drop Items
         if (changes.added.length === 0 && changes.dropped.length > 0) {
           changes.dropped.forEach((item) => {
-            updatedList = dropItem<T>(item as T, updatedList);
+            updatedList = dropItem<T>(item, updatedList);
           });
         }
         // ## Handle Item added
         if (changes.added.length > 0 && changes.dropped.length === 0) {
           changes.added.forEach((item) => {
-            updatedList = addItem<T>(item as T, updatedList);
+            updatedList = addItem<T>(item, updatedList);
           });
         }
       }
@@ -131,9 +131,9 @@ export function updatePages<T extends UpdatableItem>(
 
   if (updatedList.length > nextList.length) {
     // Items got removed: Find items that got completely removed from the list.
-    const missingItems = differenceBy<T, T>(currentList, nextList, getTrackReferenceId);
-    remove(updatedList, (item) =>
-      missingItems.map(getTrackReferenceId).includes(getTrackReferenceId(item)),
+    const missingItems = differenceBy(currentList, nextList, getTrackReferenceId);
+    updatedList = updatedList.filter(
+      (item) => !missingItems.map(getTrackReferenceId).includes(getTrackReferenceId(item)),
     );
   }
 

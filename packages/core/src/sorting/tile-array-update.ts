@@ -1,3 +1,4 @@
+import { differenceBy, chunk, zip } from '../helper/array-helper';
 import log from '../logger';
 import type { TrackReferenceOrPlaceholder } from '../track-reference';
 import { getTrackReferenceId } from '../track-reference';
@@ -7,20 +8,6 @@ type VisualChanges<T> = {
   dropped: T[];
   added: T[];
 };
-
-function chunk<T>(input: Array<T>, size: number) {
-  return input.reduce((arr, item, idx) => {
-    return idx % size === 0 ? [...arr, [item]] : [...arr.slice(0, -1), [...arr.slice(-1)[0], item]];
-  }, [] as Array<Array<T>>);
-}
-
-function zip<T, U>(a1: Array<T>, a2: Array<U>) {
-  return a1.map((value, idx) => [value, a2[idx]]);
-}
-
-function differenceBy<T>(a1: Array<T>, a2: Array<T>, by: (arg: T) => string) {
-  return a1.filter((c) => !a2.map((v) => by(v)).includes(by(c)));
-}
 
 export type UpdatableItem = TrackReferenceOrPlaceholder | number;
 

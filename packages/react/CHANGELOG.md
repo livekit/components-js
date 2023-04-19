@@ -1,5 +1,13 @@
 # @livekit/components-react
 
+## 0.8.1
+
+### Patch Changes
+
+- Fix: avoid recursive pin dependency - [#458](https://github.com/livekit/components-js/pull/458) ([@lukasIO](https://github.com/lukasIO))
+
+- Display default username in PreJoin component - [#455](https://github.com/livekit/components-js/pull/455) ([@apurvbhavsar](https://github.com/apurvbhavsar))
+
 ## 0.8.0
 
 ### Minor Changes

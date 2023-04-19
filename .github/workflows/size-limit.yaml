@@ -14,6 +14,6 @@ jobs:
       - uses: andresz1/size-limit-action@v1.7.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          script: yarn workspace @livekit/components-react run size --json
+          script: yarn --cwd packages/react size --json
           package_manager: yarn
           build_script: build:react

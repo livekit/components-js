@@ -77,8 +77,8 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
     }
   }, [
     JSON.stringify(screenShareTracks.map((ref) => ref.publication.trackSid)),
-    layoutContext.pin,
     tracks.length,
+    focusTrack?.publication?.trackSid,
   ]);
 
   return (

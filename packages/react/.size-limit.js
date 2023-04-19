@@ -13,4 +13,11 @@ module.exports = [
     limit: '40 kB',
     ignore: ['livekit-client', 'react', 'react-dom', 'loglevel'],
   },
+  {
+    name: 'All exports',
+    path: 'dist/index.mjs',
+    import: '*',
+    limit: '100 kB',
+    ignore: ['livekit-client', 'react', 'react-dom', 'loglevel'],
+  },
 ];

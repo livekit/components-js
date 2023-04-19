@@ -1,16 +1,23 @@
 module.exports = [
   {
-    name: 'Room only',
+    name: 'LiveKitRoom only',
     path: 'dist/index.mjs',
     import: '{ LiveKitRoom }',
-    limit: '10 kB',
+    limit: '4 kB',
     ignore: ['livekit-client', 'react', 'react-dom', 'loglevel'],
   },
   {
-    name: 'Room with defaults',
+    name: 'LiveKitRoom with VideoConference',
     path: 'dist/index.mjs',
     import: '{ LiveKitRoom, VideoConference }',
-    limit: '50 kB',
-    ignore: ['livekit-client', 'react', 'react-dom'],
+    limit: '40 kB',
+    ignore: ['livekit-client', 'react', 'react-dom', 'loglevel'],
+  },
+  {
+    name: 'All exports',
+    path: 'dist/index.mjs',
+    import: '*',
+    limit: '100 kB',
+    ignore: ['livekit-client', 'react', 'react-dom', 'loglevel'],
   },
 ];

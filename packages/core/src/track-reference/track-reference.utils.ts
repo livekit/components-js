@@ -56,7 +56,6 @@ export function isTrackReferencePinned(
     return pinState.some(
       (pinnedTrackReference) =>
         pinnedTrackReference.participant.identity === trackReference.participant.identity &&
-        isTrackReferencePlaceholder(pinnedTrackReference) &&
         pinnedTrackReference.source === trackReference.source,
     );
   } else {

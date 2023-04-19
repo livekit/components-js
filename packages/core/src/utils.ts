@@ -1,6 +1,5 @@
-import type { Participant, Track, TrackPublication } from 'livekit-client';
+import type { Participant, TrackPublication } from 'livekit-client';
 import { LocalParticipant, RemoteParticipant } from 'livekit-client';
-import type { PinState } from './ui-layout';
 
 export function isLocal(p: Participant) {
   return p instanceof LocalParticipant;
@@ -24,24 +23,6 @@ export const attachIfSubscribed = (
     }
   }
 };
-
-/**
- * Check if the participant track source is pinned.
- */
-export function isParticipantSourcePinned(
-  participant: Participant,
-  source: Track.Source,
-  pinState: PinState | undefined,
-): boolean {
-  if (pinState === undefined) {
-    return false;
-  }
-
-  return pinState.some(
-    ({ source: pinnedSource, participant: pinnedParticipant }) =>
-      pinnedSource === source && pinnedParticipant.identity === participant.identity,
-  );
-}
 
 /**
  * Calculates the scrollbar width by creating two HTML elements

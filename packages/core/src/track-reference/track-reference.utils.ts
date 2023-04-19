@@ -49,6 +49,7 @@ export function isTrackReferencePinned(
     return pinState.some(
       (pinnedTrackReference) =>
         pinnedTrackReference.participant.identity === trackReference.participant.identity &&
+        isTrackReference(pinnedTrackReference) &&
         pinnedTrackReference.publication.trackSid === trackReference.publication.trackSid,
     );
   } else if (isTrackReferencePlaceholder(trackReference)) {

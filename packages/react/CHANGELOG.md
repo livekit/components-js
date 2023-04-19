@@ -1,5 +1,18 @@
 # @livekit/components-react
 
+## 0.8.0
+
+### Minor Changes
+
+- Make layout component children required - [#447](https://github.com/livekit/components-js/pull/447) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- fix: remove pin when screen share ended - [#440](https://github.com/livekit/components-js/pull/440) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`f61f2b2`](https://github.com/livekit/components-js/commit/f61f2b2e5f709335c59c58010a3debb761be0ca9)]:
+  - @livekit/components-core@0.6.4
+
 ## 0.7.3
 
 ### Patch Changes

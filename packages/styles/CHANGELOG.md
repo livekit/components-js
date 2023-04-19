@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 0.3.2
+
+### Patch Changes
+
+- Fix cut of speaking indicator on ParticipantTile. - [#434](https://github.com/livekit/components-js/pull/434) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.3.1
 
 ### Patch Changes

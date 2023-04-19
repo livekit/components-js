@@ -1,7 +1,7 @@
 module.exports = [
   {
     path: 'dist/index.mjs',
-    import: '{ roomEventSelector }',
+    import: '*',
     ignore: [],
     limit: '13 kB',
   },

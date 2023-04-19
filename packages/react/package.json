@@ -41,7 +41,7 @@
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
     "test": "vitest --run",
     "test:watch": "vitest",
-    "size": "size-limit"
+    "size": "size-limit --json"
   },
   "typings": "dist/index.d.ts",
   "dependencies": {

@@ -1,7 +1,7 @@
 import { TrackIdentifier, isTrackReference } from '@livekit/components-core';
 import { setupMediaTrack, log, isLocal, getTrackByIdentifier } from '@livekit/components-core';
 import { Track } from 'livekit-client';
-import React from 'react';
+import * as React from 'react';
 import { mergeProps } from '../utils';
 
 export interface UseMediaTrackOptions {

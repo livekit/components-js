@@ -20,7 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import ipRegex from 'ip-regex';
 import { TLDs } from 'global-tld-list';
 interface RegExOptions {
   /**
@@ -44,7 +43,10 @@ export const createUrlRegExp = (options: RegExOptions) => {
 
   const protocol = `(?:(?:[a-z]+:)?//)${options.strict ? '' : '?'}`;
   const auth = '(?:\\S+(?::\\S*)?@)?';
-  const ip = ipRegex.v4().source;
+  const ip = new RegExp(
+    '(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}',
+    'g',
+  ).source;
   const host = '(?:(?:[a-z\\u00a1-\\uffff0-9][-_]*)*[a-z\\u00a1-\\uffff0-9]+)';
   const domain = '(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*';
   const tld = `(?:\\.${

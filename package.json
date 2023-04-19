@@ -21,7 +21,7 @@
     "start:next": "turbo run start --filter=@livekit/component-example-next...",
     "test": "turbo run test",
     "tooling:update-readme-nav": "node tooling/readme-manager/update-nav-in-readmes.js",
-    "size-limit:react": "cd ./packages/react && yarn size --json && cd .."
+    "size-limit:react": "cd ./packages/react && yarn size --json && cd ../.."
   },
   "workspaces": [
     "packages/*",

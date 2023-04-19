@@ -6,17 +6,26 @@
   gap: 0.375rem;
   overflow: hidden;
   border-radius: var(--border-radius);
-  transition-property: box-shadow;
-  transition-timing-function: ease-in-out;
-  // When participant stops talking the transition longer and starts with a delay.
-  transition-delay: 0.5s;
-  transition-duration: 0.8s;
-  box-shadow: 0px 0px 0px 0 transparent;
-  &[data-speaking='true']:not([data-source='screen_share']) {
-    // When participant starts talking the transition short and without delay.
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: var(--border-radius);
+    border: 0px solid var(--accent-bg);
+    // When the participant stops speaking, the fade away transition is longer and starts with a delay.
+    transition-property: border opacity;
+    transition-delay: 0.5s;
+    transition-duration: 0.4s;
+    pointer-events: none;
+  }
+  &[data-speaking='true']:not([data-source='screen_share'])::after {
+    // When the participant begins speaking, the transition is short and without a delay.
     transition-delay: 0s;
-    transition-duration: 0.3s;
-    box-shadow: 0px 0px 0px var(--speaking-indicator-width) var(--lk-accent-bg);
+    transition-duration: 0.2s;
+    border-width: var(--speaking-indicator-width);
   }
 
   .focus-toggle-button {

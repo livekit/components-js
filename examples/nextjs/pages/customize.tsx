@@ -1,6 +1,5 @@
 import {
   LiveKitRoom,
-  ScreenShareView,
   ParticipantName,
   TrackMutedIndicator,
   RoomAudioRenderer,

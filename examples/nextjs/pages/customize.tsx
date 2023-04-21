@@ -71,12 +71,14 @@ const CustomizeExample: NextPage = () => {
 };
 
 export function Stage() {
-  const cameraTracks = useTracks([Track.Source.Camera]);
+  const tracks = useTracks([
+    { source: Track.Source.Camera, withPlaceholder: true },
+    { source: Track.Source.ScreenShare, withPlaceholder: false },
+  ]);
   return (
     <>
-      <ScreenShareView />
       <div className={styles.participantGrid}>
-        <GridLayout tracks={cameraTracks}>
+        <GridLayout tracks={tracks}>
           <TrackContext.Consumer>
             {(track) =>
               track && (
@@ -85,7 +87,7 @@ export function Stage() {
                   <div className={myStyles['participant-indicators']}>
                     <div style={{ display: 'flex' }}>
                       <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
-                      <TrackMutedIndicator source={Track.Source.Camera}></TrackMutedIndicator>
+                      <TrackMutedIndicator source={track.source}></TrackMutedIndicator>
                     </div>
                     {/* Overwrite styles: By passing class names, we can easily overwrite/extend the existing styles. */}
                     {/* In addition, we can still specify a style attribute and further customize the styles. */}

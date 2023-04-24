@@ -141,7 +141,9 @@ export const ParticipantTile = ({
       <ParticipantContextIfNeeded participant={p}>
         {children ?? (
           <>
-            {source === Track.Source.Camera || source === Track.Source.ScreenShare ? (
+            {publication?.kind === 'video' ||
+            source === Track.Source.Camera ||
+            source === Track.Source.ScreenShare ? (
               <VideoTrack
                 participant={p}
                 source={source}

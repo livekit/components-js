@@ -4,7 +4,6 @@ import { Track } from 'livekit-client';
 import type { ParticipantClickEvent, TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { isParticipantSourcePinned, setupParticipantTile } from '@livekit/components-core';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
-import { MediaTrack } from './MediaTrack';
 import { ParticipantName } from './ParticipantName';
 import { TrackMutedIndicator } from './TrackMutedIndicator';
 import {
@@ -18,6 +17,8 @@ import { mergeProps } from '../../utils';
 import { FocusToggle } from '../controls/FocusToggle';
 import { ParticipantPlaceholder } from '../../assets/images';
 import { ScreenShareIcon } from '../../assets/icons';
+import { VideoTrack } from './VideoTrack';
+import { AudioTrack } from './AudioTrack';
 
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   disableSpeakingIndicator?: boolean;
@@ -140,13 +141,23 @@ export const ParticipantTile = ({
       <ParticipantContextIfNeeded participant={p}>
         {children ?? (
           <>
-            {/** TODO remove MediaTrack in favor of the equivalent Audio/Video Track. need to figure out how to differentiate here */}
-            <MediaTrack
-              source={source}
-              publication={publication}
-              participant={participant}
-              onSubscriptionStatusChanged={handleSubscribe}
-            />
+            {publication?.kind === 'video' ||
+            source === Track.Source.Camera ||
+            source === Track.Source.ScreenShare ? (
+              <VideoTrack
+                participant={p}
+                source={source}
+                publication={publication}
+                onSubscriptionStatusChanged={handleSubscribe}
+              />
+            ) : (
+              <AudioTrack
+                participant={p}
+                source={source}
+                publication={publication}
+                onSubscriptionStatusChanged={handleSubscribe}
+              />
+            )}
             <div className="lk-participant-placeholder">
               <ParticipantPlaceholder />
             </div>

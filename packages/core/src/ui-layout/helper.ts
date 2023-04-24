@@ -14,7 +14,7 @@ export function isParticipantSourcePinned(
   }
 
   return pinState.some(
-    ({ publication: pinnedTrack, participant: pinnedParticipant }) =>
-      pinnedTrack.source === source && pinnedParticipant.identity === participant.identity,
+    ({ source: pinnedSource, participant: pinnedParticipant }) =>
+      pinnedSource === source && pinnedParticipant.identity === participant.identity,
   );
 }

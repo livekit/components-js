@@ -1,5 +1,14 @@
 # @livekit/component-example-next
 
+## 0.1.26
+
+### Patch Changes
+
+- Remove deprecated components `MediaTrack` and `ScreenShareRenderer` - [#465](https://github.com/livekit/components-js/pull/465) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`40d4048`](https://github.com/livekit/components-js/commit/40d404896191a1c2d93405058e80e14967671c6e), [`0bbacce`](https://github.com/livekit/components-js/commit/0bbaccea5e964f3d38925a49223b914a3e2076fe), [`f1d3fed`](https://github.com/livekit/components-js/commit/f1d3fed7ea1866a0b7cf497906113d5653e04898)]:
+  - @livekit/components-react@0.8.2
+
 ## 0.1.25
 
 ### Patch Changes

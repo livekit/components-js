@@ -55,6 +55,7 @@
     "react-dom": ">=18"
   },
   "devDependencies": {
+    "@microsoft/api-extractor": "^7.34.4",
     "@size-limit/file": "^8.2.4",
     "@size-limit/webpack": "^8.2.4",
     "@svgr/cli": "^7.0.0",

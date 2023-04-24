@@ -1,5 +1,5 @@
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
-import React from 'react';
+import * as React from 'react';
 import type { LayoutContextType } from '../context';
 import { useEnsureLayoutContext } from '../context';
 

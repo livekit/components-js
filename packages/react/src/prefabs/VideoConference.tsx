@@ -62,15 +62,15 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
     if (screenShareTracks.length > 0 && pinnedTrack === undefined) {
       layoutContext.dispatch?.({ msg: 'pin.set', trackReference: screenShareTracks[0] });
     } else if (
-      (screenShareTracks.length === 0 && pinnedTrack?.source === Track.Source.ScreenShare) ||
+      (screenShareTracks.length === 0 && focusTrack?.source === Track.Source.ScreenShare) ||
       tracks.length <= 1
     ) {
       layoutContext.dispatch?.({ msg: 'pin.clear' });
     }
   }, [
     JSON.stringify(screenShareTracks.map((ref) => ref.publication.trackSid)),
-    layoutContext.state?.pin,
     tracks.length,
+    focusTrack?.publication?.trackSid,
   ]);
 
   return (

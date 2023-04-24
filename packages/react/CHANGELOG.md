@@ -1,5 +1,18 @@
 # @livekit/components-react
 
+## 0.8.2
+
+### Patch Changes
+
+- Remove deprecated components `MediaTrack` and `ScreenShareRenderer` - [#465](https://github.com/livekit/components-js/pull/465) ([@Ocupe](https://github.com/Ocupe))
+
+- Fix sourcemaps by not invoking rollup in tsup build - [#464](https://github.com/livekit/components-js/pull/464) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix some imports - [#461](https://github.com/livekit/components-js/pull/461) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`0bbacce`](https://github.com/livekit/components-js/commit/0bbaccea5e964f3d38925a49223b914a3e2076fe)]:
+  - @livekit/components-core@0.6.5
+
 ## 0.8.1
 
 ### Patch Changes

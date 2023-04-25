@@ -91,25 +91,6 @@ export interface CarouselViewProps extends React_2.HTMLAttributes<HTMLMediaEleme
 // @public
 export function Chat({ messageFormatter, ...props }: ChatProps): JSX.Element;
 
-// Warning: (ae-internal-missing-underscore) The name "ChatContextAction" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export type ChatContextAction = {
-    msg: 'show_chat';
-} | {
-    msg: 'hide_chat';
-} | {
-    msg: 'toggle_chat';
-};
-
-// Warning: (ae-internal-missing-underscore) The name "ChatContextType" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export type ChatContextType = {
-    dispatch?: React_2.Dispatch<ChatContextAction>;
-    state?: WidgetState;
-};
-
 // @public
 export function ChatEntry({ entry, hideName, hideTimestamp, messageFormatter, ...props }: ChatEntryProps): JSX.Element;
 
@@ -128,11 +109,6 @@ export interface ChatProps extends React_2.HTMLAttributes<HTMLDivElement> {
     // (undocumented)
     messageFormatter?: MessageFormatter;
 }
-
-// Warning: (ae-internal-missing-underscore) The name "chatReducer" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export function chatReducer(state: WidgetState, action: ChatContextAction): WidgetState;
 
 // @public
 export function ChatToggle(props: ChatToggleProps): JSX.Element;
@@ -247,13 +223,6 @@ export interface GridLayoutProps extends React_2.HTMLAttributes<HTMLDivElement>,
     // (undocumented)
     tracks: TrackReferenceOrPlaceholder[];
 }
-
-// Warning: (ae-incompatible-release-tags) The symbol "isChatContextAction" is marked as @public, but its signature references "ChatContextAction" which is marked as @internal
-//
-// @public (undocumented)
-export function isChatContextAction(action: {
-    msg: string;
-}): action is ChatContextAction;
 
 // @public (undocumented)
 export function isPinContextAction(action: {
@@ -1381,8 +1350,8 @@ export type VideoTrackProps = React_2.HTMLAttributes<HTMLVideoElement> & {
 // Warnings were encountered during analysis:
 //
 // src/components/controls/ClearPinButton.tsx:10:61 - (ae-forgotten-export) The symbol "LKComponentAttributes" needs to be exported by the entry point index.d.ts
-// src/context/layout-context.ts:8:3 - (ae-incompatible-release-tags) The symbol "pin" is marked as @public, but its signature references "PinContextType" which is marked as @internal
-// src/context/layout-context.ts:9:3 - (ae-incompatible-release-tags) The symbol "widget" is marked as @public, but its signature references "ChatContextType" which is marked as @internal
+// src/context/layout-context.ts:10:3 - (ae-incompatible-release-tags) The symbol "pin" is marked as @public, but its signature references "PinContextType" which is marked as @internal
+// src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "ChatContextType" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

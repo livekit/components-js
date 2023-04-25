@@ -7,14 +7,6 @@ export type ChatContextAction =
   | { msg: 'hide_chat' }
   | { msg: 'toggle_chat' };
 
-/** @public */
-export function isChatContextAction(action: { msg: string }): action is ChatContextAction {
-  return (
-    (action as ChatContextAction).msg === 'show_chat' ||
-    (action as ChatContextAction).msg === 'hide_chat'
-  );
-}
-
 /** @internal */
 export type ChatContextType = {
   dispatch?: React.Dispatch<ChatContextAction>;

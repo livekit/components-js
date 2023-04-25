@@ -1,7 +1,9 @@
 import { PIN_DEFAULT_STATE, WIDGET_DEFAULT_STATE } from '@livekit/components-core';
 import * as React from 'react';
-import type { ChatContextType, PinContextType } from './index';
-import { chatReducer, pinReducer } from './index';
+import type { PinContextType } from './pin-context';
+import type { ChatContextType } from './chat-context';
+import { chatReducer } from './chat-context';
+import { pinReducer } from './pin-context';
 
 /** @public */
 export type LayoutContextType = {

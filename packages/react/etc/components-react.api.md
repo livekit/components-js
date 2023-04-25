@@ -91,7 +91,9 @@ export interface CarouselViewProps extends React_2.HTMLAttributes<HTMLMediaEleme
 // @public
 export function Chat({ messageFormatter, ...props }: ChatProps): JSX.Element;
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "ChatContextAction" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export type ChatContextAction = {
     msg: 'show_chat';
 } | {
@@ -246,6 +248,8 @@ export interface GridLayoutProps extends React_2.HTMLAttributes<HTMLDivElement>,
     tracks: TrackReferenceOrPlaceholder[];
 }
 
+// Warning: (ae-incompatible-release-tags) The symbol "isChatContextAction" is marked as @public, but its signature references "ChatContextAction" which is marked as @internal
+//
 // @public (undocumented)
 export function isChatContextAction(action: {
     msg: string;
@@ -262,7 +266,7 @@ export const LayoutContext: React_2.Context<LayoutContextType | undefined>;
 // @alpha (undocumented)
 export function LayoutContextProvider({ value, onPinChange, onWidgetChange, children, }: React_2.PropsWithChildren<LayoutContextProviderProps>): JSX.Element;
 
-// @public (undocumented)
+// @alpha (undocumented)
 export type LayoutContextProviderProps = {
     value?: LayoutContextType;
     onPinChange?: (state: PinState) => void;
@@ -636,9 +640,7 @@ export interface UseMediaTrackOptions {
     props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
 }
 
-// Warning: (ae-internal-missing-underscore) The name "usePagination" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal
+// @alpha
 export function usePagination(itemPerPage: number, trackReferences: TrackReferenceOrPlaceholder[]): {
     totalPageCount: number;
     nextPage: () => void;
@@ -983,6 +985,16 @@ export interface UseRemoteParticipantsOptions {
     updateOnlyOn?: RoomEvent[];
 }
 
+// @public (undocumented)
+export interface UserInfo {
+    // (undocumented)
+    identity?: string;
+    // (undocumented)
+    metadata?: string;
+    // (undocumented)
+    name?: string;
+}
+
 // @public
 export function useRoomContext(): Room;
 
@@ -1004,19 +1016,21 @@ export function useSortedParticipants(participants: Array<Participant>): Partici
 // @public
 export const useSpeakingParticipants: () => Participant[];
 
-// Warning: (ae-forgotten-export) The symbol "UseSwipeOptions" needs to be exported by the entry point index.d.ts
-// Warning: (ae-internal-missing-underscore) The name "useSwipe" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal
+// @alpha
 export function useSwipe(element: React_2.RefObject<HTMLElement>, options?: UseSwipeOptions): void;
+
+// @alpha (undocumented)
+export type UseSwipeOptions = {
+    minSwipeDistance?: number;
+    onLeftSwipe?: () => void;
+    onRightSwipe?: () => void;
+};
 
 // @public (undocumented)
 export function useToken(tokenEndpoint: string | undefined, roomName: string, options?: UseTokenOptions): string | undefined;
 
 // @public (undocumented)
 export interface UseTokenOptions {
-    // Warning: (ae-forgotten-export) The symbol "UserInfo" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     userInfo?: UserInfo;
 }
@@ -1024,13 +1038,17 @@ export interface UseTokenOptions {
 // @public
 export function useTrackContext(): TrackReferenceOrPlaceholder;
 
-// Warning: (ae-forgotten-export) The symbol "UseTrackMutedIndicatorOptions" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export const useTrackMutedIndicator: (source: Track.Source, options?: UseTrackMutedIndicatorOptions) => {
     isMuted: boolean;
     className: string;
 };
+
+// @public (undocumented)
+export interface UseTrackMutedIndicatorOptions {
+    // (undocumented)
+    participant?: Participant;
+}
 
 // @public
 export function useTracks<T extends SourcesArray = Track.Source[]>(sources?: T, options?: UseTracksOptions): UseTracksHookReturnType<T>;

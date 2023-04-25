@@ -4,6 +4,7 @@ import * as React from 'react';
 import type { LayoutContextType } from '../../context';
 import { LayoutContext, useEnsureCreateLayoutContext } from '../../context';
 
+/** @alpha */
 export type LayoutContextProviderProps = {
   value?: LayoutContextType;
   onPinChange?: (state: PinState) => void;

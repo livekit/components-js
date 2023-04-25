@@ -16,8 +16,8 @@ export { useRemoteParticipant, UseRemoteParticipantOptions } from './useRemotePa
 export { useRemoteParticipants, UseRemoteParticipantsOptions } from './useRemoteParticipants';
 export { useSortedParticipants } from './useSortedParticipants';
 export { useSpeakingParticipants } from './useSpeakingParticipants';
-export { useToken, UseTokenOptions } from './useToken';
+export { useToken, UseTokenOptions, UserInfo } from './useToken';
 export { useTracks, UseTracksOptions, UseTracksHookReturnType } from './useTracks';
 export { useVisualStableUpdate, UseVisualStableUpdateOptions } from './useVisualStableUpdate';
 export { usePinnedTracks } from './usePinnedTracks';
-export { useSwipe } from './useSwipe';
+export { useSwipe, UseSwipeOptions } from './useSwipe';

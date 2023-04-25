@@ -13,7 +13,8 @@ export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivEl
   show?: 'always' | 'muted' | 'unmuted';
 }
 
-interface UseTrackMutedIndicatorOptions {
+/** @public */
+export interface UseTrackMutedIndicatorOptions {
   participant?: Participant;
 }
 

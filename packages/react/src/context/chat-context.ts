@@ -1,7 +1,7 @@
 import type { WidgetState } from '@livekit/components-core';
 import type * as React from 'react';
 
-/** @public */
+/** @internal */
 export type ChatContextAction =
   | { msg: 'show_chat' }
   | { msg: 'hide_chat' }

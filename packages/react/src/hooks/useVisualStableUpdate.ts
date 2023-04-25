@@ -2,6 +2,7 @@ import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { log, sortTrackReferences, updatePages } from '@livekit/components-core';
 import * as React from 'react';
 
+/** @public */
 export interface UseVisualStableUpdateOptions {
   /** Overwrites the default sort function. */
   customSortFunction?: (

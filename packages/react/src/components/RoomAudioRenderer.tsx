@@ -14,6 +14,7 @@ import { AudioTrack } from './participant/AudioTrack';
  *   <RoomAudioRenderer />
  * </LiveKitRoom>
  * ```
+ * @public
  */
 export const RoomAudioRenderer = () => {
   const tracks = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio], {

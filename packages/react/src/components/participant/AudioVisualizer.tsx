@@ -3,10 +3,12 @@ import { createAudioAnalyser, LocalAudioTrack, RemoteAudioTrack, Track } from 'l
 import * as React from 'react';
 import { useMediaTrack } from '../../hooks';
 
+/** @public */
 export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
   participant?: Participant;
 }
 
+/** @public */
 export function AudioVisualizer({ participant, ...props }: AudioVisualizerProps) {
   const [volumeBars, setVolumeBars] = React.useState<Array<number>>([]);
 

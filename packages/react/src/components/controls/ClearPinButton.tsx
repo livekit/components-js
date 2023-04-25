@@ -3,8 +3,10 @@ import * as React from 'react';
 import { mergeProps } from '../../utils';
 import { useLayoutContext } from '../../context';
 
+/** @public */
 export type ClearPinButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
+/** @public */
 export function useClearPinButton(props: ClearPinButtonProps) {
   const { state, dispatch } = useLayoutContext().pin;
 
@@ -36,6 +38,7 @@ export function useClearPinButton(props: ClearPinButtonProps) {
  *   <ClearPinButton>Leave room</ClearPinButton>
  * </LiveKitRoom>
  * ```
+ * @public
  */
 export function ClearPinButton(props: ClearPinButtonProps) {
   const { buttonProps } = useClearPinButton(props);

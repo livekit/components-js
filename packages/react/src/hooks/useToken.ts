@@ -6,10 +6,14 @@ interface UserInfo {
   metadata?: string;
 }
 
+/** @public */
 export interface UseTokenOptions {
   userInfo?: UserInfo;
 }
 
+/**
+ * @public
+ */
 export function useToken(
   tokenEndpoint: string | undefined,
   roomName: string,

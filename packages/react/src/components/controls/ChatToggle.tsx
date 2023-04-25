@@ -35,6 +35,7 @@ type ChatToggleProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
  *   <ToggleChat />
  * </LiveKitRoom>
  * ```
+ * @public
  */
 export function ChatToggle(props: ChatToggleProps) {
   const { mergedProps } = useToggleChat({ props });

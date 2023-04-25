@@ -18,6 +18,6 @@ export { useSortedParticipants } from './useSortedParticipants';
 export { useSpeakingParticipants } from './useSpeakingParticipants';
 export { useToken, UseTokenOptions } from './useToken';
 export { useTracks } from './useTracks';
-export { useVisualStableUpdate } from './useVisualStableUpdate';
+export { useVisualStableUpdate, UseVisualStableUpdateOptions } from './useVisualStableUpdate';
 export { usePinnedTracks } from './usePinnedTracks';
 export { useSwipe } from './useSwipe';

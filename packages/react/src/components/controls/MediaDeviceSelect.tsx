@@ -5,17 +5,20 @@ import { mergeProps } from '../../utils';
 import type { Room } from 'livekit-client';
 import { useObservableState } from '../../hooks/internal/useObservableState';
 
+/** @public */
 export function useMediaDevices({ kind }: { kind: MediaDeviceKind }) {
   const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
   const devices = useObservableState(deviceObserver, []);
   return devices;
 }
 
+/** @public */
 export interface UseMediaDeviceSelectProps {
   kind: MediaDeviceKind;
   room?: Room;
 }
 
+/** @public */
 export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps) {
   const roomContext = useMaybeRoomContext();
   // List of all devices.
@@ -40,6 +43,7 @@ export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps) 
   return { devices, className, activeDeviceId: currentDeviceId, setActiveMediaDevice };
 }
 
+/** @public */
 export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListElement> {
   kind: MediaDeviceKind;
   onActiveDeviceChange?: (deviceId: string) => void;
@@ -57,6 +61,7 @@ export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListEl
  *   <MediaDeviceSelect kind='audioinput' />
  * </LiveKitRoom>
  * ```
+ * @public
  */
 export function MediaDeviceSelect({
   kind,

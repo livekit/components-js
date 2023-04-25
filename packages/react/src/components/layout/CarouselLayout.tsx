@@ -11,6 +11,7 @@ const MIN_VISIBLE_TILES = 1;
 const ASPECT_RATIO = 16 / 10;
 const ASPECT_RATIO_INVERT = (1 - ASPECT_RATIO) * -1;
 
+/** @public */
 export interface CarouselLayoutProps extends React.HTMLAttributes<HTMLMediaElement> {
   tracks: TrackReferenceOrPlaceholder[];
   children: React.ReactNode;
@@ -37,6 +38,7 @@ export const CarouselView = CarouselLayout;
  *   <ParticipantTile />
  * </CarouselLayout>
  * ```
+ * @public
  */
 export function CarouselLayout({ tracks, orientation, ...props }: CarouselLayoutProps) {
   const asideEl = React.useRef<HTMLDivElement>(null);

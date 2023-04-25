@@ -75,6 +75,7 @@ interface FocusToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
  *   <FocusToggle />
  * </ParticipantTile>
  * ```
+ * @public
  */
 export function FocusToggle({ trackSource, participant, ...props }: FocusToggleProps) {
   const { mergedProps, inFocus } = useFocusToggle({ trackSource, participant, props });

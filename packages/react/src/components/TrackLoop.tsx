@@ -24,6 +24,7 @@ type TrackLoopProps = {
  *  </TrackContext.Consumer>
  * <TrackLoop />
  * ```
+ * @public
  */
 export const TrackLoop = ({ tracks, ...props }: TrackLoopProps) => {
   return (

@@ -10,6 +10,7 @@ type LayoutContextProviderProps = {
   onWidgetChange?: (state: WidgetState) => void;
 };
 
+/** @alpha */
 export function LayoutContextProvider({
   value,
   onPinChange,

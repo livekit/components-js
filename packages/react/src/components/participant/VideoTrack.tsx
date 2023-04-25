@@ -4,6 +4,7 @@ import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOr
 import type { ParticipantClickEvent } from '@livekit/components-core';
 import { useEnsureParticipant } from '../../context';
 
+/** @public */
 export type VideoTrackProps = React.HTMLAttributes<HTMLVideoElement> & {
   source: Track.Source;
   name?: string;
@@ -21,7 +22,8 @@ export type VideoTrackProps = React.HTMLAttributes<HTMLVideoElement> & {
  * ```tsx
  * <VideoTrack source={Track.Source.Camera} />
  * ```
- * @see `ParticipantTile`
+ * @see {@link @livekit/components-react#ParticipantTile | ParticipantTile}
+ * @public
  */
 export function VideoTrack({
   onTrackClick,

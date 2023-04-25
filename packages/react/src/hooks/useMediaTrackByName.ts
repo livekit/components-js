@@ -3,6 +3,7 @@ import { useEnsureParticipant } from '../context';
 import type { UseMediaTrackOptions } from './useMediaTrackBySourceOrName';
 import { useMediaTrackBySourceOrName } from './useMediaTrackBySourceOrName';
 
+/** @public */
 export function useMediaTrackByName(
   name: string,
   participant?: Participant,

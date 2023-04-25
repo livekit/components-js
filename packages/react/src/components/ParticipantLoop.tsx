@@ -25,6 +25,7 @@ type ParticipantLoopProps = {
  *   <ParticipantName />
  * <ParticipantLoop />
  * ```
+ * @public
  */
 export const ParticipantLoop = ({ participants, ...props }: ParticipantLoopProps) => {
   return (

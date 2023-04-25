@@ -5,6 +5,7 @@ import { useEnsureParticipant } from '../../context';
 import { useObservableState } from '../../hooks/internal/useObservableState';
 import { mergeProps } from '../../utils';
 
+/** @public */
 export function useParticipantInfo(props: UseParticipantInfoOptions = {}) {
   const p = useEnsureParticipant(props.participant);
   const infoObserver = React.useMemo(() => participantInfoObserver(p), [p]);
@@ -17,9 +18,12 @@ export function useParticipantInfo(props: UseParticipantInfoOptions = {}) {
   return { identity, name, metadata };
 }
 
+/** @public */
 export type UseParticipantInfoOptions = {
   participant?: Participant;
 };
+
+/** @public */
 export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement> &
   UseParticipantInfoOptions;
 
@@ -31,6 +35,7 @@ export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement> &
  * ```tsx
  * <ParticipantName />
  * ```
+ * @public
  */
 export function ParticipantName({ participant, ...props }: ParticipantNameProps) {
   const p = useEnsureParticipant(participant);

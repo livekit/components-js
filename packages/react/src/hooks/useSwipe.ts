@@ -16,8 +16,8 @@ type UseSwipeOptions = {
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
- * @internal
  * ```
+ * @internal
  */
 export function useSwipe(element: React.RefObject<HTMLElement>, options: UseSwipeOptions = {}) {
   const touchStart = React.useRef<number | null>(null);

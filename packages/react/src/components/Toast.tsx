@@ -5,15 +5,18 @@ import { SpinnerIcon } from '../assets/icons';
 import { mergeProps } from '../utils';
 import { useConnectionState } from './ConnectionState';
 
+/** @public */
 export function Toast(props: React.HTMLAttributes<HTMLDivElement>) {
   const htmlProps = React.useMemo(() => mergeProps(props, { className: 'lk-toast' }), [props]);
   return <div {...htmlProps}>{props.children}</div>;
 }
 
+/** @public */
 export interface ConnectionStateToastProps extends React.HTMLAttributes<HTMLDivElement> {
   room?: Room;
 }
 
+/** @public */
 export function ConnectionStateToast(props: ConnectionStateToastProps) {
   const [notification, setNotification] = React.useState<React.ReactElement | undefined>(undefined);
   const state = useConnectionState(props.room);

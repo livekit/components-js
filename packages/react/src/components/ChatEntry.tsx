@@ -2,11 +2,13 @@ import type { ReceivedChatMessage } from '@livekit/components-core';
 import { tokenize, createDefaultGrammar } from '@livekit/components-core';
 import * as React from 'react';
 
+/** @public */
 export type MessageFormatter = (message: string) => React.ReactNode;
 
 /**
  * ChatEntry composes the HTML div element under the hood, so you can pass all its props.
  * These are the props specific to the ChatEntry component:
+ * @public
  */
 export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
   /** The chat massage object to display. */
@@ -29,6 +31,7 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
  * </Chat>
  * ```
  * @see `Chat`
+ * @public
  */
 export function ChatEntry({
   entry,
@@ -69,6 +72,7 @@ export function ChatEntry({
   );
 }
 
+/** @public */
 export function formatChatMessageLinks(message: string): React.ReactNode {
   return tokenize(message, createDefaultGrammar()).map((tok, i) => {
     if (typeof tok === `string`) {

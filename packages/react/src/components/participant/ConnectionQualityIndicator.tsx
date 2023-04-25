@@ -7,13 +7,16 @@ import { mergeProps } from '../../utils';
 import { getConnectionQualityIcon } from '../../assets/icons/util';
 import { useObservableState } from '../../hooks/internal/useObservableState';
 
+/** @public */
 export interface ConnectionQualityIndicatorOptions {
   participant?: Participant;
 }
 
+/** @public */
 export type ConnectionQualityIndicatorProps = React.HTMLAttributes<HTMLDivElement> &
   ConnectionQualityIndicatorOptions;
 
+/** @public */
 export function useConnectionQualityIndicator(options: ConnectionQualityIndicatorOptions = {}) {
   const p = useEnsureParticipant(options.participant);
 
@@ -34,6 +37,7 @@ export function useConnectionQualityIndicator(options: ConnectionQualityIndicato
  * ```tsx
  * <ConnectionQualityIndicator />
  * ```
+ * @public
  */
 export function ConnectionQualityIndicator(props: ConnectionQualityIndicatorProps) {
   const { className, quality } = useConnectionQualityIndicator(props);

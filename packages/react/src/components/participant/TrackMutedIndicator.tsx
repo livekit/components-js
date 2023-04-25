@@ -6,6 +6,7 @@ import { useEnsureParticipant } from '../../context';
 import { getSourceIcon } from '../../assets/icons/util';
 import { useObservableState } from '../../hooks/internal/useObservableState';
 
+/** @public */
 export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   source: Track.Source;
   participant?: Participant;
@@ -16,6 +17,7 @@ interface UseTrackMutedIndicatorOptions {
   participant?: Participant;
 }
 
+/** @public */
 export const useTrackMutedIndicator = (
   source: Track.Source,
   options: UseTrackMutedIndicatorOptions = {},
@@ -39,6 +41,7 @@ export const useTrackMutedIndicator = (
  * <TrackMutedIndicator source={Track.Source.Camera} />
  * <TrackMutedIndicator source={Track.Source.Microphone} />
  * ```
+ * @public
  */
 export const TrackMutedIndicator = ({
   source,

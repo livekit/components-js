@@ -7,6 +7,7 @@ import { TrackLoop } from '../TrackLoop';
 import { PaginationControl } from '../controls/PaginationControl';
 import { PaginationIndicator } from '../controls/PaginationIndicator';
 
+/** @public */
 export interface GridLayoutProps
   extends React.HTMLAttributes<HTMLDivElement>,
     Pick<UseParticipantsOptions, 'updateOnlyOn'> {
@@ -25,6 +26,7 @@ export interface GridLayoutProps
  *   </GridLayout>
  * <LiveKitRoom>
  * ```
+ * @public
  */
 export function GridLayout({ tracks, ...props }: GridLayoutProps) {
   const gridEl = React.createRef<HTMLDivElement>();

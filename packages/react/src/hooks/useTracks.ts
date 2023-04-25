@@ -42,6 +42,7 @@ type UseTracksHookReturnType<T> = T extends Track.Source[]
  * // participants without a camera subscription.
  * const trackReferencesWithPlaceholders: TrackReferenceOrPlaceholder[] = useTracks([{source: Track.Source.Camera, withPlaceholder: true}])
  * ```
+ * @public
  */
 export function useTracks<T extends SourcesArray = Track.Source[]>(
   sources: T = [

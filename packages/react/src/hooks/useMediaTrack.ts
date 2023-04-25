@@ -4,6 +4,7 @@ import { useEnsureParticipant } from '../context/participant-context';
 import type { UseMediaTrackOptions } from './useMediaTrackBySourceOrName';
 import { useMediaTrackBySourceOrName } from './useMediaTrackBySourceOrName';
 
+/** @public */
 export function useMediaTrack(
   source: VideoSource | AudioSource,
   participant?: Participant,

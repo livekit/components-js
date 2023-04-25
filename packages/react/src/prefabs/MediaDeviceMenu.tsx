@@ -3,7 +3,8 @@ import * as React from 'react';
 import { MediaDeviceSelect } from '../components/controls/MediaDeviceSelect';
 import { log } from '@livekit/components-core';
 
-interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+/** @public */
+export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   kind?: MediaDeviceKind;
   initialSelection?: string;
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
@@ -22,6 +23,7 @@ interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElem
  *   <MediaDeviceMenu />
  * </LiveKitRoom>
  * ```
+ * @public
  */
 export const MediaDeviceMenu = ({
   kind,

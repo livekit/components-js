@@ -42,6 +42,12 @@ import type { VideoCaptureOptions } from 'livekit-client';
 import type { VideoSource } from '@livekit/components-core';
 import type { WidgetState } from '@livekit/components-core';
 
+// @public (undocumented)
+export interface AllowAudioPlaybackProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
+    // (undocumented)
+    label: string;
+}
+
 // @public
 export function AudioConference({ ...props }: AudioConferenceProps): JSX.Element;
 
@@ -94,7 +100,9 @@ export type ChatContextAction = {
     msg: 'toggle_chat';
 };
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "ChatContextType" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export type ChatContextType = {
     dispatch?: React_2.Dispatch<ChatContextAction>;
     state?: WidgetState;
@@ -119,7 +127,9 @@ export interface ChatProps extends React_2.HTMLAttributes<HTMLDivElement> {
     messageFormatter?: MessageFormatter;
 }
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "chatReducer" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export function chatReducer(state: WidgetState, action: ChatContextAction): WidgetState;
 
 // Warning: (ae-forgotten-export) The symbol "ChatToggleProps" needs to be exported by the entry point index.d.ts
@@ -164,6 +174,15 @@ export interface ConnectionStatusProps extends React_2.HTMLAttributes<HTMLDivEle
 
 // @public
 export function ControlBar({ variation, controls, ...props }: ControlBarProps): JSX.Element;
+
+// @public (undocumented)
+export type ControlBarControls = {
+    microphone?: boolean;
+    camera?: boolean;
+    chat?: boolean;
+    screenShare?: boolean;
+    leave?: boolean;
+};
 
 // @public (undocumented)
 export type ControlBarProps = React_2.HTMLAttributes<HTMLDivElement> & {
@@ -235,7 +254,7 @@ export const LayoutContext: React_2.Context<LayoutContextType | undefined>;
 
 // Warning: (ae-forgotten-export) The symbol "LayoutContextProviderProps" needs to be exported by the entry point index.d.ts
 //
-// @public (undocumented)
+// @alpha (undocumented)
 export function LayoutContextProvider({ value, onPinChange, onWidgetChange, children, }: React_2.PropsWithChildren<LayoutContextProviderProps>): JSX.Element;
 
 // @public (undocumented)
@@ -279,10 +298,18 @@ export type LocalUserChoices = {
     audioDeviceId: string;
 };
 
-// Warning: (ae-forgotten-export) The symbol "MediaDeviceMenuProps" needs to be exported by the entry point index.d.ts
-//
 // @public
 export const MediaDeviceMenu: ({ kind, initialSelection, onActiveDeviceChange, ...props }: MediaDeviceMenuProps) => JSX.Element;
+
+// @public (undocumented)
+export interface MediaDeviceMenuProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
+    // (undocumented)
+    initialSelection?: string;
+    // (undocumented)
+    kind?: MediaDeviceKind;
+    // (undocumented)
+    onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
+}
 
 // @public
 export function MediaDeviceSelect({ kind, initialSelection, onActiveDeviceChange, onDeviceListChange, ...props }: MediaDeviceSelectProps): JSX.Element;
@@ -344,13 +371,17 @@ export type PinAction = {
     msg: 'clear_pin';
 };
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "PinContextType" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export type PinContextType = {
     dispatch?: React_2.Dispatch<PinAction>;
     state?: PinState;
 };
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "pinReducer" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export function pinReducer(state: PinState, action: PinAction): PinState;
 
 // @public
@@ -386,8 +417,6 @@ export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
     childrenPosition?: 'before' | 'after';
 }
 
-// Warning: (ae-forgotten-export) The symbol "AllowAudioPlaybackProps" needs to be exported by the entry point index.d.ts
-//
 // @public
 export function StartAudio({ label, ...props }: AllowAudioPlaybackProps): JSX.Element;
 
@@ -947,8 +976,9 @@ export function useSortedParticipants(participants: Array<Participant>): Partici
 export const useSpeakingParticipants: () => Participant[];
 
 // Warning: (ae-forgotten-export) The symbol "UseSwipeOptions" needs to be exported by the entry point index.d.ts
+// Warning: (ae-internal-missing-underscore) The name "useSwipe" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @public
+// @internal
 export function useSwipe(element: React_2.RefObject<HTMLElement>, options?: UseSwipeOptions): void;
 
 // @public (undocumented)
@@ -1262,12 +1292,15 @@ export function useTrackToggle<T extends ToggleSource>({ source, onChange, initi
 
 // @public (undocumented)
 export type UseTrackToggleProps<T extends ToggleSource> = Omit<TrackToggleProps<T>, 'showIcon'>;
-
-// Warning: (ae-forgotten-export) The symbol "UseVisualStableUpdateOptions" needs to be exported by the entry point index.d.ts
-//
-// @public
+****
+// @beta
 export function useVisualStableUpdate(
 trackReferences: TrackReferenceOrPlaceholder[], maxItemsOnPage: number, options?: UseVisualStableUpdateOptions): TrackReferenceOrPlaceholder[];
+
+// @public (undocumented)
+export interface UseVisualStableUpdateOptions {
+    customSortFunction?: (trackReferences: TrackReferenceOrPlaceholder[]) => TrackReferenceOrPlaceholder[];
+}
 
 // @public
 export function VideoConference({ chatMessageFormatter, ...props }: VideoConferenceProps): JSX.Element;
@@ -1293,8 +1326,9 @@ export type VideoTrackProps = React_2.HTMLAttributes<HTMLVideoElement> & {
 
 // Warnings were encountered during analysis:
 //
-// src/components/controls/ClearPinButton.tsx:8:61 - (ae-forgotten-export) The symbol "LKComponentAttributes" needs to be exported by the entry point index.d.ts
-// src/prefabs/ControlBar.tsx:24:3 - (ae-forgotten-export) The symbol "ControlBarControls" needs to be exported by the entry point index.d.ts
+// src/components/controls/ClearPinButton.tsx:10:61 - (ae-forgotten-export) The symbol "LKComponentAttributes" needs to be exported by the entry point index.d.ts
+// src/context/layout-context.ts:8:3 - (ae-incompatible-release-tags) The symbol "pin" is marked as @public, but its signature references "PinContextType" which is marked as @internal
+// src/context/layout-context.ts:9:3 - (ae-incompatible-release-tags) The symbol "widget" is marked as @public, but its signature references "ChatContextType" which is marked as @internal
 
 // (No @packageDocumentation comment for this package)
 

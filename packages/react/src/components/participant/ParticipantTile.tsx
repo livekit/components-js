@@ -20,6 +20,7 @@ import { ScreenShareIcon } from '../../assets/icons';
 import { VideoTrack } from './VideoTrack';
 import { AudioTrack } from './AudioTrack';
 
+/** @public */
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   disableSpeakingIndicator?: boolean;
   participant?: Participant;
@@ -28,6 +29,7 @@ export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   onParticipantClick?: (event: ParticipantClickEvent) => void;
 };
 
+/** @public */
 export type UseParticipantTileProps<T extends React.HTMLAttributes<HTMLElement>> =
   TrackReferenceOrPlaceholder & {
     disableSpeakingIndicator?: boolean;
@@ -36,6 +38,7 @@ export type UseParticipantTileProps<T extends React.HTMLAttributes<HTMLElement>>
     htmlProps: T;
   };
 
+/** @public */
 export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>({
   participant,
   source,
@@ -73,6 +76,7 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
   };
 }
 
+/** @public */
 export function ParticipantContextIfNeeded(
   props: React.PropsWithChildren<{
     participant?: Participant;
@@ -98,6 +102,7 @@ export function ParticipantContextIfNeeded(
  *
  * <ParticipantTile {...trackReference} />
  * ```
+ * @public
  */
 export const ParticipantTile = ({
   participant,

@@ -41,7 +41,9 @@
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
     "test": "vitest --run",
     "test:watch": "vitest",
-    "size": "size-limit --json"
+    "size": "size-limit --json",
+    "api-check": "api-extractor run --typescript-compiler-folder ../../node_modules/typescript",
+    "api-check:update": "api-extractor run --local --typescript-compiler-folder ../../node_modules/typescript --verbose"
   },
   "typings": "dist/index.d.ts",
   "dependencies": {

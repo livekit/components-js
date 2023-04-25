@@ -1,13 +1,10 @@
-import { TrackIdentifier, isTrackReference } from '@livekit/components-core';
+import type { TrackIdentifier } from '@livekit/components-core';
+import { isTrackReference } from '@livekit/components-core';
 import { setupMediaTrack, log, isLocal, getTrackByIdentifier } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { mergeProps } from '../utils';
-
-export interface UseMediaTrackOptions {
-  element?: React.RefObject<HTMLMediaElement>;
-  props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
-}
+import type { UseMediaTrackOptions } from './useMediaTrack';
 
 /**
  * @internal

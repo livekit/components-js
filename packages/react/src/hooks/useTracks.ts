@@ -16,13 +16,15 @@ import { Track } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureRoom } from '../context';
 
-type UseTracksOptions = {
+/** @public */
+export type UseTracksOptions = {
   updateOnlyOn?: RoomEvent[];
   onlySubscribed?: boolean;
   room?: Room;
 };
 
-type UseTracksHookReturnType<T> = T extends Track.Source[]
+/** @public */
+export type UseTracksHookReturnType<T> = T extends Track.Source[]
   ? TrackReference[]
   : T extends TrackSourceWithOptions[]
   ? TrackReferenceOrPlaceholder[]

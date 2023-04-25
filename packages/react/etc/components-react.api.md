@@ -132,10 +132,11 @@ export interface ChatProps extends React_2.HTMLAttributes<HTMLDivElement> {
 // @internal (undocumented)
 export function chatReducer(state: WidgetState, action: ChatContextAction): WidgetState;
 
-// Warning: (ae-forgotten-export) The symbol "ChatToggleProps" needs to be exported by the entry point index.d.ts
-//
 // @public
 export function ChatToggle(props: ChatToggleProps): JSX.Element;
+
+// @public (undocumented)
+export type ChatToggleProps = React_2.ButtonHTMLAttributes<HTMLButtonElement>;
 
 // @public
 export function ClearPinButton(props: ClearPinButtonProps): JSX.Element;
@@ -220,10 +221,16 @@ export interface FocusLayoutProps extends React_2.HTMLAttributes<HTMLElement> {
     track?: TrackReferenceOrPlaceholder;
 }
 
-// Warning: (ae-forgotten-export) The symbol "FocusToggleProps" needs to be exported by the entry point index.d.ts
-//
 // @public
 export function FocusToggle({ trackSource, participant, ...props }: FocusToggleProps): JSX.Element;
+
+// @public (undocumented)
+export interface FocusToggleProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
+    // (undocumented)
+    participant?: Participant;
+    // (undocumented)
+    trackSource: Track.Source;
+}
 
 // @public (undocumented)
 export function formatChatMessageLinks(message: string): React_2.ReactNode;
@@ -252,10 +259,15 @@ export function isPinContextAction(action: {
 // @public (undocumented)
 export const LayoutContext: React_2.Context<LayoutContextType | undefined>;
 
-// Warning: (ae-forgotten-export) The symbol "LayoutContextProviderProps" needs to be exported by the entry point index.d.ts
-//
 // @alpha (undocumented)
 export function LayoutContextProvider({ value, onPinChange, onWidgetChange, children, }: React_2.PropsWithChildren<LayoutContextProviderProps>): JSX.Element;
+
+// @public (undocumented)
+export type LayoutContextProviderProps = {
+    value?: LayoutContextType;
+    onPinChange?: (state: PinState) => void;
+    onWidgetChange?: (state: WidgetState) => void;
+};
 
 // @public (undocumented)
 export type LayoutContextType = {
@@ -340,10 +352,14 @@ export function ParticipantContextIfNeeded(props: React_2.PropsWithChildren<{
     participant?: Participant;
 }>): JSX.Element;
 
-// Warning: (ae-forgotten-export) The symbol "ParticipantLoopProps" needs to be exported by the entry point index.d.ts
-//
 // @public
 export const ParticipantLoop: ({ participants, ...props }: ParticipantLoopProps) => JSX.Element;
+
+// @public (undocumented)
+export type ParticipantLoopProps = {
+    participants: Participant[];
+    children: React_2.ReactNode;
+};
 
 // @public
 export function ParticipantName({ participant, ...props }: ParticipantNameProps): JSX.Element;
@@ -426,10 +442,14 @@ export function Toast(props: React_2.HTMLAttributes<HTMLDivElement>): JSX.Elemen
 // @public (undocumented)
 export const TrackContext: React_2.Context<TrackReferenceOrPlaceholder | undefined>;
 
-// Warning: (ae-forgotten-export) The symbol "TrackLoopProps" needs to be exported by the entry point index.d.ts
-//
 // @public
 export const TrackLoop: ({ tracks, ...props }: TrackLoopProps) => JSX.Element;
+
+// @public (undocumented)
+export type TrackLoopProps = {
+    tracks: TrackReference[] | TrackReferenceOrPlaceholder[];
+    children: React_2.ReactNode;
+};
 
 // @public
 export const TrackMutedIndicator: ({ source, participant, show, ...props }: TrackMutedIndicatorProps) => JSX.Element | null;
@@ -539,8 +559,6 @@ export function useLiveKitRoom(props: LiveKitRoomProps): {
     htmlProps: LKComponentAttributes<HTMLElement>;
 };
 
-// Warning: (ae-forgotten-export) The symbol "UseLocalParticipantOptions" needs to be exported by the entry point index.d.ts
-//
 // @public
 export const useLocalParticipant: (options?: UseLocalParticipantOptions) => {
     isMicrophoneEnabled: boolean;
@@ -550,6 +568,11 @@ export const useLocalParticipant: (options?: UseLocalParticipantOptions) => {
     cameraTrack: TrackPublication | undefined;
     localParticipant: LocalParticipant;
 };
+
+// @public (undocumented)
+export interface UseLocalParticipantOptions {
+    room?: Room;
+}
 
 // @public (undocumented)
 export function useLocalParticipantPermissions(): ParticipantPermission | undefined;
@@ -587,8 +610,6 @@ export interface UseMediaDeviceSelectProps {
     room?: Room;
 }
 
-// Warning: (ae-forgotten-export) The symbol "UseMediaTrackOptions" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export function useMediaTrack(source: VideoSource | AudioSource, participant?: Participant, options?: UseMediaTrackOptions): {
     publication: TrackPublication | undefined;
@@ -606,6 +627,14 @@ export function useMediaTrackByName(name: string, participant?: Participant, opt
     track: Track | undefined;
     elementProps: LKComponentAttributes<HTMLElement>;
 };
+
+// @public (undocumented)
+export interface UseMediaTrackOptions {
+    // (undocumented)
+    element?: React.RefObject<HTMLMediaElement>;
+    // (undocumented)
+    props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
+}
 
 // Warning: (ae-internal-missing-underscore) The name "usePagination" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -1003,11 +1032,18 @@ export const useTrackMutedIndicator: (source: Track.Source, options?: UseTrackMu
     className: string;
 };
 
-// Warning: (ae-forgotten-export) The symbol "UseTracksOptions" needs to be exported by the entry point index.d.ts
-// Warning: (ae-forgotten-export) The symbol "UseTracksHookReturnType" needs to be exported by the entry point index.d.ts
-//
 // @public
 export function useTracks<T extends SourcesArray = Track.Source[]>(sources?: T, options?: UseTracksOptions): UseTracksHookReturnType<T>;
+
+// @public (undocumented)
+export type UseTracksHookReturnType<T> = T extends Track.Source[] ? TrackReference[] : T extends TrackSourceWithOptions[] ? TrackReferenceOrPlaceholder[] : never;
+
+// @public (undocumented)
+export type UseTracksOptions = {
+    updateOnlyOn?: RoomEvent[];
+    onlySubscribed?: boolean;
+    room?: Room;
+};
 
 // @public (undocumented)
 export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, ...rest }: UseTrackToggleProps<T>): {
@@ -1292,7 +1328,7 @@ export function useTrackToggle<T extends ToggleSource>({ source, onChange, initi
 
 // @public (undocumented)
 export type UseTrackToggleProps<T extends ToggleSource> = Omit<TrackToggleProps<T>, 'showIcon'>;
-****
+
 // @beta
 export function useVisualStableUpdate(
 trackReferences: TrackReferenceOrPlaceholder[], maxItemsOnPage: number, options?: UseVisualStableUpdateOptions): TrackReferenceOrPlaceholder[];

@@ -225,11 +225,6 @@ export interface GridLayoutProps extends React_2.HTMLAttributes<HTMLDivElement>,
 }
 
 // @public (undocumented)
-export function isPinContextAction(action: {
-    msg: string;
-}): action is PinAction;
-
-// @public (undocumented)
 export const LayoutContext: React_2.Context<LayoutContextType | undefined>;
 
 // @alpha (undocumented)
@@ -351,27 +346,6 @@ export type ParticipantTileProps = React_2.HTMLAttributes<HTMLDivElement> & {
     publication?: TrackPublication;
     onParticipantClick?: (event: ParticipantClickEvent) => void;
 };
-
-// @public (undocumented)
-export type PinAction = {
-    msg: 'set_pin';
-    trackReference: TrackReference;
-} | {
-    msg: 'clear_pin';
-};
-
-// Warning: (ae-internal-missing-underscore) The name "PinContextType" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export type PinContextType = {
-    dispatch?: React_2.Dispatch<PinAction>;
-    state?: PinState;
-};
-
-// Warning: (ae-internal-missing-underscore) The name "pinReducer" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal (undocumented)
-export function pinReducer(state: PinState, action: PinAction): PinState;
 
 // @public
 export const PreJoin: ({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, ...htmlProps }: PreJoinProps) => JSX.Element;
@@ -1350,7 +1324,7 @@ export type VideoTrackProps = React_2.HTMLAttributes<HTMLVideoElement> & {
 // Warnings were encountered during analysis:
 //
 // src/components/controls/ClearPinButton.tsx:10:61 - (ae-forgotten-export) The symbol "LKComponentAttributes" needs to be exported by the entry point index.d.ts
-// src/context/layout-context.ts:10:3 - (ae-incompatible-release-tags) The symbol "pin" is marked as @public, but its signature references "PinContextType" which is marked as @internal
+// src/context/layout-context.ts:10:3 - (ae-forgotten-export) The symbol "PinContextType" needs to be exported by the entry point index.d.ts
 // src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "ChatContextType" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)

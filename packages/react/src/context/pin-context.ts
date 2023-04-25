@@ -1,18 +1,13 @@
 import type { PinState, TrackReference } from '@livekit/components-core';
 import type * as React from 'react';
 
-/** @public */
+/** @internal */
 export type PinAction =
   | {
       msg: 'set_pin';
       trackReference: TrackReference;
     }
   | { msg: 'clear_pin' };
-
-/** @public */
-export function isPinContextAction(action: { msg: string }): action is PinAction {
-  return (action as PinAction).msg === 'set_pin' || (action as PinAction).msg === 'clear_pin';
-}
 
 /** @internal */
 export type PinContextType = {

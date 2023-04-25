@@ -14,6 +14,7 @@ import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import { DataSendOptions } from '@livekit/components-core';
 import type { GridLayout as GridLayout_2 } from '@livekit/components-core/dist/helper/grid-layouts';
+import { HTMLAttributes } from 'react';
 import { LocalParticipant } from 'livekit-client';
 import { LocalTrackPublication } from 'livekit-client';
 import { MediaDeviceFailure } from 'livekit-client';
@@ -432,7 +433,7 @@ export function useChat(): {
 
 // @public (undocumented)
 export function useClearPinButton(props: ClearPinButtonProps): {
-    buttonProps: LKComponentAttributes<HTMLElement>;
+    buttonProps: React_2.HTMLAttributes<HTMLElement>;
 };
 
 // @public (undocumented)
@@ -460,7 +461,7 @@ export function useDataChannel<T extends string>(topic?: T, onMessage?: (msg: Re
 
 // @public (undocumented)
 export function useDisconnectButton(props: DisconnectButtonProps): {
-    buttonProps: LKComponentAttributes<HTMLElement>;
+    buttonProps: React_2.HTMLAttributes<HTMLElement>;
 };
 
 // @public (undocumented)
@@ -503,7 +504,7 @@ export function useLayoutContext(): LayoutContextType;
 // @public (undocumented)
 export function useLiveKitRoom(props: LiveKitRoomProps): {
     room: Room | undefined;
-    htmlProps: LKComponentAttributes<HTMLElement>;
+    htmlProps: React_2.HTMLAttributes<HTMLElement>;
 };
 
 // @public
@@ -563,7 +564,7 @@ export function useMediaTrack(source: VideoSource | AudioSource, participant?: P
     isMuted: boolean | undefined;
     isSubscribed: boolean | undefined;
     track: Track | undefined;
-    elementProps: LKComponentAttributes<HTMLElement>;
+    elementProps: HTMLAttributes<HTMLElement>;
 };
 
 // @public (undocumented)
@@ -572,7 +573,7 @@ export function useMediaTrackByName(name: string, participant?: Participant, opt
     isMuted: boolean | undefined;
     isSubscribed: boolean | undefined;
     track: Track | undefined;
-    elementProps: LKComponentAttributes<HTMLElement>;
+    elementProps: HTMLAttributes<HTMLElement>;
 };
 
 // @public (undocumented)
@@ -785,7 +786,6 @@ export type VideoTrackProps = React_2.HTMLAttributes<HTMLVideoElement> & {
 
 // Warnings were encountered during analysis:
 //
-// src/components/controls/ClearPinButton.tsx:10:61 - (ae-forgotten-export) The symbol "LKComponentAttributes" needs to be exported by the entry point index.d.ts
 // src/context/layout-context.ts:10:3 - (ae-forgotten-export) The symbol "PinContextType" needs to be exported by the entry point index.d.ts
 // src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "ChatContextType" needs to be exported by the entry point index.d.ts
 

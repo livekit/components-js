@@ -1,5 +1,4 @@
-import type { Observable } from 'rxjs';
-import { concat, distinctUntilChanged, fromEvent, map, of, skipUntil, timeout } from 'rxjs';
+import { Observable, distinctUntilChanged, map } from 'obsrvbl';
 
 /**
  * Returns true if the user is interacting with the HTML element,
@@ -7,14 +6,14 @@ import { concat, distinctUntilChanged, fromEvent, map, of, skipUntil, timeout } 
  *
  * @internal
  */
-export function createInteractingObservable(htmlElement: HTMLElement | null, inactiveAfter = 1000) {
-  if (htmlElement === null) return of(false);
-  const move$ = fromEvent(htmlElement, 'mousemove').pipe(map(() => true));
+export function createInteractingObservable(htmlElement: HTMLElement | null) {
+  if (htmlElement === null) return Observable.of(false);
+  const move$ = Observable.fromEvent(htmlElement, 'mousemove').pipe(map(() => true));
   const moveAndStop$: Observable<boolean> = move$.pipe(
-    timeout({
-      each: inactiveAfter,
-      with: () => concat(of(false), moveAndStop$.pipe(skipUntil(move$))),
-    }),
+    // timeout({
+    //   each: inactiveAfter,
+    //   with: () => concat(of(false), moveAndStop$.pipe(skipUntil(move$))),
+    // }),
     distinctUntilChanged(),
   );
   return moveAndStop$;

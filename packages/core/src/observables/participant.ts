@@ -1,7 +1,7 @@
 import type { Participant, RemoteParticipant, Room, TrackPublication } from 'livekit-client';
 import { ParticipantEvent, RoomEvent, Track } from 'livekit-client';
-import type { Subscriber } from 'rxjs';
-import { map, switchMap, Observable, startWith } from 'rxjs';
+import type { SubscriptionObserver } from 'obsrvbl';
+import { map, Observable, startWith, switchMap } from 'obsrvbl';
 import { observeRoomEvents } from './room';
 import type { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 import { allParticipantEvents, allParticipantRoomEvents } from '../helper/eventGroups';
@@ -169,7 +169,7 @@ export function connectedParticipantsObserver(
   room: Room,
   options: ConnectedParticipantsObserverOptions = {},
 ) {
-  let subscriber: Subscriber<RemoteParticipant[]> | undefined;
+  let subscriber: SubscriptionObserver<RemoteParticipant[]> | undefined;
 
   const observable = new Observable<RemoteParticipant[]>((sub) => {
     subscriber = sub;
@@ -220,7 +220,6 @@ export function connectedParticipantObserver(
         return new Observable<undefined>((subscribe) => subscribe.next(undefined));
       }
     }),
-    startWith(room.getParticipantByIdentity(identity) as RemoteParticipant | undefined),
   );
 
   return observable;

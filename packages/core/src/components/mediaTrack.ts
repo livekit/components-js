@@ -1,5 +1,5 @@
 import { Track } from 'livekit-client';
-import { map, startWith } from 'rxjs';
+import { map, startWith } from 'obsrvbl';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 import { isTrackReference } from '../track-reference/track-reference.types';

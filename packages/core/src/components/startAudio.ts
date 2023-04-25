@@ -1,6 +1,6 @@
 import type { Room } from 'livekit-client';
 import { RoomEvent } from 'livekit-client';
-import { map } from 'rxjs';
+import { map } from 'obsrvbl';
 import log from '../logger';
 import { observeRoomEvents } from '../observables/room';
 import { prefixClass } from '../styles-interface';

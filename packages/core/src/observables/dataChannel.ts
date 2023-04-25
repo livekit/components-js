@@ -1,7 +1,7 @@
 import type { LocalParticipant, Participant, Room } from 'livekit-client';
 import { DataPacket_Kind } from 'livekit-client';
-import type { Subscriber } from 'rxjs';
-import { Observable, filter, map } from 'rxjs';
+import type { SubscriptionObserver } from 'obsrvbl';
+import { Observable } from 'obsrvbl';
 import { createDataObserver } from './room';
 
 export const DataTopic = {
@@ -44,9 +44,9 @@ export function setupDataMessageHandler<T extends string>(
   onMessage?: (msg: ReceivedDataMessage<T>) => void,
 ) {
   /** Setup a Observable that returns all data messages belonging to a topic. */
-  const messageObservable = createDataObserver(room).pipe(
-    filter(([, , , messageTopic]) => messageTopic === undefined || messageTopic === topic),
-    map(([payload, participant, , messageTopic]) => {
+  const messageObservable = createDataObserver(room)
+    .filter(([, , , messageTopic]) => messageTopic === undefined || messageTopic === topic)
+    .map(([payload, participant, , messageTopic]) => {
       const msg = {
         payload,
         topic: messageTopic as T,
@@ -54,10 +54,9 @@ export function setupDataMessageHandler<T extends string>(
       } satisfies ReceivedDataMessage<T>;
       onMessage?.(msg);
       return msg;
-    }),
-  );
+    });
 
-  let isSendingSubscriber: Subscriber<boolean>;
+  let isSendingSubscriber: SubscriptionObserver<boolean>;
   const isSendingObservable = new Observable<boolean>((subscriber) => {
     isSendingSubscriber = subscriber;
   });

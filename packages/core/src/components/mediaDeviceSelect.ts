@@ -1,16 +1,16 @@
 import type { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
 import { Track } from 'livekit-client';
-import { BehaviorSubject, map, mergeWith } from 'rxjs';
+import { Subject, merge, Observable } from 'obsrvbl';
 import log from '../logger';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 
 export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
-  const activeDeviceSubject = new BehaviorSubject<string | undefined>(undefined);
+  const activeDeviceSubject = new Subject<string | undefined>();
 
   const activeDeviceObservable = room
-    ? observeParticipantMedia(room.localParticipant).pipe(
-        map((participantMedia) => {
+    ? merge(
+        observeParticipantMedia(room.localParticipant).map((participantMedia) => {
           let localTrack: LocalAudioTrack | LocalVideoTrack | undefined;
           switch (kind) {
             case 'videoinput':
@@ -25,9 +25,9 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
           }
           return localTrack?.mediaStreamTrack.getSettings()?.deviceId;
         }),
-        mergeWith(activeDeviceSubject),
+        activeDeviceSubject,
       )
-    : activeDeviceSubject.asObservable();
+    : Observable.from(activeDeviceSubject);
 
   const setActiveMediaDevice = async (id: string) => {
     if (room) {

@@ -37,7 +37,7 @@
     "email-regex": "^5.0.0",
     "global-tld-list": "^0.0.1061",
     "loglevel": "^1.8.1",
-    "rxjs": "^7.8.0"
+    "obsrvbl": "^0.1.3"
   },
   "peerDependencies": {
     "livekit-client": "^1.7.0"

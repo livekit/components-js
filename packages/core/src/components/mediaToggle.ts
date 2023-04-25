@@ -6,8 +6,7 @@ import type {
   VideoCaptureOptions,
 } from 'livekit-client';
 import { Track } from 'livekit-client';
-import type { Observable } from 'rxjs';
-import { Subject, map, startWith } from 'rxjs';
+import { Observable, Subject, map, startWith } from 'obsrvbl';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 
@@ -102,7 +101,7 @@ export function setupMediaToggle<T extends ToggleSource>(
     className,
     toggle,
     enabledObserver,
-    pendingObserver: pendingSubject.asObservable(),
+    pendingObserver: Observable.from(pendingSubject),
   };
 }
 
@@ -123,7 +122,7 @@ export function setupManualToggle() {
   return {
     className,
     toggle,
-    enabledObserver: enabledSubject.asObservable(),
-    pendingObserver: pendingSubject.asObservable(),
+    enabledObserver: Observable.from(enabledSubject),
+    pendingObserver: Observable.from(pendingSubject),
   };
 }

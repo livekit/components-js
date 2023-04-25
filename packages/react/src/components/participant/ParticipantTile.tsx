@@ -30,16 +30,15 @@ export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
 };
 
 /** @public */
-export type UseParticipantTileProps<T extends React.HTMLAttributes<HTMLElement>> =
-  TrackReferenceOrPlaceholder & {
-    disableSpeakingIndicator?: boolean;
-    publication?: TrackPublication;
-    onParticipantClick?: (event: ParticipantClickEvent) => void;
-    htmlProps: T;
-  };
+export type UseParticipantTileProps<T extends HTMLElement> = TrackReferenceOrPlaceholder & {
+  disableSpeakingIndicator?: boolean;
+  publication?: TrackPublication;
+  onParticipantClick?: (event: ParticipantClickEvent) => void;
+  htmlProps: React.HTMLAttributes<T>;
+};
 
 /** @public */
-export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>({
+export function useParticipantTile<T extends HTMLElement>({
   participant,
   source,
   publication,
@@ -53,6 +52,7 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
     return mergeProps(htmlProps, {
       className,
       onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        // @ts-ignore
         htmlProps.onClick?.(event);
         if (typeof onParticipantClick === 'function') {
           const track = publication ?? p.getTrack(source);
@@ -72,7 +72,7 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
       'data-lk-local-participant': participant.isLocal,
       'data-lk-source': source,
       ...mergedProps,
-    },
+    } as React.HTMLAttributes<HTMLDivElement>,
   };
 }
 
@@ -115,7 +115,7 @@ export const ParticipantTile = ({
 }: ParticipantTileProps) => {
   const p = useEnsureParticipant(participant);
 
-  const { elementProps } = useParticipantTile({
+  const { elementProps } = useParticipantTile<HTMLDivElement>({
     participant: p,
     htmlProps,
     source,

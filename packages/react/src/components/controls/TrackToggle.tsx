@@ -75,7 +75,7 @@ export function useTrackToggle<T extends ToggleSource>({
       'data-lk-enabled': enabled,
       disabled: pending,
       onClick: clickHandler,
-    },
+    } as React.ButtonHTMLAttributes<HTMLButtonElement>,
   };
 }
 

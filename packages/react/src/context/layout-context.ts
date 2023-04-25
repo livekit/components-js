@@ -11,19 +11,6 @@ export type LayoutContextType = {
   widget: ChatContextType;
 };
 
-// export function layoutReducer(
-//   state: LayoutContextState,
-//   action: LayoutContextAction,
-// ): LayoutContextState {
-//   if (isChatContextAction(action)) {
-//     return { ...state, chat: chatReducer(state.chat, action) };
-//   } else if (isPinContextAction(action)) {
-//     return { ...state, pin: pinReducer(state.pin, action) };
-//   } else {
-//     return { ...state };
-//   }
-// }
-
 /** @public */
 export const LayoutContext = React.createContext<LayoutContextType | undefined>(undefined);
 

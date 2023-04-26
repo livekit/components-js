@@ -1,5 +1,13 @@
 # @livekit/components-styles
 
+## 1.0.0
+
+### Major Changes
+
+- Bump to 1.0 - [#444](https://github.com/livekit/components-js/pull/444) ([@lukasIO](https://github.com/lukasIO))
+
+  We adapted tsdoc release tags to signal stability of API methods following this [spec](https://api-extractor.com/pages/tsdoc/doc_comment_syntax/#release-tags)
+
 ## 0.3.2
 
 ### Patch Changes

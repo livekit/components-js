@@ -2,7 +2,8 @@ import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { log, sortTrackReferences, updatePages } from '@livekit/components-core';
 import * as React from 'react';
 
-interface UseVisualStableUpdateOptions {
+/** @public */
+export interface UseVisualStableUpdateOptions {
   /** Overwrites the default sort function. */
   customSortFunction?: (
     trackReferences: TrackReferenceOrPlaceholder[],
@@ -15,6 +16,8 @@ interface UseVisualStableUpdateOptions {
  *
  * Updating works with pagination. For example, if a participant starts speaking on the second page,
  * they will be moved to the first page by replacing the least active/interesting participant on the first page.
+ *
+ * @beta
  */
 export function useVisualStableUpdate(
   /** `TrackReference`s to display in the grid.  */

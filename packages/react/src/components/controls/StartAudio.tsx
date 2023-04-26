@@ -35,7 +35,9 @@ function useStartAudio({ room, props }: UseStartAudioProps) {
 
   return { mergedProps, canPlayAudio };
 }
-interface AllowAudioPlaybackProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+
+/** @public */
+export interface AllowAudioPlaybackProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
 }
 
@@ -52,6 +54,7 @@ interface AllowAudioPlaybackProps extends React.ButtonHTMLAttributes<HTMLButtonE
  * ```
  *
  * @see Autoplay policy on MDN web docs: {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices#autoplay_policy}
+ * @public
  */
 export function StartAudio({ label = 'Allow Audio', ...props }: AllowAudioPlaybackProps) {
   const room = useRoomContext();

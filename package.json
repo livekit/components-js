@@ -20,7 +20,8 @@
     "release": "turbo run build --filter=./packages/* && changeset publish",
     "start:next": "turbo run start --filter=@livekit/component-example-next...",
     "test": "turbo run test",
-    "tooling:update-readme-nav": "node tooling/readme-manager/update-nav-in-readmes.js"
+    "tooling:update-readme-nav": "node tooling/readme-manager/update-nav-in-readmes.js",
+    "api:check": "turbo run api-check"
   },
   "workspaces": [
     "packages/*",

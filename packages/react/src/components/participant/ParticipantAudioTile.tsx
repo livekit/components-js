@@ -20,6 +20,7 @@ import { AudioTrack } from './AudioTrack';
  * <ParticipantAudioTile />
  * ```
  * @see `ParticipantLoop` component
+ * @public
  */
 export const ParticipantAudioTile = ({
   participant,

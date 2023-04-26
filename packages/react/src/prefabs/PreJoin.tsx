@@ -7,6 +7,7 @@ import { TrackToggle } from '../components/controls/TrackToggle';
 import { log } from '@livekit/components-core';
 import { ParticipantPlaceholder } from '../assets/images';
 
+/** @public */
 export type LocalUserChoices = {
   username: string;
   videoEnabled: boolean;
@@ -23,35 +24,26 @@ const DEFAULT_USER_CHOICES = {
   audioDeviceId: '',
 };
 
+/** @public */
 export type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'> & {
-  /**
-   * This function is called with the `LocalUserChoices` if validation is passed.
-   */
+  /** This function is called with the `LocalUserChoices` if validation is passed. */
   onSubmit?: (values: LocalUserChoices) => void;
   /**
    * Provide your custom validation function. Only if validation is successful the user choices are past to the onSubmit callback.
    */
   onValidate?: (values: LocalUserChoices) => boolean;
-
   onError?: (error: Error) => void;
-  /**
-   * Prefill the input form with initial values.
-   */
+  /** Prefill the input form with initial values. */
   defaults?: Partial<LocalUserChoices>;
-  /**
-   * Display a debug window for your convenience.
-   */
+  /** Display a debug window for your convenience. */
   debug?: boolean;
-
   joinLabel?: string;
-
   micLabel?: string;
-
   camLabel?: string;
-
   userLabel?: string;
 };
 
+/** @public */
 function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   enabled: boolean,
   deviceId: string,
@@ -164,6 +156,7 @@ function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
  * ```tsx
  * <PreJoin />
  * ```
+ * @public
  */
 export const PreJoin = ({
   defaults = {},

@@ -20,6 +20,7 @@ import { ScreenShareIcon } from '../../assets/icons';
 import { VideoTrack } from './VideoTrack';
 import { AudioTrack } from './AudioTrack';
 
+/** @public */
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   disableSpeakingIndicator?: boolean;
   participant?: Participant;
@@ -28,15 +29,16 @@ export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   onParticipantClick?: (event: ParticipantClickEvent) => void;
 };
 
-export type UseParticipantTileProps<T extends React.HTMLAttributes<HTMLElement>> =
-  TrackReferenceOrPlaceholder & {
-    disableSpeakingIndicator?: boolean;
-    publication?: TrackPublication;
-    onParticipantClick?: (event: ParticipantClickEvent) => void;
-    htmlProps: T;
-  };
+/** @public */
+export type UseParticipantTileProps<T extends HTMLElement> = TrackReferenceOrPlaceholder & {
+  disableSpeakingIndicator?: boolean;
+  publication?: TrackPublication;
+  onParticipantClick?: (event: ParticipantClickEvent) => void;
+  htmlProps: React.HTMLAttributes<T>;
+};
 
-export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>({
+/** @public */
+export function useParticipantTile<T extends HTMLElement>({
   participant,
   source,
   publication,
@@ -50,6 +52,7 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
     return mergeProps(htmlProps, {
       className,
       onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        // @ts-ignore
         htmlProps.onClick?.(event);
         if (typeof onParticipantClick === 'function') {
           const track = publication ?? p.getTrack(source);
@@ -69,10 +72,11 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
       'data-lk-local-participant': participant.isLocal,
       'data-lk-source': source,
       ...mergedProps,
-    },
+    } as React.HTMLAttributes<HTMLDivElement>,
   };
 }
 
+/** @public */
 export function ParticipantContextIfNeeded(
   props: React.PropsWithChildren<{
     participant?: Participant;
@@ -98,6 +102,7 @@ export function ParticipantContextIfNeeded(
  *
  * <ParticipantTile {...trackReference} />
  * ```
+ * @public
  */
 export const ParticipantTile = ({
   participant,
@@ -110,7 +115,7 @@ export const ParticipantTile = ({
 }: ParticipantTileProps) => {
   const p = useEnsureParticipant(participant);
 
-  const { elementProps } = useParticipantTile({
+  const { elementProps } = useParticipantTile<HTMLDivElement>({
     participant: p,
     htmlProps,
     source,

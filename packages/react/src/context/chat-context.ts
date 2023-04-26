@@ -1,23 +1,19 @@
 import type { WidgetState } from '@livekit/components-core';
 import type * as React from 'react';
 
+/** @internal */
 export type ChatContextAction =
   | { msg: 'show_chat' }
   | { msg: 'hide_chat' }
   | { msg: 'toggle_chat' };
 
-export function isChatContextAction(action: { msg: string }): action is ChatContextAction {
-  return (
-    (action as ChatContextAction).msg === 'show_chat' ||
-    (action as ChatContextAction).msg === 'hide_chat'
-  );
-}
-
+/** @internal */
 export type ChatContextType = {
   dispatch?: React.Dispatch<ChatContextAction>;
   state?: WidgetState;
 };
 
+/** @internal */
 export function chatReducer(state: WidgetState, action: ChatContextAction): WidgetState {
   if (action.msg === 'show_chat') {
     return { ...state, showChat: true };

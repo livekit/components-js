@@ -1,8 +1,9 @@
 import type { Participant } from 'livekit-client';
 import { useEnsureParticipant } from '../context';
-import type { UseMediaTrackOptions } from './useMediaTrackBySourceOrName';
+import type { UseMediaTrackOptions } from './useMediaTrack';
 import { useMediaTrackBySourceOrName } from './useMediaTrackBySourceOrName';
 
+/** @public */
 export function useMediaTrackByName(
   name: string,
   participant?: Participant,

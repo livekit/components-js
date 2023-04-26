@@ -11,7 +11,8 @@ import { useLocalParticipantPermissions } from '../hooks';
 import { useMediaQuery } from '../hooks/internal';
 import { useMaybeLayoutContext } from '../context';
 
-type ControlBarControls = {
+/** @public */
+export type ControlBarControls = {
   microphone?: boolean;
   camera?: boolean;
   chat?: boolean;
@@ -19,6 +20,7 @@ type ControlBarControls = {
   leave?: boolean;
 };
 
+/** @public */
 export type ControlBarProps = React.HTMLAttributes<HTMLDivElement> & {
   variation?: 'minimal' | 'verbose' | 'textOnly';
   controls?: ControlBarControls;
@@ -38,6 +40,7 @@ export type ControlBarProps = React.HTMLAttributes<HTMLDivElement> & {
  *   <ControlBar />
  * </LiveKitRoom>
  * ```
+ * @public
  */
 export function ControlBar({ variation, controls, ...props }: ControlBarProps) {
   const [isChatOpen, setIsChatOpen] = React.useState(false);

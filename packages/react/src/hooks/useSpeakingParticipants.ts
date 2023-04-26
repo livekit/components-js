@@ -5,6 +5,8 @@ import { useObservableState } from './internal';
 
 /**
  * The useSpeakingParticipants hook returns the only the active speakers of all participants.
+ *
+ * @public
  */
 export const useSpeakingParticipants = () => {
   const room = useRoomContext();

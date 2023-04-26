@@ -2,6 +2,7 @@ import type { Room, RoomEvent } from 'livekit-client';
 import { useLocalParticipant } from './useLocalParticipant';
 import { useRemoteParticipants } from './useRemoteParticipants';
 
+/** @public */
 export interface UseParticipantsOptions {
   /**
    * To optimize performance, you can use the `updateOnlyOn` property to decide on what RoomEvents the hook updates.
@@ -17,6 +18,7 @@ export interface UseParticipantsOptions {
 
 /**
  * The useParticipants hook returns all participants (local and remote) of the current room.
+ * @public
  */
 export const useParticipants = (options: UseParticipantsOptions = {}) => {
   const remoteParticipants = useRemoteParticipants(options);

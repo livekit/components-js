@@ -5,10 +5,12 @@ import { useRoomContext } from '../../context';
 import { useConnectionState } from '../ConnectionState';
 import { mergeProps } from '../../utils';
 
+/** @public */
 export type DisconnectButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   stopTracks?: boolean;
 };
 
+/** @public */
 export function useDisconnectButton(props: DisconnectButtonProps) {
   const room = useRoomContext();
   const connectionState = useConnectionState(room);
@@ -36,6 +38,7 @@ export function useDisconnectButton(props: DisconnectButtonProps) {
  *   <DisconnectButton>Leave room</DisconnectButton>
  * </LiveKitRoom>
  * ```
+ * @public
  */
 export function DisconnectButton(props: DisconnectButtonProps) {
   const { buttonProps } = useDisconnectButton(props);

@@ -6,6 +6,7 @@ import { useMaybeRoomContext } from '../../context';
 import { getSourceIcon } from '../../assets/icons/util';
 import { useObservableState } from '../../hooks/internal/useObservableState';
 
+/** @public */
 export type TrackToggleProps<T extends ToggleSource> = Omit<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   'onChange'
@@ -17,8 +18,10 @@ export type TrackToggleProps<T extends ToggleSource> = Omit<
   captureOptions?: CaptureOptionsBySource<T>;
 };
 
+/** @public */
 export type UseTrackToggleProps<T extends ToggleSource> = Omit<TrackToggleProps<T>, 'showIcon'>;
 
+/** @public */
 export function useTrackToggle<T extends ToggleSource>({
   source,
   onChange,
@@ -72,7 +75,7 @@ export function useTrackToggle<T extends ToggleSource>({
       'data-lk-enabled': enabled,
       disabled: pending,
       onClick: clickHandler,
-    },
+    } as React.ButtonHTMLAttributes<HTMLButtonElement>,
   };
 }
 
@@ -87,6 +90,7 @@ export function useTrackToggle<T extends ToggleSource>({
  *   <TrackToggle source={Track.Source.Camera} />
  * </LiveKitRoom>
  * ```
+ * @public
  */
 export function TrackToggle<T extends ToggleSource>({ showIcon, ...props }: TrackToggleProps<T>) {
   const { buttonProps, enabled } = useTrackToggle(props);

@@ -4,6 +4,7 @@ import type { TrackPublication, LocalParticipant, Room } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureRoom } from '../context';
 
+/** @public */
 export interface UseLocalParticipantOptions {
   /**
    * The room to use. If not provided, the hook will use the room from the context.
@@ -13,6 +14,7 @@ export interface UseLocalParticipantOptions {
 
 /**
  * The useLocalParticipant hook the state of the local participant.
+ * @public
  */
 export const useLocalParticipant = (options: UseLocalParticipantOptions = {}) => {
   const room = useEnsureRoom(options.room);

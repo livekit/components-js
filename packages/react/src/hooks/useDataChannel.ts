@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useRoomContext } from '../context';
 import { useObservableState } from './internal';
 
+/** @public */
 export function useDataChannel<T extends string>(
   topic?: T,
   onMessage?: (msg: ReceivedDataMessage<T>) => void,

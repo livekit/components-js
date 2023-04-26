@@ -5,6 +5,7 @@ import { log } from '@livekit/components-core';
 import { useEnsureParticipant } from '../../context';
 import { RemoteAudioTrack } from 'livekit-client';
 
+/** @public */
 export type AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
   React.HTMLAttributes<T> & {
     source: Track.Source;
@@ -28,6 +29,7 @@ export type AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
  * ```
  *
  * @see `ParticipantTile` component
+ * @public
  */
 export function AudioTrack({ onSubscriptionStatusChanged, volume, ...props }: AudioTrackProps) {
   const { source, name, publication } = props;

@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useEnsureRoom } from '../context';
 import { useObservableState } from '../hooks/internal/useObservableState';
 
+/** @public */
 export interface ConnectionStatusProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * The room from which the connection status should be displayed.
@@ -18,6 +19,7 @@ export interface ConnectionStatusProps extends React.HTMLAttributes<HTMLDivEleme
  * ```tsx
  * const connectionState = useConnectionState(room);
  * ```
+ * @public
  */
 export function useConnectionState(room?: Room) {
   // passed room takes precedence, if not supplied get current room context
@@ -36,6 +38,7 @@ export function useConnectionState(room?: Room) {
  *   <ConnectionState />
  * </LiveKitRoom>
  * ```
+ * @public
  */
 export function ConnectionState({ room, ...props }: ConnectionStatusProps) {
   const connectionState = useConnectionState(room);

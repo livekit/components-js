@@ -9,6 +9,7 @@ import { useSize } from './internal';
  * tiles and select a layout that still works visually within the given limitations.
  * As the order of tiles changes over time, the hook tries to keep visual updates to a minimum
  * while trying to display important tiles such as speaking participants or screen shares.
+ * @public
  */
 export function useGridLayout(
   /** HTML element that contains the grid. */

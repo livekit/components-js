@@ -3,7 +3,8 @@ import * as React from 'react';
 import { ParticipantContext } from '../context';
 import { cloneSingleChild } from '../utils';
 
-type ParticipantLoopProps = {
+/** @public */
+export type ParticipantLoopProps = {
   /** The participants to loop over. If not provided, the participants from the current room context are used. */
   participants: Participant[];
   /** The template component to be used in the loop. */
@@ -25,6 +26,7 @@ type ParticipantLoopProps = {
  *   <ParticipantName />
  * <ParticipantLoop />
  * ```
+ * @public
  */
 export const ParticipantLoop = ({ participants, ...props }: ParticipantLoopProps) => {
   return (

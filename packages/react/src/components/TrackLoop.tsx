@@ -4,7 +4,8 @@ import * as React from 'react';
 import { TrackContext } from '../context/track-context';
 import { cloneSingleChild } from '../utils';
 
-type TrackLoopProps = {
+/** @public */
+export type TrackLoopProps = {
   /** Track references to loop over. */
   tracks: TrackReference[] | TrackReferenceOrPlaceholder[];
   /** The template component to be used in the loop. */
@@ -24,6 +25,7 @@ type TrackLoopProps = {
  *  </TrackContext.Consumer>
  * <TrackLoop />
  * ```
+ * @public
  */
 export const TrackLoop = ({ tracks, ...props }: TrackLoopProps) => {
   return (

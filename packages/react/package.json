@@ -41,7 +41,9 @@
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
     "test": "vitest --run",
     "test:watch": "vitest",
-    "size": "size-limit --json"
+    "size": "size-limit --json",
+    "api-check": "api-extractor run --typescript-compiler-folder ../../node_modules/typescript",
+    "api-check:update": "api-extractor run --local --typescript-compiler-folder ../../node_modules/typescript --verbose"
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -55,6 +57,8 @@
     "react-dom": ">=18"
   },
   "devDependencies": {
+    "@microsoft/api-documenter": "^7.21.7",
+    "@microsoft/api-extractor": "^7.34.4",
     "@size-limit/file": "^8.2.4",
     "@size-limit/webpack": "^8.2.4",
     "@svgr/cli": "^7.0.0",

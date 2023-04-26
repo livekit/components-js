@@ -8,6 +8,7 @@ import { Chat } from './Chat';
 import { ParticipantLoop } from '../components';
 import { useParticipants } from '../hooks';
 
+/** @public */
 export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 
 /**
@@ -24,6 +25,7 @@ export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
  *   <AudioConference />
  * <LiveKitRoom>
  * ```
+ * @public
  */
 export function AudioConference({ ...props }: AudioConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });

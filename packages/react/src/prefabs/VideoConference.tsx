@@ -16,6 +16,9 @@ import { CarouselLayout } from '../components/layout/CarouselLayout';
 import { useCreateLayoutContext } from '../context/layout-context';
 import { ParticipantTile } from '../components';
 
+/**
+ * @public
+ */
 export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
   chatMessageFormatter?: MessageFormatter;
 }
@@ -34,6 +37,7 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
  *   <VideoConference />
  * <LiveKitRoom>
  * ```
+ * @public
  */
 export function VideoConference({ chatMessageFormatter, ...props }: VideoConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });

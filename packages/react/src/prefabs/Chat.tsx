@@ -9,10 +9,12 @@ import { ChatEntry } from '../components/ChatEntry';
 
 export type { ChatMessage, ReceivedChatMessage };
 
+/** @public */
 export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
   messageFormatter?: MessageFormatter;
 }
 
+/** @public */
 export function useChat() {
   const room = useRoomContext();
   const [setup, setSetup] = React.useState<ReturnType<typeof setupChat>>();
@@ -38,6 +40,7 @@ export function useChat() {
  *   <Chat />
  * </LiveKitRoom>
  * ```
+ * @public
  */
 export function Chat({ messageFormatter, ...props }: ChatProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);

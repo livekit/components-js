@@ -7909,10 +7909,10 @@ object.values@^1.1.6:
     define-properties "^1.1.4"
     es-abstract "^1.20.4"
 
-obsrvbl@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/obsrvbl/-/obsrvbl-0.1.4.tgz#6526ea8f10197600a26d6e6e99626eb48680bfb8"
-  integrity sha512-SLHyb0aQ96kLt4WeQjdm9dbjG6okuAxJOj3zbCYd6Kuh3DJ92i1bhjwc5HV1jS1plcQjb4iPoeuzcTlRYNeXdw==
+obsrvbl@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/obsrvbl/-/obsrvbl-0.1.6.tgz#5297e0e745d435f0bb5397989a93091c15520477"
+  integrity sha512-hQYcZIw11DcNzcnx4DTIQ3l0eRkFGDFWGjsyqayud6VCEpM6L+dnNlwhRU0ZJS4q1aLUzMAXOEGOl6G5TKH8jg==
 
 on-finished@2.4.1:
   version "2.4.1"

@@ -4,7 +4,6 @@ import { Track } from 'livekit-client';
 import type { ParticipantClickEvent, TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { isParticipantSourcePinned, setupParticipantTile } from '@livekit/components-core';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
-import { MediaTrack } from './MediaTrack';
 import { ParticipantName } from './ParticipantName';
 import { TrackMutedIndicator } from './TrackMutedIndicator';
 import {
@@ -18,7 +17,10 @@ import { mergeProps } from '../../utils';
 import { FocusToggle } from '../controls/FocusToggle';
 import { ParticipantPlaceholder } from '../../assets/images';
 import { ScreenShareIcon } from '../../assets/icons';
+import { VideoTrack } from './VideoTrack';
+import { AudioTrack } from './AudioTrack';
 
+/** @public */
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   disableSpeakingIndicator?: boolean;
   participant?: Participant;
@@ -27,15 +29,16 @@ export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   onParticipantClick?: (event: ParticipantClickEvent) => void;
 };
 
-export type UseParticipantTileProps<T extends React.HTMLAttributes<HTMLElement>> =
-  TrackReferenceOrPlaceholder & {
-    disableSpeakingIndicator?: boolean;
-    publication?: TrackPublication;
-    onParticipantClick?: (event: ParticipantClickEvent) => void;
-    htmlProps: T;
-  };
+/** @public */
+export type UseParticipantTileProps<T extends HTMLElement> = TrackReferenceOrPlaceholder & {
+  disableSpeakingIndicator?: boolean;
+  publication?: TrackPublication;
+  onParticipantClick?: (event: ParticipantClickEvent) => void;
+  htmlProps: React.HTMLAttributes<T>;
+};
 
-export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>({
+/** @public */
+export function useParticipantTile<T extends HTMLElement>({
   participant,
   source,
   publication,
@@ -49,6 +52,7 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
     return mergeProps(htmlProps, {
       className,
       onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        // @ts-ignore
         htmlProps.onClick?.(event);
         if (typeof onParticipantClick === 'function') {
           const track = publication ?? p.getTrack(source);
@@ -68,10 +72,11 @@ export function useParticipantTile<T extends React.HTMLAttributes<HTMLElement>>(
       'data-lk-local-participant': participant.isLocal,
       'data-lk-source': source,
       ...mergedProps,
-    },
+    } as React.HTMLAttributes<HTMLDivElement>,
   };
 }
 
+/** @public */
 export function ParticipantContextIfNeeded(
   props: React.PropsWithChildren<{
     participant?: Participant;
@@ -97,6 +102,7 @@ export function ParticipantContextIfNeeded(
  *
  * <ParticipantTile {...trackReference} />
  * ```
+ * @public
  */
 export const ParticipantTile = ({
   participant,
@@ -109,7 +115,7 @@ export const ParticipantTile = ({
 }: ParticipantTileProps) => {
   const p = useEnsureParticipant(participant);
 
-  const { elementProps } = useParticipantTile({
+  const { elementProps } = useParticipantTile<HTMLDivElement>({
     participant: p,
     htmlProps,
     source,
@@ -140,13 +146,23 @@ export const ParticipantTile = ({
       <ParticipantContextIfNeeded participant={p}>
         {children ?? (
           <>
-            {/** TODO remove MediaTrack in favor of the equivalent Audio/Video Track. need to figure out how to differentiate here */}
-            <MediaTrack
-              source={source}
-              publication={publication}
-              participant={participant}
-              onSubscriptionStatusChanged={handleSubscribe}
-            />
+            {publication?.kind === 'video' ||
+            source === Track.Source.Camera ||
+            source === Track.Source.ScreenShare ? (
+              <VideoTrack
+                participant={p}
+                source={source}
+                publication={publication}
+                onSubscriptionStatusChanged={handleSubscribe}
+              />
+            ) : (
+              <AudioTrack
+                participant={p}
+                source={source}
+                publication={publication}
+                onSubscriptionStatusChanged={handleSubscribe}
+              />
+            )}
             <div className="lk-participant-placeholder">
               <ParticipantPlaceholder />
             </div>

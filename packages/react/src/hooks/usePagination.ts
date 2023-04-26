@@ -6,10 +6,12 @@ import { useVisualStableUpdate } from './useVisualStableUpdate';
  * The `usePagination` hook implements simple pagination logic for use with arrays.
  * @example
  * ```tsx
- * const { firstItemIndex, lastItemIndex } = usePagination(3, 9);
- * const itemsOnPage = items.slice(firsItemIndex, lastItemIndex)
+ * const tracks = useTracks();
+ * const pagination = usePagination(4, tracks);
+ *
+ * <TrackLoop tracks={pagination.tracks} />
  * ```
- * @internal
+ * @alpha
  */
 export function usePagination(itemPerPage: number, trackReferences: TrackReferenceOrPlaceholder[]) {
   const [currentPage, setCurrentPage] = React.useState(1);

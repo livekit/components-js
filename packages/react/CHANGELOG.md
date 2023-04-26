@@ -1,5 +1,39 @@
 # @livekit/components-react
 
+## 0.8.2
+
+### Patch Changes
+
+- Remove deprecated components `MediaTrack` and `ScreenShareRenderer` - [#465](https://github.com/livekit/components-js/pull/465) ([@Ocupe](https://github.com/Ocupe))
+
+- Fix sourcemaps by not invoking rollup in tsup build - [#464](https://github.com/livekit/components-js/pull/464) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix some imports - [#461](https://github.com/livekit/components-js/pull/461) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`0bbacce`](https://github.com/livekit/components-js/commit/0bbaccea5e964f3d38925a49223b914a3e2076fe)]:
+  - @livekit/components-core@0.6.5
+
+## 0.8.1
+
+### Patch Changes
+
+- Fix: avoid recursive pin dependency - [#458](https://github.com/livekit/components-js/pull/458) ([@lukasIO](https://github.com/lukasIO))
+
+- Display default username in PreJoin component - [#455](https://github.com/livekit/components-js/pull/455) ([@apurvbhavsar](https://github.com/apurvbhavsar))
+
+## 0.8.0
+
+### Minor Changes
+
+- Make layout component children required - [#447](https://github.com/livekit/components-js/pull/447) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- fix: remove pin when screen share ended - [#440](https://github.com/livekit/components-js/pull/440) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`f61f2b2`](https://github.com/livekit/components-js/commit/f61f2b2e5f709335c59c58010a3debb761be0ca9)]:
+  - @livekit/components-core@0.6.4
+
 ## 0.7.3
 
 ### Patch Changes

@@ -1,5 +1,17 @@
 # @livekit/components-core
 
+## 0.6.5
+
+### Patch Changes
+
+- Fix sourcemaps by not invoking rollup in tsup build - [#464](https://github.com/livekit/components-js/pull/464) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.6.4
+
+### Patch Changes
+
+- Simplify trackReference type #448 - [#456](https://github.com/livekit/components-js/pull/456) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.6.3
 
 ### Patch Changes

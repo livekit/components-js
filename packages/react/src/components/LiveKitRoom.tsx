@@ -11,6 +11,7 @@ import * as React from 'react';
 import { RoomContext } from '../context';
 import { mergeProps } from '../utils';
 
+/** @public */
 export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onError'> {
   /**
    * URL to the LiveKit server.
@@ -89,6 +90,8 @@ const defaultRoomProps: Partial<LiveKitRoomProps> = {
   audio: false,
   video: false,
 };
+
+/** @public */
 export function useLiveKitRoom(props: LiveKitRoomProps) {
   const {
     token,
@@ -232,6 +235,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
  *     ...
  * </LiveKitRoom>
  * ```
+ * @public
  */
 export function LiveKitRoom(props: React.PropsWithChildren<LiveKitRoomProps>) {
   const { room, htmlProps } = useLiveKitRoom(props);

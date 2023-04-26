@@ -1,6 +1,9 @@
 import * as React from 'react';
 
-type UseSwipeOptions = {
+/**
+ * @alpha
+ */
+export type UseSwipeOptions = {
   minSwipeDistance?: number;
   onLeftSwipe?: () => void;
   onRightSwipe?: () => void;
@@ -16,8 +19,8 @@ type UseSwipeOptions = {
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
- * @internal
  * ```
+ * @alpha
  */
 export function useSwipe(element: React.RefObject<HTMLElement>, options: UseSwipeOptions = {}) {
   const touchStart = React.useRef<number | null>(null);

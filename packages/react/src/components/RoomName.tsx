@@ -5,10 +5,12 @@ import * as React from 'react';
 import { useEnsureRoom } from '../context';
 import { useObservableState } from '../hooks/internal/useObservableState';
 
+/** @public */
 export interface UseRoomInfoOptions {
   room?: Room;
 }
 
+/** @public */
 export function useRoomInfo(options: UseRoomInfoOptions = {}) {
   const room = useEnsureRoom(options.room);
   const infoObserver = React.useMemo(() => roomInfoObserver(room), [room]);
@@ -20,6 +22,7 @@ export function useRoomInfo(options: UseRoomInfoOptions = {}) {
   return { name, metadata };
 }
 
+/** @public */
 export interface RoomNameProps extends React.HTMLAttributes<HTMLSpanElement> {
   childrenPosition?: 'before' | 'after';
 }
@@ -33,6 +36,7 @@ export interface RoomNameProps extends React.HTMLAttributes<HTMLSpanElement> {
  *   <RoomName />
  * </LiveKitRoom>
  * ```
+ * @public
  */
 export const RoomName = ({
   childrenPosition = 'before',

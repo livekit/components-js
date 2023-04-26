@@ -3,6 +3,7 @@ import type { RoomEvent, RemoteParticipant, Room } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureRoom } from '../context';
 
+/** @public */
 export interface UseRemoteParticipantsOptions {
   /**
    * To optimize performance, you can use the `updateOnlyOn` property to decide on what RoomEvents the hook updates.
@@ -18,6 +19,8 @@ export interface UseRemoteParticipantsOptions {
 
 /**
  * The useRemoteParticipants
+ *
+ * @public
  */
 export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}) => {
   const room = useEnsureRoom(options.room);

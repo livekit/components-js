@@ -5,6 +5,8 @@ import { useSpeakingParticipants } from './useSpeakingParticipants';
 
 /**
  * The useSortedParticipants hook returns the only the active speakers of all participants.
+ *
+ * @public
  */
 export function useSortedParticipants(participants: Array<Participant>) {
   const [sortedParticipants, setSortedParticipants] = React.useState(

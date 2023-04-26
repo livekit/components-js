@@ -1,15 +1,19 @@
 import { log } from '@livekit/components-core';
 import * as React from 'react';
-interface UserInfo {
+
+/** @public */
+export interface UserInfo {
   identity?: string;
   name?: string;
   metadata?: string;
 }
 
+/** @public */
 export interface UseTokenOptions {
   userInfo?: UserInfo;
 }
 
+/** @public */
 export function useToken(
   tokenEndpoint: string | undefined,
   roomName: string,

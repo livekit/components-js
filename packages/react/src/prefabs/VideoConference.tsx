@@ -16,6 +16,9 @@ import { CarouselLayout } from '../components/layout/CarouselLayout';
 import { useCreateLayoutContext } from '../context/layout-context';
 import { ParticipantTile } from '../components';
 
+/**
+ * @public
+ */
 export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
   chatMessageFormatter?: MessageFormatter;
 }
@@ -34,6 +37,7 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
  *   <VideoConference />
  * <LiveKitRoom>
  * ```
+ * @public
  */
 export function VideoConference({ chatMessageFormatter, ...props }: VideoConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });
@@ -61,24 +65,19 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
   const carouselTracks = tracks.filter((track) => !isEqualTrackRef(track, focusTrack));
 
   React.useEffect(() => {
-    if (!layoutContext.pin.state) {
-      return;
-    }
-    const pinState = layoutContext.pin.state;
-    const pinnedTrack = pinState.length > 0 ? pinState[0] : undefined;
     // if screen share tracks are published, and no pin is set explicitly, auto set the screen share
-    if (screenShareTracks.length > 0 && pinnedTrack === undefined) {
+    if (screenShareTracks.length > 0 && focusTrack === undefined) {
       layoutContext.pin.dispatch?.({ msg: 'set_pin', trackReference: screenShareTracks[0] });
     } else if (
-      (screenShareTracks.length === 0 && pinnedTrack?.source === Track.Source.ScreenShare) ||
+      (screenShareTracks.length === 0 && focusTrack?.source === Track.Source.ScreenShare) ||
       tracks.length <= 1
     ) {
       layoutContext.pin.dispatch?.({ msg: 'clear_pin' });
     }
   }, [
     JSON.stringify(screenShareTracks.map((ref) => ref.publication.trackSid)),
-    layoutContext.pin,
     tracks.length,
+    focusTrack?.publication?.trackSid,
   ]);
 
   return (

@@ -37,3 +37,6 @@ jobs:
 
       - name: Run Tests
         run: yarn test
+
+      - name: Check for API Changes
+        run: yarn api:check

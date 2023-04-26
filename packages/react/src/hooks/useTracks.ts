@@ -16,13 +16,15 @@ import { Track } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureRoom } from '../context';
 
-type UseTracksOptions = {
+/** @public */
+export type UseTracksOptions = {
   updateOnlyOn?: RoomEvent[];
   onlySubscribed?: boolean;
   room?: Room;
 };
 
-type UseTracksHookReturnType<T> = T extends Track.Source[]
+/** @public */
+export type UseTracksHookReturnType<T> = T extends Track.Source[]
   ? TrackReference[]
   : T extends TrackSourceWithOptions[]
   ? TrackReferenceOrPlaceholder[]
@@ -42,6 +44,7 @@ type UseTracksHookReturnType<T> = T extends Track.Source[]
  * // participants without a camera subscription.
  * const trackReferencesWithPlaceholders: TrackReferenceOrPlaceholder[] = useTracks([{source: Track.Source.Camera, withPlaceholder: true}])
  * ```
+ * @public
  */
 export function useTracks<T extends SourcesArray = Track.Source[]>(
   sources: T = [

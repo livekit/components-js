@@ -4,10 +4,12 @@ import * as React from 'react';
 import { useRoomContext } from '../context';
 import { useObservableState } from './internal';
 
+/** @public */
 export interface UseRemoteParticipantOptions {
   updateOnlyOn?: ParticipantEvent[];
 }
 
+/** @public */
 export const useRemoteParticipant = (
   identity: string,
   options: UseRemoteParticipantOptions = {},

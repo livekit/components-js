@@ -49,7 +49,7 @@ export function AudioTrack({ onSubscriptionStatusChanged, volume, ...props }: Au
   }, [isSubscribed, onSubscriptionStatusChanged]);
 
   React.useEffect(() => {
-    if (track === undefined || track?.isSubscribed === false || volume === undefined) {
+    if (track === undefined || volume === undefined) {
       return;
     }
     if (track instanceof RemoteAudioTrack) {
@@ -57,7 +57,7 @@ export function AudioTrack({ onSubscriptionStatusChanged, volume, ...props }: Au
     } else {
       log.warn('volume can only be set on remote audio tracks');
     }
-  }, [volume, track?.isSubscribed, track]);
+  }, [volume, track]);
 
   return <audio ref={mediaEl} {...elementProps} />;
 }

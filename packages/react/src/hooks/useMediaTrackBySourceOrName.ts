@@ -16,7 +16,7 @@ export function useMediaTrackBySourceOrName(
   const [publication, setPublication] = React.useState(getTrackByIdentifier(observerOptions));
 
   const [isMuted, setMuted] = React.useState(publication?.isMuted);
-  const [isSubscribed, setSubscribed] = React.useState(publication?.isSubscribed);
+  const [isSubscribed, setSubscribed] = React.useState(publication?.isSubscribed ?? false);
   const [track, setTrack] = React.useState(publication?.track);
   const [orientation, setOrientation] = React.useState<'landscape' | 'portrait'>('landscape');
   const previousElement = React.useRef<HTMLMediaElement | undefined | null>();

@@ -34,7 +34,7 @@ export function useMediaTrackBySourceOrName(
       log.debug('update track', publication);
       setPublication(publication);
       setMuted(publication?.isMuted);
-      setSubscribed(publication?.isSubscribed ?? false);
+      setSubscribed(publication?.isSubscribed);
       setTrack(publication?.track);
     });
     return () => subscription?.unsubscribe();

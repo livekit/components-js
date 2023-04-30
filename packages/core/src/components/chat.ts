@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import type { Participant, Room } from 'livekit-client';
 import { DataPacket_Kind } from 'livekit-client';
-import { BehaviorSubject, Subject, scan, map, takeUntil } from 'rxjs';
+import { Subject, scan, map, unsubscribe } from 'obsrvbl';
 import { DataTopic, sendMessage, setupDataMessageHandler } from '../observables/dataChannel';
 
 export interface ChatMessage {
@@ -17,7 +17,6 @@ const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
 export function setupChat(room: Room) {
-  const onDestroyObservable = new Subject<void>();
   const messageSubject = new Subject<{
     payload: Uint8Array;
     topic: string | undefined;
@@ -26,7 +25,7 @@ export function setupChat(room: Room) {
 
   /** Subscribe to all messages send over the wire. */
   const { messageObservable } = setupDataMessageHandler(room, DataTopic.CHAT);
-  messageObservable.pipe(takeUntil(onDestroyObservable)).subscribe(messageSubject);
+  const sub1 = messageObservable.subscribe(messageSubject);
 
   /** Build up the message array over time. */
   const messagesObservable = messageSubject.pipe(
@@ -36,10 +35,10 @@ export function setupChat(room: Room) {
       return newMessage;
     }),
     scan<ReceivedChatMessage, ReceivedChatMessage[]>((acc, value) => [...acc, value], []),
-    takeUntil(onDestroyObservable),
   );
 
-  const isSending$ = new BehaviorSubject<boolean>(false);
+  const isSending$ = new Subject<boolean>();
+  isSending$.next(false);
 
   const send = async (message: string) => {
     const timestamp = Date.now();
@@ -60,8 +59,7 @@ export function setupChat(room: Room) {
   };
 
   function destroy() {
-    onDestroyObservable.next();
-    onDestroyObservable.complete();
+    unsubscribe(sub1);
   }
 
   return { messageObservable: messagesObservable, isSendingObservable: isSending$, send, destroy };

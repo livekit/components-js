@@ -3,12 +3,12 @@ import { useMaybeRoomContext } from '../../context';
 import { setupDeviceSelector, createMediaDeviceObserver } from '@livekit/components-core';
 import { mergeProps } from '../../utils';
 import type { Room } from 'livekit-client';
-import { useObservableState } from '../../hooks/internal/useObservableState';
+import { useObservableStateAsync } from '../../hooks/internal/useObservableState';
 
 /** @public */
 export function useMediaDevices({ kind }: { kind: MediaDeviceKind }) {
   const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
-  const devices = useObservableState(deviceObserver, []);
+  const devices = useObservableStateAsync(deviceObserver, []);
   return devices;
 }
 
@@ -23,7 +23,7 @@ export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps) 
   const roomContext = useMaybeRoomContext();
   // List of all devices.
   const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
-  const devices = useObservableState(deviceObserver, []);
+  const devices = useObservableStateAsync(deviceObserver, []);
   // Active device management.
   const [currentDeviceId, setCurrentDeviceId] = React.useState<string>('');
   const { className, activeDeviceObservable, setActiveMediaDevice } = React.useMemo(

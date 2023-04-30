@@ -7,7 +7,7 @@ import type {
   TrackPublication,
 } from 'livekit-client';
 import { RoomEvent, TrackEvent } from 'livekit-client';
-import { map, Observable, startWith } from 'rxjs';
+import { map, Observable, startWith } from 'obsrvbl';
 import { allParticipantRoomEvents } from '../helper';
 import log from '../logger';
 import type { TrackReference } from '../track-reference';

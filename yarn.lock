@@ -8018,6 +8018,11 @@ object.values@^1.1.6:
     define-properties "^1.1.4"
     es-abstract "^1.20.4"
 
+obsrvbl@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/obsrvbl/-/obsrvbl-0.1.6.tgz#5297e0e745d435f0bb5397989a93091c15520477"
+  integrity sha512-hQYcZIw11DcNzcnx4DTIQ3l0eRkFGDFWGjsyqayud6VCEpM6L+dnNlwhRU0ZJS4q1aLUzMAXOEGOl6G5TKH8jg==
+
 on-finished@2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/on-finished/-/on-finished-2.4.1.tgz#58c8c44116e54845ad57f14ab10b03533184ac3f"
@@ -9110,7 +9115,7 @@ run-parallel@^1.1.9:
   dependencies:
     queue-microtask "^1.2.2"
 
-rxjs@^7.5.2, rxjs@^7.8.0:
+rxjs@^7.5.2:
   version "7.8.0"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.8.0.tgz#90a938862a82888ff4c7359811a595e14e1e09a4"
   integrity sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==

@@ -25,7 +25,7 @@ export function PaginationControl({
       | ReturnType<ReturnType<typeof createInteractingObservable>['subscribe']>
       | undefined;
     if (connectedElement) {
-      subscription = createInteractingObservable(connectedElement.current, 2000).subscribe(
+      subscription = createInteractingObservable(connectedElement.current).subscribe(
         setInteractive,
       );
     }

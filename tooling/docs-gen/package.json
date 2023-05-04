@@ -29,7 +29,7 @@
     "eslint-config-lk-custom": "*",
     "eslint-plugin-tsdoc": "^0.2.17",
     "glob": "^8.0.0",
-    "mkdirp": "^2.0.0",
+    "mkdirp": "^3.0.0",
     "react-docgen-typescript": "^2.1.0",
     "regenerator-runtime": "^0.13.7",
     "rimraf": "^5.0.0"

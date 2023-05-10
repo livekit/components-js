@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- Prevent false warning when setting volume on AudioTrack. - [#471](https://github.com/livekit/components-js/pull/471) ([@Ocupe](https://github.com/Ocupe))
+- Fix audio volume set to 0 and prevent false warning when setting volume on AudioTrack. - [#471](https://github.com/livekit/components-js/pull/471) ([@Ocupe](https://github.com/Ocupe))
 
 ## 1.0.0
 

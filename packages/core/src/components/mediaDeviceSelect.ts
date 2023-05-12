@@ -6,6 +6,10 @@ import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 
 export type SetMediaDeviceOptions = {
+  /**
+   *  If true, adds an `exact` constraint to the getUserMedia request.
+   *  The request will fail if this option is true and the device specified is not actually available
+   */
   exact?: boolean;
 };
 

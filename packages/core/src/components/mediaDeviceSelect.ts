@@ -5,6 +5,14 @@ import log from '../logger';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 
+export type SetMediaDeviceOptions = {
+  /**
+   *  If true, adds an `exact` constraint to the getUserMedia request.
+   *  The request will fail if this option is true and the device specified is not actually available
+   */
+  exact?: boolean;
+};
+
 export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
   const activeDeviceSubject = new BehaviorSubject<string | undefined>(undefined);
 
@@ -29,10 +37,10 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
       )
     : activeDeviceSubject.asObservable();
 
-  const setActiveMediaDevice = async (id: string) => {
+  const setActiveMediaDevice = async (id: string, options: SetMediaDeviceOptions = {}) => {
     if (room) {
       log.debug(`Switching active device of kind "${kind}" with id ${id}.`);
-      await room.switchActiveDevice(kind, id);
+      await room.switchActiveDevice(kind, id, options.exact);
       let actualDeviceId: string | undefined = id;
       if (kind === 'videoinput') {
         actualDeviceId = await room.localParticipant

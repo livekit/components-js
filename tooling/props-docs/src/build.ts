@@ -5,7 +5,7 @@ import { promisify } from 'util';
 import { promises as fs } from 'fs';
 import * as docgen from 'react-docgen-typescript';
 import { ComponentDoc } from 'react-docgen-typescript';
-import mkdirp from 'mkdirp';
+import { mkdirp } from 'mkdirp';
 
 type ComponentInfo = {
   def: ComponentDoc;

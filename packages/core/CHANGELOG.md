@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.6.6
+
+### Patch Changes
+
+- Add options to `setActiveMediaDevice` - [#482](https://github.com/livekit/components-js/pull/482) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.6.5
 
 ### Patch Changes

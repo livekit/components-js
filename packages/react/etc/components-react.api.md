@@ -32,6 +32,7 @@ import type { RoomConnectOptions } from 'livekit-client';
 import type { RoomEvent } from 'livekit-client';
 import type { RoomOptions } from 'livekit-client';
 import type { ScreenShareCaptureOptions } from 'livekit-client';
+import { SetMediaDeviceOptions } from '@livekit/components-core';
 import type { SourcesArray } from '@livekit/components-core';
 import type { ToggleSource } from '@livekit/components-core';
 import { Track } from 'livekit-client';
@@ -547,7 +548,7 @@ export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps):
     devices: MediaDeviceInfo[];
     className: string;
     activeDeviceId: string;
-    setActiveMediaDevice: (id: string) => Promise<void>;
+    setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions | undefined) => Promise<void>;
 };
 
 // @public (undocumented)

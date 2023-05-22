@@ -6,7 +6,7 @@ import { useObservableState } from '../../hooks/internal/useObservableState';
 import { mergeProps } from '../../utils';
 
 /**
- * In many browser to start audio playback, the user must perform a user-initiated event such as clicking a button.
+ * In many browsers to start audio playback, the user must perform a user-initiated event such as clicking a button.
  * The `useStatAudio` hook returns an object with a boolean `canPlayAudio` flag
  * that indicates whether audio playback is allowed in the current context,
  * as well as a `startAudio` function that can be called in a button `onClick` callback to start audio playback in the current context.

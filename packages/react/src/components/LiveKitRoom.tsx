@@ -120,7 +120,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
 
   React.useEffect(() => {
     setRoom(passedRoom ?? new Room(options));
-  }, [options, passedRoom]);
+  }, [JSON.stringify(options), passedRoom]);
 
   const htmlProps = React.useMemo(() => mergeProps(rest, setupLiveKitRoom()), [rest]);
 
@@ -186,7 +186,15 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
       log.debug('disconnecting because connect is false');
       room.disconnect();
     }
-  }, [connect, token, connectOptions, room, onError, serverUrl, simulateParticipants]);
+  }, [
+    connect,
+    token,
+    JSON.stringify(connectOptions),
+    room,
+    onError,
+    serverUrl,
+    simulateParticipants,
+  ]);
 
   React.useEffect(() => {
     if (!room) return;

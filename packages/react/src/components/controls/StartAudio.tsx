@@ -10,7 +10,7 @@ interface UseStartAudioProps {
   props: React.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
-function useStartAudio({ room, props }: UseStartAudioProps) {
+export function useStartAudio({ room, props }: UseStartAudioProps) {
   const { className, roomAudioPlaybackAllowedObservable, handleStartAudioPlayback } = React.useMemo(
     () => setupStartAudio(),
     [],

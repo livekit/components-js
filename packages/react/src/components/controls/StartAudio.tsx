@@ -5,35 +5,32 @@ import { useRoomContext } from '../../context';
 import { useObservableState } from '../../hooks/internal/useObservableState';
 import { mergeProps } from '../../utils';
 
-interface UseStartAudioProps {
-  room: Room;
-  props: React.ButtonHTMLAttributes<HTMLButtonElement>;
-}
-
-export function useStartAudio({ room, props }: UseStartAudioProps) {
-  const { className, roomAudioPlaybackAllowedObservable, handleStartAudioPlayback } = React.useMemo(
+/**
+ * In many browser to start audio playback, the user must perform a user-initiated event such as clicking a button.
+ * The `useStatAudio` hook returns an object with a boolean `canPlayAudio` flag
+ * that indicates whether audio playback is allowed in the current context,
+ * as well as a `startAudio` function that can be called in a button `onClick` callback to start audio playback in the current context.
+ *
+ * @see Autoplay policy on MDN web docs for more info: {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices#autoplay_policy}
+ * @alpha
+ */
+export function useStartAudio(room: Room) {
+  const { roomAudioPlaybackAllowedObservable, handleStartAudioPlayback } = React.useMemo(
     () => setupStartAudio(),
     [],
   );
+
+  function startAudio() {
+    handleStartAudioPlayback(room);
+  }
+
   const observable = React.useMemo(
     () => roomAudioPlaybackAllowedObservable(room),
     [room, roomAudioPlaybackAllowedObservable],
   );
   const { canPlayAudio } = useObservableState(observable, { canPlayAudio: false });
 
-  const mergedProps = React.useMemo(
-    () =>
-      mergeProps(props, {
-        className,
-        onClick: () => {
-          handleStartAudioPlayback(room);
-        },
-        style: { display: canPlayAudio ? 'none' : 'block' },
-      }),
-    [props, className, canPlayAudio, handleStartAudioPlayback, room],
-  );
-
-  return { mergedProps, canPlayAudio };
+  return { canPlayAudio, startAudio };
 }
 
 /** @public */
@@ -49,7 +46,7 @@ export interface AllowAudioPlaybackProps extends React.ButtonHTMLAttributes<HTML
  * @example
  * ```tsx
  * <LiveKitRoom>
- *   <StartAudio>Click to allow audio playback</StartAudio>
+ *   <StartAudio label="Click to allow audio playback" />
  * </LiveKitRoom>
  * ```
  *
@@ -58,7 +55,20 @@ export interface AllowAudioPlaybackProps extends React.ButtonHTMLAttributes<HTML
  */
 export function StartAudio({ label = 'Allow Audio', ...props }: AllowAudioPlaybackProps) {
   const room = useRoomContext();
-  const { mergedProps } = useStartAudio({ room, props });
+  const { canPlayAudio, startAudio } = useStartAudio(room);
+  const { className } = React.useMemo(() => setupStartAudio(), []);
+
+  const mergedProps = React.useMemo(
+    () =>
+      mergeProps(props, {
+        className,
+        onClick: () => {
+          startAudio();
+        },
+        style: { display: canPlayAudio ? 'none' : 'block' },
+      }),
+    [props, className, canPlayAudio, startAudio],
+  );
 
   return <button {...mergedProps}>{label}</button>;
 }

@@ -428,7 +428,7 @@ export type TrackToggleProps<T extends ToggleSource> = Omit<React_2.ButtonHTMLAt
 };
 
 // @alpha
-export function useAudioPlayback(room: Room): {
+export function useAudioPlayback(room?: Room): {
     canPlayAudio: boolean;
     startAudio: () => Promise<void>;
 };
@@ -721,7 +721,7 @@ export interface UseStartAudioProps {
     // (undocumented)
     props: React_2.ButtonHTMLAttributes<HTMLButtonElement>;
     // (undocumented)
-    room: Room;
+    room?: Room;
 }
 
 // @alpha

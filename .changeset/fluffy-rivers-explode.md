@@ -2,4 +2,4 @@
 "@livekit/components-react": patch
 ---
 
-Add `usePreviewDevice` and `useStartAudio` hooks to public API.
+Add `usePreviewDevice`, `useStartAudio` and newly created `useAudioPlayback` hooks to public API.

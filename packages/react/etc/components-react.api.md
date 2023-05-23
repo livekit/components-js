@@ -427,6 +427,12 @@ export type TrackToggleProps<T extends ToggleSource> = Omit<React_2.ButtonHTMLAt
     captureOptions?: CaptureOptionsBySource<T>;
 };
 
+// @alpha
+export function useAudioPlayback(room: Room): {
+    canPlayAudio: boolean;
+    startAudio: () => Promise<void>;
+};
+
 // @public (undocumented)
 export function useChat(): {
     send: ((message: string) => Promise<void>) | undefined;
@@ -705,10 +711,18 @@ export function useSortedParticipants(participants: Array<Participant>): Partici
 export const useSpeakingParticipants: () => Participant[];
 
 // @alpha
-export function useStartAudio(room: Room): {
+export function useStartAudio({ room, props }: UseStartAudioProps): {
+    mergedProps: React_2.HTMLAttributes<HTMLElement>;
     canPlayAudio: boolean;
-    startAudio: () => void;
 };
+
+// @alpha (undocumented)
+export interface UseStartAudioProps {
+    // (undocumented)
+    props: React_2.ButtonHTMLAttributes<HTMLButtonElement>;
+    // (undocumented)
+    room: Room;
+}
 
 // @alpha
 export function useSwipe(element: React_2.RefObject<HTMLElement>, options?: UseSwipeOptions): void;

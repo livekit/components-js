@@ -5,7 +5,11 @@ import log from '../logger';
 import { observeRoomEvents } from '../observables/room';
 import { prefixClass } from '../styles-interface';
 
-function roomAudioPlaybackAllowedObservable(room: Room) {
+/**
+ * Returns whether or not audio playback is allowed in the current context.
+ * @internal
+ */
+export function roomAudioPlaybackAllowedObservable(room: Room) {
   const observable = observeRoomEvents(room, RoomEvent.AudioPlaybackStatusChanged).pipe(
     map((room) => {
       return { canPlayAudio: room.canPlaybackAudio };

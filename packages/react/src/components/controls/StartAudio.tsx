@@ -1,13 +1,13 @@
 import { setupStartAudio } from '@livekit/components-core';
 import type { Room } from 'livekit-client';
 import * as React from 'react';
-import { useRoomContext } from '../../context';
+import { useEnsureRoom, useRoomContext } from '../../context';
 import { useObservableState } from '../../hooks/internal/useObservableState';
 import { mergeProps } from '../../utils';
 
 /** @alpha */
 export interface UseStartAudioProps {
-  room: Room;
+  room?: Room;
   props: React.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
@@ -21,13 +21,14 @@ export interface UseStartAudioProps {
  * @alpha
  */
 export function useStartAudio({ room, props }: UseStartAudioProps) {
+  const roomEnsured = useEnsureRoom(room);
   const { className, roomAudioPlaybackAllowedObservable, handleStartAudioPlayback } = React.useMemo(
     () => setupStartAudio(),
     [],
   );
   const observable = React.useMemo(
-    () => roomAudioPlaybackAllowedObservable(room),
-    [room, roomAudioPlaybackAllowedObservable],
+    () => roomAudioPlaybackAllowedObservable(roomEnsured),
+    [roomEnsured, roomAudioPlaybackAllowedObservable],
   );
   const { canPlayAudio } = useObservableState(observable, { canPlayAudio: false });
 
@@ -36,11 +37,11 @@ export function useStartAudio({ room, props }: UseStartAudioProps) {
       mergeProps(props, {
         className,
         onClick: () => {
-          handleStartAudioPlayback(room);
+          handleStartAudioPlayback(roomEnsured);
         },
         style: { display: canPlayAudio ? 'none' : 'block' },
       }),
-    [props, className, canPlayAudio, handleStartAudioPlayback, room],
+    [props, className, canPlayAudio, handleStartAudioPlayback, roomEnsured],
   );
 
   return { mergedProps, canPlayAudio };

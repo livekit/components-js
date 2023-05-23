@@ -206,3 +206,12 @@ export function createMediaDeviceObserver(kind?: MediaDeviceKind, requestPermiss
 export function createDataObserver(room: Room) {
   return roomEventSelector(room, RoomEvent.DataReceived);
 }
+
+export function roomAudioPlaybackAllowedObservable(room: Room) {
+  const observable = observeRoomEvents(room, RoomEvent.AudioPlaybackStatusChanged).pipe(
+    map((room) => {
+      return { canPlayAudio: room.canPlaybackAudio };
+    }),
+  );
+  return observable;
+}

@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.6.7
+
+### Patch Changes
+
+- Add roomAudioPlaybackAllowedObservable - [#487](https://github.com/livekit/components-js/pull/487) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.6.6
 
 ### Patch Changes

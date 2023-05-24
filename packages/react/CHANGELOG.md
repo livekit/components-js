@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 1.0.3
+
+### Patch Changes
+
+- Remove unneeded console.log - [#485](https://github.com/livekit/components-js/pull/485) ([@davidzhao](https://github.com/davidzhao))
+
+- Add `usePreviewDevice`, `useStartAudio` and newly created `useAudioPlayback` hooks to public API. - [#487](https://github.com/livekit/components-js/pull/487) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`a63d293`](https://github.com/livekit/components-js/commit/a63d293cbfb939d6633163e203b70fa0ba5399e5)]:
+  - @livekit/components-core@0.6.7
+
 ## 1.0.2
 
 ### Patch Changes

@@ -1,3 +1,4 @@
+export { useAudioPlayback } from './useAudioPlayback';
 export { useDataChannel } from './useDataChannel';
 export { useGridLayout } from './useGridLayout';
 export { useIsMuted, UseIsMutedOptions } from './useIsMuted';

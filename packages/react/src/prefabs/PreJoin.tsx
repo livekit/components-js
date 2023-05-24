@@ -44,7 +44,7 @@ export type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'
 };
 
 /** @public */
-function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
+export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   enabled: boolean,
   deviceId: string,
   kind: 'videoinput' | 'audioinput',

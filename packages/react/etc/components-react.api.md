@@ -15,8 +15,10 @@ import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import { DataSendOptions } from '@livekit/components-core';
 import type { GridLayout as GridLayout_2 } from '@livekit/components-core/dist/helper/grid-layouts';
 import { HTMLAttributes } from 'react';
+import type { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
 import { LocalTrackPublication } from 'livekit-client';
+import type { LocalVideoTrack } from 'livekit-client';
 import { MediaDeviceFailure } from 'livekit-client';
 import { Participant } from 'livekit-client';
 import type { ParticipantClickEvent } from '@livekit/components-core';
@@ -425,6 +427,12 @@ export type TrackToggleProps<T extends ToggleSource> = Omit<React_2.ButtonHTMLAt
     captureOptions?: CaptureOptionsBySource<T>;
 };
 
+// @alpha
+export function useAudioPlayback(room?: Room): {
+    canPlayAudio: boolean;
+    startAudio: () => Promise<void>;
+};
+
 // @public (undocumented)
 export function useChat(): {
     send: ((message: string) => Promise<void>) | undefined;
@@ -647,6 +655,13 @@ export type UseParticipantTileProps<T extends HTMLElement> = TrackReferenceOrPla
 export function usePinnedTracks(layoutContext?: LayoutContextType): TrackReferenceOrPlaceholder[];
 
 // @public (undocumented)
+export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(enabled: boolean, deviceId: string, kind: 'videoinput' | 'audioinput'): {
+    selectedDevice: MediaDeviceInfo | undefined;
+    localTrack: T | undefined;
+    deviceError: Error | null;
+};
+
+// @public (undocumented)
 export const useRemoteParticipant: (identity: string, options?: UseRemoteParticipantOptions) => RemoteParticipant | undefined;
 
 // @public (undocumented)
@@ -694,6 +709,20 @@ export function useSortedParticipants(participants: Array<Participant>): Partici
 
 // @public
 export const useSpeakingParticipants: () => Participant[];
+
+// @alpha
+export function useStartAudio({ room, props }: UseStartAudioProps): {
+    mergedProps: React_2.HTMLAttributes<HTMLElement>;
+    canPlayAudio: boolean;
+};
+
+// @alpha (undocumented)
+export interface UseStartAudioProps {
+    // (undocumented)
+    props: React_2.ButtonHTMLAttributes<HTMLButtonElement>;
+    // (undocumented)
+    room?: Room;
+}
 
 // @alpha
 export function useSwipe(element: React_2.RefObject<HTMLElement>, options?: UseSwipeOptions): void;

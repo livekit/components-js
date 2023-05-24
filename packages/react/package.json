@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@microsoft/api-documenter": "^7.21.7",
-    "@microsoft/api-extractor": "^7.34.4",
+    "@microsoft/api-extractor": "^7.35.0",
     "@size-limit/file": "^8.2.4",
     "@size-limit/webpack": "^8.2.4",
     "@svgr/cli": "^7.0.0",

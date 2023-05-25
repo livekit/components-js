@@ -1,13 +1,13 @@
 export {} from './chat-context';
 export {
   LayoutContext,
-  LayoutContextType,
   useCreateLayoutContext,
   useEnsureCreateLayoutContext,
   useEnsureLayoutContext,
   useLayoutContext,
   useMaybeLayoutContext,
 } from './layout-context';
+export type { LayoutContextType } from './layout-context';
 export {
   ParticipantContext,
   useEnsureParticipant,

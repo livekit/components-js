@@ -1,7 +1,7 @@
 export {} from './chat-context';
+export type { LayoutContextType } from './layout-context';
 export {
   LayoutContext,
-  LayoutContextType,
   useCreateLayoutContext,
   useEnsureCreateLayoutContext,
   useEnsureLayoutContext,

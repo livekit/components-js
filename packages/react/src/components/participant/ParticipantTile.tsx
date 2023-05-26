@@ -11,6 +11,9 @@ import {
   ParticipantContext,
   useEnsureParticipant,
   useMaybeLayoutContext,
+  useTrackContext,
+  useMaybeTrackContext,
+  useEnsureTrackReference,
 } from '../../context';
 import { useIsMuted, useIsSpeaking } from '../../hooks';
 import { mergeProps } from '../../utils';
@@ -113,13 +116,15 @@ export const ParticipantTile = ({
   disableSpeakingIndicator,
   ...htmlProps
 }: ParticipantTileProps) => {
-  const p = useEnsureParticipant(participant);
+  const trackRef = useEnsureTrackReference(
+    participant ? { participant, source, publication } : undefined,
+  );
 
   const { elementProps } = useParticipantTile<HTMLDivElement>({
-    participant: p,
+    participant: trackRef.participant,
     htmlProps,
-    source,
-    publication,
+    source: trackRef.source,
+    publication: trackRef.publication,
     disableSpeakingIndicator,
     onParticipantClick,
   });
@@ -129,37 +134,37 @@ export const ParticipantTile = ({
   const handleSubscribe = React.useCallback(
     (subscribed: boolean) => {
       if (
-        source &&
+        trackRef.source &&
         !subscribed &&
         layoutContext &&
         layoutContext.pin.dispatch &&
-        isParticipantSourcePinned(p, source, layoutContext.pin.state)
+        isParticipantSourcePinned(trackRef.participant, trackRef.source, layoutContext.pin.state)
       ) {
         layoutContext.pin.dispatch({ msg: 'clear_pin' });
       }
     },
-    [p, layoutContext, source],
+    [trackRef.participant, layoutContext, trackRef.source],
   );
 
   return (
     <div style={{ position: 'relative' }} {...elementProps}>
-      <ParticipantContextIfNeeded participant={p}>
+      <ParticipantContextIfNeeded participant={trackRef.participant}>
         {children ?? (
           <>
-            {publication?.kind === 'video' ||
-            source === Track.Source.Camera ||
-            source === Track.Source.ScreenShare ? (
+            {trackRef.publication?.kind === 'video' ||
+            trackRef.source === Track.Source.Camera ||
+            trackRef.source === Track.Source.ScreenShare ? (
               <VideoTrack
-                participant={p}
-                source={source}
-                publication={publication}
+                participant={trackRef.participant}
+                source={trackRef.source}
+                publication={trackRef.publication}
                 onSubscriptionStatusChanged={handleSubscribe}
               />
             ) : (
               <AudioTrack
-                participant={p}
-                source={source}
-                publication={publication}
+                participant={trackRef.participant}
+                source={trackRef.source}
+                publication={trackRef.publication}
                 onSubscriptionStatusChanged={handleSubscribe}
               />
             )}
@@ -168,7 +173,7 @@ export const ParticipantTile = ({
             </div>
             <div className="lk-participant-metadata">
               <div className="lk-participant-metadata-item">
-                {source === Track.Source.Camera ? (
+                {trackRef.source === Track.Source.Camera ? (
                   <>
                     <TrackMutedIndicator
                       source={Track.Source.Microphone}
@@ -187,7 +192,7 @@ export const ParticipantTile = ({
             </div>
           </>
         )}
-        <FocusToggle trackSource={source} />
+        <FocusToggle trackSource={trackRef.source} />
       </ParticipantContextIfNeeded>
     </div>
   );

@@ -100,18 +100,19 @@ export type UseResizeObserverCallback = (
 
 export const useSize = (target: React.RefObject<HTMLDivElement>) => {
   const [size, setSize] = React.useState({ width: 0, height: 0 });
-  React.useLayoutEffect(() => {
+
+  const handleResize = () => {
     if (target.current) {
       const { width, height } = target.current.getBoundingClientRect();
       setSize({ width, height });
     }
-  }, [target.current]);
+  };
 
-  const resizeCallback = React.useCallback(
-    (entry: ResizeObserverEntry) => setSize(entry.contentRect),
-    [],
-  );
-  // Where the magic happens
-  useResizeObserver(target, resizeCallback);
+  React.useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [target]);
+
   return size;
 };

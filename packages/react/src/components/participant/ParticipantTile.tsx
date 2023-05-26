@@ -11,8 +11,6 @@ import {
   ParticipantContext,
   useEnsureParticipant,
   useMaybeLayoutContext,
-  useTrackContext,
-  useMaybeTrackContext,
   useEnsureTrackReference,
 } from '../../context';
 import { useIsMuted, useIsSpeaking } from '../../hooks';

@@ -70,7 +70,7 @@ export function CarouselLayout({ tracks, orientation, ...props }: CarouselLayout
 
   const sortedTiles = useVisualStableUpdate(tracks, maxVisibleTiles);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (asideEl.current) {
       asideEl.current.dataset.lkOrientation = carouselOrientation;
       asideEl.current.style.setProperty('--lk-max-visible-tiles', maxVisibleTiles.toString());

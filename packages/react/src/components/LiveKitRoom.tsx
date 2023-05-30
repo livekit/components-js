@@ -130,7 +130,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
       const localP = room.localParticipant;
 
       log.debug('trying to publish local tracks');
-      Promise.allSettled([
+      Promise.all([
         localP.setMicrophoneEnabled(!!audio, typeof audio !== 'boolean' ? audio : undefined),
         localP.setCameraEnabled(!!video, typeof video !== 'boolean' ? video : undefined),
         localP.setScreenShareEnabled(!!screen, typeof screen !== 'boolean' ? screen : undefined),

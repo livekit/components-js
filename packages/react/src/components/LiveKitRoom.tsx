@@ -128,15 +128,16 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
     if (!room) return;
     const onSignalConnected = () => {
       const localP = room.localParticipant;
-      try {
-        log.debug('trying to publish local tracks');
-        localP.setMicrophoneEnabled(!!audio, typeof audio !== 'boolean' ? audio : undefined);
-        localP.setCameraEnabled(!!video, typeof video !== 'boolean' ? video : undefined);
-        localP.setScreenShareEnabled(!!screen, typeof screen !== 'boolean' ? screen : undefined);
-      } catch (e) {
+
+      log.debug('trying to publish local tracks');
+      Promise.all([
+        localP.setMicrophoneEnabled(!!audio, typeof audio !== 'boolean' ? audio : undefined),
+        localP.setCameraEnabled(!!video, typeof video !== 'boolean' ? video : undefined),
+        localP.setScreenShareEnabled(!!screen, typeof screen !== 'boolean' ? screen : undefined),
+      ]).catch((e) => {
         log.warn(e);
         onError?.(e as Error);
-      }
+      });
     };
 
     const onMediaDeviceError = (e: Error) => {

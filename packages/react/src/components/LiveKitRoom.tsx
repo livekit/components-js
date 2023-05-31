@@ -28,7 +28,7 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    */
   token: string | undefined;
   /**
-   * Publish audio directly when connecting to your LiveKit room.
+   * Publish audio immediately after connecting to your LiveKit room.
    * @defaultValue `false`
    * @see https://docs.livekit.io/client-sdk-js/interfaces/AudioCaptureOptions.html
    */

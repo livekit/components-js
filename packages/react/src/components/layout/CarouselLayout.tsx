@@ -42,28 +42,30 @@ export const CarouselView = CarouselLayout;
  */
 export function CarouselLayout({ tracks, orientation, ...props }: CarouselLayoutProps) {
   const asideEl = React.useRef<HTMLDivElement>(null);
-
+  const [prevTiles, setPrevTiles] = React.useState(0);
   const { width, height } = useSize(asideEl);
   const carouselOrientation = orientation
     ? orientation
     : height >= width
     ? 'vertical'
     : 'horizontal';
-  const tileHeight = Math.max(width * ASPECT_RATIO_INVERT, MIN_HEIGHT);
-  const tileWidth = Math.max(height * ASPECT_RATIO, MIN_WIDTH);
 
-  let maxVisibleTiles =
+  const tileSpan =
     carouselOrientation === 'vertical'
-      ? Math.max(Math.floor(height / tileHeight), MIN_VISIBLE_TILES)
-      : Math.max(Math.floor(width / tileWidth), MIN_VISIBLE_TILES);
+      ? Math.max(width * ASPECT_RATIO_INVERT, MIN_HEIGHT)
+      : Math.max(height * ASPECT_RATIO, MIN_WIDTH);
+  const scrollBarWidth = getScrollBarWidth();
 
-  // To avoid an unstable UI state, on overflow, we need to consider the scrollbar wide and calculate the `maxVisibleTiles` again.
-  if (tracks.length > maxVisibleTiles) {
-    const scrollBarWidth = getScrollBarWidth();
-    maxVisibleTiles =
-      carouselOrientation === 'vertical'
-        ? Math.max(Math.floor(height / (tileHeight - scrollBarWidth)), MIN_VISIBLE_TILES)
-        : Math.max(Math.floor(width / (tileWidth - scrollBarWidth)), MIN_VISIBLE_TILES);
+  const tilesThatFit =
+    carouselOrientation === 'vertical'
+      ? Math.max((height - scrollBarWidth) / tileSpan, MIN_VISIBLE_TILES)
+      : Math.max((width - scrollBarWidth) / tileSpan, MIN_VISIBLE_TILES);
+
+  let maxVisibleTiles = Math.round(tilesThatFit);
+  if (Math.abs(tilesThatFit - prevTiles) < 0.5) {
+    maxVisibleTiles = Math.round(prevTiles);
+  } else if (prevTiles !== tilesThatFit) {
+    setPrevTiles(tilesThatFit);
   }
 
   const sortedTiles = useVisualStableUpdate(tracks, maxVisibleTiles);

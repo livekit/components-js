@@ -34,7 +34,7 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    */
   audio?: AudioCaptureOptions | boolean;
   /**
-   * Publish video directly when connecting to your LiveKit room.
+   * Publish video immediately after connecting to your LiveKit room.
    * @defaultValue `false`
    * @see https://docs.livekit.io/client-sdk-js/interfaces/VideoCaptureOptions.html
    */

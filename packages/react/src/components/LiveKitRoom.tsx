@@ -28,26 +28,26 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    */
   token: string | undefined;
   /**
-   * Enable audio capabilities in your LiveKit room.
-   * @defaultValue `true`
+   * Publish audio immediately after connecting to your LiveKit room.
+   * @defaultValue `false`
    * @see https://docs.livekit.io/client-sdk-js/interfaces/AudioCaptureOptions.html
    */
   audio?: AudioCaptureOptions | boolean;
   /**
-   * Enable video capabilities in your LiveKit room.
-   * @defaultValue `true`
+   * Publish video immediately after connecting to your LiveKit room.
+   * @defaultValue `false`
    * @see https://docs.livekit.io/client-sdk-js/interfaces/VideoCaptureOptions.html
    */
   video?: VideoCaptureOptions | boolean;
   /**
-   * Enable screen share capabilities in your LiveKit room.
-   * @defaultValue `true`
+   * Publish screen share immediately after connecting to your LiveKit room.
+   * @defaultValue `false`
    * @see https://docs.livekit.io/client-sdk-js/interfaces/ScreenShareCaptureOptions.html
    */
   screen?: ScreenShareCaptureOptions | boolean;
   /**
    * If set to true a connection to LiveKit room is initiated.
-   * @defaultValue `true`
+   * @defaultValue `false`
    */
   connect?: boolean;
   /**

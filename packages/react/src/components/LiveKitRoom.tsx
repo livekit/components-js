@@ -40,7 +40,7 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    */
   video?: VideoCaptureOptions | boolean;
   /**
-   * Publish screen share directly when connecting to  your LiveKit room.
+   * Publish screen share immediately after connecting to your LiveKit room.
    * @defaultValue `false`
    * @see https://docs.livekit.io/client-sdk-js/interfaces/ScreenShareCaptureOptions.html
    */

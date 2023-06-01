@@ -47,7 +47,7 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
       { source: Track.Source.Camera, withPlaceholder: true },
       { source: Track.Source.ScreenShare, withPlaceholder: false },
     ],
-    { updateOnlyOn: [] },
+    { updateOnlyOn: [RoomEvent.ActiveSpeakersChanged] },
   );
 
   const widgetUpdate = (state: WidgetState) => {

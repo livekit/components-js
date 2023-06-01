@@ -26,7 +26,9 @@ export function useAudioPlayback(room?: Room): {
     () => roomAudioPlaybackAllowedObservable(roomEnsured),
     [roomEnsured],
   );
-  const { canPlayAudio } = useObservableState(observable, { canPlayAudio: false });
+  const { canPlayAudio } = useObservableState(observable, {
+    canPlayAudio: roomEnsured.canPlaybackAudio,
+  });
 
   return { canPlayAudio, startAudio };
 }

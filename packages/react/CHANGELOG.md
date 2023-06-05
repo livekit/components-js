@@ -1,5 +1,23 @@
 # @livekit/components-react
 
+## 1.0.4
+
+### Patch Changes
+
+- Improve carousel view stability on overflow - [#499](https://github.com/livekit/components-js/pull/499) ([@lukasIO](https://github.com/lukasIO))
+
+- Set correct starting value for useAudioPlayback hook - [#514](https://github.com/livekit/components-js/pull/514) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix participant tile always rendering camera track - [#498](https://github.com/livekit/components-js/pull/498) ([@lukasIO](https://github.com/lukasIO))
+
+- Catch publish promises when first connecting room - [#501](https://github.com/livekit/components-js/pull/501) ([@lukasIO](https://github.com/lukasIO))
+
+- Correct export of LayoutContextType #491 - [#495](https://github.com/livekit/components-js/pull/495) ([@Ocupe](https://github.com/Ocupe))
+
+- Stringify room options - [#489](https://github.com/livekit/components-js/pull/489) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix default values in docs - [#502](https://github.com/livekit/components-js/pull/502) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.0.3
 
 ### Patch Changes

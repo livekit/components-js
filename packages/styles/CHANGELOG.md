@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 1.0.1
+
+### Patch Changes
+
+- Add scss folder to npm package - [#490](https://github.com/livekit/components-js/pull/490) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.0.0
 
 ### Major Changes

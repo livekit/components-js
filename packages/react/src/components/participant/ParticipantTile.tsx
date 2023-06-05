@@ -11,7 +11,7 @@ import {
   ParticipantContext,
   useEnsureParticipant,
   useMaybeLayoutContext,
-  useEnsureTrackReference,
+  useMaybeTrackContext,
 } from '../../context';
 import { useIsMuted, useIsSpeaking } from '../../hooks';
 import { mergeProps } from '../../utils';
@@ -114,9 +114,12 @@ export const ParticipantTile = ({
   disableSpeakingIndicator,
   ...htmlProps
 }: ParticipantTileProps) => {
-  const trackRef = useEnsureTrackReference(
-    participant ? { participant, source, publication } : undefined,
-  );
+  const p = useEnsureParticipant(participant);
+  const trackRef: TrackReferenceOrPlaceholder = useMaybeTrackContext() ?? {
+    participant: p,
+    source,
+    publication,
+  };
 
   const { elementProps } = useParticipantTile<HTMLDivElement>({
     participant: trackRef.participant,

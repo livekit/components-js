@@ -35,7 +35,7 @@
   "dependencies": {
     "@floating-ui/dom": "^1.1.0",
     "email-regex": "^5.0.0",
-    "global-tld-list": "^0.0.1093",
+    "global-tld-list": "^0.0.1125",
     "loglevel": "^1.8.1",
     "rxjs": "^7.8.0"
   },

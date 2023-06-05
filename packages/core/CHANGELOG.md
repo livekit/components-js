@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.6.8
+
+### Patch Changes
+
+- Fix: Only react to topics defined in the message observable - [#516](https://github.com/livekit/components-js/pull/516) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.6.7
 
 ### Patch Changes

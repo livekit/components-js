@@ -11,5 +11,5 @@ export function usePinnedTracks(layoutContext?: LayoutContextType): TrackReferen
       return layoutContext.pin.state;
     }
     return [];
-  }, [layoutContext]);
+  }, [layoutContext.pin.state]);
 }

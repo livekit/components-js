@@ -42,7 +42,7 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
  */
 export function VideoConference({ chatMessageFormatter, ...props }: VideoConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });
-  const lastAutoFocusedScreenShareTrack = React.useRef<TrackReferenceOrPlaceholder>(null);
+  const lastAutoFocusedScreenShareTrack = React.useRef<TrackReferenceOrPlaceholder | null>(null);
 
   const tracks = useTracks(
     [
@@ -77,7 +77,7 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
       !screenShareTracks.some(
         (track) =>
           track.publication.trackSid ===
-          lastAutoFocusedScreenShareTrack.current?.publication.trackSid,
+          lastAutoFocusedScreenShareTrack.current?.publication?.trackSid,
       )
     ) {
       log.debug('Auto clearing screen share focus.');

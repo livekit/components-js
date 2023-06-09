@@ -46,20 +46,6 @@ export function useStartAudio({ room, props }: UseStartAudioProps) {
     [props, className, canPlayAudio, handleStartAudioPlayback, roomEnsured],
   );
 
-  log.warn(`canPlayAudio: ${canPlayAudio}`);
-
-  const dummyAudio = React.useRef<HTMLAudioElement>();
-
-  React.useEffect(() => {
-    if (canPlayAudio && !dummyAudio.current) {
-      dummyAudio.current = document.createElement('audio');
-      dummyAudio.current.autoplay = true;
-      //@ts-ignore
-      dummyAudio.current.playsInline = true;
-      dummyAudio.current.srcObject = new MediaStream([getEmptyAudioStreamTrack()]);
-    }
-  }, [canPlayAudio]);
-
   return { mergedProps, canPlayAudio };
 }
 

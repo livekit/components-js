@@ -90,7 +90,7 @@ export function StartAudio({ label = 'Allow Audio', ...props }: AllowAudioPlayba
   return (
     <button onClick={handleClick} {...htmlProps}>
       {label}
-      <audio ref={dummyAudio} autoPlay playsInline />
+      <audio ref={dummyAudio} autoPlay />
     </button>
   );
 }

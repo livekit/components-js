@@ -3,8 +3,10 @@ import {
   LiveKitRoom,
   RoomAudioRenderer,
   RoomName,
+  StartAudio,
   TrackLoop,
   TrackMutedIndicator,
+  TrackToggle,
   useIsMuted,
   useIsSpeaking,
   useToken,
@@ -36,8 +38,9 @@ const Clubhouse = () => {
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
         connect={tryToConnect}
+        options={{ expWebAudioMix: false }}
         video={false}
-        audio={true}
+        audio={false}
         // simulateParticipants={15}
         onConnected={() => setConnected(true)}
         onDisconnected={() => {
@@ -61,10 +64,10 @@ const Clubhouse = () => {
             <RoomName />
           </h1>
           <Stage />
-          <ControlBar
-            variation="minimal"
-            controls={{ microphone: true, camera: false, screenShare: false }}
-          />
+          <div className="lk-control-bar">
+            <TrackToggle source={Track.Source.Microphone}></TrackToggle>
+            <StartAudio label="start audio" />
+          </div>
           <RoomAudioRenderer />
         </div>
       </LiveKitRoom>
@@ -73,7 +76,7 @@ const Clubhouse = () => {
 };
 
 const Stage = () => {
-  const tracksReferences = useTracks([Track.Source.Microphone]);
+  const tracksReferences = useTracks([{ source: Track.Source.Microphone, withPlaceholder: true }]);
   return (
     <div className="">
       <div className={styles.stageGrid}>

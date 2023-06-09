@@ -1,5 +1,5 @@
-import { setupStartAudio } from '@livekit/components-core';
-import type { Room } from 'livekit-client';
+import { setupStartAudio, log } from '@livekit/components-core';
+import { getEmptyAudioStreamTrack, type Room } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureRoom, useRoomContext } from '../../context';
 import { useObservableState } from '../../hooks/internal/useObservableState';
@@ -30,7 +30,9 @@ export function useStartAudio({ room, props }: UseStartAudioProps) {
     () => roomAudioPlaybackAllowedObservable(roomEnsured),
     [roomEnsured, roomAudioPlaybackAllowedObservable],
   );
-  const { canPlayAudio } = useObservableState(observable, { canPlayAudio: false });
+  const { canPlayAudio } = useObservableState(observable, {
+    canPlayAudio: roomEnsured.canPlaybackAudio,
+  });
 
   const mergedProps = React.useMemo(
     () =>
@@ -43,6 +45,20 @@ export function useStartAudio({ room, props }: UseStartAudioProps) {
       }),
     [props, className, canPlayAudio, handleStartAudioPlayback, roomEnsured],
   );
+
+  log.warn(`canPlayAudio: ${canPlayAudio}`);
+
+  const dummyAudio = React.useRef<HTMLAudioElement>();
+
+  React.useEffect(() => {
+    if (canPlayAudio && !dummyAudio.current) {
+      dummyAudio.current = document.createElement('audio');
+      dummyAudio.current.autoplay = true;
+      //@ts-ignore
+      dummyAudio.current.playsInline = true;
+      dummyAudio.current.srcObject = new MediaStream([getEmptyAudioStreamTrack()]);
+    }
+  }, [canPlayAudio]);
 
   return { mergedProps, canPlayAudio };
 }
@@ -70,6 +86,25 @@ export interface AllowAudioPlaybackProps extends React.ButtonHTMLAttributes<HTML
 export function StartAudio({ label = 'Allow Audio', ...props }: AllowAudioPlaybackProps) {
   const room = useRoomContext();
   const { mergedProps } = useStartAudio({ room, props });
+  const { onClick, ...htmlProps } = mergedProps;
+  const dummyAudio = React.useRef<HTMLAudioElement>(null);
 
-  return <button {...mergedProps}>{label}</button>;
+  const handleClick = React.useCallback(
+    (ev: React.MouseEvent<HTMLElement>) => {
+      onClick?.(ev);
+      if (dummyAudio.current) {
+        const track = getEmptyAudioStreamTrack();
+        track.enabled = true;
+        dummyAudio.current.srcObject = new MediaStream([track]);
+        dummyAudio.current?.play();
+      }
+    },
+    [onClick],
+  );
+  return (
+    <button onClick={handleClick} {...htmlProps}>
+      {label}
+      <audio ref={dummyAudio} autoPlay playsInline />
+    </button>
+  );
 }

@@ -9,7 +9,7 @@ import type {
 import { RoomEvent, TrackEvent } from 'livekit-client';
 import { map, Observable, startWith } from 'rxjs';
 import { allParticipantRoomEvents } from '../helper';
-import log from '../logger';
+import { log } from '../logger';
 import type { TrackReference } from '../track-reference';
 import { observeRoomEvents } from './room';
 

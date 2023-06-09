@@ -1,7 +1,7 @@
 import { setLogLevel as setClientSdkLogLevel } from 'livekit-client';
 import loglevel from 'loglevel';
 
-const log = loglevel.getLogger('lk-components-js');
+export const log = loglevel.getLogger('lk-components-js');
 log.setDefaultLevel('WARN');
 
 type LogLevel = Parameters<typeof setClientSdkLogLevel>[0];
@@ -26,5 +26,3 @@ export function setLogLevel(
     setClientSdkLogLevel(level);
   }
 }
-
-export default log;

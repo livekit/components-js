@@ -1,7 +1,7 @@
 import type { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
 import { Track } from 'livekit-client';
 import { BehaviorSubject, map, mergeWith } from 'rxjs';
-import log from '../logger';
+import { log } from '../logger';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
 

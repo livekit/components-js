@@ -16,10 +16,9 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "rimraf generated",
-    "build": "tsx src/build.ts",
-    "clean": "rimraf generated .turbo",
-    "gen:docs": "yarn build",
+    "gen:docs": "yarn gen:api-extractor && yarn gen:api-documenter",
+    "gen:api-extractor": "tsx src/gen-docs.ts",
+    "gen:api-documenter": "api-documenter markdown --input-folder ../../packages/react/temp --output-folder ../../docs/beta-docs",
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit"
   },

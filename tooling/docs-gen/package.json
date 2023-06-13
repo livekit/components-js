@@ -7,14 +7,9 @@
   "author": "LiveKit",
   "repository": {
     "type": "git",
-    "url": "https://github.com/livekit/components/tree/main/tooling/docs-gen"
+    "url": "https://github.com/livekit/components-js.git",
+    "directory": "eslint-plugin-tsdoc"
   },
-  "bugs": {
-    "url": "https://github.com/livekit/components/tree/main/tooling/docs-gen"
-  },
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "gen:docs": "yarn gen:api-extractor && yarn gen:api-documenter",
     "gen:api-extractor": "tsx src/gen-docs.ts",

@@ -2278,19 +2278,6 @@
     "@types/mdx" "^2.0.0"
     "@types/react" ">=16"
 
-"@microsoft/api-documenter@^7.22.16":
-  version "7.22.16"
-  resolved "https://registry.yarnpkg.com/@microsoft/api-documenter/-/api-documenter-7.22.16.tgz#65e0363c3a9ecd50cb7978263af7eeb2548ef70b"
-  integrity sha512-/m2uXGrOMjdJQDDFKbEnI5xGkVyjaBcd5VUmmTYy+jBB8p1h+UxDDhM6UlW5nvQ3AebcdyFUvX7fX30epwWtaw==
-  dependencies:
-    "@microsoft/api-extractor-model" "7.27.2"
-    "@microsoft/tsdoc" "0.14.2"
-    "@rushstack/node-core-library" "3.59.3"
-    "@rushstack/ts-command-line" "4.14.0"
-    colors "~1.2.1"
-    js-yaml "~3.13.1"
-    resolve "~1.22.1"
-
 "@microsoft/api-extractor-model@7.27.1":
   version "7.27.1"
   resolved "https://registry.yarnpkg.com/@microsoft/api-extractor-model/-/api-extractor-model-7.27.1.tgz#06a1ba273f1a4b23fe080ba14b80d2e5346abd4f"

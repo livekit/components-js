@@ -24,7 +24,6 @@
     "eslint-config-lk-custom": "*"
   },
   "devDependencies": {
-    "@microsoft/api-documenter": "^7.22.16",
     "@microsoft/api-extractor": "^7.35.2"
   },
   "keywords": [

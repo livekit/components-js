@@ -18,7 +18,7 @@ export class GenerateAction extends BaseAction {
       summary: 'EXPERIMENTAL',
       documentation:
         'EXPERIMENTAL - This action is a prototype of a new config file driven mode of operation for' +
-        ' API Documenter.  It is not ready for general usage yet.  Its design may change in the future.'
+        ' API Documenter.  It is not ready for general usage yet.  Its design may change in the future.',
     });
   }
 
@@ -34,7 +34,7 @@ export class GenerateAction extends BaseAction {
       configFilePath = path.join(process.cwd(), 'config', DocumenterConfig.FILENAME);
       if (!FileSystem.exists(configFilePath)) {
         throw new Error(
-          `Unable to find ${DocumenterConfig.FILENAME} in the current folder or in a "config" subfolder`
+          `Unable to find ${DocumenterConfig.FILENAME} in the current folder or in a "config" subfolder`,
         );
       }
     }
@@ -47,13 +47,13 @@ export class GenerateAction extends BaseAction {
       const markdownDocumenter: MarkdownDocumenter = new MarkdownDocumenter({
         apiModel,
         documenterConfig,
-        outputFolder
+        outputFolder,
       });
       markdownDocumenter.generateFiles();
     } else {
       const yamlDocumenter: ExperimentalYamlDocumenter = new ExperimentalYamlDocumenter(
         apiModel,
-        documenterConfig
+        documenterConfig,
       );
       yamlDocumenter.generateFiles(outputFolder);
     }

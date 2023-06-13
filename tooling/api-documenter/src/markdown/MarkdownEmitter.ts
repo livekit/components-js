@@ -16,7 +16,7 @@ import {
   DocNodeTransforms,
   DocEscapedText,
   DocErrorText,
-  DocBlockTag
+  DocBlockTag,
 } from '@microsoft/tsdoc';
 import { InternalError } from '@rushstack/node-core-library';
 
@@ -42,7 +42,11 @@ export interface IMarkdownEmitterContext<TOptions = IMarkdownEmitterOptions> {
  * For more info:  https://en.wikipedia.org/wiki/Markdown
  */
 export class MarkdownEmitter {
-  public emit(stringBuilder: StringBuilder, docNode: DocNode, options: IMarkdownEmitterOptions): string {
+  public emit(
+    stringBuilder: StringBuilder,
+    docNode: DocNode,
+    options: IMarkdownEmitterOptions,
+  ): string {
     const writer: IndentedWriter = new IndentedWriter(stringBuilder);
 
     const context: IMarkdownEmitterContext = {
@@ -55,7 +59,7 @@ export class MarkdownEmitter {
       writingBold: false,
       writingItalic: false,
 
-      options
+      options,
     };
 
     this.writeNode(docNode, context, false);
@@ -88,7 +92,11 @@ export class MarkdownEmitter {
   /**
    * @virtual
    */
-  protected writeNode(docNode: DocNode, context: IMarkdownEmitterContext, docNodeSiblings: boolean): void {
+  protected writeNode(
+    docNode: DocNode,
+    context: IMarkdownEmitterContext,
+    docNodeSiblings: boolean,
+  ): void {
     const writer: IndentedWriter = context.writer;
 
     switch (docNode.kind) {
@@ -99,7 +107,9 @@ export class MarkdownEmitter {
       }
       case DocNodeKind.HtmlStartTag:
       case DocNodeKind.HtmlEndTag: {
-        const docHtmlTag: DocHtmlStartTag | DocHtmlEndTag = docNode as DocHtmlStartTag | DocHtmlEndTag;
+        const docHtmlTag: DocHtmlStartTag | DocHtmlEndTag = docNode as
+          | DocHtmlStartTag
+          | DocHtmlEndTag;
         // write the HTML element verbatim into the output
         writer.write(docHtmlTag.emitAsHtml());
         break;
@@ -138,7 +148,8 @@ export class MarkdownEmitter {
       }
       case DocNodeKind.Paragraph: {
         const docParagraph: DocParagraph = docNode as DocParagraph;
-        const trimmedParagraph: DocParagraph = DocNodeTransforms.trimSpacesInParagraph(docParagraph);
+        const trimmedParagraph: DocParagraph =
+          DocNodeTransforms.trimSpacesInParagraph(docParagraph);
         if (context.insideTable) {
           if (docNodeSiblings) {
             // This tentative write is necessary to avoid writing empty paragraph tags (i.e. `<p></p>`). At the
@@ -205,13 +216,19 @@ export class MarkdownEmitter {
   }
 
   /** @virtual */
-  protected writeLinkTagWithCodeDestination(docLinkTag: DocLinkTag, context: IMarkdownEmitterContext): void {
+  protected writeLinkTagWithCodeDestination(
+    docLinkTag: DocLinkTag,
+    context: IMarkdownEmitterContext,
+  ): void {
     // The subclass needs to implement this to support code destinations
     throw new InternalError('writeLinkTagWithCodeDestination()');
   }
 
   /** @virtual */
-  protected writeLinkTagWithUrlDestination(docLinkTag: DocLinkTag, context: IMarkdownEmitterContext): void {
+  protected writeLinkTagWithUrlDestination(
+    docLinkTag: DocLinkTag,
+    context: IMarkdownEmitterContext,
+  ): void {
     const linkText: string =
       docLinkTag.linkText !== undefined ? docLinkTag.linkText : docLinkTag.urlDestination!;
 

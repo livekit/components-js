@@ -15,7 +15,10 @@ export interface IDocNoteBoxParameters extends IDocNodeParameters {}
 export class DocNoteBox extends DocNode {
   public readonly content: DocSection;
 
-  public constructor(parameters: IDocNoteBoxParameters, sectionChildNodes?: ReadonlyArray<DocNode>) {
+  public constructor(
+    parameters: IDocNoteBoxParameters,
+    sectionChildNodes?: ReadonlyArray<DocNode>,
+  ) {
     super(parameters);
     this.content = new DocSection({ configuration: this.configuration }, sectionChildNodes);
   }

@@ -33,7 +33,7 @@ export class DocTable extends DocNode {
         if (parameters.headerCells) {
           throw new Error(
             'IDocTableParameters.headerCells and IDocTableParameters.headerTitles' +
-              ' cannot both be specified'
+              ' cannot both be specified',
           );
         }
         for (const cellText of parameters.headerTitles) {

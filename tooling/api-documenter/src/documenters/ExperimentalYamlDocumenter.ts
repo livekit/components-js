@@ -39,7 +39,7 @@ export class ExperimentalYamlDocumenter extends YamlDocumenter {
       let tocItem: IYamlTocItem;
       if (apiItem.kind === ApiItemKind.Namespace && !this.newDocfxNamespaces) {
         tocItem = {
-          name: this._getTocItemName(apiItem)
+          name: this._getTocItemName(apiItem),
         };
       } else {
         if (this._shouldEmbed(apiItem.kind)) {
@@ -49,7 +49,7 @@ export class ExperimentalYamlDocumenter extends YamlDocumenter {
 
         tocItem = {
           name: this._getTocItemName(apiItem),
-          uid: this._getUid(apiItem)
+          uid: this._getUid(apiItem),
         };
 
         if (apiItem.kind !== ApiItemKind.Package) {
@@ -74,7 +74,11 @@ export class ExperimentalYamlDocumenter extends YamlDocumenter {
 
     if (tocConfig.items) {
       for (const tocItem of tocConfig.items) {
-        if (tocItem.items && tocItem.items.length > 0 && this._shouldNotIncludeInPointersMap(tocItem)) {
+        if (
+          tocItem.items &&
+          tocItem.items.length > 0 &&
+          this._shouldNotIncludeInPointersMap(tocItem)
+        ) {
           this._generateTocPointersMap(tocItem);
         } else {
           // check for presence of the `catchAllCategory` config option
@@ -135,7 +139,7 @@ export class ExperimentalYamlDocumenter extends YamlDocumenter {
   // but is generic enough to be used for any inline tag
   private _findInlineTagByName(
     tagName: string,
-    docComment: DocComment | undefined
+    docComment: DocComment | undefined,
   ): DocInlineTag | undefined {
     const tagNameToCheck: string = `@${tagName}`;
 
@@ -146,7 +150,10 @@ export class ExperimentalYamlDocumenter extends YamlDocumenter {
     }
     if (docComment) {
       for (const childNode of docComment.getChildNodes()) {
-        const result: DocInlineTag | undefined = this._findInlineTagByName(tagName, childNode as DocComment);
+        const result: DocInlineTag | undefined = this._findInlineTagByName(
+          tagName,
+          childNode as DocComment,
+        );
         if (result !== undefined) {
           return result;
         }

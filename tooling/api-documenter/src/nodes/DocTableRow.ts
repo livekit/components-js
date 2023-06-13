@@ -51,8 +51,8 @@ export class DocTableRow extends DocNode {
     cell.content.appendNodeInParagraph(
       new DocPlainText({
         configuration: this.configuration,
-        text: cellContent
-      })
+        text: cellContent,
+      }),
     );
     return cell;
   }

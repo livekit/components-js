@@ -4,7 +4,11 @@
 import colors from 'colors';
 
 import { DocNode, DocLinkTag, StringBuilder } from '@microsoft/tsdoc';
-import { ApiModel, IResolveDeclarationReferenceResult, ApiItem } from '@microsoft/api-extractor-model';
+import {
+  ApiModel,
+  IResolveDeclarationReferenceResult,
+  ApiItem,
+} from '@microsoft/api-extractor-model';
 
 import { CustomDocNodeKind } from '../nodes/CustomDocNodeKind';
 import { DocHeading } from '../nodes/DocHeading';
@@ -12,7 +16,11 @@ import { DocNoteBox } from '../nodes/DocNoteBox';
 import { DocTable } from '../nodes/DocTable';
 import { DocTableCell } from '../nodes/DocTableCell';
 import { DocEmphasisSpan } from '../nodes/DocEmphasisSpan';
-import { MarkdownEmitter, IMarkdownEmitterContext, IMarkdownEmitterOptions } from './MarkdownEmitter';
+import {
+  MarkdownEmitter,
+  IMarkdownEmitterContext,
+  IMarkdownEmitterOptions,
+} from './MarkdownEmitter';
 import { IndentedWriter } from '../utils/IndentedWriter';
 
 export interface ICustomMarkdownEmitterOptions extends IMarkdownEmitterOptions {
@@ -33,13 +41,17 @@ export class CustomMarkdownEmitter extends MarkdownEmitter {
   public emit(
     stringBuilder: StringBuilder,
     docNode: DocNode,
-    options: ICustomMarkdownEmitterOptions
+    options: ICustomMarkdownEmitterOptions,
   ): string {
     return super.emit(stringBuilder, docNode, options);
   }
 
   /** @override */
-  protected writeNode(docNode: DocNode, context: IMarkdownEmitterContext, docNodeSiblings: boolean): void {
+  protected writeNode(
+    docNode: DocNode,
+    context: IMarkdownEmitterContext,
+    docNodeSiblings: boolean,
+  ): void {
     const writer: IndentedWriter = context.writer;
 
     switch (docNode.kind) {
@@ -154,13 +166,13 @@ export class CustomMarkdownEmitter extends MarkdownEmitter {
   /** @override */
   protected writeLinkTagWithCodeDestination(
     docLinkTag: DocLinkTag,
-    context: IMarkdownEmitterContext<ICustomMarkdownEmitterOptions>
+    context: IMarkdownEmitterContext<ICustomMarkdownEmitterOptions>,
   ): void {
     const options: ICustomMarkdownEmitterOptions = context.options;
 
     const result: IResolveDeclarationReferenceResult = this._apiModel.resolveDeclarationReference(
       docLinkTag.codeDestination!,
-      options.contextApiItem
+      options.contextApiItem,
     );
 
     if (result.resolvedApiItem) {
@@ -186,8 +198,8 @@ export class CustomMarkdownEmitter extends MarkdownEmitter {
       console.log(
         colors.yellow(
           `WARNING: Unable to resolve reference "${docLinkTag.codeDestination!.emitAsTsdoc()}": ` +
-            result.errorMessage
-        )
+            result.errorMessage,
+        ),
       );
     }
   }

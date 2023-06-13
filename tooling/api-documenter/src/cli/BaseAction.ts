@@ -8,7 +8,7 @@ import colors from 'colors/safe';
 import {
   CommandLineAction,
   CommandLineStringParameter,
-  type ICommandLineActionOptions
+  type ICommandLineActionOptions,
 } from '@rushstack/ts-command-line';
 import { FileSystem } from '@rushstack/node-core-library';
 import {
@@ -16,7 +16,7 @@ import {
   ApiItem,
   ApiItemContainerMixin,
   ApiDocumentedItem,
-  IResolveDeclarationReferenceResult
+  IResolveDeclarationReferenceResult,
 } from '@microsoft/api-extractor-model';
 
 export interface IBuildApiModelResult {
@@ -39,7 +39,7 @@ export abstract class BaseAction extends CommandLineAction {
       argumentName: 'FOLDER1',
       description:
         `Specifies the input folder containing the *.api.json files to be processed.` +
-        ` If omitted, the default is "./input"`
+        ` If omitted, the default is "./input"`,
     });
 
     this._outputFolderParameter = this.defineStringParameter({
@@ -49,7 +49,7 @@ export abstract class BaseAction extends CommandLineAction {
       description:
         `Specifies the output folder where the documentation will be written.` +
         ` ANY EXISTING CONTENTS WILL BE DELETED!` +
-        ` If omitted, the default is "./${this.actionName}"`
+        ` If omitted, the default is "./${this.actionName}"`,
     });
   }
 
@@ -83,20 +83,22 @@ export abstract class BaseAction extends CommandLineAction {
   private _applyInheritDoc(apiItem: ApiItem, apiModel: ApiModel): void {
     if (apiItem instanceof ApiDocumentedItem) {
       if (apiItem.tsdocComment) {
-        const inheritDocTag: tsdoc.DocInheritDocTag | undefined = apiItem.tsdocComment.inheritDocTag;
+        const inheritDocTag: tsdoc.DocInheritDocTag | undefined =
+          apiItem.tsdocComment.inheritDocTag;
 
         if (inheritDocTag && inheritDocTag.declarationReference) {
           // Attempt to resolve the declaration reference
           const result: IResolveDeclarationReferenceResult = apiModel.resolveDeclarationReference(
             inheritDocTag.declarationReference,
-            apiItem
+            apiItem,
           );
 
           if (result.errorMessage) {
             console.log(
               colors.yellow(
-                `Warning: Unresolved @inheritDoc tag for ${apiItem.displayName}: ` + result.errorMessage
-              )
+                `Warning: Unresolved @inheritDoc tag for ${apiItem.displayName}: ` +
+                  result.errorMessage,
+              ),
             );
           } else {
             if (
@@ -123,7 +125,10 @@ export abstract class BaseAction extends CommandLineAction {
    * Copy the content from `sourceDocComment` to `targetDocComment`.
    * This code is borrowed from DocCommentEnhancer as a temporary workaround.
    */
-  private _copyInheritedDocs(targetDocComment: tsdoc.DocComment, sourceDocComment: tsdoc.DocComment): void {
+  private _copyInheritedDocs(
+    targetDocComment: tsdoc.DocComment,
+    sourceDocComment: tsdoc.DocComment,
+  ): void {
     targetDocComment.summarySection = sourceDocComment.summarySection;
     targetDocComment.remarksBlock = sourceDocComment.remarksBlock;
 

@@ -5,7 +5,10 @@ import * as path from 'path';
 import * as resolve from 'resolve';
 
 import { IApiDocumenterPluginManifest, IFeatureDefinition } from './IApiDocumenterPluginManifest';
-import { MarkdownDocumenterFeature, MarkdownDocumenterFeatureContext } from './MarkdownDocumenterFeature';
+import {
+  MarkdownDocumenterFeature,
+  MarkdownDocumenterFeatureContext,
+} from './MarkdownDocumenterFeature';
 import { PluginFeatureInitialization } from './PluginFeature';
 import { DocumenterConfig } from '../documenters/DocumenterConfig';
 
@@ -19,14 +22,14 @@ export class PluginLoader {
 
   public load(
     documenterConfig: DocumenterConfig,
-    createContext: () => MarkdownDocumenterFeatureContext
+    createContext: () => MarkdownDocumenterFeatureContext,
   ): void {
     const configFileFolder: string = path.dirname(documenterConfig.configFilePath);
     for (const configPlugin of documenterConfig.configFile.plugins || []) {
       try {
         // Look for the package name in the same place as the config file
         const resolvedEntryPointPath: string = resolve.sync(configPlugin.packageName, {
-          basedir: configFileFolder
+          basedir: configFileFolder,
         });
 
         // Load the package
@@ -41,7 +44,7 @@ export class PluginLoader {
         if (!entryPoint.apiDocumenterPluginManifest) {
           throw new Error(
             `The package is not an API documenter plugin;` +
-              ` the "apiDocumenterPluginManifest" export was not found`
+              ` the "apiDocumenterPluginManifest" export was not found`,
           );
         }
 
@@ -50,13 +53,13 @@ export class PluginLoader {
         if (manifest.manifestVersion !== 1000) {
           throw new Error(
             `The plugin is not compatible with this version of API Documenter;` +
-              ` unsupported manifestVersion`
+              ` unsupported manifestVersion`,
           );
         }
 
         const loadedPlugin: ILoadedPlugin = {
           packageName: configPlugin.packageName,
-          manifest
+          manifest,
         };
 
         const featureDefinitionsByName: Map<string, IFeatureDefinition> = new Map<
@@ -68,10 +71,11 @@ export class PluginLoader {
         }
 
         for (const featureName of configPlugin.enabledFeatureNames) {
-          const featureDefinition: IFeatureDefinition | undefined = featureDefinitionsByName.get(featureName);
+          const featureDefinition: IFeatureDefinition | undefined =
+            featureDefinitionsByName.get(featureName);
           if (!featureDefinition) {
             throw new Error(
-              `The plugin ${loadedPlugin.packageName} does not have a feature with name "${featureName}"`
+              `The plugin ${loadedPlugin.packageName} does not have a feature with name "${featureName}"`,
             );
           }
 
@@ -90,13 +94,17 @@ export class PluginLoader {
               throw new Error(`Failed to construct feature subclass:\n` + (e as Error).toString());
             }
             if (!(markdownDocumenterFeature instanceof MarkdownDocumenterFeature)) {
-              throw new Error('The constructed subclass was not an instance of MarkdownDocumenterFeature');
+              throw new Error(
+                'The constructed subclass was not an instance of MarkdownDocumenterFeature',
+              );
             }
 
             try {
               markdownDocumenterFeature.onInitialized();
             } catch (e) {
-              throw new Error('Error occurred during the onInitialized() event: ' + (e as Error).toString());
+              throw new Error(
+                'Error occurred during the onInitialized() event: ' + (e as Error).toString(),
+              );
             }
 
             this.markdownDocumenterFeature = markdownDocumenterFeature;
@@ -105,7 +113,9 @@ export class PluginLoader {
           }
         }
       } catch (e) {
-        throw new Error(`Error loading plugin ${configPlugin.packageName}: ` + (e as Error).message);
+        throw new Error(
+          `Error loading plugin ${configPlugin.packageName}: ` + (e as Error).message,
+        );
       }
     }
   }

@@ -10,7 +10,7 @@ import {
   PackageName,
   FileSystem,
   NewlineKind,
-  InternalError
+  InternalError,
 } from '@rushstack/node-core-library';
 import { StringBuilder, DocSection, DocComment, DocBlock, StandardTags } from '@microsoft/tsdoc';
 import {
@@ -37,12 +37,12 @@ import {
   ExcerptTokenKind,
   HeritageType,
   ApiVariable,
-  ApiTypeAlias
+  ApiTypeAlias,
 } from '@microsoft/api-extractor-model';
 import {
   DeclarationReference,
   Navigation,
-  Meaning
+  Meaning,
 } from '@microsoft/tsdoc/lib-commonjs/beta/DeclarationReference';
 import {
   IYamlApiFile,
@@ -51,7 +51,7 @@ import {
   IYamlParameter,
   IYamlReference,
   IYamlReferenceSpec,
-  IYamlInheritanceTree
+  IYamlInheritanceTree,
 } from '../yaml/IYamlApiFile';
 import { IYamlTocFile, IYamlTocItem } from '../yaml/IYamlTocFile';
 import { Utilities } from '../utils/Utilities';
@@ -59,7 +59,7 @@ import { CustomMarkdownEmitter } from '../markdown/CustomMarkdownEmitter';
 import { convertUDPYamlToSDP } from '../utils/ToSdpConvertHelper';
 
 const yamlApiSchema: JsonSchema = JsonSchema.fromFile(
-  path.join(__dirname, '..', 'yaml', 'typescript.schema.json')
+  path.join(__dirname, '..', 'yaml', 'typescript.schema.json'),
 );
 
 interface IYamlReferences {
@@ -76,7 +76,7 @@ const enum FlattenMode {
   /** Include entries for non-namespace immediate children. */
   ImmediateChildren,
   /** Include entries for nested non-namespace children. */
-  NestedChildren
+  NestedChildren,
 }
 
 interface INameOptions {
@@ -96,7 +96,11 @@ export class YamlDocumenter {
   private _apiItemsByCanonicalReference: Map<string, ApiItem>;
   private _yamlReferences: IYamlReferences | undefined;
 
-  public constructor(apiModel: ApiModel, newDocfxNamespaces: boolean = false, yamlFormat: string = 'sdp') {
+  public constructor(
+    apiModel: ApiModel,
+    newDocfxNamespaces: boolean = false,
+    yamlFormat: string = 'sdp',
+  ) {
     this._apiModel = apiModel;
     this.newDocfxNamespaces = newDocfxNamespaces;
     this._yamlFormat = yamlFormat;
@@ -128,7 +132,7 @@ export class YamlDocumenter {
     return {
       name: 'SharePoint Framework reference',
       href: '~/overview/sharepoint.md',
-      items: []
+      items: [],
     };
   }
 
@@ -141,7 +145,7 @@ export class YamlDocumenter {
   private _visitApiItems(
     outputFolder: string,
     apiItem: ApiDocumentedItem,
-    parentYamlFile: IYamlApiFile | undefined
+    parentYamlFile: IYamlApiFile | undefined,
   ): boolean {
     let savedYamlReferences: IYamlReferences | undefined;
     if (!this._shouldEmbed(apiItem.kind)) {
@@ -163,7 +167,7 @@ export class YamlDocumenter {
       parentYamlFile.items.push(yamlItem);
     } else {
       const newYamlFile: IYamlApiFile = {
-        items: []
+        items: [],
       };
       newYamlFile.items.push(yamlItem);
 
@@ -201,9 +205,9 @@ export class YamlDocumenter {
           this._getUid(apiItem),
           this._getYamlItemName(apiItem, {
             includeNamespace: !this.newDocfxNamespaces,
-            includeSignature: true
+            includeSignature: true,
           }),
-          this._getYamlItemName(apiItem, { includeNamespace: true, includeSignature: true })
+          this._getYamlItemName(apiItem, { includeNamespace: true, includeSignature: true }),
         );
       }
     }
@@ -218,13 +222,15 @@ export class YamlDocumenter {
       this._flattenNamespaces(
         apiItem.members[0].members,
         children,
-        this.newDocfxNamespaces ? FlattenMode.NestedNamespacesAndChildren : FlattenMode.NestedChildren
+        this.newDocfxNamespaces
+          ? FlattenMode.NestedNamespacesAndChildren
+          : FlattenMode.NestedChildren,
       );
     } else {
       this._flattenNamespaces(
         apiItem.members,
         children,
-        this.newDocfxNamespaces ? FlattenMode.ImmediateChildren : FlattenMode.NestedChildren
+        this.newDocfxNamespaces ? FlattenMode.ImmediateChildren : FlattenMode.NestedChildren,
       );
     }
     return children;
@@ -239,7 +245,7 @@ export class YamlDocumenter {
   private _flattenNamespaces(
     items: ReadonlyArray<ApiItem>,
     childrenOut: ApiItem[],
-    mode: FlattenMode
+    mode: FlattenMode,
   ): boolean {
     let hasNonNamespaceChildren: boolean = false;
     for (const item of items) {
@@ -258,7 +264,9 @@ export class YamlDocumenter {
             const index: number = childrenOut.length;
             childrenOut.push(item);
 
-            if (!this._flattenNamespaces(item.members, childrenOut, FlattenMode.NestedNamespacesOnly)) {
+            if (
+              !this._flattenNamespaces(item.members, childrenOut, FlattenMode.NestedNamespacesOnly)
+            ) {
               // This namespace had no non-namespace children, remove it.
               childrenOut.splice(index, 1);
             }
@@ -293,7 +301,7 @@ export class YamlDocumenter {
   /** @virtual */
   protected buildYamlTocFile(apiItems: ReadonlyArray<ApiItem>): IYamlTocFile {
     const tocFile: IYamlTocFile = {
-      items: []
+      items: [],
     };
 
     const rootItem: IYamlTocItem = this.onGetTocRoot();
@@ -309,7 +317,7 @@ export class YamlDocumenter {
       let tocItem: IYamlTocItem;
       if (apiItem.kind === ApiItemKind.Namespace && !this.newDocfxNamespaces) {
         tocItem = {
-          name: this._getTocItemName(apiItem)
+          name: this._getTocItemName(apiItem),
         };
       } else {
         if (this._shouldEmbed(apiItem.kind)) {
@@ -319,7 +327,7 @@ export class YamlDocumenter {
 
         tocItem = {
           name: this._getTocItemName(apiItem),
-          uid: this._getUid(apiItem)
+          uid: this._getUid(apiItem),
         };
       }
 
@@ -383,7 +391,7 @@ export class YamlDocumenter {
 
     const uid: DeclarationReference = this._getUidObject(apiItem);
     const yamlItem: Partial<IYamlItem> = {
-      uid: uid.toString()
+      uid: uid.toString(),
     };
 
     if (apiItem.tsdocComment) {
@@ -405,7 +413,7 @@ export class YamlDocumenter {
       if (tsdocComment) {
         // Write the @example blocks
         const exampleBlocks: DocBlock[] = tsdocComment.customBlocks.filter(
-          (x) => x.blockTag.tagNameWithUpperCase === StandardTags.example.tagNameWithUpperCase
+          (x) => x.blockTag.tagNameWithUpperCase === StandardTags.example.tagNameWithUpperCase,
         );
 
         for (const exampleBlock of exampleBlocks) {
@@ -417,7 +425,10 @@ export class YamlDocumenter {
       }
 
       if (tsdocComment.deprecatedBlock) {
-        const deprecatedMessage: string = this._renderMarkdown(tsdocComment.deprecatedBlock.content, apiItem);
+        const deprecatedMessage: string = this._renderMarkdown(
+          tsdocComment.deprecatedBlock.content,
+          apiItem,
+        );
         if (deprecatedMessage.length > 0) {
           yamlItem.deprecated = { content: deprecatedMessage };
         }
@@ -432,9 +443,12 @@ export class YamlDocumenter {
 
     yamlItem.name = this._getYamlItemName(apiItem, {
       includeSignature: true,
-      includeNamespace: !this.newDocfxNamespaces
+      includeNamespace: !this.newDocfxNamespaces,
     });
-    yamlItem.fullName = this._getYamlItemName(apiItem, { includeSignature: true, includeNamespace: true });
+    yamlItem.fullName = this._getYamlItemName(apiItem, {
+      includeSignature: true,
+      includeNamespace: true,
+    });
     yamlItem.langs = ['typeScript'];
 
     // Add the namespace of the item if it is contained in one.
@@ -529,18 +543,18 @@ export class YamlDocumenter {
 
   private _populateYamlTypeParameters(
     contextUid: DeclarationReference,
-    apiItem: ApiTypeParameterListMixin
+    apiItem: ApiTypeParameterListMixin,
   ): IYamlParameter[] {
     const typeParameters: IYamlParameter[] = [];
     for (const apiTypeParameter of apiItem.typeParameters) {
       const typeParameter: IYamlParameter = {
-        id: apiTypeParameter.name
+        id: apiTypeParameter.name,
       };
 
       if (apiTypeParameter.tsdocTypeParamBlock) {
         typeParameter.description = this._renderMarkdown(
           apiTypeParameter.tsdocTypeParamBlock.content,
-          apiItem
+          apiItem,
         );
       }
 
@@ -556,7 +570,7 @@ export class YamlDocumenter {
   private _populateYamlClassOrInterface(
     uid: DeclarationReference,
     yamlItem: Partial<IYamlItem>,
-    apiItem: ApiClass | ApiInterface
+    apiItem: ApiClass | ApiInterface,
   ): void {
     if (apiItem instanceof ApiClass) {
       if (apiItem.extendsType) {
@@ -590,7 +604,8 @@ export class YamlDocumenter {
         if (apiItem.kind === ApiItemKind.Class) {
           sealedMessage = 'This class is marked as `@sealed`. Subclasses should not extend it.';
         } else {
-          sealedMessage = 'This interface is marked as `@sealed`. Other interfaces should not extend it.';
+          sealedMessage =
+            'This interface is marked as `@sealed`. Other interfaces should not extend it.';
         }
         if (!yamlItem.remarks) {
           yamlItem.remarks = sealedMessage;
@@ -604,10 +619,10 @@ export class YamlDocumenter {
   private _populateYamlFunctionLike(
     uid: DeclarationReference,
     yamlItem: Partial<IYamlItem>,
-    apiItem: ApiMethod | ApiMethodSignature | ApiConstructor | ApiFunction
+    apiItem: ApiMethod | ApiMethodSignature | ApiConstructor | ApiFunction,
   ): void {
     const syntax: IYamlSyntax = {
-      content: apiItem.getExcerptWithModifiers()
+      content: apiItem.getExcerptWithModifiers(),
     };
     yamlItem.syntax = syntax;
 
@@ -617,7 +632,10 @@ export class YamlDocumenter {
       let returnDescription: string = '';
 
       if (apiItem.tsdocComment && apiItem.tsdocComment.returnsBlock) {
-        returnDescription = this._renderMarkdown(apiItem.tsdocComment.returnsBlock.content, apiItem);
+        returnDescription = this._renderMarkdown(
+          apiItem.tsdocComment.returnsBlock.content,
+          apiItem,
+        );
         // temporary workaround for people who mistakenly add a hyphen, e.g. "@returns - blah"
         returnDescription = returnDescription.replace(/^\s*-\s+/, '');
       }
@@ -625,7 +643,7 @@ export class YamlDocumenter {
       if (returnType || returnDescription) {
         syntax.return = {
           type: [returnType],
-          description: returnDescription
+          description: returnDescription,
         };
       }
     }
@@ -641,7 +659,7 @@ export class YamlDocumenter {
         id: apiParameter.name,
         description: parameterDescription,
         type: [this._renderType(uid, apiParameter.parameterTypeExcerpt)],
-        optional: apiParameter.isOptional
+        optional: apiParameter.isOptional,
       } as IYamlParameter);
     }
 
@@ -660,16 +678,16 @@ export class YamlDocumenter {
   private _populateYamlProperty(
     uid: DeclarationReference,
     yamlItem: Partial<IYamlItem>,
-    apiItem: ApiPropertyItem
+    apiItem: ApiPropertyItem,
   ): void {
     const syntax: IYamlSyntax = {
-      content: apiItem.getExcerptWithModifiers()
+      content: apiItem.getExcerptWithModifiers(),
     };
     yamlItem.syntax = syntax;
 
     if (apiItem.propertyTypeExcerpt.text) {
       syntax.return = {
-        type: [this._renderType(uid, apiItem.propertyTypeExcerpt)]
+        type: [this._renderType(uid, apiItem.propertyTypeExcerpt)],
       };
     }
   }
@@ -677,16 +695,16 @@ export class YamlDocumenter {
   private _populateYamlVariable(
     uid: DeclarationReference,
     yamlItem: Partial<IYamlItem>,
-    apiItem: ApiVariable
+    apiItem: ApiVariable,
   ): void {
     const syntax: IYamlSyntax = {
-      content: apiItem.getExcerptWithModifiers()
+      content: apiItem.getExcerptWithModifiers(),
     };
     yamlItem.syntax = syntax;
 
     if (apiItem.variableTypeExcerpt.text) {
       syntax.return = {
-        type: [this._renderType(uid, apiItem.variableTypeExcerpt)]
+        type: [this._renderType(uid, apiItem.variableTypeExcerpt)],
       };
     }
   }
@@ -694,10 +712,10 @@ export class YamlDocumenter {
   private _populateYamlTypeAlias(
     uid: DeclarationReference,
     yamlItem: Partial<IYamlItem>,
-    apiItem: ApiTypeAlias
+    apiItem: ApiTypeAlias,
   ): void {
     const syntax: IYamlSyntax = {
-      content: apiItem.getExcerptWithModifiers()
+      content: apiItem.getExcerptWithModifiers(),
     };
     yamlItem.syntax = syntax;
 
@@ -708,7 +726,7 @@ export class YamlDocumenter {
 
     if (apiItem.typeExcerpt.text) {
       syntax.return = {
-        type: [this._renderType(uid, apiItem.typeExcerpt)]
+        type: [this._renderType(uid, apiItem.typeExcerpt)],
       };
     }
   }
@@ -731,7 +749,7 @@ export class YamlDocumenter {
         return encodeURI(`xref:${this._getUid(apiItem)}`)
           .replace(/[#?]/g, (s) => encodeURIComponent(s))
           .replace(/(\([^(]*\))|[()]/g, (s, balanced) => balanced || '\\' + s);
-      }
+      },
     });
 
     return stringBuilder.toString().trim();
@@ -741,12 +759,12 @@ export class YamlDocumenter {
     dataObject: {},
     filePath: string,
     yamlMimeType: string,
-    schema: JsonSchema | undefined
+    schema: JsonSchema | undefined,
   ): void {
     JsonFile.validateNoUndefinedMembers(dataObject);
 
     let stringified: string = yaml.safeDump(dataObject, {
-      lineWidth: 120
+      lineWidth: 120,
     });
 
     if (yamlMimeType) {
@@ -755,7 +773,7 @@ export class YamlDocumenter {
 
     FileSystem.writeFile(filePath, stringified, {
       convertLineEndings: NewlineKind.CrLf,
-      ensureFolderExists: true
+      ensureFolderExists: true,
     });
 
     if (schema) {
@@ -803,7 +821,7 @@ export class YamlDocumenter {
       this._yamlReferences = {
         references: [],
         typeNameToUid: new Map(),
-        uidTypeReferenceCounters: new Map()
+        uidTypeReferenceCounters: new Map(),
       };
     }
     return this._yamlReferences;
@@ -811,7 +829,7 @@ export class YamlDocumenter {
 
   private _renderInheritance(
     contextUid: DeclarationReference,
-    heritageTypes: ReadonlyArray<HeritageType>
+    heritageTypes: ReadonlyArray<HeritageType>,
   ): IYamlInheritanceTree[] {
     const result: IYamlInheritanceTree[] = [];
     for (const heritageType of heritageTypes) {
@@ -822,14 +840,14 @@ export class YamlDocumenter {
         if (apiItem instanceof ApiClass) {
           if (apiItem.extendsType) {
             yamlInheritance.inheritance = this._renderInheritance(this._getUidObject(apiItem), [
-              apiItem.extendsType
+              apiItem.extendsType,
             ]);
           }
         } else if (apiItem instanceof ApiInterface) {
           if (apiItem.extendsTypes.length > 0) {
             yamlInheritance.inheritance = this._renderInheritance(
               this._getUidObject(apiItem),
-              apiItem.extendsTypes
+              apiItem.extendsTypes,
             );
           }
         }
@@ -858,7 +876,11 @@ export class YamlDocumenter {
     const typeName: string = typeExcerpt.text.trim();
 
     // If there are no references to be used for a complex type, return the type name.
-    if (!excerptTokens.some((tok) => tok.kind === ExcerptTokenKind.Reference && !!tok.canonicalReference)) {
+    if (
+      !excerptTokens.some(
+        (tok) => tok.kind === ExcerptTokenKind.Reference && !!tok.canonicalReference,
+      )
+    ) {
       return typeName;
     }
 
@@ -882,13 +904,16 @@ export class YamlDocumenter {
         yamlReferences,
         excerptTokens[0].canonicalReference.toString(),
         apiItem ? this._getYamlItemName(apiItem) : typeName,
-        apiItem ? this._getYamlItemName(apiItem, { includeNamespace: true }) : typeName
+        apiItem ? this._getYamlItemName(apiItem, { includeNamespace: true }) : typeName,
       );
     }
 
     // Otherwise, the type is complex and consists of one or more reference tokens. Record a reference
     // and return its uid.
-    const baseUid: string = contextUid.withMeaning(undefined).withOverloadIndex(undefined).toString();
+    const baseUid: string = contextUid
+      .withMeaning(undefined)
+      .withOverloadIndex(undefined)
+      .toString();
 
     // Keep track of the count for the base uid (without meaning or overload index) to ensure
     // that each complex type reference is unique.
@@ -909,7 +934,7 @@ export class YamlDocumenter {
     uid: string,
     name: string,
     fullName: string,
-    excerptTokens?: ExcerptToken[]
+    excerptTokens?: ExcerptToken[],
   ): string {
     if (yamlReferences.references.some((ref) => ref.uid === uid)) {
       return uid;
@@ -921,7 +946,8 @@ export class YamlDocumenter {
       for (const token of excerptTokens) {
         if (token.kind === ExcerptTokenKind.Reference) {
           const spec: IYamlReferenceSpec = {};
-          const specUid: string | undefined = token.canonicalReference && token.canonicalReference.toString();
+          const specUid: string | undefined =
+            token.canonicalReference && token.canonicalReference.toString();
           const apiItem: ApiItem | undefined = specUid
             ? this._apiItemsByCanonicalReference.get(specUid)
             : undefined;
@@ -942,7 +968,7 @@ export class YamlDocumenter {
         } else {
           specs.push({
             name: token.text,
-            fullName: token.text
+            fullName: token.text,
           });
         }
       }
@@ -974,7 +1000,9 @@ export class YamlDocumenter {
 
   private _getYamlItemName(apiItem: ApiItem, options: INameOptions = {}): string {
     const { includeSignature, includeNamespace } = options;
-    const baseName: string = includeSignature ? Utilities.getConciseSignature(apiItem) : apiItem.displayName;
+    const baseName: string = includeSignature
+      ? Utilities.getConciseSignature(apiItem)
+      : apiItem.displayName;
     if (
       (includeNamespace || apiItem.kind === ApiItemKind.Namespace) &&
       apiItem.parent &&
@@ -1031,7 +1059,9 @@ export class YamlDocumenter {
         case ApiItemKind.EntryPoint:
           break;
         case ApiItemKind.Package:
-          result += Utilities.getSafeFilenameForName(PackageName.getUnscopedName(current.displayName));
+          result += Utilities.getSafeFilenameForName(
+            PackageName.getUnscopedName(current.displayName),
+          );
           break;
         default:
           if (current.parent && current.parent.kind === ApiItemKind.EntryPoint) {

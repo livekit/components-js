@@ -24,7 +24,7 @@ export class DocumenterConfig {
    * The JSON Schema for API Documenter config file (api-documenter.schema.json).
    */
   public static readonly jsonSchema: JsonSchema = JsonSchema.fromFile(
-    path.join(__dirname, '..', 'schemas', 'api-documenter.schema.json')
+    path.join(__dirname, '..', 'schemas', 'api-documenter.schema.json'),
   );
 
   /**
@@ -53,7 +53,10 @@ export class DocumenterConfig {
    * Load and validate an api-documenter.json file.
    */
   public static loadFile(configFilePath: string): DocumenterConfig {
-    const configFile: IConfigFile = JsonFile.loadAndValidate(configFilePath, DocumenterConfig.jsonSchema);
+    const configFile: IConfigFile = JsonFile.loadAndValidate(
+      configFilePath,
+      DocumenterConfig.jsonSchema,
+    );
 
     return new DocumenterConfig(path.resolve(configFilePath), configFile);
   }

@@ -37,7 +37,7 @@ export class OfficeYamlDocumenter extends YamlDocumenter {
     Outlook: '/javascript/api/requirement-sets/outlook/outlook-api-requirement-sets',
     PowerPoint: '/javascript/api/requirement-sets/powerpoint/powerpoint-api-requirement-sets',
     Visio: '/office/dev/add-ins/reference/overview/visio-javascript-reference-overview',
-    Word: '/javascript/api/requirement-sets/word/word-api-requirement-sets'
+    Word: '/javascript/api/requirement-sets/word/word-api-requirement-sets',
   };
 
   public constructor(apiModel: ApiModel, inputFolder: string, newDocfxNamespaces?: boolean) {
@@ -69,7 +69,7 @@ export class OfficeYamlDocumenter extends YamlDocumenter {
     return {
       name: 'API reference',
       href: 'overview.md',
-      items: []
+      items: [],
     };
   }
 
@@ -107,7 +107,10 @@ export class OfficeYamlDocumenter extends YamlDocumenter {
     // Hyperlink it like this:
     // \[ [API set: ExcelApi 1.1](http://bing.com?type=excel) \]
     markup = markup.replace(/Api/, 'API');
-    return markup.replace(/\\\[(API set:[^\]]+)\\\]/, '\\[ [$1](' + this._getApiSetUrl(uid) + ') \\]');
+    return markup.replace(
+      /\\\[(API set:[^\]]+)\\\]/,
+      '\\[ [$1](' + this._getApiSetUrl(uid) + ') \\]',
+    );
   }
 
   // Gets the link to the API set based on product context. Seeks a case-insensitive match in the hash set.

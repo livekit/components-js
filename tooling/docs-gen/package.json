@@ -19,7 +19,7 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@livekit/api-documenter": "~7.22.17",
+    "@livekit/api-documenter": "*",
     "@livekit/components-react": "~1.0.0",
     "eslint-config-lk-custom": "*"
   },

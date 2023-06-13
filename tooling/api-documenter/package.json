@@ -1,13 +1,12 @@
 {
-  "name": "@microsoft/api-documenter",
+  "name": "@livekit/api-documenter",
   "version": "7.22.17",
   "description": "Read JSON files from api-extractor, generate documentation pages",
   "repository": {
     "type": "git",
-    "url": "https://github.com/microsoft/rushstack.git",
-    "directory": "apps/api-documenter"
+    "url": "https://github.com/livekit/components-js.git",
+    "directory": "tooling/api-documenter"
   },
-  "homepage": "https://api-extractor.com/",
   "license": "MIT",
   "scripts": {
     "build": "heft build --clean",
@@ -20,18 +19,18 @@
   "main": "lib/index.js",
   "typings": "dist/rollup.d.ts",
   "dependencies": {
-    "@microsoft/api-extractor-model": "workspace:*",
+    "@microsoft/api-extractor-model": "^7.27.2",
     "@microsoft/tsdoc": "0.14.2",
-    "@rushstack/node-core-library": "workspace:*",
-    "@rushstack/ts-command-line": "workspace:*",
+    "@rushstack/node-core-library": "^3.59.3",
+    "@rushstack/ts-command-line": "^4.15.0",
     "colors": "~1.2.1",
     "js-yaml": "~3.13.1",
     "resolve": "~1.22.1"
   },
   "devDependencies": {
-    "@rushstack/eslint-config": "workspace:*",
-    "@rushstack/heft": "workspace:*",
-    "@rushstack/heft-node-rig": "workspace:*",
+    "@rushstack/eslint-config": "^3.3.1",
+    "@rushstack/heft": "^0.54.0",
+    "@rushstack/heft-node-rig": "^2.2.6",
     "@types/js-yaml": "3.12.1",
     "@types/node": "14.18.36",
     "@types/resolve": "1.20.2"

@@ -12,9 +12,7 @@
   "bugs": {
     "url": "https://github.com/livekit/components/tree/main/docs/alpha-docs"
   },
-  "scripts": {
-    "gen:docs": "rsync -a --delete ./../../tooling/docs-gen/generated/markdown/components/ components && rsync -a --delete ../../tooling/docs-gen/generated/markdown/hooks/ hooks"
-  },
+  "scripts": {},
   "sideEffects": false,
   "dependencies": {},
   "devDependencies": {

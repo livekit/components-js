@@ -25,6 +25,7 @@
   "sideEffects": false,
   "dependencies": {
     "@livekit/components-react": "~1.0.0",
+    "@livekit/api-documenter": "~7.22.17",
     "eslint-config-lk-custom": "*",
     "eslint-plugin-tsdoc": "^0.2.17",
     "glob": "^8.0.0",

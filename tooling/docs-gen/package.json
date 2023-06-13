@@ -24,21 +24,13 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@livekit/components-react": "~1.0.0",
     "@livekit/api-documenter": "~7.22.17",
-    "eslint-config-lk-custom": "*",
-    "eslint-plugin-tsdoc": "^0.2.17",
-    "glob": "^8.0.0",
-    "mkdirp": "^3.0.0",
-    "react-docgen-typescript": "^2.1.0",
-    "regenerator-runtime": "^0.13.7",
-    "rimraf": "^5.0.0"
+    "@livekit/components-react": "~1.0.0",
+    "eslint-config-lk-custom": "*"
   },
   "devDependencies": {
     "@microsoft/api-documenter": "^7.22.16",
-    "@microsoft/api-extractor": "^7.35.2",
-    "@types/glob": "^8.0.0",
-    "@types/mkdirp": "^1.0.2"
+    "@microsoft/api-extractor": "^7.35.2"
   },
   "keywords": [
     "docs",

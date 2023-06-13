@@ -2222,6 +2222,32 @@
     "@changesets/types" "^5.2.1"
     dotenv "^8.1.0"
 
+"@livekit/components-core@0.1.7":
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/@livekit/components-core/-/components-core-0.1.7.tgz#40404e112bb3cd4772cc26e55e309cd072044e77"
+  integrity sha512-tmPIhOMYLqy7WR3M22x8c1PH5iZLWuSMhwuJFY9zUAMrO3oXyeA5Ig7e9W1sZRqU3QVRIFiyELcH2V9m2Zs7Dw==
+  dependencies:
+    rxjs "^7.5.6"
+
+"@livekit/components-props-docs@*":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@livekit/components-props-docs/-/components-props-docs-0.0.1.tgz#d19ad98217b3de356cfdd438f302726e28c6fdc7"
+  integrity sha512-cdd2W00qG1OlmqGd+2ZOylfbUtJkxjyPCE0lPS14VUx9c/Sqi2JluMdKvfjAoL6jt/f6J401ErzkaUjhV5m4aw==
+  dependencies:
+    "@livekit/components-react" "0.1.9"
+    glob "^7.1.6"
+    mkdirp "^1.0.4"
+    react-docgen-typescript "^2.1.0"
+    regenerator-runtime "^0.13.7"
+    rimraf "^3.0.2"
+
+"@livekit/components-react@0.1.9":
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/@livekit/components-react/-/components-react-0.1.9.tgz#de40f0cd52e95e04834d9795de7c9d89d0c710cb"
+  integrity sha512-OET7OfnzrvsRfiApEh9X+qnqCw07rWYqmi7dBCkLFqUJHjUJxPSKZ3ExZTxusMxcSeNJG7OUtS5mSFG0BgftjA==
+  dependencies:
+    "@livekit/components-core" "0.1.7"
+
 "@manypkg/find-root@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@manypkg/find-root/-/find-root-1.1.0.tgz#a62d8ed1cd7e7d4c11d9d52a8397460b5d4ad29f"
@@ -3938,13 +3964,6 @@
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.2.tgz#ee771e2ba4b3dc5b372935d549fd9617bf345b8c"
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
-
-"@types/mkdirp@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@types/mkdirp/-/mkdirp-1.0.2.tgz#8d0bad7aa793abe551860be1f7ae7f3198c16666"
-  integrity sha512-o0K1tSO0Dx5X6xlU5F1D6625FawhC3dU3iqr25lluNv/+/QIVH8RLNEiVokgIZo+mz+87w/3Mkg/VvQS+J51fQ==
-  dependencies:
-    "@types/node" "*"
 
 "@types/node-fetch@^2.5.7":
   version "2.6.4"
@@ -7589,7 +7608,7 @@ glob@^10.2.5:
     minipass "^5.0.0 || ^6.0.2"
     path-scurry "^1.7.0"
 
-glob@^7.0.0, glob@^7.1.3, glob@^7.1.4, glob@^7.2.0:
+glob@^7.0.0, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6, glob@^7.2.0:
   version "7.2.3"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.2.3.tgz#b8df0fb802bbfa8e89bd1d938b4e16578ed44f2b"
   integrity sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==
@@ -7601,7 +7620,7 @@ glob@^7.0.0, glob@^7.1.3, glob@^7.1.4, glob@^7.2.0:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-glob@^8.0.0, glob@^8.0.3, glob@^8.1.0:
+glob@^8.0.3, glob@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/glob/-/glob-8.1.0.tgz#d388f656593ef708ee3e34640fdfb99a9fd1c33e"
   integrity sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==
@@ -9398,15 +9417,10 @@ mkdirp@^0.5.4:
   dependencies:
     minimist "^1.2.6"
 
-mkdirp@^1.0.3:
+mkdirp@^1.0.3, mkdirp@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
-
-mkdirp@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-3.0.1.tgz#e44e4c5607fb279c168241713cc6e0fea9adcb50"
-  integrity sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg==
 
 mlly@^1.2.0:
   version "1.3.0"
@@ -10846,7 +10860,7 @@ run-parallel@^1.1.9:
   dependencies:
     queue-microtask "^1.2.2"
 
-rxjs@^7.5.2, rxjs@^7.8.0:
+rxjs@^7.5.2, rxjs@^7.5.6, rxjs@^7.8.0:
   version "7.8.1"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.8.1.tgz#6f6f3d99ea8044291efd92e7c7fcf562c4057543"
   integrity sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==

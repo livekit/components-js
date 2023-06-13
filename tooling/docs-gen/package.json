@@ -13,7 +13,7 @@
   "scripts": {
     "gen:docs": "yarn gen:api-extractor && yarn gen:api-documenter",
     "gen:api-extractor": "tsx src/gen-docs.ts",
-    "gen:api-documenter": "api-documenter markdown --input-folder ../../packages/react/temp --output-folder ../../docs/beta-docs",
+    "gen:api-documenter": "which api-documenter && api-documenter markdown --input-folder ../../packages/react/temp --output-folder ../../docs/beta-docs",
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit"
   },

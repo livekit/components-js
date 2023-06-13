@@ -8,7 +8,9 @@
     "directory": "tooling/api-documenter"
   },
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "heft build --clean"
+  },
   "bin": {
     "api-documenter": "./bin/api-documenter"
   },
@@ -17,6 +19,7 @@
   "dependencies": {
     "@microsoft/api-extractor-model": "^7.27.2",
     "@microsoft/tsdoc": "0.14.2",
+    "@rushstack/heft-node-rig": "^2.2.6",
     "@rushstack/node-core-library": "^3.59.3",
     "@rushstack/ts-command-line": "^4.15.0",
     "colors": "~1.2.1",
@@ -25,8 +28,6 @@
   },
   "devDependencies": {
     "@rushstack/eslint-config": "^3.3.1",
-    "@rushstack/heft": "^0.54.0",
-    "@rushstack/heft-node-rig": "^2.2.6",
     "@types/js-yaml": "3.12.1",
     "@types/node": "14.18.36",
     "@types/resolve": "1.20.2"

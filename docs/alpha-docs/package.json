@@ -15,9 +15,7 @@
   "scripts": {},
   "sideEffects": false,
   "dependencies": {},
-  "devDependencies": {
-    "@livekit/components-props-docs": "*"
-  },
+  "devDependencies": {},
   "keywords": [
     "docs",
     "props"

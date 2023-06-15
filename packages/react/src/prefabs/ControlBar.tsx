@@ -80,7 +80,7 @@ export function ControlBar({ variation, controls, ...props }: ControlBarProps) {
     [variation],
   );
 
-  const browserSupportsScreenSharing = React.useMemo(() => supportsScreenSharing(), []);
+  const browserSupportsScreenSharing = supportsScreenSharing();
 
   const [isScreenShareEnabled, setIsScreenShareEnabled] = React.useState(false);
 

@@ -4,7 +4,7 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "storybook-static/**"]
+      "outputs": ["dist/**", ".next/**", "storybook-static/**", "lib/**"]
     },
     "lint": {
       "outputs": []
@@ -36,7 +36,7 @@
     },
     "gen:docs": {
       "cache": false,
-      "dependsOn": ["^api-extractor"],
+      "dependsOn": ["^api-extractor", "@livekit/api-documenter#build"],
       "outputs": ["/docs/beta-docs/**"]
     },
     "api-check": {

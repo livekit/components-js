@@ -43,7 +43,7 @@
     "test:watch": "vitest",
     "size": "size-limit --json",
     "api-check": "api-extractor run --typescript-compiler-folder ../../node_modules/typescript",
-    "api-check:update": "api-extractor run --local --typescript-compiler-folder ../../node_modules/typescript --verbose"
+    "api-extractor": "api-extractor run --local --typescript-compiler-folder ../../node_modules/typescript --verbose"
   },
   "typings": "dist/index.d.ts",
   "dependencies": {

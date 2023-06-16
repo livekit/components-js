@@ -14,15 +14,7 @@ type SetLogLevelOptions = {
  * To set the `@livekit-client` log independently, use the `liveKitClientLogLevel` prop on the `options` object.
  * @public
  */
-export function setLogLevel(
-  level: LogLevel,
-  options: SetLogLevelOptions = { liveKitClientLogLevel: undefined },
-): void {
-  if (options.liveKitClientLogLevel) {
-    log.setLevel(level);
-    setClientSdkLogLevel(options.liveKitClientLogLevel);
-  } else {
-    log.setLevel(level);
-    setClientSdkLogLevel(level);
-  }
+export function setLogLevel(level: LogLevel, options: SetLogLevelOptions = {}): void {
+  log.setLevel(level);
+  setClientSdkLogLevel(options.liveKitClientLogLevel ?? level);
 }

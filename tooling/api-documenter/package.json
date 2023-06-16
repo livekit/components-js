@@ -29,9 +29,11 @@
   },
   "devDependencies": {
     "@rushstack/eslint-config": "^3.3.1",
-    "@rushstack/heft": "^0.55.2",
     "@types/js-yaml": "3.12.1",
     "@types/node": "14.18.36",
     "@types/resolve": "1.20.2"
+  },
+  "peerDependencies": {
+    "@rushstack/heft": "^0.55.2"
   }
 }

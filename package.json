@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "author": "LiveKit",
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --filter=!./tooling/*",
     "build:core": "turbo run build --filter=@livekit/components-core...",
     "build:next": "turbo run build --filter=@livekit/component-example-next...",
     "build:react": "turbo run build --filter=@livekit/components-react...",

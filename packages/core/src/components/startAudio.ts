@@ -1,5 +1,5 @@
 import type { Room } from 'livekit-client';
-import log from '../logger';
+import { log } from '../logger';
 import { roomAudioPlaybackAllowedObservable } from '../observables/room';
 import { prefixClass } from '../styles-interface';
 

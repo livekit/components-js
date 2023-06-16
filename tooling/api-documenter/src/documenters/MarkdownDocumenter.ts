@@ -64,6 +64,7 @@ import {
 } from '../plugin/MarkdownDocumenterFeature';
 import { DocumenterConfig } from './DocumenterConfig';
 import { MarkdownDocumenterAccessor } from '../plugin/MarkdownDocumenterAccessor';
+import { getFunctionType } from '../livekitUtils/classifiers';
 
 export interface IMarkdownDocumenterOptions {
   apiModel: ApiModel;
@@ -121,6 +122,7 @@ export class MarkdownDocumenter {
   private _writeApiItemPage(apiItem: ApiItem): void {
     const configuration: TSDocConfiguration = this._tsdocConfiguration;
     const output: DocSection = new DocSection({ configuration });
+    const category = getFunctionType(apiItem);
 
     this._writeBreadcrumb(output, apiItem);
 
@@ -145,7 +147,16 @@ export class MarkdownDocumenter {
         output.appendNode(new DocHeading({ configuration, title: `${scopedName} method` }));
         break;
       case ApiItemKind.Function:
-        output.appendNode(new DocHeading({ configuration, title: `${scopedName} function` }));
+        console.group(`\nScopedName: ${scopedName}`);
+
+        output.appendNode(
+          new DocHeading({
+            configuration,
+            title: `${apiItem.displayName} (${category})`,
+            level: 1,
+          }),
+        );
+        console.groupEnd();
         break;
       case ApiItemKind.Model:
         output.appendNode(new DocHeading({ configuration, title: `API Reference` }));
@@ -211,26 +222,26 @@ export class MarkdownDocumenter {
       }
     }
 
-    if (apiItem instanceof ApiDeclaredItem) {
-      if (apiItem.excerpt.text.length > 0) {
-        output.appendNode(
-          new DocParagraph({ configuration }, [
-            new DocEmphasisSpan({ configuration, bold: true }, [
-              new DocPlainText({ configuration, text: 'Signature:' }),
-            ]),
-          ]),
-        );
-        output.appendNode(
-          new DocFencedCode({
-            configuration,
-            code: apiItem.getExcerptWithModifiers(),
-            language: 'typescript',
-          }),
-        );
-      }
+    // if (apiItem instanceof ApiDeclaredItem) {
+    //   if (apiItem.excerpt.text.length > 0) {
+    //     output.appendNode(
+    //       new DocParagraph({ configuration }, [
+    //         new DocEmphasisSpan({ configuration, bold: true }, [
+    //           new DocPlainText({ configuration, text: 'Signature:' }),
+    //         ]),
+    //       ]),
+    //     );
+    //     output.appendNode(
+    //       new DocFencedCode({
+    //         configuration,
+    //         code: apiItem.getExcerptWithModifiers(),
+    //         language: 'typescript',
+    //       }),
+    //     );
+    //   }
 
-      this._writeHeritageTypes(output, apiItem);
-    }
+    //   this._writeHeritageTypes(output, apiItem);
+    // }
 
     if (decoratorBlocks.length > 0) {
       output.appendNode(
@@ -254,6 +265,11 @@ export class MarkdownDocumenter {
         this._writeRemarksSection(output, apiItem);
         appendRemarks = false;
         break;
+    }
+
+    // Remarks & Example
+    if (appendRemarks) {
+      this._writeRemarksSection(output, apiItem);
     }
 
     switch (apiItem.kind) {
@@ -292,10 +308,6 @@ export class MarkdownDocumenter {
         break;
       default:
         throw new Error('Unsupported API item kind: ' + apiItem.kind);
-    }
-
-    if (appendRemarks) {
-      this._writeRemarksSection(output, apiItem);
     }
 
     const filename: string = path.join(this._outputFolder, this._getFilenameForApiItem(apiItem));
@@ -436,7 +448,8 @@ export class MarkdownDocumenter {
 
         let exampleNumber: number = 1;
         for (const exampleBlock of exampleBlocks) {
-          const heading: string = exampleBlocks.length > 1 ? `Example ${exampleNumber}` : 'Example';
+          const heading: string =
+            exampleBlocks.length > 1 ? `Usage Example ${exampleNumber}` : 'Usage';
 
           output.appendNode(new DocHeading({ configuration, title: heading }));
 

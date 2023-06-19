@@ -147,8 +147,6 @@ export class MarkdownDocumenter {
         output.appendNode(new DocHeading({ configuration, title: `${scopedName} method` }));
         break;
       case ApiItemKind.Function:
-        console.group(`\nScopedName: ${scopedName}`);
-
         output.appendNode(
           new DocHeading({
             configuration,
@@ -156,7 +154,7 @@ export class MarkdownDocumenter {
             level: 1,
           }),
         );
-        console.groupEnd();
+
         break;
       case ApiItemKind.Model:
         output.appendNode(new DocHeading({ configuration, title: `API Reference` }));
@@ -287,7 +285,31 @@ export class MarkdownDocumenter {
       case ApiItemKind.Method:
       case ApiItemKind.MethodSignature:
       case ApiItemKind.Function:
-        this._writeParameterTables(output, apiItem as ApiParameterListMixin);
+        // Print property table into component/prefab page.
+        if (category === 'component' || category === 'prefab') {
+          const parameters = (apiItem as ApiParameterListMixin).parameters;
+          if (parameters.length > 0) {
+            console.log('parameters: ', parameters.map((para) => para.name).join(', '));
+            const props = parameters[0];
+            if (props !== undefined) {
+              for (const token of props.parameterTypeExcerpt.tokens) {
+                if (token.kind === ExcerptTokenKind.Reference && token.canonicalReference) {
+                  const apiItemResult: IResolveDeclarationReferenceResult =
+                    this._apiModel.resolveDeclarationReference(token.canonicalReference, undefined);
+                  if (apiItemResult.resolvedApiItem) {
+                    console.log('resolvedApiItem name', apiItemResult.resolvedApiItem.displayName);
+                    this._writeInterfaceTables(
+                      output,
+                      apiItemResult.resolvedApiItem as ApiInterface,
+                    );
+                  }
+                }
+              }
+            }
+          }
+        } else if (category === 'hook') {
+          this._writeParameterTables(output, apiItem as ApiParameterListMixin);
+        }
         this._writeThrowsSection(output, apiItem);
         break;
       case ApiItemKind.Namespace:
@@ -888,6 +910,9 @@ export class MarkdownDocumenter {
     apiParameterListMixin: ApiParameterListMixin,
   ): void {
     const configuration: TSDocConfiguration = this._tsdocConfiguration;
+    // console.log({ apiParameterListMixin });
+    // console.log({ parent: apiParameterListMixin.parent });
+    // console.log({ parameters: apiParameterListMixin.parameters });
 
     const parametersTable: DocTable = new DocTable({
       configuration,

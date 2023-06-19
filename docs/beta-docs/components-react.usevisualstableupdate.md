@@ -2,10 +2,9 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useVisualStableUpdate](./components-react.usevisualstableupdate.md)
 
-## useVisualStableUpdate() function
+## useVisualStableUpdate (hook)
 
 > This API is provided as a preview for developers and may change based on feedback that we receive. Do not use this API in a production environment.
-> 
 
 The useVisualStableUpdate hook tries to keep visual updates of the TackBundles array to a minimum, while still trying to display important tiles such as speaking participants or screen shares.
 
@@ -15,18 +14,20 @@ Updating works with pagination. For example, if a participant starts speaking on
 
 ```typescript
 export declare function useVisualStableUpdate(
-trackReferences: TrackReferenceOrPlaceholder[], maxItemsOnPage: number, options?: UseVisualStableUpdateOptions): TrackReferenceOrPlaceholder[];
+  trackReferences: TrackReferenceOrPlaceholder[],
+  maxItemsOnPage: number,
+  options?: UseVisualStableUpdateOptions,
+): TrackReferenceOrPlaceholder[];
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  trackReferences | TrackReferenceOrPlaceholder\[\] |  |
-|  maxItemsOnPage | number |  |
-|  options | [UseVisualStableUpdateOptions](./components-react.usevisualstableupdateoptions.md) | _(Optional)_ |
+| Parameter       | Type                                                                               | Description  |
+| --------------- | ---------------------------------------------------------------------------------- | ------------ |
+| trackReferences | TrackReferenceOrPlaceholder\[\]                                                    |              |
+| maxItemsOnPage  | number                                                                             |              |
+| options         | [UseVisualStableUpdateOptions](./components-react.usevisualstableupdateoptions.md) | _(Optional)_ |
 
 **Returns:**
 
 TrackReferenceOrPlaceholder\[\]
-

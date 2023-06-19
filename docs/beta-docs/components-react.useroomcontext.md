@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useRoomContext](./components-react.useroomcontext.md)
 
-## useRoomContext() function
+## useRoomContext (hook)
 
 Ensures that a room is provided via context. If no room is provided, an error is thrown.
 
@@ -11,7 +11,7 @@ Ensures that a room is provided via context. If no room is provided, an error is
 ```typescript
 export declare function useRoomContext(): Room;
 ```
+
 **Returns:**
 
 Room
-

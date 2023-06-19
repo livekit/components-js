@@ -2,23 +2,24 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useEnsureLayoutContext](./components-react.useensurelayoutcontext.md)
 
-## useEnsureLayoutContext() function
+## useEnsureLayoutContext (hook)
 
 Ensures that a layout context is provided, either via context or explicitly as a parameter. If not inside a `LayoutContext` and no layout context is provided, an error is thrown.
 
 **Signature:**
 
 ```typescript
-export declare function useEnsureLayoutContext(layoutContext?: LayoutContextType): LayoutContextType;
+export declare function useEnsureLayoutContext(
+  layoutContext?: LayoutContextType,
+): LayoutContextType;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  layoutContext | [LayoutContextType](./components-react.layoutcontexttype.md) | _(Optional)_ |
+| Parameter     | Type                                                         | Description  |
+| ------------- | ------------------------------------------------------------ | ------------ |
+| layoutContext | [LayoutContextType](./components-react.layoutcontexttype.md) | _(Optional)_ |
 
 **Returns:**
 
 [LayoutContextType](./components-react.layoutcontexttype.md)
-

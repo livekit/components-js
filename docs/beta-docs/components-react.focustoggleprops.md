@@ -4,18 +4,17 @@
 
 ## FocusToggleProps interface
 
-
 **Signature:**
 
 ```typescript
-export interface FocusToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
+export interface FocusToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
 ```
+
 **Extends:** React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [participant?](./components-react.focustoggleprops.participant.md) |  | Participant | _(Optional)_ |
-|  [trackSource](./components-react.focustoggleprops.tracksource.md) |  | Track.Source |  |
-
+| Property                                                           | Modifiers | Type         | Description  |
+| ------------------------------------------------------------------ | --------- | ------------ | ------------ |
+| [participant?](./components-react.focustoggleprops.participant.md) |           | Participant  | _(Optional)_ |
+| [trackSource](./components-react.focustoggleprops.tracksource.md)  |           | Track.Source |              |

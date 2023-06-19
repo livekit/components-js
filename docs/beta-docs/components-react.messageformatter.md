@@ -4,7 +4,6 @@
 
 ## MessageFormatter type
 
-
 **Signature:**
 
 ```typescript

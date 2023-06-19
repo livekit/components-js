@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [GridLayout](./components-react.gridlayout.md)
 
-## GridLayout() function
+## GridLayout (component)
 
 The GridLayout component displays the nested participants in a grid where every participants has the same size.
 
@@ -12,18 +12,7 @@ The GridLayout component displays the nested participants in a grid where every 
 export declare function GridLayout({ tracks, ...props }: GridLayoutProps): React.JSX.Element;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { tracks, ...props } | [GridLayoutProps](./components-react.gridlayoutprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
-
-## Example
-
+## Usage
 
 ```tsx
 <LiveKitRoom>
@@ -33,3 +22,12 @@ React.JSX.Element
 <LiveKitRoom>
 ```
 
+## Parameters
+
+| Parameter            | Type                                                     | Description |
+| -------------------- | -------------------------------------------------------- | ----------- |
+| { tracks, ...props } | [GridLayoutProps](./components-react.gridlayoutprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

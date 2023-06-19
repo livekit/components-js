@@ -2,28 +2,20 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [ConnectionState](./components-react.connectionstate.md)
 
-## ConnectionState() function
+## ConnectionState (component)
 
 The ConnectionState component displays the connection status of the room in written form.
 
 **Signature:**
 
 ```typescript
-export declare function ConnectionState({ room, ...props }: ConnectionStatusProps): React.JSX.Element;
+export declare function ConnectionState({
+  room,
+  ...props
+}: ConnectionStatusProps): React.JSX.Element;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { room, ...props } | [ConnectionStatusProps](./components-react.connectionstatusprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
-
-## Example
-
+## Usage
 
 ```tsx
 <LiveKitRoom>
@@ -31,3 +23,12 @@ React.JSX.Element
 </LiveKitRoom>
 ```
 
+## Parameters
+
+| Parameter          | Type                                                                 | Description |
+| ------------------ | -------------------------------------------------------------------- | ----------- |
+| { room, ...props } | [ConnectionStatusProps](./components-react.connectionstatusprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

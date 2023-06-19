@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [AudioConference](./components-react.audioconference.md)
 
-## AudioConference() function
+## AudioConference (prefab)
 
 This component is the default setup of a classic LiveKit audio conferencing app. It provides functionality like switching between participant grid view and focus view.
 
@@ -12,22 +12,11 @@ This component is the default setup of a classic LiveKit audio conferencing app.
 export declare function AudioConference({ ...props }: AudioConferenceProps): React.JSX.Element;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { ...props } | [AudioConferenceProps](./components-react.audioconferenceprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
-
 ## Remarks
 
 The component is implemented with other LiveKit components like `FocusContextProvider`<!-- -->, `GridLayout`<!-- -->, `ControlBar`<!-- -->, `FocusLayoutContainer` and `FocusLayout`<!-- -->.
 
-## Example
-
+## Usage
 
 ```tsx
 <LiveKitRoom>
@@ -35,3 +24,12 @@ The component is implemented with other LiveKit components like `FocusContextPro
 <LiveKitRoom>
 ```
 
+## Parameters
+
+| Parameter    | Type                                                               | Description |
+| ------------ | ------------------------------------------------------------------ | ----------- |
+| { ...props } | [AudioConferenceProps](./components-react.audioconferenceprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

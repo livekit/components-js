@@ -2,22 +2,22 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useEnsureCreateLayoutContext](./components-react.useensurecreatelayoutcontext.md)
 
-## useEnsureCreateLayoutContext() function
-
+## useEnsureCreateLayoutContext (hook)
 
 **Signature:**
 
 ```typescript
-export declare function useEnsureCreateLayoutContext(layoutContext?: LayoutContextType): LayoutContextType;
+export declare function useEnsureCreateLayoutContext(
+  layoutContext?: LayoutContextType,
+): LayoutContextType;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  layoutContext | [LayoutContextType](./components-react.layoutcontexttype.md) | _(Optional)_ |
+| Parameter     | Type                                                         | Description  |
+| ------------- | ------------------------------------------------------------ | ------------ |
+| layoutContext | [LayoutContextType](./components-react.layoutcontexttype.md) | _(Optional)_ |
 
 **Returns:**
 
 [LayoutContextType](./components-react.layoutcontexttype.md)
-

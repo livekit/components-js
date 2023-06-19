@@ -9,17 +9,26 @@ The PreJoin prefab component is normally presented to the user before he enters 
 **Signature:**
 
 ```typescript
-PreJoin: ({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, ...htmlProps }: PreJoinProps) => React.JSX.Element
+PreJoin: ({
+  defaults,
+  onValidate,
+  onSubmit,
+  onError,
+  debug,
+  joinLabel,
+  micLabel,
+  camLabel,
+  userLabel,
+  ...htmlProps
+}: PreJoinProps) => React.JSX.Element;
 ```
 
 ## Remarks
 
 This component is independent from the LiveKitRoom component and don't has to be nested inside it. Because it only access the local media tracks this component is self contained and works without connection to the LiveKit server.
 
-## Example
-
+## Usage
 
 ```tsx
 <PreJoin />
 ```
-

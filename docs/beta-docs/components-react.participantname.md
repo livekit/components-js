@@ -2,30 +2,31 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [ParticipantName](./components-react.participantname.md)
 
-## ParticipantName() function
+## ParticipantName (component)
 
 The ParticipantName component displays the name of the participant as a string within an HTML span element. If no participant name is undefined the participant identity string is displayed.
 
 **Signature:**
 
 ```typescript
-export declare function ParticipantName({ participant, ...props }: ParticipantNameProps): React.JSX.Element;
+export declare function ParticipantName({
+  participant,
+  ...props
+}: ParticipantNameProps): React.JSX.Element;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { participant, ...props } | [ParticipantNameProps](./components-react.participantnameprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
-
-## Example
-
+## Usage
 
 ```tsx
 <ParticipantName />
 ```
 
+## Parameters
+
+| Parameter                 | Type                                                               | Description |
+| ------------------------- | ------------------------------------------------------------------ | ----------- |
+| { participant, ...props } | [ParticipantNameProps](./components-react.participantnameprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

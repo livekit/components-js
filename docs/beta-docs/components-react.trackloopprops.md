@@ -4,12 +4,11 @@
 
 ## TrackLoopProps type
 
-
 **Signature:**
 
 ```typescript
 export type TrackLoopProps = {
-    tracks: TrackReference[] | TrackReferenceOrPlaceholder[];
-    children: React.ReactNode;
+  tracks: TrackReference[] | TrackReferenceOrPlaceholder[];
+  children: React.ReactNode;
 };
 ```

@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useSortedParticipants](./components-react.usesortedparticipants.md)
 
-## useSortedParticipants() function
+## useSortedParticipants (hook)
 
 The useSortedParticipants hook returns the only the active speakers of all participants.
 
@@ -14,11 +14,10 @@ export declare function useSortedParticipants(participants: Array<Participant>):
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  participants | Array&lt;Participant&gt; |  |
+| Parameter    | Type                     | Description |
+| ------------ | ------------------------ | ----------- |
+| participants | Array&lt;Participant&gt; |             |
 
 **Returns:**
 
 Participant\[\]
-

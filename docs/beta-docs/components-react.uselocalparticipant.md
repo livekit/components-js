@@ -10,11 +10,11 @@ The useLocalParticipant hook the state of the local participant.
 
 ```typescript
 useLocalParticipant: (options?: UseLocalParticipantOptions) => {
-    isMicrophoneEnabled: boolean;
-    isScreenShareEnabled: boolean;
-    isCameraEnabled: boolean;
-    microphoneTrack: TrackPublication | undefined;
-    cameraTrack: TrackPublication | undefined;
-    localParticipant: LocalParticipant;
-}
+  isMicrophoneEnabled: boolean;
+  isScreenShareEnabled: boolean;
+  isCameraEnabled: boolean;
+  microphoneTrack: TrackPublication | undefined;
+  cameraTrack: TrackPublication | undefined;
+  localParticipant: LocalParticipant;
+};
 ```

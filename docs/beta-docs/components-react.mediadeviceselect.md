@@ -2,32 +2,36 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [MediaDeviceSelect](./components-react.mediadeviceselect.md)
 
-## MediaDeviceSelect() function
+## MediaDeviceSelect (component)
 
 The MediaDeviceSelect list all media devices of one kind. Clicking on one of the listed devices make it the active media device.
 
 **Signature:**
 
 ```typescript
-export declare function MediaDeviceSelect({ kind, initialSelection, onActiveDeviceChange, onDeviceListChange, ...props }: MediaDeviceSelectProps): React.JSX.Element;
+export declare function MediaDeviceSelect({
+  kind,
+  initialSelection,
+  onActiveDeviceChange,
+  onDeviceListChange,
+  ...props
+}: MediaDeviceSelectProps): React.JSX.Element;
+```
+
+## Usage
+
+```tsx
+<LiveKitRoom>
+  <MediaDeviceSelect kind="audioinput" />
+</LiveKitRoom>
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { kind, initialSelection, onActiveDeviceChange, onDeviceListChange, ...props } | [MediaDeviceSelectProps](./components-react.mediadeviceselectprops.md) |  |
+| Parameter                                                                      | Type                                                                   | Description |
+| ------------------------------------------------------------------------------ | ---------------------------------------------------------------------- | ----------- |
+| { kind, initialSelection, onActiveDeviceChange, onDeviceListChange, ...props } | [MediaDeviceSelectProps](./components-react.mediadeviceselectprops.md) |             |
 
 **Returns:**
 
 React.JSX.Element
-
-## Example
-
-
-```tsx
-<LiveKitRoom>
-  <MediaDeviceSelect kind='audioinput' />
-</LiveKitRoom>
-```
-

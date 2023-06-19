@@ -4,15 +4,14 @@
 
 ## ParticipantTileProps type
 
-
 **Signature:**
 
 ```typescript
 export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
-    disableSpeakingIndicator?: boolean;
-    participant?: Participant;
-    source?: Track.Source;
-    publication?: TrackPublication;
-    onParticipantClick?: (event: ParticipantClickEvent) => void;
+  disableSpeakingIndicator?: boolean;
+  participant?: Participant;
+  source?: Track.Source;
+  publication?: TrackPublication;
+  onParticipantClick?: (event: ParticipantClickEvent) => void;
 };
 ```

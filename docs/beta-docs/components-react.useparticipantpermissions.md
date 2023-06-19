@@ -2,22 +2,22 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useParticipantPermissions](./components-react.useparticipantpermissions.md)
 
-## useParticipantPermissions() function
-
+## useParticipantPermissions (hook)
 
 **Signature:**
 
 ```typescript
-export declare function useParticipantPermissions(options?: UseParticipantPermissionsOptions): import("livekit-client/dist/src/proto/livekit_models").ParticipantPermission | undefined;
+export declare function useParticipantPermissions(
+  options?: UseParticipantPermissionsOptions,
+): import('livekit-client/dist/src/proto/livekit_models').ParticipantPermission | undefined;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  options | [UseParticipantPermissionsOptions](./components-react.useparticipantpermissionsoptions.md) | _(Optional)_ |
+| Parameter | Type                                                                                       | Description  |
+| --------- | ------------------------------------------------------------------------------------------ | ------------ |
+| options   | [UseParticipantPermissionsOptions](./components-react.useparticipantpermissionsoptions.md) | _(Optional)_ |
 
 **Returns:**
 
-import("livekit-client/dist/src/proto/livekit\_models").ParticipantPermission \| undefined
-
+import("livekit-client/dist/src/proto/livekit_models").ParticipantPermission \| undefined

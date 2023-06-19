@@ -4,16 +4,14 @@
 
 ## UseTrackMutedIndicatorOptions interface
 
-
 **Signature:**
 
 ```typescript
-export interface UseTrackMutedIndicatorOptions 
+export interface UseTrackMutedIndicatorOptions
 ```
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [participant?](./components-react.usetrackmutedindicatoroptions.participant.md) |  | Participant | _(Optional)_ |
-
+| Property                                                                        | Modifiers | Type        | Description  |
+| ------------------------------------------------------------------------------- | --------- | ----------- | ------------ |
+| [participant?](./components-react.usetrackmutedindicatoroptions.participant.md) |           | Participant | _(Optional)_ |

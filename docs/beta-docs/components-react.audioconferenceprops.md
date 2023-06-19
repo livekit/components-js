@@ -4,7 +4,6 @@
 
 ## AudioConferenceProps type
 
-
 **Signature:**
 
 ```typescript

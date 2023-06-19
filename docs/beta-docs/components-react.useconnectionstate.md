@@ -2,30 +2,28 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useConnectionState](./components-react.useconnectionstate.md)
 
-## useConnectionState() function
+## useConnectionState (hook)
 
 The `useConnectionState` hook allows you to simply implement your own `ConnectionState` component.
 
 **Signature:**
 
 ```typescript
-export declare function useConnectionState(room?: Room): import("livekit-client").ConnectionState;
+export declare function useConnectionState(room?: Room): import('livekit-client').ConnectionState;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  room | Room | _(Optional)_ |
-
-**Returns:**
-
-import("livekit-client").ConnectionState
-
-## Example
-
+## Usage
 
 ```tsx
 const connectionState = useConnectionState(room);
 ```
 
+## Parameters
+
+| Parameter | Type | Description  |
+| --------- | ---- | ------------ |
+| room      | Room | _(Optional)_ |
+
+**Returns:**
+
+import("livekit-client").ConnectionState

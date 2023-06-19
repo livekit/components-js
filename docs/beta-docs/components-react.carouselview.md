@@ -2,33 +2,35 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [CarouselView](./components-react.carouselview.md)
 
-## CarouselView() function
+## CarouselView (component)
 
 The `CarouselLayout` displays a list of tracks horizontally or vertically. Depending on the size of the container, the carousel will display as many tiles as possible and overflows the rest. The CarouselLayout uses the `useVisualStableUpdate` hook to ensure that tile reordering due to track updates is visually stable but still moves the important tiles (speaking participants) to the front.
 
 **Signature:**
 
 ```typescript
-export declare function CarouselLayout({ tracks, orientation, ...props }: CarouselLayoutProps): React.JSX.Element;
+export declare function CarouselLayout({
+  tracks,
+  orientation,
+  ...props
+}: CarouselLayoutProps): React.JSX.Element;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { tracks, orientation, ...props } | [CarouselLayoutProps](./components-react.carouselviewprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
-
-## Example
-
+## Usage
 
 ```tsx
 const tracks = useTracks();
 <CarouselLayout tracks={tracks}>
   <ParticipantTile />
-</CarouselLayout>
+</CarouselLayout>;
 ```
 
+## Parameters
+
+| Parameter                         | Type                                                           | Description |
+| --------------------------------- | -------------------------------------------------------------- | ----------- |
+| { tracks, orientation, ...props } | [CarouselLayoutProps](./components-react.carouselviewprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

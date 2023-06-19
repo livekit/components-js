@@ -4,16 +4,14 @@
 
 ## UseParticipantPermissionsOptions interface
 
-
 **Signature:**
 
 ```typescript
-export interface UseParticipantPermissionsOptions 
+export interface UseParticipantPermissionsOptions
 ```
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [participant?](./components-react.useparticipantpermissionsoptions.participant.md) |  | Participant | _(Optional)_ |
-
+| Property                                                                           | Modifiers | Type        | Description  |
+| ---------------------------------------------------------------------------------- | --------- | ----------- | ------------ |
+| [participant?](./components-react.useparticipantpermissionsoptions.participant.md) |           | Participant | _(Optional)_ |

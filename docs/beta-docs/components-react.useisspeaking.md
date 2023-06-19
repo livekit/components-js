@@ -2,8 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useIsSpeaking](./components-react.useisspeaking.md)
 
-## useIsSpeaking() function
-
+## useIsSpeaking (hook)
 
 **Signature:**
 
@@ -13,11 +12,10 @@ export declare function useIsSpeaking(participant?: Participant): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  participant | Participant | _(Optional)_ |
+| Parameter   | Type        | Description  |
+| ----------- | ----------- | ------------ |
+| participant | Participant | _(Optional)_ |
 
 **Returns:**
 
 boolean
-

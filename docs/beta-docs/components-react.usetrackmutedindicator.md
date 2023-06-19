@@ -4,12 +4,11 @@
 
 ## useTrackMutedIndicator variable
 
-
 **Signature:**
 
 ```typescript
 useTrackMutedIndicator: (source: Track.Source, options?: UseTrackMutedIndicatorOptions) => {
-    isMuted: boolean;
-    className: string;
-}
+  isMuted: boolean;
+  className: string;
+};
 ```

@@ -4,20 +4,19 @@
 
 ## MediaDeviceSelectProps interface
 
-
 **Signature:**
 
 ```typescript
-export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListElement> 
+export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListElement>
 ```
+
 **Extends:** React.HTMLAttributes&lt;HTMLUListElement&gt;
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [initialSelection?](./components-react.mediadeviceselectprops.initialselection.md) |  | string | _(Optional)_ |
-|  [kind](./components-react.mediadeviceselectprops.kind.md) |  | MediaDeviceKind |  |
-|  [onActiveDeviceChange?](./components-react.mediadeviceselectprops.onactivedevicechange.md) |  | (deviceId: string) =&gt; void | _(Optional)_ |
-|  [onDeviceListChange?](./components-react.mediadeviceselectprops.ondevicelistchange.md) |  | (devices: MediaDeviceInfo\[\]) =&gt; void | _(Optional)_ |
-
+| Property                                                                                   | Modifiers | Type                                      | Description  |
+| ------------------------------------------------------------------------------------------ | --------- | ----------------------------------------- | ------------ |
+| [initialSelection?](./components-react.mediadeviceselectprops.initialselection.md)         |           | string                                    | _(Optional)_ |
+| [kind](./components-react.mediadeviceselectprops.kind.md)                                  |           | MediaDeviceKind                           |              |
+| [onActiveDeviceChange?](./components-react.mediadeviceselectprops.onactivedevicechange.md) |           | (deviceId: string) =&gt; void             | _(Optional)_ |
+| [onDeviceListChange?](./components-react.mediadeviceselectprops.ondevicelistchange.md)     |           | (devices: MediaDeviceInfo\[\]) =&gt; void | _(Optional)_ |

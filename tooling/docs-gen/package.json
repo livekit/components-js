@@ -13,6 +13,7 @@
   "scripts": {
     "gen:docs": "yarn gen:api-documenter",
     "gen:api-documenter": "which api-documenter && api-documenter markdown --input-folder ../../packages/react/temp --output-folder ../../docs/beta-docs",
+    "gen:format-gen-docs": "prettier --write \"./../../docs/beta-docs/**/*.md\"",
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit"
   },

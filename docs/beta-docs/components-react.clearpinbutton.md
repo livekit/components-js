@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [ClearPinButton](./components-react.clearpinbutton.md)
 
-## ClearPinButton() function
+## ClearPinButton (component)
 
 The ClearPinButton is a basic html button with the added ability to signal the LiveKitRoom that it should display the grid view again.
 
@@ -12,22 +12,11 @@ The ClearPinButton is a basic html button with the added ability to signal the L
 export declare function ClearPinButton(props: ClearPinButtonProps): React.JSX.Element;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  props | [ClearPinButtonProps](./components-react.clearpinbuttonprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
-
 ## Remarks
 
 This component works only inside a PinContext.
 
-## Example
-
+## Usage
 
 ```tsx
 <LiveKitRoom>
@@ -35,3 +24,12 @@ This component works only inside a PinContext.
 </LiveKitRoom>
 ```
 
+## Parameters
+
+| Parameter | Type                                                             | Description |
+| --------- | ---------------------------------------------------------------- | ----------- |
+| props     | [ClearPinButtonProps](./components-react.clearpinbuttonprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

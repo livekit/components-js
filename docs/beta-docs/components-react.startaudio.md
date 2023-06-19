@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [StartAudio](./components-react.startaudio.md)
 
-## StartAudio() function
+## StartAudio (component)
 
 The StartAudio component is only visible when the browser blocks audio playback. This is due to some browser implemented autoplay policies. To start audio playback, the user must perform a user-initiated event such as clicking this button. As soon as audio playback starts, the button hides itself again.
 
@@ -12,18 +12,7 @@ The StartAudio component is only visible when the browser blocks audio playback.
 export declare function StartAudio({ label, ...props }: AllowAudioPlaybackProps): React.JSX.Element;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { label, ...props } | [AllowAudioPlaybackProps](./components-react.allowaudioplaybackprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
-
-## Example
-
+## Usage
 
 ```tsx
 <LiveKitRoom>
@@ -31,3 +20,12 @@ React.JSX.Element
 </LiveKitRoom>
 ```
 
+## Parameters
+
+| Parameter           | Type                                                                     | Description |
+| ------------------- | ------------------------------------------------------------------------ | ----------- |
+| { label, ...props } | [AllowAudioPlaybackProps](./components-react.allowaudioplaybackprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

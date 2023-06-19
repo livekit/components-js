@@ -4,16 +4,16 @@
 
 ## AudioTrackProps type
 
-
 **Signature:**
 
 ```typescript
-export type AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> = React.HTMLAttributes<T> & {
+export type AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
+  React.HTMLAttributes<T> & {
     source: Track.Source;
     name?: string;
     participant?: Participant;
     publication?: TrackPublication;
     onSubscriptionStatusChanged?: (subscribed: boolean) => void;
     volume?: number;
-};
+  };
 ```

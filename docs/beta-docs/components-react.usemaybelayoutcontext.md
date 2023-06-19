@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useMaybeLayoutContext](./components-react.usemaybelayoutcontext.md)
 
-## useMaybeLayoutContext() function
+## useMaybeLayoutContext (hook)
 
 Returns a layout context from the `LayoutContext` if it exists, otherwise `undefined`<!-- -->.
 
@@ -11,7 +11,7 @@ Returns a layout context from the `LayoutContext` if it exists, otherwise `undef
 ```typescript
 export declare function useMaybeLayoutContext(): LayoutContextType | undefined;
 ```
+
 **Returns:**
 
 [LayoutContextType](./components-react.layoutcontexttype.md) \| undefined
-

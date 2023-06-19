@@ -9,14 +9,13 @@ The TrackMutedIndicator shows whether the participant's camera or microphone is 
 **Signature:**
 
 ```typescript
-TrackMutedIndicator: ({ source, participant, show, ...props }: TrackMutedIndicatorProps) => React.JSX.Element | null
+TrackMutedIndicator: ({ source, participant, show, ...props }: TrackMutedIndicatorProps) =>
+  React.JSX.Element | null;
 ```
 
-## Example
-
+## Usage
 
 ```tsx
 <TrackMutedIndicator source={Track.Source.Camera} />
 <TrackMutedIndicator source={Track.Source.Microphone} />
 ```
-

@@ -9,15 +9,13 @@ The RoomName component renders the name of the connected LiveKit room inside a s
 **Signature:**
 
 ```typescript
-RoomName: ({ childrenPosition, children, ...htmlAttributes }: RoomNameProps) => React.JSX.Element
+RoomName: ({ childrenPosition, children, ...htmlAttributes }: RoomNameProps) => React.JSX.Element;
 ```
 
-## Example
-
+## Usage
 
 ```tsx
 <LiveKitRoom>
   <RoomName />
 </LiveKitRoom>
 ```
-

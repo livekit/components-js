@@ -2,8 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [ConnectionStateToast](./components-react.connectionstatetoast.md)
 
-## ConnectionStateToast() function
-
+## ConnectionStateToast (component)
 
 **Signature:**
 
@@ -13,11 +12,10 @@ export declare function ConnectionStateToast(props: ConnectionStateToastProps): 
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  props | [ConnectionStateToastProps](./components-react.connectionstatetoastprops.md) |  |
+| Parameter | Type                                                                         | Description |
+| --------- | ---------------------------------------------------------------------------- | ----------- |
+| props     | [ConnectionStateToastProps](./components-react.connectionstatetoastprops.md) |             |
 
 **Returns:**
 
 React.JSX.Element
-

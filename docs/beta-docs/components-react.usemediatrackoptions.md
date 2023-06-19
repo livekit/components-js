@@ -4,17 +4,15 @@
 
 ## UseMediaTrackOptions interface
 
-
 **Signature:**
 
 ```typescript
-export interface UseMediaTrackOptions 
+export interface UseMediaTrackOptions
 ```
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [element?](./components-react.usemediatrackoptions.element.md) |  | React.RefObject&lt;HTMLMediaElement&gt; | _(Optional)_ |
-|  [props?](./components-react.usemediatrackoptions.props.md) |  | React.HTMLAttributes&lt;HTMLVideoElement \| HTMLAudioElement&gt; | _(Optional)_ |
-
+| Property                                                       | Modifiers | Type                                                             | Description  |
+| -------------------------------------------------------------- | --------- | ---------------------------------------------------------------- | ------------ |
+| [element?](./components-react.usemediatrackoptions.element.md) |           | React.RefObject&lt;HTMLMediaElement&gt;                          | _(Optional)_ |
+| [props?](./components-react.usemediatrackoptions.props.md)     |           | React.HTMLAttributes&lt;HTMLVideoElement \| HTMLAudioElement&gt; | _(Optional)_ |

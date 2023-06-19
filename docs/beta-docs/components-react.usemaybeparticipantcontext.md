@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useMaybeParticipantContext](./components-react.usemaybeparticipantcontext.md)
 
-## useMaybeParticipantContext() function
+## useMaybeParticipantContext (hook)
 
 Returns a participant from the `ParticipantContext` if it exists, otherwise `undefined`<!-- -->.
 
@@ -11,7 +11,7 @@ Returns a participant from the `ParticipantContext` if it exists, otherwise `und
 ```typescript
 export declare function useMaybeParticipantContext(): Participant | undefined;
 ```
+
 **Returns:**
 
 Participant \| undefined
-

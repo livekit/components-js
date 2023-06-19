@@ -4,11 +4,10 @@
 
 ## DisconnectButtonProps type
 
-
 **Signature:**
 
 ```typescript
 export type DisconnectButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    stopTracks?: boolean;
+  stopTracks?: boolean;
 };
 ```

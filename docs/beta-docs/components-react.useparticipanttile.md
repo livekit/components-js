@@ -2,24 +2,29 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useParticipantTile](./components-react.useparticipanttile.md)
 
-## useParticipantTile() function
-
+## useParticipantTile (hook)
 
 **Signature:**
 
 ```typescript
-export declare function useParticipantTile<T extends HTMLElement>({ participant, source, publication, onParticipantClick, disableSpeakingIndicator, htmlProps, }: UseParticipantTileProps<T>): {
-    elementProps: React.HTMLAttributes<HTMLDivElement>;
+export declare function useParticipantTile<T extends HTMLElement>({
+  participant,
+  source,
+  publication,
+  onParticipantClick,
+  disableSpeakingIndicator,
+  htmlProps,
+}: UseParticipantTileProps<T>): {
+  elementProps: React.HTMLAttributes<HTMLDivElement>;
 };
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { participant, source, publication, onParticipantClick, disableSpeakingIndicator, htmlProps, } | [UseParticipantTileProps](./components-react.useparticipanttileprops.md)<!-- -->&lt;T&gt; |  |
+| Parameter                                                                                      | Type                                                                                      | Description |
+| ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------- |
+| { participant, source, publication, onParticipantClick, disableSpeakingIndicator, htmlProps, } | [UseParticipantTileProps](./components-react.useparticipanttileprops.md)<!-- -->&lt;T&gt; |             |
 
 **Returns:**
 
 { elementProps: React.HTMLAttributes&lt;HTMLDivElement&gt;; }
-

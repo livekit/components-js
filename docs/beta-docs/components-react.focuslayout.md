@@ -2,8 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [FocusLayout](./components-react.focuslayout.md)
 
-## FocusLayout() function
-
+## FocusLayout (component)
 
 **Signature:**
 
@@ -13,11 +12,10 @@ export declare function FocusLayout({ track, ...htmlProps }: FocusLayoutProps): 
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { track, ...htmlProps } | [FocusLayoutProps](./components-react.focuslayoutprops.md) |  |
+| Parameter               | Type                                                       | Description |
+| ----------------------- | ---------------------------------------------------------- | ----------- |
+| { track, ...htmlProps } | [FocusLayoutProps](./components-react.focuslayoutprops.md) |             |
 
 **Returns:**
 
 React.JSX.Element
-

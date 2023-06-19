@@ -4,9 +4,8 @@
 
 ## RoomContext variable
 
-
 **Signature:**
 
 ```typescript
-RoomContext: React.Context<Room | undefined>
+RoomContext: React.Context<Room | undefined>;
 ```

@@ -4,16 +4,14 @@
 
 ## ConnectionQualityIndicatorOptions interface
 
-
 **Signature:**
 
 ```typescript
-export interface ConnectionQualityIndicatorOptions 
+export interface ConnectionQualityIndicatorOptions
 ```
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [participant?](./components-react.connectionqualityindicatoroptions.participant.md) |  | Participant | _(Optional)_ |
-
+| Property                                                                            | Modifiers | Type        | Description  |
+| ----------------------------------------------------------------------------------- | --------- | ----------- | ------------ |
+| [participant?](./components-react.connectionqualityindicatoroptions.participant.md) |           | Participant | _(Optional)_ |

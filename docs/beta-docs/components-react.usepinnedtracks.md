@@ -2,22 +2,22 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [usePinnedTracks](./components-react.usepinnedtracks.md)
 
-## usePinnedTracks() function
-
+## usePinnedTracks (hook)
 
 **Signature:**
 
 ```typescript
-export declare function usePinnedTracks(layoutContext?: LayoutContextType): TrackReferenceOrPlaceholder[];
+export declare function usePinnedTracks(
+  layoutContext?: LayoutContextType,
+): TrackReferenceOrPlaceholder[];
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  layoutContext | [LayoutContextType](./components-react.layoutcontexttype.md) | _(Optional)_ |
+| Parameter     | Type                                                         | Description  |
+| ------------- | ------------------------------------------------------------ | ------------ |
+| layoutContext | [LayoutContextType](./components-react.layoutcontexttype.md) | _(Optional)_ |
 
 **Returns:**
 
 TrackReferenceOrPlaceholder\[\]
-

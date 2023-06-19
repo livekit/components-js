@@ -2,28 +2,21 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [FocusToggle](./components-react.focustoggle.md)
 
-## FocusToggle() function
+## FocusToggle (component)
 
 The FocusToggle puts the ParticipantTile in focus or removes it from focus.
 
 **Signature:**
 
 ```typescript
-export declare function FocusToggle({ trackSource, participant, ...props }: FocusToggleProps): React.JSX.Element;
+export declare function FocusToggle({
+  trackSource,
+  participant,
+  ...props
+}: FocusToggleProps): React.JSX.Element;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { trackSource, participant, ...props } | [FocusToggleProps](./components-react.focustoggleprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
-
-## Example
-
+## Usage
 
 ```tsx
 <ParticipantTile>
@@ -31,3 +24,12 @@ React.JSX.Element
 </ParticipantTile>
 ```
 
+## Parameters
+
+| Parameter                              | Type                                                       | Description |
+| -------------------------------------- | ---------------------------------------------------------- | ----------- |
+| { trackSource, participant, ...props } | [FocusToggleProps](./components-react.focustoggleprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

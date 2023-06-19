@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useMaybeRoomContext](./components-react.usemayberoomcontext.md)
 
-## useMaybeRoomContext() function
+## useMaybeRoomContext (hook)
 
 Returns the room context if it exists, otherwise undefined.
 
@@ -11,7 +11,7 @@ Returns the room context if it exists, otherwise undefined.
 ```typescript
 export declare function useMaybeRoomContext(): Room | undefined;
 ```
+
 **Returns:**
 
 Room \| undefined
-

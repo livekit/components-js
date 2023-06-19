@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useEnsureParticipant](./components-react.useensureparticipant.md)
 
-## useEnsureParticipant() function
+## useEnsureParticipant (hook)
 
 Ensures that a participant is provided, either via context or explicitly as a parameter. If not inside a `ParticipantContext` and no participant is provided, an error is thrown.
 
@@ -14,11 +14,10 @@ export declare function useEnsureParticipant(participant?: Participant): Partici
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  participant | Participant | _(Optional)_ |
+| Parameter   | Type        | Description  |
+| ----------- | ----------- | ------------ |
+| participant | Participant | _(Optional)_ |
 
 **Returns:**
 
 Participant
-

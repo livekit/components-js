@@ -4,15 +4,17 @@
 
 ## TrackToggleProps type
 
-
 **Signature:**
 
 ```typescript
-export type TrackToggleProps<T extends ToggleSource> = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> & {
-    source: T;
-    showIcon?: boolean;
-    initialState?: boolean;
-    onChange?: (enabled: boolean) => void;
-    captureOptions?: CaptureOptionsBySource<T>;
+export type TrackToggleProps<T extends ToggleSource> = Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'onChange'
+> & {
+  source: T;
+  showIcon?: boolean;
+  initialState?: boolean;
+  onChange?: (enabled: boolean) => void;
+  captureOptions?: CaptureOptionsBySource<T>;
 };
 ```

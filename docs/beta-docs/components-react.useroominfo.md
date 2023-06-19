@@ -2,25 +2,23 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useRoomInfo](./components-react.useroominfo.md)
 
-## useRoomInfo() function
-
+## useRoomInfo (hook)
 
 **Signature:**
 
 ```typescript
 export declare function useRoomInfo(options?: UseRoomInfoOptions): {
-    name: string;
-    metadata: string | undefined;
+  name: string;
+  metadata: string | undefined;
 };
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  options | [UseRoomInfoOptions](./components-react.useroominfooptions.md) | _(Optional)_ |
+| Parameter | Type                                                           | Description  |
+| --------- | -------------------------------------------------------------- | ------------ |
+| options   | [UseRoomInfoOptions](./components-react.useroominfooptions.md) | _(Optional)_ |
 
 **Returns:**
 
 { name: string; metadata: string \| undefined; }
-

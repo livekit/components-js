@@ -4,18 +4,16 @@
 
 ## UserInfo interface
 
-
 **Signature:**
 
 ```typescript
-export interface UserInfo 
+export interface UserInfo
 ```
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [identity?](./components-react.userinfo.identity.md) |  | string | _(Optional)_ |
-|  [metadata?](./components-react.userinfo.metadata.md) |  | string | _(Optional)_ |
-|  [name?](./components-react.userinfo.name.md) |  | string | _(Optional)_ |
-
+| Property                                             | Modifiers | Type   | Description  |
+| ---------------------------------------------------- | --------- | ------ | ------------ |
+| [identity?](./components-react.userinfo.identity.md) |           | string | _(Optional)_ |
+| [metadata?](./components-react.userinfo.metadata.md) |           | string | _(Optional)_ |
+| [name?](./components-react.userinfo.name.md)         |           | string | _(Optional)_ |

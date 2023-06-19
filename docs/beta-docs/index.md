@@ -6,7 +6,6 @@
 
 ## Packages
 
-|  Package | Description |
-|  --- | --- |
-|  [@livekit/components-react](./components-react.md) |  |
-
+| Package                                            | Description |
+| -------------------------------------------------- | ----------- |
+| [@livekit/components-react](./components-react.md) |             |

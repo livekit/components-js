@@ -4,15 +4,14 @@
 
 ## LocalUserChoices type
 
-
 **Signature:**
 
 ```typescript
 export type LocalUserChoices = {
-    username: string;
-    videoEnabled: boolean;
-    audioEnabled: boolean;
-    videoDeviceId: string;
-    audioDeviceId: string;
+  username: string;
+  videoEnabled: boolean;
+  audioEnabled: boolean;
+  videoDeviceId: string;
+  audioDeviceId: string;
 };
 ```

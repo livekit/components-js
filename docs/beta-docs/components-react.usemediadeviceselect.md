@@ -2,27 +2,28 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useMediaDeviceSelect](./components-react.usemediadeviceselect.md)
 
-## useMediaDeviceSelect() function
-
+## useMediaDeviceSelect (hook)
 
 **Signature:**
 
 ```typescript
 export declare function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps): {
-    devices: MediaDeviceInfo[];
-    className: string;
-    activeDeviceId: string;
-    setActiveMediaDevice: (id: string, options?: import("@livekit/components-core").SetMediaDeviceOptions | undefined) => Promise<void>;
+  devices: MediaDeviceInfo[];
+  className: string;
+  activeDeviceId: string;
+  setActiveMediaDevice: (
+    id: string,
+    options?: import('@livekit/components-core').SetMediaDeviceOptions | undefined,
+  ) => Promise<void>;
 };
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { kind, room } | [UseMediaDeviceSelectProps](./components-react.usemediadeviceselectprops.md) |  |
+| Parameter      | Type                                                                         | Description |
+| -------------- | ---------------------------------------------------------------------------- | ----------- |
+| { kind, room } | [UseMediaDeviceSelectProps](./components-react.usemediadeviceselectprops.md) |             |
 
 **Returns:**
 
 { devices: MediaDeviceInfo\[\]; className: string; activeDeviceId: string; setActiveMediaDevice: (id: string, options?: import("@livekit/components-core").SetMediaDeviceOptions \| undefined) =&gt; Promise&lt;void&gt;; }
-

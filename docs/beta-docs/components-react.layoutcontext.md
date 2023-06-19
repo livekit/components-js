@@ -4,9 +4,8 @@
 
 ## LayoutContext variable
 
-
 **Signature:**
 
 ```typescript
-LayoutContext: React.Context<LayoutContextType | undefined>
+LayoutContext: React.Context<LayoutContextType | undefined>;
 ```

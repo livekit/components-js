@@ -2,28 +2,20 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [TrackToggle](./components-react.tracktoggle.md)
 
-## TrackToggle() function
+## TrackToggle (component)
 
 With the TrackToggle component it is possible to mute and unmute your camera and microphone. The component uses an html button element under the hood so you can treat it like a button.
 
 **Signature:**
 
 ```typescript
-export declare function TrackToggle<T extends ToggleSource>({ showIcon, ...props }: TrackToggleProps<T>): React.JSX.Element;
+export declare function TrackToggle<T extends ToggleSource>({
+  showIcon,
+  ...props
+}: TrackToggleProps<T>): React.JSX.Element;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { showIcon, ...props } | [TrackToggleProps](./components-react.tracktoggleprops.md)<!-- -->&lt;T&gt; |  |
-
-**Returns:**
-
-React.JSX.Element
-
-## Example
-
+## Usage
 
 ```tsx
 <LiveKitRoom>
@@ -32,3 +24,12 @@ React.JSX.Element
 </LiveKitRoom>
 ```
 
+## Parameters
+
+| Parameter              | Type                                                                        | Description |
+| ---------------------- | --------------------------------------------------------------------------- | ----------- |
+| { showIcon, ...props } | [TrackToggleProps](./components-react.tracktoggleprops.md)<!-- -->&lt;T&gt; |             |
+
+**Returns:**
+
+React.JSX.Element

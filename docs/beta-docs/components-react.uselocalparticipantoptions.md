@@ -4,16 +4,14 @@
 
 ## UseLocalParticipantOptions interface
 
-
 **Signature:**
 
 ```typescript
-export interface UseLocalParticipantOptions 
+export interface UseLocalParticipantOptions
 ```
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [room?](./components-react.uselocalparticipantoptions.room.md) |  | Room | _(Optional)_ The room to use. If not provided, the hook will use the room from the context. |
-
+| Property                                                       | Modifiers | Type | Description                                                                                 |
+| -------------------------------------------------------------- | --------- | ---- | ------------------------------------------------------------------------------------------- |
+| [room?](./components-react.uselocalparticipantoptions.room.md) |           | Room | _(Optional)_ The room to use. If not provided, the hook will use the room from the context. |

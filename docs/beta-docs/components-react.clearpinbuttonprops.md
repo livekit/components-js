@@ -4,7 +4,6 @@
 
 ## ClearPinButtonProps type
 
-
 **Signature:**
 
 ```typescript

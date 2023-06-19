@@ -4,17 +4,16 @@
 
 ## ChatProps interface
 
-
 **Signature:**
 
 ```typescript
-export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> 
+export interface ChatProps extends React.HTMLAttributes<HTMLDivElement>
 ```
+
 **Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [messageFormatter?](./components-react.chatprops.messageformatter.md) |  | [MessageFormatter](./components-react.messageformatter.md) | _(Optional)_ |
-
+| Property                                                              | Modifiers | Type                                                       | Description  |
+| --------------------------------------------------------------------- | --------- | ---------------------------------------------------------- | ------------ |
+| [messageFormatter?](./components-react.chatprops.messageformatter.md) |           | [MessageFormatter](./components-react.messageformatter.md) | _(Optional)_ |

@@ -4,7 +4,6 @@
 
 ## ChatToggleProps type
 
-
 **Signature:**
 
 ```typescript

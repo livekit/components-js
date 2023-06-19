@@ -2,24 +2,24 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [ParticipantContextIfNeeded](./components-react.participantcontextifneeded.md)
 
-## ParticipantContextIfNeeded() function
-
+## ParticipantContextIfNeeded (component)
 
 **Signature:**
 
 ```typescript
-export declare function ParticipantContextIfNeeded(props: React.PropsWithChildren<{
+export declare function ParticipantContextIfNeeded(
+  props: React.PropsWithChildren<{
     participant?: Participant;
-}>): React.JSX.Element;
+  }>,
+): React.JSX.Element;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  props | React.PropsWithChildren&lt;{ participant?: Participant; }&gt; |  |
+| Parameter | Type                                                          | Description |
+| --------- | ------------------------------------------------------------- | ----------- |
+| props     | React.PropsWithChildren&lt;{ participant?: Participant; }&gt; |             |
 
 **Returns:**
 
 React.JSX.Element
-

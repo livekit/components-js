@@ -2,8 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [FocusLayoutContainer](./components-react.focuslayoutcontainer.md)
 
-## FocusLayoutContainer() function
-
+## FocusLayoutContainer (component)
 
 **Signature:**
 
@@ -13,11 +12,10 @@ export declare function FocusLayoutContainer(props: FocusLayoutContainerProps): 
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  props | [FocusLayoutContainerProps](./components-react.focuslayoutcontainerprops.md) |  |
+| Parameter | Type                                                                         | Description |
+| --------- | ---------------------------------------------------------------------------- | ----------- |
+| props     | [FocusLayoutContainerProps](./components-react.focuslayoutcontainerprops.md) |             |
 
 **Returns:**
 
 React.JSX.Element
-

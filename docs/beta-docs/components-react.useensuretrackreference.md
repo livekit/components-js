@@ -2,23 +2,24 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useEnsureTrackReference](./components-react.useensuretrackreference.md)
 
-## useEnsureTrackReference() function
+## useEnsureTrackReference (hook)
 
 Ensures that a track reference is provided, either via context or explicitly as a parameter. If not inside a `TrackContext` and no track reference is provided, an error is thrown.
 
 **Signature:**
 
 ```typescript
-export declare function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): TrackReferenceOrPlaceholder;
+export declare function useEnsureTrackReference(
+  track?: TrackReferenceOrPlaceholder,
+): TrackReferenceOrPlaceholder;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  track | TrackReferenceOrPlaceholder | _(Optional)_ |
+| Parameter | Type                        | Description  |
+| --------- | --------------------------- | ------------ |
+| track     | TrackReferenceOrPlaceholder | _(Optional)_ |
 
 **Returns:**
 
 TrackReferenceOrPlaceholder
-

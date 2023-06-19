@@ -222,26 +222,26 @@ export class MarkdownDocumenter {
       }
     }
 
-    // if (apiItem instanceof ApiDeclaredItem) {
-    //   if (apiItem.excerpt.text.length > 0) {
-    //     output.appendNode(
-    //       new DocParagraph({ configuration }, [
-    //         new DocEmphasisSpan({ configuration, bold: true }, [
-    //           new DocPlainText({ configuration, text: 'Signature:' }),
-    //         ]),
-    //       ]),
-    //     );
-    //     output.appendNode(
-    //       new DocFencedCode({
-    //         configuration,
-    //         code: apiItem.getExcerptWithModifiers(),
-    //         language: 'typescript',
-    //       }),
-    //     );
-    //   }
+    if (apiItem instanceof ApiDeclaredItem) {
+      if (apiItem.excerpt.text.length > 0) {
+        output.appendNode(
+          new DocParagraph({ configuration }, [
+            new DocEmphasisSpan({ configuration, bold: true }, [
+              new DocPlainText({ configuration, text: 'Signature:' }),
+            ]),
+          ]),
+        );
+        output.appendNode(
+          new DocFencedCode({
+            configuration,
+            code: apiItem.getExcerptWithModifiers(),
+            language: 'typescript',
+          }),
+        );
+      }
 
-    //   this._writeHeritageTypes(output, apiItem);
-    // }
+      this._writeHeritageTypes(output, apiItem);
+    }
 
     if (decoratorBlocks.length > 0) {
       output.appendNode(

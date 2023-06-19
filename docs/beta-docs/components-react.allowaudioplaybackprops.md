@@ -4,17 +4,16 @@
 
 ## AllowAudioPlaybackProps interface
 
-
 **Signature:**
 
 ```typescript
-export interface AllowAudioPlaybackProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
+export interface AllowAudioPlaybackProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
 ```
+
 **Extends:** React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [label](./components-react.allowaudioplaybackprops.label.md) |  | string |  |
-
+| Property                                                     | Modifiers | Type   | Description |
+| ------------------------------------------------------------ | --------- | ------ | ----------- |
+| [label](./components-react.allowaudioplaybackprops.label.md) |           | string |             |

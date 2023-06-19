@@ -4,14 +4,13 @@
 
 ## ControlBarProps type
 
-
 **Signature:**
 
 ```typescript
 export type ControlBarProps = React.HTMLAttributes<HTMLDivElement> & {
-    variation?: 'minimal' | 'verbose' | 'textOnly';
-    controls?: ControlBarControls;
+  variation?: 'minimal' | 'verbose' | 'textOnly';
+  controls?: ControlBarControls;
 };
 ```
-**References:** [ControlBarControls](./components-react.controlbarcontrols.md)
 
+**References:** [ControlBarControls](./components-react.controlbarcontrols.md)

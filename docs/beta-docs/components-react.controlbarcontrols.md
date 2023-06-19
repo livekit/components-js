@@ -4,15 +4,14 @@
 
 ## ControlBarControls type
 
-
 **Signature:**
 
 ```typescript
 export type ControlBarControls = {
-    microphone?: boolean;
-    camera?: boolean;
-    chat?: boolean;
-    screenShare?: boolean;
-    leave?: boolean;
+  microphone?: boolean;
+  camera?: boolean;
+  chat?: boolean;
+  screenShare?: boolean;
+  leave?: boolean;
 };
 ```

@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useMaybeTrackContext](./components-react.usemaybetrackcontext.md)
 
-## useMaybeTrackContext() function
+## useMaybeTrackContext (hook)
 
 Returns a track reference from the `TrackContext` if it exists, otherwise `undefined`<!-- -->.
 
@@ -11,7 +11,7 @@ Returns a track reference from the `TrackContext` if it exists, otherwise `undef
 ```typescript
 export declare function useMaybeTrackContext(): TrackReferenceOrPlaceholder | undefined;
 ```
+
 **Returns:**
 
 TrackReferenceOrPlaceholder \| undefined
-

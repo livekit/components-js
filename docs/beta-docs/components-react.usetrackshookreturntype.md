@@ -4,9 +4,12 @@
 
 ## UseTracksHookReturnType type
 
-
 **Signature:**
 
 ```typescript
-export type UseTracksHookReturnType<T> = T extends Track.Source[] ? TrackReference[] : T extends TrackSourceWithOptions[] ? TrackReferenceOrPlaceholder[] : never;
+export type UseTracksHookReturnType<T> = T extends Track.Source[]
+  ? TrackReference[]
+  : T extends TrackSourceWithOptions[]
+  ? TrackReferenceOrPlaceholder[]
+  : never;
 ```

@@ -4,16 +4,14 @@
 
 ## UseRemoteParticipantOptions interface
 
-
 **Signature:**
 
 ```typescript
-export interface UseRemoteParticipantOptions 
+export interface UseRemoteParticipantOptions
 ```
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [updateOnlyOn?](./components-react.useremoteparticipantoptions.updateonlyon.md) |  | ParticipantEvent\[\] | _(Optional)_ |
-
+| Property                                                                        | Modifiers | Type                 | Description  |
+| ------------------------------------------------------------------------------- | --------- | -------------------- | ------------ |
+| [updateOnlyOn?](./components-react.useremoteparticipantoptions.updateonlyon.md) |           | ParticipantEvent\[\] | _(Optional)_ |

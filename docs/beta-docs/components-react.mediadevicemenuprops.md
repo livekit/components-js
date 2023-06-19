@@ -4,19 +4,18 @@
 
 ## MediaDeviceMenuProps interface
 
-
 **Signature:**
 
 ```typescript
-export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
+export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
 ```
+
 **Extends:** React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [initialSelection?](./components-react.mediadevicemenuprops.initialselection.md) |  | string | _(Optional)_ |
-|  [kind?](./components-react.mediadevicemenuprops.kind.md) |  | MediaDeviceKind | _(Optional)_ |
-|  [onActiveDeviceChange?](./components-react.mediadevicemenuprops.onactivedevicechange.md) |  | (kind: MediaDeviceKind, deviceId: string) =&gt; void | _(Optional)_ |
-
+| Property                                                                                 | Modifiers | Type                                                 | Description  |
+| ---------------------------------------------------------------------------------------- | --------- | ---------------------------------------------------- | ------------ |
+| [initialSelection?](./components-react.mediadevicemenuprops.initialselection.md)         |           | string                                               | _(Optional)_ |
+| [kind?](./components-react.mediadevicemenuprops.kind.md)                                 |           | MediaDeviceKind                                      | _(Optional)_ |
+| [onActiveDeviceChange?](./components-react.mediadevicemenuprops.onactivedevicechange.md) |           | (kind: MediaDeviceKind, deviceId: string) =&gt; void | _(Optional)_ |

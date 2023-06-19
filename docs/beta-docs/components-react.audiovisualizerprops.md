@@ -4,17 +4,16 @@
 
 ## AudioVisualizerProps interface
 
-
 **Signature:**
 
 ```typescript
-export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> 
+export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement>
 ```
+
 **Extends:** React.HTMLAttributes&lt;SVGElement&gt;
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [participant?](./components-react.audiovisualizerprops.participant.md) |  | Participant | _(Optional)_ |
-
+| Property                                                               | Modifiers | Type        | Description  |
+| ---------------------------------------------------------------------- | --------- | ----------- | ------------ |
+| [participant?](./components-react.audiovisualizerprops.participant.md) |           | Participant | _(Optional)_ |

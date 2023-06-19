@@ -2,15 +2,16 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useLocalParticipantPermissions](./components-react.uselocalparticipantpermissions.md)
 
-## useLocalParticipantPermissions() function
-
+## useLocalParticipantPermissions (hook)
 
 **Signature:**
 
 ```typescript
-export declare function useLocalParticipantPermissions(): import("livekit-client/dist/src/proto/livekit_models").ParticipantPermission | undefined;
+export declare function useLocalParticipantPermissions():
+  | import('livekit-client/dist/src/proto/livekit_models').ParticipantPermission
+  | undefined;
 ```
+
 **Returns:**
 
-import("livekit-client/dist/src/proto/livekit\_models").ParticipantPermission \| undefined
-
+import("livekit-client/dist/src/proto/livekit_models").ParticipantPermission \| undefined

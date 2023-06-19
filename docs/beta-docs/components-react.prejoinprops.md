@@ -4,21 +4,20 @@
 
 ## PreJoinProps type
 
-
 **Signature:**
 
 ```typescript
 export type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'> & {
-    onSubmit?: (values: LocalUserChoices) => void;
-    onValidate?: (values: LocalUserChoices) => boolean;
-    onError?: (error: Error) => void;
-    defaults?: Partial<LocalUserChoices>;
-    debug?: boolean;
-    joinLabel?: string;
-    micLabel?: string;
-    camLabel?: string;
-    userLabel?: string;
+  onSubmit?: (values: LocalUserChoices) => void;
+  onValidate?: (values: LocalUserChoices) => boolean;
+  onError?: (error: Error) => void;
+  defaults?: Partial<LocalUserChoices>;
+  debug?: boolean;
+  joinLabel?: string;
+  micLabel?: string;
+  camLabel?: string;
+  userLabel?: string;
 };
 ```
-**References:** [LocalUserChoices](./components-react.localuserchoices.md)
 
+**References:** [LocalUserChoices](./components-react.localuserchoices.md)

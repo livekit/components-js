@@ -4,16 +4,14 @@
 
 ## UseIsMutedOptions interface
 
-
 **Signature:**
 
 ```typescript
-export interface UseIsMutedOptions 
+export interface UseIsMutedOptions
 ```
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [participant?](./components-react.useismutedoptions.participant.md) |  | Participant | _(Optional)_ |
-
+| Property                                                            | Modifiers | Type        | Description  |
+| ------------------------------------------------------------------- | --------- | ----------- | ------------ |
+| [participant?](./components-react.useismutedoptions.participant.md) |           | Participant | _(Optional)_ |

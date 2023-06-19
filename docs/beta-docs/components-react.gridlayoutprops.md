@@ -4,18 +4,17 @@
 
 ## GridLayoutProps interface
 
-
 **Signature:**
 
 ```typescript
-export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement>, Pick<UseParticipantsOptions, 'updateOnlyOn'> 
+export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement>, Pick<UseParticipantsOptions, 'updateOnlyOn'>
 ```
+
 **Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;, Pick&lt;[UseParticipantsOptions](./components-react.useparticipantsoptions.md)<!-- -->, 'updateOnlyOn'&gt;
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [children](./components-react.gridlayoutprops.children.md) |  | React.ReactNode |  |
-|  [tracks](./components-react.gridlayoutprops.tracks.md) |  | TrackReferenceOrPlaceholder\[\] |  |
-
+| Property                                                   | Modifiers | Type                            | Description |
+| ---------------------------------------------------------- | --------- | ------------------------------- | ----------- |
+| [children](./components-react.gridlayoutprops.children.md) |           | React.ReactNode                 |             |
+| [tracks](./components-react.gridlayoutprops.tracks.md)     |           | TrackReferenceOrPlaceholder\[\] |             |

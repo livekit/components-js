@@ -9,15 +9,14 @@ The ParticipantLoop component loops over an array of participants to create a co
 **Signature:**
 
 ```typescript
-ParticipantLoop: ({ participants, ...props }: ParticipantLoopProps) => React.JSX.Element
+ParticipantLoop: ({ participants, ...props }: ParticipantLoopProps) => React.JSX.Element;
 ```
 
 ## Remarks
 
 If you want to loop over individual tracks instead of participants, you can use the `TrackLoop` component.
 
-## Example
-
+## Usage
 
 ```tsx
 const participants = useParticipants();
@@ -25,4 +24,3 @@ const participants = useParticipants();
   <ParticipantName />
 <ParticipantLoop />
 ```
-

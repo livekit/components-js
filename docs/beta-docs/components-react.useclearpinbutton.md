@@ -2,24 +2,22 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useClearPinButton](./components-react.useclearpinbutton.md)
 
-## useClearPinButton() function
-
+## useClearPinButton (hook)
 
 **Signature:**
 
 ```typescript
 export declare function useClearPinButton(props: ClearPinButtonProps): {
-    buttonProps: React.HTMLAttributes<HTMLElement>;
+  buttonProps: React.HTMLAttributes<HTMLElement>;
 };
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  props | [ClearPinButtonProps](./components-react.clearpinbuttonprops.md) |  |
+| Parameter | Type                                                             | Description |
+| --------- | ---------------------------------------------------------------- | ----------- |
+| props     | [ClearPinButtonProps](./components-react.clearpinbuttonprops.md) |             |
 
 **Returns:**
 
 { buttonProps: React.HTMLAttributes&lt;HTMLElement&gt;; }
-

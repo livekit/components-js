@@ -9,19 +9,22 @@ The MediaDeviceMenu prefab component is a button that opens a menu that lists al
 **Signature:**
 
 ```typescript
-MediaDeviceMenu: ({ kind, initialSelection, onActiveDeviceChange, ...props }: MediaDeviceMenuProps) => React.JSX.Element
+MediaDeviceMenu: ({
+  kind,
+  initialSelection,
+  onActiveDeviceChange,
+  ...props
+}: MediaDeviceMenuProps) => React.JSX.Element;
 ```
 
 ## Remarks
 
 This component is implemented with the `MediaDeviceSelect` LiveKit components.
 
-## Example
-
+## Usage
 
 ```tsx
 <LiveKitRoom>
   <MediaDeviceMenu />
 </LiveKitRoom>
 ```
-

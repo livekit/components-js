@@ -2,24 +2,20 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useMediaDevices](./components-react.usemediadevices.md)
 
-## useMediaDevices() function
-
+## useMediaDevices (hook)
 
 **Signature:**
 
 ```typescript
-export declare function useMediaDevices({ kind }: {
-    kind: MediaDeviceKind;
-}): MediaDeviceInfo[];
+export declare function useMediaDevices({ kind }: { kind: MediaDeviceKind }): MediaDeviceInfo[];
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { kind } | { kind: MediaDeviceKind; } |  |
+| Parameter | Type                       | Description |
+| --------- | -------------------------- | ----------- |
+| { kind }  | { kind: MediaDeviceKind; } |             |
 
 **Returns:**
 
 MediaDeviceInfo\[\]
-

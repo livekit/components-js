@@ -4,18 +4,17 @@
 
 ## FocusLayoutProps interface
 
-
 **Signature:**
 
 ```typescript
-export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> 
+export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement>
 ```
+
 **Extends:** React.HTMLAttributes&lt;HTMLElement&gt;
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [onParticipantClick?](./components-react.focuslayoutprops.onparticipantclick.md) |  | (evt: ParticipantClickEvent) =&gt; void | _(Optional)_ |
-|  [track?](./components-react.focuslayoutprops.track.md) |  | TrackReferenceOrPlaceholder | _(Optional)_ |
-
+| Property                                                                         | Modifiers | Type                                    | Description  |
+| -------------------------------------------------------------------------------- | --------- | --------------------------------------- | ------------ |
+| [onParticipantClick?](./components-react.focuslayoutprops.onparticipantclick.md) |           | (evt: ParticipantClickEvent) =&gt; void | _(Optional)_ |
+| [track?](./components-react.focuslayoutprops.track.md)                           |           | TrackReferenceOrPlaceholder             | _(Optional)_ |

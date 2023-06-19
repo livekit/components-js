@@ -4,11 +4,10 @@
 
 ## UseParticipantInfoOptions type
 
-
 **Signature:**
 
 ```typescript
 export type UseParticipantInfoOptions = {
-    participant?: Participant;
+  participant?: Participant;
 };
 ```

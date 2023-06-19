@@ -2,30 +2,32 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useMediaTrack](./components-react.usemediatrack.md)
 
-## useMediaTrack() function
-
+## useMediaTrack (hook)
 
 **Signature:**
 
 ```typescript
-export declare function useMediaTrack(source: VideoSource | AudioSource, participant?: Participant, options?: UseMediaTrackOptions): {
-    publication: import("livekit-client").TrackPublication | undefined;
-    isMuted: boolean | undefined;
-    isSubscribed: boolean | undefined;
-    track: import("livekit-client").Track | undefined;
-    elementProps: import("react").HTMLAttributes<HTMLElement>;
+export declare function useMediaTrack(
+  source: VideoSource | AudioSource,
+  participant?: Participant,
+  options?: UseMediaTrackOptions,
+): {
+  publication: import('livekit-client').TrackPublication | undefined;
+  isMuted: boolean | undefined;
+  isSubscribed: boolean | undefined;
+  track: import('livekit-client').Track | undefined;
+  elementProps: import('react').HTMLAttributes<HTMLElement>;
 };
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  source | VideoSource \| AudioSource |  |
-|  participant | Participant | _(Optional)_ |
-|  options | [UseMediaTrackOptions](./components-react.usemediatrackoptions.md) | _(Optional)_ |
+| Parameter   | Type                                                               | Description  |
+| ----------- | ------------------------------------------------------------------ | ------------ |
+| source      | VideoSource \| AudioSource                                         |              |
+| participant | Participant                                                        | _(Optional)_ |
+| options     | [UseMediaTrackOptions](./components-react.usemediatrackoptions.md) | _(Optional)_ |
 
 **Returns:**
 
 { publication: import("livekit-client").TrackPublication \| undefined; isMuted: boolean \| undefined; isSubscribed: boolean \| undefined; track: import("livekit-client").Track \| undefined; elementProps: import("react").HTMLAttributes&lt;HTMLElement&gt;; }
-

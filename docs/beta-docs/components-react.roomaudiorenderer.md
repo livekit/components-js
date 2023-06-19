@@ -9,15 +9,13 @@ The RoomAudioRenderer component is a drop-in solution for adding audio to your L
 **Signature:**
 
 ```typescript
-RoomAudioRenderer: () => React.JSX.Element
+RoomAudioRenderer: () => React.JSX.Element;
 ```
 
-## Example
-
+## Usage
 
 ```tsx
 <LiveKitRoom>
   <RoomAudioRenderer />
 </LiveKitRoom>
 ```
-

@@ -4,17 +4,16 @@
 
 ## ConnectionStatusProps interface
 
-
 **Signature:**
 
 ```typescript
-export interface ConnectionStatusProps extends React.HTMLAttributes<HTMLDivElement> 
+export interface ConnectionStatusProps extends React.HTMLAttributes<HTMLDivElement>
 ```
+
 **Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [room?](./components-react.connectionstatusprops.room.md) |  | Room | _(Optional)_ The room from which the connection status should be displayed. |
-
+| Property                                                  | Modifiers | Type | Description                                                                 |
+| --------------------------------------------------------- | --------- | ---- | --------------------------------------------------------------------------- |
+| [room?](./components-react.connectionstatusprops.room.md) |           | Room | _(Optional)_ The room from which the connection status should be displayed. |

@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [Chat](./components-react.chat.md)
 
-## Chat() function
+## Chat (prefab)
 
 The Chat component adds a basis chat functionality to the LiveKit room. The messages are distributed to all participants in the room. Only users who are in the room at the time of dispatch will receive the message.
 
@@ -12,18 +12,7 @@ The Chat component adds a basis chat functionality to the LiveKit room. The mess
 export declare function Chat({ messageFormatter, ...props }: ChatProps): React.JSX.Element;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { messageFormatter, ...props } | [ChatProps](./components-react.chatprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
-
-## Example
-
+## Usage
 
 ```tsx
 <LiveKitRoom>
@@ -31,3 +20,12 @@ React.JSX.Element
 </LiveKitRoom>
 ```
 
+## Parameters
+
+| Parameter                      | Type                                         | Description |
+| ------------------------------ | -------------------------------------------- | ----------- |
+| { messageFormatter, ...props } | [ChatProps](./components-react.chatprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

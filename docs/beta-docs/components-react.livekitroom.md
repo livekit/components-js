@@ -2,36 +2,32 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [LiveKitRoom](./components-react.livekitroom.md)
 
-## LiveKitRoom() function
+## LiveKitRoom (component)
 
 The LiveKitRoom component provides the room context to all its child components. It is generally the starting point of your LiveKit app and the root of the LiveKit component tree. It provides the room state as a React context to all child components, so you don't have to pass it yourself.
 
 **Signature:**
 
 ```typescript
-export declare function LiveKitRoom(props: React.PropsWithChildren<LiveKitRoomProps>): React.JSX.Element;
+export declare function LiveKitRoom(
+  props: React.PropsWithChildren<LiveKitRoomProps>,
+): React.JSX.Element;
+```
+
+## Usage
+
+```tsx
+<LiveKitRoom token="<livekit-token>" serverUrl="<url-to-livekit-server>" connect={true}>
+  ...
+</LiveKitRoom>
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  props | React.PropsWithChildren&lt;[LiveKitRoomProps](./components-react.livekitroomprops.md)<!-- -->&gt; |  |
+| Parameter | Type                                                                                              | Description |
+| --------- | ------------------------------------------------------------------------------------------------- | ----------- |
+| props     | React.PropsWithChildren&lt;[LiveKitRoomProps](./components-react.livekitroomprops.md)<!-- -->&gt; |             |
 
 **Returns:**
 
 React.JSX.Element
-
-## Example
-
-
-```tsx
-<LiveKitRoom
- token='<livekit-token>'
- serverUrl='<url-to-livekit-server>'
- connect={true}
->
-    ...
-</LiveKitRoom>
-```
-

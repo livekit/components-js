@@ -4,11 +4,11 @@
 
 ## ParticipantNameProps type
 
-
 **Signature:**
 
 ```typescript
-export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement> & UseParticipantInfoOptions;
+export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement> &
+  UseParticipantInfoOptions;
 ```
-**References:** [UseParticipantInfoOptions](./components-react.useparticipantinfooptions.md)
 
+**References:** [UseParticipantInfoOptions](./components-react.useparticipantinfooptions.md)

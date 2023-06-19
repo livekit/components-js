@@ -2,22 +2,23 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [AudioVisualizer](./components-react.audiovisualizer.md)
 
-## AudioVisualizer() function
-
+## AudioVisualizer (component)
 
 **Signature:**
 
 ```typescript
-export declare function AudioVisualizer({ participant, ...props }: AudioVisualizerProps): React.JSX.Element;
+export declare function AudioVisualizer({
+  participant,
+  ...props
+}: AudioVisualizerProps): React.JSX.Element;
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { participant, ...props } | [AudioVisualizerProps](./components-react.audiovisualizerprops.md) |  |
+| Parameter                 | Type                                                               | Description |
+| ------------------------- | ------------------------------------------------------------------ | ----------- |
+| { participant, ...props } | [AudioVisualizerProps](./components-react.audiovisualizerprops.md) |             |
 
 **Returns:**
 
 React.JSX.Element
-

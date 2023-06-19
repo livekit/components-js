@@ -4,12 +4,11 @@
 
 ## LayoutContextType type
 
-
 **Signature:**
 
 ```typescript
 export type LayoutContextType = {
-    pin: PinContextType;
-    widget: ChatContextType;
+  pin: PinContextType;
+  widget: ChatContextType;
 };
 ```

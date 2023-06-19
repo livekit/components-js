@@ -2,28 +2,23 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [ChatEntry](./components-react.chatentry.md)
 
-## ChatEntry() function
+## ChatEntry (component)
 
 The `ChatEntry` component holds and displays one chat message.
 
 **Signature:**
 
 ```typescript
-export declare function ChatEntry({ entry, hideName, hideTimestamp, messageFormatter, ...props }: ChatEntryProps): React.JSX.Element;
+export declare function ChatEntry({
+  entry,
+  hideName,
+  hideTimestamp,
+  messageFormatter,
+  ...props
+}: ChatEntryProps): React.JSX.Element;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { entry, hideName, hideTimestamp, messageFormatter, ...props } | [ChatEntryProps](./components-react.chatentryprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
-
-## Example
-
+## Usage
 
 ```tsx
 <Chat>
@@ -31,3 +26,12 @@ React.JSX.Element
 </Chat>
 ```
 
+## Parameters
+
+| Parameter                                                      | Type                                                   | Description |
+| -------------------------------------------------------------- | ------------------------------------------------------ | ----------- |
+| { entry, hideName, hideTimestamp, messageFormatter, ...props } | [ChatEntryProps](./components-react.chatentryprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

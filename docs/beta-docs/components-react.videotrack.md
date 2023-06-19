@@ -2,30 +2,36 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [VideoTrack](./components-react.videotrack.md)
 
-## VideoTrack() function
+## VideoTrack (component)
 
 The VideoTrack component is responsible for rendering participant video tracks like `camera` and `screen_share`<!-- -->. This component must have access to the participant's context, or alternatively pass it a `Participant` as a property.
 
 **Signature:**
 
 ```typescript
-export declare function VideoTrack({ onTrackClick, onClick, onSubscriptionStatusChanged, name, publication, source, ...props }: VideoTrackProps): React.JSX.Element;
+export declare function VideoTrack({
+  onTrackClick,
+  onClick,
+  onSubscriptionStatusChanged,
+  name,
+  publication,
+  source,
+  ...props
+}: VideoTrackProps): React.JSX.Element;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { onTrackClick, onClick, onSubscriptionStatusChanged, name, publication, source, ...props } | [VideoTrackProps](./components-react.videotrackprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
-
-## Example
-
+## Usage
 
 ```tsx
 <VideoTrack source={Track.Source.Camera} />
 ```
 
+## Parameters
+
+| Parameter                                                                                   | Type                                                     | Description |
+| ------------------------------------------------------------------------------------------- | -------------------------------------------------------- | ----------- |
+| { onTrackClick, onClick, onSubscriptionStatusChanged, name, publication, source, ...props } | [VideoTrackProps](./components-react.videotrackprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

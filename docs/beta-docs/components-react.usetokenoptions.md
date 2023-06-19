@@ -4,16 +4,14 @@
 
 ## UseTokenOptions interface
 
-
 **Signature:**
 
 ```typescript
-export interface UseTokenOptions 
+export interface UseTokenOptions
 ```
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [userInfo?](./components-react.usetokenoptions.userinfo.md) |  | [UserInfo](./components-react.userinfo.md) | _(Optional)_ |
-
+| Property                                                    | Modifiers | Type                                       | Description  |
+| ----------------------------------------------------------- | --------- | ------------------------------------------ | ------------ |
+| [userInfo?](./components-react.usetokenoptions.userinfo.md) |           | [UserInfo](./components-react.userinfo.md) | _(Optional)_ |

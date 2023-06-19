@@ -2,32 +2,25 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [ControlBar](./components-react.controlbar.md)
 
-## ControlBar() function
+## ControlBar (prefab)
 
 The ControlBar prefab component gives the user the basic user interface to control their media devices and leave the room.
 
 **Signature:**
 
 ```typescript
-export declare function ControlBar({ variation, controls, ...props }: ControlBarProps): React.JSX.Element;
+export declare function ControlBar({
+  variation,
+  controls,
+  ...props
+}: ControlBarProps): React.JSX.Element;
 ```
-
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { variation, controls, ...props } | [ControlBarProps](./components-react.controlbarprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
 
 ## Remarks
 
 This component is build with other LiveKit components like `TrackToggle`<!-- -->, `DeviceSelectorButton`<!-- -->, `DisconnectButton` and `StartAudio`<!-- -->.
 
-## Example
-
+## Usage
 
 ```tsx
 <LiveKitRoom>
@@ -35,3 +28,12 @@ This component is build with other LiveKit components like `TrackToggle`<!-- -->
 </LiveKitRoom>
 ```
 
+## Parameters
+
+| Parameter                         | Type                                                     | Description |
+| --------------------------------- | -------------------------------------------------------- | ----------- |
+| { variation, controls, ...props } | [ControlBarProps](./components-react.controlbarprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

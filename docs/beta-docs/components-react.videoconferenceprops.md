@@ -4,17 +4,16 @@
 
 ## VideoConferenceProps interface
 
-
 **Signature:**
 
 ```typescript
-export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> 
+export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement>
 ```
+
 **Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [chatMessageFormatter?](./components-react.videoconferenceprops.chatmessageformatter.md) |  | [MessageFormatter](./components-react.messageformatter.md) | _(Optional)_ |
-
+| Property                                                                                 | Modifiers | Type                                                       | Description  |
+| ---------------------------------------------------------------------------------------- | --------- | ---------------------------------------------------------- | ------------ |
+| [chatMessageFormatter?](./components-react.videoconferenceprops.chatmessageformatter.md) |           | [MessageFormatter](./components-react.messageformatter.md) | _(Optional)_ |

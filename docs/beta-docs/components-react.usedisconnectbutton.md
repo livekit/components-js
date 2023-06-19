@@ -2,24 +2,22 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useDisconnectButton](./components-react.usedisconnectbutton.md)
 
-## useDisconnectButton() function
-
+## useDisconnectButton (hook)
 
 **Signature:**
 
 ```typescript
 export declare function useDisconnectButton(props: DisconnectButtonProps): {
-    buttonProps: React.HTMLAttributes<HTMLElement>;
+  buttonProps: React.HTMLAttributes<HTMLElement>;
 };
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  props | [DisconnectButtonProps](./components-react.disconnectbuttonprops.md) |  |
+| Parameter | Type                                                                 | Description |
+| --------- | -------------------------------------------------------------------- | ----------- |
+| props     | [DisconnectButtonProps](./components-react.disconnectbuttonprops.md) |             |
 
 **Returns:**
 
 { buttonProps: React.HTMLAttributes&lt;HTMLElement&gt;; }
-

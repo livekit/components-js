@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useParticipantContext](./components-react.useparticipantcontext.md)
 
-## useParticipantContext() function
+## useParticipantContext (hook)
 
 Ensures that a participant is provided via context. If not inside a `ParticipantContext`<!-- -->, an error is thrown.
 
@@ -11,7 +11,7 @@ Ensures that a participant is provided via context. If not inside a `Participant
 ```typescript
 export declare function useParticipantContext(): Participant;
 ```
+
 **Returns:**
 
 Participant
-

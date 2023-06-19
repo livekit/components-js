@@ -4,19 +4,18 @@
 
 ## CarouselViewProps interface
 
-
 **Signature:**
 
 ```typescript
-export interface CarouselLayoutProps extends React.HTMLAttributes<HTMLMediaElement> 
+export interface CarouselLayoutProps extends React.HTMLAttributes<HTMLMediaElement>
 ```
+
 **Extends:** React.HTMLAttributes&lt;HTMLMediaElement&gt;
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [children](./components-react.carouselviewprops.children.md) |  | React.ReactNode |  |
-|  [orientation?](./components-react.carouselviewprops.orientation.md) |  | 'vertical' \| 'horizontal' | _(Optional)_ Place the tiles vertically or horizontally next to each other. If undefined orientation is guessed by the dimensions of the container. |
-|  [tracks](./components-react.carouselviewprops.tracks.md) |  | TrackReferenceOrPlaceholder\[\] |  |
-
+| Property                                                            | Modifiers | Type                            | Description                                                                                                                                         |
+| ------------------------------------------------------------------- | --------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [children](./components-react.carouselviewprops.children.md)        |           | React.ReactNode                 |                                                                                                                                                     |
+| [orientation?](./components-react.carouselviewprops.orientation.md) |           | 'vertical' \| 'horizontal'      | _(Optional)_ Place the tiles vertically or horizontally next to each other. If undefined orientation is guessed by the dimensions of the container. |
+| [tracks](./components-react.carouselviewprops.tracks.md)            |           | TrackReferenceOrPlaceholder\[\] |                                                                                                                                                     |

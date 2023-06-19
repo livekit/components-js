@@ -2,41 +2,43 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useTracks](./components-react.usetracks.md)
 
-## useTracks() function
+## useTracks (hook)
 
 The `useTracks` hook returns an array of `TrackReference` or `TrackReferenceOrPlaceholder` depending on the provided `sources` property. If only subscribed tracks are desired, set the `onlySubscribed` property to `true`<!-- -->.
 
 **Signature:**
 
 ```typescript
-export declare function useTracks<T extends SourcesArray = Track.Source[]>(sources?: T, options?: UseTracksOptions): UseTracksHookReturnType<T>;
+export declare function useTracks<T extends SourcesArray = Track.Source[]>(
+  sources?: T,
+  options?: UseTracksOptions,
+): UseTracksHookReturnType<T>;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  sources | T | _(Optional)_ |
-|  options | [UseTracksOptions](./components-react.usetracksoptions.md) | _(Optional)_ |
-
-**Returns:**
-
-[UseTracksHookReturnType](./components-react.usetrackshookreturntype.md)<!-- -->&lt;T&gt;
-
-## Example 1
-
+## Usage Example 1
 
 ```ts
 // Return all camera track publications.
-const trackReferences: TrackReference[] = useTracks([Track.Source.Camera])
+const trackReferences: TrackReference[] = useTracks([Track.Source.Camera]);
 ```
 
-## Example 2
-
+## Usage Example 2
 
 ```ts
 // Return all subscribed camera tracks as well as placeholders for
 // participants without a camera subscription.
-const trackReferencesWithPlaceholders: TrackReferenceOrPlaceholder[] = useTracks([{source: Track.Source.Camera, withPlaceholder: true}])
+const trackReferencesWithPlaceholders: TrackReferenceOrPlaceholder[] = useTracks([
+  { source: Track.Source.Camera, withPlaceholder: true },
+]);
 ```
 
+## Parameters
+
+| Parameter | Type                                                       | Description  |
+| --------- | ---------------------------------------------------------- | ------------ |
+| sources   | T                                                          | _(Optional)_ |
+| options   | [UseTracksOptions](./components-react.usetracksoptions.md) | _(Optional)_ |
+
+**Returns:**
+
+[UseTracksHookReturnType](./components-react.usetrackshookreturntype.md)<!-- -->&lt;T&gt;

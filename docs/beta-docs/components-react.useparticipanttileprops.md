@@ -4,14 +4,13 @@
 
 ## UseParticipantTileProps type
 
-
 **Signature:**
 
 ```typescript
 export type UseParticipantTileProps<T extends HTMLElement> = TrackReferenceOrPlaceholder & {
-    disableSpeakingIndicator?: boolean;
-    publication?: TrackPublication;
-    onParticipantClick?: (event: ParticipantClickEvent) => void;
-    htmlProps: React.HTMLAttributes<T>;
+  disableSpeakingIndicator?: boolean;
+  publication?: TrackPublication;
+  onParticipantClick?: (event: ParticipantClickEvent) => void;
+  htmlProps: React.HTMLAttributes<T>;
 };
 ```

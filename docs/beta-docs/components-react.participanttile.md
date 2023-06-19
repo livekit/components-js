@@ -9,15 +9,21 @@ The ParticipantTile component is the base utility wrapper for displaying a visua
 **Signature:**
 
 ```typescript
-ParticipantTile: ({ participant, children, source, onParticipantClick, publication, disableSpeakingIndicator, ...htmlProps }: ParticipantTileProps) => React.JSX.Element
+ParticipantTile: ({
+  participant,
+  children,
+  source,
+  onParticipantClick,
+  publication,
+  disableSpeakingIndicator,
+  ...htmlProps
+}: ParticipantTileProps) => React.JSX.Element;
 ```
 
-## Example
-
+## Usage
 
 ```tsx
 <ParticipantTile source={Track.Source.Camera} />
 
 <ParticipantTile {...trackReference} />
 ```
-

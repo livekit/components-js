@@ -4,11 +4,10 @@
 
 ## UseTrackToggleProps type
 
-
 **Signature:**
 
 ```typescript
 export type UseTrackToggleProps<T extends ToggleSource> = Omit<TrackToggleProps<T>, 'showIcon'>;
 ```
-**References:** [TrackToggleProps](./components-react.tracktoggleprops.md)
 
+**References:** [TrackToggleProps](./components-react.tracktoggleprops.md)

@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [ChatToggle](./components-react.chattoggle.md)
 
-## ChatToggle() function
+## ChatToggle (component)
 
 The ChatToggle component toggles the visibility of the chat component.
 
@@ -12,18 +12,7 @@ The ChatToggle component toggles the visibility of the chat component.
 export declare function ChatToggle(props: ChatToggleProps): React.JSX.Element;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  props | [ChatToggleProps](./components-react.chattoggleprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
-
-## Example
-
+## Usage
 
 ```tsx
 <LiveKitRoom>
@@ -31,3 +20,12 @@ React.JSX.Element
 </LiveKitRoom>
 ```
 
+## Parameters
+
+| Parameter | Type                                                     | Description |
+| --------- | -------------------------------------------------------- | ----------- |
+| props     | [ChatToggleProps](./components-react.chattoggleprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

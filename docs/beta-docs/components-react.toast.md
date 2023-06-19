@@ -2,8 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [Toast](./components-react.toast.md)
 
-## Toast() function
-
+## Toast (component)
 
 **Signature:**
 
@@ -13,11 +12,10 @@ export declare function Toast(props: React.HTMLAttributes<HTMLDivElement>): Reac
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  props | React.HTMLAttributes&lt;HTMLDivElement&gt; |  |
+| Parameter | Type                                       | Description |
+| --------- | ------------------------------------------ | ----------- |
+| props     | React.HTMLAttributes&lt;HTMLDivElement&gt; |             |
 
 **Returns:**
 
 React.JSX.Element
-

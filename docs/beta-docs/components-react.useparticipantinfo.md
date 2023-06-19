@@ -2,26 +2,24 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useParticipantInfo](./components-react.useparticipantinfo.md)
 
-## useParticipantInfo() function
-
+## useParticipantInfo (hook)
 
 **Signature:**
 
 ```typescript
 export declare function useParticipantInfo(props?: UseParticipantInfoOptions): {
-    identity: string;
-    name: string | undefined;
-    metadata: string | undefined;
+  identity: string;
+  name: string | undefined;
+  metadata: string | undefined;
 };
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  props | [UseParticipantInfoOptions](./components-react.useparticipantinfooptions.md) | _(Optional)_ |
+| Parameter | Type                                                                         | Description  |
+| --------- | ---------------------------------------------------------------------------- | ------------ |
+| props     | [UseParticipantInfoOptions](./components-react.useparticipantinfooptions.md) | _(Optional)_ |
 
 **Returns:**
 
 { identity: string; name: string \| undefined; metadata: string \| undefined; }
-

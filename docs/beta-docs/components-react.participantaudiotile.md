@@ -9,13 +9,19 @@ The ParticipantAudioTile component is the base utility wrapper for displaying a 
 **Signature:**
 
 ```typescript
-ParticipantAudioTile: ({ participant, children, source, publication, disableSpeakingIndicator, onParticipantClick, ...htmlProps }: ParticipantTileProps) => React.JSX.Element
+ParticipantAudioTile: ({
+  participant,
+  children,
+  source,
+  publication,
+  disableSpeakingIndicator,
+  onParticipantClick,
+  ...htmlProps
+}: ParticipantTileProps) => React.JSX.Element;
 ```
 
-## Example
-
+## Usage
 
 ```tsx
 <ParticipantAudioTile />
 ```
-

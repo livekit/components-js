@@ -2,25 +2,23 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useLiveKitRoom](./components-react.uselivekitroom.md)
 
-## useLiveKitRoom() function
-
+## useLiveKitRoom (hook)
 
 **Signature:**
 
 ```typescript
 export declare function useLiveKitRoom(props: LiveKitRoomProps): {
-    room: Room | undefined;
-    htmlProps: React.HTMLAttributes<HTMLElement>;
+  room: Room | undefined;
+  htmlProps: React.HTMLAttributes<HTMLElement>;
 };
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  props | [LiveKitRoomProps](./components-react.livekitroomprops.md) |  |
+| Parameter | Type                                                       | Description |
+| --------- | ---------------------------------------------------------- | ----------- |
+| props     | [LiveKitRoomProps](./components-react.livekitroomprops.md) |             |
 
 **Returns:**
 
 { room: Room \| undefined; htmlProps: React.HTMLAttributes&lt;HTMLElement&gt;; }
-

@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useLayoutContext](./components-react.uselayoutcontext.md)
 
-## useLayoutContext() function
+## useLayoutContext (hook)
 
 Ensures that a layout context is provided via context. If no layout context is provided, an error is thrown.
 
@@ -11,7 +11,7 @@ Ensures that a layout context is provided via context. If no layout context is p
 ```typescript
 export declare function useLayoutContext(): LayoutContextType;
 ```
+
 **Returns:**
 
 [LayoutContextType](./components-react.layoutcontexttype.md)
-

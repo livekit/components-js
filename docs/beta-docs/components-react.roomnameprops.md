@@ -4,17 +4,16 @@
 
 ## RoomNameProps interface
 
-
 **Signature:**
 
 ```typescript
-export interface RoomNameProps extends React.HTMLAttributes<HTMLSpanElement> 
+export interface RoomNameProps extends React.HTMLAttributes<HTMLSpanElement>
 ```
+
 **Extends:** React.HTMLAttributes&lt;HTMLSpanElement&gt;
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [childrenPosition?](./components-react.roomnameprops.childrenposition.md) |  | 'before' \| 'after' | _(Optional)_ |
-
+| Property                                                                  | Modifiers | Type                | Description  |
+| ------------------------------------------------------------------------- | --------- | ------------------- | ------------ |
+| [childrenPosition?](./components-react.roomnameprops.childrenposition.md) |           | 'before' \| 'after' | _(Optional)_ |

@@ -4,16 +4,15 @@
 
 ## VideoTrackProps type
 
-
 **Signature:**
 
 ```typescript
 export type VideoTrackProps = React.HTMLAttributes<HTMLVideoElement> & {
-    source: Track.Source;
-    name?: string;
-    participant?: Participant;
-    publication?: TrackPublication;
-    onTrackClick?: (evt: ParticipantClickEvent) => void;
-    onSubscriptionStatusChanged?: (subscribed: boolean) => void;
+  source: Track.Source;
+  name?: string;
+  participant?: Participant;
+  publication?: TrackPublication;
+  onTrackClick?: (evt: ParticipantClickEvent) => void;
+  onSubscriptionStatusChanged?: (subscribed: boolean) => void;
 };
 ```

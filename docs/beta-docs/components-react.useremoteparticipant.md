@@ -4,9 +4,9 @@
 
 ## useRemoteParticipant variable
 
-
 **Signature:**
 
 ```typescript
-useRemoteParticipant: (identity: string, options?: UseRemoteParticipantOptions) => RemoteParticipant | undefined
+useRemoteParticipant: (identity: string, options?: UseRemoteParticipantOptions) =>
+  RemoteParticipant | undefined;
 ```

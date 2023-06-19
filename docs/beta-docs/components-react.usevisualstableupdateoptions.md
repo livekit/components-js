@@ -4,16 +4,14 @@
 
 ## UseVisualStableUpdateOptions interface
 
-
 **Signature:**
 
 ```typescript
-export interface UseVisualStableUpdateOptions 
+export interface UseVisualStableUpdateOptions
 ```
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [customSortFunction?](./components-react.usevisualstableupdateoptions.customsortfunction.md) |  | (trackReferences: TrackReferenceOrPlaceholder\[\]) =&gt; TrackReferenceOrPlaceholder\[\] | _(Optional)_ Overwrites the default sort function. |
-
+| Property                                                                                     | Modifiers | Type                                                                                     | Description                                        |
+| -------------------------------------------------------------------------------------------- | --------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| [customSortFunction?](./components-react.usevisualstableupdateoptions.customsortfunction.md) |           | (trackReferences: TrackReferenceOrPlaceholder\[\]) =&gt; TrackReferenceOrPlaceholder\[\] | _(Optional)_ Overwrites the default sort function. |

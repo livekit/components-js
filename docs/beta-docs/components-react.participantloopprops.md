@@ -4,12 +4,11 @@
 
 ## ParticipantLoopProps type
 
-
 **Signature:**
 
 ```typescript
 export type ParticipantLoopProps = {
-    participants: Participant[];
-    children: React.ReactNode;
+  participants: Participant[];
+  children: React.ReactNode;
 };
 ```

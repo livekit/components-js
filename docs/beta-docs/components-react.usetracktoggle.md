@@ -2,28 +2,37 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useTrackToggle](./components-react.usetracktoggle.md)
 
-## useTrackToggle() function
-
+## useTrackToggle (hook)
 
 **Signature:**
 
 ```typescript
-export declare function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, ...rest }: UseTrackToggleProps<T>): {
-    toggle: ((forceState?: boolean | undefined) => void) | ((forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>);
-    enabled: boolean;
-    pending: boolean;
-    track: import("livekit-client").LocalTrackPublication | undefined;
-    buttonProps: React.ButtonHTMLAttributes<HTMLButtonElement>;
+export declare function useTrackToggle<T extends ToggleSource>({
+  source,
+  onChange,
+  initialState,
+  captureOptions,
+  ...rest
+}: UseTrackToggleProps<T>): {
+  toggle:
+    | ((forceState?: boolean | undefined) => void)
+    | ((
+        forceState?: boolean | undefined,
+        captureOptions?: CaptureOptionsBySource<T> | undefined,
+      ) => Promise<void>);
+  enabled: boolean;
+  pending: boolean;
+  track: import('livekit-client').LocalTrackPublication | undefined;
+  buttonProps: React.ButtonHTMLAttributes<HTMLButtonElement>;
 };
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { source, onChange, initialState, captureOptions, ...rest } | [UseTrackToggleProps](./components-react.usetracktoggleprops.md)<!-- -->&lt;T&gt; |  |
+| Parameter                                                   | Type                                                                              | Description |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------------- | ----------- |
+| { source, onChange, initialState, captureOptions, ...rest } | [UseTrackToggleProps](./components-react.usetracktoggleprops.md)<!-- -->&lt;T&gt; |             |
 
 **Returns:**
 
 { toggle: ((forceState?: boolean \| undefined) =&gt; void) \| ((forceState?: boolean \| undefined, captureOptions?: CaptureOptionsBySource&lt;T&gt; \| undefined) =&gt; Promise&lt;void&gt;); enabled: boolean; pending: boolean; track: import("livekit-client").LocalTrackPublication \| undefined; buttonProps: React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;; }
-

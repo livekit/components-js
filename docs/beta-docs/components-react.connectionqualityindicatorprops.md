@@ -4,11 +4,11 @@
 
 ## ConnectionQualityIndicatorProps type
 
-
 **Signature:**
 
 ```typescript
-export type ConnectionQualityIndicatorProps = React.HTMLAttributes<HTMLDivElement> & ConnectionQualityIndicatorOptions;
+export type ConnectionQualityIndicatorProps = React.HTMLAttributes<HTMLDivElement> &
+  ConnectionQualityIndicatorOptions;
 ```
-**References:** [ConnectionQualityIndicatorOptions](./components-react.connectionqualityindicatoroptions.md)
 
+**References:** [ConnectionQualityIndicatorOptions](./components-react.connectionqualityindicatoroptions.md)

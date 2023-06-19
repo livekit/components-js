@@ -2,31 +2,37 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useDataChannel](./components-react.usedatachannel.md)
 
-## useDataChannel() function
-
+## useDataChannel (hook)
 
 **Signature:**
 
 ```typescript
-export declare function useDataChannel<T extends string>(topic?: T, onMessage?: (msg: ReceivedDataMessage<T>) => void): {
-    message: {
+export declare function useDataChannel<T extends string>(
+  topic?: T,
+  onMessage?: (msg: ReceivedDataMessage<T>) => void,
+): {
+  message:
+    | {
         payload: Uint8Array;
         topic: T;
-        from: import("livekit-client").RemoteParticipant | undefined;
-    } | undefined;
-    send: (payload: Uint8Array, options?: import("@livekit/components-core").DataSendOptions | undefined) => Promise<void>;
-    isSending: boolean;
+        from: import('livekit-client').RemoteParticipant | undefined;
+      }
+    | undefined;
+  send: (
+    payload: Uint8Array,
+    options?: import('@livekit/components-core').DataSendOptions | undefined,
+  ) => Promise<void>;
+  isSending: boolean;
 };
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  topic | T | _(Optional)_ |
-|  onMessage | (msg: ReceivedDataMessage&lt;T&gt;) =&gt; void | _(Optional)_ |
+| Parameter | Type                                           | Description  |
+| --------- | ---------------------------------------------- | ------------ |
+| topic     | T                                              | _(Optional)_ |
+| onMessage | (msg: ReceivedDataMessage&lt;T&gt;) =&gt; void | _(Optional)_ |
 
 **Returns:**
 
 { message: { payload: Uint8Array; topic: T; from: import("livekit-client").RemoteParticipant \| undefined; } \| undefined; send: (payload: Uint8Array, options?: import("@livekit/components-core").DataSendOptions \| undefined) =&gt; Promise&lt;void&gt;; isSending: boolean; }
-

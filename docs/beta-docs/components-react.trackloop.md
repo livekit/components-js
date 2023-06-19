@@ -9,11 +9,10 @@ The TrackLoop component loops over tracks. It is for example a easy way to loop 
 **Signature:**
 
 ```typescript
-TrackLoop: ({ tracks, ...props }: TrackLoopProps) => React.JSX.Element
+TrackLoop: ({ tracks, ...props }: TrackLoopProps) => React.JSX.Element;
 ```
 
-## Example
-
+## Usage
 
 ```tsx
 const tracks = useTracks([Track.Source.Camera]);
@@ -23,4 +22,3 @@ const tracks = useTracks([Track.Source.Camera]);
  </TrackContext.Consumer>
 <TrackLoop />
 ```
-

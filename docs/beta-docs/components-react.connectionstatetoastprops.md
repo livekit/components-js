@@ -4,17 +4,16 @@
 
 ## ConnectionStateToastProps interface
 
-
 **Signature:**
 
 ```typescript
-export interface ConnectionStateToastProps extends React.HTMLAttributes<HTMLDivElement> 
+export interface ConnectionStateToastProps extends React.HTMLAttributes<HTMLDivElement>
 ```
+
 **Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [room?](./components-react.connectionstatetoastprops.room.md) |  | Room | _(Optional)_ |
-
+| Property                                                      | Modifiers | Type | Description  |
+| ------------------------------------------------------------- | --------- | ---- | ------------ |
+| [room?](./components-react.connectionstatetoastprops.room.md) |           | Room | _(Optional)_ |

@@ -4,16 +4,14 @@
 
 ## UseRoomInfoOptions interface
 
-
 **Signature:**
 
 ```typescript
-export interface UseRoomInfoOptions 
+export interface UseRoomInfoOptions
 ```
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [room?](./components-react.useroominfooptions.room.md) |  | Room | _(Optional)_ |
-
+| Property                                               | Modifiers | Type | Description  |
+| ------------------------------------------------------ | --------- | ---- | ------------ |
+| [room?](./components-react.useroominfooptions.room.md) |           | Room | _(Optional)_ |

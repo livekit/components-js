@@ -2,30 +2,30 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [ConnectionQualityIndicator](./components-react.connectionqualityindicator.md)
 
-## ConnectionQualityIndicator() function
+## ConnectionQualityIndicator (component)
 
 The ConnectionQualityIndicator shows the individual connection quality of a participant.
 
 **Signature:**
 
 ```typescript
-export declare function ConnectionQualityIndicator(props: ConnectionQualityIndicatorProps): React.JSX.Element;
+export declare function ConnectionQualityIndicator(
+  props: ConnectionQualityIndicatorProps,
+): React.JSX.Element;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  props | [ConnectionQualityIndicatorProps](./components-react.connectionqualityindicatorprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
-
-## Example
-
+## Usage
 
 ```tsx
 <ConnectionQualityIndicator />
 ```
 
+## Parameters
+
+| Parameter | Type                                                                                     | Description |
+| --------- | ---------------------------------------------------------------------------------------- | ----------- |
+| props     | [ConnectionQualityIndicatorProps](./components-react.connectionqualityindicatorprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

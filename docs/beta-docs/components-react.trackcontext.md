@@ -4,9 +4,8 @@
 
 ## TrackContext variable
 
-
 **Signature:**
 
 ```typescript
-TrackContext: React.Context<TrackReferenceOrPlaceholder | undefined>
+TrackContext: React.Context<TrackReferenceOrPlaceholder | undefined>;
 ```

@@ -2,8 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useIsMuted](./components-react.useismuted.md)
 
-## useIsMuted() function
-
+## useIsMuted (hook)
 
 **Signature:**
 
@@ -13,12 +12,11 @@ export declare function useIsMuted(source: Track.Source, options?: UseIsMutedOpt
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  source | Track.Source |  |
-|  options | [UseIsMutedOptions](./components-react.useismutedoptions.md) | _(Optional)_ |
+| Parameter | Type                                                         | Description  |
+| --------- | ------------------------------------------------------------ | ------------ |
+| source    | Track.Source                                                 |              |
+| options   | [UseIsMutedOptions](./components-react.useismutedoptions.md) | _(Optional)_ |
 
 **Returns:**
 
 boolean
-

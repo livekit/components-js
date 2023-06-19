@@ -2,32 +2,24 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [VideoConference](./components-react.videoconference.md)
 
-## VideoConference() function
+## VideoConference (prefab)
 
 This component is the default setup of a classic LiveKit video conferencing app. It provides functionality like switching between participant grid view and focus view.
 
 **Signature:**
 
 ```typescript
-export declare function VideoConference({ chatMessageFormatter, ...props }: VideoConferenceProps): React.JSX.Element;
+export declare function VideoConference({
+  chatMessageFormatter,
+  ...props
+}: VideoConferenceProps): React.JSX.Element;
 ```
-
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  { chatMessageFormatter, ...props } | [VideoConferenceProps](./components-react.videoconferenceprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
 
 ## Remarks
 
 The component is implemented with other LiveKit components like `FocusContextProvider`<!-- -->, `GridLayout`<!-- -->, `ControlBar`<!-- -->, `FocusLayoutContainer` and `FocusLayout`<!-- -->.
 
-## Example
-
+## Usage
 
 ```tsx
 <LiveKitRoom>
@@ -35,3 +27,12 @@ The component is implemented with other LiveKit components like `FocusContextPro
 <LiveKitRoom>
 ```
 
+## Parameters
+
+| Parameter                          | Type                                                               | Description |
+| ---------------------------------- | ------------------------------------------------------------------ | ----------- |
+| { chatMessageFormatter, ...props } | [VideoConferenceProps](./components-react.videoconferenceprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

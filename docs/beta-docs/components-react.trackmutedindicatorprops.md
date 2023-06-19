@@ -4,19 +4,18 @@
 
 ## TrackMutedIndicatorProps interface
 
-
 **Signature:**
 
 ```typescript
-export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivElement> 
+export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivElement>
 ```
+
 **Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [participant?](./components-react.trackmutedindicatorprops.participant.md) |  | Participant | _(Optional)_ |
-|  [show?](./components-react.trackmutedindicatorprops.show.md) |  | 'always' \| 'muted' \| 'unmuted' | _(Optional)_ |
-|  [source](./components-react.trackmutedindicatorprops.source.md) |  | Track.Source |  |
-
+| Property                                                                   | Modifiers | Type                             | Description  |
+| -------------------------------------------------------------------------- | --------- | -------------------------------- | ------------ |
+| [participant?](./components-react.trackmutedindicatorprops.participant.md) |           | Participant                      | _(Optional)_ |
+| [show?](./components-react.trackmutedindicatorprops.show.md)               |           | 'always' \| 'muted' \| 'unmuted' | _(Optional)_ |
+| [source](./components-react.trackmutedindicatorprops.source.md)            |           | Track.Source                     |              |

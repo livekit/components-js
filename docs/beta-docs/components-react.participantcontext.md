@@ -4,9 +4,8 @@
 
 ## ParticipantContext variable
 
-
 **Signature:**
 
 ```typescript
-ParticipantContext: React.Context<Participant | undefined>
+ParticipantContext: React.Context<Participant | undefined>;
 ```

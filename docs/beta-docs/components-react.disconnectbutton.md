@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [DisconnectButton](./components-react.disconnectbutton.md)
 
-## DisconnectButton() function
+## DisconnectButton (component)
 
 The DisconnectButton is a basic html button with the added ability to disconnect from a LiveKit room. Normally, it is used by end-users to leave a video or audio call.
 
@@ -12,18 +12,7 @@ The DisconnectButton is a basic html button with the added ability to disconnect
 export declare function DisconnectButton(props: DisconnectButtonProps): React.JSX.Element;
 ```
 
-## Parameters
-
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  props | [DisconnectButtonProps](./components-react.disconnectbuttonprops.md) |  |
-
-**Returns:**
-
-React.JSX.Element
-
-## Example
-
+## Usage
 
 ```tsx
 <LiveKitRoom>
@@ -31,3 +20,12 @@ React.JSX.Element
 </LiveKitRoom>
 ```
 
+## Parameters
+
+| Parameter | Type                                                                 | Description |
+| --------- | -------------------------------------------------------------------- | ----------- |
+| props     | [DisconnectButtonProps](./components-react.disconnectbuttonprops.md) |             |
+
+**Returns:**
+
+React.JSX.Element

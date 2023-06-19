@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useTrackContext](./components-react.usetrackcontext.md)
 
-## useTrackContext() function
+## useTrackContext (hook)
 
 Ensures that a track reference is provided via context. If not inside a `TrackContext`<!-- -->, an error is thrown.
 
@@ -11,7 +11,7 @@ Ensures that a track reference is provided via context. If not inside a `TrackCo
 ```typescript
 export declare function useTrackContext(): TrackReferenceOrPlaceholder;
 ```
+
 **Returns:**
 
 TrackReferenceOrPlaceholder
-

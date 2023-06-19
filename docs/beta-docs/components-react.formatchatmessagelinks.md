@@ -2,8 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [formatChatMessageLinks](./components-react.formatchatmessagelinks.md)
 
-## formatChatMessageLinks() function
-
+## formatChatMessageLinks (component)
 
 **Signature:**
 
@@ -13,11 +12,10 @@ export declare function formatChatMessageLinks(message: string): React.ReactNode
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  message | string |  |
+| Parameter | Type   | Description |
+| --------- | ------ | ----------- |
+| message   | string |             |
 
 **Returns:**
 
 React.ReactNode
-

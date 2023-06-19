@@ -4,17 +4,15 @@
 
 ## UseMediaDeviceSelectProps interface
 
-
 **Signature:**
 
 ```typescript
-export interface UseMediaDeviceSelectProps 
+export interface UseMediaDeviceSelectProps
 ```
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [kind](./components-react.usemediadeviceselectprops.kind.md) |  | MediaDeviceKind |  |
-|  [room?](./components-react.usemediadeviceselectprops.room.md) |  | Room | _(Optional)_ |
-
+| Property                                                      | Modifiers | Type            | Description  |
+| ------------------------------------------------------------- | --------- | --------------- | ------------ |
+| [kind](./components-react.usemediadeviceselectprops.kind.md)  |           | MediaDeviceKind |              |
+| [room?](./components-react.usemediadeviceselectprops.room.md) |           | Room            | _(Optional)_ |

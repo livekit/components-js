@@ -4,13 +4,12 @@
 
 ## UseTracksOptions type
 
-
 **Signature:**
 
 ```typescript
 export type UseTracksOptions = {
-    updateOnlyOn?: RoomEvent[];
-    onlySubscribed?: boolean;
-    room?: Room;
+  updateOnlyOn?: RoomEvent[];
+  onlySubscribed?: boolean;
+  room?: Room;
 };
 ```

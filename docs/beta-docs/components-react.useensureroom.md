@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [useEnsureRoom](./components-react.useensureroom.md)
 
-## useEnsureRoom() function
+## useEnsureRoom (hook)
 
 Ensures that a room is provided, either via context or explicitly as a parameter. If no room is provided, an error is thrown.
 
@@ -14,11 +14,10 @@ export declare function useEnsureRoom(room?: Room): Room;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  room | Room | _(Optional)_ |
+| Parameter | Type | Description  |
+| --------- | ---- | ------------ |
+| room      | Room | _(Optional)_ |
 
 **Returns:**
 
 Room
-

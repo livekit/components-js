@@ -2,28 +2,30 @@
 
 [Home](./index.md) &gt; [@livekit/components-react](./components-react.md) &gt; [usePreviewDevice](./components-react.usepreviewdevice.md)
 
-## usePreviewDevice() function
-
+## usePreviewDevice (hook)
 
 **Signature:**
 
 ```typescript
-export declare function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(enabled: boolean, deviceId: string, kind: 'videoinput' | 'audioinput'): {
-    selectedDevice: MediaDeviceInfo | undefined;
-    localTrack: T | undefined;
-    deviceError: Error | null;
+export declare function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
+  enabled: boolean,
+  deviceId: string,
+  kind: 'videoinput' | 'audioinput',
+): {
+  selectedDevice: MediaDeviceInfo | undefined;
+  localTrack: T | undefined;
+  deviceError: Error | null;
 };
 ```
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  enabled | boolean |  |
-|  deviceId | string |  |
-|  kind | 'videoinput' \| 'audioinput' |  |
+| Parameter | Type                         | Description |
+| --------- | ---------------------------- | ----------- |
+| enabled   | boolean                      |             |
+| deviceId  | string                       |             |
+| kind      | 'videoinput' \| 'audioinput' |             |
 
 **Returns:**
 
 { selectedDevice: MediaDeviceInfo \| undefined; localTrack: T \| undefined; deviceError: Error \| null; }
-

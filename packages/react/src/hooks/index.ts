@@ -22,3 +22,4 @@ export { useTracks, UseTracksOptions, UseTracksHookReturnType } from './useTrack
 export { useVisualStableUpdate, UseVisualStableUpdateOptions } from './useVisualStableUpdate';
 export { usePinnedTracks } from './usePinnedTracks';
 export { useSwipe, UseSwipeOptions } from './useSwipe';
+export { useFacingMode } from './useFacingMode';

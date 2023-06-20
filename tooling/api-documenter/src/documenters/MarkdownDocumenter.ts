@@ -220,8 +220,27 @@ export class MarkdownDocumenter {
       }
     }
 
+    /** Write "Import" section. */
     if (apiItem instanceof ApiDeclaredItem) {
-      if (apiItem.excerpt.text.length > 0) {
+      if (category !== undefined) {
+        let importPath: string = '';
+        try {
+          // @ts-ignore
+          importPath = apiItem.canonicalReference.source.escapedPath;
+        } catch (error) {
+          console.error(error);
+        }
+        if (importPath) {
+          output.appendNode(new DocHeading({ configuration, title: 'Import', level: 2 }));
+          output.appendNode(
+            new DocFencedCode({
+              configuration,
+              code: `import {${apiItem.displayName}} from '${importPath}'`,
+              language: 'typescript',
+            }),
+          );
+        }
+      } else if (apiItem.excerpt.text.length > 0) {
         output.appendNode(
           new DocParagraph({ configuration }, [
             new DocEmphasisSpan({ configuration, bold: true }, [

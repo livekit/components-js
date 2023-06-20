@@ -684,7 +684,7 @@ export class MarkdownDocumenter {
       output.appendNode(prefabsTable);
     }
     if (hooksTable.rows.length > 0) {
-      output.appendNode(new DocHeading({ configuration, title: 'Hook' }));
+      output.appendNode(new DocHeading({ configuration, title: 'Hooks' }));
       output.appendNode(hooksTable);
     }
     if (restTable.rows.length > 0) {

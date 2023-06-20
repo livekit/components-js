@@ -4,10 +4,10 @@
 
 ## useMediaDevices (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useMediaDevices({ kind }: { kind: MediaDeviceKind }): MediaDeviceInfo[];
+import { useMediaDevices } from '@livekit/components-react';
 ```
 
 ## Parameters

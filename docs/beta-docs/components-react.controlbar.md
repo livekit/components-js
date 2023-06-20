@@ -6,14 +6,10 @@
 
 The ControlBar prefab component gives the user the basic user interface to control their media devices and leave the room.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function ControlBar({
-  variation,
-  controls,
-  ...props
-}: ControlBarProps): React.JSX.Element;
+import { ControlBar } from '@livekit/components-react';
 ```
 
 ## Remarks

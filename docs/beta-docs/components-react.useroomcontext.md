@@ -6,10 +6,10 @@
 
 Ensures that a room is provided via context. If no room is provided, an error is thrown.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useRoomContext(): Room;
+import { useRoomContext } from '@livekit/components-react';
 ```
 
 **Returns:**

@@ -6,12 +6,10 @@
 
 The ConnectionQualityIndicator shows the individual connection quality of a participant.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function ConnectionQualityIndicator(
-  props: ConnectionQualityIndicatorProps,
-): React.JSX.Element;
+import { ConnectionQualityIndicator } from '@livekit/components-react';
 ```
 
 ## Usage

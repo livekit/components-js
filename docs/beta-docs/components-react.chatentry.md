@@ -6,16 +6,10 @@
 
 The `ChatEntry` component holds and displays one chat message.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function ChatEntry({
-  entry,
-  hideName,
-  hideTimestamp,
-  messageFormatter,
-  ...props
-}: ChatEntryProps): React.JSX.Element;
+import { ChatEntry } from '@livekit/components-react';
 ```
 
 ## Usage

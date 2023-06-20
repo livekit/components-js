@@ -4,10 +4,10 @@
 
 ## ConnectionStateToast (component)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function ConnectionStateToast(props: ConnectionStateToastProps): React.JSX.Element;
+import { ConnectionStateToast } from '@livekit/components-react';
 ```
 
 ## Properties

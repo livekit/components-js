@@ -4,19 +4,10 @@
 
 ## useParticipantTile (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useParticipantTile<T extends HTMLElement>({
-  participant,
-  source,
-  publication,
-  onParticipantClick,
-  disableSpeakingIndicator,
-  htmlProps,
-}: UseParticipantTileProps<T>): {
-  elementProps: React.HTMLAttributes<HTMLDivElement>;
-};
+import { useParticipantTile } from '@livekit/components-react';
 ```
 
 ## Parameters

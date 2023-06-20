@@ -6,10 +6,10 @@
 
 This component is the default setup of a classic LiveKit audio conferencing app. It provides functionality like switching between participant grid view and focus view.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function AudioConference({ ...props }: AudioConferenceProps): React.JSX.Element;
+import { AudioConference } from '@livekit/components-react';
 ```
 
 ## Remarks

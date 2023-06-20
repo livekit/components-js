@@ -6,14 +6,10 @@
 
 The AudioTrack component is responsible for rendering participant audio tracks. This component must have access to the participant's context, or alternatively pass it a `Participant` as a property.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function AudioTrack({
-  onSubscriptionStatusChanged,
-  volume,
-  ...props
-}: AudioTrackProps): React.JSX.Element;
+import { AudioTrack } from '@livekit/components-react';
 ```
 
 ## Usage

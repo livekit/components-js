@@ -6,10 +6,10 @@
 
 The ClearPinButton is a basic html button with the added ability to signal the LiveKitRoom that it should display the grid view again.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function ClearPinButton(props: ClearPinButtonProps): React.JSX.Element;
+import { ClearPinButton } from '@livekit/components-react';
 ```
 
 ## Remarks

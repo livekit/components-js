@@ -4,9 +4,8 @@
 
 ## useRemoteParticipant variable
 
-**Signature:**
+### Import
 
 ```typescript
-useRemoteParticipant: (identity: string, options?: UseRemoteParticipantOptions) =>
-  RemoteParticipant | undefined;
+import { useRemoteParticipant } from '@livekit/components-react';
 ```

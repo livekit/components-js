@@ -4,20 +4,10 @@
 
 ## useMediaTrack (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useMediaTrack(
-  source: VideoSource | AudioSource,
-  participant?: Participant,
-  options?: UseMediaTrackOptions,
-): {
-  publication: import('livekit-client').TrackPublication | undefined;
-  isMuted: boolean | undefined;
-  isSubscribed: boolean | undefined;
-  track: import('livekit-client').Track | undefined;
-  elementProps: import('react').HTMLAttributes<HTMLElement>;
-};
+import { useMediaTrack } from '@livekit/components-react';
 ```
 
 ## Parameters

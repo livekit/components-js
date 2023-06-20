@@ -6,10 +6,10 @@
 
 Ensures that a participant is provided, either via context or explicitly as a parameter. If not inside a `ParticipantContext` and no participant is provided, an error is thrown.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useEnsureParticipant(participant?: Participant): Participant;
+import { useEnsureParticipant } from '@livekit/components-react';
 ```
 
 ## Parameters

@@ -4,8 +4,8 @@
 
 ## formatChatMessageLinks (component)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function formatChatMessageLinks(message: string): React.ReactNode;
+import { formatChatMessageLinks } from '@livekit/components-react';
 ```

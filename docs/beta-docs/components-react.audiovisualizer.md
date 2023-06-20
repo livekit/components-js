@@ -4,13 +4,10 @@
 
 ## AudioVisualizer (component)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function AudioVisualizer({
-  participant,
-  ...props
-}: AudioVisualizerProps): React.JSX.Element;
+import { AudioVisualizer } from '@livekit/components-react';
 ```
 
 ## Properties

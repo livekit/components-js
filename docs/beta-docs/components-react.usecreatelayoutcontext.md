@@ -4,10 +4,10 @@
 
 ## useCreateLayoutContext (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useCreateLayoutContext(): LayoutContextType;
+import { useCreateLayoutContext } from '@livekit/components-react';
 ```
 
 **Returns:**

@@ -6,10 +6,10 @@
 
 Returns a track reference from the `TrackContext` if it exists, otherwise `undefined`<!-- -->.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useMaybeTrackContext(): TrackReferenceOrPlaceholder | undefined;
+import { useMaybeTrackContext } from '@livekit/components-react';
 ```
 
 **Returns:**

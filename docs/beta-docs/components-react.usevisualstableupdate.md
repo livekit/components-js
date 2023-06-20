@@ -10,14 +10,10 @@ The useVisualStableUpdate hook tries to keep visual updates of the TackBundles a
 
 Updating works with pagination. For example, if a participant starts speaking on the second page, they will be moved to the first page by replacing the least active/interesting participant on the first page.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useVisualStableUpdate(
-  trackReferences: TrackReferenceOrPlaceholder[],
-  maxItemsOnPage: number,
-  options?: UseVisualStableUpdateOptions,
-): TrackReferenceOrPlaceholder[];
+import { useVisualStableUpdate } from '@livekit/components-react';
 ```
 
 ## Parameters

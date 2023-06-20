@@ -6,13 +6,10 @@
 
 The ConnectionState component displays the connection status of the room in written form.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function ConnectionState({
-  room,
-  ...props
-}: ConnectionStatusProps): React.JSX.Element;
+import { ConnectionState } from '@livekit/components-react';
 ```
 
 ## Usage

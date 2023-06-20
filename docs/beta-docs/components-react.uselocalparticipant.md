@@ -6,15 +6,8 @@
 
 The useLocalParticipant hook the state of the local participant.
 
-**Signature:**
+### Import
 
 ```typescript
-useLocalParticipant: (options?: UseLocalParticipantOptions) => {
-  isMicrophoneEnabled: boolean;
-  isScreenShareEnabled: boolean;
-  isCameraEnabled: boolean;
-  microphoneTrack: TrackPublication | undefined;
-  cameraTrack: TrackPublication | undefined;
-  localParticipant: LocalParticipant;
-};
+import { useLocalParticipant } from '@livekit/components-react';
 ```

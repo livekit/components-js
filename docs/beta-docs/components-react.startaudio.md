@@ -6,10 +6,10 @@
 
 The StartAudio component is only visible when the browser blocks audio playback. This is due to some browser implemented autoplay policies. To start audio playback, the user must perform a user-initiated event such as clicking this button. As soon as audio playback starts, the button hides itself again.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function StartAudio({ label, ...props }: AllowAudioPlaybackProps): React.JSX.Element;
+import { StartAudio } from '@livekit/components-react';
 ```
 
 ## Usage

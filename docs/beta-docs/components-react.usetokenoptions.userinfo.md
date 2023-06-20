@@ -4,8 +4,8 @@
 
 ## UseTokenOptions.userInfo property
 
-**Signature:**
+### Import
 
 ```typescript
-userInfo?: UserInfo;
+import { userInfo } from '@livekit/components-react';
 ```

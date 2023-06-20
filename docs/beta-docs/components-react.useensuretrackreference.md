@@ -6,12 +6,10 @@
 
 Ensures that a track reference is provided, either via context or explicitly as a parameter. If not inside a `TrackContext` and no track reference is provided, an error is thrown.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useEnsureTrackReference(
-  track?: TrackReferenceOrPlaceholder,
-): TrackReferenceOrPlaceholder;
+import { useEnsureTrackReference } from '@livekit/components-react';
 ```
 
 ## Parameters

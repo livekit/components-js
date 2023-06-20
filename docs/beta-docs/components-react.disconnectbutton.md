@@ -6,10 +6,10 @@
 
 The DisconnectButton is a basic html button with the added ability to disconnect from a LiveKit room. Normally, it is used by end-users to leave a video or audio call.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function DisconnectButton(props: DisconnectButtonProps): React.JSX.Element;
+import { DisconnectButton } from '@livekit/components-react';
 ```
 
 ## Usage

@@ -6,13 +6,10 @@
 
 The ParticipantName component displays the name of the participant as a string within an HTML span element. If no participant name is undefined the participant identity string is displayed.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function ParticipantName({
-  participant,
-  ...props
-}: ParticipantNameProps): React.JSX.Element;
+import { ParticipantName } from '@livekit/components-react';
 ```
 
 ## Usage

@@ -4,8 +4,8 @@
 
 ## Toast (component)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function Toast(props: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element;
+import { Toast } from '@livekit/components-react';
 ```

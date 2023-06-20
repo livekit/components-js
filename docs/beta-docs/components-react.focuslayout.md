@@ -4,10 +4,10 @@
 
 ## FocusLayout (component)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function FocusLayout({ track, ...htmlProps }: FocusLayoutProps): React.JSX.Element;
+import { FocusLayout } from '@livekit/components-react';
 ```
 
 ## Properties

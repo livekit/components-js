@@ -4,14 +4,10 @@
 
 ## useChat (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useChat(): {
-  send: ((message: string) => Promise<void>) | undefined;
-  chatMessages: ReceivedChatMessage[];
-  isSending: boolean;
-};
+import { useChat } from '@livekit/components-react';
 ```
 
 **Returns:**

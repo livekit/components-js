@@ -6,10 +6,10 @@
 
 Ensures that a track reference is provided via context. If not inside a `TrackContext`<!-- -->, an error is thrown.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useTrackContext(): TrackReferenceOrPlaceholder;
+import { useTrackContext } from '@livekit/components-react';
 ```
 
 **Returns:**

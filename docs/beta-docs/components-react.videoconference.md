@@ -6,13 +6,10 @@
 
 This component is the default setup of a classic LiveKit video conferencing app. It provides functionality like switching between participant grid view and focus view.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function VideoConference({
-  chatMessageFormatter,
-  ...props
-}: VideoConferenceProps): React.JSX.Element;
+import { VideoConference } from '@livekit/components-react';
 ```
 
 ## Remarks

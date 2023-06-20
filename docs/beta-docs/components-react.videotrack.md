@@ -6,18 +6,10 @@
 
 The VideoTrack component is responsible for rendering participant video tracks like `camera` and `screen_share`<!-- -->. This component must have access to the participant's context, or alternatively pass it a `Participant` as a property.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function VideoTrack({
-  onTrackClick,
-  onClick,
-  onSubscriptionStatusChanged,
-  name,
-  publication,
-  source,
-  ...props
-}: VideoTrackProps): React.JSX.Element;
+import { VideoTrack } from '@livekit/components-react';
 ```
 
 ## Usage

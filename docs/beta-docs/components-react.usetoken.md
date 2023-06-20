@@ -4,14 +4,10 @@
 
 ## useToken (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useToken(
-  tokenEndpoint: string | undefined,
-  roomName: string,
-  options?: UseTokenOptions,
-): string | undefined;
+import { useToken } from '@livekit/components-react';
 ```
 
 ## Parameters

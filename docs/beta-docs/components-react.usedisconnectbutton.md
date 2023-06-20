@@ -4,12 +4,10 @@
 
 ## useDisconnectButton (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useDisconnectButton(props: DisconnectButtonProps): {
-  buttonProps: React.HTMLAttributes<HTMLElement>;
-};
+import { useDisconnectButton } from '@livekit/components-react';
 ```
 
 ## Parameters

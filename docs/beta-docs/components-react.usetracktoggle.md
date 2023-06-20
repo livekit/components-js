@@ -4,27 +4,10 @@
 
 ## useTrackToggle (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useTrackToggle<T extends ToggleSource>({
-  source,
-  onChange,
-  initialState,
-  captureOptions,
-  ...rest
-}: UseTrackToggleProps<T>): {
-  toggle:
-    | ((forceState?: boolean | undefined) => void)
-    | ((
-        forceState?: boolean | undefined,
-        captureOptions?: CaptureOptionsBySource<T> | undefined,
-      ) => Promise<void>);
-  enabled: boolean;
-  pending: boolean;
-  track: import('livekit-client').LocalTrackPublication | undefined;
-  buttonProps: React.ButtonHTMLAttributes<HTMLButtonElement>;
-};
+import { useTrackToggle } from '@livekit/components-react';
 ```
 
 ## Parameters

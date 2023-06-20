@@ -4,10 +4,10 @@
 
 ## FocusLayoutContainer (component)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function FocusLayoutContainer(props: FocusLayoutContainerProps): React.JSX.Element;
+import { FocusLayoutContainer } from '@livekit/components-react';
 ```
 
 ## Properties

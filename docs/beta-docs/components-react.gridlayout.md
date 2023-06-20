@@ -6,10 +6,10 @@
 
 The GridLayout component displays the nested participants in a grid where every participants has the same size.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function GridLayout({ tracks, ...props }: GridLayoutProps): React.JSX.Element;
+import { GridLayout } from '@livekit/components-react';
 ```
 
 ## Usage

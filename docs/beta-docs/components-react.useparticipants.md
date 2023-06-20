@@ -6,8 +6,8 @@
 
 The useParticipants hook returns all participants (local and remote) of the current room.
 
-**Signature:**
+### Import
 
 ```typescript
-useParticipants: (options?: UseParticipantsOptions) => (import("livekit-client").RemoteParticipant | import("livekit-client").LocalParticipant)[]
+import { useParticipants } from '@livekit/components-react';
 ```

@@ -4,12 +4,10 @@
 
 ## useClearPinButton (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useClearPinButton(props: ClearPinButtonProps): {
-  buttonProps: React.HTMLAttributes<HTMLElement>;
-};
+import { useClearPinButton } from '@livekit/components-react';
 ```
 
 ## Parameters

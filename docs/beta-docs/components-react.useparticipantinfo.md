@@ -4,14 +4,10 @@
 
 ## useParticipantInfo (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useParticipantInfo(props?: UseParticipantInfoOptions): {
-  identity: string;
-  name: string | undefined;
-  metadata: string | undefined;
-};
+import { useParticipantInfo } from '@livekit/components-react';
 ```
 
 ## Parameters

@@ -6,14 +6,10 @@
 
 The FocusToggle puts the ParticipantTile in focus or removes it from focus.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function FocusToggle({
-  trackSource,
-  participant,
-  ...props
-}: FocusToggleProps): React.JSX.Element;
+import { FocusToggle } from '@livekit/components-react';
 ```
 
 ## Usage

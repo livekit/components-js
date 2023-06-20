@@ -4,18 +4,10 @@
 
 ## useMediaDeviceSelect (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps): {
-  devices: MediaDeviceInfo[];
-  className: string;
-  activeDeviceId: string;
-  setActiveMediaDevice: (
-    id: string,
-    options?: import('@livekit/components-core').SetMediaDeviceOptions | undefined,
-  ) => Promise<void>;
-};
+import { useMediaDeviceSelect } from '@livekit/components-react';
 ```
 
 ## Parameters

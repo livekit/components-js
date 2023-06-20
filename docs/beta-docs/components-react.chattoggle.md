@@ -6,10 +6,10 @@
 
 The ChatToggle component toggles the visibility of the chat component.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function ChatToggle(props: ChatToggleProps): React.JSX.Element;
+import { ChatToggle } from '@livekit/components-react';
 ```
 
 ## Usage

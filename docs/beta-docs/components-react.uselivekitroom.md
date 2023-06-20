@@ -4,13 +4,10 @@
 
 ## useLiveKitRoom (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useLiveKitRoom(props: LiveKitRoomProps): {
-  room: Room | undefined;
-  htmlProps: React.HTMLAttributes<HTMLElement>;
-};
+import { useLiveKitRoom } from '@livekit/components-react';
 ```
 
 ## Parameters

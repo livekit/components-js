@@ -6,10 +6,10 @@
 
 The Chat component adds a basis chat functionality to the LiveKit room. The messages are distributed to all participants in the room. Only users who are in the room at the time of dispatch will receive the message.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function Chat({ messageFormatter, ...props }: ChatProps): React.JSX.Element;
+import { Chat } from '@livekit/components-react';
 ```
 
 ## Usage

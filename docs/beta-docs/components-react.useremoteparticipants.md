@@ -6,8 +6,8 @@
 
 The useRemoteParticipants
 
-**Signature:**
+### Import
 
 ```typescript
-useRemoteParticipants: (options?: UseRemoteParticipantsOptions) => RemoteParticipant[]
+import { useRemoteParticipants } from '@livekit/components-react';
 ```

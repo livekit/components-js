@@ -6,10 +6,10 @@
 
 The `useConnectionState` hook allows you to simply implement your own `ConnectionState` component.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useConnectionState(room?: Room): import('livekit-client').ConnectionState;
+import { useConnectionState } from '@livekit/components-react';
 ```
 
 ## Usage

@@ -4,10 +4,10 @@
 
 ## useIsSpeaking (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useIsSpeaking(participant?: Participant): boolean;
+import { useIsSpeaking } from '@livekit/components-react';
 ```
 
 ## Parameters

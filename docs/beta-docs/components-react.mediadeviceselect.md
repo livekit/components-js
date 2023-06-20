@@ -6,16 +6,10 @@
 
 The MediaDeviceSelect list all media devices of one kind. Clicking on one of the listed devices make it the active media device.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function MediaDeviceSelect({
-  kind,
-  initialSelection,
-  onActiveDeviceChange,
-  onDeviceListChange,
-  ...props
-}: MediaDeviceSelectProps): React.JSX.Element;
+import { MediaDeviceSelect } from '@livekit/components-react';
 ```
 
 ## Usage

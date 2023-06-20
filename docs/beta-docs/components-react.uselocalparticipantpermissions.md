@@ -4,12 +4,10 @@
 
 ## useLocalParticipantPermissions (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useLocalParticipantPermissions():
-  | import('livekit-client/dist/src/proto/livekit_models').ParticipantPermission
-  | undefined;
+import { useLocalParticipantPermissions } from '@livekit/components-react';
 ```
 
 **Returns:**

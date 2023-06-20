@@ -6,10 +6,10 @@
 
 Ensures that a layout context is provided via context. If no layout context is provided, an error is thrown.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useLayoutContext(): LayoutContextType;
+import { useLayoutContext } from '@livekit/components-react';
 ```
 
 **Returns:**

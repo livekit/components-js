@@ -4,26 +4,10 @@
 
 ## useDataChannel (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useDataChannel<T extends string>(
-  topic?: T,
-  onMessage?: (msg: ReceivedDataMessage<T>) => void,
-): {
-  message:
-    | {
-        payload: Uint8Array;
-        topic: T;
-        from: import('livekit-client').RemoteParticipant | undefined;
-      }
-    | undefined;
-  send: (
-    payload: Uint8Array,
-    options?: import('@livekit/components-core').DataSendOptions | undefined,
-  ) => Promise<void>;
-  isSending: boolean;
-};
+import { useDataChannel } from '@livekit/components-react';
 ```
 
 ## Parameters

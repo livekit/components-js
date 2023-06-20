@@ -6,10 +6,10 @@
 
 Ensures that a room is provided, either via context or explicitly as a parameter. If no room is provided, an error is thrown.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useEnsureRoom(room?: Room): Room;
+import { useEnsureRoom } from '@livekit/components-react';
 ```
 
 ## Parameters

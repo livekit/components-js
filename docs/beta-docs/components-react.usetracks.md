@@ -6,13 +6,10 @@
 
 The `useTracks` hook returns an array of `TrackReference` or `TrackReferenceOrPlaceholder` depending on the provided `sources` property. If only subscribed tracks are desired, set the `onlySubscribed` property to `true`<!-- -->.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useTracks<T extends SourcesArray = Track.Source[]>(
-  sources?: T,
-  options?: UseTracksOptions,
-): UseTracksHookReturnType<T>;
+import { useTracks } from '@livekit/components-react';
 ```
 
 ## Usage Example 1

@@ -4,20 +4,10 @@
 
 ## useMediaTrackByName (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useMediaTrackByName(
-  name: string,
-  participant?: Participant,
-  options?: UseMediaTrackOptions,
-): {
-  publication: import('livekit-client').TrackPublication | undefined;
-  isMuted: boolean | undefined;
-  isSubscribed: boolean | undefined;
-  track: import('livekit-client').Track | undefined;
-  elementProps: import('react').HTMLAttributes<HTMLElement>;
-};
+import { useMediaTrackByName } from '@livekit/components-react';
 ```
 
 ## Parameters

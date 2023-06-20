@@ -4,11 +4,8 @@
 
 ## useTrackMutedIndicator variable
 
-**Signature:**
+### Import
 
 ```typescript
-useTrackMutedIndicator: (source: Track.Source, options?: UseTrackMutedIndicatorOptions) => {
-  isMuted: boolean;
-  className: string;
-};
+import { useTrackMutedIndicator } from '@livekit/components-react';
 ```

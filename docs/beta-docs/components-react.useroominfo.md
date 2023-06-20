@@ -4,13 +4,10 @@
 
 ## useRoomInfo (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useRoomInfo(options?: UseRoomInfoOptions): {
-  name: string;
-  metadata: string | undefined;
-};
+import { useRoomInfo } from '@livekit/components-react';
 ```
 
 ## Parameters

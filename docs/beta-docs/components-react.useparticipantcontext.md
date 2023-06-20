@@ -6,10 +6,10 @@
 
 Ensures that a participant is provided via context. If not inside a `ParticipantContext`<!-- -->, an error is thrown.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useParticipantContext(): Participant;
+import { useParticipantContext } from '@livekit/components-react';
 ```
 
 **Returns:**

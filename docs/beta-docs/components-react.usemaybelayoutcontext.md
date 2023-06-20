@@ -6,10 +6,10 @@
 
 Returns a layout context from the `LayoutContext` if it exists, otherwise `undefined`<!-- -->.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useMaybeLayoutContext(): LayoutContextType | undefined;
+import { useMaybeLayoutContext } from '@livekit/components-react';
 ```
 
 **Returns:**

@@ -4,18 +4,10 @@
 
 ## usePreviewDevice (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
-  enabled: boolean,
-  deviceId: string,
-  kind: 'videoinput' | 'audioinput',
-): {
-  selectedDevice: MediaDeviceInfo | undefined;
-  localTrack: T | undefined;
-  deviceError: Error | null;
-};
+import { usePreviewDevice } from '@livekit/components-react';
 ```
 
 ## Parameters

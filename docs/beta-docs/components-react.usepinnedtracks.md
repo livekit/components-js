@@ -4,12 +4,10 @@
 
 ## usePinnedTracks (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function usePinnedTracks(
-  layoutContext?: LayoutContextType,
-): TrackReferenceOrPlaceholder[];
+import { usePinnedTracks } from '@livekit/components-react';
 ```
 
 ## Parameters

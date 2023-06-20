@@ -6,10 +6,10 @@
 
 Returns a participant from the `ParticipantContext` if it exists, otherwise `undefined`<!-- -->.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useMaybeParticipantContext(): Participant | undefined;
+import { useMaybeParticipantContext } from '@livekit/components-react';
 ```
 
 **Returns:**

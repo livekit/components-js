@@ -6,10 +6,10 @@
 
 Returns the room context if it exists, otherwise undefined.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useMaybeRoomContext(): Room | undefined;
+import { useMaybeRoomContext } from '@livekit/components-react';
 ```
 
 **Returns:**

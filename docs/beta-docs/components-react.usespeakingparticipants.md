@@ -6,8 +6,8 @@
 
 The useSpeakingParticipants hook returns the only the active speakers of all participants.
 
-**Signature:**
+### Import
 
 ```typescript
-useSpeakingParticipants: () => import("livekit-client").Participant[]
+import { useSpeakingParticipants } from '@livekit/components-react';
 ```

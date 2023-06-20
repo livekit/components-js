@@ -4,12 +4,8 @@
 
 ## ParticipantContextIfNeeded (component)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function ParticipantContextIfNeeded(
-  props: React.PropsWithChildren<{
-    participant?: Participant;
-  }>,
-): React.JSX.Element;
+import { ParticipantContextIfNeeded } from '@livekit/components-react';
 ```

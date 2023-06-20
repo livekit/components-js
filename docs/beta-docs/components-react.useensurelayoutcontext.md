@@ -6,12 +6,10 @@
 
 Ensures that a layout context is provided, either via context or explicitly as a parameter. If not inside a `LayoutContext` and no layout context is provided, an error is thrown.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useEnsureLayoutContext(
-  layoutContext?: LayoutContextType,
-): LayoutContextType;
+import { useEnsureLayoutContext } from '@livekit/components-react';
 ```
 
 ## Parameters

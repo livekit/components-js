@@ -4,10 +4,10 @@
 
 ## useIsMuted (hook)
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useIsMuted(source: Track.Source, options?: UseIsMutedOptions): boolean;
+import { useIsMuted } from '@livekit/components-react';
 ```
 
 ## Parameters

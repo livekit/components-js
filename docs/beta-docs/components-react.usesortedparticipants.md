@@ -6,10 +6,10 @@
 
 The useSortedParticipants hook returns the only the active speakers of all participants.
 
-**Signature:**
+### Import
 
 ```typescript
-export declare function useSortedParticipants(participants: Array<Participant>): Participant[];
+import { useSortedParticipants } from '@livekit/components-react';
 ```
 
 ## Parameters

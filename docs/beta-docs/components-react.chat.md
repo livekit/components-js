@@ -20,12 +20,8 @@ export declare function Chat({ messageFormatter, ...props }: ChatProps): React.J
 </LiveKitRoom>
 ```
 
-## Parameters
+## Properties
 
-| Parameter                      | Type                                         | Description |
-| ------------------------------ | -------------------------------------------- | ----------- |
-| { messageFormatter, ...props } | [ChatProps](./components-react.chatprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element
+| Property                                                              | Modifiers | Type                                                       | Description  |
+| --------------------------------------------------------------------- | --------- | ---------------------------------------------------------- | ------------ |
+| [messageFormatter?](./components-react.chatprops.messageformatter.md) |           | [MessageFormatter](./components-react.messageformatter.md) | _(Optional)_ |

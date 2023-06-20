@@ -26,12 +26,11 @@ export declare function MediaDeviceSelect({
 </LiveKitRoom>
 ```
 
-## Parameters
+## Properties
 
-| Parameter                                                                      | Type                                                                   | Description |
-| ------------------------------------------------------------------------------ | ---------------------------------------------------------------------- | ----------- |
-| { kind, initialSelection, onActiveDeviceChange, onDeviceListChange, ...props } | [MediaDeviceSelectProps](./components-react.mediadeviceselectprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element
+| Property                                                                                   | Modifiers | Type                                      | Description  |
+| ------------------------------------------------------------------------------------------ | --------- | ----------------------------------------- | ------------ |
+| [initialSelection?](./components-react.mediadeviceselectprops.initialselection.md)         |           | string                                    | _(Optional)_ |
+| [kind](./components-react.mediadeviceselectprops.kind.md)                                  |           | MediaDeviceKind                           |              |
+| [onActiveDeviceChange?](./components-react.mediadeviceselectprops.onactivedevicechange.md) |           | (deviceId: string) =&gt; void             | _(Optional)_ |
+| [onDeviceListChange?](./components-react.mediadeviceselectprops.ondevicelistchange.md)     |           | (devices: MediaDeviceInfo\[\]) =&gt; void | _(Optional)_ |

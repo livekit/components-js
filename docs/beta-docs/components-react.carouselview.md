@@ -25,12 +25,10 @@ const tracks = useTracks();
 </CarouselLayout>;
 ```
 
-## Parameters
+## Properties
 
-| Parameter                         | Type                                                           | Description |
-| --------------------------------- | -------------------------------------------------------------- | ----------- |
-| { tracks, orientation, ...props } | [CarouselLayoutProps](./components-react.carouselviewprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element
+| Property                                                            | Modifiers | Type                            | Description                                                                                                                                         |
+| ------------------------------------------------------------------- | --------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [children](./components-react.carouselviewprops.children.md)        |           | React.ReactNode                 |                                                                                                                                                     |
+| [orientation?](./components-react.carouselviewprops.orientation.md) |           | 'vertical' \| 'horizontal'      | _(Optional)_ Place the tiles vertically or horizontally next to each other. If undefined orientation is guessed by the dimensions of the container. |
+| [tracks](./components-react.carouselviewprops.tracks.md)            |           | TrackReferenceOrPlaceholder\[\] |                                                                                                                                                     |

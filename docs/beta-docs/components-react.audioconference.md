@@ -23,13 +23,3 @@ The component is implemented with other LiveKit components like `FocusContextPro
   <AudioConference />
 <LiveKitRoom>
 ```
-
-## Parameters
-
-| Parameter    | Type                                                               | Description |
-| ------------ | ------------------------------------------------------------------ | ----------- |
-| { ...props } | [AudioConferenceProps](./components-react.audioconferenceprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element

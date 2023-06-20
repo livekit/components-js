@@ -22,12 +22,9 @@ export declare function GridLayout({ tracks, ...props }: GridLayoutProps): React
 <LiveKitRoom>
 ```
 
-## Parameters
+## Properties
 
-| Parameter            | Type                                                     | Description |
-| -------------------- | -------------------------------------------------------- | ----------- |
-| { tracks, ...props } | [GridLayoutProps](./components-react.gridlayoutprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element
+| Property                                                   | Modifiers | Type                            | Description |
+| ---------------------------------------------------------- | --------- | ------------------------------- | ----------- |
+| [children](./components-react.gridlayoutprops.children.md) |           | React.ReactNode                 |             |
+| [tracks](./components-react.gridlayoutprops.tracks.md)     |           | TrackReferenceOrPlaceholder\[\] |             |

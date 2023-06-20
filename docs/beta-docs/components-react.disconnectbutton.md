@@ -19,13 +19,3 @@ export declare function DisconnectButton(props: DisconnectButtonProps): React.JS
   <DisconnectButton>Leave room</DisconnectButton>
 </LiveKitRoom>
 ```
-
-## Parameters
-
-| Parameter | Type                                                                 | Description |
-| --------- | -------------------------------------------------------------------- | ----------- |
-| props     | [DisconnectButtonProps](./components-react.disconnectbuttonprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element

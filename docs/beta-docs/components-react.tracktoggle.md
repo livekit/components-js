@@ -23,13 +23,3 @@ export declare function TrackToggle<T extends ToggleSource>({
   <TrackToggle source={Track.Source.Camera} />
 </LiveKitRoom>
 ```
-
-## Parameters
-
-| Parameter              | Type                                                                        | Description |
-| ---------------------- | --------------------------------------------------------------------------- | ----------- |
-| { showIcon, ...props } | [TrackToggleProps](./components-react.tracktoggleprops.md)<!-- -->&lt;T&gt; |             |
-
-**Returns:**
-
-React.JSX.Element

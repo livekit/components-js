@@ -23,12 +23,8 @@ export declare function ConnectionState({
 </LiveKitRoom>
 ```
 
-## Parameters
+## Properties
 
-| Parameter          | Type                                                                 | Description |
-| ------------------ | -------------------------------------------------------------------- | ----------- |
-| { room, ...props } | [ConnectionStatusProps](./components-react.connectionstatusprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element
+| Property                                                  | Modifiers | Type | Description                                                                 |
+| --------------------------------------------------------- | --------- | ---- | --------------------------------------------------------------------------- |
+| [room?](./components-react.connectionstatusprops.room.md) |           | Room | _(Optional)_ The room from which the connection status should be displayed. |

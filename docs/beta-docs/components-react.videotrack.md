@@ -25,13 +25,3 @@ export declare function VideoTrack({
 ```tsx
 <VideoTrack source={Track.Source.Camera} />
 ```
-
-## Parameters
-
-| Parameter                                                                                   | Type                                                     | Description |
-| ------------------------------------------------------------------------------------------- | -------------------------------------------------------- | ----------- |
-| { onTrackClick, onClick, onSubscriptionStatusChanged, name, publication, source, ...props } | [VideoTrackProps](./components-react.videotrackprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element

@@ -9,13 +9,3 @@
 ```typescript
 export declare function Toast(props: React.HTMLAttributes<HTMLDivElement>): React.JSX.Element;
 ```
-
-## Parameters
-
-| Parameter | Type                                       | Description |
-| --------- | ------------------------------------------ | ----------- |
-| props     | React.HTMLAttributes&lt;HTMLDivElement&gt; |             |
-
-**Returns:**
-
-React.JSX.Element

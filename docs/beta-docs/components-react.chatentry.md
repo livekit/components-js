@@ -26,12 +26,11 @@ export declare function ChatEntry({
 </Chat>
 ```
 
-## Parameters
+## Properties
 
-| Parameter                                                      | Type                                                   | Description |
-| -------------------------------------------------------------- | ------------------------------------------------------ | ----------- |
-| { entry, hideName, hideTimestamp, messageFormatter, ...props } | [ChatEntryProps](./components-react.chatentryprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element
+| Property                                                                   | Modifiers | Type                                                       | Description                                                                                                    |
+| -------------------------------------------------------------------------- | --------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [entry](./components-react.chatentryprops.entry.md)                        |           | ReceivedChatMessage                                        | The chat massage object to display.                                                                            |
+| [hideName?](./components-react.chatentryprops.hidename.md)                 |           | boolean                                                    | _(Optional)_ Hide sender name. Useful when displaying multiple consecutive chat messages from the same person. |
+| [hideTimestamp?](./components-react.chatentryprops.hidetimestamp.md)       |           | boolean                                                    | _(Optional)_ Hide message timestamp.                                                                           |
+| [messageFormatter?](./components-react.chatentryprops.messageformatter.md) |           | [MessageFormatter](./components-react.messageformatter.md) | _(Optional)_ An optional formatter for the message body.                                                       |

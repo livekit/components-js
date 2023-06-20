@@ -23,13 +23,3 @@ export declare function AudioTrack({
   <AudioTrack source={Track.Source.Microphone} />
 </ParticipantTile>
 ```
-
-## Parameters
-
-| Parameter                                         | Type                                                     | Description |
-| ------------------------------------------------- | -------------------------------------------------------- | ----------- |
-| { onSubscriptionStatusChanged, volume, ...props } | [AudioTrackProps](./components-react.audiotrackprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element

@@ -19,13 +19,3 @@ export declare function ConnectionQualityIndicator(
 ```tsx
 <ConnectionQualityIndicator />
 ```
-
-## Parameters
-
-| Parameter | Type                                                                                     | Description |
-| --------- | ---------------------------------------------------------------------------------------- | ----------- |
-| props     | [ConnectionQualityIndicatorProps](./components-react.connectionqualityindicatorprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element

@@ -19,13 +19,3 @@ export declare function ChatToggle(props: ChatToggleProps): React.JSX.Element;
   <ToggleChat />
 </LiveKitRoom>
 ```
-
-## Parameters
-
-| Parameter | Type                                                     | Description |
-| --------- | -------------------------------------------------------- | ----------- |
-| props     | [ChatToggleProps](./components-react.chattoggleprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element

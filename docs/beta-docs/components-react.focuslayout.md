@@ -10,12 +10,9 @@
 export declare function FocusLayout({ track, ...htmlProps }: FocusLayoutProps): React.JSX.Element;
 ```
 
-## Parameters
+## Properties
 
-| Parameter               | Type                                                       | Description |
-| ----------------------- | ---------------------------------------------------------- | ----------- |
-| { track, ...htmlProps } | [FocusLayoutProps](./components-react.focuslayoutprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element
+| Property                                                                         | Modifiers | Type                                    | Description  |
+| -------------------------------------------------------------------------------- | --------- | --------------------------------------- | ------------ |
+| [onParticipantClick?](./components-react.focuslayoutprops.onparticipantclick.md) |           | (evt: ParticipantClickEvent) =&gt; void | _(Optional)_ |
+| [track?](./components-react.focuslayoutprops.track.md)                           |           | TrackReferenceOrPlaceholder             | _(Optional)_ |

@@ -10,12 +10,8 @@
 export declare function ConnectionStateToast(props: ConnectionStateToastProps): React.JSX.Element;
 ```
 
-## Parameters
+## Properties
 
-| Parameter | Type                                                                         | Description |
-| --------- | ---------------------------------------------------------------------------- | ----------- |
-| props     | [ConnectionStateToastProps](./components-react.connectionstatetoastprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element
+| Property                                                      | Modifiers | Type | Description  |
+| ------------------------------------------------------------- | --------- | ---- | ------------ |
+| [room?](./components-react.connectionstatetoastprops.room.md) |           | Room | _(Optional)_ |

@@ -27,13 +27,3 @@ This component is build with other LiveKit components like `TrackToggle`<!-- -->
   <ControlBar />
 </LiveKitRoom>
 ```
-
-## Parameters
-
-| Parameter                         | Type                                                     | Description |
-| --------------------------------- | -------------------------------------------------------- | ----------- |
-| { variation, controls, ...props } | [ControlBarProps](./components-react.controlbarprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element

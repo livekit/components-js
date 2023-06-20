@@ -20,12 +20,8 @@ export declare function StartAudio({ label, ...props }: AllowAudioPlaybackProps)
 </LiveKitRoom>
 ```
 
-## Parameters
+## Properties
 
-| Parameter           | Type                                                                     | Description |
-| ------------------- | ------------------------------------------------------------------------ | ----------- |
-| { label, ...props } | [AllowAudioPlaybackProps](./components-react.allowaudioplaybackprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element
+| Property                                                     | Modifiers | Type   | Description |
+| ------------------------------------------------------------ | --------- | ------ | ----------- |
+| [label](./components-react.allowaudioplaybackprops.label.md) |           | string |             |

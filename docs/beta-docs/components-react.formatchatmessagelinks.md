@@ -9,13 +9,3 @@
 ```typescript
 export declare function formatChatMessageLinks(message: string): React.ReactNode;
 ```
-
-## Parameters
-
-| Parameter | Type   | Description |
-| --------- | ------ | ----------- |
-| message   | string |             |
-
-**Returns:**
-
-React.ReactNode

@@ -27,12 +27,8 @@ The component is implemented with other LiveKit components like `FocusContextPro
 <LiveKitRoom>
 ```
 
-## Parameters
+## Properties
 
-| Parameter                          | Type                                                               | Description |
-| ---------------------------------- | ------------------------------------------------------------------ | ----------- |
-| { chatMessageFormatter, ...props } | [VideoConferenceProps](./components-react.videoconferenceprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element
+| Property                                                                                 | Modifiers | Type                                                       | Description  |
+| ---------------------------------------------------------------------------------------- | --------- | ---------------------------------------------------------- | ------------ |
+| [chatMessageFormatter?](./components-react.videoconferenceprops.chatmessageformatter.md) |           | [MessageFormatter](./components-react.messageformatter.md) | _(Optional)_ |

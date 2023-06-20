@@ -23,13 +23,3 @@ This component works only inside a PinContext.
   <ClearPinButton>Leave room</ClearPinButton>
 </LiveKitRoom>
 ```
-
-## Parameters
-
-| Parameter | Type                                                             | Description |
-| --------- | ---------------------------------------------------------------- | ----------- |
-| props     | [ClearPinButtonProps](./components-react.clearpinbuttonprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element

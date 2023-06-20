@@ -13,13 +13,3 @@ export declare function ParticipantContextIfNeeded(
   }>,
 ): React.JSX.Element;
 ```
-
-## Parameters
-
-| Parameter | Type                                                          | Description |
-| --------- | ------------------------------------------------------------- | ----------- |
-| props     | React.PropsWithChildren&lt;{ participant?: Participant; }&gt; |             |
-
-**Returns:**
-
-React.JSX.Element

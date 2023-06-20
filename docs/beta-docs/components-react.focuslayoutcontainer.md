@@ -10,12 +10,9 @@
 export declare function FocusLayoutContainer(props: FocusLayoutContainerProps): React.JSX.Element;
 ```
 
-## Parameters
+## Properties
 
-| Parameter | Type                                                                         | Description |
-| --------- | ---------------------------------------------------------------------------- | ----------- |
-| props     | [FocusLayoutContainerProps](./components-react.focuslayoutcontainerprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element
+| Property                                                                      | Modifiers | Type                     | Description  |
+| ----------------------------------------------------------------------------- | --------- | ------------------------ | ------------ |
+| [focusTrack?](./components-react.focuslayoutcontainerprops.focustrack.md)     |           | TrackReference           | _(Optional)_ |
+| [participants?](./components-react.focuslayoutcontainerprops.participants.md) |           | Array&lt;Participant&gt; | _(Optional)_ |

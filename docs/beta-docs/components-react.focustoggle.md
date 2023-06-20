@@ -24,12 +24,9 @@ export declare function FocusToggle({
 </ParticipantTile>
 ```
 
-## Parameters
+## Properties
 
-| Parameter                              | Type                                                       | Description |
-| -------------------------------------- | ---------------------------------------------------------- | ----------- |
-| { trackSource, participant, ...props } | [FocusToggleProps](./components-react.focustoggleprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element
+| Property                                                           | Modifiers | Type         | Description  |
+| ------------------------------------------------------------------ | --------- | ------------ | ------------ |
+| [participant?](./components-react.focustoggleprops.participant.md) |           | Participant  | _(Optional)_ |
+| [trackSource](./components-react.focustoggleprops.tracksource.md)  |           | Track.Source |              |

@@ -13,12 +13,8 @@ export declare function AudioVisualizer({
 }: AudioVisualizerProps): React.JSX.Element;
 ```
 
-## Parameters
+## Properties
 
-| Parameter                 | Type                                                               | Description |
-| ------------------------- | ------------------------------------------------------------------ | ----------- |
-| { participant, ...props } | [AudioVisualizerProps](./components-react.audiovisualizerprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element
+| Property                                                               | Modifiers | Type        | Description  |
+| ---------------------------------------------------------------------- | --------- | ----------- | ------------ |
+| [participant?](./components-react.audiovisualizerprops.participant.md) |           | Participant | _(Optional)_ |

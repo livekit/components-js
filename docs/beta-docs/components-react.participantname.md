@@ -20,13 +20,3 @@ export declare function ParticipantName({
 ```tsx
 <ParticipantName />
 ```
-
-## Parameters
-
-| Parameter                 | Type                                                               | Description |
-| ------------------------- | ------------------------------------------------------------------ | ----------- |
-| { participant, ...props } | [ParticipantNameProps](./components-react.participantnameprops.md) |             |
-
-**Returns:**
-
-React.JSX.Element

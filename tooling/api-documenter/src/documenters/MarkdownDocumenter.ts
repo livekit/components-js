@@ -587,6 +587,26 @@ export class MarkdownDocumenter {
       headerTitles: ['Type Alias', 'Description'],
     });
 
+    // Component Table
+    const componentsTable: DocTable = new DocTable({
+      configuration,
+      headerTitles: ['Component', 'Description'],
+    });
+
+    const prefabsTable: DocTable = new DocTable({
+      configuration,
+      headerTitles: ['Prefab', 'Description'],
+    });
+    const hooksTable: DocTable = new DocTable({
+      configuration,
+      headerTitles: ['Hook', 'Description'],
+    });
+
+    const restTable: DocTable = new DocTable({
+      configuration,
+      headerTitles: ['Other', 'Description'],
+    });
+
     const apiMembers: ReadonlyArray<ApiItem> =
       apiContainer.kind === ApiItemKind.Package
         ? (apiContainer as ApiPackage).entryPoints[0].members
@@ -597,6 +617,21 @@ export class MarkdownDocumenter {
         this._createTitleCell(apiMember),
         this._createDescriptionCell(apiMember),
       ]);
+
+      switch (getFunctionType(apiMember)) {
+        case 'component':
+          componentsTable.addRow(row);
+          break;
+        case 'prefab':
+          prefabsTable.addRow(row);
+          break;
+        case 'hook':
+          hooksTable.addRow(row);
+          break;
+        default:
+          restTable.addRow(row);
+          break;
+      }
 
       switch (apiMember.kind) {
         case ApiItemKind.Class:
@@ -640,44 +675,61 @@ export class MarkdownDocumenter {
       }
     }
 
-    if (classesTable.rows.length > 0) {
-      output.appendNode(new DocHeading({ configuration, title: 'Classes' }));
-      output.appendNode(classesTable);
+    if (componentsTable.rows.length > 0) {
+      output.appendNode(new DocHeading({ configuration, title: 'Components' }));
+      output.appendNode(componentsTable);
+    }
+    if (prefabsTable.rows.length > 0) {
+      output.appendNode(new DocHeading({ configuration, title: 'Prefabs' }));
+      output.appendNode(prefabsTable);
+    }
+    if (hooksTable.rows.length > 0) {
+      output.appendNode(new DocHeading({ configuration, title: 'Hook' }));
+      output.appendNode(hooksTable);
+    }
+    if (restTable.rows.length > 0) {
+      output.appendNode(new DocHeading({ configuration, title: 'Others' }));
+      output.appendNode(restTable);
     }
 
-    if (abstractClassesTable.rows.length > 0) {
-      output.appendNode(new DocHeading({ configuration, title: 'Abstract Classes' }));
-      output.appendNode(abstractClassesTable);
-    }
+    // if (classesTable.rows.length > 0) {
+    //   output.appendNode(new DocHeading({ configuration, title: 'Classes' }));
+    //   output.appendNode(classesTable);
+    // }
 
-    if (enumerationsTable.rows.length > 0) {
-      output.appendNode(new DocHeading({ configuration, title: 'Enumerations' }));
-      output.appendNode(enumerationsTable);
-    }
-    if (functionsTable.rows.length > 0) {
-      output.appendNode(new DocHeading({ configuration, title: 'Functions' }));
-      output.appendNode(functionsTable);
-    }
+    // if (abstractClassesTable.rows.length > 0) {
+    //   output.appendNode(new DocHeading({ configuration, title: 'Abstract Classes' }));
+    //   output.appendNode(abstractClassesTable);
+    // }
 
-    if (interfacesTable.rows.length > 0) {
-      output.appendNode(new DocHeading({ configuration, title: 'Interfaces' }));
-      output.appendNode(interfacesTable);
-    }
+    // if (enumerationsTable.rows.length > 0) {
+    //   output.appendNode(new DocHeading({ configuration, title: 'Enumerations' }));
+    //   output.appendNode(enumerationsTable);
+    // }
+    // if (functionsTable.rows.length > 0) {
+    //   output.appendNode(new DocHeading({ configuration, title: 'Functions' }));
+    //   output.appendNode(functionsTable);
+    // }
 
-    if (namespacesTable.rows.length > 0) {
-      output.appendNode(new DocHeading({ configuration, title: 'Namespaces' }));
-      output.appendNode(namespacesTable);
-    }
+    // if (interfacesTable.rows.length > 0) {
+    //   output.appendNode(new DocHeading({ configuration, title: 'Interfaces' }));
+    //   output.appendNode(interfacesTable);
+    // }
 
-    if (variablesTable.rows.length > 0) {
-      output.appendNode(new DocHeading({ configuration, title: 'Variables' }));
-      output.appendNode(variablesTable);
-    }
+    // if (namespacesTable.rows.length > 0) {
+    //   output.appendNode(new DocHeading({ configuration, title: 'Namespaces' }));
+    //   output.appendNode(namespacesTable);
+    // }
 
-    if (typeAliasesTable.rows.length > 0) {
-      output.appendNode(new DocHeading({ configuration, title: 'Type Aliases' }));
-      output.appendNode(typeAliasesTable);
-    }
+    // if (variablesTable.rows.length > 0) {
+    //   output.appendNode(new DocHeading({ configuration, title: 'Variables' }));
+    //   output.appendNode(variablesTable);
+    // }
+
+    // if (typeAliasesTable.rows.length > 0) {
+    //   output.appendNode(new DocHeading({ configuration, title: 'Type Aliases' }));
+    //   output.appendNode(typeAliasesTable);
+    // }
   }
 
   /**

@@ -121,14 +121,14 @@ export function participantEventSelector<T extends ParticipantEvent>(
   event: T,
 ) {
   const observable = new Observable<Parameters<ParticipantEventCallbacks[T]>>((subscribe) => {
-    type Callback = ParticipantEventCallbacks[T];
-    const update: Callback = (...params: Array<any>) => {
-      // @ts-ignore
+    const update = (...params: Parameters<ParticipantEventCallbacks[T]>) => {
       subscribe.next(params);
     };
+    // @ts-ignore
     participant.on(event, update);
 
     const unsubscribe = () => {
+      // @ts-ignore
       participant.off(event, update);
     };
     return unsubscribe;

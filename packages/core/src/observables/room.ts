@@ -215,3 +215,14 @@ export function roomAudioPlaybackAllowedObservable(room: Room) {
   );
   return observable;
 }
+
+export function createActiveDeviceObservable(room: Room, kind: MediaDeviceKind) {
+  return roomEventSelector(room, RoomEvent.ActiveDeviceChanged).pipe(
+    filter(([kindOfDevice]) => kindOfDevice === kind),
+    map(([kind, deviceId]) => {
+      console.log('activeDeviceObservable | RoomEvent.ActiveDeviceChanged', { kind, deviceId });
+      return deviceId;
+    }),
+    startWith(room.getActiveDevice(kind)),
+  );
+}

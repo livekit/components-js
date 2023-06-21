@@ -5,4 +5,4 @@
 "@livekit/component-docs-storybook": patch
 ---
 
-Update active device selection
+Update active device selection. Require `"livekit-client": "1.11.2"`

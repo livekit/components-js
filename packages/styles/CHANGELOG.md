@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 1.0.2
+
+### Patch Changes
+
+- Underline links in chat message. - [#526](https://github.com/livekit/components-js/pull/526) ([@Ocupe](https://github.com/Ocupe))
+
 ## 1.0.1
 
 ### Patch Changes

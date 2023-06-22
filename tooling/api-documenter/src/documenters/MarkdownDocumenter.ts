@@ -64,7 +64,7 @@ import {
 } from '../plugin/MarkdownDocumenterFeature';
 import { DocumenterConfig } from './DocumenterConfig';
 import { MarkdownDocumenterAccessor } from '../plugin/MarkdownDocumenterAccessor';
-import { getFunctionType } from '../livekitUtils/classifiers';
+import { getCategorySubfolder, getFunctionType } from '../livekitUtils/classifiers';
 
 export interface IMarkdownDocumenterOptions {
   apiModel: ApiModel;
@@ -382,6 +382,7 @@ export class MarkdownDocumenter {
       convertLineEndings: this._documenterConfig
         ? this._documenterConfig.newlineKind
         : NewlineKind.CrLf,
+      ensureFolderExists: true,
     });
   }
 
@@ -1365,6 +1366,7 @@ export class MarkdownDocumenter {
     }
 
     let baseName: string = '';
+    const subFolder: string = getCategorySubfolder(apiItem);
     for (const hierarchyItem of apiItem.getHierarchy()) {
       // For overloaded methods, add a suffix such as "MyClass.myMethod_2".
       let qualifiedName: string = Utilities.getSafeFilenameForName(hierarchyItem.displayName);
@@ -1390,7 +1392,8 @@ export class MarkdownDocumenter {
           baseName += '.' + qualifiedName;
       }
     }
-    return baseName + '.md';
+
+    return subFolder + baseName + '.md';
   }
 
   private _getLinkFilenameForApiItem(apiItem: ApiItem): string {

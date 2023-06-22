@@ -12,9 +12,17 @@ function isPrefab(apiItem: ApiItem): boolean {
 }
 function isComponent(apiItem: ApiItem): boolean {
   if (apiItem instanceof ApiFunction) {
-    return !!apiItem.fileUrlPath?.startsWith('src/components/');
+    return isComponentReactPackage(apiItem) && !!apiItem.fileUrlPath?.startsWith('src/components/');
   }
   return false;
+}
+
+function isComponentReactPackage(apiItem: ApiItem): boolean {
+  return apiItem.getAssociatedPackage()?.displayName === '@livekit/components-react';
+}
+
+function isComponentCorePackage(apiItem: ApiItem): boolean {
+  return apiItem.getAssociatedPackage()?.displayName === '@livekit/components-core';
 }
 /**
  *
@@ -29,4 +37,27 @@ export function getFunctionType(apiItem: ApiItem): LkType {
   } else {
     return undefined;
   }
+}
+
+export function getCategorySubfolder(apiItem: ApiItem): string {
+  let packagePath: string = '';
+
+  if (isComponentCorePackage(apiItem)) {
+    packagePath = 'core';
+  } else if (isComponentReactPackage(apiItem)) {
+    packagePath = 'react';
+  }
+
+  let category = '';
+  switch (getFunctionType(apiItem)) {
+    case 'component':
+    case 'prefab':
+      category = 'component';
+      break;
+    case 'hook':
+      category = 'hook';
+      break;
+  }
+
+  return [packagePath, category].join('/') + '/';
 }

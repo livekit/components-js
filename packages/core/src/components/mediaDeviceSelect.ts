@@ -1,5 +1,5 @@
 import type { Room } from 'livekit-client';
-import { BehaviorSubject, mergeWith } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { log } from '../logger';
 import { prefixClass } from '../styles-interface';
 import { createActiveDeviceObservable } from '../observables/room';
@@ -16,17 +16,18 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
   const activeDeviceSubject = new BehaviorSubject<string | undefined>(undefined);
 
   const activeDeviceObservable = room
-    ? createActiveDeviceObservable(room, kind).pipe(mergeWith(activeDeviceSubject))
+    ? createActiveDeviceObservable(room, kind)
     : activeDeviceSubject.asObservable();
 
   const setActiveMediaDevice = async (id: string, options: SetMediaDeviceOptions = {}) => {
     if (room) {
       log.debug(`Switching active device of kind "${kind}" with id ${id}.`);
       await room.switchActiveDevice(kind, id, options.exact);
-      let actualDeviceId: string | undefined = id;
-
+      const actualDeviceId: string | undefined = room.getActiveDevice(kind) ?? id;
       if (actualDeviceId !== id && id !== 'default') {
-        actualDeviceId = room.getActiveDevice(kind);
+        log.warn(
+          `We tried to select the device with id (${id}), but the browser decided to select the device with id (${actualDeviceId}) instead.`,
+        );
       }
       activeDeviceSubject.next(id === 'default' ? id : actualDeviceId);
     } else {

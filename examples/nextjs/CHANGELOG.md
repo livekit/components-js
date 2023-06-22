@@ -1,5 +1,15 @@
 # @livekit/component-example-next
 
+## 0.1.28
+
+### Patch Changes
+
+- Update active device selection. Require `"livekit-client": "1.11.2"` - [#529](https://github.com/livekit/components-js/pull/529) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`0de3e80`](https://github.com/livekit/components-js/commit/0de3e80364f77ee9ac6d0b4ead593c0c252346d0), [`fdab2db`](https://github.com/livekit/components-js/commit/fdab2db9326db93024b0c3002956806d57164055), [`598442f`](https://github.com/livekit/components-js/commit/598442f8bbaeea44f5e1495ed7ab34e7dbdb67b0), [`28ac866`](https://github.com/livekit/components-js/commit/28ac86691c5ff489833b5f02e88e9ef40e33acc0)]:
+  - @livekit/components-react@1.0.6
+  - @livekit/components-styles@1.0.2
+
 ## 0.1.27
 
 ### Patch Changes

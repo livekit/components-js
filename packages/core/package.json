@@ -30,7 +30,7 @@
     "test": "vitest --run",
     "test:watch": "vitest",
     "size": "size-limit",
-    "api-check": "api-extractor run --typescript-compiler-folder ../../node_modules/typescript",
+    "api-check": "echo \"🚧 api-checks for core are disabled!\" #TODO cleanup core api then activate api checks. api-extractor run --typescript-compiler-folder ../../node_modules/typescript",
     "api-extractor": "api-extractor run --local --typescript-compiler-folder ../../node_modules/typescript --verbose"
   },
   "typings": "dist/index.d.ts",

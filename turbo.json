@@ -31,7 +31,7 @@
       "dependsOn": ["^build"]
     },
     "api-extractor": {
-      "dependsOn": ["@livekit/components-react#build"],
+      "dependsOn": ["@livekit/components-react#build", "@livekit/components-core#build"],
       "outputs": ["temp/*", "ect/*"]
     },
     "gen:docs": {

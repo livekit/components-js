@@ -15,6 +15,6 @@
    * SUPPORTED TOKENS: none
    * DEFAULT VALUE: ""
    */
-  "extends": "../../api-extractor-shared.json",
+  "extends": "./../../api-extractor-shared.json",
   "mainEntryPointFilePath": "./dist/index.d.ts"
 }

@@ -12,11 +12,11 @@ import { useDataChannel } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                           | Description  |
-| --------- | ---------------------------------------------- | ------------ |
-| topic     | T                                              | _(Optional)_ |
-| onMessage | (msg: ReceivedDataMessage&lt;T&gt;) =&gt; void | _(Optional)_ |
+| Parameter | Type                                                                                               | Description  |
+| --------- | -------------------------------------------------------------------------------------------------- | ------------ |
+| topic     | T                                                                                                  | _(Optional)_ |
+| onMessage | (msg: [ReceivedDataMessage](./components-core.receiveddatamessage.md)<!-- -->&lt;T&gt;) =&gt; void | _(Optional)_ |
 
 **Returns:**
 
-{ message: { payload: Uint8Array; topic: T; from: import("livekit-client").RemoteParticipant \| undefined; } \| undefined; send: (payload: Uint8Array, options?: import("@livekit/components-core").DataSendOptions \| undefined) =&gt; Promise&lt;void&gt;; isSending: boolean; }
+{ message: { payload: Uint8Array; topic: T; from: import("livekit-client").RemoteParticipant \| undefined; } \| undefined; send: (payload: Uint8Array, options?: import("@livekit/components-core").[DataSendOptions](./components-core.datasendoptions.md) \| undefined) =&gt; Promise&lt;void&gt;; isSending: boolean; }

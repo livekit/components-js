@@ -12,3 +12,5 @@ export type TrackLoopProps = {
   children: React.ReactNode;
 };
 ```
+
+**References:** [TrackReference](./components-core.trackreference.md)<!-- -->, [TrackReferenceOrPlaceholder](./components-core.trackreferenceorplaceholder.md)

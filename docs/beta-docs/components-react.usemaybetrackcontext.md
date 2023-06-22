@@ -14,4 +14,4 @@ import { useMaybeTrackContext } from '@livekit/components-react';
 
 **Returns:**
 
-TrackReferenceOrPlaceholder \| undefined
+[TrackReferenceOrPlaceholder](./components-core.trackreferenceorplaceholder.md) \| undefined

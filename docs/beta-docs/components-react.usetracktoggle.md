@@ -18,4 +18,4 @@ import { useTrackToggle } from '@livekit/components-react';
 
 **Returns:**
 
-{ toggle: ((forceState?: boolean \| undefined) =&gt; void) \| ((forceState?: boolean \| undefined, captureOptions?: CaptureOptionsBySource&lt;T&gt; \| undefined) =&gt; Promise&lt;void&gt;); enabled: boolean; pending: boolean; track: import("livekit-client").LocalTrackPublication \| undefined; buttonProps: React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;; }
+{ toggle: ((forceState?: boolean \| undefined) =&gt; void) \| ((forceState?: boolean \| undefined, captureOptions?: [CaptureOptionsBySource](./components-core.captureoptionsbysource.md)<!-- -->&lt;T&gt; \| undefined) =&gt; Promise&lt;void&gt;); enabled: boolean; pending: boolean; track: import("livekit-client").LocalTrackPublication \| undefined; buttonProps: React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;; }

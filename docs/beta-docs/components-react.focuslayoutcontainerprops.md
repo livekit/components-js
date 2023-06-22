@@ -14,7 +14,7 @@ export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivE
 
 ## Properties
 
-| Property                                                                      | Modifiers | Type                     | Description  |
-| ----------------------------------------------------------------------------- | --------- | ------------------------ | ------------ |
-| [focusTrack?](./components-react.focuslayoutcontainerprops.focustrack.md)     |           | TrackReference           | _(Optional)_ |
-| [participants?](./components-react.focuslayoutcontainerprops.participants.md) |           | Array&lt;Participant&gt; | _(Optional)_ |
+| Property                                                                      | Modifiers | Type                                                  | Description  |
+| ----------------------------------------------------------------------------- | --------- | ----------------------------------------------------- | ------------ |
+| [focusTrack?](./components-react.focuslayoutcontainerprops.focustrack.md)     |           | [TrackReference](./components-core.trackreference.md) | _(Optional)_ |
+| [participants?](./components-react.focuslayoutcontainerprops.participants.md) |           | Array&lt;Participant&gt;                              | _(Optional)_ |

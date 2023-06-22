@@ -12,7 +12,7 @@ import { FocusLayout } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                                                         | Modifiers | Type                                    | Description  |
-| -------------------------------------------------------------------------------- | --------- | --------------------------------------- | ------------ |
-| [onParticipantClick?](./components-react.focuslayoutprops.onparticipantclick.md) |           | (evt: ParticipantClickEvent) =&gt; void | _(Optional)_ |
-| [track?](./components-react.focuslayoutprops.track.md)                           |           | TrackReferenceOrPlaceholder             | _(Optional)_ |
+| Property                                                                         | Modifiers | Type                                                                                          | Description  |
+| -------------------------------------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------- | ------------ |
+| [onParticipantClick?](./components-react.focuslayoutprops.onparticipantclick.md) |           | (evt: [ParticipantClickEvent](./components-core.participantclickevent.md)<!-- -->) =&gt; void | _(Optional)_ |
+| [track?](./components-react.focuslayoutprops.track.md)                           |           | [TrackReferenceOrPlaceholder](./components-core.trackreferenceorplaceholder.md)               | _(Optional)_ |

@@ -18,4 +18,4 @@ import { useMediaDeviceSelect } from '@livekit/components-react';
 
 **Returns:**
 
-{ devices: MediaDeviceInfo\[\]; className: string; activeDeviceId: string; setActiveMediaDevice: (id: string, options?: import("@livekit/components-core").SetMediaDeviceOptions \| undefined) =&gt; Promise&lt;void&gt;; }
+{ devices: MediaDeviceInfo\[\]; className: string; activeDeviceId: string; setActiveMediaDevice: (id: string, options?: import("@livekit/components-core").[SetMediaDeviceOptions](./components-core.setmediadeviceoptions.md) \| undefined) =&gt; Promise&lt;void&gt;; }

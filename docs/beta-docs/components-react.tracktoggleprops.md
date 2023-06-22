@@ -18,3 +18,5 @@ export type TrackToggleProps<T extends ToggleSource> = Omit<
   captureOptions?: CaptureOptionsBySource<T>;
 };
 ```
+
+**References:** [ToggleSource](./components-core.togglesource.md)<!-- -->, [CaptureOptionsBySource](./components-core.captureoptionsbysource.md)

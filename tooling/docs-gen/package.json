@@ -11,8 +11,9 @@
     "directory": "eslint-plugin-tsdoc"
   },
   "scripts": {
-    "gen:docs": "yarn gen:api-documenter && yarn format-gen-docs",
-    "gen:api-documenter": "which api-documenter && api-documenter markdown --input-folder ../../packages/react/temp --output-folder ../../docs/beta-docs",
+    "gen:docs": "yarn gen:api-documenter && yarn gather-api-files && yarn format-gen-docs",
+    "gather-api-files": "mkdir -p ./temp && cp ./../../packages/react/temp/*.api.json ./temp/ && cp ./../../packages/core/temp/*.api.json ./temp/",
+    "gen:api-documenter": "api-documenter markdown --input-folder ./temp --output-folder ../../docs/beta-docs",
     "format-gen-docs": "prettier --write \"./../../docs/beta-docs/**/*.md\" --loglevel warn",
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit"

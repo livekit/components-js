@@ -14,3 +14,5 @@ export type UseParticipantTileProps<T extends HTMLElement> = TrackReferenceOrPla
   htmlProps: React.HTMLAttributes<T>;
 };
 ```
+
+**References:** [TrackReferenceOrPlaceholder](./components-core.trackreferenceorplaceholder.md)<!-- -->, [ParticipantClickEvent](./components-core.participantclickevent.md)

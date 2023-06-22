@@ -16,3 +16,5 @@ export type VideoTrackProps = React.HTMLAttributes<HTMLVideoElement> & {
   onSubscriptionStatusChanged?: (subscribed: boolean) => void;
 };
 ```
+
+**References:** [ParticipantClickEvent](./components-core.participantclickevent.md)

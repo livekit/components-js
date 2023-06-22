@@ -14,10 +14,10 @@ import { useEnsureTrackReference } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                        | Description  |
-| --------- | --------------------------- | ------------ |
-| track     | TrackReferenceOrPlaceholder | _(Optional)_ |
+| Parameter | Type                                                                            | Description  |
+| --------- | ------------------------------------------------------------------------------- | ------------ |
+| track     | [TrackReferenceOrPlaceholder](./components-core.trackreferenceorplaceholder.md) | _(Optional)_ |
 
 **Returns:**
 
-TrackReferenceOrPlaceholder
+[TrackReferenceOrPlaceholder](./components-core.trackreferenceorplaceholder.md)

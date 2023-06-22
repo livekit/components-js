@@ -18,4 +18,4 @@ import { usePinnedTracks } from '@livekit/components-react';
 
 **Returns:**
 
-TrackReferenceOrPlaceholder\[\]
+[TrackReferenceOrPlaceholder](./components-core.trackreferenceorplaceholder.md)<!-- -->\[\]

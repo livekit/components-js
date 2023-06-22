@@ -18,12 +18,12 @@ import { useVisualStableUpdate } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter       | Type                                                                               | Description  |
-| --------------- | ---------------------------------------------------------------------------------- | ------------ |
-| trackReferences | TrackReferenceOrPlaceholder\[\]                                                    |              |
-| maxItemsOnPage  | number                                                                             |              |
-| options         | [UseVisualStableUpdateOptions](./components-react.usevisualstableupdateoptions.md) | _(Optional)_ |
+| Parameter       | Type                                                                                        | Description  |
+| --------------- | ------------------------------------------------------------------------------------------- | ------------ |
+| trackReferences | [TrackReferenceOrPlaceholder](./components-core.trackreferenceorplaceholder.md)<!-- -->\[\] |              |
+| maxItemsOnPage  | number                                                                                      |              |
+| options         | [UseVisualStableUpdateOptions](./components-react.usevisualstableupdateoptions.md)          | _(Optional)_ |
 
 **Returns:**
 
-TrackReferenceOrPlaceholder\[\]
+[TrackReferenceOrPlaceholder](./components-core.trackreferenceorplaceholder.md)<!-- -->\[\]

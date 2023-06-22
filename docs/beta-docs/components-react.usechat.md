@@ -12,4 +12,4 @@ import { useChat } from '@livekit/components-react';
 
 **Returns:**
 
-{ send: ((message: string) =&gt; Promise&lt;void&gt;) \| undefined; chatMessages: ReceivedChatMessage\[\]; isSending: boolean; }
+{ send: ((message: string) =&gt; Promise&lt;void&gt;) \| undefined; chatMessages: [ReceivedChatMessage](./components-core.receivedchatmessage.md)<!-- -->\[\]; isSending: boolean; }

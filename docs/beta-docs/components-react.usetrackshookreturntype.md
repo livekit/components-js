@@ -13,3 +13,5 @@ export type UseTracksHookReturnType<T> = T extends Track.Source[]
   ? TrackReferenceOrPlaceholder[]
   : never;
 ```
+
+**References:** [TrackReference](./components-core.trackreference.md)<!-- -->, [TrackSourceWithOptions](./components-core.tracksourcewithoptions.md)<!-- -->, [TrackReferenceOrPlaceholder](./components-core.trackreferenceorplaceholder.md)

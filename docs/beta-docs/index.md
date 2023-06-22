@@ -8,4 +8,5 @@
 
 | Package                                            | Description |
 | -------------------------------------------------- | ----------- |
+| [@livekit/components-core](./components-core.md)   |             |
 | [@livekit/components-react](./components-react.md) |             |

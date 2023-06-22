@@ -15,3 +15,5 @@ export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
   onParticipantClick?: (event: ParticipantClickEvent) => void;
 };
 ```
+
+**References:** [ParticipantClickEvent](./components-core.participantclickevent.md)

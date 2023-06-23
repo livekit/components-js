@@ -102,7 +102,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
     }
   }, [enabled, localTrack, deviceError]);
 
-  // switch camera device
+  // update track based on mute state and changed deviceId
   React.useEffect(() => {
     if (!enabled) {
       if (localTrack) {
@@ -111,13 +111,9 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
       }
       return;
     }
-    if (
-      localTrack &&
-      selectedDevice?.deviceId &&
-      prevDeviceId.current !== selectedDevice?.deviceId
-    ) {
-      log.debug(`switching ${kind} device from`, prevDeviceId.current, selectedDevice.deviceId);
-      switchDevice(localTrack, selectedDevice.deviceId);
+    if (localTrack && localDeviceId && prevDeviceId.current !== localDeviceId) {
+      log.debug(`switching ${kind} device from`, prevDeviceId.current, localDeviceId);
+      switchDevice(localTrack, localDeviceId);
     } else {
       log.debug(`unmuting local ${kind} track`);
       localTrack?.unmute();
@@ -130,7 +126,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
         localTrack.mute();
       }
     };
-  }, [localTrack, selectedDevice, enabled, kind]);
+  }, [localTrack, localDeviceId, enabled, kind]);
 
   React.useEffect(() => {
     setSelectedDevice(devices.find((dev) => dev.deviceId === localDeviceId));

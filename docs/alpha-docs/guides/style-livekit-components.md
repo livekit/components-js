@@ -69,7 +69,7 @@ For example, the `ConnectionQualityIndicator` shows the connection quality of a 
   {/* ... */}
 </div>
 
-// Participant with a excellent poor.
+// Participant with a poor connection.
 <div data-lk-quality="poor">
   {/* ... */}
 </div>

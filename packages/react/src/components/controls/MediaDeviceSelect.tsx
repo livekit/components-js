@@ -1,47 +1,7 @@
 import * as React from 'react';
 import { useMaybeRoomContext } from '../../context';
-import { setupDeviceSelector, createMediaDeviceObserver } from '@livekit/components-core';
 import { mergeProps } from '../../utils';
-import type { Room } from 'livekit-client';
-import { useObservableState } from '../../hooks/internal/useObservableState';
-
-/** @public */
-export function useMediaDevices({ kind }: { kind: MediaDeviceKind }) {
-  const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
-  const devices = useObservableState(deviceObserver, []);
-  return devices;
-}
-
-/** @public */
-export interface UseMediaDeviceSelectProps {
-  kind: MediaDeviceKind;
-  room?: Room;
-}
-
-/** @public */
-export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps) {
-  const roomContext = useMaybeRoomContext();
-  // List of all devices.
-  const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
-  const devices = useObservableState(deviceObserver, []);
-  // Active device management.
-  const [currentDeviceId, setCurrentDeviceId] = React.useState<string>('');
-  const { className, activeDeviceObservable, setActiveMediaDevice } = React.useMemo(
-    () => setupDeviceSelector(kind, room ?? roomContext),
-    [kind, room, roomContext],
-  );
-
-  React.useEffect(() => {
-    const listener = activeDeviceObservable.subscribe((deviceId) => {
-      if (deviceId) setCurrentDeviceId(deviceId);
-    });
-    return () => {
-      listener?.unsubscribe();
-    };
-  }, [activeDeviceObservable]);
-
-  return { devices, className, activeDeviceId: currentDeviceId, setActiveMediaDevice };
-}
+import { useMediaDeviceSelect } from '../../hooks/useMediaDevices';
 
 /** @public */
 export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListElement> {

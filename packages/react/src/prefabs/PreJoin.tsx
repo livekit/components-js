@@ -2,10 +2,10 @@ import type { LocalAudioTrack, LocalVideoTrack } from 'livekit-client';
 import { createLocalAudioTrack, createLocalVideoTrack, Track, VideoPresets } from 'livekit-client';
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
-import { useMediaDevices } from '../components/controls/MediaDeviceSelect';
 import { TrackToggle } from '../components/controls/TrackToggle';
 import { log } from '@livekit/components-core';
 import { ParticipantPlaceholder } from '../assets/images';
+import { useMediaDevices } from '../hooks/useMediaDevices';
 
 /** @public */
 export type LocalUserChoices = {
@@ -48,22 +48,28 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   enabled: boolean,
   deviceId: string,
   kind: 'videoinput' | 'audioinput',
+  permissionsAvailable = true,
 ) {
   const [deviceError, setDeviceError] = React.useState<Error | null>(null);
 
-  const devices = useMediaDevices({ kind });
-  const [selectedDevice, setSelectedDevice] = React.useState<MediaDeviceInfo | undefined>(
-    undefined,
-  );
+  const [devices] = useMediaDevices({ kind }, false);
+  const [selectedDevice, setSelectedDevice] = React.useState<MediaDeviceInfo | undefined>();
 
   const [localTrack, setLocalTrack] = React.useState<T>();
-  const [localDeviceId, setLocalDeviceId] = React.useState<string>(deviceId);
+  const [localDeviceId, setLocalDeviceId] = React.useState<string | undefined>(deviceId);
 
   React.useEffect(() => {
-    setLocalDeviceId(deviceId);
-  }, [deviceId]);
+    if (deviceId != '' && localDeviceId != deviceId) {
+      setLocalDeviceId(deviceId);
+    }
+  }, [deviceId, localDeviceId]);
 
-  const createTrack = async (deviceId: string, kind: 'videoinput' | 'audioinput') => {
+  const createTrack = async (kind: 'videoinput' | 'audioinput', deviceId?: string) => {
+    if (!permissionsAvailable) {
+      // only create tracks if the permsissions are already granted.
+      // this gives the option to ask for both (video/audio) permissions at once before the first track initialization
+      return;
+    }
     try {
       const track =
         kind === 'videoinput'
@@ -97,10 +103,10 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
 
   React.useEffect(() => {
     if (enabled && !localTrack && !deviceError) {
-      log.debug('creating track', kind);
-      createTrack(localDeviceId, kind);
+      log.debug('creating track', kind, permissionsAvailable);
+      createTrack(kind, localDeviceId);
     }
-  }, [enabled, localTrack, deviceError]);
+  }, [enabled, localTrack, deviceError, permissionsAvailable, kind, localDeviceId]);
 
   // update track based on mute state and changed deviceId
   React.useEffect(() => {

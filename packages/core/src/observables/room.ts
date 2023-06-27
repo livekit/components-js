@@ -3,6 +3,7 @@ import { Subject, map, Observable, startWith, finalize } from 'rxjs';
 import type { Participant, TrackPublication } from 'livekit-client';
 import { Room, RoomEvent, Track } from 'livekit-client';
 import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
+import { PermittedDevices } from 'livekit-client/dist/src/room/DeviceManager';
 export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observable<Room> {
   const observable = new Observable<Room>((subscribe) => {
     const onRoomUpdate = () => {
@@ -31,9 +32,11 @@ export function roomEventSelector<T extends RoomEvent>(room: Room, event: T) {
       // @ts-ignore
       subscribe.next(params);
     };
+    // @ts-ignore
     room.on(event, update);
 
     const unsubscribe = () => {
+      // @ts-ignore
       room.off(event, update);
     };
     return unsubscribe;
@@ -177,12 +180,15 @@ export function activeSpeakerObserver(room: Room) {
   );
 }
 
-export function createMediaDeviceObserver(kind?: MediaDeviceKind, requestPermissions = true) {
+export function createMediaDeviceObserver(
+  kind?: MediaDeviceKind,
+  mediaConstraints?: MediaStreamConstraints,
+): Observable<[MediaDeviceInfo[], PermittedDevices]> {
   const onDeviceChange = async () => {
-    const newDevices = await Room.getLocalDevices(kind, requestPermissions);
+    const newDevices = await Room.getLocalDevices(kind, mediaConstraints);
     deviceSubject.next(newDevices);
   };
-  const deviceSubject = new Subject<MediaDeviceInfo[]>();
+  const deviceSubject = new Subject<[MediaDeviceInfo[], PermittedDevices]>();
 
   const observable = deviceSubject.pipe(
     finalize(() => {

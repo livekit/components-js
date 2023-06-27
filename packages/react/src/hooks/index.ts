@@ -9,6 +9,12 @@ export { useMediaTrack, UseMediaTrackOptions } from './useMediaTrack';
 export { useMediaTrackByName } from './useMediaTrackByName';
 export { usePagination } from './usePagination';
 export {
+  useMediaAllDevicesSelect,
+  useMediaDeviceSelect,
+  MediaDevices,
+  MediaDevicesSelection,
+} from './useMediaDevices';
+export {
   useParticipantPermissions,
   UseParticipantPermissionsOptions,
 } from './useParticipantPermissions';

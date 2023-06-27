@@ -126,9 +126,11 @@ export function participantEventSelector<T extends ParticipantEvent>(
       // @ts-ignore
       subscribe.next(params);
     };
+    // @ts-ignore
     participant.on(event, update);
 
     const unsubscribe = () => {
+      // @ts-ignore
       participant.off(event, update);
     };
     return unsubscribe;

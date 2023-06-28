@@ -10,15 +10,21 @@ import { useRoomContext } from '../../context';
 /** @alpha */
 export interface TrackProcessorSelectProps extends React.HTMLAttributes<HTMLUListElement> {
   source: VideoSource | AudioSource;
-  processors: TrackProcessor<Track.Kind>[];
+  processorMap: Record<string, TrackProcessor<Track.Kind>>;
 }
 
 /**
  * @alpha
  */
-export function TrackProcessorSelect({ source, processors, ...props }: TrackProcessorSelectProps) {
+export function TrackProcessorSelect({
+  source,
+  processorMap,
+  ...props
+}: TrackProcessorSelectProps) {
   const room = useRoomContext();
   const { track } = useMediaTrack(source, room.localParticipant);
+
+  const processors = Object.values(processorMap);
 
   const handleProcessorSelect = React.useCallback(
     async (processorName: string | null) => {
@@ -56,7 +62,7 @@ export function TrackProcessorSelect({ source, processors, ...props }: TrackProc
           None
         </button>
       </li>
-      {processors.map((processor) => (
+      {Object.entries(processorMap).map(([label, processor]) => (
         <li
           key={processor.name}
           id={processor.name}
@@ -65,7 +71,7 @@ export function TrackProcessorSelect({ source, processors, ...props }: TrackProc
           role="option"
         >
           <button className="lk-button" onClick={() => handleProcessorSelect(processor.name)}>
-            {processor.name}
+            {label}
           </button>
         </li>
       ))}

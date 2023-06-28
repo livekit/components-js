@@ -22,7 +22,10 @@ const MinimalExample: NextPage = () => {
 
   React.useEffect(() => {
     import('@livekit/track-processors').then((pkg) => {
-      setControlBarOptions({ camera: { processors: [pkg.BackgroundBlur(10)] }, chat: true });
+      setControlBarOptions({
+        camera: { processors: { 'Background Blur': pkg.BackgroundBlur(10) } },
+        chat: true,
+      });
     });
   }, []);
 

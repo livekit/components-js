@@ -1,4 +1,5 @@
-import { Track, TrackProcessor } from 'livekit-client';
+import { Track } from 'livekit-client';
+import type { TrackProcessor } from 'livekit-client';
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
@@ -15,7 +16,7 @@ import { supportsScreenSharing } from '@livekit/components-core';
  * @alpha
  */
 export type CameraOptions = {
-  processors?: TrackProcessor<Track.Kind>[];
+  processors?: Record<string, TrackProcessor<Track.Kind>>;
 };
 
 /** @public */

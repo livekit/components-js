@@ -11,7 +11,7 @@ export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLBut
   kind?: MediaDeviceKind;
   initialSelection?: string;
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
-  processors?: TrackProcessor<Track.Kind>[];
+  processors?: Record<string, TrackProcessor<Track.Kind>>;
 }
 
 /**
@@ -142,14 +142,13 @@ export const MediaDeviceMenu = ({
           onDeviceListChange={setDevices}
           kind={kind}
         />
-        {processors && processors.length > 0 && kind === 'videoinput' && (
+        {processors && Object.keys(processors).length > 0 && kind === 'videoinput' && (
           <TrackProcessorSelect
             onClick={() => setIsOpen(false)}
-            processors={processors}
+            processorMap={processors}
             source={Track.Source.Camera}
           />
         )}
-        -
       </div>
     </>
   );

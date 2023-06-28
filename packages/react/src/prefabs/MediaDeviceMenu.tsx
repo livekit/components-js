@@ -2,12 +2,16 @@ import { computeMenuPosition, wasClickOutside } from '@livekit/components-core';
 import * as React from 'react';
 import { MediaDeviceSelect } from '../components/controls/MediaDeviceSelect';
 import { log } from '@livekit/components-core';
+import type { TrackProcessor } from 'livekit-client';
+import { Track } from 'livekit-client';
+import { TrackProcessorSelect } from '../components/controls/TrackProcessorSelect';
 
 /** @public */
 export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   kind?: MediaDeviceKind;
   initialSelection?: string;
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
+  processors?: TrackProcessor<Track.Kind>[];
 }
 
 /**
@@ -29,6 +33,7 @@ export const MediaDeviceMenu = ({
   kind,
   initialSelection,
   onActiveDeviceChange,
+  processors,
   ...props
 }: MediaDeviceMenuProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -79,6 +84,41 @@ export const MediaDeviceMenu = ({
     };
   }, [handleClickOutside, setUpdateRequired]);
 
+  if (!kind) {
+    return (
+      <>
+        <button
+          className="lk-button lk-button-menu"
+          aria-pressed={isOpen}
+          {...props}
+          onClick={() => setIsOpen(!isOpen)}
+          ref={button}
+        >
+          {props.children}
+        </button>
+
+        <div
+          className="lk-device-menu"
+          ref={tooltip}
+          style={{ visibility: isOpen ? 'visible' : 'hidden' }}
+        >
+          <div className="lk-device-menu-heading">Audio inputs</div>
+          <MediaDeviceSelect
+            kind="audioinput"
+            onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('audioinput', deviceId)}
+            onDeviceListChange={setDevices}
+          />
+          <div className="lk-device-menu-heading">Video inputs</div>
+          <MediaDeviceSelect
+            kind="videoinput"
+            onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('videoinput', deviceId)}
+            onDeviceListChange={setDevices}
+          />
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <button
@@ -96,29 +136,20 @@ export const MediaDeviceMenu = ({
         ref={tooltip}
         style={{ visibility: isOpen ? 'visible' : 'hidden' }}
       >
-        {kind ? (
-          <MediaDeviceSelect
-            initialSelection={initialSelection}
-            onActiveDeviceChange={(deviceId) => handleActiveDeviceChange(kind, deviceId)}
-            onDeviceListChange={setDevices}
-            kind={kind}
+        <MediaDeviceSelect
+          initialSelection={initialSelection}
+          onActiveDeviceChange={(deviceId) => handleActiveDeviceChange(kind, deviceId)}
+          onDeviceListChange={setDevices}
+          kind={kind}
+        />
+        {processors && processors.length > 0 && kind === 'videoinput' && (
+          <TrackProcessorSelect
+            onClick={() => setIsOpen(false)}
+            processors={processors}
+            source={Track.Source.Camera}
           />
-        ) : (
-          <>
-            <div className="lk-device-menu-heading">Audio inputs</div>
-            <MediaDeviceSelect
-              kind="audioinput"
-              onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('audioinput', deviceId)}
-              onDeviceListChange={setDevices}
-            />
-            <div className="lk-device-menu-heading">Video inputs</div>
-            <MediaDeviceSelect
-              kind="videoinput"
-              onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('videoinput', deviceId)}
-              onDeviceListChange={setDevices}
-            />
-          </>
         )}
+        -
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import { Track } from 'livekit-client';
+import { Track, TrackProcessor } from 'livekit-client';
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
@@ -11,10 +11,17 @@ import { useMediaQuery } from '../hooks/internal';
 import { useMaybeLayoutContext } from '../context';
 import { supportsScreenSharing } from '@livekit/components-core';
 
+/**
+ * @alpha
+ */
+export type CameraOptions = {
+  processors?: TrackProcessor<Track.Kind>[];
+};
+
 /** @public */
 export type ControlBarControls = {
   microphone?: boolean;
-  camera?: boolean;
+  camera?: boolean | CameraOptions;
   chat?: boolean;
   screenShare?: boolean;
   leave?: boolean;
@@ -106,7 +113,14 @@ export function ControlBar({ variation, controls, ...props }: ControlBarProps) {
             {showText && 'Camera'}
           </TrackToggle>
           <div className="lk-button-group-menu">
-            <MediaDeviceMenu kind="videoinput" />
+            <MediaDeviceMenu
+              kind="videoinput"
+              processors={
+                typeof visibleControls.camera !== 'boolean'
+                  ? visibleControls.camera.processors
+                  : undefined
+              }
+            />
           </div>
         </div>
       )}

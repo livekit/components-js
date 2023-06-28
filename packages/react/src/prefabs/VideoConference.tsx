@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { LayoutContextProvider } from '../components/layout/LayoutContextProvider';
 import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
-import { ControlBar } from './ControlBar';
+import { ControlBar, ControlBarControls } from './ControlBar';
 import { FocusLayout, FocusLayoutContainer } from '../components/layout/FocusLayout';
 import { GridLayout } from '../components/layout/GridLayout';
 import type { WidgetState } from '@livekit/components-core';
@@ -22,6 +22,7 @@ import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
  */
 export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
   chatMessageFormatter?: MessageFormatter;
+  controlBarOptions?: ControlBarControls;
 }
 
 /**
@@ -40,7 +41,11 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
  * ```
  * @public
  */
-export function VideoConference({ chatMessageFormatter, ...props }: VideoConferenceProps) {
+export function VideoConference({
+  chatMessageFormatter,
+  controlBarOptions,
+  ...props
+}: VideoConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({ showChat: false });
   const lastAutoFocusedScreenShareTrack = React.useRef<TrackReferenceOrPlaceholder | null>(null);
 
@@ -113,7 +118,7 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
               </FocusLayoutContainer>
             </div>
           )}
-          <ControlBar controls={{ chat: true }} />
+          <ControlBar controls={controlBarOptions ?? { chat: true }} />
         </div>
         <Chat
           style={{ display: widgetState.showChat ? 'flex' : 'none' }}

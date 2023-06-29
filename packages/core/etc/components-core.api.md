@@ -11,7 +11,7 @@ import { ConnectionState } from 'livekit-client';
 import createEmailRegExp from 'email-regex';
 import { DataPacket_Kind } from 'livekit-client';
 import type { LocalParticipant } from 'livekit-client';
-import { Logger } from 'loglevel';
+import loglevel from 'loglevel';
 import { Observable } from 'rxjs';
 import type { Participant } from 'livekit-client';
 import { ParticipantEvent } from 'livekit-client';
@@ -22,6 +22,7 @@ import { Room } from 'livekit-client';
 import { RoomEvent } from 'livekit-client';
 import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 import type { ScreenShareCaptureOptions } from 'livekit-client';
+import { setLogLevel as setLogLevel_2 } from 'livekit-client';
 import { Track } from 'livekit-client';
 import { TrackEvent as TrackEvent_2 } from 'livekit-client';
 import { TrackPublication } from 'livekit-client';
@@ -88,6 +89,9 @@ export function connectedParticipantsObserver(room: Room, options?: ConnectedPar
 
 // @public (undocumented)
 export function connectionStateObserver(room: Room): Observable<ConnectionState>;
+
+// @public (undocumented)
+export function createActiveDeviceObservable(room: Room, kind: MediaDeviceKind): Observable<string | undefined>;
 
 // @public (undocumented)
 export function createConnectionQualityObserver(participant: Participant): Observable<ConnectionQuality>;
@@ -188,7 +192,7 @@ export function isTrackReferencePinned(trackReference: TrackReferenceOrPlacehold
 export function isTrackReferencePlaceholder(trackReference?: TrackReferenceOrPlaceholder): trackReference is TrackReferencePlaceholder;
 
 // @public (undocumented)
-export const log: Logger;
+export const log: loglevel.Logger;
 
 // @public (undocumented)
 export type MediaToggleType<T extends ToggleSource> = {
@@ -315,6 +319,12 @@ export function sendMessage(localParticipant: LocalParticipant, payload: Uint8Ar
 // @public (undocumented)
 export function setDifference<T>(setA: Set<T>, setB: Set<T>): Set<T>;
 
+// Warning: (ae-forgotten-export) The symbol "LogLevel" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "SetLogLevelOptions" needs to be exported by the entry point index.d.ts
+//
+// @public
+export function setLogLevel(level: LogLevel, options?: SetLogLevelOptions): void;
+
 // @public (undocumented)
 export type SetMediaDeviceOptions = {
     exact?: boolean;
@@ -435,6 +445,9 @@ export function sortTrackReferences(tracks: TrackReferenceOrPlaceholder[]): Trac
 
 // @public (undocumented)
 export type SourcesArray = Track.Source[] | TrackSourceWithOptions[];
+
+// @public
+export function supportsScreenSharing(): boolean;
 
 // @public (undocumented)
 export type ToggleSource = Exclude<Track.Source, Track.Source.ScreenShareAudio | Track.Source.Unknown>;

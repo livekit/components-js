@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-log: import('loglevel').Logger;
+log: loglevel.Logger;
 ```

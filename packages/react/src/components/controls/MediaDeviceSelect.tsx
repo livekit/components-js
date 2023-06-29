@@ -48,7 +48,11 @@ export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListEl
   kind: MediaDeviceKind;
   onActiveDeviceChange?: (deviceId: string) => void;
   onDeviceListChange?: (devices: MediaDeviceInfo[]) => void;
+  onDeviceSelectError?: (e: Error) => void;
   initialSelection?: string;
+  /** will force the browser to only return the specified device
+   * will call `onDeviceSelectError` with the error in case this fails
+   */
   exactMatch?: boolean;
 }
 
@@ -69,6 +73,7 @@ export function MediaDeviceSelect({
   initialSelection,
   onActiveDeviceChange,
   onDeviceListChange,
+  onDeviceSelectError,
   exactMatch,
   ...props
 }: MediaDeviceSelectProps) {
@@ -91,10 +96,18 @@ export function MediaDeviceSelect({
 
   React.useEffect(() => {
     onActiveDeviceChange?.(activeDeviceId);
-  }, [activeDeviceId]);
+  }, [activeDeviceId, onActiveDeviceChange]);
 
   const handleActiveDeviceChange = async (deviceId: string) => {
-    await setActiveMediaDevice(deviceId, { exact: exactMatch });
+    try {
+      await setActiveMediaDevice(deviceId, { exact: exactMatch });
+    } catch (e) {
+      if (e instanceof Error) {
+        onDeviceSelectError?.(e);
+      } else {
+        throw e;
+      }
+    }
   };
   // Merge Props
   const mergedProps = React.useMemo(

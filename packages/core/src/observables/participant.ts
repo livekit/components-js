@@ -18,12 +18,12 @@ export function observeParticipantEvents<T extends Participant>(
     };
 
     events.forEach((evt) => {
-      participant.on(evt as keyof ParticipantEventCallbacks, onParticipantUpdate);
+      participant.on(evt, onParticipantUpdate);
     });
 
     const unsubscribe = () => {
       events.forEach((evt) => {
-        participant.off(evt as keyof ParticipantEventCallbacks, onParticipantUpdate);
+        participant.off(evt, onParticipantUpdate);
       });
     };
     return unsubscribe;

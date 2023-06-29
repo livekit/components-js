@@ -33,7 +33,6 @@ export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps) 
 
   React.useEffect(() => {
     const listener = activeDeviceObservable.subscribe((deviceId) => {
-      console.log('active device changed', deviceId);
       if (deviceId) setCurrentDeviceId(deviceId);
     });
     return () => {
@@ -109,8 +108,8 @@ export function MediaDeviceSelect({
         <li
           key={device.deviceId}
           id={device.deviceId}
-          data-lk-active={device.deviceId.includes(activeDeviceId)}
-          aria-selected={device.deviceId.includes(activeDeviceId)}
+          data-lk-active={device.deviceId === activeDeviceId}
+          aria-selected={device.deviceId === activeDeviceId}
           role="option"
         >
           <button className="lk-button" onClick={() => handleActiveDeviceChange(device.deviceId)}>

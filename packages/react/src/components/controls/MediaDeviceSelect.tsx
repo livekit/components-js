@@ -33,6 +33,7 @@ export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps) 
 
   React.useEffect(() => {
     const listener = activeDeviceObservable.subscribe((deviceId) => {
+      console.log('active device changed', deviceId);
       if (deviceId) setCurrentDeviceId(deviceId);
     });
     return () => {
@@ -49,6 +50,7 @@ export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListEl
   onActiveDeviceChange?: (deviceId: string) => void;
   onDeviceListChange?: (devices: MediaDeviceInfo[]) => void;
   initialSelection?: string;
+  exactMatch?: boolean;
 }
 
 /**
@@ -68,6 +70,7 @@ export function MediaDeviceSelect({
   initialSelection,
   onActiveDeviceChange,
   onDeviceListChange,
+  exactMatch,
   ...props
 }: MediaDeviceSelectProps) {
   const room = useMaybeRoomContext();
@@ -87,9 +90,12 @@ export function MediaDeviceSelect({
     }
   }, [onDeviceListChange, devices]);
 
+  React.useEffect(() => {
+    onActiveDeviceChange?.(activeDeviceId);
+  }, [activeDeviceId]);
+
   const handleActiveDeviceChange = async (deviceId: string) => {
-    setActiveMediaDevice(deviceId);
-    onActiveDeviceChange?.(deviceId);
+    await setActiveMediaDevice(deviceId, { exact: exactMatch });
   };
   // Merge Props
   const mergedProps = React.useMemo(
@@ -103,8 +109,8 @@ export function MediaDeviceSelect({
         <li
           key={device.deviceId}
           id={device.deviceId}
-          data-lk-active={device.deviceId === activeDeviceId}
-          aria-selected={device.deviceId === activeDeviceId}
+          data-lk-active={device.deviceId.includes(activeDeviceId)}
+          aria-selected={device.deviceId.includes(activeDeviceId)}
           role="option"
         >
           <button className="lk-button" onClick={() => handleActiveDeviceChange(device.deviceId)}>

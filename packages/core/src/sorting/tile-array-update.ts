@@ -1,5 +1,5 @@
 import { differenceBy, chunk, zip } from '../helper/array-helper';
-import log from '../logger';
+import { log } from '../logger';
 import type { TrackReferenceOrPlaceholder } from '../track-reference';
 import { getTrackReferenceId } from '../track-reference';
 import { flatTrackReferenceArray } from '../track-reference/test-utils';

@@ -1,5 +1,15 @@
 # @livekit/components-core
 
+## 0.6.9
+
+### Patch Changes
+
+- add `setLogLevel` function - [#521](https://github.com/livekit/components-js/pull/521) ([@Ocupe](https://github.com/Ocupe))
+
+- Update active device selection. Require `"livekit-client": "1.11.2"` - [#529](https://github.com/livekit/components-js/pull/529) ([@Ocupe](https://github.com/Ocupe))
+
+- Add screen share feature detection to hide screen share button in control bar. - [#525](https://github.com/livekit/components-js/pull/525) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.6.8
 
 ### Patch Changes

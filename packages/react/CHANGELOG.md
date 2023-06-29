@@ -1,5 +1,18 @@
 # @livekit/components-react
 
+## 1.0.6
+
+### Patch Changes
+
+- Fix autofocus logic in the `VideoConference` component that prevented screen sharing from being removed from focus. Fix `usePinnedTracks` not returning `undefined` state. - [#519](https://github.com/livekit/components-js/pull/519) ([@Ocupe](https://github.com/Ocupe))
+
+- Update active device selection. Require `"livekit-client": "1.11.2"` - [#529](https://github.com/livekit/components-js/pull/529) ([@Ocupe](https://github.com/Ocupe))
+
+- Add screen share feature detection to hide screen share button in control bar. - [#525](https://github.com/livekit/components-js/pull/525) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`7c7cc55`](https://github.com/livekit/components-js/commit/7c7cc552b58bdfcc1ba15a4724e652bf188f1ea8), [`fdab2db`](https://github.com/livekit/components-js/commit/fdab2db9326db93024b0c3002956806d57164055), [`28ac866`](https://github.com/livekit/components-js/commit/28ac86691c5ff489833b5f02e88e9ef40e33acc0)]:
+  - @livekit/components-core@0.6.9
+
 ## 1.0.5
 
 ### Patch Changes

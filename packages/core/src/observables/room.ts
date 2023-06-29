@@ -1,5 +1,5 @@
 import type { Subscriber, Subscription } from 'rxjs';
-import { Subject, map, Observable, startWith, finalize } from 'rxjs';
+import { Subject, map, Observable, startWith, finalize, filter } from 'rxjs';
 import type { Participant, TrackPublication } from 'livekit-client';
 import { Room, RoomEvent, Track } from 'livekit-client';
 import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
@@ -26,14 +26,14 @@ export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observabl
 
 export function roomEventSelector<T extends RoomEvent>(room: Room, event: T) {
   const observable = new Observable<Parameters<RoomEventCallbacks[T]>>((subscribe) => {
-    type Callback = RoomEventCallbacks[T];
-    const update: Callback = (...params: Array<any>) => {
-      // @ts-ignore
+    const update = (...params: Parameters<RoomEventCallbacks[T]>) => {
       subscribe.next(params);
     };
+    // @ts-ignore
     room.on(event, update);
 
     const unsubscribe = () => {
+      // @ts-ignore
       room.off(event, update);
     };
     return unsubscribe;
@@ -214,4 +214,15 @@ export function roomAudioPlaybackAllowedObservable(room: Room) {
     }),
   );
   return observable;
+}
+
+export function createActiveDeviceObservable(room: Room, kind: MediaDeviceKind) {
+  return roomEventSelector(room, RoomEvent.ActiveDeviceChanged).pipe(
+    filter(([kindOfDevice]) => kindOfDevice === kind),
+    map(([kind, deviceId]) => {
+      console.log('activeDeviceObservable | RoomEvent.ActiveDeviceChanged', { kind, deviceId });
+      return deviceId;
+    }),
+    startWith(room.getActiveDevice(kind)),
+  );
 }

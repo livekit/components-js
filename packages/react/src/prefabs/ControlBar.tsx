@@ -6,10 +6,10 @@ import { TrackToggle } from '../components/controls/TrackToggle';
 import { StartAudio } from '../components/controls/StartAudio';
 import { ChatIcon, LeaveIcon } from '../assets/icons';
 import { ChatToggle } from '../components/controls/ChatToggle';
-import { isMobileBrowser } from '@livekit/components-core';
 import { useLocalParticipantPermissions } from '../hooks';
 import { useMediaQuery } from '../hooks/internal';
 import { useMaybeLayoutContext } from '../context';
+import { supportsScreenSharing } from '@livekit/components-core';
 
 /** @public */
 export type ControlBarControls = {
@@ -80,7 +80,7 @@ export function ControlBar({ variation, controls, ...props }: ControlBarProps) {
     [variation],
   );
 
-  const isMobile = React.useMemo(() => isMobileBrowser(), []);
+  const browserSupportsScreenSharing = supportsScreenSharing();
 
   const [isScreenShareEnabled, setIsScreenShareEnabled] = React.useState(false);
 
@@ -110,7 +110,7 @@ export function ControlBar({ variation, controls, ...props }: ControlBarProps) {
           </div>
         </div>
       )}
-      {visibleControls.screenShare && !isMobile && (
+      {visibleControls.screenShare && browserSupportsScreenSharing && (
         <TrackToggle
           source={Track.Source.ScreenShare}
           captureOptions={{ audio: true, selfBrowserSurface: 'include' }}

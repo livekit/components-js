@@ -36,6 +36,7 @@
     },
     "api-check": {
       "dependsOn": ["^build"]
-    }
+    },
+    "api-check:update": {}
   }
 }

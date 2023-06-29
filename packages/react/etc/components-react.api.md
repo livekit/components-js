@@ -296,10 +296,11 @@ export interface MediaDeviceMenuProps extends React_2.ButtonHTMLAttributes<HTMLB
 }
 
 // @public
-export function MediaDeviceSelect({ kind, initialSelection, onActiveDeviceChange, onDeviceListChange, ...props }: MediaDeviceSelectProps): React_2.JSX.Element;
+export function MediaDeviceSelect({ kind, initialSelection, onActiveDeviceChange, onDeviceListChange, onDeviceSelectError, exactMatch, ...props }: MediaDeviceSelectProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface MediaDeviceSelectProps extends React_2.HTMLAttributes<HTMLUListElement> {
+    exactMatch?: boolean;
     // (undocumented)
     initialSelection?: string;
     // (undocumented)
@@ -308,6 +309,8 @@ export interface MediaDeviceSelectProps extends React_2.HTMLAttributes<HTMLUList
     onActiveDeviceChange?: (deviceId: string) => void;
     // (undocumented)
     onDeviceListChange?: (devices: MediaDeviceInfo[]) => void;
+    // (undocumented)
+    onDeviceSelectError?: (e: Error) => void;
 }
 
 // @public (undocumented)

@@ -25,7 +25,7 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
       await room.switchActiveDevice(kind, id, options.exact);
       const actualDeviceId: string | undefined = room.getActiveDevice(kind) ?? id;
       if (actualDeviceId !== id && id !== 'default') {
-        log.warn(
+        log.info(
           `We tried to select the device with id (${id}), but the browser decided to select the device with id (${actualDeviceId}) instead.`,
         );
       }

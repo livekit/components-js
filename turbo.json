@@ -32,7 +32,7 @@
     },
     "api-extractor": {
       "dependsOn": ["@livekit/components-react#build", "@livekit/components-core#build"],
-      "outputs": ["temp/*", "ect/*"]
+      "outputs": ["temp/*", "etc/*"]
     },
     "gen:docs": {
       "cache": false,

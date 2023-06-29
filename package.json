@@ -21,7 +21,8 @@
     "start:next": "turbo run start --filter=@livekit/component-example-next...",
     "test": "turbo run test",
     "tooling:update-readme-nav": "node tooling/readme-manager/update-nav-in-readmes.js",
-    "api:check": "turbo run api-check"
+    "api:check": "turbo run api-check",
+    "api:update": "turbo run api-check:update"
   },
   "workspaces": [
     "packages/*",

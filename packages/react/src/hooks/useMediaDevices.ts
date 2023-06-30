@@ -47,9 +47,9 @@ export function useMediaAllDevicesSelect({
   const [devices, permittedDevices] = useObservableState(deviceObserver, [[], {}]);
 
   // Active device management.
-  const [currentAudioId, setcurrentAudioId] = React.useState<string>('');
-  const [currentVideoId, setcurrentVideoId] = React.useState<string>('');
-  const [currentAudioOutId, setcurrentAudioOutId] = React.useState<string>(audioOut);
+  const [currentAudioId, setcurrentAudioId] = React.useState<string>(audio ?? '');
+  const [currentVideoId, setcurrentVideoId] = React.useState<string>(video ?? '');
+  const [currentAudioOutId, setcurrentAudioOutId] = React.useState<string>(audioOut ?? '');
 
   const {
     className: audioClassName,

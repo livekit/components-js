@@ -508,7 +508,7 @@ export class MarkdownDocumenter {
             attributes: {
               name: apiItem.displayName.toLowerCase(),
               package: apiItem.getAssociatedPackage()?.name.toLowerCase() ?? '',
-              addTitle: exampleBlocks.length < 1,
+              exampleCount: exampleBlocks.length,
             },
           }),
         );

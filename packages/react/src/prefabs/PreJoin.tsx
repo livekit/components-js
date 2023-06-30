@@ -62,7 +62,10 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
     if (deviceId != '' && localDeviceId != deviceId) {
       setLocalDeviceId(deviceId);
     }
-  }, [deviceId, localDeviceId]);
+    // this effect is responsible to update the localDevice based on the passed deviceId
+    // executing this if localDeviceId changes would just reset the localDeviceId immediately to deviceId
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deviceId]);
 
   const createTrack = async (kind: 'videoinput' | 'audioinput', deviceId?: string) => {
     if (!permissionsAvailable) {
@@ -96,7 +99,11 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
     await track.restartTrack({
       deviceId: id,
     });
-    prevDeviceId.current = id;
+    const actualNewDeviceId = await track.getDeviceId();
+    prevDeviceId.current = actualNewDeviceId;
+    if (id != actualNewDeviceId) {
+      setLocalDeviceId(actualNewDeviceId);
+    }
   };
 
   const prevDeviceId = React.useRef(localDeviceId);
@@ -110,6 +117,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
 
   // update track based on mute state and changed deviceId
   React.useEffect(() => {
+    const shouldBeMuted = !enabled;
     if (!enabled) {
       if (localTrack) {
         log.debug(`muting ${kind} track`);
@@ -120,7 +128,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
     if (localTrack && localDeviceId && prevDeviceId.current !== localDeviceId) {
       log.debug(`switching ${kind} device from`, prevDeviceId.current, localDeviceId);
       switchDevice(localTrack, localDeviceId);
-    } else {
+    } else if (true || localTrack?.isMuted != shouldBeMuted) {
       log.debug(`unmuting local ${kind} track`);
       localTrack?.unmute();
     }
@@ -128,8 +136,8 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
     return () => {
       if (localTrack) {
         log.debug(`stopping local ${kind} track`);
-        localTrack.stop();
         localTrack.mute();
+        localTrack.stop();
       }
     };
   }, [localTrack, localDeviceId, enabled, kind]);

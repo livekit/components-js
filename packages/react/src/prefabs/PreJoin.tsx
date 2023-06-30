@@ -62,7 +62,15 @@ export function usePreviewTracks(
   const [tracks, setTracks] = React.useState<LocalTrack[]>();
 
   React.useEffect(() => {
-    createLocalTracks(options).then(setTracks).catch(onError);
+    let trackPromise: Promise<LocalTrack[]> | undefined = undefined;
+    if (options.audio || options.video) {
+      trackPromise = createLocalTracks(options);
+      trackPromise.then(setTracks).catch(onError);
+    }
+
+    return () => {
+      trackPromise?.then((tracks) => tracks.forEach((track) => track.stop()));
+    };
   }, [JSON.stringify(options)]);
 
   return tracks;
@@ -207,20 +215,18 @@ export const PreJoin = ({
   const [videoEnabled, setVideoEnabled] = React.useState<boolean>(
     defaults.videoEnabled ?? DEFAULT_USER_CHOICES.videoEnabled,
   );
-  const [videoDeviceId, setVideoDeviceId] = React.useState<string>(
-    defaults.videoDeviceId ?? DEFAULT_USER_CHOICES.videoDeviceId,
-  );
+  const initialVideoDeviceId = defaults.videoDeviceId ?? DEFAULT_USER_CHOICES.videoDeviceId;
+  const [videoDeviceId, setVideoDeviceId] = React.useState<string>(initialVideoDeviceId);
+  const initialAudioDeviceId = defaults.audioDeviceId ?? DEFAULT_USER_CHOICES.audioDeviceId;
   const [audioEnabled, setAudioEnabled] = React.useState<boolean>(
     defaults.audioEnabled ?? DEFAULT_USER_CHOICES.audioEnabled,
   );
-  const [audioDeviceId, setAudioDeviceId] = React.useState<string>(
-    defaults.audioDeviceId ?? DEFAULT_USER_CHOICES.audioDeviceId,
-  );
+  const [audioDeviceId, setAudioDeviceId] = React.useState<string>(initialAudioDeviceId);
 
   const tracks = usePreviewTracks(
     {
-      audio: audioEnabled ? { deviceId: audioDeviceId } : false,
-      video: videoEnabled ? { deviceId: videoDeviceId } : false,
+      audio: audioEnabled ? { deviceId: initialAudioDeviceId } : false,
+      video: videoEnabled ? { deviceId: initialVideoDeviceId } : false,
     },
     onError,
   );
@@ -305,11 +311,9 @@ export const PreJoin = ({
             <MediaDeviceMenu
               initialSelection={audioDeviceId}
               kind="audioinput"
-              onActiveDeviceChange={(_, deviceId) => {
-                setAudioDeviceId(deviceId);
-              }}
               disabled={!audioTrack}
               tracks={{ audioinput: audioTrack }}
+              onActiveDeviceChange={(_, id) => setAudioDeviceId(id)}
             />
           </div>
         </div>
@@ -325,11 +329,9 @@ export const PreJoin = ({
             <MediaDeviceMenu
               initialSelection={videoDeviceId}
               kind="videoinput"
-              onActiveDeviceChange={(_, deviceId) => {
-                setVideoDeviceId(deviceId);
-              }}
               disabled={!videoTrack}
               tracks={{ videoinput: videoTrack }}
+              onActiveDeviceChange={(_, id) => setVideoDeviceId(id)}
             />
           </div>
         </div>

@@ -37,9 +37,11 @@ export function setupDeviceSelector(
     } else if (localTrack) {
       await localTrack.setDeviceId(options.exact ? { exact: id } : id);
       const actualId = await localTrack.getDeviceId();
-      activeDeviceSubject.next(actualId);
+      activeDeviceSubject.next(id === 'default' ? id : actualId);
     } else if (activeDeviceSubject.value !== id) {
-      log.debug('Skip the device switch because the room object is not available. ');
+      log.warn(
+        'device switch skipped, please provide either a room or a local track to switch on. ',
+      );
       activeDeviceSubject.next(id);
     }
   };

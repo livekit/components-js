@@ -32,8 +32,10 @@ export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps) 
   );
 
   React.useEffect(() => {
+    console.log('resubscribing to active device observable');
     const listener = activeDeviceObservable.subscribe((deviceId) => {
       if (deviceId) setCurrentDeviceId(deviceId);
+      console.log('active device observable update', deviceId);
     });
     return () => {
       listener?.unsubscribe();
@@ -86,7 +88,7 @@ export function MediaDeviceSelect({
     if (initialSelection) {
       setActiveMediaDevice(initialSelection);
     }
-  });
+  }, [initialSelection, setActiveMediaDevice]);
 
   React.useEffect(() => {
     if (typeof onDeviceListChange === 'function') {
@@ -95,8 +97,11 @@ export function MediaDeviceSelect({
   }, [onDeviceListChange, devices]);
 
   React.useEffect(() => {
-    onActiveDeviceChange?.(activeDeviceId);
-  }, [activeDeviceId, onActiveDeviceChange]);
+    if (activeDeviceId && activeDeviceId !== '') {
+      onActiveDeviceChange?.(activeDeviceId);
+      console.log('active device id', activeDeviceId);
+    }
+  }, [activeDeviceId]);
 
   const handleActiveDeviceChange = async (deviceId: string) => {
     try {

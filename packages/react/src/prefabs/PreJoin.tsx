@@ -50,6 +50,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   kind: 'videoinput' | 'audioinput',
 ) {
   const [deviceError, setDeviceError] = React.useState<Error | null>(null);
+  const [isCreatingTrack, setIsCreatingTrack] = React.useState<boolean>(false);
 
   const devices = useMediaDevices({ kind });
   const [selectedDevice, setSelectedDevice] = React.useState<MediaDeviceInfo | undefined>(
@@ -96,22 +97,26 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   const prevDeviceId = React.useRef(localDeviceId);
 
   React.useEffect(() => {
-    if (enabled && !localTrack && !deviceError) {
+    if (enabled && !localTrack && !deviceError && !isCreatingTrack) {
       log.debug('creating track', kind);
-      createTrack(localDeviceId, kind);
+      setIsCreatingTrack(true);
+      createTrack(localDeviceId, kind).finally(() => {
+        setIsCreatingTrack(false);
+      });
     }
-  }, [enabled, localTrack, deviceError]);
+  }, [enabled, localTrack, deviceError, isCreatingTrack]);
 
   // switch camera device
   React.useEffect(() => {
+    if (!localTrack) {
+      return;
+    }
     if (!enabled) {
       if (localTrack) {
         log.debug(`muting ${kind} track`);
         localTrack.mute().then(() => log.debug(localTrack.mediaStreamTrack));
       }
-      return;
-    }
-    if (
+    } else if (
       localTrack &&
       selectedDevice?.deviceId &&
       prevDeviceId.current !== selectedDevice?.deviceId
@@ -120,9 +125,11 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
       switchDevice(localTrack, selectedDevice.deviceId);
     } else {
       log.debug(`unmuting local ${kind} track`);
-      localTrack?.unmute();
+      localTrack.unmute();
     }
+  }, [localTrack, selectedDevice, enabled, kind]);
 
+  React.useEffect(() => {
     return () => {
       if (localTrack) {
         log.debug(`stopping local ${kind} track`);
@@ -130,7 +137,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
         localTrack.mute();
       }
     };
-  }, [localTrack, selectedDevice, enabled, kind]);
+  }, []);
 
   React.useEffect(() => {
     setSelectedDevice(devices.find((dev) => dev.deviceId === localDeviceId));
@@ -266,7 +273,7 @@ export const PreJoin = ({
         )}
       </div>
       <div className="lk-button-group-container">
-        <div className="lk-button-group audio">
+        {/* <div className="lk-button-group audio">
           <TrackToggle
             initialState={audioEnabled}
             source={Track.Source.Microphone}
@@ -285,7 +292,7 @@ export const PreJoin = ({
               disabled={!!!audio.selectedDevice}
             />
           </div>
-        </div>
+        </div> */}
         <div className="lk-button-group video">
           <TrackToggle
             initialState={videoEnabled}

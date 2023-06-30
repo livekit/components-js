@@ -37,7 +37,7 @@ export const MediaDeviceMenu = ({
 
   const handleActiveDeviceChange = (kind: MediaDeviceKind, deviceId: string) => {
     log.debug('handle device change');
-    setIsOpen(false);
+    // setIsOpen(false); // TODO re-enable
     onActiveDeviceChange?.(kind, deviceId);
   };
 

@@ -30,7 +30,7 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
         );
       }
       activeDeviceSubject.next(id === 'default' ? id : actualDeviceId);
-    } else {
+    } else if (activeDeviceSubject.value !== id) {
       log.debug('Skip the device switch because the room object is not available. ');
       activeDeviceSubject.next(id);
     }

@@ -1,4 +1,4 @@
-import type { Room } from 'livekit-client';
+import type { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
 import { BehaviorSubject } from 'rxjs';
 import { log } from '../logger';
 import { prefixClass } from '../styles-interface';
@@ -12,7 +12,11 @@ export type SetMediaDeviceOptions = {
   exact?: boolean;
 };
 
-export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
+export function setupDeviceSelector(
+  kind: MediaDeviceKind,
+  room?: Room,
+  localTrack?: LocalAudioTrack | LocalVideoTrack,
+) {
   const activeDeviceSubject = new BehaviorSubject<string | undefined>(undefined);
 
   const activeDeviceObservable = room
@@ -30,6 +34,10 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
         );
       }
       activeDeviceSubject.next(id === 'default' ? id : actualDeviceId);
+    } else if (localTrack) {
+      await localTrack.setDeviceId(options.exact ? { exact: id } : id);
+      const actualId = await localTrack.getDeviceId();
+      activeDeviceSubject.next(actualId);
     } else if (activeDeviceSubject.value !== id) {
       log.debug('Skip the device switch because the room object is not available. ');
       activeDeviceSubject.next(id);

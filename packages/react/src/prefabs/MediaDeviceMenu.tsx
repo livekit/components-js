@@ -2,12 +2,14 @@ import { computeMenuPosition, wasClickOutside } from '@livekit/components-core';
 import * as React from 'react';
 import { MediaDeviceSelect } from '../components/controls/MediaDeviceSelect';
 import { log } from '@livekit/components-core';
+import type { LocalAudioTrack, LocalVideoTrack } from 'livekit-client';
 
 /** @public */
 export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   kind?: MediaDeviceKind;
   initialSelection?: string;
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
+  tracks?: Partial<Record<MediaDeviceKind, LocalAudioTrack | LocalVideoTrack | undefined>>;
 }
 
 /**
@@ -29,6 +31,7 @@ export const MediaDeviceMenu = ({
   kind,
   initialSelection,
   onActiveDeviceChange,
+  tracks,
   ...props
 }: MediaDeviceMenuProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -102,6 +105,7 @@ export const MediaDeviceMenu = ({
             onActiveDeviceChange={(deviceId) => handleActiveDeviceChange(kind, deviceId)}
             onDeviceListChange={setDevices}
             kind={kind}
+            track={tracks?.[kind]}
           />
         ) : (
           <>
@@ -110,12 +114,14 @@ export const MediaDeviceMenu = ({
               kind="audioinput"
               onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('audioinput', deviceId)}
               onDeviceListChange={setDevices}
+              track={tracks?.audioinput}
             />
             <div className="lk-device-menu-heading">Video inputs</div>
             <MediaDeviceSelect
               kind="videoinput"
               onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('videoinput', deviceId)}
               onDeviceListChange={setDevices}
+              track={tracks?.videoinput}
             />
           </>
         )}

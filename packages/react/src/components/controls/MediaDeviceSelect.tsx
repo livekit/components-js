@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useMaybeRoomContext } from '../../context';
 import { setupDeviceSelector, createMediaDeviceObserver } from '@livekit/components-core';
 import { mergeProps } from '../../utils';
-import type { Room } from 'livekit-client';
+import type { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
 import { useObservableState } from '../../hooks/internal/useObservableState';
 
 /** @public */
@@ -16,10 +16,11 @@ export function useMediaDevices({ kind }: { kind: MediaDeviceKind }) {
 export interface UseMediaDeviceSelectProps {
   kind: MediaDeviceKind;
   room?: Room;
+  track?: LocalAudioTrack | LocalVideoTrack;
 }
 
 /** @public */
-export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps) {
+export function useMediaDeviceSelect({ kind, room, track }: UseMediaDeviceSelectProps) {
   const roomContext = useMaybeRoomContext();
   // List of all devices.
   const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
@@ -27,8 +28,8 @@ export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps) 
   // Active device management.
   const [currentDeviceId, setCurrentDeviceId] = React.useState<string>('');
   const { className, activeDeviceObservable, setActiveMediaDevice } = React.useMemo(
-    () => setupDeviceSelector(kind, room ?? roomContext),
-    [kind, room, roomContext],
+    () => setupDeviceSelector(kind, room ?? roomContext, track),
+    [kind, room, roomContext, track],
   );
 
   React.useEffect(() => {
@@ -54,6 +55,7 @@ export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListEl
    * will call `onDeviceSelectError` with the error in case this fails
    */
   exactMatch?: boolean;
+  track?: LocalAudioTrack | LocalVideoTrack;
 }
 
 /**
@@ -75,12 +77,14 @@ export function MediaDeviceSelect({
   onDeviceListChange,
   onDeviceSelectError,
   exactMatch,
+  track,
   ...props
 }: MediaDeviceSelectProps) {
   const room = useMaybeRoomContext();
   const { devices, activeDeviceId, setActiveMediaDevice, className } = useMediaDeviceSelect({
     kind,
     room,
+    track,
   });
   React.useEffect(() => {
     if (initialSelection) {

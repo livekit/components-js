@@ -228,11 +228,11 @@ export const PreJoin = ({
   const videoEl = React.useRef(null);
 
   const videoTrack = React.useMemo(
-    () => tracks?.filter((track) => track.kind === Track.Kind.Video)[0],
+    () => tracks?.filter((track) => track.kind === Track.Kind.Video)[0] as LocalVideoTrack,
     [tracks],
   );
   const audioTrack = React.useMemo(
-    () => tracks?.filter((track) => track.kind === Track.Kind.Audio)[0],
+    () => tracks?.filter((track) => track.kind === Track.Kind.Audio)[0] as LocalAudioTrack,
     [tracks],
   );
 
@@ -259,31 +259,17 @@ export const PreJoin = ({
     [onValidate],
   );
 
-  function gatherUserChoices() {
-    Promise.all([videoTrack?.getDeviceId(), audioTrack?.getDeviceId()]).then(
-      ([videoId, audioId]) => {
-        const newUserChoices = {
-          username: username,
-          videoEnabled: videoEnabled,
-          videoDeviceId: videoId ?? '',
-          audioEnabled: audioEnabled,
-          audioDeviceId: audioId ?? '',
-        };
-        if (videoId) {
-          setVideoDeviceId(videoId);
-        }
-        if (audioId) {
-          setAudioDeviceId(audioId);
-        }
-        setUserChoices(newUserChoices);
-        setIsValid(handleValidation(newUserChoices));
-      },
-    );
-  }
-
   React.useEffect(() => {
-    gatherUserChoices();
-  }, [username, videoEnabled, handleValidation, audioEnabled, audioTrack, videoTrack]);
+    const newUserChoices = {
+      username: username,
+      videoEnabled: videoEnabled,
+      videoDeviceId: videoDeviceId,
+      audioEnabled: audioEnabled,
+      audioDeviceId: audioDeviceId,
+    };
+    setUserChoices(newUserChoices);
+    setIsValid(handleValidation(newUserChoices));
+  }, [username, videoEnabled, handleValidation, audioEnabled, audioDeviceId, videoDeviceId]);
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -323,6 +309,7 @@ export const PreJoin = ({
                 setAudioDeviceId(deviceId);
               }}
               disabled={!audioTrack}
+              tracks={{ audioinput: audioTrack }}
             />
           </div>
         </div>
@@ -341,7 +328,8 @@ export const PreJoin = ({
               onActiveDeviceChange={(_, deviceId) => {
                 setVideoDeviceId(deviceId);
               }}
-              disabled={!audioTrack}
+              disabled={!videoTrack}
+              tracks={{ videoinput: videoTrack }}
             />
           </div>
         </div>

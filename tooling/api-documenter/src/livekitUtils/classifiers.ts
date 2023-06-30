@@ -59,5 +59,5 @@ export function getCategorySubfolder(apiItem: ApiItem): string {
       break;
   }
 
-  return [packagePath, category].join('/') + '/';
+  return [packagePath, category].join('/');
 }

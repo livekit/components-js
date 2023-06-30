@@ -10,6 +10,8 @@
 export interface UseParticipantPermissionsOptions
 ```
 
+{% usage name="useparticipantpermissionsoptions" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                                  | Modifiers | Type        | Description  |

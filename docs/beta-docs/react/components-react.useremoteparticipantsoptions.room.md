@@ -11,3 +11,5 @@ The room to use. If not provided, the hook will use the room from the context.
 ```typescript
 room?: Room;
 ```
+
+{% usage name="room" package="@livekit/components-react" exampleCount=0 /%}

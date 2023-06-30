@@ -12,6 +12,8 @@ Ensures that a participant is provided via context. If not inside a `Participant
 import { useParticipantContext } from '@livekit/components-react';
 ```
 
+{% usage name="useparticipantcontext" package="@livekit/components-react" exampleCount=0 /%}
+
 **Returns:**
 
 Participant

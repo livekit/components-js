@@ -9,3 +9,5 @@
 ```typescript
 import { ParticipantContextIfNeeded } from '@livekit/components-react';
 ```
+
+{% usage name="participantcontextifneeded" package="@livekit/components-react" exampleCount=0 /%}

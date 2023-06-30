@@ -11,3 +11,5 @@ Returns `true` if the browser supports screen sharing.
 ```typescript
 export declare function supportsScreenSharing(): boolean;
 ```
+
+{% usage name="supportsscreensharing" package="@livekit/components-core" exampleCount=0 /%}

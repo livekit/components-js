@@ -11,3 +11,5 @@ export type UseParticipantInfoOptions = {
   participant?: Participant;
 };
 ```
+
+{% usage name="useparticipantinfooptions" package="@livekit/components-react" exampleCount=0 /%}

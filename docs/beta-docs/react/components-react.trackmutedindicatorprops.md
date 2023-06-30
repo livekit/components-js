@@ -12,6 +12,8 @@ export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivEl
 
 **Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;
 
+{% usage name="trackmutedindicatorprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                          | Modifiers | Type                             | Description  |

@@ -22,6 +22,8 @@ import { GridLayout } from '@livekit/components-react';
 <LiveKitRoom>
 ```
 
+{% usage name="gridlayout" package="@livekit/components-react" exampleCount=1 /%}
+
 ## Properties
 
 | Property                                                          | Modifiers | Type                                                                                              | Description |

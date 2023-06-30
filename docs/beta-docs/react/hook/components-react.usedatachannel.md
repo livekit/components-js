@@ -10,6 +10,8 @@
 import { useDataChannel } from '@livekit/components-react';
 ```
 
+{% usage name="usedatachannel" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Parameters
 
 | Parameter | Type                                                                                                     | Description  |

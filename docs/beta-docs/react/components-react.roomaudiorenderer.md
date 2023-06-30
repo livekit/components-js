@@ -19,3 +19,5 @@ RoomAudioRenderer: () => React.JSX.Element;
   <RoomAudioRenderer />
 </LiveKitRoom>
 ```
+
+{% usage name="roomaudiorenderer" package="@livekit/components-react" exampleCount=1 /%}

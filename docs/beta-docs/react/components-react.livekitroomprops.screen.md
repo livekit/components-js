@@ -11,3 +11,5 @@ Publish screen share immediately after connecting to your LiveKit room.
 ```typescript
 screen?: ScreenShareCaptureOptions | boolean;
 ```
+
+{% usage name="screen" package="@livekit/components-react" exampleCount=0 /%}

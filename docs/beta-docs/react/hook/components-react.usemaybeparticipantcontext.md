@@ -12,6 +12,8 @@ Returns a participant from the `ParticipantContext` if it exists, otherwise `und
 import { useMaybeParticipantContext } from '@livekit/components-react';
 ```
 
+{% usage name="usemaybeparticipantcontext" package="@livekit/components-react" exampleCount=0 /%}
+
 **Returns:**
 
 Participant \| undefined

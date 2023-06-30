@@ -20,3 +20,5 @@ import { TrackToggle } from '@livekit/components-react';
   <TrackToggle source={Track.Source.Camera} />
 </LiveKitRoom>
 ```
+
+{% usage name="tracktoggle" package="@livekit/components-react" exampleCount=1 /%}

@@ -12,6 +12,8 @@ export interface CarouselLayoutProps extends React.HTMLAttributes<HTMLMediaEleme
 
 **Extends:** React.HTMLAttributes&lt;HTMLMediaElement&gt;
 
+{% usage name="carouselviewprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                   | Modifiers | Type                                                                                              | Description                                                                                                                                         |

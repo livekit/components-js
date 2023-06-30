@@ -15,3 +15,5 @@ export declare function updatePages<T extends UpdatableItem>(
   maxItemsOnPage: number,
 ): T[];
 ```
+
+{% usage name="updatepages" package="@livekit/components-core" exampleCount=0 /%}

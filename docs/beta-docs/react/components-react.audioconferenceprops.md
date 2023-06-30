@@ -9,3 +9,5 @@
 ```typescript
 export type AudioConferenceProps = React.HTMLAttributes<HTMLDivElement>;
 ```
+
+{% usage name="audioconferenceprops" package="@livekit/components-react" exampleCount=0 /%}

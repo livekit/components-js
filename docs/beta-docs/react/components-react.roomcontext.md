@@ -9,3 +9,5 @@
 ```typescript
 RoomContext: React.Context<Room | undefined>;
 ```
+
+{% usage name="roomcontext" package="@livekit/components-react" exampleCount=0 /%}

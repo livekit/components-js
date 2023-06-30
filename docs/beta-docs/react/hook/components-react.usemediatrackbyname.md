@@ -10,6 +10,8 @@
 import { useMediaTrackByName } from '@livekit/components-react';
 ```
 
+{% usage name="usemediatrackbyname" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Parameters
 
 | Parameter   | Type                                                                      | Description  |

@@ -10,6 +10,8 @@
 export interface UseTrackMutedIndicatorOptions
 ```
 
+{% usage name="usetrackmutedindicatoroptions" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                               | Modifiers | Type        | Description  |

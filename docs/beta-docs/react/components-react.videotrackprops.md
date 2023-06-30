@@ -18,3 +18,5 @@ export type VideoTrackProps = React.HTMLAttributes<HTMLVideoElement> & {
 ```
 
 **References:** [ParticipantClickEvent](./core//components-core.participantclickevent.md)
+
+{% usage name="videotrackprops" package="@livekit/components-react" exampleCount=0 /%}

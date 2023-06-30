@@ -12,6 +12,8 @@ export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement>
 
 **Extends:** React.HTMLAttributes&lt;HTMLElement&gt;
 
+{% usage name="focuslayoutprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                                | Modifiers | Type                                                                                                | Description  |

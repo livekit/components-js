@@ -28,3 +28,5 @@ This component is implemented with the `MediaDeviceSelect` LiveKit components.
   <MediaDeviceMenu />
 </LiveKitRoom>
 ```
+
+{% usage name="mediadevicemenu" package="@livekit/components-react" exampleCount=1 /%}

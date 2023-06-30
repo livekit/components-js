@@ -12,6 +12,8 @@ Returns a layout context from the `LayoutContext` if it exists, otherwise `undef
 import { useMaybeLayoutContext } from '@livekit/components-react';
 ```
 
+{% usage name="usemaybelayoutcontext" package="@livekit/components-react" exampleCount=0 /%}
+
 **Returns:**
 
 [LayoutContextType](./react//components-react.layoutcontexttype.md) \| undefined

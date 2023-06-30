@@ -19,3 +19,5 @@ import { ChatToggle } from '@livekit/components-react';
   <ToggleChat />
 </LiveKitRoom>
 ```
+
+{% usage name="chattoggle" package="@livekit/components-react" exampleCount=1 /%}

@@ -16,3 +16,5 @@ export type UseParticipantTileProps<T extends HTMLElement> = TrackReferenceOrPla
 ```
 
 **References:** [TrackReferenceOrPlaceholder](./core//components-core.trackreferenceorplaceholder.md)<!-- -->, [ParticipantClickEvent](./core//components-core.participantclickevent.md)
+
+{% usage name="useparticipanttileprops" package="@livekit/components-react" exampleCount=0 /%}

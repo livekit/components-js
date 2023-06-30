@@ -12,6 +12,8 @@ Ensures that a room is provided via context. If no room is provided, an error is
 import { useRoomContext } from '@livekit/components-react';
 ```
 
+{% usage name="useroomcontext" package="@livekit/components-react" exampleCount=0 /%}
+
 **Returns:**
 
 Room

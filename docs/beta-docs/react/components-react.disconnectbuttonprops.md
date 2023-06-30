@@ -11,3 +11,5 @@ export type DisconnectButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement
   stopTracks?: boolean;
 };
 ```
+
+{% usage name="disconnectbuttonprops" package="@livekit/components-react" exampleCount=0 /%}

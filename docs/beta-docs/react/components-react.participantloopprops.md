@@ -12,3 +12,5 @@ export type ParticipantLoopProps = {
   children: React.ReactNode;
 };
 ```
+
+{% usage name="participantloopprops" package="@livekit/components-react" exampleCount=0 /%}

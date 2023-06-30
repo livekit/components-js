@@ -19,3 +19,5 @@ RoomName: ({ childrenPosition, children, ...htmlAttributes }: RoomNameProps) => 
   <RoomName />
 </LiveKitRoom>
 ```
+
+{% usage name="roomname" package="@livekit/components-react" exampleCount=1 /%}

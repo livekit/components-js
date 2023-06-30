@@ -11,3 +11,5 @@ The useSpeakingParticipants hook returns the only the active speakers of all par
 ```typescript
 import { useSpeakingParticipants } from '@livekit/components-react';
 ```
+
+{% usage name="usespeakingparticipants" package="@livekit/components-react" exampleCount=0 /%}

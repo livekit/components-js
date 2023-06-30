@@ -11,3 +11,5 @@ Options for when creating a new room. When you pass your own room instance to th
 ```typescript
 options?: RoomOptions;
 ```
+
+{% usage name="options" package="@livekit/components-react" exampleCount=0 /%}

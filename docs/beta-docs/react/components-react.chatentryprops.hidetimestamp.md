@@ -11,3 +11,5 @@ Hide message timestamp.
 ```typescript
 hideTimestamp?: boolean;
 ```
+
+{% usage name="hidetimestamp" package="@livekit/components-react" exampleCount=0 /%}

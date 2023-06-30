@@ -9,3 +9,5 @@
 ```typescript
 export type MessageFormatter = (message: string) => React.ReactNode;
 ```
+
+{% usage name="messageformatter" package="@livekit/components-react" exampleCount=0 /%}

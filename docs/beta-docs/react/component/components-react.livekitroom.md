@@ -20,6 +20,8 @@ import { LiveKitRoom } from '@livekit/components-react';
 </LiveKitRoom>
 ```
 
+{% usage name="livekitroom" package="@livekit/components-react" exampleCount=1 /%}
+
 ## Properties
 
 | Property                                                                                    | Modifiers | Type                                      | Description                                                                                                                                                                                                                                                                                                   |

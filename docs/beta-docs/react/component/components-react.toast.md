@@ -9,3 +9,5 @@
 ```typescript
 import { Toast } from '@livekit/components-react';
 ```
+
+{% usage name="toast" package="@livekit/components-react" exampleCount=0 /%}

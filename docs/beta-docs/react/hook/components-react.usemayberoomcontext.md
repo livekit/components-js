@@ -12,6 +12,8 @@ Returns the room context if it exists, otherwise undefined.
 import { useMaybeRoomContext } from '@livekit/components-react';
 ```
 
+{% usage name="usemayberoomcontext" package="@livekit/components-react" exampleCount=0 /%}
+
 **Returns:**
 
 Room \| undefined

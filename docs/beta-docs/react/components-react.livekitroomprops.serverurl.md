@@ -11,3 +11,5 @@ URL to the LiveKit server. For example: `wss://<domain>.livekit.cloud` To simpli
 ```typescript
 serverUrl: string | undefined;
 ```
+
+{% usage name="serverurl" package="@livekit/components-react" exampleCount=0 /%}

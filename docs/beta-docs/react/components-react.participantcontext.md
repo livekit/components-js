@@ -9,3 +9,5 @@
 ```typescript
 ParticipantContext: React.Context<Participant | undefined>;
 ```
+
+{% usage name="participantcontext" package="@livekit/components-react" exampleCount=0 /%}

@@ -11,3 +11,5 @@ Place the tiles vertically or horizontally next to each other. If undefined orie
 ```typescript
 orientation?: 'vertical' | 'horizontal';
 ```
+
+{% usage name="orientation" package="@livekit/components-react" exampleCount=0 /%}

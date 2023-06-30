@@ -9,3 +9,5 @@
 ```typescript
 LayoutContext: React.Context<LayoutContextType | undefined>;
 ```
+
+{% usage name="layoutcontext" package="@livekit/components-react" exampleCount=0 /%}

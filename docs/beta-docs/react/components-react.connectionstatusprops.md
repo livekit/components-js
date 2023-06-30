@@ -12,6 +12,8 @@ export interface ConnectionStatusProps extends React.HTMLAttributes<HTMLDivEleme
 
 **Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;
 
+{% usage name="connectionstatusprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                         | Modifiers | Type | Description                                                                 |

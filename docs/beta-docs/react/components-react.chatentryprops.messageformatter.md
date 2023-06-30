@@ -11,3 +11,5 @@ An optional formatter for the message body.
 ```typescript
 messageFormatter?: MessageFormatter;
 ```
+
+{% usage name="messageformatter" package="@livekit/components-react" exampleCount=0 /%}

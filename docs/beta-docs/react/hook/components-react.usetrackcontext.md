@@ -12,6 +12,8 @@ Ensures that a track reference is provided via context. If not inside a `TrackCo
 import { useTrackContext } from '@livekit/components-react';
 ```
 
+{% usage name="usetrackcontext" package="@livekit/components-react" exampleCount=0 /%}
+
 **Returns:**
 
 [TrackReferenceOrPlaceholder](./core//components-core.trackreferenceorplaceholder.md)

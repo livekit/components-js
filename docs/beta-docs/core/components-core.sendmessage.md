@@ -16,3 +16,5 @@ export declare function sendMessage(
   options?: DataSendOptions,
 ): Promise<void>;
 ```
+
+{% usage name="sendmessage" package="@livekit/components-core" exampleCount=0 /%}

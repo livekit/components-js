@@ -12,6 +12,8 @@ export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLBut
 
 **Extends:** React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;
 
+{% usage name="mediadevicemenuprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                                        | Modifiers | Type                                                 | Description  |

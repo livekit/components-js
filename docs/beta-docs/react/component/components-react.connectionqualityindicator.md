@@ -17,3 +17,5 @@ import { ConnectionQualityIndicator } from '@livekit/components-react';
 ```tsx
 <ConnectionQualityIndicator />
 ```
+
+{% usage name="connectionqualityindicator" package="@livekit/components-react" exampleCount=1 /%}

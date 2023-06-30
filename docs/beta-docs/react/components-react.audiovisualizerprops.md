@@ -12,6 +12,8 @@ export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement>
 
 **Extends:** React.HTMLAttributes&lt;SVGElement&gt;
 
+{% usage name="audiovisualizerprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                      | Modifiers | Type        | Description  |

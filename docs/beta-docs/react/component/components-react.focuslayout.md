@@ -10,6 +10,8 @@
 import { FocusLayout } from '@livekit/components-react';
 ```
 
+{% usage name="focuslayout" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                                | Modifiers | Type                                                                                                | Description  |

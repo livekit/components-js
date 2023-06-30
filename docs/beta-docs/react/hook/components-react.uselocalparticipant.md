@@ -11,3 +11,5 @@ The useLocalParticipant hook the state of the local participant.
 ```typescript
 import { useLocalParticipant } from '@livekit/components-react';
 ```
+
+{% usage name="uselocalparticipant" package="@livekit/components-react" exampleCount=0 /%}

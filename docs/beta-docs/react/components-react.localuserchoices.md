@@ -15,3 +15,5 @@ export type LocalUserChoices = {
   audioDeviceId: string;
 };
 ```
+
+{% usage name="localuserchoices" package="@livekit/components-react" exampleCount=0 /%}

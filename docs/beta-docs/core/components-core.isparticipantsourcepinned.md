@@ -15,3 +15,5 @@ export declare function isParticipantSourcePinned(
   pinState: PinState | undefined,
 ): boolean;
 ```
+
+{% usage name="isparticipantsourcepinned" package="@livekit/components-core" exampleCount=0 /%}

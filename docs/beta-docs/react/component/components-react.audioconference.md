@@ -23,3 +23,5 @@ The component is implemented with other LiveKit components like `FocusContextPro
   <AudioConference />
 <LiveKitRoom>
 ```
+
+{% usage name="audioconference" package="@livekit/components-react" exampleCount=1 /%}

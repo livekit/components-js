@@ -12,6 +12,8 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
 
 **Extends:** Omit&lt;React.HTMLAttributes&lt;HTMLDivElement&gt;, 'onError'&gt;
 
+{% usage name="livekitroomprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                                    | Modifiers | Type                                      | Description                                                                                                                                                                                                                                                                                                   |

@@ -12,3 +12,5 @@ export type ConnectionQualityIndicatorProps = React.HTMLAttributes<HTMLDivElemen
 ```
 
 **References:** [ConnectionQualityIndicatorOptions](./react//components-react.connectionqualityindicatoroptions.md)
+
+{% usage name="connectionqualityindicatorprops" package="@livekit/components-react" exampleCount=0 /%}

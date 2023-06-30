@@ -11,3 +11,5 @@ Overwrites the default sort function.
 ```typescript
 customSortFunction?: (trackReferences: TrackReferenceOrPlaceholder[]) => TrackReferenceOrPlaceholder[];
 ```
+
+{% usage name="customsortfunction" package="@livekit/components-react" exampleCount=0 /%}

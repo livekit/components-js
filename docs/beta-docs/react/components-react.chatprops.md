@@ -12,6 +12,8 @@ export interface ChatProps extends React.HTMLAttributes<HTMLDivElement>
 
 **Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;
 
+{% usage name="chatprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                     | Modifiers | Type                                                              | Description  |

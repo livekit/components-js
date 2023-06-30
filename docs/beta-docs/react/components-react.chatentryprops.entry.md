@@ -11,3 +11,5 @@ The chat massage object to display.
 ```typescript
 entry: ReceivedChatMessage;
 ```
+
+{% usage name="entry" package="@livekit/components-react" exampleCount=0 /%}

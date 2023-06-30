@@ -10,6 +10,8 @@
 export interface UserInfo
 ```
 
+{% usage name="userinfo" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                    | Modifiers | Type   | Description  |

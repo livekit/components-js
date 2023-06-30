@@ -29,6 +29,8 @@ const trackReferencesWithPlaceholders: TrackReferenceOrPlaceholder[] = useTracks
 ]);
 ```
 
+{% usage name="usetracks" package="@livekit/components-react" exampleCount=2 /%}
+
 ## Parameters
 
 | Parameter | Type                                                              | Description  |

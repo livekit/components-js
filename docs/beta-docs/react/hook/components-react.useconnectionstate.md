@@ -18,6 +18,8 @@ import { useConnectionState } from '@livekit/components-react';
 const connectionState = useConnectionState(room);
 ```
 
+{% usage name="useconnectionstate" package="@livekit/components-react" exampleCount=1 /%}
+
 ## Parameters
 
 | Parameter | Type | Description  |

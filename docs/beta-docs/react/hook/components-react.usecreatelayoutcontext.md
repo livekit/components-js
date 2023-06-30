@@ -10,6 +10,8 @@
 import { useCreateLayoutContext } from '@livekit/components-react';
 ```
 
+{% usage name="usecreatelayoutcontext" package="@livekit/components-react" exampleCount=0 /%}
+
 **Returns:**
 
 [LayoutContextType](./react//components-react.layoutcontexttype.md)

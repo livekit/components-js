@@ -25,3 +25,5 @@ ParticipantAudioTile: ({
 ```tsx
 <ParticipantAudioTile />
 ```
+
+{% usage name="participantaudiotile" package="@livekit/components-react" exampleCount=1 /%}

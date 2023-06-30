@@ -14,6 +14,8 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement>
 
 **Extends:** React.HTMLAttributes&lt;HTMLLIElement&gt;
 
+{% usage name="chatentryprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                          | Modifiers | Type                                                                  | Description                                                                                                    |

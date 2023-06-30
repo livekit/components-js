@@ -20,6 +20,8 @@ import { Chat } from '@livekit/components-react';
 </LiveKitRoom>
 ```
 
+{% usage name="chat" package="@livekit/components-react" exampleCount=1 /%}
+
 ## Properties
 
 | Property                                                                     | Modifiers | Type                                                              | Description  |

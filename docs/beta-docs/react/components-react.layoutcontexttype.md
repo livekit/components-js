@@ -12,3 +12,5 @@ export type LayoutContextType = {
   widget: ChatContextType;
 };
 ```
+
+{% usage name="layoutcontexttype" package="@livekit/components-react" exampleCount=0 /%}

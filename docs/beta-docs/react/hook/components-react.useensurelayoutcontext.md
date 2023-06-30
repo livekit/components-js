@@ -12,6 +12,8 @@ Ensures that a layout context is provided, either via context or explicitly as a
 import { useEnsureLayoutContext } from '@livekit/components-react';
 ```
 
+{% usage name="useensurelayoutcontext" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Parameters
 
 | Parameter     | Type                                                                | Description  |

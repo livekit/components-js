@@ -12,6 +12,8 @@ Ensures that a track reference is provided, either via context or explicitly as 
 import { useEnsureTrackReference } from '@livekit/components-react';
 ```
 
+{% usage name="useensuretrackreference" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Parameters
 
 | Parameter | Type                                                                                  | Description  |

@@ -9,3 +9,5 @@
 ```typescript
 import { useTrackMutedIndicator } from '@livekit/components-react';
 ```
+
+{% usage name="usetrackmutedindicator" package="@livekit/components-react" exampleCount=0 /%}

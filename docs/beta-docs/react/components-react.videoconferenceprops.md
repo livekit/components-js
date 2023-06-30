@@ -12,6 +12,8 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
 
 **Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;
 
+{% usage name="videoconferenceprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                                        | Modifiers | Type                                                              | Description  |

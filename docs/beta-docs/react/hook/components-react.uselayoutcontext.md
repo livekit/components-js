@@ -12,6 +12,8 @@ Ensures that a layout context is provided via context. If no layout context is p
 import { useLayoutContext } from '@livekit/components-react';
 ```
 
+{% usage name="uselayoutcontext" package="@livekit/components-react" exampleCount=0 /%}
+
 **Returns:**
 
 [LayoutContextType](./react//components-react.layoutcontexttype.md)

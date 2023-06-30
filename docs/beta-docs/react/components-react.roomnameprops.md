@@ -12,6 +12,8 @@ export interface RoomNameProps extends React.HTMLAttributes<HTMLSpanElement>
 
 **Extends:** React.HTMLAttributes&lt;HTMLSpanElement&gt;
 
+{% usage name="roomnameprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                         | Modifiers | Type                | Description  |

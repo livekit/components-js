@@ -9,3 +9,5 @@
 ```typescript
 export type ClearPinButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 ```
+
+{% usage name="clearpinbuttonprops" package="@livekit/components-react" exampleCount=0 /%}

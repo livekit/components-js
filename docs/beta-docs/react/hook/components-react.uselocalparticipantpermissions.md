@@ -10,6 +10,8 @@
 import { useLocalParticipantPermissions } from '@livekit/components-react';
 ```
 
+{% usage name="uselocalparticipantpermissions" package="@livekit/components-react" exampleCount=0 /%}
+
 **Returns:**
 
 import("livekit-client/dist/src/proto/livekit_models").ParticipantPermission \| undefined

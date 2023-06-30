@@ -10,6 +10,8 @@
 import { ConnectionStateToast } from '@livekit/components-react';
 ```
 
+{% usage name="connectionstatetoast" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                             | Modifiers | Type | Description  |

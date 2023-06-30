@@ -14,3 +14,5 @@ export declare function isTrackReferencePinned(
   pinState: PinState | undefined,
 ): boolean;
 ```
+
+{% usage name="istrackreferencepinned" package="@livekit/components-core" exampleCount=0 /%}

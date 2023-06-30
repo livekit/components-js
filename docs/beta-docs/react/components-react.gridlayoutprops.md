@@ -12,6 +12,8 @@ export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement>, P
 
 **Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;, Pick&lt;[UseParticipantsOptions](./react//components-react.useparticipantsoptions.md)<!-- -->, 'updateOnlyOn'&gt;
 
+{% usage name="gridlayoutprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                          | Modifiers | Type                                                                                              | Description |

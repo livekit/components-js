@@ -23,3 +23,5 @@ This component is build with other LiveKit components like `TrackToggle`<!-- -->
   <ControlBar />
 </LiveKitRoom>
 ```
+
+{% usage name="controlbar" package="@livekit/components-react" exampleCount=1 /%}

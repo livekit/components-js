@@ -17,3 +17,5 @@ export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
 ```
 
 **References:** [ParticipantClickEvent](./core//components-core.participantclickevent.md)
+
+{% usage name="participanttileprops" package="@livekit/components-react" exampleCount=0 /%}

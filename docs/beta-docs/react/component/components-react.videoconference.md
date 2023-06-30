@@ -24,6 +24,8 @@ The component is implemented with other LiveKit components like `FocusContextPro
 <LiveKitRoom>
 ```
 
+{% usage name="videoconference" package="@livekit/components-react" exampleCount=1 /%}
+
 ## Properties
 
 | Property                                                                                        | Modifiers | Type                                                              | Description  |

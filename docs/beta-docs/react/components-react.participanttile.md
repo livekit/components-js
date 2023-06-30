@@ -27,3 +27,5 @@ ParticipantTile: ({
 
 <ParticipantTile {...trackReference} />
 ```
+
+{% usage name="participanttile" package="@livekit/components-react" exampleCount=1 /%}

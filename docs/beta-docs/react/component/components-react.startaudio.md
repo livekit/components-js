@@ -20,6 +20,8 @@ import { StartAudio } from '@livekit/components-react';
 </LiveKitRoom>
 ```
 
+{% usage name="startaudio" package="@livekit/components-react" exampleCount=1 /%}
+
 ## Properties
 
 | Property                                                            | Modifiers | Type   | Description |

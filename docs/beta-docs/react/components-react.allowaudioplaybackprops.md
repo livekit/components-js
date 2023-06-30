@@ -12,6 +12,8 @@ export interface AllowAudioPlaybackProps extends React.ButtonHTMLAttributes<HTML
 
 **Extends:** React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;
 
+{% usage name="allowaudioplaybackprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                            | Modifiers | Type   | Description |

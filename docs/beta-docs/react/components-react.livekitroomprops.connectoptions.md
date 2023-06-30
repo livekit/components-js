@@ -11,3 +11,5 @@ Define options how to connect to the LiveKit server.
 ```typescript
 connectOptions?: RoomConnectOptions;
 ```
+
+{% usage name="connectoptions" package="@livekit/components-react" exampleCount=0 /%}

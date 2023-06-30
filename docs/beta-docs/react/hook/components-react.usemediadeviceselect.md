@@ -10,6 +10,8 @@
 import { useMediaDeviceSelect } from '@livekit/components-react';
 ```
 
+{% usage name="usemediadeviceselect" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Parameters
 
 | Parameter      | Type                                                                                | Description |

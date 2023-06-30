@@ -11,3 +11,5 @@ Optional room instance. By passing your own room instance you overwrite the `opt
 ```typescript
 room?: Room;
 ```
+
+{% usage name="room" package="@livekit/components-react" exampleCount=0 /%}

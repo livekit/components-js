@@ -10,6 +10,8 @@
 export interface UseRoomInfoOptions
 ```
 
+{% usage name="useroominfooptions" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                      | Modifiers | Type | Description  |

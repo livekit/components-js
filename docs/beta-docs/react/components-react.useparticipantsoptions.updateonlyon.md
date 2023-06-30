@@ -11,3 +11,5 @@ To optimize performance, you can use the `updateOnlyOn` property to decide on wh
 ```typescript
 updateOnlyOn?: RoomEvent[];
 ```
+
+{% usage name="updateonlyon" package="@livekit/components-react" exampleCount=0 /%}

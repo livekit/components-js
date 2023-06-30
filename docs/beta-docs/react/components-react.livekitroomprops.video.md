@@ -11,3 +11,5 @@ Publish video immediately after connecting to your LiveKit room.
 ```typescript
 video?: VideoCaptureOptions | boolean;
 ```
+
+{% usage name="video" package="@livekit/components-react" exampleCount=0 /%}

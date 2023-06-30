@@ -10,6 +10,8 @@
 import { useEnsureCreateLayoutContext } from '@livekit/components-react';
 ```
 
+{% usage name="useensurecreatelayoutcontext" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Parameters
 
 | Parameter     | Type                                                                | Description  |

@@ -12,6 +12,8 @@ export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListEl
 
 **Extends:** React.HTMLAttributes&lt;HTMLUListElement&gt;
 
+{% usage name="mediadeviceselectprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                                          | Modifiers | Type                                      | Description  |

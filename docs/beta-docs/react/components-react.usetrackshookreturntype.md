@@ -15,3 +15,5 @@ export type UseTracksHookReturnType<T> = T extends Track.Source[]
 ```
 
 **References:** [TrackReference](./core//components-core.trackreference.md)<!-- -->, [TrackSourceWithOptions](./core//components-core.tracksourcewithoptions.md)<!-- -->, [TrackReferenceOrPlaceholder](./core//components-core.trackreferenceorplaceholder.md)
+
+{% usage name="usetrackshookreturntype" package="@livekit/components-react" exampleCount=0 /%}

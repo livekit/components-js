@@ -32,3 +32,5 @@ This component is independent from the LiveKitRoom component and don't has to be
 ```tsx
 <PreJoin />
 ```
+
+{% usage name="prejoin" package="@livekit/components-react" exampleCount=1 /%}

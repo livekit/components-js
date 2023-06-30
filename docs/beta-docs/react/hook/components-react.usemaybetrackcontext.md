@@ -12,6 +12,8 @@ Returns a track reference from the `TrackContext` if it exists, otherwise `undef
 import { useMaybeTrackContext } from '@livekit/components-react';
 ```
 
+{% usage name="usemaybetrackcontext" package="@livekit/components-react" exampleCount=0 /%}
+
 **Returns:**
 
 [TrackReferenceOrPlaceholder](./core//components-core.trackreferenceorplaceholder.md) \| undefined

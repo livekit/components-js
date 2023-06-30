@@ -9,3 +9,5 @@
 ```typescript
 import { useRemoteParticipant } from '@livekit/components-react';
 ```
+
+{% usage name="useremoteparticipant" package="@livekit/components-react" exampleCount=0 /%}

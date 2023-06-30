@@ -11,3 +11,5 @@ Hide sender name. Useful when displaying multiple consecutive chat messages from
 ```typescript
 hideName?: boolean;
 ```
+
+{% usage name="hidename" package="@livekit/components-react" exampleCount=0 /%}

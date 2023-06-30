@@ -17,3 +17,5 @@ export type AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
     volume?: number;
   };
 ```
+
+{% usage name="audiotrackprops" package="@livekit/components-react" exampleCount=0 /%}

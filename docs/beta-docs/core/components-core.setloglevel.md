@@ -11,3 +11,5 @@ Set the log level for both the `@livekit/components-react` package and the `@liv
 ```typescript
 export declare function setLogLevel(level: LogLevel, options?: SetLogLevelOptions): void;
 ```
+
+{% usage name="setloglevel" package="@livekit/components-core" exampleCount=0 /%}

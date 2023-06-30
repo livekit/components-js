@@ -11,3 +11,5 @@ Publish audio immediately after connecting to your LiveKit room.
 ```typescript
 audio?: AudioCaptureOptions | boolean;
 ```
+
+{% usage name="audio" package="@livekit/components-react" exampleCount=0 /%}

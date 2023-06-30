@@ -17,3 +17,5 @@ import { VideoTrack } from '@livekit/components-react';
 ```tsx
 <VideoTrack source={Track.Source.Camera} />
 ```
+
+{% usage name="videotrack" package="@livekit/components-react" exampleCount=1 /%}

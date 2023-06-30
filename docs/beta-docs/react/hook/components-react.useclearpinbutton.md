@@ -10,6 +10,8 @@
 import { useClearPinButton } from '@livekit/components-react';
 ```
 
+{% usage name="useclearpinbutton" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Parameters
 
 | Parameter | Type                                                                    | Description |

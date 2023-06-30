@@ -23,3 +23,5 @@ This component works only inside a PinContext.
   <ClearPinButton>Leave room</ClearPinButton>
 </LiveKitRoom>
 ```
+
+{% usage name="clearpinbutton" package="@livekit/components-react" exampleCount=1 /%}

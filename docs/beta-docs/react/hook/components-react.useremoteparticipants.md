@@ -11,3 +11,5 @@ The useRemoteParticipants
 ```typescript
 import { useRemoteParticipants } from '@livekit/components-react';
 ```
+
+{% usage name="useremoteparticipants" package="@livekit/components-react" exampleCount=0 /%}

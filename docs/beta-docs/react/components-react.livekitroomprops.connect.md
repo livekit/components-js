@@ -11,3 +11,5 @@ If set to true a connection to LiveKit room is initiated.
 ```typescript
 connect?: boolean;
 ```
+
+{% usage name="connect" package="@livekit/components-react" exampleCount=0 /%}

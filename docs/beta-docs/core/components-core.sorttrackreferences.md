@@ -13,3 +13,5 @@ export declare function sortTrackReferences(
   tracks: TrackReferenceOrPlaceholder[],
 ): TrackReferenceOrPlaceholder[];
 ```
+
+{% usage name="sorttrackreferences" package="@livekit/components-core" exampleCount=0 /%}

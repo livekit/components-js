@@ -19,3 +19,5 @@ import { DisconnectButton } from '@livekit/components-react';
   <DisconnectButton>Leave room</DisconnectButton>
 </LiveKitRoom>
 ```
+
+{% usage name="disconnectbutton" package="@livekit/components-react" exampleCount=1 /%}

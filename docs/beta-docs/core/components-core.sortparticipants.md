@@ -11,3 +11,5 @@ Default sort for participants, it'll order participants by: 1. local participant
 ```typescript
 export declare function sortParticipants(participants: Participant[]): Participant[];
 ```
+
+{% usage name="sortparticipants" package="@livekit/components-core" exampleCount=0 /%}

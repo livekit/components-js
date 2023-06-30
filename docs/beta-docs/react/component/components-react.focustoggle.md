@@ -20,6 +20,8 @@ import { FocusToggle } from '@livekit/components-react';
 </ParticipantTile>
 ```
 
+{% usage name="focustoggle" package="@livekit/components-react" exampleCount=1 /%}
+
 ## Properties
 
 | Property                                                                  | Modifiers | Type         | Description  |

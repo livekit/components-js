@@ -21,3 +21,5 @@ export type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'
 ```
 
 **References:** [LocalUserChoices](./react//components-react.localuserchoices.md)
+
+{% usage name="prejoinprops" package="@livekit/components-react" exampleCount=0 /%}

@@ -24,3 +24,5 @@ const participants = useParticipants();
   <ParticipantName />
 <ParticipantLoop />
 ```
+
+{% usage name="participantloop" package="@livekit/components-react" exampleCount=1 /%}

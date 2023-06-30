@@ -21,6 +21,8 @@ const tracks = useTracks();
 </CarouselLayout>;
 ```
 
+{% usage name="carouselview" package="@livekit/components-react" exampleCount=1 /%}
+
 ## Properties
 
 | Property                                                                   | Modifiers | Type                                                                                              | Description                                                                                                                                         |

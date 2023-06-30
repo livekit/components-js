@@ -15,3 +15,5 @@ export type TrackIdentifier<T extends Track.Source = Track.Source> =
 ```
 
 **References:** [TrackSource](./core//components-core.tracksource.md)<!-- -->, [TrackReference](./core//components-core.trackreference.md)
+
+{% usage name="trackidentifier" package="@livekit/components-core" exampleCount=0 /%}

@@ -11,3 +11,5 @@ The room from which the connection status should be displayed.
 ```typescript
 room?: Room;
 ```
+
+{% usage name="room" package="@livekit/components-react" exampleCount=0 /%}

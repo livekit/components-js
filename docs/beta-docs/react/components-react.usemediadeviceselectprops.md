@@ -10,6 +10,8 @@
 export interface UseMediaDeviceSelectProps
 ```
 
+{% usage name="usemediadeviceselectprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                             | Modifiers | Type            | Description  |

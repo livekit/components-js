@@ -17,3 +17,5 @@ import { ParticipantName } from '@livekit/components-react';
 ```tsx
 <ParticipantName />
 ```
+
+{% usage name="participantname" package="@livekit/components-react" exampleCount=1 /%}

@@ -12,6 +12,8 @@ The useSortedParticipants hook returns the only the active speakers of all parti
 import { useSortedParticipants } from '@livekit/components-react';
 ```
 
+{% usage name="usesortedparticipants" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Parameters
 
 | Parameter    | Type                     | Description |

@@ -11,3 +11,5 @@ A user specific access token for a client to authenticate to the room. This toke
 ```typescript
 token: string | undefined;
 ```
+
+{% usage name="token" package="@livekit/components-react" exampleCount=0 /%}

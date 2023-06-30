@@ -15,3 +15,5 @@ export type ControlBarControls = {
   leave?: boolean;
 };
 ```
+
+{% usage name="controlbarcontrols" package="@livekit/components-react" exampleCount=0 /%}

@@ -10,6 +10,8 @@
 import { useParticipantPermissions } from '@livekit/components-react';
 ```
 
+{% usage name="useparticipantpermissions" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Parameters
 
 | Parameter | Type                                                                                              | Description  |

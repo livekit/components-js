@@ -12,6 +12,8 @@ export interface FocusToggleProps extends React.ButtonHTMLAttributes<HTMLButtonE
 
 **Extends:** React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;
 
+{% usage name="focustoggleprops" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                  | Modifiers | Type         | Description  |

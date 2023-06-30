@@ -15,3 +15,5 @@ export declare function isMobileBrowser(): boolean;
 ## Remarks
 
 This should only be used if feature detection or other methods do not work!
+
+{% usage name="ismobilebrowser" package="@livekit/components-core" exampleCount=0 /%}

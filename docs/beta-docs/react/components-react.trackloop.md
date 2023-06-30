@@ -22,3 +22,5 @@ const tracks = useTracks([Track.Source.Camera]);
  </TrackContext.Consumer>
 <TrackLoop />
 ```
+
+{% usage name="trackloop" package="@livekit/components-react" exampleCount=1 /%}

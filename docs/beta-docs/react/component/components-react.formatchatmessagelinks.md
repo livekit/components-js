@@ -9,3 +9,5 @@
 ```typescript
 import { formatChatMessageLinks } from '@livekit/components-react';
 ```
+
+{% usage name="formatchatmessagelinks" package="@livekit/components-react" exampleCount=0 /%}

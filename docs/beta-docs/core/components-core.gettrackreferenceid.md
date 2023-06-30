@@ -13,3 +13,5 @@ export declare function getTrackReferenceId(
   trackReference: TrackReferenceOrPlaceholder | number,
 ): string;
 ```
+
+{% usage name="gettrackreferenceid" package="@livekit/components-core" exampleCount=0 /%}

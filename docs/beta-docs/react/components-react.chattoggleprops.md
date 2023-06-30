@@ -9,3 +9,5 @@
 ```typescript
 export type ChatToggleProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 ```
+
+{% usage name="chattoggleprops" package="@livekit/components-react" exampleCount=0 /%}

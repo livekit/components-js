@@ -10,6 +10,8 @@
 export interface UseRemoteParticipantsOptions
 ```
 
+{% usage name="useremoteparticipantsoptions" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Properties
 
 | Property                                                                                | Modifiers | Type          | Description                                                                                                                                                                                                                                                                                                                                                                                                                      |

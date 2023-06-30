@@ -16,6 +16,8 @@ Updating works with pagination. For example, if a participant starts speaking on
 import { useVisualStableUpdate } from '@livekit/components-react';
 ```
 
+{% usage name="usevisualstableupdate" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Parameters
 
 | Parameter       | Type                                                                                              | Description  |

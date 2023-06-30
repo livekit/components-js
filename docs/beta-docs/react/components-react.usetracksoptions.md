@@ -13,3 +13,5 @@ export type UseTracksOptions = {
   room?: Room;
 };
 ```
+
+{% usage name="usetracksoptions" package="@livekit/components-react" exampleCount=0 /%}

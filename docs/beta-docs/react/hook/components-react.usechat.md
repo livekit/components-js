@@ -10,6 +10,8 @@
 import { useChat } from '@livekit/components-react';
 ```
 
+{% usage name="usechat" package="@livekit/components-react" exampleCount=0 /%}
+
 **Returns:**
 
 { send: ((message: string) =&gt; Promise&lt;void&gt;) \| undefined; chatMessages: [ReceivedChatMessage](./core//components-core.receivedchatmessage.md)<!-- -->\[\]; isSending: boolean; }

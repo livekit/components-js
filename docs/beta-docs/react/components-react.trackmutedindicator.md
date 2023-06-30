@@ -19,3 +19,5 @@ TrackMutedIndicator: ({ source, participant, show, ...props }: TrackMutedIndicat
 <TrackMutedIndicator source={Track.Source.Camera} />
 <TrackMutedIndicator source={Track.Source.Microphone} />
 ```
+
+{% usage name="trackmutedindicator" package="@livekit/components-react" exampleCount=1 /%}

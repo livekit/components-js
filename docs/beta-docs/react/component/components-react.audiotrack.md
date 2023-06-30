@@ -19,3 +19,5 @@ import { AudioTrack } from '@livekit/components-react';
   <AudioTrack source={Track.Source.Microphone} />
 </ParticipantTile>
 ```
+
+{% usage name="audiotrack" package="@livekit/components-react" exampleCount=1 /%}

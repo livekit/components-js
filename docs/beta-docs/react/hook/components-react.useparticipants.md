@@ -11,3 +11,5 @@ The useParticipants hook returns all participants (local and remote) of the curr
 ```typescript
 import { useParticipants } from '@livekit/components-react';
 ```
+
+{% usage name="useparticipants" package="@livekit/components-react" exampleCount=0 /%}

@@ -13,3 +13,5 @@ export declare function getTrackReferenceSource(
   trackReference: TrackReferenceOrPlaceholder,
 ): Track.Source;
 ```
+
+{% usage name="gettrackreferencesource" package="@livekit/components-core" exampleCount=0 /%}

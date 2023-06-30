@@ -14,3 +14,5 @@ export type ControlBarProps = React.HTMLAttributes<HTMLDivElement> & {
 ```
 
 **References:** [ControlBarControls](./react//components-react.controlbarcontrols.md)
+
+{% usage name="controlbarprops" package="@livekit/components-react" exampleCount=0 /%}

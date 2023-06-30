@@ -12,3 +12,5 @@ export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement> &
 ```
 
 **References:** [UseParticipantInfoOptions](./react//components-react.useparticipantinfooptions.md)
+
+{% usage name="participantnameprops" package="@livekit/components-react" exampleCount=0 /%}

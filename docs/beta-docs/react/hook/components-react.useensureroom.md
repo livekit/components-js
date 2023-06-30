@@ -12,6 +12,8 @@ Ensures that a room is provided, either via context or explicitly as a parameter
 import { useEnsureRoom } from '@livekit/components-react';
 ```
 
+{% usage name="useensureroom" package="@livekit/components-react" exampleCount=0 /%}
+
 ## Parameters
 
 | Parameter | Type | Description  |

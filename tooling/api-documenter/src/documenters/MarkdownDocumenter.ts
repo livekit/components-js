@@ -65,6 +65,7 @@ import {
 import { DocumenterConfig } from './DocumenterConfig';
 import { MarkdownDocumenterAccessor } from '../plugin/MarkdownDocumenterAccessor';
 import { getCategorySubfolder, getFunctionType } from '../livekitUtils/classifiers';
+import { MarkDocTag } from '../nodes/MarkDocTag';
 
 export interface IMarkdownDocumenterOptions {
   apiModel: ApiModel;
@@ -499,6 +500,18 @@ export class MarkdownDocumenter {
 
           ++exampleNumber;
         }
+
+        output.appendNode(
+          new MarkDocTag({
+            configuration,
+            name: 'usage',
+            attributes: {
+              name: apiItem.displayName.toLowerCase(),
+              package: apiItem.getAssociatedPackage()?.name.toLowerCase() ?? '',
+              addTitle: exampleBlocks.length < 1,
+            },
+          }),
+        );
       }
     }
   }

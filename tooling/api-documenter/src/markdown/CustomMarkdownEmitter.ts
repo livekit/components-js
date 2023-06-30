@@ -22,6 +22,7 @@ import {
   IMarkdownEmitterOptions,
 } from './MarkdownEmitter';
 import { IndentedWriter } from '../utils/IndentedWriter';
+import { MarkDocTag } from '../nodes/MarkDocTag';
 
 export interface ICustomMarkdownEmitterOptions extends IMarkdownEmitterOptions {
   contextApiItem: ApiItem | undefined;
@@ -156,6 +157,27 @@ export class CustomMarkdownEmitter extends MarkdownEmitter {
         this.writeNodes(docEmphasisSpan.nodes, context);
         context.boldRequested = oldBold;
         context.italicRequested = oldItalic;
+        break;
+      }
+      case CustomDocNodeKind.MarkDocTag: {
+        const markDocTag: MarkDocTag = docNode as MarkDocTag;
+        const attributesString: string =
+          ' ' +
+          Object.entries(markDocTag.attributes)
+            .map(([key, value]) => {
+              switch (typeof value) {
+                case 'boolean':
+                case 'number':
+                  return `${key}=${value}`;
+                case 'string':
+                  return `${key}="${value}"`;
+              }
+            })
+            .join(' ');
+
+        writer.ensureSkippedLine();
+        writer.writeLine('{% ' + this.getEscapedText(markDocTag.name) + attributesString + ' /%}');
+        writer.writeLine();
         break;
       }
       default:

@@ -5,6 +5,7 @@ import { DocNoteBox } from './DocNoteBox';
 import { DocTable } from './DocTable';
 import { DocTableCell } from './DocTableCell';
 import { DocTableRow } from './DocTableRow';
+import { MarkDocTag } from './MarkDocTag';
 
 // Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
@@ -19,6 +20,7 @@ export const enum CustomDocNodeKind {
   Table = 'Table',
   TableCell = 'TableCell',
   TableRow = 'TableRow',
+  MarkDocTag = 'MarkDocTag',
 }
 
 export class CustomDocNodes {
@@ -35,6 +37,7 @@ export class CustomDocNodes {
         { docNodeKind: CustomDocNodeKind.Table, constructor: DocTable },
         { docNodeKind: CustomDocNodeKind.TableCell, constructor: DocTableCell },
         { docNodeKind: CustomDocNodeKind.TableRow, constructor: DocTableRow },
+        { docNodeKind: CustomDocNodeKind.MarkDocTag, constructor: MarkDocTag },
       ]);
 
       configuration.docNodeManager.registerAllowableChildren(CustomDocNodeKind.EmphasisSpan, [
@@ -46,6 +49,7 @@ export class CustomDocNodes {
         CustomDocNodeKind.Heading,
         CustomDocNodeKind.NoteBox,
         CustomDocNodeKind.Table,
+        CustomDocNodeKind.MarkDocTag,
       ]);
 
       configuration.docNodeManager.registerAllowableChildren(DocNodeKind.Paragraph, [

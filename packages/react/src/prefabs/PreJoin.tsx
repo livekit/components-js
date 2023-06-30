@@ -29,10 +29,10 @@ export type LocalUserChoices = {
 
 const DEFAULT_USER_CHOICES = {
   username: '',
-  videoEnabled: true,
-  audioEnabled: true,
-  videoDeviceId: '',
-  audioDeviceId: '',
+  videoEnabled: false,
+  audioEnabled: false,
+  videoDeviceId: 'default',
+  audioDeviceId: 'default',
 };
 
 /** @public */

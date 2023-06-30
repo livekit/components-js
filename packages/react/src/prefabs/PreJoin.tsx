@@ -273,7 +273,7 @@ export const PreJoin = ({
         )}
       </div>
       <div className="lk-button-group-container">
-        {/* <div className="lk-button-group audio">
+        <div className="lk-button-group audio">
           <TrackToggle
             initialState={audioEnabled}
             source={Track.Source.Microphone}
@@ -286,13 +286,12 @@ export const PreJoin = ({
               initialSelection={audio.selectedDevice?.deviceId}
               kind="audioinput"
               onActiveDeviceChange={(_, deviceId) => {
-                log.warn('active device chanaged', deviceId);
                 setAudioDeviceId(deviceId);
               }}
               disabled={!!!audio.selectedDevice}
             />
           </div>
-        </div> */}
+        </div>
         <div className="lk-button-group video">
           <TrackToggle
             initialState={videoEnabled}
@@ -306,7 +305,6 @@ export const PreJoin = ({
               initialSelection={video.selectedDevice?.deviceId}
               kind="videoinput"
               onActiveDeviceChange={(_, deviceId) => {
-                log.warn('active device chanaged', deviceId);
                 setVideoDeviceId(deviceId);
               }}
               disabled={!!!video.selectedDevice}

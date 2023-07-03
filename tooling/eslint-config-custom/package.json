@@ -23,10 +23,7 @@
     "eslint-plugin-react": "^7.32.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-standard": "^4.1.0",
-    "eslint-plugin-svelte3": "^4.0.0",
     "eslint-plugin-tsdoc": "^0.2.17",
-    "prettier-plugin-svelte": "^2.9.0",
-    "svelte": "^3.55.1",
     "typescript": "^5.0.0"
   }
 }

@@ -10,6 +10,16 @@ export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLBut
   initialSelection?: string;
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
   tracks?: Partial<Record<MediaDeviceKind, LocalAudioTrack | LocalVideoTrack | undefined>>;
+  /**
+   * this will call getUserMedia if the permissions are not yet given to enumerate the devices with device labels.
+   * in some browsers multiple calls to getUserMedia result in multiple permission prompts.
+   * It's generally advised only flip this to true, once a (preview) track has been acquired successfully with the
+   * appropriate permissions.
+   *
+   * @see [PreJoin](./PreJoin.tsx)
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices
+   */
+  requestPermissions?: boolean;
 }
 
 /**
@@ -32,6 +42,7 @@ export const MediaDeviceMenu = ({
   initialSelection,
   onActiveDeviceChange,
   tracks,
+  requestPermissions = false,
   ...props
 }: MediaDeviceMenuProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -107,6 +118,7 @@ export const MediaDeviceMenu = ({
               onDeviceListChange={setDevices}
               kind={kind}
               track={tracks?.[kind]}
+              requestPermissions={requestPermissions}
             />
           ) : (
             <>
@@ -118,6 +130,7 @@ export const MediaDeviceMenu = ({
                 }
                 onDeviceListChange={setDevices}
                 track={tracks?.audioinput}
+                requestPermissions={requestPermissions}
               />
               <div className="lk-device-menu-heading">Video inputs</div>
               <MediaDeviceSelect
@@ -127,6 +140,7 @@ export const MediaDeviceMenu = ({
                 }
                 onDeviceListChange={setDevices}
                 track={tracks?.videoinput}
+                requestPermissions={requestPermissions}
               />
             </>
           )}

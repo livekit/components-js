@@ -10,7 +10,7 @@ import { useLocalParticipantPermissions } from '../hooks';
 import { useMediaQuery } from '../hooks/internal';
 import { useMaybeLayoutContext } from '../context';
 import { supportsScreenSharing } from '@livekit/components-core';
-import { SettingsMenuOptions, SettingsMenu } from '../components/controls/ProcessorsMenu';
+import { SettingsMenuOptions, SettingsMenu } from '../components/controls/SettingsMenu';
 
 /** @public */
 export type ControlBarControls = {

@@ -1,0 +1,12 @@
+.tabs {
+  position: relative;
+  display: flex;
+  align-content: space-between;
+
+  > span {
+    padding: 0.5rem;
+    &[data-active] {
+      text-decoration: underline var(--accent-bg);
+    }
+  }
+}

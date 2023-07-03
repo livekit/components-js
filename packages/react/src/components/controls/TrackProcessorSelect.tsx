@@ -26,6 +26,11 @@ export function TrackProcessorSelect({
 
   const processors = Object.values(processorMap);
 
+  const isActive = (processor: TrackProcessor<Track.Kind>) =>
+    track instanceof LocalTrack && processor.name === track.getProcessor()?.name;
+
+  const [activeProcessor, setActiveProcessor] = React.useState(processors.find(isActive));
+
   const handleProcessorSelect = React.useCallback(
     async (processorName: string | null) => {
       if (track instanceof LocalTrack) {
@@ -35,8 +40,10 @@ export function TrackProcessorSelect({
           if (targetProcessor) {
             await track.setProcessor(targetProcessor);
           }
+          setActiveProcessor(targetProcessor);
         } else {
           await track.stopProcessor();
+          setActiveProcessor(undefined);
         }
       }
     },
@@ -48,16 +55,9 @@ export function TrackProcessorSelect({
     [props],
   );
 
-  const isActive = (processor: TrackProcessor<Track.Kind>) =>
-    track instanceof LocalTrack && processor.name === track.getProcessor()?.name;
-
   return (
     <ul {...mergedProps}>
-      <li
-        data-lk-active={!processors.some(isActive)}
-        aria-selected={!processors.some(isActive)}
-        role="option"
-      >
+      <li data-lk-active={!activeProcessor} aria-selected={!activeProcessor} role="option">
         <button className="lk-button" onClick={() => handleProcessorSelect(null)}>
           None
         </button>
@@ -66,8 +66,8 @@ export function TrackProcessorSelect({
         <li
           key={processor.name}
           id={processor.name}
-          data-lk-active={isActive(processor)}
-          aria-selected={isActive(processor)}
+          data-lk-active={activeProcessor === processor}
+          aria-selected={activeProcessor === processor}
           role="option"
         >
           <button className="lk-button" onClick={() => handleProcessorSelect(processor.name)}>

@@ -19,7 +19,7 @@ export type SettingsMenuOptions = {
 /**
  * @alpha
  */
-export interface ProcessorsMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface SettingsMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   settings: SettingsMenuOptions;
 }
 
@@ -27,7 +27,7 @@ export interface ProcessorsMenuProps extends React.ButtonHTMLAttributes<HTMLButt
  *
  * @alpha
  */
-export function SettingsMenu({ settings, ...props }: ProcessorsMenuProps) {
+export function SettingsMenu({ settings, ...props }: SettingsMenuProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const mergedProps = mergeProps(props, {
     onClick: () => setIsOpen((state) => !state),
@@ -46,25 +46,31 @@ export function SettingsMenu({ settings, ...props }: ProcessorsMenuProps) {
       <button {...mergedProps}>{props.children ?? 'Effects'}</button>
       {isOpen && (
         <div className="lk-modal">
-          <div>
-            {tabs.map((tab) => (
-              <span key={tab} onClick={() => setActiveTab(tab)}>
-                {settings[tab]?.label}
-              </span>
-            ))}
+          <div className="lk-settings" style={{ width: '100%' }}>
+            <div className="lk-tabs">
+              {tabs.map((tab) => (
+                <span
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  data-lk-active={tab === activeTab}
+                >
+                  {settings[tab]?.label}
+                </span>
+              ))}
+            </div>
+            {activeTab === 'media' && settings.media?.camera && (
+              <>
+                <h3>{settings.media.camera.label}</h3>
+                <section>
+                  <h4>{settings.media.camera.processors.label}</h4>
+                  <TrackProcessorSelect
+                    processorMap={settings.media.camera.processors.processors}
+                    source={Track.Source.Camera}
+                  />
+                </section>
+              </>
+            )}
           </div>
-          {activeTab === 'media' && settings.media?.camera && (
-            <>
-              <h3>{settings.media.camera.label}</h3>
-              <section>
-                <h4>{settings.media.camera.processors.label}</h4>
-                <TrackProcessorSelect
-                  processorMap={settings.media.camera.processors.processors}
-                  source={Track.Source.Camera}
-                />
-              </section>
-            </>
-          )}
           <button onClick={() => setIsOpen(false)}>close</button>
         </div>
       )}

@@ -86,7 +86,7 @@
     "rimraf": "^5.0.0",
     "sass": "^1.54.6",
     "typed-scss-modules": "^7.0.0",
-    "vitest": "^0.31.0"
+    "vitest": "^0.32.0"
   },
   "engines": {
     "node": ">=14"

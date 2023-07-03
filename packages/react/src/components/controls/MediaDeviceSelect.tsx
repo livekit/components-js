@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useMaybeRoomContext } from '../../context';
-import { setupDeviceSelector, createMediaDeviceObserver } from '@livekit/components-core';
+import { setupDeviceSelector, createMediaDeviceObserver, log } from '@livekit/components-core';
 import { mergeProps } from '../../utils';
 import type { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
 import { useObservableState } from '../../hooks/internal/useObservableState';
@@ -34,6 +34,7 @@ export function useMediaDeviceSelect({ kind, room, track }: UseMediaDeviceSelect
 
   React.useEffect(() => {
     const listener = activeDeviceObservable.subscribe((deviceId) => {
+      log.info('setCurrentDeviceId');
       if (deviceId) setCurrentDeviceId(deviceId);
     });
     return () => {

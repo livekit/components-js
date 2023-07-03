@@ -63,13 +63,27 @@ export function usePreviewTracks(
 
   React.useEffect(() => {
     let trackPromise: Promise<LocalTrack[]> | undefined = undefined;
+    let needsCleanup = false;
     if (options.audio || options.video) {
       trackPromise = createLocalTracks(options);
-      trackPromise.then(setTracks).catch(onError);
+      trackPromise
+        .then((tracks) => {
+          if (needsCleanup) {
+            tracks.forEach((tr) => tr.stop());
+          } else {
+            setTracks(tracks);
+          }
+        })
+        .catch(onError);
     }
 
     return () => {
-      trackPromise?.then((tracks) => tracks.forEach((track) => track.stop()));
+      needsCleanup = true;
+      trackPromise?.then((tracks) =>
+        tracks.forEach((track) => {
+          track.stop();
+        }),
+      );
     };
   }, [JSON.stringify(options)]);
 
@@ -238,6 +252,7 @@ export const PreJoin = ({
 
   React.useEffect(() => {
     if (videoEl.current && videoTrack) {
+      videoTrack.unmute();
       videoTrack.attach(videoEl.current);
     }
 

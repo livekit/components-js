@@ -143,15 +143,9 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
       return;
     }
     if (!enabled) {
-      if (localTrack) {
-        log.debug(`muting ${kind} track`);
-        localTrack.mute().then(() => log.debug(localTrack.mediaStreamTrack));
-      }
-    } else if (
-      localTrack &&
-      selectedDevice?.deviceId &&
-      prevDeviceId.current !== selectedDevice?.deviceId
-    ) {
+      log.debug(`muting ${kind} track`);
+      localTrack.mute().then(() => log.debug(localTrack.mediaStreamTrack));
+    } else if (selectedDevice?.deviceId && prevDeviceId.current !== selectedDevice?.deviceId) {
       log.debug(`switching ${kind} device from`, prevDeviceId.current, selectedDevice.deviceId);
       switchDevice(localTrack, selectedDevice.deviceId);
     } else {

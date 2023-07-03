@@ -1382,6 +1382,7 @@ export class MarkdownDocumenter {
     const subFolder: string = getCategorySubfolder(apiItem);
     for (const hierarchyItem of apiItem.getHierarchy()) {
       // For overloaded methods, add a suffix such as "MyClass.myMethod_2".
+      console.log('hierarchyItem', hierarchyItem.displayName);
       let qualifiedName: string = Utilities.getSafeFilenameForName(hierarchyItem.displayName);
       if (ApiParameterListMixin.isBaseClassOf(hierarchyItem)) {
         if (hierarchyItem.overloadIndex > 1) {
@@ -1397,13 +1398,17 @@ export class MarkdownDocumenter {
         case ApiItemKind.EnumMember:
           break;
         case ApiItemKind.Package:
-          baseName = Utilities.getSafeFilenameForName(
-            PackageName.getUnscopedName(hierarchyItem.displayName),
-          );
+          // baseName = Utilities.getSafeFilenameForName(
+          //   PackageName.getUnscopedName(hierarchyItem.displayName),
+          // );
           break;
         default:
-          baseName += '.' + qualifiedName;
+          baseName = [baseName, qualifiedName].filter((part) => part !== '').join('.');
       }
+    }
+
+    if (baseName === '') {
+      baseName = 'index';
     }
 
     return subFolder + baseName + '.md';

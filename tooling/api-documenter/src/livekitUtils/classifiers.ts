@@ -41,14 +41,13 @@ export function getFunctionType(apiItem: ApiItem): LkType {
 
 export function getCategorySubfolder(apiItem: ApiItem): string {
   let packagePath: string = '';
-
   if (isComponentCorePackage(apiItem)) {
     packagePath = 'core';
   } else if (isComponentReactPackage(apiItem)) {
     packagePath = 'react';
   }
 
-  let category = '';
+  let category: string = '';
   switch (getFunctionType(apiItem)) {
     case 'component':
     case 'prefab':
@@ -59,5 +58,5 @@ export function getCategorySubfolder(apiItem: ApiItem): string {
       break;
   }
 
-  return [packagePath, category].join('/');
+  return [packagePath, category].join('/') + '/';
 }

@@ -23,7 +23,18 @@ const ProcessorsExample: NextPage = () => {
   React.useEffect(() => {
     import('@livekit/track-processors').then((pkg) => {
       setControlBarOptions({
-        camera: { processors: { 'Background Blur': pkg.BackgroundBlur(10) } },
+        settings: {
+          media: {
+            label: 'Audio and Video',
+            camera: {
+              label: 'Camera',
+              processors: {
+                label: 'Effects',
+                processors: { 'Background Blur': pkg.BackgroundBlur(10) },
+              },
+            },
+          },
+        },
         chat: true,
       });
     });

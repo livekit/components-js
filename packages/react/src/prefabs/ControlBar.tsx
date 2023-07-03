@@ -1,5 +1,4 @@
 import { Track } from 'livekit-client';
-import type { TrackProcessor } from 'livekit-client';
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
@@ -11,18 +10,16 @@ import { useLocalParticipantPermissions } from '../hooks';
 import { useMediaQuery } from '../hooks/internal';
 import { useMaybeLayoutContext } from '../context';
 import { supportsScreenSharing } from '@livekit/components-core';
-
-/**
- * @alpha
- */
-export type CameraOptions = {
-  processors?: Record<string, TrackProcessor<Track.Kind>>;
-};
+import { SettingsMenuOptions, SettingsMenu } from '../components/controls/ProcessorsMenu';
 
 /** @public */
 export type ControlBarControls = {
   microphone?: boolean;
-  camera?: boolean | CameraOptions;
+  camera?: boolean;
+  /**
+   * @alpha
+   */
+  settings?: SettingsMenuOptions;
   chat?: boolean;
   screenShare?: boolean;
   leave?: boolean;
@@ -114,14 +111,7 @@ export function ControlBar({ variation, controls, ...props }: ControlBarProps) {
             {showText && 'Camera'}
           </TrackToggle>
           <div className="lk-button-group-menu">
-            <MediaDeviceMenu
-              kind="videoinput"
-              processors={
-                typeof visibleControls.camera !== 'boolean'
-                  ? visibleControls.camera.processors
-                  : undefined
-              }
-            />
+            <MediaDeviceMenu kind="videoinput" />
           </div>
         </div>
       )}
@@ -135,6 +125,7 @@ export function ControlBar({ variation, controls, ...props }: ControlBarProps) {
           {showText && (isScreenShareEnabled ? 'Stop screen share' : 'Share screen')}
         </TrackToggle>
       )}
+      {visibleControls.settings && <SettingsMenu settings={visibleControls.settings} />}
       {visibleControls.chat && (
         <ChatToggle>
           {showIcon && <ChatIcon />}

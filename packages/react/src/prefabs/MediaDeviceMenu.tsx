@@ -2,16 +2,12 @@ import { computeMenuPosition, wasClickOutside } from '@livekit/components-core';
 import * as React from 'react';
 import { MediaDeviceSelect } from '../components/controls/MediaDeviceSelect';
 import { log } from '@livekit/components-core';
-import type { TrackProcessor } from 'livekit-client';
-import { Track } from 'livekit-client';
-import { TrackProcessorSelect } from '../components/controls/TrackProcessorSelect';
 
 /** @public */
 export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   kind?: MediaDeviceKind;
   initialSelection?: string;
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
-  processors?: Record<string, TrackProcessor<Track.Kind>>;
 }
 
 /**
@@ -33,7 +29,6 @@ export const MediaDeviceMenu = ({
   kind,
   initialSelection,
   onActiveDeviceChange,
-  processors,
   ...props
 }: MediaDeviceMenuProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -142,13 +137,6 @@ export const MediaDeviceMenu = ({
           onDeviceListChange={setDevices}
           kind={kind}
         />
-        {processors && Object.keys(processors).length > 0 && kind === 'videoinput' && (
-          <TrackProcessorSelect
-            onClick={() => setIsOpen(false)}
-            processorMap={processors}
-            source={Track.Source.Camera}
-          />
-        )}
       </div>
     </>
   );

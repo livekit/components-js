@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 1.0.3
+
+### Patch Changes
+
+- Update devDependencies (non-major) - [#540](https://github.com/livekit/components-js/pull/540) ([@renovate](https://github.com/apps/renovate))
+
 ## 1.0.2
 
 ### Patch Changes

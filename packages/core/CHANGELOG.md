@@ -1,5 +1,15 @@
 # @livekit/components-core
 
+## 0.6.10
+
+### Patch Changes
+
+- Improve PreJoin component by requesting combined permissions when possible - [#537](https://github.com/livekit/components-js/pull/537) ([@lukasIO](https://github.com/lukasIO))
+
+- Improve media device selection - [#535](https://github.com/livekit/components-js/pull/535) ([@lukasIO](https://github.com/lukasIO))
+
+- Update devDependencies (non-major) - [#540](https://github.com/livekit/components-js/pull/540) ([@renovate](https://github.com/apps/renovate))
+
 ## 0.6.9
 
 ### Patch Changes

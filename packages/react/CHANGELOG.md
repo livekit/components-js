@@ -1,5 +1,18 @@
 # @livekit/components-react
 
+## 1.0.7
+
+### Patch Changes
+
+- Improve PreJoin component by requesting combined permissions when possible - [#537](https://github.com/livekit/components-js/pull/537) ([@lukasIO](https://github.com/lukasIO))
+
+- Improve media device selection - [#535](https://github.com/livekit/components-js/pull/535) ([@lukasIO](https://github.com/lukasIO))
+
+- Update devDependencies (non-major) - [#540](https://github.com/livekit/components-js/pull/540) ([@renovate](https://github.com/apps/renovate))
+
+- Updated dependencies [[`9829600`](https://github.com/livekit/components-js/commit/98296009c5e228ce440f0285d84a3fe49ad20801), [`99878de`](https://github.com/livekit/components-js/commit/99878de51a59dedcf8758b912541123a64a66d3d), [`f7fdbc5`](https://github.com/livekit/components-js/commit/f7fdbc5adacbf05f7e7e33b131777db08cd727aa)]:
+  - @livekit/components-core@0.6.10
+
 ## 1.0.6
 
 ### Patch Changes

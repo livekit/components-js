@@ -52,7 +52,7 @@ export function useMediaDeviceSelect({
 
   React.useEffect(() => {
     const listener = activeDeviceObservable.subscribe((deviceId) => {
-      log.info('setCurrentDeviceId');
+      log.info('setCurrentDeviceId', deviceId);
       if (deviceId) setCurrentDeviceId(deviceId);
     });
     return () => {
@@ -118,7 +118,7 @@ export function MediaDeviceSelect({
     requestPermissions,
   });
   React.useEffect(() => {
-    if (initialSelection) {
+    if (initialSelection !== undefined) {
       setActiveMediaDevice(initialSelection);
     }
   }, [setActiveMediaDevice]);
@@ -152,14 +152,18 @@ export function MediaDeviceSelect({
     [className, props],
   );
 
+  function isActive(deviceId: string, activeDeviceId: string, index: number) {
+    return deviceId === activeDeviceId || (index === 0 && activeDeviceId === 'default');
+  }
+
   return (
     <ul {...mergedProps}>
-      {devices.map((device) => (
+      {devices.map((device, index) => (
         <li
           key={device.deviceId}
           id={device.deviceId}
-          data-lk-active={device.deviceId === activeDeviceId}
-          aria-selected={device.deviceId === activeDeviceId}
+          data-lk-active={isActive(device.deviceId, activeDeviceId, index)}
+          aria-selected={isActive(device.deviceId, activeDeviceId, index)}
           role="option"
         >
           <button className="lk-button" onClick={() => handleActiveDeviceChange(device.deviceId)}>

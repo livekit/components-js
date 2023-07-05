@@ -1,4 +1,10 @@
-import type { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
+import {
+  Track,
+  type LocalAudioTrack,
+  type LocalVideoTrack,
+  type Room,
+  LocalTrack,
+} from 'livekit-client';
 import { BehaviorSubject } from 'rxjs';
 import { log } from '../logger';
 import { prefixClass } from '../styles-interface';
@@ -33,11 +39,24 @@ export function setupDeviceSelector(
           `We tried to select the device with id (${id}), but the browser decided to select the device with id (${actualDeviceId}) instead.`,
         );
       }
-      activeDeviceSubject.next(id === 'default' ? id : actualDeviceId);
+      let targetTrack: LocalTrack | undefined = undefined;
+      if (kind === 'audioinput')
+        targetTrack = room.localParticipant.getTrack(Track.Source.Microphone)?.track;
+      else if (kind === 'videoinput') {
+        targetTrack = room.localParticipant.getTrack(Track.Source.Camera)?.track;
+      }
+      const useDefault =
+        (id === 'default' && !targetTrack) ||
+        (id === 'default' && targetTrack?.mediaStreamTrack.label.startsWith('Default'));
+      activeDeviceSubject.next(useDefault ? id : actualDeviceId);
     } else if (localTrack) {
+      log.info('try to acquire', id);
+      log.info(await navigator.mediaDevices.enumerateDevices());
       await localTrack.setDeviceId(options.exact ? { exact: id } : id);
       const actualId = await localTrack.getDeviceId();
-      activeDeviceSubject.next(id === 'default' ? id : actualId);
+      activeDeviceSubject.next(
+        id === 'default' && localTrack.mediaStreamTrack.label.startsWith('Default') ? id : actualId,
+      );
     } else if (activeDeviceSubject.value !== id) {
       log.warn(
         'device switch skipped, please provide either a room or a local track to switch on. ',

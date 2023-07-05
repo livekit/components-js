@@ -23,8 +23,8 @@ export interface UseMediaDeviceSelectProps {
    * It's generally advised only flip this to true, once a (preview) track has been acquired successfully with the
    * appropriate permissions.
    *
-   * @see [MediaDeviceMenu](../../prefabs/MediaDeviceMenu.tsx)
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices
+   * @see {@link MediaDeviceMenu}
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices | MDN enumerateDevices}
    */
   requestPermissions?: boolean;
 }
@@ -81,8 +81,8 @@ export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListEl
    * It's generally advised only flip this to true, once a (preview) track has been acquired successfully with the
    * appropriate permissions.
    *
-   * @see [MediaDeviceMenu](../../prefabs/MediaDeviceMenu.tsx)
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices
+   * @see {@link MediaDeviceMenu}
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices | MDN enumerateDevices}
    */
   requestPermissions?: boolean;
 }

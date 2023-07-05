@@ -16,8 +16,8 @@ export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLBut
    * It's generally advised only flip this to true, once a (preview) track has been acquired successfully with the
    * appropriate permissions.
    *
-   * @see [PreJoin](./PreJoin.tsx)
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices
+   * @see {@link PreJoin}
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices | MDN enumerateDevices}
    */
   requestPermissions?: boolean;
 }
@@ -51,7 +51,7 @@ export const MediaDeviceMenu = ({
 
   const handleActiveDeviceChange = (kind: MediaDeviceKind, deviceId: string) => {
     log.debug('handle device change');
-    // setIsOpen(false); // TODO re-enable
+    setIsOpen(false);
     onActiveDeviceChange?.(kind, deviceId);
   };
 

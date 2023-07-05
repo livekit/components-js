@@ -3,7 +3,7 @@ import {
   type LocalAudioTrack,
   type LocalVideoTrack,
   type Room,
-  LocalTrack,
+  type LocalTrack,
 } from 'livekit-client';
 import { BehaviorSubject } from 'rxjs';
 import { log } from '../logger';
@@ -50,8 +50,6 @@ export function setupDeviceSelector(
         (id === 'default' && targetTrack?.mediaStreamTrack.label.startsWith('Default'));
       activeDeviceSubject.next(useDefault ? id : actualDeviceId);
     } else if (localTrack) {
-      log.info('try to acquire', id);
-      log.info(await navigator.mediaDevices.enumerateDevices());
       await localTrack.setDeviceId(options.exact ? { exact: id } : id);
       const actualId = await localTrack.getDeviceId();
       activeDeviceSubject.next(

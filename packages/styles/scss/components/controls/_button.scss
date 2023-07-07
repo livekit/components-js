@@ -16,13 +16,17 @@
     background-color: var(--control-hover-bg);
   }
 
-  // &:not(:disabled):active,
   &[aria-pressed='true'] {
     background-color: var(--control-active-bg);
 
     &:hover {
       background-color: var(--control-active-hover-bg);
     }
+  }
+
+  &:not([disabled])[data-active='true'] {
+    color: var(--accent-fg);
+    background-color: var(--accent-bg);
   }
 
   // &[data-lk-enabled="true"] {

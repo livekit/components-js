@@ -8,18 +8,23 @@ interface UseToggleChatProps {
 }
 
 function useToggleChat({ props }: UseToggleChatProps) {
-  const { dispatch } = useLayoutContext().widget;
+  const { dispatch, state } = useLayoutContext().widget;
   const { className } = React.useMemo(() => setupChatToggle(), []);
 
   const mergedProps = React.useMemo(
     () =>
-      mergeProps(props, {
-        className,
-        onClick: () => {
-          if (dispatch) dispatch({ msg: 'toggle_chat' });
+      mergeProps(
+        props,
+        {
+          className,
+          onClick: () => {
+            if (dispatch) dispatch({ msg: 'toggle_chat' });
+          },
         },
-      }),
-    [props, className, dispatch],
+        // @ts-expect-error custom data props
+        { 'data-lk-active': state?.showChat ? 'true' : 'false' },
+      ),
+    [props, className, dispatch, state?.showChat],
   );
 
   return { mergedProps };

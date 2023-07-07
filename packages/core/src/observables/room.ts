@@ -198,8 +198,8 @@ export function createMediaDeviceObserver(kind?: MediaDeviceKind, requestPermiss
       );
     }
     navigator?.mediaDevices?.addEventListener('devicechange', onDeviceChange);
-    // because we rely on an async function, trigger the first update instead of using startWith
   }
+  // because we rely on an async function, concat the promise to retrieve the initial values with the observable
   return concat(Room.getLocalDevices(kind, requestPermissions), observable);
 }
 

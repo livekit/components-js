@@ -1,5 +1,5 @@
 module.exports = {
-  plugins: ['@typescript-eslint/eslint-plugin', 'eslint-plugin-tsdoc', 'svelte3', 'react-hooks'],
+  plugins: ['@typescript-eslint/eslint-plugin', 'eslint-plugin-tsdoc', 'react-hooks'],
   extends: [
     'next',
     'turbo',
@@ -7,7 +7,6 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:@typescript-eslint/recommended',
   ],
-  overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
   env: {
     node: true,
   },
@@ -22,7 +21,6 @@ module.exports = {
     react: {
       version: '18',
     },
-    'svelte3/typescript': "() => require('typescript')",
   },
   rules: {
     'tsdoc/syntax': 'warn',

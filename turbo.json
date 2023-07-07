@@ -42,6 +42,7 @@
     "api-check": {
       "cache": false,
       "dependsOn": ["^build"]
-    }
+    },
+    "api-check:update": {}
   }
 }

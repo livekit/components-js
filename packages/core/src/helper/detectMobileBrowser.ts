@@ -1,4 +1,4 @@
-function isWeb(): boolean {
+export function isWeb(): boolean {
   return typeof document !== 'undefined';
 }
 

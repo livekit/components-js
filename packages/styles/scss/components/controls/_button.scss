@@ -24,21 +24,6 @@
     }
   }
 
-  &:not([disabled])[data-active='true'] {
-    color: var(--accent-fg);
-    background-color: var(--accent-bg);
-  }
-
-  // &[data-lk-enabled="true"] {
-  //   color: var(--bg);
-  //   background-color: var(--fg);
-  // }
-
-  // &[data-lk-enabled="false"]:not([data-lk-source="screen_share"]) {
-  //   color: var(--danger-text);
-  //   background-color: var(--danger-bg);
-  // }
-
   &:disabled {
     opacity: 0.5;
   }

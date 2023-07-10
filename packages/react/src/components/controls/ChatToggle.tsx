@@ -21,8 +21,7 @@ function useToggleChat({ props }: UseToggleChatProps) {
             if (dispatch) dispatch({ msg: 'toggle_chat' });
           },
         },
-        // @ts-expect-error custom data props
-        { 'data-lk-active': state?.showChat ? 'true' : 'false' },
+        { 'aria-pressed': state?.showChat ? 'true' : 'false' },
       ),
     [props, className, dispatch, state?.showChat],
   );

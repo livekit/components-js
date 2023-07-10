@@ -4,19 +4,23 @@ import styles from '../styles/Home.module.scss';
 import { faker } from '@faker-js/faker';
 
 const EXAMPLE_ROUTES = {
-  minimal: { title: 'Minimal example', href: `/minimal?user=${faker.name.fullName()}` },
-  simple: { title: 'Simple example', href: `/simple?user=${faker.name.fullName()}` },
+  minimal: { title: 'Minimal example', href: () => `/minimal?user=${faker.name.fullName()}` },
+  simple: { title: 'Simple example', href: () => `/simple?user=${faker.name.fullName()}` },
   audioOnly: {
     title: 'Audio only example',
-    href: `/audio-only?user=${faker.name.fullName()}`,
+    href: () => `/audio-only?user=${faker.name.fullName()}`,
   },
   customize: {
     title: 'Simple example with custom components',
-    href: `/customize?user=${faker.name.fullName()}`,
+    href: () => `/customize?user=${faker.name.fullName()}`,
   },
   clubhouse: {
     title: 'Clubhouse clone build with LiveKit components',
-    href: `/clubhouse?user=${faker.name.fullName()}`,
+    href: () => `/clubhouse?user=${faker.name.fullName()}`,
+  },
+  processors: {
+    title: 'Minimal example with background blur',
+    href: () => `/processors?user=${faker.name.fullName()}`,
   },
 } as const;
 
@@ -42,7 +46,7 @@ const Home: NextPage = () => {
           {Object.values(EXAMPLE_ROUTES).map(({ title, href }, index) => {
             return (
               <li className={styles.listItem} key={index}>
-                <a className={styles.link} href={href}>
+                <a className={styles.link} href={href()}>
                   {title}
                 </a>
               </li>

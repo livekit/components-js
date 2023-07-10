@@ -1,4 +1,10 @@
-import type { Room } from 'livekit-client';
+import {
+  Track,
+  type LocalAudioTrack,
+  type LocalVideoTrack,
+  type Room,
+  type LocalTrack,
+} from 'livekit-client';
 import { BehaviorSubject } from 'rxjs';
 import { log } from '../logger';
 import { prefixClass } from '../styles-interface';
@@ -12,7 +18,11 @@ export type SetMediaDeviceOptions = {
   exact?: boolean;
 };
 
-export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
+export function setupDeviceSelector(
+  kind: MediaDeviceKind,
+  room?: Room,
+  localTrack?: LocalAudioTrack | LocalVideoTrack,
+) {
   const activeDeviceSubject = new BehaviorSubject<string | undefined>(undefined);
 
   const activeDeviceObservable = room
@@ -29,9 +39,26 @@ export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room) {
           `We tried to select the device with id (${id}), but the browser decided to select the device with id (${actualDeviceId}) instead.`,
         );
       }
-      activeDeviceSubject.next(id === 'default' ? id : actualDeviceId);
-    } else {
-      log.debug('Skip the device switch because the room object is not available. ');
+      let targetTrack: LocalTrack | undefined = undefined;
+      if (kind === 'audioinput')
+        targetTrack = room.localParticipant.getTrack(Track.Source.Microphone)?.track;
+      else if (kind === 'videoinput') {
+        targetTrack = room.localParticipant.getTrack(Track.Source.Camera)?.track;
+      }
+      const useDefault =
+        (id === 'default' && !targetTrack) ||
+        (id === 'default' && targetTrack?.mediaStreamTrack.label.startsWith('Default'));
+      activeDeviceSubject.next(useDefault ? id : actualDeviceId);
+    } else if (localTrack) {
+      await localTrack.setDeviceId(options.exact ? { exact: id } : id);
+      const actualId = await localTrack.getDeviceId();
+      activeDeviceSubject.next(
+        id === 'default' && localTrack.mediaStreamTrack.label.startsWith('Default') ? id : actualId,
+      );
+    } else if (activeDeviceSubject.value !== id) {
+      log.warn(
+        'device switch skipped, please provide either a room or a local track to switch on. ',
+      );
       activeDeviceSubject.next(id);
     }
   };

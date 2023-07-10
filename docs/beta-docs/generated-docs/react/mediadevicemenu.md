@@ -13,6 +13,8 @@ MediaDeviceMenu: ({
   kind,
   initialSelection,
   onActiveDeviceChange,
+  tracks,
+  requestPermissions,
   ...props
 }: MediaDeviceMenuProps) => React.JSX.Element;
 ```

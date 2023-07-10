@@ -14,9 +14,9 @@ import { useMediaDeviceSelect } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter      | Type                                                               | Description |
-| -------------- | ------------------------------------------------------------------ | ----------- |
-| { kind, room } | [UseMediaDeviceSelectProps](./react//usemediadeviceselectprops.md) |             |
+| Parameter                                  | Type                                                               | Description |
+| ------------------------------------------ | ------------------------------------------------------------------ | ----------- |
+| { kind, room, track, requestPermissions, } | [UseMediaDeviceSelectProps](./react//usemediadeviceselectprops.md) |             |
 
 **Returns:**
 

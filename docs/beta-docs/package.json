@@ -18,8 +18,7 @@
   },
   "homepage": "https://github.com/livekit/components-js#readme",
   "files": [
-    "core",
-    "react",
+    "generated-docs",
     "meta-data.json"
   ],
   "publishConfig": {

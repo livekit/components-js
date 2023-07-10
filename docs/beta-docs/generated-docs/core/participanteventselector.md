@@ -10,5 +10,5 @@
 export declare function participantEventSelector<T extends ParticipantEvent>(
   participant: Participant,
   event: T,
-): Observable<Parameters<ParticipantEventCallbacks[T]>>;
+): Observable<Parameters<ParticipantEventCallbacks[Extract<T, keyof ParticipantEventCallbacks>]>>;
 ```

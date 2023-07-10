@@ -10,6 +10,7 @@
 export declare function setupDeviceSelector(
   kind: MediaDeviceKind,
   room?: Room,
+  localTrack?: LocalAudioTrack | LocalVideoTrack,
 ): {
   className: string;
   activeDeviceObservable: import('rxjs').Observable<string | undefined>;

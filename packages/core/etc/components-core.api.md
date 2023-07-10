@@ -10,7 +10,9 @@ import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState } from 'livekit-client';
 import createEmailRegExp from 'email-regex';
 import { DataPacket_Kind } from 'livekit-client';
+import { LocalAudioTrack } from 'livekit-client';
 import type { LocalParticipant } from 'livekit-client';
+import { LocalVideoTrack } from 'livekit-client';
 import loglevel from 'loglevel';
 import { Observable } from 'rxjs';
 import type { Participant } from 'livekit-client';
@@ -226,7 +228,7 @@ export interface ParticipantClickEvent {
 }
 
 // @public (undocumented)
-export function participantEventSelector<T extends ParticipantEvent>(participant: Participant, event: T): Observable<Parameters<ParticipantEventCallbacks[T]>>;
+export function participantEventSelector<T extends ParticipantEvent>(participant: Participant, event: T): Observable<Parameters<ParticipantEventCallbacks[Extract<T, keyof ParticipantEventCallbacks>]>>;
 
 // @public (undocumented)
 export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
@@ -366,7 +368,7 @@ export function setupDataMessageHandler<T extends string>(room: Room, topic?: T,
 };
 
 // @public (undocumented)
-export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room): {
+export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room, localTrack?: LocalAudioTrack | LocalVideoTrack): {
     className: string;
     activeDeviceObservable: Observable<string | undefined>;
     setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions) => Promise<void>;

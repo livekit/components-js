@@ -10,9 +10,11 @@ type UseDataChannelReturnType<T extends string | undefined = undefined> = {
   message: ReceivedDataMessage<T> | undefined;
 };
 
-/** @public */
+/**
+ * @public
+ */
 export function useDataChannel<T extends string>(
-  topic?: T,
+  topic: T,
   onMessage?: (msg: ReceivedDataMessage<T>) => void,
 ): UseDataChannelReturnType<T>;
 export function useDataChannel(

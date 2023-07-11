@@ -125,7 +125,7 @@ export class MarkdownDocumenter {
     const output: DocSection = new DocSection({ configuration });
     const category = getFunctionType(apiItem);
 
-    this._writeBreadcrumb(output, apiItem);
+    // this._writeBreadcrumb(output, apiItem);
 
     const scopedName: string = apiItem.getScopedNameWithinPackage();
 
@@ -504,11 +504,9 @@ export class MarkdownDocumenter {
         output.appendNode(
           new MarkDocTag({
             configuration,
-            name: 'usage',
+            name: 'partial',
             attributes: {
-              name: apiItem.displayName.toLowerCase(),
-              package: apiItem.getAssociatedPackage()?.name.toLowerCase() ?? '',
-              exampleCount: exampleBlocks.length,
+              file: 'p_usage.md',
             },
           }),
         );

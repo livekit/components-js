@@ -13,6 +13,7 @@ import type { ChatMessage } from '@livekit/components-core';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import type { CreateLocalTracksOptions } from 'livekit-client';
+import type { DataSendOptions } from '@livekit/components-core';
 import type { GridLayout as GridLayout_2 } from '@livekit/components-core/dist/helper/grid-layouts';
 import { HTMLAttributes } from 'react';
 import type { LocalAudioTrack } from 'livekit-client';
@@ -35,10 +36,11 @@ import type { RoomConnectOptions } from 'livekit-client';
 import type { RoomEvent } from 'livekit-client';
 import type { RoomOptions } from 'livekit-client';
 import type { ScreenShareCaptureOptions } from 'livekit-client';
+import { SetMediaDeviceOptions } from '@livekit/components-core';
 import type { SourcesArray } from '@livekit/components-core';
 import type { ToggleSource } from '@livekit/components-core';
 import { Track } from 'livekit-client';
-import type { TrackPublication } from 'livekit-client';
+import { TrackPublication } from 'livekit-client';
 import type { TrackReference } from '@livekit/components-core';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import type { TrackSourceWithOptions } from '@livekit/components-core';
@@ -400,7 +402,7 @@ export function StartAudio({ label, ...props }: AllowAudioPlaybackProps): React_
 export function Toast(props: React_2.HTMLAttributes<HTMLDivElement>): React_2.JSX.Element;
 
 // @public (undocumented)
-export const TrackContext: React_2.Context<any>;
+export const TrackContext: React_2.Context<TrackReferenceOrPlaceholder | undefined>;
 
 // @public
 export const TrackLoop: ({ tracks, ...props }: TrackLoopProps) => React_2.JSX.Element;
@@ -444,8 +446,8 @@ export function useAudioPlayback(room?: Room): {
 
 // @public (undocumented)
 export function useChat(): {
-    send: any;
-    chatMessages: never[];
+    send: ((message: string) => Promise<void>) | undefined;
+    chatMessages: ReceivedChatMessage[];
     isSending: boolean;
 };
 
@@ -456,7 +458,7 @@ export function useClearPinButton(props: ClearPinButtonProps): {
 
 // @public (undocumented)
 export function useConnectionQualityIndicator(options?: ConnectionQualityIndicatorOptions): {
-    className: any;
+    className: "lk-list" | "lk-button" | "lk-rotate" | "lk-audio-conference" | "lk-audio-conference-stage" | "lk-audio-container" | "lk-button-group" | "lk-button-group-container" | "lk-camera-off-note" | "lk-chat" | "lk-chat-entry" | "lk-chat-form" | "lk-chat-form-input" | "lk-chat-messages" | "lk-control-bar" | "lk-focus-layout-wrapper" | "lk-form-control" | "lk-grid-layout-wrapper" | "lk-join-button" | "lk-message-body" | "lk-meta-data" | "lk-participant-name" | "lk-prejoin" | "lk-timestamp" | "lk-username-container" | "lk-video-conference" | "lk-video-conference-inner" | "lk-video-container" | "lk-audio-visualizer" | "lk-button-group-menu" | "lk-button-menu" | "lk-carousel" | "lk-chat-toggle" | "lk-connection-quality" | "lk-device-menu" | "lk-device-menu-heading" | "lk-disconnect-button" | "lk-focus-layout" | "lk-focus-toggle-button" | "lk-focused-participant" | "lk-grid-layout" | "lk-media-device-select" | "lk-pagination-control" | "lk-pagination-count" | "lk-pagination-indicator" | "lk-participant-media-audio" | "lk-participant-media-video" | "lk-participant-metadata" | "lk-participant-metadata-item" | "lk-participant-placeholder" | "lk-participant-tile" | "lk-pip-track" | "lk-room-container" | "lk-spinner" | "lk-start-audio-button" | "lk-toast" | "lk-track-muted-indicator-camera" | "lk-track-muted-indicator-microphone";
     quality: ConnectionQuality;
 };
 
@@ -466,12 +468,13 @@ export function useConnectionState(room?: Room): ConnectionState_2;
 // @public (undocumented)
 export function useCreateLayoutContext(): LayoutContextType;
 
+// Warning: (ae-forgotten-export) The symbol "UseDataChannelReturnType" needs to be exported by the entry point index.d.ts
+//
 // @public (undocumented)
-export function useDataChannel<T extends string>(topic?: T, onMessage?: (msg: ReceivedDataMessage<T>) => void): {
-    message: undefined;
-    send: any;
-    isSending: boolean;
-};
+export function useDataChannel<T extends string>(topic: T, onMessage?: (msg: ReceivedDataMessage<T>) => void): UseDataChannelReturnType<T>;
+
+// @public (undocumented)
+export function useDataChannel(onMessage?: (msg: ReceivedDataMessage) => void): UseDataChannelReturnType;
 
 // @public (undocumented)
 export function useDisconnectButton(props: DisconnectButtonProps): {
@@ -485,13 +488,13 @@ export function useEnsureCreateLayoutContext(layoutContext?: LayoutContextType):
 export function useEnsureLayoutContext(layoutContext?: LayoutContextType): LayoutContextType;
 
 // @public
-export function useEnsureParticipant(participant?: Participant): any;
+export function useEnsureParticipant(participant?: Participant): Participant;
 
 // @public
 export function useEnsureRoom(room?: Room): Room;
 
 // @public
-export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): any;
+export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): TrackReferenceOrPlaceholder;
 
 // @public
 export function useGridLayout(
@@ -510,7 +513,7 @@ export interface UseIsMutedOptions {
 }
 
 // @public (undocumented)
-export function useIsSpeaking(participant?: Participant): any;
+export function useIsSpeaking(participant?: Participant): boolean;
 
 // @public
 export function useLayoutContext(): LayoutContextType;
@@ -549,19 +552,19 @@ export function useMaybeParticipantContext(): Participant | undefined;
 export function useMaybeRoomContext(): Room | undefined;
 
 // @public
-export function useMaybeTrackContext(): any;
+export function useMaybeTrackContext(): TrackReferenceOrPlaceholder | undefined;
 
 // @public (undocumented)
 export function useMediaDevices({ kind }: {
     kind: MediaDeviceKind;
-}): never[];
+}): MediaDeviceInfo[];
 
 // @public (undocumented)
 export function useMediaDeviceSelect({ kind, room, track, requestPermissions, }: UseMediaDeviceSelectProps): {
-    devices: never[];
-    className: any;
+    devices: MediaDeviceInfo[];
+    className: string;
     activeDeviceId: string;
-    setActiveMediaDevice: any;
+    setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions | undefined) => Promise<void>;
 };
 
 // @public (undocumented)
@@ -577,19 +580,19 @@ export interface UseMediaDeviceSelectProps {
 
 // @public (undocumented)
 export function useMediaTrack(source: VideoSource | AudioSource, participant?: Participant, options?: UseMediaTrackOptions): {
-    publication: any;
-    isMuted: any;
-    isSubscribed: any;
-    track: any;
+    publication: TrackPublication | undefined;
+    isMuted: boolean | undefined;
+    isSubscribed: boolean | undefined;
+    track: Track | undefined;
     elementProps: HTMLAttributes<HTMLElement>;
 };
 
 // @public (undocumented)
 export function useMediaTrackByName(name: string, participant?: Participant, options?: UseMediaTrackOptions): {
-    publication: any;
-    isMuted: any;
-    isSubscribed: any;
-    track: any;
+    publication: TrackPublication | undefined;
+    isMuted: boolean | undefined;
+    isSubscribed: boolean | undefined;
+    track: Track | undefined;
     elementProps: HTMLAttributes<HTMLElement>;
 };
 
@@ -618,9 +621,9 @@ export function useParticipantContext(): Participant;
 
 // @public (undocumented)
 export function useParticipantInfo(props?: UseParticipantInfoOptions): {
-    identity: any;
-    name: any;
-    metadata: any;
+    identity: string;
+    name: string | undefined;
+    metadata: string | undefined;
 };
 
 // @public (undocumented)
@@ -629,7 +632,7 @@ export type UseParticipantInfoOptions = {
 };
 
 // @public (undocumented)
-export function useParticipantPermissions(options?: UseParticipantPermissionsOptions): any;
+export function useParticipantPermissions(options?: UseParticipantPermissionsOptions): ParticipantPermission | undefined;
 
 // @public (undocumented)
 export interface UseParticipantPermissionsOptions {
@@ -716,7 +719,7 @@ export interface UseRoomInfoOptions {
 }
 
 // @public
-export function useSortedParticipants(participants: Array<Participant>): any;
+export function useSortedParticipants(participants: Array<Participant>): Participant[];
 
 // @public
 export const useSpeakingParticipants: () => Participant[];
@@ -755,12 +758,12 @@ export interface UseTokenOptions {
 }
 
 // @public
-export function useTrackContext(): any;
+export function useTrackContext(): TrackReferenceOrPlaceholder;
 
 // @public (undocumented)
 export const useTrackMutedIndicator: (source: Track.Source, options?: UseTrackMutedIndicatorOptions) => {
     isMuted: boolean;
-    className: any;
+    className: string;
 };
 
 // @public (undocumented)
@@ -784,7 +787,7 @@ export type UseTracksOptions = {
 
 // @public (undocumented)
 export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, ...rest }: UseTrackToggleProps<T>): {
-    toggle: any;
+    toggle: ((forceState?: boolean | undefined) => void) | ((forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>);
     enabled: boolean;
     pending: boolean;
     track: LocalTrackPublication | undefined;

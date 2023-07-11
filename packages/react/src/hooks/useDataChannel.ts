@@ -17,9 +17,15 @@ export function useDataChannel<T extends string>(
   topic: T,
   onMessage?: (msg: ReceivedDataMessage<T>) => void,
 ): UseDataChannelReturnType<T>;
+/**
+ * @public
+ */
 export function useDataChannel(
   onMessage?: (msg: ReceivedDataMessage) => void,
 ): UseDataChannelReturnType;
+/**
+ * @internal
+ */
 export function useDataChannel<T extends string>(
   topicOrCallback?: T | ((msg: ReceivedDataMessage) => void),
   callback?: (msg: ReceivedDataMessage<T>) => void,

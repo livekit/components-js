@@ -82,7 +82,8 @@ export function useMediaTrackBySourceOrName(
       className,
       'data-lk-local-participant': observerOptions.participant.isLocal,
       'data-lk-source': publication?.source,
-      ...(publication?.source === Track.Source.Camera ||
+      ...(publication?.kind === 'video' ||
+      publication?.source === Track.Source.Camera ||
       publication?.source === Track.Source.ScreenShare
         ? { 'data-lk-orientation': orientation }
         : {}),

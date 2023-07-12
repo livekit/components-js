@@ -22,7 +22,7 @@
   width: auto;
 }
 
-// Flip the local participant camera video.
+// Mirror the camera video of the local participants.
 [data-facing-mode='user'] // 
   .participant-media-video[data-local-participant='true'][data-source='camera'] {
   transform: rotateY(180deg);

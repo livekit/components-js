@@ -29,7 +29,7 @@
       object-fit: cover;
     }
 
-    video {
+    video[data-facing-mode='user'] {
       transform: rotateY(180deg);
     }
 

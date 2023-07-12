@@ -49,7 +49,7 @@
     "eslint-config-lk-custom": "^0.1.1",
     "size-limit": "^8.2.4",
     "tsup": "^7.0.0",
-    "typescript": "^5.0.0",
+    "typescript": "5.0.4",
     "vitest": "^0.32.0"
   },
   "engines": {

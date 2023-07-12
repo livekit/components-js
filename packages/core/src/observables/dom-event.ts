@@ -9,7 +9,7 @@ import { concat, distinctUntilChanged, fromEvent, map, of, skipUntil, timeout } 
  */
 export function createInteractingObservable(htmlElement: HTMLElement | null, inactiveAfter = 1000) {
   if (htmlElement === null) return of(false);
-  const move$ = fromEvent(htmlElement, 'mousemove').pipe(map(() => true));
+  const move$ = fromEvent(htmlElement, 'mousemove', { passive: true }).pipe(map(() => true));
   const moveAndStop$: Observable<boolean> = move$.pipe(
     timeout({
       each: inactiveAfter,

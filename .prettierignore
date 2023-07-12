@@ -1,4 +1,3 @@
 packages/*/dist
 node_modules
-/.svelte-kit
 yarn.lock

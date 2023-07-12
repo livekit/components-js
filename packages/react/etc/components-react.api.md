@@ -12,11 +12,13 @@ import type { CaptureOptionsBySource } from '@livekit/components-core';
 import type { ChatMessage } from '@livekit/components-core';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
-import { DataSendOptions } from '@livekit/components-core';
+import type { CreateLocalTracksOptions } from 'livekit-client';
+import type { DataSendOptions } from '@livekit/components-core';
 import type { GridLayout as GridLayout_2 } from '@livekit/components-core/dist/helper/grid-layouts';
 import { HTMLAttributes } from 'react';
 import type { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
+import type { LocalTrack } from 'livekit-client';
 import { LocalTrackPublication } from 'livekit-client';
 import type { LocalVideoTrack } from 'livekit-client';
 import { MediaDeviceFailure } from 'livekit-client';
@@ -283,7 +285,7 @@ export type LocalUserChoices = {
 };
 
 // @public
-export const MediaDeviceMenu: ({ kind, initialSelection, onActiveDeviceChange, ...props }: MediaDeviceMenuProps) => React_2.JSX.Element;
+export const MediaDeviceMenu: ({ kind, initialSelection, onActiveDeviceChange, tracks, requestPermissions, ...props }: MediaDeviceMenuProps) => React_2.JSX.Element;
 
 // @public (undocumented)
 export interface MediaDeviceMenuProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -293,13 +295,17 @@ export interface MediaDeviceMenuProps extends React_2.ButtonHTMLAttributes<HTMLB
     kind?: MediaDeviceKind;
     // (undocumented)
     onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
+    requestPermissions?: boolean;
+    // (undocumented)
+    tracks?: Partial<Record<MediaDeviceKind, LocalAudioTrack | LocalVideoTrack | undefined>>;
 }
 
 // @public
-export function MediaDeviceSelect({ kind, initialSelection, onActiveDeviceChange, onDeviceListChange, ...props }: MediaDeviceSelectProps): React_2.JSX.Element;
+export function MediaDeviceSelect({ kind, initialSelection, onActiveDeviceChange, onDeviceListChange, onDeviceSelectError, exactMatch, track, requestPermissions, ...props }: MediaDeviceSelectProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface MediaDeviceSelectProps extends React_2.HTMLAttributes<HTMLUListElement> {
+    exactMatch?: boolean;
     // (undocumented)
     initialSelection?: string;
     // (undocumented)
@@ -308,6 +314,11 @@ export interface MediaDeviceSelectProps extends React_2.HTMLAttributes<HTMLUList
     onActiveDeviceChange?: (deviceId: string) => void;
     // (undocumented)
     onDeviceListChange?: (devices: MediaDeviceInfo[]) => void;
+    // (undocumented)
+    onDeviceSelectError?: (e: Error) => void;
+    requestPermissions?: boolean;
+    // (undocumented)
+    track?: LocalAudioTrack | LocalVideoTrack;
 }
 
 // @public (undocumented)
@@ -457,16 +468,13 @@ export function useConnectionState(room?: Room): ConnectionState_2;
 // @public (undocumented)
 export function useCreateLayoutContext(): LayoutContextType;
 
+// Warning: (ae-forgotten-export) The symbol "UseDataChannelReturnType" needs to be exported by the entry point index.d.ts
+//
 // @public (undocumented)
-export function useDataChannel<T extends string>(topic?: T, onMessage?: (msg: ReceivedDataMessage<T>) => void): {
-    message: {
-        payload: Uint8Array;
-        topic: T;
-        from: RemoteParticipant | undefined;
-    } | undefined;
-    send: (payload: Uint8Array, options?: DataSendOptions | undefined) => Promise<void>;
-    isSending: boolean;
-};
+export function useDataChannel<T extends string>(topic: T, onMessage?: (msg: ReceivedDataMessage<T>) => void): UseDataChannelReturnType<T>;
+
+// @public (undocumented)
+export function useDataChannel(onMessage?: (msg: ReceivedDataMessage) => void): UseDataChannelReturnType;
 
 // @public (undocumented)
 export function useDisconnectButton(props: DisconnectButtonProps): {
@@ -552,7 +560,7 @@ export function useMediaDevices({ kind }: {
 }): MediaDeviceInfo[];
 
 // @public (undocumented)
-export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps): {
+export function useMediaDeviceSelect({ kind, room, track, requestPermissions, }: UseMediaDeviceSelectProps): {
     devices: MediaDeviceInfo[];
     className: string;
     activeDeviceId: string;
@@ -563,8 +571,11 @@ export function useMediaDeviceSelect({ kind, room }: UseMediaDeviceSelectProps):
 export interface UseMediaDeviceSelectProps {
     // (undocumented)
     kind: MediaDeviceKind;
+    requestPermissions?: boolean;
     // (undocumented)
     room?: Room;
+    // (undocumented)
+    track?: LocalAudioTrack | LocalVideoTrack;
 }
 
 // @public (undocumented)
@@ -660,6 +671,9 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(en
     localTrack: T | undefined;
     deviceError: Error | null;
 };
+
+// @alpha (undocumented)
+export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): LocalTrack[] | undefined;
 
 // @public (undocumented)
 export const useRemoteParticipant: (identity: string, options?: UseRemoteParticipantOptions) => RemoteParticipant | undefined;

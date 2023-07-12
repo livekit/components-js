@@ -16,7 +16,6 @@
     background-color: var(--control-hover-bg);
   }
 
-  // &:not(:disabled):active,
   &[aria-pressed='true'] {
     background-color: var(--control-active-bg);
 
@@ -24,16 +23,6 @@
       background-color: var(--control-active-hover-bg);
     }
   }
-
-  // &[data-lk-enabled="true"] {
-  //   color: var(--bg);
-  //   background-color: var(--fg);
-  // }
-
-  // &[data-lk-enabled="false"]:not([data-lk-source="screen_share"]) {
-  //   color: var(--danger-text);
-  //   background-color: var(--danger-bg);
-  // }
 
   &:disabled {
     opacity: 0.5;

@@ -4,4 +4,11 @@
   @extend .button;
   color: var(--accent-fg);
   background-color: var(--accent-bg);
+
+  @media screen and (max-width: 600px) {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }

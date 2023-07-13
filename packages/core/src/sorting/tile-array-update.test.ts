@@ -2,6 +2,7 @@ import { Track } from 'livekit-client';
 import { describe, test, expect } from 'vitest';
 import {
   flatTrackReferenceArray,
+  mockTrackReferencePlaceholder,
   mockTrackReferenceSubscribed,
 } from '../track-reference/test-utils';
 import { divideIntoPages, swapItems, updatePages, visualPageChange } from './tile-array-update';
@@ -335,4 +336,21 @@ describe('Test updating the list based while considering pages.', () => {
     expect(result).toHaveLength(next.length);
     expect(flatTrackReferenceArray(result)).toStrictEqual(flatTrackReferenceArray(expected));
   });
+
+  test.each([
+    {
+      state: [mockTrackReferencePlaceholder('A', Track.Source.Camera)],
+      next: [mockTrackReferenceSubscribed('A', Track.Source.Camera, { mockPublication: true })],
+      expected: [mockTrackReferenceSubscribed('A', Track.Source.Camera, { mockPublication: true })],
+      itemsOnPage: 1,
+    },
+  ])(
+    'Test track reference type change from `TrackReferencePlaceholder` to `TrackReference`',
+    ({ state, next, itemsOnPage, expected }) => {
+      const result = updatePages(state, next, itemsOnPage);
+      expect(result).toHaveLength(next.length);
+      expect(flatTrackReferenceArray(result)).toStrictEqual(flatTrackReferenceArray(expected));
+      expect(result[0].publication).toBeDefined();
+    },
+  );
 });

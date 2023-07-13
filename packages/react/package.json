@@ -72,7 +72,7 @@
     "react-dom": "^18.2.0",
     "size-limit": "^8.2.4",
     "tsup": "^7.0.0",
-    "typescript": "^5.0.0",
+    "typescript": "5.0.4",
     "vite": "^4.1.4",
     "vitest": "^0.32.0"
   },

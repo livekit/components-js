@@ -496,6 +496,9 @@ export function useEnsureRoom(room?: Room): Room;
 // @public
 export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): TrackReferenceOrPlaceholder;
 
+// @alpha
+export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'user' | 'environment' | 'left' | 'right' | 'undefined';
+
 // @public
 export function useGridLayout(
 gridElement: React_2.RefObject<HTMLDivElement>,

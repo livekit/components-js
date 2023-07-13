@@ -1,5 +1,13 @@
 # @livekit/components-styles
 
+## 1.0.4
+
+### Patch Changes
+
+- Show start audio button in center of screen on mobile - [#550](https://github.com/livekit/components-js/pull/550) ([@lukasIO](https://github.com/lukasIO))
+
+- Display active state of chat toggle - [#549](https://github.com/livekit/components-js/pull/549) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.0.3
 
 ### Patch Changes

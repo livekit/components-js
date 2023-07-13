@@ -6,6 +6,7 @@ import {
   mockTrackReferenceSubscribed,
 } from '../track-reference/test-utils';
 import { divideIntoPages, swapItems, updatePages, visualPageChange } from './tile-array-update';
+import type { TrackReferenceOrPlaceholder } from '../track-reference';
 
 const stateNextExpectedString = (text: string) =>
   `${text}:\n$state \t\t<= t\n$next \t\t<= t+1\n--------\n$expected  \t<= expected result`;
@@ -340,7 +341,9 @@ describe('Test updating the list based while considering pages.', () => {
   test.each([
     {
       state: [mockTrackReferencePlaceholder('A', Track.Source.Camera)],
-      next: [mockTrackReferenceSubscribed('A', Track.Source.Camera, { mockPublication: true })],
+      next: [
+        mockTrackReferenceSubscribed('A', Track.Source.Camera, { mockPublication: true }),
+      ] as TrackReferenceOrPlaceholder[],
       expected: [mockTrackReferenceSubscribed('A', Track.Source.Camera, { mockPublication: true })],
       itemsOnPage: 1,
     },

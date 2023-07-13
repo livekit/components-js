@@ -17,17 +17,12 @@ export function useFacingMode(
   }
 
   let mediaStreamTrack: LocalTrack | undefined;
-  if (trackReference.publication === undefined) {
-    if (trackReference.participant.videoTracks.size > 0) {
-      mediaStreamTrack = Array.from(trackReference.participant.videoTracks.values())[0]
-        .videoTrack as LocalTrack;
-    }
-  } else {
+  if (trackReference.publication !== undefined) {
     mediaStreamTrack = trackReference.publication.track as LocalTrack;
   }
 
   if (mediaStreamTrack) {
-    const { facingMode } = facingModeFromLocalTrack(mediaStreamTrack as LocalTrack);
+    const { facingMode } = facingModeFromLocalTrack(mediaStreamTrack);
     return facingMode;
   } else {
     return 'undefined';

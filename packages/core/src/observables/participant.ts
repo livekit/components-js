@@ -18,11 +18,13 @@ export function observeParticipantEvents<T extends Participant>(
     };
 
     events.forEach((evt) => {
+      // @ts-ignore
       participant.on(evt, onParticipantUpdate);
     });
 
     const unsubscribe = () => {
       events.forEach((evt) => {
+        // @ts-ignore
         participant.off(evt, onParticipantUpdate);
       });
     };

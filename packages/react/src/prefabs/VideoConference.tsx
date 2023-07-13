@@ -5,7 +5,7 @@ import { ControlBar } from './ControlBar';
 import { FocusLayout, FocusLayoutContainer } from '../components/layout/FocusLayout';
 import { GridLayout } from '../components/layout/GridLayout';
 import type { WidgetState } from '@livekit/components-core';
-import { isEqualTrackRef, isTrackReference, log } from '@livekit/components-core';
+import { isEqualTrackRef, isTrackReference, log, isWeb } from '@livekit/components-core';
 import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
 import type { MessageFormatter } from '../components/ChatEntry';
@@ -91,35 +91,37 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
 
   return (
     <div className="lk-video-conference" {...props}>
-      <LayoutContextProvider
-        value={layoutContext}
-        // onPinChange={handleFocusStateChange}
-        onWidgetChange={widgetUpdate}
-      >
-        <div className="lk-video-conference-inner">
-          {!focusTrack ? (
-            <div className="lk-grid-layout-wrapper">
-              <GridLayout tracks={tracks}>
-                <ParticipantTile />
-              </GridLayout>
-            </div>
-          ) : (
-            <div className="lk-focus-layout-wrapper">
-              <FocusLayoutContainer>
-                <CarouselLayout tracks={carouselTracks}>
+      {isWeb() && (
+        <LayoutContextProvider
+          value={layoutContext}
+          // onPinChange={handleFocusStateChange}
+          onWidgetChange={widgetUpdate}
+        >
+          <div className="lk-video-conference-inner">
+            {!focusTrack ? (
+              <div className="lk-grid-layout-wrapper">
+                <GridLayout tracks={tracks}>
                   <ParticipantTile />
-                </CarouselLayout>
-                {focusTrack && <FocusLayout track={focusTrack} />}
-              </FocusLayoutContainer>
-            </div>
-          )}
-          <ControlBar controls={{ chat: true }} />
-        </div>
-        <Chat
-          style={{ display: widgetState.showChat ? 'flex' : 'none' }}
-          messageFormatter={chatMessageFormatter}
-        />
-      </LayoutContextProvider>
+                </GridLayout>
+              </div>
+            ) : (
+              <div className="lk-focus-layout-wrapper">
+                <FocusLayoutContainer>
+                  <CarouselLayout tracks={carouselTracks}>
+                    <ParticipantTile />
+                  </CarouselLayout>
+                  {focusTrack && <FocusLayout track={focusTrack} />}
+                </FocusLayoutContainer>
+              </div>
+            )}
+            <ControlBar controls={{ chat: true }} />
+          </div>
+          <Chat
+            style={{ display: widgetState.showChat ? 'flex' : 'none' }}
+            messageFormatter={chatMessageFormatter}
+          />
+        </LayoutContextProvider>
+      )}
       <RoomAudioRenderer />
       <ConnectionStateToast />
     </div>

@@ -13,7 +13,7 @@ import type { ChatMessage } from '@livekit/components-core';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import type { CreateLocalTracksOptions } from 'livekit-client';
-import { DataSendOptions } from '@livekit/components-core';
+import type { DataSendOptions } from '@livekit/components-core';
 import type { GridLayout as GridLayout_2 } from '@livekit/components-core/dist/helper/grid-layouts';
 import { HTMLAttributes } from 'react';
 import type { LocalAudioTrack } from 'livekit-client';
@@ -468,16 +468,13 @@ export function useConnectionState(room?: Room): ConnectionState_2;
 // @public (undocumented)
 export function useCreateLayoutContext(): LayoutContextType;
 
+// Warning: (ae-forgotten-export) The symbol "UseDataChannelReturnType" needs to be exported by the entry point index.d.ts
+//
 // @public (undocumented)
-export function useDataChannel<T extends string>(topic?: T, onMessage?: (msg: ReceivedDataMessage<T>) => void): {
-    message: {
-        payload: Uint8Array;
-        topic: T;
-        from: RemoteParticipant | undefined;
-    } | undefined;
-    send: (payload: Uint8Array, options?: DataSendOptions | undefined) => Promise<void>;
-    isSending: boolean;
-};
+export function useDataChannel<T extends string>(topic: T, onMessage?: (msg: ReceivedDataMessage<T>) => void): UseDataChannelReturnType<T>;
+
+// @public (undocumented)
+export function useDataChannel(onMessage?: (msg: ReceivedDataMessage) => void): UseDataChannelReturnType;
 
 // @public (undocumented)
 export function useDisconnectButton(props: DisconnectButtonProps): {

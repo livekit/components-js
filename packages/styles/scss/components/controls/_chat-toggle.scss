@@ -1,3 +1,6 @@
+@use 'button';
+
 .chat-toggle {
+  @extend .button;
   position: initial; // Only here to include this selector into the type gen process.
 }

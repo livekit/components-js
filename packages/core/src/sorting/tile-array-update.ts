@@ -11,7 +11,7 @@ type VisualChanges<T> = {
 
 export type UpdatableItem = TrackReferenceOrPlaceholder | number;
 
-/** Check if something visually change on the page. */
+/** Check to see if anything visually changes on the page. */
 export function visualPageChange<T extends UpdatableItem>(state: T[], next: T[]): VisualChanges<T> {
   return {
     dropped: differenceBy(state, next, getTrackReferenceId),
@@ -78,7 +78,7 @@ export function updatePages<T extends UpdatableItem>(
   nextList: T[],
   maxItemsOnPage: number,
 ): T[] {
-  let updatedList: T[] = [...currentList];
+  let updatedList: T[] = refreshList(currentList, nextList);
 
   if (currentList.length < nextList.length) {
     // Items got added: Find newly added items and add them to the end of the list.
@@ -138,4 +138,22 @@ export function updatePages<T extends UpdatableItem>(
   }
 
   return updatedList;
+}
+
+/**
+ * Update the first list with the items from the second list whenever the ids are the same.
+ * @remarks
+ * This is needed because `TrackReference`s can change their internal state while keeping the same id.
+ */
+function refreshList<T extends UpdatableItem>(currentList: T[], nextList: T[]): T[] {
+  return currentList.map((currentItem) => {
+    const updateForCurrentItem = nextList.find(
+      (newItem_) => getTrackReferenceId(currentItem) === getTrackReferenceId(newItem_),
+    );
+    if (updateForCurrentItem) {
+      return updateForCurrentItem;
+    } else {
+      return currentItem;
+    }
+  });
 }

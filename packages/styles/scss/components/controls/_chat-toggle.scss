@@ -6,7 +6,7 @@
 }
 
 .chat-toggle[data-unread-msgs]:not([data-unread-msgs='0']):after {
-  content: attr(data-lk-unread-msgs);
+  content: attr(data-unread-msgs);
   position: absolute;
   top: 0;
   left: 0;

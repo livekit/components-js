@@ -2,5 +2,19 @@
 
 .chat-toggle {
   @extend .button;
-  position: initial; // Only here to include this selector into the type gen process.
+  position: relative;
+}
+
+.chat-toggle[data-unread-msgs]:not([data-unread-msgs='0']):after {
+  content: attr(data-unread-msgs);
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.25rem;
+  margin-left: 0.25rem;
+  margin-top: 0.25rem;
+  border-radius: 50%;
+  font-size: 0.5rem;
+  line-height: 0.75;
+  background: var(--accent-bg);
 }

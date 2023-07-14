@@ -1,7 +1,7 @@
 import type { ChatMessage, ReceivedChatMessage } from '@livekit/components-core';
 import { setupChat } from '@livekit/components-core';
 import * as React from 'react';
-import { useRoomContext } from '../context';
+import { useMaybeLayoutContext, useRoomContext } from '../context';
 import { useObservableState } from '../hooks/internal/useObservableState';
 import { cloneSingleChild } from '../utils';
 import type { MessageFormatter } from '../components/ChatEntry';
@@ -12,6 +12,11 @@ export type { ChatMessage, ReceivedChatMessage };
 /** @public */
 export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
   messageFormatter?: MessageFormatter;
+  /**
+   * indicates whether or not the chat is currently visible.
+   * this is primarily used to display an unread message notification when not open.
+   */
+  isOpen?: boolean;
 }
 
 /** @public */
@@ -42,10 +47,12 @@ export function useChat() {
  * ```
  * @public
  */
-export function Chat({ messageFormatter, ...props }: ChatProps) {
+export function Chat({ messageFormatter, isOpen, ...props }: ChatProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const ulRef = React.useRef<HTMLUListElement>(null);
   const { send, chatMessages, isSending } = useChat();
+  const layoutContext = useMaybeLayoutContext();
+  const [lastReadMsgAt, setLastReadMsgAt] = React.useState<ChatMessage['timestamp']>();
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -63,6 +70,28 @@ export function Chat({ messageFormatter, ...props }: ChatProps) {
       ulRef.current?.scrollTo({ top: ulRef.current.scrollHeight });
     }
   }, [ulRef, chatMessages]);
+
+  React.useEffect(() => {
+    if (
+      isOpen &&
+      chatMessages.length > 0 &&
+      lastReadMsgAt !== chatMessages[chatMessages.length - 1]?.timestamp
+    ) {
+      setLastReadMsgAt(chatMessages[chatMessages.length - 1]?.timestamp);
+      return;
+    }
+
+    if (!layoutContext || chatMessages.length === 0) {
+      return;
+    }
+
+    const latestChatMessageAt = chatMessages[chatMessages.length - 1].timestamp;
+
+    const { widget } = layoutContext;
+    if (!lastReadMsgAt || latestChatMessageAt > lastReadMsgAt) {
+      widget.dispatch?.({ msg: 'unread_msg' });
+    }
+  }, [chatMessages, layoutContext?.widget.dispatch, isOpen]);
 
   return (
     <div {...props} className="lk-chat">

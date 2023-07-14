@@ -2,5 +2,16 @@
 
 .chat-toggle {
   @extend .button;
-  position: initial; // Only here to include this selector into the type gen process.
+  position: relative;
+}
+
+.chat-toggle[data-unread='true']:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+  background: var(--lk-accent-bg);
+  padding: 0.375rem;
+  border-radius: 50%;
 }

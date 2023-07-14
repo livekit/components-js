@@ -13,17 +13,15 @@ function useToggleChat({ props }: UseToggleChatProps) {
 
   const mergedProps = React.useMemo(
     () =>
-      mergeProps(
-        props,
-        {
-          className,
-          onClick: () => {
-            if (dispatch) dispatch({ msg: 'toggle_chat' });
-          },
+      mergeProps(props, {
+        className,
+        onClick: () => {
+          if (dispatch) dispatch({ msg: 'toggle_chat' });
         },
-        { 'aria-pressed': state?.showChat ? 'true' : 'false' },
-      ),
-    [props, className, dispatch, state?.showChat],
+        'aria-pressed': state?.showChat ? 'true' : 'false',
+        'data-lk-unread': state?.hasUnreadMessages ? 'true' : 'false',
+      }),
+    [props, className, dispatch, state],
   );
 
   return { mergedProps };

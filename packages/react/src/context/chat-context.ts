@@ -5,7 +5,8 @@ import type * as React from 'react';
 export type ChatContextAction =
   | { msg: 'show_chat' }
   | { msg: 'hide_chat' }
-  | { msg: 'toggle_chat' };
+  | { msg: 'toggle_chat' }
+  | { msg: 'unread_msg' };
 
 /** @internal */
 export type ChatContextType = {
@@ -16,11 +17,19 @@ export type ChatContextType = {
 /** @internal */
 export function chatReducer(state: WidgetState, action: ChatContextAction): WidgetState {
   if (action.msg === 'show_chat') {
-    return { ...state, showChat: true };
+    return { ...state, showChat: true, hasUnreadMessages: false };
   } else if (action.msg === 'hide_chat') {
     return { ...state, showChat: false };
   } else if (action.msg === 'toggle_chat') {
-    return { ...state, showChat: !state.showChat };
+    const newState = { ...state, showChat: !state.showChat };
+    if (newState.showChat === true) {
+      console.log('resetting unread');
+      newState.hasUnreadMessages = false;
+    }
+    return newState;
+  } else if (action.msg === 'unread_msg') {
+    console.log('has unread messages');
+    return { ...state, hasUnreadMessages: true };
   } else {
     return { ...state };
   }

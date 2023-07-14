@@ -6,7 +6,7 @@ export type ChatContextAction =
   | { msg: 'show_chat' }
   | { msg: 'hide_chat' }
   | { msg: 'toggle_chat' }
-  | { msg: 'unread_msg' };
+  | { msg: 'unread_msg'; count: number };
 
 /** @internal */
 export type ChatContextType = {
@@ -17,18 +17,17 @@ export type ChatContextType = {
 /** @internal */
 export function chatReducer(state: WidgetState, action: ChatContextAction): WidgetState {
   if (action.msg === 'show_chat') {
-    return { ...state, showChat: true, hasUnreadMessages: false };
+    return { ...state, showChat: true, unreadMessages: 0 };
   } else if (action.msg === 'hide_chat') {
     return { ...state, showChat: false };
   } else if (action.msg === 'toggle_chat') {
     const newState = { ...state, showChat: !state.showChat };
     if (newState.showChat === true) {
-      console.log('resetting unread');
-      newState.hasUnreadMessages = false;
+      newState.unreadMessages = 0;
     }
     return newState;
   } else if (action.msg === 'unread_msg') {
-    return { ...state, hasUnreadMessages: true };
+    return { ...state, unreadMessages: action.count };
   } else {
     return { ...state };
   }

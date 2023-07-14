@@ -43,7 +43,7 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
 export function VideoConference({ chatMessageFormatter, ...props }: VideoConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({
     showChat: false,
-    hasUnreadMessages: false,
+    unreadMessages: 0,
   });
   const lastAutoFocusedScreenShareTrack = React.useRef<TrackReferenceOrPlaceholder | null>(null);
 
@@ -121,7 +121,6 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
           </div>
           <Chat
             style={{ display: widgetState.showChat ? 'flex' : 'none' }}
-            isOpen={widgetState.showChat}
             messageFormatter={chatMessageFormatter}
           />
         </LayoutContextProvider>

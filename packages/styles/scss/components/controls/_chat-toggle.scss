@@ -5,8 +5,8 @@
   position: relative;
 }
 
-.chat-toggle[data-unread='true']:after {
-  content: '';
+.chat-toggle[data-unread-msgs]:not([data-unread-msgs='0']):after {
+  content: attr(data-unread-msgs);
   position: absolute;
   top: 0;
   right: 0;

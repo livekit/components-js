@@ -12,11 +12,6 @@ export type { ChatMessage, ReceivedChatMessage };
 /** @public */
 export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
   messageFormatter?: MessageFormatter;
-  /**
-   * indicates whether or not the chat is currently visible.
-   * this is primarily used to display an unread message notification when not open.
-   */
-  isOpen?: boolean;
 }
 
 /** @public */
@@ -47,12 +42,12 @@ export function useChat() {
  * ```
  * @public
  */
-export function Chat({ messageFormatter, isOpen, ...props }: ChatProps) {
+export function Chat({ messageFormatter, ...props }: ChatProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const ulRef = React.useRef<HTMLUListElement>(null);
   const { send, chatMessages, isSending } = useChat();
   const layoutContext = useMaybeLayoutContext();
-  const [lastReadMsgAt, setLastReadMsgAt] = React.useState<ChatMessage['timestamp']>();
+  const lastReadMsgAt = React.useRef<ChatMessage['timestamp']>(0);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -72,26 +67,28 @@ export function Chat({ messageFormatter, isOpen, ...props }: ChatProps) {
   }, [ulRef, chatMessages]);
 
   React.useEffect(() => {
-    if (
-      isOpen &&
-      chatMessages.length > 0 &&
-      lastReadMsgAt !== chatMessages[chatMessages.length - 1]?.timestamp
-    ) {
-      setLastReadMsgAt(chatMessages[chatMessages.length - 1]?.timestamp);
-      return;
-    }
-
     if (!layoutContext || chatMessages.length === 0) {
       return;
     }
 
-    const latestChatMessageAt = chatMessages[chatMessages.length - 1].timestamp;
+    if (
+      layoutContext.widget.state?.showChat &&
+      chatMessages.length > 0 &&
+      lastReadMsgAt.current !== chatMessages[chatMessages.length - 1]?.timestamp
+    ) {
+      lastReadMsgAt.current = chatMessages[chatMessages.length - 1]?.timestamp;
+      return;
+    }
+
+    const unreadMessageCount = chatMessages.filter(
+      (msg) => !lastReadMsgAt.current || msg.timestamp > lastReadMsgAt.current,
+    ).length;
 
     const { widget } = layoutContext;
-    if (!lastReadMsgAt || latestChatMessageAt > lastReadMsgAt) {
-      widget.dispatch?.({ msg: 'unread_msg' });
+    if (unreadMessageCount > 0 && widget.state?.unreadMessages !== unreadMessageCount) {
+      widget.dispatch?.({ msg: 'unread_msg', count: unreadMessageCount });
     }
-  }, [chatMessages, layoutContext?.widget.dispatch, isOpen]);
+  }, [chatMessages, layoutContext?.widget]);
 
   return (
     <div {...props} className="lk-chat">

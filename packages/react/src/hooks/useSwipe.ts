@@ -53,9 +53,9 @@ export function useSwipe(element: React.RefObject<HTMLElement>, options: UseSwip
   React.useEffect(() => {
     const elementCopy = element.current;
     if (elementCopy) {
-      elementCopy.addEventListener('touchstart', onTouchStart);
-      elementCopy.addEventListener('touchmove', onTouchMove);
-      elementCopy.addEventListener('touchend', onTouchEnd);
+      elementCopy.addEventListener('touchstart', onTouchStart, { passive: true });
+      elementCopy.addEventListener('touchmove', onTouchMove, { passive: true });
+      elementCopy.addEventListener('touchend', onTouchEnd, { passive: true });
     }
     return () => {
       if (elementCopy) {

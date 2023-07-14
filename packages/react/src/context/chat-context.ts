@@ -28,7 +28,6 @@ export function chatReducer(state: WidgetState, action: ChatContextAction): Widg
     }
     return newState;
   } else if (action.msg === 'unread_msg') {
-    console.log('has unread messages');
     return { ...state, hasUnreadMessages: true };
   } else {
     return { ...state };

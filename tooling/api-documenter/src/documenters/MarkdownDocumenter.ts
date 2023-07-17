@@ -915,7 +915,7 @@ export class MarkdownDocumenter {
 
     const propertiesTable: DocTable = new DocTable({
       configuration,
-      headerTitles: ['Property', 'Modifiers', 'Type', 'Description'],
+      headerTitles: ['Property', 'Type', 'Description'],
     });
 
     const methodsTable: DocTable = new DocTable({
@@ -947,7 +947,7 @@ export class MarkdownDocumenter {
             eventsTable.addRow(
               new DocTableRow({ configuration }, [
                 this._createTitleCell(apiMember),
-                this._createModifiersCell(apiMember),
+                // this._createModifiersCell(apiMember),
                 this._createPropertyTypeCell(apiMember),
                 this._createDescriptionCell(apiMember, isInherited),
               ]),
@@ -956,7 +956,7 @@ export class MarkdownDocumenter {
             propertiesTable.addRow(
               new DocTableRow({ configuration }, [
                 this._createTitleCell(apiMember),
-                this._createModifiersCell(apiMember),
+                // this._createModifiersCell(apiMember),
                 this._createPropertyTypeCell(apiMember),
                 this._createDescriptionCell(apiMember, isInherited),
               ]),

@@ -14,9 +14,9 @@ import { useDataChannel } from '@livekit/components-react';
 
 | Parameter | Type                                                                                     | Description  |
 | --------- | ---------------------------------------------------------------------------------------- | ------------ |
-| topic     | T                                                                                        | _(Optional)_ |
+| topic     | T                                                                                        |              |
 | onMessage | (msg: [ReceivedDataMessage](./core//receiveddatamessage.md)<!-- -->&lt;T&gt;) =&gt; void | _(Optional)_ |
 
 **Returns:**
 
-{ message: { payload: Uint8Array; topic: T; from: import("livekit-client").RemoteParticipant \| undefined; } \| undefined; send: (payload: Uint8Array, options?: import("@livekit/components-core").[DataSendOptions](./core//datasendoptions.md) \| undefined) =&gt; Promise&lt;void&gt;; isSending: boolean; }
+UseDataChannelReturnType&lt;T&gt;

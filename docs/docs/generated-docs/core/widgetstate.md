@@ -7,5 +7,6 @@
 ```typescript
 export type WidgetState = {
   showChat: boolean;
+  unreadMessages: number;
 };
 ```

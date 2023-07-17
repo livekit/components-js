@@ -193,6 +193,11 @@ export function isTrackReferencePinned(trackReference: TrackReferenceOrPlacehold
 // @public (undocumented)
 export function isTrackReferencePlaceholder(trackReference?: TrackReferenceOrPlaceholder): trackReference is TrackReferencePlaceholder;
 
+// Warning: (ae-internal-missing-underscore) The name "isWeb" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export function isWeb(): boolean;
+
 // @public (undocumented)
 export const log: loglevel.Logger;
 
@@ -531,6 +536,7 @@ export const WIDGET_DEFAULT_STATE: WidgetState;
 // @public (undocumented)
 export type WidgetState = {
     showChat: boolean;
+    unreadMessages: number;
 };
 
 // (No @packageDocumentation comment for this package)

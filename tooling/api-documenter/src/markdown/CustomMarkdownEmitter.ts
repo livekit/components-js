@@ -63,16 +63,19 @@ export class CustomMarkdownEmitter extends MarkdownEmitter {
         let prefix: string;
         switch (docHeading.level) {
           case 1:
-            prefix = '##';
+            prefix = '#';
             break;
           case 2:
-            prefix = '###';
+            prefix = '##';
             break;
           case 3:
             prefix = '###';
             break;
-          default:
+          case 4:
             prefix = '####';
+            break;
+          default:
+            prefix = '#####';
         }
 
         writer.writeLine(prefix + ' ' + this.getEscapedText(docHeading.title));

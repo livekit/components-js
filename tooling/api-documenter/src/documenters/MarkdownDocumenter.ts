@@ -478,7 +478,7 @@ export class MarkdownDocumenter {
       if (tsdocComment) {
         // Write the @remarks block
         if (tsdocComment.remarksBlock) {
-          output.appendNode(new DocHeading({ configuration, title: 'Remarks' }));
+          output.appendNode(new DocHeading({ configuration, title: 'Remarks', level: 2 }));
           this._appendSection(output, tsdocComment.remarksBlock.content);
         }
 
@@ -492,7 +492,7 @@ export class MarkdownDocumenter {
           const heading: string =
             exampleBlocks.length > 1 ? `Usage Example ${exampleNumber}` : 'Usage';
 
-          output.appendNode(new DocHeading({ configuration, title: heading }));
+          output.appendNode(new DocHeading({ configuration, title: heading, level: 2 }));
 
           this._appendSection(output, exampleBlock.content);
 
@@ -856,7 +856,7 @@ export class MarkdownDocumenter {
     }
 
     if (propertiesTable.rows.length > 0) {
-      output.appendNode(new DocHeading({ configuration, title: 'Properties' }));
+      output.appendNode(new DocHeading({ configuration, title: 'Properties', level: 2 }));
       output.appendNode(propertiesTable);
     }
 

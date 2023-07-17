@@ -12,7 +12,7 @@ export interface UseMediaTrackOptions
 
 ## Properties
 
-| Property                                             | Modifiers | Type                                                             | Description  |
-| ---------------------------------------------------- | --------- | ---------------------------------------------------------------- | ------------ |
-| [element?](./react//usemediatrackoptions.element.md) |           | React.RefObject&lt;HTMLMediaElement&gt;                          | _(Optional)_ |
-| [props?](./react//usemediatrackoptions.props.md)     |           | React.HTMLAttributes&lt;HTMLVideoElement \| HTMLAudioElement&gt; | _(Optional)_ |
+| Property                                             | Type                                                             | Description  |
+| ---------------------------------------------------- | ---------------------------------------------------------------- | ------------ |
+| [element?](./react//usemediatrackoptions.element.md) | React.RefObject&lt;HTMLMediaElement&gt;                          | _(Optional)_ |
+| [props?](./react//usemediatrackoptions.props.md)     | React.HTMLAttributes&lt;HTMLVideoElement \| HTMLAudioElement&gt; | _(Optional)_ |

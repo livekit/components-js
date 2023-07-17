@@ -22,6 +22,6 @@ import { Chat } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                                    | Modifiers | Type                                             | Description  |
-| ----------------------------------------------------------- | --------- | ------------------------------------------------ | ------------ |
-| [messageFormatter?](./react//chatprops.messageformatter.md) |           | [MessageFormatter](./react//messageformatter.md) | _(Optional)_ |
+| Property                                                    | Type                                             | Description  |
+| ----------------------------------------------------------- | ------------------------------------------------ | ------------ |
+| [messageFormatter?](./react//chatprops.messageformatter.md) | [MessageFormatter](./react//messageformatter.md) | _(Optional)_ |

@@ -22,7 +22,7 @@ import { FocusToggle } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                                 | Modifiers | Type         | Description  |
-| -------------------------------------------------------- | --------- | ------------ | ------------ |
-| [participant?](./react//focustoggleprops.participant.md) |           | Participant  | _(Optional)_ |
-| [trackSource](./react//focustoggleprops.tracksource.md)  |           | Track.Source |              |
+| Property                                                 | Type         | Description  |
+| -------------------------------------------------------- | ------------ | ------------ |
+| [participant?](./react//focustoggleprops.participant.md) | Participant  | _(Optional)_ |
+| [trackSource](./react//focustoggleprops.tracksource.md)  | Track.Source |              |

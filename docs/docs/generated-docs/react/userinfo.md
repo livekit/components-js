@@ -12,8 +12,8 @@ export interface UserInfo
 
 ## Properties
 
-| Property                                   | Modifiers | Type   | Description  |
-| ------------------------------------------ | --------- | ------ | ------------ |
-| [identity?](./react//userinfo.identity.md) |           | string | _(Optional)_ |
-| [metadata?](./react//userinfo.metadata.md) |           | string | _(Optional)_ |
-| [name?](./react//userinfo.name.md)         |           | string | _(Optional)_ |
+| Property                                   | Type   | Description  |
+| ------------------------------------------ | ------ | ------------ |
+| [identity?](./react//userinfo.identity.md) | string | _(Optional)_ |
+| [metadata?](./react//userinfo.metadata.md) | string | _(Optional)_ |
+| [name?](./react//userinfo.name.md)         | string | _(Optional)_ |

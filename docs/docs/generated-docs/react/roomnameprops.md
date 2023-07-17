@@ -14,6 +14,6 @@ export interface RoomNameProps extends React.HTMLAttributes<HTMLSpanElement>
 
 ## Properties
 
-| Property                                                        | Modifiers | Type                | Description  |
-| --------------------------------------------------------------- | --------- | ------------------- | ------------ |
-| [childrenPosition?](./react//roomnameprops.childrenposition.md) |           | 'before' \| 'after' | _(Optional)_ |
+| Property                                                        | Type                | Description  |
+| --------------------------------------------------------------- | ------------------- | ------------ |
+| [childrenPosition?](./react//roomnameprops.childrenposition.md) | 'before' \| 'after' | _(Optional)_ |

@@ -14,7 +14,7 @@ export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement>
 
 ## Properties
 
-| Property                                                               | Modifiers | Type                                                                                | Description  |
-| ---------------------------------------------------------------------- | --------- | ----------------------------------------------------------------------------------- | ------------ |
-| [onParticipantClick?](./react//focuslayoutprops.onparticipantclick.md) |           | (evt: [ParticipantClickEvent](./core//participantclickevent.md)<!-- -->) =&gt; void | _(Optional)_ |
-| [track?](./react//focuslayoutprops.track.md)                           |           | [TrackReferenceOrPlaceholder](./core//trackreferenceorplaceholder.md)               | _(Optional)_ |
+| Property                                                               | Type                                                                                | Description  |
+| ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------ |
+| [onParticipantClick?](./react//focuslayoutprops.onparticipantclick.md) | (evt: [ParticipantClickEvent](./core//participantclickevent.md)<!-- -->) =&gt; void | _(Optional)_ |
+| [track?](./react//focuslayoutprops.track.md)                           | [TrackReferenceOrPlaceholder](./core//trackreferenceorplaceholder.md)               | _(Optional)_ |

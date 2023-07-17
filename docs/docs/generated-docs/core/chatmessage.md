@@ -10,7 +10,7 @@ export interface ChatMessage
 
 ## Properties
 
-| Property                                      | Modifiers | Type   | Description |
-| --------------------------------------------- | --------- | ------ | ----------- |
-| [message](./core//chatmessage.message.md)     |           | string |             |
-| [timestamp](./core//chatmessage.timestamp.md) |           | number |             |
+| Property                                      | Type   | Description |
+| --------------------------------------------- | ------ | ----------- |
+| [message](./core//chatmessage.message.md)     | string |             |
+| [timestamp](./core//chatmessage.timestamp.md) | number |             |

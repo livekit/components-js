@@ -12,6 +12,6 @@ export interface ReceivedChatMessage extends ChatMessage
 
 ## Properties
 
-| Property                                     | Modifiers | Type        | Description  |
-| -------------------------------------------- | --------- | ----------- | ------------ |
-| [from?](./core//receivedchatmessage.from.md) |           | Participant | _(Optional)_ |
+| Property                                     | Type        | Description  |
+| -------------------------------------------- | ----------- | ------------ |
+| [from?](./core//receivedchatmessage.from.md) | Participant | _(Optional)_ |

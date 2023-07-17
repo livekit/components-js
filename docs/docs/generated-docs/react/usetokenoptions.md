@@ -12,6 +12,6 @@ export interface UseTokenOptions
 
 ## Properties
 
-| Property                                              | Modifiers | Type                             | Description  |
-| ----------------------------------------------------- | --------- | -------------------------------- | ------------ |
-| [userInfo?](./react/hook/usetokenoptions.userinfo.md) |           | [UserInfo](./react//userinfo.md) | _(Optional)_ |
+| Property                                              | Type                             | Description  |
+| ----------------------------------------------------- | -------------------------------- | ------------ |
+| [userInfo?](./react/hook/usetokenoptions.userinfo.md) | [UserInfo](./react//userinfo.md) | _(Optional)_ |

@@ -12,6 +12,6 @@ export interface UseTrackMutedIndicatorOptions
 
 ## Properties
 
-| Property                                                              | Modifiers | Type        | Description  |
-| --------------------------------------------------------------------- | --------- | ----------- | ------------ |
-| [participant?](./react//usetrackmutedindicatoroptions.participant.md) |           | Participant | _(Optional)_ |
+| Property                                                              | Type        | Description  |
+| --------------------------------------------------------------------- | ----------- | ------------ |
+| [participant?](./react//usetrackmutedindicatoroptions.participant.md) | Participant | _(Optional)_ |

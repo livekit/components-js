@@ -12,6 +12,6 @@ export interface UseIsMutedOptions
 
 ## Properties
 
-| Property                                                  | Modifiers | Type        | Description  |
-| --------------------------------------------------------- | --------- | ----------- | ------------ |
-| [participant?](./react//useismutedoptions.participant.md) |           | Participant | _(Optional)_ |
+| Property                                                  | Type        | Description  |
+| --------------------------------------------------------- | ----------- | ------------ |
+| [participant?](./react//useismutedoptions.participant.md) | Participant | _(Optional)_ |

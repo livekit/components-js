@@ -14,6 +14,6 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
 
 ## Properties
 
-| Property                                                                       | Modifiers | Type                                             | Description  |
-| ------------------------------------------------------------------------------ | --------- | ------------------------------------------------ | ------------ |
-| [chatMessageFormatter?](./react//videoconferenceprops.chatmessageformatter.md) |           | [MessageFormatter](./react//messageformatter.md) | _(Optional)_ |
+| Property                                                                       | Type                                             | Description  |
+| ------------------------------------------------------------------------------ | ------------------------------------------------ | ------------ |
+| [chatMessageFormatter?](./react//videoconferenceprops.chatmessageformatter.md) | [MessageFormatter](./react//messageformatter.md) | _(Optional)_ |

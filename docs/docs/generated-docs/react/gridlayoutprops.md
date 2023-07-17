@@ -14,7 +14,7 @@ export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement>, P
 
 ## Properties
 
-| Property                                         | Modifiers | Type                                                                              | Description |
-| ------------------------------------------------ | --------- | --------------------------------------------------------------------------------- | ----------- |
-| [children](./react//gridlayoutprops.children.md) |           | React.ReactNode                                                                   |             |
-| [tracks](./react//gridlayoutprops.tracks.md)     |           | [TrackReferenceOrPlaceholder](./core//trackreferenceorplaceholder.md)<!-- -->\[\] |             |
+| Property                                         | Type                                                                              | Description |
+| ------------------------------------------------ | --------------------------------------------------------------------------------- | ----------- |
+| [children](./react//gridlayoutprops.children.md) | React.ReactNode                                                                   |             |
+| [tracks](./react//gridlayoutprops.tracks.md)     | [TrackReferenceOrPlaceholder](./core//trackreferenceorplaceholder.md)<!-- -->\[\] |             |

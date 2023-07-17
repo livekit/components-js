@@ -12,7 +12,7 @@ import { FocusLayoutContainer } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                                            | Modifiers | Type                                        | Description  |
-| ------------------------------------------------------------------- | --------- | ------------------------------------------- | ------------ |
-| [focusTrack?](./react//focuslayoutcontainerprops.focustrack.md)     |           | [TrackReference](./core//trackreference.md) | _(Optional)_ |
-| [participants?](./react//focuslayoutcontainerprops.participants.md) |           | Array&lt;Participant&gt;                    | _(Optional)_ |
+| Property                                                            | Type                                        | Description  |
+| ------------------------------------------------------------------- | ------------------------------------------- | ------------ |
+| [focusTrack?](./react//focuslayoutcontainerprops.focustrack.md)     | [TrackReference](./core//trackreference.md) | _(Optional)_ |
+| [participants?](./react//focuslayoutcontainerprops.participants.md) | Array&lt;Participant&gt;                    | _(Optional)_ |

@@ -12,6 +12,6 @@ export interface UseLocalParticipantOptions
 
 ## Properties
 
-| Property                                             | Modifiers | Type | Description                                                                                 |
-| ---------------------------------------------------- | --------- | ---- | ------------------------------------------------------------------------------------------- |
-| [room?](./react//uselocalparticipantoptions.room.md) |           | Room | _(Optional)_ The room to use. If not provided, the hook will use the room from the context. |
+| Property                                             | Type | Description                                                                                 |
+| ---------------------------------------------------- | ---- | ------------------------------------------------------------------------------------------- |
+| [room?](./react//uselocalparticipantoptions.room.md) | Room | _(Optional)_ The room to use. If not provided, the hook will use the room from the context. |

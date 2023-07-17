@@ -12,6 +12,6 @@ export interface UseRemoteParticipantOptions
 
 ## Properties
 
-| Property                                                              | Modifiers | Type                 | Description  |
-| --------------------------------------------------------------------- | --------- | -------------------- | ------------ |
-| [updateOnlyOn?](./react//useremoteparticipantoptions.updateonlyon.md) |           | ParticipantEvent\[\] | _(Optional)_ |
+| Property                                                              | Type                 | Description  |
+| --------------------------------------------------------------------- | -------------------- | ------------ |
+| [updateOnlyOn?](./react//useremoteparticipantoptions.updateonlyon.md) | ParticipantEvent\[\] | _(Optional)_ |

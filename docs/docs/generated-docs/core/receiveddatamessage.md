@@ -12,6 +12,6 @@ export interface ReceivedDataMessage<T extends string | undefined = string> exte
 
 ## Properties
 
-| Property                                     | Modifiers | Type        | Description  |
-| -------------------------------------------- | --------- | ----------- | ------------ |
-| [from?](./core//receiveddatamessage.from.md) |           | Participant | _(Optional)_ |
+| Property                                     | Type        | Description  |
+| -------------------------------------------- | ----------- | ------------ |
+| [from?](./core//receiveddatamessage.from.md) | Participant | _(Optional)_ |

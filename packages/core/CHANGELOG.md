@@ -1,5 +1,15 @@
 # @livekit/components-core
 
+## 0.6.11
+
+### Patch Changes
+
+- Fix initial population of device select - [#554](https://github.com/livekit/components-js/pull/554) ([@lukasIO](https://github.com/lukasIO))
+
+- Make mouse event listener passive - [#551](https://github.com/livekit/components-js/pull/551) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix: Handle track reference type changes in the `updatePages` function by returning the new track reference instead of the old one. - [#560](https://github.com/livekit/components-js/pull/560) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.6.10
 
 ### Patch Changes

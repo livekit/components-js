@@ -8,6 +8,7 @@ import {
   createLocalAudioTrack,
   createLocalTracks,
   createLocalVideoTrack,
+  facingModeFromLocalTrack,
   Track,
   VideoPresets,
 } from 'livekit-client';
@@ -245,6 +246,16 @@ export const PreJoin = ({
     () => tracks?.filter((track) => track.kind === Track.Kind.Video)[0] as LocalVideoTrack,
     [tracks],
   );
+
+  const facingMode = React.useMemo(() => {
+    if (videoTrack) {
+      const { facingMode } = facingModeFromLocalTrack(videoTrack);
+      return facingMode;
+    } else {
+      return 'undefined';
+    }
+  }, [videoTrack]);
+
   const audioTrack = React.useMemo(
     () => tracks?.filter((track) => track.kind === Track.Kind.Audio)[0] as LocalAudioTrack,
     [tracks],
@@ -300,7 +311,9 @@ export const PreJoin = ({
   return (
     <div className="lk-prejoin" {...htmlProps}>
       <div className="lk-video-container">
-        {videoTrack && <video ref={videoEl} width="1280" height="720" />}
+        {videoTrack && (
+          <video ref={videoEl} width="1280" height="720" data-lk-facing-mode={facingMode} />
+        )}
         {(!videoTrack || !videoEnabled) && (
           <div className="lk-camera-off-note">
             <ParticipantPlaceholder />

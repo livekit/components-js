@@ -13,7 +13,7 @@ import {
   useMaybeLayoutContext,
   useMaybeTrackContext,
 } from '../../context';
-import { useIsMuted, useIsSpeaking } from '../../hooks';
+import { useFacingMode, useIsMuted, useIsSpeaking } from '../../hooks';
 import { mergeProps } from '../../utils';
 import { FocusToggle } from '../controls/FocusToggle';
 import { ParticipantPlaceholder } from '../../assets/images';
@@ -65,6 +65,7 @@ export function useParticipantTile<T extends HTMLElement>({
   const isVideoMuted = useIsMuted(Track.Source.Camera, { participant });
   const isAudioMuted = useIsMuted(Track.Source.Microphone, { participant });
   const isSpeaking = useIsSpeaking(participant);
+  const facingMode = useFacingMode({ participant, publication, source });
   return {
     elementProps: {
       'data-lk-audio-muted': isAudioMuted,
@@ -72,6 +73,7 @@ export function useParticipantTile<T extends HTMLElement>({
       'data-lk-speaking': disableSpeakingIndicator === true ? false : isSpeaking,
       'data-lk-local-participant': participant.isLocal,
       'data-lk-source': source,
+      'data-lk-facing-mode': facingMode,
       ...mergedProps,
     } as React.HTMLAttributes<HTMLDivElement>,
   };

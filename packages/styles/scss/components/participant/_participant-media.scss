@@ -6,11 +6,6 @@
   // aspect-ratio: 16 / 10;
   background-color: #000;
 
-  // Flip the local participant camera video.
-  &[data-local-participant='true'][data-source='camera'] {
-    transform: rotateY(180deg);
-  }
-
   &[data-orientation='landscape'] {
     object-fit: cover;
   }
@@ -25,4 +20,10 @@
 
 .participant-media-audio {
   width: auto;
+}
+
+// Mirror the camera video of the local participants.
+[data-facing-mode='user'] // 
+  .participant-media-video[data-local-participant='true'][data-source='camera'] {
+  transform: rotateY(180deg);
 }

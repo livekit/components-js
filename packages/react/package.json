@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-react",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "license": "Apache-2.0",
   "author": "LiveKit",
   "repository": {
@@ -47,7 +47,7 @@
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@livekit/components-core": "0.6.10",
+    "@livekit/components-core": "0.6.11",
     "@react-hook/latest": "^1.0.3",
     "clsx": "^1.2.1"
   },
@@ -72,6 +72,7 @@
     "size-limit": "^8.2.4",
     "typescript": "5.0.4",
     "tsup": "^7.0.0",
+    "typescript": "5.0.4",
     "vite": "^4.1.4",
     "vitest": "^0.32.0"
   },

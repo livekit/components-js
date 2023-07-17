@@ -309,7 +309,6 @@ export class MarkdownDocumenter {
         if (category === 'component' || category === 'prefab') {
           const parameters = (apiItem as ApiParameterListMixin).parameters;
           if (parameters.length > 0) {
-            console.log('parameters: ', parameters.map((para) => para.name).join(', '));
             const props = parameters[0];
             if (props !== undefined) {
               for (const token of props.parameterTypeExcerpt.tokens) {
@@ -317,7 +316,6 @@ export class MarkdownDocumenter {
                   const apiItemResult: IResolveDeclarationReferenceResult =
                     this._apiModel.resolveDeclarationReference(token.canonicalReference, undefined);
                   if (apiItemResult.resolvedApiItem) {
-                    console.log('resolvedApiItem name', apiItemResult.resolvedApiItem.displayName);
                     this._writeInterfaceTables(
                       output,
                       apiItemResult.resolvedApiItem as ApiInterface,
@@ -480,7 +478,7 @@ export class MarkdownDocumenter {
       if (tsdocComment) {
         // Write the @remarks block
         if (tsdocComment.remarksBlock) {
-          output.appendNode(new DocHeading({ configuration, title: 'Remarks' }));
+          output.appendNode(new DocHeading({ configuration, title: 'Remarks', level: 2 }));
           this._appendSection(output, tsdocComment.remarksBlock.content);
         }
 
@@ -494,7 +492,7 @@ export class MarkdownDocumenter {
           const heading: string =
             exampleBlocks.length > 1 ? `Usage Example ${exampleNumber}` : 'Usage';
 
-          output.appendNode(new DocHeading({ configuration, title: heading }));
+          output.appendNode(new DocHeading({ configuration, title: heading, level: 2 }));
 
           this._appendSection(output, exampleBlock.content);
 
@@ -858,7 +856,7 @@ export class MarkdownDocumenter {
     }
 
     if (propertiesTable.rows.length > 0) {
-      output.appendNode(new DocHeading({ configuration, title: 'Properties' }));
+      output.appendNode(new DocHeading({ configuration, title: 'Properties', level: 2 }));
       output.appendNode(propertiesTable);
     }
 
@@ -915,7 +913,7 @@ export class MarkdownDocumenter {
 
     const propertiesTable: DocTable = new DocTable({
       configuration,
-      headerTitles: ['Property', 'Modifiers', 'Type', 'Description'],
+      headerTitles: ['Property', 'Type', 'Description'],
     });
 
     const methodsTable: DocTable = new DocTable({
@@ -947,7 +945,7 @@ export class MarkdownDocumenter {
             eventsTable.addRow(
               new DocTableRow({ configuration }, [
                 this._createTitleCell(apiMember),
-                this._createModifiersCell(apiMember),
+                // this._createModifiersCell(apiMember),
                 this._createPropertyTypeCell(apiMember),
                 this._createDescriptionCell(apiMember, isInherited),
               ]),
@@ -956,7 +954,7 @@ export class MarkdownDocumenter {
             propertiesTable.addRow(
               new DocTableRow({ configuration }, [
                 this._createTitleCell(apiMember),
-                this._createModifiersCell(apiMember),
+                // this._createModifiersCell(apiMember),
                 this._createPropertyTypeCell(apiMember),
                 this._createDescriptionCell(apiMember, isInherited),
               ]),
@@ -1380,7 +1378,6 @@ export class MarkdownDocumenter {
     const subFolder: string = getCategorySubfolder(apiItem);
     for (const hierarchyItem of apiItem.getHierarchy()) {
       // For overloaded methods, add a suffix such as "MyClass.myMethod_2".
-      console.log('hierarchyItem', hierarchyItem.displayName);
       let qualifiedName: string = Utilities.getSafeFilenameForName(hierarchyItem.displayName);
       if (ApiParameterListMixin.isBaseClassOf(hierarchyItem)) {
         if (hierarchyItem.overloadIndex > 1) {

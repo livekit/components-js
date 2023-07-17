@@ -309,7 +309,6 @@ export class MarkdownDocumenter {
         if (category === 'component' || category === 'prefab') {
           const parameters = (apiItem as ApiParameterListMixin).parameters;
           if (parameters.length > 0) {
-            console.log('parameters: ', parameters.map((para) => para.name).join(', '));
             const props = parameters[0];
             if (props !== undefined) {
               for (const token of props.parameterTypeExcerpt.tokens) {
@@ -317,7 +316,6 @@ export class MarkdownDocumenter {
                   const apiItemResult: IResolveDeclarationReferenceResult =
                     this._apiModel.resolveDeclarationReference(token.canonicalReference, undefined);
                   if (apiItemResult.resolvedApiItem) {
-                    console.log('resolvedApiItem name', apiItemResult.resolvedApiItem.displayName);
                     this._writeInterfaceTables(
                       output,
                       apiItemResult.resolvedApiItem as ApiInterface,
@@ -1380,7 +1378,6 @@ export class MarkdownDocumenter {
     const subFolder: string = getCategorySubfolder(apiItem);
     for (const hierarchyItem of apiItem.getHierarchy()) {
       // For overloaded methods, add a suffix such as "MyClass.myMethod_2".
-      console.log('hierarchyItem', hierarchyItem.displayName);
       let qualifiedName: string = Utilities.getSafeFilenameForName(hierarchyItem.displayName);
       if (ApiParameterListMixin.isBaseClassOf(hierarchyItem)) {
         if (hierarchyItem.overloadIndex > 1) {

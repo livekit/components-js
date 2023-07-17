@@ -22,7 +22,7 @@ import { GridLayout } from '@livekit/components-react';
 
 {% partial file="p_usage.md" /%}
 
-# Properties
+## Properties
 
 | Property                                         | Type                                                                              | Description |
 | ------------------------------------------------ | --------------------------------------------------------------------------------- | ----------- |

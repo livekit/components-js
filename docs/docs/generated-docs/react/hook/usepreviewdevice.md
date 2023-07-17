@@ -10,7 +10,7 @@ import { usePreviewDevice } from '@livekit/components-react';
 
 {% partial file="p_usage.md" /%}
 
-# Parameters
+## Parameters
 
 | Parameter | Type                         | Description |
 | --------- | ---------------------------- | ----------- |

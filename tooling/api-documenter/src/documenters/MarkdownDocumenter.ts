@@ -973,7 +973,7 @@ export class MarkdownDocumenter {
     }
 
     if (propertiesTable.rows.length > 0) {
-      output.appendNode(new DocHeading({ configuration, title: 'Properties' }));
+      output.appendNode(new DocHeading({ configuration, title: 'Properties', level: 2 }));
       output.appendNode(propertiesTable);
     }
 

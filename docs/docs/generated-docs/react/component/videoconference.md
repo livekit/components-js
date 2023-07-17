@@ -24,7 +24,7 @@ The component is implemented with other LiveKit components like `FocusContextPro
 
 {% partial file="p_usage.md" /%}
 
-# Properties
+## Properties
 
 | Property                                                                       | Type                                             | Description  |
 | ------------------------------------------------------------------------------ | ------------------------------------------------ | ------------ |

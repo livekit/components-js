@@ -26,7 +26,7 @@ export class DocHeading extends DocNode {
   public constructor(parameters: IDocHeadingParameters) {
     super(parameters);
     this.title = parameters.title;
-    this.level = parameters.level !== undefined ? parameters.level : 1;
+    this.level = parameters.level !== undefined ? parameters.level : 2;
 
     if (this.level < 1 || this.level > 5) {
       throw new Error('IDocHeadingParameters.level must be a number between 1 and 5');

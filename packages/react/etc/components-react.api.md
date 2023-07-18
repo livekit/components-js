@@ -285,7 +285,7 @@ export type LocalUserChoices = {
 };
 
 // @public
-export const MediaDeviceMenu: ({ kind, initialSelection, onActiveDeviceChange, tracks, requestPermissions, ...props }: MediaDeviceMenuProps) => React_2.JSX.Element;
+export function MediaDeviceMenu({ kind, initialSelection, onActiveDeviceChange, tracks, requestPermissions, ...props }: MediaDeviceMenuProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface MediaDeviceMenuProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -325,7 +325,7 @@ export interface MediaDeviceSelectProps extends React_2.HTMLAttributes<HTMLUList
 export type MessageFormatter = (message: string) => React_2.ReactNode;
 
 // @public
-export const ParticipantAudioTile: ({ participant, children, source, publication, disableSpeakingIndicator, onParticipantClick, ...htmlProps }: ParticipantTileProps) => React_2.JSX.Element;
+export function ParticipantAudioTile({ participant, children, source, publication, disableSpeakingIndicator, onParticipantClick, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export const ParticipantContext: React_2.Context<Participant | undefined>;
@@ -336,7 +336,7 @@ export function ParticipantContextIfNeeded(props: React_2.PropsWithChildren<{
 }>): React_2.JSX.Element;
 
 // @public
-export const ParticipantLoop: ({ participants, ...props }: ParticipantLoopProps) => React_2.JSX.Element;
+export function ParticipantLoop({ participants, ...props }: ParticipantLoopProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export type ParticipantLoopProps = {
@@ -351,7 +351,7 @@ export function ParticipantName({ participant, ...props }: ParticipantNameProps)
 export type ParticipantNameProps = React_2.HTMLAttributes<HTMLSpanElement> & UseParticipantInfoOptions;
 
 // @public
-export const ParticipantTile: ({ participant, children, source, onParticipantClick, publication, disableSpeakingIndicator, ...htmlProps }: ParticipantTileProps) => React_2.JSX.Element;
+export function ParticipantTile({ participant, children, source, onParticipantClick, publication, disableSpeakingIndicator, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export type ParticipantTileProps = React_2.HTMLAttributes<HTMLDivElement> & {
@@ -363,7 +363,7 @@ export type ParticipantTileProps = React_2.HTMLAttributes<HTMLDivElement> & {
 };
 
 // @public
-export const PreJoin: ({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, ...htmlProps }: PreJoinProps) => React_2.JSX.Element;
+export function PreJoin({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, ...htmlProps }: PreJoinProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export type PreJoinProps = Omit<React_2.HTMLAttributes<HTMLDivElement>, 'onSubmit'> & {
@@ -381,13 +381,13 @@ export type PreJoinProps = Omit<React_2.HTMLAttributes<HTMLDivElement>, 'onSubmi
 export { ReceivedChatMessage }
 
 // @public
-export const RoomAudioRenderer: () => React_2.JSX.Element;
+export function RoomAudioRenderer(): React_2.JSX.Element;
 
 // @public (undocumented)
 export const RoomContext: React_2.Context<Room | undefined>;
 
 // @public
-export const RoomName: ({ childrenPosition, children, ...htmlAttributes }: RoomNameProps) => React_2.JSX.Element;
+export function RoomName({ childrenPosition, children, ...htmlAttributes }: RoomNameProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
@@ -405,7 +405,7 @@ export function Toast(props: React_2.HTMLAttributes<HTMLDivElement>): React_2.JS
 export const TrackContext: React_2.Context<TrackReferenceOrPlaceholder | undefined>;
 
 // @public
-export const TrackLoop: ({ tracks, ...props }: TrackLoopProps) => React_2.JSX.Element;
+export function TrackLoop({ tracks, ...props }: TrackLoopProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export type TrackLoopProps = {
@@ -414,7 +414,7 @@ export type TrackLoopProps = {
 };
 
 // @public
-export const TrackMutedIndicator: ({ source, participant, show, ...props }: TrackMutedIndicatorProps) => React_2.JSX.Element | null;
+export function TrackMutedIndicator({ source, participant, show, ...props }: TrackMutedIndicatorProps): React_2.JSX.Element | null;
 
 // @public (undocumented)
 export interface TrackMutedIndicatorProps extends React_2.HTMLAttributes<HTMLDivElement> {
@@ -528,7 +528,7 @@ export function useLiveKitRoom(props: LiveKitRoomProps): {
 };
 
 // @public
-export const useLocalParticipant: (options?: UseLocalParticipantOptions) => {
+export function useLocalParticipant(options?: UseLocalParticipantOptions): {
     isMicrophoneEnabled: boolean;
     isScreenShareEnabled: boolean;
     isCameraEnabled: boolean;
@@ -644,7 +644,7 @@ export interface UseParticipantPermissionsOptions {
 }
 
 // @public
-export const useParticipants: (options?: UseParticipantsOptions) => (RemoteParticipant | LocalParticipant)[];
+export function useParticipants(options?: UseParticipantsOptions): (RemoteParticipant | LocalParticipant)[];
 
 // @public (undocumented)
 export interface UseParticipantsOptions {
@@ -679,7 +679,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(en
 export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): LocalTrack[] | undefined;
 
 // @public (undocumented)
-export const useRemoteParticipant: (identity: string, options?: UseRemoteParticipantOptions) => RemoteParticipant | undefined;
+export function useRemoteParticipant(identity: string, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;
 
 // @public (undocumented)
 export interface UseRemoteParticipantOptions {
@@ -688,7 +688,7 @@ export interface UseRemoteParticipantOptions {
 }
 
 // @public
-export const useRemoteParticipants: (options?: UseRemoteParticipantsOptions) => RemoteParticipant[];
+export function useRemoteParticipants(options?: UseRemoteParticipantsOptions): RemoteParticipant[];
 
 // @public (undocumented)
 export interface UseRemoteParticipantsOptions {
@@ -725,7 +725,7 @@ export interface UseRoomInfoOptions {
 export function useSortedParticipants(participants: Array<Participant>): Participant[];
 
 // @public
-export const useSpeakingParticipants: () => Participant[];
+export function useSpeakingParticipants(): Participant[];
 
 // @alpha
 export function useStartAudio({ room, props }: UseStartAudioProps): {
@@ -764,7 +764,7 @@ export interface UseTokenOptions {
 export function useTrackContext(): TrackReferenceOrPlaceholder;
 
 // @public (undocumented)
-export const useTrackMutedIndicator: (source: Track.Source, options?: UseTrackMutedIndicatorOptions) => {
+export function useTrackMutedIndicator(source: Track.Source, options?: UseTrackMutedIndicatorOptions): {
     isMuted: boolean;
     className: string;
 };

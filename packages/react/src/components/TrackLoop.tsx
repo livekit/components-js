@@ -27,7 +27,7 @@ export type TrackLoopProps = {
  * ```
  * @public
  */
-export const TrackLoop = ({ tracks, ...props }: TrackLoopProps) => {
+export function TrackLoop({ tracks, ...props }: TrackLoopProps) {
   return (
     <>
       {tracks.map((trackReference) => {
@@ -45,4 +45,4 @@ export const TrackLoop = ({ tracks, ...props }: TrackLoopProps) => {
       })}
     </>
   );
-};
+}

@@ -37,14 +37,14 @@ export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLBut
  * ```
  * @public
  */
-export const MediaDeviceMenu = ({
+export function MediaDeviceMenu({
   kind,
   initialSelection,
   onActiveDeviceChange,
   tracks,
   requestPermissions = false,
   ...props
-}: MediaDeviceMenuProps) => {
+}: MediaDeviceMenuProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [devices, setDevices] = React.useState<MediaDeviceInfo[]>([]);
   const [updateRequired, setUpdateRequired] = React.useState<boolean>(true);
@@ -148,4 +148,4 @@ export const MediaDeviceMenu = ({
       )}
     </>
   );
-};
+}

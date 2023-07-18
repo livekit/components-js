@@ -28,7 +28,7 @@ export type ParticipantLoopProps = {
  * ```
  * @public
  */
-export const ParticipantLoop = ({ participants, ...props }: ParticipantLoopProps) => {
+export function ParticipantLoop({ participants, ...props }: ParticipantLoopProps) {
   return (
     <>
       {participants.map((participant) => (
@@ -38,4 +38,4 @@ export const ParticipantLoop = ({ participants, ...props }: ParticipantLoopProps
       ))}
     </>
   );
-};
+}

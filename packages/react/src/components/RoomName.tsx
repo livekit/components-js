@@ -38,11 +38,11 @@ export interface RoomNameProps extends React.HTMLAttributes<HTMLSpanElement> {
  * ```
  * @public
  */
-export const RoomName = ({
+export function RoomName({
   childrenPosition = 'before',
   children,
   ...htmlAttributes
-}: RoomNameProps) => {
+}: RoomNameProps) {
   const { name } = useRoomInfo();
 
   return (
@@ -52,4 +52,4 @@ export const RoomName = ({
       {childrenPosition === 'after' && children}
     </span>
   );
-};
+}

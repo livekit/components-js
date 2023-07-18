@@ -64,7 +64,7 @@ import {
 } from '../plugin/MarkdownDocumenterFeature';
 import { DocumenterConfig } from './DocumenterConfig';
 import { MarkdownDocumenterAccessor } from '../plugin/MarkdownDocumenterAccessor';
-import { getCategorySubfolder, getFunctionType } from '../livekitUtils/classifiers';
+import { LkType, getCategorySubfolder, getFunctionType } from '../livekitUtils/classifiers';
 import { MarkDocTag } from '../nodes/MarkDocTag';
 
 export interface IMarkdownDocumenterOptions {
@@ -123,7 +123,7 @@ export class MarkdownDocumenter {
   private _writeApiItemPage(apiItem: ApiItem): void {
     const configuration: TSDocConfiguration = this._tsdocConfiguration;
     const output: DocSection = new DocSection({ configuration });
-    const category = getFunctionType(apiItem);
+    const category: LkType = getFunctionType(apiItem);
 
     // this._writeBreadcrumb(output, apiItem);
 

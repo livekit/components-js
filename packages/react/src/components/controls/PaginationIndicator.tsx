@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-export type PaginationIndicatorProps = {
+export interface PaginationIndicatorProps {
   totalPageCount: number;
   currentPage: number;
-};
+}
 
 export function PaginationIndicator({ totalPageCount, currentPage }: PaginationIndicatorProps) {
   const bubbles = new Array(totalPageCount).fill('').map((_, index) => {

@@ -37,7 +37,8 @@ const DEFAULT_USER_CHOICES = {
 };
 
 /** @public */
-export type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'> & {
+export interface PreJoinProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit' | 'onError'> {
   /** This function is called with the `LocalUserChoices` if validation is passed. */
   onSubmit?: (values: LocalUserChoices) => void;
   /**
@@ -53,7 +54,7 @@ export type PreJoinProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'
   micLabel?: string;
   camLabel?: string;
   userLabel?: string;
-};
+}
 
 /** @alpha */
 export function usePreviewTracks(

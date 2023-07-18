@@ -21,10 +21,10 @@ export type ControlBarControls = {
 };
 
 /** @public */
-export type ControlBarProps = React.HTMLAttributes<HTMLDivElement> & {
+export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
   variation?: 'minimal' | 'verbose' | 'textOnly';
   controls?: ControlBarControls;
-};
+}
 
 /**
  * The ControlBar prefab component gives the user the basic user interface

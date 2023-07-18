@@ -24,8 +24,9 @@ export type UseParticipantInfoOptions = {
 };
 
 /** @public */
-export type ParticipantNameProps = React.HTMLAttributes<HTMLSpanElement> &
-  UseParticipantInfoOptions;
+export interface ParticipantNameProps
+  extends React.HTMLAttributes<HTMLSpanElement>,
+    UseParticipantInfoOptions {}
 
 /**
  * The ParticipantName component displays the name of the participant as a string within an HTML span element.

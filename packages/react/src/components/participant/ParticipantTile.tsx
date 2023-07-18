@@ -22,21 +22,23 @@ import { VideoTrack } from './VideoTrack';
 import { AudioTrack } from './AudioTrack';
 
 /** @public */
-export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
+export interface ParticipantTileProps extends React.HTMLAttributes<HTMLDivElement> {
   disableSpeakingIndicator?: boolean;
   participant?: Participant;
   source?: Track.Source;
   publication?: TrackPublication;
   onParticipantClick?: (event: ParticipantClickEvent) => void;
-};
+}
 
 /** @public */
-export type UseParticipantTileProps<T extends HTMLElement> = TrackReferenceOrPlaceholder & {
+export interface UseParticipantTileProps<T extends HTMLElement> extends React.HTMLAttributes<T> {
   disableSpeakingIndicator?: boolean;
   publication?: TrackPublication;
   onParticipantClick?: (event: ParticipantClickEvent) => void;
   htmlProps: React.HTMLAttributes<T>;
-};
+  source: Track.Source;
+  participant: Participant;
+}
 
 /** @public */
 export function useParticipantTile<T extends HTMLElement>({

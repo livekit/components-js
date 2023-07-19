@@ -29,3 +29,4 @@ export { useFacingMode } from './useFacingMode';
 export { useRoomInfo } from './useRoomInfo';
 export { useClearPinButton } from './useClearPinButton';
 export { useDisconnectButton } from './useDisconnectButton';
+export { useFocusToggle } from './useFocusToggle';

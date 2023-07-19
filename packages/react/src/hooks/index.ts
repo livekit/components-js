@@ -1,3 +1,4 @@
+export { useLiveKitRoom } from './useLiveKitRoom';
 export { useAudioPlayback } from './useAudioPlayback';
 export { useDataChannel } from './useDataChannel';
 export { useGridLayout } from './useGridLayout';

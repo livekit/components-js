@@ -28,3 +28,4 @@ export { useSwipe, UseSwipeOptions } from './useSwipe';
 export { useFacingMode } from './useFacingMode';
 export { useRoomInfo } from './useRoomInfo';
 export { useClearPinButton } from './useClearPinButton';
+export { useDisconnectButton } from './useDisconnectButton';

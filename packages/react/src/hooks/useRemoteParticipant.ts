@@ -10,10 +10,10 @@ export interface UseRemoteParticipantOptions {
 }
 
 /** @public */
-export const useRemoteParticipant = (
+export function useRemoteParticipant(
   identity: string,
   options: UseRemoteParticipantOptions = {},
-): RemoteParticipant | undefined => {
+): RemoteParticipant | undefined {
   const room = useRoomContext();
   const [updateOnlyOn] = React.useState(options.updateOnlyOn);
 
@@ -26,4 +26,4 @@ export const useRemoteParticipant = (
     room.getParticipantByIdentity(identity) as RemoteParticipant | undefined,
   );
   return participant;
-};
+}

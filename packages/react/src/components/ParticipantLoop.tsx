@@ -4,12 +4,12 @@ import { ParticipantContext } from '../context';
 import { cloneSingleChild } from '../utils';
 
 /** @public */
-export type ParticipantLoopProps = {
+export interface ParticipantLoopProps {
   /** The participants to loop over. If not provided, the participants from the current room context are used. */
   participants: Participant[];
   /** The template component to be used in the loop. */
   children: React.ReactNode;
-};
+}
 
 /**
  * The ParticipantLoop component loops over an array of participants to create a context for every participant.
@@ -28,7 +28,7 @@ export type ParticipantLoopProps = {
  * ```
  * @public
  */
-export const ParticipantLoop = ({ participants, ...props }: ParticipantLoopProps) => {
+export function ParticipantLoop({ participants, ...props }: ParticipantLoopProps) {
   return (
     <>
       {participants.map((participant) => (
@@ -38,4 +38,4 @@ export const ParticipantLoop = ({ participants, ...props }: ParticipantLoopProps
       ))}
     </>
   );
-};
+}

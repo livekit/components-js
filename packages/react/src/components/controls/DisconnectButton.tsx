@@ -6,9 +6,9 @@ import { useConnectionState } from '../ConnectionState';
 import { mergeProps } from '../../utils';
 
 /** @public */
-export type DisconnectButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+export interface DisconnectButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   stopTracks?: boolean;
-};
+}
 
 /** @public */
 export function useDisconnectButton(props: DisconnectButtonProps) {

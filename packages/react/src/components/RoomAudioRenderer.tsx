@@ -16,7 +16,7 @@ import { AudioTrack } from './participant/AudioTrack';
  * ```
  * @public
  */
-export const RoomAudioRenderer = () => {
+export function RoomAudioRenderer() {
   const tracks = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio], {
     updateOnlyOn: [],
   }).filter((ref) => !isLocal(ref.participant));
@@ -27,4 +27,4 @@ export const RoomAudioRenderer = () => {
       ))}
     </div>
   );
-};
+}

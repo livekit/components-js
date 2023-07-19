@@ -16,7 +16,7 @@ export interface UseLocalParticipantOptions {
  * The useLocalParticipant hook the state of the local participant.
  * @public
  */
-export const useLocalParticipant = (options: UseLocalParticipantOptions = {}) => {
+export function useLocalParticipant(options: UseLocalParticipantOptions = {}) {
   const room = useEnsureRoom(options.room);
   const [localParticipant, setLocalParticipant] = React.useState(room.localParticipant);
   const [isMicrophoneEnabled, setIsMicrophoneEnabled] = React.useState(
@@ -55,4 +55,4 @@ export const useLocalParticipant = (options: UseLocalParticipantOptions = {}) =>
     cameraTrack,
     localParticipant,
   };
-};
+}

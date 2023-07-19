@@ -22,21 +22,23 @@ import { VideoTrack } from './VideoTrack';
 import { AudioTrack } from './AudioTrack';
 
 /** @public */
-export type ParticipantTileProps = React.HTMLAttributes<HTMLDivElement> & {
+export interface ParticipantTileProps extends React.HTMLAttributes<HTMLDivElement> {
   disableSpeakingIndicator?: boolean;
   participant?: Participant;
   source?: Track.Source;
   publication?: TrackPublication;
   onParticipantClick?: (event: ParticipantClickEvent) => void;
-};
+}
 
 /** @public */
-export type UseParticipantTileProps<T extends HTMLElement> = TrackReferenceOrPlaceholder & {
+export interface UseParticipantTileProps<T extends HTMLElement> extends React.HTMLAttributes<T> {
   disableSpeakingIndicator?: boolean;
   publication?: TrackPublication;
   onParticipantClick?: (event: ParticipantClickEvent) => void;
   htmlProps: React.HTMLAttributes<T>;
-};
+  source: Track.Source;
+  participant: Participant;
+}
 
 /** @public */
 export function useParticipantTile<T extends HTMLElement>({
@@ -107,7 +109,7 @@ export function ParticipantContextIfNeeded(
  * ```
  * @public
  */
-export const ParticipantTile = ({
+export function ParticipantTile({
   participant,
   children,
   source = Track.Source.Camera,
@@ -115,7 +117,7 @@ export const ParticipantTile = ({
   publication,
   disableSpeakingIndicator,
   ...htmlProps
-}: ParticipantTileProps) => {
+}: ParticipantTileProps) {
   const p = useEnsureParticipant(participant);
   const trackRef: TrackReferenceOrPlaceholder = useMaybeTrackContext() ?? {
     participant: p,
@@ -199,4 +201,4 @@ export const ParticipantTile = ({
       </ParticipantContextIfNeeded>
     </div>
   );
-};
+}

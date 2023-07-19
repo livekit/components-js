@@ -6,16 +6,16 @@ import { useEnsureParticipant } from '../../context';
 import { RemoteAudioTrack } from 'livekit-client';
 
 /** @public */
-export type AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> =
-  React.HTMLAttributes<T> & {
-    source: Track.Source;
-    name?: string;
-    participant?: Participant;
-    publication?: TrackPublication;
-    onSubscriptionStatusChanged?: (subscribed: boolean) => void;
-    /** by the default the range is between 0 and 1 */
-    volume?: number;
-  };
+export interface AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
+  extends React.HTMLAttributes<T> {
+  source: Track.Source;
+  name?: string;
+  participant?: Participant;
+  publication?: TrackPublication;
+  onSubscriptionStatusChanged?: (subscribed: boolean) => void;
+  /** by the default the range is between 0 and 1 */
+  volume?: number;
+}
 
 /**
  * The AudioTrack component is responsible for rendering participant audio tracks.

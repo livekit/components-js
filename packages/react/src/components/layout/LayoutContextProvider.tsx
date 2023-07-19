@@ -5,11 +5,11 @@ import type { LayoutContextType } from '../../context';
 import { LayoutContext, useEnsureCreateLayoutContext } from '../../context';
 
 /** @alpha */
-export type LayoutContextProviderProps = {
+export interface LayoutContextProviderProps {
   value?: LayoutContextType;
   onPinChange?: (state: PinState) => void;
   onWidgetChange?: (state: WidgetState) => void;
-};
+}
 
 /** @alpha */
 export function LayoutContextProvider({

@@ -4,7 +4,7 @@ import { mergeProps } from '../../utils';
 import { useLayoutContext } from '../../context';
 
 /** @public */
-export type ClearPinButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+export interface ClearPinButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 /** @public */
 export function useClearPinButton(props: ClearPinButtonProps) {

@@ -1,3 +1,4 @@
+export { useToggleChat } from './useToggleChat';
 export { useLiveKitRoom } from './useLiveKitRoom';
 export { useConnectionState } from './useConnectionStatus';
 export { useAudioPlayback } from './useAudioPlayback';

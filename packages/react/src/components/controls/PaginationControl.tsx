@@ -3,14 +3,15 @@ import SvgChevron from '../../assets/icons/Chevron';
 import type { usePagination } from '../../hooks';
 import { createInteractingObservable } from '@livekit/components-core';
 
-export type PaginationControlProps = Pick<
-  ReturnType<typeof usePagination>,
-  'totalPageCount' | 'nextPage' | 'prevPage' | 'currentPage'
-> & {
+export interface PaginationControlProps
+  extends Pick<
+    ReturnType<typeof usePagination>,
+    'totalPageCount' | 'nextPage' | 'prevPage' | 'currentPage'
+  > {
   /** Reference to an HTML element that holds the pages, while interacting (`mouseover`)
    *  with it, the pagination controls will appear for a while. */
   pagesContainer?: React.RefObject<HTMLElement>;
-};
+}
 
 export function PaginationControl({
   totalPageCount,

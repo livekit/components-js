@@ -22,7 +22,7 @@ export interface UseRemoteParticipantsOptions {
  *
  * @public
  */
-export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}) => {
+export function useRemoteParticipants(options: UseRemoteParticipantsOptions = {}) {
   const room = useEnsureRoom(options.room);
   const [participants, setParticipants] = React.useState<RemoteParticipant[]>([]);
 
@@ -33,4 +33,4 @@ export const useRemoteParticipants = (options: UseRemoteParticipantsOptions = {}
     return () => listener.unsubscribe();
   }, [room, JSON.stringify(options.updateOnlyOn)]);
   return participants;
-};
+}

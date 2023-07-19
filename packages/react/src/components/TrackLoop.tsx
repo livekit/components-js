@@ -5,12 +5,12 @@ import { TrackContext } from '../context/track-context';
 import { cloneSingleChild } from '../utils';
 
 /** @public */
-export type TrackLoopProps = {
+export interface TrackLoopProps {
   /** Track references to loop over. */
   tracks: TrackReference[] | TrackReferenceOrPlaceholder[];
   /** The template component to be used in the loop. */
   children: React.ReactNode;
-};
+}
 
 /**
  * The TrackLoop component loops over tracks. It is for example a easy way to loop over all participant camera and screen share tracks.
@@ -27,7 +27,7 @@ export type TrackLoopProps = {
  * ```
  * @public
  */
-export const TrackLoop = ({ tracks, ...props }: TrackLoopProps) => {
+export function TrackLoop({ tracks, ...props }: TrackLoopProps) {
   return (
     <>
       {tracks.map((trackReference) => {
@@ -45,4 +45,4 @@ export const TrackLoop = ({ tracks, ...props }: TrackLoopProps) => {
       })}
     </>
   );
-};
+}

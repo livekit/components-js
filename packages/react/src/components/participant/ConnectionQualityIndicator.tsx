@@ -13,8 +13,9 @@ export interface ConnectionQualityIndicatorOptions {
 }
 
 /** @public */
-export type ConnectionQualityIndicatorProps = React.HTMLAttributes<HTMLDivElement> &
-  ConnectionQualityIndicatorOptions;
+export interface ConnectionQualityIndicatorProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    ConnectionQualityIndicatorOptions {}
 
 /** @public */
 export function useConnectionQualityIndicator(options: ConnectionQualityIndicatorOptions = {}) {

@@ -22,7 +22,7 @@ import { AudioTrack } from './AudioTrack';
  * @see `ParticipantLoop` component
  * @public
  */
-export const ParticipantAudioTile = ({
+export function ParticipantAudioTile({
   participant,
   children,
   source,
@@ -30,7 +30,7 @@ export const ParticipantAudioTile = ({
   disableSpeakingIndicator,
   onParticipantClick,
   ...htmlProps
-}: ParticipantTileProps) => {
+}: ParticipantTileProps) {
   const p = useEnsureParticipant(participant);
   const { elementProps } = useParticipantTile({
     participant: p,
@@ -60,4 +60,4 @@ export const ParticipantAudioTile = ({
       </ParticipantContextIfNeeded>
     </div>
   );
-};
+}

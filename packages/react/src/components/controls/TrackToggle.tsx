@@ -7,19 +7,18 @@ import { getSourceIcon } from '../../assets/icons/util';
 import { useObservableState } from '../../hooks/internal/useObservableState';
 
 /** @public */
-export type TrackToggleProps<T extends ToggleSource> = Omit<
-  React.ButtonHTMLAttributes<HTMLButtonElement>,
-  'onChange'
-> & {
+export interface TrackToggleProps<T extends ToggleSource>
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
   source: T;
   showIcon?: boolean;
   initialState?: boolean;
   onChange?: (enabled: boolean) => void;
   captureOptions?: CaptureOptionsBySource<T>;
-};
+}
 
 /** @public */
-export type UseTrackToggleProps<T extends ToggleSource> = Omit<TrackToggleProps<T>, 'showIcon'>;
+export interface UseTrackToggleProps<T extends ToggleSource>
+  extends Omit<TrackToggleProps<T>, 'showIcon'> {}
 
 /** @public */
 export function useTrackToggle<T extends ToggleSource>({

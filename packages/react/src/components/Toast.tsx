@@ -3,7 +3,7 @@ import { ConnectionState } from 'livekit-client';
 import * as React from 'react';
 import { SpinnerIcon } from '../assets/icons';
 import { mergeProps } from '../utils';
-import { useConnectionState } from './ConnectionState';
+import { useConnectionState } from '../hooks';
 
 /** @public */
 export function Toast(props: React.HTMLAttributes<HTMLDivElement>) {

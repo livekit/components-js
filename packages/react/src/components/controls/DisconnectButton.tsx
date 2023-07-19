@@ -2,8 +2,8 @@ import { ConnectionState } from 'livekit-client';
 import { setupDisconnectButton } from '@livekit/components-core';
 import * as React from 'react';
 import { useRoomContext } from '../../context';
-import { useConnectionState } from '../ConnectionState';
 import { mergeProps } from '../../utils';
+import { useConnectionState } from '../../hooks';
 
 /** @public */
 export interface DisconnectButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

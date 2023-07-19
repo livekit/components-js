@@ -27,3 +27,4 @@ export { usePinnedTracks } from './usePinnedTracks';
 export { useSwipe, UseSwipeOptions } from './useSwipe';
 export { useFacingMode } from './useFacingMode';
 export { useRoomInfo } from './useRoomInfo';
+export { useClearPinButton } from './useClearPinButton';

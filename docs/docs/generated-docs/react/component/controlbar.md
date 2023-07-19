@@ -23,3 +23,10 @@ This component is build with other LiveKit components like `TrackToggle`<!-- -->
 ```
 
 {% partial file="p_usage.md" /%}
+
+## Properties
+
+| Property                                            | Type                                                 | Description  |
+| --------------------------------------------------- | ---------------------------------------------------- | ------------ |
+| [controls?](./react//controlbarprops.controls.md)   | [ControlBarControls](./react//controlbarcontrols.md) | _(Optional)_ |
+| [variation?](./react//controlbarprops.variation.md) | 'minimal' \| 'verbose' \| 'textOnly'                 | _(Optional)_ |

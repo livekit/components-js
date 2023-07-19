@@ -19,3 +19,9 @@ import { DisconnectButton } from '@livekit/components-react';
 ```
 
 {% partial file="p_usage.md" /%}
+
+## Properties
+
+| Property                                                    | Type    | Description  |
+| ----------------------------------------------------------- | ------- | ------------ |
+| [stopTracks?](./react//disconnectbuttonprops.stoptracks.md) | boolean | _(Optional)_ |

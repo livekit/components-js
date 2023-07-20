@@ -1,3 +1,4 @@
+export { useMediaDevices } from './useMediaDevices';
 export { useToggleChat } from './useToggleChat';
 export { useLiveKitRoom } from './useLiveKitRoom';
 export { useConnectionState } from './useConnectionStatus';
@@ -30,3 +31,4 @@ export { useRoomInfo } from './useRoomInfo';
 export { useClearPinButton } from './useClearPinButton';
 export { useDisconnectButton } from './useDisconnectButton';
 export { useFocusToggle } from './useFocusToggle';
+export { useMediaDeviceSelect, UseMediaDeviceSelectProps } from './useMediaDeviceSelect';

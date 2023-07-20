@@ -1,3 +1,4 @@
+export { useParticipantInfo, UseParticipantInfoOptions } from './useParticipantInfo';
 export { useTrackToggle, UseTrackToggleProps } from './useTrackToggle';
 export { useStartAudio, UseStartAudioProps } from './useStartAudio';
 export { useMediaDevices } from './useMediaDevices';

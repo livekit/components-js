@@ -1,3 +1,4 @@
+export { useTrackMutedIndicator, UseTrackMutedIndicatorOptions } from './useTrackMutedIndicator';
 export { useParticipantTile, UseParticipantTileProps } from './useParticipantTile';
 export { useParticipantInfo, UseParticipantInfoOptions } from './useParticipantInfo';
 export { useTrackToggle, UseTrackToggleProps } from './useTrackToggle';

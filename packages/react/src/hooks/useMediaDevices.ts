@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { useObservableState } from './internal';
 import { createMediaDeviceObserver } from '@livekit/components-core';
 

@@ -1,6 +1,6 @@
 import { setupStartAudio } from '@livekit/components-core';
 import type { Room } from 'livekit-client';
-import React from 'react';
+import * as React from 'react';
 import { useEnsureRoom } from '../context';
 import { mergeProps } from '../mergeProps';
 import { useObservableState } from './internal';

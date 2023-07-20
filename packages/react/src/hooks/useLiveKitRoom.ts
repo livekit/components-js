@@ -1,6 +1,6 @@
 import { log, setupLiveKitRoom } from '@livekit/components-core';
 import { Room, MediaDeviceFailure, RoomEvent, ConnectionState } from 'livekit-client';
-import React from 'react';
+import * as React from 'react';
 import type { LiveKitRoomProps } from '../components';
 import { mergeProps } from '../mergeProps';
 

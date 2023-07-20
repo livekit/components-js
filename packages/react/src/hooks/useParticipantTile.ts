@@ -2,7 +2,7 @@ import type { ParticipantClickEvent } from '@livekit/components-core';
 import { setupParticipantTile } from '@livekit/components-core';
 import type { TrackPublication, Participant } from 'livekit-client';
 import { Track } from 'livekit-client';
-import React from 'react';
+import * as React from 'react';
 import { useEnsureParticipant } from '../context';
 import { mergeProps } from '../mergeProps';
 import { useFacingMode } from './useFacingMode';

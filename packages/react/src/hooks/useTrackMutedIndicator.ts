@@ -1,6 +1,6 @@
 import { setupTrackMutedIndicator } from '@livekit/components-core';
 import type { Participant, Track } from 'livekit-client';
-import React from 'react';
+import * as React from 'react';
 import { useEnsureParticipant } from '../context';
 import { useObservableState } from './internal';
 

@@ -2,7 +2,7 @@ import { setupFocusToggle, isTrackReferencePinned } from '@livekit/components-co
 import type { Track, Participant } from 'livekit-client';
 import { useEnsureParticipant, useMaybeLayoutContext } from '../context';
 import { mergeProps } from '../mergeProps';
-import React from 'react';
+import * as React from 'react';
 
 export interface UseFocusToggleProps {
   props: React.ButtonHTMLAttributes<HTMLButtonElement>;

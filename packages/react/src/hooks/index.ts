@@ -1,3 +1,7 @@
+export {
+  useConnectionQualityIndicator,
+  ConnectionQualityIndicatorOptions,
+} from './useConnectionQualityIndicator';
 export { useTrackMutedIndicator, UseTrackMutedIndicatorOptions } from './useTrackMutedIndicator';
 export { useParticipantTile, UseParticipantTileProps } from './useParticipantTile';
 export { useParticipantInfo, UseParticipantInfoOptions } from './useParticipantInfo';

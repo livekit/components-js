@@ -1,3 +1,4 @@
+export { useStartAudio, UseStartAudioProps } from './useStartAudio';
 export { useMediaDevices } from './useMediaDevices';
 export { useToggleChat } from './useToggleChat';
 export { useLiveKitRoom } from './useLiveKitRoom';

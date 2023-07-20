@@ -8,7 +8,7 @@ export { useParticipantInfo, UseParticipantInfoOptions } from './useParticipantI
 export { useTrackToggle, UseTrackToggleProps } from './useTrackToggle';
 export { useStartAudio, UseStartAudioProps } from './useStartAudio';
 export { useMediaDevices } from './useMediaDevices';
-export { useToggleChat } from './useToggleChat';
+export { useToggleChat, UseToggleChatProps } from './useToggleChat';
 export { useLiveKitRoom } from './useLiveKitRoom';
 export { useConnectionState } from './useConnectionStatus';
 export { useAudioPlayback } from './useAudioPlayback';
@@ -36,8 +36,8 @@ export { useVisualStableUpdate, UseVisualStableUpdateOptions } from './useVisual
 export { usePinnedTracks } from './usePinnedTracks';
 export { useSwipe, UseSwipeOptions } from './useSwipe';
 export { useFacingMode } from './useFacingMode';
-export { useRoomInfo } from './useRoomInfo';
+export { useRoomInfo, UseRoomInfoOptions } from './useRoomInfo';
 export { useClearPinButton } from './useClearPinButton';
 export { useDisconnectButton } from './useDisconnectButton';
-export { useFocusToggle } from './useFocusToggle';
+export { useFocusToggle, UseFocusToggleProps } from './useFocusToggle';
 export { useMediaDeviceSelect, UseMediaDeviceSelectProps } from './useMediaDeviceSelect';

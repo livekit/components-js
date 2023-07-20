@@ -4,13 +4,13 @@ import { useEnsureParticipant, useMaybeLayoutContext } from '../context';
 import { mergeProps } from '../mergeProps';
 import React from 'react';
 
-export interface useFocusToggleProps {
+export interface UseFocusToggleProps {
   props: React.ButtonHTMLAttributes<HTMLButtonElement>;
   trackSource: Track.Source;
   participant?: Participant;
 }
 
-export function useFocusToggle({ trackSource, participant, props }: useFocusToggleProps) {
+export function useFocusToggle({ trackSource, participant, props }: UseFocusToggleProps) {
   const p = useEnsureParticipant(participant);
   const layoutContext = useMaybeLayoutContext();
   const { className } = React.useMemo(() => setupFocusToggle(), []);

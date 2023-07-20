@@ -3,7 +3,7 @@ import { useLayoutContext } from '../context';
 import { mergeProps } from '../mergeProps';
 import * as React from 'react';
 
-interface UseToggleChatProps {
+export interface UseToggleChatProps {
   props: React.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 

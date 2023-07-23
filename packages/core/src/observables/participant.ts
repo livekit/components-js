@@ -56,6 +56,7 @@ export function observeParticipantMedia<T extends Participant>(participant: T) {
     ParticipantEvent.TrackUnsubscribed,
     ParticipantEvent.LocalTrackPublished,
     ParticipantEvent.LocalTrackUnpublished,
+    ParticipantEvent.MediaDevicesError,
     // ParticipantEvent.ConnectionQualityChanged,
   ).pipe(
     map((p) => {

@@ -14,7 +14,7 @@ import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import type { CreateLocalTracksOptions } from 'livekit-client';
 import type { DataSendOptions } from '@livekit/components-core';
-import type { GridLayout as GridLayout_2 } from '@livekit/components-core/dist/helper/grid-layouts';
+import type { GridLayoutDefinition } from '@livekit/components-core';
 import { HTMLAttributes } from 'react';
 import type { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
@@ -534,7 +534,7 @@ export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'use
 export function useGridLayout(
 gridElement: React_2.RefObject<HTMLDivElement>,
 trackCount: number): {
-    layout: GridLayout_2;
+    layout: GridLayoutDefinition;
 };
 
 // @public (undocumented)

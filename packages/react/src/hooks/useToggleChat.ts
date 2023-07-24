@@ -3,10 +3,12 @@ import { useLayoutContext } from '../context';
 import { mergeProps } from '../mergeProps';
 import * as React from 'react';
 
+/** @public */
 export interface UseToggleChatProps {
   props: React.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
+/** @public */
 export function useToggleChat({ props }: UseToggleChatProps) {
   const { dispatch, state } = useLayoutContext().widget;
   const { className } = React.useMemo(() => setupChatToggle(), []);

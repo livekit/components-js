@@ -1,5 +1,5 @@
 import { GRID_LAYOUTS, selectGridLayout } from '@livekit/components-core';
-import type { GridLayout } from '@livekit/components-core/dist/helper/grid-layouts';
+import type { GridLayoutDefinition } from '@livekit/components-core';
 import * as React from 'react';
 import { useSize } from './internal';
 
@@ -16,7 +16,7 @@ export function useGridLayout(
   gridElement: React.RefObject<HTMLDivElement>,
   /** Count of tracks that should get layed out */
   trackCount: number,
-): { layout: GridLayout } {
+): { layout: GridLayoutDefinition } {
   const { width, height } = useSize(gridElement);
 
   const layout =

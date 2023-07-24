@@ -22,7 +22,7 @@ export function useToggleChat({ props }: UseToggleChatProps) {
         ? state.unreadMessages < 10
           ? state.unreadMessages.toFixed(0)
           : '9+'
-        : 0,
+        : '0',
     });
   }, [props, className, dispatch, state]);
 

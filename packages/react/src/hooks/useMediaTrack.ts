@@ -1,6 +1,7 @@
 import type { VideoSource, AudioSource } from '@livekit/components-core';
 import type { Participant } from 'livekit-client';
 import { useEnsureParticipant } from '../context/participant-context';
+import type * as React from 'react';
 import { useMediaTrackBySourceOrName } from './useMediaTrackBySourceOrName';
 
 /** @public */

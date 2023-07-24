@@ -1,6 +1,8 @@
 import { log, setupLiveKitRoom } from '@livekit/components-core';
 import { Room, MediaDeviceFailure, RoomEvent, ConnectionState } from 'livekit-client';
 import * as React from 'react';
+import type { HTMLAttributes } from 'react';
+
 import type { LiveKitRoomProps } from '../components';
 import { mergeProps } from '../mergeProps';
 
@@ -11,7 +13,12 @@ const defaultRoomProps: Partial<LiveKitRoomProps> = {
 };
 
 /** @public */
-export function useLiveKitRoom(props: LiveKitRoomProps) {
+export function useLiveKitRoom<T extends HTMLElement>(
+  props: LiveKitRoomProps,
+): {
+  room: Room | undefined;
+  htmlProps: HTMLAttributes<T>;
+} {
   const {
     token,
     serverUrl,
@@ -41,7 +48,10 @@ export function useLiveKitRoom(props: LiveKitRoomProps) {
     setRoom(passedRoom ?? new Room(options));
   }, [JSON.stringify(options), passedRoom]);
 
-  const htmlProps = React.useMemo(() => mergeProps(rest, setupLiveKitRoom()), [rest]);
+  const htmlProps = React.useMemo(() => {
+    const { className } = setupLiveKitRoom();
+    return mergeProps(rest, { className }) as HTMLAttributes<T>;
+  }, [rest]);
 
   React.useEffect(() => {
     if (!room) return;

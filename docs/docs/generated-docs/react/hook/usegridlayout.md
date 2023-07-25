@@ -21,4 +21,4 @@ import { useGridLayout } from '@livekit/components-react';
 
 **Returns:**
 
-{ layout: GridLayout; }
+{ layout: [GridLayoutDefinition](./core//gridlayoutdefinition.md)<!-- -->; }

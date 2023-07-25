@@ -18,4 +18,4 @@ import { useClearPinButton } from '@livekit/components-react';
 
 **Returns:**
 
-{ buttonProps: React.HTMLAttributes&lt;HTMLElement&gt;; }
+{ buttonProps: [ClearPinButtonProps](./react//clearpinbuttonprops.md) &amp; { className: string; disabled: boolean; onClick: () =&gt; void; }; }

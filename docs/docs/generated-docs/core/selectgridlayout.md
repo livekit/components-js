@@ -6,9 +6,9 @@
 
 ```typescript
 export declare function selectGridLayout(
-  layouts: GridLayout[],
+  layouts: GridLayoutDefinition[],
   participantCount: number,
   width: number,
   height: number,
-): GridLayout;
+): GridLayoutDefinition;
 ```

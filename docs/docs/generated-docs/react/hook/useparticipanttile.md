@@ -18,4 +18,4 @@ import { useParticipantTile } from '@livekit/components-react';
 
 **Returns:**
 
-{ elementProps: React.HTMLAttributes&lt;HTMLDivElement&gt;; }
+{ elementProps: React.HTMLAttributes&lt;T&gt;; }

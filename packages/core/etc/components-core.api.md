@@ -158,10 +158,19 @@ export function getTrackReferenceId(trackReference: TrackReferenceOrPlaceholder 
 // @public
 export function getTrackReferenceSource(trackReference: TrackReferenceOrPlaceholder): Track.Source;
 
-// Warning: (ae-forgotten-export) The symbol "GridLayout" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
-export const GRID_LAYOUTS: GridLayout[];
+export const GRID_LAYOUTS: GridLayoutDefinition[];
+
+// @public (undocumented)
+export type GridLayoutDefinition = {
+    name: string;
+    columns: number;
+    rows: number;
+    minTiles: number;
+    maxTiles: number;
+    minWidth: number;
+    minHeight: number;
+};
 
 // @public (undocumented)
 export function isEqualTrackRef(a?: TrackReferenceOrPlaceholder, b?: TrackReferenceOrPlaceholder): boolean;
@@ -318,7 +327,7 @@ export type ScreenShareTrackMap = Array<{
 }>;
 
 // @public (undocumented)
-export function selectGridLayout(layouts: GridLayout[], participantCount: number, width: number, height: number): GridLayout;
+export function selectGridLayout(layouts: GridLayoutDefinition[], participantCount: number, width: number, height: number): GridLayoutDefinition;
 
 // @public
 export function sendMessage(localParticipant: LocalParticipant, payload: Uint8Array, topic?: string, options?: DataSendOptions): Promise<void>;

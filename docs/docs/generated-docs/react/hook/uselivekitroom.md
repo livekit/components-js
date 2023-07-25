@@ -18,4 +18,4 @@ import { useLiveKitRoom } from '@livekit/components-react';
 
 **Returns:**
 
-{ room: Room \| undefined; htmlProps: React.HTMLAttributes&lt;HTMLElement&gt;; }
+{ room: Room \| undefined; htmlProps: HTMLAttributes&lt;T&gt;; }

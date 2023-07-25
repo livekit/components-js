@@ -20,4 +20,4 @@ import { useMediaTrack } from '@livekit/components-react';
 
 **Returns:**
 
-{ publication: import("livekit-client").TrackPublication \| undefined; isMuted: boolean \| undefined; isSubscribed: boolean \| undefined; track: import("livekit-client").Track \| undefined; elementProps: import("react").HTMLAttributes&lt;HTMLElement&gt;; }
+{ publication: import("livekit-client").TrackPublication \| undefined; isMuted: boolean \| undefined; isSubscribed: boolean \| undefined; track: import("livekit-client").Track \| undefined; elementProps: React.HTMLAttributes&lt;HTMLElement&gt;; }

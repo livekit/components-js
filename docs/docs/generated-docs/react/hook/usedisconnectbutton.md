@@ -18,4 +18,4 @@ import { useDisconnectButton } from '@livekit/components-react';
 
 **Returns:**
 
-{ buttonProps: React.HTMLAttributes&lt;HTMLElement&gt;; }
+{ buttonProps: [DisconnectButtonProps](./react//disconnectbuttonprops.md) &amp; { className: string; onClick: () =&gt; void; disabled: boolean; }; }

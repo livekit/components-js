@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import type { GridLayout } from './grid-layouts';
+import type { GridLayoutDefinition } from './grid-layouts';
 import { GRID_LAYOUTS, selectGridLayout } from './grid-layouts';
 
 describe.concurrent('Test correct layout for participant count with no screen size limits:', () => {
@@ -48,7 +48,7 @@ describe.concurrent('Test correct layout for participant count with no screen si
   });
 });
 
-function is_same(array1: GridLayout[], array2: GridLayout[]) {
+function is_same(array1: GridLayoutDefinition[], array2: GridLayoutDefinition[]) {
   return (
     array1.length == array2.length &&
     array1.every((element, index) => {
@@ -71,7 +71,6 @@ describe.concurrent(
       { desiredLayoutName: '5x5', expected: '4x4' },
       { desiredLayoutName: '4x4', expected: '3x3' },
       { desiredLayoutName: '3x3', expected: '2x2' },
-      //TODO { desiredLayoutName: '2x2', expected: '2x1' },
       { desiredLayoutName: '2x1', expected: '1x2' },
     ])(
       'If the minimum width for the $desiredLayoutName layout is not satisfied switch to smaller layout ($expected).',

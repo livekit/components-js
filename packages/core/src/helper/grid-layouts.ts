@@ -1,8 +1,11 @@
 import { log } from '../logger';
 
-export type GridLayout = {
+export type GridLayoutDefinition = {
+  /** Layout name (convention `<column_count>x<row_count>`). */
   name: string;
+  /** Column count of the layout. */
   columns: number;
+  /** Row count of the layout. */
   rows: number;
   // # Constraints that have to be meet to use this layout.
   // ## 1. Participant range:
@@ -17,7 +20,7 @@ export type GridLayout = {
   minHeight: number;
 };
 
-export const GRID_LAYOUTS: GridLayout[] = [
+export const GRID_LAYOUTS: GridLayoutDefinition[] = [
   {
     columns: 1,
     rows: 1,
@@ -42,7 +45,7 @@ export const GRID_LAYOUTS: GridLayout[] = [
     name: '2x1',
     minTiles: 2,
     maxTiles: 2,
-    minWidth: 800,
+    minWidth: 900,
     minHeight: 0,
   },
   {
@@ -84,11 +87,11 @@ export const GRID_LAYOUTS: GridLayout[] = [
 ];
 
 export function selectGridLayout(
-  layouts: GridLayout[],
+  layouts: GridLayoutDefinition[],
   participantCount: number,
   width: number,
   height: number,
-): GridLayout {
+): GridLayoutDefinition {
   // Find the best layout to fit all participants.
   let currentLayoutIndex = 0;
   let layout = layouts.find((layout_, index, allLayouts) => {

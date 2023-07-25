@@ -8,8 +8,9 @@ import { useEnsureParticipant } from '../../context';
 
 import { AudioVisualizer } from './AudioVisualizer';
 import type { ParticipantTileProps } from './ParticipantTile';
-import { useParticipantTile, ParticipantContextIfNeeded } from './ParticipantTile';
+import { ParticipantContextIfNeeded } from './ParticipantTile';
 import { AudioTrack } from './AudioTrack';
+import { useParticipantTile } from '../../hooks';
 
 /**
  * The ParticipantAudioTile component is the base utility wrapper for displaying a visual representation of a participant.

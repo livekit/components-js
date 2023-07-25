@@ -35,7 +35,7 @@ export { useSortedParticipants } from './useSortedParticipants';
 export { useSpeakingParticipants } from './useSpeakingParticipants';
 export { UseStartAudioProps, useStartAudio } from './useStartAudio';
 export { UseSwipeOptions, useSwipe } from './useSwipe';
-export { UseToggleChatProps, useToggleChat } from './useToggleChat';
+export { UseChatToggleProps, useChatToggle } from './useChatToggle';
 export { UseTokenOptions, UserInfo, useToken } from './useToken';
 export { UseTrackMutedIndicatorOptions, useTrackMutedIndicator } from './useTrackMutedIndicator';
 export { UseTrackToggleProps, useTrackToggle } from './useTrackToggle';

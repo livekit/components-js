@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useToggleChat } from '../../hooks';
+import { useChatToggle } from '../../hooks';
 
 /** @public */
 export interface ChatToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
@@ -16,7 +16,7 @@ export interface ChatToggleProps extends React.ButtonHTMLAttributes<HTMLButtonEl
  * @public
  */
 export function ChatToggle(props: ChatToggleProps) {
-  const { mergedProps } = useToggleChat({ props });
+  const { mergedProps } = useChatToggle({ props });
 
   return <button {...mergedProps}>{props.children}</button>;
 }

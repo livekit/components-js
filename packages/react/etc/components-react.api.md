@@ -483,6 +483,22 @@ export function useChat(): {
 };
 
 // @public (undocumented)
+export function useChatToggle({ props }: UseChatToggleProps): {
+    mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
+        className: string;
+        onClick: () => void;
+        'aria-pressed': string;
+        'data-lk-unread-msgs': string;
+    };
+};
+
+// @public (undocumented)
+export interface UseChatToggleProps {
+    // (undocumented)
+    props: React_2.ButtonHTMLAttributes<HTMLButtonElement>;
+}
+
+// @public (undocumented)
 export function useClearPinButton(props: ClearPinButtonProps): {
     buttonProps: ClearPinButtonProps & {
         className: string;
@@ -823,22 +839,6 @@ export type UseSwipeOptions = {
     onLeftSwipe?: () => void;
     onRightSwipe?: () => void;
 };
-
-// @public (undocumented)
-export function useToggleChat({ props }: UseToggleChatProps): {
-    mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
-        className: string;
-        onClick: () => void;
-        'aria-pressed': string;
-        'data-lk-unread-msgs': string;
-    };
-};
-
-// @public (undocumented)
-export interface UseToggleChatProps {
-    // (undocumented)
-    props: React_2.ButtonHTMLAttributes<HTMLButtonElement>;
-}
 
 // @public (undocumented)
 export function useToken(tokenEndpoint: string | undefined, roomName: string, options?: UseTokenOptions): string | undefined;

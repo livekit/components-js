@@ -1,27 +1,9 @@
-import { participantInfoObserver, setupParticipantName } from '@livekit/components-core';
-import type { Participant } from 'livekit-client';
+import { setupParticipantName } from '@livekit/components-core';
 import * as React from 'react';
 import { useEnsureParticipant } from '../../context';
 import { useObservableState } from '../../hooks/internal/useObservableState';
 import { mergeProps } from '../../utils';
-
-/** @public */
-export function useParticipantInfo(props: UseParticipantInfoOptions = {}) {
-  const p = useEnsureParticipant(props.participant);
-  const infoObserver = React.useMemo(() => participantInfoObserver(p), [p]);
-  const { identity, name, metadata } = useObservableState(infoObserver, {
-    name: p.name,
-    identity: p.identity,
-    metadata: p.metadata,
-  });
-
-  return { identity, name, metadata };
-}
-
-/** @public */
-export type UseParticipantInfoOptions = {
-  participant?: Participant;
-};
+import type { UseParticipantInfoOptions } from '../../hooks';
 
 /** @public */
 export interface ParticipantNameProps

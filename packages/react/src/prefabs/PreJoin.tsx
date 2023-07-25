@@ -14,10 +14,10 @@ import {
 } from 'livekit-client';
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
-import { useMediaDevices } from '../components/controls/MediaDeviceSelect';
 import { TrackToggle } from '../components/controls/TrackToggle';
 import { log } from '@livekit/components-core';
 import { ParticipantPlaceholder } from '../assets/images';
+import { useMediaDevices } from '../hooks';
 
 /** @public */
 export type LocalUserChoices = {

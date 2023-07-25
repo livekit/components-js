@@ -8,7 +8,7 @@
 
 import type { AudioCaptureOptions } from 'livekit-client';
 import type { AudioSource } from '@livekit/components-core';
-import type { CaptureOptionsBySource } from '@livekit/components-core';
+import { CaptureOptionsBySource } from '@livekit/components-core';
 import type { ChatMessage } from '@livekit/components-core';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
@@ -21,7 +21,7 @@ import { LocalParticipant } from 'livekit-client';
 import type { LocalTrack } from 'livekit-client';
 import { LocalTrackPublication } from 'livekit-client';
 import type { LocalVideoTrack } from 'livekit-client';
-import { MediaDeviceFailure } from 'livekit-client';
+import type { MediaDeviceFailure } from 'livekit-client';
 import { Participant } from 'livekit-client';
 import type { ParticipantClickEvent } from '@livekit/components-core';
 import type { ParticipantEvent } from 'livekit-client';
@@ -483,13 +483,33 @@ export function useChat(): {
 };
 
 // @public (undocumented)
+export function useChatToggle({ props }: UseChatToggleProps): {
+    mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
+        className: string;
+        onClick: () => void;
+        'aria-pressed': string;
+        'data-lk-unread-msgs': string;
+    };
+};
+
+// @public (undocumented)
+export interface UseChatToggleProps {
+    // (undocumented)
+    props: React_2.ButtonHTMLAttributes<HTMLButtonElement>;
+}
+
+// @public (undocumented)
 export function useClearPinButton(props: ClearPinButtonProps): {
-    buttonProps: React_2.HTMLAttributes<HTMLElement>;
+    buttonProps: ClearPinButtonProps & {
+        className: string;
+        disabled: boolean;
+        onClick: () => void;
+    };
 };
 
 // @public (undocumented)
 export function useConnectionQualityIndicator(options?: ConnectionQualityIndicatorOptions): {
-    className: "lk-list" | "lk-button" | "lk-rotate" | "lk-audio-conference" | "lk-audio-conference-stage" | "lk-audio-container" | "lk-button-group" | "lk-button-group-container" | "lk-camera-off-note" | "lk-chat" | "lk-chat-entry" | "lk-chat-form" | "lk-chat-form-input" | "lk-chat-messages" | "lk-control-bar" | "lk-focus-layout-wrapper" | "lk-form-control" | "lk-grid-layout-wrapper" | "lk-join-button" | "lk-message-body" | "lk-meta-data" | "lk-participant-name" | "lk-prejoin" | "lk-timestamp" | "lk-username-container" | "lk-video-conference" | "lk-video-conference-inner" | "lk-video-container" | "lk-audio-visualizer" | "lk-button-group-menu" | "lk-button-menu" | "lk-carousel" | "lk-chat-toggle" | "lk-connection-quality" | "lk-device-menu" | "lk-device-menu-heading" | "lk-disconnect-button" | "lk-focus-layout" | "lk-focus-toggle-button" | "lk-focused-participant" | "lk-grid-layout" | "lk-media-device-select" | "lk-pagination-control" | "lk-pagination-count" | "lk-pagination-indicator" | "lk-participant-media-audio" | "lk-participant-media-video" | "lk-participant-metadata" | "lk-participant-metadata-item" | "lk-participant-placeholder" | "lk-participant-tile" | "lk-pip-track" | "lk-room-container" | "lk-spinner" | "lk-start-audio-button" | "lk-toast" | "lk-track-muted-indicator-camera" | "lk-track-muted-indicator-microphone";
+    className: "lk-rotate" | "lk-audio-conference" | "lk-audio-conference-stage" | "lk-audio-container" | "lk-button" | "lk-button-group" | "lk-button-group-container" | "lk-camera-off-note" | "lk-chat" | "lk-chat-entry" | "lk-chat-form" | "lk-chat-form-input" | "lk-chat-messages" | "lk-control-bar" | "lk-focus-layout-wrapper" | "lk-form-control" | "lk-grid-layout-wrapper" | "lk-join-button" | "lk-list" | "lk-message-body" | "lk-meta-data" | "lk-participant-name" | "lk-prejoin" | "lk-timestamp" | "lk-username-container" | "lk-video-conference" | "lk-video-conference-inner" | "lk-video-container" | "lk-audio-visualizer" | "lk-button-group-menu" | "lk-button-menu" | "lk-carousel" | "lk-chat-toggle" | "lk-connection-quality" | "lk-device-menu" | "lk-device-menu-heading" | "lk-disconnect-button" | "lk-focus-layout" | "lk-focus-toggle-button" | "lk-focused-participant" | "lk-grid-layout" | "lk-media-device-select" | "lk-pagination-control" | "lk-pagination-count" | "lk-pagination-indicator" | "lk-participant-media-audio" | "lk-participant-media-video" | "lk-participant-metadata" | "lk-participant-metadata-item" | "lk-participant-placeholder" | "lk-participant-tile" | "lk-pip-track" | "lk-room-container" | "lk-spinner" | "lk-start-audio-button" | "lk-toast" | "lk-track-muted-indicator-camera" | "lk-track-muted-indicator-microphone";
     quality: ConnectionQuality;
 };
 
@@ -509,7 +529,11 @@ export function useDataChannel(onMessage?: (msg: ReceivedDataMessage) => void): 
 
 // @public (undocumented)
 export function useDisconnectButton(props: DisconnectButtonProps): {
-    buttonProps: React_2.HTMLAttributes<HTMLElement>;
+    buttonProps: DisconnectButtonProps & {
+        className: string;
+        onClick: () => void;
+        disabled: boolean;
+    };
 };
 
 // @public (undocumented)
@@ -529,6 +553,25 @@ export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): Tr
 
 // @alpha
 export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'user' | 'environment' | 'left' | 'right' | 'undefined';
+
+// @public (undocumented)
+export function useFocusToggle({ trackSource, participant, props }: UseFocusToggleProps): {
+    mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
+        className: string;
+        onClick: (event: React_2.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    };
+    inFocus: boolean;
+};
+
+// @public (undocumented)
+export interface UseFocusToggleProps {
+    // (undocumented)
+    participant?: Participant;
+    // (undocumented)
+    props: React_2.ButtonHTMLAttributes<HTMLButtonElement>;
+    // (undocumented)
+    trackSource: Track.Source;
+}
 
 // @public
 export function useGridLayout(
@@ -553,9 +596,9 @@ export function useIsSpeaking(participant?: Participant): boolean;
 export function useLayoutContext(): LayoutContextType;
 
 // @public (undocumented)
-export function useLiveKitRoom(props: LiveKitRoomProps): {
+export function useLiveKitRoom<T extends HTMLElement>(props: LiveKitRoomProps): {
     room: Room | undefined;
-    htmlProps: React_2.HTMLAttributes<HTMLElement>;
+    htmlProps: HTMLAttributes<T>;
 };
 
 // @public
@@ -618,7 +661,7 @@ export function useMediaTrack(source: VideoSource | AudioSource, participant?: P
     isMuted: boolean | undefined;
     isSubscribed: boolean | undefined;
     track: Track | undefined;
-    elementProps: HTMLAttributes<HTMLElement>;
+    elementProps: React_2.HTMLAttributes<HTMLElement>;
 };
 
 // @public (undocumented)
@@ -633,9 +676,9 @@ export function useMediaTrackByName(name: string, participant?: Participant, opt
 // @public (undocumented)
 export interface UseMediaTrackOptions {
     // (undocumented)
-    element?: React.RefObject<HTMLMediaElement>;
+    element?: React_2.RefObject<HTMLMediaElement>;
     // (undocumented)
-    props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
+    props?: React_2.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
 }
 
 // @alpha
@@ -661,9 +704,10 @@ export function useParticipantInfo(props?: UseParticipantInfoOptions): {
 };
 
 // @public (undocumented)
-export type UseParticipantInfoOptions = {
+export interface UseParticipantInfoOptions {
+    // (undocumented)
     participant?: Participant;
-};
+}
 
 // @public (undocumented)
 export function useParticipantPermissions(options?: UseParticipantPermissionsOptions): ParticipantPermission | undefined;
@@ -685,7 +729,7 @@ export interface UseParticipantsOptions {
 
 // @public (undocumented)
 export function useParticipantTile<T extends HTMLElement>({ participant, source, publication, onParticipantClick, disableSpeakingIndicator, htmlProps, }: UseParticipantTileProps<T>): {
-    elementProps: React_2.HTMLAttributes<HTMLDivElement>;
+    elementProps: React_2.HTMLAttributes<T>;
 };
 
 // @public (undocumented)
@@ -768,7 +812,13 @@ export function useSpeakingParticipants(): Participant[];
 
 // @alpha
 export function useStartAudio({ room, props }: UseStartAudioProps): {
-    mergedProps: React_2.HTMLAttributes<HTMLElement>;
+    mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
+        className: string;
+        onClick: () => void;
+        style: {
+            display: string;
+        };
+    };
     canPlayAudio: boolean;
 };
 

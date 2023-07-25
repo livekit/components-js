@@ -12,9 +12,9 @@ import { useDataChannel } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                                            | Description  |
-| --------- | ------------------------------------------------------------------------------- | ------------ |
-| onMessage | (msg: [ReceivedDataMessage](./core//receiveddatamessage.md)<!-- -->) =&gt; void | _(Optional)_ |
+| Parameter | Type                                                                           | Description  |
+| --------- | ------------------------------------------------------------------------------ | ------------ |
+| onMessage | (msg: [ReceivedDataMessage](./core/receiveddatamessage.md)<!-- -->) =&gt; void | _(Optional)_ |
 
 **Returns:**
 

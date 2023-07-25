@@ -24,7 +24,7 @@ import { GridLayout } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                         | Type                                                                              | Description |
-| ------------------------------------------------ | --------------------------------------------------------------------------------- | ----------- |
-| [children](./react//gridlayoutprops.children.md) | React.ReactNode                                                                   |             |
-| [tracks](./react//gridlayoutprops.tracks.md)     | [TrackReferenceOrPlaceholder](./core//trackreferenceorplaceholder.md)<!-- -->\[\] |             |
+| Property                                        | Type                                                                             | Description |
+| ----------------------------------------------- | -------------------------------------------------------------------------------- | ----------- |
+| [children](./react/gridlayoutprops.children.md) | React.ReactNode                                                                  |             |
+| [tracks](./react/gridlayoutprops.tracks.md)     | [TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md)<!-- -->\[\] |             |

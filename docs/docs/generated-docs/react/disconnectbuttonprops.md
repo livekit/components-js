@@ -14,6 +14,6 @@ export interface DisconnectButtonProps extends React.ButtonHTMLAttributes<HTMLBu
 
 ## Properties
 
-| Property                                                    | Type    | Description  |
-| ----------------------------------------------------------- | ------- | ------------ |
-| [stopTracks?](./react//disconnectbuttonprops.stoptracks.md) | boolean | _(Optional)_ |
+| Property                                                   | Type    | Description  |
+| ---------------------------------------------------------- | ------- | ------------ |
+| [stopTracks?](./react/disconnectbuttonprops.stoptracks.md) | boolean | _(Optional)_ |

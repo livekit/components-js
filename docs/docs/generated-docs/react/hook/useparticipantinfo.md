@@ -12,9 +12,9 @@ import { useParticipantInfo } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                               | Description  |
-| --------- | ------------------------------------------------------------------ | ------------ |
-| props     | [UseParticipantInfoOptions](./react//useparticipantinfooptions.md) | _(Optional)_ |
+| Parameter | Type                                                              | Description  |
+| --------- | ----------------------------------------------------------------- | ------------ |
+| props     | [UseParticipantInfoOptions](./react/useparticipantinfooptions.md) | _(Optional)_ |
 
 **Returns:**
 

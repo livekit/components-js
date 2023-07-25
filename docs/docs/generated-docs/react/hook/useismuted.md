@@ -12,10 +12,10 @@ import { useIsMuted } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                               | Description  |
-| --------- | -------------------------------------------------- | ------------ |
-| source    | Track.Source                                       |              |
-| options   | [UseIsMutedOptions](./react//useismutedoptions.md) | _(Optional)_ |
+| Parameter | Type                                              | Description  |
+| --------- | ------------------------------------------------- | ------------ |
+| source    | Track.Source                                      |              |
+| options   | [UseIsMutedOptions](./react/useismutedoptions.md) | _(Optional)_ |
 
 **Returns:**
 

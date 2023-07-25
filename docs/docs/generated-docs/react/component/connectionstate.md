@@ -22,6 +22,6 @@ import { ConnectionState } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                        | Type | Description                                                                 |
-| ----------------------------------------------- | ---- | --------------------------------------------------------------------------- |
-| [room?](./react//connectionstatusprops.room.md) | Room | _(Optional)_ The room from which the connection status should be displayed. |
+| Property                                       | Type | Description                                                                 |
+| ---------------------------------------------- | ---- | --------------------------------------------------------------------------- |
+| [room?](./react/connectionstatusprops.room.md) | Room | _(Optional)_ The room from which the connection status should be displayed. |

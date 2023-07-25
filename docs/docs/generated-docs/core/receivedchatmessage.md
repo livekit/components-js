@@ -8,10 +8,10 @@
 export interface ReceivedChatMessage extends ChatMessage
 ```
 
-**Extends:** [ChatMessage](./core//chatmessage.md)
+**Extends:** [ChatMessage](./core/chatmessage.md)
 
 ## Properties
 
-| Property                                     | Type        | Description  |
-| -------------------------------------------- | ----------- | ------------ |
-| [from?](./core//receivedchatmessage.from.md) | Participant | _(Optional)_ |
+| Property                                    | Type        | Description  |
+| ------------------------------------------- | ----------- | ------------ |
+| [from?](./core/receivedchatmessage.from.md) | Participant | _(Optional)_ |

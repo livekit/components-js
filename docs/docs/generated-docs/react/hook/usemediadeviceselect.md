@@ -12,10 +12,10 @@ import { useMediaDeviceSelect } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter                                  | Type                                                               | Description |
-| ------------------------------------------ | ------------------------------------------------------------------ | ----------- |
-| { kind, room, track, requestPermissions, } | [UseMediaDeviceSelectProps](./react//usemediadeviceselectprops.md) |             |
+| Parameter                                  | Type                                                              | Description |
+| ------------------------------------------ | ----------------------------------------------------------------- | ----------- |
+| { kind, room, track, requestPermissions, } | [UseMediaDeviceSelectProps](./react/usemediadeviceselectprops.md) |             |
 
 **Returns:**
 
-{ devices: MediaDeviceInfo\[\]; className: string; activeDeviceId: string; setActiveMediaDevice: (id: string, options?: import("@livekit/components-core").[SetMediaDeviceOptions](./core//setmediadeviceoptions.md) \| undefined) =&gt; Promise&lt;void&gt;; }
+{ devices: MediaDeviceInfo\[\]; className: string; activeDeviceId: string; setActiveMediaDevice: (id: string, options?: import("@livekit/components-core").[SetMediaDeviceOptions](./core/setmediadeviceoptions.md) \| undefined) =&gt; Promise&lt;void&gt;; }

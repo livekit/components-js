@@ -8,4 +8,4 @@
 export type TrackReferenceOrPlaceholder = TrackReference | TrackReferencePlaceholder;
 ```
 
-**References:** [TrackReference](./core//trackreference.md)<!-- -->, [TrackReferencePlaceholder](./core//trackreferenceplaceholder.md)
+**References:** [TrackReference](./core/trackreference.md)<!-- -->, [TrackReferencePlaceholder](./core/trackreferenceplaceholder.md)

@@ -12,6 +12,6 @@ export interface UseParticipantInfoOptions
 
 ## Properties
 
-| Property                                                          | Type        | Description  |
-| ----------------------------------------------------------------- | ----------- | ------------ |
-| [participant?](./react//useparticipantinfooptions.participant.md) | Participant | _(Optional)_ |
+| Property                                                         | Type        | Description  |
+| ---------------------------------------------------------------- | ----------- | ------------ |
+| [participant?](./react/useparticipantinfooptions.participant.md) | Participant | _(Optional)_ |

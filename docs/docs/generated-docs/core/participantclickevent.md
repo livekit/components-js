@@ -10,7 +10,7 @@ export interface ParticipantClickEvent
 
 ## Properties
 
-| Property                                                    | Type             | Description  |
-| ----------------------------------------------------------- | ---------------- | ------------ |
-| [participant](./core//participantclickevent.participant.md) | Participant      |              |
-| [track?](./core//participantclickevent.track.md)            | TrackPublication | _(Optional)_ |
+| Property                                                   | Type             | Description  |
+| ---------------------------------------------------------- | ---------------- | ------------ |
+| [participant](./core/participantclickevent.participant.md) | Participant      |              |
+| [track?](./core/participantclickevent.track.md)            | TrackPublication | _(Optional)_ |

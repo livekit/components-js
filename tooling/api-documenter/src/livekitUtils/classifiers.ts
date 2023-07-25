@@ -58,5 +58,10 @@ export function getCategorySubfolder(apiItem: ApiItem): string {
       break;
   }
 
-  return [packagePath, category].join('/') + '/';
+  const subfolderPath: string = [packagePath, category].join('/');
+  if (subfolderPath.endsWith('/')) {
+    return subfolderPath;
+  } else {
+    return subfolderPath + '/';
+  }
 }

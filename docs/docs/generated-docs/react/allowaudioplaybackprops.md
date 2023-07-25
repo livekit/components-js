@@ -14,6 +14,6 @@ export interface AllowAudioPlaybackProps extends React.ButtonHTMLAttributes<HTML
 
 ## Properties
 
-| Property                                           | Type   | Description |
-| -------------------------------------------------- | ------ | ----------- |
-| [label](./react//allowaudioplaybackprops.label.md) | string |             |
+| Property                                          | Type   | Description |
+| ------------------------------------------------- | ------ | ----------- |
+| [label](./react/allowaudioplaybackprops.label.md) | string |             |

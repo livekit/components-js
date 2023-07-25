@@ -8,10 +8,10 @@
 export interface ReceivedDataMessage<T extends string | undefined = string> extends BaseDataMessage<T>
 ```
 
-**Extends:** [BaseDataMessage](./core//basedatamessage.md)<!-- -->&lt;T&gt;
+**Extends:** [BaseDataMessage](./core/basedatamessage.md)<!-- -->&lt;T&gt;
 
 ## Properties
 
-| Property                                     | Type        | Description  |
-| -------------------------------------------- | ----------- | ------------ |
-| [from?](./core//receiveddatamessage.from.md) | Participant | _(Optional)_ |
+| Property                                    | Type        | Description  |
+| ------------------------------------------- | ----------- | ------------ |
+| [from?](./core/receiveddatamessage.from.md) | Participant | _(Optional)_ |

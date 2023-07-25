@@ -12,11 +12,11 @@ import { useToken } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter     | Type                                           | Description  |
-| ------------- | ---------------------------------------------- | ------------ |
-| tokenEndpoint | string \| undefined                            |              |
-| roomName      | string                                         |              |
-| options       | [UseTokenOptions](./react//usetokenoptions.md) | _(Optional)_ |
+| Parameter     | Type                                          | Description  |
+| ------------- | --------------------------------------------- | ------------ |
+| tokenEndpoint | string \| undefined                           |              |
+| roomName      | string                                        |              |
+| options       | [UseTokenOptions](./react/usetokenoptions.md) | _(Optional)_ |
 
 **Returns:**
 

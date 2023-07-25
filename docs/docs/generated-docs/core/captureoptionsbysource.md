@@ -14,4 +14,4 @@ export type CaptureOptionsBySource<T extends ToggleSource> = T extends Track.Sou
   : never;
 ```
 
-**References:** [ToggleSource](./core//togglesource.md)
+**References:** [ToggleSource](./core/togglesource.md)

@@ -8,6 +8,6 @@
 export interface ParticipantNameProps extends React.HTMLAttributes<HTMLSpanElement>, UseParticipantInfoOptions
 ```
 
-**Extends:** React.HTMLAttributes&lt;HTMLSpanElement&gt;, [UseParticipantInfoOptions](./react//useparticipantinfooptions.md)
+**Extends:** React.HTMLAttributes&lt;HTMLSpanElement&gt;, [UseParticipantInfoOptions](./react/useparticipantinfooptions.md)
 
 {% partial file="p_usage.md" /%}

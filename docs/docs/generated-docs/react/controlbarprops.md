@@ -14,7 +14,7 @@ export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement>
 
 ## Properties
 
-| Property                                            | Type                                                 | Description  |
-| --------------------------------------------------- | ---------------------------------------------------- | ------------ |
-| [controls?](./react//controlbarprops.controls.md)   | [ControlBarControls](./react//controlbarcontrols.md) | _(Optional)_ |
-| [variation?](./react//controlbarprops.variation.md) | 'minimal' \| 'verbose' \| 'textOnly'                 | _(Optional)_ |
+| Property                                           | Type                                                | Description  |
+| -------------------------------------------------- | --------------------------------------------------- | ------------ |
+| [controls?](./react/controlbarprops.controls.md)   | [ControlBarControls](./react/controlbarcontrols.md) | _(Optional)_ |
+| [variation?](./react/controlbarprops.variation.md) | 'minimal' \| 'verbose' \| 'textOnly'                | _(Optional)_ |

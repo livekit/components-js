@@ -8,6 +8,6 @@
 export interface UseTrackToggleProps<T extends ToggleSource> extends Omit<TrackToggleProps<T>, 'showIcon'>
 ```
 
-**Extends:** Omit&lt;[TrackToggleProps](./react//tracktoggleprops.md)<!-- -->&lt;T&gt;, 'showIcon'&gt;
+**Extends:** Omit&lt;[TrackToggleProps](./react/tracktoggleprops.md)<!-- -->&lt;T&gt;, 'showIcon'&gt;
 
 {% partial file="p_usage.md" /%}

@@ -8,4 +8,4 @@
 export type PinState = TrackReferenceOrPlaceholder[];
 ```
 
-**References:** [TrackReferenceOrPlaceholder](./core//trackreferenceorplaceholder.md)
+**References:** [TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md)

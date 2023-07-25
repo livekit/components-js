@@ -12,4 +12,4 @@ import { useCreateLayoutContext } from '@livekit/components-react';
 
 **Returns:**
 
-[LayoutContextType](./react//layoutcontexttype.md)
+[LayoutContextType](./react/layoutcontexttype.md)

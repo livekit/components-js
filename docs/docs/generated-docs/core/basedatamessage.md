@@ -10,7 +10,7 @@ export interface BaseDataMessage<T extends string | undefined>
 
 ## Properties
 
-| Property                                      | Type       | Description  |
-| --------------------------------------------- | ---------- | ------------ |
-| [payload](./core//basedatamessage.payload.md) | Uint8Array |              |
-| [topic?](./core//basedatamessage.topic.md)    | T          | _(Optional)_ |
+| Property                                     | Type       | Description  |
+| -------------------------------------------- | ---------- | ------------ |
+| [payload](./core/basedatamessage.payload.md) | Uint8Array |              |
+| [topic?](./core/basedatamessage.topic.md)    | T          | _(Optional)_ |

@@ -14,9 +14,9 @@ import { useLocalParticipant } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                                 | Description  |
-| --------- | -------------------------------------------------------------------- | ------------ |
-| options   | [UseLocalParticipantOptions](./react//uselocalparticipantoptions.md) | _(Optional)_ |
+| Parameter | Type                                                                | Description  |
+| --------- | ------------------------------------------------------------------- | ------------ |
+| options   | [UseLocalParticipantOptions](./react/uselocalparticipantoptions.md) | _(Optional)_ |
 
 **Returns:**
 

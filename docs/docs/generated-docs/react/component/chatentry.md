@@ -22,9 +22,9 @@ import { ChatEntry } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                                         | Type                                                  | Description                                                                                                    |
-| ---------------------------------------------------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| [entry](./react//chatentryprops.entry.md)                        | [ReceivedChatMessage](./core//receivedchatmessage.md) | The chat massage object to display.                                                                            |
-| [hideName?](./react//chatentryprops.hidename.md)                 | boolean                                               | _(Optional)_ Hide sender name. Useful when displaying multiple consecutive chat messages from the same person. |
-| [hideTimestamp?](./react//chatentryprops.hidetimestamp.md)       | boolean                                               | _(Optional)_ Hide message timestamp.                                                                           |
-| [messageFormatter?](./react//chatentryprops.messageformatter.md) | [MessageFormatter](./react//messageformatter.md)      | _(Optional)_ An optional formatter for the message body.                                                       |
+| Property                                                        | Type                                                 | Description                                                                                                    |
+| --------------------------------------------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [entry](./react/chatentryprops.entry.md)                        | [ReceivedChatMessage](./core/receivedchatmessage.md) | The chat massage object to display.                                                                            |
+| [hideName?](./react/chatentryprops.hidename.md)                 | boolean                                              | _(Optional)_ Hide sender name. Useful when displaying multiple consecutive chat messages from the same person. |
+| [hideTimestamp?](./react/chatentryprops.hidetimestamp.md)       | boolean                                              | _(Optional)_ Hide message timestamp.                                                                           |
+| [messageFormatter?](./react/chatentryprops.messageformatter.md) | [MessageFormatter](./react/messageformatter.md)      | _(Optional)_ An optional formatter for the message body.                                                       |

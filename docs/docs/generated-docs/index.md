@@ -4,7 +4,7 @@
 
 ## Packages
 
-| Package                                        | Description |
-| ---------------------------------------------- | ----------- |
-| [@livekit/components-core](./core//index.md)   |             |
-| [@livekit/components-react](./react//index.md) |             |
+| Package                                       | Description |
+| --------------------------------------------- | ----------- |
+| [@livekit/components-core](./core/index.md)   |             |
+| [@livekit/components-react](./react/index.md) |             |

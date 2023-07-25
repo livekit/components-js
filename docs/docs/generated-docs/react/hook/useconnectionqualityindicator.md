@@ -12,9 +12,9 @@ import { useConnectionQualityIndicator } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                                               | Description  |
-| --------- | ---------------------------------------------------------------------------------- | ------------ |
-| options   | [ConnectionQualityIndicatorOptions](./react//connectionqualityindicatoroptions.md) | _(Optional)_ |
+| Parameter | Type                                                                              | Description  |
+| --------- | --------------------------------------------------------------------------------- | ------------ |
+| options   | [ConnectionQualityIndicatorOptions](./react/connectionqualityindicatoroptions.md) | _(Optional)_ |
 
 **Returns:**
 

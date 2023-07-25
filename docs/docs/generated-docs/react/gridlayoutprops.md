@@ -8,13 +8,13 @@
 export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement>, Pick<UseParticipantsOptions, 'updateOnlyOn'>
 ```
 
-**Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;, Pick&lt;[UseParticipantsOptions](./react//useparticipantsoptions.md)<!-- -->, 'updateOnlyOn'&gt;
+**Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;, Pick&lt;[UseParticipantsOptions](./react/useparticipantsoptions.md)<!-- -->, 'updateOnlyOn'&gt;
 
 {% partial file="p_usage.md" /%}
 
 ## Properties
 
-| Property                                         | Type                                                                              | Description |
-| ------------------------------------------------ | --------------------------------------------------------------------------------- | ----------- |
-| [children](./react//gridlayoutprops.children.md) | React.ReactNode                                                                   |             |
-| [tracks](./react//gridlayoutprops.tracks.md)     | [TrackReferenceOrPlaceholder](./core//trackreferenceorplaceholder.md)<!-- -->\[\] |             |
+| Property                                        | Type                                                                             | Description |
+| ----------------------------------------------- | -------------------------------------------------------------------------------- | ----------- |
+| [children](./react/gridlayoutprops.children.md) | React.ReactNode                                                                  |             |
+| [tracks](./react/gridlayoutprops.tracks.md)     | [TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md)<!-- -->\[\] |             |

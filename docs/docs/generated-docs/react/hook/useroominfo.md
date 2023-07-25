@@ -12,9 +12,9 @@ import { useRoomInfo } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                 | Description  |
-| --------- | ---------------------------------------------------- | ------------ |
-| options   | [UseRoomInfoOptions](./react//useroominfooptions.md) | _(Optional)_ |
+| Parameter | Type                                                | Description  |
+| --------- | --------------------------------------------------- | ------------ |
+| options   | [UseRoomInfoOptions](./react/useroominfooptions.md) | _(Optional)_ |
 
 **Returns:**
 

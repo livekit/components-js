@@ -8,6 +8,6 @@
 export interface ConnectionQualityIndicatorProps extends React.HTMLAttributes<HTMLDivElement>, ConnectionQualityIndicatorOptions
 ```
 
-**Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;, [ConnectionQualityIndicatorOptions](./react//connectionqualityindicatoroptions.md)
+**Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;, [ConnectionQualityIndicatorOptions](./react/connectionqualityindicatoroptions.md)
 
 {% partial file="p_usage.md" /%}

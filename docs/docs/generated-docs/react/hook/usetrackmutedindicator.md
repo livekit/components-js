@@ -12,10 +12,10 @@ import { useTrackMutedIndicator } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                                       | Description  |
-| --------- | -------------------------------------------------------------------------- | ------------ |
-| source    | Track.Source                                                               |              |
-| options   | [UseTrackMutedIndicatorOptions](./react//usetrackmutedindicatoroptions.md) | _(Optional)_ |
+| Parameter | Type                                                                      | Description  |
+| --------- | ------------------------------------------------------------------------- | ------------ |
+| source    | Track.Source                                                              |              |
+| options   | [UseTrackMutedIndicatorOptions](./react/usetrackmutedindicatoroptions.md) | _(Optional)_ |
 
 **Returns:**
 

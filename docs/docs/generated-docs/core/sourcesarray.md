@@ -8,4 +8,4 @@
 export type SourcesArray = Track.Source[] | TrackSourceWithOptions[];
 ```
 
-**References:** [TrackSourceWithOptions](./core//tracksourcewithoptions.md)
+**References:** [TrackSourceWithOptions](./core/tracksourcewithoptions.md)

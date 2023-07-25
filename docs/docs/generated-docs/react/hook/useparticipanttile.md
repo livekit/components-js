@@ -12,9 +12,9 @@ import { useParticipantTile } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter                                                                                      | Type                                                                            | Description |
-| ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ----------- |
-| { participant, source, publication, onParticipantClick, disableSpeakingIndicator, htmlProps, } | [UseParticipantTileProps](./react//useparticipanttileprops.md)<!-- -->&lt;T&gt; |             |
+| Parameter                                                                                      | Type                                                                           | Description |
+| ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ----------- |
+| { participant, source, publication, onParticipantClick, disableSpeakingIndicator, htmlProps, } | [UseParticipantTileProps](./react/useparticipanttileprops.md)<!-- -->&lt;T&gt; |             |
 
 **Returns:**
 

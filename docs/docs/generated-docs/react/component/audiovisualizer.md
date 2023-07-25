@@ -12,6 +12,6 @@ import { AudioVisualizer } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                                     | Type        | Description  |
-| ------------------------------------------------------------ | ----------- | ------------ |
-| [participant?](./react//audiovisualizerprops.participant.md) | Participant | _(Optional)_ |
+| Property                                                    | Type        | Description  |
+| ----------------------------------------------------------- | ----------- | ------------ |
+| [participant?](./react/audiovisualizerprops.participant.md) | Participant | _(Optional)_ |

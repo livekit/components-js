@@ -12,10 +12,10 @@ import { usePinnedTracks } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter     | Type                                               | Description  |
-| ------------- | -------------------------------------------------- | ------------ |
-| layoutContext | [LayoutContextType](./react//layoutcontexttype.md) | _(Optional)_ |
+| Parameter     | Type                                              | Description  |
+| ------------- | ------------------------------------------------- | ------------ |
+| layoutContext | [LayoutContextType](./react/layoutcontexttype.md) | _(Optional)_ |
 
 **Returns:**
 
-[TrackReferenceOrPlaceholder](./core//trackreferenceorplaceholder.md)<!-- -->\[\]
+[TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md)<!-- -->\[\]

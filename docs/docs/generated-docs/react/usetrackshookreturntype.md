@@ -12,6 +12,6 @@ export type UseTracksHookReturnType<T> = T extends Track.Source[]
   : never;
 ```
 
-**References:** [TrackReference](./core//trackreference.md)<!-- -->, [TrackSourceWithOptions](./core//tracksourcewithoptions.md)<!-- -->, [TrackReferenceOrPlaceholder](./core//trackreferenceorplaceholder.md)
+**References:** [TrackReference](./core/trackreference.md)<!-- -->, [TrackSourceWithOptions](./core/tracksourcewithoptions.md)<!-- -->, [TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md)
 
 {% partial file="p_usage.md" /%}

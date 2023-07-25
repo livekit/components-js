@@ -14,9 +14,9 @@ import { useParticipants } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                         | Description  |
-| --------- | ------------------------------------------------------------ | ------------ |
-| options   | [UseParticipantsOptions](./react//useparticipantsoptions.md) | _(Optional)_ |
+| Parameter | Type                                                        | Description  |
+| --------- | ----------------------------------------------------------- | ------------ |
+| options   | [UseParticipantsOptions](./react/useparticipantsoptions.md) | _(Optional)_ |
 
 **Returns:**
 

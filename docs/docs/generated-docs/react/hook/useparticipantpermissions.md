@@ -12,9 +12,9 @@ import { useParticipantPermissions } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                                             | Description  |
-| --------- | -------------------------------------------------------------------------------- | ------------ |
-| options   | [UseParticipantPermissionsOptions](./react//useparticipantpermissionsoptions.md) | _(Optional)_ |
+| Parameter | Type                                                                            | Description  |
+| --------- | ------------------------------------------------------------------------------- | ------------ |
+| options   | [UseParticipantPermissionsOptions](./react/useparticipantpermissionsoptions.md) | _(Optional)_ |
 
 **Returns:**
 

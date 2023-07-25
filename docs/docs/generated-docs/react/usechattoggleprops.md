@@ -12,6 +12,6 @@ export interface UseChatToggleProps
 
 ## Properties
 
-| Property                                      | Type                                                | Description |
-| --------------------------------------------- | --------------------------------------------------- | ----------- |
-| [props](./react//usechattoggleprops.props.md) | React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt; |             |
+| Property                                     | Type                                                | Description |
+| -------------------------------------------- | --------------------------------------------------- | ----------- |
+| [props](./react/usechattoggleprops.props.md) | React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt; |             |

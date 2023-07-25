@@ -12,9 +12,9 @@ import { useFocusToggle } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter                           | Type                                                   | Description |
-| ----------------------------------- | ------------------------------------------------------ | ----------- |
-| { trackSource, participant, props } | [UseFocusToggleProps](./react//usefocustoggleprops.md) |             |
+| Parameter                           | Type                                                  | Description |
+| ----------------------------------- | ----------------------------------------------------- | ----------- |
+| { trackSource, participant, props } | [UseFocusToggleProps](./react/usefocustoggleprops.md) |             |
 
 **Returns:**
 

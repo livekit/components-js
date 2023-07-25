@@ -22,6 +22,6 @@ import { DisconnectButton } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                                    | Type    | Description  |
-| ----------------------------------------------------------- | ------- | ------------ |
-| [stopTracks?](./react//disconnectbuttonprops.stoptracks.md) | boolean | _(Optional)_ |
+| Property                                                   | Type    | Description  |
+| ---------------------------------------------------------- | ------- | ------------ |
+| [stopTracks?](./react/disconnectbuttonprops.stoptracks.md) | boolean | _(Optional)_ |

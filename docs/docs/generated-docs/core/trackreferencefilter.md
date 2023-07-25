@@ -8,4 +8,4 @@
 export type TrackReferenceFilter = Parameters<TrackReferenceOrPlaceholder[]['filter']>['0'];
 ```
 
-**References:** [TrackReferenceOrPlaceholder](./core//trackreferenceorplaceholder.md)
+**References:** [TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md)

@@ -12,9 +12,9 @@ import { useLiveKitRoom } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                             | Description |
-| --------- | ------------------------------------------------ | ----------- |
-| props     | [LiveKitRoomProps](./react//livekitroomprops.md) |             |
+| Parameter | Type                                            | Description |
+| --------- | ----------------------------------------------- | ----------- |
+| props     | [LiveKitRoomProps](./react/livekitroomprops.md) |             |
 
 **Returns:**
 

@@ -14,6 +14,6 @@ export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement>
 
 ## Properties
 
-| Property                                                     | Type        | Description  |
-| ------------------------------------------------------------ | ----------- | ------------ |
-| [participant?](./react//audiovisualizerprops.participant.md) | Participant | _(Optional)_ |
+| Property                                                    | Type        | Description  |
+| ----------------------------------------------------------- | ----------- | ------------ |
+| [participant?](./react/audiovisualizerprops.participant.md) | Participant | _(Optional)_ |

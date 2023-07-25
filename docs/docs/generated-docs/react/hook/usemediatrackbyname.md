@@ -12,11 +12,11 @@ import { useMediaTrackByName } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter   | Type                                                     | Description  |
-| ----------- | -------------------------------------------------------- | ------------ |
-| name        | string                                                   |              |
-| participant | Participant                                              | _(Optional)_ |
-| options     | [UseMediaTrackOptions](./react//usemediatrackoptions.md) | _(Optional)_ |
+| Parameter   | Type                                                    | Description  |
+| ----------- | ------------------------------------------------------- | ------------ |
+| name        | string                                                  |              |
+| participant | Participant                                             | _(Optional)_ |
+| options     | [UseMediaTrackOptions](./react/usemediatrackoptions.md) | _(Optional)_ |
 
 **Returns:**
 

@@ -12,10 +12,10 @@ import { useRemoteParticipant } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                                   | Description  |
-| --------- | ---------------------------------------------------------------------- | ------------ |
-| identity  | string                                                                 |              |
-| options   | [UseRemoteParticipantOptions](./react//useremoteparticipantoptions.md) | _(Optional)_ |
+| Parameter | Type                                                                  | Description  |
+| --------- | --------------------------------------------------------------------- | ------------ |
+| identity  | string                                                                |              |
+| options   | [UseRemoteParticipantOptions](./react/useremoteparticipantoptions.md) | _(Optional)_ |
 
 **Returns:**
 

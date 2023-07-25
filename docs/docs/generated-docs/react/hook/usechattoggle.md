@@ -12,9 +12,9 @@ import { useChatToggle } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                 | Description |
-| --------- | ---------------------------------------------------- | ----------- |
-| { props } | [UseChatToggleProps](./react//usechattoggleprops.md) |             |
+| Parameter | Type                                                | Description |
+| --------- | --------------------------------------------------- | ----------- |
+| { props } | [UseChatToggleProps](./react/usechattoggleprops.md) |             |
 
 **Returns:**
 

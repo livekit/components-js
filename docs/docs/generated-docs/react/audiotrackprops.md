@@ -14,11 +14,11 @@ export interface AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> 
 
 ## Properties
 
-| Property                                                                                | Type                             | Description                                              |
-| --------------------------------------------------------------------------------------- | -------------------------------- | -------------------------------------------------------- |
-| [name?](./react//audiotrackprops.name.md)                                               | string                           | _(Optional)_                                             |
-| [onSubscriptionStatusChanged?](./react//audiotrackprops.onsubscriptionstatuschanged.md) | (subscribed: boolean) =&gt; void | _(Optional)_                                             |
-| [participant?](./react//audiotrackprops.participant.md)                                 | Participant                      | _(Optional)_                                             |
-| [publication?](./react//audiotrackprops.publication.md)                                 | TrackPublication                 | _(Optional)_                                             |
-| [source](./react//audiotrackprops.source.md)                                            | Track.Source                     |                                                          |
-| [volume?](./react//audiotrackprops.volume.md)                                           | number                           | _(Optional)_ by the default the range is between 0 and 1 |
+| Property                                                                               | Type                             | Description                                              |
+| -------------------------------------------------------------------------------------- | -------------------------------- | -------------------------------------------------------- |
+| [name?](./react/audiotrackprops.name.md)                                               | string                           | _(Optional)_                                             |
+| [onSubscriptionStatusChanged?](./react/audiotrackprops.onsubscriptionstatuschanged.md) | (subscribed: boolean) =&gt; void | _(Optional)_                                             |
+| [participant?](./react/audiotrackprops.participant.md)                                 | Participant                      | _(Optional)_                                             |
+| [publication?](./react/audiotrackprops.publication.md)                                 | TrackPublication                 | _(Optional)_                                             |
+| [source](./react/audiotrackprops.source.md)                                            | Track.Source                     |                                                          |
+| [volume?](./react/audiotrackprops.volume.md)                                           | number                           | _(Optional)_ by the default the range is between 0 and 1 |

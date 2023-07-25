@@ -12,6 +12,6 @@ export interface ConnectionQualityIndicatorOptions
 
 ## Properties
 
-| Property                                                                  | Type        | Description  |
-| ------------------------------------------------------------------------- | ----------- | ------------ |
-| [participant?](./react//connectionqualityindicatoroptions.participant.md) | Participant | _(Optional)_ |
+| Property                                                                 | Type        | Description  |
+| ------------------------------------------------------------------------ | ----------- | ------------ |
+| [participant?](./react/connectionqualityindicatoroptions.participant.md) | Participant | _(Optional)_ |

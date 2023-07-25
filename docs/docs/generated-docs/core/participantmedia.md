@@ -10,11 +10,11 @@ export interface ParticipantMedia<T extends Participant = Participant>
 
 ## Properties
 
-| Property                                                                 | Type             | Description  |
-| ------------------------------------------------------------------------ | ---------------- | ------------ |
-| [cameraTrack?](./core//participantmedia.cameratrack.md)                  | TrackPublication | _(Optional)_ |
-| [isCameraEnabled](./core//participantmedia.iscameraenabled.md)           | boolean          |              |
-| [isMicrophoneEnabled](./core//participantmedia.ismicrophoneenabled.md)   | boolean          |              |
-| [isScreenShareEnabled](./core//participantmedia.isscreenshareenabled.md) | boolean          |              |
-| [microphoneTrack?](./core//participantmedia.microphonetrack.md)          | TrackPublication | _(Optional)_ |
-| [participant](./core//participantmedia.participant.md)                   | T                |              |
+| Property                                                                | Type             | Description  |
+| ----------------------------------------------------------------------- | ---------------- | ------------ |
+| [cameraTrack?](./core/participantmedia.cameratrack.md)                  | TrackPublication | _(Optional)_ |
+| [isCameraEnabled](./core/participantmedia.iscameraenabled.md)           | boolean          |              |
+| [isMicrophoneEnabled](./core/participantmedia.ismicrophoneenabled.md)   | boolean          |              |
+| [isScreenShareEnabled](./core/participantmedia.isscreenshareenabled.md) | boolean          |              |
+| [microphoneTrack?](./core/participantmedia.microphonetrack.md)          | TrackPublication | _(Optional)_ |
+| [participant](./core/participantmedia.participant.md)                   | T                |              |

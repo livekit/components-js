@@ -12,6 +12,6 @@ export interface UseRoomInfoOptions
 
 ## Properties
 
-| Property                                     | Type | Description  |
-| -------------------------------------------- | ---- | ------------ |
-| [room?](./react//useroominfooptions.room.md) | Room | _(Optional)_ |
+| Property                                    | Type | Description  |
+| ------------------------------------------- | ---- | ------------ |
+| [room?](./react/useroominfooptions.room.md) | Room | _(Optional)_ |

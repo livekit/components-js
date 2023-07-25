@@ -12,6 +12,6 @@ export interface UseParticipantPermissionsOptions
 
 ## Properties
 
-| Property                                                                 | Type        | Description  |
-| ------------------------------------------------------------------------ | ----------- | ------------ |
-| [participant?](./react//useparticipantpermissionsoptions.participant.md) | Participant | _(Optional)_ |
+| Property                                                                | Type        | Description  |
+| ----------------------------------------------------------------------- | ----------- | ------------ |
+| [participant?](./react/useparticipantpermissionsoptions.participant.md) | Participant | _(Optional)_ |

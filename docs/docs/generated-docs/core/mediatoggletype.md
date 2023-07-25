@@ -13,4 +13,4 @@ export type MediaToggleType<T extends ToggleSource> = {
 };
 ```
 
-**References:** [ToggleSource](./core//togglesource.md)<!-- -->, [CaptureOptionsBySource](./core//captureoptionsbysource.md)
+**References:** [ToggleSource](./core/togglesource.md)<!-- -->, [CaptureOptionsBySource](./core/captureoptionsbysource.md)

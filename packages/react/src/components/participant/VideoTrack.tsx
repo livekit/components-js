@@ -32,10 +32,11 @@ export function VideoTrack({
   name,
   publication,
   source,
+  participant: p,
   ...props
 }: VideoTrackProps) {
   const mediaEl = React.useRef<HTMLVideoElement>(null);
-  const participant = useEnsureParticipant(props.participant);
+  const participant = useEnsureParticipant(p);
   const {
     elementProps,
     publication: pub,

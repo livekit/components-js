@@ -31,10 +31,17 @@ export interface AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
  * @see `ParticipantTile` component
  * @public
  */
-export function AudioTrack({ onSubscriptionStatusChanged, volume, ...props }: AudioTrackProps) {
-  const { source, name, publication } = props;
+export function AudioTrack({
+  onSubscriptionStatusChanged,
+  volume,
+  source,
+  name,
+  publication,
+  participant: p,
+  ...props
+}: AudioTrackProps) {
   const mediaEl = React.useRef<HTMLAudioElement>(null);
-  const participant = useEnsureParticipant(props.participant);
+  const participant = useEnsureParticipant(p);
 
   const { elementProps, isSubscribed, track } = useMediaTrackBySourceOrName(
     { source, name, participant, publication },

@@ -33,8 +33,7 @@ export function useParticipantTile<T extends HTMLElement>({
     const { className } = setupParticipantTile();
     return mergeProps(htmlProps, {
       className,
-      onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        // @ts-ignore
+      onClick: (event: React.MouseEvent<T, MouseEvent>) => {
         htmlProps.onClick?.(event);
         if (typeof onParticipantClick === 'function') {
           const track = publication ?? p.getTrack(source);

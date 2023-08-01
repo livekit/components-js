@@ -30,12 +30,10 @@ export function roomEventSelector<T extends RoomEvent>(room: Room, event: T) {
     const update = (...params: Parameters<RoomEventCallbacks[T]>) => {
       subscribe.next(params);
     };
-    // @ts-ignore
-    room.on(event, update);
+    room.on(event as keyof RoomEventCallbacks, update);
 
     const unsubscribe = () => {
-      // @ts-ignore
-      room.off(event, update);
+      room.off(event as keyof RoomEventCallbacks, update);
     };
     return unsubscribe;
   });

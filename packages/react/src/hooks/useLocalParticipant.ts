@@ -25,6 +25,10 @@ export function useLocalParticipant(options: UseLocalParticipantOptions = {}) {
   const [isCameraEnabled, setIsCameraEnabled] = React.useState(
     localParticipant.isMicrophoneEnabled,
   );
+  const [lastMicrophoneError, setLastMicrophoneError] = React.useState(
+    localParticipant.lastMicrophoneError,
+  );
+  const [lastCameraError, setLastCameraError] = React.useState(localParticipant.lastCameraError);
   const [isScreenShareEnabled, setIsScreenShareEnabled] = React.useState(
     localParticipant.isMicrophoneEnabled,
   );
@@ -39,6 +43,8 @@ export function useLocalParticipant(options: UseLocalParticipantOptions = {}) {
     setIsScreenShareEnabled(media.isScreenShareEnabled);
     setCameraTrack(media.cameraTrack);
     setMicrophoneTrack(media.microphoneTrack);
+    setLastMicrophoneError(media.participant.lastMicrophoneError);
+    setLastCameraError(media.participant.lastCameraError);
     setLocalParticipant(media.participant);
   };
   React.useEffect(() => {
@@ -53,6 +59,8 @@ export function useLocalParticipant(options: UseLocalParticipantOptions = {}) {
     isCameraEnabled,
     microphoneTrack,
     cameraTrack,
+    lastMicrophoneError,
+    lastCameraError,
     localParticipant,
   };
 }

@@ -608,6 +608,8 @@ export function useLocalParticipant(options?: UseLocalParticipantOptions): {
     isCameraEnabled: boolean;
     microphoneTrack: TrackPublication | undefined;
     cameraTrack: TrackPublication | undefined;
+    lastMicrophoneError: Error | undefined;
+    lastCameraError: Error | undefined;
     localParticipant: LocalParticipant;
 };
 

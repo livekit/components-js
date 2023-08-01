@@ -25,7 +25,7 @@ import type { MediaDeviceFailure } from 'livekit-client';
 import { Participant } from 'livekit-client';
 import type { ParticipantClickEvent } from '@livekit/components-core';
 import type { ParticipantEvent } from 'livekit-client';
-import { ParticipantPermission } from 'livekit-client/dist/src/proto/livekit_models';
+import { ParticipantPermission } from 'livekit-client/dist/src/proto/livekit_models_pb';
 import type { PinState } from '@livekit/components-core';
 import * as React_2 from 'react';
 import type { ReceivedChatMessage } from '@livekit/components-core';

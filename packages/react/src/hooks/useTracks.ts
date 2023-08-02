@@ -79,9 +79,8 @@ export function useTracks<T extends SourcesArray = Track.Source[]>(
   const maybeTrackReferences = React.useMemo(() => {
     if (isSourcesWithOptions(sources)) {
       const requirePlaceholder = requiredPlaceholders(sources, participants);
-      const trackReferencesWithPlaceholders = Array.from(
-        trackReferences,
-      ) as TrackReferenceOrPlaceholder[];
+      const trackReferencesWithPlaceholders: TrackReferenceOrPlaceholder[] =
+        Array.from(trackReferences);
       participants.forEach((participant) => {
         if (requirePlaceholder.has(participant.identity)) {
           const sourcesToAddPlaceholder = requirePlaceholder.get(participant.identity) ?? [];

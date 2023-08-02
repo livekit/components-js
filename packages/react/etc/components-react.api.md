@@ -25,7 +25,7 @@ import type { MediaDeviceFailure } from 'livekit-client';
 import { Participant } from 'livekit-client';
 import type { ParticipantClickEvent } from '@livekit/components-core';
 import type { ParticipantEvent } from 'livekit-client';
-import { ParticipantPermission } from 'livekit-client/dist/src/proto/livekit_models';
+import { ParticipantPermission } from 'livekit-client/dist/src/proto/livekit_models_pb';
 import type { PinState } from '@livekit/components-core';
 import * as React_2 from 'react';
 import type { ReceivedChatMessage } from '@livekit/components-core';
@@ -62,7 +62,7 @@ export interface AudioConferenceProps extends React_2.HTMLAttributes<HTMLDivElem
 }
 
 // @public
-export function AudioTrack({ onSubscriptionStatusChanged, volume, ...props }: AudioTrackProps): React_2.JSX.Element;
+export function AudioTrack({ onSubscriptionStatusChanged, volume, source, name, publication, participant: p, ...props }: AudioTrackProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> extends React_2.HTMLAttributes<T> {
@@ -608,6 +608,8 @@ export function useLocalParticipant(options?: UseLocalParticipantOptions): {
     isCameraEnabled: boolean;
     microphoneTrack: TrackPublication | undefined;
     cameraTrack: TrackPublication | undefined;
+    lastMicrophoneError: Error | undefined;
+    lastCameraError: Error | undefined;
     localParticipant: LocalParticipant;
 };
 
@@ -909,7 +911,7 @@ export interface VideoConferenceProps extends React_2.HTMLAttributes<HTMLDivElem
 }
 
 // @public
-export function VideoTrack({ onTrackClick, onClick, onSubscriptionStatusChanged, name, publication, source, ...props }: VideoTrackProps): React_2.JSX.Element;
+export function VideoTrack({ onTrackClick, onClick, onSubscriptionStatusChanged, name, publication, source, participant: p, ...props }: VideoTrackProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface VideoTrackProps extends React_2.HTMLAttributes<HTMLVideoElement> {

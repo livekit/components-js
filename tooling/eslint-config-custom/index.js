@@ -36,5 +36,6 @@ module.exports = {
     '@typescript-eslint/consistent-type-imports': 'warn',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+    '@typescript-eslint/no-explicit-any': 'warn',
   },
 };

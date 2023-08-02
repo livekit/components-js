@@ -43,7 +43,7 @@
     "test:watch": "vitest",
     "size": "size-limit --json",
     "api-check": "api-extractor run --typescript-compiler-folder ../../node_modules/typescript",
-    "api-check:update": "api-extractor run --local --typescript-compiler-folder ../../node_modules/typescript --verbose"
+    "api-extractor": "api-extractor run --local --typescript-compiler-folder ../../node_modules/typescript --verbose"
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -57,7 +57,6 @@
     "react-dom": ">=18"
   },
   "devDependencies": {
-    "@microsoft/api-documenter": "^7.21.7",
     "@microsoft/api-extractor": "^7.35.0",
     "@size-limit/file": "^8.2.4",
     "@size-limit/webpack": "^8.2.4",
@@ -71,8 +70,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "size-limit": "^8.2.4",
-    "tsup": "^7.0.0",
     "typescript": "5.1.6",
+    "tsup": "^7.0.0",
     "vite": "^4.1.4",
     "vitest": "^0.34.0"
   },

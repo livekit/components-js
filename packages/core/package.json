@@ -29,7 +29,9 @@
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
     "test": "vitest --run",
     "test:watch": "vitest",
-    "size": "size-limit"
+    "size": "size-limit",
+    "api-check": "echo \"🚧 api-checks for core are disabled!\" #TODO cleanup core api then activate api checks. api-extractor run --typescript-compiler-folder ../../node_modules/typescript",
+    "api-extractor": "api-extractor run --local --typescript-compiler-folder ../../node_modules/typescript --verbose"
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -44,6 +46,7 @@
   },
   "devDependencies": {
     "@livekit/components-styles": "~1.0.4",
+    "@microsoft/api-extractor": "^7.36.0",
     "@size-limit/file": "^8.2.4",
     "@size-limit/webpack": "^8.2.4",
     "eslint-config-lk-custom": "^0.1.1",

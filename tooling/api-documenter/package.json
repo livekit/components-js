@@ -1,0 +1,39 @@
+{
+  "name": "@livekit/api-documenter",
+  "version": "7.22.17",
+  "description": "Read JSON files from api-extractor, generate documentation pages",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/livekit/components-js.git",
+    "directory": "tooling/api-documenter"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "heft build --clean"
+  },
+  "bin": {
+    "api-documenter": "./bin/api-documenter"
+  },
+  "main": "lib/index.js",
+  "typings": "dist/rollup.d.ts",
+  "dependencies": {
+    "@microsoft/api-extractor-model": "^7.27.2",
+    "@microsoft/tsdoc": "0.14.2",
+    "@rushstack/heft-node-rig": "^2.2.6",
+    "@rushstack/node-core-library": "^3.59.3",
+    "@rushstack/ts-command-line": "^4.15.0",
+    "colors": "~1.2.1",
+    "eslint-config-lk-custom": "*",
+    "js-yaml": "~3.13.1",
+    "resolve": "~1.22.1"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-config": "^3.3.1",
+    "@types/js-yaml": "3.12.1",
+    "@types/node": "14.18.36",
+    "@types/resolve": "1.20.2"
+  },
+  "peerDependencies": {
+    "@rushstack/heft": "^0.55.2"
+  }
+}

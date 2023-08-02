@@ -4,7 +4,7 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "storybook-static/**"]
+      "outputs": ["dist/**", ".next/**", "storybook-static/**", "lib/**"]
     },
     "lint": {
       "outputs": []
@@ -30,11 +30,17 @@
     "deploy": {
       "dependsOn": ["^build"]
     },
+    "api-extractor": {
+      "dependsOn": ["@livekit/components-react#build", "@livekit/components-core#build"],
+      "outputs": ["temp/*", "etc/*"]
+    },
     "gen:docs": {
       "cache": false,
-      "dependsOn": ["^build"]
+      "dependsOn": ["^api-extractor", "@livekit/api-documenter#build"],
+      "outputs": ["/docs/docs/**"]
     },
     "api-check": {
+      "cache": false,
       "dependsOn": ["^build"]
     },
     "api-check:update": {}

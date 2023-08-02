@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "name": "@livekit/components-js-docs",
+  "version": "0.0.1",
+  "description": "Automatically generated documentation pages for LiveKit Components JS. Intended to be consumed by the documentation page.",
+  "scripts": {
+    "yalc:publish": "yalc publish --private --push --replace",
+    "yalc:publish:watch": "nodemon --delay 1 --watch \"generated-docs/**/*\" -e md -x \"yarn yalc:publish\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/livekit/components-js.git",
+    "directory": "/docs/beta-docs"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/livekit/components-js/issues"
+  },
+  "homepage": "https://github.com/livekit/components-js#readme",
+  "files": [
+    "generated-docs",
+    "meta-data.json"
+  ],
+  "publishConfig": {
+    "access": "restricted"
+  }
+}

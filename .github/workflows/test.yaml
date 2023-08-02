@@ -18,13 +18,17 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
-          cache: "yarn"
+          node-version: '16.x'
+          cache: 'yarn'
 
       - name: Install Yarn
         run: |
           npm install -g yarn
           yarn install
+
+        # TODO: Remove this when heft is removed as a dependency of tooling/api-documenter.
+      - name: Install Heft
+        run: yarn global add @rushstack/heft
 
       - name: ESLint
         run: yarn lint

@@ -78,7 +78,7 @@
   "peerDependencies": {},
   "devDependencies": {
     "modern-normalize": "^2.0.0",
-    "nodemon": "^2.0.19",
+    "nodemon": "^3.0.0",
     "postcss": "^8.4.17",
     "postcss-cli": "^10.0.0",
     "postcss-prefixer": "^2.1.3",

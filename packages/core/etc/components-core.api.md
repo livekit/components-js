@@ -347,9 +347,9 @@ export type SetMediaDeviceOptions = {
 };
 
 // @public (undocumented)
-export function setupChat(room: Room, options: {
-    messageEncoder?: (message: string, timestamp: number) => Uint8Array;
-    messageDecoder?: (message: Uint8Array) => ChatMessage;
+export function setupChat(room: Room, options?: {
+    messageEncoder?: (message: ChatMessage) => Uint8Array;
+    messageDecoder?: (message: Uint8Array) => ReceivedChatMessage;
 }): {
     messageObservable: Observable<ReceivedChatMessage[]>;
     isSendingObservable: BehaviorSubject<boolean>;

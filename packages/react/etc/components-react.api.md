@@ -341,10 +341,10 @@ export interface MediaDeviceSelectProps extends React_2.HTMLAttributes<HTMLUList
 }
 
 // @public (undocumented)
-export type MessageDecoder = (message: Uint8Array) => ChatMessage;
+export type MessageDecoder = (message: Uint8Array) => ReceivedChatMessage;
 
 // @public (undocumented)
-export type MessageEncoder = (message: string, timestamp: number) => Uint8Array;
+export type MessageEncoder = (message: ChatMessage) => Uint8Array;
 
 // @public (undocumented)
 export type MessageFormatter = (message: string) => React_2.ReactNode;
@@ -486,7 +486,7 @@ export function useAudioPlayback(room?: Room): {
 };
 
 // @public (undocumented)
-export function useChat(options: {
+export function useChat(options?: {
     messageEncoder?: MessageEncoder;
     messageDecoder?: MessageDecoder;
 }): {

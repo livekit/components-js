@@ -25,7 +25,7 @@ export function setupChat(
   room: Room,
   options: {
     messageEncoder?: (message: ChatMessage) => Uint8Array;
-    messageDecoder?: (message: Uint8Array) => ChatMessage;
+    messageDecoder?: (message: Uint8Array) => ReceivedChatMessage;
   } = {},
 ) {
   const onDestroyObservable = new Subject<void>();

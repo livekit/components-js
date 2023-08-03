@@ -16,17 +16,17 @@ export interface ReceivedChatMessage extends ChatMessage {
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
-const encode = (message: string, timestamp: number) =>
-  encoder.encode(JSON.stringify({ message, timestamp }));
+const encode = (message: ChatMessage) =>
+  encoder.encode(JSON.stringify({ message: message.message, timestamp: message.timestamp }));
 
-const decode = (message: Uint8Array) => JSON.parse(decoder.decode(message)) as ChatMessage;
+const decode = (message: Uint8Array) => JSON.parse(decoder.decode(message)) as ReceivedChatMessage;
 
 export function setupChat(
   room: Room,
   options: {
-    messageEncoder?: (message: string, timestamp: number) => Uint8Array;
+    messageEncoder?: (message: ChatMessage) => Uint8Array;
     messageDecoder?: (message: Uint8Array) => ChatMessage;
-  },
+  } = {},
 ) {
   const onDestroyObservable = new Subject<void>();
   const messageSubject = new Subject<{
@@ -60,7 +60,7 @@ export function setupChat(
 
   const send = async (message: string) => {
     const timestamp = Date.now();
-    const encodedMsg = finalMessageEncoder(message, timestamp);
+    const encodedMsg = finalMessageEncoder({ message, timestamp });
     isSending$.next(true);
     try {
       await sendMessage(room.localParticipant, encodedMsg, DataTopic.CHAT, {

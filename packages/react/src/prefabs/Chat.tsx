@@ -17,14 +17,17 @@ export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /** @public */
-export function useChat(messageEncoder?: MessageEncoder, messageDecoder?: MessageDecoder) {
+export function useChat(options: {
+  messageEncoder?: MessageEncoder;
+  messageDecoder?: MessageDecoder;
+}) {
   const room = useRoomContext();
   const [setup, setSetup] = React.useState<ReturnType<typeof setupChat>>();
   const isSending = useObservableState(setup?.isSendingObservable, false);
   const chatMessages = useObservableState(setup?.messageObservable, []);
 
   React.useEffect(() => {
-    const setupChatReturn = setupChat(room, messageEncoder, messageDecoder);
+    const setupChatReturn = setupChat(room, options);
     setSetup(setupChatReturn);
     return setupChatReturn.destroy;
   }, [room]);
@@ -47,7 +50,10 @@ export function useChat(messageEncoder?: MessageEncoder, messageDecoder?: Messag
 export function Chat({ messageFormatter, ...props }: ChatProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const ulRef = React.useRef<HTMLUListElement>(null);
-  const { send, chatMessages, isSending } = useChat(props.messageEncoder, props.messageDecoder);
+  const { send, chatMessages, isSending } = useChat({
+    messageEncoder: props.messageEncoder,
+    messageDecoder: props.messageDecoder,
+  });
   const layoutContext = useMaybeLayoutContext();
   const lastReadMsgAt = React.useRef<ChatMessage['timestamp']>(0);
 

@@ -486,7 +486,10 @@ export function useAudioPlayback(room?: Room): {
 };
 
 // @public (undocumented)
-export function useChat(messageEncoder?: MessageEncoder, messageDecoder?: MessageDecoder): {
+export function useChat(options: {
+    messageEncoder?: MessageEncoder;
+    messageDecoder?: MessageDecoder;
+}): {
     send: ((message: string) => Promise<void>) | undefined;
     chatMessages: ReceivedChatMessage[];
     isSending: boolean;

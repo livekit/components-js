@@ -23,8 +23,10 @@ const decode = (message: Uint8Array) => JSON.parse(decoder.decode(message)) as C
 
 export function setupChat(
   room: Room,
-  messageEncoder?: (message: string, timestamp: number) => Uint8Array,
-  messageDecoder?: (message: Uint8Array) => ChatMessage,
+  options: {
+    messageEncoder?: (message: string, timestamp: number) => Uint8Array;
+    messageDecoder?: (message: Uint8Array) => ChatMessage;
+  },
 ) {
   const onDestroyObservable = new Subject<void>();
   const messageSubject = new Subject<{
@@ -37,7 +39,9 @@ export function setupChat(
   const { messageObservable } = setupDataMessageHandler(room, DataTopic.CHAT);
   messageObservable.pipe(takeUntil(onDestroyObservable)).subscribe(messageSubject);
 
-  const finalMessageDecoder = messageDecoder ? messageDecoder : decode;
+  const { messageDecoder, messageEncoder } = options;
+
+  const finalMessageDecoder = messageDecoder ?? decode;
 
   /** Build up the message array over time. */
   const messagesObservable = messageSubject.pipe(
@@ -52,7 +56,7 @@ export function setupChat(
 
   const isSending$ = new BehaviorSubject<boolean>(false);
 
-  const finalMessageEncoder = messageEncoder ? messageEncoder : encode;
+  const finalMessageEncoder = messageEncoder ?? encode;
 
   const send = async (message: string) => {
     const timestamp = Date.now();

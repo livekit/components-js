@@ -6,9 +6,9 @@ import * as React from 'react';
 export type MessageFormatter = (message: string) => React.ReactNode;
 
 /** @public */
-export type MessageEncoder = (message: string, timestamp: number) => Uint8Array;
+export type MessageEncoder = (message: ChatMessage) => Uint8Array;
 /** @public */
-export type MessageDecoder = (message: Uint8Array) => ChatMessage;
+export type MessageDecoder = (message: Uint8Array) => ReceivedChatMessage;
 
 /**
  * ChatEntry composes the HTML div element under the hood, so you can pass all its props.

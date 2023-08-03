@@ -17,10 +17,12 @@ export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /** @public */
-export function useChat(options: {
-  messageEncoder?: MessageEncoder;
-  messageDecoder?: MessageDecoder;
-}) {
+export function useChat(
+  options: {
+    messageEncoder?: MessageEncoder;
+    messageDecoder?: MessageDecoder;
+  } = {},
+) {
   const room = useRoomContext();
   const [setup, setSetup] = React.useState<ReturnType<typeof setupChat>>();
   const isSending = useObservableState(setup?.isSendingObservable, false);

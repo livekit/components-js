@@ -1,5 +1,31 @@
 # @livekit/components-react
 
+## 1.1.0
+
+### Minor Changes
+
+- Codebase consistency: Consistently use named functions instead of arrow functions for exported top-level elements. Consistently use `interface` instead of `type` for component properties. - [#564](https://github.com/livekit/components-js/pull/564) ([@Ocupe](https://github.com/Ocupe))
+
+### Patch Changes
+
+- Remove unnecessary props from audio and video elements - [#569](https://github.com/livekit/components-js/pull/569) ([@mpnri](https://github.com/mpnri))
+
+- Move Hooks into hook dir. Expose `useFocusToggle` and `useToggleChat` hooks. - [#565](https://github.com/livekit/components-js/pull/565) ([@Ocupe](https://github.com/Ocupe))
+
+- Merge control bar classname with passed props - [#582](https://github.com/livekit/components-js/pull/582) ([@lukasIO](https://github.com/lukasIO))
+
+- Add unread chat message badge - [#563](https://github.com/livekit/components-js/pull/563) ([@lukasIO](https://github.com/lukasIO))
+
+- Add MediaDevicesError event for use local participant - [#566](https://github.com/livekit/components-js/pull/566) ([@mpnri](https://github.com/mpnri))
+
+- Rename GridLayout to GridLayoutDefinition in core to resolve name overlap. - [#567](https://github.com/livekit/components-js/pull/567) ([@Ocupe](https://github.com/Ocupe))
+  Switch to the vertical 2x1 layout a bit earlier if reducing the width of the viewport.
+
+- Make touch events passive - [#561](https://github.com/livekit/components-js/pull/561) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`5f018d5`](https://github.com/livekit/components-js/commit/5f018d5773f31a756e83b76152627cab991b4d3b), [`8a1964a`](https://github.com/livekit/components-js/commit/8a1964a821a568b24856186bdd118768cc24e78c), [`95f48c0`](https://github.com/livekit/components-js/commit/95f48c0ab2768f2f4a3cc5f399e7100d8db9a21a), [`1a9851b`](https://github.com/livekit/components-js/commit/1a9851b9ecdd48e22ef3c4e17a3795086f06e979)]:
+  - @livekit/components-core@0.6.12
+
 ## 1.0.8
 
 ### Patch Changes

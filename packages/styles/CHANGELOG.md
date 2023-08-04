@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 1.0.5
+
+### Patch Changes
+
+- Add unread chat message badge - [#563](https://github.com/livekit/components-js/pull/563) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.0.4
 
 ### Patch Changes

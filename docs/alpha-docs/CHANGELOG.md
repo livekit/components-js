@@ -1,5 +1,11 @@
 # @livekit/components-alpha-docs
 
+## 0.0.4
+
+### Patch Changes
+
+- Docs gen v3 - [#523](https://github.com/livekit/components-js/pull/523) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.0.3
 
 ### Patch Changes

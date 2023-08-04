@@ -1,5 +1,18 @@
 # @livekit/components-core
 
+## 0.6.12
+
+### Patch Changes
+
+- Remove unnecessary props from audio and video elements - [#569](https://github.com/livekit/components-js/pull/569) ([@mpnri](https://github.com/mpnri))
+
+- Add unread chat message badge - [#563](https://github.com/livekit/components-js/pull/563) ([@lukasIO](https://github.com/lukasIO))
+
+- Add MediaDevicesError event for use local participant - [#566](https://github.com/livekit/components-js/pull/566) ([@mpnri](https://github.com/mpnri))
+
+- Rename GridLayout to GridLayoutDefinition in core to resolve name overlap. - [#567](https://github.com/livekit/components-js/pull/567) ([@Ocupe](https://github.com/Ocupe))
+  Switch to the vertical 2x1 layout a bit earlier if reducing the width of the viewport.
+
 ## 0.6.11
 
 ### Patch Changes

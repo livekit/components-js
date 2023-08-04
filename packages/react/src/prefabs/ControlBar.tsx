@@ -10,6 +10,7 @@ import { useLocalParticipantPermissions } from '../hooks';
 import { useMediaQuery } from '../hooks/internal';
 import { useMaybeLayoutContext } from '../context';
 import { supportsScreenSharing } from '@livekit/components-core';
+import { mergeProps } from '../utils';
 
 /** @public */
 export type ControlBarControls = {
@@ -88,8 +89,10 @@ export function ControlBar({ variation, controls, ...props }: ControlBarProps) {
     setIsScreenShareEnabled(enabled);
   };
 
+  const htmlProps = mergeProps({ className: 'lk-control-bar' }, props);
+
   return (
-    <div className="lk-control-bar" {...props}>
+    <div {...htmlProps}>
       {visibleControls.microphone && (
         <div className="lk-button-group">
           <TrackToggle source={Track.Source.Microphone} showIcon={showIcon}>

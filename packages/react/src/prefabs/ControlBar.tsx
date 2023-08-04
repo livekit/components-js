@@ -92,7 +92,7 @@ export function ControlBar({ variation, controls, ...props }: ControlBarProps) {
   const htmlProps = mergeProps({ className: 'lk-control-bar' }, props);
 
   return (
-    <div className="lk-control-bar" {...htmlProps}>
+    <div {...htmlProps}>
       {visibleControls.microphone && (
         <div className="lk-button-group">
           <TrackToggle source={Track.Source.Microphone} showIcon={showIcon}>

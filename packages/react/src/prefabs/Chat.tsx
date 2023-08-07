@@ -30,7 +30,7 @@ export function useChat(options?: {
     const setupChatReturn = setupChat(room, options);
     setSetup(setupChatReturn);
     return setupChatReturn.destroy;
-  }, [room]);
+  }, [room, options]);
 
   return { send: setup?.send, chatMessages, isSending };
 }

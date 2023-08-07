@@ -23,10 +23,10 @@ const decode = (message: Uint8Array) => JSON.parse(decoder.decode(message)) as R
 
 export function setupChat(
   room: Room,
-  options: {
+  options?: {
     messageEncoder?: (message: ChatMessage) => Uint8Array;
     messageDecoder?: (message: Uint8Array) => ReceivedChatMessage;
-  } = {},
+  },
 ) {
   const onDestroyObservable = new Subject<void>();
   const messageSubject = new Subject<{
@@ -39,7 +39,7 @@ export function setupChat(
   const { messageObservable } = setupDataMessageHandler(room, DataTopic.CHAT);
   messageObservable.pipe(takeUntil(onDestroyObservable)).subscribe(messageSubject);
 
-  const { messageDecoder, messageEncoder } = options;
+  const { messageDecoder, messageEncoder } = options ?? {};
 
   const finalMessageDecoder = messageDecoder ?? decode;
 

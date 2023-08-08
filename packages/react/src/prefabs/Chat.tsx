@@ -50,10 +50,13 @@ export function useChat(options?: {
 export function Chat({ messageFormatter, ...props }: ChatProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const ulRef = React.useRef<HTMLUListElement>(null);
-  const { send, chatMessages, isSending } = useChat({
-    messageEncoder: props.messageEncoder,
-    messageDecoder: props.messageDecoder,
-  });
+
+  const chatOptions = React.useMemo(() => {
+    return { messageDecoder: props.messageDecoder, messageEncoder: props.messageEncoder };
+  }, [props.messageDecoder, props.messageEncoder]);
+
+  const { send, chatMessages, isSending } = useChat(chatOptions);
+
   const layoutContext = useMaybeLayoutContext();
   const lastReadMsgAt = React.useRef<ChatMessage['timestamp']>(0);
 

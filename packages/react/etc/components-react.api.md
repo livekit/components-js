@@ -101,7 +101,7 @@ export interface CarouselViewProps extends React_2.HTMLAttributes<HTMLMediaEleme
 }
 
 // @public
-export function Chat({ messageFormatter, ...props }: ChatProps): React_2.JSX.Element;
+export function Chat({ messageFormatter, messageDecoder, messageEncoder, ...props }: ChatProps): React_2.JSX.Element;
 
 // @public
 export function ChatEntry({ entry, hideName, hideTimestamp, messageFormatter, ...props }: ChatEntryProps): React_2.JSX.Element;

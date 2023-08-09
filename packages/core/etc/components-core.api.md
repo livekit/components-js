@@ -18,7 +18,7 @@ import { Observable } from 'rxjs';
 import type { Participant } from 'livekit-client';
 import { ParticipantEvent } from 'livekit-client';
 import type { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
-import { ParticipantPermission } from 'livekit-client/dist/src/proto/livekit_models';
+import { ParticipantPermission } from 'livekit-client/dist/src/proto/livekit_models_pb';
 import { RemoteParticipant } from 'livekit-client';
 import { Room } from 'livekit-client';
 import { RoomEvent } from 'livekit-client';
@@ -347,7 +347,10 @@ export type SetMediaDeviceOptions = {
 };
 
 // @public (undocumented)
-export function setupChat(room: Room): {
+export function setupChat(room: Room, options?: {
+    messageEncoder?: (message: ChatMessage) => Uint8Array;
+    messageDecoder?: (message: Uint8Array) => ReceivedChatMessage;
+}): {
     messageObservable: Observable<ReceivedChatMessage[]>;
     isSendingObservable: BehaviorSubject<boolean>;
     send: (message: string) => Promise<void>;

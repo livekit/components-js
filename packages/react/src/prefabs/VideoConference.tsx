@@ -8,7 +8,7 @@ import type { WidgetState } from '@livekit/components-core';
 import { isEqualTrackRef, isTrackReference, log, isWeb } from '@livekit/components-core';
 import { Chat } from './Chat';
 import { ConnectionStateToast } from '../components/Toast';
-import type { MessageFormatter } from '../components/ChatEntry';
+import type { MessageDecoder, MessageEncoder, MessageFormatter } from '../components/ChatEntry';
 import { RoomEvent, Track } from 'livekit-client';
 import { useTracks } from '../hooks/useTracks';
 import { usePinnedTracks } from '../hooks/usePinnedTracks';
@@ -22,6 +22,8 @@ import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
  */
 export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
   chatMessageFormatter?: MessageFormatter;
+  chatMessageEncoder?: MessageEncoder;
+  chatMessageDecoder?: MessageDecoder;
 }
 
 /**
@@ -40,7 +42,12 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
  * ```
  * @public
  */
-export function VideoConference({ chatMessageFormatter, ...props }: VideoConferenceProps) {
+export function VideoConference({
+  chatMessageFormatter,
+  chatMessageDecoder,
+  chatMessageEncoder,
+  ...props
+}: VideoConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({
     showChat: false,
     unreadMessages: 0,
@@ -122,6 +129,8 @@ export function VideoConference({ chatMessageFormatter, ...props }: VideoConfere
           <Chat
             style={{ display: widgetState.showChat ? 'flex' : 'none' }}
             messageFormatter={chatMessageFormatter}
+            messageEncoder={chatMessageEncoder}
+            messageDecoder={chatMessageDecoder}
           />
         </LayoutContextProvider>
       )}

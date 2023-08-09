@@ -101,7 +101,7 @@ export interface CarouselViewProps extends React_2.HTMLAttributes<HTMLMediaEleme
 }
 
 // @public
-export function Chat({ messageFormatter, ...props }: ChatProps): React_2.JSX.Element;
+export function Chat({ messageFormatter, messageDecoder, messageEncoder, ...props }: ChatProps): React_2.JSX.Element;
 
 // @public
 export function ChatEntry({ entry, hideName, hideTimestamp, messageFormatter, ...props }: ChatEntryProps): React_2.JSX.Element;
@@ -118,6 +118,10 @@ export { ChatMessage }
 
 // @public (undocumented)
 export interface ChatProps extends React_2.HTMLAttributes<HTMLDivElement> {
+    // (undocumented)
+    messageDecoder?: MessageDecoder;
+    // (undocumented)
+    messageEncoder?: MessageEncoder;
     // (undocumented)
     messageFormatter?: MessageFormatter;
 }
@@ -337,6 +341,12 @@ export interface MediaDeviceSelectProps extends React_2.HTMLAttributes<HTMLUList
 }
 
 // @public (undocumented)
+export type MessageDecoder = (message: Uint8Array) => ReceivedChatMessage;
+
+// @public (undocumented)
+export type MessageEncoder = (message: ChatMessage) => Uint8Array;
+
+// @public (undocumented)
 export type MessageFormatter = (message: string) => React_2.ReactNode;
 
 // @public
@@ -476,7 +486,10 @@ export function useAudioPlayback(room?: Room): {
 };
 
 // @public (undocumented)
-export function useChat(): {
+export function useChat(options?: {
+    messageEncoder?: MessageEncoder;
+    messageDecoder?: MessageDecoder;
+}): {
     send: ((message: string) => Promise<void>) | undefined;
     chatMessages: ReceivedChatMessage[];
     isSending: boolean;
@@ -902,10 +915,14 @@ export interface UseVisualStableUpdateOptions {
 }
 
 // @public
-export function VideoConference({ chatMessageFormatter, ...props }: VideoConferenceProps): React_2.JSX.Element;
+export function VideoConference({ chatMessageFormatter, chatMessageDecoder, chatMessageEncoder, ...props }: VideoConferenceProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface VideoConferenceProps extends React_2.HTMLAttributes<HTMLDivElement> {
+    // (undocumented)
+    chatMessageDecoder?: MessageDecoder;
+    // (undocumented)
+    chatMessageEncoder?: MessageEncoder;
     // (undocumented)
     chatMessageFormatter?: MessageFormatter;
 }

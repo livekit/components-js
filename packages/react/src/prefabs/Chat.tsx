@@ -47,13 +47,13 @@ export function useChat(options?: {
  * ```
  * @public
  */
-export function Chat({ messageFormatter, ...props }: ChatProps) {
+export function Chat({ messageFormatter, messageDecoder, messageEncoder, ...props }: ChatProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const ulRef = React.useRef<HTMLUListElement>(null);
 
   const chatOptions = React.useMemo(() => {
-    return { messageDecoder: props.messageDecoder, messageEncoder: props.messageEncoder };
-  }, [props.messageDecoder, props.messageEncoder]);
+    return { messageDecoder, messageEncoder };
+  }, [messageDecoder, messageEncoder]);
 
   const { send, chatMessages, isSending } = useChat(chatOptions);
 

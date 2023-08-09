@@ -26,10 +26,6 @@ jobs:
       - name: Install Dependencies
         run: yarn
 
-        # TODO: Remove this when heft is removed as a dependency of tooling/api-documenter.
-      - name: Install Heft
-        run: yarn global add @rushstack/heft
-
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1

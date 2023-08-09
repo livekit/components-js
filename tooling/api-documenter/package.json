@@ -34,6 +34,6 @@
     "@types/resolve": "1.20.2"
   },
   "peerDependencies": {
-    "@rushstack/heft": "^0.55.2"
+    "@rushstack/heft": "^0.58.2"
   }
 }

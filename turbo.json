@@ -37,7 +37,7 @@
     "gen:docs": {
       "cache": false,
       "dependsOn": ["^api-extractor", "@livekit/api-documenter#build"],
-      "outputs": ["/docs/docs/**"]
+      "outputs": ["docs/docs/**"]
     },
     "api-check": {
       "cache": false,

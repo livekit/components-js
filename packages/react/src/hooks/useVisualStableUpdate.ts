@@ -1,5 +1,6 @@
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { log, sortTrackReferences, updatePages } from '@livekit/components-core';
+import { RemoteTrackPublication } from 'livekit-client';
 import * as React from 'react';
 
 /** @public */

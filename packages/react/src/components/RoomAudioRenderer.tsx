@@ -1,5 +1,5 @@
 import { isLocal } from '@livekit/components-core';
-import { Track } from 'livekit-client';
+import { RemoteTrackPublication, Track } from 'livekit-client';
 import * as React from 'react';
 import { useTracks } from '../hooks';
 import { AudioTrack } from './participant/AudioTrack';
@@ -19,7 +19,11 @@ import { AudioTrack } from './participant/AudioTrack';
 export function RoomAudioRenderer() {
   const tracks = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio], {
     updateOnlyOn: [],
+    onlySubscribed: false,
   }).filter((ref) => !isLocal(ref.participant));
+
+  tracks.forEach((track) => (track.publication as RemoteTrackPublication).setSubscribed(true));
+
   return (
     <div style={{ display: 'none' }}>
       {tracks.map((trackRef) => (

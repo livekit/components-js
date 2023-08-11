@@ -1,4 +1,4 @@
-import type { Participant } from 'livekit-client';
+import { RemoteTrackPublication, type Participant } from 'livekit-client';
 import * as React from 'react';
 import { mergeProps } from '../../utils';
 import type { TrackReference, TrackReferenceOrPlaceholder } from '@livekit/components-core';
@@ -26,5 +26,8 @@ export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
 
 /** @public */
 export function FocusLayout({ track, ...htmlProps }: FocusLayoutProps) {
+  if (track?.publication instanceof RemoteTrackPublication) {
+    track.publication.setSubscribed(true);
+  }
   return <ParticipantTile {...track} {...htmlProps} />;
 }

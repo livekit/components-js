@@ -1,6 +1,7 @@
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import * as React from 'react';
 import { useVisualStableUpdate } from './useVisualStableUpdate';
+import { RemoteTrackPublication } from 'livekit-client';
 
 /**
  * The `usePagination` hook implements simple pagination logic for use with arrays.
@@ -50,6 +51,13 @@ export function usePagination(itemPerPage: number, trackReferences: TrackReferen
 
   const updatedTrackReferences = useVisualStableUpdate(trackReferences, itemPerPage);
 
+  const tracksOnPage = updatedTrackReferences.slice(firstItemIndex, lastItemIndex);
+  updatedTrackReferences.forEach((track) => {
+    if (track.publication instanceof RemoteTrackPublication) {
+      track.publication.setSubscribed(tracksOnPage.includes(track));
+    }
+  });
+
   return {
     totalPageCount,
     nextPage: () => changePage('next'),
@@ -57,7 +65,7 @@ export function usePagination(itemPerPage: number, trackReferences: TrackReferen
     setPage: goToPage,
     firstItemIndex,
     lastItemIndex,
-    tracks: updatedTrackReferences.slice(firstItemIndex, lastItemIndex),
+    tracks: tracksOnPage,
     currentPage,
   };
 }

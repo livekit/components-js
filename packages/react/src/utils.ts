@@ -31,3 +31,22 @@ export function cloneSingleChild(
     return child;
   });
 }
+/** @internal */
+export function isElementVisible(element: HTMLElement, container: HTMLElement | null) {
+  if (!container) {
+    return false;
+  }
+  const eleTop = element.offsetTop;
+  const eleBottom = eleTop + element.clientHeight;
+
+  const containerTop = container.scrollTop;
+  const containerBottom = containerTop + container.clientHeight;
+
+  // The element is fully visible in the container
+  return (
+    (eleTop >= containerTop && eleBottom <= containerBottom) ||
+    // Some part of the element is visible in the container
+    (eleTop < containerTop && containerTop < eleBottom) ||
+    (eleTop < containerBottom && containerBottom < eleBottom)
+  );
+}

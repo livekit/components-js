@@ -26,8 +26,5 @@ export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
 
 /** @public */
 export function FocusLayout({ track, ...htmlProps }: FocusLayoutProps) {
-  if (track?.publication instanceof RemoteTrackPublication) {
-    track.publication.setSubscribed(true);
-  }
   return <ParticipantTile {...track} {...htmlProps} />;
 }

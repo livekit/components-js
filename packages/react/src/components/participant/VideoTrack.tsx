@@ -1,8 +1,14 @@
-import type { Participant, Track, TrackPublication } from 'livekit-client';
+import {
+  RemoteTrackPublication,
+  type Participant,
+  type Track,
+  type TrackPublication,
+} from 'livekit-client';
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
 import type { ParticipantClickEvent } from '@livekit/components-core';
 import { useEnsureParticipant } from '../../context';
+import { useDebounce, useIntersectionObserver } from 'usehooks-ts';
 
 /** @public */
 export interface VideoTrackProps extends React.HTMLAttributes<HTMLVideoElement> {
@@ -36,6 +42,29 @@ export function VideoTrack({
   ...props
 }: VideoTrackProps) {
   const mediaEl = React.useRef<HTMLVideoElement>(null);
+
+  const intersectionEntry = useIntersectionObserver(mediaEl, {});
+
+  const debouncedIntersectionEntry = useDebounce(intersectionEntry, 3000);
+
+  React.useEffect(() => {
+    if (
+      publication instanceof RemoteTrackPublication &&
+      debouncedIntersectionEntry?.isIntersecting === false
+    ) {
+      publication.setSubscribed(false);
+    }
+  }, [debouncedIntersectionEntry, publication]);
+
+  React.useEffect(() => {
+    if (
+      publication instanceof RemoteTrackPublication &&
+      intersectionEntry?.isIntersecting === true
+    ) {
+      publication.setSubscribed(true);
+    }
+  }, [intersectionEntry, publication]);
+
   const participant = useEnsureParticipant(p);
   const {
     elementProps,

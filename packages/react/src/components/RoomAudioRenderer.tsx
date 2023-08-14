@@ -22,7 +22,9 @@ export function RoomAudioRenderer() {
     onlySubscribed: false,
   }).filter((ref) => !isLocal(ref.participant));
 
-  tracks.forEach((track) => (track.publication as RemoteTrackPublication).setSubscribed(true));
+  React.useEffect(() => {
+    tracks.forEach((track) => (track.publication as RemoteTrackPublication).setSubscribed(true));
+  }, [tracks]);
 
   return (
     <div style={{ display: 'none' }}>

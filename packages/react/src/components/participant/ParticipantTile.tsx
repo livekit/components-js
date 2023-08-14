@@ -1,6 +1,7 @@
 import * as React from 'react';
+import { useIntersectionObserver } from 'usehooks-ts';
 import type { Participant, TrackPublication } from 'livekit-client';
-import { Track } from 'livekit-client';
+import { RemoteTrackPublication, Track } from 'livekit-client';
 import type { ParticipantClickEvent, TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { isParticipantSourcePinned } from '@livekit/components-core';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
@@ -73,6 +74,16 @@ export function ParticipantTile({
     publication,
   };
 
+  const tileElement = React.useRef(null);
+
+  const intersectionEntry = useIntersectionObserver(tileElement, {});
+
+  React.useEffect(() => {
+    if (intersectionEntry && trackRef.publication instanceof RemoteTrackPublication) {
+      trackRef.publication.setSubscribed(intersectionEntry.isIntersecting);
+    }
+  }, [intersectionEntry?.isIntersecting]);
+
   const { elementProps } = useParticipantTile<HTMLDivElement>({
     participant: trackRef.participant,
     htmlProps,
@@ -100,7 +111,7 @@ export function ParticipantTile({
   );
 
   return (
-    <div style={{ position: 'relative' }} {...elementProps}>
+    <div ref={tileElement} style={{ position: 'relative' }} {...elementProps}>
       <ParticipantContextIfNeeded participant={trackRef.participant}>
         {children ?? (
           <>

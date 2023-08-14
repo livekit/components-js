@@ -49,7 +49,8 @@
   "dependencies": {
     "@livekit/components-core": "0.6.12",
     "@react-hook/latest": "^1.0.3",
-    "clsx": "^1.2.1"
+    "clsx": "^1.2.1",
+    "usehooks-ts": "^2.9.1"
   },
   "peerDependencies": {
     "livekit-client": "^1.12.0",
@@ -70,8 +71,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "size-limit": "^8.2.4",
-    "typescript": "5.1.6",
     "tsup": "^7.0.0",
+    "typescript": "5.1.6",
     "vite": "^4.1.4",
     "vitest": "^0.34.0"
   },

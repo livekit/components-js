@@ -4,8 +4,6 @@ import * as React from 'react';
 import { useSize } from '../../hooks/internal';
 import { useVisualStableUpdate } from '../../hooks';
 import { TrackLoop } from '../TrackLoop';
-import { LocalTrackPublication } from 'livekit-client';
-import { isElementVisible } from '../../utils';
 
 const MIN_HEIGHT = 130;
 const MIN_WIDTH = 140;
@@ -69,14 +67,6 @@ export function CarouselLayout({ tracks, orientation, ...props }: CarouselLayout
   } else if (prevTiles !== tilesThatFit) {
     setPrevTiles(tilesThatFit);
   }
-
-  const visibleIndices = sortedTiles.map(
-    (trackRef) =>
-      trackRef.publication instanceof LocalTrackPublication ||
-      trackRef.publication?.track?.attachedElements.some((el) =>
-        isElementVisible(el, asideEl.current),
-      ),
-  );
 
   const sortedTiles = useVisualStableUpdate(tracks, maxVisibleTiles);
 

@@ -1,6 +1,6 @@
 import { setLogLevel } from '@livekit/components-core';
 import { LiveKitRoom, useToken, VideoConference } from '@livekit/components-react';
-import { RoomConnectOptions, RoomOptions } from 'livekit-client';
+import { RoomConnectOptions } from 'livekit-client';
 import type { NextPage } from 'next';
 
 const MinimalExample: NextPage = () => {

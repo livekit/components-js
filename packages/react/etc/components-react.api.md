@@ -8,7 +8,7 @@
 
 import type { AudioCaptureOptions } from 'livekit-client';
 import type { AudioSource } from '@livekit/components-core';
-import { CaptureOptionsBySource } from '@livekit/components-core';
+import type { CaptureOptionsBySource } from '@livekit/components-core';
 import type { ChatMessage } from '@livekit/components-core';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
@@ -36,7 +36,6 @@ import type { RoomConnectOptions } from 'livekit-client';
 import type { RoomEvent } from 'livekit-client';
 import type { RoomOptions } from 'livekit-client';
 import type { ScreenShareCaptureOptions } from 'livekit-client';
-import { SetMediaDeviceOptions } from '@livekit/components-core';
 import type { SourcesArray } from '@livekit/components-core';
 import type { ToggleSource } from '@livekit/components-core';
 import { Track } from 'livekit-client';
@@ -438,7 +437,7 @@ export function StartAudio({ label, ...props }: AllowAudioPlaybackProps): React_
 export function Toast(props: React_2.HTMLAttributes<HTMLDivElement>): React_2.JSX.Element;
 
 // @public (undocumented)
-export const TrackContext: React_2.Context<TrackReferenceOrPlaceholder | undefined>;
+export const TrackContext: React_2.Context<any>;
 
 // @public
 export function TrackLoop({ tracks, ...props }: TrackLoopProps): React_2.JSX.Element;
@@ -490,18 +489,18 @@ export function useChat(options?: {
     messageEncoder?: MessageEncoder;
     messageDecoder?: MessageDecoder;
 }): {
-    send: ((message: string) => Promise<void>) | undefined;
-    chatMessages: ReceivedChatMessage[];
+    send: any;
+    chatMessages: never[];
     isSending: boolean;
 };
 
 // @public (undocumented)
 export function useChatToggle({ props }: UseChatToggleProps): {
     mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
-        className: string;
+        className: any;
         onClick: () => void;
         'aria-pressed': string;
-        'data-lk-unread-msgs': string;
+        'data-lk-unread-msgs': any;
     };
 };
 
@@ -514,7 +513,7 @@ export interface UseChatToggleProps {
 // @public (undocumented)
 export function useClearPinButton(props: ClearPinButtonProps): {
     buttonProps: ClearPinButtonProps & {
-        className: string;
+        className: any;
         disabled: boolean;
         onClick: () => void;
     };
@@ -522,7 +521,7 @@ export function useClearPinButton(props: ClearPinButtonProps): {
 
 // @public (undocumented)
 export function useConnectionQualityIndicator(options?: ConnectionQualityIndicatorOptions): {
-    className: "lk-rotate" | "lk-audio-conference" | "lk-audio-conference-stage" | "lk-audio-container" | "lk-button" | "lk-button-group" | "lk-button-group-container" | "lk-camera-off-note" | "lk-chat" | "lk-chat-entry" | "lk-chat-form" | "lk-chat-form-input" | "lk-chat-messages" | "lk-control-bar" | "lk-focus-layout-wrapper" | "lk-form-control" | "lk-grid-layout-wrapper" | "lk-join-button" | "lk-list" | "lk-message-body" | "lk-meta-data" | "lk-participant-name" | "lk-prejoin" | "lk-timestamp" | "lk-username-container" | "lk-video-conference" | "lk-video-conference-inner" | "lk-video-container" | "lk-audio-visualizer" | "lk-button-group-menu" | "lk-button-menu" | "lk-carousel" | "lk-chat-toggle" | "lk-connection-quality" | "lk-device-menu" | "lk-device-menu-heading" | "lk-disconnect-button" | "lk-focus-layout" | "lk-focus-toggle-button" | "lk-focused-participant" | "lk-grid-layout" | "lk-media-device-select" | "lk-pagination-control" | "lk-pagination-count" | "lk-pagination-indicator" | "lk-participant-media-audio" | "lk-participant-media-video" | "lk-participant-metadata" | "lk-participant-metadata-item" | "lk-participant-placeholder" | "lk-participant-tile" | "lk-pip-track" | "lk-room-container" | "lk-spinner" | "lk-start-audio-button" | "lk-toast" | "lk-track-muted-indicator-camera" | "lk-track-muted-indicator-microphone";
+    className: any;
     quality: ConnectionQuality;
 };
 
@@ -543,8 +542,8 @@ export function useDataChannel(onMessage?: (msg: ReceivedDataMessage) => void): 
 // @public (undocumented)
 export function useDisconnectButton(props: DisconnectButtonProps): {
     buttonProps: DisconnectButtonProps & {
-        className: string;
-        onClick: () => void;
+        className: any;
+        onClick: () => any;
         disabled: boolean;
     };
 };
@@ -556,13 +555,13 @@ export function useEnsureCreateLayoutContext(layoutContext?: LayoutContextType):
 export function useEnsureLayoutContext(layoutContext?: LayoutContextType): LayoutContextType;
 
 // @public
-export function useEnsureParticipant(participant?: Participant): Participant;
+export function useEnsureParticipant(participant?: Participant): any;
 
 // @public
 export function useEnsureRoom(room?: Room): Room;
 
 // @public
-export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): TrackReferenceOrPlaceholder;
+export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): any;
 
 // @alpha
 export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'user' | 'environment' | 'left' | 'right' | 'undefined';
@@ -570,7 +569,7 @@ export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'use
 // @public (undocumented)
 export function useFocusToggle({ trackSource, participant, props }: UseFocusToggleProps): {
     mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
-        className: string;
+        className: any;
         onClick: (event: React_2.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     };
     inFocus: boolean;
@@ -603,7 +602,7 @@ export interface UseIsMutedOptions {
 }
 
 // @public (undocumented)
-export function useIsSpeaking(participant?: Participant): boolean;
+export function useIsSpeaking(participant?: Participant): any;
 
 // @public
 export function useLayoutContext(): LayoutContextType;
@@ -644,19 +643,19 @@ export function useMaybeParticipantContext(): Participant | undefined;
 export function useMaybeRoomContext(): Room | undefined;
 
 // @public
-export function useMaybeTrackContext(): TrackReferenceOrPlaceholder | undefined;
+export function useMaybeTrackContext(): any;
 
 // @public (undocumented)
 export function useMediaDevices({ kind }: {
     kind: MediaDeviceKind;
-}): MediaDeviceInfo[];
+}): never[];
 
 // @public (undocumented)
 export function useMediaDeviceSelect({ kind, room, track, requestPermissions, }: UseMediaDeviceSelectProps): {
-    devices: MediaDeviceInfo[];
-    className: string;
+    devices: never[];
+    className: any;
     activeDeviceId: string;
-    setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions | undefined) => Promise<void>;
+    setActiveMediaDevice: any;
 };
 
 // @public (undocumented)
@@ -672,19 +671,19 @@ export interface UseMediaDeviceSelectProps {
 
 // @public (undocumented)
 export function useMediaTrack(source: VideoSource | AudioSource, participant?: Participant, options?: UseMediaTrackOptions): {
-    publication: TrackPublication | undefined;
-    isMuted: boolean | undefined;
-    isSubscribed: boolean | undefined;
-    track: Track | undefined;
+    publication: any;
+    isMuted: any;
+    isSubscribed: any;
+    track: any;
     elementProps: React_2.HTMLAttributes<HTMLElement>;
 };
 
 // @public (undocumented)
 export function useMediaTrackByName(name: string, participant?: Participant, options?: UseMediaTrackOptions): {
-    publication: TrackPublication | undefined;
-    isMuted: boolean | undefined;
-    isSubscribed: boolean | undefined;
-    track: Track | undefined;
+    publication: any;
+    isMuted: any;
+    isSubscribed: any;
+    track: any;
     elementProps: HTMLAttributes<HTMLElement>;
 };
 
@@ -713,9 +712,9 @@ export function useParticipantContext(): Participant;
 
 // @public (undocumented)
 export function useParticipantInfo(props?: UseParticipantInfoOptions): {
-    identity: string;
-    name: string | undefined;
-    metadata: string | undefined;
+    identity: any;
+    name: any;
+    metadata: any;
 };
 
 // @public (undocumented)
@@ -725,7 +724,7 @@ export interface UseParticipantInfoOptions {
 }
 
 // @public (undocumented)
-export function useParticipantPermissions(options?: UseParticipantPermissionsOptions): ParticipantPermission | undefined;
+export function useParticipantPermissions(options?: UseParticipantPermissionsOptions): any;
 
 // @public (undocumented)
 export interface UseParticipantPermissionsOptions {
@@ -820,7 +819,7 @@ export interface UseRoomInfoOptions {
 }
 
 // @public
-export function useSortedParticipants(participants: Array<Participant>): Participant[];
+export function useSortedParticipants(participants: Array<Participant>): any;
 
 // @public
 export function useSpeakingParticipants(): Participant[];
@@ -828,7 +827,7 @@ export function useSpeakingParticipants(): Participant[];
 // @alpha
 export function useStartAudio({ room, props }: UseStartAudioProps): {
     mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
-        className: string;
+        className: any;
         onClick: () => void;
         style: {
             display: string;
@@ -865,12 +864,12 @@ export interface UseTokenOptions {
 }
 
 // @public
-export function useTrackContext(): TrackReferenceOrPlaceholder;
+export function useTrackContext(): any;
 
 // @public (undocumented)
 export function useTrackMutedIndicator(source: Track.Source, options?: UseTrackMutedIndicatorOptions): {
     isMuted: boolean;
-    className: string;
+    className: any;
 };
 
 // @public (undocumented)
@@ -894,7 +893,7 @@ export type UseTracksOptions = {
 
 // @public (undocumented)
 export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, ...rest }: UseTrackToggleProps<T>): {
-    toggle: ((forceState?: boolean | undefined) => void) | ((forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>);
+    toggle: any;
     enabled: boolean;
     pending: boolean;
     track: LocalTrackPublication | undefined;
@@ -928,10 +927,12 @@ export interface VideoConferenceProps extends React_2.HTMLAttributes<HTMLDivElem
 }
 
 // @public
-export function VideoTrack({ onTrackClick, onClick, onSubscriptionStatusChanged, name, publication, source, participant: p, ...props }: VideoTrackProps): React_2.JSX.Element;
+export function VideoTrack({ onTrackClick, onClick, onSubscriptionStatusChanged, name, publication, source, participant: p, manageSubscription, ...props }: VideoTrackProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface VideoTrackProps extends React_2.HTMLAttributes<HTMLVideoElement> {
+    // (undocumented)
+    manageSubscription?: boolean;
     // (undocumented)
     name?: string;
     // (undocumented)

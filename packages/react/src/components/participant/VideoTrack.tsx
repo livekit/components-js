@@ -18,6 +18,7 @@ export interface VideoTrackProps extends React.HTMLAttributes<HTMLVideoElement> 
   publication?: TrackPublication;
   onTrackClick?: (evt: ParticipantClickEvent) => void;
   onSubscriptionStatusChanged?: (subscribed: boolean) => void;
+  manageSubscription?: boolean;
 }
 
 /**
@@ -39,6 +40,7 @@ export function VideoTrack({
   publication,
   source,
   participant: p,
+  manageSubscription,
   ...props
 }: VideoTrackProps) {
   const mediaEl = React.useRef<HTMLVideoElement>(null);
@@ -49,21 +51,23 @@ export function VideoTrack({
 
   React.useEffect(() => {
     if (
+      manageSubscription &&
       publication instanceof RemoteTrackPublication &&
       debouncedIntersectionEntry?.isIntersecting === false
     ) {
       publication.setSubscribed(false);
     }
-  }, [debouncedIntersectionEntry, publication]);
+  }, [debouncedIntersectionEntry, publication, manageSubscription]);
 
   React.useEffect(() => {
     if (
+      manageSubscription &&
       publication instanceof RemoteTrackPublication &&
       intersectionEntry?.isIntersecting === true
     ) {
       publication.setSubscribed(true);
     }
-  }, [intersectionEntry, publication]);
+  }, [intersectionEntry, publication, manageSubscription]);
 
   const participant = useEnsureParticipant(p);
   const {

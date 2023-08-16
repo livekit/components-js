@@ -1,5 +1,6 @@
 import { isLocal } from '@livekit/components-core';
-import { RemoteTrackPublication, Track } from 'livekit-client';
+import type { RemoteTrackPublication } from 'livekit-client';
+import { Track } from 'livekit-client';
 import * as React from 'react';
 import { useTracks } from '../hooks';
 import { AudioTrack } from './participant/AudioTrack';

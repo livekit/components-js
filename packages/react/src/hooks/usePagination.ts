@@ -50,6 +50,8 @@ export function usePagination(itemPerPage: number, trackReferences: TrackReferen
 
   const updatedTrackReferences = useVisualStableUpdate(trackReferences, itemPerPage);
 
+  const tracksOnPage = updatedTrackReferences.slice(firstItemIndex, lastItemIndex);
+
   return {
     totalPageCount,
     nextPage: () => changePage('next'),
@@ -57,7 +59,7 @@ export function usePagination(itemPerPage: number, trackReferences: TrackReferen
     setPage: goToPage,
     firstItemIndex,
     lastItemIndex,
-    tracks: updatedTrackReferences.slice(firstItemIndex, lastItemIndex),
+    tracks: tracksOnPage,
     currentPage,
   };
 }

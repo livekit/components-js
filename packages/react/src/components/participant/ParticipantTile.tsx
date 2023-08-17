@@ -112,6 +112,7 @@ export function ParticipantTile({
                 source={trackRef.source}
                 publication={trackRef.publication}
                 onSubscriptionStatusChanged={handleSubscribe}
+                manageSubscription={true}
               />
             ) : (
               <AudioTrack

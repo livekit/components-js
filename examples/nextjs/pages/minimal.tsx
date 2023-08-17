@@ -1,5 +1,6 @@
 import { setLogLevel } from '@livekit/components-core';
 import { LiveKitRoom, useToken, VideoConference } from '@livekit/components-react';
+import { RoomConnectOptions } from 'livekit-client';
 import type { NextPage } from 'next';
 
 const MinimalExample: NextPage = () => {
@@ -15,12 +16,17 @@ const MinimalExample: NextPage = () => {
     },
   });
 
+  const options: RoomConnectOptions = {
+    autoSubscribe: false,
+  };
+
   return (
     <div data-lk-theme="default" style={{ height: '100vh' }}>
       <LiveKitRoom
         video={true}
         audio={true}
         token={token}
+        connectOptions={options}
         serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
       >
         <VideoConference />

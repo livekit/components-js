@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 1.1.3
+
+### Patch Changes
+
+- Use different import scheme for usehooks - [#595](https://github.com/livekit/components-js/pull/595) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.1.2
 
 ### Patch Changes

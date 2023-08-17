@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 1.0.6
+
+### Patch Changes
+
+- update to "postcss-prefixer": "^3.0.0" - [#591](https://github.com/livekit/components-js/pull/591) ([@Ocupe](https://github.com/Ocupe))
+
 ## 1.0.5
 
 ### Patch Changes

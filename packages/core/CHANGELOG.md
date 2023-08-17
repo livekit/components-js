@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.6.14
+
+### Patch Changes
+
+- Make sure dependencies arent bundled for esm builds - [#594](https://github.com/livekit/components-js/pull/594) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.6.13
 
 ### Patch Changes

@@ -9,5 +9,10 @@ const defaultOptions: Options = {
   dts: false,
   clean: true,
   target: 'es6',
+  esbuildOptions: (options, context) => {
+    if (context.format === 'esm') {
+      options.packages = 'external';
+    }
+  },
 };
 export default defaultOptions;

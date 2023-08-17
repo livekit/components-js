@@ -8,7 +8,7 @@ import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
 import type { ParticipantClickEvent } from '@livekit/components-core';
 import { useEnsureParticipant } from '../../context';
-import { useDebounce, useIntersectionObserver } from 'usehooks-ts';
+import * as useHooks from 'usehooks-ts';
 
 /** @public */
 export interface VideoTrackProps extends React.HTMLAttributes<HTMLVideoElement> {
@@ -45,9 +45,9 @@ export function VideoTrack({
 }: VideoTrackProps) {
   const mediaEl = React.useRef<HTMLVideoElement>(null);
 
-  const intersectionEntry = useIntersectionObserver(mediaEl, {});
+  const intersectionEntry = useHooks.useIntersectionObserver(mediaEl, {});
 
-  const debouncedIntersectionEntry = useDebounce(intersectionEntry, 3000);
+  const debouncedIntersectionEntry = useHooks.useDebounce(intersectionEntry, 3000);
 
   React.useEffect(() => {
     if (

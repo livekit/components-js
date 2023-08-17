@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.6.13
+
+### Patch Changes
+
+- Expose custom message encoder/decoder from video conference - [#581](https://github.com/livekit/components-js/pull/581) ([@jmoguilevsky](https://github.com/jmoguilevsky))
+
 ## 0.6.12
 
 ### Patch Changes

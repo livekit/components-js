@@ -1,5 +1,18 @@
 # @livekit/components-react
 
+## 1.1.1
+
+### Patch Changes
+
+- Expose custom message encoder/decoder from video conference - [#581](https://github.com/livekit/components-js/pull/581) ([@jmoguilevsky](https://github.com/jmoguilevsky))
+
+- Fix loop component docs - [#584](https://github.com/livekit/components-js/pull/584) ([@lukasIO](https://github.com/lukasIO))
+
+- Enable auto managed subscriptions for ParticipantTile - [#590](https://github.com/livekit/components-js/pull/590) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`f1ed9cf`](https://github.com/livekit/components-js/commit/f1ed9cf4ec0ecc0a321380a163e90f03e8b32158)]:
+  - @livekit/components-core@0.6.13
+
 ## 1.1.0
 
 ### Minor Changes

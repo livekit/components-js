@@ -12,7 +12,7 @@ export interface TrackLoopProps
 
 ## Properties
 
-| Property                                       | Type                                                                                                                                       | Description                                    |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
-| [children](./react/trackloopprops.children.md) | React.ReactNode                                                                                                                            | The template component to be used in the loop. |
-| [tracks](./react/trackloopprops.tracks.md)     | [TrackReference](./core/trackreference.md)<!-- -->\[\] \| [TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md)<!-- -->\[\] | Track references to loop over.                 |
+| Property                                       | Type                                                                                                                                       | Description                                                                                          |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| [children](./react/trackloopprops.children.md) | React.ReactNode                                                                                                                            | The template component to be used in the loop.                                                       |
+| [tracks](./react/trackloopprops.tracks.md)     | [TrackReference](./core/trackreference.md)<!-- -->\[\] \| [TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md)<!-- -->\[\] | Track references to loop over. You can the use <code>useTracks()</code> hook to get TrackReferences. |

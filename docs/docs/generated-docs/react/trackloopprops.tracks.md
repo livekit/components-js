@@ -2,7 +2,7 @@
 
 ## TrackLoopProps.tracks property
 
-Track references to loop over.
+Track references to loop over. You can the use `useTracks()` hook to get TrackReferences.
 
 **Signature:**
 

@@ -5,7 +5,13 @@
 **Signature:**
 
 ```typescript
-export declare function setupChat(room: Room): {
+export declare function setupChat(
+  room: Room,
+  options?: {
+    messageEncoder?: (message: ChatMessage) => Uint8Array;
+    messageDecoder?: (message: Uint8Array) => ReceivedChatMessage;
+  },
+): {
   messageObservable: import('rxjs').Observable<ReceivedChatMessage[]>;
   isSendingObservable: BehaviorSubject<boolean>;
   send: (message: string) => Promise<void>;

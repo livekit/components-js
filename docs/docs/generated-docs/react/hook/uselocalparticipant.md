@@ -20,4 +20,4 @@ import { useLocalParticipant } from '@livekit/components-react';
 
 **Returns:**
 
-{ isMicrophoneEnabled: boolean; isScreenShareEnabled: boolean; isCameraEnabled: boolean; microphoneTrack: TrackPublication \| undefined; cameraTrack: TrackPublication \| undefined; localParticipant: LocalParticipant; }
+{ isMicrophoneEnabled: boolean; isScreenShareEnabled: boolean; isCameraEnabled: boolean; microphoneTrack: TrackPublication \| undefined; cameraTrack: TrackPublication \| undefined; lastMicrophoneError: Error \| undefined; lastCameraError: Error \| undefined; localParticipant: LocalParticipant; }

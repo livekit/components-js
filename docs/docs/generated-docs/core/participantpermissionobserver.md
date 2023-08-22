@@ -8,6 +8,6 @@
 export declare function participantPermissionObserver(
   participant: Participant,
 ): Observable<
-  import('livekit-client/dist/src/proto/livekit_models').ParticipantPermission | undefined
+  import('livekit-client/dist/src/proto/livekit_models_pb').ParticipantPermission | undefined
 >;
 ```

@@ -10,6 +10,12 @@ import { useChat } from '@livekit/components-react';
 
 {% partial file="p_usage.md" /%}
 
+## Parameters
+
+| Parameter | Type                                                                                                                                            | Description  |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| options   | { messageEncoder?: [MessageEncoder](./react/messageencoder.md)<!-- -->; messageDecoder?: [MessageDecoder](./react/messagedecoder.md)<!-- -->; } | _(Optional)_ |
+
 **Returns:**
 
 { send: ((message: string) =&gt; Promise&lt;void&gt;) \| undefined; chatMessages: [ReceivedChatMessage](./core/receivedchatmessage.md)<!-- -->\[\]; isSending: boolean; }

@@ -154,7 +154,7 @@ export class MarkdownDocumenter {
         output.appendNode(
           new DocHeading({
             configuration,
-            title: `${apiItem.displayName} (${category})`,
+            title: `${apiItem.displayName}`,
             level: 1,
           }),
         );

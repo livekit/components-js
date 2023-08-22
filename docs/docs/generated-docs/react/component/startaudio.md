@@ -22,6 +22,5 @@ import { StartAudio } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                          | Type   | Description |
-| ------------------------------------------------- | ------ | ----------- |
-| [label](./react/allowaudioplaybackprops.label.md) | string |             |
+{% parameter name="label" type="string" optional=false %}
+{% /parameter %}

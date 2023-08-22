@@ -22,7 +22,10 @@ import { FocusToggle } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                                | Type         | Description  |
-| ------------------------------------------------------- | ------------ | ------------ |
-| [participant?](./react/focustoggleprops.participant.md) | Participant  | _(Optional)_ |
-| [trackSource](./react/focustoggleprops.tracksource.md)  | Track.Source |              |
+{% parameter name="participant" type="Participant" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="trackSource" type="Track.Source" optional=false %}
+{% /parameter %}

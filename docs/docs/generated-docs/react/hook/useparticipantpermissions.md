@@ -12,10 +12,9 @@ import { useParticipantPermissions } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                                            | Description  |
-| --------- | ------------------------------------------------------------------------------- | ------------ |
-| options   | [UseParticipantPermissionsOptions](./react/useparticipantpermissionsoptions.md) | _(Optional)_ |
+{% parameter name="options" type="UseParticipantPermissionsOptions" optional=true %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-import("livekit-client/dist/src/proto/livekit_models_pb").ParticipantPermission \| undefined
+`import("livekit-client/dist/src/proto/livekit_models_pb").ParticipantPermission | undefined`

@@ -12,10 +12,9 @@ import { useIsSpeaking } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter   | Type        | Description  |
-| ----------- | ----------- | ------------ |
-| participant | Participant | _(Optional)_ |
+{% parameter name="participant" type="Participant" optional=true %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-boolean
+`boolean`

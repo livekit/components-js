@@ -20,12 +20,35 @@ import { VideoTrack } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                                                               | Type                                                                               | Description  |
-| -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------ |
-| [manageSubscription?](./react/videotrackprops.managesubscription.md)                   | boolean                                                                            | _(Optional)_ |
-| [name?](./react/videotrackprops.name.md)                                               | string                                                                             | _(Optional)_ |
-| [onSubscriptionStatusChanged?](./react/videotrackprops.onsubscriptionstatuschanged.md) | (subscribed: boolean) =&gt; void                                                   | _(Optional)_ |
-| [onTrackClick?](./react/videotrackprops.ontrackclick.md)                               | (evt: [ParticipantClickEvent](./core/participantclickevent.md)<!-- -->) =&gt; void | _(Optional)_ |
-| [participant?](./react/videotrackprops.participant.md)                                 | Participant                                                                        | _(Optional)_ |
-| [publication?](./react/videotrackprops.publication.md)                                 | TrackPublication                                                                   | _(Optional)_ |
-| [source](./react/videotrackprops.source.md)                                            | Track.Source                                                                       |              |
+{% parameter name="manageSubscription" type="boolean" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="name" type="string" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="onSubscriptionStatusChanged" type="(subscribed: boolean) => void" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="onTrackClick" type="(evt: ParticipantClickEvent) => void" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="participant" type="Participant" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="publication" type="TrackPublication" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="source" type="Track.Source" optional=false %}
+{% /parameter %}

@@ -21,8 +21,15 @@ import { TrackMutedIndicator } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                                        | Type                             | Description  |
-| --------------------------------------------------------------- | -------------------------------- | ------------ |
-| [participant?](./react/trackmutedindicatorprops.participant.md) | Participant                      | _(Optional)_ |
-| [show?](./react/trackmutedindicatorprops.show.md)               | 'always' \| 'muted' \| 'unmuted' | _(Optional)_ |
-| [source](./react/trackmutedindicatorprops.source.md)            | Track.Source                     |              |
+{% parameter name="participant" type="Participant" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="show" type="'always' | 'muted' | 'unmuted'" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="source" type="Track.Source" optional=false %}
+{% /parameter %}

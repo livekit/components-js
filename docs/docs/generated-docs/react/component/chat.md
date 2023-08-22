@@ -22,8 +22,17 @@ import { Chat } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                                   | Type                                            | Description  |
-| ---------------------------------------------------------- | ----------------------------------------------- | ------------ |
-| [messageDecoder?](./react/chatprops.messagedecoder.md)     | [MessageDecoder](./react/messagedecoder.md)     | _(Optional)_ |
-| [messageEncoder?](./react/chatprops.messageencoder.md)     | [MessageEncoder](./react/messageencoder.md)     | _(Optional)_ |
-| [messageFormatter?](./react/chatprops.messageformatter.md) | [MessageFormatter](./react/messageformatter.md) | _(Optional)_ |
+{% parameter name="messageDecoder" type="MessageDecoder" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="messageEncoder" type="MessageEncoder" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="messageFormatter" type="MessageFormatter" optional=true %}
+_(Optional)_
+
+{% /parameter %}

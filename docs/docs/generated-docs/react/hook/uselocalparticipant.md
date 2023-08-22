@@ -14,10 +14,9 @@ import { useLocalParticipant } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                                | Description  |
-| --------- | ------------------------------------------------------------------- | ------------ |
-| options   | [UseLocalParticipantOptions](./react/uselocalparticipantoptions.md) | _(Optional)_ |
+{% parameter name="options" type="UseLocalParticipantOptions" optional=true %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-{ isMicrophoneEnabled: boolean; isScreenShareEnabled: boolean; isCameraEnabled: boolean; microphoneTrack: TrackPublication \| undefined; cameraTrack: TrackPublication \| undefined; lastMicrophoneError: Error \| undefined; lastCameraError: Error \| undefined; localParticipant: LocalParticipant; }
+`{     isMicrophoneEnabled: boolean;     isScreenShareEnabled: boolean;     isCameraEnabled: boolean;     microphoneTrack: TrackPublication | undefined;     cameraTrack: TrackPublication | undefined;     lastMicrophoneError: Error | undefined;     lastCameraError: Error | undefined;     localParticipant: LocalParticipant; }`

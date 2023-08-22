@@ -12,10 +12,9 @@ import { useChatToggle } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                | Description |
-| --------- | --------------------------------------------------- | ----------- |
-| { props } | [UseChatToggleProps](./react/usechattoggleprops.md) |             |
+{% parameter name="{ props }" type="UseChatToggleProps" optional=false %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-{ mergedProps: React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt; &amp; { className: string; onClick: () =&gt; void; 'aria-pressed': string; 'data-lk-unread-msgs': string; }; }
+`{     mergedProps: React.ButtonHTMLAttributes<HTMLButtonElement> & {         className: string;         onClick: () => void;         'aria-pressed': string;         'data-lk-unread-msgs': string;     }; }`

@@ -14,10 +14,9 @@ import { useEnsureTrackReference } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                                 | Description  |
-| --------- | -------------------------------------------------------------------- | ------------ |
-| track     | [TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md) | _(Optional)_ |
+{% parameter name="track" type="TrackReferenceOrPlaceholder" optional=true %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-[TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md)
+`TrackReferenceOrPlaceholder`

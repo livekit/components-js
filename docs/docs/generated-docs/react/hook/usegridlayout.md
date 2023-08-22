@@ -14,11 +14,12 @@ import { useGridLayout } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter   | Type                                  | Description |
-| ----------- | ------------------------------------- | ----------- |
-| gridElement | React.RefObject&lt;HTMLDivElement&gt; |             |
-| trackCount  | number                                |             |
+{% parameter name="gridElement" type="React.RefObject<HTMLDivElement>" optional=false %}
+{% /parameter %}
 
-**Returns:**
+{% parameter name="trackCount" type="number" optional=false %}
+{% /parameter %}
 
-{ layout: [GridLayoutDefinition](./core/gridlayoutdefinition.md)<!-- -->; }
+## Returns
+
+`{     layout: GridLayoutDefinition; }`

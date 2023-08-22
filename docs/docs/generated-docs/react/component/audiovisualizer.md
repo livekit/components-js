@@ -12,6 +12,7 @@ import { AudioVisualizer } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                                    | Type        | Description  |
-| ----------------------------------------------------------- | ----------- | ------------ |
-| [participant?](./react/audiovisualizerprops.participant.md) | Participant | _(Optional)_ |
+{% parameter name="participant" type="Participant" optional=true %}
+_(Optional)_
+
+{% /parameter %}

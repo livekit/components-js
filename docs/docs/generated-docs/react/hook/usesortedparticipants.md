@@ -14,10 +14,9 @@ import { useSortedParticipants } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter    | Type                     | Description |
-| ------------ | ------------------------ | ----------- |
-| participants | Array&lt;Participant&gt; |             |
+{% parameter name="participants" type="Array<Participant>" optional=false %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-Participant\[\]
+`Participant[]`

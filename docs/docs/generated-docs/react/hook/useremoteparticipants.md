@@ -14,10 +14,9 @@ import { useRemoteParticipants } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                                    | Description  |
-| --------- | ----------------------------------------------------------------------- | ------------ |
-| options   | [UseRemoteParticipantsOptions](./react/useremoteparticipantsoptions.md) | _(Optional)_ |
+{% parameter name="options" type="UseRemoteParticipantsOptions" optional=true %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-RemoteParticipant\[\]
+`RemoteParticipant[]`

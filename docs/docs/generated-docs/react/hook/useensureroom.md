@@ -14,10 +14,9 @@ import { useEnsureRoom } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type | Description  |
-| --------- | ---- | ------------ |
-| room      | Room | _(Optional)_ |
+{% parameter name="room" type="Room" optional=true %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-Room
+`Room`

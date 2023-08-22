@@ -26,7 +26,12 @@ This component is build with other LiveKit components like `TrackToggle`<!-- -->
 
 ## Properties
 
-| Property                                           | Type                                                | Description  |
-| -------------------------------------------------- | --------------------------------------------------- | ------------ |
-| [controls?](./react/controlbarprops.controls.md)   | [ControlBarControls](./react/controlbarcontrols.md) | _(Optional)_ |
-| [variation?](./react/controlbarprops.variation.md) | 'minimal' \| 'verbose' \| 'textOnly'                | _(Optional)_ |
+{% parameter name="controls" type="ControlBarControls" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="variation" type="'minimal' | 'verbose' | 'textOnly'" optional=true %}
+_(Optional)_
+
+{% /parameter %}

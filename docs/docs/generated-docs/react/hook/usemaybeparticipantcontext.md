@@ -12,6 +12,6 @@ import { useMaybeParticipantContext } from '@livekit/components-react';
 
 {% partial file="p_usage.md" /%}
 
-**Returns:**
+## Returns
 
-Participant \| undefined
+`Participant | undefined`

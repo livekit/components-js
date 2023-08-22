@@ -12,10 +12,9 @@ import { useLiveKitRoom } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                            | Description |
-| --------- | ----------------------------------------------- | ----------- |
-| props     | [LiveKitRoomProps](./react/livekitroomprops.md) |             |
+{% parameter name="props" type="LiveKitRoomProps" optional=false %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-{ room: Room \| undefined; htmlProps: HTMLAttributes&lt;T&gt;; }
+`{     room: Room | undefined;     htmlProps: HTMLAttributes<T>; }`

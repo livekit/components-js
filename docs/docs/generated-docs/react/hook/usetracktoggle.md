@@ -12,10 +12,9 @@ import { useTrackToggle } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter                                                   | Type                                                                   | Description |
-| ----------------------------------------------------------- | ---------------------------------------------------------------------- | ----------- |
-| { source, onChange, initialState, captureOptions, ...rest } | [UseTrackToggleProps](./react/usetracktoggleprops.md)<!-- -->&lt;T&gt; |             |
+{% parameter name="{ source, onChange, initialState, captureOptions, ...rest }" type="UseTrackToggleProps<T>" optional=false %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-{ toggle: ((forceState?: boolean \| undefined) =&gt; void) \| ((forceState?: boolean \| undefined, captureOptions?: import("@livekit/components-core").[CaptureOptionsBySource](./core/captureoptionsbysource.md)<!-- -->&lt;T&gt; \| undefined) =&gt; Promise&lt;void&gt;); enabled: boolean; pending: boolean; track: import("livekit-client").LocalTrackPublication \| undefined; buttonProps: React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;; }
+`{     toggle: ((forceState?: boolean | undefined) => void) | ((forceState?: boolean | undefined, captureOptions?: import("@livekit/components-core").CaptureOptionsBySource<T> | undefined) => Promise<void>);     enabled: boolean;     pending: boolean;     track: import("livekit-client").LocalTrackPublication | undefined;     buttonProps: React.ButtonHTMLAttributes<HTMLButtonElement>; }`

@@ -12,6 +12,6 @@ import { useRoomContext } from '@livekit/components-react';
 
 {% partial file="p_usage.md" /%}
 
-**Returns:**
+## Returns
 
-Room
+`Room`

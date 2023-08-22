@@ -12,6 +12,6 @@ import { useMaybeLayoutContext } from '@livekit/components-react';
 
 {% partial file="p_usage.md" /%}
 
-**Returns:**
+## Returns
 
-[LayoutContextType](./react/layoutcontexttype.md) \| undefined
+`LayoutContextType | undefined`

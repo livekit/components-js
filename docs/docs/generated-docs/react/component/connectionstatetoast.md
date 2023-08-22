@@ -12,6 +12,7 @@ import { ConnectionStateToast } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                           | Type | Description  |
-| -------------------------------------------------- | ---- | ------------ |
-| [room?](./react/connectionstatetoastprops.room.md) | Room | _(Optional)_ |
+{% parameter name="room" type="Room" optional=true %}
+_(Optional)_
+
+{% /parameter %}

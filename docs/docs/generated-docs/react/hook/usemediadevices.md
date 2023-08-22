@@ -12,10 +12,11 @@ import { useMediaDevices } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                       | Description |
-| --------- | -------------------------- | ----------- |
-| { kind }  | { kind: MediaDeviceKind; } |             |
+{% parameter name="{ kind }" type="{
+    kind: MediaDeviceKind;
+}" optional=false %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-MediaDeviceInfo\[\]
+`MediaDeviceInfo[]`

@@ -20,10 +20,9 @@ const connectionState = useConnectionState(room);
 
 ## Parameters
 
-| Parameter | Type | Description  |
-| --------- | ---- | ------------ |
-| room      | Room | _(Optional)_ |
+{% parameter name="room" type="Room" optional=true %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-import("livekit-client").ConnectionState
+`import("livekit-client").ConnectionState`

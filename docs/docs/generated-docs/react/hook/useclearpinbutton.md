@@ -12,10 +12,9 @@ import { useClearPinButton } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                  | Description |
-| --------- | ----------------------------------------------------- | ----------- |
-| props     | [ClearPinButtonProps](./react/clearpinbuttonprops.md) |             |
+{% parameter name="props" type="ClearPinButtonProps" optional=false %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-{ buttonProps: [ClearPinButtonProps](./react/clearpinbuttonprops.md) &amp; { className: string; disabled: boolean; onClick: () =&gt; void; }; }
+`{     buttonProps: ClearPinButtonProps & {         className: string;         disabled: boolean;         onClick: () => void;     }; }`

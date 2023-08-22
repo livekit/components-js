@@ -12,10 +12,9 @@ import { useParticipantInfo } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                              | Description  |
-| --------- | ----------------------------------------------------------------- | ------------ |
-| props     | [UseParticipantInfoOptions](./react/useparticipantinfooptions.md) | _(Optional)_ |
+{% parameter name="props" type="UseParticipantInfoOptions" optional=true %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-{ identity: string; name: string \| undefined; metadata: string \| undefined; }
+`{     identity: string;     name: string | undefined;     metadata: string | undefined; }`

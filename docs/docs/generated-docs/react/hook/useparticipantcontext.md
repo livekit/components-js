@@ -12,6 +12,6 @@ import { useParticipantContext } from '@livekit/components-react';
 
 {% partial file="p_usage.md" /%}
 
-**Returns:**
+## Returns
 
-Participant
+`Participant`

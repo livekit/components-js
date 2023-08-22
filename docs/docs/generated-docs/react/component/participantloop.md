@@ -27,7 +27,12 @@ const participants = useParticipants();
 
 ## Properties
 
-| Property                                                     | Type            | Description                                                                                 |
-| ------------------------------------------------------------ | --------------- | ------------------------------------------------------------------------------------------- |
-| [children](./react/participantloopprops.children.md)         | React.ReactNode | The template component to be used in the loop.                                              |
-| [participants](./react/participantloopprops.participants.md) | Participant\[\] | The participants to loop over. Use <code>useParticipants()</code> hook to get participants. |
+{% parameter name="children" type="React.ReactNode" optional=false %}
+The template component to be used in the loop.
+
+{% /parameter %}
+
+{% parameter name="participants" type="Participant[]" optional=false %}
+The participants to loop over. Use `useParticipants()` hook to get participants.
+
+{% /parameter %}

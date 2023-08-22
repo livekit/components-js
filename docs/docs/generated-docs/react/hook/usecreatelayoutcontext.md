@@ -10,6 +10,6 @@ import { useCreateLayoutContext } from '@livekit/components-react';
 
 {% partial file="p_usage.md" /%}
 
-**Returns:**
+## Returns
 
-[LayoutContextType](./react/layoutcontexttype.md)
+`LayoutContextType`

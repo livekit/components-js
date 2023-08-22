@@ -12,6 +12,6 @@ import { useSpeakingParticipants } from '@livekit/components-react';
 
 {% partial file="p_usage.md" /%}
 
-**Returns:**
+## Returns
 
-import("livekit-client").Participant\[\]
+`import("livekit-client").Participant[]`

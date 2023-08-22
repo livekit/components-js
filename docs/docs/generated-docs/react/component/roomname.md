@@ -22,6 +22,7 @@ import { RoomName } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                                       | Type                | Description  |
-| -------------------------------------------------------------- | ------------------- | ------------ |
-| [childrenPosition?](./react/roomnameprops.childrenposition.md) | 'before' \| 'after' | _(Optional)_ |
+{% parameter name="childrenPosition" type="'before' | 'after'" optional=true %}
+_(Optional)_
+
+{% /parameter %}

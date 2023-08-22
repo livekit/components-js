@@ -12,6 +12,6 @@ import { useMaybeTrackContext } from '@livekit/components-react';
 
 {% partial file="p_usage.md" /%}
 
-**Returns:**
+## Returns
 
-[TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md) \| undefined
+`TrackReferenceOrPlaceholder | undefined`

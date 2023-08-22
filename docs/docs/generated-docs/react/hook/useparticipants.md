@@ -14,10 +14,9 @@ import { useParticipants } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                        | Description  |
-| --------- | ----------------------------------------------------------- | ------------ |
-| options   | [UseParticipantsOptions](./react/useparticipantsoptions.md) | _(Optional)_ |
+{% parameter name="options" type="UseParticipantsOptions" optional=true %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-(import("livekit-client").RemoteParticipant \| import("livekit-client").LocalParticipant)\[\]
+`(import("livekit-client").RemoteParticipant | import("livekit-client").LocalParticipant)[]`

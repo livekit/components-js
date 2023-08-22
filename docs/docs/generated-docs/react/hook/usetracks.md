@@ -31,11 +31,12 @@ const trackReferencesWithPlaceholders: TrackReferenceOrPlaceholder[] = useTracks
 
 ## Parameters
 
-| Parameter | Type                                            | Description  |
-| --------- | ----------------------------------------------- | ------------ |
-| sources   | T                                               | _(Optional)_ |
-| options   | [UseTracksOptions](./react/usetracksoptions.md) | _(Optional)_ |
+{% parameter name="sources" type="T" optional=true %}
+{% /parameter %}
 
-**Returns:**
+{% parameter name="options" type="UseTracksOptions" optional=true %}
+{% /parameter %}
 
-[UseTracksHookReturnType](./react/usetrackshookreturntype.md)<!-- -->&lt;T&gt;
+## Returns
+
+`UseTracksHookReturnType<T>`

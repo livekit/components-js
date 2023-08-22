@@ -10,6 +10,6 @@ import { useLocalParticipantPermissions } from '@livekit/components-react';
 
 {% partial file="p_usage.md" /%}
 
-**Returns:**
+## Returns
 
-import("livekit-client/dist/src/proto/livekit_models_pb").ParticipantPermission \| undefined
+`import("livekit-client/dist/src/proto/livekit_models_pb").ParticipantPermission | undefined`

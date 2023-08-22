@@ -14,10 +14,9 @@ import { useEnsureLayoutContext } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter     | Type                                              | Description  |
-| ------------- | ------------------------------------------------- | ------------ |
-| layoutContext | [LayoutContextType](./react/layoutcontexttype.md) | _(Optional)_ |
+{% parameter name="layoutContext" type="LayoutContextType" optional=true %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-[LayoutContextType](./react/layoutcontexttype.md)
+`LayoutContextType`

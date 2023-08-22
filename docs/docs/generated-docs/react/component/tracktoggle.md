@@ -23,10 +23,25 @@ import { TrackToggle } from '@livekit/components-react';
 
 ## Properties
 
-| Property                                                      | Type                                                                        | Description  |
-| ------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------ |
-| [captureOptions?](./react/tracktoggleprops.captureoptions.md) | [CaptureOptionsBySource](./core/captureoptionsbysource.md)<!-- -->&lt;T&gt; | _(Optional)_ |
-| [initialState?](./react/tracktoggleprops.initialstate.md)     | boolean                                                                     | _(Optional)_ |
-| [onChange?](./react/tracktoggleprops.onchange.md)             | (enabled: boolean) =&gt; void                                               | _(Optional)_ |
-| [showIcon?](./react/tracktoggleprops.showicon.md)             | boolean                                                                     | _(Optional)_ |
-| [source](./react/tracktoggleprops.source.md)                  | T                                                                           |              |
+{% parameter name="captureOptions" type="CaptureOptionsBySource<T>" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="initialState" type="boolean" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="onChange" type="(enabled: boolean) => void" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="showIcon" type="boolean" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="source" type="T" optional=false %}
+{% /parameter %}

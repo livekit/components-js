@@ -12,10 +12,9 @@ import { useDisconnectButton } from '@livekit/components-react';
 
 ## Parameters
 
-| Parameter | Type                                                      | Description |
-| --------- | --------------------------------------------------------- | ----------- |
-| props     | [DisconnectButtonProps](./react/disconnectbuttonprops.md) |             |
+{% parameter name="props" type="DisconnectButtonProps" optional=false %}
+{% /parameter %}
 
-**Returns:**
+## Returns
 
-{ buttonProps: [DisconnectButtonProps](./react/disconnectbuttonprops.md) &amp; { className: string; onClick: () =&gt; void; disabled: boolean; }; }
+`{     buttonProps: DisconnectButtonProps & {         className: string;         onClick: () => void;         disabled: boolean;     }; }`

@@ -23,8 +23,13 @@ const tracks = useTracks();
 
 ## Properties
 
-| Property                                                 | Type                                                                             | Description                                                                                                                                         |
-| -------------------------------------------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [children](./react/carouselviewprops.children.md)        | React.ReactNode                                                                  |                                                                                                                                                     |
-| [orientation?](./react/carouselviewprops.orientation.md) | 'vertical' \| 'horizontal'                                                       | _(Optional)_ Place the tiles vertically or horizontally next to each other. If undefined orientation is guessed by the dimensions of the container. |
-| [tracks](./react/carouselviewprops.tracks.md)            | [TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md)<!-- -->\[\] |                                                                                                                                                     |
+{% parameter name="children" type="React.ReactNode" optional=false %}
+{% /parameter %}
+
+{% parameter name="orientation" type="'vertical' | 'horizontal'" optional=true %}
+_(Optional)_ Place the tiles vertically or horizontally next to each other. If undefined orientation is guessed by the dimensions of the container.
+
+{% /parameter %}
+
+{% parameter name="tracks" type="TrackReferenceOrPlaceholder[]" optional=false %}
+{% /parameter %}

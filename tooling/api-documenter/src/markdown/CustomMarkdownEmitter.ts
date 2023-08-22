@@ -191,6 +191,7 @@ export class CustomMarkdownEmitter extends MarkdownEmitter {
         for (const parameter of parameterList.getParameters()) {
           this.writeNode(parameter, context, docNodeSiblings);
         }
+        writer.ensureSkippedLine();
         break;
       }
       case CustomDocNodeKind.ParameterItem: {

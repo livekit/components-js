@@ -1078,6 +1078,29 @@ export class MarkdownDocumenter {
       output.appendNode(new DocHeading({ configuration, title: 'Parameters' }));
       output.appendNode(parameterList);
     }
+
+    if (ApiReturnTypeMixin.isBaseClassOf(apiParameterListMixin)) {
+      const returnTypeExcerpt: Excerpt = apiParameterListMixin.returnTypeExcerpt;
+      output.appendNode(new DocHeading({ configuration, title: 'Returns', level: 2 }));
+
+      const paragraph: DocParagraph = new DocParagraph({ configuration });
+
+      const returnTypeAsText: string = returnTypeExcerpt.spannedTokens
+        .map((x) => x.text)
+        .join('')
+        .replace(/[\r\n]+/g, ' ');
+      console.log('returnTypeAsText: ', returnTypeAsText);
+
+      if (returnTypeAsText) {
+        paragraph.appendNode(
+          new DocCodeSpan({
+            configuration,
+            code: returnTypeAsText,
+          }),
+        );
+      }
+      output.appendNode(paragraph);
+    }
   }
 
   /**

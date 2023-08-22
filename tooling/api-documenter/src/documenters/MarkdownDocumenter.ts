@@ -46,6 +46,7 @@ import {
   ApiProtectedMixin,
   ApiReadonlyMixin,
   IFindApiItemsResult,
+  Parameter,
 } from '@microsoft/api-extractor-model';
 
 import { CustomDocNodes } from '../nodes/CustomDocNodeKind';
@@ -66,6 +67,8 @@ import { DocumenterConfig } from './DocumenterConfig';
 import { MarkdownDocumenterAccessor } from '../plugin/MarkdownDocumenterAccessor';
 import { LkType, getCategorySubfolder, getFunctionType } from '../livekitUtils/classifiers';
 import { MarkDocTag } from '../nodes/MarkDocTag';
+import { ParameterList } from '../nodes/ParameterList';
+import { ParameterItem } from '../nodes/ParameterItem';
 
 export interface IMarkdownDocumenterOptions {
   apiModel: ApiModel;
@@ -151,7 +154,7 @@ export class MarkdownDocumenter {
         output.appendNode(
           new DocHeading({
             configuration,
-            title: `${apiItem.displayName} (${category})`,
+            title: `${apiItem.displayName}`,
             level: 1,
           }),
         );
@@ -307,26 +310,9 @@ export class MarkdownDocumenter {
       case ApiItemKind.Function:
         // Print property table into component/prefab page.
         if (category === 'component' || category === 'prefab') {
-          const parameters = (apiItem as ApiParameterListMixin).parameters;
-          if (parameters.length > 0) {
-            const props = parameters[0];
-            if (props !== undefined) {
-              for (const token of props.parameterTypeExcerpt.tokens) {
-                if (token.kind === ExcerptTokenKind.Reference && token.canonicalReference) {
-                  const apiItemResult: IResolveDeclarationReferenceResult =
-                    this._apiModel.resolveDeclarationReference(token.canonicalReference, undefined);
-                  if (apiItemResult.resolvedApiItem) {
-                    this._writeInterfaceTables(
-                      output,
-                      apiItemResult.resolvedApiItem as ApiInterface,
-                    );
-                  }
-                }
-              }
-            }
-          }
+          this._writeComponentPropertyList(output, apiItem as ApiParameterListMixin);
         } else if (category === 'hook') {
-          this._writeParameterTables(output, apiItem as ApiParameterListMixin);
+          this._writeParameterList(output, apiItem as ApiParameterListMixin);
         }
         this._writeThrowsSection(output, apiItem);
         break;
@@ -1052,6 +1038,152 @@ export class MarkdownDocumenter {
           this._appendSection(output, apiParameterListMixin.tsdocComment.returnsBlock.content);
         }
       }
+    }
+  }
+
+  /**
+   * Create a ParameterList for a function-like API item.
+   *
+   * @remarks
+   * Parameters are the variables that a function accepts.
+   * Properties are a special kind of parameter, they are an object passed as the first argument to a function.
+   * Attributes are the actual values passed to a function.
+   */
+  private _writeParameterList(
+    output: DocSection,
+    apiParameterListMixin: ApiParameterListMixin,
+  ): void {
+    const configuration: TSDocConfiguration = this._tsdocConfiguration;
+
+    const parameterList: ParameterList = new ParameterList({ configuration });
+    for (const apiParameter of apiParameterListMixin.parameters) {
+      const parameterDescription: DocSection = new DocSection({ configuration });
+      if (apiParameter.tsdocParamBlock) {
+        this._appendAndMergeSection(parameterDescription, apiParameter.tsdocParamBlock.content);
+      }
+      parameterList.addParameter(
+        new ParameterItem({
+          configuration,
+          attributes: {
+            name: apiParameter.name,
+            type: apiParameter.parameterTypeExcerpt.text,
+            optional: apiParameter.isOptional,
+            description: parameterDescription.nodes,
+          },
+        }),
+      );
+    }
+
+    if (parameterList.getParameters().length > 0) {
+      output.appendNode(new DocHeading({ configuration, title: 'Parameters' }));
+      output.appendNode(parameterList);
+    }
+
+    if (ApiReturnTypeMixin.isBaseClassOf(apiParameterListMixin)) {
+      const returnTypeExcerpt: Excerpt = apiParameterListMixin.returnTypeExcerpt;
+      output.appendNode(new DocHeading({ configuration, title: 'Returns', level: 2 }));
+
+      const paragraph: DocParagraph = new DocParagraph({ configuration });
+
+      const returnTypeAsText: string = returnTypeExcerpt.spannedTokens
+        .map((x) => x.text)
+        .join('')
+        .replace(/[\r\n]+/g, ' ');
+      console.log('returnTypeAsText: ', returnTypeAsText);
+
+      if (returnTypeAsText) {
+        paragraph.appendNode(
+          new DocCodeSpan({
+            configuration,
+            code: returnTypeAsText,
+          }),
+        );
+      }
+      output.appendNode(paragraph);
+    }
+  }
+
+  /**
+   * Create a property list for a Component.
+   */
+  private _writeComponentPropertyList(output: DocSection, apiItem: ApiParameterListMixin): void {
+    console.group('Write Component Property List for: ', apiItem.displayName);
+    const configuration: TSDocConfiguration = this._tsdocConfiguration;
+    const parameterList: ParameterList = new ParameterList({ configuration });
+
+    const parameters: ReadonlyArray<Parameter> = apiItem.parameters;
+
+    if (parameters.length > 0) {
+      const props = parameters[0];
+      if (props !== undefined) {
+        for (const token of props.parameterTypeExcerpt.tokens) {
+          if (token.kind === ExcerptTokenKind.Reference && token.canonicalReference) {
+            const apiItemResult: IResolveDeclarationReferenceResult =
+              this._apiModel.resolveDeclarationReference(token.canonicalReference, undefined);
+
+            const apiInterface: ApiItem | undefined = apiItemResult.resolvedApiItem;
+            if (apiInterface) {
+              const apiMembers: readonly ApiItem[] = this._getMembersAndWriteIncompleteWarning(
+                apiInterface as ApiInterface,
+                output,
+              );
+
+              for (const apiMember of apiMembers) {
+                const isInherited: boolean = apiMember.parent !== apiInterface;
+                switch (apiMember.kind) {
+                  // case ApiItemKind.ConstructSignature:
+                  // case ApiItemKind.MethodSignature: {
+                  //   methodsTable.addRow(
+                  //     new DocTableRow({ configuration }, [
+                  //       this._createTitleCell(apiMember),
+                  //       this._createDescriptionCell(apiMember, isInherited),
+                  //     ]),
+                  //   );
+
+                  //   this._writeApiItemPage(apiMember);
+                  //   break;
+                  // }
+                  case ApiItemKind.PropertySignature: {
+                    // if ((apiMember as ApiPropertyItem).isEventProperty) {
+                    //   eventsTable.addRow(
+                    //     new DocTableRow({ configuration }, [
+                    //       this._createTitleCell(apiMember),
+                    //       // this._createModifiersCell(apiMember),
+                    //       this._createPropertyTypeCell(apiMember),
+                    //       this._createDescriptionCell(apiMember, isInherited),
+                    //     ]),
+                    //   );
+                    // } else {
+                    if (apiMember as ApiPropertyItem) {
+                      parameterList.addParameter(
+                        new ParameterItem({
+                          configuration,
+                          attributes: {
+                            name: apiMember.displayName,
+                            type: (apiMember as ApiPropertyItem).propertyTypeExcerpt.text,
+                            optional: (apiMember as ApiPropertyItem).isOptional,
+                            description: this._createDescriptionCell(apiMember, isInherited).content
+                              .nodes,
+                          },
+                        }),
+                      );
+                    }
+                    // }
+
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      console.groupEnd();
+    }
+
+    if (parameterList.getParameters().length > 0) {
+      output.appendNode(new DocHeading({ configuration, title: 'Properties' }));
+      output.appendNode(parameterList);
     }
   }
 

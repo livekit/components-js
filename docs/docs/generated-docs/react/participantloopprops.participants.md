@@ -2,7 +2,7 @@
 
 ## ParticipantLoopProps.participants property
 
-The participants to loop over. If not provided, the participants from the current room context are used.
+The participants to loop over. Use `useParticipants()` hook to get participants.
 
 **Signature:**
 

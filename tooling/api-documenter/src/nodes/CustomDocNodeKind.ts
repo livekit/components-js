@@ -6,6 +6,8 @@ import { DocTable } from './DocTable';
 import { DocTableCell } from './DocTableCell';
 import { DocTableRow } from './DocTableRow';
 import { MarkDocTag } from './MarkDocTag';
+import { ParameterList } from './ParameterList';
+import { ParameterItem } from './ParameterItem';
 
 // Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
@@ -21,6 +23,8 @@ export const enum CustomDocNodeKind {
   TableCell = 'TableCell',
   TableRow = 'TableRow',
   MarkDocTag = 'MarkDocTag',
+  ParameterList = 'ParameterList',
+  ParameterItem = 'ParameterItem',
 }
 
 export class CustomDocNodes {
@@ -38,6 +42,8 @@ export class CustomDocNodes {
         { docNodeKind: CustomDocNodeKind.TableCell, constructor: DocTableCell },
         { docNodeKind: CustomDocNodeKind.TableRow, constructor: DocTableRow },
         { docNodeKind: CustomDocNodeKind.MarkDocTag, constructor: MarkDocTag },
+        { docNodeKind: CustomDocNodeKind.ParameterList, constructor: ParameterList },
+        { docNodeKind: CustomDocNodeKind.ParameterItem, constructor: ParameterItem },
       ]);
 
       configuration.docNodeManager.registerAllowableChildren(CustomDocNodeKind.EmphasisSpan, [
@@ -50,6 +56,7 @@ export class CustomDocNodes {
         CustomDocNodeKind.NoteBox,
         CustomDocNodeKind.Table,
         CustomDocNodeKind.MarkDocTag,
+        CustomDocNodeKind.ParameterList,
       ]);
 
       configuration.docNodeManager.registerAllowableChildren(DocNodeKind.Paragraph, [

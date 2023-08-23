@@ -12,10 +12,10 @@ import { usePreviewDevice } from '@livekit/components-react';
 
 ## Parameters
 
-{% parameter name="enabled" type="boolean" optional=false %}
+{% parameter name="deviceId" type="string" optional=false %}
 {% /parameter %}
 
-{% parameter name="deviceId" type="string" optional=false %}
+{% parameter name="enabled" type="boolean" optional=false %}
 {% /parameter %}
 
 {% parameter name="kind" type="'videoinput' | 'audioinput'" optional=false %}

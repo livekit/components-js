@@ -22,6 +22,9 @@ import { MediaDeviceSelect } from '@livekit/components-react';
 
 ## Properties
 
+{% parameter name="kind" type="MediaDeviceKind" optional=false %}
+{% /parameter %}
+
 {% parameter name="exactMatch" type="boolean" optional=true %}
 _(Optional)_ will force the browser to only return the specified device will call `onDeviceSelectError` with the error in case this fails
 
@@ -30,9 +33,6 @@ _(Optional)_ will force the browser to only return the specified device will cal
 {% parameter name="initialSelection" type="string" optional=true %}
 _(Optional)_
 
-{% /parameter %}
-
-{% parameter name="kind" type="MediaDeviceKind" optional=false %}
 {% /parameter %}
 
 {% parameter name="onActiveDeviceChange" type="(deviceId: string) => void" optional=true %}

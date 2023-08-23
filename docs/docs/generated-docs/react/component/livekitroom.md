@@ -22,6 +22,16 @@ import { LiveKitRoom } from '@livekit/components-react';
 
 ## Properties
 
+{% parameter name="serverUrl" type="string | undefined" optional=false %}
+URL to the LiveKit server. For example: `wss://<domain>.livekit.cloud` To simplify the implementation, `undefined` is also accepted as an intermediate value, but only with a valid string url can the connection be established.
+
+{% /parameter %}
+
+{% parameter name="token" type="string | undefined" optional=false %}
+A user specific access token for a client to authenticate to the room. This token is necessary to establish a connection to the room. To simplify the implementation, `undefined` is also accepted as an intermediate value, but only with a valid string token can the connection be established.
+
+{% /parameter %}
+
 {% parameter name="audio" type="AudioCaptureOptions | boolean" optional=true %}
 _(Optional)_ Publish audio immediately after connecting to your LiveKit room.
 
@@ -72,18 +82,8 @@ _(Optional)_ Publish screen share immediately after connecting to your LiveKit r
 
 {% /parameter %}
 
-{% parameter name="serverUrl" type="string | undefined" optional=false %}
-URL to the LiveKit server. For example: `wss://<domain>.livekit.cloud` To simplify the implementation, `undefined` is also accepted as an intermediate value, but only with a valid string url can the connection be established.
-
-{% /parameter %}
-
 {% parameter name="simulateParticipants" type="number | undefined" optional=true %}
 _(Optional)_
-
-{% /parameter %}
-
-{% parameter name="token" type="string | undefined" optional=false %}
-A user specific access token for a client to authenticate to the room. This token is necessary to establish a connection to the room. To simplify the implementation, `undefined` is also accepted as an intermediate value, but only with a valid string token can the connection be established.
 
 {% /parameter %}
 

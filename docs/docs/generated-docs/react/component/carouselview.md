@@ -26,10 +26,10 @@ const tracks = useTracks();
 {% parameter name="children" type="React.ReactNode" optional=false %}
 {% /parameter %}
 
+{% parameter name="tracks" type="TrackReferenceOrPlaceholder[]" optional=false %}
+{% /parameter %}
+
 {% parameter name="orientation" type="'vertical' | 'horizontal'" optional=true %}
 _(Optional)_ Place the tiles vertically or horizontally next to each other. If undefined orientation is guessed by the dimensions of the container.
 
-{% /parameter %}
-
-{% parameter name="tracks" type="TrackReferenceOrPlaceholder[]" optional=false %}
 {% /parameter %}

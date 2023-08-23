@@ -18,10 +18,10 @@ import { useVisualStableUpdate } from '@livekit/components-react';
 
 ## Parameters
 
-{% parameter name="trackReferences" type="TrackReferenceOrPlaceholder[]" optional=false %}
+{% parameter name="maxItemsOnPage" type="number" optional=false %}
 {% /parameter %}
 
-{% parameter name="maxItemsOnPage" type="number" optional=false %}
+{% parameter name="trackReferences" type="TrackReferenceOrPlaceholder[]" optional=false %}
 {% /parameter %}
 
 {% parameter name="options" type="UseVisualStableUpdateOptions" optional=true %}

@@ -12,10 +12,10 @@ import { useToken } from '@livekit/components-react';
 
 ## Parameters
 
-{% parameter name="tokenEndpoint" type="string | undefined" optional=false %}
+{% parameter name="roomName" type="string" optional=false %}
 {% /parameter %}
 
-{% parameter name="roomName" type="string" optional=false %}
+{% parameter name="tokenEndpoint" type="string | undefined" optional=false %}
 {% /parameter %}
 
 {% parameter name="options" type="UseTokenOptions" optional=true %}

@@ -32,6 +32,7 @@ export class ParameterList extends DocNode {
 
   public addParameter(parameter: ParameterItem): void {
     this._parameterList.push(parameter);
+    this._parameterList = sortParameters(this._parameterList);
   }
 
   public getParameters(): ReadonlyArray<ParameterItem> {
@@ -42,4 +43,16 @@ export class ParameterList extends DocNode {
   protected onGetChildNodes(): ReadonlyArray<DocNode | undefined> {
     return [...this._parameterList];
   }
+}
+
+export function sortParameters(parameters: ParameterItem[]): ParameterItem[] {
+  return parameters.sort((a, b) => {
+    if (a.attributes.optional === b.attributes.optional) {
+      return a.attributes.name.localeCompare(b.attributes.name);
+    } else if (a.attributes.optional) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
 }

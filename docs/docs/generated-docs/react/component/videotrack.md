@@ -20,6 +20,9 @@ import { VideoTrack } from '@livekit/components-react';
 
 ## Properties
 
+{% parameter name="source" type="Track.Source" optional=false %}
+{% /parameter %}
+
 {% parameter name="manageSubscription" type="boolean" optional=true %}
 _(Optional)_
 
@@ -48,7 +51,4 @@ _(Optional)_
 {% parameter name="publication" type="TrackPublication" optional=true %}
 _(Optional)_
 
-{% /parameter %}
-
-{% parameter name="source" type="Track.Source" optional=false %}
 {% /parameter %}

@@ -15,10 +15,10 @@ import { useMediaTrack } from '@livekit/components-react';
 {% parameter name="source" type="VideoSource | AudioSource" optional=false %}
 {% /parameter %}
 
-{% parameter name="participant" type="Participant" optional=true %}
+{% parameter name="options" type="UseMediaTrackOptions" optional=true %}
 {% /parameter %}
 
-{% parameter name="options" type="UseMediaTrackOptions" optional=true %}
+{% parameter name="participant" type="Participant" optional=true %}
 {% /parameter %}
 
 ## Returns

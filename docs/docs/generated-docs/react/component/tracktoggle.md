@@ -23,6 +23,9 @@ import { TrackToggle } from '@livekit/components-react';
 
 ## Properties
 
+{% parameter name="source" type="T" optional=false %}
+{% /parameter %}
+
 {% parameter name="captureOptions" type="CaptureOptionsBySource<T>" optional=true %}
 _(Optional)_
 
@@ -41,7 +44,4 @@ _(Optional)_
 {% parameter name="showIcon" type="boolean" optional=true %}
 _(Optional)_
 
-{% /parameter %}
-
-{% parameter name="source" type="T" optional=false %}
 {% /parameter %}

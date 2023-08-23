@@ -22,6 +22,9 @@ import { AudioTrack } from '@livekit/components-react';
 
 ## Properties
 
+{% parameter name="source" type="Track.Source" optional=false %}
+{% /parameter %}
+
 {% parameter name="name" type="string" optional=true %}
 _(Optional)_
 
@@ -40,9 +43,6 @@ _(Optional)_
 {% parameter name="publication" type="TrackPublication" optional=true %}
 _(Optional)_
 
-{% /parameter %}
-
-{% parameter name="source" type="Track.Source" optional=false %}
 {% /parameter %}
 
 {% parameter name="volume" type="number" optional=true %}

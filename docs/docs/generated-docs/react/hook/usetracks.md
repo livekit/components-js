@@ -31,10 +31,10 @@ const trackReferencesWithPlaceholders: TrackReferenceOrPlaceholder[] = useTracks
 
 ## Parameters
 
-{% parameter name="sources" type="T" optional=true %}
+{% parameter name="options" type="UseTracksOptions" optional=true %}
 {% /parameter %}
 
-{% parameter name="options" type="UseTracksOptions" optional=true %}
+{% parameter name="sources" type="T" optional=true %}
 {% /parameter %}
 
 ## Returns

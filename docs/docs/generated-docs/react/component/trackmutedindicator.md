@@ -21,6 +21,9 @@ import { TrackMutedIndicator } from '@livekit/components-react';
 
 ## Properties
 
+{% parameter name="source" type="Track.Source" optional=false %}
+{% /parameter %}
+
 {% parameter name="participant" type="Participant" optional=true %}
 _(Optional)_
 
@@ -29,7 +32,4 @@ _(Optional)_
 {% parameter name="show" type="'always' | 'muted' | 'unmuted'" optional=true %}
 _(Optional)_
 
-{% /parameter %}
-
-{% parameter name="source" type="Track.Source" optional=false %}
 {% /parameter %}

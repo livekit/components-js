@@ -9,7 +9,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "heft build --clean"
+    "build": "heft build --clean",
+    "test": "heft test"
   },
   "bin": {
     "api-documenter": "./bin/api-documenter"

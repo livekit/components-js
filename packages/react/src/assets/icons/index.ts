@@ -5,6 +5,7 @@ export { default as Chevron } from './Chevron';
 export { default as FocusToggleIcon } from './FocusToggleIcon';
 export { default as GearIcon } from './GearIcon';
 export { default as LeaveIcon } from './LeaveIcon';
+export { default as LockLockedIcon } from './LockLockedIcon';
 export { default as MicDisabledIcon } from './MicDisabledIcon';
 export { default as MicIcon } from './MicIcon';
 export { default as QualityExcellentIcon } from './QualityExcellentIcon';

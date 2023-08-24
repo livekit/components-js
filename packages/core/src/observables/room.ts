@@ -1,7 +1,7 @@
 import type { Subscriber, Subscription } from 'rxjs';
 import { Subject, map, Observable, startWith, finalize, filter, concat } from 'rxjs';
 import type { Participant, TrackPublication } from 'livekit-client';
-import { Room, RoomEvent, Track } from 'livekit-client';
+import { LocalParticipant, Room, RoomEvent, Track } from 'livekit-client';
 import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 import { log } from '../logger';
 export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observable<Room> {
@@ -222,5 +222,19 @@ export function createActiveDeviceObservable(room: Room, kind: MediaDeviceKind) 
       return deviceId;
     }),
     startWith(room.getActiveDevice(kind)),
+  );
+}
+
+export function encryptionStatusObservable(room: Room, participant: Participant) {
+  return roomEventSelector(room, RoomEvent.ParticipantEncryptionStatusChanged).pipe(
+    filter(
+      ([, p]) =>
+        participant.identity === p?.identity ||
+        (!p && participant.identity === room.localParticipant.identity),
+    ),
+    map(([encrypted]) => encrypted),
+    startWith(
+      participant instanceof LocalParticipant ? participant.isE2EEEnabled : participant.isEncrypted,
+    ),
   );
 }

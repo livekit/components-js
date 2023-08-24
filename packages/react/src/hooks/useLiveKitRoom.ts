@@ -46,7 +46,7 @@ export function useLiveKitRoom<T extends HTMLElement>(
 
   React.useEffect(() => {
     setRoom(passedRoom ?? new Room(options));
-  }, [JSON.stringify(options), passedRoom]);
+  }, [passedRoom]);
 
   const htmlProps = React.useMemo(() => {
     const { className } = setupLiveKitRoom();

@@ -19,6 +19,7 @@ import { ScreenShareIcon } from '../../assets/icons';
 import { VideoTrack } from './VideoTrack';
 import { AudioTrack } from './AudioTrack';
 import { useParticipantTile } from '../../hooks';
+import { useIsEncrypted } from '../../hooks/useIsEncrypted';
 
 /** @public */
 export function ParticipantContextIfNeeded(
@@ -81,7 +82,7 @@ export function ParticipantTile({
     disableSpeakingIndicator,
     onParticipantClick,
   });
-
+  const isEncrypted = useIsEncrypted();
   const layoutContext = useMaybeLayoutContext();
 
   const handleSubscribe = React.useCallback(
@@ -129,6 +130,7 @@ export function ParticipantTile({
               <div className="lk-participant-metadata-item">
                 {trackRef.source === Track.Source.Camera ? (
                   <>
+                    {isEncrypted && <span>🔒</span>}
                     <TrackMutedIndicator
                       source={Track.Source.Microphone}
                       show={'muted'}

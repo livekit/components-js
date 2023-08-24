@@ -4,6 +4,9 @@ import { encryptionStatusObservable } from '@livekit/components-core';
 import { useEnsureParticipant, useEnsureRoom } from '../context';
 import { useObservableState } from './internal';
 
+/**
+ * @alpha
+ */
 export function useIsEncrypted() {
   const p = useEnsureParticipant();
   const room = useEnsureRoom();

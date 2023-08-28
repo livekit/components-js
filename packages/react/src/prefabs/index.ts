@@ -1,7 +1,20 @@
-export * from './Chat';
-export * from '../components/ChatEntry';
-export * from './PreJoin';
-export * from './VideoConference';
-export * from './ControlBar';
-export * from './MediaDeviceMenu';
-export * from './AudioConference';
+export { Chat, useChat, type ChatProps, type ChatMessage, type ReceivedChatMessage } from './Chat';
+export {
+  ChatEntry,
+  formatChatMessageLinks,
+  type ChatEntryProps,
+  type MessageDecoder,
+  type MessageEncoder,
+  type MessageFormatter,
+} from '../components/ChatEntry';
+export {
+  PreJoin,
+  PreJoinProps,
+  usePreviewDevice,
+  usePreviewTracks,
+  type LocalUserChoices,
+} from './PreJoin';
+export { VideoConference, type VideoConferenceProps } from './VideoConference';
+export { ControlBar, type ControlBarProps, type ControlBarControls } from './ControlBar';
+export { MediaDeviceMenu, type MediaDeviceMenuProps } from './MediaDeviceMenu';
+export { AudioConference, type AudioConferenceProps } from './AudioConference';

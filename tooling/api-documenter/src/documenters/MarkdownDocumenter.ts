@@ -113,7 +113,6 @@ export class MarkdownDocumenter {
       });
     }
 
-    console.log();
     this._deleteOldOutputFiles();
 
     this._writeApiItemPage(this._apiModel);
@@ -491,6 +490,9 @@ export class MarkdownDocumenter {
             name: 'partial',
             attributes: {
               file: 'p_usage.md',
+            },
+            variables: {
+              exampleCount: exampleNumber - 1,
             },
           }),
         );

@@ -14,6 +14,7 @@ interface ITagAttributes {
 export interface IMarkDocTagParameters extends IDocNodeParameters {
   name: string;
   attributes: ITagAttributes;
+  variables: ITagAttributes;
 }
 
 /**
@@ -22,6 +23,7 @@ export interface IMarkDocTagParameters extends IDocNodeParameters {
 export class MarkDocTag extends DocNode {
   public readonly name: string;
   public readonly attributes: ITagAttributes;
+  public readonly variables: ITagAttributes;
 
   /**
    * Don't call this directly.  Instead use {@link TSDocParser}
@@ -31,6 +33,7 @@ export class MarkDocTag extends DocNode {
     super(parameters);
     this.name = parameters.name;
     this.attributes = parameters.attributes;
+    this.variables = parameters.variables;
   }
 
   /** @override */

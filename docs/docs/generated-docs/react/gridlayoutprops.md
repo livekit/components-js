@@ -10,7 +10,7 @@ export interface GridLayoutProps extends React.HTMLAttributes<HTMLDivElement>, P
 
 **Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;, Pick&lt;[UseParticipantsOptions](./react/useparticipantsoptions.md)<!-- -->, 'updateOnlyOn'&gt;
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Properties
 

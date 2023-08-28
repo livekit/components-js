@@ -10,7 +10,7 @@ Returns a participant from the `ParticipantContext` if it exists, otherwise `und
 import { useMaybeParticipantContext } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Returns
 

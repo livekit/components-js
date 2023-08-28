@@ -10,4 +10,4 @@ A user specific access token for a client to authenticate to the room. This toke
 token: string | undefined;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

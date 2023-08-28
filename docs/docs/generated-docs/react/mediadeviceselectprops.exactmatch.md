@@ -10,4 +10,4 @@ will force the browser to only return the specified device will call `onDeviceSe
 exactMatch?: boolean;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

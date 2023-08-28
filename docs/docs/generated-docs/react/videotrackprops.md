@@ -10,7 +10,7 @@ export interface VideoTrackProps extends React.HTMLAttributes<HTMLVideoElement>
 
 **Extends:** React.HTMLAttributes&lt;HTMLVideoElement&gt;
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Properties
 

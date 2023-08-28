@@ -10,4 +10,4 @@ export interface ConnectionQualityIndicatorProps extends React.HTMLAttributes<HT
 
 **Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;, [ConnectionQualityIndicatorOptions](./react/connectionqualityindicatoroptions.md)
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

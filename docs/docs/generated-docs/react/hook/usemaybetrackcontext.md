@@ -10,7 +10,7 @@ Returns a track reference from the `TrackContext` if it exists, otherwise `undef
 import { useMaybeTrackContext } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Returns
 

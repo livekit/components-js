@@ -17,7 +17,7 @@ import { TrackMutedIndicator } from '@livekit/components-react';
 <TrackMutedIndicator source={Track.Source.Microphone} />
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Properties
 

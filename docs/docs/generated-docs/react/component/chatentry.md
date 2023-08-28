@@ -18,7 +18,7 @@ import { ChatEntry } from '@livekit/components-react';
 </Chat>
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Properties
 

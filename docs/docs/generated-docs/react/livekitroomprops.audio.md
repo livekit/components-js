@@ -10,4 +10,4 @@ Publish audio immediately after connecting to your LiveKit room.
 audio?: AudioCaptureOptions | boolean;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

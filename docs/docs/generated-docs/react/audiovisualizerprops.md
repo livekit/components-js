@@ -10,7 +10,7 @@ export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement>
 
 **Extends:** React.HTMLAttributes&lt;SVGElement&gt;
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Properties
 

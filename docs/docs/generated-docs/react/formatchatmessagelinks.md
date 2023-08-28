@@ -8,4 +8,4 @@
 export declare function formatChatMessageLinks(message: string): React.ReactNode;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

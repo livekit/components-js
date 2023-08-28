@@ -10,4 +10,4 @@ Place the tiles vertically or horizontally next to each other. If undefined orie
 orientation?: 'vertical' | 'horizontal';
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

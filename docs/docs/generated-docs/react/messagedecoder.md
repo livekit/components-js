@@ -10,4 +10,4 @@ export type MessageDecoder = (message: Uint8Array) => ReceivedChatMessage;
 
 **References:** [ReceivedChatMessage](./core/receivedchatmessage.md)
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

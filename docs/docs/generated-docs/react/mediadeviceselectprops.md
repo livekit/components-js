@@ -10,7 +10,7 @@ export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListEl
 
 **Extends:** React.HTMLAttributes&lt;HTMLUListElement&gt;
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Properties
 

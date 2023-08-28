@@ -10,7 +10,7 @@ export interface RoomNameProps extends React.HTMLAttributes<HTMLSpanElement>
 
 **Extends:** React.HTMLAttributes&lt;HTMLSpanElement&gt;
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Properties
 

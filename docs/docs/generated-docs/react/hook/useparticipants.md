@@ -10,7 +10,7 @@ The useParticipants hook returns all participants (local and remote) of the curr
 import { useParticipants } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Parameters
 

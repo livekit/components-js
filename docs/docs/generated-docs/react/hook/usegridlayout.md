@@ -10,7 +10,7 @@ The useGridLayout hook tries to select the best layout to fit all tiles. If the 
 import { useGridLayout } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Parameters
 

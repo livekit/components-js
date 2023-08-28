@@ -14,4 +14,4 @@ export declare function updatePages<T extends UpdatableItem>(
 ): T[];
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

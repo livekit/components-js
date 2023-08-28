@@ -10,4 +10,4 @@ Publish video immediately after connecting to your LiveKit room.
 video?: VideoCaptureOptions | boolean;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

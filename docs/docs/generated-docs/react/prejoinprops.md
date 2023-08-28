@@ -10,7 +10,7 @@ export interface PreJoinProps extends Omit<React.HTMLAttributes<HTMLDivElement>,
 
 **Extends:** Omit&lt;React.HTMLAttributes&lt;HTMLDivElement&gt;, 'onSubmit' \| 'onError'&gt;
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Properties
 

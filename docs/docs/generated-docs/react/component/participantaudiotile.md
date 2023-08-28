@@ -16,7 +16,7 @@ import { ParticipantAudioTile } from '@livekit/components-react';
 <ParticipantAudioTile />
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Properties
 

@@ -22,4 +22,4 @@ This component works only inside a PinContext.
 </LiveKitRoom>
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}

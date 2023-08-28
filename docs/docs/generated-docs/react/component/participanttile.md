@@ -18,7 +18,7 @@ import { ParticipantTile } from '@livekit/components-react';
 <ParticipantTile {...trackReference} />
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Properties
 

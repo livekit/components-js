@@ -10,4 +10,4 @@ Publish screen share immediately after connecting to your LiveKit room.
 screen?: ScreenShareCaptureOptions | boolean;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

@@ -2,7 +2,10 @@ import { ApiFunction, ApiItem } from '@microsoft/api-extractor-model';
 
 export type LkType = 'component' | 'hook' | 'prefab' | undefined;
 function isHook(apiItem: ApiItem): boolean {
-  return apiItem.displayName.startsWith('use');
+  if (apiItem instanceof ApiFunction) {
+    return apiItem.getScopedNameWithinPackage().startsWith('use');
+  }
+  return false;
 }
 function isPrefab(apiItem: ApiItem): boolean {
   if (apiItem instanceof ApiFunction) {

@@ -1,5 +1,11 @@
 # @livekit/components-js-docs
 
+## 0.0.4
+
+### Patch Changes
+
+- Automatically generate doc meta-data.json file - [#601](https://github.com/livekit/components-js/pull/601) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.0.3
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 1.1.4
+
+### Patch Changes
+
+- Automatically generate doc meta-data.json file - [#601](https://github.com/livekit/components-js/pull/601) ([@Ocupe](https://github.com/Ocupe))
+
 ## 1.1.3
 
 ### Patch Changes

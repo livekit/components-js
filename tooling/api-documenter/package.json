@@ -32,7 +32,8 @@
     "@rushstack/eslint-config": "^3.3.1",
     "@types/js-yaml": "3.12.1",
     "@types/node": "14.18.36",
-    "@types/resolve": "1.20.2"
+    "@types/resolve": "1.20.2",
+    "fast-glob": "^3.3.1"
   },
   "peerDependencies": {
     "@rushstack/heft": "^0.58.2"

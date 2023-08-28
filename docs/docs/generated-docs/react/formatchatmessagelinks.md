@@ -2,10 +2,10 @@
 
 # formatChatMessageLinks
 
-## Import
+**Signature:**
 
 ```typescript
-import { formatChatMessageLinks } from '@livekit/components-react';
+export declare function formatChatMessageLinks(message: string): React.ReactNode;
 ```
 
 {% partial file="p_usage.md" /%}

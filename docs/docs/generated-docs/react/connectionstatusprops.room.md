@@ -10,4 +10,4 @@ The room from which the connection status should be displayed.
 room?: Room;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

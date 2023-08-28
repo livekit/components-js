@@ -10,4 +10,4 @@ Track references to loop over. You can the use `useTracks()` hook to get TrackRe
 tracks: TrackReference[] | TrackReferenceOrPlaceholder[];
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

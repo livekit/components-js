@@ -10,7 +10,7 @@ Ensures that a track reference is provided via context. If not inside a `TrackCo
 import { useTrackContext } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Returns
 

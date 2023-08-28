@@ -10,4 +10,4 @@ Hide message timestamp.
 hideTimestamp?: boolean;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

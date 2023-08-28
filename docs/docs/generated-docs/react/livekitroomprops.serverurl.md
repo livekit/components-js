@@ -10,4 +10,4 @@ URL to the LiveKit server. For example: `wss://<domain>.livekit.cloud` To simpli
 serverUrl: string | undefined;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

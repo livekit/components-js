@@ -10,4 +10,4 @@ Default sort for participants, it'll order participants by: 1. local participant
 export declare function sortParticipants(participants: Participant[]): Participant[];
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

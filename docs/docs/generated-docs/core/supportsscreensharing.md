@@ -10,4 +10,4 @@ Returns `true` if the browser supports screen sharing.
 export declare function supportsScreenSharing(): boolean;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

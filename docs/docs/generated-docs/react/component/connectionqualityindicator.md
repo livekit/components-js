@@ -16,4 +16,4 @@ import { ConnectionQualityIndicator } from '@livekit/components-react';
 <ConnectionQualityIndicator />
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}

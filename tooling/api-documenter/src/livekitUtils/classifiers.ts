@@ -1,8 +1,11 @@
-import { ApiAbstractMixin, ApiFunction, ApiItem } from '@microsoft/api-extractor-model';
+import { ApiFunction, ApiItem } from '@microsoft/api-extractor-model';
 
 export type LkType = 'component' | 'hook' | 'prefab' | undefined;
 function isHook(apiItem: ApiItem): boolean {
-  return apiItem.displayName.startsWith('use');
+  if (apiItem instanceof ApiFunction) {
+    return apiItem.getScopedNameWithinPackage().startsWith('use');
+  }
+  return false;
 }
 function isPrefab(apiItem: ApiItem): boolean {
   if (apiItem instanceof ApiFunction) {
@@ -12,7 +15,11 @@ function isPrefab(apiItem: ApiItem): boolean {
 }
 function isComponent(apiItem: ApiItem): boolean {
   if (apiItem instanceof ApiFunction) {
-    return isComponentReactPackage(apiItem) && !!apiItem.fileUrlPath?.startsWith('src/components/');
+    return (
+      isComponentReactPackage(apiItem) &&
+      !!apiItem.fileUrlPath?.startsWith('src/components/') &&
+      startsWithCapitalLetter(apiItem.displayName)
+    );
   }
   return false;
 }
@@ -24,6 +31,11 @@ function isComponentReactPackage(apiItem: ApiItem): boolean {
 function isComponentCorePackage(apiItem: ApiItem): boolean {
   return apiItem.getAssociatedPackage()?.displayName === '@livekit/components-core';
 }
+
+function startsWithCapitalLetter(name: string): boolean {
+  return /^[A-Z]/.test(name);
+}
+
 /**
  *
  */

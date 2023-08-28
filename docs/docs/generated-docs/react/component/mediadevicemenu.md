@@ -22,7 +22,7 @@ This component is implemented with the `MediaDeviceSelect` LiveKit components.
 </LiveKitRoom>
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Properties
 

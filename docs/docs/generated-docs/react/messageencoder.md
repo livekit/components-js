@@ -10,4 +10,4 @@ export type MessageEncoder = (message: ChatMessage) => Uint8Array;
 
 **References:** [ChatMessage](./core/chatmessage.md)
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

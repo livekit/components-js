@@ -10,7 +10,7 @@ export interface ConnectionStateToastProps extends React.HTMLAttributes<HTMLDivE
 
 **Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Properties
 

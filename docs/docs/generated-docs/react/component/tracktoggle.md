@@ -19,7 +19,7 @@ import { TrackToggle } from '@livekit/components-react';
 </LiveKitRoom>
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Properties
 

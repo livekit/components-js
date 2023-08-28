@@ -10,4 +10,4 @@ This function is called with the `LocalUserChoices` if validation is passed.
 onSubmit?: (values: LocalUserChoices) => void;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

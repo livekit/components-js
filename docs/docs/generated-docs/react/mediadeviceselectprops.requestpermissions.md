@@ -10,4 +10,4 @@ this will call getUserMedia if the permissions are not yet given to enumerate th
 requestPermissions?: boolean;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

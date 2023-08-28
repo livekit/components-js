@@ -14,4 +14,4 @@ export type TrackIdentifier<T extends Track.Source = Track.Source> =
 
 **References:** [TrackSource](./core/tracksource.md)<!-- -->, [TrackReference](./core/trackreference.md)
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

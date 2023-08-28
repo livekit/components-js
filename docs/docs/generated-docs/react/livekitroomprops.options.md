@@ -10,4 +10,4 @@ Options for when creating a new room. When you pass your own room instance to th
 options?: RoomOptions;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

@@ -10,4 +10,4 @@ The participants to loop over. Use `useParticipants()` hook to get participants.
 participants: Participant[];
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

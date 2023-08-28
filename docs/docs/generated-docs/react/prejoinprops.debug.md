@@ -10,4 +10,4 @@ Display a debug window for your convenience.
 debug?: boolean;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

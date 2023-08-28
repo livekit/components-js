@@ -16,7 +16,7 @@ import { VideoTrack } from '@livekit/components-react';
 <VideoTrack source={Track.Source.Camera} />
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Properties
 

@@ -10,4 +10,4 @@ Set the log level for both the `@livekit/components-react` package and the `@liv
 export declare function setLogLevel(level: LogLevel, options?: SetLogLevelOptions): void;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

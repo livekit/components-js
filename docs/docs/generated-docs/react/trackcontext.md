@@ -8,4 +8,4 @@
 TrackContext: React.Context<TrackReferenceOrPlaceholder | undefined>;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

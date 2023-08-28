@@ -10,4 +10,4 @@ by the default the range is between 0 and 1
 volume?: number;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

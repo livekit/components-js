@@ -78,7 +78,10 @@ export function VideoConference({
 
   React.useEffect(() => {
     // If screen share tracks are published, and no pin is set explicitly, auto set the screen share.
-    if (screenShareTracks.length > 0 && lastAutoFocusedScreenShareTrack.current === null) {
+    if (
+      screenShareTracks.some((track) => track.publication.isSubscribed) &&
+      lastAutoFocusedScreenShareTrack.current === null
+    ) {
       log.debug('Auto set screen share focus:', { newScreenShareTrack: screenShareTracks[0] });
       layoutContext.pin.dispatch?.({ msg: 'set_pin', trackReference: screenShareTracks[0] });
       lastAutoFocusedScreenShareTrack.current = screenShareTracks[0];
@@ -95,7 +98,9 @@ export function VideoConference({
       lastAutoFocusedScreenShareTrack.current = null;
     }
   }, [
-    screenShareTracks.map((ref) => ref.publication.trackSid).join(),
+    screenShareTracks
+      .map((ref) => `${ref.publication.trackSid}_${ref.publication.isSubscribed}`)
+      .join(),
     focusTrack?.publication?.trackSid,
   ]);
 

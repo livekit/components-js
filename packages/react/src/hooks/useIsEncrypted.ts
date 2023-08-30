@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { LocalParticipant } from 'livekit-client';
+import { LocalParticipant, Participant } from 'livekit-client';
 import { encryptionStatusObservable } from '@livekit/components-core';
 import { useEnsureParticipant, useEnsureRoom } from '../context';
 import { useObservableState } from './internal';
@@ -7,8 +7,8 @@ import { useObservableState } from './internal';
 /**
  * @alpha
  */
-export function useIsEncrypted() {
-  const p = useEnsureParticipant();
+export function useIsEncrypted(participant?: Participant) {
+  const p = useEnsureParticipant(participant);
   const room = useEnsureRoom();
 
   const observer = React.useMemo(() => encryptionStatusObservable(room, p), [room, p]);

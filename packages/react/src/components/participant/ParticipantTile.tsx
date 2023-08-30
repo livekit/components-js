@@ -82,7 +82,7 @@ export function ParticipantTile({
     disableSpeakingIndicator,
     onParticipantClick,
   });
-  const isEncrypted = useIsEncrypted();
+  const isEncrypted = useIsEncrypted(p);
   const layoutContext = useMaybeLayoutContext();
 
   const handleSubscribe = React.useCallback(

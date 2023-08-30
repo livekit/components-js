@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 1.1.6
+
+### Patch Changes
+
+- Pass participant explicitly to useIsEncrypted - [#607](https://github.com/livekit/components-js/pull/607) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.1.5
 
 ### Patch Changes

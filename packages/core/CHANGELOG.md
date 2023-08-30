@@ -1,5 +1,15 @@
 # @livekit/components-core
 
+## 0.6.15
+
+### Patch Changes
+
+- Update dependency livekit-client to v1.13.1 - [#606](https://github.com/livekit/components-js/pull/606) ([@renovate](https://github.com/apps/renovate))
+
+- Add useIsEncrypted hooks and display to tile - [#600](https://github.com/livekit/components-js/pull/600) ([@lukasIO](https://github.com/lukasIO))
+
+- Make sure pinning is only attempted when screen share track is subscribed - [#604](https://github.com/livekit/components-js/pull/604) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.6.14
 
 ### Patch Changes

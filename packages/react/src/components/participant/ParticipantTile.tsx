@@ -15,10 +15,11 @@ import {
 } from '../../context';
 import { FocusToggle } from '../controls/FocusToggle';
 import { ParticipantPlaceholder } from '../../assets/images';
-import { ScreenShareIcon } from '../../assets/icons';
+import { LockLockedIcon, ScreenShareIcon } from '../../assets/icons';
 import { VideoTrack } from './VideoTrack';
 import { AudioTrack } from './AudioTrack';
 import { useParticipantTile } from '../../hooks';
+import { useIsEncrypted } from '../../hooks/useIsEncrypted';
 
 /** @public */
 export function ParticipantContextIfNeeded(
@@ -81,7 +82,7 @@ export function ParticipantTile({
     disableSpeakingIndicator,
     onParticipantClick,
   });
-
+  const isEncrypted = useIsEncrypted();
   const layoutContext = useMaybeLayoutContext();
 
   const handleSubscribe = React.useCallback(
@@ -129,6 +130,7 @@ export function ParticipantTile({
               <div className="lk-participant-metadata-item">
                 {trackRef.source === Track.Source.Camera ? (
                   <>
+                    {isEncrypted && <LockLockedIcon style={{ marginRight: '0.25rem' }} />}
                     <TrackMutedIndicator
                       source={Track.Source.Microphone}
                       show={'muted'}

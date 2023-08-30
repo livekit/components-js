@@ -10,7 +10,7 @@ Ensures that a participant is provided, either via context or explicitly as a pa
 import { useEnsureParticipant } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Parameters
 

@@ -10,4 +10,4 @@ Optional room instance. By passing your own room instance you overwrite the `opt
 room?: Room;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

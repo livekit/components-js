@@ -10,4 +10,4 @@ Provide your custom validation function. Only if validation is successful the us
 onValidate?: (values: LocalUserChoices) => boolean;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

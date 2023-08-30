@@ -8,10 +8,10 @@
 export interface UseTokenOptions
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Properties
 
-| Property                                              | Type                            | Description  |
-| ----------------------------------------------------- | ------------------------------- | ------------ |
-| [userInfo?](./react/hook/usetokenoptions.userinfo.md) | [UserInfo](./react/userinfo.md) | _(Optional)_ |
+| Property                                         | Type                            | Description  |
+| ------------------------------------------------ | ------------------------------- | ------------ |
+| [userInfo?](./react/usetokenoptions.userinfo.md) | [UserInfo](./react/userinfo.md) | _(Optional)_ |

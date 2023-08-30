@@ -10,7 +10,7 @@ export interface TrackToggleProps<T extends ToggleSource> extends Omit<React.But
 
 **Extends:** Omit&lt;React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;, 'onChange'&gt;
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Properties
 

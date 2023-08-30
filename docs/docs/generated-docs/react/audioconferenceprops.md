@@ -10,4 +10,4 @@ export interface AudioConferenceProps extends React.HTMLAttributes<HTMLDivElemen
 
 **Extends:** React.HTMLAttributes&lt;HTMLDivElement&gt;
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

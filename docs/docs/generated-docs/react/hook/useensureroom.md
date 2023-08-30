@@ -10,7 +10,7 @@ Ensures that a room is provided, either via context or explicitly as a parameter
 import { useEnsureRoom } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Parameters
 

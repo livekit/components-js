@@ -10,7 +10,7 @@ Ensures that a participant is provided via context. If not inside a `Participant
 import { useParticipantContext } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Returns
 

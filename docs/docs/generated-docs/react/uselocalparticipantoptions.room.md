@@ -10,4 +10,4 @@ The room to use. If not provided, the hook will use the room from the context.
 room?: Room;
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

@@ -10,4 +10,4 @@ export interface ParticipantNameProps extends React.HTMLAttributes<HTMLSpanEleme
 
 **Extends:** React.HTMLAttributes&lt;HTMLSpanElement&gt;, [UseParticipantInfoOptions](./react/useparticipantinfooptions.md)
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

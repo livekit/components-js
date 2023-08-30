@@ -180,8 +180,33 @@ export class CustomMarkdownEmitter extends MarkdownEmitter {
             })
             .join(' ');
 
+        const variablesString: string =
+          ' variables={' +
+          Object.entries(markDocTag.variables)
+            .map(([key, value]) => {
+              switch (typeof value) {
+                case 'number':
+                case 'boolean': {
+                  return `${key}: ${value}`;
+                }
+                case 'string': {
+                  return `${key}: "${value}"`;
+                }
+              }
+            })
+            .join(' ') +
+          '}';
+
+        // const variablesString: string = markDocTag.variables.toString();
+
         writer.ensureSkippedLine();
-        writer.writeLine('{% ' + this.getEscapedText(markDocTag.name) + attributesString + ' /%}');
+        writer.writeLine(
+          '{% ' +
+            this.getEscapedText(markDocTag.name) +
+            attributesString +
+            variablesString +
+            ' /%}',
+        );
         writer.writeLine();
         break;
       }

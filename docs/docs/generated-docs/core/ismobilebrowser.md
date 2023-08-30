@@ -14,4 +14,4 @@ export declare function isMobileBrowser(): boolean;
 
 This should only be used if feature detection or other methods do not work!
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

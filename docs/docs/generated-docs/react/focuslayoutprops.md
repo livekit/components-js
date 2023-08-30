@@ -10,7 +10,7 @@ export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement>
 
 **Extends:** React.HTMLAttributes&lt;HTMLElement&gt;
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
 ## Properties
 

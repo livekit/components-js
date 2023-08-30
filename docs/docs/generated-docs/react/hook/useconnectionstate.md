@@ -16,7 +16,7 @@ import { useConnectionState } from '@livekit/components-react';
 const connectionState = useConnectionState(room);
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Parameters
 

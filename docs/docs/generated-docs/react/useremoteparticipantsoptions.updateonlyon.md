@@ -10,4 +10,4 @@ To optimize performance, you can use the `updateOnlyOn` property to decide on wh
 updateOnlyOn?: RoomEvent[];
 ```
 
-{% partial file="p_usage.md" /%}
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

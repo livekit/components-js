@@ -17,4 +17,12 @@ import { useTrackToggle } from '@livekit/components-react';
 
 ## Returns
 
-`{     toggle: ((forceState?: boolean | undefined) => void) | ((forceState?: boolean | undefined, captureOptions?: import("@livekit/components-core").CaptureOptionsBySource<T> | undefined) => Promise<void>);     enabled: boolean;     pending: boolean;     track: import("livekit-client").LocalTrackPublication | undefined;     buttonProps: React.ButtonHTMLAttributes<HTMLButtonElement>; }`
+```typescript
+{
+    toggle: ((forceState?: boolean | undefined) => void) | ((forceState?: boolean | undefined, captureOptions?: import("@livekit/components-core").CaptureOptionsBySource<T> | undefined) => Promise<void>);
+    enabled: boolean;
+    pending: boolean;
+    track: import("livekit-client").LocalTrackPublication | undefined;
+    buttonProps: React.ButtonHTMLAttributes<HTMLButtonElement>;
+}
+```

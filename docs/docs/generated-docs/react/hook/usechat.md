@@ -20,4 +20,10 @@ import { useChat } from '@livekit/components-react';
 
 ## Returns
 
-`{     send: ((message: string) => Promise<void>) | undefined;     chatMessages: ReceivedChatMessage[];     isSending: boolean; }`
+```typescript
+{
+    send: ((message: string) => Promise<void>) | undefined;
+    chatMessages: ReceivedChatMessage[];
+    isSending: boolean;
+}
+```

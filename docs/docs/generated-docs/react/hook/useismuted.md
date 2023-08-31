@@ -20,4 +20,6 @@ import { useIsMuted } from '@livekit/components-react';
 
 ## Returns
 
-`boolean`
+```typescript
+boolean;
+```

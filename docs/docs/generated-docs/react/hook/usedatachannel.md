@@ -20,4 +20,6 @@ import { useDataChannel } from '@livekit/components-react';
 
 ## Returns
 
-`UseDataChannelReturnType<T>`
+```typescript
+UseDataChannelReturnType<T>;
+```

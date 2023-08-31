@@ -12,4 +12,6 @@ import { useLocalParticipantPermissions } from '@livekit/components-react';
 
 ## Returns
 
-`import("livekit-client/dist/src/proto/livekit_models_pb").ParticipantPermission | undefined`
+```typescript
+import('livekit-client/dist/src/proto/livekit_models_pb').ParticipantPermission | undefined;
+```

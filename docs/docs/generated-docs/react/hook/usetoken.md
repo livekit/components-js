@@ -23,4 +23,6 @@ import { useToken } from '@livekit/components-react';
 
 ## Returns
 
-`string | undefined`
+```typescript
+string | undefined;
+```

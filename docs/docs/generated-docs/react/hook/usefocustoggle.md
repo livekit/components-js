@@ -17,4 +17,12 @@ import { useFocusToggle } from '@livekit/components-react';
 
 ## Returns
 
-`{     mergedProps: React.ButtonHTMLAttributes<HTMLButtonElement> & {         className: string;         onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;     };     inFocus: boolean; }`
+```typescript
+{
+    mergedProps: React.ButtonHTMLAttributes<HTMLButtonElement> & {
+        className: string;
+        onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    };
+    inFocus: boolean;
+}
+```

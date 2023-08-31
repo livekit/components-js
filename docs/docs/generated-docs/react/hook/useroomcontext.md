@@ -14,4 +14,6 @@ import { useRoomContext } from '@livekit/components-react';
 
 ## Returns
 
-`Room`
+```typescript
+Room;
+```

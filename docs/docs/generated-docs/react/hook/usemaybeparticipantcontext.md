@@ -14,4 +14,6 @@ import { useMaybeParticipantContext } from '@livekit/components-react';
 
 ## Returns
 
-`Participant | undefined`
+```typescript
+Participant | undefined;
+```

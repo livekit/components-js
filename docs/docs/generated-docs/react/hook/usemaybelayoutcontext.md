@@ -14,4 +14,6 @@ import { useMaybeLayoutContext } from '@livekit/components-react';
 
 ## Returns
 
-`LayoutContextType | undefined`
+```typescript
+LayoutContextType | undefined;
+```

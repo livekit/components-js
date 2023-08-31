@@ -20,4 +20,9 @@ import { useTrackMutedIndicator } from '@livekit/components-react';
 
 ## Returns
 
-`{     isMuted: boolean;     className: string; }`
+```typescript
+{
+  isMuted: boolean;
+  className: string;
+}
+```

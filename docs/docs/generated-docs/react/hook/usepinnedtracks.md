@@ -17,4 +17,6 @@ import { usePinnedTracks } from '@livekit/components-react';
 
 ## Returns
 
-`TrackReferenceOrPlaceholder[]`
+```typescript
+TrackReferenceOrPlaceholder[]
+```

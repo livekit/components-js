@@ -17,4 +17,13 @@ import { useChatToggle } from '@livekit/components-react';
 
 ## Returns
 
-`{     mergedProps: React.ButtonHTMLAttributes<HTMLButtonElement> & {         className: string;         onClick: () => void;         'aria-pressed': string;         'data-lk-unread-msgs': string;     }; }`
+```typescript
+{
+    mergedProps: React.ButtonHTMLAttributes<HTMLButtonElement> & {
+        className: string;
+        onClick: () => void;
+        'aria-pressed': string;
+        'data-lk-unread-msgs': string;
+    };
+}
+```

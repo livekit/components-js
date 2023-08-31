@@ -17,4 +17,12 @@ import { useClearPinButton } from '@livekit/components-react';
 
 ## Returns
 
-`{     buttonProps: ClearPinButtonProps & {         className: string;         disabled: boolean;         onClick: () => void;     }; }`
+```typescript
+{
+    buttonProps: ClearPinButtonProps & {
+        className: string;
+        disabled: boolean;
+        onClick: () => void;
+    };
+}
+```

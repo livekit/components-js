@@ -39,4 +39,6 @@ const trackReferencesWithPlaceholders: TrackReferenceOrPlaceholder[] = useTracks
 
 ## Returns
 
-`UseTracksHookReturnType<T>`
+```typescript
+UseTracksHookReturnType<T>;
+```

@@ -19,4 +19,6 @@ import { useRemoteParticipants } from '@livekit/components-react';
 
 ## Returns
 
-`RemoteParticipant[]`
+```typescript
+RemoteParticipant[]
+```

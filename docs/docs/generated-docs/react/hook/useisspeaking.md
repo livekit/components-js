@@ -17,4 +17,6 @@ import { useIsSpeaking } from '@livekit/components-react';
 
 ## Returns
 
-`boolean`
+```typescript
+boolean;
+```

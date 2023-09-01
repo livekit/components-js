@@ -17,4 +17,9 @@ import { useRoomInfo } from '@livekit/components-react';
 
 ## Returns
 
-`{     name: string;     metadata: string | undefined; }`
+```typescript
+{
+  name: string;
+  metadata: string | undefined;
+}
+```

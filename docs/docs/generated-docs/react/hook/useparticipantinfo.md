@@ -17,4 +17,10 @@ import { useParticipantInfo } from '@livekit/components-react';
 
 ## Returns
 
-`{     identity: string;     name: string | undefined;     metadata: string | undefined; }`
+```typescript
+{
+  identity: string;
+  name: string | undefined;
+  metadata: string | undefined;
+}
+```

@@ -19,4 +19,6 @@ import { useSortedParticipants } from '@livekit/components-react';
 
 ## Returns
 
-`Participant[]`
+```typescript
+Participant[]
+```

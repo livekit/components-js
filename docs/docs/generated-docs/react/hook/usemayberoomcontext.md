@@ -14,4 +14,6 @@ import { useMaybeRoomContext } from '@livekit/components-react';
 
 ## Returns
 
-`Room | undefined`
+```typescript
+Room | undefined;
+```

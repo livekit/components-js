@@ -17,4 +17,8 @@ import { useParticipantTile } from '@livekit/components-react';
 
 ## Returns
 
-`{     elementProps: React.HTMLAttributes<T>; }`
+```typescript
+{
+  elementProps: React.HTMLAttributes<T>;
+}
+```

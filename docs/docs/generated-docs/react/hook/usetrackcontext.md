@@ -14,4 +14,6 @@ import { useTrackContext } from '@livekit/components-react';
 
 ## Returns
 
-`TrackReferenceOrPlaceholder`
+```typescript
+TrackReferenceOrPlaceholder;
+```

@@ -25,4 +25,6 @@ const connectionState = useConnectionState(room);
 
 ## Returns
 
-`import("livekit-client").ConnectionState`
+```typescript
+import('livekit-client').ConnectionState;
+```

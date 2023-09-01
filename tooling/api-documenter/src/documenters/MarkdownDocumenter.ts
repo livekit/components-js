@@ -1085,23 +1085,26 @@ export class MarkdownDocumenter {
       const returnTypeExcerpt: Excerpt = apiParameterListMixin.returnTypeExcerpt;
       output.appendNode(new DocHeading({ configuration, title: 'Returns', level: 2 }));
 
-      const paragraph: DocParagraph = new DocParagraph({ configuration });
+      const fencedCode: DocFencedCode = new DocFencedCode({
+        configuration,
+        code: returnTypeExcerpt.text,
+        language: 'typescript',
+      });
 
-      const returnTypeAsText: string = returnTypeExcerpt.spannedTokens
-        .map((x) => x.text)
-        .join('')
-        .replace(/[\r\n]+/g, ' ');
-      console.log('returnTypeAsText: ', returnTypeAsText);
+      // const returnTypeAsText: string = returnTypeExcerpt.spannedTokens
+      //   .map((x) => x.text)
+      //   .join('')
+      //   .replace(/[\r\n]+/g, ' ');
 
-      if (returnTypeAsText) {
-        paragraph.appendNode(
-          new DocCodeSpan({
-            configuration,
-            code: returnTypeAsText,
-          }),
-        );
-      }
-      output.appendNode(paragraph);
+      // if (returnTypeAsText) {
+      //   paragraph.appendNode(
+      //     new DocCodeSpan({
+      //       configuration,
+      //       code: returnTypeAsText,
+      //     }),
+      //   );
+      // }
+      output.appendNode(fencedCode);
     }
   }
 

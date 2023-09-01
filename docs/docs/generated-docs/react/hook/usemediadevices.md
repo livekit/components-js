@@ -19,4 +19,6 @@ import { useMediaDevices } from '@livekit/components-react';
 
 ## Returns
 
-`MediaDeviceInfo[]`
+```typescript
+MediaDeviceInfo[]
+```

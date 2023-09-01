@@ -19,4 +19,6 @@ import { useEnsureParticipant } from '@livekit/components-react';
 
 ## Returns
 
-`Participant`
+```typescript
+Participant;
+```

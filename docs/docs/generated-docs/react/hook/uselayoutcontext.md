@@ -14,4 +14,6 @@ import { useLayoutContext } from '@livekit/components-react';
 
 ## Returns
 
-`LayoutContextType`
+```typescript
+LayoutContextType;
+```

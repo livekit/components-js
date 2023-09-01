@@ -14,4 +14,6 @@ import { useSpeakingParticipants } from '@livekit/components-react';
 
 ## Returns
 
-`import("livekit-client").Participant[]`
+```typescript
+import("livekit-client").Participant[]
+```

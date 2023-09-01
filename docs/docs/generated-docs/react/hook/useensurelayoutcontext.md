@@ -19,4 +19,6 @@ import { useEnsureLayoutContext } from '@livekit/components-react';
 
 ## Returns
 
-`LayoutContextType`
+```typescript
+LayoutContextType;
+```

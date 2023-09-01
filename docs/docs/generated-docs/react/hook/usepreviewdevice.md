@@ -23,4 +23,10 @@ import { usePreviewDevice } from '@livekit/components-react';
 
 ## Returns
 
-`{     selectedDevice: MediaDeviceInfo | undefined;     localTrack: T | undefined;     deviceError: Error | null; }`
+```typescript
+{
+  selectedDevice: MediaDeviceInfo | undefined;
+  localTrack: T | undefined;
+  deviceError: Error | null;
+}
+```

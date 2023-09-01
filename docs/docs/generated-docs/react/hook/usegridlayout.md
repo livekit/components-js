@@ -22,4 +22,8 @@ import { useGridLayout } from '@livekit/components-react';
 
 ## Returns
 
-`{     layout: GridLayoutDefinition; }`
+```typescript
+{
+  layout: GridLayoutDefinition;
+}
+```

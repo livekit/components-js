@@ -17,4 +17,9 @@ import { useLiveKitRoom } from '@livekit/components-react';
 
 ## Returns
 
-`{     room: Room | undefined;     htmlProps: HTMLAttributes<T>; }`
+```typescript
+{
+  room: Room | undefined;
+  htmlProps: HTMLAttributes<T>;
+}
+```

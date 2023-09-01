@@ -23,4 +23,12 @@ import { useMediaTrackByName } from '@livekit/components-react';
 
 ## Returns
 
-`{     publication: import("livekit-client").TrackPublication | undefined;     isMuted: boolean | undefined;     isSubscribed: boolean | undefined;     track: import("livekit-client").Track | undefined;     elementProps: import("react").HTMLAttributes<HTMLElement>; }`
+```typescript
+{
+  publication: import('livekit-client').TrackPublication | undefined;
+  isMuted: boolean | undefined;
+  isSubscribed: boolean | undefined;
+  track: import('livekit-client').Track | undefined;
+  elementProps: import('react').HTMLAttributes<HTMLElement>;
+}
+```

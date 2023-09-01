@@ -20,4 +20,6 @@ import { useRemoteParticipant } from '@livekit/components-react';
 
 ## Returns
 
-`RemoteParticipant | undefined`
+```typescript
+RemoteParticipant | undefined;
+```

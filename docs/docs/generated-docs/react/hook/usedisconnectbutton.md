@@ -17,4 +17,12 @@ import { useDisconnectButton } from '@livekit/components-react';
 
 ## Returns
 
-`{     buttonProps: DisconnectButtonProps & {         className: string;         onClick: () => void;         disabled: boolean;     }; }`
+```typescript
+{
+    buttonProps: DisconnectButtonProps & {
+        className: string;
+        onClick: () => void;
+        disabled: boolean;
+    };
+}
+```

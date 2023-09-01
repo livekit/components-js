@@ -4,13 +4,15 @@ import type { TrackReferenceOrPlaceholder } from './track-reference.types';
 import { isTrackReference, isTrackReferencePlaceholder } from './track-reference.types';
 
 /** Returns a id to identify the `TrackReference` based on participant and source. */
-export function getTrackReferenceId(trackReference: TrackReferenceOrPlaceholder | number): string {
+export function getTrackReferenceId(trackReference: TrackReferenceOrPlaceholder | number) {
   if (typeof trackReference === 'string' || typeof trackReference === 'number') {
-    return `${trackReference}`;
+    return `${trackReference}` as const;
   } else if (isTrackReference(trackReference)) {
-    return `${trackReference.participant.identity}_${trackReference.publication.source}`;
+    return `${trackReference.participant.identity}_${trackReference.publication.source}_${
+      trackReference.publication.trackName ?? ''
+    }` as const;
   } else {
-    return `${trackReference.participant.identity}_${trackReference.source}`;
+    return `${trackReference.participant.identity}_${trackReference.source}` as const;
   }
 }
 

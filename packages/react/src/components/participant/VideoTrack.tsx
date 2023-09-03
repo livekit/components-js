@@ -53,7 +53,8 @@ export function VideoTrack({
     if (
       manageSubscription &&
       publication instanceof RemoteTrackPublication &&
-      debouncedIntersectionEntry?.isIntersecting === false
+      debouncedIntersectionEntry?.isIntersecting === false &&
+      intersectionEntry?.isIntersecting === false
     ) {
       publication.setSubscribed(false);
     }

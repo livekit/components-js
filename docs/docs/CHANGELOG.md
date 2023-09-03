@@ -1,5 +1,11 @@
 # @livekit/components-js-docs
 
+## 0.0.5
+
+### Patch Changes
+
+- Use fenced code blocks to display return values. - [#609](https://github.com/livekit/components-js/pull/609) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.0.4
 
 ### Patch Changes

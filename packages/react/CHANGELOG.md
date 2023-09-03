@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 1.1.7
+
+### Patch Changes
+
+- Fix occasional black tiles, unsusbscribe if intersection entry is still not intersecting - [#619](https://github.com/livekit/components-js/pull/619) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.1.6
 
 ### Patch Changes

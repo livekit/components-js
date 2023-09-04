@@ -12,11 +12,11 @@ import { isTrackReference, isTrackReferencePlaceholder } from './track-reference
  */
 export function getTrackReferenceId(trackReference: TrackReferenceOrPlaceholder | number) {
   if (typeof trackReference === 'string' || typeof trackReference === 'number') {
-    return `${trackReference}` as const;
+    return `${trackReference}`;
   } else if (isTrackReferencePlaceholder(trackReference)) {
-    return `${trackReference.participant.identity}_${trackReference.source}_placeholder` as const;
+    return `${trackReference.participant.identity}_${trackReference.source}_placeholder`;
   } else if (isTrackReference(trackReference)) {
-    return `${trackReference.participant.identity}_${trackReference.publication.source}_${trackReference.publication.trackSid}` as const;
+    return `${trackReference.participant.identity}_${trackReference.publication.source}_${trackReference.publication.trackSid}`;
   } else {
     throw new Error(`Can't generate a id for the given track reference: ${trackReference}`);
   }

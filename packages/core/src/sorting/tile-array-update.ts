@@ -82,12 +82,12 @@ export function updatePages<T extends UpdatableItem>(
 ): T[] {
   let updatedList: T[] = refreshList(currentList, nextList);
 
-  if (currentList.length < nextList.length) {
+  if (updatedList.length < nextList.length) {
     // Items got added: Find newly added items and add them to the end of the list.
-    const addedItems = differenceBy(nextList, currentList, getTrackReferenceId);
+    const addedItems = differenceBy(nextList, updatedList, getTrackReferenceId);
     updatedList = [...updatedList, ...addedItems];
   }
-  const currentPages = divideIntoPages(currentList, maxItemsOnPage);
+  const currentPages = divideIntoPages(updatedList, maxItemsOnPage);
   const nextPages = divideIntoPages(nextList, maxItemsOnPage);
 
   zip(currentPages, nextPages).forEach(([currentPage, nextPage], pageIndex) => {
@@ -133,7 +133,7 @@ export function updatePages<T extends UpdatableItem>(
 
   if (updatedList.length > nextList.length) {
     // Items got removed: Find items that got completely removed from the list.
-    const missingItems = differenceBy(currentList, nextList, getTrackReferenceId);
+    const missingItems = differenceBy(updatedList, nextList, getTrackReferenceId);
     updatedList = updatedList.filter(
       (item) => !missingItems.map(getTrackReferenceId).includes(getTrackReferenceId(item)),
     );

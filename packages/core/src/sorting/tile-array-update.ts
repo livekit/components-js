@@ -1,8 +1,14 @@
 import { differenceBy, chunk, zip } from '../helper/array-helper';
-import { log } from '../logger';
+import { log, setLogLevel } from '../logger';
 import type { TrackReferenceOrPlaceholder } from '../track-reference';
-import { getTrackReferenceId } from '../track-reference';
+import {
+  getTrackReferenceId,
+  isTrackReference,
+  isTrackReferencePlaceholder,
+} from '../track-reference';
 import { flatTrackReferenceArray } from '../track-reference/test-utils';
+
+setLogLevel('debug');
 
 type VisualChanges<T> = {
   dropped: T[];
@@ -39,6 +45,25 @@ export function findIndex<T extends UpdatableItem>(
     );
   }
   return indexToReplace;
+}
+
+/**
+ * Check if the current `currentTrackRef` was the placeholder for next `nextTrackRef`.
+ * Based on the participant identity and the source.
+ */
+export function isPlaceholderReplacement<T extends UpdatableItem>(
+  currentTrackRef: T,
+  nextTrackRef: T,
+) {
+  if (typeof nextTrackRef === 'number' || typeof currentTrackRef === 'number') {
+    return false;
+  }
+  return (
+    isTrackReferencePlaceholder(currentTrackRef) &&
+    isTrackReference(nextTrackRef) &&
+    nextTrackRef.participant.identity === currentTrackRef.participant.identity &&
+    nextTrackRef.source === currentTrackRef.source
+  );
 }
 
 /** Swap items in the complete list of all elements */

@@ -1,5 +1,5 @@
 import { differenceBy, chunk, zip } from '../helper/array-helper';
-import { log, setLogLevel } from '../logger';
+import { log } from '../logger';
 import type { TrackReferenceOrPlaceholder } from '../track-reference';
 import {
   getTrackReferenceId,
@@ -8,8 +8,6 @@ import {
   isTrackReferencePlaceholder,
 } from '../track-reference';
 import { flatTrackReferenceArray } from '../track-reference/test-utils';
-
-setLogLevel('debug');
 
 type VisualChanges<T> = {
   dropped: T[];

@@ -79,6 +79,7 @@ export function isTrackReferencePinned(
 /**
  * Check if the current `currentTrackRef` is the placeholder for next `nextTrackRef`.
  * Based on the participant identity and the source.
+ * @internal
  */
 export function isPlaceholderReplacement(
   currentTrackRef: TrackReferenceOrPlaceholder,

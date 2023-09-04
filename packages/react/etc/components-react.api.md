@@ -222,14 +222,16 @@ export interface FocusLayoutProps extends React_2.HTMLAttributes<HTMLElement> {
 }
 
 // @public
-export function FocusToggle({ trackSource, participant, ...props }: FocusToggleProps): React_2.JSX.Element;
+export function FocusToggle({ trackRef, trackSource, participant, ...props }: FocusToggleProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface FocusToggleProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
-    // (undocumented)
+    // @deprecated (undocumented)
     participant?: Participant;
     // (undocumented)
-    trackSource: Track.Source;
+    trackRef?: TrackReferenceOrPlaceholder;
+    // @deprecated (undocumented)
+    trackSource?: Track.Source;
 }
 
 // @public (undocumented)
@@ -568,7 +570,7 @@ export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): Tr
 export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'user' | 'environment' | 'left' | 'right' | 'undefined';
 
 // @public (undocumented)
-export function useFocusToggle({ trackSource, participant, props }: UseFocusToggleProps): {
+export function useFocusToggle({ trackRef, trackSource, participant, props }: UseFocusToggleProps): {
     mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
         className: string;
         onClick: (event: React_2.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
@@ -578,12 +580,14 @@ export function useFocusToggle({ trackSource, participant, props }: UseFocusTogg
 
 // @public (undocumented)
 export interface UseFocusToggleProps {
-    // (undocumented)
+    // @deprecated (undocumented)
     participant?: Participant;
     // (undocumented)
     props: React_2.ButtonHTMLAttributes<HTMLButtonElement>;
     // (undocumented)
-    trackSource: Track.Source;
+    trackRef?: TrackReferenceOrPlaceholder;
+    // @deprecated (undocumented)
+    trackSource?: Track.Source;
 }
 
 // @public

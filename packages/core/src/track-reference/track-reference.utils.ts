@@ -3,18 +3,26 @@ import type { PinState } from '../types';
 import type { TrackReferenceOrPlaceholder } from './track-reference.types';
 import { isTrackReference, isTrackReferencePlaceholder } from './track-reference.types';
 
-/** Returns a id to identify the `TrackReference` based on participant and source. */
+/**
+ * Returns a id to identify the `TrackReference` or `TrackReferencePlaceholder` based on
+ * participant, track source and trackSid.
+ * @remarks
+ * The id pattern is: `${participantIdentity}_${trackSource}_${trackSid}` for `TrackReference`
+ * and `${participantIdentity}_${trackSource}_placeholder` for `TrackReferencePlaceholder`.
+ */
 export function getTrackReferenceId(trackReference: TrackReferenceOrPlaceholder | number) {
   if (typeof trackReference === 'string' || typeof trackReference === 'number') {
     return `${trackReference}` as const;
+  } else if (isTrackReferencePlaceholder(trackReference)) {
+    return `${trackReference.participant.identity}_${trackReference.source}_placeholder` as const;
   } else if (isTrackReference(trackReference)) {
-    return `${trackReference.participant.identity}_${trackReference.publication.source}_${
-      trackReference.publication.trackName ?? ''
-    }` as const;
+    return `${trackReference.participant.identity}_${trackReference.publication.source}_${trackReference.publication.trackSid}` as const;
   } else {
-    return `${trackReference.participant.identity}_${trackReference.source}` as const;
+    throw new Error(`Can't generate a id for the given track reference: ${trackReference}`);
   }
 }
+
+export type TrackReferenceId = ReturnType<typeof getTrackReferenceId>;
 
 /** Returns the Source of the TrackReference. */
 export function getTrackReferenceSource(trackReference: TrackReferenceOrPlaceholder): Track.Source {
@@ -29,12 +37,14 @@ export function isEqualTrackRef(
   a?: TrackReferenceOrPlaceholder,
   b?: TrackReferenceOrPlaceholder,
 ): boolean {
+  if (a === undefined || b === undefined) {
+    return false;
+  }
   if (isTrackReference(a) && isTrackReference(b)) {
     return a.publication.trackSid === b.publication.trackSid;
-  } else if (isTrackReferencePlaceholder(a) && isTrackReferencePlaceholder(b)) {
-    return a.participant.identity === b.participant.identity && a.source === b.source;
+  } else {
+    return getTrackReferenceId(a) === getTrackReferenceId(b);
   }
-  return false;
 }
 
 /**

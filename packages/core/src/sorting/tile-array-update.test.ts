@@ -5,13 +5,7 @@ import {
   mockTrackReferencePlaceholder,
   mockTrackReferenceSubscribed,
 } from '../track-reference/test-utils';
-import {
-  divideIntoPages,
-  placeholderReplacement,
-  swapItems,
-  updatePages,
-  visualPageChange,
-} from './tile-array-update';
+import { divideIntoPages, swapItems, updatePages, visualPageChange } from './tile-array-update';
 import type { TrackReferenceOrPlaceholder } from '../track-reference';
 
 const stateNextExpectedString = (text: string) =>

@@ -5,7 +5,13 @@ import {
   mockTrackReferencePlaceholder,
   mockTrackReferenceSubscribed,
 } from '../track-reference/test-utils';
-import { divideIntoPages, swapItems, updatePages, visualPageChange } from './tile-array-update';
+import {
+  divideIntoPages,
+  placeholderReplacement,
+  swapItems,
+  updatePages,
+  visualPageChange,
+} from './tile-array-update';
 import type { TrackReferenceOrPlaceholder } from '../track-reference';
 
 const stateNextExpectedString = (text: string) =>
@@ -338,6 +344,7 @@ describe('Test updating the list based while considering pages.', () => {
     expect(flatTrackReferenceArray(result)).toStrictEqual(flatTrackReferenceArray(expected));
   });
 
+  // FIXME: mute for implementation unmute before production.
   test.each([
     {
       state: [mockTrackReferencePlaceholder('A', Track.Source.Camera)],

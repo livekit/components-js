@@ -24,7 +24,7 @@ export function useMediaTrackBySourceOrName(
   const { className, trackObserver } = React.useMemo(() => {
     return setupMediaTrack(observerOptions);
   }, [
-    observerOptions.participant.identity,
+    observerOptions.participant.sid ?? observerOptions.participant.identity,
     observerOptions.source,
     isTrackReference(observerOptions) && observerOptions.publication.trackSid,
   ]);

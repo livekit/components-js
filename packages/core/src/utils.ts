@@ -2,6 +2,8 @@ import type { Participant, Track, TrackPublication } from 'livekit-client';
 import { LocalParticipant, RemoteParticipant } from 'livekit-client';
 
 import type { PinState } from './types';
+import type { TrackReference } from './track-reference';
+import { isEqualTrackRef } from './track-reference';
 
 export function isLocal(p: Participant) {
   return p instanceof LocalParticipant;
@@ -28,6 +30,7 @@ export const attachIfSubscribed = (
 
 /**
  * Check if the participant track source is pinned.
+ * @deprecated Use {@link isParticipantTrackReferencePinned} instead.
  */
 export function isParticipantSourcePinned(
   participant: Participant,
@@ -42,6 +45,20 @@ export function isParticipantSourcePinned(
     ({ source: pinnedSource, participant: pinnedParticipant }) =>
       pinnedSource === source && pinnedParticipant.identity === participant.identity,
   );
+}
+
+/**
+ * Check if the participant track reference is pinned.
+ */
+export function isParticipantTrackReferencePinned(
+  trackRef: TrackReference,
+  pinState: PinState | undefined,
+): boolean {
+  if (pinState === undefined) {
+    return false;
+  }
+
+  return pinState.some((pinnedTrackRef) => isEqualTrackRef(pinnedTrackRef, trackRef));
 }
 
 /**

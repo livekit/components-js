@@ -5,13 +5,7 @@ import {
   mockTrackReferencePlaceholder,
   mockTrackReferenceSubscribed,
 } from '../track-reference/test-utils';
-import {
-  divideIntoPages,
-  swapItems,
-  updatePages,
-  isPlaceholderReplacement,
-  visualPageChange,
-} from './tile-array-update';
+import { divideIntoPages, swapItems, updatePages, visualPageChange } from './tile-array-update';
 import type { TrackReferenceOrPlaceholder } from '../track-reference';
 
 const stateNextExpectedString = (text: string) =>
@@ -360,41 +354,6 @@ describe('Test updating the list based while considering pages.', () => {
       expect(result).toHaveLength(next.length);
       expect(flatTrackReferenceArray(result)).toStrictEqual(flatTrackReferenceArray(expected));
       expect(result[0].publication).toBeDefined();
-    },
-  );
-});
-
-describe('Test if a trackReference is the migration of placeholder', () => {
-  test.each([
-    {
-      currentTrackRef: mockTrackReferencePlaceholder('Participant_A', Track.Source.Camera),
-      nextTrackRef: mockTrackReferenceSubscribed('Participant_A', Track.Source.Camera, {
-        mockPublication: true,
-      }),
-      isPlaceholderReplacement: true,
-    },
-    {
-      currentTrackRef: mockTrackReferencePlaceholder('Participant_B', Track.Source.Camera),
-      nextTrackRef: mockTrackReferenceSubscribed('Participant_A', Track.Source.Camera, {
-        mockPublication: true,
-      }),
-      isPlaceholderReplacement: false,
-    },
-    {
-      currentTrackRef: mockTrackReferencePlaceholder('Participant_A', Track.Source.ScreenShare),
-      nextTrackRef: mockTrackReferenceSubscribed('Participant_A', Track.Source.Camera, {
-        mockPublication: true,
-      }),
-      isPlaceholderReplacement: false,
-    },
-  ])(
-    'Test if the current TrackReference was the placeholder for the next TrackReference.',
-    ({ nextTrackRef: trackRef, currentTrackRef: maybePlaceholder, isPlaceholderReplacement }) => {
-      const result = isPlaceholderReplacement(
-        maybePlaceholder as TrackReferenceOrPlaceholder,
-        trackRef,
-      );
-      expect(result).toBe(isPlaceholderReplacement);
     },
   );
 });

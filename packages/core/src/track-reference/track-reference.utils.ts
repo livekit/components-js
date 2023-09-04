@@ -75,3 +75,22 @@ export function isTrackReferencePinned(
     return false;
   }
 }
+
+/**
+ * Check if the current `currentTrackRef` is the placeholder for next `nextTrackRef`.
+ * Based on the participant identity and the source.
+ */
+export function isPlaceholderReplacement(
+  currentTrackRef: TrackReferenceOrPlaceholder,
+  nextTrackRef: TrackReferenceOrPlaceholder,
+) {
+  // if (typeof nextTrackRef === 'number' || typeof currentTrackRef === 'number') {
+  //   return false;
+  // }
+  return (
+    isTrackReferencePlaceholder(currentTrackRef) &&
+    isTrackReference(nextTrackRef) &&
+    nextTrackRef.participant.identity === currentTrackRef.participant.identity &&
+    nextTrackRef.source === currentTrackRef.source
+  );
+}

@@ -1,8 +1,8 @@
 import type { TrackReference, TrackReferenceOrPlaceholder } from '@livekit/components-core';
-import { isTrackReference } from '@livekit/components-core';
 import * as React from 'react';
 import { TrackContext } from '../context/track-context';
 import { cloneSingleChild } from '../utils';
+import { getTrackReferenceId } from '@livekit/components-core';
 
 /** @public */
 export interface TrackLoopProps {
@@ -31,14 +31,8 @@ export function TrackLoop({ tracks, ...props }: TrackLoopProps) {
   return (
     <>
       {tracks.map((trackReference) => {
-        const trackSource = isTrackReference(trackReference)
-          ? trackReference.publication.source
-          : trackReference.source;
         return (
-          <TrackContext.Provider
-            value={trackReference}
-            key={`${trackReference.participant.identity}_${trackSource}`}
-          >
+          <TrackContext.Provider value={trackReference} key={getTrackReferenceId(trackReference)}>
             {cloneSingleChild(props.children)}
           </TrackContext.Provider>
         );

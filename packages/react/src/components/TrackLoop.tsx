@@ -1,6 +1,6 @@
 import type { TrackReference, TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import * as React from 'react';
-import { TrackContext } from '../context/track-context';
+import { TrackContext } from '../context/track-reference-context';
 import { cloneSingleChild } from '../utils';
 import { getTrackReferenceId } from '@livekit/components-core';
 

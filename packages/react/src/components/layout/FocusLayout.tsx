@@ -20,11 +20,15 @@ export function FocusLayoutContainer(props: FocusLayoutContainerProps) {
 
 /** @public */
 export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
+  /** The track to display in the focus layout. */
+  trackRef?: TrackReferenceOrPlaceholder;
+  /** @deprecated This parameter will be removed in a future version use `trackRef` instead. */
   track?: TrackReferenceOrPlaceholder;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
 
 /** @public */
-export function FocusLayout({ track, ...htmlProps }: FocusLayoutProps) {
-  return <ParticipantTile {...track} {...htmlProps} />;
+export function FocusLayout({ trackRef, track, ...htmlProps }: FocusLayoutProps) {
+  const trackReference = trackRef ?? track;
+  return <ParticipantTile {...trackReference} {...htmlProps} />;
 }

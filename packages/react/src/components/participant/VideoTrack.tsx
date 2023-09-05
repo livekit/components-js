@@ -7,7 +7,7 @@ import {
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
 import type { ParticipantClickEvent, TrackReference } from '@livekit/components-core';
-import { useEnsureParticipant } from '../../context';
+import { useEnsureParticipant, useMaybeTrackContext } from '../../context';
 import * as useHooks from 'usehooks-ts';
 
 /** @public */
@@ -50,11 +50,12 @@ export function VideoTrack({
   manageSubscription,
   ...props
 }: VideoTrackProps) {
+  const maybeTrackRef = useMaybeTrackContext() ?? trackRef;
   // TODO: Remove and refactor all variables with underscore in a future version after the deprecation period.
-  const _name = trackRef?.publication?.trackName ?? name;
-  const _source = trackRef?.source ?? source;
-  const _publication = trackRef?.publication ?? publication;
-  const _participant = trackRef?.participant ?? p;
+  const _name = maybeTrackRef?.publication?.trackName ?? name;
+  const _source = maybeTrackRef?.source ?? source;
+  const _publication = maybeTrackRef?.publication ?? publication;
+  const _participant = maybeTrackRef?.participant ?? p;
   if (_source === undefined) {
     throw new Error('VideoTrack: You must provide a trackRef or source property.');
   }

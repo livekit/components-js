@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
 import type { TrackReference } from '@livekit/components-core';
 import { log } from '@livekit/components-core';
-import { useEnsureParticipant } from '../../context';
+import { useEnsureParticipant, useMaybeTrackContext } from '../../context';
 import { RemoteAudioTrack } from 'livekit-client';
 
 /** @public */
@@ -49,10 +49,11 @@ export function AudioTrack({
   ...props
 }: AudioTrackProps) {
   // TODO: Remove and refactor all variables with underscore in a future version after the deprecation period.
-  const _name = trackRef?.publication?.trackName ?? name;
-  const _source = trackRef?.source ?? source;
-  const _publication = trackRef?.publication ?? publication;
-  const _participant = trackRef?.participant ?? p;
+  const maybeTrackRef = useMaybeTrackContext() ?? trackRef;
+  const _name = maybeTrackRef?.publication?.trackName ?? name;
+  const _source = maybeTrackRef?.source ?? source;
+  const _publication = maybeTrackRef?.publication ?? publication;
+  const _participant = maybeTrackRef?.participant ?? p;
   if (_source === undefined) {
     throw new Error('The AudioTrack component expects a trackRef or source property.');
   }

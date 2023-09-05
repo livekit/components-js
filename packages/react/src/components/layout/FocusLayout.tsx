@@ -7,7 +7,9 @@ import type { ParticipantClickEvent } from '@livekit/components-core';
 
 /** @public */
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** @deprecated This parameter has no effect and will be removed in a future version. */
   focusTrack?: TrackReference;
+  /** @deprecated This parameter has no effect and will be removed in a future version. */
   participants?: Array<Participant>;
 }
 

@@ -49,11 +49,11 @@ export function AudioTrack({
   ...props
 }: AudioTrackProps) {
   // TODO: Remove and refactor all variables with underscore in a future version after the deprecation period.
-  const maybeTrackRef = useMaybeTrackContext() ?? trackRef;
-  const _name = maybeTrackRef?.publication?.trackName ?? name;
-  const _source = maybeTrackRef?.source ?? source;
-  const _publication = maybeTrackRef?.publication ?? publication;
-  const _participant = maybeTrackRef?.participant ?? p;
+  const maybeTrackRef = useMaybeTrackContext();
+  const _name = trackRef?.publication?.trackName ?? maybeTrackRef?.publication?.trackName ?? name;
+  const _source = trackRef?.source ?? maybeTrackRef?.source ?? source;
+  const _publication = trackRef?.publication ?? maybeTrackRef?.publication ?? publication;
+  const _participant = trackRef?.participant ?? maybeTrackRef?.participant ?? p;
   if (_source === undefined) {
     throw new Error('The AudioTrack component expects a trackRef or source property.');
   }

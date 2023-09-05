@@ -118,12 +118,9 @@ export function ParticipantTile({
                 manageSubscription={true}
               />
             ) : (
-              <AudioTrack
-                participant={trackRef.participant}
-                source={trackRef.source}
-                publication={trackRef.publication}
-                onSubscriptionStatusChanged={handleSubscribe}
-              />
+              isTrackReference(trackRef) && (
+                <AudioTrack trackRef={trackRef} onSubscriptionStatusChanged={handleSubscribe} />
+              )
             )}
             <div className="lk-participant-placeholder">
               <ParticipantPlaceholder />

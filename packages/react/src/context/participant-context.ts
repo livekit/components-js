@@ -1,6 +1,6 @@
 import type { Participant } from 'livekit-client';
 import * as React from 'react';
-import { useMaybeTrackContext } from './track-context';
+import { useMaybeTrackContext } from './track-reference-context';
 
 /** @public */
 export const ParticipantContext = React.createContext<Participant | undefined>(undefined);

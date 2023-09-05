@@ -1,6 +1,6 @@
 import type { TrackReference, TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import * as React from 'react';
-import { TrackContext } from '../context/track-context';
+import { TrackContext } from '../context/track-reference-context';
 import { cloneSingleChild } from '../utils';
 import { getTrackReferenceId } from '@livekit/components-core';
 
@@ -18,10 +18,10 @@ export interface TrackLoopProps {
  *
  * @example
  * ```tsx
- * const tracks = useTracks([Track.Source.Camera]);
- * <TrackLoop tracks={tracks} >
+ * const trackRefs = useTracks([Track.Source.Camera]);
+ * <TrackLoop tracks={trackRefs} >
  *  <TrackContext.Consumer>
- *    {(track) => track && <VideoTrack {...track}/>}
+ *    {(trackRef) => trackRef && <VideoTrack trackRef={trackRef}/>}
  *  </TrackContext.Consumer>
  * <TrackLoop />
  * ```

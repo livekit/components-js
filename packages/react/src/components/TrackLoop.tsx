@@ -18,10 +18,10 @@ export interface TrackLoopProps {
  *
  * @example
  * ```tsx
- * const tracks = useTracks([Track.Source.Camera]);
- * <TrackLoop tracks={tracks} >
+ * const trackRefs = useTracks([Track.Source.Camera]);
+ * <TrackLoop tracks={trackRefs} >
  *  <TrackContext.Consumer>
- *    {(track) => track && <VideoTrack {...track}/>}
+ *    {(trackRef) => trackRef && <VideoTrack trackRef={trackRef}/>}
  *  </TrackContext.Consumer>
  * <TrackLoop />
  * ```

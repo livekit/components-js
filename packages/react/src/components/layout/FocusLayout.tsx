@@ -7,9 +7,9 @@ import type { ParticipantClickEvent } from '@livekit/components-core';
 
 /** @public */
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** @deprecated This parameter has no effect and will be removed in a future version. */
+  /** @deprecated This property has no effect and will be removed in a future version. */
   focusTrack?: TrackReference;
-  /** @deprecated This parameter has no effect and will be removed in a future version. */
+  /** @deprecated This property has no effect and will be removed in a future version. */
   participants?: Array<Participant>;
 }
 
@@ -24,7 +24,7 @@ export function FocusLayoutContainer(props: FocusLayoutContainerProps) {
 export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
   /** The track to display in the focus layout. */
   trackRef?: TrackReferenceOrPlaceholder;
-  /** @deprecated This parameter will be removed in a future version use `trackRef` instead. */
+  /** @deprecated This property will be removed in a future version use `trackRef` instead. */
   track?: TrackReferenceOrPlaceholder;
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }

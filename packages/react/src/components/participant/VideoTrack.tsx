@@ -55,6 +55,10 @@ export function VideoTrack({
   const _source = trackRef?.source ?? source;
   const _publication = trackRef?.publication ?? publication;
   const _participant = trackRef?.participant ?? p;
+  if (_source === undefined) {
+    throw new Error('VideoTrack: You must provide a trackRef or source property.');
+  }
+
   const participant = useEnsureParticipant(_participant);
 
   const mediaEl = React.useRef<HTMLVideoElement>(null);

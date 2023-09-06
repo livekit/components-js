@@ -3,7 +3,7 @@ import { setupParticipantTile } from '@livekit/components-core';
 import type { TrackPublication, Participant } from 'livekit-client';
 import { Track } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureParticipant, useMaybeTrackContext } from '../context';
+import { useEnsureParticipant, useMaybeTrackRefContext } from '../context';
 import { mergeProps } from '../mergeProps';
 import { useFacingMode } from './useFacingMode';
 import { useIsMuted } from './useIsMuted';
@@ -36,7 +36,7 @@ export function useParticipantTile<T extends HTMLElement>({
 }: UseParticipantTileProps<T>) {
   // TODO: Remove and refactor after deprecation period to use:
   // const trackReference = useEnsureTrackRefContext(trackRef)`.
-  const maybeTrackRef = useMaybeTrackContext();
+  const maybeTrackRef = useMaybeTrackRefContext();
   const p = useEnsureParticipant(participant);
   const trackReference = React.useMemo(() => {
     return {

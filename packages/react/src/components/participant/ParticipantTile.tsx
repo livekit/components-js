@@ -8,11 +8,11 @@ import { ParticipantName } from './ParticipantName';
 import { TrackMutedIndicator } from './TrackMutedIndicator';
 import {
   ParticipantContext,
-  TrackContext,
+  TrackRefContext,
   useEnsureParticipant,
   useMaybeLayoutContext,
   useMaybeParticipantContext,
-  useMaybeTrackContext,
+  useMaybeTrackRefContext,
 } from '../../context';
 import { FocusToggle } from '../controls/FocusToggle';
 import { ParticipantPlaceholder } from '../../assets/images';
@@ -46,9 +46,9 @@ function TrackRefContextIfNeeded(
     trackRef?: TrackReferenceOrPlaceholder;
   }>,
 ) {
-  const hasContext = !!useMaybeTrackContext();
+  const hasContext = !!useMaybeTrackRefContext();
   return props.trackRef && !hasContext ? (
-    <TrackContext.Provider value={props.trackRef}>{props.children}</TrackContext.Provider>
+    <TrackRefContext.Provider value={props.trackRef}>{props.children}</TrackRefContext.Provider>
   ) : (
     <>{props.children}</>
   );
@@ -95,7 +95,7 @@ export function ParticipantTile({
   ...htmlProps
 }: ParticipantTileProps) {
   // TODO: remove deprecated props and refactor in a future version.
-  const maybeTrackRef = useMaybeTrackContext();
+  const maybeTrackRef = useMaybeTrackRefContext();
   const p = useEnsureParticipant(participant);
   const trackReference: TrackReferenceOrPlaceholder = React.useMemo(() => {
     return {

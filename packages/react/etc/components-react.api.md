@@ -305,6 +305,8 @@ export type LocalUserChoices = {
     audioEnabled: boolean;
     videoDeviceId: string;
     audioDeviceId: string;
+    e2ee: boolean;
+    sharedPassphrase: string;
 };
 
 // @public
@@ -399,7 +401,7 @@ export interface ParticipantTileProps extends React_2.HTMLAttributes<HTMLDivElem
 }
 
 // @public
-export function PreJoin({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, ...htmlProps }: PreJoinProps): React_2.JSX.Element;
+export function PreJoin({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, showE2EEOptions, ...htmlProps }: PreJoinProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement>, 'onSubmit' | 'onError'> {
@@ -415,6 +417,8 @@ export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement
     onError?: (error: Error) => void;
     onSubmit?: (values: LocalUserChoices) => void;
     onValidate?: (values: LocalUserChoices) => boolean;
+    // (undocumented)
+    showE2EEOptions?: boolean;
     // (undocumented)
     userLabel?: string;
 }

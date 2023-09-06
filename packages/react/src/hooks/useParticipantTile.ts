@@ -34,9 +34,10 @@ export function useParticipantTile<T extends HTMLElement>({
   disableSpeakingIndicator,
   htmlProps,
 }: UseParticipantTileProps<T>) {
+  // TODO: Remove and refactor after deprecation period to use:
+  // const trackReference = useEnsureTrackRefContext(trackRef)`.
   const maybeTrackRef = useMaybeTrackContext();
   const p = useEnsureParticipant(participant);
-
   const trackReference = React.useMemo(() => {
     return {
       participant: trackRef?.participant ?? maybeTrackRef?.participant ?? p,

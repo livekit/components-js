@@ -125,7 +125,7 @@ export function VideoConference({
                   <CarouselLayout tracks={carouselTracks}>
                     <ParticipantTile />
                   </CarouselLayout>
-                  {focusTrack && <FocusLayout track={focusTrack} />}
+                  {focusTrack && <FocusLayout trackRef={focusTrack} />}
                 </FocusLayoutContainer>
               </div>
             )}

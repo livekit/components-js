@@ -51,7 +51,7 @@ export const mockTrackReferenceSubscribed = (
       ? (mockParticipant(id, options.mockIsLocal ?? false) as Participant)
       : new Participant(`${id}`, `${id}`),
     publication: options.mockPublication
-      ? (mockTrackPublication(`publicationId(${id})`, kind, source) as TrackPublication)
+      ? (mockTrackPublication(id, kind, source) as TrackPublication)
       : publication,
     source,
   };

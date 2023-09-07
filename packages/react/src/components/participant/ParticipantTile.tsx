@@ -2,7 +2,7 @@ import * as React from 'react';
 import type { Participant, TrackPublication } from 'livekit-client';
 import { Track } from 'livekit-client';
 import type { ParticipantClickEvent, TrackReferenceOrPlaceholder } from '@livekit/components-core';
-import { isTrackReferencePinned } from '@livekit/components-core';
+import { isParticipantSourcePinned } from '@livekit/components-core';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
 import { ParticipantName } from './ParticipantName';
 import { TrackMutedIndicator } from './TrackMutedIndicator';
@@ -68,14 +68,11 @@ export function ParticipantTile({
   ...htmlProps
 }: ParticipantTileProps) {
   const p = useEnsureParticipant(participant);
-  const initialTrackRef: TrackReferenceOrPlaceholder = React.useMemo(() => {
-    return {
-      participant: p,
-      source,
-      publication,
-    };
-  }, [p, publication, source]);
-  const trackRef: TrackReferenceOrPlaceholder = useMaybeTrackContext() ?? initialTrackRef;
+  const trackRef: TrackReferenceOrPlaceholder = useMaybeTrackContext() ?? {
+    participant: p,
+    source,
+    publication,
+  };
 
   const { elementProps } = useParticipantTile<HTMLDivElement>({
     participant: trackRef.participant,
@@ -95,12 +92,12 @@ export function ParticipantTile({
         !subscribed &&
         layoutContext &&
         layoutContext.pin.dispatch &&
-        isTrackReferencePinned(trackRef, layoutContext.pin.state)
+        isParticipantSourcePinned(trackRef.participant, trackRef.source, layoutContext.pin.state)
       ) {
         layoutContext.pin.dispatch({ msg: 'clear_pin' });
       }
     },
-    [trackRef, layoutContext],
+    [trackRef.participant, layoutContext, trackRef.source],
   );
 
   return (
@@ -151,7 +148,7 @@ export function ParticipantTile({
             </div>
           </>
         )}
-        <FocusToggle trackRef={trackRef} />
+        <FocusToggle trackSource={trackRef.source} />
       </ParticipantContextIfNeeded>
     </div>
   );

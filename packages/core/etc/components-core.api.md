@@ -184,16 +184,8 @@ export function isLocal(p: Participant): boolean;
 // @public
 export function isMobileBrowser(): boolean;
 
-// @public @deprecated
-export function isParticipantSourcePinned(participant: Participant, source: Track.Source, pinState: PinState | undefined): boolean;
-
 // @public
-export function isParticipantTrackReferencePinned(trackRef: TrackReference, pinState: PinState | undefined): boolean;
-
-// Warning: (ae-internal-missing-underscore) The name "isPlaceholderReplacement" should be prefixed with an underscore because the declaration is marked as @internal
-//
-// @internal
-export function isPlaceholderReplacement(currentTrackRef: TrackReferenceOrPlaceholder, nextTrackRef: TrackReferenceOrPlaceholder): boolean;
+export function isParticipantSourcePinned(participant: Participant, source: Track.Source, pinState: PinState | undefined): boolean;
 
 // @public (undocumented)
 export function isRemote(p: Participant): boolean;
@@ -508,9 +500,6 @@ export type TrackReference = {
 
 // @public (undocumented)
 export type TrackReferenceFilter = Parameters<TrackReferenceOrPlaceholder[]['filter']>['0'];
-
-// @public (undocumented)
-export type TrackReferenceId = ReturnType<typeof getTrackReferenceId>;
 
 // @public (undocumented)
 export type TrackReferenceOrPlaceholder = TrackReference | TrackReferencePlaceholder;

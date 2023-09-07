@@ -17,6 +17,7 @@ import {
   DocBlock,
   DocComment,
   DocNodeContainer,
+  DocNode,
 } from '@microsoft/tsdoc';
 import {
   ApiModel,
@@ -47,6 +48,7 @@ import {
   ApiReadonlyMixin,
   IFindApiItemsResult,
   Parameter,
+  ApiPropertySignature,
 } from '@microsoft/api-extractor-model';
 
 import { CustomDocNodes } from '../nodes/CustomDocNodeKind';
@@ -1063,21 +1065,53 @@ export class MarkdownDocumenter {
       if (apiParameter.tsdocParamBlock) {
         this._appendAndMergeSection(parameterDescription, apiParameter.tsdocParamBlock.content);
       }
-      parameterList.addParameter(
-        new ParameterItem({
-          configuration,
-          attributes: {
-            name: apiParameter.name,
-            type: apiParameter.parameterTypeExcerpt.text,
-            optional: apiParameter.isOptional,
-            description: parameterDescription.nodes,
-          },
-        }),
-      );
+      const firstParameter: ExcerptToken = apiParameter.parameterTypeExcerpt.spannedTokens[0];
+      if (
+        //@ts-ignore
+        // apiParameter?._parent?.displayName === 'useParticipantTile' &&
+        firstParameter.kind === ExcerptTokenKind.Reference &&
+        firstParameter.text.endsWith('Props') &&
+        firstParameter.canonicalReference
+      ) {
+        // First parameter is a props object.
+        const result: IResolveDeclarationReferenceResult =
+          this._apiModel.resolveDeclarationReference(firstParameter.canonicalReference, undefined);
+
+        if (!result.errorMessage) {
+          result.resolvedApiItem?.members.forEach((member) => {
+            if (member instanceof ApiPropertySignature) {
+              parameterList.addParameter(
+                new ParameterItem({
+                  configuration,
+                  attributes: {
+                    name: member.displayName,
+                    type: member.propertyTypeExcerpt.text,
+                    optional: member.isOptional,
+                    description: member.tsdocComment?.summarySection?.nodes ?? [],
+                    deprecated: member.tsdocComment?.deprecatedBlock?.content.nodes,
+                  },
+                }),
+              );
+            }
+          });
+        }
+      } else {
+        parameterList.addParameter(
+          new ParameterItem({
+            configuration,
+            attributes: {
+              name: apiParameter.name,
+              type: apiParameter.parameterTypeExcerpt.text,
+              optional: apiParameter.isOptional,
+              description: parameterDescription.nodes,
+            },
+          }),
+        );
+      }
     }
 
     if (parameterList.getParameters().length > 0) {
-      output.appendNode(new DocHeading({ configuration, title: 'Parameters' }));
+      output.appendNode(new DocHeading({ configuration, title: 'Properties' }));
       output.appendNode(parameterList);
     }
 
@@ -1091,19 +1125,6 @@ export class MarkdownDocumenter {
         language: 'typescript',
       });
 
-      // const returnTypeAsText: string = returnTypeExcerpt.spannedTokens
-      //   .map((x) => x.text)
-      //   .join('')
-      //   .replace(/[\r\n]+/g, ' ');
-
-      // if (returnTypeAsText) {
-      //   paragraph.appendNode(
-      //     new DocCodeSpan({
-      //       configuration,
-      //       code: returnTypeAsText,
-      //     }),
-      //   );
-      // }
       output.appendNode(fencedCode);
     }
   }
@@ -1160,6 +1181,12 @@ export class MarkdownDocumenter {
                     //   );
                     // } else {
                     if (apiMember as ApiPropertyItem) {
+                      let deprecated: readonly DocNode[] | undefined = undefined;
+                      if (apiMember instanceof ApiDocumentedItem) {
+                        if (apiMember.tsdocComment !== undefined) {
+                          deprecated = apiMember.tsdocComment.deprecatedBlock?.content.nodes;
+                        }
+                      }
                       parameterList.addParameter(
                         new ParameterItem({
                           configuration,
@@ -1169,6 +1196,7 @@ export class MarkdownDocumenter {
                             optional: (apiMember as ApiPropertyItem).isOptional,
                             description: this._createDescriptionCell(apiMember, isInherited).content
                               .nodes,
+                            deprecated,
                           },
                         }),
                       );

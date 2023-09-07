@@ -222,9 +222,31 @@ export class CustomMarkdownEmitter extends MarkdownEmitter {
       case CustomDocNodeKind.ParameterItem: {
         const parameterItem: ParameterItem = docNode as ParameterItem;
         writer.ensureSkippedLine();
-        const { name, type, optional, description } = parameterItem.attributes;
-        writer.writeLine(`{% parameter name="${name}" type="${type}" optional=${optional} %}`);
+        const { name, type, optional, description, deprecated } = parameterItem.attributes;
+
+        writer.write(`{% parameter`);
+        writer.increaseIndent();
+        if (name) {
+          writer.write(` name="${name}"`);
+        }
+        if (type) {
+          writer.write(` type="${type}"`);
+        }
+        if (optional) {
+          writer.write(` optional=${optional}`);
+        }
+        if (deprecated) {
+          writer.write(` deprecated=true`);
+        }
+        writer.write(' %}\n');
+        writer.decreaseIndent();
         this.writeNodes(description, context);
+
+        if (deprecated) {
+          writer.writeLine(`{% deprecated %}`);
+          this.writeNodes(deprecated, context);
+          writer.writeLine(`{% /deprecated %}`);
+        }
         writer.writeLine(`{% /parameter %}`);
         break;
       }

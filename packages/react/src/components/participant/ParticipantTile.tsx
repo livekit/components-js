@@ -2,7 +2,7 @@ import * as React from 'react';
 import type { Participant, TrackPublication } from 'livekit-client';
 import { Track } from 'livekit-client';
 import type { ParticipantClickEvent, TrackReferenceOrPlaceholder } from '@livekit/components-core';
-import { isTrackReference, isTrackReferencePinned } from '@livekit/components-core';
+import { isTrackReferencePinned } from '@livekit/components-core';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
 import { ParticipantName } from './ParticipantName';
 import { TrackMutedIndicator } from './TrackMutedIndicator';
@@ -108,19 +108,23 @@ export function ParticipantTile({
       <ParticipantContextIfNeeded participant={trackRef.participant}>
         {children ?? (
           <>
-            {isTrackReference(trackRef) &&
-            (trackRef.publication?.kind === 'video' ||
-              trackRef.source === Track.Source.Camera ||
-              trackRef.source === Track.Source.ScreenShare) ? (
+            {trackRef.publication?.kind === 'video' ||
+            trackRef.source === Track.Source.Camera ||
+            trackRef.source === Track.Source.ScreenShare ? (
               <VideoTrack
-                trackRef={trackRef}
+                participant={trackRef.participant}
+                source={trackRef.source}
+                publication={trackRef.publication}
                 onSubscriptionStatusChanged={handleSubscribe}
                 manageSubscription={true}
               />
             ) : (
-              isTrackReference(trackRef) && (
-                <AudioTrack trackRef={trackRef} onSubscriptionStatusChanged={handleSubscribe} />
-              )
+              <AudioTrack
+                participant={trackRef.participant}
+                source={trackRef.source}
+                publication={trackRef.publication}
+                onSubscriptionStatusChanged={handleSubscribe}
+              />
             )}
             <div className="lk-participant-placeholder">
               <ParticipantPlaceholder />

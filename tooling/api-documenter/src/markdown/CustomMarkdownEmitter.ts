@@ -226,15 +226,9 @@ export class CustomMarkdownEmitter extends MarkdownEmitter {
 
         writer.write(`{% parameter`);
         writer.increaseIndent();
-        if (name) {
-          writer.write(` name="${name}"`);
-        }
-        if (type) {
-          writer.write(` type="${type}"`);
-        }
-        if (optional) {
-          writer.write(` optional=${optional}`);
-        }
+        writer.write(` name="${name}"`);
+        writer.write(` type="${type}"`);
+        writer.write(` optional=${optional}`);
         if (deprecated) {
           writer.write(` deprecated=true`);
         }

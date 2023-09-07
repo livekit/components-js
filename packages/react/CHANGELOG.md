@@ -1,5 +1,15 @@
 # @livekit/components-react
 
+## 1.1.8
+
+### Patch Changes
+
+- Add e2ee user choices to PreJoin component - [#624](https://github.com/livekit/components-js/pull/624) ([@lukasIO](https://github.com/lukasIO))
+
+- Apply default passphrase in PreJoin - [#625](https://github.com/livekit/components-js/pull/625) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix: media tracks were memoized on participant identity - [#620](https://github.com/livekit/components-js/pull/620) ([@dbkr](https://github.com/dbkr))
+
 ## 1.1.7
 
 ### Patch Changes

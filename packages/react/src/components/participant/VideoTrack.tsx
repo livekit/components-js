@@ -7,7 +7,7 @@ import {
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
 import type { ParticipantClickEvent, TrackReference } from '@livekit/components-core';
-import { useEnsureParticipant, useMaybeTrackRefContext } from '../../context';
+import { useEnsureParticipant, useMaybeTrackContext } from '../../context';
 import * as useHooks from 'usehooks-ts';
 
 /** @public */
@@ -51,7 +51,7 @@ export function VideoTrack({
   ...props
 }: VideoTrackProps) {
   // TODO: Remove and refactor all variables with underscore in a future version after the deprecation period.
-  const maybeTrackRef = useMaybeTrackRefContext();
+  const maybeTrackRef = useMaybeTrackContext();
   const _name = trackRef?.publication?.trackName ?? maybeTrackRef?.publication?.trackName ?? name;
   const _source = trackRef?.source ?? maybeTrackRef?.source ?? source;
   const _publication = trackRef?.publication ?? maybeTrackRef?.publication ?? publication;

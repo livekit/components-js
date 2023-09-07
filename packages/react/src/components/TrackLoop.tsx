@@ -1,6 +1,6 @@
 import type { TrackReference, TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import * as React from 'react';
-import { TrackRefContext } from '../context/track-reference-context';
+import { TrackContext } from '../context/track-reference-context';
 import { cloneSingleChild } from '../utils';
 import { getTrackReferenceId } from '@livekit/components-core';
 
@@ -14,15 +14,15 @@ export interface TrackLoopProps {
 
 /**
  * The TrackLoop component loops over tracks. It is for example a easy way to loop over all participant camera and screen share tracks.
- * TrackLoop creates a TrackRefContext for each track that you can use to e.g. render the track.
+ * TrackLoop creates a TrackContext for each track that you can use to e.g. render the track.
  *
  * @example
  * ```tsx
  * const trackRefs = useTracks([Track.Source.Camera]);
  * <TrackLoop tracks={trackRefs} >
- *  <TrackRefContext.Consumer>
+ *  <TrackContext.Consumer>
  *    {(trackRef) => trackRef && <VideoTrack trackRef={trackRef}/>}
- *  </TrackRefContext.Consumer>
+ *  </TrackContext.Consumer>
  * <TrackLoop />
  * ```
  * @public
@@ -32,12 +32,9 @@ export function TrackLoop({ tracks, ...props }: TrackLoopProps) {
     <>
       {tracks.map((trackReference) => {
         return (
-          <TrackRefContext.Provider
-            value={trackReference}
-            key={getTrackReferenceId(trackReference)}
-          >
+          <TrackContext.Provider value={trackReference} key={getTrackReferenceId(trackReference)}>
             {cloneSingleChild(props.children)}
-          </TrackRefContext.Provider>
+          </TrackContext.Provider>
         );
       })}
     </>

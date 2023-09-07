@@ -9,7 +9,7 @@ import {
   ControlBar,
   GridLayout,
   useTracks,
-  TrackRefContext,
+  TrackContext,
 } from '@livekit/components-react';
 import { ConnectionQuality, Room, Track } from 'livekit-client';
 import styles from '../styles/Simple.module.css';
@@ -78,7 +78,7 @@ export function Stage() {
     <>
       <div className={styles.participantGrid}>
         <GridLayout tracks={tracks}>
-          <TrackRefContext.Consumer>
+          <TrackContext.Consumer>
             {(track) =>
               track && (
                 <div className="my-tile">
@@ -100,7 +100,7 @@ export function Stage() {
                 </div>
               )
             }
-          </TrackRefContext.Consumer>
+          </TrackContext.Consumer>
         </GridLayout>
       </div>
     </>

@@ -383,7 +383,7 @@ export interface ParticipantNameProps extends React_2.HTMLAttributes<HTMLSpanEle
 }
 
 // @public
-export function ParticipantTile({ trackRef, participant, children, source, onParticipantClick, publication, disableSpeakingIndicator, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
+export function ParticipantTile({ participant, children, source, onParticipantClick, publication, disableSpeakingIndicator, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface ParticipantTileProps extends React_2.HTMLAttributes<HTMLDivElement> {
@@ -391,13 +391,12 @@ export interface ParticipantTileProps extends React_2.HTMLAttributes<HTMLDivElem
     disableSpeakingIndicator?: boolean;
     // (undocumented)
     onParticipantClick?: (event: ParticipantClickEvent) => void;
-    // @deprecated (undocumented)
+    // (undocumented)
     participant?: Participant;
-    // @deprecated (undocumented)
+    // (undocumented)
     publication?: TrackPublication;
-    // @deprecated (undocumented)
+    // (undocumented)
     source?: Track.Source;
-    trackRef?: TrackReferenceOrPlaceholder;
 }
 
 // @public
@@ -446,7 +445,7 @@ export function StartAudio({ label, ...props }: AllowAudioPlaybackProps): React_
 // @public (undocumented)
 export function Toast(props: React_2.HTMLAttributes<HTMLDivElement>): React_2.JSX.Element;
 
-// @public @deprecated (undocumented)
+// @public (undocumented)
 export const TrackContext: React_2.Context<TrackReferenceOrPlaceholder | undefined>;
 
 // @public
@@ -470,9 +469,6 @@ export interface TrackMutedIndicatorProps extends React_2.HTMLAttributes<HTMLDiv
     // (undocumented)
     source: Track.Source;
 }
-
-// @public
-export const TrackRefContext: React_2.Context<TrackReferenceOrPlaceholder | undefined>;
 
 // @public
 export function TrackToggle<T extends ToggleSource>({ showIcon, ...props }: TrackToggleProps<T>): React_2.JSX.Element;
@@ -574,9 +570,6 @@ export function useEnsureParticipant(participant?: Participant): Participant;
 export function useEnsureRoom(room?: Room): Room;
 
 // @public
-export function useEnsureTrackRef(trackRef?: TrackReferenceOrPlaceholder): void;
-
-// @public @deprecated
 export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): TrackReferenceOrPlaceholder;
 
 // @alpha
@@ -660,11 +653,8 @@ export function useMaybeParticipantContext(): Participant | undefined;
 // @public
 export function useMaybeRoomContext(): Room | undefined;
 
-// @public @deprecated
-export function useMaybeTrackContext(): TrackReferenceOrPlaceholder | undefined;
-
 // @public
-export function useMaybeTrackRefContext(): TrackReferenceOrPlaceholder | undefined;
+export function useMaybeTrackContext(): TrackReferenceOrPlaceholder | undefined;
 
 // @public (undocumented)
 export function useMediaDevices({ kind }: {
@@ -763,7 +753,7 @@ export interface UseParticipantsOptions {
 }
 
 // @public (undocumented)
-export function useParticipantTile<T extends HTMLElement>({ trackRef, participant, source, publication, onParticipantClick, disableSpeakingIndicator, htmlProps, }: UseParticipantTileProps<T>): {
+export function useParticipantTile<T extends HTMLElement>({ participant, source, publication, onParticipantClick, disableSpeakingIndicator, htmlProps, }: UseParticipantTileProps<T>): {
     elementProps: React_2.HTMLAttributes<T>;
 };
 
@@ -775,13 +765,12 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
     htmlProps: React_2.HTMLAttributes<T>;
     // (undocumented)
     onParticipantClick?: (event: ParticipantClickEvent) => void;
-    // @deprecated (undocumented)
+    // (undocumented)
     participant: Participant;
-    // @deprecated (undocumented)
+    // (undocumented)
     publication?: TrackPublication;
-    // @deprecated (undocumented)
+    // (undocumented)
     source: Track.Source;
-    trackRef?: TrackReferenceOrPlaceholder;
 }
 
 // @public (undocumented)
@@ -885,7 +874,7 @@ export interface UseTokenOptions {
     userInfo?: UserInfo;
 }
 
-// @public @deprecated
+// @public
 export function useTrackContext(): TrackReferenceOrPlaceholder;
 
 // @public (undocumented)
@@ -899,9 +888,6 @@ export interface UseTrackMutedIndicatorOptions {
     // (undocumented)
     participant?: Participant;
 }
-
-// @public
-export function useTrackRefContext(): TrackReferenceOrPlaceholder;
 
 // @public
 export function useTracks<T extends SourcesArray = Track.Source[]>(sources?: T, options?: UseTracksOptions): UseTracksHookReturnType<T>;

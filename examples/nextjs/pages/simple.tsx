@@ -5,7 +5,7 @@ import {
   LiveKitRoom,
   ParticipantTile,
   RoomName,
-  TrackRefContext,
+  TrackContext,
   useToken,
   useTracks,
 } from '@livekit/components-react';
@@ -72,9 +72,7 @@ function Stage() {
     <>
       {screenShareTrack && <ParticipantTile {...screenShareTrack} />}
       <GridLayout tracks={cameraTracks}>
-        <TrackRefContext.Consumer>
-          {(track) => <ParticipantTile {...track} />}
-        </TrackRefContext.Consumer>
+        <TrackContext.Consumer>{(track) => <ParticipantTile {...track} />}</TrackContext.Consumer>
       </GridLayout>
     </>
   );

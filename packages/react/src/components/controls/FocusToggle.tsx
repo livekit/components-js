@@ -1,6 +1,6 @@
 import type { Participant, Track } from 'livekit-client';
 import * as React from 'react';
-import { LayoutContext, useMaybeTrackRefContext } from '../../context';
+import { LayoutContext, useMaybeTrackContext } from '../../context';
 import { FocusToggleIcon, UnfocusToggleIcon } from '../../assets/icons';
 import { useFocusToggle } from '../../hooks';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
@@ -26,7 +26,7 @@ export interface FocusToggleProps extends React.ButtonHTMLAttributes<HTMLButtonE
  * @public
  */
 export function FocusToggle({ trackRef, trackSource, participant, ...props }: FocusToggleProps) {
-  const trackRefFromContext = useMaybeTrackRefContext();
+  const trackRefFromContext = useMaybeTrackContext();
 
   const { mergedProps, inFocus } = useFocusToggle({
     trackRef: trackRef ?? trackRefFromContext,

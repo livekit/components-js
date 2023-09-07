@@ -8,7 +8,7 @@ import {
   useIsMuted,
   useIsSpeaking,
   useToken,
-  useTrackRefContext,
+  useTrackContext,
   useTracks,
 } from '@livekit/components-react';
 import styles from '../styles/Clubhouse.module.scss';
@@ -86,7 +86,7 @@ const Stage = () => {
 };
 
 const CustomParticipantTile = () => {
-  const { participant, source } = useTrackRefContext();
+  const { participant, source } = useTrackContext();
   const isSpeaking = useIsSpeaking(participant);
   const isMuted = useIsMuted(source);
 

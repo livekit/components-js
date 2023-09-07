@@ -62,21 +62,20 @@ export interface AudioConferenceProps extends React_2.HTMLAttributes<HTMLDivElem
 }
 
 // @public
-export function AudioTrack({ trackRef, onSubscriptionStatusChanged, volume, source, name, publication, participant: p, ...props }: AudioTrackProps): React_2.JSX.Element;
+export function AudioTrack({ onSubscriptionStatusChanged, volume, source, name, publication, participant: p, ...props }: AudioTrackProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> extends React_2.HTMLAttributes<T> {
-    // @deprecated (undocumented)
+    // (undocumented)
     name?: string;
     // (undocumented)
     onSubscriptionStatusChanged?: (subscribed: boolean) => void;
-    // @deprecated (undocumented)
+    // (undocumented)
     participant?: Participant;
-    // @deprecated (undocumented)
+    // (undocumented)
     publication?: TrackPublication;
-    // @deprecated (undocumented)
-    source?: Track.Source;
-    trackRef?: TrackReference;
+    // (undocumented)
+    source: Track.Source;
     volume?: number;
 }
 
@@ -201,16 +200,16 @@ export interface DisconnectButtonProps extends React_2.ButtonHTMLAttributes<HTML
 }
 
 // @public (undocumented)
-export function FocusLayout({ trackRef, track, ...htmlProps }: FocusLayoutProps): React_2.JSX.Element;
+export function FocusLayout({ track, ...htmlProps }: FocusLayoutProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export function FocusLayoutContainer(props: FocusLayoutContainerProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface FocusLayoutContainerProps extends React_2.HTMLAttributes<HTMLDivElement> {
-    // @deprecated (undocumented)
+    // (undocumented)
     focusTrack?: TrackReference;
-    // @deprecated (undocumented)
+    // (undocumented)
     participants?: Array<Participant>;
 }
 
@@ -218,22 +217,19 @@ export interface FocusLayoutContainerProps extends React_2.HTMLAttributes<HTMLDi
 export interface FocusLayoutProps extends React_2.HTMLAttributes<HTMLElement> {
     // (undocumented)
     onParticipantClick?: (evt: ParticipantClickEvent) => void;
-    // @deprecated (undocumented)
+    // (undocumented)
     track?: TrackReferenceOrPlaceholder;
-    trackRef?: TrackReferenceOrPlaceholder;
 }
 
 // @public
-export function FocusToggle({ trackRef, trackSource, participant, ...props }: FocusToggleProps): React_2.JSX.Element;
+export function FocusToggle({ trackSource, participant, ...props }: FocusToggleProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface FocusToggleProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
-    // @deprecated (undocumented)
+    // (undocumented)
     participant?: Participant;
     // (undocumented)
-    trackRef?: TrackReferenceOrPlaceholder;
-    // @deprecated (undocumented)
-    trackSource?: Track.Source;
+    trackSource: Track.Source;
 }
 
 // @public (undocumented)
@@ -383,7 +379,7 @@ export interface ParticipantNameProps extends React_2.HTMLAttributes<HTMLSpanEle
 }
 
 // @public
-export function ParticipantTile({ trackRef, participant, children, source, onParticipantClick, publication, disableSpeakingIndicator, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
+export function ParticipantTile({ participant, children, source, onParticipantClick, publication, disableSpeakingIndicator, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface ParticipantTileProps extends React_2.HTMLAttributes<HTMLDivElement> {
@@ -391,13 +387,12 @@ export interface ParticipantTileProps extends React_2.HTMLAttributes<HTMLDivElem
     disableSpeakingIndicator?: boolean;
     // (undocumented)
     onParticipantClick?: (event: ParticipantClickEvent) => void;
-    // @deprecated (undocumented)
+    // (undocumented)
     participant?: Participant;
-    // @deprecated (undocumented)
+    // (undocumented)
     publication?: TrackPublication;
-    // @deprecated (undocumented)
+    // (undocumented)
     source?: Track.Source;
-    trackRef?: TrackReferenceOrPlaceholder;
 }
 
 // @public
@@ -446,7 +441,7 @@ export function StartAudio({ label, ...props }: AllowAudioPlaybackProps): React_
 // @public (undocumented)
 export function Toast(props: React_2.HTMLAttributes<HTMLDivElement>): React_2.JSX.Element;
 
-// @public @deprecated (undocumented)
+// @public (undocumented)
 export const TrackContext: React_2.Context<TrackReferenceOrPlaceholder | undefined>;
 
 // @public
@@ -470,9 +465,6 @@ export interface TrackMutedIndicatorProps extends React_2.HTMLAttributes<HTMLDiv
     // (undocumented)
     source: Track.Source;
 }
-
-// @public
-export const TrackRefContext: React_2.Context<TrackReferenceOrPlaceholder | undefined>;
 
 // @public
 export function TrackToggle<T extends ToggleSource>({ showIcon, ...props }: TrackToggleProps<T>): React_2.JSX.Element;
@@ -574,16 +566,13 @@ export function useEnsureParticipant(participant?: Participant): Participant;
 export function useEnsureRoom(room?: Room): Room;
 
 // @public
-export function useEnsureTrackRef(trackRef?: TrackReferenceOrPlaceholder): void;
-
-// @public @deprecated
 export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): TrackReferenceOrPlaceholder;
 
 // @alpha
 export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'user' | 'environment' | 'left' | 'right' | 'undefined';
 
 // @public (undocumented)
-export function useFocusToggle({ trackRef, trackSource, participant, props }: UseFocusToggleProps): {
+export function useFocusToggle({ trackSource, participant, props }: UseFocusToggleProps): {
     mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
         className: string;
         onClick: (event: React_2.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
@@ -593,14 +582,12 @@ export function useFocusToggle({ trackRef, trackSource, participant, props }: Us
 
 // @public (undocumented)
 export interface UseFocusToggleProps {
-    // @deprecated (undocumented)
+    // (undocumented)
     participant?: Participant;
     // (undocumented)
     props: React_2.ButtonHTMLAttributes<HTMLButtonElement>;
     // (undocumented)
-    trackRef?: TrackReferenceOrPlaceholder;
-    // @deprecated (undocumented)
-    trackSource?: Track.Source;
+    trackSource: Track.Source;
 }
 
 // @public
@@ -660,11 +647,8 @@ export function useMaybeParticipantContext(): Participant | undefined;
 // @public
 export function useMaybeRoomContext(): Room | undefined;
 
-// @public @deprecated
-export function useMaybeTrackContext(): TrackReferenceOrPlaceholder | undefined;
-
 // @public
-export function useMaybeTrackRefContext(): TrackReferenceOrPlaceholder | undefined;
+export function useMaybeTrackContext(): TrackReferenceOrPlaceholder | undefined;
 
 // @public (undocumented)
 export function useMediaDevices({ kind }: {
@@ -763,7 +747,7 @@ export interface UseParticipantsOptions {
 }
 
 // @public (undocumented)
-export function useParticipantTile<T extends HTMLElement>({ trackRef, participant, source, publication, onParticipantClick, disableSpeakingIndicator, htmlProps, }: UseParticipantTileProps<T>): {
+export function useParticipantTile<T extends HTMLElement>({ participant, source, publication, onParticipantClick, disableSpeakingIndicator, htmlProps, }: UseParticipantTileProps<T>): {
     elementProps: React_2.HTMLAttributes<T>;
 };
 
@@ -775,13 +759,12 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
     htmlProps: React_2.HTMLAttributes<T>;
     // (undocumented)
     onParticipantClick?: (event: ParticipantClickEvent) => void;
-    // @deprecated (undocumented)
+    // (undocumented)
     participant: Participant;
-    // @deprecated (undocumented)
+    // (undocumented)
     publication?: TrackPublication;
-    // @deprecated (undocumented)
+    // (undocumented)
     source: Track.Source;
-    trackRef?: TrackReferenceOrPlaceholder;
 }
 
 // @public (undocumented)
@@ -885,7 +868,7 @@ export interface UseTokenOptions {
     userInfo?: UserInfo;
 }
 
-// @public @deprecated
+// @public
 export function useTrackContext(): TrackReferenceOrPlaceholder;
 
 // @public (undocumented)
@@ -899,9 +882,6 @@ export interface UseTrackMutedIndicatorOptions {
     // (undocumented)
     participant?: Participant;
 }
-
-// @public
-export function useTrackRefContext(): TrackReferenceOrPlaceholder;
 
 // @public
 export function useTracks<T extends SourcesArray = Track.Source[]>(sources?: T, options?: UseTracksOptions): UseTracksHookReturnType<T>;
@@ -952,25 +932,24 @@ export interface VideoConferenceProps extends React_2.HTMLAttributes<HTMLDivElem
 }
 
 // @public
-export function VideoTrack({ onTrackClick, onClick, onSubscriptionStatusChanged, trackRef, name, publication, source, participant: p, manageSubscription, ...props }: VideoTrackProps): React_2.JSX.Element;
+export function VideoTrack({ onTrackClick, onClick, onSubscriptionStatusChanged, name, publication, source, participant: p, manageSubscription, ...props }: VideoTrackProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface VideoTrackProps extends React_2.HTMLAttributes<HTMLVideoElement> {
     // (undocumented)
     manageSubscription?: boolean;
-    // @deprecated (undocumented)
+    // (undocumented)
     name?: string;
     // (undocumented)
     onSubscriptionStatusChanged?: (subscribed: boolean) => void;
     // (undocumented)
     onTrackClick?: (evt: ParticipantClickEvent) => void;
-    // @deprecated (undocumented)
+    // (undocumented)
     participant?: Participant;
-    // @deprecated (undocumented)
+    // (undocumented)
     publication?: TrackPublication;
-    // @deprecated (undocumented)
-    source?: Track.Source;
-    trackRef?: TrackReference;
+    // (undocumented)
+    source: Track.Source;
 }
 
 // Warnings were encountered during analysis:

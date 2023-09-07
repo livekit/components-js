@@ -1,4 +1,4 @@
-import { getTrackReferenceId, isLocal } from '@livekit/components-core';
+import { isLocal } from '@livekit/components-core';
 import type { RemoteTrackPublication } from 'livekit-client';
 import { Track } from 'livekit-client';
 import * as React from 'react';
@@ -30,7 +30,7 @@ export function RoomAudioRenderer() {
   return (
     <div style={{ display: 'none' }}>
       {tracks.map((trackRef) => (
-        <AudioTrack key={getTrackReferenceId(trackRef)} trackRef={trackRef} />
+        <AudioTrack key={trackRef.publication.trackSid} {...trackRef} />
       ))}
     </div>
   );

@@ -18,11 +18,7 @@ export {} from './pin-context';
 export { RoomContext, useEnsureRoom, useMaybeRoomContext, useRoomContext } from './room-context';
 export {
   TrackContext,
-  TrackRefContext,
   useEnsureTrackReference,
-  useEnsureTrackRef,
   useMaybeTrackContext,
-  useMaybeTrackRefContext,
   useTrackContext,
-  useTrackRefContext,
-} from './track-reference-context';
+} from './track-context';

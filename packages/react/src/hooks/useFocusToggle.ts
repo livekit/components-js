@@ -1,9 +1,4 @@
-import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
-import {
-  setupFocusToggle,
-  isTrackReferencePinned,
-  isTrackReference,
-} from '@livekit/components-core';
+import { setupFocusToggle, isTrackReferencePinned } from '@livekit/components-core';
 import type { Track, Participant } from 'livekit-client';
 import { useEnsureParticipant, useMaybeLayoutContext } from '../context';
 import { mergeProps } from '../mergeProps';
@@ -11,40 +6,28 @@ import * as React from 'react';
 
 /** @public */
 export interface UseFocusToggleProps {
-  trackRef?: TrackReferenceOrPlaceholder;
-  /** @deprecated This parameter will be removed in a future version use `trackRef` instead. */
-  trackSource?: Track.Source;
-  /** @deprecated This parameter will be removed in a future version use `trackRef` instead. */
-  participant?: Participant;
   props: React.ButtonHTMLAttributes<HTMLButtonElement>;
+  trackSource: Track.Source;
+  participant?: Participant;
 }
 
 /** @public */
-export function useFocusToggle({ trackRef, trackSource, participant, props }: UseFocusToggleProps) {
+export function useFocusToggle({ trackSource, participant, props }: UseFocusToggleProps) {
   const p = useEnsureParticipant(participant);
-  if (!trackRef && !trackSource) {
-    throw new Error('trackRef or trackSource must be defined.');
-  }
   const layoutContext = useMaybeLayoutContext();
   const { className } = React.useMemo(() => setupFocusToggle(), []);
 
   const inFocus: boolean = React.useMemo(() => {
-    if (trackRef) {
-      return isTrackReferencePinned(trackRef, layoutContext?.pin.state);
-    } else if (trackSource) {
-      const track = p.getTrack(trackSource);
-      if (layoutContext?.pin.state && track) {
-        return isTrackReferencePinned(
-          { participant: p, source: trackSource, publication: track },
-          layoutContext.pin.state,
-        );
-      } else {
-        return false;
-      }
+    const track = p.getTrack(trackSource);
+    if (layoutContext?.pin.state && track) {
+      return isTrackReferencePinned(
+        { participant: p, source: trackSource, publication: track },
+        layoutContext.pin.state,
+      );
     } else {
-      throw new Error('trackRef or trackSource and participant must be defined.');
+      return false;
     }
-  }, [trackRef, layoutContext?.pin.state, p, trackSource]);
+  }, [p, trackSource, layoutContext]);
 
   const mergedProps = React.useMemo(
     () =>
@@ -55,39 +38,26 @@ export function useFocusToggle({ trackRef, trackSource, participant, props }: Us
           props.onClick?.(event);
 
           // Set or clear focus based on current focus state.
-          if (trackRef && isTrackReference(trackRef)) {
+          const track = p.getTrack(trackSource);
+          if (layoutContext?.pin.dispatch && track) {
             if (inFocus) {
-              layoutContext?.pin.dispatch?.({
+              layoutContext.pin.dispatch({
                 msg: 'clear_pin',
               });
             } else {
-              layoutContext?.pin.dispatch?.({
+              layoutContext.pin.dispatch({
                 msg: 'set_pin',
-                trackReference: trackRef,
+                trackReference: {
+                  participant: p,
+                  publication: track,
+                  source: track.source,
+                },
               });
-            }
-          } else if (trackSource) {
-            const track = p.getTrack(trackSource);
-            if (layoutContext?.pin.dispatch && track) {
-              if (inFocus) {
-                layoutContext.pin.dispatch({
-                  msg: 'clear_pin',
-                });
-              } else {
-                layoutContext.pin.dispatch({
-                  msg: 'set_pin',
-                  trackReference: {
-                    participant: p,
-                    publication: track,
-                    source: track.source,
-                  },
-                });
-              }
             }
           }
         },
       }),
-    [props, className, trackRef, trackSource, inFocus, layoutContext?.pin, p],
+    [props, className, p, trackSource, inFocus, layoutContext],
   );
 
   return { mergedProps, inFocus };

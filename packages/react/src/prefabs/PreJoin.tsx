@@ -409,6 +409,7 @@ export function PreJoin({
                 <input
                   id="passphrase"
                   type="password"
+                  value={sharedPassphrase}
                   onChange={(ev) => setSharedPassphrase(ev.target.value)}
                 />
               </div>

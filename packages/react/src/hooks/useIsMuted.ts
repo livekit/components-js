@@ -14,7 +14,7 @@ export interface UseIsMutedOptions {
 
 /** @public */
 export function useIsMuted(trackRef: TrackReferenceOrPlaceholder): boolean;
-/** @deprecated this overload will be removed in a future version, pass in trackRef instead */
+/** @public @deprecated this overload will be removed in a future version, pass in trackRef instead */
 export function useIsMuted(source: Track.Source, options?: UseIsMutedOptions): boolean;
 export function useIsMuted(
   sourceOrTrackRef: TrackReferenceOrPlaceholder | Track.Source,

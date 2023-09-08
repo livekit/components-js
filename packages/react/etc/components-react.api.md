@@ -471,7 +471,7 @@ export interface TrackMutedIndicatorProps extends React_2.HTMLAttributes<HTMLDiv
     // (undocumented)
     show?: 'always' | 'muted' | 'unmuted';
     // @deprecated (undocumented)
-    source: Track.Source;
+    source?: Track.Source;
     // (undocumented)
     trackRef?: TrackReferenceOrPlaceholder;
 }

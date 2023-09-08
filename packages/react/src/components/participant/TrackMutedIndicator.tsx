@@ -8,7 +8,7 @@ import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 /** @public */
 export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   /** @deprecated This parameter will be removed in a future version use `trackRef` instead. */
-  source: Track.Source;
+  source?: Track.Source;
   /** @deprecated This parameter will be removed in a future version use `trackRef` instead. */
   participant?: Participant;
   trackRef?: TrackReferenceOrPlaceholder;
@@ -52,7 +52,7 @@ export function TrackMutedIndicator({
 
   return (
     <div {...htmlProps} data-lk-muted={isMuted}>
-      {props.children ?? getSourceIcon(source, !isMuted)}
+      {props.children ?? getSourceIcon((trackRef?.source ?? source)!, !isMuted)}
     </div>
   );
 }

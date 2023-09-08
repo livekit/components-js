@@ -23,6 +23,7 @@ interface TrackMutedIndicatorReturnType {
 export function useTrackMutedIndicator(
   trackRef?: TrackReferenceOrPlaceholder,
 ): TrackMutedIndicatorReturnType;
+/** @deprecated this overload will be removed in a future version, pass in trackRef instead */
 export function useTrackMutedIndicator(
   source: Track.Source,
   options: UseTrackMutedIndicatorOptions,

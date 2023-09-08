@@ -26,7 +26,7 @@ export function useTrackMutedIndicator(
 /** @deprecated this overload will be removed in a future version, pass in trackRef instead */
 export function useTrackMutedIndicator(
   source: Track.Source,
-  options: UseTrackMutedIndicatorOptions,
+  options?: UseTrackMutedIndicatorOptions,
 ): TrackMutedIndicatorReturnType;
 export function useTrackMutedIndicator(
   trackRefOrSource?: TrackReferenceOrPlaceholder | Track.Source,

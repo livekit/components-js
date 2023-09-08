@@ -1,15 +1,18 @@
 import type { Participant } from 'livekit-client';
 import { createAudioAnalyser, LocalAudioTrack, RemoteAudioTrack, Track } from 'livekit-client';
 import * as React from 'react';
-import { useMediaTrack } from '../../hooks';
+import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import { useTrack } from '../../hooks/useTrack';
 
 /** @public */
 export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
+  /** @deprecated this property will be removed in a future version, use `trackRef` instead */
   participant?: Participant;
+  trackRef: TrackReferenceOrPlaceholder;
 }
 
 /** @public */
-export function AudioVisualizer({ participant, ...props }: AudioVisualizerProps) {
+export function AudioVisualizer({ participant, trackRef, ...props }: AudioVisualizerProps) {
   const [volumeBars, setVolumeBars] = React.useState<Array<number>>([]);
 
   const svgWidth = 200;
@@ -19,7 +22,7 @@ export function AudioVisualizer({ participant, ...props }: AudioVisualizerProps)
   const volMultiplier = 50;
   const barCount = 7;
 
-  const { track } = useMediaTrack(Track.Source.Microphone, participant);
+  const { track } = useTrack(trackRef ?? { participant, source: Track.Source.Microphone });
 
   React.useEffect(() => {
     if (!track || !(track instanceof LocalAudioTrack || track instanceof RemoteAudioTrack)) {

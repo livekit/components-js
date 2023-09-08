@@ -7,7 +7,10 @@ import { useMaybeParticipantContext, useMaybeTrackRefContext } from '../../conte
 
 /** @public */
 export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
+  /** @deprecated This property will be removed in a future version, use `trackRef` instead.
+```suggestion
   /** @deprecated this property will be removed in a future version, use `trackRef` instead */
+``` */
   participant?: Participant;
   trackRef?: TrackReferenceOrPlaceholder;
 }

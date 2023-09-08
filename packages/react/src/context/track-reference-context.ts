@@ -2,16 +2,18 @@ import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import * as React from 'react';
 
 /**
- * @public
- * @deprecated `TrackContext` has been to `TrackRefContext`, use this as a drop in replacement.
- */
-export const TrackContext = React.createContext<TrackReferenceOrPlaceholder | undefined>(undefined);
-
-/**
  * This context provides a `TrackReferenceOrPlaceholder` to all child components.
  * @public
  */
-export const TrackRefContext = TrackContext;
+export const TrackRefContext = React.createContext<TrackReferenceOrPlaceholder | undefined>(
+  undefined,
+);
+
+/**
+ * @public
+ * @deprecated `TrackContext` has been to `TrackRefContext`, use this as a drop in replacement.
+ */
+export const TrackContext = TrackRefContext;
 
 /**
  * Ensures that a track reference is provided via context.
@@ -20,11 +22,7 @@ export const TrackRefContext = TrackContext;
  * @deprecated `useTrackContext` has been to `useTrackRefContext`, use this as a drop in replacement.
  */
 export function useTrackContext() {
-  const trackReference = React.useContext(TrackContext);
-  if (!trackReference) {
-    throw Error('tried to access track context outside of track context provider');
-  }
-  return trackReference;
+  return useTrackRefContext();
 }
 
 /**
@@ -33,7 +31,11 @@ export function useTrackContext() {
  * @public
  */
 export function useTrackRefContext() {
-  return useTrackContext();
+  const trackReference = React.useContext(TrackRefContext);
+  if (!trackReference) {
+    throw Error('tried to access track context outside of track context provider');
+  }
+  return trackReference;
 }
 
 /**
@@ -42,7 +44,7 @@ export function useTrackRefContext() {
  * @deprecated `useMaybeTrackContext` has been to `useMaybeTrackRefContext`, use this as a drop in replacement.
  */
 export function useMaybeTrackContext() {
-  return React.useContext(TrackContext);
+  return useMaybeTrackRefContext();
 }
 
 /**
@@ -50,7 +52,7 @@ export function useMaybeTrackContext() {
  * @public
  */
 export function useMaybeTrackRefContext() {
-  return useMaybeTrackContext();
+  return React.useContext(TrackRefContext);
 }
 
 /**
@@ -60,14 +62,7 @@ export function useMaybeTrackRefContext() {
  * @deprecated `useEnsureTrackReference` has been to `useEnsureTrackRef`, use this as a drop in replacement.
  */
 export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder) {
-  const context = useMaybeTrackContext();
-  const trackRef = track ?? context;
-  if (!trackRef) {
-    throw new Error(
-      'No TrackRef, make sure you are inside a TrackRefContext or pass the TrackRef explicitly',
-    );
-  }
-  return trackRef;
+  return useEnsureTrackRef(track);
 }
 
 /**
@@ -76,5 +71,12 @@ export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder) {
  * @public
  */
 export function useEnsureTrackRef(trackRef?: TrackReferenceOrPlaceholder) {
-  useEnsureTrackReference(trackRef);
+  const context = useMaybeTrackRefContext();
+  const ref = trackRef ?? context;
+  if (!ref) {
+    throw new Error(
+      'No TrackRef, make sure you are inside a TrackRefContext or pass the TrackRef explicitly',
+    );
+  }
+  return ref;
 }

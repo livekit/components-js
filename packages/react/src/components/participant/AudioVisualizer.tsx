@@ -3,12 +3,13 @@ import { createAudioAnalyser, LocalAudioTrack, RemoteAudioTrack, Track } from 'l
 import * as React from 'react';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { useTrack } from '../../hooks/useTrack';
+import { useMaybeParticipantContext, useMaybeTrackRefContext } from '../../context';
 
 /** @public */
 export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
   /** @deprecated this property will be removed in a future version, use `trackRef` instead */
   participant?: Participant;
-  trackRef: TrackReferenceOrPlaceholder;
+  trackRef?: TrackReferenceOrPlaceholder;
 }
 
 /** @public */
@@ -22,7 +23,16 @@ export function AudioVisualizer({ participant, trackRef, ...props }: AudioVisual
   const volMultiplier = 50;
   const barCount = 7;
 
-  const { track } = useTrack(trackRef ?? { participant, source: Track.Source.Microphone });
+  const p = useMaybeParticipantContext() ?? participant;
+  let ref = useMaybeTrackRefContext() ?? trackRef;
+  if (!ref) {
+    if (!p) {
+      throw Error(`Participant missing, provide it directly or within a context`);
+    }
+    ref = { participant: p, source: Track.Source.Microphone };
+  }
+
+  const { track } = useTrack(ref);
 
   React.useEffect(() => {
     if (!track || !(track instanceof LocalAudioTrack || track instanceof RemoteAudioTrack)) {

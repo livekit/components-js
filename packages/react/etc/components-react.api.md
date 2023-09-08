@@ -902,6 +902,15 @@ export function useTrack(trackRef: TrackIdentifier, options?: UseTrackOptions): 
     elementProps: React_2.HTMLAttributes<HTMLElement>;
 };
 
+// @public (undocumented)
+export function useTrackByName(trackRef?: TrackReferenceOrPlaceholder, options?: UseMediaTrackOptions): {
+    publication: TrackPublication | undefined;
+    isMuted: boolean | undefined;
+    isSubscribed: boolean | undefined;
+    track: Track | undefined;
+    elementProps: HTMLAttributes<HTMLElement>;
+};
+
 // @public @deprecated
 export function useTrackContext(): TrackReferenceOrPlaceholder;
 

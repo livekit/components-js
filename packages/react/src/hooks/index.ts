@@ -41,5 +41,5 @@ export { UseTrackMutedIndicatorOptions, useTrackMutedIndicator } from './useTrac
 export { UseTrackToggleProps, useTrackToggle } from './useTrackToggle';
 export { UseTracksHookReturnType, UseTracksOptions, useTracks } from './useTracks';
 export { UseVisualStableUpdateOptions, useVisualStableUpdate } from './useVisualStableUpdate';
-export * from './useTrack';
-export * from './useTrackByName';
+export { UseTrackOptions, useTrack } from './useTrack';
+export { useTrackByName } from './useTrackByName';

@@ -5,9 +5,8 @@ import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 
 /**
  * @public
- * @deprecated this function will be removed in a future version, use `useTrackByName` instead
  */
-export function useMediaTrackByName(
+export function useTrackByName(
   trackRef?: TrackReferenceOrPlaceholder,
   options: UseMediaTrackOptions = {},
 ) {

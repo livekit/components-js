@@ -5,7 +5,7 @@ import { useMediaTrackBySourceOrName } from './useMediaTrackBySourceOrName';
 
 /**
  * @public
- * @deprecated this function will be removed in a future version, use `useTrackByName` instead
+ * @deprecated This function will be removed in a future version, use `useTrackByName` instead.
  */
 export function useMediaTrackByName(
   name: string,

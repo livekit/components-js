@@ -10,7 +10,10 @@ export interface UseMediaTrackOptions {
   props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
 }
 
-/** @public */
+/**
+ * @public
+ * @deprecated use `useTrack` instead
+ *  */
 export function useMediaTrack(
   source: VideoSource | AudioSource,
   participant?: Participant,

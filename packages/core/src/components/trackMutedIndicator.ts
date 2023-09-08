@@ -1,12 +1,12 @@
 import type { Styles } from '@livekit/components-styles/dist/types_unprefixed/index.scss';
-import type { Participant } from 'livekit-client';
 import { Track } from 'livekit-client';
 import { mutedObserver } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
+import type { TrackReferenceOrPlaceholder } from '../track-reference';
 
-export function setupTrackMutedIndicator(participant: Participant, source: Track.Source) {
+export function setupTrackMutedIndicator(trackRef: TrackReferenceOrPlaceholder) {
   let classForSource: keyof Styles = 'track-muted-indicator-camera';
-  switch (source) {
+  switch (trackRef.source) {
     case Track.Source.Camera:
       classForSource = 'track-muted-indicator-camera';
       break;
@@ -18,7 +18,7 @@ export function setupTrackMutedIndicator(participant: Participant, source: Track
       break;
   }
   const className: string = prefixClass(classForSource);
-  const mediaMutedObserver = mutedObserver(participant, source);
+  const mediaMutedObserver = mutedObserver(trackRef);
 
   return { className, mediaMutedObserver };
 }

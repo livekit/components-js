@@ -619,7 +619,7 @@ trackCount: number): {
 export function useIsMuted(trackRef: TrackReferenceOrPlaceholder): boolean;
 
 // @public @deprecated (undocumented)
-export function useIsMuted(source: Track.Source, options: UseIsMutedOptions): boolean;
+export function useIsMuted(source: Track.Source, options?: UseIsMutedOptions): boolean;
 
 // @public (undocumented)
 export interface UseIsMutedOptions {
@@ -911,7 +911,7 @@ export function useTrackContext(): TrackReferenceOrPlaceholder;
 export function useTrackMutedIndicator(trackRef?: TrackReferenceOrPlaceholder): TrackMutedIndicatorReturnType;
 
 // @public @deprecated (undocumented)
-export function useTrackMutedIndicator(source: Track.Source, options: UseTrackMutedIndicatorOptions): TrackMutedIndicatorReturnType;
+export function useTrackMutedIndicator(source: Track.Source, options?: UseTrackMutedIndicatorOptions): TrackMutedIndicatorReturnType;
 
 // @public (undocumented)
 export interface UseTrackMutedIndicatorOptions {

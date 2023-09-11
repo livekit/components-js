@@ -86,14 +86,14 @@ const Stage = () => {
 };
 
 const CustomParticipantTile = () => {
-  const { participant, source } = useTrackRefContext();
-  const isSpeaking = useIsSpeaking(participant);
-  const isMuted = useIsMuted(source);
+  const trackRef = useTrackRefContext();
+  const isSpeaking = useIsSpeaking(trackRef.participant);
+  const isMuted = useIsMuted(trackRef);
 
-  const id = useMemo(() => participant.identity, [participant]);
+  const id = useMemo(() => trackRef.participant.identity, [trackRef.participant.identity]);
 
   return (
-    <section className={styles['participant-tile']} title={participant.name}>
+    <section className={styles['participant-tile']} title={trackRef.participant.name}>
       <div
         // className={`rounded-full border-2 p-0.5 transition-colors duration-1000 ${
         className={styles['avatar-container']}
@@ -108,14 +108,14 @@ const CustomParticipantTile = () => {
             className="fade-in"
             width={150}
             height={150}
-            alt={`Avatar of user: ${participant.identity}`}
+            alt={`Avatar of user: ${trackRef.participant.identity}`}
           />
         </div>
       </div>
 
       <div style={{ opacity: isMuted ? 1 : 0 }} className={styles['mic-container']}>
         <div>
-          <TrackMutedIndicator className={styles.mic} source={source}></TrackMutedIndicator>
+          <TrackMutedIndicator className={styles.mic} trackRef={trackRef}></TrackMutedIndicator>
         </div>
       </div>
     </section>

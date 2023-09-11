@@ -26,14 +26,18 @@ export type LocalUserChoices = {
   audioEnabled: boolean;
   videoDeviceId: string;
   audioDeviceId: string;
+  e2ee: boolean;
+  sharedPassphrase: string;
 };
 
-const DEFAULT_USER_CHOICES = {
+const DEFAULT_USER_CHOICES: LocalUserChoices = {
   username: '',
   videoEnabled: true,
   audioEnabled: true,
   videoDeviceId: 'default',
   audioDeviceId: 'default',
+  e2ee: false,
+  sharedPassphrase: '',
 };
 
 /** @public */
@@ -54,6 +58,7 @@ export interface PreJoinProps
   micLabel?: string;
   camLabel?: string;
   userLabel?: string;
+  showE2EEOptions?: boolean;
 }
 
 /** @alpha */
@@ -216,6 +221,7 @@ export function PreJoin({
   micLabel = 'Microphone',
   camLabel = 'Camera',
   userLabel = 'Username',
+  showE2EEOptions = false,
   ...htmlProps
 }: PreJoinProps) {
   const [userChoices, setUserChoices] = React.useState(DEFAULT_USER_CHOICES);
@@ -232,6 +238,10 @@ export function PreJoin({
     defaults.audioEnabled ?? DEFAULT_USER_CHOICES.audioEnabled,
   );
   const [audioDeviceId, setAudioDeviceId] = React.useState<string>(initialAudioDeviceId);
+  const [e2ee, setE2ee] = React.useState<boolean>(defaults.e2ee ?? DEFAULT_USER_CHOICES.e2ee);
+  const [sharedPassphrase, setSharedPassphrase] = React.useState<string>(
+    defaults.sharedPassphrase ?? DEFAULT_USER_CHOICES.sharedPassphrase,
+  );
 
   const tracks = usePreviewTracks(
     {
@@ -288,15 +298,26 @@ export function PreJoin({
 
   React.useEffect(() => {
     const newUserChoices = {
-      username: username,
-      videoEnabled: videoEnabled,
-      videoDeviceId: videoDeviceId,
-      audioEnabled: audioEnabled,
-      audioDeviceId: audioDeviceId,
+      username,
+      videoEnabled,
+      videoDeviceId,
+      audioEnabled,
+      audioDeviceId,
+      e2ee,
+      sharedPassphrase,
     };
     setUserChoices(newUserChoices);
     setIsValid(handleValidation(newUserChoices));
-  }, [username, videoEnabled, handleValidation, audioEnabled, audioDeviceId, videoDeviceId]);
+  }, [
+    username,
+    videoEnabled,
+    handleValidation,
+    audioEnabled,
+    audioDeviceId,
+    videoDeviceId,
+    sharedPassphrase,
+    e2ee,
+  ]);
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -371,6 +392,30 @@ export function PreJoin({
           onChange={(inputEl) => setUsername(inputEl.target.value)}
           autoComplete="off"
         />
+        {showE2EEOptions && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
+              <input
+                id="use-e2ee"
+                type="checkbox"
+                checked={e2ee}
+                onChange={(ev) => setE2ee(ev.target.checked)}
+              ></input>
+              <label htmlFor="use-e2ee">Enable end-to-end encryption</label>
+            </div>
+            {e2ee && (
+              <div style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
+                <label htmlFor="passphrase">Passphrase</label>
+                <input
+                  id="passphrase"
+                  type="password"
+                  value={sharedPassphrase}
+                  onChange={(ev) => setSharedPassphrase(ev.target.value)}
+                />
+              </div>
+            )}
+          </div>
+        )}
         <button
           className="lk-button lk-join-button"
           type="submit"

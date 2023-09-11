@@ -40,9 +40,10 @@ import { SetMediaDeviceOptions } from '@livekit/components-core';
 import type { SourcesArray } from '@livekit/components-core';
 import type { ToggleSource } from '@livekit/components-core';
 import { Track } from 'livekit-client';
+import type { TrackIdentifier } from '@livekit/components-core';
 import { TrackPublication } from 'livekit-client';
 import type { TrackReference } from '@livekit/components-core';
-import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import type { TrackSourceWithOptions } from '@livekit/components-core';
 import type { VideoCaptureOptions } from 'livekit-client';
 import type { VideoSource } from '@livekit/components-core';
@@ -81,12 +82,14 @@ export interface AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> 
 }
 
 // @public (undocumented)
-export function AudioVisualizer({ participant, ...props }: AudioVisualizerProps): React_2.JSX.Element;
+export function AudioVisualizer({ participant, trackRef, ...props }: AudioVisualizerProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface AudioVisualizerProps extends React_2.HTMLAttributes<SVGElement> {
-    // (undocumented)
+    // @deprecated (undocumented)
     participant?: Participant;
+    // (undocumented)
+    trackRef?: TrackReferenceOrPlaceholder;
 }
 
 // @public
@@ -305,6 +308,8 @@ export type LocalUserChoices = {
     audioEnabled: boolean;
     videoDeviceId: string;
     audioDeviceId: string;
+    e2ee: boolean;
+    sharedPassphrase: string;
 };
 
 // @public
@@ -399,7 +404,7 @@ export interface ParticipantTileProps extends React_2.HTMLAttributes<HTMLDivElem
 }
 
 // @public
-export function PreJoin({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, ...htmlProps }: PreJoinProps): React_2.JSX.Element;
+export function PreJoin({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, showE2EEOptions, ...htmlProps }: PreJoinProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement>, 'onSubmit' | 'onError'> {
@@ -415,6 +420,8 @@ export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement
     onError?: (error: Error) => void;
     onSubmit?: (values: LocalUserChoices) => void;
     onValidate?: (values: LocalUserChoices) => boolean;
+    // (undocumented)
+    showE2EEOptions?: boolean;
     // (undocumented)
     userLabel?: string;
 }
@@ -455,16 +462,18 @@ export interface TrackLoopProps {
 }
 
 // @public
-export function TrackMutedIndicator({ source, participant, show, ...props }: TrackMutedIndicatorProps): React_2.JSX.Element | null;
+export function TrackMutedIndicator({ source, participant, trackRef, show, ...props }: TrackMutedIndicatorProps): React_2.JSX.Element | null;
 
 // @public (undocumented)
 export interface TrackMutedIndicatorProps extends React_2.HTMLAttributes<HTMLDivElement> {
-    // (undocumented)
+    // @deprecated (undocumented)
     participant?: Participant;
     // (undocumented)
     show?: 'always' | 'muted' | 'unmuted';
+    // @deprecated (undocumented)
+    source?: Track.Source;
     // (undocumented)
-    source: Track.Source;
+    trackRef?: TrackReferenceOrPlaceholder;
 }
 
 // @public
@@ -570,7 +579,7 @@ export function useEnsureParticipant(participant?: Participant): Participant;
 export function useEnsureRoom(room?: Room): Room;
 
 // @public
-export function useEnsureTrackRef(trackRef?: TrackReferenceOrPlaceholder): void;
+export function useEnsureTrackRef(trackRef?: TrackReferenceOrPlaceholder): TrackReferenceOrPlaceholder;
 
 // @public @deprecated
 export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): TrackReferenceOrPlaceholder;
@@ -607,6 +616,9 @@ trackCount: number): {
 };
 
 // @public (undocumented)
+export function useIsMuted(trackRef: TrackReferenceOrPlaceholder): boolean;
+
+// @public @deprecated (undocumented)
 export function useIsMuted(source: Track.Source, options?: UseIsMutedOptions): boolean;
 
 // @public (undocumented)
@@ -686,7 +698,7 @@ export interface UseMediaDeviceSelectProps {
     track?: LocalAudioTrack | LocalVideoTrack;
 }
 
-// @public (undocumented)
+// @public @deprecated (undocumented)
 export function useMediaTrack(source: VideoSource | AudioSource, participant?: Participant, options?: UseMediaTrackOptions): {
     publication: TrackPublication | undefined;
     isMuted: boolean | undefined;
@@ -695,7 +707,7 @@ export function useMediaTrack(source: VideoSource | AudioSource, participant?: P
     elementProps: React_2.HTMLAttributes<HTMLElement>;
 };
 
-// @public (undocumented)
+// @public @deprecated (undocumented)
 export function useMediaTrackByName(name: string, participant?: Participant, options?: UseMediaTrackOptions): {
     publication: TrackPublication | undefined;
     isMuted: boolean | undefined;
@@ -881,19 +893,47 @@ export interface UseTokenOptions {
     userInfo?: UserInfo;
 }
 
-// @public @deprecated
-export function useTrackContext(): TrackReferenceOrPlaceholder;
-
 // @public (undocumented)
-export function useTrackMutedIndicator(source: Track.Source, options?: UseTrackMutedIndicatorOptions): {
-    isMuted: boolean;
-    className: string;
+export function useTrack(trackRef: TrackIdentifier, options?: UseTrackOptions): {
+    publication: TrackPublication | undefined;
+    isMuted: boolean | undefined;
+    isSubscribed: boolean | undefined;
+    track: Track | undefined;
+    elementProps: React_2.HTMLAttributes<HTMLElement>;
 };
 
 // @public (undocumented)
+export function useTrackByName(trackRef?: TrackReferenceOrPlaceholder, options?: UseMediaTrackOptions): {
+    publication: TrackPublication | undefined;
+    isMuted: boolean | undefined;
+    isSubscribed: boolean | undefined;
+    track: Track | undefined;
+    elementProps: HTMLAttributes<HTMLElement>;
+};
+
+// @public @deprecated
+export function useTrackContext(): TrackReferenceOrPlaceholder;
+
+// Warning: (ae-forgotten-export) The symbol "TrackMutedIndicatorReturnType" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+export function useTrackMutedIndicator(trackRef?: TrackReferenceOrPlaceholder): TrackMutedIndicatorReturnType;
+
+// @public @deprecated (undocumented)
+export function useTrackMutedIndicator(source: Track.Source, options?: UseTrackMutedIndicatorOptions): TrackMutedIndicatorReturnType;
+
+// @public (undocumented)
 export interface UseTrackMutedIndicatorOptions {
-    // (undocumented)
+    // @deprecated (undocumented)
     participant?: Participant;
+}
+
+// @public (undocumented)
+export interface UseTrackOptions {
+    // (undocumented)
+    element?: React_2.RefObject<HTMLMediaElement>;
+    // (undocumented)
+    props?: React_2.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
 }
 
 // @public

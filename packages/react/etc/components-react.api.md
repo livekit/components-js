@@ -784,11 +784,11 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
     // (undocumented)
     onParticipantClick?: (event: ParticipantClickEvent) => void;
     // @deprecated (undocumented)
-    participant: Participant;
+    participant?: Participant;
     // @deprecated (undocumented)
     publication?: TrackPublication;
     // @deprecated (undocumented)
-    source: Track.Source;
+    source?: Track.Source;
     trackRef?: TrackReferenceOrPlaceholder;
 }
 

@@ -101,6 +101,7 @@ export function trackReferencesObservable(
   const roomEvents = Array.from(
     new Set([
       RoomEvent.ParticipantConnected,
+      RoomEvent.ParticipantDisconnected,
       RoomEvent.ConnectionStateChanged,
       RoomEvent.LocalTrackPublished,
       RoomEvent.LocalTrackUnpublished,

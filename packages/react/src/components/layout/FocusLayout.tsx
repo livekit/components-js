@@ -13,7 +13,13 @@ export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivE
   participants?: Array<Participant>;
 }
 
-/** @public */
+/**
+ * The `FocusLayoutContainer` is a layout component that expects two children:
+ * A small side component: In a video conference, this is usually a carousel of participants
+ * who are not in focus. And a larger main component to display the focused participant.
+ * For example, with the `FocusLayout` component.
+ *  @public
+ */
 export function FocusLayoutContainer(props: FocusLayoutContainerProps) {
   const elementProps = mergeProps(props, { className: 'lk-focus-layout' });
 
@@ -29,7 +35,10 @@ export interface FocusLayoutProps extends React.HTMLAttributes<HTMLElement> {
   onParticipantClick?: (evt: ParticipantClickEvent) => void;
 }
 
-/** @public */
+/**
+ * The `FocusLayout` component is just a light wrapper around the `ParticipantTile` to display a single participant.
+ * @public
+ */
 export function FocusLayout({ trackRef, track, ...htmlProps }: FocusLayoutProps) {
   const trackReference = trackRef ?? track;
   return <ParticipantTile {...trackReference} {...htmlProps} />;

@@ -28,8 +28,8 @@ export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * The ControlBar prefab component gives the user the basic user interface
- * to control their media devices and leave the room.
+ * The `ControlBar` prefab gives the user the basic user interface to control their
+ * media devices (camera, microphone and screen share), open the `Chat` and leave the room.
  *
  * @remarks
  * This component is build with other LiveKit components like `TrackToggle`,

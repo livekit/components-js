@@ -23,7 +23,7 @@ export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLBut
 }
 
 /**
- * The MediaDeviceMenu prefab component is a button that opens a menu that lists
+ * The `MediaDeviceMenu` component is a button that opens a menu that lists
  * all media devices and allows the user to select them.
  *
  * @remarks

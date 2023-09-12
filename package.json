@@ -5,6 +5,7 @@
   "license": "Apache-2.0",
   "author": "LiveKit",
   "scripts": {
+    "prepare": "husky install",
     "build": "turbo run build",
     "build:core": "turbo run build --filter=@livekit/components-core...",
     "build:next": "turbo run build --filter=@livekit/component-example-next...",
@@ -40,6 +41,7 @@
     "@livekit/changesets-changelog-github": "^0.0.4",
     "@rushstack/heft": "^0.58.2",
     "glob": "^8.1.0",
+    "husky": "^8.0.3",
     "nodemon": "^2.0.22",
     "prettier": "^2.8.3",
     "turbo": "^1.9.3",

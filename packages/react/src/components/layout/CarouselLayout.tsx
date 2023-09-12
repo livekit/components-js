@@ -22,6 +22,7 @@ export interface CarouselLayoutProps extends React.HTMLAttributes<HTMLMediaEleme
 
 /**
  * @deprecated Renamed to [[CarouselLayout]]
+ * @public
  */
 export const CarouselView = CarouselLayout;
 

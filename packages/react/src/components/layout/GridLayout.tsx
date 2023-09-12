@@ -16,8 +16,11 @@ export interface GridLayoutProps
 }
 
 /**
- * The GridLayout component displays the nested participants in a grid where every participants has the same size.
- *
+ * The `GridLayout` component displays the nested participants in a grid where every participants has the same size.
+ * It also supports pagination if there are more participants than the grid can display.
+ * @remarks
+ * To ensure visual stability when tiles are reordered due to track updates,
+ * the component uses the `useVisualStableUpdate` hook.
  * @example
  * ```tsx
  * <LiveKitRoom>

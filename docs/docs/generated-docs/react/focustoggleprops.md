@@ -14,7 +14,8 @@ export interface FocusToggleProps extends React.ButtonHTMLAttributes<HTMLButtonE
 
 ## Properties
 
-| Property                                                | Type         | Description  |
-| ------------------------------------------------------- | ------------ | ------------ |
-| [participant?](./react/focustoggleprops.participant.md) | Participant  | _(Optional)_ |
-| [trackSource](./react/focustoggleprops.tracksource.md)  | Track.Source |              |
+| Property                                                | Type                                                                 | Description  |
+| ------------------------------------------------------- | -------------------------------------------------------------------- | ------------ |
+| [participant?](./react/focustoggleprops.participant.md) | Participant                                                          | _(Optional)_ |
+| [trackRef?](./react/focustoggleprops.trackref.md)       | [TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md) | _(Optional)_ |
+| [trackSource?](./react/focustoggleprops.tracksource.md) | Track.Source                                                         | _(Optional)_ |

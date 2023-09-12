@@ -2,10 +2,20 @@
 
 # ParticipantContextIfNeeded
 
+The `ParticipantContextIfNeeded` component only creates a `ParticipantContext` if there is no `ParticipantContext` already.
+
 ## Import
 
 ```typescript
 import { ParticipantContextIfNeeded } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+<ParticipantContextIfNeeded participant={trackReference.participant}>
+  ...
+</ParticipantContextIfNeeded>
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}

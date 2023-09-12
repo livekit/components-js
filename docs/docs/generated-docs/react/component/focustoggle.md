@@ -2,13 +2,17 @@
 
 # FocusToggle
 
-The FocusToggle puts the ParticipantTile in focus or removes it from focus.
+The `FocusToggle` puts the `ParticipantTile` in focus or removes it from focus.
 
 ## Import
 
 ```typescript
 import { FocusToggle } from '@livekit/components-react';
 ```
+
+## Remarks
+
+This component needs to live inside `LayoutContext` to work properly.
 
 ## Usage
 
@@ -22,10 +26,17 @@ import { FocusToggle } from '@livekit/components-react';
 
 ## Properties
 
-{% parameter name="trackSource" type="Track.Source" optional=false %}
+{% parameter name="participant" type="Participant" optional=true %}
+_(Optional)_
+
 {% /parameter %}
 
-{% parameter name="participant" type="Participant" optional=true %}
+{% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="trackSource" type="Track.Source" optional=true %}
 _(Optional)_
 
 {% /parameter %}

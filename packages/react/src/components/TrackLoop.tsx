@@ -13,8 +13,8 @@ export interface TrackLoopProps {
 }
 
 /**
- * The TrackLoop component loops over tracks. It is for example a easy way to loop over all participant camera and screen share tracks.
- * TrackLoop creates a TrackRefContext for each track that you can use to e.g. render the track.
+ * The `TrackLoop` component loops over tracks. It is for example a easy way to loop over all participant camera and screen share tracks.
+ * `TrackLoop` creates a `TrackRefContext` for each track that you can use to e.g. render the track.
  *
  * @example
  * ```tsx

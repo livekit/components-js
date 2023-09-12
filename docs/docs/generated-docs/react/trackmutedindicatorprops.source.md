@@ -2,8 +2,14 @@
 
 ## TrackMutedIndicatorProps.source property
 
+> Warning: This API is now obsolete.
+>
+> This parameter will be removed in a future version use `trackRef` instead.
+
 **Signature:**
 
 ```typescript
-source: Track.Source;
+source?: Track.Source;
 ```
+
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

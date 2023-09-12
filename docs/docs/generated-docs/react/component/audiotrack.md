@@ -14,16 +14,13 @@ import { AudioTrack } from '@livekit/components-react';
 
 ```tsx
 <ParticipantTile>
-  <AudioTrack source={Track.Source.Microphone} />
+  <AudioTrack trackRef={trackRef} />
 </ParticipantTile>
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Properties
-
-{% parameter name="source" type="Track.Source" optional=false %}
-{% /parameter %}
 
 {% parameter name="name" type="string" optional=true %}
 _(Optional)_
@@ -42,6 +39,16 @@ _(Optional)_
 
 {% parameter name="publication" type="TrackPublication" optional=true %}
 _(Optional)_
+
+{% /parameter %}
+
+{% parameter name="source" type="Track.Source" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="trackRef" type="TrackReference" optional=true %}
+_(Optional)_ The track reference of the track from which the audio is to be rendered.
 
 {% /parameter %}
 

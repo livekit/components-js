@@ -2,7 +2,11 @@
 
 # useTrackContext
 
-Ensures that a track reference is provided via context. If not inside a `TrackContext`<!-- -->, an error is thrown.
+> Warning: This API is now obsolete.
+>
+> `useTrackContext` has been to `useTrackRefContext`<!-- -->, use this as a drop in replacement.
+
+Ensures that a track reference is provided via context. If not inside a `TrackRefContext`<!-- -->, an error is thrown.
 
 ## Import
 

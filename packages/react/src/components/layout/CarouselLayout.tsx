@@ -22,18 +22,19 @@ export interface CarouselLayoutProps extends React.HTMLAttributes<HTMLMediaEleme
 
 /**
  * @deprecated Renamed to [[CarouselLayout]]
+ * @public
  */
 export const CarouselView = CarouselLayout;
 
 /**
- * The `CarouselLayout` displays a list of tracks horizontally or vertically.
- * Depending on the size of the container, the carousel will display as many tiles as possible and overflows the rest.
- * The CarouselLayout uses the `useVisualStableUpdate` hook to ensure that tile reordering due to track updates
- * is visually stable but still moves the important tiles (speaking participants) to the front.
- *
+ * The `CarouselLayout` component displays a list of tracks in a scroll container.
+ * It will display as many tiles as possible and overflow the rest.
+ * @remarks
+ * To ensure visual stability when tiles are reordered due to track updates,
+ * the component uses the `useVisualStableUpdate` hook.
  * @example
  * ```tsx
- * const tracks = useTracks();
+ * const tracks = useTracks([Track.Source.Camera]);
  * <CarouselLayout tracks={tracks}>
  *   <ParticipantTile />
  * </CarouselLayout>

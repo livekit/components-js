@@ -2,8 +2,14 @@
 
 ## AudioVisualizerProps.participant property
 
+> Warning: This API is now obsolete.
+>
+> this property will be removed in a future version, use `trackRef` instead
+
 **Signature:**
 
 ```typescript
 participant?: Participant;
 ```
+
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

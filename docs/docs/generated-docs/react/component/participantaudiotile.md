@@ -2,7 +2,7 @@
 
 # ParticipantAudioTile
 
-The ParticipantAudioTile component is the base utility wrapper for displaying a visual representation of a participant. This component can be used as a child of the `TileLoop` or independently if a participant is passed as a property.
+The `ParticipantAudioTile` component is the base utility wrapper for displaying a visual representation of a participant. This component can be used as a child of the `TileLoop` or independently if a participant is passed as a property.
 
 ## Import
 
@@ -42,5 +42,10 @@ _(Optional)_
 
 {% parameter name="source" type="Track.Source" optional=true %}
 _(Optional)_
+
+{% /parameter %}
+
+{% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=true %}
+_(Optional)_ The track reference to display.
 
 {% /parameter %}

@@ -2,10 +2,18 @@
 
 # Toast
 
+The `Toast` component is a rudimentary way to display a message to the user. This message should be short lived and not require user interaction. For example, displaying the current connection state like `ConnectionStateToast` does.
+
 ## Import
 
 ```typescript
 import { Toast } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+<Toast>Connecting...</Toast>
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}

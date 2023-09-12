@@ -2,17 +2,34 @@
 
 # AudioVisualizer
 
+The AudioVisualizer component is used to visualize the audio volume of a given audio track.
+
 ## Import
 
 ```typescript
 import { AudioVisualizer } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Remarks
+
+Requires a `TrackReferenceOrPlaceholder` to be provided either as a property or via the `TrackRefContext`<!-- -->.
+
+## Usage
+
+```tsx
+<AudioVisualizer />
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Properties
 
 {% parameter name="participant" type="Participant" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=true %}
 _(Optional)_
 
 {% /parameter %}

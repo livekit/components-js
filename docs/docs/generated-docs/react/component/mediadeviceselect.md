@@ -2,7 +2,7 @@
 
 # MediaDeviceSelect
 
-The MediaDeviceSelect list all media devices of one kind. Clicking on one of the listed devices make it the active media device.
+The `MediaDeviceSelect` list all media devices of one kind. Clicking on one of the listed devices make it the active media device.
 
 ## Import
 

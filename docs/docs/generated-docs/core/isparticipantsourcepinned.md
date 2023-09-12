@@ -2,6 +2,10 @@
 
 # isParticipantSourcePinned
 
+> Warning: This API is now obsolete.
+>
+> Use [isParticipantTrackReferencePinned()](./core/isparticipanttrackreferencepinned.md) instead.
+
 Check if the participant track source is pinned.
 
 **Signature:**

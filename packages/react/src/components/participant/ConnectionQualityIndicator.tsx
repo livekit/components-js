@@ -10,7 +10,7 @@ export interface ConnectionQualityIndicatorProps
     ConnectionQualityIndicatorOptions {}
 
 /**
- * The ConnectionQualityIndicator shows the individual connection quality of a participant.
+ * The `ConnectionQualityIndicator` shows the individual connection quality of a participant.
  *
  * @example
  * ```tsx

@@ -81,7 +81,7 @@ export interface AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> 
     volume?: number;
 }
 
-// @public (undocumented)
+// @public
 export function AudioVisualizer({ participant, trackRef, ...props }: AudioVisualizerProps): React_2.JSX.Element;
 
 // @public (undocumented)
@@ -93,16 +93,19 @@ export interface AudioVisualizerProps extends React_2.HTMLAttributes<SVGElement>
 }
 
 // @public
-export function CarouselView({ tracks, orientation, ...props }: CarouselViewProps): React_2.JSX.Element;
+export function CarouselLayout({ tracks, orientation, ...props }: CarouselLayoutProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface CarouselViewProps extends React_2.HTMLAttributes<HTMLMediaElement> {
+export interface CarouselLayoutProps extends React_2.HTMLAttributes<HTMLMediaElement> {
     // (undocumented)
     children: React_2.ReactNode;
     orientation?: 'vertical' | 'horizontal';
     // (undocumented)
     tracks: TrackReferenceOrPlaceholder[];
 }
+
+// @public @deprecated (undocumented)
+export const CarouselView: typeof CarouselLayout;
 
 // @public
 export function Chat({ messageFormatter, messageDecoder, messageEncoder, ...props }: ChatProps): React_2.JSX.Element;
@@ -160,7 +163,7 @@ export interface ConnectionQualityIndicatorProps extends React_2.HTMLAttributes<
 // @public
 export function ConnectionState({ room, ...props }: ConnectionStatusProps): React_2.JSX.Element;
 
-// @public (undocumented)
+// @public
 export function ConnectionStateToast(props: ConnectionStateToastProps): React_2.JSX.Element;
 
 // @public (undocumented)
@@ -203,10 +206,10 @@ export interface DisconnectButtonProps extends React_2.ButtonHTMLAttributes<HTML
     stopTracks?: boolean;
 }
 
-// @public (undocumented)
+// @public
 export function FocusLayout({ trackRef, track, ...htmlProps }: FocusLayoutProps): React_2.JSX.Element;
 
-// @public (undocumented)
+// @public
 export function FocusLayoutContainer(props: FocusLayoutContainerProps): React_2.JSX.Element;
 
 // @public (undocumented)
@@ -364,7 +367,7 @@ export function ParticipantAudioTile({ participant, children, source, publicatio
 // @public (undocumented)
 export const ParticipantContext: React_2.Context<Participant | undefined>;
 
-// @public (undocumented)
+// @public
 export function ParticipantContextIfNeeded(props: React_2.PropsWithChildren<{
     participant?: Participant;
 }>): React_2.JSX.Element;
@@ -446,7 +449,7 @@ export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
 // @public
 export function StartAudio({ label, ...props }: AllowAudioPlaybackProps): React_2.JSX.Element;
 
-// @public (undocumented)
+// @public
 export function Toast(props: React_2.HTMLAttributes<HTMLDivElement>): React_2.JSX.Element;
 
 // @public @deprecated (undocumented)

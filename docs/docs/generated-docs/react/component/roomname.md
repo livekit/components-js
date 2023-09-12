@@ -2,7 +2,7 @@
 
 # RoomName
 
-The RoomName component renders the name of the connected LiveKit room inside a span tag.
+The `RoomName` component renders the name of the connected LiveKit room inside a span tag.
 
 ## Import
 

@@ -12,7 +12,7 @@ export interface ParticipantLoopProps {
 }
 
 /**
- * The ParticipantLoop component loops over an array of participants to create a context for every participant.
+ * The `ParticipantLoop` component loops over an array of participants to create a context for every participant.
  * This component takes exactly one child component as a template.
  * By providing your own template as a child you have full control over the look and feel of your participant representations.
  *

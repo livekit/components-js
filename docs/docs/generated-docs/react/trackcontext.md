@@ -2,6 +2,10 @@
 
 ## TrackContext variable
 
+> Warning: This API is now obsolete.
+>
+> `TrackContext` has been to `TrackRefContext`<!-- -->, use this as a drop in replacement.
+
 **Signature:**
 
 ```typescript

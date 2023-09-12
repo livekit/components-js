@@ -11,7 +11,8 @@ export interface ConnectionStatusProps extends React.HTMLAttributes<HTMLDivEleme
 }
 
 /**
- * The ConnectionState component displays the connection status of the room in written form.
+ * The `ConnectionState` component displays the connection status of the room as strings
+ * (`"connected" | "connecting" | "disconnected" | "reconnecting"`).
  *
  * @example
  * ```tsx

@@ -2,7 +2,7 @@
 
 # ParticipantTile
 
-The ParticipantTile component is the base utility wrapper for displaying a visual representation of a participant. This component can be used as a child of the `TrackLoop` component or by spreading a track reference as properties.
+The `ParticipantTile` component is the base utility wrapper for displaying a visual representation of a participant. This component can be used as a child of the `TrackLoop` component or by passing a track reference as property.
 
 ## Import
 
@@ -10,15 +10,25 @@ The ParticipantTile component is the base utility wrapper for displaying a visua
 import { ParticipantTile } from '@livekit/components-react';
 ```
 
-## Usage
+## Usage Example 1
+
+Using the `ParticipantTile` component with a track reference:
 
 ```tsx
-<ParticipantTile source={Track.Source.Camera} />
-
-<ParticipantTile {...trackReference} />
+<ParticipantTile trackRef={trackRef} />
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 1} /%}
+## Usage Example 2
+
+Using the `ParticipantTile` component as a child of the `TrackLoop` component:
+
+```tsx
+<TrackLoop>
+  <ParticipantTile />
+</TrackLoop>
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 2} /%}
 
 ## Properties
 
@@ -44,5 +54,10 @@ _(Optional)_
 
 {% parameter name="source" type="Track.Source" optional=true %}
 _(Optional)_
+
+{% /parameter %}
+
+{% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=true %}
+_(Optional)_ The track reference to display.
 
 {% /parameter %}

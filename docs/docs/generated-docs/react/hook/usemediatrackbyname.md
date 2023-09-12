@@ -2,6 +2,10 @@
 
 # useMediaTrackByName
 
+> Warning: This API is now obsolete.
+>
+> This function will be removed in a future version, use `useTrackByName` instead.
+
 ## Import
 
 ```typescript

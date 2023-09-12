@@ -7,8 +7,8 @@ export interface DisconnectButtonProps extends React.ButtonHTMLAttributes<HTMLBu
 }
 
 /**
- * The DisconnectButton is a basic html button with the added ability to disconnect from a LiveKit room.
- * Normally, it is used by end-users to leave a video or audio call.
+ * The `DisconnectButton` is a basic html button with the added ability to disconnect from a LiveKit room.
+ * Normally this is the big red button that allows end users to leave the video or audio call.
  *
  * @example
  * ```tsx

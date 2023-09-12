@@ -12,17 +12,11 @@ import { useTrackMutedIndicator } from '@livekit/components-react';
 
 ## Parameters
 
-{% parameter name="source" type="Track.Source" optional=false %}
-{% /parameter %}
-
-{% parameter name="options" type="UseTrackMutedIndicatorOptions" optional=true %}
+{% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=true %}
 {% /parameter %}
 
 ## Returns
 
 ```typescript
-{
-  isMuted: boolean;
-  className: string;
-}
+TrackMutedIndicatorReturnType;
 ```

@@ -2,7 +2,7 @@
 
 # getTrackReferenceId
 
-Returns a id to identify the `TrackReference` based on participant and source.
+Returns a id to identify the `TrackReference` or `TrackReferencePlaceholder` based on participant, track source and trackSid.
 
 **Signature:**
 
@@ -11,5 +11,9 @@ export declare function getTrackReferenceId(
   trackReference: TrackReferenceOrPlaceholder | number,
 ): string;
 ```
+
+## Remarks
+
+The id pattern is: `${participantIdentity}_${trackSource}_${trackSid}` for `TrackReference` and `${participantIdentity}_${trackSource}_placeholder` for `TrackReferencePlaceholder`<!-- -->.
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

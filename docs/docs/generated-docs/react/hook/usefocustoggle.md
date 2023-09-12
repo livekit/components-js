@@ -12,7 +12,7 @@ import { useFocusToggle } from '@livekit/components-react';
 
 ## Parameters
 
-{% parameter name="{ trackSource, participant, props }" type="UseFocusToggleProps" optional=false %}
+{% parameter name="{ trackRef, trackSource, participant, props }" type="UseFocusToggleProps" optional=false %}
 {% /parameter %}
 
 ## Returns

@@ -14,10 +14,11 @@ export interface ParticipantTileProps extends React.HTMLAttributes<HTMLDivElemen
 
 ## Properties
 
-| Property                                                                              | Type                                                                                 | Description  |
-| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ------------ |
-| [disableSpeakingIndicator?](./react/participanttileprops.disablespeakingindicator.md) | boolean                                                                              | _(Optional)_ |
-| [onParticipantClick?](./react/participanttileprops.onparticipantclick.md)             | (event: [ParticipantClickEvent](./core/participantclickevent.md)<!-- -->) =&gt; void | _(Optional)_ |
-| [participant?](./react/participanttileprops.participant.md)                           | Participant                                                                          | _(Optional)_ |
-| [publication?](./react/participanttileprops.publication.md)                           | TrackPublication                                                                     | _(Optional)_ |
-| [source?](./react/participanttileprops.source.md)                                     | Track.Source                                                                         | _(Optional)_ |
+| Property                                                                              | Type                                                                                 | Description                                  |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------- |
+| [disableSpeakingIndicator?](./react/participanttileprops.disablespeakingindicator.md) | boolean                                                                              | _(Optional)_                                 |
+| [onParticipantClick?](./react/participanttileprops.onparticipantclick.md)             | (event: [ParticipantClickEvent](./core/participantclickevent.md)<!-- -->) =&gt; void | _(Optional)_                                 |
+| [participant?](./react/participanttileprops.participant.md)                           | Participant                                                                          | _(Optional)_                                 |
+| [publication?](./react/participanttileprops.publication.md)                           | TrackPublication                                                                     | _(Optional)_                                 |
+| [source?](./react/participanttileprops.source.md)                                     | Track.Source                                                                         | _(Optional)_                                 |
+| [trackRef?](./react/participanttileprops.trackref.md)                                 | [TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md)                 | _(Optional)_ The track reference to display. |

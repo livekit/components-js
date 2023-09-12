@@ -5,10 +5,7 @@
 **Signature:**
 
 ```typescript
-export declare function setupTrackMutedIndicator(
-  participant: Participant,
-  source: Track.Source,
-): {
+export declare function setupTrackMutedIndicator(trackRef: TrackReferenceOrPlaceholder): {
   className: string;
   mediaMutedObserver: import('rxjs').Observable<boolean>;
 };

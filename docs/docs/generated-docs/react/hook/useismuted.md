@@ -12,10 +12,7 @@ import { useIsMuted } from '@livekit/components-react';
 
 ## Parameters
 
-{% parameter name="source" type="Track.Source" optional=false %}
-{% /parameter %}
-
-{% parameter name="options" type="UseIsMutedOptions" optional=true %}
+{% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=false %}
 {% /parameter %}
 
 ## Returns

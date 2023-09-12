@@ -12,7 +12,7 @@ import { useParticipantTile } from '@livekit/components-react';
 
 ## Parameters
 
-{% parameter name="{ participant, source, publication, onParticipantClick, disableSpeakingIndicator, htmlProps, }" type="UseParticipantTileProps<T>" optional=false %}
+{% parameter name="{ trackRef, participant, source, publication, onParticipantClick, disableSpeakingIndicator, htmlProps, }" type="UseParticipantTileProps<T>" optional=false %}
 {% /parameter %}
 
 ## Returns

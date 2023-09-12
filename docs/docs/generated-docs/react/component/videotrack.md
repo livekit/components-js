@@ -2,7 +2,7 @@
 
 # VideoTrack
 
-The VideoTrack component is responsible for rendering participant video tracks like `camera` and `screen_share`<!-- -->. This component must have access to the participant's context, or alternatively pass it a `Participant` as a property.
+The `VideoTrack` component is responsible for rendering participant video tracks like `camera` and `screen_share`<!-- -->. This component must have access to the participant's context, or alternatively pass it a `Participant` as a property.
 
 ## Import
 
@@ -13,15 +13,12 @@ import { VideoTrack } from '@livekit/components-react';
 ## Usage
 
 ```tsx
-<VideoTrack source={Track.Source.Camera} />
+<VideoTrack trackRef={trackRef} />
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Properties
-
-{% parameter name="source" type="Track.Source" optional=false %}
-{% /parameter %}
 
 {% parameter name="manageSubscription" type="boolean" optional=true %}
 _(Optional)_
@@ -50,5 +47,15 @@ _(Optional)_
 
 {% parameter name="publication" type="TrackPublication" optional=true %}
 _(Optional)_
+
+{% /parameter %}
+
+{% parameter name="source" type="Track.Source" optional=true %}
+_(Optional)_
+
+{% /parameter %}
+
+{% parameter name="trackRef" type="TrackReference" optional=true %}
+_(Optional)_ The track reference of the track to render.
 
 {% /parameter %}

@@ -2,6 +2,10 @@
 
 # useMediaTrack
 
+> Warning: This API is now obsolete.
+>
+> use `useTrack` instead
+
 ## Import
 
 ```typescript

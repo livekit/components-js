@@ -2,7 +2,7 @@
 
 # TrackLoop
 
-The TrackLoop component loops over tracks. It is for example a easy way to loop over all participant camera and screen share tracks. TrackLoop creates a TrackContext for each track that you can use to e.g. render the track.
+The `TrackLoop` component loops over tracks. It is for example a easy way to loop over all participant camera and screen share tracks. `TrackLoop` creates a `TrackRefContext` for each track that you can use to e.g. render the track.
 
 ## Import
 
@@ -13,11 +13,11 @@ import { TrackLoop } from '@livekit/components-react';
 ## Usage
 
 ```tsx
-const tracks = useTracks([Track.Source.Camera]);
-<TrackLoop tracks={tracks} >
- <TrackContext.Consumer>
-   {(track) => track && <VideoTrack {...track}/>}
- </TrackContext.Consumer>
+const trackRefs = useTracks([Track.Source.Camera]);
+<TrackLoop tracks={trackRefs} >
+ <TrackRefContext.Consumer>
+   {(trackRef) => trackRef && <VideoTrack trackRef={trackRef}/>}
+ </TrackRefContext.Consumer>
 <TrackLoop />
 ```
 

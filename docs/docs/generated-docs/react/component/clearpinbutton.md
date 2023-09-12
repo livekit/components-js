@@ -2,7 +2,7 @@
 
 # ClearPinButton
 
-The ClearPinButton is a basic html button with the added ability to signal the LiveKitRoom that it should display the grid view again.
+The `ClearPinButton` is a basic html button with the added ability to signal the `LayoutContext` that it should display the grid view again.
 
 ## Import
 
@@ -12,13 +12,13 @@ import { ClearPinButton } from '@livekit/components-react';
 
 ## Remarks
 
-This component works only inside a PinContext.
+This component works only inside a `LayoutContext`<!-- -->.
 
 ## Usage
 
 ```tsx
 <LiveKitRoom>
-  <ClearPinButton>Leave room</ClearPinButton>
+  <ClearPinButton>Back to grid view</ClearPinButton>
 </LiveKitRoom>
 ```
 

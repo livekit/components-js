@@ -12,8 +12,9 @@ export interface UseFocusToggleProps
 
 ## Properties
 
-| Property                                                   | Type                                                | Description  |
-| ---------------------------------------------------------- | --------------------------------------------------- | ------------ |
-| [participant?](./react/usefocustoggleprops.participant.md) | Participant                                         | _(Optional)_ |
-| [props](./react/usefocustoggleprops.props.md)              | React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt; |              |
-| [trackSource](./react/usefocustoggleprops.tracksource.md)  | Track.Source                                        |              |
+| Property                                                   | Type                                                                 | Description  |
+| ---------------------------------------------------------- | -------------------------------------------------------------------- | ------------ |
+| [participant?](./react/usefocustoggleprops.participant.md) | Participant                                                          | _(Optional)_ |
+| [props](./react/usefocustoggleprops.props.md)              | React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;                  |              |
+| [trackRef?](./react/usefocustoggleprops.trackref.md)       | [TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md) | _(Optional)_ |
+| [trackSource?](./react/usefocustoggleprops.tracksource.md) | Track.Source                                                         | _(Optional)_ |

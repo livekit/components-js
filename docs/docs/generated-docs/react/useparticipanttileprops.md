@@ -14,11 +14,12 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React.HT
 
 ## Properties
 
-| Property                                                                                 | Type                                                                                 | Description  |
-| ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ------------ |
-| [disableSpeakingIndicator?](./react/useparticipanttileprops.disablespeakingindicator.md) | boolean                                                                              | _(Optional)_ |
-| [htmlProps](./react/useparticipanttileprops.htmlprops.md)                                | React.HTMLAttributes&lt;T&gt;                                                        |              |
-| [onParticipantClick?](./react/useparticipanttileprops.onparticipantclick.md)             | (event: [ParticipantClickEvent](./core/participantclickevent.md)<!-- -->) =&gt; void | _(Optional)_ |
-| [participant](./react/useparticipanttileprops.participant.md)                            | Participant                                                                          |              |
-| [publication?](./react/useparticipanttileprops.publication.md)                           | TrackPublication                                                                     | _(Optional)_ |
-| [source](./react/useparticipanttileprops.source.md)                                      | Track.Source                                                                         |              |
+| Property                                                                                 | Type                                                                                 | Description                                  |
+| ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------- |
+| [disableSpeakingIndicator?](./react/useparticipanttileprops.disablespeakingindicator.md) | boolean                                                                              | _(Optional)_                                 |
+| [htmlProps](./react/useparticipanttileprops.htmlprops.md)                                | React.HTMLAttributes&lt;T&gt;                                                        |                                              |
+| [onParticipantClick?](./react/useparticipanttileprops.onparticipantclick.md)             | (event: [ParticipantClickEvent](./core/participantclickevent.md)<!-- -->) =&gt; void | _(Optional)_                                 |
+| [participant?](./react/useparticipanttileprops.participant.md)                           | Participant                                                                          | _(Optional)_                                 |
+| [publication?](./react/useparticipanttileprops.publication.md)                           | TrackPublication                                                                     | _(Optional)_                                 |
+| [source?](./react/useparticipanttileprops.source.md)                                     | Track.Source                                                                         | _(Optional)_                                 |
+| [trackRef?](./react/useparticipanttileprops.trackref.md)                                 | [TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md)                 | _(Optional)_ The track reference to display. |

@@ -1,21 +1,22 @@
-import * as React from 'react';
-import { LayoutContextProvider } from '../components/layout/LayoutContextProvider';
-import { RoomAudioRenderer } from '../components/RoomAudioRenderer';
-import { ControlBar } from './ControlBar';
-import { FocusLayout, FocusLayoutContainer } from '../components/layout/FocusLayout';
-import { GridLayout } from '../components/layout/GridLayout';
-import type { WidgetState } from '@livekit/components-core';
-import { isEqualTrackRef, isTrackReference, log, isWeb } from '@livekit/components-core';
-import { Chat } from './Chat';
-import { ConnectionStateToast } from '../components/Toast';
-import type { MessageDecoder, MessageEncoder, MessageFormatter } from '../components/ChatEntry';
+import type { TrackReferenceOrPlaceholder, WidgetState } from '@livekit/components-core';
+import { isEqualTrackRef, isTrackReference, isWeb, log } from '@livekit/components-core';
 import { RoomEvent, Track } from 'livekit-client';
-import { useTracks } from '../hooks/useTracks';
-import { usePinnedTracks } from '../hooks/usePinnedTracks';
-import { CarouselLayout } from '../components/layout/CarouselLayout';
-import { useCreateLayoutContext } from '../context/layout-context';
-import { ParticipantTile } from '../components';
-import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import * as React from 'react';
+import {
+  CarouselLayout,
+  ConnectionStateToast,
+  FocusLayout,
+  FocusLayoutContainer,
+  GridLayout,
+  LayoutContextProvider,
+  ParticipantTile,
+  RoomAudioRenderer,
+} from '../components';
+import type { MessageDecoder, MessageEncoder, MessageFormatter } from '../components/ChatEntry';
+import { useCreateLayoutContext } from '../context';
+import { usePinnedTracks, useTracks } from '../hooks';
+import { Chat } from './Chat';
+import { ControlBar } from './ControlBar';
 
 /**
  * @public

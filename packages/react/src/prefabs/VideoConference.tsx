@@ -28,12 +28,14 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
 }
 
 /**
- * This component is the default setup of a classic LiveKit video conferencing app.
- * It provides functionality like switching between participant grid view and focus view.
+ * The `VideoConference` ready-made component is your drop-in solution for a classic video conferencing application.
+ * It provides functionality such as focusing on one participant, grid view with pagination to handle large numbers
+ * of participants, basic non-persistent chat, screen sharing, and more.
  *
  * @remarks
  * The component is implemented with other LiveKit components like `FocusContextProvider`,
  * `GridLayout`, `ControlBar`, `FocusLayoutContainer` and `FocusLayout`.
+ * You can use this components as a starting point for your own custom video conferencing application.
  *
  * @example
  * ```tsx

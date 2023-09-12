@@ -79,7 +79,7 @@ export interface ParticipantTileProps extends React.HTMLAttributes<HTMLDivElemen
 }
 
 /**
- * The ParticipantTile component is the base utility wrapper for displaying a visual representation of a participant.
+ * The `ParticipantTile` component is the base utility wrapper for displaying a visual representation of a participant.
  * This component can be used as a child of the `TrackLoop` component or by passing a track reference as property.
  *
  * @example Using the `ParticipantTile` component with a track reference:

@@ -22,7 +22,17 @@ import { AudioTrack } from './AudioTrack';
 import { useParticipantTile } from '../../hooks';
 import { useIsEncrypted } from '../../hooks/useIsEncrypted';
 
-/** @public */
+/**
+ * The `ParticipantContextIfNeeded` component only creates a `ParticipantContext`
+ * if there is no `ParticipantContext` already.
+ * @example
+ * ```tsx
+ * <ParticipantContextIfNeeded participant={trackReference.participant}>
+ *  ...
+ * </ParticipantContextIfNeeded>
+ * ```
+ * @public
+ */
 export function ParticipantContextIfNeeded(
   props: React.PropsWithChildren<{
     participant?: Participant;

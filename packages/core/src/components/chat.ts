@@ -13,6 +13,11 @@ export interface ReceivedChatMessage extends ChatMessage {
   from?: Participant;
 }
 
+/** @public */
+export type MessageEncoder = (message: ChatMessage) => Uint8Array;
+/** @public */
+export type MessageDecoder = (message: Uint8Array) => ReceivedChatMessage;
+
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 

@@ -9,7 +9,7 @@
 import type { AudioCaptureOptions } from 'livekit-client';
 import type { AudioSource } from '@livekit/components-core';
 import { CaptureOptionsBySource } from '@livekit/components-core';
-import type { ChatMessage } from '@livekit/components-core';
+import { ChatMessage } from '@livekit/components-core';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import type { CreateLocalTracksOptions } from 'livekit-client';
@@ -22,13 +22,15 @@ import type { LocalTrack } from 'livekit-client';
 import { LocalTrackPublication } from 'livekit-client';
 import type { LocalVideoTrack } from 'livekit-client';
 import type { MediaDeviceFailure } from 'livekit-client';
+import { MessageDecoder } from '@livekit/components-core';
+import { MessageEncoder } from '@livekit/components-core';
 import { Participant } from 'livekit-client';
 import type { ParticipantClickEvent } from '@livekit/components-core';
 import type { ParticipantEvent } from 'livekit-client';
 import { ParticipantPermission } from 'livekit-client/dist/src/proto/livekit_models_pb';
 import type { PinState } from '@livekit/components-core';
 import * as React_2 from 'react';
-import type { ReceivedChatMessage } from '@livekit/components-core';
+import { ReceivedChatMessage } from '@livekit/components-core';
 import type { ReceivedDataMessage } from '@livekit/components-core';
 import { RemoteParticipant } from 'livekit-client';
 import { Room } from 'livekit-client';
@@ -352,11 +354,9 @@ export interface MediaDeviceSelectProps extends React_2.HTMLAttributes<HTMLUList
     track?: LocalAudioTrack | LocalVideoTrack;
 }
 
-// @public (undocumented)
-export type MessageDecoder = (message: Uint8Array) => ReceivedChatMessage;
+export { MessageDecoder }
 
-// @public (undocumented)
-export type MessageEncoder = (message: ChatMessage) => Uint8Array;
+export { MessageEncoder }
 
 // @public (undocumented)
 export type MessageFormatter = (message: string) => React_2.ReactNode;
@@ -505,7 +505,7 @@ export function useAudioPlayback(room?: Room): {
     startAudio: () => Promise<void>;
 };
 
-// @public (undocumented)
+// @public
 export function useChat(options?: {
     messageEncoder?: MessageEncoder;
     messageDecoder?: MessageDecoder;
@@ -515,7 +515,7 @@ export function useChat(options?: {
     isSending: boolean;
 };
 
-// @public (undocumented)
+// @public
 export function useChatToggle({ props }: UseChatToggleProps): {
     mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
         className: string;

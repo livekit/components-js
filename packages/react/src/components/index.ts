@@ -23,3 +23,9 @@ export * from './TrackLoop';
 export * from './participant/ParticipantTile';
 export * from './participant/ParticipantAudioTile';
 export { ConnectionStateToast, type ConnectionStateToastProps } from './ConnectionStateToast';
+export {
+  type MessageFormatter,
+  type ChatEntryProps,
+  ChatEntry,
+  formatChatMessageLinks,
+} from '../components/ChatEntry';

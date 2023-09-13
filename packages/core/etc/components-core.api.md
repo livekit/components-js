@@ -230,6 +230,12 @@ export type MediaToggleType<T extends ToggleSource> = {
 };
 
 // @public (undocumented)
+export type MessageDecoder = (message: Uint8Array) => ReceivedChatMessage;
+
+// @public (undocumented)
+export type MessageEncoder = (message: ChatMessage) => Uint8Array;
+
+// @public (undocumented)
 export function mutedObserver(trackRef: TrackReferenceOrPlaceholder): Observable<boolean>;
 
 // @public (undocumented)

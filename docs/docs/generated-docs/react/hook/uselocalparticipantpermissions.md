@@ -2,13 +2,21 @@
 
 # useLocalParticipantPermissions
 
+The `useLocalParticipantPermissions` hook returns the local participant's permissions.
+
 ## Import
 
 ```typescript
 import { useLocalParticipantPermissions } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+const { canPublish, canPublishData } = useLocalParticipantPermissions();
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Returns
 

@@ -2,7 +2,7 @@
 
 # useLocalParticipant
 
-The useLocalParticipant hook the state of the local participant.
+The `useLocalParticipant` hook returns the local participant and the associated state around the participant.
 
 ## Import
 
@@ -10,7 +10,13 @@ The useLocalParticipant hook the state of the local participant.
 import { useLocalParticipant } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+const { localParticipant } = useLocalParticipant();
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Parameters
 

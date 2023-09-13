@@ -2,7 +2,7 @@
 
 # useGridLayout
 
-The useGridLayout hook tries to select the best layout to fit all tiles. If the available screen space is not enough, it will reduce the number of maximum visible tiles and select a layout that still works visually within the given limitations. As the order of tiles changes over time, the hook tries to keep visual updates to a minimum while trying to display important tiles such as speaking participants or screen shares.
+The `useGridLayout` hook tries to select the best layout to fit all tiles. If the available screen space is not enough, it will reduce the number of maximum visible tiles and select a layout that still works visually within the given limitations. As the order of tiles changes over time, the hook tries to keep visual updates to a minimum while trying to display important tiles such as speaking participants or screen shares.
 
 ## Import
 
@@ -10,7 +10,13 @@ The useGridLayout hook tries to select the best layout to fit all tiles. If the 
 import { useGridLayout } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+const { layout } = useGridLayout(gridElement, trackCount);
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Parameters
 

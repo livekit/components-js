@@ -2,13 +2,21 @@
 
 ## UseParticipantInfoOptions interface
 
+The `useParticipantInfo` hook returns the identity, name, and metadata of a given participant. It requires a `Participant` object passed as property or via the `ParticipantContext`<!-- -->.
+
 **Signature:**
 
 ```typescript
 export interface UseParticipantInfoOptions
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+const { identity, name, metadata } = useParticipantInfo({ participant });
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Properties
 

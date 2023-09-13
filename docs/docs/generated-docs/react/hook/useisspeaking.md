@@ -2,13 +2,21 @@
 
 # useIsSpeaking
 
+The `useIsSpeaking` hook returns a `boolean` that indicates if the participant is speaking or not.
+
 ## Import
 
 ```typescript
 import { useIsSpeaking } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+const isSpeaking = useIsSpeaking(participant);
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Parameters
 

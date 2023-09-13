@@ -590,7 +590,7 @@ export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): Tr
 // @alpha
 export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'user' | 'environment' | 'left' | 'right' | 'undefined';
 
-// @public (undocumented)
+// @public
 export function useFocusToggle({ trackRef, trackSource, participant, props }: UseFocusToggleProps): {
     mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
         className: string;

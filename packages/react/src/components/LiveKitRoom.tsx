@@ -7,7 +7,7 @@ import type {
 } from 'livekit-client';
 import type { MediaDeviceFailure, Room } from 'livekit-client';
 import * as React from 'react';
-import { RoomContext } from '../context';
+import { FeatureFlags, LKFeatureContext, RoomContext } from '../context';
 import { useLiveKitRoom } from '../hooks';
 
 /** @public */
@@ -75,6 +75,8 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   room?: Room;
 
   simulateParticipants?: number | undefined;
+
+  featureFlags?: FeatureFlags;
 }
 
 /**
@@ -98,7 +100,13 @@ export function LiveKitRoom(props: React.PropsWithChildren<LiveKitRoomProps>) {
   const { room, htmlProps } = useLiveKitRoom(props);
   return (
     <div {...htmlProps}>
-      {room && <RoomContext.Provider value={room}>{props.children}</RoomContext.Provider>}
+      {room && (
+        <RoomContext.Provider value={room}>
+          <LKFeatureContext.Provider value={props.featureFlags}>
+            {props.children}
+          </LKFeatureContext.Provider>
+        </RoomContext.Provider>
+      )}
     </div>
   );
 }

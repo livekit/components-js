@@ -10,6 +10,7 @@ import {
   ParticipantContext,
   TrackRefContext,
   useEnsureParticipant,
+  useFeatureContext,
   useMaybeLayoutContext,
   useMaybeParticipantContext,
   useMaybeTrackRefContext,
@@ -126,6 +127,8 @@ export function ParticipantTile({
   const isEncrypted = useIsEncrypted(p);
   const layoutContext = useMaybeLayoutContext();
 
+  const autoManageSubscription = useFeatureContext()?.autoSubscription;
+
   const handleSubscribe = React.useCallback(
     (subscribed: boolean) => {
       if (
@@ -154,7 +157,7 @@ export function ParticipantTile({
                 <VideoTrack
                   trackRef={trackReference}
                   onSubscriptionStatusChanged={handleSubscribe}
-                  manageSubscription={true}
+                  manageSubscription={autoManageSubscription}
                 />
               ) : (
                 isTrackReference(trackReference) && (

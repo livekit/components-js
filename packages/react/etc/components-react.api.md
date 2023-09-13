@@ -991,7 +991,7 @@ export interface VideoConferenceProps extends React_2.HTMLAttributes<HTMLDivElem
 }
 
 // @public
-export function VideoTrack({ onTrackClick, onClick, onSubscriptionStatusChanged, trackRef, name, publication, source, participant: p, manageSubscription, ...props }: VideoTrackProps): React_2.JSX.Element;
+export function VideoTrack({ onTrackClick, onClick, onSubscriptionStatusChanged, trackRef, name, publication, source, participant: p, ...props }: VideoTrackProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface VideoTrackProps extends React_2.HTMLAttributes<HTMLVideoElement> {

@@ -430,7 +430,7 @@ export function setupManualToggle(): {
 export function setupMediaToggle<T extends ToggleSource>(source: T, room: Room, options?: CaptureOptionsBySource<T>): MediaToggleType<T>;
 
 // @public (undocumented)
-export function setupMediaTrack(trackIdentifier: TrackIdentifier): {
+export function setupMediaTrack(trackIdentifier: TrackIdentifier, element?: HTMLMediaElement): {
     className: string;
     trackObserver: Observable<TrackPublication | undefined>;
 };

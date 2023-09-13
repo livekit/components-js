@@ -886,10 +886,10 @@ export type UseSwipeOptions = {
     onRightSwipe?: () => void;
 };
 
-// @public (undocumented)
+// @public
 export function useToken(tokenEndpoint: string | undefined, roomName: string, options?: UseTokenOptions): string | undefined;
 
-// @public
+// @public (undocumented)
 export interface UseTokenOptions {
     // (undocumented)
     userInfo?: UserInfo;
@@ -918,7 +918,7 @@ export function useTrackContext(): TrackReferenceOrPlaceholder;
 
 // Warning: (ae-forgotten-export) The symbol "TrackMutedIndicatorReturnType" needs to be exported by the entry point index.d.ts
 //
-// @public (undocumented)
+// @public
 export function useTrackMutedIndicator(trackRef?: TrackReferenceOrPlaceholder): TrackMutedIndicatorReturnType;
 
 // @public @deprecated (undocumented)

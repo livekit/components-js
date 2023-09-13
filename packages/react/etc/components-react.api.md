@@ -954,7 +954,7 @@ export type UseTracksOptions = {
     room?: Room;
 };
 
-// @public (undocumented)
+// @public
 export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, ...rest }: UseTrackToggleProps<T>): {
     toggle: ((forceState?: boolean | undefined) => void) | ((forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>);
     enabled: boolean;

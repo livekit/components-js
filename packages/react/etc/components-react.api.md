@@ -749,7 +749,7 @@ export function useParticipantInfo(props?: UseParticipantInfoOptions): {
     metadata: string | undefined;
 };
 
-// @public (undocumented)
+// @public
 export interface UseParticipantInfoOptions {
     // (undocumented)
     participant?: Participant;

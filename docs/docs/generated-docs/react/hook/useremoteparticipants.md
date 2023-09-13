@@ -2,7 +2,7 @@
 
 # useRemoteParticipants
 
-The useRemoteParticipants
+The `useRemoteParticipants` hook returns all remote participants (without the local) of the current room.
 
 ## Import
 
@@ -10,7 +10,20 @@ The useRemoteParticipants
 import { useRemoteParticipants } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Remarks
+
+To optimize performance, you can use the `updateOnlyOn` property to decide on what `RoomEvents` the hook updates.
+
+## Usage
+
+```tsx
+const participants = useRemoteParticipants();
+<ParticipantLoop participants={participants}>
+  <ParticipantName />
+</ParticipantLoop>;
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Parameters
 

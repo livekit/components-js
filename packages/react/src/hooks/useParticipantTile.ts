@@ -24,7 +24,14 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React.HT
   participant?: Participant;
 }
 
-/** @public */
+/**
+ * The `useParticipantTile` hook is used to implement the `ParticipantTile` and returns the props needed to render the tile.
+ * @remarks
+ * The returned props include many data attributes that are useful for CSS styling purposes because they
+ * indicate the state of the participant and the track.
+ * For example: `data-lk-audio-muted`, `data-lk-video-muted`, `data-lk-speaking`, `data-lk-local-participant`, `data-lk-source`, `data-lk-facing-mode`.
+ * @public
+ */
 export function useParticipantTile<T extends HTMLElement>({
   trackRef,
   participant,

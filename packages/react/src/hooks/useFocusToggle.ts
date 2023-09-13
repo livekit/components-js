@@ -19,7 +19,17 @@ export interface UseFocusToggleProps {
   props: React.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
-/** @public */
+/**
+ * The `useFocusToggle` hook is used to implement the `FocusToggle` or your custom implementation of it.
+ * The `TrackReferenceOrPlaceholder` is used to register a onClick handler and to identify the track to focus on.
+ *
+ * @example
+ * ```tsx
+ * const { mergedProps, inFocus } = useFocusToggle({ trackRef, props: yourButtonProps });
+ * return <button {...mergedProps}>{inFocus ? 'Unfocus' : 'Focus'}</button>;
+ * ```
+ * @public
+ */
 export function useFocusToggle({ trackRef, trackSource, participant, props }: UseFocusToggleProps) {
   const p = useEnsureParticipant(participant);
   if (!trackRef && !trackSource) {

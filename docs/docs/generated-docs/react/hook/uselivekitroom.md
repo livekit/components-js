@@ -2,13 +2,22 @@
 
 # useLiveKitRoom
 
+The `useLiveKitRoom` hook is used to implement the `LiveKitRoom` or your custom implementation of it. It returns a `Room` instance and HTML props that should be applied to the root element of the component.
+
 ## Import
 
 ```typescript
 import { useLiveKitRoom } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+const { room, htmlProps } = useLiveKitRoom();
+return <div {...htmlProps}>...</div>;
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Parameters
 

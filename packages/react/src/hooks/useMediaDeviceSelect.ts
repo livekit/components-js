@@ -21,7 +21,17 @@ export interface UseMediaDeviceSelectProps {
   requestPermissions?: boolean;
 }
 
-/** @public */
+/**
+ * The `useMediaDeviceSelect` hook is used to implement the `MediaDeviceSelect` component and
+ * returns o.a. the list of devices of a given kind (audioinput or videoinput), the currently active device
+ * and a function to set the the active device.
+ *
+ * @example
+ * ```tsx
+ * const { devices, activeDeviceId, setActiveMediaDevice } = useMediaDeviceSelect({kind: 'audioinput'});
+ * ```
+ * @public
+ */
 export function useMediaDeviceSelect({
   kind,
   room,

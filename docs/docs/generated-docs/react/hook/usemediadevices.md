@@ -2,13 +2,22 @@
 
 # useMediaDevices
 
+The `useMediaDevices` hook returns the list of media devices of a given kind.
+
 ## Import
 
 ```typescript
 import { useMediaDevices } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+const videoDevices = useMediaDevices({ kind: 'videoinput' });
+const audioDevices = useMediaDevices({ kind: 'audioinput' });
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Parameters
 

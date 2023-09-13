@@ -2,11 +2,17 @@
 
 # useChatToggle
 
+The `useChatToggle` hook provides state and functions for toggling the chat window.
+
 ## Import
 
 ```typescript
 import { useChatToggle } from '@livekit/components-react';
 ```
+
+## Remarks
+
+Depends on the `LayoutContext` to work properly.
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}
 

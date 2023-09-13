@@ -10,7 +10,16 @@ export interface ConnectionQualityIndicatorOptions {
   participant?: Participant;
 }
 
-/** @public */
+/**
+ * The `useConnectionQualityIndicator` hook provides props for the `ConnectionQualityIndicator` or your custom implementation of it component.
+ * @example
+ * ```tsx
+ * const { quality } = useConnectionQualityIndicator();
+ * // or
+ * const { quality } = useConnectionQualityIndicator({ participant });
+ * ```
+ * @public
+ */
 export function useConnectionQualityIndicator(options: ConnectionQualityIndicatorOptions = {}) {
   const p = useEnsureParticipant(options.participant);
 

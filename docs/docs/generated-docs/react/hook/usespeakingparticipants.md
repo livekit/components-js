@@ -2,7 +2,7 @@
 
 # useSpeakingParticipants
 
-The useSpeakingParticipants hook returns the only the active speakers of all participants.
+The `useSpeakingParticipants` hook returns the only the active speakers of all participants.
 
 ## Import
 
@@ -10,7 +10,13 @@ The useSpeakingParticipants hook returns the only the active speakers of all par
 import { useSpeakingParticipants } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+const activeSpeakers = useSpeakingParticipants();
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Returns
 

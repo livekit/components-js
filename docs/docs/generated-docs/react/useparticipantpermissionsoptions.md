@@ -2,13 +2,21 @@
 
 ## UseParticipantPermissionsOptions interface
 
+The `useParticipantPermissions` hook returns the permissions of a given participant.
+
 **Signature:**
 
 ```typescript
 export interface UseParticipantPermissionsOptions
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+const permissions = useParticipantPermissions({ participant });
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Properties
 

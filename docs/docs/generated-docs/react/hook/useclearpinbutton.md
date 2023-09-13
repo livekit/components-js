@@ -2,6 +2,8 @@
 
 # useClearPinButton
 
+The `useClearPinButton` hook provides props for the [ClearPinButton()](./react/component/clearpinbutton.md) or your custom implementation of it component. It adds the `onClick` handler to signal the `LayoutContext` that the tile in focus should be cleared.
+
 ## Import
 
 ```typescript

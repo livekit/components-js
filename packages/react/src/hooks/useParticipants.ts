@@ -19,7 +19,7 @@ export interface UseParticipantsOptions {
 /**
  * The `useParticipants` hook returns all participants (local and remote) of the current room.
  * @remarks
- * To optimize performance, you can use the `updateOnlyOn` property to decide on what RoomEvents the hook updates.
+ * To optimize performance, you can use the `updateOnlyOn` property to decide on what `RoomEvents` the hook updates.
  *
  * @example
  * ```tsx

@@ -808,12 +808,11 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(en
 // @alpha (undocumented)
 export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): LocalTrack[] | undefined;
 
-// @public (undocumented)
+// @public
 export function useRemoteParticipant(identity: string, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;
 
 // @public (undocumented)
 export interface UseRemoteParticipantOptions {
-    // (undocumented)
     updateOnlyOn?: ParticipantEvent[];
 }
 

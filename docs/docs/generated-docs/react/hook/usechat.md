@@ -2,11 +2,17 @@
 
 # useChat
 
+The `useChat` hook provides chat functionality for a LiveKit room. It returns a simple `send` function to send chat messages and an array of `chatMessages` to hold received messages.
+
 ## Import
 
 ```typescript
 import { useChat } from '@livekit/components-react';
 ```
+
+## Remarks
+
+It is possible to pass configurations for custom message encoding and decoding.
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
@@ -23,7 +29,7 @@ import { useChat } from '@livekit/components-react';
 ```typescript
 {
     send: ((message: string) => Promise<void>) | undefined;
-    chatMessages: ReceivedChatMessage[];
+    chatMessages: import("@livekit/components-core").ReceivedChatMessage[];
     isSending: boolean;
 }
 ```

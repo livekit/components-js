@@ -2,13 +2,25 @@
 
 # usePinnedTracks
 
+The `usePinnedTracks` hook returns a array of the pinned tracks of the current room.
+
 ## Import
 
 ```typescript
 import { usePinnedTracks } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Remarks
+
+To function properly, this hook must be called within a `LayoutContext`<!-- -->.
+
+## Usage
+
+```tsx
+const pinnedTracks = usePinnedTracks();
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Parameters
 

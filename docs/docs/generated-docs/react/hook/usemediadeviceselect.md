@@ -2,13 +2,23 @@
 
 # useMediaDeviceSelect
 
+The `useMediaDeviceSelect` hook is used to implement the `MediaDeviceSelect` component and returns o.a. the list of devices of a given kind (audioinput or videoinput), the currently active device and a function to set the the active device.
+
 ## Import
 
 ```typescript
 import { useMediaDeviceSelect } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+const { devices, activeDeviceId, setActiveMediaDevice } = useMediaDeviceSelect({
+  kind: 'audioinput',
+});
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Parameters
 

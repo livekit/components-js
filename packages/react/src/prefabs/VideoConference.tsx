@@ -1,7 +1,13 @@
-import type { TrackReferenceOrPlaceholder, WidgetState } from '@livekit/components-core';
+import type {
+  MessageDecoder,
+  MessageEncoder,
+  TrackReferenceOrPlaceholder,
+  WidgetState,
+} from '@livekit/components-core';
 import { isEqualTrackRef, isTrackReference, isWeb, log } from '@livekit/components-core';
 import { RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
+import type { MessageFormatter } from '../components';
 import {
   CarouselLayout,
   ConnectionStateToast,
@@ -12,7 +18,6 @@ import {
   ParticipantTile,
   RoomAudioRenderer,
 } from '../components';
-import type { MessageDecoder, MessageEncoder, MessageFormatter } from '../components/ChatEntry';
 import { useCreateLayoutContext } from '../context';
 import { usePinnedTracks, useTracks } from '../hooks';
 import { Chat } from './Chat';

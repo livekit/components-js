@@ -9,7 +9,7 @@
 import type { AudioCaptureOptions } from 'livekit-client';
 import type { AudioSource } from '@livekit/components-core';
 import { CaptureOptionsBySource } from '@livekit/components-core';
-import type { ChatMessage } from '@livekit/components-core';
+import { ChatMessage } from '@livekit/components-core';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import type { CreateLocalTracksOptions } from 'livekit-client';
@@ -22,13 +22,15 @@ import type { LocalTrack } from 'livekit-client';
 import { LocalTrackPublication } from 'livekit-client';
 import type { LocalVideoTrack } from 'livekit-client';
 import type { MediaDeviceFailure } from 'livekit-client';
+import { MessageDecoder } from '@livekit/components-core';
+import { MessageEncoder } from '@livekit/components-core';
 import { Participant } from 'livekit-client';
 import type { ParticipantClickEvent } from '@livekit/components-core';
 import type { ParticipantEvent } from 'livekit-client';
 import { ParticipantPermission } from 'livekit-client/dist/src/proto/livekit_models_pb';
 import type { PinState } from '@livekit/components-core';
 import * as React_2 from 'react';
-import type { ReceivedChatMessage } from '@livekit/components-core';
+import { ReceivedChatMessage } from '@livekit/components-core';
 import type { ReceivedDataMessage } from '@livekit/components-core';
 import { RemoteParticipant } from 'livekit-client';
 import { Room } from 'livekit-client';
@@ -352,11 +354,9 @@ export interface MediaDeviceSelectProps extends React_2.HTMLAttributes<HTMLUList
     track?: LocalAudioTrack | LocalVideoTrack;
 }
 
-// @public (undocumented)
-export type MessageDecoder = (message: Uint8Array) => ReceivedChatMessage;
+export { MessageDecoder }
 
-// @public (undocumented)
-export type MessageEncoder = (message: ChatMessage) => Uint8Array;
+export { MessageEncoder }
 
 // @public (undocumented)
 export type MessageFormatter = (message: string) => React_2.ReactNode;
@@ -505,7 +505,7 @@ export function useAudioPlayback(room?: Room): {
     startAudio: () => Promise<void>;
 };
 
-// @public (undocumented)
+// @public
 export function useChat(options?: {
     messageEncoder?: MessageEncoder;
     messageDecoder?: MessageDecoder;
@@ -515,7 +515,7 @@ export function useChat(options?: {
     isSending: boolean;
 };
 
-// @public (undocumented)
+// @public
 export function useChatToggle({ props }: UseChatToggleProps): {
     mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
         className: string;
@@ -531,7 +531,7 @@ export interface UseChatToggleProps {
     props: React_2.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
-// @public (undocumented)
+// @public
 export function useClearPinButton(props: ClearPinButtonProps): {
     buttonProps: ClearPinButtonProps & {
         className: string;
@@ -540,9 +540,9 @@ export function useClearPinButton(props: ClearPinButtonProps): {
     };
 };
 
-// @public (undocumented)
+// @public
 export function useConnectionQualityIndicator(options?: ConnectionQualityIndicatorOptions): {
-    className: "lk-rotate" | "lk-audio-conference" | "lk-audio-conference-stage" | "lk-audio-container" | "lk-button" | "lk-button-group" | "lk-button-group-container" | "lk-camera-off-note" | "lk-chat" | "lk-chat-entry" | "lk-chat-form" | "lk-chat-form-input" | "lk-chat-messages" | "lk-control-bar" | "lk-focus-layout-wrapper" | "lk-form-control" | "lk-grid-layout-wrapper" | "lk-join-button" | "lk-list" | "lk-message-body" | "lk-meta-data" | "lk-participant-name" | "lk-prejoin" | "lk-timestamp" | "lk-username-container" | "lk-video-conference" | "lk-video-conference-inner" | "lk-video-container" | "lk-audio-visualizer" | "lk-button-group-menu" | "lk-button-menu" | "lk-carousel" | "lk-chat-toggle" | "lk-connection-quality" | "lk-device-menu" | "lk-device-menu-heading" | "lk-disconnect-button" | "lk-focus-layout" | "lk-focus-toggle-button" | "lk-focused-participant" | "lk-grid-layout" | "lk-media-device-select" | "lk-pagination-control" | "lk-pagination-count" | "lk-pagination-indicator" | "lk-participant-media-audio" | "lk-participant-media-video" | "lk-participant-metadata" | "lk-participant-metadata-item" | "lk-participant-placeholder" | "lk-participant-tile" | "lk-pip-track" | "lk-room-container" | "lk-spinner" | "lk-start-audio-button" | "lk-toast" | "lk-track-muted-indicator-camera" | "lk-track-muted-indicator-microphone";
+    className: "lk-connection-quality";
     quality: ConnectionQuality;
 };
 
@@ -554,13 +554,13 @@ export function useCreateLayoutContext(): LayoutContextType;
 
 // Warning: (ae-forgotten-export) The symbol "UseDataChannelReturnType" needs to be exported by the entry point index.d.ts
 //
-// @public (undocumented)
+// @public
 export function useDataChannel<T extends string>(topic: T, onMessage?: (msg: ReceivedDataMessage<T>) => void): UseDataChannelReturnType<T>;
 
-// @public (undocumented)
+// @public
 export function useDataChannel(onMessage?: (msg: ReceivedDataMessage) => void): UseDataChannelReturnType;
 
-// @public (undocumented)
+// @public
 export function useDisconnectButton(props: DisconnectButtonProps): {
     buttonProps: DisconnectButtonProps & {
         className: string;
@@ -590,7 +590,7 @@ export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): Tr
 // @alpha
 export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'user' | 'environment' | 'left' | 'right' | 'undefined';
 
-// @public (undocumented)
+// @public
 export function useFocusToggle({ trackRef, trackSource, participant, props }: UseFocusToggleProps): {
     mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
         className: string;
@@ -618,7 +618,7 @@ trackCount: number): {
     layout: GridLayoutDefinition;
 };
 
-// @public (undocumented)
+// @public
 export function useIsMuted(trackRef: TrackReferenceOrPlaceholder): boolean;
 
 // @public @deprecated (undocumented)
@@ -630,13 +630,13 @@ export interface UseIsMutedOptions {
     participant?: Participant;
 }
 
-// @public (undocumented)
+// @public
 export function useIsSpeaking(participant?: Participant): boolean;
 
 // @public
 export function useLayoutContext(): LayoutContextType;
 
-// @public (undocumented)
+// @public
 export function useLiveKitRoom<T extends HTMLElement>(props: LiveKitRoomProps): {
     room: Room | undefined;
     htmlProps: HTMLAttributes<T>;
@@ -659,7 +659,7 @@ export interface UseLocalParticipantOptions {
     room?: Room;
 }
 
-// @public (undocumented)
+// @public
 export function useLocalParticipantPermissions(): ParticipantPermission | undefined;
 
 // @public
@@ -677,12 +677,12 @@ export function useMaybeTrackContext(): TrackReferenceOrPlaceholder | undefined;
 // @public
 export function useMaybeTrackRefContext(): TrackReferenceOrPlaceholder | undefined;
 
-// @public (undocumented)
+// @public
 export function useMediaDevices({ kind }: {
     kind: MediaDeviceKind;
 }): MediaDeviceInfo[];
 
-// @public (undocumented)
+// @public
 export function useMediaDeviceSelect({ kind, room, track, requestPermissions, }: UseMediaDeviceSelectProps): {
     devices: MediaDeviceInfo[];
     className: string;
@@ -749,7 +749,7 @@ export function useParticipantInfo(props?: UseParticipantInfoOptions): {
     metadata: string | undefined;
 };
 
-// @public (undocumented)
+// @public
 export interface UseParticipantInfoOptions {
     // (undocumented)
     participant?: Participant;
@@ -758,7 +758,7 @@ export interface UseParticipantInfoOptions {
 // @public (undocumented)
 export function useParticipantPermissions(options?: UseParticipantPermissionsOptions): ParticipantPermission | undefined;
 
-// @public (undocumented)
+// @public
 export interface UseParticipantPermissionsOptions {
     // (undocumented)
     participant?: Participant;
@@ -773,7 +773,7 @@ export interface UseParticipantsOptions {
     updateOnlyOn?: RoomEvent[];
 }
 
-// @public (undocumented)
+// @public
 export function useParticipantTile<T extends HTMLElement>({ trackRef, participant, source, publication, onParticipantClick, disableSpeakingIndicator, htmlProps, }: UseParticipantTileProps<T>): {
     elementProps: React_2.HTMLAttributes<T>;
 };
@@ -795,7 +795,7 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
     trackRef?: TrackReferenceOrPlaceholder;
 }
 
-// @public (undocumented)
+// @public
 export function usePinnedTracks(layoutContext?: LayoutContextType): TrackReferenceOrPlaceholder[];
 
 // @public (undocumented)
@@ -808,12 +808,11 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(en
 // @alpha (undocumented)
 export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): LocalTrack[] | undefined;
 
-// @public (undocumented)
+// @public
 export function useRemoteParticipant(identity: string, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;
 
 // @public (undocumented)
 export interface UseRemoteParticipantOptions {
-    // (undocumented)
     updateOnlyOn?: ParticipantEvent[];
 }
 
@@ -845,7 +844,7 @@ export function useRoomInfo(options?: UseRoomInfoOptions): {
     metadata: string | undefined;
 };
 
-// @public (undocumented)
+// @public
 export interface UseRoomInfoOptions {
     // (undocumented)
     room?: Room;
@@ -887,7 +886,7 @@ export type UseSwipeOptions = {
     onRightSwipe?: () => void;
 };
 
-// @public (undocumented)
+// @public
 export function useToken(tokenEndpoint: string | undefined, roomName: string, options?: UseTokenOptions): string | undefined;
 
 // @public (undocumented)
@@ -919,7 +918,7 @@ export function useTrackContext(): TrackReferenceOrPlaceholder;
 
 // Warning: (ae-forgotten-export) The symbol "TrackMutedIndicatorReturnType" needs to be exported by the entry point index.d.ts
 //
-// @public (undocumented)
+// @public
 export function useTrackMutedIndicator(trackRef?: TrackReferenceOrPlaceholder): TrackMutedIndicatorReturnType;
 
 // @public @deprecated (undocumented)
@@ -955,7 +954,7 @@ export type UseTracksOptions = {
     room?: Room;
 };
 
-// @public (undocumented)
+// @public
 export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, ...rest }: UseTrackToggleProps<T>): {
     toggle: ((forceState?: boolean | undefined) => void) | ((forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>);
     enabled: boolean;
@@ -968,7 +967,7 @@ export function useTrackToggle<T extends ToggleSource>({ source, onChange, initi
 export interface UseTrackToggleProps<T extends ToggleSource> extends Omit<TrackToggleProps<T>, 'showIcon'> {
 }
 
-// @beta
+// @public
 export function useVisualStableUpdate(
 trackReferences: TrackReferenceOrPlaceholder[], maxItemsOnPage: number, options?: UseVisualStableUpdateOptions): TrackReferenceOrPlaceholder[];
 

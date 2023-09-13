@@ -4,7 +4,15 @@ import { participantPermissionObserver } from '@livekit/components-core';
 import { useEnsureParticipant } from '../context';
 import { useObservableState } from './internal/useObservableState';
 
-/** @public */
+/**
+ * The `useParticipantPermissions` hook returns the permissions of a given participant.
+ *
+ * @example
+ * ```tsx
+ * const permissions = useParticipantPermissions({ participant });
+ * ```
+ * @public
+ */
 export interface UseParticipantPermissionsOptions {
   participant?: Participant;
 }

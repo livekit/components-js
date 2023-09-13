@@ -2,13 +2,25 @@
 
 # useRemoteParticipant
 
+The `useRemoteParticipant` hook returns the RemoteParticipant with the given `identity`<!-- -->.
+
 ## Import
 
 ```typescript
 import { useRemoteParticipant } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Remarks
+
+To optimize performance, you can use the `updateOnlyOn` property to decide on what `ParticipantEvents` the hook updates.
+
+## Usage
+
+```tsx
+const participant = useRemoteParticipant('Russ');
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Parameters
 

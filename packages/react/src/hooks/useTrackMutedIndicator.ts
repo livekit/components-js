@@ -19,7 +19,16 @@ interface TrackMutedIndicatorReturnType {
   className: string;
 }
 
-/** @public */
+/**
+ * The `useTrackMutedIndicator` hook is used to implement the `TrackMutedIndicator` component
+ * and returns the muted state of the given track.
+ *
+ * @example
+ * ```tsx
+ * const { isMuted } = useTrackMutedIndicator(trackRef);
+ * ```
+ * @public
+ */
 export function useTrackMutedIndicator(
   trackRef?: TrackReferenceOrPlaceholder,
 ): TrackMutedIndicatorReturnType;

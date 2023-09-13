@@ -16,6 +16,6 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
 
 | Property                                                                      | Type                                            | Description  |
 | ----------------------------------------------------------------------------- | ----------------------------------------------- | ------------ |
-| [chatMessageDecoder?](./react/videoconferenceprops.chatmessagedecoder.md)     | [MessageDecoder](./react/messagedecoder.md)     | _(Optional)_ |
-| [chatMessageEncoder?](./react/videoconferenceprops.chatmessageencoder.md)     | [MessageEncoder](./react/messageencoder.md)     | _(Optional)_ |
+| [chatMessageDecoder?](./react/videoconferenceprops.chatmessagedecoder.md)     | [MessageDecoder](./core/messagedecoder.md)      | _(Optional)_ |
+| [chatMessageEncoder?](./react/videoconferenceprops.chatmessageencoder.md)     | [MessageEncoder](./core/messageencoder.md)      | _(Optional)_ |
 | [chatMessageFormatter?](./react/videoconferenceprops.chatmessageformatter.md) | [MessageFormatter](./react/messageformatter.md) | _(Optional)_ |

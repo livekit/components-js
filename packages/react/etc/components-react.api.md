@@ -659,7 +659,7 @@ export interface UseLocalParticipantOptions {
     room?: Room;
 }
 
-// @public (undocumented)
+// @public
 export function useLocalParticipantPermissions(): ParticipantPermission | undefined;
 
 // @public

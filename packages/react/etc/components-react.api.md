@@ -682,7 +682,7 @@ export function useMediaDevices({ kind }: {
     kind: MediaDeviceKind;
 }): MediaDeviceInfo[];
 
-// @public (undocumented)
+// @public
 export function useMediaDeviceSelect({ kind, room, track, requestPermissions, }: UseMediaDeviceSelectProps): {
     devices: MediaDeviceInfo[];
     className: string;

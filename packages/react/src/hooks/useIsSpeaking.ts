@@ -4,7 +4,14 @@ import * as React from 'react';
 import { useEnsureParticipant } from '../context';
 import { useObservableState } from './internal';
 
-/** @public */
+/**
+ * The `useIsSpeaking` hook returns a `boolean` that indicates if the participant is speaking or not.
+ * @example
+ * ```tsx
+ * const isSpeaking = useIsSpeaking(participant);
+ * ```
+ * @public
+ */
 export function useIsSpeaking(participant?: Participant) {
   const p = useEnsureParticipant(participant);
   const observable = React.useMemo(() => createIsSpeakingObserver(p), [p]);

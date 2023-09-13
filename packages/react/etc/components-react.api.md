@@ -630,7 +630,7 @@ export interface UseIsMutedOptions {
     participant?: Participant;
 }
 
-// @public (undocumented)
+// @public
 export function useIsSpeaking(participant?: Participant): boolean;
 
 // @public

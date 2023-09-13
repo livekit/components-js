@@ -967,7 +967,7 @@ export function useTrackToggle<T extends ToggleSource>({ source, onChange, initi
 export interface UseTrackToggleProps<T extends ToggleSource> extends Omit<TrackToggleProps<T>, 'showIcon'> {
 }
 
-// @beta
+// @public
 export function useVisualStableUpdate(
 trackReferences: TrackReferenceOrPlaceholder[], maxItemsOnPage: number, options?: UseVisualStableUpdateOptions): TrackReferenceOrPlaceholder[];
 

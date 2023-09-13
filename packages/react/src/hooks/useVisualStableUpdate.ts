@@ -11,13 +11,21 @@ export interface UseVisualStableUpdateOptions {
 }
 
 /**
- * The useVisualStableUpdate hook tries to keep visual updates of the TackBundles array to a minimum,
- * while still trying to display important tiles such as speaking participants or screen shares.
+ * The `useVisualStableUpdate` hook is used to prevent visually jarring jumps and shifts of elements
+ * in an array. The algorithm only starts to update when there are more items than visually fit
+ * on a page. If this is the case, it will make sure that speaking participants move to the first
+ * page and are always visible.
+ * @remarks
+ * Updating the array can occur because attendees leave or join a room, or because they mute/unmute
+ * or start speaking.
+ * The hook is used for the `GridLayout` and `CarouselLayout` components.
  *
- * Updating works with pagination. For example, if a participant starts speaking on the second page,
- * they will be moved to the first page by replacing the least active/interesting participant on the first page.
- *
- * @beta
+ * @example
+ * ```tsx
+ * const trackRefs = useTracks();
+ * const updatedTrackRefs = useVisualStableUpdate(trackRefs, itemPerPage);
+ * ```
+ * @public
  */
 export function useVisualStableUpdate(
   /** `TrackReference`s to display in the grid.  */

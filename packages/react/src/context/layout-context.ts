@@ -15,6 +15,14 @@ export type LayoutContextType = {
 export const LayoutContext = React.createContext<LayoutContextType | undefined>(undefined);
 
 /**
+ * Returns a layout context from the `LayoutContext` if it exists, otherwise `undefined`.
+ * @public
+ */
+export function useMaybeLayoutContext(): LayoutContextType | undefined {
+  return React.useContext(LayoutContext);
+}
+
+/**
  * Ensures that a layout context is provided via context.
  * If no layout context is provided, an error is thrown.
  * @public
@@ -63,10 +71,27 @@ export function useEnsureCreateLayoutContext(layoutContext?: LayoutContextType):
   );
 }
 
-/**
- * Returns a layout context from the `LayoutContext` if it exists, otherwise `undefined`.
- * @public
- */
-export function useMaybeLayoutContext(): LayoutContextType | undefined {
-  return React.useContext(LayoutContext);
+type OptionMaybeContext = undefined;
+type OptionEnsureContext = { ensure: true };
+type HookContextOptions = undefined | { ensure: true };
+export type UseLayoutContextReturnType<InputType> = InputType extends OptionMaybeContext
+  ? LayoutContextType | undefined
+  : InputType extends OptionEnsureContext
+  ? LayoutContextType
+  : never;
+
+export function useTestLayoutContext<T extends HookContextOptions>(
+  options?: T,
+): UseLayoutContextReturnType<T> {
+  const context = React.useContext(LayoutContext);
+  if (options?.ensure === true) {
+    if (context === undefined) {
+      throw Error(
+        'Tried to access LayoutContext context outside a LayoutContextProvider provider.',
+      );
+    } else {
+      return context as UseLayoutContextReturnType<T>;
+    }
+  }
+  return context as UseLayoutContextReturnType<T>;
 }

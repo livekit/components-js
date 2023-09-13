@@ -758,7 +758,7 @@ export interface UseParticipantInfoOptions {
 // @public (undocumented)
 export function useParticipantPermissions(options?: UseParticipantPermissionsOptions): ParticipantPermission | undefined;
 
-// @public (undocumented)
+// @public
 export interface UseParticipantPermissionsOptions {
     // (undocumented)
     participant?: Participant;

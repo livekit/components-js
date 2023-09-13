@@ -1,5 +1,5 @@
 ---
-"@livekit/components-js-docs": patch
+'@livekit/components-js-docs': minor
 ---
 
-Doc strings for all hooks. Minor refactors. Promote `useVisualStableUpdate` @alpha -> @public.
+Doc strings for all hooks. Refactor around `Chat` component. Promote `useVisualStableUpdate` @alpha -> @public.

@@ -12,7 +12,17 @@ const defaultRoomProps: Partial<LiveKitRoomProps> = {
   video: false,
 };
 
-/** @public */
+/**
+ * The `useLiveKitRoom` hook is used to implement the `LiveKitRoom` or your custom implementation of it.
+ * It returns a `Room` instance and HTML props that should be applied to the root element of the component.
+ *
+ * @example
+ * ```tsx
+ * const { room, htmlProps } = useLiveKitRoom();
+ * return <div {...htmlProps}>...</div>;
+ * ```
+ * @public
+ */
 export function useLiveKitRoom<T extends HTMLElement>(
   props: LiveKitRoomProps,
 ): {

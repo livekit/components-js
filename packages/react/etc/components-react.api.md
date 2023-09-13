@@ -636,7 +636,7 @@ export function useIsSpeaking(participant?: Participant): boolean;
 // @public
 export function useLayoutContext(): LayoutContextType;
 
-// @public (undocumented)
+// @public
 export function useLiveKitRoom<T extends HTMLElement>(props: LiveKitRoomProps): {
     room: Room | undefined;
     htmlProps: HTMLAttributes<T>;

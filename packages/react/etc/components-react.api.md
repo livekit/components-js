@@ -889,7 +889,7 @@ export type UseSwipeOptions = {
 // @public (undocumented)
 export function useToken(tokenEndpoint: string | undefined, roomName: string, options?: UseTokenOptions): string | undefined;
 
-// @public (undocumented)
+// @public
 export interface UseTokenOptions {
     // (undocumented)
     userInfo?: UserInfo;

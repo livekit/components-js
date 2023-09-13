@@ -531,7 +531,7 @@ export interface UseChatToggleProps {
     props: React_2.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
-// @public (undocumented)
+// @public
 export function useClearPinButton(props: ClearPinButtonProps): {
     buttonProps: ClearPinButtonProps & {
         className: string;

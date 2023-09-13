@@ -4,7 +4,12 @@ import { useLayoutContext } from '../context';
 import { mergeProps } from '../mergeProps';
 import type { ClearPinButtonProps } from '../components';
 
-/** @public */
+/**
+ * The `useClearPinButton` hook provides props for the {@link ClearPinButton}
+ * or your custom implementation of it component. It adds the `onClick` handler
+ * to signal the `LayoutContext` that the tile in focus should be cleared.
+ * @public
+ */
 export function useClearPinButton(props: ClearPinButtonProps) {
   const { state, dispatch } = useLayoutContext().pin;
 

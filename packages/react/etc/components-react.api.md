@@ -677,7 +677,7 @@ export function useMaybeTrackContext(): TrackReferenceOrPlaceholder | undefined;
 // @public
 export function useMaybeTrackRefContext(): TrackReferenceOrPlaceholder | undefined;
 
-// @public (undocumented)
+// @public
 export function useMediaDevices({ kind }: {
     kind: MediaDeviceKind;
 }): MediaDeviceInfo[];

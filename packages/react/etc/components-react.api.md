@@ -618,7 +618,7 @@ trackCount: number): {
     layout: GridLayoutDefinition;
 };
 
-// @public (undocumented)
+// @public
 export function useIsMuted(trackRef: TrackReferenceOrPlaceholder): boolean;
 
 // @public @deprecated (undocumented)

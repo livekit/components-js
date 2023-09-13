@@ -22,11 +22,12 @@ export function useMediaTrackBySourceOrName(
   const previousElement = React.useRef<HTMLMediaElement | undefined | null>();
 
   const { className, trackObserver } = React.useMemo(() => {
-    return setupMediaTrack(observerOptions);
+    return setupMediaTrack(observerOptions, options.element?.current ?? undefined);
   }, [
     observerOptions.participant.sid ?? observerOptions.participant.identity,
     observerOptions.source,
     isTrackReference(observerOptions) && observerOptions.publication.trackSid,
+    options.element?.current,
   ]);
 
   React.useEffect(() => {

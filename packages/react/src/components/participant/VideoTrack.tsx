@@ -1,14 +1,8 @@
-import {
-  RemoteTrackPublication,
-  type Participant,
-  type Track,
-  type TrackPublication,
-} from 'livekit-client';
+import { type Participant, type Track, type TrackPublication } from 'livekit-client';
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
 import type { ParticipantClickEvent, TrackReference } from '@livekit/components-core';
 import { useEnsureParticipant, useMaybeTrackRefContext } from '../../context';
-import * as useHooks from 'usehooks-ts';
 
 /** @public */
 export interface VideoTrackProps extends React.HTMLAttributes<HTMLVideoElement> {
@@ -47,7 +41,7 @@ export function VideoTrack({
   publication,
   source,
   participant: p,
-  manageSubscription,
+  // manageSubscription,
   ...props
 }: VideoTrackProps) {
   // TODO: Remove and refactor all variables with underscore in a future version after the deprecation period.
@@ -64,30 +58,30 @@ export function VideoTrack({
 
   const mediaEl = React.useRef<HTMLVideoElement>(null);
 
-  const intersectionEntry = useHooks.useIntersectionObserver(mediaEl, {});
+  // const intersectionEntry = useHooks.useIntersectionObserver(mediaEl, {});
 
-  const debouncedIntersectionEntry = useHooks.useDebounce(intersectionEntry, 3000);
+  // const debouncedIntersectionEntry = useHooks.useDebounce(intersectionEntry, 3000);
 
-  React.useEffect(() => {
-    if (
-      manageSubscription &&
-      _publication instanceof RemoteTrackPublication &&
-      debouncedIntersectionEntry?.isIntersecting === false &&
-      intersectionEntry?.isIntersecting === false
-    ) {
-      _publication.setSubscribed(false);
-    }
-  }, [debouncedIntersectionEntry, _publication, manageSubscription]);
+  // React.useEffect(() => {
+  //   if (
+  //     manageSubscription &&
+  //     _publication instanceof RemoteTrackPublication &&
+  //     debouncedIntersectionEntry?.isIntersecting === false &&
+  //     intersectionEntry?.isIntersecting === false
+  //   ) {
+  //     _publication.setSubscribed(false);
+  //   }
+  // }, [debouncedIntersectionEntry, _publication, manageSubscription]);
 
-  React.useEffect(() => {
-    if (
-      manageSubscription &&
-      _publication instanceof RemoteTrackPublication &&
-      intersectionEntry?.isIntersecting === true
-    ) {
-      _publication.setSubscribed(true);
-    }
-  }, [intersectionEntry, _publication, manageSubscription]);
+  // React.useEffect(() => {
+  //   if (
+  //     manageSubscription &&
+  //     _publication instanceof RemoteTrackPublication &&
+  //     intersectionEntry?.isIntersecting === true
+  //   ) {
+  //     _publication.setSubscribed(true);
+  //   }
+  // }, [intersectionEntry, _publication, manageSubscription]);
 
   const {
     elementProps,

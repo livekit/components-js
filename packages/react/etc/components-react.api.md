@@ -795,7 +795,7 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
     trackRef?: TrackReferenceOrPlaceholder;
 }
 
-// @public (undocumented)
+// @public
 export function usePinnedTracks(layoutContext?: LayoutContextType): TrackReferenceOrPlaceholder[];
 
 // @public (undocumented)

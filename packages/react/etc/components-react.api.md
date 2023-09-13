@@ -844,7 +844,7 @@ export function useRoomInfo(options?: UseRoomInfoOptions): {
     metadata: string | undefined;
 };
 
-// @public (undocumented)
+// @public
 export interface UseRoomInfoOptions {
     // (undocumented)
     room?: Room;

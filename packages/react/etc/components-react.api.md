@@ -560,7 +560,7 @@ export function useDataChannel<T extends string>(topic: T, onMessage?: (msg: Rec
 // @public
 export function useDataChannel(onMessage?: (msg: ReceivedDataMessage) => void): UseDataChannelReturnType;
 
-// @public (undocumented)
+// @public
 export function useDisconnectButton(props: DisconnectButtonProps): {
     buttonProps: DisconnectButtonProps & {
         className: string;

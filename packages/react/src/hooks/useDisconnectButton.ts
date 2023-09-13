@@ -6,7 +6,18 @@ import { useRoomContext } from '../context';
 import { mergeProps } from '../mergeProps';
 import { useConnectionState } from './useConnectionStatus';
 
-/** @public */
+/**
+ * The `useDisconnectButton` hook is used to implement the `DisconnectButton` or your
+ * custom implementation of it. It adds onClick handler to the button to disconnect
+ * from the room.
+ *
+ * @example
+ * ```tsx
+ * const { buttonProps } = useDisconnectButton();
+ * return <button {...buttonProps}>Disconnect</button>;
+ * ```
+ * @public
+ */
 export function useDisconnectButton(props: DisconnectButtonProps) {
   const room = useRoomContext();
   const connectionState = useConnectionState(room);

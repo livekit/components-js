@@ -554,10 +554,10 @@ export function useCreateLayoutContext(): LayoutContextType;
 
 // Warning: (ae-forgotten-export) The symbol "UseDataChannelReturnType" needs to be exported by the entry point index.d.ts
 //
-// @public (undocumented)
+// @public
 export function useDataChannel<T extends string>(topic: T, onMessage?: (msg: ReceivedDataMessage<T>) => void): UseDataChannelReturnType<T>;
 
-// @public (undocumented)
+// @public
 export function useDataChannel(onMessage?: (msg: ReceivedDataMessage) => void): UseDataChannelReturnType;
 
 // @public (undocumented)

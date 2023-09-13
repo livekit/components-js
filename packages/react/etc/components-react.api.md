@@ -773,7 +773,7 @@ export interface UseParticipantsOptions {
     updateOnlyOn?: RoomEvent[];
 }
 
-// @public (undocumented)
+// @public
 export function useParticipantTile<T extends HTMLElement>({ trackRef, participant, source, publication, onParticipantClick, disableSpeakingIndicator, htmlProps, }: UseParticipantTileProps<T>): {
     elementProps: React_2.HTMLAttributes<T>;
 };

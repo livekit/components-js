@@ -9,7 +9,7 @@ export interface UseChatToggleProps {
 }
 
 /**
- * A React hook that provides state and functions for toggling the chat window.
+ * The `useChatToggle` hook provides state and functions for toggling the chat window.
  * @remarks
  * Depends on the `LayoutContext` to work properly.
  * @see {@link ChatToggle}, {@link Chat}

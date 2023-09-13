@@ -41,6 +41,8 @@
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
     "test": "vitest --run",
     "test:watch": "vitest",
+    "test:types": "vitest --run typecheck",
+    "test:types:watch": "vitest typecheck",
     "size": "size-limit --json",
     "api-check": "api-extractor run --typescript-compiler-folder ../../node_modules/typescript",
     "api-extractor": "api-extractor run --local --typescript-compiler-folder ../../node_modules/typescript --verbose"

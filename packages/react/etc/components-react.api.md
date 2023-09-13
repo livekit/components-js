@@ -208,6 +208,12 @@ export interface DisconnectButtonProps extends React_2.ButtonHTMLAttributes<HTML
     stopTracks?: boolean;
 }
 
+// @alpha (undocumented)
+export interface FeatureFlags {
+    // (undocumented)
+    autoSubscription?: boolean;
+}
+
 // @public
 export function FocusLayout({ trackRef, track, ...htmlProps }: FocusLayoutProps): React_2.JSX.Element;
 
@@ -288,6 +294,10 @@ export interface LiveKitRoomProps extends Omit<React_2.HTMLAttributes<HTMLDivEle
     audio?: AudioCaptureOptions | boolean;
     connect?: boolean;
     connectOptions?: RoomConnectOptions;
+    // Warning: (ae-incompatible-release-tags) The symbol "featureFlags" is marked as @public, but its signature references "FeatureFlags" which is marked as @alpha
+    //
+    // (undocumented)
+    featureFlags?: FeatureFlags;
     // (undocumented)
     onConnected?: () => void;
     // (undocumented)
@@ -305,6 +315,9 @@ export interface LiveKitRoomProps extends Omit<React_2.HTMLAttributes<HTMLDivEle
     token: string | undefined;
     video?: VideoCaptureOptions | boolean;
 }
+
+// @alpha (undocumented)
+export const LKFeatureContext: React_2.Context<FeatureFlags | undefined>;
 
 // @public (undocumented)
 export type LocalUserChoices = {
@@ -589,6 +602,11 @@ export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): Tr
 
 // @alpha
 export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'user' | 'environment' | 'left' | 'right' | 'undefined';
+
+// Warning: (ae-forgotten-export) The symbol "FeatureContext" needs to be exported by the entry point index.d.ts
+//
+// @alpha (undocumented)
+export function useFeatureContext<T extends boolean>(require?: T): FeatureContext<T>;
 
 // @public
 export function useFocusToggle({ trackRef, trackSource, participant, props }: UseFocusToggleProps): {

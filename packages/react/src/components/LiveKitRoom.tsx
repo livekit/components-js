@@ -7,7 +7,7 @@ import type {
 } from 'livekit-client';
 import type { MediaDeviceFailure, Room } from 'livekit-client';
 import * as React from 'react';
-import { FeatureFlags, LKFeatureContext, RoomContext } from '../context';
+import { type FeatureFlags, LKFeatureContext, RoomContext } from '../context';
 import { useLiveKitRoom } from '../hooks';
 
 /** @public */
@@ -76,6 +76,9 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
 
   simulateParticipants?: number | undefined;
 
+  /**
+   * @internal
+   */
   featureFlags?: FeatureFlags;
 }
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-/** @alpha */
+/** @internal */
 export interface FeatureFlags {
   autoSubscription?: boolean;
 }
@@ -9,11 +9,11 @@ type FeatureContext<T extends boolean = false> = T extends true
   ? FeatureFlags
   : FeatureFlags | undefined;
 
-/** @alpha */
+/** @internal */
 export const LKFeatureContext = React.createContext<FeatureFlags | undefined>(undefined);
 
 /**
- * @alpha
+ * @internal
  */
 export function useFeatureContext<T extends boolean>(require?: T): FeatureContext<T> {
   const ctx = React.useContext(LKFeatureContext) as FeatureContext<T>;

@@ -22,34 +22,25 @@ export const LayoutContext = React.createContext<LayoutContextType | undefined>(
 
 // TODO: don't change name
 // TODO: custom error for missing context.
-export function useMegaLayoutContext(
-  options?: ContextHookOptions<LayoutContextType>,
-): ContextHookReturnType<typeof options, LayoutContextType> {
+export function useMegaLayoutContext<ContextType extends LayoutContextType>(
+  options?: ContextHookOptions<ContextType> | undefined,
+): ContextHookReturnType<ContextType, typeof options> {
+  // type ReturnThis = ContextHookReturnType<ContextType>;
   const context = React.useContext(LayoutContext);
 
-  if (options === undefined) {
-    // Case: (undefined) -> LayoutContextType
-    if (context !== undefined) {
-      return context;
-    }
-  } else if (isEnsureFalse(options)) {
+  if (isEnsureFalse(options)) {
     // Case: {ensure: false} -> LayoutContextType | undefined
     return context;
-  } else if (isEnsureContext(options)) {
-    // Case: (LayoutContextType) -> LayoutContextType
-    return options;
+  } else if (context) {
+    if (options === undefined) {
+      // Case: (undefined) -> LayoutContextType
+      return context;
+    } else if (isEnsureContext(options)) {
+      // Case: (LayoutContextType) -> LayoutContextType
+      return options;
+    }
   }
-
-  if (context !== undefined) {
-    return never;
-  }
-  if (context === undefined) {
-    throw Error('Tried to access LayoutContext context outside a LayoutContextProvider provider.');
-  }
-
-  const test1 = options;
-  const test = context;
-  console.log(test, test1);
+  throw Error('Tried to access LayoutContext context outside a LayoutContextProvider provider.');
 }
 
 /**

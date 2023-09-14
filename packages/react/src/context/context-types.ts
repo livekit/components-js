@@ -7,12 +7,15 @@ export type ContextHookOptions<ContextType> =
   | OptionEnsureFalse
   | OptionEnsureWithContext<ContextType>;
 
-export type ContextHookReturnType<Option, ContextType> = Option extends OptionUndefined
-  ? ContextType
-  : Option extends OptionEnsureWithContext<ContextType>
+export type ContextHookReturnType<
+  ContextType,
+  Option extends ContextHookOptions<ContextType>,
+> = Option extends OptionUndefined
   ? ContextType
   : Option extends OptionEnsureFalse
   ? ContextType | undefined
+  : Option extends OptionEnsureWithContext<ContextType>
+  ? ContextType
   : never;
 
 export function isEnsureFalse(options: unknown): options is OptionEnsureFalse {

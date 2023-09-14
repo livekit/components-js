@@ -4,6 +4,12 @@ import type { PinContextType } from './pin-context';
 import type { ChatContextType } from './chat-context';
 import { chatReducer } from './chat-context';
 import { pinReducer } from './pin-context';
+import {
+  type ContextHookOptions,
+  type ContextHookReturnType,
+  isEnsureFalse,
+  isEnsureContext,
+} from './context-types';
 
 /** @public */
 export type LayoutContextType = {
@@ -13,6 +19,38 @@ export type LayoutContextType = {
 
 /** @public */
 export const LayoutContext = React.createContext<LayoutContextType | undefined>(undefined);
+
+// TODO: don't change name
+// TODO: custom error for missing context.
+export function useMegaLayoutContext(
+  options?: ContextHookOptions<LayoutContextType>,
+): ContextHookReturnType<typeof options, LayoutContextType> {
+  const context = React.useContext(LayoutContext);
+
+  if (options === undefined) {
+    // Case: (undefined) -> LayoutContextType
+    if (context !== undefined) {
+      return context;
+    }
+  } else if (isEnsureFalse(options)) {
+    // Case: {ensure: false} -> LayoutContextType | undefined
+    return context;
+  } else if (isEnsureContext(options)) {
+    // Case: (LayoutContextType) -> LayoutContextType
+    return options;
+  }
+
+  if (context !== undefined) {
+    return never;
+  }
+  if (context === undefined) {
+    throw Error('Tried to access LayoutContext context outside a LayoutContextProvider provider.');
+  }
+
+  const test1 = options;
+  const test = context;
+  console.log(test, test1);
+}
 
 /**
  * Returns a layout context from the `LayoutContext` if it exists, otherwise `undefined`.
@@ -69,29 +107,4 @@ export function useEnsureCreateLayoutContext(layoutContext?: LayoutContextType):
       widget: { dispatch: widgetDispatch, state: widgetState },
     }
   );
-}
-
-type OptionMaybeContext = undefined;
-type OptionEnsureContext = { ensure: true };
-type HookContextOptions = undefined | { ensure: true };
-export type UseLayoutContextReturnType<InputType> = InputType extends OptionMaybeContext
-  ? LayoutContextType | undefined
-  : InputType extends OptionEnsureContext
-  ? LayoutContextType
-  : never;
-
-export function useTestLayoutContext<T extends HookContextOptions>(
-  options?: T,
-): UseLayoutContextReturnType<T> {
-  const context = React.useContext(LayoutContext);
-  if (options?.ensure === true) {
-    if (context === undefined) {
-      throw Error(
-        'Tried to access LayoutContext context outside a LayoutContextProvider provider.',
-      );
-    } else {
-      return context as UseLayoutContextReturnType<T>;
-    }
-  }
-  return context as UseLayoutContextReturnType<T>;
 }

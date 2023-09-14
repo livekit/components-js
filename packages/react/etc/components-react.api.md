@@ -208,6 +208,14 @@ export interface DisconnectButtonProps extends React_2.ButtonHTMLAttributes<HTML
     stopTracks?: boolean;
 }
 
+// Warning: (ae-internal-missing-underscore) The name "FeatureFlags" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export interface FeatureFlags {
+    // (undocumented)
+    autoSubscription?: boolean;
+}
+
 // @public
 export function FocusLayout({ trackRef, track, ...htmlProps }: FocusLayoutProps): React_2.JSX.Element;
 
@@ -288,6 +296,8 @@ export interface LiveKitRoomProps extends Omit<React_2.HTMLAttributes<HTMLDivEle
     audio?: AudioCaptureOptions | boolean;
     connect?: boolean;
     connectOptions?: RoomConnectOptions;
+    // @internal (undocumented)
+    featureFlags?: FeatureFlags;
     // (undocumented)
     onConnected?: () => void;
     // (undocumented)
@@ -305,6 +315,11 @@ export interface LiveKitRoomProps extends Omit<React_2.HTMLAttributes<HTMLDivEle
     token: string | undefined;
     video?: VideoCaptureOptions | boolean;
 }
+
+// Warning: (ae-internal-missing-underscore) The name "LKFeatureContext" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const LKFeatureContext: React_2.Context<FeatureFlags | undefined>;
 
 // @public (undocumented)
 export type LocalUserChoices = {
@@ -589,6 +604,12 @@ export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): Tr
 
 // @alpha
 export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'user' | 'environment' | 'left' | 'right' | 'undefined';
+
+// Warning: (ae-forgotten-export) The symbol "FeatureContext" needs to be exported by the entry point index.d.ts
+// Warning: (ae-internal-missing-underscore) The name "useFeatureContext" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export function useFeatureContext<T extends boolean>(require?: T): FeatureContext<T>;
 
 // @public
 export function useFocusToggle({ trackRef, trackSource, participant, props }: UseFocusToggleProps): {

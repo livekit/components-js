@@ -14,12 +14,6 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
-    "test:build": {
-      "outputs": []
-    },
-    "test:unit": {
-      "outputs": []
-    },
     "test:watch": {
       "outputs": []
     },

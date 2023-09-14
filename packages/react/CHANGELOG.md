@@ -1,5 +1,30 @@
 # @livekit/components-react
 
+## 1.2.0
+
+### Minor Changes
+
+- fix handling of multiple tracks of the same source from the same participant - [#627](https://github.com/livekit/components-js/pull/627) ([@lukasIO](https://github.com/lukasIO))
+
+- Update more hooks and components to use `trackRef` and deprecate participant/source property pairs - [#629](https://github.com/livekit/components-js/pull/629) ([@lukasIO](https://github.com/lukasIO))
+
+- refactor `ParticipantTile` and `useParticipantTile` to trackRef and rename `TrackContext` to `TrackRefContext`. - [#627](https://github.com/livekit/components-js/pull/627) ([@lukasIO](https://github.com/lukasIO))
+
+- Update AudioTrack and VideoTrack components to accept track references. - [#627](https://github.com/livekit/components-js/pull/627) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Make `source` and `participant` props optional for `UseParticipantTileProps`. - [#632](https://github.com/livekit/components-js/pull/632) ([@Ocupe](https://github.com/Ocupe))
+
+- Add internal feature flag support - [#637](https://github.com/livekit/components-js/pull/637) ([@lukasIO](https://github.com/lukasIO))
+
+- fix handling of multiple tracks of the same source from the same participant - [#627](https://github.com/livekit/components-js/pull/627) ([@lukasIO](https://github.com/lukasIO))
+
+- Update and add doc strings for all components. - [#633](https://github.com/livekit/components-js/pull/633) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`999eb2ca`](https://github.com/livekit/components-js/commit/999eb2ca85f6d9cab16988f2815974d5f394e4ee), [`71690916`](https://github.com/livekit/components-js/commit/71690916a80d053fe6457c66f3fa3b584b69c5fe), [`999eb2ca`](https://github.com/livekit/components-js/commit/999eb2ca85f6d9cab16988f2815974d5f394e4ee), [`d5b2093b`](https://github.com/livekit/components-js/commit/d5b2093b1999df891cdd6fbe7b350c488b330cf7)]:
+  - @livekit/components-core@0.7.0
+
 ## 1.1.8
 
 ### Patch Changes

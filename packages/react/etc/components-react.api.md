@@ -208,7 +208,9 @@ export interface DisconnectButtonProps extends React_2.ButtonHTMLAttributes<HTML
     stopTracks?: boolean;
 }
 
-// @alpha (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "FeatureFlags" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export interface FeatureFlags {
     // (undocumented)
     autoSubscription?: boolean;
@@ -294,9 +296,7 @@ export interface LiveKitRoomProps extends Omit<React_2.HTMLAttributes<HTMLDivEle
     audio?: AudioCaptureOptions | boolean;
     connect?: boolean;
     connectOptions?: RoomConnectOptions;
-    // Warning: (ae-incompatible-release-tags) The symbol "featureFlags" is marked as @public, but its signature references "FeatureFlags" which is marked as @alpha
-    //
-    // (undocumented)
+    // @internal (undocumented)
     featureFlags?: FeatureFlags;
     // (undocumented)
     onConnected?: () => void;
@@ -316,7 +316,9 @@ export interface LiveKitRoomProps extends Omit<React_2.HTMLAttributes<HTMLDivEle
     video?: VideoCaptureOptions | boolean;
 }
 
-// @alpha (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "LKFeatureContext" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const LKFeatureContext: React_2.Context<FeatureFlags | undefined>;
 
 // @public (undocumented)
@@ -604,8 +606,9 @@ export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder): Tr
 export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'user' | 'environment' | 'left' | 'right' | 'undefined';
 
 // Warning: (ae-forgotten-export) The symbol "FeatureContext" needs to be exported by the entry point index.d.ts
+// Warning: (ae-internal-missing-underscore) The name "useFeatureContext" should be prefixed with an underscore because the declaration is marked as @internal
 //
-// @alpha (undocumented)
+// @internal (undocumented)
 export function useFeatureContext<T extends boolean>(require?: T): FeatureContext<T>;
 
 // @public

@@ -1,23 +1,23 @@
 type OptionUndefined = undefined;
-type OptionEnsureFalse = { maybeUndefined: true };
 type OptionEnsureWithContext<ContextType> = ContextType;
+type OptionMaybeUndefined = { maybeUndefined: true };
 
 export type ContextHookOptions<ContextType> =
   | OptionUndefined
-  | OptionEnsureFalse
-  | OptionEnsureWithContext<ContextType>;
+  | OptionEnsureWithContext<ContextType>
+  | OptionMaybeUndefined;
 
 export type ConditionalReturnType<ContextType, O> = O extends
   | OptionUndefined
   | OptionEnsureWithContext<ContextType>
   ? ContextType
-  : O extends OptionEnsureFalse
+  : O extends OptionMaybeUndefined
   ? ContextType | undefined
   : never;
 
-export function isEnsureFalse<ContextType>(
+export function isMaybeUndefined<ContextType>(
   options: ContextHookOptions<ContextType>,
-): options is OptionEnsureFalse {
+): options is OptionMaybeUndefined {
   return (
     options !== undefined &&
     options !== null &&
@@ -31,5 +31,5 @@ export function isEnsureFalse<ContextType>(
 export function isEnsureContext<ContextType>(
   options: ContextHookOptions<ContextType>,
 ): options is OptionEnsureWithContext<ContextType> {
-  return !isEnsureFalse(options);
+  return !isMaybeUndefined(options);
 }

@@ -4,7 +4,7 @@ import type { PinContextType } from './pin-context';
 import type { ChatContextType } from './chat-context';
 import { chatReducer } from './chat-context';
 import { pinReducer } from './pin-context';
-import { isEnsureFalse, isEnsureContext } from './context-types';
+import { isMaybeUndefined, isEnsureContext } from './context-types';
 import type { ContextHookOptions, ConditionalReturnType } from './context-types';
 
 /** @public */
@@ -37,7 +37,7 @@ export function useLayoutContext<
   Options extends ContextHookOptions<ContentType> = undefined,
 >(options?: Options): ConditionalReturnType<ContentType, Options> {
   const context = React.useContext(LayoutContext);
-  if (isEnsureFalse<ContentType>(options)) {
+  if (isMaybeUndefined<ContentType>(options)) {
     // Case: {ensure: false} -> LayoutContextType | undefined
     return context as ConditionalReturnType<ContentType, Options>;
   } else if (context) {

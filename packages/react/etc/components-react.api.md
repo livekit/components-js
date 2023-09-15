@@ -572,7 +572,7 @@ export function useDisconnectButton(props: DisconnectButtonProps): {
 // @public (undocumented)
 export function useEnsureCreateLayoutContext(layoutContext?: LayoutContextType): LayoutContextType;
 
-// @public
+// @public @deprecated
 export function useEnsureLayoutContext(layoutContext?: LayoutContextType): LayoutContextType;
 
 // @public
@@ -633,8 +633,11 @@ export interface UseIsMutedOptions {
 // @public
 export function useIsSpeaking(participant?: Participant): boolean;
 
+// Warning: (ae-forgotten-export) The symbol "ContextHookOptions" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "ConditionalReturnType" needs to be exported by the entry point index.d.ts
+//
 // @public
-export function useLayoutContext(): LayoutContextType;
+export function useLayoutContext<ContentType extends LayoutContextType, Options extends ContextHookOptions<ContentType> = undefined>(options?: Options): ConditionalReturnType<ContentType, Options>;
 
 // @public
 export function useLiveKitRoom<T extends HTMLElement>(props: LiveKitRoomProps): {
@@ -662,7 +665,7 @@ export interface UseLocalParticipantOptions {
 // @public
 export function useLocalParticipantPermissions(): ParticipantPermission | undefined;
 
-// @public
+// @public @deprecated
 export function useMaybeLayoutContext(): LayoutContextType | undefined;
 
 // @public
@@ -1013,8 +1016,8 @@ export interface VideoTrackProps extends React_2.HTMLAttributes<HTMLVideoElement
 
 // Warnings were encountered during analysis:
 //
-// src/context/layout-context.ts:10:3 - (ae-forgotten-export) The symbol "PinContextType" needs to be exported by the entry point index.d.ts
-// src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "ChatContextType" needs to be exported by the entry point index.d.ts
+// src/context/layout-context.ts:12:3 - (ae-forgotten-export) The symbol "PinContextType" needs to be exported by the entry point index.d.ts
+// src/context/layout-context.ts:13:3 - (ae-forgotten-export) The symbol "ChatContextType" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

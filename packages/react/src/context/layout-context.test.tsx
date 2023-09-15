@@ -45,10 +45,10 @@ describe('Test the return types of useLayoutContext() based on the inputs:', () 
     );
   });
 
-  test('Input ({ ensure: false }) -> with context -> return context.', () => {
+  test('Input ({ maybeUndefined: true }) -> with context -> return context.', () => {
     const { result } = renderHook(
       () => {
-        return useMegaLayoutContext({ ensure: false });
+        return useMegaLayoutContext({ maybeUndefined: true });
       },
       { wrapper: ContextWrapper },
     );
@@ -56,9 +56,9 @@ describe('Test the return types of useLayoutContext() based on the inputs:', () 
     expect(result.current?.pin.dispatch).toBe('provided_context');
     assertType<LayoutContextType | undefined>(result.current);
   });
-  test('Input ({ ensure: false }) -> with no context -> return undefined.', () => {
+  test('Input ({ maybeUndefined: true }) -> with no context -> return undefined.', () => {
     const { result } = renderHook(() => {
-      return useMegaLayoutContext({ ensure: false });
+      return useMegaLayoutContext({ maybeUndefined: true });
     });
     expect(result.current).toBeUndefined();
   });

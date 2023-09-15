@@ -22,19 +22,19 @@ export const LayoutContext = React.createContext<LayoutContextType | undefined>(
 export function useMegaLayoutContext<
   ContentType extends LayoutContextType,
   Options extends ContextHookOptions<ContentType> = undefined,
->(options?: Options): ConditionalReturnType<ContentType, typeof options> {
+>(options?: Options): ConditionalReturnType<ContentType, Options> {
   const context = React.useContext(LayoutContext);
 
-  if (isEnsureFalse(options)) {
+  if (isEnsureFalse<ContentType>(options)) {
     // Case: {ensure: false} -> LayoutContextType | undefined
-    return context as ConditionalReturnType<ContentType, typeof options>;
+    return context as ConditionalReturnType<ContentType, Options>;
   } else if (context) {
     if (options === undefined) {
       // Case: (undefined) -> LayoutContextType
-      return context as ConditionalReturnType<ContentType, typeof options>;
-    } else if (isEnsureContext(options)) {
+      return context as ConditionalReturnType<ContentType, Options>;
+    } else if (isEnsureContext<ContentType>(options)) {
       // Case: (LayoutContextType) -> LayoutContextType
-      return options as unknown as ConditionalReturnType<ContentType, typeof options>;
+      return options as unknown as ConditionalReturnType<ContentType, Options>;
     }
   }
   throw Error('Tried to access LayoutContext context outside a LayoutContextProvider provider.');

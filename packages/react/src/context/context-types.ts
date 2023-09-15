@@ -1,26 +1,30 @@
 type OptionUndefined = undefined;
-type OptionEnsureFalse = { ensure: false };
+type OptionEnsureFalse = { maybeUndefined: true };
 type OptionEnsureWithContext<ContextType> = ContextType;
 
-export type ContextHookOptions<ContextTyp> =
+export type ContextHookOptions<ContextType> =
   | OptionUndefined
   | OptionEnsureFalse
-  | OptionEnsureWithContext<ContextTyp>;
+  | OptionEnsureWithContext<ContextType>;
 
-export type ConditionalReturnType<ContextType, T> = T extends OptionUndefined | ContextType
+export type ConditionalReturnType<ContextType, O> = O extends
+  | OptionUndefined
+  | OptionEnsureWithContext<ContextType>
   ? ContextType
-  : T extends OptionEnsureFalse
+  : O extends OptionEnsureFalse
   ? ContextType | undefined
   : never;
 
-export function isEnsureFalse(options: unknown): options is OptionEnsureFalse {
+export function isEnsureFalse<ContextType>(
+  options: ContextHookOptions<ContextType>,
+): options is OptionEnsureFalse {
   return (
     options !== undefined &&
     options !== null &&
     typeof options === 'object' &&
-    options.hasOwnProperty('ensure') &&
-    'ensure' in options &&
-    options.ensure === false
+    options.hasOwnProperty('maybeUndefined') &&
+    'maybeUndefined' in options &&
+    options.maybeUndefined === true
   );
 }
 

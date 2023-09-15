@@ -1,6 +1,6 @@
 import { describe, test, expect, assertType } from 'vitest';
 import type { LayoutContextType } from './layout-context';
-import { useMegaLayoutContext } from './layout-context';
+import { useLayoutContext } from './layout-context';
 import { renderHook } from '@testing-library/react';
 import { LayoutContextProvider } from '../components';
 import * as React from 'react';
@@ -18,7 +18,7 @@ describe('Test the return types of useLayoutContext() based on the inputs:', () 
   test('Input (undefined) -> with context -> return context.', () => {
     const { result } = renderHook(
       () => {
-        return useMegaLayoutContext();
+        return useLayoutContext();
       },
       { wrapper: ContextWrapper },
     );
@@ -32,7 +32,7 @@ describe('Test the return types of useLayoutContext() based on the inputs:', () 
     let finalResult: unknown;
     try {
       const { result } = renderHook(() => {
-        return useMegaLayoutContext();
+        return useLayoutContext();
       });
       finalResult = result;
       assertType<LayoutContextType>(result.current);
@@ -48,7 +48,7 @@ describe('Test the return types of useLayoutContext() based on the inputs:', () 
   test('Input ({ maybeUndefined: true }) -> with context -> return context.', () => {
     const { result } = renderHook(
       () => {
-        return useMegaLayoutContext({ maybeUndefined: true });
+        return useLayoutContext({ maybeUndefined: true });
       },
       { wrapper: ContextWrapper },
     );
@@ -58,7 +58,7 @@ describe('Test the return types of useLayoutContext() based on the inputs:', () 
   });
   test('Input ({ maybeUndefined: true }) -> with no context -> return undefined.', () => {
     const { result } = renderHook(() => {
-      return useMegaLayoutContext({ maybeUndefined: true });
+      return useLayoutContext({ maybeUndefined: true });
     });
     expect(result.current).toBeUndefined();
   });
@@ -71,7 +71,7 @@ describe('Test the return types of useLayoutContext() based on the inputs:', () 
 
     const { result } = renderHook(
       () => {
-        return useMegaLayoutContext(contextAsAttribute);
+        return useLayoutContext(contextAsAttribute);
       },
       { wrapper: ContextWrapper },
     );

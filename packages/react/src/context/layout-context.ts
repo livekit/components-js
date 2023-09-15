@@ -16,15 +16,27 @@ export type LayoutContextType = {
 /** @public */
 export const LayoutContext = React.createContext<LayoutContextType | undefined>(undefined);
 
-//www.typescriptlang.org/play?#code/C4TwDgpgBA8mwEsD2A7AqigJhAZglEmUAvFAK5a76EDcAUKJLPMigKIoDOZAThAGIBDADadopAN5QIXXhABcUHCLFQAvvUbQ4iVB258A6gmAALAMKpgEAB7AAPJZTW7AFXAQAfCShOXwd0h6Bg9fK1tgAAkkJABrHVZOR3C3cG9iOigsqAAfZl10SjwCTEzsvIS9WT4hUQgyrIqWKoMIYzM-COTnCMDPYK0wrBNWEQAlCGBeFECIbv9ZgBooV3SGlek7GUxOfNYMbGLCXKGF0IB+U97Q+XXXTessXcr2aoEVaEvO1KY8ikPqERbtkoAQAG4QHjBHAUADGBXIYm+URisXm1yYEW2uwAImQALb4kDI5b3LFPK52aJxF5JZGzdLkIqAzwACnWSGaXHOilcdAAlIonJgRqhxpNprN0T8IMstEgcFBOQVON4JOsAPQaqD8OEIgBGSEwICgpkhEAAdFbNdr+EgeFAzNBOIJYtAFY7TAhdrZBPiwMJZVAAJIAcmEwigACsyJxgFA+FMeCgoIIoJgCUSoGCRGRLetE9MoBI1KndsLRShxUmZh5pQEPHKPB7lYl+nQ1HQ6FqoGgXQBzBR0fDWHjKWHQPGE4kpePqkEZ6eKOM8fD9jtd2GoOMJiDcYTAABMPljEGR1NirP5NCgPbYNkg8OOWkUU6JyLoW648b43GAwgAZhPJFZwvVkpEXIlFFDaw41DdR+VvbV70fawiBfKA3xnHo7E-bcfz3MgDwARmAs9QNRcDpDeRRlDqBCbx7WZX0zbD-BOf4qBKIA
-
-// TODO: custom error for missing context.
-export function useMegaLayoutContext<
+/**
+ * The `useLayoutContext` hook returns the `LayoutContext` or `undefined` depending on its input.
+ *
+ * @example
+ * ```tsx
+ * // Garanteed to return a LayoutContext or throw an error.
+ * const context = useLayoutContext();
+ * const context = useLayoutContext(layoutContext);
+ *
+ * // Returns a LayoutContext or undefined.
+ * const context = useLayoutContext({maybeUndefined: true});
+ * ```
+ * @throws Error - If the the return value is not allowed to be `undefined`
+ * and the hook is used outside of a `LayoutContextProvider`.
+ * @public
+ */
+export function useLayoutContext<
   ContentType extends LayoutContextType,
   Options extends ContextHookOptions<ContentType> = undefined,
 >(options?: Options): ConditionalReturnType<ContentType, Options> {
   const context = React.useContext(LayoutContext);
-
   if (isEnsureFalse<ContentType>(options)) {
     // Case: {ensure: false} -> LayoutContextType | undefined
     return context as ConditionalReturnType<ContentType, Options>;
@@ -42,37 +54,21 @@ export function useMegaLayoutContext<
 
 /**
  * Returns a layout context from the `LayoutContext` if it exists, otherwise `undefined`.
+ * @deprecated This hook will be removed soon use `useLayoutContext({maybeUndefined: true})` instead.
  * @public
  */
 export function useMaybeLayoutContext(): LayoutContextType | undefined {
-  return React.useContext(LayoutContext);
-}
-
-/**
- * Ensures that a layout context is provided via context.
- * If no layout context is provided, an error is thrown.
- * @public
- */
-export function useLayoutContext(): LayoutContextType {
-  const layoutContext = React.useContext(LayoutContext);
-  if (!layoutContext) {
-    throw Error('Tried to access LayoutContext context outside a LayoutContextProvider provider.');
-  }
-  return layoutContext;
+  return useLayoutContext({ maybeUndefined: true });
 }
 
 /**
  * Ensures that a layout context is provided, either via context or explicitly as a parameter.
  * If not inside a `LayoutContext` and no layout context is provided, an error is thrown.
+ * @deprecated This hook will be removed soon use `useLayoutContext(layoutContext)` instead.
  * @public
  */
 export function useEnsureLayoutContext(layoutContext?: LayoutContextType) {
-  const layout = useMaybeLayoutContext();
-  layoutContext ??= layout;
-  if (!layoutContext) {
-    throw Error('Tried to access LayoutContext context outside a LayoutContextProvider provider.');
-  }
-  return layoutContext;
+  return useLayoutContext(layoutContext);
 }
 
 /** @public */

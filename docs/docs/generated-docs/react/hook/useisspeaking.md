@@ -18,7 +18,7 @@ const isSpeaking = useIsSpeaking(participant);
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="participant" type="Participant" optional=true %}
 {% /parameter %}

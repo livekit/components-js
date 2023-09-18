@@ -2,9 +2,13 @@
 
 # useMediaTrackByName
 
-> Warning: This API is now obsolete.
->
-> This function will be removed in a future version, use `useTrackByName` instead.
+{% callout type="caution" variation="normal" %}
+
+This API is deprecated:
+
+This function will be removed in a future version, use `useTrackByName` instead.
+
+{% /callout %}
 
 ## Import
 
@@ -14,7 +18,7 @@ import { useMediaTrackByName } from '@livekit/components-react';
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="name" type="string" optional=false %}
 {% /parameter %}

@@ -19,11 +19,11 @@ const audioDevices = useMediaDevices({ kind: 'audioinput' });
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="{ kind }" type="{
-    kind: MediaDeviceKind;
-}" optional=false %}
+      kind: MediaDeviceKind;
+  }" optional=false %}
 {% /parameter %}
 
 ## Returns

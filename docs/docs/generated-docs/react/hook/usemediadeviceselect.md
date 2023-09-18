@@ -20,9 +20,20 @@ const { devices, activeDeviceId, setActiveMediaDevice } = useMediaDeviceSelect({
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
-{% parameter name="{ kind, room, track, requestPermissions, }" type="UseMediaDeviceSelectProps" optional=false %}
+{% parameter name="kind" type="MediaDeviceKind" optional=false %}
+{% /parameter %}
+
+{% parameter name="requestPermissions" type="boolean" optional=true %}
+this will call getUserMedia if the permissions are not yet given to enumerate the devices with device labels. in some browsers multiple calls to getUserMedia result in multiple permission prompts. It's generally advised only flip this to true, once a (preview) track has been acquired successfully with the appropriate permissions.
+
+{% /parameter %}
+
+{% parameter name="room" type="Room" optional=true %}
+{% /parameter %}
+
+{% parameter name="track" type="LocalAudioTrack | LocalVideoTrack" optional=true %}
 {% /parameter %}
 
 ## Returns

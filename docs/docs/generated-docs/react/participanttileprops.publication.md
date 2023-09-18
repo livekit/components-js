@@ -2,9 +2,13 @@
 
 ## ParticipantTileProps.publication property
 
-> Warning: This API is now obsolete.
->
-> This parameter will be removed in a future version use `trackRef` instead.
+{% callout type="caution" variation="normal" %}
+
+This API is deprecated:
+
+This parameter will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
 
 **Signature:**
 

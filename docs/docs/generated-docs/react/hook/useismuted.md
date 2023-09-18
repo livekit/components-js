@@ -18,7 +18,7 @@ const isMuted = useIsMuted(track);
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=false %}
 {% /parameter %}

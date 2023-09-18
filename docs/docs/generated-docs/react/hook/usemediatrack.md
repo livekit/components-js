@@ -2,9 +2,13 @@
 
 # useMediaTrack
 
-> Warning: This API is now obsolete.
->
-> use `useTrack` instead
+{% callout type="caution" variation="normal" %}
+
+This API is deprecated:
+
+use `useTrack` instead
+
+{% /callout %}
 
 ## Import
 
@@ -14,7 +18,7 @@ import { useMediaTrack } from '@livekit/components-react';
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="source" type="VideoSource | AudioSource" optional=false %}
 {% /parameter %}

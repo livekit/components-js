@@ -2,9 +2,13 @@
 
 ## CarouselView variable
 
-> Warning: This API is now obsolete.
->
-> Renamed to \[\[CarouselLayout\]\]
+{% callout type="caution" variation="normal" %}
+
+This API is deprecated:
+
+Renamed to \[\[CarouselLayout\]\]
+
+{% /callout %}
 
 **Signature:**
 

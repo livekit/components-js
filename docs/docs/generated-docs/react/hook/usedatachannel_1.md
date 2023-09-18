@@ -23,7 +23,7 @@ const { message, send } = useDataChannel(callback);
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="onMessage" type="(msg: ReceivedDataMessage) => void" optional=true %}
 {% /parameter %}

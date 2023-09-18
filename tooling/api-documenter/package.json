@@ -10,7 +10,8 @@
   "license": "MIT",
   "scripts": {
     "build": "heft build --clean",
-    "test": "heft test"
+    "test": "heft test",
+    "test:watch": "nodemon --watch \"src/**/*\" --watch \"packages/react/src/**/*\" -e js,ts -x \"yarn test\""
   },
   "bin": {
     "api-documenter": "./bin/api-documenter"
@@ -33,7 +34,8 @@
     "@types/js-yaml": "3.12.7",
     "@types/node": "14.18.58",
     "@types/resolve": "1.20.2",
-    "fast-glob": "^3.3.1"
+    "fast-glob": "^3.3.1",
+    "nodemon": "^2.0.22"
   },
   "peerDependencies": {
     "@rushstack/heft": "^0.58.2"

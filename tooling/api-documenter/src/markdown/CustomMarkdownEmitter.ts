@@ -25,6 +25,7 @@ import { IndentedWriter } from '../utils/IndentedWriter';
 import { MarkDocTag } from '../nodes/MarkDocTag';
 import { ParameterList } from '../nodes/ParameterList';
 import { ParameterItem } from '../nodes/ParameterItem';
+import { Callout } from '../nodes/Callout';
 
 export interface ICustomMarkdownEmitterOptions extends IMarkdownEmitterOptions {
   contextApiItem: ApiItem | undefined;
@@ -222,10 +223,42 @@ export class CustomMarkdownEmitter extends MarkdownEmitter {
       case CustomDocNodeKind.ParameterItem: {
         const parameterItem: ParameterItem = docNode as ParameterItem;
         writer.ensureSkippedLine();
-        const { name, type, optional, description } = parameterItem.attributes;
-        writer.writeLine(`{% parameter name="${name}" type="${type}" optional=${optional} %}`);
+        const { name, type, optional, description, deprecated } = parameterItem.attributes;
+
+        writer.write(`{% parameter`);
+        writer.increaseIndent();
+        writer.write(` name="${name}"`);
+        writer.write(` type="${type}"`);
+        writer.write(` optional=${optional}`);
+        if (deprecated) {
+          writer.write(` deprecated=true`);
+        }
+        writer.write(' %}\n');
+        writer.decreaseIndent();
         this.writeNodes(description, context);
+
+        if (deprecated) {
+          writer.writeLine(`{% callout type="caution" variation="compact" %}`);
+          this.writeNodes(deprecated, context);
+          writer.writeLine(`{% /callout %}`);
+        }
         writer.writeLine(`{% /parameter %}`);
+        break;
+      }
+      case CustomDocNodeKind.Callout: {
+        const callout: Callout = docNode as Callout;
+        writer.ensureNewLine();
+
+        writer.writeLine(
+          '{% callout type="' + callout.type + '" variation="' + callout.variant + '" %}',
+        );
+
+        writer.writeLine();
+        this.writeNode(callout.content, context, false);
+        writer.ensureNewLine();
+        writer.writeLine('{% /callout %}');
+
+        writer.writeLine();
         break;
       }
       default:

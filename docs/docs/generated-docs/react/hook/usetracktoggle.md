@@ -19,11 +19,6 @@ return <button {...buttonProps}>{enabled ? 'disable' : 'enable'}</button>;
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
-
-{% parameter name="{ source, onChange, initialState, captureOptions, ...rest }" type="UseTrackToggleProps<T>" optional=false %}
-{% /parameter %}
-
 ## Returns
 
 ```typescript

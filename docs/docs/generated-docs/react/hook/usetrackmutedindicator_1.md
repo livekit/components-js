@@ -2,9 +2,13 @@
 
 # useTrackMutedIndicator
 
-> Warning: This API is now obsolete.
->
-> This overload will be removed in a future version, pass in trackRef instead.
+{% callout type="caution" variation="normal" %}
+
+This API is deprecated:
+
+This overload will be removed in a future version, pass in trackRef instead.
+
+{% /callout %}
 
 ## Import
 
@@ -14,7 +18,7 @@ import { useTrackMutedIndicator } from '@livekit/components-react';
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="source" type="Track.Source" optional=false %}
 {% /parameter %}

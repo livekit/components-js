@@ -42,22 +42,34 @@ _(Optional)_
 
 {% /parameter %}
 
-{% parameter name="participant" type="Participant" optional=true %}
-_(Optional)_
-
-{% /parameter %}
-
-{% parameter name="publication" type="TrackPublication" optional=true %}
-_(Optional)_
-
-{% /parameter %}
-
-{% parameter name="source" type="Track.Source" optional=true %}
-_(Optional)_
-
-{% /parameter %}
-
 {% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=true %}
 _(Optional)_ The track reference to display.
 
+{% /parameter %}
+
+{% parameter name="participant" type="Participant" optional=true deprecated=true %}
+_(Optional)_
+
+{% callout type="caution" variation="compact" %}
+This parameter will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
+{% /parameter %}
+
+{% parameter name="publication" type="TrackPublication" optional=true deprecated=true %}
+_(Optional)_
+
+{% callout type="caution" variation="compact" %}
+This parameter will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
+{% /parameter %}
+
+{% parameter name="source" type="Track.Source" optional=true deprecated=true %}
+_(Optional)_
+
+{% callout type="caution" variation="compact" %}
+This parameter will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
 {% /parameter %}

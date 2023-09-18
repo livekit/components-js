@@ -16,12 +16,12 @@ It is possible to pass configurations for custom message encoding and decoding.
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="options" type="{
-    messageEncoder?: MessageEncoder;
-    messageDecoder?: MessageDecoder;
-}" optional=true %}
+      messageEncoder?: MessageEncoder;
+      messageDecoder?: MessageDecoder;
+  }" optional=true %}
 {% /parameter %}
 
 ## Returns

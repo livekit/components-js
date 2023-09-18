@@ -19,12 +19,16 @@ _(Optional)_
 
 {% /parameter %}
 
-{% parameter name="track" type="TrackReferenceOrPlaceholder" optional=true %}
-_(Optional)_
-
-{% /parameter %}
-
 {% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=true %}
 _(Optional)_ The track to display in the focus layout.
 
+{% /parameter %}
+
+{% parameter name="track" type="TrackReferenceOrPlaceholder" optional=true deprecated=true %}
+_(Optional)_
+
+{% callout type="caution" variation="compact" %}
+This property will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
 {% /parameter %}

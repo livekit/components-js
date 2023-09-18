@@ -2,7 +2,7 @@
 
 # useVisualStableUpdate
 
-The `useVisualStableUpdate` hook is used to prevent visually jarring jumps and shifts of elements in an array. The algorithm only starts to update when there are more items than visually fit on a page. If this is the case, it will make sure that speaking participants move to the first page and are always visible. Updating the array can occur because attendees leave or join a room, or because they mute/unmute or start speaking.
+The `useVisualStableUpdate` hook is used to prevent visually jarring jumps and shifts of elements in an array. The algorithm only starts to update when there are more items than visually fit on a page. If this is the case, it will make sure that speaking participants move to the first page and are always visible.
 
 ## Import
 
@@ -12,7 +12,7 @@ import { useVisualStableUpdate } from '@livekit/components-react';
 
 ## Remarks
 
-The hook is used for the `GridLayout` and `CarouselLayout` components.
+Updating the array can occur because attendees leave or join a room, or because they mute/unmute or start speaking. The hook is used for the `GridLayout` and `CarouselLayout` components.
 
 ## Usage
 
@@ -23,7 +23,7 @@ const updatedTrackRefs = useVisualStableUpdate(trackRefs, itemPerPage);
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="maxItemsOnPage" type="number" optional=false %}
 {% /parameter %}

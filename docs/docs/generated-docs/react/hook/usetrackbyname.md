@@ -10,7 +10,7 @@ import { useTrackByName } from '@livekit/components-react';
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="options" type="UseMediaTrackOptions" optional=true %}
 {% /parameter %}

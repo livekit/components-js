@@ -26,17 +26,25 @@ This component needs to live inside `LayoutContext` to work properly.
 
 ## Properties
 
-{% parameter name="participant" type="Participant" optional=true %}
-_(Optional)_
-
-{% /parameter %}
-
 {% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=true %}
 _(Optional)_
 
 {% /parameter %}
 
-{% parameter name="trackSource" type="Track.Source" optional=true %}
+{% parameter name="participant" type="Participant" optional=true deprecated=true %}
 _(Optional)_
 
+{% callout type="caution" variation="compact" %}
+This parameter will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
+{% /parameter %}
+
+{% parameter name="trackSource" type="Track.Source" optional=true deprecated=true %}
+_(Optional)_
+
+{% callout type="caution" variation="compact" %}
+This parameter will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
 {% /parameter %}

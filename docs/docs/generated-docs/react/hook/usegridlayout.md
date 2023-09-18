@@ -18,7 +18,7 @@ const { layout } = useGridLayout(gridElement, trackCount);
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="gridElement" type="React.RefObject<HTMLDivElement>" optional=false %}
 {% /parameter %}

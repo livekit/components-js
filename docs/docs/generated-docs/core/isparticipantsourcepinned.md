@@ -2,9 +2,13 @@
 
 # isParticipantSourcePinned
 
-> Warning: This API is now obsolete.
->
-> Use [isParticipantTrackReferencePinned()](./core/isparticipanttrackreferencepinned.md) instead.
+{% callout type="caution" variation="normal" %}
+
+This API is deprecated:
+
+Use [isParticipantTrackReferencePinned()](./core/isparticipanttrackreferencepinned.md) instead.
+
+{% /callout %}
 
 Check if the participant track source is pinned.
 

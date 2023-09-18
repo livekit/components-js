@@ -19,9 +19,26 @@ return <button {...mergedProps}>{inFocus ? 'Unfocus' : 'Focus'}</button>;
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
-{% parameter name="{ trackRef, trackSource, participant, props }" type="UseFocusToggleProps" optional=false %}
+{% parameter name="props" type="React.ButtonHTMLAttributes<HTMLButtonElement>" optional=false %}
+{% /parameter %}
+
+{% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=true %}
+{% /parameter %}
+
+{% parameter name="participant" type="Participant" optional=true deprecated=true %}
+{% callout type="caution" variation="compact" %}
+This parameter will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
+{% /parameter %}
+
+{% parameter name="trackSource" type="Track.Source" optional=true deprecated=true %}
+{% callout type="caution" variation="compact" %}
+This parameter will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
 {% /parameter %}
 
 ## Returns

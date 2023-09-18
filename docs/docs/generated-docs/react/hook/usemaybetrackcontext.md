@@ -2,9 +2,13 @@
 
 # useMaybeTrackContext
 
-> Warning: This API is now obsolete.
->
-> `useMaybeTrackContext` has been to `useMaybeTrackRefContext`<!-- -->, use this as a drop in replacement.
+{% callout type="caution" variation="normal" %}
+
+This API is deprecated:
+
+`useMaybeTrackContext` has been renamed to `useMaybeTrackRefContext`<!-- -->, use this as a drop in replacement.
+
+{% /callout %}
 
 Returns a track reference from the `TrackContext` if it exists, otherwise `undefined`<!-- -->.
 

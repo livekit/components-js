@@ -46,13 +46,27 @@ export class ParameterList extends DocNode {
 }
 
 export function sortParameters(parameters: ParameterItem[]): ParameterItem[] {
-  return parameters.sort((a, b) => {
-    if (a.attributes.optional === b.attributes.optional) {
-      return a.attributes.name.localeCompare(b.attributes.name);
-    } else if (a.attributes.optional) {
-      return 1;
+  const deprecated: ParameterItem[] = [];
+  const nonDeprecated: ParameterItem[] = [];
+  parameters.forEach((parameter) => {
+    if (parameter.attributes.deprecated) {
+      deprecated.push(parameter);
     } else {
-      return -1;
+      nonDeprecated.push(parameter);
     }
   });
+  return [
+    ...nonDeprecated.sort(sortRequiredBeforeOptional),
+    ...deprecated.sort(sortRequiredBeforeOptional),
+  ];
+}
+
+function sortRequiredBeforeOptional(a: ParameterItem, b: ParameterItem): number {
+  if (a.attributes.optional === b.attributes.optional) {
+    return a.attributes.name.localeCompare(b.attributes.name);
+  } else if (a.attributes.optional) {
+    return 1;
+  } else {
+    return -1;
+  }
 }

@@ -4,8 +4,13 @@ import { ParameterList, sortParameters } from './ParameterList';
 
 const configuration = new TSDocConfiguration();
 const dummyDocs = new DocSection({ configuration }).nodes;
+const dummyDeprecationNote = new DocSection({ configuration }).nodes;
 
-function dummyParameterItem(name: string, optional: boolean): ParameterItem {
+function dummyParameterItem(
+  name: string,
+  optional: boolean,
+  deprecated: boolean = false,
+): ParameterItem {
   return new ParameterItem({
     configuration,
     attributes: {
@@ -13,6 +18,7 @@ function dummyParameterItem(name: string, optional: boolean): ParameterItem {
       type: 'not-used',
       optional: optional,
       description: dummyDocs,
+      deprecated: deprecated ? dummyDeprecationNote : undefined,
     },
   });
 }
@@ -51,6 +57,15 @@ test('Test ParameterList parameters are sorted after adding them with `addParame
   parameterList.addParameter(dummyParameterItem('c', true));
   parameterList.addParameter(dummyParameterItem('b', false));
   parameterList.addParameter(dummyParameterItem('a', true));
+  const sortedParameters = parameterList.getParameters();
+  expect(sortedParameters.map((p) => p.attributes.name)).toStrictEqual(['b', 'a', 'c']);
+});
+
+test('Deprecated ParameterItems should be sorted to the end of the list.', () => {
+  const parameterList = new ParameterList({ configuration });
+  parameterList.addParameter(dummyParameterItem('a', false, true));
+  parameterList.addParameter(dummyParameterItem('b', false, false));
+  parameterList.addParameter(dummyParameterItem('c', false, true));
   const sortedParameters = parameterList.getParameters();
   expect(sortedParameters.map((p) => p.attributes.name)).toStrictEqual(['b', 'a', 'c']);
 });

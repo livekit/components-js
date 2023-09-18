@@ -25,7 +25,7 @@ const participants = useParticipants();
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="options" type="UseParticipantsOptions" optional=true %}
 {% /parameter %}

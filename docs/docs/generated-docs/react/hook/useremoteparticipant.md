@@ -22,7 +22,7 @@ const participant = useRemoteParticipant('Russ');
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="identity" type="string" optional=false %}
 {% /parameter %}

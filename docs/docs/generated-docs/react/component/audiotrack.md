@@ -22,27 +22,7 @@ import { AudioTrack } from '@livekit/components-react';
 
 ## Properties
 
-{% parameter name="name" type="string" optional=true %}
-_(Optional)_
-
-{% /parameter %}
-
 {% parameter name="onSubscriptionStatusChanged" type="(subscribed: boolean) => void" optional=true %}
-_(Optional)_
-
-{% /parameter %}
-
-{% parameter name="participant" type="Participant" optional=true %}
-_(Optional)_
-
-{% /parameter %}
-
-{% parameter name="publication" type="TrackPublication" optional=true %}
-_(Optional)_
-
-{% /parameter %}
-
-{% parameter name="source" type="Track.Source" optional=true %}
 _(Optional)_
 
 {% /parameter %}
@@ -55,4 +35,40 @@ _(Optional)_ The track reference of the track from which the audio is to be rend
 {% parameter name="volume" type="number" optional=true %}
 _(Optional)_ by the default the range is between 0 and 1
 
+{% /parameter %}
+
+{% parameter name="name" type="string" optional=true deprecated=true %}
+_(Optional)_
+
+{% callout type="caution" variation="compact" %}
+This property will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
+{% /parameter %}
+
+{% parameter name="participant" type="Participant" optional=true deprecated=true %}
+_(Optional)_
+
+{% callout type="caution" variation="compact" %}
+This property will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
+{% /parameter %}
+
+{% parameter name="publication" type="TrackPublication" optional=true deprecated=true %}
+_(Optional)_
+
+{% callout type="caution" variation="compact" %}
+This property will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
+{% /parameter %}
+
+{% parameter name="source" type="Track.Source" optional=true deprecated=true %}
+_(Optional)_
+
+{% callout type="caution" variation="compact" %}
+This property will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
 {% /parameter %}

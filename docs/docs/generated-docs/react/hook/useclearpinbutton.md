@@ -12,11 +12,6 @@ import { useClearPinButton } from '@livekit/components-react';
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
-## Parameters
-
-{% parameter name="props" type="ClearPinButtonProps" optional=false %}
-{% /parameter %}
-
 ## Returns
 
 ```typescript

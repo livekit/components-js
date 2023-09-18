@@ -211,6 +211,9 @@ export class MarkdownDocumenter {
         if (tsdocComment.deprecatedBlock) {
           output.appendNode(
             new Callout({ configuration, type: 'caution', variant: 'normal' }, [
+              new DocParagraph({ configuration }, [
+                new DocPlainText({ configuration, text: 'This API is deprecated:' }),
+              ]),
               ...tsdocComment.deprecatedBlock.content.nodes,
             ]),
           );

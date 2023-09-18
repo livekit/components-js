@@ -3,7 +3,15 @@ import * as React from 'react';
 import { useRoomContext } from '../context';
 import { useObservableState } from './internal';
 
-/** @public */
+/**
+ * The `useLocalParticipantPermissions` hook returns the local participant's permissions.
+ *
+ * @example
+ * ```tsx
+ * const { canPublish, canPublishData } = useLocalParticipantPermissions();
+ * ```
+ * @public
+ */
 export function useLocalParticipantPermissions() {
   const room = useRoomContext();
   const permissionObserver = React.useMemo(

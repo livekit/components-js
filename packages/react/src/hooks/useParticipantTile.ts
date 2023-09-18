@@ -19,12 +19,19 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React.HT
   onParticipantClick?: (event: ParticipantClickEvent) => void;
   htmlProps: React.HTMLAttributes<T>;
   /** @deprecated This parameter will be removed in a future version use `trackRef` instead. */
-  source: Track.Source;
+  source?: Track.Source;
   /** @deprecated This parameter will be removed in a future version use `trackRef` instead. */
-  participant: Participant;
+  participant?: Participant;
 }
 
-/** @public */
+/**
+ * The `useParticipantTile` hook is used to implement the `ParticipantTile` and returns the props needed to render the tile.
+ * @remarks
+ * The returned props include many data attributes that are useful for CSS styling purposes because they
+ * indicate the state of the participant and the track.
+ * For example: `data-lk-audio-muted`, `data-lk-video-muted`, `data-lk-speaking`, `data-lk-local-participant`, `data-lk-source`, `data-lk-facing-mode`.
+ * @public
+ */
 export function useParticipantTile<T extends HTMLElement>({
   trackRef,
   participant,
@@ -39,10 +46,16 @@ export function useParticipantTile<T extends HTMLElement>({
   const maybeTrackRef = useMaybeTrackRefContext();
   const p = useEnsureParticipant(participant);
   const trackReference = React.useMemo(() => {
+    const _source = trackRef?.source ?? maybeTrackRef?.source ?? source;
+    if (_source === undefined) {
+      throw new Error(
+        'Missing track `source`, provided it via `trackRef`, `source` property or via `TrackRefContext`.',
+      );
+    }
     return {
       participant: trackRef?.participant ?? maybeTrackRef?.participant ?? p,
-      source: trackRef?.source ?? maybeTrackRef?.source ?? source,
       publication: trackRef?.publication ?? maybeTrackRef?.publication ?? publication,
+      source: _source,
     };
   }, [
     trackRef?.participant,

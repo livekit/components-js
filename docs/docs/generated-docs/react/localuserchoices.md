@@ -11,6 +11,8 @@ export type LocalUserChoices = {
   audioEnabled: boolean;
   videoDeviceId: string;
   audioDeviceId: string;
+  e2ee: boolean;
+  sharedPassphrase: string;
 };
 ```
 

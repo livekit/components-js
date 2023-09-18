@@ -15,7 +15,9 @@ export interface FocusToggleProps extends React.ButtonHTMLAttributes<HTMLButtonE
 }
 
 /**
- * The FocusToggle puts the ParticipantTile in focus or removes it from focus.
+ * The `FocusToggle` puts the `ParticipantTile` in focus or removes it from focus.
+ * @remarks
+ * This component needs to live inside `LayoutContext` to work properly.
  *
  * @example
  * ```tsx

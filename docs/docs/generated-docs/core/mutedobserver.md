@@ -5,8 +5,5 @@
 **Signature:**
 
 ```typescript
-export declare function mutedObserver(
-  participant: Participant,
-  source: Track.Source,
-): Observable<boolean>;
+export declare function mutedObserver(trackRef: TrackReferenceOrPlaceholder): Observable<boolean>;
 ```

@@ -2,20 +2,25 @@
 
 # useIsMuted
 
+The `useIsMuted` hook is used to implement the `TrackMutedIndicator` or your custom implementation of it. It returns a `boolean` that indicates if the track is muted or not.
+
 ## Import
 
 ```typescript
 import { useIsMuted } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+const isMuted = useIsMuted(track);
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Parameters
 
-{% parameter name="source" type="Track.Source" optional=false %}
-{% /parameter %}
-
-{% parameter name="options" type="UseIsMutedOptions" optional=true %}
+{% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=false %}
 {% /parameter %}
 
 ## Returns

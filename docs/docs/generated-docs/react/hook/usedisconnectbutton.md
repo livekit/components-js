@@ -2,13 +2,22 @@
 
 # useDisconnectButton
 
+The `useDisconnectButton` hook is used to implement the `DisconnectButton` or your custom implementation of it. It adds onClick handler to the button to disconnect from the room.
+
 ## Import
 
 ```typescript
 import { useDisconnectButton } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+const { buttonProps } = useDisconnectButton();
+return <button {...buttonProps}>Disconnect</button>;
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Parameters
 

@@ -2,6 +2,8 @@
 
 # FocusLayout
 
+The `FocusLayout` component is just a light wrapper around the `ParticipantTile` to display a single participant.
+
 ## Import
 
 ```typescript
@@ -19,5 +21,10 @@ _(Optional)_
 
 {% parameter name="track" type="TrackReferenceOrPlaceholder" optional=true %}
 _(Optional)_
+
+{% /parameter %}
+
+{% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=true %}
+_(Optional)_ The track to display in the focus layout.
 
 {% /parameter %}

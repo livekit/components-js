@@ -13,7 +13,13 @@ export interface UseLocalParticipantOptions {
 }
 
 /**
- * The useLocalParticipant hook the state of the local participant.
+ * The `useLocalParticipant` hook returns the local participant and the associated state
+ * around the participant.
+ *
+ * @example
+ * ```tsx
+ * const { localParticipant } = useLocalParticipant();
+ * ```
  * @public
  */
 export function useLocalParticipant(options: UseLocalParticipantOptions = {}) {

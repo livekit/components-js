@@ -11,7 +11,7 @@ export interface ParticipantNameProps
     UseParticipantInfoOptions {}
 
 /**
- * The ParticipantName component displays the name of the participant as a string within an HTML span element.
+ * The `ParticipantName` component displays the name of the participant as a string within an HTML span element.
  * If no participant name is undefined the participant identity string is displayed.
  *
  * @example

@@ -2,27 +2,29 @@
 
 # useTrackMutedIndicator
 
+The `useTrackMutedIndicator` hook is used to implement the `TrackMutedIndicator` component and returns the muted state of the given track.
+
 ## Import
 
 ```typescript
 import { useTrackMutedIndicator } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+const { isMuted } = useTrackMutedIndicator(trackRef);
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Parameters
 
-{% parameter name="source" type="Track.Source" optional=false %}
-{% /parameter %}
-
-{% parameter name="options" type="UseTrackMutedIndicatorOptions" optional=true %}
+{% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=true %}
 {% /parameter %}
 
 ## Returns
 
 ```typescript
-{
-  isMuted: boolean;
-  className: string;
-}
+TrackMutedIndicatorReturnType;
 ```

@@ -2,13 +2,17 @@
 
 # ChatToggle
 
-The ChatToggle component toggles the visibility of the chat component.
+The `ChatToggle` component is a button that toggles the visibility of the `Chat` component.
 
 ## Import
 
 ```typescript
 import { ChatToggle } from '@livekit/components-react';
 ```
+
+## Remarks
+
+For the component to have any effect it has to live inside a `LayoutContext` context.
 
 ## Usage
 

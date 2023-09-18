@@ -2,6 +2,10 @@
 
 # useEnsureTrackReference
 
+> Warning: This API is now obsolete.
+>
+> `useEnsureTrackReference` has been to `useEnsureTrackRef`<!-- -->, use this as a drop in replacement.
+
 Ensures that a track reference is provided, either via context or explicitly as a parameter. If not inside a `TrackContext` and no track reference is provided, an error is thrown.
 
 ## Import

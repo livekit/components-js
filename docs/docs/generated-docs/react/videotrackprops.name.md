@@ -2,8 +2,14 @@
 
 ## VideoTrackProps.name property
 
+> Warning: This API is now obsolete.
+>
+> This property will be removed in a future version use `trackRef` instead.
+
 **Signature:**
 
 ```typescript
 name?: string;
 ```
+
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

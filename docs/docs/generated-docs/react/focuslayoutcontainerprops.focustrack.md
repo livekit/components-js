@@ -2,8 +2,14 @@
 
 ## FocusLayoutContainerProps.focusTrack property
 
+> Warning: This API is now obsolete.
+>
+> This property has no effect and will be removed in a future version.
+
 **Signature:**
 
 ```typescript
 focusTrack?: TrackReference;
 ```
+
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

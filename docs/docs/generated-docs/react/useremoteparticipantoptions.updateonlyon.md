@@ -2,8 +2,12 @@
 
 ## UseRemoteParticipantOptions.updateOnlyOn property
 
+To optimize performance, you can use the `updateOnlyOn` property to decide on what `ParticipantEvents` the hook updates. By default it updates on all relevant ParticipantEvents to keep the returned participant up to date.
+
 **Signature:**
 
 ```typescript
 updateOnlyOn?: ParticipantEvent[];
 ```
+
+{% partial file="p_usage.md" variables={exampleCount: 0} /%}

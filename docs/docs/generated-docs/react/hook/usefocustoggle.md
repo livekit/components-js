@@ -2,17 +2,26 @@
 
 # useFocusToggle
 
+The `useFocusToggle` hook is used to implement the `FocusToggle` or your custom implementation of it. The `TrackReferenceOrPlaceholder` is used to register a onClick handler and to identify the track to focus on.
+
 ## Import
 
 ```typescript
 import { useFocusToggle } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+const { mergedProps, inFocus } = useFocusToggle({ trackRef, props: yourButtonProps });
+return <button {...mergedProps}>{inFocus ? 'Unfocus' : 'Focus'}</button>;
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Parameters
 
-{% parameter name="{ trackSource, participant, props }" type="UseFocusToggleProps" optional=false %}
+{% parameter name="{ trackRef, trackSource, participant, props }" type="UseFocusToggleProps" optional=false %}
 {% /parameter %}
 
 ## Returns

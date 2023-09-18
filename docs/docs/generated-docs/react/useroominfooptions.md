@@ -2,13 +2,25 @@
 
 ## UseRoomInfoOptions interface
 
+The `useRoomInfo` hook returns the name and metadata of the given `Room`<!-- -->.
+
 **Signature:**
 
 ```typescript
 export interface UseRoomInfoOptions
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Remarks
+
+Needs to be called inside a `RoomContext` or by passing a `Room` instance.
+
+## Usage
+
+```tsx
+const { name, metadata } = useRoomInfo();
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Properties
 

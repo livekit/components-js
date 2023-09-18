@@ -1,38 +1,16 @@
-import type { ChatMessage, ReceivedChatMessage } from '@livekit/components-core';
-import { setupChat } from '@livekit/components-core';
+import type { ChatMessage, MessageEncoder, MessageDecoder } from '@livekit/components-core';
 import * as React from 'react';
-import { useMaybeLayoutContext, useRoomContext } from '../context';
-import { useObservableState } from '../hooks/internal/useObservableState';
+import { useMaybeLayoutContext } from '../context';
 import { cloneSingleChild } from '../utils';
-import type { MessageDecoder, MessageEncoder, MessageFormatter } from '../components/ChatEntry';
+import type { MessageFormatter } from '../components/ChatEntry';
 import { ChatEntry } from '../components/ChatEntry';
-
-export type { ChatMessage, ReceivedChatMessage };
+import { useChat } from '../hooks/useChat';
 
 /** @public */
 export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
   messageFormatter?: MessageFormatter;
   messageEncoder?: MessageEncoder;
   messageDecoder?: MessageDecoder;
-}
-
-/** @public */
-export function useChat(options?: {
-  messageEncoder?: MessageEncoder;
-  messageDecoder?: MessageDecoder;
-}) {
-  const room = useRoomContext();
-  const [setup, setSetup] = React.useState<ReturnType<typeof setupChat>>();
-  const isSending = useObservableState(setup?.isSendingObservable, false);
-  const chatMessages = useObservableState(setup?.messageObservable, []);
-
-  React.useEffect(() => {
-    const setupChatReturn = setupChat(room, options);
-    setSetup(setupChatReturn);
-    return setupChatReturn.destroy;
-  }, [room, options]);
-
-  return { send: setup?.send, chatMessages, isSending };
 }
 
 /**

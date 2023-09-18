@@ -1,5 +1,19 @@
 # @livekit/components-core
 
+## 0.7.0
+
+### Minor Changes
+
+- Update more hooks and components to use `trackRef` and deprecate participant/source property pairs - [#629](https://github.com/livekit/components-js/pull/629) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- fix handling of multiple tracks of the same source from the same participant - [#627](https://github.com/livekit/components-js/pull/627) ([@lukasIO](https://github.com/lukasIO))
+
+- Listen to ParticipantDisconnected event for useTracks hook - [#631](https://github.com/livekit/components-js/pull/631) ([@lukasIO](https://github.com/lukasIO))
+
+- fix handling of multiple tracks of the same source from the same participant - [#627](https://github.com/livekit/components-js/pull/627) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.6.15
 
 ### Patch Changes

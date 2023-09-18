@@ -2,6 +2,8 @@
 
 # ConnectionStateToast
 
+The `ConnectionStateToast` component displays a toast notification indicating the current connection state of the room.
+
 ## Import
 
 ```typescript

@@ -12,7 +12,16 @@ export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
   trackRef?: TrackReferenceOrPlaceholder;
 }
 
-/** @public */
+/**
+ * The AudioVisualizer component is used to visualize the audio volume of a given audio track.
+ * @remarks
+ * Requires a `TrackReferenceOrPlaceholder` to be provided either as a property or via the `TrackRefContext`.
+ * @example
+ * ```tsx
+ * <AudioVisualizer />
+ * ```
+ * @public
+ */
 export function AudioVisualizer({ participant, trackRef, ...props }: AudioVisualizerProps) {
   const [volumeBars, setVolumeBars] = React.useState<Array<number>>([]);
 

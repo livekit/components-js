@@ -7,7 +7,7 @@ import type {
 } from 'livekit-client';
 import type { MediaDeviceFailure, Room } from 'livekit-client';
 import * as React from 'react';
-import { RoomContext } from '../context';
+import { type FeatureFlags, LKFeatureContext, RoomContext } from '../context';
 import { useLiveKitRoom } from '../hooks';
 
 /** @public */
@@ -75,17 +75,15 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   room?: Room;
 
   simulateParticipants?: number | undefined;
+
+  /**
+   * @internal
+   */
+  featureFlags?: FeatureFlags;
 }
 
-// type RoomContextState = {
-//   room: Room;
-//   connectionState: ConnectionState;
-//   participants: Participant[];
-//   audioTracks: AudioTrack[];
-// };
-
 /**
- * The LiveKitRoom component provides the room context to all its child components.
+ * The `LiveKitRoom` component provides the room context to all its child components.
  * It is generally the starting point of your LiveKit app and the root of the LiveKit component tree.
  * It provides the room state as a React context to all child components, so you don't have to pass it yourself.
  *
@@ -105,7 +103,13 @@ export function LiveKitRoom(props: React.PropsWithChildren<LiveKitRoomProps>) {
   const { room, htmlProps } = useLiveKitRoom(props);
   return (
     <div {...htmlProps}>
-      {room && <RoomContext.Provider value={room}>{props.children}</RoomContext.Provider>}
+      {room && (
+        <RoomContext.Provider value={room}>
+          <LKFeatureContext.Provider value={props.featureFlags}>
+            {props.children}
+          </LKFeatureContext.Provider>
+        </RoomContext.Provider>
+      )}
     </div>
   );
 }

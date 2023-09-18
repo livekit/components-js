@@ -2,7 +2,7 @@
 
 # PreJoin
 
-The PreJoin prefab component is normally presented to the user before he enters a room. This component allows the user to check and select the preferred media device (camera und microphone). On submit the user decisions are returned, which can then be passed on to the LiveKitRoom so that the user enters the room with the correct media devices.
+The `PreJoin` prefab component is normally presented to the user before he enters a room. This component allows the user to check and select the preferred media device (camera und microphone). On submit the user decisions are returned, which can then be passed on to the `LiveKitRoom` so that the user enters the room with the correct media devices.
 
 ## Import
 
@@ -12,7 +12,7 @@ import { PreJoin } from '@livekit/components-react';
 
 ## Remarks
 
-This component is independent from the LiveKitRoom component and don't has to be nested inside it. Because it only access the local media tracks this component is self contained and works without connection to the LiveKit server.
+This component is independent from the `LiveKitRoom` component and don't has to be nested inside it. Because it only access the local media tracks this component is self contained and works without connection to the LiveKit server.
 
 ## Usage
 
@@ -61,6 +61,11 @@ _(Optional)_ This function is called with the `LocalUserChoices` if validation i
 
 {% parameter name="onValidate" type="(values: LocalUserChoices) => boolean" optional=true %}
 _(Optional)_ Provide your custom validation function. Only if validation is successful the user choices are past to the onSubmit callback.
+
+{% /parameter %}
+
+{% parameter name="showE2EEOptions" type="boolean" optional=true %}
+_(Optional)_
 
 {% /parameter %}
 

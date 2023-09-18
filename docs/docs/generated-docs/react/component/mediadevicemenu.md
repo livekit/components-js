@@ -2,7 +2,7 @@
 
 # MediaDeviceMenu
 
-The MediaDeviceMenu prefab component is a button that opens a menu that lists all media devices and allows the user to select them.
+The `MediaDeviceMenu` component is a button that opens a menu that lists all media devices and allows the user to select them.
 
 ## Import
 

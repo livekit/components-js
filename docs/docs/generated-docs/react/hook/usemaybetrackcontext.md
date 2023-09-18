@@ -2,6 +2,10 @@
 
 # useMaybeTrackContext
 
+> Warning: This API is now obsolete.
+>
+> `useMaybeTrackContext` has been to `useMaybeTrackRefContext`<!-- -->, use this as a drop in replacement.
+
 Returns a track reference from the `TrackContext` if it exists, otherwise `undefined`<!-- -->.
 
 ## Import

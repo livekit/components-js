@@ -2,13 +2,22 @@
 
 # useTrackToggle
 
+The `useTrackToggle` hook is used to implement the `TrackToggle` component and returns state and functionality of the given track.
+
 ## Import
 
 ```typescript
 import { useTrackToggle } from '@livekit/components-react';
 ```
 
-{% partial file="p_usage.md" variables={exampleCount: 0} /%}
+## Usage
+
+```tsx
+const { buttonProps, enabled } = useTrackToggle(trackRef);
+return <button {...buttonProps}>{enabled ? 'disable' : 'enable'}</button>;
+```
+
+{% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
 ## Parameters
 

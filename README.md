@@ -93,9 +93,6 @@ The highest priority is currently to get the core and react packages to a stable
 ## Monorepo Navigation
 
 - [Home 👈](/README.md)
-- **Docs**
-  - [Docs](/docs/alpha-docs/README.md)
-  - [Storybook](/docs/storybook/README.md)
 - **Framework Implementations**:
   - [React](/packages/react/README.md)
 - **Examples**

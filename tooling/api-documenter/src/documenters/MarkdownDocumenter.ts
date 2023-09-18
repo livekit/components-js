@@ -71,6 +71,7 @@ import { LkType, getCategorySubfolder, getFunctionType } from '../livekitUtils/c
 import { MarkDocTag } from '../nodes/MarkDocTag';
 import { ParameterList } from '../nodes/ParameterList';
 import { ParameterItem } from '../nodes/ParameterItem';
+import { Callout } from '../nodes/Callout';
 
 export interface IMarkdownDocumenterOptions {
   apiModel: ApiModel;
@@ -209,13 +210,7 @@ export class MarkdownDocumenter {
 
         if (tsdocComment.deprecatedBlock) {
           output.appendNode(
-            new DocNoteBox({ configuration }, [
-              new DocParagraph({ configuration }, [
-                new DocPlainText({
-                  configuration,
-                  text: 'Warning: This API is now obsolete. ',
-                }),
-              ]),
+            new Callout({ configuration, type: 'caution', variant: 'normal' }, [
               ...tsdocComment.deprecatedBlock.content.nodes,
             ]),
           );

@@ -21,7 +21,7 @@ export const LayoutContext = React.createContext<LayoutContextType | undefined>(
  *
  * @example
  * ```tsx
- * // Garanteed to return a LayoutContext or throw an error.
+ * // Guaranteed to return a LayoutContext or throw an error.
  * const context = useLayoutContext();
  * const context = useLayoutContext(layoutContext);
  *

@@ -2,9 +2,13 @@
 
 ## TrackContext variable
 
-> Warning: This API is now obsolete.
->
-> `TrackContext` has been to `TrackRefContext`<!-- -->, use this as a drop in replacement.
+{% callout type="caution" variation="normal" %}
+
+This API is deprecated:
+
+`TrackContext` has been renamed to `TrackRefContext`<!-- -->, use this as a drop in replacement.
+
+{% /callout %}
 
 **Signature:**
 

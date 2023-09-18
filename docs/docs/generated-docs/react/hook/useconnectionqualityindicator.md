@@ -20,7 +20,7 @@ const { quality } = useConnectionQualityIndicator({ participant });
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="options" type="ConnectionQualityIndicatorOptions" optional=true %}
 {% /parameter %}

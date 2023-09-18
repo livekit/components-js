@@ -21,17 +21,7 @@ import { TrackMutedIndicator } from '@livekit/components-react';
 
 ## Properties
 
-{% parameter name="participant" type="Participant" optional=true %}
-_(Optional)_
-
-{% /parameter %}
-
 {% parameter name="show" type="'always' | 'muted' | 'unmuted'" optional=true %}
-_(Optional)_
-
-{% /parameter %}
-
-{% parameter name="source" type="Track.Source" optional=true %}
 _(Optional)_
 
 {% /parameter %}
@@ -39,4 +29,22 @@ _(Optional)_
 {% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=true %}
 _(Optional)_
 
+{% /parameter %}
+
+{% parameter name="participant" type="Participant" optional=true deprecated=true %}
+_(Optional)_
+
+{% callout type="caution" variation="compact" %}
+This parameter will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
+{% /parameter %}
+
+{% parameter name="source" type="Track.Source" optional=true deprecated=true %}
+_(Optional)_
+
+{% callout type="caution" variation="compact" %}
+This parameter will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
 {% /parameter %}

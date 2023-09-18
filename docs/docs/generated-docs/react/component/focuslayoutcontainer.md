@@ -14,12 +14,20 @@ import { FocusLayoutContainer } from '@livekit/components-react';
 
 ## Properties
 
-{% parameter name="focusTrack" type="TrackReference" optional=true %}
+{% parameter name="focusTrack" type="TrackReference" optional=true deprecated=true %}
 _(Optional)_
 
+{% callout type="caution" variation="compact" %}
+This property has no effect and will be removed in a future version.
+
+{% /callout %}
 {% /parameter %}
 
-{% parameter name="participants" type="Array<Participant>" optional=true %}
+{% parameter name="participants" type="Array<Participant>" optional=true deprecated=true %}
 _(Optional)_
 
+{% callout type="caution" variation="compact" %}
+This property has no effect and will be removed in a future version.
+
+{% /callout %}
 {% /parameter %}

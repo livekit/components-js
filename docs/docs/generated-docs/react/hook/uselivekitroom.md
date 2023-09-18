@@ -19,9 +19,66 @@ return <div {...htmlProps}>...</div>;
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
-{% parameter name="props" type="LiveKitRoomProps" optional=false %}
+{% parameter name="serverUrl" type="string | undefined" optional=false %}
+URL to the LiveKit server. For example: `wss://<domain>.livekit.cloud` To simplify the implementation, `undefined` is also accepted as an intermediate value, but only with a valid string url can the connection be established.
+
+{% /parameter %}
+
+{% parameter name="token" type="string | undefined" optional=false %}
+A user specific access token for a client to authenticate to the room. This token is necessary to establish a connection to the room. To simplify the implementation, `undefined` is also accepted as an intermediate value, but only with a valid string token can the connection be established.
+
+{% /parameter %}
+
+{% parameter name="audio" type="AudioCaptureOptions | boolean" optional=true %}
+Publish audio immediately after connecting to your LiveKit room.
+
+{% /parameter %}
+
+{% parameter name="connect" type="boolean" optional=true %}
+If set to true a connection to LiveKit room is initiated.
+
+{% /parameter %}
+
+{% parameter name="connectOptions" type="RoomConnectOptions" optional=true %}
+Define options how to connect to the LiveKit server.
+
+{% /parameter %}
+
+{% parameter name="onConnected" type="() => void" optional=true %}
+{% /parameter %}
+
+{% parameter name="onDisconnected" type="() => void" optional=true %}
+{% /parameter %}
+
+{% parameter name="onError" type="(error: Error) => void" optional=true %}
+{% /parameter %}
+
+{% parameter name="onMediaDeviceFailure" type="(failure?: MediaDeviceFailure) => void" optional=true %}
+{% /parameter %}
+
+{% parameter name="options" type="RoomOptions" optional=true %}
+Options for when creating a new room. When you pass your own room instance to this component, these options have no effect. Instead, set the options directly in the room instance.
+
+{% /parameter %}
+
+{% parameter name="room" type="Room" optional=true %}
+Optional room instance. By passing your own room instance you overwrite the `options` parameter, make sure to set the options directly on the room instance itself.
+
+{% /parameter %}
+
+{% parameter name="screen" type="ScreenShareCaptureOptions | boolean" optional=true %}
+Publish screen share immediately after connecting to your LiveKit room.
+
+{% /parameter %}
+
+{% parameter name="simulateParticipants" type="number | undefined" optional=true %}
+{% /parameter %}
+
+{% parameter name="video" type="VideoCaptureOptions | boolean" optional=true %}
+Publish video immediately after connecting to your LiveKit room.
+
 {% /parameter %}
 
 ## Returns

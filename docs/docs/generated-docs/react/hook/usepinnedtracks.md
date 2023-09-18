@@ -22,7 +22,7 @@ const pinnedTracks = usePinnedTracks();
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="layoutContext" type="LayoutContextType" optional=true %}
 {% /parameter %}

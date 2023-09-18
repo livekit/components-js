@@ -18,7 +18,7 @@ const token = useToken(<token-endpoint>, roomName, { userInfo: { identity, name 
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="roomName" type="string" optional=false %}
 {% /parameter %}

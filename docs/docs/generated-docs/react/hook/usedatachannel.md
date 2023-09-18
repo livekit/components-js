@@ -23,7 +23,7 @@ const { message, send } = useDataChannel('chat');
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="topic" type="T" optional=false %}
 {% /parameter %}

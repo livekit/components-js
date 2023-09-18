@@ -2,9 +2,13 @@
 
 # useTrackContext
 
-> Warning: This API is now obsolete.
->
-> `useTrackContext` has been to `useTrackRefContext`<!-- -->, use this as a drop in replacement.
+{% callout type="caution" variation="normal" %}
+
+This API is deprecated:
+
+`useTrackContext` has been renamed to `useTrackRefContext`<!-- -->, use this as a drop in replacement.
+
+{% /callout %}
 
 Ensures that a track reference is provided via context. If not inside a `TrackRefContext`<!-- -->, an error is thrown.
 

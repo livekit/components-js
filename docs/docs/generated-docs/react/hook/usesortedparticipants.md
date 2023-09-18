@@ -12,7 +12,7 @@ import { useSortedParticipants } from '@livekit/components-react';
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="participants" type="Array<Participant>" optional=false %}
 {% /parameter %}

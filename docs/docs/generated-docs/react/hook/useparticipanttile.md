@@ -16,9 +16,41 @@ The returned props include many data attributes that are useful for CSS styling 
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
-## Parameters
+## Properties
 
-{% parameter name="{ trackRef, participant, source, publication, onParticipantClick, disableSpeakingIndicator, htmlProps, }" type="UseParticipantTileProps<T>" optional=false %}
+{% parameter name="htmlProps" type="React.HTMLAttributes<T>" optional=false %}
+{% /parameter %}
+
+{% parameter name="disableSpeakingIndicator" type="boolean" optional=true %}
+{% /parameter %}
+
+{% parameter name="onParticipantClick" type="(event: ParticipantClickEvent) => void" optional=true %}
+{% /parameter %}
+
+{% parameter name="trackRef" type="TrackReferenceOrPlaceholder" optional=true %}
+The track reference to display.
+
+{% /parameter %}
+
+{% parameter name="participant" type="Participant" optional=true deprecated=true %}
+{% callout type="caution" variation="compact" %}
+This parameter will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
+{% /parameter %}
+
+{% parameter name="publication" type="TrackPublication" optional=true deprecated=true %}
+{% callout type="caution" variation="compact" %}
+This parameter will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
+{% /parameter %}
+
+{% parameter name="source" type="Track.Source" optional=true deprecated=true %}
+{% callout type="caution" variation="compact" %}
+This parameter will be removed in a future version use `trackRef` instead.
+
+{% /callout %}
 {% /parameter %}
 
 ## Returns

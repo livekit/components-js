@@ -29,7 +29,7 @@ const trackReferencesWithPlaceholders: TrackReferenceOrPlaceholder[] = useTracks
 
 {% partial file="p_usage.md" variables={exampleCount: 2} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="options" type="UseTracksOptions" optional=true %}
 {% /parameter %}

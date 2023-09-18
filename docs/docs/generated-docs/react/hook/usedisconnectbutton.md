@@ -19,9 +19,9 @@ return <button {...buttonProps}>Disconnect</button>;
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
-{% parameter name="props" type="DisconnectButtonProps" optional=false %}
+{% parameter name="stopTracks" type="boolean" optional=true %}
 {% /parameter %}
 
 ## Returns

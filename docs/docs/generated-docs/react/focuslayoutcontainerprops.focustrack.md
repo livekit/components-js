@@ -2,9 +2,13 @@
 
 ## FocusLayoutContainerProps.focusTrack property
 
-> Warning: This API is now obsolete.
->
-> This property has no effect and will be removed in a future version.
+{% callout type="caution" variation="normal" %}
+
+This API is deprecated:
+
+This property has no effect and will be removed in a future version.
+
+{% /callout %}
 
 **Signature:**
 

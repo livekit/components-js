@@ -2,9 +2,13 @@
 
 # useEnsureTrackReference
 
-> Warning: This API is now obsolete.
->
-> `useEnsureTrackReference` has been to `useEnsureTrackRef`<!-- -->, use this as a drop in replacement.
+{% callout type="caution" variation="normal" %}
+
+This API is deprecated:
+
+`useEnsureTrackReference` has been renamed to `useEnsureTrackRef`<!-- -->, use this as a drop in replacement.
+
+{% /callout %}
 
 Ensures that a track reference is provided, either via context or explicitly as a parameter. If not inside a `TrackContext` and no track reference is provided, an error is thrown.
 
@@ -16,7 +20,7 @@ import { useEnsureTrackReference } from '@livekit/components-react';
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="track" type="TrackReferenceOrPlaceholder" optional=true %}
 {% /parameter %}

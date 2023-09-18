@@ -2,9 +2,13 @@
 
 ## AudioVisualizerProps.participant property
 
-> Warning: This API is now obsolete.
->
-> this property will be removed in a future version, use `trackRef` instead
+{% callout type="caution" variation="normal" %}
+
+This API is deprecated:
+
+this property will be removed in a future version, use `trackRef` instead
+
+{% /callout %}
 
 **Signature:**
 

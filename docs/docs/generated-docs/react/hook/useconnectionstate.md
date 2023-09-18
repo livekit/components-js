@@ -18,7 +18,7 @@ const connectionState = useConnectionState(room);
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
 
-## Parameters
+## Properties
 
 {% parameter name="room" type="Room" optional=true %}
 {% /parameter %}

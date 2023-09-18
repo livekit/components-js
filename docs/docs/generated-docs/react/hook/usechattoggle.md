@@ -16,9 +16,9 @@ Depends on the `LayoutContext` to work properly.
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}
 
-## Parameters
+## Properties
 
-{% parameter name="{ props }" type="UseChatToggleProps" optional=false %}
+{% parameter name="props" type="React.ButtonHTMLAttributes<HTMLButtonElement>" optional=false %}
 {% /parameter %}
 
 ## Returns

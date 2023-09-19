@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 1.2.1
+
+### Patch Changes
+
+- Set the default value for `canPlayAudio` returned by the `useStartAudio` hook to `true` to avoid flashing issues. - [#641](https://github.com/livekit/components-js/pull/641) ([@harrisonlo](https://github.com/harrisonlo))
+
 ## 1.2.0
 
 ### Minor Changes

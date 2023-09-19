@@ -1,5 +1,11 @@
 # @livekit/components-js-docs
 
+## 0.1.1
+
+### Patch Changes
+
+- Include link-to-source info when generating docs. Add frontmatter section for generated markdown files. - [#642](https://github.com/livekit/components-js/pull/642) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.1.0
 
 ### Minor Changes

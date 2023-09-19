@@ -1,7 +1,7 @@
 ---
 {
   "title": "setupDataMessageHandler",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/dataChannel.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/dataChannel.ts"
 }
 ---
 
@@ -15,7 +15,7 @@
 export declare function setupDataMessageHandler<T extends string>(
   room: Room,
   topic?: T,
-  onMessage?: (msg: ReceivedDataMessage<T>) => void,
+  onMessage?: (msg: ReceivedDataMessage<T>) => void
 ): {
   messageObservable: Observable<{
     payload: Uint8Array;

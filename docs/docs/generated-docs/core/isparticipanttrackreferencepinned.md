@@ -1,7 +1,7 @@
 ---
 {
   "title": "isParticipantTrackReferencePinned",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/utils.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/utils.ts"
 }
 ---
 
@@ -16,7 +16,7 @@ Check if the participant track reference is pinned.
 ```typescript
 export declare function isParticipantTrackReferencePinned(
   trackRef: TrackReference,
-  pinState: PinState | undefined,
+  pinState: PinState | undefined
 ): boolean;
 ```
 

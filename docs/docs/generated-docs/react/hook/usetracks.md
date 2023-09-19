@@ -1,7 +1,7 @@
 ---
 {
   "title": "useTracks",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTracks.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTracks.ts"
 }
 ---
 
@@ -30,7 +30,7 @@ const trackReferences: TrackReference[] = useTracks([Track.Source.Camera]);
 // Return all subscribed camera tracks as well as placeholders for
 // participants without a camera subscription.
 const trackReferencesWithPlaceholders: TrackReferenceOrPlaceholder[] = useTracks([
-  { source: Track.Source.Camera, withPlaceholder: true },
+  { source: Track.Source.Camera, withPlaceholder: true }
 ]);
 ```
 

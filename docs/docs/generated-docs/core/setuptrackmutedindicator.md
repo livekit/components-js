@@ -1,7 +1,7 @@
 ---
 {
   "title": "setupTrackMutedIndicator",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/trackMutedIndicator.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/trackMutedIndicator.ts"
 }
 ---
 

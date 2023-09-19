@@ -1,7 +1,7 @@
 ---
 {
   "title": "getTrackReferenceSource",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/track-reference/track-reference.utils.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/track-reference/track-reference.utils.ts"
 }
 ---
 
@@ -15,7 +15,7 @@ Returns the Source of the TrackReference.
 
 ```typescript
 export declare function getTrackReferenceSource(
-  trackReference: TrackReferenceOrPlaceholder,
+  trackReference: TrackReferenceOrPlaceholder
 ): Track.Source;
 ```
 

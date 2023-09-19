@@ -1,7 +1,7 @@
 ---
 {
   "title": "TrackLoop",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/TrackLoop.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/TrackLoop.tsx"
 }
 ---
 

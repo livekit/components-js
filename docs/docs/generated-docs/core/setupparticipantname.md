@@ -1,7 +1,7 @@
 ---
 {
   "title": "setupParticipantName",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/participantName.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/participantName.ts"
 }
 ---
 

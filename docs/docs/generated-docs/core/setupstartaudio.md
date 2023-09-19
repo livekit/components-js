@@ -1,7 +1,7 @@
 ---
 {
   "title": "setupStartAudio",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/startAudio.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/startAudio.ts"
 }
 ---
 

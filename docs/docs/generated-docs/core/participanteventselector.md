@@ -1,7 +1,7 @@
 ---
 {
   "title": "participantEventSelector",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts"
 }
 ---
 
@@ -14,6 +14,6 @@
 ```typescript
 export declare function participantEventSelector<T extends ParticipantEvent>(
   participant: Participant,
-  event: T,
+  event: T
 ): Observable<Parameters<ParticipantEventCallbacks[Extract<T, keyof ParticipantEventCallbacks>]>>;
 ```

@@ -1,7 +1,7 @@
 ---
 {
   "title": "createDataObserver",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts"
 }
 ---
 
@@ -13,13 +13,13 @@
 
 ```typescript
 export declare function createDataObserver(
-  room: Room,
+  room: Room
 ): Observable<
   [
     payload: Uint8Array,
     participant?: import("livekit-client").RemoteParticipant | undefined,
     kind?: import("livekit-client").DataPacket_Kind | undefined,
-    topic?: string | undefined,
+    topic?: string | undefined
   ]
 >;
 ```

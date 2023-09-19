@@ -1,7 +1,7 @@
 ---
 {
   "title": "LiveKitRoom",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/LiveKitRoom.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/LiveKitRoom.tsx"
 }
 ---
 

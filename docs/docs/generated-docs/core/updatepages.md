@@ -1,7 +1,7 @@
 ---
 {
   "title": "updatePages",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/sorting/tile-array-update.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/sorting/tile-array-update.ts"
 }
 ---
 
@@ -17,7 +17,7 @@ Divide the list of elements into pages and and check if pages need updating.
 export declare function updatePages<T extends UpdatableItem>(
   currentList: T[],
   nextList: T[],
-  maxItemsOnPage: number,
+  maxItemsOnPage: number
 ): T[];
 ```
 

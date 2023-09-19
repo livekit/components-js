@@ -1,7 +1,7 @@
 ---
 {
   "title": "allParticipantEvents variable",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/eventGroups.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/eventGroups.ts"
 }
 ---
 

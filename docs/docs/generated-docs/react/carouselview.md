@@ -1,7 +1,7 @@
 ---
 {
   "title": "CarouselView variable",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/layout/CarouselLayout.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/layout/CarouselLayout.tsx"
 }
 ---
 

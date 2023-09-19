@@ -1,7 +1,7 @@
 ---
 {
   "title": "DataSendOptions type",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/dataChannel.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/dataChannel.ts"
 }
 ---
 

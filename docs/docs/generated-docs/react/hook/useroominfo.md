@@ -1,7 +1,7 @@
 ---
 {
   "title": "useRoomInfo",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useRoomInfo.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useRoomInfo.ts"
 }
 ---
 

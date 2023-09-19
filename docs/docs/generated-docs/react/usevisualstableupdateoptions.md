@@ -1,7 +1,7 @@
 ---
 {
   "title": "UseVisualStableUpdateOptions interface",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useVisualStableUpdate.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useVisualStableUpdate.ts"
 }
 ---
 

@@ -1,7 +1,7 @@
 ---
 {
   "title": "supportsScreenSharing",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/featureDetection.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/featureDetection.ts"
 }
 ---
 

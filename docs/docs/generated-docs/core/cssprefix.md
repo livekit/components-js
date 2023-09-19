@@ -1,7 +1,7 @@
 ---
 {
   "title": "cssPrefix variable",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/constants.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/constants.ts"
 }
 ---
 

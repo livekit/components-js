@@ -1,7 +1,7 @@
 ---
 {
   "title": "RoomAudioRenderer",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/RoomAudioRenderer.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/RoomAudioRenderer.tsx"
 }
 ---
 

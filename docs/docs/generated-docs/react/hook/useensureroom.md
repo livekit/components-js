@@ -1,7 +1,7 @@
 ---
 {
   "title": "useEnsureRoom",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/room-context.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/room-context.ts"
 }
 ---
 

@@ -1,7 +1,7 @@
 ---
 {
   "title": "ChatToggleProps interface",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/ChatToggle.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/ChatToggle.tsx"
 }
 ---
 

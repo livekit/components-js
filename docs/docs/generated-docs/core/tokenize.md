@@ -1,7 +1,7 @@
 ---
 {
   "title": "tokenize",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/tokenizer.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/tokenizer.ts"
 }
 ---
 
@@ -14,7 +14,7 @@
 ```typescript
 export declare function tokenize<T extends TokenizeGrammar>(
   input: string,
-  grammar: T,
+  grammar: T
 ): (
   | string
   | {

@@ -1,7 +1,7 @@
 ---
 {
   "title": "createUrlRegExp variable",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/urlRegex.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/urlRegex.ts"
 }
 ---
 

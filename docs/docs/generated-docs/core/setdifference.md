@@ -1,7 +1,7 @@
 ---
 {
   "title": "setDifference",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/set-helper.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/set-helper.ts"
 }
 ---
 

@@ -1,7 +1,7 @@
 ---
 {
   "title": "setupChatToggle",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/chatToggle.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/chatToggle.ts"
 }
 ---
 

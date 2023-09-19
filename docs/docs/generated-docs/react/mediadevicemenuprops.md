@@ -1,7 +1,7 @@
 ---
 {
   "title": "MediaDeviceMenuProps interface",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/MediaDeviceMenu.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/MediaDeviceMenu.tsx"
 }
 ---
 

@@ -1,7 +1,7 @@
 ---
 {
   "title": "observeParticipantMedia",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts"
 }
 ---
 
@@ -13,6 +13,6 @@
 
 ```typescript
 export declare function observeParticipantMedia<T extends Participant>(
-  participant: T,
+  participant: T
 ): Observable<ParticipantMedia<T>>;
 ```

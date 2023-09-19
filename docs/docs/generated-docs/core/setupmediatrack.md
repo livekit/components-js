@@ -1,7 +1,7 @@
 ---
 {
   "title": "setupMediaTrack",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/mediaTrack.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/mediaTrack.ts"
 }
 ---
 

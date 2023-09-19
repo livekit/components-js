@@ -1,7 +1,7 @@
 ---
 {
   "title": "ChatEntryProps interface",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/ChatEntry.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/ChatEntry.tsx"
 }
 ---
 

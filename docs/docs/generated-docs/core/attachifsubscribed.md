@@ -1,7 +1,7 @@
 ---
 {
   "title": "attachIfSubscribed variable",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/utils.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/utils.ts"
 }
 ---
 

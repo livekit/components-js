@@ -1,7 +1,7 @@
 ---
 {
   "title": "isParticipantSourcePinned",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/utils.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/utils.ts"
 }
 ---
 
@@ -25,7 +25,7 @@ Check if the participant track source is pinned.
 export declare function isParticipantSourcePinned(
   participant: Participant,
   source: Track.Source,
-  pinState: PinState | undefined,
+  pinState: PinState | undefined
 ): boolean;
 ```
 

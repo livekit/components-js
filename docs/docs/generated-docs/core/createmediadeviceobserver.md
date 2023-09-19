@@ -1,7 +1,7 @@
 ---
 {
   "title": "createMediaDeviceObserver",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts"
 }
 ---
 
@@ -14,6 +14,6 @@
 ```typescript
 export declare function createMediaDeviceObserver(
   kind?: MediaDeviceKind,
-  requestPermissions?: boolean,
+  requestPermissions?: boolean
 ): Observable<MediaDeviceInfo[]>;
 ```

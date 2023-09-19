@@ -1,7 +1,7 @@
 ---
 {
   "title": "GridLayoutDefinition type",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/grid-layouts.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/grid-layouts.ts"
 }
 ---
 

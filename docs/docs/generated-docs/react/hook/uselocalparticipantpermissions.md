@@ -1,7 +1,7 @@
 ---
 {
   "title": "useLocalParticipantPermissions",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useLocalParticipantPermissions.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useLocalParticipantPermissions.ts"
 }
 ---
 

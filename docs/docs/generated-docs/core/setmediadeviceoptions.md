@@ -1,7 +1,7 @@
 ---
 {
   "title": "SetMediaDeviceOptions type",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/mediaDeviceSelect.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/mediaDeviceSelect.ts"
 }
 ---
 

@@ -1,7 +1,7 @@
 ---
 {
   "title": "log variable",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/logger.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/logger.ts"
 }
 ---
 

@@ -1,7 +1,7 @@
 ---
 {
   "title": "DisconnectButton",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/DisconnectButton.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/DisconnectButton.tsx"
 }
 ---
 

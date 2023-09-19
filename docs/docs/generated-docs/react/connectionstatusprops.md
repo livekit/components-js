@@ -1,7 +1,7 @@
 ---
 {
   "title": "ConnectionStatusProps interface",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/ConnectionState.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/ConnectionState.tsx"
 }
 ---
 

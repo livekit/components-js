@@ -1,7 +1,7 @@
 ---
 {
   "title": "encryptionStatusObservable",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts"
 }
 ---
 
@@ -14,6 +14,6 @@
 ```typescript
 export declare function encryptionStatusObservable(
   room: Room,
-  participant: Participant,
+  participant: Participant
 ): Observable<boolean>;
 ```

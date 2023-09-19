@@ -1,7 +1,7 @@
 ---
 {
   "title": "useConnectionQualityIndicator",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useConnectionQualityIndicator.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useConnectionQualityIndicator.ts"
 }
 ---
 

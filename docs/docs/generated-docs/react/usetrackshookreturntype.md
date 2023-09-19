@@ -1,7 +1,7 @@
 ---
 {
   "title": "UseTracksHookReturnType type",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTracks.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTracks.ts"
 }
 ---
 

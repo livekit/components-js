@@ -1,7 +1,7 @@
 ---
 {
   "title": "useSpeakingParticipants",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useSpeakingParticipants.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useSpeakingParticipants.ts"
 }
 ---
 

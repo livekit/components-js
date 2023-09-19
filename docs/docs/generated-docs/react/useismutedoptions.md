@@ -1,7 +1,7 @@
 ---
 {
   "title": "UseIsMutedOptions interface",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useIsMuted.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useIsMuted.ts"
 }
 ---
 

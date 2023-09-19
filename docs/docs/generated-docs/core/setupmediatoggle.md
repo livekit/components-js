@@ -1,7 +1,7 @@
 ---
 {
   "title": "setupMediaToggle",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/mediaToggle.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/mediaToggle.ts"
 }
 ---
 
@@ -15,6 +15,6 @@
 export declare function setupMediaToggle<T extends ToggleSource>(
   source: T,
   room: Room,
-  options?: CaptureOptionsBySource<T>,
+  options?: CaptureOptionsBySource<T>
 ): MediaToggleType<T>;
 ```

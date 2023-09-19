@@ -1,7 +1,7 @@
 ---
 {
   "title": "ConnectionStateToastProps interface",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/ConnectionStateToast.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/ConnectionStateToast.tsx"
 }
 ---
 

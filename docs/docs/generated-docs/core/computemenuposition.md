@@ -1,7 +1,7 @@
 ---
 {
   "title": "computeMenuPosition",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/floating-menu.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/floating-menu.ts"
 }
 ---
 
@@ -14,7 +14,7 @@
 ```typescript
 export declare function computeMenuPosition(
   button: HTMLElement,
-  menu: HTMLElement,
+  menu: HTMLElement
 ): Promise<{
   x: number;
   y: number;

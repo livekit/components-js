@@ -1,7 +1,7 @@
 ---
 {
   "title": "createTrackObserver",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts"
 }
 ---
 
@@ -14,7 +14,7 @@
 ```typescript
 export declare function createTrackObserver(
   participant: Participant,
-  options: TrackIdentifier,
+  options: TrackIdentifier
 ): Observable<{
   publication: TrackPublication | undefined;
 }>;

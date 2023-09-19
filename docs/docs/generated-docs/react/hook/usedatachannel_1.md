@@ -1,7 +1,7 @@
 ---
 {
   "title": "useDataChannel",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useDataChannel.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useDataChannel.ts"
 }
 ---
 

@@ -1,7 +1,7 @@
 ---
 {
   "title": "connectedParticipantsObserver",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts"
 }
 ---
 
@@ -14,6 +14,6 @@
 ```typescript
 export declare function connectedParticipantsObserver(
   room: Room,
-  options?: ConnectedParticipantsObserverOptions,
+  options?: ConnectedParticipantsObserverOptions
 ): Observable<RemoteParticipant[]>;
 ```

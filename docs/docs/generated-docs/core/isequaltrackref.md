@@ -1,7 +1,7 @@
 ---
 {
   "title": "isEqualTrackRef",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/track-reference/track-reference.utils.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/track-reference/track-reference.utils.ts"
 }
 ---
 
@@ -14,6 +14,6 @@
 ```typescript
 export declare function isEqualTrackRef(
   a?: TrackReferenceOrPlaceholder,
-  b?: TrackReferenceOrPlaceholder,
+  b?: TrackReferenceOrPlaceholder
 ): boolean;
 ```

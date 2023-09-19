@@ -1,7 +1,7 @@
 ---
 {
   "title": "usePinnedTracks",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/usePinnedTracks.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/usePinnedTracks.ts"
 }
 ---
 

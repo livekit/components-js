@@ -1,7 +1,7 @@
 ---
 {
   "title": "VideoConferenceProps interface",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/VideoConference.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/VideoConference.tsx"
 }
 ---
 

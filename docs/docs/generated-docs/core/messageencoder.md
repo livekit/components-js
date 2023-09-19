@@ -1,7 +1,7 @@
 ---
 {
   "title": "MessageEncoder type",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/chat.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/chat.ts"
 }
 ---
 

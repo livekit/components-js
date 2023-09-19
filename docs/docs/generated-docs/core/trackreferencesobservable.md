@@ -1,7 +1,7 @@
 ---
 {
   "title": "trackReferencesObservable",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/track.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/track.ts"
 }
 ---
 
@@ -15,7 +15,7 @@
 export declare function trackReferencesObservable(
   room: Room,
   sources: Track.Source[],
-  options: TrackReferencesObservableOptions,
+  options: TrackReferencesObservableOptions
 ): Observable<{
   trackReferences: TrackReference[];
   participants: Participant[];

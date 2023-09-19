@@ -1,7 +1,7 @@
 ---
 {
   "title": "setupParticipantTile",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/participantTile.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/participantTile.ts"
 }
 ---
 

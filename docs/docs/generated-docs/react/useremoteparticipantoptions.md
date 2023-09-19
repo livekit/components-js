@@ -1,7 +1,7 @@
 ---
 {
   "title": "UseRemoteParticipantOptions interface",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useRemoteParticipant.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useRemoteParticipant.ts"
 }
 ---
 

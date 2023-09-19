@@ -1,7 +1,7 @@
 ---
 {
   "title": "ParticipantAudioTile",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ParticipantAudioTile.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ParticipantAudioTile.tsx"
 }
 ---
 

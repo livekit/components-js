@@ -1,7 +1,7 @@
 ---
 {
   "title": "getTrackByIdentifier",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/mediaTrack.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/mediaTrack.ts"
 }
 ---
 
@@ -13,6 +13,6 @@
 
 ```typescript
 export declare function getTrackByIdentifier(
-  options: TrackIdentifier,
+  options: TrackIdentifier
 ): import("livekit-client").TrackPublication | undefined;
 ```

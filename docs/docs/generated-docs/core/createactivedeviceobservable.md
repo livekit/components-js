@@ -1,7 +1,7 @@
 ---
 {
   "title": "createActiveDeviceObservable",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts"
 }
 ---
 
@@ -14,6 +14,6 @@
 ```typescript
 export declare function createActiveDeviceObservable(
   room: Room,
-  kind: MediaDeviceKind,
+  kind: MediaDeviceKind
 ): Observable<string | undefined>;
 ```

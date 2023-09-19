@@ -1,7 +1,7 @@
 ---
 {
   "title": "getTrackReferenceId",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/track-reference/track-reference.utils.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/track-reference/track-reference.utils.ts"
 }
 ---
 
@@ -15,7 +15,7 @@ Returns a id to identify the `TrackReference` or `TrackReferencePlaceholder` bas
 
 ```typescript
 export declare function getTrackReferenceId(
-  trackReference: TrackReferenceOrPlaceholder | number,
+  trackReference: TrackReferenceOrPlaceholder | number
 ): string;
 ```
 

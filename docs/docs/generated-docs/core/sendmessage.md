@@ -1,7 +1,7 @@
 ---
 {
   "title": "sendMessage",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/dataChannel.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/dataChannel.ts"
 }
 ---
 
@@ -18,7 +18,7 @@ export declare function sendMessage(
   localParticipant: LocalParticipant,
   payload: Uint8Array,
   topic?: string,
-  options?: DataSendOptions,
+  options?: DataSendOptions
 ): Promise<void>;
 ```
 

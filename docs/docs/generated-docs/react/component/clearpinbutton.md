@@ -1,7 +1,7 @@
 ---
 {
   "title": "ClearPinButton",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/ClearPinButton.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/ClearPinButton.tsx"
 }
 ---
 

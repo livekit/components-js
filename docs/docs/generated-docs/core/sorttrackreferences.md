@@ -1,7 +1,7 @@
 ---
 {
   "title": "sortTrackReferences",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/sorting/sort-track-bundles.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/sorting/sort-track-bundles.ts"
 }
 ---
 
@@ -15,7 +15,7 @@ Default sort for `TrackReferenceOrPlaceholder`<!-- -->, it'll order participants
 
 ```typescript
 export declare function sortTrackReferences(
-  tracks: TrackReferenceOrPlaceholder[],
+  tracks: TrackReferenceOrPlaceholder[]
 ): TrackReferenceOrPlaceholder[];
 ```
 

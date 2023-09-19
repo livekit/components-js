@@ -1,7 +1,7 @@
 ---
 {
   "title": "ParticipantTileProps interface",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ParticipantTile.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ParticipantTile.tsx"
 }
 ---
 

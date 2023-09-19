@@ -1,7 +1,7 @@
 ---
 {
   "title": "wasClickOutside",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/floating-menu.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/floating-menu.ts"
 }
 ---
 

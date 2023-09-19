@@ -1,7 +1,7 @@
 ---
 {
   "title": "setupConnectionQualityIndicator",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/connectionQualityIndicator.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/connectionQualityIndicator.ts"
 }
 ---
 

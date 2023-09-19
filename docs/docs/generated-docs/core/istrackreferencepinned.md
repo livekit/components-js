@@ -1,7 +1,7 @@
 ---
 {
   "title": "isTrackReferencePinned",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/track-reference/track-reference.utils.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/track-reference/track-reference.utils.ts"
 }
 ---
 
@@ -16,7 +16,7 @@ Check if the `TrackReference` is pinned.
 ```typescript
 export declare function isTrackReferencePinned(
   trackReference: TrackReferenceOrPlaceholder,
-  pinState: PinState | undefined,
+  pinState: PinState | undefined
 ): boolean;
 ```
 

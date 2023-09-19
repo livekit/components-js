@@ -1,7 +1,7 @@
 ---
 {
   "title": "VideoTrackProps interface",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/VideoTrack.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/VideoTrack.tsx"
 }
 ---
 

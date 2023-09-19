@@ -1,7 +1,7 @@
 ---
 {
   "title": "TrackMutedIndicator",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/TrackMutedIndicator.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/TrackMutedIndicator.tsx"
 }
 ---
 

@@ -1,7 +1,7 @@
 ---
 {
   "title": "MediaDeviceSelect",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/MediaDeviceSelect.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/MediaDeviceSelect.tsx"
 }
 ---
 

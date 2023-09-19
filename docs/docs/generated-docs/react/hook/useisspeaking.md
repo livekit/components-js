@@ -1,7 +1,7 @@
 ---
 {
   "title": "useIsSpeaking",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useIsSpeaking.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useIsSpeaking.ts"
 }
 ---
 

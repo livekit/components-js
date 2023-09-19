@@ -1,7 +1,7 @@
 ---
 {
   "title": "isSourcesWithOptions",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/types.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/types.ts"
 }
 ---
 
@@ -13,6 +13,6 @@
 
 ```typescript
 export declare function isSourcesWithOptions(
-  sources: SourcesArray,
+  sources: SourcesArray
 ): sources is TrackSourceWithOptions[];
 ```

@@ -1,7 +1,7 @@
 ---
 {
   "title": "useParticipants",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useParticipants.ts",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useParticipants.ts"
 }
 ---
 

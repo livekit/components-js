@@ -1,7 +1,7 @@
 ---
 {
   "title": "AudioTrack",
-  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/AudioTrack.tsx",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/AudioTrack.tsx"
 }
 ---
 

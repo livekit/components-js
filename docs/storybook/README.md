@@ -7,9 +7,6 @@ This Storybook gives a good overview over all* (*work in progress) LiveKit compo
 ## Monorepo Navigation
 
 - [Home](../../README.md)
-- **Docs**
-  - [Docs](../../docs/alpha-docs/README.md)
-  - [Storybook 👈](../../docs/storybook/README.md)
 - **Framework Implementations**:
   - [React](../../packages/react/README.md)
 - **Examples**

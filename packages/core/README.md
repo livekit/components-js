@@ -9,9 +9,6 @@ This package is a wrapper around the [livekit/client-sdk-js](https://github.com/
 ## Monorepo Navigation
 
 - [Home](../../README.md)
-- **Docs**
-  - [Docs](../../docs/alpha-docs/README.md)
-  - [Storybook](../../docs/storybook/README.md)
 - **Framework Implementations**:
   - [React](../../packages/react/README.md)
 - **Examples**

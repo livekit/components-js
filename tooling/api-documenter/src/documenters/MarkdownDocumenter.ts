@@ -140,11 +140,57 @@ export class MarkdownDocumenter {
     // this._writeBreadcrumb(output, apiItem);
 
     const scopedName: string = apiItem.getScopedNameWithinPackage();
+    let pageTitle: string = scopedName;
+
+    switch (apiItem.kind) {
+      case ApiItemKind.Class:
+        pageTitle = `${scopedName} class`;
+        break;
+      case ApiItemKind.Enum:
+        pageTitle = `${scopedName} enum`;
+        break;
+      case ApiItemKind.Interface:
+        pageTitle = `${scopedName} interface`;
+        break;
+      case ApiItemKind.Constructor:
+      case ApiItemKind.ConstructSignature:
+        break;
+      case ApiItemKind.Method:
+      case ApiItemKind.MethodSignature:
+        pageTitle = `${scopedName} method`;
+        break;
+      case ApiItemKind.Function:
+        pageTitle = `${apiItem.displayName}`;
+        break;
+      case ApiItemKind.Model:
+        pageTitle = 'API Reference';
+        break;
+      case ApiItemKind.Namespace:
+        pageTitle = `${scopedName} namespace`;
+        break;
+      case ApiItemKind.Package:
+        console.log(`Writing ${apiItem.displayName} package`);
+        const unscopedPackageName: string = PackageName.getUnscopedName(apiItem.displayName);
+        pageTitle = `${unscopedPackageName} package`;
+        break;
+      case ApiItemKind.Property:
+      case ApiItemKind.PropertySignature:
+        pageTitle = `${scopedName} property`;
+        break;
+      case ApiItemKind.TypeAlias:
+        pageTitle = `${scopedName} type`;
+        break;
+      case ApiItemKind.Variable:
+        pageTitle = `${scopedName} variable`;
+        break;
+      default:
+        throw new Error('Unsupported API item kind: ' + apiItem.kind);
+    }
 
     output.appendNode(
       new DocFrontmatter({
         configuration,
-        title: apiItem.displayName,
+        title: pageTitle,
         linkToSource: getLinkToSourceOnGitHub(apiItem),
       }),
     );
@@ -156,60 +202,7 @@ export class MarkdownDocumenter {
       }),
     );
 
-    switch (apiItem.kind) {
-      case ApiItemKind.Class:
-        output.appendNode(new DocHeading({ configuration, title: `${scopedName} class` }));
-        break;
-      case ApiItemKind.Enum:
-        output.appendNode(new DocHeading({ configuration, title: `${scopedName} enum` }));
-        break;
-      case ApiItemKind.Interface:
-        output.appendNode(new DocHeading({ configuration, title: `${scopedName} interface` }));
-        break;
-      case ApiItemKind.Constructor:
-      case ApiItemKind.ConstructSignature:
-        output.appendNode(new DocHeading({ configuration, title: scopedName }));
-        break;
-      case ApiItemKind.Method:
-      case ApiItemKind.MethodSignature:
-        output.appendNode(new DocHeading({ configuration, title: `${scopedName} method` }));
-        break;
-      case ApiItemKind.Function:
-        output.appendNode(
-          new DocHeading({
-            configuration,
-            title: `${apiItem.displayName}`,
-            level: 1,
-          }),
-        );
-
-        break;
-      case ApiItemKind.Model:
-        output.appendNode(new DocHeading({ configuration, title: `API Reference` }));
-        break;
-      case ApiItemKind.Namespace:
-        output.appendNode(new DocHeading({ configuration, title: `${scopedName} namespace` }));
-        break;
-      case ApiItemKind.Package:
-        console.log(`Writing ${apiItem.displayName} package`);
-        const unscopedPackageName: string = PackageName.getUnscopedName(apiItem.displayName);
-        output.appendNode(
-          new DocHeading({ configuration, title: `${unscopedPackageName} package` }),
-        );
-        break;
-      case ApiItemKind.Property:
-      case ApiItemKind.PropertySignature:
-        output.appendNode(new DocHeading({ configuration, title: `${scopedName} property` }));
-        break;
-      case ApiItemKind.TypeAlias:
-        output.appendNode(new DocHeading({ configuration, title: `${scopedName} type` }));
-        break;
-      case ApiItemKind.Variable:
-        output.appendNode(new DocHeading({ configuration, title: `${scopedName} variable` }));
-        break;
-      default:
-        throw new Error('Unsupported API item kind: ' + apiItem.kind);
-    }
+    output.appendNode(new DocHeading({ configuration, title: pageTitle, level: 1 }));
 
     if (ApiReleaseTagMixin.isBaseClassOf(apiItem)) {
       if (apiItem.releaseTag === ReleaseTag.Beta) {

@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 1.2.2
+
+### Patch Changes
+
+- Initialize canPlayAudio with room state - [#646](https://github.com/livekit/components-js/pull/646) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.2.1
 
 ### Patch Changes

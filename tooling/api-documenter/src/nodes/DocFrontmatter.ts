@@ -9,7 +9,7 @@ import { CustomDocNodeKind } from './CustomDocNodeKind';
  */
 export interface IDocFrontmatterParameters extends IDocNodeParameters {
   title: string;
-  linkToSource: string;
+  linkToSource?: string;
 }
 
 /**
@@ -25,7 +25,7 @@ export interface IDocFrontmatterParameters extends IDocNodeParameters {
  */
 export class DocFrontmatter extends DocNode {
   public readonly title: string;
-  public readonly linkToSource: string;
+  public readonly linkToSource: string | undefined;
 
   public constructor(parameters: IDocFrontmatterParameters) {
     super(parameters);

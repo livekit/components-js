@@ -77,3 +77,22 @@ export function getCategorySubfolder(apiItem: ApiItem): string {
     return subfolderPath + '/';
   }
 }
+
+function getPackageSrcBaseUrl(apiItem: ApiItem) {
+  const urlBase = 'https://github.com/livekit/components-js/blob/main/packages' as const;
+  if (isComponentCorePackage(apiItem)) {
+    return `${urlBase}/core` as const;
+  } else if (isComponentReactPackage(apiItem)) {
+    return `${urlBase}/react` as const;
+  } else {
+    throw new Error('Unknown package');
+  }
+}
+
+export function getLinkToSourceOnGitHub(apiItem: ApiItem) {
+  if ('fileUrlPath' in apiItem && apiItem.fileUrlPath) {
+    const packageSrcBaseUrl = getPackageSrcBaseUrl(apiItem);
+    return `${packageSrcBaseUrl}/${apiItem.fileUrlPath}`;
+  }
+  return undefined;
+}

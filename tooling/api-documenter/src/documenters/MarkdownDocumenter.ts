@@ -67,7 +67,12 @@ import {
 } from '../plugin/MarkdownDocumenterFeature';
 import { DocumenterConfig } from './DocumenterConfig';
 import { MarkdownDocumenterAccessor } from '../plugin/MarkdownDocumenterAccessor';
-import { LkType, getCategorySubfolder, getFunctionType } from '../livekitUtils/classifiers';
+import {
+  LkType,
+  getCategorySubfolder,
+  getFunctionType,
+  getLinkToSourceOnGitHub,
+} from '../livekitUtils/classifiers';
 import { MarkDocTag } from '../nodes/MarkDocTag';
 import { ParameterList } from '../nodes/ParameterList';
 import { ParameterItem } from '../nodes/ParameterItem';
@@ -140,7 +145,7 @@ export class MarkdownDocumenter {
       new DocFrontmatter({
         configuration,
         title: apiItem.displayName,
-        linkToSource: 'https://github.todo',
+        linkToSource: getLinkToSourceOnGitHub(apiItem),
       }),
     );
 

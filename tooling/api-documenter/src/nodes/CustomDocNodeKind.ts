@@ -9,6 +9,8 @@ import { MarkDocTag } from './MarkDocTag';
 import { ParameterList } from './ParameterList';
 import { ParameterItem } from './ParameterItem';
 import { Callout } from './Callout';
+import { DocMdComment } from './DocMdComment';
+import { DocFrontmatter } from './DocFrontmatter';
 
 // Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
@@ -27,6 +29,8 @@ export const enum CustomDocNodeKind {
   ParameterList = 'ParameterList',
   ParameterItem = 'ParameterItem',
   Callout = 'Callout',
+  MdComment = 'MdComment',
+  Frontmatter = 'Frontmatter',
 }
 
 export class CustomDocNodes {
@@ -47,6 +51,8 @@ export class CustomDocNodes {
         { docNodeKind: CustomDocNodeKind.MarkDocTag, constructor: MarkDocTag },
         { docNodeKind: CustomDocNodeKind.ParameterList, constructor: ParameterList },
         { docNodeKind: CustomDocNodeKind.ParameterItem, constructor: ParameterItem },
+        { docNodeKind: CustomDocNodeKind.Frontmatter, constructor: DocFrontmatter },
+        { docNodeKind: CustomDocNodeKind.MdComment, constructor: DocMdComment },
       ]);
 
       configuration.docNodeManager.registerAllowableChildren(CustomDocNodeKind.EmphasisSpan, [
@@ -61,6 +67,8 @@ export class CustomDocNodes {
         CustomDocNodeKind.Table,
         CustomDocNodeKind.MarkDocTag,
         CustomDocNodeKind.ParameterList,
+        CustomDocNodeKind.Frontmatter,
+        CustomDocNodeKind.MdComment,
       ]);
 
       configuration.docNodeManager.registerAllowableChildren(DocNodeKind.Paragraph, [

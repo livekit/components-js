@@ -26,6 +26,8 @@ import { MarkDocTag } from '../nodes/MarkDocTag';
 import { ParameterList } from '../nodes/ParameterList';
 import { ParameterItem } from '../nodes/ParameterItem';
 import { Callout } from '../nodes/Callout';
+import { DocFrontmatter } from '../nodes/DocFrontmatter';
+import { DocMdComment } from '../nodes/DocMdComment';
 
 export interface ICustomMarkdownEmitterOptions extends IMarkdownEmitterOptions {
   contextApiItem: ApiItem | undefined;
@@ -259,6 +261,24 @@ export class CustomMarkdownEmitter extends MarkdownEmitter {
         writer.writeLine('{% /callout %}');
 
         writer.writeLine();
+        break;
+      }
+      case CustomDocNodeKind.Frontmatter: {
+        const frontmatter: DocFrontmatter = docNode as DocFrontmatter;
+        writer.writeLine('---');
+
+        writer.writeLine(frontmatter.asJson());
+        writer.ensureNewLine();
+
+        writer.writeLine('---');
+        break;
+      }
+      case CustomDocNodeKind.MdComment: {
+        const comment: DocMdComment = docNode as DocMdComment;
+
+        writer.ensureNewLine();
+        writer.writeLine(`<!-- ${comment.text} -->\n\n`);
+
         break;
       }
       default:

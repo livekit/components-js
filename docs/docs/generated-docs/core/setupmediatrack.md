@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'setupMediaTrack',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/components/mediaTrack.ts',
+  "title": "setupMediaTrack",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/mediaTrack.ts",
 }
 ---
 
@@ -14,6 +14,6 @@
 ```typescript
 export declare function setupMediaTrack(trackIdentifier: TrackIdentifier): {
   className: string;
-  trackObserver: import('rxjs').Observable<import('livekit-client').TrackPublication | undefined>;
+  trackObserver: import("rxjs").Observable<import("livekit-client").TrackPublication | undefined>;
 };
 ```

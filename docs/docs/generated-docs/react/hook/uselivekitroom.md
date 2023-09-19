@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useLiveKitRoom',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useLiveKitRoom.ts',
+  "title": "useLiveKitRoom",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useLiveKitRoom.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useLiveKitRoom` hook is used to implement the `LiveKitRoom` or your custom 
 ## Import
 
 ```typescript
-import { useLiveKitRoom } from '@livekit/components-react';
+import { useLiveKitRoom } from "@livekit/components-react";
 ```
 
 ## Usage

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useVisualStableUpdate',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useVisualStableUpdate.ts',
+  "title": "useVisualStableUpdate",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useVisualStableUpdate.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useVisualStableUpdate` hook is used to prevent visually jarring jumps and s
 ## Import
 
 ```typescript
-import { useVisualStableUpdate } from '@livekit/components-react';
+import { useVisualStableUpdate } from "@livekit/components-react";
 ```
 
 ## Remarks

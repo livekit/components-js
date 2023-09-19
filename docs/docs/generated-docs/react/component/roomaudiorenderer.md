@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'RoomAudioRenderer',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/RoomAudioRenderer.tsx',
+  "title": "RoomAudioRenderer",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/RoomAudioRenderer.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `RoomAudioRenderer` component is a drop-in solution for adding audio to your
 ## Import
 
 ```typescript
-import { RoomAudioRenderer } from '@livekit/components-react';
+import { RoomAudioRenderer } from "@livekit/components-react";
 ```
 
 ## Usage

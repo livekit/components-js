@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'isParticipantTrackReferencePinned',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/utils.ts',
+  "title": "isParticipantTrackReferencePinned",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/utils.ts",
 }
 ---
 

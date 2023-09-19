@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useTrackMutedIndicator',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTrackMutedIndicator.ts',
+  "title": "useTrackMutedIndicator",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTrackMutedIndicator.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useTrackMutedIndicator` hook is used to implement the `TrackMutedIndicator`
 ## Import
 
 ```typescript
-import { useTrackMutedIndicator } from '@livekit/components-react';
+import { useTrackMutedIndicator } from "@livekit/components-react";
 ```
 
 ## Usage

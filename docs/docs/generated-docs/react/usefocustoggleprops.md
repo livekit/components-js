@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'UseFocusToggleProps interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useFocusToggle.ts',
+  "title": "UseFocusToggleProps interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useFocusToggle.ts",
 }
 ---
 

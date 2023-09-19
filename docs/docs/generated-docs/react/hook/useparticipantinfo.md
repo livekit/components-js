@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useParticipantInfo',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useParticipantInfo.ts',
+  "title": "useParticipantInfo",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useParticipantInfo.ts",
 }
 ---
 
@@ -12,7 +12,7 @@
 ## Import
 
 ```typescript
-import { useParticipantInfo } from '@livekit/components-react';
+import { useParticipantInfo } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

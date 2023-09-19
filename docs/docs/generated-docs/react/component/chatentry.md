@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ChatEntry',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/ChatEntry.tsx',
+  "title": "ChatEntry",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/ChatEntry.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `ChatEntry` component holds and displays one chat message.
 ## Import
 
 ```typescript
-import { ChatEntry } from '@livekit/components-react';
+import { ChatEntry } from "@livekit/components-react";
 ```
 
 ## Usage

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'GridLayoutProps interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/layout/GridLayout.tsx',
+  "title": "GridLayoutProps interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/layout/GridLayout.tsx",
 }
 ---
 

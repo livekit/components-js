@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'computeMenuPosition',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/helper/floating-menu.ts',
+  "title": "computeMenuPosition",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/floating-menu.ts",
 }
 ---
 

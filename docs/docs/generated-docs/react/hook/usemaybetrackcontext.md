@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useMaybeTrackContext',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/context/track-reference-context.ts',
+  "title": "useMaybeTrackContext",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/track-reference-context.ts",
 }
 ---
 
@@ -22,7 +22,7 @@ Returns a track reference from the `TrackContext` if it exists, otherwise `undef
 ## Import
 
 ```typescript
-import { useMaybeTrackContext } from '@livekit/components-react';
+import { useMaybeTrackContext } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

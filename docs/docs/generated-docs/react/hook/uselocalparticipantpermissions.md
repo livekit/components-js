@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useLocalParticipantPermissions',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useLocalParticipantPermissions.ts',
+  "title": "useLocalParticipantPermissions",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useLocalParticipantPermissions.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useLocalParticipantPermissions` hook returns the local participant's permis
 ## Import
 
 ```typescript
-import { useLocalParticipantPermissions } from '@livekit/components-react';
+import { useLocalParticipantPermissions } from "@livekit/components-react";
 ```
 
 ## Usage
@@ -28,5 +28,5 @@ const { canPublish, canPublishData } = useLocalParticipantPermissions();
 ## Returns
 
 ```typescript
-import('livekit-client/dist/src/proto/livekit_models_pb').ParticipantPermission | undefined;
+import("livekit-client/dist/src/proto/livekit_models_pb").ParticipantPermission | undefined;
 ```

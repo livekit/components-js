@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'AudioVisualizerProps interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/AudioVisualizer.tsx',
+  "title": "AudioVisualizerProps interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/AudioVisualizer.tsx",
 }
 ---
 

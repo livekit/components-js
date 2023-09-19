@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'PreJoinProps interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/PreJoin.tsx',
+  "title": "PreJoinProps interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/PreJoin.tsx",
 }
 ---
 

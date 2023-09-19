@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'UseTrackMutedIndicatorOptions interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTrackMutedIndicator.ts',
+  "title": "UseTrackMutedIndicatorOptions interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTrackMutedIndicator.ts",
 }
 ---
 

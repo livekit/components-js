@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'WIDGET_DEFAULT_STATE variable',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/types.ts',
+  "title": "WIDGET_DEFAULT_STATE variable",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/types.ts",
 }
 ---
 

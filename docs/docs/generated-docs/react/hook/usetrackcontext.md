@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useTrackContext',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/context/track-reference-context.ts',
+  "title": "useTrackContext",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/track-reference-context.ts",
 }
 ---
 
@@ -22,7 +22,7 @@ Ensures that a track reference is provided via context. If not inside a `TrackRe
 ## Import
 
 ```typescript
-import { useTrackContext } from '@livekit/components-react';
+import { useTrackContext } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

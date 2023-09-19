@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useTrackByName',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTrackByName.ts',
+  "title": "useTrackByName",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTrackByName.ts",
 }
 ---
 
@@ -12,7 +12,7 @@
 ## Import
 
 ```typescript
-import { useTrackByName } from '@livekit/components-react';
+import { useTrackByName } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}
@@ -29,10 +29,10 @@ import { useTrackByName } from '@livekit/components-react';
 
 ```typescript
 {
-  publication: import('livekit-client').TrackPublication | undefined;
+  publication: import("livekit-client").TrackPublication | undefined;
   isMuted: boolean | undefined;
   isSubscribed: boolean | undefined;
-  track: import('livekit-client').Track | undefined;
-  elementProps: import('react').HTMLAttributes<HTMLElement>;
+  track: import("livekit-client").Track | undefined;
+  elementProps: import("react").HTMLAttributes<HTMLElement>;
 }
 ```

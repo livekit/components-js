@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ChatToggle',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/ChatToggle.tsx',
+  "title": "ChatToggle",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/ChatToggle.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `ChatToggle` component is a button that toggles the visibility of the `Chat`
 ## Import
 
 ```typescript
-import { ChatToggle } from '@livekit/components-react';
+import { ChatToggle } from "@livekit/components-react";
 ```
 
 ## Remarks

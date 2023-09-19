@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useFocusToggle',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useFocusToggle.ts',
+  "title": "useFocusToggle",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useFocusToggle.ts",
 }
 ---
 
@@ -14,14 +14,14 @@ The `useFocusToggle` hook is used to implement the `FocusToggle` or your custom 
 ## Import
 
 ```typescript
-import { useFocusToggle } from '@livekit/components-react';
+import { useFocusToggle } from "@livekit/components-react";
 ```
 
 ## Usage
 
 ```tsx
 const { mergedProps, inFocus } = useFocusToggle({ trackRef, props: yourButtonProps });
-return <button {...mergedProps}>{inFocus ? 'Unfocus' : 'Focus'}</button>;
+return <button {...mergedProps}>{inFocus ? "Unfocus" : "Focus"}</button>;
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'allRemoteParticipantEvents variable',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/helper/eventGroups.ts',
+  "title": "allRemoteParticipantEvents variable",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/eventGroups.ts",
 }
 ---
 

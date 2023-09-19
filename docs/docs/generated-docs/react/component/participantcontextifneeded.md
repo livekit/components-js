@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ParticipantContextIfNeeded',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ParticipantTile.tsx',
+  "title": "ParticipantContextIfNeeded",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ParticipantTile.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `ParticipantContextIfNeeded` component only creates a `ParticipantContext` i
 ## Import
 
 ```typescript
-import { ParticipantContextIfNeeded } from '@livekit/components-react';
+import { ParticipantContextIfNeeded } from "@livekit/components-react";
 ```
 
 ## Usage

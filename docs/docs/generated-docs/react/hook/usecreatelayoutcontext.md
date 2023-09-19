@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useCreateLayoutContext',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/context/layout-context.ts',
+  "title": "useCreateLayoutContext",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/layout-context.ts",
 }
 ---
 
@@ -12,7 +12,7 @@
 ## Import
 
 ```typescript
-import { useCreateLayoutContext } from '@livekit/components-react';
+import { useCreateLayoutContext } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

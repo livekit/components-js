@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useRoomInfo',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useRoomInfo.ts',
+  "title": "useRoomInfo",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useRoomInfo.ts",
 }
 ---
 
@@ -12,7 +12,7 @@
 ## Import
 
 ```typescript
-import { useRoomInfo } from '@livekit/components-react';
+import { useRoomInfo } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useChat',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useChat.ts',
+  "title": "useChat",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useChat.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useChat` hook provides chat functionality for a LiveKit room. It returns a 
 ## Import
 
 ```typescript
-import { useChat } from '@livekit/components-react';
+import { useChat } from "@livekit/components-react";
 ```
 
 ## Remarks

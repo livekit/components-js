@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useMediaTrackByName',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useMediaTrackByName.ts',
+  "title": "useMediaTrackByName",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useMediaTrackByName.ts",
 }
 ---
 
@@ -20,7 +20,7 @@ This function will be removed in a future version, use `useTrackByName` instead.
 ## Import
 
 ```typescript
-import { useMediaTrackByName } from '@livekit/components-react';
+import { useMediaTrackByName } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}
@@ -40,10 +40,10 @@ import { useMediaTrackByName } from '@livekit/components-react';
 
 ```typescript
 {
-  publication: import('livekit-client').TrackPublication | undefined;
+  publication: import("livekit-client").TrackPublication | undefined;
   isMuted: boolean | undefined;
   isSubscribed: boolean | undefined;
-  track: import('livekit-client').Track | undefined;
-  elementProps: import('react').HTMLAttributes<HTMLElement>;
+  track: import("livekit-client").Track | undefined;
+  elementProps: import("react").HTMLAttributes<HTMLElement>;
 }
 ```

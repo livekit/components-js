@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useEnsureParticipant',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/context/participant-context.ts',
+  "title": "useEnsureParticipant",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/participant-context.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ Ensures that a participant is provided, either via context or explicitly as a pa
 ## Import
 
 ```typescript
-import { useEnsureParticipant } from '@livekit/components-react';
+import { useEnsureParticipant } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

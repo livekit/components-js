@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ParticipantFilter type',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/types.ts',
+  "title": "ParticipantFilter type",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/types.ts",
 }
 ---
 
@@ -12,5 +12,5 @@
 **Signature:**
 
 ```typescript
-export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
+export type ParticipantFilter = Parameters<Participant[]["filter"]>["0"];
 ```

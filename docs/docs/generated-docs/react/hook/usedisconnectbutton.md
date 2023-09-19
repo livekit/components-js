@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useDisconnectButton',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useDisconnectButton.ts',
+  "title": "useDisconnectButton",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useDisconnectButton.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useDisconnectButton` hook is used to implement the `DisconnectButton` or yo
 ## Import
 
 ```typescript
-import { useDisconnectButton } from '@livekit/components-react';
+import { useDisconnectButton } from "@livekit/components-react";
 ```
 
 ## Usage

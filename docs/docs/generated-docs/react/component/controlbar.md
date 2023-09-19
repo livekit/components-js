@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ControlBar',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/ControlBar.tsx',
+  "title": "ControlBar",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/ControlBar.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `ControlBar` prefab gives the user the basic user interface to control their
 ## Import
 
 ```typescript
-import { ControlBar } from '@livekit/components-react';
+import { ControlBar } from "@livekit/components-react";
 ```
 
 ## Remarks

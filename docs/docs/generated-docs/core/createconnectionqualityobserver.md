@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'createConnectionQualityObserver',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts',
+  "title": "createConnectionQualityObserver",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts",
 }
 ---
 
@@ -14,5 +14,5 @@
 ```typescript
 export declare function createConnectionQualityObserver(
   participant: Participant,
-): Observable<import('livekit-client').ConnectionQuality>;
+): Observable<import("livekit-client").ConnectionQuality>;
 ```

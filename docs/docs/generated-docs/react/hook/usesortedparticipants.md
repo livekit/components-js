@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useSortedParticipants',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useSortedParticipants.ts',
+  "title": "useSortedParticipants",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useSortedParticipants.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useSortedParticipants` hook returns the participants sorted by importance.
 ## Import
 
 ```typescript
-import { useSortedParticipants } from '@livekit/components-react';
+import { useSortedParticipants } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

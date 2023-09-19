@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useMediaTrack',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useMediaTrack.ts',
+  "title": "useMediaTrack",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useMediaTrack.ts",
 }
 ---
 
@@ -20,7 +20,7 @@ use `useTrack` instead
 ## Import
 
 ```typescript
-import { useMediaTrack } from '@livekit/components-react';
+import { useMediaTrack } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}
@@ -40,10 +40,10 @@ import { useMediaTrack } from '@livekit/components-react';
 
 ```typescript
 {
-  publication: import('livekit-client').TrackPublication | undefined;
+  publication: import("livekit-client").TrackPublication | undefined;
   isMuted: boolean | undefined;
   isSubscribed: boolean | undefined;
-  track: import('livekit-client').Track | undefined;
+  track: import("livekit-client").Track | undefined;
   elementProps: React.HTMLAttributes<HTMLElement>;
 }
 ```

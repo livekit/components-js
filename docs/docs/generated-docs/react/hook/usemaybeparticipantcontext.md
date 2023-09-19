@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useMaybeParticipantContext',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/context/participant-context.ts',
+  "title": "useMaybeParticipantContext",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/participant-context.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ Returns a participant from the `ParticipantContext` if it exists, otherwise `und
 ## Import
 
 ```typescript
-import { useMaybeParticipantContext } from '@livekit/components-react';
+import { useMaybeParticipantContext } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

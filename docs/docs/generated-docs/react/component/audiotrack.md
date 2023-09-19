@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'AudioTrack',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/AudioTrack.tsx',
+  "title": "AudioTrack",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/AudioTrack.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The AudioTrack component is responsible for rendering participant audio tracks. 
 ## Import
 
 ```typescript
-import { AudioTrack } from '@livekit/components-react';
+import { AudioTrack } from "@livekit/components-react";
 ```
 
 ## Usage

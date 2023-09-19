@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useToken',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useToken.ts',
+  "title": "useToken",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useToken.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useToken` hook fetches a token from the given token endpoint with the given
 ## Import
 
 ```typescript
-import { useToken } from '@livekit/components-react';
+import { useToken } from "@livekit/components-react";
 ```
 
 ## Usage

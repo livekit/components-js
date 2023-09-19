@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useLayoutContext',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/context/layout-context.ts',
+  "title": "useLayoutContext",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/layout-context.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ Ensures that a layout context is provided via context. If no layout context is p
 ## Import
 
 ```typescript
-import { useLayoutContext } from '@livekit/components-react';
+import { useLayoutContext } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useEnsureTrackRef',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/context/track-reference-context.ts',
+  "title": "useEnsureTrackRef",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/track-reference-context.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ Ensures that a track reference is provided, either via context or explicitly as 
 ## Import
 
 ```typescript
-import { useEnsureTrackRef } from '@livekit/components-react';
+import { useEnsureTrackRef } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

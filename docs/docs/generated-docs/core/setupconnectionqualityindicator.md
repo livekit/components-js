@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'setupConnectionQualityIndicator',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/components/connectionQualityIndicator.ts',
+  "title": "setupConnectionQualityIndicator",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/connectionQualityIndicator.ts",
 }
 ---
 
@@ -13,7 +13,7 @@
 
 ```typescript
 export declare function setupConnectionQualityIndicator(participant: Participant): {
-  className: 'lk-connection-quality';
-  connectionQualityObserver: import('rxjs').Observable<import('livekit-client').ConnectionQuality>;
+  className: "lk-connection-quality";
+  connectionQualityObserver: import("rxjs").Observable<import("livekit-client").ConnectionQuality>;
 };
 ```

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useSpeakingParticipants',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useSpeakingParticipants.ts',
+  "title": "useSpeakingParticipants",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useSpeakingParticipants.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useSpeakingParticipants` hook returns the only the active speakers of all p
 ## Import
 
 ```typescript
-import { useSpeakingParticipants } from '@livekit/components-react';
+import { useSpeakingParticipants } from "@livekit/components-react";
 ```
 
 ## Usage

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ChatProps interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/Chat.tsx',
+  "title": "ChatProps interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/Chat.tsx",
 }
 ---
 

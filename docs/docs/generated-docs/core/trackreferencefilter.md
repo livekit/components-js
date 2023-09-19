@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'TrackReferenceFilter type',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/types.ts',
+  "title": "TrackReferenceFilter type",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/types.ts",
 }
 ---
 
@@ -12,7 +12,7 @@
 **Signature:**
 
 ```typescript
-export type TrackReferenceFilter = Parameters<TrackReferenceOrPlaceholder[]['filter']>['0'];
+export type TrackReferenceFilter = Parameters<TrackReferenceOrPlaceholder[]["filter"]>["0"];
 ```
 
 **References:** [TrackReferenceOrPlaceholder](./core/trackreferenceorplaceholder.md)

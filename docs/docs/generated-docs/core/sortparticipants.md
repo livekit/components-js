@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'sortParticipants',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/sorting/sort-participants.ts',
+  "title": "sortParticipants",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/sorting/sort-participants.ts",
 }
 ---
 

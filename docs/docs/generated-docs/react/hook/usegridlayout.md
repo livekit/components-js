@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useGridLayout',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useGridLayout.ts',
+  "title": "useGridLayout",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useGridLayout.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useGridLayout` hook tries to select the best layout to fit all tiles. If th
 ## Import
 
 ```typescript
-import { useGridLayout } from '@livekit/components-react';
+import { useGridLayout } from "@livekit/components-react";
 ```
 
 ## Usage

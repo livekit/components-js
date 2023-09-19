@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'TrackSource type',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/types.ts',
+  "title": "TrackSource type",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/types.ts",
 }
 ---
 
@@ -18,6 +18,6 @@ export type TrackSource<T extends Track.Source> = RequireAtLeastOne<
     name: string;
     participant: Participant;
   },
-  'name' | 'source'
+  "name" | "source"
 >;
 ```

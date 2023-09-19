@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'UseMediaTrackOptions interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useMediaTrack.ts',
+  "title": "UseMediaTrackOptions interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useMediaTrack.ts",
 }
 ---
 

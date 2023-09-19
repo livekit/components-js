@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'DisconnectButton',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/DisconnectButton.tsx',
+  "title": "DisconnectButton",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/DisconnectButton.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `DisconnectButton` is a basic html button with the added ability to disconne
 ## Import
 
 ```typescript
-import { DisconnectButton } from '@livekit/components-react';
+import { DisconnectButton } from "@livekit/components-react";
 ```
 
 ## Usage

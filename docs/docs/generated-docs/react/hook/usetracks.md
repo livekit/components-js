@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useTracks',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTracks.ts',
+  "title": "useTracks",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTracks.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useTracks` hook returns an array of `TrackReference` or `TrackReferenceOrPl
 ## Import
 
 ```typescript
-import { useTracks } from '@livekit/components-react';
+import { useTracks } from "@livekit/components-react";
 ```
 
 ## Usage Example 1

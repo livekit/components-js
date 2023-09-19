@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'connectionStateObserver',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts',
+  "title": "connectionStateObserver",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts",
 }
 ---
 
@@ -14,5 +14,5 @@
 ```typescript
 export declare function connectionStateObserver(
   room: Room,
-): Observable<import('livekit-client').ConnectionState>;
+): Observable<import("livekit-client").ConnectionState>;
 ```

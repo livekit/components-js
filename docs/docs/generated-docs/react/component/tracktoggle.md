@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'TrackToggle',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/TrackToggle.tsx',
+  "title": "TrackToggle",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/TrackToggle.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ With the `TrackToggle` component it is possible to mute and unmute your camera a
 ## Import
 
 ```typescript
-import { TrackToggle } from '@livekit/components-react';
+import { TrackToggle } from "@livekit/components-react";
 ```
 
 ## Usage

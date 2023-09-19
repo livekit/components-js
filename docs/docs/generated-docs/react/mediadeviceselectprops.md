@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'MediaDeviceSelectProps interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/MediaDeviceSelect.tsx',
+  "title": "MediaDeviceSelectProps interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/MediaDeviceSelect.tsx",
 }
 ---
 

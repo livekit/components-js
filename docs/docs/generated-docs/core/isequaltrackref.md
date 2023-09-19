@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'isEqualTrackRef',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/track-reference/track-reference.utils.ts',
+  "title": "isEqualTrackRef",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/track-reference/track-reference.utils.ts",
 }
 ---
 

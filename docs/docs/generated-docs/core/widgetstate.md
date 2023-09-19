@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'WidgetState type',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/types.ts',
+  "title": "WidgetState type",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/types.ts",
 }
 ---
 

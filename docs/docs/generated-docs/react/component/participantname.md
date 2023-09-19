@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ParticipantName',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ParticipantName.tsx',
+  "title": "ParticipantName",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ParticipantName.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `ParticipantName` component displays the name of the participant as a string
 ## Import
 
 ```typescript
-import { ParticipantName } from '@livekit/components-react';
+import { ParticipantName } from "@livekit/components-react";
 ```
 
 ## Usage

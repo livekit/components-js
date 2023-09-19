@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'createTrackObserver',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts',
+  "title": "createTrackObserver",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts",
 }
 ---
 

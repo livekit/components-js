@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'setLogLevel',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/logger.ts',
+  "title": "setLogLevel",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/logger.ts",
 }
 ---
 

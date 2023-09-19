@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useIsMuted',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useIsMuted.ts',
+  "title": "useIsMuted",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useIsMuted.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useIsMuted` hook is used to implement the `TrackMutedIndicator` or your cus
 ## Import
 
 ```typescript
-import { useIsMuted } from '@livekit/components-react';
+import { useIsMuted } from "@livekit/components-react";
 ```
 
 ## Usage

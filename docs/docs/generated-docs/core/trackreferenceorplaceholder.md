@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'TrackReferenceOrPlaceholder type',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/track-reference/track-reference.types.ts',
+  "title": "TrackReferenceOrPlaceholder type",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/track-reference/track-reference.types.ts",
 }
 ---
 

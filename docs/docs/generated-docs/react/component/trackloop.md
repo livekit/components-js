@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'TrackLoop',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/TrackLoop.tsx',
+  "title": "TrackLoop",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/TrackLoop.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `TrackLoop` component loops over tracks. It is for example a easy way to loo
 ## Import
 
 ```typescript
-import { TrackLoop } from '@livekit/components-react';
+import { TrackLoop } from "@livekit/components-react";
 ```
 
 ## Usage

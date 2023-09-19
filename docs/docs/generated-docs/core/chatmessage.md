@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ChatMessage interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/components/chat.ts',
+  "title": "ChatMessage interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/chat.ts",
 }
 ---
 

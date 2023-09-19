@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'UserInfo interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useToken.ts',
+  "title": "UserInfo interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useToken.ts",
 }
 ---
 

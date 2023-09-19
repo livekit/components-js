@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ScreenShareTrackMap type',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts',
+  "title": "ScreenShareTrackMap type",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts",
 }
 ---
 

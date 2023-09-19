@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'setupFocusToggle',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/components/focusToggle.ts',
+  "title": "setupFocusToggle",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/focusToggle.ts",
 }
 ---
 

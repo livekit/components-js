@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'Toast',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/Toast.tsx',
+  "title": "Toast",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/Toast.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `Toast` component is a rudimentary way to display a message to the user. Thi
 ## Import
 
 ```typescript
-import { Toast } from '@livekit/components-react';
+import { Toast } from "@livekit/components-react";
 ```
 
 ## Usage

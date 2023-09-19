@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useRoomContext',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/context/room-context.ts',
+  "title": "useRoomContext",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/room-context.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ Ensures that a room is provided via context. If no room is provided, an error is
 ## Import
 
 ```typescript
-import { useRoomContext } from '@livekit/components-react';
+import { useRoomContext } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

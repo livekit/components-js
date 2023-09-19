@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'setupParticipantName',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/components/participantName.ts',
+  "title": "setupParticipantName",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/participantName.ts",
 }
 ---
 
@@ -14,7 +14,7 @@
 ```typescript
 export declare function setupParticipantName(participant: Participant): {
   className: string;
-  infoObserver: import('rxjs').Observable<
+  infoObserver: import("rxjs").Observable<
     | {
         name: string | undefined;
         identity: string;

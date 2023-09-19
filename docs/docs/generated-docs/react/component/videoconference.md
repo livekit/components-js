@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'VideoConference',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/VideoConference.tsx',
+  "title": "VideoConference",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/VideoConference.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `VideoConference` ready-made component is your drop-in solution for a classi
 ## Import
 
 ```typescript
-import { VideoConference } from '@livekit/components-react';
+import { VideoConference } from "@livekit/components-react";
 ```
 
 ## Remarks

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useConnectionState',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useConnectionStatus.ts',
+  "title": "useConnectionState",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useConnectionStatus.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useConnectionState` hook allows you to simply implement your own `Connectio
 ## Import
 
 ```typescript
-import { useConnectionState } from '@livekit/components-react';
+import { useConnectionState } from "@livekit/components-react";
 ```
 
 ## Usage
@@ -33,5 +33,5 @@ const connectionState = useConnectionState(room);
 ## Returns
 
 ```typescript
-import('livekit-client').ConnectionState;
+import("livekit-client").ConnectionState;
 ```

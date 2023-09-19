@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'UseParticipantPermissionsOptions interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useParticipantPermissions.ts',
+  "title": "UseParticipantPermissionsOptions interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useParticipantPermissions.ts",
 }
 ---
 

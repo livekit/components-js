@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'sortTrackReferences',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/sorting/sort-track-bundles.ts',
+  "title": "sortTrackReferences",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/sorting/sort-track-bundles.ts",
 }
 ---
 

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ConnectionStateToast',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/ConnectionStateToast.tsx',
+  "title": "ConnectionStateToast",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/ConnectionStateToast.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `ConnectionStateToast` component displays a toast notification indicating th
 ## Import
 
 ```typescript
-import { ConnectionStateToast } from '@livekit/components-react';
+import { ConnectionStateToast } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useLocalParticipant',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useLocalParticipant.ts',
+  "title": "useLocalParticipant",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useLocalParticipant.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useLocalParticipant` hook returns the local participant and the associated 
 ## Import
 
 ```typescript
-import { useLocalParticipant } from '@livekit/components-react';
+import { useLocalParticipant } from "@livekit/components-react";
 ```
 
 ## Usage

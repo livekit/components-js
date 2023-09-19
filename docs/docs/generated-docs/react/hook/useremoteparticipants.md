@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useRemoteParticipants',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useRemoteParticipants.ts',
+  "title": "useRemoteParticipants",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useRemoteParticipants.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useRemoteParticipants` hook returns all remote participants (without the lo
 ## Import
 
 ```typescript
-import { useRemoteParticipants } from '@livekit/components-react';
+import { useRemoteParticipants } from "@livekit/components-react";
 ```
 
 ## Remarks

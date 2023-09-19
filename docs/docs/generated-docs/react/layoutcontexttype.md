@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'LayoutContextType type',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/context/layout-context.ts',
+  "title": "LayoutContextType type",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/layout-context.ts",
 }
 ---
 

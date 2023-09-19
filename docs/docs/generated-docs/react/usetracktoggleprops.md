@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'UseTrackToggleProps interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTrackToggle.ts',
+  "title": "UseTrackToggleProps interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTrackToggle.ts",
 }
 ---
 

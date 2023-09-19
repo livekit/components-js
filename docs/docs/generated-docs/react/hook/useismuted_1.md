@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useIsMuted',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useIsMuted.ts',
+  "title": "useIsMuted",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useIsMuted.ts",
 }
 ---
 
@@ -20,7 +20,7 @@ This overload will be removed in a future version, pass in trackRef instead.
 ## Import
 
 ```typescript
-import { useIsMuted } from '@livekit/components-react';
+import { useIsMuted } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

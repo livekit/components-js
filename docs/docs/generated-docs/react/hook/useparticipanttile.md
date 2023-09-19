@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useParticipantTile',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useParticipantTile.ts',
+  "title": "useParticipantTile",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useParticipantTile.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useParticipantTile` hook is used to implement the `ParticipantTile` and ret
 ## Import
 
 ```typescript
-import { useParticipantTile } from '@livekit/components-react';
+import { useParticipantTile } from "@livekit/components-react";
 ```
 
 ## Remarks

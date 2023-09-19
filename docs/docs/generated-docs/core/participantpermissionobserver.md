@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'participantPermissionObserver',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts',
+  "title": "participantPermissionObserver",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts",
 }
 ---
 
@@ -15,6 +15,6 @@
 export declare function participantPermissionObserver(
   participant: Participant,
 ): Observable<
-  import('livekit-client/dist/src/proto/livekit_models_pb').ParticipantPermission | undefined
+  import("livekit-client/dist/src/proto/livekit_models_pb").ParticipantPermission | undefined
 >;
 ```

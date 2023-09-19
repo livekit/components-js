@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useChatToggle',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useChatToggle.ts',
+  "title": "useChatToggle",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useChatToggle.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useChatToggle` hook provides state and functions for toggling the chat wind
 ## Import
 
 ```typescript
-import { useChatToggle } from '@livekit/components-react';
+import { useChatToggle } from "@livekit/components-react";
 ```
 
 ## Remarks

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useMaybeLayoutContext',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/context/layout-context.ts',
+  "title": "useMaybeLayoutContext",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/layout-context.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ Returns a layout context from the `LayoutContext` if it exists, otherwise `undef
 ## Import
 
 ```typescript
-import { useMaybeLayoutContext } from '@livekit/components-react';
+import { useMaybeLayoutContext } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

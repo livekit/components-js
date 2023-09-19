@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'setupDataMessageHandler',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/observables/dataChannel.ts',
+  "title": "setupDataMessageHandler",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/dataChannel.ts",
 }
 ---
 
@@ -20,7 +20,7 @@ export declare function setupDataMessageHandler<T extends string>(
   messageObservable: Observable<{
     payload: Uint8Array;
     topic: T;
-    from: import('livekit-client').RemoteParticipant | undefined;
+    from: import("livekit-client").RemoteParticipant | undefined;
   }>;
   isSendingObservable: Observable<boolean>;
   send: (payload: Uint8Array, options?: DataSendOptions) => Promise<void>;

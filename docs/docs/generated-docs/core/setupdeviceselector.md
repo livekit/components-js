@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'setupDeviceSelector',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/components/mediaDeviceSelect.ts',
+  "title": "setupDeviceSelector",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/mediaDeviceSelect.ts",
 }
 ---
 
@@ -18,7 +18,7 @@ export declare function setupDeviceSelector(
   localTrack?: LocalAudioTrack | LocalVideoTrack,
 ): {
   className: string;
-  activeDeviceObservable: import('rxjs').Observable<string | undefined>;
+  activeDeviceObservable: import("rxjs").Observable<string | undefined>;
   setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions) => Promise<void>;
 };
 ```

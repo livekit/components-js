@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useDataChannel',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useDataChannel.ts',
+  "title": "useDataChannel",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useDataChannel.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useDataChannel` hook returns the ability to send and receive messages. By o
 ## Import
 
 ```typescript
-import { useDataChannel } from '@livekit/components-react';
+import { useDataChannel } from "@livekit/components-react";
 ```
 
 ## Remarks
@@ -25,7 +25,7 @@ There is only one data channel. Passing a `topic` does not open a new data chann
 
 ```tsx
 // Send messages to all participants via the 'chat' topic.
-const { message, send } = useDataChannel('chat');
+const { message, send } = useDataChannel("chat");
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'connectedParticipantsObserver',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts',
+  "title": "connectedParticipantsObserver",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/participant.ts",
 }
 ---
 

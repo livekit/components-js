@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'sendMessage',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/observables/dataChannel.ts',
+  "title": "sendMessage",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/dataChannel.ts",
 }
 ---
 

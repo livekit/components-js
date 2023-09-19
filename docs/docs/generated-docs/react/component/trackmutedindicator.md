@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'TrackMutedIndicator',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/TrackMutedIndicator.tsx',
+  "title": "TrackMutedIndicator",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/TrackMutedIndicator.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `TrackMutedIndicator` shows whether the participant's camera or microphone i
 ## Import
 
 ```typescript
-import { TrackMutedIndicator } from '@livekit/components-react';
+import { TrackMutedIndicator } from "@livekit/components-react";
 ```
 
 ## Usage

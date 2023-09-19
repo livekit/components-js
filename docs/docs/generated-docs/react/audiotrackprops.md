@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'AudioTrackProps interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/AudioTrack.tsx',
+  "title": "AudioTrackProps interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/AudioTrack.tsx",
 }
 ---
 

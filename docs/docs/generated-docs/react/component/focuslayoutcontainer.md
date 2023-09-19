@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'FocusLayoutContainer',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/layout/FocusLayout.tsx',
+  "title": "FocusLayoutContainer",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/layout/FocusLayout.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `FocusLayoutContainer` is a layout component that expects two children: A sm
 ## Import
 
 ```typescript
-import { FocusLayoutContainer } from '@livekit/components-react';
+import { FocusLayoutContainer } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

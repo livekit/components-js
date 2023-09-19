@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'usePreviewDevice',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/PreJoin.tsx',
+  "title": "usePreviewDevice",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/PreJoin.tsx",
 }
 ---
 
@@ -12,7 +12,7 @@
 ## Import
 
 ```typescript
-import { usePreviewDevice } from '@livekit/components-react';
+import { usePreviewDevice } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

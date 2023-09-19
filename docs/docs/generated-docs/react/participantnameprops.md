@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ParticipantNameProps interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ParticipantName.tsx',
+  "title": "ParticipantNameProps interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ParticipantName.tsx",
 }
 ---
 

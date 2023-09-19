@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'Chat',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/Chat.tsx',
+  "title": "Chat",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/Chat.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The Chat component adds a basis chat functionality to the LiveKit room. The mess
 ## Import
 
 ```typescript
-import { Chat } from '@livekit/components-react';
+import { Chat } from "@livekit/components-react";
 ```
 
 ## Usage

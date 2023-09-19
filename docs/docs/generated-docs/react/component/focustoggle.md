@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'FocusToggle',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/FocusToggle.tsx',
+  "title": "FocusToggle",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/FocusToggle.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `FocusToggle` puts the `ParticipantTile` in focus or removes it from focus.
 ## Import
 
 ```typescript
-import { FocusToggle } from '@livekit/components-react';
+import { FocusToggle } from "@livekit/components-react";
 ```
 
 ## Remarks

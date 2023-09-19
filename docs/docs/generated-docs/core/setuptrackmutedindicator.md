@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'setupTrackMutedIndicator',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/components/trackMutedIndicator.ts',
+  "title": "setupTrackMutedIndicator",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/trackMutedIndicator.ts",
 }
 ---
 
@@ -14,6 +14,6 @@
 ```typescript
 export declare function setupTrackMutedIndicator(trackRef: TrackReferenceOrPlaceholder): {
   className: string;
-  mediaMutedObserver: import('rxjs').Observable<boolean>;
+  mediaMutedObserver: import("rxjs").Observable<boolean>;
 };
 ```

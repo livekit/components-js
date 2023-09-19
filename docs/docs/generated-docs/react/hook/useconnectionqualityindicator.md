@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useConnectionQualityIndicator',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useConnectionQualityIndicator.ts',
+  "title": "useConnectionQualityIndicator",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useConnectionQualityIndicator.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useConnectionQualityIndicator` hook provides props for the `ConnectionQuali
 ## Import
 
 ```typescript
-import { useConnectionQualityIndicator } from '@livekit/components-react';
+import { useConnectionQualityIndicator } from "@livekit/components-react";
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ const { quality } = useConnectionQualityIndicator({ participant });
 
 ```typescript
 {
-  className: 'lk-connection-quality';
+  className: "lk-connection-quality";
   quality: ConnectionQuality;
 }
 ```

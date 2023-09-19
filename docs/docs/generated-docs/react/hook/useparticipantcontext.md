@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useParticipantContext',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/context/participant-context.ts',
+  "title": "useParticipantContext",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/participant-context.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ Ensures that a participant is provided via context. If not inside a `Participant
 ## Import
 
 ```typescript
-import { useParticipantContext } from '@livekit/components-react';
+import { useParticipantContext } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

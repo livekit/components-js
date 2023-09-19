@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'FocusLayout',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/layout/FocusLayout.tsx',
+  "title": "FocusLayout",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/layout/FocusLayout.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `FocusLayout` component is just a light wrapper around the `ParticipantTile`
 ## Import
 
 ```typescript
-import { FocusLayout } from '@livekit/components-react';
+import { FocusLayout } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

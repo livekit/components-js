@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ParticipantTile',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ParticipantTile.tsx',
+  "title": "ParticipantTile",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ParticipantTile.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `ParticipantTile` component is the base utility wrapper for displaying a vis
 ## Import
 
 ```typescript
-import { ParticipantTile } from '@livekit/components-react';
+import { ParticipantTile } from "@livekit/components-react";
 ```
 
 ## Usage Example 1

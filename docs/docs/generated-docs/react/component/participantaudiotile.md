@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ParticipantAudioTile',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ParticipantAudioTile.tsx',
+  "title": "ParticipantAudioTile",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ParticipantAudioTile.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `ParticipantAudioTile` component is the base utility wrapper for displaying 
 ## Import
 
 ```typescript
-import { ParticipantAudioTile } from '@livekit/components-react';
+import { ParticipantAudioTile } from "@livekit/components-react";
 ```
 
 ## Usage

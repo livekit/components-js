@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'LayoutContext variable',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/context/layout-context.ts',
+  "title": "LayoutContext variable",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/layout-context.ts",
 }
 ---
 

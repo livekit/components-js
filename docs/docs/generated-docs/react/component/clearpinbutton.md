@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ClearPinButton',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/ClearPinButton.tsx',
+  "title": "ClearPinButton",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/ClearPinButton.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `ClearPinButton` is a basic html button with the added ability to signal the
 ## Import
 
 ```typescript
-import { ClearPinButton } from '@livekit/components-react';
+import { ClearPinButton } from "@livekit/components-react";
 ```
 
 ## Remarks

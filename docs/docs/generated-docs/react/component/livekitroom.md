@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'LiveKitRoom',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/LiveKitRoom.tsx',
+  "title": "LiveKitRoom",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/LiveKitRoom.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `LiveKitRoom` component provides the room context to all its child component
 ## Import
 
 ```typescript
-import { LiveKitRoom } from '@livekit/components-react';
+import { LiveKitRoom } from "@livekit/components-react";
 ```
 
 ## Usage

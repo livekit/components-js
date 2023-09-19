@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'UseParticipantsOptions interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useParticipants.ts',
+  "title": "UseParticipantsOptions interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useParticipants.ts",
 }
 ---
 

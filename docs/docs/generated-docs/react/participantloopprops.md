@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ParticipantLoopProps interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/ParticipantLoop.tsx',
+  "title": "ParticipantLoopProps interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/ParticipantLoop.tsx",
 }
 ---
 

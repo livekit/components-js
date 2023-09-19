@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'LocalUserChoices type',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/PreJoin.tsx',
+  "title": "LocalUserChoices type",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/PreJoin.tsx",
 }
 ---
 

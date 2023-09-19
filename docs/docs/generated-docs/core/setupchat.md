@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'setupChat',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/components/chat.ts',
+  "title": "setupChat",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/chat.ts",
 }
 ---
 
@@ -19,7 +19,7 @@ export declare function setupChat(
     messageDecoder?: (message: Uint8Array) => ReceivedChatMessage;
   },
 ): {
-  messageObservable: import('rxjs').Observable<ReceivedChatMessage[]>;
+  messageObservable: import("rxjs").Observable<ReceivedChatMessage[]>;
   isSendingObservable: BehaviorSubject<boolean>;
   send: (message: string) => Promise<void>;
   destroy: () => void;

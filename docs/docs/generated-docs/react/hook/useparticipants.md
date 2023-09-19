@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useParticipants',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useParticipants.ts',
+  "title": "useParticipants",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useParticipants.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useParticipants` hook returns all participants (local and remote) of the cu
 ## Import
 
 ```typescript
-import { useParticipants } from '@livekit/components-react';
+import { useParticipants } from "@livekit/components-react";
 ```
 
 ## Remarks

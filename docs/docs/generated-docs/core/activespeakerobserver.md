@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'activeSpeakerObserver',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts',
+  "title": "activeSpeakerObserver",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts",
 }
 ---
 

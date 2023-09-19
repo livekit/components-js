@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'MediaDeviceSelect',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/MediaDeviceSelect.tsx',
+  "title": "MediaDeviceSelect",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/controls/MediaDeviceSelect.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `MediaDeviceSelect` list all media devices of one kind. Clicking on one of t
 ## Import
 
 ```typescript
-import { MediaDeviceSelect } from '@livekit/components-react';
+import { MediaDeviceSelect } from "@livekit/components-react";
 ```
 
 ## Usage

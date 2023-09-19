@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'GRID_LAYOUTS variable',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/helper/grid-layouts.ts',
+  "title": "GRID_LAYOUTS variable",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/grid-layouts.ts",
 }
 ---
 

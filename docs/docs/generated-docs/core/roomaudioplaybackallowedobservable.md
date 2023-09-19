@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'roomAudioPlaybackAllowedObservable',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts',
+  "title": "roomAudioPlaybackAllowedObservable",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts",
 }
 ---
 

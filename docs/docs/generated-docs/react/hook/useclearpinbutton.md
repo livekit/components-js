@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useClearPinButton',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useClearPinButton.ts',
+  "title": "useClearPinButton",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useClearPinButton.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useClearPinButton` hook provides props for the [ClearPinButton()](./react/c
 ## Import
 
 ```typescript
-import { useClearPinButton } from '@livekit/components-react';
+import { useClearPinButton } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useTrackMutedIndicator',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTrackMutedIndicator.ts',
+  "title": "useTrackMutedIndicator",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTrackMutedIndicator.ts",
 }
 ---
 
@@ -20,7 +20,7 @@ This overload will be removed in a future version, pass in trackRef instead.
 ## Import
 
 ```typescript
-import { useTrackMutedIndicator } from '@livekit/components-react';
+import { useTrackMutedIndicator } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

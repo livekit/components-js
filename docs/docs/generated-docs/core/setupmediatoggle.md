@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'setupMediaToggle',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/components/mediaToggle.ts',
+  "title": "setupMediaToggle",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/components/mediaToggle.ts",
 }
 ---
 

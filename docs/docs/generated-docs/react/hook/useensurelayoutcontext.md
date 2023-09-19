@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useEnsureLayoutContext',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/context/layout-context.ts',
+  "title": "useEnsureLayoutContext",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/layout-context.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ Ensures that a layout context is provided, either via context or explicitly as a
 ## Import
 
 ```typescript
-import { useEnsureLayoutContext } from '@livekit/components-react';
+import { useEnsureLayoutContext } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 0} /%}

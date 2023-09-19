@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'CarouselLayout',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/layout/CarouselLayout.tsx',
+  "title": "CarouselLayout",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/layout/CarouselLayout.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `CarouselLayout` component displays a list of tracks in a scroll container. 
 ## Import
 
 ```typescript
-import { CarouselLayout } from '@livekit/components-react';
+import { CarouselLayout } from "@livekit/components-react";
 ```
 
 ## Remarks

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'VideoTrack',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/VideoTrack.tsx',
+  "title": "VideoTrack",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/VideoTrack.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `VideoTrack` component is responsible for rendering participant video tracks
 ## Import
 
 ```typescript
-import { VideoTrack } from '@livekit/components-react';
+import { VideoTrack } from "@livekit/components-react";
 ```
 
 ## Usage

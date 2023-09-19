@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'isMobileBrowser',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/helper/detectMobileBrowser.ts',
+  "title": "isMobileBrowser",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/detectMobileBrowser.ts",
 }
 ---
 

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useDataChannel',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useDataChannel.ts',
+  "title": "useDataChannel",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useDataChannel.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useDataChannel` hook returns the ability to send and receive messages.
 ## Import
 
 ```typescript
-import { useDataChannel } from '@livekit/components-react';
+import { useDataChannel } from "@livekit/components-react";
 ```
 
 ## Remarks

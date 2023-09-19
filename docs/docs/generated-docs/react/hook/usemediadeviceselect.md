@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useMediaDeviceSelect',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useMediaDeviceSelect.ts',
+  "title": "useMediaDeviceSelect",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useMediaDeviceSelect.ts",
 }
 ---
 
@@ -14,14 +14,14 @@ The `useMediaDeviceSelect` hook is used to implement the `MediaDeviceSelect` com
 ## Import
 
 ```typescript
-import { useMediaDeviceSelect } from '@livekit/components-react';
+import { useMediaDeviceSelect } from "@livekit/components-react";
 ```
 
 ## Usage
 
 ```tsx
 const { devices, activeDeviceId, setActiveMediaDevice } = useMediaDeviceSelect({
-  kind: 'audioinput',
+  kind: "audioinput",
 });
 ```
 

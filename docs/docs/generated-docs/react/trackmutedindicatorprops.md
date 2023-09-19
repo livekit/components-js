@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'TrackMutedIndicatorProps interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/TrackMutedIndicator.tsx',
+  "title": "TrackMutedIndicatorProps interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/TrackMutedIndicator.tsx",
 }
 ---
 

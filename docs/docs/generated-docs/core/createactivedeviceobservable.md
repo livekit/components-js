@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'createActiveDeviceObservable',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts',
+  "title": "createActiveDeviceObservable",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/room.ts",
 }
 ---
 

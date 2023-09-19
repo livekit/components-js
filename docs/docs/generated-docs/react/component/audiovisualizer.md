@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'AudioVisualizer',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/AudioVisualizer.tsx',
+  "title": "AudioVisualizer",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/AudioVisualizer.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The AudioVisualizer component is used to visualize the audio volume of a given a
 ## Import
 
 ```typescript
-import { AudioVisualizer } from '@livekit/components-react';
+import { AudioVisualizer } from "@livekit/components-react";
 ```
 
 ## Remarks

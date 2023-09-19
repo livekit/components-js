@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useRemoteParticipant',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useRemoteParticipant.ts',
+  "title": "useRemoteParticipant",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useRemoteParticipant.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useRemoteParticipant` hook returns the RemoteParticipant with the given `id
 ## Import
 
 ```typescript
-import { useRemoteParticipant } from '@livekit/components-react';
+import { useRemoteParticipant } from "@livekit/components-react";
 ```
 
 ## Remarks
@@ -24,7 +24,7 @@ To optimize performance, you can use the `updateOnlyOn` property to decide on wh
 ## Usage
 
 ```tsx
-const participant = useRemoteParticipant('Russ');
+const participant = useRemoteParticipant("Russ");
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}

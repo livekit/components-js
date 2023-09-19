@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'FocusLayoutProps interface',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/layout/FocusLayout.tsx',
+  "title": "FocusLayoutProps interface",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/layout/FocusLayout.tsx",
 }
 ---
 

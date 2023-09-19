@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'usePinnedTracks',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/usePinnedTracks.ts',
+  "title": "usePinnedTracks",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/usePinnedTracks.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `usePinnedTracks` hook returns a array of the pinned tracks of the current r
 ## Import
 
 ```typescript
-import { usePinnedTracks } from '@livekit/components-react';
+import { usePinnedTracks } from "@livekit/components-react";
 ```
 
 ## Remarks

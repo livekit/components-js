@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useMediaDevices',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useMediaDevices.ts',
+  "title": "useMediaDevices",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useMediaDevices.ts",
 }
 ---
 
@@ -14,14 +14,14 @@ The `useMediaDevices` hook returns the list of media devices of a given kind.
 ## Import
 
 ```typescript
-import { useMediaDevices } from '@livekit/components-react';
+import { useMediaDevices } from "@livekit/components-react";
 ```
 
 ## Usage
 
 ```tsx
-const videoDevices = useMediaDevices({ kind: 'videoinput' });
-const audioDevices = useMediaDevices({ kind: 'audioinput' });
+const videoDevices = useMediaDevices({ kind: "videoinput" });
+const audioDevices = useMediaDevices({ kind: "audioinput" });
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}

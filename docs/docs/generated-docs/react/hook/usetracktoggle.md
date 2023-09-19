@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useTrackToggle',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTrackToggle.ts',
+  "title": "useTrackToggle",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useTrackToggle.ts",
 }
 ---
 
@@ -14,14 +14,14 @@ The `useTrackToggle` hook is used to implement the `TrackToggle` component and r
 ## Import
 
 ```typescript
-import { useTrackToggle } from '@livekit/components-react';
+import { useTrackToggle } from "@livekit/components-react";
 ```
 
 ## Usage
 
 ```tsx
 const { buttonProps, enabled } = useTrackToggle(trackRef);
-return <button {...buttonProps}>{enabled ? 'disable' : 'enable'}</button>;
+return <button {...buttonProps}>{enabled ? "disable" : "enable"}</button>;
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}

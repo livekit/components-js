@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'updatePages',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/sorting/tile-array-update.ts',
+  "title": "updatePages",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/sorting/tile-array-update.ts",
 }
 ---
 

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ConnectionState',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/ConnectionState.tsx',
+  "title": "ConnectionState",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/ConnectionState.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `ConnectionState` component displays the connection status of the room as st
 ## Import
 
 ```typescript
-import { ConnectionState } from '@livekit/components-react';
+import { ConnectionState } from "@livekit/components-react";
 ```
 
 ## Usage

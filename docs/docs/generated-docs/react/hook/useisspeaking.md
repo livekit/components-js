@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'useIsSpeaking',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useIsSpeaking.ts',
+  "title": "useIsSpeaking",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/hooks/useIsSpeaking.ts",
 }
 ---
 
@@ -14,7 +14,7 @@ The `useIsSpeaking` hook returns a `boolean` that indicates if the participant i
 ## Import
 
 ```typescript
-import { useIsSpeaking } from '@livekit/components-react';
+import { useIsSpeaking } from "@livekit/components-react";
 ```
 
 ## Usage

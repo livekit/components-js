@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'TokenizeGrammar type',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/helper/tokenizer.ts',
+  "title": "TokenizeGrammar type",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/helper/tokenizer.ts",
 }
 ---
 

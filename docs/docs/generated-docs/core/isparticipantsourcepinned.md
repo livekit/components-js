@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'isParticipantSourcePinned',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/utils.ts',
+  "title": "isParticipantSourcePinned",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/utils.ts",
 }
 ---
 

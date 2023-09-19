@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ParticipantLoop',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/ParticipantLoop.tsx',
+  "title": "ParticipantLoop",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/ParticipantLoop.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `ParticipantLoop` component loops over an array of participants to create a 
 ## Import
 
 ```typescript
-import { ParticipantLoop } from '@livekit/components-react';
+import { ParticipantLoop } from "@livekit/components-react";
 ```
 
 ## Remarks

@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'PreJoin',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/PreJoin.tsx',
+  "title": "PreJoin",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/PreJoin.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `PreJoin` prefab component is normally presented to the user before he enter
 ## Import
 
 ```typescript
-import { PreJoin } from '@livekit/components-react';
+import { PreJoin } from "@livekit/components-react";
 ```
 
 ## Remarks

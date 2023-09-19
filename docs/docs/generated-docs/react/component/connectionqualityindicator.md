@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'ConnectionQualityIndicator',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ConnectionQualityIndicator.tsx',
+  "title": "ConnectionQualityIndicator",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/participant/ConnectionQualityIndicator.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `ConnectionQualityIndicator` shows the individual connection quality of a pa
 ## Import
 
 ```typescript
-import { ConnectionQualityIndicator } from '@livekit/components-react';
+import { ConnectionQualityIndicator } from "@livekit/components-react";
 ```
 
 ## Usage

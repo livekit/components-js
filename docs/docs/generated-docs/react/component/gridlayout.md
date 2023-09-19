@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'GridLayout',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/layout/GridLayout.tsx',
+  "title": "GridLayout",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/layout/GridLayout.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `GridLayout` component displays the nested participants in a grid where ever
 ## Import
 
 ```typescript
-import { GridLayout } from '@livekit/components-react';
+import { GridLayout } from "@livekit/components-react";
 ```
 
 ## Remarks

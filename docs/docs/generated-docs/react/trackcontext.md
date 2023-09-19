@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'TrackContext variable',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/context/track-reference-context.ts',
+  "title": "TrackContext variable",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/context/track-reference-context.ts",
 }
 ---
 

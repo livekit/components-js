@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'AudioConference',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/AudioConference.tsx',
+  "title": "AudioConference",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/prefabs/AudioConference.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ This component is the default setup of a classic LiveKit audio conferencing app.
 ## Import
 
 ```typescript
-import { AudioConference } from '@livekit/components-react';
+import { AudioConference } from "@livekit/components-react";
 ```
 
 ## Remarks

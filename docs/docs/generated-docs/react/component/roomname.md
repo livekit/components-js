@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'RoomName',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/react/src/components/RoomName.tsx',
+  "title": "RoomName",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/react/src/components/RoomName.tsx",
 }
 ---
 
@@ -14,7 +14,7 @@ The `RoomName` component renders the name of the connected LiveKit room inside a
 ## Import
 
 ```typescript
-import { RoomName } from '@livekit/components-react';
+import { RoomName } from "@livekit/components-react";
 ```
 
 ## Usage

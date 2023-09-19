@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'observeTrackEvents',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/observables/track.ts',
+  "title": "observeTrackEvents",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/observables/track.ts",
 }
 ---
 

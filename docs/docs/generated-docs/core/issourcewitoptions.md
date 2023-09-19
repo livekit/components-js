@@ -1,7 +1,7 @@
 ---
 {
-  'title': 'isSourceWitOptions',
-  'linkToSource': 'https://github.com/livekit/components-js/blob/main/packages/core/src/types.ts',
+  "title": "isSourceWitOptions",
+  "linkToSource": "https://github.com/livekit/components-js/blob/main/packages/core/src/types.ts",
 }
 ---
 

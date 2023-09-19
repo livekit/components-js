@@ -30,7 +30,7 @@ export function useStartAudio({ room, props }: UseStartAudioProps) {
     () => roomAudioPlaybackAllowedObservable(roomEnsured),
     [roomEnsured, roomAudioPlaybackAllowedObservable],
   );
-  const { canPlayAudio } = useObservableState(observable, { canPlayAudio: false });
+  const { canPlayAudio } = useObservableState(observable, { canPlayAudio: true });
 
   const mergedProps = React.useMemo(
     () =>

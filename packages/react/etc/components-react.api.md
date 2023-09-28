@@ -453,6 +453,7 @@ export function RoomAudioRenderer({ volume, isMuted }: RoomAudioRendererProps): 
 
 // @public (undocumented)
 export interface RoomAudioRendererProps {
+    // @alpha
     isMuted?: boolean;
     volume?: number;
 }

@@ -5,6 +5,11 @@ import * as React from 'react';
 import { useTracks } from '../hooks';
 import { AudioTrack } from './participant/AudioTrack';
 
+export interface RoomAudioRendererProps {
+  /** Sets the volume for all audio tracks rendered by this component. By default, the range is between `0.0` and `1.0`. */
+  volume?: number;
+}
+
 /**
  * The `RoomAudioRenderer` component is a drop-in solution for adding audio to your LiveKit app.
  * It takes care of handling remote participants’ audio tracks and makes sure that microphones and screen share are audible.
@@ -17,20 +22,22 @@ import { AudioTrack } from './participant/AudioTrack';
  * ```
  * @public
  */
-export function RoomAudioRenderer() {
+export function RoomAudioRenderer({ volume }: RoomAudioRendererProps) {
   const tracks = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio], {
     updateOnlyOn: [],
     onlySubscribed: false,
   }).filter((ref) => !isLocal(ref.participant));
 
   React.useEffect(() => {
-    tracks.forEach((track) => (track.publication as RemoteTrackPublication).setSubscribed(true));
+    for (const track of tracks) {
+      (track.publication as RemoteTrackPublication).setSubscribed(true);
+    }
   }, [tracks]);
 
   return (
     <div style={{ display: 'none' }}>
       {tracks.map((trackRef) => (
-        <AudioTrack key={getTrackReferenceId(trackRef)} trackRef={trackRef} />
+        <AudioTrack key={getTrackReferenceId(trackRef)} trackRef={trackRef} volume={volume} />
       ))}
     </div>
   );

@@ -20,7 +20,7 @@ export interface AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
   /** @deprecated This property will be removed in a future version use `trackRef` instead. */
   publication?: TrackPublication;
   onSubscriptionStatusChanged?: (subscribed: boolean) => void;
-  /** by the default the range is between 0 and 1 */
+  /** Sets the volume of the audio track. By default, the range is between `0.0` and `1.0`. */
   volume?: number;
 }
 

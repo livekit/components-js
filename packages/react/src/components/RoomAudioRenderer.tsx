@@ -8,6 +8,8 @@ import { AudioTrack } from './participant/AudioTrack';
 export interface RoomAudioRendererProps {
   /** Sets the volume for all audio tracks rendered by this component. By default, the range is between `0.0` and `1.0`. */
   volume?: number;
+  /** If set to true, mutes all audio tracks rendered by the component. */
+  isMuted?: boolean;
 }
 
 /**
@@ -22,7 +24,7 @@ export interface RoomAudioRendererProps {
  * ```
  * @public
  */
-export function RoomAudioRenderer({ volume }: RoomAudioRendererProps) {
+export function RoomAudioRenderer({ volume, isMuted }: RoomAudioRendererProps) {
   const tracks = useTracks(
     [Track.Source.Microphone, Track.Source.ScreenShareAudio, Track.Source.Unknown],
     {
@@ -40,7 +42,12 @@ export function RoomAudioRenderer({ volume }: RoomAudioRendererProps) {
   return (
     <div style={{ display: 'none' }}>
       {tracks.map((trackRef) => (
-        <AudioTrack key={getTrackReferenceId(trackRef)} trackRef={trackRef} volume={volume} />
+        <AudioTrack
+          key={getTrackReferenceId(trackRef)}
+          trackRef={trackRef}
+          volume={volume}
+          isMuted={isMuted}
+        />
       ))}
     </div>
   );

@@ -22,6 +22,14 @@ export interface AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
   onSubscriptionStatusChanged?: (subscribed: boolean) => void;
   /** Sets the volume of the audio track. By default, the range is between `0.0` and `1.0`. */
   volume?: number;
+  /**
+   * Mutes the audio track if set to `true`.
+   * @remarks
+   * Does not currently support the Web Audio API.
+   * A workaround is to set the volume to `0` instead.
+   * @alpha
+   */
+  isMuted?: boolean;
 }
 
 /**
@@ -42,6 +50,7 @@ export function AudioTrack({
   trackRef,
   onSubscriptionStatusChanged,
   volume,
+  isMuted,
   source,
   name,
   publication,
@@ -84,5 +93,5 @@ export function AudioTrack({
     }
   }, [volume, track]);
 
-  return <audio ref={mediaEl} {...elementProps} />;
+  return <audio ref={mediaEl} muted={isMuted} {...elementProps} />;
 }

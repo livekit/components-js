@@ -5,6 +5,7 @@ import * as React from 'react';
 import { useTracks } from '../hooks';
 import { AudioTrack } from './participant/AudioTrack';
 
+/** @public */
 export interface RoomAudioRendererProps {
   /** Sets the volume for all audio tracks rendered by this component. By default, the range is between `0.0` and `1.0`. */
   volume?: number;

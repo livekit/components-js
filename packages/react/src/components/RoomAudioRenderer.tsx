@@ -23,10 +23,13 @@ export interface RoomAudioRendererProps {
  * @public
  */
 export function RoomAudioRenderer({ volume }: RoomAudioRendererProps) {
-  const tracks = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio], {
-    updateOnlyOn: [],
-    onlySubscribed: false,
-  }).filter((ref) => !isLocal(ref.participant));
+  const tracks = useTracks(
+    [Track.Source.Microphone, Track.Source.ScreenShareAudio, Track.Source.Unknown],
+    {
+      updateOnlyOn: [],
+      onlySubscribed: false,
+    },
+  ).filter((ref) => !isLocal(ref.participant) && ref.publication.kind === Track.Kind.Audio);
 
   React.useEffect(() => {
     for (const track of tracks) {

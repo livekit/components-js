@@ -8,7 +8,13 @@ import { AudioTrack } from './participant/AudioTrack';
 export interface RoomAudioRendererProps {
   /** Sets the volume for all audio tracks rendered by this component. By default, the range is between `0.0` and `1.0`. */
   volume?: number;
-  /** If set to true, mutes all audio tracks rendered by the component. */
+  /**
+   * If set to `true`, mutes all audio tracks rendered by the component.
+   * @remarks
+   * Does not currently support the Web Audio API. A workaround is to
+   * set the volume to `0` instead.
+   * @alpha
+   */
   isMuted?: boolean;
 }
 

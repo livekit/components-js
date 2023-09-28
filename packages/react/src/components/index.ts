@@ -16,7 +16,7 @@ export * from './participant/VideoTrack';
 export * from './participant/ParticipantName';
 export * from './participant/TrackMutedIndicator';
 export * from './ParticipantLoop';
-export { RoomAudioRenderer } from './RoomAudioRenderer';
+export { RoomAudioRenderer, type RoomAudioRendererProps } from './RoomAudioRenderer';
 export * from './RoomName';
 export { Toast } from './Toast';
 export * from './TrackLoop';

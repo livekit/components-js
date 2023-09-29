@@ -4,7 +4,7 @@ import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOr
 import type { TrackReference } from '@livekit/components-core';
 import { log } from '@livekit/components-core';
 import { useEnsureParticipant, useMaybeTrackRefContext } from '../../context';
-import { RemoteAudioTrack } from 'livekit-client';
+import { RemoteAudioTrack, RemoteTrackPublication } from 'livekit-client';
 
 /** @public */
 export interface AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
@@ -25,11 +25,10 @@ export interface AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
   /**
    * Mutes the audio track if set to `true`.
    * @remarks
-   * Does not currently support the Web Audio API.
-   * A workaround is to set the volume to `0` instead.
+   * If set to `true`, the server will stop sending audio track data to the client.
    * @alpha
    */
-  isMuted?: boolean;
+  muted?: boolean;
 }
 
 /**
@@ -50,7 +49,6 @@ export function AudioTrack({
   trackRef,
   onSubscriptionStatusChanged,
   volume,
-  isMuted,
   source,
   name,
   publication,
@@ -70,7 +68,12 @@ export function AudioTrack({
   const mediaEl = React.useRef<HTMLAudioElement>(null);
   const participant = useEnsureParticipant(_participant);
 
-  const { elementProps, isSubscribed, track } = useMediaTrackBySourceOrName(
+  const {
+    elementProps,
+    isSubscribed,
+    track,
+    publication: pub,
+  } = useMediaTrackBySourceOrName(
     { source: _source, name: _name, participant, publication: _publication },
     {
       element: mediaEl,
@@ -89,9 +92,20 @@ export function AudioTrack({
     if (track instanceof RemoteAudioTrack) {
       track.setVolume(volume);
     } else {
-      log.warn('volume can only be set on remote audio tracks');
+      log.warn('Volume can only be set on remote audio tracks.');
     }
   }, [volume, track]);
 
-  return <audio ref={mediaEl} muted={isMuted} {...elementProps} />;
+  React.useEffect(() => {
+    if (pub === undefined || props.muted === undefined) {
+      return;
+    }
+    if (pub instanceof RemoteTrackPublication) {
+      pub.setEnabled(!props.muted);
+    } else {
+      log.warn('Can only call setEnabled on remote track publications.');
+    }
+  }, [props.muted, pub, track]);
+
+  return <audio ref={mediaEl} {...elementProps} />;
 }

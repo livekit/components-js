@@ -12,11 +12,10 @@ export interface RoomAudioRendererProps {
   /**
    * If set to `true`, mutes all audio tracks rendered by the component.
    * @remarks
-   * Does not currently support the Web Audio API. A workaround is to
-   * set the volume to `0` instead.
+   * If set to `true`, the server will stop sending audio track data to the client.
    * @alpha
    */
-  isMuted?: boolean;
+  muted?: boolean;
 }
 
 /**
@@ -31,7 +30,7 @@ export interface RoomAudioRendererProps {
  * ```
  * @public
  */
-export function RoomAudioRenderer({ volume, isMuted }: RoomAudioRendererProps) {
+export function RoomAudioRenderer({ volume, muted }: RoomAudioRendererProps) {
   const tracks = useTracks(
     [Track.Source.Microphone, Track.Source.ScreenShareAudio, Track.Source.Unknown],
     {
@@ -53,7 +52,7 @@ export function RoomAudioRenderer({ volume, isMuted }: RoomAudioRendererProps) {
           key={getTrackReferenceId(trackRef)}
           trackRef={trackRef}
           volume={volume}
-          isMuted={isMuted}
+          muted={muted}
         />
       ))}
     </div>

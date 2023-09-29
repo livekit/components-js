@@ -65,12 +65,12 @@ export interface AudioConferenceProps extends React_2.HTMLAttributes<HTMLDivElem
 }
 
 // @public
-export function AudioTrack({ trackRef, onSubscriptionStatusChanged, volume, isMuted, source, name, publication, participant: p, ...props }: AudioTrackProps): React_2.JSX.Element;
+export function AudioTrack({ trackRef, onSubscriptionStatusChanged, volume, source, name, publication, participant: p, ...props }: AudioTrackProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> extends React_2.HTMLAttributes<T> {
     // @alpha
-    isMuted?: boolean;
+    muted?: boolean;
     // @deprecated (undocumented)
     name?: string;
     // (undocumented)
@@ -449,12 +449,12 @@ export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement
 export { ReceivedChatMessage }
 
 // @public
-export function RoomAudioRenderer({ volume, isMuted }: RoomAudioRendererProps): React_2.JSX.Element;
+export function RoomAudioRenderer({ volume, muted }: RoomAudioRendererProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface RoomAudioRendererProps {
     // @alpha
-    isMuted?: boolean;
+    muted?: boolean;
     volume?: number;
 }
 

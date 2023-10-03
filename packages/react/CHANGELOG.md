@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 1.3.0
+
+### Minor Changes
+
+- Add `volume` and `muted` control to `RoomAudioRenderer` and `AudioTrack`. Include to render `Track.Source.Unknown` in `RoomAudioRenderer` as long as they are of king `Track.Kind.Audio`. - [#648](https://github.com/livekit/components-js/pull/648) ([@Ocupe](https://github.com/Ocupe))
+
 ## 1.2.2
 
 ### Patch Changes

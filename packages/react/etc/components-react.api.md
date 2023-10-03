@@ -69,6 +69,8 @@ export function AudioTrack({ trackRef, onSubscriptionStatusChanged, volume, sour
 
 // @public (undocumented)
 export interface AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> extends React_2.HTMLAttributes<T> {
+    // @alpha
+    muted?: boolean;
     // @deprecated (undocumented)
     name?: string;
     // (undocumented)
@@ -447,7 +449,14 @@ export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement
 export { ReceivedChatMessage }
 
 // @public
-export function RoomAudioRenderer(): React_2.JSX.Element;
+export function RoomAudioRenderer({ volume, muted }: RoomAudioRendererProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export interface RoomAudioRendererProps {
+    // @alpha
+    muted?: boolean;
+    volume?: number;
+}
 
 // @public (undocumented)
 export const RoomContext: React_2.Context<Room | undefined>;

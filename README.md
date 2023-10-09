@@ -12,14 +12,32 @@
 
 <!--BEGIN_DESCRIPTION-->Use this SDK to add real-time video, audio and data features to your React app. By connecting to a self- or cloud-hosted <a href="https://livekit.io/">LiveKit</a> server, you can quickly build applications like interactive live streaming or video calls with just a few lines of code.<!--END_DESCRIPTION-->
 
-<br>
+<br/>
+<br/>
 
 ![LiveKit Components Preview](./.github/assets/livekit-meet.jpg)
 
+## Quick Start
+
+First add the library to your project:
+```shell
+npm i @livekit/react-components
+```
+
+Then use any of our pre-fabricated or helper components:
 ```tsx
-<LiveKitRoom token="my-token" serverUrl="wss://my-livekit-server" connect={true}>
-  <VideoConference />
-</LiveKitRoom>
+import { LiveKitRoom, VideoConference } from '@livekit/react-components'
+
+const TOKEN = 'generated-jwt'
+const WS_URL = 'wss://my-livekit-server'
+
+export default function Example() {
+  return (
+    <LiveKitRoom token={TOKEN} serverUrl={WS_URL} connect={true}>
+      <VideoConference />
+    </LiveKitRoom>
+  )
+}
 ```
 
 ## Docs

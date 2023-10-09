@@ -26,8 +26,7 @@ npm i @livekit/react-components
 
 Then use any of our pre-fabricated or helper components:
 ```tsx
-import { LiveKitRoom } from '@livekit/react-components'
-import { VideoConference } from './VideoConference'
+import { LiveKitRoom, VideoConference } from '@livekit/components-react'
 
 const TOKEN = 'generated-jwt'
 const WS_URL = 'wss://my-livekit-server'

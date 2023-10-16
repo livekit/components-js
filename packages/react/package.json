@@ -35,8 +35,8 @@
   "scripts": {
     "build": "yarn gen:svg && tsup --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
     "dev": "tsup --watch --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
-    "gen:icons": "svgr --out-dir ./src/assets/icons --typescript ../styles/assets/icons",
-    "gen:images": "svgr --out-dir ./src/assets/images --typescript --no-svgo ../styles/assets/images",
+    "gen:icons": "rimraf -I -g ./src/assets/icons/*Icon.tsx && svgr --template ./src/assets/template.js --out-dir ./src/assets/icons --typescript ../styles/assets/icons",
+    "gen:images": "rimraf -I -g ./src/assets/images/*.tsx && svgr --template ./src/assets/template.js --out-dir ./src/assets/images --typescript --no-svgo ../styles/assets/images",
     "gen:svg": "yarn gen:images && yarn gen:icons",
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
     "test": "vitest --run",
@@ -70,6 +70,7 @@
     "jsdom": "^22.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "rimraf": "^5.0.5",
     "size-limit": "^8.2.4",
     "tsup": "^7.0.0",
     "typescript": "5.2.2",

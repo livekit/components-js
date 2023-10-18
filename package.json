@@ -23,7 +23,8 @@
     "test": "turbo run test",
     "tooling:update-readme-nav": "node tooling/readme-manager/update-nav-in-readmes.js",
     "api:check": "turbo run api-check",
-    "api-extractor": "turbo run api-extractor"
+    "api-extractor": "turbo run api-extractor",
+    "cleanup": "find . -type d \\( -name 'node_modules' -o -name '.turbo' -o -name 'dist' \\) -prune -exec rm -rf '{}' +"
   },
   "workspaces": [
     "packages/*",

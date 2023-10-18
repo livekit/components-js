@@ -8301,11 +8301,6 @@ glob@^8.0.3, glob@^8.1.0:
     minimatch "^5.0.1"
     once "^1.3.0"
 
-global-tld-list@^1.0.0:
-  version "1.4.67"
-  resolved "https://registry.yarnpkg.com/global-tld-list/-/global-tld-list-1.4.67.tgz#7f3c215728d172f995068c20e3fc4407b2356070"
-  integrity sha512-pkFKXrFIYWyzdUXg7oMbowJlme0pwV4RTFIpWLsfbJQgs8YJ0Cdu2O/tm1tv3b/CXrGtU9jAm8TwS90CMxfalw==
-
 globals@^11.1.0:
   version "11.12.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-11.12.0.tgz#ab8795338868a0babd8525758018c2a7eb95c42e"

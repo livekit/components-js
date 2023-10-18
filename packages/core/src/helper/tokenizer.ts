@@ -6,7 +6,7 @@ export type TokenizeGrammar = { [type: string]: RegExp };
 export const createDefaultGrammar = () => {
   return {
     email: createEmailRegExp(),
-    url: createUrlRegExp({ strict: false }),
+    url: createUrlRegExp({}),
   } satisfies TokenizeGrammar;
 };
 

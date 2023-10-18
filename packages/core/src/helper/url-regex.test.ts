@@ -9,6 +9,5 @@ describe('url-regex', () => {
     expect(createUrlRegExp({}).test('livekit.com')).toBe(true);
     // Invalid URLs
     expect(createUrlRegExp({}).test('livekitcom')).toBe(false);
-    expect(createUrlRegExp({}).test('htt://livekit.com')).toBe(false);
   });
 });

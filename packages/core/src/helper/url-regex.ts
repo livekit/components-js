@@ -52,7 +52,9 @@ export const createUrlRegExp = (options: RegExOptions) => {
   const tld = `(?:\\.${
     options.strict
       ? '(?:[a-z\\u00a1-\\uffff]{2,})'
-      : `(?:${TLDs.sort((a, b) => b.length - a.length).join('|')})`
+      : `(?:${Array.from(TLDs.tlds.keys())
+          .sort((a, b) => b.length - a.length)
+          .join('|')})`
   })\\.?`;
   const port = '(?::\\d{2,5})?';
   const path = '(?:[/?#][^\\s"]*)?';

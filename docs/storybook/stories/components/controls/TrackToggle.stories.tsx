@@ -4,11 +4,12 @@ import { StoryObj } from '@storybook/react';
 import { TrackToggle, TrackToggleProps } from '@livekit/components-react';
 import { LkRoomContext } from '../../../.storybook/lk-decorators';
 import { Track } from 'livekit-client';
+import { ToggleSource } from '@livekit/components-core';
 
 export default {
   component: TrackToggle,
   decorators: [LkRoomContext],
-  render: (args: TrackToggleProps<Track.Source>) => (
+  render: (args: TrackToggleProps<ToggleSource>) => (
     <>
       <TrackToggle {...args}>{`${args.source}`.toUpperCase()} Control</TrackToggle>
       <TrackToggle {...args} />

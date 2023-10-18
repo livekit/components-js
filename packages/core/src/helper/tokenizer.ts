@@ -1,5 +1,5 @@
 import { createEmailRegExp } from './emailRegex';
-import { createUrlRegExp } from './urlRegex';
+import { createUrlRegExp } from './url-regex';
 
 export type TokenizeGrammar = { [type: string]: RegExp };
 

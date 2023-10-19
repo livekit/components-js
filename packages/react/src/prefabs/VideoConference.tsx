@@ -140,7 +140,7 @@ export function VideoConference({
             <ControlBar controls={{ chat: true }} />
           </div>
           <Chat
-            style={{ display: widgetState.showChat ? 'flex' : 'none' }}
+            style={{ display: widgetState.showChat ? 'grid' : 'none' }}
             messageFormatter={chatMessageFormatter}
             messageEncoder={chatMessageEncoder}
             messageDecoder={chatMessageDecoder}

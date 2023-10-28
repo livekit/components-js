@@ -20,23 +20,25 @@
 ## Quick Start
 
 First add the library to your project:
+
 ```shell
-npm i @livekit/react-components
+npm i @livekit/components-react
 ```
 
 Then use any of our pre-fabricated or helper components:
-```tsx
-import { LiveKitRoom, VideoConference } from '@livekit/components-react'
 
-const TOKEN = 'generated-jwt'
-const WS_URL = 'wss://my-livekit-server'
+```tsx
+import { LiveKitRoom, VideoConference } from '@livekit/components-react';
+
+const TOKEN = 'generated-jwt';
+const WS_URL = 'wss://my-livekit-server';
 
 export default function Example() {
   return (
     <LiveKitRoom token={TOKEN} serverUrl={WS_URL} connect={true}>
       <VideoConference />
     </LiveKitRoom>
-  )
+  );
 }
 ```
 

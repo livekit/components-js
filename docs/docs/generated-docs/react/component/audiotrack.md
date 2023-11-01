@@ -40,7 +40,7 @@ _(Optional)_ The track reference of the track from which the audio is to be rend
 {% /parameter %}
 
 {% parameter name="volume" type="number" optional=true %}
-_(Optional)_ by the default the range is between 0 and 1
+_(Optional)_ Sets the volume of the audio track. By default, the range is between `0.0` and `1.0`<!-- -->.
 
 {% /parameter %}
 

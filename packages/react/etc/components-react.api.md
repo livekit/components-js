@@ -68,7 +68,7 @@ export interface AudioConferenceProps extends React_2.HTMLAttributes<HTMLDivElem
 export function AudioTrack({ trackRef, onSubscriptionStatusChanged, volume, source, name, publication, participant: p, ...props }: AudioTrackProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement> extends React_2.HTMLAttributes<T> {
+export interface AudioTrackProps extends React_2.AudioHTMLAttributes<HTMLAudioElement> {
     // @alpha
     muted?: boolean;
     // @deprecated (undocumented)
@@ -1023,7 +1023,7 @@ export interface VideoConferenceProps extends React_2.HTMLAttributes<HTMLDivElem
 export function VideoTrack({ onTrackClick, onClick, onSubscriptionStatusChanged, trackRef, name, publication, source, participant: p, manageSubscription, ...props }: VideoTrackProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface VideoTrackProps extends React_2.HTMLAttributes<HTMLVideoElement> {
+export interface VideoTrackProps extends React_2.VideoHTMLAttributes<HTMLVideoElement> {
     // (undocumented)
     manageSubscription?: boolean;
     // @deprecated (undocumented)

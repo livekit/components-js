@@ -202,7 +202,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
  * On submit the user decisions are returned, which can then be passed on to the `LiveKitRoom` so that the user enters the room with the correct media devices.
  *
  * @remarks
- * This component is independent from the `LiveKitRoom` component and don't has to be nested inside it.
+ * This component is independent of the `LiveKitRoom` component and should not be nested within it.
  * Because it only access the local media tracks this component is self contained and works without connection to the LiveKit server.
  *
  * @example

@@ -128,7 +128,7 @@ export function createTrackObserver(participant: Participant, options: TrackIden
 // Warning: (ae-forgotten-export) The symbol "RegExOptions" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
-export const createUrlRegExp: (options: RegExOptions) => RegExp;
+export function createUrlRegExp(options: RegExOptions): RegExp;
 
 // @public (undocumented)
 export const cssPrefix = "lk";

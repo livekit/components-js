@@ -6,7 +6,7 @@
 
 # AudioTrackProps.volume property
 
-by the default the range is between 0 and 1
+Sets the volume of the audio track. By default, the range is between `0.0` and `1.0`<!-- -->.
 
 **Signature:**
 

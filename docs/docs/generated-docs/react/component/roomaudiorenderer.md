@@ -26,3 +26,10 @@ import { RoomAudioRenderer } from "@livekit/components-react";
 ```
 
 {% partial file="p_usage.md" variables={exampleCount: 1} /%}
+
+## Properties
+
+{% parameter name="volume" type="number" optional=true %}
+_(Optional)_ Sets the volume for all audio tracks rendered by this component. By default, the range is between `0.0` and `1.0`<!-- -->.
+
+{% /parameter %}

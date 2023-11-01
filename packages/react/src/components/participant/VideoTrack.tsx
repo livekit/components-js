@@ -11,7 +11,7 @@ import { useEnsureParticipant, useMaybeTrackRefContext } from '../../context';
 import * as useHooks from 'usehooks-ts';
 
 /** @public */
-export interface VideoTrackProps extends React.HTMLAttributes<HTMLVideoElement> {
+export interface VideoTrackProps extends React.VideoHTMLAttributes<HTMLVideoElement> {
   /** The track reference of the track to render. */
   trackRef?: TrackReference;
   /** @deprecated This property will be removed in a future version use `trackRef` instead. */

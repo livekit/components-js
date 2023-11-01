@@ -7,8 +7,7 @@ import { useEnsureParticipant, useMaybeTrackRefContext } from '../../context';
 import { RemoteAudioTrack, RemoteTrackPublication } from 'livekit-client';
 
 /** @public */
-export interface AudioTrackProps<T extends HTMLMediaElement = HTMLMediaElement>
-  extends React.HTMLAttributes<T> {
+export interface AudioTrackProps extends React.AudioHTMLAttributes<HTMLAudioElement> {
   /** The track reference of the track from which the audio is to be rendered. */
   trackRef?: TrackReference;
   /** @deprecated This property will be removed in a future version use `trackRef` instead. */

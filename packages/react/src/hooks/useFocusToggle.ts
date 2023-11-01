@@ -1,9 +1,5 @@
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
-import {
-  setupFocusToggle,
-  isTrackReferencePinned,
-  isTrackReference,
-} from '@livekit/components-core';
+import { setupFocusToggle, isTrackReferencePinned } from '@livekit/components-core';
 import type { Track, Participant } from 'livekit-client';
 import { useEnsureParticipant, useMaybeLayoutContext } from '../context';
 import { mergeProps } from '../mergeProps';
@@ -65,7 +61,7 @@ export function useFocusToggle({ trackRef, trackSource, participant, props }: Us
           props.onClick?.(event);
 
           // Set or clear focus based on current focus state.
-          if (trackRef && isTrackReference(trackRef)) {
+          if (trackRef) {
             if (inFocus) {
               layoutContext?.pin.dispatch?.({
                 msg: 'clear_pin',

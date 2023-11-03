@@ -156,7 +156,7 @@ export type DeviceSettings = {
 export function encryptionStatusObservable(room: Room, participant: Participant): Observable<boolean>;
 
 // @alpha
-export function getDeviceSettings(): DeviceSettings | undefined;
+export function getDeviceSettings(fallback?: DeviceSettings): DeviceSettings;
 
 // Warning: (ae-internal-missing-underscore) The name "getScrollBarWidth" should be prefixed with an underscore because the declaration is marked as @internal
 //

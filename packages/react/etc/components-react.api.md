@@ -14,6 +14,7 @@ import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import type { CreateLocalTracksOptions } from 'livekit-client';
 import type { DataSendOptions } from '@livekit/components-core';
+import type { DeviceSettings } from '@livekit/components-core';
 import type { GridLayoutDefinition } from '@livekit/components-core';
 import { HTMLAttributes } from 'react';
 import type { LocalAudioTrack } from 'livekit-client';
@@ -182,7 +183,7 @@ export interface ConnectionStatusProps extends React_2.HTMLAttributes<HTMLDivEle
 }
 
 // @public
-export function ControlBar({ variation, controls, ...props }: ControlBarProps): React_2.JSX.Element;
+export function ControlBar({ variation, controls, saveDeviceSettings, ...props }: ControlBarProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export type ControlBarControls = {
@@ -197,6 +198,7 @@ export type ControlBarControls = {
 export interface ControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> {
     // (undocumented)
     controls?: ControlBarControls;
+    saveDeviceSettings?: boolean;
     // (undocumented)
     variation?: 'minimal' | 'verbose' | 'textOnly';
 }
@@ -424,9 +426,9 @@ export interface ParticipantTileProps extends React_2.HTMLAttributes<HTMLDivElem
 }
 
 // @public
-export function PreJoin({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, showE2EEOptions, ...htmlProps }: PreJoinProps): React_2.JSX.Element;
+export function PreJoin({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, showE2EEOptions, saveDeviceSettings, ...htmlProps }: PreJoinProps): React_2.JSX.Element;
 
-// @public (undocumented)
+// @public
 export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement>, 'onSubmit' | 'onError'> {
     // (undocumented)
     camLabel?: string;
@@ -440,6 +442,7 @@ export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement
     onError?: (error: Error) => void;
     onSubmit?: (values: LocalUserChoices) => void;
     onValidate?: (values: LocalUserChoices) => boolean;
+    saveDeviceSettings?: boolean;
     // (undocumented)
     showE2EEOptions?: boolean;
     // (undocumented)
@@ -824,6 +827,17 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
     source?: Track.Source;
     trackRef?: TrackReferenceOrPlaceholder;
 }
+
+// Warning: (ae-forgotten-export) The symbol "UsePersistentDeviceSettingsOptions" needs to be exported by the entry point index.d.ts
+//
+// @alpha
+export function usePersistentDeviceSettings(options?: UsePersistentDeviceSettingsOptions): {
+    deviceSettings: DeviceSettings;
+    saveAudioInputEnabled: (isEnabled: boolean) => void;
+    saveVideoInputEnabled: (isEnabled: boolean) => void;
+    saveAudioInputDeviceId: (deviceId: string) => void;
+    saveVideoInputDeviceId: (deviceId: string) => void;
+};
 
 // @public
 export function usePinnedTracks(layoutContext?: LayoutContextType): TrackReferenceOrPlaceholder[];

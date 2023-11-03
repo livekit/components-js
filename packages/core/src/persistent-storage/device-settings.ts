@@ -10,6 +10,13 @@ export type DeviceSettings = {
   audioInputDeviceId: string;
 };
 
+const defaultDeviceSettings: DeviceSettings = {
+  videoInputEnabled: true,
+  audioInputEnabled: true,
+  videoInputDeviceId: '',
+  audioInputDeviceId: '',
+};
+
 /**
  * Sets the device settings in local storage.
  * @param deviceSettings - The device settings to be stored.
@@ -20,10 +27,11 @@ export function setDeviceSettings(deviceSettings: DeviceSettings): void {
 }
 
 /**
- * Retrieves the device settings from local storage.
- * @returns The device settings object or undefined if not found.
+ * Retrieves the device settings from local storage, or returns the default settings if none are found.
+ * @param fallback - The default device settings to use if none are found in local storage.
+ * @returns The retrieved device settings, or the default settings if none are found.
  * @alpha
  */
-export function getDeviceSettings(): DeviceSettings | undefined {
-  return getLocalStorageObject(DEVICE_SELECTION_KEY);
+export function getDeviceSettings(fallback?: DeviceSettings): DeviceSettings {
+  return getLocalStorageObject(DEVICE_SELECTION_KEY) ?? fallback ?? defaultDeviceSettings;
 }

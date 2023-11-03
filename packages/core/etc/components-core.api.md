@@ -145,7 +145,18 @@ export const DataTopic: {
 };
 
 // @public (undocumented)
+export type DeviceSettings = {
+    videoInputEnabled: boolean;
+    audioInputEnabled: boolean;
+    videoInputDeviceId: string;
+    audioInputDeviceId: string;
+};
+
+// @public (undocumented)
 export function encryptionStatusObservable(room: Room, participant: Participant): Observable<boolean>;
+
+// @alpha
+export function getDeviceSettings(): DeviceSettings | undefined;
 
 // Warning: (ae-internal-missing-underscore) The name "getScrollBarWidth" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -348,6 +359,9 @@ export function selectGridLayout(layouts: GridLayoutDefinition[], participantCou
 
 // @public
 export function sendMessage(localParticipant: LocalParticipant, payload: Uint8Array, topic?: string, options?: DataSendOptions): Promise<void>;
+
+// @alpha
+export function setDeviceSettings(deviceSettings: DeviceSettings): void;
 
 // @public (undocumented)
 export function setDifference<T>(setA: Set<T>, setB: Set<T>): Set<T>;

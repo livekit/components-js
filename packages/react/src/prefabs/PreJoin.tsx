@@ -238,7 +238,13 @@ export function PreJoin({
   const [username, setUsername] = React.useState(
     defaults.username ?? DEFAULT_USER_CHOICES.username,
   );
-  const { deviceSettings } = usePersistentDeviceSettings({
+  const {
+    deviceSettings,
+    saveAudioInputDeviceId,
+    saveAudioInputEnabled,
+    saveVideoInputDeviceId,
+    saveVideoInputEnabled,
+  } = usePersistentDeviceSettings({
     fallbackValues: {
       audioInputDeviceId: DEFAULT_USER_CHOICES.audioDeviceId,
       videoInputDeviceId: DEFAULT_USER_CHOICES.videoDeviceId,
@@ -248,6 +254,7 @@ export function PreJoin({
     preventSave: !saveDeviceSettings,
   });
 
+  // Initialize device settings
   const [audioEnabled, setAudioEnabled] = React.useState<boolean>(
     defaults.audioEnabled ?? deviceSettings.audioInputEnabled,
   );
@@ -265,6 +272,20 @@ export function PreJoin({
   const [sharedPassphrase, setSharedPassphrase] = React.useState<string>(
     defaults.sharedPassphrase ?? DEFAULT_USER_CHOICES.sharedPassphrase,
   );
+
+  // Update persistent device settings
+  React.useEffect(() => {
+    saveAudioInputEnabled(audioEnabled);
+  }, [audioEnabled, saveAudioInputEnabled]);
+  React.useEffect(() => {
+    saveVideoInputEnabled(videoEnabled);
+  }, [videoEnabled, saveVideoInputEnabled]);
+  React.useEffect(() => {
+    saveAudioInputDeviceId(audioDeviceId);
+  }, [audioDeviceId, saveAudioInputDeviceId]);
+  React.useEffect(() => {
+    saveVideoInputDeviceId(videoDeviceId);
+  }, [videoDeviceId, saveVideoInputDeviceId]);
 
   const tracks = usePreviewTracks(
     {

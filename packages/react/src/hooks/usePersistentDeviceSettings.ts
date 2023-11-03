@@ -50,7 +50,7 @@ export function usePersistentDeviceSettings(options: UsePersistentDeviceSettings
   }, [deviceSettings, options.preventSave]);
 
   return {
-    settings: deviceSettings,
+    deviceSettings,
     saveAudioInputEnabled,
     saveVideoInputEnabled,
     saveAudioInputDeviceId,

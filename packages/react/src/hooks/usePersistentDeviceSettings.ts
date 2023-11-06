@@ -8,9 +8,9 @@ import * as React from 'react';
  */
 interface UsePersistentDeviceSettingsOptions {
   /**
-   * The fallback value to use if no stored value is found.
+   * The default value to use if reading from local storage returns no results or fails.
    */
-  fallbackValues?: DeviceSettings;
+  defaults?: DeviceSettings;
   /**
    * Whether to prevent saving the device settings to local storage.
    * @defaultValue false
@@ -26,7 +26,7 @@ interface UsePersistentDeviceSettingsOptions {
  */
 export function usePersistentDeviceSettings(options: UsePersistentDeviceSettingsOptions = {}) {
   const [deviceSettings, setSettings] = React.useState<DeviceSettings>(
-    getDeviceSettings(options.fallbackValues),
+    getDeviceSettings(options.defaults),
   );
 
   const saveAudioInputEnabled = React.useCallback((isEnabled: boolean) => {

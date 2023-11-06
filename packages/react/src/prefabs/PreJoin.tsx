@@ -245,7 +245,7 @@ export function PreJoin({
     saveVideoInputDeviceId,
     saveVideoInputEnabled,
   } = usePersistentDeviceSettings({
-    fallbackValues: {
+    defaults: {
       audioInputDeviceId: DEFAULT_USER_CHOICES.audioDeviceId,
       videoInputDeviceId: DEFAULT_USER_CHOICES.videoDeviceId,
       audioInputEnabled: DEFAULT_USER_CHOICES.audioEnabled,

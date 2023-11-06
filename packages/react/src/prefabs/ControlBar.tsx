@@ -6,7 +6,7 @@ import { TrackToggle } from '../components/controls/TrackToggle';
 import { StartAudio } from '../components/controls/StartAudio';
 import { ChatIcon, LeaveIcon } from '../assets/icons';
 import { ChatToggle } from '../components/controls/ChatToggle';
-import { useLocalParticipantPermissions, usePersistentDeviceSettings } from '../hooks';
+import { useLocalParticipantPermissions, usePersistentUserChoices } from '../hooks';
 import { useMediaQuery } from '../hooks/internal';
 import { useMaybeLayoutContext } from '../context';
 import { supportsScreenSharing } from '@livekit/components-core';
@@ -107,7 +107,7 @@ export function ControlBar({
     saveVideoInputEnabled,
     saveAudioInputDeviceId,
     saveVideoInputDeviceId,
-  } = usePersistentDeviceSettings({ preventSave: !saveDeviceSettings });
+  } = usePersistentUserChoices({ preventSave: !saveDeviceSettings });
 
   return (
     <div {...htmlProps}>

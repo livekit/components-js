@@ -44,4 +44,4 @@ export { UseVisualStableUpdateOptions, useVisualStableUpdate } from './useVisual
 export { UseTrackOptions, useTrack } from './useTrack';
 export { useTrackByName } from './useTrackByName';
 export { useChat } from './useChat';
-export { usePersistentDeviceSettings } from './usePersistentDeviceSettings';
+export { usePersistentUserChoices } from './usePersistentUserChoices';

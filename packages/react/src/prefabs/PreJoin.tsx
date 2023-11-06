@@ -17,7 +17,7 @@ import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { TrackToggle } from '../components/controls/TrackToggle';
 import { log } from '@livekit/components-core';
 import { ParticipantPlaceholder } from '../assets/images';
-import { useMediaDevices, usePersistentDeviceSettings } from '../hooks';
+import { useMediaDevices, usePersistentUserChoices } from '../hooks';
 
 /** @public */
 export type LocalUserChoices = {
@@ -244,7 +244,7 @@ export function PreJoin({
     saveAudioInputEnabled,
     saveVideoInputDeviceId,
     saveVideoInputEnabled,
-  } = usePersistentDeviceSettings({
+  } = usePersistentUserChoices({
     defaults: {
       audioInputDeviceId: DEFAULT_USER_CHOICES.audioDeviceId,
       videoInputDeviceId: DEFAULT_USER_CHOICES.videoDeviceId,

@@ -6,7 +6,7 @@ import * as React from 'react';
  * Options for the `usePersistentDeviceSettings` hook.
  * @alpha
  */
-interface UsePersistentDeviceSettingsOptions {
+interface UsePersistentUserChoicesOptions {
   /**
    * The default value to use if reading from local storage returns no results or fails.
    */
@@ -19,12 +19,11 @@ interface UsePersistentDeviceSettingsOptions {
 }
 
 /**
- * A hook that provides access to persistent device settings stored in local storage.
- * @param fallbackValues - The initial value to use if no stored value is found.
- * @returns A tuple containing the stored value and a function to update the stored value.
+ * A hook that provides access to user choices stored in local storage, such as
+ * selected media devices and their current state, as well as the user name.
  * @alpha
  */
-export function usePersistentDeviceSettings(options: UsePersistentDeviceSettingsOptions = {}) {
+export function usePersistentUserChoices(options: UsePersistentUserChoicesOptions = {}) {
   const [deviceSettings, setSettings] = React.useState<DeviceSettings>(
     getDeviceSettings(options.defaults),
   );

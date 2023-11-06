@@ -12,10 +12,15 @@ interface UsePersistentUserChoicesOptions {
    */
   defaults?: Partial<UserChoices>;
   /**
-   * Whether to prevent saving the device settings to local storage.
+   * Whether to prevent saving to persistent storage.
    * @defaultValue false
    */
   preventSave?: boolean;
+  /**
+   * Whether to prevent loading user choices from persistent storage and use `defaults` instead.
+   * @defaultValue false
+   */
+  preventLoad?: boolean;
 }
 
 /**
@@ -25,7 +30,7 @@ interface UsePersistentUserChoicesOptions {
  */
 export function usePersistentUserChoices(options: UsePersistentUserChoicesOptions = {}) {
   const [deviceSettings, setSettings] = React.useState<UserChoices>(
-    loadUserChoices(options.defaults),
+    loadUserChoices(options.defaults, options.preventLoad ?? false),
   );
 
   const saveAudioInputEnabled = React.useCallback((isEnabled: boolean) => {
@@ -42,10 +47,7 @@ export function usePersistentUserChoices(options: UsePersistentUserChoicesOption
   }, []);
 
   React.useEffect(() => {
-    if (options.preventSave === true) {
-      return;
-    }
-    saveUserChoices(deviceSettings);
+    saveUserChoices(deviceSettings, options.preventSave ?? false);
   }, [deviceSettings, options.preventSave]);
 
   return {

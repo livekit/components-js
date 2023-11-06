@@ -24,7 +24,16 @@ const defaultUserChoices: UserChoices = {
  * @param deviceSettings - The device settings to be stored.
  * @alpha
  */
-export function saveUserChoices(deviceSettings: UserChoices): void {
+export function saveUserChoices(
+  deviceSettings: UserChoices,
+  /**
+   * Whether to prevent saving user choices to local storage.
+   */
+  preventSave: boolean = false,
+): void {
+  if (preventSave === true) {
+    return;
+  }
   setLocalStorageObject(USER_CHOICES_KEY, deviceSettings);
 }
 
@@ -35,7 +44,14 @@ export function saveUserChoices(deviceSettings: UserChoices): void {
  *
  * @alpha
  */
-export function loadUserChoices(defaults?: Partial<UserChoices>): UserChoices {
+export function loadUserChoices(
+  defaults?: Partial<UserChoices>,
+  /**
+   * Whether to prevent loading from local storage and return default values instead.
+   * @defaultValue false
+   */
+  preventLoad: boolean = false,
+): UserChoices {
   const fallback: UserChoices = {
     videoInputEnabled: defaults?.videoInputEnabled ?? defaultUserChoices.videoInputEnabled,
     audioInputEnabled: defaults?.audioInputEnabled ?? defaultUserChoices.audioInputEnabled,
@@ -44,5 +60,9 @@ export function loadUserChoices(defaults?: Partial<UserChoices>): UserChoices {
     username: defaults?.username ?? defaultUserChoices.username,
   };
 
-  return getLocalStorageObject(USER_CHOICES_KEY) ?? fallback;
+  if (preventLoad) {
+    return fallback;
+  } else {
+    return getLocalStorageObject(USER_CHOICES_KEY) ?? fallback;
+  }
 }

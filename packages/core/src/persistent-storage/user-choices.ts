@@ -20,7 +20,7 @@ const defaultUserChoices: UserChoices = {
 };
 
 /**
- * Sets the user choices in local storage.
+ * Saves user choices to local storage.
  * @param deviceSettings - The device settings to be stored.
  * @alpha
  */

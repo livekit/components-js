@@ -1,1 +1,1 @@
-export { setDeviceSettings, getDeviceSettings, type DeviceSettings } from './device-settings';
+export { saveUserChoices, loadUserChoices, type UserChoices } from './user-choices';

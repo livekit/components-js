@@ -1,5 +1,5 @@
-import type { DeviceSettings } from '@livekit/components-core';
-import { getDeviceSettings, setDeviceSettings } from '@livekit/components-core';
+import type { UserChoices } from '@livekit/components-core';
+import { loadUserChoices, saveUserChoices } from '@livekit/components-core';
 import * as React from 'react';
 
 /**
@@ -10,7 +10,7 @@ interface UsePersistentUserChoicesOptions {
   /**
    * The default value to use if reading from local storage returns no results or fails.
    */
-  defaults?: DeviceSettings;
+  defaults?: UserChoices;
   /**
    * Whether to prevent saving the device settings to local storage.
    * @defaultValue false
@@ -20,12 +20,12 @@ interface UsePersistentUserChoicesOptions {
 
 /**
  * A hook that provides access to user choices stored in local storage, such as
- * selected media devices and their current state, as well as the user name.
+ * selected media devices and their current state (on or off), as well as the user name.
  * @alpha
  */
 export function usePersistentUserChoices(options: UsePersistentUserChoicesOptions = {}) {
-  const [deviceSettings, setSettings] = React.useState<DeviceSettings>(
-    getDeviceSettings(options.defaults),
+  const [deviceSettings, setSettings] = React.useState<UserChoices>(
+    loadUserChoices(options.defaults),
   );
 
   const saveAudioInputEnabled = React.useCallback((isEnabled: boolean) => {
@@ -45,7 +45,7 @@ export function usePersistentUserChoices(options: UsePersistentUserChoicesOption
     if (options.preventSave === true) {
       return;
     }
-    setDeviceSettings(deviceSettings);
+    saveUserChoices(deviceSettings);
   }, [deviceSettings, options.preventSave]);
 
   return {

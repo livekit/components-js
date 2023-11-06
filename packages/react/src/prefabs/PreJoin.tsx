@@ -250,6 +250,7 @@ export function PreJoin({
       videoInputDeviceId: DEFAULT_USER_CHOICES.videoDeviceId,
       audioInputEnabled: DEFAULT_USER_CHOICES.audioEnabled,
       videoInputEnabled: DEFAULT_USER_CHOICES.videoEnabled,
+      username: DEFAULT_USER_CHOICES.username,
     },
     preventSave: !saveDeviceSettings,
   });

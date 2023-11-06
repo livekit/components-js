@@ -3,11 +3,35 @@ import { getLocalStorageObject, setLocalStorageObject } from './local-storage-he
 
 const USER_CHOICES_KEY = `${cssPrefix}-device-settings` as const;
 
+/**
+ * Represents the user's choices for video and audio input devices,
+ * as well as their username.
+ */
 export type UserChoices = {
+  /**
+   * Whether video input is enabled.
+   * @defaultValue `true`
+   */
   videoInputEnabled: boolean;
+  /**
+   * Whether audio input is enabled.
+   * @defaultValue `true`
+   */
   audioInputEnabled: boolean;
+  /**
+   * The device ID of the video input device to use.
+   * @defaultValue `''`
+   */
   videoInputDeviceId: string;
+  /**
+   * The device ID of the audio input device to use.
+   * @defaultValue `''`
+   */
   audioInputDeviceId: string;
+  /**
+   * The username to use.
+   * @defaultValue `''`
+   */
   username: string;
 };
 
@@ -17,7 +41,7 @@ const defaultUserChoices: UserChoices = {
   videoInputDeviceId: '',
   audioInputDeviceId: '',
   username: '',
-};
+} as const;
 
 /**
  * Saves user choices to local storage.

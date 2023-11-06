@@ -2249,25 +2249,7 @@
     "@microsoft/tsdoc-config" "~0.16.1"
     "@rushstack/node-core-library" "3.59.7"
 
-"@microsoft/api-extractor@7.38.0":
-  version "7.38.0"
-  resolved "https://registry.yarnpkg.com/@microsoft/api-extractor/-/api-extractor-7.38.0.tgz#e72546d6766b3866578a462b040f71b17779e1c5"
-  integrity sha512-e1LhZYnfw+JEebuY2bzhw0imDCl1nwjSThTrQqBXl40hrVo6xm3j/1EpUr89QyzgjqmAwek2ZkIVZbrhaR+cqg==
-  dependencies:
-    "@microsoft/api-extractor-model" "7.28.2"
-    "@microsoft/tsdoc" "0.14.2"
-    "@microsoft/tsdoc-config" "~0.16.1"
-    "@rushstack/node-core-library" "3.61.0"
-    "@rushstack/rig-package" "0.5.1"
-    "@rushstack/ts-command-line" "4.16.1"
-    colors "~1.2.1"
-    lodash "~4.17.15"
-    resolve "~1.22.1"
-    semver "~7.5.4"
-    source-map "~0.6.1"
-    typescript "~5.0.4"
-
-"@microsoft/api-extractor@^7.35.0", "@microsoft/api-extractor@^7.35.2", "@microsoft/api-extractor@^7.36.0":
+"@microsoft/api-extractor@7.38.2", "@microsoft/api-extractor@^7.35.0", "@microsoft/api-extractor@^7.35.2", "@microsoft/api-extractor@^7.36.0":
   version "7.38.2"
   resolved "https://registry.yarnpkg.com/@microsoft/api-extractor/-/api-extractor-7.38.2.tgz#fbc329fbec2b27a160507d08d02b78018fd142ac"
   integrity sha512-JOARuhTwOcOMIU0O2czscoJy3ddVzIRhSA9/7T1ALuZSNphgWsPk+Bv4E7AnBDmTV4pP4lBNLtCxEHjjpWaytQ==
@@ -2839,10 +2821,10 @@
     "@rushstack/tree-pattern" "0.3.1"
     "@typescript-eslint/experimental-utils" "~5.59.2"
 
-"@rushstack/heft-api-extractor-plugin@0.2.9":
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/@rushstack/heft-api-extractor-plugin/-/heft-api-extractor-plugin-0.2.9.tgz#4747ff5127d1d64b7e7510615322ee34de91b718"
-  integrity sha512-2rPzQOVc7yUL2+5PZyRQkund19m9pECkZTy+DYKD5G6q8qFSw7jSTJ8UncukLvd2CLbN64+q38qBqkJUDHRX3Q==
+"@rushstack/heft-api-extractor-plugin@0.2.11":
+  version "0.2.11"
+  resolved "https://registry.yarnpkg.com/@rushstack/heft-api-extractor-plugin/-/heft-api-extractor-plugin-0.2.11.tgz#443010829bf8bd43dcf9235d27cb032b410d265c"
+  integrity sha512-VgXCaBhV8rLBxtYIV6bxDuA8gIrx73xqgGzPm/BqJrYHyRhbmDwRGOUz6xqg104N+TD52IVyevdnj/YjiJNrow==
   dependencies:
     "@rushstack/heft-config-file" "0.14.2"
     "@rushstack/node-core-library" "3.61.0"
@@ -2857,10 +2839,10 @@
     "@rushstack/rig-package" "0.5.1"
     jsonpath-plus "~4.0.0"
 
-"@rushstack/heft-jest-plugin@0.9.9":
-  version "0.9.9"
-  resolved "https://registry.yarnpkg.com/@rushstack/heft-jest-plugin/-/heft-jest-plugin-0.9.9.tgz#b94e08eee05dc31fee628ba4121ce8a7d3fd98bd"
-  integrity sha512-Ju07HHzX2QoZr9mp53kCjqyhxeGPb48pO2c8FY2dV9dqISm4OkSi+XS7pG0vi4FE93vgTnAjKKwsNAuJ0iirVA==
+"@rushstack/heft-jest-plugin@0.10.3":
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/@rushstack/heft-jest-plugin/-/heft-jest-plugin-0.10.3.tgz#cb6556338cc25e8000a36f20fd57126c456eecf8"
+  integrity sha512-3dTGGkSE5CA+z+TYClmkq40s6uu99l/4laTbEjih2C6Zbhnf/jx9kkAz0qgNRvkT6Ums1yPFxzUGtl9kAFg1NQ==
   dependencies:
     "@jest/core" "~29.5.0"
     "@jest/reporters" "~29.5.0"
@@ -2872,34 +2854,34 @@
     jest-snapshot "~29.5.0"
     lodash "~4.17.15"
 
-"@rushstack/heft-lint-plugin@0.2.9":
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/@rushstack/heft-lint-plugin/-/heft-lint-plugin-0.2.9.tgz#0f94c8569dbc62dae861f697f83231e1b390badb"
-  integrity sha512-gKE4RHo3aoPxNv4V4rZkXDxEAbjSnz6UPJKDWm7y+5ODk70BGUffXDmn0tC4uWOgYc9ChCAhLRXavOHv8Owy4A==
+"@rushstack/heft-lint-plugin@0.2.11":
+  version "0.2.11"
+  resolved "https://registry.yarnpkg.com/@rushstack/heft-lint-plugin/-/heft-lint-plugin-0.2.11.tgz#080196f50193dcc2cec4dbeeb14c3d7d3e50852d"
+  integrity sha512-WxPRESqZxE4hdTUXN6E8lvxz9cH8+Kx+DR4zbwoN9HE21TXk9LZlyeiYsIj7a42ddska9BvpNlZ+0AtnlBYrdA==
   dependencies:
     "@rushstack/node-core-library" "3.61.0"
     semver "~7.5.4"
 
 "@rushstack/heft-node-rig@^2.2.6":
-  version "2.3.5"
-  resolved "https://registry.yarnpkg.com/@rushstack/heft-node-rig/-/heft-node-rig-2.3.5.tgz#1c7a6b2528d65453b555540542dd3d1b78f03f56"
-  integrity sha512-kkxqWROCDe3qyw7Chd92P0tfre+zD0uu3efwXV74rubsKERL1ewVHZilT76C9ntlI0Q4z3tBdbOqS75wrZQ1GA==
+  version "2.3.9"
+  resolved "https://registry.yarnpkg.com/@rushstack/heft-node-rig/-/heft-node-rig-2.3.9.tgz#daa2a8f24bbd557fac261cd40db2e0e72a3bf1bf"
+  integrity sha512-m7+wiXPk8FkyVejCBhqtGpGJhCXQDibq4ed8gPZleUm3mLwuUAJ22Vvjn+qNWOCoFsB5rWZDLyU3GIyCMxTYkg==
   dependencies:
-    "@microsoft/api-extractor" "7.38.0"
+    "@microsoft/api-extractor" "7.38.2"
     "@rushstack/eslint-config" "3.4.1"
-    "@rushstack/heft-api-extractor-plugin" "0.2.9"
-    "@rushstack/heft-jest-plugin" "0.9.9"
-    "@rushstack/heft-lint-plugin" "0.2.9"
-    "@rushstack/heft-typescript-plugin" "0.2.9"
+    "@rushstack/heft-api-extractor-plugin" "0.2.11"
+    "@rushstack/heft-jest-plugin" "0.10.3"
+    "@rushstack/heft-lint-plugin" "0.2.11"
+    "@rushstack/heft-typescript-plugin" "0.2.11"
     "@types/heft-jest" "1.0.1"
     eslint "~8.7.0"
     jest-environment-node "~29.5.0"
     typescript "~5.0.4"
 
-"@rushstack/heft-typescript-plugin@0.2.9":
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/@rushstack/heft-typescript-plugin/-/heft-typescript-plugin-0.2.9.tgz#4686a017135dffe3ed6834cb219514582a249ddc"
-  integrity sha512-rCovSIeG9MHfehTjzqjkYmob//LEqfesQ+Q3ArCu8bnI5W9g0oe4pd9h3kMWvdaL6GkiTKigxQUisAwlWovnZg==
+"@rushstack/heft-typescript-plugin@0.2.11":
+  version "0.2.11"
+  resolved "https://registry.yarnpkg.com/@rushstack/heft-typescript-plugin/-/heft-typescript-plugin-0.2.11.tgz#1c0a589fc047b2beb96464b9ac6c068a67be3ef5"
+  integrity sha512-GThjwXVcfvWvJyHgjuQ2gZPauyKr4/WHaeAxfbFBCRTs4om00wOoFiAb9gz39YKM9KIdwO4JIB7lsD+mXk7/RQ==
   dependencies:
     "@rushstack/heft-config-file" "0.14.2"
     "@rushstack/node-core-library" "3.61.0"
@@ -2972,20 +2954,20 @@
   resolved "https://registry.yarnpkg.com/@rushstack/tree-pattern/-/tree-pattern-0.3.1.tgz#f5213dab1ddc14c625ceb7e66322576225b63d65"
   integrity sha512-2yn4qTkXZTByQffL3ymS6viYuyZk3YnJT49bopGBlm9Thtyfa7iuFUV6tt+09YIRO1sjmSWILf4dPj6+Dr5YVA==
 
-"@rushstack/ts-command-line@4.16.1", "@rushstack/ts-command-line@^4.15.0":
-  version "4.16.1"
-  resolved "https://registry.yarnpkg.com/@rushstack/ts-command-line/-/ts-command-line-4.16.1.tgz#3537bbc323f77c8646646465c579b992d39feb16"
-  integrity sha512-+OCsD553GYVLEmz12yiFjMOzuPeCiZ3f8wTiFHL30ZVXexTyPmgjwXEhg2K2P0a2lVf+8YBy7WtPoflB2Fp8/A==
+"@rushstack/ts-command-line@4.17.1":
+  version "4.17.1"
+  resolved "https://registry.yarnpkg.com/@rushstack/ts-command-line/-/ts-command-line-4.17.1.tgz#c78db928ce5b93f2e98fd9e14c24f3f3876e57f1"
+  integrity sha512-2jweO1O57BYP5qdBGl6apJLB+aRIn5ccIRTPDyULh0KMwVzFqWtw6IZWt1qtUoZD/pD2RNkIOosH6Cq45rIYeg==
   dependencies:
     "@types/argparse" "1.0.38"
     argparse "~1.0.9"
     colors "~1.2.1"
     string-argv "~0.3.1"
 
-"@rushstack/ts-command-line@4.17.1":
-  version "4.17.1"
-  resolved "https://registry.yarnpkg.com/@rushstack/ts-command-line/-/ts-command-line-4.17.1.tgz#c78db928ce5b93f2e98fd9e14c24f3f3876e57f1"
-  integrity sha512-2jweO1O57BYP5qdBGl6apJLB+aRIn5ccIRTPDyULh0KMwVzFqWtw6IZWt1qtUoZD/pD2RNkIOosH6Cq45rIYeg==
+"@rushstack/ts-command-line@^4.15.0":
+  version "4.16.1"
+  resolved "https://registry.yarnpkg.com/@rushstack/ts-command-line/-/ts-command-line-4.16.1.tgz#3537bbc323f77c8646646465c579b992d39feb16"
+  integrity sha512-+OCsD553GYVLEmz12yiFjMOzuPeCiZ3f8wTiFHL30ZVXexTyPmgjwXEhg2K2P0a2lVf+8YBy7WtPoflB2Fp8/A==
   dependencies:
     "@types/argparse" "1.0.38"
     argparse "~1.0.9"

@@ -43,7 +43,7 @@
     "glob": "^8.1.0",
     "husky": "^8.0.3",
     "nodemon": "^2.0.22",
-    "prettier": "^2.8.3",
+    "prettier": "^3.0.0",
     "turbo": "^1.9.3",
     "typescript": "5.2.2"
   },

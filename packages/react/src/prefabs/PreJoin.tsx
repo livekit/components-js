@@ -15,11 +15,15 @@ import {
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { TrackToggle } from '../components/controls/TrackToggle';
+import type { UserChoices } from '@livekit/components-core';
 import { log } from '@livekit/components-core';
 import { ParticipantPlaceholder } from '../assets/images';
-import { useMediaDevices } from '../hooks';
+import { useMediaDevices, usePersistentUserChoices } from '../hooks';
 
-/** @public */
+/**
+ * @deprecated Use `UserChoices` from `@livekit/components-core` instead.
+ * @public
+ */
 export type LocalUserChoices = {
   username: string;
   videoEnabled: boolean;
@@ -40,7 +44,10 @@ const DEFAULT_USER_CHOICES: LocalUserChoices = {
   sharedPassphrase: '',
 };
 
-/** @public */
+/**
+ * Props for the PreJoin component.
+ * @public
+ */
 export interface PreJoinProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit' | 'onError'> {
   /** This function is called with the `LocalUserChoices` if validation is passed. */
@@ -59,6 +66,13 @@ export interface PreJoinProps
   camLabel?: string;
   userLabel?: string;
   showE2EEOptions?: boolean;
+
+  /**
+   * If true, user choices are persisted across sessions.
+   * @defaultValue true
+   * @alpha
+   */
+  persistUserChoices?: boolean;
 }
 
 /** @alpha */
@@ -222,26 +236,67 @@ export function PreJoin({
   camLabel = 'Camera',
   userLabel = 'Username',
   showE2EEOptions = false,
+  persistUserChoices = true,
   ...htmlProps
 }: PreJoinProps) {
   const [userChoices, setUserChoices] = React.useState(DEFAULT_USER_CHOICES);
   const [username, setUsername] = React.useState(
     defaults.username ?? DEFAULT_USER_CHOICES.username,
   );
-  const [videoEnabled, setVideoEnabled] = React.useState<boolean>(
-    defaults.videoEnabled ?? DEFAULT_USER_CHOICES.videoEnabled,
-  );
-  const initialVideoDeviceId = defaults.videoDeviceId ?? DEFAULT_USER_CHOICES.videoDeviceId;
-  const [videoDeviceId, setVideoDeviceId] = React.useState<string>(initialVideoDeviceId);
-  const initialAudioDeviceId = defaults.audioDeviceId ?? DEFAULT_USER_CHOICES.audioDeviceId;
+
+  // TODO: Remove and pipe `defaults` object directly into `usePersistentUserChoices` once we fully switch from type `LocalUserChoices` to `UserChoices`.
+  const partialDefaults: Partial<UserChoices> = {
+    ...(defaults.audioDeviceId !== undefined && { audioInputDeviceId: defaults.audioDeviceId }),
+    ...(defaults.videoDeviceId !== undefined && { videoInputDeviceId: defaults.videoDeviceId }),
+    ...(defaults.audioEnabled !== undefined && { audioInputEnabled: defaults.audioEnabled }),
+    ...(defaults.videoEnabled !== undefined && { videoInputEnabled: defaults.videoEnabled }),
+    ...(defaults.username !== undefined && { username: defaults.username }),
+  };
+
+  const {
+    userChoices: initialUserChoices,
+    saveAudioInputDeviceId,
+    saveAudioInputEnabled,
+    saveVideoInputDeviceId,
+    saveVideoInputEnabled,
+  } = usePersistentUserChoices({
+    defaults: partialDefaults,
+    preventSave: !persistUserChoices,
+    preventLoad: !persistUserChoices,
+  });
+
+  // Initialize device settings
   const [audioEnabled, setAudioEnabled] = React.useState<boolean>(
-    defaults.audioEnabled ?? DEFAULT_USER_CHOICES.audioEnabled,
+    defaults.audioEnabled ?? initialUserChoices.audioInputEnabled,
   );
+  const [videoEnabled, setVideoEnabled] = React.useState<boolean>(
+    defaults.videoEnabled ?? initialUserChoices.videoInputEnabled,
+  );
+
+  const initialAudioDeviceId = defaults.audioDeviceId ?? initialUserChoices.audioInputDeviceId;
   const [audioDeviceId, setAudioDeviceId] = React.useState<string>(initialAudioDeviceId);
+
+  const initialVideoDeviceId = defaults.videoDeviceId ?? initialUserChoices.videoInputDeviceId;
+  const [videoDeviceId, setVideoDeviceId] = React.useState<string>(initialVideoDeviceId);
+
   const [e2ee, setE2ee] = React.useState<boolean>(defaults.e2ee ?? DEFAULT_USER_CHOICES.e2ee);
   const [sharedPassphrase, setSharedPassphrase] = React.useState<string>(
     defaults.sharedPassphrase ?? DEFAULT_USER_CHOICES.sharedPassphrase,
   );
+
+  // Update persistent device settings
+  React.useEffect(() => {
+    saveAudioInputEnabled(audioEnabled);
+  }, [audioEnabled, saveAudioInputEnabled]);
+  React.useEffect(() => {
+    saveVideoInputEnabled(videoEnabled);
+  }, [videoEnabled, saveVideoInputEnabled]);
+  React.useEffect(() => {
+    saveAudioInputDeviceId(audioDeviceId);
+  }, [audioDeviceId, saveAudioInputDeviceId]);
+  React.useEffect(() => {
+    saveVideoInputDeviceId(videoDeviceId);
+  }, [videoDeviceId, saveVideoInputDeviceId]);
 
   const tracks = usePreviewTracks(
     {

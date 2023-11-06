@@ -27,4 +27,6 @@ export * from './observables/track';
 export * from './observables/dataChannel';
 export * from './observables/dom-event';
 
+export * from './persistent-storage';
+
 export { log, setLogLevel } from './logger';

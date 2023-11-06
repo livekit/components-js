@@ -6,7 +6,7 @@ import { TrackToggle } from '../components/controls/TrackToggle';
 import { StartAudio } from '../components/controls/StartAudio';
 import { ChatIcon, LeaveIcon } from '../assets/icons';
 import { ChatToggle } from '../components/controls/ChatToggle';
-import { useLocalParticipantPermissions } from '../hooks';
+import { useLocalParticipantPermissions, usePersistentUserChoices } from '../hooks';
 import { useMediaQuery } from '../hooks/internal';
 import { useMaybeLayoutContext } from '../context';
 import { supportsScreenSharing } from '@livekit/components-core';
@@ -25,6 +25,13 @@ export type ControlBarControls = {
 export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
   variation?: 'minimal' | 'verbose' | 'textOnly';
   controls?: ControlBarControls;
+  /**
+   * If `true`, the user's device choices will be persisted.
+   * This will enables the user to have the same device choices when they rejoin the room.
+   * @defaultValue true
+   * @alpha
+   */
+  saveUserChoices?: boolean;
 }
 
 /**
@@ -43,7 +50,12 @@ export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
  * ```
  * @public
  */
-export function ControlBar({ variation, controls, ...props }: ControlBarProps) {
+export function ControlBar({
+  variation,
+  controls,
+  saveUserChoices = true,
+  ...props
+}: ControlBarProps) {
   const [isChatOpen, setIsChatOpen] = React.useState(false);
   const layoutContext = useMaybeLayoutContext();
   React.useEffect(() => {
@@ -91,25 +103,46 @@ export function ControlBar({ variation, controls, ...props }: ControlBarProps) {
 
   const htmlProps = mergeProps({ className: 'lk-control-bar' }, props);
 
+  const {
+    saveAudioInputEnabled,
+    saveVideoInputEnabled,
+    saveAudioInputDeviceId,
+    saveVideoInputDeviceId,
+  } = usePersistentUserChoices({ preventSave: !saveUserChoices });
+
   return (
     <div {...htmlProps}>
       {visibleControls.microphone && (
         <div className="lk-button-group">
-          <TrackToggle source={Track.Source.Microphone} showIcon={showIcon}>
+          <TrackToggle
+            source={Track.Source.Microphone}
+            showIcon={showIcon}
+            onChange={saveAudioInputEnabled}
+          >
             {showText && 'Microphone'}
           </TrackToggle>
           <div className="lk-button-group-menu">
-            <MediaDeviceMenu kind="audioinput" />
+            <MediaDeviceMenu
+              kind="audioinput"
+              onActiveDeviceChange={(_kind, deviceId) => saveAudioInputDeviceId(deviceId ?? '')}
+            />
           </div>
         </div>
       )}
       {visibleControls.camera && (
         <div className="lk-button-group">
-          <TrackToggle source={Track.Source.Camera} showIcon={showIcon}>
+          <TrackToggle
+            source={Track.Source.Camera}
+            showIcon={showIcon}
+            onChange={saveVideoInputEnabled}
+          >
             {showText && 'Camera'}
           </TrackToggle>
           <div className="lk-button-group-menu">
-            <MediaDeviceMenu kind="videoinput" />
+            <MediaDeviceMenu
+              kind="videoinput"
+              onActiveDeviceChange={(_kind, deviceId) => saveVideoInputDeviceId(deviceId ?? '')}
+            />
           </div>
         </div>
       )}

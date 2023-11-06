@@ -47,6 +47,7 @@ import { TrackPublication } from 'livekit-client';
 import type { TrackReference } from '@livekit/components-core';
 import { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import type { TrackSourceWithOptions } from '@livekit/components-core';
+import type { UserChoices } from '@livekit/components-core';
 import type { VideoCaptureOptions } from 'livekit-client';
 import type { VideoSource } from '@livekit/components-core';
 import type { WidgetState } from '@livekit/components-core';
@@ -182,7 +183,7 @@ export interface ConnectionStatusProps extends React_2.HTMLAttributes<HTMLDivEle
 }
 
 // @public
-export function ControlBar({ variation, controls, ...props }: ControlBarProps): React_2.JSX.Element;
+export function ControlBar({ variation, controls, saveUserChoices, ...props }: ControlBarProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export type ControlBarControls = {
@@ -197,6 +198,8 @@ export type ControlBarControls = {
 export interface ControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> {
     // (undocumented)
     controls?: ControlBarControls;
+    // @alpha
+    saveUserChoices?: boolean;
     // (undocumented)
     variation?: 'minimal' | 'verbose' | 'textOnly';
 }
@@ -323,7 +326,7 @@ export interface LiveKitRoomProps extends Omit<React_2.HTMLAttributes<HTMLDivEle
 // @internal (undocumented)
 export const LKFeatureContext: React_2.Context<FeatureFlags | undefined>;
 
-// @public (undocumented)
+// @public @deprecated (undocumented)
 export type LocalUserChoices = {
     username: string;
     videoEnabled: boolean;
@@ -424,9 +427,9 @@ export interface ParticipantTileProps extends React_2.HTMLAttributes<HTMLDivElem
 }
 
 // @public
-export function PreJoin({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, showE2EEOptions, ...htmlProps }: PreJoinProps): React_2.JSX.Element;
+export function PreJoin({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, showE2EEOptions, persistUserChoices, ...htmlProps }: PreJoinProps): React_2.JSX.Element;
 
-// @public (undocumented)
+// @public
 export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement>, 'onSubmit' | 'onError'> {
     // (undocumented)
     camLabel?: string;
@@ -440,6 +443,8 @@ export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement
     onError?: (error: Error) => void;
     onSubmit?: (values: LocalUserChoices) => void;
     onValidate?: (values: LocalUserChoices) => boolean;
+    // @alpha
+    persistUserChoices?: boolean;
     // (undocumented)
     showE2EEOptions?: boolean;
     // (undocumented)
@@ -823,6 +828,22 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
     // @deprecated (undocumented)
     source?: Track.Source;
     trackRef?: TrackReferenceOrPlaceholder;
+}
+
+// @alpha
+export function usePersistentUserChoices(options?: UsePersistentUserChoicesOptions): {
+    userChoices: UserChoices;
+    saveAudioInputEnabled: (isEnabled: boolean) => void;
+    saveVideoInputEnabled: (isEnabled: boolean) => void;
+    saveAudioInputDeviceId: (deviceId: string) => void;
+    saveVideoInputDeviceId: (deviceId: string) => void;
+};
+
+// @alpha
+export interface UsePersistentUserChoicesOptions {
+    defaults?: Partial<UserChoices>;
+    preventLoad?: boolean;
+    preventSave?: boolean;
 }
 
 // @public

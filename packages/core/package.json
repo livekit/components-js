@@ -47,7 +47,7 @@
     "@livekit/components-styles": "~1.0.6",
     "@microsoft/api-extractor": "^7.36.0",
     "@size-limit/file": "^8.2.4",
-    "@size-limit/webpack": "^8.2.4",
+    "@size-limit/webpack": "^10.0.0",
     "eslint-config-lk-custom": "^0.1.1",
     "size-limit": "^10.0.0",
     "tsup": "^7.0.0",

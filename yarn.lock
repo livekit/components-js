@@ -3000,13 +3000,13 @@
   dependencies:
     semver "7.5.3"
 
-"@size-limit/webpack@^8.2.4":
-  version "8.2.6"
-  resolved "https://registry.yarnpkg.com/@size-limit/webpack/-/webpack-8.2.6.tgz#3a3c98293b80f7c5fb6e8499199ae6f94f05b463"
-  integrity sha512-y2sB66m5sJxIjZ8SEAzpWbiw3/+bnQHDHfk9cSbV5ChKklq02AlYg8BS5KxGWmMpdyUo4TzpjSCP9oEudY+hxQ==
+"@size-limit/webpack@^10.0.0":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@size-limit/webpack/-/webpack-10.0.2.tgz#82477a9eec9a09b37e89cd1fe7349921427fe030"
+  integrity sha512-dw+26aHKYKZaLr0xxKdUYb/VIws+W4ED6rw4Te8OfoTtZZ9cx4NxiKzYGAs/OUSmEUPGFxa12qj8iMW4nrxTWQ==
   dependencies:
-    nanoid "^3.3.6"
-    webpack "^5.88.0"
+    nanoid "^5.0.2"
+    webpack "^5.89.0"
 
 "@storybook/addon-actions@7.5.2":
   version "7.5.2"
@@ -10077,6 +10077,11 @@ nanoid@^3.3.4, nanoid@^3.3.6:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.6.tgz#443380c856d6e9f9824267d960b4236ad583ea4c"
   integrity sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==
 
+nanoid@^5.0.2:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.0.3.tgz#6c97f53d793a7a1de6a38ebb46f50f95bf9793c7"
+  integrity sha512-I7X2b22cxA4LIHXPSqbBCEQSL+1wv8TuoefejsX4HFWyC6jc5JG7CEaxOltiKjc1M+YCS2YkrZZcj4+dytw9GA==
+
 nanospinner@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/nanospinner/-/nanospinner-1.1.0.tgz#d17ff621cb1784b0a206b400da88a0ef6db39b97"
@@ -13126,7 +13131,7 @@ webpack-virtual-modules@^0.5.0:
   resolved "https://registry.yarnpkg.com/webpack-virtual-modules/-/webpack-virtual-modules-0.5.0.tgz#362f14738a56dae107937ab98ea7062e8bdd3b6c"
   integrity sha512-kyDivFZ7ZM0BVOUteVbDFhlRt7Ah/CSPwJdi8hBpkK7QLumUqdLtVfm/PX/hkcnrvr0i77fO5+TjZ94Pe+C9iw==
 
-webpack@^5.75.0, webpack@^5.88.0:
+webpack@^5.75.0, webpack@^5.89.0:
   version "5.89.0"
   resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.89.0.tgz#56b8bf9a34356e93a6625770006490bf3a7f32dc"
   integrity sha512-qyfIC10pOr70V+jkmud8tMfajraGCZMBWJtrmuBymQKCrLTRejBI8STDp1MCyZu/QTdZSeacCQYpYNQVOzX5kw==

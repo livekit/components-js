@@ -42,7 +42,7 @@ export function useTrackMutedIndicator(
   options: UseTrackMutedIndicatorOptions = {},
 ): TrackMutedIndicatorReturnType {
   let ref = useMaybeTrackRefContext();
-  const p = useMaybeParticipantContext() ?? options.participant;
+  const p = useMaybeParticipantContext() ?? options.participant ?? ref?.participant;
 
   if (typeof trackRefOrSource === 'string') {
     if (!p) {

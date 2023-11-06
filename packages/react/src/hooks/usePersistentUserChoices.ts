@@ -29,7 +29,7 @@ export interface UsePersistentUserChoicesOptions {
  * @alpha
  */
 export function usePersistentUserChoices(options: UsePersistentUserChoicesOptions = {}) {
-  const [deviceSettings, setSettings] = React.useState<UserChoices>(
+  const [userChoices, setSettings] = React.useState<UserChoices>(
     loadUserChoices(options.defaults, options.preventLoad ?? false),
   );
 
@@ -47,11 +47,11 @@ export function usePersistentUserChoices(options: UsePersistentUserChoicesOption
   }, []);
 
   React.useEffect(() => {
-    saveUserChoices(deviceSettings, options.preventSave ?? false);
-  }, [deviceSettings, options.preventSave]);
+    saveUserChoices(userChoices, options.preventSave ?? false);
+  }, [userChoices, options.preventSave]);
 
   return {
-    deviceSettings,
+    userChoices,
     saveAudioInputEnabled,
     saveVideoInputEnabled,
     saveAudioInputDeviceId,

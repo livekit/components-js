@@ -26,11 +26,11 @@ export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
   variation?: 'minimal' | 'verbose' | 'textOnly';
   controls?: ControlBarControls;
   /**
-   * If `true`, the user's device settings will be saved to local storage.
-   * This will allow the user to have the same device selected when they rejoin a room.
+   * If `true`, the user's device choices will be persisted.
+   * This will enables the user to have the same device choices when they rejoin the room.
    * @defaultValue true
    */
-  saveDeviceSettings?: boolean;
+  saveUserChoices?: boolean;
 }
 
 /**
@@ -52,7 +52,7 @@ export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
 export function ControlBar({
   variation,
   controls,
-  saveDeviceSettings = true,
+  saveUserChoices: saveDeviceSettings = true,
   ...props
 }: ControlBarProps) {
   const [isChatOpen, setIsChatOpen] = React.useState(false);

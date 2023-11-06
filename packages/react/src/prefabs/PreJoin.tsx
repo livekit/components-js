@@ -70,6 +70,7 @@ export interface PreJoinProps
   /**
    * If true, user choices are persisted across sessions.
    * @defaultValue true
+   * @alpha
    */
   persistUserChoices?: boolean;
 }
@@ -253,7 +254,7 @@ export function PreJoin({
   };
 
   const {
-    deviceSettings,
+    userChoices: initialUserChoices,
     saveAudioInputDeviceId,
     saveAudioInputEnabled,
     saveVideoInputDeviceId,
@@ -266,16 +267,16 @@ export function PreJoin({
 
   // Initialize device settings
   const [audioEnabled, setAudioEnabled] = React.useState<boolean>(
-    defaults.audioEnabled ?? deviceSettings.audioInputEnabled,
+    defaults.audioEnabled ?? initialUserChoices.audioInputEnabled,
   );
   const [videoEnabled, setVideoEnabled] = React.useState<boolean>(
-    defaults.videoEnabled ?? deviceSettings.videoInputEnabled,
+    defaults.videoEnabled ?? initialUserChoices.videoInputEnabled,
   );
 
-  const initialAudioDeviceId = defaults.audioDeviceId ?? deviceSettings.audioInputDeviceId;
+  const initialAudioDeviceId = defaults.audioDeviceId ?? initialUserChoices.audioInputDeviceId;
   const [audioDeviceId, setAudioDeviceId] = React.useState<string>(initialAudioDeviceId);
 
-  const initialVideoDeviceId = defaults.videoDeviceId ?? deviceSettings.videoInputDeviceId;
+  const initialVideoDeviceId = defaults.videoDeviceId ?? initialUserChoices.videoInputDeviceId;
   const [videoDeviceId, setVideoDeviceId] = React.useState<string>(initialVideoDeviceId);
 
   const [e2ee, setE2ee] = React.useState<boolean>(defaults.e2ee ?? DEFAULT_USER_CHOICES.e2ee);

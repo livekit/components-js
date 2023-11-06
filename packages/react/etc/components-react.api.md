@@ -14,7 +14,6 @@ import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import type { CreateLocalTracksOptions } from 'livekit-client';
 import type { DataSendOptions } from '@livekit/components-core';
-import type { DeviceSettings } from '@livekit/components-core';
 import type { GridLayoutDefinition } from '@livekit/components-core';
 import { HTMLAttributes } from 'react';
 import type { LocalAudioTrack } from 'livekit-client';
@@ -48,6 +47,7 @@ import { TrackPublication } from 'livekit-client';
 import type { TrackReference } from '@livekit/components-core';
 import { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import type { TrackSourceWithOptions } from '@livekit/components-core';
+import type { UserChoices } from '@livekit/components-core';
 import type { VideoCaptureOptions } from 'livekit-client';
 import type { VideoSource } from '@livekit/components-core';
 import type { WidgetState } from '@livekit/components-core';
@@ -325,7 +325,7 @@ export interface LiveKitRoomProps extends Omit<React_2.HTMLAttributes<HTMLDivEle
 // @internal (undocumented)
 export const LKFeatureContext: React_2.Context<FeatureFlags | undefined>;
 
-// @public (undocumented)
+// @public @deprecated (undocumented)
 export type LocalUserChoices = {
     username: string;
     videoEnabled: boolean;
@@ -828,16 +828,21 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
     trackRef?: TrackReferenceOrPlaceholder;
 }
 
-// Warning: (ae-forgotten-export) The symbol "UsePersistentDeviceSettingsOptions" needs to be exported by the entry point index.d.ts
-//
 // @alpha
-export function usePersistentDeviceSettings(options?: UsePersistentDeviceSettingsOptions): {
-    deviceSettings: DeviceSettings;
+export function usePersistentUserChoices(options?: UsePersistentUserChoicesOptions): {
+    deviceSettings: UserChoices;
     saveAudioInputEnabled: (isEnabled: boolean) => void;
     saveVideoInputEnabled: (isEnabled: boolean) => void;
     saveAudioInputDeviceId: (deviceId: string) => void;
     saveVideoInputDeviceId: (deviceId: string) => void;
 };
+
+// @alpha
+export interface UsePersistentUserChoicesOptions {
+    defaults?: Partial<UserChoices>;
+    preventLoad?: boolean;
+    preventSave?: boolean;
+}
 
 // @public
 export function usePinnedTracks(layoutContext?: LayoutContextType): TrackReferenceOrPlaceholder[];

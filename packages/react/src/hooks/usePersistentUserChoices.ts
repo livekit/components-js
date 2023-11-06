@@ -6,7 +6,7 @@ import * as React from 'react';
  * Options for the `usePersistentDeviceSettings` hook.
  * @alpha
  */
-interface UsePersistentUserChoicesOptions {
+export interface UsePersistentUserChoicesOptions {
   /**
    * The default value to use if reading from local storage returns no results or fails.
    */

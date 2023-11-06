@@ -145,18 +145,7 @@ export const DataTopic: {
 };
 
 // @public (undocumented)
-export type DeviceSettings = {
-    videoInputEnabled: boolean;
-    audioInputEnabled: boolean;
-    videoInputDeviceId: string;
-    audioInputDeviceId: string;
-};
-
-// @public (undocumented)
 export function encryptionStatusObservable(room: Room, participant: Participant): Observable<boolean>;
-
-// @alpha
-export function getDeviceSettings(fallback?: DeviceSettings): DeviceSettings;
 
 // Warning: (ae-internal-missing-underscore) The name "getScrollBarWidth" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -228,6 +217,10 @@ export function isTrackReferencePlaceholder(trackReference?: TrackReferenceOrPla
 //
 // @internal (undocumented)
 export function isWeb(): boolean;
+
+// @alpha
+export function loadUserChoices(defaults?: Partial<UserChoices>,
+preventLoad?: boolean): UserChoices;
 
 // @public (undocumented)
 export const log: loglevel.Logger;
@@ -345,6 +338,10 @@ export function roomInfoObserver(room: Room): Observable<{
 // @public (undocumented)
 export function roomObserver(room: Room): Observable<Room>;
 
+// @alpha
+export function saveUserChoices(deviceSettings: UserChoices,
+preventSave?: boolean): void;
+
 // @public (undocumented)
 export function screenShareObserver(room: Room): Observable<ScreenShareTrackMap>;
 
@@ -359,9 +356,6 @@ export function selectGridLayout(layouts: GridLayoutDefinition[], participantCou
 
 // @public
 export function sendMessage(localParticipant: LocalParticipant, payload: Uint8Array, topic?: string, options?: DataSendOptions): Promise<void>;
-
-// @alpha
-export function setDeviceSettings(deviceSettings: DeviceSettings): void;
 
 // @public (undocumented)
 export function setDifference<T>(setA: Set<T>, setB: Set<T>): Set<T>;
@@ -569,6 +563,15 @@ export type TrackSourceWithOptions = {
 //
 // @public
 export function updatePages<T extends UpdatableItem>(currentList: T[], nextList: T[], maxItemsOnPage: number): T[];
+
+// @public
+export type UserChoices = {
+    videoInputEnabled: boolean;
+    audioInputEnabled: boolean;
+    videoInputDeviceId: string;
+    audioInputDeviceId: string;
+    username: string;
+};
 
 // @public (undocumented)
 export type VideoSource = Track.Source.Camera | Track.Source.ScreenShare;

@@ -34,7 +34,7 @@ export function getLocalStorageObject<T extends object>(key: string): T | undefi
   try {
     const item = localStorage.getItem(key);
     if (!item) {
-      log.error(`Item with key ${key} does not exist in local storage.`);
+      log.warn(`Item with key ${key} does not exist in local storage.`);
       return undefined;
     }
     return JSON.parse(item);

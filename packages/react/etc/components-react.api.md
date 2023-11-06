@@ -183,7 +183,7 @@ export interface ConnectionStatusProps extends React_2.HTMLAttributes<HTMLDivEle
 }
 
 // @public
-export function ControlBar({ variation, controls, saveDeviceSettings, ...props }: ControlBarProps): React_2.JSX.Element;
+export function ControlBar({ variation, controls, saveUserChoices, ...props }: ControlBarProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export type ControlBarControls = {
@@ -198,7 +198,8 @@ export type ControlBarControls = {
 export interface ControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> {
     // (undocumented)
     controls?: ControlBarControls;
-    saveDeviceSettings?: boolean;
+    // @alpha
+    saveUserChoices?: boolean;
     // (undocumented)
     variation?: 'minimal' | 'verbose' | 'textOnly';
 }
@@ -426,7 +427,7 @@ export interface ParticipantTileProps extends React_2.HTMLAttributes<HTMLDivElem
 }
 
 // @public
-export function PreJoin({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, showE2EEOptions, saveDeviceSettings, ...htmlProps }: PreJoinProps): React_2.JSX.Element;
+export function PreJoin({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, showE2EEOptions, persistUserChoices, ...htmlProps }: PreJoinProps): React_2.JSX.Element;
 
 // @public
 export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement>, 'onSubmit' | 'onError'> {
@@ -442,7 +443,8 @@ export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement
     onError?: (error: Error) => void;
     onSubmit?: (values: LocalUserChoices) => void;
     onValidate?: (values: LocalUserChoices) => boolean;
-    saveDeviceSettings?: boolean;
+    // @alpha
+    persistUserChoices?: boolean;
     // (undocumented)
     showE2EEOptions?: boolean;
     // (undocumented)
@@ -830,7 +832,7 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
 
 // @alpha
 export function usePersistentUserChoices(options?: UsePersistentUserChoicesOptions): {
-    deviceSettings: UserChoices;
+    userChoices: UserChoices;
     saveAudioInputEnabled: (isEnabled: boolean) => void;
     saveVideoInputEnabled: (isEnabled: boolean) => void;
     saveAudioInputDeviceId: (deviceId: string) => void;

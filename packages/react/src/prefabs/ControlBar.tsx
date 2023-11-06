@@ -29,6 +29,7 @@ export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
    * If `true`, the user's device choices will be persisted.
    * This will enables the user to have the same device choices when they rejoin the room.
    * @defaultValue true
+   * @alpha
    */
   saveUserChoices?: boolean;
 }
@@ -52,7 +53,7 @@ export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
 export function ControlBar({
   variation,
   controls,
-  saveUserChoices: saveDeviceSettings = true,
+  saveUserChoices = true,
   ...props
 }: ControlBarProps) {
   const [isChatOpen, setIsChatOpen] = React.useState(false);
@@ -107,7 +108,7 @@ export function ControlBar({
     saveVideoInputEnabled,
     saveAudioInputDeviceId,
     saveVideoInputDeviceId,
-  } = usePersistentUserChoices({ preventSave: !saveDeviceSettings });
+  } = usePersistentUserChoices({ preventSave: !saveUserChoices });
 
   return (
     <div {...htmlProps}>

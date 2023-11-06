@@ -4,8 +4,5 @@
   "semi": true,
   "tabWidth": 2,
   "printWidth": 100,
-  "plugins": [],
-  "pluginSearchDirs": [
-    "."
-  ]
+  "plugins": []
 }

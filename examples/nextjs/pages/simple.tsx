@@ -25,7 +25,7 @@ const SimpleExample: NextPage = () => {
   const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
     userInfo: {
       identity: userIdentity,
-      name: 'my-name',
+      name: userIdentity,
     },
   });
 

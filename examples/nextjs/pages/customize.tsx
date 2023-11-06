@@ -17,11 +17,12 @@ import myStyles from '../styles/Customize.module.css';
 import type { NextPage } from 'next';
 import { HTMLAttributes, useState } from 'react';
 import { isTrackReference } from '@livekit/components-core';
+import { generateRandomUserId } from '../lib/helper';
 
 const CustomizeExample: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
   const roomName = params?.get('room') ?? 'test-room';
-  const userIdentity = params?.get('user') ?? 'test-identity';
+  const userIdentity = params?.get('user') ?? generateRandomUserId();
   const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
     userInfo: {
       identity: userIdentity,
@@ -85,8 +86,8 @@ export function Stage() {
                   {isTrackReference(track) ? <VideoTrack {...track} /> : <p>Camera placeholder</p>}
                   <div className={myStyles['participant-indicators']}>
                     <div style={{ display: 'flex' }}>
-                      <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
-                      <TrackMutedIndicator source={track.source}></TrackMutedIndicator>
+                      <TrackMutedIndicator source={Track.Source.Microphone} />
+                      <TrackMutedIndicator source={track.source} />
                     </div>
                     {/* Overwrite styles: By passing class names, we can easily overwrite/extend the existing styles. */}
                     {/* In addition, we can still specify a style attribute and further customize the styles. */}

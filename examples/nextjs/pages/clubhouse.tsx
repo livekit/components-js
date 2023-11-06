@@ -14,11 +14,12 @@ import {
 import styles from '../styles/Clubhouse.module.scss';
 import { Track } from 'livekit-client';
 import { useMemo, useState } from 'react';
+import { generateRandomUserId } from '../lib/helper';
 
 const Clubhouse = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
   const roomName = params?.get('room') ?? 'test-room';
-  const userIdentity = params?.get('user') ?? 'test-identity';
+  const userIdentity = params?.get('user') ?? generateRandomUserId();
 
   const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
     userInfo: {

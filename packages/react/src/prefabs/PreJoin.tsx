@@ -68,10 +68,10 @@ export interface PreJoinProps
   showE2EEOptions?: boolean;
 
   /**
-   * If true, the device settings will be saved to local storage.
+   * If true, user choices are persisted across sessions.
    * @defaultValue true
    */
-  saveDeviceSettings?: boolean;
+  persistUserChoices?: boolean;
 }
 
 /** @alpha */
@@ -235,7 +235,7 @@ export function PreJoin({
   camLabel = 'Camera',
   userLabel = 'Username',
   showE2EEOptions = false,
-  saveDeviceSettings = true,
+  persistUserChoices = true,
   ...htmlProps
 }: PreJoinProps) {
   const [userChoices, setUserChoices] = React.useState(DEFAULT_USER_CHOICES);
@@ -260,7 +260,8 @@ export function PreJoin({
     saveVideoInputEnabled,
   } = usePersistentUserChoices({
     defaults: partialDefaults,
-    preventSave: !saveDeviceSettings,
+    preventSave: !persistUserChoices,
+    preventLoad: !persistUserChoices,
   });
 
   // Initialize device settings

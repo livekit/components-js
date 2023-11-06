@@ -86,8 +86,8 @@ export function Stage() {
                   {isTrackReference(track) ? <VideoTrack {...track} /> : <p>Camera placeholder</p>}
                   <div className={myStyles['participant-indicators']}>
                     <div style={{ display: 'flex' }}>
-                      <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
-                      <TrackMutedIndicator source={track.source}></TrackMutedIndicator>
+                      <TrackMutedIndicator source={Track.Source.Microphone} />
+                      <TrackMutedIndicator source={track.source} />
                     </div>
                     {/* Overwrite styles: By passing class names, we can easily overwrite/extend the existing styles. */}
                     {/* In addition, we can still specify a style attribute and further customize the styles. */}

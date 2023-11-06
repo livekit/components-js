@@ -1,26 +1,25 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import styles from '../styles/Home.module.scss';
-import { faker } from '@faker-js/faker';
 
 const EXAMPLE_ROUTES = {
-  minimal: { title: 'Minimal example', href: () => `/minimal?user=${faker.name.fullName()}` },
-  simple: { title: 'Simple example', href: () => `/simple?user=${faker.name.fullName()}` },
+  minimal: { title: 'Minimal example', href: () => `/minimal` },
+  simple: { title: 'Simple example', href: () => `/simple` },
   audioOnly: {
     title: 'Audio only example',
-    href: () => `/audio-only?user=${faker.name.fullName()}`,
+    href: () => `/audio-only`,
   },
   customize: {
     title: 'Simple example with custom components',
-    href: () => `/customize?user=${faker.name.fullName()}`,
+    href: () => `/customize`,
   },
   clubhouse: {
     title: 'Clubhouse clone build with LiveKit components',
-    href: () => `/clubhouse?user=${faker.name.fullName()}`,
+    href: () => `/clubhouse`,
   },
   processors: {
     title: 'Minimal example with background blur',
-    href: () => `/processors?user=${faker.name.fullName()}`,
+    href: () => `/processors`,
   },
 } as const;
 

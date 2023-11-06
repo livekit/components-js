@@ -8,6 +8,7 @@
     "build": "turbo run build",
     "build:core": "turbo run build --filter=@livekit/components-core...",
     "build:next": "turbo run build --filter=@livekit/component-example-next...",
+    "build:next-14": "turbo run build --filter=@livekit/component-example-next-14...",
     "build:react": "turbo run build --filter=@livekit/components-react...",
     "build:storybook": "turbo run build --filter=@livekit/component-docs-storybook...",
     "build:styles": "turbo run build --filter=@livekit/components-styles...",

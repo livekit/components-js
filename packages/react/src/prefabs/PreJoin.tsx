@@ -15,11 +15,15 @@ import {
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { TrackToggle } from '../components/controls/TrackToggle';
+import type { UserChoices } from '@livekit/components-core';
 import { log } from '@livekit/components-core';
 import { ParticipantPlaceholder } from '../assets/images';
 import { useMediaDevices, usePersistentUserChoices } from '../hooks';
 
-/** @public */
+/**
+ * @deprecated Use `UserChoices` from `@livekit/components-core` instead.
+ * @public
+ */
 export type LocalUserChoices = {
   username: string;
   videoEnabled: boolean;
@@ -238,6 +242,16 @@ export function PreJoin({
   const [username, setUsername] = React.useState(
     defaults.username ?? DEFAULT_USER_CHOICES.username,
   );
+
+  // TODO: Remove and pipe `defaults` object directly into `usePersistentUserChoices` once we fully switch from type `LocalUserChoices` to `UserChoices`.
+  const partialDefaults: Partial<UserChoices> = {
+    ...(defaults.audioDeviceId !== undefined && { audioInputDeviceId: defaults.audioDeviceId }),
+    ...(defaults.videoDeviceId !== undefined && { videoInputDeviceId: defaults.videoDeviceId }),
+    ...(defaults.audioEnabled !== undefined && { audioInputEnabled: defaults.audioEnabled }),
+    ...(defaults.videoEnabled !== undefined && { videoInputEnabled: defaults.videoEnabled }),
+    ...(defaults.username !== undefined && { username: defaults.username }),
+  };
+
   const {
     deviceSettings,
     saveAudioInputDeviceId,
@@ -245,13 +259,7 @@ export function PreJoin({
     saveVideoInputDeviceId,
     saveVideoInputEnabled,
   } = usePersistentUserChoices({
-    defaults: {
-      audioInputDeviceId: DEFAULT_USER_CHOICES.audioDeviceId,
-      videoInputDeviceId: DEFAULT_USER_CHOICES.videoDeviceId,
-      audioInputEnabled: DEFAULT_USER_CHOICES.audioEnabled,
-      videoInputEnabled: DEFAULT_USER_CHOICES.videoEnabled,
-      username: DEFAULT_USER_CHOICES.username,
-    },
+    defaults: partialDefaults,
     preventSave: !saveDeviceSettings,
   });
 

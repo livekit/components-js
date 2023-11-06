@@ -10,7 +10,7 @@ interface UsePersistentUserChoicesOptions {
   /**
    * The default value to use if reading from local storage returns no results or fails.
    */
-  defaults?: UserChoices;
+  defaults?: Partial<UserChoices>;
   /**
    * Whether to prevent saving the device settings to local storage.
    * @defaultValue false

@@ -31,8 +31,18 @@ export function saveUserChoices(deviceSettings: UserChoices): void {
 /**
  * Reads the user choices from local storage, or returns the default settings if none are found.
  * @param defaults - The default device settings to use if none are found in local storage.
+ * @defaultValue `defaultUserChoices`
+ *
  * @alpha
  */
-export function loadUserChoices(defaults?: UserChoices): UserChoices {
-  return getLocalStorageObject(USER_CHOICES_KEY) ?? defaults ?? defaultUserChoices;
+export function loadUserChoices(defaults?: Partial<UserChoices>): UserChoices {
+  const fallback: UserChoices = {
+    videoInputEnabled: defaults?.videoInputEnabled ?? defaultUserChoices.videoInputEnabled,
+    audioInputEnabled: defaults?.audioInputEnabled ?? defaultUserChoices.audioInputEnabled,
+    videoInputDeviceId: defaults?.videoInputDeviceId ?? defaultUserChoices.videoInputDeviceId,
+    audioInputDeviceId: defaults?.audioInputDeviceId ?? defaultUserChoices.audioInputDeviceId,
+    username: defaults?.username ?? defaultUserChoices.username,
+  };
+
+  return getLocalStorageObject(USER_CHOICES_KEY) ?? fallback;
 }

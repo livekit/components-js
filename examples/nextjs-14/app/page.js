@@ -1,3 +1,5 @@
+'use-client';
+
 import styles from './page.module.css';
 import { LiveKitRoom } from '@livekit/components-react';
 

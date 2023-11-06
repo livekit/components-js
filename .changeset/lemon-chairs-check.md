@@ -1,6 +1,6 @@
 ---
-"@livekit/components-core": minor
-"@livekit/components-react": minor
+'@livekit/components-core': minor
+'@livekit/components-react': minor
 ---
 
-Add `usePersistentDeviceSettings` hook and device settings saving functionality.
+Add `usePersistentUserChoices` hook to save user choices saving functionality.

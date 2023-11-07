@@ -7,7 +7,19 @@ const PreJoinExample: NextPage = () => {
 
   return (
     <div data-lk-theme="default" style={{ height: '100vh' }}>
-      <PreJoin />
+      <PreJoin
+        defaults={{ e2ee: true, videoDeviceId: '' }}
+        onSubmit={(values) => {
+          values.audioDeviceId;
+          values.e2ee;
+          values.sharedPassphrase;
+        }}
+        onValidate={(values) => {
+          values.e2ee;
+          values.sharedPassphrase;
+          return true;
+        }}
+      />
     </div>
   );
 };

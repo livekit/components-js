@@ -13,5 +13,6 @@ export type {
   ReceivedChatMessage,
   MessageDecoder,
   MessageEncoder,
+  LocalUserChoices,
   UserChoices,
 } from '@livekit/components-core';

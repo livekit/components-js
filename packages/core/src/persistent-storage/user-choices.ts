@@ -12,22 +12,22 @@ export type UserChoices = {
    * Whether video input is enabled.
    * @defaultValue `true`
    */
-  videoInputEnabled: boolean;
+  videoEnabled: boolean;
   /**
    * Whether audio input is enabled.
    * @defaultValue `true`
    */
-  audioInputEnabled: boolean;
+  audioEnabled: boolean;
   /**
    * The device ID of the video input device to use.
    * @defaultValue `''`
    */
-  videoInputDeviceId: string;
+  videoDeviceId: string;
   /**
    * The device ID of the audio input device to use.
    * @defaultValue `''`
    */
-  audioInputDeviceId: string;
+  audioDeviceId: string;
   /**
    * The username to use.
    * @defaultValue `''`
@@ -35,21 +35,28 @@ export type UserChoices = {
   username: string;
 };
 
+export type LocalUserChoices = UserChoices & {
+  /** @deprecated This property will be removed without replacement. */
+  e2ee: boolean;
+  /** @deprecated This property will be removed without replacement. */
+  sharedPassphrase: string;
+};
+
 const defaultUserChoices: UserChoices = {
-  videoInputEnabled: true,
-  audioInputEnabled: true,
-  videoInputDeviceId: '',
-  audioInputDeviceId: '',
+  videoEnabled: true,
+  audioEnabled: true,
+  videoDeviceId: '',
+  audioDeviceId: '',
   username: '',
 } as const;
 
 /**
  * Saves user choices to local storage.
- * @param deviceSettings - The device settings to be stored.
+ * @param userChoices - The device settings to be stored.
  * @alpha
  */
 export function saveUserChoices(
-  deviceSettings: UserChoices,
+  userChoices: UserChoices,
   /**
    * Whether to prevent saving user choices to local storage.
    */
@@ -58,7 +65,7 @@ export function saveUserChoices(
   if (preventSave === true) {
     return;
   }
-  setLocalStorageObject(USER_CHOICES_KEY, deviceSettings);
+  setLocalStorageObject(USER_CHOICES_KEY, userChoices);
 }
 
 /**
@@ -77,10 +84,10 @@ export function loadUserChoices(
   preventLoad: boolean = false,
 ): UserChoices {
   const fallback: UserChoices = {
-    videoInputEnabled: defaults?.videoInputEnabled ?? defaultUserChoices.videoInputEnabled,
-    audioInputEnabled: defaults?.audioInputEnabled ?? defaultUserChoices.audioInputEnabled,
-    videoInputDeviceId: defaults?.videoInputDeviceId ?? defaultUserChoices.videoInputDeviceId,
-    audioInputDeviceId: defaults?.audioInputDeviceId ?? defaultUserChoices.audioInputDeviceId,
+    videoEnabled: defaults?.videoEnabled ?? defaultUserChoices.videoEnabled,
+    audioEnabled: defaults?.audioEnabled ?? defaultUserChoices.audioEnabled,
+    videoDeviceId: defaults?.videoDeviceId ?? defaultUserChoices.videoDeviceId,
+    audioDeviceId: defaults?.audioDeviceId ?? defaultUserChoices.audioDeviceId,
     username: defaults?.username ?? defaultUserChoices.username,
   };
 

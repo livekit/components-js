@@ -229,10 +229,10 @@ export function PreJoin({
 
   // TODO: Remove and pipe `defaults` object directly into `usePersistentUserChoices` once we fully switch from type `LocalUserChoices` to `UserChoices`.
   const partialDefaults: Partial<LocalUserChoices> = {
-    ...(defaults.audioDeviceId !== undefined && { audioInputDeviceId: defaults.audioDeviceId }),
-    ...(defaults.videoDeviceId !== undefined && { videoInputDeviceId: defaults.videoDeviceId }),
+    ...(defaults.audioDeviceId !== undefined && { audioDeviceId: defaults.audioDeviceId }),
+    ...(defaults.videoDeviceId !== undefined && { videoDeviceId: defaults.videoDeviceId }),
     ...(defaults.audioEnabled !== undefined && { audioEnabled: defaults.audioEnabled }),
-    ...(defaults.videoEnabled !== undefined && { videoInputEnabled: defaults.videoEnabled }),
+    ...(defaults.videoEnabled !== undefined && { videoEnabled: defaults.videoEnabled }),
     ...(defaults.username !== undefined && { username: defaults.username }),
   };
 

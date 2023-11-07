@@ -1,4 +1,4 @@
-import type { LocalUserChoices, UserChoices } from '@livekit/components-core';
+import type { UserChoices } from '@livekit/components-core';
 import { loadUserChoices, saveUserChoices } from '@livekit/components-core';
 import * as React from 'react';
 
@@ -10,7 +10,7 @@ export interface UsePersistentUserChoicesOptions {
   /**
    * The default value to use if reading from local storage returns no results or fails.
    */
-  defaults?: Partial<LocalUserChoices>;
+  defaults?: Partial<UserChoices>;
   /**
    * Whether to prevent saving to persistent storage.
    * @defaultValue false

@@ -223,6 +223,12 @@ export function loadUserChoices(defaults?: Partial<UserChoices>,
 preventLoad?: boolean): UserChoices;
 
 // @public (undocumented)
+export type LocalUserChoices = UserChoices & {
+    e2ee: boolean;
+    sharedPassphrase: string;
+};
+
+// @public (undocumented)
 export const log: loglevel.Logger;
 
 // @public (undocumented)
@@ -339,7 +345,7 @@ export function roomInfoObserver(room: Room): Observable<{
 export function roomObserver(room: Room): Observable<Room>;
 
 // @alpha
-export function saveUserChoices(deviceSettings: UserChoices,
+export function saveUserChoices(userChoices: UserChoices,
 preventSave?: boolean): void;
 
 // @public (undocumented)
@@ -566,10 +572,10 @@ export function updatePages<T extends UpdatableItem>(currentList: T[], nextList:
 
 // @public
 export type UserChoices = {
-    videoInputEnabled: boolean;
-    audioInputEnabled: boolean;
-    videoInputDeviceId: string;
-    audioInputDeviceId: string;
+    videoEnabled: boolean;
+    audioEnabled: boolean;
+    videoDeviceId: string;
+    audioDeviceId: string;
     username: string;
 };
 

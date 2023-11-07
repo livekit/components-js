@@ -20,6 +20,7 @@ import type { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
 import type { LocalTrack } from 'livekit-client';
 import { LocalTrackPublication } from 'livekit-client';
+import { LocalUserChoices } from '@livekit/components-core';
 import type { LocalVideoTrack } from 'livekit-client';
 import type { MediaDeviceFailure } from 'livekit-client';
 import { MessageDecoder } from '@livekit/components-core';
@@ -327,16 +328,7 @@ export interface LiveKitRoomProps extends Omit<React_2.HTMLAttributes<HTMLDivEle
 // @internal (undocumented)
 export const LKFeatureContext: React_2.Context<FeatureFlags | undefined>;
 
-// @public @deprecated (undocumented)
-export type LocalUserChoices = {
-    username: string;
-    videoEnabled: boolean;
-    audioEnabled: boolean;
-    videoDeviceId: string;
-    audioDeviceId: string;
-    e2ee: boolean;
-    sharedPassphrase: string;
-};
+export { LocalUserChoices }
 
 // @public
 export function MediaDeviceMenu({ kind, initialSelection, onActiveDeviceChange, tracks, requestPermissions, ...props }: MediaDeviceMenuProps): React_2.JSX.Element;
@@ -840,6 +832,7 @@ export function usePersistentUserChoices(options?: UsePersistentUserChoicesOptio
     saveVideoInputEnabled: (isEnabled: boolean) => void;
     saveAudioInputDeviceId: (deviceId: string) => void;
     saveVideoInputDeviceId: (deviceId: string) => void;
+    saveUsername: (username: string) => void;
 };
 
 // @alpha

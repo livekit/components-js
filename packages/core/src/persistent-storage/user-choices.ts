@@ -1,7 +1,7 @@
 import { cssPrefix } from '../constants';
 import { getLocalStorageObject, setLocalStorageObject } from './local-storage-helpers';
 
-const USER_CHOICES_KEY = `${cssPrefix}-device-settings` as const;
+const USER_CHOICES_KEY = `${cssPrefix}-user-choices` as const;
 
 /**
  * Represents the user's choices for video and audio input devices,

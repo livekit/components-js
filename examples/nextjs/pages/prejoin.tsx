@@ -8,7 +8,7 @@ const PreJoinExample: NextPage = () => {
 
   return (
     <div data-lk-theme="default" style={{ height: '100vh' }}>
-      <PreJoin showE2EEOptions={true} />
+      <PreJoin />
     </div>
   );
 };

@@ -45,6 +45,9 @@ export function usePersistentUserChoices(options: UsePersistentUserChoicesOption
   const saveVideoInputDeviceId = React.useCallback((deviceId: string) => {
     setSettings((prev) => ({ ...prev, videoInputDeviceId: deviceId }));
   }, []);
+  const saveUsername = React.useCallback((username: string) => {
+    setSettings((prev) => ({ ...prev, username: username }));
+  }, []);
 
   React.useEffect(() => {
     saveUserChoices(userChoices, options.preventSave ?? false);
@@ -56,5 +59,6 @@ export function usePersistentUserChoices(options: UsePersistentUserChoicesOption
     saveVideoInputEnabled,
     saveAudioInputDeviceId,
     saveVideoInputDeviceId,
+    saveUsername,
   };
 }

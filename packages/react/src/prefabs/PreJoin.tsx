@@ -65,8 +65,10 @@ export interface PreJoinProps
   micLabel?: string;
   camLabel?: string;
   userLabel?: string;
+  /**
+   * @deprecated Displaying e2ee options is no longer supported. Custom e2ee options have to be implemented by the user.
+   */
   showE2EEOptions?: boolean;
-
   /**
    * If true, user choices are persisted across sessions.
    * @defaultValue true

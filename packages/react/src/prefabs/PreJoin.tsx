@@ -21,7 +21,7 @@ import { ParticipantPlaceholder } from '../assets/images';
 import { useMediaDevices, usePersistentUserChoices } from '../hooks';
 
 /**
- * @deprecated Use `UserChoices` from `@livekit/components-core` instead.
+ * @deprecated Use `UserChoices` instead.
  * @public
  */
 export type LocalUserChoices = {
@@ -65,9 +65,7 @@ export interface PreJoinProps
   micLabel?: string;
   camLabel?: string;
   userLabel?: string;
-  /**
-   * @deprecated Displaying e2ee options is no longer supported. Custom e2ee options have to be implemented by the user.
-   */
+  /** @deprecated  E2EE options will be removed from PreJoin in a future version **/
   showE2EEOptions?: boolean;
   /**
    * If true, user choices are persisted across sessions.

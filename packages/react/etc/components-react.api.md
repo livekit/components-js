@@ -38,6 +38,7 @@ import type { RoomConnectOptions } from 'livekit-client';
 import type { RoomEvent } from 'livekit-client';
 import type { RoomOptions } from 'livekit-client';
 import type { ScreenShareCaptureOptions } from 'livekit-client';
+import { setLogLevel } from '@livekit/components-core';
 import { SetMediaDeviceOptions } from '@livekit/components-core';
 import type { SourcesArray } from '@livekit/components-core';
 import type { ToggleSource } from '@livekit/components-core';
@@ -47,7 +48,7 @@ import { TrackPublication } from 'livekit-client';
 import type { TrackReference } from '@livekit/components-core';
 import { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import type { TrackSourceWithOptions } from '@livekit/components-core';
-import type { UserChoices } from '@livekit/components-core';
+import { UserChoices } from '@livekit/components-core';
 import type { VideoCaptureOptions } from 'livekit-client';
 import type { VideoSource } from '@livekit/components-core';
 import type { WidgetState } from '@livekit/components-core';
@@ -445,7 +446,7 @@ export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement
     onValidate?: (values: LocalUserChoices) => boolean;
     // @alpha
     persistUserChoices?: boolean;
-    // (undocumented)
+    // @deprecated (undocumented)
     showE2EEOptions?: boolean;
     // (undocumented)
     userLabel?: string;
@@ -474,6 +475,8 @@ export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
     // (undocumented)
     childrenPosition?: 'before' | 'after';
 }
+
+export { setLogLevel }
 
 // @public
 export function StartAudio({ label, ...props }: AllowAudioPlaybackProps): React_2.JSX.Element;
@@ -858,6 +861,8 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(en
 
 // @alpha (undocumented)
 export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): LocalTrack[] | undefined;
+
+export { UserChoices }
 
 // @public
 export function useRemoteParticipant(identity: string, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;

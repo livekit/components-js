@@ -1,5 +1,4 @@
-import { setLogLevel } from '@livekit/components-core';
-import { LiveKitRoom, useToken, VideoConference } from '@livekit/components-react';
+import { LiveKitRoom, useToken, VideoConference, setLogLevel } from '@livekit/components-react';
 import { RoomConnectOptions } from 'livekit-client';
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';

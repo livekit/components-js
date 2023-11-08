@@ -16,27 +16,27 @@ jobs:
         with:
           fetch-depth: 2
 
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v2
         with:
-          node-version: '20.x'
-          cache: 'yarn'
-
-      - name: Install Yarn
-        run: |
-          npm install -g yarn
-          yarn install
-
+          version: 8
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
       - name: ESLint
-        run: yarn lint
+        run: pnpm lint
 
       - name: Prettier
-        run: yarn format:check
+        run: pnpm format:check
 
       - name: Build Packages
-        run: yarn build
+        run: pnpm build
 
       - name: Run Tests
-        run: yarn test
+        run: pnpm test
 
       - name: Check for API Changes
-        run: yarn api:check
+        run: pnpm api:check

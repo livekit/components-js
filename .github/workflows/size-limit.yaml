@@ -15,5 +15,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           script: npx -w @livekit/components-react size-limit --json
-          package_manager: yarn
+          package_manager: pnpm
           build_script: build:react

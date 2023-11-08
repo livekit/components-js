@@ -26,12 +26,6 @@
     "api-extractor": "turbo run api-extractor",
     "cleanup": "find . -type d \\( -name 'node_modules' -o -name '.turbo' -o -name 'dist' \\) -prune -exec rm -rf '{}' +"
   },
-  "workspaces": [
-    "packages/*",
-    "examples/*",
-    "docs/*",
-    "tooling/*"
-  ],
   "dependencies": {},
   "peerDependencies": {
     "typescript": "5.1.6"

@@ -219,8 +219,19 @@ export function isTrackReferencePlaceholder(trackReference?: TrackReferenceOrPla
 export function isWeb(): boolean;
 
 // @alpha
-export function loadUserChoices(defaults?: Partial<UserChoices>,
-preventLoad?: boolean): UserChoices;
+export function loadUserChoices(defaults?: Partial<LocalUserChoices>,
+preventLoad?: boolean): LocalUserChoices;
+
+// @public
+export type LocalUserChoices = {
+    videoEnabled: boolean;
+    audioEnabled: boolean;
+    videoDeviceId: string;
+    audioDeviceId: string;
+    username: string;
+    e2ee: boolean;
+    sharedPassphrase: string;
+};
 
 // @public (undocumented)
 export const log: loglevel.Logger;
@@ -339,7 +350,7 @@ export function roomInfoObserver(room: Room): Observable<{
 export function roomObserver(room: Room): Observable<Room>;
 
 // @alpha
-export function saveUserChoices(deviceSettings: UserChoices,
+export function saveUserChoices(userChoices: LocalUserChoices,
 preventSave?: boolean): void;
 
 // @public (undocumented)
@@ -563,15 +574,6 @@ export type TrackSourceWithOptions = {
 //
 // @public
 export function updatePages<T extends UpdatableItem>(currentList: T[], nextList: T[], maxItemsOnPage: number): T[];
-
-// @public
-export type UserChoices = {
-    videoInputEnabled: boolean;
-    audioInputEnabled: boolean;
-    videoInputDeviceId: string;
-    audioInputDeviceId: string;
-    username: string;
-};
 
 // @public (undocumented)
 export type VideoSource = Track.Source.Camera | Track.Source.ScreenShare;

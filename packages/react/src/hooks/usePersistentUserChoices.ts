@@ -1,4 +1,4 @@
-import type { UserChoices } from '@livekit/components-core';
+import type { LocalUserChoices } from '@livekit/components-core';
 import { loadUserChoices, saveUserChoices } from '@livekit/components-core';
 import * as React from 'react';
 
@@ -10,7 +10,7 @@ export interface UsePersistentUserChoicesOptions {
   /**
    * The default value to use if reading from local storage returns no results or fails.
    */
-  defaults?: Partial<UserChoices>;
+  defaults?: Partial<LocalUserChoices>;
   /**
    * Whether to prevent saving to persistent storage.
    * @defaultValue false
@@ -29,21 +29,24 @@ export interface UsePersistentUserChoicesOptions {
  * @alpha
  */
 export function usePersistentUserChoices(options: UsePersistentUserChoicesOptions = {}) {
-  const [userChoices, setSettings] = React.useState<UserChoices>(
+  const [userChoices, setSettings] = React.useState<LocalUserChoices>(
     loadUserChoices(options.defaults, options.preventLoad ?? false),
   );
 
   const saveAudioInputEnabled = React.useCallback((isEnabled: boolean) => {
-    setSettings((prev) => ({ ...prev, audioInputEnabled: isEnabled }));
+    setSettings((prev) => ({ ...prev, audioEnabled: isEnabled }));
   }, []);
   const saveVideoInputEnabled = React.useCallback((isEnabled: boolean) => {
-    setSettings((prev) => ({ ...prev, videoInputEnabled: isEnabled }));
+    setSettings((prev) => ({ ...prev, videoEnabled: isEnabled }));
   }, []);
   const saveAudioInputDeviceId = React.useCallback((deviceId: string) => {
-    setSettings((prev) => ({ ...prev, audioInputDeviceId: deviceId }));
+    setSettings((prev) => ({ ...prev, audioDeviceId: deviceId }));
   }, []);
   const saveVideoInputDeviceId = React.useCallback((deviceId: string) => {
-    setSettings((prev) => ({ ...prev, videoInputDeviceId: deviceId }));
+    setSettings((prev) => ({ ...prev, videoDeviceId: deviceId }));
+  }, []);
+  const saveUsername = React.useCallback((username: string) => {
+    setSettings((prev) => ({ ...prev, username: username }));
   }, []);
 
   React.useEffect(() => {
@@ -56,5 +59,6 @@ export function usePersistentUserChoices(options: UsePersistentUserChoicesOption
     saveVideoInputEnabled,
     saveAudioInputDeviceId,
     saveVideoInputDeviceId,
+    saveUsername,
   };
 }

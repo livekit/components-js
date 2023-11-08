@@ -1,5 +1,5 @@
 import { cssPrefix } from '../constants';
-import { getLocalStorageObject, setLocalStorageObject } from './local-storage-helpers';
+import { createLocalStorageInterface } from './local-storage-helpers';
 
 const USER_CHOICES_KEY = `${cssPrefix}-user-choices` as const;
 
@@ -7,49 +7,63 @@ const USER_CHOICES_KEY = `${cssPrefix}-user-choices` as const;
  * Represents the user's choices for video and audio input devices,
  * as well as their username.
  */
-export type UserChoices = {
+export type LocalUserChoices = {
   /**
    * Whether video input is enabled.
    * @defaultValue `true`
    */
-  videoInputEnabled: boolean;
+  videoEnabled: boolean;
   /**
    * Whether audio input is enabled.
    * @defaultValue `true`
    */
-  audioInputEnabled: boolean;
+  audioEnabled: boolean;
   /**
    * The device ID of the video input device to use.
    * @defaultValue `''`
    */
-  videoInputDeviceId: string;
+  videoDeviceId: string;
   /**
    * The device ID of the audio input device to use.
    * @defaultValue `''`
    */
-  audioInputDeviceId: string;
+  audioDeviceId: string;
   /**
    * The username to use.
    * @defaultValue `''`
    */
   username: string;
+  /** @deprecated This property will be removed without replacement. */
+  e2ee: boolean;
+  /** @deprecated This property will be removed without replacement. */
+  sharedPassphrase: string;
 };
 
-const defaultUserChoices: UserChoices = {
-  videoInputEnabled: true,
-  audioInputEnabled: true,
-  videoInputDeviceId: '',
-  audioInputDeviceId: '',
+const defaultUserChoices: LocalUserChoices = {
+  videoEnabled: true,
+  audioEnabled: true,
+  videoDeviceId: '',
+  audioDeviceId: '',
   username: '',
+  e2ee: false,
+  sharedPassphrase: '',
 } as const;
 
 /**
+ * The type of the object stored in local storage.
+ * @remarks
+ * TODO: Replace this type with `LocalUserChoices` after removing the deprecated properties from `LocalUserChoices`.
+ * @internal
+ */
+type TempStorageType = Omit<LocalUserChoices, 'e2ee' | 'sharedPassphrase'>;
+const { load, save } = createLocalStorageInterface<TempStorageType>(USER_CHOICES_KEY);
+
+/**
  * Saves user choices to local storage.
- * @param deviceSettings - The device settings to be stored.
  * @alpha
  */
 export function saveUserChoices(
-  deviceSettings: UserChoices,
+  userChoices: LocalUserChoices,
   /**
    * Whether to prevent saving user choices to local storage.
    */
@@ -58,35 +72,41 @@ export function saveUserChoices(
   if (preventSave === true) {
     return;
   }
-  setLocalStorageObject(USER_CHOICES_KEY, deviceSettings);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { e2ee, sharedPassphrase, ...toSave } = userChoices;
+  save(toSave);
 }
 
 /**
  * Reads the user choices from local storage, or returns the default settings if none are found.
- * @param defaults - The default device settings to use if none are found in local storage.
- * @defaultValue `defaultUserChoices`
- *
+ * @remarks
+ * The deprecated parameters `e2ee` and `sharedPassphrase` are not read from local storage
+ * and always return the value from the passed `defaults` or internal defaults.
  * @alpha
  */
 export function loadUserChoices(
-  defaults?: Partial<UserChoices>,
+  defaults?: Partial<LocalUserChoices>,
   /**
    * Whether to prevent loading from local storage and return default values instead.
    * @defaultValue false
    */
   preventLoad: boolean = false,
-): UserChoices {
-  const fallback: UserChoices = {
-    videoInputEnabled: defaults?.videoInputEnabled ?? defaultUserChoices.videoInputEnabled,
-    audioInputEnabled: defaults?.audioInputEnabled ?? defaultUserChoices.audioInputEnabled,
-    videoInputDeviceId: defaults?.videoInputDeviceId ?? defaultUserChoices.videoInputDeviceId,
-    audioInputDeviceId: defaults?.audioInputDeviceId ?? defaultUserChoices.audioInputDeviceId,
+): LocalUserChoices {
+  const fallback: LocalUserChoices = {
+    videoEnabled: defaults?.videoEnabled ?? defaultUserChoices.videoEnabled,
+    audioEnabled: defaults?.audioEnabled ?? defaultUserChoices.audioEnabled,
+    videoDeviceId: defaults?.videoDeviceId ?? defaultUserChoices.videoDeviceId,
+    audioDeviceId: defaults?.audioDeviceId ?? defaultUserChoices.audioDeviceId,
     username: defaults?.username ?? defaultUserChoices.username,
+    e2ee: defaults?.e2ee ?? defaultUserChoices.e2ee,
+    sharedPassphrase: defaults?.sharedPassphrase ?? defaultUserChoices.sharedPassphrase,
   };
 
   if (preventLoad) {
     return fallback;
   } else {
-    return getLocalStorageObject(USER_CHOICES_KEY) ?? fallback;
+    const maybeLoadedObject = load();
+    const result = { ...fallback, ...(maybeLoadedObject ?? {}) };
+    return result;
   }
 }

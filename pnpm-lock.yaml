@@ -164,7 +164,7 @@ importers:
         version: 2.6.2
     devDependencies:
       '@livekit/components-styles':
-        specifier: ~1.0.6
+        specifier: workspace:../styles
         version: link:../styles
       '@microsoft/api-extractor':
         specifier: ^7.36.0

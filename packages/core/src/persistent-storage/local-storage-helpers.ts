@@ -1,12 +1,10 @@
 import { log } from '../logger';
 
 /**
- * Set an object to local storage by key
- * @param key - the key to set the object to local storage
- * @param value - the object to set to local storage
+ * Persists a serializable object to local storage associated with the specified key.
  * @internal
  */
-export function setLocalStorageObject<T extends object>(key: string, value: T): void {
+export function saveToLocalStorage<T extends object>(key: string, value: T): void {
   if (typeof localStorage === 'undefined') {
     log.error('Local storage is not available.');
     return;
@@ -20,12 +18,10 @@ export function setLocalStorageObject<T extends object>(key: string, value: T): 
 }
 
 /**
- * Get an object from local storage by key
- * @param key - the key to retrieve the object from local storage
- * @returns the object retrieved from local storage, or null if the key does not exist
+ * Retrieves a serializable object from local storage by its key.
  * @internal
  */
-export function getLocalStorageObject<T extends object>(key: string): T | undefined {
+export function loadFromLocalStorage<T extends object>(key: string): T | undefined {
   if (typeof localStorage === 'undefined') {
     log.error('Local storage is not available.');
     return undefined;

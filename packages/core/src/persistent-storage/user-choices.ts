@@ -1,5 +1,5 @@
 import { cssPrefix } from '../constants';
-import { getLocalStorageObject, setLocalStorageObject } from './local-storage-helpers';
+import { loadFromLocalStorage, saveToLocalStorage } from './local-storage-helpers';
 
 const USER_CHOICES_KEY = `${cssPrefix}-device-settings` as const;
 
@@ -65,7 +65,7 @@ export function saveUserChoices(
   if (preventSave === true) {
     return;
   }
-  setLocalStorageObject(USER_CHOICES_KEY, userChoices);
+  saveToLocalStorage(USER_CHOICES_KEY, userChoices);
 }
 
 /**
@@ -94,6 +94,6 @@ export function loadUserChoices(
   if (preventLoad) {
     return fallback;
   } else {
-    return getLocalStorageObject(USER_CHOICES_KEY) ?? fallback;
+    return loadFromLocalStorage(USER_CHOICES_KEY) ?? fallback;
   }
 }

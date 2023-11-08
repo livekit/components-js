@@ -44,7 +44,7 @@ export function useMediaDeviceSelect({
     () => createMediaDeviceObserver(kind, requestPermissions),
     [kind, requestPermissions],
   );
-  const devices = useObservableState(deviceObserver, []);
+  const devices = useObservableState(deviceObserver, [] as MediaDeviceInfo[]);
   // Active device management.
   const [currentDeviceId, setCurrentDeviceId] = React.useState<string>('');
   const { className, activeDeviceObservable, setActiveMediaDevice } = React.useMemo(

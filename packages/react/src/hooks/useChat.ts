@@ -1,5 +1,5 @@
 import type { MessageDecoder, MessageEncoder } from '@livekit/components-core';
-import { setupChat } from '@livekit/components-core';
+import { ReceivedChatMessage, setupChat } from '@livekit/components-core';
 import * as React from 'react';
 import { useRoomContext } from '../context';
 import { useObservableState } from './internal/useObservableState';
@@ -18,7 +18,7 @@ export function useChat(options?: {
   const room = useRoomContext();
   const [setup, setSetup] = React.useState<ReturnType<typeof setupChat>>();
   const isSending = useObservableState(setup?.isSendingObservable, false);
-  const chatMessages = useObservableState(setup?.messageObservable, []);
+  const chatMessages = useObservableState<ReceivedChatMessage[]>(setup?.messageObservable, []);
 
   React.useEffect(() => {
     const setupChatReturn = setupChat(room, options);

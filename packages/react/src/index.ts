@@ -14,5 +14,4 @@ export type {
   MessageDecoder,
   MessageEncoder,
   LocalUserChoices,
-  UserChoices,
 } from '@livekit/components-core';

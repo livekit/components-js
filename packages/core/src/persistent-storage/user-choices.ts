@@ -7,7 +7,7 @@ const USER_CHOICES_KEY = `${cssPrefix}-device-settings` as const;
  * Represents the user's choices for video and audio input devices,
  * as well as their username.
  */
-export type UserChoices = {
+export type LocalUserChoices = {
   /**
    * Whether video input is enabled.
    * @defaultValue `true`
@@ -33,30 +33,36 @@ export type UserChoices = {
    * @defaultValue `''`
    */
   username: string;
-};
-
-export type LocalUserChoices = UserChoices & {
   /** @deprecated This property will be removed without replacement. */
   e2ee: boolean;
   /** @deprecated This property will be removed without replacement. */
   sharedPassphrase: string;
 };
 
-const defaultUserChoices: UserChoices = {
+/**
+ * The type of the object stored in local storage.
+ * @remarks
+ * TODO: remove this after removing the deprecated properties from `LocalUserChoices`.
+ * @internal
+ */
+type TempStorageType = Omit<LocalUserChoices, 'e2ee' | 'sharedPassphrase'>;
+
+const defaultUserChoices: LocalUserChoices = {
   videoEnabled: true,
   audioEnabled: true,
   videoDeviceId: '',
   audioDeviceId: '',
   username: '',
+  e2ee: false,
+  sharedPassphrase: '',
 } as const;
 
 /**
  * Saves user choices to local storage.
- * @param userChoices - The device settings to be stored.
  * @alpha
  */
 export function saveUserChoices(
-  userChoices: UserChoices,
+  userChoices: LocalUserChoices,
   /**
    * Whether to prevent saving user choices to local storage.
    */
@@ -65,35 +71,41 @@ export function saveUserChoices(
   if (preventSave === true) {
     return;
   }
-  saveToLocalStorage(USER_CHOICES_KEY, userChoices);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { e2ee, sharedPassphrase, ...toSave } = userChoices;
+  saveToLocalStorage(USER_CHOICES_KEY, toSave);
 }
 
 /**
  * Reads the user choices from local storage, or returns the default settings if none are found.
- * @param defaults - The default device settings to use if none are found in local storage.
- * @defaultValue `defaultUserChoices`
- *
+ * @remarks
+ * The deprecated parameters `e2ee` and `sharedPassphrase` are not read from local storage
+ * and always return the value from the passed `defaults` or internal defaults.
  * @alpha
  */
 export function loadUserChoices(
-  defaults?: Partial<UserChoices>,
+  defaults?: Partial<LocalUserChoices>,
   /**
    * Whether to prevent loading from local storage and return default values instead.
    * @defaultValue false
    */
   preventLoad: boolean = false,
-): UserChoices {
-  const fallback: UserChoices = {
+): LocalUserChoices {
+  const fallback: LocalUserChoices = {
     videoEnabled: defaults?.videoEnabled ?? defaultUserChoices.videoEnabled,
     audioEnabled: defaults?.audioEnabled ?? defaultUserChoices.audioEnabled,
     videoDeviceId: defaults?.videoDeviceId ?? defaultUserChoices.videoDeviceId,
     audioDeviceId: defaults?.audioDeviceId ?? defaultUserChoices.audioDeviceId,
     username: defaults?.username ?? defaultUserChoices.username,
+    e2ee: defaults?.e2ee ?? defaultUserChoices.e2ee,
+    sharedPassphrase: defaults?.sharedPassphrase ?? defaultUserChoices.sharedPassphrase,
   };
 
   if (preventLoad) {
     return fallback;
   } else {
-    return loadFromLocalStorage(USER_CHOICES_KEY) ?? fallback;
+    const maybeLoadedObject = loadFromLocalStorage<TempStorageType>(USER_CHOICES_KEY);
+    const result = { ...fallback, ...(maybeLoadedObject ?? {}) };
+    return result;
   }
 }

@@ -1,10 +1,15 @@
 import { log } from '../logger';
 
+type JsonPrimitive = string | number | boolean | null;
+type JsonArray = JsonValue[];
+type JsonObject = { [key: string]: JsonValue };
+type JsonValue = JsonPrimitive | JsonArray | JsonObject;
+
 /**
  * Persists a serializable object to local storage associated with the specified key.
  * @internal
  */
-export function saveToLocalStorage<T extends object>(key: string, value: T): void {
+export function saveToLocalStorage<T extends JsonValue>(key: string, value: T): void {
   if (typeof localStorage === 'undefined') {
     log.error('Local storage is not available.');
     return;
@@ -21,7 +26,7 @@ export function saveToLocalStorage<T extends object>(key: string, value: T): voi
  * Retrieves a serializable object from local storage by its key.
  * @internal
  */
-export function loadFromLocalStorage<T extends object>(key: string): T | undefined {
+export function loadFromLocalStorage<T extends JsonValue>(key: string): T | undefined {
   if (typeof localStorage === 'undefined') {
     log.error('Local storage is not available.');
     return undefined;

@@ -3,6 +3,7 @@ import {
   ParticipantName,
   TrackMutedIndicator,
   RoomAudioRenderer,
+  isTrackReference,
   useConnectionQualityIndicator,
   VideoTrack,
   useToken,
@@ -16,7 +17,6 @@ import styles from '../styles/Simple.module.css';
 import myStyles from '../styles/Customize.module.css';
 import type { NextPage } from 'next';
 import { HTMLAttributes, useState } from 'react';
-import { isTrackReference } from '@livekit/components-core';
 import { generateRandomUserId } from '../lib/helper';
 
 const CustomizeExample: NextPage = () => {

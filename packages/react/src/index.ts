@@ -7,7 +7,7 @@ export * from './prefabs';
 export * from './context';
 
 // Re-exports from core
-export { setLogLevel } from '@livekit/components-core';
+export { setLogLevel, isTrackReference } from '@livekit/components-core';
 export type {
   ChatMessage,
   ReceivedChatMessage,

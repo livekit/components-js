@@ -1,5 +1,5 @@
 import { cssPrefix } from '../constants';
-import { loadFromLocalStorage, saveToLocalStorage } from './local-storage-helpers';
+import { createLocalStorageInterface } from './local-storage-helpers';
 
 const USER_CHOICES_KEY = `${cssPrefix}-device-settings` as const;
 
@@ -39,14 +39,6 @@ export type LocalUserChoices = {
   sharedPassphrase: string;
 };
 
-/**
- * The type of the object stored in local storage.
- * @remarks
- * TODO: remove this after removing the deprecated properties from `LocalUserChoices`.
- * @internal
- */
-type TempStorageType = Omit<LocalUserChoices, 'e2ee' | 'sharedPassphrase'>;
-
 const defaultUserChoices: LocalUserChoices = {
   videoEnabled: true,
   audioEnabled: true,
@@ -56,6 +48,15 @@ const defaultUserChoices: LocalUserChoices = {
   e2ee: false,
   sharedPassphrase: '',
 } as const;
+
+/**
+ * The type of the object stored in local storage.
+ * @remarks
+ * TODO: Replace this type with `LocalUserChoices` after removing the deprecated properties from `LocalUserChoices`.
+ * @internal
+ */
+type TempStorageType = Omit<LocalUserChoices, 'e2ee' | 'sharedPassphrase'>;
+const { load, save } = createLocalStorageInterface<TempStorageType>(USER_CHOICES_KEY);
 
 /**
  * Saves user choices to local storage.
@@ -73,7 +74,7 @@ export function saveUserChoices(
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { e2ee, sharedPassphrase, ...toSave } = userChoices;
-  saveToLocalStorage(USER_CHOICES_KEY, toSave);
+  save(toSave);
 }
 
 /**
@@ -104,7 +105,7 @@ export function loadUserChoices(
   if (preventLoad) {
     return fallback;
   } else {
-    const maybeLoadedObject = loadFromLocalStorage<TempStorageType>(USER_CHOICES_KEY);
+    const maybeLoadedObject = load();
     const result = { ...fallback, ...(maybeLoadedObject ?? {}) };
     return result;
   }

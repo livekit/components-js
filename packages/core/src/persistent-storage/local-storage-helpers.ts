@@ -9,7 +9,7 @@ type JsonValue = JsonPrimitive | JsonArray | JsonObject;
  * Persists a serializable object to local storage associated with the specified key.
  * @internal
  */
-export function saveToLocalStorage<T extends JsonValue>(key: string, value: T): void {
+function saveToLocalStorage<T extends JsonValue>(key: string, value: T): void {
   if (typeof localStorage === 'undefined') {
     log.error('Local storage is not available.');
     return;
@@ -26,7 +26,7 @@ export function saveToLocalStorage<T extends JsonValue>(key: string, value: T): 
  * Retrieves a serializable object from local storage by its key.
  * @internal
  */
-export function loadFromLocalStorage<T extends JsonValue>(key: string): T | undefined {
+function loadFromLocalStorage<T extends JsonValue>(key: string): T | undefined {
   if (typeof localStorage === 'undefined') {
     log.error('Local storage is not available.');
     return undefined;
@@ -43,4 +43,17 @@ export function loadFromLocalStorage<T extends JsonValue>(key: string): T | unde
     log.error(`Error getting item from local storage: ${error}`);
     return undefined;
   }
+}
+
+/**
+ * Generate a pair of functions to load and save a value of type T to local storage.
+ * @internal
+ */
+export function createLocalStorageInterface<T extends JsonValue>(
+  key: string,
+): { load: () => T | undefined; save: (value: T) => void } {
+  return {
+    load: () => loadFromLocalStorage<T>(key),
+    save: (value: T) => saveToLocalStorage<T>(key, value),
+  };
 }

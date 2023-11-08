@@ -59,18 +59,18 @@ If you are interested in contributing to the project or running the examples tha
 ### Setup Monorepo
 
 This repo consists of multiple packages that partly build on top of each other.
-It relies on yarn workspaces and [Turborepo](https://turbo.build/repo/docs) (which gets installed automatically).
+It relies on pnpm workspaces and [Turborepo](https://turbo.build/repo/docs) (which gets installed automatically).
 
-Clone the repo and run `yarn install` the root level:
+Clone the repo and run `pnpm install` the root level:
 
 ```shell
-yarn install
+pnpm install
 ```
 
 In order to link up initial dependencies and check whether everything has installed correctly run
 
 ```shell
-yarn build
+pnpm build
 ```
 
 This will build all the packages in `/packages` and the examples in `/examples` once.
@@ -79,7 +79,7 @@ After that you can use a more granular command to only rebuild the packages you 
 E.g. to test and automatically rebuild package dependencies for the nextjs example, run:
 
 ```shell
-yarn dev:next
+pnpm dev:next
 ```
 
 > **Note**

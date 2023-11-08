@@ -20,7 +20,7 @@ A LiveKit Components implementation in [React](https://reactjs.org/).
 ## Install
 
 ```bash
-yarn install @livekit/components-react
+npm add @livekit/components-react
 ```
 
 ## Usage

@@ -49,7 +49,6 @@ import { TrackPublication } from 'livekit-client';
 import type { TrackReference } from '@livekit/components-core';
 import { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import type { TrackSourceWithOptions } from '@livekit/components-core';
-import { UserChoices } from '@livekit/components-core';
 import type { VideoCaptureOptions } from 'livekit-client';
 import type { VideoSource } from '@livekit/components-core';
 import type { WidgetState } from '@livekit/components-core';
@@ -827,7 +826,7 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
 
 // @alpha
 export function usePersistentUserChoices(options?: UsePersistentUserChoicesOptions): {
-    userChoices: UserChoices;
+    userChoices: LocalUserChoices;
     saveAudioInputEnabled: (isEnabled: boolean) => void;
     saveVideoInputEnabled: (isEnabled: boolean) => void;
     saveAudioInputDeviceId: (deviceId: string) => void;
@@ -837,7 +836,7 @@ export function usePersistentUserChoices(options?: UsePersistentUserChoicesOptio
 
 // @alpha
 export interface UsePersistentUserChoicesOptions {
-    defaults?: Partial<UserChoices>;
+    defaults?: Partial<LocalUserChoices>;
     preventLoad?: boolean;
     preventSave?: boolean;
 }
@@ -854,8 +853,6 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(en
 
 // @alpha (undocumented)
 export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): LocalTrack[] | undefined;
-
-export { UserChoices }
 
 // @public
 export function useRemoteParticipant(identity: string, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;

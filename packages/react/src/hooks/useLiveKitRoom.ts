@@ -43,6 +43,7 @@ export function useLiveKitRoom<T extends HTMLElement>(
     onDisconnected,
     onError,
     onMediaDeviceFailure,
+    onEncryptionError,
     simulateParticipants,
     ...rest
   } = { ...defaultRoomProps, ...props };
@@ -79,18 +80,25 @@ export function useLiveKitRoom<T extends HTMLElement>(
       });
     };
 
-    const onMediaDeviceError = (e: Error) => {
+    const handleMediaDeviceError = (e: Error) => {
       const mediaDeviceFailure = MediaDeviceFailure.getFailure(e);
       onMediaDeviceFailure?.(mediaDeviceFailure);
     };
-    room.on(RoomEvent.SignalConnected, onSignalConnected);
-    room.on(RoomEvent.MediaDevicesError, onMediaDeviceError);
+    const handleEncryptionError = (e: Error) => {
+      onEncryptionError?.(e);
+    };
+    room
+      .on(RoomEvent.SignalConnected, onSignalConnected)
+      .on(RoomEvent.MediaDevicesError, handleMediaDeviceError)
+      .on(RoomEvent.EncryptionError, handleEncryptionError);
 
     return () => {
-      room.off(RoomEvent.SignalConnected, onSignalConnected);
-      room.off(RoomEvent.MediaDevicesError, onMediaDeviceError);
+      room
+        .off(RoomEvent.SignalConnected, onSignalConnected)
+        .off(RoomEvent.MediaDevicesError, handleMediaDeviceError)
+        .off(RoomEvent.EncryptionError, handleEncryptionError);
     };
-  }, [room, audio, video, screen, onError]);
+  }, [room, audio, video, screen, onError, onEncryptionError, onMediaDeviceFailure]);
 
   React.useEffect(() => {
     if (!room) return;

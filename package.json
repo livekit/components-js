@@ -16,9 +16,9 @@
     "format:check": "prettier --check \"**/src/**/*.{ts,tsx,md}\"",
     "format:write": "prettier --write \"**/src/**/*.{ts,tsx,md}\"",
     "gen:docs": "turbo run gen:docs",
-    "gen:docs:watch": "nodemon --watch \"tooling/api-documenter/src/**/*\" --watch \"packages/react/src/**/*\" --ignore \"packages/react/src/assets/**/*\" -e js,jsx,ts,tsx -x \"yarn gen:docs\"",
+    "gen:docs:watch": "nodemon --watch \"tooling/api-documenter/src/**/*\" --watch \"packages/react/src/**/*\" --ignore \"packages/react/src/assets/**/*\" -e js,jsx,ts,tsx -x \"pnpm gen:docs\"",
     "lint": "turbo run lint",
-    "release": "turbo run build --filter=./packages/* && changeset publish",
+    "publish": "turbo run build --filter=./packages/* && pnpm --filter=./packages/* publish",
     "start:next": "turbo run start --filter=@livekit/component-example-next...",
     "test": "turbo run test",
     "tooling:update-readme-nav": "node tooling/readme-manager/update-nav-in-readmes.js",
@@ -26,12 +26,6 @@
     "api-extractor": "turbo run api-extractor",
     "cleanup": "find . -type d \\( -name 'node_modules' -o -name '.turbo' -o -name 'dist' \\) -prune -exec rm -rf '{}' +"
   },
-  "workspaces": [
-    "packages/*",
-    "examples/*",
-    "docs/*",
-    "tooling/*"
-  ],
   "dependencies": {},
   "peerDependencies": {
     "typescript": "5.1.6"

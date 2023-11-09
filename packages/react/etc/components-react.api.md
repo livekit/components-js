@@ -16,6 +16,7 @@ import type { CreateLocalTracksOptions } from 'livekit-client';
 import type { DataSendOptions } from '@livekit/components-core';
 import type { GridLayoutDefinition } from '@livekit/components-core';
 import { HTMLAttributes } from 'react';
+import { isTrackReference } from '@livekit/components-core';
 import type { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
 import type { LocalTrack } from 'livekit-client';
@@ -271,6 +272,8 @@ export interface GridLayoutProps extends React_2.HTMLAttributes<HTMLDivElement>,
     // (undocumented)
     tracks: TrackReferenceOrPlaceholder[];
 }
+
+export { isTrackReference }
 
 // @public (undocumented)
 export const LayoutContext: React_2.Context<LayoutContextType | undefined>;

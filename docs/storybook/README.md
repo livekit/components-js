@@ -23,7 +23,7 @@ This Storybook gives a good overview over all* (*work in progress) LiveKit compo
 2. From the root of the monorepo run:
 
 ```bash
-yarn dev:storybook
+pnpm dev:storybook
 ```
 
 This should open storybook in the default browser under `http://localhost:6006`

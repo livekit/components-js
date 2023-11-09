@@ -28,7 +28,7 @@ Copy the the contents of `.env.example` in to a newly created `.env.local` file 
 With everything setup we can now start the Next.js-App from the root of the monorepo with:
 
 ```bash
-yarn dev:next
+pnpm dev:next
 ```
 
 Navigate to `http://localhost:3000/` to see a list of examples to choose from.

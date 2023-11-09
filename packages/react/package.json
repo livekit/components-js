@@ -33,11 +33,11 @@
     "src"
   ],
   "scripts": {
-    "build": "yarn gen:svg && tsup --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
+    "build": "pnpm gen:svg && tsup --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
     "dev": "tsup --watch --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
     "gen:icons": "rimraf -I -g ./src/assets/icons/*Icon.tsx && svgr --template ./src/assets/template.js --out-dir ./src/assets/icons --typescript ../styles/assets/icons",
     "gen:images": "rimraf -I -g ./src/assets/images/*.tsx && svgr --template ./src/assets/template.js --out-dir ./src/assets/images --typescript --no-svgo ../styles/assets/images",
-    "gen:svg": "yarn gen:images && yarn gen:icons",
+    "gen:svg": "pnpm gen:images && pnpm gen:icons",
     "lint": "eslint -f unix \"src/**/*.{ts,tsx}\"",
     "test": "vitest --run",
     "test:watch": "vitest",
@@ -47,7 +47,7 @@
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@livekit/components-core": "0.7.0",
+    "@livekit/components-core": "workspace:../core",
     "@react-hook/latest": "^1.0.3",
     "clsx": "^2.0.0",
     "usehooks-ts": "^2.9.1"
@@ -55,7 +55,8 @@
   "peerDependencies": {
     "livekit-client": "^1.12.0",
     "react": ">=18",
-    "react-dom": ">=18"
+    "react-dom": ">=18",
+    "tslib": "^2.6.2"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.35.0",

@@ -18,6 +18,7 @@
     "gen:docs": "turbo run gen:docs",
     "gen:docs:watch": "nodemon --watch \"tooling/api-documenter/src/**/*\" --watch \"packages/react/src/**/*\" --ignore \"packages/react/src/assets/**/*\" -e js,jsx,ts,tsx -x \"pnpm gen:docs\"",
     "lint": "turbo run lint",
+    "preinstall": "npx only-allow pnpm",
     "publish": "turbo run build --filter=./packages/* && pnpm --filter=./packages/* publish",
     "start:next": "turbo run start --filter=@livekit/component-example-next...",
     "test": "turbo run test",

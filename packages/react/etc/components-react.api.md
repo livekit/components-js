@@ -312,6 +312,8 @@ export interface LiveKitRoomProps extends Omit<React_2.HTMLAttributes<HTMLDivEle
     // (undocumented)
     onDisconnected?: () => void;
     // (undocumented)
+    onEncryptionError?: (error: Error) => void;
+    // (undocumented)
     onError?: (error: Error) => void;
     // (undocumented)
     onMediaDeviceFailure?: (failure?: MediaDeviceFailure) => void;

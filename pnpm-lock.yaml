@@ -167,7 +167,7 @@ importers:
         version: 2.6.2
     devDependencies:
       '@livekit/components-styles':
-        specifier: workspace:../styles
+        specifier: workspace:*
         version: link:../styles
       '@microsoft/api-extractor':
         specifier: ^7.36.0
@@ -197,7 +197,7 @@ importers:
   packages/react:
     dependencies:
       '@livekit/components-core':
-        specifier: workspace:../core
+        specifier: workspace:*
         version: link:../core
       '@react-hook/latest':
         specifier: ^1.0.3

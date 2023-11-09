@@ -7,7 +7,7 @@
     "url": "git+https://github.com/livekit/components-js.git",
     "directory": "/docs/beta-docs"
   },
-  "devDependencies": {
+  "dependencies": {
     "@livekit/components-react": "workspace:*"
   },
   "author": "",

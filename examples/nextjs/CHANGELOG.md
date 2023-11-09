@@ -1,5 +1,19 @@
 # @livekit/component-example-next
 
+## 0.2.0
+
+### Minor Changes
+
+- Deprecate showE2EE options on PreJoin - [#693](https://github.com/livekit/components-js/pull/693) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Add helper function to generate random user identity - [#691](https://github.com/livekit/components-js/pull/691) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`d0b90cba`](https://github.com/livekit/components-js/commit/d0b90cbae07abf701c9c1de403152e0aafb915a0), [`01611f5d`](https://github.com/livekit/components-js/commit/01611f5d2498c8dcdc231e5e305f281c9c2d9311), [`946d2b06`](https://github.com/livekit/components-js/commit/946d2b06d78a5f8ab721a98fbebe6b16a2e98463), [`66df197a`](https://github.com/livekit/components-js/commit/66df197a861429f6bb87774ec5be4cad1bd5762a), [`d52a53b5`](https://github.com/livekit/components-js/commit/d52a53b5727c9cceccd7050dbae737d1fc47acb8), [`8348816d`](https://github.com/livekit/components-js/commit/8348816d83a943535efe90827eca4bb56a1948a6), [`67d62ba3`](https://github.com/livekit/components-js/commit/67d62ba3cb902d5b55fb553c1ab8480a12fb1d55), [`01b04180`](https://github.com/livekit/components-js/commit/01b0418077da58c99fc3c81e76a46dd739517011), [`8d760ead`](https://github.com/livekit/components-js/commit/8d760ead2aa7101e608773df04ce09e9e9b5967a)]:
+  - @livekit/components-react@1.4.0
+  - @livekit/components-styles@1.0.7
+
 ## 0.1.31
 
 ### Patch Changes

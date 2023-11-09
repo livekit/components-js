@@ -1,5 +1,15 @@
 # @livekit/components-core
 
+## 0.8.0
+
+### Minor Changes
+
+- Add `usePersistentUserChoices` hook to save user choices saving functionality. - [#683](https://github.com/livekit/components-js/pull/683) ([@Ocupe](https://github.com/Ocupe))
+
+### Patch Changes
+
+- Update PreJoin description and update docs. - [#682](https://github.com/livekit/components-js/pull/682) ([@Ocupe](https://github.com/Ocupe))
+
 ## 0.7.0
 
 ### Minor Changes

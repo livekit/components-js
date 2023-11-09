@@ -11,7 +11,7 @@
     "directory": "eslint-plugin-tsdoc"
   },
   "scripts": {
-    "gen:docs": "yarn gen:api-documenter && yarn gather-api-files && yarn format-gen-docs",
+    "gen:docs": "pnpm gather-api-files && pnpm gen:api-documenter && pnpm format-gen-docs",
     "gather-api-files": "mkdir -p ./temp && cp ./../../packages/react/temp/*.api.json ./temp/ && cp ./../../packages/core/temp/*.api.json ./temp/",
     "gen:api-documenter": "api-documenter markdown --input-folder ./temp --output-folder ../../docs/docs/generated-docs",
     "format-gen-docs": "prettier --write \"./../../docs/docs/**/*.md\" --loglevel warn --single-quote false --trailing-comma none",

@@ -20,9 +20,9 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@livekit/api-documenter": "*",
-    "@livekit/components-react": "~1.3.0",
-    "eslint-config-lk-custom": "*"
+    "@livekit/api-documenter": "workspace:*",
+    "@livekit/components-react": "workspace:*",
+    "eslint-config-lk-custom": "workspace:*"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.35.2"

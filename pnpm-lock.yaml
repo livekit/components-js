@@ -36,7 +36,11 @@ importers:
         specifier: 5.2.2
         version: 5.2.2
 
-  docs/docs: {}
+  docs/docs:
+    devDependencies:
+      '@livekit/components-react':
+        specifier: workspace:*
+        version: link:../../packages/react
 
   docs/storybook:
     dependencies:

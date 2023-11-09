@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 1.0.7
+
+### Patch Changes
+
+- Fix chat messages are not scrollable. - [#662](https://github.com/livekit/components-js/pull/662) ([@Ocupe](https://github.com/Ocupe))
+
 ## 1.0.6
 
 ### Patch Changes

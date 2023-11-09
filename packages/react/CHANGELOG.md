@@ -1,5 +1,32 @@
 # @livekit/components-react
 
+## 1.4.0
+
+### Minor Changes
+
+- Add `usePersistentUserChoices` hook to save user choices saving functionality. - [#683](https://github.com/livekit/components-js/pull/683) ([@Ocupe](https://github.com/Ocupe))
+
+- Deprecate showE2EE options on PreJoin - [#693](https://github.com/livekit/components-js/pull/693) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Use more specific prop types for audio and video track - [#681](https://github.com/livekit/components-js/pull/681) ([@lukasIO](https://github.com/lukasIO))
+
+- Update PreJoin description and update docs. - [#682](https://github.com/livekit/components-js/pull/682) ([@Ocupe](https://github.com/Ocupe))
+
+- Fix `useTrackRef` for certain cases. - [#692](https://github.com/livekit/components-js/pull/692) ([@Ocupe](https://github.com/Ocupe))
+
+- Fix chat messages are not scrollable. - [#662](https://github.com/livekit/components-js/pull/662) ([@Ocupe](https://github.com/Ocupe))
+
+- Export isTrackReference - [#696](https://github.com/livekit/components-js/pull/696) ([@lukasIO](https://github.com/lukasIO))
+
+- Allow track placeholders to be pinned - [#666](https://github.com/livekit/components-js/pull/666) ([@lukasIO](https://github.com/lukasIO))
+
+- Remove non-exposed orphaned icons `QualityUnknownIcon.tsx` and `UserSilhouetteIcon.tsx`. - [#647](https://github.com/livekit/components-js/pull/647) ([@hehehai](https://github.com/hehehai))
+
+- Updated dependencies [[`01611f5d`](https://github.com/livekit/components-js/commit/01611f5d2498c8dcdc231e5e305f281c9c2d9311), [`946d2b06`](https://github.com/livekit/components-js/commit/946d2b06d78a5f8ab721a98fbebe6b16a2e98463)]:
+  - @livekit/components-core@0.8.0
+
 ## 1.3.0
 
 ### Minor Changes

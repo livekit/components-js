@@ -350,10 +350,10 @@ export interface MediaDeviceMenuProps extends React_2.ButtonHTMLAttributes<HTMLB
 }
 
 // @public
-export function MediaDeviceSelect({ kind, initialSelection, onActiveDeviceChange, onDeviceListChange, onDeviceSelectError, exactMatch, track, requestPermissions, ...props }: MediaDeviceSelectProps): React_2.JSX.Element;
+export function MediaDeviceSelect({ kind, initialSelection, onActiveDeviceChange, onDeviceListChange, onDeviceSelectError, exactMatch, track, requestPermissions, onError, ...props }: MediaDeviceSelectProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface MediaDeviceSelectProps extends React_2.HTMLAttributes<HTMLUListElement> {
+export interface MediaDeviceSelectProps extends Omit<React_2.HTMLAttributes<HTMLUListElement>, 'onError'> {
     exactMatch?: boolean;
     // (undocumented)
     initialSelection?: string;
@@ -365,6 +365,8 @@ export interface MediaDeviceSelectProps extends React_2.HTMLAttributes<HTMLUList
     onDeviceListChange?: (devices: MediaDeviceInfo[]) => void;
     // (undocumented)
     onDeviceSelectError?: (e: Error) => void;
+    // (undocumented)
+    onError?: (e: Error) => void;
     requestPermissions?: boolean;
     // (undocumented)
     track?: LocalAudioTrack | LocalVideoTrack;
@@ -758,7 +760,7 @@ export function useMediaDevices({ kind }: {
 }): MediaDeviceInfo[];
 
 // @public
-export function useMediaDeviceSelect({ kind, room, track, requestPermissions, }: UseMediaDeviceSelectProps): {
+export function useMediaDeviceSelect({ kind, room, track, requestPermissions, onError, }: UseMediaDeviceSelectProps): {
     devices: MediaDeviceInfo[];
     className: string;
     activeDeviceId: string;
@@ -769,6 +771,8 @@ export function useMediaDeviceSelect({ kind, room, track, requestPermissions, }:
 export interface UseMediaDeviceSelectProps {
     // (undocumented)
     kind: MediaDeviceKind;
+    // (undocumented)
+    onError?: (e: Error) => void;
     requestPermissions?: boolean;
     // (undocumented)
     room?: Room;
@@ -1127,7 +1131,7 @@ export type WidgetState = {
 // src/context/layout-context.ts:10:3 - (ae-forgotten-export) The symbol "PinContextType" needs to be exported by the entry point index.d.ts
 // src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "ChatContextType" needs to be exported by the entry point index.d.ts
 // src/hooks/useGridLayout.ts:24:6 - (ae-forgotten-export) The symbol "GridLayoutDefinition" needs to be exported by the entry point index.d.ts
-// src/hooks/useMediaDeviceSelect.ts:40:29 - (ae-forgotten-export) The symbol "SetMediaDeviceOptions" needs to be exported by the entry point index.d.ts
+// src/hooks/useMediaDeviceSelect.ts:42:29 - (ae-forgotten-export) The symbol "SetMediaDeviceOptions" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

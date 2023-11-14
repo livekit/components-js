@@ -6,21 +6,25 @@
 import type { Participant, Track, TrackPublication } from 'livekit-client';
 // ## TrackReference Types
 
+/** @public */
 export type TrackReferencePlaceholder = {
   participant: Participant;
   publication?: never;
   source: Track.Source;
 };
 
+/** @public */
 export type TrackReference = {
   participant: Participant;
   publication: TrackPublication;
   source: Track.Source;
 };
 
+/** @public */
 export type TrackReferenceOrPlaceholder = TrackReference | TrackReferencePlaceholder;
 
 // ### TrackReference Type Predicates
+/** @internal */
 export function isTrackReference(trackReference: unknown): trackReference is TrackReference {
   if (typeof trackReference === 'undefined') {
     return false;

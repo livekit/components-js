@@ -14,4 +14,9 @@ export type {
   MessageDecoder,
   MessageEncoder,
   LocalUserChoices,
+  TrackReference,
+  TrackReferenceOrPlaceholder,
+  ParticipantClickEvent,
+  PinState,
+  WidgetState,
 } from '@livekit/components-core';

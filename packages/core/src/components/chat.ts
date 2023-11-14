@@ -4,11 +4,13 @@ import { DataPacket_Kind } from 'livekit-client';
 import { BehaviorSubject, Subject, scan, map, takeUntil } from 'rxjs';
 import { DataTopic, sendMessage, setupDataMessageHandler } from '../observables/dataChannel';
 
+/** @public */
 export interface ChatMessage {
   timestamp: number;
   message: string;
 }
 
+/** @public */
 export interface ReceivedChatMessage extends ChatMessage {
   from?: Participant;
 }

@@ -4,6 +4,7 @@ import { createLocalStorageInterface } from './local-storage-helpers';
 const USER_CHOICES_KEY = `${cssPrefix}-user-choices` as const;
 
 /**
+ * @public
  * Represents the user's choices for video and audio input devices,
  * as well as their username.
  */

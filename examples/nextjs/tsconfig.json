@@ -14,7 +14,12 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "paths": {
+      "@livekit/components-core": ["../../packages/core/dist/index.d.ts"],
+      "@livekit/components-react": ["../../packages/react/dist/index.d.ts"],
+      "@livekit/components-styles": ["../../packages/styles/dist/types/general/index.css.d.ts"]
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

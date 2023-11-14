@@ -28,7 +28,12 @@ const MinimalExample: NextPage = () => {
         token={token}
         connectOptions={options}
         serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-        onMediaDeviceFailure={(e) => console.warn(e)}
+        onMediaDeviceFailure={(e) => {
+          console.error(e);
+          alert(
+            'Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab',
+          );
+        }}
       >
         <VideoConference />
       </LiveKitRoom>

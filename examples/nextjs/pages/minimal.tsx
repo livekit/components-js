@@ -23,11 +23,12 @@ const MinimalExample: NextPage = () => {
   return (
     <div data-lk-theme="default" style={{ height: '100vh' }}>
       <LiveKitRoom
-        video={true}
-        audio={true}
+        video={false}
+        audio={false}
         token={token}
         connectOptions={options}
         serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
+        onMediaDeviceFailure={(e) => console.warn(e)}
       >
         <VideoConference />
       </LiveKitRoom>

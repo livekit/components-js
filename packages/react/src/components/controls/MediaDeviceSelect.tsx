@@ -5,7 +5,8 @@ import type { LocalAudioTrack, LocalVideoTrack } from 'livekit-client';
 import { useMediaDeviceSelect } from '../../hooks';
 
 /** @public */
-export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListElement> {
+export interface MediaDeviceSelectProps
+  extends Omit<React.HTMLAttributes<HTMLUListElement>, 'onError'> {
   kind: MediaDeviceKind;
   onActiveDeviceChange?: (deviceId: string) => void;
   onDeviceListChange?: (devices: MediaDeviceInfo[]) => void;
@@ -26,6 +27,7 @@ export interface MediaDeviceSelectProps extends React.HTMLAttributes<HTMLUListEl
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices | MDN enumerateDevices}
    */
   requestPermissions?: boolean;
+  onError?: (e: Error) => void;
 }
 
 /**
@@ -49,6 +51,7 @@ export function MediaDeviceSelect({
   exactMatch,
   track,
   requestPermissions,
+  onError,
   ...props
 }: MediaDeviceSelectProps) {
   const room = useMaybeRoomContext();
@@ -57,6 +60,7 @@ export function MediaDeviceSelect({
     room,
     track,
     requestPermissions,
+    onError,
   });
   React.useEffect(() => {
     if (initialSelection !== undefined) {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useMaybeRoomContext } from '../../context';
 import { mergeProps } from '../../utils';
-import type { LocalAudioTrack, LocalVideoTrack } from 'livekit-client';
+import { RoomEvent, type LocalAudioTrack, type LocalVideoTrack } from 'livekit-client';
 import { useMediaDeviceSelect } from '../../hooks';
 
 /** @public */
@@ -55,12 +55,19 @@ export function MediaDeviceSelect({
   ...props
 }: MediaDeviceSelectProps) {
   const room = useMaybeRoomContext();
+  const handleError = (e: Error) => {
+    if (room) {
+      // awkwardly emit the event from outside of the room, as we don't have other means to raise a MediaDeviceError
+      room.emit(RoomEvent.MediaDevicesError, e);
+    }
+    onError?.(e);
+  };
   const { devices, activeDeviceId, setActiveMediaDevice, className } = useMediaDeviceSelect({
     kind,
     room,
     track,
     requestPermissions,
-    onError,
+    onError: handleError,
   });
   React.useEffect(() => {
     if (initialSelection !== undefined) {

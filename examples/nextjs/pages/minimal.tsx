@@ -16,17 +16,12 @@ const MinimalExample: NextPage = () => {
     },
   });
 
-  const options: RoomConnectOptions = {
-    autoSubscribe: false,
-  };
-
   return (
     <div data-lk-theme="default" style={{ height: '100vh' }}>
       <LiveKitRoom
         video={true}
         audio={true}
         token={token}
-        connectOptions={options}
         serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
       >
         <VideoConference />

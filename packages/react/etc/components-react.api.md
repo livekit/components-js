@@ -260,7 +260,9 @@ export interface GridLayoutProps extends React_2.HTMLAttributes<HTMLDivElement>,
     tracks: TrackReferenceOrPlaceholder[];
 }
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "isTrackReference" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export function isTrackReference(trackReference: unknown): trackReference is TrackReference;
 
 // @public (undocumented)

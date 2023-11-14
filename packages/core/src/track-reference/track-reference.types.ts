@@ -20,9 +20,11 @@ export type TrackReference = {
   source: Track.Source;
 };
 
+/** @public */
 export type TrackReferenceOrPlaceholder = TrackReference | TrackReferencePlaceholder;
 
 // ### TrackReference Type Predicates
+/** @internal */
 export function isTrackReference(trackReference: unknown): trackReference is TrackReference {
   if (typeof trackReference === 'undefined') {
     return false;

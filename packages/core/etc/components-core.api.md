@@ -265,7 +265,9 @@ export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observabl
 // @public (undocumented)
 export function observeTrackEvents(track: TrackPublication, ...events: TrackEvent_2[]): Observable<TrackPublication>;
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "ParticipantClickEvent" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export interface ParticipantClickEvent {
     // (undocumented)
     participant: Participant;

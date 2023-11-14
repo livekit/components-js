@@ -2,10 +2,12 @@ import type { Participant, Track, TrackPublication } from 'livekit-client';
 import type { TrackReference, TrackReferenceOrPlaceholder } from './track-reference';
 
 // ## PinState Type
+/** @public */
 export type PinState = TrackReferenceOrPlaceholder[];
 export const PIN_DEFAULT_STATE: PinState = [];
 
 // ## WidgetState Types
+/** @public */
 export type WidgetState = {
   showChat: boolean;
   unreadMessages: number;
@@ -34,6 +36,7 @@ export type TrackReferenceFilter = Parameters<TrackReferenceOrPlaceholder[]['fil
 export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
 
 // ## Other Types
+/** @internal */
 export interface ParticipantClickEvent {
   participant: Participant;
   track?: TrackPublication;

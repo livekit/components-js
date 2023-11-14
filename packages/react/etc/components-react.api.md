@@ -224,6 +224,8 @@ export interface FocusLayoutContainerProps extends React_2.HTMLAttributes<HTMLDi
 
 // @public (undocumented)
 export interface FocusLayoutProps extends React_2.HTMLAttributes<HTMLElement> {
+    // Warning: (ae-incompatible-release-tags) The symbol "onParticipantClick" is marked as @public, but its signature references "ParticipantClickEvent" which is marked as @internal
+    //
     // (undocumented)
     onParticipantClick?: (evt: ParticipantClickEvent) => void;
     // @deprecated (undocumented)
@@ -378,7 +380,9 @@ export type MessageFormatter = (message: string) => React_2.ReactNode;
 // @public
 export function ParticipantAudioTile({ participant, children, source, publication, disableSpeakingIndicator, onParticipantClick, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "ParticipantClickEvent" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export interface ParticipantClickEvent {
     // (undocumented)
     participant: Participant;
@@ -417,6 +421,8 @@ export function ParticipantTile({ trackRef, participant, children, source, onPar
 export interface ParticipantTileProps extends React_2.HTMLAttributes<HTMLDivElement> {
     // (undocumented)
     disableSpeakingIndicator?: boolean;
+    // Warning: (ae-incompatible-release-tags) The symbol "onParticipantClick" is marked as @public, but its signature references "ParticipantClickEvent" which is marked as @internal
+    //
     // (undocumented)
     onParticipantClick?: (event: ParticipantClickEvent) => void;
     // @deprecated (undocumented)
@@ -854,6 +860,8 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
     disableSpeakingIndicator?: boolean;
     // (undocumented)
     htmlProps: React_2.HTMLAttributes<T>;
+    // Warning: (ae-incompatible-release-tags) The symbol "onParticipantClick" is marked as @public, but its signature references "ParticipantClickEvent" which is marked as @internal
+    //
     // (undocumented)
     onParticipantClick?: (event: ParticipantClickEvent) => void;
     // @deprecated (undocumented)
@@ -1093,6 +1101,8 @@ export interface VideoTrackProps extends React_2.VideoHTMLAttributes<HTMLVideoEl
     name?: string;
     // (undocumented)
     onSubscriptionStatusChanged?: (subscribed: boolean) => void;
+    // Warning: (ae-incompatible-release-tags) The symbol "onTrackClick" is marked as @public, but its signature references "ParticipantClickEvent" which is marked as @internal
+    //
     // (undocumented)
     onTrackClick?: (evt: ParticipantClickEvent) => void;
     // @deprecated (undocumented)

@@ -6,12 +6,14 @@
 import type { Participant, Track, TrackPublication } from 'livekit-client';
 // ## TrackReference Types
 
+/** @public */
 export type TrackReferencePlaceholder = {
   participant: Participant;
   publication?: never;
   source: Track.Source;
 };
 
+/** @public */
 export type TrackReference = {
   participant: Participant;
   publication: TrackPublication;

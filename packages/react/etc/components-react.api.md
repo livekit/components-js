@@ -94,7 +94,7 @@ export interface CarouselLayoutProps extends React_2.HTMLAttributes<HTMLMediaEle
 export const CarouselView: typeof CarouselLayout;
 
 // @public
-export function Chat({ messageFormatter, messageDecoder, messageEncoder, ...props }: ChatProps): React_2.JSX.Element;
+export function Chat({ messageFormatter, messageDecoder, messageEncoder, channelTopic, ...props }: ChatProps): React_2.JSX.Element;
 
 // @public
 export function ChatEntry({ entry, hideName, hideTimestamp, messageFormatter, ...props }: ChatEntryProps): React_2.JSX.Element;
@@ -115,12 +115,10 @@ export interface ChatMessage {
     timestamp: number;
 }
 
+// Warning: (ae-forgotten-export) The symbol "ChatOptions" needs to be exported by the entry point index.d.ts
+//
 // @public (undocumented)
-export interface ChatProps extends React_2.HTMLAttributes<HTMLDivElement> {
-    // (undocumented)
-    messageDecoder?: MessageDecoder;
-    // (undocumented)
-    messageEncoder?: MessageEncoder;
+export interface ChatProps extends React_2.HTMLAttributes<HTMLDivElement>, ChatOptions {
     // (undocumented)
     messageFormatter?: MessageFormatter;
 }
@@ -574,10 +572,7 @@ export function useAudioPlayback(room?: Room): {
 };
 
 // @public
-export function useChat(options?: {
-    messageEncoder?: MessageEncoder;
-    messageDecoder?: MessageDecoder;
-}): {
+export function useChat(options?: ChatOptions): {
     send: ((message: string) => Promise<void>) | undefined;
     chatMessages: ReceivedChatMessage[];
     isSending: boolean;

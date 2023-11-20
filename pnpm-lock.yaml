@@ -52,7 +52,7 @@ importers:
         version: link:../../packages/styles
       livekit-client:
         specifier: ^1.12.0
-        version: 1.14.4
+        version: 1.15.0
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -116,7 +116,7 @@ importers:
         version: link:../../packages/styles
       livekit-client:
         specifier: ^1.12.0
-        version: 1.14.4
+        version: 1.15.0
       livekit-server-sdk:
         specifier: ^1.0.3
         version: 1.2.7
@@ -159,7 +159,7 @@ importers:
         version: 5.0.0
       livekit-client:
         specifier: ^1.12.0
-        version: 1.14.4
+        version: 1.15.0
       loglevel:
         specifier: ^1.8.1
         version: 1.8.1
@@ -211,7 +211,7 @@ importers:
         version: 2.0.0
       livekit-client:
         specifier: ^1.12.0
-        version: 1.14.4
+        version: 1.15.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -10742,14 +10742,15 @@ packages:
   /lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  /livekit-client@1.14.4:
-    resolution: {integrity: sha512-sXNH+qhqkmXeCVsw3hcEbUsh9QfguBIGgM3glM0v0+YW4C2LdeGWD4pQBLR7USbkwbbVMEHDmqr/iY6XvEIoeQ==}
+  /livekit-client@1.15.0:
+    resolution: {integrity: sha512-uyp1sIFeOdezYBn9J0FnrMuG8uPgR4fwWPENodNisJC999xJwTSV3xVLX76AAnfky3IJoJehU4gY2UqoyXjm2w==}
     dependencies:
       '@bufbuild/protobuf': 1.4.2
       events: 3.3.0
       loglevel: 1.8.1
       sdp-transform: 2.14.1
       ts-debounce: 4.0.0
+      tslib: 2.6.2
       typed-emitter: 2.1.0
       webrtc-adapter: 8.2.3
     dev: false

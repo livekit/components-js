@@ -1,5 +1,5 @@
-import type { MessageDecoder, MessageEncoder } from '@livekit/components-core';
-import { ReceivedChatMessage, setupChat } from '@livekit/components-core';
+import type { ChatOptions, ReceivedChatMessage } from '@livekit/components-core';
+import { setupChat } from '@livekit/components-core';
 import * as React from 'react';
 import { useRoomContext } from '../context';
 import { useObservableState } from './internal/useObservableState';
@@ -11,10 +11,7 @@ import { useObservableState } from './internal/useObservableState';
  * It is possible to pass configurations for custom message encoding and decoding.
  * @public
  */
-export function useChat(options?: {
-  messageEncoder?: MessageEncoder;
-  messageDecoder?: MessageDecoder;
-}) {
+export function useChat(options?: ChatOptions) {
   const room = useRoomContext();
   const [setup, setSetup] = React.useState<ReturnType<typeof setupChat>>();
   const isSending = useObservableState(setup?.isSendingObservable, false);

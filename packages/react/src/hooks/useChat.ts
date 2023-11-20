@@ -20,7 +20,6 @@ export function useChat(options?: ChatOptions) {
   React.useEffect(() => {
     const setupChatReturn = setupChat(room, options);
     setSetup(setupChatReturn);
-    return setupChatReturn.destroy;
   }, [room, options]);
 
   return { send: setup?.send, chatMessages, isSending };

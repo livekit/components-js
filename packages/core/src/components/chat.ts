@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import type { Participant, Room } from 'livekit-client';
-import { DataPacket_Kind } from 'livekit-client';
+import { DataPacket_Kind, RoomEvent } from 'livekit-client';
 import { BehaviorSubject, Subject, scan, map, takeUntil } from 'rxjs';
 import { DataTopic, sendMessage, setupDataMessageHandler } from '../observables/dataChannel';
 
@@ -94,7 +94,9 @@ export function setupChat(room: Room, options?: ChatOptions) {
   function destroy() {
     onDestroyObservable.next();
     onDestroyObservable.complete();
+    topicSubjectMap.clear();
   }
+  room.once(RoomEvent.Disconnected, destroy);
 
-  return { messageObservable: messagesObservable, isSendingObservable: isSending$, send, destroy };
+  return { messageObservable: messagesObservable, isSendingObservable: isSending$, send };
 }

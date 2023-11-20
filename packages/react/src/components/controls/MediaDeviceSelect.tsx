@@ -55,13 +55,16 @@ export function MediaDeviceSelect({
   ...props
 }: MediaDeviceSelectProps) {
   const room = useMaybeRoomContext();
-  const handleError = (e: Error) => {
-    if (room) {
-      // awkwardly emit the event from outside of the room, as we don't have other means to raise a MediaDeviceError
-      room.emit(RoomEvent.MediaDevicesError, e);
-    }
-    onError?.(e);
-  };
+  const handleError = React.useCallback(
+    (e: Error) => {
+      if (room) {
+        // awkwardly emit the event from outside of the room, as we don't have other means to raise a MediaDeviceError
+        room.emit(RoomEvent.MediaDevicesError, e);
+      }
+      onError?.(e);
+    },
+    [room, onError],
+  );
   const { devices, activeDeviceId, setActiveMediaDevice, className } = useMediaDeviceSelect({
     kind,
     room,

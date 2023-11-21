@@ -19,6 +19,11 @@ export interface UseMediaDeviceSelectProps {
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices | MDN enumerateDevices}
    */
   requestPermissions?: boolean;
+  /**
+   * this callback gets called if an error is thrown when failing to select a device and also if a user
+   * denied permissions, eventhough the `requestPermissions` option is set to `true`.
+   * Most commonly this will emit a MediaDeviceError
+   */
   onError?: (e: Error) => void;
 }
 

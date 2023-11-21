@@ -79,10 +79,14 @@ export interface AudioVisualizerProps extends React_2.HTMLAttributes<SVGElement>
     trackRef?: TrackReferenceOrPlaceholder;
 }
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "CameraDisabledIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const CameraDisabledIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "CameraIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const CameraIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
@@ -114,7 +118,9 @@ export interface ChatEntryProps extends React_2.HTMLAttributes<HTMLLIElement> {
     messageFormatter?: MessageFormatter;
 }
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "ChatIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const ChatIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public (undocumented)
@@ -142,7 +148,9 @@ export function ChatToggle(props: ChatToggleProps): React_2.JSX.Element;
 export interface ChatToggleProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "Chevron" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const Chevron: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
@@ -249,7 +257,9 @@ export interface FocusLayoutProps extends React_2.HTMLAttributes<HTMLElement> {
 // @public
 export function FocusToggle({ trackRef, trackSource, participant, ...props }: FocusToggleProps): React_2.JSX.Element;
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "FocusToggleIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const FocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public (undocumented)
@@ -265,7 +275,9 @@ export interface FocusToggleProps extends React_2.ButtonHTMLAttributes<HTMLButto
 // @public (undocumented)
 export function formatChatMessageLinks(message: string): React_2.ReactNode;
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "GearIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const GearIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
@@ -306,7 +318,9 @@ export type LayoutContextType = {
     widget: ChatContextType;
 };
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "LeaveIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const LeaveIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
@@ -355,7 +369,9 @@ export type LocalUserChoices = {
     sharedPassphrase: string;
 };
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "LockLockedIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const LockLockedIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
@@ -404,10 +420,14 @@ export type MessageEncoder = (message: ChatMessage) => Uint8Array;
 // @public (undocumented)
 export type MessageFormatter = (message: string) => React_2.ReactNode;
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "MicDisabledIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const MicDisabledIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "MicIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const MicIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
@@ -447,7 +467,9 @@ export function ParticipantName({ participant, ...props }: ParticipantNameProps)
 export interface ParticipantNameProps extends React_2.HTMLAttributes<HTMLSpanElement>, UseParticipantInfoOptions {
 }
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "ParticipantPlaceholder" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const ParticipantPlaceholder: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
@@ -498,16 +520,24 @@ export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement
     userLabel?: string;
 }
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "QualityExcellentIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const QualityExcellentIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "QualityGoodIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const QualityGoodIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "QualityPoorIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const QualityPoorIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "QualityUnknownIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const QualityUnknownIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public (undocumented)
@@ -538,10 +568,14 @@ export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
     childrenPosition?: 'before' | 'after';
 }
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "ScreenShareIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const ScreenShareIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "ScreenShareStopIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const ScreenShareStopIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // Warning: (ae-forgotten-export) The symbol "LogLevel" needs to be exported by the entry point index.d.ts
@@ -550,7 +584,9 @@ export const ScreenShareStopIcon: (props: SVGProps<SVGSVGElement>) => React_2.JS
 // @public
 export function setLogLevel(level: LogLevel, options?: SetLogLevelOptions): void;
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "SpinnerIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const SpinnerIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
@@ -622,7 +658,9 @@ export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.B
     source: T;
 }
 
-// @public (undocumented)
+// Warning: (ae-internal-missing-underscore) The name "UnfocusToggleIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
 export const UnfocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @alpha

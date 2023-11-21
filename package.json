@@ -25,9 +25,10 @@
     "tooling:update-readme-nav": "node tooling/readme-manager/update-nav-in-readmes.js",
     "api:check": "turbo run api-check",
     "api-extractor": "turbo run api-extractor",
-    "cleanup": "find . -type d \\( -name 'node_modules' -o -name '.turbo' -o -name 'dist' \\) -prune -exec rm -rf '{}' +"
+    "cleanup": "find . -type d \\( -name 'node_modules' -o -name '.turbo' -o -name 'dist' \\) -prune -exec rm -rf '{}' +",
+    "link-local-client": "npm pkg set \"pnpm.overrides.livekit-client\"=\"file:../client-sdk-js\" && pnpm install",
+    "unlink-local-client": "npm pkg delete \"pnpm.overrides.livekit-client\" && pnpm install"
   },
-  "dependencies": {},
   "peerDependencies": {
     "typescript": "5.1.6"
   },
@@ -44,5 +45,8 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "pnpm": {
+    "overrides": {}
   }
 }

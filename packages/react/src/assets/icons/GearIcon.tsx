@@ -3,6 +3,9 @@
  */
 import * as React from 'react';
 import type { SVGProps } from 'react';
+/**
+ * @internal
+ */
 const SvgGearIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="none" {...props}>
     <path

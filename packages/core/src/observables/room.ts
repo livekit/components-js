@@ -176,10 +176,18 @@ export function activeSpeakerObserver(room: Room) {
   );
 }
 
-export function createMediaDeviceObserver(kind?: MediaDeviceKind, requestPermissions = true) {
+export function createMediaDeviceObserver(
+  kind?: MediaDeviceKind,
+  onError?: (e: Error) => void,
+  requestPermissions = true,
+) {
   const onDeviceChange = async () => {
-    const newDevices = await Room.getLocalDevices(kind, requestPermissions);
-    deviceSubject.next(newDevices);
+    try {
+      const newDevices = await Room.getLocalDevices(kind, requestPermissions);
+      deviceSubject.next(newDevices);
+    } catch (e: any) {
+      onError?.(e);
+    }
   };
   const deviceSubject = new Subject<MediaDeviceInfo[]>();
 
@@ -198,7 +206,10 @@ export function createMediaDeviceObserver(kind?: MediaDeviceKind, requestPermiss
     navigator?.mediaDevices?.addEventListener('devicechange', onDeviceChange);
   }
   // because we rely on an async function, concat the promise to retrieve the initial values with the observable
-  return concat(Room.getLocalDevices(kind, requestPermissions), observable);
+  return concat(
+    Room.getLocalDevices(kind, requestPermissions).catch((e) => onError?.(e)),
+    observable,
+  );
 }
 
 export function createDataObserver(room: Room) {

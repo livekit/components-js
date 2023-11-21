@@ -48,3 +48,4 @@ export {
   usePersistentUserChoices,
   type UsePersistentUserChoicesOptions,
 } from './usePersistentUserChoices';
+export { useIsEncrypted } from './useIsEncrypted';

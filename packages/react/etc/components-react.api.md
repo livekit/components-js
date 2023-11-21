@@ -29,6 +29,7 @@ import type { RoomEvent } from 'livekit-client';
 import type { RoomOptions } from 'livekit-client';
 import type { ScreenShareCaptureOptions } from 'livekit-client';
 import { setLogLevel as setLogLevel_2 } from 'livekit-client';
+import type { SVGProps } from 'react';
 import { Track } from 'livekit-client';
 import { TrackPublication } from 'livekit-client';
 import type { VideoCaptureOptions } from 'livekit-client';
@@ -78,6 +79,12 @@ export interface AudioVisualizerProps extends React_2.HTMLAttributes<SVGElement>
     trackRef?: TrackReferenceOrPlaceholder;
 }
 
+// @public (undocumented)
+export const CameraDisabledIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// @public (undocumented)
+export const CameraIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
 // @public
 export function CarouselLayout({ tracks, orientation, ...props }: CarouselLayoutProps): React_2.JSX.Element;
 
@@ -108,6 +115,9 @@ export interface ChatEntryProps extends React_2.HTMLAttributes<HTMLLIElement> {
 }
 
 // @public (undocumented)
+export const ChatIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// @public (undocumented)
 export interface ChatMessage {
     // (undocumented)
     message: string;
@@ -131,6 +141,9 @@ export function ChatToggle(props: ChatToggleProps): React_2.JSX.Element;
 // @public (undocumented)
 export interface ChatToggleProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
 }
+
+// @public (undocumented)
+export const Chevron: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
 export function ClearPinButton(props: ClearPinButtonProps): React_2.JSX.Element;
@@ -237,6 +250,9 @@ export interface FocusLayoutProps extends React_2.HTMLAttributes<HTMLElement> {
 export function FocusToggle({ trackRef, trackSource, participant, ...props }: FocusToggleProps): React_2.JSX.Element;
 
 // @public (undocumented)
+export const FocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// @public (undocumented)
 export interface FocusToggleProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
     // @deprecated (undocumented)
     participant?: Participant;
@@ -248,6 +264,9 @@ export interface FocusToggleProps extends React_2.ButtonHTMLAttributes<HTMLButto
 
 // @public (undocumented)
 export function formatChatMessageLinks(message: string): React_2.ReactNode;
+
+// @public (undocumented)
+export const GearIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
 export function GridLayout({ tracks, ...props }: GridLayoutProps): React_2.JSX.Element;
@@ -286,6 +305,9 @@ export type LayoutContextType = {
     pin: PinContextType;
     widget: ChatContextType;
 };
+
+// @public (undocumented)
+export const LeaveIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
 export function LiveKitRoom(props: React_2.PropsWithChildren<LiveKitRoomProps>): React_2.JSX.Element;
@@ -333,6 +355,9 @@ export type LocalUserChoices = {
     sharedPassphrase: string;
 };
 
+// @public (undocumented)
+export const LockLockedIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
 // @public
 export function MediaDeviceMenu({ kind, initialSelection, onActiveDeviceChange, tracks, requestPermissions, ...props }: MediaDeviceMenuProps): React_2.JSX.Element;
 
@@ -379,6 +404,12 @@ export type MessageEncoder = (message: ChatMessage) => Uint8Array;
 // @public (undocumented)
 export type MessageFormatter = (message: string) => React_2.ReactNode;
 
+// @public (undocumented)
+export const MicDisabledIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// @public (undocumented)
+export const MicIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
 // @public
 export function ParticipantAudioTile({ participant, children, source, publication, disableSpeakingIndicator, onParticipantClick, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
 
@@ -415,6 +446,9 @@ export function ParticipantName({ participant, ...props }: ParticipantNameProps)
 // @public (undocumented)
 export interface ParticipantNameProps extends React_2.HTMLAttributes<HTMLSpanElement>, UseParticipantInfoOptions {
 }
+
+// @public (undocumented)
+export const ParticipantPlaceholder: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
 export function ParticipantTile({ trackRef, participant, children, source, onParticipantClick, publication, disableSpeakingIndicator, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
@@ -465,6 +499,18 @@ export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement
 }
 
 // @public (undocumented)
+export const QualityExcellentIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// @public (undocumented)
+export const QualityGoodIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// @public (undocumented)
+export const QualityPoorIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// @public (undocumented)
+export const QualityUnknownIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// @public (undocumented)
 export interface ReceivedChatMessage extends ChatMessage {
     // (undocumented)
     from?: Participant;
@@ -492,11 +538,20 @@ export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
     childrenPosition?: 'before' | 'after';
 }
 
+// @public (undocumented)
+export const ScreenShareIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// @public (undocumented)
+export const ScreenShareStopIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
 // Warning: (ae-forgotten-export) The symbol "LogLevel" needs to be exported by the entry point index.d.ts
 // Warning: (ae-forgotten-export) The symbol "SetLogLevelOptions" needs to be exported by the entry point index.d.ts
 //
 // @public
 export function setLogLevel(level: LogLevel, options?: SetLogLevelOptions): void;
+
+// @public (undocumented)
+export const SpinnerIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
 export function StartAudio({ label, ...props }: AllowAudioPlaybackProps): React_2.JSX.Element;
@@ -566,6 +621,9 @@ export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.B
     // (undocumented)
     source: T;
 }
+
+// @public (undocumented)
+export const UnfocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @alpha
 export function useAudioPlayback(room?: Room): {
@@ -692,6 +750,9 @@ gridElement: React_2.RefObject<HTMLDivElement>,
 trackCount: number): {
     layout: GridLayoutDefinition;
 };
+
+// @alpha (undocumented)
+export function useIsEncrypted(participant?: Participant): boolean;
 
 // @public
 export function useIsMuted(trackRef: TrackReferenceOrPlaceholder): boolean;

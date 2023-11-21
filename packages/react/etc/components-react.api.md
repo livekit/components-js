@@ -771,7 +771,6 @@ export function useMediaDeviceSelect({ kind, room, track, requestPermissions, on
 export interface UseMediaDeviceSelectProps {
     // (undocumented)
     kind: MediaDeviceKind;
-    // (undocumented)
     onError?: (e: Error) => void;
     requestPermissions?: boolean;
     // (undocumented)
@@ -1131,7 +1130,7 @@ export type WidgetState = {
 // src/context/layout-context.ts:10:3 - (ae-forgotten-export) The symbol "PinContextType" needs to be exported by the entry point index.d.ts
 // src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "ChatContextType" needs to be exported by the entry point index.d.ts
 // src/hooks/useGridLayout.ts:24:6 - (ae-forgotten-export) The symbol "GridLayoutDefinition" needs to be exported by the entry point index.d.ts
-// src/hooks/useMediaDeviceSelect.ts:42:29 - (ae-forgotten-export) The symbol "SetMediaDeviceOptions" needs to be exported by the entry point index.d.ts
+// src/hooks/useMediaDeviceSelect.ts:47:29 - (ae-forgotten-export) The symbol "SetMediaDeviceOptions" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

@@ -1,4 +1,4 @@
-import type { ChatMessage, MessageEncoder, MessageDecoder } from '@livekit/components-core';
+import type { ChatMessage, ChatOptions } from '@livekit/components-core';
 import * as React from 'react';
 import { useMaybeLayoutContext } from '../context';
 import { cloneSingleChild } from '../utils';
@@ -7,10 +7,8 @@ import { ChatEntry } from '../components/ChatEntry';
 import { useChat } from '../hooks/useChat';
 
 /** @public */
-export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ChatProps extends React.HTMLAttributes<HTMLDivElement>, ChatOptions {
   messageFormatter?: MessageFormatter;
-  messageEncoder?: MessageEncoder;
-  messageDecoder?: MessageDecoder;
 }
 
 /**
@@ -25,13 +23,19 @@ export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
  * ```
  * @public
  */
-export function Chat({ messageFormatter, messageDecoder, messageEncoder, ...props }: ChatProps) {
+export function Chat({
+  messageFormatter,
+  messageDecoder,
+  messageEncoder,
+  channelTopic,
+  ...props
+}: ChatProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const ulRef = React.useRef<HTMLUListElement>(null);
 
-  const chatOptions = React.useMemo(() => {
-    return { messageDecoder, messageEncoder };
-  }, [messageDecoder, messageEncoder]);
+  const chatOptions: ChatOptions = React.useMemo(() => {
+    return { messageDecoder, messageEncoder, channelTopic };
+  }, [messageDecoder, messageEncoder, channelTopic]);
 
   const { send, chatMessages, isSending } = useChat(chatOptions);
 

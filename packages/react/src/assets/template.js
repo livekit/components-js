@@ -8,7 +8,8 @@ function template(variables, { tpl }) {
   ${variables.imports};
   
   ${variables.interfaces};
-  
+
+  ${'/**\n * @internal\n */\n'}
   const ${variables.componentName} = (${variables.props}) => (
     ${variables.jsx}
   );

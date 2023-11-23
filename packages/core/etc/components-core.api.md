@@ -71,6 +71,13 @@ export interface ChatMessage {
 }
 
 // @public (undocumented)
+export type ChatOptions = {
+    messageEncoder?: (message: ChatMessage) => Uint8Array;
+    messageDecoder?: (message: Uint8Array) => ReceivedChatMessage;
+    channelTopic?: string;
+};
+
+// @public (undocumented)
 export function computeMenuPosition(button: HTMLElement, menu: HTMLElement): Promise<{
     x: number;
     y: number;
@@ -118,7 +125,7 @@ export function createInteractingObservable(htmlElement: HTMLElement | null, ina
 export function createIsSpeakingObserver(participant: Participant): Observable<boolean>;
 
 // @public (undocumented)
-export function createMediaDeviceObserver(kind?: MediaDeviceKind, requestPermissions?: boolean): Observable<MediaDeviceInfo[]>;
+export function createMediaDeviceObserver(kind?: MediaDeviceKind, onError?: (e: Error) => void, requestPermissions?: boolean): Observable<void | MediaDeviceInfo[] | undefined>;
 
 // @public (undocumented)
 export function createTrackObserver(participant: Participant, options: TrackIdentifier): Observable<{
@@ -387,14 +394,10 @@ export type SetMediaDeviceOptions = {
 };
 
 // @public (undocumented)
-export function setupChat(room: Room, options?: {
-    messageEncoder?: (message: ChatMessage) => Uint8Array;
-    messageDecoder?: (message: Uint8Array) => ReceivedChatMessage;
-}): {
+export function setupChat(room: Room, options?: ChatOptions): {
     messageObservable: Observable<ReceivedChatMessage[]>;
     isSendingObservable: BehaviorSubject<boolean>;
     send: (message: string) => Promise<void>;
-    destroy: () => void;
 };
 
 // @public (undocumented)

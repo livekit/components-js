@@ -6,6 +6,10 @@ export * from './prefabs';
 
 export * from './context';
 
+export * from './assets/icons';
+
+export * from './assets/images';
+
 // Re-exports from core
 export { setLogLevel, isTrackReference } from '@livekit/components-core';
 export type {

@@ -12,11 +12,11 @@ import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import type { CreateLocalTracksOptions } from 'livekit-client';
 import { DataPacket_Kind } from 'livekit-client';
 import { HTMLAttributes } from 'react';
-import type { LocalAudioTrack } from 'livekit-client';
+import { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
 import type { LocalTrack } from 'livekit-client';
 import { LocalTrackPublication } from 'livekit-client';
-import type { LocalVideoTrack } from 'livekit-client';
+import { LocalVideoTrack } from 'livekit-client';
 import type { MediaDeviceFailure } from 'livekit-client';
 import { Participant } from 'livekit-client';
 import type { ParticipantEvent } from 'livekit-client';
@@ -29,6 +29,7 @@ import type { RoomEvent } from 'livekit-client';
 import type { RoomOptions } from 'livekit-client';
 import type { ScreenShareCaptureOptions } from 'livekit-client';
 import { setLogLevel as setLogLevel_2 } from 'livekit-client';
+import type { SVGProps } from 'react';
 import { Track } from 'livekit-client';
 import { TrackPublication } from 'livekit-client';
 import type { VideoCaptureOptions } from 'livekit-client';
@@ -78,6 +79,16 @@ export interface AudioVisualizerProps extends React_2.HTMLAttributes<SVGElement>
     trackRef?: TrackReferenceOrPlaceholder;
 }
 
+// Warning: (ae-internal-missing-underscore) The name "CameraDisabledIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const CameraDisabledIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// Warning: (ae-internal-missing-underscore) The name "CameraIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const CameraIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
 // @public
 export function CarouselLayout({ tracks, orientation, ...props }: CarouselLayoutProps): React_2.JSX.Element;
 
@@ -94,7 +105,7 @@ export interface CarouselLayoutProps extends React_2.HTMLAttributes<HTMLMediaEle
 export const CarouselView: typeof CarouselLayout;
 
 // @public
-export function Chat({ messageFormatter, messageDecoder, messageEncoder, ...props }: ChatProps): React_2.JSX.Element;
+export function Chat({ messageFormatter, messageDecoder, messageEncoder, channelTopic, ...props }: ChatProps): React_2.JSX.Element;
 
 // @public
 export function ChatEntry({ entry, hideName, hideTimestamp, messageFormatter, ...props }: ChatEntryProps): React_2.JSX.Element;
@@ -107,6 +118,11 @@ export interface ChatEntryProps extends React_2.HTMLAttributes<HTMLLIElement> {
     messageFormatter?: MessageFormatter;
 }
 
+// Warning: (ae-internal-missing-underscore) The name "ChatIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const ChatIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
 // @public (undocumented)
 export interface ChatMessage {
     // (undocumented)
@@ -115,12 +131,10 @@ export interface ChatMessage {
     timestamp: number;
 }
 
+// Warning: (ae-forgotten-export) The symbol "ChatOptions" needs to be exported by the entry point index.d.ts
+//
 // @public (undocumented)
-export interface ChatProps extends React_2.HTMLAttributes<HTMLDivElement> {
-    // (undocumented)
-    messageDecoder?: MessageDecoder;
-    // (undocumented)
-    messageEncoder?: MessageEncoder;
+export interface ChatProps extends React_2.HTMLAttributes<HTMLDivElement>, ChatOptions {
     // (undocumented)
     messageFormatter?: MessageFormatter;
 }
@@ -131,6 +145,11 @@ export function ChatToggle(props: ChatToggleProps): React_2.JSX.Element;
 // @public (undocumented)
 export interface ChatToggleProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
 }
+
+// Warning: (ae-internal-missing-underscore) The name "Chevron" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const Chevron: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
 export function ClearPinButton(props: ClearPinButtonProps): React_2.JSX.Element;
@@ -236,6 +255,11 @@ export interface FocusLayoutProps extends React_2.HTMLAttributes<HTMLElement> {
 // @public
 export function FocusToggle({ trackRef, trackSource, participant, ...props }: FocusToggleProps): React_2.JSX.Element;
 
+// Warning: (ae-internal-missing-underscore) The name "FocusToggleIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const FocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
 // @public (undocumented)
 export interface FocusToggleProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
     // @deprecated (undocumented)
@@ -248,6 +272,11 @@ export interface FocusToggleProps extends React_2.ButtonHTMLAttributes<HTMLButto
 
 // @public (undocumented)
 export function formatChatMessageLinks(message: string): React_2.ReactNode;
+
+// Warning: (ae-internal-missing-underscore) The name "GearIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const GearIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
 export function GridLayout({ tracks, ...props }: GridLayoutProps): React_2.JSX.Element;
@@ -286,6 +315,11 @@ export type LayoutContextType = {
     pin: PinContextType;
     widget: ChatContextType;
 };
+
+// Warning: (ae-internal-missing-underscore) The name "LeaveIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const LeaveIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
 export function LiveKitRoom(props: React_2.PropsWithChildren<LiveKitRoomProps>): React_2.JSX.Element;
@@ -333,6 +367,11 @@ export type LocalUserChoices = {
     sharedPassphrase: string;
 };
 
+// Warning: (ae-internal-missing-underscore) The name "LockLockedIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const LockLockedIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
 // @public
 export function MediaDeviceMenu({ kind, initialSelection, onActiveDeviceChange, tracks, requestPermissions, ...props }: MediaDeviceMenuProps): React_2.JSX.Element;
 
@@ -350,10 +389,10 @@ export interface MediaDeviceMenuProps extends React_2.ButtonHTMLAttributes<HTMLB
 }
 
 // @public
-export function MediaDeviceSelect({ kind, initialSelection, onActiveDeviceChange, onDeviceListChange, onDeviceSelectError, exactMatch, track, requestPermissions, ...props }: MediaDeviceSelectProps): React_2.JSX.Element;
+export function MediaDeviceSelect({ kind, initialSelection, onActiveDeviceChange, onDeviceListChange, onDeviceSelectError, exactMatch, track, requestPermissions, onError, ...props }: MediaDeviceSelectProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface MediaDeviceSelectProps extends React_2.HTMLAttributes<HTMLUListElement> {
+export interface MediaDeviceSelectProps extends Omit<React_2.HTMLAttributes<HTMLUListElement>, 'onError'> {
     exactMatch?: boolean;
     // (undocumented)
     initialSelection?: string;
@@ -365,6 +404,8 @@ export interface MediaDeviceSelectProps extends React_2.HTMLAttributes<HTMLUList
     onDeviceListChange?: (devices: MediaDeviceInfo[]) => void;
     // (undocumented)
     onDeviceSelectError?: (e: Error) => void;
+    // (undocumented)
+    onError?: (e: Error) => void;
     requestPermissions?: boolean;
     // (undocumented)
     track?: LocalAudioTrack | LocalVideoTrack;
@@ -378,6 +419,16 @@ export type MessageEncoder = (message: ChatMessage) => Uint8Array;
 
 // @public (undocumented)
 export type MessageFormatter = (message: string) => React_2.ReactNode;
+
+// Warning: (ae-internal-missing-underscore) The name "MicDisabledIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const MicDisabledIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// Warning: (ae-internal-missing-underscore) The name "MicIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const MicIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
 export function ParticipantAudioTile({ participant, children, source, publication, disableSpeakingIndicator, onParticipantClick, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
@@ -415,6 +466,11 @@ export function ParticipantName({ participant, ...props }: ParticipantNameProps)
 // @public (undocumented)
 export interface ParticipantNameProps extends React_2.HTMLAttributes<HTMLSpanElement>, UseParticipantInfoOptions {
 }
+
+// Warning: (ae-internal-missing-underscore) The name "ParticipantPlaceholder" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const ParticipantPlaceholder: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
 export function ParticipantTile({ trackRef, participant, children, source, onParticipantClick, publication, disableSpeakingIndicator, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
@@ -464,6 +520,26 @@ export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement
     userLabel?: string;
 }
 
+// Warning: (ae-internal-missing-underscore) The name "QualityExcellentIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const QualityExcellentIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// Warning: (ae-internal-missing-underscore) The name "QualityGoodIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const QualityGoodIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// Warning: (ae-internal-missing-underscore) The name "QualityPoorIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const QualityPoorIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// Warning: (ae-internal-missing-underscore) The name "QualityUnknownIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const QualityUnknownIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
 // @public (undocumented)
 export interface ReceivedChatMessage extends ChatMessage {
     // (undocumented)
@@ -492,11 +568,26 @@ export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
     childrenPosition?: 'before' | 'after';
 }
 
+// Warning: (ae-internal-missing-underscore) The name "ScreenShareIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const ScreenShareIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// Warning: (ae-internal-missing-underscore) The name "ScreenShareStopIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const ScreenShareStopIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
 // Warning: (ae-forgotten-export) The symbol "LogLevel" needs to be exported by the entry point index.d.ts
 // Warning: (ae-forgotten-export) The symbol "SetLogLevelOptions" needs to be exported by the entry point index.d.ts
 //
 // @public
 export function setLogLevel(level: LogLevel, options?: SetLogLevelOptions): void;
+
+// Warning: (ae-internal-missing-underscore) The name "SpinnerIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const SpinnerIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
 export function StartAudio({ label, ...props }: AllowAudioPlaybackProps): React_2.JSX.Element;
@@ -567,6 +658,11 @@ export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.B
     source: T;
 }
 
+// Warning: (ae-internal-missing-underscore) The name "UnfocusToggleIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const UnfocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
 // @alpha
 export function useAudioPlayback(room?: Room): {
     canPlayAudio: boolean;
@@ -574,10 +670,7 @@ export function useAudioPlayback(room?: Room): {
 };
 
 // @public
-export function useChat(options?: {
-    messageEncoder?: MessageEncoder;
-    messageDecoder?: MessageDecoder;
-}): {
+export function useChat(options?: ChatOptions): {
     send: ((message: string) => Promise<void>) | undefined;
     chatMessages: ReceivedChatMessage[];
     isSending: boolean;
@@ -693,6 +786,9 @@ trackCount: number): {
     layout: GridLayoutDefinition;
 };
 
+// @alpha (undocumented)
+export function useIsEncrypted(participant?: Participant): boolean;
+
 // @public
 export function useIsMuted(trackRef: TrackReferenceOrPlaceholder): boolean;
 
@@ -758,7 +854,7 @@ export function useMediaDevices({ kind }: {
 }): MediaDeviceInfo[];
 
 // @public
-export function useMediaDeviceSelect({ kind, room, track, requestPermissions, }: UseMediaDeviceSelectProps): {
+export function useMediaDeviceSelect({ kind, room, track, requestPermissions, onError, }: UseMediaDeviceSelectProps): {
     devices: MediaDeviceInfo[];
     className: string;
     activeDeviceId: string;
@@ -769,6 +865,7 @@ export function useMediaDeviceSelect({ kind, room, track, requestPermissions, }:
 export interface UseMediaDeviceSelectProps {
     // (undocumented)
     kind: MediaDeviceKind;
+    onError?: (e: Error) => void;
     requestPermissions?: boolean;
     // (undocumented)
     room?: Room;
@@ -1127,7 +1224,7 @@ export type WidgetState = {
 // src/context/layout-context.ts:10:3 - (ae-forgotten-export) The symbol "PinContextType" needs to be exported by the entry point index.d.ts
 // src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "ChatContextType" needs to be exported by the entry point index.d.ts
 // src/hooks/useGridLayout.ts:24:6 - (ae-forgotten-export) The symbol "GridLayoutDefinition" needs to be exported by the entry point index.d.ts
-// src/hooks/useMediaDeviceSelect.ts:40:29 - (ae-forgotten-export) The symbol "SetMediaDeviceOptions" needs to be exported by the entry point index.d.ts
+// src/hooks/useMediaDeviceSelect.ts:47:29 - (ae-forgotten-export) The symbol "SetMediaDeviceOptions" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

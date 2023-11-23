@@ -34,6 +34,7 @@ export { UseRoomInfoOptions, useRoomInfo } from './useRoomInfo';
 export { useSortedParticipants } from './useSortedParticipants';
 export { useSpeakingParticipants } from './useSpeakingParticipants';
 export { UseStartAudioProps, useStartAudio } from './useStartAudio';
+export { UseStartVideoProps, useStartVideo } from './useStartVideo';
 export { UseSwipeOptions, useSwipe } from './useSwipe';
 export { UseChatToggleProps, useChatToggle } from './useChatToggle';
 export { UseTokenOptions, UserInfo, useToken } from './useToken';

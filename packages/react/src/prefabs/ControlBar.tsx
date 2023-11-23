@@ -3,7 +3,6 @@ import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { TrackToggle } from '../components/controls/TrackToggle';
-import { StartAudio } from '../components/controls/StartAudio';
 import { ChatIcon, LeaveIcon } from '../assets/icons';
 import { ChatToggle } from '../components/controls/ChatToggle';
 import { useLocalParticipantPermissions, usePersistentUserChoices } from '../hooks';
@@ -11,6 +10,7 @@ import { useMediaQuery } from '../hooks/internal';
 import { useMaybeLayoutContext } from '../context';
 import { supportsScreenSharing } from '@livekit/components-core';
 import { mergeProps } from '../utils';
+import { StartMediaButton } from '../components/controls/StartMediaButton';
 
 /** @public */
 export type ControlBarControls = {
@@ -168,7 +168,7 @@ export function ControlBar({
           {showText && 'Leave'}
         </DisconnectButton>
       )}
-      <StartAudio label="Start Audio" />
+      <StartMediaButton />
     </div>
   );
 }

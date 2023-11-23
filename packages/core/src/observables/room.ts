@@ -225,6 +225,15 @@ export function roomAudioPlaybackAllowedObservable(room: Room) {
   return observable;
 }
 
+export function roomVideoPlaybackAllowedObservable(room: Room) {
+  const observable = observeRoomEvents(room, RoomEvent.VideoPlaybackStatusChanged).pipe(
+    map((room) => {
+      return { canPlayVideo: room.canPlaybackVideo };
+    }),
+  );
+  return observable;
+}
+
 export function createActiveDeviceObservable(room: Room, kind: MediaDeviceKind) {
   return roomEventSelector(room, RoomEvent.ActiveDeviceChanged).pipe(
     filter(([kindOfDevice]) => kindOfDevice === kind),

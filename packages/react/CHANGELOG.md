@@ -1,5 +1,24 @@
 # @livekit/components-react
 
+## 1.4.1
+
+### Patch Changes
+
+- Surface encryption error on LiveKitRoom - [#706](https://github.com/livekit/components-js/pull/706) ([@lukasIO](https://github.com/lukasIO))
+
+- Add useStartVideo hook + update livekit client - [#714](https://github.com/livekit/components-js/pull/714) ([@lukasIO](https://github.com/lukasIO))
+
+- Add support for multiple chat windows - [#713](https://github.com/livekit/components-js/pull/713) ([@lukasIO](https://github.com/lukasIO))
+
+- Add StartMediaButton - [#717](https://github.com/livekit/components-js/pull/717) ([@lukasIO](https://github.com/lukasIO))
+
+- Add onError callback for MediaDeviceSelect - [#710](https://github.com/livekit/components-js/pull/710) ([@lukasIO](https://github.com/lukasIO))
+
+- Expose icons and hooks necessary to recreate participant tile - [#716](https://github.com/livekit/components-js/pull/716) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`da5ffe3b`](https://github.com/livekit/components-js/commit/da5ffe3b867de4d8567a544597905dd9b2fc8fd9), [`adc3d042`](https://github.com/livekit/components-js/commit/adc3d0427745000b73b70971297e9496c7eee9d6), [`11ec05d4`](https://github.com/livekit/components-js/commit/11ec05d4a753cd4e317e5031ccdb66137cab49b5), [`2dab3b08`](https://github.com/livekit/components-js/commit/2dab3b0855b09eb8c72c4c0c6fc63de5d5f6384d)]:
+  - @livekit/components-core@0.8.1
+
 ## 1.4.0
 
 ### Minor Changes

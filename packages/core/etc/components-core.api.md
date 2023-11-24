@@ -360,6 +360,11 @@ export function roomInfoObserver(room: Room): Observable<{
 // @public (undocumented)
 export function roomObserver(room: Room): Observable<Room>;
 
+// @public (undocumented)
+export function roomVideoPlaybackAllowedObservable(room: Room): Observable<{
+    canPlayVideo: boolean;
+}>;
+
 // @alpha
 export function saveUserChoices(userChoices: LocalUserChoices,
 preventSave?: boolean): void;
@@ -491,6 +496,13 @@ export function setupStartAudio(): {
     className: string;
     roomAudioPlaybackAllowedObservable: typeof roomAudioPlaybackAllowedObservable;
     handleStartAudioPlayback: (room: Room) => Promise<void>;
+};
+
+// @public (undocumented)
+export function setupStartVideo(): {
+    className: string;
+    roomVideoPlaybackAllowedObservable: typeof roomVideoPlaybackAllowedObservable;
+    handleStartVideoPlayback: (room: Room) => Promise<void>;
 };
 
 // @public (undocumented)

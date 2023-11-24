@@ -1071,6 +1071,26 @@ export interface UseStartAudioProps {
 }
 
 // @alpha
+export function useStartVideo({ room, props }: UseStartVideoProps): {
+    mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
+        className: string;
+        onClick: () => void;
+        style: {
+            display: string;
+        };
+    };
+    canPlayVideo: boolean;
+};
+
+// @alpha (undocumented)
+export interface UseStartVideoProps {
+    // (undocumented)
+    props: React_2.ButtonHTMLAttributes<HTMLButtonElement>;
+    // (undocumented)
+    room?: Room;
+}
+
+// @alpha
 export function useSwipe(element: React_2.RefObject<HTMLElement>, options?: UseSwipeOptions): void;
 
 // @alpha (undocumented)

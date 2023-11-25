@@ -1,5 +1,17 @@
 # @livekit/components-core
 
+## 0.8.1
+
+### Patch Changes
+
+- Add useStartVideo hook + update livekit client - [#714](https://github.com/livekit/components-js/pull/714) ([@lukasIO](https://github.com/lukasIO))
+
+- Add support for multiple chat windows - [#713](https://github.com/livekit/components-js/pull/713) ([@lukasIO](https://github.com/lukasIO))
+
+- Add StartMediaButton - [#717](https://github.com/livekit/components-js/pull/717) ([@lukasIO](https://github.com/lukasIO))
+
+- Add onError callback for MediaDeviceSelect - [#710](https://github.com/livekit/components-js/pull/710) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.8.0
 
 ### Minor Changes

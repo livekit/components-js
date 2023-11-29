@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.8.2
+
+### Patch Changes
+
+- Fix duplicate chat messages - [#718](https://github.com/livekit/components-js/pull/718) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.8.1
 
 ### Patch Changes

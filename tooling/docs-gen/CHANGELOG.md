@@ -1,5 +1,12 @@
 # @livekit/components-docs-gen
 
+## 0.0.26
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @livekit/components-react@1.4.2
+
 ## 0.0.25
 
 ### Patch Changes

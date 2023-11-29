@@ -49,12 +49,18 @@ export function setupChat(room: Room, options?: ChatOptions) {
 
   const topic = channelTopic ?? DataTopic.CHAT;
 
+  let needsSetup = false;
+  if (!topicSubjectMap.has(topic)) {
+    needsSetup = true;
+  }
   const messageSubject = topicSubjectMap.get(topic) ?? new Subject<RawMessage>();
   topicSubjectMap.set(topic, messageSubject);
 
-  /** Subscribe to all appropriate messages sent over the wire. */
-  const { messageObservable } = setupDataMessageHandler(room, topic);
-  messageObservable.pipe(takeUntil(onDestroyObservable)).subscribe(messageSubject);
+  if (needsSetup) {
+    /** Subscribe to all appropriate messages sent over the wire. */
+    const { messageObservable } = setupDataMessageHandler(room, topic);
+    messageObservable.pipe(takeUntil(onDestroyObservable)).subscribe(messageSubject);
+  }
 
   const finalMessageDecoder = messageDecoder ?? decode;
 

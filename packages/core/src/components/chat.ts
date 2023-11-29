@@ -35,7 +35,7 @@ type RawMessage = {
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
-const topicSubjectMap: Map<string, Subject<RawMessage>> = new Map();
+const topicSubjectMap: Map<Room, Map<string, Subject<RawMessage>>> = new Map();
 
 const encode = (message: ChatMessage) =>
   encoder.encode(JSON.stringify({ message: message.message, timestamp: message.timestamp }));
@@ -49,12 +49,20 @@ export function setupChat(room: Room, options?: ChatOptions) {
 
   const topic = channelTopic ?? DataTopic.CHAT;
 
-  const messageSubject = topicSubjectMap.get(topic) ?? new Subject<RawMessage>();
-  topicSubjectMap.set(topic, messageSubject);
+  let needsSetup = false;
+  if (!topicSubjectMap.has(room)) {
+    needsSetup = true;
+  }
+  const topicMap = topicSubjectMap.get(room) ?? new Map<string, Subject<RawMessage>>();
+  const messageSubject = topicMap.get(topic) ?? new Subject<RawMessage>();
+  topicMap.set(topic, messageSubject);
+  topicSubjectMap.set(room, topicMap);
 
-  /** Subscribe to all appropriate messages sent over the wire. */
-  const { messageObservable } = setupDataMessageHandler(room, topic);
-  messageObservable.pipe(takeUntil(onDestroyObservable)).subscribe(messageSubject);
+  if (needsSetup) {
+    /** Subscribe to all appropriate messages sent over the wire. */
+    const { messageObservable } = setupDataMessageHandler(room, topic);
+    messageObservable.pipe(takeUntil(onDestroyObservable)).subscribe(messageSubject);
+  }
 
   const finalMessageDecoder = messageDecoder ?? decode;
 

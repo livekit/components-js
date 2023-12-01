@@ -180,8 +180,8 @@ importers:
         specifier: ^10.0.0
         version: 10.0.2(size-limit@10.0.2)
       '@size-limit/webpack':
-        specifier: ^10.0.0
-        version: 10.0.2(esbuild@0.18.20)(size-limit@10.0.2)
+        specifier: ^11.0.0
+        version: 11.0.0(esbuild@0.18.20)(size-limit@10.0.2)
       eslint-config-lk-custom:
         specifier: ^0.1.1
         version: link:../../tooling/eslint-config-custom
@@ -226,8 +226,8 @@ importers:
         specifier: ^10.0.0
         version: 10.0.2(size-limit@10.0.2)
       '@size-limit/webpack':
-        specifier: ^10.0.0
-        version: 10.0.2(esbuild@0.18.20)(size-limit@10.0.2)
+        specifier: ^11.0.0
+        version: 11.0.0(esbuild@0.18.20)(size-limit@10.0.2)
       '@svgr/cli':
         specifier: ^8.0.0
         version: 8.1.0(typescript@5.2.2)
@@ -3781,11 +3781,11 @@ packages:
       size-limit: 10.0.2
     dev: true
 
-  /@size-limit/webpack@10.0.2(esbuild@0.18.20)(size-limit@10.0.2):
-    resolution: {integrity: sha512-dw+26aHKYKZaLr0xxKdUYb/VIws+W4ED6rw4Te8OfoTtZZ9cx4NxiKzYGAs/OUSmEUPGFxa12qj8iMW4nrxTWQ==}
+  /@size-limit/webpack@11.0.0(esbuild@0.18.20)(size-limit@10.0.2):
+    resolution: {integrity: sha512-AFF8/JBOcU7KUgkLUo93DmrfexRZz/7+qVwye+I4fbMgl/lRtoonNbgwGTdjvwZBjQLTGkWLtSPK5xGYbIdpGA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      size-limit: 10.0.2
+      size-limit: 11.0.0
     dependencies:
       nanoid: 5.0.3
       size-limit: 10.0.2

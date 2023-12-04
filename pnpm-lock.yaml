@@ -177,11 +177,11 @@ importers:
         specifier: ^7.36.0
         version: 7.38.2(@types/node@20.8.10)
       '@size-limit/file':
-        specifier: ^10.0.0
-        version: 10.0.2(size-limit@10.0.2)
+        specifier: ^11.0.0
+        version: 11.0.0(size-limit@10.0.2)
       '@size-limit/webpack':
-        specifier: ^10.0.0
-        version: 10.0.2(esbuild@0.18.20)(size-limit@10.0.2)
+        specifier: ^11.0.0
+        version: 11.0.0(esbuild@0.18.20)(size-limit@10.0.2)
       eslint-config-lk-custom:
         specifier: ^0.1.1
         version: link:../../tooling/eslint-config-custom
@@ -223,11 +223,11 @@ importers:
         specifier: ^7.35.0
         version: 7.38.2(@types/node@20.8.10)
       '@size-limit/file':
-        specifier: ^10.0.0
-        version: 10.0.2(size-limit@10.0.2)
+        specifier: ^11.0.0
+        version: 11.0.0(size-limit@10.0.2)
       '@size-limit/webpack':
-        specifier: ^10.0.0
-        version: 10.0.2(esbuild@0.18.20)(size-limit@10.0.2)
+        specifier: ^11.0.0
+        version: 11.0.0(esbuild@0.18.20)(size-limit@10.0.2)
       '@svgr/cli':
         specifier: ^8.0.0
         version: 8.1.0(typescript@5.2.2)
@@ -3771,21 +3771,20 @@ packages:
       '@sinonjs/commons': 3.0.0
     dev: false
 
-  /@size-limit/file@10.0.2(size-limit@10.0.2):
-    resolution: {integrity: sha512-27jzgQtER/2WP4+ciLe8aExkceSfqQFSDEbFVhXnbpFvQBqGZ7uEQG9bDX7a5VGxTdMtGwzZndMsCOlinmLzSg==}
+  /@size-limit/file@11.0.0(size-limit@10.0.2):
+    resolution: {integrity: sha512-tTg6sSiFbiogiof3GV4iIRCPS4+46Hvq4QWXGXp00Be/tOnpglXF62xNpCfFwefx9YCXxCyeYSqqaRBjpRCsmQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      size-limit: 10.0.2
+      size-limit: 11.0.0
     dependencies:
-      semver: 7.5.4
       size-limit: 10.0.2
     dev: true
 
-  /@size-limit/webpack@10.0.2(esbuild@0.18.20)(size-limit@10.0.2):
-    resolution: {integrity: sha512-dw+26aHKYKZaLr0xxKdUYb/VIws+W4ED6rw4Te8OfoTtZZ9cx4NxiKzYGAs/OUSmEUPGFxa12qj8iMW4nrxTWQ==}
+  /@size-limit/webpack@11.0.0(esbuild@0.18.20)(size-limit@10.0.2):
+    resolution: {integrity: sha512-AFF8/JBOcU7KUgkLUo93DmrfexRZz/7+qVwye+I4fbMgl/lRtoonNbgwGTdjvwZBjQLTGkWLtSPK5xGYbIdpGA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      size-limit: 10.0.2
+      size-limit: 11.0.0
     dependencies:
       nanoid: 5.0.3
       size-limit: 10.0.2

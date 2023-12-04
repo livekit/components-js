@@ -22,6 +22,7 @@ import { useCreateLayoutContext } from '../context';
 import { usePinnedTracks, useTracks } from '../hooks';
 import { Chat } from './Chat';
 import { ControlBar } from './ControlBar';
+import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 
 /**
  * @public
@@ -111,6 +112,8 @@ export function VideoConference({
       .join(),
     focusTrack?.publication?.trackSid,
   ]);
+
+  useWarnAboutMissingStyles();
 
   return (
     <div className="lk-video-conference" {...props}>

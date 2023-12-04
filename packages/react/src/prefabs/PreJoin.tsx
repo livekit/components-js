@@ -19,6 +19,7 @@ import type { LocalUserChoices } from '@livekit/components-core';
 import { log } from '@livekit/components-core';
 import { ParticipantPlaceholder } from '../assets/images';
 import { useMediaDevices, usePersistentUserChoices } from '../hooks';
+import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 
 const DEFAULT_USER_CHOICES: LocalUserChoices = {
   username: '',
@@ -368,6 +369,8 @@ export function PreJoin({
       log.warn('Validation failed with: ', userChoices);
     }
   }
+
+  useWarnAboutMissingStyles();
 
   return (
     <div className="lk-prejoin" {...htmlProps}>

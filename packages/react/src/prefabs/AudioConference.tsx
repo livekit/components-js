@@ -7,6 +7,7 @@ import type { WidgetState } from '@livekit/components-core';
 import { Chat } from './Chat';
 import { ParticipantLoop } from '../components';
 import { useParticipants } from '../hooks';
+import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 
 /** @public */
 export interface AudioConferenceProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -33,6 +34,8 @@ export function AudioConference({ ...props }: AudioConferenceProps) {
     unreadMessages: 0,
   });
   const participants = useParticipants();
+
+  useWarnAboutMissingStyles();
 
   return (
     <LayoutContextProvider onWidgetChange={setWidgetState}>

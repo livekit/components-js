@@ -22,7 +22,7 @@ import { useCreateLayoutContext } from '../context';
 import { usePinnedTracks, useTracks } from '../hooks';
 import { Chat } from './Chat';
 import { ControlBar } from './ControlBar';
-import { checkForStylesPackage } from '../utils';
+import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 
 /**
  * @public
@@ -113,9 +113,7 @@ export function VideoConference({
     focusTrack?.publication?.trackSid,
   ]);
 
-  React.useEffect(() => {
-    checkForStylesPackage();
-  }, []);
+  useWarnAboutMissingStyles();
 
   return (
     <div className="lk-video-conference" {...props}>

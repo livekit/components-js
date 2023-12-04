@@ -36,7 +36,7 @@ export function cloneSingleChild(
 /**
  * @internal
  */
-export function checkForStylesPackage(el?: HTMLElement) {
+export function warnAboutMissingStyles(el?: HTMLElement) {
   if (
     // eslint-disable-next-line turbo/no-undeclared-env-vars
     (process?.env?.NODE_ENV === 'dev' || process?.env?.NODE_ENV === 'development') &&

@@ -1,15 +1,13 @@
-import type { Participant } from 'livekit-client';
-import { createAudioAnalyser, LocalAudioTrack, RemoteAudioTrack, Track } from 'livekit-client';
+import type { Participant, Track } from 'livekit-client';
+import { createAudioAnalyser, LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
 import * as React from 'react';
-import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
-import { useTrack } from '../../hooks/useTrack';
-import { useMaybeParticipantContext, useMaybeTrackRefContext } from '../../context';
+import { isTrackReference, type TrackReferenceOrPlaceholder } from '@livekit/components-core';
 
 /** @public */
 export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
   /** @deprecated this property will be removed in a future version, use `trackRef` instead */
   participant?: Participant;
-  trackRef?: TrackReferenceOrPlaceholder;
+  track?: TrackReferenceOrPlaceholder | Track;
 }
 
 /**
@@ -22,7 +20,7 @@ export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
  * ```
  * @public
  */
-export function AudioVisualizer({ participant, trackRef, ...props }: AudioVisualizerProps) {
+export function AudioVisualizer({ track: trackOrTrackRef, ...props }: AudioVisualizerProps) {
   const [volumeBars, setVolumeBars] = React.useState<Array<number>>([]);
 
   const svgWidth = 200;
@@ -32,16 +30,9 @@ export function AudioVisualizer({ participant, trackRef, ...props }: AudioVisual
   const volMultiplier = 50;
   const barCount = 7;
 
-  const p = useMaybeParticipantContext() ?? participant;
-  let ref = useMaybeTrackRefContext() ?? trackRef;
-  if (!ref) {
-    if (!p) {
-      throw Error(`Participant missing, provide it directly or within a context`);
-    }
-    ref = { participant: p, source: Track.Source.Microphone };
-  }
-
-  const { track } = useTrack(ref);
+  const track = isTrackReference(trackOrTrackRef)
+    ? trackOrTrackRef?.publication?.track
+    : trackOrTrackRef;
 
   React.useEffect(() => {
     if (!track || !(track instanceof LocalAudioTrack || track instanceof RemoteAudioTrack)) {

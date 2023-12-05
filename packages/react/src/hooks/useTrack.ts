@@ -1,6 +1,7 @@
-import type { TrackIdentifier } from '@livekit/components-core';
 import type * as React from 'react';
-import { useMediaTrackBySourceOrName } from './useMediaTrackBySourceOrName';
+import type { Participant, Track } from 'livekit-client';
+import { useTrackRefBySourceOrName } from './useTrackRefBySourceOrName';
+import { useEnsureParticipant } from '../context';
 
 /** @public */
 export interface UseTrackOptions {
@@ -9,6 +10,7 @@ export interface UseTrackOptions {
 }
 
 /** @public */
-export function useTrack(trackRef: TrackIdentifier, options: UseTrackOptions = {}) {
-  return useMediaTrackBySourceOrName(trackRef, options);
+export function useTrack(source: Track.Source, participant?: Participant) {
+  const p = useEnsureParticipant(participant);
+  return useTrackRefBySourceOrName({ source, participant: p });
 }

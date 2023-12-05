@@ -1,15 +1,11 @@
-import { useEnsureTrackRef } from '../context';
-import type { UseMediaTrackOptions } from './useMediaTrack';
-import { useMediaTrackBySourceOrName } from './useMediaTrackBySourceOrName';
-import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import type { Participant } from 'livekit-client';
+import { useEnsureParticipant } from '../context';
+import { useTrackRefBySourceOrName } from './useTrackRefBySourceOrName';
 
 /**
  * @public
  */
-export function useTrackByName(
-  trackRef?: TrackReferenceOrPlaceholder,
-  options: UseMediaTrackOptions = {},
-) {
-  const ref = useEnsureTrackRef(trackRef);
-  return useMediaTrackBySourceOrName(ref, options);
+export function useTrackByName(name: string, participant?: Participant) {
+  const p = useEnsureParticipant(participant);
+  return useTrackRefBySourceOrName({ name, participant: p });
 }

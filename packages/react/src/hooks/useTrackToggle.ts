@@ -30,6 +30,8 @@ export function useTrackToggle<T extends ToggleSource>({
 }: UseTrackToggleProps<T>) {
   const room = useMaybeRoomContext();
   const track = room?.localParticipant?.getTrack(source);
+  /** `true` if a user interaction such as a click on the TrackToggle button has occurred. */
+  const userInteractionRef = React.useRef(false);
 
   const { toggle, className, pendingObserver, enabledObserver } = React.useMemo(
     () => (room ? setupMediaToggle<T>(source, room, captureOptions) : setupManualToggle()),
@@ -40,7 +42,7 @@ export function useTrackToggle<T extends ToggleSource>({
   const enabled = useObservableState(enabledObserver, initialState ?? !!track?.isEnabled);
 
   React.useEffect(() => {
-    onChange?.(enabled);
+    onChange?.(enabled, userInteractionRef.current);
   }, [enabled, onChange]);
 
   React.useEffect(() => {
@@ -56,6 +58,7 @@ export function useTrackToggle<T extends ToggleSource>({
 
   const clickHandler: React.MouseEventHandler<HTMLButtonElement> = React.useCallback(
     (evt) => {
+      userInteractionRef.current = true;
       toggle();
       rest.onClick?.(evt);
     },

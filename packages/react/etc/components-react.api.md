@@ -650,8 +650,7 @@ export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.B
     captureOptions?: CaptureOptionsBySource<T>;
     // (undocumented)
     initialState?: boolean;
-    // (undocumented)
-    onChange?: (enabled: boolean) => void;
+    onChange?: (enabled: boolean, isUserInitiated: boolean) => void;
     // (undocumented)
     showIcon?: boolean;
     // (undocumented)

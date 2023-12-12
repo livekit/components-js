@@ -26,7 +26,6 @@ export function useTrackToggle<T extends ToggleSource>({
   onChange,
   initialState,
   captureOptions,
-  onUserInitiatedChange,
   ...rest
 }: UseTrackToggleProps<T>) {
   const room = useMaybeRoomContext();
@@ -43,13 +42,8 @@ export function useTrackToggle<T extends ToggleSource>({
   const enabled = useObservableState(enabledObserver, initialState ?? !!track?.isEnabled);
 
   React.useEffect(() => {
-    onChange?.(enabled);
-    if (onUserInitiatedChange !== undefined && userInteractionRef.current === true) {
-      log.debug(`onUserInitiatedChange: toggle state ${enabled}`);
-      onUserInitiatedChange(enabled);
-      userInteractionRef.current = false;
-    }
-  }, [enabled, onChange, onUserInitiatedChange]);
+    onChange?.(enabled, userInteractionRef.current);
+  }, [enabled, onChange]);
 
   React.useEffect(() => {
     if (initialState !== undefined) {

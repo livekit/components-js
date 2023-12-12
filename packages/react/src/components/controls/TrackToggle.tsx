@@ -9,13 +9,12 @@ export interface TrackToggleProps<T extends ToggleSource>
   source: T;
   showIcon?: boolean;
   initialState?: boolean;
-  onChange?: (enabled: boolean) => void;
-  captureOptions?: CaptureOptionsBySource<T>;
   /**
-   * Function that is only called if the button state change was triggered by a user interaction like a click.
-   * @alpha
+   * Function that is called when the enabled state of the toggle changes.
+   * The second function argument `isUserInitiated` is `true` if the change was initiated by a user interaction, such as a click.
    */
-  onUserInitiatedChange?: (enabled: boolean) => void;
+  onChange?: (enabled: boolean, isUserInitiated: boolean) => void;
+  captureOptions?: CaptureOptionsBySource<T>;
 }
 
 /**

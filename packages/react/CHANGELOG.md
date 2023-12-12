@@ -1,5 +1,18 @@
 # @livekit/components-react
 
+## 1.5.0
+
+### Minor Changes
+
+- Add an `isUserInitiated` argument to the `onChange` callback on the `TrackToggle` component. - [#732](https://github.com/livekit/components-js/pull/732) ([@Ocupe](https://github.com/Ocupe))
+
+### Patch Changes
+
+- Emit missing style warning on VideoConference when in development mode - [#720](https://github.com/livekit/components-js/pull/720) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies []:
+  - @livekit/components-core@0.8.2
+
 ## 1.4.2
 
 ### Patch Changes

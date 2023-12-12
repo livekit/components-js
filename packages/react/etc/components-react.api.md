@@ -652,6 +652,8 @@ export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.B
     initialState?: boolean;
     // (undocumented)
     onChange?: (enabled: boolean) => void;
+    // @alpha
+    onUserInitiatedChange?: (enabled: boolean) => void;
     // (undocumented)
     showIcon?: boolean;
     // (undocumented)
@@ -1175,7 +1177,7 @@ export type UseTracksOptions = {
 };
 
 // @public
-export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, ...rest }: UseTrackToggleProps<T>): {
+export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, onUserInitiatedChange, ...rest }: UseTrackToggleProps<T>): {
     toggle: ((forceState?: boolean | undefined) => void) | ((forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>);
     enabled: boolean;
     pending: boolean;

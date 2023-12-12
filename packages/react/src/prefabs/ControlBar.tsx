@@ -117,7 +117,7 @@ export function ControlBar({
           <TrackToggle
             source={Track.Source.Microphone}
             showIcon={showIcon}
-            onChange={saveAudioInputEnabled}
+            onUserInitiatedChange={saveAudioInputEnabled}
           >
             {showText && 'Microphone'}
           </TrackToggle>
@@ -134,7 +134,7 @@ export function ControlBar({
           <TrackToggle
             source={Track.Source.Camera}
             showIcon={showIcon}
-            onChange={saveVideoInputEnabled}
+            onUserInitiatedChange={saveVideoInputEnabled}
           >
             {showText && 'Camera'}
           </TrackToggle>

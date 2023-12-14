@@ -578,6 +578,12 @@ export const ScreenShareIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.El
 // @internal (undocumented)
 export const ScreenShareStopIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
+// Warning: (ae-forgotten-export) The symbol "LogExtension" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "SetLogExtensionOptions" needs to be exported by the entry point index.d.ts
+//
+// @public
+export function setLogExtension(extension: LogExtension, options?: SetLogExtensionOptions): void;
+
 // Warning: (ae-forgotten-export) The symbol "LogLevel" needs to be exported by the entry point index.d.ts
 // Warning: (ae-forgotten-export) The symbol "SetLogLevelOptions" needs to be exported by the entry point index.d.ts
 //

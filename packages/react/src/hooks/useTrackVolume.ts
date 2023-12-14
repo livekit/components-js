@@ -3,6 +3,10 @@ import type { LocalAudioTrack, RemoteAudioTrack, AudioAnalyserOptions } from 'li
 import { createAudioAnalyser } from 'livekit-client';
 import { type TrackReference, isTrackReference } from '@livekit/components-core';
 
+/**
+ * @alpha
+ * Hook for tracking the volume of an audio track using the Web Audio API.
+ */
 export const useTrackVolume = (
   trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReference,
   options: AudioAnalyserOptions = { fftSize: 32, smoothingTimeConstant: 0 },
@@ -61,6 +65,10 @@ const normalizeFrequencies = (frequencies: Float32Array) => {
   });
 };
 
+/**
+ * Interface for configuring options for the useMultibandTrackVolume hook.
+ * @alpha
+ */
 export interface MultiBandTrackVolumeOptions {
   bands?: number;
   loPass?: number;
@@ -80,6 +88,10 @@ const multibandDefaults = {
   analyserOptions: { fftSize: 2048 },
 } as const satisfies MultiBandTrackVolumeOptions;
 
+/**
+ * Hook for tracking the volume of an audio track across multiple frequency bands using the Web Audio API.
+ * @alpha
+ */
 export const useMultibandTrackVolume = (
   trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReference,
   options: MultiBandTrackVolumeOptions = {},

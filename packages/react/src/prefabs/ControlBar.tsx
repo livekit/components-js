@@ -97,9 +97,12 @@ export function ControlBar({
 
   const [isScreenShareEnabled, setIsScreenShareEnabled] = React.useState(false);
 
-  const onScreenShareChange = (enabled: boolean) => {
-    setIsScreenShareEnabled(enabled);
-  };
+  const onScreenShareChange = React.useCallback(
+    (enabled: boolean) => {
+      setIsScreenShareEnabled(enabled);
+    },
+    [setIsScreenShareEnabled],
+  );
 
   const htmlProps = mergeProps({ className: 'lk-control-bar' }, props);
 
@@ -110,6 +113,18 @@ export function ControlBar({
     saveVideoInputDeviceId,
   } = usePersistentUserChoices({ preventSave: !saveUserChoices });
 
+  const microphoneOnChange = React.useCallback(
+    (enabled: boolean, isUserInitiated: boolean) =>
+      isUserInitiated ? saveAudioInputEnabled(enabled) : null,
+    [saveAudioInputEnabled],
+  );
+
+  const cameraOnChange = React.useCallback(
+    (enabled: boolean, isUserInitiated: boolean) =>
+      isUserInitiated ? saveVideoInputEnabled(enabled) : null,
+    [saveVideoInputEnabled],
+  );
+
   return (
     <div {...htmlProps}>
       {visibleControls.microphone && (
@@ -117,9 +132,7 @@ export function ControlBar({
           <TrackToggle
             source={Track.Source.Microphone}
             showIcon={showIcon}
-            onChange={(enabled, isUserInitiated) =>
-              isUserInitiated ? saveAudioInputEnabled(enabled) : null
-            }
+            onChange={microphoneOnChange}
           >
             {showText && 'Microphone'}
           </TrackToggle>
@@ -133,13 +146,7 @@ export function ControlBar({
       )}
       {visibleControls.camera && (
         <div className="lk-button-group">
-          <TrackToggle
-            source={Track.Source.Camera}
-            showIcon={showIcon}
-            onChange={(enabled, isUserInitiated) =>
-              isUserInitiated ? saveVideoInputEnabled(enabled) : null
-            }
-          >
+          <TrackToggle source={Track.Source.Camera} showIcon={showIcon} onChange={cameraOnChange}>
             {showText && 'Camera'}
           </TrackToggle>
           <div className="lk-button-group-menu">

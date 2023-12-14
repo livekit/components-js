@@ -38,7 +38,7 @@ export function useFocusToggle({ trackRef, trackSource, participant, props }: Us
     if (trackRef) {
       return isTrackReferencePinned(trackRef, layoutContext?.pin.state);
     } else if (trackSource) {
-      const track = p.getTrack(trackSource);
+      const track = p.getTrackPublication(trackSource);
       if (layoutContext?.pin.state && track) {
         return isTrackReferencePinned(
           { participant: p, source: trackSource, publication: track },
@@ -73,7 +73,7 @@ export function useFocusToggle({ trackRef, trackSource, participant, props }: Us
               });
             }
           } else if (trackSource) {
-            const track = p.getTrack(trackSource);
+            const track = p.getTrackPublication(trackSource);
             if (layoutContext?.pin.dispatch && track) {
               if (inFocus) {
                 layoutContext.pin.dispatch({

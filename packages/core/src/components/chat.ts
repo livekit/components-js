@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import type { Participant, Room } from 'livekit-client';
-import { DataPacket_Kind, RoomEvent } from 'livekit-client';
+import { RoomEvent } from 'livekit-client';
 import { BehaviorSubject, Subject, scan, map, takeUntil } from 'rxjs';
 import { DataTopic, sendMessage, setupDataMessageHandler } from '../observables/dataChannel';
 
@@ -87,7 +87,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
     isSending$.next(true);
     try {
       await sendMessage(room.localParticipant, encodedMsg, topic, {
-        kind: DataPacket_Kind.RELIABLE,
+        reliable: true,
       });
       messageSubject.next({
         payload: encodedMsg,

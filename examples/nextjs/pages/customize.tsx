@@ -123,6 +123,8 @@ export function UserDefinedConnectionQualityIndicator(props: HTMLAttributes<HTML
         return 'Good';
       case ConnectionQuality.Excellent:
         return 'Excellent';
+      case ConnectionQuality.Lost:
+        return 'Reconnecting';
       default:
         return 'No idea';
     }

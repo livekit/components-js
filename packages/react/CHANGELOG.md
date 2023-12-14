@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 1.5.1
+
+### Patch Changes
+
+- Fix render loop in TrackToggle onChange - [#734](https://github.com/livekit/components-js/pull/734) ([@harrywebdev](https://github.com/harrywebdev))
+
 ## 1.5.0
 
 ### Minor Changes

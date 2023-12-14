@@ -117,14 +117,14 @@ export function UserDefinedConnectionQualityIndicator(props: HTMLAttributes<HTML
 
   function qualityToText(quality: ConnectionQuality): string {
     switch (quality) {
-      case ConnectionQuality.Unknown:
-        return 'No idea';
       case ConnectionQuality.Poor:
         return 'Poor';
       case ConnectionQuality.Good:
         return 'Good';
       case ConnectionQuality.Excellent:
         return 'Excellent';
+      default:
+        return 'No idea';
     }
   }
 

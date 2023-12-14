@@ -6,6 +6,7 @@
 
 /// <reference types="react" />
 
+import type { AudioAnalyserOptions } from 'livekit-client';
 import type { AudioCaptureOptions } from 'livekit-client';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
@@ -22,6 +23,7 @@ import { Participant } from 'livekit-client';
 import type { ParticipantEvent } from 'livekit-client';
 import { ParticipantPermission } from 'livekit-client/dist/src/proto/livekit_models_pb';
 import * as React_2 from 'react';
+import type { RemoteAudioTrack } from 'livekit-client';
 import { RemoteParticipant } from 'livekit-client';
 import { Room } from 'livekit-client';
 import type { RoomConnectOptions } from 'livekit-client';
@@ -429,6 +431,19 @@ export const MicDisabledIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.El
 //
 // @internal (undocumented)
 export const MicIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// @public (undocumented)
+export interface MultiBandTrackVolumeOptions {
+    // (undocumented)
+    analyserOptions?: AnalyserOptions;
+    // (undocumented)
+    bands?: number;
+    // (undocumented)
+    hiPass?: number;
+    // (undocumented)
+    loPass?: number;
+    updateInterval?: number;
+}
 
 // @public
 export function ParticipantAudioTile({ participant, children, source, publication, disableSpeakingIndicator, onParticipantClick, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
@@ -901,6 +916,9 @@ export interface UseMediaTrackOptions {
     props?: React_2.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
 }
 
+// @public (undocumented)
+export const useMultibandTrackVolume: (trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReference, options?: MultiBandTrackVolumeOptions) => Float32Array[];
+
 // @alpha
 export function usePagination(itemPerPage: number, trackReferences: TrackReferenceOrPlaceholder[]): {
     totalPageCount: number;
@@ -1185,6 +1203,9 @@ export function useTrackToggle<T extends ToggleSource>({ source, onChange, initi
 // @public (undocumented)
 export interface UseTrackToggleProps<T extends ToggleSource> extends Omit<TrackToggleProps<T>, 'showIcon'> {
 }
+
+// @public (undocumented)
+export const useTrackVolume: (trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReference, options?: AudioAnalyserOptions) => number;
 
 // @public
 export function useVisualStableUpdate(

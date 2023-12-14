@@ -432,7 +432,7 @@ export const MicDisabledIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.El
 // @internal (undocumented)
 export const MicIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
-// @public (undocumented)
+// @alpha
 export interface MultiBandTrackVolumeOptions {
     // (undocumented)
     analyserOptions?: AnalyserOptions;
@@ -916,7 +916,7 @@ export interface UseMediaTrackOptions {
     props?: React_2.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
 }
 
-// @public (undocumented)
+// @alpha
 export const useMultibandTrackVolume: (trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReference, options?: MultiBandTrackVolumeOptions) => Float32Array[];
 
 // @alpha
@@ -1204,7 +1204,7 @@ export function useTrackToggle<T extends ToggleSource>({ source, onChange, initi
 export interface UseTrackToggleProps<T extends ToggleSource> extends Omit<TrackToggleProps<T>, 'showIcon'> {
 }
 
-// @public (undocumented)
+// @alpha
 export const useTrackVolume: (trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReference, options?: AudioAnalyserOptions) => number;
 
 // @public

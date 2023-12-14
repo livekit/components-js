@@ -1,7 +1,11 @@
 import * as React from 'react';
 import type { LocalAudioTrack, RemoteAudioTrack, AudioAnalyserOptions } from 'livekit-client';
-import { createAudioAnalyser } from 'livekit-client';
-import { type TrackReference, isTrackReference } from '@livekit/components-core';
+import { Track, createAudioAnalyser } from 'livekit-client';
+import {
+  type TrackReference,
+  isTrackReference,
+  type TrackReferenceOrPlaceholder,
+} from '@livekit/components-core';
 
 /**
  * @alpha
@@ -93,16 +97,17 @@ const multibandDefaults = {
  * @alpha
  */
 export const useMultibandTrackVolume = (
-  trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReference,
+  trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder,
   options: MultiBandTrackVolumeOptions = {},
 ) => {
-  const track = isTrackReference(trackOrTrackReference)
-    ? <LocalAudioTrack | RemoteAudioTrack | undefined>trackOrTrackReference.publication.track
-    : trackOrTrackReference;
+  const track =
+    trackOrTrackReference instanceof Track
+      ? trackOrTrackReference
+      : <LocalAudioTrack | RemoteAudioTrack | undefined>trackOrTrackReference?.publication?.track;
   const [frequencyBands, setFrequencyBands] = React.useState<Float32Array[]>([]);
   const opts = { ...multibandDefaults, ...options };
   React.useEffect(() => {
-    if (!track || !track.mediaStream) {
+    if (!track || !track?.mediaStream) {
       return;
     }
     const { analyser, cleanup } = createAudioAnalyser(track, opts.analyserOptions);

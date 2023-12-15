@@ -387,6 +387,12 @@ export function sendMessage(localParticipant: LocalParticipant, payload: Uint8Ar
 // @public (undocumented)
 export function setDifference<T>(setA: Set<T>, setB: Set<T>): Set<T>;
 
+// Warning: (ae-forgotten-export) The symbol "LogExtension" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "SetLogExtensionOptions" needs to be exported by the entry point index.d.ts
+//
+// @public
+export function setLogExtension(extension: LogExtension, options?: SetLogExtensionOptions): void;
+
 // Warning: (ae-forgotten-export) The symbol "LogLevel" needs to be exported by the entry point index.d.ts
 // Warning: (ae-forgotten-export) The symbol "SetLogLevelOptions" needs to be exported by the entry point index.d.ts
 //

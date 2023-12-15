@@ -1,5 +1,12 @@
 # @livekit/component-docs-storybook
 
+## 1.0.31
+
+### Patch Changes
+
+- Updated dependencies [[`dab1e274`](https://github.com/livekit/components-js/commit/dab1e274dc41a83c97dc7a415b8bd69d888c7da9)]:
+  - @livekit/components-react@1.5.1
+
 ## 1.0.30
 
 ### Patch Changes

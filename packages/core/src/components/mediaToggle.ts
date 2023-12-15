@@ -10,7 +10,6 @@ import type { Observable } from 'rxjs';
 import { Subject, map, startWith } from 'rxjs';
 import { observeParticipantMedia } from '../observables/participant';
 import { prefixClass } from '../styles-interface';
-import { Mutex } from 'livekit-client/dist/src/room/utils';
 
 export type CaptureOptionsBySource<T extends ToggleSource> = T extends Track.Source.Camera
   ? VideoCaptureOptions
@@ -64,10 +63,8 @@ export function setupMediaToggle<T extends ToggleSource>(
     startWith(getSourceEnabled(source, localParticipant)),
   );
 
-  const toggleLock = new Mutex();
   const pendingSubject = new Subject<boolean>();
   const toggle = async (forceState?: boolean, captureOptions?: CaptureOptionsBySource<T>) => {
-    const unlock = await toggleLock.lock();
     try {
       captureOptions ??= options;
       // trigger observable update
@@ -95,7 +92,6 @@ export function setupMediaToggle<T extends ToggleSource>(
           break;
       }
     } finally {
-      unlock();
       pendingSubject.next(false);
       // trigger observable update
     }

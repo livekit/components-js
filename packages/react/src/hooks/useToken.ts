@@ -43,6 +43,6 @@ export function useToken(
       setToken(accessToken);
     };
     tokenFetcher();
-  }, [tokenEndpoint, roomName, options]);
+  }, [tokenEndpoint, roomName, JSON.stringify(options)]);
   return token;
 }

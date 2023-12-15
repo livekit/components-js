@@ -104,7 +104,7 @@ export const useMultibandTrackVolume = (
     trackOrTrackReference instanceof Track
       ? trackOrTrackReference
       : <LocalAudioTrack | RemoteAudioTrack | undefined>trackOrTrackReference?.publication?.track;
-  const [frequencyBands, setFrequencyBands] = React.useState<Float32Array[]>([]);
+  const [frequencyBands, setFrequencyBands] = React.useState<Array<number>>([]);
   const opts = { ...multibandDefaults, ...options };
   React.useEffect(() => {
     if (!track || !track?.mediaStream) {
@@ -125,9 +125,12 @@ export const useMultibandTrackVolume = (
 
       const normalizedFrequencies = normalizeFrequencies(frequencies);
       const chunkSize = Math.ceil(normalizedFrequencies.length / opts.bands);
-      const chunks: Float32Array[] = [];
+      const chunks: Array<number> = [];
       for (let i = 0; i < opts.bands; i++) {
-        chunks.push(normalizedFrequencies.slice(i * chunkSize, (i + 1) * chunkSize));
+        const summedVolumes = normalizedFrequencies
+          .slice(i * chunkSize, (i + 1) * chunkSize)
+          .reduce((acc, val) => (acc += val), 0);
+        chunks.push(summedVolumes / chunkSize);
       }
 
       setFrequencyBands(chunks);

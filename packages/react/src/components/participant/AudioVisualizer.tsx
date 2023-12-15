@@ -1,8 +1,7 @@
 import type { Participant } from 'livekit-client';
-import { createAudioAnalyser, LocalAudioTrack, RemoteAudioTrack, Track } from 'livekit-client';
+import { Track } from 'livekit-client';
 import * as React from 'react';
 import { isTrackReferencePlaceholder, type TrackReference } from '@livekit/components-core';
-import { useTrack } from '../../hooks/useTrack';
 import { useMaybeParticipantContext, useMaybeTrackRefContext } from '../../context';
 import { useMultibandTrackVolume } from '../../hooks';
 
@@ -33,14 +32,14 @@ export function AudioVisualizer({ participant, trackRef, ...props }: AudioVisual
 
   const p = useMaybeParticipantContext() ?? participant;
   let ref = useMaybeTrackRefContext() ?? trackRef;
-  if (!ref || isTrackReferencePlaceholder(ref)) {
+  if (!ref) {
     if (!p) {
       throw Error(`Participant missing, provide it directly or within a context`);
     }
     ref = { participant: p, source: Track.Source.Microphone };
   }
 
-  const volumes = useMultibandTrackVolume(ref, { bands: 7 });
+  const volumes = useMultibandTrackVolume(ref, { bands: 7, loPass: 300 });
 
   return (
     <svg
@@ -56,7 +55,7 @@ export function AudioVisualizer({ participant, trackRef, ...props }: AudioVisual
           transform: `translate(${(svgWidth - barCount * (barWidth + barSpacing)) / 2}px, 0)`,
         }}
       >
-        {Array.from(volumes).map((vol, idx) => (
+        {volumes.map((vol, idx) => (
           <rect
             key={idx}
             x={idx * (barWidth + barSpacing)}

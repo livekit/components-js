@@ -1,7 +1,7 @@
 import type { Participant } from 'livekit-client';
 import { Track } from 'livekit-client';
 import * as React from 'react';
-import { isTrackReferencePlaceholder, type TrackReference } from '@livekit/components-core';
+import { type TrackReference } from '@livekit/components-core';
 import { useMaybeParticipantContext, useMaybeTrackRefContext } from '../../context';
 import { useMultibandTrackVolume } from '../../hooks';
 

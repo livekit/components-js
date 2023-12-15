@@ -464,7 +464,7 @@ export function setupLiveKitRoom(): {
 // @public (undocumented)
 export function setupManualToggle(): {
     className: string;
-    toggle: (forceState?: boolean) => void;
+    toggle: (forceState?: boolean) => Promise<void>;
     enabledObserver: Observable<boolean>;
     pendingObserver: Observable<boolean>;
 };

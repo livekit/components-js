@@ -75,7 +75,15 @@ const normalizeFrequencies = (frequencies: Float32Array) => {
  */
 export interface MultiBandTrackVolumeOptions {
   bands?: number;
+  /**
+   * cut off of frequency bins on the lower end
+   * Note: this is not a frequency measure, but in relation to analyserOptions.fftSize,
+   */
   loPass?: number;
+  /**
+   * cut off of frequency bins on the higher end
+   * Note: this is not a frequency measure, but in relation to analyserOptions.fftSize,
+   */
   hiPass?: number;
   /**
    * update should run every x ms

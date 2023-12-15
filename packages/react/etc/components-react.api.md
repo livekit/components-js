@@ -438,9 +438,7 @@ export interface MultiBandTrackVolumeOptions {
     analyserOptions?: AnalyserOptions;
     // (undocumented)
     bands?: number;
-    // (undocumented)
     hiPass?: number;
-    // (undocumented)
     loPass?: number;
     updateInterval?: number;
 }

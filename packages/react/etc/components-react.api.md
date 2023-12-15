@@ -78,7 +78,7 @@ export interface AudioVisualizerProps extends React_2.HTMLAttributes<SVGElement>
     // @deprecated (undocumented)
     participant?: Participant;
     // (undocumented)
-    trackRef?: TrackReferenceOrPlaceholder;
+    trackRef?: TrackReference;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "CameraDisabledIcon" should be prefixed with an underscore because the declaration is marked as @internal
@@ -923,7 +923,7 @@ export interface UseMediaTrackOptions {
 }
 
 // @alpha
-export const useMultibandTrackVolume: (trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReference, options?: MultiBandTrackVolumeOptions) => Float32Array[];
+export const useMultibandTrackVolume: (trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder, options?: MultiBandTrackVolumeOptions) => number[];
 
 // @alpha
 export function usePagination(itemPerPage: number, trackReferences: TrackReferenceOrPlaceholder[]): {

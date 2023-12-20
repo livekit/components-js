@@ -113,7 +113,7 @@ export function setupManualToggle() {
 
   const pendingSubject = new Subject<boolean>();
 
-  const toggle = (forceState?: boolean) => {
+  const toggle = async (forceState?: boolean) => {
     pendingSubject.next(true);
     state = forceState ?? !state;
     enabledSubject.next(state);

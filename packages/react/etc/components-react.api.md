@@ -107,6 +107,11 @@ export const CarouselView: typeof CarouselLayout;
 // @public
 export function Chat({ messageFormatter, messageDecoder, messageEncoder, channelTopic, ...props }: ChatProps): React_2.JSX.Element;
 
+// Warning: (ae-internal-missing-underscore) The name "ChatCloseIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const ChatCloseIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
 // @public
 export function ChatEntry({ entry, hideName, hideTimestamp, messageFormatter, ...props }: ChatEntryProps): React_2.JSX.Element;
 

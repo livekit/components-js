@@ -88,8 +88,8 @@ export function Chat({
   return (
     <div {...props} className="lk-chat">
       <div className="lk-chat-header">
-        <span>Messages</span>
-        <ChatToggle>
+        Messages
+        <ChatToggle className="lk-close-button">
           <ChatCloseIcon />
         </ChatToggle>
       </div>

@@ -334,8 +334,8 @@ importers:
         specifier: '*'
         version: link:../eslint-config-custom
       js-yaml:
-        specifier: ~3.14.0
-        version: 3.14.1
+        specifier: ~4.1.0
+        version: 4.1.0
       resolve:
         specifier: ~1.22.1
         version: 1.22.8
@@ -347,8 +347,8 @@ importers:
         specifier: ^1.0.6
         version: 1.0.6
       '@types/js-yaml':
-        specifier: 3.12.9
-        version: 3.12.9
+        specifier: 4.0.9
+        version: 4.0.9
       '@types/node':
         specifier: 20.8.10
         version: 20.8.10
@@ -5281,8 +5281,8 @@ packages:
       expect: 29.7.0
       pretty-format: 29.7.0
 
-  /@types/js-yaml@3.12.9:
-    resolution: {integrity: sha512-s5v3+2RB96nd7AOZXLScwHDRClor83+0E5q+5fzq0fTFXw8spF3QWHAUmHwItmmlr7XnDjpM0FkAgNKHzDTXtg==}
+  /@types/js-yaml@4.0.9:
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
     dev: true
 
   /@types/json-schema@7.0.15:

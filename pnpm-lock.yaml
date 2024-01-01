@@ -178,16 +178,16 @@ importers:
         version: 7.38.2(@types/node@20.8.10)
       '@size-limit/file':
         specifier: ^11.0.0
-        version: 11.0.0(size-limit@10.0.2)
+        version: 11.0.0(size-limit@11.0.1)
       '@size-limit/webpack':
         specifier: ^11.0.0
-        version: 11.0.0(esbuild@0.18.20)(size-limit@10.0.2)
+        version: 11.0.0(esbuild@0.18.20)(size-limit@11.0.1)
       eslint-config-lk-custom:
         specifier: ^0.1.1
         version: link:../../tooling/eslint-config-custom
       size-limit:
-        specifier: ^10.0.0
-        version: 10.0.2
+        specifier: ^11.0.0
+        version: 11.0.1
       tsup:
         specifier: ^7.0.0
         version: 7.2.0(typescript@5.2.2)
@@ -224,10 +224,10 @@ importers:
         version: 7.38.2(@types/node@20.8.10)
       '@size-limit/file':
         specifier: ^11.0.0
-        version: 11.0.0(size-limit@10.0.2)
+        version: 11.0.0(size-limit@11.0.1)
       '@size-limit/webpack':
         specifier: ^11.0.0
-        version: 11.0.0(esbuild@0.18.20)(size-limit@10.0.2)
+        version: 11.0.0(esbuild@0.18.20)(size-limit@11.0.1)
       '@svgr/cli':
         specifier: ^8.0.0
         version: 8.1.0(typescript@5.2.2)
@@ -259,8 +259,8 @@ importers:
         specifier: ^5.0.5
         version: 5.0.5
       size-limit:
-        specifier: ^10.0.0
-        version: 10.0.2
+        specifier: ^11.0.0
+        version: 11.0.1
       tsup:
         specifier: ^7.0.0
         version: 7.2.0(typescript@5.2.2)
@@ -3759,6 +3759,11 @@ packages:
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
 
+  /@sindresorhus/merge-streams@1.0.0:
+    resolution: {integrity: sha512-rUV5WyJrJLoloD4NDN1V1+LDMDWOa4OTsT4yYJwQNpTU6FWxkxHpL7eu4w+DmiH8x/EAM1otkPE1+LaspIbplw==}
+    engines: {node: '>=18'}
+    dev: true
+
   /@sinonjs/commons@3.0.0:
     resolution: {integrity: sha512-jXBtWAF4vmdNmZgD5FoKsVLv3rPgDnLgPbU84LIJ3otV44vJlDRokVng5v8NFJdCf/da9legHcKaRuZs4L7faA==}
     dependencies:
@@ -3771,23 +3776,23 @@ packages:
       '@sinonjs/commons': 3.0.0
     dev: false
 
-  /@size-limit/file@11.0.0(size-limit@10.0.2):
+  /@size-limit/file@11.0.0(size-limit@11.0.1):
     resolution: {integrity: sha512-tTg6sSiFbiogiof3GV4iIRCPS4+46Hvq4QWXGXp00Be/tOnpglXF62xNpCfFwefx9YCXxCyeYSqqaRBjpRCsmQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
       size-limit: 11.0.0
     dependencies:
-      size-limit: 10.0.2
+      size-limit: 11.0.1
     dev: true
 
-  /@size-limit/webpack@11.0.0(esbuild@0.18.20)(size-limit@10.0.2):
+  /@size-limit/webpack@11.0.0(esbuild@0.18.20)(size-limit@11.0.1):
     resolution: {integrity: sha512-AFF8/JBOcU7KUgkLUo93DmrfexRZz/7+qVwye+I4fbMgl/lRtoonNbgwGTdjvwZBjQLTGkWLtSPK5xGYbIdpGA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
       size-limit: 11.0.0
     dependencies:
       nanoid: 5.0.3
-      size-limit: 10.0.2
+      size-limit: 11.0.1
       webpack: 5.89.0(esbuild@0.18.20)
     transitivePeerDependencies:
       - '@swc/core'
@@ -9404,6 +9409,18 @@ packages:
       slash: 4.0.0
     dev: true
 
+  /globby@14.0.0:
+    resolution: {integrity: sha512-/1WM/LNHRAOH9lZta77uGbq0dAEQM+XjNesWwhlERDVenqothRbnzTrL3/LrIoEPPjeUHC3vrS6TwoyxeHs7MQ==}
+    engines: {node: '>=18'}
+    dependencies:
+      '@sindresorhus/merge-streams': 1.0.0
+      fast-glob: 3.3.2
+      ignore: 5.2.4
+      path-type: 5.0.0
+      slash: 5.1.0
+      unicorn-magic: 0.1.0
+    dev: true
+
   /gopd@1.0.1:
     resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}
     dependencies:
@@ -10738,6 +10755,11 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
+  /lilconfig@3.0.0:
+    resolution: {integrity: sha512-K2U4W2Ff5ibV7j7ydLr+zLAkIg5JJ4lPn1Ltsdt+Tz/IjQ8buJ55pZAxoP34lqIiwtF9iAvtLv3JGv7CAyAg+g==}
+    engines: {node: '>=14'}
+    dev: true
+
   /lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
@@ -11724,6 +11746,11 @@ packages:
   /path-type@4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
+
+  /path-type@5.0.0:
+    resolution: {integrity: sha512-5HviZNaZcfqP95rwpv+1HDgUamezbqdSYTyzjTvwtJSnIH+3vnbmWsItli8OFEndS984VT55M3jduxZbX351gg==}
+    engines: {node: '>=12'}
+    dev: true
 
   /pathe@1.1.1:
     resolution: {integrity: sha512-d+RQGp0MAYTIaDBIMmOfMwz3E+LOZnxx1HZd5R18mmCZY0QBlK0LDZfPc8FW8Ed2DlvsuE6PRjroDY+wg4+j/Q==}
@@ -12853,15 +12880,15 @@ packages:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
     dev: true
 
-  /size-limit@10.0.2:
-    resolution: {integrity: sha512-ULFHMr+OQjuyqdGSqkDGY3XfnGO0l3cIfJaNe6F6ZqO+QzWUYunZh9DYHovNctsN7R9fR9gzzzW4Ze8TiJ060g==}
+  /size-limit@11.0.1:
+    resolution: {integrity: sha512-6L80ocVspWPrhIRg8kPl41VypqTGH8/lu9e6TJiSJpkNLtOR2h/EEqdAO/wNJOv/sUVtjX+lVEWrzBpItGP+gQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     dependencies:
       bytes-iec: 3.1.1
       chokidar: 3.5.3
-      globby: 13.2.2
-      lilconfig: 2.1.0
+      globby: 14.0.0
+      lilconfig: 3.0.0
       nanospinner: 1.1.0
       picocolors: 1.0.0
     dev: true
@@ -13903,6 +13930,11 @@ packages:
   /unicode-property-aliases-ecmascript@2.1.0:
     resolution: {integrity: sha512-6t3foTQI9qne+OZoVQB/8x8rk2k1eVy1gRXhV3oFQ5T6R1dqQ1xtin3XqSlx3+ATBkliTaR/hHyJBm+LVPNM8w==}
     engines: {node: '>=4'}
+    dev: true
+
+  /unicorn-magic@0.1.0:
+    resolution: {integrity: sha512-lRfVq8fE8gz6QMBuDM6a+LO3IAzTi05H6gCVaUpir2E1Rwpo4ZUog45KpNXKC/Mn3Yb9UDuHumeFTo9iV/D9FQ==}
+    engines: {node: '>=18'}
     dev: true
 
   /unique-string@2.0.0:

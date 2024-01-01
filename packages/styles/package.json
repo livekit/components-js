@@ -80,7 +80,7 @@
     "modern-normalize": "^2.0.0",
     "nodemon": "^3.0.0",
     "postcss": "^8.4.17",
-    "postcss-cli": "^10.0.0",
+    "postcss-cli": "^11.0.0",
     "postcss-prefixer": "^3.0.0",
     "postcss-variables-prefixer": "^1.2.0",
     "rimraf": "^5.0.0",

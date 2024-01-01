@@ -73,7 +73,7 @@
     "react-dom": "^18.2.0",
     "rimraf": "^5.0.5",
     "size-limit": "^10.0.0",
-    "tsup": "^7.0.0",
+    "tsup": "^8.0.0",
     "typescript": "5.2.2",
     "vite": "^4.1.4",
     "vitest": "^0.34.0"

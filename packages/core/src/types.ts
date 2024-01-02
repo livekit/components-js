@@ -48,8 +48,8 @@ export type TrackSource<T extends Track.Source> = RequireAtLeastOne<
 >;
 
 export type ParticipantTrackIdentifier = RequireAtLeastOne<
-  { source: Track.Source; name: string; kind: Track.Kind },
-  'source' | 'name' | 'kind'
+  { sources: Track.Source[]; name: string; kind: Track.Kind },
+  'sources' | 'name' | 'kind'
 >;
 
 /**

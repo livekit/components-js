@@ -96,11 +96,11 @@ function getParticipantTrackRefs(
   identifier: ParticipantTrackIdentifier,
   onlySubscribedTracks = false,
 ): TrackReference[] {
-  const { source, kind, name } = identifier;
+  const { sources, kind, name } = identifier;
   const sourceReferences = Array.from(participant.tracks.values())
     .filter(
       (pub) =>
-        (!source || pub.source === source) &&
+        (!sources || sources.includes(pub.source)) &&
         (!kind || pub.kind === kind) &&
         (!name || pub.trackName === name) &&
         // either return all or only the ones that are subscribed

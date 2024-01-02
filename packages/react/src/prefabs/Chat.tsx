@@ -5,6 +5,8 @@ import { cloneSingleChild } from '../utils';
 import type { MessageFormatter } from '../components/ChatEntry';
 import { ChatEntry } from '../components/ChatEntry';
 import { useChat } from '../hooks/useChat';
+import { ChatToggle } from '../components';
+import { ChatCloseIcon } from '../assets/icons';
 
 /** @public */
 export interface ChatProps extends React.HTMLAttributes<HTMLDivElement>, ChatOptions {
@@ -85,6 +87,13 @@ export function Chat({
 
   return (
     <div {...props} className="lk-chat">
+      <div className="lk-chat-header">
+        Messages
+        <ChatToggle className="lk-close-button">
+          <ChatCloseIcon />
+        </ChatToggle>
+      </div>
+
       <ul className="lk-list lk-chat-messages" ref={ulRef}>
         {props.children
           ? chatMessages.map((msg, idx) =>

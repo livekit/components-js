@@ -1,10 +1,28 @@
 .chat {
   display: grid;
-  grid-template-rows: 1fr var(--control-bar-height);
+  grid-template-rows: var(--chat-header-height) 1fr var(--control-bar-height);
   width: clamp(200px, 55ch, 60ch);
   background-color: var(--bg2);
   border-left: 1px solid var(--border-color);
   align-items: end;
+}
+
+.chat-header {
+  height: var(--chat-header-height);
+  padding: 0.75rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .close-button {
+    position: absolute;
+    right: 0;
+    transform: translateX(-50%);
+    background-color: transparent;
+    &:hover {
+      background-color:var(--lk-control-active-hover-bg);
+    }
+  }
 }
 
 .chat-messages {
@@ -28,9 +46,11 @@
     white-space: nowrap;
     padding: 0 0.3rem;
     display: flex;
+
     .participant-name {
       margin-top: 1rem;
     }
+
     .timestamp {
       margin-left: auto;
       align-self: flex-end;
@@ -49,6 +69,7 @@
       background-color: var(--bg5);
     }
   }
+
   &[data-message-origin='remote'] {
     .message-body {
       background-color: var(--accent4);

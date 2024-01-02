@@ -36,7 +36,7 @@
     "@types/node": "20.8.10",
     "@types/resolve": "1.20.4",
     "fast-glob": "^3.3.1",
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.0.0"
   },
   "peerDependencies": {
     "@rushstack/heft": "^0.58.2 || ^0.62.0 || ^0.63.0"

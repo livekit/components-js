@@ -51,7 +51,7 @@
     "@size-limit/webpack": "^11.0.0",
     "eslint-config-lk-custom": "^0.1.1",
     "size-limit": "^10.0.0",
-    "tsup": "^7.0.0",
+    "tsup": "^8.0.0",
     "typescript": "5.2.2",
     "vitest": "^0.34.0"
   },

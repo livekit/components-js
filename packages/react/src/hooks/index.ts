@@ -50,3 +50,4 @@ export {
   type UsePersistentUserChoicesOptions,
 } from './usePersistentUserChoices';
 export { useIsEncrypted } from './useIsEncrypted';
+export * from './useTrackVolume';

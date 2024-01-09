@@ -6,6 +6,7 @@
 
 /// <reference types="react" />
 
+import type { AudioAnalyserOptions } from 'livekit-client';
 import type { AudioCaptureOptions } from 'livekit-client';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
@@ -22,6 +23,7 @@ import { Participant } from 'livekit-client';
 import type { ParticipantEvent } from 'livekit-client';
 import { ParticipantPermission } from 'livekit-client/dist/src/proto/livekit_models_pb';
 import * as React_2 from 'react';
+import type { RemoteAudioTrack } from 'livekit-client';
 import { RemoteParticipant } from 'livekit-client';
 import { Room } from 'livekit-client';
 import type { RoomConnectOptions } from 'livekit-client';
@@ -76,7 +78,7 @@ export interface AudioVisualizerProps extends React_2.HTMLAttributes<SVGElement>
     // @deprecated (undocumented)
     participant?: Participant;
     // (undocumented)
-    trackRef?: TrackReferenceOrPlaceholder;
+    trackRef?: TrackReference;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "CameraDisabledIcon" should be prefixed with an underscore because the declaration is marked as @internal
@@ -434,6 +436,17 @@ export const MicDisabledIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.El
 //
 // @internal (undocumented)
 export const MicIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// @alpha
+export interface MultiBandTrackVolumeOptions {
+    // (undocumented)
+    analyserOptions?: AnalyserOptions;
+    // (undocumented)
+    bands?: number;
+    hiPass?: number;
+    loPass?: number;
+    updateInterval?: number;
+}
 
 // @public
 export function ParticipantAudioTile({ participant, children, source, publication, disableSpeakingIndicator, onParticipantClick, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
@@ -913,6 +926,9 @@ export interface UseMediaTrackOptions {
 }
 
 // @alpha
+export const useMultibandTrackVolume: (trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder, options?: MultiBandTrackVolumeOptions) => number[];
+
+// @alpha
 export function usePagination(itemPerPage: number, trackReferences: TrackReferenceOrPlaceholder[]): {
     totalPageCount: number;
     nextPage: () => void;
@@ -1196,6 +1212,9 @@ export function useTrackToggle<T extends ToggleSource>({ source, onChange, initi
 // @public (undocumented)
 export interface UseTrackToggleProps<T extends ToggleSource> extends Omit<TrackToggleProps<T>, 'showIcon'> {
 }
+
+// @alpha
+export const useTrackVolume: (trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReference, options?: AudioAnalyserOptions) => number;
 
 // @public
 export function useVisualStableUpdate(

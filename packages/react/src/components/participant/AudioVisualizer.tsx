@@ -1,15 +1,15 @@
 import type { Participant } from 'livekit-client';
-import { createAudioAnalyser, LocalAudioTrack, RemoteAudioTrack, Track } from 'livekit-client';
+import { Track } from 'livekit-client';
 import * as React from 'react';
-import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
-import { useTrack } from '../../hooks/useTrack';
+import { type TrackReference } from '@livekit/components-core';
 import { useMaybeParticipantContext, useMaybeTrackRefContext } from '../../context';
+import { useMultibandTrackVolume } from '../../hooks';
 
 /** @public */
 export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
   /** @deprecated this property will be removed in a future version, use `trackRef` instead */
   participant?: Participant;
-  trackRef?: TrackReferenceOrPlaceholder;
+  trackRef?: TrackReference;
 }
 
 /**
@@ -23,8 +23,6 @@ export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
  * @public
  */
 export function AudioVisualizer({ participant, trackRef, ...props }: AudioVisualizerProps) {
-  const [volumeBars, setVolumeBars] = React.useState<Array<number>>([]);
-
   const svgWidth = 200;
   const svgHeight = 90;
   const barWidth = 6;
@@ -41,55 +39,7 @@ export function AudioVisualizer({ participant, trackRef, ...props }: AudioVisual
     ref = { participant: p, source: Track.Source.Microphone };
   }
 
-  const { track } = useTrack(ref);
-
-  React.useEffect(() => {
-    if (!track || !(track instanceof LocalAudioTrack || track instanceof RemoteAudioTrack)) {
-      return;
-    }
-    const { analyser, cleanup } = createAudioAnalyser(track, {
-      smoothingTimeConstant: 0.8,
-      fftSize: 64,
-    });
-
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-    const calculateBars = () => {
-      analyser.getByteFrequencyData(dataArray);
-      const sums: Array<number> = new Array(barCount).fill(0);
-      dataArray.slice(1);
-      const binSize = 6;
-
-      for (let i = 0; i < barCount / 2; i += 1) {
-        const id = Math.floor(barCount / 2 - i);
-        for (let k = 0; k < binSize; k += 1) {
-          sums[id] += Math.pow(dataArray[i * binSize + k] / 255, 2);
-        }
-        sums[id] /= binSize;
-      }
-      for (let i = 0; i < barCount / 2; i += 1) {
-        const id = Math.floor(barCount / 2 + i);
-        if (sums[id] !== 0) {
-          continue;
-        }
-        for (let k = 0; k < binSize; k += 1) {
-          sums[id] += Math.pow(dataArray[i * binSize + k] / 255, 2);
-        }
-        sums[id] /= binSize;
-      }
-      return sums.map((s) => s * volMultiplier);
-    };
-
-    const calcInterval = setInterval(() => {
-      const bars = calculateBars();
-      setVolumeBars(bars);
-    }, 100);
-
-    return () => {
-      clearInterval(calcInterval);
-      cleanup();
-    };
-  }, [track]);
+  const volumes = useMultibandTrackVolume(ref, { bands: 7, loPass: 300 });
 
   return (
     <svg
@@ -105,13 +55,13 @@ export function AudioVisualizer({ participant, trackRef, ...props }: AudioVisual
           transform: `translate(${(svgWidth - barCount * (barWidth + barSpacing)) / 2}px, 0)`,
         }}
       >
-        {volumeBars.map((vol, idx) => (
+        {volumes.map((vol, idx) => (
           <rect
             key={idx}
             x={idx * (barWidth + barSpacing)}
-            y={svgHeight / 2 - vol / 2}
+            y={svgHeight / 2 - (vol * volMultiplier) / 2}
             width={barWidth}
-            height={vol}
+            height={vol * volMultiplier}
           ></rect>
         ))}
       </g>

@@ -21,7 +21,7 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-      - uses: andresz1/size-limit-action@35ea3c74377213d727b88532229d467a849345f4 # with pnpm support
+      - uses: andresz1/size-limit-action@7313b26c76b3666c1dc41e2ca05370e201a9b7de # with pnpm support
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           script: pnpm --filter @livekit/components-react exec size-limit --json

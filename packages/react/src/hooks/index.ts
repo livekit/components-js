@@ -50,3 +50,5 @@ export {
   type UsePersistentUserChoicesOptions,
 } from './usePersistentUserChoices';
 export { useIsEncrypted } from './useIsEncrypted';
+export { useParticipantTracks } from './useParticipantTracks';
+export { useParticipantTracksByName } from './useParticipantTracksByName';

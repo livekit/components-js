@@ -1,5 +1,20 @@
 # @livekit/components-react
 
+## 1.5.2
+
+### Patch Changes
+
+- Added close button in chat screen - [#740](https://github.com/livekit/components-js/pull/740) ([@govind-io](https://github.com/govind-io))
+
+- Add useTrackVolume hooks - [#735](https://github.com/livekit/components-js/pull/735) ([@lukasIO](https://github.com/lukasIO))
+
+- Log error on non-ok http statuses of useToken - [#739](https://github.com/livekit/components-js/pull/739) ([@lukasIO](https://github.com/lukasIO))
+
+- Pin all direct dependencies (Fixes an dependency resolve issue with a broken usehooks-ts release) - [#751](https://github.com/livekit/components-js/pull/751) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`e805d41b`](https://github.com/livekit/components-js/commit/e805d41b424b4c5618caff87bab65dbf5fbb648f), [`3e15bde4`](https://github.com/livekit/components-js/commit/3e15bde4720309869dc8f6b42ea7263f1bc8319e)]:
+  - @livekit/components-core@0.8.3
+
 ## 1.5.1
 
 ### Patch Changes

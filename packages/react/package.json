@@ -48,9 +48,9 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@livekit/components-core": "workspace:*",
-    "@react-hook/latest": "^1.0.3",
-    "clsx": "^2.0.0",
-    "usehooks-ts": "^2.9.1"
+    "@react-hook/latest": "1.0.3",
+    "clsx": "2.1.0",
+    "usehooks-ts": "2.9.1"
   },
   "peerDependencies": {
     "livekit-client": "^1.15.1",

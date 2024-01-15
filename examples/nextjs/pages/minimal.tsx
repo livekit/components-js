@@ -2,19 +2,24 @@ import { LiveKitRoom, useToken, VideoConference, setLogLevel } from '@livekit/co
 import { RoomConnectOptions } from 'livekit-client';
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';
+import { useMemo } from 'react';
 
 const MinimalExample: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
   const roomName = params?.get('room') ?? 'test-room';
-  const userIdentity = params?.get('user') ?? generateRandomUserId();
   setLogLevel('info', { liveKitClientLogLevel: 'warn' });
 
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    userInfo: {
-      identity: userIdentity,
-      name: userIdentity,
-    },
-  });
+  const tokenOptions = useMemo(() => {
+    const userId = params?.get('user') ?? generateRandomUserId();
+    return {
+      userInfo: {
+        identity: userId,
+        name: userId,
+      },
+    };
+  }, []);
+
+  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, tokenOptions);
 
   return (
     <div data-lk-theme="default" style={{ height: '100vh' }}>

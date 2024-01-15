@@ -97,10 +97,10 @@ export function Chat({
 
       <ul className="lk-list lk-chat-messages" ref={ulRef}>
         {props.children
-          ? chatMessages.map((msg) =>
+          ? chatMessages.map((msg, idx) =>
               cloneSingleChild(props.children, {
                 entry: msg,
-                key: msg.id,
+                key: msg.id ?? idx,
                 messageFormatter,
               }),
             )
@@ -111,7 +111,7 @@ export function Chat({
 
               return (
                 <ChatEntry
-                  key={msg.id}
+                  key={msg.id ?? idx}
                   hideName={hideName}
                   hideTimestamp={hideName === false ? false : hideTimestamp} // If we show the name always show the timestamp as well.
                   entry={msg}

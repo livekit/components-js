@@ -6,6 +6,7 @@ import { DataTopic, sendMessage, setupDataMessageHandler } from '../observables/
 
 /** @public */
 export interface ChatMessage {
+  id: string;
   timestamp: number;
   message: string;
 }
@@ -13,6 +14,7 @@ export interface ChatMessage {
 /** @public */
 export interface ReceivedChatMessage extends ChatMessage {
   from?: Participant;
+  editTimestamp?: number;
 }
 
 /** @public */
@@ -24,6 +26,7 @@ export type ChatOptions = {
   messageEncoder?: (message: ChatMessage) => Uint8Array;
   messageDecoder?: (message: Uint8Array) => ReceivedChatMessage;
   channelTopic?: string;
+  updateChannelTopic?: string;
 };
 
 type RawMessage = {
@@ -37,17 +40,18 @@ const decoder = new TextDecoder();
 
 const topicSubjectMap: Map<Room, Map<string, Subject<RawMessage>>> = new Map();
 
-const encode = (message: ChatMessage) =>
-  encoder.encode(JSON.stringify({ message: message.message, timestamp: message.timestamp }));
+const encode = (message: ChatMessage) => encoder.encode(JSON.stringify(message));
 
 const decode = (message: Uint8Array) => JSON.parse(decoder.decode(message)) as ReceivedChatMessage;
 
 export function setupChat(room: Room, options?: ChatOptions) {
   const onDestroyObservable = new Subject<void>();
 
-  const { messageDecoder, messageEncoder, channelTopic } = options ?? {};
+  const { messageDecoder, messageEncoder, channelTopic, updateChannelTopic } = options ?? {};
 
   const topic = channelTopic ?? DataTopic.CHAT;
+
+  const updateTopic = updateChannelTopic ?? DataTopic.CHAT_UPDATE;
 
   let needsSetup = false;
   if (!topicSubjectMap.has(room)) {
@@ -60,7 +64,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
 
   if (needsSetup) {
     /** Subscribe to all appropriate messages sent over the wire. */
-    const { messageObservable } = setupDataMessageHandler(room, topic);
+    const { messageObservable } = setupDataMessageHandler(room, [topic, updateTopic]);
     messageObservable.pipe(takeUntil(onDestroyObservable)).subscribe(messageSubject);
   }
 
@@ -73,7 +77,26 @@ export function setupChat(room: Room, options?: ChatOptions) {
       const newMessage: ReceivedChatMessage = { ...parsedMessage, from: msg.from };
       return newMessage;
     }),
-    scan<ReceivedChatMessage, ReceivedChatMessage[]>((acc, value) => [...acc, value], []),
+    scan<ReceivedChatMessage, ReceivedChatMessage[]>((acc, value) => {
+      // handle message updates
+      if (
+        'id' in value &&
+        acc.find((msg) => msg.from?.identity === value.from?.identity && msg.id === value.id)
+      ) {
+        const replaceIndex = acc.findIndex((msg) => msg.id === value.id);
+        if (replaceIndex > -1) {
+          const originalMsg = acc[replaceIndex];
+          acc[replaceIndex] = {
+            ...value,
+            timestamp: originalMsg.timestamp,
+            editTimestamp: value.timestamp,
+          };
+        }
+
+        return [...acc];
+      }
+      return [...acc, value];
+    }, []),
     takeUntil(onDestroyObservable),
   );
 
@@ -83,7 +106,9 @@ export function setupChat(room: Room, options?: ChatOptions) {
 
   const send = async (message: string) => {
     const timestamp = Date.now();
-    const encodedMsg = finalMessageEncoder({ message, timestamp });
+    const id = crypto.randomUUID();
+    const chatMessage: ChatMessage = { id, message, timestamp };
+    const encodedMsg = finalMessageEncoder(chatMessage);
     isSending$.next(true);
     try {
       await sendMessage(room.localParticipant, encodedMsg, topic, {
@@ -94,6 +119,27 @@ export function setupChat(room: Room, options?: ChatOptions) {
         topic: topic,
         from: room.localParticipant,
       });
+      return chatMessage;
+    } finally {
+      isSending$.next(false);
+    }
+  };
+
+  const update = async (message: string, messageId: string) => {
+    const timestamp = Date.now();
+    const chatMessage: ChatMessage = { id: messageId, message, timestamp };
+    const encodedMsg = finalMessageEncoder(chatMessage);
+    isSending$.next(true);
+    try {
+      await sendMessage(room.localParticipant, encodedMsg, updateTopic, {
+        kind: DataPacket_Kind.RELIABLE,
+      });
+      messageSubject.next({
+        payload: encodedMsg,
+        topic: topic,
+        from: room.localParticipant,
+      });
+      return chatMessage;
     } finally {
       isSending$.next(false);
     }
@@ -106,5 +152,5 @@ export function setupChat(room: Room, options?: ChatOptions) {
   }
   room.once(RoomEvent.Disconnected, destroy);
 
-  return { messageObservable: messagesObservable, isSendingObservable: isSending$, send };
+  return { messageObservable: messagesObservable, isSendingObservable: isSending$, send, update };
 }

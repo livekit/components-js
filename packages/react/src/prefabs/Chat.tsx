@@ -30,16 +30,17 @@ export function Chat({
   messageDecoder,
   messageEncoder,
   channelTopic,
+  updateChannelTopic,
   ...props
 }: ChatProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const ulRef = React.useRef<HTMLUListElement>(null);
 
   const chatOptions: ChatOptions = React.useMemo(() => {
-    return { messageDecoder, messageEncoder, channelTopic };
-  }, [messageDecoder, messageEncoder, channelTopic]);
+    return { messageDecoder, messageEncoder, channelTopic, updateChannelTopic };
+  }, [messageDecoder, messageEncoder, channelTopic, updateChannelTopic]);
 
-  const { send, chatMessages, isSending } = useChat(chatOptions);
+  const { send, update, chatMessages, isSending } = useChat(chatOptions);
 
   const layoutContext = useMaybeLayoutContext();
   const lastReadMsgAt = React.useRef<ChatMessage['timestamp']>(0);
@@ -110,11 +111,12 @@ export function Chat({
 
               return (
                 <ChatEntry
-                  key={idx}
+                  key={msg.id}
                   hideName={hideName}
                   hideTimestamp={hideName === false ? false : hideTimestamp} // If we show the name always show the timestamp as well.
                   entry={msg}
                   messageFormatter={messageFormatter}
+                  onEdit={(msg) => update?.(msg.message, msg.id)}
                 />
               );
             })}

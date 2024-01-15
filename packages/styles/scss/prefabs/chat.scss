@@ -20,7 +20,7 @@
     transform: translateX(-50%);
     background-color: transparent;
     &:hover {
-      background-color:var(--lk-control-active-hover-bg);
+      background-color: var(--lk-control-active-hover-bg);
     }
   }
 }
@@ -57,11 +57,22 @@
     }
   }
 
+  .edit-button {
+    background: none;
+    float: right;
+    margin: 0;
+    padding: 0 0.25rem;
+    border-radius: 0;
+    font-size: 12px;
+  }
+
   .message-body {
+    display: inline-block;
     border-radius: 15px;
     padding: 0.25rem 0.75rem;
     word-break: break-word;
     width: fit-content;
+    max-width: calc(100% - 32px); // leave space for edit button
   }
 
   &[data-message-origin='local'] {

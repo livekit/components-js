@@ -97,10 +97,10 @@ export function Chat({
 
       <ul className="lk-list lk-chat-messages" ref={ulRef}>
         {props.children
-          ? chatMessages.map((msg, idx) =>
+          ? chatMessages.map((msg) =>
               cloneSingleChild(props.children, {
                 entry: msg,
-                key: idx,
+                key: msg.id,
                 messageFormatter,
               }),
             )

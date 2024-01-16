@@ -91,7 +91,7 @@ export function ChatEntry({
 
           {(!hideTimestamp || hasBeenEdited) && (
             <span className="lk-timestamp">
-              {hasBeenEdited && '(edited) '}
+              {hasBeenEdited && 'edited '}
               {time.toLocaleTimeString(locale, { timeStyle: 'short' })}
             </span>
           )}

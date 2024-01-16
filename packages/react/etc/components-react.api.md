@@ -133,6 +133,8 @@ export const ChatIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 // @public (undocumented)
 export interface ChatMessage {
     // (undocumented)
+    id: string;
+    // (undocumented)
     message: string;
     // (undocumented)
     timestamp: number;
@@ -561,6 +563,8 @@ export const QualityUnknownIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX
 // @public (undocumented)
 export interface ReceivedChatMessage extends ChatMessage {
     // (undocumented)
+    editTimestamp?: number;
+    // (undocumented)
     from?: Participant;
 }
 
@@ -694,7 +698,8 @@ export function useAudioPlayback(room?: Room): {
 
 // @public
 export function useChat(options?: ChatOptions): {
-    send: ((message: string) => Promise<void>) | undefined;
+    send: ((message: string) => Promise<ChatMessage>) | undefined;
+    update: ((message: string, messageId: string) => Promise<ChatMessage>) | undefined;
     chatMessages: ReceivedChatMessage[];
     isSending: boolean;
 };

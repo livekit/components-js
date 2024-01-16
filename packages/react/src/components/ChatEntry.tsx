@@ -1,7 +1,6 @@
-import type { ChatMessage, ReceivedChatMessage } from '@livekit/components-core';
+import type { ReceivedChatMessage } from '@livekit/components-core';
 import { tokenize, createDefaultGrammar } from '@livekit/components-core';
 import * as React from 'react';
-import { useHover } from 'usehooks-ts';
 
 /** @public */
 export type MessageFormatter = (message: string) => React.ReactNode;

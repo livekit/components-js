@@ -65,6 +65,8 @@ export type CaptureOptionsBySource<T extends ToggleSource> = T extends Track.Sou
 // @public (undocumented)
 export interface ChatMessage {
     // (undocumented)
+    id: string;
+    // (undocumented)
     message: string;
     // (undocumented)
     timestamp: number;
@@ -75,6 +77,7 @@ export type ChatOptions = {
     messageEncoder?: (message: ChatMessage) => Uint8Array;
     messageDecoder?: (message: Uint8Array) => ReceivedChatMessage;
     channelTopic?: string;
+    updateChannelTopic?: string;
 };
 
 // @public (undocumented)
@@ -149,6 +152,7 @@ export type DataSendOptions = {
 // @public (undocumented)
 export const DataTopic: {
     readonly CHAT: "lk-chat-topic";
+    readonly CHAT_UPDATE: "lk-chat-update-topic";
 };
 
 // @public (undocumented)
@@ -329,6 +333,8 @@ export type PinState = TrackReferenceOrPlaceholder[];
 // @public (undocumented)
 export interface ReceivedChatMessage extends ChatMessage {
     // (undocumented)
+    editTimestamp?: number;
+    // (undocumented)
     from?: Participant;
 }
 
@@ -408,7 +414,8 @@ export type SetMediaDeviceOptions = {
 export function setupChat(room: Room, options?: ChatOptions): {
     messageObservable: Observable<ReceivedChatMessage[]>;
     isSendingObservable: BehaviorSubject<boolean>;
-    send: (message: string) => Promise<void>;
+    send: (message: string) => Promise<ChatMessage>;
+    update: (message: string, messageId: string) => Promise<ChatMessage>;
 };
 
 // @public (undocumented)
@@ -428,7 +435,7 @@ export function setupConnectionQualityIndicator(participant: Participant): {
 };
 
 // @public (undocumented)
-export function setupDataMessageHandler<T extends string>(room: Room, topic?: T, onMessage?: (msg: ReceivedDataMessage<T>) => void): {
+export function setupDataMessageHandler<T extends string>(room: Room, topic?: T | [T, ...T[]], onMessage?: (msg: ReceivedDataMessage<T>) => void): {
     messageObservable: Observable<{
         payload: Uint8Array;
         topic: T;

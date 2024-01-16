@@ -99,7 +99,7 @@ export function Chat({
           ? chatMessages.map((msg, idx) =>
               cloneSingleChild(props.children, {
                 entry: msg,
-                key: idx,
+                key: msg.id ?? idx,
                 messageFormatter,
               }),
             )
@@ -110,7 +110,7 @@ export function Chat({
 
               return (
                 <ChatEntry
-                  key={idx}
+                  key={msg.id ?? idx}
                   hideName={hideName}
                   hideTimestamp={hideName === false ? false : hideTimestamp} // If we show the name always show the timestamp as well.
                   entry={msg}

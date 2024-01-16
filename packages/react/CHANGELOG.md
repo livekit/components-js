@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 1.5.3
+
+### Patch Changes
+
+- Add possibility to edit/update chat messages - [#757](https://github.com/livekit/components-js/pull/757) ([@lukasIO](https://github.com/lukasIO))
+
+- Use room as dependency to recreate localParticipant observable - [#753](https://github.com/livekit/components-js/pull/753) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies []:
+  - @livekit/components-core@0.8.3
+
 ## 1.5.2
 
 ### Patch Changes

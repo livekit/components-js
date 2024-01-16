@@ -20,8 +20,6 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
   hideTimestamp?: boolean;
   /** An optional formatter for the message body. */
   messageFormatter?: MessageFormatter;
-  /** edit callback */
-  onEdit?: (msg: ChatMessage) => void;
 }
 
 /**
@@ -41,42 +39,18 @@ export function ChatEntry({
   hideName = false,
   hideTimestamp = false,
   messageFormatter,
-  onEdit,
   ...props
 }: ChatEntryProps) {
   const formattedMessage = React.useMemo(() => {
     return messageFormatter ? messageFormatter(entry.message) : entry.message;
   }, [entry.message, messageFormatter]);
-  const listElement = React.useRef(null);
   const hasBeenEdited = !!entry.editTimestamp;
-  const isHovering = useHover(listElement);
   const time = new Date(entry.timestamp);
   const locale = navigator ? navigator.language : 'en-US';
-  const [editMessage, setEditMessage] = React.useState(entry.message);
-
-  console.log(entry.from);
-
-  const [isEditing, setIsEditing] = React.useState(false);
-
-  const commitEdit = () => {
-    if (isEditing && editMessage !== entry.message) {
-      onEdit?.({
-        ...entry,
-        message: editMessage,
-      });
-    }
-    setIsEditing((value) => !value);
-  };
-
-  const cancelEdit = () => {
-    setIsEditing(false);
-    setEditMessage(entry.message);
-  };
 
   return (
     <li
       className="lk-chat-entry"
-      ref={listElement}
       title={time.toLocaleTimeString(locale, { timeStyle: 'full' })}
       data-lk-message-origin={entry.from?.isLocal ? 'local' : 'remote'}
       {...props}
@@ -91,36 +65,14 @@ export function ChatEntry({
 
           {(!hideTimestamp || hasBeenEdited) && (
             <span className="lk-timestamp">
-              {hasBeenEdited && '(edited) '}
+              {hasBeenEdited && 'edited '}
               {time.toLocaleTimeString(locale, { timeStyle: 'short' })}
             </span>
           )}
         </span>
       )}
 
-      <span className="lk-message-container">
-        {isEditing ? (
-          <textarea
-            className="lk-message-body"
-            value={editMessage}
-            onChange={(ev) => setEditMessage(ev.target.value)}
-            onKeyDown={(ev) => {
-              if (ev.key === 'Enter') {
-                commitEdit();
-              } else if (ev.key === 'Escape') {
-                cancelEdit();
-              }
-            }}
-          />
-        ) : (
-          <span className="lk-message-body">{formattedMessage}</span>
-        )}
-        {entry.from?.isLocal && (isHovering || isEditing) && (
-          <button className="lk-button lk-edit-button" onClick={commitEdit}>
-            {isEditing ? 'save' : 'edit'}
-          </button>
-        )}
-      </span>
+      <span className="lk-message-body">{formattedMessage}</span>
     </li>
   );
 }

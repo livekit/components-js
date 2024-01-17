@@ -1,5 +1,13 @@
 # @livekit/components-styles
 
+## 1.0.9
+
+### Patch Changes
+
+- Add possibility to edit/update chat messages - [#757](https://github.com/livekit/components-js/pull/757) ([@lukasIO](https://github.com/lukasIO))
+
+- Add styling for chat close button - [#756](https://github.com/livekit/components-js/pull/756) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.0.8
 
 ### Patch Changes

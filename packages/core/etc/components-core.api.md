@@ -383,7 +383,7 @@ export type ScreenShareTrackMap = Array<{
 export function selectGridLayout(layouts: GridLayoutDefinition[], participantCount: number, width: number, height: number): GridLayoutDefinition;
 
 // @public
-export function sendMessage(localParticipant: LocalParticipant, payload: Uint8Array, topic?: string, options?: DataPublishOptions): Promise<void>;
+export function sendMessage(localParticipant: LocalParticipant, payload: Uint8Array, options?: DataPublishOptions): Promise<void>;
 
 // @public (undocumented)
 export function setDifference<T>(setA: Set<T>, setB: Set<T>): Set<T>;

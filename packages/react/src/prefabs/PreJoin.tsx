@@ -187,7 +187,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   }, []);
 
   React.useEffect(() => {
-    setSelectedDevice(devices.find((dev) => dev.deviceId === localDeviceId));
+    setSelectedDevice(devices?.find((dev) => dev.deviceId === localDeviceId));
   }, [localDeviceId, devices]);
 
   return {

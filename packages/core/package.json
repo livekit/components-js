@@ -41,16 +41,16 @@
     "rxjs": "7.8.1"
   },
   "peerDependencies": {
-    "livekit-client": "^1.15.1",
+    "livekit-client": "^2.0.0",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
     "@livekit/components-styles": "workspace:*",
     "@microsoft/api-extractor": "^7.36.0",
-    "@size-limit/file": "^11.0.0",
-    "@size-limit/webpack": "^11.0.0",
+    "@size-limit/file": "^11.0.2",
+    "@size-limit/webpack": "^11.0.2",
     "eslint-config-lk-custom": "^0.1.1",
-    "size-limit": "^10.0.0",
+    "size-limit": "^11.0.2",
     "tsup": "^8.0.0",
     "typescript": "5.2.2",
     "vitest": "^0.34.0"

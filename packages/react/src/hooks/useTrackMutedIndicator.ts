@@ -62,7 +62,7 @@ export function useTrackMutedIndicator(
 
   const isMuted = useObservableState(
     mediaMutedObserver,
-    !!(ref.publication?.isMuted || ref.participant.getTrack(ref.source)?.isMuted),
+    !!(ref.publication?.isMuted || ref.participant.getTrackPublication(ref.source)?.isMuted),
   );
 
   return { isMuted, className };

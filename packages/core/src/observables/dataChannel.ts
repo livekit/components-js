@@ -1,5 +1,4 @@
-import type { LocalParticipant, Participant, Room } from 'livekit-client';
-import { DataPacket_Kind } from 'livekit-client';
+import type { DataPublishOptions, LocalParticipant, Participant, Room } from 'livekit-client';
 import type { Subscriber } from 'rxjs';
 import { Observable, filter, map } from 'rxjs';
 import { createDataObserver } from './room';
@@ -9,23 +8,18 @@ export const DataTopic = {
   CHAT_UPDATE: 'lk-chat-update-topic',
 } as const;
 
-export type DataSendOptions = {
-  kind?: DataPacket_Kind;
-  destination?: string[];
-};
-
 /** Publish data from the LocalParticipant. */
 export async function sendMessage(
   localParticipant: LocalParticipant,
   payload: Uint8Array,
-  topic?: string,
-  options: DataSendOptions = {},
+  options: DataPublishOptions = {},
 ) {
-  const { kind, destination } = options;
+  const { reliable, destinationIdentities, topic } = options;
 
-  await localParticipant.publishData(payload, kind ?? DataPacket_Kind.RELIABLE, {
-    destination,
+  await localParticipant.publishData(payload, {
+    destinationIdentities,
     topic,
+    reliable,
   });
 }
 
@@ -67,10 +61,10 @@ export function setupDataMessageHandler<T extends string>(
     isSendingSubscriber = subscriber;
   });
 
-  const send = async (payload: Uint8Array, options: DataSendOptions = {}) => {
+  const send = async (payload: Uint8Array, options: DataPublishOptions = {}) => {
     isSendingSubscriber.next(true);
     try {
-      await sendMessage(room.localParticipant, payload, topics[0], options);
+      await sendMessage(room.localParticipant, payload, { topic: topics[0], ...options });
     } finally {
       isSendingSubscriber.next(false);
     }

@@ -10,6 +10,7 @@ import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState } from 'livekit-client';
 import createEmailRegExp from 'email-regex';
 import { DataPacket_Kind } from 'livekit-client';
+import type { DataPublishOptions } from 'livekit-client';
 import { LocalAudioTrack } from 'livekit-client';
 import type { LocalParticipant } from 'livekit-client';
 import { LocalVideoTrack } from 'livekit-client';
@@ -142,12 +143,6 @@ export function createUrlRegExp(options: RegExOptions): RegExp;
 
 // @public (undocumented)
 export const cssPrefix = "lk";
-
-// @public (undocumented)
-export type DataSendOptions = {
-    kind?: DataPacket_Kind;
-    destination?: string[];
-};
 
 // @public (undocumented)
 export const DataTopic: {
@@ -388,7 +383,7 @@ export type ScreenShareTrackMap = Array<{
 export function selectGridLayout(layouts: GridLayoutDefinition[], participantCount: number, width: number, height: number): GridLayoutDefinition;
 
 // @public
-export function sendMessage(localParticipant: LocalParticipant, payload: Uint8Array, topic?: string, options?: DataSendOptions): Promise<void>;
+export function sendMessage(localParticipant: LocalParticipant, payload: Uint8Array, options?: DataPublishOptions): Promise<void>;
 
 // @public (undocumented)
 export function setDifference<T>(setA: Set<T>, setB: Set<T>): Set<T>;
@@ -442,7 +437,7 @@ export function setupDataMessageHandler<T extends string>(room: Room, topic?: T 
         from: RemoteParticipant | undefined;
     }>;
     isSendingObservable: Observable<boolean>;
-    send: (payload: Uint8Array, options?: DataSendOptions) => Promise<void>;
+    send: (payload: Uint8Array, options?: DataPublishOptions) => Promise<void>;
 };
 
 // @public (undocumented)

@@ -78,7 +78,7 @@ export function useParticipantTile<T extends HTMLElement>({
         if (typeof onParticipantClick === 'function') {
           const track =
             trackReference.publication ??
-            trackReference.participant.getTrack(trackReference.source);
+            trackReference.participant.getTrackPublication(trackReference.source);
           onParticipantClick({ participant: trackReference.participant, track });
         }
       },

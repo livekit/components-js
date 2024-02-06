@@ -41,9 +41,9 @@ export function setupDeviceSelector(
       }
       let targetTrack: LocalTrack | undefined = undefined;
       if (kind === 'audioinput')
-        targetTrack = room.localParticipant.getTrack(Track.Source.Microphone)?.track;
+        targetTrack = room.localParticipant.getTrackPublication(Track.Source.Microphone)?.track;
       else if (kind === 'videoinput') {
-        targetTrack = room.localParticipant.getTrack(Track.Source.Camera)?.track;
+        targetTrack = room.localParticipant.getTrackPublication(Track.Source.Camera)?.track;
       }
       const useDefault =
         (id === 'default' && !targetTrack) ||

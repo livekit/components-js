@@ -37,7 +37,7 @@ export function useIsMuted(
       ? { participant: p, source: sourceOrTrackRef }
       : sourceOrTrackRef;
   const [isMuted, setIsMuted] = React.useState(
-    !!(ref.publication?.isMuted || p.getTrack(ref.source)?.isMuted),
+    !!(ref.publication?.isMuted || p.getTrackPublication(ref.source)?.isMuted),
   );
 
   React.useEffect(() => {

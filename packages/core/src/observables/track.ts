@@ -57,13 +57,13 @@ function getTrackReferences(
   onlySubscribedTracks = true,
 ): { trackReferences: TrackReference[]; participants: Participant[] } {
   const localParticipant = room.localParticipant;
-  const allParticipants = [localParticipant, ...Array.from(room.participants.values())];
+  const allParticipants = [localParticipant, ...Array.from(room.remoteParticipants.values())];
   const trackReferences: TrackReference[] = [];
 
   allParticipants.forEach((participant) => {
     sources.forEach((source) => {
       const sourceReferences = Array.from<RemoteTrackPublication | LocalTrackPublication>(
-        participant.tracks.values(),
+        participant.trackPublications.values(),
       )
         .filter(
           (track) =>

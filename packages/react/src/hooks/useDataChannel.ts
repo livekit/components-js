@@ -1,12 +1,13 @@
-import type { DataSendOptions, ReceivedDataMessage } from '@livekit/components-core';
+import type { ReceivedDataMessage } from '@livekit/components-core';
 import { setupDataMessageHandler } from '@livekit/components-core';
 import * as React from 'react';
+import type { DataPublishOptions } from 'livekit-client';
 import { useRoomContext } from '../context';
 import { useObservableState } from './internal';
 
 type UseDataChannelReturnType<T extends string | undefined = undefined> = {
   isSending: boolean;
-  send: (payload: Uint8Array, options: DataSendOptions) => void;
+  send: (payload: Uint8Array, options: DataPublishOptions) => void;
   message: ReceivedDataMessage<T> | undefined;
 };
 

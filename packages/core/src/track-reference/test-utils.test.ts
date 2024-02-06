@@ -1,6 +1,6 @@
 import { describe, test, expect, expectTypeOf } from 'vitest';
 import { mockTrackReferencePlaceholder, mockTrackReferenceSubscribed } from './test-utils';
-import { Participant, TrackPublication } from 'livekit-client';
+import type { Participant, TrackPublication } from 'livekit-client';
 import { Track } from 'livekit-client';
 import { getTrackReferenceId } from './track-reference.utils';
 

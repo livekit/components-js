@@ -38,7 +38,7 @@ const ContextWrapper = ({
       if (inFocus) {
         const participant = participants[0];
         if (participant) {
-          const track = participant.getTrack(Track.Source.Camera)!;
+          const track = participant.getTrackPublication(Track.Source.Camera)!;
           dispatch({
             msg: 'set_pin',
             trackReference: { participant, source: track.source, publication: track },

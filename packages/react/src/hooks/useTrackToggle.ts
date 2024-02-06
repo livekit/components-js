@@ -29,7 +29,7 @@ export function useTrackToggle<T extends ToggleSource>({
   ...rest
 }: UseTrackToggleProps<T>) {
   const room = useMaybeRoomContext();
-  const track = room?.localParticipant?.getTrack(source);
+  const track = room?.localParticipant?.getTrackPublication(source);
   /** `true` if a user interaction such as a click on the TrackToggle button has occurred. */
   const userInteractionRef = React.useRef(false);
 

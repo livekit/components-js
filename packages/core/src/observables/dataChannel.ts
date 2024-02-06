@@ -11,13 +11,12 @@ export const DataTopic = {
 export async function sendMessage(
   localParticipant: LocalParticipant,
   payload: Uint8Array,
-  topic?: string,
   options: DataPublishOptions = {},
 ) {
-  const { reliable, destination } = options;
+  const { reliable, destinationIdentities, topic } = options;
 
   await localParticipant.publishData(payload, {
-    destination,
+    destinationIdentities,
     topic,
     reliable,
   });
@@ -60,7 +59,7 @@ export function setupDataMessageHandler<T extends string>(
   const send = async (payload: Uint8Array, options: DataPublishOptions = {}) => {
     isSendingSubscriber.next(true);
     try {
-      await sendMessage(room.localParticipant, payload, topic, options);
+      await sendMessage(room.localParticipant, payload, { topic, ...options });
     } finally {
       isSendingSubscriber.next(false);
     }

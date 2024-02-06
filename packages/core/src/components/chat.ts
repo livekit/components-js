@@ -86,8 +86,9 @@ export function setupChat(room: Room, options?: ChatOptions) {
     const encodedMsg = finalMessageEncoder({ message, timestamp });
     isSending$.next(true);
     try {
-      await sendMessage(room.localParticipant, encodedMsg, topic, {
+      await sendMessage(room.localParticipant, encodedMsg, {
         reliable: true,
+        topic,
       });
       messageSubject.next({
         payload: encodedMsg,

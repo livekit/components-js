@@ -190,6 +190,7 @@ export function createMediaDeviceObserver(
     }
   };
   const deviceSubject = new Subject<MediaDeviceInfo[]>();
+  deviceSubject.next([]);
 
   const observable = deviceSubject.pipe(
     finalize(() => {

@@ -37,7 +37,7 @@
   "dependencies": {
     "@floating-ui/dom": "1.5.4",
     "email-regex": "5.0.0",
-    "loglevel": "1.8.1",
+    "loglevel": "1.9.1",
     "rxjs": "7.8.1"
   },
   "peerDependencies": {

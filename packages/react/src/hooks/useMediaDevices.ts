@@ -12,8 +12,17 @@ import { createMediaDeviceObserver } from '@livekit/components-core';
  * ```
  * @public
  */
-export function useMediaDevices({ kind }: { kind: MediaDeviceKind }) {
-  const deviceObserver = React.useMemo(() => createMediaDeviceObserver(kind), [kind]);
+export function useMediaDevices({
+  kind,
+  onError,
+}: {
+  kind: MediaDeviceKind;
+  onError?: (e: Error) => void;
+}) {
+  const deviceObserver = React.useMemo(
+    () => createMediaDeviceObserver(kind, onError),
+    [kind, onError],
+  );
   const devices = useObservableState(deviceObserver, [] as MediaDeviceInfo[]);
   return devices;
 }

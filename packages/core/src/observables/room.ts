@@ -190,7 +190,6 @@ export function createMediaDeviceObserver(
     }
   };
   const deviceSubject = new Subject<MediaDeviceInfo[]>();
-  deviceSubject.next([]);
 
   const observable = deviceSubject.pipe(
     finalize(() => {
@@ -208,7 +207,10 @@ export function createMediaDeviceObserver(
   }
   // because we rely on an async function, concat the promise to retrieve the initial values with the observable
   return concat(
-    Room.getLocalDevices(kind, requestPermissions).catch((e) => onError?.(e)),
+    Room.getLocalDevices(kind, requestPermissions).catch((e) => {
+      onError?.(e);
+      return [] as MediaDeviceInfo[];
+    }),
     observable,
   );
 }

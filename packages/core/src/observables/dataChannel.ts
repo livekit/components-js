@@ -5,6 +5,7 @@ import { createDataObserver } from './room';
 
 export const DataTopic = {
   CHAT: 'lk-chat-topic',
+  CHAT_UPDATE: 'lk-chat-update-topic',
 } as const;
 
 /** Publish data from the LocalParticipant. */
@@ -34,12 +35,16 @@ export interface ReceivedDataMessage<T extends string | undefined = string>
 
 export function setupDataMessageHandler<T extends string>(
   room: Room,
-  topic?: T,
+  topic?: T | [T, ...T[]],
   onMessage?: (msg: ReceivedDataMessage<T>) => void,
 ) {
+  const topics = Array.isArray(topic) ? topic : [topic];
   /** Setup a Observable that returns all data messages belonging to a topic. */
   const messageObservable = createDataObserver(room).pipe(
-    filter(([, , , messageTopic]) => topic === undefined || messageTopic === topic),
+    filter(
+      ([, , , messageTopic]) =>
+        topic === undefined || (messageTopic !== undefined && topics.includes(messageTopic as T)),
+    ),
     map(([payload, participant, , messageTopic]) => {
       const msg = {
         payload,
@@ -59,7 +64,7 @@ export function setupDataMessageHandler<T extends string>(
   const send = async (payload: Uint8Array, options: DataPublishOptions = {}) => {
     isSendingSubscriber.next(true);
     try {
-      await sendMessage(room.localParticipant, payload, { topic, ...options });
+      await sendMessage(room.localParticipant, payload, { topic: topics[0], ...options });
     } finally {
       isSendingSubscriber.next(false);
     }

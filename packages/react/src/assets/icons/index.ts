@@ -1,5 +1,6 @@
 export { default as CameraDisabledIcon } from './CameraDisabledIcon';
 export { default as CameraIcon } from './CameraIcon';
+export { default as ChatCloseIcon } from './ChatCloseIcon';
 export { default as ChatIcon } from './ChatIcon';
 export { default as Chevron } from './Chevron';
 export { default as FocusToggleIcon } from './FocusToggleIcon';

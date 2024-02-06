@@ -43,6 +43,7 @@ export function useTrackToggle<T extends ToggleSource>({
 
   React.useEffect(() => {
     onChange?.(enabled, userInteractionRef.current);
+    userInteractionRef.current = false;
   }, [enabled, onChange]);
 
   React.useEffect(() => {
@@ -59,7 +60,7 @@ export function useTrackToggle<T extends ToggleSource>({
   const clickHandler: React.MouseEventHandler<HTMLButtonElement> = React.useCallback(
     (evt) => {
       userInteractionRef.current = true;
-      toggle();
+      toggle().finally(() => (userInteractionRef.current = false));
       rest.onClick?.(evt);
     },
     [rest, toggle],

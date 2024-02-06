@@ -30,4 +30,4 @@ export * from './observables/dom-event';
 
 export * from './persistent-storage';
 
-export { log, setLogLevel } from './logger';
+export { log, setLogLevel, setLogExtension } from './logger';

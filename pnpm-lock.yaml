@@ -313,7 +313,7 @@ importers:
         specifier: 0.14.2
         version: 0.14.2
       '@rushstack/heft':
-        specifier: ^0.58.2 || ^0.62.0 || ^0.63.0
+        specifier: ^0.58.2 || ^0.62.0 || ^0.63.0 || ^0.64.0
         version: 0.63.6(@types/node@20.8.10)
       '@rushstack/heft-node-rig':
         specifier: ^2.2.6

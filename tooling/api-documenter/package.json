@@ -39,6 +39,6 @@
     "nodemon": "^3.0.0"
   },
   "peerDependencies": {
-    "@rushstack/heft": "^0.58.2 || ^0.62.0 || ^0.63.0"
+    "@rushstack/heft": "^0.58.2 || ^0.62.0 || ^0.63.0 || ^0.64.0"
   }
 }

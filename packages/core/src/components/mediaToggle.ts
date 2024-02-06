@@ -14,10 +14,10 @@ import { prefixClass } from '../styles-interface';
 export type CaptureOptionsBySource<T extends ToggleSource> = T extends Track.Source.Camera
   ? VideoCaptureOptions
   : T extends Track.Source.Microphone
-  ? AudioCaptureOptions
-  : T extends Track.Source.ScreenShare
-  ? ScreenShareCaptureOptions
-  : never;
+    ? AudioCaptureOptions
+    : T extends Track.Source.ScreenShare
+      ? ScreenShareCaptureOptions
+      : never;
 
 export type MediaToggleType<T extends ToggleSource> = {
   pendingObserver: Observable<boolean>;

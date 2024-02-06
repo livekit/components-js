@@ -196,8 +196,8 @@ export function connectedParticipantsObserver(
     ]),
   );
 
-  const listener = observeRoomEvents(room, ...roomEvents).subscribe(
-    (r) => subscriber?.next(Array.from(r.remoteParticipants.values())),
+  const listener = observeRoomEvents(room, ...roomEvents).subscribe((r) =>
+    subscriber?.next(Array.from(r.remoteParticipants.values())),
   );
   if (room.remoteParticipants.size > 0) {
     subscriber?.next(Array.from(room.remoteParticipants.values()));

@@ -48,8 +48,8 @@ export function CarouselLayout({ tracks, orientation, ...props }: CarouselLayout
   const carouselOrientation = orientation
     ? orientation
     : height >= width
-    ? 'vertical'
-    : 'horizontal';
+      ? 'vertical'
+      : 'horizontal';
 
   const tileSpan =
     carouselOrientation === 'vertical'

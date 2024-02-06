@@ -27,8 +27,8 @@ export type UseTracksOptions = {
 export type UseTracksHookReturnType<T> = T extends Track.Source[]
   ? TrackReference[]
   : T extends TrackSourceWithOptions[]
-  ? TrackReferenceOrPlaceholder[]
-  : never;
+    ? TrackReferenceOrPlaceholder[]
+    : never;
 
 /**
  * The `useTracks` hook returns an array of `TrackReference` or `TrackReferenceOrPlaceholder` depending on the provided `sources` property.

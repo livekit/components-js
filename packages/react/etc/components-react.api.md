@@ -877,8 +877,9 @@ export function useMaybeTrackContext(): TrackReferenceOrPlaceholder | undefined;
 export function useMaybeTrackRefContext(): TrackReferenceOrPlaceholder | undefined;
 
 // @public
-export function useMediaDevices({ kind }: {
+export function useMediaDevices({ kind, onError, }: {
     kind: MediaDeviceKind;
+    onError?: (e: Error) => void;
 }): MediaDeviceInfo[];
 
 // @public

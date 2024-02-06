@@ -129,7 +129,7 @@ export function createInteractingObservable(htmlElement: HTMLElement | null, ina
 export function createIsSpeakingObserver(participant: Participant): Observable<boolean>;
 
 // @public (undocumented)
-export function createMediaDeviceObserver(kind?: MediaDeviceKind, onError?: (e: Error) => void, requestPermissions?: boolean): Observable<void | MediaDeviceInfo[] | undefined>;
+export function createMediaDeviceObserver(kind?: MediaDeviceKind, onError?: (e: Error) => void, requestPermissions?: boolean): Observable<MediaDeviceInfo[]>;
 
 // @public (undocumented)
 export function createTrackObserver(participant: Participant, options: TrackIdentifier): Observable<{

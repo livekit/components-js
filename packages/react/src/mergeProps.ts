@@ -21,7 +21,7 @@ export function chain(...callbacks: any[]): (...args: any[]) => void {
     for (const callback of callbacks) {
       if (typeof callback === 'function') {
         try {
-          await callback(...args);
+          callback(...args);
         } catch (e) {
           console.error(e);
         }

@@ -1004,6 +1004,9 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
     trackRef?: TrackReferenceOrPlaceholder;
 }
 
+// @public (undocumented)
+export function useParticipantTracks(sources: Track.Source[], participant?: Participant): TrackReference[];
+
 // @alpha
 export function usePersistentUserChoices(options?: UsePersistentUserChoicesOptions): {
     userChoices: LocalUserChoices;
@@ -1141,25 +1144,11 @@ export interface UseTokenOptions {
     userInfo?: UserInfo;
 }
 
-// Warning: (ae-forgotten-export) The symbol "TrackIdentifier" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
-export function useTrack(trackRef: TrackIdentifier, options?: UseTrackOptions): {
-    publication: TrackPublication | undefined;
-    isMuted: boolean | undefined;
-    isSubscribed: boolean | undefined;
-    track: Track | undefined;
-    elementProps: React_2.HTMLAttributes<HTMLElement>;
-};
+export function useTrack(source: Track.Source, participant?: Participant): TrackReferenceOrPlaceholder;
 
 // @public (undocumented)
-export function useTrackByName(trackRef?: TrackReferenceOrPlaceholder, options?: UseMediaTrackOptions): {
-    publication: TrackPublication | undefined;
-    isMuted: boolean | undefined;
-    isSubscribed: boolean | undefined;
-    track: Track | undefined;
-    elementProps: HTMLAttributes<HTMLElement>;
-};
+export function useTrackByName(name: string, participant?: Participant): TrackReferenceOrPlaceholder;
 
 // @public @deprecated
 export function useTrackContext(): TrackReferenceOrPlaceholder;

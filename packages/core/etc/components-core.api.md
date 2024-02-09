@@ -320,6 +320,21 @@ export interface ParticipantMedia<T extends Participant = Participant> {
 export function participantPermissionObserver(participant: Participant): Observable<ParticipantPermission | undefined>;
 
 // @public (undocumented)
+export const participantTrackEvents: ParticipantEvent[];
+
+// Warning: (ae-forgotten-export) The symbol "RequireAtLeastOne" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+export type ParticipantTrackIdentifier = RequireAtLeastOne<{
+    sources: Track.Source[];
+    name: string;
+    kind: Track.Kind;
+}, 'sources' | 'name' | 'kind'>;
+
+// @public (undocumented)
+export function participantTracksObservable(participant: Participant, trackIdentifier: ParticipantTrackIdentifier): Observable<TrackReference[]>;
+
+// @public (undocumented)
 export const PIN_DEFAULT_STATE: PinState;
 
 // @public (undocumented)
@@ -582,8 +597,6 @@ export function trackReferencesObservable(room: Room, sources: Track.Source[], o
     participants: Participant[];
 }>;
 
-// Warning: (ae-forgotten-export) The symbol "RequireAtLeastOne" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export type TrackSource<T extends Track.Source> = RequireAtLeastOne<{
     source: T;

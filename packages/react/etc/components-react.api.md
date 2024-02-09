@@ -6,11 +6,12 @@
 
 /// <reference types="react" />
 
+import type { AudioAnalyserOptions } from 'livekit-client';
 import type { AudioCaptureOptions } from 'livekit-client';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import type { CreateLocalTracksOptions } from 'livekit-client';
-import { DataPacket_Kind } from 'livekit-client';
+import type { DataPublishOptions } from 'livekit-client';
 import { HTMLAttributes } from 'react';
 import { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
@@ -22,6 +23,7 @@ import { Participant } from 'livekit-client';
 import type { ParticipantEvent } from 'livekit-client';
 import { ParticipantPermission } from 'livekit-client/dist/src/proto/livekit_models_pb';
 import * as React_2 from 'react';
+import type { RemoteAudioTrack } from 'livekit-client';
 import { RemoteParticipant } from 'livekit-client';
 import { Room } from 'livekit-client';
 import type { RoomConnectOptions } from 'livekit-client';
@@ -76,7 +78,7 @@ export interface AudioVisualizerProps extends React_2.HTMLAttributes<SVGElement>
     // @deprecated (undocumented)
     participant?: Participant;
     // (undocumented)
-    trackRef?: TrackReferenceOrPlaceholder;
+    trackRef?: TrackReference;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "CameraDisabledIcon" should be prefixed with an underscore because the declaration is marked as @internal
@@ -107,6 +109,11 @@ export const CarouselView: typeof CarouselLayout;
 // @public
 export function Chat({ messageFormatter, messageDecoder, messageEncoder, channelTopic, ...props }: ChatProps): React_2.JSX.Element;
 
+// Warning: (ae-internal-missing-underscore) The name "ChatCloseIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const ChatCloseIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
 // @public
 export function ChatEntry({ entry, hideName, hideTimestamp, messageFormatter, ...props }: ChatEntryProps): React_2.JSX.Element;
 
@@ -125,6 +132,8 @@ export const ChatIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public (undocumented)
 export interface ChatMessage {
+    // (undocumented)
+    id: string;
     // (undocumented)
     message: string;
     // (undocumented)
@@ -430,6 +439,17 @@ export const MicDisabledIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.El
 // @internal (undocumented)
 export const MicIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
+// @alpha
+export interface MultiBandTrackVolumeOptions {
+    // (undocumented)
+    analyserOptions?: AnalyserOptions;
+    // (undocumented)
+    bands?: number;
+    hiPass?: number;
+    loPass?: number;
+    updateInterval?: number;
+}
+
 // @public
 export function ParticipantAudioTile({ participant, children, source, publication, disableSpeakingIndicator, onParticipantClick, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
 
@@ -543,6 +563,8 @@ export const QualityUnknownIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX
 // @public (undocumented)
 export interface ReceivedChatMessage extends ChatMessage {
     // (undocumented)
+    editTimestamp?: number;
+    // (undocumented)
     from?: Participant;
 }
 
@@ -577,6 +599,12 @@ export const ScreenShareIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.El
 //
 // @internal (undocumented)
 export const ScreenShareStopIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// Warning: (ae-forgotten-export) The symbol "LogExtension" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "SetLogExtensionOptions" needs to be exported by the entry point index.d.ts
+//
+// @public
+export function setLogExtension(extension: LogExtension, options?: SetLogExtensionOptions): void;
 
 // Warning: (ae-forgotten-export) The symbol "LogLevel" needs to be exported by the entry point index.d.ts
 // Warning: (ae-forgotten-export) The symbol "SetLogLevelOptions" needs to be exported by the entry point index.d.ts
@@ -650,8 +678,7 @@ export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.B
     captureOptions?: CaptureOptionsBySource<T>;
     // (undocumented)
     initialState?: boolean;
-    // (undocumented)
-    onChange?: (enabled: boolean) => void;
+    onChange?: (enabled: boolean, isUserInitiated: boolean) => void;
     // (undocumented)
     showIcon?: boolean;
     // (undocumented)
@@ -671,7 +698,8 @@ export function useAudioPlayback(room?: Room): {
 
 // @public
 export function useChat(options?: ChatOptions): {
-    send: ((message: string) => Promise<void>) | undefined;
+    send: ((message: string) => Promise<ChatMessage>) | undefined;
+    update: ((message: string, messageId: string) => Promise<ChatMessage>) | undefined;
     chatMessages: ReceivedChatMessage[];
     isSending: boolean;
 };
@@ -849,8 +877,9 @@ export function useMaybeTrackContext(): TrackReferenceOrPlaceholder | undefined;
 export function useMaybeTrackRefContext(): TrackReferenceOrPlaceholder | undefined;
 
 // @public
-export function useMediaDevices({ kind }: {
+export function useMediaDevices({ kind, onError, }: {
     kind: MediaDeviceKind;
+    onError?: (e: Error) => void;
 }): MediaDeviceInfo[];
 
 // @public
@@ -901,6 +930,9 @@ export interface UseMediaTrackOptions {
     // (undocumented)
     props?: React_2.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
 }
+
+// @alpha
+export const useMultibandTrackVolume: (trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder, options?: MultiBandTrackVolumeOptions) => number[];
 
 // @alpha
 export function usePagination(itemPerPage: number, trackReferences: TrackReferenceOrPlaceholder[]): {
@@ -1176,7 +1208,7 @@ export type UseTracksOptions = {
 
 // @public
 export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, ...rest }: UseTrackToggleProps<T>): {
-    toggle: ((forceState?: boolean | undefined) => void) | ((forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>);
+    toggle: (forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>;
     enabled: boolean;
     pending: boolean;
     track: LocalTrackPublication | undefined;
@@ -1186,6 +1218,9 @@ export function useTrackToggle<T extends ToggleSource>({ source, onChange, initi
 // @public (undocumented)
 export interface UseTrackToggleProps<T extends ToggleSource> extends Omit<TrackToggleProps<T>, 'showIcon'> {
 }
+
+// @alpha
+export const useTrackVolume: (trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReference, options?: AudioAnalyserOptions) => number;
 
 // @public
 export function useVisualStableUpdate(

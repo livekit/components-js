@@ -11,12 +11,8 @@ const PreJoinExample: NextPage = () => {
         defaults={{ e2ee: true, videoDeviceId: '' }}
         onSubmit={(values) => {
           values.audioDeviceId;
-          values.e2ee;
-          values.sharedPassphrase;
         }}
         onValidate={(values) => {
-          values.e2ee;
-          values.sharedPassphrase;
           return true;
         }}
       />

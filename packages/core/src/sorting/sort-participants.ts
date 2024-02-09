@@ -34,8 +34,8 @@ export function sortParticipants(participants: Participant[]): Participant[] {
     }
 
     // video on
-    const aVideo = a.videoTracks.size > 0;
-    const bVideo = b.videoTracks.size > 0;
+    const aVideo = a.videoTrackPublications.size > 0;
+    const bVideo = b.videoTrackPublications.size > 0;
     if (aVideo !== bVideo) {
       if (aVideo) {
         return -1;

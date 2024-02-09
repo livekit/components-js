@@ -59,8 +59,8 @@ export function observeParticipantMedia<T extends Participant>(participant: T) {
   ).pipe(
     map((p) => {
       const { isMicrophoneEnabled, isCameraEnabled, isScreenShareEnabled } = p;
-      const microphoneTrack = p.getTrack(Track.Source.Microphone);
-      const cameraTrack = p.getTrack(Track.Source.Camera);
+      const microphoneTrack = p.getTrackPublication(Track.Source.Microphone);
+      const cameraTrack = p.getTrackPublication(Track.Source.Camera);
       const participantMedia: ParticipantMedia<T> = {
         isCameraEnabled,
         isMicrophoneEnabled,
@@ -153,12 +153,12 @@ export function mutedObserver(trackRef: TrackReferenceOrPlaceholder) {
     ParticipantEvent.LocalTrackUnpublished,
   ).pipe(
     map((participant) => {
-      const pub = trackRef.publication ?? participant.getTrack(trackRef.source);
+      const pub = trackRef.publication ?? participant.getTrackPublication(trackRef.source);
       return pub?.isMuted ?? true;
     }),
     startWith(
       trackRef.publication?.isMuted ??
-        trackRef.participant.getTrack(trackRef.source)?.isMuted ??
+        trackRef.participant.getTrackPublication(trackRef.source)?.isMuted ??
         true,
     ),
   );
@@ -183,7 +183,7 @@ export function connectedParticipantsObserver(
   const observable = new Observable<RemoteParticipant[]>((sub) => {
     subscriber = sub;
     return () => listener.unsubscribe();
-  }).pipe(startWith(Array.from(room.participants.values())));
+  }).pipe(startWith(Array.from(room.remoteParticipants.values())));
 
   const additionalRoomEvents = options.additionalRoomEvents ?? allParticipantRoomEvents;
 
@@ -196,11 +196,11 @@ export function connectedParticipantsObserver(
     ]),
   );
 
-  const listener = observeRoomEvents(room, ...roomEvents).subscribe(
-    (r) => subscriber?.next(Array.from(r.participants.values())),
+  const listener = observeRoomEvents(room, ...roomEvents).subscribe((r) =>
+    subscriber?.next(Array.from(r.remoteParticipants.values())),
   );
-  if (room.participants.size > 0) {
-    subscriber?.next(Array.from(room.participants.values()));
+  if (room.remoteParticipants.size > 0) {
+    subscriber?.next(Array.from(room.remoteParticipants.values()));
   }
   return observable;
 }

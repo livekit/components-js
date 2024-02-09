@@ -10,6 +10,7 @@ import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState } from 'livekit-client';
 import createEmailRegExp from 'email-regex';
 import { DataPacket_Kind } from 'livekit-client';
+import type { DataPublishOptions } from 'livekit-client';
 import { LocalAudioTrack } from 'livekit-client';
 import type { LocalParticipant } from 'livekit-client';
 import { LocalVideoTrack } from 'livekit-client';
@@ -65,6 +66,8 @@ export type CaptureOptionsBySource<T extends ToggleSource> = T extends Track.Sou
 // @public (undocumented)
 export interface ChatMessage {
     // (undocumented)
+    id: string;
+    // (undocumented)
     message: string;
     // (undocumented)
     timestamp: number;
@@ -75,6 +78,7 @@ export type ChatOptions = {
     messageEncoder?: (message: ChatMessage) => Uint8Array;
     messageDecoder?: (message: Uint8Array) => ReceivedChatMessage;
     channelTopic?: string;
+    updateChannelTopic?: string;
 };
 
 // @public (undocumented)
@@ -125,7 +129,7 @@ export function createInteractingObservable(htmlElement: HTMLElement | null, ina
 export function createIsSpeakingObserver(participant: Participant): Observable<boolean>;
 
 // @public (undocumented)
-export function createMediaDeviceObserver(kind?: MediaDeviceKind, onError?: (e: Error) => void, requestPermissions?: boolean): Observable<void | MediaDeviceInfo[] | undefined>;
+export function createMediaDeviceObserver(kind?: MediaDeviceKind, onError?: (e: Error) => void, requestPermissions?: boolean): Observable<MediaDeviceInfo[]>;
 
 // @public (undocumented)
 export function createTrackObserver(participant: Participant, options: TrackIdentifier): Observable<{
@@ -141,14 +145,9 @@ export function createUrlRegExp(options: RegExOptions): RegExp;
 export const cssPrefix = "lk";
 
 // @public (undocumented)
-export type DataSendOptions = {
-    kind?: DataPacket_Kind;
-    destination?: string[];
-};
-
-// @public (undocumented)
 export const DataTopic: {
     readonly CHAT: "lk-chat-topic";
+    readonly CHAT_UPDATE: "lk-chat-update-topic";
 };
 
 // @public (undocumented)
@@ -329,6 +328,8 @@ export type PinState = TrackReferenceOrPlaceholder[];
 // @public (undocumented)
 export interface ReceivedChatMessage extends ChatMessage {
     // (undocumented)
+    editTimestamp?: number;
+    // (undocumented)
     from?: Participant;
 }
 
@@ -382,10 +383,16 @@ export type ScreenShareTrackMap = Array<{
 export function selectGridLayout(layouts: GridLayoutDefinition[], participantCount: number, width: number, height: number): GridLayoutDefinition;
 
 // @public
-export function sendMessage(localParticipant: LocalParticipant, payload: Uint8Array, topic?: string, options?: DataSendOptions): Promise<void>;
+export function sendMessage(localParticipant: LocalParticipant, payload: Uint8Array, options?: DataPublishOptions): Promise<void>;
 
 // @public (undocumented)
 export function setDifference<T>(setA: Set<T>, setB: Set<T>): Set<T>;
+
+// Warning: (ae-forgotten-export) The symbol "LogExtension" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "SetLogExtensionOptions" needs to be exported by the entry point index.d.ts
+//
+// @public
+export function setLogExtension(extension: LogExtension, options?: SetLogExtensionOptions): void;
 
 // Warning: (ae-forgotten-export) The symbol "LogLevel" needs to be exported by the entry point index.d.ts
 // Warning: (ae-forgotten-export) The symbol "SetLogLevelOptions" needs to be exported by the entry point index.d.ts
@@ -402,7 +409,8 @@ export type SetMediaDeviceOptions = {
 export function setupChat(room: Room, options?: ChatOptions): {
     messageObservable: Observable<ReceivedChatMessage[]>;
     isSendingObservable: BehaviorSubject<boolean>;
-    send: (message: string) => Promise<void>;
+    send: (message: string) => Promise<ChatMessage>;
+    update: (message: string, messageId: string) => Promise<ChatMessage>;
 };
 
 // @public (undocumented)
@@ -422,14 +430,14 @@ export function setupConnectionQualityIndicator(participant: Participant): {
 };
 
 // @public (undocumented)
-export function setupDataMessageHandler<T extends string>(room: Room, topic?: T, onMessage?: (msg: ReceivedDataMessage<T>) => void): {
+export function setupDataMessageHandler<T extends string>(room: Room, topic?: T | [T, ...T[]], onMessage?: (msg: ReceivedDataMessage<T>) => void): {
     messageObservable: Observable<{
         payload: Uint8Array;
         topic: T;
         from: RemoteParticipant | undefined;
     }>;
     isSendingObservable: Observable<boolean>;
-    send: (payload: Uint8Array, options?: DataSendOptions) => Promise<void>;
+    send: (payload: Uint8Array, options?: DataPublishOptions) => Promise<void>;
 };
 
 // @public (undocumented)
@@ -458,7 +466,7 @@ export function setupLiveKitRoom(): {
 // @public (undocumented)
 export function setupManualToggle(): {
     className: string;
-    toggle: (forceState?: boolean) => void;
+    toggle: (forceState?: boolean) => Promise<void>;
     enabledObserver: Observable<boolean>;
     pendingObserver: Observable<boolean>;
 };

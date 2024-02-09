@@ -14,10 +14,10 @@ import { prefixClass } from '../styles-interface';
 export type CaptureOptionsBySource<T extends ToggleSource> = T extends Track.Source.Camera
   ? VideoCaptureOptions
   : T extends Track.Source.Microphone
-  ? AudioCaptureOptions
-  : T extends Track.Source.ScreenShare
-  ? ScreenShareCaptureOptions
-  : never;
+    ? AudioCaptureOptions
+    : T extends Track.Source.ScreenShare
+      ? ScreenShareCaptureOptions
+      : never;
 
 export type MediaToggleType<T extends ToggleSource> = {
   pendingObserver: Observable<boolean>;
@@ -113,7 +113,7 @@ export function setupManualToggle() {
 
   const pendingSubject = new Subject<boolean>();
 
-  const toggle = (forceState?: boolean) => {
+  const toggle = async (forceState?: boolean) => {
     pendingSubject.next(true);
     state = forceState ?? !state;
     enabledSubject.next(state);

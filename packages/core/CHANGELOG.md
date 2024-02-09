@@ -1,5 +1,13 @@
 # @livekit/components-core
 
+## 0.8.3
+
+### Patch Changes
+
+- Add setLogExtension to core - [#728](https://github.com/livekit/components-js/pull/728) ([@mpnri](https://github.com/mpnri))
+
+- Pin all direct dependencies (Fixes an dependency resolve issue with a broken usehooks-ts release) - [#751](https://github.com/livekit/components-js/pull/751) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.8.2
 
 ### Patch Changes

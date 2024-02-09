@@ -93,7 +93,7 @@ export function screenShareObserver(room: Room) {
     let trackMap = screenShareTracks.find((tr) => tr.participant.identity === participant.identity);
     const getScreenShareTracks = (participant: Participant) => {
       return participant
-        .getTracks()
+        .getTrackPublications()
         .filter(
           (track) =>
             (track.source === Track.Source.ScreenShare ||
@@ -147,8 +147,8 @@ export function screenShareObserver(room: Room) {
   );
   setTimeout(() => {
     // TODO find way to avoid this timeout
-    for (const p of room.participants.values()) {
-      p.getTracks().forEach((track) => {
+    for (const p of room.remoteParticipants.values()) {
+      p.getTrackPublications().forEach((track) => {
         handleSub(track, p);
       });
     }
@@ -207,7 +207,10 @@ export function createMediaDeviceObserver(
   }
   // because we rely on an async function, concat the promise to retrieve the initial values with the observable
   return concat(
-    Room.getLocalDevices(kind, requestPermissions).catch((e) => onError?.(e)),
+    Room.getLocalDevices(kind, requestPermissions).catch((e) => {
+      onError?.(e);
+      return [] as MediaDeviceInfo[];
+    }),
     observable,
   );
 }

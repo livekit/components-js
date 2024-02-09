@@ -43,6 +43,7 @@ export function ChatEntry({
   const formattedMessage = React.useMemo(() => {
     return messageFormatter ? messageFormatter(entry.message) : entry.message;
   }, [entry.message, messageFormatter]);
+  const hasBeenEdited = !!entry.editTimestamp;
   const time = new Date(entry.timestamp);
   const locale = navigator ? navigator.language : 'en-US';
 
@@ -53,20 +54,23 @@ export function ChatEntry({
       data-lk-message-origin={entry.from?.isLocal ? 'local' : 'remote'}
       {...props}
     >
-      {(!hideTimestamp || !hideName) && (
+      {(!hideTimestamp || !hideName || hasBeenEdited) && (
         <span className="lk-meta-data">
           {!hideName && (
             <strong className="lk-participant-name">
               {entry.from?.name ?? entry.from?.identity}
             </strong>
           )}
-          {!hideTimestamp && (
+
+          {(!hideTimestamp || hasBeenEdited) && (
             <span className="lk-timestamp">
+              {hasBeenEdited && 'edited '}
               {time.toLocaleTimeString(locale, { timeStyle: 'short' })}
             </span>
           )}
         </span>
       )}
+
       <span className="lk-message-body">{formattedMessage}</span>
     </li>
   );

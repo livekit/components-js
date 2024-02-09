@@ -51,3 +51,4 @@ export {
 } from './usePersistentUserChoices';
 export { useIsEncrypted } from './useIsEncrypted';
 export * from './useTrackVolume';
+export * from './useParticipantTracks';

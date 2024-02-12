@@ -1005,7 +1005,7 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
 }
 
 // @public (undocumented)
-export function useParticipantTracks(sources: Track.Source[], participant?: Participant): TrackReference[];
+export function useParticipantTracks(sources: Track.Source[], participantIdentity?: string): TrackReference[];
 
 // @alpha
 export function usePersistentUserChoices(options?: UsePersistentUserChoicesOptions): {

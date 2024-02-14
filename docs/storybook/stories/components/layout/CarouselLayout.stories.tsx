@@ -1,14 +1,14 @@
 import * as React from 'react';
 
-import { CarouselView, CarouselViewProps } from '@livekit/components-react';
+import { CarouselLayout, CarouselLayoutProps } from '@livekit/components-react';
 import { LkRoomContext } from '../../../.storybook/lk-decorators';
 
 export default {
-  component: CarouselView,
+  component: CarouselLayout,
   decorators: [LkRoomContext],
-  render: (args: CarouselViewProps) => (
+  render: (args: CarouselLayoutProps) => (
     <div style={{ width: '100%', height: '100%', maxHeight: '100%' }}>
-      <CarouselView {...args} />
+      <CarouselLayout {...args} />
     </div>
   ),
   argTypes: {

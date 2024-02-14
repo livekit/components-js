@@ -20,7 +20,7 @@ import { log } from '@livekit/components-core';
 import { ParticipantPlaceholder } from '../assets/images';
 import { useMediaDevices, usePersistentUserChoices } from '../hooks';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
-import { defaultUserChoices } from '@livekit/components-core/dist/persistent-storage/user-choices';
+import { defaultUserChoices } from '@livekit/components-core';
 
 /**
  * Props for the PreJoin component.

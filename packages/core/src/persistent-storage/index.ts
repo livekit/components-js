@@ -1,1 +1,6 @@
-export { saveUserChoices, loadUserChoices, type LocalUserChoices } from './user-choices';
+export {
+  saveUserChoices,
+  loadUserChoices,
+  type LocalUserChoices,
+  defaultUserChoices,
+} from './user-choices';

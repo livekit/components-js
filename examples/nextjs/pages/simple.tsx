@@ -67,14 +67,14 @@ const SimpleExample: NextPage = () => {
 
 function Stage() {
   const cameraTracks = useTracks([Track.Source.Camera]);
-  const screenShareTrack = useTracks([Track.Source.ScreenShare])[0];
+  const screenShareTrackRef = useTracks([Track.Source.ScreenShare])[0];
 
   return (
     <>
-      {screenShareTrack && <ParticipantTile {...screenShareTrack} />}
+      {screenShareTrackRef && <ParticipantTile trackRef={screenShareTrackRef} />}
       <GridLayout tracks={cameraTracks}>
         <TrackRefContext.Consumer>
-          {(track) => <ParticipantTile {...track} />}
+          {(trackRef) => <ParticipantTile trackRef={trackRef} />}
         </TrackRefContext.Consumer>
       </GridLayout>
     </>

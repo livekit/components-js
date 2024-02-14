@@ -17,8 +17,6 @@ export { UseLocalParticipantOptions, useLocalParticipant } from './useLocalParti
 export { useLocalParticipantPermissions } from './useLocalParticipantPermissions';
 export { UseMediaDeviceSelectProps, useMediaDeviceSelect } from './useMediaDeviceSelect';
 export { useMediaDevices } from './useMediaDevices';
-export { UseMediaTrackOptions, useMediaTrack } from './useMediaTrack';
-export { useMediaTrackByName } from './useMediaTrackByName';
 export { usePagination } from './usePagination';
 export { UseParticipantInfoOptions, useParticipantInfo } from './useParticipantInfo';
 export {
@@ -38,7 +36,7 @@ export { UseStartVideoProps, useStartVideo } from './useStartVideo';
 export { UseSwipeOptions, useSwipe } from './useSwipe';
 export { UseChatToggleProps, useChatToggle } from './useChatToggle';
 export { UseTokenOptions, UserInfo, useToken } from './useToken';
-export { UseTrackMutedIndicatorOptions, useTrackMutedIndicator } from './useTrackMutedIndicator';
+export { useTrackMutedIndicator } from './useTrackMutedIndicator';
 export { UseTrackToggleProps, useTrackToggle } from './useTrackToggle';
 export { UseTracksHookReturnType, UseTracksOptions, useTracks } from './useTracks';
 export { UseVisualStableUpdateOptions, useVisualStableUpdate } from './useVisualStableUpdate';

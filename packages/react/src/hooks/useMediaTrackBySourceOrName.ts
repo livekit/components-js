@@ -3,7 +3,12 @@ import { isTrackReference } from '@livekit/components-core';
 import { setupMediaTrack, log, isLocal, getTrackByIdentifier } from '@livekit/components-core';
 import * as React from 'react';
 import { mergeProps } from '../utils';
-import type { UseMediaTrackOptions } from './useMediaTrack';
+
+/** @public */
+export interface UseMediaTrackOptions {
+  element?: React.RefObject<HTMLMediaElement>;
+  props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
+}
 
 /**
  * @internal

@@ -1,27 +1,14 @@
-import {
-  RemoteTrackPublication,
-  type Participant,
-  type Track,
-  type TrackPublication,
-} from 'livekit-client';
+import { RemoteTrackPublication } from 'livekit-client';
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
 import type { ParticipantClickEvent, TrackReference } from '@livekit/components-core';
-import { useEnsureParticipant, useMaybeTrackRefContext } from '../../context';
+import { useEnsureTrackRef } from '../../context';
 import * as useHooks from 'usehooks-ts';
 
 /** @public */
 export interface VideoTrackProps extends React.VideoHTMLAttributes<HTMLVideoElement> {
   /** The track reference of the track to render. */
   trackRef?: TrackReference;
-  /** @deprecated This property will be removed in a future version use `trackRef` instead. */
-  source?: Track.Source;
-  /** @deprecated This property will be removed in a future version use `trackRef` instead. */
-  name?: string;
-  /** @deprecated This property will be removed in a future version use `trackRef` instead. */
-  participant?: Participant;
-  /** @deprecated This property will be removed in a future version use `trackRef` instead. */
-  publication?: TrackPublication;
   onTrackClick?: (evt: ParticipantClickEvent) => void;
   onSubscriptionStatusChanged?: (subscribed: boolean) => void;
   manageSubscription?: boolean;
@@ -43,24 +30,10 @@ export function VideoTrack({
   onClick,
   onSubscriptionStatusChanged,
   trackRef,
-  name,
-  publication,
-  source,
-  participant: p,
   manageSubscription,
   ...props
 }: VideoTrackProps) {
-  // TODO: Remove and refactor all variables with underscore in a future version after the deprecation period.
-  const maybeTrackRef = useMaybeTrackRefContext();
-  const _name = trackRef?.publication?.trackName ?? maybeTrackRef?.publication?.trackName ?? name;
-  const _source = trackRef?.source ?? maybeTrackRef?.source ?? source;
-  const _publication = trackRef?.publication ?? maybeTrackRef?.publication ?? publication;
-  const _participant = trackRef?.participant ?? maybeTrackRef?.participant ?? p;
-  if (_source === undefined) {
-    throw new Error('VideoTrack: You must provide a trackRef or source property.');
-  }
-
-  const participant = useEnsureParticipant(_participant);
+  const trackReference = useEnsureTrackRef(trackRef);
 
   const mediaEl = React.useRef<HTMLVideoElement>(null);
 
@@ -71,35 +44,32 @@ export function VideoTrack({
   React.useEffect(() => {
     if (
       manageSubscription &&
-      _publication instanceof RemoteTrackPublication &&
+      trackReference.publication instanceof RemoteTrackPublication &&
       debouncedIntersectionEntry?.isIntersecting === false &&
       intersectionEntry?.isIntersecting === false
     ) {
-      _publication.setSubscribed(false);
+      trackReference.publication.setSubscribed(false);
     }
-  }, [debouncedIntersectionEntry, _publication, manageSubscription]);
+  }, [debouncedIntersectionEntry, trackReference, manageSubscription]);
 
   React.useEffect(() => {
     if (
       manageSubscription &&
-      _publication instanceof RemoteTrackPublication &&
+      trackReference.publication instanceof RemoteTrackPublication &&
       intersectionEntry?.isIntersecting === true
     ) {
-      _publication.setSubscribed(true);
+      trackReference.publication.setSubscribed(true);
     }
-  }, [intersectionEntry, _publication, manageSubscription]);
+  }, [intersectionEntry, trackReference, manageSubscription]);
 
   const {
     elementProps,
     publication: pub,
     isSubscribed,
-  } = useMediaTrackBySourceOrName(
-    { participant, name: _name, source: _source, publication: _publication },
-    {
-      element: mediaEl,
-      props,
-    },
-  );
+  } = useMediaTrackBySourceOrName(trackReference, {
+    element: mediaEl,
+    props,
+  });
 
   React.useEffect(() => {
     onSubscriptionStatusChanged?.(!!isSubscribed);
@@ -107,7 +77,7 @@ export function VideoTrack({
 
   const clickHandler = (evt: React.MouseEvent<HTMLVideoElement, MouseEvent>) => {
     onClick?.(evt);
-    onTrackClick?.({ participant, track: pub });
+    onTrackClick?.({ participant: trackReference?.participant, track: pub });
   };
 
   return <video ref={mediaEl} {...elementProps} muted={true} onClick={clickHandler}></video>;

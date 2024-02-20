@@ -4,15 +4,13 @@
 
 ```ts
 
-/// <reference types="react" />
-
 import type { AudioAnalyserOptions } from 'livekit-client';
 import type { AudioCaptureOptions } from 'livekit-client';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import type { CreateLocalTracksOptions } from 'livekit-client';
 import type { DataPublishOptions } from 'livekit-client';
-import { HTMLAttributes } from 'react';
+import type { HTMLAttributes } from 'react';
 import { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
 import type { LocalTrack } from 'livekit-client';
@@ -33,7 +31,7 @@ import type { ScreenShareCaptureOptions } from 'livekit-client';
 import { setLogLevel as setLogLevel_2 } from 'livekit-client';
 import type { SVGProps } from 'react';
 import { Track } from 'livekit-client';
-import { TrackPublication } from 'livekit-client';
+import type { TrackPublication } from 'livekit-client';
 import type { VideoCaptureOptions } from 'livekit-client';
 
 // @public (undocumented)
@@ -916,6 +914,9 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
     trackRef?: TrackReferenceOrPlaceholder;
 }
 
+// @public
+export function useParticipantTracks(sources: Track.Source[], participantIdentity?: string): TrackReference[];
+
 // @alpha
 export function usePersistentUserChoices(options?: UsePersistentUserChoicesOptions): {
     userChoices: LocalUserChoices;
@@ -1053,40 +1054,13 @@ export interface UseTokenOptions {
     userInfo?: UserInfo;
 }
 
-// Warning: (ae-forgotten-export) The symbol "TrackIdentifier" needs to be exported by the entry point index.d.ts
-//
-// @public (undocumented)
-export function useTrack(trackRef: TrackIdentifier, options?: UseTrackOptions): {
-    publication: TrackPublication | undefined;
-    isMuted: boolean | undefined;
-    isSubscribed: boolean | undefined;
-    track: Track<Track> | undefined;
-    elementProps: React_2.HTMLAttributes<HTMLElement>;
-};
-
-// Warning: (ae-forgotten-export) The symbol "UseMediaTrackOptions" needs to be exported by the entry point index.d.ts
-//
-// @public (undocumented)
-export function useTrackByName(trackRef?: TrackReferenceOrPlaceholder, options?: UseMediaTrackOptions): {
-    publication: TrackPublication | undefined;
-    isMuted: boolean | undefined;
-    isSubscribed: boolean | undefined;
-    track: Track<Track> | undefined;
-    elementProps: HTMLAttributes<HTMLElement>;
-};
+// @public
+export function useTrackByName(name: string, participant?: Participant): TrackReferenceOrPlaceholder;
 
 // Warning: (ae-forgotten-export) The symbol "TrackMutedIndicatorReturnType" needs to be exported by the entry point index.d.ts
 //
 // @public
 export function useTrackMutedIndicator(trackRef?: TrackReferenceOrPlaceholder): TrackMutedIndicatorReturnType;
-
-// @public (undocumented)
-export interface UseTrackOptions {
-    // (undocumented)
-    element?: React_2.RefObject<HTMLMediaElement>;
-    // (undocumented)
-    props?: React_2.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
-}
 
 // @public
 export function useTrackRefContext(): TrackReferenceOrPlaceholder;

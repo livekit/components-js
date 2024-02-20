@@ -28,6 +28,20 @@ export const allParticipantRoomEvents = [
   RoomEvent.LocalTrackUnpublished,
 ];
 
+export const participantTrackEvents = [
+  ParticipantEvent.TrackPublished,
+  ParticipantEvent.TrackUnpublished,
+  ParticipantEvent.TrackMuted,
+  ParticipantEvent.TrackUnmuted,
+  ParticipantEvent.TrackStreamStateChanged,
+  ParticipantEvent.TrackSubscribed,
+  ParticipantEvent.TrackUnsubscribed,
+  ParticipantEvent.TrackSubscriptionPermissionChanged,
+  ParticipantEvent.TrackSubscriptionFailed,
+  ParticipantEvent.LocalTrackPublished,
+  ParticipantEvent.LocalTrackUnpublished,
+];
+
 export const allRemoteParticipantEvents = [
   ParticipantEvent.ConnectionQualityChanged,
   ParticipantEvent.IsSpeakingChanged,

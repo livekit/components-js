@@ -131,6 +131,8 @@ export function createIsSpeakingObserver(participant: Participant): Observable<b
 // @public (undocumented)
 export function createMediaDeviceObserver(kind?: MediaDeviceKind, onError?: (e: Error) => void, requestPermissions?: boolean): Observable<MediaDeviceInfo[]>;
 
+// Warning: (ae-incompatible-release-tags) The symbol "createTrackObserver" is marked as @public, but its signature references "TrackIdentifier" which is marked as @internal
+//
 // @public (undocumented)
 export function createTrackObserver(participant: Participant, options: TrackIdentifier): Observable<{
     publication: TrackPublication | undefined;
@@ -161,6 +163,8 @@ export function encryptionStatusObservable(room: Room, participant: Participant)
 // @internal
 export function getScrollBarWidth(): number;
 
+// Warning: (ae-incompatible-release-tags) The symbol "getTrackByIdentifier" is marked as @public, but its signature references "TrackIdentifier" which is marked as @internal
+//
 // @public (undocumented)
 export function getTrackByIdentifier(options: TrackIdentifier): TrackPublication | undefined;
 
@@ -318,6 +322,21 @@ export interface ParticipantMedia<T extends Participant = Participant> {
 export function participantPermissionObserver(participant: Participant): Observable<ParticipantPermission | undefined>;
 
 // @public (undocumented)
+export const participantTrackEvents: ParticipantEvent[];
+
+// Warning: (ae-forgotten-export) The symbol "RequireAtLeastOne" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+export type ParticipantTrackIdentifier = RequireAtLeastOne<{
+    sources: Track.Source[];
+    name: string;
+    kind: Track.Kind;
+}, 'sources' | 'name' | 'kind'>;
+
+// @public (undocumented)
+export function participantTracksObservable(participant: Participant, trackIdentifier: ParticipantTrackIdentifier): Observable<TrackReference[]>;
+
+// @public (undocumented)
 export const PIN_DEFAULT_STATE: PinState;
 
 // @public (undocumented)
@@ -472,6 +491,8 @@ export function setupManualToggle(): {
 // @public (undocumented)
 export function setupMediaToggle<T extends ToggleSource>(source: T, room: Room, options?: CaptureOptionsBySource<T>): MediaToggleType<T>;
 
+// Warning: (ae-incompatible-release-tags) The symbol "setupMediaTrack" is marked as @public, but its signature references "TrackIdentifier" which is marked as @internal
+//
 // @public (undocumented)
 export function setupMediaTrack(trackIdentifier: TrackIdentifier): {
     className: string;
@@ -543,7 +564,9 @@ export type TokenizeGrammar = {
     [type: string]: RegExp;
 };
 
-// @public
+// Warning: (ae-internal-missing-underscore) The name "TrackIdentifier" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal
 export type TrackIdentifier<T extends Track.Source = Track.Source> = TrackSource<T> | TrackReference;
 
 // @public (undocumented)
@@ -580,8 +603,6 @@ export function trackReferencesObservable(room: Room, sources: Track.Source[], o
     participants: Participant[];
 }>;
 
-// Warning: (ae-forgotten-export) The symbol "RequireAtLeastOne" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export type TrackSource<T extends Track.Source> = RequireAtLeastOne<{
     source: T;

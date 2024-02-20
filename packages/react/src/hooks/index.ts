@@ -40,7 +40,7 @@ export { useTrackMutedIndicator } from './useTrackMutedIndicator';
 export { UseTrackToggleProps, useTrackToggle } from './useTrackToggle';
 export { UseTracksHookReturnType, UseTracksOptions, useTracks } from './useTracks';
 export { UseVisualStableUpdateOptions, useVisualStableUpdate } from './useVisualStableUpdate';
-export { UseTrackOptions, useTrack } from './useTrack';
+// export { UseTrackOptions, useTrack } from './useTrack';
 export { useTrackByName } from './useTrackByName';
 export { useChat } from './useChat';
 export {
@@ -49,3 +49,4 @@ export {
 } from './usePersistentUserChoices';
 export { useIsEncrypted } from './useIsEncrypted';
 export * from './useTrackVolume';
+export * from './useParticipantTracks';

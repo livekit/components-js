@@ -8,10 +8,12 @@ import type {
 } from 'livekit-client';
 import { RoomEvent, TrackEvent } from 'livekit-client';
 import { map, Observable, startWith } from 'rxjs';
-import { allParticipantRoomEvents } from '../helper';
+import { allParticipantRoomEvents, participantTrackEvents } from '../helper';
 import { log } from '../logger';
 import type { TrackReference } from '../track-reference';
 import { observeRoomEvents } from './room';
+import type { ParticipantTrackIdentifier } from '../types';
+import { observeParticipantEvents } from './participant';
 
 export function trackObservable(track: TrackPublication) {
   const trackObserver = observeTrackEvents(
@@ -86,6 +88,35 @@ function getTrackReferences(
   return { trackReferences, participants: allParticipants };
 }
 
+/**
+ * Create `TrackReferences` for all tracks that are included in the sources property.
+ *  */
+function getParticipantTrackRefs(
+  participant: Participant,
+  identifier: ParticipantTrackIdentifier,
+  onlySubscribedTracks = false,
+): TrackReference[] {
+  const { sources, kind, name } = identifier;
+  const sourceReferences = Array.from(participant.trackPublications.values())
+    .filter(
+      (pub) =>
+        (!sources || sources.includes(pub.source)) &&
+        (!kind || pub.kind === kind) &&
+        (!name || pub.trackName === name) &&
+        // either return all or only the ones that are subscribed
+        (!onlySubscribedTracks || pub.track),
+    )
+    .map((track): TrackReference => {
+      return {
+        participant: participant,
+        publication: track,
+        source: track.source,
+      };
+    });
+
+  return sourceReferences;
+}
+
 type TrackReferencesObservableOptions = {
   additionalRoomEvents?: RoomEvent[];
   onlySubscribed?: boolean;
@@ -119,6 +150,22 @@ export function trackReferencesObservable(
       return data;
     }),
     startWith(getTrackReferences(room, sources, onlySubscribedTracks)),
+  );
+
+  return observable;
+}
+
+export function participantTracksObservable(
+  participant: Participant,
+  trackIdentifier: ParticipantTrackIdentifier,
+): Observable<TrackReference[]> {
+  const observable = observeParticipantEvents(participant, ...participantTrackEvents).pipe(
+    map((participant) => {
+      const data = getParticipantTrackRefs(participant, trackIdentifier);
+      log.debug(`TrackReference[] was updated. (length ${data.length})`, data);
+      return data;
+    }),
+    startWith(getParticipantTrackRefs(participant, trackIdentifier)),
   );
 
   return observable;

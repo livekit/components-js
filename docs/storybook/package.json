@@ -13,7 +13,7 @@
   "dependencies": {
     "@livekit/components-react": "workspace:*",
     "@livekit/components-styles": "workspace:*",
-    "livekit-client": "^2.0.0",
+    "livekit-client": "^2.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

@@ -26,13 +26,6 @@ interface RegExOptions {
 		@defaultValue false
 		*/
   readonly exact?: boolean;
-
-  /**
-		Force URLs to start with a valid protocol or `www`. If set to `false` it'll match the TLD against a list of valid [TLDs](https://github.com/stephenmathieson/node-tlds).
-		@defaultValue false
-    @deprecated This option will be removed in the next major version and has already no effect.
-		*/
-  readonly strict?: boolean;
 }
 
 export function createUrlRegExp(options: RegExOptions) {

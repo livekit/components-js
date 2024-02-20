@@ -80,14 +80,23 @@ export function Stage() {
       <div className={styles.participantGrid}>
         <GridLayout tracks={tracks}>
           <TrackRefContext.Consumer>
-            {(track) =>
-              track && (
+            {(trackRef) =>
+              trackRef && (
                 <div className="my-tile">
-                  {isTrackReference(track) ? <VideoTrack {...track} /> : <p>Camera placeholder</p>}
+                  {isTrackReference(trackRef) ? (
+                    <VideoTrack trackRef={trackRef} />
+                  ) : (
+                    <p>Camera placeholder</p>
+                  )}
                   <div className={myStyles['participant-indicators']}>
                     <div style={{ display: 'flex' }}>
-                      <TrackMutedIndicator source={Track.Source.Microphone} />
-                      <TrackMutedIndicator source={track.source} />
+                      <TrackMutedIndicator
+                        trackRef={{
+                          participant: trackRef.participant,
+                          source: Track.Source.Microphone,
+                        }}
+                      />
+                      <TrackMutedIndicator trackRef={trackRef} />
                     </div>
                     {/* Overwrite styles: By passing class names, we can easily overwrite/extend the existing styles. */}
                     {/* In addition, we can still specify a style attribute and further customize the styles. */}

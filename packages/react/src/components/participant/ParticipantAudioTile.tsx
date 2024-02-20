@@ -1,16 +1,15 @@
 import * as React from 'react';
-import { Track } from 'livekit-client';
 
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
 import { ParticipantName } from './ParticipantName';
 import { TrackMutedIndicator } from './TrackMutedIndicator';
-import { useEnsureParticipant } from '../../context';
+import { TrackRefContext, useEnsureTrackRef } from '../../context';
 
 import { AudioVisualizer } from './AudioVisualizer';
 import type { ParticipantTileProps } from './ParticipantTile';
-import { ParticipantContextIfNeeded } from './ParticipantTile';
 import { AudioTrack } from './AudioTrack';
 import { useParticipantTile } from '../../hooks';
+import { isTrackReference } from '@livekit/components-core';
 
 /**
  * The `ParticipantAudioTile` component is the base utility wrapper for displaying a visual representation of a participant.
@@ -23,41 +22,39 @@ import { useParticipantTile } from '../../hooks';
  * @public
  */
 export function ParticipantAudioTile({
-  participant,
   children,
-  source,
-  publication,
   disableSpeakingIndicator,
   onParticipantClick,
+  trackRef,
   ...htmlProps
 }: ParticipantTileProps) {
-  const p = useEnsureParticipant(participant);
+  const trackReference = useEnsureTrackRef(trackRef);
   const { elementProps } = useParticipantTile({
-    participant: p,
+    trackRef: trackReference,
     htmlProps,
     disableSpeakingIndicator,
-    source: Track.Source.Microphone,
-    publication,
     onParticipantClick,
   });
 
   return (
     <div style={{ position: 'relative' }} {...elementProps}>
-      <ParticipantContextIfNeeded participant={p}>
+      <TrackRefContext.Provider value={trackReference}>
         {children ?? (
           <>
-            <AudioTrack source={source ?? Track.Source.Microphone}></AudioTrack>
+            {isTrackReference(trackReference) && (
+              <AudioTrack trackRef={trackReference}></AudioTrack>
+            )}
             <AudioVisualizer />
             <div className="lk-participant-metadata">
               <div className="lk-participant-metadata-item">
-                <TrackMutedIndicator source={Track.Source.Microphone}></TrackMutedIndicator>
+                <TrackMutedIndicator trackRef={trackReference}></TrackMutedIndicator>
                 <ParticipantName />
               </div>
               <ConnectionQualityIndicator className="lk-participant-metadata-item" />
             </div>
           </>
         )}
-      </ParticipantContextIfNeeded>
+      </TrackRefContext.Provider>
     </div>
   );
 }

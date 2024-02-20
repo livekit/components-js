@@ -1,23 +1,15 @@
-import type { Participant, Track, TrackPublication } from 'livekit-client';
 import * as React from 'react';
 import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOrName';
 import type { TrackReference } from '@livekit/components-core';
 import { log } from '@livekit/components-core';
-import { useEnsureParticipant, useMaybeTrackRefContext } from '../../context';
 import { RemoteAudioTrack, RemoteTrackPublication } from 'livekit-client';
+import { useEnsureTrackRef } from '../../context';
 
 /** @public */
 export interface AudioTrackProps extends React.AudioHTMLAttributes<HTMLAudioElement> {
   /** The track reference of the track from which the audio is to be rendered. */
   trackRef?: TrackReference;
-  /** @deprecated This property will be removed in a future version use `trackRef` instead. */
-  source?: Track.Source;
-  /** @deprecated This property will be removed in a future version use `trackRef` instead. */
-  name?: string;
-  /** @deprecated This property will be removed in a future version use `trackRef` instead. */
-  participant?: Participant;
-  /** @deprecated This property will be removed in a future version use `trackRef` instead. */
-  publication?: TrackPublication;
+
   onSubscriptionStatusChanged?: (subscribed: boolean) => void;
   /** Sets the volume of the audio track. By default, the range is between `0.0` and `1.0`. */
   volume?: number;
@@ -48,37 +40,21 @@ export function AudioTrack({
   trackRef,
   onSubscriptionStatusChanged,
   volume,
-  source,
-  name,
-  publication,
-  participant: p,
   ...props
 }: AudioTrackProps) {
-  // TODO: Remove and refactor all variables with underscore in a future version after the deprecation period.
-  const maybeTrackRef = useMaybeTrackRefContext();
-  const _name = trackRef?.publication?.trackName ?? maybeTrackRef?.publication?.trackName ?? name;
-  const _source = trackRef?.source ?? maybeTrackRef?.source ?? source;
-  const _publication = trackRef?.publication ?? maybeTrackRef?.publication ?? publication;
-  const _participant = trackRef?.participant ?? maybeTrackRef?.participant ?? p;
-  if (_source === undefined) {
-    throw new Error('The AudioTrack component expects a trackRef or source property.');
-  }
+  const trackReference = useEnsureTrackRef(trackRef);
 
   const mediaEl = React.useRef<HTMLAudioElement>(null);
-  const participant = useEnsureParticipant(_participant);
 
   const {
     elementProps,
     isSubscribed,
     track,
     publication: pub,
-  } = useMediaTrackBySourceOrName(
-    { source: _source, name: _name, participant, publication: _publication },
-    {
-      element: mediaEl,
-      props,
-    },
-  );
+  } = useMediaTrackBySourceOrName(trackReference, {
+    element: mediaEl,
+    props,
+  });
 
   React.useEffect(() => {
     onSubscriptionStatusChanged?.(!!isSubscribed);

@@ -34,20 +34,14 @@ export type LocalUserChoices = {
    * @defaultValue `''`
    */
   username: string;
-  /** @deprecated This property will be removed without replacement. */
-  e2ee: boolean;
-  /** @deprecated This property will be removed without replacement. */
-  sharedPassphrase: string;
 };
 
-const defaultUserChoices: LocalUserChoices = {
+export const defaultUserChoices: LocalUserChoices = {
   videoEnabled: true,
   audioEnabled: true,
   videoDeviceId: '',
   audioDeviceId: '',
   username: '',
-  e2ee: false,
-  sharedPassphrase: '',
 } as const;
 
 /**
@@ -73,9 +67,7 @@ export function saveUserChoices(
   if (preventSave === true) {
     return;
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { e2ee, sharedPassphrase, ...toSave } = userChoices;
-  save(toSave);
+  save(userChoices);
 }
 
 /**
@@ -99,8 +91,6 @@ export function loadUserChoices(
     videoDeviceId: defaults?.videoDeviceId ?? defaultUserChoices.videoDeviceId,
     audioDeviceId: defaults?.audioDeviceId ?? defaultUserChoices.audioDeviceId,
     username: defaults?.username ?? defaultUserChoices.username,
-    e2ee: defaults?.e2ee ?? defaultUserChoices.e2ee,
-    sharedPassphrase: defaults?.sharedPassphrase ?? defaultUserChoices.sharedPassphrase,
   };
 
   if (preventLoad) {

@@ -1,4 +1,4 @@
-import type { Participant, Track, TrackPublication } from 'livekit-client';
+import type { Participant, TrackPublication } from 'livekit-client';
 import { LocalParticipant, RemoteParticipant } from 'livekit-client';
 
 import type { PinState } from './types';
@@ -27,25 +27,6 @@ export const attachIfSubscribed = (
     }
   }
 };
-
-/**
- * Check if the participant track source is pinned.
- * @deprecated Use {@link isParticipantTrackReferencePinned} instead.
- */
-export function isParticipantSourcePinned(
-  participant: Participant,
-  source: Track.Source,
-  pinState: PinState | undefined,
-): boolean {
-  if (pinState === undefined) {
-    return false;
-  }
-
-  return pinState.some(
-    ({ source: pinnedSource, participant: pinnedParticipant }) =>
-      pinnedSource === source && pinnedParticipant.identity === participant.identity,
-  );
-}
 
 /**
  * Check if the participant track reference is pinned.

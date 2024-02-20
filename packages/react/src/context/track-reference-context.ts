@@ -10,22 +10,6 @@ export const TrackRefContext = React.createContext<TrackReferenceOrPlaceholder |
 );
 
 /**
- * @public
- * @deprecated `TrackContext` has been renamed to `TrackRefContext`, use this as a drop in replacement.
- */
-export const TrackContext = TrackRefContext;
-
-/**
- * Ensures that a track reference is provided via context.
- * If not inside a `TrackRefContext`, an error is thrown.
- * @public
- * @deprecated `useTrackContext` has been renamed to `useTrackRefContext`, use this as a drop in replacement.
- */
-export function useTrackContext() {
-  return useTrackRefContext();
-}
-
-/**
  * Ensures that a track reference is provided via context.
  * If not inside a `TrackRefContext`, an error is thrown.
  * @public
@@ -39,30 +23,11 @@ export function useTrackRefContext() {
 }
 
 /**
- * Returns a track reference from the `TrackContext` if it exists, otherwise `undefined`.
- * @public
- * @deprecated `useMaybeTrackContext` has been renamed to `useMaybeTrackRefContext`, use this as a drop in replacement.
- */
-export function useMaybeTrackContext() {
-  return useMaybeTrackRefContext();
-}
-
-/**
  * Returns a track reference from the `TrackRefContext` if it exists, otherwise `undefined`.
  * @public
  */
 export function useMaybeTrackRefContext() {
   return React.useContext(TrackRefContext);
-}
-
-/**
- * Ensures that a track reference is provided, either via context or explicitly as a parameter.
- * If not inside a `TrackContext` and no track reference is provided, an error is thrown.
- * @public
- * @deprecated `useEnsureTrackReference` has been renamed to `useEnsureTrackRef`, use this as a drop in replacement.
- */
-export function useEnsureTrackReference(track?: TrackReferenceOrPlaceholder) {
-  return useEnsureTrackRef(track);
 }
 
 /**

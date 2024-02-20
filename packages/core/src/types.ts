@@ -56,6 +56,7 @@ export type ParticipantTrackIdentifier = RequireAtLeastOne<
  * The TrackIdentifier type is used to select Tracks either based on
  * - Track.Source and/or name of the track, e.g. `{source: Track.Source.Camera}` or `{name: "my-track"}`
  * - TrackReference (participant and publication)
+ * @internal
  */
 export type TrackIdentifier<T extends Track.Source = Track.Source> =
   | TrackSource<T>

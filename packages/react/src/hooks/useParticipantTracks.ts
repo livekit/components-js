@@ -6,6 +6,8 @@ import type { Track } from 'livekit-client';
 import { useMaybeParticipantContext, useRoomContext } from '../context';
 
 /**
+ * `useParticipantTracks` is a custom React that allows you to get tracks of a specific participant only, by specifiying the participant's identity.
+ * If the participant identity is not passed the hook will try to get the participant from a participant context.
  * @public
  */
 export function useParticipantTracks(

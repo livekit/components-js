@@ -1004,7 +1004,7 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
     trackRef?: TrackReferenceOrPlaceholder;
 }
 
-// @public (undocumented)
+// @public
 export function useParticipantTracks(sources: Track.Source[], participantIdentity?: string): TrackReference[];
 
 // @alpha
@@ -1144,7 +1144,7 @@ export interface UseTokenOptions {
     userInfo?: UserInfo;
 }
 
-// @public (undocumented)
+// @public
 export function useTrackByName(name: string, participant?: Participant): TrackReferenceOrPlaceholder;
 
 // @public @deprecated

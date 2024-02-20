@@ -131,6 +131,8 @@ export function createIsSpeakingObserver(participant: Participant): Observable<b
 // @public (undocumented)
 export function createMediaDeviceObserver(kind?: MediaDeviceKind, onError?: (e: Error) => void, requestPermissions?: boolean): Observable<MediaDeviceInfo[]>;
 
+// Warning: (ae-incompatible-release-tags) The symbol "createTrackObserver" is marked as @public, but its signature references "TrackIdentifier" which is marked as @internal
+//
 // @public (undocumented)
 export function createTrackObserver(participant: Participant, options: TrackIdentifier): Observable<{
     publication: TrackPublication | undefined;
@@ -158,6 +160,8 @@ export function encryptionStatusObservable(room: Room, participant: Participant)
 // @internal
 export function getScrollBarWidth(): number;
 
+// Warning: (ae-incompatible-release-tags) The symbol "getTrackByIdentifier" is marked as @public, but its signature references "TrackIdentifier" which is marked as @internal
+//
 // @public (undocumented)
 export function getTrackByIdentifier(options: TrackIdentifier): TrackPublication | undefined;
 
@@ -489,6 +493,8 @@ export function setupManualToggle(): {
 // @public (undocumented)
 export function setupMediaToggle<T extends ToggleSource>(source: T, room: Room, options?: CaptureOptionsBySource<T>): MediaToggleType<T>;
 
+// Warning: (ae-incompatible-release-tags) The symbol "setupMediaTrack" is marked as @public, but its signature references "TrackIdentifier" which is marked as @internal
+//
 // @public (undocumented)
 export function setupMediaTrack(trackIdentifier: TrackIdentifier): {
     className: string;
@@ -560,7 +566,9 @@ export type TokenizeGrammar = {
     [type: string]: RegExp;
 };
 
-// @public
+// Warning: (ae-internal-missing-underscore) The name "TrackIdentifier" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal
 export type TrackIdentifier<T extends Track.Source = Track.Source> = TrackSource<T> | TrackReference;
 
 // @public (undocumented)

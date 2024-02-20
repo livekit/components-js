@@ -1,5 +1,17 @@
 # @livekit/components-core
 
+## 0.9.0
+
+### Minor Changes
+
+- Remove previously deprecated APIs - [#774](https://github.com/livekit/components-js/pull/774) ([@lukasIO](https://github.com/lukasIO))
+
+- Update to livekit-client v2 - read the migration guide [here](https://docs.livekit.io/guides/migrate-from-v1/)https://docs.livekit.io/guides/migrate-from-v1/ - [#733](https://github.com/livekit/components-js/pull/733) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Initialize useMediaDevices useMediaDeviceSelect with empty array on error - [#770](https://github.com/livekit/components-js/pull/770) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.8.3
 
 ### Patch Changes

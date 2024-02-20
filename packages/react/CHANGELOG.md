@@ -1,5 +1,26 @@
 # @livekit/components-react
 
+## 2.0.0
+
+### Major Changes
+
+- Remove previously deprecated APIs - [#774](https://github.com/livekit/components-js/pull/774) ([@lukasIO](https://github.com/lukasIO))
+
+- Add useParticipantTracks and remove useTrack hook - [#729](https://github.com/livekit/components-js/pull/729) ([@lukasIO](https://github.com/lukasIO))
+
+- Update to livekit-client v2 - read the migration guide [here](https://docs.livekit.io/guides/migrate-from-v1/)https://docs.livekit.io/guides/migrate-from-v1/ - [#733](https://github.com/livekit/components-js/pull/733) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Initialize useMediaDevices useMediaDeviceSelect with empty array on error - [#770](https://github.com/livekit/components-js/pull/770) ([@lukasIO](https://github.com/lukasIO))
+
+- Do not crash in usePreviewDevice when user has not granted permission to media device - [#768](https://github.com/livekit/components-js/pull/768) ([@dnetteln](https://github.com/dnetteln))
+
+- Catch callback executions when chained as props - [#771](https://github.com/livekit/components-js/pull/771) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`6d3e25c593923eb86ee66b76455bb55a7da779b5`](https://github.com/livekit/components-js/commit/6d3e25c593923eb86ee66b76455bb55a7da779b5), [`e00d930a80bbcba30933656c484e064a683c5408`](https://github.com/livekit/components-js/commit/e00d930a80bbcba30933656c484e064a683c5408), [`5fa2d6b33c591a5cf511c015d066546c983bf2aa`](https://github.com/livekit/components-js/commit/5fa2d6b33c591a5cf511c015d066546c983bf2aa)]:
+  - @livekit/components-core@0.9.0
+
 ## 1.5.3
 
 ### Patch Changes

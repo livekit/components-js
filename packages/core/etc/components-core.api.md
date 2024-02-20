@@ -151,6 +151,9 @@ export const DataTopic: {
 };
 
 // @public (undocumented)
+export const defaultUserChoices: LocalUserChoices;
+
+// @public (undocumented)
 export function encryptionStatusObservable(room: Room, participant: Participant): Observable<boolean>;
 
 // Warning: (ae-internal-missing-underscore) The name "getScrollBarWidth" should be prefixed with an underscore because the declaration is marked as @internal
@@ -189,9 +192,6 @@ export function isLocal(p: Participant): boolean;
 
 // @public
 export function isMobileBrowser(): boolean;
-
-// @public @deprecated
-export function isParticipantSourcePinned(participant: Participant, source: Track.Source, pinState: PinState | undefined): boolean;
 
 // @public
 export function isParticipantTrackReferencePinned(trackRef: TrackReference, pinState: PinState | undefined): boolean;
@@ -237,8 +237,6 @@ export type LocalUserChoices = {
     videoDeviceId: string;
     audioDeviceId: string;
     username: string;
-    e2ee: boolean;
-    sharedPassphrase: string;
 };
 
 // @public (undocumented)

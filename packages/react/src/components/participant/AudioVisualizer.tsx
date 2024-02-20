@@ -1,14 +1,10 @@
-import type { Participant } from 'livekit-client';
-import { Track } from 'livekit-client';
 import * as React from 'react';
 import { type TrackReference } from '@livekit/components-core';
-import { useMaybeParticipantContext, useMaybeTrackRefContext } from '../../context';
+import { useEnsureTrackRef } from '../../context';
 import { useMultibandTrackVolume } from '../../hooks';
 
 /** @public */
 export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
-  /** @deprecated this property will be removed in a future version, use `trackRef` instead */
-  participant?: Participant;
   trackRef?: TrackReference;
 }
 
@@ -22,24 +18,16 @@ export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
  * ```
  * @public
  */
-export function AudioVisualizer({ participant, trackRef, ...props }: AudioVisualizerProps) {
+export function AudioVisualizer({ trackRef, ...props }: AudioVisualizerProps) {
   const svgWidth = 200;
   const svgHeight = 90;
   const barWidth = 6;
   const barSpacing = 4;
   const volMultiplier = 50;
   const barCount = 7;
+  const trackReference = useEnsureTrackRef(trackRef);
 
-  const p = useMaybeParticipantContext() ?? participant;
-  let ref = useMaybeTrackRefContext() ?? trackRef;
-  if (!ref) {
-    if (!p) {
-      throw Error(`Participant missing, provide it directly or within a context`);
-    }
-    ref = { participant: p, source: Track.Source.Microphone };
-  }
-
-  const volumes = useMultibandTrackVolume(ref, { bands: 7, loPass: 300 });
+  const volumes = useMultibandTrackVolume(trackReference, { bands: 7, loPass: 300 });
 
   return (
     <svg

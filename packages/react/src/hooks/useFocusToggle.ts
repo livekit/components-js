@@ -1,17 +1,12 @@
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { setupFocusToggle, isTrackReferencePinned } from '@livekit/components-core';
-import type { Track, Participant } from 'livekit-client';
-import { useEnsureParticipant, useMaybeLayoutContext } from '../context';
+import { useEnsureTrackRef, useMaybeLayoutContext } from '../context';
 import { mergeProps } from '../mergeProps';
 import * as React from 'react';
 
 /** @public */
 export interface UseFocusToggleProps {
   trackRef?: TrackReferenceOrPlaceholder;
-  /** @deprecated This parameter will be removed in a future version use `trackRef` instead. */
-  trackSource?: Track.Source;
-  /** @deprecated This parameter will be removed in a future version use `trackRef` instead. */
-  participant?: Participant;
   props: React.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
@@ -26,31 +21,15 @@ export interface UseFocusToggleProps {
  * ```
  * @public
  */
-export function useFocusToggle({ trackRef, trackSource, participant, props }: UseFocusToggleProps) {
-  const p = useEnsureParticipant(participant);
-  if (!trackRef && !trackSource) {
-    throw new Error('trackRef or trackSource must be defined.');
-  }
+export function useFocusToggle({ trackRef, props }: UseFocusToggleProps) {
+  const trackReference = useEnsureTrackRef(trackRef);
+
   const layoutContext = useMaybeLayoutContext();
   const { className } = React.useMemo(() => setupFocusToggle(), []);
 
   const inFocus: boolean = React.useMemo(() => {
-    if (trackRef) {
-      return isTrackReferencePinned(trackRef, layoutContext?.pin.state);
-    } else if (trackSource) {
-      const track = p.getTrackPublication(trackSource);
-      if (layoutContext?.pin.state && track) {
-        return isTrackReferencePinned(
-          { participant: p, source: trackSource, publication: track },
-          layoutContext.pin.state,
-        );
-      } else {
-        return false;
-      }
-    } else {
-      throw new Error('trackRef or trackSource and participant must be defined.');
-    }
-  }, [trackRef, layoutContext?.pin.state, p, trackSource]);
+    return isTrackReferencePinned(trackReference, layoutContext?.pin.state);
+  }, [trackRef, layoutContext?.pin.state]);
 
   const mergedProps = React.useMemo(
     () =>
@@ -61,39 +40,19 @@ export function useFocusToggle({ trackRef, trackSource, participant, props }: Us
           props.onClick?.(event);
 
           // Set or clear focus based on current focus state.
-          if (trackRef) {
-            if (inFocus) {
-              layoutContext?.pin.dispatch?.({
-                msg: 'clear_pin',
-              });
-            } else {
-              layoutContext?.pin.dispatch?.({
-                msg: 'set_pin',
-                trackReference: trackRef,
-              });
-            }
-          } else if (trackSource) {
-            const track = p.getTrackPublication(trackSource);
-            if (layoutContext?.pin.dispatch && track) {
-              if (inFocus) {
-                layoutContext.pin.dispatch({
-                  msg: 'clear_pin',
-                });
-              } else {
-                layoutContext.pin.dispatch({
-                  msg: 'set_pin',
-                  trackReference: {
-                    participant: p,
-                    publication: track,
-                    source: track.source,
-                  },
-                });
-              }
-            }
+          if (inFocus) {
+            layoutContext?.pin.dispatch?.({
+              msg: 'clear_pin',
+            });
+          } else {
+            layoutContext?.pin.dispatch?.({
+              msg: 'set_pin',
+              trackReference,
+            });
           }
         },
       }),
-    [props, className, trackRef, trackSource, inFocus, layoutContext?.pin, p],
+    [props, className, trackRef, inFocus, layoutContext?.pin],
   );
 
   return { mergedProps, inFocus };

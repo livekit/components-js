@@ -944,7 +944,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(en
 };
 
 // @alpha (undocumented)
-export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): LocalTrack[] | undefined;
+export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): LocalTrack<Track.Kind>[] | undefined;
 
 // @public
 export function useRemoteParticipant(identity: string, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;
@@ -1060,7 +1060,7 @@ export function useTrack(trackRef: TrackIdentifier, options?: UseTrackOptions): 
     publication: TrackPublication | undefined;
     isMuted: boolean | undefined;
     isSubscribed: boolean | undefined;
-    track: Track | undefined;
+    track: Track<Track> | undefined;
     elementProps: React_2.HTMLAttributes<HTMLElement>;
 };
 
@@ -1071,7 +1071,7 @@ export function useTrackByName(trackRef?: TrackReferenceOrPlaceholder, options?:
     publication: TrackPublication | undefined;
     isMuted: boolean | undefined;
     isSubscribed: boolean | undefined;
-    track: Track | undefined;
+    track: Track<Track> | undefined;
     elementProps: HTMLAttributes<HTMLElement>;
 };
 

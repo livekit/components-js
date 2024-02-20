@@ -11,7 +11,7 @@
   "dependencies": {
     "@livekit/components-react": "workspace:*",
     "@livekit/components-styles": "workspace:*",
-    "livekit-client": "^2.0.0",
+    "livekit-client": "^2.0.2",
     "livekit-server-sdk": "^1.2.7",
     "next": "^12.3.4",
     "react": "^18.2.0",

@@ -23,6 +23,7 @@ import { usePinnedTracks, useTracks } from '../hooks';
 import { Chat } from './Chat';
 import { ControlBar } from './ControlBar';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
+import { SettingsMenu } from './SettingsMenu';
 
 /**
  * @public
@@ -60,6 +61,7 @@ export function VideoConference({
   const [widgetState, setWidgetState] = React.useState<WidgetState>({
     showChat: false,
     unreadMessages: 0,
+    showSettings: false,
   });
   const lastAutoFocusedScreenShareTrack = React.useRef<TrackReferenceOrPlaceholder | null>(null);
 
@@ -148,6 +150,11 @@ export function VideoConference({
             messageEncoder={chatMessageEncoder}
             messageDecoder={chatMessageDecoder}
           />
+          {widgetState.showSettings && (
+            <div className="lk-settings-menu-modal">
+              <SettingsMenu />
+            </div>
+          )}
         </LayoutContextProvider>
       )}
       <RoomAudioRenderer />

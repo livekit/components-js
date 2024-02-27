@@ -297,7 +297,9 @@ export function PreJoin({
 
   React.useEffect(() => {
     if (videoEl.current && videoTrack) {
-      videoTrack.unmute();
+      if (videoTrack.isMuted) {
+        videoTrack.unmute();
+      }
       videoTrack.attach(videoEl.current);
     }
 

@@ -48,6 +48,7 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@livekit/components-core": "workspace:*",
+    "@livekit/noise-filter": "0.1.2",
     "@react-hook/latest": "1.0.3",
     "clsx": "2.1.0",
     "usehooks-ts": "2.14.0"

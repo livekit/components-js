@@ -150,11 +150,13 @@ export function VideoConference({
             messageEncoder={chatMessageEncoder}
             messageDecoder={chatMessageDecoder}
           />
-          {widgetState.showSettings && (
-            <div className="lk-settings-menu-modal">
-              <SettingsMenu />
-            </div>
-          )}
+          <div
+            className="lk-settings-menu-modal"
+            style={{ display: widgetState.showSettings ? 'block' : 'none' }}
+          >
+            <SettingsMenu />
+          </div>
+          )
         </LayoutContextProvider>
       )}
       <RoomAudioRenderer />

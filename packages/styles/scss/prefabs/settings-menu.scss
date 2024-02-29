@@ -3,4 +3,42 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  background: var(--lk-bg);
+  padding: 1rem;
+  border-radius: var(--lk-border-radius);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--lk-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  min-width: 50vw;
+  min-height: 50vh;
+}
+
+.settings-close-button {
+  position: absolute;
+  right: var(--lk-grid-gap);
+  bottom: var(--lk-grid-gap);
+}
+
+.tabs {
+  position: relative;
+  display: flex;
+  align-content: space-between;
+
+  > .tab {
+    padding: 0.5rem;
+    border-radius: 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid;
+    border-color: var(--bg5);
+    &[aria-pressed='true'] {
+      border-color: var(--accent-bg);
+    }
+  }
 }

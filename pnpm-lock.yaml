@@ -203,9 +203,6 @@ importers:
       '@livekit/components-core':
         specifier: workspace:*
         version: link:../core
-      '@livekit/noise-filter':
-        specifier: 0.1.2
-        version: 0.1.2(livekit-client@2.0.3)
       '@react-hook/latest':
         specifier: 1.0.3
         version: 1.0.3(react@18.2.0)
@@ -221,6 +218,10 @@ importers:
       usehooks-ts:
         specifier: 2.14.0
         version: 2.14.0(react@18.2.0)
+    optionalDependencies:
+      '@livekit/noise-filter':
+        specifier: 0.1.2
+        version: 0.1.2(livekit-client@2.0.3)
     devDependencies:
       '@microsoft/api-extractor':
         specifier: ^7.35.0
@@ -2850,11 +2851,13 @@ packages:
 
   /@livekit/noise-filter@0.1.2(livekit-client@2.0.3):
     resolution: {integrity: sha512-2XoR+yyJJlAg3TEClAQdOFXqLx4ROIP2kHPSBx1tQSsRl2GtTfXXVDqojcAUgFIClZiXJPU1/k7EmtVt4emFGQ==}
+    requiresBuild: true
     peerDependencies:
       livekit-client: ^2.0.2
     dependencies:
       livekit-client: 2.0.3
     dev: false
+    optional: true
 
   /@manypkg/find-root@1.1.0:
     resolution: {integrity: sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA==}

@@ -6,6 +6,9 @@ import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { LocalAudioTrack, Track } from 'livekit-client';
 import { useLocalParticipant } from '../hooks';
 
+/**
+ * @alpha
+ */
 export interface SettingsMenuProps extends React.HTMLAttributes<HTMLDivElement> {
   media: false | { label: string; microphone: boolean; camera: boolean; speaker: boolean };
   effects:
@@ -13,6 +16,9 @@ export interface SettingsMenuProps extends React.HTMLAttributes<HTMLDivElement> 
     | { label: string; camera: Record<string, boolean>; microphone: Record<string, boolean> };
 }
 
+/**
+ * @alpha
+ */
 export function SettingsMenu({ media, effects, ...props }: SettingsMenuProps) {
   const layoutContext = useMaybeLayoutContext();
 

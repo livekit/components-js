@@ -5,6 +5,7 @@ import { TrackToggle } from '../components';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { LocalAudioTrack, Track } from 'livekit-client';
 import { useLocalParticipant } from '../hooks';
+import { log } from '@livekit/components-core';
 
 /**
  * @alpha
@@ -45,12 +46,14 @@ export function SettingsMenu({ media, effects, ...props }: SettingsMenuProps) {
       if (currentProcessor && !isNoiseFilterEnabled) {
         micPublication.track.stopProcessor();
       } else if (!currentProcessor && isNoiseFilterEnabled) {
-        import('@livekit/noise-filter').then(({ NoiseFilter }) => {
-          micPublication?.track
-            // @ts-ignore
-            ?.setProcessor(NoiseFilter({}))
-            .then(() => console.log('successfully set noise filter'));
-        });
+        import('@livekit/noise-filter')
+          .then(({ NoiseFilter }) => {
+            micPublication?.track
+              // @ts-ignore
+              ?.setProcessor(NoiseFilter({}))
+              .then(() => console.log('successfully set noise filter'));
+          })
+          .catch((e) => log.error('Failed to load noise filter', e));
       }
     }
   }, [isNoiseFilterEnabled, microphoneTrack]);

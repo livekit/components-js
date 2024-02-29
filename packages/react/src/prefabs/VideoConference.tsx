@@ -154,7 +154,15 @@ export function VideoConference({
             className="lk-settings-menu-modal"
             style={{ display: widgetState.showSettings ? 'block' : 'none' }}
           >
-            <SettingsMenu />
+            <SettingsMenu
+              media={{
+                camera: true,
+                label: 'Camera and Microphone',
+                speaker: true,
+                microphone: true,
+              }}
+              effects={{ label: 'Effects', camera: {}, microphone: { noiseFilter: true } }}
+            />
           </div>
           )
         </LayoutContextProvider>

@@ -6,29 +6,21 @@ import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { LocalAudioTrack, Track } from 'livekit-client';
 import { useLocalParticipant } from '../hooks';
 
-export interface SettingsMenuProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface SettingsMenuProps extends React.HTMLAttributes<HTMLDivElement> {
+  media: false | { label: string; microphone: boolean; camera: boolean; speaker: boolean };
+  effects:
+    | false
+    | { label: string; camera: Record<string, boolean>; microphone: Record<string, boolean> };
+}
 
-export function SettingsMenu(props: SettingsMenuProps) {
+export function SettingsMenu({ media, effects, ...props }: SettingsMenuProps) {
   const layoutContext = useMaybeLayoutContext();
 
   const settings = React.useMemo(() => {
     return {
-      media: {
-        label: 'Media Devices',
-        microphone: true,
-        camera: true,
-        speaker: true,
-      },
-      effects: {
-        label: 'Effects',
-        camera: {
-          background: true,
-        },
-        microphone: {
-          enhancedNoiseCancellation: true,
-        },
-      },
-    } as const;
+      media,
+      effects,
+    };
   }, []);
 
   const tabs = React.useMemo(
@@ -38,15 +30,15 @@ export function SettingsMenu(props: SettingsMenuProps) {
   const { microphoneTrack } = useLocalParticipant();
 
   const [activeTab, setActiveTab] = React.useState(tabs[0]);
-  const [isNoiseCancellationEnabled, setIsNoiseCancellationEnabled] = React.useState(true);
+  const [isNoiseFilterEnabled, setIsNoiseFilterEnabled] = React.useState(false);
 
   React.useEffect(() => {
     const micPublication = microphoneTrack;
     if (micPublication && micPublication.track instanceof LocalAudioTrack) {
       const currentProcessor = micPublication.track.getProcessor();
-      if (currentProcessor && !isNoiseCancellationEnabled) {
+      if (currentProcessor && !isNoiseFilterEnabled) {
         micPublication.track.stopProcessor();
-      } else if (!currentProcessor && isNoiseCancellationEnabled) {
+      } else if (!currentProcessor && isNoiseFilterEnabled) {
         import('@livekit/noise-filter').then(({ NoiseFilter }) => {
           micPublication?.track
             // @ts-ignore
@@ -55,26 +47,32 @@ export function SettingsMenu(props: SettingsMenuProps) {
         });
       }
     }
-  }, [isNoiseCancellationEnabled, microphoneTrack]);
+  }, [isNoiseFilterEnabled, microphoneTrack]);
 
   return (
     <div className="lk-settings" style={{ width: '100%' }} {...props}>
       <div className="lk-tabs">
-        {tabs.map((tab) => (
-          <button
-            className="lk-button lk-tab"
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            aria-pressed={tab === activeTab}
-          >
-            {settings[tab]?.label}
-          </button>
-        ))}
+        {tabs.map(
+          (tab) =>
+            settings[tab] && (
+              <button
+                className="lk-button lk-tab"
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                aria-pressed={tab === activeTab}
+              >
+                {
+                  // @ts-ignore
+                  settings[tab].label
+                }
+              </button>
+            ),
+        )}
       </div>
       <div className="lk-tab-content">
         {activeTab === 'media' && (
           <>
-            {settings.media.camera && (
+            {settings.media && settings.media.camera && (
               <>
                 <h3>Camera</h3>
                 <section className="lk-button-group">
@@ -85,7 +83,7 @@ export function SettingsMenu(props: SettingsMenuProps) {
                 </section>
               </>
             )}
-            {settings.media.microphone && (
+            {settings.media && settings.media.microphone && (
               <>
                 <h3>Microphone</h3>
                 <section className="lk-button-group">
@@ -96,7 +94,7 @@ export function SettingsMenu(props: SettingsMenuProps) {
                 </section>
               </>
             )}
-            {settings.media.speaker && (
+            {settings.media && settings.media.speaker && (
               <>
                 <h3>Speaker & Headphones</h3>
                 <section>
@@ -108,12 +106,12 @@ export function SettingsMenu(props: SettingsMenuProps) {
         )}
         {activeTab === 'effects' && (
           <>
-            <label htmlFor="noise-cancellation"> Enhanced Noise Cancellation</label>
+            <label htmlFor="noise-filter"> Enhanced Noise Cancellation</label>
             <input
               type="checkbox"
-              id="noise-cancellation"
-              onChange={(ev) => setIsNoiseCancellationEnabled(ev.target.checked)}
-              checked={isNoiseCancellationEnabled}
+              id="noise-filter"
+              onChange={(ev) => setIsNoiseFilterEnabled(ev.target.checked)}
+              checked={isNoiseFilterEnabled}
             ></input>
           </>
         )}

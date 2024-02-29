@@ -38,8 +38,11 @@ export function cloneSingleChild(
  */
 export function warnAboutMissingStyles(el?: HTMLElement) {
   if (
-    // eslint-disable-next-line turbo/no-undeclared-env-vars
-    (process?.env?.NODE_ENV === 'dev' || process?.env?.NODE_ENV === 'development') &&
+    ((typeof process !== 'undefined' &&
+      // eslint-disable-next-line turbo/no-undeclared-env-vars
+      process?.env?.NODE_ENV === 'dev') ||
+      // eslint-disable-next-line turbo/no-undeclared-env-vars
+      process?.env?.NODE_ENV === 'development') &&
     typeof window !== 'undefined'
   ) {
     const target = el ?? document.querySelector('.lk-room-container');

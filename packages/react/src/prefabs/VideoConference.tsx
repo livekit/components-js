@@ -23,7 +23,6 @@ import { usePinnedTracks, useTracks } from '../hooks';
 import { Chat } from './Chat';
 import { ControlBar } from './ControlBar';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
-import { SettingsMenu } from './SettingsMenu';
 
 /**
  * @public
@@ -32,6 +31,7 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
   chatMessageFormatter?: MessageFormatter;
   chatMessageEncoder?: MessageEncoder;
   chatMessageDecoder?: MessageDecoder;
+  SettingsComponent?: React.ComponentType;
 }
 
 /**
@@ -56,6 +56,7 @@ export function VideoConference({
   chatMessageFormatter,
   chatMessageDecoder,
   chatMessageEncoder,
+  SettingsComponent,
   ...props
 }: VideoConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({
@@ -150,20 +151,14 @@ export function VideoConference({
             messageEncoder={chatMessageEncoder}
             messageDecoder={chatMessageDecoder}
           />
-          <div
-            className="lk-settings-menu-modal"
-            style={{ display: widgetState.showSettings ? 'block' : 'none' }}
-          >
-            <SettingsMenu
-              media={{
-                camera: true,
-                label: 'Camera and Microphone',
-                speaker: true,
-                microphone: true,
-              }}
-              effects={{ label: 'Effects', camera: {}, microphone: { noiseFilter: true } }}
-            />
-          </div>
+          {SettingsComponent && (
+            <div
+              className="lk-settings-menu-modal"
+              style={{ display: widgetState.showSettings ? 'block' : 'none' }}
+            >
+              <SettingsComponent />
+            </div>
+          )}
           )
         </LayoutContextProvider>
       )}

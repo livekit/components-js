@@ -70,7 +70,7 @@ export function ControlBar({
   const defaultVariation = isTooLittleSpace ? 'minimal' : 'verbose';
   variation ??= defaultVariation;
 
-  const visibleControls = { settings: true, leave: true, ...controls };
+  const visibleControls = { leave: true, ...controls };
 
   const localPermissions = useLocalParticipantPermissions();
 

@@ -58,9 +58,6 @@
     "react-dom": ">=18",
     "tslib": "^2.6.2"
   },
-  "optionalDependencies": {
-    "@livekit/noise-filter": "0.1.2"
-  },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.35.0",
     "@size-limit/file": "^11.0.2",

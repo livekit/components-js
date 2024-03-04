@@ -1119,7 +1119,7 @@ export interface VideoConferenceProps extends React_2.HTMLAttributes<HTMLDivElem
     chatMessageEncoder?: MessageEncoder;
     // (undocumented)
     chatMessageFormatter?: MessageFormatter;
-    // (undocumented)
+    // @alpha (undocumented)
     SettingsComponent?: React_2.ComponentType;
 }
 

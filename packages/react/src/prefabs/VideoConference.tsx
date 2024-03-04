@@ -160,7 +160,6 @@ export function VideoConference({
               <SettingsComponent />
             </div>
           )}
-          )
         </LayoutContextProvider>
       )}
       <RoomAudioRenderer />

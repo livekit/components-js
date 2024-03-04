@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.0.2
+
+### Patch Changes
+
+- Remove unintended character in video conference view - [#794](https://github.com/livekit/components-js/pull/794) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.0.1
 
 ### Patch Changes

@@ -192,6 +192,7 @@ export type ControlBarControls = {
     chat?: boolean;
     screenShare?: boolean;
     leave?: boolean;
+    settings?: boolean;
 };
 
 // @public (undocumented)
@@ -297,7 +298,7 @@ export interface LayoutContextProviderProps {
 // @public (undocumented)
 export type LayoutContextType = {
     pin: PinContextType;
-    widget: ChatContextType;
+    widget: WidgetContextType;
 };
 
 // Warning: (ae-internal-missing-underscore) The name "LeaveIcon" should be prefixed with an underscore because the declaration is marked as @internal
@@ -1108,7 +1109,7 @@ export interface UseVisualStableUpdateOptions {
 }
 
 // @public
-export function VideoConference({ chatMessageFormatter, chatMessageDecoder, chatMessageEncoder, ...props }: VideoConferenceProps): React_2.JSX.Element;
+export function VideoConference({ chatMessageFormatter, chatMessageDecoder, chatMessageEncoder, SettingsComponent, ...props }: VideoConferenceProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface VideoConferenceProps extends React_2.HTMLAttributes<HTMLDivElement> {
@@ -1118,6 +1119,8 @@ export interface VideoConferenceProps extends React_2.HTMLAttributes<HTMLDivElem
     chatMessageEncoder?: MessageEncoder;
     // (undocumented)
     chatMessageFormatter?: MessageFormatter;
+    // @alpha (undocumented)
+    SettingsComponent?: React_2.ComponentType;
 }
 
 // @public
@@ -1140,12 +1143,13 @@ export interface VideoTrackProps extends React_2.VideoHTMLAttributes<HTMLVideoEl
 export type WidgetState = {
     showChat: boolean;
     unreadMessages: number;
+    showSettings?: boolean;
 };
 
 // Warnings were encountered during analysis:
 //
 // src/context/layout-context.ts:10:3 - (ae-forgotten-export) The symbol "PinContextType" needs to be exported by the entry point index.d.ts
-// src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "ChatContextType" needs to be exported by the entry point index.d.ts
+// src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "WidgetContextType" needs to be exported by the entry point index.d.ts
 // src/hooks/useGridLayout.ts:24:6 - (ae-forgotten-export) The symbol "GridLayoutDefinition" needs to be exported by the entry point index.d.ts
 // src/hooks/useMediaDeviceSelect.ts:47:29 - (ae-forgotten-export) The symbol "SetMediaDeviceOptions" needs to be exported by the entry point index.d.ts
 

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { TrackToggle } from '../components/controls/TrackToggle';
-import { ChatIcon, LeaveIcon } from '../assets/icons';
+import { ChatIcon, GearIcon, LeaveIcon } from '../assets/icons';
 import { ChatToggle } from '../components/controls/ChatToggle';
 import { useLocalParticipantPermissions, usePersistentUserChoices } from '../hooks';
 import { useMediaQuery } from '../hooks/internal';
@@ -11,6 +11,7 @@ import { useMaybeLayoutContext } from '../context';
 import { supportsScreenSharing } from '@livekit/components-core';
 import { mergeProps } from '../utils';
 import { StartMediaButton } from '../components/controls/StartMediaButton';
+import { SettingsMenuToggle } from '../components/controls/SettingsMenuToggle';
 
 /** @public */
 export type ControlBarControls = {
@@ -19,6 +20,7 @@ export type ControlBarControls = {
   chat?: boolean;
   screenShare?: boolean;
   leave?: boolean;
+  settings?: boolean;
 };
 
 /** @public */
@@ -172,6 +174,12 @@ export function ControlBar({
           {showIcon && <ChatIcon />}
           {showText && 'Chat'}
         </ChatToggle>
+      )}
+      {visibleControls.settings && (
+        <SettingsMenuToggle>
+          {showIcon && <GearIcon />}
+          {showText && 'Settings'}
+        </SettingsMenuToggle>
       )}
       {visibleControls.leave && (
         <DisconnectButton>

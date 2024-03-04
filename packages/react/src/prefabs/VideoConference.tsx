@@ -31,6 +31,8 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
   chatMessageFormatter?: MessageFormatter;
   chatMessageEncoder?: MessageEncoder;
   chatMessageDecoder?: MessageDecoder;
+  /** @alpha */
+  SettingsComponent?: React.ComponentType;
 }
 
 /**
@@ -55,11 +57,13 @@ export function VideoConference({
   chatMessageFormatter,
   chatMessageDecoder,
   chatMessageEncoder,
+  SettingsComponent,
   ...props
 }: VideoConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({
     showChat: false,
     unreadMessages: 0,
+    showSettings: false,
   });
   const lastAutoFocusedScreenShareTrack = React.useRef<TrackReferenceOrPlaceholder | null>(null);
 
@@ -140,7 +144,7 @@ export function VideoConference({
                 </FocusLayoutContainer>
               </div>
             )}
-            <ControlBar controls={{ chat: true }} />
+            <ControlBar controls={{ chat: true, settings: !!SettingsComponent }} />
           </div>
           <Chat
             style={{ display: widgetState.showChat ? 'grid' : 'none' }}
@@ -148,6 +152,15 @@ export function VideoConference({
             messageEncoder={chatMessageEncoder}
             messageDecoder={chatMessageDecoder}
           />
+          {SettingsComponent && (
+            <div
+              className="lk-settings-menu-modal"
+              style={{ display: widgetState.showSettings ? 'block' : 'none' }}
+            >
+              <SettingsComponent />
+            </div>
+          )}
+          )
         </LayoutContextProvider>
       )}
       <RoomAudioRenderer />

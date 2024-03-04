@@ -634,6 +634,7 @@ export const WIDGET_DEFAULT_STATE: WidgetState;
 export type WidgetState = {
     showChat: boolean;
     unreadMessages: number;
+    showSettings?: boolean;
 };
 
 // (No @packageDocumentation comment for this package)

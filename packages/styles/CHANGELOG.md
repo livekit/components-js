@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 1.0.10
+
+### Patch Changes
+
+- Add support for a settings modal render prop - [#781](https://github.com/livekit/components-js/pull/781) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.0.9
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 2.0.1
+
+### Patch Changes
+
+- Fix check for process in style warning - [#782](https://github.com/livekit/components-js/pull/782) ([@lukasIO](https://github.com/lukasIO))
+
+- Add support for a settings modal render prop - [#781](https://github.com/livekit/components-js/pull/781) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`344dd70e23c7a1184cab6c066d5cf6ef9c919eb2`](https://github.com/livekit/components-js/commit/344dd70e23c7a1184cab6c066d5cf6ef9c919eb2)]:
+  - @livekit/components-core@0.9.1
+
 ## 2.0.0
 
 ### Major Changes

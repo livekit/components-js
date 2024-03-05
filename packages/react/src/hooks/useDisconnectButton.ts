@@ -13,7 +13,7 @@ import { useConnectionState } from './useConnectionStatus';
  *
  * @example
  * ```tsx
- * const { buttonProps } = useDisconnectButton();
+ * const { buttonProps } = useDisconnectButton(buttonProps);
  * return <button {...buttonProps}>Disconnect</button>;
  * ```
  * @public

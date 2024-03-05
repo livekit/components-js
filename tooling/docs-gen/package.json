@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@livekit/components-docs-gen",
-  "version": "0.0.33",
+  "version": "0.0.34",
   "description": "Generate component docs.",
   "license": "Apache 2.0",
   "author": "LiveKit",

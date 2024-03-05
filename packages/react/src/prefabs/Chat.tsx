@@ -126,6 +126,9 @@ export function Chat({
           ref={inputRef}
           type="text"
           placeholder="Enter a message..."
+          onInput={(ev) => ev.stopPropagation()}
+          onKeyDown={(ev) => ev.stopPropagation()}
+          onKeyUp={(ev) => ev.stopPropagation()}
         />
         <button type="submit" className="lk-button lk-chat-form-button" disabled={isSending}>
           Send

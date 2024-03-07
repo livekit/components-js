@@ -1,5 +1,13 @@
 # @livekit/components-react
 
+## 2.0.3
+
+### Patch Changes
+
+- Stop propagation of key events on chat input element - [#798](https://github.com/livekit/components-js/pull/798) ([@lukasIO](https://github.com/lukasIO))
+
+- Update docs for useDisconnectButton - [#796](https://github.com/livekit/components-js/pull/796) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.0.2
 
 ### Patch Changes

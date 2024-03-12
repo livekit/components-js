@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 1.0.11
+
+### Patch Changes
+
+- Use blue accent colour for stop screen share button - [#801](https://github.com/livekit/components-js/pull/801) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.0.10
 
 ### Patch Changes

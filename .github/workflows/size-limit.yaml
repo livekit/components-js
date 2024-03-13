@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 jobs:
   react-size:
-    runs-on: ubuntu-latest
+    runs-on: namespace-profile-2vcpu-cache
     env:
       CI_JOB_NUMBER: 1
     steps:
@@ -21,7 +21,7 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-      - uses: andresz1/size-limit-action@35ea3c74377213d727b88532229d467a849345f4 # with pnpm support
+      - uses: andresz1/size-limit-action@f338c35e16e2643dcc41a8ba32fbaf0ec9016728 # with pnpm support
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           script: pnpm --filter @livekit/components-react exec size-limit --json

@@ -1,13 +1,14 @@
+import type { ParticipantPermission } from '@livekit/protocol';
 import type { Participant, RemoteParticipant, Room, TrackPublication } from 'livekit-client';
 import { ParticipantEvent, RoomEvent, Track } from 'livekit-client';
-import type { Subscriber } from 'rxjs';
-import { map, switchMap, Observable, startWith } from 'rxjs';
-import { observeRoomEvents } from './room';
 import type { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
-import { allParticipantEvents, allParticipantRoomEvents } from '../helper/eventGroups';
-import type { TrackIdentifier } from '../types';
+import type { Subscriber } from 'rxjs';
+import { Observable, map, startWith, switchMap } from 'rxjs';
 import { getTrackByIdentifier } from '../components/mediaTrack';
-import { TrackReferenceOrPlaceholder } from '../track-reference';
+import { allParticipantEvents, allParticipantRoomEvents } from '../helper/eventGroups';
+import type { TrackReferenceOrPlaceholder } from '../track-reference';
+import type { TrackIdentifier } from '../types';
+import { observeRoomEvents } from './room';
 
 export function observeParticipantEvents<T extends Participant>(
   participant: T,
@@ -235,7 +236,9 @@ export function connectedParticipantObserver(
   return observable;
 }
 
-export function participantPermissionObserver(participant: Participant) {
+export function participantPermissionObserver(
+  participant: Participant,
+): Observable<ParticipantPermission | undefined> {
   const observer = participantEventSelector(
     participant,
     ParticipantEvent.ParticipantPermissionsChanged,

@@ -154,6 +154,9 @@ importers:
       '@floating-ui/dom':
         specifier: 1.6.3
         version: 1.6.3
+      '@livekit/protocol':
+        specifier: ^1.12.0
+        version: 1.12.0
       email-regex:
         specifier: 5.0.0
         version: 5.0.0
@@ -203,6 +206,9 @@ importers:
       '@livekit/components-core':
         specifier: workspace:*
         version: link:../core
+      '@livekit/protocol':
+        specifier: ^1.12.0
+        version: 1.12.0
       '@react-hook/latest':
         specifier: 1.0.3
         version: 1.0.3(react@18.2.0)
@@ -2800,6 +2806,12 @@ packages:
 
   /@livekit/protocol@1.10.4:
     resolution: {integrity: sha512-7Occ6l5VqjsKsUjpLeVJXJkip4ce22iG9QR/haOkrDXYwGSY+TwCA4ubbJ81aQBt2z0kHVZuaQWdzJSDLI+Kag==}
+    dependencies:
+      '@bufbuild/protobuf': 1.7.2
+    dev: false
+
+  /@livekit/protocol@1.12.0:
+    resolution: {integrity: sha512-AMUWxna4AO/biPaKiu45JYYVHi7sc+sK6pkeNNpqkzL85+eeHkNhkFfENn9YbQKQsVWABkOmcL8p4ZbUjxZkeQ==}
     dependencies:
       '@bufbuild/protobuf': 1.7.2
     dev: false

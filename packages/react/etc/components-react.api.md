@@ -19,7 +19,7 @@ import { LocalVideoTrack } from 'livekit-client';
 import type { MediaDeviceFailure } from 'livekit-client';
 import { Participant } from 'livekit-client';
 import type { ParticipantEvent } from 'livekit-client';
-import { ParticipantPermission } from 'livekit-client/dist/src/proto/livekit_models_pb';
+import type { ParticipantPermission } from '@livekit/protocol';
 import * as React_2 from 'react';
 import type { RemoteAudioTrack } from 'livekit-client';
 import { RemoteParticipant } from 'livekit-client';

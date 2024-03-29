@@ -1,11 +1,5 @@
 # @livekit/components-react
 
-## 3.0.0
-
-### Major Changes
-
-- Revert "Request device permissions when opening menu" due to change in behavior - [#808](https://github.com/livekit/components-js/pull/808) ([@davidzhao](https://github.com/davidzhao))
-
 ## 2.0.4
 
 ### Patch Changes

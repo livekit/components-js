@@ -21,7 +21,7 @@ export interface UseParticipantPermissionsOptions {
 /** @public */
 export function useParticipantPermissions(
   options: UseParticipantPermissionsOptions = {},
-): ParticipantPermission {
+): ParticipantPermission | undefined {
   const p = useEnsureParticipant(options.participant);
   const permissionObserver = React.useMemo(() => participantPermissionObserver(p), [p]);
   const permissions = useObservableState(permissionObserver, p.permissions);

@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.9.2
+
+### Patch Changes
+
+- Update livekit-client to 2.0.10 for Chrome 124 compatibility - [#806](https://github.com/livekit/components-js/pull/806) ([@davidzhao](https://github.com/davidzhao))
+
 ## 0.9.1
 
 ### Patch Changes

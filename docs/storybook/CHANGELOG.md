@@ -1,5 +1,15 @@
 # @livekit/component-docs-storybook
 
+## 1.0.38
+
+### Patch Changes
+
+- Update livekit-client to 2.0.10 for Chrome 124 compatibility - [#806](https://github.com/livekit/components-js/pull/806) ([@davidzhao](https://github.com/davidzhao))
+
+- Updated dependencies [[`614ba929468d0de124374f50a584412f53ece56b`](https://github.com/livekit/components-js/commit/614ba929468d0de124374f50a584412f53ece56b), [`24de53696cd6c90cf32f0e35d3b64d6b20d8dc5b`](https://github.com/livekit/components-js/commit/24de53696cd6c90cf32f0e35d3b64d6b20d8dc5b), [`30882e2b55652511945dbf5d6a55fe54f7c4f158`](https://github.com/livekit/components-js/commit/30882e2b55652511945dbf5d6a55fe54f7c4f158)]:
+  - @livekit/components-react@2.0.4
+  - @livekit/components-styles@1.0.11
+
 ## 1.0.37
 
 ### Patch Changes

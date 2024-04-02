@@ -133,7 +133,7 @@ export function requiredPlaceholders<T extends SourcesArray>(
 
     participants.forEach((participant) => {
       const sourcesOfSubscribedTracks = participant
-        .getTrackPublications()
+        .getTracks()
         .map((pub) => pub.track?.source)
         .filter((trackSource): trackSource is Track.Source => trackSource !== undefined);
       const placeholderNeededForThisParticipant = Array.from(

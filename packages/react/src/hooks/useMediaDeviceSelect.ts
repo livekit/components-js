@@ -40,9 +40,9 @@ export interface UseMediaDeviceSelectProps {
  */
 export function useMediaDeviceSelect({
   kind,
+  room,
   track,
   requestPermissions,
-  room,
   onError,
 }: UseMediaDeviceSelectProps) {
   const roomContext = useMaybeRoomContext();

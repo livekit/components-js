@@ -1,6 +1,7 @@
-import * as React from 'react';
-import type { Participant } from 'livekit-client';
 import { participantPermissionObserver } from '@livekit/components-core';
+import type { ParticipantPermission } from '@livekit/protocol';
+import type { Participant } from 'livekit-client';
+import * as React from 'react';
 import { useEnsureParticipant } from '../context';
 import { useObservableState } from './internal/useObservableState';
 
@@ -18,7 +19,9 @@ export interface UseParticipantPermissionsOptions {
 }
 
 /** @public */
-export function useParticipantPermissions(options: UseParticipantPermissionsOptions = {}) {
+export function useParticipantPermissions(
+  options: UseParticipantPermissionsOptions = {},
+): ParticipantPermission | undefined {
   const p = useEnsureParticipant(options.participant);
   const permissionObserver = React.useMemo(() => participantPermissionObserver(p), [p]);
   const permissions = useObservableState(permissionObserver, p.permissions);

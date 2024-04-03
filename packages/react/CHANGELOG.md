@@ -1,5 +1,22 @@
 # @livekit/components-react
 
+## 2.0.5
+
+### Patch Changes
+
+- Revert "Request device permissions when opening menu" due to change in behavior - [#810](https://github.com/livekit/components-js/pull/810) ([@davidzhao](https://github.com/davidzhao))
+
+## 2.0.4
+
+### Patch Changes
+
+- Request device permissions when opening media device menu - [#800](https://github.com/livekit/components-js/pull/800) ([@lukasIO](https://github.com/lukasIO))
+
+- Update livekit-client to 2.0.10 for Chrome 124 compatibility - [#806](https://github.com/livekit/components-js/pull/806) ([@davidzhao](https://github.com/davidzhao))
+
+- Updated dependencies [[`24de53696cd6c90cf32f0e35d3b64d6b20d8dc5b`](https://github.com/livekit/components-js/commit/24de53696cd6c90cf32f0e35d3b64d6b20d8dc5b)]:
+  - @livekit/components-core@0.9.2
+
 ## 2.0.3
 
 ### Patch Changes

@@ -25,6 +25,14 @@
     }
   }
 
+  /* apply accent color (blue) to screen share button, when screen sharing is active */
+  &[data-source='screen_share'][data-enabled='true'] {
+    background-color: var(--accent-bg);
+    &:hover {
+      background-color: var(--accent2);
+    }
+  }
+
   &:disabled {
     opacity: 0.5;
   }

@@ -19,7 +19,7 @@ import { Observable } from 'rxjs';
 import type { Participant } from 'livekit-client';
 import { ParticipantEvent } from 'livekit-client';
 import type { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
-import { ParticipantPermission } from 'livekit-client/dist/src/proto/livekit_models_pb';
+import type { ParticipantPermission } from '@livekit/protocol';
 import { RemoteParticipant } from 'livekit-client';
 import { Room } from 'livekit-client';
 import { RoomEvent } from 'livekit-client';

@@ -1,7 +1,7 @@
 import { createMediaDeviceObserver, setupDeviceSelector, log } from '@livekit/components-core';
 import type { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureRoom } from '../context';
+import { useEnsureRoom, useMaybeRoomContext } from '../context';
 import { useObservableState } from './internal';
 
 /** @public */
@@ -40,12 +40,12 @@ export interface UseMediaDeviceSelectProps {
  */
 export function useMediaDeviceSelect({
   kind,
-  room,
   track,
   requestPermissions,
+  room,
   onError,
 }: UseMediaDeviceSelectProps) {
-  const roomContext = useEnsureRoom(room);
+  const roomContext = useMaybeRoomContext();
   // List of all devices.
   const deviceObserver = React.useMemo(
     () => createMediaDeviceObserver(kind, onError, requestPermissions),
@@ -55,8 +55,8 @@ export function useMediaDeviceSelect({
   // Active device management.
   const [currentDeviceId, setCurrentDeviceId] = React.useState<string>('');
   const { className, activeDeviceObservable, setActiveMediaDevice } = React.useMemo(
-    () => setupDeviceSelector(kind, roomContext, track),
-    [kind, roomContext, track],
+    () => setupDeviceSelector(kind, room ?? roomContext, track),
+    [kind, room, roomContext, track],
   );
 
   React.useEffect(() => {

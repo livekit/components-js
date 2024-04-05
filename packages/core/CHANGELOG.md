@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.9.3
+
+### Patch Changes
+
+- Fix participant info observer - [#822](https://github.com/livekit/components-js/pull/822) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.9.2
 
 ### Patch Changes

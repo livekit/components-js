@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 2.0.6
+
+### Patch Changes
+
+- Request device permissions when opening media device menu - [#820](https://github.com/livekit/components-js/pull/820) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`8c4e196adfe0f85e9eef5d6045eeda19d78a8e03`](https://github.com/livekit/components-js/commit/8c4e196adfe0f85e9eef5d6045eeda19d78a8e03)]:
+  - @livekit/components-core@0.9.3
+
 ## 2.0.5
 
 ### Patch Changes

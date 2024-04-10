@@ -1,36 +1,19 @@
-# LiveKit Components **React**
+# LiveKit Components **React Native**
 
-A LiveKit Components implementation in [React](https://reactjs.org/).
+LiveKit Components React hooks for React Native.
 
 <!--NAV_START-->
-
-## Monorepo Navigation
-
-- [Home](../../README.md)
-- **Framework Implementations**:
-  - [React 👈](../../packages/react/README.md)
-- **Examples**
-  - [Next.js](../../examples/nextjs/README.md)
-- **Internal Packages**
-  - [Core](../../packages/core/README.md)
-  - [Styles](../../packages/styles/README.md)
 
 <!--NAV_END-->
 
 ## Install
 
 ```bash
-npm install @livekit/components-react
+npm install @livekit/components-react-native
 ```
 
 ## Usage
 
 ```tsx
-import { LiveKitRoom } from '@livekit/components-react';
-
-<LiveKitRoom token="<livekit-token>" serverUrl="<url-to-livekit-server>" connect={true} />;
+import { useLiveKitRoom } from '@livekit/components-react-native';
 ```
-
-## Architecture Overview
-
-![React specific implementation of LiveKit Components](./../../.github/assets/components-react-implementation.png)

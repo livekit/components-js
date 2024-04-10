@@ -9,6 +9,7 @@
     "build:core": "turbo run build --filter=@livekit/components-core...",
     "build:next": "turbo run build --filter=@livekit/component-example-next...",
     "build:react": "turbo run build --filter=@livekit/components-react...",
+    "build:react-native": "turbo run build --filter=@livekit/components-react-native...",
     "build:storybook": "turbo run build --filter=@livekit/component-docs-storybook...",
     "build:styles": "turbo run build --filter=@livekit/components-styles...",
     "dev:next": "turbo run dev --filter=@livekit/component-example-next...",

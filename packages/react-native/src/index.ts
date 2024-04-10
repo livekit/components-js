@@ -19,4 +19,6 @@ export {
   useIsEncrypted,
   useIsMuted,
   useParticipantTracks,
+  useLiveKitRoom,
+  LiveKitRoomProps,
 } from '@livekit/components-react';

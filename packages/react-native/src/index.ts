@@ -21,4 +21,12 @@ export {
   useParticipantTracks,
   useLiveKitRoom,
   LiveKitRoomProps,
+  RoomContext,
+  useRoomContext,
+  ParticipantContext,
+  useParticipantContext,
+  TrackRefContext,
+  useTrackRefContext,
+  useTracks,
+  UseTracksOptions,
 } from '@livekit/components-react';

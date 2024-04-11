@@ -288,6 +288,9 @@ importers:
       livekit-client:
         specifier: ^2.0.10
         version: 2.0.10
+      react-native:
+        specifier: ^0.73.6
+        version: 0.73.6(@babel/core@7.24.4)(@babel/preset-env@7.24.0)(react@18.2.0)
     devDependencies:
       '@types/react':
         specifier: ^18.0.25
@@ -295,9 +298,6 @@ importers:
       eslint-config-lk-custom:
         specifier: ~0.1.1
         version: link:../../tooling/eslint-config-custom
-      jsdom:
-        specifier: ^24.0.0
-        version: 24.0.0
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -11148,7 +11148,7 @@ packages:
       '@jest/environment': 29.7.0
       '@jest/fake-timers': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 20.12.4
+      '@types/node': 18.19.22
       jest-mock: 29.7.0
       jest-util: 29.7.0
     dev: false

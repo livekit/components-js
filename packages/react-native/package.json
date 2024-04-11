@@ -13,16 +13,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
-    },
-    "./hooks": {
-      "types": "./dist/hooks/index.d.ts",
-      "import": "./dist/hooks/index.mjs",
-      "require": "./dist/hooks/index.js"
-    },
-    "./prefabs": {
-      "types": "./dist/prefabs/index.d.ts",
-      "import": "./dist/prefabs/index.mjs",
-      "require": "./dist/prefabs/index.js"
     }
   },
   "main": "dist/index.js",
@@ -45,12 +35,12 @@
     "@livekit/react-native": "^2.0.1",
     "@livekit/protocol": "^1.12.0",
     "livekit-client": "^2.0.10",
-    "react": ">=18"
+    "react": ">=18",
+    "react-native": "^0.73.6"
   },
   "devDependencies": {
     "@types/react": "^18.0.25",
     "eslint-config-lk-custom": "~0.1.1",
-    "jsdom": "^24.0.0",
     "react": "^18.2.0",
     "tsup": "^8.0.0"
   },

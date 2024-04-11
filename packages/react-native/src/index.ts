@@ -29,4 +29,9 @@ export {
   useTrackRefContext,
   useTracks,
   UseTracksOptions,
+  TrackReference,
+  TrackReferenceOrPlaceholder,
+  isTrackReference,
+  useEnsureTrackRef,
+  useTrackMutedIndicator,
 } from '@livekit/components-react';

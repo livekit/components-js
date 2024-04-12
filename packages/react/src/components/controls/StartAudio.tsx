@@ -22,9 +22,15 @@ export interface AllowAudioPlaybackProps extends React.ButtonHTMLAttributes<HTML
  * @see Autoplay policy on MDN web docs: {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices#autoplay_policy}
  * @public
  */
-export function StartAudio({ label = 'Allow Audio', ...props }: AllowAudioPlaybackProps) {
-  const room = useRoomContext();
-  const { mergedProps } = useStartAudio({ room, props });
+export const StartAudio = React.forwardRef<HTMLButtonElement, AllowAudioPlaybackProps>(
+  function StartAudio({ label = 'Allow Audio', ...props }: AllowAudioPlaybackProps, ref) {
+    const room = useRoomContext();
+    const { mergedProps } = useStartAudio({ room, props });
 
-  return <button {...mergedProps}>{label}</button>;
-}
+    return (
+      <button ref={ref} {...mergedProps}>
+        {label}
+      </button>
+    );
+  },
+);

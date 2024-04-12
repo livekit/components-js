@@ -5,14 +5,20 @@ export interface PaginationIndicatorProps {
   currentPage: number;
 }
 
-export function PaginationIndicator({ totalPageCount, currentPage }: PaginationIndicatorProps) {
-  const bubbles = new Array(totalPageCount).fill('').map((_, index) => {
-    if (index + 1 === currentPage) {
-      return <span data-lk-active key={index} />;
-    } else {
-      return <span key={index} />;
-    }
-  });
+export const PaginationIndicator = React.forwardRef<HTMLDivElement, PaginationIndicatorProps>(
+  function PaginationIndicator({ totalPageCount, currentPage }: PaginationIndicatorProps, ref) {
+    const bubbles = new Array(totalPageCount).fill('').map((_, index) => {
+      if (index + 1 === currentPage) {
+        return <span data-lk-active key={index} />;
+      } else {
+        return <span key={index} />;
+      }
+    });
 
-  return <div className="lk-pagination-indicator">{bubbles}</div>;
-}
+    return (
+      <div ref={ref} className="lk-pagination-indicator">
+        {bubbles}
+      </div>
+    );
+  },
+);

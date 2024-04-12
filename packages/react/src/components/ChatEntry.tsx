@@ -33,13 +33,10 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
  * @see `Chat`
  * @public
  */
-export function ChatEntry({
-  entry,
-  hideName = false,
-  hideTimestamp = false,
-  messageFormatter,
-  ...props
-}: ChatEntryProps) {
+export const ChatEntry = React.forwardRef<HTMLLIElement, ChatEntryProps>(function ChatEntry(
+  { entry, hideName = false, hideTimestamp = false, messageFormatter, ...props }: ChatEntryProps,
+  ref,
+) {
   const formattedMessage = React.useMemo(() => {
     return messageFormatter ? messageFormatter(entry.message) : entry.message;
   }, [entry.message, messageFormatter]);
@@ -49,6 +46,7 @@ export function ChatEntry({
 
   return (
     <li
+      ref={ref}
       className="lk-chat-entry"
       title={time.toLocaleTimeString(locale, { timeStyle: 'full' })}
       data-lk-message-origin={entry.from?.isLocal ? 'local' : 'remote'}
@@ -74,7 +72,7 @@ export function ChatEntry({
       <span className="lk-message-body">{formattedMessage}</span>
     </li>
   );
-}
+});
 
 /** @public */
 export function formatChatMessageLinks(message: string): React.ReactNode {

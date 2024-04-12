@@ -21,40 +21,42 @@ import { isTrackReference } from '@livekit/components-core';
  * ```
  * @public
  */
-export function ParticipantAudioTile({
-  children,
-  disableSpeakingIndicator,
-  onParticipantClick,
-  trackRef,
-  ...htmlProps
-}: ParticipantTileProps) {
-  const trackReference = useEnsureTrackRef(trackRef);
-  const { elementProps } = useParticipantTile({
-    trackRef: trackReference,
-    htmlProps,
+export const ParticipantAudioTile = React.forwardRef<HTMLDivElement, ParticipantTileProps>(
+  function ParticipantAudioTile({
+    children,
     disableSpeakingIndicator,
     onParticipantClick,
-  });
+    trackRef,
+    ...htmlProps
+  }: ParticipantTileProps) {
+    const trackReference = useEnsureTrackRef(trackRef);
+    const { elementProps } = useParticipantTile({
+      trackRef: trackReference,
+      htmlProps,
+      disableSpeakingIndicator,
+      onParticipantClick,
+    });
 
-  return (
-    <div style={{ position: 'relative' }} {...elementProps}>
-      <TrackRefContext.Provider value={trackReference}>
-        {children ?? (
-          <>
-            {isTrackReference(trackReference) && (
-              <AudioTrack trackRef={trackReference}></AudioTrack>
-            )}
-            <AudioVisualizer />
-            <div className="lk-participant-metadata">
-              <div className="lk-participant-metadata-item">
-                <TrackMutedIndicator trackRef={trackReference}></TrackMutedIndicator>
-                <ParticipantName />
+    return (
+      <div style={{ position: 'relative' }} {...elementProps}>
+        <TrackRefContext.Provider value={trackReference}>
+          {children ?? (
+            <>
+              {isTrackReference(trackReference) && (
+                <AudioTrack trackRef={trackReference}></AudioTrack>
+              )}
+              <AudioVisualizer />
+              <div className="lk-participant-metadata">
+                <div className="lk-participant-metadata-item">
+                  <TrackMutedIndicator trackRef={trackReference}></TrackMutedIndicator>
+                  <ParticipantName />
+                </div>
+                <ConnectionQualityIndicator className="lk-participant-metadata-item" />
               </div>
-              <ConnectionQualityIndicator className="lk-participant-metadata-item" />
-            </div>
-          </>
-        )}
-      </TrackRefContext.Provider>
-    </div>
-  );
-}
+            </>
+          )}
+        </TrackRefContext.Provider>
+      </div>
+    );
+  },
+);

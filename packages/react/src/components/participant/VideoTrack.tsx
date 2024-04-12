@@ -4,6 +4,7 @@ import { useMediaTrackBySourceOrName } from '../../hooks/useMediaTrackBySourceOr
 import type { ParticipantClickEvent, TrackReference } from '@livekit/components-core';
 import { useEnsureTrackRef } from '../../context';
 import * as useHooks from 'usehooks-ts';
+import { useForwardedRef } from '../../utils';
 
 /** @public */
 export interface VideoTrackProps extends React.VideoHTMLAttributes<HTMLVideoElement> {
@@ -25,14 +26,17 @@ export interface VideoTrackProps extends React.VideoHTMLAttributes<HTMLVideoElem
  * @see {@link @livekit/components-react#ParticipantTile | ParticipantTile}
  * @public
  */
-export function VideoTrack({
-  onTrackClick,
-  onClick,
-  onSubscriptionStatusChanged,
-  trackRef,
-  manageSubscription,
-  ...props
-}: VideoTrackProps) {
+export const VideoTrack = React.forwardRef<HTMLVideoElement, VideoTrackProps>(function VideoTrack(
+  {
+    onTrackClick,
+    onClick,
+    onSubscriptionStatusChanged,
+    trackRef,
+    manageSubscription,
+    ...props
+  }: VideoTrackProps,
+  ref,
+) {
   const trackReference = useEnsureTrackRef(trackRef);
 
   const mediaEl = React.useRef<HTMLVideoElement>(null);
@@ -62,12 +66,14 @@ export function VideoTrack({
     }
   }, [intersectionEntry, trackReference, manageSubscription]);
 
+  const mediaElRef = useForwardedRef(ref);
+
   const {
     elementProps,
     publication: pub,
     isSubscribed,
   } = useMediaTrackBySourceOrName(trackReference, {
-    element: mediaEl,
+    element: mediaElRef,
     props,
   });
 
@@ -80,5 +86,5 @@ export function VideoTrack({
     onTrackClick?.({ participant: trackReference?.participant, track: pub });
   };
 
-  return <video ref={mediaEl} {...elementProps} muted={true} onClick={clickHandler}></video>;
-}
+  return <video ref={ref} {...elementProps} muted={true} onClick={clickHandler}></video>;
+});

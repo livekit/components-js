@@ -17,15 +17,14 @@ export interface ChatToggleProps extends React.ButtonHTMLAttributes<HTMLButtonEl
  * ```
  * @public
  */
-export const ChatToggle = React.forwardRef<HTMLButtonElement, ChatToggleProps>(function ChatToggle(
-  props: ChatToggleProps,
-  ref,
-) {
-  const { mergedProps } = useChatToggle({ props });
+export const ChatToggle = /* @__PURE__ */ React.forwardRef<HTMLButtonElement, ChatToggleProps>(
+  function ChatToggle(props: ChatToggleProps, ref) {
+    const { mergedProps } = useChatToggle({ props });
 
-  return (
-    <button ref={ref} {...mergedProps}>
-      {props.children}
-    </button>
-  );
-});
+    return (
+      <button ref={ref} {...mergedProps}>
+        {props.children}
+      </button>
+    );
+  },
+);

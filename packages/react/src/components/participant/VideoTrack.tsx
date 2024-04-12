@@ -26,65 +26,67 @@ export interface VideoTrackProps extends React.VideoHTMLAttributes<HTMLVideoElem
  * @see {@link @livekit/components-react#ParticipantTile | ParticipantTile}
  * @public
  */
-export const VideoTrack = React.forwardRef<HTMLVideoElement, VideoTrackProps>(function VideoTrack(
-  {
-    onTrackClick,
-    onClick,
-    onSubscriptionStatusChanged,
-    trackRef,
-    manageSubscription,
-    ...props
-  }: VideoTrackProps,
-  ref,
-) {
-  const trackReference = useEnsureTrackRef(trackRef);
+export const VideoTrack = /* @__PURE__ */ React.forwardRef<HTMLVideoElement, VideoTrackProps>(
+  function VideoTrack(
+    {
+      onTrackClick,
+      onClick,
+      onSubscriptionStatusChanged,
+      trackRef,
+      manageSubscription,
+      ...props
+    }: VideoTrackProps,
+    ref,
+  ) {
+    const trackReference = useEnsureTrackRef(trackRef);
 
-  const mediaEl = React.useRef<HTMLVideoElement>(null);
+    const mediaEl = React.useRef<HTMLVideoElement>(null);
 
-  const intersectionEntry = useHooks.useIntersectionObserver(mediaEl, {});
+    const intersectionEntry = useHooks.useIntersectionObserver(mediaEl, {});
 
-  const debouncedIntersectionEntry = useHooks.useDebounce(intersectionEntry, 3000);
+    const debouncedIntersectionEntry = useHooks.useDebounce(intersectionEntry, 3000);
 
-  React.useEffect(() => {
-    if (
-      manageSubscription &&
-      trackReference.publication instanceof RemoteTrackPublication &&
-      debouncedIntersectionEntry?.isIntersecting === false &&
-      intersectionEntry?.isIntersecting === false
-    ) {
-      trackReference.publication.setSubscribed(false);
-    }
-  }, [debouncedIntersectionEntry, trackReference, manageSubscription]);
+    React.useEffect(() => {
+      if (
+        manageSubscription &&
+        trackReference.publication instanceof RemoteTrackPublication &&
+        debouncedIntersectionEntry?.isIntersecting === false &&
+        intersectionEntry?.isIntersecting === false
+      ) {
+        trackReference.publication.setSubscribed(false);
+      }
+    }, [debouncedIntersectionEntry, trackReference, manageSubscription]);
 
-  React.useEffect(() => {
-    if (
-      manageSubscription &&
-      trackReference.publication instanceof RemoteTrackPublication &&
-      intersectionEntry?.isIntersecting === true
-    ) {
-      trackReference.publication.setSubscribed(true);
-    }
-  }, [intersectionEntry, trackReference, manageSubscription]);
+    React.useEffect(() => {
+      if (
+        manageSubscription &&
+        trackReference.publication instanceof RemoteTrackPublication &&
+        intersectionEntry?.isIntersecting === true
+      ) {
+        trackReference.publication.setSubscribed(true);
+      }
+    }, [intersectionEntry, trackReference, manageSubscription]);
 
-  const mediaElRef = useForwardedRef(ref);
+    const mediaElRef = useForwardedRef(ref);
 
-  const {
-    elementProps,
-    publication: pub,
-    isSubscribed,
-  } = useMediaTrackBySourceOrName(trackReference, {
-    element: mediaElRef,
-    props,
-  });
+    const {
+      elementProps,
+      publication: pub,
+      isSubscribed,
+    } = useMediaTrackBySourceOrName(trackReference, {
+      element: mediaElRef,
+      props,
+    });
 
-  React.useEffect(() => {
-    onSubscriptionStatusChanged?.(!!isSubscribed);
-  }, [isSubscribed, onSubscriptionStatusChanged]);
+    React.useEffect(() => {
+      onSubscriptionStatusChanged?.(!!isSubscribed);
+    }, [isSubscribed, onSubscriptionStatusChanged]);
 
-  const clickHandler = (evt: React.MouseEvent<HTMLVideoElement, MouseEvent>) => {
-    onClick?.(evt);
-    onTrackClick?.({ participant: trackReference?.participant, track: pub });
-  };
+    const clickHandler = (evt: React.MouseEvent<HTMLVideoElement, MouseEvent>) => {
+      onClick?.(evt);
+      onTrackClick?.({ participant: trackReference?.participant, track: pub });
+    };
 
-  return <video ref={ref} {...elementProps} muted={true} onClick={clickHandler}></video>;
-});
+    return <video ref={ref} {...elementProps} muted={true} onClick={clickHandler}></video>;
+  },
+);

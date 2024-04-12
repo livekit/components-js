@@ -18,44 +18,45 @@ export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
  * ```
  * @public
  */
-export const AudioVisualizer = React.forwardRef<SVGSVGElement, AudioVisualizerProps>(
-  function AudioVisualizer({ trackRef, ...props }: AudioVisualizerProps, ref) {
-    const svgWidth = 200;
-    const svgHeight = 90;
-    const barWidth = 6;
-    const barSpacing = 4;
-    const volMultiplier = 50;
-    const barCount = 7;
-    const trackReference = useEnsureTrackRef(trackRef);
+export const AudioVisualizer = /* @__PURE__ */ React.forwardRef<
+  SVGSVGElement,
+  AudioVisualizerProps
+>(function AudioVisualizer({ trackRef, ...props }: AudioVisualizerProps, ref) {
+  const svgWidth = 200;
+  const svgHeight = 90;
+  const barWidth = 6;
+  const barSpacing = 4;
+  const volMultiplier = 50;
+  const barCount = 7;
+  const trackReference = useEnsureTrackRef(trackRef);
 
-    const volumes = useMultibandTrackVolume(trackReference, { bands: 7, loPass: 300 });
+  const volumes = useMultibandTrackVolume(trackReference, { bands: 7, loPass: 300 });
 
-    return (
-      <svg
-        ref={ref}
-        width="100%"
-        height="100%"
-        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-        {...props}
-        className="lk-audio-visualizer"
+  return (
+    <svg
+      ref={ref}
+      width="100%"
+      height="100%"
+      viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+      {...props}
+      className="lk-audio-visualizer"
+    >
+      <rect x="0" y="0" width="100%" height="100%" />
+      <g
+        style={{
+          transform: `translate(${(svgWidth - barCount * (barWidth + barSpacing)) / 2}px, 0)`,
+        }}
       >
-        <rect x="0" y="0" width="100%" height="100%" />
-        <g
-          style={{
-            transform: `translate(${(svgWidth - barCount * (barWidth + barSpacing)) / 2}px, 0)`,
-          }}
-        >
-          {volumes.map((vol, idx) => (
-            <rect
-              key={idx}
-              x={idx * (barWidth + barSpacing)}
-              y={svgHeight / 2 - (vol * volMultiplier) / 2}
-              width={barWidth}
-              height={vol * volMultiplier}
-            ></rect>
-          ))}
-        </g>
-      </svg>
-    );
-  },
-);
+        {volumes.map((vol, idx) => (
+          <rect
+            key={idx}
+            x={idx * (barWidth + barSpacing)}
+            y={svgHeight / 2 - (vol * volMultiplier) / 2}
+            width={barWidth}
+            height={vol * volMultiplier}
+          ></rect>
+        ))}
+      </g>
+    </svg>
+  );
+});

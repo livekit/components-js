@@ -36,10 +36,9 @@ export interface TrackToggleProps<T extends ToggleSource>
  * ```
  * @public
  */
-export const TrackToggle = React.forwardRef(function TrackToggle<T extends ToggleSource>(
-  { showIcon, ...props }: TrackToggleProps<T>,
-  ref: React.ForwardedRef<HTMLButtonElement>,
-) {
+export const TrackToggle = /* @__PURE__ */ React.forwardRef(function TrackToggle<
+  T extends ToggleSource,
+>({ showIcon, ...props }: TrackToggleProps<T>, ref: React.ForwardedRef<HTMLButtonElement>) {
   const { buttonProps, enabled } = useTrackToggle(props);
   return (
     <button ref={ref} {...buttonProps}>

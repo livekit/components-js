@@ -22,7 +22,7 @@ export interface FocusToggleProps extends React.ButtonHTMLAttributes<HTMLButtonE
  * ```
  * @public
  */
-export const FocusToggle = React.forwardRef<HTMLButtonElement, FocusToggleProps>(
+export const FocusToggle = /* @__PURE__ */ React.forwardRef<HTMLButtonElement, FocusToggleProps>(
   function FocusToggle({ trackRef, ...props }: FocusToggleProps, ref) {
     const trackRefFromContext = useMaybeTrackRefContext();
 

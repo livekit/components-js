@@ -11,14 +11,15 @@ export interface SettingsMenuToggleProps extends React.ButtonHTMLAttributes<HTML
  *
  * @alpha
  */
-export const SettingsMenuToggle = React.forwardRef<HTMLButtonElement, SettingsMenuToggleProps>(
-  function SettingsMenuToggle(props: SettingsMenuToggleProps, ref) {
-    const { mergedProps } = useSettingsToggle({ props });
+export const SettingsMenuToggle = /* @__PURE__ */ React.forwardRef<
+  HTMLButtonElement,
+  SettingsMenuToggleProps
+>(function SettingsMenuToggle(props: SettingsMenuToggleProps, ref) {
+  const { mergedProps } = useSettingsToggle({ props });
 
-    return (
-      <button ref={ref} {...mergedProps}>
-        {props.children}
-      </button>
-    );
-  },
-);
+  return (
+    <button ref={ref} {...mergedProps}>
+      {props.children}
+    </button>
+  );
+});

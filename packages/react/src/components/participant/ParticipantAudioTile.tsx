@@ -24,13 +24,16 @@ import { isTrackReference } from '@livekit/components-core';
 export const ParticipantAudioTile = /* @__PURE__ */ React.forwardRef<
   HTMLDivElement,
   ParticipantTileProps
->(function ParticipantAudioTile({
-  children,
-  disableSpeakingIndicator,
-  onParticipantClick,
-  trackRef,
-  ...htmlProps
-}: ParticipantTileProps) {
+>(function ParticipantAudioTile(
+  {
+    children,
+    disableSpeakingIndicator,
+    onParticipantClick,
+    trackRef,
+    ...htmlProps
+  }: ParticipantTileProps,
+  ref,
+) {
   const trackReference = useEnsureTrackRef(trackRef);
   const { elementProps } = useParticipantTile({
     trackRef: trackReference,
@@ -40,7 +43,7 @@ export const ParticipantAudioTile = /* @__PURE__ */ React.forwardRef<
   });
 
   return (
-    <div style={{ position: 'relative' }} {...elementProps}>
+    <div ref={ref} style={{ position: 'relative' }} {...elementProps}>
       <TrackRefContext.Provider value={trackReference}>
         {children ?? (
           <>

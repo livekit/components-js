@@ -20,7 +20,6 @@ export {
   useIsMuted,
   useParticipantTracks,
   useLiveKitRoom,
-  LiveKitRoomProps,
   RoomContext,
   useRoomContext,
   ParticipantContext,
@@ -35,3 +34,5 @@ export {
   useEnsureTrackRef,
   useTrackMutedIndicator,
 } from '@livekit/components-react';
+
+export { LiveKitRoom, LiveKitRoomProps } from './components/LiveKitRoom';

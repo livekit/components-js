@@ -154,3 +154,52 @@ export const useMultibandTrackVolume = (
 
   return frequencyBands;
 };
+
+/**
+ * @alpha
+ */
+export interface AudioWaveformOptions {
+  analyserOptions?: AnalyserOptions;
+}
+
+const waveformDefaults = {
+  analyserOptions: { fftSize: 2048 },
+} as const satisfies AudioWaveformOptions;
+
+/**
+ * @alpha
+ */
+export const useAudioWaveform = (
+  onUpdate: (waveform: Float32Array) => void,
+  trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder,
+  options: AudioWaveformOptions = {},
+) => {
+  const track =
+    trackOrTrackReference instanceof Track
+      ? trackOrTrackReference
+      : <LocalAudioTrack | RemoteAudioTrack | undefined>trackOrTrackReference?.publication?.track;
+  const opts = { ...waveformDefaults, ...options };
+
+  React.useEffect(() => {
+    if (!track || !track?.mediaStream) {
+      return;
+    }
+    const { analyser, cleanup } = createAudioAnalyser(track, opts.analyserOptions);
+
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Float32Array(bufferLength);
+
+    const update = () => {
+      updateWaveform = requestAnimationFrame(update);
+      analyser.getFloatTimeDomainData(dataArray);
+      onUpdate(dataArray);
+    };
+
+    let updateWaveform = requestAnimationFrame(update);
+
+    return () => {
+      cleanup();
+      cancelAnimationFrame(updateWaveform);
+    };
+  }, [track, track?.mediaStream, JSON.stringify(options), onUpdate]);
+};

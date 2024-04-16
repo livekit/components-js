@@ -5,11 +5,12 @@ import { ParticipantName } from './ParticipantName';
 import { TrackMutedIndicator } from './TrackMutedIndicator';
 import { TrackRefContext, useEnsureTrackRef } from '../../context';
 
-import { AudioVisualizer } from './AudioVisualizer';
 import type { ParticipantTileProps } from './ParticipantTile';
 import { AudioTrack } from './AudioTrack';
 import { useParticipantTile } from '../../hooks';
 import { isTrackReference } from '@livekit/components-core';
+import { AudioWaveVisualizer } from './AudioWaveVisualizer';
+import { AudioVisualizer } from './AudioVisualizer';
 
 /**
  * The `ParticipantAudioTile` component is the base utility wrapper for displaying a visual representation of a participant.

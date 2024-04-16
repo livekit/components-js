@@ -160,10 +160,12 @@ export const useMultibandTrackVolume = (
  */
 export interface AudioWaveformOptions {
   analyserOptions?: AnalyserOptions;
+  aggregateTime?: number;
 }
 
 const waveformDefaults = {
   analyserOptions: { fftSize: 2048 },
+  aggregateTime: 100,
 } as const satisfies AudioWaveformOptions;
 
 /**
@@ -180,6 +182,10 @@ export const useAudioWaveform = (
       : <LocalAudioTrack | RemoteAudioTrack | undefined>trackOrTrackReference?.publication?.track;
   const opts = { ...waveformDefaults, ...options };
 
+  const aggregateWave = React.useRef(new Float32Array(options.analyserOptions!.fftSize!));
+  const timeRef = React.useRef(performance.now());
+  const updates = React.useRef(0);
+
   React.useEffect(() => {
     if (!track || !track?.mediaStream) {
       return;
@@ -192,7 +198,15 @@ export const useAudioWaveform = (
     const update = () => {
       updateWaveform = requestAnimationFrame(update);
       analyser.getFloatTimeDomainData(dataArray);
-      onUpdate(dataArray);
+      aggregateWave.current.map((v, i) => v + dataArray[i]);
+      updates.current += 1;
+
+      if (performance.now() - timeRef.current >= opts.aggregateTime) {
+        const newData = dataArray.map((v) => v / updates.current);
+        onUpdate(newData);
+        timeRef.current = performance.now();
+        updates.current = 0;
+      }
     };
 
     let updateWaveform = requestAnimationFrame(update);

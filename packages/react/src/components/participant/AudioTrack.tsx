@@ -36,51 +36,51 @@ export interface AudioTrackProps extends React.AudioHTMLAttributes<HTMLAudioElem
  * @see `ParticipantTile` component
  * @public
  */
-export function AudioTrack({
-  trackRef,
-  onSubscriptionStatusChanged,
-  volume,
-  ...props
-}: AudioTrackProps) {
-  const trackReference = useEnsureTrackRef(trackRef);
+export const AudioTrack = /* @__PURE__ */ React.forwardRef<HTMLAudioElement, AudioTrackProps>(
+  function AudioTrack(
+    { trackRef, onSubscriptionStatusChanged, volume, ...props }: AudioTrackProps,
+    ref,
+  ) {
+    const trackReference = useEnsureTrackRef(trackRef);
 
-  const mediaEl = React.useRef<HTMLAudioElement>(null);
+    const mediaEl = React.useRef<HTMLAudioElement>(null);
 
-  const {
-    elementProps,
-    isSubscribed,
-    track,
-    publication: pub,
-  } = useMediaTrackBySourceOrName(trackReference, {
-    element: mediaEl,
-    props,
-  });
+    const {
+      elementProps,
+      isSubscribed,
+      track,
+      publication: pub,
+    } = useMediaTrackBySourceOrName(trackReference, {
+      element: mediaEl,
+      props,
+    });
 
-  React.useEffect(() => {
-    onSubscriptionStatusChanged?.(!!isSubscribed);
-  }, [isSubscribed, onSubscriptionStatusChanged]);
+    React.useEffect(() => {
+      onSubscriptionStatusChanged?.(!!isSubscribed);
+    }, [isSubscribed, onSubscriptionStatusChanged]);
 
-  React.useEffect(() => {
-    if (track === undefined || volume === undefined) {
-      return;
-    }
-    if (track instanceof RemoteAudioTrack) {
-      track.setVolume(volume);
-    } else {
-      log.warn('Volume can only be set on remote audio tracks.');
-    }
-  }, [volume, track]);
+    React.useEffect(() => {
+      if (track === undefined || volume === undefined) {
+        return;
+      }
+      if (track instanceof RemoteAudioTrack) {
+        track.setVolume(volume);
+      } else {
+        log.warn('Volume can only be set on remote audio tracks.');
+      }
+    }, [volume, track]);
 
-  React.useEffect(() => {
-    if (pub === undefined || props.muted === undefined) {
-      return;
-    }
-    if (pub instanceof RemoteTrackPublication) {
-      pub.setEnabled(!props.muted);
-    } else {
-      log.warn('Can only call setEnabled on remote track publications.');
-    }
-  }, [props.muted, pub, track]);
+    React.useEffect(() => {
+      if (pub === undefined || props.muted === undefined) {
+        return;
+      }
+      if (pub instanceof RemoteTrackPublication) {
+        pub.setEnabled(!props.muted);
+      } else {
+        log.warn('Can only call setEnabled on remote track publications.');
+      }
+    }, [props.muted, pub, track]);
 
-  return <audio ref={mediaEl} {...elementProps} />;
-}
+    return <audio ref={ref} {...elementProps} />;
+  },
+);

@@ -22,7 +22,14 @@ export interface ConnectionStatusProps extends React.HTMLAttributes<HTMLDivEleme
  * ```
  * @public
  */
-export function ConnectionState({ room, ...props }: ConnectionStatusProps) {
+export const ConnectionState = /* @__PURE__ */ React.forwardRef<
+  HTMLDivElement,
+  ConnectionStatusProps
+>(function ConnectionState({ room, ...props }: ConnectionStatusProps, ref) {
   const connectionState = useConnectionState(room);
-  return <div {...props}>{connectionState}</div>;
-}
+  return (
+    <div ref={ref} {...props}>
+      {connectionState}
+    </div>
+  );
+});

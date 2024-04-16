@@ -48,7 +48,7 @@ export interface AudioConferenceProps extends React_2.HTMLAttributes<HTMLDivElem
 }
 
 // @public
-export function AudioTrack({ trackRef, onSubscriptionStatusChanged, volume, ...props }: AudioTrackProps): React_2.JSX.Element;
+export const AudioTrack: (props: AudioTrackProps & React_2.RefAttributes<HTMLAudioElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public (undocumented)
 export interface AudioTrackProps extends React_2.AudioHTMLAttributes<HTMLAudioElement> {
@@ -61,7 +61,7 @@ export interface AudioTrackProps extends React_2.AudioHTMLAttributes<HTMLAudioEl
 }
 
 // @public
-export function AudioVisualizer({ trackRef, ...props }: AudioVisualizerProps): React_2.JSX.Element;
+export const AudioVisualizer: (props: AudioVisualizerProps & React_2.RefAttributes<SVGSVGElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public (undocumented)
 export interface AudioVisualizerProps extends React_2.HTMLAttributes<SVGElement> {
@@ -100,7 +100,7 @@ export function Chat({ messageFormatter, messageDecoder, messageEncoder, channel
 export const ChatCloseIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
-export function ChatEntry({ entry, hideName, hideTimestamp, messageFormatter, ...props }: ChatEntryProps): React_2.JSX.Element;
+export const ChatEntry: (props: ChatEntryProps & React_2.RefAttributes<HTMLLIElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public
 export interface ChatEntryProps extends React_2.HTMLAttributes<HTMLLIElement> {
@@ -134,7 +134,7 @@ export interface ChatProps extends React_2.HTMLAttributes<HTMLDivElement>, ChatO
 }
 
 // @public
-export function ChatToggle(props: ChatToggleProps): React_2.JSX.Element;
+export const ChatToggle: (props: ChatToggleProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public (undocumented)
 export interface ChatToggleProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -146,14 +146,14 @@ export interface ChatToggleProps extends React_2.ButtonHTMLAttributes<HTMLButton
 export const Chevron: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
-export function ClearPinButton(props: ClearPinButtonProps): React_2.JSX.Element;
+export const ClearPinButton: (props: ClearPinButtonProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public (undocumented)
 export interface ClearPinButtonProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 // @public
-export function ConnectionQualityIndicator(props: ConnectionQualityIndicatorProps): React_2.JSX.Element;
+export const ConnectionQualityIndicator: (props: ConnectionQualityIndicatorProps & React_2.RefAttributes<HTMLDivElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public (undocumented)
 export interface ConnectionQualityIndicatorOptions {
@@ -166,7 +166,7 @@ export interface ConnectionQualityIndicatorProps extends React_2.HTMLAttributes<
 }
 
 // @public
-export function ConnectionState({ room, ...props }: ConnectionStatusProps): React_2.JSX.Element;
+export const ConnectionState: (props: ConnectionStatusProps & React_2.RefAttributes<HTMLDivElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public
 export function ConnectionStateToast(props: ConnectionStateToastProps): React_2.JSX.Element;
@@ -206,7 +206,7 @@ export interface ControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> 
 }
 
 // @public
-export function DisconnectButton(props: DisconnectButtonProps): React_2.JSX.Element;
+export const DisconnectButton: (props: DisconnectButtonProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public (undocumented)
 export interface DisconnectButtonProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -242,7 +242,7 @@ export interface FocusLayoutProps extends React_2.HTMLAttributes<HTMLElement> {
 }
 
 // @public
-export function FocusToggle({ trackRef, ...props }: FocusToggleProps): React_2.JSX.Element;
+export const FocusToggle: (props: FocusToggleProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // Warning: (ae-internal-missing-underscore) The name "FocusToggleIcon" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -307,7 +307,9 @@ export type LayoutContextType = {
 export const LeaveIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
-export function LiveKitRoom(props: React_2.PropsWithChildren<LiveKitRoomProps>): React_2.JSX.Element;
+export const LiveKitRoom: (props: LiveKitRoomProps & {
+    children?: React_2.ReactNode;
+} & React_2.RefAttributes<HTMLDivElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public (undocumented)
 export interface LiveKitRoomProps extends Omit<React_2.HTMLAttributes<HTMLDivElement>, 'onError'> {
@@ -372,7 +374,7 @@ export interface MediaDeviceMenuProps extends React_2.ButtonHTMLAttributes<HTMLB
 }
 
 // @public
-export function MediaDeviceSelect({ kind, initialSelection, onActiveDeviceChange, onDeviceListChange, onDeviceSelectError, exactMatch, track, requestPermissions, onError, ...props }: MediaDeviceSelectProps): React_2.JSX.Element;
+export const MediaDeviceSelect: (props: MediaDeviceSelectProps & React_2.RefAttributes<HTMLUListElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public (undocumented)
 export interface MediaDeviceSelectProps extends Omit<React_2.HTMLAttributes<HTMLUListElement>, 'onError'> {
@@ -425,7 +427,7 @@ export interface MultiBandTrackVolumeOptions {
 }
 
 // @public
-export function ParticipantAudioTile({ children, disableSpeakingIndicator, onParticipantClick, trackRef, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
+export const ParticipantAudioTile: (props: ParticipantTileProps & React_2.RefAttributes<HTMLDivElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // Warning: (ae-internal-missing-underscore) The name "ParticipantClickEvent" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -455,7 +457,7 @@ export interface ParticipantLoopProps {
 }
 
 // @public
-export function ParticipantName({ participant, ...props }: ParticipantNameProps): React_2.JSX.Element;
+export const ParticipantName: (props: ParticipantNameProps & React_2.RefAttributes<HTMLSpanElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public (undocumented)
 export interface ParticipantNameProps extends React_2.HTMLAttributes<HTMLSpanElement>, UseParticipantInfoOptions {
@@ -467,7 +469,7 @@ export interface ParticipantNameProps extends React_2.HTMLAttributes<HTMLSpanEle
 export const ParticipantPlaceholder: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
-export function ParticipantTile({ trackRef, children, onParticipantClick, disableSpeakingIndicator, ...htmlProps }: ParticipantTileProps): React_2.JSX.Element;
+export const ParticipantTile: (props: ParticipantTileProps & React_2.RefAttributes<HTMLDivElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public (undocumented)
 export interface ParticipantTileProps extends React_2.HTMLAttributes<HTMLDivElement> {
@@ -548,7 +550,7 @@ export interface RoomAudioRendererProps {
 export const RoomContext: React_2.Context<Room | undefined>;
 
 // @public
-export function RoomName({ childrenPosition, children, ...htmlAttributes }: RoomNameProps): React_2.JSX.Element;
+export const RoomName: (props: RoomNameProps & React_2.RefAttributes<HTMLSpanElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public (undocumented)
 export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
@@ -584,7 +586,7 @@ export function setLogLevel(level: LogLevel, options?: SetLogLevelOptions): void
 export const SpinnerIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
-export function StartAudio({ label, ...props }: AllowAudioPlaybackProps): React_2.JSX.Element;
+export const StartAudio: (props: AllowAudioPlaybackProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public
 export function Toast(props: React_2.HTMLAttributes<HTMLDivElement>): React_2.JSX.Element;
@@ -599,7 +601,7 @@ export interface TrackLoopProps {
 }
 
 // @public
-export function TrackMutedIndicator({ trackRef, show, ...props }: TrackMutedIndicatorProps): React_2.JSX.Element | null;
+export const TrackMutedIndicator: (props: TrackMutedIndicatorProps & React_2.RefAttributes<HTMLDivElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public (undocumented)
 export interface TrackMutedIndicatorProps extends React_2.HTMLAttributes<HTMLDivElement> {
@@ -627,7 +629,7 @@ export type TrackReferenceOrPlaceholder = TrackReference | TrackReferencePlaceho
 // Warning: (ae-forgotten-export) The symbol "ToggleSource" needs to be exported by the entry point index.d.ts
 //
 // @public
-export function TrackToggle<T extends ToggleSource>({ showIcon, ...props }: TrackToggleProps<T>): React_2.JSX.Element;
+export const TrackToggle: <T extends ToggleSource>(props: TrackToggleProps<T> & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactElement | null;
 
 // @public (undocumented)
 export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
@@ -1124,7 +1126,7 @@ export interface VideoConferenceProps extends React_2.HTMLAttributes<HTMLDivElem
 }
 
 // @public
-export function VideoTrack({ onTrackClick, onClick, onSubscriptionStatusChanged, trackRef, manageSubscription, ...props }: VideoTrackProps): React_2.JSX.Element;
+export const VideoTrack: (props: VideoTrackProps & React_2.RefAttributes<HTMLVideoElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public (undocumented)
 export interface VideoTrackProps extends React_2.VideoHTMLAttributes<HTMLVideoElement> {

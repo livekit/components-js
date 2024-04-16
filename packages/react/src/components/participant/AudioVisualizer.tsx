@@ -18,7 +18,10 @@ export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
  * ```
  * @public
  */
-export function AudioVisualizer({ trackRef, ...props }: AudioVisualizerProps) {
+export const AudioVisualizer = /* @__PURE__ */ React.forwardRef<
+  SVGSVGElement,
+  AudioVisualizerProps
+>(function AudioVisualizer({ trackRef, ...props }: AudioVisualizerProps, ref) {
   const svgWidth = 200;
   const svgHeight = 90;
   const barWidth = 6;
@@ -31,6 +34,7 @@ export function AudioVisualizer({ trackRef, ...props }: AudioVisualizerProps) {
 
   return (
     <svg
+      ref={ref}
       width="100%"
       height="100%"
       viewBox={`0 0 ${svgWidth} ${svgHeight}`}
@@ -55,4 +59,4 @@ export function AudioVisualizer({ trackRef, ...props }: AudioVisualizerProps) {
       </g>
     </svg>
   );
-}
+});

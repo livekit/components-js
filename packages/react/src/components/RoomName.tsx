@@ -17,18 +17,19 @@ export interface RoomNameProps extends React.HTMLAttributes<HTMLSpanElement> {
  * ```
  * @public
  */
-export function RoomName({
-  childrenPosition = 'before',
-  children,
-  ...htmlAttributes
-}: RoomNameProps) {
-  const { name } = useRoomInfo();
+export const RoomName = /* @__PURE__ */ React.forwardRef<HTMLSpanElement, RoomNameProps>(
+  function RoomName(
+    { childrenPosition = 'before', children, ...htmlAttributes }: RoomNameProps,
+    ref,
+  ) {
+    const { name } = useRoomInfo();
 
-  return (
-    <span {...htmlAttributes}>
-      {childrenPosition === 'before' && children}
-      {name}
-      {childrenPosition === 'after' && children}
-    </span>
-  );
-}
+    return (
+      <span ref={ref} {...htmlAttributes}>
+        {childrenPosition === 'before' && children}
+        {name}
+        {childrenPosition === 'after' && children}
+      </span>
+    );
+  },
+);

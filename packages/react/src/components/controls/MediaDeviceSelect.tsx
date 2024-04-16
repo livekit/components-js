@@ -42,18 +42,24 @@ export interface MediaDeviceSelectProps
  * ```
  * @public
  */
-export function MediaDeviceSelect({
-  kind,
-  initialSelection,
-  onActiveDeviceChange,
-  onDeviceListChange,
-  onDeviceSelectError,
-  exactMatch,
-  track,
-  requestPermissions,
-  onError,
-  ...props
-}: MediaDeviceSelectProps) {
+export const MediaDeviceSelect = /* @__PURE__ */ React.forwardRef<
+  HTMLUListElement,
+  MediaDeviceSelectProps
+>(function MediaDeviceSelect(
+  {
+    kind,
+    initialSelection,
+    onActiveDeviceChange,
+    onDeviceListChange,
+    onDeviceSelectError,
+    exactMatch,
+    track,
+    requestPermissions,
+    onError,
+    ...props
+  }: MediaDeviceSelectProps,
+  ref,
+) {
   const room = useMaybeRoomContext();
   const handleError = React.useCallback(
     (e: Error) => {
@@ -112,7 +118,7 @@ export function MediaDeviceSelect({
   }
 
   return (
-    <ul {...mergedProps}>
+    <ul ref={ref} {...mergedProps}>
       {devices.map((device, index) => (
         <li
           key={device.deviceId}
@@ -128,4 +134,4 @@ export function MediaDeviceSelect({
       ))}
     </ul>
   );
-}
+});

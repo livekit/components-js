@@ -18,10 +18,17 @@ export interface ConnectionQualityIndicatorProps
  * ```
  * @public
  */
-export function ConnectionQualityIndicator(props: ConnectionQualityIndicatorProps) {
+export const ConnectionQualityIndicator = /* @__PURE__ */ React.forwardRef<
+  HTMLDivElement,
+  ConnectionQualityIndicatorProps
+>(function ConnectionQualityIndicator(props: ConnectionQualityIndicatorProps, ref) {
   const { className, quality } = useConnectionQualityIndicator(props);
   const elementProps = React.useMemo(() => {
     return { ...mergeProps(props, { className: className as string }), 'data-lk-quality': quality };
   }, [quality, props, className]);
-  return <div {...elementProps}>{props.children ?? getConnectionQualityIcon(quality)}</div>;
-}
+  return (
+    <div ref={ref} {...elementProps}>
+      {props.children ?? getConnectionQualityIcon(quality)}
+    </div>
+  );
+});

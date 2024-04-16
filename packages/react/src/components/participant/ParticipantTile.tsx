@@ -90,13 +90,19 @@ export interface ParticipantTileProps extends React.HTMLAttributes<HTMLDivElemen
  * ```
  * @public
  */
-export function ParticipantTile({
-  trackRef,
-  children,
-  onParticipantClick,
-  disableSpeakingIndicator,
-  ...htmlProps
-}: ParticipantTileProps) {
+export const ParticipantTile = /* @__PURE__ */ React.forwardRef<
+  HTMLDivElement,
+  ParticipantTileProps
+>(function ParticipantTile(
+  {
+    trackRef,
+    children,
+    onParticipantClick,
+    disableSpeakingIndicator,
+    ...htmlProps
+  }: ParticipantTileProps,
+  ref,
+) {
   const trackReference = useEnsureTrackRef(trackRef);
 
   const { elementProps } = useParticipantTile<HTMLDivElement>({
@@ -126,7 +132,7 @@ export function ParticipantTile({
   );
 
   return (
-    <div style={{ position: 'relative' }} {...elementProps}>
+    <div ref={ref} style={{ position: 'relative' }} {...elementProps}>
       <TrackRefContextIfNeeded trackRef={trackReference}>
         <ParticipantContextIfNeeded participant={trackReference.participant}>
           {children ?? (
@@ -181,4 +187,4 @@ export function ParticipantTile({
       </TrackRefContextIfNeeded>
     </div>
   );
-}
+});

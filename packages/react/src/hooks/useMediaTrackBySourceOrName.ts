@@ -6,7 +6,7 @@ import { mergeProps } from '../utils';
 
 /** @public */
 export interface UseMediaTrackOptions {
-  element?: React.RefObject<HTMLMediaElement>;
+  element?: React.RefObject<HTMLMediaElement> | null;
   props?: React.HTMLAttributes<HTMLVideoElement | HTMLAudioElement>;
 }
 

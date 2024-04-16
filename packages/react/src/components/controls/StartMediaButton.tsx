@@ -22,7 +22,10 @@ export interface AllowMediaPlaybackProps extends React.ButtonHTMLAttributes<HTML
  * @see Autoplay policy on MDN web docs: {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices#autoplay_policy}
  * @public
  */
-export function StartMediaButton({ label, ...props }: AllowMediaPlaybackProps) {
+export const StartMediaButton = /* @__PURE__ */ React.forwardRef<
+  HTMLButtonElement,
+  AllowMediaPlaybackProps
+>(function StartMediaButton({ label, ...props }: AllowMediaPlaybackProps, ref) {
   const room = useRoomContext();
   const { mergedProps: audioProps, canPlayAudio } = useStartAudio({ room, props });
   const { mergedProps, canPlayVideo } = useStartVideo({ room, props: audioProps });
@@ -30,8 +33,8 @@ export function StartMediaButton({ label, ...props }: AllowMediaPlaybackProps) {
   style.display = canPlayAudio && canPlayVideo ? 'none' : 'block';
 
   return (
-    <button style={style} {...restProps}>
+    <button ref={ref} style={style} {...restProps}>
       {label ?? `Start ${!canPlayAudio ? 'Audio' : 'Video'}`}
     </button>
   );
-}
+});

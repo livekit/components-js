@@ -20,7 +20,10 @@ export interface ParticipantNameProps
  * ```
  * @public
  */
-export function ParticipantName({ participant, ...props }: ParticipantNameProps) {
+export const ParticipantName = /* @__PURE__ */ React.forwardRef<
+  HTMLSpanElement,
+  ParticipantNameProps
+>(function ParticipantName({ participant, ...props }: ParticipantNameProps, ref) {
   const p = useEnsureParticipant(participant);
 
   const { className, infoObserver } = React.useMemo(() => {
@@ -38,9 +41,9 @@ export function ParticipantName({ participant, ...props }: ParticipantNameProps)
   }, [props, className, name]);
 
   return (
-    <span {...mergedProps}>
+    <span ref={ref} {...mergedProps}>
       {name !== '' ? name : identity}
       {props.children}
     </span>
   );
-}
+});

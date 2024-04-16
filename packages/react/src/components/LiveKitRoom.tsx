@@ -100,10 +100,13 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
  * ```
  * @public
  */
-export function LiveKitRoom(props: React.PropsWithChildren<LiveKitRoomProps>) {
+export const LiveKitRoom = /* @__PURE__ */ React.forwardRef<
+  HTMLDivElement,
+  React.PropsWithChildren<LiveKitRoomProps>
+>(function LiveKitRoom(props: React.PropsWithChildren<LiveKitRoomProps>, ref) {
   const { room, htmlProps } = useLiveKitRoom(props);
   return (
-    <div {...htmlProps}>
+    <div ref={ref} {...htmlProps}>
       {room && (
         <RoomContext.Provider value={room}>
           <LKFeatureContext.Provider value={props.featureFlags}>
@@ -113,4 +116,4 @@ export function LiveKitRoom(props: React.PropsWithChildren<LiveKitRoomProps>) {
       )}
     </div>
   );
-}
+});

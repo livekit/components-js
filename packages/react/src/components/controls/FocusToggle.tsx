@@ -22,29 +22,31 @@ export interface FocusToggleProps extends React.ButtonHTMLAttributes<HTMLButtonE
  * ```
  * @public
  */
-export function FocusToggle({ trackRef, ...props }: FocusToggleProps) {
-  const trackRefFromContext = useMaybeTrackRefContext();
+export const FocusToggle = /* @__PURE__ */ React.forwardRef<HTMLButtonElement, FocusToggleProps>(
+  function FocusToggle({ trackRef, ...props }: FocusToggleProps, ref) {
+    const trackRefFromContext = useMaybeTrackRefContext();
 
-  const { mergedProps, inFocus } = useFocusToggle({
-    trackRef: trackRef ?? trackRefFromContext,
-    props,
-  });
+    const { mergedProps, inFocus } = useFocusToggle({
+      trackRef: trackRef ?? trackRefFromContext,
+      props,
+    });
 
-  return (
-    <LayoutContext.Consumer>
-      {(layoutContext) =>
-        layoutContext !== undefined && (
-          <button {...mergedProps}>
-            {props.children ? (
-              props.children
-            ) : inFocus ? (
-              <UnfocusToggleIcon />
-            ) : (
-              <FocusToggleIcon />
-            )}
-          </button>
-        )
-      }
-    </LayoutContext.Consumer>
-  );
-}
+    return (
+      <LayoutContext.Consumer>
+        {(layoutContext) =>
+          layoutContext !== undefined && (
+            <button ref={ref} {...mergedProps}>
+              {props.children ? (
+                props.children
+              ) : inFocus ? (
+                <UnfocusToggleIcon />
+              ) : (
+                <FocusToggleIcon />
+              )}
+            </button>
+          )
+        }
+      </LayoutContext.Consumer>
+    );
+  },
+);

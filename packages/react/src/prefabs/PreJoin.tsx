@@ -62,12 +62,13 @@ export function usePreviewTracks(
   const trackLock = new Mutex();
 
   React.useEffect(() => {
-    let trackPromise: Promise<LocalTrack[]> | undefined = undefined;
     let needsCleanup = false;
     trackLock.lock().then((unlock) => {
+      tracks?.forEach((track) => {
+        track.stop();
+      });
       if (options.audio || options.video) {
-        trackPromise = createLocalTracks(options);
-        trackPromise
+        createLocalTracks(options)
           .then((tracks) => {
             if (needsCleanup) {
               tracks.forEach((tr) => tr.stop());

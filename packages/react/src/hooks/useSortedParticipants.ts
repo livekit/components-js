@@ -15,6 +15,6 @@ export function useSortedParticipants(participants: Array<Participant>) {
 
   React.useEffect(() => {
     setSortedParticipants(sortParticipants(participants));
-  }, [activeSpeakers, participants]);
+  }, [activeSpeakers, participants.length]);
   return sortedParticipants;
 }

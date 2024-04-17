@@ -21,6 +21,7 @@ import { ParticipantPlaceholder } from '../assets/images';
 import { useMediaDevices, usePersistentUserChoices } from '../hooks';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 import { defaultUserChoices } from '@livekit/components-core';
+import { Mutex } from '../utils';
 
 /**
  * Props for the PreJoin component.
@@ -58,29 +59,32 @@ export function usePreviewTracks(
 ) {
   const [tracks, setTracks] = React.useState<LocalTrack[]>();
 
+  const trackLock = new Mutex();
+
   React.useEffect(() => {
     let trackPromise: Promise<LocalTrack[]> | undefined = undefined;
     let needsCleanup = false;
-    if (options.audio || options.video) {
-      trackPromise = createLocalTracks(options);
-      trackPromise
-        .then((tracks) => {
-          if (needsCleanup) {
-            tracks.forEach((tr) => tr.stop());
-          } else {
-            setTracks(tracks);
-          }
-        })
-        .catch(onError);
-    }
+    trackLock.lock().then((unlock) => {
+      if (options.audio || options.video) {
+        trackPromise = createLocalTracks(options);
+        trackPromise
+          .then((tracks) => {
+            if (needsCleanup) {
+              tracks.forEach((tr) => tr.stop());
+            } else {
+              setTracks(tracks);
+            }
+          })
+          .catch((e) => (onError ? onError(e) : log.error(e)))
+          .finally(unlock);
+      }
+    });
 
     return () => {
       needsCleanup = true;
-      trackPromise?.then((tracks) =>
-        tracks.forEach((track) => {
-          track.stop();
-        }),
-      );
+      tracks?.forEach((track) => {
+        track.stop();
+      });
     };
   }, [JSON.stringify(options)]);
 

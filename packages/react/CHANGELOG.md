@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.1.1
+
+### Patch Changes
+
+- Fix video rendering, use imperative handle to forward ref - [#831](https://github.com/livekit/components-js/pull/831) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.1.0
 
 ### Minor Changes

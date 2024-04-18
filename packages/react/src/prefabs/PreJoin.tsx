@@ -11,6 +11,7 @@ import {
   facingModeFromLocalTrack,
   Track,
   VideoPresets,
+  Mutex,
 } from 'livekit-client';
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
@@ -58,29 +59,33 @@ export function usePreviewTracks(
 ) {
   const [tracks, setTracks] = React.useState<LocalTrack[]>();
 
+  const trackLock = React.useMemo(() => new Mutex(), []);
+
   React.useEffect(() => {
-    let trackPromise: Promise<LocalTrack[]> | undefined = undefined;
     let needsCleanup = false;
-    if (options.audio || options.video) {
-      trackPromise = createLocalTracks(options);
-      trackPromise
-        .then((tracks) => {
-          if (needsCleanup) {
-            tracks.forEach((tr) => tr.stop());
-          } else {
-            setTracks(tracks);
-          }
-        })
-        .catch(onError);
-    }
+    trackLock.lock().then((unlock) => {
+      tracks?.forEach((track) => {
+        track.stop();
+      });
+      if (options.audio || options.video) {
+        createLocalTracks(options)
+          .then((tracks) => {
+            if (needsCleanup) {
+              tracks.forEach((tr) => tr.stop());
+            } else {
+              setTracks(tracks);
+            }
+          })
+          .catch((e) => (onError ? onError(e) : log.error(e)))
+          .finally(unlock);
+      }
+    });
 
     return () => {
       needsCleanup = true;
-      trackPromise?.then((tracks) =>
-        tracks.forEach((track) => {
-          track.stop();
-        }),
-      );
+      tracks?.forEach((track) => {
+        track.stop();
+      });
     };
   }, [JSON.stringify(options)]);
 

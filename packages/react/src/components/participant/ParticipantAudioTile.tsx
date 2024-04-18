@@ -9,7 +9,6 @@ import type { ParticipantTileProps } from './ParticipantTile';
 import { AudioTrack } from './AudioTrack';
 import { useParticipantTile } from '../../hooks';
 import { isTrackReference } from '@livekit/components-core';
-import { AudioWaveVisualizer } from './AudioWaveVisualizer';
 import { AudioVisualizer } from './AudioVisualizer';
 
 /**

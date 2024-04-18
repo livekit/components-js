@@ -1,6 +1,7 @@
 import type { Room, RoomEvent } from 'livekit-client';
 import { useLocalParticipant } from './useLocalParticipant';
 import { useRemoteParticipants } from './useRemoteParticipants';
+import * as React from 'react';
 
 /** @public */
 export interface UseParticipantsOptions {
@@ -34,5 +35,8 @@ export function useParticipants(options: UseParticipantsOptions = {}) {
   const remoteParticipants = useRemoteParticipants(options);
   const { localParticipant } = useLocalParticipant(options);
 
-  return [localParticipant, ...remoteParticipants];
+  return React.useMemo(
+    () => [localParticipant, ...remoteParticipants],
+    [localParticipant, remoteParticipants],
+  );
 }

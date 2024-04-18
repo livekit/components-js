@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import { PreJoin, setLogLevel } from '@livekit/components-react';
 import type { NextPage } from 'next';

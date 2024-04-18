@@ -11,6 +11,7 @@ import {
   facingModeFromLocalTrack,
   Track,
   VideoPresets,
+  Mutex,
 } from 'livekit-client';
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
@@ -21,7 +22,6 @@ import { ParticipantPlaceholder } from '../assets/images';
 import { useMediaDevices, usePersistentUserChoices } from '../hooks';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 import { defaultUserChoices } from '@livekit/components-core';
-import { Mutex } from '../utils';
 
 /**
  * Props for the PreJoin component.

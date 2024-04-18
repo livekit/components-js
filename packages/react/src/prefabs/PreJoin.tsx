@@ -59,7 +59,7 @@ export function usePreviewTracks(
 ) {
   const [tracks, setTracks] = React.useState<LocalTrack[]>();
 
-  const trackLock = new Mutex();
+  const trackLock = React.useMemo(() => new Mutex(), []);
 
   React.useEffect(() => {
     let needsCleanup = false;

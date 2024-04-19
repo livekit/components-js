@@ -44,6 +44,7 @@ export const AudioTrack = /* @__PURE__ */ React.forwardRef<HTMLAudioElement, Aud
     const trackReference = useEnsureTrackRef(trackRef);
 
     const mediaEl = React.useRef<HTMLAudioElement>(null);
+    React.useImperativeHandle(ref, () => mediaEl.current as HTMLAudioElement);
 
     const {
       elementProps,
@@ -81,6 +82,6 @@ export const AudioTrack = /* @__PURE__ */ React.forwardRef<HTMLAudioElement, Aud
       }
     }, [props.muted, pub, track]);
 
-    return <audio ref={ref} {...elementProps} />;
+    return <audio ref={mediaEl} {...elementProps} />;
   },
 );

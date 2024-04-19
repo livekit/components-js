@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import {
   ConnectionQualityIndicator,
@@ -8,7 +8,7 @@ import {
 import { MockParticipantContext } from '../../../.storybook/lk-decorators';
 import { ConnectionQuality } from 'livekit-client';
 
-export default {
+const Story: Meta<typeof ConnectionQualityIndicator> = {
   /*
    * This is some docs for connection quality
    */
@@ -16,6 +16,7 @@ export default {
   decorators: [MockParticipantContext],
   render: (args: ConnectionQualityIndicatorProps) => <ConnectionQualityIndicator {...args} />,
   argTypes: {
+    // @ts-ignore the arg will be used from within the MockParticipantContext
     connectionQuality: {
       control: { type: 'select' },
       options: [
@@ -36,5 +37,7 @@ export default {
     },
   },
 };
+
+export default Story;
 
 export const Default: StoryObj<ConnectionQualityIndicatorProps> = {};

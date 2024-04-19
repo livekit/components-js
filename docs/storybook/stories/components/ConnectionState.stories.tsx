@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { StoryObj } from '@storybook/react';
+import { StoryObj, Meta } from '@storybook/react';
 
 import { ConnectionState, ConnectionStatusProps } from '@livekit/components-react';
 import { LkRoomContext } from '../../.storybook/lk-decorators';
 
-export default {
+const Story: Meta<typeof ConnectionState> = {
   component: ConnectionState,
   decorators: [LkRoomContext],
   render: (args: ConnectionStatusProps) => <ConnectionState {...args}></ConnectionState>,
@@ -15,6 +15,8 @@ export default {
     },
   },
 };
+
+export default Story;
 
 export const Default: StoryObj<ConnectionStatusProps> = {
   args: {},

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { ClearPinButton, ClearPinButtonProps } from '@livekit/components-react';
 import { LkLayoutContext, LkRoomContext } from '../../../.storybook/lk-decorators';
 
-export default {
+const Story: Meta<typeof ClearPinButton> = {
   component: ClearPinButton,
   decorators: [LkLayoutContext, LkRoomContext],
   render: (args: ClearPinButtonProps) => <ClearPinButton {...args}>Back to Grid</ClearPinButton>,
@@ -20,6 +20,8 @@ export default {
     },
   },
 };
+
+export default Story;
 
 export const Default: StoryObj<ClearPinButtonProps> = {
   args: {},

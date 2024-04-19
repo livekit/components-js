@@ -1,17 +1,23 @@
 import * as React from 'react';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { AudioVisualizer, AudioVisualizerProps } from '@livekit/components-react';
-import { LkParticipantContext, LkRoomContext } from '../../../.storybook/lk-decorators';
+import { LkLocalMicTrackContext, LkRoomContext } from '../../../.storybook/lk-decorators';
 
-export default {
+const Story: Meta<typeof AudioVisualizer> = {
   /*
    * This is some docs for connection quality
    */
   component: AudioVisualizer,
-  decorators: [LkParticipantContext, LkRoomContext],
+  decorators: [LkLocalMicTrackContext, LkRoomContext],
   render: (args: AudioVisualizerProps) => <AudioVisualizer {...args} />,
-  argTypes: {},
+  argTypes: {
+    barCount: {
+      name: 'Bar count',
+      control: { type: 'range', min: 1, max: 1024, step: 1 },
+      default: 32,
+    },
+  },
   parameters: {
     actions: {
       handles: [],
@@ -22,4 +28,9 @@ export default {
   },
 };
 
-export const Default: StoryObj<AudioVisualizerProps> = {};
+export default Story;
+
+export const Default: StoryObj<AudioVisualizerProps> = { args: { barCount: 1024 } };
+export const Abstract: StoryObj<AudioVisualizerProps> = {
+  args: { barCount: 6, gap: '0.5rem', barWidth: '0.5rem', borderRadius: '1rem' },
+};

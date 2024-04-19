@@ -2,8 +2,9 @@ import * as React from 'react';
 
 import { FocusLayoutContainerProps, FocusLayoutContainer } from '@livekit/components-react';
 import { LkLayoutContext, LkRoomContext } from '../../../.storybook/lk-decorators';
+import { Meta } from '@storybook/react';
 
-export default {
+const Story: Meta<typeof FocusLayoutContainer> = {
   component: FocusLayoutContainer,
   decorators: [LkLayoutContext, LkRoomContext],
   render: (args: FocusLayoutContainerProps) => <FocusLayoutContainer {...args} />,
@@ -14,6 +15,8 @@ export default {
     },
   },
 };
+
+export default Story;
 
 export const Default = {
   args: {},

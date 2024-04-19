@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { TrackToggle, TrackToggleProps } from '@livekit/components-react';
 import { LkRoomContext } from '../../../.storybook/lk-decorators';
 import { Track } from 'livekit-client';
 import { ToggleSource } from '@livekit/components-core';
 
-export default {
+const Story: Meta<typeof TrackToggle> = {
   component: TrackToggle,
   decorators: [LkRoomContext],
   render: (args: TrackToggleProps<ToggleSource>) => (
@@ -28,6 +28,8 @@ export default {
     },
   },
 };
+
+export default Story;
 
 export const Camera: StoryObj<TrackToggleProps<Track.Source.Camera>> = {
   args: { source: Track.Source.Camera, initialState: true },

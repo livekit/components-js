@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { StoryObj } from '@storybook/react';
+import { StoryObj, Meta } from '@storybook/react';
 
 import { ParticipantName, ParticipantNameProps } from '@livekit/components-react';
 import { LkParticipantContext, LkRoomContext } from '../../../.storybook/lk-decorators';
 
-export default {
+const Story: Meta<typeof ParticipantName> = {
   component: ParticipantName,
   decorators: [LkParticipantContext, LkRoomContext],
   render: (args: ParticipantNameProps) => <ParticipantName {...args}></ParticipantName>,
@@ -15,6 +15,8 @@ export default {
     },
   },
 };
+
+export default Story;
 
 export const Default: StoryObj<ParticipantNameProps> = {
   args: {},

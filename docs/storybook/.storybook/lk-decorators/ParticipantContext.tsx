@@ -1,6 +1,12 @@
 import React, { HTMLAttributes } from 'react';
-import { ParticipantContext, useLocalParticipant } from '@livekit/components-react';
+import {
+  ParticipantContext,
+  TrackRefContext,
+  useLocalParticipant,
+  useTracks,
+} from '@livekit/components-react';
 import { Decorator } from '@storybook/react';
+import { Track } from 'livekit-client';
 
 /**
  * Wraps a Storybook Story into a LiveKit participant context.
@@ -10,6 +16,16 @@ import { Decorator } from '@storybook/react';
  */
 export const LkParticipantContext: Decorator = (Story, _) => {
   return <LocalParticipantContext>{Story()}</LocalParticipantContext>;
+};
+
+export const LkLocalMicTrackContext: Decorator = (Story, _) => {
+  return <LocalMicTrackContext>{Story()}</LocalMicTrackContext>;
+};
+
+const LocalMicTrackContext = (props: HTMLAttributes<HTMLDivElement>) => {
+  const p = useTracks([Track.Source.Microphone])[0];
+
+  return p && <TrackRefContext.Provider value={p}>{props.children}</TrackRefContext.Provider>;
 };
 
 const LocalParticipantContext = (props: HTMLAttributes<HTMLDivElement>) => {

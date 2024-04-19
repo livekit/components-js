@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { DisconnectButton, DisconnectButtonProps } from '@livekit/components-react';
 import { LkRoomContext } from '../../../.storybook/lk-decorators';
 
-export default {
+const Story: Meta<typeof DisconnectButton> = {
   component: DisconnectButton,
   decorators: [LkRoomContext],
   render: (args: DisconnectButtonProps) => <DisconnectButton {...args}>Leave</DisconnectButton>,
@@ -14,6 +14,8 @@ export default {
     },
   },
 };
+
+export default Story;
 
 export const Connected: StoryObj<DisconnectButtonProps> = {
   args: {

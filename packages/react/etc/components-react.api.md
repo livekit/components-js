@@ -61,12 +61,28 @@ export interface AudioTrackProps extends React_2.AudioHTMLAttributes<HTMLAudioEl
 }
 
 // @public
-export const AudioVisualizer: (props: AudioVisualizerProps & React_2.RefAttributes<SVGSVGElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
+export const AudioVisualizer: (props: AudioVisualizerProps & React_2.RefAttributes<HTMLDivElement>) => React_2.ReactElement<any, string | React_2.JSXElementConstructor<any>> | null;
 
 // @public (undocumented)
-export interface AudioVisualizerProps extends React_2.HTMLAttributes<SVGElement> {
+export interface AudioVisualizerProps extends React_2.HTMLAttributes<HTMLDivElement> {
+    // (undocumented)
+    barCount?: number;
+    // (undocumented)
+    barWidth?: string;
+    // (undocumented)
+    borderRadius?: string;
+    // (undocumented)
+    gap?: string;
     // (undocumented)
     trackRef?: TrackReference;
+}
+
+// @alpha (undocumented)
+export interface AudioWaveformOptions {
+    // (undocumented)
+    aggregateTime?: number;
+    // (undocumented)
+    analyserOptions?: AnalyserOptions;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "CameraDisabledIcon" should be prefixed with an underscore because the declaration is marked as @internal
@@ -656,6 +672,9 @@ export function useAudioPlayback(room?: Room): {
     canPlayAudio: boolean;
     startAudio: () => Promise<void>;
 };
+
+// @alpha (undocumented)
+export const useAudioWaveform: (onUpdate: (waveform: Float32Array) => void, trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder, options?: AudioWaveformOptions) => void;
 
 // @public
 export function useChat(options?: ChatOptions): {

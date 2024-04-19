@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.10.0
+
+### Minor Changes
+
+- Require livekit-client ^2.1.0 peer dependency - [#830](https://github.com/livekit/components-js/pull/830) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.9.3
 
 ### Patch Changes

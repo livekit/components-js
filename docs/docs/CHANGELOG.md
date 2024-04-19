@@ -1,5 +1,26 @@
 # @livekit/components-js-docs
 
+## 0.1.18
+
+### Patch Changes
+
+- Updated dependencies [[`68068430cdeb9175a21a1c8a47177529c878120a`](https://github.com/livekit/components-js/commit/68068430cdeb9175a21a1c8a47177529c878120a)]:
+  - @livekit/components-react@2.1.2
+
+## 0.1.17
+
+### Patch Changes
+
+- Updated dependencies [[`af109550ce48c6b70c56c6ef25f03c767d94ff45`](https://github.com/livekit/components-js/commit/af109550ce48c6b70c56c6ef25f03c767d94ff45)]:
+  - @livekit/components-react@2.1.1
+
+## 0.1.16
+
+### Patch Changes
+
+- Updated dependencies [[`ccd551f98037427d92bb6e14560f972458a4544d`](https://github.com/livekit/components-js/commit/ccd551f98037427d92bb6e14560f972458a4544d), [`2da35e73ef5046e2941f3a43a9e08d55f90f9275`](https://github.com/livekit/components-js/commit/2da35e73ef5046e2941f3a43a9e08d55f90f9275), [`ccd551f98037427d92bb6e14560f972458a4544d`](https://github.com/livekit/components-js/commit/ccd551f98037427d92bb6e14560f972458a4544d), [`ecef222a309e53b62bb896aca1309c301ac354c7`](https://github.com/livekit/components-js/commit/ecef222a309e53b62bb896aca1309c301ac354c7)]:
+  - @livekit/components-react@2.1.0
+
 ## 0.1.15
 
 ### Patch Changes

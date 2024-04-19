@@ -1,5 +1,34 @@
 # @livekit/components-react
 
+## 2.1.2
+
+### Patch Changes
+
+- Forward AudioTrack ref via imperative handle (fixes audio rendering) - [#835](https://github.com/livekit/components-js/pull/835) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.1.1
+
+### Patch Changes
+
+- Fix video rendering, use imperative handle to forward ref - [#831](https://github.com/livekit/components-js/pull/831) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.1.0
+
+### Minor Changes
+
+- Require livekit-client ^2.1.0 peer dependency - [#830](https://github.com/livekit/components-js/pull/830) ([@lukasIO](https://github.com/lukasIO))
+
+- Support referencing components via refs - [#827](https://github.com/livekit/components-js/pull/827) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Improve track acquiring and handling in usePreviewTracks - [#830](https://github.com/livekit/components-js/pull/830) ([@lukasIO](https://github.com/lukasIO))
+
+- Use participant array length to re-trigger sorting - [#829](https://github.com/livekit/components-js/pull/829) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`ccd551f98037427d92bb6e14560f972458a4544d`](https://github.com/livekit/components-js/commit/ccd551f98037427d92bb6e14560f972458a4544d)]:
+  - @livekit/components-core@0.10.0
+
 ## 2.0.6
 
 ### Patch Changes

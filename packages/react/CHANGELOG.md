@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.1.2
+
+### Patch Changes
+
+- Forward AudioTrack ref via imperative handle (fixes audio rendering) - [#835](https://github.com/livekit/components-js/pull/835) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.1.1
 
 ### Patch Changes

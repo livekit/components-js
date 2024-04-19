@@ -9,15 +9,16 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  gap: 0.1rem;
+  // gap: 0.5rem;
 
   & > span {
-    background: #ff6a5855;
+    background: var(--accent-bg);
     // box-shadow:
     //   7px 7px 14px #c94e41,
     //   -7px -7px 14px #ff7863;
     flex-grow: 1;
     height: 100%;
-    transition: height 100ms ease-out;
+    transition: height 80ms ease-in-out;
+    border-radius: 0.25rem;
   }
 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StoryObj } from '@storybook/react';
+import { StoryObj, Meta } from '@storybook/react';
 
 import {
   //   ConnectionState,
@@ -9,7 +9,7 @@ import {
 // import { LkRoomContext } from '../../.storybook/lk-decorators';
 import { Room, ConnectionState as State } from 'livekit-client';
 
-export default {
+const Story: Meta<typeof ConnectionStateToast> = {
   component: ConnectionStateToast,
   //   decorators: [LkRoomContext],
   render: (args: ConnectionStatusProps) => <ConnectionStateToast {...args}></ConnectionStateToast>,
@@ -20,6 +20,8 @@ export default {
     },
   },
 };
+
+export default Story;
 
 function getRoomWithState(state: State) {
   const room = new Room();

@@ -6,6 +6,7 @@ import { mergeProps } from '../mergeProps';
 import { useFacingMode } from './useFacingMode';
 import { useIsMuted } from './useIsMuted';
 import { useIsSpeaking } from './useIsSpeaking';
+import { Track } from 'livekit-client';
 
 /** @public */
 export interface UseParticipantTileProps<T extends HTMLElement> extends React.HTMLAttributes<T> {
@@ -53,8 +54,17 @@ export function useParticipantTile<T extends HTMLElement>({
     trackReference.source,
     trackReference.participant,
   ]);
+
+  const micTrack = trackReference.participant.getTrackPublication(Track.Source.Microphone);
+  const micRef = React.useMemo(() => {
+    return {
+      participant: trackReference.participant,
+      source: Track.Source.Microphone,
+      publication: micTrack,
+    };
+  }, [micTrack, trackReference.participant]);
   const isVideoMuted = useIsMuted(trackReference);
-  const isAudioMuted = useIsMuted(trackReference);
+  const isAudioMuted = useIsMuted(micRef);
   const isSpeaking = useIsSpeaking(trackReference.participant);
   const facingMode = useFacingMode(trackReference);
   return {

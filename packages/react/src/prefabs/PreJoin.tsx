@@ -63,21 +63,28 @@ export function usePreviewTracks(
 
   React.useEffect(() => {
     let needsCleanup = false;
-    trackLock.lock().then((unlock) => {
-      tracks?.forEach((track) => {
-        track.stop();
-      });
-      if (options.audio || options.video) {
-        createLocalTracks(options)
-          .then((tracks) => {
-            if (needsCleanup) {
-              tracks.forEach((tr) => tr.stop());
-            } else {
-              setTracks(tracks);
-            }
-          })
-          .catch((e) => (onError ? onError(e) : log.error(e)))
-          .finally(unlock);
+    trackLock.lock().then(async (unlock) => {
+      try {
+        tracks?.forEach((track) => {
+          track.stop();
+        });
+        if (options.audio || options.video) {
+          const localTracks = await createLocalTracks(options);
+
+          if (needsCleanup) {
+            localTracks.forEach((tr) => tr.stop());
+          } else {
+            setTracks(localTracks);
+          }
+        }
+      } catch (e: unknown) {
+        if (onError && e instanceof Error) {
+          onError(e);
+        } else {
+          log.error(e);
+        }
+      } finally {
+        unlock();
       }
     });
 

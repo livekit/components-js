@@ -1,5 +1,15 @@
 # @livekit/components-react
 
+## 2.1.3
+
+### Patch Changes
+
+- Fix participant tile audio muted data prop - [#838](https://github.com/livekit/components-js/pull/838) ([@lukasIO](https://github.com/lukasIO))
+
+- Remove useForwardedRef redeclaration - [#839](https://github.com/livekit/components-js/pull/839) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix prejoin track lock release - [#842](https://github.com/livekit/components-js/pull/842) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.1.2
 
 ### Patch Changes

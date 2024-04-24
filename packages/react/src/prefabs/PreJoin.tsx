@@ -66,9 +66,6 @@ export function usePreviewTracks(
     let localTracks: Array<LocalTrack> = [];
     trackLock.lock().then(async (unlock) => {
       try {
-        // tracks?.forEach((track) => {
-        //   track.stop();
-        // });
         if (options.audio || options.video) {
           localTracks = await createLocalTracks(options);
 

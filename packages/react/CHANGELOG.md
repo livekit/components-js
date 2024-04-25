@@ -1,5 +1,17 @@
 # @livekit/components-react
 
+## 2.2.0
+
+### Minor Changes
+
+- Don't auto subscribe to all audio tracks automatically in RoomAudioRenderer - [#847](https://github.com/livekit/components-js/pull/847) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Fix docs for TrackMutedIndicator accepting track references - [#846](https://github.com/livekit/components-js/pull/846) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix releasing of local tracks in prejoin - [#844](https://github.com/livekit/components-js/pull/844) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.1.3
 
 ### Patch Changes

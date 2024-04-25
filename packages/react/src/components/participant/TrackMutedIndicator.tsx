@@ -16,8 +16,7 @@ export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivEl
  *
  * @example
  * ```tsx
- * <TrackMutedIndicator source={Track.Source.Camera} />
- * <TrackMutedIndicator source={Track.Source.Microphone} />
+ * <TrackMutedIndicator trackRef={trackRef} />
  * ```
  * @public
  */

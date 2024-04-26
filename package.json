@@ -47,6 +47,8 @@
     "node": ">=18"
   },
   "pnpm": {
-    "overrides": {}
+    "overrides": {
+      "livekit-client": "link:../client-sdk-js"
+    }
   }
 }

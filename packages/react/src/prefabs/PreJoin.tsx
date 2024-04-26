@@ -1,3 +1,4 @@
+'use client';
 import type {
   CreateLocalTracksOptions,
   LocalAudioTrack,
@@ -64,8 +65,13 @@ export function usePreviewTracks(
   React.useEffect(() => {
     let needsCleanup = false;
     let localTracks: Array<LocalTrack> = [];
-    trackLock.lock().then(async (unlock) => {
+    const lockPromise = trackLock.lock();
+    lockPromise.then(async (unlock) => {
       try {
+        // if (needsCleanup) {
+        //   // return early if the component has unmounted already after acquiring the lock
+        //   return;
+        // }
         if (options.audio || options.video) {
           localTracks = await createLocalTracks(options);
 

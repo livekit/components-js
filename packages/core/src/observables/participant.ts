@@ -248,3 +248,7 @@ export function participantPermissionObserver(
   );
   return observer;
 }
+
+export function participantTranscriptionObserver(participant: Participant) {
+  return participantEventSelector(participant, ParticipantEvent.TranscriptionReceived);
+}

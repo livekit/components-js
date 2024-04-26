@@ -59,27 +59,34 @@ export function usePreviewTracks(
 ) {
   const [tracks, setTracks] = React.useState<LocalTrack[]>();
 
+  const [orphanTracks, setOrphanTracks] = React.useState<Track[]>([]);
+
+  React.useEffect(() => () => {
+    orphanTracks.forEach(track => track.stop());
+  }, [orphanTracks]);
+
+
   const trackLock = React.useMemo(() => new Mutex(), []);
 
   React.useEffect(() => {
-    let isComponentMounted = true;
+    let needsCleanup = false;
+    let localTracks: Array<LocalTrack> = [];
     trackLock.lock().then(async (unlock) => {
       try {
         if (options.audio || options.video) {
-          const localTracks = await createLocalTracks(options);
+          localTracks = await createLocalTracks(options);
 
-          if (isComponentMounted) {
-            setTracks(localTracks);
+          if (needsCleanup) {
+            localTracks.forEach((tr) => tr.stop());
           } else {
-            // If component is not mounted when tracks are ready, stop them
-            localTracks.forEach(track => track.stop());
+            setTracks(localTracks);
           }
         }
-      } catch (e) {
+      } catch (e: unknown) {
         if (onError && e instanceof Error) {
           onError(e);
         } else {
-          console.error(e);
+          log.error(e);
         }
       } finally {
         unlock();
@@ -87,11 +94,11 @@ export function usePreviewTracks(
     });
 
     return () => {
-      isComponentMounted = false;
-      if (tracks) {
-        tracks.forEach(track => track.stop());
-        setTracks(undefined);
-      }
+      needsCleanup = true;
+      localTracks.forEach((track) => {
+        track.stop();
+      });
+      setOrphanTracks(localTracks);
     };
   }, [JSON.stringify(options), onError, trackLock]);
 
@@ -150,7 +157,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   const prevDeviceId = React.useRef(localDeviceId);
 
   React.useEffect(() => {
-    if (enabled && !localTrack && !deviceError && !isCreatingTrack) {
+    if (!isCreatingTrack && enabled && !localTrack && !deviceError) {
       log.debug('creating track', kind);
       setIsCreatingTrack(true);
       createTrack(localDeviceId, kind).finally(() => {
@@ -226,7 +233,6 @@ export function PreJoin({
   ...htmlProps
 }: PreJoinProps) {
   const [userChoices, setUserChoices] = React.useState(defaultUserChoices);
-  console.log('userChoices', userChoices);
 
   // TODO: Remove and pipe `defaults` object directly into `usePersistentUserChoices` once we fully switch from type `LocalUserChoices` to `UserChoices`.
   const partialDefaults: Partial<LocalUserChoices> = {
@@ -314,7 +320,12 @@ export function PreJoin({
     }
 
     return () => {
-      videoTrack?.detach();
+      if (videoTrack) {
+        if (videoEl.current)
+          videoTrack.detach(videoEl.current);
+        videoTrack.stop();
+      }
+
     };
   }, [videoTrack]);
 

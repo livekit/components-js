@@ -62,24 +62,24 @@ export function usePreviewTracks(
   const trackLock = React.useMemo(() => new Mutex(), []);
 
   React.useEffect(() => {
-    let needsCleanup = false;
-    let localTracks: Array<LocalTrack> = [];
+    let isComponentMounted = true;
     trackLock.lock().then(async (unlock) => {
       try {
         if (options.audio || options.video) {
-          localTracks = await createLocalTracks(options);
+          const localTracks = await createLocalTracks(options);
 
-          if (needsCleanup) {
-            localTracks.forEach((tr) => tr.stop());
-          } else {
+          if (isComponentMounted) {
             setTracks(localTracks);
+          } else {
+            // If component is not mounted when tracks are ready, stop them
+            localTracks.forEach(track => track.stop());
           }
         }
-      } catch (e: unknown) {
+      } catch (e) {
         if (onError && e instanceof Error) {
           onError(e);
         } else {
-          log.error(e);
+          console.error(e);
         }
       } finally {
         unlock();
@@ -87,10 +87,11 @@ export function usePreviewTracks(
     });
 
     return () => {
-      needsCleanup = true;
-      localTracks.forEach((track) => {
-        track.stop();
-      });
+      isComponentMounted = false;
+      if (tracks) {
+        tracks.forEach(track => track.stop());
+        setTracks(undefined);
+      }
     };
   }, [JSON.stringify(options), onError, trackLock]);
 
@@ -123,9 +124,9 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
       const track =
         kind === 'videoinput'
           ? await createLocalVideoTrack({
-              deviceId: deviceId,
-              resolution: VideoPresets.h720.resolution,
-            })
+            deviceId: deviceId,
+            resolution: VideoPresets.h720.resolution,
+          })
           : await createLocalAudioTrack({ deviceId });
 
       const newDeviceId = await track.getDeviceId();
@@ -225,6 +226,7 @@ export function PreJoin({
   ...htmlProps
 }: PreJoinProps) {
   const [userChoices, setUserChoices] = React.useState(defaultUserChoices);
+  console.log('userChoices', userChoices);
 
   // TODO: Remove and pipe `defaults` object directly into `usePersistentUserChoices` once we fully switch from type `LocalUserChoices` to `UserChoices`.
   const partialDefaults: Partial<LocalUserChoices> = {

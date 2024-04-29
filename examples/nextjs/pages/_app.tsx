@@ -1,14 +1,10 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-// import '@livekit/components-styles';
+import '@livekit/components-styles';
 import { StrictMode } from 'react';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <StrictMode>
-      <Component {...pageProps} />
-    </StrictMode>
-  );
+  return <Component {...pageProps} />;
 }
 
 export default MyApp;

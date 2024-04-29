@@ -59,6 +59,13 @@ export function usePreviewTracks(
 ) {
   const [tracks, setTracks] = React.useState<LocalTrack[]>();
 
+  const [orphanTracks, setOrphanTracks] = React.useState<Track[]>([]);
+
+  React.useEffect(() => () => {
+    orphanTracks.forEach(track => track.stop());
+  }, [orphanTracks]);
+
+
   const trackLock = React.useMemo(() => new Mutex(), []);
 
   React.useEffect(() => {
@@ -91,6 +98,7 @@ export function usePreviewTracks(
       localTracks.forEach((track) => {
         track.stop();
       });
+      setOrphanTracks(localTracks);
     };
   }, [JSON.stringify(options), onError, trackLock]);
 
@@ -123,9 +131,9 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
       const track =
         kind === 'videoinput'
           ? await createLocalVideoTrack({
-              deviceId: deviceId,
-              resolution: VideoPresets.h720.resolution,
-            })
+            deviceId: deviceId,
+            resolution: VideoPresets.h720.resolution,
+          })
           : await createLocalAudioTrack({ deviceId });
 
       const newDeviceId = await track.getDeviceId();
@@ -149,7 +157,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   const prevDeviceId = React.useRef(localDeviceId);
 
   React.useEffect(() => {
-    if (enabled && !localTrack && !deviceError && !isCreatingTrack) {
+    if (!isCreatingTrack && enabled && !localTrack && !deviceError) {
       log.debug('creating track', kind);
       setIsCreatingTrack(true);
       createTrack(localDeviceId, kind).finally(() => {
@@ -312,7 +320,12 @@ export function PreJoin({
     }
 
     return () => {
-      videoTrack?.detach();
+      if (videoTrack) {
+        if (videoEl.current)
+          videoTrack.detach(videoEl.current);
+        videoTrack.stop();
+      }
+
     };
   }, [videoTrack]);
 

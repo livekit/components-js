@@ -1,4 +1,8 @@
-import type { RemoteParticipant, RemoteTrackPublication, Transcription } from 'livekit-client';
+import type {
+  RemoteParticipant,
+  RemoteTrackPublication,
+  TranscriptionSegment,
+} from 'livekit-client';
 import { createTranscriptionObserver } from '@livekit/components-core';
 import * as React from 'react';
 import { useRoomContext } from '../context';
@@ -8,7 +12,7 @@ import { useRoomContext } from '../context';
  */
 export function useTranscription(
   onTranscription: (
-    transcription: Transcription,
+    segments: TranscriptionSegment[],
     participant?: RemoteParticipant,
     publication?: RemoteTrackPublication,
   ) => void,

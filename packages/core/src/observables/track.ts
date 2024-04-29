@@ -172,7 +172,10 @@ export function participantTracksObservable(
   return observable;
 }
 
-export function trackEventSelector<T extends TrackEvent>(publication: TrackPublication, event: T) {
+export function trackEventSelector<T extends TrackEvent>(
+  publication: TrackPublication | Track,
+  event: T,
+) {
   const observable = new Observable<
     Parameters<PublicationEventCallbacks[Extract<T, keyof PublicationEventCallbacks>]>
   >((subscribe) => {
@@ -196,4 +199,8 @@ export function trackEventSelector<T extends TrackEvent>(publication: TrackPubli
 
 export function trackTranscriptionObserver(publication: TrackPublication) {
   return trackEventSelector(publication, TrackEvent.TranscriptionReceived);
+}
+
+export function trackSyncTimeObserver(track: Track) {
+  return trackEventSelector(track, TrackEvent.TimeSyncUpdate);
 }

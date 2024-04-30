@@ -38,7 +38,7 @@ export interface AudioTrackProps extends React.AudioHTMLAttributes<HTMLAudioElem
  */
 export const AudioTrack = /* @__PURE__ */ React.forwardRef<HTMLAudioElement, AudioTrackProps>(
   function AudioTrack(
-    { trackRef, onSubscriptionStatusChanged, volume, ...props }: AudioTrackProps,
+    { trackRef, onSubscriptionStatusChanged, volume, muted, ...props }: AudioTrackProps,
     ref,
   ) {
     const trackReference = useEnsureTrackRef(trackRef);
@@ -72,15 +72,15 @@ export const AudioTrack = /* @__PURE__ */ React.forwardRef<HTMLAudioElement, Aud
     }, [volume, track]);
 
     React.useEffect(() => {
-      if (pub === undefined || props.muted === undefined) {
+      if (pub === undefined || muted === undefined) {
         return;
       }
       if (pub instanceof RemoteTrackPublication) {
-        pub.setEnabled(!props.muted);
+        pub.setEnabled(!muted);
       } else {
         log.warn('Can only call setEnabled on remote track publications.');
       }
-    }, [props.muted, pub, track]);
+    }, [muted, pub, track]);
 
     return <audio ref={mediaEl} {...elementProps} />;
   },

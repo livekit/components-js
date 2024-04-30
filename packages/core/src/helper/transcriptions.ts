@@ -27,7 +27,7 @@ export function addMediaTimestampToTranscription(
 }
 
 /**
- * @returns An array of unique (by id) `TranscriptionSegment`s. Latest wins.
+ * @returns An array of unique (by id) `TranscriptionSegment`s. Latest wins. If the resulting array would be longer than `windowSize`, the array will be reduced to `windowSize` length
  */
 export function dedupeSegments<T extends TranscriptionSegment>(
   prevSegments: T[],

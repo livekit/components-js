@@ -1,7 +1,12 @@
 import {
+  type ReceivedTranscriptionSegment,
+  addMediaTimestampToTranscription,
+  dedupeSegments,
+  getActiveTranscriptionSegments,
   getTrackReferenceId,
   trackTranscriptionObserver,
   type TrackReference,
+  didActiveSegmentsChange,
 } from '@livekit/components-core';
 import type { TranscriptionSegment } from 'livekit-client';
 import * as React from 'react';
@@ -25,23 +30,21 @@ export function useTrackTranscription(
   options: TrackTranscriptionOptions,
 ) {
   const opts = { ...TRACK_TRANSCRIPTION_DEFAULTS, ...options };
-  const [segments, setSegments] = React.useState<Array<TranscriptionSegment>>([]);
-  const currentTrackSyncTime = useTrackSyncTime(trackRef);
-  const handleSegmentMessage = React.useCallback(
-    (newSegments: TranscriptionSegment[]) => {
-      setSegments((prevSegments) =>
-        [...prevSegments, ...newSegments]
-          .reduceRight((acc, segment) => {
-            if (!acc.find((val) => val.id === segment.id)) {
-              acc.unshift(segment);
-            }
-            return acc;
-          }, [] as Array<TranscriptionSegment>)
-          .slice(0 - opts.windowSize),
-      );
-    },
-    [JSON.stringify(opts)],
+  const [segments, setSegments] = React.useState<Array<ReceivedTranscriptionSegment>>([]);
+  const [activeSegments, setActiveSegments] = React.useState<Array<ReceivedTranscriptionSegment>>(
+    [],
   );
+  const prevActiveSegments = React.useRef<ReceivedTranscriptionSegment[]>([]);
+  const currentTrackSyncTime = useTrackSyncTime(trackRef);
+  const handleSegmentMessage = (newSegments: TranscriptionSegment[]) => {
+    setSegments((prevSegments) =>
+      dedupeSegments(
+        prevSegments,
+        newSegments.map((s) => addMediaTimestampToTranscription(s, currentTrackSyncTime ?? 0)),
+        opts.windowSize,
+      ),
+    );
+  };
   React.useEffect(() => {
     if (!trackRef.publication) {
       return;
@@ -54,24 +57,16 @@ export function useTrackTranscription(
     };
   }, [getTrackReferenceId(trackRef), handleSegmentMessage]);
 
-  const activeSegments = React.useMemo(() => {
-    return currentTrackSyncTime
-      ? getActiveTranscriptionSegments(segments, currentTrackSyncTime)
-      : [];
+  React.useEffect(() => {
+    if (currentTrackSyncTime) {
+      const newActiveSegments = getActiveTranscriptionSegments(segments, currentTrackSyncTime);
+      // only update active segment array if content actually changed
+      if (didActiveSegmentsChange(prevActiveSegments.current, newActiveSegments)) {
+        setActiveSegments(newActiveSegments);
+        prevActiveSegments.current = newActiveSegments;
+      }
+    }
   }, [currentTrackSyncTime, segments]);
 
   return { segments, activeSegments };
-}
-
-function getActiveTranscriptionSegments(
-  segments: TranscriptionSegment[],
-  currentTrackTime: number,
-) {
-  return segments.filter((segment) => {
-    const displayStartTime = Math.max(segment.receivedAt, segment.startTime);
-    const segmentDuration = segment.endTime - segment.startTime;
-    return (
-      displayStartTime >= currentTrackTime && displayStartTime + segmentDuration <= currentTrackTime
-    );
-  });
 }

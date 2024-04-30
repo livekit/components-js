@@ -9,7 +9,9 @@ export function getActiveTranscriptionSegments(
   currentTrackTime: number,
 ) {
   return segments.filter((segment) => {
+    // if a segment arrives late, consider startTime to be the media timestamp from when the segment was received client side
     const displayStartTime = Math.max(segment.receivedAtMediaTimestamp, segment.startTime);
+    // "active" duration is computed by the diff between start and end time, so we don't rely on displayStartTime to always be the same as the segment's startTime
     const segmentDuration = segment.endTime - segment.startTime;
     return (
       displayStartTime >= currentTrackTime && displayStartTime + segmentDuration <= currentTrackTime
@@ -24,6 +26,9 @@ export function addMediaTimestampToTranscription(
   return { ...segment, receivedAtMediaTimestamp: timestamp };
 }
 
+/**
+ * @returns An array of unique (by id) `TranscriptionSegment`s. Latest wins.
+ */
 export function dedupeSegments<T extends TranscriptionSegment>(
   prevSegments: T[],
   newSegments: T[],

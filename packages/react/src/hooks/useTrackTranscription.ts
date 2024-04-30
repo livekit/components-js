@@ -40,6 +40,7 @@ export function useTrackTranscription(
     setSegments((prevSegments) =>
       dedupeSegments(
         prevSegments,
+        // when first receiving a segment, add the current media timestamp to it
         newSegments.map((s) => addMediaTimestampToTranscription(s, currentTrackSyncTime ?? 0)),
         opts.windowSize,
       ),

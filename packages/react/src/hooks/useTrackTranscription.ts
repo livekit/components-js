@@ -67,7 +67,11 @@ function getActiveTranscriptionSegments(
   segments: TranscriptionSegment[],
   currentTrackTime: number,
 ) {
-  return segments.filter(
-    (segment) => segment.startTime >= currentTrackTime && segment.endTime <= currentTrackTime,
-  );
+  return segments.filter((segment) => {
+    const displayStartTime = Math.max(segment.receivedAt, segment.startTime);
+    const segmentDuration = segment.endTime - segment.startTime;
+    return (
+      displayStartTime >= currentTrackTime && displayStartTime + segmentDuration <= currentTrackTime
+    );
+  });
 }

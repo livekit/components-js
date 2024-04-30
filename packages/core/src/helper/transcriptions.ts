@@ -14,7 +14,7 @@ export function getActiveTranscriptionSegments(
     // "active" duration is computed by the diff between start and end time, so we don't rely on displayStartTime to always be the same as the segment's startTime
     const segmentDuration = segment.endTime - segment.startTime;
     return (
-      displayStartTime >= currentTrackTime && displayStartTime + segmentDuration <= currentTrackTime
+      currentTrackTime >= displayStartTime && currentTrackTime <= displayStartTime + segmentDuration
     );
   });
 }
@@ -52,7 +52,7 @@ export function didActiveSegmentsChange<T extends TranscriptionSegment>(
     return true;
   }
   return !newActive.every((newSegment) => {
-    prevActive.find(
+    return prevActive.find(
       (prevSegment) =>
         prevSegment.id === newSegment.id &&
         prevSegment.text === newSegment.text &&

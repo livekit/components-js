@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 2.2.1
+
+### Patch Changes
+
+- Update docs for default connect value in LiveKitRoom - [#840](https://github.com/livekit/components-js/pull/840) ([@davidliu](https://github.com/davidliu))
+
+- Fix duplicated incoming audio when using AudioTrack renderer and its muted property - [#855](https://github.com/livekit/components-js/pull/855) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies []:
+  - @livekit/components-core@0.10.0
+
 ## 2.2.0
 
 ### Minor Changes

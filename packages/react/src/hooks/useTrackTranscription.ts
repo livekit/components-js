@@ -27,7 +27,7 @@ const TRACK_TRANSCRIPTION_DEFAULTS = {
  */
 export function useTrackTranscription(
   trackRef: TrackReference,
-  options: TrackTranscriptionOptions,
+  options?: TrackTranscriptionOptions,
 ) {
   const opts = { ...TRACK_TRANSCRIPTION_DEFAULTS, ...options };
   const [segments, setSegments] = React.useState<Array<ReceivedTranscriptionSegment>>([]);

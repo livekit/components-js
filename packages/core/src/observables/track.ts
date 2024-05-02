@@ -189,7 +189,7 @@ export function trackEventSelector<T extends TrackEvent>(
 
     const unsubscribe = () => {
       // @ts-expect-error not a perfect overlap between TrackEvent and keyof TrackEventCallbacks
-      participant.off(event, update);
+      publication.off(event, update);
     };
     return unsubscribe;
   });
@@ -202,5 +202,5 @@ export function trackTranscriptionObserver(publication: TrackPublication) {
 }
 
 export function trackSyncTimeObserver(track: Track) {
-  return trackEventSelector(track, TrackEvent.TimeSyncUpdate);
+  return trackEventSelector(track, TrackEvent.TimeSyncUpdate).pipe(map(([time]) => time));
 }

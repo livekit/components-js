@@ -96,4 +96,22 @@ describe('transcription helpers', () => {
     expect(res2.length).toBe(1);
     expect(res2.at(0)?.id).toBe('4');
   });
+
+  test('getActiveTranscriptionSegments with maxAge', () => {
+    const res1 = getActiveTranscriptionSegments(
+      prevSegments.map((s) => addMediaTimestampToTranscription(s, testStartTime - 5)),
+      testStartTime,
+      5,
+    );
+    expect(res1.length).toBe(2);
+    expect(res1.at(0)?.id).toBe('1');
+    expect(res1.at(1)?.id).toBe('2');
+
+    const res2 = getActiveTranscriptionSegments(
+      prevSegments.map((s) => addMediaTimestampToTranscription(s, testStartTime - 5)),
+      testStartTime + 3.5,
+      5,
+    );
+    expect(res2.length).toBe(4);
+  });
 });

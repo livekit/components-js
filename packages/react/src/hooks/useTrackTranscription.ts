@@ -15,10 +15,13 @@ import { useTrackSyncTime } from './useTrackSyncTime';
 export interface TrackTranscriptionOptions {
   // how many transcription segments should be buffered in state
   windowSize?: number;
+  // amount of time (in ms) that the segment is considered `active` past its original segment duration, defaults to 2_000
+  maxAge?: number;
 }
 
 const TRACK_TRANSCRIPTION_DEFAULTS = {
   windowSize: 100,
+  maxAge: 2_000,
 } as const satisfies TrackTranscriptionOptions;
 
 /**
@@ -60,14 +63,18 @@ export function useTrackTranscription(
 
   React.useEffect(() => {
     if (currentTrackSyncTime) {
-      const newActiveSegments = getActiveTranscriptionSegments(segments, currentTrackSyncTime);
+      const newActiveSegments = getActiveTranscriptionSegments(
+        segments,
+        currentTrackSyncTime,
+        opts.maxAge,
+      );
       // only update active segment array if content actually changed
       if (didActiveSegmentsChange(prevActiveSegments.current, newActiveSegments)) {
         setActiveSegments(newActiveSegments);
         prevActiveSegments.current = newActiveSegments;
       }
     }
-  }, [currentTrackSyncTime, segments]);
+  }, [currentTrackSyncTime, segments, opts.maxAge]);
 
   return { segments, activeSegments };
 }

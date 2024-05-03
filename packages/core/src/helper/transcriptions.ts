@@ -7,12 +7,13 @@ export type ReceivedTranscriptionSegment = TranscriptionSegment & {
 export function getActiveTranscriptionSegments(
   segments: ReceivedTranscriptionSegment[],
   currentTrackTime: number,
+  maxAge = 0,
 ) {
   return segments.filter((segment) => {
     // if a segment arrives late, consider startTime to be the media timestamp from when the segment was received client side
     const displayStartTime = Math.max(segment.receivedAtMediaTimestamp, segment.startTime);
     // "active" duration is computed by the diff between start and end time, so we don't rely on displayStartTime to always be the same as the segment's startTime
-    const segmentDuration = segment.endTime - segment.startTime;
+    const segmentDuration = maxAge + segment.endTime - segment.startTime;
     return (
       currentTrackTime >= displayStartTime && currentTrackTime <= displayStartTime + segmentDuration
     );

@@ -17,13 +17,13 @@ import { useTrackSyncTime } from './useTrackSyncTime';
  */
 export interface TrackTranscriptionOptions {
   /** how many transcription segments should be buffered in state */
-  windowSize?: number;
+  bufferSize?: number;
   /** amount of time (in ms) that the segment is considered `active` past its original segment duration, defaults to 2_000 */
   maxAge?: number;
 }
 
 const TRACK_TRANSCRIPTION_DEFAULTS = {
-  windowSize: 100,
+  bufferSize: 100,
   maxAge: 2_000,
 } as const satisfies TrackTranscriptionOptions;
 
@@ -48,7 +48,7 @@ export function useTrackTranscription(
         prevSegments,
         // when first receiving a segment, add the current media timestamp to it
         newSegments.map((s) => addMediaTimestampToTranscription(s, currentTrackSyncTime ?? 0)),
-        opts.windowSize,
+        opts.bufferSize,
       ),
     );
   };

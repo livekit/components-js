@@ -649,8 +649,8 @@ export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.B
 
 // @alpha (undocumented)
 export interface TrackTranscriptionOptions {
+    bufferSize?: number;
     maxAge?: number;
-    windowSize?: number;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "UnfocusToggleIcon" should be prefixed with an underscore because the declaration is marked as @internal

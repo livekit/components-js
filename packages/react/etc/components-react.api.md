@@ -32,6 +32,7 @@ import { setLogLevel as setLogLevel_2 } from 'livekit-client';
 import type { SVGProps } from 'react';
 import { Track } from 'livekit-client';
 import type { TrackPublication } from 'livekit-client';
+import type { TranscriptionSegment } from 'livekit-client';
 import type { VideoCaptureOptions } from 'livekit-client';
 
 // @public (undocumented)
@@ -646,6 +647,12 @@ export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.B
     source: T;
 }
 
+// @public (undocumented)
+export interface TrackTranscriptionOptions {
+    maxAge?: number;
+    windowSize?: number;
+}
+
 // Warning: (ae-internal-missing-underscore) The name "UnfocusToggleIcon" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -1098,6 +1105,12 @@ export function useTrackToggle<T extends ToggleSource>({ source, onChange, initi
 export interface UseTrackToggleProps<T extends ToggleSource> extends Omit<TrackToggleProps<T>, 'showIcon'> {
 }
 
+// @alpha (undocumented)
+export function useTrackTranscription(trackRef: TrackReference, options?: TrackTranscriptionOptions): {
+    segments: ReceivedTranscriptionSegment[];
+    activeSegments: ReceivedTranscriptionSegment[];
+};
+
 // @alpha
 export const useTrackVolume: (trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReference, options?: AudioAnalyserOptions) => number;
 
@@ -1154,6 +1167,7 @@ export type WidgetState = {
 // src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "WidgetContextType" needs to be exported by the entry point index.d.ts
 // src/hooks/useGridLayout.ts:24:6 - (ae-forgotten-export) The symbol "GridLayoutDefinition" needs to be exported by the entry point index.d.ts
 // src/hooks/useMediaDeviceSelect.ts:47:29 - (ae-forgotten-export) The symbol "SetMediaDeviceOptions" needs to be exported by the entry point index.d.ts
+// src/hooks/useTrackTranscription.ts:33:38 - (ae-forgotten-export) The symbol "ReceivedTranscriptionSegment" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

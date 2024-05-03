@@ -13,9 +13,9 @@ import * as React from 'react';
 import { useTrackSyncTime } from './useTrackSyncTime';
 
 export interface TrackTranscriptionOptions {
-  // how many transcription segments should be buffered in state
+  /** how many transcription segments should be buffered in state */
   windowSize?: number;
-  // amount of time (in ms) that the segment is considered `active` past its original segment duration, defaults to 2_000
+  /** amount of time (in ms) that the segment is considered `active` past its original segment duration, defaults to 2_000 */
   maxAge?: number;
 }
 

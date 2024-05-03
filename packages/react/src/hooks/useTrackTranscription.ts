@@ -12,6 +12,9 @@ import type { TranscriptionSegment } from 'livekit-client';
 import * as React from 'react';
 import { useTrackSyncTime } from './useTrackSyncTime';
 
+/**
+ * @alpha
+ */
 export interface TrackTranscriptionOptions {
   /** how many transcription segments should be buffered in state */
   windowSize?: number;
@@ -25,8 +28,8 @@ const TRACK_TRANSCRIPTION_DEFAULTS = {
 } as const satisfies TrackTranscriptionOptions;
 
 /**
- * @alpha
  * @returns An object consisting of `segments` with maximum length of opts.windowLength and `activeSegments` that are valid for the current track timestamp
+ * @alpha
  */
 export function useTrackTranscription(
   trackRef: TrackReference,

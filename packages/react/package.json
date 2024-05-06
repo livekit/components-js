@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-react",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "license": "Apache-2.0",
   "author": "LiveKit",
   "repository": {
@@ -64,7 +64,7 @@
     "@size-limit/file": "^11.0.2",
     "@size-limit/webpack": "^11.0.2",
     "@svgr/cli": "^8.0.0",
-    "@testing-library/react": "^14.0.0",
+    "@testing-library/react": "^15.0.0",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-react": "^4.0.0",

@@ -320,12 +320,7 @@ export function PreJoin({
     }
 
     return () => {
-      if (videoTrack) {
-        if (videoEl.current)
-          videoTrack.detach(videoEl.current);
-        videoTrack.stop();
-      }
-
+      videoTrack?.detach();
     };
   }, [videoTrack]);
 

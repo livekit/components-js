@@ -202,5 +202,7 @@ export function trackTranscriptionObserver(publication: TrackPublication) {
 }
 
 export function trackSyncTimeObserver(track: Track) {
-  return trackEventSelector(track, TrackEvent.TimeSyncUpdate).pipe(map(([time]) => time));
+  return trackEventSelector(track, TrackEvent.TimeSyncUpdate).pipe(
+    map(([timeUpdate]) => timeUpdate),
+  );
 }

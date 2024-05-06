@@ -2,16 +2,21 @@ import type { TranscriptionSegment } from 'livekit-client';
 
 export type ReceivedTranscriptionSegment = TranscriptionSegment & {
   receivedAtMediaTimestamp: number;
+  receivedAt: number;
 };
 
 export function getActiveTranscriptionSegments(
   segments: ReceivedTranscriptionSegment[],
-  currentTrackTime: number,
+  syncTimes: { timestamp: number; rtpTimestamp?: number },
   maxAge = 0,
 ) {
   return segments.filter((segment) => {
+    const hasTrackSync = !!syncTimes.rtpTimestamp;
+    const currentTrackTime = syncTimes.rtpTimestamp ?? performance.timeOrigin + performance.now();
     // if a segment arrives late, consider startTime to be the media timestamp from when the segment was received client side
-    const displayStartTime = Math.max(segment.receivedAtMediaTimestamp, segment.startTime);
+    const displayStartTime = hasTrackSync
+      ? Math.max(segment.receivedAtMediaTimestamp, segment.startTime)
+      : segment.receivedAt;
     // "active" duration is computed by the diff between start and end time, so we don't rely on displayStartTime to always be the same as the segment's startTime
     const segmentDuration = maxAge + segment.endTime - segment.startTime;
     return (
@@ -22,9 +27,13 @@ export function getActiveTranscriptionSegments(
 
 export function addMediaTimestampToTranscription(
   segment: TranscriptionSegment,
-  timestamp: number,
+  timestamps: { timestamp: number; rtpTimestamp?: number },
 ): ReceivedTranscriptionSegment {
-  return { ...segment, receivedAtMediaTimestamp: timestamp };
+  return {
+    ...segment,
+    receivedAtMediaTimestamp: timestamps.rtpTimestamp ?? 0,
+    receivedAt: timestamps.timestamp,
+  };
 }
 
 /**

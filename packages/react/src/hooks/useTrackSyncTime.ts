@@ -10,5 +10,8 @@ export function useTrackSyncTime({ publication }: TrackReference) {
     () => (publication.track ? trackSyncTimeObserver(publication.track) : undefined),
     [publication.track],
   );
-  return useObservableState(observable, publication.track?.rtpTimestamp);
+  return useObservableState(observable, {
+    timestamp: Date.now(),
+    rtpTimestamp: publication.track?.rtpTimestamp,
+  });
 }

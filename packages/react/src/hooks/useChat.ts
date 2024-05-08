@@ -21,12 +21,10 @@ export function useChat(options?: ChatOptions) {
     () => connectionState === ConnectionState.Disconnected,
     [connectionState],
   ); // used to reset the messages on room disconnect
-  const setup = React.useMemo<ReturnType<typeof setupChat>>(() => {
-    if (isDisconnected) {
-      console.log('clear due to disconnect');
-    }
-    return setupChat(room, options);
-  }, [room, options, isDisconnected]);
+  const setup = React.useMemo<ReturnType<typeof setupChat>>(
+    () => setupChat(room, options),
+    [room, options, isDisconnected],
+  );
   const isSending = useObservableState(setup.isSendingObservable, false);
   const chatMessages = useObservableState<ReceivedChatMessage[]>(setup.messageObservable, []);
 

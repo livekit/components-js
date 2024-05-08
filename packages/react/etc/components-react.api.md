@@ -659,8 +659,8 @@ export function useAudioPlayback(room?: Room): {
 
 // @public
 export function useChat(options?: ChatOptions): {
-    send: ((message: string) => Promise<ChatMessage>) | undefined;
-    update: ((message: string, messageId: string) => Promise<ChatMessage>) | undefined;
+    send: (message: string) => Promise<ChatMessage>;
+    update: (message: string, messageId: string) => Promise<ChatMessage>;
     chatMessages: ReceivedChatMessage[];
     isSending: boolean;
 };

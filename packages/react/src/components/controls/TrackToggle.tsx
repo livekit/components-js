@@ -2,6 +2,7 @@ import type { CaptureOptionsBySource, ToggleSource } from '@livekit/components-c
 import * as React from 'react';
 import { getSourceIcon } from '../../assets/icons/util';
 import { useTrackToggle } from '../../hooks';
+import { TrackPublishOptions } from 'livekit-client';
 
 /** @public */
 export interface TrackToggleProps<T extends ToggleSource>
@@ -15,6 +16,7 @@ export interface TrackToggleProps<T extends ToggleSource>
    */
   onChange?: (enabled: boolean, isUserInitiated: boolean) => void;
   captureOptions?: CaptureOptionsBySource<T>;
+  publishOptions?: TrackPublishOptions;
 }
 
 /**

@@ -74,7 +74,12 @@ export function useTracks<T extends SourcesArray = Track.Source[]>(
       setParticipants(participants);
     });
     return () => subscription.unsubscribe();
-  }, [room, JSON.stringify(options.updateOnlyOn), JSON.stringify(sources)]);
+  }, [
+    room,
+    JSON.stringify(options.onlySubscribed),
+    JSON.stringify(options.updateOnlyOn),
+    JSON.stringify(sources),
+  ]);
 
   const maybeTrackReferences = React.useMemo(() => {
     if (isSourcesWithOptions(sources)) {

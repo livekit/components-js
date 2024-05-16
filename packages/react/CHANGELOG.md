@@ -1,5 +1,38 @@
 # @livekit/components-react
 
+## 2.2.1
+
+### Patch Changes
+
+- Update docs for default connect value in LiveKitRoom - [#840](https://github.com/livekit/components-js/pull/840) ([@davidliu](https://github.com/davidliu))
+
+- Fix duplicated incoming audio when using AudioTrack renderer and its muted property - [#855](https://github.com/livekit/components-js/pull/855) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies []:
+  - @livekit/components-core@0.10.0
+
+## 2.2.0
+
+### Minor Changes
+
+- Don't auto subscribe to all audio tracks automatically in RoomAudioRenderer - [#847](https://github.com/livekit/components-js/pull/847) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Fix docs for TrackMutedIndicator accepting track references - [#846](https://github.com/livekit/components-js/pull/846) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix releasing of local tracks in prejoin - [#844](https://github.com/livekit/components-js/pull/844) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.1.3
+
+### Patch Changes
+
+- Fix participant tile audio muted data prop - [#838](https://github.com/livekit/components-js/pull/838) ([@lukasIO](https://github.com/lukasIO))
+
+- Remove useForwardedRef redeclaration - [#839](https://github.com/livekit/components-js/pull/839) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix prejoin track lock release - [#842](https://github.com/livekit/components-js/pull/842) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.1.2
 
 ### Patch Changes

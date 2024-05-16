@@ -29,6 +29,7 @@ import { setLogLevel as setLogLevel_2 } from 'livekit-client';
 import { Track } from 'livekit-client';
 import { TrackEvent as TrackEvent_2 } from 'livekit-client';
 import { TrackPublication } from 'livekit-client';
+import type { TrackPublishOptions } from 'livekit-client';
 import type { VideoCaptureOptions } from 'livekit-client';
 
 // @public (undocumented)
@@ -489,7 +490,7 @@ export function setupManualToggle(): {
 };
 
 // @public (undocumented)
-export function setupMediaToggle<T extends ToggleSource>(source: T, room: Room, options?: CaptureOptionsBySource<T>): MediaToggleType<T>;
+export function setupMediaToggle<T extends ToggleSource>(source: T, room: Room, options?: CaptureOptionsBySource<T>, publishOptions?: TrackPublishOptions): MediaToggleType<T>;
 
 // Warning: (ae-incompatible-release-tags) The symbol "setupMediaTrack" is marked as @public, but its signature references "TrackIdentifier" which is marked as @internal
 //

@@ -26,6 +26,7 @@ export function useTrackToggle<T extends ToggleSource>({
   onChange,
   initialState,
   captureOptions,
+  publishOptions,
   ...rest
 }: UseTrackToggleProps<T>) {
   const room = useMaybeRoomContext();
@@ -34,8 +35,11 @@ export function useTrackToggle<T extends ToggleSource>({
   const userInteractionRef = React.useRef(false);
 
   const { toggle, className, pendingObserver, enabledObserver } = React.useMemo(
-    () => (room ? setupMediaToggle<T>(source, room, captureOptions) : setupManualToggle()),
-    [room, source, JSON.stringify(captureOptions)],
+    () =>
+      room
+        ? setupMediaToggle<T>(source, room, captureOptions, publishOptions)
+        : setupManualToggle(),
+    [room, source, JSON.stringify(captureOptions), JSON.stringify(publishOptions)],
   );
 
   const pending = useObservableState(pendingObserver, false);

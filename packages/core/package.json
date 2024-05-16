@@ -35,14 +35,14 @@
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@floating-ui/dom": "1.6.3",
+    "@floating-ui/dom": "1.6.4",
     "email-regex": "5.0.0",
     "loglevel": "1.9.1",
     "rxjs": "7.8.1"
   },
   "peerDependencies": {
-    "livekit-client": "^2.1.0",
-    "@livekit/protocol": "^1.12.0",
+    "livekit-client": "^2.1.5",
+    "@livekit/protocol": "^1.16.0",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
@@ -50,10 +50,10 @@
     "@microsoft/api-extractor": "^7.36.0",
     "@size-limit/file": "^11.0.2",
     "@size-limit/webpack": "^11.0.2",
-    "eslint-config-lk-custom": "^0.1.1",
+    "eslint-config-lk-custom": "workspace:*",
     "size-limit": "^11.0.2",
     "tsup": "^8.0.0",
-    "typescript": "5.4.3",
+    "typescript": "5.4.5",
     "vitest": "^1.3.0"
   },
   "engines": {

@@ -51,8 +51,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/styles
       livekit-client:
-        specifier: ^2.1.0
-        version: 2.1.1
+        specifier: ^2.1.5
+        version: 2.1.5
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -115,8 +115,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/styles
       livekit-client:
-        specifier: ^2.1.0
-        version: 2.1.1
+        specifier: ^2.1.5
+        version: 2.1.5
       livekit-server-sdk:
         specifier: ^1.2.7
         version: 1.2.7
@@ -161,8 +161,8 @@ importers:
         specifier: 5.0.0
         version: 5.0.0
       livekit-client:
-        specifier: ^2.1.0
-        version: 2.1.0
+        specifier: ^2.1.5
+        version: 2.1.5
       loglevel:
         specifier: 1.9.1
         version: 1.9.1
@@ -213,8 +213,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0
       livekit-client:
-        specifier: ^2.1.0
-        version: 2.1.0
+        specifier: ^2.1.5
+        version: 2.1.5
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -1765,9 +1765,6 @@ packages:
 
   '@livekit/changesets-changelog-github@0.0.4':
     resolution: {integrity: sha512-MXaiLYwgkYciZb8G2wkVtZ1pJJzZmVx5cM30Q+ClslrIYyAqQhRbPmZDM79/5CGxb1MTemR/tfOM25tgJgAK0g==}
-
-  '@livekit/protocol@1.13.0':
-    resolution: {integrity: sha512-M3U36VgRfb0VutWG6pnozXusL+mkYstbCctTLUyCIyye36Ztv1wA9zYpyYvz7VnsgmCn+g/g0eB2rnAkTVwcnA==}
 
   '@livekit/protocol@1.16.0':
     resolution: {integrity: sha512-xZZTZVh2FmWmUgNS3n+oGNbA4GcS4XOwhg8CWy75jenYxbgQ89ds7ixfMQ+F+oxktcXfJ1qsph086oRTlg8e5Q==}
@@ -5675,11 +5672,8 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  livekit-client@2.1.0:
-    resolution: {integrity: sha512-nJwfRKw1Pafd2napk66l30dlBjsv1VZ+na3mzNezcAFAYT2lQ4Gch57TdbMBDYo+QfrZ98s+kuZzsFhBwM5rqw==}
-
-  livekit-client@2.1.1:
-    resolution: {integrity: sha512-ffnXHQt210GPJ9sR846o7g0lCg/3TJqZxdu55mzQFS1YXGgn9PYKGzcAhKtuOsQ0NEkkn1zKQ0ABHBt7iADiqg==}
+  livekit-client@2.1.5:
+    resolution: {integrity: sha512-8sc1ltfKRjy51Q/V/SaDpjptXBamm9LXhixKBYdXdQFZdew4hgqTGYlHIyee/IM9QSqAXk1W+uCtVfkmxPD1EA==}
 
   livekit-server-sdk@1.2.7:
     resolution: {integrity: sha512-tOhRb0vz1wBzMpTkP4ixptlC9MFME24PvG8Z/R7vBbQ1VGd6EdNr56voBSr+RCalYxaQqx0E9Gg4l+57m/Nlmw==}
@@ -9466,10 +9460,6 @@ snapshots:
       dotenv: 8.6.0
     transitivePeerDependencies:
       - encoding
-
-  '@livekit/protocol@1.13.0':
-    dependencies:
-      '@bufbuild/protobuf': 1.9.0
 
   '@livekit/protocol@1.16.0':
     dependencies:
@@ -14679,20 +14669,9 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  livekit-client@2.1.0:
+  livekit-client@2.1.5:
     dependencies:
-      '@livekit/protocol': 1.13.0
-      events: 3.3.0
-      loglevel: 1.9.1
-      sdp-transform: 2.14.2
-      ts-debounce: 4.0.0
-      tslib: 2.6.2
-      typed-emitter: 2.1.0
-      webrtc-adapter: 8.2.3
-
-  livekit-client@2.1.1:
-    dependencies:
-      '@livekit/protocol': 1.13.0
+      '@livekit/protocol': 1.16.0
       events: 3.3.0
       loglevel: 1.9.1
       sdp-transform: 2.14.2

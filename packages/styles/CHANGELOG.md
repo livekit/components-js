@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 1.0.12
+
+### Patch Changes
+
+- Improve use of available space in GridLayout component. - [#854](https://github.com/livekit/components-js/pull/854) ([@Ocupe](https://github.com/Ocupe))
+
 ## 1.0.11
 
 ### Patch Changes

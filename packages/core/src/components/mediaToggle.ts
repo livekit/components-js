@@ -3,6 +3,7 @@ import type {
   LocalParticipant,
   Room,
   ScreenShareCaptureOptions,
+  TrackPublishOptions,
   VideoCaptureOptions,
 } from 'livekit-client';
 import { Track } from 'livekit-client';
@@ -35,6 +36,7 @@ export function setupMediaToggle<T extends ToggleSource>(
   source: T,
   room: Room,
   options?: CaptureOptionsBySource<T>,
+  publishOptions?: TrackPublishOptions,
 ): MediaToggleType<T> {
   const { localParticipant } = room;
 
@@ -74,18 +76,21 @@ export function setupMediaToggle<T extends ToggleSource>(
           await localParticipant.setCameraEnabled(
             forceState ?? !localParticipant.isCameraEnabled,
             captureOptions as VideoCaptureOptions,
+            publishOptions,
           );
           break;
         case Track.Source.Microphone:
           await localParticipant.setMicrophoneEnabled(
             forceState ?? !localParticipant.isMicrophoneEnabled,
             captureOptions as AudioCaptureOptions,
+            publishOptions,
           );
           break;
         case Track.Source.ScreenShare:
           await localParticipant.setScreenShareEnabled(
             forceState ?? !localParticipant.isScreenShareEnabled,
             captureOptions as ScreenShareCaptureOptions,
+            publishOptions,
           );
           break;
         default:

@@ -32,6 +32,7 @@ import { setLogLevel as setLogLevel_2 } from 'livekit-client';
 import type { SVGProps } from 'react';
 import { Track } from 'livekit-client';
 import type { TrackPublication } from 'livekit-client';
+import { TrackPublishOptions } from 'livekit-client';
 import type { VideoCaptureOptions } from 'livekit-client';
 
 // @public (undocumented)
@@ -641,6 +642,8 @@ export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.B
     initialState?: boolean;
     onChange?: (enabled: boolean, isUserInitiated: boolean) => void;
     // (undocumented)
+    publishOptions?: TrackPublishOptions;
+    // (undocumented)
     showIcon?: boolean;
     // (undocumented)
     source: T;
@@ -1086,7 +1089,7 @@ export type UseTracksOptions = {
 };
 
 // @public
-export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, ...rest }: UseTrackToggleProps<T>): {
+export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, publishOptions, ...rest }: UseTrackToggleProps<T>): {
     toggle: (forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>;
     enabled: boolean;
     pending: boolean;

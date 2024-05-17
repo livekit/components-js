@@ -37,6 +37,7 @@ export function setupMediaToggle<T extends ToggleSource>(
   room: Room,
   options?: CaptureOptionsBySource<T>,
   publishOptions?: TrackPublishOptions,
+  onError?: (error: Error) => void,
 ): MediaToggleType<T> {
   const { localParticipant } = room;
 
@@ -95,6 +96,12 @@ export function setupMediaToggle<T extends ToggleSource>(
           break;
         default:
           break;
+      }
+    } catch (e) {
+      if (onError && e instanceof Error) {
+        onError?.(e);
+      } else {
+        throw e;
       }
     } finally {
       pendingSubject.next(false);

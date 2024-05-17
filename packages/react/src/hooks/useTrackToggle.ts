@@ -27,6 +27,7 @@ export function useTrackToggle<T extends ToggleSource>({
   initialState,
   captureOptions,
   publishOptions,
+  onDeviceError,
   ...rest
 }: UseTrackToggleProps<T>) {
   const room = useMaybeRoomContext();
@@ -37,9 +38,9 @@ export function useTrackToggle<T extends ToggleSource>({
   const { toggle, className, pendingObserver, enabledObserver } = React.useMemo(
     () =>
       room
-        ? setupMediaToggle<T>(source, room, captureOptions, publishOptions)
+        ? setupMediaToggle<T>(source, room, captureOptions, publishOptions, onDeviceError)
         : setupManualToggle(),
-    [room, source, JSON.stringify(captureOptions), JSON.stringify(publishOptions)],
+    [room, source, JSON.stringify(captureOptions), publishOptions],
   );
 
   const pending = useObservableState(pendingObserver, false);

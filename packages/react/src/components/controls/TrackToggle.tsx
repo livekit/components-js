@@ -17,6 +17,7 @@ export interface TrackToggleProps<T extends ToggleSource>
   onChange?: (enabled: boolean, isUserInitiated: boolean) => void;
   captureOptions?: CaptureOptionsBySource<T>;
   publishOptions?: TrackPublishOptions;
+  onDeviceError?: (error: Error) => void;
 }
 
 /**

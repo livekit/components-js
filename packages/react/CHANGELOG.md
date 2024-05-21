@@ -1,5 +1,20 @@
 # @livekit/components-react
 
+## 2.3.0
+
+### Minor Changes
+
+- Reset useChat messages when room disconnects - [#866](https://github.com/livekit/components-js/pull/866) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Add publishOptions for TrackToggle - [#868](https://github.com/livekit/components-js/pull/868) ([@lukasIO](https://github.com/lukasIO))
+
+- Forward track toggle errors - [#869](https://github.com/livekit/components-js/pull/869) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`bdfd3f53875ffc79024f8290b5302cf20eaed664`](https://github.com/livekit/components-js/commit/bdfd3f53875ffc79024f8290b5302cf20eaed664), [`b9136108c654906d693fb17db577d5f939d98ad1`](https://github.com/livekit/components-js/commit/b9136108c654906d693fb17db577d5f939d98ad1), [`3b257b19da111d52d6d554467024973e3922fa6c`](https://github.com/livekit/components-js/commit/3b257b19da111d52d6d554467024973e3922fa6c)]:
+  - @livekit/components-core@0.10.1
+
 ## 2.2.1
 
 ### Patch Changes

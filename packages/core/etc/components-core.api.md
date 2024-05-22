@@ -30,6 +30,7 @@ import { setLogLevel as setLogLevel_2 } from 'livekit-client';
 import { Track } from 'livekit-client';
 import { TrackEvent as TrackEvent_2 } from 'livekit-client';
 import { TrackPublication } from 'livekit-client';
+import type { TrackPublishOptions } from 'livekit-client';
 import { TranscriptionSegment } from 'livekit-client';
 import type { VideoCaptureOptions } from 'livekit-client';
 
@@ -37,7 +38,10 @@ import type { VideoCaptureOptions } from 'livekit-client';
 export function activeSpeakerObserver(room: Room): Observable<Participant[]>;
 
 // @public (undocumented)
-export function addMediaTimestampToTranscription(segment: TranscriptionSegment, timestamp: number): ReceivedTranscriptionSegment;
+export function addMediaTimestampToTranscription(segment: TranscriptionSegment, timestamps: {
+    timestamp: number;
+    rtpTimestamp?: number;
+}): ReceivedTranscriptionSegment;
 
 // @public (undocumented)
 export const allParticipantEvents: ParticipantEvent[];
@@ -170,7 +174,10 @@ export function didActiveSegmentsChange<T extends TranscriptionSegment>(prevActi
 export function encryptionStatusObservable(room: Room, participant: Participant): Observable<boolean>;
 
 // @public (undocumented)
-export function getActiveTranscriptionSegments(segments: ReceivedTranscriptionSegment[], currentTrackTime: number, maxAge?: number): ReceivedTranscriptionSegment[];
+export function getActiveTranscriptionSegments(segments: ReceivedTranscriptionSegment[], syncTimes: {
+    timestamp: number;
+    rtpTimestamp?: number;
+}, maxAge?: number): ReceivedTranscriptionSegment[];
 
 // Warning: (ae-internal-missing-underscore) The name "getScrollBarWidth" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -373,6 +380,7 @@ export interface ReceivedDataMessage<T extends string | undefined = string> exte
 // @public (undocumented)
 export type ReceivedTranscriptionSegment = TranscriptionSegment & {
     receivedAtMediaTimestamp: number;
+    receivedAt: number;
 };
 
 // @public (undocumented)
@@ -508,7 +516,7 @@ export function setupManualToggle(): {
 };
 
 // @public (undocumented)
-export function setupMediaToggle<T extends ToggleSource>(source: T, room: Room, options?: CaptureOptionsBySource<T>): MediaToggleType<T>;
+export function setupMediaToggle<T extends ToggleSource>(source: T, room: Room, options?: CaptureOptionsBySource<T>, publishOptions?: TrackPublishOptions, onError?: (error: Error) => void): MediaToggleType<T>;
 
 // Warning: (ae-incompatible-release-tags) The symbol "setupMediaTrack" is marked as @public, but its signature references "TrackIdentifier" which is marked as @internal
 //

@@ -150,7 +150,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
   function destroy() {
     onDestroyObservable.next();
     onDestroyObservable.complete();
-    topicSubjectMap.clear();
+    topicSubjectMap.delete(room);
   }
   room.once(RoomEvent.Disconnected, destroy);
 

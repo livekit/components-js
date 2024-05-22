@@ -32,6 +32,7 @@ import { setLogLevel as setLogLevel_2 } from 'livekit-client';
 import type { SVGProps } from 'react';
 import { Track } from 'livekit-client';
 import type { TrackPublication } from 'livekit-client';
+import { TrackPublishOptions } from 'livekit-client';
 import type { TranscriptionSegment } from 'livekit-client';
 import type { VideoCaptureOptions } from 'livekit-client';
 
@@ -642,6 +643,10 @@ export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.B
     initialState?: boolean;
     onChange?: (enabled: boolean, isUserInitiated: boolean) => void;
     // (undocumented)
+    onDeviceError?: (error: Error) => void;
+    // (undocumented)
+    publishOptions?: TrackPublishOptions;
+    // (undocumented)
     showIcon?: boolean;
     // (undocumented)
     source: T;
@@ -650,7 +655,6 @@ export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.B
 // @alpha (undocumented)
 export interface TrackTranscriptionOptions {
     bufferSize?: number;
-    maxAge?: number;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "UnfocusToggleIcon" should be prefixed with an underscore because the declaration is marked as @internal
@@ -666,8 +670,8 @@ export function useAudioPlayback(room?: Room): {
 
 // @public
 export function useChat(options?: ChatOptions): {
-    send: ((message: string) => Promise<ChatMessage>) | undefined;
-    update: ((message: string, messageId: string) => Promise<ChatMessage>) | undefined;
+    send: (message: string) => Promise<ChatMessage>;
+    update: (message: string, messageId: string) => Promise<ChatMessage>;
     chatMessages: ReceivedChatMessage[];
     isSending: boolean;
 };
@@ -1093,7 +1097,7 @@ export type UseTracksOptions = {
 };
 
 // @public
-export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, ...rest }: UseTrackToggleProps<T>): {
+export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, publishOptions, onDeviceError, ...rest }: UseTrackToggleProps<T>): {
     toggle: (forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>;
     enabled: boolean;
     pending: boolean;
@@ -1108,7 +1112,6 @@ export interface UseTrackToggleProps<T extends ToggleSource> extends Omit<TrackT
 // @alpha (undocumented)
 export function useTrackTranscription(trackRef: TrackReference, options?: TrackTranscriptionOptions): {
     segments: ReceivedTranscriptionSegment[];
-    activeSegments: ReceivedTranscriptionSegment[];
 };
 
 // @alpha

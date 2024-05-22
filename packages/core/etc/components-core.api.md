@@ -20,6 +20,7 @@ import type { Participant } from 'livekit-client';
 import { ParticipantEvent } from 'livekit-client';
 import type { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 import type { ParticipantPermission } from '@livekit/protocol';
+import type { PublicationEventCallbacks } from 'livekit-client/dist/src/room/track/TrackPublication';
 import { RemoteParticipant } from 'livekit-client';
 import { Room } from 'livekit-client';
 import { RoomEvent } from 'livekit-client';
@@ -30,10 +31,17 @@ import { Track } from 'livekit-client';
 import { TrackEvent as TrackEvent_2 } from 'livekit-client';
 import { TrackPublication } from 'livekit-client';
 import type { TrackPublishOptions } from 'livekit-client';
+import { TranscriptionSegment } from 'livekit-client';
 import type { VideoCaptureOptions } from 'livekit-client';
 
 // @public (undocumented)
 export function activeSpeakerObserver(room: Room): Observable<Participant[]>;
+
+// @public (undocumented)
+export function addMediaTimestampToTranscription(segment: TranscriptionSegment, timestamps: {
+    timestamp: number;
+    rtpTimestamp?: number;
+}): ReceivedTranscriptionSegment;
 
 // @public (undocumented)
 export const allParticipantEvents: ParticipantEvent[];
@@ -154,10 +162,22 @@ export const DataTopic: {
 };
 
 // @public (undocumented)
+export function dedupeSegments<T extends TranscriptionSegment>(prevSegments: T[], newSegments: T[], windowSize: number): T[];
+
+// @public (undocumented)
 export const defaultUserChoices: LocalUserChoices;
 
 // @public (undocumented)
+export function didActiveSegmentsChange<T extends TranscriptionSegment>(prevActive: T[], newActive: T[]): boolean;
+
+// @public (undocumented)
 export function encryptionStatusObservable(room: Room, participant: Participant): Observable<boolean>;
+
+// @public (undocumented)
+export function getActiveTranscriptionSegments(segments: ReceivedTranscriptionSegment[], syncTimes: {
+    timestamp: number;
+    rtpTimestamp?: number;
+}, maxAge?: number): ReceivedTranscriptionSegment[];
 
 // Warning: (ae-internal-missing-underscore) The name "getScrollBarWidth" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -356,6 +376,12 @@ export interface ReceivedDataMessage<T extends string | undefined = string> exte
     // (undocumented)
     from?: Participant;
 }
+
+// @public (undocumented)
+export type ReceivedTranscriptionSegment = TranscriptionSegment & {
+    receivedAtMediaTimestamp: number;
+    receivedAt: number;
+};
 
 // @public (undocumented)
 export type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> & {
@@ -565,6 +591,9 @@ export type TokenizeGrammar = {
     [type: string]: RegExp;
 };
 
+// @public (undocumented)
+export function trackEventSelector<T extends TrackEvent_2>(publication: TrackPublication | Track, event: T): Observable<Parameters<PublicationEventCallbacks[Extract<T, keyof PublicationEventCallbacks>]>>;
+
 // Warning: (ae-internal-missing-underscore) The name "TrackIdentifier" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal
@@ -616,6 +645,12 @@ export type TrackSourceWithOptions = {
     source: Track.Source;
     withPlaceholder: boolean;
 };
+
+// @public (undocumented)
+export function trackSyncTimeObserver(track: Track): Observable<number>;
+
+// @public (undocumented)
+export function trackTranscriptionObserver(publication: TrackPublication): Observable<[transcription: TranscriptionSegment[]]>;
 
 // Warning: (ae-forgotten-export) The symbol "UpdatableItem" needs to be exported by the entry point index.d.ts
 //

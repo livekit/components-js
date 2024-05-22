@@ -5,7 +5,7 @@ import {
   // getActiveTranscriptionSegments,
   getTrackReferenceId,
   trackTranscriptionObserver,
-  type TrackReference,
+  type TrackReferenceOrPlaceholder,
   // didActiveSegmentsChange,
 } from '@livekit/components-core';
 import type { TranscriptionSegment } from 'livekit-client';
@@ -16,7 +16,10 @@ import { useTrackSyncTime } from './useTrackSyncTime';
  * @alpha
  */
 export interface TrackTranscriptionOptions {
-  /** how many transcription segments should be buffered in state */
+  /**
+   * how many transcription segments should be buffered in state
+   * @defaultValue 100
+   */
   bufferSize?: number;
   /** amount of time (in ms) that the segment is considered `active` past its original segment duration, defaults to 2_000 */
   // maxAge?: number;
@@ -32,7 +35,7 @@ const TRACK_TRANSCRIPTION_DEFAULTS = {
  * @alpha
  */
 export function useTrackTranscription(
-  trackRef: TrackReference,
+  trackRef: TrackReferenceOrPlaceholder,
   options?: TrackTranscriptionOptions,
 ) {
   const opts = { ...TRACK_TRANSCRIPTION_DEFAULTS, ...options };

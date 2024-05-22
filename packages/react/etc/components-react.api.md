@@ -1110,7 +1110,7 @@ export interface UseTrackToggleProps<T extends ToggleSource> extends Omit<TrackT
 }
 
 // @alpha (undocumented)
-export function useTrackTranscription(trackRef: TrackReference, options?: TrackTranscriptionOptions): {
+export function useTrackTranscription(trackRef: TrackReferenceOrPlaceholder, options?: TrackTranscriptionOptions): {
     segments: ReceivedTranscriptionSegment[];
 };
 
@@ -1170,7 +1170,7 @@ export type WidgetState = {
 // src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "WidgetContextType" needs to be exported by the entry point index.d.ts
 // src/hooks/useGridLayout.ts:24:6 - (ae-forgotten-export) The symbol "GridLayoutDefinition" needs to be exported by the entry point index.d.ts
 // src/hooks/useMediaDeviceSelect.ts:47:29 - (ae-forgotten-export) The symbol "SetMediaDeviceOptions" needs to be exported by the entry point index.d.ts
-// src/hooks/useTrackTranscription.ts:36:38 - (ae-forgotten-export) The symbol "ReceivedTranscriptionSegment" needs to be exported by the entry point index.d.ts
+// src/hooks/useTrackTranscription.ts:39:38 - (ae-forgotten-export) The symbol "ReceivedTranscriptionSegment" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

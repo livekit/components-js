@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.10.2
+
+### Patch Changes
+
+- Add experimental hooks for transcriptions - [#853](https://github.com/livekit/components-js/pull/853) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.10.1
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 2.3.1
+
+### Patch Changes
+
+- Add experimental hooks for transcriptions - [#853](https://github.com/livekit/components-js/pull/853) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`79636e4f9ac72a4e608d5d28ccaf337bcb2a6514`](https://github.com/livekit/components-js/commit/79636e4f9ac72a4e608d5d28ccaf337bcb2a6514)]:
+  - @livekit/components-core@0.10.2
+
 ## 2.3.0
 
 ### Minor Changes

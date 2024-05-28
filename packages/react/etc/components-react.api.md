@@ -780,7 +780,13 @@ trackCount: number): {
 };
 
 // @alpha (undocumented)
-export function useIsEncrypted(participant?: Participant): boolean;
+export function useIsEncrypted(participant?: Participant, options?: UseIsEncryptedOptions): boolean;
+
+// @alpha (undocumented)
+export interface UseIsEncryptedOptions {
+    // (undocumented)
+    room?: Room;
+}
 
 // @public
 export function useIsMuted(trackRef: TrackReferenceOrPlaceholder): boolean;

@@ -110,11 +110,22 @@ export function VideoConference({
       layoutContext.pin.dispatch?.({ msg: 'clear_pin' });
       lastAutoFocusedScreenShareTrack.current = null;
     }
+    if (focusTrack && !isTrackReference(focusTrack)) {
+      const updatedFocusTrack = tracks.find(
+        (tr) =>
+          tr.participant.identity === focusTrack.participant.identity &&
+          tr.source === focusTrack.source,
+      );
+      if (updatedFocusTrack !== focusTrack && isTrackReference(updatedFocusTrack)) {
+        layoutContext.pin.dispatch?.({ msg: 'set_pin', trackReference: updatedFocusTrack });
+      }
+    }
   }, [
     screenShareTracks
       .map((ref) => `${ref.publication.trackSid}_${ref.publication.isSubscribed}`)
       .join(),
     focusTrack?.publication?.trackSid,
+    tracks,
   ]);
 
   useWarnAboutMissingStyles();

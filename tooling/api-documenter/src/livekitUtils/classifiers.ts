@@ -1,4 +1,9 @@
-import { ApiFunction, ApiItem } from '@microsoft/api-extractor-model';
+import {
+  ApiFunction,
+  ApiItem,
+  ApiVariable,
+  ExcerptTokenKind,
+} from '@microsoft/api-extractor-model';
 
 export type LkType = 'component' | 'hook' | 'prefab' | undefined;
 function isHook(apiItem: ApiItem): boolean {
@@ -13,11 +18,30 @@ function isPrefab(apiItem: ApiItem): boolean {
   }
   return false;
 }
+
+function isConstDeclarationComponent(apiItem: ApiItem): boolean {
+  return (
+    apiItem instanceof ApiVariable &&
+    apiItem.isReadonly &&
+    apiItem.excerptTokens.some(
+      (token) =>
+        token.kind === ExcerptTokenKind.Reference &&
+        ['React.ReactNode', 'React.Context'].includes(token.text),
+    )
+  );
+}
+
 function isComponent(apiItem: ApiItem): boolean {
-  if (apiItem instanceof ApiFunction) {
+  if (
+    apiItem instanceof ApiFunction ||
+    (apiItem instanceof ApiVariable && isConstDeclarationComponent(apiItem))
+  ) {
     return (
       isComponentReactPackage(apiItem) &&
-      !!apiItem.fileUrlPath?.startsWith('src/components/') &&
+      !!(
+        apiItem.fileUrlPath?.startsWith('src/components/') ||
+        apiItem.fileUrlPath?.startsWith('src/context/')
+      ) &&
       startsWithCapitalLetter(apiItem.displayName)
     );
   }

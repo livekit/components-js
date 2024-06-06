@@ -11,10 +11,10 @@ import {
  * @alpha
  * Hook for tracking the volume of an audio track using the Web Audio API.
  */
-export const useTrackVolume = (
+export function useTrackVolume(
   trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReference,
   options: AudioAnalyserOptions = { fftSize: 32, smoothingTimeConstant: 0 },
-) => {
+) {
   const track = isTrackReference(trackOrTrackReference)
     ? <LocalAudioTrack | RemoteAudioTrack | undefined>trackOrTrackReference.publication.track
     : trackOrTrackReference;
@@ -48,7 +48,7 @@ export const useTrackVolume = (
   }, [track, track?.mediaStream, JSON.stringify(options)]);
 
   return volume;
-};
+}
 
 const normalizeFrequencies = (frequencies: Float32Array) => {
   const normalizeDb = (value: number) => {
@@ -104,10 +104,10 @@ const multibandDefaults = {
  * Hook for tracking the volume of an audio track across multiple frequency bands using the Web Audio API.
  * @alpha
  */
-export const useMultibandTrackVolume = (
+export function useMultibandTrackVolume(
   trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder,
   options: MultiBandTrackVolumeOptions = {},
-) => {
+) {
   const track =
     trackOrTrackReference instanceof Track
       ? trackOrTrackReference
@@ -153,4 +153,4 @@ export const useMultibandTrackVolume = (
   }, [track, track?.mediaStream, JSON.stringify(options)]);
 
   return frequencyBands;
-};
+}

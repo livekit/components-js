@@ -868,7 +868,7 @@ export interface UseMediaDeviceSelectProps {
 }
 
 // @alpha
-export const useMultibandTrackVolume: (trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder, options?: MultiBandTrackVolumeOptions) => number[];
+export function useMultibandTrackVolume(trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder, options?: MultiBandTrackVolumeOptions): number[];
 
 // @alpha
 export function usePagination(itemPerPage: number, trackReferences: TrackReferenceOrPlaceholder[]): {
@@ -1121,7 +1121,7 @@ export function useTrackTranscription(trackRef: TrackReferenceOrPlaceholder, opt
 };
 
 // @alpha
-export const useTrackVolume: (trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReference, options?: AudioAnalyserOptions) => number;
+export function useTrackVolume(trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReference, options?: AudioAnalyserOptions): number;
 
 // @public
 export function useVisualStableUpdate(

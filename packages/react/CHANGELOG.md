@@ -1,5 +1,13 @@
 # @livekit/components-react
 
+## 2.3.2
+
+### Patch Changes
+
+- Support passing room to useIsEncrypted hook - [#871](https://github.com/livekit/components-js/pull/871) ([@renekliment](https://github.com/renekliment))
+
+- Update focused placeholder to trackRef - [#874](https://github.com/livekit/components-js/pull/874) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.3.1
 
 ### Patch Changes

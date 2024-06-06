@@ -181,7 +181,7 @@ export class MarkdownDocumenter {
         pageTitle = `${scopedName} type`;
         break;
       case ApiItemKind.Variable:
-        pageTitle = `${scopedName} variable`;
+        pageTitle = `${scopedName}`;
         break;
       default:
         throw new Error('Unsupported API item kind: ' + apiItem.kind);

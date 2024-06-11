@@ -2,7 +2,6 @@ import { connectedParticipantObserver } from '@livekit/components-core';
 import type { ParticipantEvent, RemoteParticipant } from 'livekit-client';
 import * as React from 'react';
 import { useRoomContext } from '../context';
-// import { useObservableState } from './internal';
 
 /** @public */
 export interface UseRemoteParticipantOptions {
@@ -36,6 +35,8 @@ export function useRemoteParticipant(
     [room, identity, updateOnlyOn],
   );
 
+  // Using `wrapperParticipant` to ensure a new object reference,
+  // triggering a re-render when the participant events fire.
   const [participantWrapper, setParticipantWrapper] = React.useState({
     p: room.getParticipantByIdentity(identity) as RemoteParticipant | undefined,
   });

@@ -51,8 +51,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/styles
       livekit-client:
-        specifier: ^2.1.5
-        version: 2.1.5
+        specifier: ^2.2.0
+        version: 2.2.0
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -115,8 +115,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/styles
       livekit-client:
-        specifier: ^2.1.5
-        version: 2.1.5
+        specifier: ^2.2.0
+        version: 2.2.0
       livekit-server-sdk:
         specifier: ^1.2.7
         version: 1.2.7
@@ -161,8 +161,8 @@ importers:
         specifier: 5.0.0
         version: 5.0.0
       livekit-client:
-        specifier: ^2.1.5
-        version: 2.1.5
+        specifier: ^2.2.0
+        version: 2.2.0
       loglevel:
         specifier: 1.9.1
         version: 1.9.1
@@ -213,8 +213,8 @@ importers:
         specifier: 2.1.1
         version: 2.1.1
       livekit-client:
-        specifier: ^2.1.5
-        version: 2.1.5
+        specifier: ^2.2.0
+        version: 2.2.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -5538,8 +5538,8 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  livekit-client@2.1.5:
-    resolution: {integrity: sha512-8sc1ltfKRjy51Q/V/SaDpjptXBamm9LXhixKBYdXdQFZdew4hgqTGYlHIyee/IM9QSqAXk1W+uCtVfkmxPD1EA==}
+  livekit-client@2.2.0:
+    resolution: {integrity: sha512-Iuk17l269P7SxvE3Gs3ExwoW3+lrz3BfiXOU7gTf/GqansxPx7Y+rfkLHWSBmvmAXOt+Rld4EFEpk8ARSagfnQ==}
 
   livekit-server-sdk@1.2.7:
     resolution: {integrity: sha512-tOhRb0vz1wBzMpTkP4ixptlC9MFME24PvG8Z/R7vBbQ1VGd6EdNr56voBSr+RCalYxaQqx0E9Gg4l+57m/Nlmw==}
@@ -14294,7 +14294,7 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  livekit-client@2.1.5:
+  livekit-client@2.2.0:
     dependencies:
       '@livekit/protocol': 1.16.0
       events: 3.3.0

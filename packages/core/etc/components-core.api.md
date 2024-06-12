@@ -19,6 +19,7 @@ import { Observable } from 'rxjs';
 import type { Participant } from 'livekit-client';
 import { ParticipantEvent } from 'livekit-client';
 import type { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
+import { ParticipantKind } from 'livekit-client';
 import type { ParticipantPermission } from '@livekit/protocol';
 import type { PublicationEventCallbacks } from 'livekit-client/dist/src/room/track/TrackPublication';
 import { RemoteParticipant } from 'livekit-client';
@@ -295,6 +296,9 @@ export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observabl
 
 // @public (undocumented)
 export function observeTrackEvents(track: TrackPublication, ...events: TrackEvent_2[]): Observable<TrackPublication>;
+
+// @public (undocumented)
+export function participantByKindObserver(room: Room, kind: ParticipantKind, options?: ConnectedParticipantObserverOptions): Observable<RemoteParticipant | undefined>;
 
 // Warning: (ae-internal-missing-underscore) The name "ParticipantClickEvent" should be prefixed with an underscore because the declaration is marked as @internal
 //

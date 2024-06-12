@@ -19,6 +19,7 @@ import { LocalVideoTrack } from 'livekit-client';
 import type { MediaDeviceFailure } from 'livekit-client';
 import { Participant } from 'livekit-client';
 import type { ParticipantEvent } from 'livekit-client';
+import type { ParticipantKind } from 'livekit-client';
 import type { ParticipantPermission } from '@livekit/protocol';
 import * as React_2 from 'react';
 import type { RemoteAudioTrack } from 'livekit-client';
@@ -969,6 +970,14 @@ export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (e
 
 // @public
 export function useRemoteParticipant(identity: string, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;
+
+// @alpha
+export function useRemoteParticipantByKind(kind: ParticipantKind, options?: UseRemoteParticipantByKindOptions): RemoteParticipant | undefined;
+
+// @alpha (undocumented)
+export interface UseRemoteParticipantByKindOptions {
+    updateOnlyOn?: ParticipantEvent[];
+}
 
 // @public (undocumented)
 export interface UseRemoteParticipantOptions {

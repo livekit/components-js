@@ -1,6 +1,6 @@
 import type { ParticipantPermission } from '@livekit/protocol';
 import type { Participant, RemoteParticipant, Room, TrackPublication } from 'livekit-client';
-import { ParticipantEvent, RoomEvent, Track } from 'livekit-client';
+import { ParticipantEvent, ParticipantKind, RoomEvent, Track } from 'livekit-client';
 import type { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 import type { Subscriber } from 'rxjs';
 import { Observable, map, startWith, switchMap } from 'rxjs';
@@ -247,4 +247,30 @@ export function participantPermissionObserver(
     startWith(participant.permissions),
   );
   return observer;
+}
+
+export function participantByKindObserver(
+  room: Room,
+  kind: ParticipantKind,
+  options: ConnectedParticipantObserverOptions = {},
+): Observable<RemoteParticipant | undefined> {
+  const additionalEvents = options.additionalEvents ?? allParticipantEvents;
+  const observable = observeRoomEvents(
+    room,
+    RoomEvent.ParticipantConnected,
+    RoomEvent.ParticipantDisconnected,
+    RoomEvent.ConnectionStateChanged,
+  ).pipe(
+    switchMap((r) => {
+      const participant = Array.from(r.remoteParticipants.values()).find((p) => p.kind === kind);
+      if (participant) {
+        return observeParticipantEvents(participant, ...additionalEvents);
+      } else {
+        return new Observable<undefined>((subscribe) => subscribe.next(undefined));
+      }
+    }),
+    startWith(Array.from(room.remoteParticipants.values()).find((p) => p.kind === kind)),
+  );
+
+  return observable;
 }

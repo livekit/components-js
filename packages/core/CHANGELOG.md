@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.10.3
+
+### Patch Changes
+
+- Create emailregex in components-core instead of using a dedicated package - [#895](https://github.com/livekit/components-js/pull/895) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.10.2
 
 ### Patch Changes

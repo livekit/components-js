@@ -157,9 +157,6 @@ importers:
       '@livekit/protocol':
         specifier: ^1.16.0
         version: 1.16.0
-      email-regex:
-        specifier: 5.0.0
-        version: 5.0.0
       livekit-client:
         specifier: ^2.1.5
         version: 2.1.5
@@ -4057,10 +4054,6 @@ packages:
 
   electron-to-chromium@1.4.726:
     resolution: {integrity: sha512-xtjfBXn53RORwkbyKvDfTajtnTp0OJoPOIBzXvkNbb7+YYvCHJflba3L7Txyx/6Fov3ov2bGPr/n5MTixmPhdQ==}
-
-  email-regex@5.0.0:
-    resolution: {integrity: sha512-he76Cm8JFxb6OGQHabLBPdsiStgPmJeAEhctmw0uhonUh1pCBsHpI6/rB62s2GNzjBb0YlhIcF/1l9Lp5AfH0Q==}
-    engines: {node: '>=12'}
 
   emittery@0.13.1:
     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
@@ -12260,8 +12253,6 @@ snapshots:
       jake: 10.8.7
 
   electron-to-chromium@1.4.726: {}
-
-  email-regex@5.0.0: {}
 
   emittery@0.13.1: {}
 

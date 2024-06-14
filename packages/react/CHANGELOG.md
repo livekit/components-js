@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 2.3.3
+
+### Patch Changes
+
+- Fix `useRemoteParticipant` re-rendering on participant events - [#891](https://github.com/livekit/components-js/pull/891) ([@mpnri](https://github.com/mpnri))
+
+- Updated dependencies [[`f09491284e935fa7e1af6cae0870bcb09926f722`](https://github.com/livekit/components-js/commit/f09491284e935fa7e1af6cae0870bcb09926f722)]:
+  - @livekit/components-core@0.10.3
+
 ## 2.3.2
 
 ### Patch Changes

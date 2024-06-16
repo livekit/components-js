@@ -1,6 +1,6 @@
 ---
-"@livekit/components-core": patch
-"@livekit/components-react": patch
+'@livekit/components-core': patch
+'@livekit/components-react': patch
 ---
 
-Add useParticipantByKind hook
+Add overload for kind + identity in useRemoteParticipant hook

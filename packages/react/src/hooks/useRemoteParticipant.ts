@@ -29,7 +29,7 @@ export interface UseRemoteParticipantOptions {
  */
 export function useRemoteParticipant(
   identifier: ParticipantIdentifier,
-  options: UseRemoteParticipantOptions,
+  options?: UseRemoteParticipantOptions,
 ): RemoteParticipant | undefined;
 /**
  * The `useRemoteParticipant` hook returns the first RemoteParticipant by either identity or based on the participant kind.
@@ -44,7 +44,7 @@ export function useRemoteParticipant(
  */
 export function useRemoteParticipant(
   identity: string,
-  options: UseRemoteParticipantOptions,
+  options?: UseRemoteParticipantOptions,
 ): RemoteParticipant | undefined;
 export function useRemoteParticipant(
   identityOrIdentifier: string | ParticipantIdentifier,

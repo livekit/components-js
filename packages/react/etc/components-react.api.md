@@ -968,16 +968,13 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(en
 // @alpha (undocumented)
 export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): LocalTrack<Track.Kind>[] | undefined;
 
+// Warning: (ae-forgotten-export) The symbol "ParticipantIdentifier" needs to be exported by the entry point index.d.ts
+//
+// @public
+export function useRemoteParticipant(identifier: ParticipantIdentifier, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;
+
 // @public
 export function useRemoteParticipant(identity: string, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;
-
-// @alpha
-export function useRemoteParticipantByKind(kind: ParticipantKind, options?: UseRemoteParticipantByKindOptions): RemoteParticipant | undefined;
-
-// @alpha (undocumented)
-export interface UseRemoteParticipantByKindOptions {
-    updateOnlyOn?: ParticipantEvent[];
-}
 
 // @public (undocumented)
 export interface UseRemoteParticipantOptions {

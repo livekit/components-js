@@ -1,4 +1,4 @@
-import type { Participant, Track, TrackPublication } from 'livekit-client';
+import type { Participant, ParticipantKind, Track, TrackPublication } from 'livekit-client';
 import type { TrackReference, TrackReferenceOrPlaceholder } from './track-reference';
 
 // ## PinState Type
@@ -55,6 +55,11 @@ export type TrackSource<T extends Track.Source> = RequireAtLeastOne<
 export type ParticipantTrackIdentifier = RequireAtLeastOne<
   { sources: Track.Source[]; name: string; kind: Track.Kind },
   'sources' | 'name' | 'kind'
+>;
+
+export type ParticipantIdentifier = RequireAtLeastOne<
+  { kind: ParticipantKind; identity: string },
+  'identity' | 'kind'
 >;
 
 /**

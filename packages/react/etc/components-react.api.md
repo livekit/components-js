@@ -973,7 +973,7 @@ export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (e
 // @public
 export function useRemoteParticipant(identifier: ParticipantIdentifier, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;
 
-// @public
+// @public (undocumented)
 export function useRemoteParticipant(identity: string, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;
 
 // @public (undocumented)

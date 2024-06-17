@@ -6,7 +6,7 @@ import {
 } from '@microsoft/api-extractor-model';
 
 export type LkType = 'component' | 'hook' | 'prefab' | undefined;
-function isHook(apiItem: ApiItem): boolean {
+export function isHook(apiItem: ApiItem): boolean {
   if (apiItem instanceof ApiFunction) {
     return apiItem.getScopedNameWithinPackage().startsWith('use');
   }

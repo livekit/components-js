@@ -72,6 +72,7 @@ import {
   getCategorySubfolder,
   getFunctionType,
   getLinkToSourceOnGitHub,
+  isHook,
 } from '../livekitUtils/classifiers';
 import { MarkDocTag } from '../nodes/MarkDocTag';
 import { ParameterList } from '../nodes/ParameterList';
@@ -546,7 +547,10 @@ export class MarkdownDocumenter {
       headerTitles: ['Package', 'Description'],
     });
 
-    for (const apiMember of apiModel.members) {
+    // skip items with the same name as it would generate multiple doc files for overloaded functions
+    // instead we want the docs string to showcase all overload usages and only have one file for each function
+
+    for (const apiMember of Utilities.dedupeApiItems(apiModel.members)) {
       const row: DocTableRow = new DocTableRow({ configuration }, [
         this._createTitleCell(apiMember),
         this._createDescriptionCell(apiMember),
@@ -640,7 +644,9 @@ export class MarkdownDocumenter {
         ? (apiContainer as ApiPackage).entryPoints[0].members
         : (apiContainer as ApiNamespace).members;
 
-    for (const apiMember of apiMembers) {
+    // skip items with the same name as it would generate multiple doc files for overloaded functions
+    // instead we want the docs string to showcase all overload usages and only have one file for each function
+    for (const apiMember of Utilities.dedupeApiItems(apiMembers)) {
       const row: DocTableRow = new DocTableRow({ configuration }, [
         this._createTitleCell(apiMember),
         this._createDescriptionCell(apiMember),
@@ -790,7 +796,9 @@ export class MarkdownDocumenter {
       apiClass,
       output,
     );
-    for (const apiMember of apiMembers) {
+    // skip items with the same name as it would generate multiple doc files for overloaded functions
+    // instead we want the docs string to showcase all overload usages and only have one file for each function
+    for (const apiMember of Utilities.dedupeApiItems(apiMembers)) {
       const isInherited: boolean = apiMember.parent !== apiClass;
       switch (apiMember.kind) {
         case ApiItemKind.Constructor: {
@@ -924,7 +932,9 @@ export class MarkdownDocumenter {
       apiInterface,
       output,
     );
-    for (const apiMember of apiMembers) {
+    // skip items with the same name as it would generate multiple doc files for overloaded functions
+    // instead we want the docs string to showcase all overload usages and only have one file for each function
+    for (const apiMember of Utilities.dedupeApiItems(apiMembers)) {
       const isInherited: boolean = apiMember.parent !== apiInterface;
       switch (apiMember.kind) {
         case ApiItemKind.ConstructSignature:

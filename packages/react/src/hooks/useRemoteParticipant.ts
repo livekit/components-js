@@ -1,5 +1,5 @@
 import {
-  ParticipantIdentifier,
+  type ParticipantIdentifier,
   connectedParticipantObserver,
   participantByIdentifierObserver,
 } from '@livekit/components-core';

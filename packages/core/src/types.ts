@@ -57,6 +57,9 @@ export type ParticipantTrackIdentifier = RequireAtLeastOne<
   'sources' | 'name' | 'kind'
 >;
 
+/**
+ * @beta
+ */
 export type ParticipantIdentifier = RequireAtLeastOne<
   { kind: ParticipantKind; identity: string },
   'identity' | 'kind'

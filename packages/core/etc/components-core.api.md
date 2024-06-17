@@ -297,6 +297,8 @@ export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observabl
 // @public (undocumented)
 export function observeTrackEvents(track: TrackPublication, ...events: TrackEvent_2[]): Observable<TrackPublication>;
 
+// Warning: (ae-incompatible-release-tags) The symbol "participantByIdentifierObserver" is marked as @public, but its signature references "ParticipantIdentifier" which is marked as @beta
+//
 // @public (undocumented)
 export function participantByIdentifierObserver(room: Room, { kind, identity }: ParticipantIdentifier, options?: ConnectedParticipantObserverOptions): Observable<RemoteParticipant | undefined>;
 
@@ -318,7 +320,7 @@ export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
 
 // Warning: (ae-forgotten-export) The symbol "RequireAtLeastOne" needs to be exported by the entry point index.d.ts
 //
-// @public (undocumented)
+// @beta (undocumented)
 export type ParticipantIdentifier = RequireAtLeastOne<{
     kind: ParticipantKind;
     identity: string;

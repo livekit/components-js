@@ -452,7 +452,7 @@ export function ParticipantContextIfNeeded(props: React_2.PropsWithChildren<{
 
 // Warning: (ae-forgotten-export) The symbol "RequireAtLeastOne" needs to be exported by the entry point index.d.ts
 //
-// @public (undocumented)
+// @beta (undocumented)
 export type ParticipantIdentifier = RequireAtLeastOne<{
     kind: ParticipantKind;
     identity: string;
@@ -976,6 +976,8 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(en
 // @alpha (undocumented)
 export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): LocalTrack<Track.Kind>[] | undefined;
 
+// Warning: (ae-incompatible-release-tags) The symbol "useRemoteParticipant" is marked as @public, but its signature references "ParticipantIdentifier" which is marked as @beta
+//
 // @public
 export function useRemoteParticipant(identifier: ParticipantIdentifier, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;
 

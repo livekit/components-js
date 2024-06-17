@@ -19,6 +19,7 @@ import { Observable } from 'rxjs';
 import type { Participant } from 'livekit-client';
 import { ParticipantEvent } from 'livekit-client';
 import type { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
+import type { ParticipantKind } from 'livekit-client';
 import type { ParticipantPermission } from '@livekit/protocol';
 import type { PublicationEventCallbacks } from 'livekit-client/dist/src/room/track/TrackPublication';
 import { RemoteParticipant } from 'livekit-client';
@@ -296,6 +297,11 @@ export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observabl
 // @public (undocumented)
 export function observeTrackEvents(track: TrackPublication, ...events: TrackEvent_2[]): Observable<TrackPublication>;
 
+// Warning: (ae-incompatible-release-tags) The symbol "participantByIdentifierObserver" is marked as @public, but its signature references "ParticipantIdentifier" which is marked as @beta
+//
+// @public (undocumented)
+export function participantByIdentifierObserver(room: Room, { kind, identity }: ParticipantIdentifier, options?: ConnectedParticipantObserverOptions): Observable<RemoteParticipant | undefined>;
+
 // Warning: (ae-internal-missing-underscore) The name "ParticipantClickEvent" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -311,6 +317,14 @@ export function participantEventSelector<T extends ParticipantEvent>(participant
 
 // @public (undocumented)
 export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
+
+// Warning: (ae-forgotten-export) The symbol "RequireAtLeastOne" needs to be exported by the entry point index.d.ts
+//
+// @beta (undocumented)
+export type ParticipantIdentifier = RequireAtLeastOne<{
+    kind: ParticipantKind;
+    identity: string;
+}, 'identity' | 'kind'>;
 
 // @public (undocumented)
 export function participantInfoObserver(participant: Participant): Observable<{
@@ -345,8 +359,6 @@ export function participantPermissionObserver(participant: Participant): Observa
 // @public (undocumented)
 export const participantTrackEvents: ParticipantEvent[];
 
-// Warning: (ae-forgotten-export) The symbol "RequireAtLeastOne" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export type ParticipantTrackIdentifier = RequireAtLeastOne<{
     sources: Track.Source[];

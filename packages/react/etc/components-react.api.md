@@ -19,6 +19,7 @@ import { LocalVideoTrack } from 'livekit-client';
 import type { MediaDeviceFailure } from 'livekit-client';
 import { Participant } from 'livekit-client';
 import type { ParticipantEvent } from 'livekit-client';
+import type { ParticipantKind } from 'livekit-client';
 import type { ParticipantPermission } from '@livekit/protocol';
 import * as React_2 from 'react';
 import type { RemoteAudioTrack } from 'livekit-client';
@@ -448,6 +449,14 @@ export const ParticipantContext: React_2.Context<Participant | undefined>;
 export function ParticipantContextIfNeeded(props: React_2.PropsWithChildren<{
     participant?: Participant;
 }>): React_2.JSX.Element;
+
+// Warning: (ae-forgotten-export) The symbol "RequireAtLeastOne" needs to be exported by the entry point index.d.ts
+//
+// @beta (undocumented)
+export type ParticipantIdentifier = RequireAtLeastOne<{
+    kind: ParticipantKind;
+    identity: string;
+}, 'identity' | 'kind'>;
 
 // @public
 export function ParticipantLoop({ participants, ...props }: ParticipantLoopProps): React_2.JSX.Element;
@@ -966,6 +975,11 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(en
 
 // @alpha (undocumented)
 export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): LocalTrack<Track.Kind>[] | undefined;
+
+// Warning: (ae-incompatible-release-tags) The symbol "useRemoteParticipant" is marked as @public, but its signature references "ParticipantIdentifier" which is marked as @beta
+//
+// @public
+export function useRemoteParticipant(identifier: ParticipantIdentifier, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;
 
 // @public
 export function useRemoteParticipant(identity: string, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;

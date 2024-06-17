@@ -7,7 +7,7 @@ import { Observable, map, startWith, switchMap } from 'rxjs';
 import { getTrackByIdentifier } from '../components/mediaTrack';
 import { allParticipantEvents, allParticipantRoomEvents } from '../helper/eventGroups';
 import type { TrackReferenceOrPlaceholder } from '../track-reference';
-import type { TrackIdentifier } from '../types';
+import type { ParticipantIdentifier, TrackIdentifier } from '../types';
 import { observeRoomEvents } from './room';
 
 export function observeParticipantEvents<T extends Participant>(
@@ -247,4 +247,42 @@ export function participantPermissionObserver(
     startWith(participant.permissions),
   );
   return observer;
+}
+
+export function participantByIdentifierObserver(
+  room: Room,
+  { kind, identity }: ParticipantIdentifier,
+  options: ConnectedParticipantObserverOptions = {},
+): Observable<RemoteParticipant | undefined> {
+  const additionalEvents = options.additionalEvents ?? allParticipantEvents;
+  const matchesIdentifier = (participant: RemoteParticipant) => {
+    let isMatch = true;
+    if (kind) {
+      isMatch = isMatch && participant.kind === kind;
+    }
+    if (identity) {
+      isMatch = isMatch && participant.identity === identity;
+    }
+    return isMatch;
+  };
+  const observable = observeRoomEvents(
+    room,
+    RoomEvent.ParticipantConnected,
+    RoomEvent.ParticipantDisconnected,
+    RoomEvent.ConnectionStateChanged,
+  ).pipe(
+    switchMap((r) => {
+      const participant = Array.from(r.remoteParticipants.values()).find((p) =>
+        matchesIdentifier(p),
+      );
+      if (participant) {
+        return observeParticipantEvents(participant, ...additionalEvents);
+      } else {
+        return new Observable<undefined>((subscribe) => subscribe.next(undefined));
+      }
+    }),
+    startWith(Array.from(room.remoteParticipants.values()).find((p) => matchesIdentifier(p))),
+  );
+
+  return observable;
 }

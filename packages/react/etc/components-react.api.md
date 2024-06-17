@@ -450,6 +450,14 @@ export function ParticipantContextIfNeeded(props: React_2.PropsWithChildren<{
     participant?: Participant;
 }>): React_2.JSX.Element;
 
+// Warning: (ae-forgotten-export) The symbol "RequireAtLeastOne" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+export type ParticipantIdentifier = RequireAtLeastOne<{
+    kind: ParticipantKind;
+    identity: string;
+}, 'identity' | 'kind'>;
+
 // @public
 export function ParticipantLoop({ participants, ...props }: ParticipantLoopProps): React_2.JSX.Element;
 
@@ -968,8 +976,6 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(en
 // @alpha (undocumented)
 export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): LocalTrack<Track.Kind>[] | undefined;
 
-// Warning: (ae-forgotten-export) The symbol "ParticipantIdentifier" needs to be exported by the entry point index.d.ts
-//
 // @public
 export function useRemoteParticipant(identifier: ParticipantIdentifier, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;
 

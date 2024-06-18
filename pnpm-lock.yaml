@@ -319,8 +319,8 @@ importers:
         specifier: ^2.2.6
         version: 2.6.17(@rushstack/heft@0.66.18(@types/node@20.14.5))(@types/node@20.14.5)
       '@rushstack/node-core-library':
-        specifier: ^4.0.0
-        version: 4.3.0(@types/node@20.14.5)
+        specifier: ^5.0.0
+        version: 5.4.1(@types/node@20.14.5)
       '@rushstack/ts-command-line':
         specifier: ^4.15.0
         version: 4.22.0(@types/node@20.14.5)
@@ -2283,14 +2283,6 @@ packages:
 
   '@rushstack/node-core-library@4.1.0':
     resolution: {integrity: sha512-qz4JFBZJCf1YN5cAXa1dP6Mki/HrsQxc/oYGAGx29dF2cwF2YMxHoly0FBhMw3IEnxo5fMj0boVfoHVBkpkx/w==}
-    peerDependencies:
-      '@types/node': '*'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
-  '@rushstack/node-core-library@4.3.0':
-    resolution: {integrity: sha512-JuNZ7lwaYQ4R1TugpryyWBn4lIxK+L7fF+muibFp0by5WklG22nsvH868fuBoZMLo5FqAs6WFOifNos4PJjWSA==}
     peerDependencies:
       '@types/node': '*'
     peerDependenciesMeta:
@@ -9971,17 +9963,6 @@ snapshots:
     optionalDependencies:
       '@types/node': 20.14.5
 
-  '@rushstack/node-core-library@4.3.0(@types/node@20.14.5)':
-    dependencies:
-      fs-extra: 7.0.1
-      import-lazy: 4.0.0
-      jju: 1.4.0
-      resolve: 1.22.8
-      semver: 7.5.4
-      z-schema: 5.0.5
-    optionalDependencies:
-      '@types/node': 20.14.5
-
   '@rushstack/node-core-library@5.4.1(@types/node@20.14.5)':
     dependencies:
       ajv: 8.13.0
@@ -11205,7 +11186,7 @@ snapshots:
       '@typescript-eslint/types': 6.21.0
       '@typescript-eslint/typescript-estree': 6.21.0(typescript@5.4.5)
       eslint: 8.57.0
-      semver: 7.6.0
+      semver: 7.6.2
     transitivePeerDependencies:
       - supports-color
       - typescript

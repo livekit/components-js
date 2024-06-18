@@ -1,14 +1,15 @@
 {
   "extends": ["config:base"],
-  "schedule": "on the first day of the month",
   "rangeStrategy": "auto",
   "packageRules": [
     {
+      "schedule": "before 6am on the first day of the month",
       "matchDepTypes": ["devDependencies"],
       "matchUpdateTypes": ["patch", "minor"],
       "groupName": "devDependencies (non-major)"
     },
     {
+      "schedule": "before 6am on the first day of the month",
       "matchPackagePrefixes": ["@rushstack"],
       "matchUpdateTypes": ["patch", "minor"],
       "groupName": "Rush stack (non-major)"

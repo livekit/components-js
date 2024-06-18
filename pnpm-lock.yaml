@@ -221,7 +221,7 @@ importers:
     devDependencies:
       '@livekit/protocol':
         specifier: ^1.16.0
-        version: 1.17.0
+        version: 1.16.0
       '@microsoft/api-extractor':
         specifier: ^7.35.0
         version: 7.47.0(@types/node@20.14.5)
@@ -1639,9 +1639,6 @@ packages:
 
   '@livekit/protocol@1.16.0':
     resolution: {integrity: sha512-xZZTZVh2FmWmUgNS3n+oGNbA4GcS4XOwhg8CWy75jenYxbgQ89ds7ixfMQ+F+oxktcXfJ1qsph086oRTlg8e5Q==}
-
-  '@livekit/protocol@1.17.0':
-    resolution: {integrity: sha512-PFsirFpVLFMtq7qQOV5VTnNeW4pmLvww+iF4kkMxjxMfhSQQXJoubyhAYO0nMpKmervqPUYwaM4rSOysQtCbRg==}
 
   '@manypkg/find-root@1.1.0':
     resolution: {integrity: sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA==}

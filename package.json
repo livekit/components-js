@@ -40,10 +40,11 @@
     "husky": "^8.0.3",
     "nodemon": "^3.0.3",
     "prettier": "^3.2.5",
-    "turbo": "^1.12.2",
+    "turbo": "^2.0.0",
     "typescript": "5.4.5"
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "packageManager": "pnpm@9.2.0"
 }

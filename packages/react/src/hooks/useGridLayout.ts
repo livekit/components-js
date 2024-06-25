@@ -24,7 +24,7 @@ export function useGridLayout(
   options: {
     gridLayouts?: GridLayoutDefinition[];
   } = {},
-): { layout: GridLayoutDefinition, width: number, height: number } {
+): { layout: GridLayoutDefinition; width: number; height: number } {
   const { gridLayouts } = options;
   const { width, height } = useSize(gridElement);
 

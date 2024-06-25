@@ -42,5 +42,7 @@ export function useGridLayout(
 
   return {
     layout,
+    width,
+    height,
   };
 }

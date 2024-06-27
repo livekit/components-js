@@ -1,6 +1,28 @@
 import { log } from '../logger';
 
 export type GridLayoutDefinition = {
+  /** Column count of the grid layout. */
+  columns: number;
+  /** Row count of the grid layout. */
+  rows: number;
+  // # Constraints that have to be meet to use this layout.
+  /**
+   * Minimum grid container width required to use this layout.
+   * @remarks
+   * If this constraint is not met, we try to select a layout with fewer tiles
+   * (`tiles=columns*rows`) that is within the constraint.
+   */
+  minWidth?: number;
+  /**
+   * Minimum grid container height required to use this layout.
+   * @remarks
+   * If this constraint is not met, we try to select a layout with fewer tiles
+   * (`tiles=columns*rows`) that is within the constraint.
+   */
+  minHeight?: number;
+};
+
+type GridLayout = {
   /** Layout name (convention `<column_count>x<row_count>`). */
   name: string;
   /** Column count of the layout. */
@@ -9,8 +31,6 @@ export type GridLayoutDefinition = {
   rows: number;
   // # Constraints that have to be meet to use this layout.
   // ## 1. Participant range:
-  /** Minimum number of tiles needed to use this layout. */
-  minTiles: number;
   /** Maximum tiles that fit into this layout. */
   maxTiles: number;
   // ## 2. Screen size limits:
@@ -24,74 +44,45 @@ export const GRID_LAYOUTS: GridLayoutDefinition[] = [
   {
     columns: 1,
     rows: 1,
-    name: '1x1',
-    minTiles: 1,
-    maxTiles: 1,
-    minWidth: 0,
-    minHeight: 0,
   },
   {
     columns: 1,
     rows: 2,
-    name: '1x2',
-    minTiles: 2,
-    maxTiles: 2,
-    minWidth: 0,
-    minHeight: 0,
   },
   {
     columns: 2,
     rows: 1,
-    name: '2x1',
-    minTiles: 2,
-    maxTiles: 2,
     minWidth: 900,
-    minHeight: 0,
   },
   {
     columns: 2,
     rows: 2,
-    name: '2x2',
-    minTiles: 3,
-    maxTiles: 4,
     minWidth: 560,
-    minHeight: 0,
   },
   {
     columns: 3,
     rows: 3,
-    name: '3x3',
-    minTiles: 5,
-    maxTiles: 9,
     minWidth: 700,
-    minHeight: 0,
   },
   {
     columns: 4,
     rows: 4,
-    name: '4x4',
-    minTiles: 10,
-    maxTiles: 16,
     minWidth: 960,
-    minHeight: 0,
   },
   {
     columns: 5,
     rows: 5,
-    name: '5x5',
-    minTiles: 17,
-    maxTiles: 25,
     minWidth: 1100,
-    minHeight: 0,
   },
 ];
 
 export function selectGridLayout(
-  layouts: GridLayoutDefinition[],
+  layoutDefinitions: GridLayoutDefinition[],
   participantCount: number,
   width: number,
   height: number,
-): GridLayoutDefinition {
+): GridLayout {
+  const layouts = expandAndSortLayoutDefinitions(layoutDefinitions);
   // Find the best layout to fit all participants.
   let currentLayoutIndex = 0;
   let layout = layouts.find((layout_, index, allLayouts) => {
@@ -108,7 +99,7 @@ export function selectGridLayout(
     layout = layouts[layouts.length - 1];
     if (layout) {
       log.warn(
-        `No layout found for: participantCount: ${participantCount}, width/height: ${width}/${height} fallback to biggest available layout (${layout.name}).`,
+        `No layout found for: participantCount: ${participantCount}, width/height: ${width}/${height} fallback to biggest available layout (${layout}).`,
       );
     } else {
       throw new Error(`No layout or fallback layout found.`);
@@ -129,4 +120,28 @@ export function selectGridLayout(
     }
   }
   return layout;
+}
+
+/**
+ * @internal
+ */
+export function expandAndSortLayoutDefinitions(layouts: GridLayoutDefinition[]): GridLayout[] {
+  return [...layouts]
+    .map((layout) => {
+      return {
+        name: `${layout.columns}x${layout.rows}`,
+        columns: layout.columns,
+        rows: layout.rows,
+        maxTiles: layout.columns * layout.rows,
+        minWidth: layout.minWidth ?? 0,
+        minHeight: layout.minHeight ?? 0,
+      } satisfies GridLayout;
+    })
+    .sort((a, b) => {
+      if (a.maxTiles !== b.maxTiles) {
+        return a.maxTiles - b.maxTiles;
+      } else {
+        return a.minWidth - b.minWidth;
+      }
+    });
 }

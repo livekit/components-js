@@ -25,13 +25,16 @@ export function useGridLayout(
     gridLayouts?: GridLayoutDefinition[];
   } = {},
 ): { layout: GridLayoutDefinition; width: number; height: number } {
-  const { gridLayouts } = options;
+  const gridLayouts = options.gridLayouts ?? GRID_LAYOUTS;
+  if (gridLayouts.length < 1) {
+    throw new Error('At least one grid layout must be provided.');
+  }
   const { width, height } = useSize(gridElement);
 
   const layout =
     width > 0 && height > 0
-      ? selectGridLayout(gridLayouts || GRID_LAYOUTS, trackCount, width, height)
-      : GRID_LAYOUTS[0];
+      ? selectGridLayout(gridLayouts, trackCount, width, height)
+      : gridLayouts[0];
 
   React.useEffect(() => {
     if (gridElement.current && layout) {

@@ -1,5 +1,5 @@
 import { GRID_LAYOUTS, selectGridLayout } from '@livekit/components-core';
-import type { GridLayoutDefinition } from '@livekit/components-core';
+import type { GridLayoutDefinition, GridLayoutInfo } from '@livekit/components-core';
 import * as React from 'react';
 import { useSize } from './internal';
 
@@ -24,17 +24,10 @@ export function useGridLayout(
   options: {
     gridLayouts?: GridLayoutDefinition[];
   } = {},
-): { layout: GridLayoutDefinition; width: number; height: number } {
+): { layout: GridLayoutInfo; containerWidth: number; containerHeight: number } {
   const gridLayouts = options.gridLayouts ?? GRID_LAYOUTS;
-  if (gridLayouts.length < 1) {
-    throw new Error('At least one grid layout must be provided.');
-  }
   const { width, height } = useSize(gridElement);
-
-  const layout =
-    width > 0 && height > 0
-      ? selectGridLayout(gridLayouts, trackCount, width, height)
-      : gridLayouts[0];
+  const layout = selectGridLayout(gridLayouts, trackCount, width, height);
 
   React.useEffect(() => {
     if (gridElement.current && layout) {
@@ -45,7 +38,7 @@ export function useGridLayout(
 
   return {
     layout,
-    width,
-    height,
+    containerWidth: width,
+    containerHeight: height,
   };
 }

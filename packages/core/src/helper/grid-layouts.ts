@@ -22,7 +22,7 @@ export type GridLayoutDefinition = {
   minHeight?: number;
 };
 
-type GridLayout = {
+export type GridLayoutInfo = {
   /** Layout name (convention `<column_count>x<row_count>`). */
   name: string;
   /** Column count of the layout. */
@@ -74,15 +74,21 @@ export const GRID_LAYOUTS: GridLayoutDefinition[] = [
     rows: 5,
     minWidth: 1100,
   },
-];
+] as const;
 
 export function selectGridLayout(
   layoutDefinitions: GridLayoutDefinition[],
   participantCount: number,
   width: number,
   height: number,
-): GridLayout {
+): GridLayoutInfo {
+  if (layoutDefinitions.length < 1) {
+    throw new Error('At least one grid layout definition must be provided.');
+  }
   const layouts = expandAndSortLayoutDefinitions(layoutDefinitions);
+  if (width <= 0 || height <= 0) {
+    return layouts[0];
+  }
   // Find the best layout to fit all participants.
   let currentLayoutIndex = 0;
   let layout = layouts.find((layout_, index, allLayouts) => {
@@ -125,7 +131,7 @@ export function selectGridLayout(
 /**
  * @internal
  */
-export function expandAndSortLayoutDefinitions(layouts: GridLayoutDefinition[]): GridLayout[] {
+export function expandAndSortLayoutDefinitions(layouts: GridLayoutDefinition[]): GridLayoutInfo[] {
   return [...layouts]
     .map((layout) => {
       return {
@@ -135,7 +141,7 @@ export function expandAndSortLayoutDefinitions(layouts: GridLayoutDefinition[]):
         maxTiles: layout.columns * layout.rows,
         minWidth: layout.minWidth ?? 0,
         minHeight: layout.minHeight ?? 0,
-      } satisfies GridLayout;
+      } satisfies GridLayoutInfo;
     })
     .sort((a, b) => {
       if (a.maxTiles !== b.maxTiles) {

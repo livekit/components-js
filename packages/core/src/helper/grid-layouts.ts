@@ -146,8 +146,12 @@ export function expandAndSortLayoutDefinitions(layouts: GridLayoutDefinition[]):
     .sort((a, b) => {
       if (a.maxTiles !== b.maxTiles) {
         return a.maxTiles - b.maxTiles;
-      } else {
+      } else if (a.minWidth !== 0 || b.minWidth !== 0) {
         return a.minWidth - b.minWidth;
+      } else if (a.minHeight !== 0 || b.minHeight !== 0) {
+        return a.minHeight - b.minHeight;
+      } else {
+        return 0;
       }
     });
 }

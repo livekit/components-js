@@ -217,7 +217,6 @@ export type GridLayoutInfo = {
     maxTiles: number;
     minWidth: number;
     minHeight: number;
-    minTiles: number;
 };
 
 // @public (undocumented)

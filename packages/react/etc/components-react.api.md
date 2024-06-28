@@ -788,8 +788,8 @@ trackCount: number, options?: {
     gridLayouts?: GridLayoutDefinition[];
 }): {
     layout: GridLayoutInfo;
-    gridWidth: number;
-    gridHeight: number;
+    containerWidth: number;
+    containerHeight: number;
 };
 
 // @alpha (undocumented)

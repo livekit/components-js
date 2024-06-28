@@ -8,7 +8,6 @@ import type { AudioCaptureOptions } from 'livekit-client';
 import { BehaviorSubject } from 'rxjs';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState } from 'livekit-client';
-import createEmailRegExp from 'email-regex';
 import { DataPacket_Kind } from 'livekit-client';
 import type { DataPublishOptions } from 'livekit-client';
 import { LocalAudioTrack } from 'livekit-client';
@@ -128,7 +127,10 @@ export const createDefaultGrammar: () => {
     url: RegExp;
 };
 
-export { createEmailRegExp }
+// @public (undocumented)
+export function createEmailRegExp({ exact }?: {
+    exact?: boolean;
+}): RegExp;
 
 // Warning: (ae-internal-missing-underscore) The name "createInteractingObservable" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -201,10 +203,17 @@ export const GRID_LAYOUTS: GridLayoutDefinition[];
 
 // @public (undocumented)
 export type GridLayoutDefinition = {
+    columns: number;
+    rows: number;
+    minWidth?: number;
+    minHeight?: number;
+};
+
+// @public (undocumented)
+export type GridLayoutInfo = {
     name: string;
     columns: number;
     rows: number;
-    minTiles: number;
     maxTiles: number;
     minWidth: number;
     minHeight: number;
@@ -436,7 +445,7 @@ export type ScreenShareTrackMap = Array<{
 }>;
 
 // @public (undocumented)
-export function selectGridLayout(layouts: GridLayoutDefinition[], participantCount: number, width: number, height: number): GridLayoutDefinition;
+export function selectGridLayout(layoutDefinitions: GridLayoutDefinition[], participantCount: number, width: number, height: number): GridLayoutInfo;
 
 // @public
 export function sendMessage(localParticipant: LocalParticipant, payload: Uint8Array, options?: DataPublishOptions): Promise<void>;

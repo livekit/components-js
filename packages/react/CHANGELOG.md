@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 2.3.4
+
+### Patch Changes
+
+- Update usehooks-ts to v3 - [#885](https://github.com/livekit/components-js/pull/885) ([@renovate](https://github.com/apps/renovate))
+
+- Add overload for kind + identity in useRemoteParticipant hook - [#893](https://github.com/livekit/components-js/pull/893) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`fcc23749ebd9209f29cbe47ec93e643eeb057a26`](https://github.com/livekit/components-js/commit/fcc23749ebd9209f29cbe47ec93e643eeb057a26)]:
+  - @livekit/components-core@0.10.4
+
 ## 2.3.3
 
 ### Patch Changes

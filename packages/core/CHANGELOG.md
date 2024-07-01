@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.10.4
+
+### Patch Changes
+
+- Add overload for kind + identity in useRemoteParticipant hook - [#893](https://github.com/livekit/components-js/pull/893) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.10.3
 
 ### Patch Changes

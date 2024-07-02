@@ -8,7 +8,6 @@ import type { AudioCaptureOptions } from 'livekit-client';
 import { BehaviorSubject } from 'rxjs';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState } from 'livekit-client';
-import createEmailRegExp from 'email-regex';
 import { DataPacket_Kind } from 'livekit-client';
 import type { DataPublishOptions } from 'livekit-client';
 import { LocalAudioTrack } from 'livekit-client';
@@ -128,7 +127,10 @@ export const createDefaultGrammar: () => {
     url: RegExp;
 };
 
-export { createEmailRegExp }
+// @public (undocumented)
+export function createEmailRegExp({ exact }?: {
+    exact?: boolean;
+}): RegExp;
 
 // Warning: (ae-internal-missing-underscore) The name "createInteractingObservable" should be prefixed with an underscore because the declaration is marked as @internal
 //

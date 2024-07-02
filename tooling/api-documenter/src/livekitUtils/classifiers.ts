@@ -25,8 +25,9 @@ function isConstDeclarationComponent(apiItem: ApiItem): boolean {
     apiItem.isReadonly &&
     apiItem.excerptTokens.some(
       (token) =>
-        token.kind === ExcerptTokenKind.Reference &&
-        ['React.ReactNode', 'React.Context'].includes(token.text),
+        (token.kind === ExcerptTokenKind.Reference &&
+          ['React.ReactNode', 'React.Context'].includes(token.text)) ||
+        token.text.startsWith('HTML'),
     )
   );
 }
@@ -84,7 +85,9 @@ export function getCategorySubfolder(apiItem: ApiItem): string {
   }
 
   let category: string = '';
-  switch (getFunctionType(apiItem)) {
+  const functionType = getFunctionType(apiItem);
+
+  switch (functionType) {
     case 'component':
     case 'prefab':
       category = 'component';

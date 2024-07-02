@@ -16,6 +16,8 @@ export interface RoomNameProps extends React.HTMLAttributes<HTMLSpanElement> {
  * </LiveKitRoom>
  * ```
  * @public
+ *
+ * @param props - RoomNameProps
  */
 export const RoomName = /* @__PURE__ */ React.forwardRef<HTMLSpanElement, RoomNameProps>(
   function RoomName(

@@ -100,7 +100,9 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
  * ```
  * @public
  */
-export const LiveKitRoom = /* @__PURE__ */ React.forwardRef<
+export const LiveKitRoom: (
+  props: React.PropsWithChildren<LiveKitRoomProps> & React.RefAttributes<HTMLDivElement>,
+) => React.ReactNode = /* @__PURE__ */ React.forwardRef<
   HTMLDivElement,
   React.PropsWithChildren<LiveKitRoomProps>
 >(function LiveKitRoom(props: React.PropsWithChildren<LiveKitRoomProps>, ref) {

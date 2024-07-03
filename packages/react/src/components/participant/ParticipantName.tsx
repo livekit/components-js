@@ -20,30 +20,31 @@ export interface ParticipantNameProps
  * ```
  * @public
  */
-export const ParticipantName = /* @__PURE__ */ React.forwardRef<
-  HTMLSpanElement,
-  ParticipantNameProps
->(function ParticipantName({ participant, ...props }: ParticipantNameProps, ref) {
-  const p = useEnsureParticipant(participant);
+export const ParticipantName: (
+  props: ParticipantNameProps & React.RefAttributes<HTMLSpanElement>,
+) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLSpanElement, ParticipantNameProps>(
+  function ParticipantName({ participant, ...props }: ParticipantNameProps, ref) {
+    const p = useEnsureParticipant(participant);
 
-  const { className, infoObserver } = React.useMemo(() => {
-    return setupParticipantName(p);
-  }, [p]);
+    const { className, infoObserver } = React.useMemo(() => {
+      return setupParticipantName(p);
+    }, [p]);
 
-  const { identity, name } = useObservableState(infoObserver, {
-    name: p.name,
-    identity: p.identity,
-    metadata: p.metadata,
-  });
+    const { identity, name } = useObservableState(infoObserver, {
+      name: p.name,
+      identity: p.identity,
+      metadata: p.metadata,
+    });
 
-  const mergedProps = React.useMemo(() => {
-    return mergeProps(props, { className, 'data-lk-participant-name': name });
-  }, [props, className, name]);
+    const mergedProps = React.useMemo(() => {
+      return mergeProps(props, { className, 'data-lk-participant-name': name });
+    }, [props, className, name]);
 
-  return (
-    <span ref={ref} {...mergedProps}>
-      {name !== '' ? name : identity}
-      {props.children}
-    </span>
-  );
-});
+    return (
+      <span ref={ref} {...mergedProps}>
+        {name !== '' ? name : identity}
+        {props.children}
+      </span>
+    );
+  },
+);

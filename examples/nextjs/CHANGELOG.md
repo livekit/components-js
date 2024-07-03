@@ -1,5 +1,12 @@
 # @livekit/component-example-next
 
+## 0.2.25
+
+### Patch Changes
+
+- Updated dependencies [[`cd447a1da49645a3966323c73ba18f16bf81fcef`](https://github.com/livekit/components-js/commit/cd447a1da49645a3966323c73ba18f16bf81fcef)]:
+  - @livekit/components-react@2.3.5
+
 ## 0.2.24
 
 ### Patch Changes

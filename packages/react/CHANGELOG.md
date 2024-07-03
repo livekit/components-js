@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 2.3.5
+
+### Patch Changes
+
+- Fix docs package parameter extraction and forwardRefs components typing - [#912](https://github.com/livekit/components-js/pull/912) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`cd447a1da49645a3966323c73ba18f16bf81fcef`](https://github.com/livekit/components-js/commit/cd447a1da49645a3966323c73ba18f16bf81fcef)]:
+  - @livekit/components-core@0.10.5
+
 ## 2.3.4
 
 ### Patch Changes

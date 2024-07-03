@@ -1,5 +1,11 @@
 # @livekit/api-documenter
 
+## 7.22.20
+
+### Patch Changes
+
+- Fix docs package parameter extraction and forwardRefs components typing - [#912](https://github.com/livekit/components-js/pull/912) ([@lukasIO](https://github.com/lukasIO))
+
 ## 7.22.19
 
 ### Patch Changes

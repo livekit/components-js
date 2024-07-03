@@ -18,7 +18,9 @@ export interface ConnectionQualityIndicatorProps
  * ```
  * @public
  */
-export const ConnectionQualityIndicator = /* @__PURE__ */ React.forwardRef<
+export const ConnectionQualityIndicator: (
+  props: ConnectionQualityIndicatorProps & React.RefAttributes<HTMLDivElement>,
+) => React.ReactNode = /* @__PURE__ */ React.forwardRef<
   HTMLDivElement,
   ConnectionQualityIndicatorProps
 >(function ConnectionQualityIndicator(props: ConnectionQualityIndicatorProps, ref) {

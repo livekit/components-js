@@ -19,7 +19,9 @@ export interface RoomNameProps extends React.HTMLAttributes<HTMLSpanElement> {
  *
  * @param props - RoomNameProps
  */
-export const RoomName = /* @__PURE__ */ React.forwardRef<HTMLSpanElement, RoomNameProps>(
+export const RoomName: (
+  props: RoomNameProps & React.RefAttributes<HTMLSpanElement>,
+) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLSpanElement, RoomNameProps>(
   function RoomName(
     { childrenPosition = 'before', children, ...htmlAttributes }: RoomNameProps,
     ref,

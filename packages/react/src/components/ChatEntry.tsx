@@ -33,7 +33,9 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
  * @see `Chat`
  * @public
  */
-export const ChatEntry = /* @__PURE__ */ React.forwardRef<HTMLLIElement, ChatEntryProps>(
+export const ChatEntry: (
+  props: ChatEntryProps & React.RefAttributes<HTMLLIElement>,
+) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLLIElement, ChatEntryProps>(
   function ChatEntry(
     { entry, hideName = false, hideTimestamp = false, messageFormatter, ...props }: ChatEntryProps,
     ref,

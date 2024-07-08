@@ -83,7 +83,7 @@
     "postcss-cli": "^11.0.0",
     "postcss-prefixer": "^3.0.0",
     "postcss-variables-prefixer": "^1.2.0",
-    "rimraf": "^5.0.0",
+    "rimraf": "^6.0.0",
     "sass": "^1.54.6",
     "typed-scss-modules": "^8.0.0",
     "vitest": "^2.0.0"

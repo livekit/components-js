@@ -308,7 +308,7 @@ importers:
     dependencies:
       '@microsoft/api-extractor-model':
         specifier: ^7.27.2
-        version: 7.28.14(@types/node@20.14.5)
+        version: 7.29.2(@types/node@20.14.5)
       '@microsoft/tsdoc':
         specifier: 0.14.2
         version: 0.14.2
@@ -1652,18 +1652,12 @@ packages:
     peerDependencies:
       react: '>=16'
 
-  '@microsoft/api-extractor-model@7.28.14':
-    resolution: {integrity: sha512-Bery/c8A8SsKPSvA82cTTuy/+OcxZbLRmKhPkk91/AJOQzxZsShcrmHFAGeiEqSIrv1nPZ3tKq9kfMLdCHmsqg==}
-
   '@microsoft/api-extractor-model@7.29.2':
     resolution: {integrity: sha512-hAYajOjQan3uslhKJRwvvHIdLJ+ZByKqdSsJ/dgHFxPtEbdKpzMDO8zuW4K5gkSMYl5D0LbNwxkhxr51P2zsmw==}
 
   '@microsoft/api-extractor@7.47.0':
     resolution: {integrity: sha512-LT8yvcWNf76EpDC+8/ArTVSYePvuDQ+YbAUrsTcpg3ptiZ93HIcMCozP/JOxDt+rrsFfFHcpfoselKfPyRI0GQ==}
     hasBin: true
-
-  '@microsoft/tsdoc-config@0.16.2':
-    resolution: {integrity: sha512-OGiIzzoBLgWWR0UdRJX98oYO+XKGf7tiK4Zk6tQ/E4IJqGCe7dvkTvgDZV5cFJUzLGDOjeAXrnZoA6QkVySuxw==}
 
   '@microsoft/tsdoc-config@0.17.0':
     resolution: {integrity: sha512-v/EYRXnCAIHxOHW+Plb6OWuUoMotxTN0GLatnpOb1xq0KuTNw/WI3pamJx/UbsoJP5k9MCw1QxvvhPcF9pH3Zg==}
@@ -2280,14 +2274,6 @@ packages:
     resolution: {integrity: sha512-7BxYULezPaEWTdA2eVNTZjNWJcwfyr/apBGH7osC51Y94BagKXOkqGQQOiUEbOikC/zF6eYOHmzU00EDJ6+uDA==}
     engines: {node: '>=10.13.0'}
     hasBin: true
-
-  '@rushstack/node-core-library@4.1.0':
-    resolution: {integrity: sha512-qz4JFBZJCf1YN5cAXa1dP6Mki/HrsQxc/oYGAGx29dF2cwF2YMxHoly0FBhMw3IEnxo5fMj0boVfoHVBkpkx/w==}
-    peerDependencies:
-      '@types/node': '*'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
 
   '@rushstack/node-core-library@5.4.1':
     resolution: {integrity: sha512-WNnwdS8r9NZ/2K3u29tNoSRldscFa7SxU0RT+82B6Dy2I4Hl2MeCSKm4EXLXPKeNzLGvJ1cqbUhTLviSF8E6iA==}
@@ -5550,17 +5536,11 @@ packages:
   lodash.debounce@4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
 
-  lodash.get@4.4.2:
-    resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
-
   lodash.includes@4.3.0:
     resolution: {integrity: sha512-W3Bx6mdkRTGtlJISOvVD/lbqjTlPPUDTMnlXZFnVwi9NKJ6tiAk6LVdlhZMm17VZisqhKcgzpO5Wz91PCt5b0w==}
 
   lodash.isboolean@3.0.3:
     resolution: {integrity: sha512-Bz5mupy2SVbPHURB98VAcw+aHh4vRV5IPNhILUCsOzRmsTmSQ17jIuqopAentWoehktxGd9e/hbIXq980/1QJg==}
-
-  lodash.isequal@4.5.0:
-    resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
 
   lodash.isinteger@4.0.4:
     resolution: {integrity: sha512-DBwtEWN2caHQ9/imiNeEA5ys1JoRtRfY3d7V9wkqtbycnAmTvRRmbHKDV4a0EYc678/dia0jrte4tjYwVBaZUA==}
@@ -6570,9 +6550,6 @@ packages:
     resolution: {integrity: sha512-X2UW6Nw3n/aMgDVy+0rSqgHlv39WZAlZrXCdnbyEiKm17DSqHX4MmQMaST3FbeWR5FTuRcUwYAziZajji0Y7mg==}
     engines: {node: '>=10'}
 
-  resolve@1.19.0:
-    resolution: {integrity: sha512-rArEXAgsBG4UgRGcynxWIWKFvh/XZCcS8UJdHhwy91zwAvCZIbcs+vAbflgBnNjYMs/i/i+/Ux6IZhML1yPvxg==}
-
   resolve@1.22.8:
     resolution: {integrity: sha512-oKWePCxqpd6FlLvGV1VU0x7bkPmmCNolxzjMf4NczoDnQcIWrAF+cPtZn5i6n+RfD2d9i0tzpKnG6Yk168yIyw==}
     hasBin: true
@@ -7467,10 +7444,6 @@ packages:
   validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
 
-  validator@13.12.0:
-    resolution: {integrity: sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg==}
-    engines: {node: '>= 0.10'}
-
   vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
@@ -7747,11 +7720,6 @@ packages:
   yocto-queue@1.0.0:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
-
-  z-schema@5.0.5:
-    resolution: {integrity: sha512-D7eujBWkLa3p2sIpJA0d1pr7es+a7m0vFAnZLlCEKq/Ij2k0MLi9Br2UPxoxdYystm5K1yeBGzub0FlYUEWj2Q==}
-    engines: {node: '>=8.0.0'}
-    hasBin: true
 
 snapshots:
 
@@ -9231,14 +9199,6 @@ snapshots:
       '@types/react': 18.3.3
       react: 18.3.1
 
-  '@microsoft/api-extractor-model@7.28.14(@types/node@20.14.5)':
-    dependencies:
-      '@microsoft/tsdoc': 0.14.2
-      '@microsoft/tsdoc-config': 0.16.2
-      '@rushstack/node-core-library': 4.1.0(@types/node@20.14.5)
-    transitivePeerDependencies:
-      - '@types/node'
-
   '@microsoft/api-extractor-model@7.29.2(@types/node@20.14.5)':
     dependencies:
       '@microsoft/tsdoc': 0.15.0
@@ -9290,13 +9250,6 @@ snapshots:
       typescript: 5.4.2
     transitivePeerDependencies:
       - '@types/node'
-
-  '@microsoft/tsdoc-config@0.16.2':
-    dependencies:
-      '@microsoft/tsdoc': 0.14.2
-      ajv: 6.12.6
-      jju: 1.4.0
-      resolve: 1.19.0
 
   '@microsoft/tsdoc-config@0.17.0':
     dependencies:
@@ -9944,17 +9897,6 @@ snapshots:
       watchpack: 2.4.0
     transitivePeerDependencies:
       - '@types/node'
-
-  '@rushstack/node-core-library@4.1.0(@types/node@20.14.5)':
-    dependencies:
-      fs-extra: 7.0.1
-      import-lazy: 4.0.0
-      jju: 1.4.0
-      resolve: 1.22.8
-      semver: 7.5.4
-      z-schema: 5.0.5
-    optionalDependencies:
-      '@types/node': 20.14.5
 
   '@rushstack/node-core-library@5.4.1(@types/node@20.14.5)':
     dependencies:
@@ -14389,13 +14331,9 @@ snapshots:
 
   lodash.debounce@4.0.8: {}
 
-  lodash.get@4.4.2: {}
-
   lodash.includes@4.3.0: {}
 
   lodash.isboolean@3.0.3: {}
-
-  lodash.isequal@4.5.0: {}
 
   lodash.isinteger@4.0.4: {}
 
@@ -15430,11 +15368,6 @@ snapshots:
 
   resolve.exports@2.0.2: {}
 
-  resolve@1.19.0:
-    dependencies:
-      is-core-module: 2.13.1
-      path-parse: 1.0.7
-
   resolve@1.22.8:
     dependencies:
       is-core-module: 2.13.1
@@ -16384,8 +16317,6 @@ snapshots:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
 
-  validator@13.12.0: {}
-
   vary@1.1.2: {}
 
   vite-node@2.0.0(@types/node@20.14.9)(sass@1.77.6)(terser@5.31.1):
@@ -16755,11 +16686,3 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   yocto-queue@1.0.0: {}
-
-  z-schema@5.0.5:
-    dependencies:
-      lodash.get: 4.4.2
-      lodash.isequal: 4.5.0
-      validator: 13.12.0
-    optionalDependencies:
-      commander: 9.5.0

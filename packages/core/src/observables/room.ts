@@ -248,16 +248,18 @@ export function createActiveDeviceObservable(room: Room, kind: MediaDeviceKind) 
   );
 }
 
-export function encryptionStatusObservable(room: Room, participant: Participant) {
+export function encryptionStatusObservable(room: Room, participant: Participant | undefined) {
   return roomEventSelector(room, RoomEvent.ParticipantEncryptionStatusChanged).pipe(
     filter(
       ([, p]) =>
-        participant.identity === p?.identity ||
-        (!p && participant.identity === room.localParticipant.identity),
+        participant?.identity === p?.identity ||
+        (!p && participant?.identity === room.localParticipant.identity),
     ),
     map(([encrypted]) => encrypted),
     startWith(
-      participant instanceof LocalParticipant ? participant.isE2EEEnabled : participant.isEncrypted,
+      participant instanceof LocalParticipant
+        ? participant.isE2EEEnabled
+        : !!participant?.isEncrypted,
     ),
   );
 }

@@ -35,7 +35,6 @@ export function useVoiceAssistant(): VoiceAssistant {
   const agent = useRemoteParticipants().find((p) => p.kind === ParticipantKind.AGENT);
   const audioTrack = useParticipantTracks([Track.Source.Microphone], agent?.identity)[0];
   const { segments: agentTranscriptions } = useTrackTranscription(audioTrack);
-  const isSpeaking = useIsSpeaking(agent);
   const { metadata: agentMetadata } = useParticipantInfo({ participant: agent });
   const connectionState = useConnectionState();
 
@@ -58,14 +57,14 @@ export function useVoiceAssistant(): VoiceAssistant {
       const { agent_state } = JSON.parse(agentMetadata);
       if (agent_state === 'thinking') {
         return 'thinking';
-      } else if (agent_state === 'speaking' || isSpeaking) {
+      } else if (agent_state === 'speaking') {
         return 'speaking';
       }
     } catch (e) {
       return 'listening';
     }
     return 'listening';
-  }, [agentMetadata, agent, isSpeaking, connectionState]);
+  }, [agentMetadata, agent, connectionState]);
 
   return {
     agent,

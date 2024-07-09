@@ -559,7 +559,7 @@ export interface RoomAudioRendererProps {
 export const RoomContext: React_2.Context<Room | undefined>;
 
 // @public
-export const RoomName: (props: RoomNameProps & React_2.RefAttributes<HTMLSpanElement>) => React_2.ReactNode;
+export const RoomName: React_2.FC<RoomNameProps & React_2.RefAttributes<HTMLSpanElement>>;
 
 // @public (undocumented)
 export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {

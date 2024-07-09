@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { LocalParticipant, Participant, Room } from 'livekit-client';
 import { encryptionStatusObservable } from '@livekit/components-core';
-import { useEnsureParticipant, useEnsureRoom } from '../context';
+import { useEnsureParticipant, useEnsureRoom, useMaybeParticipantContext } from '../context';
 import { useObservableState } from './internal';
 
 /**
@@ -15,13 +15,17 @@ export interface UseIsEncryptedOptions {
  * @alpha
  */
 export function useIsEncrypted(participant?: Participant, options: UseIsEncryptedOptions = {}) {
-  const p = useEnsureParticipant(participant);
+  let p = useMaybeParticipantContext();
+  if (participant) {
+    p = participant;
+  }
+
   const room = useEnsureRoom(options.room);
 
   const observer = React.useMemo(() => encryptionStatusObservable(room, p), [room, p]);
   const isEncrypted = useObservableState(
     observer,
-    p instanceof LocalParticipant ? p.isE2EEEnabled : p.isEncrypted,
+    p instanceof LocalParticipant ? p.isE2EEEnabled : !!p?.isEncrypted,
   );
   return isEncrypted;
 }

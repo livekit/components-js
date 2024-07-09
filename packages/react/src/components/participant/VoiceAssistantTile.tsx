@@ -44,7 +44,6 @@ export const VoiceAssistantTile: (
                   <div className="lk-participant-metadata-item">
                     <>{isEncrypted && <LockLockedIcon style={{ marginRight: '0.25rem' }} />}</>
                   </div>
-                  <ConnectionQualityIndicator className="lk-participant-metadata-item" />
                 </div>
               </>
             )}

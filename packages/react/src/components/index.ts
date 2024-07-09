@@ -22,6 +22,7 @@ export { Toast } from './Toast';
 export * from './TrackLoop';
 export * from './participant/ParticipantTile';
 export * from './participant/ParticipantAudioTile';
+export * from './participant/VoiceAssistantTile';
 export { ConnectionStateToast, type ConnectionStateToastProps } from './ConnectionStateToast';
 export {
   type MessageFormatter,

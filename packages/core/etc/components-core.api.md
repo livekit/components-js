@@ -15,7 +15,7 @@ import type { LocalParticipant } from 'livekit-client';
 import { LocalVideoTrack } from 'livekit-client';
 import loglevel from 'loglevel';
 import { Observable } from 'rxjs';
-import type { Participant } from 'livekit-client';
+import { Participant } from 'livekit-client';
 import { ParticipantEvent } from 'livekit-client';
 import type { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 import type { ParticipantKind } from 'livekit-client';
@@ -329,7 +329,7 @@ export type ParticipantIdentifier = RequireAtLeastOne<{
 }, 'identity' | 'kind'>;
 
 // @public (undocumented)
-export function participantInfoObserver(participant: Participant): Observable<{
+export function participantInfoObserver(participant?: Participant): Observable<{
     name: string | undefined;
     identity: string;
     metadata: string | undefined;
@@ -337,7 +337,7 @@ export function participantInfoObserver(participant: Participant): Observable<{
     name: string | undefined;
     identity: string;
     metadata: string | undefined;
-}>;
+}> | undefined;
 
 // @public (undocumented)
 export interface ParticipantMedia<T extends Participant = Participant> {
@@ -551,7 +551,7 @@ export function setupParticipantName(participant: Participant): {
     name: string | undefined;
     identity: string;
     metadata: string | undefined;
-    }>;
+    }> | undefined;
 };
 
 // @public (undocumented)

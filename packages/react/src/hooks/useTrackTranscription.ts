@@ -35,7 +35,7 @@ const TRACK_TRANSCRIPTION_DEFAULTS = {
  * @alpha
  */
 export function useTrackTranscription(
-  trackRef: TrackReferenceOrPlaceholder,
+  trackRef: TrackReferenceOrPlaceholder | undefined,
   options?: TrackTranscriptionOptions,
 ) {
   const opts = { ...TRACK_TRANSCRIPTION_DEFAULTS, ...options };
@@ -56,7 +56,7 @@ export function useTrackTranscription(
     );
   };
   React.useEffect(() => {
-    if (!trackRef.publication) {
+    if (!trackRef?.publication) {
       return;
     }
     const subscription = trackTranscriptionObserver(trackRef.publication).subscribe((evt) => {
@@ -65,7 +65,7 @@ export function useTrackTranscription(
     return () => {
       subscription.unsubscribe();
     };
-  }, [getTrackReferenceId(trackRef), handleSegmentMessage]);
+  }, [trackRef && getTrackReferenceId(trackRef), handleSegmentMessage]);
 
   // React.useEffect(() => {
   //   if (syncTimestamps) {

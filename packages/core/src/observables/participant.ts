@@ -1,5 +1,5 @@
 import type { ParticipantPermission } from '@livekit/protocol';
-import type { Participant, RemoteParticipant, Room, TrackPublication } from 'livekit-client';
+import { Participant, RemoteParticipant, Room, TrackPublication } from 'livekit-client';
 import { ParticipantEvent, RoomEvent, Track } from 'livekit-client';
 import type { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 import type { Subscriber } from 'rxjs';
@@ -85,7 +85,10 @@ export function createTrackObserver(participant: Participant, options: TrackIden
   );
 }
 
-export function participantInfoObserver(participant: Participant) {
+export function participantInfoObserver(participant?: Participant) {
+  if (!participant) {
+    return undefined;
+  }
   const observer = observeParticipantEvents(
     participant,
     ParticipantEvent.ParticipantMetadataChanged,

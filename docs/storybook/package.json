@@ -30,7 +30,7 @@
     "eslint-config-lk-custom": "workspace:*",
     "storybook": "^7.0.0-beta.30",
     "tsx": "^4.0.0",
-    "typescript": "5.4.5",
+    "typescript": "5.4.2",
     "vite": "^5.0.0",
     "webpack": "^5.75.0"
   }

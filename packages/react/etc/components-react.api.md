@@ -901,7 +901,7 @@ export function useParticipantContext(): Participant;
 
 // @public (undocumented)
 export function useParticipantInfo(props?: UseParticipantInfoOptions): {
-    identity: string;
+    identity: string | undefined;
     name: string | undefined;
     metadata: string | undefined;
 };
@@ -1202,13 +1202,6 @@ export const VoiceAssistantContext: React_2.Context<VoiceAssistant | undefined>;
 
 // @alpha (undocumented)
 export type VoiceAssistantState = 'offline' | 'connecting' | 'listening' | 'thinking' | 'speaking';
-
-// @alpha
-export const VoiceAssistantTile: (props: VoiceAssistantTileProps & React_2.RefAttributes<HTMLDivElement>) => React_2.ReactNode;
-
-// @alpha (undocumented)
-export interface VoiceAssistantTileProps extends React_2.HTMLAttributes<HTMLDivElement> {
-}
 
 // @public (undocumented)
 export type WidgetState = {

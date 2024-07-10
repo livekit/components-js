@@ -174,7 +174,7 @@ export const defaultUserChoices: LocalUserChoices;
 export function didActiveSegmentsChange<T extends TranscriptionSegment>(prevActive: T[], newActive: T[]): boolean;
 
 // @public (undocumented)
-export function encryptionStatusObservable(room: Room, participant: Participant): Observable<boolean>;
+export function encryptionStatusObservable(room: Room, participant: Participant | undefined): Observable<boolean>;
 
 // @public (undocumented)
 export function getActiveTranscriptionSegments(segments: ReceivedTranscriptionSegment[], syncTimes: {

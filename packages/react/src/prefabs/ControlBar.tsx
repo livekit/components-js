@@ -25,6 +25,7 @@ export type ControlBarControls = {
 
 /** @public */
 export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
+  onDeviceError?: (error: Error) => void;
   variation?: 'minimal' | 'verbose' | 'textOnly';
   controls?: ControlBarControls;
   /**
@@ -56,6 +57,7 @@ export function ControlBar({
   variation,
   controls,
   saveUserChoices = true,
+  onDeviceError,
   ...props
 }: ControlBarProps) {
   const [isChatOpen, setIsChatOpen] = React.useState(false);
@@ -135,6 +137,7 @@ export function ControlBar({
             source={Track.Source.Microphone}
             showIcon={showIcon}
             onChange={microphoneOnChange}
+            onDeviceError={onDeviceError}
           >
             {showText && 'Microphone'}
           </TrackToggle>
@@ -148,7 +151,12 @@ export function ControlBar({
       )}
       {visibleControls.camera && (
         <div className="lk-button-group">
-          <TrackToggle source={Track.Source.Camera} showIcon={showIcon} onChange={cameraOnChange}>
+          <TrackToggle
+            source={Track.Source.Camera}
+            showIcon={showIcon}
+            onChange={cameraOnChange}
+            onDeviceError={onDeviceError}
+          >
             {showText && 'Camera'}
           </TrackToggle>
           <div className="lk-button-group-menu">
@@ -165,6 +173,7 @@ export function ControlBar({
           captureOptions={{ audio: true, selfBrowserSurface: 'include' }}
           showIcon={showIcon}
           onChange={onScreenShareChange}
+          onDeviceError={onDeviceError}
         >
           {showText && (isScreenShareEnabled ? 'Stop screen share' : 'Share screen')}
         </TrackToggle>

@@ -186,7 +186,7 @@ export interface ConnectionStatusProps extends React_2.HTMLAttributes<HTMLDivEle
 }
 
 // @public
-export function ControlBar({ variation, controls, saveUserChoices, ...props }: ControlBarProps): React_2.JSX.Element;
+export function ControlBar({ variation, controls, saveUserChoices, onDeviceError, ...props }: ControlBarProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export type ControlBarControls = {
@@ -202,6 +202,11 @@ export type ControlBarControls = {
 export interface ControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> {
     // (undocumented)
     controls?: ControlBarControls;
+    // (undocumented)
+    onDeviceError?: (error: {
+        source: Track.Source;
+        error: Error;
+    }) => void;
     // @alpha
     saveUserChoices?: boolean;
     // (undocumented)

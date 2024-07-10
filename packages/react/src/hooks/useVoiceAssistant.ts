@@ -5,7 +5,6 @@ import type { ReceivedTranscriptionSegment, TrackReference } from '@livekit/comp
 import { useRemoteParticipants } from './useRemoteParticipants';
 import { useParticipantTracks } from './useParticipantTracks';
 import { useTrackTranscription } from './useTrackTranscription';
-import { useIsSpeaking } from './useIsSpeaking';
 import { useParticipantInfo } from './useParticipantInfo';
 import { useConnectionState } from './useConnectionStatus';
 

@@ -1,7 +1,14 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-underscore-dangle */
 import * as React from 'react';
-import useLatest from '@react-hook/latest';
+
+const useLatest = <T>(current: T) => {
+  const storedValue = React.useRef(current);
+  React.useEffect(() => {
+    storedValue.current = current;
+  });
+  return storedValue;
+};
 
 /**
  * A React hook that fires a callback whenever ResizeObserver detects a change to its size

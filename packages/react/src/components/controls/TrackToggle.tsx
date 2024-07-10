@@ -17,6 +17,7 @@ export interface TrackToggleProps<T extends ToggleSource>
   onChange?: (enabled: boolean, isUserInitiated: boolean) => void;
   captureOptions?: CaptureOptionsBySource<T>;
   publishOptions?: TrackPublishOptions;
+  onDeviceError?: (error: Error) => void;
 }
 
 /**
@@ -32,7 +33,9 @@ export interface TrackToggleProps<T extends ToggleSource>
  * ```
  * @public
  */
-export const TrackToggle = /* @__PURE__ */ React.forwardRef(function TrackToggle<
+export const TrackToggle: <T extends ToggleSource>(
+  props: TrackToggleProps<T> & React.RefAttributes<HTMLButtonElement>,
+) => React.ReactNode = /* @__PURE__ */ React.forwardRef(function TrackToggle<
   T extends ToggleSource,
 >({ showIcon, ...props }: TrackToggleProps<T>, ref: React.ForwardedRef<HTMLButtonElement>) {
   const { buttonProps, enabled } = useTrackToggle(props);

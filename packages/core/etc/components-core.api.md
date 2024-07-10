@@ -8,7 +8,6 @@ import type { AudioCaptureOptions } from 'livekit-client';
 import { BehaviorSubject } from 'rxjs';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState } from 'livekit-client';
-import createEmailRegExp from 'email-regex';
 import { DataPacket_Kind } from 'livekit-client';
 import type { DataPublishOptions } from 'livekit-client';
 import { LocalAudioTrack } from 'livekit-client';
@@ -19,7 +18,9 @@ import { Observable } from 'rxjs';
 import type { Participant } from 'livekit-client';
 import { ParticipantEvent } from 'livekit-client';
 import type { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
+import type { ParticipantKind } from 'livekit-client';
 import type { ParticipantPermission } from '@livekit/protocol';
+import type { PublicationEventCallbacks } from 'livekit-client/dist/src/room/track/TrackPublication';
 import { RemoteParticipant } from 'livekit-client';
 import { Room } from 'livekit-client';
 import { RoomEvent } from 'livekit-client';
@@ -30,10 +31,17 @@ import { Track } from 'livekit-client';
 import { TrackEvent as TrackEvent_2 } from 'livekit-client';
 import { TrackPublication } from 'livekit-client';
 import type { TrackPublishOptions } from 'livekit-client';
+import { TranscriptionSegment } from 'livekit-client';
 import type { VideoCaptureOptions } from 'livekit-client';
 
 // @public (undocumented)
 export function activeSpeakerObserver(room: Room): Observable<Participant[]>;
+
+// @public (undocumented)
+export function addMediaTimestampToTranscription(segment: TranscriptionSegment, timestamps: {
+    timestamp: number;
+    rtpTimestamp?: number;
+}): ReceivedTranscriptionSegment;
 
 // @public (undocumented)
 export const allParticipantEvents: ParticipantEvent[];
@@ -119,7 +127,10 @@ export const createDefaultGrammar: () => {
     url: RegExp;
 };
 
-export { createEmailRegExp }
+// @public (undocumented)
+export function createEmailRegExp({ exact }?: {
+    exact?: boolean;
+}): RegExp;
 
 // Warning: (ae-internal-missing-underscore) The name "createInteractingObservable" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -154,10 +165,22 @@ export const DataTopic: {
 };
 
 // @public (undocumented)
+export function dedupeSegments<T extends TranscriptionSegment>(prevSegments: T[], newSegments: T[], windowSize: number): T[];
+
+// @public (undocumented)
 export const defaultUserChoices: LocalUserChoices;
 
 // @public (undocumented)
+export function didActiveSegmentsChange<T extends TranscriptionSegment>(prevActive: T[], newActive: T[]): boolean;
+
+// @public (undocumented)
 export function encryptionStatusObservable(room: Room, participant: Participant): Observable<boolean>;
+
+// @public (undocumented)
+export function getActiveTranscriptionSegments(segments: ReceivedTranscriptionSegment[], syncTimes: {
+    timestamp: number;
+    rtpTimestamp?: number;
+}, maxAge?: number): ReceivedTranscriptionSegment[];
 
 // Warning: (ae-internal-missing-underscore) The name "getScrollBarWidth" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -276,6 +299,11 @@ export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observabl
 // @public (undocumented)
 export function observeTrackEvents(track: TrackPublication, ...events: TrackEvent_2[]): Observable<TrackPublication>;
 
+// Warning: (ae-incompatible-release-tags) The symbol "participantByIdentifierObserver" is marked as @public, but its signature references "ParticipantIdentifier" which is marked as @beta
+//
+// @public (undocumented)
+export function participantByIdentifierObserver(room: Room, { kind, identity }: ParticipantIdentifier, options?: ConnectedParticipantObserverOptions): Observable<RemoteParticipant | undefined>;
+
 // Warning: (ae-internal-missing-underscore) The name "ParticipantClickEvent" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -291,6 +319,14 @@ export function participantEventSelector<T extends ParticipantEvent>(participant
 
 // @public (undocumented)
 export type ParticipantFilter = Parameters<Participant[]['filter']>['0'];
+
+// Warning: (ae-forgotten-export) The symbol "RequireAtLeastOne" needs to be exported by the entry point index.d.ts
+//
+// @beta (undocumented)
+export type ParticipantIdentifier = RequireAtLeastOne<{
+    kind: ParticipantKind;
+    identity: string;
+}, 'identity' | 'kind'>;
 
 // @public (undocumented)
 export function participantInfoObserver(participant: Participant): Observable<{
@@ -325,8 +361,6 @@ export function participantPermissionObserver(participant: Participant): Observa
 // @public (undocumented)
 export const participantTrackEvents: ParticipantEvent[];
 
-// Warning: (ae-forgotten-export) The symbol "RequireAtLeastOne" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export type ParticipantTrackIdentifier = RequireAtLeastOne<{
     sources: Track.Source[];
@@ -356,6 +390,12 @@ export interface ReceivedDataMessage<T extends string | undefined = string> exte
     // (undocumented)
     from?: Participant;
 }
+
+// @public (undocumented)
+export type ReceivedTranscriptionSegment = TranscriptionSegment & {
+    receivedAtMediaTimestamp: number;
+    receivedAt: number;
+};
 
 // @public (undocumented)
 export type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> & {
@@ -490,7 +530,7 @@ export function setupManualToggle(): {
 };
 
 // @public (undocumented)
-export function setupMediaToggle<T extends ToggleSource>(source: T, room: Room, options?: CaptureOptionsBySource<T>, publishOptions?: TrackPublishOptions): MediaToggleType<T>;
+export function setupMediaToggle<T extends ToggleSource>(source: T, room: Room, options?: CaptureOptionsBySource<T>, publishOptions?: TrackPublishOptions, onError?: (error: Error) => void): MediaToggleType<T>;
 
 // Warning: (ae-incompatible-release-tags) The symbol "setupMediaTrack" is marked as @public, but its signature references "TrackIdentifier" which is marked as @internal
 //
@@ -565,6 +605,9 @@ export type TokenizeGrammar = {
     [type: string]: RegExp;
 };
 
+// @public (undocumented)
+export function trackEventSelector<T extends TrackEvent_2>(publication: TrackPublication | Track, event: T): Observable<Parameters<PublicationEventCallbacks[Extract<T, keyof PublicationEventCallbacks>]>>;
+
 // Warning: (ae-internal-missing-underscore) The name "TrackIdentifier" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal
@@ -616,6 +659,12 @@ export type TrackSourceWithOptions = {
     source: Track.Source;
     withPlaceholder: boolean;
 };
+
+// @public (undocumented)
+export function trackSyncTimeObserver(track: Track): Observable<number>;
+
+// @public (undocumented)
+export function trackTranscriptionObserver(publication: TrackPublication): Observable<[transcription: TranscriptionSegment[]]>;
 
 // Warning: (ae-forgotten-export) The symbol "UpdatableItem" needs to be exported by the entry point index.d.ts
 //

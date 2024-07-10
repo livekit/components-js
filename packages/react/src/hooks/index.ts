@@ -47,6 +47,7 @@ export {
   usePersistentUserChoices,
   type UsePersistentUserChoicesOptions,
 } from './usePersistentUserChoices';
-export { useIsEncrypted } from './useIsEncrypted';
+export { UseIsEncryptedOptions, useIsEncrypted } from './useIsEncrypted';
 export * from './useTrackVolume';
 export * from './useParticipantTracks';
+export * from './useTrackTranscription';

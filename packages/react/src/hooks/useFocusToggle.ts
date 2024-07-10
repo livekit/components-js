@@ -29,7 +29,7 @@ export function useFocusToggle({ trackRef, props }: UseFocusToggleProps) {
 
   const inFocus: boolean = React.useMemo(() => {
     return isTrackReferencePinned(trackReference, layoutContext?.pin.state);
-  }, [trackRef, layoutContext?.pin.state]);
+  }, [trackReference, layoutContext?.pin.state]);
 
   const mergedProps = React.useMemo(
     () =>
@@ -52,7 +52,7 @@ export function useFocusToggle({ trackRef, props }: UseFocusToggleProps) {
           }
         },
       }),
-    [props, className, trackRef, inFocus, layoutContext?.pin],
+    [props, className, trackReference, inFocus, layoutContext?.pin],
   );
 
   return { mergedProps, inFocus };

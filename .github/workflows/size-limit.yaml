@@ -12,8 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2
-        with:
-          version: 8
       - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
@@ -24,6 +22,6 @@ jobs:
       - uses: andresz1/size-limit-action@v1.8.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          script: pnpm --filter @livekit/components-react exec size-limit --json
+          script: pnpm --filter @livekit/components-react --reporter-hide-prefix exec size-limit --json
           package_manager: pnpm
           build_script: build:react

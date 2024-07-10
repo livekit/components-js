@@ -1,5 +1,39 @@
 # @livekit/components-core
 
+## 0.10.5
+
+### Patch Changes
+
+- Fix docs package parameter extraction and forwardRefs components typing - [#912](https://github.com/livekit/components-js/pull/912) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.10.4
+
+### Patch Changes
+
+- Add overload for kind + identity in useRemoteParticipant hook - [#893](https://github.com/livekit/components-js/pull/893) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.10.3
+
+### Patch Changes
+
+- Create emailregex in components-core instead of using a dedicated package - [#895](https://github.com/livekit/components-js/pull/895) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.10.2
+
+### Patch Changes
+
+- Add experimental hooks for transcriptions - [#853](https://github.com/livekit/components-js/pull/853) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.10.1
+
+### Patch Changes
+
+- Add publishOptions for TrackToggle - [#868](https://github.com/livekit/components-js/pull/868) ([@lukasIO](https://github.com/lukasIO))
+
+- Forward track toggle errors - [#869](https://github.com/livekit/components-js/pull/869) ([@lukasIO](https://github.com/lukasIO))
+
+- Reset useChat messages when room disconnects - [#866](https://github.com/livekit/components-js/pull/866) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.10.0
 
 ### Minor Changes

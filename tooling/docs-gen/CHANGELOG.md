@@ -1,5 +1,48 @@
 # @livekit/components-docs-gen
 
+## 0.0.49
+
+### Patch Changes
+
+- Updated dependencies [[`cd447a1da49645a3966323c73ba18f16bf81fcef`](https://github.com/livekit/components-js/commit/cd447a1da49645a3966323c73ba18f16bf81fcef)]:
+  - @livekit/components-react@2.3.5
+  - @livekit/api-documenter@7.22.20
+
+## 0.0.48
+
+### Patch Changes
+
+- Updated dependencies [[`7cd73d75698bb79add5bd42ebbdc080abdfc90d0`](https://github.com/livekit/components-js/commit/7cd73d75698bb79add5bd42ebbdc080abdfc90d0), [`fcc23749ebd9209f29cbe47ec93e643eeb057a26`](https://github.com/livekit/components-js/commit/fcc23749ebd9209f29cbe47ec93e643eeb057a26)]:
+  - @livekit/components-react@2.3.4
+
+## 0.0.47
+
+### Patch Changes
+
+- Updated dependencies [[`857f77e1063a42970d7a032656a171249a43766e`](https://github.com/livekit/components-js/commit/857f77e1063a42970d7a032656a171249a43766e)]:
+  - @livekit/components-react@2.3.3
+
+## 0.0.46
+
+### Patch Changes
+
+- Updated dependencies [[`ca0847f4cc602abcf6a2870ce212ba373c57c12b`](https://github.com/livekit/components-js/commit/ca0847f4cc602abcf6a2870ce212ba373c57c12b), [`0761e9632a44d2bce0a8f57d5c00db0615f06065`](https://github.com/livekit/components-js/commit/0761e9632a44d2bce0a8f57d5c00db0615f06065)]:
+  - @livekit/components-react@2.3.2
+
+## 0.0.45
+
+### Patch Changes
+
+- Updated dependencies [[`79636e4f9ac72a4e608d5d28ccaf337bcb2a6514`](https://github.com/livekit/components-js/commit/79636e4f9ac72a4e608d5d28ccaf337bcb2a6514)]:
+  - @livekit/components-react@2.3.1
+
+## 0.0.44
+
+### Patch Changes
+
+- Updated dependencies [[`bdfd3f53875ffc79024f8290b5302cf20eaed664`](https://github.com/livekit/components-js/commit/bdfd3f53875ffc79024f8290b5302cf20eaed664), [`b9136108c654906d693fb17db577d5f939d98ad1`](https://github.com/livekit/components-js/commit/b9136108c654906d693fb17db577d5f939d98ad1), [`3b257b19da111d52d6d554467024973e3922fa6c`](https://github.com/livekit/components-js/commit/3b257b19da111d52d6d554467024973e3922fa6c)]:
+  - @livekit/components-react@2.3.0
+
 ## 0.0.43
 
 ### Patch Changes

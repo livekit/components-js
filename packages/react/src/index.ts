@@ -21,6 +21,7 @@ export type {
   TrackReference,
   TrackReferenceOrPlaceholder,
   ParticipantClickEvent,
+  ParticipantIdentifier,
   PinState,
   WidgetState,
 } from '@livekit/components-core';

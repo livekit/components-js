@@ -25,7 +25,9 @@ export interface VideoTrackProps extends React.VideoHTMLAttributes<HTMLVideoElem
  * @see {@link @livekit/components-react#ParticipantTile | ParticipantTile}
  * @public
  */
-export const VideoTrack = /* @__PURE__ */ React.forwardRef<HTMLVideoElement, VideoTrackProps>(
+export const VideoTrack: (
+  props: VideoTrackProps & React.RefAttributes<HTMLVideoElement>,
+) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLVideoElement, VideoTrackProps>(
   function VideoTrack(
     {
       onTrackClick,
@@ -42,9 +44,9 @@ export const VideoTrack = /* @__PURE__ */ React.forwardRef<HTMLVideoElement, Vid
     const mediaEl = React.useRef<HTMLVideoElement>(null);
     React.useImperativeHandle(ref, () => mediaEl.current as HTMLVideoElement);
 
-    const intersectionEntry = useHooks.useIntersectionObserver(mediaEl, {});
+    const intersectionEntry = useHooks.useIntersectionObserver({ root: mediaEl.current });
 
-    const debouncedIntersectionEntry = useHooks.useDebounce(intersectionEntry, 3000);
+    const [debouncedIntersectionEntry] = useHooks.useDebounceValue(intersectionEntry, 3000);
 
     React.useEffect(() => {
       if (

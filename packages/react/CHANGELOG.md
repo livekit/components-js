@@ -1,5 +1,66 @@
 # @livekit/components-react
 
+## 2.3.5
+
+### Patch Changes
+
+- Fix docs package parameter extraction and forwardRefs components typing - [#912](https://github.com/livekit/components-js/pull/912) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`cd447a1da49645a3966323c73ba18f16bf81fcef`](https://github.com/livekit/components-js/commit/cd447a1da49645a3966323c73ba18f16bf81fcef)]:
+  - @livekit/components-core@0.10.5
+
+## 2.3.4
+
+### Patch Changes
+
+- Update usehooks-ts to v3 - [#885](https://github.com/livekit/components-js/pull/885) ([@renovate](https://github.com/apps/renovate))
+
+- Add overload for kind + identity in useRemoteParticipant hook - [#893](https://github.com/livekit/components-js/pull/893) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`fcc23749ebd9209f29cbe47ec93e643eeb057a26`](https://github.com/livekit/components-js/commit/fcc23749ebd9209f29cbe47ec93e643eeb057a26)]:
+  - @livekit/components-core@0.10.4
+
+## 2.3.3
+
+### Patch Changes
+
+- Fix `useRemoteParticipant` re-rendering on participant events - [#891](https://github.com/livekit/components-js/pull/891) ([@mpnri](https://github.com/mpnri))
+
+- Updated dependencies [[`f09491284e935fa7e1af6cae0870bcb09926f722`](https://github.com/livekit/components-js/commit/f09491284e935fa7e1af6cae0870bcb09926f722)]:
+  - @livekit/components-core@0.10.3
+
+## 2.3.2
+
+### Patch Changes
+
+- Support passing room to useIsEncrypted hook - [#871](https://github.com/livekit/components-js/pull/871) ([@renekliment](https://github.com/renekliment))
+
+- Update focused placeholder to trackRef - [#874](https://github.com/livekit/components-js/pull/874) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.3.1
+
+### Patch Changes
+
+- Add experimental hooks for transcriptions - [#853](https://github.com/livekit/components-js/pull/853) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`79636e4f9ac72a4e608d5d28ccaf337bcb2a6514`](https://github.com/livekit/components-js/commit/79636e4f9ac72a4e608d5d28ccaf337bcb2a6514)]:
+  - @livekit/components-core@0.10.2
+
+## 2.3.0
+
+### Minor Changes
+
+- Reset useChat messages when room disconnects - [#866](https://github.com/livekit/components-js/pull/866) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Add publishOptions for TrackToggle - [#868](https://github.com/livekit/components-js/pull/868) ([@lukasIO](https://github.com/lukasIO))
+
+- Forward track toggle errors - [#869](https://github.com/livekit/components-js/pull/869) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`bdfd3f53875ffc79024f8290b5302cf20eaed664`](https://github.com/livekit/components-js/commit/bdfd3f53875ffc79024f8290b5302cf20eaed664), [`b9136108c654906d693fb17db577d5f939d98ad1`](https://github.com/livekit/components-js/commit/b9136108c654906d693fb17db577d5f939d98ad1), [`3b257b19da111d52d6d554467024973e3922fa6c`](https://github.com/livekit/components-js/commit/3b257b19da111d52d6d554467024973e3922fa6c)]:
+  - @livekit/components-core@0.10.1
+
 ## 2.2.1
 
 ### Patch Changes

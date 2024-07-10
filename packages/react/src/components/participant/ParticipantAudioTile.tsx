@@ -21,46 +21,47 @@ import { AudioVisualizer } from './AudioVisualizer';
  * ```
  * @public
  */
-export const ParticipantAudioTile = /* @__PURE__ */ React.forwardRef<
-  HTMLDivElement,
-  ParticipantTileProps
->(function ParticipantAudioTile(
-  {
-    children,
-    disableSpeakingIndicator,
-    onParticipantClick,
-    trackRef,
-    ...htmlProps
-  }: ParticipantTileProps,
-  ref,
-) {
-  const trackReference = useEnsureTrackRef(trackRef);
-  const { elementProps } = useParticipantTile({
-    trackRef: trackReference,
-    htmlProps,
-    disableSpeakingIndicator,
-    onParticipantClick,
-  });
+export const ParticipantAudioTile: (
+  props: ParticipantTileProps & React.RefAttributes<HTMLDivElement>,
+) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLDivElement, ParticipantTileProps>(
+  function ParticipantAudioTile(
+    {
+      children,
+      disableSpeakingIndicator,
+      onParticipantClick,
+      trackRef,
+      ...htmlProps
+    }: ParticipantTileProps,
+    ref,
+  ) {
+    const trackReference = useEnsureTrackRef(trackRef);
+    const { elementProps } = useParticipantTile({
+      trackRef: trackReference,
+      htmlProps,
+      disableSpeakingIndicator,
+      onParticipantClick,
+    });
 
-  return (
-    <div ref={ref} style={{ position: 'relative' }} {...elementProps}>
-      <TrackRefContext.Provider value={trackReference}>
-        {children ?? (
-          <>
-            {isTrackReference(trackReference) && (
-              <AudioTrack trackRef={trackReference}></AudioTrack>
-            )}
-            <AudioVisualizer />
-            <div className="lk-participant-metadata">
-              <div className="lk-participant-metadata-item">
-                <TrackMutedIndicator trackRef={trackReference}></TrackMutedIndicator>
-                <ParticipantName />
+    return (
+      <div ref={ref} style={{ position: 'relative' }} {...elementProps}>
+        <TrackRefContext.Provider value={trackReference}>
+          {children ?? (
+            <>
+              {isTrackReference(trackReference) && (
+                <AudioTrack trackRef={trackReference}></AudioTrack>
+              )}
+              <AudioVisualizer />
+              <div className="lk-participant-metadata">
+                <div className="lk-participant-metadata-item">
+                  <TrackMutedIndicator trackRef={trackReference}></TrackMutedIndicator>
+                  <ParticipantName />
+                </div>
+                <ConnectionQualityIndicator className="lk-participant-metadata-item" />
               </div>
-              <ConnectionQualityIndicator className="lk-participant-metadata-item" />
-            </div>
-          </>
-        )}
-      </TrackRefContext.Provider>
-    </div>
-  );
-});
+            </>
+          )}
+        </TrackRefContext.Provider>
+      </div>
+    );
+  },
+);

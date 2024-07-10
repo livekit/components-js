@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.3.6
+
+### Patch Changes
+
+- Remove @react-hook dependency due to ESM conflicts - [#919](https://github.com/livekit/components-js/pull/919) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.3.5
 
 ### Patch Changes

@@ -25,7 +25,7 @@ export type ControlBarControls = {
 
 /** @public */
 export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
-  onDeviceError?: (error: Error) => void;
+  onDeviceError?: (error: { source: Track.Source; error: Error }) => void;
   variation?: 'minimal' | 'verbose' | 'textOnly';
   controls?: ControlBarControls;
   /**
@@ -137,7 +137,7 @@ export function ControlBar({
             source={Track.Source.Microphone}
             showIcon={showIcon}
             onChange={microphoneOnChange}
-            onDeviceError={onDeviceError}
+            onDeviceError={(error) => onDeviceError?.({ source: Track.Source.Microphone, error })}
           >
             {showText && 'Microphone'}
           </TrackToggle>
@@ -155,7 +155,7 @@ export function ControlBar({
             source={Track.Source.Camera}
             showIcon={showIcon}
             onChange={cameraOnChange}
-            onDeviceError={onDeviceError}
+            onDeviceError={(error) => onDeviceError?.({ source: Track.Source.Camera, error })}
           >
             {showText && 'Camera'}
           </TrackToggle>
@@ -173,7 +173,7 @@ export function ControlBar({
           captureOptions={{ audio: true, selfBrowserSurface: 'include' }}
           showIcon={showIcon}
           onChange={onScreenShareChange}
-          onDeviceError={onDeviceError}
+          onDeviceError={(error) => onDeviceError?.({ source: Track.Source.ScreenShare, error })}
         >
           {showText && (isScreenShareEnabled ? 'Stop screen share' : 'Share screen')}
         </TrackToggle>

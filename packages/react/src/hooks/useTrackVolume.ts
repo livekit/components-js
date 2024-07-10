@@ -159,20 +159,21 @@ export function useMultibandTrackVolume(
  * @alpha
  */
 export interface AudioWaveformOptions {
-  analyserOptions?: AnalyserOptions;
-  aggregateTime?: number;
+  barCount?: number;
+  volMultiplier?: number;
+  updateInterval?: number;
 }
 
 const waveformDefaults = {
-  analyserOptions: { fftSize: 2048 },
-  aggregateTime: 100,
+  barCount: 120,
+  volMultiplier: 5,
+  updateInterval: 20,
 } as const satisfies AudioWaveformOptions;
 
 /**
  * @alpha
  */
 export function useAudioWaveform(
-  onUpdate: (waveform: Float32Array) => void,
   trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder,
   options: AudioWaveformOptions = {},
 ) {
@@ -182,15 +183,26 @@ export function useAudioWaveform(
       : <LocalAudioTrack | RemoteAudioTrack | undefined>trackOrTrackReference?.publication?.track;
   const opts = { ...waveformDefaults, ...options };
 
-  const aggregateWave = React.useRef(new Float32Array(options.analyserOptions!.fftSize!));
+  const aggregateWave = React.useRef(new Float32Array());
   const timeRef = React.useRef(performance.now());
   const updates = React.useRef(0);
+  const [bars, setBars] = React.useState<number[]>([]);
+
+  const onUpdate = React.useCallback((wave: Float32Array) => {
+    setBars(
+      Array.from(
+        wave.slice(0, opts.barCount).map((v) => sigmoid(v * opts.volMultiplier, 0.08, 0.2)),
+      ),
+    );
+  }, []);
 
   React.useEffect(() => {
     if (!track || !track?.mediaStream) {
       return;
     }
-    const { analyser, cleanup } = createAudioAnalyser(track, opts.analyserOptions);
+    const { analyser, cleanup } = createAudioAnalyser(track, {
+      fftSize: getFFTSizeValue(opts.barCount),
+    });
 
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Float32Array(bufferLength);
@@ -201,7 +213,7 @@ export function useAudioWaveform(
       aggregateWave.current.map((v, i) => v + dataArray[i]);
       updates.current += 1;
 
-      if (performance.now() - timeRef.current >= opts.aggregateTime) {
+      if (performance.now() - timeRef.current >= opts.updateInterval) {
         const newData = dataArray.map((v) => v / updates.current);
         onUpdate(newData);
         timeRef.current = performance.now();
@@ -216,4 +228,28 @@ export function useAudioWaveform(
       cancelAnimationFrame(updateWaveform);
     };
   }, [track, track?.mediaStream, JSON.stringify(options), onUpdate]);
+
+  return {
+    bars,
+  };
+}
+
+function getFFTSizeValue(x: number) {
+  if (x < 32) return 32;
+  else return closestPow2(x);
+}
+
+function sigmoid(x: number, k = 2, s = 0) {
+  return 1 / (1 + Math.exp(-(x - s) / k));
+}
+
+function closestPow2(x: number) {
+  let pow = x;
+  pow -= 1;
+  pow |= pow >> 1;
+  pow |= pow >> 2;
+  pow |= pow >> 4;
+  pow |= pow >> 16;
+  pow += 1;
+  return pow;
 }

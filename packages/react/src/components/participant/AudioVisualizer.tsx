@@ -12,26 +12,6 @@ export interface AudioVisualizerProps extends React.HTMLAttributes<HTMLDivElemen
   barCount?: number;
 }
 
-function sigmoid(x: number, k = 2, s = 0) {
-  return 1 / (1 + Math.exp(-(x - s) / k));
-}
-
-function closestPow2(x: number) {
-  let pow = x;
-  pow -= 1;
-  pow |= pow >> 1;
-  pow |= pow >> 2;
-  pow |= pow >> 4;
-  pow |= pow >> 16;
-  pow += 1;
-  return pow;
-}
-
-function getFFTSizeValue(x: number) {
-  if (x < 32) return 32;
-  else return closestPow2(x);
-}
-
 /**
  * The AudioVisualizer component is used to visualize the audio volume of a given audio track.
  * @remarks
@@ -49,24 +29,19 @@ export const AudioVisualizer = /* @__PURE__ */ React.forwardRef<
   {
     trackRef,
     barWidth = '0.5rem',
-    gap = '0',
-    borderRadius = '0.25rem',
-    barCount = 240,
+    gap = '2px',
+    borderRadius = '0rem',
+    barCount = 20,
     ...props
   }: AudioVisualizerProps,
   ref,
 ) {
-  const volMultiplier = 5;
   const trackReference = useEnsureTrackRef(trackRef);
 
-  const [bars, setBars] = React.useState([] as Array<number>);
-  const drawWave = React.useCallback((wave: Float32Array) => {
-    setBars(Array.from(wave.slice(0, barCount).map((v) => sigmoid(v * volMultiplier, 0.08, 0.2))));
-  }, []);
-
-  useAudioWaveform(drawWave, trackReference, {
-    analyserOptions: { fftSize: getFFTSizeValue(barCount) },
-    aggregateTime: 20,
+  const { bars } = useAudioWaveform(trackReference, {
+    barCount,
+    volMultiplier: 5,
+    updateInterval: 20,
   });
 
   return (

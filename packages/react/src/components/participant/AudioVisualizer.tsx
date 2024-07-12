@@ -29,9 +29,9 @@ export const AudioVisualizer = /* @__PURE__ */ React.forwardRef<
   {
     trackRef,
     barWidth = '0.5rem',
-    gap = '2px',
+    gap = '0',
     borderRadius = '0rem',
-    barCount = 20,
+    barCount = 510,
     ...props
   }: AudioVisualizerProps,
   ref,
@@ -40,8 +40,8 @@ export const AudioVisualizer = /* @__PURE__ */ React.forwardRef<
 
   const { bars } = useAudioWaveform(trackReference, {
     barCount,
-    volMultiplier: 5,
-    updateInterval: 20,
+    volMultiplier: 4,
+    updateInterval: 50,
   });
 
   return (
@@ -51,8 +51,8 @@ export const AudioVisualizer = /* @__PURE__ */ React.forwardRef<
           key={idx}
           style={{
             width: barWidth,
-            transform: `scale(1, 1)`,
-            height: `${vol * 100}%`,
+            transform: `scale(1, ${vol})`,
+            height: `100%`,
             borderRadius,
           }}
         ></span>

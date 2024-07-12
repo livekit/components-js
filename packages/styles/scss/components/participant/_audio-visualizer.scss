@@ -13,12 +13,10 @@
 
   & > span {
     background: var(--accent-bg);
-    // box-shadow:
-    //   7px 7px 14px #c94e41,
-    //   -7px -7px 14px #ff7863;
+    // box-shadow: 2px 2px 1px rgba(255, 255, 255, 0.4);
     flex-grow: 1;
     height: 100%;
-    transition: height 80ms ease-in-out;
+    transition: transform 40ms cubic-bezier(0.42, -0.39, 0.61, 1.4);
     border-radius: 0.25rem;
   }
 }

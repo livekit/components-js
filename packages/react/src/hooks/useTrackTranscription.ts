@@ -1,12 +1,12 @@
 import {
   type ReceivedTranscriptionSegment,
-  addMediaTimestampToTranscription as addTimestampsToTranscription,
+  addMediaTimestampToTranscription,
   dedupeSegments,
-  // getActiveTranscriptionSegments,
+  getActiveTranscriptionSegments,
   getTrackReferenceId,
   trackTranscriptionObserver,
   type TrackReferenceOrPlaceholder,
-  // didActiveSegmentsChange,
+  didActiveSegmentsChange,
 } from '@livekit/components-core';
 import type { TranscriptionSegment } from 'livekit-client';
 import * as React from 'react';
@@ -22,12 +22,12 @@ export interface TrackTranscriptionOptions {
    */
   bufferSize?: number;
   /** amount of time (in ms) that the segment is considered `active` past its original segment duration, defaults to 2_000 */
-  // maxAge?: number;
+  maxAge?: number;
 }
 
 const TRACK_TRANSCRIPTION_DEFAULTS = {
   bufferSize: 100,
-  // maxAge: 2_000,
+  maxAge: 2_000,
 } as const satisfies TrackTranscriptionOptions;
 
 /**
@@ -40,17 +40,17 @@ export function useTrackTranscription(
 ) {
   const opts = { ...TRACK_TRANSCRIPTION_DEFAULTS, ...options };
   const [segments, setSegments] = React.useState<Array<ReceivedTranscriptionSegment>>([]);
-  // const [activeSegments, setActiveSegments] = React.useState<Array<ReceivedTranscriptionSegment>>(
-  //   [],
-  // );
-  // const prevActiveSegments = React.useRef<ReceivedTranscriptionSegment[]>([]);
+  const [activeSegments, setActiveSegments] = React.useState<Array<ReceivedTranscriptionSegment>>(
+    [],
+  );
+  const prevActiveSegments = React.useRef<ReceivedTranscriptionSegment[]>([]);
   const syncTimestamps = useTrackSyncTime(trackRef);
   const handleSegmentMessage = (newSegments: TranscriptionSegment[]) => {
     setSegments((prevSegments) =>
       dedupeSegments(
         prevSegments,
         // when first receiving a segment, add the current media timestamp to it
-        newSegments.map((s) => addTimestampsToTranscription(s, syncTimestamps)),
+        newSegments.map((s) => addMediaTimestampToTranscription(s, syncTimestamps)),
         opts.bufferSize,
       ),
     );
@@ -67,20 +67,20 @@ export function useTrackTranscription(
     };
   }, [getTrackReferenceId(trackRef), handleSegmentMessage]);
 
-  // React.useEffect(() => {
-  //   if (syncTimestamps) {
-  //     const newActiveSegments = getActiveTranscriptionSegments(
-  //       segments,
-  //       syncTimestamps,
-  //       opts.maxAge,
-  //     );
-  //     // only update active segment array if content actually changed
-  //     if (didActiveSegmentsChange(prevActiveSegments.current, newActiveSegments)) {
-  //       setActiveSegments(newActiveSegments);
-  //       prevActiveSegments.current = newActiveSegments;
-  //     }
-  //   }
-  // }, [syncTimestamps, segments, opts.maxAge]);
+  React.useEffect(() => {
+    if (syncTimestamps) {
+      const newActiveSegments = getActiveTranscriptionSegments(
+        segments,
+        syncTimestamps,
+        opts.maxAge,
+      );
+      // only update active segment array if content actually changed
+      if (didActiveSegmentsChange(prevActiveSegments.current, newActiveSegments)) {
+        setActiveSegments(newActiveSegments);
+        prevActiveSegments.current = newActiveSegments;
+      }
+    }
+  }, [syncTimestamps, segments, opts.maxAge]);
 
-  return { segments };
+  return { segments, activeSegments };
 }

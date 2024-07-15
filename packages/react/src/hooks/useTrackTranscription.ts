@@ -27,7 +27,7 @@ export interface TrackTranscriptionOptions {
 
 const TRACK_TRANSCRIPTION_DEFAULTS = {
   bufferSize: 100,
-  maxAge: 2_000,
+  maxAge: 5_000,
 } as const satisfies TrackTranscriptionOptions;
 
 /**
@@ -35,7 +35,7 @@ const TRACK_TRANSCRIPTION_DEFAULTS = {
  * @alpha
  */
 export function useTrackTranscription(
-  trackRef: TrackReferenceOrPlaceholder,
+  trackRef?: TrackReferenceOrPlaceholder,
   options?: TrackTranscriptionOptions,
 ) {
   const opts = { ...TRACK_TRANSCRIPTION_DEFAULTS, ...options };
@@ -45,18 +45,21 @@ export function useTrackTranscription(
   );
   const prevActiveSegments = React.useRef<ReceivedTranscriptionSegment[]>([]);
   const syncTimestamps = useTrackSyncTime(trackRef);
-  const handleSegmentMessage = (newSegments: TranscriptionSegment[]) => {
-    setSegments((prevSegments) =>
-      dedupeSegments(
-        prevSegments,
-        // when first receiving a segment, add the current media timestamp to it
-        newSegments.map((s) => addMediaTimestampToTranscription(s, syncTimestamps)),
-        opts.bufferSize,
-      ),
-    );
-  };
+  const handleSegmentMessage = React.useCallback(
+    (newSegments: TranscriptionSegment[]) => {
+      setSegments((prevSegments) =>
+        dedupeSegments(
+          prevSegments,
+          // when first receiving a segment, add the current media timestamp to it
+          newSegments.map((s) => addMediaTimestampToTranscription(s, syncTimestamps)),
+          opts.bufferSize,
+        ),
+      );
+    },
+    [syncTimestamps, opts.bufferSize],
+  );
   React.useEffect(() => {
-    if (!trackRef.publication) {
+    if (!trackRef?.publication) {
       return;
     }
     const subscription = trackTranscriptionObserver(trackRef.publication).subscribe((evt) => {
@@ -65,7 +68,7 @@ export function useTrackTranscription(
     return () => {
       subscription.unsubscribe();
     };
-  }, [getTrackReferenceId(trackRef), handleSegmentMessage]);
+  }, [trackRef && getTrackReferenceId(trackRef), handleSegmentMessage]);
 
   React.useEffect(() => {
     if (syncTimestamps) {
@@ -81,6 +84,5 @@ export function useTrackTranscription(
       }
     }
   }, [syncTimestamps, segments, opts.maxAge]);
-
   return { segments, activeSegments };
 }

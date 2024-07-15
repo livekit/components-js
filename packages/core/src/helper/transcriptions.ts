@@ -8,11 +8,11 @@ export type ReceivedTranscriptionSegment = TranscriptionSegment & {
 export function getActiveTranscriptionSegments(
   segments: ReceivedTranscriptionSegment[],
   syncTimes: { timestamp: number; rtpTimestamp?: number },
-  maxAge = 0,
+  maxAge = 5_000,
 ) {
   return segments.filter((segment) => {
-    const hasTrackSync = !!syncTimes.rtpTimestamp;
-    const currentTrackTime = syncTimes.rtpTimestamp ?? performance.timeOrigin + performance.now();
+    const hasTrackSync = !!syncTimes.rtpTimestamp && segment.startTime !== 0;
+    const currentTrackTime = syncTimes.rtpTimestamp || performance.timeOrigin + performance.now();
     // if a segment arrives late, consider startTime to be the media timestamp from when the segment was received client side
     const displayStartTime = hasTrackSync
       ? Math.max(segment.receivedAtMediaTimestamp, segment.startTime)
@@ -29,6 +29,7 @@ export function addMediaTimestampToTranscription(
   segment: TranscriptionSegment,
   timestamps: { timestamp: number; rtpTimestamp?: number },
 ): ReceivedTranscriptionSegment {
+  console.log('new media timestamp', { segment, receivedAt: timestamps.timestamp });
   return {
     ...segment,
     receivedAtMediaTimestamp: timestamps.rtpTimestamp ?? 0,

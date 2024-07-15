@@ -4,6 +4,7 @@ import { participantTracksObservable } from '@livekit/components-core';
 import { useObservableState } from './internal';
 import type { Track } from 'livekit-client';
 import { useMaybeParticipantContext, useRoomContext } from '../context';
+import { useConnectionState } from './useConnectionStatus';
 
 /**
  * `useParticipantTracks` is a custom React that allows you to get tracks of a specific participant only, by specifiying the participant's identity.
@@ -16,9 +17,16 @@ export function useParticipantTracks(
 ): TrackReference[] {
   const room = useRoomContext();
   const participantContext = useMaybeParticipantContext();
-  const p = participantIdentity
-    ? room.getParticipantByIdentity(participantIdentity)
-    : participantContext;
+  const connectionState = useConnectionState();
+  const p = React.useMemo(
+    () =>
+      participantIdentity
+        ? participantIdentity === room.localParticipant.identity
+          ? room.localParticipant
+          : room.getParticipantByIdentity(participantIdentity)
+        : participantContext,
+    [connectionState, participantIdentity, room, participantContext],
+  );
   const observable = React.useMemo(
     () => (p ? participantTracksObservable(p, { sources }) : undefined),
     [p?.sid, p?.identity, JSON.stringify(sources)],

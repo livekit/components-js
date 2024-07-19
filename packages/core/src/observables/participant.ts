@@ -286,3 +286,15 @@ export function participantByIdentifierObserver(
 
   return observable;
 }
+
+export function participantAttributesObserver(participant: Participant) {
+  return participantEventSelector(participant, ParticipantEvent.AttributesChanged).pipe(
+    map(([changedAttributes]) => {
+      return {
+        changed: changedAttributes as Readonly<Record<string, string>>,
+        attributes: participant.attributes,
+      };
+    }),
+    startWith({ changed: participant.attributes, attributes: participant.attributes }),
+  );
+}

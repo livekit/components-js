@@ -6,12 +6,13 @@ import {
   ParticipantTile,
   RoomName,
   TrackRefContext,
+  useLocalParticipantAttributes,
   useToken,
   useTracks,
 } from '@livekit/components-react';
 import { Track } from 'livekit-client';
 import type { NextPage } from 'next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '../styles/Simple.module.css';
 import { generateRandomUserId } from '../lib/helper';
 
@@ -22,12 +23,14 @@ const SimpleExample: NextPage = () => {
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
+  const [userInfo] = useState({
     userInfo: {
       identity: userIdentity,
       name: userIdentity,
     },
   });
+
+  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, userInfo);
 
   const handleDisconnect = () => {
     setConnect(false);
@@ -69,9 +72,18 @@ function Stage() {
   const cameraTracks = useTracks([Track.Source.Camera]);
   const screenShareTrackRef = useTracks([Track.Source.ScreenShare])[0];
 
+  const [attributes, setAttributes] = useLocalParticipantAttributes();
+
+  useEffect(() => {
+    console.log('attributes updated', attributes);
+  });
+
   return (
     <>
       {screenShareTrackRef && <ParticipantTile trackRef={screenShareTrackRef} />}
+      <button onClick={() => setAttributes({ test: 'new attribute value' })}>
+        update attributes
+      </button>
       <GridLayout tracks={cameraTracks}>
         <TrackRefContext.Consumer>
           {(trackRef) => <ParticipantTile trackRef={trackRef} />}

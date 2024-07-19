@@ -70,7 +70,10 @@ export function useParticipantAttribute(
  * ```
  * @public
  */
-export function useLocalParticipantAttributes() {
+export function useLocalParticipantAttributes(): [
+  Record<string, string>,
+  (attributes: Record<string, string>) => void,
+] {
   const room = useRoomContext();
 
   const attributeObserver = React.useMemo(

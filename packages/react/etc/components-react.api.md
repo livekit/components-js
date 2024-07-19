@@ -833,6 +833,12 @@ export function useLocalParticipant(options?: UseLocalParticipantOptions): {
     localParticipant: LocalParticipant;
 };
 
+// @public
+export function useLocalParticipantAttributes(): [
+Record<string, string>,
+(attributes: Record<string, string>) => void
+];
+
 // @public (undocumented)
 export interface UseLocalParticipantOptions {
     room?: Room;
@@ -893,6 +899,20 @@ export function usePagination(itemPerPage: number, trackReferences: TrackReferen
     tracks: TrackReferenceOrPlaceholder[];
     currentPage: number;
 };
+
+// @public
+export function useParticipantAttribute(attributeKey: string, options?: UseParticipantAttributesOptions): string;
+
+// @public (undocumented)
+export function useParticipantAttributes(props?: UseParticipantAttributesOptions): {
+    attributes: Readonly<Record<string, string>>;
+};
+
+// @public
+export interface UseParticipantAttributesOptions {
+    // (undocumented)
+    participant?: Participant;
+}
 
 // @public
 export function useParticipantContext(): Participant;

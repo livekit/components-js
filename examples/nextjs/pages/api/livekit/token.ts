@@ -39,6 +39,7 @@ export default async function handleToken(req: NextApiRequest, res: NextApiRespo
       canPublish: true,
       canPublishData: true,
       canSubscribe: true,
+      canUpdateOwnMetadata: true,
     };
     const token = createToken({ identity, name, metadata }, grant);
 

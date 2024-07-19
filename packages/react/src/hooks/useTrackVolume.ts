@@ -204,7 +204,7 @@ export function useAudioWaveform(
       fftSize: getFFTSizeValue(opts.barCount),
     });
 
-    const bufferLength = analyser.frequencyBinCount;
+    const bufferLength = getFFTSizeValue(opts.barCount);
     const dataArray = new Float32Array(bufferLength);
 
     const update = () => {
@@ -236,20 +236,17 @@ export function useAudioWaveform(
 
 function getFFTSizeValue(x: number) {
   if (x < 32) return 32;
-  else return closestPow2(x);
+  else return pow2ceil(x);
 }
 
 function sigmoid(x: number, k = 2, s = 0) {
   return 1 / (1 + Math.exp(-(x - s) / k));
 }
 
-function closestPow2(x: number) {
-  let pow = x;
-  pow -= 1;
-  pow |= pow >> 1;
-  pow |= pow >> 2;
-  pow |= pow >> 4;
-  pow |= pow >> 16;
-  pow += 1;
-  return pow;
+function pow2ceil(v: number) {
+  let p = 2;
+  while ((v >>= 1)) {
+    p <<= 1;
+  }
+  return p;
 }

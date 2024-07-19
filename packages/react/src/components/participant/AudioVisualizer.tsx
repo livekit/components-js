@@ -4,11 +4,11 @@ import { useEnsureTrackRef } from '../../context';
 import { useAudioWaveform } from '../../hooks';
 
 /** @public */
-export interface AudioVisualizerProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface AudioVisualizerProps extends React.HTMLAttributes<SVGSVGElement> {
   trackRef?: TrackReference;
-  gap?: string;
-  barWidth?: string;
-  borderRadius?: string;
+  gap?: number;
+  barWidth?: number;
+  borderRadius?: number;
   barCount?: number;
 }
 
@@ -23,17 +23,10 @@ export interface AudioVisualizerProps extends React.HTMLAttributes<HTMLDivElemen
  * @public
  */
 export const AudioVisualizer = /* @__PURE__ */ React.forwardRef<
-  HTMLDivElement,
+  SVGSVGElement,
   AudioVisualizerProps
 >(function AudioVisualizer(
-  {
-    trackRef,
-    barWidth = '0.5rem',
-    gap = '0',
-    borderRadius = '0rem',
-    barCount = 510,
-    ...props
-  }: AudioVisualizerProps,
+  { trackRef, gap = 1, borderRadius = 0, barCount = 20, ...props }: AudioVisualizerProps,
   ref,
 ) {
   const trackReference = useEnsureTrackRef(trackRef);
@@ -44,19 +37,30 @@ export const AudioVisualizer = /* @__PURE__ */ React.forwardRef<
     updateInterval: 50,
   });
 
+  const barWidth = (320 - barCount * gap) / barCount;
+
   return (
-    <div ref={ref} {...props} style={{ gap: gap }} className="lk-audio-visualizer">
+    <svg
+      ref={ref}
+      {...props}
+      style={{ width: '100%', height: '100%' }}
+      className="lk-audio-visualizer"
+      viewBox="0 0 320 180"
+    >
       {bars.map((vol, idx) => (
-        <span
+        <rect
           key={idx}
+          x={idx * (barWidth + gap)}
+          y={0}
+          width={barWidth}
+          height={180}
+          rx={borderRadius}
           style={{
-            width: barWidth,
-            transform: `scale(1, ${vol})`,
-            height: `100%`,
-            borderRadius,
+            transform: `scale(1, ${vol}`,
+            transformOrigin: 'center',
           }}
-        ></span>
+        ></rect>
       ))}
-    </div>
+    </svg>
   );
 });

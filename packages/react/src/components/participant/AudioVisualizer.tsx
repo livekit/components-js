@@ -4,11 +4,11 @@ import { useEnsureTrackRef } from '../../context';
 import { useAudioWaveform } from '../../hooks';
 
 /** @public */
-export interface AudioVisualizerProps extends React.HTMLAttributes<SVGSVGElement> {
+export interface AudioVisualizerProps extends React.SVGProps<SVGSVGElement> {
   trackRef?: TrackReference;
   gap?: number;
   barWidth?: number;
-  borderRadius?: number;
+  borderRadius?: string;
   barCount?: number;
 }
 
@@ -26,7 +26,14 @@ export const AudioVisualizer = /* @__PURE__ */ React.forwardRef<
   SVGSVGElement,
   AudioVisualizerProps
 >(function AudioVisualizer(
-  { trackRef, gap = 1, borderRadius = 0, barCount = 20, ...props }: AudioVisualizerProps,
+  {
+    trackRef,
+    gap = 1,
+    borderRadius = '0.5rem',
+    barCount = 128,
+    viewBox = '0 0 512 180',
+    ...props
+  }: AudioVisualizerProps,
   ref,
 ) {
   const trackReference = useEnsureTrackRef(trackRef);
@@ -36,8 +43,9 @@ export const AudioVisualizer = /* @__PURE__ */ React.forwardRef<
     volMultiplier: 4,
     updateInterval: 50,
   });
+  const [, , width, height] = viewBox.split(' ');
 
-  const barWidth = (320 - barCount * gap) / barCount;
+  const barWidth = (Number.parseInt(width) - barCount * gap) / barCount;
 
   return (
     <svg
@@ -45,15 +53,15 @@ export const AudioVisualizer = /* @__PURE__ */ React.forwardRef<
       {...props}
       style={{ width: '100%', height: '100%' }}
       className="lk-audio-visualizer"
-      viewBox="0 0 320 180"
+      viewBox={viewBox}
     >
       {bars.map((vol, idx) => (
         <rect
           key={idx}
-          x={idx * (barWidth + gap)}
+          x={gap + idx * (barWidth + gap)}
           y={0}
           width={barWidth}
-          height={180}
+          height={Number.parseInt(height)}
           rx={borderRadius}
           style={{
             transform: `scale(1, ${vol}`,

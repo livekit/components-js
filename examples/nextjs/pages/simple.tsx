@@ -72,18 +72,9 @@ function Stage() {
   const cameraTracks = useTracks([Track.Source.Camera]);
   const screenShareTrackRef = useTracks([Track.Source.ScreenShare])[0];
 
-  const [attributes, setAttributes] = useLocalParticipantAttributes();
-
-  useEffect(() => {
-    console.log('attributes updated', attributes);
-  });
-
   return (
     <>
       {screenShareTrackRef && <ParticipantTile trackRef={screenShareTrackRef} />}
-      <button onClick={() => setAttributes({ test: 'new attribute value' })}>
-        update attributes
-      </button>
       <GridLayout tracks={cameraTracks}>
         <TrackRefContext.Consumer>
           {(trackRef) => <ParticipantTile trackRef={trackRef} />}

@@ -11,7 +11,7 @@ import {
 } from '@livekit/components-react';
 import { Track } from 'livekit-client';
 import type { NextPage } from 'next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '../styles/Simple.module.css';
 import { generateRandomUserId } from '../lib/helper';
 
@@ -22,12 +22,14 @@ const SimpleExample: NextPage = () => {
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
+  const [userInfo] = useState({
     userInfo: {
       identity: userIdentity,
       name: userIdentity,
     },
   });
+
+  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, userInfo);
 
   const handleDisconnect = () => {
     setConnect(false);

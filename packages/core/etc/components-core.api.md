@@ -299,6 +299,15 @@ export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observabl
 // @public (undocumented)
 export function observeTrackEvents(track: TrackPublication, ...events: TrackEvent_2[]): Observable<TrackPublication>;
 
+// @public (undocumented)
+export function participantAttributesObserver(participant: Participant): Observable<{
+    changed: Readonly<Record<string, string>>;
+    attributes: Readonly<Record<string, string>>;
+} | {
+    changed: Readonly<Record<string, string>>;
+    attributes: Readonly<Record<string, string>>;
+}>;
+
 // Warning: (ae-incompatible-release-tags) The symbol "participantByIdentifierObserver" is marked as @public, but its signature references "ParticipantIdentifier" which is marked as @beta
 //
 // @public (undocumented)

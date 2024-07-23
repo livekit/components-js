@@ -895,6 +895,20 @@ export function usePagination(itemPerPage: number, trackReferences: TrackReferen
 };
 
 // @public
+export function useParticipantAttribute(attributeKey: string, options?: UseParticipantAttributesOptions): string;
+
+// @public (undocumented)
+export function useParticipantAttributes(props?: UseParticipantAttributesOptions): {
+    attributes: Readonly<Record<string, string>>;
+};
+
+// @public
+export interface UseParticipantAttributesOptions {
+    // (undocumented)
+    participant?: Participant;
+}
+
+// @public
 export function useParticipantContext(): Participant;
 
 // @public (undocumented)

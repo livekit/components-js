@@ -6,7 +6,6 @@ import {
   ParticipantTile,
   RoomName,
   TrackRefContext,
-  useLocalParticipantAttributes,
   useToken,
   useTracks,
 } from '@livekit/components-react';

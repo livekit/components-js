@@ -1,7 +1,7 @@
 import { participantAttributesObserver } from '@livekit/components-core';
 import type { Participant } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureParticipant, useRoomContext } from '../context';
+import { useEnsureParticipant } from '../context';
 import { useObservableState } from './internal';
 
 /**
@@ -58,37 +58,4 @@ export function useParticipantAttribute(
   }, [p, attributeKey]);
 
   return attribute;
-}
-
-/**
- * The `useLocalParticipantAttributes` hook allows to update and read the attributes of the localParticipant.
- * It returns an array in React.useState format, where the first element is the state and the second one the update function.
- *
- * @example
- * ```tsx
- * const [localAttributes, setLocalAttributes] = useLocalParticipantAttributes();
- * ```
- * @public
- */
-export function useLocalParticipantAttributes(): [
-  Record<string, string>,
-  (attributes: Record<string, string>) => void,
-] {
-  const room = useRoomContext();
-
-  const attributeObserver = React.useMemo(
-    () => participantAttributesObserver(room.localParticipant),
-    [room.localParticipant],
-  );
-  const { attributes: localAttributes } = useObservableState(attributeObserver, {
-    attributes: room.localParticipant.attributes,
-  });
-
-  const setLocalAttributes = React.useCallback(
-    async (attr: Record<string, string>) => {
-      await room.localParticipant.setAttributes(attr);
-    },
-    [room.localParticipant],
-  );
-  return [localAttributes, setLocalAttributes];
 }

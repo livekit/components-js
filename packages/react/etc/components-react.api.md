@@ -833,12 +833,6 @@ export function useLocalParticipant(options?: UseLocalParticipantOptions): {
     localParticipant: LocalParticipant;
 };
 
-// @public
-export function useLocalParticipantAttributes(): [
-Record<string, string>,
-(attributes: Record<string, string>) => void
-];
-
 // @public (undocumented)
 export interface UseLocalParticipantOptions {
     room?: Room;

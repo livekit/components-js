@@ -49,6 +49,7 @@ import {
   IFindApiItemsResult,
   Parameter,
   ApiPropertySignature,
+  ApiVariable,
 } from '@microsoft/api-extractor-model';
 
 import { CustomDocNodes } from '../nodes/CustomDocNodeKind';
@@ -322,6 +323,7 @@ export class MarkdownDocumenter {
       case ApiItemKind.Method:
       case ApiItemKind.MethodSignature:
       case ApiItemKind.Function:
+      case ApiItemKind.Variable:
         // Print property table into component/prefab page.
         if (category === 'component' || category === 'prefab') {
           this._writeComponentPropertyList(output, apiItem as ApiParameterListMixin);
@@ -343,8 +345,6 @@ export class MarkdownDocumenter {
       case ApiItemKind.PropertySignature:
         break;
       case ApiItemKind.TypeAlias:
-        break;
-      case ApiItemKind.Variable:
         break;
       default:
         throw new Error('Unsupported API item kind: ' + apiItem.kind);
@@ -1148,7 +1148,7 @@ export class MarkdownDocumenter {
 
     const parameters: ReadonlyArray<Parameter> = apiItem.parameters;
 
-    if (parameters.length > 0) {
+    if (parameters?.length > 0) {
       const props = parameters[0];
       if (props !== undefined) {
         for (const token of props.parameterTypeExcerpt.tokens) {

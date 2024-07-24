@@ -1,5 +1,31 @@
 # @livekit/components-react
 
+## 2.3.6
+
+### Patch Changes
+
+- Remove @react-hook dependency due to ESM conflicts - [#919](https://github.com/livekit/components-js/pull/919) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.3.5
+
+### Patch Changes
+
+- Fix docs package parameter extraction and forwardRefs components typing - [#912](https://github.com/livekit/components-js/pull/912) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`cd447a1da49645a3966323c73ba18f16bf81fcef`](https://github.com/livekit/components-js/commit/cd447a1da49645a3966323c73ba18f16bf81fcef)]:
+  - @livekit/components-core@0.10.5
+
+## 2.3.4
+
+### Patch Changes
+
+- Update usehooks-ts to v3 - [#885](https://github.com/livekit/components-js/pull/885) ([@renovate](https://github.com/apps/renovate))
+
+- Add overload for kind + identity in useRemoteParticipant hook - [#893](https://github.com/livekit/components-js/pull/893) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`fcc23749ebd9209f29cbe47ec93e643eeb057a26`](https://github.com/livekit/components-js/commit/fcc23749ebd9209f29cbe47ec93e643eeb057a26)]:
+  - @livekit/components-core@0.10.4
+
 ## 2.3.3
 
 ### Patch Changes

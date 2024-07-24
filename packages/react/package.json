@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-react",
-  "version": "2.4.3",
+  "version": "2.3.6",
   "license": "Apache-2.0",
   "author": "LiveKit",
   "repository": {
@@ -48,13 +48,12 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@livekit/components-core": "workspace:*",
-    "@react-hook/latest": "1.0.3",
     "clsx": "2.1.1",
     "usehooks-ts": "3.1.0"
   },
   "peerDependencies": {
     "@livekit/protocol": "^1.16.0",
-    "livekit-client": "^2.2.0",
+    "livekit-client": "^2.4.0",
     "react": ">=18",
     "react-dom": ">=18",
     "tslib": "^2.6.2"
@@ -73,10 +72,10 @@
     "jsdom": "^24.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "rimraf": "^5.0.5",
+    "rimraf": "^6.0.0",
     "size-limit": "^11.0.2",
     "tsup": "^8.0.0",
-    "vitest": "^1.3.0"
+    "vitest": "^2.0.0"
   },
   "engines": {
     "node": ">=18"

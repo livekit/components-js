@@ -1,6 +1,6 @@
 {
   "name": "@livekit/component-example-next",
-  "version": "0.2.23",
+  "version": "0.2.26",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,7 +11,7 @@
   "dependencies": {
     "@livekit/components-react": "workspace:*",
     "@livekit/components-styles": "workspace:*",
-    "livekit-client": "^2.2.0",
+    "livekit-client": "^2.4.0",
     "livekit-server-sdk": "^1.2.7",
     "next": "^12.3.4",
     "react": "^18.2.0",
@@ -23,6 +23,6 @@
     "@types/react-dom": "^18.2.18",
     "eslint-config-next": "^12.3.4",
     "source-map-loader": "^4.0.2",
-    "typescript": "^5.3.3"
+    "typescript": "5.4.2"
   }
 }

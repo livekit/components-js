@@ -2,4 +2,4 @@
 "@livekit/components-react": patch
 ---
 
-Update usehooks-ts to v3
+Add onDeviceError callback to ControlBar

@@ -1,5 +1,18 @@
 # @livekit/components-react
 
+## 2.4.0
+
+### Minor Changes
+
+- Add participant attribute hooks and update livekit client - [#926](https://github.com/livekit/components-js/pull/926) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Add onDeviceError callback to ControlBar - [#921](https://github.com/livekit/components-js/pull/921) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`4245444ad0212f3eb33920216a65b5d0b9a0637c`](https://github.com/livekit/components-js/commit/4245444ad0212f3eb33920216a65b5d0b9a0637c)]:
+  - @livekit/components-core@0.11.0
+
 ## 2.3.6
 
 ### Patch Changes

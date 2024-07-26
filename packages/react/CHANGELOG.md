@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 2.4.1
+
+### Patch Changes
+
+- Allow custom GridLayout definitions - [#909](https://github.com/livekit/components-js/pull/909) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`5a17214da6d516e52f7f6917e3fcbe86aaa3805f`](https://github.com/livekit/components-js/commit/5a17214da6d516e52f7f6917e3fcbe86aaa3805f)]:
+  - @livekit/components-core@0.11.1
+
 ## 2.4.0
 
 ### Minor Changes

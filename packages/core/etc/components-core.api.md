@@ -203,13 +203,22 @@ export const GRID_LAYOUTS: GridLayoutDefinition[];
 
 // @public (undocumented)
 export type GridLayoutDefinition = {
+    columns: number;
+    rows: number;
+    minWidth?: number;
+    minHeight?: number;
+    orientation?: 'landscape' | 'portrait';
+};
+
+// @public (undocumented)
+export type GridLayoutInfo = {
     name: string;
     columns: number;
     rows: number;
-    minTiles: number;
     maxTiles: number;
     minWidth: number;
     minHeight: number;
+    orientation?: 'landscape' | 'portrait';
 };
 
 // @public (undocumented)
@@ -447,7 +456,7 @@ export type ScreenShareTrackMap = Array<{
 }>;
 
 // @public (undocumented)
-export function selectGridLayout(layouts: GridLayoutDefinition[], participantCount: number, width: number, height: number): GridLayoutDefinition;
+export function selectGridLayout(layoutDefinitions: GridLayoutDefinition[], participantCount: number, width: number, height: number): GridLayoutInfo;
 
 // @public
 export function sendMessage(localParticipant: LocalParticipant, payload: Uint8Array, options?: DataPublishOptions): Promise<void>;

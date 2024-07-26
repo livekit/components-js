@@ -207,6 +207,7 @@ export type GridLayoutDefinition = {
     rows: number;
     minWidth?: number;
     minHeight?: number;
+    orientation?: 'landscape' | 'portrait';
 };
 
 // @public (undocumented)
@@ -217,6 +218,7 @@ export type GridLayoutInfo = {
     maxTiles: number;
     minWidth: number;
     minHeight: number;
+    orientation?: 'landscape' | 'portrait';
 };
 
 // @public (undocumented)

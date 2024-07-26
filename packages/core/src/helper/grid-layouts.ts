@@ -20,6 +20,11 @@ export type GridLayoutDefinition = {
    * (`tiles=columns*rows`) that is within the constraint.
    */
   minHeight?: number;
+  /**
+   * For which orientation the layout definition should be applied.
+   * Will be used for both landscape and portrait if no value is specified.
+   */
+  orientation?: 'landscape' | 'portrait';
 };
 
 export type GridLayoutInfo = {
@@ -38,6 +43,7 @@ export type GridLayoutInfo = {
   minWidth: number;
   /** Minimum height required to use this layout. */
   minHeight: number;
+  orientation?: 'landscape' | 'portrait';
 };
 
 export const GRID_LAYOUTS: GridLayoutDefinition[] = [
@@ -48,11 +54,12 @@ export const GRID_LAYOUTS: GridLayoutDefinition[] = [
   {
     columns: 1,
     rows: 2,
+    orientation: 'portrait',
   },
   {
     columns: 2,
     rows: 1,
-    minWidth: 900,
+    orientation: 'landscape',
   },
   {
     columns: 2,
@@ -91,13 +98,15 @@ export function selectGridLayout(
   }
   // Find the best layout to fit all participants.
   let currentLayoutIndex = 0;
+  const containerOrientation = width / height > 1 ? 'landscape' : 'portrait';
   let layout = layouts.find((layout_, index, allLayouts) => {
     currentLayoutIndex = index;
     const isBiggerLayoutAvailable =
       allLayouts.findIndex((l, i) => {
+        const fitsOrientation = !l.orientation || l.orientation === containerOrientation;
         const layoutIsBiggerThanCurrent = i > index;
         const layoutFitsSameAmountOfParticipants = l.maxTiles === layout_.maxTiles;
-        return layoutIsBiggerThanCurrent && layoutFitsSameAmountOfParticipants;
+        return layoutIsBiggerThanCurrent && layoutFitsSameAmountOfParticipants && fitsOrientation;
       }) !== -1;
     return layout_.maxTiles >= participantCount && !isBiggerLayoutAvailable;
   });
@@ -141,6 +150,7 @@ export function expandAndSortLayoutDefinitions(layouts: GridLayoutDefinition[]):
         maxTiles: layout.columns * layout.rows,
         minWidth: layout.minWidth ?? 0,
         minHeight: layout.minHeight ?? 0,
+        orientation: layout.orientation,
       } satisfies GridLayoutInfo;
     })
     .sort((a, b) => {

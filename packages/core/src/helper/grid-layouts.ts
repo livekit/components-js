@@ -1,5 +1,8 @@
 import { log } from '../logger';
 
+/**
+ * @public
+ */
 export type GridLayoutDefinition = {
   /** Column count of the grid layout. */
   columns: number;

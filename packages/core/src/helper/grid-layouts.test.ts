@@ -9,10 +9,13 @@ describe.concurrent('Test correct layout for participant count with no screen si
       expect(layout.name).toBe(expected);
     },
   );
-  test.each([{ participantCount: 2, expected: '2x1' }])(
-    'Layout for $participantCount should be -> $expected',
-    ({ participantCount, expected }) => {
-      const layout = selectGridLayout(GRID_LAYOUTS, participantCount, 9999, 9999);
+  test.each([
+    { participantCount: 2, expected: '1x2', width: 720 },
+    { participantCount: 2, expected: '2x1', width: 1920 },
+  ])(
+    'Layout for $participantCount for $width x 720 should be -> $expected',
+    ({ participantCount, expected, width }) => {
+      const layout = selectGridLayout(GRID_LAYOUTS, participantCount, width, 1080);
       expect(layout.name).toBe(expected);
     },
   );
@@ -47,7 +50,7 @@ describe.concurrent('Test correct layout for participant count with no screen si
   });
 });
 
-describe.concurrent('Test defined GRID_LAYOUTS array is valid', () => {
+describe('Test defined GRID_LAYOUTS array is valid', () => {
   test('GRID_LAYOUTS should be ordered by layout.maxParticipants', () => {
     const layouts = expandAndSortLayoutDefinitions(GRID_LAYOUTS);
     expect(layouts).toMatchInlineSnapshot(`
@@ -58,6 +61,7 @@ describe.concurrent('Test defined GRID_LAYOUTS array is valid', () => {
           "minHeight": 0,
           "minWidth": 0,
           "name": "1x1",
+          "orientation": undefined,
           "rows": 1,
         },
         {
@@ -66,14 +70,16 @@ describe.concurrent('Test defined GRID_LAYOUTS array is valid', () => {
           "minHeight": 0,
           "minWidth": 0,
           "name": "1x2",
+          "orientation": "portrait",
           "rows": 2,
         },
         {
           "columns": 2,
           "maxTiles": 2,
           "minHeight": 0,
-          "minWidth": 900,
+          "minWidth": 0,
           "name": "2x1",
+          "orientation": "landscape",
           "rows": 1,
         },
         {
@@ -82,6 +88,7 @@ describe.concurrent('Test defined GRID_LAYOUTS array is valid', () => {
           "minHeight": 0,
           "minWidth": 560,
           "name": "2x2",
+          "orientation": undefined,
           "rows": 2,
         },
         {
@@ -90,6 +97,7 @@ describe.concurrent('Test defined GRID_LAYOUTS array is valid', () => {
           "minHeight": 0,
           "minWidth": 700,
           "name": "3x3",
+          "orientation": undefined,
           "rows": 3,
         },
         {
@@ -98,6 +106,7 @@ describe.concurrent('Test defined GRID_LAYOUTS array is valid', () => {
           "minHeight": 0,
           "minWidth": 960,
           "name": "4x4",
+          "orientation": undefined,
           "rows": 4,
         },
         {
@@ -106,6 +115,7 @@ describe.concurrent('Test defined GRID_LAYOUTS array is valid', () => {
           "minHeight": 0,
           "minWidth": 1100,
           "name": "5x5",
+          "orientation": undefined,
           "rows": 5,
         },
       ]
@@ -120,7 +130,6 @@ describe.concurrent(
       { desiredGrid: { columns: 4, rows: 4 }, expected: { columns: 3, rows: 3 } },
       { desiredGrid: { columns: 5, rows: 5 }, expected: { columns: 4, rows: 4 } },
       { desiredGrid: { columns: 3, rows: 3 }, expected: { columns: 2, rows: 2 } },
-      { desiredGrid: { columns: 2, rows: 1 }, expected: { columns: 1, rows: 2 } },
     ])(
       'If the minimum width for the $desiredGrid layout is not satisfied, switch to smaller layout ($expected).',
       ({ desiredGrid, expected }) => {

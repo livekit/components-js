@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.4.3
+
+### Patch Changes
+
+- Expose useIsRecording hook with optional room param - [#934](https://github.com/livekit/components-js/pull/934) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.4.2
 
 ### Patch Changes

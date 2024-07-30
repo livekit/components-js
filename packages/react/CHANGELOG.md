@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 2.4.2
+
+### Patch Changes
+
+- Add useIsRecording hook - [#931](https://github.com/livekit/components-js/pull/931) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`ddb2451790be04b03dbce4f7fc2fb52c19ff7843`](https://github.com/livekit/components-js/commit/ddb2451790be04b03dbce4f7fc2fb52c19ff7843)]:
+  - @livekit/components-core@0.11.2
+
 ## 2.4.1
 
 ### Patch Changes

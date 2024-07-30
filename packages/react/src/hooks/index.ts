@@ -52,3 +52,4 @@ export * from './useTrackVolume';
 export * from './useParticipantTracks';
 export * from './useTrackTranscription';
 export * from './useParticipantAttributes';
+export * from './useIsRecording';

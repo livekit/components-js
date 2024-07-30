@@ -823,6 +823,9 @@ export interface UseIsMutedOptions {
 }
 
 // @public
+export function useIsRecording(room?: Room): boolean;
+
+// @public
 export function useIsSpeaking(participant?: Participant): boolean;
 
 // @public

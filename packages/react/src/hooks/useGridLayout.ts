@@ -1,5 +1,5 @@
 import { GRID_LAYOUTS, selectGridLayout } from '@livekit/components-core';
-import type { GridLayoutDefinition } from '@livekit/components-core';
+import type { GridLayoutDefinition, GridLayoutInfo } from '@livekit/components-core';
 import * as React from 'react';
 import { useSize } from './internal';
 
@@ -21,13 +21,13 @@ export function useGridLayout(
   gridElement: React.RefObject<HTMLDivElement>,
   /** Count of tracks that should get layed out */
   trackCount: number,
-): { layout: GridLayoutDefinition } {
+  options: {
+    gridLayouts?: GridLayoutDefinition[];
+  } = {},
+): { layout: GridLayoutInfo; containerWidth: number; containerHeight: number } {
+  const gridLayouts = options.gridLayouts ?? GRID_LAYOUTS;
   const { width, height } = useSize(gridElement);
-
-  const layout =
-    width > 0 && height > 0
-      ? selectGridLayout(GRID_LAYOUTS, trackCount, width, height)
-      : GRID_LAYOUTS[0];
+  const layout = selectGridLayout(gridLayouts, trackCount, width, height);
 
   React.useEffect(() => {
     if (gridElement.current && layout) {
@@ -38,5 +38,7 @@ export function useGridLayout(
 
   return {
     layout,
+    containerWidth: width,
+    containerHeight: height,
   };
 }

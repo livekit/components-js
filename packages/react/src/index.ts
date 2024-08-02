@@ -24,4 +24,5 @@ export type {
   ParticipantIdentifier,
   PinState,
   WidgetState,
+  GridLayoutDefinition,
 } from '@livekit/components-core';

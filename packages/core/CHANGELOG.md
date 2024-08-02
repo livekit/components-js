@@ -1,5 +1,23 @@
 # @livekit/components-core
 
+## 0.11.2
+
+### Patch Changes
+
+- Add useIsRecording hook - [#931](https://github.com/livekit/components-js/pull/931) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.1
+
+### Patch Changes
+
+- Allow custom GridLayout definitions - [#909](https://github.com/livekit/components-js/pull/909) ([@Ocupe](https://github.com/Ocupe))
+
+## 0.11.0
+
+### Minor Changes
+
+- Add participant attribute hooks and update livekit client - [#926](https://github.com/livekit/components-js/pull/926) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.10.5
 
 ### Patch Changes

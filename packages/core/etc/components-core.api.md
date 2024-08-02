@@ -203,13 +203,22 @@ export const GRID_LAYOUTS: GridLayoutDefinition[];
 
 // @public (undocumented)
 export type GridLayoutDefinition = {
+    columns: number;
+    rows: number;
+    minWidth?: number;
+    minHeight?: number;
+    orientation?: 'landscape' | 'portrait';
+};
+
+// @public (undocumented)
+export type GridLayoutInfo = {
     name: string;
     columns: number;
     rows: number;
-    minTiles: number;
     maxTiles: number;
     minWidth: number;
     minHeight: number;
+    orientation?: 'landscape' | 'portrait';
 };
 
 // @public (undocumented)
@@ -298,6 +307,15 @@ export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observabl
 
 // @public (undocumented)
 export function observeTrackEvents(track: TrackPublication, ...events: TrackEvent_2[]): Observable<TrackPublication>;
+
+// @public (undocumented)
+export function participantAttributesObserver(participant: Participant): Observable<{
+    changed: Readonly<Record<string, string>>;
+    attributes: Readonly<Record<string, string>>;
+} | {
+    changed: Readonly<Record<string, string>>;
+    attributes: Readonly<Record<string, string>>;
+}>;
 
 // Warning: (ae-incompatible-release-tags) The symbol "participantByIdentifierObserver" is marked as @public, but its signature references "ParticipantIdentifier" which is marked as @beta
 //
@@ -398,6 +416,9 @@ export type ReceivedTranscriptionSegment = TranscriptionSegment & {
 };
 
 // @public (undocumented)
+export function recordingStatusObservable(room: Room): Observable<boolean>;
+
+// @public (undocumented)
 export type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> & {
     [K in Keys]-?: Required<Pick<T, K>> & Partial<Record<Exclude<Keys, K>, undefined>>;
 }[Keys];
@@ -438,7 +459,7 @@ export type ScreenShareTrackMap = Array<{
 }>;
 
 // @public (undocumented)
-export function selectGridLayout(layouts: GridLayoutDefinition[], participantCount: number, width: number, height: number): GridLayoutDefinition;
+export function selectGridLayout(layoutDefinitions: GridLayoutDefinition[], participantCount: number, width: number, height: number): GridLayoutInfo;
 
 // @public
 export function sendMessage(localParticipant: LocalParticipant, payload: Uint8Array, options?: DataPublishOptions): Promise<void>;

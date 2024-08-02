@@ -202,7 +202,7 @@ export interface ConnectionStatusProps extends React_2.HTMLAttributes<HTMLDivEle
 }
 
 // @public
-export function ControlBar({ variation, controls, saveUserChoices, ...props }: ControlBarProps): React_2.JSX.Element;
+export function ControlBar({ variation, controls, saveUserChoices, onDeviceError, ...props }: ControlBarProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export type ControlBarControls = {
@@ -218,6 +218,11 @@ export type ControlBarControls = {
 export interface ControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> {
     // (undocumented)
     controls?: ControlBarControls;
+    // (undocumented)
+    onDeviceError?: (error: {
+        source: Track.Source;
+        error: Error;
+    }) => void;
     // @alpha
     saveUserChoices?: boolean;
     // (undocumented)
@@ -284,6 +289,15 @@ export const GearIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
 export function GridLayout({ tracks, ...props }: GridLayoutProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export type GridLayoutDefinition = {
+    columns: number;
+    rows: number;
+    minWidth?: number;
+    minHeight?: number;
+    orientation?: 'landscape' | 'portrait';
+};
 
 // @public (undocumented)
 export interface GridLayoutProps extends React_2.HTMLAttributes<HTMLDivElement>, Pick<UseParticipantsOptions, 'updateOnlyOn'> {
@@ -801,8 +815,12 @@ export interface UseFocusToggleProps {
 // @public
 export function useGridLayout(
 gridElement: React_2.RefObject<HTMLDivElement>,
-trackCount: number): {
-    layout: GridLayoutDefinition;
+trackCount: number, options?: {
+    gridLayouts?: GridLayoutDefinition[];
+}): {
+    layout: GridLayoutInfo;
+    containerWidth: number;
+    containerHeight: number;
 };
 
 // @alpha (undocumented)
@@ -822,6 +840,9 @@ export interface UseIsMutedOptions {
     // (undocumented)
     participant?: Participant;
 }
+
+// @public
+export function useIsRecording(room?: Room): boolean;
 
 // @public
 export function useIsSpeaking(participant?: Participant): boolean;
@@ -907,6 +928,20 @@ export function usePagination(itemPerPage: number, trackReferences: TrackReferen
     tracks: TrackReferenceOrPlaceholder[];
     currentPage: number;
 };
+
+// @public
+export function useParticipantAttribute(attributeKey: string, options?: UseParticipantAttributesOptions): string;
+
+// @public (undocumented)
+export function useParticipantAttributes(props?: UseParticipantAttributesOptions): {
+    attributes: Readonly<Record<string, string>>;
+};
+
+// @public
+export interface UseParticipantAttributesOptions {
+    // (undocumented)
+    participant?: Participant;
+}
 
 // @public
 export function useParticipantContext(): Participant;
@@ -1205,7 +1240,7 @@ export type WidgetState = {
 //
 // src/context/layout-context.ts:10:3 - (ae-forgotten-export) The symbol "PinContextType" needs to be exported by the entry point index.d.ts
 // src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "WidgetContextType" needs to be exported by the entry point index.d.ts
-// src/hooks/useGridLayout.ts:24:6 - (ae-forgotten-export) The symbol "GridLayoutDefinition" needs to be exported by the entry point index.d.ts
+// src/hooks/useGridLayout.ts:27:6 - (ae-forgotten-export) The symbol "GridLayoutInfo" needs to be exported by the entry point index.d.ts
 // src/hooks/useMediaDeviceSelect.ts:47:29 - (ae-forgotten-export) The symbol "SetMediaDeviceOptions" needs to be exported by the entry point index.d.ts
 // src/hooks/useTrackTranscription.ts:39:38 - (ae-forgotten-export) The symbol "ReceivedTranscriptionSegment" needs to be exported by the entry point index.d.ts
 

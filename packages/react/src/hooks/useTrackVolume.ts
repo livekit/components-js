@@ -191,7 +191,8 @@ export function useAudioWaveform(
   const onUpdate = React.useCallback((wave: Float32Array) => {
     setBars(
       Array.from(
-        wave.slice(0, opts.barCount).map((v) => sigmoid(v * opts.volMultiplier, 0.08, 0.2)),
+        filterData(wave, opts.barCount).map((v) => Math.sqrt(v) * opts.volMultiplier),
+        // wave.slice(0, opts.barCount).map((v) => sigmoid(v * opts.volMultiplier, 0.08, 0.2)),
       ),
     );
   }, []);
@@ -250,3 +251,22 @@ function pow2ceil(v: number) {
   }
   return p;
 }
+
+function filterData(audioData: Float32Array, numSamples: number) {
+  const blockSize = Math.floor(audioData.length / numSamples); // the number of samples in each subdivision
+  const filteredData = new Float32Array(numSamples);
+  for (let i = 0; i < numSamples; i++) {
+    const blockStart = blockSize * i; // the location of the first sample in the block
+    let sum = 0;
+    for (let j = 0; j < blockSize; j++) {
+      sum = sum + Math.abs(audioData[blockStart + j]); // find the sum of all the samples in the block
+    }
+    filteredData[i] = sum / blockSize; // divide the sum by the block size to get the average
+  }
+  return filteredData;
+}
+
+// function normalizeData(audioData: Float32Array) {
+//   const multiplier = Math.pow(Math.max(...audioData), -1);
+//   return audioData.map((n) => n * multiplier);
+// }

@@ -10,6 +10,7 @@ export interface AudioVisualizerProps extends React.SVGProps<SVGSVGElement> {
   barWidth?: number;
   borderRadius?: string;
   barCount?: number;
+  mode?: 'wave' | 'bars';
 }
 
 /**
@@ -32,6 +33,7 @@ export const AudioVisualizer = /* @__PURE__ */ React.forwardRef<
     borderRadius = '0.5rem',
     barCount = 128,
     viewBox = '0 0 512 180',
+    mode = 'wave',
     ...props
   }: AudioVisualizerProps,
   ref,
@@ -40,7 +42,7 @@ export const AudioVisualizer = /* @__PURE__ */ React.forwardRef<
 
   const { bars } = useAudioWaveform(trackReference, {
     barCount,
-    volMultiplier: 4,
+    volMultiplier: 3,
     updateInterval: 50,
   });
   const [, , width, height] = viewBox.split(' ');
@@ -55,20 +57,37 @@ export const AudioVisualizer = /* @__PURE__ */ React.forwardRef<
       className="lk-audio-visualizer"
       viewBox={viewBox}
     >
-      {bars.map((vol, idx) => (
-        <rect
-          key={idx}
-          x={gap + idx * (barWidth + gap)}
-          y={0}
-          width={barWidth}
-          height={Number.parseInt(height)}
-          rx={borderRadius}
-          style={{
-            transform: `scale(1, ${vol}`,
-            transformOrigin: 'center',
-          }}
-        ></rect>
-      ))}
+      {mode === 'bars' &&
+        bars.map((vol, idx) => (
+          <rect
+            key={idx}
+            x={gap + idx * (barWidth + gap)}
+            y={0}
+            width={barWidth}
+            height={Number.parseInt(height)}
+            rx={borderRadius}
+            style={{
+              transform: `scale(1, ${vol}`,
+              transformOrigin: 'center',
+            }}
+          ></rect>
+        ))}
+      {mode === 'wave' && (
+        <path
+          fill="none"
+          style={{ strokeWidth: '1px', strokeLinecap: 'round' }}
+          d={`${bars.reduce((acc, val, idx) => {
+            const halfHeight = Number.parseInt(height) / 2;
+            const barPos = (Number.parseInt(width) / barCount) * idx;
+            if (idx === 0) {
+              return `M 0 ${halfHeight} `;
+            } else {
+              acc += `L ${barPos} ${halfHeight + halfHeight * val * (idx % 2 === 0 ? 1 : -1)} `;
+            }
+            return acc;
+          }, '')}`}
+        />
+      )}
     </svg>
   );
 });

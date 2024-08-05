@@ -131,8 +131,8 @@ export function useMultibandTrackVolume(
       }
       frequencies = frequencies.slice(options.loPass, options.hiPass);
 
-      const normalizedFrequencies = normalizeFrequencies(frequencies);
-      const chunkSize = Math.ceil(normalizedFrequencies.length / opts.bands);
+      const normalizedFrequencies = normalizeFrequencies(frequencies); // is this needed ?
+      const chunkSize = Math.ceil(normalizedFrequencies.length / opts.bands); // we want logarithmic chunking here
       const chunks: Array<number> = [];
       for (let i = 0; i < opts.bands; i++) {
         const summedVolumes = normalizedFrequencies

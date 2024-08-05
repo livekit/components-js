@@ -113,6 +113,7 @@ export function useMultibandTrackVolume(
       ? trackOrTrackReference
       : <LocalAudioTrack | RemoteAudioTrack | undefined>trackOrTrackReference?.publication?.track;
   const [frequencyBands, setFrequencyBands] = React.useState<Array<number>>([]);
+  options.analyserOptions = { ...multibandDefaults.analyserOptions, ...options.analyserOptions };
   const opts = { ...multibandDefaults, ...options };
   React.useEffect(() => {
     if (!track || !track?.mediaStream) {
@@ -132,16 +133,14 @@ export function useMultibandTrackVolume(
       frequencies = frequencies.slice(options.loPass, options.hiPass);
 
       const normalizedFrequencies = normalizeFrequencies(frequencies);
-      const chunkSize = Math.ceil(normalizedFrequencies.length / opts.bands);
-      const chunks: Array<number> = [];
-      for (let i = 0; i < opts.bands; i++) {
-        const summedVolumes = normalizedFrequencies
-          .slice(i * chunkSize, (i + 1) * chunkSize)
-          .reduce((acc, val) => (acc += val), 0);
-        chunks.push(summedVolumes / chunkSize);
-      }
+      const binVolumes = fftToLogBins(
+        normalizedFrequencies,
+        analyser.context.sampleRate,
+        opts.bands,
+        opts.analyserOptions.fftSize!,
+      );
 
-      setFrequencyBands(chunks);
+      setFrequencyBands(binVolumes);
     };
 
     const interval = setInterval(updateVolume, opts.updateInterval);
@@ -153,4 +152,52 @@ export function useMultibandTrackVolume(
   }, [track, track?.mediaStream, JSON.stringify(options)]);
 
   return frequencyBands;
+}
+
+function calculateLogBinEdges(minFreq: number, maxFreq: number, numBins: number): number[] {
+  const logBinEdges: number[] = [];
+  const logMinFreq = Math.log(minFreq);
+  const logMaxFreq = Math.log(maxFreq);
+  const binWidth = (logMaxFreq - logMinFreq) / numBins;
+
+  for (let i = 0; i <= numBins; i++) {
+    logBinEdges.push(Math.exp(logMinFreq + i * binWidth));
+  }
+
+  return logBinEdges;
+}
+
+function fftToLogBins(
+  rawFFTValues: Float32Array,
+  sampleRate: number,
+  numBins: number,
+  fftSize: number,
+): number[] {
+  const deltaF = sampleRate / fftSize;
+
+  // Define the min and max frequencies of interest
+  const minFreq = deltaF; // Starting from the first FFT bin frequency
+  const maxFreq = sampleRate / 2; // Nyquist frequency
+
+  const logBinEdges = calculateLogBinEdges(minFreq, maxFreq, numBins);
+  const logBinValues = new Array(numBins).fill(0);
+
+  for (let i = 0; i < numBins; i++) {
+    const startFreq = logBinEdges[i];
+    const endFreq = logBinEdges[i + 1];
+
+    const startBin = Math.ceil(startFreq / deltaF);
+    const endBin = Math.floor(endFreq / deltaF);
+
+    if (startBin >= rawFFTValues.length) {
+      break;
+    }
+
+    for (let j = startBin; j <= endBin && j < rawFFTValues.length; j++) {
+      logBinValues[i] += rawFFTValues[j];
+    }
+    logBinValues[i] /= endBin - startBin + 1;
+  }
+
+  return logBinValues;
 }

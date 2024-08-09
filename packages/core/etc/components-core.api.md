@@ -312,9 +312,12 @@ export function observeTrackEvents(track: TrackPublication, ...events: TrackEven
 export function participantAttributesObserver(participant: Participant): Observable<{
     changed: Readonly<Record<string, string>>;
     attributes: Readonly<Record<string, string>>;
-} | {
-    changed: Readonly<Record<string, string>>;
-    attributes: Readonly<Record<string, string>>;
+}>;
+
+// @public (undocumented)
+export function participantAttributesObserver(participant: undefined): Observable<{
+    changed: undefined;
+    attributes: undefined;
 }>;
 
 // Warning: (ae-incompatible-release-tags) The symbol "participantByIdentifierObserver" is marked as @public, but its signature references "ParticipantIdentifier" which is marked as @beta

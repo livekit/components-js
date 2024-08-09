@@ -888,7 +888,7 @@ export function useMediaDeviceSelect({ kind, room, track, requestPermissions, on
     devices: MediaDeviceInfo[];
     className: string;
     activeDeviceId: string;
-    setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions) => Promise<void>;
+    setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions | undefined) => Promise<void>;
 };
 
 // @public (undocumented)
@@ -923,7 +923,7 @@ export function useParticipantAttribute(attributeKey: string, options?: UseParti
 
 // @public (undocumented)
 export function useParticipantAttributes(props?: UseParticipantAttributesOptions): {
-    attributes: Readonly<Record<string, string>>;
+    attributes: Readonly<Record<string, string>> | undefined;
 };
 
 // @public
@@ -1159,7 +1159,7 @@ export type UseTracksOptions = {
 
 // @public
 export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, publishOptions, onDeviceError, ...rest }: UseTrackToggleProps<T>): {
-    toggle: (forceState?: boolean, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>;
+    toggle: (forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>;
     enabled: boolean;
     pending: boolean;
     track: LocalTrackPublication | undefined;
@@ -1226,6 +1226,8 @@ export interface VoiceAssistant {
     // (undocumented)
     agent: RemoteParticipant | undefined;
     // (undocumented)
+    agentAttributes: RemoteParticipant['attributes'] | undefined;
+    // (undocumented)
     agentTranscriptions: ReceivedTranscriptionSegment[];
     // (undocumented)
     audioTrack: TrackReference | undefined;
@@ -1237,7 +1239,7 @@ export interface VoiceAssistant {
 export const VoiceAssistantContext: React_2.Context<VoiceAssistant | undefined>;
 
 // @alpha (undocumented)
-export type VoiceAssistantState = 'offline' | 'connecting' | 'listening' | 'thinking' | 'speaking';
+export type VoiceAssistantState = 'disconnected' | 'connecting' | 'listening' | 'thinking' | 'speaking';
 
 // @public (undocumented)
 export type WidgetState = {

@@ -30,7 +30,15 @@ export const AudioVisualizer: (
     const barCount = 7;
     const trackReference = useEnsureTrackRef(trackRef);
 
-    const volumes = useMultibandTrackVolume(trackReference, { bands: 7, loPass: 300 });
+    const volumes = useMultibandTrackVolume(trackReference, {
+      bands: 7,
+      loPass: 60,
+      hiPass: 1800,
+      analyserOptions: {
+        minDecibels: -60,
+        maxDecibels: -20,
+      },
+    });
 
     return (
       <svg

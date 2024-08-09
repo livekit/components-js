@@ -119,6 +119,7 @@ export function useMultibandTrackVolume(
     if (!track || !track?.mediaStream) {
       return;
     }
+
     const { analyser, cleanup } = createAudioAnalyser(track, opts.analyserOptions);
 
     const bufferLength = analyser.frequencyBinCount;

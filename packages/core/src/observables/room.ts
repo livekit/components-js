@@ -263,3 +263,10 @@ export function encryptionStatusObservable(room: Room, participant: Participant 
     ),
   );
 }
+
+export function recordingStatusObservable(room: Room) {
+  return roomEventSelector(room, RoomEvent.RecordingStatusChanged).pipe(
+    map(([recording]) => recording),
+    startWith(room.isRecording),
+  );
+}

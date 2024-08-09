@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-core",
-  "version": "0.10.5",
+  "version": "0.11.2",
   "license": "Apache-2.0",
   "author": "LiveKit",
   "repository": {
@@ -35,12 +35,12 @@
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@floating-ui/dom": "1.6.7",
+    "@floating-ui/dom": "1.6.8",
     "loglevel": "1.9.1",
     "rxjs": "7.8.1"
   },
   "peerDependencies": {
-    "livekit-client": "^2.2.0",
+    "livekit-client": "^2.4.0",
     "@livekit/protocol": "^1.16.0",
     "tslib": "^2.6.2"
   },

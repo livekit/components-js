@@ -1,17 +1,22 @@
 import * as React from 'react';
-import { ParticipantKind, Track } from 'livekit-client';
+import { ConnectionState, ParticipantKind, Track } from 'livekit-client';
 import type { RemoteParticipant } from 'livekit-client';
 import type { ReceivedTranscriptionSegment, TrackReference } from '@livekit/components-core';
 import { useRemoteParticipants } from './useRemoteParticipants';
 import { useParticipantTracks } from './useParticipantTracks';
 import { useTrackTranscription } from './useTrackTranscription';
-import { useParticipantInfo } from './useParticipantInfo';
 import { useConnectionState } from './useConnectionStatus';
+import { useParticipantAttributes } from './useParticipantAttributes';
 
 /**
  * @alpha
  */
-export type VoiceAssistantState = 'offline' | 'connecting' | 'listening' | 'thinking' | 'speaking';
+export type VoiceAssistantState =
+  | 'disconnected'
+  | 'connecting'
+  | 'listening'
+  | 'thinking'
+  | 'speaking';
 
 /**
  * @alpha
@@ -21,6 +26,7 @@ export interface VoiceAssistant {
   state: VoiceAssistantState;
   audioTrack: TrackReference | undefined;
   agentTranscriptions: ReceivedTranscriptionSegment[];
+  agentAttributes: RemoteParticipant['attributes'] | undefined;
 }
 
 /**
@@ -34,41 +40,24 @@ export function useVoiceAssistant(): VoiceAssistant {
   const agent = useRemoteParticipants().find((p) => p.kind === ParticipantKind.AGENT);
   const audioTrack = useParticipantTracks([Track.Source.Microphone], agent?.identity)[0];
   const { segments: agentTranscriptions } = useTrackTranscription(audioTrack);
-  const { metadata: agentMetadata } = useParticipantInfo({ participant: agent });
   const connectionState = useConnectionState();
+  const { attributes } = useParticipantAttributes({ participant: agent });
 
   const state: VoiceAssistantState = React.useMemo(() => {
-    if (connectionState === 'disconnected') {
-      return 'offline';
-    } else if (connectionState !== 'connected') {
+    if (connectionState === ConnectionState.Disconnected) {
+      return 'disconnected';
+    } else if (connectionState === ConnectionState.Connecting || !agent || !attributes?.state) {
       return 'connecting';
+    } else {
+      return attributes.state as VoiceAssistantState;
     }
-
-    if (!agent) {
-      return 'connecting';
-    }
-
-    if (!agentMetadata) {
-      return 'listening';
-    }
-
-    try {
-      const { agent_state } = JSON.parse(agentMetadata);
-      if (agent_state === 'thinking') {
-        return 'thinking';
-      } else if (agent_state === 'speaking') {
-        return 'speaking';
-      }
-    } catch (e) {
-      return 'listening';
-    }
-    return 'listening';
-  }, [agentMetadata, agent, connectionState]);
+  }, [attributes, agent, connectionState]);
 
   return {
     agent,
     state,
     audioTrack,
     agentTranscriptions,
+    agentAttributes: attributes,
   };
 }

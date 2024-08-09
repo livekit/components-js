@@ -21,6 +21,10 @@ export interface TrackTranscriptionOptions {
    * @defaultValue 100
    */
   bufferSize?: number;
+  /**
+   * optional callback for retrieving newly incoming transcriptions only
+   */
+  onTranscription?: (newSegments: TranscriptionSegment[]) => void;
   /** amount of time (in ms) that the segment is considered `active` past its original segment duration, defaults to 2_000 */
   // maxAge?: number;
 }
@@ -46,6 +50,7 @@ export function useTrackTranscription(
   // const prevActiveSegments = React.useRef<ReceivedTranscriptionSegment[]>([]);
   const syncTimestamps = useTrackSyncTime(trackRef);
   const handleSegmentMessage = (newSegments: TranscriptionSegment[]) => {
+    opts.onTranscription?.(newSegments);
     setSegments((prevSegments) =>
       dedupeSegments(
         prevSegments,

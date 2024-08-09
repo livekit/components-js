@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-react",
-  "version": "2.3.5",
+  "version": "2.4.3",
   "license": "Apache-2.0",
   "author": "LiveKit",
   "repository": {
@@ -48,13 +48,12 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@livekit/components-core": "workspace:*",
-    "@react-hook/latest": "1.0.3",
     "clsx": "2.1.1",
     "usehooks-ts": "3.1.0"
   },
   "peerDependencies": {
     "@livekit/protocol": "^1.16.0",
-    "livekit-client": "^2.2.0",
+    "livekit-client": "^2.4.0",
     "react": ">=18",
     "react-dom": ">=18",
     "tslib": "^2.6.2"

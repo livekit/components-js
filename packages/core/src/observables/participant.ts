@@ -289,3 +289,26 @@ export function participantByIdentifierObserver(
 
   return observable;
 }
+
+export function participantAttributesObserver(participant: Participant): Observable<{
+  changed: Readonly<Record<string, string>>;
+  attributes: Readonly<Record<string, string>>;
+}>;
+export function participantAttributesObserver(participant: undefined): Observable<{
+  changed: undefined;
+  attributes: undefined;
+}>;
+export function participantAttributesObserver(participant: Participant | undefined) {
+  if (typeof participant === 'undefined') {
+    return new Observable<{ changed: undefined; attributes: undefined }>();
+  }
+  return participantEventSelector(participant, ParticipantEvent.AttributesChanged).pipe(
+    map(([changedAttributes]) => {
+      return {
+        changed: changedAttributes as Readonly<Record<string, string>>,
+        attributes: participant.attributes,
+      };
+    }),
+    startWith({ changed: participant.attributes, attributes: participant.attributes }),
+  );
+}

@@ -15,7 +15,7 @@ import type { LocalParticipant } from 'livekit-client';
 import { LocalVideoTrack } from 'livekit-client';
 import loglevel from 'loglevel';
 import { Observable } from 'rxjs';
-import type { Participant } from 'livekit-client';
+import { Participant } from 'livekit-client';
 import { ParticipantEvent } from 'livekit-client';
 import type { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 import type { ParticipantKind } from 'livekit-client';
@@ -174,7 +174,7 @@ export const defaultUserChoices: LocalUserChoices;
 export function didActiveSegmentsChange<T extends TranscriptionSegment>(prevActive: T[], newActive: T[]): boolean;
 
 // @public (undocumented)
-export function encryptionStatusObservable(room: Room, participant: Participant): Observable<boolean>;
+export function encryptionStatusObservable(room: Room, participant: Participant | undefined): Observable<boolean>;
 
 // @public (undocumented)
 export function getActiveTranscriptionSegments(segments: ReceivedTranscriptionSegment[], syncTimes: {
@@ -312,9 +312,12 @@ export function observeTrackEvents(track: TrackPublication, ...events: TrackEven
 export function participantAttributesObserver(participant: Participant): Observable<{
     changed: Readonly<Record<string, string>>;
     attributes: Readonly<Record<string, string>>;
-} | {
-    changed: Readonly<Record<string, string>>;
-    attributes: Readonly<Record<string, string>>;
+}>;
+
+// @public (undocumented)
+export function participantAttributesObserver(participant: undefined): Observable<{
+    changed: undefined;
+    attributes: undefined;
 }>;
 
 // Warning: (ae-incompatible-release-tags) The symbol "participantByIdentifierObserver" is marked as @public, but its signature references "ParticipantIdentifier" which is marked as @beta
@@ -347,7 +350,7 @@ export type ParticipantIdentifier = RequireAtLeastOne<{
 }, 'identity' | 'kind'>;
 
 // @public (undocumented)
-export function participantInfoObserver(participant: Participant): Observable<{
+export function participantInfoObserver(participant?: Participant): Observable<{
     name: string | undefined;
     identity: string;
     metadata: string | undefined;
@@ -355,7 +358,7 @@ export function participantInfoObserver(participant: Participant): Observable<{
     name: string | undefined;
     identity: string;
     metadata: string | undefined;
-}>;
+}> | undefined;
 
 // @public (undocumented)
 export interface ParticipantMedia<T extends Participant = Participant> {
@@ -572,7 +575,7 @@ export function setupParticipantName(participant: Participant): {
     name: string | undefined;
     identity: string;
     metadata: string | undefined;
-    }>;
+    }> | undefined;
 };
 
 // @public (undocumented)

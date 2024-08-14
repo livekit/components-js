@@ -573,7 +573,7 @@ export interface RoomAudioRendererProps {
 export const RoomContext: React_2.Context<Room | undefined>;
 
 // @public
-export const RoomName: (props: RoomNameProps & React_2.RefAttributes<HTMLSpanElement>) => React_2.ReactNode;
+export const RoomName: React_2.FC<RoomNameProps & React_2.RefAttributes<HTMLSpanElement>>;
 
 // @public (undocumented)
 export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
@@ -636,6 +636,13 @@ export interface TrackMutedIndicatorProps extends React_2.HTMLAttributes<HTMLDiv
 
 // @public
 export const TrackRefContext: React_2.Context<TrackReferenceOrPlaceholder | undefined>;
+
+// Warning: (ae-internal-missing-underscore) The name "TrackRefContextIfNeeded" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal
+export function TrackRefContextIfNeeded(props: React_2.PropsWithChildren<{
+    trackRef?: TrackReferenceOrPlaceholder;
+}>): React_2.JSX.Element;
 
 // @public (undocumented)
 export type TrackReference = {
@@ -881,7 +888,7 @@ export function useMediaDeviceSelect({ kind, room, track, requestPermissions, on
     devices: MediaDeviceInfo[];
     className: string;
     activeDeviceId: string;
-    setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions) => Promise<void>;
+    setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions | undefined) => Promise<void>;
 };
 
 // @public (undocumented)
@@ -916,7 +923,7 @@ export function useParticipantAttribute(attributeKey: string, options?: UseParti
 
 // @public (undocumented)
 export function useParticipantAttributes(props?: UseParticipantAttributesOptions): {
-    attributes: Readonly<Record<string, string>>;
+    attributes: Readonly<Record<string, string>> | undefined;
 };
 
 // @public
@@ -930,7 +937,7 @@ export function useParticipantContext(): Participant;
 
 // @public (undocumented)
 export function useParticipantInfo(props?: UseParticipantInfoOptions): {
-    identity: string;
+    identity: string | undefined;
     name: string | undefined;
     metadata: string | undefined;
 };
@@ -1152,7 +1159,7 @@ export type UseTracksOptions = {
 
 // @public
 export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, publishOptions, onDeviceError, ...rest }: UseTrackToggleProps<T>): {
-    toggle: (forceState?: boolean, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>;
+    toggle: (forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>;
     enabled: boolean;
     pending: boolean;
     track: LocalTrackPublication | undefined;
@@ -1164,7 +1171,7 @@ export interface UseTrackToggleProps<T extends ToggleSource> extends Omit<TrackT
 }
 
 // @alpha (undocumented)
-export function useTrackTranscription(trackRef: TrackReferenceOrPlaceholder, options?: TrackTranscriptionOptions): {
+export function useTrackTranscription(trackRef: TrackReferenceOrPlaceholder | undefined, options?: TrackTranscriptionOptions): {
     segments: ReceivedTranscriptionSegment[];
 };
 
@@ -1179,6 +1186,9 @@ trackReferences: TrackReferenceOrPlaceholder[], maxItemsOnPage: number, options?
 export interface UseVisualStableUpdateOptions {
     customSortFunction?: (trackReferences: TrackReferenceOrPlaceholder[]) => TrackReferenceOrPlaceholder[];
 }
+
+// @alpha
+export function useVoiceAssistant(): VoiceAssistant;
 
 // @public
 export function VideoConference({ chatMessageFormatter, chatMessageDecoder, chatMessageEncoder, SettingsComponent, ...props }: VideoConferenceProps): React_2.JSX.Element;
@@ -1210,6 +1220,26 @@ export interface VideoTrackProps extends React_2.VideoHTMLAttributes<HTMLVideoEl
     onTrackClick?: (evt: ParticipantClickEvent) => void;
     trackRef?: TrackReference;
 }
+
+// @alpha (undocumented)
+export interface VoiceAssistant {
+    // (undocumented)
+    agent: RemoteParticipant | undefined;
+    // (undocumented)
+    agentAttributes: RemoteParticipant['attributes'] | undefined;
+    // (undocumented)
+    agentTranscriptions: ReceivedTranscriptionSegment[];
+    // (undocumented)
+    audioTrack: TrackReference | undefined;
+    // (undocumented)
+    state: VoiceAssistantState;
+}
+
+// @alpha (undocumented)
+export const VoiceAssistantContext: React_2.Context<VoiceAssistant | undefined>;
+
+// @alpha (undocumented)
+export type VoiceAssistantState = 'disconnected' | 'connecting' | 'listening' | 'thinking' | 'speaking';
 
 // @public (undocumented)
 export type WidgetState = {

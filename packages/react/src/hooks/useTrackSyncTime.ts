@@ -5,13 +5,13 @@ import { useObservableState } from './internal';
 /**
  * @internal
  */
-export function useTrackSyncTime({ publication }: TrackReferenceOrPlaceholder) {
+export function useTrackSyncTime(ref: TrackReferenceOrPlaceholder | undefined) {
   const observable = React.useMemo(
-    () => (publication?.track ? trackSyncTimeObserver(publication.track) : undefined),
-    [publication?.track],
+    () => (ref?.publication?.track ? trackSyncTimeObserver(ref?.publication.track) : undefined),
+    [ref?.publication?.track],
   );
   return useObservableState(observable, {
     timestamp: Date.now(),
-    rtpTimestamp: publication?.track?.rtpTimestamp,
+    rtpTimestamp: ref?.publication?.track?.rtpTimestamp,
   });
 }

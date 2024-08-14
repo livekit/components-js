@@ -1,7 +1,7 @@
 import { participantInfoObserver } from '@livekit/components-core';
 import type { Participant } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureParticipant } from '../context';
+import { useMaybeParticipantContext } from '../context';
 import { useObservableState } from './internal';
 
 /**
@@ -20,12 +20,15 @@ export interface UseParticipantInfoOptions {
 
 /** @public */
 export function useParticipantInfo(props: UseParticipantInfoOptions = {}) {
-  const p = useEnsureParticipant(props.participant);
+  let p = useMaybeParticipantContext();
+  if (props.participant) {
+    p = props.participant;
+  }
   const infoObserver = React.useMemo(() => participantInfoObserver(p), [p]);
   const { identity, name, metadata } = useObservableState(infoObserver, {
-    name: p.name,
-    identity: p.identity,
-    metadata: p.metadata,
+    name: p?.name,
+    identity: p?.identity,
+    metadata: p?.metadata,
   });
 
   return { identity, name, metadata };

@@ -47,10 +47,14 @@ export function useVoiceAssistant(): VoiceAssistant {
   const state: VoiceAssistantState = React.useMemo(() => {
     if (connectionState === ConnectionState.Disconnected) {
       return 'disconnected';
-    } else if (connectionState === ConnectionState.Connecting || !agent || !attributes?.state) {
+    } else if (
+      connectionState === ConnectionState.Connecting ||
+      !agent ||
+      !attributes?.['agent.state']
+    ) {
       return 'connecting';
     } else {
-      return attributes['agent.state'] as VoiceAssistantState;
+      return (attributes['agent.state'] as VoiceAssistantState) ?? 'listening';
     }
   }, [attributes, agent, connectionState]);
 

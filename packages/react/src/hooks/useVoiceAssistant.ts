@@ -54,7 +54,7 @@ export function useVoiceAssistant(): VoiceAssistant {
     ) {
       return 'connecting';
     } else {
-      return (attributes['agent.state'] as VoiceAssistantState) ?? 'listening';
+      return attributes['agent.state'] as VoiceAssistantState;
     }
   }, [attributes, agent, connectionState]);
 

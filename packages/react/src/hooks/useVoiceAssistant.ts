@@ -14,6 +14,7 @@ import { useParticipantAttributes } from './useParticipantAttributes';
 export type VoiceAssistantState =
   | 'disconnected'
   | 'connecting'
+  | 'initializing'
   | 'listening'
   | 'thinking'
   | 'speaking';
@@ -46,10 +47,14 @@ export function useVoiceAssistant(): VoiceAssistant {
   const state: VoiceAssistantState = React.useMemo(() => {
     if (connectionState === ConnectionState.Disconnected) {
       return 'disconnected';
-    } else if (connectionState === ConnectionState.Connecting || !agent || !attributes?.state) {
+    } else if (
+      connectionState === ConnectionState.Connecting ||
+      !agent ||
+      !attributes?.['agent.state']
+    ) {
       return 'connecting';
     } else {
-      return attributes.state as VoiceAssistantState;
+      return attributes['agent.state'] as VoiceAssistantState;
     }
   }, [attributes, agent, connectionState]);
 

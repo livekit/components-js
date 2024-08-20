@@ -1239,7 +1239,7 @@ export interface VoiceAssistant {
 export const VoiceAssistantContext: React_2.Context<VoiceAssistant | undefined>;
 
 // @alpha (undocumented)
-export type VoiceAssistantState = 'disconnected' | 'connecting' | 'listening' | 'thinking' | 'speaking';
+export type VoiceAssistantState = 'disconnected' | 'connecting' | 'initializing' | 'listening' | 'thinking' | 'speaking';
 
 // @public (undocumented)
 export type WidgetState = {

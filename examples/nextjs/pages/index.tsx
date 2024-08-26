@@ -17,10 +17,6 @@ const EXAMPLE_ROUTES = {
     title: 'Clubhouse clone build with LiveKit components',
     href: () => `/clubhouse`,
   },
-  processors: {
-    title: 'Minimal example with background blur',
-    href: () => `/processors`,
-  },
 } as const;
 
 const Home: NextPage = () => {

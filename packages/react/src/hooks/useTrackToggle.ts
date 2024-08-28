@@ -65,7 +65,7 @@ export function useTrackToggle<T extends ToggleSource>({
   const clickHandler: React.MouseEventHandler<HTMLButtonElement> = React.useCallback(
     (evt) => {
       userInteractionRef.current = true;
-      toggle().finally(() => (userInteractionRef.current = false));
+      toggle();
       rest.onClick?.(evt);
     },
     [rest, toggle],

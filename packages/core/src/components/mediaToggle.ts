@@ -22,7 +22,10 @@ export type CaptureOptionsBySource<T extends ToggleSource> = T extends Track.Sou
 
 export type MediaToggleType<T extends ToggleSource> = {
   pendingObserver: Observable<boolean>;
-  toggle: (forceState?: boolean, captureOptions?: CaptureOptionsBySource<T>) => Promise<void>;
+  toggle: (
+    forceState?: boolean,
+    captureOptions?: CaptureOptionsBySource<T>,
+  ) => Promise<boolean | undefined>;
   className: string;
   enabledObserver: Observable<boolean>;
 };
@@ -79,27 +82,28 @@ export function setupMediaToggle<T extends ToggleSource>(
             captureOptions as VideoCaptureOptions,
             publishOptions,
           );
-          break;
+          return localParticipant.isCameraEnabled;
         case Track.Source.Microphone:
           await localParticipant.setMicrophoneEnabled(
             forceState ?? !localParticipant.isMicrophoneEnabled,
             captureOptions as AudioCaptureOptions,
             publishOptions,
           );
-          break;
+          return localParticipant.isMicrophoneEnabled;
         case Track.Source.ScreenShare:
           await localParticipant.setScreenShareEnabled(
             forceState ?? !localParticipant.isScreenShareEnabled,
             captureOptions as ScreenShareCaptureOptions,
             publishOptions,
           );
-          break;
+          return localParticipant.isScreenShareEnabled;
         default:
-          break;
+          throw new TypeError('Tried to toggle unsupported source');
       }
     } catch (e) {
       if (onError && e instanceof Error) {
         onError?.(e);
+        return undefined;
       } else {
         throw e;
       }

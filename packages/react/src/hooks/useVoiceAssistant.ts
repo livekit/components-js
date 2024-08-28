@@ -30,6 +30,8 @@ export interface VoiceAssistant {
   agentAttributes: RemoteParticipant['attributes'] | undefined;
 }
 
+const state_attribute = 'voice_assistant.state';
+
 /**
  * @alpha
  *
@@ -50,11 +52,11 @@ export function useVoiceAssistant(): VoiceAssistant {
     } else if (
       connectionState === ConnectionState.Connecting ||
       !agent ||
-      !attributes?.['agent.state']
+      !attributes?.[state_attribute]
     ) {
       return 'connecting';
     } else {
-      return attributes['agent.state'] as VoiceAssistantState;
+      return attributes[state_attribute] as VoiceAssistantState;
     }
   }, [attributes, agent, connectionState]);
 

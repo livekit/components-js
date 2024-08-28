@@ -41,6 +41,7 @@
 .button-group {
   display: inline-flex;
   align-items: stretch;
+  height: 100%;
 
   > .button:first-child {
     border-top-right-radius: 0;

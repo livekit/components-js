@@ -60,7 +60,7 @@ export function VoiceAssistantControlBar({
     visibleControls.microphone ??= localPermissions.canPublish;
   }
 
-  const htmlProps = mergeProps({ className: 'lk-control-bar' }, props);
+  const htmlProps = mergeProps({ className: 'lk-agent-control-bar' }, props);
 
   const { saveAudioInputEnabled, saveAudioInputDeviceId } = usePersistentUserChoices({
     preventSave: !saveUserChoices,
@@ -85,7 +85,9 @@ export function VoiceAssistantControlBar({
             onChange={microphoneOnChange}
             onDeviceError={(error) => onDeviceError?.({ source: Track.Source.Microphone, error })}
           ></TrackToggle>
-          <AudioVisualizer trackRef={micTrackRef} />
+          <div>
+            <AudioVisualizer trackRef={micTrackRef} />
+          </div>
           <div className="lk-button-group-menu">
             <MediaDeviceMenu
               kind="audioinput"

@@ -282,7 +282,7 @@ export const log: loglevel.Logger;
 // @public (undocumented)
 export type MediaToggleType<T extends ToggleSource> = {
     pendingObserver: Observable<boolean>;
-    toggle: (forceState?: boolean, captureOptions?: CaptureOptionsBySource<T>) => Promise<void>;
+    toggle: (forceState?: boolean, captureOptions?: CaptureOptionsBySource<T>) => Promise<boolean | undefined>;
     className: string;
     enabledObserver: Observable<boolean>;
 };

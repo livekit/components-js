@@ -1159,7 +1159,7 @@ export type UseTracksOptions = {
 
 // @public
 export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, publishOptions, onDeviceError, ...rest }: UseTrackToggleProps<T>): {
-    toggle: (forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>;
+    toggle: ((forceState?: boolean | undefined) => Promise<void>) | ((forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<boolean | undefined>);
     enabled: boolean;
     pending: boolean;
     track: LocalTrackPublication | undefined;

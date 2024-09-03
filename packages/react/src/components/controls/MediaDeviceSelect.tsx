@@ -113,18 +113,20 @@ export const MediaDeviceSelect: (
       [className, props],
     );
 
-    function isActive(deviceId: string, activeDeviceId: string, index: number) {
-      return deviceId === activeDeviceId || (index === 0 && activeDeviceId === 'default');
+    function isActive(deviceId: string, label: string, activeDeviceId: string) {
+      return (
+        deviceId === activeDeviceId || (label.includes('default') && activeDeviceId === 'default')
+      );
     }
 
     return (
       <ul ref={ref} {...mergedProps}>
-        {devices.map((device, index) => (
+        {devices.map((device) => (
           <li
-            key={device.deviceId}
+            key={device.groupId + device.deviceId}
             id={device.deviceId}
-            data-lk-active={isActive(device.deviceId, activeDeviceId, index)}
-            aria-selected={isActive(device.deviceId, activeDeviceId, index)}
+            data-lk-active={isActive(device.deviceId, device.label, activeDeviceId)}
+            aria-selected={isActive(device.deviceId, device.label, activeDeviceId)}
             role="option"
           >
             <button className="lk-button" onClick={() => handleActiveDeviceChange(device.deviceId)}>

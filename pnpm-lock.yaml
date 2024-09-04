@@ -114,6 +114,9 @@ importers:
       '@livekit/components-styles':
         specifier: workspace:*
         version: link:../../packages/styles
+      '@livekit/track-processors':
+        specifier: ^0.3.2
+        version: 0.3.2(livekit-client@2.4.0)
       livekit-client:
         specifier: ^2.4.0
         version: 2.4.0
@@ -1641,6 +1644,11 @@ packages:
   '@livekit/protocol@1.19.1':
     resolution: {integrity: sha512-PQYIuqRv++fRik9tKulJ0C0tT5O4cNviBA7OxwLTCBFDxJpve8ua8/JZ+nK+7r4j2KbLfVjsJYop9wcTCgRn7Q==}
 
+  '@livekit/track-processors@0.3.2':
+    resolution: {integrity: sha512-4JUCzb7yIKoVsTo8J6FTzLZJHcI6DihfX/pGRDg0SOGaxprcDPrt8jaDBBTsnGBSXHeMxl2ugN+xQjdCWzLKEA==}
+    peerDependencies:
+      livekit-client: ^1.12.0 || ^2.1.0
+
   '@manypkg/find-root@1.1.0':
     resolution: {integrity: sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA==}
 
@@ -1651,6 +1659,12 @@ packages:
     resolution: {integrity: sha512-zQH//gdOmuu7nt2oJR29vFhDv88oGPmVw6BggmrHeMI+xgEkp1B2dX9/bMBSYtK0dyLX/aOmesKS09g222K1/g==}
     peerDependencies:
       react: '>=16'
+
+  '@mediapipe/holistic@0.5.1675471629':
+    resolution: {integrity: sha512-qY+cxtDeSOvVtevrLgnodiwXYaAtPi7dHZtNv/bUCGEjFicAOYtMmrZSqMmbPkTB2+4jLnPF1vgshkAqQRSYAw==}
+
+  '@mediapipe/tasks-vision@0.10.9':
+    resolution: {integrity: sha512-/gFguyJm1ng4Qr7VVH2vKO+zZcQd8wc3YafUfvBuYFX0Y5+CvrV+VNPEVkl5W/gUZF5KNKNZAiaHPULGPCIjyQ==}
 
   '@microsoft/api-extractor-model@7.28.14':
     resolution: {integrity: sha512-Bery/c8A8SsKPSvA82cTTuy/+OcxZbLRmKhPkk91/AJOQzxZsShcrmHFAGeiEqSIrv1nPZ3tKq9kfMLdCHmsqg==}
@@ -9223,6 +9237,12 @@ snapshots:
     dependencies:
       '@bufbuild/protobuf': 1.9.0
 
+  '@livekit/track-processors@0.3.2(livekit-client@2.4.0)':
+    dependencies:
+      '@mediapipe/holistic': 0.5.1675471629
+      '@mediapipe/tasks-vision': 0.10.9
+      livekit-client: 2.4.0
+
   '@manypkg/find-root@1.1.0':
     dependencies:
       '@babel/runtime': 7.24.7
@@ -9244,6 +9264,10 @@ snapshots:
       '@types/mdx': 2.0.13
       '@types/react': 18.3.3
       react: 18.3.1
+
+  '@mediapipe/holistic@0.5.1675471629': {}
+
+  '@mediapipe/tasks-vision@0.10.9': {}
 
   '@microsoft/api-extractor-model@7.28.14(@types/node@20.14.5)':
     dependencies:

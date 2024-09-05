@@ -1,7 +1,7 @@
 import { participantAttributesObserver } from '@livekit/components-core';
 import type { Participant } from 'livekit-client';
 import * as React from 'react';
-import { useEnsureParticipant } from '../context';
+import { useEnsureParticipant, useMaybeParticipantContext } from '../context';
 import { useObservableState } from './internal';
 
 /**
@@ -20,10 +20,15 @@ export interface UseParticipantAttributesOptions {
 
 /** @public */
 export function useParticipantAttributes(props: UseParticipantAttributesOptions = {}) {
-  const p = useEnsureParticipant(props.participant);
-  const attributeObserver = React.useMemo(() => participantAttributesObserver(p), [p]);
+  const participantContext = useMaybeParticipantContext();
+  const p = props.participant ?? participantContext;
+  const attributeObserver = React.useMemo(
+    // weird typescript constraint
+    () => (p ? participantAttributesObserver(p) : participantAttributesObserver(p)),
+    [p],
+  );
   const { attributes } = useObservableState(attributeObserver, {
-    attributes: p.attributes,
+    attributes: p?.attributes,
   });
 
   return { attributes };
@@ -47,6 +52,9 @@ export function useParticipantAttribute(
   const [attribute, setAttribute] = React.useState(p.attributes[attributeKey]);
 
   React.useEffect(() => {
+    if (!p) {
+      return;
+    }
     const subscription = participantAttributesObserver(p).subscribe((val) => {
       if (val.changed[attributeKey] !== undefined) {
         setAttribute(val.changed[attributeKey]);

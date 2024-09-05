@@ -11,6 +11,7 @@
   "dependencies": {
     "@livekit/components-react": "workspace:*",
     "@livekit/components-styles": "workspace:*",
+    "@livekit/track-processors": "^0.3.2",
     "livekit-client": "^2.4.0",
     "livekit-server-sdk": "^1.2.7",
     "next": "^12.3.4",

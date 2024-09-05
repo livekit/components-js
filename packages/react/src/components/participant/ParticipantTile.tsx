@@ -51,8 +51,9 @@ export function ParticipantContextIfNeeded(
 
 /**
  * Only create a `TrackRefContext` if there is no `TrackRefContext` already.
+ * @internal
  */
-function TrackRefContextIfNeeded(
+export function TrackRefContextIfNeeded(
   props: React.PropsWithChildren<{
     trackRef?: TrackReferenceOrPlaceholder;
   }>,

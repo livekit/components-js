@@ -18,7 +18,7 @@ const EXAMPLE_ROUTES = {
     href: () => `/clubhouse`,
   },
   processors: {
-    title: 'Minimal example with background blur',
+    title: 'Example usage of @livekit/track-processors for background blur',
     href: () => `/processors`,
   },
 } as const;

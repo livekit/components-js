@@ -2,17 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 import { generateConnectingSequenceBar } from '../animationSequences/connectingSequence';
 import { generateListeningSequenceBar } from '../animationSequences/listeningSequence';
 import { generateThinkingSequenceBar } from '../animationSequences/thinkingSequence';
-import { VoiceAssistantState } from '../../../hooks';
-import { GridAnimationOptions } from '../BarVisualizer';
+import type { VoiceAssistantState } from '../../../hooks';
 
 export const useBarAnimator = (
   type: VoiceAssistantState,
   columns: number,
   interval: number,
-  animationOptions?: GridAnimationOptions,
 ): number[] => {
   const [index, setIndex] = useState(0);
-  const [sequence, setSequence] = useState<number[][]>([]);
+  const [sequence, setSequence] = useState<number[][]>([[]]);
 
   useEffect(() => {
     if (type === 'thinking') {
@@ -23,10 +21,10 @@ export const useBarAnimator = (
     } else if (type === 'listening') {
       setSequence(generateListeningSequenceBar(columns));
     } else {
-      setSequence([]);
+      setSequence([[]]);
     }
     setIndex(0);
-  }, [type, columns, animationOptions?.connectingRing]);
+  }, [type, columns]);
 
   const animationFrameId = useRef<number | null>(null);
   useEffect(() => {

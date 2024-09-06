@@ -96,7 +96,7 @@ const multibandDefaults = {
   bands: 5,
   loPass: 100,
   hiPass: 600,
-  updateInterval: 10,
+  updateInterval: 32,
   analyserOptions: { fftSize: 2048 },
 } as const satisfies MultiBandTrackVolumeOptions;
 

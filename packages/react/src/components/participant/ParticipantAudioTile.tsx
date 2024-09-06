@@ -10,6 +10,7 @@ import { AudioTrack } from './AudioTrack';
 import { useParticipantTile } from '../../hooks';
 import { isTrackReference } from '@livekit/components-core';
 import { AudioVisualizer } from './AudioVisualizer';
+import { AgentBarVisualizer } from './BarVisualizer';
 
 /**
  * The `ParticipantAudioTile` component is the base utility wrapper for displaying a visual representation of a participant.
@@ -50,7 +51,7 @@ export const ParticipantAudioTile: (
               {isTrackReference(trackReference) && (
                 <AudioTrack trackRef={trackReference}></AudioTrack>
               )}
-              <AudioVisualizer />
+              <AgentBarVisualizer state={'speaking'} barCount={15} />
               <div className="lk-participant-metadata">
                 <div className="lk-participant-metadata-item">
                   <TrackMutedIndicator trackRef={trackReference}></TrackMutedIndicator>

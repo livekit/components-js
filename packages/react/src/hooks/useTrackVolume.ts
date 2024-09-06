@@ -240,9 +240,9 @@ function getFFTSizeValue(x: number) {
   else return pow2ceil(x);
 }
 
-function sigmoid(x: number, k = 2, s = 0) {
-  return 1 / (1 + Math.exp(-(x - s) / k));
-}
+// function sigmoid(x: number, k = 2, s = 0) {
+//   return 1 / (1 + Math.exp(-(x - s) / k));
+// }
 
 function pow2ceil(v: number) {
   let p = 2;

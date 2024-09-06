@@ -41,6 +41,8 @@
     width: 12px;
     border-radius: 32px;
     background-color: rgba(255, 255, 255, 0.05);
+    transition: background-color 0.5s ease-out;
+
     // transition: all 0.0s ease-out   // commented out as the transition duration is 0
   }
 
@@ -48,20 +50,20 @@
   & > .audio-bar.highlighted {
     background-color: #fff;
     box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 32px 8px;
-    transition: background-color 0.5s ease-out;
+    transition: none;
   }
 
-  &[data-va-state='offline'] {
-  }
+  // &[data-va-state='offline'] {
+  // }
 
-  &[data-va-state='connecting'] {
-  }
+  // &[data-va-state='connecting'] {
+  // }
 
-  &[data-va-state='thinking'] {
-  }
+  // &[data-va-state='thinking'] {
+  // }
 
-  &[data-va-state='speaking'] {
-  }
+  // &[data-va-state='speaking'] {
+  // }
 }
 
 // @keyframes connecting {

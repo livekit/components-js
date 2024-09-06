@@ -16,6 +16,12 @@ export interface BarVisualizerProps extends React.HTMLProps<HTMLDivElement> {
   options?: BarVisualizerOptions;
 }
 
+const sequencerIntervals = new Map<VoiceAssistantState, number>([
+  ['connecting', 25],
+  ['listening', 500],
+  ['thinking', 40],
+]);
+
 export const AgentBarVisualizer = /* @__PURE__ */ React.forwardRef<
   HTMLDivElement,
   BarVisualizerProps
@@ -37,7 +43,7 @@ export const AgentBarVisualizer = /* @__PURE__ */ React.forwardRef<
   const minHeight = options?.minHeight ?? 10;
   const maxHeight = options?.maxHeight ?? 100;
 
-  const highlightedIndices = useBarAnimator(state, barCount, 100);
+  const highlightedIndices = useBarAnimator(state, barCount, sequencerIntervals.get(state) ?? 100);
 
   return (
     <div
@@ -52,7 +58,7 @@ export const AgentBarVisualizer = /* @__PURE__ */ React.forwardRef<
       {volumeBands.map((volume, idx) => (
         <span
           key={idx}
-          className={`lk-audio-bar ${highlightedIndices.includes(idx) && 'highlighted'}`}
+          className={`lk-audio-bar ${highlightedIndices.includes(idx) && 'lk-highlighted'}`}
           style={{
             // TODO transform animations would be more performant, however the border-radius gets distorted when using scale transforms. a 9-slice approach (or 3 in this case) could work
             // transform: `scale(1, ${Math.min(maxHeight, Math.max(minHeight, volume))}`,

@@ -4,6 +4,8 @@ import {
   setLogLevel,
   useVoiceAssistant,
   AgentBarVisualizer,
+  ControlBar,
+  RoomAudioRenderer,
   // VoiceAssistantControlBar,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
@@ -33,12 +35,17 @@ const MinimalExample: NextPage = () => {
   function AgentTile() {
     const { state, audioTrack } = useVoiceAssistant();
     useEffect(() => {
-      console.log(state);
+      console.log('voice-assistant', state);
     }, [state]);
 
     return (
-      <div>
-        <AgentBarVisualizer state={state} barCount={5} audioTrack={audioTrack} />
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <AgentBarVisualizer
+          state={state}
+          barCount={15}
+          audioTrack={audioTrack}
+          style={{ width: '75vw', height: '30vw' }}
+        />
       </div>
     );
   }
@@ -60,6 +67,8 @@ const MinimalExample: NextPage = () => {
       >
         {/* <VoiceAssistantControlBar /> */}
         <AgentTile />
+        <ControlBar />
+        <RoomAudioRenderer />
       </LiveKitRoom>
     </div>
   );

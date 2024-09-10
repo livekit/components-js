@@ -62,14 +62,7 @@ const VoiceAssistantExample: NextPage = () => {
         onDisconnected={() => setShouldConnect(false)}
         className={styles.room}
       >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '30vh',
-          }}
-        >
+        <div className={styles.inner}>
           {shouldConnect ? (
             <SimpleVoiceAssistant />
           ) : (

@@ -112,8 +112,11 @@ export function useMultibandTrackVolume(
     trackOrTrackReference instanceof Track
       ? trackOrTrackReference
       : <LocalAudioTrack | RemoteAudioTrack | undefined>trackOrTrackReference?.publication?.track;
-  const [frequencyBands, setFrequencyBands] = React.useState<Array<number>>([]);
   const opts = { ...multibandDefaults, ...options };
+  const [frequencyBands, setFrequencyBands] = React.useState<Array<number>>(
+    new Array(opts.bands).fill(0),
+  );
+
   React.useEffect(() => {
     if (!track || !track?.mediaStream) {
       return;

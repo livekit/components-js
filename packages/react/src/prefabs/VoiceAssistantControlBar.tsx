@@ -10,7 +10,7 @@ import {
 } from '../hooks';
 import { mergeProps } from '../utils';
 import { StartMediaButton } from '../components/controls/StartMediaButton';
-import { AudioVisualizer } from '../components';
+import { BarVisualizer } from '../components';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 
 /** @public */
@@ -84,10 +84,9 @@ export function VoiceAssistantControlBar({
             showIcon={true}
             onChange={microphoneOnChange}
             onDeviceError={(error) => onDeviceError?.({ source: Track.Source.Microphone, error })}
-          ></TrackToggle>
-          <div>
-            <AudioVisualizer trackRef={micTrackRef} />
-          </div>
+          >
+            <BarVisualizer trackRef={micTrackRef} barCount={7} options={{ minHeight: 5 }} />
+          </TrackToggle>
           <div className="lk-button-group-menu">
             <MediaDeviceMenu
               kind="audioinput"

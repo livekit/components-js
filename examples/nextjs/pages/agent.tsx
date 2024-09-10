@@ -1,12 +1,10 @@
 import {
   LiveKitRoom,
   useToken,
-  setLogLevel,
   useVoiceAssistant,
-  AgentBarVisualizer,
-  ControlBar,
+  BarVisualizer,
   RoomAudioRenderer,
-  // VoiceAssistantControlBar,
+  VoiceAssistantControlBar,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';
@@ -18,7 +16,6 @@ const MinimalExample: NextPage = () => {
     () => params?.get('room') ?? 'test-room-' + Math.random().toFixed(5),
     [],
   );
-  setLogLevel('info', { liveKitClientLogLevel: 'debug' });
 
   const tokenOptions = useMemo(() => {
     const userId = params?.get('user') ?? generateRandomUserId();
@@ -37,10 +34,9 @@ const MinimalExample: NextPage = () => {
 
     return (
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <AgentBarVisualizer
-          state={state}
+        <BarVisualizer
           barCount={5}
-          audioTrack={audioTrack}
+          trackRef={audioTrack}
           style={{ width: '75vw', height: '30vw' }}
         />
       </div>
@@ -62,9 +58,8 @@ const MinimalExample: NextPage = () => {
           );
         }}
       >
-        {/* <VoiceAssistantControlBar /> */}
         <AgentTile />
-        <ControlBar />
+        <VoiceAssistantControlBar />
         <RoomAudioRenderer />
       </LiveKitRoom>
     </div>

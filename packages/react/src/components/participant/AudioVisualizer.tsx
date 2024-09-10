@@ -1,16 +1,14 @@
 import * as React from 'react';
-import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import { type TrackReference } from '@livekit/components-core';
 import { useEnsureTrackRef } from '../../context';
-import { useAudioWaveform } from '../../hooks';
+import { useMultibandTrackVolume } from '../../hooks';
 
-/** @public */
-export interface AudioVisualizerProps extends React.SVGProps<SVGSVGElement> {
-  trackRef?: TrackReferenceOrPlaceholder;
-  gap?: number;
-  barWidth?: number;
-  borderRadius?: string;
-  barCount?: number;
-  mode?: 'wave' | 'bars';
+/**
+ * @public
+ * @deprecated Use BarVisualizer instead
+ */
+export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
+  trackRef?: TrackReference;
 }
 
 /**
@@ -22,72 +20,48 @@ export interface AudioVisualizerProps extends React.SVGProps<SVGSVGElement> {
  * <AudioVisualizer />
  * ```
  * @public
+ * @deprecated Use BarVisualizer instead
  */
-export const AudioVisualizer = /* @__PURE__ */ React.forwardRef<
-  SVGSVGElement,
-  AudioVisualizerProps
->(function AudioVisualizer(
-  {
-    trackRef,
-    gap = 1,
-    borderRadius = '0.5rem',
-    barCount = 128,
-    viewBox = '0 0 512 180',
-    mode = 'wave',
-    ...props
-  }: AudioVisualizerProps,
-  ref,
-) {
-  const trackReference = useEnsureTrackRef(trackRef);
+export const AudioVisualizer: (
+  props: AudioVisualizerProps & React.RefAttributes<SVGSVGElement>,
+) => React.ReactNode = /* @__PURE__ */ React.forwardRef<SVGSVGElement, AudioVisualizerProps>(
+  function AudioVisualizer({ trackRef, ...props }: AudioVisualizerProps, ref) {
+    const svgWidth = 200;
+    const svgHeight = 90;
+    const barWidth = 6;
+    const barSpacing = 4;
+    const volMultiplier = 50;
+    const barCount = 7;
+    const trackReference = useEnsureTrackRef(trackRef);
 
-  const { bars } = useAudioWaveform(trackReference, {
-    barCount,
-    volMultiplier: 3,
-    updateInterval: 50,
-  });
-  const [, , width, height] = viewBox.split(' ');
+    const volumes = useMultibandTrackVolume(trackReference, { bands: 7, loPass: 300 });
 
-  const barWidth = (Number.parseInt(width) - barCount * gap) / barCount;
-
-  return (
-    <svg
-      ref={ref}
-      {...props}
-      style={{ width: '100%', height: '100%' }}
-      className="lk-audio-visualizer"
-      viewBox={viewBox}
-    >
-      {mode === 'bars' &&
-        bars.map((vol, idx) => (
-          <rect
-            key={idx}
-            x={gap + idx * (barWidth + gap)}
-            y={0}
-            width={barWidth}
-            height={Number.parseInt(height)}
-            rx={borderRadius}
-            style={{
-              transform: `scale(1, ${vol}`,
-              transformOrigin: 'center',
-            }}
-          ></rect>
-        ))}
-      {mode === 'wave' && (
-        <path
-          fill="none"
-          style={{ strokeWidth: '1px', strokeLinecap: 'round' }}
-          d={`${bars.reduce((acc, val, idx) => {
-            const halfHeight = Number.parseInt(height) / 2;
-            const barPos = (Number.parseInt(width) / barCount) * idx;
-            if (idx === 0) {
-              return `M 0 ${halfHeight} `;
-            } else {
-              acc += `L ${barPos} ${halfHeight + halfHeight * val * (idx % 2 === 0 ? 1 : -1)} `;
-            }
-            return acc;
-          }, '')}`}
-        />
-      )}
-    </svg>
-  );
-});
+    return (
+      <svg
+        ref={ref}
+        width="100%"
+        height="100%"
+        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+        {...props}
+        className="lk-audio-visualizer"
+      >
+        <rect x="0" y="0" width="100%" height="100%" />
+        <g
+          style={{
+            transform: `translate(${(svgWidth - barCount * (barWidth + barSpacing)) / 2}px, 0)`,
+          }}
+        >
+          {volumes.map((vol, idx) => (
+            <rect
+              key={idx}
+              x={idx * (barWidth + barSpacing)}
+              y={svgHeight / 2 - (vol * volMultiplier) / 2}
+              width={barWidth}
+              height={vol * volMultiplier}
+            ></rect>
+          ))}
+        </g>
+      </svg>
+    );
+  },
+);

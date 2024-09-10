@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { generateConnectingSequenceBar } from '../animationSequences/connectingSequence';
 import { generateListeningSequenceBar } from '../animationSequences/listeningSequence';
-import { generateThinkingSequenceBar } from '../animationSequences/thinkingSequence';
 import type { VoiceAssistantState } from '../../../hooks';
 
 export const useBarAnimator = (
-  type: VoiceAssistantState,
+  state: VoiceAssistantState | undefined,
   columns: number,
   interval: number,
 ): number[] => {
@@ -13,18 +12,20 @@ export const useBarAnimator = (
   const [sequence, setSequence] = useState<number[][]>([[]]);
 
   useEffect(() => {
-    if (type === 'thinking') {
+    if (state === 'thinking') {
       setSequence(generateListeningSequenceBar(columns));
-    } else if (type === 'connecting' || type === 'initializing') {
+    } else if (state === 'connecting' || state === 'initializing') {
       const sequence = [...generateConnectingSequenceBar(columns)];
       setSequence(sequence);
-    } else if (type === 'listening') {
+    } else if (state === 'listening') {
       setSequence(generateListeningSequenceBar(columns));
+    } else if (state === undefined) {
+      setSequence([new Array(columns).fill(0).map((_, idx) => idx)]);
     } else {
       setSequence([[]]);
     }
     setIndex(0);
-  }, [type, columns]);
+  }, [state, columns]);
 
   const animationFrameId = useRef<number | null>(null);
   useEffect(() => {
@@ -48,7 +49,7 @@ export const useBarAnimator = (
         cancelAnimationFrame(animationFrameId.current);
       }
     };
-  }, [interval, columns, type, sequence.length]);
+  }, [interval, columns, state, sequence.length]);
 
   return sequence[index % sequence.length];
 };

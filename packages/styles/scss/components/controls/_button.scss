@@ -17,6 +17,10 @@
     background-color: var(--control-hover-bg);
   }
 
+  & > svg {
+    overflow: visible;
+  }
+
   &[aria-pressed='true'] {
     background-color: var(--control-active-bg);
 

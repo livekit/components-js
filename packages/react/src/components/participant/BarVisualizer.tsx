@@ -8,7 +8,9 @@ import { useMaybeTrackRefContext } from '../../context';
  * @beta
  */
 export type BarVisualizerOptions = {
+  /** in percentage */
   maxHeight?: number;
+  /** in percentage */
   minHeight?: number;
 };
 
@@ -16,7 +18,9 @@ export type BarVisualizerOptions = {
  * @beta
  */
 export interface BarVisualizerProps extends React.HTMLProps<HTMLDivElement> {
+  /** If set, the visualizer will transition between different voice assistant states */
   state?: VoiceAssistantState;
+  /** Number of bars that show up in the visualizer */
   barCount?: number;
   trackRef?: TrackReferenceOrPlaceholder;
   options?: BarVisualizerOptions;
@@ -50,7 +54,22 @@ const getSequencerInterval = (
   return interval;
 };
 /**
+ * Visualizes audio signals from a TrackReference as bars.
+ * If the `state` prop is set, it automatically transitions between VoiceAssistant states.
  * @beta
+ *
+ * @example
+ * ```tsx
+ * function SimpleVoiceAssistant() {
+ *   const { state, audioTrack } = useVoiceAssistant();
+ *   return (
+ *    <BarVisualizer
+ *      state={state}
+ *      trackRef={audioTrack}
+ *    />
+ *   );
+ * }
+ * ```
  */
 export const BarVisualizer = /* @__PURE__ */ React.forwardRef<HTMLDivElement, BarVisualizerProps>(
   function BarVisualizer(

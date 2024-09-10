@@ -82,7 +82,7 @@ export interface AudioWaveformOptions {
     volMultiplier?: number;
 }
 
-// @beta (undocumented)
+// @beta
 export const BarVisualizer: React_2.ForwardRefExoticComponent<Omit<BarVisualizerProps, "ref"> & React_2.RefAttributes<HTMLDivElement>>;
 
 // @beta (undocumented)
@@ -93,13 +93,10 @@ export type BarVisualizerOptions = {
 
 // @beta (undocumented)
 export interface BarVisualizerProps extends React_2.HTMLProps<HTMLDivElement> {
-    // (undocumented)
     barCount?: number;
     // (undocumented)
     options?: BarVisualizerOptions;
     // Warning: (ae-incompatible-release-tags) The symbol "state" is marked as @beta, but its signature references "VoiceAssistantState" which is marked as @alpha
-    //
-    // (undocumented)
     state?: VoiceAssistantState;
     // (undocumented)
     trackRef?: TrackReferenceOrPlaceholder;

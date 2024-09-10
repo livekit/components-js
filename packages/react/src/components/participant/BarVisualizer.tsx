@@ -60,7 +60,7 @@ export const BarVisualizer = /* @__PURE__ */ React.forwardRef<HTMLDivElement, Ba
     const volumeBands = useMultibandTrackVolume(trackReference, {
       bands: barCount,
       loPass: 100,
-      hiPass: 356,
+      hiPass: 200,
     });
     const minHeight = options?.minHeight ?? 20;
     const maxHeight = options?.maxHeight ?? 100;

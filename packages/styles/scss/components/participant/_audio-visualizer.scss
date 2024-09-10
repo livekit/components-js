@@ -51,7 +51,7 @@ deprecated
   &[data-va-state='speaking'] > .audio-bar,
   & > .audio-bar.highlighted {
     background-color: #fff;
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 32px 8px;
+    filter: drop-shadow(rgba(255, 255, 255, 0.2) 0px 0px 24px);
     transition: none;
   }
 

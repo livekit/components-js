@@ -18,7 +18,7 @@
   --va-bar-border-radius: 1px;
   & .audio-bar-visualizer {
     & .audio-bar.highlighted {
-      box-shadow: none;
+      filter: none;
     }
   }
 }

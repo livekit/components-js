@@ -4,11 +4,17 @@ import { useMultibandTrackVolume, type VoiceAssistantState } from '../../hooks';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { useMaybeTrackRefContext } from '../../context';
 
+/**
+ * @beta
+ */
 export type BarVisualizerOptions = {
   maxHeight?: number;
   minHeight?: number;
 };
 
+/**
+ * @beta
+ */
 export interface BarVisualizerProps extends React.HTMLProps<HTMLDivElement> {
   state?: VoiceAssistantState;
   barCount?: number;

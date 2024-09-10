@@ -14,7 +14,7 @@ export const useBarAnimator = (
 
   useEffect(() => {
     if (type === 'thinking') {
-      setSequence(generateThinkingSequenceBar(columns));
+      setSequence(generateListeningSequenceBar(columns));
     } else if (type === 'connecting' || type === 'initializing') {
       const sequence = [...generateConnectingSequenceBar(columns)];
       setSequence(sequence);

@@ -41,8 +41,7 @@
     width: 12px;
     border-radius: 32px;
     background-color: rgba(255, 255, 255, 0.05);
-    transition: background-color 0.5s ease-out;
-
+    transition: background-color 0.25s ease-out;
     // transition: all 0.0s ease-out   // commented out as the transition duration is 0
   }
 
@@ -59,8 +58,9 @@
   // &[data-va-state='connecting'] {
   // }
 
-  // &[data-va-state='thinking'] {
-  // }
+  &[data-va-state='thinking'] {
+    transition: background-color 0.15s ease-out;
+  }
 
   // &[data-va-state='speaking'] {
   // }

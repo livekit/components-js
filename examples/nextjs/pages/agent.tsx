@@ -34,15 +34,12 @@ const MinimalExample: NextPage = () => {
 
   function AgentTile() {
     const { state, audioTrack } = useVoiceAssistant();
-    useEffect(() => {
-      console.log('voice-assistant', state);
-    }, [state]);
 
     return (
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <AgentBarVisualizer
           state={state}
-          barCount={15}
+          barCount={5}
           audioTrack={audioTrack}
           style={{ width: '75vw', height: '30vw' }}
         />

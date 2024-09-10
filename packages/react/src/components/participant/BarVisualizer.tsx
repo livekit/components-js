@@ -19,7 +19,7 @@ export interface BarVisualizerProps extends React.HTMLProps<HTMLDivElement> {
 const sequencerIntervals = new Map<VoiceAssistantState, number>([
   ['connecting', 25 * 15],
   ['listening', 500],
-  ['thinking', 40 * 15],
+  ['thinking', 150],
 ]);
 
 const getSequencerInterval = (state: VoiceAssistantState, barCount: number): number | undefined => {
@@ -27,7 +27,7 @@ const getSequencerInterval = (state: VoiceAssistantState, barCount: number): num
   if (interval) {
     switch (state) {
       case 'connecting':
-      case 'thinking':
+        // case 'thinking':
         interval /= barCount;
         break;
 

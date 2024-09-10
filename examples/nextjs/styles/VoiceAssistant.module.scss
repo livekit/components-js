@@ -1,0 +1,8 @@
+.main {
+  height: 100%;
+}
+
+.room {
+  display: grid;
+  grid-template-rows: auto min-content;
+}

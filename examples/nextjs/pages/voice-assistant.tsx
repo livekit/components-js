@@ -9,12 +9,18 @@ import {
 import type { NextPage } from 'next';
 import { useMemo, useState } from 'react';
 import { MediaDeviceFailure } from 'livekit-client';
+import styles from '../styles/VoiceAssistant.module.scss';
 import { generateRandomUserId } from '../lib/helper';
 
 function SimpleVoiceAssistant() {
   const { state, audioTrack } = useVoiceAssistant();
   return (
-    <BarVisualizer barCount={7} trackRef={audioTrack} style={{ width: '75vw', height: '300px' }} />
+    <BarVisualizer
+      state={state}
+      barCount={7}
+      trackRef={audioTrack}
+      style={{ width: '75vw', height: '300px' }}
+    />
   );
 }
 
@@ -46,7 +52,7 @@ const VoiceAssistantExample: NextPage = () => {
   };
 
   return (
-    <div data-lk-theme="default" style={{ height: '100%' }}>
+    <main data-lk-theme="default" className={styles.main}>
       <LiveKitRoom
         audio={true}
         token={token}
@@ -54,6 +60,7 @@ const VoiceAssistantExample: NextPage = () => {
         serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
         onMediaDeviceFailure={onDeviceFailure}
         onDisconnected={() => setShouldConnect(false)}
+        className={styles.room}
       >
         <div
           style={{
@@ -74,7 +81,7 @@ const VoiceAssistantExample: NextPage = () => {
         <VoiceAssistantControlBar />
         <RoomAudioRenderer />
       </LiveKitRoom>
-    </div>
+    </main>
   );
 };
 

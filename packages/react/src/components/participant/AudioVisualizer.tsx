@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { type TrackReference } from '@livekit/components-core';
+import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { useEnsureTrackRef } from '../../context';
 import { useAudioWaveform } from '../../hooks';
 
 /** @public */
 export interface AudioVisualizerProps extends React.SVGProps<SVGSVGElement> {
-  trackRef?: TrackReference;
+  trackRef?: TrackReferenceOrPlaceholder;
   gap?: number;
   barWidth?: number;
   borderRadius?: string;

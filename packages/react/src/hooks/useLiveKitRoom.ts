@@ -65,7 +65,7 @@ export function useLiveKitRoom<T extends HTMLElement>(
   }, [passedRoom, JSON.stringify(options, roomOptionsStringifyReplacer)]);
 
   const prewarm = React.useMemo(() => {
-    if (room && serverUrl && prepareConnection) {
+    if (room && serverUrl && prepareConnection && token) {
       return room.prepareConnection(serverUrl, token);
     }
     return new Promise<void>((resolve) => resolve(undefined));

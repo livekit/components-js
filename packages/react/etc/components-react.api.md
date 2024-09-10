@@ -63,19 +63,11 @@ export interface AudioTrackProps extends React_2.AudioHTMLAttributes<HTMLAudioEl
     volume?: number;
 }
 
-// @public
-export const AudioVisualizer: React_2.ForwardRefExoticComponent<AudioVisualizerProps & React_2.RefAttributes<HTMLDivElement>>;
+// @public @deprecated
+export const AudioVisualizer: (props: AudioVisualizerProps & React_2.RefAttributes<SVGSVGElement>) => React_2.ReactNode;
 
-// @public (undocumented)
-export interface AudioVisualizerProps extends React_2.HTMLAttributes<HTMLDivElement> {
-    // (undocumented)
-    barCount?: number;
-    // (undocumented)
-    barWidth?: string;
-    // (undocumented)
-    borderRadius?: string;
-    // (undocumented)
-    gap?: string;
+// @public @deprecated (undocumented)
+export interface AudioVisualizerProps extends React_2.HTMLAttributes<SVGElement> {
     // (undocumented)
     trackRef?: TrackReference;
 }
@@ -83,9 +75,34 @@ export interface AudioVisualizerProps extends React_2.HTMLAttributes<HTMLDivElem
 // @alpha (undocumented)
 export interface AudioWaveformOptions {
     // (undocumented)
-    aggregateTime?: number;
+    barCount?: number;
     // (undocumented)
-    analyserOptions?: AnalyserOptions;
+    updateInterval?: number;
+    // (undocumented)
+    volMultiplier?: number;
+}
+
+// @beta (undocumented)
+export const BarVisualizer: React_2.ForwardRefExoticComponent<Omit<BarVisualizerProps, "ref"> & React_2.RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+export type BarVisualizerOptions = {
+    maxHeight?: number;
+    minHeight?: number;
+};
+
+// @public (undocumented)
+export interface BarVisualizerProps extends React_2.HTMLProps<HTMLDivElement> {
+    // (undocumented)
+    barCount?: number;
+    // (undocumented)
+    options?: BarVisualizerOptions;
+    // Warning: (ae-incompatible-release-tags) The symbol "state" is marked as @public, but its signature references "VoiceAssistantState" which is marked as @alpha
+    //
+    // (undocumented)
+    state?: VoiceAssistantState;
+    // (undocumented)
+    trackRef?: TrackReferenceOrPlaceholder;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "CameraDisabledIcon" should be prefixed with an underscore because the declaration is marked as @internal
@@ -714,7 +731,9 @@ export function useAudioPlayback(room?: Room): {
 };
 
 // @alpha (undocumented)
-export function useAudioWaveform(onUpdate: (waveform: Float32Array) => void, trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder, options?: AudioWaveformOptions): void;
+export function useAudioWaveform(trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder, options?: AudioWaveformOptions): {
+    bars: number[];
+};
 
 // @public
 export function useChat(options?: ChatOptions): {
@@ -1256,6 +1275,28 @@ export interface VoiceAssistant {
 
 // @alpha (undocumented)
 export const VoiceAssistantContext: React_2.Context<VoiceAssistant | undefined>;
+
+// @alpha (undocumented)
+export function VoiceAssistantControlBar({ controls, saveUserChoices, onDeviceError, ...props }: VoiceAssistantControlBarProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export type VoiceAssistantControlBarControls = {
+    microphone?: boolean;
+    leave?: boolean;
+};
+
+// @public (undocumented)
+export interface VoiceAssistantControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> {
+    // (undocumented)
+    controls?: VoiceAssistantControlBarControls;
+    // (undocumented)
+    onDeviceError?: (error: {
+        source: Track.Source;
+        error: Error;
+    }) => void;
+    // @alpha
+    saveUserChoices?: boolean;
+}
 
 // @alpha (undocumented)
 export type VoiceAssistantState = 'disconnected' | 'connecting' | 'initializing' | 'listening' | 'thinking' | 'speaking';

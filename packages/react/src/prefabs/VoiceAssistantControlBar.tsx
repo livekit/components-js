@@ -13,13 +13,13 @@ import { StartMediaButton } from '../components/controls/StartMediaButton';
 import { BarVisualizer } from '../components';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 
-/** @public */
+/** @beta */
 export type VoiceAssistantControlBarControls = {
   microphone?: boolean;
   leave?: boolean;
 };
 
-/** @public */
+/** @beta */
 export interface VoiceAssistantControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
   onDeviceError?: (error: { source: Track.Source; error: Error }) => void;
   controls?: VoiceAssistantControlBarControls;
@@ -33,7 +33,7 @@ export interface VoiceAssistantControlBarProps extends React.HTMLAttributes<HTML
 }
 
 /**
- * @alpha
+ * @beta
  */
 export function VoiceAssistantControlBar({
   controls,

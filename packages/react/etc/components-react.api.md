@@ -1273,16 +1273,16 @@ export interface VoiceAssistant {
 // @alpha (undocumented)
 export const VoiceAssistantContext: React_2.Context<VoiceAssistant | undefined>;
 
-// @alpha (undocumented)
+// @beta (undocumented)
 export function VoiceAssistantControlBar({ controls, saveUserChoices, onDeviceError, ...props }: VoiceAssistantControlBarProps): React_2.JSX.Element;
 
-// @public (undocumented)
+// @beta (undocumented)
 export type VoiceAssistantControlBarControls = {
     microphone?: boolean;
     leave?: boolean;
 };
 
-// @public (undocumented)
+// @beta (undocumented)
 export interface VoiceAssistantControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> {
     // (undocumented)
     controls?: VoiceAssistantControlBarControls;

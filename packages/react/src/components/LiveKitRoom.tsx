@@ -79,6 +79,11 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   simulateParticipants?: number | undefined;
 
   /**
+   * If set to `true` (default) an initial HTTP request will be sent to the serverURL even before connecting to prewarm the connection
+   */
+  prepareConnection?: boolean;
+
+  /**
    * @internal
    */
   featureFlags?: FeatureFlags;

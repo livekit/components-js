@@ -58,6 +58,8 @@ const getSequencerInterval = (
  * If the `state` prop is set, it automatically transitions between VoiceAssistant states.
  * @beta
  *
+ * @remarks For VoiceAssistant state transitions this component requires a voice assistant agent running with livekit-agents \>= 0.8.11
+ *
  * @example
  * ```tsx
  * function SimpleVoiceAssistant() {

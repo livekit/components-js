@@ -27,11 +27,11 @@ export function useParticipantAttributes(props: UseParticipantAttributesOptions 
     () => (p ? participantAttributesObserver(p) : participantAttributesObserver(p)),
     [p],
   );
-  const { attributes } = useObservableState(attributeObserver, {
+  const attributeState = useObservableState(attributeObserver, {
     attributes: p?.attributes,
   });
 
-  return { attributes };
+  return attributeState;
 }
 
 /**

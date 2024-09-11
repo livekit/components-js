@@ -310,8 +310,8 @@ importers:
         specifier: ^7.27.2
         version: 7.28.14(@types/node@20.14.5)
       '@microsoft/tsdoc':
-        specifier: 0.14.2
-        version: 0.14.2
+        specifier: 0.15.0
+        version: 0.15.0
       '@rushstack/heft':
         specifier: ^0.58.2 || ^0.62.0 || ^0.63.0 || ^0.66.0
         version: 0.66.19(@types/node@20.14.5)

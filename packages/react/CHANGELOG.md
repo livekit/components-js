@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.5.2
+
+### Patch Changes
+
+- Don't override className on BarVisualizer - [#963](https://github.com/livekit/components-js/pull/963) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.5.1
 
 ### Patch Changes

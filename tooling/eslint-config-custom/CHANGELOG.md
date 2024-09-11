@@ -1,5 +1,11 @@
 # eslint-config-lk-custom
 
+## 0.1.2
+
+### Patch Changes
+
+- Add useVoiceAssistant - [#917](https://github.com/livekit/components-js/pull/917) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.1.1
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 2.5.1
+
+### Patch Changes
+
+- Add css var fallbacks and fix className forwarding on BarVisualizer - [#961](https://github.com/livekit/components-js/pull/961) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies []:
+  - @livekit/components-core@0.11.3
+
 ## 2.5.0
 
 ### Minor Changes

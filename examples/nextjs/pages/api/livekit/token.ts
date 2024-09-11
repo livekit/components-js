@@ -5,10 +5,10 @@ import type { AccessTokenOptions, VideoGrant } from 'livekit-server-sdk';
 const apiKey = process.env.LK_API_KEY;
 const apiSecret = process.env.LK_API_SECRET;
 
-const createToken = (userInfo: AccessTokenOptions, grant: VideoGrant) => {
+const createToken = async (userInfo: AccessTokenOptions, grant: VideoGrant) => {
   const at = new AccessToken(apiKey, apiSecret, userInfo);
   at.addGrant(grant);
-  return at.toJwt();
+  return await at.toJwt();
 };
 
 export default async function handleToken(req: NextApiRequest, res: NextApiResponse) {
@@ -41,7 +41,7 @@ export default async function handleToken(req: NextApiRequest, res: NextApiRespo
       canSubscribe: true,
       canUpdateOwnMetadata: true,
     };
-    const token = createToken({ identity, name, metadata }, grant);
+    const token = await createToken({ identity, name, metadata }, grant);
 
     res.status(200).json({ identity, accessToken: token });
   } catch (e) {

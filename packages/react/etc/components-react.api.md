@@ -63,13 +63,43 @@ export interface AudioTrackProps extends React_2.AudioHTMLAttributes<HTMLAudioEl
     volume?: number;
 }
 
-// @public
+// @public @deprecated
 export const AudioVisualizer: (props: AudioVisualizerProps & React_2.RefAttributes<SVGSVGElement>) => React_2.ReactNode;
 
-// @public (undocumented)
+// @public @deprecated (undocumented)
 export interface AudioVisualizerProps extends React_2.HTMLAttributes<SVGElement> {
     // (undocumented)
     trackRef?: TrackReference;
+}
+
+// @alpha (undocumented)
+export interface AudioWaveformOptions {
+    // (undocumented)
+    barCount?: number;
+    // (undocumented)
+    updateInterval?: number;
+    // (undocumented)
+    volMultiplier?: number;
+}
+
+// @beta
+export const BarVisualizer: React_2.ForwardRefExoticComponent<Omit<BarVisualizerProps, "ref"> & React_2.RefAttributes<HTMLDivElement>>;
+
+// @beta (undocumented)
+export type BarVisualizerOptions = {
+    maxHeight?: number;
+    minHeight?: number;
+};
+
+// @beta (undocumented)
+export interface BarVisualizerProps extends React_2.HTMLProps<HTMLDivElement> {
+    barCount?: number;
+    // (undocumented)
+    options?: BarVisualizerOptions;
+    // Warning: (ae-incompatible-release-tags) The symbol "state" is marked as @beta, but its signature references "VoiceAssistantState" which is marked as @alpha
+    state?: VoiceAssistantState;
+    // (undocumented)
+    trackRef?: TrackReferenceOrPlaceholder;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "CameraDisabledIcon" should be prefixed with an underscore because the declaration is marked as @internal
@@ -697,6 +727,11 @@ export function useAudioPlayback(room?: Room): {
     startAudio: () => Promise<void>;
 };
 
+// @alpha (undocumented)
+export function useAudioWaveform(trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder, options?: AudioWaveformOptions): {
+    bars: number[];
+};
+
 // @public
 export function useChat(options?: ChatOptions): {
     send: (message: string) => Promise<ChatMessage>;
@@ -1237,6 +1272,28 @@ export interface VoiceAssistant {
 
 // @alpha (undocumented)
 export const VoiceAssistantContext: React_2.Context<VoiceAssistant | undefined>;
+
+// @beta (undocumented)
+export function VoiceAssistantControlBar({ controls, saveUserChoices, onDeviceError, ...props }: VoiceAssistantControlBarProps): React_2.JSX.Element;
+
+// @beta (undocumented)
+export type VoiceAssistantControlBarControls = {
+    microphone?: boolean;
+    leave?: boolean;
+};
+
+// @beta (undocumented)
+export interface VoiceAssistantControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> {
+    // (undocumented)
+    controls?: VoiceAssistantControlBarControls;
+    // (undocumented)
+    onDeviceError?: (error: {
+        source: Track.Source;
+        error: Error;
+    }) => void;
+    // @alpha
+    saveUserChoices?: boolean;
+}
 
 // @alpha (undocumented)
 export type VoiceAssistantState = 'disconnected' | 'connecting' | 'initializing' | 'listening' | 'thinking' | 'speaking';

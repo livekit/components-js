@@ -3,8 +3,12 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.scss';
 
 const EXAMPLE_ROUTES = {
-  minimal: { title: 'Minimal example', href: () => `/minimal` },
-  simple: { title: 'Simple example', href: () => `/simple` },
+  voiceAssistant: {
+    title: 'AI Voice Assistant example',
+    href: () => `/voice-assistant`,
+  },
+  minimal: { title: 'VideoConference example with minimal code', href: () => `/minimal` },
+  simple: { title: 'Simple custom setup example', href: () => `/simple` },
   audioOnly: {
     title: 'Audio only example',
     href: () => `/audio-only`,

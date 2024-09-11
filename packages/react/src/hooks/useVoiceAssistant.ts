@@ -38,6 +38,7 @@ const state_attribute = 'voice_assistant.state';
  * This hook looks for the first agent-participant in the room.
  * It assumes that the agent participant is based on the LiveKit VoiceAssistant API and
  * returns the most commonly used state vars when interacting with a VoiceAssistant.
+ * @remarks This hook requires a voice assistant agent running with livekit-agents \>= 0.8.11
  */
 export function useVoiceAssistant(): VoiceAssistant {
   const agent = useRemoteParticipants().find((p) => p.kind === ParticipantKind.AGENT);

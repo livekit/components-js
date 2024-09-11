@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 1.1.1
+
+### Patch Changes
+
+- Add css var fallbacks and fix className forwarding on BarVisualizer - [#961](https://github.com/livekit/components-js/pull/961) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.1.0
 
 ### Minor Changes

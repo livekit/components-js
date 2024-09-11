@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 1.1.0
+
+### Minor Changes
+
+- Update styles for new agent components - [#959](https://github.com/livekit/components-js/pull/959) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.0.12
 
 ### Patch Changes

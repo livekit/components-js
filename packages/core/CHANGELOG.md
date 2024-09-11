@@ -1,5 +1,15 @@
 # @livekit/components-core
 
+## 0.11.3
+
+### Patch Changes
+
+- Fix local storage of user choices - [#949](https://github.com/livekit/components-js/pull/949) ([@lukasIO](https://github.com/lukasIO))
+
+- Don't write empty username values to local storage - [#953](https://github.com/livekit/components-js/pull/953) ([@lukasIO](https://github.com/lukasIO))
+
+- Add useVoiceAssistant - [#917](https://github.com/livekit/components-js/pull/917) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.11.2
 
 ### Patch Changes

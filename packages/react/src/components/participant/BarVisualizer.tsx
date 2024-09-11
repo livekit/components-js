@@ -101,12 +101,7 @@ export const BarVisualizer = /* @__PURE__ */ React.forwardRef<HTMLDivElement, Ba
     );
 
     return (
-      <div
-        ref={ref}
-        {...elementProps}
-        className={`lk-audio-bar-visualizer`}
-        data-lk-va-state={state}
-      >
+      <div ref={ref} {...elementProps} data-lk-va-state={state}>
         {volumeBands.map((volume, idx) => (
           <span
             key={idx}

@@ -3,6 +3,7 @@ import { useBarAnimator } from './animators/useBarAnimator';
 import { useMultibandTrackVolume, type VoiceAssistantState } from '../../hooks';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { useMaybeTrackRefContext } from '../../context';
+import { mergeProps } from '../../utils';
 
 /**
  * @beta
@@ -78,6 +79,7 @@ export const BarVisualizer = /* @__PURE__ */ React.forwardRef<HTMLDivElement, Ba
     { state, options, barCount = 15, trackRef, ...props }: BarVisualizerProps,
     ref,
   ) {
+    const elementProps = mergeProps(props, { className: 'lk-audio-bar-visualizer' });
     let trackReference = useMaybeTrackRefContext();
 
     if (trackRef) {
@@ -99,7 +101,12 @@ export const BarVisualizer = /* @__PURE__ */ React.forwardRef<HTMLDivElement, Ba
     );
 
     return (
-      <div ref={ref} {...props} className={`lk-audio-bar-visualizer`} data-lk-va-state={state}>
+      <div
+        ref={ref}
+        {...elementProps}
+        className={`lk-audio-bar-visualizer`}
+        data-lk-va-state={state}
+      >
         {volumeBands.map((volume, idx) => (
           <span
             key={idx}

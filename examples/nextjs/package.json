@@ -13,7 +13,7 @@
     "@livekit/components-styles": "workspace:*",
     "@livekit/track-processors": "^0.3.2",
     "livekit-client": "^2.4.0",
-    "livekit-server-sdk": "^1.2.7",
+    "livekit-server-sdk": "^2.6.1",
     "next": "^12.3.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

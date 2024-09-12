@@ -94,6 +94,7 @@ export type BarVisualizerOptions = {
 // @beta (undocumented)
 export interface BarVisualizerProps extends React_2.HTMLProps<HTMLDivElement> {
     barCount?: number;
+    children?: React_2.ReactNode;
     // (undocumented)
     options?: BarVisualizerOptions;
     // Warning: (ae-incompatible-release-tags) The symbol "state" is marked as @beta, but its signature references "VoiceAssistantState" which is marked as @alpha

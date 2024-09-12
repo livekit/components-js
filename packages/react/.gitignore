@@ -4,4 +4,3 @@ node_modules
 .cache
 dist
 temp
-.turbo

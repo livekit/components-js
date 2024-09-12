@@ -3,15 +3,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [
-        "dist/**",
-        ".next/**",
-        "!.next/cache/**",
-        "storybook-static/**",
-        "lib/**",
-        "src/assets/icons/**",
-        "src/assets/images/**"
-      ]
+      "outputs": ["dist/**", ".next/**", "storybook-static/**", "lib/**"]
     },
     "lint": {
       "outputs": []
@@ -25,9 +17,8 @@
       "outputs": []
     },
     "dev": {
-      "dependsOn": ["^dev"],
       "cache": false,
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "storybook-static/**", "lib/**"]
+      "persistent": true
     },
     "deploy": {
       "dependsOn": ["^build"]

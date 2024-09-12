@@ -67,7 +67,7 @@
     "prebuild": "rimraf .temp dist",
     "build": "pnpm compile:sass && pnpm postcss && pnpm generate:types",
     "compile:sass": "sass scss:.temp/general --style compressed",
-    "dev": "nodemon -e scss,js -x \"pnpm build\"",
+    "dev": "pnpm build",
     "generate:types": "pnpm generate:types:unprefixed && pnpm generate:types:prefixed",
     "generate:types:prefixed": "cd dist && typed-scss-modules \"**/*.css\" --exportType default --outputFolder ../dist/types --nameFormat kebab",
     "generate:types:unprefixed": "cd scss && typed-scss-modules \"**/*.scss\" --exportType default --outputFolder ../dist/types_unprefixed --nameFormat kebab --exportTypeName UnprefixedClassNames",

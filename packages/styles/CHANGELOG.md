@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 1.1.2
+
+### Patch Changes
+
+- Add dataprops and allow a template child for BarVisualizer @lukasIO - [#965](https://github.com/livekit/components-js/pull/965) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.1.1
 
 ### Patch Changes

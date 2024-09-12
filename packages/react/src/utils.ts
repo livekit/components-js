@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { mergeProps as mergePropsReactAria } from './mergeProps';
 import { log } from '@livekit/components-core';
+import clsx from 'clsx';
 
 /** @internal */
 export function isProp<U extends HTMLElement, T extends React.HTMLAttributes<U>>(
@@ -27,6 +28,12 @@ export function cloneSingleChild(
     // Checking isValidElement is the safe way and avoids a typescript
     // error too.
     if (React.isValidElement(child) && React.Children.only(children)) {
+      if (child.props.class) {
+        // make sure we retain classnames of both passed props and child
+        props ??= {};
+        props.class = clsx(child.props.class, props.class);
+        props.style = { ...child.props.style, ...props.style };
+      }
       return React.cloneElement(child, { ...props, key });
     }
     return child;

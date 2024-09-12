@@ -49,7 +49,8 @@ deprecated
   }
 
   &[data-va-state='speaking'] > .audio-bar,
-  & > .audio-bar.highlighted {
+  & > .audio-bar.highlighted,
+  & > [data-highlighted='true'] {
     background-color: var(--fg, #fff);
     filter: drop-shadow(var(--drop-shadow, rgba(255, 255, 255, 0.2) 0px 0px 24px));
     transition: none;

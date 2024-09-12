@@ -3,7 +3,7 @@ import { useBarAnimator } from './animators/useBarAnimator';
 import { useMultibandTrackVolume, type VoiceAssistantState } from '../../hooks';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { useMaybeTrackRefContext } from '../../context';
-import { mergeProps } from '../../utils';
+import { cloneSingleChild, mergeProps } from '../../utils';
 
 /**
  * @beta
@@ -25,6 +25,8 @@ export interface BarVisualizerProps extends React.HTMLProps<HTMLDivElement> {
   barCount?: number;
   trackRef?: TrackReferenceOrPlaceholder;
   options?: BarVisualizerOptions;
+  /** The template component to be used in the visualizer. */
+  children?: React.ReactNode;
 }
 
 const sequencerIntervals = new Map<VoiceAssistantState, number>([
@@ -76,7 +78,7 @@ const getSequencerInterval = (
  */
 export const BarVisualizer = /* @__PURE__ */ React.forwardRef<HTMLDivElement, BarVisualizerProps>(
   function BarVisualizer(
-    { state, options, barCount = 15, trackRef, ...props }: BarVisualizerProps,
+    { state, options, barCount = 15, trackRef, children, ...props }: BarVisualizerProps,
     ref,
   ) {
     const elementProps = mergeProps(props, { className: 'lk-audio-bar-visualizer' });
@@ -102,17 +104,28 @@ export const BarVisualizer = /* @__PURE__ */ React.forwardRef<HTMLDivElement, Ba
 
     return (
       <div ref={ref} {...elementProps} data-lk-va-state={state}>
-        {volumeBands.map((volume, idx) => (
-          <span
-            key={idx}
-            className={`lk-audio-bar ${highlightedIndices.includes(idx) && 'lk-highlighted'}`}
-            style={{
-              // TODO transform animations would be more performant, however the border-radius gets distorted when using scale transforms. a 9-slice approach (or 3 in this case) could work
-              // transform: `scale(1, ${Math.min(maxHeight, Math.max(minHeight, volume))}`,
-              height: `${Math.min(maxHeight, Math.max(minHeight, volume * 100 + 5))}%`,
-            }}
-          ></span>
-        ))}
+        {volumeBands.map((volume, idx) =>
+          children ? (
+            cloneSingleChild(children, {
+              'data-lk-highlighted': highlightedIndices.includes(idx),
+              'data-lk-bar-index': idx,
+              class: 'lk-audio-bar',
+              style: { height: `${Math.min(maxHeight, Math.max(minHeight, volume * 100 + 5))}%` },
+            })
+          ) : (
+            <span
+              key={idx}
+              data-lk-highlighted={highlightedIndices.includes(idx)}
+              data-lk-bar-index={idx}
+              className={`lk-audio-bar ${highlightedIndices.includes(idx) && 'lk-highlighted'}`}
+              style={{
+                // TODO transform animations would be more performant, however the border-radius gets distorted when using scale transforms. a 9-slice approach (or 3 in this case) could work
+                // transform: `scale(1, ${Math.min(maxHeight, Math.max(minHeight, volume))}`,
+                height: `${Math.min(maxHeight, Math.max(minHeight, volume * 100 + 5))}%`,
+              }}
+            ></span>
+          ),
+        )}
       </div>
     );
   },

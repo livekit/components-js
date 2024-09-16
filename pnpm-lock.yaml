@@ -52,7 +52,7 @@ importers:
         version: link:../../packages/styles
       livekit-client:
         specifier: ^2.4.0
-        version: 2.4.0
+        version: 2.5.1
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -116,10 +116,10 @@ importers:
         version: link:../../packages/styles
       '@livekit/track-processors':
         specifier: ^0.3.2
-        version: 0.3.2(livekit-client@2.4.0)
+        version: 0.3.2(livekit-client@2.5.1)
       livekit-client:
         specifier: ^2.4.0
-        version: 2.4.0
+        version: 2.5.1
       livekit-server-sdk:
         specifier: ^2.6.1
         version: 2.6.1
@@ -221,7 +221,7 @@ importers:
     devDependencies:
       '@livekit/protocol':
         specifier: ^1.16.0
-        version: 1.16.0
+        version: 1.21.0
       '@microsoft/api-extractor':
         specifier: ^7.35.0
         version: 7.47.0(@types/node@22.5.5)
@@ -1175,6 +1175,9 @@ packages:
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
+  '@bufbuild/protobuf@1.10.0':
+    resolution: {integrity: sha512-QDdVFLoN93Zjg36NoQPZfsVH9tZew7wKDKyV5qRdj8ntT4wQCOradQjRaTdwMhWUYsgKsvCINKKm87FdEk96Ag==}
+
   '@bufbuild/protobuf@1.9.0':
     resolution: {integrity: sha512-W7gp8Q/v1NlCZLsv8pQ3Y0uCu/SHgXOVFK+eUluUKWXmsb6VHkpNx0apdOWWcDbB9sJoKeP8uPrjmehJz6xETQ==}
 
@@ -1712,6 +1715,12 @@ packages:
 
   '@livekit/protocol@1.19.1':
     resolution: {integrity: sha512-PQYIuqRv++fRik9tKulJ0C0tT5O4cNviBA7OxwLTCBFDxJpve8ua8/JZ+nK+7r4j2KbLfVjsJYop9wcTCgRn7Q==}
+
+  '@livekit/protocol@1.20.1':
+    resolution: {integrity: sha512-TgyuwOx+XJn9inEYT9OKfFNs9YIPS4BdLa4pF5FDf9MhWRnahKwPe7jxr/+sVdWxYbZmy9hRrH58jSAFu0ONHw==}
+
+  '@livekit/protocol@1.21.0':
+    resolution: {integrity: sha512-3TohFPNZy1axTuoDLU6mA1rwuP4VawgehvX52OoLJnU+fNQYfmMJqz8k7NSh79jG5I8Og77YYhT905Omrhli2A==}
 
   '@livekit/track-processors@0.3.2':
     resolution: {integrity: sha512-4JUCzb7yIKoVsTo8J6FTzLZJHcI6DihfX/pGRDg0SOGaxprcDPrt8jaDBBTsnGBSXHeMxl2ugN+xQjdCWzLKEA==}
@@ -5679,6 +5688,9 @@ packages:
   livekit-client@2.4.0:
     resolution: {integrity: sha512-45+8N8DO1IO7+W50WQdDD1jdKF98d8hgPmsi58AhDuq1tLSPuBI9ovKO/rcfyy5ukowlD0DAGwsbE7zBy8sokQ==}
 
+  livekit-client@2.5.1:
+    resolution: {integrity: sha512-D7BzGoO3nc7/H2pEP9hseTjpzfgUoQ1AdeUNdlM7XNEywvorY1UR6RhOWH9UvycM/D5tIIRx7OvhxzpVfHE3TA==}
+
   livekit-server-sdk@2.6.1:
     resolution: {integrity: sha512-j/8TOlahIyWnycNkuSzTv6q+win4JTbDGNH48iMsZDMnJBks9hhC9UwAO4ES42sAorIAxGkrH58hxt4KdTkZaQ==}
     engines: {node: '>=19'}
@@ -5745,6 +5757,10 @@ packages:
 
   loglevel@1.9.1:
     resolution: {integrity: sha512-hP3I3kCrDIMuRwAwHltphhDM1r8i55H33GgqjXbrisuJhF4kRhW1dNuxsRklp4bXl8DSdLaNLuiL4A/LWRfxvg==}
+    engines: {node: '>= 0.6.0'}
+
+  loglevel@1.9.2:
+    resolution: {integrity: sha512-HgMmCqIJSAKqo68l0rS2AanEWfkxaZ5wNiEFb5ggm08lDs9Xl2KxBlX3PTcaD2chBM1gXAYf491/M2Rv8Jwayg==}
     engines: {node: '>= 0.6.0'}
 
   loose-envify@1.4.0:
@@ -7331,6 +7347,9 @@ packages:
 
   tslib@2.6.3:
     resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
+
+  tslib@2.7.0:
+    resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
 
   tsup@8.1.0:
     resolution: {integrity: sha512-UFdfCAXukax+U6KzeTNO2kAARHcWxmKsnvSPXUcfA1D+kU05XDccCrkffCQpFaWDsZfV0jMyTsxU39VfCp6EOg==}
@@ -8935,6 +8954,8 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
+  '@bufbuild/protobuf@1.10.0': {}
+
   '@bufbuild/protobuf@1.9.0': {}
 
   '@changesets/apply-release-plan@7.0.3':
@@ -9567,11 +9588,19 @@ snapshots:
     dependencies:
       '@bufbuild/protobuf': 1.9.0
 
-  '@livekit/track-processors@0.3.2(livekit-client@2.4.0)':
+  '@livekit/protocol@1.20.1':
+    dependencies:
+      '@bufbuild/protobuf': 1.10.0
+
+  '@livekit/protocol@1.21.0':
+    dependencies:
+      '@bufbuild/protobuf': 1.10.0
+
+  '@livekit/track-processors@0.3.2(livekit-client@2.5.1)':
     dependencies:
       '@mediapipe/holistic': 0.5.1675471629
       '@mediapipe/tasks-vision': 0.10.9
-      livekit-client: 2.4.0
+      livekit-client: 2.5.1
 
   '@manypkg/find-root@1.1.0':
     dependencies:
@@ -11158,7 +11187,7 @@ snapshots:
 
   '@swc/helpers@0.4.11':
     dependencies:
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   '@testing-library/dom@10.1.0':
     dependencies:
@@ -11860,7 +11889,7 @@ snapshots:
   '@yarnpkg/esbuild-plugin-pnp@3.0.0-rc.15(esbuild@0.18.20)':
     dependencies:
       esbuild: 0.18.20
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   '@yarnpkg/fslib@2.10.3':
     dependencies:
@@ -11991,7 +12020,7 @@ snapshots:
 
   aria-hidden@1.2.4:
     dependencies:
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   aria-query@5.1.3:
     dependencies:
@@ -12093,7 +12122,7 @@ snapshots:
 
   ast-types@0.16.1:
     dependencies:
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   async-limiter@1.0.1: {}
 
@@ -12337,7 +12366,7 @@ snapshots:
   camel-case@4.1.2:
     dependencies:
       pascal-case: 3.1.2
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   camelcase-keys@6.2.2:
     dependencies:
@@ -12367,7 +12396,7 @@ snapshots:
   capital-case@1.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.7.0
       upper-case-first: 2.0.2
 
   chai@5.1.1:
@@ -12402,7 +12431,7 @@ snapshots:
       path-case: 3.0.4
       sentence-case: 3.0.4
       snake-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   char-regex@1.0.2: {}
 
@@ -12538,7 +12567,7 @@ snapshots:
   constant-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.7.0
       upper-case: 2.0.2
 
   content-disposition@0.5.4:
@@ -12821,7 +12850,7 @@ snapshots:
   dot-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   dotenv-expand@10.0.0: {}
 
@@ -14013,7 +14042,7 @@ snapshots:
   header-case@2.0.4:
     dependencies:
       capital-case: 1.0.4
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   hosted-git-info@2.8.9: {}
 
@@ -14838,6 +14867,17 @@ snapshots:
       typed-emitter: 2.1.0
       webrtc-adapter: 9.0.1
 
+  livekit-client@2.5.1:
+    dependencies:
+      '@livekit/protocol': 1.20.1
+      events: 3.3.0
+      loglevel: 1.9.2
+      sdp-transform: 2.14.2
+      ts-debounce: 4.0.0
+      tslib: 2.6.3
+      typed-emitter: 2.1.0
+      webrtc-adapter: 9.0.1
+
   livekit-server-sdk@2.6.1:
     dependencies:
       '@livekit/protocol': 1.19.1
@@ -14897,6 +14937,8 @@ snapshots:
 
   loglevel@1.9.1: {}
 
+  loglevel@1.9.2: {}
+
   loose-envify@1.4.0:
     dependencies:
       js-tokens: 4.0.0
@@ -14907,7 +14949,7 @@ snapshots:
 
   lower-case@2.0.2:
     dependencies:
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   lru-cache@10.2.2: {}
 
@@ -15153,7 +15195,7 @@ snapshots:
   no-case@3.0.4:
     dependencies:
       lower-case: 2.0.2
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   node-dir@0.1.17:
     dependencies:
@@ -15362,7 +15404,7 @@ snapshots:
   param-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   parent-module@1.0.1:
     dependencies:
@@ -15384,12 +15426,12 @@ snapshots:
   pascal-case@3.1.2:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   path-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   path-exists@3.0.0: {}
 
@@ -15750,7 +15792,7 @@ snapshots:
     dependencies:
       react: 18.3.1
       react-style-singleton: 2.2.1(@types/react@18.3.3)(react@18.3.1)
-      tslib: 2.6.3
+      tslib: 2.7.0
     optionalDependencies:
       '@types/react': 18.3.3
 
@@ -15759,7 +15801,7 @@ snapshots:
       react: 18.3.1
       react-remove-scroll-bar: 2.3.6(@types/react@18.3.3)(react@18.3.1)
       react-style-singleton: 2.2.1(@types/react@18.3.3)(react@18.3.1)
-      tslib: 2.6.3
+      tslib: 2.7.0
       use-callback-ref: 1.3.2(@types/react@18.3.3)(react@18.3.1)
       use-sidecar: 1.1.2(@types/react@18.3.3)(react@18.3.1)
     optionalDependencies:
@@ -15770,7 +15812,7 @@ snapshots:
       get-nonce: 1.0.1
       invariant: 2.2.4
       react: 18.3.1
-      tslib: 2.6.3
+      tslib: 2.7.0
     optionalDependencies:
       '@types/react': 18.3.3
 
@@ -15828,7 +15870,7 @@ snapshots:
       esprima: 4.0.1
       source-map: 0.6.1
       tiny-invariant: 1.3.3
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   redent@3.0.0:
     dependencies:
@@ -16070,7 +16112,7 @@ snapshots:
   sentence-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.7.0
       upper-case-first: 2.0.2
 
   serialize-javascript@6.0.2:
@@ -16167,7 +16209,7 @@ snapshots:
   snake-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   source-map-js@1.2.0: {}
 
@@ -16382,7 +16424,7 @@ snapshots:
   synckit@0.8.8:
     dependencies:
       '@pkgr/core': 0.1.1
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   tapable@1.1.3: {}
 
@@ -16568,6 +16610,8 @@ snapshots:
   tslib@2.6.2: {}
 
   tslib@2.6.3: {}
+
+  tslib@2.7.0: {}
 
   tsup@8.1.0(@microsoft/api-extractor@7.47.0(@types/node@22.5.5))(postcss@8.4.38)(typescript@5.4.2):
     dependencies:
@@ -16831,11 +16875,11 @@ snapshots:
 
   upper-case-first@2.0.2:
     dependencies:
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   upper-case@2.0.2:
     dependencies:
-      tslib: 2.6.3
+      tslib: 2.7.0
 
   uri-js@4.4.1:
     dependencies:
@@ -16849,7 +16893,7 @@ snapshots:
   use-callback-ref@1.3.2(@types/react@18.3.3)(react@18.3.1):
     dependencies:
       react: 18.3.1
-      tslib: 2.6.3
+      tslib: 2.7.0
     optionalDependencies:
       '@types/react': 18.3.3
 
@@ -16863,7 +16907,7 @@ snapshots:
     dependencies:
       detect-node-es: 1.1.0
       react: 18.3.1
-      tslib: 2.6.3
+      tslib: 2.7.0
     optionalDependencies:
       '@types/react': 18.3.3
 

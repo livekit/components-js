@@ -52,14 +52,14 @@
     "usehooks-ts": "3.1.0"
   },
   "peerDependencies": {
-    "@livekit/protocol": "^1.16.0",
+    "@livekit/protocol": "^1.20.1",
     "livekit-client": "^2.4.0",
     "react": ">=18",
     "react-dom": ">=18",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@livekit/protocol": "^1.16.0",
+    "@livekit/protocol": "^1.20.1",
     "@microsoft/api-extractor": "^7.35.0",
     "@size-limit/file": "^11.0.2",
     "@size-limit/webpack": "^11.0.2",

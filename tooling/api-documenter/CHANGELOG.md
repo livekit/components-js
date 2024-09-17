@@ -1,5 +1,14 @@
 # @livekit/api-documenter
 
+## 7.22.21
+
+### Patch Changes
+
+- Fix rushstack deps - [#971](https://github.com/livekit/components-js/pull/971) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`d53329716f083bd13b421e7b9a12bbd5e4bb363b`](https://github.com/livekit/components-js/commit/d53329716f083bd13b421e7b9a12bbd5e4bb363b)]:
+  - eslint-config-lk-custom@0.1.3
+
 ## 7.22.20
 
 ### Patch Changes

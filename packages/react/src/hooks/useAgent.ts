@@ -11,61 +11,60 @@ import { useParticipantAttributes } from './useParticipantAttributes';
 /**
  * @beta
  */
-export type VoiceAssistantState =
+export type AgentState =
   | 'disconnected'
   | 'connecting'
   | 'initializing'
   | 'listening'
   | 'thinking'
-  | 'speaking';
+  | 'speaking'
+  | string;
 
 /**
  * @beta
  */
-export interface VoiceAssistant {
-  agent: RemoteParticipant | undefined;
-  state: VoiceAssistantState;
+export interface Agent {
+  participant: RemoteParticipant | undefined;
+  state: AgentState;
   audioTrack: TrackReference | undefined;
   agentTranscriptions: ReceivedTranscriptionSegment[];
   agentAttributes: RemoteParticipant['attributes'] | undefined;
 }
 
-const state_attribute = 'voice_assistant.state';
+const state_attribute = 'agent.state';
 
 /**
  * This hook looks for the first agent-participant in the room.
- * It assumes that the agent participant is based on the LiveKit VoiceAssistant API and
- * returns the most commonly used state vars when interacting with a VoiceAssistant.
- * @remarks This hook requires a voice assistant agent running with livekit-agents \>= 0.8.11
+ * @remarks This hook requires an agent running with livekit-agents \>= 0.8.11
  * @example
  * ```tsx
- * const { state, audioTrack, agentTranscriptions, agentAttributes } = useVoiceAssistant();
+ * const { state, audioTrack, agentTranscriptions, agentAttributes } = useAgent();
  * ```
  * @beta
  */
-export function useVoiceAssistant(): VoiceAssistant {
-  const agent = useRemoteParticipants().find((p) => p.kind === ParticipantKind.AGENT);
-  const audioTrack = useParticipantTracks([Track.Source.Microphone], agent?.identity)[0];
+export function useAgent(): Agent {
+  const participant = useRemoteParticipants().find((p) => p.kind === ParticipantKind.AGENT);
+  const audioTrack = useParticipantTracks([Track.Source.Microphone], participant?.identity)[0];
   const { segments: agentTranscriptions } = useTrackTranscription(audioTrack);
   const connectionState = useConnectionState();
-  const { attributes } = useParticipantAttributes({ participant: agent });
+  const { attributes } = useParticipantAttributes({ participant });
 
-  const state: VoiceAssistantState = React.useMemo(() => {
+  const state: AgentState = React.useMemo(() => {
     if (connectionState === ConnectionState.Disconnected) {
       return 'disconnected';
     } else if (
       connectionState === ConnectionState.Connecting ||
-      !agent ||
+      !participant ||
       !attributes?.[state_attribute]
     ) {
       return 'connecting';
     } else {
-      return attributes[state_attribute] as VoiceAssistantState;
+      return attributes[state_attribute] as AgentState;
     }
-  }, [attributes, agent, connectionState]);
+  }, [attributes, participant, connectionState]);
 
   return {
-    agent,
+    participant,
     state,
     audioTrack,
     agentTranscriptions,

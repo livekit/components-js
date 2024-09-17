@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useBarAnimator } from './animators/useBarAnimator';
-import { useMultibandTrackVolume, type VoiceAssistantState } from '../../hooks';
+import { useMultibandTrackVolume, type AgentState } from '../../hooks';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { useMaybeTrackRefContext } from '../../context';
 import { cloneSingleChild, mergeProps } from '../../utils';
@@ -20,7 +20,7 @@ export type BarVisualizerOptions = {
  */
 export interface BarVisualizerProps extends React.HTMLProps<HTMLDivElement> {
   /** If set, the visualizer will transition between different voice assistant states */
-  state?: VoiceAssistantState;
+  state?: AgentState;
   /** Number of bars that show up in the visualizer */
   barCount?: number;
   trackRef?: TrackReferenceOrPlaceholder;
@@ -29,14 +29,14 @@ export interface BarVisualizerProps extends React.HTMLProps<HTMLDivElement> {
   children?: React.ReactNode;
 }
 
-const sequencerIntervals = new Map<VoiceAssistantState, number>([
+const sequencerIntervals = new Map<AgentState, number>([
   ['connecting', 25 * 15],
   ['listening', 500],
   ['thinking', 150],
 ]);
 
 const getSequencerInterval = (
-  state: VoiceAssistantState | undefined,
+  state: AgentState | undefined,
   barCount: number,
 ): number | undefined => {
   if (state === undefined) {
@@ -66,7 +66,7 @@ const getSequencerInterval = (
  * @example
  * ```tsx
  * function SimpleVoiceAssistant() {
- *   const { state, audioTrack } = useVoiceAssistant();
+ *   const { state, audioTrack } = useAgent();
  *   return (
  *    <BarVisualizer
  *      state={state}

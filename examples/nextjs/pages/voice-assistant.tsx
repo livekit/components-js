@@ -1,10 +1,10 @@
 import {
   LiveKitRoom,
   useToken,
-  useVoiceAssistant,
+  useAgent,
   BarVisualizer,
   RoomAudioRenderer,
-  VoiceAssistantControlBar,
+  AssistantControlBar,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { useMemo, useState } from 'react';
@@ -13,7 +13,7 @@ import styles from '../styles/VoiceAssistant.module.scss';
 import { generateRandomUserId } from '../lib/helper';
 
 function SimpleVoiceAssistant() {
-  const { state, audioTrack } = useVoiceAssistant();
+  const { state, audioTrack } = useAgent();
   return (
     <BarVisualizer
       state={state}
@@ -71,7 +71,7 @@ const VoiceAssistantExample: NextPage = () => {
             </button>
           )}
         </div>
-        <VoiceAssistantControlBar />
+        <AssistantControlBar />
         <RoomAudioRenderer />
       </LiveKitRoom>
     </main>

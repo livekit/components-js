@@ -37,10 +37,50 @@ import { TrackPublishOptions } from 'livekit-client';
 import type { TranscriptionSegment } from 'livekit-client';
 import type { VideoCaptureOptions } from 'livekit-client';
 
+// @beta (undocumented)
+export interface Agent {
+    // (undocumented)
+    agentAttributes: RemoteParticipant['attributes'] | undefined;
+    // Warning: (ae-forgotten-export) The symbol "ReceivedTranscriptionSegment" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    agentTranscriptions: ReceivedTranscriptionSegment[];
+    // (undocumented)
+    audioTrack: TrackReference | undefined;
+    // (undocumented)
+    participant: RemoteParticipant | undefined;
+    // (undocumented)
+    state: AgentState;
+}
+
+// @beta (undocumented)
+export type AgentState = 'disconnected' | 'connecting' | 'initializing' | 'listening' | 'thinking' | 'speaking' | string;
+
 // @public (undocumented)
 export interface AllowAudioPlaybackProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
     // (undocumented)
     label: string;
+}
+
+// @beta (undocumented)
+export function AssistantControlBar({ controls, saveUserChoices, onDeviceError, ...props }: AssistantControlBarProps): React_2.JSX.Element;
+
+// @beta (undocumented)
+export type AssistantControlBarControls = {
+    microphone?: boolean;
+    leave?: boolean;
+};
+
+// @beta (undocumented)
+export interface AssistantControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> {
+    // (undocumented)
+    controls?: AssistantControlBarControls;
+    // (undocumented)
+    onDeviceError?: (error: {
+        source: Track.Source;
+        error: Error;
+    }) => void;
+    saveUserChoices?: boolean;
 }
 
 // @public
@@ -97,7 +137,7 @@ export interface BarVisualizerProps extends React_2.HTMLProps<HTMLDivElement> {
     children?: React_2.ReactNode;
     // (undocumented)
     options?: BarVisualizerOptions;
-    state?: VoiceAssistantState;
+    state?: AgentState;
     // (undocumented)
     trackRef?: TrackReferenceOrPlaceholder;
 }
@@ -721,6 +761,9 @@ export interface TrackTranscriptionOptions {
 // @internal (undocumented)
 export const UnfocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
+// @beta
+export function useAgent(): Agent;
+
 // @alpha
 export function useAudioPlayback(room?: Room): {
     canPlayAudio: boolean;
@@ -1222,9 +1265,6 @@ export interface UseVisualStableUpdateOptions {
     customSortFunction?: (trackReferences: TrackReferenceOrPlaceholder[]) => TrackReferenceOrPlaceholder[];
 }
 
-// @beta
-export function useVoiceAssistant(): VoiceAssistant;
-
 // @public
 export function VideoConference({ chatMessageFormatter, chatMessageDecoder, chatMessageEncoder, SettingsComponent, ...props }: VideoConferenceProps): React_2.JSX.Element;
 
@@ -1256,44 +1296,6 @@ export interface VideoTrackProps extends React_2.VideoHTMLAttributes<HTMLVideoEl
     trackRef?: TrackReference;
 }
 
-// @beta (undocumented)
-export interface VoiceAssistant {
-    // (undocumented)
-    agent: RemoteParticipant | undefined;
-    // (undocumented)
-    agentAttributes: RemoteParticipant['attributes'] | undefined;
-    // (undocumented)
-    agentTranscriptions: ReceivedTranscriptionSegment[];
-    // (undocumented)
-    audioTrack: TrackReference | undefined;
-    // (undocumented)
-    state: VoiceAssistantState;
-}
-
-// @beta (undocumented)
-export function VoiceAssistantControlBar({ controls, saveUserChoices, onDeviceError, ...props }: VoiceAssistantControlBarProps): React_2.JSX.Element;
-
-// @beta (undocumented)
-export type VoiceAssistantControlBarControls = {
-    microphone?: boolean;
-    leave?: boolean;
-};
-
-// @beta (undocumented)
-export interface VoiceAssistantControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> {
-    // (undocumented)
-    controls?: VoiceAssistantControlBarControls;
-    // (undocumented)
-    onDeviceError?: (error: {
-        source: Track.Source;
-        error: Error;
-    }) => void;
-    saveUserChoices?: boolean;
-}
-
-// @beta (undocumented)
-export type VoiceAssistantState = 'disconnected' | 'connecting' | 'initializing' | 'listening' | 'thinking' | 'speaking';
-
 // @public (undocumented)
 export type WidgetState = {
     showChat: boolean;
@@ -1307,7 +1309,6 @@ export type WidgetState = {
 // src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "WidgetContextType" needs to be exported by the entry point index.d.ts
 // src/hooks/useGridLayout.ts:27:6 - (ae-forgotten-export) The symbol "GridLayoutInfo" needs to be exported by the entry point index.d.ts
 // src/hooks/useMediaDeviceSelect.ts:47:29 - (ae-forgotten-export) The symbol "SetMediaDeviceOptions" needs to be exported by the entry point index.d.ts
-// src/hooks/useTrackTranscription.ts:43:38 - (ae-forgotten-export) The symbol "ReceivedTranscriptionSegment" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

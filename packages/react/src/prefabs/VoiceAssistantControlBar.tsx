@@ -27,12 +27,17 @@ export interface VoiceAssistantControlBarProps extends React.HTMLAttributes<HTML
    * If `true`, the user's device choices will be persisted.
    * This will enables the user to have the same device choices when they rejoin the room.
    * @defaultValue true
-   * @alpha
    */
   saveUserChoices?: boolean;
 }
 
 /**
+ * @example
+ * ```tsx
+ * <LiveKitRoom ... >
+ *   <VoiceAssistantControlBar />
+ * </LiveKitRoom>
+ * ```
  * @beta
  */
 export function VoiceAssistantControlBar({

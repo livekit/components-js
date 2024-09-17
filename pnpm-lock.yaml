@@ -52,7 +52,7 @@ importers:
         version: link:../../packages/styles
       livekit-client:
         specifier: ^2.4.0
-        version: 2.5.1
+        version: 2.5.2
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -116,10 +116,10 @@ importers:
         version: link:../../packages/styles
       '@livekit/track-processors':
         specifier: ^0.3.2
-        version: 0.3.2(livekit-client@2.5.1)
+        version: 0.3.2(livekit-client@2.5.2)
       livekit-client:
         specifier: ^2.4.0
-        version: 2.5.1
+        version: 2.5.2
       livekit-server-sdk:
         specifier: ^2.6.1
         version: 2.6.1
@@ -5437,6 +5437,9 @@ packages:
   livekit-client@2.5.1:
     resolution: {integrity: sha512-D7BzGoO3nc7/H2pEP9hseTjpzfgUoQ1AdeUNdlM7XNEywvorY1UR6RhOWH9UvycM/D5tIIRx7OvhxzpVfHE3TA==}
 
+  livekit-client@2.5.2:
+    resolution: {integrity: sha512-rzWFH02UznHxpnbj+WEEoHxL1ZSo9BdFK+7ltSZWniTt2llnNckdqeXNsjkBH6k+C9agHTF4XikmxKcpWa4YrQ==}
+
   livekit-server-sdk@2.6.1:
     resolution: {integrity: sha512-j/8TOlahIyWnycNkuSzTv6q+win4JTbDGNH48iMsZDMnJBks9hhC9UwAO4ES42sAorIAxGkrH58hxt4KdTkZaQ==}
     engines: {node: '>=19'}
@@ -5497,6 +5500,10 @@ packages:
 
   loglevel@1.9.1:
     resolution: {integrity: sha512-hP3I3kCrDIMuRwAwHltphhDM1r8i55H33GgqjXbrisuJhF4kRhW1dNuxsRklp4bXl8DSdLaNLuiL4A/LWRfxvg==}
+    engines: {node: '>= 0.6.0'}
+
+  loglevel@1.9.2:
+    resolution: {integrity: sha512-HgMmCqIJSAKqo68l0rS2AanEWfkxaZ5wNiEFb5ggm08lDs9Xl2KxBlX3PTcaD2chBM1gXAYf491/M2Rv8Jwayg==}
     engines: {node: '>= 0.6.0'}
 
   loose-envify@1.4.0:
@@ -9073,11 +9080,11 @@ snapshots:
     dependencies:
       '@bufbuild/protobuf': 1.10.0
 
-  '@livekit/track-processors@0.3.2(livekit-client@2.5.1)':
+  '@livekit/track-processors@0.3.2(livekit-client@2.5.2)':
     dependencies:
       '@mediapipe/holistic': 0.5.1675471629
       '@mediapipe/tasks-vision': 0.10.9
-      livekit-client: 2.5.1
+      livekit-client: 2.5.2
 
   '@manypkg/find-root@1.1.0':
     dependencies:
@@ -14188,6 +14195,17 @@ snapshots:
       typed-emitter: 2.1.0
       webrtc-adapter: 9.0.1
 
+  livekit-client@2.5.2:
+    dependencies:
+      '@livekit/protocol': 1.20.1
+      events: 3.3.0
+      loglevel: 1.9.2
+      sdp-transform: 2.14.2
+      ts-debounce: 4.0.0
+      tslib: 2.7.0
+      typed-emitter: 2.1.0
+      webrtc-adapter: 9.0.1
+
   livekit-server-sdk@2.6.1:
     dependencies:
       '@livekit/protocol': 1.21.0
@@ -14242,6 +14260,8 @@ snapshots:
       is-unicode-supported: 0.1.0
 
   loglevel@1.9.1: {}
+
+  loglevel@1.9.2: {}
 
   loose-envify@1.4.0:
     dependencies:

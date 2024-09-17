@@ -97,7 +97,6 @@ export interface BarVisualizerProps extends React_2.HTMLProps<HTMLDivElement> {
     children?: React_2.ReactNode;
     // (undocumented)
     options?: BarVisualizerOptions;
-    // Warning: (ae-incompatible-release-tags) The symbol "state" is marked as @beta, but its signature references "VoiceAssistantState" which is marked as @alpha
     state?: VoiceAssistantState;
     // (undocumented)
     trackRef?: TrackReferenceOrPlaceholder;
@@ -1223,7 +1222,7 @@ export interface UseVisualStableUpdateOptions {
     customSortFunction?: (trackReferences: TrackReferenceOrPlaceholder[]) => TrackReferenceOrPlaceholder[];
 }
 
-// @alpha
+// @beta
 export function useVoiceAssistant(): VoiceAssistant;
 
 // @public
@@ -1257,7 +1256,7 @@ export interface VideoTrackProps extends React_2.VideoHTMLAttributes<HTMLVideoEl
     trackRef?: TrackReference;
 }
 
-// @alpha (undocumented)
+// @beta (undocumented)
 export interface VoiceAssistant {
     // (undocumented)
     agent: RemoteParticipant | undefined;
@@ -1270,9 +1269,6 @@ export interface VoiceAssistant {
     // (undocumented)
     state: VoiceAssistantState;
 }
-
-// @alpha (undocumented)
-export const VoiceAssistantContext: React_2.Context<VoiceAssistant | undefined>;
 
 // @beta (undocumented)
 export function VoiceAssistantControlBar({ controls, saveUserChoices, onDeviceError, ...props }: VoiceAssistantControlBarProps): React_2.JSX.Element;
@@ -1292,11 +1288,10 @@ export interface VoiceAssistantControlBarProps extends React_2.HTMLAttributes<HT
         source: Track.Source;
         error: Error;
     }) => void;
-    // @alpha
     saveUserChoices?: boolean;
 }
 
-// @alpha (undocumented)
+// @beta (undocumented)
 export type VoiceAssistantState = 'disconnected' | 'connecting' | 'initializing' | 'listening' | 'thinking' | 'speaking';
 
 // @public (undocumented)

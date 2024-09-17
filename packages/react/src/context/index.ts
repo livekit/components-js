@@ -24,4 +24,3 @@ export {
 } from './track-reference-context';
 
 export { FeatureFlags, useFeatureContext, LKFeatureContext } from './feature-context';
-export { VoiceAssistantContext } from './voice-assistant-context';

@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.11.5
+
+### Patch Changes
+
+- Fix local storage user choices - [#970](https://github.com/livekit/components-js/pull/970) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.11.4
 
 ### Patch Changes

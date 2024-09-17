@@ -1,5 +1,14 @@
 # @livekit/components-docs-gen
 
+## 0.0.59
+
+### Patch Changes
+
+- Updated dependencies [[`d53329716f083bd13b421e7b9a12bbd5e4bb363b`](https://github.com/livekit/components-js/commit/d53329716f083bd13b421e7b9a12bbd5e4bb363b)]:
+  - @livekit/api-documenter@7.22.21
+  - eslint-config-lk-custom@0.1.3
+  - @livekit/components-react@2.5.4
+
 ## 0.0.58
 
 ### Patch Changes

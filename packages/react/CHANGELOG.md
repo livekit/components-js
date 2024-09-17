@@ -1,5 +1,48 @@
 # @livekit/components-react
 
+## 2.5.3
+
+### Patch Changes
+
+- Add dataprops and allow a template child for BarVisualizer @lukasIO - [#965](https://github.com/livekit/components-js/pull/965) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`a77a52eeb415701f0e233e9f2304b7de2d754397`](https://github.com/livekit/components-js/commit/a77a52eeb415701f0e233e9f2304b7de2d754397)]:
+  - @livekit/components-core@0.11.4
+
+## 2.5.2
+
+### Patch Changes
+
+- Don't override className on BarVisualizer - [#963](https://github.com/livekit/components-js/pull/963) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.5.1
+
+### Patch Changes
+
+- Add css var fallbacks and fix className forwarding on BarVisualizer - [#961](https://github.com/livekit/components-js/pull/961) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies []:
+  - @livekit/components-core@0.11.3
+
+## 2.5.0
+
+### Minor Changes
+
+- Stateful BarVisualizer and VoiceAssistantControlBar - [#954](https://github.com/livekit/components-js/pull/954) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Fix local storage of user choices - [#949](https://github.com/livekit/components-js/pull/949) ([@lukasIO](https://github.com/lukasIO))
+
+- Add useVoiceAssistant - [#917](https://github.com/livekit/components-js/pull/917) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix state update on participant attributes hook - [#957](https://github.com/livekit/components-js/pull/957) ([@lukasIO](https://github.com/lukasIO))
+
+- Add callback option to trackTranscription hook - [#939](https://github.com/livekit/components-js/pull/939) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`cb45f42912a08a2ab8c03b1e5109eb24d1d78180`](https://github.com/livekit/components-js/commit/cb45f42912a08a2ab8c03b1e5109eb24d1d78180), [`9b1a2596f4068c68ac8780c119426cbb55a4ca3f`](https://github.com/livekit/components-js/commit/9b1a2596f4068c68ac8780c119426cbb55a4ca3f), [`d35dffd16131cac43279300071c595f30981767f`](https://github.com/livekit/components-js/commit/d35dffd16131cac43279300071c595f30981767f)]:
+  - @livekit/components-core@0.11.3
+
 ## 2.4.3
 
 ### Patch Changes

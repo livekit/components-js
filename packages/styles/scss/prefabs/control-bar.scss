@@ -7,3 +7,18 @@
   border-top: 1px solid var(--border-color);
   max-height: var(--control-bar-height);
 }
+
+.agent-control-bar {
+  @extend .control-bar;
+
+  height: var(--control-bar-height);
+  --bg: transparent;
+  --va-bar-width: 2px;
+  --va-bar-gap: 4px;
+  --va-bar-border-radius: 1px;
+  & .audio-bar-visualizer {
+    & .audio-bar.highlighted {
+      filter: none;
+    }
+  }
+}

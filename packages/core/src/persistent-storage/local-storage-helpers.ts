@@ -16,7 +16,12 @@ function saveToLocalStorage<T extends JsonValue>(key: string, value: T): void {
   }
 
   try {
-    localStorage.setItem(key, JSON.stringify(value));
+    if (value) {
+      const nonEmptySettings = Object.fromEntries(
+        Object.entries(value).filter(([, value]) => value !== ''),
+      );
+      localStorage.setItem(key, JSON.stringify(nonEmptySettings));
+    }
   } catch (error) {
     log.error(`Error setting item to local storage: ${error}`);
   }

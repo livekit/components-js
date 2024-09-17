@@ -17,12 +17,13 @@ export interface UseIsEncryptedOptions {
  */
 export function useIsEncrypted(participant?: Participant, options: UseIsEncryptedOptions = {}) {
   const p = useEnsureParticipant(participant);
+
   const room = useEnsureRoom(options.room);
 
   const observer = React.useMemo(() => encryptionStatusObservable(room, p), [room, p]);
   const isEncrypted = useObservableState(
     observer,
-    p instanceof LocalParticipant ? p.isE2EEEnabled : p.isEncrypted,
+    p instanceof LocalParticipant ? p.isE2EEEnabled : !!p?.isEncrypted,
   );
   return isEncrypted;
 }

@@ -63,13 +63,44 @@ export interface AudioTrackProps extends React_2.AudioHTMLAttributes<HTMLAudioEl
     volume?: number;
 }
 
-// @public
+// @public @deprecated
 export const AudioVisualizer: (props: AudioVisualizerProps & React_2.RefAttributes<SVGSVGElement>) => React_2.ReactNode;
 
-// @public (undocumented)
+// @public @deprecated (undocumented)
 export interface AudioVisualizerProps extends React_2.HTMLAttributes<SVGElement> {
     // (undocumented)
     trackRef?: TrackReference;
+}
+
+// @alpha (undocumented)
+export interface AudioWaveformOptions {
+    // (undocumented)
+    barCount?: number;
+    // (undocumented)
+    updateInterval?: number;
+    // (undocumented)
+    volMultiplier?: number;
+}
+
+// @beta
+export const BarVisualizer: React_2.ForwardRefExoticComponent<Omit<BarVisualizerProps, "ref"> & React_2.RefAttributes<HTMLDivElement>>;
+
+// @beta (undocumented)
+export type BarVisualizerOptions = {
+    maxHeight?: number;
+    minHeight?: number;
+};
+
+// @beta (undocumented)
+export interface BarVisualizerProps extends React_2.HTMLProps<HTMLDivElement> {
+    barCount?: number;
+    children?: React_2.ReactNode;
+    // (undocumented)
+    options?: BarVisualizerOptions;
+    // Warning: (ae-incompatible-release-tags) The symbol "state" is marked as @beta, but its signature references "VoiceAssistantState" which is marked as @alpha
+    state?: VoiceAssistantState;
+    // (undocumented)
+    trackRef?: TrackReferenceOrPlaceholder;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "CameraDisabledIcon" should be prefixed with an underscore because the declaration is marked as @internal
@@ -573,7 +604,7 @@ export interface RoomAudioRendererProps {
 export const RoomContext: React_2.Context<Room | undefined>;
 
 // @public
-export const RoomName: (props: RoomNameProps & React_2.RefAttributes<HTMLSpanElement>) => React_2.ReactNode;
+export const RoomName: React_2.FC<RoomNameProps & React_2.RefAttributes<HTMLSpanElement>>;
 
 // @public (undocumented)
 export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
@@ -637,6 +668,13 @@ export interface TrackMutedIndicatorProps extends React_2.HTMLAttributes<HTMLDiv
 // @public
 export const TrackRefContext: React_2.Context<TrackReferenceOrPlaceholder | undefined>;
 
+// Warning: (ae-internal-missing-underscore) The name "TrackRefContextIfNeeded" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal
+export function TrackRefContextIfNeeded(props: React_2.PropsWithChildren<{
+    trackRef?: TrackReferenceOrPlaceholder;
+}>): React_2.JSX.Element;
+
 // @public (undocumented)
 export type TrackReference = {
     participant: Participant;
@@ -676,6 +714,7 @@ export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.B
 // @alpha (undocumented)
 export interface TrackTranscriptionOptions {
     bufferSize?: number;
+    onTranscription?: (newSegments: TranscriptionSegment[]) => void;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "UnfocusToggleIcon" should be prefixed with an underscore because the declaration is marked as @internal
@@ -687,6 +726,11 @@ export const UnfocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.
 export function useAudioPlayback(room?: Room): {
     canPlayAudio: boolean;
     startAudio: () => Promise<void>;
+};
+
+// @alpha (undocumented)
+export function useAudioWaveform(trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder, options?: AudioWaveformOptions): {
+    bars: number[];
 };
 
 // @public
@@ -880,7 +924,7 @@ export function useMediaDeviceSelect({ kind, room, track, requestPermissions, on
     devices: MediaDeviceInfo[];
     className: string;
     activeDeviceId: string;
-    setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions) => Promise<void>;
+    setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions | undefined) => Promise<void>;
 };
 
 // @public (undocumented)
@@ -915,7 +959,7 @@ export function useParticipantAttribute(attributeKey: string, options?: UseParti
 
 // @public (undocumented)
 export function useParticipantAttributes(props?: UseParticipantAttributesOptions): {
-    attributes: Readonly<Record<string, string>>;
+    attributes: Readonly<Record<string, string>> | undefined;
 };
 
 // @public
@@ -929,7 +973,7 @@ export function useParticipantContext(): Participant;
 
 // @public (undocumented)
 export function useParticipantInfo(props?: UseParticipantInfoOptions): {
-    identity: string;
+    identity: string | undefined;
     name: string | undefined;
     metadata: string | undefined;
 };
@@ -1151,7 +1195,7 @@ export type UseTracksOptions = {
 
 // @public
 export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, publishOptions, onDeviceError, ...rest }: UseTrackToggleProps<T>): {
-    toggle: (forceState?: boolean, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<void>;
+    toggle: ((forceState?: boolean | undefined) => Promise<void>) | ((forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<boolean | undefined>);
     enabled: boolean;
     pending: boolean;
     track: LocalTrackPublication | undefined;
@@ -1163,7 +1207,7 @@ export interface UseTrackToggleProps<T extends ToggleSource> extends Omit<TrackT
 }
 
 // @alpha (undocumented)
-export function useTrackTranscription(trackRef: TrackReferenceOrPlaceholder, options?: TrackTranscriptionOptions): {
+export function useTrackTranscription(trackRef: TrackReferenceOrPlaceholder | undefined, options?: TrackTranscriptionOptions): {
     segments: ReceivedTranscriptionSegment[];
 };
 
@@ -1178,6 +1222,9 @@ trackReferences: TrackReferenceOrPlaceholder[], maxItemsOnPage: number, options?
 export interface UseVisualStableUpdateOptions {
     customSortFunction?: (trackReferences: TrackReferenceOrPlaceholder[]) => TrackReferenceOrPlaceholder[];
 }
+
+// @alpha
+export function useVoiceAssistant(): VoiceAssistant;
 
 // @public
 export function VideoConference({ chatMessageFormatter, chatMessageDecoder, chatMessageEncoder, SettingsComponent, ...props }: VideoConferenceProps): React_2.JSX.Element;
@@ -1210,6 +1257,48 @@ export interface VideoTrackProps extends React_2.VideoHTMLAttributes<HTMLVideoEl
     trackRef?: TrackReference;
 }
 
+// @alpha (undocumented)
+export interface VoiceAssistant {
+    // (undocumented)
+    agent: RemoteParticipant | undefined;
+    // (undocumented)
+    agentAttributes: RemoteParticipant['attributes'] | undefined;
+    // (undocumented)
+    agentTranscriptions: ReceivedTranscriptionSegment[];
+    // (undocumented)
+    audioTrack: TrackReference | undefined;
+    // (undocumented)
+    state: VoiceAssistantState;
+}
+
+// @alpha (undocumented)
+export const VoiceAssistantContext: React_2.Context<VoiceAssistant | undefined>;
+
+// @beta (undocumented)
+export function VoiceAssistantControlBar({ controls, saveUserChoices, onDeviceError, ...props }: VoiceAssistantControlBarProps): React_2.JSX.Element;
+
+// @beta (undocumented)
+export type VoiceAssistantControlBarControls = {
+    microphone?: boolean;
+    leave?: boolean;
+};
+
+// @beta (undocumented)
+export interface VoiceAssistantControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> {
+    // (undocumented)
+    controls?: VoiceAssistantControlBarControls;
+    // (undocumented)
+    onDeviceError?: (error: {
+        source: Track.Source;
+        error: Error;
+    }) => void;
+    // @alpha
+    saveUserChoices?: boolean;
+}
+
+// @alpha (undocumented)
+export type VoiceAssistantState = 'disconnected' | 'connecting' | 'initializing' | 'listening' | 'thinking' | 'speaking';
+
 // @public (undocumented)
 export type WidgetState = {
     showChat: boolean;
@@ -1223,7 +1312,7 @@ export type WidgetState = {
 // src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "WidgetContextType" needs to be exported by the entry point index.d.ts
 // src/hooks/useGridLayout.ts:27:6 - (ae-forgotten-export) The symbol "GridLayoutInfo" needs to be exported by the entry point index.d.ts
 // src/hooks/useMediaDeviceSelect.ts:47:29 - (ae-forgotten-export) The symbol "SetMediaDeviceOptions" needs to be exported by the entry point index.d.ts
-// src/hooks/useTrackTranscription.ts:39:38 - (ae-forgotten-export) The symbol "ReceivedTranscriptionSegment" needs to be exported by the entry point index.d.ts
+// src/hooks/useTrackTranscription.ts:43:38 - (ae-forgotten-export) The symbol "ReceivedTranscriptionSegment" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

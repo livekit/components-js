@@ -21,6 +21,10 @@ export interface TrackTranscriptionOptions {
    * @defaultValue 100
    */
   bufferSize?: number;
+  /**
+   * optional callback for retrieving newly incoming transcriptions only
+   */
+  onTranscription?: (newSegments: TranscriptionSegment[]) => void;
   /** amount of time (in ms) that the segment is considered `active` past its original segment duration, defaults to 2_000 */
   // maxAge?: number;
 }
@@ -35,7 +39,7 @@ const TRACK_TRANSCRIPTION_DEFAULTS = {
  * @alpha
  */
 export function useTrackTranscription(
-  trackRef: TrackReferenceOrPlaceholder,
+  trackRef: TrackReferenceOrPlaceholder | undefined,
   options?: TrackTranscriptionOptions,
 ) {
   const opts = { ...TRACK_TRANSCRIPTION_DEFAULTS, ...options };
@@ -46,6 +50,7 @@ export function useTrackTranscription(
   // const prevActiveSegments = React.useRef<ReceivedTranscriptionSegment[]>([]);
   const syncTimestamps = useTrackSyncTime(trackRef);
   const handleSegmentMessage = (newSegments: TranscriptionSegment[]) => {
+    opts.onTranscription?.(newSegments);
     setSegments((prevSegments) =>
       dedupeSegments(
         prevSegments,
@@ -56,7 +61,7 @@ export function useTrackTranscription(
     );
   };
   React.useEffect(() => {
-    if (!trackRef.publication) {
+    if (!trackRef?.publication) {
       return;
     }
     const subscription = trackTranscriptionObserver(trackRef.publication).subscribe((evt) => {
@@ -65,7 +70,7 @@ export function useTrackTranscription(
     return () => {
       subscription.unsubscribe();
     };
-  }, [getTrackReferenceId(trackRef), handleSegmentMessage]);
+  }, [trackRef && getTrackReferenceId(trackRef), handleSegmentMessage]);
 
   // React.useEffect(() => {
   //   if (syncTimestamps) {

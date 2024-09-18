@@ -162,7 +162,7 @@ importers:
         version: 1.21.0
       livekit-client:
         specifier: ^2.4.0
-        version: 2.5.1
+        version: 2.5.2
       loglevel:
         specifier: 1.9.1
         version: 1.9.1
@@ -211,7 +211,7 @@ importers:
         version: 2.1.1
       livekit-client:
         specifier: ^2.4.0
-        version: 2.5.1
+        version: 2.5.2
       tslib:
         specifier: ^2.6.2
         version: 2.7.0
@@ -5434,9 +5434,6 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  livekit-client@2.5.1:
-    resolution: {integrity: sha512-D7BzGoO3nc7/H2pEP9hseTjpzfgUoQ1AdeUNdlM7XNEywvorY1UR6RhOWH9UvycM/D5tIIRx7OvhxzpVfHE3TA==}
-
   livekit-client@2.5.2:
     resolution: {integrity: sha512-rzWFH02UznHxpnbj+WEEoHxL1ZSo9BdFK+7ltSZWniTt2llnNckdqeXNsjkBH6k+C9agHTF4XikmxKcpWa4YrQ==}
 
@@ -5500,10 +5497,6 @@ packages:
 
   loglevel@1.9.1:
     resolution: {integrity: sha512-hP3I3kCrDIMuRwAwHltphhDM1r8i55H33GgqjXbrisuJhF4kRhW1dNuxsRklp4bXl8DSdLaNLuiL4A/LWRfxvg==}
-    engines: {node: '>= 0.6.0'}
-
-  loglevel@1.9.2:
-    resolution: {integrity: sha512-HgMmCqIJSAKqo68l0rS2AanEWfkxaZ5wNiEFb5ggm08lDs9Xl2KxBlX3PTcaD2chBM1gXAYf491/M2Rv8Jwayg==}
     engines: {node: '>= 0.6.0'}
 
   loose-envify@1.4.0:
@@ -7052,9 +7045,6 @@ packages:
 
   tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
-
-  tslib@2.6.3:
-    resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
 
   tslib@2.7.0:
     resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
@@ -14184,22 +14174,11 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  livekit-client@2.5.1:
-    dependencies:
-      '@livekit/protocol': 1.20.1
-      events: 3.3.0
-      loglevel: 1.9.1
-      sdp-transform: 2.14.2
-      ts-debounce: 4.0.0
-      tslib: 2.6.3
-      typed-emitter: 2.1.0
-      webrtc-adapter: 9.0.1
-
   livekit-client@2.5.2:
     dependencies:
       '@livekit/protocol': 1.20.1
       events: 3.3.0
-      loglevel: 1.9.2
+      loglevel: 1.9.1
       sdp-transform: 2.14.2
       ts-debounce: 4.0.0
       tslib: 2.7.0
@@ -14260,8 +14239,6 @@ snapshots:
       is-unicode-supported: 0.1.0
 
   loglevel@1.9.1: {}
-
-  loglevel@1.9.2: {}
 
   loose-envify@1.4.0:
     dependencies:
@@ -15897,8 +15874,6 @@ snapshots:
       strip-bom: 3.0.0
 
   tslib@1.14.1: {}
-
-  tslib@2.6.3: {}
 
   tslib@2.7.0: {}
 

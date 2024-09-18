@@ -31,7 +31,7 @@ export interface Agent {
   agentAttributes: RemoteParticipant['attributes'] | undefined;
 }
 
-const state_attribute = 'agent.state';
+const state_attribute = 'lk.agent.state';
 
 /**
  * This hook looks for the first agent-participant in the room.

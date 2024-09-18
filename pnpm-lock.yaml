@@ -52,7 +52,7 @@ importers:
         version: link:../../packages/styles
       livekit-client:
         specifier: ^2.4.0
-        version: 2.5.1
+        version: 2.5.2
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -116,10 +116,10 @@ importers:
         version: link:../../packages/styles
       '@livekit/track-processors':
         specifier: ^0.3.2
-        version: 0.3.2(livekit-client@2.5.1)
+        version: 0.3.2(livekit-client@2.5.2)
       livekit-client:
         specifier: ^2.4.0
-        version: 2.5.1
+        version: 2.5.2
       livekit-server-sdk:
         specifier: ^2.6.1
         version: 2.6.1
@@ -162,7 +162,7 @@ importers:
         version: 1.21.0
       livekit-client:
         specifier: ^2.4.0
-        version: 2.5.1
+        version: 2.5.2
       loglevel:
         specifier: 1.9.1
         version: 1.9.1
@@ -211,7 +211,7 @@ importers:
         version: 2.1.1
       livekit-client:
         specifier: ^2.4.0
-        version: 2.5.1
+        version: 2.5.2
       tslib:
         specifier: ^2.6.2
         version: 2.7.0
@@ -5434,8 +5434,8 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  livekit-client@2.5.1:
-    resolution: {integrity: sha512-D7BzGoO3nc7/H2pEP9hseTjpzfgUoQ1AdeUNdlM7XNEywvorY1UR6RhOWH9UvycM/D5tIIRx7OvhxzpVfHE3TA==}
+  livekit-client@2.5.2:
+    resolution: {integrity: sha512-rzWFH02UznHxpnbj+WEEoHxL1ZSo9BdFK+7ltSZWniTt2llnNckdqeXNsjkBH6k+C9agHTF4XikmxKcpWa4YrQ==}
 
   livekit-server-sdk@2.6.1:
     resolution: {integrity: sha512-j/8TOlahIyWnycNkuSzTv6q+win4JTbDGNH48iMsZDMnJBks9hhC9UwAO4ES42sAorIAxGkrH58hxt4KdTkZaQ==}
@@ -7045,9 +7045,6 @@ packages:
 
   tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
-
-  tslib@2.6.3:
-    resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
 
   tslib@2.7.0:
     resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
@@ -9073,11 +9070,11 @@ snapshots:
     dependencies:
       '@bufbuild/protobuf': 1.10.0
 
-  '@livekit/track-processors@0.3.2(livekit-client@2.5.1)':
+  '@livekit/track-processors@0.3.2(livekit-client@2.5.2)':
     dependencies:
       '@mediapipe/holistic': 0.5.1675471629
       '@mediapipe/tasks-vision': 0.10.9
-      livekit-client: 2.5.1
+      livekit-client: 2.5.2
 
   '@manypkg/find-root@1.1.0':
     dependencies:
@@ -14177,14 +14174,14 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  livekit-client@2.5.1:
+  livekit-client@2.5.2:
     dependencies:
       '@livekit/protocol': 1.20.1
       events: 3.3.0
       loglevel: 1.9.1
       sdp-transform: 2.14.2
       ts-debounce: 4.0.0
-      tslib: 2.6.3
+      tslib: 2.7.0
       typed-emitter: 2.1.0
       webrtc-adapter: 9.0.1
 
@@ -15877,8 +15874,6 @@ snapshots:
       strip-bom: 3.0.0
 
   tslib@1.14.1: {}
-
-  tslib@2.6.3: {}
 
   tslib@2.7.0: {}
 

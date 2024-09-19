@@ -40,6 +40,9 @@
     "turbo": "^2.1.1",
     "typescript": "5.4.2"
   },
+  "dependencies": {
+    "livekit-client": "^2.5.2"
+  },
   "engines": {
     "node": ">=18"
   },
@@ -48,5 +51,5 @@
       "livekit-client": "link:../client-sdk-js"
     }
   },
-  "packageManager": "pnpm@9.2.0"
+  "packageManager": "pnpm@9.10.0"
 }

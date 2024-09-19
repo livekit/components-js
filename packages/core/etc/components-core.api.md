@@ -6,6 +6,7 @@
 
 import type { AudioCaptureOptions } from 'livekit-client';
 import { BehaviorSubject } from 'rxjs';
+import type { ChatMessage } from 'livekit-client';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState } from 'livekit-client';
 import { DataPacket_Kind } from 'livekit-client';
@@ -72,15 +73,7 @@ export interface BaseDataMessage<T extends string | undefined> {
 // @public (undocumented)
 export type CaptureOptionsBySource<T extends ToggleSource> = T extends Track.Source.Camera ? VideoCaptureOptions : T extends Track.Source.Microphone ? AudioCaptureOptions : T extends Track.Source.ScreenShare ? ScreenShareCaptureOptions : never;
 
-// @public (undocumented)
-export interface ChatMessage {
-    // (undocumented)
-    id: string;
-    // (undocumented)
-    message: string;
-    // (undocumented)
-    timestamp: number;
-}
+export { ChatMessage }
 
 // @public (undocumented)
 export type ChatOptions = {
@@ -287,10 +280,10 @@ export type MediaToggleType<T extends ToggleSource> = {
     enabledObserver: Observable<boolean>;
 };
 
-// @public (undocumented)
+// @public @deprecated (undocumented)
 export type MessageDecoder = (message: Uint8Array) => ReceivedChatMessage;
 
-// @public (undocumented)
+// @public @deprecated (undocumented)
 export type MessageEncoder = (message: ChatMessage) => Uint8Array;
 
 // @public (undocumented)

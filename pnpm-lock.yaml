@@ -10,6 +10,10 @@ overrides:
 importers:
 
   .:
+    dependencies:
+      livekit-client:
+        specifier: link:../client-sdk-js
+        version: link:../client-sdk-js
     devDependencies:
       '@changesets/cli':
         specifier: ^2.27.1
@@ -119,7 +123,7 @@ importers:
         version: link:../../packages/styles
       '@livekit/track-processors':
         specifier: ^0.3.2
-        version: 0.3.2
+        version: 0.3.2(livekit-client@client-sdk-js)
       livekit-client:
         specifier: link:../../../client-sdk-js
         version: link:../../../client-sdk-js
@@ -9053,10 +9057,11 @@ snapshots:
     dependencies:
       '@bufbuild/protobuf': 1.10.0
 
-  '@livekit/track-processors@0.3.2':
+  '@livekit/track-processors@0.3.2(livekit-client@client-sdk-js)':
     dependencies:
       '@mediapipe/holistic': 0.5.1675471629
       '@mediapipe/tasks-vision': 0.10.9
+      livekit-client: link:../client-sdk-js
 
   '@manypkg/find-root@1.1.0':
     dependencies:

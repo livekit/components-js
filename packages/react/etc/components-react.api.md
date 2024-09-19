@@ -6,6 +6,7 @@
 
 import type { AudioAnalyserOptions } from 'livekit-client';
 import type { AudioCaptureOptions } from 'livekit-client';
+import { ChatMessage } from 'livekit-client';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import type { CreateLocalTracksOptions } from 'livekit-client';
@@ -154,15 +155,7 @@ export interface ChatEntryProps extends React_2.HTMLAttributes<HTMLLIElement> {
 // @internal (undocumented)
 export const ChatIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
-// @public (undocumented)
-export interface ChatMessage {
-    // (undocumented)
-    id: string;
-    // (undocumented)
-    message: string;
-    // (undocumented)
-    timestamp: number;
-}
+export { ChatMessage }
 
 // Warning: (ae-forgotten-export) The symbol "ChatOptions" needs to be exported by the entry point index.d.ts
 //
@@ -447,10 +440,10 @@ export interface MediaDeviceSelectProps extends Omit<React_2.HTMLAttributes<HTML
     track?: LocalAudioTrack | LocalVideoTrack;
 }
 
-// @public (undocumented)
+// @public @deprecated (undocumented)
 export type MessageDecoder = (message: Uint8Array) => ReceivedChatMessage;
 
-// @public (undocumented)
+// @public @deprecated (undocumented)
 export type MessageEncoder = (message: ChatMessage) => Uint8Array;
 
 // @public (undocumented)

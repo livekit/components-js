@@ -43,5 +43,10 @@
   "engines": {
     "node": ">=18"
   },
+  "pnpm": {
+    "overrides": {
+      "livekit-client": "link:../client-sdk-js"
+    }
+  },
   "packageManager": "pnpm@9.2.0"
 }

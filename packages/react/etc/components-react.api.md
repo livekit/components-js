@@ -43,6 +43,12 @@ export interface AllowAudioPlaybackProps extends React_2.ButtonHTMLAttributes<HT
     label: string;
 }
 
+// @public (undocumented)
+export interface AllowMediaPlaybackProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
+    // (undocumented)
+    label?: string;
+}
+
 // @public
 export function AudioConference({ ...props }: AudioConferenceProps): React_2.JSX.Element;
 
@@ -640,6 +646,9 @@ export const SpinnerIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Elemen
 
 // @public
 export const StartAudio: (props: AllowAudioPlaybackProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactNode;
+
+// @public
+export const StartMediaButton: (props: AllowMediaPlaybackProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactNode;
 
 // @public
 export function Toast(props: React_2.HTMLAttributes<HTMLDivElement>): React_2.JSX.Element;

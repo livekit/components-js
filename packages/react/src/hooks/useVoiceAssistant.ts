@@ -17,8 +17,7 @@ export type AgentState =
   | 'initializing'
   | 'listening'
   | 'thinking'
-  | 'speaking'
-  | string;
+  | 'speaking';
 
 /**
  * @beta

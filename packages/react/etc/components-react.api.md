@@ -37,6 +37,9 @@ import { TrackPublishOptions } from 'livekit-client';
 import type { TranscriptionSegment } from 'livekit-client';
 import type { VideoCaptureOptions } from 'livekit-client';
 
+// @beta (undocumented)
+export type AgentState = 'disconnected' | 'connecting' | 'initializing' | 'listening' | 'thinking' | 'speaking';
+
 // @public (undocumented)
 export interface AllowAudioPlaybackProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
     // (undocumented)
@@ -103,7 +106,7 @@ export interface BarVisualizerProps extends React_2.HTMLProps<HTMLDivElement> {
     children?: React_2.ReactNode;
     // (undocumented)
     options?: BarVisualizerOptions;
-    state?: VoiceAssistantState;
+    state?: AgentState;
     // (undocumented)
     trackRef?: TrackReferenceOrPlaceholder;
 }
@@ -1276,7 +1279,7 @@ export interface VoiceAssistant {
     // (undocumented)
     audioTrack: TrackReference | undefined;
     // (undocumented)
-    state: VoiceAssistantState;
+    state: AgentState;
 }
 
 // @beta (undocumented)
@@ -1299,9 +1302,6 @@ export interface VoiceAssistantControlBarProps extends React_2.HTMLAttributes<HT
     }) => void;
     saveUserChoices?: boolean;
 }
-
-// @beta (undocumented)
-export type VoiceAssistantState = 'disconnected' | 'connecting' | 'initializing' | 'listening' | 'thinking' | 'speaking';
 
 // @public (undocumented)
 export type WidgetState = {

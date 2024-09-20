@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { generateConnectingSequenceBar } from '../animationSequences/connectingSequence';
 import { generateListeningSequenceBar } from '../animationSequences/listeningSequence';
-import type { VoiceAssistantState } from '../../../hooks';
+import type { AgentState } from '../../../hooks';
 
 export const useBarAnimator = (
-  state: VoiceAssistantState | undefined,
+  state: AgentState | undefined,
   columns: number,
   interval: number,
 ): number[] => {

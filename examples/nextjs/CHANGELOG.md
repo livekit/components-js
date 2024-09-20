@@ -1,5 +1,14 @@
 # @livekit/component-example-next
 
+## 0.2.37
+
+### Patch Changes
+
+- Update agent state property name to `lk.agent.state` - [#976](https://github.com/livekit/components-js/pull/976) ([@bcherry](https://github.com/bcherry))
+
+- Updated dependencies [[`6abb8325277c9588ad7952b1e8f3760d7d8c97f6`](https://github.com/livekit/components-js/commit/6abb8325277c9588ad7952b1e8f3760d7d8c97f6), [`79fbc0a9b1dbcb3fba45939667574e38c96d342e`](https://github.com/livekit/components-js/commit/79fbc0a9b1dbcb3fba45939667574e38c96d342e), [`b350999c4cb91510a18616ff7b663f50619690f2`](https://github.com/livekit/components-js/commit/b350999c4cb91510a18616ff7b663f50619690f2)]:
+  - @livekit/components-react@2.6.0
+
 ## 0.2.36
 
 ### Patch Changes

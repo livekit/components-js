@@ -5,6 +5,7 @@ export * from './controls/DisconnectButton';
 export * from './controls/FocusToggle';
 export * from './controls/MediaDeviceSelect';
 export * from './controls/StartAudio';
+export * from './controls/StartMediaButton';
 export * from './controls/TrackToggle';
 export * from './layout';
 export * from './layout/LayoutContextProvider';

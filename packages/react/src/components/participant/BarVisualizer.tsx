@@ -66,7 +66,7 @@ const getSequencerInterval = (
  * @example
  * ```tsx
  * function SimpleVoiceAssistant() {
- *   const { state, audioTrack } = useAgent();
+ *   const { state, audioTrack } = useVoiceAssistant();
  *   return (
  *    <BarVisualizer
  *      state={state}

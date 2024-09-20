@@ -3,4 +3,4 @@
 "@livekit/component-example-next": patch
 ---
 
-Rename VoiceAssistantState to AgentState, VoiceAssistantControlBar to AssistantControlBar
+Update agent state property name to `lk.agent.state`

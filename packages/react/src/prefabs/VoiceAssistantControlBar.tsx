@@ -14,15 +14,15 @@ import { BarVisualizer } from '../components';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 
 /** @beta */
-export type AssistantControlBarControls = {
+export type VoiceAssistantControlBarControls = {
   microphone?: boolean;
   leave?: boolean;
 };
 
 /** @beta */
-export interface AssistantControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface VoiceAssistantControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
   onDeviceError?: (error: { source: Track.Source; error: Error }) => void;
-  controls?: AssistantControlBarControls;
+  controls?: VoiceAssistantControlBarControls;
   /**
    * If `true`, the user's device choices will be persisted.
    * This will enables the user to have the same device choices when they rejoin the room.
@@ -35,17 +35,17 @@ export interface AssistantControlBarProps extends React.HTMLAttributes<HTMLDivEl
  * @example
  * ```tsx
  * <LiveKitRoom ... >
- *   <AssistantControlBar />
+ *   <VoiceAssistantControlBar />
  * </LiveKitRoom>
  * ```
  * @beta
  */
-export function AssistantControlBar({
+export function VoiceAssistantControlBar({
   controls,
   saveUserChoices = true,
   onDeviceError,
   ...props
-}: AssistantControlBarProps) {
+}: VoiceAssistantControlBarProps) {
   const visibleControls = { leave: true, microphone: true, ...controls };
 
   const localPermissions = useLocalParticipantPermissions();

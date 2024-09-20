@@ -38,11 +38,11 @@ const state_attribute = 'lk.agent.state';
  * @remarks This hook requires an agent running with livekit-agents \>= 0.8.11
  * @example
  * ```tsx
- * const { state, audioTrack, agentTranscriptions, agentAttributes } = useAgent();
+ * const { state, audioTrack, agentTranscriptions, agentAttributes } = useVoiceAssistant();
  * ```
  * @beta
  */
-export function useAgent(): Agent {
+export function useVoiceAssistant(): Agent {
   const participant = useRemoteParticipants().find((p) => p.kind === ParticipantKind.AGENT);
   const audioTrack = useParticipantTracks([Track.Source.Microphone], participant?.identity)[0];
   const { segments: agentTranscriptions } = useTrackTranscription(audioTrack);

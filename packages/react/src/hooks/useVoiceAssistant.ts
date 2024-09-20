@@ -22,7 +22,7 @@ export type AgentState =
 /**
  * @beta
  */
-export interface Agent {
+export interface VoiceAssistant {
   participant: RemoteParticipant | undefined;
   state: AgentState;
   audioTrack: TrackReference | undefined;
@@ -41,7 +41,7 @@ const state_attribute = 'lk.agent.state';
  * ```
  * @beta
  */
-export function useVoiceAssistant(): Agent {
+export function useVoiceAssistant(): VoiceAssistant {
   const participant = useRemoteParticipants().find((p) => p.kind === ParticipantKind.AGENT);
   const audioTrack = useParticipantTracks([Track.Source.Microphone], participant?.identity)[0];
   const { segments: agentTranscriptions } = useTrackTranscription(audioTrack);

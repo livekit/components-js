@@ -38,22 +38,6 @@ import type { TranscriptionSegment } from 'livekit-client';
 import type { VideoCaptureOptions } from 'livekit-client';
 
 // @beta (undocumented)
-export interface Agent {
-    // (undocumented)
-    agentAttributes: RemoteParticipant['attributes'] | undefined;
-    // Warning: (ae-forgotten-export) The symbol "ReceivedTranscriptionSegment" needs to be exported by the entry point index.d.ts
-    //
-    // (undocumented)
-    agentTranscriptions: ReceivedTranscriptionSegment[];
-    // (undocumented)
-    audioTrack: TrackReference | undefined;
-    // (undocumented)
-    participant: RemoteParticipant | undefined;
-    // (undocumented)
-    state: AgentState;
-}
-
-// @beta (undocumented)
 export type AgentState = 'disconnected' | 'connecting' | 'initializing' | 'listening' | 'thinking' | 'speaking';
 
 // @public (undocumented)
@@ -1251,7 +1235,7 @@ export interface UseVisualStableUpdateOptions {
 }
 
 // @beta
-export function useVoiceAssistant(): Agent;
+export function useVoiceAssistant(): VoiceAssistant;
 
 // @public
 export function VideoConference({ chatMessageFormatter, chatMessageDecoder, chatMessageEncoder, SettingsComponent, ...props }: VideoConferenceProps): React_2.JSX.Element;
@@ -1282,6 +1266,20 @@ export interface VideoTrackProps extends React_2.VideoHTMLAttributes<HTMLVideoEl
     // (undocumented)
     onTrackClick?: (evt: ParticipantClickEvent) => void;
     trackRef?: TrackReference;
+}
+
+// @beta (undocumented)
+export interface VoiceAssistant {
+    // (undocumented)
+    agentAttributes: RemoteParticipant['attributes'] | undefined;
+    // (undocumented)
+    agentTranscriptions: ReceivedTranscriptionSegment[];
+    // (undocumented)
+    audioTrack: TrackReference | undefined;
+    // (undocumented)
+    participant: RemoteParticipant | undefined;
+    // (undocumented)
+    state: AgentState;
 }
 
 // @beta (undocumented)
@@ -1318,6 +1316,7 @@ export type WidgetState = {
 // src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "WidgetContextType" needs to be exported by the entry point index.d.ts
 // src/hooks/useGridLayout.ts:27:6 - (ae-forgotten-export) The symbol "GridLayoutInfo" needs to be exported by the entry point index.d.ts
 // src/hooks/useMediaDeviceSelect.ts:47:29 - (ae-forgotten-export) The symbol "SetMediaDeviceOptions" needs to be exported by the entry point index.d.ts
+// src/hooks/useTrackTranscription.ts:43:38 - (ae-forgotten-export) The symbol "ReceivedTranscriptionSegment" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

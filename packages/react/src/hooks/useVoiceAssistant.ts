@@ -23,7 +23,7 @@ export type AgentState =
  * @beta
  */
 export interface VoiceAssistant {
-  participant: RemoteParticipant | undefined;
+  agent: RemoteParticipant | undefined;
   state: AgentState;
   audioTrack: TrackReference | undefined;
   agentTranscriptions: ReceivedTranscriptionSegment[];
@@ -42,28 +42,28 @@ const state_attribute = 'lk.agent.state';
  * @beta
  */
 export function useVoiceAssistant(): VoiceAssistant {
-  const participant = useRemoteParticipants().find((p) => p.kind === ParticipantKind.AGENT);
-  const audioTrack = useParticipantTracks([Track.Source.Microphone], participant?.identity)[0];
+  const agent = useRemoteParticipants().find((p) => p.kind === ParticipantKind.AGENT);
+  const audioTrack = useParticipantTracks([Track.Source.Microphone], agent?.identity)[0];
   const { segments: agentTranscriptions } = useTrackTranscription(audioTrack);
   const connectionState = useConnectionState();
-  const { attributes } = useParticipantAttributes({ participant });
+  const { attributes } = useParticipantAttributes({ participant: agent });
 
   const state: AgentState = React.useMemo(() => {
     if (connectionState === ConnectionState.Disconnected) {
       return 'disconnected';
     } else if (
       connectionState === ConnectionState.Connecting ||
-      !participant ||
+      !agent ||
       !attributes?.[state_attribute]
     ) {
       return 'connecting';
     } else {
       return attributes[state_attribute] as AgentState;
     }
-  }, [attributes, participant, connectionState]);
+  }, [attributes, agent, connectionState]);
 
   return {
-    participant,
+    agent,
     state,
     audioTrack,
     agentTranscriptions,

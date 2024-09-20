@@ -1271,13 +1271,13 @@ export interface VideoTrackProps extends React_2.VideoHTMLAttributes<HTMLVideoEl
 // @beta (undocumented)
 export interface VoiceAssistant {
     // (undocumented)
+    agent: RemoteParticipant | undefined;
+    // (undocumented)
     agentAttributes: RemoteParticipant['attributes'] | undefined;
     // (undocumented)
     agentTranscriptions: ReceivedTranscriptionSegment[];
     // (undocumented)
     audioTrack: TrackReference | undefined;
-    // (undocumented)
-    participant: RemoteParticipant | undefined;
     // (undocumented)
     state: AgentState;
 }

@@ -54,7 +54,7 @@ export interface Agent {
 }
 
 // @beta (undocumented)
-export type AgentState = 'disconnected' | 'connecting' | 'initializing' | 'listening' | 'thinking' | 'speaking' | string;
+export type AgentState = 'disconnected' | 'connecting' | 'initializing' | 'listening' | 'thinking' | 'speaking';
 
 // @public (undocumented)
 export interface AllowAudioPlaybackProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -66,27 +66,6 @@ export interface AllowAudioPlaybackProps extends React_2.ButtonHTMLAttributes<HT
 export interface AllowMediaPlaybackProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
     // (undocumented)
     label?: string;
-}
-
-// @beta (undocumented)
-export function AssistantControlBar({ controls, saveUserChoices, onDeviceError, ...props }: AssistantControlBarProps): React_2.JSX.Element;
-
-// @beta (undocumented)
-export type AssistantControlBarControls = {
-    microphone?: boolean;
-    leave?: boolean;
-};
-
-// @beta (undocumented)
-export interface AssistantControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> {
-    // (undocumented)
-    controls?: AssistantControlBarControls;
-    // (undocumented)
-    onDeviceError?: (error: {
-        source: Track.Source;
-        error: Error;
-    }) => void;
-    saveUserChoices?: boolean;
 }
 
 // @public
@@ -770,9 +749,6 @@ export interface TrackTranscriptionOptions {
 // @internal (undocumented)
 export const UnfocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
-// @beta
-export function useAgent(): Agent;
-
 // @alpha
 export function useAudioPlayback(room?: Room): {
     canPlayAudio: boolean;
@@ -1274,6 +1250,9 @@ export interface UseVisualStableUpdateOptions {
     customSortFunction?: (trackReferences: TrackReferenceOrPlaceholder[]) => TrackReferenceOrPlaceholder[];
 }
 
+// @beta
+export function useVoiceAssistant(): Agent;
+
 // @public
 export function VideoConference({ chatMessageFormatter, chatMessageDecoder, chatMessageEncoder, SettingsComponent, ...props }: VideoConferenceProps): React_2.JSX.Element;
 
@@ -1303,6 +1282,27 @@ export interface VideoTrackProps extends React_2.VideoHTMLAttributes<HTMLVideoEl
     // (undocumented)
     onTrackClick?: (evt: ParticipantClickEvent) => void;
     trackRef?: TrackReference;
+}
+
+// @beta (undocumented)
+export function VoiceAssistantControlBar({ controls, saveUserChoices, onDeviceError, ...props }: VoiceAssistantControlBarProps): React_2.JSX.Element;
+
+// @beta (undocumented)
+export type VoiceAssistantControlBarControls = {
+    microphone?: boolean;
+    leave?: boolean;
+};
+
+// @beta (undocumented)
+export interface VoiceAssistantControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> {
+    // (undocumented)
+    controls?: VoiceAssistantControlBarControls;
+    // (undocumented)
+    onDeviceError?: (error: {
+        source: Track.Source;
+        error: Error;
+    }) => void;
+    saveUserChoices?: boolean;
 }
 
 // @public (undocumented)

@@ -1,5 +1,17 @@
 # @livekit/components-react
 
+## 2.6.0
+
+### Minor Changes
+
+- Update agent state property name to `lk.agent.state` - [#976](https://github.com/livekit/components-js/pull/976) ([@bcherry](https://github.com/bcherry))
+
+### Patch Changes
+
+- Add StartMediaButton to public API - [#978](https://github.com/livekit/components-js/pull/978) ([@junsumida](https://github.com/junsumida))
+
+- Update agent component docs - [#973](https://github.com/livekit/components-js/pull/973) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.5.4
 
 ### Patch Changes

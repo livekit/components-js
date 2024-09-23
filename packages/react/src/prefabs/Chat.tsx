@@ -6,7 +6,7 @@ import type { MessageFormatter } from '../components/ChatEntry';
 import { ChatEntry } from '../components/ChatEntry';
 import { useChat } from '../hooks/useChat';
 import { ChatToggle } from '../components';
-import { ChatCloseIcon } from '../assets/icons';
+import { FileAttachIcon, ChatCloseIcon } from '../assets/icons';
 
 /** @public */
 export interface ChatProps extends React.HTMLAttributes<HTMLDivElement>, ChatOptions {
@@ -33,20 +33,38 @@ export function Chat({
   ...props
 }: ChatProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const thumbnailRef = React.useRef<HTMLInputElement>(null);
   const ulRef = React.useRef<HTMLUListElement>(null);
+  const [imagePackets, setImagePackets] = React.useState<string[]>([]);
+  const [selectedImage, setSelectedImage] = React.useState<string | null>(null);
 
   const chatOptions: ChatOptions = React.useMemo(() => {
     return { messageDecoder, messageEncoder, channelTopic };
   }, [messageDecoder, messageEncoder, channelTopic]);
 
-  const { send, chatMessages, isSending } = useChat(chatOptions);
+  const { send, chatMessages, isSending, sendImagePacket } = useChat(chatOptions);
 
   const layoutContext = useMaybeLayoutContext();
   const lastReadMsgAt = React.useRef<ChatMessage['timestamp']>(0);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    if (inputRef.current && inputRef.current.value.trim() !== '') {
+    if (thumbnailRef.current && imagePackets.length > 0) {
+      if (sendImagePacket) {
+        const message = inputRef.current ? inputRef.current.value : '';
+        const id = crypto.randomUUID();
+        for (let i = 0; i < imagePackets.length; i++) {
+          await sendImagePacket(message, id, i, imagePackets.length, imagePackets[i]);
+        }
+        if (inputRef.current) {
+          inputRef.current.value = '';
+          inputRef.current.focus();
+        }
+        thumbnailRef.current.value = '';
+        setImagePackets([]);
+        setSelectedImage(null);
+      }
+    } else if (inputRef.current && inputRef.current.value.trim() !== '') {
       if (send) {
         await send(inputRef.current.value);
         inputRef.current.value = '';
@@ -54,6 +72,50 @@ export function Chat({
       }
     }
   }
+
+  function handleImageUploadClicked(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+    event.preventDefault();
+    if (!thumbnailRef || !thumbnailRef.current) return;
+
+    thumbnailRef.current.click();
+  }
+
+  const handleFileRead = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    if (event.target.files != null) {
+      const file = event.target.files[0];
+      if (file.size > 3000000) {
+        throw Error('Image file is larger than 3 MB, please select a different image');
+      } else {
+        const fileData = await getFileData(file);
+        packetizeFileData(String(fileData));
+      }
+    }
+  };
+
+  const packetizeFileData = (fileData: string) => {
+    const maxPacketSize = 50000; // LiveKit doesn't support message length higher than ~6.5 kb
+    const packets = [];
+    for (let i = 0; i < fileData.length; i += maxPacketSize) {
+      packets.push(fileData.slice(i, i + maxPacketSize));
+    }
+    setImagePackets(packets);
+    inputRef.current?.focus();
+  };
+
+  const getFileData = (file: File) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        setSelectedImage(fileReader.result as string);
+        resolve(String(fileReader.result).split(',')[1]);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
 
   React.useEffect(() => {
     if (ulRef) {
@@ -119,7 +181,25 @@ export function Chat({
               );
             })}
       </ul>
+      {selectedImage && (
+        <div className="lk-thumbnail">
+          <img src={selectedImage} alt="Selected image" />
+          <button
+            className="lk-delete-button"
+            onClick={() => {
+              if (thumbnailRef.current) thumbnailRef.current.value = '';
+              setImagePackets([]);
+              setSelectedImage(null);
+            }}
+          >
+            <ChatCloseIcon />
+          </button>
+        </div>
+      )}
       <form className="lk-chat-form" onSubmit={handleSubmit}>
+        <button type="button" onClick={handleImageUploadClicked} className="lk-file-attach-button">
+          <FileAttachIcon />
+        </button>
         <input
           className="lk-form-control lk-chat-form-input"
           disabled={isSending}
@@ -134,6 +214,15 @@ export function Chat({
           Send
         </button>
       </form>
+      <input
+        disabled={isSending}
+        hidden
+        ref={thumbnailRef}
+        type="file"
+        accept="image/*"
+        onChange={(e) => handleFileRead(e)}
+        placeholder="upload image..."
+      />
     </div>
   );
 }

@@ -46,6 +46,10 @@ export const ChatEntry: (
     const hasBeenEdited = !!entry.editTimestamp;
     const time = new Date(entry.timestamp);
     const locale = navigator ? navigator.language : 'en-US';
+    let imgSrc = '';
+    if (entry.image) {
+      imgSrc = URL.createObjectURL(entry.image);
+    }
 
     return (
       <li
@@ -71,8 +75,12 @@ export const ChatEntry: (
             )}
           </span>
         )}
-
-        <span className="lk-message-body">{formattedMessage}</span>
+        <span>
+          <div className="lk-message-body">
+            {formattedMessage}
+            {entry.image && <img className="lk-image-body" src={imgSrc}></img>}
+          </div>
+        </span>
       </li>
     );
   },

@@ -9,6 +9,14 @@ export interface ChatMessage {
   id: string;
   timestamp: number;
   message: string;
+  image?: Blob;
+  imagePacketProperties?: ImagePacketProperties;
+}
+
+export interface ImagePacketProperties {
+  packetIndex: number;
+  totalPacketCount: number;
+  packetImageData: string;
 }
 
 /** @public */
@@ -44,10 +52,25 @@ const encode = (message: ChatMessage) => encoder.encode(JSON.stringify(message))
 
 const decode = (message: Uint8Array) => JSON.parse(decoder.decode(message)) as ReceivedChatMessage;
 
+const getImageBlob = (imagePackets: string[] | null[]) => {
+  const completeImageData = imagePackets.join('');
+  const byteCharacters = atob(completeImageData);
+  const byteNumbers = new Array(byteCharacters.length);
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+  const byteArray = new Uint8Array(byteNumbers);
+  const blob = new Blob([byteArray], { type: 'image/jpeg' });
+  return blob;
+};
+
 export function setupChat(room: Room, options?: ChatOptions) {
   const onDestroyObservable = new Subject<void>();
 
   const { messageDecoder, messageEncoder, channelTopic, updateChannelTopic } = options ?? {};
+
+  // Used to map an image to its packets using id
+  const chatImagesMap: { [key: string]: string[] | null[] } = {};
 
   const topic = channelTopic ?? DataTopic.CHAT;
 
@@ -95,7 +118,43 @@ export function setupChat(room: Room, options?: ChatOptions) {
 
         return [...acc];
       }
-      return [...acc, value];
+      // handle image messages
+      if (value.imagePacketProperties) {
+        const imageId = value.id;
+        const totalPacketCount = value.imagePacketProperties.totalPacketCount;
+        const packetIndex = value.imagePacketProperties.packetIndex;
+        if (!chatImagesMap[imageId]) {
+          chatImagesMap[imageId] = new Array(totalPacketCount).fill(null);
+        }
+
+        if (packetIndex >= 0 && packetIndex < totalPacketCount) {
+          chatImagesMap[imageId][packetIndex] = value.imagePacketProperties.packetImageData;
+        } else {
+          console.error(
+            `Index ${packetIndex} is out of bounds, Array size with size ${totalPacketCount}`,
+          );
+        }
+
+        // received final image packet, can send a message with image to users
+        if (packetIndex == totalPacketCount - 1) {
+          const packets = chatImagesMap[imageId];
+          if (packets != null && packets.every((element) => element !== null)) {
+            const imageBlob = getImageBlob(packets);
+            value.image = imageBlob;
+            delete chatImagesMap[imageId];
+            return [...acc, value];
+          } else {
+            console.error(`Didn't receive every image packet in order, discarding image message`);
+            delete chatImagesMap[imageId];
+            return [...acc];
+          }
+        } else {
+          // ignore messages by not sending them to the user until final image packet arrives
+          return [...acc];
+        }
+      } else {
+        return [...acc, value];
+      }
     }, []),
     takeUntil(onDestroyObservable),
   );
@@ -147,6 +206,43 @@ export function setupChat(room: Room, options?: ChatOptions) {
     }
   };
 
+  const sendImagePacket = async (
+    message: string,
+    messageId: string,
+    packetIndex: number,
+    totalPacketCount: number,
+    packetImageData: string,
+  ) => {
+    const timestamp = Date.now();
+    const imageProp: ImagePacketProperties = {
+      packetIndex: packetIndex,
+      totalPacketCount: totalPacketCount,
+      packetImageData: packetImageData,
+    };
+    const chatMessage: ChatMessage = {
+      id: messageId,
+      message,
+      timestamp,
+      imagePacketProperties: imageProp,
+    };
+    const encodedMsg = finalMessageEncoder(chatMessage);
+    isSending$.next(true);
+    try {
+      await sendMessage(room.localParticipant, encodedMsg, {
+        topic: topic,
+        reliable: true,
+      });
+      messageSubject.next({
+        payload: encodedMsg,
+        topic: topic,
+        from: room.localParticipant,
+      });
+      return chatMessage;
+    } finally {
+      isSending$.next(false);
+    }
+  };
+
   function destroy() {
     onDestroyObservable.next();
     onDestroyObservable.complete();
@@ -154,5 +250,11 @@ export function setupChat(room: Room, options?: ChatOptions) {
   }
   room.once(RoomEvent.Disconnected, destroy);
 
-  return { messageObservable: messagesObservable, isSendingObservable: isSending$, send, update };
+  return {
+    messageObservable: messagesObservable,
+    isSendingObservable: isSending$,
+    send,
+    sendImagePacket,
+    update,
+  };
 }

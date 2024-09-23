@@ -3,6 +3,7 @@ export { default as CameraIcon } from './CameraIcon';
 export { default as ChatCloseIcon } from './ChatCloseIcon';
 export { default as ChatIcon } from './ChatIcon';
 export { default as Chevron } from './Chevron';
+export { default as FileAttachIcon } from './FileAttachIcon';
 export { default as FocusToggleIcon } from './FocusToggleIcon';
 export { default as GearIcon } from './GearIcon';
 export { default as LeaveIcon } from './LeaveIcon';

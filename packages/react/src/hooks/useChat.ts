@@ -28,5 +28,11 @@ export function useChat(options?: ChatOptions) {
   const isSending = useObservableState(setup.isSendingObservable, false);
   const chatMessages = useObservableState<ReceivedChatMessage[]>(setup.messageObservable, []);
 
-  return { send: setup.send, update: setup.update, chatMessages, isSending };
+  return {
+    send: setup.send,
+    update: setup.update,
+    chatMessages,
+    isSending,
+    sendImagePacket: setup.sendImagePacket,
+  };
 }

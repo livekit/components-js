@@ -162,6 +162,12 @@ export interface ChatMessage {
     // (undocumented)
     id: string;
     // (undocumented)
+    image?: Blob;
+    // Warning: (ae-forgotten-export) The symbol "ImagePacketProperties" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    imagePacketProperties?: ImagePacketProperties;
+    // (undocumented)
     message: string;
     // (undocumented)
     timestamp: number;
@@ -268,6 +274,11 @@ export interface FeatureFlags {
     // (undocumented)
     autoSubscription?: boolean;
 }
+
+// Warning: (ae-internal-missing-underscore) The name "FileAttachIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const FileAttachIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
 export function FocusLayout({ trackRef, ...htmlProps }: FocusLayoutProps): React_2.JSX.Element;
@@ -750,6 +761,7 @@ export function useChat(options?: ChatOptions): {
     update: (message: string, messageId: string) => Promise<ChatMessage>;
     chatMessages: ReceivedChatMessage[];
     isSending: boolean;
+    sendImagePacket: (message: string, messageId: string, packetIndex: number, totalPacketCount: number, packetImageData: string) => Promise<ChatMessage>;
 };
 
 // @public

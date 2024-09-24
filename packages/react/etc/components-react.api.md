@@ -440,11 +440,15 @@ export interface MediaDeviceSelectProps extends Omit<React_2.HTMLAttributes<HTML
     track?: LocalAudioTrack | LocalVideoTrack;
 }
 
+// Warning: (ae-forgotten-export) The symbol "LegacyReceivedChatMessage" needs to be exported by the entry point index.d.ts
+//
 // @public @deprecated (undocumented)
-export type MessageDecoder = (message: Uint8Array) => ReceivedChatMessage;
+export type MessageDecoder = (message: Uint8Array) => LegacyReceivedChatMessage;
 
+// Warning: (ae-forgotten-export) The symbol "LegacyChatMessage" needs to be exported by the entry point index.d.ts
+//
 // @public @deprecated (undocumented)
-export type MessageEncoder = (message: ChatMessage) => Uint8Array;
+export type MessageEncoder = (message: LegacyChatMessage) => Uint8Array;
 
 // @public (undocumented)
 export type MessageFormatter = (message: string) => React_2.ReactNode;
@@ -582,8 +586,6 @@ export const QualityUnknownIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX
 
 // @public (undocumented)
 export interface ReceivedChatMessage extends ChatMessage {
-    // (undocumented)
-    editTimestamp?: number;
     // (undocumented)
     from?: Participant;
 }
@@ -737,7 +739,12 @@ export function useAudioWaveform(trackOrTrackReference?: LocalAudioTrack | Remot
 // @public
 export function useChat(options?: ChatOptions): {
     send: (message: string) => Promise<ChatMessage>;
-    update: (message: string, messageId: string) => Promise<ChatMessage>;
+    update: (message: string, originalMessageOrId: string | ChatMessage) => Promise<{
+        readonly message: string;
+        readonly editTimestamp: number;
+        readonly id: string;
+        readonly timestamp: number;
+    }>;
     chatMessages: ReceivedChatMessage[];
     isSending: boolean;
 };

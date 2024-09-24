@@ -41,15 +41,10 @@
     "typescript": "5.4.2"
   },
   "dependencies": {
-    "livekit-client": "^2.5.2"
+    "livekit-client": "^2.5.3"
   },
   "engines": {
     "node": ">=18"
-  },
-  "pnpm": {
-    "overrides": {
-      "livekit-client": "link:../client-sdk-js"
-    }
   },
   "packageManager": "pnpm@9.10.0"
 }

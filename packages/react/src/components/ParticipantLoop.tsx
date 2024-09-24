@@ -24,7 +24,7 @@ export interface ParticipantLoopProps {
  * const participants = useParticipants();
  * <ParticipantLoop participants={participants}>
  *   <ParticipantName />
- * <ParticipantLoop />
+ * </ParticipantLoop>
  * ```
  * @public
  */

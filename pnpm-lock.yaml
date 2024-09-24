@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       livekit-client:
-        specifier: ^2.5.3
-        version: 2.5.3
+        specifier: ^2.5.4
+        version: 2.5.4
     devDependencies:
       '@changesets/cli':
         specifier: ^2.27.1
@@ -55,8 +55,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/styles
       livekit-client:
-        specifier: ^2.5.3
-        version: 2.5.3
+        specifier: ^2.5.4
+        version: 2.5.4
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -120,10 +120,10 @@ importers:
         version: link:../../packages/styles
       '@livekit/track-processors':
         specifier: ^0.3.2
-        version: 0.3.2(livekit-client@2.5.3)
+        version: 0.3.2(livekit-client@2.5.4)
       livekit-client:
-        specifier: ^2.5.3
-        version: 2.5.3
+        specifier: ^2.5.4
+        version: 2.5.4
       livekit-server-sdk:
         specifier: ^2.6.1
         version: 2.6.1
@@ -162,8 +162,8 @@ importers:
         specifier: 1.6.11
         version: 1.6.11
       livekit-client:
-        specifier: ^2.5.3
-        version: 2.5.3
+        specifier: ^2.5.4
+        version: 2.5.4
       loglevel:
         specifier: 1.9.1
         version: 1.9.1
@@ -214,8 +214,8 @@ importers:
         specifier: 2.1.1
         version: 2.1.1
       livekit-client:
-        specifier: ^2.5.3
-        version: 2.5.3
+        specifier: ^2.5.4
+        version: 2.5.4
       tslib:
         specifier: ^2.6.2
         version: 2.7.0
@@ -5438,8 +5438,8 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  livekit-client@2.5.3:
-    resolution: {integrity: sha512-XCcZMHBCUAVLB91EQxHW3iVc/sq4/eLPY+ZBdlCY4q4DOWmMwZMnPuydyL0BBnn6EEFF0bl/FCDdEMCNSDiZTg==}
+  livekit-client@2.5.4:
+    resolution: {integrity: sha512-ZL1Twbzscvhji7Sor+JIkIV4V7jSbX/IvBvfxeOuRzovIiM0v9IUCMINUR98mPZ7kHNFuiKB3w14afYa4UjkPg==}
 
   livekit-server-sdk@2.6.1:
     resolution: {integrity: sha512-j/8TOlahIyWnycNkuSzTv6q+win4JTbDGNH48iMsZDMnJBks9hhC9UwAO4ES42sAorIAxGkrH58hxt4KdTkZaQ==}
@@ -9074,11 +9074,11 @@ snapshots:
     dependencies:
       '@bufbuild/protobuf': 1.10.0
 
-  '@livekit/track-processors@0.3.2(livekit-client@2.5.3)':
+  '@livekit/track-processors@0.3.2(livekit-client@2.5.4)':
     dependencies:
       '@mediapipe/holistic': 0.5.1675471629
       '@mediapipe/tasks-vision': 0.10.9
-      livekit-client: 2.5.3
+      livekit-client: 2.5.4
 
   '@manypkg/find-root@1.1.0':
     dependencies:
@@ -14178,7 +14178,7 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  livekit-client@2.5.3:
+  livekit-client@2.5.4:
     dependencies:
       '@livekit/protocol': 1.22.0
       events: 3.3.0

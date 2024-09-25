@@ -34,7 +34,7 @@ const state_attribute = 'lk.agent.state';
 
 /**
  * This hook looks for the first agent-participant in the room.
- * @remarks This hook requires an agent running with livekit-agents \>= 0.8.11
+ * @remarks This hook requires an agent running with livekit-agents \>= 0.9.0
  * @example
  * ```tsx
  * const { state, audioTrack, agentTranscriptions, agentAttributes } = useVoiceAssistant();

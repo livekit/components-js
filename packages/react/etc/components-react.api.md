@@ -6,6 +6,7 @@
 
 import type { AudioAnalyserOptions } from 'livekit-client';
 import type { AudioCaptureOptions } from 'livekit-client';
+import { ChatMessage } from 'livekit-client';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import type { CreateLocalTracksOptions } from 'livekit-client';
@@ -157,15 +158,7 @@ export interface ChatEntryProps extends React_2.HTMLAttributes<HTMLLIElement> {
 // @internal (undocumented)
 export const ChatIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
-// @public (undocumented)
-export interface ChatMessage {
-    // (undocumented)
-    id: string;
-    // (undocumented)
-    message: string;
-    // (undocumented)
-    timestamp: number;
-}
+export { ChatMessage }
 
 // Warning: (ae-forgotten-export) The symbol "ChatOptions" needs to be exported by the entry point index.d.ts
 //
@@ -450,11 +443,15 @@ export interface MediaDeviceSelectProps extends Omit<React_2.HTMLAttributes<HTML
     track?: LocalAudioTrack | LocalVideoTrack;
 }
 
-// @public (undocumented)
-export type MessageDecoder = (message: Uint8Array) => ReceivedChatMessage;
+// Warning: (ae-forgotten-export) The symbol "LegacyReceivedChatMessage" needs to be exported by the entry point index.d.ts
+//
+// @public @deprecated (undocumented)
+export type MessageDecoder = (message: Uint8Array) => LegacyReceivedChatMessage;
 
-// @public (undocumented)
-export type MessageEncoder = (message: ChatMessage) => Uint8Array;
+// Warning: (ae-forgotten-export) The symbol "LegacyChatMessage" needs to be exported by the entry point index.d.ts
+//
+// @public @deprecated (undocumented)
+export type MessageEncoder = (message: LegacyChatMessage) => Uint8Array;
 
 // @public (undocumented)
 export type MessageFormatter = (message: string) => React_2.ReactNode;
@@ -592,8 +589,6 @@ export const QualityUnknownIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX
 
 // @public (undocumented)
 export interface ReceivedChatMessage extends ChatMessage {
-    // (undocumented)
-    editTimestamp?: number;
     // (undocumented)
     from?: Participant;
 }
@@ -747,7 +742,12 @@ export function useAudioWaveform(trackOrTrackReference?: LocalAudioTrack | Remot
 // @public
 export function useChat(options?: ChatOptions): {
     send: (message: string) => Promise<ChatMessage>;
-    update: (message: string, messageId: string) => Promise<ChatMessage>;
+    update: (message: string, originalMessageOrId: string | ChatMessage) => Promise<{
+        readonly message: string;
+        readonly editTimestamp: number;
+        readonly id: string;
+        readonly timestamp: number;
+    }>;
     chatMessages: ReceivedChatMessage[];
     isSending: boolean;
 };

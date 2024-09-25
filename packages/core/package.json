@@ -40,12 +40,12 @@
     "rxjs": "7.8.1"
   },
   "peerDependencies": {
-    "livekit-client": "^2.4.0",
-    "@livekit/protocol": "^1.20.1",
+    "livekit-client": "^2.5.4",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
     "@livekit/components-styles": "workspace:*",
+    "@livekit/protocol": "^1.22.0",
     "@microsoft/api-extractor": "^7.36.0",
     "@size-limit/file": "^11.0.2",
     "@size-limit/webpack": "^11.0.2",

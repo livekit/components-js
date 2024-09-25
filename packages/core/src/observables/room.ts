@@ -219,6 +219,10 @@ export function createDataObserver(room: Room) {
   return roomEventSelector(room, RoomEvent.DataReceived);
 }
 
+export function createChatObserver(room: Room) {
+  return roomEventSelector(room, RoomEvent.ChatMessage);
+}
+
 export function roomAudioPlaybackAllowedObservable(room: Room) {
   const observable = observeRoomEvents(room, RoomEvent.AudioPlaybackStatusChanged).pipe(
     map((room) => {

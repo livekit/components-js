@@ -203,7 +203,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
  *
  * @remarks
  * This component is independent of the `LiveKitRoom` component and should not be nested within it.
- * Because it only access the local media tracks this component is self contained and works without connection to the LiveKit server.
+ * Because it only accesses the local media tracks this component is self-contained and works without connection to the LiveKit server.
  *
  * @example
  * ```tsx

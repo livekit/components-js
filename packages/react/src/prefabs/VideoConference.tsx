@@ -43,7 +43,7 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
  * @remarks
  * The component is implemented with other LiveKit components like `FocusContextProvider`,
  * `GridLayout`, `ControlBar`, `FocusLayoutContainer` and `FocusLayout`.
- * You can use this components as a starting point for your own custom video conferencing application.
+ * You can use these components as a starting point for your own custom video conferencing application.
  *
  * @example
  * ```tsx

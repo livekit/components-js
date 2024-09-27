@@ -20,6 +20,7 @@ export interface useKrispNoiseFilterOptions {
  * It returns a `setNoiseFilterEnabled` method to conveniently toggle between enabled and disabled states.
  *
  * @note Krisp noise filter is a feature that's only supported on LiveKit cloud plans
+ *
  */
 export function useKrispNoiseFilter(options: useKrispNoiseFilterOptions = {}) {
   const [shouldEnable, setShouldEnable] = React.useState(false);

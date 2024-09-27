@@ -23,11 +23,6 @@
       "types": "./dist/prefabs/index.d.ts",
       "import": "./dist/prefabs/index.mjs",
       "require": "./dist/prefabs/index.js"
-    },
-    "./cloud/krisp": {
-      "types": "./dist/cloud/krisp/index.d.ts",
-      "import": "./dist/cloud/krisp/index.mjs",
-      "require": "./dist/cloud/krisp/index.js"
     }
   },
   "main": "dist/index.js",

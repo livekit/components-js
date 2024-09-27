@@ -893,7 +893,7 @@ export function useKrispNoiseFilter(options?: useKrispNoiseFilterOptions): {
     processor: KrispNoiseFilterProcessor | undefined;
 };
 
-// @public (undocumented)
+// @alpha (undocumented)
 export interface useKrispNoiseFilterOptions {
     // (undocumented)
     filterOptions?: NoiseFilterOptions;

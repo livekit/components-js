@@ -3,6 +3,9 @@ import { type TrackReferenceOrPlaceholder, useLocalParticipant } from '../../../
 import { LocalAudioTrack } from 'livekit-client';
 import type { KrispNoiseFilterProcessor, NoiseFilterOptions } from '@livekit/krisp-noise-filter';
 
+/**
+ * @alpha
+ */
 export interface useKrispNoiseFilterOptions {
   /**
    * by default the hook will use the localParticipant's microphone track publication.

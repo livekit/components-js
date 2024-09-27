@@ -188,7 +188,7 @@ importers:
         version: 11.1.4(size-limit@11.1.4)
       '@size-limit/webpack':
         specifier: ^11.0.2
-        version: 11.1.4(esbuild@0.21.5)(size-limit@11.1.4)
+        version: 11.1.4(size-limit@11.1.4)
       eslint-config-lk-custom:
         specifier: workspace:*
         version: link:../../tooling/eslint-config-custom
@@ -210,6 +210,9 @@ importers:
       '@livekit/components-core':
         specifier: workspace:*
         version: link:../core
+      '@livekit/krisp-noise-filter':
+        specifier: ^0.2.8
+        version: 0.2.8(livekit-client@2.5.4)
       clsx:
         specifier: 2.1.1
         version: 2.1.1
@@ -234,7 +237,7 @@ importers:
         version: 11.1.4(size-limit@11.1.4)
       '@size-limit/webpack':
         specifier: ^11.0.2
-        version: 11.1.4(size-limit@11.1.4)
+        version: 11.1.4(esbuild@0.21.5)(size-limit@11.1.4)
       '@svgr/cli':
         specifier: ^8.0.0
         version: 8.1.0(typescript@5.4.5)
@@ -1617,6 +1620,11 @@ packages:
 
   '@livekit/changesets-changelog-github@0.0.4':
     resolution: {integrity: sha512-MXaiLYwgkYciZb8G2wkVtZ1pJJzZmVx5cM30Q+ClslrIYyAqQhRbPmZDM79/5CGxb1MTemR/tfOM25tgJgAK0g==}
+
+  '@livekit/krisp-noise-filter@0.2.8':
+    resolution: {integrity: sha512-WPlQOwm4bC3jxtCFxlc+l0Ai44NbfeSXwQ0MGnv4gC3TVam+imHU5agFHdc+6TFRsQAaq7wRtLjAbt7shrpzaw==}
+    peerDependencies:
+      livekit-client: ^2.0.8
 
   '@livekit/protocol@1.21.0':
     resolution: {integrity: sha512-3TohFPNZy1axTuoDLU6mA1rwuP4VawgehvX52OoLJnU+fNQYfmMJqz8k7NSh79jG5I8Og77YYhT905Omrhli2A==}
@@ -9065,6 +9073,10 @@ snapshots:
       dotenv: 8.6.0
     transitivePeerDependencies:
       - encoding
+
+  '@livekit/krisp-noise-filter@0.2.8(livekit-client@2.5.4)':
+    dependencies:
+      livekit-client: 2.5.4
 
   '@livekit/protocol@1.21.0':
     dependencies:

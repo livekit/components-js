@@ -23,6 +23,11 @@
       "types": "./dist/prefabs/index.d.ts",
       "import": "./dist/prefabs/index.mjs",
       "require": "./dist/prefabs/index.js"
+    },
+    "./cloud/krisp": {
+      "types": "./dist/cloud/krisp/index.d.ts",
+      "import": "./dist/cloud/krisp/index.mjs",
+      "require": "./dist/cloud/krisp/index.js"
     }
   },
   "main": "dist/index.js",
@@ -52,10 +57,16 @@
     "usehooks-ts": "3.1.0"
   },
   "peerDependencies": {
+    "@livekit/krisp-noise-filter": "^0.2.8",
     "livekit-client": "^2.5.4",
     "react": ">=18",
     "react-dom": ">=18",
     "tslib": "^2.6.2"
+  },
+  "peerDependenciesMeta": {
+    "@livekit/krisp-noise-filter": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@livekit/protocol": "^1.22.0",

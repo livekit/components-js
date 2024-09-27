@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { type TrackReferenceOrPlaceholder, useLocalParticipant } from '../../../index';
 import { LocalAudioTrack } from 'livekit-client';
-import {
-  type KrispNoiseFilterProcessor,
-  type NoiseFilterOptions,
-} from '@livekit/krisp-noise-filter';
+import type { KrispNoiseFilterProcessor, NoiseFilterOptions } from '@livekit/krisp-noise-filter';
 
 export interface useKrispNoiseFilterOptions {
   /**

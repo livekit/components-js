@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { type TrackReferenceOrPlaceholder, useLocalParticipant } from '../../../index';
 import { LocalAudioTrack } from 'livekit-client';
 import type { KrispNoiseFilterProcessor, NoiseFilterOptions } from '@livekit/krisp-noise-filter';
+import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import { useLocalParticipant } from '../../useLocalParticipant';
 
 /**
  * @alpha
@@ -22,7 +23,6 @@ export interface useKrispNoiseFilterOptions {
  * @note Krisp noise filter is a feature that's only supported on LiveKit cloud plans
  * @alpha
  */
-/* @__PURE__ */
 export function useKrispNoiseFilter(options: useKrispNoiseFilterOptions = {}) {
   const [shouldEnable, setShouldEnable] = React.useState(false);
   const [isNoiseFilterPending, setIsNoiseFilterPending] = React.useState(false);

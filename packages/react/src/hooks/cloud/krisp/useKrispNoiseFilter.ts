@@ -18,8 +18,8 @@ export interface useKrispNoiseFilterOptions {
  *
  * @note Krisp noise filter is a feature that's only supported on LiveKit cloud plans
  * @alpha
- * @__PURE__
  */
+/* @__PURE__ */
 export function useKrispNoiseFilter(options: useKrispNoiseFilterOptions = {}) {
   const [shouldEnable, setShouldEnable] = React.useState(false);
   const [isNoiseFilterPending, setIsNoiseFilterPending] = React.useState(false);

@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 2.6.1
+
+### Patch Changes
+
+- Improve bar visualizer animations and add initializing state - [#987](https://github.com/livekit/components-js/pull/987) ([@mattherzog](https://github.com/mattherzog))
+
+- Add support for new chat API - [#979](https://github.com/livekit/components-js/pull/979) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`3a8495fd70489bc09b801fb743afe850950c3871`](https://github.com/livekit/components-js/commit/3a8495fd70489bc09b801fb743afe850950c3871), [`22fa65e4715490216577223ab07ce14f6ff7917d`](https://github.com/livekit/components-js/commit/22fa65e4715490216577223ab07ce14f6ff7917d)]:
+  - @livekit/components-core@0.11.6
+
 ## 2.6.0
 
 ### Minor Changes

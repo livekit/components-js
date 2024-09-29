@@ -30,7 +30,8 @@ export interface BarVisualizerProps extends React.HTMLProps<HTMLDivElement> {
 }
 
 const sequencerIntervals = new Map<AgentState, number>([
-  ['connecting', 25 * 15],
+  ['connecting', 2000],
+  ['initializing', 2000],
   ['listening', 500],
   ['thinking', 150],
 ]);

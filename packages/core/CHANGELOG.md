@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.11.7
+
+### Patch Changes
+
+- Add krisp hook - [#986](https://github.com/livekit/components-js/pull/986) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.11.6
 
 ### Patch Changes

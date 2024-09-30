@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 2.6.2
+
+### Patch Changes
+
+- Add krisp hook - [#986](https://github.com/livekit/components-js/pull/986) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`302bbb776cea1391c51c167127023d696a2dbab8`](https://github.com/livekit/components-js/commit/302bbb776cea1391c51c167127023d696a2dbab8)]:
+  - @livekit/components-core@0.11.7
+
 ## 2.6.1
 
 ### Patch Changes

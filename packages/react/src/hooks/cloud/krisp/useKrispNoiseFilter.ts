@@ -20,7 +20,7 @@ export interface useKrispNoiseFilterOptions {
  * This hook is a convenience helper for enabling Krisp Enhanced Audio Noise Cancellation on LiveKit audio tracks.
  * It returns a `setNoiseFilterEnabled` method to conveniently toggle between enabled and disabled states.
  *
- * @note Krisp noise filter is a feature that's only supported on LiveKit cloud plans
+ * @remarks Krisp noise filter is a feature that's only supported on LiveKit cloud plans
  * @alpha
  */
 export function useKrispNoiseFilter(options: useKrispNoiseFilterOptions = {}) {

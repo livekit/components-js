@@ -22,6 +22,16 @@ export interface useKrispNoiseFilterOptions {
  *
  * @remarks Krisp noise filter is a feature that's only supported on LiveKit cloud plans
  * @alpha
+ * @example
+ * ```tsx
+ *   const krisp = useKrispNoiseFilter();
+ *   return <input
+        type="checkbox"
+        onChange={(ev) => krisp.setNoiseFilterEnabled(ev.target.checked)}
+        checked={krisp.isNoiseFilterEnabled}
+        disabled={krisp.isNoiseFilterPending}
+      />
+ * ```
  */
 export function useKrispNoiseFilter(options: useKrispNoiseFilterOptions = {}) {
   const [shouldEnable, setShouldEnable] = React.useState(false);

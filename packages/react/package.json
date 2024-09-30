@@ -52,10 +52,16 @@
     "usehooks-ts": "3.1.0"
   },
   "peerDependencies": {
+    "@livekit/krisp-noise-filter": "^0.2.12",
     "livekit-client": "^2.5.4",
     "react": ">=18",
     "react-dom": ">=18",
     "tslib": "^2.6.2"
+  },
+  "peerDependenciesMeta": {
+    "@livekit/krisp-noise-filter": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@livekit/protocol": "^1.22.0",

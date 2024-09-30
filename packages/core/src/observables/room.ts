@@ -2,6 +2,7 @@ import type { Subscriber, Subscription } from 'rxjs';
 import { Subject, map, Observable, startWith, finalize, filter, concat } from 'rxjs';
 import type { Participant, TrackPublication } from 'livekit-client';
 import { LocalParticipant, Room, RoomEvent, Track } from 'livekit-client';
+// @ts-ignore some module resolutions (other than 'node') choke on this
 import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 import { log } from '../logger';
 export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observable<Room> {

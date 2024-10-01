@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 2.6.3
+
+### Patch Changes
+
+- Move useKrispNoiseFilter into dedicated import path  - [#991](https://github.com/livekit/components-js/pull/991) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`a353a3b52303d167f0e04d34caeb90bab36244ba`](https://github.com/livekit/components-js/commit/a353a3b52303d167f0e04d34caeb90bab36244ba)]:
+  - @livekit/components-core@0.11.8
+
 ## 2.6.2
 
 ### Patch Changes

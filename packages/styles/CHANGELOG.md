@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 1.1.3
+
+### Patch Changes
+
+- Add css var for idle visualizer bar color - [#985](https://github.com/livekit/components-js/pull/985) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.1.2
 
 ### Patch Changes

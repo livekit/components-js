@@ -1,5 +1,19 @@
 # @livekit/components-core
 
+## 0.11.7
+
+### Patch Changes
+
+- Add krisp hook - [#986](https://github.com/livekit/components-js/pull/986) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.6
+
+### Patch Changes
+
+- update useParticipants to listen for any Participant's info changes - [#980](https://github.com/livekit/components-js/pull/980) ([@lebaudantoine](https://github.com/lebaudantoine))
+
+- Add support for new chat API - [#979](https://github.com/livekit/components-js/pull/979) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.11.5
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@livekit/component-example-next",
-  "version": "0.2.37",
+  "version": "0.2.39",
   "private": true,
   "scripts": {
     "dev": "next dev",

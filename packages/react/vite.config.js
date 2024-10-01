@@ -20,6 +20,8 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
+        hooks: resolve(__dirname, 'src/hooks/index.ts'),
+        prefabs: resolve(__dirname, 'src/prefabs/index.ts'),
         krisp: resolve(__dirname, 'src/hooks/cloud/krisp/useKrispNoiseFilter.ts'),
       },
     },

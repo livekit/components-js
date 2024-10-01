@@ -18,7 +18,7 @@ export default defineConfig({
     minify: 'esbuild',
     emptyOutDir: true,
     sourcemap: true,
-    target: 'es6',
+    target: 'modules',
     modulePreload: { polyfill: false },
     lib: {
       entry: {
@@ -40,8 +40,15 @@ export default defineConfig({
         {
           format: 'es',
           entryFileNames: '[name].mjs', // Use .mjs for ESM
-          chunkFileNames: 'shared-[hash].mjs',
+          chunkFileNames: '[name]-[hash].mjs',
           dir: 'dist',
+          manualChunks: {
+            contexts: ['src/context/index.ts'],
+            room: ['src/hooks/useLiveKitRoom.ts', 'src/components/LiveKitRoom.tsx'],
+            hooks: ['src/hooks/index.ts'],
+            components: ['src/components/index.ts'],
+            prefabs: ['src/prefabs/index.ts'],
+          },
         },
         {
           format: 'cjs',

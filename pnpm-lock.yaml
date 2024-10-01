@@ -254,8 +254,8 @@ importers:
         specifier: ^18.0.8
         version: 18.3.0
       '@vitejs/plugin-react':
-        specifier: ^4.0.0
-        version: 4.3.1(vite@5.4.8(@types/node@22.5.5)(sass@1.77.6)(terser@5.31.1))
+        specifier: ^4.3.2
+        version: 4.3.2(vite@5.4.8(@types/node@22.5.5)(sass@1.77.6)(terser@5.31.1))
       eslint-config-lk-custom:
         specifier: workspace:*
         version: link:../../tooling/eslint-config-custom
@@ -274,9 +274,6 @@ importers:
       size-limit:
         specifier: ^11.0.2
         version: 11.1.4
-      tsup:
-        specifier: ^8.0.0
-        version: 8.1.0(@microsoft/api-extractor@7.47.9(@types/node@22.5.5))(postcss@8.4.47)(typescript@5.4.5)
       vite:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@22.5.5)(sass@1.77.6)(terser@5.31.1)
@@ -3190,8 +3187,8 @@ packages:
     peerDependencies:
       vite: ^4.1.0-beta.0
 
-  '@vitejs/plugin-react@4.3.1':
-    resolution: {integrity: sha512-m/V2syj5CuVnaxcUJOQRel/Wr31FFXRFlnOoq1TVtkCxsY5veGMTEmpWHndrhB2U8ScHtCQB1e+4hWYExQc6Lg==}
+  '@vitejs/plugin-react@4.3.2':
+    resolution: {integrity: sha512-hieu+o05v4glEBucTcKMK3dlES0OeJlD9YVOAPraVMOInBCwzumaIFiUjr4bHK7NPgnAHgiskUoceKercrN8vg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: ^4.2.0 || ^5.0.0
@@ -11708,7 +11705,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitejs/plugin-react@4.3.1(vite@5.4.8(@types/node@22.5.5)(sass@1.77.6)(terser@5.31.1))':
+  '@vitejs/plugin-react@4.3.2(vite@5.4.8(@types/node@22.5.5)(sass@1.77.6)(terser@5.31.1))':
     dependencies:
       '@babel/core': 7.25.2
       '@babel/plugin-transform-react-jsx-self': 7.24.7(@babel/core@7.25.2)
@@ -16656,30 +16653,6 @@ snapshots:
       '@microsoft/api-extractor': 7.47.9(@types/node@22.5.5)
       postcss: 8.4.47
       typescript: 5.4.2
-    transitivePeerDependencies:
-      - supports-color
-      - ts-node
-
-  tsup@8.1.0(@microsoft/api-extractor@7.47.9(@types/node@22.5.5))(postcss@8.4.47)(typescript@5.4.5):
-    dependencies:
-      bundle-require: 4.2.1(esbuild@0.21.5)
-      cac: 6.7.14
-      chokidar: 3.6.0
-      debug: 4.3.7(supports-color@5.5.0)
-      esbuild: 0.21.5
-      execa: 5.1.1
-      globby: 11.1.0
-      joycon: 3.1.1
-      postcss-load-config: 4.0.2(postcss@8.4.47)
-      resolve-from: 5.0.0
-      rollup: 4.18.0
-      source-map: 0.8.0-beta.0
-      sucrase: 3.35.0
-      tree-kill: 1.2.2
-    optionalDependencies:
-      '@microsoft/api-extractor': 7.47.9(@types/node@22.5.5)
-      postcss: 8.4.47
-      typescript: 5.4.5
     transitivePeerDependencies:
       - supports-color
       - ts-node

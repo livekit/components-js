@@ -54,4 +54,3 @@ export * from './useTrackTranscription';
 export * from './useVoiceAssistant';
 export * from './useParticipantAttributes';
 export * from './useIsRecording';
-export { useKrispNoiseFilter, useKrispNoiseFilterOptions } from './cloud/krisp/useKrispNoiseFilter';

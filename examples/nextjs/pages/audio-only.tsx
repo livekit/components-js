@@ -1,3 +1,5 @@
+'use client';
+
 import { AudioConference, LiveKitRoom, useToken } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';

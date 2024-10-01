@@ -1,9 +1,12 @@
+'use client';
+
 import {
   ConnectionState,
   ControlBar,
   GridLayout,
   LiveKitRoom,
   ParticipantTile,
+  RoomAudioRenderer,
   RoomName,
   TrackRefContext,
   useToken,
@@ -11,7 +14,7 @@ import {
 } from '@livekit/components-react';
 import { Track } from 'livekit-client';
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import styles from '../styles/Simple.module.css';
 import { generateRandomUserId } from '../lib/helper';
 
@@ -22,12 +25,14 @@ const SimpleExample: NextPage = () => {
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
-  const [userInfo] = useState({
-    userInfo: {
-      identity: userIdentity,
-      name: userIdentity,
-    },
-  });
+  const userInfo = useMemo(() => {
+    return {
+      userInfo: {
+        identity: userIdentity,
+        name: userIdentity,
+      },
+    };
+  }, []);
 
   const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, userInfo);
 
@@ -58,7 +63,7 @@ const SimpleExample: NextPage = () => {
         >
           <RoomName />
           <ConnectionState />
-          {/* <RoomAudioRenderer /> */}
+          <RoomAudioRenderer />
           {isConnected && <Stage />}
           <ControlBar />
         </LiveKitRoom>

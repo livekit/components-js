@@ -1,6 +1,8 @@
+'use client';
+
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import styles from '../styles/Home.module.scss';
+import Head from 'next/head';
 
 const EXAMPLE_ROUTES = {
   voiceAssistant: {

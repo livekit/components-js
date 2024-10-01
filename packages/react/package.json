@@ -39,7 +39,7 @@
   ],
   "scripts": {
     "build": "pnpm gen:svg && vite build",
-    "dev": "tsup --watch --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
+    "dev": "vite build --watch",
     "gen:icons": "rimraf -I -g ./src/assets/icons/*Icon.tsx && svgr --template ./src/assets/template.js --out-dir ./src/assets/icons --typescript ../styles/assets/icons",
     "gen:images": "rimraf -I -g ./src/assets/images/*.tsx && svgr --template ./src/assets/template.js --out-dir ./src/assets/images --typescript --no-svgo ../styles/assets/images",
     "gen:svg": "pnpm gen:images && pnpm gen:icons",

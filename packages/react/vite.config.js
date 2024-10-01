@@ -18,6 +18,8 @@ export default defineConfig({
     minify: 'esbuild',
     emptyOutDir: true,
     sourcemap: true,
+    target: 'es6',
+    modulePreload: { polyfill: false },
     lib: {
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
@@ -29,9 +31,9 @@ export default defineConfig({
     rollupOptions: {
       external: [
         'livekit-client',
+        '@livekit/krisp-noise-filter',
         'react',
         'react-dom',
-        '@livekit/krisp-noise-filter',
         'react/jsx-runtime',
       ],
       output: [

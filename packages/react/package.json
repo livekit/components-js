@@ -15,19 +15,19 @@
       "require": "./dist/index.js"
     },
     "./hooks": {
-      "types": "./dist/hooks/index.d.ts",
-      "import": "./dist/hooks/index.mjs",
-      "require": "./dist/hooks/index.js"
+      "types": "./dist/hooks.d.ts",
+      "import": "./dist/hooks.mjs",
+      "require": "./dist/hooks.js"
     },
     "./prefabs": {
-      "types": "./dist/prefabs/index.d.ts",
-      "import": "./dist/prefabs/index.mjs",
-      "require": "./dist/prefabs/index.js"
+      "types": "./dist/prefabs.d.ts",
+      "import": "./dist/prefabs.mjs",
+      "require": "./dist/prefabs.js"
     },
     "./krisp": {
-      "types": "./dist/hooks/cloud/krisp/useKrispNoiseFilter.d.ts",
-      "import": "./dist/hooks/cloud/krisp/useKrispNoiseFilter.mjs",
-      "require": "./dist/hooks/cloud/krisp/useKrispNoiseFilter.js"
+      "types": "./dist/krisp.d.ts",
+      "import": "./dist/krisp.mjs",
+      "require": "./dist/krisp.js"
     }
   },
   "main": "dist/index.js",
@@ -38,7 +38,7 @@
     "src"
   ],
   "scripts": {
-    "build": "pnpm gen:svg && tsup --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
+    "build": "pnpm gen:svg && vite build",
     "dev": "tsup --watch --onSuccess \"tsc --declaration --emitDeclarationOnly\"",
     "gen:icons": "rimraf -I -g ./src/assets/icons/*Icon.tsx && svgr --template ./src/assets/template.js --out-dir ./src/assets/icons --typescript ../styles/assets/icons",
     "gen:images": "rimraf -I -g ./src/assets/images/*.tsx && svgr --template ./src/assets/template.js --out-dir ./src/assets/images --typescript --no-svgo ../styles/assets/images",
@@ -73,18 +73,20 @@
     "@microsoft/api-extractor": "^7.35.0",
     "@size-limit/file": "^11.0.2",
     "@size-limit/webpack": "^11.0.2",
+    "@size-limit/webpack-why": "^11.1.6",
     "@svgr/cli": "^8.0.0",
     "@testing-library/react": "^16.0.0",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
-    "@vitejs/plugin-react": "^4.0.0",
+    "@vitejs/plugin-react": "^4.3.2",
     "eslint-config-lk-custom": "workspace:*",
     "jsdom": "^24.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rimraf": "^6.0.0",
     "size-limit": "^11.0.2",
-    "tsup": "^8.0.0",
+    "vite": "^5.4.8",
+    "vite-plugin-dts": "^4.2.3",
     "vitest": "^2.0.0"
   },
   "engines": {

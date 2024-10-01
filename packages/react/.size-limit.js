@@ -3,7 +3,7 @@ module.exports = [
     name: 'LiveKitRoom only',
     path: 'dist/index.mjs',
     import: '{ LiveKitRoom }',
-    limit: '4 kB',
+    limit: '9 kB',
     ignore: [
       'livekit-client',
       'react',

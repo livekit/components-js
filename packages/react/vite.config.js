@@ -15,6 +15,7 @@ export default defineConfig({
     }),
   ],
   build: {
+    minify: 'esbuild',
     emptyOutDir: true,
     sourcemap: true,
     lib: {
@@ -37,13 +38,13 @@ export default defineConfig({
         {
           format: 'es',
           entryFileNames: '[name].mjs', // Use .mjs for ESM
-          chunkFileNames: '[name]-[hash].mjs',
+          chunkFileNames: 'shared-[hash].mjs',
           dir: 'dist',
         },
         {
           format: 'cjs',
           entryFileNames: '[name].js', // Use .js for CJS
-          chunkFileNames: '[name]-[hash].js',
+          chunkFileNames: 'shared-[hash].js',
           dir: 'dist',
         },
       ],

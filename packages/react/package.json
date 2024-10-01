@@ -15,19 +15,19 @@
       "require": "./dist/index.js"
     },
     "./hooks": {
-      "types": "./dist/hooks/index.d.ts",
-      "import": "./dist/hooks/index.mjs",
-      "require": "./dist/hooks/index.js"
+      "types": "./dist/hooks.d.ts",
+      "import": "./dist/hooks.mjs",
+      "require": "./dist/hooks.js"
     },
     "./prefabs": {
-      "types": "./dist/prefabs/index.d.ts",
-      "import": "./dist/prefabs/index.mjs",
-      "require": "./dist/prefabs/index.js"
+      "types": "./dist/prefabs.d.ts",
+      "import": "./dist/prefabs.mjs",
+      "require": "./dist/prefabs.js"
     },
     "./krisp": {
-      "types": "./dist/hooks/cloud/krisp/useKrispNoiseFilter.d.ts",
-      "import": "./dist/hooks/cloud/krisp/useKrispNoiseFilter.mjs",
-      "require": "./dist/hooks/cloud/krisp/useKrispNoiseFilter.js"
+      "types": "./dist/krisp.d.ts",
+      "import": "./dist/krisp.mjs",
+      "require": "./dist/krisp.js"
     }
   },
   "main": "dist/index.js",

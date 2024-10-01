@@ -12,14 +12,12 @@ import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import type { CreateLocalTracksOptions } from 'livekit-client';
 import type { DataPublishOptions } from 'livekit-client';
 import type { HTMLAttributes } from 'react';
-import type { KrispNoiseFilterProcessor } from '@livekit/krisp-noise-filter';
 import { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
 import type { LocalTrack } from 'livekit-client';
 import { LocalTrackPublication } from 'livekit-client';
 import { LocalVideoTrack } from 'livekit-client';
 import type { MediaDeviceFailure } from 'livekit-client';
-import type { NoiseFilterOptions } from '@livekit/krisp-noise-filter';
 import { Participant } from 'livekit-client';
 import type { ParticipantEvent } from 'livekit-client';
 import type { ParticipantKind } from 'livekit-client';
@@ -884,21 +882,6 @@ export function useIsRecording(room?: Room): boolean;
 
 // @public
 export function useIsSpeaking(participant?: Participant): boolean;
-
-// @alpha
-export function useKrispNoiseFilter(options?: useKrispNoiseFilterOptions): {
-    setNoiseFilterEnabled: (enable: boolean) => Promise<void>;
-    isNoiseFilterEnabled: boolean;
-    isNoiseFilterPending: boolean;
-    processor: KrispNoiseFilterProcessor | undefined;
-};
-
-// @alpha (undocumented)
-export interface useKrispNoiseFilterOptions {
-    // (undocumented)
-    filterOptions?: NoiseFilterOptions;
-    trackRef?: TrackReferenceOrPlaceholder;
-}
 
 // @public
 export function useLayoutContext(): LayoutContextType;

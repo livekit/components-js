@@ -23,6 +23,11 @@
       "types": "./dist/prefabs/index.d.ts",
       "import": "./dist/prefabs/index.mjs",
       "require": "./dist/prefabs/index.js"
+    },
+    "./krisp": {
+      "types": "./dist/hooks/cloud/krisp/useKrispNoiseFilter.d.ts",
+      "import": "./dist/hooks/cloud/krisp/useKrispNoiseFilter.mjs",
+      "require": "./dist/hooks/cloud/krisp/useKrispNoiseFilter.js"
     }
   },
   "main": "dist/index.js",

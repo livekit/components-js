@@ -935,7 +935,7 @@ export function useMediaDeviceSelect({ kind, room, track, requestPermissions, on
     devices: MediaDeviceInfo[];
     className: string;
     activeDeviceId: string;
-    setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions | undefined) => Promise<void>;
+    setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions) => Promise<void>;
 };
 
 // @public (undocumented)
@@ -1206,7 +1206,7 @@ export type UseTracksOptions = {
 
 // @public
 export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, publishOptions, onDeviceError, ...rest }: UseTrackToggleProps<T>): {
-    toggle: ((forceState?: boolean | undefined) => Promise<void>) | ((forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<boolean | undefined>);
+    toggle: ((forceState?: boolean) => Promise<void>) | ((forceState?: boolean, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<boolean | undefined>);
     enabled: boolean;
     pending: boolean;
     track: LocalTrackPublication | undefined;

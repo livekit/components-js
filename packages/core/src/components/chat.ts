@@ -67,7 +67,8 @@ export function setupChat(room: Room, options?: ChatOptions) {
   const onDestroyObservable = new Subject<void>();
 
   const serverSupportsChatApi = () =>
-    !!room.serverVersion && compareVersions(room.serverVersion, '1.17.2') > 0;
+    room.serverInfo?.edition === 1 ||
+    (!!room.serverInfo?.version && compareVersions(room.serverInfo?.version, '1.17.2') > 0);
 
   const { messageDecoder, messageEncoder, channelTopic, updateChannelTopic } = options ?? {};
 

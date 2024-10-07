@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import type { Participant, Room, ChatMessage } from 'livekit-client';
-import { RoomEvent } from 'livekit-client';
+import { compareVersions, RoomEvent } from 'livekit-client';
 import { BehaviorSubject, Subject, scan, map, takeUntil, merge } from 'rxjs';
 import {
   DataTopic,
@@ -18,11 +18,11 @@ export interface ReceivedChatMessage extends ChatMessage {
 }
 
 export interface LegacyChatMessage extends ChatMessage {
-  ignore?: true;
+  ignore?: boolean;
 }
 
 export interface LegacyReceivedChatMessage extends ReceivedChatMessage {
-  ignore?: true;
+  ignore?: boolean;
 }
 
 /**
@@ -65,6 +65,10 @@ const decode = (message: Uint8Array) =>
 
 export function setupChat(room: Room, options?: ChatOptions) {
   const onDestroyObservable = new Subject<void>();
+
+  const serverSupportsChatApi = () =>
+    room.serverInfo?.edition === 1 ||
+    (!!room.serverInfo?.version && compareVersions(room.serverInfo?.version, '1.17.2') > 0);
 
   const { messageDecoder, messageEncoder, channelTopic, updateChannelTopic } = options ?? {};
 
@@ -143,7 +147,10 @@ export function setupChat(room: Room, options?: ChatOptions) {
     isSending$.next(true);
     try {
       const chatMessage = await sendChatMessage(message);
-      const encodedLegacyMsg = finalMessageEncoder({ ...chatMessage, ignore: true });
+      const encodedLegacyMsg = finalMessageEncoder({
+        ...chatMessage,
+        ignore: serverSupportsChatApi(),
+      });
       await sendMessage(room.localParticipant, encodedLegacyMsg, {
         reliable: true,
         topic,

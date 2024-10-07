@@ -262,13 +262,13 @@ export function isWeb(): boolean;
 // @public (undocumented)
 export interface LegacyChatMessage extends ChatMessage {
     // (undocumented)
-    ignore?: true;
+    ignore?: boolean;
 }
 
 // @public (undocumented)
 export interface LegacyReceivedChatMessage extends ReceivedChatMessage {
     // (undocumented)
-    ignore?: true;
+    ignore?: boolean;
 }
 
 // @alpha

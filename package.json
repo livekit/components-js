@@ -41,7 +41,7 @@
     "typescript": "5.4.2"
   },
   "dependencies": {
-    "livekit-client": "^2.5.4"
+    "livekit-client": "^2.5.7"
   },
   "engines": {
     "node": ">=18"

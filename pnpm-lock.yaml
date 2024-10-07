@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       livekit-client:
-        specifier: ^2.5.4
-        version: 2.5.4
+        specifier: ^2.5.7
+        version: 2.5.7
     devDependencies:
       '@changesets/cli':
         specifier: ^2.27.1
@@ -55,8 +55,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/styles
       livekit-client:
-        specifier: ^2.5.4
-        version: 2.5.4
+        specifier: ^2.5.7
+        version: 2.5.7
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -120,10 +120,10 @@ importers:
         version: link:../../packages/styles
       '@livekit/track-processors':
         specifier: ^0.3.2
-        version: 0.3.2(livekit-client@2.5.4)
+        version: 0.3.2(livekit-client@2.5.7)
       livekit-client:
-        specifier: ^2.5.4
-        version: 2.5.4
+        specifier: ^2.5.7
+        version: 2.5.7
       livekit-server-sdk:
         specifier: ^2.6.1
         version: 2.6.1
@@ -162,8 +162,8 @@ importers:
         specifier: 1.6.11
         version: 1.6.11
       livekit-client:
-        specifier: ^2.5.4
-        version: 2.5.4
+        specifier: ^2.5.7
+        version: 2.5.7
       loglevel:
         specifier: 1.9.1
         version: 1.9.1
@@ -178,8 +178,8 @@ importers:
         specifier: workspace:*
         version: link:../styles
       '@livekit/protocol':
-        specifier: ^1.22.0
-        version: 1.22.0
+        specifier: ^1.23.0
+        version: 1.23.0
       '@microsoft/api-extractor':
         specifier: ^7.36.0
         version: 7.47.9(@types/node@22.5.5)
@@ -212,13 +212,13 @@ importers:
         version: link:../core
       '@livekit/krisp-noise-filter':
         specifier: ^0.2.12
-        version: 0.2.12(livekit-client@2.5.4)
+        version: 0.2.12(livekit-client@2.5.7)
       clsx:
         specifier: 2.1.1
         version: 2.1.1
       livekit-client:
-        specifier: ^2.5.4
-        version: 2.5.4
+        specifier: ^2.5.7
+        version: 2.5.7
       tslib:
         specifier: ^2.6.2
         version: 2.7.0
@@ -227,8 +227,8 @@ importers:
         version: 3.1.0(react@18.3.1)
     devDependencies:
       '@livekit/protocol':
-        specifier: ^1.22.0
-        version: 1.22.0
+        specifier: ^1.23.0
+        version: 1.23.0
       '@microsoft/api-extractor':
         specifier: ^7.35.0
         version: 7.47.9(@types/node@22.5.5)
@@ -460,6 +460,10 @@ packages:
     resolution: {integrity: sha512-BcYH1CVJBO9tvyIZ2jVeXgSIMvGZ2FDRvDdOIVQyuklNKSsx+eppDEBq/g47Ayw+RqNFE+URvOShmf+f/qwAlA==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/code-frame@7.25.7':
+    resolution: {integrity: sha512-0xZJFNE5XMpENsgfHYTw8FbX4kv53mFLn2i3XPoq69LyhYSCBJtitaHx9QnsVTrsogI4Z3+HtEfZ2/GFPOtf5g==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/compat-data@7.25.4':
     resolution: {integrity: sha512-+LGRog6RAsCJrrrg/IO6LGmpphNe5DiK30dGjCoxxeGv49B10/3XYGxPsAwrDlMFcFEvdAUavDT8r9k/hSyQqQ==}
     engines: {node: '>=6.9.0'}
@@ -567,6 +571,10 @@ packages:
     resolution: {integrity: sha512-rR+PBcQ1SMQDDyF6X0wxtG8QyLCgUB0eRAGguqRLfkCA87l7yAP7ehq8SNj96OOGTO8OBV70KhuFYcIkHXOg0w==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/helper-validator-identifier@7.25.7':
+    resolution: {integrity: sha512-AM6TzwYqGChO45oiuPqwL2t20/HdMC1rTPAesnBCgPCSF1x3oN9MVUwQV2iyz4xqWrctwK5RNC8LV22kaQCNYg==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/helper-validator-option@7.24.8':
     resolution: {integrity: sha512-xb8t9tD1MHLungh/AIoWYN+gVHaB9kwlu8gffXGSt3FFEIT7RjS+xWbc2vUD1UTZdIpKj/ab3rdqJ7ufngyi2Q==}
     engines: {node: '>=6.9.0'}
@@ -581,6 +589,10 @@ packages:
 
   '@babel/highlight@7.24.7':
     resolution: {integrity: sha512-EStJpq4OuY8xYfhGVXngigBJRWxftKX9ksiGDnmlY3o7B/V7KIAc9X4oiK87uPJSc/vs5L869bem5fhZa8caZw==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/highlight@7.25.7':
+    resolution: {integrity: sha512-iYyACpW3iW8Fw+ZybQK+drQre+ns/tKpXbNESfrhNnPLIklLbXr7MYJ6gPEd0iETGLOK+SxMjVvKb/ffmk+FEw==}
     engines: {node: '>=6.9.0'}
 
   '@babel/parser@7.25.6':
@@ -1083,6 +1095,10 @@ packages:
 
   '@babel/runtime@7.25.6':
     resolution: {integrity: sha512-VBj9MYyDb9tuLq7yzqjgzt6Q+IBQLrGZfdjOekyEirZPHxXWoTSGUTMrpsfi58Up73d13NfYLv8HT9vmznjzhQ==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime@7.25.7':
+    resolution: {integrity: sha512-FjoyLe754PMiYsFaN5C94ttGiOmBNYTf6pLr4xXHAT5uctHb092PBszndLDR5XA/jghQvn4n7JMHl7dmTgbm9w==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.25.0':
@@ -1642,8 +1658,8 @@ packages:
   '@livekit/protocol@1.21.0':
     resolution: {integrity: sha512-3TohFPNZy1axTuoDLU6mA1rwuP4VawgehvX52OoLJnU+fNQYfmMJqz8k7NSh79jG5I8Og77YYhT905Omrhli2A==}
 
-  '@livekit/protocol@1.22.0':
-    resolution: {integrity: sha512-KYOfVAz38YFRsmEzeDgzoaHZJhMZEkeZQlzr9xIjczWR9SeEaYNU6+IDcZRlrYcpWl6Almgt/OhXcQn+nkrDGw==}
+  '@livekit/protocol@1.23.0':
+    resolution: {integrity: sha512-Hh83moW437mWhiyRgoDMedJ/s/rCTfe3ACSaIJ3n2NlVaq/+BTuB/yH7a6alM1NEkGBSmgrEHxabDfozVUlgYg==}
 
   '@livekit/track-processors@0.3.2':
     resolution: {integrity: sha512-4JUCzb7yIKoVsTo8J6FTzLZJHcI6DihfX/pGRDg0SOGaxprcDPrt8jaDBBTsnGBSXHeMxl2ugN+xQjdCWzLKEA==}
@@ -5692,8 +5708,8 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  livekit-client@2.5.4:
-    resolution: {integrity: sha512-ZL1Twbzscvhji7Sor+JIkIV4V7jSbX/IvBvfxeOuRzovIiM0v9IUCMINUR98mPZ7kHNFuiKB3w14afYa4UjkPg==}
+  livekit-client@2.5.7:
+    resolution: {integrity: sha512-g15/e9J9eZStQM4B7dgUP7eLAKbqJYh37n8IkR9n0M4/1ZxkyPgVvxkaooPNxp9C0Ri6cefN5uHNbyyXWUJOVw==}
 
   livekit-server-sdk@2.6.1:
     resolution: {integrity: sha512-j/8TOlahIyWnycNkuSzTv6q+win4JTbDGNH48iMsZDMnJBks9hhC9UwAO4ES42sAorIAxGkrH58hxt4KdTkZaQ==}
@@ -7989,6 +8005,11 @@ snapshots:
       '@babel/highlight': 7.24.7
       picocolors: 1.1.0
 
+  '@babel/code-frame@7.25.7':
+    dependencies:
+      '@babel/highlight': 7.25.7
+      picocolors: 1.1.0
+
   '@babel/compat-data@7.25.4': {}
 
   '@babel/core@7.25.2':
@@ -8138,6 +8159,8 @@ snapshots:
 
   '@babel/helper-validator-identifier@7.24.7': {}
 
+  '@babel/helper-validator-identifier@7.25.7': {}
+
   '@babel/helper-validator-option@7.24.8': {}
 
   '@babel/helper-wrap-function@7.24.5':
@@ -8154,6 +8177,13 @@ snapshots:
   '@babel/highlight@7.24.7':
     dependencies:
       '@babel/helper-validator-identifier': 7.24.7
+      chalk: 2.4.2
+      js-tokens: 4.0.0
+      picocolors: 1.1.0
+
+  '@babel/highlight@7.25.7':
+    dependencies:
+      '@babel/helper-validator-identifier': 7.25.7
       chalk: 2.4.2
       js-tokens: 4.0.0
       picocolors: 1.1.0
@@ -8750,6 +8780,10 @@ snapshots:
   '@babel/regjsgen@0.8.0': {}
 
   '@babel/runtime@7.25.6':
+    dependencies:
+      regenerator-runtime: 0.14.1
+
+  '@babel/runtime@7.25.7':
     dependencies:
       regenerator-runtime: 0.14.1
 
@@ -9405,23 +9439,23 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@livekit/krisp-noise-filter@0.2.12(livekit-client@2.5.4)':
+  '@livekit/krisp-noise-filter@0.2.12(livekit-client@2.5.7)':
     dependencies:
-      livekit-client: 2.5.4
+      livekit-client: 2.5.7
 
   '@livekit/protocol@1.21.0':
     dependencies:
       '@bufbuild/protobuf': 1.10.0
 
-  '@livekit/protocol@1.22.0':
+  '@livekit/protocol@1.23.0':
     dependencies:
       '@bufbuild/protobuf': 1.10.0
 
-  '@livekit/track-processors@0.3.2(livekit-client@2.5.4)':
+  '@livekit/track-processors@0.3.2(livekit-client@2.5.7)':
     dependencies:
       '@mediapipe/holistic': 0.5.1675471629
       '@mediapipe/tasks-vision': 0.10.9
-      livekit-client: 2.5.4
+      livekit-client: 2.5.7
 
   '@manypkg/find-root@1.1.0':
     dependencies:
@@ -11139,8 +11173,8 @@ snapshots:
 
   '@testing-library/dom@10.1.0':
     dependencies:
-      '@babel/code-frame': 7.24.7
-      '@babel/runtime': 7.25.6
+      '@babel/code-frame': 7.25.7
+      '@babel/runtime': 7.25.7
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
       chalk: 4.1.2
@@ -14848,9 +14882,9 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  livekit-client@2.5.4:
+  livekit-client@2.5.7:
     dependencies:
-      '@livekit/protocol': 1.22.0
+      '@livekit/protocol': 1.23.0
       events: 3.3.0
       loglevel: 1.9.1
       sdp-transform: 2.14.2

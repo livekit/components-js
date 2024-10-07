@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 1.1.4
+
+### Patch Changes
+
+- Adjust default BarVisualizer color - [#1005](https://github.com/livekit/components-js/pull/1005) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.1.3
 
 ### Patch Changes

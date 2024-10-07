@@ -43,7 +43,7 @@ deprecated
     height: 100%;
     width: var(--va-bar-width, 12px);
     border-radius: var(--va-bar-border-radius, 32px);
-    background-color: var(--va-bar-bg, rgba(255, 255, 255, 0.05));
+    background-color: var(--va-bar-bg, rgba(136, 136, 136, 0.2));
     transition: background-color 0.25s ease-out;
     // transition: all 0.0s ease-out   // commented out as the transition duration is 0
   }
@@ -51,8 +51,7 @@ deprecated
   &[data-va-state='speaking'] > .audio-bar,
   & > .audio-bar.highlighted,
   & > [data-highlighted='true'] {
-    background-color: var(--fg, #fff);
-    filter: drop-shadow(var(--drop-shadow, rgba(255, 255, 255, 0.2) 0px 0px 24px));
+    background-color: var(--fg, rgba(136, 136, 136, 1));
     transition: none;
   }
 

@@ -43,7 +43,7 @@ deprecated
     height: 100%;
     width: var(--va-bar-width, 12px);
     border-radius: var(--va-bar-border-radius, 32px);
-    background-color: var(--va-bar-bg, rgba(136, 136, 136, 0.4));
+    background-color: var(--va-bar-bg, rgba(136, 136, 136, 0.2));
     transition: background-color 0.25s ease-out;
     // transition: all 0.0s ease-out   // commented out as the transition duration is 0
   }

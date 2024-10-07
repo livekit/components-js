@@ -221,7 +221,7 @@ export type GridLayoutInfo = {
 export function isEqualTrackRef(a?: TrackReferenceOrPlaceholder, b?: TrackReferenceOrPlaceholder): boolean;
 
 // @public (undocumented)
-export function isLocal(p: Participant): boolean;
+export function isLocal(p: Participant): p is LocalParticipant;
 
 // @public
 export function isMobileBrowser(): boolean;
@@ -235,7 +235,7 @@ export function isParticipantTrackReferencePinned(trackRef: TrackReference, pinS
 export function isPlaceholderReplacement(currentTrackRef: TrackReferenceOrPlaceholder, nextTrackRef: TrackReferenceOrPlaceholder): boolean;
 
 // @public (undocumented)
-export function isRemote(p: Participant): boolean;
+export function isRemote(p: Participant): p is RemoteParticipant;
 
 // @public (undocumented)
 export function isSourcesWithOptions(sources: SourcesArray): sources is TrackSourceWithOptions[];

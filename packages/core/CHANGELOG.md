@@ -1,10 +1,16 @@
 # @livekit/components-core
 
+## 0.11.9
+
+### Patch Changes
+
+- Use legacy chat messages on unsupported server versions - [#999](https://github.com/livekit/components-js/pull/999) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.11.8
 
 ### Patch Changes
 
--  Move useKrispNoiseFilter into dedicated import path - [#991](https://github.com/livekit/components-js/pull/991) ([@lukasIO](https://github.com/lukasIO))
+- Move useKrispNoiseFilter into dedicated import path - [#991](https://github.com/livekit/components-js/pull/991) ([@lukasIO](https://github.com/lukasIO))
 
 ## 0.11.7
 

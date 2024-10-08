@@ -115,7 +115,8 @@ export const MediaDeviceSelect: (
 
     function isActive(deviceId: string, label: string, activeDeviceId: string) {
       return (
-        deviceId === activeDeviceId || (label.includes('default') && activeDeviceId === 'default')
+        deviceId === activeDeviceId ||
+        (label.toLowerCase().includes('default') && activeDeviceId === 'default')
       );
     }
 

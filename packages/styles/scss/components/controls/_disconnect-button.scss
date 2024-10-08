@@ -2,14 +2,18 @@
 
 .disconnect-button {
   @extend .button;
-  --control-fg: var(--danger-fg);
-  --control-bg: var(--danger);
+  // --control-fg: var(--danger-fg);
+  // --control-bg: var(--danger);
   font-weight: 600;
+  color: var(--danger);
+  border: 1px solid var(--danger);
 
   &:not(:disabled):hover {
     --lk-control-hover-bg: var(--danger2);
+    color: var(--danger-fg);
   }
   &:not(:disabled):active {
     --lk-control-hover-bg: var(--danger3);
+    color: var(--danger-fg);
   }
 }

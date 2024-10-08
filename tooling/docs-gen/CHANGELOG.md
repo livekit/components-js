@@ -1,5 +1,85 @@
 # @livekit/components-docs-gen
 
+## 0.0.65
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @livekit/components-react@2.6.5
+
+## 0.0.64
+
+### Patch Changes
+
+- Updated dependencies [[`6ef4005749c09f97ea12e46520b5f61dc9c35361`](https://github.com/livekit/components-js/commit/6ef4005749c09f97ea12e46520b5f61dc9c35361)]:
+  - @livekit/components-react@2.6.4
+
+## 0.0.63
+
+### Patch Changes
+
+- Updated dependencies [[`a353a3b52303d167f0e04d34caeb90bab36244ba`](https://github.com/livekit/components-js/commit/a353a3b52303d167f0e04d34caeb90bab36244ba)]:
+  - @livekit/components-react@2.6.3
+
+## 0.0.62
+
+### Patch Changes
+
+- Updated dependencies [[`302bbb776cea1391c51c167127023d696a2dbab8`](https://github.com/livekit/components-js/commit/302bbb776cea1391c51c167127023d696a2dbab8)]:
+  - @livekit/components-react@2.6.2
+
+## 0.0.61
+
+### Patch Changes
+
+- Updated dependencies [[`11bdec81bf22abf0db2f03e2b5c82ca60a91a1b4`](https://github.com/livekit/components-js/commit/11bdec81bf22abf0db2f03e2b5c82ca60a91a1b4), [`22fa65e4715490216577223ab07ce14f6ff7917d`](https://github.com/livekit/components-js/commit/22fa65e4715490216577223ab07ce14f6ff7917d)]:
+  - @livekit/components-react@2.6.1
+
+## 0.0.60
+
+### Patch Changes
+
+- Updated dependencies [[`6abb8325277c9588ad7952b1e8f3760d7d8c97f6`](https://github.com/livekit/components-js/commit/6abb8325277c9588ad7952b1e8f3760d7d8c97f6), [`79fbc0a9b1dbcb3fba45939667574e38c96d342e`](https://github.com/livekit/components-js/commit/79fbc0a9b1dbcb3fba45939667574e38c96d342e), [`b350999c4cb91510a18616ff7b663f50619690f2`](https://github.com/livekit/components-js/commit/b350999c4cb91510a18616ff7b663f50619690f2)]:
+  - @livekit/components-react@2.6.0
+
+## 0.0.59
+
+### Patch Changes
+
+- Updated dependencies [[`d53329716f083bd13b421e7b9a12bbd5e4bb363b`](https://github.com/livekit/components-js/commit/d53329716f083bd13b421e7b9a12bbd5e4bb363b)]:
+  - @livekit/api-documenter@7.22.21
+  - eslint-config-lk-custom@0.1.3
+  - @livekit/components-react@2.5.4
+
+## 0.0.58
+
+### Patch Changes
+
+- Updated dependencies [[`a77a52eeb415701f0e233e9f2304b7de2d754397`](https://github.com/livekit/components-js/commit/a77a52eeb415701f0e233e9f2304b7de2d754397)]:
+  - @livekit/components-react@2.5.3
+
+## 0.0.57
+
+### Patch Changes
+
+- Updated dependencies [[`ee5874e4cce586dce4f2ab2130a31f2756cccd10`](https://github.com/livekit/components-js/commit/ee5874e4cce586dce4f2ab2130a31f2756cccd10)]:
+  - @livekit/components-react@2.5.2
+
+## 0.0.56
+
+### Patch Changes
+
+- Updated dependencies [[`6c67aedca71a17c4cec96a4155c5f38d238e5156`](https://github.com/livekit/components-js/commit/6c67aedca71a17c4cec96a4155c5f38d238e5156)]:
+  - @livekit/components-react@2.5.1
+
+## 0.0.55
+
+### Patch Changes
+
+- Updated dependencies [[`cb45f42912a08a2ab8c03b1e5109eb24d1d78180`](https://github.com/livekit/components-js/commit/cb45f42912a08a2ab8c03b1e5109eb24d1d78180), [`d35dffd16131cac43279300071c595f30981767f`](https://github.com/livekit/components-js/commit/d35dffd16131cac43279300071c595f30981767f), [`0e5ef94450b4d84f88d549ba8c31ea1746d75d43`](https://github.com/livekit/components-js/commit/0e5ef94450b4d84f88d549ba8c31ea1746d75d43), [`7ef2dd982b82c17a90a8524e57729412e207e1e1`](https://github.com/livekit/components-js/commit/7ef2dd982b82c17a90a8524e57729412e207e1e1), [`d2b518ca2f9c93985b8bbef7c6ae15cf0d4752b1`](https://github.com/livekit/components-js/commit/d2b518ca2f9c93985b8bbef7c6ae15cf0d4752b1)]:
+  - @livekit/components-react@2.5.0
+  - eslint-config-lk-custom@0.1.2
+
 ## 0.0.54
 
 ### Patch Changes

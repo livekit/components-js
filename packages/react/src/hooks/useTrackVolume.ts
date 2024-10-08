@@ -96,7 +96,7 @@ const multibandDefaults = {
   bands: 5,
   loPass: 100,
   hiPass: 600,
-  updateInterval: 10,
+  updateInterval: 32,
   analyserOptions: { fftSize: 2048 },
 } as const satisfies MultiBandTrackVolumeOptions;
 
@@ -112,8 +112,11 @@ export function useMultibandTrackVolume(
     trackOrTrackReference instanceof Track
       ? trackOrTrackReference
       : <LocalAudioTrack | RemoteAudioTrack | undefined>trackOrTrackReference?.publication?.track;
-  const [frequencyBands, setFrequencyBands] = React.useState<Array<number>>([]);
   const opts = { ...multibandDefaults, ...options };
+  const [frequencyBands, setFrequencyBands] = React.useState<Array<number>>(
+    new Array(opts.bands).fill(0),
+  );
+
   React.useEffect(() => {
     if (!track || !track?.mediaStream) {
       return;
@@ -131,8 +134,8 @@ export function useMultibandTrackVolume(
       }
       frequencies = frequencies.slice(options.loPass, options.hiPass);
 
-      const normalizedFrequencies = normalizeFrequencies(frequencies);
-      const chunkSize = Math.ceil(normalizedFrequencies.length / opts.bands);
+      const normalizedFrequencies = normalizeFrequencies(frequencies); // is this needed ?
+      const chunkSize = Math.ceil(normalizedFrequencies.length / opts.bands); // we want logarithmic chunking here
       const chunks: Array<number> = [];
       for (let i = 0; i < opts.bands; i++) {
         const summedVolumes = normalizedFrequencies
@@ -154,3 +157,119 @@ export function useMultibandTrackVolume(
 
   return frequencyBands;
 }
+
+/**
+ * @alpha
+ */
+export interface AudioWaveformOptions {
+  barCount?: number;
+  volMultiplier?: number;
+  updateInterval?: number;
+}
+
+const waveformDefaults = {
+  barCount: 120,
+  volMultiplier: 5,
+  updateInterval: 20,
+} as const satisfies AudioWaveformOptions;
+
+/**
+ * @alpha
+ */
+export function useAudioWaveform(
+  trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder,
+  options: AudioWaveformOptions = {},
+) {
+  const track =
+    trackOrTrackReference instanceof Track
+      ? trackOrTrackReference
+      : <LocalAudioTrack | RemoteAudioTrack | undefined>trackOrTrackReference?.publication?.track;
+  const opts = { ...waveformDefaults, ...options };
+
+  const aggregateWave = React.useRef(new Float32Array());
+  const timeRef = React.useRef(performance.now());
+  const updates = React.useRef(0);
+  const [bars, setBars] = React.useState<number[]>([]);
+
+  const onUpdate = React.useCallback((wave: Float32Array) => {
+    setBars(
+      Array.from(
+        filterData(wave, opts.barCount).map((v) => Math.sqrt(v) * opts.volMultiplier),
+        // wave.slice(0, opts.barCount).map((v) => sigmoid(v * opts.volMultiplier, 0.08, 0.2)),
+      ),
+    );
+  }, []);
+
+  React.useEffect(() => {
+    if (!track || !track?.mediaStream) {
+      return;
+    }
+    const { analyser, cleanup } = createAudioAnalyser(track, {
+      fftSize: getFFTSizeValue(opts.barCount),
+    });
+
+    const bufferLength = getFFTSizeValue(opts.barCount);
+    const dataArray = new Float32Array(bufferLength);
+
+    const update = () => {
+      updateWaveform = requestAnimationFrame(update);
+      analyser.getFloatTimeDomainData(dataArray);
+      aggregateWave.current.map((v, i) => v + dataArray[i]);
+      updates.current += 1;
+
+      if (performance.now() - timeRef.current >= opts.updateInterval) {
+        const newData = dataArray.map((v) => v / updates.current);
+        onUpdate(newData);
+        timeRef.current = performance.now();
+        updates.current = 0;
+      }
+    };
+
+    let updateWaveform = requestAnimationFrame(update);
+
+    return () => {
+      cleanup();
+      cancelAnimationFrame(updateWaveform);
+    };
+  }, [track, track?.mediaStream, JSON.stringify(options), onUpdate]);
+
+  return {
+    bars,
+  };
+}
+
+function getFFTSizeValue(x: number) {
+  if (x < 32) return 32;
+  else return pow2ceil(x);
+}
+
+// function sigmoid(x: number, k = 2, s = 0) {
+//   return 1 / (1 + Math.exp(-(x - s) / k));
+// }
+
+function pow2ceil(v: number) {
+  let p = 2;
+  while ((v >>= 1)) {
+    p <<= 1;
+  }
+  return p;
+}
+
+function filterData(audioData: Float32Array, numSamples: number) {
+  const blockSize = Math.floor(audioData.length / numSamples); // the number of samples in each subdivision
+  const filteredData = new Float32Array(numSamples);
+  for (let i = 0; i < numSamples; i++) {
+    const blockStart = blockSize * i; // the location of the first sample in the block
+    let sum = 0;
+    for (let j = 0; j < blockSize; j++) {
+      sum = sum + Math.abs(audioData[blockStart + j]); // find the sum of all the samples in the block
+    }
+    filteredData[i] = sum / blockSize; // divide the sum by the block size to get the average
+  }
+  return filteredData;
+}
+
+// function normalizeData(audioData: Float32Array) {
+//   const multiplier = Math.pow(Math.max(...audioData), -1);
+//   return audioData.map((n) => n * multiplier);
+// }

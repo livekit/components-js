@@ -23,7 +23,7 @@ export interface TrackLoopProps {
  *  <TrackRefContext.Consumer>
  *    {(trackRef) => trackRef && <VideoTrack trackRef={trackRef}/>}
  *  </TrackRefContext.Consumer>
- * <TrackLoop />
+ * </TrackLoop>
  * ```
  * @public
  */

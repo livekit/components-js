@@ -5,11 +5,11 @@ import { ParticipantName } from './ParticipantName';
 import { TrackMutedIndicator } from './TrackMutedIndicator';
 import { TrackRefContext, useEnsureTrackRef } from '../../context';
 
-import { AudioVisualizer } from './AudioVisualizer';
 import type { ParticipantTileProps } from './ParticipantTile';
 import { AudioTrack } from './AudioTrack';
 import { useParticipantTile } from '../../hooks';
 import { isTrackReference } from '@livekit/components-core';
+import { BarVisualizer } from './BarVisualizer';
 
 /**
  * The `ParticipantAudioTile` component is the base utility wrapper for displaying a visual representation of a participant.
@@ -43,14 +43,14 @@ export const ParticipantAudioTile: (
     });
 
     return (
-      <div ref={ref} style={{ position: 'relative' }} {...elementProps}>
+      <div ref={ref} style={{ position: 'relative', minHeight: '160px' }} {...elementProps}>
         <TrackRefContext.Provider value={trackReference}>
           {children ?? (
             <>
               {isTrackReference(trackReference) && (
                 <AudioTrack trackRef={trackReference}></AudioTrack>
               )}
-              <AudioVisualizer />
+              <BarVisualizer barCount={7} options={{ minHeight: 8 }} />
               <div className="lk-participant-metadata">
                 <div className="lk-participant-metadata-item">
                   <TrackMutedIndicator trackRef={trackReference}></TrackMutedIndicator>

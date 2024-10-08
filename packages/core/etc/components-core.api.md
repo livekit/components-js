@@ -6,12 +6,13 @@
 
 import type { AudioCaptureOptions } from 'livekit-client';
 import { BehaviorSubject } from 'rxjs';
+import { ChatMessage } from 'livekit-client';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState } from 'livekit-client';
 import { DataPacket_Kind } from 'livekit-client';
 import type { DataPublishOptions } from 'livekit-client';
 import { LocalAudioTrack } from 'livekit-client';
-import type { LocalParticipant } from 'livekit-client';
+import { LocalParticipant } from 'livekit-client';
 import { LocalVideoTrack } from 'livekit-client';
 import loglevel from 'loglevel';
 import { Observable } from 'rxjs';
@@ -72,20 +73,12 @@ export interface BaseDataMessage<T extends string | undefined> {
 // @public (undocumented)
 export type CaptureOptionsBySource<T extends ToggleSource> = T extends Track.Source.Camera ? VideoCaptureOptions : T extends Track.Source.Microphone ? AudioCaptureOptions : T extends Track.Source.ScreenShare ? ScreenShareCaptureOptions : never;
 
-// @public (undocumented)
-export interface ChatMessage {
-    // (undocumented)
-    id: string;
-    // (undocumented)
-    message: string;
-    // (undocumented)
-    timestamp: number;
-}
+export { ChatMessage }
 
 // @public (undocumented)
 export type ChatOptions = {
-    messageEncoder?: (message: ChatMessage) => Uint8Array;
-    messageDecoder?: (message: Uint8Array) => ReceivedChatMessage;
+    messageEncoder?: (message: LegacyChatMessage) => Uint8Array;
+    messageDecoder?: (message: Uint8Array) => LegacyReceivedChatMessage;
     channelTopic?: string;
     updateChannelTopic?: string;
 };
@@ -114,6 +107,9 @@ export function connectionStateObserver(room: Room): Observable<ConnectionState>
 
 // @public (undocumented)
 export function createActiveDeviceObservable(room: Room, kind: MediaDeviceKind): Observable<string | undefined>;
+
+// @public (undocumented)
+export function createChatObserver(room: Room): Observable<[message: ChatMessage, participant?: LocalParticipant | RemoteParticipant | undefined]>;
 
 // @public (undocumented)
 export function createConnectionQualityObserver(participant: Participant): Observable<ConnectionQuality>;
@@ -225,7 +221,7 @@ export type GridLayoutInfo = {
 export function isEqualTrackRef(a?: TrackReferenceOrPlaceholder, b?: TrackReferenceOrPlaceholder): boolean;
 
 // @public (undocumented)
-export function isLocal(p: Participant): boolean;
+export function isLocal(p: Participant): p is LocalParticipant;
 
 // @public
 export function isMobileBrowser(): boolean;
@@ -239,7 +235,7 @@ export function isParticipantTrackReferencePinned(trackRef: TrackReference, pinS
 export function isPlaceholderReplacement(currentTrackRef: TrackReferenceOrPlaceholder, nextTrackRef: TrackReferenceOrPlaceholder): boolean;
 
 // @public (undocumented)
-export function isRemote(p: Participant): boolean;
+export function isRemote(p: Participant): p is RemoteParticipant;
 
 // @public (undocumented)
 export function isSourcesWithOptions(sources: SourcesArray): sources is TrackSourceWithOptions[];
@@ -262,6 +258,18 @@ export function isTrackReferencePlaceholder(trackReference?: TrackReferenceOrPla
 //
 // @internal (undocumented)
 export function isWeb(): boolean;
+
+// @public (undocumented)
+export interface LegacyChatMessage extends ChatMessage {
+    // (undocumented)
+    ignore?: boolean;
+}
+
+// @public (undocumented)
+export interface LegacyReceivedChatMessage extends ReceivedChatMessage {
+    // (undocumented)
+    ignore?: boolean;
+}
 
 // @alpha
 export function loadUserChoices(defaults?: Partial<LocalUserChoices>,
@@ -287,11 +295,11 @@ export type MediaToggleType<T extends ToggleSource> = {
     enabledObserver: Observable<boolean>;
 };
 
-// @public (undocumented)
-export type MessageDecoder = (message: Uint8Array) => ReceivedChatMessage;
+// @public @deprecated (undocumented)
+export type MessageDecoder = (message: Uint8Array) => LegacyReceivedChatMessage;
 
-// @public (undocumented)
-export type MessageEncoder = (message: ChatMessage) => Uint8Array;
+// @public @deprecated (undocumented)
+export type MessageEncoder = (message: LegacyChatMessage) => Uint8Array;
 
 // @public (undocumented)
 export function mutedObserver(trackRef: TrackReferenceOrPlaceholder): Observable<boolean>;
@@ -401,8 +409,6 @@ export type PinState = TrackReferenceOrPlaceholder[];
 // @public (undocumented)
 export interface ReceivedChatMessage extends ChatMessage {
     // (undocumented)
-    editTimestamp?: number;
-    // (undocumented)
     from?: Participant;
 }
 
@@ -492,7 +498,24 @@ export function setupChat(room: Room, options?: ChatOptions): {
     messageObservable: Observable<ReceivedChatMessage[]>;
     isSendingObservable: BehaviorSubject<boolean>;
     send: (message: string) => Promise<ChatMessage>;
-    update: (message: string, messageId: string) => Promise<ChatMessage>;
+    update: (message: string, originalMessageOrId: string | ChatMessage) => Promise<{
+        readonly message: string;
+        readonly editTimestamp: number;
+        readonly id: string;
+        readonly timestamp: number;
+    }>;
+};
+
+// @public (undocumented)
+export function setupChatMessageHandler(room: Room): {
+    chatObservable: Observable<[message: ChatMessage, participant?: LocalParticipant | RemoteParticipant | undefined]>;
+    send: (text: string) => Promise<ChatMessage>;
+    edit: (text: string, originalMsg: ChatMessage) => Promise<{
+        readonly message: string;
+        readonly editTimestamp: number;
+        readonly id: string;
+        readonly timestamp: number;
+    }>;
 };
 
 // @public (undocumented)

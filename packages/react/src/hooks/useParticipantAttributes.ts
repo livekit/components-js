@@ -27,11 +27,11 @@ export function useParticipantAttributes(props: UseParticipantAttributesOptions 
     () => (p ? participantAttributesObserver(p) : participantAttributesObserver(p)),
     [p],
   );
-  const { attributes } = useObservableState(attributeObserver, {
+  const attributeState = useObservableState(attributeObserver, {
     attributes: p?.attributes,
   });
 
-  return { attributes };
+  return attributeState;
 }
 
 /**
@@ -57,7 +57,7 @@ export function useParticipantAttribute(
     }
     const subscription = participantAttributesObserver(p).subscribe((val) => {
       if (val.changed[attributeKey] !== undefined) {
-        setAttribute(val.changed[attributeKey]);
+        setAttribute(val.attributes[attributeKey]);
       }
     });
     return () => {

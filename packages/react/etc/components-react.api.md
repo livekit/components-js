@@ -4,43 +4,53 @@
 
 ```ts
 
-import type { AudioAnalyserOptions } from 'livekit-client';
-import type { AudioCaptureOptions } from 'livekit-client';
+import { AudioAnalyserOptions } from 'livekit-client';
+import { AudioCaptureOptions } from 'livekit-client';
+import { ChatMessage } from 'livekit-client';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
-import type { CreateLocalTracksOptions } from 'livekit-client';
-import type { DataPublishOptions } from 'livekit-client';
-import type { HTMLAttributes } from 'react';
+import { CreateLocalTracksOptions } from 'livekit-client';
+import { DataPublishOptions } from 'livekit-client';
+import { HTMLAttributes } from 'react';
 import { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
-import type { LocalTrack } from 'livekit-client';
+import { LocalTrack } from 'livekit-client';
 import { LocalTrackPublication } from 'livekit-client';
 import { LocalVideoTrack } from 'livekit-client';
-import type { MediaDeviceFailure } from 'livekit-client';
+import { MediaDeviceFailure } from 'livekit-client';
 import { Participant } from 'livekit-client';
-import type { ParticipantEvent } from 'livekit-client';
+import { ParticipantEvent } from 'livekit-client';
 import type { ParticipantKind } from 'livekit-client';
-import type { ParticipantPermission } from '@livekit/protocol';
+import { ParticipantPermission } from '@livekit/protocol';
 import * as React_2 from 'react';
-import type { RemoteAudioTrack } from 'livekit-client';
+import { RemoteAudioTrack } from 'livekit-client';
 import { RemoteParticipant } from 'livekit-client';
 import { Room } from 'livekit-client';
-import type { RoomConnectOptions } from 'livekit-client';
-import type { RoomEvent } from 'livekit-client';
-import type { RoomOptions } from 'livekit-client';
-import type { ScreenShareCaptureOptions } from 'livekit-client';
+import { RoomConnectOptions } from 'livekit-client';
+import { RoomEvent } from 'livekit-client';
+import { RoomOptions } from 'livekit-client';
+import { ScreenShareCaptureOptions } from 'livekit-client';
 import { setLogLevel as setLogLevel_2 } from 'livekit-client';
-import type { SVGProps } from 'react';
+import { SVGProps } from 'react';
 import { Track } from 'livekit-client';
-import type { TrackPublication } from 'livekit-client';
+import { TrackPublication } from 'livekit-client';
 import { TrackPublishOptions } from 'livekit-client';
-import type { TranscriptionSegment } from 'livekit-client';
-import type { VideoCaptureOptions } from 'livekit-client';
+import { TranscriptionSegment } from 'livekit-client';
+import { VideoCaptureOptions } from 'livekit-client';
+
+// @beta (undocumented)
+export type AgentState = 'disconnected' | 'connecting' | 'initializing' | 'listening' | 'thinking' | 'speaking';
 
 // @public (undocumented)
 export interface AllowAudioPlaybackProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
     // (undocumented)
     label: string;
+}
+
+// @public (undocumented)
+export interface AllowMediaPlaybackProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
+    // (undocumented)
+    label?: string;
 }
 
 // @public
@@ -63,13 +73,43 @@ export interface AudioTrackProps extends React_2.AudioHTMLAttributes<HTMLAudioEl
     volume?: number;
 }
 
-// @public
+// @public @deprecated
 export const AudioVisualizer: (props: AudioVisualizerProps & React_2.RefAttributes<SVGSVGElement>) => React_2.ReactNode;
 
-// @public (undocumented)
+// @public @deprecated (undocumented)
 export interface AudioVisualizerProps extends React_2.HTMLAttributes<SVGElement> {
     // (undocumented)
     trackRef?: TrackReference;
+}
+
+// @alpha (undocumented)
+export interface AudioWaveformOptions {
+    // (undocumented)
+    barCount?: number;
+    // (undocumented)
+    updateInterval?: number;
+    // (undocumented)
+    volMultiplier?: number;
+}
+
+// @beta
+export const BarVisualizer: React_2.ForwardRefExoticComponent<Omit<BarVisualizerProps, "ref"> & React_2.RefAttributes<HTMLDivElement>>;
+
+// @beta (undocumented)
+export type BarVisualizerOptions = {
+    maxHeight?: number;
+    minHeight?: number;
+};
+
+// @beta (undocumented)
+export interface BarVisualizerProps extends React_2.HTMLProps<HTMLDivElement> {
+    barCount?: number;
+    children?: React_2.ReactNode;
+    // (undocumented)
+    options?: BarVisualizerOptions;
+    state?: AgentState;
+    // (undocumented)
+    trackRef?: TrackReferenceOrPlaceholder;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "CameraDisabledIcon" should be prefixed with an underscore because the declaration is marked as @internal
@@ -118,15 +158,7 @@ export interface ChatEntryProps extends React_2.HTMLAttributes<HTMLLIElement> {
 // @internal (undocumented)
 export const ChatIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
-// @public (undocumented)
-export interface ChatMessage {
-    // (undocumented)
-    id: string;
-    // (undocumented)
-    message: string;
-    // (undocumented)
-    timestamp: number;
-}
+export { ChatMessage }
 
 // Warning: (ae-forgotten-export) The symbol "ChatOptions" needs to be exported by the entry point index.d.ts
 //
@@ -411,11 +443,15 @@ export interface MediaDeviceSelectProps extends Omit<React_2.HTMLAttributes<HTML
     track?: LocalAudioTrack | LocalVideoTrack;
 }
 
-// @public (undocumented)
-export type MessageDecoder = (message: Uint8Array) => ReceivedChatMessage;
+// Warning: (ae-forgotten-export) The symbol "LegacyReceivedChatMessage" needs to be exported by the entry point index.d.ts
+//
+// @public @deprecated (undocumented)
+export type MessageDecoder = (message: Uint8Array) => LegacyReceivedChatMessage;
 
-// @public (undocumented)
-export type MessageEncoder = (message: ChatMessage) => Uint8Array;
+// Warning: (ae-forgotten-export) The symbol "LegacyChatMessage" needs to be exported by the entry point index.d.ts
+//
+// @public @deprecated (undocumented)
+export type MessageEncoder = (message: LegacyChatMessage) => Uint8Array;
 
 // @public (undocumented)
 export type MessageFormatter = (message: string) => React_2.ReactNode;
@@ -554,8 +590,6 @@ export const QualityUnknownIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX
 // @public (undocumented)
 export interface ReceivedChatMessage extends ChatMessage {
     // (undocumented)
-    editTimestamp?: number;
-    // (undocumented)
     from?: Participant;
 }
 
@@ -610,6 +644,9 @@ export const SpinnerIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Elemen
 
 // @public
 export const StartAudio: (props: AllowAudioPlaybackProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactNode;
+
+// @public
+export const StartMediaButton: (props: AllowMediaPlaybackProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactNode;
 
 // @public
 export function Toast(props: React_2.HTMLAttributes<HTMLDivElement>): React_2.JSX.Element;
@@ -697,10 +734,20 @@ export function useAudioPlayback(room?: Room): {
     startAudio: () => Promise<void>;
 };
 
+// @alpha (undocumented)
+export function useAudioWaveform(trackOrTrackReference?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder, options?: AudioWaveformOptions): {
+    bars: number[];
+};
+
 // @public
 export function useChat(options?: ChatOptions): {
     send: (message: string) => Promise<ChatMessage>;
-    update: (message: string, messageId: string) => Promise<ChatMessage>;
+    update: (message: string, originalMessageOrId: string | ChatMessage) => Promise<{
+        readonly message: string;
+        readonly editTimestamp: number;
+        readonly id: string;
+        readonly timestamp: number;
+    }>;
     chatMessages: ReceivedChatMessage[];
     isSending: boolean;
 };
@@ -888,7 +935,7 @@ export function useMediaDeviceSelect({ kind, room, track, requestPermissions, on
     devices: MediaDeviceInfo[];
     className: string;
     activeDeviceId: string;
-    setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions | undefined) => Promise<void>;
+    setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions) => Promise<void>;
 };
 
 // @public (undocumented)
@@ -1159,7 +1206,7 @@ export type UseTracksOptions = {
 
 // @public
 export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, publishOptions, onDeviceError, ...rest }: UseTrackToggleProps<T>): {
-    toggle: ((forceState?: boolean | undefined) => Promise<void>) | ((forceState?: boolean | undefined, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<boolean | undefined>);
+    toggle: ((forceState?: boolean) => Promise<void>) | ((forceState?: boolean, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<boolean | undefined>);
     enabled: boolean;
     pending: boolean;
     track: LocalTrackPublication | undefined;
@@ -1187,7 +1234,7 @@ export interface UseVisualStableUpdateOptions {
     customSortFunction?: (trackReferences: TrackReferenceOrPlaceholder[]) => TrackReferenceOrPlaceholder[];
 }
 
-// @alpha
+// @beta
 export function useVoiceAssistant(): VoiceAssistant;
 
 // @public
@@ -1221,7 +1268,7 @@ export interface VideoTrackProps extends React_2.VideoHTMLAttributes<HTMLVideoEl
     trackRef?: TrackReference;
 }
 
-// @alpha (undocumented)
+// @beta (undocumented)
 export interface VoiceAssistant {
     // (undocumented)
     agent: RemoteParticipant | undefined;
@@ -1232,14 +1279,29 @@ export interface VoiceAssistant {
     // (undocumented)
     audioTrack: TrackReference | undefined;
     // (undocumented)
-    state: VoiceAssistantState;
+    state: AgentState;
 }
 
-// @alpha (undocumented)
-export const VoiceAssistantContext: React_2.Context<VoiceAssistant | undefined>;
+// @beta (undocumented)
+export function VoiceAssistantControlBar({ controls, saveUserChoices, onDeviceError, ...props }: VoiceAssistantControlBarProps): React_2.JSX.Element;
 
-// @alpha (undocumented)
-export type VoiceAssistantState = 'disconnected' | 'connecting' | 'initializing' | 'listening' | 'thinking' | 'speaking';
+// @beta (undocumented)
+export type VoiceAssistantControlBarControls = {
+    microphone?: boolean;
+    leave?: boolean;
+};
+
+// @beta (undocumented)
+export interface VoiceAssistantControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> {
+    // (undocumented)
+    controls?: VoiceAssistantControlBarControls;
+    // (undocumented)
+    onDeviceError?: (error: {
+        source: Track.Source;
+        error: Error;
+    }) => void;
+    saveUserChoices?: boolean;
+}
 
 // @public (undocumented)
 export type WidgetState = {

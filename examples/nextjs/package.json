@@ -1,7 +1,8 @@
 {
   "name": "@livekit/component-example-next",
-  "version": "0.2.30",
+  "version": "0.2.42",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,9 +12,10 @@
   "dependencies": {
     "@livekit/components-react": "workspace:*",
     "@livekit/components-styles": "workspace:*",
-    "livekit-client": "^2.4.0",
-    "livekit-server-sdk": "^1.2.7",
-    "next": "^12.3.4",
+    "@livekit/track-processors": "^0.3.2",
+    "livekit-client": "^2.5.7",
+    "livekit-server-sdk": "^2.6.1",
+    "next": "^14.2.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

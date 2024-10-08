@@ -1,5 +1,109 @@
 # @livekit/components-react
 
+## 2.6.5
+
+### Patch Changes
+
+- Updated dependencies [[`369d1b443eb831ce700a99531048981f1a1d3db8`](https://github.com/livekit/components-js/commit/369d1b443eb831ce700a99531048981f1a1d3db8)]:
+  - @livekit/components-core@0.11.9
+
+## 2.6.4
+
+### Patch Changes
+
+- Use vite for building react package, fixes useKrispNoiseFilter usage - [#994](https://github.com/livekit/components-js/pull/994) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.6.3
+
+### Patch Changes
+
+- Move useKrispNoiseFilter into dedicated import path - [#991](https://github.com/livekit/components-js/pull/991) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`a353a3b52303d167f0e04d34caeb90bab36244ba`](https://github.com/livekit/components-js/commit/a353a3b52303d167f0e04d34caeb90bab36244ba)]:
+  - @livekit/components-core@0.11.8
+
+## 2.6.2
+
+### Patch Changes
+
+- Add krisp hook - [#986](https://github.com/livekit/components-js/pull/986) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`302bbb776cea1391c51c167127023d696a2dbab8`](https://github.com/livekit/components-js/commit/302bbb776cea1391c51c167127023d696a2dbab8)]:
+  - @livekit/components-core@0.11.7
+
+## 2.6.1
+
+### Patch Changes
+
+- Improve bar visualizer animations and add initializing state - [#987](https://github.com/livekit/components-js/pull/987) ([@mattherzog](https://github.com/mattherzog))
+
+- Add support for new chat API - [#979](https://github.com/livekit/components-js/pull/979) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`3a8495fd70489bc09b801fb743afe850950c3871`](https://github.com/livekit/components-js/commit/3a8495fd70489bc09b801fb743afe850950c3871), [`22fa65e4715490216577223ab07ce14f6ff7917d`](https://github.com/livekit/components-js/commit/22fa65e4715490216577223ab07ce14f6ff7917d)]:
+  - @livekit/components-core@0.11.6
+
+## 2.6.0
+
+### Minor Changes
+
+- Update agent state property name to `lk.agent.state` - [#976](https://github.com/livekit/components-js/pull/976) ([@bcherry](https://github.com/bcherry))
+
+### Patch Changes
+
+- Add StartMediaButton to public API - [#978](https://github.com/livekit/components-js/pull/978) ([@junsumida](https://github.com/junsumida))
+
+- Update agent component docs - [#973](https://github.com/livekit/components-js/pull/973) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.5.4
+
+### Patch Changes
+
+- Updated dependencies [[`3b66cf356a90973e0cb1abc3a6d6c56880c4eb58`](https://github.com/livekit/components-js/commit/3b66cf356a90973e0cb1abc3a6d6c56880c4eb58)]:
+  - @livekit/components-core@0.11.5
+
+## 2.5.3
+
+### Patch Changes
+
+- Add dataprops and allow a template child for BarVisualizer @lukasIO - [#965](https://github.com/livekit/components-js/pull/965) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`a77a52eeb415701f0e233e9f2304b7de2d754397`](https://github.com/livekit/components-js/commit/a77a52eeb415701f0e233e9f2304b7de2d754397)]:
+  - @livekit/components-core@0.11.4
+
+## 2.5.2
+
+### Patch Changes
+
+- Don't override className on BarVisualizer - [#963](https://github.com/livekit/components-js/pull/963) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.5.1
+
+### Patch Changes
+
+- Add css var fallbacks and fix className forwarding on BarVisualizer - [#961](https://github.com/livekit/components-js/pull/961) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies []:
+  - @livekit/components-core@0.11.3
+
+## 2.5.0
+
+### Minor Changes
+
+- Stateful BarVisualizer and VoiceAssistantControlBar - [#954](https://github.com/livekit/components-js/pull/954) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Fix local storage of user choices - [#949](https://github.com/livekit/components-js/pull/949) ([@lukasIO](https://github.com/lukasIO))
+
+- Add useVoiceAssistant - [#917](https://github.com/livekit/components-js/pull/917) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix state update on participant attributes hook - [#957](https://github.com/livekit/components-js/pull/957) ([@lukasIO](https://github.com/lukasIO))
+
+- Add callback option to trackTranscription hook - [#939](https://github.com/livekit/components-js/pull/939) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`cb45f42912a08a2ab8c03b1e5109eb24d1d78180`](https://github.com/livekit/components-js/commit/cb45f42912a08a2ab8c03b1e5109eb24d1d78180), [`9b1a2596f4068c68ac8780c119426cbb55a4ca3f`](https://github.com/livekit/components-js/commit/9b1a2596f4068c68ac8780c119426cbb55a4ca3f), [`d35dffd16131cac43279300071c595f30981767f`](https://github.com/livekit/components-js/commit/d35dffd16131cac43279300071c595f30981767f)]:
+  - @livekit/components-core@0.11.3
+
 ## 2.4.3
 
 ### Patch Changes

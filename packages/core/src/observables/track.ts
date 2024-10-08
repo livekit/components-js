@@ -14,6 +14,7 @@ import type { TrackReference } from '../track-reference';
 import { observeRoomEvents } from './room';
 import type { ParticipantTrackIdentifier } from '../types';
 import { observeParticipantEvents } from './participant';
+// @ts-ignore some module resolutions (other than 'node') choke on this
 import type { PublicationEventCallbacks } from 'livekit-client/dist/src/room/track/TrackPublication';
 
 export function trackObservable(track: TrackPublication) {

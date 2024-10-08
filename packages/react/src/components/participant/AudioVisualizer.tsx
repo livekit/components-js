@@ -3,7 +3,10 @@ import { type TrackReference } from '@livekit/components-core';
 import { useEnsureTrackRef } from '../../context';
 import { useMultibandTrackVolume } from '../../hooks';
 
-/** @public */
+/**
+ * @public
+ * @deprecated Use BarVisualizer instead
+ */
 export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
   trackRef?: TrackReference;
 }
@@ -17,6 +20,7 @@ export interface AudioVisualizerProps extends React.HTMLAttributes<SVGElement> {
  * <AudioVisualizer />
  * ```
  * @public
+ * @deprecated Use BarVisualizer instead
  */
 export const AudioVisualizer: (
   props: AudioVisualizerProps & React.RefAttributes<SVGSVGElement>,

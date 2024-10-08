@@ -1,10 +1,16 @@
+'use client';
+
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import styles from '../styles/Home.module.scss';
+import Head from 'next/head';
 
 const EXAMPLE_ROUTES = {
-  minimal: { title: 'Minimal example', href: () => `/minimal` },
-  simple: { title: 'Simple example', href: () => `/simple` },
+  voiceAssistant: {
+    title: 'AI Voice Assistant example',
+    href: () => `/voice-assistant`,
+  },
+  minimal: { title: 'VideoConference example with minimal code', href: () => `/minimal` },
+  simple: { title: 'Simple custom setup example', href: () => `/simple` },
   audioOnly: {
     title: 'Audio only example',
     href: () => `/audio-only`,
@@ -16,6 +22,10 @@ const EXAMPLE_ROUTES = {
   clubhouse: {
     title: 'Clubhouse clone build with LiveKit components',
     href: () => `/clubhouse`,
+  },
+  processors: {
+    title: 'Example usage of @livekit/track-processors for background blur',
+    href: () => `/processors`,
   },
 } as const;
 

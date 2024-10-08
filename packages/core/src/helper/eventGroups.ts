@@ -11,6 +11,8 @@ export const allRemoteParticipantRoomEvents = [
   RoomEvent.ParticipantDisconnected,
   RoomEvent.ParticipantPermissionsChanged,
   RoomEvent.ParticipantMetadataChanged,
+  RoomEvent.ParticipantNameChanged,
+  RoomEvent.ParticipantAttributesChanged,
 
   RoomEvent.TrackMuted,
   RoomEvent.TrackUnmuted,

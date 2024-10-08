@@ -9,9 +9,9 @@ import { useConnectionState } from './useConnectionStatus';
 import { useParticipantAttributes } from './useParticipantAttributes';
 
 /**
- * @alpha
+ * @beta
  */
-export type VoiceAssistantState =
+export type AgentState =
   | 'disconnected'
   | 'connecting'
   | 'initializing'
@@ -20,24 +20,26 @@ export type VoiceAssistantState =
   | 'speaking';
 
 /**
- * @alpha
+ * @beta
  */
 export interface VoiceAssistant {
   agent: RemoteParticipant | undefined;
-  state: VoiceAssistantState;
+  state: AgentState;
   audioTrack: TrackReference | undefined;
   agentTranscriptions: ReceivedTranscriptionSegment[];
   agentAttributes: RemoteParticipant['attributes'] | undefined;
 }
 
-const state_attribute = 'voice_assistant.state';
+const state_attribute = 'lk.agent.state';
 
 /**
- * @alpha
- *
  * This hook looks for the first agent-participant in the room.
- * It assumes that the agent participant is based on the LiveKit VoiceAssistant API and
- * returns the most commonly used state vars when interacting with a VoiceAssistant.
+ * @remarks This hook requires an agent running with livekit-agents \>= 0.9.0
+ * @example
+ * ```tsx
+ * const { state, audioTrack, agentTranscriptions, agentAttributes } = useVoiceAssistant();
+ * ```
+ * @beta
  */
 export function useVoiceAssistant(): VoiceAssistant {
   const agent = useRemoteParticipants().find((p) => p.kind === ParticipantKind.AGENT);
@@ -46,7 +48,7 @@ export function useVoiceAssistant(): VoiceAssistant {
   const connectionState = useConnectionState();
   const { attributes } = useParticipantAttributes({ participant: agent });
 
-  const state: VoiceAssistantState = React.useMemo(() => {
+  const state: AgentState = React.useMemo(() => {
     if (connectionState === ConnectionState.Disconnected) {
       return 'disconnected';
     } else if (
@@ -56,7 +58,7 @@ export function useVoiceAssistant(): VoiceAssistant {
     ) {
       return 'connecting';
     } else {
-      return attributes[state_attribute] as VoiceAssistantState;
+      return attributes[state_attribute] as AgentState;
     }
   }, [attributes, agent, connectionState]);
 

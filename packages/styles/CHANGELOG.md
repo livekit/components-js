@@ -1,5 +1,29 @@
 # @livekit/components-styles
 
+## 1.1.3
+
+### Patch Changes
+
+- Add css var for idle visualizer bar color - [#985](https://github.com/livekit/components-js/pull/985) ([@lukasIO](https://github.com/lukasIO))
+
+## 1.1.2
+
+### Patch Changes
+
+- Add dataprops and allow a template child for BarVisualizer @lukasIO - [#965](https://github.com/livekit/components-js/pull/965) ([@lukasIO](https://github.com/lukasIO))
+
+## 1.1.1
+
+### Patch Changes
+
+- Add css var fallbacks and fix className forwarding on BarVisualizer - [#961](https://github.com/livekit/components-js/pull/961) ([@lukasIO](https://github.com/lukasIO))
+
+## 1.1.0
+
+### Minor Changes
+
+- Update styles for new agent components - [#959](https://github.com/livekit/components-js/pull/959) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.0.12
 
 ### Patch Changes

@@ -1,5 +1,53 @@
 # @livekit/components-core
 
+## 0.11.9
+
+### Patch Changes
+
+- Use legacy chat messages on unsupported server versions - [#999](https://github.com/livekit/components-js/pull/999) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.8
+
+### Patch Changes
+
+- Move useKrispNoiseFilter into dedicated import path - [#991](https://github.com/livekit/components-js/pull/991) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.7
+
+### Patch Changes
+
+- Add krisp hook - [#986](https://github.com/livekit/components-js/pull/986) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.6
+
+### Patch Changes
+
+- update useParticipants to listen for any Participant's info changes - [#980](https://github.com/livekit/components-js/pull/980) ([@lebaudantoine](https://github.com/lebaudantoine))
+
+- Add support for new chat API - [#979](https://github.com/livekit/components-js/pull/979) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.5
+
+### Patch Changes
+
+- Fix local storage user choices - [#970](https://github.com/livekit/components-js/pull/970) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.4
+
+### Patch Changes
+
+- Add dataprops and allow a template child for BarVisualizer @lukasIO - [#965](https://github.com/livekit/components-js/pull/965) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.3
+
+### Patch Changes
+
+- Fix local storage of user choices - [#949](https://github.com/livekit/components-js/pull/949) ([@lukasIO](https://github.com/lukasIO))
+
+- Don't write empty username values to local storage - [#953](https://github.com/livekit/components-js/pull/953) ([@lukasIO](https://github.com/lukasIO))
+
+- Add useVoiceAssistant - [#917](https://github.com/livekit/components-js/pull/917) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.11.2
 
 ### Patch Changes

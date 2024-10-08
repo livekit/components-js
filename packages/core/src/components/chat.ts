@@ -1,31 +1,49 @@
 /* eslint-disable camelcase */
-import type { Participant, Room } from 'livekit-client';
-import { RoomEvent } from 'livekit-client';
-import { BehaviorSubject, Subject, scan, map, takeUntil } from 'rxjs';
-import { DataTopic, sendMessage, setupDataMessageHandler } from '../observables/dataChannel';
+import type { Participant, Room, ChatMessage } from 'livekit-client';
+import { compareVersions, RoomEvent } from 'livekit-client';
+import { BehaviorSubject, Subject, scan, map, takeUntil, merge } from 'rxjs';
+import {
+  DataTopic,
+  sendMessage,
+  setupChatMessageHandler,
+  setupDataMessageHandler,
+} from '../observables/dataChannel';
 
 /** @public */
-export interface ChatMessage {
-  id: string;
-  timestamp: number;
-  message: string;
-}
+export type { ChatMessage };
 
 /** @public */
 export interface ReceivedChatMessage extends ChatMessage {
   from?: Participant;
-  editTimestamp?: number;
 }
 
-/** @public */
-export type MessageEncoder = (message: ChatMessage) => Uint8Array;
-/** @public */
-export type MessageDecoder = (message: Uint8Array) => ReceivedChatMessage;
+export interface LegacyChatMessage extends ChatMessage {
+  ignore?: boolean;
+}
+
+export interface LegacyReceivedChatMessage extends ReceivedChatMessage {
+  ignore?: boolean;
+}
+
+/**
+ * @public
+ * @deprecated the new chat API doesn't rely on encoders and decoders anymore and uses a dedicated chat API instead
+ */
+export type MessageEncoder = (message: LegacyChatMessage) => Uint8Array;
+/**
+ * @public
+ * @deprecated the new chat API doesn't rely on encoders and decoders anymore and uses a dedicated chat API instead
+ */
+export type MessageDecoder = (message: Uint8Array) => LegacyReceivedChatMessage;
 /** @public */
 export type ChatOptions = {
-  messageEncoder?: (message: ChatMessage) => Uint8Array;
-  messageDecoder?: (message: Uint8Array) => ReceivedChatMessage;
+  /** @deprecated the new chat API doesn't rely on encoders and decoders anymore and uses a dedicated chat API instead */
+  messageEncoder?: (message: LegacyChatMessage) => Uint8Array;
+  /** @deprecated the new chat API doesn't rely on encoders and decoders anymore and uses a dedicated chat API instead */
+  messageDecoder?: (message: Uint8Array) => LegacyReceivedChatMessage;
+  /** @deprecated the new chat API doesn't rely on topics anymore and uses a dedicated chat API instead */
   channelTopic?: string;
+  /** @deprecated the new chat API doesn't rely on topics anymore and uses a dedicated chat API instead */
   updateChannelTopic?: string;
 };
 
@@ -40,12 +58,17 @@ const decoder = new TextDecoder();
 
 const topicSubjectMap: Map<Room, Map<string, Subject<RawMessage>>> = new Map();
 
-const encode = (message: ChatMessage) => encoder.encode(JSON.stringify(message));
+const encode = (message: LegacyReceivedChatMessage) => encoder.encode(JSON.stringify(message));
 
-const decode = (message: Uint8Array) => JSON.parse(decoder.decode(message)) as ReceivedChatMessage;
+const decode = (message: Uint8Array) =>
+  JSON.parse(decoder.decode(message)) as LegacyReceivedChatMessage | ReceivedChatMessage;
 
 export function setupChat(room: Room, options?: ChatOptions) {
   const onDestroyObservable = new Subject<void>();
+
+  const serverSupportsChatApi = () =>
+    room.serverInfo?.edition === 1 ||
+    (!!room.serverInfo?.version && compareVersions(room.serverInfo?.version, '1.17.2') > 0);
 
   const { messageDecoder, messageEncoder, channelTopic, updateChannelTopic } = options ?? {};
 
@@ -67,17 +90,33 @@ export function setupChat(room: Room, options?: ChatOptions) {
     const { messageObservable } = setupDataMessageHandler(room, [topic, updateTopic]);
     messageObservable.pipe(takeUntil(onDestroyObservable)).subscribe(messageSubject);
   }
+  const { chatObservable, send: sendChatMessage } = setupChatMessageHandler(room);
 
   const finalMessageDecoder = messageDecoder ?? decode;
 
   /** Build up the message array over time. */
-  const messagesObservable = messageSubject.pipe(
-    map((msg) => {
-      const parsedMessage = finalMessageDecoder(msg.payload);
-      const newMessage: ReceivedChatMessage = { ...parsedMessage, from: msg.from };
-      return newMessage;
-    }),
-    scan<ReceivedChatMessage, ReceivedChatMessage[]>((acc, value) => {
+  const messagesObservable = merge(
+    messageSubject.pipe(
+      map((msg) => {
+        const parsedMessage = finalMessageDecoder(msg.payload);
+        const newMessage = { ...parsedMessage, from: msg.from };
+        if (isIgnorableChatMessage(newMessage)) {
+          return undefined;
+        }
+        return newMessage;
+      }),
+    ),
+    chatObservable.pipe(
+      map(([msg, participant]) => {
+        return { ...msg, from: participant };
+      }),
+    ),
+  ).pipe(
+    scan<ReceivedChatMessage | undefined, ReceivedChatMessage[]>((acc, value) => {
+      // ignore legacy message updates
+      if (!value) {
+        return acc;
+      }
       // handle message updates
       if (
         'id' in value &&
@@ -89,7 +128,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
           acc[replaceIndex] = {
             ...value,
             timestamp: originalMsg.timestamp,
-            editTimestamp: value.timestamp,
+            editTimestamp: value.editTimestamp ?? value.timestamp,
           };
         }
 
@@ -105,20 +144,16 @@ export function setupChat(room: Room, options?: ChatOptions) {
   const finalMessageEncoder = messageEncoder ?? encode;
 
   const send = async (message: string) => {
-    const timestamp = Date.now();
-    const id = crypto.randomUUID();
-    const chatMessage: ChatMessage = { id, message, timestamp };
-    const encodedMsg = finalMessageEncoder(chatMessage);
     isSending$.next(true);
     try {
-      await sendMessage(room.localParticipant, encodedMsg, {
+      const chatMessage = await sendChatMessage(message);
+      const encodedLegacyMsg = finalMessageEncoder({
+        ...chatMessage,
+        ignore: serverSupportsChatApi(),
+      });
+      await sendMessage(room.localParticipant, encodedLegacyMsg, {
         reliable: true,
         topic,
-      });
-      messageSubject.next({
-        payload: encodedMsg,
-        topic: topic,
-        from: room.localParticipant,
       });
       return chatMessage;
     } finally {
@@ -126,22 +161,21 @@ export function setupChat(room: Room, options?: ChatOptions) {
     }
   };
 
-  const update = async (message: string, messageId: string) => {
+  const update = async (message: string, originalMessageOrId: string | ChatMessage) => {
     const timestamp = Date.now();
-    const chatMessage: ChatMessage = { id: messageId, message, timestamp };
-    const encodedMsg = finalMessageEncoder(chatMessage);
+    const originalMessage: ChatMessage =
+      typeof originalMessageOrId === 'string'
+        ? { id: originalMessageOrId, message: '', timestamp }
+        : originalMessageOrId;
     isSending$.next(true);
     try {
-      await sendMessage(room.localParticipant, encodedMsg, {
+      const editedMessage = await room.localParticipant.editChatMessage(message, originalMessage);
+      const encodedLegacyMessage = finalMessageEncoder(editedMessage);
+      await sendMessage(room.localParticipant, encodedLegacyMessage, {
         topic: updateTopic,
         reliable: true,
       });
-      messageSubject.next({
-        payload: encodedMsg,
-        topic: topic,
-        from: room.localParticipant,
-      });
-      return chatMessage;
+      return editedMessage;
     } finally {
       isSending$.next(false);
     }
@@ -154,5 +188,16 @@ export function setupChat(room: Room, options?: ChatOptions) {
   }
   room.once(RoomEvent.Disconnected, destroy);
 
-  return { messageObservable: messagesObservable, isSendingObservable: isSending$, send, update };
+  return {
+    messageObservable: messagesObservable,
+    isSendingObservable: isSending$,
+    send,
+    update,
+  };
+}
+
+function isIgnorableChatMessage(
+  msg: ReceivedChatMessage | LegacyReceivedChatMessage,
+): msg is ReceivedChatMessage {
+  return (msg as LegacyChatMessage).ignore == true;
 }

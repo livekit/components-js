@@ -5,6 +5,7 @@ export * from './controls/DisconnectButton';
 export * from './controls/FocusToggle';
 export * from './controls/MediaDeviceSelect';
 export * from './controls/StartAudio';
+export * from './controls/StartMediaButton';
 export * from './controls/TrackToggle';
 export * from './layout';
 export * from './layout/LayoutContextProvider';
@@ -22,6 +23,7 @@ export { Toast } from './Toast';
 export * from './TrackLoop';
 export * from './participant/ParticipantTile';
 export * from './participant/ParticipantAudioTile';
+export * from './participant/BarVisualizer';
 export { ConnectionStateToast, type ConnectionStateToastProps } from './ConnectionStateToast';
 export {
   type MessageFormatter,

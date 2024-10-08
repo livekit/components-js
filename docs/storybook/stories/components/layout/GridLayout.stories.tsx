@@ -3,8 +3,9 @@ import * as React from 'react';
 import { GridLayout, GridLayoutProps, useTracks } from '@livekit/components-react';
 import { LkRoomContext } from '../../../.storybook/lk-decorators';
 import { Track } from 'livekit-client';
+import { Meta } from '@storybook/react';
 
-export default {
+const Story: Meta<typeof GridLayout> = {
   component: GridLayout,
   decorators: [LkRoomContext],
   render: (args: Omit<GridLayoutProps, 'tracks'>) => {
@@ -13,6 +14,8 @@ export default {
   },
   argTypes: {},
 };
+
+export default Story;
 
 export const Default = {
   args: {},

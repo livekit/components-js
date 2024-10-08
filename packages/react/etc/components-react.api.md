@@ -376,6 +376,7 @@ export interface LiveKitRoomProps extends Omit<React_2.HTMLAttributes<HTMLDivEle
     // (undocumented)
     onMediaDeviceFailure?: (failure?: MediaDeviceFailure) => void;
     options?: RoomOptions;
+    prepareConnection?: boolean;
     room?: Room;
     screen?: ScreenShareCaptureOptions | boolean;
     serverUrl: string | undefined;

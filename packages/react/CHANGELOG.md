@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.6.6
+
+### Patch Changes
+
+- Avoid logging activeDevice updates for undefined active devices - [#1012](https://github.com/livekit/components-js/pull/1012) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.6.5
 
 ### Patch Changes

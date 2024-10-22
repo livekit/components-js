@@ -63,7 +63,7 @@ export function useMediaDeviceSelect({
 
   React.useEffect(() => {
     const listener = activeDeviceObservable.subscribe((deviceId) => {
-      if (deviceId) {
+      if (deviceId && deviceId !== currentDeviceId) {
         log.info('setCurrentDeviceId', deviceId);
         setCurrentDeviceId(deviceId);
       }

@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.11.10
+
+### Patch Changes
+
+- Fix initial device selection when mounting useMediaDeviceSelect - [#1014](https://github.com/livekit/components-js/pull/1014) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.11.9
 
 ### Patch Changes

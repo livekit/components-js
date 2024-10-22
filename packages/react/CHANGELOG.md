@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 2.6.7
+
+### Patch Changes
+
+- Fix initial device selection when mounting useMediaDeviceSelect - [#1014](https://github.com/livekit/components-js/pull/1014) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`5e314414a443c487fc3a4ac687c20bee5f60f0e7`](https://github.com/livekit/components-js/commit/5e314414a443c487fc3a4ac687c20bee5f60f0e7)]:
+  - @livekit/components-core@0.11.10
+
 ## 2.6.6
 
 ### Patch Changes

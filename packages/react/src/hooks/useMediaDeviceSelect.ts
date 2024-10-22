@@ -65,7 +65,7 @@ export function useMediaDeviceSelect({
     const listener = activeDeviceObservable.subscribe((deviceId) => {
       if (deviceId) {
         log.info('setCurrentDeviceId', deviceId);
-        if (deviceId) setCurrentDeviceId(deviceId);
+        setCurrentDeviceId(deviceId);
       }
     });
     return () => {

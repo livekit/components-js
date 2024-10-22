@@ -249,7 +249,6 @@ export function createActiveDeviceObservable(room: Room, kind: MediaDeviceKind) 
       log.debug('activeDeviceObservable | RoomEvent.ActiveDeviceChanged', { kind, deviceId });
       return deviceId;
     }),
-    startWith(room.getActiveDevice(kind)),
   );
 }
 

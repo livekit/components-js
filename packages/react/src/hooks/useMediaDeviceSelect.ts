@@ -53,7 +53,9 @@ export function useMediaDeviceSelect({
   );
   const devices = useObservableState(deviceObserver, [] as MediaDeviceInfo[]);
   // Active device management.
-  const [currentDeviceId, setCurrentDeviceId] = React.useState<string>('');
+  const [currentDeviceId, setCurrentDeviceId] = React.useState<string>(
+    roomContext?.getActiveDevice(kind) ?? '',
+  );
   const { className, activeDeviceObservable, setActiveMediaDevice } = React.useMemo(
     () => setupDeviceSelector(kind, room ?? roomContext, track),
     [kind, room, roomContext, track],
@@ -61,8 +63,10 @@ export function useMediaDeviceSelect({
 
   React.useEffect(() => {
     const listener = activeDeviceObservable.subscribe((deviceId) => {
-      log.info('setCurrentDeviceId', deviceId);
-      if (deviceId) setCurrentDeviceId(deviceId);
+      if (deviceId) {
+        log.info('setCurrentDeviceId', deviceId);
+        setCurrentDeviceId(deviceId);
+      }
     });
     return () => {
       listener?.unsubscribe();

@@ -26,6 +26,8 @@ const CustomizeExample: NextPage = () => {
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string>();
+  const [hasAudio, setHasAudio] = useState(false);
+  const [hasVideo, setHasVideo] = useState(false);
 
   // Get room parameters once on mount
   const [roomParams] = useState(() => {
@@ -36,6 +38,30 @@ const CustomizeExample: NextPage = () => {
       userIdentity: params.get('user') ?? generateRandomUserId(),
     };
   });
+
+  // Check available devices on mount
+  useEffect(() => {
+    async function checkDevices() {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        setHasAudio(devices.some(device => device.kind === 'audioinput'));
+        setHasVideo(devices.some(device => device.kind === 'videoinput'));
+      } catch (e) {
+        console.warn('Unable to check media devices:', e);
+        setHasAudio(false);
+        setHasVideo(false);
+      }
+    }
+
+    // Only check devices if on client side and API is available
+    if (typeof window !== 'undefined' && navigator.mediaDevices) {
+      checkDevices();
+
+      // Listen for device changes
+      navigator.mediaDevices.addEventListener('devicechange', checkDevices);
+      return () => navigator.mediaDevices.removeEventListener('devicechange', checkDevices);
+    }
+  }, []);
 
   // Fetch token only when connect button is clicked
   const fetchToken = useCallback(async () => {
@@ -75,6 +101,11 @@ const CustomizeExample: NextPage = () => {
   }, []);
 
   const handleError = useCallback((err: Error) => {
+    // Don't treat missing devices as a fatal error
+    if (err.name === 'NotFoundError' || err.name === 'NotAllowedError') {
+      console.warn('Media device error:', err);
+      return;
+    }
     console.error('LiveKit error:', err);
     setError(err.message);
     handleDisconnect();
@@ -87,8 +118,14 @@ const CustomizeExample: NextPage = () => {
           Welcome to <a href="https://livekit.io">LiveKit</a>
         </h1>
 
+        {!hasAudio && !hasVideo && (
+          <div style={{ backgroundColor: '#fff3cd', color: '#856404', padding: '1rem', borderRadius: '4px', margin: '1rem 0' }}>
+            No camera or microphone detected. You can still join but won't be able to share audio or video.
+          </div>
+        )}
+
         {error && (
-          <div style={{ color: 'red', margin: '1rem 0' }}>
+          <div style={{ backgroundColor: '#f8d7da', color: '#721c24', padding: '1rem', borderRadius: '4px', margin: '1rem 0' }}>
             Error: {error}
           </div>
         )}
@@ -111,8 +148,16 @@ const CustomizeExample: NextPage = () => {
             onConnected={() => setIsConnected(true)}
             onDisconnected={handleDisconnect}
             onError={handleError}
-            audio={true}
-            video={true}
+            // Only enable audio/video if devices are available
+            audio={hasAudio}
+            video={hasVideo}
+            options={{
+              audioCaptureDefaults: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                autoGainControl: true,
+              },
+            }}
           >
             <RoomAudioRenderer />
             {isConnected && <Stage />}

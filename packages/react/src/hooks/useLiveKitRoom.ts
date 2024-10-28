@@ -10,6 +10,7 @@ const defaultRoomProps: Partial<LiveKitRoomProps> = {
   connect: true,
   audio: false,
   video: false,
+  prepareConnection: true,
 };
 
 /**
@@ -45,6 +46,7 @@ export function useLiveKitRoom<T extends HTMLElement>(
     onMediaDeviceFailure,
     onEncryptionError,
     simulateParticipants,
+    prepareConnection,
     ...rest
   } = { ...defaultRoomProps, ...props };
   if (options && passedRoom) {
@@ -58,6 +60,13 @@ export function useLiveKitRoom<T extends HTMLElement>(
   React.useEffect(() => {
     setRoom(passedRoom ?? new Room(options));
   }, [passedRoom]);
+
+  const prewarm = React.useMemo(() => {
+    if (room && serverUrl && prepareConnection && token) {
+      return room.prepareConnection(serverUrl, token);
+    }
+    return new Promise<void>((resolve) => resolve(undefined));
+  }, [serverUrl, prepareConnection, token, room]);
 
   const htmlProps = React.useMemo(() => {
     const { className } = setupLiveKitRoom();
@@ -126,10 +135,12 @@ export function useLiveKitRoom<T extends HTMLElement>(
     }
     if (connect) {
       log.debug('connecting');
-      room.connect(serverUrl, token, connectOptions).catch((e) => {
-        log.warn(e);
-        onError?.(e as Error);
-      });
+      prewarm.then(() =>
+        room.connect(serverUrl, token, connectOptions).catch((e) => {
+          log.warn(e);
+          onError?.(e as Error);
+        }),
+      );
     } else {
       log.debug('disconnecting because connect is false');
       room.disconnect();

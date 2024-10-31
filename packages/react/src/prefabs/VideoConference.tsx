@@ -29,6 +29,7 @@ import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
  */
 export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
   chatMessageFormatter?: MessageFormatter;
+  onScreenShareClick?: (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   chatMessageEncoder?: MessageEncoder;
   chatMessageDecoder?: MessageDecoder;
   /** @alpha */
@@ -58,6 +59,7 @@ export function VideoConference({
   chatMessageDecoder,
   chatMessageEncoder,
   SettingsComponent,
+  onScreenShareClick,
   ...props
 }: VideoConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({
@@ -155,7 +157,7 @@ export function VideoConference({
                 </FocusLayoutContainer>
               </div>
             )}
-            <ControlBar controls={{ chat: true, settings: !!SettingsComponent }} />
+            <ControlBar variation="minimal" controls={{ chat: true, settings: !!SettingsComponent }} onScreenShareClick={onScreenShareClick} />
           </div>
           <Chat
             style={{ display: widgetState.showChat ? 'grid' : 'none' }}

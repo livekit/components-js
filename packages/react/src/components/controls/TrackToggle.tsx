@@ -18,6 +18,7 @@ export interface TrackToggleProps<T extends ToggleSource>
   captureOptions?: CaptureOptionsBySource<T>;
   publishOptions?: TrackPublishOptions;
   onDeviceError?: (error: Error) => void;
+  onClick?: (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 /**

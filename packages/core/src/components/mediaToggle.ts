@@ -91,11 +91,13 @@ export function setupMediaToggle<T extends ToggleSource>(
           );
           return localParticipant.isMicrophoneEnabled;
         case Track.Source.ScreenShare:
-          await localParticipant.setScreenShareEnabled(
-            forceState ?? !localParticipant.isScreenShareEnabled,
-            captureOptions as ScreenShareCaptureOptions,
-            publishOptions,
-          );
+          // await localParticipant.setScreenShareEnabled(
+          //   forceState ?? !localParticipant.isScreenShareEnabled,
+          //   captureOptions as ScreenShareCaptureOptions,
+          //   publishOptions,
+          // );
+          console.warn('do nothing, use custom screen share picker.');
+          
           return localParticipant.isScreenShareEnabled;
         default:
           throw new TypeError('Tried to toggle unsupported source');

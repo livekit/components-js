@@ -35,6 +35,7 @@ export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
    * @alpha
    */
   saveUserChoices?: boolean;
+  onScreenShareClick?: (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 /**
@@ -58,6 +59,7 @@ export function ControlBar({
   controls,
   saveUserChoices = true,
   onDeviceError,
+  onScreenShareClick,
   ...props
 }: ControlBarProps) {
   const [isChatOpen, setIsChatOpen] = React.useState(false);
@@ -177,6 +179,7 @@ export function ControlBar({
           captureOptions={{ audio: true, selfBrowserSurface: 'include' }}
           showIcon={showIcon}
           onChange={onScreenShareChange}
+          onClick={onScreenShareClick}
           onDeviceError={(error) => onDeviceError?.({ source: Track.Source.ScreenShare, error })}
         >
           {showText && (isScreenShareEnabled ? 'Stop screen share' : 'Share screen')}

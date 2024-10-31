@@ -21,6 +21,6 @@
     "meta-data.json"
   ],
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   }
 }

@@ -157,7 +157,7 @@ export function VideoConference({
                 </FocusLayoutContainer>
               </div>
             )}
-            <ControlBar controls={{ chat: true, settings: !!SettingsComponent }} onScreenShareClick={onScreenShareClick} />
+            <ControlBar variation="minimal" controls={{ chat: true, settings: !!SettingsComponent }} onScreenShareClick={onScreenShareClick} />
           </div>
           <Chat
             style={{ display: widgetState.showChat ? 'grid' : 'none' }}

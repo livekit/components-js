@@ -95,8 +95,7 @@ export function ControlBar({
     [variation],
   );
   const showText = React.useMemo(
-    // () => variation === 'textOnly' || variation === 'verbose',
-    () => false,
+    () => variation === 'textOnly' || variation === 'verbose',
     [variation],
   );
 

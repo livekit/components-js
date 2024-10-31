@@ -1,6 +1,6 @@
 .toast {
   position: fixed;
-  top: 0.75rem;
+  top: 2.75rem;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -21,6 +21,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(359deg);
   }

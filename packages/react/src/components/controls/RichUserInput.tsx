@@ -60,7 +60,13 @@ export function RichUserInput(props: RichUserInputProps) {
   );
   return (
     <>
-      <div>
+      <div
+        style={{
+          bottom: 0,
+          position: 'absolute',
+          width: '99.9%',
+        }}
+      >
         <div className="lk-file-list">
           {Array.from(filesToSend).map((file) => (
             <div key={file.name}>

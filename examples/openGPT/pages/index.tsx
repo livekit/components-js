@@ -4,12 +4,12 @@ import {
   LiveKitRoom,
   useToken,
   setLogLevel,
-  RichUserInput,
   useConnectionState,
   Chat,
   useVoiceAssistant,
   BarVisualizer,
   TrackToggle,
+  VoiceAssistantControlBar,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';
@@ -25,16 +25,34 @@ function GptUi() {
 
   return (
     <div style={{ height: '100vh' }}>
-      <select defaultValue={mode} onChange={(ev) => setMode(ev.target.value as 'audio' | 'text')}>
-        <option value={'text'}>Text</option>
-        <option value={'audio'}>Audio</option>
-      </select>
+      <button
+        id="mode-toggle"
+        className="lk-button"
+        style={{
+          fontSize: '3rem',
+          position: 'absolute',
+          top: '0.75rem',
+          right: '0.75rem',
+          cursor: 'pointer',
+        }}
+        onClick={() => {
+          setMode((mode) => (mode === 'audio' ? 'text' : 'audio'));
+        }}
+      >
+        {mode === 'audio' ? '📝' : '🎙️'}
+      </button>
       {connectionState === ConnectionState.Connected && (
         <div style={{ height: '100%' }}>
           <Chat style={{ display: mode === 'text' ? 'block' : 'none' }} />
           <div style={{ display: mode === 'audio' ? 'block' : 'none' }}>
             <BarVisualizer trackRef={agent.audioTrack} />
-            <TrackToggle source={Track.Source.Microphone} />
+            <VoiceAssistantControlBar
+              style={{
+                bottom: 0,
+                position: 'absolute',
+                width: '99.9%',
+              }}
+            />
           </div>
         </div>
       )}

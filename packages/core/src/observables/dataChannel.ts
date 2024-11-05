@@ -86,7 +86,7 @@ export function setupChatMessageHandler(room: Room) {
   const send = async (text: string, options: SendTextOptions) => {
     const msg = await room.localParticipant.sendChatMessage(text);
     await room.localParticipant.sendText(text, options);
-    return msg;
+    return { ...msg, from: room.localParticipant };
   };
 
   const edit = async (text: string, originalMsg: ChatMessage) => {

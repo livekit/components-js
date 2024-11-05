@@ -5,8 +5,7 @@ import { cloneSingleChild } from '../utils';
 import type { MessageFormatter } from '../components/ChatEntry';
 import { ChatEntry } from '../components/ChatEntry';
 import { useChat } from '../hooks/useChat';
-import { ChatToggle, RichUserInput } from '../components';
-import { ChatCloseIcon } from '../assets/icons';
+import { RichUserInput } from '../components';
 
 /** @public */
 export interface ChatProps extends React.HTMLAttributes<HTMLDivElement>, ChatOptions {

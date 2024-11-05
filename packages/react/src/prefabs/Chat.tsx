@@ -5,7 +5,7 @@ import { cloneSingleChild } from '../utils';
 import type { MessageFormatter } from '../components/ChatEntry';
 import { ChatEntry } from '../components/ChatEntry';
 import { useChat } from '../hooks/useChat';
-import { ChatToggle } from '../components';
+import { ChatToggle, RichUserInput } from '../components';
 import { ChatCloseIcon } from '../assets/icons';
 
 /** @public */
@@ -32,28 +32,16 @@ export function Chat({
   channelTopic,
   ...props
 }: ChatProps) {
-  const inputRef = React.useRef<HTMLInputElement>(null);
   const ulRef = React.useRef<HTMLUListElement>(null);
 
   const chatOptions: ChatOptions = React.useMemo(() => {
     return { messageDecoder, messageEncoder, channelTopic };
   }, [messageDecoder, messageEncoder, channelTopic]);
 
-  const { send, chatMessages, isSending } = useChat(chatOptions);
+  const { chatMessages, send, isSending } = useChat(chatOptions);
 
   const layoutContext = useMaybeLayoutContext();
   const lastReadMsgAt = React.useRef<ChatMessage['timestamp']>(0);
-
-  async function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    if (inputRef.current && inputRef.current.value.trim() !== '') {
-      if (send) {
-        await send(inputRef.current.value);
-        inputRef.current.value = '';
-        inputRef.current.focus();
-      }
-    }
-  }
 
   React.useEffect(() => {
     if (ulRef) {
@@ -87,12 +75,12 @@ export function Chat({
 
   return (
     <div {...props} className="lk-chat">
-      <div className="lk-chat-header">
+      {/* <div className="lk-chat-header">
         Messages
         <ChatToggle className="lk-close-button">
           <ChatCloseIcon />
         </ChatToggle>
-      </div>
+      </div> */}
 
       <ul className="lk-list lk-chat-messages" ref={ulRef}>
         {props.children
@@ -119,21 +107,7 @@ export function Chat({
               );
             })}
       </ul>
-      <form className="lk-chat-form" onSubmit={handleSubmit}>
-        <input
-          className="lk-form-control lk-chat-form-input"
-          disabled={isSending}
-          ref={inputRef}
-          type="text"
-          placeholder="Enter a message..."
-          onInput={(ev) => ev.stopPropagation()}
-          onKeyDown={(ev) => ev.stopPropagation()}
-          onKeyUp={(ev) => ev.stopPropagation()}
-        />
-        <button type="submit" className="lk-button lk-chat-form-button" disabled={isSending}>
-          Send
-        </button>
-      </form>
+      <RichUserInput send={send} />
     </div>
   );
 }

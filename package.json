@@ -42,7 +42,13 @@
     "typescript": "5.6.2"
   },
   "dependencies": {
-    "livekit-client": "^2.5.7"
+    "livekit-client": "link:../client-sdk-js"
+  },
+  "pnpm": {
+    "overrides": {
+      "livekit-client": "link:../client-sdk-js",
+      "@livekit/protocol": "file:../protocol/packages/javascript"
+    }
   },
   "engines": {
     "node": ">=18"

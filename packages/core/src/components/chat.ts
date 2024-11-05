@@ -8,6 +8,7 @@ import {
   setupChatMessageHandler,
   setupDataMessageHandler,
 } from '../observables/dataChannel';
+import { SendTextOptions } from 'livekit-client/dist/src/room/types';
 
 /** @public */
 export type { ChatMessage };
@@ -143,10 +144,10 @@ export function setupChat(room: Room, options?: ChatOptions) {
 
   const finalMessageEncoder = messageEncoder ?? encode;
 
-  const send = async (message: string) => {
+  const send = async (message: string, options: SendTextOptions) => {
     isSending$.next(true);
     try {
-      const chatMessage = await sendChatMessage(message);
+      const chatMessage = await sendChatMessage(message, options);
       const encodedLegacyMsg = finalMessageEncoder({
         ...chatMessage,
         ignore: serverSupportsChatApi(),

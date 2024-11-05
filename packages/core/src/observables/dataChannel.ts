@@ -1,13 +1,14 @@
-import type {
-  ChatMessage,
-  DataPublishOptions,
-  LocalParticipant,
-  Participant,
-  Room,
+import {
+  type ChatMessage,
+  type DataPublishOptions,
+  type LocalParticipant,
+  type Participant,
+  type Room,
 } from 'livekit-client';
 import type { Subscriber } from 'rxjs';
 import { Observable, filter, map } from 'rxjs';
 import { createChatObserver, createDataObserver } from './room';
+import { SendTextOptions } from 'livekit-client/dist/src/room/types';
 
 export const DataTopic = {
   CHAT: 'lk-chat-topic',
@@ -82,8 +83,9 @@ export function setupDataMessageHandler<T extends string>(
 export function setupChatMessageHandler(room: Room) {
   const chatObservable = createChatObserver(room);
 
-  const send = async (text: string) => {
+  const send = async (text: string, options: SendTextOptions) => {
     const msg = await room.localParticipant.sendChatMessage(text);
+    await room.localParticipant.sendText(text, options);
     return msg;
   };
 

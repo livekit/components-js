@@ -47,6 +47,23 @@ export const ChatEntry: (
     const time = new Date(entry.timestamp);
     const locale = navigator ? navigator.language : 'en-US';
 
+    React.useEffect(() => {
+      entry.attachedFiles?.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const imagePreview = document.querySelector(
+            `.lk-file-preview#${encodeURI(file.name.replaceAll('.', '-'))}`,
+          ) as HTMLImageElement;
+          // Set the preview image source to the file URL
+          imagePreview.src = e.target!.result;
+          // Show the image element
+          imagePreview.style.display = 'block';
+        };
+        // Read the file as a Data URL
+        reader.readAsDataURL(file);
+      });
+    }, [entry]);
+
     return (
       <li
         ref={ref}
@@ -73,6 +90,19 @@ export const ChatEntry: (
         )}
 
         <span className="lk-message-body">{formattedMessage}</span>
+        {entry.attachedFiles && (
+          <div className="lk-file-attachments">
+            {entry.attachedFiles.map((file) => (
+              <div className="file-preview" key={file.name}>
+                <img
+                  className="lk-file-preview"
+                  id={encodeURI(file.name.replaceAll('.', '-'))}
+                  title={file.name}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </li>
     );
   },

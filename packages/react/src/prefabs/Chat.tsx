@@ -81,7 +81,11 @@ export function Chat({
         </ChatToggle>
       </div> */}
 
-      <ul className="lk-list lk-chat-messages" ref={ulRef}>
+      <ul
+        className="lk-list lk-chat-messages"
+        ref={ulRef}
+        style={{ height: 'calc(100% - var(--lk-control-bar-height))' }}
+      >
         {props.children
           ? chatMessages.map((msg, idx) =>
               cloneSingleChild(props.children, {

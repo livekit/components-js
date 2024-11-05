@@ -8,8 +8,8 @@ import {
   Chat,
   useVoiceAssistant,
   BarVisualizer,
-  TrackToggle,
   VoiceAssistantControlBar,
+  useRoomContext,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';
@@ -18,14 +18,28 @@ import { ConnectionState, Track } from 'livekit-client';
 
 function GptUi() {
   const connectionState = useConnectionState();
+  const room = useRoomContext();
 
-  const [mode, setMode] = useState<'audio' | 'text'>('text');
+  const [audioMode, setAudioMode] = useState(false);
+  const [isSwitchingModes, setIsSwitchingModes] = useState(false);
 
   const agent = useVoiceAssistant();
+
+  const handleModeSwitch = async () => {
+    setIsSwitchingModes(true);
+    try {
+      let nextMode = !audioMode;
+      setAudioMode(nextMode);
+      await room.localParticipant.setMicrophoneEnabled(nextMode);
+    } finally {
+      setIsSwitchingModes(false);
+    }
+  };
 
   return (
     <div style={{ height: '100vh' }}>
       <button
+        disabled={isSwitchingModes}
         id="mode-toggle"
         className="lk-button"
         style={{
@@ -35,18 +49,17 @@ function GptUi() {
           right: '0.75rem',
           cursor: 'pointer',
         }}
-        onClick={() => {
-          setMode((mode) => (mode === 'audio' ? 'text' : 'audio'));
-        }}
+        onClick={handleModeSwitch}
       >
-        {mode === 'audio' ? '📝' : '🎙️'}
+        {audioMode ? '📝' : '🎙️'}
       </button>
       {connectionState === ConnectionState.Connected && (
         <div style={{ height: '100%' }}>
-          <Chat style={{ display: mode === 'text' ? 'block' : 'none' }} />
-          <div style={{ display: mode === 'audio' ? 'block' : 'none' }}>
+          <Chat style={{ display: !audioMode ? 'block' : 'none' }} />
+          <div style={{ display: audioMode ? 'block' : 'none' }}>
             <BarVisualizer trackRef={agent.audioTrack} />
             <VoiceAssistantControlBar
+              controls={{ microphone: !isSwitchingModes }}
               style={{
                 bottom: 0,
                 position: 'absolute',

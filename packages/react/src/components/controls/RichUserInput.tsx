@@ -12,7 +12,7 @@ export function RichUserInput(props: RichUserInputProps) {
   const room = useRoomContext();
 
   const [isSending, setIsSending] = React.useState(false);
-  const [filesToSend, setFilesToSend] = React.useState<Set<File>>(new Set());
+  const [filesToSend, setFilesToSend] = React.useState<Map<string, File>>(new Map());
 
   const handleFileInput = () => {
     if (fileRef.current === null) {
@@ -23,16 +23,16 @@ export function RichUserInput(props: RichUserInputProps) {
       for (let i = 0; i < files?.length; i++) {
         const item = files.item(i);
         if (item) {
-          filesToSend.add(item);
+          filesToSend.set(item.name, item);
         }
       }
     }
-    setFilesToSend(new Set(filesToSend));
+    setFilesToSend(new Map(filesToSend));
   };
 
   const handleFileDelete = (file: File) => {
-    filesToSend.delete(file);
-    setFilesToSend(new Set(filesToSend));
+    filesToSend.delete(file.name);
+    setFilesToSend(new Map(filesToSend));
   };
 
   const handleSubmit = React.useCallback(
@@ -46,14 +46,15 @@ export function RichUserInput(props: RichUserInputProps) {
         console.log('sending message');
         await props.send(textRef.current.value, {
           topic: 'user-message',
-          attachedFiles: Array.from(filesToSend),
+          attachedFiles: Array.from(filesToSend.values()),
         });
       } finally {
         fileRef.current.files = null;
         textRef.current.value = '';
         textRef.current.focus();
         setIsSending(false);
-        setFilesToSend(new Set());
+        filesToSend.clear();
+        setFilesToSend(filesToSend);
       }
     },
     [room],
@@ -68,7 +69,7 @@ export function RichUserInput(props: RichUserInputProps) {
         }}
       >
         <div className="lk-file-list">
-          {Array.from(filesToSend).map((file) => (
+          {Array.from(filesToSend.values()).map((file) => (
             <div key={file.name}>
               <span>{file.name}</span>
               <button className="lk-button" onClick={() => handleFileDelete(file)}>

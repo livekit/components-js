@@ -1,0 +1,19 @@
+.main {
+  min-height: 50vh;
+  margin: 5%;
+  display: grid;
+  place-content: center;
+}
+
+ul.examples {
+  list-style: disc;
+}
+
+li.list-item {
+  margin-top: 1rem;
+  margin-left: 1rem;
+}
+
+a.link {
+  text-decoration: underline;
+}

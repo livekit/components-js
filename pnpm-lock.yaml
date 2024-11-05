@@ -156,6 +156,52 @@ importers:
         specifier: 5.4.2
         version: 5.4.2
 
+  examples/openGPT:
+    dependencies:
+      '@livekit/components-react':
+        specifier: workspace:*
+        version: link:../../packages/react
+      '@livekit/components-styles':
+        specifier: workspace:*
+        version: link:../../packages/styles
+      '@livekit/track-processors':
+        specifier: ^0.3.2
+        version: 0.3.2(livekit-client@2.5.7)
+      livekit-client:
+        specifier: ^2.5.7
+        version: 2.5.7
+      livekit-server-sdk:
+        specifier: ^2.6.1
+        version: 2.6.1
+      next:
+        specifier: ^14.2.13
+        version: 14.2.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.77.6)
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.3.1(react@18.3.1)
+    devDependencies:
+      '@types/node':
+        specifier: ^18.19.14
+        version: 18.19.31
+      '@types/react':
+        specifier: ^18.2.55
+        version: 18.3.3
+      '@types/react-dom':
+        specifier: ^18.2.18
+        version: 18.3.0
+      eslint-config-next:
+        specifier: ^12.3.4
+        version: 12.3.4(eslint@8.57.0)(typescript@5.4.2)
+      source-map-loader:
+        specifier: ^4.0.2
+        version: 4.0.2(webpack@5.95.0)
+      typescript:
+        specifier: 5.4.2
+        version: 5.4.2
+
   packages/core:
     dependencies:
       '@floating-ui/dom':

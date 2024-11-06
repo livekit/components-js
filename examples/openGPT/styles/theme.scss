@@ -11,24 +11,24 @@ $accent: #a0a0a0;
   color-scheme: light;
 
   --lk-bg: #{$bg};
-  --lk-bg2: #{color.adjust($bg, $lightness: 5%)};
-  --lk-bg3: #{color.adjust($bg, $lightness: 10%)};
-  --lk-bg4: #{color.adjust($bg, $lightness: 15%)};
-  --lk-bg5: #{color.adjust($bg, $lightness: 20%)};
+  --lk-bg2: #{color.adjust($bg, $lightness: -5%)};
+  --lk-bg3: #{color.adjust($bg, $lightness: -10%)};
+  --lk-bg4: #{color.adjust($bg, $lightness: -15%)};
+  --lk-bg5: #{color.adjust($bg, $lightness: -20%)};
 
   --lk-fg: #111;
-  --lk-fg2: #{color.adjust($fg, $lightness: -4%)};
-  --lk-fg3: #{color.adjust($fg, $lightness: -8%)};
-  --lk-fg4: #{color.adjust($fg, $lightness: -12%)};
-  --lk-fg5: #{color.adjust($fg, $lightness: -16%)};
+  --lk-fg2: #{color.adjust($fg, $lightness: 4%)};
+  --lk-fg3: #{color.adjust($fg, $lightness: 8%)};
+  --lk-fg4: #{color.adjust($fg, $lightness: 12%)};
+  --lk-fg5: #{color.adjust($fg, $lightness: 16%)};
 
   --lk-border-color: rgba(255, 255, 255, 0.1);
 
   --lk-accent-fg: #111;
   --lk-accent-bg: #1f8cf9;
-  --lk-accent2: #{color.adjust($accent, $lightness: 4%)};
-  --lk-accent3: #{color.adjust($accent, $lightness: 8%)};
-  --lk-accent4: #{color.adjust($accent, $lightness: 12%)};
+  --lk-accent2: #{color.adjust($accent, $lightness: -4%)};
+  --lk-accent3: #{color.adjust($accent, $lightness: -8%)};
+  --lk-accent4: #{color.adjust($accent, $lightness: -12%)};
 
   --lk-danger-fg: #111;
   --lk-danger: #f91f31;
@@ -44,9 +44,9 @@ $accent: #a0a0a0;
 
   --lk-control-fg: var(--fg);
   --lk-control-bg: var(--bg2);
-  --lk-control-hover-bg: var(--bg3);
-  --lk-control-active-bg: var(--bg4);
-  --lk-control-active-hover-bg: var(--bg5);
+  --lk-control-hover-bg: var(--lk-bg3);
+  --lk-control-active-bg: var(--lk-bg4);
+  --lk-control-active-hover-bg: var(---lk-bg5);
 
   --lk-connection-excellent: #06db4d;
   --lk-connection-good: #f9b11f;

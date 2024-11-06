@@ -13,8 +13,9 @@
   "dependencies": {
     "@livekit/components-react": "workspace:*",
     "@livekit/components-styles": "workspace:*",
-    "@livekit/track-processors": "^0.3.2",
     "@livekit/krisp-noise-filter": "0.2.12",
+    "@livekit/track-processors": "^0.3.2",
+    "@phosphor-icons/react": "^2.1.7",
     "livekit-client": "^2.5.7",
     "livekit-server-sdk": "^2.6.1",
     "next": "^14.2.13",

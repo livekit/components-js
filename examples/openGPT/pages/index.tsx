@@ -12,10 +12,11 @@ import {
   useRoomContext,
   RoomAudioRenderer,
 } from '@livekit/components-react';
+import { ChatText, Headphones } from '@phosphor-icons/react';
 
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';
-import { useEffect, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { ConnectionState, Track, AgentState } from 'livekit-client';
 
 function GptUi() {
@@ -39,46 +40,59 @@ function GptUi() {
   };
 
   return (
-    <div style={{ height: '100vh' }}>
-      {connectionState === ConnectionState.Connected && agent.state !== 'connecting' ? (
+    <div style={{ height: '100vh', display: 'grid', gridTemplateColumns: '260px 1fr' }}>
+      {connectionState === ConnectionState.Connected ? (
+        // && agent.state !== 'connecting'
         <>
-          <button
-            disabled={isSwitchingModes}
-            id="mode-toggle"
-            className="lk-button"
-            style={{
-              fontSize: '3rem',
-              position: 'absolute',
-              top: '0.75rem',
-              right: '0.75rem',
-              cursor: 'pointer',
-            }}
-            onClick={handleModeSwitch}
+          <div
+            style={{ padding: '0.75rem', background: 'rgb(249, 249, 249)', position: 'relative' }}
           >
-            {audioMode ? '📝' : '🎙️'}
-          </button>
-          <div style={{ height: '100%' }}>
+            <button
+              disabled={isSwitchingModes}
+              id="mode-toggle"
+              className="lk-button"
+              style={{
+                position: 'absolute',
+                fontSize: '1.5rem',
+                top: '0.75rem',
+                right: '0.75rem',
+                cursor: 'pointer',
+              }}
+              onClick={handleModeSwitch}
+            >
+              {audioMode ? <ChatText /> : <Headphones />}
+            </button>
+            <p style={{ padding: '2rem' }}>
+              <img src="/logo.png" style={{ width: '0.75rem', marginRight: '0.5rem' }} />
+              hackGPT
+            </p>
+            {/* <label className="switch">
+              <input
+                type="checkbox"
+                disabled={isSwitchingModes}
+                onInput={()) => handleModeSwitch()}
+              />
+              <span className="slider"></span>
+            </label> */}
+          </div>
+          <div style={{ height: '100%', position: 'relative' }}>
             <Chat style={{ display: !audioMode ? 'block' : 'none' }} />
-            <div style={{ display: audioMode ? 'block' : 'none' }}>
+            <div style={{ display: audioMode ? 'grid' : 'none', width: '100%', height: '100%' }}>
               <RoomAudioRenderer muted={!audioMode} />
 
               <BarVisualizer
                 trackRef={agent.audioTrack}
-                style={{ width: '500px', height: '300px' }}
+                style={{ width: '500px', height: '300px', placeSelf: 'center' }}
               />
               <VoiceAssistantControlBar
+                style={{ position: 'absolute', bottom: '0', width: '100%' }}
                 controls={{ microphone: !isSwitchingModes }}
-                style={{
-                  bottom: 0,
-                  position: 'absolute',
-                  width: '99.9%',
-                }}
               />
             </div>
           </div>
         </>
       ) : (
-        <div style={{ display: 'grid', height: '100vh' }}>
+        <div style={{ display: 'grid', height: '100vh', gridColumn: 'span 2' }}>
           <div className="lds-ring" style={{ placeSelf: 'center' }}>
             <div></div>
             <div></div>

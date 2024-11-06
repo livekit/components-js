@@ -84,7 +84,7 @@ export function Chat({
       <ul
         className="lk-list lk-chat-messages"
         ref={ulRef}
-        style={{ height: 'calc(100% - var(--lk-control-bar-height))' }}
+        style={{ height: 'calc(100% - var(--lk-control-bar-height))', padding: '0.5rem' }}
       >
         {props.children
           ? chatMessages.map((msg, idx) =>

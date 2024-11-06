@@ -51,10 +51,10 @@ export function RichUserInput(props: RichUserInputProps) {
       } finally {
         fileRef.current.files = null;
         textRef.current.value = '';
-        textRef.current.focus();
         setIsSending(false);
         filesToSend.clear();
         setFilesToSend(filesToSend);
+        textRef.current.focus();
       }
     },
     [room],

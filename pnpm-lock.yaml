@@ -168,6 +168,9 @@ importers:
       '@livekit/components-styles':
         specifier: workspace:*
         version: link:../../packages/styles
+      '@livekit/krisp-noise-filter':
+        specifier: 0.2.12
+        version: 0.2.12(livekit-client@client-sdk-js)
       '@livekit/track-processors':
         specifier: ^0.3.2
         version: 0.3.2(livekit-client@client-sdk-js)
@@ -186,6 +189,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.3.1(react@18.3.1)
+      sass:
+        specifier: ^1.54.6
+        version: 1.77.6
     devDependencies:
       '@types/node':
         specifier: ^18.19.14

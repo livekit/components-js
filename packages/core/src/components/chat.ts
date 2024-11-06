@@ -91,7 +91,11 @@ export function setupChat(room: Room, options?: ChatOptions) {
     const { messageObservable } = setupDataMessageHandler(room, [topic, updateTopic]);
     messageObservable.pipe(takeUntil(onDestroyObservable)).subscribe(messageSubject);
   }
-  const { chatObservable, send: sendChatMessage } = setupChatMessageHandler(room);
+  const {
+    chatObservable,
+    send: sendChatMessage,
+    textStreamObservable,
+  } = setupChatMessageHandler(room);
 
   const finalMessageDecoder = messageDecoder ?? decode;
 
@@ -112,6 +116,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
         return { ...msg, from: participant };
       }),
     ),
+    textStreamObservable,
   ).pipe(
     scan<ReceivedChatMessage | undefined, ReceivedChatMessage[]>((acc, value) => {
       // ignore legacy message updates

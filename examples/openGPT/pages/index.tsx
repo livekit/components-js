@@ -10,11 +10,13 @@ import {
   BarVisualizer,
   VoiceAssistantControlBar,
   useRoomContext,
+  RoomAudioRenderer,
 } from '@livekit/components-react';
+
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';
-import { useMemo, useState } from 'react';
-import { ConnectionState, Track } from 'livekit-client';
+import { useEffect, useMemo, useState } from 'react';
+import { ConnectionState, Track, AgentState } from 'livekit-client';
 
 function GptUi() {
   const connectionState = useConnectionState();
@@ -38,34 +40,50 @@ function GptUi() {
 
   return (
     <div style={{ height: '100vh' }}>
-      <button
-        disabled={isSwitchingModes}
-        id="mode-toggle"
-        className="lk-button"
-        style={{
-          fontSize: '3rem',
-          position: 'absolute',
-          top: '0.75rem',
-          right: '0.75rem',
-          cursor: 'pointer',
-        }}
-        onClick={handleModeSwitch}
-      >
-        {audioMode ? '📝' : '🎙️'}
-      </button>
-      {connectionState === ConnectionState.Connected && (
-        <div style={{ height: '100%' }}>
-          <Chat style={{ display: !audioMode ? 'block' : 'none' }} />
-          <div style={{ display: audioMode ? 'block' : 'none' }}>
-            <BarVisualizer trackRef={agent.audioTrack} />
-            <VoiceAssistantControlBar
-              controls={{ microphone: !isSwitchingModes }}
-              style={{
-                bottom: 0,
-                position: 'absolute',
-                width: '99.9%',
-              }}
-            />
+      {connectionState === ConnectionState.Connected && agent.state !== 'connecting' ? (
+        <>
+          <button
+            disabled={isSwitchingModes}
+            id="mode-toggle"
+            className="lk-button"
+            style={{
+              fontSize: '3rem',
+              position: 'absolute',
+              top: '0.75rem',
+              right: '0.75rem',
+              cursor: 'pointer',
+            }}
+            onClick={handleModeSwitch}
+          >
+            {audioMode ? '📝' : '🎙️'}
+          </button>
+          <div style={{ height: '100%' }}>
+            <Chat style={{ display: !audioMode ? 'block' : 'none' }} />
+            <div style={{ display: audioMode ? 'block' : 'none' }}>
+              <RoomAudioRenderer muted={!audioMode} />
+
+              <BarVisualizer
+                trackRef={agent.audioTrack}
+                style={{ width: '500px', height: '300px' }}
+              />
+              <VoiceAssistantControlBar
+                controls={{ microphone: !isSwitchingModes }}
+                style={{
+                  bottom: 0,
+                  position: 'absolute',
+                  width: '99.9%',
+                }}
+              />
+            </div>
+          </div>
+        </>
+      ) : (
+        <div style={{ display: 'grid', height: '100vh' }}>
+          <div className="lds-ring" style={{ placeSelf: 'center' }}>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
           </div>
         </div>
       )}
@@ -75,7 +93,7 @@ function GptUi() {
 
 const MinimalExample: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
-  const roomName = params?.get('room') ?? 'test-room';
+  const roomName = useMemo(() => params?.get('room') ?? 'test-room' + generateRandomUserId(), []);
   setLogLevel('info', { liveKitClientLogLevel: 'debug' });
 
   const tokenOptions = useMemo(() => {
@@ -91,7 +109,7 @@ const MinimalExample: NextPage = () => {
   const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, tokenOptions);
 
   return (
-    <div data-lk-theme="default" style={{ height: '100vh' }}>
+    <div data-lk-theme="gpt" style={{ height: '100vh' }}>
       <LiveKitRoom
         video={false}
         audio={false}

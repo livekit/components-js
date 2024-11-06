@@ -7,7 +7,7 @@ import {
 } from 'livekit-client';
 import type { Subscriber } from 'rxjs';
 import { Observable, filter, map } from 'rxjs';
-import { createChatObserver, createDataObserver } from './room';
+import { createChatObserver, createDataObserver, createTextStreamObserver } from './room';
 import { SendTextOptions } from 'livekit-client/dist/src/room/types';
 import { ReceivedChatMessage } from '../components/chat';
 
@@ -83,6 +83,7 @@ export function setupDataMessageHandler<T extends string>(
 
 export function setupChatMessageHandler(room: Room) {
   const chatObservable = createChatObserver(room);
+  const textStreamObservable = createTextStreamObserver(room);
 
   const send = async (text: string, options: SendTextOptions): Promise<ReceivedChatMessage> => {
     const msg = await room.localParticipant.sendChatMessage(text, options);
@@ -96,5 +97,5 @@ export function setupChatMessageHandler(room: Room) {
     return msg;
   };
 
-  return { chatObservable, send, edit };
+  return { chatObservable, send, edit, textStreamObservable };
 }

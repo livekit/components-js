@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.6.8
+
+### Patch Changes
+
+- Don't emit connection errors if `connect` is set to false - [#1025](https://github.com/livekit/components-js/pull/1025) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.6.7
 
 ### Patch Changes

@@ -13,6 +13,7 @@ import {
   RoomAudioRenderer,
 } from '@livekit/components-react';
 import { ChatText, Headphones } from '@phosphor-icons/react';
+import { useKrispNoiseFilter } from '@livekit/components-react/krisp';
 
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';
@@ -28,12 +29,15 @@ function GptUi() {
 
   const agent = useVoiceAssistant();
 
+  const krisp = useKrispNoiseFilter();
+
   const handleModeSwitch = async () => {
     setIsSwitchingModes(true);
     try {
       let nextMode = !audioMode;
       setAudioMode(nextMode);
       await room.localParticipant.setMicrophoneEnabled(nextMode);
+      krisp.setNoiseFilterEnabled(true);
     } finally {
       setIsSwitchingModes(false);
     }
@@ -41,8 +45,7 @@ function GptUi() {
 
   return (
     <div style={{ height: '100vh', display: 'grid', gridTemplateColumns: '260px 1fr' }}>
-      {connectionState === ConnectionState.Connected ? (
-        // && agent.state !== 'connecting'
+      {connectionState === ConnectionState.Connected && agent.state !== 'connecting' ? (
         <>
           <div
             style={{ padding: '0.75rem', background: 'rgb(249, 249, 249)', position: 'relative' }}

@@ -47,6 +47,11 @@ export const ChatEntry: (
     const time = new Date(entry.timestamp);
     const locale = navigator ? navigator.language : 'en-US';
 
+    let name = entry.from?.name ?? entry.from?.identity;
+    if (!name || name === '') {
+      name = 'hackGPT';
+    }
+
     React.useEffect(() => {
       entry.attachedFiles?.forEach((file) => {
         const reader = new FileReader();
@@ -58,6 +63,7 @@ export const ChatEntry: (
           imagePreview.src = e.target!.result;
           // Show the image element
           imagePreview.style.display = 'block';
+          imagePreview.style.maxWidth = '360px';
         };
         // Read the file as a Data URL
         reader.readAsDataURL(file);
@@ -74,11 +80,7 @@ export const ChatEntry: (
       >
         {(!hideTimestamp || !hideName || hasBeenEdited) && (
           <span className="lk-meta-data">
-            {!hideName && (
-              <strong className="lk-participant-name">
-                {entry.from?.name ?? entry.from?.identity}
-              </strong>
-            )}
+            {!hideName && <strong className="lk-participant-name">{name}</strong>}
 
             {(!hideTimestamp || hasBeenEdited) && (
               <span className="lk-timestamp">

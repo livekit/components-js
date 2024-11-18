@@ -5,7 +5,7 @@ $bg: #fff;
 $danger: #f91f31;
 $success: #1ff968;
 $warning: #f9b11f;
-$accent: #a0a0a0;
+$accent: #d0d0d0;
 
 [data-lk-theme='gpt'] {
   color-scheme: light;
@@ -25,7 +25,7 @@ $accent: #a0a0a0;
   --lk-border-color: rgba(255, 255, 255, 0.1);
 
   --lk-accent-fg: #111;
-  --lk-accent-bg: #1f8cf9;
+  --lk-accent-bg: #ddd;
   --lk-accent2: #{color.adjust($accent, $lightness: -4%)};
   --lk-accent3: #{color.adjust($accent, $lightness: -8%)};
   --lk-accent4: #{color.adjust($accent, $lightness: -12%)};

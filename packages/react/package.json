@@ -54,6 +54,7 @@
   "dependencies": {
     "@livekit/components-core": "workspace:*",
     "clsx": "2.1.1",
+    "react-markdown": "^9.0.1",
     "usehooks-ts": "3.1.0"
   },
   "peerDependencies": {

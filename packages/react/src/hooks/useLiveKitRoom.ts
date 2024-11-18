@@ -55,6 +55,8 @@ export function useLiveKitRoom<T extends HTMLElement>(
 
   const [room, setRoom] = React.useState<Room | undefined>();
 
+  const shouldConnect = React.useRef(connect);
+
   React.useEffect(() => {
     setRoom(passedRoom ?? new Room(options));
   }, [passedRoom]);
@@ -115,23 +117,28 @@ export function useLiveKitRoom<T extends HTMLElement>(
       });
       return;
     }
-    if (!token) {
-      log.debug('no token yet');
-      return;
-    }
-    if (!serverUrl) {
-      log.warn('no livekit url provided');
-      onError?.(Error('no livekit url provided'));
-      return;
-    }
+
     if (connect) {
+      shouldConnect.current = true;
       log.debug('connecting');
+      if (!token) {
+        log.debug('no token yet');
+        return;
+      }
+      if (!serverUrl) {
+        log.warn('no livekit url provided');
+        onError?.(Error('no livekit url provided'));
+        return;
+      }
       room.connect(serverUrl, token, connectOptions).catch((e) => {
         log.warn(e);
-        onError?.(e as Error);
+        if (shouldConnect.current === true) {
+          onError?.(e as Error);
+        }
       });
     } else {
       log.debug('disconnecting because connect is false');
+      shouldConnect.current = false;
       room.disconnect();
     }
   }, [

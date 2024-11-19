@@ -89,9 +89,11 @@ export function Chat({
     <div {...props} className="lk-chat">
       <div className="lk-chat-header">
         Messages
-        <ChatToggle className="lk-close-button">
-          <ChatCloseIcon />
-        </ChatToggle>
+        {layoutContext && (
+          <ChatToggle className="lk-close-button">
+            <ChatCloseIcon />
+          </ChatToggle>
+        )}
       </div>
 
       <ul className="lk-list lk-chat-messages" ref={ulRef}>

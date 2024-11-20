@@ -110,7 +110,7 @@ export const BarVisualizer = /* @__PURE__ */ React.forwardRef<HTMLDivElement, Ba
             cloneSingleChild(children, {
               'data-lk-highlighted': highlightedIndices.includes(idx),
               'data-lk-bar-index': idx,
-              class: 'lk-audio-bar',
+              className: 'lk-audio-bar',
               style: { height: `${Math.min(maxHeight, Math.max(minHeight, volume * 100 + 5))}%` },
             })
           ) : (

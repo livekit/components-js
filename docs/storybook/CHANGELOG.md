@@ -1,5 +1,12 @@
 # @livekit/component-docs-storybook
 
+## 1.0.74
+
+### Patch Changes
+
+- Updated dependencies [[`2b582d3b63e7132b554a8509f957a630f5590111`](https://github.com/livekit/components-js/commit/2b582d3b63e7132b554a8509f957a630f5590111), [`1289a5fe112bad9f81555848969d972b32b335db`](https://github.com/livekit/components-js/commit/1289a5fe112bad9f81555848969d972b32b335db), [`82ba2d008c68b00bb9ffb2d21c2a5d87af527f5f`](https://github.com/livekit/components-js/commit/82ba2d008c68b00bb9ffb2d21c2a5d87af527f5f)]:
+  - @livekit/components-react@2.6.9
+
 ## 1.0.73
 
 ### Patch Changes

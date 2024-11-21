@@ -1,5 +1,15 @@
 # @livekit/components-react
 
+## 2.6.9
+
+### Patch Changes
+
+- Fix Chat usage without layoutcontext - [#1027](https://github.com/livekit/components-js/pull/1027) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix className property on BarVisualizer - [#1029](https://github.com/livekit/components-js/pull/1029) ([@mikljohansson](https://github.com/mikljohansson))
+
+- Forward disconnectReason to onDisconnected callback - [#1031](https://github.com/livekit/components-js/pull/1031) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.6.8
 
 ### Patch Changes

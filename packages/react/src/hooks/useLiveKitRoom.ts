@@ -112,7 +112,17 @@ export function useLiveKitRoom<T extends HTMLElement>(
         .off(RoomEvent.Disconnected, handleDisconnected)
         .off(RoomEvent.Connected, handleConnected);
     };
-  }, [room, audio, video, screen, onError, onEncryptionError, onMediaDeviceFailure]);
+  }, [
+    room,
+    audio,
+    video,
+    screen,
+    onError,
+    onEncryptionError,
+    onMediaDeviceFailure,
+    onConnected,
+    onDisconnected,
+  ]);
 
   React.useEffect(() => {
     if (!room) return;

@@ -1,5 +1,6 @@
 import type {
   AudioCaptureOptions,
+  DisconnectReason,
   RoomConnectOptions,
   RoomOptions,
   ScreenShareCaptureOptions,
@@ -64,7 +65,7 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    */
   connectOptions?: RoomConnectOptions;
   onConnected?: () => void;
-  onDisconnected?: () => void;
+  onDisconnected?: (reason?: DisconnectReason) => void;
   onError?: (error: Error) => void;
   onMediaDeviceFailure?: (failure?: MediaDeviceFailure) => void;
   onEncryptionError?: (error: Error) => void;

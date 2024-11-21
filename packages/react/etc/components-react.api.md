@@ -11,6 +11,7 @@ import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import { CreateLocalTracksOptions } from 'livekit-client';
 import { DataPublishOptions } from 'livekit-client';
+import { DisconnectReason } from 'livekit-client';
 import { HTMLAttributes } from 'react';
 import { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
@@ -368,7 +369,7 @@ export interface LiveKitRoomProps extends Omit<React_2.HTMLAttributes<HTMLDivEle
     // (undocumented)
     onConnected?: () => void;
     // (undocumented)
-    onDisconnected?: () => void;
+    onDisconnected?: (reason?: DisconnectReason) => void;
     // (undocumented)
     onEncryptionError?: (error: Error) => void;
     // (undocumented)

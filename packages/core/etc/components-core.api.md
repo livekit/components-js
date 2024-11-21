@@ -106,7 +106,7 @@ export function connectedParticipantsObserver(room: Room, options?: ConnectedPar
 export function connectionStateObserver(room: Room): Observable<ConnectionState>;
 
 // @public (undocumented)
-export function createActiveDeviceObservable(room: Room, kind: MediaDeviceKind): Observable<string | undefined>;
+export function createActiveDeviceObservable(room: Room, kind: MediaDeviceKind): Observable<string>;
 
 // @public (undocumented)
 export function createChatObserver(room: Room): Observable<[message: ChatMessage, participant?: LocalParticipant | RemoteParticipant | undefined]>;

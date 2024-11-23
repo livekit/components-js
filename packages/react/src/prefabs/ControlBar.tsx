@@ -3,7 +3,7 @@ import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { TrackToggle } from '../components/controls/TrackToggle';
-import { ChatIcon, GearIcon, LeaveIcon, AddMemberIcon } from '../assets/icons';
+import { ChatIcon, GearIcon, LeaveIcon, AddMemberIcon, MemberListIcon } from '../assets/icons';
 import { ChatToggle } from '../components/controls/ChatToggle';
 import { useLocalParticipantPermissions, usePersistentUserChoices } from '../hooks';
 import { useMediaQuery } from '../hooks/internal';
@@ -13,6 +13,7 @@ import { mergeProps } from '../utils';
 import { StartMediaButton } from '../components/controls/StartMediaButton';
 import { SettingsMenuToggle } from '../components/controls/SettingsMenuToggle';
 import { AddMemberButton } from '../components/controls/AddMemberButton';
+import { MemberListButton } from '../components/controls/MemberListButton';
 
 /** @public */
 export type ControlBarControls = {
@@ -23,6 +24,7 @@ export type ControlBarControls = {
   leave?: boolean;
   settings?: boolean;
   addMember?: boolean;
+  memberList?: boolean;
 };
 
 /** @public */
@@ -39,6 +41,7 @@ export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
   saveUserChoices?: boolean;
   onScreenShareClick?: (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   onAddMember?: () => void;
+  onMemberList?: () => void;
 }
 
 /**
@@ -64,6 +67,7 @@ export function ControlBar({
   onDeviceError,
   onScreenShareClick,
   onAddMember,
+  onMemberList,
   ...props
 }: ControlBarProps) {
   const [isChatOpen, setIsChatOpen] = React.useState(false);
@@ -206,6 +210,12 @@ export function ControlBar({
           {showIcon && <AddMemberIcon />}
           {showText && 'Add member'}
         </AddMemberButton>
+      )}
+      {visibleControls.memberList && (
+        <MemberListButton onClick={onMemberList}>
+          {showIcon && <MemberListIcon />}
+          {showText && 'Member list'}
+        </MemberListButton>
       )}
       {visibleControls.leave && (
         <DisconnectButton>

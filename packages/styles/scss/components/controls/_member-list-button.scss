@@ -1,0 +1,5 @@
+@use 'button';
+
+.member-list-button {
+  @extend .button;
+}

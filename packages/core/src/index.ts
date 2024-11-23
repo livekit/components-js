@@ -22,6 +22,7 @@ export * from './components/focusToggle';
 export * from './components/clearPinButton';
 export * from './components/room';
 export * from './components/addMemberButton';
+export * from './components/memberListButton';
 
 export * from './observables/room';
 export * from './observables/participant';

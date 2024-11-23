@@ -36,6 +36,7 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
   SettingsComponent?: React.ComponentType;
   controls?: ControlBarProps['controls'];
   onAddMember?: () => void;
+  onMemberList?: () => void;
 }
 
 /**
@@ -63,6 +64,7 @@ export function VideoConference({
   SettingsComponent,
   onScreenShareClick,
   onAddMember,
+  onMemberList,
   controls,
   ...props
 }: VideoConferenceProps) {
@@ -164,6 +166,7 @@ export function VideoConference({
             <ControlBar
               variation="minimal"
               onAddMember={onAddMember}
+              onMemberList={onMemberList}
               controls={{ chat: true, settings: !!SettingsComponent, ...controls }}
               onScreenShareClick={onScreenShareClick}
             />

@@ -6,6 +6,7 @@
   "author": "LiveKit",
   "scripts": {
     "build": "turbo run build",
+    "build:pkg": "turbo run build --filter=./packages/*",
     "build:core": "turbo run build --filter=@cc-livekit/components-core...",
     "build:next": "turbo run build --filter=@cc-livekit/component-example-next...",
     "build:react": "turbo run build --filter=@cc-livekit/components-react...",

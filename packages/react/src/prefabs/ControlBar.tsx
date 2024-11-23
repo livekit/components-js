@@ -3,7 +3,7 @@ import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { TrackToggle } from '../components/controls/TrackToggle';
-import { ChatIcon, GearIcon, LeaveIcon } from '../assets/icons';
+import { ChatIcon, GearIcon, LeaveIcon, AddMemberIcon } from '../assets/icons';
 import { ChatToggle } from '../components/controls/ChatToggle';
 import { useLocalParticipantPermissions, usePersistentUserChoices } from '../hooks';
 import { useMediaQuery } from '../hooks/internal';
@@ -13,7 +13,6 @@ import { mergeProps } from '../utils';
 import { StartMediaButton } from '../components/controls/StartMediaButton';
 import { SettingsMenuToggle } from '../components/controls/SettingsMenuToggle';
 import { AddMemberButton } from '../components/controls/AddMemberButton';
-import AddMemberIcon from '../assets/icons/AddMemberIcon';
 
 /** @public */
 export type ControlBarControls = {

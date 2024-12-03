@@ -27,7 +27,7 @@ import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 /**
  * @public
  */
-export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface NewVideoConferenceProps extends React.HTMLAttributes<HTMLDivElement> {
   chatMessageFormatter?: MessageFormatter;
   onScreenShareClick?: (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   chatMessageEncoder?: MessageEncoder;
@@ -37,6 +37,7 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
   controls?: ControlBarProps['controls'];
   onAddMember?: () => void;
   onMemberList?: () => void;
+  filterLocalTracks?: boolean;
 }
 
 /**
@@ -57,7 +58,7 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
  * ```
  * @public
  */
-export function VideoConference({
+export function NewVideoConference({
   chatMessageFormatter,
   chatMessageDecoder,
   chatMessageEncoder,
@@ -65,9 +66,10 @@ export function VideoConference({
   onScreenShareClick,
   onAddMember,
   onMemberList,
+  filterLocalTracks,
   controls,
   ...props
-}: VideoConferenceProps) {
+}: NewVideoConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({
     showChat: false,
     unreadMessages: 0,
@@ -80,7 +82,7 @@ export function VideoConference({
       { source: Track.Source.Camera, withPlaceholder: true },
       { source: Track.Source.ScreenShare, withPlaceholder: false },
     ],
-    { updateOnlyOn: [RoomEvent.ActiveSpeakersChanged], onlySubscribed: false },
+    { updateOnlyOn: [RoomEvent.ActiveSpeakersChanged], onlySubscribed: false, filterLocalTracks },
   );
 
   const widgetUpdate = (state: WidgetState) => {
@@ -187,7 +189,7 @@ export function VideoConference({
           )}
         </LayoutContextProvider>
       )}
-      <RoomAudioRenderer />
+      <RoomAudioRenderer filterLocalTracks={filterLocalTracks} />
       <ConnectionStateToast />
     </div>
   );

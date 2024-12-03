@@ -15,6 +15,7 @@ export interface RoomAudioRendererProps {
    * @alpha
    */
   muted?: boolean;
+  filterLocalTracks?: boolean;
 }
 
 /**

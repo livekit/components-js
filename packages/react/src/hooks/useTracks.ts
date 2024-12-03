@@ -21,6 +21,7 @@ export type UseTracksOptions = {
   updateOnlyOn?: RoomEvent[];
   onlySubscribed?: boolean;
   room?: Room;
+  filterLocalTracks?: boolean;
 };
 
 /** @public */
@@ -115,6 +116,11 @@ export function useTracks<T extends SourcesArray = Track.Source[]>(
     }
   }, [trackReferences, participants, sources]);
 
+  if (options.filterLocalTracks) {
+    return maybeTrackReferences.filter(
+      (item) => !item.participant.isLocal,
+    ) as UseTracksHookReturnType<T>;
+  }
   return maybeTrackReferences as UseTracksHookReturnType<T>;
 }
 

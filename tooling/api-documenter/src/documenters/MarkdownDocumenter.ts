@@ -225,13 +225,38 @@ export class MarkdownDocumenter {
         );
 
         if (tsdocComment.deprecatedBlock) {
+          // Render the deprecation message as a "caution" callout add a "deprecated" prefix to the message.
+          let addedDeprecationString = false;
+          const newContent = tsdocComment.deprecatedBlock.content.nodes.reduce<DocNode[]>(
+            (acc, node) => {
+              if (!addedDeprecationString && node.kind === DocNodeKind.Paragraph) {
+                const paragraphChildren = node
+                  .getChildNodes()
+                  .reduce<DocNode[]>((paragraphNodes, paraNode) => {
+                    if (!addedDeprecationString && paraNode.kind === DocNodeKind.PlainText) {
+                      paragraphNodes.push(
+                        new DocPlainText({
+                          configuration,
+                          text: 'This API is deprecated: ' + (paraNode as DocPlainText).text,
+                        }),
+                      );
+                      addedDeprecationString = true;
+                    } else {
+                      paragraphNodes.push(paraNode);
+                    }
+                    return paragraphNodes;
+                  }, []);
+                acc.push(new DocParagraph({ configuration }, paragraphChildren));
+              } else {
+                acc.push(node);
+              }
+              return acc;
+            },
+            [],
+          );
+
           output.appendNode(
-            new Callout({ configuration, type: 'caution', variant: 'normal' }, [
-              new DocParagraph({ configuration }, [
-                new DocPlainText({ configuration, text: 'This API is deprecated:' }),
-              ]),
-              ...tsdocComment.deprecatedBlock.content.nodes,
-            ]),
+            new Callout({ configuration, type: 'caution', variant: 'normal' }, [...newContent]),
           );
         }
 

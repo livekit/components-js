@@ -22,6 +22,7 @@ import { ParticipantPlaceholder } from '../assets/images';
 import { useMediaDevices, usePersistentUserChoices } from '../hooks';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 import { defaultUserChoices } from '@livekit/components-core';
+import { roomOptionsStringifyReplacer } from '../utils';
 
 /**
  * Props for the PreJoin component.
@@ -92,7 +93,7 @@ export function usePreviewTracks(
         track.stop();
       });
     };
-  }, [JSON.stringify(options), onError, trackLock]);
+  }, [JSON.stringify(options, roomOptionsStringifyReplacer), onError, trackLock]);
 
   return tracks;
 }

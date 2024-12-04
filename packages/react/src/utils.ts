@@ -60,3 +60,19 @@ export function warnAboutMissingStyles(el?: HTMLElement) {
     }
   }
 }
+
+/**
+ *
+ * @internal
+ * used to stringify room options to detect dependency changes for react hooks.
+ * Replaces processors and e2ee options with strings.
+ */
+export function roomOptionsStringifyReplacer(key: string, val: unknown) {
+  if (key === 'processor' && val && typeof val === 'object' && 'name' in val) {
+    return val.name;
+  }
+  if (key === 'e2ee' && val) {
+    return 'e2ee-enabled';
+  }
+  return val;
+}

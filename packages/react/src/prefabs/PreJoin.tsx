@@ -3,6 +3,7 @@ import type {
   LocalAudioTrack,
   LocalTrack,
   LocalVideoTrack,
+  VideoResolution,
 } from 'livekit-client';
 import {
   createLocalAudioTrack,
@@ -52,6 +53,19 @@ export interface PreJoinProps
   persistUserChoices?: boolean;
 }
 
+const makeComparableOptions = (options: CreateLocalTracksOptions) => {
+  return {
+    video:
+      typeof options.video === 'object'
+        ? { ...options.video, processor: options.video.processor?.name }
+        : options.video,
+    audio:
+      typeof options.audio === 'object'
+        ? { ...options.audio, processor: options.audio.processor?.name }
+        : options.audio,
+  };
+};
+
 /** @alpha */
 export function usePreviewTracks(
   options: CreateLocalTracksOptions,
@@ -87,13 +101,16 @@ export function usePreviewTracks(
     });
 
     return () => {
+      // In case this is triggered while awaiting for `createLocalTracks`,
+      // this makes sure, we will stop the tracks after the creation await.
+      // (yes needsCleanup is passed into this closure by ref and is the same ref as in the
+      // lock.then closure)
       needsCleanup = true;
       localTracks.forEach((track) => {
         track.stop();
       });
     };
-  }, [JSON.stringify(options), onError, trackLock]);
-
+  }, [trackLock, makeComparableOptions(options)]);
   return tracks;
 }
 

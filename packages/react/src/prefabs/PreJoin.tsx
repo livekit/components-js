@@ -72,6 +72,7 @@ export function usePreviewTracks(
           if (needsCleanup) {
             localTracks.forEach((tr) => tr.stop());
           } else {
+            // Only create the tracks if we dont need to clean them up due to a effecRerun.
             setTracks(localTracks);
           }
         }
@@ -87,13 +88,16 @@ export function usePreviewTracks(
     });
 
     return () => {
+      // In case this is triggered while awaiting for `createLocalTracks`,
+      // this makes sure, we will stop the tracks after the creation await.
+      // (yes needsCleanup is passed into this closure by ref and is the same ref as in the
+      // lock.then closure)
       needsCleanup = true;
       localTracks.forEach((track) => {
         track.stop();
       });
     };
-  }, [JSON.stringify(options), onError, trackLock]);
-
+  }, [onError, options, trackLock]);
   return tracks;
 }
 

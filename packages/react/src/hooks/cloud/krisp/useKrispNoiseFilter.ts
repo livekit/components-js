@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { LocalAudioTrack } from 'livekit-client';
+import { log } from '@livekit/components-core';
 import type { KrispNoiseFilterProcessor, NoiseFilterOptions } from '@livekit/krisp-noise-filter';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { useLocalParticipant } from '../../..';
@@ -52,7 +53,7 @@ export function useKrispNoiseFilter(options: useKrispNoiseFilterOptions = {}) {
       );
 
       if (!isKrispNoiseFilterSupported()) {
-        console.warn('Krisp noise filter is not supported in this browser');
+        log.warn('LiveKit-Krisp noise filter is not supported in this browser');
         return;
       }
       if (!krispProcessor) {
@@ -86,7 +87,7 @@ export function useKrispNoiseFilter(options: useKrispNoiseFilterOptions = {}) {
           })
           .catch((e: any) => {
             setIsNoiseFilterEnabled(false);
-            console.error(e);
+            log.error('Krisp hook: error enabling filter', e);
           })
           .finally(() => {
             setIsNoiseFilterPending(false);

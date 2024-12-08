@@ -3,6 +3,7 @@ import type {
   LocalAudioTrack,
   LocalTrack,
   LocalVideoTrack,
+  TrackProcessor,
 } from 'livekit-client';
 import {
   createLocalAudioTrack,
@@ -51,6 +52,7 @@ export interface PreJoinProps
    * @alpha
    */
   persistUserChoices?: boolean;
+  videoProcessor?: TrackProcessor<Track.Kind.Video>;
 }
 
 /** @alpha */
@@ -223,6 +225,7 @@ export function PreJoin({
   camLabel = 'Camera',
   userLabel = 'Username',
   persistUserChoices = true,
+  videoProcessor,
   ...htmlProps
 }: PreJoinProps) {
   const [userChoices, setUserChoices] = React.useState(defaultUserChoices);
@@ -280,7 +283,9 @@ export function PreJoin({
   const tracks = usePreviewTracks(
     {
       audio: audioEnabled ? { deviceId: initialUserChoices.audioDeviceId } : false,
-      video: videoEnabled ? { deviceId: initialUserChoices.videoDeviceId } : false,
+      video: videoEnabled
+        ? { deviceId: initialUserChoices.videoDeviceId, processor: videoProcessor }
+        : false,
     },
     onError,
   );

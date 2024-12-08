@@ -72,18 +72,10 @@ const ProcessorsExample: NextPage = () => {
     },
   });
 
-  const [backgroundBlur, setBackgroundBlur] = React.useState<
-    TrackProcessor<Track.Kind.Video> | undefined
-  >(undefined);
-
-  React.useEffect(() => {
-    setBackgroundBlur(BackgroundBlur());
-  }, []);
-
   return (
     <div data-lk-theme="default" style={{ height: '100vh' }}>
       <LiveKitRoom
-        video={{ processor: backgroundBlur }}
+        video={true}
         audio={false}
         token={token}
         connect={true}

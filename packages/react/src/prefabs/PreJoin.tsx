@@ -3,6 +3,7 @@ import type {
   LocalAudioTrack,
   LocalTrack,
   LocalVideoTrack,
+  TrackProcessor,
 } from 'livekit-client';
 import {
   createLocalAudioTrack,
@@ -22,6 +23,7 @@ import { ParticipantPlaceholder } from '../assets/images';
 import { useMediaDevices, usePersistentUserChoices } from '../hooks';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 import { defaultUserChoices } from '@livekit/components-core';
+import { roomOptionsStringifyReplacer } from '../utils';
 
 /**
  * Props for the PreJoin component.
@@ -50,6 +52,7 @@ export interface PreJoinProps
    * @alpha
    */
   persistUserChoices?: boolean;
+  videoProcessor?: TrackProcessor<Track.Kind.Video>;
 }
 
 /** @alpha */
@@ -92,7 +95,7 @@ export function usePreviewTracks(
         track.stop();
       });
     };
-  }, [JSON.stringify(options), onError, trackLock]);
+  }, [JSON.stringify(options, roomOptionsStringifyReplacer), onError, trackLock]);
 
   return tracks;
 }
@@ -222,6 +225,7 @@ export function PreJoin({
   camLabel = 'Camera',
   userLabel = 'Username',
   persistUserChoices = true,
+  videoProcessor,
   ...htmlProps
 }: PreJoinProps) {
   const [userChoices, setUserChoices] = React.useState(defaultUserChoices);
@@ -279,7 +283,9 @@ export function PreJoin({
   const tracks = usePreviewTracks(
     {
       audio: audioEnabled ? { deviceId: initialUserChoices.audioDeviceId } : false,
-      video: videoEnabled ? { deviceId: initialUserChoices.videoDeviceId } : false,
+      video: videoEnabled
+        ? { deviceId: initialUserChoices.videoDeviceId, processor: videoProcessor }
+        : false,
     },
     onError,
   );

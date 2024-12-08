@@ -34,6 +34,7 @@ import { ScreenShareCaptureOptions } from 'livekit-client';
 import { setLogLevel as setLogLevel_2 } from 'livekit-client';
 import { SVGProps } from 'react';
 import { Track } from 'livekit-client';
+import { TrackProcessor } from 'livekit-client';
 import { TrackPublication } from 'livekit-client';
 import { TrackPublishOptions } from 'livekit-client';
 import { TranscriptionSegment } from 'livekit-client';
@@ -546,7 +547,7 @@ export interface ParticipantTileProps extends React_2.HTMLAttributes<HTMLDivElem
 export type PinState = TrackReferenceOrPlaceholder[];
 
 // @public
-export function PreJoin({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, persistUserChoices, ...htmlProps }: PreJoinProps): React_2.JSX.Element;
+export function PreJoin({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, persistUserChoices, videoProcessor, ...htmlProps }: PreJoinProps): React_2.JSX.Element;
 
 // @public
 export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement>, 'onSubmit' | 'onError'> {
@@ -566,6 +567,8 @@ export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement
     persistUserChoices?: boolean;
     // (undocumented)
     userLabel?: string;
+    // (undocumented)
+    videoProcessor?: TrackProcessor<Track.Kind.Video>;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "QualityExcellentIcon" should be prefixed with an underscore because the declaration is marked as @internal

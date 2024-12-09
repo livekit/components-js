@@ -183,7 +183,7 @@ export function NewVideoConference({
   useWarnAboutMissingStyles();
 
   return (
-    <div className="lk-video-conference" {...props}>
+    <div className={`lk-video-conference conference-type-${featureFlags?.type}`} {...props}>
       {isWeb() && (
         <LayoutContextProvider
           value={layoutContext}

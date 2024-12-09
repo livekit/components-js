@@ -108,6 +108,7 @@ export const ParticipantTile: (
     ref,
   ) {
     const trackReference = useEnsureTrackRef(trackRef);
+    const featureFlags = useFeatureContext();
 
     const { elementProps } = useParticipantTile<HTMLDivElement>({
       htmlProps,
@@ -129,10 +130,12 @@ export const ParticipantTile: (
           layoutContext.pin.dispatch &&
           isTrackReferencePinned(trackReference, layoutContext.pin.state)
         ) {
-          layoutContext.pin.dispatch({ msg: 'clear_pin' });
+          if (featureFlags?.type !== '1on1') {
+            layoutContext.pin.dispatch({ msg: 'clear_pin' });
+          }
         }
       },
-      [trackReference, layoutContext],
+      [trackReference, layoutContext, featureFlags?.type],
     );
 
     return (

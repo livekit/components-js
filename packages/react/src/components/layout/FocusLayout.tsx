@@ -3,6 +3,7 @@ import { mergeProps } from '../../utils';
 import type { TrackReferenceOrPlaceholder } from '@cc-livekit/components-core';
 import { ParticipantTile } from '../participant/ParticipantTile';
 import type { ParticipantClickEvent } from '@cc-livekit/components-core';
+import { useFeatureContext } from '../../context';
 
 /** @public */
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -15,7 +16,10 @@ export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivE
  *  @public
  */
 export function FocusLayoutContainer(props: FocusLayoutContainerProps) {
-  const elementProps = mergeProps(props, { className: 'lk-focus-layout' });
+  const featureFlags = useFeatureContext();
+  const elementProps = mergeProps(props, {
+    className: `lk-focus-layout room-type-${featureFlags?.type}`,
+  });
 
   return <div {...elementProps}>{props.children}</div>;
 }

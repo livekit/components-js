@@ -22,7 +22,7 @@ export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivEl
  */
 export const TrackMutedIndicator: (
   props: TrackMutedIndicatorProps & React.RefAttributes<HTMLDivElement>,
-) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLDivElement, TrackMutedIndicatorProps>(
+) => any = /* @__PURE__ */ React.forwardRef<HTMLDivElement, TrackMutedIndicatorProps>(
   function TrackMutedIndicator(
     { trackRef, show = 'always', ...props }: TrackMutedIndicatorProps,
     ref,

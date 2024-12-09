@@ -22,7 +22,7 @@ export interface ParticipantNameProps
  */
 export const ParticipantName: (
   props: ParticipantNameProps & React.RefAttributes<HTMLSpanElement>,
-) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLSpanElement, ParticipantNameProps>(
+) => any = /* @__PURE__ */ React.forwardRef<HTMLSpanElement, ParticipantNameProps>(
   function ParticipantName({ participant, ...props }: ParticipantNameProps, ref) {
     const p = useEnsureParticipant(participant);
     const nameFormatter = useFeatureContext()?.nameFormatter;

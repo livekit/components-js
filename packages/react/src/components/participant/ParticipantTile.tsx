@@ -96,7 +96,7 @@ export interface ParticipantTileProps extends React.HTMLAttributes<HTMLDivElemen
  */
 export const ParticipantTile: (
   props: ParticipantTileProps & React.RefAttributes<HTMLDivElement>,
-) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLDivElement, ParticipantTileProps>(
+) => any = /* @__PURE__ */ React.forwardRef<HTMLDivElement, ParticipantTileProps>(
   function ParticipantTile(
     {
       trackRef,

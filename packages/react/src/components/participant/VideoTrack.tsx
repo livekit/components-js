@@ -25,10 +25,8 @@ export interface VideoTrackProps extends React.VideoHTMLAttributes<HTMLVideoElem
  * @see {@link @livekit/components-react#ParticipantTile | ParticipantTile}
  * @public
  */
-export const VideoTrack: (
-  props: VideoTrackProps & React.RefAttributes<HTMLVideoElement>,
-) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLVideoElement, VideoTrackProps>(
-  function VideoTrack(
+export const VideoTrack: (props: VideoTrackProps & React.RefAttributes<HTMLVideoElement>) => any =
+  /* @__PURE__ */ React.forwardRef<HTMLVideoElement, VideoTrackProps>(function VideoTrack(
     {
       onTrackClick,
       onClick,
@@ -88,5 +86,4 @@ export const VideoTrack: (
     };
 
     return <video ref={mediaEl} {...elementProps} muted={true} onClick={clickHandler}></video>;
-  },
-);
+  });

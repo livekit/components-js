@@ -36,10 +36,8 @@ export interface AudioTrackProps extends React.AudioHTMLAttributes<HTMLAudioElem
  * @see `ParticipantTile` component
  * @public
  */
-export const AudioTrack: (
-  props: AudioTrackProps & React.RefAttributes<HTMLAudioElement>,
-) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLAudioElement, AudioTrackProps>(
-  function AudioTrack(
+export const AudioTrack: (props: AudioTrackProps & React.RefAttributes<HTMLAudioElement>) => any =
+  /* @__PURE__ */ React.forwardRef<HTMLAudioElement, AudioTrackProps>(function AudioTrack(
     { trackRef, onSubscriptionStatusChanged, volume, muted, ...props }: AudioTrackProps,
     ref,
   ) {
@@ -85,5 +83,4 @@ export const AudioTrack: (
     }, [muted, pub, track]);
 
     return <audio ref={mediaEl} {...elementProps} />;
-  },
-);
+  });

@@ -5,6 +5,7 @@ import * as React from 'react';
 export interface FeatureFlags {
   autoSubscription?: boolean;
   nameFormatter?: (participant: Participant) => string;
+  type?: '1on1' | 'instant' | 'group';
 }
 
 type FeatureContext<T extends boolean = false> = T extends true

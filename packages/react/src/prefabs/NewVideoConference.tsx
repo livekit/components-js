@@ -18,7 +18,7 @@ import {
   ParticipantTile,
   RoomAudioRenderer,
 } from '../components';
-import { useCreateLayoutContext, useRoomContext } from '../context';
+import { useCreateLayoutContext, useFeatureContext, useRoomContext } from '../context';
 import { usePinnedTracks, useTracks } from '../hooks';
 import { Chat } from './Chat';
 import { ControlBar, ControlBarProps } from './ControlBar';
@@ -38,7 +38,6 @@ export interface NewVideoConferenceProps extends React.HTMLAttributes<HTMLDivEle
   onAddMember?: () => void;
   onMemberList?: () => void;
   filterLocalTracks?: boolean;
-  type?: '1on1' | 'instant' | 'group';
 }
 
 /**
@@ -69,7 +68,6 @@ export function NewVideoConference({
   onMemberList,
   filterLocalTracks,
   controls,
-  type,
   ...props
 }: NewVideoConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({
@@ -101,10 +99,11 @@ export function NewVideoConference({
 
   const focusTrack = usePinnedTracks(layoutContext)?.[0];
   const carouselTracks = tracks.filter((track) => !isEqualTrackRef(track, focusTrack));
+  const featureFlags = useFeatureContext();
 
   // auto pin remote participant when 1on1
   React.useEffect(() => {
-    if (!room || type !== '1on1') {
+    if (!room || featureFlags?.type !== '1on1') {
       return;
     }
 
@@ -140,7 +139,7 @@ export function NewVideoConference({
       room.off(RoomEvent.Connected, onLocalConnected);
       room.off(RoomEvent.ParticipantConnected, onRemoteConnected);
     };
-  }, [room, type]);
+  }, [room, featureFlags?.type]);
 
   React.useEffect(() => {
     // If screen share tracks are published, and no pin is set explicitly, auto set the screen share.

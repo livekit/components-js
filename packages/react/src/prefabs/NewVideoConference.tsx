@@ -5,7 +5,7 @@ import type {
   WidgetState,
 } from '@cc-livekit/components-core';
 import { isEqualTrackRef, isTrackReference, isWeb, log } from '@cc-livekit/components-core';
-import { RoomEvent, Track } from 'livekit-client';
+import { RemoteParticipant, RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
 import type { MessageFormatter } from '../components';
 import {
@@ -18,7 +18,7 @@ import {
   ParticipantTile,
   RoomAudioRenderer,
 } from '../components';
-import { useCreateLayoutContext } from '../context';
+import { useCreateLayoutContext, useRoomContext } from '../context';
 import { usePinnedTracks, useTracks } from '../hooks';
 import { Chat } from './Chat';
 import { ControlBar, ControlBarProps } from './ControlBar';
@@ -38,6 +38,7 @@ export interface NewVideoConferenceProps extends React.HTMLAttributes<HTMLDivEle
   onAddMember?: () => void;
   onMemberList?: () => void;
   filterLocalTracks?: boolean;
+  type?: '1on1' | 'instant' | 'group';
 }
 
 /**
@@ -68,6 +69,7 @@ export function NewVideoConference({
   onMemberList,
   filterLocalTracks,
   controls,
+  type,
   ...props
 }: NewVideoConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({
@@ -75,6 +77,7 @@ export function NewVideoConference({
     unreadMessages: 0,
     showSettings: false,
   });
+  const room = useRoomContext();
   const lastAutoFocusedScreenShareTrack = React.useRef<TrackReferenceOrPlaceholder | null>(null);
 
   const tracks = useTracks(
@@ -98,6 +101,46 @@ export function NewVideoConference({
 
   const focusTrack = usePinnedTracks(layoutContext)?.[0];
   const carouselTracks = tracks.filter((track) => !isEqualTrackRef(track, focusTrack));
+
+  // auto pin remote participant when 1on1
+  React.useEffect(() => {
+    if (!room || type !== '1on1') {
+      return;
+    }
+
+    const onLocalConnected = () => {
+      const participants = room.remoteParticipants;
+      for (let [_, participant] of participants) {
+        layoutContext.pin.dispatch?.({
+          msg: 'set_pin',
+          trackReference: {
+            participant,
+            publication: participant.getTrackPublication(Track.Source.Camera),
+            source: Track.Source.Camera,
+          },
+        });
+      }
+    };
+
+    const onRemoteConnected = (p: RemoteParticipant) => {
+      layoutContext.pin.dispatch?.({
+        msg: 'set_pin',
+        trackReference: {
+          participant: p,
+          publication: p.getTrackPublication(Track.Source.Camera),
+          source: Track.Source.Camera,
+        },
+      });
+    };
+
+    room.on(RoomEvent.Connected, onLocalConnected);
+    room.on(RoomEvent.ParticipantConnected, onRemoteConnected);
+
+    return () => {
+      room.off(RoomEvent.Connected, onLocalConnected);
+      room.off(RoomEvent.ParticipantConnected, onRemoteConnected);
+    };
+  }, [room, type]);
 
   React.useEffect(() => {
     // If screen share tracks are published, and no pin is set explicitly, auto set the screen share.

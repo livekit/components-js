@@ -185,7 +185,7 @@ export const ParticipantTile: (
                       </>
                     )}
                   </div>
-                  <ConnectionQualityIndicator className="lk-participant-metadata-item" />
+                  {/* <ConnectionQualityIndicator className="lk-participant-metadata-item" /> */}
                 </div>
               </>
             )}

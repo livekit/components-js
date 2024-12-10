@@ -17,6 +17,7 @@ export type PinContextType = {
 
 /** @internal */
 export function pinReducer(state: PinState, action: PinAction): PinState {
+  console.trace('pin update', action);
   if (action.msg === 'set_pin') {
     return [action.trackReference];
   } else if (action.msg === 'clear_pin') {

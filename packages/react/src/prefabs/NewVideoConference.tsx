@@ -126,6 +126,10 @@ export function NewVideoConference({
     };
 
     const onRemoteConnected = (p: RemoteParticipant) => {
+      // convert to instant
+      if (Array.from(room.remoteParticipants).length > 1) {
+        return;
+      }
       layoutContext.pin.dispatch?.({
         msg: 'set_pin',
         trackReference: {

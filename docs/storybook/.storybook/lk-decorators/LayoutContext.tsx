@@ -39,6 +39,7 @@ const ContextWrapper = ({
         const participant = participants[0];
         if (participant) {
           const track = participant.getTrackPublication(Track.Source.Camera)!;
+          console.warn('set pin 1');
           dispatch({
             msg: 'set_pin',
             trackReference: { participant, source: track.source, publication: track },

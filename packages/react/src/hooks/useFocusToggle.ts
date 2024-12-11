@@ -45,6 +45,7 @@ export function useFocusToggle({ trackRef, props }: UseFocusToggleProps) {
               msg: 'clear_pin',
             });
           } else {
+            console.warn('set pin 2');
             layoutContext?.pin.dispatch?.({
               msg: 'set_pin',
               trackReference,

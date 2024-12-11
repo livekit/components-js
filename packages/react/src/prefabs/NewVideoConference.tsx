@@ -113,6 +113,9 @@ export function NewVideoConference({
 
     const onLocalConnected = () => {
       const participants = room.remoteParticipants;
+      if (participants.size > 1) {
+        return;
+      }
       for (let [_, participant] of participants) {
         layoutContext.pin.dispatch?.({
           msg: 'set_pin',
@@ -130,6 +133,7 @@ export function NewVideoConference({
       if (room.remoteParticipants.size > 1) {
         return;
       }
+      console.warn('on remote connected, current remote size:', room.remoteParticipants.size);
       layoutContext.pin.dispatch?.({
         msg: 'set_pin',
         trackReference: {
@@ -156,6 +160,7 @@ export function NewVideoConference({
       lastAutoFocusedScreenShareTrack.current === null
     ) {
       log.debug('Auto set screen share focus:', { newScreenShareTrack: screenShareTracks[0] });
+      console.warn('set pin 5');
       layoutContext.pin.dispatch?.({ msg: 'set_pin', trackReference: screenShareTracks[0] });
       lastAutoFocusedScreenShareTrack.current = screenShareTracks[0];
     } else if (
@@ -177,6 +182,7 @@ export function NewVideoConference({
           tr.source === focusTrack.source,
       );
       if (updatedFocusTrack !== focusTrack && isTrackReference(updatedFocusTrack)) {
+        console.warn('set pin 6');
         layoutContext.pin.dispatch?.({ msg: 'set_pin', trackReference: updatedFocusTrack });
       }
     }

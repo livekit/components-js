@@ -127,7 +127,7 @@ export function NewVideoConference({
 
     const onRemoteConnected = (p: RemoteParticipant) => {
       // convert to instant
-      if (Array.from(room.remoteParticipants).length > 1) {
+      if (room.remoteParticipants.size > 1) {
         return;
       }
       layoutContext.pin.dispatch?.({

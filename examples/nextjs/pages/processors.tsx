@@ -13,7 +13,7 @@ import {
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { ControlBarControls } from '@livekit/components-react';
-import { LocalVideoTrack, Track } from 'livekit-client';
+import { LocalVideoTrack, Track, TrackProcessor } from 'livekit-client';
 import { BackgroundBlur } from '@livekit/track-processors';
 
 function Stage() {
@@ -23,6 +23,7 @@ function Stage() {
   const [blurEnabled, setBlurEnabled] = React.useState(false);
   const [processorPending, setProcessorPending] = React.useState(false);
   const { cameraTrack } = useLocalParticipant();
+  const [blur] = React.useState(BackgroundBlur());
 
   React.useEffect(() => {
     const localCamTrack = cameraTrack?.track as LocalVideoTrack | undefined;
@@ -30,7 +31,7 @@ function Stage() {
       setProcessorPending(true);
       try {
         if (blurEnabled && !localCamTrack.getProcessor()) {
-          localCamTrack.setProcessor(BackgroundBlur());
+          localCamTrack.setProcessor(blur);
         } else if (!blurEnabled) {
           localCamTrack.stopProcessor();
         }

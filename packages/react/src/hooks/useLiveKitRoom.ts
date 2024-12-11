@@ -6,6 +6,7 @@ import type { HTMLAttributes } from 'react';
 
 import type { LiveKitRoomProps } from '../components';
 import { mergeProps } from '../mergeProps';
+import { roomOptionsStringifyReplacer } from '../utils';
 
 const defaultRoomProps: Partial<LiveKitRoomProps> = {
   connect: true,
@@ -60,7 +61,7 @@ export function useLiveKitRoom<T extends HTMLElement>(
 
   React.useEffect(() => {
     setRoom(passedRoom ?? new Room(options));
-  }, [passedRoom]);
+  }, [passedRoom, JSON.stringify(options, roomOptionsStringifyReplacer)]);
 
   const htmlProps = React.useMemo(() => {
     const { className } = setupLiveKitRoom();

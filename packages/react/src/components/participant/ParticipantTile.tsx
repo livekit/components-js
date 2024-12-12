@@ -162,7 +162,9 @@ export const ParticipantTile: (
                   )
                 )}
                 <div className="lk-participant-placeholder">
-                  <ParticipantPlaceholder />
+                  {featureFlags?.renderParticipantPlaceholder?.(trackReference.participant) ?? (
+                    <ParticipantPlaceholder />
+                  )}
                 </div>
                 <div className="lk-participant-metadata">
                   <div className="lk-participant-metadata-item">

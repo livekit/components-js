@@ -5,6 +5,7 @@ import * as React from 'react';
 export interface FeatureFlags {
   autoSubscription?: boolean;
   nameFormatter?: (participant: Participant) => string;
+  renderParticipantPlaceholder?: (participant: Participant | undefined) => any;
   type?: '1on1' | 'instant' | 'group';
 }
 

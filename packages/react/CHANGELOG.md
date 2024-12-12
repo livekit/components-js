@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.6.10
+
+### Patch Changes
+
+- Make processor initialization work on track create - [#1039](https://github.com/livekit/components-js/pull/1039) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.6.9
 
 ### Patch Changes

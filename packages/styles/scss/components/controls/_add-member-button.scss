@@ -1,0 +1,7 @@
+@use 'button';
+
+.add-member-button {
+  @extend .button;
+  // --control-fg: var(--danger-fg);
+  // --control-bg: var(--danger);
+}

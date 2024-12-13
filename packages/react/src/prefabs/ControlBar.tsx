@@ -12,6 +12,8 @@ import { supportsScreenSharing } from '@livekit/components-core';
 import { mergeProps } from '../utils';
 import { StartMediaButton } from '../components/controls/StartMediaButton';
 import { SettingsMenuToggle } from '../components/controls/SettingsMenuToggle';
+import { AddMemberButton } from '../components/controls/AddMemberButton';
+import AddMemberIcon from '../assets/icons/AddMemberIcon';
 
 /** @public */
 export type ControlBarControls = {
@@ -21,6 +23,7 @@ export type ControlBarControls = {
   screenShare?: boolean;
   leave?: boolean;
   settings?: boolean;
+  addMember?: boolean;
 };
 
 /** @public */
@@ -36,6 +39,7 @@ export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
    */
   saveUserChoices?: boolean;
   onScreenShareClick?: (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onAddMember?: () => void;
 }
 
 /**
@@ -60,6 +64,7 @@ export function ControlBar({
   saveUserChoices = true,
   onDeviceError,
   onScreenShareClick,
+  onAddMember,
   ...props
 }: ControlBarProps) {
   const [isChatOpen, setIsChatOpen] = React.useState(false);
@@ -196,6 +201,12 @@ export function ControlBar({
           {showIcon && <GearIcon />}
           {showText && 'Settings'}
         </SettingsMenuToggle>
+      )}
+      {visibleControls.addMember && (
+        <AddMemberButton onClick={onAddMember}>
+          {showIcon && <AddMemberIcon />}
+          {showText && 'Add member'}
+        </AddMemberButton>
       )}
       {visibleControls.leave && (
         <DisconnectButton>

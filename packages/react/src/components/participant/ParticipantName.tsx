@@ -1,6 +1,6 @@
 import { setupParticipantName } from '@livekit/components-core';
 import * as React from 'react';
-import { useEnsureParticipant } from '../../context';
+import { useEnsureParticipant, useFeatureContext } from '../../context';
 import { useObservableState } from '../../hooks/internal/useObservableState';
 import { mergeProps } from '../../utils';
 import type { UseParticipantInfoOptions } from '../../hooks';
@@ -25,6 +25,7 @@ export const ParticipantName: (
 ) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLSpanElement, ParticipantNameProps>(
   function ParticipantName({ participant, ...props }: ParticipantNameProps, ref) {
     const p = useEnsureParticipant(participant);
+    const nameFormatter = useFeatureContext()?.nameFormatter;
 
     const { className, infoObserver } = React.useMemo(() => {
       return setupParticipantName(p);
@@ -42,7 +43,7 @@ export const ParticipantName: (
 
     return (
       <span ref={ref} {...mergedProps}>
-        {name !== '' ? name : identity}
+        {nameFormatter ? nameFormatter(p) : name !== '' ? name : identity}
         {props.children}
       </span>
     );

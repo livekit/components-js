@@ -21,7 +21,7 @@ import {
 import { useCreateLayoutContext } from '../context';
 import { usePinnedTracks, useTracks } from '../hooks';
 import { Chat } from './Chat';
-import { ControlBar } from './ControlBar';
+import { ControlBar, ControlBarProps } from './ControlBar';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 
 /**
@@ -34,6 +34,8 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
   chatMessageDecoder?: MessageDecoder;
   /** @alpha */
   SettingsComponent?: React.ComponentType;
+  controls?: ControlBarProps['controls'];
+  onAddMember?: () => void;
 }
 
 /**
@@ -60,6 +62,8 @@ export function VideoConference({
   chatMessageEncoder,
   SettingsComponent,
   onScreenShareClick,
+  onAddMember,
+  controls,
   ...props
 }: VideoConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({
@@ -157,7 +161,12 @@ export function VideoConference({
                 </FocusLayoutContainer>
               </div>
             )}
-            <ControlBar variation="minimal" controls={{ chat: true, settings: !!SettingsComponent }} onScreenShareClick={onScreenShareClick} />
+            <ControlBar
+              variation="minimal"
+              onAddMember={onAddMember}
+              controls={{ chat: true, settings: !!SettingsComponent, ...controls }}
+              onScreenShareClick={onScreenShareClick}
+            />
           </div>
           <Chat
             style={{ display: widgetState.showChat ? 'grid' : 'none' }}

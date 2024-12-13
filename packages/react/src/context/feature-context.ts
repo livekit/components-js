@@ -1,8 +1,10 @@
+import { Participant } from 'livekit-client';
 import * as React from 'react';
 
 /** @internal */
 export interface FeatureFlags {
   autoSubscription?: boolean;
+  nameFormatter?: (participant: Participant) => string;
 }
 
 type FeatureContext<T extends boolean = false> = T extends true

@@ -2,7 +2,8 @@ import * as React from 'react';
 import { useMaybeRoomContext } from '../../context';
 import { mergeProps } from '../../utils';
 import { RoomEvent, type LocalAudioTrack, type LocalVideoTrack } from 'livekit-client';
-import { useMediaDeviceSelect } from '../../hooks';
+import { useLocalParticipant, useMediaDeviceSelect } from '../../hooks';
+import { Slider } from 'antd';
 
 /** @public */
 export interface MediaDeviceSelectProps

@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { type TrackReferenceOrPlaceholder, trackSyncTimeObserver } from '@livekit/components-core';
+import {
+  type TrackReferenceOrPlaceholder,
+  trackSyncTimeObserver,
+} from '@cc-livekit/components-core';
 import { useObservableState } from './internal';
 
 /**

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react';
 
-import { Chat, ChatProps } from '@livekit/components-react';
+import { Chat, ChatProps } from '@cc-livekit/components-react';
 import { LkRoomContext } from '../../.storybook/lk-decorators';
 
 export default {

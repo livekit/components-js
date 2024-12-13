@@ -2,7 +2,7 @@ import * as React from 'react';
 import { LayoutContext, useMaybeTrackRefContext } from '../../context';
 import { FocusToggleIcon, UnfocusToggleIcon } from '../../assets/icons';
 import { useFocusToggle } from '../../hooks';
-import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import type { TrackReferenceOrPlaceholder } from '@cc-livekit/components-core';
 
 /** @public */
 export interface FocusToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

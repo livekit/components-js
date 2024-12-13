@@ -17,13 +17,13 @@ import {
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { TrackToggle } from '../components/controls/TrackToggle';
-import type { LocalUserChoices } from '@livekit/components-core';
-import { log } from '@livekit/components-core';
+import type { LocalUserChoices } from '@cc-livekit/components-core';
+import { log } from '@cc-livekit/components-core';
 import { ParticipantPlaceholder } from '../assets/images';
 import { useMediaDevices, usePersistentUserChoices } from '../hooks';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
-import { defaultUserChoices } from '@livekit/components-core';
 import { roomOptionsStringifyReplacer } from '../utils';
+import { defaultUserChoices } from '@cc-livekit/components-core';
 
 /**
  * Props for the PreJoin component.

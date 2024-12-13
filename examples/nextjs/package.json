@@ -1,6 +1,6 @@
 {
-  "name": "@livekit/component-example-next",
-  "version": "0.2.50",
+  "name": "@cc-livekit/component-example-next",
+  "version": "0.2.46",
   "private": true,
   "type": "module",
   "scripts": {
@@ -16,13 +16,13 @@
     "livekit-client": "catalog:",
     "livekit-server-sdk": "^2.6.1",
     "next": "^14.2.13",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
   },
   "devDependencies": {
     "@types/node": "^18.19.14",
-    "@types/react": "^18.2.55",
-    "@types/react-dom": "^18.2.18",
+    "@types/react": "17.0.2",
+    "@types/react-dom": "17.0.2",
     "eslint-config-next": "^12.3.4",
     "source-map-loader": "^4.0.2",
     "typescript": "5.4.2"

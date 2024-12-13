@@ -8,7 +8,7 @@ import { TrackRefContext, useEnsureTrackRef } from '../../context';
 import type { ParticipantTileProps } from './ParticipantTile';
 import { AudioTrack } from './AudioTrack';
 import { useParticipantTile } from '../../hooks';
-import { isTrackReference } from '@livekit/components-core';
+import { isTrackReference } from '@cc-livekit/components-core';
 import { BarVisualizer } from './BarVisualizer';
 
 /**

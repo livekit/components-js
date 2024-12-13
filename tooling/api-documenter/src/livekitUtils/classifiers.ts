@@ -50,11 +50,11 @@ function isComponent(apiItem: ApiItem): boolean {
 }
 
 function isComponentReactPackage(apiItem: ApiItem): boolean {
-  return apiItem.getAssociatedPackage()?.displayName === '@livekit/components-react';
+  return apiItem.getAssociatedPackage()?.displayName === '@cc-livekit/components-react';
 }
 
 function isComponentCorePackage(apiItem: ApiItem): boolean {
-  return apiItem.getAssociatedPackage()?.displayName === '@livekit/components-core';
+  return apiItem.getAssociatedPackage()?.displayName === '@cc-livekit/components-core';
 }
 
 function startsWithCapitalLetter(name: string): boolean {

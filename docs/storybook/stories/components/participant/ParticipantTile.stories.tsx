@@ -1,4 +1,4 @@
-import { ParticipantTile, ParticipantTileProps } from '@livekit/components-react';
+import { ParticipantTile, ParticipantTileProps } from '@cc-livekit/components-react';
 import { Meta, StoryObj } from '@storybook/react';
 import { Track } from 'livekit-client';
 import * as React from 'react';

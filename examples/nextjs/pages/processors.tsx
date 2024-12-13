@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { setLogLevel } from '@livekit/components-core';
+import { setLogLevel } from '@cc-livekit/components-core';
 import {
   GridLayout,
   LiveKitRoom,
@@ -10,10 +10,10 @@ import {
   useLocalParticipant,
   useToken,
   useTracks,
-} from '@livekit/components-react';
+} from '@cc-livekit/components-react';
 import type { NextPage } from 'next';
-import { ControlBarControls } from '@livekit/components-react';
-import { LocalVideoTrack, Track, TrackProcessor } from 'livekit-client';
+import { ControlBarControls } from '@cc-livekit/components-react';
+import { LocalVideoTrack, Track } from 'livekit-client';
 import { BackgroundBlur } from '@livekit/track-processors';
 
 function Stage() {

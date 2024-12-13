@@ -3,7 +3,7 @@ import { ControlBar } from './ControlBar';
 
 import { ParticipantAudioTile } from '../components/participant/ParticipantAudioTile';
 import { LayoutContextProvider } from '../components/layout/LayoutContextProvider';
-import type { WidgetState } from '@livekit/components-core';
+import type { WidgetState } from '@cc-livekit/components-core';
 import { Chat } from './Chat';
 import { TrackLoop } from '../components';
 import { useTracks } from '../hooks';

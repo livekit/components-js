@@ -1,5 +1,8 @@
-import type { ParticipantClickEvent, TrackReferenceOrPlaceholder } from '@livekit/components-core';
-import { setupParticipantTile } from '@livekit/components-core';
+import type {
+  ParticipantClickEvent,
+  TrackReferenceOrPlaceholder,
+} from '@cc-livekit/components-core';
+import { setupParticipantTile } from '@cc-livekit/components-core';
 import * as React from 'react';
 import { useEnsureTrackRef } from '../context';
 import { mergeProps } from '../mergeProps';

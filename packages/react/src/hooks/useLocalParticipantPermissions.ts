@@ -1,4 +1,4 @@
-import { participantPermissionObserver } from '@livekit/components-core';
+import { participantPermissionObserver } from '@cc-livekit/components-core';
 import type { ParticipantPermission } from '@livekit/protocol';
 import * as React from 'react';
 import { useRoomContext } from '../context';

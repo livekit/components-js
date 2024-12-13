@@ -4,7 +4,7 @@ import {
   TrackRefContext,
   useLocalParticipant,
   useTracks,
-} from '@livekit/components-react';
+} from '@cc-livekit/components-react';
 import { Decorator } from '@storybook/react';
 import { Track } from 'livekit-client';
 

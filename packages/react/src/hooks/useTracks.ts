@@ -4,13 +4,13 @@ import type {
   TrackReferenceOrPlaceholder,
   TrackSourceWithOptions,
   TrackReferencePlaceholder,
-} from '@livekit/components-core';
+} from '@cc-livekit/components-core';
 import {
   isSourcesWithOptions,
   isSourceWitOptions,
   log,
   trackReferencesObservable,
-} from '@livekit/components-core';
+} from '@cc-livekit/components-core';
 import type { Participant, Room, RoomEvent } from 'livekit-client';
 import { Track } from 'livekit-client';
 import * as React from 'react';

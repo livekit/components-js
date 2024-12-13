@@ -1,8 +1,8 @@
-import type { TrackReference, TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import type { TrackReference, TrackReferenceOrPlaceholder } from '@cc-livekit/components-core';
 import * as React from 'react';
 import { TrackRefContext } from '../context/track-reference-context';
 import { cloneSingleChild } from '../utils';
-import { getTrackReferenceId } from '@livekit/components-core';
+import { getTrackReferenceId } from '@cc-livekit/components-core';
 
 /** @public */
 export interface TrackLoopProps {

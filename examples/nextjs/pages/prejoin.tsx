@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { PreJoin, setLogLevel } from '@livekit/components-react';
+import { PreJoin, setLogLevel } from '@cc-livekit/components-react';
 import type { NextPage } from 'next';
 import { Track, TrackProcessor } from 'livekit-client';
 import { BackgroundBlur } from '@livekit/track-processors';

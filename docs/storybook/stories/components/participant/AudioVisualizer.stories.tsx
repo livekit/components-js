@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { AudioVisualizer, AudioVisualizerProps } from '@livekit/components-react';
+import { AudioVisualizer, AudioVisualizerProps } from '@cc-livekit/components-react';
 import { LkLocalMicTrackContext, LkRoomContext } from '../../../.storybook/lk-decorators';
 
 const Story: Meta<typeof AudioVisualizer> = {

@@ -2,7 +2,7 @@ import {
   type TrackReferenceOrPlaceholder,
   getTrackReferenceId,
   mutedObserver,
-} from '@livekit/components-core';
+} from '@cc-livekit/components-core';
 import type { Participant, Track } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureParticipant } from '../context';

@@ -1,4 +1,4 @@
-import { PIN_DEFAULT_STATE, WIDGET_DEFAULT_STATE } from '@livekit/components-core';
+import { PIN_DEFAULT_STATE, WIDGET_DEFAULT_STATE } from '@cc-livekit/components-core';
 import * as React from 'react';
 import type { PinContextType } from './pin-context';
 import type { WidgetContextType } from './chat-context';

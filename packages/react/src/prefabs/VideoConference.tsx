@@ -3,8 +3,8 @@ import type {
   MessageEncoder,
   TrackReferenceOrPlaceholder,
   WidgetState,
-} from '@livekit/components-core';
-import { isEqualTrackRef, isTrackReference, isWeb, log } from '@livekit/components-core';
+} from '@cc-livekit/components-core';
+import { isEqualTrackRef, isTrackReference, isWeb, log } from '@cc-livekit/components-core';
 import { RoomEvent, Track } from 'livekit-client';
 import * as React from 'react';
 import type { MessageFormatter } from '../components';

@@ -11,7 +11,7 @@ export * from './assets/icons';
 export * from './assets/images';
 
 // Re-exports from core
-export { setLogLevel, setLogExtension, isTrackReference } from '@livekit/components-core';
+export { setLogLevel, setLogExtension, isTrackReference } from '@cc-livekit/components-core';
 export type {
   ChatMessage,
   ReceivedChatMessage,
@@ -25,4 +25,4 @@ export type {
   PinState,
   WidgetState,
   GridLayoutDefinition,
-} from '@livekit/components-core';
+} from '@cc-livekit/components-core';

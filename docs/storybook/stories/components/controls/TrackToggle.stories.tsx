@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { TrackToggle, TrackToggleProps } from '@livekit/components-react';
+import { TrackToggle, TrackToggleProps } from '@cc-livekit/components-react';
 import { LkRoomContext } from '../../../.storybook/lk-decorators';
 import { Track } from 'livekit-client';
-import { ToggleSource } from '@livekit/components-core';
+import { ToggleSource } from '@cc-livekit/components-core';
 
 const Story: Meta<typeof TrackToggle> = {
   component: TrackToggle,

@@ -11,7 +11,7 @@ import {
 import { mergeProps } from '../utils';
 import { StartMediaButton } from '../components/controls/StartMediaButton';
 import { BarVisualizer } from '../components';
-import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import type { TrackReferenceOrPlaceholder } from '@cc-livekit/components-core';
 
 /** @beta */
 export type VoiceAssistantControlBarControls = {

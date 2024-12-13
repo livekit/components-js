@@ -5,7 +5,7 @@ import {
   type TrackReference,
   isTrackReference,
   type TrackReferenceOrPlaceholder,
-} from '@livekit/components-core';
+} from '@cc-livekit/components-core';
 
 /**
  * @alpha

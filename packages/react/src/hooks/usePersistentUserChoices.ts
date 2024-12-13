@@ -1,5 +1,5 @@
-import type { LocalUserChoices } from '@livekit/components-core';
-import { loadUserChoices, saveUserChoices } from '@livekit/components-core';
+import type { LocalUserChoices } from '@cc-livekit/components-core';
+import { loadUserChoices, saveUserChoices } from '@cc-livekit/components-core';
 import * as React from 'react';
 
 /**

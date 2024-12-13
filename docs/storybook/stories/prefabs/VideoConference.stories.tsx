@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { VideoConference, VideoConferenceProps } from '@livekit/components-react';
+import { VideoConference, VideoConferenceProps } from '@cc-livekit/components-react';
 import { LkRoomContext } from '../../.storybook/lk-decorators';
 
 export default {

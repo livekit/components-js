@@ -1,4 +1,4 @@
-import { setupStartAudio } from '@livekit/components-core';
+import { setupStartAudio } from '@cc-livekit/components-core';
 import type { Room } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureRoom } from '../context';

@@ -1,7 +1,7 @@
-import { computeMenuPosition, wasClickOutside } from '@livekit/components-core';
+import { computeMenuPosition, wasClickOutside } from '@cc-livekit/components-core';
 import * as React from 'react';
 import { MediaDeviceSelect } from '../components/controls/MediaDeviceSelect';
-import { log } from '@livekit/components-core';
+import { log } from '@cc-livekit/components-core';
 import type { LocalAudioTrack, LocalVideoTrack } from 'livekit-client';
 
 /** @public */

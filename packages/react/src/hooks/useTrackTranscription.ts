@@ -7,7 +7,7 @@ import {
   trackTranscriptionObserver,
   type TrackReferenceOrPlaceholder,
   // didActiveSegmentsChange,
-} from '@livekit/components-core';
+} from '@cc-livekit/components-core';
 import type { TranscriptionSegment } from 'livekit-client';
 import * as React from 'react';
 import { useTrackSyncTime } from './useTrackSyncTime';

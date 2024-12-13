@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StoryObj, Meta } from '@storybook/react';
 
-import { ParticipantName, ParticipantNameProps } from '@livekit/components-react';
+import { ParticipantName, ParticipantNameProps } from '@cc-livekit/components-react';
 import { LkParticipantContext, LkRoomContext } from '../../../.storybook/lk-decorators';
 
 const Story: Meta<typeof ParticipantName> = {

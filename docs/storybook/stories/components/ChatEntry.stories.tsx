@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { ChatEntry, ChatEntryProps, formatChatMessageLinks } from '@livekit/components-react';
+import { ChatEntry, ChatEntryProps, formatChatMessageLinks } from '@cc-livekit/components-react';
 import { LkRoomContext } from '../../.storybook/lk-decorators';
 import { Participant } from 'livekit-client';
 

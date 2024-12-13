@@ -2,7 +2,7 @@ import {
   type TrackReferenceOrPlaceholder,
   setupTrackMutedIndicator,
   getTrackReferenceId,
-} from '@livekit/components-core';
+} from '@cc-livekit/components-core';
 import * as React from 'react';
 import { useEnsureTrackRef } from '../context';
 import { useObservableState } from './internal';

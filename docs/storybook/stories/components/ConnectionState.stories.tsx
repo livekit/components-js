@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StoryObj, Meta } from '@storybook/react';
 
-import { ConnectionState, ConnectionStatusProps } from '@livekit/components-react';
+import { ConnectionState, ConnectionStatusProps } from '@cc-livekit/components-react';
 import { LkRoomContext } from '../../.storybook/lk-decorators';
 
 const Story: Meta<typeof ConnectionState> = {

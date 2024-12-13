@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ConnectionState, ParticipantKind, Track } from 'livekit-client';
 import type { RemoteParticipant } from 'livekit-client';
-import type { ReceivedTranscriptionSegment, TrackReference } from '@livekit/components-core';
+import type { ReceivedTranscriptionSegment, TrackReference } from '@cc-livekit/components-core';
 import { useRemoteParticipants } from './useRemoteParticipants';
 import { useParticipantTracks } from './useParticipantTracks';
 import { useTrackTranscription } from './useTrackTranscription';

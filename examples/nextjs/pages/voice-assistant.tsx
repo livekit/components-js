@@ -7,7 +7,7 @@ import {
   BarVisualizer,
   RoomAudioRenderer,
   VoiceAssistantControlBar,
-} from '@livekit/components-react';
+} from '@cc-livekit/components-react';
 import type { NextPage } from 'next';
 import { useMemo, useState } from 'react';
 import { MediaDeviceFailure } from 'livekit-client';

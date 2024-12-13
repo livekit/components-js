@@ -13,7 +13,9 @@
 </h1>
 
 <!--BEGIN_DESCRIPTION-->
+
 Use this SDK to add realtime video, audio and data features to your React app. By connecting to <a href="https://livekit.io/">LiveKit</a> Cloud or a self-hosted server, you can quickly build applications such as multi-modal AI, live streaming, or video calls with just a few lines of code.
+
 <!--END_DESCRIPTION-->
 
 <br/>
@@ -32,7 +34,7 @@ npm i @livekit/components-react
 Then use any of our pre-fabricated or helper components:
 
 ```tsx
-import { LiveKitRoom, VideoConference } from '@livekit/components-react';
+import { LiveKitRoom, VideoConference } from '@cc-livekit/components-react';
 
 const TOKEN = 'generated-jwt';
 const WS_URL = 'wss://my-livekit-server';
@@ -127,7 +129,9 @@ The highest priority is currently to get the core and react packages to a stable
 
 <!--NAV_END-->
 <!--BEGIN_REPO_NAV-->
+
 <br/><table>
+
 <thead><tr><th colspan="2">LiveKit Ecosystem</th></tr></thead>
 <tbody>
 <tr><td>Realtime SDKs</td><td><b>React Components</b> · <a href="https://github.com/livekit/client-sdk-js">Browser</a> · <a href="https://github.com/livekit/components-swift">Swift Components</a> · <a href="https://github.com/livekit/client-sdk-swift">iOS/macOS/visionOS</a> · <a href="https://github.com/livekit/client-sdk-android">Android</a> · <a href="https://github.com/livekit/client-sdk-flutter">Flutter</a> · <a href="https://github.com/livekit/client-sdk-react-native">React Native</a> · <a href="https://github.com/livekit/rust-sdks">Rust</a> · <a href="https://github.com/livekit/node-sdks">Node.js</a> · <a href="https://github.com/livekit/python-sdks">Python</a> · <a href="https://github.com/livekit/client-sdk-unity-web">Unity (web)</a> · <a href="https://github.com/livekit/client-sdk-unity">Unity (beta)</a></td></tr><tr></tr>
@@ -138,5 +142,3 @@ The highest priority is currently to get the core and react packages to a stable
 </tbody>
 </table>
 <!--END_REPO_NAV-->
-
-

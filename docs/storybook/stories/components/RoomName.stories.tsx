@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { RoomName, RoomNameProps } from '@livekit/components-react';
+import { RoomName, RoomNameProps } from '@cc-livekit/components-react';
 import { LkRoomContext } from '../../.storybook/lk-decorators';
 
 const Story: Meta<typeof RoomName> = {

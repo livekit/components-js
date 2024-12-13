@@ -1,4 +1,4 @@
-import { recordingStatusObservable } from '@livekit/components-core';
+import { recordingStatusObservable } from '@cc-livekit/components-core';
 import * as React from 'react';
 import { useEnsureRoom } from '../context';
 import { useObservableState } from './internal';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { mergeProps } from '../utils';
 import { AddMemberButtonProps } from '../components/controls/AddMemberButton';
-import { setupAddMemberButton } from '@livekit/components-core';
+import { setupAddMemberButton } from '@cc-livekit/components-core';
 
 export function useAddMemberButton(props: AddMemberButtonProps) {
   const buttonProps = React.useMemo(() => {

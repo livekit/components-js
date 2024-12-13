@@ -1,5 +1,5 @@
-import type { ReceivedChatMessage } from '@livekit/components-core';
-import { tokenize, createDefaultGrammar } from '@livekit/components-core';
+import type { ReceivedChatMessage } from '@cc-livekit/components-core';
+import { tokenize, createDefaultGrammar } from '@cc-livekit/components-core';
 import * as React from 'react';
 
 /** @public */

@@ -1,4 +1,4 @@
-import { setupParticipantName } from '@livekit/components-core';
+import { setupParticipantName } from '@cc-livekit/components-core';
 import * as React from 'react';
 import { useEnsureParticipant, useFeatureContext } from '../../context';
 import { useObservableState } from '../../hooks/internal/useObservableState';

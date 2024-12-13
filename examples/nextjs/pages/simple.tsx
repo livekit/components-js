@@ -11,7 +11,7 @@ import {
   TrackRefContext,
   useToken,
   useTracks,
-} from '@livekit/components-react';
+} from '@cc-livekit/components-react';
 import { Track } from 'livekit-client';
 import type { NextPage } from 'next';
 import { useMemo, useState } from 'react';

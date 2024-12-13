@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { LocalParticipant } from 'livekit-client';
 import type { Participant, Room } from 'livekit-client';
-import { encryptionStatusObservable } from '@livekit/components-core';
+import { encryptionStatusObservable } from '@cc-livekit/components-core';
 import { useEnsureParticipant, useEnsureRoom } from '../context';
 import { useObservableState } from './internal';
 

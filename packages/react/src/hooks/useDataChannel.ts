@@ -1,5 +1,5 @@
-import type { ReceivedDataMessage } from '@livekit/components-core';
-import { setupDataMessageHandler } from '@livekit/components-core';
+import type { ReceivedDataMessage } from '@cc-livekit/components-core';
+import { setupDataMessageHandler } from '@cc-livekit/components-core';
 import * as React from 'react';
 import type { DataPublishOptions } from 'livekit-client';
 import { useRoomContext } from '../context';

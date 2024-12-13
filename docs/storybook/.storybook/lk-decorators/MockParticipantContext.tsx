@@ -1,4 +1,4 @@
-import { ParticipantContext } from '@livekit/components-react';
+import { ParticipantContext } from '@cc-livekit/components-react';
 import { Decorator } from '@storybook/react';
 import { ConnectionQuality, Participant, ParticipantEvent } from 'livekit-client';
 import * as React from 'react';

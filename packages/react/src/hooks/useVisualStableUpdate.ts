@@ -1,5 +1,5 @@
-import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
-import { log, sortTrackReferences, updatePages } from '@livekit/components-core';
+import type { TrackReferenceOrPlaceholder } from '@cc-livekit/components-core';
+import { log, sortTrackReferences, updatePages } from '@cc-livekit/components-core';
 import * as React from 'react';
 
 /** @public */

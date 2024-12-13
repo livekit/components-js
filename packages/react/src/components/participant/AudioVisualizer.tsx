@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { type TrackReference } from '@livekit/components-core';
+import { type TrackReference } from '@cc-livekit/components-core';
 import { useEnsureTrackRef } from '../../context';
 import { useMultibandTrackVolume } from '../../hooks';
 

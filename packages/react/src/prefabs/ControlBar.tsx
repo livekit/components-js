@@ -8,7 +8,7 @@ import { ChatToggle } from '../components/controls/ChatToggle';
 import { useLocalParticipantPermissions, usePersistentUserChoices } from '../hooks';
 import { useMediaQuery } from '../hooks/internal';
 import { useMaybeLayoutContext } from '../context';
-import { supportsScreenSharing } from '@livekit/components-core';
+import { supportsScreenSharing } from '@cc-livekit/components-core';
 import { mergeProps } from '../utils';
 import { StartMediaButton } from '../components/controls/StartMediaButton';
 import { SettingsMenuToggle } from '../components/controls/SettingsMenuToggle';

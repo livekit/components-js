@@ -1,4 +1,4 @@
-import { setupConnectionQualityIndicator } from '@livekit/components-core';
+import { setupConnectionQualityIndicator } from '@cc-livekit/components-core';
 import type { Participant } from 'livekit-client';
 import { ConnectionQuality } from 'livekit-client';
 import * as React from 'react';

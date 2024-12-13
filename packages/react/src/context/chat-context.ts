@@ -1,4 +1,4 @@
-import type { WidgetState } from '@livekit/components-core';
+import type { WidgetState } from '@cc-livekit/components-core';
 import type * as React from 'react';
 
 /** @internal */

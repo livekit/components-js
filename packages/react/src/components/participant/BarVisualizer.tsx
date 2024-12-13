@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useBarAnimator } from './animators/useBarAnimator';
 import { useMultibandTrackVolume, type AgentState } from '../../hooks';
-import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import type { TrackReferenceOrPlaceholder } from '@cc-livekit/components-core';
 import { useMaybeTrackRefContext } from '../../context';
 import { cloneSingleChild, mergeProps } from '../../utils';
 

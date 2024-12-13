@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { ClearPinButton, ClearPinButtonProps } from '@livekit/components-react';
+import { ClearPinButton, ClearPinButtonProps } from '@cc-livekit/components-react';
 import { LkLayoutContext, LkRoomContext } from '../../../.storybook/lk-decorators';
 
 const Story: Meta<typeof ClearPinButton> = {

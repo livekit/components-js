@@ -1,6 +1,5 @@
-import { log, setupLiveKitRoom } from '@livekit/components-core';
-import type { DisconnectReason } from 'livekit-client';
-import { Room, MediaDeviceFailure, RoomEvent } from 'livekit-client';
+import { log, setupLiveKitRoom } from '@cc-livekit/components-core';
+import { Room, MediaDeviceFailure, RoomEvent, ConnectionState } from 'livekit-client';
 import * as React from 'react';
 import type { HTMLAttributes } from 'react';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { LiveKitRoom, useToken, VideoConference, setLogLevel } from '@livekit/components-react';
+import { LiveKitRoom, useToken, VideoConference, setLogLevel } from '@cc-livekit/components-react';
 import type { NextPage } from 'next';
 import * as React from 'react';
 import { Room, ExternalE2EEKeyProvider } from 'livekit-client';

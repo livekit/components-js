@@ -2,7 +2,7 @@ import * as React from 'react';
 import { mergeProps } from '../../utils';
 import { getSourceIcon } from '../../assets/icons/util';
 import { useTrackMutedIndicator } from '../../hooks';
-import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import type { TrackReferenceOrPlaceholder } from '@cc-livekit/components-core';
 
 /** @public */
 export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {

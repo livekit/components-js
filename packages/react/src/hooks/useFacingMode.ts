@@ -1,4 +1,4 @@
-import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
+import type { TrackReferenceOrPlaceholder } from '@cc-livekit/components-core';
 import { LocalTrackPublication, facingModeFromLocalTrack } from 'livekit-client';
 
 /**

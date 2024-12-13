@@ -20,7 +20,7 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@livekit/api-documenter": "workspace:*",
+    "@cc-livekit/api-documenter": "workspace:*",
     "@cc-livekit/components-react": "workspace:*",
     "eslint-config-lk-custom": "workspace:*"
   },

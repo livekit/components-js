@@ -29,7 +29,7 @@
     },
     "gen:docs": {
       "cache": false,
-      "dependsOn": ["^api-extractor", "@livekit/api-documenter#build"],
+      "dependsOn": ["^api-extractor", "@cc-livekit/api-documenter#build"],
       "outputs": ["docs/docs/**"]
     },
     "api-check": {

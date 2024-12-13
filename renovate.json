@@ -16,7 +16,7 @@
       "groupName": "Rush stack (non-major)"
     },
     {
-      "matchPackagePrefixes": ["@livekit", "livekit-"],
+      "matchPackagePrefixes": ["@livekit", "livekit-", "@cc-livekit"],
       "matchUpdateTypes": ["patch", "minor"],
       "groupName": "LiveKit dependencies (non-major)"
     }

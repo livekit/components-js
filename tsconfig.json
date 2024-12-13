@@ -2,7 +2,10 @@
   // see https://www.typescriptlang.org/tsconfig to better understand tsconfigs
   "compilerOptions": {
     "module": "esnext",
-    "lib": ["dom", "esnext"],
+    "lib": [
+      "dom",
+      "esnext"
+    ],
     "target": "ES6",
     "importHelpers": true,
     // output .d.ts declaration files for consumers
@@ -29,9 +32,15 @@
     // error out if import and file system have a casing mismatch. Recommended by TS
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@livekit/components-core": ["./packages/core/dist/index.d.ts"],
-      "@livekit/components-react": ["./packages/react/dist/index.d.ts"],
-      "@livekit/components-styles": ["./packages/styles/dist/types/general/index.css.d.ts"]
+      "@cc-livekit/components-core": [
+        "./packages/core/dist/index.d.ts"
+      ],
+      "@cc-livekit/components-react": [
+        "./packages/react/dist/index.d.ts"
+      ],
+      "@cc-livekit/components-styles": [
+        "./packages/styles/dist/types/general/index.css.d.ts"
+      ]
     }
   }
 }

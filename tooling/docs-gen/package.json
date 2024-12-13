@@ -21,7 +21,7 @@
   "sideEffects": false,
   "dependencies": {
     "@livekit/api-documenter": "workspace:*",
-    "@livekit/components-react": "workspace:*",
+    "@cc-livekit/components-react": "workspace:*",
     "eslint-config-lk-custom": "workspace:*"
   },
   "devDependencies": {

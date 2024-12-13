@@ -16,9 +16,9 @@
     "incremental": true,
     "sourceMap": true,
     "paths": {
-      "@livekit/components-core": ["../../packages/core/dist/index.d.ts"],
-      "@livekit/components-react": ["../../packages/react/dist/index.d.ts"],
-      "@livekit/components-styles": ["../../packages/styles/dist/types/general/index.css.d.ts"]
+      "@cc-livekit/components-core": ["../../packages/core/dist/index.d.ts"],
+      "@cc-livekit/components-react": ["../../packages/react/dist/index.d.ts"],
+      "@cc-livekit/components-styles": ["../../packages/styles/dist/types/general/index.css.d.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.cjs"],

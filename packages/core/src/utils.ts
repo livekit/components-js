@@ -1,16 +1,15 @@
 import type { Participant, TrackPublication } from 'livekit-client';
-import { LocalParticipant, RemoteParticipant } from 'livekit-client';
 
-import type { PinState } from './types';
 import type { TrackReference } from './track-reference';
 import { isEqualTrackRef } from './track-reference';
+import type { PinState } from './types';
 
 export function isLocal(p: Participant) {
-  return p instanceof LocalParticipant;
+  return p.isLocal;
 }
 
 export function isRemote(p: Participant) {
-  return p instanceof RemoteParticipant;
+  return !p.isLocal;
 }
 
 export const attachIfSubscribed = (

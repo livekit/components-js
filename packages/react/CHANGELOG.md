@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 2.6.11
+
+### Patch Changes
+
+- Use shared logger for krisp hook - [#1044](https://github.com/livekit/components-js/pull/1044) ([@bcherry](https://github.com/bcherry))
+
+- use JS SDK's isLocal check - [#1050](https://github.com/livekit/components-js/pull/1050) ([@davidzhao](https://github.com/davidzhao))
+
+- Updated dependencies [[`ebe78fb658cd6c8b76eedf0465c51b03aa00b305`](https://github.com/livekit/components-js/commit/ebe78fb658cd6c8b76eedf0465c51b03aa00b305)]:
+  - @livekit/components-core@0.11.11
+
 ## 2.6.10
 
 ### Patch Changes

@@ -23,7 +23,7 @@ export function useIsEncrypted(participant?: Participant, options: UseIsEncrypte
   const observer = React.useMemo(() => encryptionStatusObservable(room, p), [room, p]);
   const isEncrypted = useObservableState(
     observer,
-    p instanceof LocalParticipant ? p.isE2EEEnabled : !!p?.isEncrypted,
+    p.isLocal ? (p as LocalParticipant).isE2EEEnabled : !!p?.isEncrypted,
   );
   return isEncrypted;
 }

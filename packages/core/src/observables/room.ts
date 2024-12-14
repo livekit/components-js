@@ -261,8 +261,8 @@ export function encryptionStatusObservable(room: Room, participant: Participant 
     ),
     map(([encrypted]) => encrypted),
     startWith(
-      participant instanceof LocalParticipant
-        ? participant.isE2EEEnabled
+      participant?.isLocal
+        ? (participant as LocalParticipant).isE2EEEnabled
         : !!participant?.isEncrypted,
     ),
   );

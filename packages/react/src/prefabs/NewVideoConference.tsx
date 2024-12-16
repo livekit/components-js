@@ -153,6 +153,27 @@ export function NewVideoConference({
     };
   }, [room, featureFlags?.type]);
 
+  const screenShareTrack = tracks.find((track) => track.source === Track.Source.ScreenShare);
+
+  React.useEffect(() => {
+    if (featureFlags?.type === '1on1' && !screenShareTrack) {
+      const remoteP = room.remoteParticipants.values().next().value;
+      console.warn('remote p?', remoteP);
+      if (remoteP) {
+        setTimeout(() => {
+          layoutContext.pin.dispatch?.({
+            msg: 'set_pin',
+            trackReference: {
+              participant: remoteP,
+              publication: remoteP.getTrackPublication(Track.Source.Camera),
+              source: Track.Source.Camera,
+            },
+          });
+        });
+      }
+    }
+  }, [featureFlags?.type, screenShareTrack]);
+
   React.useEffect(() => {
     // If screen share tracks are published, and no pin is set explicitly, auto set the screen share.
     if (
@@ -197,7 +218,7 @@ export function NewVideoConference({
   useWarnAboutMissingStyles();
 
   return (
-    <div className={`lk-video-conference conference-type-${featureFlags?.type}`} {...props}>
+    <div className="lk-video-conference" {...props}>
       {isWeb() && (
         <LayoutContextProvider
           value={layoutContext}

@@ -191,7 +191,7 @@ export const ParticipantTile: (
                 </div>
               </>
             )}
-            <FocusToggle trackRef={trackReference} />
+            {/* <FocusToggle trackRef={trackReference} /> */}
           </ParticipantContextIfNeeded>
         </TrackRefContextIfNeeded>
       </div>

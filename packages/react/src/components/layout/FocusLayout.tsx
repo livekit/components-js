@@ -4,6 +4,8 @@ import type { TrackReferenceOrPlaceholder } from '@cc-livekit/components-core';
 import { ParticipantTile } from '../participant/ParticipantTile';
 import type { ParticipantClickEvent } from '@cc-livekit/components-core';
 import { useFeatureContext } from '../../context';
+import { RoomEvent, Track } from 'livekit-client';
+import { useTracks } from '../../hooks';
 
 /** @public */
 export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -17,8 +19,14 @@ export interface FocusLayoutContainerProps extends React.HTMLAttributes<HTMLDivE
  */
 export function FocusLayoutContainer(props: FocusLayoutContainerProps) {
   const featureFlags = useFeatureContext();
+  const tracks = useTracks([{ source: Track.Source.ScreenShare, withPlaceholder: false }], {
+    updateOnlyOn: [RoomEvent.ActiveSpeakersChanged],
+    onlySubscribed: false,
+  });
+  const isSharingScreen = tracks.some((track) => track.source === Track.Source.ScreenShare);
+
   const elementProps = mergeProps(props, {
-    className: `lk-focus-layout room-type-${featureFlags?.type}`,
+    className: `lk-focus-layout ${!isSharingScreen && featureFlags?.type === '1on1' ? 'adapt-1on1-call' : ''}`,
   });
 
   return <div {...elementProps}>{props.children}</div>;

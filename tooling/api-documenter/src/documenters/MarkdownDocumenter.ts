@@ -1177,7 +1177,7 @@ export class MarkdownDocumenter {
         //@ts-ignore
         // apiParameter?._parent?.displayName === 'useParticipantTile' &&
         firstParameter.kind === ExcerptTokenKind.Reference &&
-        firstParameter.text.endsWith('Props') &&
+        (firstParameter.text.endsWith('Props') || firstParameter.text.endsWith('Options')) &&
         firstParameter.canonicalReference
       ) {
         // First parameter is a props object.

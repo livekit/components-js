@@ -901,7 +901,7 @@ export function useKrispNoiseFilter(options?: useKrispNoiseFilterOptions): {
 
 // @alpha (undocumented)
 export interface useKrispNoiseFilterOptions {
-    // (undocumented)
+    // @internal (undocumented)
     filterOptions?: NoiseFilterOptions;
     trackRef?: TrackReferenceOrPlaceholder;
 }

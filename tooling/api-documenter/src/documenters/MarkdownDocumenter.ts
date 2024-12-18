@@ -1630,40 +1630,35 @@ export class MarkdownDocumenter {
   }
 
   private _getImportPath(apiItem: ApiDeclaredItem): string {
-    try {
-      // Check for custom import path from TSDoc first
-      if (apiItem instanceof ApiDocumentedItem && apiItem.tsdocComment) {
-        const packageTag: DocBlock | undefined = apiItem.tsdocComment.customBlocks.find(
-          (block) => block.blockTag.tagName === '@package',
-        );
+    // Check for custom import path from TSDoc first
+    if (apiItem instanceof ApiDocumentedItem && apiItem.tsdocComment) {
+      const packageTag: DocBlock | undefined = apiItem.tsdocComment.customBlocks.find(
+        (block) => block.blockTag.tagName === '@package',
+      );
 
-        if (packageTag) {
-          return packageTag.content.nodes
-            .map((node) => {
-              if (node.kind === DocNodeKind.Paragraph) {
-                return node
-                  .getChildNodes()
-                  .map((child) => {
-                    if (child.kind === DocNodeKind.PlainText) {
-                      return (child as DocPlainText).text;
-                    }
-                    return '';
-                  })
-                  .join('');
-              }
-              return '';
-            })
-            .join('')
-            .trim();
-        }
+      if (packageTag) {
+        return packageTag.content.nodes
+          .map((node) => {
+            if (node.kind === DocNodeKind.Paragraph) {
+              return node
+                .getChildNodes()
+                .map((child) => {
+                  if (child.kind === DocNodeKind.PlainText) {
+                    return (child as DocPlainText).text;
+                  }
+                  return '';
+                })
+                .join('');
+            }
+            return '';
+          })
+          .join('')
+          .trim();
       }
-
-      // Fallback to canonical reference
-      // @ts-ignore
-      return apiItem.canonicalReference.source.escapedPath;
-    } catch (error) {
-      console.error(error);
-      return '';
     }
+
+    // Fallback to canonical reference
+    // @ts-ignore
+    return apiItem.canonicalReference.source.escapedPath;
   }
 }

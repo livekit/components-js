@@ -748,6 +748,7 @@ export class MarkdownDocumenter {
     // if (classesTable.rows.length > 0) {
     //   output.appendNode(new DocHeading({ configuration, title: 'Classes' }));
     //   output.appendNode(classesTable);
+    // }
 
     // if (abstractClassesTable.rows.length > 0) {
     //   output.appendNode(new DocHeading({ configuration, title: 'Abstract Classes' }));

@@ -1191,7 +1191,7 @@ export class MarkdownDocumenter {
                 new ParameterItem({
                   configuration,
                   attributes: {
-                    name: member.displayName,
+                    name: `${apiParameter.name}.${member.displayName}`,
                     type: member.propertyTypeExcerpt.text,
                     optional: member.isOptional,
                     description: member.tsdocComment?.summarySection?.nodes ?? [],

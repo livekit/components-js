@@ -18,12 +18,11 @@ export interface useKrispNoiseFilterOptions {
 }
 
 /**
- * This hook is a convenience helper for enabling Krisp Enhanced Audio Noise Cancellation on LiveKit audio tracks.
- * It returns a `setNoiseFilterEnabled` method to conveniently toggle between enabled and disabled states.
+ * Enable the Krisp enhanced noise cancellation feature for local audio tracks.
  *
  * @package @livekit/components-react/krisp
- * @remarks Krisp noise filter is a feature that's only supported on LiveKit cloud plans
- * @alpha
+ * @remarks This filter requires that you installthe `@livekit/krisp-noise-filter` package and is supported only on [LiveKit Cloud](https://cloud.livekit.io).
+ * @beta
  * @example
  * ```tsx
  *   const krisp = useKrispNoiseFilter();

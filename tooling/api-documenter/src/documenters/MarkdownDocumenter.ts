@@ -261,7 +261,7 @@ export class MarkdownDocumenter {
           );
         }
 
-        this._appendSection(output, tsdocComment.summarySection);
+        this._appendSection(output, this._processMarkdownContent(tsdocComment.summarySection));
       }
     }
 
@@ -500,7 +500,9 @@ export class MarkdownDocumenter {
         // Write the @remarks block
         if (tsdocComment.remarksBlock) {
           output.appendNode(new DocHeading({ configuration, title: 'Remarks', level: 2 }));
-          this._appendSection(output, tsdocComment.remarksBlock.content);
+          // Process the content to handle markdown links before appending
+          const processedContent = this._processMarkdownContent(tsdocComment.remarksBlock.content);
+          this._appendSection(output, processedContent);
         }
 
         // Write the @example blocks
@@ -514,8 +516,9 @@ export class MarkdownDocumenter {
             exampleBlocks.length > 1 ? `Usage Example ${exampleNumber}` : 'Usage';
 
           output.appendNode(new DocHeading({ configuration, title: heading, level: 2 }));
-
-          this._appendSection(output, exampleBlock.content);
+          // Process the content to handle markdown links before appending
+          const processedContent = this._processMarkdownContent(exampleBlock.content);
+          this._appendSection(output, processedContent);
 
           ++exampleNumber;
         }
@@ -536,6 +539,72 @@ export class MarkdownDocumenter {
     }
   }
 
+  private _processMarkdownContent(content: DocSection): DocSection {
+    const configuration: TSDocConfiguration = this._tsdocConfiguration;
+    const processedSection = new DocSection({ configuration });
+
+    // Process each node in the content
+    for (const node of content.nodes) {
+      if (node.kind === DocNodeKind.Paragraph) {
+        const paragraph = node as DocParagraph;
+        const processedParagraph = new DocParagraph({ configuration });
+
+        // Process each child node in the paragraph
+        for (const child of paragraph.getChildNodes()) {
+          if (child.kind === DocNodeKind.PlainText) {
+            const text = (child as DocPlainText).text;
+            // Look for markdown links [text](url)
+            const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+            let lastIndex = 0;
+            let match;
+
+            while ((match = linkRegex.exec(text)) !== null) {
+              // Add any text before the link
+              if (match.index > lastIndex) {
+                processedParagraph.appendNode(
+                  new DocPlainText({
+                    configuration,
+                    text: text.substring(lastIndex, match.index),
+                  })
+                );
+              }
+
+              // Add the link
+              processedParagraph.appendNode(
+                new DocLinkTag({
+                  configuration,
+                  tagName: '@link',
+                  linkText: match[1],
+                  urlDestination: match[2],
+                })
+              );
+
+              lastIndex = match.index + match[0].length;
+            }
+
+            // Add any remaining text
+            if (lastIndex < text.length) {
+              processedParagraph.appendNode(
+                new DocPlainText({
+                  configuration,
+                  text: text.substring(lastIndex),
+                })
+              );
+            }
+          } else {
+            processedParagraph.appendNode(child);
+          }
+        }
+
+        processedSection.appendNode(processedParagraph);
+      } else {
+        processedSection.appendNode(node);
+      }
+    }
+
+    return processedSection;
+  }
+
   private _writeThrowsSection(output: DocSection, apiItem: ApiItem): void {
     const configuration: TSDocConfiguration = this._tsdocConfiguration;
 
@@ -553,7 +622,9 @@ export class MarkdownDocumenter {
           output.appendNode(new DocHeading({ configuration, title: heading }));
 
           for (const throwsBlock of throwsBlocks) {
-            this._appendSection(output, throwsBlock.content);
+            // Process throws blocks for markdown links
+            const processedContent = this._processMarkdownContent(throwsBlock.content);
+            this._appendSection(output, processedContent);
           }
         }
       }
@@ -1073,7 +1144,9 @@ export class MarkdownDocumenter {
 
       if (apiParameterListMixin instanceof ApiDocumentedItem) {
         if (apiParameterListMixin.tsdocComment && apiParameterListMixin.tsdocComment.returnsBlock) {
-          this._appendSection(output, apiParameterListMixin.tsdocComment.returnsBlock.content);
+          // Process returns block for markdown links
+          const processedReturns = this._processMarkdownContent(apiParameterListMixin.tsdocComment.returnsBlock.content);
+          this._appendSection(output, processedReturns);
         }
       }
     }
@@ -1361,7 +1434,9 @@ export class MarkdownDocumenter {
 
     if (apiItem instanceof ApiDocumentedItem) {
       if (apiItem.tsdocComment !== undefined) {
-        this._appendAndMergeSection(section, apiItem.tsdocComment.summarySection);
+        // Process summary section for markdown links
+        const processedSummary = this._processMarkdownContent(apiItem.tsdocComment.summarySection);
+        this._appendAndMergeSection(section, processedSummary);
       }
     }
 
@@ -1535,7 +1610,9 @@ export class MarkdownDocumenter {
     for (const node of docSection.nodes) {
       if (firstNode) {
         if (node.kind === DocNodeKind.Paragraph) {
-          output.appendNodesInParagraph(node.getChildNodes());
+          // Process paragraph nodes for markdown links
+          const processedParagraph = this._processMarkdownContent(new DocSection({ configuration: this._tsdocConfiguration }, [node]));
+          output.appendNodesInParagraph(processedParagraph.nodes[0].getChildNodes());
           firstNode = false;
           continue;
         }

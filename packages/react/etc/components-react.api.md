@@ -889,7 +889,9 @@ export function useIsRecording(room?: Room): boolean;
 // @public
 export function useIsSpeaking(participant?: Participant): boolean;
 
-// @alpha
+// Warning: (ae-incompatible-release-tags) The symbol "useKrispNoiseFilter" is marked as @beta, but its signature references "useKrispNoiseFilterOptions" which is marked as @alpha
+//
+// @beta
 export function useKrispNoiseFilter(options?: useKrispNoiseFilterOptions): {
     setNoiseFilterEnabled: (enable: boolean) => Promise<void>;
     isNoiseFilterEnabled: boolean;

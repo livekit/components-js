@@ -49,7 +49,6 @@ import {
   IFindApiItemsResult,
   Parameter,
   ApiPropertySignature,
-  ApiVariable,
 } from '@microsoft/api-extractor-model';
 
 import { CustomDocNodes } from '../nodes/CustomDocNodeKind';
@@ -58,7 +57,6 @@ import { DocTable } from '../nodes/DocTable';
 import { DocEmphasisSpan } from '../nodes/DocEmphasisSpan';
 import { DocTableRow } from '../nodes/DocTableRow';
 import { DocTableCell } from '../nodes/DocTableCell';
-import { DocNoteBox } from '../nodes/DocNoteBox';
 import { Utilities } from '../utils/Utilities';
 import { CustomMarkdownEmitter } from '../markdown/CustomMarkdownEmitter';
 import { PluginLoader } from '../plugin/PluginLoader';
@@ -272,8 +270,7 @@ export class MarkdownDocumenter {
       if (category !== undefined) {
         let importPath: string = '';
         try {
-          // @ts-ignore
-          importPath = apiItem.canonicalReference.source.escapedPath;
+          importPath = this._getImportPath(apiItem);
         } catch (error) {
           console.error(error);
         }
@@ -751,7 +748,6 @@ export class MarkdownDocumenter {
     // if (classesTable.rows.length > 0) {
     //   output.appendNode(new DocHeading({ configuration, title: 'Classes' }));
     //   output.appendNode(classesTable);
-    // }
 
     // if (abstractClassesTable.rows.length > 0) {
     //   output.appendNode(new DocHeading({ configuration, title: 'Abstract Classes' }));
@@ -1504,7 +1500,7 @@ export class MarkdownDocumenter {
   private _writeBetaWarning(output: DocSection): void {
     const configuration: TSDocConfiguration = this._tsdocConfiguration;
     const betaWarning: string =
-      "This feature is under active development and may change based on developer feedback and real-world usage."
+      'This feature is under active development and may change based on developer feedback and real-world usage.';
     output.appendNode(
       new Callout({ configuration }, [
         new DocParagraph({ configuration }, [
@@ -1517,7 +1513,7 @@ export class MarkdownDocumenter {
   private _writeAlphaWarning(output: DocSection): void {
     const configuration: TSDocConfiguration = this._tsdocConfiguration;
     const alphaWarning: string =
-      "This feature is experimental and may change or be removed based on developer feedback and real-world usage."
+      'This feature is experimental and may change or be removed based on developer feedback and real-world usage.';
     output.appendNode(
       new Callout({ configuration }, [
         new DocParagraph({ configuration }, [
@@ -1630,5 +1626,43 @@ export class MarkdownDocumenter {
   private _deleteOldOutputFiles(): void {
     console.log('Deleting old output from ' + this._outputFolder);
     FileSystem.ensureEmptyFolder(this._outputFolder);
+  }
+
+  private _getImportPath(apiItem: ApiDeclaredItem): string {
+    try {
+      // Check for custom import path from TSDoc first
+      if (apiItem instanceof ApiDocumentedItem && apiItem.tsdocComment) {
+        const packageTag: DocBlock | undefined = apiItem.tsdocComment.customBlocks.find(
+          (block) => block.blockTag.tagName === '@package',
+        );
+
+        if (packageTag) {
+          return packageTag.content.nodes
+            .map((node) => {
+              if (node.kind === DocNodeKind.Paragraph) {
+                return node
+                  .getChildNodes()
+                  .map((child) => {
+                    if (child.kind === DocNodeKind.PlainText) {
+                      return (child as DocPlainText).text;
+                    }
+                    return '';
+                  })
+                  .join('');
+              }
+              return '';
+            })
+            .join('')
+            .trim();
+        }
+      }
+
+      // Fallback to canonical reference
+      // @ts-ignore
+      return apiItem.canonicalReference.source.escapedPath;
+    } catch (error) {
+      console.error(error);
+      return '';
+    }
   }
 }

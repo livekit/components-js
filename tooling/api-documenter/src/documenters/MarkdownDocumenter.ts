@@ -209,6 +209,9 @@ export class MarkdownDocumenter {
       if (apiItem.releaseTag === ReleaseTag.Beta) {
         this._writeBetaWarning(output);
       }
+      if (apiItem.releaseTag === ReleaseTag.Alpha) {
+        this._writeAlphaWarning(output);
+      }
     }
 
     const decoratorBlocks: DocBlock[] = [];
@@ -1501,12 +1504,24 @@ export class MarkdownDocumenter {
   private _writeBetaWarning(output: DocSection): void {
     const configuration: TSDocConfiguration = this._tsdocConfiguration;
     const betaWarning: string =
-      'This API is provided as a preview for developers and may change' +
-      ' based on feedback that we receive.  Do not use this API in a production environment.';
+      "This feature is under active development and may change based on developer feedback and real-world usage."
     output.appendNode(
-      new DocNoteBox({ configuration }, [
+      new Callout({ configuration }, [
         new DocParagraph({ configuration }, [
           new DocPlainText({ configuration, text: betaWarning }),
+        ]),
+      ]),
+    );
+  }
+
+  private _writeAlphaWarning(output: DocSection): void {
+    const configuration: TSDocConfiguration = this._tsdocConfiguration;
+    const alphaWarning: string =
+      "This feature is experimental and may change or be removed based on developer feedback and real-world usage."
+    output.appendNode(
+      new Callout({ configuration }, [
+        new DocParagraph({ configuration }, [
+          new DocPlainText({ configuration, text: alphaWarning }),
         ]),
       ]),
     );

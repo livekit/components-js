@@ -524,22 +524,22 @@ export class MarkdownDocumenter {
 
   private _processMarkdownContent(content: DocSection): DocSection {
     const configuration: TSDocConfiguration = this._tsdocConfiguration;
-    const processedSection = new DocSection({ configuration });
+    const processedSection: DocSection = new DocSection({ configuration });
 
     // Process each node in the content
     for (const node of content.nodes) {
       if (node.kind === DocNodeKind.Paragraph) {
-        const paragraph = node as DocParagraph;
-        const processedParagraph = new DocParagraph({ configuration });
+        const paragraph: DocParagraph = node as DocParagraph;
+        const processedParagraph: DocParagraph = new DocParagraph({ configuration });
 
         // Process each child node in the paragraph
         for (const child of paragraph.getChildNodes()) {
           if (child.kind === DocNodeKind.PlainText) {
-            const text = (child as DocPlainText).text;
+            const text: string = (child as DocPlainText).text;
             // Look for markdown links [text](url)
-            const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-            let lastIndex = 0;
-            let match;
+            const linkRegex: RegExp = /\[([^\]]+)\]\(([^)]+)\)/g;
+            let lastIndex: number = 0;
+            let match: RegExpExecArray | null;
 
             while ((match = linkRegex.exec(text)) !== null) {
               // Add any text before the link

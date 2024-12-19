@@ -95,7 +95,9 @@ export function VoiceAssistantControlBar({
           <div className="lk-button-group-menu">
             <MediaDeviceMenu
               kind="audioinput"
-              onActiveDeviceChange={(_kind, deviceId) => saveAudioInputDeviceId(deviceId ?? '')}
+              onActiveDeviceChange={(_kind, deviceId) =>
+                saveAudioInputDeviceId(deviceId ?? 'default')
+              }
             />
           </div>
         </div>

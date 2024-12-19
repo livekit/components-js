@@ -56,7 +56,7 @@ export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
 export function ControlBar({
   variation,
   controls,
-  saveUserChoices = true,
+  saveUserChoices = false,
   onDeviceError,
   ...props
 }: ControlBarProps) {
@@ -144,7 +144,9 @@ export function ControlBar({
           <div className="lk-button-group-menu">
             <MediaDeviceMenu
               kind="audioinput"
-              onActiveDeviceChange={(_kind, deviceId) => saveAudioInputDeviceId(deviceId ?? '')}
+              onActiveDeviceChange={(_kind, deviceId) =>
+                saveAudioInputDeviceId(deviceId ?? 'default')
+              }
             />
           </div>
         </div>
@@ -162,7 +164,9 @@ export function ControlBar({
           <div className="lk-button-group-menu">
             <MediaDeviceMenu
               kind="videoinput"
-              onActiveDeviceChange={(_kind, deviceId) => saveVideoInputDeviceId(deviceId ?? '')}
+              onActiveDeviceChange={(_kind, deviceId) =>
+                saveVideoInputDeviceId(deviceId ?? 'default')
+              }
             />
           </div>
         </div>

@@ -131,7 +131,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
             })
           : await createLocalAudioTrack({ deviceId });
 
-      const newDeviceId = await track.getDeviceId();
+      const newDeviceId = await track.getDeviceId(false);
       if (newDeviceId && deviceId !== newDeviceId) {
         prevDeviceId.current = newDeviceId;
         setLocalDeviceId(newDeviceId);
@@ -248,8 +248,8 @@ export function PreJoin({
     saveUsername,
   } = usePersistentUserChoices({
     defaults: partialDefaults,
-    preventSave: !persistUserChoices,
-    preventLoad: !persistUserChoices,
+    preventSave: true,
+    preventLoad: true,
   });
 
   // Initialize device settings

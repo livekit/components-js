@@ -113,8 +113,12 @@ export const MediaDeviceSelect: (
       [className, props],
     );
 
+    const hasDefault = !!devices.find((info) => info.label.toLowerCase().startsWith('default'));
+
     function isActive(deviceId: string, activeDeviceId: string, index: number) {
-      return deviceId === activeDeviceId || (index === 0 && activeDeviceId === 'default');
+      return (
+        deviceId === activeDeviceId || (!hasDefault && index === 0 && activeDeviceId === 'default')
+      );
     }
 
     return (

@@ -246,7 +246,7 @@ export function createActiveDeviceObservable(room: Room, kind: MediaDeviceKind) 
   return roomEventSelector(room, RoomEvent.ActiveDeviceChanged).pipe(
     filter(([kindOfDevice]) => kindOfDevice === kind),
     map(([kind, deviceId]) => {
-      log.debug('activeDeviceObservable | RoomEvent.ActiveDeviceChanged', { kind, deviceId });
+      log.info('activeDeviceObservable | RoomEvent.ActiveDeviceChanged', { kind, deviceId });
       return deviceId;
     }),
   );

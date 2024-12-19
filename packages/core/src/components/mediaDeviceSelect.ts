@@ -51,7 +51,7 @@ export function setupDeviceSelector(
       activeDeviceSubject.next(useDefault ? id : actualDeviceId);
     } else if (localTrack) {
       await localTrack.setDeviceId(options.exact ? { exact: id } : id);
-      const actualId = await localTrack.getDeviceId();
+      const actualId = await localTrack.getDeviceId(false);
       activeDeviceSubject.next(
         id === 'default' && localTrack.mediaStreamTrack.label.startsWith('Default') ? id : actualId,
       );

@@ -25,7 +25,7 @@ export interface useKrispNoiseFilterOptions {
  * Defaults to the localParticipant's microphone track publication, but you can override this behavior by passing in a different track reference.
  *
  * @package \@livekit/components-react/krisp
- * @remarks This filter requires that you install the `@livekit/krisp-noise-filter` package and is supported only on [LiveKit Cloud](https://cloud.livekit.io).
+ * @remarks This filter requires that you install the `@livekit/krisp-noise-filter` package and is supported only on {@link https://cloud.livekit.io | LiveKit Cloud}.
  * @beta
  * @example
  * ```tsx

@@ -18,6 +18,7 @@ import {
   DocComment,
   DocNodeContainer,
   DocNode,
+  DocEscapedText,
 } from '@microsoft/tsdoc';
 import {
   ApiModel,
@@ -1783,6 +1784,8 @@ export class MarkdownDocumenter {
                 .map((child) => {
                   if (child.kind === DocNodeKind.PlainText) {
                     return (child as DocPlainText).text;
+                  } else if (child.kind === DocNodeKind.EscapedText) {
+                    return (child as DocEscapedText).decodedText;
                   }
                   return '';
                 })

@@ -562,13 +562,11 @@ export class MarkdownDocumenter {
             
             output.appendNode(new DocHeading({ configuration, title, level: 3 }));
 
-            // Create new content with modified first node
-            const newContent = new DocSection({ configuration });
+            const newContent: DocSection = new DocSection({ configuration });
             if (firstNode && firstNode.getChildNodes().length > 0) {
               newContent.appendNode(firstNode);
             }
-            // Add all other nodes after the first one
-            for (let i = 1; i < exampleBlock.content.nodes.length; i++) {
+            for (let i: number = 1; i < exampleBlock.content.nodes.length; i++) {
               newContent.appendNode(exampleBlock.content.nodes[i]);
             }
 

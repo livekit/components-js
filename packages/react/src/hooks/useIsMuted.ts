@@ -27,7 +27,7 @@ export interface UseIsMutedOptions {
  * ```
  *
  * @param trackRef - A track reference object
- * @param sourceOrTrackRef - Either a track reference or a track source
+ * @param sourceOrTrackRef - Either a `TrackRef` or a track source
  * @param options - Additional options when using with track source
  * @returns boolean indicating if the track is muted
  *

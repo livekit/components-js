@@ -16,5 +16,5 @@
    * DEFAULT VALUE: ""
    */
   "extends": "../../api-extractor-shared.json",
-  "mainEntryPointFilePath": "./dist/index.d.ts"
+  "mainEntryPointFilePath": "./dist/index.docs.d.ts"
 }

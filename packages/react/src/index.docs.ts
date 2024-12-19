@@ -1,6 +1,5 @@
 /**
- * API Docs index. This is used by api-extractor given our package.json exports.
- * Monitoring: https://github.com/microsoft/rushstack/issues/3557
+ * Used to merge the exports from the main index.ts file with the exports from the cloud/krisp/useKrispNoiseFilter.ts file for docs generation.
  */
 
 // Regular exports

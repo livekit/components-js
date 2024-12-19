@@ -29,14 +29,15 @@ export interface useKrispNoiseFilterOptions {
  * @beta
  * @example
  * ```tsx
- *   const krisp = useKrispNoiseFilter();
- *   return <input
-        type="checkbox"
-        onChange={(ev) => krisp.setNoiseFilterEnabled(ev.target.checked)}
-        checked={krisp.isNoiseFilterEnabled}
-        disabled={krisp.isNoiseFilterPending}
-      />
+ * const krisp = useKrispNoiseFilter();
+ * return <input
+ *   type="checkbox"
+ *   onChange={(ev) => krisp.setNoiseFilterEnabled(ev.target.checked)}
+ *   checked={krisp.isNoiseFilterEnabled}
+ *   disabled={krisp.isNoiseFilterPending}
+ * />
  * ```
+ * @returns Use `setIsNoiseFilterEnabled` to enable/disable the noise filter.
  */
 export function useKrispNoiseFilter(options: useKrispNoiseFilterOptions = {}) {
   const [shouldEnable, setShouldEnable] = React.useState(false);

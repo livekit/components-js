@@ -1144,9 +1144,7 @@ export class MarkdownDocumenter {
 
       if (apiParameterListMixin instanceof ApiDocumentedItem) {
         if (apiParameterListMixin.tsdocComment && apiParameterListMixin.tsdocComment.returnsBlock) {
-          // Process returns block for markdown links
-          const processedReturns = this._processMarkdownContent(apiParameterListMixin.tsdocComment.returnsBlock.content);
-          this._appendSection(output, processedReturns);
+          this._appendSection(output, apiParameterListMixin.tsdocComment.returnsBlock.content);
         }
       }
     }
@@ -1225,6 +1223,14 @@ export class MarkdownDocumenter {
     if (ApiReturnTypeMixin.isBaseClassOf(apiParameterListMixin)) {
       const returnTypeExcerpt: Excerpt = apiParameterListMixin.returnTypeExcerpt;
       output.appendNode(new DocHeading({ configuration, title: 'Returns', level: 2 }));
+
+      if (apiParameterListMixin instanceof ApiDocumentedItem) {
+        if (apiParameterListMixin.tsdocComment?.returnsBlock) {
+          this._appendSection(output, this._processMarkdownContent(
+            apiParameterListMixin.tsdocComment.returnsBlock.content
+          ));
+        }
+      }
 
       const fencedCode: DocFencedCode = new DocFencedCode({
         configuration,

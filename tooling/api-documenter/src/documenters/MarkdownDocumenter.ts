@@ -500,7 +500,10 @@ export class MarkdownDocumenter {
         // Write the @remarks block
         if (tsdocComment.remarksBlock) {
           output.appendNode(new DocHeading({ configuration, title: 'Remarks', level: 2 }));
-          this._appendSection(output, this._processMarkdownContent(tsdocComment.remarksBlock.content));
+          this._appendSection(
+            output,
+            this._processMarkdownContent(tsdocComment.remarksBlock.content),
+          );
         }
 
         // Write the @example blocks
@@ -512,15 +515,17 @@ export class MarkdownDocumenter {
           output.appendNode(new DocHeading({ configuration, title: 'Usage', level: 2 }));
         }
 
-        const findFirstPlainText = (node: DocNode): { text: string | undefined, node: DocPlainText | undefined } => {
+        const findFirstPlainText = (
+          node: DocNode,
+        ): { text: string | undefined; node: DocPlainText | undefined } => {
           if (node.kind === DocNodeKind.PlainText) {
             const plainTextNode = node as DocPlainText;
-            return { 
+            return {
               text: plainTextNode.text.split('\n')[0].trim(),
-              node: plainTextNode
+              node: plainTextNode,
             };
           }
-          
+
           if (node instanceof DocNodeContainer) {
             for (const childNode of node.getChildNodes()) {
               const result = findFirstPlainText(childNode);
@@ -529,7 +534,7 @@ export class MarkdownDocumenter {
               }
             }
           }
-          
+
           return { text: undefined, node: undefined };
         };
 
@@ -537,29 +542,36 @@ export class MarkdownDocumenter {
           if (exampleBlocks.length > 1) {
             let firstNode: DocNode | undefined = exampleBlock.content.nodes[0];
             let title: string = `Example ${index + 1}`;
-            
+
             if (firstNode) {
               const { text, node: plainTextNode } = findFirstPlainText(firstNode);
               if (text) {
                 title = text;
                 if (plainTextNode) {
-                  const remainingText: string | undefined = plainTextNode.text.split('\n').slice(1).join('\n').trim();
+                  const remainingText: string | undefined = plainTextNode.text
+                    .split('\n')
+                    .slice(1)
+                    .join('\n')
+                    .trim();
                   const parent: DocNodeContainer = firstNode as DocNodeContainer;
-                  
-                  const newChildNodes: DocNode[] = parent.getChildNodes().map(childNode => {
-                    if (childNode === plainTextNode) {
-                      return remainingText ? 
-                        new DocPlainText({ configuration, text: remainingText }) :
-                        undefined;
-                    }
-                    return childNode;
-                  }).filter((node): node is DocNode => node !== undefined);
+
+                  const newChildNodes: DocNode[] = parent
+                    .getChildNodes()
+                    .map((childNode) => {
+                      if (childNode === plainTextNode) {
+                        return remainingText
+                          ? new DocPlainText({ configuration, text: remainingText })
+                          : undefined;
+                      }
+                      return childNode;
+                    })
+                    .filter((node): node is DocNode => node !== undefined);
 
                   firstNode = new DocParagraph({ configuration }, newChildNodes);
                 }
               }
             }
-            
+
             output.appendNode(new DocHeading({ configuration, title, level: 3 }));
 
             const newContent: DocSection = new DocSection({ configuration });
@@ -605,7 +617,7 @@ export class MarkdownDocumenter {
                   new DocPlainText({
                     configuration,
                     text: text.substring(lastIndex, match.index),
-                  })
+                  }),
                 );
               }
 
@@ -616,7 +628,7 @@ export class MarkdownDocumenter {
                   tagName: '@link',
                   linkText: match[1],
                   urlDestination: match[2],
-                })
+                }),
               );
 
               lastIndex = match.index + match[0].length;
@@ -628,7 +640,7 @@ export class MarkdownDocumenter {
                 new DocPlainText({
                   configuration,
                   text: text.substring(lastIndex),
-                })
+                }),
               );
             }
           } else {
@@ -1266,9 +1278,10 @@ export class MarkdownDocumenter {
 
       if (apiParameterListMixin instanceof ApiDocumentedItem) {
         if (apiParameterListMixin.tsdocComment?.returnsBlock) {
-          this._appendSection(output, this._processMarkdownContent(
-            apiParameterListMixin.tsdocComment.returnsBlock.content
-          ));
+          this._appendSection(
+            output,
+            this._processMarkdownContent(apiParameterListMixin.tsdocComment.returnsBlock.content),
+          );
         }
       }
 
@@ -1657,7 +1670,9 @@ export class MarkdownDocumenter {
       if (firstNode) {
         if (node.kind === DocNodeKind.Paragraph) {
           // Process paragraph nodes for markdown links
-          const processedParagraph = this._processMarkdownContent(new DocSection({ configuration: this._tsdocConfiguration }, [node]));
+          const processedParagraph = this._processMarkdownContent(
+            new DocSection({ configuration: this._tsdocConfiguration }, [node]),
+          );
           output.appendNodesInParagraph(processedParagraph.nodes[0].getChildNodes());
           firstNode = false;
           continue;

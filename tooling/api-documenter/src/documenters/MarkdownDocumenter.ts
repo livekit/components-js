@@ -604,8 +604,12 @@ export class MarkdownDocumenter {
 
         // Process each child node in the paragraph
         for (const child of paragraph.getChildNodes()) {
-          if (child.kind === DocNodeKind.PlainText) {
-            const text: string = (child as DocPlainText).text;
+          if (child.kind === DocNodeKind.PlainText || child.kind === DocNodeKind.EscapedText) {
+            const text: string =
+              child.kind === DocNodeKind.PlainText
+                ? (child as DocPlainText).text
+                : (child as DocEscapedText).decodedText;
+
             // Look for markdown links [text](url)
             const linkRegex: RegExp = /\[([^\]]+)\]\(([^)]+)\)/g;
             let lastIndex: number = 0;

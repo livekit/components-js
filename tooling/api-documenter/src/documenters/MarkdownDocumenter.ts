@@ -500,9 +500,7 @@ export class MarkdownDocumenter {
         // Write the @remarks block
         if (tsdocComment.remarksBlock) {
           output.appendNode(new DocHeading({ configuration, title: 'Remarks', level: 2 }));
-          // Process the content to handle markdown links before appending
-          const processedContent = this._processMarkdownContent(tsdocComment.remarksBlock.content);
-          this._appendSection(output, processedContent);
+          this._appendSection(output, this._processMarkdownContent(tsdocComment.remarksBlock.content));
         }
 
         // Write the @example blocks
@@ -510,31 +508,16 @@ export class MarkdownDocumenter {
           (x) => x.blockTag.tagNameWithUpperCase === StandardTags.example.tagNameWithUpperCase,
         );
 
-        let exampleNumber: number = 1;
-        for (const exampleBlock of exampleBlocks) {
-          const heading: string =
-            exampleBlocks.length > 1 ? `Usage Example ${exampleNumber}` : 'Usage';
-
-          output.appendNode(new DocHeading({ configuration, title: heading, level: 2 }));
-          // Process the content to handle markdown links before appending
-          const processedContent = this._processMarkdownContent(exampleBlock.content);
-          this._appendSection(output, processedContent);
-
-          ++exampleNumber;
+        if (exampleBlocks.length > 0) {
+          output.appendNode(new DocHeading({ configuration, title: 'Usage', level: 2 }));
         }
 
-        output.appendNode(
-          new MarkDocTag({
-            configuration,
-            name: 'partial',
-            attributes: {
-              file: 'p_usage.md',
-            },
-            variables: {
-              exampleCount: exampleNumber - 1,
-            },
-          }),
-        );
+        for (const [index, exampleBlock] of exampleBlocks.entries()) {
+          if (exampleBlocks.length > 1) {
+            output.appendNode(new DocHeading({ configuration, title: `Example ${index + 1}`, level: 3 }));
+          }
+          this._appendSection(output, this._processMarkdownContent(exampleBlock.content));
+        }
       }
     }
   }

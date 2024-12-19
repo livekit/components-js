@@ -512,11 +512,70 @@ export class MarkdownDocumenter {
           output.appendNode(new DocHeading({ configuration, title: 'Usage', level: 2 }));
         }
 
+        const findFirstPlainText = (node: DocNode): { text: string | undefined, node: DocPlainText | undefined } => {
+          if (node.kind === DocNodeKind.PlainText) {
+            const plainTextNode = node as DocPlainText;
+            return { 
+              text: plainTextNode.text.split('\n')[0].trim(),
+              node: plainTextNode
+            };
+          }
+          
+          if (node instanceof DocNodeContainer) {
+            for (const childNode of node.getChildNodes()) {
+              const result = findFirstPlainText(childNode);
+              if (result.text) {
+                return result;
+              }
+            }
+          }
+          
+          return { text: undefined, node: undefined };
+        };
+
         for (const [index, exampleBlock] of exampleBlocks.entries()) {
           if (exampleBlocks.length > 1) {
-            output.appendNode(new DocHeading({ configuration, title: `Example ${index + 1}`, level: 3 }));
+            let firstNode: DocNode | undefined = exampleBlock.content.nodes[0];
+            let title: string = `Example ${index + 1}`;
+            
+            if (firstNode) {
+              const { text, node: plainTextNode } = findFirstPlainText(firstNode);
+              if (text) {
+                title = text;
+                if (plainTextNode) {
+                  const remainingText: string | undefined = plainTextNode.text.split('\n').slice(1).join('\n').trim();
+                  const parent: DocNodeContainer = firstNode as DocNodeContainer;
+                  
+                  const newChildNodes: DocNode[] = parent.getChildNodes().map(childNode => {
+                    if (childNode === plainTextNode) {
+                      return remainingText ? 
+                        new DocPlainText({ configuration, text: remainingText }) :
+                        undefined;
+                    }
+                    return childNode;
+                  }).filter((node): node is DocNode => node !== undefined);
+
+                  firstNode = new DocParagraph({ configuration }, newChildNodes);
+                }
+              }
+            }
+            
+            output.appendNode(new DocHeading({ configuration, title, level: 3 }));
+
+            // Create new content with modified first node
+            const newContent = new DocSection({ configuration });
+            if (firstNode && firstNode.getChildNodes().length > 0) {
+              newContent.appendNode(firstNode);
+            }
+            // Add all other nodes after the first one
+            for (let i = 1; i < exampleBlock.content.nodes.length; i++) {
+              newContent.appendNode(exampleBlock.content.nodes[i]);
+            }
+
+            this._appendSection(output, this._processMarkdownContent(newContent));
+          } else {
+            this._appendSection(output, this._processMarkdownContent(exampleBlock.content));
           }
-          this._appendSection(output, this._processMarkdownContent(exampleBlock.content));
         }
       }
     }

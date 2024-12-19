@@ -16,18 +16,18 @@ export interface UseIsMutedOptions {
  * The `useIsMuted` hook is used to implement the `TrackMutedIndicator` or your custom implementation of it.
  * It returns a `boolean` that indicates if the track is muted or not.
  *
- * @example Using with a track reference
+ * @example With a track reference
  * ```tsx
  * const isMuted = useIsMuted(track);
  * ```
  *
- * @example Using with a track source
+ * @example With a track source / participant
  * ```tsx
  * const isMuted = useIsMuted('camera', { participant });
  * ```
  *
  * @param trackRef - A track reference object
- * @param sourceOrTrackRef - Either a track reference or a track source string
+ * @param sourceOrTrackRef - Either a track reference or a track source
  * @param options - Additional options when using with track source
  * @returns boolean indicating if the track is muted
  *

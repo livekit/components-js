@@ -6,7 +6,7 @@ import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { useLocalParticipant } from '../../..';
 
 /**
- * @alpha
+ * @beta
  */
 export interface useKrispNoiseFilterOptions {
   /**

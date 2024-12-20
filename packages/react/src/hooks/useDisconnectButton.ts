@@ -2,7 +2,7 @@ import { setupDisconnectButton } from '@cc-livekit/components-core';
 import { ConnectionState } from 'livekit-client';
 import * as React from 'react';
 import type { DisconnectButtonProps } from '../components';
-import { useRoomContext } from '../context';
+import { useFeatureContext, useRoomContext } from '../context';
 import { mergeProps } from '../mergeProps';
 import { useConnectionState } from './useConnectionStatus';
 
@@ -21,12 +21,19 @@ import { useConnectionState } from './useConnectionStatus';
 export function useDisconnectButton(props: DisconnectButtonProps) {
   const room = useRoomContext();
   const connectionState = useConnectionState(room);
+  const featureFlags = useFeatureContext();
 
   const buttonProps = React.useMemo(() => {
     const { className, disconnect } = setupDisconnectButton(room);
     const mergedProps = mergeProps(props, {
       className,
-      onClick: () => disconnect(props.stopTracks ?? true),
+      onClick: async () => {
+        if (featureFlags?.onHungUp) {
+          await featureFlags?.onHungUp?.();
+        } else {
+          disconnect(props.stopTracks ?? true);
+        }
+      },
       disabled: connectionState === ConnectionState.Disconnected,
     });
     return mergedProps;

@@ -7,6 +7,7 @@ export interface FeatureFlags {
   nameFormatter?: (participant: Participant) => string;
   renderParticipantPlaceholder?: (participant: Participant | undefined) => any;
   type?: '1on1' | 'instant' | 'group';
+  onHungUp?: () => void;
 }
 
 type FeatureContext<T extends boolean = false> = T extends true

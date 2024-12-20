@@ -28,8 +28,8 @@ export function useDisconnectButton(props: DisconnectButtonProps) {
     const mergedProps = mergeProps(props, {
       className,
       onClick: async () => {
-        if (featureFlags?.onHungUp) {
-          await featureFlags?.onHungUp?.();
+        if (featureFlags?.onHangup) {
+          await featureFlags?.onHangup?.();
         } else {
           disconnect(props.stopTracks ?? true);
         }

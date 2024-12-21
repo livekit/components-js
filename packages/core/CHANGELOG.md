@@ -1,5 +1,13 @@
 # @livekit/components-core
 
+## 0.11.11
+
+### Patch Changes
+
+- Include useKrispNoiseFilter in generated docs - [#1055](https://github.com/livekit/components-js/pull/1055) ([@bcherry](https://github.com/bcherry))
+
+- use JS SDK's isLocal check - [#1050](https://github.com/livekit/components-js/pull/1050) ([@davidzhao](https://github.com/davidzhao))
+
 ## 0.11.10
 
 ### Patch Changes

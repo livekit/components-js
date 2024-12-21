@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-js-docs",
-  "version": "0.1.48",
+  "version": "0.1.49",
   "description": "Automatically generated documentation pages for LiveKit Components JS. Intended to be consumed by the documentation page.",
   "repository": {
     "type": "git",

@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@livekit/component-docs-storybook",
-  "version": "1.0.75",
+  "version": "1.0.76",
   "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {

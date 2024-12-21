@@ -1,5 +1,11 @@
 # @livekit/api-documenter
 
+## 7.22.22
+
+### Patch Changes
+
+- Include useKrispNoiseFilter in generated docs - [#1055](https://github.com/livekit/components-js/pull/1055) ([@bcherry](https://github.com/bcherry))
+
 ## 7.22.21
 
 ### Patch Changes

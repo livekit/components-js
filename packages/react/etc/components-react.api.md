@@ -13,12 +13,14 @@ import { CreateLocalTracksOptions } from 'livekit-client';
 import { DataPublishOptions } from 'livekit-client';
 import { DisconnectReason } from 'livekit-client';
 import { HTMLAttributes } from 'react';
+import { KrispNoiseFilterProcessor } from '@livekit/krisp-noise-filter';
 import { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
 import { LocalTrack } from 'livekit-client';
 import { LocalTrackPublication } from 'livekit-client';
 import { LocalVideoTrack } from 'livekit-client';
 import { MediaDeviceFailure } from 'livekit-client';
+import { NoiseFilterOptions } from '@livekit/krisp-noise-filter';
 import { Participant } from 'livekit-client';
 import { ParticipantEvent } from 'livekit-client';
 import type { ParticipantKind } from 'livekit-client';
@@ -162,7 +164,7 @@ export const ChatIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 export { ChatMessage }
 
-// Warning: (ae-forgotten-export) The symbol "ChatOptions" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "ChatOptions" needs to be exported by the entry point index.docs.d.ts
 //
 // @public (undocumented)
 export interface ChatProps extends React_2.HTMLAttributes<HTMLDivElement>, ChatOptions {
@@ -445,12 +447,12 @@ export interface MediaDeviceSelectProps extends Omit<React_2.HTMLAttributes<HTML
     track?: LocalAudioTrack | LocalVideoTrack;
 }
 
-// Warning: (ae-forgotten-export) The symbol "LegacyReceivedChatMessage" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "LegacyReceivedChatMessage" needs to be exported by the entry point index.docs.d.ts
 //
 // @public @deprecated (undocumented)
 export type MessageDecoder = (message: Uint8Array) => LegacyReceivedChatMessage;
 
-// Warning: (ae-forgotten-export) The symbol "LegacyChatMessage" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "LegacyChatMessage" needs to be exported by the entry point index.docs.d.ts
 //
 // @public @deprecated (undocumented)
 export type MessageEncoder = (message: LegacyChatMessage) => Uint8Array;
@@ -500,7 +502,7 @@ export function ParticipantContextIfNeeded(props: React_2.PropsWithChildren<{
     participant?: Participant;
 }>): React_2.JSX.Element;
 
-// Warning: (ae-forgotten-export) The symbol "RequireAtLeastOne" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "RequireAtLeastOne" needs to be exported by the entry point index.docs.d.ts
 //
 // @beta (undocumented)
 export type ParticipantIdentifier = RequireAtLeastOne<{
@@ -629,14 +631,14 @@ export const ScreenShareIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.El
 // @internal (undocumented)
 export const ScreenShareStopIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
-// Warning: (ae-forgotten-export) The symbol "LogExtension" needs to be exported by the entry point index.d.ts
-// Warning: (ae-forgotten-export) The symbol "SetLogExtensionOptions" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "LogExtension" needs to be exported by the entry point index.docs.d.ts
+// Warning: (ae-forgotten-export) The symbol "SetLogExtensionOptions" needs to be exported by the entry point index.docs.d.ts
 //
 // @public
 export function setLogExtension(extension: LogExtension, options?: SetLogExtensionOptions): void;
 
-// Warning: (ae-forgotten-export) The symbol "LogLevel" needs to be exported by the entry point index.d.ts
-// Warning: (ae-forgotten-export) The symbol "SetLogLevelOptions" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "LogLevel" needs to be exported by the entry point index.docs.d.ts
+// Warning: (ae-forgotten-export) The symbol "SetLogLevelOptions" needs to be exported by the entry point index.docs.d.ts
 //
 // @public
 export function setLogLevel(level: LogLevel, options?: SetLogLevelOptions): void;
@@ -692,19 +694,19 @@ export type TrackReference = {
     source: Track.Source;
 };
 
-// Warning: (ae-forgotten-export) The symbol "TrackReferencePlaceholder" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "TrackReferencePlaceholder" needs to be exported by the entry point index.docs.d.ts
 //
 // @public (undocumented)
 export type TrackReferenceOrPlaceholder = TrackReference | TrackReferencePlaceholder;
 
-// Warning: (ae-forgotten-export) The symbol "ToggleSource" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "ToggleSource" needs to be exported by the entry point index.docs.d.ts
 //
 // @public
 export const TrackToggle: <T extends ToggleSource>(props: TrackToggleProps<T> & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactNode;
 
 // @public (undocumented)
 export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
-    // Warning: (ae-forgotten-export) The symbol "CaptureOptionsBySource" needs to be exported by the entry point index.d.ts
+    // Warning: (ae-forgotten-export) The symbol "CaptureOptionsBySource" needs to be exported by the entry point index.docs.d.ts
     //
     // (undocumented)
     captureOptions?: CaptureOptionsBySource<T>;
@@ -793,8 +795,8 @@ export function useConnectionState(room?: Room): ConnectionState_2;
 // @public (undocumented)
 export function useCreateLayoutContext(): LayoutContextType;
 
-// Warning: (ae-forgotten-export) The symbol "ReceivedDataMessage" needs to be exported by the entry point index.d.ts
-// Warning: (ae-forgotten-export) The symbol "UseDataChannelReturnType" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "ReceivedDataMessage" needs to be exported by the entry point index.docs.d.ts
+// Warning: (ae-forgotten-export) The symbol "UseDataChannelReturnType" needs to be exported by the entry point index.docs.d.ts
 //
 // @public
 export function useDataChannel<T extends string>(topic: T, onMessage?: (msg: ReceivedDataMessage<T>) => void): UseDataChannelReturnType<T>;
@@ -829,7 +831,7 @@ export function useEnsureTrackRef(trackRef?: TrackReferenceOrPlaceholder): Track
 // @alpha
 export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'user' | 'environment' | 'left' | 'right' | 'undefined';
 
-// Warning: (ae-forgotten-export) The symbol "FeatureContext" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "FeatureContext" needs to be exported by the entry point index.docs.d.ts
 // Warning: (ae-internal-missing-underscore) The name "useFeatureContext" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -886,6 +888,21 @@ export function useIsRecording(room?: Room): boolean;
 
 // @public
 export function useIsSpeaking(participant?: Participant): boolean;
+
+// @beta
+export function useKrispNoiseFilter(options?: useKrispNoiseFilterOptions): {
+    setNoiseFilterEnabled: (enable: boolean) => Promise<void>;
+    isNoiseFilterEnabled: boolean;
+    isNoiseFilterPending: boolean;
+    processor: KrispNoiseFilterProcessor | undefined;
+};
+
+// @beta (undocumented)
+export interface useKrispNoiseFilterOptions {
+    // @internal (undocumented)
+    filterOptions?: NoiseFilterOptions;
+    trackRef?: TrackReferenceOrPlaceholder;
+}
 
 // @public
 export function useLayoutContext(): LayoutContextType;
@@ -1183,7 +1200,7 @@ export interface UseTokenOptions {
 // @public
 export function useTrackByName(name: string, participant?: Participant): TrackReferenceOrPlaceholder;
 
-// Warning: (ae-forgotten-export) The symbol "TrackMutedIndicatorReturnType" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "TrackMutedIndicatorReturnType" needs to be exported by the entry point index.docs.d.ts
 //
 // @public
 export function useTrackMutedIndicator(trackRef?: TrackReferenceOrPlaceholder): TrackMutedIndicatorReturnType;
@@ -1191,12 +1208,12 @@ export function useTrackMutedIndicator(trackRef?: TrackReferenceOrPlaceholder): 
 // @public
 export function useTrackRefContext(): TrackReferenceOrPlaceholder;
 
-// Warning: (ae-forgotten-export) The symbol "SourcesArray" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "SourcesArray" needs to be exported by the entry point index.docs.d.ts
 //
 // @public
 export function useTracks<T extends SourcesArray = Track.Source[]>(sources?: T, options?: UseTracksOptions): UseTracksHookReturnType<T>;
 
-// Warning: (ae-forgotten-export) The symbol "TrackSourceWithOptions" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "TrackSourceWithOptions" needs to be exported by the entry point index.docs.d.ts
 //
 // @public (undocumented)
 export type UseTracksHookReturnType<T> = T extends Track.Source[] ? TrackReference[] : T extends TrackSourceWithOptions[] ? TrackReferenceOrPlaceholder[] : never;
@@ -1316,11 +1333,11 @@ export type WidgetState = {
 
 // Warnings were encountered during analysis:
 //
-// src/context/layout-context.ts:10:3 - (ae-forgotten-export) The symbol "PinContextType" needs to be exported by the entry point index.d.ts
-// src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "WidgetContextType" needs to be exported by the entry point index.d.ts
-// src/hooks/useGridLayout.ts:27:6 - (ae-forgotten-export) The symbol "GridLayoutInfo" needs to be exported by the entry point index.d.ts
-// src/hooks/useMediaDeviceSelect.ts:47:29 - (ae-forgotten-export) The symbol "SetMediaDeviceOptions" needs to be exported by the entry point index.d.ts
-// src/hooks/useTrackTranscription.ts:43:38 - (ae-forgotten-export) The symbol "ReceivedTranscriptionSegment" needs to be exported by the entry point index.d.ts
+// src/context/layout-context.ts:10:3 - (ae-forgotten-export) The symbol "PinContextType" needs to be exported by the entry point index.docs.d.ts
+// src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "WidgetContextType" needs to be exported by the entry point index.docs.d.ts
+// src/hooks/useGridLayout.ts:27:6 - (ae-forgotten-export) The symbol "GridLayoutInfo" needs to be exported by the entry point index.docs.d.ts
+// src/hooks/useMediaDeviceSelect.ts:47:29 - (ae-forgotten-export) The symbol "SetMediaDeviceOptions" needs to be exported by the entry point index.docs.d.ts
+// src/hooks/useTrackTranscription.ts:43:38 - (ae-forgotten-export) The symbol "ReceivedTranscriptionSegment" needs to be exported by the entry point index.docs.d.ts
 
 // (No @packageDocumentation comment for this package)
 

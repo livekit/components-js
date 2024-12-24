@@ -104,6 +104,11 @@ export function NewVideoConference({
   // auto pin remote participant when 1on1
   React.useEffect(() => {
     if (featureFlags?.type === 'instant') {
+      const participants = [...Array.from(room.remoteParticipants.values()), room.localParticipant];
+      const hasScreenShareTrack = participants.some(p => p.getTrackPublication(Track.Source.ScreenShare));
+      if (hasScreenShareTrack) {
+        return;
+      }
       // instant mode must be converted from 1on1
       return layoutContext.pin.dispatch?.({ msg: 'clear_pin' });
     }

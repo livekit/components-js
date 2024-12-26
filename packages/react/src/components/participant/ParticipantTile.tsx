@@ -24,7 +24,7 @@ import { LockLockedIcon, ScreenShareIcon } from '../../assets/icons';
 import { VideoTrack } from './VideoTrack';
 import { AudioTrack } from './AudioTrack';
 import { useParticipantTile } from '../../hooks';
-import { useIsEncrypted } from '../../hooks/useIsEncrypted';
+// import { useIsEncrypted } from '../../hooks/useIsEncrypted';
 
 /**
  * The `ParticipantContextIfNeeded` component only creates a `ParticipantContext`
@@ -116,7 +116,7 @@ export const ParticipantTile: (
       onParticipantClick,
       trackRef: trackReference,
     });
-    const isEncrypted = useIsEncrypted(trackReference.participant);
+    // const isEncrypted = useIsEncrypted(trackReference.participant);
     const layoutContext = useMaybeLayoutContext();
 
     const autoManageSubscription = useFeatureContext()?.autoSubscription;
@@ -170,7 +170,7 @@ export const ParticipantTile: (
                   <div className="lk-participant-metadata-item">
                     {trackReference.source === Track.Source.Camera ? (
                       <>
-                        {isEncrypted && <LockLockedIcon style={{ marginRight: '0.25rem' }} />}
+                        {/* {isEncrypted && <LockLockedIcon style={{ marginRight: '0.25rem' }} />} */}
                         <TrackMutedIndicator
                           trackRef={{
                             participant: trackReference.participant,

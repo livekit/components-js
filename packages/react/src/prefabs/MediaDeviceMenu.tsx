@@ -118,7 +118,41 @@ export function MediaDeviceMenu({
           ref={tooltip}
           style={{ visibility: isOpen ? 'visible' : 'hidden' }}
         >
-          {kind ? (
+          {kind ? kind === 'audioinput' ? (
+            <div>
+              <p
+                style={{
+                  textAlign: 'left',
+                  paddingLeft: 16,
+                  color: '#878787'
+                }}
+              >Microphone</p>
+              <MediaDeviceSelect
+              initialSelection={initialSelection}
+              onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('audioinput', deviceId)}
+              onDeviceListChange={setDevices}
+              kind={'audioinput'}
+              track={tracks?.['audioinput']}
+              requestPermissions={needPermissions}
+            />
+            <p
+              style={{
+                textAlign: 'left',
+                paddingLeft: 16,
+                color: '#878787',
+                marginTop: 4
+              }}
+            >Speakers</p>
+            <MediaDeviceSelect
+              initialSelection={initialSelection}
+              onActiveDeviceChange={(deviceId) => handleActiveDeviceChange('audiooutput', deviceId)}
+              onDeviceListChange={setDevices}
+              kind={'audiooutput'}
+              track={tracks?.['audiooutput']}
+              requestPermissions={needPermissions}
+            />
+            </div>
+          ) : (
             <MediaDeviceSelect
               initialSelection={initialSelection}
               onActiveDeviceChange={(deviceId) => handleActiveDeviceChange(kind, deviceId)}

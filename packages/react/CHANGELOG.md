@@ -1,5 +1,18 @@
 # @livekit/components-react
 
+## 2.6.11
+
+### Patch Changes
+
+- Include useKrispNoiseFilter in generated docs - [#1055](https://github.com/livekit/components-js/pull/1055) ([@bcherry](https://github.com/bcherry))
+
+- Use shared logger for krisp hook - [#1044](https://github.com/livekit/components-js/pull/1044) ([@bcherry](https://github.com/bcherry))
+
+- use JS SDK's isLocal check - [#1050](https://github.com/livekit/components-js/pull/1050) ([@davidzhao](https://github.com/davidzhao))
+
+- Updated dependencies [[`146272c1654c4b9dc86996ff85804a8ee4a0780c`](https://github.com/livekit/components-js/commit/146272c1654c4b9dc86996ff85804a8ee4a0780c), [`ebe78fb658cd6c8b76eedf0465c51b03aa00b305`](https://github.com/livekit/components-js/commit/ebe78fb658cd6c8b76eedf0465c51b03aa00b305)]:
+  - @livekit/components-core@0.11.11
+
 ## 2.6.10
 
 ### Patch Changes

@@ -21,12 +21,12 @@
     transition-duration: 0.4s;
     pointer-events: none;
   }
-  &[data-speaking='true']:not([data-source='screen_share'])::after {
-    // When the participant begins speaking, the transition is short and without a delay.
-    transition-delay: 0s;
-    transition-duration: 0.2s;
-    border-width: var(--speaking-indicator-width);
-  }
+  // &[data-speaking='true']:not([data-source='screen_share'])::after {
+  //   // When the participant begins speaking, the transition is short and without a delay.
+  //   transition-delay: 0s;
+  //   transition-duration: 0.2s;
+  //   border-width: var(--speaking-indicator-width);
+  // }
 
   .focus-toggle-button {
     position: absolute;

@@ -1,12 +1,16 @@
 .track-muted-indicator-camera,
 .track-muted-indicator-microphone {
   position: relative;
-  width: var(--indicator-size, 1rem);
-  height: var(--indicator-size, 1rem);
+  // width: var(--indicator-size, 1rem);
+  // height: var(--indicator-size, 1rem);
+  height: 20px;
   margin-inline-end: 0.25rem;
   // background-repeat: no-repeat;
   // background-image: var(--bg);
   transition: opacity 0.25s ease-in-out;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
 }
 
 .track-muted-indicator-camera {
@@ -24,4 +28,46 @@
   //   opacity: 0.5;
   //   // --bg: var(--icon-mic-disabled);
   // }
+}
+
+.speaking-bars {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 14px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  gap: 2px;
+  height: 10px;
+  /*     background: black; */
+}
+
+.bar-item {
+  background: #82c1fc;
+  bottom: 1px;
+  height: 3px;
+  width: 2px;
+  border-radius: 5px;
+  animation: sound 0ms -600ms linear infinite alternate;
+}
+
+@keyframes sound {
+  0% {
+    height: 3px;
+  }
+  100% {
+    opacity: 1;
+    height: 10px;
+  }
+}
+
+.bar-item:nth-child(1) {
+  animation-duration: 374ms;
+}
+.bar-item:nth-child(2) {
+  animation-duration: 333ms;
+}
+.bar-item:nth-child(3) {
+  animation-duration: 307ms;
 }

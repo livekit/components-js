@@ -3,6 +3,7 @@ import { mergeProps } from '../../utils';
 import { getSourceIcon } from '../../assets/icons/util';
 import { useIsSpeaking, useTrackMutedIndicator } from '../../hooks';
 import type { TrackReferenceOrPlaceholder } from '@cc-livekit/components-core';
+import { MicDisabledMiniIcon, SpeakingDotIcon } from '../../assets/icons';
 
 /** @public */
 export interface TrackMutedIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -47,8 +48,32 @@ export const TrackMutedIndicator: (
 
     return (
       <div ref={ref} {...htmlProps} data-lk-muted={isMuted} data-lk-speaking={isSpeaking}>
-        {props.children ?? getSourceIcon(trackRef.source, !isMuted)}
+        {/* {props.children ?? getSourceIcon(trackRef.source, !isMuted)} */}
+        <ParticipantStatus isMuted={isMuted} isSpeaking={isSpeaking} />
       </div>
     );
   },
 );
+
+interface IParticipantStatusProps {
+  isMuted: boolean;
+  isSpeaking: boolean;
+}
+
+function ParticipantStatus(props: IParticipantStatusProps) {
+  const { isSpeaking, isMuted } = props;
+
+  if (isMuted) {
+    return <MicDisabledMiniIcon />;
+  }
+  if (isSpeaking) {
+    return (
+      <div className="lk-speaking-bars">
+        <div className="lk-bar-item"></div>
+        <div className="lk-bar-item"></div>
+        <div className="lk-bar-item"></div>
+      </div>
+    );
+  }
+  return <SpeakingDotIcon height={14} width={14} />;
+}

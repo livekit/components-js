@@ -20,8 +20,8 @@
 .track-muted-indicator-microphone {
   --bg: var(--icon-mic);
 
-  &[data-muted='true'] {
-    opacity: 0.5;
-    // --bg: var(--icon-mic-disabled);
-  }
+  // &[data-muted='true'] {
+  //   opacity: 0.5;
+  //   // --bg: var(--icon-mic-disabled);
+  // }
 }

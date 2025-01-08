@@ -7,9 +7,20 @@ import type { SVGProps } from 'react';
  * @internal
  */
 const SvgCameraDisabledIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" {...props}>
-    <path d="M1.354.646a.5.5 0 1 0-.708.708l14 14a.5.5 0 0 0 .708-.708L11 10.293V4.5A1.5 1.5 0 0 0 9.5 3H3.707zM0 4.5a1.5 1.5 0 0 1 .943-1.393l9.532 9.533c-.262.224-.603.36-.975.36h-8A1.5 1.5 0 0 1 0 11.5z" />
-    <path d="m15.2 3.6-2.8 2.1a1 1 0 0 0-.4.8v3a1 1 0 0 0 .4.8l2.8 2.1a.5.5 0 0 0 .8-.4V4a.5.5 0 0 0-.8-.4" />
+  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} fill="none" {...props}>
+    <path
+      stroke="#F5F5F5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.667}
+      d="m12.5 8.333 3.794-1.896a.833.833 0 0 1 1.206.745v5.636a.833.833 0 0 1-1.206.745L12.5 11.666zM10.833 5H4.167C3.247 5 2.5 5.746 2.5 6.667v6.666c0 .92.746 1.667 1.667 1.667h6.666c.92 0 1.667-.746 1.667-1.667V6.667c0-.92-.746-1.667-1.667-1.667"
+    />
+    <path
+      stroke="#F84135"
+      strokeLinecap="round"
+      strokeWidth={1.667}
+      d="m2.846 1.667 15.321 15.32"
+    />
   </svg>
 );
 export default SvgCameraDisabledIcon;

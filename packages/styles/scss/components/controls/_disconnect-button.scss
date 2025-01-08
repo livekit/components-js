@@ -5,12 +5,19 @@
   // --control-fg: var(--danger-fg);
   // --control-bg: var(--danger);
   font-weight: 600;
-  color: var(--danger);
+  // color: var(--danger);
   border: 1px solid var(--danger);
+  --lk-control-hover-bg: var(--danger5);
+
+  width: 50px;
+  border-radius: 100px;
+
+  color: var(--danger-fg);
+  background-color: var(--lk-control-hover-bg);
 
   &:not(:disabled):hover {
-    --lk-control-hover-bg: var(--danger2);
-    color: var(--danger-fg);
+    --lk-control-hover-bg: var(--danger6);
+    // color: var(--danger-fg);
   }
   &:not(:disabled):active {
     --lk-control-hover-bg: var(--danger3);

@@ -1,3 +1,7 @@
 .participant-name {
   font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+  white-space: nowrap;
 }

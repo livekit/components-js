@@ -7,20 +7,14 @@ import type { SVGProps } from 'react';
  * @internal
  */
 const SvgAddMemberIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={16}
-    height={16}
-    fill="none"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth={2}
-    viewBox="0 0 24 24"
-    {...props}
-  >
-    <path stroke="none" d="M0 0h24v24H0z" />
-    <path d="M8 7a4 4 0 1 0 8 0 4 4 0 0 0-8 0M16 19h6M19 16v6M6 21v-2a4 4 0 0 1 4-4h4" />
+  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} fill="none" {...props}>
+    <path
+      stroke="#F8F8F8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.667}
+      d="M7.807 9.298a2.982 2.982 0 1 0 0-5.964 2.982 2.982 0 0 0 0 5.964M15.264 7.062v4.473m-11.93 5.22v-1.492a2.98 2.98 0 0 1 2.982-2.982H9.3a2.98 2.98 0 0 1 2.982 2.982v1.492zm9.693-7.457h4.474z"
+    />
   </svg>
 );
 export default SvgAddMemberIcon;

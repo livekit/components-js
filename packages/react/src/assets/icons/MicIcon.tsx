@@ -7,13 +7,14 @@ import type { SVGProps } from 'react';
  * @internal
  */
 const SvgMicIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" {...props}>
+  <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} fill="none" {...props}>
     <path
-      fillRule="evenodd"
-      d="M2.975 8.002a.5.5 0 0 1 .547.449 4.5 4.5 0 0 0 8.956 0 .5.5 0 1 1 .995.098A5.5 5.5 0 0 1 8.5 13.478V15h2a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1h2v-1.522a5.5 5.5 0 0 1-4.973-4.929.5.5 0 0 1 .448-.547"
-      clipRule="evenodd"
+      stroke="#EAECEF"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.667}
+      d="M12.496 4.167a2.5 2.5 0 0 0-5 0v4.167a2.5 2.5 0 1 0 5 0zM4.164 8.334a5.833 5.833 0 0 0 5.833 5.833m0 0a5.834 5.834 0 0 0 5.834-5.833m-5.834 5.833V17.5m-3.333 0h6.667"
     />
-    <path d="M5 3a3 3 0 1 1 6 0v5a3 3 0 0 1-6 0z" />
   </svg>
 );
 export default SvgMicIcon;

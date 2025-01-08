@@ -2,6 +2,8 @@
 
 .add-member-button {
   @extend .button;
+  width: 50px;
+  border-radius: 100px;
   // --control-fg: var(--danger-fg);
   // --control-bg: var(--danger);
 }

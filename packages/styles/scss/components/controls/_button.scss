@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.625rem 1rem;
+  // padding: 0.625rem 1rem;
   color: var(--control-fg);
   background-image: none;
   background-color: var(--control-bg);
@@ -12,6 +12,7 @@
   border-radius: var(--border-radius);
   cursor: pointer;
   white-space: nowrap;
+  height: 44px;
 
   &:not(:disabled):hover {
     background-color: var(--control-hover-bg);
@@ -27,6 +28,11 @@
     &:hover {
       background-color: var(--control-active-hover-bg);
     }
+  }
+
+  &[data-source='screen_share'] {
+    width: 44px;
+    border-radius: 50%;
   }
 
   /* apply accent color (blue) to screen share button, when screen sharing is active */
@@ -48,8 +54,13 @@
   height: 100%;
 
   > .button:first-child {
+    width: 36px;
+    padding-left: 12px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
   }
 }
 
@@ -58,11 +69,21 @@
   flex-shrink: 0;
 
   > .button {
+    width: 28px;
+    padding-right: 12px;
     height: 100%;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMiAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik05LjM1MzU1IDcuODUzNTVDOS41NDg4MiA3LjY1ODI5IDkuNTQ4ODIgNy4zNDE3MSA5LjM1MzU1IDcuMTQ2NDVMNi4zNTM1NSA0LjE0NjQ1QzYuMTU4MjkgMy45NTExOCA1Ljg0MTcxIDMuOTUxMTggNS42NDY0NSA0LjE0NjQ1TDIuNjQ2NDUgNy4xNDY0NUMyLjQ1MTE5IDcuMzQxNzEgMi40NTExOSA3LjY1ODI5IDIuNjQ2NDUgNy44NTM1NUMyLjg0MTcxIDguMDQ4ODIgMy4xNTgyOSA4LjA0ODgyIDMuMzUzNTUgNy44NTM1NUw2IDUuMjA3MTFMOC42NDY0NSA3Ljg1MzU1QzguODQxNzEgOC4wNDg4MiA5LjE1ODI5IDguMDQ4ODIgOS4zNTM1NSA3Ljg1MzU1WiIgZmlsbD0id2hpdGUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K');
+    background-repeat: no-repeat;
+    background-position: 15% 50%;
+
     &::after {
+      display: none;
       margin-left: 0;
     }
   }
@@ -75,11 +96,11 @@
     content: '';
     width: 0.5em;
     height: 0.5em;
-    margin-top: -0.25rem;
+    margin-top: 0.25rem;
     margin-left: 0.5rem;
     border-left: 0.125em solid;
     border-bottom: 0.125em solid;
-    transform: rotate(-45deg);
-    transform-origin: center center;
+    transform: rotate(135deg);
+    // transform-origin: center center;
   }
 }

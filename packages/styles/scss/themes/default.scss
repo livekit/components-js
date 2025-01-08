@@ -35,6 +35,8 @@ $accent: #1f8cf9;
   --danger2: #{color.adjust($danger, $lightness: 4%)};
   --danger3: #{color.adjust($danger, $lightness: 8%)};
   --danger4: #{color.adjust($danger, $lightness: 12%)};
+  --danger5: #f84135;
+  --danger6: #d9271e;
 
   --success-fg: #fff;
   --success: #1ff968;

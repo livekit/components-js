@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { mergeProps } from '../../utils';
 import { getSourceIcon } from '../../assets/icons/util';
-import { useTrackMutedIndicator } from '../../hooks';
+import { useIsSpeaking, useTrackMutedIndicator } from '../../hooks';
 import type { TrackReferenceOrPlaceholder } from '@cc-livekit/components-core';
 
 /** @public */
@@ -28,6 +28,7 @@ export const TrackMutedIndicator: (
     ref,
   ) {
     const { className, isMuted } = useTrackMutedIndicator(trackRef);
+    const isSpeaking = useIsSpeaking(trackRef.participant);
 
     const showIndicator =
       show === 'always' || (show === 'muted' && isMuted) || (show === 'unmuted' && !isMuted);
@@ -45,7 +46,7 @@ export const TrackMutedIndicator: (
     }
 
     return (
-      <div ref={ref} {...htmlProps} data-lk-muted={isMuted}>
+      <div ref={ref} {...htmlProps} data-lk-muted={isMuted} data-lk-speaking={isSpeaking}>
         {props.children ?? getSourceIcon(trackRef.source, !isMuted)}
       </div>
     );

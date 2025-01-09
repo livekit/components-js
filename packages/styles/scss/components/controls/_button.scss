@@ -37,9 +37,9 @@
 
   /* apply accent color (blue) to screen share button, when screen sharing is active */
   &[data-source='screen_share'][data-enabled='true'] {
-    background-color: var(--accent-bg);
+    background-color: var(--danger5);
     &:hover {
-      background-color: var(--accent2);
+      background-color: var(--danger6);
     }
   }
 

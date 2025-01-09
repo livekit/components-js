@@ -11,7 +11,7 @@ export * from './assets/icons';
 export * from './assets/images';
 
 // Re-exports from core
-export { setLogLevel, setLogExtension, isTrackReference } from '@cc-livekit/components-core';
+export { log, setLogLevel, setLogExtension, isTrackReference } from '@cc-livekit/components-core';
 export type {
   ChatMessage,
   ReceivedChatMessage,

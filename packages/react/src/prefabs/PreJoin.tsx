@@ -100,7 +100,10 @@ export function usePreviewTracks(
   return tracks;
 }
 
-/** @deprecated use `usePreviewTracks` instead */
+/**
+ * @public
+ * @deprecated use `usePreviewTracks` instead
+ */
 export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   enabled: boolean,
   deviceId: string,

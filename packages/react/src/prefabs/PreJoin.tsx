@@ -24,7 +24,6 @@ import { useMediaDevices, usePersistentUserChoices } from '../hooks';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 import { defaultUserChoices } from '@livekit/components-core';
 import { roomOptionsStringifyReplacer } from '../utils';
-import { useMaybeRoomContext } from '../context';
 
 /**
  * Props for the PreJoin component.
@@ -358,8 +357,6 @@ export function PreJoin({
       log.warn('Validation failed with: ', userChoices);
     }
   }
-
-  const room = useMaybeRoomContext();
 
   useWarnAboutMissingStyles();
 

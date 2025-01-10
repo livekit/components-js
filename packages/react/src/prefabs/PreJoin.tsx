@@ -24,6 +24,7 @@ import { useMediaDevices, usePersistentUserChoices } from '../hooks';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 import { defaultUserChoices } from '@livekit/components-core';
 import { roomOptionsStringifyReplacer } from '../utils';
+import { useMaybeRoomContext } from '../context';
 
 /**
  * Props for the PreJoin component.
@@ -55,7 +56,7 @@ export interface PreJoinProps
   videoProcessor?: TrackProcessor<Track.Kind.Video>;
 }
 
-/** @alpha */
+/** @public */
 export function usePreviewTracks(
   options: CreateLocalTracksOptions,
   onError?: (err: Error) => void,
@@ -100,7 +101,7 @@ export function usePreviewTracks(
   return tracks;
 }
 
-/** @public */
+/** @deprecated use `usePreviewTracks` instead */
 export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   enabled: boolean,
   deviceId: string,
@@ -357,6 +358,8 @@ export function PreJoin({
       log.warn('Validation failed with: ', userChoices);
     }
   }
+
+  const room = useMaybeRoomContext();
 
   useWarnAboutMissingStyles();
 

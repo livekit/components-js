@@ -56,7 +56,7 @@ export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
 export function ControlBar({
   variation,
   controls,
-  saveUserChoices = false,
+  saveUserChoices = true,
   onDeviceError,
   ...props
 }: ControlBarProps) {

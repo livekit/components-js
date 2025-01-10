@@ -249,8 +249,8 @@ export function PreJoin({
     saveUsername,
   } = usePersistentUserChoices({
     defaults: partialDefaults,
-    preventSave: true,
-    preventLoad: true,
+    preventSave: !persistUserChoices,
+    preventLoad: !persistUserChoices,
   });
 
   // Initialize device settings

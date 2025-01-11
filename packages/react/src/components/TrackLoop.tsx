@@ -8,6 +8,7 @@ import { getTrackReferenceId } from '@cc-livekit/components-core';
 export interface TrackLoopProps {
   /** Track references to loop over. You can the use `useTracks()` hook to get TrackReferences. */
   tracks: TrackReference[] | TrackReferenceOrPlaceholder[];
+  participantCount?: number;
   /** The template component to be used in the loop. */
   children: React.ReactNode;
 }
@@ -27,16 +28,16 @@ export interface TrackLoopProps {
  * ```
  * @public
  */
-export function TrackLoop({ tracks, ...props }: TrackLoopProps) {
+export function TrackLoop({ tracks, participantCount, ...props }: TrackLoopProps) {
   return (
     <>
-      {tracks.map((trackReference) => {
+      {tracks.map((trackReference, index) => {
         return (
           <TrackRefContext.Provider
             value={trackReference}
             key={getTrackReferenceId(trackReference)}
           >
-            {cloneSingleChild(props.children)}
+            {cloneSingleChild(props.children, { participantCount, index })}
           </TrackRefContext.Provider>
         );
       })}

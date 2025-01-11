@@ -40,7 +40,7 @@
     "rxjs": "7.8.1"
   },
   "peerDependencies": {
-    "livekit-client": "catalog:",
+    "livekit-client": "2.8.0",
     "tslib": "^2.6.2"
   },
   "devDependencies": {

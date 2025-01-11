@@ -59,7 +59,7 @@
   },
   "peerDependencies": {
     "@livekit/krisp-noise-filter": "^0.2.12",
-    "livekit-client": "catalog:",
+    "livekit-client": "2.8.0",
     "react": ">=18",
     "react-dom": ">=18",
     "tslib": "^2.6.2"

@@ -105,7 +105,9 @@ export function NewVideoConference({
   React.useEffect(() => {
     if (featureFlags?.type === 'instant') {
       const participants = [...Array.from(room.remoteParticipants.values()), room.localParticipant];
-      const hasScreenShareTrack = participants.some(p => p.getTrackPublication(Track.Source.ScreenShare));
+      const hasScreenShareTrack = participants.some((p) =>
+        p.getTrackPublication(Track.Source.ScreenShare),
+      );
       if (hasScreenShareTrack) {
         return;
       }
@@ -234,7 +236,7 @@ export function NewVideoConference({
             {!focusTrack ? (
               <div className="lk-grid-layout-wrapper">
                 <GridLayout tracks={tracks}>
-                  <ParticipantTile />
+                  <ParticipantTile></ParticipantTile>
                 </GridLayout>
               </div>
             ) : (

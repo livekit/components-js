@@ -27,14 +27,14 @@ export function useGridLayout(
 ): { layout: GridLayoutInfo; containerWidth: number; containerHeight: number } {
   const gridLayouts = options.gridLayouts ?? GRID_LAYOUTS;
   const { width, height } = useSize(gridElement);
-  const layout = selectGridLayout(gridLayouts, trackCount, width, height);
+  const layout = selectGridLayout(gridLayouts, trackCount);
 
-  React.useEffect(() => {
-    if (gridElement.current && layout) {
-      gridElement.current.style.setProperty('--lk-col-count', layout?.columns.toString());
-      gridElement.current.style.setProperty('--lk-row-count', layout?.rows.toString());
-    }
-  }, [gridElement, layout]);
+  // React.useEffect(() => {
+  //   if (gridElement.current && layout) {
+  //     gridElement.current.style.setProperty('--lk-col-count', layout?.columns.toString());
+  //     gridElement.current.style.setProperty('--lk-row-count', layout?.rows.toString());
+  //   }
+  // }, [gridElement, layout]);
 
   return {
     layout,

@@ -6,6 +6,7 @@ import type { TrackReferenceOrPlaceholder } from '@cc-livekit/components-core';
 import { TrackLoop } from '../TrackLoop';
 import { PaginationControl } from '../controls/PaginationControl';
 import { PaginationIndicator } from '../controls/PaginationIndicator';
+import { useState } from 'react';
 
 /** @public */
 export interface GridLayoutProps
@@ -33,23 +34,44 @@ export interface GridLayoutProps
  */
 export function GridLayout({ tracks, ...props }: GridLayoutProps) {
   const gridEl = React.createRef<HTMLDivElement>();
+  // const [count, setCount] = useState(1);
 
   const elementProps = React.useMemo(
     () => mergeProps(props, { className: 'lk-grid-layout' }),
     [props],
   );
   const { layout } = useGridLayout(gridEl, tracks.length);
-  const pagination = usePagination(layout.maxTiles, tracks);
+  // const { layout } = useGridLayout(gridEl, count);
+  // const pagination = usePagination(layout.maxTiles, tracks);
 
-  useSwipe(gridEl, {
-    onLeftSwipe: pagination.nextPage,
-    onRightSwipe: pagination.prevPage,
-  });
+  // useSwipe(gridEl, {
+  //   onLeftSwipe: pagination.nextPage,
+  //   onRightSwipe: pagination.prevPage,
+  // });
+
+  const { wrapperStyle } = layout ?? {};
 
   return (
-    <div ref={gridEl} data-lk-pagination={pagination.totalPageCount > 1} {...elementProps}>
-      <TrackLoop tracks={pagination.tracks}>{props.children}</TrackLoop>
-      {tracks.length > layout.maxTiles && (
+    <div
+      ref={gridEl}
+      {...elementProps}
+      style={{
+        ...elementProps?.style,
+        gridTemplateColumns: wrapperStyle?.gridTemplateColumns,
+        height: wrapperStyle?.height,
+      }}
+    >
+      {/* TODO: tracks and tracks.length */}
+      <TrackLoop tracks={tracks} participantCount={tracks.length}>
+        {props.children}
+      </TrackLoop>
+      {/* <button style={{ position: 'fixed' }} onClick={() => setCount((prev) => prev + 1)}>
+        add
+      </button>
+      <button style={{ position: 'fixed', left: 200 }} onClick={() => setCount((prev) => prev - 1)}>
+        reduce
+      </button> */}
+      {/* {tracks.length > layout.maxTiles && (
         <>
           <PaginationIndicator
             totalPageCount={pagination.totalPageCount}
@@ -57,7 +79,7 @@ export function GridLayout({ tracks, ...props }: GridLayoutProps) {
           />
           <PaginationControl pagesContainer={gridEl} {...pagination} />
         </>
-      )}
+      )} */}
     </div>
   );
 }

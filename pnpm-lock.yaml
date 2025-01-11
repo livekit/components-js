@@ -196,6 +196,7 @@ importers:
         version: 1.6.11
       livekit-client:
 <<<<<<< HEAD
+<<<<<<< HEAD
         specifier: 'catalog:'
         version: 2.8.0
 =======
@@ -208,6 +209,10 @@ importers:
 >>>>>>> 17e91fdb ([chore] sync from upstream)
 =======
 >>>>>>> 65e0bbc4 ([chore] sync from upstream)
+=======
+        specifier: 2.8.0
+        version: 2.8.0
+>>>>>>> c99741ba ([chore] update grid layout)
       loglevel:
         specifier: 1.9.1
         version: 1.9.1
@@ -257,6 +262,7 @@ importers:
       '@livekit/krisp-noise-filter':
         specifier: ^0.2.12
 <<<<<<< HEAD
+<<<<<<< HEAD
         version: 0.2.12(livekit-client@2.8.0)
 =======
 <<<<<<< HEAD
@@ -269,6 +275,9 @@ importers:
 >>>>>>> 17e91fdb ([chore] sync from upstream)
 =======
 =======
+=======
+        version: 0.2.12(livekit-client@2.8.0)
+>>>>>>> c99741ba ([chore] update grid layout)
       antd:
         specifier: 5.21.6
         version: 5.21.6(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -278,6 +287,7 @@ importers:
         specifier: 2.1.1
         version: 2.1.1
       livekit-client:
+<<<<<<< HEAD
 <<<<<<< HEAD
         specifier: 'catalog:'
         version: 2.8.0
@@ -291,6 +301,10 @@ importers:
         version: 2.8.1
 =======
         version: 2.5.10
+=======
+        specifier: 2.8.0
+        version: 2.8.0
+>>>>>>> c99741ba ([chore] update grid layout)
       tslib:
         specifier: ^2.6.2
         version: 2.8.0
@@ -2077,6 +2091,9 @@ packages:
 =======
     resolution: {integrity: sha512-aiUhoThBNF9UyGTxEURFzJLhhPLIVTnQiEVMjRhPnfHNKLfo2JY9xovHKIus7B78UD5hsP6DlgpmAsjrz4U0Iw==, tarball: https://registry.npmjs.org/@livekit/mutex/-/mutex-1.0.0.tgz}
 
+  '@livekit/mutex@1.1.1':
+    resolution: {integrity: sha512-EsshAucklmpuUAfkABPxJNhzj9v2sG7JuzFDL4ML1oJQSV14sqrpTYnsaOudMAw9yOaW53NU3QQTlUQoRs4czw==, tarball: https://registry.npmjs.org/@livekit/mutex/-/mutex-1.1.1.tgz}
+
   '@livekit/protocol@1.24.0':
     resolution: {integrity: sha512-9dCsqnkMn7lvbI4NGh18zhLDsrXyUcpS++TEFgEk5Xv1WM3R2kT3EzqgL1P/mr3jaabM6rJ8wZA/KJLuQNpF5w==, tarball: https://registry.npmjs.org/@livekit/protocol/-/protocol-1.24.0.tgz}
 
@@ -2086,6 +2103,9 @@ packages:
 
   '@livekit/protocol@1.30.0':
     resolution: {integrity: sha512-SDI9ShVKj8N3oOSinr8inaxD3FXgmgoJlqN35uU/Yx1sdoDeQbzAuBFox7bYjM+VhnZ1V22ivIDjAsKr00H+XQ==}
+
+  '@livekit/protocol@1.30.0':
+    resolution: {integrity: sha512-SDI9ShVKj8N3oOSinr8inaxD3FXgmgoJlqN35uU/Yx1sdoDeQbzAuBFox7bYjM+VhnZ1V22ivIDjAsKr00H+XQ==, tarball: https://registry.npmjs.org/@livekit/protocol/-/protocol-1.30.0.tgz}
 
   '@livekit/track-processors@0.3.2':
     resolution: {integrity: sha512-4JUCzb7yIKoVsTo8J6FTzLZJHcI6DihfX/pGRDg0SOGaxprcDPrt8jaDBBTsnGBSXHeMxl2ugN+xQjdCWzLKEA==, tarball: https://registry.npmjs.org/@livekit/track-processors/-/track-processors-0.3.2.tgz}
@@ -6279,6 +6299,9 @@ packages:
 >>>>>>> 5796a404 ([chore] update pkg name for publish)
 >>>>>>> 17e91fdb ([chore] sync from upstream)
 
+  livekit-client@2.8.0:
+    resolution: {integrity: sha512-8/IXhacAFYdXMU1wFyc8/MSGCzHr02Hn9T5o3MX19TR03RHSaBKBF2xK8fQFINBmpcYkiMAnQL0P6K3nfcifQA==, tarball: https://registry.npmjs.org/livekit-client/-/livekit-client-2.8.0.tgz}
+
   livekit-server-sdk@2.7.2:
     resolution: {integrity: sha512-qDNRXeo+WMnY5nKSug7KHJ9er9JIuKi+r7H9ZaSBbmbaOt62i0b4BrHBMFSMr8pAuWzuSxihCFa29q5QvFc5fw==, tarball: https://registry.npmjs.org/livekit-server-sdk/-/livekit-server-sdk-2.7.2.tgz}
     engines: {node: '>=19'}
@@ -8173,6 +8196,9 @@ packages:
 =======
   tslib@2.8.0:
     resolution: {integrity: sha512-jWVzBLplnCmoaTr13V9dYbiQ99wvZRd0vNWaDRg+aVYRcjDF3nDksxFDE/+fkXnKhpnUUkmx5pK/v8mCtLVqZA==, tarball: https://registry.npmjs.org/tslib/-/tslib-2.8.0.tgz}
+
+  tslib@2.8.1:
+    resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==, tarball: https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz}
 
   tsup@8.3.5:
     resolution: {integrity: sha512-Tunf6r6m6tnZsG9GYWndg0z8dEV7fD733VBFzFJ5Vcm1FtlXB8xBD/rtrBi2a3YKEV7hHtxiZtW5EAVADoe1pA==, tarball: https://registry.npmjs.org/tsup/-/tsup-8.3.5.tgz}
@@ -10645,6 +10671,7 @@ snapshots:
       - encoding
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   '@livekit/krisp-noise-filter@0.2.12(livekit-client@2.8.0)':
     dependencies:
       livekit-client: 2.8.0
@@ -10661,16 +10688,33 @@ snapshots:
 >>>>>>> 17e91fdb ([chore] sync from upstream)
 
   '@livekit/mutex@1.1.1': {}
+=======
+  '@livekit/krisp-noise-filter@0.2.12(livekit-client@2.8.0)':
+    dependencies:
+      livekit-client: 2.8.0
+
+  '@livekit/mutex@1.0.0': {}
+
+  '@livekit/mutex@1.1.1': {}
+
+  '@livekit/protocol@1.24.0':
+    dependencies:
+      '@bufbuild/protobuf': 1.10.0
+>>>>>>> c99741ba ([chore] update grid layout)
 
   '@livekit/protocol@1.27.1':
     dependencies:
       '@bufbuild/protobuf': 1.10.0
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c99741ba ([chore] update grid layout)
   '@livekit/protocol@1.30.0':
     dependencies:
       '@bufbuild/protobuf': 1.10.0
 
+<<<<<<< HEAD
   '@livekit/track-processors@0.3.2(livekit-client@2.8.0)':
     dependencies:
       '@mediapipe/holistic': 0.5.1675471629
@@ -10684,6 +10728,8 @@ snapshots:
       '@mediapipe/tasks-vision': 0.10.9
       livekit-client: 2.6.0
 =======
+=======
+>>>>>>> c99741ba ([chore] update grid layout)
   '@livekit/track-processors@0.3.2(livekit-client@2.5.10)':
     dependencies:
       '@mediapipe/holistic': 0.5.1675471629
@@ -16391,6 +16437,18 @@ snapshots:
       typed-emitter: 2.1.0
       webrtc-adapter: 9.0.1
 
+  livekit-client@2.8.0:
+    dependencies:
+      '@livekit/mutex': 1.1.1
+      '@livekit/protocol': 1.30.0
+      events: 3.3.0
+      loglevel: 1.9.1
+      sdp-transform: 2.14.2
+      ts-debounce: 4.0.0
+      tslib: 2.8.1
+      typed-emitter: 2.1.0
+      webrtc-adapter: 9.0.1
+
   livekit-server-sdk@2.7.2:
     dependencies:
       '@livekit/protocol': 1.27.1
@@ -18508,6 +18566,8 @@ snapshots:
   tsup@8.1.0(@microsoft/api-extractor@7.47.9(@types/node@22.7.4))(postcss@8.4.47)(typescript@5.6.2):
 =======
   tslib@2.8.0: {}
+
+  tslib@2.8.1: {}
 
   tsup@8.3.5(@microsoft/api-extractor@7.47.11(@types/node@20.16.10))(jiti@2.3.3)(postcss@8.4.47)(tsx@4.19.2)(typescript@5.6.2)(yaml@2.6.0):
 >>>>>>> 5796a404 ([chore] update pkg name for publish)

@@ -2,10 +2,15 @@ import * as React from 'react';
 import type { Participant } from 'livekit-client';
 import { Track } from 'livekit-client';
 import type {
+  GridLayoutDefinition,
   ParticipantClickEvent,
   TrackReferenceOrPlaceholder,
 } from '@cc-livekit/components-core';
-import { isTrackReference, isTrackReferencePinned } from '@cc-livekit/components-core';
+import {
+  isTrackReference,
+  isTrackReferencePinned,
+  selectGridLayout,
+} from '@cc-livekit/components-core';
 import { ConnectionQualityIndicator } from './ConnectionQualityIndicator';
 import { ParticipantName } from './ParticipantName';
 import { TrackMutedIndicator } from './TrackMutedIndicator';
@@ -76,6 +81,8 @@ export interface ParticipantTileProps extends React.HTMLAttributes<HTMLDivElemen
   disableSpeakingIndicator?: boolean;
 
   onParticipantClick?: (event: ParticipantClickEvent) => void;
+  participantCount?: number;
+  index?: number;
 }
 
 /**
@@ -103,6 +110,8 @@ export const ParticipantTile: (
       children,
       onParticipantClick,
       disableSpeakingIndicator,
+      participantCount,
+      index,
       ...htmlProps
     }: ParticipantTileProps,
     ref,
@@ -138,8 +147,19 @@ export const ParticipantTile: (
       [trackReference, layoutContext, featureFlags?.type],
     );
 
+    const layout = selectGridLayout([{} as GridLayoutDefinition], participantCount ?? 0);
+    console.warn('layout in tile', layout, index);
+    const gridColumn = layout?.gridColumns?.[index as number];
+
     return (
-      <div ref={ref} style={{ position: 'relative' }} {...elementProps}>
+      <div
+        ref={ref}
+        style={{
+          position: 'relative',
+          gridColumn,
+        }}
+        {...elementProps}
+      >
         <TrackRefContextIfNeeded trackRef={trackReference}>
           <ParticipantContextIfNeeded participant={trackReference.participant}>
             {children ?? (

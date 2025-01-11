@@ -148,8 +148,41 @@ export const ParticipantTile: (
     );
 
     const layout = selectGridLayout([{} as GridLayoutDefinition], participantCount ?? 0);
-    console.warn('layout in tile', layout, index);
     const gridColumn = layout?.gridColumns?.[index as number];
+    const extraCount = React.useMemo(() => {
+      if (!participantCount) return 0;
+      return participantCount - 16 + 1;
+    }, [participantCount]);
+
+    if (index === 15 && participantCount && participantCount > 16) {
+      return (
+        <div
+          style={{
+            position: 'relative',
+            gridColumn,
+            background: 'var(--lk-bg2)',
+            borderRadius: 'var(--lk-border-radius)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <div
+            style={{
+              height: 80,
+              width: 80,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: '50%',
+              backgroundColor: '#494d56',
+            }}
+          >
+            +{extraCount}
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div

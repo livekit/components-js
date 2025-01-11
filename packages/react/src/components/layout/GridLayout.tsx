@@ -7,6 +7,7 @@ import { TrackLoop } from '../TrackLoop';
 import { PaginationControl } from '../controls/PaginationControl';
 import { PaginationIndicator } from '../controls/PaginationIndicator';
 import { useState } from 'react';
+import { createLocalTracks, Track } from 'livekit-client';
 
 /** @public */
 export interface GridLayoutProps
@@ -40,7 +41,6 @@ export function GridLayout({ tracks, ...props }: GridLayoutProps) {
     () => mergeProps(props, { className: 'lk-grid-layout' }),
     [props],
   );
-  const { layout } = useGridLayout(gridEl, tracks.length);
   // const { layout } = useGridLayout(gridEl, count);
   // const pagination = usePagination(layout.maxTiles, tracks);
 
@@ -48,6 +48,19 @@ export function GridLayout({ tracks, ...props }: GridLayoutProps) {
   //   onLeftSwipe: pagination.nextPage,
   //   onRightSwipe: pagination.prevPage,
   // });
+
+  const tracksForLoop = React.useMemo(() => {
+    if (!tracks.length) return [];
+
+    // mock data
+    const result = [...tracks];
+    // for (let i = 0; i < 16; i++) {
+    //   result.push(tracks?.[0]);
+    // }
+    return result.slice(0, 16);
+  }, [tracks]);
+
+  const { layout } = useGridLayout(gridEl, tracksForLoop.length);
 
   const { wrapperStyle } = layout ?? {};
 
@@ -62,7 +75,7 @@ export function GridLayout({ tracks, ...props }: GridLayoutProps) {
       }}
     >
       {/* TODO: tracks and tracks.length */}
-      <TrackLoop tracks={tracks} participantCount={tracks.length}>
+      <TrackLoop tracks={tracksForLoop} participantCount={tracks.length}>
         {props.children}
       </TrackLoop>
       {/* <button style={{ position: 'fixed' }} onClick={() => setCount((prev) => prev + 1)}>

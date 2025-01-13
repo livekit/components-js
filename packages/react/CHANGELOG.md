@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 2.7.0
+
+### Minor Changes
+
+- Improve default device handling - [#1056](https://github.com/livekit/components-js/pull/1056) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Updated dependencies [[`31a2b04ec36e9a3524804a2dbb7c2b663ea18b83`](https://github.com/livekit/components-js/commit/31a2b04ec36e9a3524804a2dbb7c2b663ea18b83)]:
+  - @livekit/components-core@0.12.0
+
 ## 2.6.11
 
 ### Patch Changes

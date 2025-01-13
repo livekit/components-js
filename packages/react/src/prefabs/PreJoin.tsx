@@ -55,7 +55,7 @@ export interface PreJoinProps
   videoProcessor?: TrackProcessor<Track.Kind.Video>;
 }
 
-/** @alpha */
+/** @public */
 export function usePreviewTracks(
   options: CreateLocalTracksOptions,
   onError?: (err: Error) => void,
@@ -100,7 +100,10 @@ export function usePreviewTracks(
   return tracks;
 }
 
-/** @public */
+/**
+ * @public
+ * @deprecated use `usePreviewTracks` instead
+ */
 export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   enabled: boolean,
   deviceId: string,
@@ -131,7 +134,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
             })
           : await createLocalAudioTrack({ deviceId });
 
-      const newDeviceId = await track.getDeviceId();
+      const newDeviceId = await track.getDeviceId(false);
       if (newDeviceId && deviceId !== newDeviceId) {
         prevDeviceId.current = newDeviceId;
         setLocalDeviceId(newDeviceId);

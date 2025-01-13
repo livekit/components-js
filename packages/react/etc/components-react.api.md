@@ -1075,14 +1075,14 @@ export interface UsePersistentUserChoicesOptions {
 // @public
 export function usePinnedTracks(layoutContext?: LayoutContextType): TrackReferenceOrPlaceholder[];
 
-// @public (undocumented)
+// @public @deprecated (undocumented)
 export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(enabled: boolean, deviceId: string, kind: 'videoinput' | 'audioinput'): {
     selectedDevice: MediaDeviceInfo | undefined;
     localTrack: T | undefined;
     deviceError: Error | null;
 };
 
-// @alpha (undocumented)
+// @public (undocumented)
 export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): LocalTrack<Track.Kind>[] | undefined;
 
 // Warning: (ae-incompatible-release-tags) The symbol "useRemoteParticipant" is marked as @public, but its signature references "ParticipantIdentifier" which is marked as @beta

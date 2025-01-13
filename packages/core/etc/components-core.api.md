@@ -546,9 +546,9 @@ export function setupDataMessageHandler<T extends string>(room: Room, topic?: T 
 };
 
 // @public (undocumented)
-export function setupDeviceSelector(kind: MediaDeviceKind, room?: Room, localTrack?: LocalAudioTrack | LocalVideoTrack): {
+export function setupDeviceSelector(kind: MediaDeviceKind, room: Room, localTrack?: LocalAudioTrack | LocalVideoTrack): {
     className: string;
-    activeDeviceObservable: Observable<string | undefined>;
+    activeDeviceObservable: Observable<string>;
     setActiveMediaDevice: (id: string, options?: SetMediaDeviceOptions) => Promise<void>;
 };
 

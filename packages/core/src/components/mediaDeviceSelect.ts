@@ -20,17 +20,21 @@ export type SetMediaDeviceOptions = {
 
 export function setupDeviceSelector(
   kind: MediaDeviceKind,
-  room?: Room,
+  room: Room,
   localTrack?: LocalAudioTrack | LocalVideoTrack,
 ) {
   const activeDeviceSubject = new BehaviorSubject<string | undefined>(undefined);
 
-  const activeDeviceObservable = room
-    ? createActiveDeviceObservable(room, kind)
-    : activeDeviceSubject.asObservable();
+  const activeDeviceObservable = createActiveDeviceObservable(room, kind);
 
   const setActiveMediaDevice = async (id: string, options: SetMediaDeviceOptions = {}) => {
-    if (room) {
+    if (localTrack) {
+      await localTrack.setDeviceId(options.exact ? { exact: id } : id);
+      const actualId = await localTrack.getDeviceId(false);
+      activeDeviceSubject.next(
+        id === 'default' && localTrack.mediaStreamTrack.label.startsWith('Default') ? id : actualId,
+      );
+    } else if (room) {
       log.debug(`Switching active device of kind "${kind}" with id ${id}.`);
       await room.switchActiveDevice(kind, id, options.exact);
       const actualDeviceId: string | undefined = room.getActiveDevice(kind) ?? id;
@@ -49,17 +53,6 @@ export function setupDeviceSelector(
         (id === 'default' && !targetTrack) ||
         (id === 'default' && targetTrack?.mediaStreamTrack.label.startsWith('Default'));
       activeDeviceSubject.next(useDefault ? id : actualDeviceId);
-    } else if (localTrack) {
-      await localTrack.setDeviceId(options.exact ? { exact: id } : id);
-      const actualId = await localTrack.getDeviceId();
-      activeDeviceSubject.next(
-        id === 'default' && localTrack.mediaStreamTrack.label.startsWith('Default') ? id : actualId,
-      );
-    } else if (activeDeviceSubject.value !== id) {
-      log.warn(
-        'device switch skipped, please provide either a room or a local track to switch on. ',
-      );
-      activeDeviceSubject.next(id);
     }
   };
   const className: string = prefixClass('media-device-select');

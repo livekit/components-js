@@ -23,6 +23,7 @@ import { usePinnedTracks, useTracks } from '../hooks';
 import { Chat } from './Chat';
 import { ControlBar, ControlBarProps } from './ControlBar';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
+import { DraggableWrapper } from './DraggableWrapper';
 
 /**
  * @public
@@ -242,9 +243,11 @@ export function NewVideoConference({
             ) : (
               <div className="lk-focus-layout-wrapper">
                 <FocusLayoutContainer>
-                  <CarouselLayout tracks={carouselTracks}>
-                    <ParticipantTile />
-                  </CarouselLayout>
+                  <DraggableWrapper>
+                    <CarouselLayout tracks={carouselTracks}>
+                      <ParticipantTile />
+                    </CarouselLayout>
+                  </DraggableWrapper>
                   {focusTrack && <FocusLayout trackRef={focusTrack} />}
                 </FocusLayoutContainer>
               </div>

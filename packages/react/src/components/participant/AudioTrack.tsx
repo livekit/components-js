@@ -84,6 +84,6 @@ export const AudioTrack: (
       }
     }, [muted, pub, track]);
 
-    return <audio ref={mediaEl} {...elementProps} />;
+    return <audio ref={mediaEl} muted={muted} {...elementProps} />;
   },
 );

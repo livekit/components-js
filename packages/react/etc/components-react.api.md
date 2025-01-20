@@ -71,7 +71,6 @@ export const AudioTrack: (props: AudioTrackProps & React_2.RefAttributes<HTMLAud
 export interface AudioTrackProps extends React_2.AudioHTMLAttributes<HTMLAudioElement> {
     // @alpha
     muted?: boolean;
-    muteElementWhenMuted?: boolean;
     // (undocumented)
     onSubscriptionStatusChanged?: (subscribed: boolean) => void;
     trackRef?: TrackReference;

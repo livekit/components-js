@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 2.8.0
+
+### Minor Changes
+
+- Forward muted prop on audio elements - [#1065](https://github.com/livekit/components-js/pull/1065) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Updated dependencies [[`10c58567d2fae2053efd76f3fdf82a84e5104897`](https://github.com/livekit/components-js/commit/10c58567d2fae2053efd76f3fdf82a84e5104897)]:
+  - @livekit/components-core@0.12.1
+
 ## 2.7.0
 
 ### Minor Changes

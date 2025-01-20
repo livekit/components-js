@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.12.1
+
+### Patch Changes
+
+- Update livekit-client dependency - [#1068](https://github.com/livekit/components-js/pull/1068) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.12.0
 
 ### Minor Changes

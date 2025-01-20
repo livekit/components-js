@@ -20,10 +20,6 @@ export interface AudioTrackProps extends React.AudioHTMLAttributes<HTMLAudioElem
    * @alpha
    */
   muted?: boolean;
-  /**
-   * mute audio element if `muted` is set to true
-   */
-  muteElementWhenMuted?: boolean;
 }
 
 /**
@@ -44,14 +40,7 @@ export const AudioTrack: (
   props: AudioTrackProps & React.RefAttributes<HTMLAudioElement>,
 ) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLAudioElement, AudioTrackProps>(
   function AudioTrack(
-    {
-      trackRef,
-      onSubscriptionStatusChanged,
-      volume,
-      muted,
-      muteElementWhenMuted,
-      ...props
-    }: AudioTrackProps,
+    { trackRef, onSubscriptionStatusChanged, volume, ...props }: AudioTrackProps,
     ref,
   ) {
     const trackReference = useEnsureTrackRef(trackRef);
@@ -63,7 +52,6 @@ export const AudioTrack: (
       elementProps,
       isSubscribed,
       track,
-      isMuted,
       publication: pub,
     } = useMediaTrackBySourceOrName(trackReference, {
       element: mediaEl,
@@ -86,16 +74,16 @@ export const AudioTrack: (
     }, [volume, track]);
 
     React.useEffect(() => {
-      if (pub === undefined || muted === undefined) {
+      if (pub === undefined || props.muted === undefined) {
         return;
       }
       if (pub instanceof RemoteTrackPublication) {
-        pub.setEnabled(!muted);
+        pub.setEnabled(!props.muted);
       } else {
         log.warn('Can only call setEnabled on remote track publications.');
       }
-    }, [muted, pub, track]);
+    }, [props.muted, pub, track]);
 
-    return <audio ref={mediaEl} muted={muteElementWhenMuted && isMuted} {...elementProps} />;
+    return <audio ref={mediaEl} {...elementProps} />;
   },
 );

@@ -15,10 +15,6 @@ export interface RoomAudioRendererProps {
    * @alpha
    */
   muted?: boolean;
-  /**
-   * mute all audio elements if `muted` is set to true
-   */
-  muteElementsWhenMuted?: boolean;
 }
 
 /**

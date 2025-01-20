@@ -20,6 +20,10 @@ export interface AudioTrackProps extends React.AudioHTMLAttributes<HTMLAudioElem
    * @alpha
    */
   muted?: boolean;
+  /**
+   * mute audio element if `muted` is set to true
+   */
+  muteElementWhenMuted?: boolean;
 }
 
 /**
@@ -40,7 +44,14 @@ export const AudioTrack: (
   props: AudioTrackProps & React.RefAttributes<HTMLAudioElement>,
 ) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLAudioElement, AudioTrackProps>(
   function AudioTrack(
-    { trackRef, onSubscriptionStatusChanged, volume, muted, ...props }: AudioTrackProps,
+    {
+      trackRef,
+      onSubscriptionStatusChanged,
+      volume,
+      muted,
+      muteElementWhenMuted,
+      ...props
+    }: AudioTrackProps,
     ref,
   ) {
     const trackReference = useEnsureTrackRef(trackRef);
@@ -52,6 +63,7 @@ export const AudioTrack: (
       elementProps,
       isSubscribed,
       track,
+      isMuted,
       publication: pub,
     } = useMediaTrackBySourceOrName(trackReference, {
       element: mediaEl,
@@ -84,6 +96,6 @@ export const AudioTrack: (
       }
     }, [muted, pub, track]);
 
-    return <audio ref={mediaEl} muted={muted} {...elementProps} />;
+    return <audio ref={mediaEl} muted={muteElementWhenMuted && isMuted} {...elementProps} />;
   },
 );

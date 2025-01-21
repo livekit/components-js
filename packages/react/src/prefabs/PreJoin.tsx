@@ -22,7 +22,6 @@ import { log } from '@livekit/components-core';
 import { ParticipantPlaceholder } from '../assets/images';
 import { useMediaDevices, usePersistentUserChoices } from '../hooks';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
-import { defaultUserChoices } from '@livekit/components-core';
 import { roomOptionsStringifyReplacer } from '../utils';
 
 /**
@@ -231,15 +230,6 @@ export function PreJoin({
   videoProcessor,
   ...htmlProps
 }: PreJoinProps) {
-  // TODO: Remove and pipe `defaults` object directly into `usePersistentUserChoices` once we fully switch from type `LocalUserChoices` to `UserChoices`.
-  const mergedDefaults: LocalUserChoices = {
-    username: defaults.username ?? defaultUserChoices.username,
-    audioEnabled: defaults.audioEnabled ?? defaultUserChoices.audioEnabled,
-    videoEnabled: defaults.videoEnabled ?? defaultUserChoices.videoEnabled,
-    audioDeviceId: defaults.audioDeviceId ?? defaultUserChoices.audioDeviceId,
-    videoDeviceId: defaults.videoDeviceId ?? defaultUserChoices.videoDeviceId,
-  };
-
   const {
     userChoices: initialUserChoices,
     saveAudioInputDeviceId,
@@ -248,7 +238,7 @@ export function PreJoin({
     saveVideoInputEnabled,
     saveUsername,
   } = usePersistentUserChoices({
-    defaults: mergedDefaults,
+    defaults,
     preventSave: !persistUserChoices,
     preventLoad: !persistUserChoices,
   });

@@ -232,12 +232,12 @@ export function PreJoin({
   ...htmlProps
 }: PreJoinProps) {
   // TODO: Remove and pipe `defaults` object directly into `usePersistentUserChoices` once we fully switch from type `LocalUserChoices` to `UserChoices`.
-  const partialDefaults: Partial<LocalUserChoices> = {
-    ...(defaults.audioDeviceId !== undefined && { audioDeviceId: defaults.audioDeviceId }),
-    ...(defaults.videoDeviceId !== undefined && { videoDeviceId: defaults.videoDeviceId }),
-    ...(defaults.audioEnabled !== undefined && { audioEnabled: defaults.audioEnabled }),
-    ...(defaults.videoEnabled !== undefined && { videoEnabled: defaults.videoEnabled }),
-    ...(defaults.username !== undefined && { username: defaults.username }),
+  const mergedDefaults: LocalUserChoices = {
+    username: defaults.username ?? defaultUserChoices.username,
+    audioEnabled: defaults.audioEnabled ?? defaultUserChoices.audioEnabled,
+    videoEnabled: defaults.videoEnabled ?? defaultUserChoices.videoEnabled,
+    audioDeviceId: defaults.audioDeviceId ?? defaultUserChoices.audioDeviceId,
+    videoDeviceId: defaults.videoDeviceId ?? defaultUserChoices.videoDeviceId,
   };
 
   const {
@@ -248,7 +248,7 @@ export function PreJoin({
     saveVideoInputEnabled,
     saveUsername,
   } = usePersistentUserChoices({
-    defaults: partialDefaults,
+    defaults: mergedDefaults,
     preventSave: !persistUserChoices,
     preventLoad: !persistUserChoices,
   });

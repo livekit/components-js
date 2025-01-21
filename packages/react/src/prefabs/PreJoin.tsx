@@ -231,8 +231,6 @@ export function PreJoin({
   videoProcessor,
   ...htmlProps
 }: PreJoinProps) {
-  const [userChoices, setUserChoices] = React.useState(defaultUserChoices);
-
   // TODO: Remove and pipe `defaults` object directly into `usePersistentUserChoices` once we fully switch from type `LocalUserChoices` to `UserChoices`.
   const partialDefaults: Partial<LocalUserChoices> = {
     ...(defaults.audioDeviceId !== undefined && { audioDeviceId: defaults.audioDeviceId }),
@@ -255,16 +253,14 @@ export function PreJoin({
     preventLoad: !persistUserChoices,
   });
 
+  const [userChoices, setUserChoices] = React.useState(initialUserChoices);
+
   // Initialize device settings
-  const [audioEnabled, setAudioEnabled] = React.useState<boolean>(initialUserChoices.audioEnabled);
-  const [videoEnabled, setVideoEnabled] = React.useState<boolean>(initialUserChoices.videoEnabled);
-  const [audioDeviceId, setAudioDeviceId] = React.useState<string>(
-    initialUserChoices.audioDeviceId,
-  );
-  const [videoDeviceId, setVideoDeviceId] = React.useState<string>(
-    initialUserChoices.videoDeviceId,
-  );
-  const [username, setUsername] = React.useState(initialUserChoices.username);
+  const [audioEnabled, setAudioEnabled] = React.useState<boolean>(userChoices.audioEnabled);
+  const [videoEnabled, setVideoEnabled] = React.useState<boolean>(userChoices.videoEnabled);
+  const [audioDeviceId, setAudioDeviceId] = React.useState<string>(userChoices.audioDeviceId);
+  const [videoDeviceId, setVideoDeviceId] = React.useState<string>(userChoices.videoDeviceId);
+  const [username, setUsername] = React.useState(userChoices.username);
 
   // Save user choices to persistent storage.
   React.useEffect(() => {

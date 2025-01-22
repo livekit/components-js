@@ -39,10 +39,16 @@ export const TrackToggle: <T extends ToggleSource>(
   T extends ToggleSource,
 >({ showIcon, ...props }: TrackToggleProps<T>, ref: React.ForwardedRef<HTMLButtonElement>) {
   const { buttonProps, enabled } = useTrackToggle(props);
+  const [isClient, setIsClient] = React.useState(false);
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
   return (
-    <button ref={ref} {...buttonProps}>
-      {(showIcon ?? true) && getSourceIcon(props.source, enabled)}
-      {props.children}
-    </button>
+    isClient && (
+      <button ref={ref} {...buttonProps}>
+        {(showIcon ?? true) && getSourceIcon(props.source, enabled)}
+        {props.children}
+      </button>
+    )
   );
 });

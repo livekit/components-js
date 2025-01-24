@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.8.1
+
+### Patch Changes
+
+- Fix toggle hydration error - [#1069](https://github.com/livekit/components-js/pull/1069) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.8.0
 
 ### Minor Changes

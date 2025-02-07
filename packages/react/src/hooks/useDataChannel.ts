@@ -7,7 +7,7 @@ import { useObservableState } from './internal';
 
 type UseDataChannelReturnType<T extends string | undefined = undefined> = {
   isSending: boolean;
-  send: (payload: Uint8Array, options: DataPublishOptions) => void;
+  send: (payload: Uint8Array, options: DataPublishOptions) => Promise<void>;
   message: ReceivedDataMessage<T> | undefined;
 };
 

@@ -36,9 +36,8 @@ export type ChatOptions = {
   messageEncoder?: (message: LegacyChatMessage) => Uint8Array;
   /** @deprecated the new chat API doesn't rely on encoders and decoders anymore and uses a dedicated chat API instead */
   messageDecoder?: (message: Uint8Array) => LegacyReceivedChatMessage;
-  /** @deprecated the new chat API doesn't rely on topics anymore and uses a dedicated chat API instead */
   channelTopic?: string;
-  /** @deprecated the new chat API doesn't rely on topics anymore and uses a dedicated chat API instead */
+  /** @deprecated the new chat API doesn't rely on update topics anymore and uses a dedicated chat API instead */
   updateChannelTopic?: string;
 };
 
@@ -213,7 +212,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
 
   if (needsSetup) {
     room.registerTextStreamHandler(topic, async (reader, participantInfo) => {
-      const { id, timestamp } = reader.info;
+      const { id, timestamp, type } = reader.info;
       const streamObservable = from(reader).pipe(
         map((chunk) => {
           return {
@@ -221,6 +220,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
             timestamp,
             message: chunk.collected,
             from: room.getParticipantByIdentity(participantInfo.identity),
+            editTimestamp: type === 'update' ? timestamp : undefined,
           } as ReceivedChatMessage;
         }),
       );
@@ -273,6 +273,25 @@ export function setupChat(room: Room, options?: ChatOptions) {
     }
   };
 
+  const update = async (messageId: string, message: string) => {
+    isSending$.next(true);
+    try {
+      const info = await room.localParticipant.updateText(messageId, message);
+
+      const chatMsg: ReceivedChatMessage = {
+        id: info.id,
+        timestamp: info.timestamp,
+        editTimestamp: info.timestamp,
+        message,
+        from: room.localParticipant,
+      };
+      messageSubject.next(chatMsg);
+      return chatMsg;
+    } finally {
+      isSending$.next(false);
+    }
+  };
+
   function destroy() {
     onDestroyObservable.next();
     onDestroyObservable.complete();
@@ -286,5 +305,6 @@ export function setupChat(room: Room, options?: ChatOptions) {
     messageObservable: messagesObservable,
     isSendingObservable: isSending$,
     send,
+    update,
   };
 }

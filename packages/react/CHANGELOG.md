@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.8.2
+
+### Patch Changes
+
+- Fix useDataChannel's send return type - [#1080](https://github.com/livekit/components-js/pull/1080) ([@murilo-teleo](https://github.com/murilo-teleo))
+
 ## 2.8.1
 
 ### Patch Changes

@@ -87,7 +87,7 @@
     "size-limit": "^11.0.2",
     "vite": "^6.0.0",
     "vite-plugin-dts": "^4.2.3",
-    "vitest": "^2.0.0"
+    "vitest": "^3.0.0"
   },
   "engines": {
     "node": ">=18"

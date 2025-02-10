@@ -21,6 +21,6 @@ export class Utilities {
   public static getSafeFilenameForName(name: string): string {
     // TODO: This can introduce naming collisions.
     // We will fix that as part of https://github.com/microsoft/rushstack/issues/1308
-    return name.replace(Utilities._badFilenameCharsRegExp, '_').toLowerCase();
+    return name.replace(Utilities._badFilenameCharsRegExp, '_');
   }
 }

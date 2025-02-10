@@ -325,8 +325,8 @@ importers:
         specifier: ^7.27.2
         version: 7.30.3(@types/node@20.17.17)
       '@microsoft/tsdoc':
-        specifier: 0.15.0
-        version: 0.15.0
+        specifier: 0.15.1
+        version: 0.15.1
       '@rushstack/heft':
         specifier: ^0.67.2
         version: 0.67.2(@types/node@20.17.17)
@@ -7654,8 +7654,8 @@ packages:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
 
-  tocbot@4.33.0:
-    resolution: {integrity: sha512-mwTJXunwTyic/22uyLeBGXeX/c6jLcfrF8ONVJmwSg5tieW6kYGSfSSJQEOQXStbutv7WS7QdZ+gk4vQIQ23nA==}
+  tocbot@4.34.0:
+    resolution: {integrity: sha512-l1x9aH5rQcOPjdhj2SPinbH3qg4Mqx8qPA7xMdLlVcZ7IbUaNfN2vRmdUFOFsS15+818rgqR8s1t1wlFbE8ciA==}
 
   toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
@@ -9932,7 +9932,7 @@ snapshots:
 
   '@microsoft/api-extractor-model@7.29.8(@types/node@20.17.17)':
     dependencies:
-      '@microsoft/tsdoc': 0.15.0
+      '@microsoft/tsdoc': 0.15.1
       '@microsoft/tsdoc-config': 0.17.1
       '@rushstack/node-core-library': 5.9.0(@types/node@20.17.17)
     transitivePeerDependencies:
@@ -9957,7 +9957,7 @@ snapshots:
   '@microsoft/api-extractor@7.47.9(@types/node@20.17.17)':
     dependencies:
       '@microsoft/api-extractor-model': 7.29.8(@types/node@20.17.17)
-      '@microsoft/tsdoc': 0.15.0
+      '@microsoft/tsdoc': 0.15.1
       '@microsoft/tsdoc-config': 0.17.1
       '@rushstack/node-core-library': 5.9.0(@types/node@20.17.17)
       '@rushstack/rig-package': 0.5.3
@@ -11199,7 +11199,7 @@ snapshots:
       react-colorful: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-dom: 18.3.1(react@18.3.1)
       telejson: 7.2.0
-      tocbot: 4.33.0
+      tocbot: 4.34.0
       ts-dedent: 2.2.0
       util-deprecate: 1.0.2
     transitivePeerDependencies:
@@ -17101,7 +17101,7 @@ snapshots:
     dependencies:
       is-number: 7.0.0
 
-  tocbot@4.33.0: {}
+  tocbot@4.34.0: {}
 
   toidentifier@1.0.1: {}
 

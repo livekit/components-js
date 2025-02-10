@@ -54,7 +54,7 @@
   "dependencies": {
     "@livekit/components-core": "workspace:*",
     "clsx": "2.1.1",
-    "usehooks-ts": "3.1.0"
+    "usehooks-ts": "3.1.1"
   },
   "peerDependencies": {
     "@livekit/krisp-noise-filter": "^0.2.12",
@@ -80,7 +80,7 @@
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-react": "^4.3.2",
     "eslint-config-lk-custom": "workspace:*",
-    "jsdom": "^25.0.0",
+    "jsdom": "^26.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rimraf": "^6.0.0",

@@ -1,5 +1,5 @@
 module.exports = {
-  plugins: ['@typescript-eslint/eslint-plugin', 'eslint-plugin-tsdoc', 'react-hooks'],
+  plugins: ['@typescript-eslint/eslint-plugin', 'eslint-plugin-tsdoc'],
   extends: [
     'next',
     'turbo',

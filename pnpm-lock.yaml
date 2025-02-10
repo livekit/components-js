@@ -325,8 +325,8 @@ importers:
         specifier: ^7.27.2
         version: 7.29.8(@types/node@20.16.10)
       '@microsoft/tsdoc':
-        specifier: 0.15.0
-        version: 0.15.0
+        specifier: 0.15.1
+        version: 0.15.1
       '@rushstack/heft':
         specifier: ^0.67.2
         version: 0.67.2(@types/node@20.16.10)
@@ -1684,6 +1684,9 @@ packages:
 
   '@microsoft/tsdoc@0.15.0':
     resolution: {integrity: sha512-HZpPoABogPvjeJOdzCOSJsXeL/SMCBgBZMVC3X3d7YYp2gf31MfxhUoYUNwf1ERPJOnQc0wkFn9trqI6ZEdZuA==}
+
+  '@microsoft/tsdoc@0.15.1':
+    resolution: {integrity: sha512-4aErSrCR/On/e5G2hDP0wjooqDdauzEbIq8hIkIe5pXV0rtWJZvdCEKL0ykZxex+IxIwBp0eGeV48hQN07dXtw==}
 
   '@ndelangen/get-tarball@3.0.9':
     resolution: {integrity: sha512-9JKTEik4vq+yGosHYhZ1tiH/3WpUS0Nh0kej4Agndhox8pAdWhEx5knFVRcb/ya9knCRCs1rPxNrSXTDdfVqpA==}
@@ -9321,7 +9324,7 @@ snapshots:
 
   '@microsoft/api-extractor-model@7.29.6(@types/node@22.7.4)':
     dependencies:
-      '@microsoft/tsdoc': 0.15.0
+      '@microsoft/tsdoc': 0.15.1
       '@microsoft/tsdoc-config': 0.17.0
       '@rushstack/node-core-library': 5.7.0(@types/node@22.7.4)
     transitivePeerDependencies:
@@ -9329,7 +9332,7 @@ snapshots:
 
   '@microsoft/api-extractor-model@7.29.8(@types/node@20.16.10)':
     dependencies:
-      '@microsoft/tsdoc': 0.15.0
+      '@microsoft/tsdoc': 0.15.1
       '@microsoft/tsdoc-config': 0.17.0
       '@rushstack/node-core-library': 5.9.0(@types/node@20.16.10)
     transitivePeerDependencies:
@@ -9337,7 +9340,7 @@ snapshots:
 
   '@microsoft/api-extractor-model@7.29.8(@types/node@22.7.4)':
     dependencies:
-      '@microsoft/tsdoc': 0.15.0
+      '@microsoft/tsdoc': 0.15.1
       '@microsoft/tsdoc-config': 0.17.0
       '@rushstack/node-core-library': 5.9.0(@types/node@22.7.4)
     transitivePeerDependencies:
@@ -9346,7 +9349,7 @@ snapshots:
   '@microsoft/api-extractor@7.47.7(@types/node@22.7.4)':
     dependencies:
       '@microsoft/api-extractor-model': 7.29.6(@types/node@22.7.4)
-      '@microsoft/tsdoc': 0.15.0
+      '@microsoft/tsdoc': 0.15.1
       '@microsoft/tsdoc-config': 0.17.0
       '@rushstack/node-core-library': 5.7.0(@types/node@22.7.4)
       '@rushstack/rig-package': 0.5.3
@@ -9364,7 +9367,7 @@ snapshots:
   '@microsoft/api-extractor@7.47.9(@types/node@20.16.10)':
     dependencies:
       '@microsoft/api-extractor-model': 7.29.8(@types/node@20.16.10)
-      '@microsoft/tsdoc': 0.15.0
+      '@microsoft/tsdoc': 0.15.1
       '@microsoft/tsdoc-config': 0.17.0
       '@rushstack/node-core-library': 5.9.0(@types/node@20.16.10)
       '@rushstack/rig-package': 0.5.3
@@ -9382,7 +9385,7 @@ snapshots:
   '@microsoft/api-extractor@7.47.9(@types/node@22.7.4)':
     dependencies:
       '@microsoft/api-extractor-model': 7.29.8(@types/node@22.7.4)
-      '@microsoft/tsdoc': 0.15.0
+      '@microsoft/tsdoc': 0.15.1
       '@microsoft/tsdoc-config': 0.17.0
       '@rushstack/node-core-library': 5.9.0(@types/node@22.7.4)
       '@rushstack/rig-package': 0.5.3
@@ -9405,6 +9408,8 @@ snapshots:
       resolve: 1.22.8
 
   '@microsoft/tsdoc@0.15.0': {}
+
+  '@microsoft/tsdoc@0.15.1': {}
 
   '@ndelangen/get-tarball@3.0.9':
     dependencies:

@@ -2,8 +2,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { AccessToken } from 'livekit-server-sdk';
 import type { AccessTokenOptions, VideoGrant } from 'livekit-server-sdk';
 
-const apiKey = process.env.LK_API_KEY;
-const apiSecret = process.env.LK_API_SECRET;
+const apiKey = process.env.LIVEKIT_API_KEY;
+const apiSecret = process.env.LIVEKIT_API_SECRET;
+const url = process.env.LIVEKIT_URL;
 
 const createToken = async (userInfo: AccessTokenOptions, grant: VideoGrant) => {
   const at = new AccessToken(apiKey, apiSecret, userInfo);
@@ -43,7 +44,7 @@ export default async function handleToken(req: NextApiRequest, res: NextApiRespo
     };
     const token = await createToken({ identity, name, metadata }, grant);
 
-    res.status(200).json({ identity, accessToken: token });
+    res.status(200).json({ identity, accessToken: token, url });
   } catch (e) {
     res.statusMessage = (e as Error).message;
     res.status(500).end();

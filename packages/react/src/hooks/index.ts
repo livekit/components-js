@@ -35,7 +35,7 @@ export { type UseStartAudioProps, useStartAudio } from './useStartAudio';
 export { type UseStartVideoProps, useStartVideo } from './useStartVideo';
 export { type UseSwipeOptions, useSwipe } from './useSwipe';
 export { type UseChatToggleProps, useChatToggle } from './useChatToggle';
-export { type UseTokenOptions, type UserInfo, useToken } from './useToken';
+export { type UseTokenOptions, type UserInfo, useToken, useConnectCredentials } from './useToken';
 export { useTrackMutedIndicator } from './useTrackMutedIndicator';
 export { type UseTrackToggleProps, useTrackToggle } from './useTrackToggle';
 export { type UseTracksHookReturnType, type UseTracksOptions, useTracks } from './useTracks';

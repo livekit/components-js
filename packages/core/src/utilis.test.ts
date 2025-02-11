@@ -5,9 +5,11 @@ import type { PinState } from './types';
 
 describe('Test isTrackReferencePinned', () => {
   const participantA = new Participant('dummy-participant', 'A_id', 'track_A_name');
+  // @ts-ignore
   const trackA = new TrackPublication(Track.Kind.Video, 'track_A_id', 'track_A_name');
   trackA.trackSid = 'track_a_sid';
   const participantB = new Participant('participant_B', 'B_id', 'B_name');
+  // @ts-ignore
   const trackB = new TrackPublication(Track.Kind.Video, 'track_B_id', 'track_B_name');
   trackB.trackSid = 'track_b_sid';
   const trackReferenceA = {

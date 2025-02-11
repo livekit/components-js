@@ -1,11 +1,10 @@
 import type { Subscriber, Subscription } from 'rxjs';
 import { Subject, map, Observable, startWith, finalize, filter, concat } from 'rxjs';
-import type { ChatMessage, Participant, TrackPublication } from 'livekit-client';
+import type { Participant, TrackPublication } from 'livekit-client';
 import { LocalParticipant, Room, RoomEvent, Track } from 'livekit-client';
 // @ts-ignore some module resolutions (other than 'node') choke on this
 import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 import { log } from '../logger';
-import { ReceivedChatMessage } from '../components/chat';
 export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observable<Room> {
   const observable = new Observable<Room>((subscribe) => {
     const onRoomUpdate = () => {
@@ -219,42 +218,6 @@ export function createMediaDeviceObserver(
 
 export function createDataObserver(room: Room) {
   return roomEventSelector(room, RoomEvent.DataReceived);
-}
-
-export function createTextStreamObserver(room: Room) {
-  const chatMessages: Map<string, ChatMessage> = new Map();
-
-  const chatMessageSubject = new Subject<ReceivedChatMessage>();
-
-  room.on(RoomEvent.TextStreamReceived, async (info, stream, participant) => {
-    if (info.isFinite && info.topic === 'chat') {
-      handleChatMessage(
-        {
-          id: info.messageId,
-          timestamp: info.timestamp,
-          message: (await stream.readAll()).join(''),
-        },
-        participant,
-      );
-    } else {
-      for await (const msg of stream) {
-        handleChatMessage(
-          {
-            id: info.messageId,
-            timestamp: info.timestamp,
-            message: [chatMessages.get(info.messageId)?.message ?? '', msg].join(''),
-          },
-          participant,
-        );
-      }
-    }
-  });
-
-  function handleChatMessage(msg: ChatMessage, participant?: Participant) {
-    chatMessages.set(msg.id, msg);
-    chatMessageSubject.next({ ...msg, from: participant });
-  }
-  return chatMessageSubject;
 }
 
 export function createChatObserver(room: Room) {

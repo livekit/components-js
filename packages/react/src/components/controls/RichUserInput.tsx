@@ -45,8 +45,8 @@ export function RichUserInput(props: RichUserInputProps) {
       try {
         console.log('sending message');
         await props.send(textRef.current.value, {
-          topic: 'user-message',
-          attachedFiles: Array.from(filesToSend.values()),
+          topic: 'lk.chat',
+          attachments: Array.from(filesToSend.values()),
         });
       } finally {
         fileRef.current.files = null;

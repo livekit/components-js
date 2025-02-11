@@ -2,7 +2,6 @@
 
 import {
   LiveKitRoom,
-  useToken,
   setLogLevel,
   useConnectionState,
   Chat,
@@ -11,6 +10,7 @@ import {
   VoiceAssistantControlBar,
   useRoomContext,
   RoomAudioRenderer,
+  useConnectCredentials,
 } from '@livekit/components-react';
 import { ChatText, Headphones } from '@phosphor-icons/react';
 import { useKrispNoiseFilter } from '@livekit/components-react/krisp';
@@ -18,7 +18,7 @@ import { useKrispNoiseFilter } from '@livekit/components-react/krisp';
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';
 import { FormEvent, useEffect, useMemo, useState } from 'react';
-import { ConnectionState, Track, AgentState } from 'livekit-client';
+import { ConnectionState, Track } from 'livekit-client';
 
 function GptUi() {
   const connectionState = useConnectionState();
@@ -123,7 +123,11 @@ const MinimalExample: NextPage = () => {
     };
   }, []);
 
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, tokenOptions);
+  const { token, url } = useConnectCredentials(
+    process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT,
+    roomName,
+    tokenOptions,
+  );
 
   return (
     <div data-lk-theme="gpt" style={{ height: '100vh' }}>
@@ -131,7 +135,7 @@ const MinimalExample: NextPage = () => {
         video={false}
         audio={false}
         token={token}
-        serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
+        serverUrl={url}
         onMediaDeviceFailure={(e) => {
           console.error(e);
           alert(

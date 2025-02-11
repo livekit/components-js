@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useRoomContext } from '../context';
 import type { TextStreamHandler } from 'livekit-client';
 
-export function useTextStream(topic: string, onTextStreamReceived: TextStreamHandler) {
+export function useReceiveTextStream(topic: string, onTextStreamReceived: TextStreamHandler) {
   const room = useRoomContext();
 
   React.useEffect(() => {

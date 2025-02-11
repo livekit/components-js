@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useRoomContext } from '../context';
 import type { ByteStreamHandler } from 'livekit-client';
 
-export function useByteStream(topic: string, onByteStreamReceived: ByteStreamHandler) {
+export function useReceiveByteStream(topic: string, onByteStreamReceived: ByteStreamHandler) {
   const room = useRoomContext();
 
   React.useEffect(() => {

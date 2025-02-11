@@ -14,34 +14,37 @@ import {
 } from '@livekit/components-react';
 import { ChatText, Headphones } from '@phosphor-icons/react';
 import { useKrispNoiseFilter } from '@livekit/components-react/krisp';
+import Markdown from 'react-markdown';
 
 import type { NextPage } from 'next';
-import { generateRandomUserId } from '../lib/helper';
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { generateRandomUserId } from '@lib/helper';
+import { AgentChat } from '@lib/AgentChat';
+import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { ConnectionState, Track } from 'livekit-client';
 
 function GptUi() {
   const connectionState = useConnectionState();
   const room = useRoomContext();
 
-  const [audioMode, setAudioMode] = useState(false);
   const [isSwitchingModes, setIsSwitchingModes] = useState(false);
 
   const agent = useVoiceAssistant();
 
   const krisp = useKrispNoiseFilter();
 
-  const handleModeSwitch = async () => {
-    setIsSwitchingModes(true);
-    try {
-      let nextMode = !audioMode;
-      setAudioMode(nextMode);
-      await room.localParticipant.setMicrophoneEnabled(nextMode);
-      krisp.setNoiseFilterEnabled(true);
-    } finally {
-      setIsSwitchingModes(false);
-    }
-  };
+  const markdownFormatter = useCallback((input: string) => <Markdown>{input}</Markdown>, []);
+
+  // const handleModeSwitch = async () => {
+  //   setIsSwitchingModes(true);
+  //   try {
+  //     let nextMode = !audioMode;
+  //     setAudioMode(nextMode);
+  //     await room.localParticipant.setMicrophoneEnabled(nextMode);
+  //     krisp.setNoiseFilterEnabled(true);
+  //   } finally {
+  //     setIsSwitchingModes(false);
+  //   }
+  // };
 
   return (
     <div style={{ height: '100vh', display: 'grid', gridTemplateColumns: '260px 1fr' }}>
@@ -50,7 +53,7 @@ function GptUi() {
           <div
             style={{ padding: '0.75rem', background: 'rgb(249, 249, 249)', position: 'relative' }}
           >
-            <button
+            {/* <button
               disabled={isSwitchingModes}
               id="mode-toggle"
               className="lk-button"
@@ -64,11 +67,20 @@ function GptUi() {
               onClick={handleModeSwitch}
             >
               {audioMode ? <ChatText /> : <Headphones />}
-            </button>
+            </button> */}
             <p style={{ padding: '2rem' }}>
               <img src="/logo.png" style={{ width: '0.75rem', marginRight: '0.5rem' }} />
               hackGPT
             </p>
+
+            <BarVisualizer
+              trackRef={agent.audioTrack}
+              style={{ width: '500px', height: '300px', placeSelf: 'center' }}
+            />
+            <VoiceAssistantControlBar
+              style={{ position: 'absolute', bottom: '0', width: '100%' }}
+              controls={{ microphone: !isSwitchingModes }}
+            />
             {/* <label className="switch">
               <input
                 type="checkbox"
@@ -79,19 +91,9 @@ function GptUi() {
             </label> */}
           </div>
           <div style={{ height: '100%', position: 'relative' }}>
-            <Chat style={{ display: !audioMode ? 'block' : 'none' }} />
-            <div style={{ display: audioMode ? 'grid' : 'none', width: '100%', height: '100%' }}>
-              <RoomAudioRenderer muted={!audioMode} />
+            <RoomAudioRenderer muted={false} />
 
-              <BarVisualizer
-                trackRef={agent.audioTrack}
-                style={{ width: '500px', height: '300px', placeSelf: 'center' }}
-              />
-              <VoiceAssistantControlBar
-                style={{ position: 'absolute', bottom: '0', width: '100%' }}
-                controls={{ microphone: !isSwitchingModes }}
-              />
-            </div>
+            <AgentChat messageFormatter={markdownFormatter} />
           </div>
         </>
       ) : (

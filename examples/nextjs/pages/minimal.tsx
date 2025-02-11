@@ -3,7 +3,7 @@
 import { LiveKitRoom, useToken, VideoConference, setLogLevel } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 
 const MinimalExample: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;

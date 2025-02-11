@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useRoomContext } from '../../context';
 import { ChatMessage, SendTextOptions } from 'livekit-client';
+import { DataTopic } from '@livekit/components-core';
 
 export interface RichUserInputProps {
   send: (text: string, options: SendTextOptions) => Promise<ChatMessage>;
@@ -9,7 +9,6 @@ export interface RichUserInputProps {
 export function RichUserInput(props: RichUserInputProps) {
   const fileRef = React.useRef<HTMLInputElement>(null);
   const textRef = React.useRef<HTMLInputElement>(null);
-  const room = useRoomContext();
 
   const [isSending, setIsSending] = React.useState(false);
   const [filesToSend, setFilesToSend] = React.useState<Map<string, File>>(new Map());
@@ -35,30 +34,26 @@ export function RichUserInput(props: RichUserInputProps) {
     setFilesToSend(new Map(filesToSend));
   };
 
-  const handleSubmit = React.useCallback(
-    async (ev: React.FormEvent) => {
-      ev.preventDefault();
-      if (!textRef.current || !fileRef.current) {
-        return;
-      }
-      setIsSending(true);
-      try {
-        console.log('sending message');
-        await props.send(textRef.current.value, {
-          topic: 'lk.chat',
-          attachments: Array.from(filesToSend.values()),
-        });
-      } finally {
-        fileRef.current.files = null;
-        textRef.current.value = '';
-        setIsSending(false);
-        filesToSend.clear();
-        setFilesToSend(filesToSend);
-        textRef.current.focus();
-      }
-    },
-    [room],
-  );
+  const handleSubmit = async (ev: React.FormEvent) => {
+    ev.preventDefault();
+    if (!textRef.current || !fileRef.current) {
+      return;
+    }
+    setIsSending(true);
+    try {
+      await props.send(textRef.current.value, {
+        topic: DataTopic.CHAT,
+        attachments: Array.from(filesToSend.values()),
+      });
+    } finally {
+      fileRef.current.files = null;
+      textRef.current.value = '';
+      setIsSending(false);
+      filesToSend.clear();
+      setFilesToSend(filesToSend);
+      textRef.current.focus();
+    }
+  };
   return (
     <>
       <div
@@ -95,9 +90,6 @@ export function RichUserInput(props: RichUserInputProps) {
             ref={textRef}
             type="text"
             placeholder="Enter a message..."
-            onInput={(ev) => ev.stopPropagation()}
-            onKeyDown={(ev) => ev.stopPropagation()}
-            onKeyUp={(ev) => ev.stopPropagation()}
           />
           <button type="submit" className="lk-button lk-chat-form-button" disabled={isSending}>
             Send

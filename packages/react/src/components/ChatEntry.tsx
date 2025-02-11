@@ -49,26 +49,8 @@ export const ChatEntry: (
 
     let name = entry.from?.name ?? entry.from?.identity;
     if (!name || name === '') {
-      name = 'hackGPT';
+      name = 'openGPT';
     }
-
-    React.useEffect(() => {
-      entry.attachedFiles?.forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const imagePreview = document.querySelector(
-            `.lk-file-preview#${encodeURI(file.name.replaceAll('.', '-'))}`,
-          ) as HTMLImageElement;
-          // Set the preview image source to the file URL
-          imagePreview.src = e.target!.result;
-          // Show the image element
-          imagePreview.style.display = 'block';
-          imagePreview.style.maxWidth = '360px';
-        };
-        // Read the file as a Data URL
-        reader.readAsDataURL(file);
-      });
-    }, [entry]);
 
     return (
       <li

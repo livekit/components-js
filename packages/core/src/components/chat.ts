@@ -97,6 +97,8 @@ export function setupChat(room: Room, options?: ChatOptions) {
         next: (value) => messageSubject.next(value),
       });
     });
+
+    /** legacy chat protocol handling */
     const { messageObservable } = setupDataMessageHandler(room, [legacyTopic]);
     messageObservable
       .pipe(
@@ -139,7 +141,10 @@ export function setupChat(room: Room, options?: ChatOptions) {
   const isSending$ = new BehaviorSubject<boolean>(false);
   const finalMessageEncoder = options?.messageEncoder ?? encodeLegacyMsg;
 
-  const send = async (message: string, options: SendTextOptions) => {
+  const send = async (message: string, options?: SendTextOptions) => {
+    if (!options) {
+      options = {};
+    }
     options.topic ??= topic;
     isSending$.next(true);
 

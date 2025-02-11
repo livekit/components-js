@@ -212,7 +212,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
 
   if (needsSetup) {
     room.registerTextStreamHandler(topic, async (reader, participantInfo) => {
-      const { id, timestamp, type } = reader.info;
+      const { id, timestamp } = reader.info;
       const streamObservable = from(reader).pipe(
         map((chunk) => {
           return {
@@ -220,7 +220,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
             timestamp,
             message: chunk.collected,
             from: room.getParticipantByIdentity(participantInfo.identity),
-            editTimestamp: type === 'update' ? timestamp : undefined,
+            // editTimestamp: type === 'update' ? timestamp : undefined,
           } as ReceivedChatMessage;
         }),
       );
@@ -276,17 +276,18 @@ export function setupChat(room: Room, options?: ChatOptions) {
   const update = async (messageId: string, message: string) => {
     isSending$.next(true);
     try {
-      const info = await room.localParticipant.updateText(messageId, message);
+      throw Error('not implemented');
+      // const info = await room.localParticipant.updateText(messageId, message);
 
-      const chatMsg: ReceivedChatMessage = {
-        id: info.id,
-        timestamp: info.timestamp,
-        editTimestamp: info.timestamp,
-        message,
-        from: room.localParticipant,
-      };
-      messageSubject.next(chatMsg);
-      return chatMsg;
+      // const chatMsg: ReceivedChatMessage = {
+      //   id: info.id,
+      //   timestamp: info.timestamp,
+      //   editTimestamp: info.timestamp,
+      //   message,
+      //   from: room.localParticipant,
+      // };
+      // messageSubject.next(chatMsg);
+      // return chatMsg;
     } finally {
       isSending$.next(false);
     }

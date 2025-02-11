@@ -38,7 +38,7 @@ export function Chat({
     return { messageDecoder, messageEncoder, channelTopic };
   }, [messageDecoder, messageEncoder, channelTopic]);
 
-  const { chatMessages, send, isSending } = useChat(chatOptions);
+  const { chatMessages, send } = useChat(chatOptions);
 
   const layoutContext = useMaybeLayoutContext();
   const lastReadMsgAt = React.useRef<ChatMessage['timestamp']>(0);

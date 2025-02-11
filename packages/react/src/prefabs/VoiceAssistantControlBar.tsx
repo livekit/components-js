@@ -1,7 +1,6 @@
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
-import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { TrackToggle } from '../components/controls/TrackToggle';
 import {
   useLocalParticipant,
@@ -103,7 +102,7 @@ export function VoiceAssistantControlBar({
         </div>
       )}
 
-      {visibleControls.leave && <DisconnectButton>{'Disconnect'}</DisconnectButton>}
+      {/* {visibleControls.leave && <DisconnectButton>{'Disconnect'}</DisconnectButton>} */}
       <StartMediaButton />
     </div>
   );

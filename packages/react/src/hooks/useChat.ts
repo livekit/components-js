@@ -16,7 +16,6 @@ import { useConnectionState } from './useConnectionStatus';
  * @returns An object containing:
  * - `chatMessages` - Array of received chat messages
  * - `send` - Function to send a new message
- * - `update` - Function to edit an existing message
  * - `isSending` - Boolean indicating if a message is currently being sent
  * 
  * @example

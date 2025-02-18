@@ -1,7 +1,7 @@
-import type { Subscriber, Subscription } from 'rxjs';
-import { Subject, map, Observable, startWith, finalize, filter, concat } from 'rxjs';
 import type { Participant, TrackPublication } from 'livekit-client';
 import { LocalParticipant, Room, RoomEvent, Track } from 'livekit-client';
+import type { Subscriber, Subscription } from 'rxjs';
+import { concat, filter, finalize, map, Observable, startWith, Subject } from 'rxjs';
 // @ts-ignore some module resolutions (other than 'node') choke on this
 import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 import { log } from '../logger';
@@ -54,7 +54,7 @@ export function roomObserver(room: Room) {
     RoomEvent.LocalTrackUnpublished,
     RoomEvent.AudioPlaybackStatusChanged,
     RoomEvent.ConnectionStateChanged,
-  ).pipe(startWith(room));
+  );
 
   return observable;
 }

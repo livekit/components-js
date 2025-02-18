@@ -78,16 +78,21 @@ export function setupChat(room: Room, options?: ChatOptions) {
   topicSubjectMap.set(room, topicMap);
 
   const finalMessageDecoder = options?.messageDecoder ?? decodeLegacyMsg;
-
+  console.log('needsSetup', needsSetup);
   if (needsSetup) {
+    console.log('registerTextStreamHandler', topic);
     room.registerTextStreamHandler(topic, async (reader, participantInfo) => {
       const { id, timestamp } = reader.info;
       const streamObservable = from(reader).pipe(
-        map((chunk) => {
+        // @ts-ignore
+        scan((acc: string, chunk: string) => {
+          return acc + chunk;
+        }),
+        map((chunk: string) => {
           return {
             id,
             timestamp,
-            message: chunk.collected,
+            message: chunk,
             from: room.getParticipantByIdentity(participantInfo.identity),
             // editTimestamp: type === 'update' ? timestamp : undefined,
           } as ReceivedChatMessage;

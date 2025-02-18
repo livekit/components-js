@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.12.2
+
+### Patch Changes
+
+- Fix duplicate startWith on room events observable - [#1092](https://github.com/livekit/components-js/pull/1092) ([@Toubat](https://github.com/Toubat))
+
 ## 0.12.1
 
 ### Patch Changes

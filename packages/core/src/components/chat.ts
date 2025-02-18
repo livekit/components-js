@@ -78,9 +78,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
   topicSubjectMap.set(room, topicMap);
 
   const finalMessageDecoder = options?.messageDecoder ?? decodeLegacyMsg;
-  console.log('needsSetup', needsSetup);
   if (needsSetup) {
-    console.log('registerTextStreamHandler', topic);
     room.registerTextStreamHandler(topic, async (reader, participantInfo) => {
       const { id, timestamp } = reader.info;
       const streamObservable = from(reader).pipe(

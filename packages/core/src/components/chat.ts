@@ -84,7 +84,6 @@ export function setupChat(room: Room, options?: ChatOptions) {
     room.registerTextStreamHandler(topic, async (reader, participantInfo) => {
       const { id, timestamp } = reader.info;
       const streamObservable = from(reader).pipe(
-        // @ts-ignore
         scan((acc: string, chunk: string) => {
           return acc + chunk;
         }),

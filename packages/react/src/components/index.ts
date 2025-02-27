@@ -31,5 +31,3 @@ export {
   ChatEntry,
   formatChatMessageLinks,
 } from '../components/ChatEntry';
-
-export * from './controls/RichUserInput';

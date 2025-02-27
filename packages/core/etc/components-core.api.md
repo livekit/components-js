@@ -10,7 +10,7 @@ import { ChatMessage } from 'livekit-client';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState } from 'livekit-client';
 import { DataPacket_Kind } from 'livekit-client';
-import type { DataPublishOptions } from 'livekit-client';
+import { DataPublishOptions } from 'livekit-client';
 import { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
 import { LocalVideoTrack } from 'livekit-client';
@@ -27,6 +27,7 @@ import { Room } from 'livekit-client';
 import { RoomEvent } from 'livekit-client';
 import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 import type { ScreenShareCaptureOptions } from 'livekit-client';
+import { SendTextOptions } from 'livekit-client';
 import { setLogLevel as setLogLevel_2 } from 'livekit-client';
 import { Track } from 'livekit-client';
 import { TrackEvent as TrackEvent_2 } from 'livekit-client';
@@ -156,8 +157,7 @@ export const cssPrefix = "lk";
 
 // @public (undocumented)
 export const DataTopic: {
-    readonly CHAT: "lk-chat-topic";
-    readonly CHAT_UPDATE: "lk-chat-update-topic";
+    readonly CHAT: "lk.chat";
 };
 
 // @public (undocumented)
@@ -262,13 +262,18 @@ export function isWeb(): boolean;
 // @public (undocumented)
 export interface LegacyChatMessage extends ChatMessage {
     // (undocumented)
-    ignore?: boolean;
+    ignoreLegacy?: boolean;
 }
+
+// @public @deprecated (undocumented)
+export const LegacyDataTopic: {
+    readonly CHAT: "lk-chat-topic";
+};
 
 // @public (undocumented)
 export interface LegacyReceivedChatMessage extends ReceivedChatMessage {
     // (undocumented)
-    ignore?: boolean;
+    ignoreLegacy?: boolean;
 }
 
 // @alpha
@@ -497,24 +502,19 @@ export type SetMediaDeviceOptions = {
 export function setupChat(room: Room, options?: ChatOptions): {
     messageObservable: Observable<ReceivedChatMessage[]>;
     isSendingObservable: BehaviorSubject<boolean>;
-    send: (message: string) => Promise<ChatMessage>;
-    update: (message: string, originalMessageOrId: string | ChatMessage) => Promise<{
-        readonly message: string;
-        readonly editTimestamp: number;
-        readonly id: string;
-        readonly timestamp: number;
-    }>;
+    send: (message: string, options?: SendTextOptions) => Promise<ReceivedChatMessage>;
 };
 
 // @public (undocumented)
 export function setupChatMessageHandler(room: Room): {
     chatObservable: Observable<[message: ChatMessage, participant?: LocalParticipant | RemoteParticipant | undefined]>;
-    send: (text: string) => Promise<ChatMessage>;
+    send: (text: string, options: SendTextOptions) => Promise<ReceivedChatMessage>;
     edit: (text: string, originalMsg: ChatMessage) => Promise<{
         readonly message: string;
         readonly editTimestamp: number;
         readonly id: string;
         readonly timestamp: number;
+        readonly attachedFiles?: Array<File>;
     }>;
 };
 

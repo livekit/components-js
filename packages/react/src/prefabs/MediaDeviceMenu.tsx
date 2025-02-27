@@ -3,7 +3,6 @@ import * as React from 'react';
 import { MediaDeviceSelect } from '../components/controls/MediaDeviceSelect';
 import { log } from '@livekit/components-core';
 import type { LocalAudioTrack, LocalVideoTrack } from 'livekit-client';
-import { useMediaDevices } from '../hooks';
 
 /** @public */
 export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -113,7 +112,7 @@ export function MediaDeviceMenu({
         {props.children}
       </button>
       {/** only render when enabled in order to make sure that the permissions are requested only if the menu is enabled */}
-      {
+      {!props.disabled && (
         <div
           className="lk-device-menu"
           ref={tooltip}
@@ -153,7 +152,7 @@ export function MediaDeviceMenu({
             </>
           )}
         </div>
-      }
+      )}
     </>
   );
 }

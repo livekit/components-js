@@ -9,7 +9,7 @@ import {
 } from '../hooks';
 import { mergeProps } from '../utils';
 import { StartMediaButton } from '../components/controls/StartMediaButton';
-import { BarVisualizer } from '../components';
+import { BarVisualizer, DisconnectButton } from '../components';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 
 /** @beta */
@@ -102,7 +102,7 @@ export function VoiceAssistantControlBar({
         </div>
       )}
 
-      {/* {visibleControls.leave && <DisconnectButton>{'Disconnect'}</DisconnectButton>} */}
+      {visibleControls.leave && <DisconnectButton>{'Disconnect'}</DisconnectButton>}
       <StartMediaButton />
     </div>
   );

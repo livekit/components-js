@@ -12,7 +12,6 @@
     "build:storybook": "turbo run build --filter=@livekit/component-docs-storybook...",
     "build:styles": "turbo run build --filter=@livekit/components-styles...",
     "dev:next": "turbo run dev --filter=@livekit/component-example-next...",
-    "dev:gpt": "turbo run dev --filter=@livekit/open-gpt...",
     "dev:storybook": "turbo run dev --filter=@livekit/component-docs-storybook...",
     "format:check": "prettier --check \"**/src/**/*.{ts,tsx,md}\"",
     "format:write": "prettier --write \"**/src/**/*.{ts,tsx,md}\"",
@@ -46,10 +45,5 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "pnpm@9.15.5",
-  "pnpm": {
-    "overrides": {
-      "livekit-client": "file:../client-sdk-js"
-    }
-  }
+  "packageManager": "pnpm@9.15.5"
 }

@@ -47,10 +47,7 @@ export const ChatEntry: (
     const time = new Date(entry.timestamp);
     const locale = navigator ? navigator.language : 'en-US';
 
-    let name = entry.from?.name ?? entry.from?.identity;
-    if (!name || name === '') {
-      name = 'openGPT';
-    }
+    const name = entry.from?.name ?? entry.from?.identity;
 
     return (
       <li
@@ -74,19 +71,6 @@ export const ChatEntry: (
         )}
 
         <span className="lk-message-body">{formattedMessage}</span>
-        {entry.attachedFiles && (
-          <div className="lk-file-attachments">
-            {entry.attachedFiles.map((file) => (
-              <div className="file-preview" key={file.name}>
-                <img
-                  className="lk-file-preview"
-                  id={encodeURI(file.name.replaceAll('.', '-'))}
-                  title={file.name}
-                />
-              </div>
-            ))}
-          </div>
-        )}
       </li>
     );
   },

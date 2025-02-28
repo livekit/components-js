@@ -46,7 +46,7 @@ export type ChatOptions = {
   updateChannelTopic?: string;
 };
 
-const topicSubjectMap: Map<Room, Map<string, Subject<ReceivedChatMessage>>> = new Map();
+const topicSubjectMap: WeakMap<Room, Map<string, Subject<ReceivedChatMessage>>> = new WeakMap();
 
 function isIgnorableChatMessage(msg: ReceivedChatMessage | LegacyReceivedChatMessage) {
   return (msg as LegacyChatMessage).ignoreLegacy == true;
@@ -86,6 +86,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
           return acc + chunk;
         }),
         map((chunk: string) => {
+          console.log('text stream updated', { id, chunk, attributes: reader.info.attributes });
           return {
             id,
             timestamp,
@@ -131,6 +132,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
           acc[replaceIndex] = {
             ...value,
             timestamp: originalMsg.timestamp,
+            editTimestamp: value.timestamp,
           };
         }
         return [...acc];

@@ -5,4 +5,4 @@ packages:
   - 'tooling/*'
 
 catalog:
-  livekit-client: ^2.9.4
+  livekit-client: ^2.9.5

@@ -22,6 +22,7 @@ import { VideoTrack } from './VideoTrack';
 import { AudioTrack } from './AudioTrack';
 import { useParticipantTile } from '../../hooks';
 import { useIsEncrypted } from '../../hooks/useIsEncrypted';
+import { useTranscription } from '../../hooks/useTranscription';
 
 /**
  * The `ParticipantContextIfNeeded` component only creates a `ParticipantContext`
@@ -71,6 +72,7 @@ export interface ParticipantTileProps extends React.HTMLAttributes<HTMLDivElemen
   /** The track reference to display. */
   trackRef?: TrackReferenceOrPlaceholder;
   disableSpeakingIndicator?: boolean;
+  showTranscription?: boolean;
 
   onParticipantClick?: (event: ParticipantClickEvent) => void;
 }
@@ -100,11 +102,14 @@ export const ParticipantTile: (
       children,
       onParticipantClick,
       disableSpeakingIndicator,
+      showTranscription = true,
       ...htmlProps
     }: ParticipantTileProps,
     ref,
   ) {
     const trackReference = useEnsureTrackRef(trackRef);
+
+    const { activeTranscription } = useTranscription(trackReference.participant.identity);
 
     const { elementProps } = useParticipantTile<HTMLDivElement>({
       htmlProps,
@@ -184,6 +189,32 @@ export const ParticipantTile: (
               </>
             )}
             <FocusToggle trackRef={trackReference} />
+            {showTranscription && activeTranscription && (
+              <div
+                className="lk-transcription-container"
+                style={{
+                  position: 'absolute',
+                  bottom: '25px',
+                  left: 0,
+                  right: 0,
+                }}
+              >
+                <div
+                  className="lk-transcription-text"
+                  style={{
+                    position: 'relative',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    width: 'fit-content',
+                    padding: '0 5px',
+                    margin: 'auto',
+                    maxWidth: '80%',
+                    textAlign: 'center',
+                  }}
+                >
+                  {activeTranscription.text}
+                </div>
+              </div>
+            )}
           </ParticipantContextIfNeeded>
         </TrackRefContextIfNeeded>
       </div>

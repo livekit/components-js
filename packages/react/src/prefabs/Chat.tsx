@@ -1,4 +1,4 @@
-import type { ChatMessage, ChatOptions } from '@livekit/components-core';
+import { type ChatMessage, type ChatOptions } from '@livekit/components-core';
 import * as React from 'react';
 import { useMaybeLayoutContext } from '../context';
 import { cloneSingleChild } from '../utils';
@@ -6,7 +6,7 @@ import type { MessageFormatter } from '../components/ChatEntry';
 import { ChatEntry } from '../components/ChatEntry';
 import { useChat } from '../hooks/useChat';
 import { ChatToggle } from '../components';
-import { ChatCloseIcon } from '../assets/icons';
+import ChatCloseIcon from '../assets/icons/ChatCloseIcon';
 
 /** @public */
 export interface ChatProps extends React.HTMLAttributes<HTMLDivElement>, ChatOptions {
@@ -46,14 +46,14 @@ export function Chat({
   channelTopic,
   ...props
 }: ChatProps) {
-  const inputRef = React.useRef<HTMLInputElement>(null);
   const ulRef = React.useRef<HTMLUListElement>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const chatOptions: ChatOptions = React.useMemo(() => {
     return { messageDecoder, messageEncoder, channelTopic };
   }, [messageDecoder, messageEncoder, channelTopic]);
 
-  const { send, chatMessages, isSending } = useChat(chatOptions);
+  const { chatMessages, send, isSending } = useChat(chatOptions);
 
   const layoutContext = useMaybeLayoutContext();
   const lastReadMsgAt = React.useRef<ChatMessage['timestamp']>(0);
@@ -61,11 +61,9 @@ export function Chat({
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     if (inputRef.current && inputRef.current.value.trim() !== '') {
-      if (send) {
-        await send(inputRef.current.value);
-        inputRef.current.value = '';
-        inputRef.current.focus();
-      }
+      await send(inputRef.current.value);
+      inputRef.current.value = '';
+      inputRef.current.focus();
     }
   }
 

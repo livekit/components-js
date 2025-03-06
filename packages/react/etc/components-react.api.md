@@ -9,7 +9,6 @@ import { AudioCaptureOptions } from 'livekit-client';
 import { CaptureOptionsBySource } from '../../../packages/core/dist/index.d.ts';
 import { CaptureOptionsBySource as CaptureOptionsBySource_2 } from '../../packages/core/dist/index.d.ts';
 import { ChatMessage } from '../packages/core/dist/index.d.ts';
-import { ChatMessage as ChatMessage_2 } from 'livekit-client';
 import { ChatOptions } from '../../packages/core/dist/index.d.ts';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
@@ -58,6 +57,7 @@ import { RoomConnectOptions } from 'livekit-client';
 import { RoomEvent } from 'livekit-client';
 import { RoomOptions } from 'livekit-client';
 import { ScreenShareCaptureOptions } from 'livekit-client';
+import { SendTextOptions } from 'livekit-client';
 import { setLogExtension } from '../packages/core/dist/index.d.ts';
 import { setLogLevel } from '../packages/core/dist/index.d.ts';
 import { SetMediaDeviceOptions } from '../../packages/core/dist/index.d.ts';
@@ -720,13 +720,7 @@ export function useAudioWaveform(trackOrTrackReference?: LocalAudioTrack | Remot
 
 // @public
 export function useChat(options?: ChatOptions): {
-    send: (message: string) => Promise<ChatMessage_2>;
-    update: (message: string, originalMessageOrId: string | ChatMessage_2) => Promise<{
-        readonly message: string;
-        readonly editTimestamp: number;
-        readonly id: string;
-        readonly timestamp: number;
-    }>;
+    send: (message: string, options?: SendTextOptions) => Promise<ReceivedChatMessage_2>;
     chatMessages: ReceivedChatMessage_2[];
     isSending: boolean;
 };

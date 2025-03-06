@@ -47,6 +47,8 @@ export const ChatEntry: (
     const time = new Date(entry.timestamp);
     const locale = navigator ? navigator.language : 'en-US';
 
+    const name = entry.from?.name ?? entry.from?.identity;
+
     return (
       <li
         ref={ref}
@@ -57,11 +59,7 @@ export const ChatEntry: (
       >
         {(!hideTimestamp || !hideName || hasBeenEdited) && (
           <span className="lk-meta-data">
-            {!hideName && (
-              <strong className="lk-participant-name">
-                {entry.from?.name ?? entry.from?.identity}
-              </strong>
-            )}
+            {!hideName && <strong className="lk-participant-name">{name}</strong>}
 
             {(!hideTimestamp || hasBeenEdited) && (
               <span className="lk-timestamp">

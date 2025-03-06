@@ -92,6 +92,11 @@
     color: inherit;
   }
 
+  * {
+    margin-block-start: 0.25em;
+    margin-block-end: 0.25em;
+  }
+
   &:last-child {
     margin-bottom: 0.25rem;
   }

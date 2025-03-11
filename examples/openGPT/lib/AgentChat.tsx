@@ -43,6 +43,7 @@ export function AgentChat({ messageFormatter, ...props }: ChatProps) {
 
   return (
     <div {...props} className="lk-chat">
+      <h2>Messages</h2>
       <ul className="lk-list lk-chat-messages" ref={ulRef}>
         {chatMessages.map((msg, idx, allMsg) => {
           return (

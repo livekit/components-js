@@ -20,7 +20,11 @@ import type { NextPage } from 'next';
 import { generateRandomUserId } from '@lib/helper';
 import { AgentChat } from '@lib/AgentChat';
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import rehypeHighlight from 'rehype-highlight';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+
 import { ConnectionState, Track } from 'livekit-client';
+import remarkGfm from 'remark-gfm';
 
 function GptUi() {
   const connectionState = useConnectionState();
@@ -32,7 +36,31 @@ function GptUi() {
 
   const krisp = useKrispNoiseFilter();
 
-  const markdownFormatter = useCallback((input: string) => <Markdown>{input}</Markdown>, []);
+  const markdownFormatter = useCallback(
+    (input: string) => (
+      <Markdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          code(props) {
+            const { children, className, node, ...rest } = props;
+            const match = /language-(\w+)/.exec(className || '');
+            return match ? (
+              <SyntaxHighlighter {...rest} PreTag="div" language={match[1]}>
+                {String(children).replace(/\n$/, '')}
+              </SyntaxHighlighter>
+            ) : (
+              <code {...rest} className={className}>
+                {children}
+              </code>
+            );
+          },
+        }}
+      >
+        {input}
+      </Markdown>
+    ),
+    [],
+  );
 
   // const handleModeSwitch = async () => {
   //   setIsSwitchingModes(true);

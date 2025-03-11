@@ -4,8 +4,11 @@ import '@livekit/components-styles/prefabs';
 import '../styles/globals.css';
 import '../styles/theme.scss';
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <head />
+      <body>{children}</body>
+    </html>
+  );
 }
-
-export default MyApp;

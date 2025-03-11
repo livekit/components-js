@@ -76,6 +76,7 @@
   }
 
   &[data-message-origin='local'] {
+    align-items: end;
     .message-body {
       background-color: var(--bg5);
     }

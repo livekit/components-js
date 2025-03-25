@@ -39,8 +39,8 @@ export type LocalUserChoices = {
 export const defaultUserChoices: LocalUserChoices = {
   videoEnabled: true,
   audioEnabled: true,
-  videoDeviceId: '',
-  audioDeviceId: '',
+  videoDeviceId: 'default',
+  audioDeviceId: 'default',
   username: '',
 } as const;
 

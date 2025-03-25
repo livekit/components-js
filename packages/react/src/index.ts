@@ -1,4 +1,4 @@
-export * from './components';
+export * from './components/index.js';
 
 export * from './hooks';
 
@@ -21,6 +21,8 @@ export type {
   TrackReference,
   TrackReferenceOrPlaceholder,
   ParticipantClickEvent,
+  ParticipantIdentifier,
   PinState,
   WidgetState,
+  GridLayoutDefinition,
 } from '@livekit/components-core';

@@ -43,7 +43,7 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
  * @remarks
  * The component is implemented with other LiveKit components like `FocusContextProvider`,
  * `GridLayout`, `ControlBar`, `FocusLayoutContainer` and `FocusLayout`.
- * You can use this components as a starting point for your own custom video conferencing application.
+ * You can use these components as a starting point for your own custom video conferencing application.
  *
  * @example
  * ```tsx
@@ -110,11 +110,22 @@ export function VideoConference({
       layoutContext.pin.dispatch?.({ msg: 'clear_pin' });
       lastAutoFocusedScreenShareTrack.current = null;
     }
+    if (focusTrack && !isTrackReference(focusTrack)) {
+      const updatedFocusTrack = tracks.find(
+        (tr) =>
+          tr.participant.identity === focusTrack.participant.identity &&
+          tr.source === focusTrack.source,
+      );
+      if (updatedFocusTrack !== focusTrack && isTrackReference(updatedFocusTrack)) {
+        layoutContext.pin.dispatch?.({ msg: 'set_pin', trackReference: updatedFocusTrack });
+      }
+    }
   }, [
     screenShareTracks
       .map((ref) => `${ref.publication.trackSid}_${ref.publication.isSubscribed}`)
       .join(),
     focusTrack?.publication?.trackSid,
+    tracks,
   ]);
 
   useWarnAboutMissingStyles();

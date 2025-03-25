@@ -1,5 +1,302 @@
 # @livekit/components-react
 
+## 2.8.1
+
+### Patch Changes
+
+- Fix toggle hydration error - [#1069](https://github.com/livekit/components-js/pull/1069) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.8.0
+
+### Minor Changes
+
+- Forward muted prop on audio elements - [#1065](https://github.com/livekit/components-js/pull/1065) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Updated dependencies [[`10c58567d2fae2053efd76f3fdf82a84e5104897`](https://github.com/livekit/components-js/commit/10c58567d2fae2053efd76f3fdf82a84e5104897)]:
+  - @livekit/components-core@0.12.1
+
+## 2.7.0
+
+### Minor Changes
+
+- Improve default device handling - [#1056](https://github.com/livekit/components-js/pull/1056) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Updated dependencies [[`31a2b04ec36e9a3524804a2dbb7c2b663ea18b83`](https://github.com/livekit/components-js/commit/31a2b04ec36e9a3524804a2dbb7c2b663ea18b83)]:
+  - @livekit/components-core@0.12.0
+
+## 2.6.11
+
+### Patch Changes
+
+- Include useKrispNoiseFilter in generated docs - [#1055](https://github.com/livekit/components-js/pull/1055) ([@bcherry](https://github.com/bcherry))
+
+- Use shared logger for krisp hook - [#1044](https://github.com/livekit/components-js/pull/1044) ([@bcherry](https://github.com/bcherry))
+
+- use JS SDK's isLocal check - [#1050](https://github.com/livekit/components-js/pull/1050) ([@davidzhao](https://github.com/davidzhao))
+
+- Updated dependencies [[`146272c1654c4b9dc86996ff85804a8ee4a0780c`](https://github.com/livekit/components-js/commit/146272c1654c4b9dc86996ff85804a8ee4a0780c), [`ebe78fb658cd6c8b76eedf0465c51b03aa00b305`](https://github.com/livekit/components-js/commit/ebe78fb658cd6c8b76eedf0465c51b03aa00b305)]:
+  - @livekit/components-core@0.11.11
+
+## 2.6.10
+
+### Patch Changes
+
+- Make processor initialization work on track create - [#1039](https://github.com/livekit/components-js/pull/1039) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.6.9
+
+### Patch Changes
+
+- Fix Chat usage without layoutcontext - [#1027](https://github.com/livekit/components-js/pull/1027) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix className property on BarVisualizer - [#1029](https://github.com/livekit/components-js/pull/1029) ([@mikljohansson](https://github.com/mikljohansson))
+
+- Forward disconnectReason to onDisconnected callback - [#1031](https://github.com/livekit/components-js/pull/1031) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.6.8
+
+### Patch Changes
+
+- Don't emit connection errors if `connect` is set to false - [#1025](https://github.com/livekit/components-js/pull/1025) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.6.7
+
+### Patch Changes
+
+- Fix initial device selection when mounting useMediaDeviceSelect - [#1014](https://github.com/livekit/components-js/pull/1014) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`5e314414a443c487fc3a4ac687c20bee5f60f0e7`](https://github.com/livekit/components-js/commit/5e314414a443c487fc3a4ac687c20bee5f60f0e7)]:
+  - @livekit/components-core@0.11.10
+
+## 2.6.6
+
+### Patch Changes
+
+- Avoid logging activeDevice updates for undefined active devices - [#1012](https://github.com/livekit/components-js/pull/1012) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.6.5
+
+### Patch Changes
+
+- Updated dependencies [[`369d1b443eb831ce700a99531048981f1a1d3db8`](https://github.com/livekit/components-js/commit/369d1b443eb831ce700a99531048981f1a1d3db8)]:
+  - @livekit/components-core@0.11.9
+
+## 2.6.4
+
+### Patch Changes
+
+- Use vite for building react package, fixes useKrispNoiseFilter usage - [#994](https://github.com/livekit/components-js/pull/994) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.6.3
+
+### Patch Changes
+
+- Move useKrispNoiseFilter into dedicated import path - [#991](https://github.com/livekit/components-js/pull/991) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`a353a3b52303d167f0e04d34caeb90bab36244ba`](https://github.com/livekit/components-js/commit/a353a3b52303d167f0e04d34caeb90bab36244ba)]:
+  - @livekit/components-core@0.11.8
+
+## 2.6.2
+
+### Patch Changes
+
+- Add krisp hook - [#986](https://github.com/livekit/components-js/pull/986) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`302bbb776cea1391c51c167127023d696a2dbab8`](https://github.com/livekit/components-js/commit/302bbb776cea1391c51c167127023d696a2dbab8)]:
+  - @livekit/components-core@0.11.7
+
+## 2.6.1
+
+### Patch Changes
+
+- Improve bar visualizer animations and add initializing state - [#987](https://github.com/livekit/components-js/pull/987) ([@mattherzog](https://github.com/mattherzog))
+
+- Add support for new chat API - [#979](https://github.com/livekit/components-js/pull/979) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`3a8495fd70489bc09b801fb743afe850950c3871`](https://github.com/livekit/components-js/commit/3a8495fd70489bc09b801fb743afe850950c3871), [`22fa65e4715490216577223ab07ce14f6ff7917d`](https://github.com/livekit/components-js/commit/22fa65e4715490216577223ab07ce14f6ff7917d)]:
+  - @livekit/components-core@0.11.6
+
+## 2.6.0
+
+### Minor Changes
+
+- Update agent state property name to `lk.agent.state` - [#976](https://github.com/livekit/components-js/pull/976) ([@bcherry](https://github.com/bcherry))
+
+### Patch Changes
+
+- Add StartMediaButton to public API - [#978](https://github.com/livekit/components-js/pull/978) ([@junsumida](https://github.com/junsumida))
+
+- Update agent component docs - [#973](https://github.com/livekit/components-js/pull/973) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.5.4
+
+### Patch Changes
+
+- Updated dependencies [[`3b66cf356a90973e0cb1abc3a6d6c56880c4eb58`](https://github.com/livekit/components-js/commit/3b66cf356a90973e0cb1abc3a6d6c56880c4eb58)]:
+  - @livekit/components-core@0.11.5
+
+## 2.5.3
+
+### Patch Changes
+
+- Add dataprops and allow a template child for BarVisualizer @lukasIO - [#965](https://github.com/livekit/components-js/pull/965) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`a77a52eeb415701f0e233e9f2304b7de2d754397`](https://github.com/livekit/components-js/commit/a77a52eeb415701f0e233e9f2304b7de2d754397)]:
+  - @livekit/components-core@0.11.4
+
+## 2.5.2
+
+### Patch Changes
+
+- Don't override className on BarVisualizer - [#963](https://github.com/livekit/components-js/pull/963) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.5.1
+
+### Patch Changes
+
+- Add css var fallbacks and fix className forwarding on BarVisualizer - [#961](https://github.com/livekit/components-js/pull/961) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies []:
+  - @livekit/components-core@0.11.3
+
+## 2.5.0
+
+### Minor Changes
+
+- Stateful BarVisualizer and VoiceAssistantControlBar - [#954](https://github.com/livekit/components-js/pull/954) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Fix local storage of user choices - [#949](https://github.com/livekit/components-js/pull/949) ([@lukasIO](https://github.com/lukasIO))
+
+- Add useVoiceAssistant - [#917](https://github.com/livekit/components-js/pull/917) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix state update on participant attributes hook - [#957](https://github.com/livekit/components-js/pull/957) ([@lukasIO](https://github.com/lukasIO))
+
+- Add callback option to trackTranscription hook - [#939](https://github.com/livekit/components-js/pull/939) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`cb45f42912a08a2ab8c03b1e5109eb24d1d78180`](https://github.com/livekit/components-js/commit/cb45f42912a08a2ab8c03b1e5109eb24d1d78180), [`9b1a2596f4068c68ac8780c119426cbb55a4ca3f`](https://github.com/livekit/components-js/commit/9b1a2596f4068c68ac8780c119426cbb55a4ca3f), [`d35dffd16131cac43279300071c595f30981767f`](https://github.com/livekit/components-js/commit/d35dffd16131cac43279300071c595f30981767f)]:
+  - @livekit/components-core@0.11.3
+
+## 2.4.3
+
+### Patch Changes
+
+- Expose useIsRecording hook with optional room param - [#934](https://github.com/livekit/components-js/pull/934) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.4.2
+
+### Patch Changes
+
+- Add useIsRecording hook - [#931](https://github.com/livekit/components-js/pull/931) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`ddb2451790be04b03dbce4f7fc2fb52c19ff7843`](https://github.com/livekit/components-js/commit/ddb2451790be04b03dbce4f7fc2fb52c19ff7843)]:
+  - @livekit/components-core@0.11.2
+
+## 2.4.1
+
+### Patch Changes
+
+- Allow custom GridLayout definitions - [#909](https://github.com/livekit/components-js/pull/909) ([@Ocupe](https://github.com/Ocupe))
+
+- Updated dependencies [[`5a17214da6d516e52f7f6917e3fcbe86aaa3805f`](https://github.com/livekit/components-js/commit/5a17214da6d516e52f7f6917e3fcbe86aaa3805f)]:
+  - @livekit/components-core@0.11.1
+
+## 2.4.0
+
+### Minor Changes
+
+- Add participant attribute hooks and update livekit client - [#926](https://github.com/livekit/components-js/pull/926) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Add onDeviceError callback to ControlBar - [#921](https://github.com/livekit/components-js/pull/921) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`4245444ad0212f3eb33920216a65b5d0b9a0637c`](https://github.com/livekit/components-js/commit/4245444ad0212f3eb33920216a65b5d0b9a0637c)]:
+  - @livekit/components-core@0.11.0
+
+## 2.3.6
+
+### Patch Changes
+
+- Remove @react-hook dependency due to ESM conflicts - [#919](https://github.com/livekit/components-js/pull/919) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.3.5
+
+### Patch Changes
+
+- Fix docs package parameter extraction and forwardRefs components typing - [#912](https://github.com/livekit/components-js/pull/912) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`cd447a1da49645a3966323c73ba18f16bf81fcef`](https://github.com/livekit/components-js/commit/cd447a1da49645a3966323c73ba18f16bf81fcef)]:
+  - @livekit/components-core@0.10.5
+
+## 2.3.4
+
+### Patch Changes
+
+- Update usehooks-ts to v3 - [#885](https://github.com/livekit/components-js/pull/885) ([@renovate](https://github.com/apps/renovate))
+
+- Add overload for kind + identity in useRemoteParticipant hook - [#893](https://github.com/livekit/components-js/pull/893) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`fcc23749ebd9209f29cbe47ec93e643eeb057a26`](https://github.com/livekit/components-js/commit/fcc23749ebd9209f29cbe47ec93e643eeb057a26)]:
+  - @livekit/components-core@0.10.4
+
+## 2.3.3
+
+### Patch Changes
+
+- Fix `useRemoteParticipant` re-rendering on participant events - [#891](https://github.com/livekit/components-js/pull/891) ([@mpnri](https://github.com/mpnri))
+
+- Updated dependencies [[`f09491284e935fa7e1af6cae0870bcb09926f722`](https://github.com/livekit/components-js/commit/f09491284e935fa7e1af6cae0870bcb09926f722)]:
+  - @livekit/components-core@0.10.3
+
+## 2.3.2
+
+### Patch Changes
+
+- Support passing room to useIsEncrypted hook - [#871](https://github.com/livekit/components-js/pull/871) ([@renekliment](https://github.com/renekliment))
+
+- Update focused placeholder to trackRef - [#874](https://github.com/livekit/components-js/pull/874) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.3.1
+
+### Patch Changes
+
+- Add experimental hooks for transcriptions - [#853](https://github.com/livekit/components-js/pull/853) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`79636e4f9ac72a4e608d5d28ccaf337bcb2a6514`](https://github.com/livekit/components-js/commit/79636e4f9ac72a4e608d5d28ccaf337bcb2a6514)]:
+  - @livekit/components-core@0.10.2
+
+## 2.3.0
+
+### Minor Changes
+
+- Reset useChat messages when room disconnects - [#866](https://github.com/livekit/components-js/pull/866) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Add publishOptions for TrackToggle - [#868](https://github.com/livekit/components-js/pull/868) ([@lukasIO](https://github.com/lukasIO))
+
+- Forward track toggle errors - [#869](https://github.com/livekit/components-js/pull/869) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`bdfd3f53875ffc79024f8290b5302cf20eaed664`](https://github.com/livekit/components-js/commit/bdfd3f53875ffc79024f8290b5302cf20eaed664), [`b9136108c654906d693fb17db577d5f939d98ad1`](https://github.com/livekit/components-js/commit/b9136108c654906d693fb17db577d5f939d98ad1), [`3b257b19da111d52d6d554467024973e3922fa6c`](https://github.com/livekit/components-js/commit/3b257b19da111d52d6d554467024973e3922fa6c)]:
+  - @livekit/components-core@0.10.1
+
+## 2.2.1
+
+### Patch Changes
+
+- Update docs for default connect value in LiveKitRoom - [#840](https://github.com/livekit/components-js/pull/840) ([@davidliu](https://github.com/davidliu))
+
+- Fix duplicated incoming audio when using AudioTrack renderer and its muted property - [#855](https://github.com/livekit/components-js/pull/855) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies []:
+  - @livekit/components-core@0.10.0
+
 ## 2.2.0
 
 ### Minor Changes

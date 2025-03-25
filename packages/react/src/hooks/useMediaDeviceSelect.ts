@@ -1,5 +1,5 @@
 import { createMediaDeviceObserver, setupDeviceSelector, log } from '@livekit/components-core';
-import type { LocalAudioTrack, LocalVideoTrack, Room } from 'livekit-client';
+import { Room, type LocalAudioTrack, type LocalVideoTrack } from 'livekit-client';
 import * as React from 'react';
 import { useMaybeRoomContext } from '../context';
 import { useObservableState } from './internal';
@@ -46,6 +46,9 @@ export function useMediaDeviceSelect({
   onError,
 }: UseMediaDeviceSelectProps) {
   const roomContext = useMaybeRoomContext();
+
+  const roomFallback = React.useMemo(() => room ?? roomContext ?? new Room(), [room, roomContext]);
+
   // List of all devices.
   const deviceObserver = React.useMemo(
     () => createMediaDeviceObserver(kind, onError, requestPermissions),
@@ -53,16 +56,21 @@ export function useMediaDeviceSelect({
   );
   const devices = useObservableState(deviceObserver, [] as MediaDeviceInfo[]);
   // Active device management.
-  const [currentDeviceId, setCurrentDeviceId] = React.useState<string>('');
+  const [currentDeviceId, setCurrentDeviceId] = React.useState<string>(
+    roomFallback?.getActiveDevice(kind) ?? 'default',
+  );
   const { className, activeDeviceObservable, setActiveMediaDevice } = React.useMemo(
-    () => setupDeviceSelector(kind, room ?? roomContext, track),
-    [kind, room, roomContext, track],
+    () => setupDeviceSelector(kind, roomFallback),
+    [kind, roomFallback, track],
   );
 
   React.useEffect(() => {
     const listener = activeDeviceObservable.subscribe((deviceId) => {
+      if (!deviceId) {
+        return;
+      }
       log.info('setCurrentDeviceId', deviceId);
-      if (deviceId) setCurrentDeviceId(deviceId);
+      setCurrentDeviceId(deviceId);
     });
     return () => {
       listener?.unsubscribe();

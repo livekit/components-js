@@ -1,0 +1,14 @@
+.main {
+  height: 100%;
+}
+
+.room {
+  display: grid;
+  grid-template-rows: auto min-content;
+}
+
+.inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

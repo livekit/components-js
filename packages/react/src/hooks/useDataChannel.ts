@@ -7,7 +7,7 @@ import { useObservableState } from './internal';
 
 type UseDataChannelReturnType<T extends string | undefined = undefined> = {
   isSending: boolean;
-  send: (payload: Uint8Array, options: DataPublishOptions) => void;
+  send: (payload: Uint8Array, options: DataPublishOptions) => Promise<void>;
   message: ReceivedDataMessage<T> | undefined;
 };
 
@@ -21,7 +21,7 @@ type UseDataChannelReturnType<T extends string | undefined = undefined> = {
  * @example
  * ```tsx
  * // Send messages to all participants via the 'chat' topic.
- * const { message, send } = useDataChannel('chat');
+ * const { message: latestMessage, send } = useDataChannel('chat', (msg) => console.log("message received", msg));
  * ```
  * @public
  */
@@ -38,7 +38,7 @@ export function useDataChannel<T extends string>(
  * @example
  * ```tsx
  * // Send messages to all participants
- * const { message, send } = useDataChannel(callback);
+ * const { message: latestMessage, send } = useDataChannel('chat', (msg) => console.log("message received", msg));
  * ```
  * @public
  */

@@ -1,4 +1,4 @@
-import { getTrackReferenceId, isLocal } from '@livekit/components-core';
+import { getTrackReferenceId } from '@livekit/components-core';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { useTracks } from '../hooks';
@@ -36,7 +36,7 @@ export function RoomAudioRenderer({ volume, muted }: RoomAudioRendererProps) {
       updateOnlyOn: [],
       onlySubscribed: true,
     },
-  ).filter((ref) => !isLocal(ref.participant) && ref.publication.kind === Track.Kind.Audio);
+  ).filter((ref) => !ref.participant.isLocal && ref.publication.kind === Track.Kind.Audio);
 
   return (
     <div style={{ display: 'none' }}>

@@ -14,6 +14,8 @@ import type { TrackReference } from '../track-reference';
 import { observeRoomEvents } from './room';
 import type { ParticipantTrackIdentifier } from '../types';
 import { observeParticipantEvents } from './participant';
+// @ts-ignore some module resolutions (other than 'node') choke on this
+import type { PublicationEventCallbacks } from 'livekit-client/dist/src/room/track/TrackPublication';
 
 export function trackObservable(track: TrackPublication) {
   const trackObserver = observeTrackEvents(
@@ -169,4 +171,39 @@ export function participantTracksObservable(
   );
 
   return observable;
+}
+
+export function trackEventSelector<T extends TrackEvent>(
+  publication: TrackPublication | Track,
+  event: T,
+) {
+  const observable = new Observable<
+    Parameters<PublicationEventCallbacks[Extract<T, keyof PublicationEventCallbacks>]>
+  >((subscribe) => {
+    const update = (
+      ...params: Parameters<PublicationEventCallbacks[Extract<T, keyof PublicationEventCallbacks>]>
+    ) => {
+      subscribe.next(params);
+    };
+    // @ts-expect-error not a perfect overlap between TrackEvent and keyof TrackEventCallbacks
+    publication.on(event, update);
+
+    const unsubscribe = () => {
+      // @ts-expect-error not a perfect overlap between TrackEvent and keyof TrackEventCallbacks
+      publication.off(event, update);
+    };
+    return unsubscribe;
+  });
+
+  return observable;
+}
+
+export function trackTranscriptionObserver(publication: TrackPublication) {
+  return trackEventSelector(publication, TrackEvent.TranscriptionReceived);
+}
+
+export function trackSyncTimeObserver(track: Track) {
+  return trackEventSelector(track, TrackEvent.TimeSyncUpdate).pipe(
+    map(([timeUpdate]) => timeUpdate),
+  );
 }

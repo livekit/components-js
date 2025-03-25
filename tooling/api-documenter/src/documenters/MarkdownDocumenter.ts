@@ -18,6 +18,7 @@ import {
   DocComment,
   DocNodeContainer,
   DocNode,
+  DocEscapedText,
 } from '@microsoft/tsdoc';
 import {
   ApiModel,
@@ -57,7 +58,6 @@ import { DocTable } from '../nodes/DocTable';
 import { DocEmphasisSpan } from '../nodes/DocEmphasisSpan';
 import { DocTableRow } from '../nodes/DocTableRow';
 import { DocTableCell } from '../nodes/DocTableCell';
-import { DocNoteBox } from '../nodes/DocNoteBox';
 import { Utilities } from '../utils/Utilities';
 import { CustomMarkdownEmitter } from '../markdown/CustomMarkdownEmitter';
 import { PluginLoader } from '../plugin/PluginLoader';
@@ -181,7 +181,7 @@ export class MarkdownDocumenter {
         pageTitle = `${scopedName} type`;
         break;
       case ApiItemKind.Variable:
-        pageTitle = `${scopedName} variable`;
+        pageTitle = `${scopedName}`;
         break;
       default:
         throw new Error('Unsupported API item kind: ' + apiItem.kind);
@@ -208,6 +208,9 @@ export class MarkdownDocumenter {
       if (apiItem.releaseTag === ReleaseTag.Beta) {
         this._writeBetaWarning(output);
       }
+      if (apiItem.releaseTag === ReleaseTag.Alpha) {
+        this._writeAlphaWarning(output);
+      }
     }
 
     const decoratorBlocks: DocBlock[] = [];
@@ -224,13 +227,38 @@ export class MarkdownDocumenter {
         );
 
         if (tsdocComment.deprecatedBlock) {
+          // Render the deprecation message as a "caution" callout add a "deprecated" prefix to the message.
+          let addedDeprecationString = false;
+          const newContent = tsdocComment.deprecatedBlock.content.nodes.reduce<DocNode[]>(
+            (acc, node) => {
+              if (!addedDeprecationString && node.kind === DocNodeKind.Paragraph) {
+                const paragraphChildren = node
+                  .getChildNodes()
+                  .reduce<DocNode[]>((paragraphNodes, paraNode) => {
+                    if (!addedDeprecationString && paraNode.kind === DocNodeKind.PlainText) {
+                      paragraphNodes.push(
+                        new DocPlainText({
+                          configuration,
+                          text: 'This API is deprecated: ' + (paraNode as DocPlainText).text,
+                        }),
+                      );
+                      addedDeprecationString = true;
+                    } else {
+                      paragraphNodes.push(paraNode);
+                    }
+                    return paragraphNodes;
+                  }, []);
+                acc.push(new DocParagraph({ configuration }, paragraphChildren));
+              } else {
+                acc.push(node);
+              }
+              return acc;
+            },
+            [],
+          );
+
           output.appendNode(
-            new Callout({ configuration, type: 'caution', variant: 'normal' }, [
-              new DocParagraph({ configuration }, [
-                new DocPlainText({ configuration, text: 'This API is deprecated:' }),
-              ]),
-              ...tsdocComment.deprecatedBlock.content.nodes,
-            ]),
+            new Callout({ configuration, type: 'caution', variant: 'normal' }, [...newContent]),
           );
         }
 
@@ -243,8 +271,7 @@ export class MarkdownDocumenter {
       if (category !== undefined) {
         let importPath: string = '';
         try {
-          // @ts-ignore
-          importPath = apiItem.canonicalReference.source.escapedPath;
+          importPath = this._getImportPath(apiItem);
         } catch (error) {
           console.error(error);
         }
@@ -322,6 +349,7 @@ export class MarkdownDocumenter {
       case ApiItemKind.Method:
       case ApiItemKind.MethodSignature:
       case ApiItemKind.Function:
+      case ApiItemKind.Variable:
         // Print property table into component/prefab page.
         if (category === 'component' || category === 'prefab') {
           this._writeComponentPropertyList(output, apiItem as ApiParameterListMixin);
@@ -343,8 +371,6 @@ export class MarkdownDocumenter {
       case ApiItemKind.PropertySignature:
         break;
       case ApiItemKind.TypeAlias:
-        break;
-      case ApiItemKind.Variable:
         break;
       default:
         throw new Error('Unsupported API item kind: ' + apiItem.kind);
@@ -483,30 +509,82 @@ export class MarkdownDocumenter {
           (x) => x.blockTag.tagNameWithUpperCase === StandardTags.example.tagNameWithUpperCase,
         );
 
-        let exampleNumber: number = 1;
-        for (const exampleBlock of exampleBlocks) {
-          const heading: string =
-            exampleBlocks.length > 1 ? `Usage Example ${exampleNumber}` : 'Usage';
-
-          output.appendNode(new DocHeading({ configuration, title: heading, level: 2 }));
-
-          this._appendSection(output, exampleBlock.content);
-
-          ++exampleNumber;
+        if (exampleBlocks.length > 0) {
+          output.appendNode(new DocHeading({ configuration, title: 'Usage', level: 2 }));
         }
 
-        output.appendNode(
-          new MarkDocTag({
-            configuration,
-            name: 'partial',
-            attributes: {
-              file: 'p_usage.md',
-            },
-            variables: {
-              exampleCount: exampleNumber - 1,
-            },
-          }),
-        );
+        const findFirstPlainText = (
+          node: DocNode,
+        ): { text: string | undefined; node: DocPlainText | undefined } => {
+          if (node.kind === DocNodeKind.PlainText) {
+            const plainTextNode = node as DocPlainText;
+            return {
+              text: plainTextNode.text.split('\n')[0].trim(),
+              node: plainTextNode,
+            };
+          }
+
+          if (node instanceof DocNodeContainer) {
+            for (const childNode of node.getChildNodes()) {
+              const result = findFirstPlainText(childNode);
+              if (result.text) {
+                return result;
+              }
+            }
+          }
+
+          return { text: undefined, node: undefined };
+        };
+
+        for (const [index, exampleBlock] of exampleBlocks.entries()) {
+          if (exampleBlocks.length > 1) {
+            let firstNode: DocNode | undefined = exampleBlock.content.nodes[0];
+            let title: string = `Example ${index + 1}`;
+
+            if (firstNode) {
+              const { text, node: plainTextNode } = findFirstPlainText(firstNode);
+              if (text) {
+                title = text;
+                if (plainTextNode) {
+                  const remainingText: string | undefined = plainTextNode.text
+                    .split('\n')
+                    .slice(1)
+                    .join('\n')
+                    .trim();
+                  const parent: DocNodeContainer = firstNode as DocNodeContainer;
+
+                  const newChildNodes: DocNode[] = parent
+                    .getChildNodes()
+                    .map((childNode) => {
+                      if (childNode === plainTextNode) {
+                        return remainingText
+                          ? new DocPlainText({ configuration, text: remainingText })
+                          : undefined;
+                      }
+                      return childNode;
+                    })
+                    .filter((node): node is DocNode => node !== undefined);
+
+                  firstNode = new DocParagraph({ configuration }, newChildNodes);
+                }
+              }
+            }
+
+            output.appendNode(new DocHeading({ configuration, title, level: 3 }));
+
+            const newContent: DocSection = new DocSection({ configuration });
+            if (firstNode && firstNode.getChildNodes().length > 0) {
+              newContent.appendNode(firstNode);
+            }
+            for (let i: number = 1; i < exampleBlock.content.nodes.length; i++) {
+              newContent.appendNode(exampleBlock.content.nodes[i]);
+            }
+
+            this._appendSection(output, newContent);
+          } else {
+            this._appendSection(output, exampleBlock.content);
+          }
+        }
       }
     }
   }
@@ -1079,7 +1157,7 @@ export class MarkdownDocumenter {
         //@ts-ignore
         // apiParameter?._parent?.displayName === 'useParticipantTile' &&
         firstParameter.kind === ExcerptTokenKind.Reference &&
-        firstParameter.text.endsWith('Props') &&
+        (firstParameter.text.endsWith('Props') || firstParameter.text.endsWith('Options')) &&
         firstParameter.canonicalReference
       ) {
         // First parameter is a props object.
@@ -1093,7 +1171,7 @@ export class MarkdownDocumenter {
                 new ParameterItem({
                   configuration,
                   attributes: {
-                    name: member.displayName,
+                    name: `${apiParameter.name}.${member.displayName}`,
                     type: member.propertyTypeExcerpt.text,
                     optional: member.isOptional,
                     description: member.tsdocComment?.summarySection?.nodes ?? [],
@@ -1128,6 +1206,12 @@ export class MarkdownDocumenter {
       const returnTypeExcerpt: Excerpt = apiParameterListMixin.returnTypeExcerpt;
       output.appendNode(new DocHeading({ configuration, title: 'Returns', level: 2 }));
 
+      if (apiParameterListMixin instanceof ApiDocumentedItem) {
+        if (apiParameterListMixin.tsdocComment?.returnsBlock) {
+          this._appendSection(output, apiParameterListMixin.tsdocComment.returnsBlock.content);
+        }
+      }
+
       const fencedCode: DocFencedCode = new DocFencedCode({
         configuration,
         code: returnTypeExcerpt.text,
@@ -1148,7 +1232,7 @@ export class MarkdownDocumenter {
 
     const parameters: ReadonlyArray<Parameter> = apiItem.parameters;
 
-    if (parameters.length > 0) {
+    if (parameters?.length > 0) {
       const props = parameters[0];
       if (props !== undefined) {
         for (const token of props.parameterTypeExcerpt.tokens) {
@@ -1476,12 +1560,24 @@ export class MarkdownDocumenter {
   private _writeBetaWarning(output: DocSection): void {
     const configuration: TSDocConfiguration = this._tsdocConfiguration;
     const betaWarning: string =
-      'This API is provided as a preview for developers and may change' +
-      ' based on feedback that we receive.  Do not use this API in a production environment.';
+      'This feature is under active development and may change based on developer feedback and real-world usage.';
     output.appendNode(
-      new DocNoteBox({ configuration }, [
+      new Callout({ configuration }, [
         new DocParagraph({ configuration }, [
           new DocPlainText({ configuration, text: betaWarning }),
+        ]),
+      ]),
+    );
+  }
+
+  private _writeAlphaWarning(output: DocSection): void {
+    const configuration: TSDocConfiguration = this._tsdocConfiguration;
+    const alphaWarning: string =
+      'This feature is experimental and may change or be removed based on developer feedback and real-world usage.';
+    output.appendNode(
+      new Callout({ configuration }, [
+        new DocParagraph({ configuration }, [
+          new DocPlainText({ configuration, text: alphaWarning }),
         ]),
       ]),
     );
@@ -1590,5 +1686,40 @@ export class MarkdownDocumenter {
   private _deleteOldOutputFiles(): void {
     console.log('Deleting old output from ' + this._outputFolder);
     FileSystem.ensureEmptyFolder(this._outputFolder);
+  }
+
+  private _getImportPath(apiItem: ApiDeclaredItem): string {
+    // Check for custom import path from TSDoc first
+    if (apiItem instanceof ApiDocumentedItem && apiItem.tsdocComment) {
+      const packageTag: DocBlock | undefined = apiItem.tsdocComment.customBlocks.find(
+        (block) => block.blockTag.tagName === '@package',
+      );
+
+      if (packageTag) {
+        return packageTag.content.nodes
+          .map((node) => {
+            if (node.kind === DocNodeKind.Paragraph) {
+              return node
+                .getChildNodes()
+                .map((child) => {
+                  if (child.kind === DocNodeKind.PlainText) {
+                    return (child as DocPlainText).text;
+                  } else if (child.kind === DocNodeKind.EscapedText) {
+                    return (child as DocEscapedText).decodedText;
+                  }
+                  return '';
+                })
+                .join('');
+            }
+            return '';
+          })
+          .join('')
+          .trim();
+      }
+    }
+
+    // Fallback to canonical reference
+    // @ts-ignore
+    return apiItem.canonicalReference.source.escapedPath;
   }
 }

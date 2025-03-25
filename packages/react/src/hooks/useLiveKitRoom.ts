@@ -1,10 +1,12 @@
 import { log, setupLiveKitRoom } from '@livekit/components-core';
-import { Room, MediaDeviceFailure, RoomEvent, ConnectionState } from 'livekit-client';
+import type { DisconnectReason } from 'livekit-client';
+import { Room, MediaDeviceFailure, RoomEvent } from 'livekit-client';
 import * as React from 'react';
 import type { HTMLAttributes } from 'react';
 
 import type { LiveKitRoomProps } from '../components';
 import { mergeProps } from '../mergeProps';
+import { roomOptionsStringifyReplacer } from '../utils';
 
 const defaultRoomProps: Partial<LiveKitRoomProps> = {
   connect: true,
@@ -55,9 +57,11 @@ export function useLiveKitRoom<T extends HTMLElement>(
 
   const [room, setRoom] = React.useState<Room | undefined>();
 
+  const shouldConnect = React.useRef(connect);
+
   React.useEffect(() => {
     setRoom(passedRoom ?? new Room(options));
-  }, [passedRoom]);
+  }, [passedRoom, JSON.stringify(options, roomOptionsStringifyReplacer)]);
 
   const htmlProps = React.useMemo(() => {
     const { className } = setupLiveKitRoom();
@@ -87,18 +91,39 @@ export function useLiveKitRoom<T extends HTMLElement>(
     const handleEncryptionError = (e: Error) => {
       onEncryptionError?.(e);
     };
+    const handleDisconnected = (reason?: DisconnectReason) => {
+      onDisconnected?.(reason);
+    };
+    const handleConnected = () => {
+      onConnected?.();
+    };
+
     room
       .on(RoomEvent.SignalConnected, onSignalConnected)
       .on(RoomEvent.MediaDevicesError, handleMediaDeviceError)
-      .on(RoomEvent.EncryptionError, handleEncryptionError);
+      .on(RoomEvent.EncryptionError, handleEncryptionError)
+      .on(RoomEvent.Disconnected, handleDisconnected)
+      .on(RoomEvent.Connected, handleConnected);
 
     return () => {
       room
         .off(RoomEvent.SignalConnected, onSignalConnected)
         .off(RoomEvent.MediaDevicesError, handleMediaDeviceError)
-        .off(RoomEvent.EncryptionError, handleEncryptionError);
+        .off(RoomEvent.EncryptionError, handleEncryptionError)
+        .off(RoomEvent.Disconnected, handleDisconnected)
+        .off(RoomEvent.Connected, handleConnected);
     };
-  }, [room, audio, video, screen, onError, onEncryptionError, onMediaDeviceFailure]);
+  }, [
+    room,
+    audio,
+    video,
+    screen,
+    onError,
+    onEncryptionError,
+    onMediaDeviceFailure,
+    onConnected,
+    onDisconnected,
+  ]);
 
   React.useEffect(() => {
     if (!room) return;
@@ -115,23 +140,28 @@ export function useLiveKitRoom<T extends HTMLElement>(
       });
       return;
     }
-    if (!token) {
-      log.debug('no token yet');
-      return;
-    }
-    if (!serverUrl) {
-      log.warn('no livekit url provided');
-      onError?.(Error('no livekit url provided'));
-      return;
-    }
+
     if (connect) {
+      shouldConnect.current = true;
       log.debug('connecting');
+      if (!token) {
+        log.debug('no token yet');
+        return;
+      }
+      if (!serverUrl) {
+        log.warn('no livekit url provided');
+        onError?.(Error('no livekit url provided'));
+        return;
+      }
       room.connect(serverUrl, token, connectOptions).catch((e) => {
         log.warn(e);
-        onError?.(e as Error);
+        if (shouldConnect.current === true) {
+          onError?.(e as Error);
+        }
       });
     } else {
       log.debug('disconnecting because connect is false');
+      shouldConnect.current = false;
       room.disconnect();
     }
   }, [
@@ -143,27 +173,6 @@ export function useLiveKitRoom<T extends HTMLElement>(
     serverUrl,
     simulateParticipants,
   ]);
-
-  React.useEffect(() => {
-    if (!room) return;
-    const connectionStateChangeListener = (state: ConnectionState) => {
-      switch (state) {
-        case ConnectionState.Disconnected:
-          if (onDisconnected) onDisconnected();
-          break;
-        case ConnectionState.Connected:
-          if (onConnected) onConnected();
-          break;
-
-        default:
-          break;
-      }
-    };
-    room.on(RoomEvent.ConnectionStateChanged, connectionStateChangeListener);
-    return () => {
-      room.off(RoomEvent.ConnectionStateChanged, connectionStateChangeListener);
-    };
-  }, [token, onConnected, onDisconnected, room]);
 
   React.useEffect(() => {
     if (!room) return;

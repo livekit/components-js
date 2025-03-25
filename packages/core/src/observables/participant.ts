@@ -1,13 +1,14 @@
 import type { ParticipantPermission } from '@livekit/protocol';
-import type { Participant, RemoteParticipant, Room, TrackPublication } from 'livekit-client';
+import { Participant, RemoteParticipant, Room, TrackPublication } from 'livekit-client';
 import { ParticipantEvent, RoomEvent, Track } from 'livekit-client';
+// @ts-ignore some module resolutions (other than 'node') choke on this
 import type { ParticipantEventCallbacks } from 'livekit-client/dist/src/room/participant/Participant';
 import type { Subscriber } from 'rxjs';
 import { Observable, map, startWith, switchMap } from 'rxjs';
 import { getTrackByIdentifier } from '../components/mediaTrack';
 import { allParticipantEvents, allParticipantRoomEvents } from '../helper/eventGroups';
 import type { TrackReferenceOrPlaceholder } from '../track-reference';
-import type { TrackIdentifier } from '../types';
+import type { ParticipantIdentifier, TrackIdentifier } from '../types';
 import { observeRoomEvents } from './room';
 
 export function observeParticipantEvents<T extends Participant>(
@@ -85,7 +86,10 @@ export function createTrackObserver(participant: Participant, options: TrackIden
   );
 }
 
-export function participantInfoObserver(participant: Participant) {
+export function participantInfoObserver(participant?: Participant) {
+  if (!participant) {
+    return undefined;
+  }
   const observer = observeParticipantEvents(
     participant,
     ParticipantEvent.ParticipantMetadataChanged,
@@ -247,4 +251,65 @@ export function participantPermissionObserver(
     startWith(participant.permissions),
   );
   return observer;
+}
+
+export function participantByIdentifierObserver(
+  room: Room,
+  { kind, identity }: ParticipantIdentifier,
+  options: ConnectedParticipantObserverOptions = {},
+): Observable<RemoteParticipant | undefined> {
+  const additionalEvents = options.additionalEvents ?? allParticipantEvents;
+  const matchesIdentifier = (participant: RemoteParticipant) => {
+    let isMatch = true;
+    if (kind) {
+      isMatch = isMatch && participant.kind === kind;
+    }
+    if (identity) {
+      isMatch = isMatch && participant.identity === identity;
+    }
+    return isMatch;
+  };
+  const observable = observeRoomEvents(
+    room,
+    RoomEvent.ParticipantConnected,
+    RoomEvent.ParticipantDisconnected,
+    RoomEvent.ConnectionStateChanged,
+  ).pipe(
+    switchMap((r) => {
+      const participant = Array.from(r.remoteParticipants.values()).find((p) =>
+        matchesIdentifier(p),
+      );
+      if (participant) {
+        return observeParticipantEvents(participant, ...additionalEvents);
+      } else {
+        return new Observable<undefined>((subscribe) => subscribe.next(undefined));
+      }
+    }),
+    startWith(Array.from(room.remoteParticipants.values()).find((p) => matchesIdentifier(p))),
+  );
+
+  return observable;
+}
+
+export function participantAttributesObserver(participant: Participant): Observable<{
+  changed: Readonly<Record<string, string>>;
+  attributes: Readonly<Record<string, string>>;
+}>;
+export function participantAttributesObserver(participant: undefined): Observable<{
+  changed: undefined;
+  attributes: undefined;
+}>;
+export function participantAttributesObserver(participant: Participant | undefined) {
+  if (typeof participant === 'undefined') {
+    return new Observable<{ changed: undefined; attributes: undefined }>();
+  }
+  return participantEventSelector(participant, ParticipantEvent.AttributesChanged).pipe(
+    map(([changedAttributes]) => {
+      return {
+        changed: changedAttributes as Readonly<Record<string, string>>,
+        attributes: participant.attributes,
+      };
+    }),
+    startWith({ changed: participant.attributes, attributes: participant.attributes }),
+  );
 }

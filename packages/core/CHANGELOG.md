@@ -1,5 +1,131 @@
 # @livekit/components-core
 
+## 0.12.1
+
+### Patch Changes
+
+- Update livekit-client dependency - [#1068](https://github.com/livekit/components-js/pull/1068) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.12.0
+
+### Minor Changes
+
+- Improve default device handling - [#1056](https://github.com/livekit/components-js/pull/1056) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.11
+
+### Patch Changes
+
+- Include useKrispNoiseFilter in generated docs - [#1055](https://github.com/livekit/components-js/pull/1055) ([@bcherry](https://github.com/bcherry))
+
+- use JS SDK's isLocal check - [#1050](https://github.com/livekit/components-js/pull/1050) ([@davidzhao](https://github.com/davidzhao))
+
+## 0.11.10
+
+### Patch Changes
+
+- Fix initial device selection when mounting useMediaDeviceSelect - [#1014](https://github.com/livekit/components-js/pull/1014) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.9
+
+### Patch Changes
+
+- Use legacy chat messages on unsupported server versions - [#999](https://github.com/livekit/components-js/pull/999) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.8
+
+### Patch Changes
+
+- Move useKrispNoiseFilter into dedicated import path - [#991](https://github.com/livekit/components-js/pull/991) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.7
+
+### Patch Changes
+
+- Add krisp hook - [#986](https://github.com/livekit/components-js/pull/986) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.6
+
+### Patch Changes
+
+- update useParticipants to listen for any Participant's info changes - [#980](https://github.com/livekit/components-js/pull/980) ([@lebaudantoine](https://github.com/lebaudantoine))
+
+- Add support for new chat API - [#979](https://github.com/livekit/components-js/pull/979) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.5
+
+### Patch Changes
+
+- Fix local storage user choices - [#970](https://github.com/livekit/components-js/pull/970) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.4
+
+### Patch Changes
+
+- Add dataprops and allow a template child for BarVisualizer @lukasIO - [#965](https://github.com/livekit/components-js/pull/965) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.3
+
+### Patch Changes
+
+- Fix local storage of user choices - [#949](https://github.com/livekit/components-js/pull/949) ([@lukasIO](https://github.com/lukasIO))
+
+- Don't write empty username values to local storage - [#953](https://github.com/livekit/components-js/pull/953) ([@lukasIO](https://github.com/lukasIO))
+
+- Add useVoiceAssistant - [#917](https://github.com/livekit/components-js/pull/917) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.2
+
+### Patch Changes
+
+- Add useIsRecording hook - [#931](https://github.com/livekit/components-js/pull/931) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.11.1
+
+### Patch Changes
+
+- Allow custom GridLayout definitions - [#909](https://github.com/livekit/components-js/pull/909) ([@Ocupe](https://github.com/Ocupe))
+
+## 0.11.0
+
+### Minor Changes
+
+- Add participant attribute hooks and update livekit client - [#926](https://github.com/livekit/components-js/pull/926) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.10.5
+
+### Patch Changes
+
+- Fix docs package parameter extraction and forwardRefs components typing - [#912](https://github.com/livekit/components-js/pull/912) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.10.4
+
+### Patch Changes
+
+- Add overload for kind + identity in useRemoteParticipant hook - [#893](https://github.com/livekit/components-js/pull/893) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.10.3
+
+### Patch Changes
+
+- Create emailregex in components-core instead of using a dedicated package - [#895](https://github.com/livekit/components-js/pull/895) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.10.2
+
+### Patch Changes
+
+- Add experimental hooks for transcriptions - [#853](https://github.com/livekit/components-js/pull/853) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.10.1
+
+### Patch Changes
+
+- Add publishOptions for TrackToggle - [#868](https://github.com/livekit/components-js/pull/868) ([@lukasIO](https://github.com/lukasIO))
+
+- Forward track toggle errors - [#869](https://github.com/livekit/components-js/pull/869) ([@lukasIO](https://github.com/lukasIO))
+
+- Reset useChat messages when room disconnects - [#866](https://github.com/livekit/components-js/pull/866) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.10.0
 
 ### Minor Changes

@@ -4,7 +4,7 @@ import { useRoomContext } from '../context';
 import { useObservableState } from './internal';
 
 /**
- * The `useSpeakingParticipants` hook returns the only the active speakers of all participants.
+ * The `useSpeakingParticipants` hook returns only the active speakers of all participants.
  *
  * @example
  * ```tsx

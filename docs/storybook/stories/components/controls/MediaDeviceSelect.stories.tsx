@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { MediaDeviceSelect, MediaDeviceSelectProps } from '@livekit/components-react';
 import { LkRoomContext } from '../../../.storybook/lk-decorators';
 
 const kinds: MediaDeviceKind[] = ['audioinput', 'audiooutput', 'videoinput'];
 
-export default {
-  name: 'MediaDeviceSelect',
+const Story: Meta<typeof MediaDeviceSelect> = {
   component: MediaDeviceSelect,
   decorators: [LkRoomContext],
   render: (args: MediaDeviceSelectProps) => (
@@ -26,6 +25,8 @@ export default {
     },
   },
 };
+
+export default Story;
 
 export const AudioInputDevices: StoryObj<MediaDeviceSelectProps> = {
   args: { kind: 'audioinput' },

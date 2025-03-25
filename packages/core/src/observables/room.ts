@@ -1,7 +1,8 @@
-import type { Subscriber, Subscription } from 'rxjs';
-import { Subject, map, Observable, startWith, finalize, filter, concat } from 'rxjs';
 import type { Participant, TrackPublication } from 'livekit-client';
 import { LocalParticipant, Room, RoomEvent, Track } from 'livekit-client';
+import type { Subscriber, Subscription } from 'rxjs';
+import { concat, filter, finalize, map, Observable, startWith, Subject } from 'rxjs';
+// @ts-ignore some module resolutions (other than 'node') choke on this
 import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 import { log } from '../logger';
 export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observable<Room> {
@@ -53,7 +54,7 @@ export function roomObserver(room: Room) {
     RoomEvent.LocalTrackUnpublished,
     RoomEvent.AudioPlaybackStatusChanged,
     RoomEvent.ConnectionStateChanged,
-  ).pipe(startWith(room));
+  );
 
   return observable;
 }
@@ -219,6 +220,10 @@ export function createDataObserver(room: Room) {
   return roomEventSelector(room, RoomEvent.DataReceived);
 }
 
+export function createChatObserver(room: Room) {
+  return roomEventSelector(room, RoomEvent.ChatMessage);
+}
+
 export function roomAudioPlaybackAllowedObservable(room: Room) {
   const observable = observeRoomEvents(room, RoomEvent.AudioPlaybackStatusChanged).pipe(
     map((room) => {
@@ -244,20 +249,28 @@ export function createActiveDeviceObservable(room: Room, kind: MediaDeviceKind) 
       log.debug('activeDeviceObservable | RoomEvent.ActiveDeviceChanged', { kind, deviceId });
       return deviceId;
     }),
-    startWith(room.getActiveDevice(kind)),
   );
 }
 
-export function encryptionStatusObservable(room: Room, participant: Participant) {
+export function encryptionStatusObservable(room: Room, participant: Participant | undefined) {
   return roomEventSelector(room, RoomEvent.ParticipantEncryptionStatusChanged).pipe(
     filter(
       ([, p]) =>
-        participant.identity === p?.identity ||
-        (!p && participant.identity === room.localParticipant.identity),
+        participant?.identity === p?.identity ||
+        (!p && participant?.identity === room.localParticipant.identity),
     ),
     map(([encrypted]) => encrypted),
     startWith(
-      participant instanceof LocalParticipant ? participant.isE2EEEnabled : participant.isEncrypted,
+      participant?.isLocal
+        ? (participant as LocalParticipant).isE2EEEnabled
+        : !!participant?.isEncrypted,
     ),
+  );
+}
+
+export function recordingStatusObservable(room: Room) {
+  return roomEventSelector(room, RoomEvent.RecordingStatusChanged).pipe(
+    map(([recording]) => recording),
+    startWith(room.isRecording),
   );
 }

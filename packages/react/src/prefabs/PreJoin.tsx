@@ -3,6 +3,7 @@ import type {
   LocalAudioTrack,
   LocalTrack,
   LocalVideoTrack,
+  TrackProcessor,
 } from 'livekit-client';
 import {
   createLocalAudioTrack,
@@ -21,7 +22,7 @@ import { log } from '@livekit/components-core';
 import { ParticipantPlaceholder } from '../assets/images';
 import { useMediaDevices, usePersistentUserChoices } from '../hooks';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
-import { defaultUserChoices } from '@livekit/components-core';
+import { roomOptionsStringifyReplacer } from '../utils';
 
 /**
  * Props for the PreJoin component.
@@ -50,9 +51,10 @@ export interface PreJoinProps
    * @alpha
    */
   persistUserChoices?: boolean;
+  videoProcessor?: TrackProcessor<Track.Kind.Video>;
 }
 
-/** @alpha */
+/** @public */
 export function usePreviewTracks(
   options: CreateLocalTracksOptions,
   onError?: (err: Error) => void,
@@ -100,12 +102,15 @@ export function usePreviewTracks(
       });
       setOrphanTracks(localTracks);
     };
-  }, [JSON.stringify(options), onError, trackLock]);
+  }, [JSON.stringify(options, roomOptionsStringifyReplacer), onError, trackLock]);
 
   return tracks;
 }
 
-/** @public */
+/**
+ * @public
+ * @deprecated use `usePreviewTracks` instead
+ */
 export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   enabled: boolean,
   deviceId: string,
@@ -136,7 +141,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
           })
           : await createLocalAudioTrack({ deviceId });
 
-      const newDeviceId = await track.getDeviceId();
+      const newDeviceId = await track.getDeviceId(false);
       if (newDeviceId && deviceId !== newDeviceId) {
         prevDeviceId.current = newDeviceId;
         setLocalDeviceId(newDeviceId);
@@ -211,7 +216,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
  *
  * @remarks
  * This component is independent of the `LiveKitRoom` component and should not be nested within it.
- * Because it only access the local media tracks this component is self contained and works without connection to the LiveKit server.
+ * Because it only accesses the local media tracks this component is self-contained and works without connection to the LiveKit server.
  *
  * @example
  * ```tsx
@@ -230,19 +235,9 @@ export function PreJoin({
   camLabel = 'Camera',
   userLabel = 'Username',
   persistUserChoices = true,
+  videoProcessor,
   ...htmlProps
 }: PreJoinProps) {
-  const [userChoices, setUserChoices] = React.useState(defaultUserChoices);
-
-  // TODO: Remove and pipe `defaults` object directly into `usePersistentUserChoices` once we fully switch from type `LocalUserChoices` to `UserChoices`.
-  const partialDefaults: Partial<LocalUserChoices> = {
-    ...(defaults.audioDeviceId !== undefined && { audioDeviceId: defaults.audioDeviceId }),
-    ...(defaults.videoDeviceId !== undefined && { videoDeviceId: defaults.videoDeviceId }),
-    ...(defaults.audioEnabled !== undefined && { audioEnabled: defaults.audioEnabled }),
-    ...(defaults.videoEnabled !== undefined && { videoEnabled: defaults.videoEnabled }),
-    ...(defaults.username !== undefined && { username: defaults.username }),
-  };
-
   const {
     userChoices: initialUserChoices,
     saveAudioInputDeviceId,
@@ -251,21 +246,19 @@ export function PreJoin({
     saveVideoInputEnabled,
     saveUsername,
   } = usePersistentUserChoices({
-    defaults: partialDefaults,
+    defaults,
     preventSave: !persistUserChoices,
     preventLoad: !persistUserChoices,
   });
 
+  const [userChoices, setUserChoices] = React.useState(initialUserChoices);
+
   // Initialize device settings
-  const [audioEnabled, setAudioEnabled] = React.useState<boolean>(initialUserChoices.audioEnabled);
-  const [videoEnabled, setVideoEnabled] = React.useState<boolean>(initialUserChoices.videoEnabled);
-  const [audioDeviceId, setAudioDeviceId] = React.useState<string>(
-    initialUserChoices.audioDeviceId,
-  );
-  const [videoDeviceId, setVideoDeviceId] = React.useState<string>(
-    initialUserChoices.videoDeviceId,
-  );
-  const [username, setUsername] = React.useState(initialUserChoices.username);
+  const [audioEnabled, setAudioEnabled] = React.useState<boolean>(userChoices.audioEnabled);
+  const [videoEnabled, setVideoEnabled] = React.useState<boolean>(userChoices.videoEnabled);
+  const [audioDeviceId, setAudioDeviceId] = React.useState<string>(userChoices.audioDeviceId);
+  const [videoDeviceId, setVideoDeviceId] = React.useState<string>(userChoices.videoDeviceId);
+  const [username, setUsername] = React.useState(userChoices.username);
 
   // Save user choices to persistent storage.
   React.useEffect(() => {
@@ -287,7 +280,9 @@ export function PreJoin({
   const tracks = usePreviewTracks(
     {
       audio: audioEnabled ? { deviceId: initialUserChoices.audioDeviceId } : false,
-      video: videoEnabled ? { deviceId: initialUserChoices.videoDeviceId } : false,
+      video: videoEnabled
+        ? { deviceId: initialUserChoices.videoDeviceId, processor: videoProcessor }
+        : false,
     },
     onError,
   );

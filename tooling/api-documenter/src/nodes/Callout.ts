@@ -4,7 +4,7 @@
 import { IDocNodeParameters, DocNode, DocSection } from '@microsoft/tsdoc';
 import { CustomDocNodeKind } from './CustomDocNodeKind';
 
-type CalloutType = 'info' | 'tip' | 'important' | 'caution' | 'warning';
+type CalloutType = 'note' | 'tip' | 'important' | 'caution' | 'warning';
 type CalloutVariant = 'normal' | 'compact';
 
 /**
@@ -26,7 +26,7 @@ export class Callout extends DocNode {
   public constructor(parameters: ICalloutParameters, sectionChildNodes?: ReadonlyArray<DocNode>) {
     super(parameters);
     this.content = new DocSection({ configuration: this.configuration }, sectionChildNodes);
-    this.type = parameters.type ?? 'info';
+    this.type = parameters.type ?? 'note';
     this.variant = parameters.variant ?? 'normal';
   }
 

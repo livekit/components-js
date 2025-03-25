@@ -159,6 +159,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
         timestamp: Date.now(),
         message,
         from: room.localParticipant,
+        attachedFiles: options.attachments,
       };
       messageSubject.next(chatMsg);
       const encodedLegacyMsg = finalMessageEncoder({

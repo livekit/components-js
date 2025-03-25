@@ -72,19 +72,16 @@ export const ChatEntry: (
 
         <span className="lk-message-body">{formattedMessage}</span>
         <span className="lk-message-attachements">
-          {entry.attachedFiles?.map((file) =>
-            file.type.startsWith('image/') ? (
-              <img
-                style={{ maxWidth: '300px', maxHeight: '300px' }}
-                key={file.name}
-                src={URL.createObjectURL(file)}
-                alt={file.name}
-              />
-            ) : (
-              <span key={file.name} className="lk-message-attachment">
-                {file.name}
-              </span>
-            ),
+          {entry.attachedFiles?.map(
+            (file) =>
+              file.type.startsWith('image/') && (
+                <img
+                  style={{ maxWidth: '300px', maxHeight: '300px' }}
+                  key={file.name}
+                  src={URL.createObjectURL(file)}
+                  alt={file.name}
+                />
+              ),
           )}
         </span>
       </li>

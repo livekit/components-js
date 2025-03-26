@@ -180,7 +180,7 @@ importers:
         specifier: workspace:*
         version: link:../styles
       '@livekit/protocol':
-        specifier: ^1.23.0
+        specifier: ^1.36.1
         version: 1.36.1
       '@microsoft/api-extractor':
         specifier: ^7.36.0

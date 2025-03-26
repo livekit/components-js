@@ -726,6 +726,7 @@ export function useChat(options?: ChatOptions): {
         readonly editTimestamp: number;
         readonly id: string;
         readonly timestamp: number;
+        readonly attachedFiles?: Array<File>;
     }>;
     chatMessages: ReceivedChatMessage_2[];
     isSending: boolean;

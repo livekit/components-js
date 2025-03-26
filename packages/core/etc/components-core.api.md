@@ -503,6 +503,7 @@ export function setupChat(room: Room, options?: ChatOptions): {
         readonly editTimestamp: number;
         readonly id: string;
         readonly timestamp: number;
+        readonly attachedFiles?: Array<File>;
     }>;
 };
 
@@ -515,6 +516,7 @@ export function setupChatMessageHandler(room: Room): {
         readonly editTimestamp: number;
         readonly id: string;
         readonly timestamp: number;
+        readonly attachedFiles?: Array<File>;
     }>;
 };
 

@@ -1154,7 +1154,7 @@ export type UseSwipeOptions = {
     onRightSwipe?: () => void;
 };
 
-// @public (undocumented)
+// @beta (undocumented)
 export function useTextStream(topic: string): {
     textStreams: TextStreamData_2[];
 };

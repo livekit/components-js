@@ -25,4 +25,5 @@ export type {
   PinState,
   WidgetState,
   GridLayoutDefinition,
+  TextStreamData,
 } from '@livekit/components-core';

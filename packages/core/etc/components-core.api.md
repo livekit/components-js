@@ -29,6 +29,7 @@ import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 import type { ScreenShareCaptureOptions } from 'livekit-client';
 import { SendTextOptions } from 'livekit-client';
 import { setLogLevel as setLogLevel_2 } from 'livekit-client';
+import type { TextStreamInfo } from 'livekit-client/dist/src/room/types';
 import { Track } from 'livekit-client';
 import { TrackEvent as TrackEvent_2 } from 'livekit-client';
 import { TrackPublication } from 'livekit-client';
@@ -621,6 +622,9 @@ export function setupStartVideo(): {
 };
 
 // @public (undocumented)
+export function setupTextStream(room: Room, topic: string): Observable<TextStreamData[]>;
+
+// @public (undocumented)
 export function setupTrackMutedIndicator(trackRef: TrackReferenceOrPlaceholder): {
     className: string;
     mediaMutedObserver: Observable<boolean>;
@@ -637,6 +641,18 @@ export type SourcesArray = Track.Source[] | TrackSourceWithOptions[];
 
 // @public
 export function supportsScreenSharing(): boolean;
+
+// @public (undocumented)
+export interface TextStreamData {
+    // (undocumented)
+    participantInfo: {
+        identity: string;
+    };
+    // (undocumented)
+    streamInfo: TextStreamInfo;
+    // (undocumented)
+    text: string;
+}
 
 // @public (undocumented)
 export type ToggleSource = Exclude<Track.Source, Track.Source.ScreenShareAudio | Track.Source.Unknown>;

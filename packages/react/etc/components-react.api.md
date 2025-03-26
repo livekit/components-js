@@ -63,6 +63,8 @@ import { setLogLevel } from '../packages/core/dist/index.d.ts';
 import { SetMediaDeviceOptions } from '../../packages/core/dist/index.d.ts';
 import { SourcesArray } from '../../packages/core/dist/index.d.ts';
 import { SVGProps } from 'react';
+import { TextStreamData } from '../packages/core/dist/index.d.ts';
+import { TextStreamData as TextStreamData_2 } from '../../packages/core/dist/index.d.ts';
 import { ToggleSource } from '../../../packages/core/dist/index.d.ts';
 import { ToggleSource as ToggleSource_2 } from '../../packages/core/dist/index.d.ts';
 import { Track } from 'livekit-client';
@@ -639,6 +641,8 @@ export const StartAudio: (props: AllowAudioPlaybackProps & React_2.RefAttributes
 // @public
 export const StartMediaButton: (props: AllowMediaPlaybackProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactNode;
 
+export { TextStreamData }
+
 // @public
 export function Toast(props: React_2.HTMLAttributes<HTMLDivElement>): React_2.JSX.Element;
 
@@ -1148,6 +1152,11 @@ export type UseSwipeOptions = {
     minSwipeDistance?: number;
     onLeftSwipe?: () => void;
     onRightSwipe?: () => void;
+};
+
+// @public (undocumented)
+export function useTextStream(topic: string): {
+    textStreams: TextStreamData_2[];
 };
 
 // @public

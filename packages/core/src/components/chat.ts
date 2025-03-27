@@ -86,7 +86,6 @@ export function setupChat(room: Room, options?: ChatOptions) {
           return acc + chunk;
         }),
         map((chunk: string) => {
-          console.log('text stream updated', { id, chunk, attributes: reader.info.attributes });
           return {
             id,
             timestamp,

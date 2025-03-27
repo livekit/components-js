@@ -1,5 +1,18 @@
 # @livekit/components-react
 
+## 2.9.0
+
+### Minor Changes
+
+- Add support for datastream based chat - [#1096](https://github.com/livekit/components-js/pull/1096) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Fix useDataChannel's send return type - [#1080](https://github.com/livekit/components-js/pull/1080) ([@murilo-teleo](https://github.com/murilo-teleo))
+
+- Updated dependencies [[`e6e589820821302f7c4203cdb3772afc7f301e03`](https://github.com/livekit/components-js/commit/e6e589820821302f7c4203cdb3772afc7f301e03), [`74d98d34253612feea712e54b00bd4efb24d698b`](https://github.com/livekit/components-js/commit/74d98d34253612feea712e54b00bd4efb24d698b), [`673ee68a7ac6289d4deb8bf415563e4c5a4ea06a`](https://github.com/livekit/components-js/commit/673ee68a7ac6289d4deb8bf415563e4c5a4ea06a)]:
+  - @livekit/components-core@0.12.2
+
 ## 2.8.1
 
 ### Patch Changes

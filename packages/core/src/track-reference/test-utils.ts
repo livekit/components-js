@@ -23,6 +23,7 @@ export const mockTrackReferencePublished = (id: string, source: Track.Source): T
     : Track.Kind.Audio;
   return {
     participant: new Participant(`${id}`, `${id}`),
+    // @ts-ignore
     publication: new TrackPublication(kind, `${id}`, `${id}`),
     source: source,
   };
@@ -43,8 +44,9 @@ export const mockTrackReferenceSubscribed = (
     ? Track.Kind.Video
     : Track.Kind.Audio;
 
+  // @ts-ignore
   const publication = new TrackPublication(kind, `${id}`, `${id}`);
-  // @ts-expect-error
+  // @ts-ignore
   publication.track = {};
   return {
     participant: options.mockParticipant

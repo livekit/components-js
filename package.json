@@ -34,11 +34,13 @@
     "@livekit/changesets-changelog-github": "^0.0.4",
     "@rushstack/heft": "^0.68.0",
     "glob": "^11.0.0",
+    "globals": "^15.14.0",
     "husky": "^8.0.3",
     "nodemon": "^3.0.3",
     "prettier": "^3.2.5",
     "turbo": "^2.1.1",
-    "typescript": "5.7.3"
+    "typescript": "5.7.3",
+    "typescript-eslint": "^8.24.0"
   },
   "engines": {
     "node": ">=18"

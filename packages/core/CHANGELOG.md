@@ -1,5 +1,15 @@
 # @livekit/components-core
 
+## 0.12.2
+
+### Patch Changes
+
+- Update dependency rxjs to v7.8.2 - [#1094](https://github.com/livekit/components-js/pull/1094) ([@renovate](https://github.com/apps/renovate))
+
+- Fix duplicate startWith on room events observable - [#1092](https://github.com/livekit/components-js/pull/1092) ([@Toubat](https://github.com/Toubat))
+
+- Add support for datastream based chat - [#1096](https://github.com/livekit/components-js/pull/1096) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.12.1
 
 ### Patch Changes

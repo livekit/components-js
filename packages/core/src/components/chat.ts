@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
-import type { Participant, Room, ChatMessage } from 'livekit-client';
+import type { Participant, Room, ChatMessage, SendTextOptions } from 'livekit-client';
 import { compareVersions, RoomEvent } from 'livekit-client';
-import { BehaviorSubject, Subject, scan, map, takeUntil, merge } from 'rxjs';
+import { BehaviorSubject, Subject, scan, map, takeUntil, from, filter } from 'rxjs';
 import {
   DataTopic,
+  LegacyDataTopic,
   sendMessage,
-  setupChatMessageHandler,
   setupDataMessageHandler,
 } from '../observables/dataChannel';
 
@@ -18,11 +18,11 @@ export interface ReceivedChatMessage extends ChatMessage {
 }
 
 export interface LegacyChatMessage extends ChatMessage {
-  ignore?: boolean;
+  ignoreLegacy?: boolean;
 }
 
 export interface LegacyReceivedChatMessage extends ReceivedChatMessage {
-  ignore?: boolean;
+  ignoreLegacy?: boolean;
 }
 
 /**
@@ -41,83 +41,86 @@ export type ChatOptions = {
   messageEncoder?: (message: LegacyChatMessage) => Uint8Array;
   /** @deprecated the new chat API doesn't rely on encoders and decoders anymore and uses a dedicated chat API instead */
   messageDecoder?: (message: Uint8Array) => LegacyReceivedChatMessage;
-  /** @deprecated the new chat API doesn't rely on topics anymore and uses a dedicated chat API instead */
   channelTopic?: string;
-  /** @deprecated the new chat API doesn't rely on topics anymore and uses a dedicated chat API instead */
+  /** @deprecated the new chat API doesn't rely on update topics anymore and uses a dedicated chat API instead */
   updateChannelTopic?: string;
 };
 
-type RawMessage = {
-  payload: Uint8Array;
-  topic: string | undefined;
-  from: Participant | undefined;
-};
+const topicSubjectMap: WeakMap<Room, Map<string, Subject<ReceivedChatMessage>>> = new WeakMap();
 
-const encoder = new TextEncoder();
-const decoder = new TextDecoder();
+function isIgnorableChatMessage(msg: ReceivedChatMessage | LegacyReceivedChatMessage) {
+  return (msg as LegacyChatMessage).ignoreLegacy == true;
+}
 
-const topicSubjectMap: Map<Room, Map<string, Subject<RawMessage>>> = new Map();
+const decodeLegacyMsg = (message: Uint8Array) =>
+  JSON.parse(new TextDecoder().decode(message)) as LegacyReceivedChatMessage | ReceivedChatMessage;
 
-const encode = (message: LegacyReceivedChatMessage) => encoder.encode(JSON.stringify(message));
-
-const decode = (message: Uint8Array) =>
-  JSON.parse(decoder.decode(message)) as LegacyReceivedChatMessage | ReceivedChatMessage;
+const encodeLegacyMsg = (message: LegacyReceivedChatMessage) =>
+  new TextEncoder().encode(JSON.stringify(message));
 
 export function setupChat(room: Room, options?: ChatOptions) {
+  const serverSupportsDataStreams = () =>
+    room.serverInfo?.edition === 1 ||
+    (!!room.serverInfo?.version && compareVersions(room.serverInfo?.version, '1.8.2') > 0);
+
   const onDestroyObservable = new Subject<void>();
 
-  const serverSupportsChatApi = () =>
-    room.serverInfo?.edition === 1 ||
-    (!!room.serverInfo?.version && compareVersions(room.serverInfo?.version, '1.17.2') > 0);
-
-  const { messageDecoder, messageEncoder, channelTopic, updateChannelTopic } = options ?? {};
-
-  const topic = channelTopic ?? DataTopic.CHAT;
-
-  const updateTopic = updateChannelTopic ?? DataTopic.CHAT_UPDATE;
+  const topic = options?.channelTopic ?? DataTopic.CHAT;
+  const legacyTopic = options?.channelTopic ?? LegacyDataTopic.CHAT;
 
   let needsSetup = false;
   if (!topicSubjectMap.has(room)) {
     needsSetup = true;
   }
-  const topicMap = topicSubjectMap.get(room) ?? new Map<string, Subject<RawMessage>>();
-  const messageSubject = topicMap.get(topic) ?? new Subject<RawMessage>();
+  const topicMap = topicSubjectMap.get(room) ?? new Map<string, Subject<ReceivedChatMessage>>();
+  const messageSubject = topicMap.get(topic) ?? new Subject<ReceivedChatMessage>();
   topicMap.set(topic, messageSubject);
   topicSubjectMap.set(room, topicMap);
 
+  const finalMessageDecoder = options?.messageDecoder ?? decodeLegacyMsg;
   if (needsSetup) {
-    /** Subscribe to all appropriate messages sent over the wire. */
-    const { messageObservable } = setupDataMessageHandler(room, [topic, updateTopic]);
-    messageObservable.pipe(takeUntil(onDestroyObservable)).subscribe(messageSubject);
-  }
-  const { chatObservable, send: sendChatMessage } = setupChatMessageHandler(room);
+    room.registerTextStreamHandler(topic, async (reader, participantInfo) => {
+      const { id, timestamp } = reader.info;
+      const streamObservable = from(reader).pipe(
+        scan((acc: string, chunk: string) => {
+          return acc + chunk;
+        }),
+        map((chunk: string) => {
+          return {
+            id,
+            timestamp,
+            message: chunk,
+            from: room.getParticipantByIdentity(participantInfo.identity),
+            // editTimestamp: type === 'update' ? timestamp : undefined,
+          } as ReceivedChatMessage;
+        }),
+      );
+      streamObservable.subscribe({
+        next: (value) => messageSubject.next(value),
+      });
+    });
 
-  const finalMessageDecoder = messageDecoder ?? decode;
+    /** legacy chat protocol handling */
+    const { messageObservable } = setupDataMessageHandler(room, [legacyTopic]);
+    messageObservable
+      .pipe(
+        map((msg) => {
+          const parsedMessage = finalMessageDecoder(msg.payload);
+          if (isIgnorableChatMessage(parsedMessage)) {
+            return undefined;
+          }
+          const newMessage: ReceivedChatMessage = { ...parsedMessage, from: msg.from };
+          return newMessage;
+        }),
+        filter((msg) => !!msg),
+        takeUntil(onDestroyObservable),
+      )
+      .subscribe(messageSubject);
+  }
 
   /** Build up the message array over time. */
-  const messagesObservable = merge(
-    messageSubject.pipe(
-      map((msg) => {
-        const parsedMessage = finalMessageDecoder(msg.payload);
-        const newMessage = { ...parsedMessage, from: msg.from };
-        if (isIgnorableChatMessage(newMessage)) {
-          return undefined;
-        }
-        return newMessage;
-      }),
-    ),
-    chatObservable.pipe(
-      map(([msg, participant]) => {
-        return { ...msg, from: participant };
-      }),
-    ),
-  ).pipe(
-    scan<ReceivedChatMessage | undefined, ReceivedChatMessage[]>((acc, value) => {
-      // ignore legacy message updates
-      if (!value) {
-        return acc;
-      }
-      // handle message updates
+  const messagesObservable = messageSubject.pipe(
+    scan<ReceivedChatMessage, ReceivedChatMessage[]>((acc, value) => {
       if (
         'id' in value &&
         acc.find((msg) => msg.from?.identity === value.from?.identity && msg.id === value.id)
@@ -128,10 +131,9 @@ export function setupChat(room: Room, options?: ChatOptions) {
           acc[replaceIndex] = {
             ...value,
             timestamp: originalMsg.timestamp,
-            editTimestamp: value.editTimestamp ?? value.timestamp,
+            editTimestamp: value.timestamp,
           };
         }
-
         return [...acc];
       }
       return [...acc, value];
@@ -140,42 +142,34 @@ export function setupChat(room: Room, options?: ChatOptions) {
   );
 
   const isSending$ = new BehaviorSubject<boolean>(false);
+  const finalMessageEncoder = options?.messageEncoder ?? encodeLegacyMsg;
 
-  const finalMessageEncoder = messageEncoder ?? encode;
-
-  const send = async (message: string) => {
+  const send = async (message: string, options?: SendTextOptions) => {
+    if (!options) {
+      options = {};
+    }
+    options.topic ??= topic;
     isSending$.next(true);
+
     try {
-      const chatMessage = await sendChatMessage(message);
+      const info = await room.localParticipant.sendText(message, options);
+      const chatMsg: ReceivedChatMessage = {
+        id: info.id,
+        timestamp: Date.now(),
+        message,
+        from: room.localParticipant,
+        attachedFiles: options.attachments,
+      };
+      messageSubject.next(chatMsg);
       const encodedLegacyMsg = finalMessageEncoder({
-        ...chatMessage,
-        ignore: serverSupportsChatApi(),
+        ...chatMsg,
+        ignoreLegacy: serverSupportsDataStreams(),
       });
       await sendMessage(room.localParticipant, encodedLegacyMsg, {
         reliable: true,
-        topic,
+        topic: legacyTopic,
       });
-      return chatMessage;
-    } finally {
-      isSending$.next(false);
-    }
-  };
-
-  const update = async (message: string, originalMessageOrId: string | ChatMessage) => {
-    const timestamp = Date.now();
-    const originalMessage: ChatMessage =
-      typeof originalMessageOrId === 'string'
-        ? { id: originalMessageOrId, message: '', timestamp }
-        : originalMessageOrId;
-    isSending$.next(true);
-    try {
-      const editedMessage = await room.localParticipant.editChatMessage(message, originalMessage);
-      const encodedLegacyMessage = finalMessageEncoder(editedMessage);
-      await sendMessage(room.localParticipant, encodedLegacyMessage, {
-        topic: updateTopic,
-        reliable: true,
-      });
-      return editedMessage;
+      return chatMsg;
     } finally {
       isSending$.next(false);
     }
@@ -184,7 +178,9 @@ export function setupChat(room: Room, options?: ChatOptions) {
   function destroy() {
     onDestroyObservable.next();
     onDestroyObservable.complete();
+    messageSubject.complete();
     topicSubjectMap.delete(room);
+    room.unregisterTextStreamHandler(topic);
   }
   room.once(RoomEvent.Disconnected, destroy);
 
@@ -192,12 +188,5 @@ export function setupChat(room: Room, options?: ChatOptions) {
     messageObservable: messagesObservable,
     isSendingObservable: isSending$,
     send,
-    update,
   };
-}
-
-function isIgnorableChatMessage(
-  msg: ReceivedChatMessage | LegacyReceivedChatMessage,
-): msg is ReceivedChatMessage {
-  return (msg as LegacyChatMessage).ignore == true;
 }

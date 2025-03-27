@@ -1,7 +1,6 @@
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
-import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { TrackToggle } from '../components/controls/TrackToggle';
 import {
   useLocalParticipant,
@@ -10,7 +9,7 @@ import {
 } from '../hooks';
 import { mergeProps } from '../utils';
 import { StartMediaButton } from '../components/controls/StartMediaButton';
-import { BarVisualizer } from '../components';
+import { BarVisualizer, DisconnectButton } from '../components';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 
 /** @beta */

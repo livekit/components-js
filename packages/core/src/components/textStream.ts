@@ -67,7 +67,6 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
 
     // Subscribe to the stream and update our array when new chunks arrive
     streamObservable.subscribe((accumulatedText) => {
-      console.log('accumulatedText', accumulatedText);
       // Find and update the stream in our array
       const index = textStreams.findIndex((stream) => stream.streamInfo.id === reader.info.id);
       if (index !== -1) {

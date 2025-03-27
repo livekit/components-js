@@ -16,7 +16,7 @@ export interface UseTranscriptionsOptions {
  * if no options are provided, it will return all transcriptions
  * @example
  * ```tsx
- * const { transcriptions } = useTranscriptions();
+ * const transcriptions = useTranscriptions();
  * return <div>{transcriptions.map((transcription) => transcription.text)}</div>;
  * ```
  */

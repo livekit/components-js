@@ -1,17 +1,30 @@
 import * as React from 'react';
 import { useTextStream } from './useTextStream';
 
-export function useTranscription(participantIdentity: string) {
-  const { textStreams } = useTextStream('lk.chat');
+export interface UseTranscriptionsOptions {
+  participantIdentities?: string[];
+  trackSids?: string[];
+}
+
+export function useTranscriptions(opts: UseTranscriptionsOptions) {
+  const { participantIdentities, trackSids } = opts;
+  const { textStreams } = useTextStream('lk.transcription');
 
   const filteredMessages = React.useMemo(
-    () => textStreams.filter((stream) => stream.participantInfo.identity === participantIdentity),
-    [textStreams, participantIdentity],
+    () =>
+      textStreams
+        .filter((stream) =>
+          participantIdentities
+            ? participantIdentities.includes(stream.participantInfo.identity)
+            : true,
+        )
+        .filter((stream) =>
+          trackSids
+            ? trackSids.includes(stream.streamInfo.attributes?.['lk.transcribed_track_id'] ?? '')
+            : true,
+        ),
+    [textStreams, participantIdentities, trackSids],
   );
 
-  const activeTranscription = React.useMemo(() => {
-    return filteredMessages.at(-1);
-  }, [filteredMessages]);
-
-  return { activeTranscription: activeTranscription, transcriptions: filteredMessages };
+  return filteredMessages;
 }

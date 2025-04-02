@@ -45,7 +45,7 @@ export const ChatEntry: (
     }, [entry.message, messageFormatter]);
     const hasBeenEdited = !!entry.editTimestamp;
     const time = new Date(entry.timestamp);
-    const locale = navigator ? navigator.language : 'en-US';
+    const locale = typeof navigator !== 'undefined' ? navigator.language : 'en-US';
 
     const name = entry.from?.name ?? entry.from?.identity;
 

@@ -76,6 +76,33 @@ const getSequencerInterval = (
  *   );
  * }
  * ```
+ *
+ * @example
+ *  Styling the BarVisualizer using CSS classes
+ * ```css
+ * .lk-audio-bar {
+ *  // Styles for "idle" bars
+ *  }
+ * .lk-audio-bar.lk-highlighted {
+ *  // Styles for "active" bars
+ * }
+ * ```
+ *
+ * @example
+ * Styling the BarVisualizer using CSS custom properties
+ * ```css
+ * --lk-fg // for the "active" colour, note that this defines the main foreground colour for the whole "theme"
+ * --lk-va-bg // for "idle" colour
+ * ```
+ *
+ * @example
+ * Using a custom bar template for the BarVisualizer
+ * ```tsx
+ * <BarVisualizer>
+ *   <div className="all the classes" />
+ * </BarVisualizer>
+ * ```
+ * the highlighted children will get a data prop of data-lk-highlighted for them to switch between active and idle bars in their own template bar
  */
 export const BarVisualizer = /* @__PURE__ */ React.forwardRef<HTMLDivElement, BarVisualizerProps>(
   function BarVisualizer(

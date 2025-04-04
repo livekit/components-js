@@ -1,5 +1,13 @@
 # @livekit/components-react
 
+## 2.9.1
+
+### Patch Changes
+
+- Add more usage examples for bar visualizer - [#1116](https://github.com/livekit/components-js/pull/1116) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix navigator access in ChatEntry - [#1114](https://github.com/livekit/components-js/pull/1114) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.9.0
 
 ### Minor Changes

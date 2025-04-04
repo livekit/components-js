@@ -29,6 +29,7 @@ export { usePinnedTracks } from './usePinnedTracks';
 export { type UseRemoteParticipantOptions, useRemoteParticipant } from './useRemoteParticipant';
 export { type UseRemoteParticipantsOptions, useRemoteParticipants } from './useRemoteParticipants';
 export { type UseRoomInfoOptions, useRoomInfo } from './useRoomInfo';
+export { useSelectedDevice } from './useSelectedDevice';
 export { useSortedParticipants } from './useSortedParticipants';
 export { useSpeakingParticipants } from './useSpeakingParticipants';
 export { type UseStartAudioProps, useStartAudio } from './useStartAudio';

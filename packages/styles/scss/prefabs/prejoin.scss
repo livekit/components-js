@@ -1,4 +1,5 @@
 @import '../preflight';
+@import '../components/controls/button';
 
 .prejoin {
   @extend %container-style;
@@ -59,25 +60,20 @@
   }
 
   .button-group-container {
-    display: flex;
-    flex-wrap: nowrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
 
     > .button-group {
-      width: 50%;
-
-      > .button {
-        justify-content: left;
-      }
-
-      > .button:first-child {
-        width: 100%;
-      }
+      width: 100%;
     }
   }
-  @media (max-width: 400px) {
+  
+  @media (max-width: 600px) {
     .button-group-container {
-      flex-wrap: wrap;
+      display: flex;
+      flex-direction: column;
+
       > .button-group {
         width: 100%;
       }
@@ -102,5 +98,43 @@
     &:hover {
       background-color: var(--control-hover-bg);
     }
+  }
+}
+
+.button-group-pre-join {
+  @extend .button-group;
+  flex-wrap: nowrap;
+  width: 100%;
+  gap: 0.5rem;
+
+  > .button-menu {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
+.button-group-menu-pre-join {
+  @extend .button-group-menu;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow: hidden;
+
+  > label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.button-menu {
+  @extend .button-menu;
+  &::after {
+    margin-left: 0;
   }
 }

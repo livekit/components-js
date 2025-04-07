@@ -96,10 +96,8 @@ export function MediaDeviceMenu({
 
   React.useEffect(() => {
     document.addEventListener<'click'>('click', handleClickOutside);
-    // window.addEventListener<'resize'>('resize', () => setUpdateRequired(true));
     return () => {
       document.removeEventListener<'click'>('click', handleClickOutside);
-      // window.removeEventListener<'resize'>('resize', () => setUpdateRequired(true));
     };
   }, [handleClickOutside]);
 

@@ -25,7 +25,10 @@ export function useTextStream(topic: string) {
   );
 
   const textStreamObservable = React.useMemo(() => {
-    return setupTextStream(room, topic);
+    if (!isDisconnected) {
+      return setupTextStream(room, topic);
+    }
+    return undefined;
   }, [room, topic, isDisconnected]);
 
   const textStreams = useObservableState<TextStreamData[]>(textStreamObservable, []);

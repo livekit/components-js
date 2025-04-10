@@ -1,5 +1,20 @@
 # @livekit/components-react
 
+## 2.9.1
+
+### Patch Changes
+
+- Add more usage examples for bar visualizer - [#1116](https://github.com/livekit/components-js/pull/1116) ([@lukasIO](https://github.com/lukasIO))
+
+- Improve device menu auto placement - [#1117](https://github.com/livekit/components-js/pull/1117) ([@lukasIO](https://github.com/lukasIO))
+
+- Default to exact device matching - [#1119](https://github.com/livekit/components-js/pull/1119) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix navigator access in ChatEntry - [#1114](https://github.com/livekit/components-js/pull/1114) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`15b8bc608a9f3053cfaaf6da7ad93e40d23d5598`](https://github.com/livekit/components-js/commit/15b8bc608a9f3053cfaaf6da7ad93e40d23d5598)]:
+  - @livekit/components-core@0.12.3
+
 ## 2.9.0
 
 ### Minor Changes

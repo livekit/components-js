@@ -98,7 +98,7 @@ export const MediaDeviceSelect: (
 
     const handleActiveDeviceChange = async (deviceId: string) => {
       try {
-        await setActiveMediaDevice(deviceId, { exact: exactMatch });
+        await setActiveMediaDevice(deviceId, { exact: exactMatch ?? true });
       } catch (e) {
         if (e instanceof Error) {
           onDeviceSelectError?.(e);

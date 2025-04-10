@@ -29,7 +29,6 @@ export const mockTrackReferencePublished = (id: string, source: Track.Source): T
   });
   return {
     participant: new Participant(`${id}`, `${id}`),
-    // @ts-expect-error
     publication: new RemoteTrackPublication(kind, trackInfo, true),
     source: source,
   };
@@ -54,7 +53,6 @@ export const mockTrackReferenceSubscribed = (
     name: `${id}`,
     muted: false,
   });
-  // @ts-expect-error
   const publication = new RemoteTrackPublication(kind, trackInfo, true);
   // @ts-expect-error
   publication.track = {};

@@ -128,7 +128,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
       const track =
         kind === 'videoinput'
           ? await createLocalVideoTrack({
-              deviceId: deviceId,
+              deviceId,
               resolution: VideoPresets.h720.resolution,
             })
           : await createLocalAudioTrack({ deviceId });

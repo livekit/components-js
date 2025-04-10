@@ -7,8 +7,8 @@ settings:
 catalogs:
   default:
     livekit-client:
-      specifier: ^2.11.0
-      version: 2.11.0
+      specifier: ^2.11.1
+      version: 2.11.1
 
 importers:
 
@@ -64,7 +64,7 @@ importers:
         version: link:../../packages/styles
       livekit-client:
         specifier: 'catalog:'
-        version: 2.11.0
+        version: 2.11.1
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -128,10 +128,10 @@ importers:
         version: link:../../packages/styles
       '@livekit/track-processors':
         specifier: ^0.3.2
-        version: 0.3.2(livekit-client@2.11.0)
+        version: 0.3.2(livekit-client@2.11.1)
       livekit-client:
         specifier: 'catalog:'
-        version: 2.11.0
+        version: 2.11.1
       livekit-server-sdk:
         specifier: ^2.6.1
         version: 2.6.1
@@ -171,7 +171,7 @@ importers:
         version: 1.6.13
       livekit-client:
         specifier: 'catalog:'
-        version: 2.11.0
+        version: 2.11.1
       loglevel:
         specifier: 1.9.1
         version: 1.9.1
@@ -220,13 +220,13 @@ importers:
         version: link:../core
       '@livekit/krisp-noise-filter':
         specifier: ^0.2.12
-        version: 0.2.12(livekit-client@2.11.0)
+        version: 0.2.12(livekit-client@2.11.1)
       clsx:
         specifier: 2.1.1
         version: 2.1.1
       livekit-client:
         specifier: 'catalog:'
-        version: 2.11.0
+        version: 2.11.1
       tslib:
         specifier: ^2.6.2
         version: 2.8.1
@@ -6161,8 +6161,8 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  livekit-client@2.11.0:
-    resolution: {integrity: sha512-XoFpt8Y5hYHo25m8L6QkmQ5eAzcPXG9p+KcDhd3wetCxKT5olcibwfX2Zh3j/yWCxMvxerJwkrb/noMroqkLqg==}
+  livekit-client@2.11.1:
+    resolution: {integrity: sha512-XoUpMLll09ptJoHcYYefez1ACRFVxNt2Jo/yDLezc8c/gBzG2QJ35qvZaATlOUSRlF1q/6VwtcnWKQMGxriZkw==}
 
   livekit-server-sdk@2.6.1:
     resolution: {integrity: sha512-j/8TOlahIyWnycNkuSzTv6q+win4JTbDGNH48iMsZDMnJBks9hhC9UwAO4ES42sAorIAxGkrH58hxt4KdTkZaQ==}
@@ -10031,9 +10031,9 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@livekit/krisp-noise-filter@0.2.12(livekit-client@2.11.0)':
+  '@livekit/krisp-noise-filter@0.2.12(livekit-client@2.11.1)':
     dependencies:
-      livekit-client: 2.11.0
+      livekit-client: 2.11.1
 
   '@livekit/mutex@1.1.1': {}
 
@@ -10041,11 +10041,11 @@ snapshots:
     dependencies:
       '@bufbuild/protobuf': 1.10.0
 
-  '@livekit/track-processors@0.3.2(livekit-client@2.11.0)':
+  '@livekit/track-processors@0.3.2(livekit-client@2.11.1)':
     dependencies:
       '@mediapipe/holistic': 0.5.1675471629
       '@mediapipe/tasks-vision': 0.10.9
-      livekit-client: 2.11.0
+      livekit-client: 2.11.1
 
   '@manypkg/find-root@1.1.0':
     dependencies:
@@ -15591,7 +15591,7 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  livekit-client@2.11.0:
+  livekit-client@2.11.1:
     dependencies:
       '@livekit/mutex': 1.1.1
       '@livekit/protocol': 1.36.1

@@ -128,10 +128,10 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
       const track =
         kind === 'videoinput'
           ? await createLocalVideoTrack({
-              deviceId: { exact: deviceId },
+              deviceId,
               resolution: VideoPresets.h720.resolution,
             })
-          : await createLocalAudioTrack({ deviceId: { exact: deviceId } });
+          : await createLocalAudioTrack({ deviceId });
 
       const newDeviceId = await track.getDeviceId(false);
       if (newDeviceId && deviceId !== newDeviceId) {
@@ -271,9 +271,9 @@ export function PreJoin({
 
   const tracks = usePreviewTracks(
     {
-      audio: audioEnabled ? { deviceId: initialUserChoices.audioDeviceId } : false,
+      audio: audioEnabled ? { deviceId: { exact: initialUserChoices.audioDeviceId } } : false,
       video: videoEnabled
-        ? { deviceId: initialUserChoices.videoDeviceId, processor: videoProcessor }
+        ? { deviceId: { exact: initialUserChoices.videoDeviceId }, processor: videoProcessor }
         : false,
     },
     onError,

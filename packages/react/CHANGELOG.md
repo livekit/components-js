@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 2.9.2
+
+### Patch Changes
+
+- fix: avoid text stream re-register on disconnect - [#1118](https://github.com/livekit/components-js/pull/1118) ([@hudson-worden](https://github.com/hudson-worden))
+
+- chore: update livekit-client dependency - [#1121](https://github.com/livekit/components-js/pull/1121) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`a1b5f5c09e4e6b6c31f030a6d10e6a3f7df2a784`](https://github.com/livekit/components-js/commit/a1b5f5c09e4e6b6c31f030a6d10e6a3f7df2a784)]:
+  - @livekit/components-core@0.12.4
+
 ## 2.9.1
 
 ### Patch Changes

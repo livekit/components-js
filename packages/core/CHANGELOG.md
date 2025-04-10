@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.12.3
+
+### Patch Changes
+
+- Improve device menu auto placement - [#1117](https://github.com/livekit/components-js/pull/1117) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.12.2
 
 ### Patch Changes

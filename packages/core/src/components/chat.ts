@@ -8,6 +8,7 @@ import {
   sendMessage,
   setupDataMessageHandler,
 } from '../observables/dataChannel';
+import { log } from '../logger';
 
 /** @public */
 export type { ChatMessage };
@@ -165,10 +166,14 @@ export function setupChat(room: Room, options?: ChatOptions) {
         ...chatMsg,
         ignoreLegacy: serverSupportsDataStreams(),
       });
-      await sendMessage(room.localParticipant, encodedLegacyMsg, {
-        reliable: true,
-        topic: legacyTopic,
-      });
+      try {
+        await sendMessage(room.localParticipant, encodedLegacyMsg, {
+          reliable: true,
+          topic: legacyTopic,
+        });
+      } catch (error) {
+        log.info('could not send message in legacy chat format', error);
+      }
       return chatMsg;
     } finally {
       isSending$.next(false);

@@ -22,10 +22,7 @@ export default function Home() {
 
   React.useEffect(() => {
     if (room.state === 'disconnected') {
-      room.connect(
-        'wss://lukas-staging.staging.livekit.cloud',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3OTE0MDMzMzgsImlzcyI6IkFQSUFRc3hKRXZtR2Q5ZiIsIm5iZiI6MTY5MTQwMzMzOSwic3ViIjoiZGV2MSIsInZpZGVvIjp7ImNhblB1Ymxpc2giOnRydWUsImNhblB1Ymxpc2hEYXRhIjp0cnVlLCJjYW5TdWJzY3JpYmUiOnRydWUsInJvb20iOiJkZXYiLCJyb29tSm9pbiI6dHJ1ZX19.PcUA1yXZE-emwDhotnii9NmD5qFnf1r70wO-UygOm9k',
-      );
+      room.connect(process.env.NEXT_PUBLIC_LIVEKIT_URL, process.env.NEXT_PUBLIC_LIVEKIT_TOKEN);
     }
     return () => {
       room.disconnect();

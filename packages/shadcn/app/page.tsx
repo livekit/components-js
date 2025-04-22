@@ -43,8 +43,12 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <h2 className="text-sm text-muted-foreground sm:pl-3">A device select component.</h2>
             </div>
-            <div className="flex items-center justify-center min-h-[400px] relative">
-              <DeviceSelect kind="audioinput" />
+            <div className="flex items-center justify-center min-h-[100px] relative">
+              <DeviceSelect variant="default" kind="audioinput" />
+            </div>
+
+            <div className="flex items-center justify-center min-h-[100px] relative">
+              <DeviceSelect variant="small" kind="audioinput" />
             </div>
           </div>
 

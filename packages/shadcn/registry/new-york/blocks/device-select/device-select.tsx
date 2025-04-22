@@ -6,9 +6,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { cn } from '@/lib/utils';
 
 import { useMediaDeviceSelect, useMaybeRoomContext } from '@livekit/components-react';
+import { cva } from 'class-variance-authority';
 import { LocalAudioTrack, LocalVideoTrack } from 'livekit-client';
 type DeviceSelectProps = React.ComponentProps<typeof Select> & {
   kind: MediaDeviceKind;
@@ -18,7 +18,20 @@ type DeviceSelectProps = React.ComponentProps<typeof Select> & {
   initialSelection?: string;
   onActiveDeviceChange?: (deviceId: string) => void;
   onDeviceListChange?: (devices: MediaDeviceInfo[]) => void;
+  variant?: 'default' | 'small';
 };
+
+const selectVariants = cva('w-full rounded-md border px-3 py-2 text-sm', {
+  variants: {
+    variant: {
+      default: 'w-[180px]',
+      small: 'w-auto',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+  },
+});
 
 export function DeviceSelect({
   kind,
@@ -30,6 +43,8 @@ export function DeviceSelect({
   onDeviceListChange,
   ...props
 }: DeviceSelectProps) {
+  const variant = props.variant || 'default';
+
   const room = useMaybeRoomContext();
   const { devices, activeDeviceId, setActiveMediaDevice } = useMediaDeviceSelect({
     kind,
@@ -40,8 +55,8 @@ export function DeviceSelect({
   });
   return (
     <Select {...props} value={activeDeviceId} onValueChange={setActiveMediaDevice}>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder={`Select a ${kind}`} />
+      <SelectTrigger className={selectVariants({ variant })}>
+        {variant !== 'small' && <SelectValue placeholder={`Select a ${kind}`} />}
       </SelectTrigger>
       <SelectContent>
         {devices.map((device) => (

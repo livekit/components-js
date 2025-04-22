@@ -51,10 +51,20 @@ export function useVoiceAssistant(): VoiceAssistant {
     (p) =>
       p.kind === ParticipantKind.AGENT && p.attributes['lk.publish_on_behalf'] === agent?.identity,
   );
-  const agentTracks = useParticipantTracks([Track.Source.Microphone, Track.Source.Camera], agent?.identity);
-  const workerTracks = useParticipantTracks([Track.Source.Microphone, Track.Source.Camera], worker?.identity);
-  const audioTrack = agentTracks.find((t) => t.source === Track.Source.Microphone) ?? workerTracks.find((t) => t.source === Track.Source.Microphone);
-  const videoTrack = agentTracks.find((t) => t.source === Track.Source.Camera) ?? workerTracks.find((t) => t.source === Track.Source.Camera);
+  const agentTracks = useParticipantTracks(
+    [Track.Source.Microphone, Track.Source.Camera],
+    agent?.identity,
+  );
+  const workerTracks = useParticipantTracks(
+    [Track.Source.Microphone, Track.Source.Camera],
+    worker?.identity,
+  );
+  const audioTrack =
+    agentTracks.find((t) => t.source === Track.Source.Microphone) ??
+    workerTracks.find((t) => t.source === Track.Source.Microphone);
+  const videoTrack =
+    agentTracks.find((t) => t.source === Track.Source.Camera) ??
+    workerTracks.find((t) => t.source === Track.Source.Camera);
   const { segments: agentTranscriptions } = useTrackTranscription(audioTrack);
   const connectionState = useConnectionState();
   const { attributes } = useParticipantAttributes({ participant: agent });

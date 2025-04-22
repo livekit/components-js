@@ -43,19 +43,18 @@ const state_attribute = 'lk.agent.state';
  * @beta
  */
 export function useVoiceAssistant(): VoiceAssistant {
-  const agent = useRemoteParticipants().find(
+  const remoteParticipants = useRemoteParticipants();
+  const agent = remoteParticipants.find(
     (p) => p.kind === ParticipantKind.AGENT && !('lk.publish_on_behalf' in p.attributes),
   );
-  const worker = useRemoteParticipants().find(
+  const worker = remoteParticipants.find(
     (p) =>
       p.kind === ParticipantKind.AGENT && p.attributes['lk.publish_on_behalf'] === agent?.identity,
   );
-  const agentAudioTrack = useParticipantTracks([Track.Source.Microphone], agent?.identity)[0];
-  const agentVideoTrack = useParticipantTracks([Track.Source.Camera], agent?.identity)[0];
-  const workerAudioTrack = useParticipantTracks([Track.Source.Microphone], worker?.identity)[0];
-  const workerVideoTrack = useParticipantTracks([Track.Source.Camera], worker?.identity)[0];
-  const audioTrack = agentAudioTrack ?? workerAudioTrack;
-  const videoTrack = agentVideoTrack ?? workerVideoTrack;
+  const agentTracks = useParticipantTracks([Track.Source.Microphone, Track.Source.Camera], agent?.identity);
+  const workerTracks = useParticipantTracks([Track.Source.Microphone, Track.Source.Camera], worker?.identity);
+  const audioTrack = agentTracks.find((t) => t.source === Track.Source.Microphone) ?? workerTracks.find((t) => t.source === Track.Source.Microphone);
+  const videoTrack = agentTracks.find((t) => t.source === Track.Source.Camera) ?? workerTracks.find((t) => t.source === Track.Source.Camera);
   const { segments: agentTranscriptions } = useTrackTranscription(audioTrack);
   const connectionState = useConnectionState();
   const { attributes } = useParticipantAttributes({ participant: agent });

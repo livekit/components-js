@@ -26,6 +26,7 @@ export interface VoiceAssistant {
   agent: RemoteParticipant | undefined;
   state: AgentState;
   audioTrack: TrackReference | undefined;
+  videoTrack: TrackReference | undefined;
   agentTranscriptions: ReceivedTranscriptionSegment[];
   agentAttributes: RemoteParticipant['attributes'] | undefined;
 }
@@ -42,8 +43,19 @@ const state_attribute = 'lk.agent.state';
  * @beta
  */
 export function useVoiceAssistant(): VoiceAssistant {
-  const agent = useRemoteParticipants().find((p) => p.kind === ParticipantKind.AGENT);
-  const audioTrack = useParticipantTracks([Track.Source.Microphone], agent?.identity)[0];
+  const agent = useRemoteParticipants().find(
+    (p) => p.kind === ParticipantKind.AGENT && !('lk.publish_on_behalf' in p.attributes),
+  );
+  const worker = useRemoteParticipants().find(
+    (p) =>
+      p.kind === ParticipantKind.AGENT && p.attributes['lk.publish_on_behalf'] === agent?.identity,
+  );
+  const agentAudioTrack = useParticipantTracks([Track.Source.Microphone], agent?.identity)[0];
+  const agentVideoTrack = useParticipantTracks([Track.Source.Camera], agent?.identity)[0];
+  const workerAudioTrack = useParticipantTracks([Track.Source.Microphone], worker?.identity)[0];
+  const workerVideoTrack = useParticipantTracks([Track.Source.Camera], worker?.identity)[0];
+  const audioTrack = agentAudioTrack ?? workerAudioTrack;
+  const videoTrack = agentVideoTrack ?? workerVideoTrack;
   const { segments: agentTranscriptions } = useTrackTranscription(audioTrack);
   const connectionState = useConnectionState();
   const { attributes } = useParticipantAttributes({ participant: agent });
@@ -66,6 +78,7 @@ export function useVoiceAssistant(): VoiceAssistant {
     agent,
     state,
     audioTrack,
+    videoTrack,
     agentTranscriptions,
     agentAttributes: attributes,
   };

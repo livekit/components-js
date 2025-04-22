@@ -6,11 +6,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { cn } from '@/lib/utils';
 
 import { useMediaDeviceSelect, useMaybeRoomContext } from '@livekit/components-react';
 import { cva } from 'class-variance-authority';
 import { LocalAudioTrack, LocalVideoTrack } from 'livekit-client';
-type DeviceSelectProps = React.ComponentProps<typeof Select> & {
+type DeviceSelectProps = React.ComponentProps<typeof SelectTrigger> & {
   kind: MediaDeviceKind;
   track?: LocalAudioTrack | LocalVideoTrack | undefined;
   requestPermissions?: boolean;
@@ -54,8 +55,8 @@ export function DeviceSelect({
     onError,
   });
   return (
-    <Select {...props} value={activeDeviceId} onValueChange={setActiveMediaDevice}>
-      <SelectTrigger className={selectVariants({ variant })}>
+    <Select value={activeDeviceId} onValueChange={setActiveMediaDevice}>
+      <SelectTrigger className={cn(selectVariants({ variant }), props.className)}>
         {variant !== 'small' && <SelectValue placeholder={`Select a ${kind}`} />}
       </SelectTrigger>
       <SelectContent>

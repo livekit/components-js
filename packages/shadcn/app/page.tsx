@@ -66,7 +66,7 @@ export default function Home() {
               </Select>
             </div>
             <div className="flex items-center justify-center min-h-[400px] relative">
-              <TrackToggle source={source} />
+              <TrackToggle variant="outline" source={source} />
             </div>
           </div>
 

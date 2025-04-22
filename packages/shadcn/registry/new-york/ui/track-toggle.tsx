@@ -12,8 +12,10 @@ export function TrackToggle(props: TrackToggleProps) {
   const { enabled, pending, toggle } = useTrackToggle({
     source: props.source,
   });
+  const variant = props.variant || 'outline';
   return (
     <Toggle
+      variant={variant}
       aria-label={`Toggle ${props.source}`}
       onPressedChange={() => {
         console.log('toggle change');
@@ -33,6 +35,7 @@ export function TrackToggle(props: TrackToggleProps) {
       ) : (
         <VideoOff />
       )}
+      {props.children}
     </Toggle>
   );
 }

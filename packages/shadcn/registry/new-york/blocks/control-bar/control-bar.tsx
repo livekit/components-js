@@ -18,26 +18,29 @@ export const ControlBar = () => (
     <ToolbarToggleGroup
       type="multiple"
       aria-label="Publishing controls"
-      className="flex items-center gap-2"
+      className="flex items-center gap-0"
     >
       <ToolbarToggleItem asChild value="microphone">
-        <TrackToggle source={Track.Source.Microphone} />
+        <TrackToggle className="border-r-0 rounded-r-none" source={Track.Source.Microphone} />
       </ToolbarToggleItem>
       <ToolbarToggleItem asChild value="audioinput">
-        <DeviceSelect kind={'audioinput'} />
+        <DeviceSelect className="border-l-0 rounded-l-none" variant="small" kind={'audioinput'} />
       </ToolbarToggleItem>
     </ToolbarToggleGroup>
     <ToolbarSeparator className="mx-2.5 w-px bg-mauve6" />
     <ToolbarToggleGroup
       type="multiple"
       aria-label="Publishing controls"
-      className="flex items-center gap-2"
+      className="flex items-center gap-0"
     >
       <ToolbarToggleItem asChild value="camera">
-        <TrackToggle source={Track.Source.Camera} />
+        <TrackToggle
+          className="border-r-0 rounded-r-none"
+          source={Track.Source.Camera}
+        ></TrackToggle>
       </ToolbarToggleItem>
       <ToolbarToggleItem asChild value="videoinput">
-        <DeviceSelect kind={'videoinput'} />
+        <DeviceSelect className="border-l-0 rounded-l-none" variant="small" kind={'videoinput'} />
       </ToolbarToggleItem>
     </ToolbarToggleGroup>
 

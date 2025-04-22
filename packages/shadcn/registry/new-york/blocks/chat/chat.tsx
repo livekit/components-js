@@ -1,39 +1,45 @@
+'use client';
+
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { Send } from 'lucide-react';
 import { useChat, type ReceivedChatMessage } from '@livekit/components-react';
-import { useRef } from 'react';
 import { cn } from '@/lib/utils';
 import React from 'react';
-export type ChatProps = {
-  className?: string;
+import { ChatEntry } from './chat-entry';
+import { useChatMessageList } from './hooks/useChatMessageList';
+
+export type ChatProps = React.HTMLAttributes<HTMLDivElement> & {
   channelTopic?: string;
 };
 
-export const Chat = (props: ChatProps) => {
-  const chatOptions = React.useMemo(
-    () => ({ channelTopic: props.channelTopic ?? 'lk.chat' }),
-    [props.channelTopic],
-  );
-  const { chatMessages, send } = useChat(chatOptions);
-  const messageRef = useRef<HTMLTextAreaElement>(null);
-  const handleSend = () => {
-    if (messageRef.current) {
-      send(messageRef.current.value);
-      messageRef.current.value = '';
-    }
-  };
+export const Chat = React.forwardRef<HTMLDivElement, ChatProps>((props, ref) => {
+  const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
+  const { onSend, onKeyDown, chatMessages } = useChatMessageList({
+    channelTopic: props.channelTopic,
+    scrollContent: props.children,
+    textAreaRef,
+  });
+
   return (
-    <div className={cn('flex flex-col gap-2', props.className)}>
+    <div ref={ref} className={cn('flex flex-col gap-2', props.className)}>
       <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
         {chatMessages.map((message: ReceivedChatMessage) => (
-          <div key={message.id}>{message.message}</div>
+          <ChatEntry key={message.id} entry={message} />
         ))}
       </ScrollArea>
       <div className="flex gap-2">
-        <Textarea ref={messageRef} placeholder="Type your message here." />
-        <Button onClick={handleSend}>Send</Button>
+        <Textarea
+          ref={textAreaRef}
+          placeholder="Type your message here."
+          onKeyDown={onKeyDown}
+          className="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+        />
+        <Button onClick={onSend}>
+          <Send className="h-4 w-4" />
+        </Button>
       </div>
     </div>
   );
-};
+});

@@ -19,6 +19,7 @@ type DeviceSelectProps = React.ComponentProps<typeof Select> & {
   onActiveDeviceChange?: (deviceId: string) => void;
   onDeviceListChange?: (devices: MediaDeviceInfo[]) => void;
 };
+
 export function DeviceSelect({
   kind,
   track,

@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.9.3
+
+### Patch Changes
+
+- Pull audio track from avatar worker in useVoiceAssistant - [#1130](https://github.com/livekit/components-js/pull/1130) ([@bcherry](https://github.com/bcherry))
+
 ## 2.9.2
 
 ### Patch Changes

@@ -23,11 +23,29 @@ export type AgentState =
  * @beta
  */
 export interface VoiceAssistant {
+  /**
+   * The agent participant.
+   */
   agent: RemoteParticipant | undefined;
+  /**
+   * The current state of the agent.
+   */
   state: AgentState;
+  /**
+   * The microphone track published by the agent or associated avatar worker (if any).
+   */
   audioTrack: TrackReference | undefined;
+  /**
+   * The camera track published by the agent or associated avatar worker (if any).
+   */
   videoTrack: TrackReference | undefined;
+  /**
+   * The transcriptions of the agent's microphone track (if any).
+   */
   agentTranscriptions: ReceivedTranscriptionSegment[];
+  /**
+   * The agent's participant attributes.
+   */
   agentAttributes: RemoteParticipant['attributes'] | undefined;
 }
 

@@ -86,10 +86,7 @@ export type ChatOptions = {
 };
 
 // @public (undocumented)
-export function computeMenuPosition(button: HTMLElement, menu: HTMLElement): Promise<{
-    x: number;
-    y: number;
-}>;
+export function computeMenuPosition(button: HTMLElement, menu: HTMLElement, onUpdate?: (x: number, y: number) => void): () => void;
 
 // @public (undocumented)
 export function connectedParticipantObserver(room: Room, identity: string, options?: ConnectedParticipantObserverOptions): Observable<RemoteParticipant | undefined>;

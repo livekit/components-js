@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Chat } from '@/registry/new-york/blocks/chat/chat';
+import { VoiceAssistantControlBar } from '@/registry/new-york/blocks/voice-assistant-control-bar/voice-assistant-control-bar';
 // This page displays items from the custom registry.
 // You are free to implement this with your own design as needed.
 
@@ -39,7 +40,7 @@ export default function Home() {
       </header>
       <RoomContext.Provider value={room}>
         <main className="flex flex-col flex-1 gap-8">
-          <div className="flex flex-col gap-4 border rounded-lg p-4 min-h-[450px] relative">
+          <div className="flex flex-col gap-4 border rounded-lg p-4 min-h-[250px] relative">
             <div className="flex items-center justify-between">
               <h2 className="text-sm text-muted-foreground sm:pl-3">A device select component.</h2>
             </div>
@@ -83,8 +84,11 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <h2 className="text-sm text-muted-foreground sm:pl-3">A control bar component.</h2>
             </div>
-            <div className="flex items-center justify-center min-h-[400px] relative">
+            <div className="flex items-center justify-center min-h-[200px] relative">
               <ControlBar />
+            </div>
+            <div className="flex items-center justify-center min-h-[200px] relative">
+              <VoiceAssistantControlBar />
             </div>
           </div>
         </main>

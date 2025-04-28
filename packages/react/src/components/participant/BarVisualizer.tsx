@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useBarAnimator } from './animators/useBarAnimator';
-import { useMultibandTrackVolume, type AgentState } from '../../hooks';
+import { useIsMuted, useMultibandTrackVolume, type AgentState } from '../../hooks';
 import type { TrackReferenceOrPlaceholder } from '@livekit/components-core';
 import { useMaybeTrackRefContext } from '../../context';
 import { cloneSingleChild, mergeProps } from '../../utils';
@@ -121,6 +121,8 @@ export const BarVisualizer = /* @__PURE__ */ React.forwardRef<HTMLDivElement, Ba
       loPass: 100,
       hiPass: 200,
     });
+
+    const muted = useIsMuted(trackReference as TrackReferenceOrPlaceholder);
     const minHeight = options?.minHeight ?? 20;
     const maxHeight = options?.maxHeight ?? 100;
 
@@ -136,14 +138,15 @@ export const BarVisualizer = /* @__PURE__ */ React.forwardRef<HTMLDivElement, Ba
           children ? (
             cloneSingleChild(children, {
               'data-lk-highlighted': highlightedIndices.includes(idx),
+              'data-lk-muted': muted || undefined,
               'data-lk-bar-index': idx,
-              className: 'lk-audio-bar',
               style: { height: `${Math.min(maxHeight, Math.max(minHeight, volume * 100 + 5))}%` },
             })
           ) : (
             <span
               key={idx}
               data-lk-highlighted={highlightedIndices.includes(idx)}
+              data-lk-muted={muted || undefined}
               data-lk-bar-index={idx}
               className={`lk-audio-bar ${highlightedIndices.includes(idx) && 'lk-highlighted'}`}
               style={{

@@ -39,9 +39,10 @@ export function useDataChannel<T extends string>(
 ): UseDataChannelReturnType<T>;
 
 /**
- * Overload for `useDataChannel` without a topic. See `useDataChannel<T>` for more usage examples.
- * @internal
- *  */
+ * Overload for `useDataChannel` without a topic. See {@link useDataChannel} for information and usage examples.
+ *
+ * @public
+ */
 export function useDataChannel(
   onMessage?: (msg: ReceivedDataMessage) => void,
 ): UseDataChannelReturnType;

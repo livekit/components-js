@@ -19,6 +19,13 @@ function isPrefab(apiItem: ApiItem): boolean {
   return false;
 }
 
+export function isNonDefaultOverload(apiItem: ApiItem): boolean {
+  if (apiItem instanceof ApiFunction) {
+    return apiItem.overloadIndex !== undefined && apiItem.overloadIndex > 1;
+  }
+  return false;
+}
+
 function isConstDeclarationComponent(apiItem: ApiItem): boolean {
   return (
     apiItem instanceof ApiVariable &&

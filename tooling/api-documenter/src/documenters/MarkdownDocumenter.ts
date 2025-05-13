@@ -72,6 +72,7 @@ import {
   getCategorySubfolder,
   getFunctionType,
   getLinkToSourceOnGitHub,
+  isNonDefaultOverload,
 } from '../livekitUtils/classifiers';
 import { MarkDocTag } from '../nodes/MarkDocTag';
 import { ParameterList } from '../nodes/ParameterList';
@@ -136,6 +137,11 @@ export class MarkdownDocumenter {
     const configuration: TSDocConfiguration = this._tsdocConfiguration;
     const output: DocSection = new DocSection({ configuration });
     const category: LkType = getFunctionType(apiItem);
+
+    if (isNonDefaultOverload(apiItem)) {
+      console.log('isNonDefaultOverload', apiItem.displayName);
+      return;
+    }
 
     // this._writeBreadcrumb(output, apiItem);
 

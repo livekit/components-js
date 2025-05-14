@@ -39,7 +39,7 @@ export function useDataChannel<T extends string>(
 ): UseDataChannelReturnType<T>;
 
 /**
- * Overload for `useDataChannel` without a topic. See {@link useDataChannel:function(1)} for information and usage examples.
+ * Overload for `useDataChannel` without a topic. See {@link (useDataChannel:1)} for information and usage examples.
  *
  * @public
  */

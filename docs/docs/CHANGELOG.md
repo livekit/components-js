@@ -1,5 +1,14 @@
 # @livekit/components-js-docs
 
+## 0.1.57
+
+### Patch Changes
+
+- Add all examples to the one useDataChannel that gets documented - [#1136](https://github.com/livekit/components-js/pull/1136) ([@bcherry](https://github.com/bcherry))
+
+- Updated dependencies []:
+  - @livekit/components-react@2.9.4
+
 ## 0.1.56
 
 ### Patch Changes

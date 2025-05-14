@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.12.5
+
+### Patch Changes
+
+- Ensure subject is completed when unsubscribed - [#1135](https://github.com/livekit/components-js/pull/1135) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.12.4
 
 ### Patch Changes

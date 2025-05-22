@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.9.8
+
+### Patch Changes
+
+- fix(react): set all cols highlighted when agent state is speaking - [#1152](https://github.com/livekit/components-js/pull/1152) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.9.7
 
 ### Patch Changes

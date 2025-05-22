@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 2.9.5
+
+### Patch Changes
+
+- feat: add MediaDeviceKind to onMediaDeviceFailure callback - [#1143](https://github.com/livekit/components-js/pull/1143) ([@lukasIO](https://github.com/lukasIO))
+
+- fix: merge classes for slotted cloned children - [#1147](https://github.com/livekit/components-js/pull/1147) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies []:
+  - @livekit/components-core@0.12.5
+
 ## 2.9.4
 
 ### Patch Changes

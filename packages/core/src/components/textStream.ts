@@ -57,6 +57,8 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
   const textStreamsSubject = new Subject<TextStreamData[]>();
   const textStreams: TextStreamData[] = [];
 
+  const segmentAttribute = 'lk.segment_id';
+
   room.registerTextStreamHandler(topic, async (reader, participantInfo) => {
     // Create an observable from the reader
     const streamObservable = from(reader).pipe(
@@ -65,14 +67,17 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
       }, ''),
     );
 
+    const isTranscription = !!reader.info.attributes?.[segmentAttribute];
+
     // Subscribe to the stream and update our array when new chunks arrive
     streamObservable.subscribe((accumulatedText) => {
       // Find and update the stream in our array
       const index = textStreams.findIndex(
         (stream) =>
           stream.streamInfo.id === reader.info.id ||
-          stream.streamInfo.attributes?.['lk.segment_id'] ===
-            reader.info.attributes?.['lk.segment_id'],
+          (isTranscription &&
+            stream.streamInfo.attributes?.[segmentAttribute] ===
+              reader.info.attributes?.[segmentAttribute]),
       );
       if (index !== -1) {
         textStreams[index] = {

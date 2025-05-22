@@ -28,10 +28,10 @@ export function cloneSingleChild(
     // Checking isValidElement is the safe way and avoids a typescript
     // error too.
     if (React.isValidElement(child) && React.Children.only(children)) {
-      if (child.props.class) {
+      if (child.props.className) {
         // make sure we retain classnames of both passed props and child
         props ??= {};
-        props.class = clsx(child.props.class, props.class);
+        props.className = clsx(child.props.className, props.className);
         props.style = { ...child.props.style, ...props.style };
       }
       return React.cloneElement(child, { ...props, key });

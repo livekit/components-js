@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.12.7
+
+### Patch Changes
+
+- fix(core): dedupe transcriptions based on segment id - [#1149](https://github.com/livekit/components-js/pull/1149) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.12.6
 
 ### Patch Changes

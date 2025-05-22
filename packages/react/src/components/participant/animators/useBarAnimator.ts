@@ -19,7 +19,7 @@ export const useBarAnimator = (
       setSequence(sequence);
     } else if (state === 'listening') {
       setSequence(generateListeningSequenceBar(columns));
-    } else if (state === undefined) {
+    } else if (state === undefined || state === 'speaking') {
       setSequence([new Array(columns).fill(0).map((_, idx) => idx)]);
     } else {
       setSequence([[]]);

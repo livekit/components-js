@@ -67,7 +67,7 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   onConnected?: () => void;
   onDisconnected?: (reason?: DisconnectReason) => void;
   onError?: (error: Error) => void;
-  onMediaDeviceFailure?: (failure?: MediaDeviceFailure) => void;
+  onMediaDeviceFailure?: (failure?: MediaDeviceFailure, kind?: MediaDeviceKind) => void;
   onEncryptionError?: (error: Error) => void;
   /**
    * Optional room instance.

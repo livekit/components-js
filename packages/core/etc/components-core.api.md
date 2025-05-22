@@ -156,6 +156,7 @@ export const cssPrefix = "lk";
 // @public (undocumented)
 export const DataTopic: {
     readonly CHAT: "lk.chat";
+    readonly TRANSCRIPTION: "lk.transcription";
 };
 
 // @public (undocumented)

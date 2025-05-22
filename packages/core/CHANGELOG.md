@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.12.6
+
+### Patch Changes
+
+- Add useTranscription hook - [#1109](https://github.com/livekit/components-js/pull/1109) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.12.5
 
 ### Patch Changes

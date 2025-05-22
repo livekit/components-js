@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 2.9.6
+
+### Patch Changes
+
+- Add useTranscription hook - [#1109](https://github.com/livekit/components-js/pull/1109) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`f2a7e95975d8bd173fea38e6377bff26ce6f0bcc`](https://github.com/livekit/components-js/commit/f2a7e95975d8bd173fea38e6377bff26ce6f0bcc)]:
+  - @livekit/components-core@0.12.6
+
 ## 2.9.5
 
 ### Patch Changes

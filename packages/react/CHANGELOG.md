@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.9.9
+
+### Patch Changes
+
+- fix: remove path mapping to avoid relative package import paths in dist - [#1155](https://github.com/livekit/components-js/pull/1155) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.9.8
 
 ### Patch Changes

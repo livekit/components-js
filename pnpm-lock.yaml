@@ -236,7 +236,7 @@ importers:
     devDependencies:
       '@livekit/protocol':
         specifier: ^1.23.0
-        version: 1.36.1
+        version: 1.38.0
       '@microsoft/api-extractor':
         specifier: ^7.35.0
         version: 7.49.2(@types/node@22.13.1)
@@ -2094,9 +2094,6 @@ packages:
 
   '@livekit/mutex@1.1.1':
     resolution: {integrity: sha512-EsshAucklmpuUAfkABPxJNhzj9v2sG7JuzFDL4ML1oJQSV14sqrpTYnsaOudMAw9yOaW53NU3QQTlUQoRs4czw==}
-
-  '@livekit/protocol@1.36.1':
-    resolution: {integrity: sha512-nN3QnITAQ5yXk7UKfotH7CRWIlEozNWeKVyFJ0/+dtSzvWP/ib+10l1DDnRYi3A1yICJOGAKFgJ5d6kmi1HCUA==}
 
   '@livekit/protocol@1.38.0':
     resolution: {integrity: sha512-XX6ulvsE1XCN18LVf3ydHN7Ri1Z1M1P5dQdjnm5nVDsSqUL12Vbo/4RKcRlCEXAg2qB62mKjcaVLXVwkfXggkg==}
@@ -10062,10 +10059,6 @@ snapshots:
       livekit-client: 2.13.1
 
   '@livekit/mutex@1.1.1': {}
-
-  '@livekit/protocol@1.36.1':
-    dependencies:
-      '@bufbuild/protobuf': 1.10.0
 
   '@livekit/protocol@1.38.0':
     dependencies:

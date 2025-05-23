@@ -219,7 +219,7 @@ importers:
         specifier: workspace:*
         version: link:../core
       '@livekit/krisp-noise-filter':
-        specifier: ^0.2.12
+        specifier: ^0.2.12 || ^0.3.0
         version: 0.2.12(livekit-client@2.13.1)
       clsx:
         specifier: 2.1.1

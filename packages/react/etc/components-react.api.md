@@ -1204,6 +1204,17 @@ export interface UseTranscriptionsOptions {
     trackSids?: string[];
 }
 
+// @beta
+export function useTranscriptions(opts?: UseTranscriptionsOptions): TextStreamData_2[];
+
+// @beta (undocumented)
+export interface UseTranscriptionsOptions {
+    // (undocumented)
+    participantIdentities?: string[];
+    // (undocumented)
+    trackSids?: string[];
+}
+
 // @public
 export function useVisualStableUpdate(
 trackReferences: TrackReferenceOrPlaceholder[], maxItemsOnPage: number, options?: UseVisualStableUpdateOptions): TrackReferenceOrPlaceholder[];

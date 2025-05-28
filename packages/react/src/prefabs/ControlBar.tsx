@@ -12,7 +12,6 @@ import { supportsScreenSharing } from '@livekit/components-core';
 import { mergeProps } from '../utils';
 import { StartMediaButton } from '../components/controls/StartMediaButton';
 import { SettingsMenuToggle } from '../components/controls/SettingsMenuToggle';
-import { TrackSource } from '@livekit/protocol';
 
 /** @public */
 export type ControlBarControls = {
@@ -22,6 +21,19 @@ export type ControlBarControls = {
   screenShare?: boolean;
   leave?: boolean;
   settings?: boolean;
+};
+
+const trackSourceToProtocol = (source: Track.Source) => {
+  switch (source) {
+    case Track.Source.Camera:
+      return 1;
+    case Track.Source.Microphone:
+      return 2;
+    case Track.Source.ScreenShare:
+      return 3;
+    default:
+      return 0;
+  }
 };
 
 /** @public */
@@ -83,16 +95,16 @@ export function ControlBar({
     visibleControls.microphone = false;
     visibleControls.screenShare = false;
   } else {
-    const canPublishSource = (source: TrackSource) => {
+    const canPublishSource = (source: Track.Source) => {
       return (
         localPermissions.canPublish &&
         (localPermissions.canPublishSources.length === 0 ||
-          localPermissions.canPublishSources.includes(source))
+          localPermissions.canPublishSources.includes(trackSourceToProtocol(source)))
       );
     };
-    visibleControls.camera ??= canPublishSource(TrackSource.CAMERA);
-    visibleControls.microphone ??= canPublishSource(TrackSource.MICROPHONE);
-    visibleControls.screenShare ??= canPublishSource(TrackSource.SCREEN_SHARE);
+    visibleControls.camera ??= canPublishSource(Track.Source.Camera);
+    visibleControls.microphone ??= canPublishSource(Track.Source.Microphone);
+    visibleControls.screenShare ??= canPublishSource(Track.Source.ScreenShare);
     visibleControls.chat ??= localPermissions.canPublishData && controls?.chat;
   }
 

@@ -12,6 +12,7 @@ import { supportsScreenSharing } from '@livekit/components-core';
 import { mergeProps } from '../utils';
 import { StartMediaButton } from '../components/controls/StartMediaButton';
 import { SettingsMenuToggle } from '../components/controls/SettingsMenuToggle';
+import { TrackSource } from '@livekit/protocol';
 
 /** @public */
 export type ControlBarControls = {
@@ -82,9 +83,16 @@ export function ControlBar({
     visibleControls.microphone = false;
     visibleControls.screenShare = false;
   } else {
-    visibleControls.camera ??= localPermissions.canPublish;
-    visibleControls.microphone ??= localPermissions.canPublish;
-    visibleControls.screenShare ??= localPermissions.canPublish;
+    const canPublishSource = (source: TrackSource) => {
+      return (
+        localPermissions.canPublish &&
+        (localPermissions.canPublishSources.length === 0 ||
+          localPermissions.canPublishSources.includes(source))
+      );
+    };
+    visibleControls.camera ??= canPublishSource(TrackSource.CAMERA);
+    visibleControls.microphone ??= canPublishSource(TrackSource.MICROPHONE);
+    visibleControls.screenShare ??= canPublishSource(TrackSource.SCREEN_SHARE);
     visibleControls.chat ??= localPermissions.canPublishData && controls?.chat;
   }
 

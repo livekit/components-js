@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.9.10
+
+### Patch Changes
+
+- Refine visible controls based on canPublishSources permissions - [#1160](https://github.com/livekit/components-js/pull/1160) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.9.9
 
 ### Patch Changes

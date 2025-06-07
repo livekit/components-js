@@ -11,6 +11,7 @@ import {
 import type { TranscriptionSegment } from 'livekit-client';
 import * as React from 'react';
 import { useTrackSyncTime } from './useTrackSyncTime';
+import { useTranscriptions } from './useTranscriptions';
 
 /**
  * @alpha
@@ -39,6 +40,48 @@ const TRACK_TRANSCRIPTION_DEFAULTS = {
  * @alpha
  */
 export function useTrackTranscription(
+  trackRef: TrackReferenceOrPlaceholder | undefined,
+  options?: TrackTranscriptionOptions,
+) {
+  const legacyTranscription = useLegacyTranscription(trackRef, options);
+
+  const participantIdentities = React.useMemo(() => {
+    if (!trackRef) {
+      return [];
+    }
+    return [trackRef.participant.identity];
+  }, [trackRef]);
+  const trackSids = React.useMemo(() => {
+    if (!trackRef) {
+      return [];
+    }
+    return [getTrackReferenceId(trackRef)];
+  }, [trackRef]);
+  const useTranscriptionsOptions = React.useMemo(() => {
+    return { participantIdentities, trackSids };
+  }, [participantIdentities, trackSids]);
+  const transcriptions = useTranscriptions(useTranscriptionsOptions);
+
+  const streamAsSegments = transcriptions.map((t) => {
+    const legacySegment: ReceivedTranscriptionSegment = {
+      id: t.streamInfo.id,
+      text: t.text,
+      receivedAt: t.streamInfo.timestamp,
+      receivedAtMediaTimestamp: 0,
+      language: '',
+      startTime: 0,
+      endTime: 0,
+      final: false,
+      firstReceivedTime: 0,
+      lastReceivedTime: 0,
+    };
+    return legacySegment;
+  });
+
+  return streamAsSegments.length > 0 ? { segments: streamAsSegments } : legacyTranscription;
+}
+
+function useLegacyTranscription(
   trackRef: TrackReferenceOrPlaceholder | undefined,
   options?: TrackTranscriptionOptions,
 ) {

@@ -1,6 +1,5 @@
 import { setupConnectionQualityIndicator } from '@livekit/components-core';
 import type { Participant } from 'livekit-client';
-import { ConnectionQuality } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureParticipant } from '../context';
 import { useObservableState } from './internal';
@@ -28,7 +27,7 @@ export function useConnectionQualityIndicator(options: ConnectionQualityIndicato
     [p],
   );
 
-  const quality = useObservableState(connectionQualityObserver, ConnectionQuality.Unknown);
+  const quality = useObservableState(connectionQualityObserver, p.connectionQuality);
 
   return { className, quality };
 }

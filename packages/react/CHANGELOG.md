@@ -1,5 +1,13 @@
 # @livekit/components-react
 
+## 2.9.11
+
+### Patch Changes
+
+- Initialize connection quality with participant's current value - [#1171](https://github.com/livekit/components-js/pull/1171) ([@lukasIO](https://github.com/lukasIO))
+
+- fix(react): ensure useParticipantTracks hook updates on participant joins - [#1166](https://github.com/livekit/components-js/pull/1166) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.9.10
 
 ### Patch Changes

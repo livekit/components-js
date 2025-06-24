@@ -16,6 +16,7 @@ export type { ChatMessage };
 /** @public */
 export interface ReceivedChatMessage extends ChatMessage {
   from?: Participant;
+  attributes?: Record<string, string>;
 }
 
 export interface LegacyChatMessage extends ChatMessage {
@@ -169,6 +170,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
       const receivedChatMsg: ReceivedChatMessage = {
         ...chatMsg,
         from: room.localParticipant,
+        attributes: options.attributes,
       };
 
       messageSubject.next(receivedChatMsg);

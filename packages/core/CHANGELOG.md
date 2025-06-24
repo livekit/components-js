@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.12.8
+
+### Patch Changes
+
+- Fix legacy message encoding - [#1173](https://github.com/livekit/components-js/pull/1173) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.12.7
 
 ### Patch Changes

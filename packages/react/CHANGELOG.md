@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 2.9.12
+
+### Patch Changes
+
+- Only call onDeviceChange callback when non default device initially - [#1172](https://github.com/livekit/components-js/pull/1172) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`287c29fbdbe33086e44162b08343882c7e9ece99`](https://github.com/livekit/components-js/commit/287c29fbdbe33086e44162b08343882c7e9ece99)]:
+  - @livekit/components-core@0.12.8
+
 ## 2.9.11
 
 ### Patch Changes

@@ -61,6 +61,7 @@ export const MediaDeviceSelect: (
     ref,
   ) {
     const room = useMaybeRoomContext();
+    const previousActiveDeviceId = React.useRef<string>('default');
     const handleError = React.useCallback(
       (e: Error) => {
         if (room) {
@@ -91,9 +92,10 @@ export const MediaDeviceSelect: (
     }, [onDeviceListChange, devices]);
 
     React.useEffect(() => {
-      if (activeDeviceId && activeDeviceId !== '') {
+      if (activeDeviceId !== previousActiveDeviceId.current) {
         onActiveDeviceChange?.(activeDeviceId);
       }
+      previousActiveDeviceId.current = activeDeviceId;
     }, [activeDeviceId]);
 
     const handleActiveDeviceChange = async (deviceId: string) => {

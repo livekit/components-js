@@ -8,7 +8,7 @@ import { useMemo } from 'react';
 const MinimalExample: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
   const roomName = params?.get('room') ?? 'test-room';
-  setLogLevel('info', { liveKitClientLogLevel: 'warn' });
+  setLogLevel('debug', { liveKitClientLogLevel: 'info' });
 
   const tokenOptions = useMemo(() => {
     const userId = params?.get('user') ?? generateRandomUserId();

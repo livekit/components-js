@@ -155,16 +155,26 @@ export function setupChat(room: Room, options?: ChatOptions) {
     try {
       const info = await room.localParticipant.sendText(message, options);
 
-      const chatMsg: LegacyChatMessage = {
+      const legacyChatMsg: LegacyChatMessage = {
         id: info.id,
         timestamp: Date.now(),
         message,
+      };
+
+      const chatMsg: ChatMessage = {
+        ...legacyChatMsg,
         attachedFiles: options.attachments,
       };
-      messageSubject.next({ ...chatMsg, from: room.localParticipant });
+
+      const receivedChatMsg: ReceivedChatMessage = {
+        ...chatMsg,
+        from: room.localParticipant,
+      };
+
+      messageSubject.next(receivedChatMsg);
 
       const encodedLegacyMsg = finalMessageEncoder({
-        ...chatMsg,
+        ...legacyChatMsg,
         ignoreLegacy: serverSupportsDataStreams(),
       });
 
@@ -177,7 +187,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
         log.info('could not send message in legacy chat format', error);
       }
 
-      return chatMsg;
+      return receivedChatMsg;
     } finally {
       isSending$.next(false);
     }

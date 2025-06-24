@@ -56,7 +56,7 @@ function isIgnorableChatMessage(msg: ReceivedChatMessage | LegacyReceivedChatMes
 const decodeLegacyMsg = (message: Uint8Array) =>
   JSON.parse(new TextDecoder().decode(message)) as LegacyReceivedChatMessage | ReceivedChatMessage;
 
-const encodeLegacyMsg = (message: LegacyReceivedChatMessage) =>
+const encodeLegacyMsg = (message: LegacyChatMessage) =>
   new TextEncoder().encode(JSON.stringify(message));
 
 export function setupChat(room: Room, options?: ChatOptions) {
@@ -154,18 +154,20 @@ export function setupChat(room: Room, options?: ChatOptions) {
 
     try {
       const info = await room.localParticipant.sendText(message, options);
-      const chatMsg: ReceivedChatMessage = {
+
+      const chatMsg: LegacyChatMessage = {
         id: info.id,
         timestamp: Date.now(),
         message,
-        from: room.localParticipant,
         attachedFiles: options.attachments,
       };
-      messageSubject.next(chatMsg);
+      messageSubject.next({ ...chatMsg, from: room.localParticipant });
+
       const encodedLegacyMsg = finalMessageEncoder({
         ...chatMsg,
         ignoreLegacy: serverSupportsDataStreams(),
       });
+
       try {
         await sendMessage(room.localParticipant, encodedLegacyMsg, {
           reliable: true,
@@ -174,6 +176,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
       } catch (error) {
         log.info('could not send message in legacy chat format', error);
       }
+
       return chatMsg;
     } finally {
       isSending$.next(false);

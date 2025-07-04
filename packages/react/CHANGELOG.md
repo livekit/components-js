@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.9.13
+
+### Patch Changes
+
+- Update krisp peer dependency range - [#1182](https://github.com/livekit/components-js/pull/1182) ([@lukasIO](https://github.com/lukasIO))
+
 ## 2.9.12
 
 ### Patch Changes

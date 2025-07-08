@@ -157,7 +157,10 @@ export function VideoConference({
                 </FocusLayoutContainer>
               </div>
             )}
-            <ControlBar onDeviceError={onDeviceError} controls={{ chat: true, settings: !!SettingsComponent }} />
+            <ControlBar
+              onDeviceError={onDeviceError}
+              controls={{ chat: true, settings: !!SettingsComponent }}
+            />
           </div>
           <Chat
             style={{ display: widgetState.showChat ? 'grid' : 'none' }}

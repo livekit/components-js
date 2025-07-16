@@ -106,7 +106,6 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
         });
       },
       finalize: () => {
-        console.log('finalizing');
         room.unregisterTextStreamHandler(topic);
       },
     }),

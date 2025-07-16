@@ -106,9 +106,7 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
   observableCache.set(cacheKey, sharedObservable);
 
   // Add cleanup when room is disconnected
-  room.once(RoomEvent.Disconnected, () => {
-    room.unregisterTextStreamHandler(topic);
-    textStreamsSubject.complete();
+  room.on(RoomEvent.Disconnected, () => {
     getObservableCache().delete(cacheKey);
   });
 

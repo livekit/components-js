@@ -1,7 +1,7 @@
 import { RoomEvent, type Room } from 'livekit-client';
 import type { TextStreamInfo } from 'livekit-client/dist/src/room/types';
 import { from, scan, Subject, type Observable } from 'rxjs';
-import { share } from 'rxjs/operators';
+import { share, tap } from 'rxjs/operators';
 
 export interface TextStreamData {
   text: string;
@@ -55,61 +55,70 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
   }
 
   const textStreamsSubject = new Subject<TextStreamData[]>();
-  const textStreams: TextStreamData[] = [];
+  let textStreams: TextStreamData[] = [];
 
   const segmentAttribute = 'lk.segment_id';
 
-  room.registerTextStreamHandler(topic, async (reader, participantInfo) => {
-    // Create an observable from the reader
-    const streamObservable = from(reader).pipe(
-      scan((acc: string, chunk: string) => {
-        return acc + chunk;
-      }, ''),
-    );
-
-    const isTranscription = !!reader.info.attributes?.[segmentAttribute];
-
-    // Subscribe to the stream and update our array when new chunks arrive
-    streamObservable.subscribe((accumulatedText) => {
-      // Find and update the stream in our array
-      const index = textStreams.findIndex(
-        (stream) =>
-          stream.streamInfo.id === reader.info.id ||
-          (isTranscription &&
-            stream.streamInfo.attributes?.[segmentAttribute] ===
-              reader.info.attributes?.[segmentAttribute]),
-      );
-      if (index !== -1) {
-        textStreams[index] = {
-          ...textStreams[index],
-          text: accumulatedText,
-        };
-
-        // Emit the updated array
-        textStreamsSubject.next([...textStreams]);
-      } else {
-        // Handle case where stream ID wasn't found (new stream)
-        textStreams.push({
-          text: accumulatedText,
-          participantInfo,
-          streamInfo: reader.info,
-        });
-
-        // Emit the updated array with the new stream
-        textStreamsSubject.next([...textStreams]);
-      }
-    });
-  });
-
   // Create shared observable and store in cache
-  const sharedObservable = textStreamsSubject.asObservable().pipe(share());
+  const sharedObservable = textStreamsSubject.pipe(
+    tap({
+      subscribe: () => {
+        room.registerTextStreamHandler(topic, async (reader, participantInfo) => {
+          // Create an observable from the reader
+          const streamObservable = from(reader).pipe(
+            scan((acc: string, chunk: string) => {
+              return acc + chunk;
+            }, ''),
+          );
+
+          const isTranscription = !!reader.info.attributes?.[segmentAttribute];
+
+          // Subscribe to the stream and update our array when new chunks arrive
+          streamObservable.subscribe((accumulatedText) => {
+            // Find and update the stream in our array
+            const index = textStreams.findIndex(
+              (stream) =>
+                stream.streamInfo.id === reader.info.id ||
+                (isTranscription &&
+                  stream.streamInfo.attributes?.[segmentAttribute] ===
+                    reader.info.attributes?.[segmentAttribute]),
+            );
+            if (index !== -1) {
+              textStreams[index] = {
+                ...textStreams[index],
+                text: accumulatedText,
+              };
+
+              // Emit the updated array
+              textStreamsSubject.next([...textStreams]);
+            } else {
+              // Handle case where stream ID wasn't found (new stream)
+              textStreams.push({
+                text: accumulatedText,
+                participantInfo,
+                streamInfo: reader.info,
+              });
+
+              // Emit the updated array with the new stream
+              textStreamsSubject.next([...textStreams]);
+            }
+          });
+        });
+      },
+      finalize: () => {
+        room.unregisterTextStreamHandler(topic);
+      },
+    }),
+    share(),
+  );
+
   observableCache.set(cacheKey, sharedObservable);
 
   // Add cleanup when room is disconnected
-  room.once(RoomEvent.Disconnected, () => {
-    room.unregisterTextStreamHandler(topic);
-    textStreamsSubject.complete();
+  room.on(RoomEvent.Disconnected, () => {
     getObservableCache().delete(cacheKey);
+    textStreams = [];
+    textStreamsSubject.next([]);
   });
 
   return sharedObservable;

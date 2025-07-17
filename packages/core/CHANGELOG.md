@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.12.9
+
+### Patch Changes
+
+- fix(core): don't unregister stream handler on disconnect - [#1188](https://github.com/livekit/components-js/pull/1188) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.12.8
 
 ### Patch Changes

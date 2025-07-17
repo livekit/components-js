@@ -4,6 +4,7 @@ import {
   type LocalVideoTrack,
   type Room,
   type LocalTrack,
+  getBrowser,
 } from 'livekit-client';
 import { BehaviorSubject } from 'rxjs';
 import { log } from '../logger';
@@ -35,6 +36,11 @@ export function setupDeviceSelector(
         id === 'default' && localTrack.mediaStreamTrack.label.startsWith('Default') ? id : actualId,
       );
     } else if (room) {
+      const browser = getBrowser();
+      if (kind === 'audiooutput' && (browser?.name === 'Safari' || browser?.os === 'iOS')) {
+        log.warn(`Switching audio output device is not supported on Safari and iOS.`);
+        return;
+      }
       log.debug(`Switching active device of kind "${kind}" with id ${id}.`);
       await room.switchActiveDevice(kind, id, options.exact);
       const actualDeviceId: string | undefined = room.getActiveDevice(kind) ?? id;

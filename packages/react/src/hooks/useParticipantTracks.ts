@@ -4,7 +4,7 @@ import { participantTracksObservable } from '@livekit/components-core';
 import { useObservableState } from './internal';
 import type { Track } from 'livekit-client';
 import { useMaybeParticipantContext } from '../context';
-import { useRemoteParticipants } from './useRemoteParticipants';
+import { useParticipants } from './useParticipants';
 
 /**
  * `useParticipantTracks` is a custom React that allows you to get tracks of a specific participant only, by specifiying the participant's identity.
@@ -16,14 +16,14 @@ export function useParticipantTracks(
   participantIdentity?: string,
 ): TrackReference[] {
   const participantContext = useMaybeParticipantContext();
-  const remoteParticipants = useRemoteParticipants({ updateOnlyOn: [] });
+  const participants = useParticipants({ updateOnlyOn: [] });
 
   const p = React.useMemo(() => {
     if (participantIdentity) {
-      return remoteParticipants.find((p) => p.identity === participantIdentity);
+      return participants.find((p) => p.identity === participantIdentity);
     }
     return participantContext;
-  }, [participantIdentity, remoteParticipants, participantContext]);
+  }, [participantIdentity, participants, participantContext]);
 
   const observable = React.useMemo(() => {
     if (!p) {

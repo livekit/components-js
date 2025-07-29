@@ -138,39 +138,41 @@ export function VideoConference({
           // onPinChange={handleFocusStateChange}
           onWidgetChange={widgetUpdate}
         >
-          <div className="lk-video-conference-inner">
-            {!focusTrack ? (
-              <div className="lk-grid-layout-wrapper">
-                <GridLayout tracks={tracks}>
-                  <ParticipantTile />
-                </GridLayout>
-              </div>
-            ) : (
-              <div className="lk-focus-layout-wrapper">
-                <FocusLayoutContainer>
-                  <CarouselLayout tracks={carouselTracks}>
+          <div className="lk-video-conference-content">
+            <div className="lk-video-conference-inner">
+              {!focusTrack ? (
+                <div className="lk-grid-layout-wrapper">
+                  <GridLayout tracks={tracks}>
                     <ParticipantTile />
-                  </CarouselLayout>
-                  {focusTrack && <FocusLayout trackRef={focusTrack} />}
-                </FocusLayoutContainer>
+                  </GridLayout>
+                </div>
+              ) : (
+                <div className="lk-focus-layout-wrapper">
+                  <FocusLayoutContainer>
+                    <CarouselLayout tracks={carouselTracks}>
+                      <ParticipantTile />
+                    </CarouselLayout>
+                    {focusTrack && <FocusLayout trackRef={focusTrack} />}
+                  </FocusLayoutContainer>
+                </div>
+              )}
+            </div>
+            <Chat
+              style={{ display: widgetState.showChat ? 'grid' : 'none' }}
+              messageFormatter={chatMessageFormatter}
+              messageEncoder={chatMessageEncoder}
+              messageDecoder={chatMessageDecoder}
+            />
+            {SettingsComponent && (
+              <div
+                className="lk-settings-menu-modal"
+                style={{ display: widgetState.showSettings ? 'block' : 'none' }}
+              >
+                <SettingsComponent />
               </div>
             )}
-            <ControlBar controls={{ chat: true, settings: !!SettingsComponent }} />
           </div>
-          <Chat
-            style={{ display: widgetState.showChat ? 'grid' : 'none' }}
-            messageFormatter={chatMessageFormatter}
-            messageEncoder={chatMessageEncoder}
-            messageDecoder={chatMessageDecoder}
-          />
-          {SettingsComponent && (
-            <div
-              className="lk-settings-menu-modal"
-              style={{ display: widgetState.showSettings ? 'block' : 'none' }}
-            >
-              <SettingsComponent />
-            </div>
-          )}
+          <ControlBar controls={{ chat: true, settings: !!SettingsComponent }} />
         </LayoutContextProvider>
       )}
       <RoomAudioRenderer />

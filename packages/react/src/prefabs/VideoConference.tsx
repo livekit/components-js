@@ -23,6 +23,7 @@ import { usePinnedTracks, useTracks } from '../hooks';
 import { Chat } from './Chat';
 import { ControlBar } from './ControlBar';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
+import { EmojiReactionProvider } from '../context/EmojiReactionContext';
 
 /**
  * @public
@@ -133,47 +134,49 @@ export function VideoConference({
   return (
     <div className="lk-video-conference" {...props}>
       {isWeb() && (
-        <LayoutContextProvider
-          value={layoutContext}
-          // onPinChange={handleFocusStateChange}
-          onWidgetChange={widgetUpdate}
-        >
-          <div className="lk-video-conference-content">
-            <div className="lk-video-conference-inner">
-              {!focusTrack ? (
-                <div className="lk-grid-layout-wrapper">
-                  <GridLayout tracks={tracks}>
-                    <ParticipantTile />
-                  </GridLayout>
-                </div>
-              ) : (
-                <div className="lk-focus-layout-wrapper">
-                  <FocusLayoutContainer>
-                    <CarouselLayout tracks={carouselTracks}>
+        <EmojiReactionProvider>
+          <LayoutContextProvider
+            value={layoutContext}
+            // onPinChange={handleFocusStateChange}
+            onWidgetChange={widgetUpdate}
+          >
+            <div className="lk-video-conference-content">
+              <div className="lk-video-conference-inner">
+                {!focusTrack ? (
+                  <div className="lk-grid-layout-wrapper">
+                    <GridLayout tracks={tracks}>
                       <ParticipantTile />
-                    </CarouselLayout>
-                    {focusTrack && <FocusLayout trackRef={focusTrack} />}
-                  </FocusLayoutContainer>
+                    </GridLayout>
+                  </div>
+                ) : (
+                  <div className="lk-focus-layout-wrapper">
+                    <FocusLayoutContainer>
+                      <CarouselLayout tracks={carouselTracks}>
+                        <ParticipantTile />
+                      </CarouselLayout>
+                      {focusTrack && <FocusLayout trackRef={focusTrack} />}
+                    </FocusLayoutContainer>
+                  </div>
+                )}
+              </div>
+              <Chat
+                style={{ display: widgetState.showChat ? 'grid' : 'none' }}
+                messageFormatter={chatMessageFormatter}
+                messageEncoder={chatMessageEncoder}
+                messageDecoder={chatMessageDecoder}
+              />
+              {SettingsComponent && (
+                <div
+                  className="lk-settings-menu-modal"
+                  style={{ display: widgetState.showSettings ? 'block' : 'none' }}
+                >
+                  <SettingsComponent />
                 </div>
               )}
             </div>
-            <Chat
-              style={{ display: widgetState.showChat ? 'grid' : 'none' }}
-              messageFormatter={chatMessageFormatter}
-              messageEncoder={chatMessageEncoder}
-              messageDecoder={chatMessageDecoder}
-            />
-            {SettingsComponent && (
-              <div
-                className="lk-settings-menu-modal"
-                style={{ display: widgetState.showSettings ? 'block' : 'none' }}
-              >
-                <SettingsComponent />
-              </div>
-            )}
-          </div>
-          <ControlBar controls={{ chat: true, settings: !!SettingsComponent }} />
-        </LayoutContextProvider>
+            <ControlBar controls={{ chat: true, settings: !!SettingsComponent, reactions: true }} />
+          </LayoutContextProvider>
+        </EmojiReactionProvider>
       )}
       <RoomAudioRenderer />
       <ConnectionStateToast />

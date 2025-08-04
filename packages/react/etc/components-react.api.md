@@ -1064,6 +1064,30 @@ export interface UserInfo {
 }
 
 // @public
+export function useRoomConnection(options: UseRoomConnectionOptions): UseRoomConnectionResult;
+
+// @public (undocumented)
+export type UseRoomConnectionDetails = {
+    serverUrl: string;
+    participantToken: string;
+};
+
+// @public (undocumented)
+export type UseRoomConnectionOptions = {
+    getConnectionDetails: () => Promise<UseRoomConnectionDetails>;
+    onConnectionError?: (err: Error) => void;
+    room?: Room;
+    connected?: boolean;
+    trackPublishOptions?: TrackPublishOptions;
+};
+
+// @public (undocumented)
+export type UseRoomConnectionResult = {
+    room: Room;
+    status: 'idle' | 'connecting' | 'disconnecting';
+};
+
+// @public
 export function useRoomContext(): Room;
 
 // @public (undocumented)

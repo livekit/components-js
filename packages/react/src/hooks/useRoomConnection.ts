@@ -45,7 +45,7 @@ type UseRoomConnectionResult = {
 export function useRoomConnection(options: UseRoomConnectionOptions): UseRoomConnectionResult {
   const roomFromContext = useMaybeRoomContext();
   const room = useMemo(() => {
-    return roomFromContext ?? options.room ?? (new Room());
+    return roomFromContext ?? options.room ?? new Room();
   }, [options.room, roomFromContext]);
 
   const connected = options.connected ?? true;
@@ -64,7 +64,11 @@ export function useRoomConnection(options: UseRoomConnectionOptions): UseRoomCon
         const connectionDetails = await options.getConnectionDetails();
         try {
           await Promise.all([
-            room.localParticipant.setMicrophoneEnabled(true, undefined, options.trackPublishOptions),
+            room.localParticipant.setMicrophoneEnabled(
+              true,
+              undefined,
+              options.trackPublishOptions,
+            ),
             room.connect(connectionDetails.serverUrl, connectionDetails.participantToken),
           ]);
         } catch (error) {
@@ -81,7 +85,7 @@ export function useRoomConnection(options: UseRoomConnectionOptions): UseRoomCon
         } finally {
           setStatus('idle');
         }
-      };
+      }
       unlock();
     });
   }, [connected]);

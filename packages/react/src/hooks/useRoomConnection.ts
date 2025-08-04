@@ -1,4 +1,4 @@
-import { Mutex, TrackPublishOptions, Room } from 'livekit-client';
+import { Mutex, type TrackPublishOptions, Room } from 'livekit-client';
 import { useEffect, useMemo, useState } from 'react';
 import { useMaybeRoomContext } from '../context';
 
@@ -18,14 +18,15 @@ type UseRoomConnectionOptions = {
 };
 
 type UseRoomConnectionResult = {
-  room: Room,
+  room: Room;
 
   /** What operation is the useRoomConnection hook currently in the midst of performing?  */
-  status: 'idle' | 'connecting' | 'disconnecting',
+  status: 'idle' | 'connecting' | 'disconnecting';
 };
 
 /**
- * The `useRoomConnection` hook provides a fully managed way to 
+ * The `useRoomConnection` hook provides a fully managed way to connect / disconnect from a LiveKit
+ * room. To control whether the connection is active or not, use `options.connected`.
  * @remarks
  * Can be called inside a `RoomContext` or by passing a `Room` instance, otherwise creates a Room
  * itself.

@@ -2,11 +2,17 @@ import { Mutex, type TrackPublishOptions, Room } from 'livekit-client';
 import { useEffect, useMemo, useState } from 'react';
 import { useMaybeRoomContext } from '../context';
 
+/**
+ * @public
+ */
 type UseRoomConnectionDetails = {
   serverUrl: string;
   participantToken: string;
 };
 
+/**
+ * @public
+ */
 type UseRoomConnectionOptions = {
   getConnectionDetails: () => Promise<UseRoomConnectionDetails>;
   onConnectionError?: (err: Error) => void;
@@ -17,6 +23,9 @@ type UseRoomConnectionOptions = {
   trackPublishOptions?: TrackPublishOptions;
 };
 
+/**
+ * @public
+ */
 type UseRoomConnectionResult = {
   room: Room;
 

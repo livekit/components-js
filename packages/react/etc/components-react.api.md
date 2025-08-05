@@ -375,6 +375,7 @@ export const LiveKitRoom: (props: React_2.PropsWithChildren<LiveKitRoomProps> & 
 export interface LiveKitRoomProps extends Omit<React_2.HTMLAttributes<HTMLDivElement>, 'onError'> {
     audio?: AudioCaptureOptions | boolean;
     connect?: boolean;
+    connectionSideEffect?: (room: Room) => Promise<void>;
     connectOptions?: RoomConnectOptions;
     // @internal (undocumented)
     featureFlags?: FeatureFlags;

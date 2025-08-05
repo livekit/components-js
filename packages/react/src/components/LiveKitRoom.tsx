@@ -79,6 +79,12 @@ export interface LiveKitRoomProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   simulateParticipants?: number | undefined;
 
   /**
+   * Optional side effect to run in parallel with the connection process.
+   * This can be used to enable the microphone preconnect buffer / etc
+   */
+  connectionSideEffect?: (room: Room) => Promise<void>;
+
+  /**
    * @internal
    */
   featureFlags?: FeatureFlags;

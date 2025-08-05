@@ -47,6 +47,7 @@ export function useLiveKitRoom<T extends HTMLElement>(
     onMediaDeviceFailure,
     onEncryptionError,
     simulateParticipants,
+    connectionSideEffect,
     ...rest
   } = { ...defaultRoomProps, ...props };
   if (options && passedRoom) {
@@ -84,7 +85,7 @@ export function useLiveKitRoom<T extends HTMLElement>(
       });
     };
 
-    const handleMediaDeviceError = (e: Error, kind: MediaDeviceKind) => {
+    const handleMediaDeviceError = (e: Error, kind?: MediaDeviceKind) => {
       const mediaDeviceFailure = MediaDeviceFailure.getFailure(e);
       onMediaDeviceFailure?.(mediaDeviceFailure, kind);
     };
@@ -153,7 +154,12 @@ export function useLiveKitRoom<T extends HTMLElement>(
         onError?.(Error('no livekit url provided'));
         return;
       }
-      room.connect(serverUrl, token, connectOptions).catch((e) => {
+
+      const connectionPromise = room.connect(serverUrl, token, connectOptions);
+      (connectionSideEffect ? Promise.all([
+        connectionPromise,
+        connectionSideEffect,
+      ]) : connectionPromise).catch((e) => {
         log.warn(e);
         if (shouldConnect.current === true) {
           onError?.(e as Error);
@@ -172,6 +178,7 @@ export function useLiveKitRoom<T extends HTMLElement>(
     onError,
     serverUrl,
     simulateParticipants,
+    connectionSideEffect,
   ]);
 
   React.useEffect(() => {

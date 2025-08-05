@@ -1,6 +1,6 @@
 import { log, setupLiveKitRoom } from '@livekit/components-core';
 import type { DisconnectReason } from 'livekit-client';
-import { Room, MediaDeviceFailure, RoomEvent } from 'livekit-client';
+import { Room, MediaDeviceFailure, RoomEvent, Mutex } from 'livekit-client';
 import * as React from 'react';
 import type { HTMLAttributes } from 'react';
 
@@ -126,6 +126,8 @@ export function useLiveKitRoom<T extends HTMLElement>(
     onDisconnected,
   ]);
 
+  const connectDisconnectLock = React.useMemo(() => new Mutex(), []);
+
   React.useEffect(() => {
     if (!room) return;
 
@@ -155,20 +157,30 @@ export function useLiveKitRoom<T extends HTMLElement>(
         return;
       }
 
-      const connectionPromise = room.connect(serverUrl, token, connectOptions);
-      (connectionSideEffect ? Promise.all([
-        connectionPromise,
-        connectionSideEffect,
-      ]) : connectionPromise).catch((e) => {
-        log.warn(e);
-        if (shouldConnect.current === true) {
-          onError?.(e as Error);
+      connectDisconnectLock.lock().then(async (unlock) => {
+        try {
+          const connectionPromise = room.connect(serverUrl, token, connectOptions);
+          if (connectionSideEffect) {
+            await Promise.all([connectionPromise, connectionSideEffect]);
+          } else {
+            await connectionPromise;
+          }
+        } catch (e) {
+          log.warn(e);
+          if (shouldConnect.current === true) {
+            onError?.(e as Error);
+          }
+        } finally {
+          unlock();
         }
       });
     } else {
       log.debug('disconnecting because connect is false');
       shouldConnect.current = false;
-      room.disconnect();
+      connectDisconnectLock.lock().then(async (unlock) => {
+        await room.disconnect();
+        unlock();
+      });
     }
   }, [
     connect,
@@ -185,7 +197,10 @@ export function useLiveKitRoom<T extends HTMLElement>(
     if (!room) return;
     return () => {
       log.info('disconnecting on onmount');
-      room.disconnect();
+      connectDisconnectLock.lock().then(async (unlock) => {
+        await room.disconnect();
+        unlock();
+      });
     };
   }, [room]);
 

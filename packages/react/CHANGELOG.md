@@ -1,5 +1,134 @@
 # @livekit/components-react
 
+## 2.9.14
+
+### Patch Changes
+
+- Updated dependencies [[`caa59f6592834080be6e74797f35ed99a7262ee3`](https://github.com/livekit/components-js/commit/caa59f6592834080be6e74797f35ed99a7262ee3)]:
+  - @livekit/components-core@0.12.9
+
+## 2.9.13
+
+### Patch Changes
+
+- Update krisp peer dependency range - [#1182](https://github.com/livekit/components-js/pull/1182) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.9.12
+
+### Patch Changes
+
+- Only call onDeviceChange callback when non default device initially - [#1172](https://github.com/livekit/components-js/pull/1172) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`287c29fbdbe33086e44162b08343882c7e9ece99`](https://github.com/livekit/components-js/commit/287c29fbdbe33086e44162b08343882c7e9ece99)]:
+  - @livekit/components-core@0.12.8
+
+## 2.9.11
+
+### Patch Changes
+
+- Initialize connection quality with participant's current value - [#1171](https://github.com/livekit/components-js/pull/1171) ([@lukasIO](https://github.com/lukasIO))
+
+- fix(react): ensure useParticipantTracks hook updates on participant joins - [#1166](https://github.com/livekit/components-js/pull/1166) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.9.10
+
+### Patch Changes
+
+- Refine visible controls based on canPublishSources permissions - [#1160](https://github.com/livekit/components-js/pull/1160) ([@lukasIO](https://github.com/lukasIO))
+
+- Use correct default states in useLocalParticipant hook - [#1169](https://github.com/livekit/components-js/pull/1169) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.9.9
+
+### Patch Changes
+
+- fix: remove path mapping to avoid relative package import paths in dist - [#1155](https://github.com/livekit/components-js/pull/1155) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.9.8
+
+### Patch Changes
+
+- fix(react): set all cols highlighted when agent state is speaking - [#1152](https://github.com/livekit/components-js/pull/1152) ([@lukasIO](https://github.com/lukasIO))
+
+## 2.9.7
+
+### Patch Changes
+
+- Updated dependencies [[`3c1d973ff7b94d4b796223bc2511dab747635839`](https://github.com/livekit/components-js/commit/3c1d973ff7b94d4b796223bc2511dab747635839)]:
+  - @livekit/components-core@0.12.7
+
+## 2.9.6
+
+### Patch Changes
+
+- Add useTranscription hook - [#1109](https://github.com/livekit/components-js/pull/1109) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`f2a7e95975d8bd173fea38e6377bff26ce6f0bcc`](https://github.com/livekit/components-js/commit/f2a7e95975d8bd173fea38e6377bff26ce6f0bcc)]:
+  - @livekit/components-core@0.12.6
+
+## 2.9.5
+
+### Patch Changes
+
+- feat: add MediaDeviceKind to onMediaDeviceFailure callback - [#1143](https://github.com/livekit/components-js/pull/1143) ([@lukasIO](https://github.com/lukasIO))
+
+- fix: merge classes for slotted cloned children - [#1147](https://github.com/livekit/components-js/pull/1147) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies []:
+  - @livekit/components-core@0.12.5
+
+## 2.9.4
+
+### Patch Changes
+
+- Updated dependencies [[`0854fe11d70e2c2766720f663bc17cec5a3d98a2`](https://github.com/livekit/components-js/commit/0854fe11d70e2c2766720f663bc17cec5a3d98a2)]:
+  - @livekit/components-core@0.12.5
+
+## 2.9.3
+
+### Patch Changes
+
+- Pull audio track from avatar worker in useVoiceAssistant - [#1130](https://github.com/livekit/components-js/pull/1130) ([@bcherry](https://github.com/bcherry))
+
+## 2.9.2
+
+### Patch Changes
+
+- fix: avoid text stream re-register on disconnect - [#1118](https://github.com/livekit/components-js/pull/1118) ([@hudson-worden](https://github.com/hudson-worden))
+
+- chore: update livekit-client dependency - [#1121](https://github.com/livekit/components-js/pull/1121) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`a1b5f5c09e4e6b6c31f030a6d10e6a3f7df2a784`](https://github.com/livekit/components-js/commit/a1b5f5c09e4e6b6c31f030a6d10e6a3f7df2a784)]:
+  - @livekit/components-core@0.12.4
+
+## 2.9.1
+
+### Patch Changes
+
+- Add more usage examples for bar visualizer - [#1116](https://github.com/livekit/components-js/pull/1116) ([@lukasIO](https://github.com/lukasIO))
+
+- Improve device menu auto placement - [#1117](https://github.com/livekit/components-js/pull/1117) ([@lukasIO](https://github.com/lukasIO))
+
+- Default to exact device matching - [#1119](https://github.com/livekit/components-js/pull/1119) ([@lukasIO](https://github.com/lukasIO))
+
+- Fix navigator access in ChatEntry - [#1114](https://github.com/livekit/components-js/pull/1114) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`15b8bc608a9f3053cfaaf6da7ad93e40d23d5598`](https://github.com/livekit/components-js/commit/15b8bc608a9f3053cfaaf6da7ad93e40d23d5598)]:
+  - @livekit/components-core@0.12.3
+
+## 2.9.0
+
+### Minor Changes
+
+- Add support for datastream based chat - [#1096](https://github.com/livekit/components-js/pull/1096) ([@lukasIO](https://github.com/lukasIO))
+
+### Patch Changes
+
+- Fix useDataChannel's send return type - [#1080](https://github.com/livekit/components-js/pull/1080) ([@murilo-teleo](https://github.com/murilo-teleo))
+
+- Updated dependencies [[`e6e589820821302f7c4203cdb3772afc7f301e03`](https://github.com/livekit/components-js/commit/e6e589820821302f7c4203cdb3772afc7f301e03), [`74d98d34253612feea712e54b00bd4efb24d698b`](https://github.com/livekit/components-js/commit/74d98d34253612feea712e54b00bd4efb24d698b), [`673ee68a7ac6289d4deb8bf415563e4c5a4ea06a`](https://github.com/livekit/components-js/commit/673ee68a7ac6289d4deb8bf415563e4c5a4ea06a)]:
+  - @livekit/components-core@0.12.2
+
 ## 2.8.1
 
 ### Patch Changes

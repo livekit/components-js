@@ -23,6 +23,20 @@ export type ControlBarControls = {
   settings?: boolean;
 };
 
+const trackSourceToProtocol = (source: Track.Source) => {
+  // NOTE: this mapping avoids importing the protocol package as that leads to a significant bundle size increase
+  switch (source) {
+    case Track.Source.Camera:
+      return 1;
+    case Track.Source.Microphone:
+      return 2;
+    case Track.Source.ScreenShare:
+      return 3;
+    default:
+      return 0;
+  }
+};
+
 /** @public */
 export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
   onDeviceError?: (error: { source: Track.Source; error: Error }) => void;
@@ -82,9 +96,16 @@ export function ControlBar({
     visibleControls.microphone = false;
     visibleControls.screenShare = false;
   } else {
-    visibleControls.camera ??= localPermissions.canPublish;
-    visibleControls.microphone ??= localPermissions.canPublish;
-    visibleControls.screenShare ??= localPermissions.canPublish;
+    const canPublishSource = (source: Track.Source) => {
+      return (
+        localPermissions.canPublish &&
+        (localPermissions.canPublishSources.length === 0 ||
+          localPermissions.canPublishSources.includes(trackSourceToProtocol(source)))
+      );
+    };
+    visibleControls.camera ??= canPublishSource(Track.Source.Camera);
+    visibleControls.microphone ??= canPublishSource(Track.Source.Microphone);
+    visibleControls.screenShare ??= canPublishSource(Track.Source.ScreenShare);
     visibleControls.chat ??= localPermissions.canPublishData && controls?.chat;
   }
 

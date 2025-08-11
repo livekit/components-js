@@ -1,17 +1,24 @@
-import type {
-  ChatMessage,
-  DataPublishOptions,
-  LocalParticipant,
-  Participant,
-  Room,
+import {
+  type ChatMessage,
+  type DataPublishOptions,
+  type LocalParticipant,
+  type Participant,
+  type Room,
+  type SendTextOptions,
 } from 'livekit-client';
 import type { Subscriber } from 'rxjs';
 import { Observable, filter, map } from 'rxjs';
 import { createChatObserver, createDataObserver } from './room';
+import { ReceivedChatMessage } from '../components/chat';
 
 export const DataTopic = {
+  CHAT: 'lk.chat',
+  TRANSCRIPTION: 'lk.transcription',
+} as const;
+
+/** @deprecated */
+export const LegacyDataTopic = {
   CHAT: 'lk-chat-topic',
-  CHAT_UPDATE: 'lk-chat-update-topic',
 } as const;
 
 /** Publish data from the LocalParticipant. */
@@ -82,9 +89,10 @@ export function setupDataMessageHandler<T extends string>(
 export function setupChatMessageHandler(room: Room) {
   const chatObservable = createChatObserver(room);
 
-  const send = async (text: string) => {
-    const msg = await room.localParticipant.sendChatMessage(text);
-    return msg;
+  const send = async (text: string, options: SendTextOptions): Promise<ReceivedChatMessage> => {
+    const msg = await room.localParticipant.sendChatMessage(text, options);
+    await room.localParticipant.sendText(text, options);
+    return { ...msg, from: room.localParticipant, attachedFiles: options.attachments };
   };
 
   const edit = async (text: string, originalMsg: ChatMessage) => {

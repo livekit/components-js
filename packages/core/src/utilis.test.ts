@@ -1,14 +1,26 @@
-import { Participant, Track, TrackPublication } from 'livekit-client';
+import { Participant, RemoteTrackPublication, Track } from 'livekit-client';
 import { describe, it, expect } from 'vitest';
 import { isTrackReferencePinned } from './track-reference';
 import type { PinState } from './types';
+import { TrackInfo } from '@livekit/protocol';
 
 describe('Test isTrackReferencePinned', () => {
   const participantA = new Participant('dummy-participant', 'A_id', 'track_A_name');
-  const trackA = new TrackPublication(Track.Kind.Video, 'track_A_id', 'track_A_name');
-  trackA.trackSid = 'track_a_sid';
+  const trackInfoA = new TrackInfo({
+    sid: 'track_a_sid',
+    name: 'track_A_name',
+    muted: false,
+  });
+  // @ts-expect-error
+  const trackA = new RemoteTrackPublication(Track.Kind.Video, trackInfoA, true);
   const participantB = new Participant('participant_B', 'B_id', 'B_name');
-  const trackB = new TrackPublication(Track.Kind.Video, 'track_B_id', 'track_B_name');
+  const trackInfoB = new TrackInfo({
+    sid: 'track_b_sid',
+    name: 'track_B_name',
+    muted: false,
+  });
+  // @ts-expect-error
+  const trackB = new RemoteTrackPublication(Track.Kind.Video, trackInfoB, true);
   trackB.trackSid = 'track_b_sid';
   const trackReferenceA = {
     participant: participantA,

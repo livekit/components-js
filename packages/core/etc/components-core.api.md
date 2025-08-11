@@ -10,7 +10,7 @@ import { ChatMessage } from 'livekit-client';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState } from 'livekit-client';
 import { DataPacket_Kind } from 'livekit-client';
-import type { DataPublishOptions } from 'livekit-client';
+import { DataPublishOptions } from 'livekit-client';
 import { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
 import { LocalVideoTrack } from 'livekit-client';
@@ -27,7 +27,9 @@ import { Room } from 'livekit-client';
 import { RoomEvent } from 'livekit-client';
 import type { RoomEventCallbacks } from 'livekit-client/dist/src/room/Room';
 import type { ScreenShareCaptureOptions } from 'livekit-client';
+import { SendTextOptions } from 'livekit-client';
 import { setLogLevel as setLogLevel_2 } from 'livekit-client';
+import type { TextStreamInfo } from 'livekit-client/dist/src/room/types';
 import { Track } from 'livekit-client';
 import { TrackEvent as TrackEvent_2 } from 'livekit-client';
 import { TrackPublication } from 'livekit-client';
@@ -84,10 +86,7 @@ export type ChatOptions = {
 };
 
 // @public (undocumented)
-export function computeMenuPosition(button: HTMLElement, menu: HTMLElement): Promise<{
-    x: number;
-    y: number;
-}>;
+export function computeMenuPosition(button: HTMLElement, menu: HTMLElement, onUpdate?: (x: number, y: number) => void): () => void;
 
 // @public (undocumented)
 export function connectedParticipantObserver(room: Room, identity: string, options?: ConnectedParticipantObserverOptions): Observable<RemoteParticipant | undefined>;
@@ -156,8 +155,8 @@ export const cssPrefix = "lk";
 
 // @public (undocumented)
 export const DataTopic: {
-    readonly CHAT: "lk-chat-topic";
-    readonly CHAT_UPDATE: "lk-chat-update-topic";
+    readonly CHAT: "lk.chat";
+    readonly TRANSCRIPTION: "lk.transcription";
 };
 
 // @public (undocumented)
@@ -262,13 +261,18 @@ export function isWeb(): boolean;
 // @public (undocumented)
 export interface LegacyChatMessage extends ChatMessage {
     // (undocumented)
-    ignore?: boolean;
+    ignoreLegacy?: boolean;
 }
+
+// @public @deprecated (undocumented)
+export const LegacyDataTopic: {
+    readonly CHAT: "lk-chat-topic";
+};
 
 // @public (undocumented)
 export interface LegacyReceivedChatMessage extends ReceivedChatMessage {
     // (undocumented)
-    ignore?: boolean;
+    ignoreLegacy?: boolean;
 }
 
 // @alpha
@@ -497,24 +501,19 @@ export type SetMediaDeviceOptions = {
 export function setupChat(room: Room, options?: ChatOptions): {
     messageObservable: Observable<ReceivedChatMessage[]>;
     isSendingObservable: BehaviorSubject<boolean>;
-    send: (message: string) => Promise<ChatMessage>;
-    update: (message: string, originalMessageOrId: string | ChatMessage) => Promise<{
-        readonly message: string;
-        readonly editTimestamp: number;
-        readonly id: string;
-        readonly timestamp: number;
-    }>;
+    send: (message: string, options?: SendTextOptions) => Promise<ReceivedChatMessage>;
 };
 
 // @public (undocumented)
 export function setupChatMessageHandler(room: Room): {
     chatObservable: Observable<[message: ChatMessage, participant?: LocalParticipant | RemoteParticipant | undefined]>;
-    send: (text: string) => Promise<ChatMessage>;
+    send: (text: string, options: SendTextOptions) => Promise<ReceivedChatMessage>;
     edit: (text: string, originalMsg: ChatMessage) => Promise<{
         readonly message: string;
         readonly editTimestamp: number;
         readonly id: string;
         readonly timestamp: number;
+        readonly attachedFiles?: Array<File>;
     }>;
 };
 
@@ -621,6 +620,9 @@ export function setupStartVideo(): {
 };
 
 // @public (undocumented)
+export function setupTextStream(room: Room, topic: string): Observable<TextStreamData[]>;
+
+// @public (undocumented)
 export function setupTrackMutedIndicator(trackRef: TrackReferenceOrPlaceholder): {
     className: string;
     mediaMutedObserver: Observable<boolean>;
@@ -637,6 +639,18 @@ export type SourcesArray = Track.Source[] | TrackSourceWithOptions[];
 
 // @public
 export function supportsScreenSharing(): boolean;
+
+// @public (undocumented)
+export interface TextStreamData {
+    // (undocumented)
+    participantInfo: {
+        identity: string;
+    };
+    // (undocumented)
+    streamInfo: TextStreamInfo;
+    // (undocumented)
+    text: string;
+}
 
 // @public (undocumented)
 export type ToggleSource = Exclude<Track.Source, Track.Source.ScreenShareAudio | Track.Source.Unknown>;

@@ -13,7 +13,8 @@ type UseDataChannelReturnType<T extends string | undefined = undefined> = {
 
 /**
  * The `useDataChannel` hook returns the ability to send and receive messages.
- * By optionally passing a `topic`, you can narrow down which messages are returned in the messages array.
+ * Pass an optional `topic` to narrow down which messages are returned in the messages array.
+ *
  * @remarks
  * There is only one data channel. Passing a `topic` does not open a new data channel.
  * It is only used to filter out messages with no or a different `topic`.
@@ -23,23 +24,23 @@ type UseDataChannelReturnType<T extends string | undefined = undefined> = {
  * // Send messages to all participants via the 'chat' topic.
  * const { message: latestMessage, send } = useDataChannel('chat', (msg) => console.log("message received", msg));
  * ```
+ *
+ * @example
+ * ```tsx
+ * // Receive all messages (no topic filtering)
+ * const { message: latestMessage, send } = useDataChannel((msg) => console.log("message received", msg));
+ * ```
+ *
  * @public
  */
 export function useDataChannel<T extends string>(
   topic: T,
   onMessage?: (msg: ReceivedDataMessage<T>) => void,
 ): UseDataChannelReturnType<T>;
+
 /**
- * The `useDataChannel` hook returns the ability to send and receive messages.
- * @remarks
- * There is only one data channel. Passing a `topic` does not open a new data channel.
- * It is only used to filter out messages with no or a different `topic`.
+ * Overload for `useDataChannel` without a topic. See {@link (useDataChannel:1)} for information and usage examples.
  *
- * @example
- * ```tsx
- * // Send messages to all participants
- * const { message: latestMessage, send } = useDataChannel('chat', (msg) => console.log("message received", msg));
- * ```
  * @public
  */
 export function useDataChannel(

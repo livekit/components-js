@@ -7,3 +7,7 @@ yarn-error.log
 .DS_Store
 generated/
 .husky/
+.env
+.env.*
+.next/
+next-env.d.ts

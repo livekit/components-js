@@ -1,5 +1,17 @@
 # @livekit/components-styles
 
+## 1.1.6
+
+### Patch Changes
+
+- Apply max styles for settings modal - [#1145](https://github.com/livekit/components-js/pull/1145) ([@lukasIO](https://github.com/lukasIO))
+
+## 1.1.5
+
+### Patch Changes
+
+- Add support for datastream based chat - [#1096](https://github.com/livekit/components-js/pull/1096) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.1.4
 
 ### Patch Changes

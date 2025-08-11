@@ -1,7 +1,6 @@
-import { computeMenuPosition, wasClickOutside } from '@livekit/components-core';
+import { computeMenuPosition, wasClickOutside, log } from '@livekit/components-core';
 import * as React from 'react';
 import { MediaDeviceSelect } from '../components/controls/MediaDeviceSelect';
-import { log } from '@livekit/components-core';
 import type { LocalAudioTrack, LocalVideoTrack } from 'livekit-client';
 
 /** @public */
@@ -66,14 +65,18 @@ export function MediaDeviceMenu({
   }, [isOpen]);
 
   React.useLayoutEffect(() => {
+    let cleanup: ReturnType<typeof computeMenuPosition> | undefined;
     if (button.current && tooltip.current && (devices || updateRequired)) {
-      computeMenuPosition(button.current, tooltip.current).then(({ x, y }) => {
+      cleanup = computeMenuPosition(button.current, tooltip.current, (x, y) => {
         if (tooltip.current) {
           Object.assign(tooltip.current.style, { left: `${x}px`, top: `${y}px` });
         }
       });
     }
     setUpdateRequired(false);
+    return () => {
+      cleanup?.();
+    };
   }, [button, tooltip, devices, updateRequired]);
 
   const handleClickOutside = React.useCallback(
@@ -93,12 +96,10 @@ export function MediaDeviceMenu({
 
   React.useEffect(() => {
     document.addEventListener<'click'>('click', handleClickOutside);
-    window.addEventListener<'resize'>('resize', () => setUpdateRequired(true));
     return () => {
       document.removeEventListener<'click'>('click', handleClickOutside);
-      window.removeEventListener<'resize'>('resize', () => setUpdateRequired(true));
     };
-  }, [handleClickOutside, setUpdateRequired]);
+  }, [handleClickOutside]);
 
   return (
     <>

@@ -1,5 +1,11 @@
 # @livekit/api-documenter
 
+## 7.22.23
+
+### Patch Changes
+
+- fix(docs-gen): drop non default overloads from docs - [#1138](https://github.com/livekit/components-js/pull/1138) ([@lukasIO](https://github.com/lukasIO))
+
 ## 7.22.22
 
 ### Patch Changes

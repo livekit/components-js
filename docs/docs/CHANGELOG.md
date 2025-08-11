@@ -1,5 +1,112 @@
 # @livekit/components-js-docs
 
+## 0.1.67
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @livekit/components-react@2.9.14
+
+## 0.1.66
+
+### Patch Changes
+
+- Updated dependencies [[`f5415d5fd6a1152af100c5844bc801622a0fa59a`](https://github.com/livekit/components-js/commit/f5415d5fd6a1152af100c5844bc801622a0fa59a)]:
+  - @livekit/components-react@2.9.13
+
+## 0.1.65
+
+### Patch Changes
+
+- Updated dependencies [[`9cc0b7c1dd493bb29587722c3885b0c892eb10e0`](https://github.com/livekit/components-js/commit/9cc0b7c1dd493bb29587722c3885b0c892eb10e0)]:
+  - @livekit/components-react@2.9.12
+
+## 0.1.64
+
+### Patch Changes
+
+- Updated dependencies [[`793689ab5b3f1dadd67b16cfcd61f0dd34e5fee6`](https://github.com/livekit/components-js/commit/793689ab5b3f1dadd67b16cfcd61f0dd34e5fee6), [`2cd7559ce62dfba35476a32ba06f5808b2309371`](https://github.com/livekit/components-js/commit/2cd7559ce62dfba35476a32ba06f5808b2309371)]:
+  - @livekit/components-react@2.9.11
+
+## 0.1.63
+
+### Patch Changes
+
+- Updated dependencies [[`7091b412872c9630f85f583fd61e134fdb4ef80e`](https://github.com/livekit/components-js/commit/7091b412872c9630f85f583fd61e134fdb4ef80e), [`daf9e7d2f77626ae7a581407d87ff0e29ebf19d2`](https://github.com/livekit/components-js/commit/daf9e7d2f77626ae7a581407d87ff0e29ebf19d2)]:
+  - @livekit/components-react@2.9.10
+
+## 0.1.62
+
+### Patch Changes
+
+- Updated dependencies [[`683359b0bcd1f2f92774e63090ea234701048f82`](https://github.com/livekit/components-js/commit/683359b0bcd1f2f92774e63090ea234701048f82)]:
+  - @livekit/components-react@2.9.9
+
+## 0.1.61
+
+### Patch Changes
+
+- Updated dependencies [[`35a950614b32a3ea58710f1fef79b4ab888d8603`](https://github.com/livekit/components-js/commit/35a950614b32a3ea58710f1fef79b4ab888d8603)]:
+  - @livekit/components-react@2.9.8
+
+## 0.1.60
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @livekit/components-react@2.9.7
+
+## 0.1.59
+
+### Patch Changes
+
+- Updated dependencies [[`f2a7e95975d8bd173fea38e6377bff26ce6f0bcc`](https://github.com/livekit/components-js/commit/f2a7e95975d8bd173fea38e6377bff26ce6f0bcc)]:
+  - @livekit/components-react@2.9.6
+
+## 0.1.58
+
+### Patch Changes
+
+- Updated dependencies [[`b6ac84d77bae99fbf06c5c4d8af4298baf969a33`](https://github.com/livekit/components-js/commit/b6ac84d77bae99fbf06c5c4d8af4298baf969a33), [`2b43ed4ddff9f02012388c59ca406b69e69b8afc`](https://github.com/livekit/components-js/commit/2b43ed4ddff9f02012388c59ca406b69e69b8afc)]:
+  - @livekit/components-react@2.9.5
+
+## 0.1.57
+
+### Patch Changes
+
+- Add all examples to the one useDataChannel that gets documented - [#1136](https://github.com/livekit/components-js/pull/1136) ([@bcherry](https://github.com/bcherry))
+
+- Updated dependencies []:
+  - @livekit/components-react@2.9.4
+
+## 0.1.56
+
+### Patch Changes
+
+- Updated dependencies [[`37182c3fa60a91463eb5855559dee2597d52c99a`](https://github.com/livekit/components-js/commit/37182c3fa60a91463eb5855559dee2597d52c99a)]:
+  - @livekit/components-react@2.9.3
+
+## 0.1.55
+
+### Patch Changes
+
+- Updated dependencies [[`1c48a648d8d4cfa9828fdac67dfc9f1de96e0e1b`](https://github.com/livekit/components-js/commit/1c48a648d8d4cfa9828fdac67dfc9f1de96e0e1b), [`a1b5f5c09e4e6b6c31f030a6d10e6a3f7df2a784`](https://github.com/livekit/components-js/commit/a1b5f5c09e4e6b6c31f030a6d10e6a3f7df2a784)]:
+  - @livekit/components-react@2.9.2
+
+## 0.1.54
+
+### Patch Changes
+
+- Updated dependencies [[`40d8a52184a8dd91ab9d78a0ac87ff6d4dfecce9`](https://github.com/livekit/components-js/commit/40d8a52184a8dd91ab9d78a0ac87ff6d4dfecce9), [`15b8bc608a9f3053cfaaf6da7ad93e40d23d5598`](https://github.com/livekit/components-js/commit/15b8bc608a9f3053cfaaf6da7ad93e40d23d5598), [`7bcf4d8416cbde256ca56f37b0aafd31a59178db`](https://github.com/livekit/components-js/commit/7bcf4d8416cbde256ca56f37b0aafd31a59178db), [`0c30d15934ee038ce376b00fe9c957b4773e75c9`](https://github.com/livekit/components-js/commit/0c30d15934ee038ce376b00fe9c957b4773e75c9)]:
+  - @livekit/components-react@2.9.1
+
+## 0.1.53
+
+### Patch Changes
+
+- Updated dependencies [[`673ee68a7ac6289d4deb8bf415563e4c5a4ea06a`](https://github.com/livekit/components-js/commit/673ee68a7ac6289d4deb8bf415563e4c5a4ea06a), [`7f1c1bfa602171da152471e6fa47e296bceb6ea4`](https://github.com/livekit/components-js/commit/7f1c1bfa602171da152471e6fa47e296bceb6ea4)]:
+  - @livekit/components-react@2.9.0
+
 ## 0.1.52
 
 ### Patch Changes

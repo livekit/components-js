@@ -1,5 +1,57 @@
 # @livekit/components-core
 
+## 0.12.9
+
+### Patch Changes
+
+- fix(core): don't unregister stream handler on disconnect - [#1188](https://github.com/livekit/components-js/pull/1188) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.12.8
+
+### Patch Changes
+
+- Fix legacy message encoding - [#1173](https://github.com/livekit/components-js/pull/1173) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.12.7
+
+### Patch Changes
+
+- fix(core): dedupe transcriptions based on segment id - [#1149](https://github.com/livekit/components-js/pull/1149) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.12.6
+
+### Patch Changes
+
+- Add useTranscription hook - [#1109](https://github.com/livekit/components-js/pull/1109) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.12.5
+
+### Patch Changes
+
+- Ensure subject is completed when unsubscribed - [#1135](https://github.com/livekit/components-js/pull/1135) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.12.4
+
+### Patch Changes
+
+- chore: update livekit-client dependency - [#1121](https://github.com/livekit/components-js/pull/1121) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.12.3
+
+### Patch Changes
+
+- Improve device menu auto placement - [#1117](https://github.com/livekit/components-js/pull/1117) ([@lukasIO](https://github.com/lukasIO))
+
+## 0.12.2
+
+### Patch Changes
+
+- Update dependency rxjs to v7.8.2 - [#1094](https://github.com/livekit/components-js/pull/1094) ([@renovate](https://github.com/apps/renovate))
+
+- Fix duplicate startWith on room events observable - [#1092](https://github.com/livekit/components-js/pull/1092) ([@Toubat](https://github.com/Toubat))
+
+- Add support for datastream based chat - [#1096](https://github.com/livekit/components-js/pull/1096) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.12.1
 
 ### Patch Changes

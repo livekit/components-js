@@ -1,14 +1,19 @@
-import { computePosition, flip, offset, shift } from '@floating-ui/dom';
+import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 
-export async function computeMenuPosition(
+export function computeMenuPosition(
   button: HTMLElement,
   menu: HTMLElement,
-): Promise<{ x: number; y: number }> {
-  const { x, y } = await computePosition(button, menu, {
-    placement: 'top',
-    middleware: [offset(6), flip(), shift({ padding: 5 })],
+  onUpdate?: (x: number, y: number) => void,
+): () => void {
+  const cleanup = autoUpdate(button, menu, async () => {
+    const { x, y } = await computePosition(button, menu, {
+      placement: 'top',
+      middleware: [offset(6), flip(), shift({ padding: 5 })],
+    });
+
+    onUpdate?.(x, y);
   });
-  return { x, y };
+  return cleanup;
 }
 
 export function wasClickOutside(insideElement: HTMLElement, event: MouseEvent): boolean {

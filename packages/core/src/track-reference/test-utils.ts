@@ -4,10 +4,11 @@
  * @internal
  */
 
-import { Participant, Track, TrackPublication } from 'livekit-client';
+import { Participant, RemoteTrackPublication, Track, TrackPublication } from 'livekit-client';
 import type { UpdatableItem } from '../sorting/tile-array-update';
 import type { TrackReference, TrackReferencePlaceholder } from './track-reference.types';
 import { getTrackReferenceId } from './track-reference.utils';
+import { TrackInfo } from '@livekit/protocol';
 
 // Test function:
 export const mockTrackReferencePlaceholder = (
@@ -21,9 +22,14 @@ export const mockTrackReferencePublished = (id: string, source: Track.Source): T
   const kind = [Track.Source.Camera, Track.Source.ScreenShare].includes(source)
     ? Track.Kind.Video
     : Track.Kind.Audio;
+  const trackInfo = new TrackInfo({
+    sid: `${id}`,
+    name: `${id}`,
+    muted: false,
+  });
   return {
     participant: new Participant(`${id}`, `${id}`),
-    publication: new TrackPublication(kind, `${id}`, `${id}`),
+    publication: new RemoteTrackPublication(kind, trackInfo, true),
     source: source,
   };
 };
@@ -42,8 +48,12 @@ export const mockTrackReferenceSubscribed = (
   const kind = [Track.Source.Camera, Track.Source.ScreenShare].includes(source)
     ? Track.Kind.Video
     : Track.Kind.Audio;
-
-  const publication = new TrackPublication(kind, `${id}`, `${id}`);
+  const trackInfo = new TrackInfo({
+    sid: `${id}`,
+    name: `${id}`,
+    muted: false,
+  });
+  const publication = new RemoteTrackPublication(kind, trackInfo, true);
   // @ts-expect-error
   publication.track = {};
   return {

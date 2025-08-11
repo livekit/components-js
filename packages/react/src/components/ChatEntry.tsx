@@ -45,7 +45,9 @@ export const ChatEntry: (
     }, [entry.message, messageFormatter]);
     const hasBeenEdited = !!entry.editTimestamp;
     const time = new Date(entry.timestamp);
-    const locale = navigator ? navigator.language : 'en-US';
+    const locale = typeof navigator !== 'undefined' ? navigator.language : 'en-US';
+
+    const name = entry.from?.name ?? entry.from?.identity;
 
     return (
       <li
@@ -57,11 +59,7 @@ export const ChatEntry: (
       >
         {(!hideTimestamp || !hideName || hasBeenEdited) && (
           <span className="lk-meta-data">
-            {!hideName && (
-              <strong className="lk-participant-name">
-                {entry.from?.name ?? entry.from?.identity}
-              </strong>
-            )}
+            {!hideName && <strong className="lk-participant-name">{name}</strong>}
 
             {(!hideTimestamp || hasBeenEdited) && (
               <span className="lk-timestamp">
@@ -73,6 +71,19 @@ export const ChatEntry: (
         )}
 
         <span className="lk-message-body">{formattedMessage}</span>
+        <span className="lk-message-attachements">
+          {entry.attachedFiles?.map(
+            (file) =>
+              file.type.startsWith('image/') && (
+                <img
+                  style={{ maxWidth: '300px', maxHeight: '300px' }}
+                  key={file.name}
+                  src={URL.createObjectURL(file)}
+                  alt={file.name}
+                />
+              ),
+          )}
+        </span>
       </li>
     );
   },

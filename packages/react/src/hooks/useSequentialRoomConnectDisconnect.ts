@@ -3,8 +3,8 @@ import { useCallback, useMemo } from 'react';
 
 /** @public */
 export type UseSequentialRoomConnectDisconnectResults = {
-  connect: typeof Room.prototype.connect,
-  disconnect: typeof Room.prototype.disconnect,
+  connect: typeof Room.prototype.connect;
+  disconnect: typeof Room.prototype.disconnect;
 };
 
 /**
@@ -26,26 +26,34 @@ export type UseSequentialRoomConnectDisconnectResults = {
  *
  * @public
  */
-export function useSequentialRoomConnectDisconnect(room: Room): UseSequentialRoomConnectDisconnectResults {
+export function useSequentialRoomConnectDisconnect(
+  room: Room,
+): UseSequentialRoomConnectDisconnectResults {
   // NOTE: it would on the surface seem that managing a room's connection with a useEffect would be
   // straightforward, but `room.disconnect()` is async and useEffect doesn't support async cleanup
   // functions, which means `room.connect()` can run in the midst of `room.disconnect()`, causing
   // race conditions.
   const connectDisconnectLock = useMemo(() => new Mutex(), []);
   return {
-    connect: useCallback(async (...args) => {
-      return connectDisconnectLock.lock().then(async (unlock) => {
-        const result = await room.connect(...args);
-        unlock();
-        return result;
-      });
-    }, [room]),
-    disconnect: useCallback(async (...args) => {
-      return connectDisconnectLock.lock().then(async (unlock) => {
-        const result = await room.disconnect(...args);
-        unlock();
-        return result;
-      });
-    }, [room]),
+    connect: useCallback(
+      async (...args) => {
+        return connectDisconnectLock.lock().then(async (unlock) => {
+          const result = await room.connect(...args);
+          unlock();
+          return result;
+        });
+      },
+      [room],
+    ),
+    disconnect: useCallback(
+      async (...args) => {
+        return connectDisconnectLock.lock().then(async (unlock) => {
+          const result = await room.disconnect(...args);
+          unlock();
+          return result;
+        });
+      },
+      [room],
+    ),
   };
 }

@@ -1,7 +1,8 @@
 import { Mutex, Room } from 'livekit-client';
 import { useCallback, useMemo } from 'react';
 
-type UseSequentialRoomConnectDisconnectResults = {
+/** @public */
+export type UseSequentialRoomConnectDisconnectResults = {
   connect: typeof Room.prototype.connect,
   disconnect: typeof Room.prototype.disconnect,
 };

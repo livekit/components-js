@@ -1079,6 +1079,15 @@ export interface UseRoomInfoOptions {
 }
 
 // @public
+export function useSequentialRoomConnectDisconnect(room: Room): UseSequentialRoomConnectDisconnectResults;
+
+// @public (undocumented)
+export type UseSequentialRoomConnectDisconnectResults = {
+    connect: typeof Room.prototype.connect;
+    disconnect: typeof Room.prototype.disconnect;
+};
+
+// @public
 export function useSortedParticipants(participants: Array<Participant>): Participant[];
 
 // @public

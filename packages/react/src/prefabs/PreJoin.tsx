@@ -23,6 +23,7 @@ import { ParticipantPlaceholder } from '../assets/images';
 import { useMediaDevices, usePersistentUserChoices } from '../hooks';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 import { roomOptionsStringifyReplacer } from '../utils';
+import { useSelectedDevice } from '../hooks/useSelectedDevice';
 
 /**
  * Props for the PreJoin component.
@@ -59,46 +60,117 @@ export function usePreviewTracks(
   options: CreateLocalTracksOptions,
   onError?: (err: Error) => void,
 ) {
-  const [tracks, setTracks] = React.useState<LocalTrack[]>();
+  const [audioTrack, setAudioTrack] = React.useState<LocalTrack | undefined>();
+  const [videoTrack, setVideoTrack] = React.useState<LocalTrack | undefined>();
+
+  const [orphanTracks, setOrphanTracks] = React.useState<Track[]>([]);
+
+  React.useEffect(
+    () => () => {
+      orphanTracks.forEach((track) => track.stop());
+    },
+    [orphanTracks],
+  );
 
   const trackLock = React.useMemo(() => new Mutex(), []);
 
+  // Store current tracks in refs to avoid dependency cycles
+  const audioTrackRef = React.useRef<LocalTrack | undefined>(audioTrack);
+  const videoTrackRef = React.useRef<LocalTrack | undefined>(videoTrack);
+
+  // Update refs when state changes
   React.useEffect(() => {
-    let needsCleanup = false;
-    let localTracks: Array<LocalTrack> = [];
-    trackLock.lock().then(async (unlock) => {
-      try {
-        if (options.audio || options.video) {
-          localTracks = await createLocalTracks(options);
+    audioTrackRef.current = audioTrack;
+  }, [audioTrack]);
 
-          if (needsCleanup) {
-            localTracks.forEach((tr) => tr.stop());
-          } else {
-            setTracks(localTracks);
-          }
+  React.useEffect(() => {
+    videoTrackRef.current = videoTrack;
+  }, [videoTrack]);
+
+  // Shared function to handle track creation and cleanup
+  const handleTrackCreation = React.useCallback(
+    (
+      trackType: 'audio' | 'video',
+      trackOption: any | false,
+      setTrack: React.Dispatch<React.SetStateAction<LocalTrack | undefined>>,
+    ) => {
+      if (!trackOption) {
+        const currentTrack = trackType === 'audio' ? audioTrackRef.current : videoTrackRef.current;
+
+        if (currentTrack) {
+          setOrphanTracks((prev) => [...prev, currentTrack]);
+          setTrack(undefined);
         }
-      } catch (e: unknown) {
-        if (onError && e instanceof Error) {
-          onError(e);
-        } else {
-          log.error(e);
-        }
-      } finally {
-        unlock();
+        return;
       }
-    });
 
-    return () => {
-      needsCleanup = true;
-      localTracks.forEach((track) => {
-        track.stop();
+      let needsCleanup = false;
+      let localTrack: LocalTrack | undefined;
+
+      trackLock.lock().then(async (unlock) => {
+        try {
+          const trackOptions = {
+            audio: trackType === 'audio' ? trackOption : false,
+            video: trackType === 'video' ? trackOption : false,
+          };
+
+          const tracks = await createLocalTracks(trackOptions);
+
+          localTrack = tracks.find((track) => track.kind === trackType);
+
+          if (needsCleanup && localTrack) {
+            localTrack.stop();
+          } else if (localTrack) {
+            // Stop previous track if it exists
+            const currentTrack =
+              trackType === 'audio' ? audioTrackRef.current : videoTrackRef.current;
+
+            if (currentTrack) {
+              setOrphanTracks((prev) => [...prev, currentTrack]);
+            }
+            setTrack(localTrack);
+          }
+        } catch (e: unknown) {
+          if (onError && e instanceof Error) {
+            onError(e);
+          } else {
+            log.error(e);
+          }
+        } finally {
+          unlock();
+        }
       });
-    };
-  }, [JSON.stringify(options, roomOptionsStringifyReplacer), onError, trackLock]);
+
+      return () => {
+        needsCleanup = true;
+        if (localTrack) {
+          localTrack.stop();
+        }
+      };
+    },
+    [trackLock, onError, setOrphanTracks],
+  );
+
+  // Handle audio track
+  React.useEffect(() => {
+    return handleTrackCreation('audio', options.audio, setAudioTrack);
+  }, [handleTrackCreation, JSON.stringify(options.audio, roomOptionsStringifyReplacer)]);
+
+  // Handle video track
+  React.useEffect(() => {
+    return handleTrackCreation('video', options.video, setVideoTrack);
+  }, [handleTrackCreation, JSON.stringify(options.video, roomOptionsStringifyReplacer)]);
+
+  // Combine tracks for the return value
+  const tracks = React.useMemo(() => {
+    const result: LocalTrack[] = [];
+    if (audioTrack) result.push(audioTrack);
+    if (videoTrack) result.push(videoTrack);
+    return result.length > 0 ? result : undefined;
+  }, [audioTrack, videoTrack]);
 
   return tracks;
 }
-
 /**
  * @public
  * @deprecated use `usePreviewTracks` instead
@@ -154,7 +226,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   const prevDeviceId = React.useRef(localDeviceId);
 
   React.useEffect(() => {
-    if (enabled && !localTrack && !deviceError && !isCreatingTrack) {
+    if (!isCreatingTrack && enabled && !localTrack && !deviceError) {
       log.debug('creating track', kind);
       setIsCreatingTrack(true);
       createTrack(localDeviceId, kind).finally(() => {
@@ -300,6 +372,17 @@ export function PreJoin({
     [tracks],
   );
 
+  const { selectedDevice: selectedAudioDevice } = useSelectedDevice({
+    kind: 'audioinput',
+    track: audioTrack,
+    deviceId: audioDeviceId,
+  });
+  const { selectedDevice: selectedVideoDevice } = useSelectedDevice({
+    kind: 'videoinput',
+    track: videoTrack,
+    deviceId: videoDeviceId,
+  });
+
   React.useEffect(() => {
     if (videoEl.current && videoTrack) {
       videoTrack.unmute();
@@ -307,7 +390,10 @@ export function PreJoin({
     }
 
     return () => {
-      videoTrack?.detach();
+      if (videoTrack) {
+        if (videoEl.current) videoTrack.detach(videoEl.current);
+        videoTrack.stop();
+      }
     };
   }, [videoTrack]);
 
@@ -362,41 +448,43 @@ export function PreJoin({
         )}
       </div>
       <div className="lk-button-group-container">
-        <div className="lk-button-group audio">
+        <div className="lk-button-group-pre-join audio">
           <TrackToggle
             initialState={audioEnabled}
             source={Track.Source.Microphone}
             onChange={(enabled) => setAudioEnabled(enabled)}
-          >
-            {micLabel}
-          </TrackToggle>
-          <div className="lk-button-group-menu">
-            <MediaDeviceMenu
-              initialSelection={audioDeviceId}
-              kind="audioinput"
-              disabled={!audioTrack}
-              tracks={{ audioinput: audioTrack }}
-              onActiveDeviceChange={(_, id) => setAudioDeviceId(id)}
-            />
+          />
+          <div className="lk-button-group-menu-pre-join">
+            <label className="lk-selected-device-label">
+              {selectedAudioDevice?.label || micLabel}
+            </label>
           </div>
+          <MediaDeviceMenu
+            initialSelection={audioDeviceId}
+            kind="audioinput"
+            disabled={Boolean(!selectedAudioDevice)}
+            tracks={{ audioinput: audioTrack }}
+            onActiveDeviceChange={(_, id) => setAudioDeviceId(id)}
+          />
         </div>
-        <div className="lk-button-group video">
+        <div className="lk-button-group-pre-join video">
           <TrackToggle
             initialState={videoEnabled}
             source={Track.Source.Camera}
             onChange={(enabled) => setVideoEnabled(enabled)}
-          >
-            {camLabel}
-          </TrackToggle>
-          <div className="lk-button-group-menu">
-            <MediaDeviceMenu
-              initialSelection={videoDeviceId}
-              kind="videoinput"
-              disabled={!videoTrack}
-              tracks={{ videoinput: videoTrack }}
-              onActiveDeviceChange={(_, id) => setVideoDeviceId(id)}
-            />
+          />
+          <div className="lk-button-group-menu-pre-join">
+            <label className="lk-selected-device-label">
+              {selectedVideoDevice?.label || camLabel}
+            </label>
           </div>
+          <MediaDeviceMenu
+            initialSelection={videoDeviceId}
+            kind="videoinput"
+            disabled={Boolean(!selectedAudioDevice)}
+            tracks={{ videoinput: videoTrack }}
+            onActiveDeviceChange={(_, id) => setVideoDeviceId(id)}
+          />
         </div>
       </div>
 

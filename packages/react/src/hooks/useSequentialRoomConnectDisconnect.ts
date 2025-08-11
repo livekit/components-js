@@ -29,10 +29,6 @@ export type UseSequentialRoomConnectDisconnectResults = {
 export function useSequentialRoomConnectDisconnect(
   room: Room,
 ): UseSequentialRoomConnectDisconnectResults {
-  // NOTE: it would on the surface seem that managing a room's connection with a useEffect would be
-  // straightforward, but `room.disconnect()` is async and useEffect doesn't support async cleanup
-  // functions, which means `room.connect()` can run in the midst of `room.disconnect()`, causing
-  // race conditions.
   const connectDisconnectLock = useMemo(() => new Mutex(), []);
   return {
     connect: useCallback(

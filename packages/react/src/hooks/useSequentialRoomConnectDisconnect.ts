@@ -13,8 +13,8 @@ type RoomDisconnectFn = typeof Room.prototype.disconnect;
 
 /** @public */
 export type UseSequentialRoomConnectDisconnectResults<R extends Room | undefined> = {
-  connect: R extends undefined ? RoomConnectFn | null : RoomConnectFn,
-  disconnect: R extends undefined ? RoomDisconnectFn | null : RoomDisconnectFn,
+  connect: R extends undefined ? RoomConnectFn | null : RoomConnectFn;
+  disconnect: R extends undefined ? RoomDisconnectFn | null : RoomDisconnectFn;
 };
 
 /**
@@ -39,22 +39,24 @@ export type UseSequentialRoomConnectDisconnectResults<R extends Room | undefined
 export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(
   room: R,
 ): UseSequentialRoomConnectDisconnectResults<R> {
-  const connectDisconnectQueueRef = useRef<Array<
-    | {
-      type: 'connect';
-      room: Room;
-      args: Parameters<RoomConnectFn>;
-      resolve: (value: Awaited<ReturnType<RoomConnectFn>>) => void;
-      reject: (err: Error) => void;
-    }
-    | {
-      type: 'disconnect';
-      room: Room;
-      args: Parameters<RoomDisconnectFn>;
-      resolve: (value: Awaited<ReturnType<RoomDisconnectFn>>) => void;
-      reject: (err: Error) => void;
-    }
-  >>([]);
+  const connectDisconnectQueueRef = useRef<
+    Array<
+      | {
+          type: 'connect';
+          room: Room;
+          args: Parameters<RoomConnectFn>;
+          resolve: (value: Awaited<ReturnType<RoomConnectFn>>) => void;
+          reject: (err: Error) => void;
+        }
+      | {
+          type: 'disconnect';
+          room: Room;
+          args: Parameters<RoomDisconnectFn>;
+          resolve: (value: Awaited<ReturnType<RoomDisconnectFn>>) => void;
+          reject: (err: Error) => void;
+        }
+    >
+  >([]);
 
   // Process room connection / disconnection events and execute them in series
   // The main queue is a ref, so one invocation of this function can continue to process newly added
@@ -71,10 +73,16 @@ export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(
 
         switch (message.type) {
           case 'connect':
-            await message.room.connect(...message.args).then(message.resolve).catch(message.reject);
+            await message.room
+              .connect(...message.args)
+              .then(message.resolve)
+              .catch(message.reject);
             break;
           case 'disconnect':
-            await message.room.disconnect(...message.args).then(message.resolve).catch(message.reject);
+            await message.room
+              .disconnect(...message.args)
+              .then(message.resolve)
+              .catch(message.reject);
             break;
         }
       }
@@ -84,7 +92,7 @@ export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(
   const roomChangedTimesRef = useRef<Array<Date>>([]);
   const checkRoomThreshold = useCallback((now: Date) => {
     let roomChangesInThreshold = 0;
-    roomChangedTimesRef.current = roomChangedTimesRef.current.filter(i => {
+    roomChangedTimesRef.current = roomChangedTimesRef.current.filter((i) => {
       const isWithinThreshold = now.getTime() - i.getTime() < ROOM_CHANGE_WARNING_THRESHOLD_MS;
       if (isWithinThreshold) {
         roomChangesInThreshold += 1;
@@ -94,7 +102,7 @@ export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(
 
     if (roomChangesInThreshold > ROOM_CHANGE_WARNING_THRESHOLD_QUANTITY) {
       log.warn(
-        `useSequentialRoomConnectDisconnect: room changed reference rapidly (over ${ROOM_CHANGE_WARNING_THRESHOLD_QUANTITY}x in ${ROOM_CHANGE_WARNING_THRESHOLD_MS}ms). This is not recommended.`
+        `useSequentialRoomConnectDisconnect: room changed reference rapidly (over ${ROOM_CHANGE_WARNING_THRESHOLD_QUANTITY}x in ${ROOM_CHANGE_WARNING_THRESHOLD_MS}ms). This is not recommended.`,
       );
     }
   }, []);
@@ -111,8 +119,9 @@ export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(
   const connectDisconnectEnqueueTimes = useRef<Array<Date>>([]);
   const checkConnectDisconnectThreshold = useCallback((now: Date) => {
     let connectDisconnectsInThreshold = 0;
-    connectDisconnectEnqueueTimes.current = connectDisconnectEnqueueTimes.current.filter(i => {
-      const isWithinThreshold = now.getTime() - i.getTime() < CONNECT_DISCONNECT_WARNING_THRESHOLD_MS;
+    connectDisconnectEnqueueTimes.current = connectDisconnectEnqueueTimes.current.filter((i) => {
+      const isWithinThreshold =
+        now.getTime() - i.getTime() < CONNECT_DISCONNECT_WARNING_THRESHOLD_MS;
       if (isWithinThreshold) {
         connectDisconnectsInThreshold += 1;
       }
@@ -121,36 +130,42 @@ export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(
 
     if (connectDisconnectsInThreshold > CONNECT_DISCONNECT_WARNING_THRESHOLD_QUANTITY) {
       log.warn(
-        `useSequentialRoomConnectDisconnect: room connect / disconnect occurring in rapid sequence (over ${CONNECT_DISCONNECT_WARNING_THRESHOLD_QUANTITY}x in ${CONNECT_DISCONNECT_WARNING_THRESHOLD_MS}ms). This is not recommended and may be the sign of a bug like a useEffect dependency changing every render.`
+        `useSequentialRoomConnectDisconnect: room connect / disconnect occurring in rapid sequence (over ${CONNECT_DISCONNECT_WARNING_THRESHOLD_QUANTITY}x in ${CONNECT_DISCONNECT_WARNING_THRESHOLD_MS}ms). This is not recommended and may be the sign of a bug like a useEffect dependency changing every render.`,
       );
     }
   }, []);
 
-  const connect = useCallback(async (...args: Parameters<RoomConnectFn>) => {
-    return new Promise((resolve, reject) => {
-      if (!room) {
-        throw new Error('Called connect(), but room was unset');;
-      }
-      const now = new Date();
-      checkConnectDisconnectThreshold(now);
-      connectDisconnectQueueRef.current.push({type: 'connect', room, args, resolve, reject });
-      connectDisconnectEnqueueTimes.current.push(now);
-      processConnectsAndDisconnects();
-    });
-  }, [room, checkConnectDisconnectThreshold, processConnectsAndDisconnects]);
+  const connect = useCallback(
+    async (...args: Parameters<RoomConnectFn>) => {
+      return new Promise((resolve, reject) => {
+        if (!room) {
+          throw new Error('Called connect(), but room was unset');
+        }
+        const now = new Date();
+        checkConnectDisconnectThreshold(now);
+        connectDisconnectQueueRef.current.push({ type: 'connect', room, args, resolve, reject });
+        connectDisconnectEnqueueTimes.current.push(now);
+        processConnectsAndDisconnects();
+      });
+    },
+    [room, checkConnectDisconnectThreshold, processConnectsAndDisconnects],
+  );
 
-  const disconnect = useCallback(async (...args: Parameters<RoomDisconnectFn>) => {
-    return new Promise((resolve, reject) => {
-      if (!room) {
-        throw new Error('Called discconnect(), but room was unset');;
-      }
-      const now = new Date();
-      checkConnectDisconnectThreshold(now);
-      connectDisconnectQueueRef.current.push({type: 'disconnect', room, args, resolve, reject });
-      connectDisconnectEnqueueTimes.current.push(now);
-      processConnectsAndDisconnects();
-    });
-  }, [room, checkConnectDisconnectThreshold, processConnectsAndDisconnects]);
+  const disconnect = useCallback(
+    async (...args: Parameters<RoomDisconnectFn>) => {
+      return new Promise((resolve, reject) => {
+        if (!room) {
+          throw new Error('Called discconnect(), but room was unset');
+        }
+        const now = new Date();
+        checkConnectDisconnectThreshold(now);
+        connectDisconnectQueueRef.current.push({ type: 'disconnect', room, args, resolve, reject });
+        connectDisconnectEnqueueTimes.current.push(now);
+        processConnectsAndDisconnects();
+      });
+    },
+    [room, checkConnectDisconnectThreshold, processConnectsAndDisconnects],
+  );
 
   return {
     connect: room ? connect : null,

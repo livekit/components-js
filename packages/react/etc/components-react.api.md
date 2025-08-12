@@ -1079,12 +1079,12 @@ export interface UseRoomInfoOptions {
 }
 
 // @public
-export function useSequentialRoomConnectDisconnect(room: Room): UseSequentialRoomConnectDisconnectResults;
+export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(room: R): UseSequentialRoomConnectDisconnectResults<R>;
 
 // @public (undocumented)
-export type UseSequentialRoomConnectDisconnectResults = {
-    connect: typeof Room.prototype.connect;
-    disconnect: typeof Room.prototype.disconnect;
+export type UseSequentialRoomConnectDisconnectResults<R extends Room | undefined> = {
+    connect: R extends undefined ? (typeof Room.prototype.connect) | null : (typeof Room.prototype.connect);
+    disconnect: R extends undefined ? (typeof Room.prototype.disconnect) | null : (typeof Room.prototype.disconnect);
 };
 
 // @public

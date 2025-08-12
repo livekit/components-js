@@ -1,4 +1,4 @@
-import { Mutex, Room } from 'livekit-client';
+import { Mutex, type Room } from 'livekit-client';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { log } from '@livekit/components-core';
 
@@ -8,13 +8,14 @@ const CONNECT_DISCONNECT_WARNING_THRESHOLD_MS = 400;
 const ROOM_CHANGE_WARNING_THRESHOLD_QUANTITY = 3;
 const ROOM_CHANGE_WARNING_THRESHOLD_MS = 1000;
 
-type RoomConnectFn = typeof Room.prototype.connect;
-type RoomDisconnectFn = typeof Room.prototype.disconnect;
-
 /** @public */
 export type UseSequentialRoomConnectDisconnectResults<R extends Room | undefined> = {
-  connect: R extends undefined ? RoomConnectFn | null : RoomConnectFn;
-  disconnect: R extends undefined ? RoomDisconnectFn | null : RoomDisconnectFn;
+  connect: R extends undefined
+    ? typeof Room.prototype.connect | null
+    : typeof Room.prototype.connect;
+  disconnect: R extends undefined
+    ? typeof Room.prototype.disconnect | null
+    : typeof Room.prototype.disconnect;
 };
 
 /**
@@ -44,15 +45,15 @@ export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(
       | {
           type: 'connect';
           room: Room;
-          args: Parameters<RoomConnectFn>;
-          resolve: (value: Awaited<ReturnType<RoomConnectFn>>) => void;
+          args: Parameters<typeof Room.prototype.connect>;
+          resolve: (value: Awaited<ReturnType<typeof Room.prototype.connect>>) => void;
           reject: (err: Error) => void;
         }
       | {
           type: 'disconnect';
           room: Room;
-          args: Parameters<RoomDisconnectFn>;
-          resolve: (value: Awaited<ReturnType<RoomDisconnectFn>>) => void;
+          args: Parameters<typeof Room.prototype.disconnect>;
+          resolve: (value: Awaited<ReturnType<typeof Room.prototype.disconnect>>) => void;
           reject: (err: Error) => void;
         }
     >
@@ -136,7 +137,7 @@ export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(
   }, []);
 
   const connect = useCallback(
-    async (...args: Parameters<RoomConnectFn>) => {
+    async (...args: Parameters<typeof Room.prototype.connect>) => {
       return new Promise((resolve, reject) => {
         if (!room) {
           throw new Error('Called connect(), but room was unset');
@@ -152,7 +153,7 @@ export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(
   );
 
   const disconnect = useCallback(
-    async (...args: Parameters<RoomDisconnectFn>) => {
+    async (...args: Parameters<typeof Room.prototype.disconnect>) => {
       return new Promise((resolve, reject) => {
         if (!room) {
           throw new Error('Called discconnect(), but room was unset');

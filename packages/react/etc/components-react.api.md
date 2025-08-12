@@ -1083,8 +1083,8 @@ export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(r
 
 // @public (undocumented)
 export type UseSequentialRoomConnectDisconnectResults<R extends Room | undefined> = {
-    connect: R extends undefined ? (typeof Room.prototype.connect) | null : (typeof Room.prototype.connect);
-    disconnect: R extends undefined ? (typeof Room.prototype.disconnect) | null : (typeof Room.prototype.disconnect);
+    connect: typeof Room.prototype.connect & (R extends undefined ? null : unknown);
+    disconnect: typeof Room.prototype.disconnect & (R extends undefined ? null : unknown);
 };
 
 // @public

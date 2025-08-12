@@ -10,12 +10,8 @@ const ROOM_CHANGE_WARNING_THRESHOLD_MS = 1000;
 
 /** @public */
 export type UseSequentialRoomConnectDisconnectResults<R extends Room | undefined> = {
-  connect: R extends undefined
-    ? typeof Room.prototype.connect | null
-    : typeof Room.prototype.connect;
-  disconnect: R extends undefined
-    ? typeof Room.prototype.disconnect | null
-    : typeof Room.prototype.disconnect;
+  connect: typeof Room.prototype.connect & (R extends undefined ? null : unknown);
+  disconnect: typeof Room.prototype.disconnect & (R extends undefined ? null : unknown);
 };
 
 /**

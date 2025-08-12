@@ -2,8 +2,11 @@ import { Mutex, Room } from 'livekit-client';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { log } from '@livekit/components-core';
 
-const CONNECT_DISCONNECT_WARNING_THRESHOLD_MS = 400;
 const CONNECT_DISCONNECT_WARNING_THRESHOLD_QUANTITY = 2;
+const CONNECT_DISCONNECT_WARNING_THRESHOLD_MS = 400;
+
+const ROOM_CHANGE_WARNING_THRESHOLD_QUANTITY = 3;
+const ROOM_CHANGE_WARNING_THRESHOLD_MS = 1000;
 
 type RoomConnectFn = typeof Room.prototype.connect;
 type RoomDisconnectFn = typeof Room.prototype.disconnect;
@@ -54,6 +57,8 @@ export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(
   >>([]);
 
   // Process room connection / disconnection events and execute them in series
+  // The main queue is a ref, so one invocation of this function can continue to process newly added
+  // events
   const processConnectsAndDisconnectsLock = useMemo(() => new Mutex(), []);
   const processConnectsAndDisconnects = useCallback(async () => {
     return processConnectsAndDisconnectsLock.lock().then(async (unlock) => {
@@ -76,13 +81,35 @@ export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(
     });
   }, []);
 
-  // When the room changes, clear any pending connect / disconnect calls
+  const roomChangedTimesRef = useRef<Array<Date>>([]);
+  const checkRoomThreshold = useCallback((now: Date) => {
+    let roomChangesInThreshold = 0;
+    roomChangedTimesRef.current = roomChangedTimesRef.current.filter(i => {
+      const isWithinThreshold = now.getTime() - i.getTime() < ROOM_CHANGE_WARNING_THRESHOLD_MS;
+      if (isWithinThreshold) {
+        roomChangesInThreshold += 1;
+      }
+      return isWithinThreshold;
+    });
+
+    if (roomChangesInThreshold > ROOM_CHANGE_WARNING_THRESHOLD_QUANTITY) {
+      log.warn(
+        `useSequentialRoomConnectDisconnect: room changed reference rapidly (over ${ROOM_CHANGE_WARNING_THRESHOLD_QUANTITY}x in ${ROOM_CHANGE_WARNING_THRESHOLD_MS}ms). This is not recommended.`
+      );
+    }
+  }, []);
+
+  // When the room changes, clear any pending connect / disconnect calls and log when it happened
   useEffect(() => {
     connectDisconnectQueueRef.current = [];
-  }, [room]);
+
+    const now = new Date();
+    roomChangedTimesRef.current.push(now);
+    checkRoomThreshold(now);
+  }, [room, checkRoomThreshold]);
 
   const connectDisconnectEnqueueTimes = useRef<Array<Date>>([]);
-  const checkThreshold = useCallback((now: Date) => {
+  const checkConnectDisconnectThreshold = useCallback((now: Date) => {
     let connectDisconnectsInThreshold = 0;
     connectDisconnectEnqueueTimes.current = connectDisconnectEnqueueTimes.current.filter(i => {
       const isWithinThreshold = now.getTime() - i.getTime() < CONNECT_DISCONNECT_WARNING_THRESHOLD_MS;
@@ -105,12 +132,12 @@ export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(
         throw new Error('Called connect(), but room was unset');;
       }
       const now = new Date();
-      checkThreshold(now);
+      checkConnectDisconnectThreshold(now);
       connectDisconnectQueueRef.current.push({type: 'connect', room, args, resolve, reject });
       connectDisconnectEnqueueTimes.current.push(now);
       processConnectsAndDisconnects();
     });
-  }, [room, checkThreshold, processConnectsAndDisconnects]);
+  }, [room, checkConnectDisconnectThreshold, processConnectsAndDisconnects]);
 
   const disconnect = useCallback(async (...args: Parameters<RoomDisconnectFn>) => {
     return new Promise((resolve, reject) => {
@@ -118,12 +145,12 @@ export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(
         throw new Error('Called discconnect(), but room was unset');;
       }
       const now = new Date();
-      checkThreshold(now);
+      checkConnectDisconnectThreshold(now);
       connectDisconnectQueueRef.current.push({type: 'disconnect', room, args, resolve, reject });
       connectDisconnectEnqueueTimes.current.push(now);
       processConnectsAndDisconnects();
     });
-  }, [room, checkThreshold, processConnectsAndDisconnects]);
+  }, [room, checkConnectDisconnectThreshold, processConnectsAndDisconnects]);
 
   return {
     connect: room ? connect : null,

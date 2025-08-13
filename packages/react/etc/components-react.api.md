@@ -680,7 +680,7 @@ export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.B
     source: T;
 }
 
-// @public @deprecated (undocumented)
+// @alpha @deprecated (undocumented)
 export interface TrackTranscriptionOptions {
     bufferSize?: number;
     onTranscription?: (newSegments: TranscriptionSegment[]) => void;
@@ -1185,7 +1185,7 @@ export function useTrackToggle<T extends ToggleSource>({ source, onChange, initi
 export interface UseTrackToggleProps<T extends ToggleSource> extends Omit<TrackToggleProps<T>, 'showIcon'> {
 }
 
-// @public @deprecated (undocumented)
+// @alpha @deprecated (undocumented)
 export function useTrackTranscription(trackRef: TrackReferenceOrPlaceholder | undefined, options?: TrackTranscriptionOptions): {
     segments: ReceivedTranscriptionSegment[];
 };

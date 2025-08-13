@@ -13,7 +13,7 @@ import * as React from 'react';
 import { useTrackSyncTime } from './useTrackSyncTime';
 
 /**
- * @alpha
+ * @deprecated Use useTranscription instead
  */
 export interface TrackTranscriptionOptions {
   /**
@@ -36,7 +36,7 @@ const TRACK_TRANSCRIPTION_DEFAULTS = {
 
 /**
  * @returns An object consisting of `segments` with maximum length of opts.bufferSize
- * @alpha
+ * @deprecated Use useTranscription instead
  */
 export function useTrackTranscription(
   trackRef: TrackReferenceOrPlaceholder | undefined,

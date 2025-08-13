@@ -413,6 +413,8 @@ export type PinState = TrackReferenceOrPlaceholder[];
 // @public (undocumented)
 export interface ReceivedChatMessage extends ChatMessage {
     // (undocumented)
+    attributes?: Record<string, string>;
+    // (undocumented)
     from?: Participant;
 }
 

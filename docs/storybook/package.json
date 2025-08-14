@@ -31,7 +31,7 @@
     "storybook": "^7.0.0-beta.30",
     "tsx": "^4.0.0",
     "typescript": "5.8.2",
-    "vite": "^6.0.0",
+    "vite": "^7.0.0",
     "webpack": "^5.75.0"
   }
 }

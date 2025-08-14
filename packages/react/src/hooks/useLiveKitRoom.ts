@@ -1,6 +1,6 @@
 import { log, setupLiveKitRoom } from '@livekit/components-core';
 import type { DisconnectReason } from 'livekit-client';
-import { Room, MediaDeviceFailure, RoomEvent } from 'livekit-client';
+import { Room, MediaDeviceFailure, RoomEvent, Mutex } from 'livekit-client';
 import * as React from 'react';
 import type { HTMLAttributes } from 'react';
 
@@ -47,6 +47,7 @@ export function useLiveKitRoom<T extends HTMLElement>(
     onMediaDeviceFailure,
     onEncryptionError,
     simulateParticipants,
+    connectionSideEffect,
     ...rest
   } = { ...defaultRoomProps, ...props };
   if (options && passedRoom) {
@@ -84,7 +85,7 @@ export function useLiveKitRoom<T extends HTMLElement>(
       });
     };
 
-    const handleMediaDeviceError = (e: Error, kind: MediaDeviceKind) => {
+    const handleMediaDeviceError = (e: Error, kind?: MediaDeviceKind) => {
       const mediaDeviceFailure = MediaDeviceFailure.getFailure(e);
       onMediaDeviceFailure?.(mediaDeviceFailure, kind);
     };
@@ -125,6 +126,8 @@ export function useLiveKitRoom<T extends HTMLElement>(
     onDisconnected,
   ]);
 
+  const connectDisconnectLock = React.useMemo(() => new Mutex(), []);
+
   React.useEffect(() => {
     if (!room) return;
 
@@ -153,16 +156,31 @@ export function useLiveKitRoom<T extends HTMLElement>(
         onError?.(Error('no livekit url provided'));
         return;
       }
-      room.connect(serverUrl, token, connectOptions).catch((e) => {
-        log.warn(e);
-        if (shouldConnect.current === true) {
-          onError?.(e as Error);
+
+      connectDisconnectLock.lock().then(async (unlock) => {
+        try {
+          const connectionPromise = room.connect(serverUrl, token, connectOptions);
+          if (connectionSideEffect) {
+            await Promise.all([connectionPromise, connectionSideEffect]);
+          } else {
+            await connectionPromise;
+          }
+        } catch (e) {
+          log.warn(e);
+          if (shouldConnect.current === true) {
+            onError?.(e as Error);
+          }
+        } finally {
+          unlock();
         }
       });
     } else {
       log.debug('disconnecting because connect is false');
       shouldConnect.current = false;
-      room.disconnect();
+      connectDisconnectLock.lock().then(async (unlock) => {
+        await room.disconnect();
+        unlock();
+      });
     }
   }, [
     connect,
@@ -172,13 +190,17 @@ export function useLiveKitRoom<T extends HTMLElement>(
     onError,
     serverUrl,
     simulateParticipants,
+    connectionSideEffect,
   ]);
 
   React.useEffect(() => {
     if (!room) return;
     return () => {
       log.info('disconnecting on onmount');
-      room.disconnect();
+      connectDisconnectLock.lock().then(async (unlock) => {
+        await room.disconnect();
+        unlock();
+      });
     };
   }, [room]);
 

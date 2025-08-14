@@ -4,6 +4,7 @@ import { useObservableState } from './internal';
 
 /**
  * @internal
+ * @deprecated this is an internal hook that's only used by deprecated APIs
  */
 export function useTrackSyncTime(ref: TrackReferenceOrPlaceholder | undefined) {
   const observable = React.useMemo(

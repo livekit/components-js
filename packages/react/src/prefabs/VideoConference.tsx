@@ -33,6 +33,7 @@ export interface VideoConferenceProps extends React.HTMLAttributes<HTMLDivElemen
   chatMessageDecoder?: MessageDecoder;
   /** @alpha */
   SettingsComponent?: React.ComponentType;
+  onDeviceError?: (error: { source: Track.Source; error: Error }) => void;
 }
 
 /**
@@ -58,6 +59,7 @@ export function VideoConference({
   chatMessageDecoder,
   chatMessageEncoder,
   SettingsComponent,
+  onDeviceError,
   ...props
 }: VideoConferenceProps) {
   const [widgetState, setWidgetState] = React.useState<WidgetState>({
@@ -155,7 +157,10 @@ export function VideoConference({
                 </FocusLayoutContainer>
               </div>
             )}
-            <ControlBar controls={{ chat: true, settings: !!SettingsComponent }} />
+            <ControlBar
+              onDeviceError={onDeviceError}
+              controls={{ chat: true, settings: !!SettingsComponent }}
+            />
           </div>
           <Chat
             style={{ display: widgetState.showChat ? 'grid' : 'none' }}

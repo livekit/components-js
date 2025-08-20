@@ -1,7 +1,7 @@
-import { connectedParticipantsObserver } from '@livekit/components-core';
-import type { RoomEvent, RemoteParticipant, Room } from 'livekit-client';
-import * as React from 'react';
+import { type RoomSignalState } from '@livekit/components-core';
+import type { RoomEvent, Room } from 'livekit-client';
 import { useEnsureRoom } from '../context';
+import { useSignal } from './useSignal';
 
 /** @public */
 export interface UseRemoteParticipantsOptions {
@@ -31,15 +31,7 @@ export interface UseRemoteParticipantsOptions {
  * ```
  * @public
  */
-export function useRemoteParticipants(options: UseRemoteParticipantsOptions = {}) {
-  const room = useEnsureRoom(options.room);
-  const [participants, setParticipants] = React.useState<RemoteParticipant[]>([]);
-
-  React.useEffect(() => {
-    const listener = connectedParticipantsObserver(room, {
-      additionalRoomEvents: options.updateOnlyOn,
-    }).subscribe(setParticipants);
-    return () => listener.unsubscribe();
-  }, [room, JSON.stringify(options.updateOnlyOn)]);
-  return participants;
+export function useRemoteParticipants(roomState?: RoomSignalState) {
+  const room = useEnsureRoom(roomState);
+  return useSignal(room.remoteParticipants);
 }

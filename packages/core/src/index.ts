@@ -32,4 +32,6 @@ export * from './persistent-storage';
 
 export * from './components/textStream';
 
+export * from './state';
+
 export { log, setLogLevel, setLogExtension } from './logger';

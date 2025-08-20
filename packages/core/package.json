@@ -37,7 +37,8 @@
   "dependencies": {
     "@floating-ui/dom": "1.6.13",
     "loglevel": "1.9.1",
-    "rxjs": "7.8.2"
+    "rxjs": "7.8.2",
+    "signal-polyfill": "^0.2.2"
   },
   "peerDependencies": {
     "livekit-client": "catalog:",

@@ -1,36 +1,8 @@
-import {
-  type ParticipantIdentifier,
-  connectedParticipantObserver,
-  participantByIdentifierObserver,
-} from '@livekit/components-core';
-import type { ParticipantEvent, RemoteParticipant } from 'livekit-client';
-import * as React from 'react';
+import { type RemoteParticipantSignalState, Signal } from '@livekit/components-core';
+
 import { useRoomContext } from '../context';
-
-/** @public */
-export interface UseRemoteParticipantOptions {
-  /**
-   * To optimize performance, you can use the `updateOnlyOn` property to decide on what `ParticipantEvents` the hook updates.
-   * By default it updates on all relevant ParticipantEvents to keep the returned participant up to date.
-   */
-  updateOnlyOn?: ParticipantEvent[];
-}
-
-/**
- * The `useRemoteParticipant` hook returns the first RemoteParticipant by either identity and/or based on the participant kind.
- * @remarks
- * To optimize performance, you can use the `updateOnlyOn` property to decide on what `ParticipantEvents` the hook updates.
- *
- * @example
- * ```tsx
- * const participant = useRemoteParticipant({kind: ParticipantKind.Agent, identity: 'myAgent'});
- * ```
- * @public
- */
-export function useRemoteParticipant(
-  identifier: ParticipantIdentifier,
-  options?: UseRemoteParticipantOptions,
-): RemoteParticipant | undefined;
+import { useSignal } from './useSignal';
+import { useMemo } from 'react';
 /**
  * The `useRemoteParticipant` hook returns the first RemoteParticipant by either identity or based on the participant kind.
  * @remarks
@@ -42,38 +14,16 @@ export function useRemoteParticipant(
  * ```
  * @public
  */
-export function useRemoteParticipant(
-  identity: string,
-  options?: UseRemoteParticipantOptions,
-): RemoteParticipant | undefined;
-export function useRemoteParticipant(
-  identityOrIdentifier: string | ParticipantIdentifier,
-  options: UseRemoteParticipantOptions = {},
-): RemoteParticipant | undefined {
-  const room = useRoomContext();
-  const [updateOnlyOn] = React.useState(options.updateOnlyOn);
+export function useRemoteParticipant(identity: string): RemoteParticipantSignalState | undefined {
+  const ctx = useRoomContext();
 
-  const observable = React.useMemo(() => {
-    if (typeof identityOrIdentifier === 'string') {
-      return connectedParticipantObserver(room, identityOrIdentifier, {
-        additionalEvents: updateOnlyOn,
-      });
-    } else {
-      return participantByIdentifierObserver(room, identityOrIdentifier, {
-        additionalEvents: updateOnlyOn,
-      });
-    }
-  }, [room, JSON.stringify(identityOrIdentifier), updateOnlyOn]);
+  const targetParticipant = useMemo(
+    () =>
+      new Signal.Computed(() =>
+        ctx.roomState.remoteParticipants.get().find((p) => p.identity === identity),
+      ),
+    [identity, ctx.roomState],
+  );
 
-  // Using `wrapperParticipant` to ensure a new object reference,
-  // triggering a re-render when the participant events fire.
-  const [participantWrapper, setParticipantWrapper] = React.useState({
-    p: undefined as RemoteParticipant | undefined,
-  });
-  React.useEffect(() => {
-    const listener = observable.subscribe((p) => setParticipantWrapper({ p }));
-    return () => listener.unsubscribe();
-  }, [observable]);
-
-  return participantWrapper.p;
+  return useSignal(targetParticipant);
 }

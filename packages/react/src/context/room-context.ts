@@ -1,8 +1,12 @@
-import type { Room } from 'livekit-client';
+import { type RoomSignalState } from '@livekit/components-core';
 import * as React from 'react';
 
+export type LiveKitRoomContext = {
+  roomState: RoomSignalState;
+};
+
 /** @public */
-export const RoomContext = React.createContext<Room | undefined>(undefined);
+export const RoomContext = React.createContext<LiveKitRoomContext | undefined>(undefined);
 
 /**
  * Ensures that a room is provided via context.
@@ -30,7 +34,7 @@ export function useMaybeRoomContext() {
  * If no room is provided, an error is thrown.
  * @public
  */
-export function useEnsureRoom(room?: Room) {
+export function useEnsureRoom(room?: RoomSignalState) {
   const context = useMaybeRoomContext();
   const r = room ?? context;
   if (!r) {

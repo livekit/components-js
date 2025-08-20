@@ -1,4 +1,4 @@
-import type { ConnectionState, Room, RemoteParticipant } from 'livekit-client';
+import type { ConnectionState, Room } from 'livekit-client';
 import { RoomEvent } from 'livekit-client';
 import { Signal } from 'signal-polyfill';
 import {
@@ -14,6 +14,7 @@ export function createRoomSignalState(room: Room, abortSignal: AbortSignal) {
   const connectionState = new Signal.State(room.state);
   const updateConnectionState = (state: ConnectionState) => {
     connectionState.set(state);
+    updateRemoteParticipants();
   };
 
   const metadata = new Signal.State<string | undefined>(room.metadata);
@@ -26,34 +27,33 @@ export function createRoomSignalState(room: Room, abortSignal: AbortSignal) {
       createRemoteParticipantSignalState(participant, abortSignal),
     ),
   );
-  const addRemoteParticipant = (participant: RemoteParticipant) => {
-    const existingParticipant = remoteParticipants
-      .get()
-      .find((p) => p.identity === participant.identity);
-    if (!existingParticipant) {
+
+  const updateRemoteParticipants = () => {
+    const existingParticipants = remoteParticipants.get();
+    const newParticipants = Array.from(room.remoteParticipants.values()).filter(
+      (participant) => !existingParticipants.some((p) => p.identity === participant.identity),
+    );
+
+    if (newParticipants.length > 0) {
       remoteParticipants.set([
-        ...remoteParticipants.get(),
-        createRemoteParticipantSignalState(participant, abortSignal),
+        ...existingParticipants,
+        ...newParticipants.map((participant) =>
+          createRemoteParticipantSignalState(participant, abortSignal),
+        ),
       ]);
     }
   };
 
-  const removeRemoteParticipant = (participant: RemoteParticipant) => {
-    remoteParticipants.set(
-      remoteParticipants.get().filter((p) => p.identity !== participant.identity),
-    );
-  };
-
   room.on(RoomEvent.ConnectionStateChanged, updateConnectionState);
   room.on(RoomEvent.RoomMetadataChanged, updateMetadata);
-  room.on(RoomEvent.ParticipantConnected, addRemoteParticipant);
-  room.on(RoomEvent.ParticipantDisconnected, removeRemoteParticipant);
+  room.on(RoomEvent.ParticipantConnected, updateRemoteParticipants);
+  room.on(RoomEvent.ParticipantDisconnected, updateRemoteParticipants);
 
   abortSignal.addEventListener('abort', () => {
     room.off(RoomEvent.ConnectionStateChanged, updateConnectionState);
     room.off(RoomEvent.RoomMetadataChanged, updateMetadata);
-    room.off(RoomEvent.ParticipantConnected, addRemoteParticipant);
-    room.off(RoomEvent.ParticipantDisconnected, removeRemoteParticipant);
+    room.off(RoomEvent.ParticipantConnected, updateRemoteParticipants);
+    room.off(RoomEvent.ParticipantDisconnected, updateRemoteParticipants);
   });
 
   return {

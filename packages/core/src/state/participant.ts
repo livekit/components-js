@@ -1,9 +1,5 @@
 import type { LocalParticipant, LocalTrackPublication, Participant } from 'livekit-client';
-import {
-  ParticipantEvent,
-  type RemoteParticipant,
-  type RemoteTrackPublication,
-} from 'livekit-client';
+import { ParticipantEvent, type RemoteParticipant } from 'livekit-client';
 import { Signal } from 'signal-polyfill';
 import {
   createLocalTrackSignalState,
@@ -20,18 +16,18 @@ export function createBaseParticipantSignalState(
   abortSignal: AbortSignal,
 ) {
   const metadata = new Signal.State<string | undefined>(participant.metadata);
-  const updateMetadata = (_metadata: string | undefined) => {
-    metadata.set(_metadata);
+  const updateMetadata = () => {
+    metadata.set(participant.metadata);
   };
 
   const name = new Signal.State<string | undefined>(participant.name);
-  const updateName = (_name: string | undefined) => {
-    name.set(_name);
+  const updateName = () => {
+    name.set(participant.name);
   };
 
   const isSpeaking = new Signal.State<boolean>(participant.isSpeaking);
-  const updateIsSpeaking = (_isSpeaking: boolean) => {
-    isSpeaking.set(_isSpeaking);
+  const updateIsSpeaking = () => {
+    isSpeaking.set(participant.isSpeaking);
   };
 
   participant.on(ParticipantEvent.ParticipantMetadataChanged, updateMetadata);
@@ -62,23 +58,25 @@ export function createRemoteParticipantSignalState(
     ),
   );
 
-  const addTrack = (track: RemoteTrackPublication) => {
-    const existingTrack = tracks.get().find((t) => t.id === track.trackSid);
-    if (!existingTrack) {
-      tracks.set([...tracks.get(), createRemoteTrackSignalState(track, abortSignal)]);
+  const updateTracks = () => {
+    const existingTracks = tracks.get();
+    const newTracks = Array.from(participant.trackPublications.values()).filter(
+      (track) => !existingTracks.some((t) => t.id === track.trackSid),
+    );
+    if (newTracks.length > 0) {
+      tracks.set([
+        ...existingTracks,
+        ...newTracks.map((track) => createRemoteTrackSignalState(track, abortSignal)),
+      ]);
     }
   };
 
-  const removeTrack = (track: RemoteTrackPublication) => {
-    tracks.set(tracks.get().filter((t) => t.id !== track.trackSid));
-  };
-
-  participant.on(ParticipantEvent.TrackPublished, addTrack);
-  participant.on(ParticipantEvent.TrackUnpublished, removeTrack);
+  participant.on(ParticipantEvent.TrackPublished, updateTracks);
+  participant.on(ParticipantEvent.TrackUnpublished, updateTracks);
 
   abortSignal.addEventListener('abort', () => {
-    participant.off(ParticipantEvent.TrackPublished, addTrack);
-    participant.off(ParticipantEvent.TrackUnpublished, removeTrack);
+    participant.off(ParticipantEvent.TrackPublished, updateTracks);
+    participant.off(ParticipantEvent.TrackUnpublished, updateTracks);
   });
 
   const baseParticipantState = createBaseParticipantSignalState(participant, abortSignal);

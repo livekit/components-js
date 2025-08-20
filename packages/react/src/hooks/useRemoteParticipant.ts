@@ -27,3 +27,8 @@ export function useRemoteParticipant(identity: string): RemoteParticipantSignalS
 
   return useSignal(targetParticipant);
 }
+
+export function useTest() {
+  const remoteParticipant = useRemoteParticipant('test');
+  const muted = useSignalSelector(remoteParticipant, (state) => state.muted);
+}

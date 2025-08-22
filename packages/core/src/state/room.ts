@@ -2,6 +2,7 @@ import type { ConnectionState, Room } from 'livekit-client';
 import { RoomEvent } from 'livekit-client';
 import { Signal } from 'signal-polyfill';
 import {
+  createLocalParticipantSignalState,
   createRemoteParticipantSignalState,
   type RemoteParticipantSignalState,
 } from './participant';
@@ -44,6 +45,8 @@ export function createRoomSignalState(room: Room, abortSignal: AbortSignal) {
     }
   };
 
+  const localParticipant = createLocalParticipantSignalState(room.localParticipant, abortSignal);
+
   room.on(RoomEvent.ConnectionStateChanged, updateConnectionState);
   room.on(RoomEvent.RoomMetadataChanged, updateMetadata);
   room.on(RoomEvent.ParticipantConnected, updateRemoteParticipants);
@@ -60,6 +63,7 @@ export function createRoomSignalState(room: Room, abortSignal: AbortSignal) {
     state: new Signal.Computed(() => connectionState.get()),
     metadata: new Signal.Computed(() => metadata.get()),
     remoteParticipants: new Signal.Computed(() => remoteParticipants.get()),
+    localParticipant,
     subtle: {
       room,
     },

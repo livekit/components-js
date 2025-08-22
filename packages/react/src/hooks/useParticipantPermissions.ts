@@ -4,6 +4,7 @@ import type { Participant } from 'livekit-client';
 import * as React from 'react';
 import { useEnsureParticipant } from '../context';
 import { useObservableState } from './internal/useObservableState';
+import { useParticipantStateSelector } from './useParticipantStateSelector';
 
 /**
  * The `useParticipantPermissions` hook returns the permissions of a given participant.
@@ -27,3 +28,7 @@ export function useParticipantPermissions(
   const permissions = useObservableState(permissionObserver, p.permissions);
   return permissions;
 }
+
+const useParticipantPermissions = () => {
+  return useParticipantStateSelector('myidentity', (state) => state.permissions);
+};

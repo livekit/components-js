@@ -1,10 +1,12 @@
-import type { ToggleSource } from '@livekit/components-core';
+import type { LocalTrackSignalState, ToggleSource } from '@livekit/components-core';
 import { setupMediaToggle, setupManualToggle, log } from '@livekit/components-core';
 import * as React from 'react';
 import type { TrackToggleProps } from '../components';
-import { useMaybeRoomContext } from '../context';
+import { useMaybeRoomContext, useRoomContext } from '../context';
 import { mergeProps } from '../mergeProps';
 import { useObservableState } from './internal';
+import { useRoomStateSelector } from './useRoomStateSelector';
+import { Track } from 'livekit-client';
 
 /** @public */
 export interface UseTrackToggleProps<T extends ToggleSource>
@@ -62,15 +64,6 @@ export function useTrackToggle<T extends ToggleSource>({
 
   const newProps = React.useMemo(() => mergeProps(rest, { className }), [rest, className]);
 
-  const clickHandler: React.MouseEventHandler<HTMLButtonElement> = React.useCallback(
-    (evt) => {
-      userInteractionRef.current = true;
-      toggle().catch(() => (userInteractionRef.current = false));
-      rest.onClick?.(evt);
-    },
-    [rest, toggle],
-  );
-
   return {
     toggle,
     enabled,
@@ -84,5 +77,55 @@ export function useTrackToggle<T extends ToggleSource>({
       disabled: pending,
       onClick: clickHandler,
     } as React.ButtonHTMLAttributes<HTMLButtonElement>,
+  };
+}
+
+export function useMicrophoneToggle(onChange?: (enabled: boolean, userInitiated: boolean) => void) {
+  const state = useRoomContext();
+  const isMicrophoneEnabled = useRoomStateSelector(
+    (state) => state.localParticipant.isMicrophoneEnabled,
+  );
+  const [pending, setPending] = React.useState(false);
+  /** `true` if a user interaction such as a click on the TrackToggle button has occurred. */
+  const userInteractionRef = React.useRef(false);
+
+  React.useEffect(() => {
+    onChange?.(isMicrophoneEnabled, userInteractionRef.current);
+    userInteractionRef.current = false;
+  }, [isMicrophoneEnabled, onChange]);
+
+  const toggle = React.useCallback(
+    async (enabled: boolean) => {
+      setPending(true);
+      userInteractionRef.current = true;
+      const track = await state.actions.setMicrophoneEnabled(enabled);
+      setPending(false);
+      return track;
+    },
+    [state],
+  );
+  return {
+    source: Track.Source.Microphone,
+    toggle,
+    enabled: isMicrophoneEnabled,
+    pending,
+  };
+}
+
+export function useToggleButton(
+  toggleState: ReturnType<typeof useMicrophoneToggle>,
+  onError?: (error: Error) => void,
+) {
+  const { source, enabled, pending, toggle } = toggleState;
+  return {
+    props: {
+      'aria-pressed': enabled,
+      'data-lk-source': source,
+      'data-lk-enabled': enabled,
+      disabled: pending,
+      onClick: (evt: React.MouseEvent<HTMLButtonElement>) => {
+        toggle(!enabled).catch((error) => onError?.(error));
+      },
+    },
   };
 }

@@ -26,6 +26,7 @@ function createBaseTrackSignalState(publication: TrackPublication, abortSignal: 
   return {
     clientId: crypto.randomUUID(),
     kind: publication.kind,
+    source: publication.source,
     muted: new Signal.Computed(() => muted.get()),
     encrypted: new Signal.Computed(() => publication.isEncrypted),
   };

@@ -1,8 +1,23 @@
+import type { LocalTrackSignalState } from '@livekit/components-core';
 import { type RoomSignalState } from '@livekit/components-core';
+import type { ParticipantPermission } from '@livekit/protocol';
+import type { Room } from 'livekit-client';
 import * as React from 'react';
 
 export type LiveKitRoomContext = {
   roomState: RoomSignalState;
+  actions: {
+    connect: () => Promise<void>;
+    disconnect: () => Promise<void>;
+    updateLocalParticipantMetadata: (metadata: string) => Promise<void>;
+    updateLocalParticipantPermission: (permission: ParticipantPermission) => Promise<boolean>;
+    setMicrophoneEnabled: (enabled: boolean) => Promise<LocalTrackSignalState | undefined>;
+    setCameraEnabled: (enabled: boolean) => Promise<LocalTrackSignalState | undefined>;
+    setScreenShareEnabled: (enabled: boolean) => Promise<LocalTrackSignalState | undefined>;
+  };
+  subtle: {
+    room: Room;
+  };
 };
 
 /** @public */

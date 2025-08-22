@@ -1,6 +1,6 @@
 import { type RoomSignalState } from '@livekit/components-core';
 import type { RoomEvent, Room } from 'livekit-client';
-import { useEnsureRoom } from '../context';
+import { useEnsureRoom, useRoomContext } from '../context';
 import { useSignal } from './useSignal';
 
 /** @public */
@@ -31,7 +31,7 @@ export interface UseRemoteParticipantsOptions {
  * ```
  * @public
  */
-export function useRemoteParticipants(roomState?: RoomSignalState) {
-  const room = useEnsureRoom(roomState);
-  return useSignal(room.remoteParticipants);
+export function useRemoteParticipants() {
+  const state = useRoomContext();
+  return useSignal(state.roomState.remoteParticipants);
 }

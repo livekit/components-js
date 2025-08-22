@@ -30,20 +30,45 @@ export function createBaseParticipantSignalState(
     isSpeaking.set(participant.isSpeaking);
   };
 
+  const isMicrophoneEnabled = new Signal.State<boolean>(participant.isMicrophoneEnabled);
+  const isCameraEnabled = new Signal.State<boolean>(participant.isCameraEnabled);
+  const isScreenShareEnabled = new Signal.State<boolean>(participant.isScreenShareEnabled);
+
+  const updateMutedStatus = () => {
+    isMicrophoneEnabled.set(participant.isMicrophoneEnabled);
+    isCameraEnabled.set(participant.isCameraEnabled);
+    isScreenShareEnabled.set(participant.isScreenShareEnabled);
+  };
+
   participant.on(ParticipantEvent.ParticipantMetadataChanged, updateMetadata);
   participant.on(ParticipantEvent.ParticipantNameChanged, updateName);
   participant.on(ParticipantEvent.IsSpeakingChanged, updateIsSpeaking);
+  participant.on(ParticipantEvent.TrackMuted, updateMutedStatus);
+  participant.on(ParticipantEvent.TrackUnmuted, updateMutedStatus);
+  participant.on(ParticipantEvent.TrackPublished, updateMutedStatus);
+  participant.on(ParticipantEvent.TrackUnpublished, updateMutedStatus);
+  participant.on(ParticipantEvent.LocalTrackPublished, updateMutedStatus);
+  participant.on(ParticipantEvent.LocalTrackUnpublished, updateMutedStatus);
 
   abortSignal.addEventListener('abort', () => {
     participant.off(ParticipantEvent.ParticipantMetadataChanged, updateMetadata);
     participant.off(ParticipantEvent.ParticipantNameChanged, updateName);
     participant.off(ParticipantEvent.IsSpeakingChanged, updateIsSpeaking);
+    participant.off(ParticipantEvent.TrackMuted, updateMutedStatus);
+    participant.off(ParticipantEvent.TrackUnmuted, updateMutedStatus);
+    participant.off(ParticipantEvent.TrackPublished, updateMutedStatus);
+    participant.off(ParticipantEvent.TrackUnpublished, updateMutedStatus);
+    participant.off(ParticipantEvent.LocalTrackPublished, updateMutedStatus);
+    participant.off(ParticipantEvent.LocalTrackUnpublished, updateMutedStatus);
   });
 
   return {
     metadata: new Signal.Computed(() => metadata.get()),
     name: new Signal.Computed(() => name.get()),
     isSpeaking: new Signal.Computed(() => isSpeaking.get()),
+    isMicrophoneEnabled: new Signal.Computed(() => isMicrophoneEnabled.get()),
+    isCameraEnabled: new Signal.Computed(() => isCameraEnabled.get()),
+    isScreenShareEnabled: new Signal.Computed(() => isScreenShareEnabled.get()),
     identity: participant.identity,
   };
 }
@@ -123,26 +148,3 @@ export function createLocalParticipantSignalState(
     tracks: new Signal.Computed(() => tracks.get()),
   };
 }
-
-// export function createLocalParticipantSignalState(
-//   participant: LocalParticipant,
-//   abortSignal: AbortSignal,
-// ) {
-//   const metadata = new Signal.State<string | undefined>(participant.metadata);
-//   const updateMetadata = (_metadata: string | undefined) => {
-//     metadata.set(_metadata);
-//   };
-
-//   const name = new Signal.State<string | undefined>(participant.name);
-//   const updateName = (_name: string | undefined) => {
-//     name.set(_name);
-//   };
-
-//   const isSpeaking = new Signal.State<boolean>(participant.isSpeaking);
-
-//   return {
-//     metadata: new Signal.Computed(() => metadata.get()),
-//     name: new Signal.Computed(() => participant.name),
-//     identity: new Signal.Computed(() => participant.identity),
-//   };
-// }

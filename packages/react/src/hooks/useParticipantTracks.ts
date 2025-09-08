@@ -2,9 +2,14 @@ import * as React from 'react';
 import type { TrackReference } from '@livekit/components-core';
 import { participantTracksObservable } from '@livekit/components-core';
 import { useObservableState } from './internal';
-import type { Track } from 'livekit-client';
+import type { Room, Track } from 'livekit-client';
 import { useMaybeParticipantContext } from '../context';
 import { useParticipants } from './useParticipants';
+
+type UseParticipantTracksOptions = {
+  participantIdentity?: string;
+  room?: Room;
+};
 
 /**
  * `useParticipantTracks` is a custom React that allows you to get tracks of a specific participant only, by specifiying the participant's identity.
@@ -13,10 +18,19 @@ import { useParticipants } from './useParticipants';
  */
 export function useParticipantTracks(
   sources: Track.Source[],
-  participantIdentity?: string,
+  optionsOrParticipantIdentity: UseParticipantTracksOptions | UseParticipantTracksOptions["participantIdentity"] = {},
 ): TrackReference[] {
+  let participantIdentity: UseParticipantTracksOptions["participantIdentity"];
+  let room: UseParticipantTracksOptions["room"];
+  if (typeof optionsOrParticipantIdentity === 'string') {
+    participantIdentity = optionsOrParticipantIdentity;
+  } else {
+    participantIdentity = optionsOrParticipantIdentity?.participantIdentity;
+    room = optionsOrParticipantIdentity?.room;
+  }
+
   const participantContext = useMaybeParticipantContext();
-  const participants = useParticipants({ updateOnlyOn: [] });
+  const participants = useParticipants({ room, updateOnlyOn: [] });
 
   const p = React.useMemo(() => {
     if (participantIdentity) {

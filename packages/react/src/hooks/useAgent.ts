@@ -283,15 +283,22 @@ export function useAgent(conversation: ConversationInstanceStub /*, name?: strin
     };
   }, [room]);
 
-  const [localMicTrack, setLocalMicTrack] = useState<LocalTrackPublication | null>(null);
+  const [localMicTrack, setLocalMicTrack] = useState<LocalTrackPublication | null>(() => (
+    room.localParticipant.getTrackPublication(Track.Source.Microphone) ?? null
+  ));
   useEffect(() => {
     const handleLocalParticipantTrackPublished = () => {
       setLocalMicTrack(room.localParticipant.getTrackPublication(Track.Source.Microphone) ?? null);
     };
+    const handleLocalParticipantTrackUnPublished = () => {
+      setLocalMicTrack(null);
+    };
 
-    room.localParticipant.on(ParticipantEvent.TrackPublished, handleLocalParticipantTrackPublished)
+    room.localParticipant.on(ParticipantEvent.LocalTrackPublished, handleLocalParticipantTrackPublished)
+    room.localParticipant.on(ParticipantEvent.LocalTrackUnpublished, handleLocalParticipantTrackUnPublished)
     return () => {
-      room.localParticipant.off(ParticipantEvent.TrackPublished, handleLocalParticipantTrackPublished)
+      room.localParticipant.off(ParticipantEvent.LocalTrackPublished, handleLocalParticipantTrackPublished)
+      room.localParticipant.off(ParticipantEvent.LocalTrackUnpublished, handleLocalParticipantTrackUnPublished)
     };
   }, [room.localParticipant]);
 

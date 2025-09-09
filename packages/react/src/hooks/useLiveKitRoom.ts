@@ -84,7 +84,7 @@ export function useLiveKitRoom<T extends HTMLElement>(
       });
     };
 
-    const handleMediaDeviceError = (e: Error, kind: MediaDeviceKind) => {
+    const handleMediaDeviceError = (e: Error, kind?: MediaDeviceKind) => {
       const mediaDeviceFailure = MediaDeviceFailure.getFailure(e);
       onMediaDeviceFailure?.(mediaDeviceFailure, kind);
     };

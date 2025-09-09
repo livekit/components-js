@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTextStream } from './useTextStream';
-import { DataTopic } from '@livekit/components-core';
+import { DataTopic, ParticipantAgentAttributes } from '@livekit/components-core';
 
 /**
  * @beta
@@ -34,7 +34,7 @@ export function useTranscriptions(opts?: UseTranscriptionsOptions) {
         )
         .filter((stream) =>
           trackSids
-            ? trackSids.includes(stream.streamInfo.attributes?.['lk.transcribed_track_id'] ?? '')
+            ? trackSids.includes(stream.streamInfo.attributes?.[ParticipantAgentAttributes.TranscribedTrackId] ?? '')
             : true,
         ),
     [textStreams, participantIdentities, trackSids],

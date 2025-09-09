@@ -7,21 +7,24 @@ import type { Participant, Track, TrackPublication } from 'livekit-client';
 // ## TrackReference Types
 
 /** @public */
-export type TrackReferencePlaceholder = {
-  participant: Participant;
+export type TrackReferencePlaceholder<TrackSource extends Track.Source = Track.Source, P = Participant> = {
+  participant: P;
   publication?: never;
-  source: Track.Source;
+  source: TrackSource;
 };
 
 /** @public */
-export type TrackReference = {
-  participant: Participant;
+export type TrackReference<TrackSource extends Track.Source = Track.Source, P = Participant> = {
+  participant: P;
   publication: TrackPublication;
-  source: Track.Source;
+  source: TrackSource;
 };
 
 /** @public */
-export type TrackReferenceOrPlaceholder = TrackReference | TrackReferencePlaceholder;
+export type TrackReferenceOrPlaceholder<
+  TrackSource extends Track.Source = Track.Source,
+  P = Participant,
+> = TrackReference<TrackSource, P> | TrackReferencePlaceholder<TrackSource, P>;
 
 // ### TrackReference Type Predicates
 /** @internal */

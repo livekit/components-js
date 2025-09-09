@@ -25,9 +25,9 @@ export type UseTracksOptions = {
 
 /** @public */
 export type UseTracksHookReturnType<T> = T extends Track.Source[]
-  ? TrackReference[]
+  ? Array<TrackReference<T[0]>>
   : T extends TrackSourceWithOptions[]
-    ? TrackReferenceOrPlaceholder[]
+    ? Array<TrackReferenceOrPlaceholder<T[0]['source']>>
     : never;
 
 /**

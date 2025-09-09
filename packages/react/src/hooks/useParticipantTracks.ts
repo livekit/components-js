@@ -16,10 +16,10 @@ type UseParticipantTracksOptions = {
  * If the participant identity is not passed the hook will try to get the participant from a participant context.
  * @public
  */
-export function useParticipantTracks(
-  sources: Track.Source[],
+export function useParticipantTracks<TrackSource extends Track.Source>(
+  sources: Array<TrackSource>,
   optionsOrParticipantIdentity: UseParticipantTracksOptions | UseParticipantTracksOptions["participantIdentity"] = {},
-): TrackReference[] {
+): Array<TrackReference<TrackSource>> {
   let participantIdentity: UseParticipantTracksOptions["participantIdentity"];
   let room: UseParticipantTracksOptions["room"];
   if (typeof optionsOrParticipantIdentity === 'string') {
@@ -43,10 +43,10 @@ export function useParticipantTracks(
     if (!p) {
       return undefined;
     }
-    return participantTracksObservable(p, { sources });
+    return participantTracksObservable<TrackSource>(p, { sources });
   }, [p, JSON.stringify(sources)]);
 
-  const trackRefs = useObservableState(observable, [] as TrackReference[]);
+  const trackRefs = useObservableState(observable, [] as Array<TrackReference<TrackSource>>);
 
   return trackRefs;
 }

@@ -41,7 +41,7 @@ export type MessagesCallbacks = {
   [MessagesEvent.Disconnected]: () => void;
 };
 
-export function useAgentMessages(conversation: ConversationInstance): MessagesInstance {
+export function useConversationMessages(conversation: ConversationInstance): MessagesInstance {
   const { room } = conversation.subtle;
 
   const agent = useAgent(conversation);

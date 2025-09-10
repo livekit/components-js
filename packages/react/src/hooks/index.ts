@@ -60,4 +60,4 @@ export * from './useSequentialRoomConnectDisconnect';
 export * from './useAgentConversation';
 export * from './useAgent';
 export * from './useAgentEvents';
-export * from './useAgentMessages';
+export * from './useConversationMessages';

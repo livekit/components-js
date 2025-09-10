@@ -59,3 +59,4 @@ export * from './useTranscriptions';
 export * from './useAgentConversation';
 export * from './useAgent';
 export * from './useAgentEvents';
+export * from './useAgentMessages';

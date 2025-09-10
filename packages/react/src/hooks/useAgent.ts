@@ -1,4 +1,4 @@
-import { ConnectionState, LocalTrackPublication, ParticipantEvent, ParticipantKind, RemoteParticipant, Room, RoomEvent, Track } from 'livekit-client';
+import { ConnectionState, LocalTrackPublication, ParticipantEvent, ParticipantKind, RemoteParticipant, RoomEvent, Track } from 'livekit-client';
 import type TypedEventEmitter from 'typed-emitter';
 import { EventEmitter } from 'events';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -9,7 +9,6 @@ import { useParticipantTracks } from './useParticipantTracks';
 import { useRemoteParticipants } from './useRemoteParticipants';
 import { TrackReference } from '@livekit/components-core';
 import { create } from 'zustand';
-import { useMaybeRoomContext } from '../context';
 
 // FIXME: make this 10 seconds once room dispatch booting info is discoverable
 const DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS = 20_000;
@@ -203,20 +202,11 @@ const useAgentTimeoutIdStore = create<{
   };
 });
 
-type UseAgentOptions = {
-  room?: Room;
-};
-
 /**
   * useAgent encapculates all agent state, normalizing some quirks around how LiveKit Agents work.
   */
-export function useAgent(options?: UseAgentOptions): AgentInstance;
-export function useAgent(name?: string, options?: UseAgentOptions): AgentInstance;
-export function useAgent(nameOrOptions?: string | UseAgentOptions, optionsOrUnknown?: UseAgentOptions): AgentInstance {
-  const options = typeof nameOrOptions !== 'string' ? nameOrOptions : optionsOrUnknown;
-
-  const roomFromContext = useMaybeRoomContext();
-  const room = useMemo(() => options?.room ?? roomFromContext ?? new Room(), []);
+export function useAgent(conversation: ConversationInstance, name?: string): AgentInstance {
+  const { room } = conversation.subtle;
 
   const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<AgentCallbacks>, []);
 

@@ -7,7 +7,7 @@ export function useAgentEvents<
   Event extends Parameters<Emitter["on"]>[0],
   Callback extends EmitterEventMap[Event],
 >(
-  instance: { subtle: { emitter: Emitter } } | null | undefined,
+  instance: Emitter | { subtle: { emitter: Emitter } } | null | undefined,
   event: Event,
   handlerFn: Callback | undefined,
   dependencies?: React.DependencyList
@@ -16,8 +16,17 @@ export function useAgentEvents<
   const wrappedCallback = useCallback(handlerFn ?? fallback, dependencies ?? []);
   const callback = dependencies ? wrappedCallback : handlerFn;
 
+  const emitter = useMemo(() => {
+    if (!instance) {
+      return null;
+    }
+    if ('subtle' in instance) {
+      return instance.subtle.emitter;
+    }
+    return instance;
+  }, [instance]);
+
   useEffect(() => {
-    const emitter = instance?.subtle.emitter;
     if (!emitter || !callback) {
       return;
     }
@@ -25,5 +34,5 @@ export function useAgentEvents<
     return () => {
       emitter.off(event, callback);
     };
-  }, [instance?.subtle.emitter, event, callback]);
+  }, [emitter, event, callback]);
 }

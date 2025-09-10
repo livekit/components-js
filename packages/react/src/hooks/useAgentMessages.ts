@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import type TypedEventEmitter from 'typed-emitter';
-import { Room, SendTextOptions } from 'livekit-client';
-import { EventEmitter } from "events";
+// import type TypedEventEmitter from 'typed-emitter';
+import { SendTextOptions } from 'livekit-client';
+// import { EventEmitter } from "events";
 import {
   ReceivedMessage,
   ReceivedChatMessage,
@@ -10,10 +10,10 @@ import {
   ReceivedAgentTranscriptionMessage,
 } from '@livekit/components-core';
 
-import { AgentInstance } from './useAgent';
+import { useAgent } from './useAgent';
 import { useTranscriptions } from './useTranscriptions';
 import { useChat } from './useChat';
-import { useMaybeRoomContext } from '../context';
+import { ConversationInstance } from './useAgentConversation';
 
 export type MessagesInstance = {
   [Symbol.toStringTag]: "MessagesInstance",
@@ -25,9 +25,10 @@ export type MessagesInstance = {
 
   send: (message: string, options?: SendTextOptions) => Promise<ReceivedChatMessage>;
 
-  subtle: {
-    emitter: TypedEventEmitter<MessagesCallbacks>;
-  };
+  // FIXME: does there need to be a way to subscribe to individual messages?
+  // subtle: {
+  //   emitter: TypedEventEmitter<MessagesCallbacks>;
+  // };
 }
 
 export enum MessagesEvent {
@@ -40,14 +41,10 @@ export type MessagesCallbacks = {
   [MessagesEvent.Disconnected]: () => void;
 };
 
-type AgentMessagesOptions = {
-  room?: Room;
-};
+export function useAgentMessages(conversation: ConversationInstance): MessagesInstance {
+  const { room } = conversation.subtle;
 
-export function useAgentMessages(agent: AgentInstance, options?: AgentMessagesOptions): MessagesInstance {
-  const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<MessagesCallbacks>, []);
-  const roomFromContext = useMaybeRoomContext();
-  const room = useMemo(() => options?.room ?? roomFromContext ?? new Room(), [options?.room, roomFromContext]);
+  const agent = useAgent(conversation);
 
   const transcriptions: Array<TextStreamData> = useTranscriptions();
   const chat = useChat();
@@ -111,9 +108,5 @@ export function useAgentMessages(agent: AgentInstance, options?: AgentMessagesOp
     messages: receivedMessages,
     send: chat.send,
     isSending: chat.isSending,
-
-    subtle: {
-      emitter,
-    },
-  }), [receivedMessages, chat.send, chat.isSending, emitter]);
+  }), [receivedMessages, chat.send, chat.isSending]);
 }

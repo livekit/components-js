@@ -1,5 +1,4 @@
 import type { Participant, ChatMessage } from 'livekit-client';
-import { TextStreamInfo } from 'livekit-client/dist/src/room/types';
 
 /** @public */
 export type { ChatMessage };
@@ -25,21 +24,17 @@ export type ReceivedChatMessage = ReceivedMessageWithType<'chatMessage', ChatMes
   attributes?: Record<string, string>;
 }>;
 
-export type ReceivedAgentTranscriptionMessage = ReceivedMessageWithType<'agentTranscript', {
-  message: string;
-  streamInfo: TextStreamInfo;
-}>;
-
 export type ReceivedUserTranscriptionMessage = ReceivedMessageWithType<'userTranscript', {
   message: string;
-  streamInfo: TextStreamInfo;
 }>;
 
-export type ReceivedUserInputMessage = ReceivedMessageWithType<'userInput'>;
+export type ReceivedAgentTranscriptionMessage = ReceivedMessageWithType<'agentTranscript', {
+  message: string;
+}>;
 
 /** @public */
 export type ReceivedMessage =
   | ReceivedUserTranscriptionMessage
   | ReceivedAgentTranscriptionMessage
-  | ReceivedUserInputMessage
+  | ReceivedChatMessage
   // TODO: images? attachments? rpc?

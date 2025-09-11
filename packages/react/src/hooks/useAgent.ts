@@ -3,12 +3,12 @@ import type TypedEventEmitter from 'typed-emitter';
 import { EventEmitter } from 'events';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { create } from 'zustand';
+import { ParticipantAgentAttributes, TrackReference } from '@livekit/components-core';
 
-import { ParticipantAgentAttributes } from '@livekit/components-core';
-import { ConversationInstance } from './useAgentConversation';
 import { useParticipantTracks } from './useParticipantTracks';
 import { useRemoteParticipants } from './useRemoteParticipants';
-import { TrackReference } from '@livekit/components-core';
+import { AgentState as LegacyAgentState } from './useVoiceAssistant';
+import { ConversationInstance } from './useAgentConversation';
 
 // FIXME: make this 10 seconds once room dispatch booting info is discoverable
 const DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS = 20_000;
@@ -55,6 +55,11 @@ type AgentInstanceCommon = {
 
     agentParticipant: RemoteParticipant | null;
     workerParticipant: RemoteParticipant | null;
+
+    /** A computed version of the old {@link AgentState} value returned by {@link useVoiceAssistant}
+      * @deprecated Use conversation.connectionState / agent.conversationalState if at all possible
+      */
+    legacyAgentState: LegacyAgentState;
   };
 };
 
@@ -349,6 +354,31 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
     updateAgentTimeoutParticipantExists(agentParticipant !== null);
   }, [agentParticipant]);
 
+  const legacyAgentState: LegacyAgentState = useMemo(() => {
+    switch (conversation.connectionState) {
+      case 'disconnected':
+      case 'connecting':
+        return conversation.connectionState;
+
+      case 'connected':
+      case 'reconnecting':
+      case 'signalReconnecting':
+        switch (conversationalState) {
+          case 'speaking':
+          case 'listening':
+          case 'initializing':
+          case 'thinking':
+            return conversationalState;
+
+          case 'idle':
+          case 'unset':
+          case 'failed':
+            // There's not really a good direct correlation for either of these...
+            return 'disconnected';
+        }
+    }
+  }, [conversation.connectionState, conversationalState]);
+
   const agentState: AgentStateAvailable | AgentStateUnAvailable | AgentStateFailed = useMemo(() => {
     const common: AgentInstanceCommon = {
       [Symbol.toStringTag]: "AgentInstance",
@@ -359,6 +389,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
         emitter,
         agentParticipant,
         workerParticipant,
+        legacyAgentState,
       },
     };
 

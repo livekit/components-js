@@ -60,6 +60,7 @@ type ConversationStateCommon = {
   subtle: {
     emitter: TypedEventEmitter<ConversationCallbacks>;
     room: Room;
+    credentials: ConnectionCredentials,
   };
 };
 
@@ -82,8 +83,6 @@ type ConversationStateDisconnected = ConversationStateCommon & {
 };
 
 type ConversationActions = {
-  credentials: ConnectionCredentials;
-
   /** Returns a promise that resolves once the room connects. */
   waitUntilConnected: (signal?: AbortSignal) => void;
   /** Returns a promise that resolves once the room disconnects */
@@ -163,6 +162,7 @@ export function useConversation(options: ConversationOptions): ConversationInsta
       subtle: {
         room,
         emitter,
+        credentials: options.credentials,
       },
     };
 
@@ -193,7 +193,7 @@ export function useConversation(options: ConversationOptions): ConversationInsta
           ...generateDerivedConnectionStateValues(ConnectionState.Disconnected),
         };
     }
-  }, [room, emitter]);
+  }, [options.credentials, room, emitter, roomConnectionState]);
   useEffect(() => {
     emitter.emit(ConversationEvent.ConnectionStateChanged, conversationState.connectionState);
   }, [conversationState.connectionState]);
@@ -279,8 +279,6 @@ export function useConversation(options: ConversationOptions): ConversationInsta
   return useMemo(() => ({
     ...conversationState,
 
-    credentials: options.credentials,
-
     waitUntilConnected,
     waitUntilDisconnected,
 
@@ -289,7 +287,6 @@ export function useConversation(options: ConversationOptions): ConversationInsta
     disconnect,
   }), [
     conversationState,
-    options.credentials,
     waitUntilConnected,
     waitUntilDisconnected,
     prepareConnection,

@@ -258,6 +258,10 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
     );
   }, [waitUntilConnectionState]);
 
+  const agent = useAgent(useMemo(() => ({
+    connectionState: conversationState.connectionState,
+    subtle: { emitter, room, credentials: options.credentials }
+  }), [conversationState, emitter, room, options.credentials]), agentName);
 
   const connect = useCallback(async (connectOptions: AgentSessionConnectOptions = {}) => {
     const {
@@ -279,8 +283,9 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
     ]);
 
     await waitUntilConnected();
-    // await agent.waitUntilAvailable();
-  }, [room, waitUntilConnected, /* agent.waitUntilAvailable */]);
+    await agent.waitUntilAvailable();
+  }, [room, waitUntilDisconnected, options.credentials, waitUntilConnected, agent.waitUntilAvailable]);
+
   const disconnect = useCallback(async () => {
     await room.disconnect();
   }, [room]);

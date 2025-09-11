@@ -5,6 +5,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ConnectionCredentials } from '../utils/ConnectionCredentialsProvider';
 import { useMaybeRoomContext } from '../context';
+import { RoomAgentDispatch, RoomConfiguration } from '@livekit/protocol';
+import { useAgent } from './useAgent';
 
 /** State representing the current connection status to the server hosted agent */
 // FIXME: maybe just make this ConnectionState?
@@ -99,11 +101,27 @@ export type ConversationInstance = (ConversationStateConnecting | ConversationSt
  * AgentSession represents a connection to a LiveKit Agent, providing abstractions to make 1:1
  * agent/participant rooms easier to work with.
  */
-export function useConversation(options: ConversationOptions): ConversationInstance {
+export function useConversation(agentToDispatch: string | RoomAgentDispatch, options: ConversationOptions): ConversationInstance {
   const roomFromContext = useMaybeRoomContext();
   const room = useMemo(() => roomFromContext ?? options.room ?? new Room(), []);
 
-  const emitter = new EventEmitter() as TypedEventEmitter<ConversationCallbacks>;
+  const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<ConversationCallbacks>, []);
+
+  const agentName = typeof agentToDispatch === 'string' ? agentToDispatch : agentToDispatch.agentName;
+  useEffect(() => {
+    const agentDispatch = typeof agentToDispatch === 'string' ? (
+      new RoomAgentDispatch({ agentName: agentToDispatch, metadata: '' })
+    ) : agentToDispatch;
+    options.credentials.setRequest({
+      roomConfig: new RoomConfiguration({
+        agents: [agentDispatch],
+      }),
+    });
+
+    return () => {
+      options.credentials.clearRequest();
+    };
+  }, [options.credentials]);
 
   const generateDerivedConnectionStateValues = <ConnectionState extends ConversationInstance["connectionState"]>(connectionState: ConnectionState) => ({
     isConnected: (

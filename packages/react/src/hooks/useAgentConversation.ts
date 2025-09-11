@@ -142,13 +142,6 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
   useEffect(() => {
     const handleConnectionStateChanged = (connectionState: ConnectionState) => {
       setRoomConnectionState(connectionState);
-
-      switch (connectionState) {
-        case ConnectionState.Disconnected: {
-          options.credentials.refresh();
-          break;
-        }
-      };
     };
 
     room.on(RoomEvent.ConnectionStateChanged, handleConnectionStateChanged);
@@ -272,8 +265,10 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
     await waitUntilDisconnected(waitForDisconnectSignal);
 
     await Promise.all([
-      options.credentials.generate().then(connection => (
-        room.connect(connection.serverUrl, connection.participantToken)
+      // FIXME: swap the below line in once the new `livekit-client` changes are published
+      // room.connect(options.credentials),
+      options.credentials.generate().then(({ serverUrl, participantToken }) => (
+        room.connect(serverUrl, participantToken)
       )),
 
       // Start microphone (with preconnect buffer) by default
@@ -293,11 +288,13 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
   const prepareConnection = useCallback(async () => {
     const credentials = await options.credentials.generate();
     await room.prepareConnection(credentials.serverUrl, credentials.participantToken);
-  }, [room]);
-  prepareConnection().catch(err => {
-    // FIXME: figure out a better logging solution?
-    console.warn('WARNING: Room.prepareConnection failed:', err);
-  });
+  }, [options.credentials, room]);
+  useEffect(() => {
+    prepareConnection().catch(err => {
+      // FIXME: figure out a better logging solution?
+      console.warn('WARNING: Room.prepareConnection failed:', err);
+    });
+  }, [prepareConnection]);
 
   return useMemo(() => ({
     ...conversationState,

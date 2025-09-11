@@ -150,11 +150,6 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
     };
   }, [room]);
 
-
-  // const handleAgentAttributesChanged = () => {
-  //   set((old) => generateConnectionStateUpdate(old, old.agent, old.local, old.messages));
-  // };
-
   useEffect(() => {
     const handleMediaDevicesError = async (error: Error) => {
       emitter.emit(ConversationEvent.MediaDevicesError, error);
@@ -164,7 +159,7 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
     return () => {
       room.off(RoomEvent.MediaDevicesError, handleMediaDevicesError);
     };
-  }, [room]);
+  }, [room, emitter]);
 
   const conversationState = useMemo((): ConversationStateConnecting | ConversationStateConnected | ConversationStateDisconnected => {
     const common: ConversationStateCommon = {
@@ -207,7 +202,7 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
   }, [options.credentials, room, emitter, roomConnectionState]);
   useEffect(() => {
     emitter.emit(ConversationEvent.ConnectionStateChanged, conversationState.connectionState);
-  }, [conversationState.connectionState]);
+  }, [emitter, conversationState.connectionState]);
 
   const waitUntilConnectionState = useCallback(async (state: ConversationInstance["connectionState"], signal?: AbortSignal) => {
     if (conversationState.connectionState === state) {
@@ -235,7 +230,7 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
       emitter.on(ConversationEvent.ConnectionStateChanged, onceEventOccurred);
       signal?.addEventListener('abort', abortHandler);
     });
-  }, [conversationState.connectionState]);
+  }, [conversationState.connectionState, emitter]);
 
   const waitUntilConnected = useCallback(async (signal?: AbortSignal) => {
     return waitUntilConnectionState(

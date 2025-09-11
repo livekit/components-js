@@ -2,13 +2,13 @@ import { ConnectionState, LocalTrackPublication, ParticipantEvent, ParticipantKi
 import type TypedEventEmitter from 'typed-emitter';
 import { EventEmitter } from 'events';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { create } from 'zustand';
 
 import { ParticipantAgentAttributes } from '@livekit/components-core';
 import { ConversationInstance } from './useAgentConversation';
 import { useParticipantTracks } from './useParticipantTracks';
 import { useRemoteParticipants } from './useRemoteParticipants';
 import { TrackReference } from '@livekit/components-core';
-import { create } from 'zustand';
 
 // FIXME: make this 10 seconds once room dispatch booting info is discoverable
 const DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS = 20_000;
@@ -202,10 +202,12 @@ const useAgentTimeoutIdStore = create<{
   };
 });
 
+type ConversationStub = Pick<ConversationInstance, 'connectionState' | 'subtle'>;
+
 /**
   * useAgent encapculates all agent state, normalizing some quirks around how LiveKit Agents work.
   */
-export function useAgent(conversation: ConversationInstance, name?: string): AgentInstance {
+export function useAgent(conversation: ConversationStub, _name?: string): AgentInstance {
   const { room } = conversation.subtle;
 
   const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<AgentCallbacks>, []);

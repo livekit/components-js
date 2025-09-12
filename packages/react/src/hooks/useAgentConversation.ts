@@ -98,7 +98,7 @@ export type ConversationInstance = (ConversationStateConnecting | ConversationSt
  */
 export function useConversation(agentToDispatch: string | RoomAgentDispatch, options: ConversationOptions): ConversationInstance {
   const roomFromContext = useMaybeRoomContext();
-  const room = useMemo(() => roomFromContext ?? options.room ?? new Room(), []);
+  const room = useMemo(() => roomFromContext ?? options.room ?? new Room(), [roomFromContext, options.room]);
 
   const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<ConversationCallbacks>, []);
 

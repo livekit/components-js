@@ -28,13 +28,8 @@ export type ConversationOptions = {
 };
 
 export type AgentSessionConnectOptions = {
-  /** Optional abort signal which if triggered will stop waiting for the room to be disconnected
-    * prior to connecting
-    *
-    * FIXME: is this a confusing property to expose? Maybe expose one `signal` that universally
-    * could apply across the whole agentSession.connect(...) call?
-    */
-  waitForDisconnectSignal?: AbortSignal;
+  /** Optional abort signal which if triggered will terminate connecting even if it isn't complete */
+  signal?: AbortSignal;
 
   // FIXME: not sure about this pattern, background thinking is that it would be good to be able to
   // abstract away enabling relevant media tracks to the caller so they don't have to interface with
@@ -253,11 +248,16 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
 
   const connect = useCallback(async (connectOptions: AgentSessionConnectOptions = {}) => {
     const {
-      waitForDisconnectSignal,
+      signal,
       tracks = { microphone: { enabled: true, publishOptions: { preConnectBuffer: true } } },
     } = connectOptions;
 
-    await waitUntilDisconnected(waitForDisconnectSignal);
+    await waitUntilDisconnected(signal);
+
+    const onSignalAbort = () => {
+      room.disconnect();
+    };
+    signal?.addEventListener('abort', onSignalAbort);
 
     await Promise.all([
       // FIXME: swap the below line in once the new `livekit-client` changes are published
@@ -272,8 +272,10 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
       ) : Promise.resolve(),
     ]);
 
-    await waitUntilConnected();
-    await agent.waitUntilAvailable();
+    await waitUntilConnected(signal);
+    await agent.waitUntilAvailable(signal);
+
+    signal?.removeEventListener('abort', onSignalAbort);
   }, [room, waitUntilDisconnected, options.credentials, waitUntilConnected, agent.waitUntilAvailable]);
 
   const disconnect = useCallback(async () => {

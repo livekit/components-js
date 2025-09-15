@@ -25,6 +25,14 @@ export type ConversationCallbacks = {
 export type ConversationOptions = {
   credentials: ConnectionCredentials;
   room?: Room;
+
+  dispatch?: {
+    /**
+      * Amount of time in milliseonds the system will wait for an agent to join the room, before
+      * transitioning to the "failure" state.
+      */
+    agentConnectTimeoutMilliseconds?: number;
+  },
 };
 
 export type AgentSessionConnectOptions = {
@@ -58,6 +66,7 @@ type ConversationStateCommon = {
     emitter: TypedEventEmitter<ConversationCallbacks>;
     room: Room;
     credentials: ConnectionCredentials,
+    agentConnectTimeoutMilliseconds: NonNullable<ConversationOptions["dispatch"]>["agentConnectTimeoutMilliseconds"],
   };
 };
 
@@ -164,6 +173,7 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
         room,
         emitter,
         credentials: options.credentials,
+        agentConnectTimeoutMilliseconds: options.dispatch?.agentConnectTimeoutMilliseconds,
       },
     };
 
@@ -243,8 +253,13 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
 
   const agent = useAgent(useMemo(() => ({
     connectionState: conversationState.connectionState,
-    subtle: { emitter, room, credentials: options.credentials }
-  }), [conversationState, emitter, room, options.credentials]), agentName);
+    subtle: {
+      emitter,
+      room,
+      credentials: options.credentials,
+      agentConnectTimeoutMilliseconds: options.dispatch?.agentConnectTimeoutMilliseconds,
+    },
+  }), [conversationState, emitter, room, options.credentials, options.dispatch?.agentConnectTimeoutMilliseconds]), agentName);
 
   const connect = useCallback(async (connectOptions: AgentSessionConnectOptions = {}) => {
     const {

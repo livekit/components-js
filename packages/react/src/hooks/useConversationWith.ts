@@ -112,7 +112,11 @@ type ConversationActions = {
   waitUntilDisconnected: (signal?: AbortSignal) => void;
 
   prepareConnection: () => Promise<void>,
+
+  /** Connect to the underlying room and dispatch any agents */
   begin: (options?: AgentSessionConnectOptions) => Promise<void>;
+
+  /** Disconnect from the underlying room */
   end: () => Promise<void>;
 };
 

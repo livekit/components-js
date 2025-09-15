@@ -186,13 +186,15 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch,
     };
   }, [room, emitter]);
 
-  const { localParticipant, cameraTrack, microphoneTrack } = useLocalParticipant({ room });
+  const { localParticipant } = useLocalParticipant({ room });
+  const cameraPublication = localParticipant.getTrackPublication(Track.Source.Camera);
   const localCamera = useMemo(() => {
-    return cameraTrack ? { source: Track.Source.Camera as const, participant: localParticipant, publication: microphoneTrack } : null;
-  }, [localParticipant, microphoneTrack]);
+    return !cameraPublication?.isMuted ? { source: Track.Source.Camera as const, participant: localParticipant, publication: cameraPublication } : null;
+  }, [localParticipant, cameraPublication, cameraPublication?.isMuted]);
+  const microphonePublication = localParticipant.getTrackPublication(Track.Source.Microphone);
   const localMicrophone = useMemo(() => {
-    return microphoneTrack ? { source: Track.Source.Microphone as const, participant: localParticipant, publication: microphoneTrack } : null;
-  }, [localParticipant, microphoneTrack]);
+    return !microphonePublication?.isMuted ? { source: Track.Source.Microphone as const, participant: localParticipant, publication: microphonePublication } : null;
+  }, [localParticipant, microphonePublication, microphonePublication?.isMuted]);
 
   const conversationState = useMemo((): ConversationStateConnecting | ConversationStateConnected | ConversationStateDisconnected => {
     const common: ConversationStateCommon = {
@@ -248,7 +250,7 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch,
           },
         };
     }
-  }, [options.credentials, room, emitter, roomConnectionState, localParticipant]);
+  }, [options.credentials, room, emitter, roomConnectionState, localParticipant, localCamera, localMicrophone]);
   useEffect(() => {
     emitter.emit(ConversationEvent.ConnectionStateChanged, conversationState.connectionState);
   }, [emitter, conversationState.connectionState]);

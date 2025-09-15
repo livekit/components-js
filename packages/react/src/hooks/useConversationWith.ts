@@ -1,5 +1,5 @@
 import type TypedEventEmitter from 'typed-emitter';
-import { Room, RoomEvent, ConnectionState, TrackPublishOptions } from 'livekit-client';
+import { Room, RoomEvent, ConnectionState, TrackPublishOptions, Track } from 'livekit-client';
 import { EventEmitter } from 'events';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -7,6 +7,7 @@ import { ConnectionCredentials } from '../utils/ConnectionCredentialsProvider';
 import { useMaybeRoomContext } from '../context';
 import { RoomAgentDispatch, RoomConfiguration } from '@livekit/protocol';
 import { useAgent } from './useAgent';
+import { TrackReferencePlaceholder } from '@livekit/components-core';
 
 /** State representing the current connection status to the server hosted agent */
 // FIXME: maybe just make this ConnectionState?
@@ -95,8 +96,8 @@ type ConversationActions = {
   waitUntilDisconnected: (signal?: AbortSignal) => void;
 
   prepareConnection: () => Promise<void>,
-  connect: (options?: AgentSessionConnectOptions) => Promise<void>;
-  disconnect: () => Promise<void>;
+  begin: (options?: AgentSessionConnectOptions) => Promise<void>;
+  end: () => Promise<void>;
 };
 
 export type ConversationInstance = (ConversationStateConnecting | ConversationStateConnected | ConversationStateDisconnected) & ConversationActions;
@@ -105,7 +106,7 @@ export type ConversationInstance = (ConversationStateConnecting | ConversationSt
  * AgentSession represents a connection to a LiveKit Agent, providing abstractions to make 1:1
  * agent/participant rooms easier to work with.
  */
-export function useConversation(agentToDispatch: string | RoomAgentDispatch, options: ConversationOptions): ConversationInstance {
+export function useConversationWith(agentToDispatch: string | RoomAgentDispatch, options: ConversationOptions): ConversationInstance {
   const roomFromContext = useMaybeRoomContext();
   const room = useMemo(() => roomFromContext ?? options.room ?? new Room(), [roomFromContext, options.room]);
 
@@ -261,7 +262,7 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
     },
   }), [conversationState, emitter, room, options.credentials, options.dispatch?.agentConnectTimeoutMilliseconds]), agentName);
 
-  const connect = useCallback(async (connectOptions: AgentSessionConnectOptions = {}) => {
+  const begin = useCallback(async (connectOptions: AgentSessionConnectOptions = {}) => {
     const {
       signal,
       tracks = { microphone: { enabled: true, publishOptions: { preConnectBuffer: true } } },
@@ -293,7 +294,7 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
     signal?.removeEventListener('abort', onSignalAbort);
   }, [room, waitUntilDisconnected, options.credentials, waitUntilConnected, agent.waitUntilAvailable]);
 
-  const disconnect = useCallback(async () => {
+  const end = useCallback(async () => {
     await room.disconnect();
   }, [room]);
 
@@ -315,14 +316,14 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
     waitUntilDisconnected,
 
     prepareConnection,
-    connect,
-    disconnect,
+    begin,
+    end,
   }), [
     conversationState,
     waitUntilConnected,
     waitUntilDisconnected,
     prepareConnection,
-    connect,
-    disconnect,
+    begin,
+    end,
   ]);
 }

@@ -8,7 +8,7 @@ import { ParticipantAgentAttributes, TrackReference } from '@livekit/components-
 import { useParticipantTracks } from './useParticipantTracks';
 import { useRemoteParticipants } from './useRemoteParticipants';
 import { AgentState as LegacyAgentState } from './useVoiceAssistant';
-import { ConversationInstance } from './useAgentConversation';
+import { ConversationInstance } from './useConversationWith';
 
 // FIXME: make this 10 seconds once room dispatch booting info is discoverable
 const DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS = 20_000;

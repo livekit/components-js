@@ -56,7 +56,7 @@ export * from './useParticipantAttributes';
 export * from './useIsRecording';
 export * from './useTextStream';
 export * from './useTranscriptions';
-export * from './useAgentConversation';
+export * from './useConversationWith';
 export * from './useAgent';
 export * from './useAgentEvents';
 export * from './useConversationMessages';

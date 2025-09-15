@@ -13,7 +13,7 @@ import {
 import { useAgent } from './useAgent';
 import { useTranscriptions } from './useTranscriptions';
 import { useChat } from './useChat';
-import { ConversationInstance } from './useAgentConversation';
+import { ConversationInstance } from './useConversationWith';
 
 export type MessagesInstance = {
   [Symbol.toStringTag]: "MessagesInstance",

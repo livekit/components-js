@@ -58,5 +58,5 @@ export * from './useTextStream';
 export * from './useTranscriptions';
 export * from './useConversationWith';
 export * from './useAgent';
-export * from './useAgentEvents';
+export * from './useEvents';
 export * from './useConversationMessages';

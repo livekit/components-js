@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useMemo } from "react";
 import TypedEventEmitter, { EventMap } from "typed-emitter";
 
-export function useAgentEvents<
+export function useEvents<
   Emitter extends TypedEventEmitter<EventMap>,
   EmitterEventMap extends (Emitter extends TypedEventEmitter<infer EM> ? EM : never),
   Event extends Parameters<Emitter["on"]>[0],

@@ -8,8 +8,7 @@ interface KindWithInitialSelection {
   initialSelection?: string;
 }
 
-interface MediaDeviceMenuPropsSingleKind
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface MediaDeviceMenuPropsSingleKind extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   kind?: MediaDeviceKind;
   initialSelection?: string;
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
@@ -26,8 +25,7 @@ interface MediaDeviceMenuPropsSingleKind
   requestPermissions?: boolean;
 }
 
-interface MediaDeviceMenuPropsMultiKind
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface MediaDeviceMenuPropsMultiKind extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   kind?: KindWithInitialSelection[];
   initialSelection?: undefined;
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
@@ -173,7 +171,9 @@ export function MediaDeviceMenu({
               <MediaDeviceSelect
                 kind={kindInfo.kind}
                 initialSelection={kindInfo.initialSelection}
-                onActiveDeviceChange={(deviceId) => handleActiveDeviceChange(kindInfo.kind, deviceId)}
+                onActiveDeviceChange={(deviceId) =>
+                  handleActiveDeviceChange(kindInfo.kind, deviceId)
+                }
                 onDeviceListChange={setDevices}
                 track={tracks?.[kindInfo.kind]}
                 requestPermissions={needPermissions}

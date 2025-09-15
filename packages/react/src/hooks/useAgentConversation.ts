@@ -1,5 +1,5 @@
 import type TypedEventEmitter from 'typed-emitter';
-import { Room, RoomEvent, ConnectionState, TrackPublishOptions, Track, LocalParticipant } from 'livekit-client';
+import { Room, RoomEvent, ConnectionState, TrackPublishOptions } from 'livekit-client';
 import { EventEmitter } from 'events';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -7,8 +7,6 @@ import { ConnectionCredentials } from '../utils/ConnectionCredentialsProvider';
 import { useMaybeRoomContext } from '../context';
 import { RoomAgentDispatch, RoomConfiguration } from '@livekit/protocol';
 import { useAgent } from './useAgent';
-import { TrackReferenceOrPlaceholder, TrackReferencePlaceholder } from '@livekit/components-core';
-import { useLocalParticipant } from './useLocalParticipant';
 
 /** State representing the current connection status to the server hosted agent */
 // FIXME: maybe just make this ConnectionState?
@@ -76,33 +74,18 @@ type ConversationStateConnecting = ConversationStateCommon & {
   connectionState: "connecting";
   isConnected: false;
   isReconnecting: false;
-
-  local: {
-    camera: TrackReferencePlaceholder<Track.Source.Camera, LocalParticipant>;
-    microphone: TrackReferencePlaceholder<Track.Source.Microphone, LocalParticipant>;
-  };
 };
 
 type ConversationStateConnected = ConversationStateCommon & {
   connectionState: "connected" | "reconnecting" | "signalReconnecting";
   isConnected: true;
   isReconnecting: boolean;
-
-  local: {
-    camera: TrackReferenceOrPlaceholder<Track.Source.Camera, LocalParticipant>,
-    microphone: TrackReferenceOrPlaceholder<Track.Source.Microphone, LocalParticipant>,
-  };
 };
 
 type ConversationStateDisconnected = ConversationStateCommon & {
   connectionState: "disconnected";
   isConnected: false;
   isReconnecting: false;
-
-  local: {
-    camera: TrackReferencePlaceholder<Track.Source.Camera, LocalParticipant>;
-    microphone: TrackReferencePlaceholder<Track.Source.Microphone, LocalParticipant>;
-  };
 };
 
 type ConversationActions = {
@@ -182,14 +165,6 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
     };
   }, [room, emitter]);
 
-  const { localParticipant, cameraTrack, microphoneTrack } = useLocalParticipant({ room });
-  const localCamera = useMemo(() => {
-    return cameraTrack ? { source: Track.Source.Camera, participant: localParticipant, publication: microphoneTrack } : null;
-  }, [localParticipant, microphoneTrack]);
-  const localMicrophone = useMemo(() => {
-    return microphoneTrack ? { source: Track.Source.Microphone, participant: localParticipant, publication: microphoneTrack } : null;
-  }, [localParticipant, microphoneTrack]);
-
   const conversationState = useMemo((): ConversationStateConnecting | ConversationStateConnected | ConversationStateDisconnected => {
     const common: ConversationStateCommon = {
       [Symbol.toStringTag]: "AgentSessionInstance",
@@ -209,11 +184,6 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
 
           connectionState: 'connecting',
           ...generateDerivedConnectionStateValues('connecting'),
-
-          local: {
-            camera: { participant: localParticipant, source: Track.Source.Camera },
-            microphone: { participant: localParticipant, source: Track.Source.Microphone },
-          },
         };
 
       case ConnectionState.Connected:
@@ -224,11 +194,6 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
 
           connectionState: roomConnectionState,
           ...generateDerivedConnectionStateValues(roomConnectionState),
-
-          local: {
-            camera: localCamera ?? { participant: localParticipant, source: Track.Source.Camera },
-            microphone: localMicrophone ?? { participant: localParticipant, source: Track.Source.Microphone },
-          },
         };
 
       case ConnectionState.Disconnected:
@@ -237,14 +202,9 @@ export function useConversation(agentToDispatch: string | RoomAgentDispatch, opt
 
           connectionState: ConnectionState.Disconnected,
           ...generateDerivedConnectionStateValues(ConnectionState.Disconnected),
-
-          local: {
-            camera: { participant: localParticipant, source: Track.Source.Camera },
-            microphone: { participant: localParticipant, source: Track.Source.Microphone },
-          },
         };
     }
-  }, [options.credentials, room, emitter, roomConnectionState, localParticipant]);
+  }, [options.credentials, room, emitter, roomConnectionState]);
   useEffect(() => {
     emitter.emit(ConversationEvent.ConnectionStateChanged, conversationState.connectionState);
   }, [emitter, conversationState.connectionState]);

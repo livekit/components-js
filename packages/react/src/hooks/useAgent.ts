@@ -30,20 +30,6 @@ export type AgentCallbacks = {
   [AgentEvent.ConversationalStateChanged]: (newAgentConversationalState: AgentConversationalState) => void;
 };
 
-type DispatchOptions = {
-  /**
-    * Amount of time in milliseonds the system will wait for an agent to join the room, before
-    * emitting an AgentSessionEvent.AgentConnectionFailure event.
-    */
-  agentConnectTimeoutMilliseconds?: number;
-
-  /**
-    * Optional abort signal, which if aborted, will terminate the agent dispatch before completion.
-    */
-  signal?: AbortSignal;
-};
-
-
 type AgentInstanceCommon = {
   [Symbol.toStringTag]: "AgentInstance";
 
@@ -105,15 +91,10 @@ type AgentActions = {
 
   /** Returns a promise that resolves once the agent has published a microphone track */
   waitUntilMicrophone: (signal?: AbortSignal) => Promise<TrackReference<Track.Source.Microphone, RemoteParticipant>>;
-
-  /** Dispatches the agent, causing the agent to join the Room */
-  dispatch: (options?: DispatchOptions) => Promise<void>;
-
-  /** Kicks the agent from the Room */
-  kick: (signal?: AbortSignal) => void;
 };
 
-export type AgentInstance = (AgentStateAvailable | AgentStateUnAvailable | AgentStateFailed) & AgentActions;
+type AgentState = AgentStateAvailable | AgentStateUnAvailable | AgentStateFailed;
+export type AgentInstance = AgentState & AgentActions;
 
 const generateDerivedConversationalStateValues = <ConversationalState extends AgentConversationalState>(conversationalState: ConversationalState) => ({
   isAvailable: (
@@ -124,7 +105,6 @@ const generateDerivedConversationalStateValues = <ConversationalState extends Ag
 } as {
   isAvailable: ConversationalState extends 'listening' | 'thinking' | 'speaking' ? true : false,
 });
-
 
 const useAgentTimeoutIdStore = create<{
   agentTimeoutFailureReason: string | null,
@@ -354,6 +334,19 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
     updateAgentTimeoutParticipantExists(agentParticipant !== null);
   }, [agentParticipant]);
 
+  // When the conversation room begins connecting, start the agent timeout
+  const isConversationDisconnected = conversation.connectionState === "disconnected";
+  useEffect(() => {
+    if (isConversationDisconnected) {
+      return;
+    }
+
+    startAgentTimeout(conversation.subtle.agentConnectTimeoutMilliseconds);
+    return () => {
+      clearAgentTimeout();
+    };
+  }, [isConversationDisconnected, conversation.subtle.agentConnectTimeoutMilliseconds]);
+
   const legacyAgentState: LegacyAgentState = useMemo(() => {
     switch (conversation.connectionState) {
       case 'disconnected':
@@ -379,7 +372,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
     }
   }, [conversation.connectionState, conversationalState]);
 
-  const agentState: AgentStateAvailable | AgentStateUnAvailable | AgentStateFailed = useMemo(() => {
+  const agentState: AgentState = useMemo(() => {
     const common: AgentInstanceCommon = {
       [Symbol.toStringTag]: "AgentInstance",
 
@@ -476,36 +469,6 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
     });
   }, [conversationalState, emitter]);
 
-  const waitUntilNotAvailable = useCallback(async (signal?: AbortSignal) => {
-    const { isAvailable } = generateDerivedConversationalStateValues(conversationalState);
-    if (!isAvailable) {
-      return;
-    }
-
-    return new Promise<void>((resolve, reject) => {
-      const stateChangedHandler = (state: AgentConversationalState) => {
-        const { isAvailable } = generateDerivedConversationalStateValues(state);
-        if (isAvailable) {
-          return;
-        }
-        cleanup();
-        resolve();
-      };
-      const abortHandler = () => {
-        cleanup();
-        reject(new Error('AgentInstance.waitUntilNotAvailable - signal aborted'));
-      };
-
-      const cleanup = () => {
-        emitter.off(AgentEvent.ConversationalStateChanged, stateChangedHandler);
-        signal?.removeEventListener('abort', abortHandler);
-      };
-
-      emitter.on(AgentEvent.ConversationalStateChanged, stateChangedHandler);
-      signal?.addEventListener('abort', abortHandler);
-    });
-  }, [conversationalState, emitter]);
-
   const waitUntilCamera = useCallback((signal?: AbortSignal) => {
     return new Promise<TrackReference<Track.Source.Camera, RemoteParticipant>>((resolve, reject) => {
       const stateChangedHandler = (camera: TrackReference<Track.Source.Camera, RemoteParticipant> | null) => {
@@ -554,40 +517,17 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
     });
   }, [emitter]);
 
-  const dispatchAgent = useCallback(async (options?: DispatchOptions) => {
-    const agentConnectTimeoutMilliseconds = options?.agentConnectTimeoutMilliseconds;
-    const signal = options?.signal;
-
-    await waitUntilNotAvailable(signal);
-
-    // Dispatch agent
-    // FIXME: how do I dispatch the agent?
-    startAgentTimeout(agentConnectTimeoutMilliseconds);
-
-    await waitUntilAvailable(signal);
-  }, [startAgentTimeout, waitUntilNotAvailable, waitUntilAvailable]);
-
-  const kickAgent = useCallback(() => {
-    // Kick the agent from the call
-    // FIXME: how do I kick the agent from the call?
-    clearAgentTimeout();
-  }, [clearAgentTimeout]);
-
   return useMemo(() => {
     return {
       ...agentState,
       waitUntilAvailable,
       waitUntilCamera,
       waitUntilMicrophone,
-      dispatch: dispatchAgent,
-      kick: kickAgent,
     };
   }, [
     agentState,
     waitUntilAvailable,
     waitUntilCamera,
     waitUntilMicrophone,
-    dispatchAgent,
-    kickAgent,
   ]);
 }

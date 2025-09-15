@@ -45,8 +45,9 @@ export function useConversationMessages(conversation: ConversationInstance): Mes
 
   const agent = useAgent(conversation);
 
-  const transcriptions: Array<TextStreamData> = useTranscriptions();
-  const chat = useChat();
+  const transcriptions: Array<TextStreamData> = useTranscriptions({ room });
+  const chatOptions = useMemo(() => ({ room }), [room]);
+  const chat = useChat(chatOptions);
 
   const transcriptionMessages: Array<ReceivedUserTranscriptionMessage | ReceivedAgentTranscriptionMessage> = useMemo(() => {
     return transcriptions.map(transcription => {

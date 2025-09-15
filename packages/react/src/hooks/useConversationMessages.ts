@@ -38,7 +38,6 @@ export enum MessagesEvent {
 
 export type MessagesCallbacks = {
   [MessagesEvent.MessageReceived]: (message: ReceivedMessage) => void;
-  [MessagesEvent.Disconnected]: () => void;
 };
 
 export function useConversationMessages(conversation: ConversationInstance): MessagesInstance {

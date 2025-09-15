@@ -59,5 +59,5 @@ export * from './useTranscriptions';
 export * from './useSequentialRoomConnectDisconnect';
 export * from './useConversationWith';
 export * from './useAgent';
-export * from './useAgentEvents';
+export * from './useEvents';
 export * from './useConversationMessages';

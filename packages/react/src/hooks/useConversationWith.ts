@@ -10,17 +10,13 @@ import { useAgent } from './useAgent';
 import { TrackReferenceOrPlaceholder, TrackReferencePlaceholder } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
 
-/** State representing the current connection status to the server hosted agent */
-// FIXME: maybe just make this ConnectionState?
-export type AgentSessionConnectionState = 'disconnected' | 'connecting' | 'connected' | 'reconnecting' | 'signalReconnecting';
-
 export enum ConversationEvent {
   ConnectionStateChanged = 'connectionStateChanged',
   MediaDevicesError = 'MediaDevicesError',
 }
 
 export type ConversationCallbacks = {
-  [ConversationEvent.ConnectionStateChanged]: (newAgentConnectionState: AgentSessionConnectionState) => void;
+  [ConversationEvent.ConnectionStateChanged]: (newAgentConnectionState: ConnectionState) => void;
   [ConversationEvent.MediaDevicesError]: (error: Error) => void;
 };
 
@@ -73,7 +69,7 @@ type ConversationStateCommon = {
 };
 
 type ConversationStateConnecting = ConversationStateCommon & {
-  connectionState: "connecting";
+  connectionState: ConnectionState.Connecting;
   isConnected: false;
   isReconnecting: false;
 
@@ -84,7 +80,7 @@ type ConversationStateConnecting = ConversationStateCommon & {
 };
 
 type ConversationStateConnected = ConversationStateCommon & {
-  connectionState: "connected" | "reconnecting" | "signalReconnecting";
+  connectionState: ConnectionState.Connected | ConnectionState.Reconnecting | ConnectionState.SignalReconnecting;
   isConnected: true;
   isReconnecting: boolean;
 
@@ -95,7 +91,7 @@ type ConversationStateConnected = ConversationStateCommon & {
 };
 
 type ConversationStateDisconnected = ConversationStateCommon & {
-  connectionState: "disconnected";
+  connectionState: ConnectionState.Disconnected;
   isConnected: false;
   isReconnecting: false;
 
@@ -149,20 +145,20 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
     };
   }, [options.tokenSource]);
 
-  const generateDerivedConnectionStateValues = <ConnectionState extends ConversationInstance["connectionState"]>(connectionState: ConnectionState) => ({
+  const generateDerivedConnectionStateValues = useCallback(<State extends ConversationInstance["connectionState"]>(connectionState: State) => ({
     isConnected: (
-      connectionState === 'connected' ||
-      connectionState === 'reconnecting' ||
-      connectionState === 'signalReconnecting'
+      connectionState === ConnectionState.Connected ||
+      connectionState === ConnectionState.Reconnecting ||
+      connectionState === ConnectionState.SignalReconnecting
     ),
     isReconnecting: (
-      connectionState === 'reconnecting' ||
-      connectionState === 'signalReconnecting'
+      connectionState === ConnectionState.Reconnecting ||
+      connectionState === ConnectionState.SignalReconnecting
     ),
   } as {
-    isConnected: ConnectionState extends 'connected' | 'reconnecting' | 'signalReconnecting' ? true : false,
-    isReconnecting: ConnectionState extends 'reconnecting' | 'signalReconnecting' ? true : false,
-  });
+    isConnected: State extends ConnectionState.Connected | ConnectionState.Reconnecting | ConnectionState.SignalReconnecting ? true : false,
+    isReconnecting: State extends ConnectionState.Reconnecting | ConnectionState.SignalReconnecting ? true : false,
+  }), []);
 
   const [roomConnectionState, setRoomConnectionState] = useState(room.state);
   useEffect(() => {
@@ -214,8 +210,8 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
         return {
           ...common,
 
-          connectionState: 'connecting',
-          ...generateDerivedConnectionStateValues('connecting'),
+          connectionState: ConnectionState.Connecting,
+          ...generateDerivedConnectionStateValues(ConnectionState.Connecting),
 
           local: {
             camera: { participant: localParticipant, source: Track.Source.Camera },
@@ -251,7 +247,16 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
           },
         };
     }
-  }, [options.tokenSource, room, emitter, roomConnectionState, localParticipant, localCamera, localMicrophone]);
+  }, [
+    options.tokenSource,
+    room,
+    emitter,
+    roomConnectionState,
+    localParticipant,
+    localCamera,
+    localMicrophone,
+    generateDerivedConnectionStateValues,
+  ]);
   useEffect(() => {
     emitter.emit(ConversationEvent.ConnectionStateChanged, conversationState.connectionState);
   }, [emitter, conversationState.connectionState]);

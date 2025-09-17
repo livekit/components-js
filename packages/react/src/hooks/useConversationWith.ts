@@ -126,22 +126,23 @@ export type ConversationInstance = (ConversationStateConnecting | ConversationSt
  * AgentSession represents a connection to a LiveKit Agent, providing abstractions to make 1:1
  * agent/participant rooms easier to work with.
  */
-export function useConversationWith(agentToDispatch: string | RoomAgentDispatch, options: ConversationOptions): ConversationInstance {
+export function useConversationWith(agentToDispatch: string | RoomAgentDispatch | null, options: ConversationOptions): ConversationInstance {
   const roomFromContext = useMaybeRoomContext();
   const room = useMemo(() => roomFromContext ?? options.room ?? new Room(), [roomFromContext, options.room]);
 
   const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<ConversationCallbacks>, []);
 
-  const agentName = typeof agentToDispatch === 'string' ? agentToDispatch : agentToDispatch.agentName;
+  const agentName = typeof agentToDispatch === 'string' ? agentToDispatch : agentToDispatch?.agentName;
   useEffect(() => {
-    const agentDispatch = typeof agentToDispatch === 'string' ? (
+    const roomAgentDispatch = typeof agentToDispatch === 'string' ? (
       new RoomAgentDispatch({ agentName: agentToDispatch, metadata: '' })
     ) : agentToDispatch;
-    options.credentials.setRequest({
-      roomConfig: new RoomConfiguration({
-        agents: [agentDispatch],
-      }),
-    });
+    const roomConfig = roomAgentDispatch ? (
+      new RoomConfiguration({
+        agents: [roomAgentDispatch],
+      })
+    ) : undefined;
+    options.credentials.setRequest({ roomConfig });
 
     return () => {
       options.credentials.clearRequest();
@@ -371,4 +372,8 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch,
     start,
     end,
   ]);
+}
+
+export function useConversation(options: ConversationOptions): ConversationInstance {
+  return useConversationWith(null, options);
 }

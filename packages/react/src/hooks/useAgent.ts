@@ -14,20 +14,20 @@ import { ConversationInstance } from './useConversationWith';
 const DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS = 20_000;
 
 /** State representing the current status of the agent, whether it is ready for speach, etc */
-export type AgentLifecycleState = 'unset' | 'initializing' | 'failed' | 'idle' | 'listening' | 'thinking' | 'speaking';
+export type AgentStateNew = 'unset' | 'initializing' | 'failed' | 'idle' | 'listening' | 'thinking' | 'speaking';
 
 export enum AgentEvent {
   CameraChanged = 'cameraChanged',
   MicrophoneChanged = 'microphoneChanged',
   AttributesChanged = 'attributesChanged',
-  ConversationalStateChanged = 'lifecycleStateChanged',
+  StateChanged = 'lifecycleStateChanged',
 }
 
 export type AgentCallbacks = {
   [AgentEvent.CameraChanged]: (newTrack: TrackReference<Track.Source.Camera, RemoteParticipant> | null) => void;
   [AgentEvent.MicrophoneChanged]: (newTrack: TrackReference<Track.Source.Microphone, RemoteParticipant> | null) => void;
   [AgentEvent.AttributesChanged]: (newAttributes: Record<string, string>) => void;
-  [AgentEvent.ConversationalStateChanged]: (newAgentConversationalState: AgentLifecycleState) => void;
+  [AgentEvent.StateChanged]: (newAgentState: AgentStateNew) => void;
 };
 
 type AgentInstanceCommon = {
@@ -50,7 +50,7 @@ type AgentInstanceCommon = {
 };
 
 type AgentStateAvailable = AgentInstanceCommon & {
-  lifecycleState: "listening" | "thinking" | "speaking";
+  state: "listening" | "thinking" | "speaking";
   failureReasons: null;
 
   /** Is the agent ready for user interaction? */
@@ -61,7 +61,7 @@ type AgentStateAvailable = AgentInstanceCommon & {
 };
 
 type AgentStateUnAvailable = AgentInstanceCommon & {
-  lifecycleState: "unset" | "initializing" | "idle";
+  state: "unset" | "initializing" | "idle";
   failureReasons: null;
 
   /** Is the agent ready for user interaction? */
@@ -72,7 +72,7 @@ type AgentStateUnAvailable = AgentInstanceCommon & {
 };
 
 type AgentStateFailed = AgentInstanceCommon & {
-  lifecycleState: "failed";
+  state: "failed";
   failureReasons: Array<string>;
 
   /** Is the agent ready for user interaction? */
@@ -93,40 +93,40 @@ type AgentActions = {
   waitUntilMicrophone: (signal?: AbortSignal) => Promise<TrackReference<Track.Source.Microphone, RemoteParticipant>>;
 };
 
-type AgentState = AgentStateAvailable | AgentStateUnAvailable | AgentStateFailed;
-export type AgentInstance = AgentState & AgentActions;
+type AgentStateCases = AgentStateAvailable | AgentStateUnAvailable | AgentStateFailed;
+export type AgentInstance = AgentStateCases & AgentActions;
 
-const generateDerivedLifecycleStateValues = <LifecycleState extends AgentLifecycleState>(lifecycleState: LifecycleState) => ({
+const generateDerivedStateValues = <State extends AgentStateNew>(state: State) => ({
   isAvailable: (
-    lifecycleState === 'listening' ||
-    lifecycleState === 'thinking' ||
-    lifecycleState === 'speaking'
+    state === 'listening' ||
+    state === 'thinking' ||
+    state === 'speaking'
   ),
 } as {
-  isAvailable: LifecycleState extends 'listening' | 'thinking' | 'speaking' ? true : false,
+  isAvailable: State extends 'listening' | 'thinking' | 'speaking' ? true : false,
 });
 
 const useAgentTimeoutIdStore = create<{
   agentTimeoutFailureReason: string | null,
   startAgentTimeout: (agentConnectTimeoutMilliseconds?: number) => void;
   clearAgentTimeout: () => void;
-  updateAgentTimeoutConversationalState: (agentConversationalState: AgentLifecycleState) => void;
+  updateAgentTimeoutState: (agentState: AgentStateNew) => void;
   updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => void;
   subtle: {
     agentTimeoutId: ReturnType<typeof setTimeout> | null;
-    agentConversationalState: AgentLifecycleState;
+    agentState: AgentStateNew;
     agentParticipantExists: boolean;
   };
 }>((set, get) => {
   const startAgentConnectedTimeout = (agentConnectTimeoutMilliseconds?: number) => {
     return setTimeout(() => {
-      const { subtle: { agentConversationalState, agentParticipantExists } } = get();
+      const { subtle: { agentState: agentConversationalState, agentParticipantExists } } = get();
       if (!agentParticipantExists) {
         set((old) => ({ ...old, agentTimeoutFailureReason: 'Agent did not join the room.' }));
         return;
       }
 
-      const { isAvailable } = generateDerivedLifecycleStateValues(agentConversationalState);
+      const { isAvailable } = generateDerivedStateValues(agentConversationalState);
       if (!isAvailable) {
         set((old) => ({ ...old, agentTimeoutFailureReason: 'Agent connected but did not complete initializing.' }));
         return;
@@ -148,7 +148,7 @@ const useAgentTimeoutIdStore = create<{
           subtle: {
             ...old.subtle,
             agentTimeoutId: startAgentConnectedTimeout(agentConnectTimeoutMilliseconds),
-            agentConversationalState: 'unset',
+            agentState: 'unset',
             agentParticipantExists: false,
           },
         };
@@ -165,15 +165,15 @@ const useAgentTimeoutIdStore = create<{
           subtle: {
             ...old.subtle,
             agentTimeoutId: null,
-            agentConversationalState: 'unset',
+            agentState: 'unset',
             agentParticipantExists: false,
           },
         };
       });
     },
 
-    updateAgentTimeoutConversationalState: (agentConversationalState: AgentLifecycleState) => {
-      set((old) => ({ ...old, subtle: { ...old.subtle, agentConversationalState } }));
+    updateAgentTimeoutState: (agentState: AgentStateNew) => {
+      set((old) => ({ ...old, subtle: { ...old.subtle, agentState: agentState } }));
     },
     updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => {
       set((old) => ({ ...old, subtle: { ...old.subtle, agentParticipantExists } }));
@@ -181,7 +181,7 @@ const useAgentTimeoutIdStore = create<{
 
     subtle: {
       agentTimeoutId: null,
-      agentConversationalState: 'unset',
+      agentState: 'unset',
       agentParticipantExists: false,
     },
   };
@@ -292,7 +292,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
     agentTimeoutFailureReason,
     startAgentTimeout,
     clearAgentTimeout,
-    updateAgentTimeoutConversationalState,
+    updateAgentTimeoutState: updateAgentTimeoutConversationalState,
     updateAgentTimeoutParticipantExists,
   } = useAgentTimeoutIdStore();
 
@@ -300,37 +300,36 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
     return agentTimeoutFailureReason ? [ agentTimeoutFailureReason ] : [];
   }, [agentTimeoutFailureReason]);
 
-  const lifecycleState = useMemo(() => {
+  const state = useMemo(() => {
     if (failureReasons.length > 0) {
       return 'failed';
     }
 
-    let newConversationalState: AgentLifecycleState = 'unset';
+    let newState: AgentStateNew = 'unset';
 
     if (roomConnectionState !== ConnectionState.Disconnected) {
-      newConversationalState = 'initializing';
+      newState = 'initializing';
     }
 
     // If the microphone preconnect buffer is active, then the state should be "listening" rather
     // than "initializing"
     if (localMicTrack) {
-      newConversationalState = 'listening';
+      newState = 'listening';
     }
 
     if (agentParticipant && agentParticipantAttributes[ParticipantAgentAttributes.AgentState]) {
       // ref: https://github.com/livekit/agents/blob/65170238db197f62f479eb7aaef1c0e18bfad6e7/livekit-agents/livekit/agents/voice/events.py#L97
       const agentState = agentParticipantAttributes[ParticipantAgentAttributes.AgentState] as 'initializing' | 'idle' | 'listening' | 'thinking' | 'speaking';
-      newConversationalState = agentState;
+      newState = agentState;
     }
 
-    return newConversationalState;
+    return newState;
   }, [failureReasons, roomConnectionState, localMicTrack, agentParticipant, agentParticipantAttributes]);
 
   useEffect(() => {
-    console.log('AGENT TIMEOUT FAILURE REASON:', lifecycleState);
-    emitter.emit(AgentEvent.ConversationalStateChanged, lifecycleState);
-    updateAgentTimeoutConversationalState(lifecycleState);
-  }, [emitter, lifecycleState]);
+    emitter.emit(AgentEvent.StateChanged, state);
+    updateAgentTimeoutConversationalState(state);
+  }, [emitter, state]);
   useEffect(() => {
     updateAgentTimeoutParticipantExists(agentParticipant !== null);
   }, [agentParticipant]);
@@ -357,12 +356,12 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
       case 'connected':
       case 'reconnecting':
       case 'signalReconnecting':
-        switch (lifecycleState) {
+        switch (state) {
           case 'speaking':
           case 'listening':
           case 'initializing':
           case 'thinking':
-            return lifecycleState;
+            return state;
 
           case 'idle':
           case 'unset':
@@ -371,9 +370,9 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
             return 'disconnected';
         }
     }
-  }, [conversation.connectionState, lifecycleState]);
+  }, [conversation.connectionState, state]);
 
-  const agentState: AgentState = useMemo(() => {
+  const agentState: AgentStateCases = useMemo(() => {
     const common: AgentInstanceCommon = {
       [Symbol.toStringTag]: "AgentInstance",
 
@@ -387,15 +386,15 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
       },
     };
 
-    switch (lifecycleState) {
+    switch (state) {
       case 'listening':
       case 'thinking':
       case 'speaking':
         return {
           ...common,
 
-          lifecycleState,
-          ...generateDerivedLifecycleStateValues(lifecycleState),
+          state,
+          ...generateDerivedStateValues(state),
           failureReasons: null,
 
           camera: videoTrack,
@@ -408,8 +407,8 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
         return {
           ...common,
 
-          lifecycleState,
-          ...generateDerivedLifecycleStateValues(lifecycleState),
+          state,
+          ...generateDerivedStateValues(state),
           failureReasons: null,
 
           // Clear inner values if no longer connected
@@ -421,8 +420,8 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
         return {
           ...common,
 
-          lifecycleState: 'failed',
-          ...generateDerivedLifecycleStateValues('failed'),
+          state: 'failed',
+          ...generateDerivedStateValues('failed'),
           failureReasons,
 
           // Clear inner values if no longer connected
@@ -435,20 +434,20 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
     emitter,
     agentParticipant,
 
-    lifecycleState,
+    state,
     videoTrack,
     audioTrack,
   ]);
 
   const waitUntilAvailable = useCallback(async (signal?: AbortSignal) => {
-    const { isAvailable } = generateDerivedLifecycleStateValues(lifecycleState);
+    const { isAvailable } = generateDerivedStateValues(state);
     if (isAvailable) {
       return;
     }
 
     return new Promise<void>((resolve, reject) => {
-      const stateChangedHandler = (state: AgentLifecycleState) => {
-        const { isAvailable } = generateDerivedLifecycleStateValues(state);
+      const stateChangedHandler = (state: AgentStateNew) => {
+        const { isAvailable } = generateDerivedStateValues(state);
         if (!isAvailable) {
           return;
         }
@@ -461,14 +460,14 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
       };
 
       const cleanup = () => {
-        emitter.off(AgentEvent.ConversationalStateChanged, stateChangedHandler);
+        emitter.off(AgentEvent.StateChanged, stateChangedHandler);
         signal?.removeEventListener('abort', abortHandler);
       };
 
-      emitter.on(AgentEvent.ConversationalStateChanged, stateChangedHandler);
+      emitter.on(AgentEvent.StateChanged, stateChangedHandler);
       signal?.addEventListener('abort', abortHandler);
     });
-  }, [lifecycleState, emitter]);
+  }, [state, emitter]);
 
   const waitUntilCamera = useCallback((signal?: AbortSignal) => {
     return new Promise<TrackReference<Track.Source.Camera, RemoteParticipant>>((resolve, reject) => {

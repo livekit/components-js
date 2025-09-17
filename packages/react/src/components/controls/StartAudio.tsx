@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMaybeRoomContext } from '../../context';
+import { useEnsureRoom } from '../../context';
 import { useStartAudio } from '../../hooks';
 import { Room } from 'livekit-client';
 
@@ -28,9 +28,8 @@ export const StartAudio: (
   props: AllowAudioPlaybackProps & React.RefAttributes<HTMLButtonElement>,
 ) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLButtonElement, AllowAudioPlaybackProps>(
   function StartAudio({ label = 'Allow Audio', ...props }: AllowAudioPlaybackProps, ref) {
-    const room = useMaybeRoomContext();
-    const roomFallback = React.useMemo(() => props.room ?? room ?? new Room(), []);
-    const { mergedProps } = useStartAudio({ room: roomFallback, props });
+    const room = useEnsureRoom(props.room);
+    const { mergedProps } = useStartAudio({ room, props });
 
     return (
       <button ref={ref} {...mergedProps}>

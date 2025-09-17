@@ -3,7 +3,7 @@ import { Room, RoomEvent, ConnectionState, TrackPublishOptions, Track, LocalPart
 import { EventEmitter } from 'events';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { ConnectionCredentials } from '../utils/ConnectionCredentialsProvider';
+import { ConnectionCredentials as TokenSource } from '../utils/ConnectionCredentialsProvider';
 import { useMaybeRoomContext } from '../context';
 import { RoomAgentDispatch, RoomConfiguration } from '@livekit/protocol';
 import { useAgent } from './useAgent';
@@ -25,7 +25,7 @@ export type ConversationCallbacks = {
 };
 
 export type ConversationOptions = {
-  credentials: ConnectionCredentials;
+  tokenSource: TokenSource;
   room?: Room;
 
   dispatch?: {
@@ -67,7 +67,7 @@ type ConversationStateCommon = {
   subtle: {
     emitter: TypedEventEmitter<ConversationCallbacks>;
     room: Room;
-    credentials: ConnectionCredentials,
+    credentials: TokenSource,
     agentConnectTimeoutMilliseconds: NonNullable<ConversationOptions["dispatch"]>["agentConnectTimeoutMilliseconds"],
   };
 };
@@ -142,12 +142,12 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
         agents: [roomAgentDispatch],
       })
     ) : undefined;
-    options.credentials.setRequest({ roomConfig });
+    options.tokenSource.setRequest({ roomConfig });
 
     return () => {
-      options.credentials.clearRequest();
+      options.tokenSource.clearRequest();
     };
-  }, [options.credentials]);
+  }, [options.tokenSource]);
 
   const generateDerivedConnectionStateValues = <ConnectionState extends ConversationInstance["connectionState"]>(connectionState: ConnectionState) => ({
     isConnected: (
@@ -204,7 +204,7 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
       subtle: {
         room,
         emitter,
-        credentials: options.credentials,
+        credentials: options.tokenSource,
         agentConnectTimeoutMilliseconds: options.dispatch?.agentConnectTimeoutMilliseconds,
       },
     };
@@ -251,7 +251,7 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
           },
         };
     }
-  }, [options.credentials, room, emitter, roomConnectionState, localParticipant, localCamera, localMicrophone]);
+  }, [options.tokenSource, room, emitter, roomConnectionState, localParticipant, localCamera, localMicrophone]);
   useEffect(() => {
     emitter.emit(ConversationEvent.ConnectionStateChanged, conversationState.connectionState);
   }, [emitter, conversationState.connectionState]);
@@ -303,10 +303,10 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
     subtle: {
       emitter,
       room,
-      credentials: options.credentials,
+      credentials: options.tokenSource,
       agentConnectTimeoutMilliseconds: options.dispatch?.agentConnectTimeoutMilliseconds,
     },
-  }), [conversationState, emitter, room, options.credentials, options.dispatch?.agentConnectTimeoutMilliseconds]), agentName);
+  }), [conversationState, emitter, room, options.tokenSource, options.dispatch?.agentConnectTimeoutMilliseconds]), agentName);
 
   const start = useCallback(async (connectOptions: AgentSessionConnectOptions = {}) => {
     const {
@@ -324,7 +324,7 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
     await Promise.all([
       // FIXME: swap the below line in once the new `livekit-client` changes are published
       // room.connect(options.credentials),
-      options.credentials.generate().then(({ serverUrl, participantToken }) => (
+      options.tokenSource.generate().then(({ serverUrl, participantToken }) => (
         room.connect(serverUrl, participantToken)
       )),
 
@@ -338,16 +338,16 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
     await agent.waitUntilAvailable(signal);
 
     signal?.removeEventListener('abort', onSignalAbort);
-  }, [room, waitUntilDisconnected, options.credentials, waitUntilConnected, agent.waitUntilAvailable]);
+  }, [room, waitUntilDisconnected, options.tokenSource, waitUntilConnected, agent.waitUntilAvailable]);
 
   const end = useCallback(async () => {
     await room.disconnect();
   }, [room]);
 
   const prepareConnection = useCallback(async () => {
-    const credentials = await options.credentials.generate();
+    const credentials = await options.tokenSource.generate();
     await room.prepareConnection(credentials.serverUrl, credentials.participantToken);
-  }, [options.credentials, room]);
+  }, [options.tokenSource, room]);
   useEffect(() => {
     prepareConnection().catch(err => {
       // FIXME: figure out a better logging solution?

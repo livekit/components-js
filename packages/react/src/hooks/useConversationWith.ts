@@ -3,7 +3,7 @@ import { Room, RoomEvent, ConnectionState, TrackPublishOptions, Track } from 'li
 import { EventEmitter } from 'events';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { ConnectionCredentials as TokenSource } from '../utils/ConnectionCredentialsProvider';
+import { TokenSource } from '../TokenSource';
 import { useMaybeRoomContext } from '../context';
 import { RoomAgentDispatch, RoomConfiguration } from '@livekit/protocol';
 import { useAgent } from './useAgent';

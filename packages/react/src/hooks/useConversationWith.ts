@@ -114,7 +114,7 @@ type ConversationActions = {
   prepareConnection: () => Promise<void>,
 
   /** Connect to the underlying room and dispatch any agents */
-  begin: (options?: AgentSessionConnectOptions) => Promise<void>;
+  start: (options?: AgentSessionConnectOptions) => Promise<void>;
 
   /** Disconnect from the underlying room */
   end: () => Promise<void>;
@@ -307,7 +307,7 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch,
     },
   }), [conversationState, emitter, room, options.credentials, options.dispatch?.agentConnectTimeoutMilliseconds]), agentName);
 
-  const begin = useCallback(async (connectOptions: AgentSessionConnectOptions = {}) => {
+  const start = useCallback(async (connectOptions: AgentSessionConnectOptions = {}) => {
     const {
       signal,
       tracks = { microphone: { enabled: true, publishOptions: { preConnectBuffer: true } } },
@@ -361,14 +361,14 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch,
     waitUntilDisconnected,
 
     prepareConnection,
-    begin,
+    start,
     end,
   }), [
     conversationState,
     waitUntilConnected,
     waitUntilDisconnected,
     prepareConnection,
-    begin,
+    start,
     end,
   ]);
 }

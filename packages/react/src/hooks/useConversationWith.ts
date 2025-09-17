@@ -1,5 +1,5 @@
 import type TypedEventEmitter from 'typed-emitter';
-import { Room, RoomEvent, ConnectionState, TrackPublishOptions, Track, LocalParticipant } from 'livekit-client';
+import { Room, RoomEvent, ConnectionState, TrackPublishOptions, Track } from 'livekit-client';
 import { EventEmitter } from 'events';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -78,8 +78,8 @@ type ConversationStateConnecting = ConversationStateCommon & {
   isReconnecting: false;
 
   local: {
-    camera: TrackReferencePlaceholder<Track.Source.Camera, LocalParticipant>;
-    microphone: TrackReferencePlaceholder<Track.Source.Microphone, LocalParticipant>;
+    camera: TrackReferencePlaceholder;
+    microphone: TrackReferencePlaceholder;
   };
 };
 
@@ -89,8 +89,8 @@ type ConversationStateConnected = ConversationStateCommon & {
   isReconnecting: boolean;
 
   local: {
-    camera: TrackReferenceOrPlaceholder<Track.Source.Camera, LocalParticipant>,
-    microphone: TrackReferenceOrPlaceholder<Track.Source.Microphone, LocalParticipant>,
+    camera: TrackReferenceOrPlaceholder,
+    microphone: TrackReferenceOrPlaceholder,
   };
 };
 
@@ -100,8 +100,8 @@ type ConversationStateDisconnected = ConversationStateCommon & {
   isReconnecting: false;
 
   local: {
-    camera: TrackReferencePlaceholder<Track.Source.Camera, LocalParticipant>;
-    microphone: TrackReferencePlaceholder<Track.Source.Microphone, LocalParticipant>;
+    camera: TrackReferencePlaceholder;
+    microphone: TrackReferencePlaceholder;
   };
 };
 

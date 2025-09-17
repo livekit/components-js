@@ -57,10 +57,6 @@ export type ParticipantTrackIdentifier = RequireAtLeastOne<
   'sources' | 'name' | 'kind'
 >;
 
-export type ExtractTrackSourcesFromParticipantTrackIdentifier<TrackIdentifier extends ParticipantTrackIdentifier> = (
-  TrackIdentifier['sources'] extends undefined ? Track.Source : NonNullable<ParticipantTrackIdentifier['sources']>[0]
-);
-
 /**
  * @beta
  */

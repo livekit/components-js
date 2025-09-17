@@ -19,7 +19,7 @@ type UseParticipantTracksOptions = {
 export function useParticipantTracks<TrackSource extends Track.Source>(
   sources: Array<TrackSource>,
   optionsOrParticipantIdentity: UseParticipantTracksOptions | UseParticipantTracksOptions["participantIdentity"] = {},
-): Array<TrackReference<TrackSource>> {
+): Array<TrackReference> {
   let participantIdentity: UseParticipantTracksOptions["participantIdentity"];
   let room: UseParticipantTracksOptions["room"];
   if (typeof optionsOrParticipantIdentity === 'string') {
@@ -46,7 +46,7 @@ export function useParticipantTracks<TrackSource extends Track.Source>(
     return participantTracksObservable<TrackSource>(p, { sources });
   }, [p, JSON.stringify(sources)]);
 
-  const trackRefs = useObservableState(observable, [] as Array<TrackReference<TrackSource>>);
+  const trackRefs = useObservableState(observable, [] as Array<TrackReference>);
 
   return trackRefs;
 }

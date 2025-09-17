@@ -6,9 +6,9 @@ import { Track } from 'livekit-client';
 /**
  * @internal
  */
-export function useTrackRefBySourceOrName<Source extends TrackSource<TS>, TS extends Track.Source>(
-  source: Source,
-): Source['source'] extends undefined ? TrackReferenceOrPlaceholder : TrackReferenceOrPlaceholder<TS> {
+export function useTrackRefBySourceOrName(
+  source: TrackSource<Track.Source>,
+): TrackReferenceOrPlaceholder {
   const [publication, setPublication] = React.useState(getTrackByIdentifier(source));
 
   const { trackObserver } = React.useMemo(() => {
@@ -24,7 +24,7 @@ export function useTrackRefBySourceOrName<Source extends TrackSource<TS>, TS ext
 
   return {
     participant: source.participant,
-    source: (source.source ?? Track.Source.Unknown) as TS,
+    source: source.source ?? Track.Source.Unknown,
     publication,
   };
 }

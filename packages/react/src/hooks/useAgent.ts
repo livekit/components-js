@@ -24,8 +24,8 @@ export enum AgentEvent {
 }
 
 export type AgentCallbacks = {
-  [AgentEvent.CameraChanged]: (newTrack: TrackReference<Track.Source.Camera, RemoteParticipant> | null) => void;
-  [AgentEvent.MicrophoneChanged]: (newTrack: TrackReference<Track.Source.Microphone, RemoteParticipant> | null) => void;
+  [AgentEvent.CameraChanged]: (newTrack: TrackReference | null) => void;
+  [AgentEvent.MicrophoneChanged]: (newTrack: TrackReference | null) => void;
   [AgentEvent.AttributesChanged]: (newAttributes: Record<string, string>) => void;
   [AgentEvent.StateChanged]: (newAgentState: AgentStateNew) => void;
 };
@@ -56,8 +56,8 @@ type AgentStateAvailable = AgentInstanceCommon & {
   /** Is the agent ready for user interaction? */
   isAvailable: true;
 
-  camera: TrackReference<Track.Source.Camera, RemoteParticipant> | null;
-  microphone: TrackReference<Track.Source.Microphone, RemoteParticipant> | null;
+  camera: TrackReference | null;
+  microphone: TrackReference | null;
 };
 
 type AgentStateUnAvailable = AgentInstanceCommon & {
@@ -87,10 +87,10 @@ type AgentActions = {
   waitUntilAvailable: (signal?: AbortSignal) => Promise<void>;
 
   /** Returns a promise that resolves once the agent has published a camera track */
-  waitUntilCamera: (signal?: AbortSignal) => Promise<TrackReference<Track.Source.Camera, RemoteParticipant>>;
+  waitUntilCamera: (signal?: AbortSignal) => Promise<TrackReference>;
 
   /** Returns a promise that resolves once the agent has published a microphone track */
-  waitUntilMicrophone: (signal?: AbortSignal) => Promise<TrackReference<Track.Source.Microphone, RemoteParticipant>>;
+  waitUntilMicrophone: (signal?: AbortSignal) => Promise<TrackReference>;
 };
 
 type AgentStateCases = AgentStateAvailable | AgentStateUnAvailable | AgentStateFailed;
@@ -244,7 +244,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
   const videoTrack = useMemo(() => (
     agentTracks.find((t) => t.source === Track.Source.Camera) ??
     workerTracks.find((t) => t.source === Track.Source.Camera) ?? null
-  ) as TrackReference<Track.Source.Camera, RemoteParticipant> | null, [agentTracks, workerTracks]);
+  ), [agentTracks, workerTracks]);
   useEffect(() => {
     emitter.emit(AgentEvent.CameraChanged, videoTrack);
   }, [emitter, videoTrack]);
@@ -252,7 +252,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
   const audioTrack = useMemo(() => (
     agentTracks.find((t) => t.source === Track.Source.Microphone) ??
     workerTracks.find((t) => t.source === Track.Source.Microphone) ?? null
-  ) as TrackReference<Track.Source.Microphone, RemoteParticipant> | null, [agentTracks, workerTracks]);
+  ), [agentTracks, workerTracks]);
   useEffect(() => {
     emitter.emit(AgentEvent.MicrophoneChanged, audioTrack);
   }, [emitter, audioTrack]);
@@ -470,8 +470,8 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
   }, [state, emitter]);
 
   const waitUntilCamera = useCallback((signal?: AbortSignal) => {
-    return new Promise<TrackReference<Track.Source.Camera, RemoteParticipant>>((resolve, reject) => {
-      const stateChangedHandler = (camera: TrackReference<Track.Source.Camera, RemoteParticipant> | null) => {
+    return new Promise<TrackReference>((resolve, reject) => {
+      const stateChangedHandler = (camera: TrackReference | null) => {
         if (!camera) {
           return;
         }
@@ -494,8 +494,8 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
   }, [emitter]);
 
   const waitUntilMicrophone = useCallback((signal?: AbortSignal) => {
-    return new Promise<TrackReference<Track.Source.Microphone, RemoteParticipant>>((resolve, reject) => {
-      const stateChangedHandler = (microphone: TrackReference<Track.Source.Microphone, RemoteParticipant> | null) => {
+    return new Promise<TrackReference>((resolve, reject) => {
+      const stateChangedHandler = (microphone: TrackReference | null) => {
         if (!microphone) {
           return;
         }

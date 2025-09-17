@@ -12,7 +12,7 @@ import { allParticipantRoomEvents, participantTrackEvents } from '../helper';
 import { log } from '../logger';
 import type { TrackReference } from '../track-reference';
 import { observeRoomEvents } from './room';
-import type { ExtractTrackSourcesFromParticipantTrackIdentifier, ParticipantTrackIdentifier } from '../types';
+import type { ParticipantTrackIdentifier } from '../types';
 import { observeParticipantEvents } from './participant';
 // @ts-ignore some module resolutions (other than 'node') choke on this
 import type { PublicationEventCallbacks } from 'livekit-client/dist/src/room/track/TrackPublication';
@@ -93,15 +93,11 @@ function getTrackReferences(
 /**
  * Create `TrackReferences` for all tracks that are included in the sources property.
  *  */
-function getParticipantTrackRefs<
-  TrackSource extends ExtractTrackSourcesFromParticipantTrackIdentifier<TrackIdentifier>,
-  P extends Participant,
-  TrackIdentifier extends ParticipantTrackIdentifier = ParticipantTrackIdentifier,
->(
-  participant: P,
-  identifier: TrackIdentifier,
+function getParticipantTrackRefs(
+  participant: Participant,
+  identifier: ParticipantTrackIdentifier,
   onlySubscribedTracks = false,
-): Array<TrackReference<TrackSource, P>> {
+): TrackReference[] {
   const { sources, kind, name } = identifier;
   const sourceReferences = Array.from(participant.trackPublications.values())
     .filter(
@@ -112,11 +108,11 @@ function getParticipantTrackRefs<
         // either return all or only the ones that are subscribed
         (!onlySubscribedTracks || pub.track),
     )
-    .map((track): TrackReference<TrackSource, P> => {
+    .map((track): TrackReference => {
       return {
         participant: participant,
         publication: track,
-        source: track.source as TrackSource,
+        source: track.source,
       };
     });
 
@@ -161,21 +157,17 @@ export function trackReferencesObservable(
   return observable;
 }
 
-export function participantTracksObservable<
-  TrackSource extends ExtractTrackSourcesFromParticipantTrackIdentifier<TrackIdentifier>,
-  P extends Participant = Participant,
-  TrackIdentifier extends ParticipantTrackIdentifier = ParticipantTrackIdentifier,
->(
-  participant: P,
-  trackIdentifier: TrackIdentifier,
-): Observable<Array<TrackReference<TrackSource, P>>> {
+export function participantTracksObservable(
+  participant: Participant,
+  trackIdentifier: ParticipantTrackIdentifier,
+): Observable<TrackReference[]> {
   const observable = observeParticipantEvents(participant, ...participantTrackEvents).pipe(
     map((participant) => {
-      const data = getParticipantTrackRefs<TrackSource, P>(participant, trackIdentifier);
+      const data = getParticipantTrackRefs(participant, trackIdentifier);
       log.debug(`TrackReference[] was updated. (length ${data.length})`, data);
       return data;
     }),
-    startWith(getParticipantTrackRefs<TrackSource, P>(participant, trackIdentifier)),
+    startWith(getParticipantTrackRefs(participant, trackIdentifier)),
   );
 
   return observable;

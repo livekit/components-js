@@ -349,13 +349,13 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
 
   const legacyAgentState: LegacyAgentState = useMemo(() => {
     switch (conversation.connectionState) {
-      case 'disconnected':
-      case 'connecting':
+      case ConnectionState.Disconnected:
+      case ConnectionState.Connecting:
         return conversation.connectionState;
 
-      case 'connected':
-      case 'reconnecting':
-      case 'signalReconnecting':
+      case ConnectionState.Connected:
+      case ConnectionState.Reconnecting:
+      case ConnectionState.SignalReconnecting:
         switch (state) {
           case 'speaking':
           case 'listening':

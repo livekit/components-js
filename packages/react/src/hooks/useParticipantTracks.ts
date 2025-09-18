@@ -43,7 +43,7 @@ export function useParticipantTracks<TrackSource extends Track.Source>(
     if (!p) {
       return undefined;
     }
-    return participantTracksObservable<TrackSource>(p, { sources });
+    return participantTracksObservable(p, { sources });
   }, [p, JSON.stringify(sources)]);
 
   const trackRefs = useObservableState(observable, [] as Array<TrackReference>);

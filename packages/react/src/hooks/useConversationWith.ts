@@ -74,8 +74,8 @@ type ConversationStateConnecting = ConversationStateCommon & {
   isReconnecting: false;
 
   local: {
-    camera: TrackReferencePlaceholder;
-    microphone: TrackReferencePlaceholder;
+    cameraTrack: TrackReferencePlaceholder;
+    microphoneTrack: TrackReferencePlaceholder;
   };
 };
 
@@ -85,8 +85,8 @@ type ConversationStateConnected = ConversationStateCommon & {
   isReconnecting: boolean;
 
   local: {
-    camera: TrackReferenceOrPlaceholder,
-    microphone: TrackReferenceOrPlaceholder,
+    cameraTrack: TrackReferenceOrPlaceholder,
+    microphoneTrack: TrackReferenceOrPlaceholder,
   };
 };
 
@@ -96,8 +96,8 @@ type ConversationStateDisconnected = ConversationStateCommon & {
   isReconnecting: false;
 
   local: {
-    camera: TrackReferencePlaceholder;
-    microphone: TrackReferencePlaceholder;
+    cameraTrack: TrackReferencePlaceholder;
+    microphoneTrack: TrackReferencePlaceholder;
   };
 };
 
@@ -214,8 +214,8 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
           ...generateDerivedConnectionStateValues(ConnectionState.Connecting),
 
           local: {
-            camera: { participant: localParticipant, source: Track.Source.Camera },
-            microphone: { participant: localParticipant, source: Track.Source.Microphone },
+            cameraTrack: { participant: localParticipant, source: Track.Source.Camera },
+            microphoneTrack: { participant: localParticipant, source: Track.Source.Microphone },
           },
         };
 
@@ -229,8 +229,8 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
           ...generateDerivedConnectionStateValues(roomConnectionState),
 
           local: {
-            camera: localCamera ?? { participant: localParticipant, source: Track.Source.Camera },
-            microphone: localMicrophone ?? { participant: localParticipant, source: Track.Source.Microphone },
+            cameraTrack: localCamera ?? { participant: localParticipant, source: Track.Source.Camera },
+            microphoneTrack: localMicrophone ?? { participant: localParticipant, source: Track.Source.Microphone },
           },
         };
 
@@ -242,8 +242,8 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
           ...generateDerivedConnectionStateValues(ConnectionState.Disconnected),
 
           local: {
-            camera: { participant: localParticipant, source: Track.Source.Camera },
-            microphone: { participant: localParticipant, source: Track.Source.Microphone },
+            cameraTrack: { participant: localParticipant, source: Track.Source.Camera },
+            microphoneTrack: { participant: localParticipant, source: Track.Source.Microphone },
           },
         };
     }

@@ -13,11 +13,9 @@ import {
 import { useAgent } from './useAgent';
 import { useTranscriptions } from './useTranscriptions';
 import { useChat } from './useChat';
-import { ConversationInstance } from './useConversationWith';
+import { UseConversationReturn } from './useConversationWith';
 
-export type MessagesInstance = {
-  [Symbol.toStringTag]: "MessagesInstance",
-
+export type UseConversationMessagesReturn = {
   messages: Array<ReceivedMessage>;
 
   /** Is a send operation currently in progress? */
@@ -40,7 +38,7 @@ export type MessagesCallbacks = {
   [MessagesEvent.MessageReceived]: (message: ReceivedMessage) => void;
 };
 
-export function useConversationMessages(conversation: ConversationInstance): MessagesInstance {
+export function useConversationMessages(conversation: UseConversationReturn): UseConversationMessagesReturn {
   const { room } = conversation.subtle;
 
   const agent = useAgent(conversation);
@@ -103,8 +101,6 @@ export function useConversationMessages(conversation: ConversationInstance): Mes
   }, [transcriptionMessages, chat.chatMessages]);
 
   return useMemo(() => ({
-    [Symbol.toStringTag]: "MessagesInstance",
-
     messages: receivedMessages,
     send: chat.send,
     isSending: chat.isSending,

@@ -7,7 +7,7 @@ import { ParticipantAgentAttributes, TrackReference } from '@livekit/components-
 
 import { useParticipantTracks } from './useParticipantTracks';
 import { useRemoteParticipants } from './useRemoteParticipants';
-import { ConversationInstance } from './useConversationWith';
+import { UseConversationReturn } from './useConversationWith';
 
 // FIXME: make this 10 seconds once room dispatch booting info is discoverable
 const DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS = 20_000;
@@ -46,9 +46,7 @@ export type AgentCallbacks = {
   [AgentEvent.StateChanged]: (newAgentState: AgentState) => void;
 };
 
-type AgentInstanceCommon = {
-  [Symbol.toStringTag]: "AgentInstance";
-
+type AgentStateCommon = {
   // FIXME: maybe add some sort of schema to this?
   attributes: Record<string, string>;
 
@@ -60,7 +58,7 @@ type AgentInstanceCommon = {
   };
 };
 
-type AgentStateAvailable = AgentInstanceCommon & {
+type AgentStateAvailable = AgentStateCommon & {
   state: "thinking" | "speaking";
   failureReasons: null;
 
@@ -74,7 +72,7 @@ type AgentStateAvailable = AgentInstanceCommon & {
   microphoneTrack: TrackReference | null;
 };
 
-type AgentStateAvailableListening = AgentInstanceCommon & {
+type AgentStateAvailableListening = AgentStateCommon & {
   state: "listening";
   failureReasons: null;
 
@@ -88,7 +86,7 @@ type AgentStateAvailableListening = AgentInstanceCommon & {
   microphoneTrack: TrackReference | null;
 };
 
-type AgentStateUnAvailable = AgentInstanceCommon & {
+type AgentStateUnAvailable = AgentStateCommon & {
   state: "initializing" | "idle";
   failureReasons: null;
 
@@ -102,7 +100,7 @@ type AgentStateUnAvailable = AgentInstanceCommon & {
   microphoneTrack: TrackReference | null;
 };
 
-type AgentStateConnecting = AgentInstanceCommon & {
+type AgentStateConnecting = AgentStateCommon & {
   state: "disconnected" | "connecting";
   failureReasons: null;
 
@@ -116,7 +114,7 @@ type AgentStateConnecting = AgentInstanceCommon & {
   microphoneTrack: null;
 };
 
-type AgentStateFailed = AgentInstanceCommon & {
+type AgentStateFailed = AgentStateCommon & {
   state: "failed";
   failureReasons: Array<string>;
 
@@ -142,7 +140,7 @@ type AgentActions = {
 };
 
 type AgentStateCases = AgentStateConnecting | AgentStateAvailable | AgentStateAvailableListening | AgentStateUnAvailable | AgentStateFailed;
-export type AgentInstance = AgentStateCases & AgentActions;
+export type UseAgentReturn = AgentStateCases & AgentActions;
 
 const generateDerivedStateValues = <State extends AgentState>(state: State) => ({
   isAvailable: (
@@ -235,12 +233,12 @@ const useAgentTimeoutIdStore = create<{
   };
 });
 
-type ConversationStub = Pick<ConversationInstance, 'connectionState' | 'subtle'>;
+type ConversationStub = Pick<UseConversationReturn, 'connectionState' | 'subtle'>;
 
 /**
   * useAgent encapculates all agent state, normalizing some quirks around how LiveKit Agents work.
   */
-export function useAgent(conversation: ConversationStub, _name?: string): AgentInstance {
+export function useAgent(conversation: ConversationStub, _name?: string): UseAgentReturn {
   const { room } = conversation.subtle;
 
   const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<AgentCallbacks>, []);
@@ -268,7 +266,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
       return;
     }
 
-    const handleAttributesChanged = (attributes: AgentInstance["attributes"]) => {
+    const handleAttributesChanged = (attributes: UseAgentReturn["attributes"]) => {
       setAgentParticipantAttributes(attributes);
       emitter.emit(AgentEvent.AttributesChanged, attributes);
     };
@@ -397,9 +395,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
   }, [isConversationDisconnected, conversation.subtle.agentConnectTimeoutMilliseconds]);
 
   const agentState: AgentStateCases = useMemo(() => {
-    const common: AgentInstanceCommon = {
-      [Symbol.toStringTag]: "AgentInstance",
-
+    const common: AgentStateCommon = {
       attributes: agentParticipantAttributes,
 
       subtle: {
@@ -508,7 +504,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
       };
       const abortHandler = () => {
         cleanup();
-        reject(new Error('AgentInstance.waitUntilAvailable - signal aborted'));
+        reject(new Error('useAgent.waitUntilAvailable - signal aborted'));
       };
 
       const cleanup = () => {
@@ -532,7 +528,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
       };
       const abortHandler = () => {
         cleanup();
-        reject(new Error('AgentInstance.waitUntilCamera - signal aborted'));
+        reject(new Error('useAgent.waitUntilCamera - signal aborted'));
       };
 
       const cleanup = () => {
@@ -556,7 +552,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
       };
       const abortHandler = () => {
         cleanup();
-        reject(new Error('AgentInstance.waitUntilMicrophone - signal aborted'));
+        reject(new Error('useAgent.waitUntilMicrophone - signal aborted'));
       };
 
       const cleanup = () => {

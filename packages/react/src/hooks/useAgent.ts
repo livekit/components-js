@@ -36,7 +36,7 @@ export enum AgentEvent {
   CameraChanged = 'cameraChanged',
   MicrophoneChanged = 'microphoneChanged',
   AttributesChanged = 'attributesChanged',
-  StateChanged = 'lifecycleStateChanged',
+  StateChanged = 'stateChanged',
 }
 
 export type AgentCallbacks = {

@@ -58,8 +58,6 @@ export type SwitchActiveDeviceOptions = {
 };
 
 type ConversationStateCommon = {
-  [Symbol.toStringTag]: "AgentSessionInstance",
-
   subtle: {
     emitter: TypedEventEmitter<ConversationCallbacks>;
     room: Room;
@@ -116,13 +114,13 @@ type ConversationActions = {
   end: () => Promise<void>;
 };
 
-export type ConversationInstance = (ConversationStateConnecting | ConversationStateConnected | ConversationStateDisconnected) & ConversationActions;
+export type UseConversationReturn = (ConversationStateConnecting | ConversationStateConnected | ConversationStateDisconnected) & ConversationActions;
 
 /**
  * AgentSession represents a connection to a LiveKit Agent, providing abstractions to make 1:1
  * agent/participant rooms easier to work with.
  */
-export function useConversationWith(agentToDispatch: string | RoomAgentDispatch | null, options: ConversationOptions): ConversationInstance {
+export function useConversationWith(agentToDispatch: string | RoomAgentDispatch | null, options: ConversationOptions): UseConversationReturn {
   const roomFromContext = useMaybeRoomContext();
   const room = useMemo(() => roomFromContext ?? options.room ?? new Room(), [roomFromContext, options.room]);
 
@@ -145,7 +143,7 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
     };
   }, [options.tokenSource]);
 
-  const generateDerivedConnectionStateValues = useCallback(<State extends ConversationInstance["connectionState"]>(connectionState: State) => ({
+  const generateDerivedConnectionStateValues = useCallback(<State extends UseConversationReturn["connectionState"]>(connectionState: State) => ({
     isConnected: (
       connectionState === ConnectionState.Connected ||
       connectionState === ConnectionState.Reconnecting ||
@@ -209,8 +207,6 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
 
   const conversationState = useMemo((): ConversationStateConnecting | ConversationStateConnected | ConversationStateDisconnected => {
     const common: ConversationStateCommon = {
-      [Symbol.toStringTag]: "AgentSessionInstance",
-
       subtle: {
         room,
         emitter,
@@ -275,13 +271,13 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
     emitter.emit(ConversationEvent.ConnectionStateChanged, conversationState.connectionState);
   }, [emitter, conversationState.connectionState]);
 
-  const waitUntilConnectionState = useCallback(async (state: ConversationInstance["connectionState"], signal?: AbortSignal) => {
+  const waitUntilConnectionState = useCallback(async (state: UseConversationReturn["connectionState"], signal?: AbortSignal) => {
     if (conversationState.connectionState === state) {
       return;
     }
 
     return new Promise<void>((resolve, reject) => {
-      const onceEventOccurred = (newState: ConversationInstance["connectionState"]) => {
+      const onceEventOccurred = (newState: UseConversationReturn["connectionState"]) => {
         if (newState !== state) {
           return;
         }
@@ -393,6 +389,6 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
   ]);
 }
 
-export function useConversation(options: ConversationOptions): ConversationInstance {
+export function useConversation(options: ConversationOptions): UseConversationReturn {
   return useConversationWith(null, options);
 }

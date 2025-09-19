@@ -67,7 +67,7 @@ type AgentStateAvailable = AgentInstanceCommon & {
   /** Is the agent ready for user interaction? */
   isAvailable: true;
 
-  /** Is the audio preconnect buffer currently available? */
+  /** Is the audio preconnect buffer currently active and recording? */
   isPreConnectBufferEnabled: false;
 
   cameraTrack: TrackReference | null;
@@ -81,7 +81,7 @@ type AgentStateAvailableListening = AgentInstanceCommon & {
   /** Is the agent ready for user interaction? */
   isAvailable: true;
 
-  /** Is the audio preconnect buffer currently available? */
+  /** Is the audio preconnect buffer currently active and recording? */
   isPreConnectBufferEnabled: boolean;
 
   cameraTrack: TrackReference | null;
@@ -95,7 +95,7 @@ type AgentStateUnAvailable = AgentInstanceCommon & {
   /** Is the agent ready for user interaction? */
   isAvailable: false;
 
-  /** Is the audio preconnect buffer currently available? */
+  /** Is the audio preconnect buffer currently active and recording? */
   isPreConnectBufferEnabled: false;
 
   cameraTrack: TrackReference | null;
@@ -109,7 +109,7 @@ type AgentStateConnecting = AgentInstanceCommon & {
   /** Is the agent ready for user interaction? */
   isAvailable: false;
 
-  /** Is the audio preconnect buffer currently available? */
+  /** Is the audio preconnect buffer currently active and recording? */
   isPreConnectBufferEnabled: false;
 
   cameraTrack: null;
@@ -123,7 +123,7 @@ type AgentStateFailed = AgentInstanceCommon & {
   /** Is the agent ready for user interaction? */
   isAvailable: false;
 
-  /** Is the audio preconnect buffer currently available? */
+  /** Is the audio preconnect buffer currently active and recording? */
   isPreConnectBufferEnabled: false;
 
   cameraTrack: null;

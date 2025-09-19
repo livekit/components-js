@@ -7,7 +7,7 @@ import { TokenSource } from '../TokenSource';
 import { useMaybeRoomContext } from '../context';
 import { RoomAgentDispatch, RoomConfiguration } from '@livekit/protocol';
 import { useAgent } from './useAgent';
-import { TrackReferenceOrPlaceholder, TrackReferencePlaceholder } from '@livekit/components-core';
+import { TrackReference } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
 
 export enum ConversationEvent {
@@ -74,8 +74,8 @@ type ConversationStateConnecting = ConversationStateCommon & {
   isReconnecting: false;
 
   local: {
-    cameraTrack: TrackReferencePlaceholder;
-    microphoneTrack: TrackReferencePlaceholder;
+    cameraTrack: null;
+    microphoneTrack: null;
   };
 };
 
@@ -85,8 +85,8 @@ type ConversationStateConnected = ConversationStateCommon & {
   isReconnecting: boolean;
 
   local: {
-    cameraTrack: TrackReferenceOrPlaceholder,
-    microphoneTrack: TrackReferenceOrPlaceholder,
+    cameraTrack: TrackReference | null,
+    microphoneTrack: TrackReference | null,
   };
 };
 
@@ -96,8 +96,8 @@ type ConversationStateDisconnected = ConversationStateCommon & {
   isReconnecting: false;
 
   local: {
-    cameraTrack: TrackReferencePlaceholder;
-    microphoneTrack: TrackReferencePlaceholder;
+    cameraTrack: null;
+    microphoneTrack: null;
   };
 };
 
@@ -186,11 +186,25 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
   const { localParticipant } = useLocalParticipant({ room });
   const cameraPublication = localParticipant.getTrackPublication(Track.Source.Camera);
   const localCamera = useMemo(() => {
-    return !cameraPublication?.isMuted ? { source: Track.Source.Camera as const, participant: localParticipant, publication: cameraPublication } : null;
+    if (!cameraPublication || cameraPublication.isMuted) {
+      return null;
+    }
+    return {
+      source: Track.Source.Camera,
+      participant: localParticipant,
+      publication: cameraPublication,
+    };
   }, [localParticipant, cameraPublication, cameraPublication?.isMuted]);
   const microphonePublication = localParticipant.getTrackPublication(Track.Source.Microphone);
   const localMicrophone = useMemo(() => {
-    return !microphonePublication?.isMuted ? { source: Track.Source.Microphone as const, participant: localParticipant, publication: microphonePublication } : null;
+    if (!microphonePublication || microphonePublication.isMuted) {
+      return null;
+    }
+    return {
+      source: Track.Source.Microphone,
+      participant: localParticipant,
+      publication: microphonePublication,
+    };
   }, [localParticipant, microphonePublication, microphonePublication?.isMuted]);
 
   const conversationState = useMemo((): ConversationStateConnecting | ConversationStateConnected | ConversationStateDisconnected => {
@@ -214,8 +228,8 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
           ...generateDerivedConnectionStateValues(ConnectionState.Connecting),
 
           local: {
-            cameraTrack: { participant: localParticipant, source: Track.Source.Camera },
-            microphoneTrack: { participant: localParticipant, source: Track.Source.Microphone },
+            cameraTrack: null,
+            microphoneTrack: null,
           },
         };
 
@@ -229,8 +243,8 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
           ...generateDerivedConnectionStateValues(roomConnectionState),
 
           local: {
-            cameraTrack: localCamera ?? { participant: localParticipant, source: Track.Source.Camera },
-            microphoneTrack: localMicrophone ?? { participant: localParticipant, source: Track.Source.Microphone },
+            cameraTrack: localCamera,
+            microphoneTrack: localMicrophone,
           },
         };
 
@@ -242,8 +256,8 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
           ...generateDerivedConnectionStateValues(ConnectionState.Disconnected),
 
           local: {
-            cameraTrack: { participant: localParticipant, source: Track.Source.Camera },
-            microphoneTrack: { participant: localParticipant, source: Track.Source.Microphone },
+            cameraTrack: null,
+            microphoneTrack: null,
           },
         };
     }

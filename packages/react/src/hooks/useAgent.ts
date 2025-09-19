@@ -56,8 +56,8 @@ type AgentStateAvailable = AgentInstanceCommon & {
   /** Is the agent ready for user interaction? */
   isAvailable: true;
 
-  camera: TrackReference | null;
-  microphone: TrackReference | null;
+  cameraTrack: TrackReference | null;
+  microphoneTrack: TrackReference | null;
 };
 
 type AgentStateUnAvailable = AgentInstanceCommon & {
@@ -67,8 +67,8 @@ type AgentStateUnAvailable = AgentInstanceCommon & {
   /** Is the agent ready for user interaction? */
   isAvailable: false;
 
-  camera: null;
-  microphone: null;
+  cameraTrack: null;
+  microphoneTrack: null;
 };
 
 type AgentStateFailed = AgentInstanceCommon & {
@@ -78,8 +78,8 @@ type AgentStateFailed = AgentInstanceCommon & {
   /** Is the agent ready for user interaction? */
   isAvailable: false;
 
-  camera: null;
-  microphone: null;
+  cameraTrack: null;
+  microphoneTrack: null;
 };
 
 type AgentActions = {
@@ -397,8 +397,8 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
           ...generateDerivedStateValues(state),
           failureReasons: null,
 
-          camera: videoTrack,
-          microphone: audioTrack,
+          cameraTrack: videoTrack,
+          microphoneTrack: audioTrack,
         };
 
       case 'unset':
@@ -412,8 +412,8 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
           failureReasons: null,
 
           // Clear inner values if no longer connected
-          camera: null,
-          microphone: null,
+          cameraTrack: null,
+          microphoneTrack: null,
         };
 
       case 'failed':
@@ -425,8 +425,8 @@ export function useAgent(conversation: ConversationStub, _name?: string): AgentI
           failureReasons,
 
           // Clear inner values if no longer connected
-          camera: null,
-          microphone: null,
+          cameraTrack: null,
+          microphoneTrack: null,
         };
     }
   }, [

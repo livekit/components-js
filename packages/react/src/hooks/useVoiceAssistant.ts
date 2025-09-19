@@ -7,17 +7,7 @@ import { useParticipantTracks } from './useParticipantTracks';
 import { useTrackTranscription } from './useTrackTranscription';
 import { useConnectionState } from './useConnectionStatus';
 import { useParticipantAttributes } from './useParticipantAttributes';
-
-/**
- * @beta
- */
-export type AgentState =
-  | 'disconnected'
-  | 'connecting'
-  | 'initializing'
-  | 'listening'
-  | 'thinking'
-  | 'speaking';
+import { AgentState } from './useAgent';
 
 /**
  * @beta

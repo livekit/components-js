@@ -243,7 +243,7 @@ type ConversationStub = Pick<UseConversationReturn, 'connectionState' | 'subtle'
 /**
   * useAgent encapculates all agent state, normalizing some quirks around how LiveKit Agents work.
   */
-export function useAgent(conversation: ConversationStub, _name?: string): UseAgentReturn {
+export function useAgent(conversation: ConversationStub): UseAgentReturn {
   const { room } = conversation.subtle;
 
   const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<AgentCallbacks>, []);

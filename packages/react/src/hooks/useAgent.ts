@@ -65,8 +65,9 @@ type AgentStateAvailable = AgentStateCommon & {
   /** Is the agent ready for user interaction? */
   isAvailable: true;
 
-  /** Is the audio preconnect buffer currently active and recording? */
-  isPreConnectBufferEnabled: false;
+  /** Is the audio preconnect buffer currently active and recording because the agent hasn't
+    * connected yet? */
+  isBufferingSpeech: false;
 
   cameraTrack: TrackReference | null;
   microphoneTrack: TrackReference | null;
@@ -79,8 +80,9 @@ type AgentStateAvailableListening = AgentStateCommon & {
   /** Is the agent ready for user interaction? */
   isAvailable: true;
 
-  /** Is the audio preconnect buffer currently active and recording? */
-  isPreConnectBufferEnabled: boolean;
+  /** Is the audio preconnect buffer currently active and recording because the agent hasn't
+    * connected yet? */
+  isBufferingSpeech: boolean;
 
   cameraTrack: TrackReference | null;
   microphoneTrack: TrackReference | null;
@@ -93,8 +95,9 @@ type AgentStateUnAvailable = AgentStateCommon & {
   /** Is the agent ready for user interaction? */
   isAvailable: false;
 
-  /** Is the audio preconnect buffer currently active and recording? */
-  isPreConnectBufferEnabled: false;
+  /** Is the audio preconnect buffer currently active and recording because the agent hasn't
+    * connected yet? */
+  isBufferingSpeech: false;
 
   cameraTrack: TrackReference | null;
   microphoneTrack: TrackReference | null;
@@ -107,8 +110,9 @@ type AgentStateConnecting = AgentStateCommon & {
   /** Is the agent ready for user interaction? */
   isAvailable: false;
 
-  /** Is the audio preconnect buffer currently active and recording? */
-  isPreConnectBufferEnabled: false;
+  /** Is the audio preconnect buffer currently active and recording because the agent hasn't
+    * connected yet? */
+  isBufferingSpeech: false;
 
   cameraTrack: null;
   microphoneTrack: null;
@@ -121,8 +125,9 @@ type AgentStateFailed = AgentStateCommon & {
   /** Is the agent ready for user interaction? */
   isAvailable: false;
 
-  /** Is the audio preconnect buffer currently active and recording? */
-  isPreConnectBufferEnabled: false;
+  /** Is the audio preconnect buffer currently active and recording because the agent hasn't
+    * connected yet? */
+  isBufferingSpeech: false;
 
   cameraTrack: null;
   microphoneTrack: null;
@@ -346,13 +351,13 @@ export function useAgent(conversation: ConversationStub, _name?: string): UseAge
     return agentTimeoutFailureReason ? [ agentTimeoutFailureReason ] : [];
   }, [agentTimeoutFailureReason]);
 
-  const [state, isPreConnectBufferEnabled] = useMemo(() => {
+  const [state, isBufferingSpeech] = useMemo(() => {
     if (failureReasons.length > 0) {
       return ['failed' as const, false];
     }
 
     let state: AgentState = 'disconnected';
-    let preconnectBufferEnabled = false;
+    let bufferingSpeachLocally = false;
 
     if (roomConnectionState !== ConnectionState.Disconnected) {
       state = 'connecting';
@@ -362,15 +367,15 @@ export function useAgent(conversation: ConversationStub, _name?: string): UseAge
     // than "initializing"
     if (localMicTrack) {
       state = 'listening';
-      preconnectBufferEnabled = true;
+      bufferingSpeachLocally = true;
     }
 
     if (agentParticipant && agentParticipantAttributes[ParticipantAgentAttributes.AgentState]) {
       state = agentParticipantAttributes[ParticipantAgentAttributes.AgentState] as AgentSdkStates;
-      preconnectBufferEnabled = false;
+      bufferingSpeachLocally = false;
     }
 
-    return [state, preconnectBufferEnabled] as [AgentState, boolean];
+    return [state, bufferingSpeachLocally] as [AgentState, boolean];
   }, [failureReasons, roomConnectionState, localMicTrack, agentParticipant, agentParticipantAttributes]);
 
   useEffect(() => {
@@ -413,7 +418,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): UseAge
 
           state,
           ...generateDerivedStateValues(state),
-          isPreConnectBufferEnabled: false,
+          isBufferingSpeech: false,
           failureReasons: null,
 
           // Clear inner values if no longer connected
@@ -428,7 +433,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): UseAge
 
           state,
           ...generateDerivedStateValues(state),
-          isPreConnectBufferEnabled: false,
+          isBufferingSpeech: false,
           failureReasons: null,
 
           cameraTrack: videoTrack,
@@ -441,7 +446,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): UseAge
 
           state,
           ...generateDerivedStateValues(state),
-          isPreConnectBufferEnabled,
+          isBufferingSpeech,
           failureReasons: null,
 
           cameraTrack: videoTrack,
@@ -455,7 +460,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): UseAge
 
           state,
           ...generateDerivedStateValues(state),
-          isPreConnectBufferEnabled: false,
+          isBufferingSpeech: false,
           failureReasons: null,
 
           cameraTrack: videoTrack,
@@ -468,7 +473,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): UseAge
 
           state: 'failed',
           ...generateDerivedStateValues('failed'),
-          isPreConnectBufferEnabled: false,
+          isBufferingSpeech: false,
           failureReasons,
 
           // Clear inner values if no longer connected
@@ -484,7 +489,7 @@ export function useAgent(conversation: ConversationStub, _name?: string): UseAge
     state,
     videoTrack,
     audioTrack,
-    isPreConnectBufferEnabled,
+    isBufferingSpeech,
   ]);
 
   const waitUntilAvailable = useCallback(async (signal?: AbortSignal) => {

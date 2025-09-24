@@ -1,5 +1,13 @@
 # @livekit/components-core
 
+## 0.12.10
+
+### Patch Changes
+
+- fix(core): prevent audio output switching on safari based browsers - [#1190](https://github.com/livekit/components-js/pull/1190) ([@lukasIO](https://github.com/lukasIO))
+
+- chore(react): deprecate legacy useTrackTranscriptions - [#1200](https://github.com/livekit/components-js/pull/1200) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.12.9
 
 ### Patch Changes

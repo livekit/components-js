@@ -346,7 +346,7 @@ export function useSession(
     await Promise.all([
       // FIXME: swap the below line in once the new `livekit-client` changes are published
       // room.connect(options.credentials),
-      tokenSource.getTokenValue().then(({ serverUrl, participantToken }) => (
+      tokenSource.generate().then(({ serverUrl, participantToken }) => (
         room.connect(serverUrl, participantToken)
       )),
 
@@ -367,7 +367,7 @@ export function useSession(
   }, [room]);
 
   const prepareConnection = useCallback(async () => {
-    const credentials = await tokenSource.getTokenValue();
+    const credentials = await tokenSource.generate();
     await room.prepareConnection(credentials.serverUrl, credentials.participantToken);
   }, [tokenSource, room]);
   useEffect(() => {

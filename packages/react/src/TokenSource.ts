@@ -282,15 +282,39 @@ export class TokenSourceSandboxTokenServer extends TokenSourceEndpoint {
 }
 
 export const TokenSource = {
+  /** TokenSource.literal contains a single, literal set of credentials. */
   literal(literalOrFn: LiteralOrFn) {
     return new TokenSourceLiteral(literalOrFn);
   },
+
+  /**
+   * TokenSource.custom allows a user to define a manual function which generates new
+   * {@link ResponsePayload} values on demand.
+   *
+   * Use this to get credentials from custom backends / etc.
+   */
   custom(customFn: CustomFn) {
     return new TokenSourceCustom(customFn);
   },
+
+  /**
+   * TokenSource.endpoint creates a token source that fetches credentials from a given URL using
+   * the standard endpoint format:
+   * FIXME: add docs link here in the future!
+   */
   endpoint(url: string, options: EndpointOptions = {}) {
     return new TokenSourceEndpoint(url, options);
   },
+
+  /**
+   * TokenSource.sandboxTokenServer queries a sandbox token server for credentials,
+   * which supports quick prototyping / getting started types of use cases.
+   *
+   * This token provider is INSECURE and should NOT be used in production.
+   *
+   * For more info:
+   * @see https://cloud.livekit.io/projects/p_/sandbox/templates/token-server
+   */
   sandboxTokenServer(options: SandboxTokenServerOptions) {
     return new TokenSourceSandboxTokenServer(options);
   },

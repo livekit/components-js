@@ -106,23 +106,23 @@ export abstract class TokenSourceRefreshable extends TokenSourceFlexible {
   private fetchMutex = new Mutex();
 
   protected isSameAsCachedOptions(options: TokenSourceOptions) {
-    if (options.roomName !== this.options.roomName) {
-      return false;
-    }
-    if (options.participantName !== this.options.participantName) {
-      return false;
-    }
-    if (options.participantIdentity !== this.options.participantIdentity) {
-      return false;
-    }
-    if (options.participantMetadata !== this.options.participantMetadata) {
-      return false;
-    }
-    if (options.participantAttributes !== this.options.participantAttributes) {
-      return false;
-    }
-    if (options.agentName  !== this.options.agentName) {
-      return false;
+    for (const key of Object.keys(this.options) as Array<keyof TokenSourceOptions>) {
+      switch (key) {
+        case 'roomName':
+        case 'participantName':
+        case 'participantIdentity':
+        case 'participantMetadata':
+        case 'participantAttributes':
+        case 'agentName':
+          if (this.options[key] !== options[key]) {
+            return false;
+          }
+          break;
+        default:
+          // ref: https://stackoverflow.com/a/58009992
+          const exhaustiveCheckedKey: never = key;
+          throw new Error(`Options key ${exhaustiveCheckedKey} not being checked for equality!`);
+      }
     }
 
     return true;

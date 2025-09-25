@@ -10,18 +10,20 @@ import { useAgent } from './useAgent';
 import { TrackReference } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
 
-export enum ConversationEvent {
+export enum SessionEvent {
   ConnectionStateChanged = 'connectionStateChanged',
   MediaDevicesError = 'MediaDevicesError',
 }
 
-export type ConversationCallbacks = {
-  [ConversationEvent.ConnectionStateChanged]: (newAgentConnectionState: ConnectionState) => void;
-  [ConversationEvent.MediaDevicesError]: (error: Error) => void;
+export type SessionCallbacks = {
+  [SessionEvent.ConnectionStateChanged]: (newAgentConnectionState: ConnectionState) => void;
+  [SessionEvent.MediaDevicesError]: (error: Error) => void;
 };
 
-export type ConversationOptions = {
+export type SessionOptions = {
   tokenSource: TokenSource;
+  agentToDispatch?: string | RoomAgentDispatch;
+
   room?: Room;
 
   dispatch?: {
@@ -57,16 +59,16 @@ export type SwitchActiveDeviceOptions = {
   exact?: boolean;
 };
 
-type ConversationStateCommon = {
+type SessionStateCommon = {
   subtle: {
-    emitter: TypedEventEmitter<ConversationCallbacks>;
+    emitter: TypedEventEmitter<SessionCallbacks>;
     room: Room;
     credentials: TokenSource,
-    agentConnectTimeoutMilliseconds: NonNullable<ConversationOptions["dispatch"]>["agentConnectTimeoutMilliseconds"],
+    agentConnectTimeoutMilliseconds: NonNullable<SessionOptions["dispatch"]>["agentConnectTimeoutMilliseconds"],
   };
 };
 
-type ConversationStateConnecting = ConversationStateCommon & {
+type SessionStateConnecting = SessionStateCommon & {
   connectionState: ConnectionState.Connecting;
   isConnected: false;
   isReconnecting: false;
@@ -77,7 +79,7 @@ type ConversationStateConnecting = ConversationStateCommon & {
   };
 };
 
-type ConversationStateConnected = ConversationStateCommon & {
+type SessionStateConnected = SessionStateCommon & {
   connectionState: ConnectionState.Connected | ConnectionState.Reconnecting | ConnectionState.SignalReconnecting;
   isConnected: true;
   isReconnecting: boolean;
@@ -88,7 +90,7 @@ type ConversationStateConnected = ConversationStateCommon & {
   };
 };
 
-type ConversationStateDisconnected = ConversationStateCommon & {
+type SessionStateDisconnected = SessionStateCommon & {
   connectionState: ConnectionState.Disconnected;
   isConnected: false;
   isReconnecting: false;
@@ -99,7 +101,7 @@ type ConversationStateDisconnected = ConversationStateCommon & {
   };
 };
 
-type ConversationActions = {
+type SessionActions = {
   /** Returns a promise that resolves once the room connects. */
   waitUntilConnected: (signal?: AbortSignal) => void;
   /** Returns a promise that resolves once the room disconnects */
@@ -114,23 +116,23 @@ type ConversationActions = {
   end: () => Promise<void>;
 };
 
-export type UseConversationReturn = (ConversationStateConnecting | ConversationStateConnected | ConversationStateDisconnected) & ConversationActions;
+export type UseSessionReturn = (SessionStateConnecting | SessionStateConnected | SessionStateDisconnected) & SessionActions;
 
 /**
- * AgentSession represents a connection to a LiveKit Agent, providing abstractions to make 1:1
+ * A Session represents a connection to a LiveKit Agent, providing abstractions to make 1:1
  * agent/participant rooms easier to work with.
  */
-export function useConversationWith(agentToDispatch: string | RoomAgentDispatch | null, options: ConversationOptions): UseConversationReturn {
+export function useSession(options: SessionOptions): UseSessionReturn {
   const roomFromContext = useMaybeRoomContext();
   const room = useMemo(() => roomFromContext ?? options.room ?? new Room(), [roomFromContext, options.room]);
 
-  const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<ConversationCallbacks>, []);
+  const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<SessionCallbacks>, []);
 
-  const agentName = typeof agentToDispatch === 'string' ? agentToDispatch : agentToDispatch?.agentName;
+  const agentName = typeof options.agentToDispatch === 'string' ? options.agentToDispatch : options.agentToDispatch?.agentName;
   useEffect(() => {
-    const roomAgentDispatch = typeof agentToDispatch === 'string' ? (
-      new RoomAgentDispatch({ agentName: agentToDispatch, metadata: '' })
-    ) : agentToDispatch;
+    const roomAgentDispatch = typeof options.agentToDispatch === 'string' ? (
+      new RoomAgentDispatch({ agentName: options.agentToDispatch, metadata: '' })
+    ) : options.agentToDispatch;
     const roomConfig = roomAgentDispatch ? (
       new RoomConfiguration({
         agents: [roomAgentDispatch],
@@ -143,7 +145,7 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
     };
   }, [options.tokenSource]);
 
-  const generateDerivedConnectionStateValues = useCallback(<State extends UseConversationReturn["connectionState"]>(connectionState: State) => ({
+  const generateDerivedConnectionStateValues = useCallback(<State extends UseSessionReturn["connectionState"]>(connectionState: State) => ({
     isConnected: (
       connectionState === ConnectionState.Connected ||
       connectionState === ConnectionState.Reconnecting ||
@@ -172,7 +174,7 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
 
   useEffect(() => {
     const handleMediaDevicesError = async (error: Error) => {
-      emitter.emit(ConversationEvent.MediaDevicesError, error);
+      emitter.emit(SessionEvent.MediaDevicesError, error);
     };
 
     room.on(RoomEvent.MediaDevicesError, handleMediaDevicesError);
@@ -205,8 +207,8 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
     };
   }, [localParticipant, microphonePublication, microphonePublication?.isMuted]);
 
-  const conversationState = useMemo((): ConversationStateConnecting | ConversationStateConnected | ConversationStateDisconnected => {
-    const common: ConversationStateCommon = {
+  const conversationState = useMemo((): SessionStateConnecting | SessionStateConnected | SessionStateDisconnected => {
+    const common: SessionStateCommon = {
       subtle: {
         room,
         emitter,
@@ -268,16 +270,16 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
     generateDerivedConnectionStateValues,
   ]);
   useEffect(() => {
-    emitter.emit(ConversationEvent.ConnectionStateChanged, conversationState.connectionState);
+    emitter.emit(SessionEvent.ConnectionStateChanged, conversationState.connectionState);
   }, [emitter, conversationState.connectionState]);
 
-  const waitUntilConnectionState = useCallback(async (state: UseConversationReturn["connectionState"], signal?: AbortSignal) => {
+  const waitUntilConnectionState = useCallback(async (state: UseSessionReturn["connectionState"], signal?: AbortSignal) => {
     if (conversationState.connectionState === state) {
       return;
     }
 
     return new Promise<void>((resolve, reject) => {
-      const onceEventOccurred = (newState: UseConversationReturn["connectionState"]) => {
+      const onceEventOccurred = (newState: UseSessionReturn["connectionState"]) => {
         if (newState !== state) {
           return;
         }
@@ -290,11 +292,11 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
       };
 
       const cleanup = () => {
-        emitter.off(ConversationEvent.ConnectionStateChanged, onceEventOccurred);
+        emitter.off(SessionEvent.ConnectionStateChanged, onceEventOccurred);
         signal?.removeEventListener('abort', abortHandler);
       };
 
-      emitter.on(ConversationEvent.ConnectionStateChanged, onceEventOccurred);
+      emitter.on(SessionEvent.ConnectionStateChanged, onceEventOccurred);
       signal?.addEventListener('abort', abortHandler);
     });
   }, [conversationState.connectionState, emitter]);
@@ -387,8 +389,4 @@ export function useConversationWith(agentToDispatch: string | RoomAgentDispatch 
     start,
     end,
   ]);
-}
-
-export function useConversation(options: ConversationOptions): UseConversationReturn {
-  return useConversationWith(null, options);
 }

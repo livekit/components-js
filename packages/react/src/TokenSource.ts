@@ -274,13 +274,12 @@ class TokenSourceEndpoint extends TokenSourceRefreshable {
 }
 
 export type SandboxTokenServerOptions = {
-  sandboxId: string;
   baseUrl?: string;
 };
 
 export class TokenSourceSandboxTokenServer extends TokenSourceEndpoint {
-  constructor(options: SandboxTokenServerOptions) {
-    const { sandboxId, baseUrl = 'https://cloud-api.livekit.io', ...rest } = options;
+  constructor(sandboxId: string, options: SandboxTokenServerOptions) {
+    const { baseUrl = 'https://cloud-api.livekit.io', ...rest } = options;
 
     super(`${baseUrl}/api/v2/sandbox/connection-details`, {
       ...rest,
@@ -325,7 +324,7 @@ export const TokenSource = {
    * For more info:
    * @see https://cloud.livekit.io/projects/p_/sandbox/templates/token-server
    */
-  sandboxTokenServer(options: SandboxTokenServerOptions) {
-    return new TokenSourceSandboxTokenServer(options);
+  sandboxTokenServer(sandboxId: string, options: SandboxTokenServerOptions) {
+    return new TokenSourceSandboxTokenServer(sandboxId, options);
   },
 };

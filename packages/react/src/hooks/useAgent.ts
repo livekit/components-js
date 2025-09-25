@@ -7,7 +7,7 @@ import { ParticipantAgentAttributes, TrackReference } from '@livekit/components-
 
 import { useParticipantTracks } from './useParticipantTracks';
 import { useRemoteParticipants } from './useRemoteParticipants';
-import { UseConversationReturn } from './useConversationWith';
+import { UseSessionReturn } from './useSession';
 
 // FIXME: make this 10 seconds once room dispatch booting info is discoverable
 const DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS = 20_000;
@@ -171,13 +171,13 @@ const useAgentTimeoutIdStore = create<{
 }>((set, get) => {
   const startAgentConnectedTimeout = (agentConnectTimeoutMilliseconds?: number) => {
     return setTimeout(() => {
-      const { subtle: { agentState: agentConversationalState, agentParticipantExists } } = get();
+      const { subtle: { agentState, agentParticipantExists } } = get();
       if (!agentParticipantExists) {
         set((old) => ({ ...old, agentTimeoutFailureReason: 'Agent did not join the room.' }));
         return;
       }
 
-      const { isAvailable } = generateDerivedStateValues(agentConversationalState);
+      const { isAvailable } = generateDerivedStateValues(agentState);
       if (!isAvailable) {
         set((old) => ({ ...old, agentTimeoutFailureReason: 'Agent connected but did not complete initializing.' }));
         return;
@@ -238,13 +238,13 @@ const useAgentTimeoutIdStore = create<{
   };
 });
 
-type ConversationStub = Pick<UseConversationReturn, 'connectionState' | 'subtle'>;
+type SessionStub = Pick<UseSessionReturn, 'connectionState' | 'subtle'>;
 
 /**
   * useAgent encapculates all agent state, normalizing some quirks around how LiveKit Agents work.
   */
-export function useAgent(conversation: ConversationStub): UseAgentReturn {
-  const { room } = conversation.subtle;
+export function useAgent(session: SessionStub): UseAgentReturn {
+  const { room } = session.subtle;
 
   const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<AgentCallbacks>, []);
 
@@ -386,18 +386,18 @@ export function useAgent(conversation: ConversationStub): UseAgentReturn {
     updateAgentTimeoutParticipantExists(agentParticipant !== null);
   }, [agentParticipant]);
 
-  // When the conversation room begins connecting, start the agent timeout
-  const isConversationDisconnected = conversation.connectionState === "disconnected";
+  // When the session room begins connecting, start the agent timeout
+  const isSessionDisconnected = session.connectionState === "disconnected";
   useEffect(() => {
-    if (isConversationDisconnected) {
+    if (isSessionDisconnected) {
       return;
     }
 
-    startAgentTimeout(conversation.subtle.agentConnectTimeoutMilliseconds);
+    startAgentTimeout(session.subtle.agentConnectTimeoutMilliseconds);
     return () => {
       clearAgentTimeout();
     };
-  }, [isConversationDisconnected, conversation.subtle.agentConnectTimeoutMilliseconds]);
+  }, [isSessionDisconnected, session.subtle.agentConnectTimeoutMilliseconds]);
 
   const agentState: AgentStateCases = useMemo(() => {
     const common: AgentStateCommon = {

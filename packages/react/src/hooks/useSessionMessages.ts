@@ -13,9 +13,9 @@ import {
 import { useAgent } from './useAgent';
 import { useTranscriptions } from './useTranscriptions';
 import { useChat } from './useChat';
-import { UseConversationReturn } from './useConversationWith';
+import { UseSessionReturn } from './useSession';
 
-export type UseConversationMessagesReturn = {
+export type UseSessionMessagesReturn = {
   messages: Array<ReceivedMessage>;
 
   /** Is a send operation currently in progress? */
@@ -38,10 +38,10 @@ export type MessagesCallbacks = {
   [MessagesEvent.MessageReceived]: (message: ReceivedMessage) => void;
 };
 
-export function useConversationMessages(conversation: UseConversationReturn): UseConversationMessagesReturn {
-  const { room } = conversation.subtle;
+export function useSessionMessages(session: UseSessionReturn): UseSessionMessagesReturn {
+  const { room } = session.subtle;
 
-  const agent = useAgent(conversation);
+  const agent = useAgent(session);
 
   const transcriptions: Array<TextStreamData> = useTranscriptions({ room });
   const chatOptions = useMemo(() => ({ room }), [room]);

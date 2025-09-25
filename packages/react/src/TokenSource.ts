@@ -1,244 +1,299 @@
-import { RoomConfiguration } from '@livekit/protocol';
+import { RoomAgentDispatch, RoomConfiguration, TokenSourceRequest, TokenSourceResponse } from '@livekit/protocol';
 import { decodeJwt } from 'jose';
+import { Mutex } from 'livekit-client';
 
 const ONE_SECOND_IN_MILLISECONDS = 1000;
 const ONE_MINUTE_IN_MILLISECONDS = 60 * ONE_SECOND_IN_MILLISECONDS;
 
-/**
- * TokenSource handles getting credentials for connecting to a new Room, caching
- * the last result and using it until it expires. */
-export abstract class TokenSource {
-  private request: TokenSource.Request = {};
 
-  protected cachedResponse: TokenSource.Response | null = null;
+export type CamelToSnakeCase<Str extends string> = Str extends `${infer First}${infer Rest}`
+  ? `${First extends Capitalize<First> ? '_' : ''}${Lowercase<First>}${CamelToSnakeCase<Rest>}`
+  : Str;
 
-  private inProgressFetch: Promise<TokenSource.Response> | null = null;
+type ArrayValuesToSnakeCase<Item> = Array<ValueToSnakeCase<Item>>;
 
-  protected getCachedResponseJwtPayload() {
-    const token = this.cachedResponse?.participantToken;
-    if (!token) {
-      return null;
-    }
+type ObjectKeysToSnakeCase<Obj> = {
+  [Key in keyof Obj as CamelToSnakeCase<string & Key>]: NonNullable<ValueToSnakeCase<Obj[Key]>>;
+};
 
-    return decodeJwt<{ roomConfig?: ReturnType<RoomConfiguration['toJson']> }>(token);
+export type ValueToSnakeCase<Value> =
+  Value extends Array<infer Item>
+    ? ArrayValuesToSnakeCase<Item>
+    : Value extends object
+      ? ObjectKeysToSnakeCase<Value>
+      : Value;
+
+
+export type TokenSourceResponseObject = Required<NonNullable<ConstructorParameters<typeof TokenSourceResponse>[0]>>;
+
+type RoomConfigurationPayload = ValueToSnakeCase<
+  NonNullable<ConstructorParameters<typeof RoomConfiguration>[0]>
+>;
+
+
+
+
+
+
+export abstract class TokenSourceBase {
+  abstract getTokenValue(): Promise<TokenSourceResponseObject>;
+}
+
+export abstract class TokenSourceInFlexible extends TokenSourceBase {}
+
+export type TokenSourceOptions = {
+  roomName?: string;
+  participantName?: string;
+  participantIdentity?: string;
+  participantMetadata?: string;
+  participantAttributes?: { [key: string]: string };
+
+  agentName?: string;
+};
+
+export abstract class TokenSourceFlexible extends TokenSourceBase {
+  abstract getTokenValue(): Promise<TokenSourceResponseObject>;
+
+  abstract setOptions(options: TokenSourceOptions): void;
+  abstract clearOptions(): void;
+}
+
+
+
+
+
+function isResponseExpired(response: TokenSourceResponse) {
+  const jwtPayload = getJwtPayload(response);
+  if (!jwtPayload?.exp) {
+    return true;
   }
+  const expInMilliseconds = jwtPayload.exp * ONE_SECOND_IN_MILLISECONDS;
+  const expiresAt = new Date(expInMilliseconds - ONE_MINUTE_IN_MILLISECONDS);
 
-  protected isCachedResponseExpired() {
-    const jwtPayload = this.getCachedResponseJwtPayload();
-    if (!jwtPayload?.exp) {
-      return true;
-    }
-    const expInMilliseconds = jwtPayload.exp * ONE_SECOND_IN_MILLISECONDS;
-    const expiresAt = new Date(expInMilliseconds - ONE_MINUTE_IN_MILLISECONDS);
+  const now = new Date();
+  return expiresAt >= now;
+}
 
-    const now = new Date();
-    return expiresAt >= now;
-  }
+function getJwtPayload(response: TokenSourceResponse) {
+  const token = response.participantToken;
+  return decodeJwt<{
+    name?: string;
+    metadata?: string;
+    attributes?: Record<string, string>;
+    roomConfig?: RoomConfigurationPayload;
+    video?: {
+      room?: string;
+      roomJoin?: boolean;
+      canPublish?: boolean;
+      canPublishData?: boolean;
+      canSubscribe?: boolean;
+    };
+  }>(token);
+}
 
-  getCachedResponseRoomConfig() {
-    const roomConfigJsonValue = this.getCachedResponseJwtPayload()?.roomConfig;
-    if (!roomConfigJsonValue) {
-      return null;
-    }
-    return RoomConfiguration.fromJson(roomConfigJsonValue);
-  }
+export abstract class TokenSourceRefreshable extends TokenSourceFlexible {
+  private options: TokenSourceOptions = {};
 
-  protected isSameAsCachedRequest(request: TokenSource.Request) {
-    if (!this.request) {
+  private cachedResponse: TokenSourceResponse | null = null;
+  private fetchMutex = new Mutex();
+
+  protected isSameAsCachedOptions(options: TokenSourceOptions) {
+    if (options.roomName !== this.options.roomName) {
       return false;
     }
-
-    if (this.request.roomName !== request.roomName) {
+    if (options.participantName !== this.options.participantName) {
       return false;
     }
-    if (this.request.participantName !== request.participantName) {
+    if (options.participantIdentity !== this.options.participantIdentity) {
       return false;
     }
-    if (
-      (!this.request.roomConfig && request.roomConfig) ||
-      (this.request.roomConfig && !request.roomConfig)
-    ) {
+    if (options.participantMetadata !== this.options.participantMetadata) {
       return false;
     }
-    if (
-      this.request.roomConfig &&
-      request.roomConfig &&
-      !this.request.roomConfig.equals(request.roomConfig)
-    ) {
+    if (options.participantAttributes !== this.options.participantAttributes) {
+      return false;
+    }
+    if (options.agentName  !== this.options.agentName) {
       return false;
     }
 
     return true;
   }
 
-  /**
-   * Store request metadata which will be provide explicitly when fetching new credentials.
-   *
-   * @example new TokenSource.Custom((request /* <= This value! *\/) => ({ serverUrl: "...", participantToken: "..." })) */
-  setRequest(request: TokenSource.Request) {
-    if (!this.isSameAsCachedRequest(request)) {
-      this.cachedResponse = null;
+  getJwtPayload() {
+    if (!this.cachedResponse) {
+      return null;
     }
-    this.request = request;
+    return getJwtPayload(this.cachedResponse);
   }
 
-  clearRequest() {
-    this.request = {};
+  setOptions(options: TokenSourceOptions) {
+    if (!this.isSameAsCachedOptions(options)) {
+      this.cachedResponse = null;
+    }
+    this.options = options;
+  }
+
+  clearOptions() {
+    this.options = {};
     this.cachedResponse = null;
   }
 
-  async generate() {
-    if (this.isCachedResponseExpired()) {
-      await this.refresh();
+  async getTokenValue(): Promise<TokenSourceResponseObject> {
+    if (this.cachedResponse && !isResponseExpired(this.cachedResponse)) {
+      return this.cachedResponse!.toJson() as TokenSourceResponseObject;
     }
 
-    return this.cachedResponse!;
-  }
-
-  async refresh() {
-    if (this.inProgressFetch) {
-      await this.inProgressFetch;
-      return;
-    }
-
+    const unlock = await this.fetchMutex.lock();
     try {
-      this.inProgressFetch = this.fetch(this.request);
-      this.cachedResponse = await this.inProgressFetch;
+      const tokenResponse = await this.generate(this.options);
+      this.cachedResponse = tokenResponse;
+      return tokenResponse;
     } finally {
-      this.inProgressFetch = null;
+      unlock();
     }
   }
 
-  protected abstract fetch(
-    request: TokenSource.Request,
-  ): Promise<TokenSource.Response>;
+  abstract generate(options: TokenSourceOptions): Promise<TokenSourceResponse>;
 }
 
-export namespace TokenSource {
-  export type Request = {
-    /** The name of the room being requested when generating credentials */
-    roomName?: string;
 
-    /** The identity of the participant being requested for this client when generating credentials */
-    participantName?: string;
 
-    /**
-     * A RoomConfiguration object can be passed to request extra parameters should be included when
-     * generating connection credentials - dispatching agents, defining egress settings, etc
-     * @see https://docs.livekit.io/home/get-started/authentication/#room-configuration
-     */
-    roomConfig?: RoomConfiguration;
-  };
-  export type Response = {
-    serverUrl: string;
-    participantToken: string;
-  };
 
-  export type LiteralOptions = { loggerName?: string };
 
-  /** TokenSource.Literal contains a single, literal set of credentials.
-   * Note that refreshing credentials isn't implemented, because there is only one set provided.
-   * */
-  export class Literal extends TokenSource {
-    private log = console;
+type LiteralOrFn = TokenSourceResponseObject | (() => TokenSourceResponseObject | Promise<TokenSourceResponseObject>);
+export class TokenSourceLiteral extends TokenSourceInFlexible {
+  private literalOrFn: LiteralOrFn;
 
-    constructor(payload: Response /* , options?: LiteralOptions */) {
-      super();
-      this.cachedResponse = payload;
-
-      // this.log = getLogger(options?.loggerName ?? LoggerNames.TokenSource);
-    }
-
-    async fetch() {
-      if (this.isCachedResponseExpired()) {
-        // FIXME: figure out a better logging solution?
-        this.log.warn(
-          'The credentials within TokenSource.Literal have expired, so any upcoming uses of them will likely fail.',
-        );
-      }
-      return this.cachedResponse!;
-    }
+  constructor(literalOrFn: LiteralOrFn) {
+    super();
+    this.literalOrFn = literalOrFn;
   }
 
-  /** TokenSource.Custom allows a user to define a manual function which generates new
-   * {@link Response} values on demand. Use this to get credentials from custom backends / etc.
-   * */
-  export class Custom extends TokenSource {
-    protected fetch: (request: Request) => Promise<Response>;
-
-    constructor(handler: (request: Request) => Promise<Response>) {
-      super();
-      this.fetch = handler;
-    }
-  }
-
-  export type SandboxTokenServerOptions = Pick<
-    Request,
-    'roomName' | 'participantName' | 'roomConfig'
-  > & {
-    sandboxId: string;
-    baseUrl?: string;
-    loggerName?: string;
-
-    /** Disable sandbox security related warning log if TokenSource.Sandbox is used in
-     * production */
-    disableSecurityWarning?: boolean;
-  };
-
-  /** TokenSource.SandboxTokenServer queries a sandbox token server for credentials,
-   * which supports quick prototyping / getting started types of use cases.
-   *
-   * This token provider is INSECURE and should NOT be used in production.
-   *
-   * For more info:
-   * @see https://cloud.livekit.io/projects/p_/sandbox/templates/token-server */
-  export class SandboxTokenServer extends TokenSource {
-    protected options: SandboxTokenServerOptions;
-
-    private log = console;
-
-    constructor(options: SandboxTokenServerOptions) {
-      super();
-      this.options = options;
-
-      // this.log = getLogger(options.loggerName ?? LoggerNames.TokenSource);
-
-      if (process.env.NODE_ENV === 'production' && !this.options.disableSecurityWarning) {
-        // FIXME: figure out a better logging solution?
-        this.log.warn(
-          'TokenSource.SandboxTokenServer is meant for development, and is not security hardened. In production, implement your own token generation solution.',
-        );
-      }
-    }
-
-    async fetch(request: Request) {
-      const baseUrl = this.options.baseUrl ?? 'https://cloud-api.livekit.io';
-
-      const roomName = this.options.roomName ?? request.roomName;
-      const participantName = this.options.participantName ?? request.participantName;
-      const roomConfig = this.options.roomConfig ?? request.roomConfig;
-
-      const response = await fetch(`${baseUrl}/api/sandbox/connection-details`, {
-        method: 'POST',
-        headers: {
-          'X-Sandbox-ID': this.options.sandboxId,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          roomName,
-          participantName,
-          roomConfig: roomConfig?.toJson(),
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(
-          `Error generating token from sandbox token server: received ${response.status} / ${await response.text()}`,
-        );
-      }
-
-      const body: Exclude<Response, 'roomConfig'> = await response.json();
-      return { ...body, roomConfig };
+  async getTokenValue(): Promise<TokenSourceResponseObject> {
+    if (typeof this.literalOrFn === 'function') {
+      return this.literalOrFn();
+    } else {
+      return this.literalOrFn;
     }
   }
 }
+
+
+type CustomFn = (options: TokenSourceOptions) => TokenSourceResponseObject | Promise<TokenSourceResponseObject>;
+
+class TokenSourceCustom extends TokenSourceRefreshable {
+  private customFn: CustomFn;
+  constructor(customFn: CustomFn) {
+    super();
+    this.customFn = customFn;
+  }
+
+  async generate(options: TokenSourceOptions) {
+    const resultMaybePromise = this.customFn(options);
+
+    let result;
+    if (resultMaybePromise instanceof Promise) {
+      result = await resultMaybePromise;
+    } else {
+      result = resultMaybePromise;
+    }
+
+    return TokenSourceResponse.fromJson(result, {
+      // NOTE: it could be possible that the response body could contain more fields than just
+      // what's in TokenSourceResponse depending on the implementation (ie, SandboxTokenServer)
+      ignoreUnknownFields: true,
+    });
+  }
+}
+
+
+export type EndpointOptions = Omit<RequestInit, 'body'>;
+
+class TokenSourceEndpoint extends TokenSourceRefreshable {
+  private url: string;
+  private endpointOptions: EndpointOptions;
+
+  constructor(url: string, options: EndpointOptions = {}) {
+    super();
+    this.url = url;
+    this.endpointOptions = options;
+  }
+
+  async generate(options: TokenSourceOptions) {
+    // NOTE: I don't like the repetitive nature of this, `options` shouldn't be a thing,
+    // `request` should just be passed through instead...
+    const request = new TokenSourceRequest();
+    request.roomName = options.roomName;
+    request.participantName = options.participantName;
+    request.participantIdentity = options.participantIdentity;
+    request.participantMetadata = options.participantMetadata;
+    request.participantAttributes = options.participantAttributes ?? {};
+    request.roomConfig = options.agentName ? (
+      new RoomConfiguration({
+        agents: [
+          new RoomAgentDispatch({
+            agentName: options.agentName,
+            metadata: '', // FIXME: how do I support this? Maybe make agentName -> agentToDispatch?
+          }),
+        ],
+      })
+    ) : undefined;
+
+    const response = await fetch(this.url, {
+      ...this.endpointOptions,
+      method: this.endpointOptions.method ?? 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...this.endpointOptions.headers,
+      },
+      body: request.toJsonString(),
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Error generating token from endpoint ${this.url}: received ${response.status} / ${await response.text()}`,
+      );
+    }
+
+    const body = await response.json();
+    return TokenSourceResponse.fromJson(body, {
+      // NOTE: it could be possible that the response body could contain more fields than just
+      // what's in TokenSourceResponse depending on the implementation (ie, SandboxTokenServer)
+      ignoreUnknownFields: true,
+    });
+  }
+}
+
+export type SandboxTokenServerOptions = {
+  sandboxId: string;
+  baseUrl?: string;
+};
+
+export class TokenSourceSandboxTokenServer extends TokenSourceEndpoint {
+  constructor(options: SandboxTokenServerOptions) {
+    const { sandboxId, baseUrl = 'https://cloud-api.livekit.io', ...rest } = options;
+
+    super(`${baseUrl}/api/v2/sandbox/connection-details`, {
+      ...rest,
+      headers: {
+        'X-Sandbox-ID': sandboxId,
+      },
+    });
+  }
+}
+
+export const TokenSource = {
+  literal(literalOrFn: LiteralOrFn) {
+    return new TokenSourceLiteral(literalOrFn);
+  },
+  custom(customFn: CustomFn) {
+    return new TokenSourceCustom(customFn);
+  },
+  endpoint(url: string, options: EndpointOptions = {}) {
+    return new TokenSourceEndpoint(url, options);
+  },
+  sandboxTokenServer(options: SandboxTokenServerOptions) {
+    return new TokenSourceSandboxTokenServer(options);
+  },
+};

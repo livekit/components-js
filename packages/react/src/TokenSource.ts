@@ -36,7 +36,7 @@ type RoomConfigurationPayload = ValueToSnakeCase<
 
 
 export abstract class TokenSourceBase {
-  abstract getTokenValue(): Promise<TokenSourceResponseObject>;
+  abstract generate(): Promise<TokenSourceResponseObject>;
 }
 
 export abstract class TokenSourceInFlexible extends TokenSourceBase {}
@@ -52,8 +52,6 @@ export type TokenSourceOptions = {
 };
 
 export abstract class TokenSourceFlexible extends TokenSourceBase {
-  abstract getTokenValue(): Promise<TokenSourceResponseObject>;
-
   abstract setOptions(options: TokenSourceOptions): void;
   abstract clearOptions(): void;
 }
@@ -139,14 +137,14 @@ export abstract class TokenSourceRefreshable extends TokenSourceFlexible {
     this.cachedResponse = null;
   }
 
-  async getTokenValue(): Promise<TokenSourceResponseObject> {
+  async generate(): Promise<TokenSourceResponseObject> {
     if (this.cachedResponse && !isResponseExpired(this.cachedResponse)) {
       return this.cachedResponse!.toJson() as TokenSourceResponseObject;
     }
 
     const unlock = await this.fetchMutex.lock();
     try {
-      const tokenResponse = await this.generate(this.options);
+      const tokenResponse = await this.update(this.options);
       this.cachedResponse = tokenResponse;
       return tokenResponse;
     } finally {
@@ -154,7 +152,7 @@ export abstract class TokenSourceRefreshable extends TokenSourceFlexible {
     }
   }
 
-  abstract generate(options: TokenSourceOptions): Promise<TokenSourceResponse>;
+  abstract update(options: TokenSourceOptions): Promise<TokenSourceResponse>;
 }
 
 
@@ -170,7 +168,7 @@ export class TokenSourceLiteral extends TokenSourceInFlexible {
     this.literalOrFn = literalOrFn;
   }
 
-  async getTokenValue(): Promise<TokenSourceResponseObject> {
+  async generate(): Promise<TokenSourceResponseObject> {
     if (typeof this.literalOrFn === 'function') {
       return this.literalOrFn();
     } else {
@@ -189,7 +187,7 @@ class TokenSourceCustom extends TokenSourceRefreshable {
     this.customFn = customFn;
   }
 
-  async generate(options: TokenSourceOptions) {
+  async update(options: TokenSourceOptions) {
     const resultMaybePromise = this.customFn(options);
 
     let result;
@@ -220,7 +218,7 @@ class TokenSourceEndpoint extends TokenSourceRefreshable {
     this.endpointOptions = options;
   }
 
-  async generate(options: TokenSourceOptions) {
+  async update(options: TokenSourceOptions) {
     // NOTE: I don't like the repetitive nature of this, `options` shouldn't be a thing,
     // `request` should just be passed through instead...
     const request = new TokenSourceRequest();

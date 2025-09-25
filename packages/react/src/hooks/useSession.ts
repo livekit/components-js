@@ -3,9 +3,13 @@ import { Room, RoomEvent, ConnectionState, TrackPublishOptions, Track } from 'li
 import { EventEmitter } from 'events';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { TokenSource } from '../TokenSource';
+import {
+  TokenSourceBase,
+  TokenSourceFlexible,
+  TokenSourceInFlexible,
+  TokenSourceOptions,
+} from '../TokenSource';
 import { useMaybeRoomContext } from '../context';
-import { RoomAgentDispatch, RoomConfiguration } from '@livekit/protocol';
 import { useAgent } from './useAgent';
 import { TrackReference } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
@@ -20,22 +24,7 @@ export type SessionCallbacks = {
   [SessionEvent.MediaDevicesError]: (error: Error) => void;
 };
 
-export type SessionOptions = {
-  tokenSource: TokenSource;
-  agentToDispatch?: string | RoomAgentDispatch;
-
-  room?: Room;
-
-  dispatch?: {
-    /**
-      * Amount of time in milliseonds the system will wait for an agent to join the room, before
-      * transitioning to the "failure" state.
-      */
-    agentConnectTimeoutMilliseconds?: number;
-  },
-};
-
-export type AgentSessionConnectOptions = {
+export type SessionConnectOptions = {
   /** Optional abort signal which if triggered will terminate connecting even if it isn't complete */
   signal?: AbortSignal;
 
@@ -63,8 +52,8 @@ type SessionStateCommon = {
   subtle: {
     emitter: TypedEventEmitter<SessionCallbacks>;
     room: Room;
-    credentials: TokenSource,
-    agentConnectTimeoutMilliseconds: NonNullable<SessionOptions["dispatch"]>["agentConnectTimeoutMilliseconds"],
+    tokenSource: TokenSourceBase,
+    agentConnectTimeoutMilliseconds?: number;
   };
 };
 
@@ -110,7 +99,7 @@ type SessionActions = {
   prepareConnection: () => Promise<void>,
 
   /** Connect to the underlying room and dispatch any agents */
-  start: (options?: AgentSessionConnectOptions) => Promise<void>;
+  start: (options?: SessionConnectOptions) => Promise<void>;
 
   /** Disconnect from the underlying room */
   end: () => Promise<void>;
@@ -118,32 +107,48 @@ type SessionActions = {
 
 export type UseSessionReturn = (SessionStateConnecting | SessionStateConnected | SessionStateDisconnected) & SessionActions;
 
+type UseSessionCommonOptions = {
+  room?: Room;
+
+  /**
+    * Amount of time in milliseonds the system will wait for an agent to join the room, before
+    * transitioning to the "failure" state.
+    */
+  agentConnectTimeoutMilliseconds?: number;
+};
+
+type UseSessionFlexibleOptions = UseSessionCommonOptions & TokenSourceOptions;
+type UseSessionInFlexibleOptions = UseSessionCommonOptions;
+
+
 /**
- * A Session represents a connection to a LiveKit Agent, providing abstractions to make 1:1
- * agent/participant rooms easier to work with.
+ * A Session represents a manages connection to a Room which can contain Agents.
  */
-export function useSession(options: SessionOptions): UseSessionReturn {
+export function useSession(tokenSource: TokenSourceFlexible, options?: UseSessionFlexibleOptions): UseSessionReturn;
+export function useSession(tokenSource: TokenSourceInFlexible, options?: UseSessionInFlexibleOptions): UseSessionReturn;
+export function useSession(
+  tokenSource: TokenSourceFlexible | TokenSourceInFlexible,
+  options: UseSessionFlexibleOptions | UseSessionInFlexibleOptions = {},
+): UseSessionReturn {
+  const { room: optionsRoom, agentConnectTimeoutMilliseconds, ...tokenSourceOptions } = options;
+
   const roomFromContext = useMaybeRoomContext();
-  const room = useMemo(() => roomFromContext ?? options.room ?? new Room(), [roomFromContext, options.room]);
+  const room = useMemo(() => roomFromContext ?? optionsRoom ?? new Room(), [roomFromContext, optionsRoom]);
 
   const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<SessionCallbacks>, []);
 
-  const agentName = typeof options.agentToDispatch === 'string' ? options.agentToDispatch : options.agentToDispatch?.agentName;
+  // Flexible `TokenSource`s can have options injected
   useEffect(() => {
-    const roomAgentDispatch = typeof options.agentToDispatch === 'string' ? (
-      new RoomAgentDispatch({ agentName: options.agentToDispatch, metadata: '' })
-    ) : options.agentToDispatch;
-    const roomConfig = roomAgentDispatch ? (
-      new RoomConfiguration({
-        agents: [roomAgentDispatch],
-      })
-    ) : undefined;
-    options.tokenSource.setRequest({ roomConfig });
+    const isFlexible = tokenSource instanceof TokenSourceFlexible;
+    if (!isFlexible) {
+      return;
+    }
 
+    tokenSource.setOptions(tokenSourceOptions);
     return () => {
-      options.tokenSource.clearRequest();
+      tokenSource.clearOptions();
     };
-  }, [options.tokenSource]);
+  }, [tokenSource, tokenSourceOptions]);
 
   const generateDerivedConnectionStateValues = useCallback(<State extends UseSessionReturn["connectionState"]>(connectionState: State) => ({
     isConnected: (
@@ -212,8 +217,8 @@ export function useSession(options: SessionOptions): UseSessionReturn {
       subtle: {
         room,
         emitter,
-        credentials: options.tokenSource,
-        agentConnectTimeoutMilliseconds: options.dispatch?.agentConnectTimeoutMilliseconds,
+        tokenSource,
+        agentConnectTimeoutMilliseconds,
       },
     };
 
@@ -260,7 +265,8 @@ export function useSession(options: SessionOptions): UseSessionReturn {
         };
     }
   }, [
-    options.tokenSource,
+    tokenSource,
+    agentConnectTimeoutMilliseconds,
     room,
     emitter,
     roomConnectionState,
@@ -320,12 +326,11 @@ export function useSession(options: SessionOptions): UseSessionReturn {
     subtle: {
       emitter,
       room,
-      credentials: options.tokenSource,
-      agentConnectTimeoutMilliseconds: options.dispatch?.agentConnectTimeoutMilliseconds,
+      tokenSource,
     },
-  }), [conversationState, emitter, room, options.tokenSource, options.dispatch?.agentConnectTimeoutMilliseconds]), agentName);
+  }), [conversationState, emitter, room, tokenSource]));
 
-  const start = useCallback(async (connectOptions: AgentSessionConnectOptions = {}) => {
+  const start = useCallback(async (connectOptions: SessionConnectOptions = {}) => {
     const {
       signal,
       tracks = { microphone: { enabled: true, publishOptions: { preConnectBuffer: true } } },
@@ -341,7 +346,7 @@ export function useSession(options: SessionOptions): UseSessionReturn {
     await Promise.all([
       // FIXME: swap the below line in once the new `livekit-client` changes are published
       // room.connect(options.credentials),
-      options.tokenSource.generate().then(({ serverUrl, participantToken }) => (
+      tokenSource.getTokenValue().then(({ serverUrl, participantToken }) => (
         room.connect(serverUrl, participantToken)
       )),
 
@@ -355,16 +360,16 @@ export function useSession(options: SessionOptions): UseSessionReturn {
     await agent.waitUntilAvailable(signal);
 
     signal?.removeEventListener('abort', onSignalAbort);
-  }, [room, waitUntilDisconnected, options.tokenSource, waitUntilConnected, agent.waitUntilAvailable]);
+  }, [room, waitUntilDisconnected, tokenSource, waitUntilConnected, agent.waitUntilAvailable]);
 
   const end = useCallback(async () => {
     await room.disconnect();
   }, [room]);
 
   const prepareConnection = useCallback(async () => {
-    const credentials = await options.tokenSource.generate();
+    const credentials = await tokenSource.getTokenValue();
     await room.prepareConnection(credentials.serverUrl, credentials.participantToken);
-  }, [options.tokenSource, room]);
+  }, [tokenSource, room]);
   useEffect(() => {
     prepareConnection().catch(err => {
       // FIXME: figure out a better logging solution?

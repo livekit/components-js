@@ -1,5 +1,5 @@
 import { RoomAgentDispatch, RoomConfiguration, TokenSourceRequest, TokenSourceResponse } from '@livekit/protocol';
-import { decodeJwt } from 'jose';
+import { decodeJwt, JWTPayload } from 'jose';
 import { Mutex } from 'livekit-client';
 
 const ONE_SECOND_IN_MILLISECONDS = 1000;
@@ -26,9 +26,7 @@ export type ValueToSnakeCase<Value> =
 
 export type TokenSourceResponseObject = Required<NonNullable<ConstructorParameters<typeof TokenSourceResponse>[0]>>;
 
-type RoomConfigurationPayload = ValueToSnakeCase<
-  NonNullable<ConstructorParameters<typeof RoomConfiguration>[0]>
->;
+type RoomConfigurationPayload = NonNullable<ConstructorParameters<typeof RoomConfiguration>[0]>;
 
 
 
@@ -61,7 +59,7 @@ export abstract class TokenSourceFlexible extends TokenSourceBase {
 
 
 function isResponseExpired(response: TokenSourceResponse) {
-  const jwtPayload = getJwtPayload(response);
+  const jwtPayload = decodeTokenPayload(response.participantToken);
   if (!jwtPayload?.exp) {
     return true;
   }
@@ -72,21 +70,33 @@ function isResponseExpired(response: TokenSourceResponse) {
   return expiresAt >= now;
 }
 
-function getJwtPayload(response: TokenSourceResponse) {
-  const token = response.participantToken;
-  return decodeJwt<{
-    name?: string;
-    metadata?: string;
-    attributes?: Record<string, string>;
-    roomConfig?: RoomConfigurationPayload;
-    video?: {
-      room?: string;
-      roomJoin?: boolean;
-      canPublish?: boolean;
-      canPublishData?: boolean;
-      canSubscribe?: boolean;
-    };
-  }>(token);
+type TokenPayload = JWTPayload & {
+  name?: string;
+  metadata?: string;
+  attributes?: Record<string, string>;
+  video?: {
+    room?: string;
+    roomJoin?: boolean;
+    canPublish?: boolean;
+    canPublishData?: boolean;
+    canSubscribe?: boolean;
+  };
+  roomConfig?: RoomConfigurationPayload,
+};
+
+function decodeTokenPayload(token: string) {
+  const payload = decodeJwt<Omit<TokenPayload, 'roomConfig'>>(token);
+
+  const { roomConfig, ...rest } = payload;
+
+  const mappedPayload: TokenPayload = {
+    ...rest,
+    roomConfig: payload.roomConfig
+      ? RoomConfiguration.fromJson(payload.roomConfig as Record<string, any>) as RoomConfigurationPayload
+      : undefined,
+  };
+
+  return mappedPayload;
 }
 
 export abstract class TokenSourceRefreshable extends TokenSourceFlexible {
@@ -122,7 +132,7 @@ export abstract class TokenSourceRefreshable extends TokenSourceFlexible {
     if (!this.cachedResponse) {
       return null;
     }
-    return getJwtPayload(this.cachedResponse);
+    return decodeTokenPayload(this.cachedResponse.participantToken);
   }
 
   setOptions(options: TokenSourceOptions) {

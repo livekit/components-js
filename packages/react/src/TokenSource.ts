@@ -148,12 +148,12 @@ export abstract class TokenSourceRefreshable extends TokenSourceFlexible {
   }
 
   async generate(): Promise<TokenSourceResponseObject> {
-    if (this.cachedResponse && !isResponseExpired(this.cachedResponse)) {
-      return this.cachedResponse!.toJson() as TokenSourceResponseObject;
-    }
-
     const unlock = await this.fetchMutex.lock();
     try {
+      if (this.cachedResponse && !isResponseExpired(this.cachedResponse)) {
+        return this.cachedResponse!.toJson() as TokenSourceResponseObject;
+      }
+
       const tokenResponse = await this.update(this.options);
       this.cachedResponse = tokenResponse;
       return tokenResponse;

@@ -162,7 +162,7 @@ export abstract class TokenSourceRefreshable extends TokenSourceFlexible {
     }
   }
 
-  abstract update(options: TokenSourceOptions): Promise<TokenSourceResponse>;
+  protected abstract update(options: TokenSourceOptions): Promise<TokenSourceResponse>;
 }
 
 
@@ -197,7 +197,7 @@ class TokenSourceCustom extends TokenSourceRefreshable {
     this.customFn = customFn;
   }
 
-  async update(options: TokenSourceOptions) {
+  protected async update(options: TokenSourceOptions) {
     const resultMaybePromise = this.customFn(options);
 
     let result;
@@ -228,7 +228,7 @@ class TokenSourceEndpoint extends TokenSourceRefreshable {
     this.endpointOptions = options;
   }
 
-  async update(options: TokenSourceOptions) {
+  protected async update(options: TokenSourceOptions) {
     // NOTE: I don't like the repetitive nature of this, `options` shouldn't be a thing,
     // `request` should just be passed through instead...
     const request = new TokenSourceRequest();

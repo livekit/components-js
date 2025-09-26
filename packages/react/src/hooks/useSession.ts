@@ -4,7 +4,7 @@ import { EventEmitter } from 'events';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
-  TokenSourceBase,
+  TokenSource,
   TokenSourceConfigurable,
   TokenSourceFixed,
   TokenSourceOptions,
@@ -52,7 +52,7 @@ type SessionStateCommon = {
   subtle: {
     emitter: TypedEventEmitter<SessionCallbacks>;
     room: Room;
-    tokenSource: TokenSourceBase,
+    tokenSource: TokenSource,
     agentConnectTimeoutMilliseconds?: number;
   };
 };
@@ -136,19 +136,6 @@ export function useSession(
   const room = useMemo(() => roomFromContext ?? optionsRoom ?? new Room(), [roomFromContext, optionsRoom]);
 
   const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<SessionCallbacks>, []);
-
-  // Flexible `TokenSource`s can have options injected
-  useEffect(() => {
-    const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
-    if (!isConfigurable) {
-      return;
-    }
-
-    tokenSource.setOptions(tokenSourceOptions);
-    return () => {
-      tokenSource.clearOptions();
-    };
-  }, [tokenSource, tokenSourceOptions]);
 
   const generateDerivedConnectionStateValues = useCallback(<State extends UseSessionReturn["connectionState"]>(connectionState: State) => ({
     isConnected: (
@@ -330,6 +317,15 @@ export function useSession(
     },
   }), [conversationState, emitter, room, tokenSource]));
 
+  const tokenSourceGetToken = useCallback(() => {
+    const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
+    if (isConfigurable) {
+      return tokenSource.getToken(tokenSourceOptions);
+    } else {
+      return tokenSource.getToken();
+    }
+  }, [tokenSource]);
+
   const start = useCallback(async (connectOptions: SessionConnectOptions = {}) => {
     const {
       signal,
@@ -345,8 +341,8 @@ export function useSession(
 
     await Promise.all([
       // FIXME: swap the below line in once the new `livekit-client` changes are published
-      // room.connect(options.credentials),
-      tokenSource.getToken().then(({ serverUrl, participantToken }) => (
+      // room.connect(tokenSource),
+      tokenSourceGetToken().then(({ serverUrl, participantToken }) => (
         room.connect(serverUrl, participantToken)
       )),
 
@@ -360,16 +356,18 @@ export function useSession(
     await agent.waitUntilAvailable(signal);
 
     signal?.removeEventListener('abort', onSignalAbort);
-  }, [room, waitUntilDisconnected, tokenSource, waitUntilConnected, agent.waitUntilAvailable]);
+  }, [room, waitUntilDisconnected, tokenSourceGetToken, waitUntilConnected, agent.waitUntilAvailable]);
 
   const end = useCallback(async () => {
     await room.disconnect();
   }, [room]);
 
   const prepareConnection = useCallback(async () => {
-    const credentials = await tokenSource.getToken();
+    const credentials = await tokenSourceGetToken();
+    // FIXME: swap the below line in once the new `livekit-client` changes are published
+    // room.prepareConnection(tokenSource),
     await room.prepareConnection(credentials.serverUrl, credentials.participantToken);
-  }, [tokenSource, room]);
+  }, [tokenSourceGetToken, room]);
   useEffect(() => {
     prepareConnection().catch(err => {
       // FIXME: figure out a better logging solution?

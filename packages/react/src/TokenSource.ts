@@ -33,11 +33,10 @@ type RoomConfigurationPayload = NonNullable<ConstructorParameters<typeof RoomCon
 
 
 
-export abstract class TokenSourceBase {
-  abstract generate(): Promise<TokenSourceResponseObject>;
+export abstract class TokenSourceFixed {
+  abstract getToken(): Promise<TokenSourceResponseObject>;
 }
 
-export abstract class TokenSourceFixed extends TokenSourceBase {}
 export type TokenSourceOptions = {
   roomName?: string;
   participantName?: string;
@@ -48,10 +47,12 @@ export type TokenSourceOptions = {
   agentName?: string;
 };
 
-export abstract class TokenSourceConfigurable extends TokenSourceBase {
-  abstract setOptions(options: TokenSourceOptions): void;
-  abstract clearOptions(): void;
+export abstract class TokenSourceConfigurable {
+  abstract getToken(options: TokenSourceOptions): Promise<TokenSourceResponseObject>;
 }
+
+export type TokenSource = TokenSourceFixed | TokenSourceConfigurable;
+
 
 
 
@@ -131,33 +132,35 @@ export abstract class TokenSourceRefreshable extends TokenSourceConfigurable {
     return true;
   }
 
-  getJwtPayload() {
+  protected shouldUseCachedValue(options: TokenSourceOptions) {
+    if (!this.cachedResponse) {
+      return false;
+    }
+    if (isResponseExpired(this.cachedResponse)) {
+      return false;
+    }
+    if (this.isSameAsCachedOptions(options)) {
+      return false;
+    }
+    return true;
+}
+
+  getCachedResponseJwtPayload() {
     if (!this.cachedResponse) {
       return null;
     }
     return decodeTokenPayload(this.cachedResponse.participantToken);
   }
 
-  setOptions(options: TokenSourceOptions) {
-    if (!this.isSameAsCachedOptions(options)) {
-      this.cachedResponse = null;
-    }
-    this.options = options;
-  }
-
-  clearOptions() {
-    this.options = {};
-    this.cachedResponse = null;
-  }
-
-  async getToken(): Promise<TokenSourceResponseObject> {
+  async getToken(options: TokenSourceOptions): Promise<TokenSourceResponseObject> {
     const unlock = await this.fetchMutex.lock();
     try {
-      if (this.cachedResponse && !isResponseExpired(this.cachedResponse)) {
+      if (this.shouldUseCachedValue(options)) {
         return this.cachedResponse!.toJson() as TokenSourceResponseObject;
       }
+      this.cachedOptions = options;
 
-      const tokenResponse = await this.update(this.options);
+      const tokenResponse = await this.update(options);
       this.cachedResponse = tokenResponse;
       return tokenResponse;
     } finally {

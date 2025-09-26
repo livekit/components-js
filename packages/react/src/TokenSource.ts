@@ -150,7 +150,7 @@ export abstract class TokenSourceRefreshable extends TokenSourceConfigurable {
     this.cachedResponse = null;
   }
 
-  async generate(): Promise<TokenSourceResponseObject> {
+  async getToken(): Promise<TokenSourceResponseObject> {
     const unlock = await this.fetchMutex.lock();
     try {
       if (this.cachedResponse && !isResponseExpired(this.cachedResponse)) {
@@ -181,7 +181,7 @@ export class TokenSourceLiteral extends TokenSourceFixed {
     this.literalOrFn = literalOrFn;
   }
 
-  async generate(): Promise<TokenSourceResponseObject> {
+  async getToken(): Promise<TokenSourceResponseObject> {
     if (typeof this.literalOrFn === 'function') {
       return this.literalOrFn();
     } else {

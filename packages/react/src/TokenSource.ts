@@ -37,8 +37,7 @@ export abstract class TokenSourceBase {
   abstract generate(): Promise<TokenSourceResponseObject>;
 }
 
-export abstract class TokenSourceInFlexible extends TokenSourceBase {}
-
+export abstract class TokenSourceFixed extends TokenSourceBase {}
 export type TokenSourceOptions = {
   roomName?: string;
   participantName?: string;
@@ -49,7 +48,7 @@ export type TokenSourceOptions = {
   agentName?: string;
 };
 
-export abstract class TokenSourceFlexible extends TokenSourceBase {
+export abstract class TokenSourceConfigurable extends TokenSourceBase {
   abstract setOptions(options: TokenSourceOptions): void;
   abstract clearOptions(): void;
 }
@@ -99,9 +98,8 @@ function decodeTokenPayload(token: string) {
   return mappedPayload;
 }
 
-export abstract class TokenSourceRefreshable extends TokenSourceFlexible {
+export abstract class TokenSourceRefreshable extends TokenSourceConfigurable {
   private options: TokenSourceOptions = {};
-
   private cachedResponse: TokenSourceResponse | null = null;
   private fetchMutex = new Mutex();
 
@@ -170,7 +168,7 @@ export abstract class TokenSourceRefreshable extends TokenSourceFlexible {
 
 
 type LiteralOrFn = TokenSourceResponseObject | (() => TokenSourceResponseObject | Promise<TokenSourceResponseObject>);
-export class TokenSourceLiteral extends TokenSourceInFlexible {
+export class TokenSourceLiteral extends TokenSourceFixed {
   private literalOrFn: LiteralOrFn;
 
   constructor(literalOrFn: LiteralOrFn) {

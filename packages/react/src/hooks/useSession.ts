@@ -5,8 +5,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   TokenSourceBase,
-  TokenSourceFlexible,
-  TokenSourceInFlexible,
+  TokenSourceConfigurable,
+  TokenSourceFixed,
   TokenSourceOptions,
 } from '../TokenSource';
 import { useMaybeRoomContext } from '../context';
@@ -117,18 +117,18 @@ type UseSessionCommonOptions = {
   agentConnectTimeoutMilliseconds?: number;
 };
 
-type UseSessionFlexibleOptions = UseSessionCommonOptions & TokenSourceOptions;
-type UseSessionInFlexibleOptions = UseSessionCommonOptions;
+type UseSessionConfigurableOptions = UseSessionCommonOptions & TokenSourceOptions;
+type UseSessionFixedOptions = UseSessionCommonOptions;
 
 
 /**
  * A Session represents a manages connection to a Room which can contain Agents.
  */
-export function useSession(tokenSource: TokenSourceFlexible, options?: UseSessionFlexibleOptions): UseSessionReturn;
-export function useSession(tokenSource: TokenSourceInFlexible, options?: UseSessionInFlexibleOptions): UseSessionReturn;
+export function useSession(tokenSource: TokenSourceConfigurable, options?: UseSessionConfigurableOptions): UseSessionReturn;
+export function useSession(tokenSource: TokenSourceFixed, options?: UseSessionFixedOptions): UseSessionReturn;
 export function useSession(
-  tokenSource: TokenSourceFlexible | TokenSourceInFlexible,
-  options: UseSessionFlexibleOptions | UseSessionInFlexibleOptions = {},
+  tokenSource: TokenSourceConfigurable | TokenSourceFixed,
+  options: UseSessionConfigurableOptions | UseSessionFixedOptions = {},
 ): UseSessionReturn {
   const { room: optionsRoom, agentConnectTimeoutMilliseconds, ...tokenSourceOptions } = options;
 
@@ -139,8 +139,8 @@ export function useSession(
 
   // Flexible `TokenSource`s can have options injected
   useEffect(() => {
-    const isFlexible = tokenSource instanceof TokenSourceFlexible;
-    if (!isFlexible) {
+    const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
+    if (!isConfigurable) {
       return;
     }
 

@@ -99,12 +99,17 @@ function decodeTokenPayload(token: string) {
 }
 
 export abstract class TokenSourceRefreshable extends TokenSourceConfigurable {
-  private options: TokenSourceOptions = {};
+  private cachedOptions: TokenSourceOptions | null = null;
   private cachedResponse: TokenSourceResponse | null = null;
+
   private fetchMutex = new Mutex();
 
   protected isSameAsCachedOptions(options: TokenSourceOptions) {
-    for (const key of Object.keys(this.options) as Array<keyof TokenSourceOptions>) {
+    if (!this.cachedOptions) {
+      return false;
+    }
+
+    for (const key of Object.keys(this.cachedOptions) as Array<keyof TokenSourceOptions>) {
       switch (key) {
         case 'roomName':
         case 'participantName':
@@ -112,7 +117,7 @@ export abstract class TokenSourceRefreshable extends TokenSourceConfigurable {
         case 'participantMetadata':
         case 'participantAttributes':
         case 'agentName':
-          if (this.options[key] !== options[key]) {
+          if (this.cachedOptions[key] !== options[key]) {
             return false;
           }
           break;

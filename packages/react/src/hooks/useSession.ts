@@ -317,12 +317,12 @@ export function useSession(
     },
   }), [conversationState, emitter, room, tokenSource]));
 
-  const tokenSourceGetToken = useCallback(() => {
+  const tokenSourceFetch = useCallback(() => {
     const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
     if (isConfigurable) {
-      return tokenSource.getToken(tokenSourceOptions);
+      return tokenSource.fetch(tokenSourceOptions);
     } else {
-      return tokenSource.getToken();
+      return tokenSource.fetch();
     }
   }, [tokenSource]);
 
@@ -341,8 +341,8 @@ export function useSession(
 
     await Promise.all([
       // FIXME: swap the below line in once the new `livekit-client` changes are published
-      // room.connect(tokenSource),
-      tokenSourceGetToken().then(({ serverUrl, participantToken }) => (
+      // room.connect(tokenSource, { tokenSourceOptions }),
+      tokenSourceFetch().then(({ serverUrl, participantToken }) => (
         room.connect(serverUrl, participantToken)
       )),
 
@@ -356,18 +356,18 @@ export function useSession(
     await agent.waitUntilAvailable(signal);
 
     signal?.removeEventListener('abort', onSignalAbort);
-  }, [room, waitUntilDisconnected, tokenSourceGetToken, waitUntilConnected, agent.waitUntilAvailable]);
+  }, [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected, agent.waitUntilAvailable]);
 
   const end = useCallback(async () => {
     await room.disconnect();
   }, [room]);
 
   const prepareConnection = useCallback(async () => {
-    const credentials = await tokenSourceGetToken();
+    const credentials = await tokenSourceFetch();
     // FIXME: swap the below line in once the new `livekit-client` changes are published
-    // room.prepareConnection(tokenSource),
+    // room.prepareConnection(tokenSource, { tokenSourceOptions }),
     await room.prepareConnection(credentials.serverUrl, credentials.participantToken);
-  }, [tokenSourceGetToken, room]);
+  }, [tokenSourceFetch, room]);
   useEffect(() => {
     prepareConnection().catch(err => {
       // FIXME: figure out a better logging solution?

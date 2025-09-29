@@ -34,7 +34,7 @@ type RoomConfigurationPayload = NonNullable<ConstructorParameters<typeof RoomCon
 
 
 export abstract class TokenSourceFixed {
-  abstract getToken(): Promise<TokenSourceResponseObject>;
+  abstract fetch(): Promise<TokenSourceResponseObject>;
 }
 
 export type TokenSourceOptions = {
@@ -48,7 +48,7 @@ export type TokenSourceOptions = {
 };
 
 export abstract class TokenSourceConfigurable {
-  abstract getToken(options: TokenSourceOptions): Promise<TokenSourceResponseObject>;
+  abstract fetch(options: TokenSourceOptions): Promise<TokenSourceResponseObject>;
 }
 
 export type TokenSource = TokenSourceFixed | TokenSourceConfigurable;
@@ -152,7 +152,7 @@ export abstract class TokenSourceRefreshable extends TokenSourceConfigurable {
     return decodeTokenPayload(this.cachedResponse.participantToken);
   }
 
-  async getToken(options: TokenSourceOptions): Promise<TokenSourceResponseObject> {
+  async fetch(options: TokenSourceOptions): Promise<TokenSourceResponseObject> {
     const unlock = await this.fetchMutex.lock();
     try {
       if (this.shouldUseCachedValue(options)) {
@@ -184,7 +184,7 @@ export class TokenSourceLiteral extends TokenSourceFixed {
     this.literalOrFn = literalOrFn;
   }
 
-  async getToken(): Promise<TokenSourceResponseObject> {
+  async fetch(): Promise<TokenSourceResponseObject> {
     if (typeof this.literalOrFn === 'function') {
       return this.literalOrFn();
     } else {

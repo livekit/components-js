@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { ConnectionState, ParticipantKind, Track } from 'livekit-client';
 import type { RemoteParticipant } from 'livekit-client';
-import { ParticipantAgentAttributes, type ReceivedTranscriptionSegment, type TrackReference } from '@livekit/components-core';
+import {
+  ParticipantAgentAttributes,
+  type ReceivedTranscriptionSegment,
+  type TrackReference,
+} from '@livekit/components-core';
 import { useRemoteParticipants } from './useRemoteParticipants';
 import { useParticipantTracks } from './useParticipantTracks';
 import { useTrackTranscription } from './useTrackTranscription';
@@ -53,11 +57,14 @@ const state_attribute = ParticipantAgentAttributes.AgentState;
 export function useVoiceAssistant(): VoiceAssistant {
   const remoteParticipants = useRemoteParticipants();
   const agent = remoteParticipants.find(
-    (p) => p.kind === ParticipantKind.AGENT && !(ParticipantAgentAttributes.PublishOnBehalf in p.attributes),
+    (p) =>
+      p.kind === ParticipantKind.AGENT &&
+      !(ParticipantAgentAttributes.PublishOnBehalf in p.attributes),
   );
   const worker = remoteParticipants.find(
     (p) =>
-      p.kind === ParticipantKind.AGENT && p.attributes[ParticipantAgentAttributes.PublishOnBehalf] === agent?.identity,
+      p.kind === ParticipantKind.AGENT &&
+      p.attributes[ParticipantAgentAttributes.PublishOnBehalf] === agent?.identity,
   );
   const agentTracks = useParticipantTracks(
     [Track.Source.Microphone, Track.Source.Camera],

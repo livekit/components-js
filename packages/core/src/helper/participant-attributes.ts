@@ -3,7 +3,7 @@ export enum ParticipantAgentAttributes {
   AgentState = 'lk.agent.state',
   PublishOnBehalf = 'lk.publish_on_behalf',
 
-  TranscriptionFinal = "lk.transcription_final",
-  TranscriptionSegmentId = "lk.segment_id",
-  TranscribedTrackId = "lk.transcribed_track_id",
+  TranscriptionFinal = 'lk.transcription_final',
+  TranscriptionSegmentId = 'lk.segment_id',
+  TranscribedTrackId = 'lk.transcribed_track_id',
 }

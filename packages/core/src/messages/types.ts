@@ -5,10 +5,7 @@ export type { ChatMessage };
 
 export type SentMessage = ChatMessage;
 
-type ReceivedMessageWithType<
-  Type extends string,
-  Metadata extends {} = {},
-> = {
+type ReceivedMessageWithType<Type extends string, Metadata extends {} = {}> = {
   id: string;
   timestamp: number;
 
@@ -19,22 +16,31 @@ type ReceivedMessageWithType<
 } & Metadata;
 
 /** @public */
-export type ReceivedChatMessage = ReceivedMessageWithType<'chatMessage', ChatMessage & {
-  from?: Participant;
-  attributes?: Record<string, string>;
-}>;
+export type ReceivedChatMessage = ReceivedMessageWithType<
+  'chatMessage',
+  ChatMessage & {
+    from?: Participant;
+    attributes?: Record<string, string>;
+  }
+>;
 
-export type ReceivedUserTranscriptionMessage = ReceivedMessageWithType<'userTranscript', {
-  message: string;
-}>;
+export type ReceivedUserTranscriptionMessage = ReceivedMessageWithType<
+  'userTranscript',
+  {
+    message: string;
+  }
+>;
 
-export type ReceivedAgentTranscriptionMessage = ReceivedMessageWithType<'agentTranscript', {
-  message: string;
-}>;
+export type ReceivedAgentTranscriptionMessage = ReceivedMessageWithType<
+  'agentTranscript',
+  {
+    message: string;
+  }
+>;
 
 /** @public */
 export type ReceivedMessage =
   | ReceivedUserTranscriptionMessage
   | ReceivedAgentTranscriptionMessage
-  | ReceivedChatMessage
-  // TODO: images? attachments? rpc?
+  | ReceivedChatMessage;
+// TODO: images? attachments? rpc?

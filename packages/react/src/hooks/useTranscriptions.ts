@@ -36,7 +36,9 @@ export function useTranscriptions(opts?: UseTranscriptionsOptions) {
         )
         .filter((stream) =>
           trackSids
-            ? trackSids.includes(stream.streamInfo.attributes?.[ParticipantAgentAttributes.TranscribedTrackId] ?? '')
+            ? trackSids.includes(
+                stream.streamInfo.attributes?.[ParticipantAgentAttributes.TranscribedTrackId] ?? '',
+              )
             : true,
         ),
     [textStreams, participantIdentities, trackSids],

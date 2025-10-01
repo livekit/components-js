@@ -50,7 +50,9 @@ function isIgnorableChatMessage(msg: ReceivedChatMessage | LegacyReceivedChatMes
 }
 
 const decodeLegacyMsg = (message: Uint8Array) =>
-  JSON.parse(new TextDecoder().decode(message)) as LegacyReceivedChatMessage | Exclude<ReceivedChatMessage, 'type'>;
+  JSON.parse(new TextDecoder().decode(message)) as
+    | LegacyReceivedChatMessage
+    | Exclude<ReceivedChatMessage, 'type'>;
 
 const encodeLegacyMsg = (message: LegacyChatMessage) =>
   new TextEncoder().encode(JSON.stringify(message));
@@ -107,7 +109,11 @@ export function setupChat(room: Room, options?: ChatOptions) {
           if (isIgnorableChatMessage(parsedMessage)) {
             return undefined;
           }
-          const newMessage: ReceivedChatMessage = { ...parsedMessage, type: 'chatMessage', from: msg.from };
+          const newMessage: ReceivedChatMessage = {
+            ...parsedMessage,
+            type: 'chatMessage',
+            from: msg.from,
+          };
           return newMessage;
         }),
         filter((msg) => !!msg),

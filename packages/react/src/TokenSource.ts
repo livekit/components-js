@@ -1,10 +1,14 @@
-import { RoomAgentDispatch, RoomConfiguration, TokenSourceRequest, TokenSourceResponse } from '@livekit/protocol';
+import {
+  RoomAgentDispatch,
+  RoomConfiguration,
+  TokenSourceRequest,
+  TokenSourceResponse,
+} from '@livekit/protocol';
 import { decodeJwt, JWTPayload } from 'jose';
 import { Mutex } from 'livekit-client';
 
 const ONE_SECOND_IN_MILLISECONDS = 1000;
 const ONE_MINUTE_IN_MILLISECONDS = 60 * ONE_SECOND_IN_MILLISECONDS;
-
 
 export type CamelToSnakeCase<Str extends string> = Str extends `${infer First}${infer Rest}`
   ? `${First extends Capitalize<First> ? '_' : ''}${Lowercase<First>}${CamelToSnakeCase<Rest>}`
@@ -23,15 +27,11 @@ export type ValueToSnakeCase<Value> =
       ? ObjectKeysToSnakeCase<Value>
       : Value;
 
-
-export type TokenSourceResponseObject = Required<NonNullable<ConstructorParameters<typeof TokenSourceResponse>[0]>>;
+export type TokenSourceResponseObject = Required<
+  NonNullable<ConstructorParameters<typeof TokenSourceResponse>[0]>
+>;
 
 type RoomConfigurationPayload = NonNullable<ConstructorParameters<typeof RoomConfiguration>[0]>;
-
-
-
-
-
 
 export abstract class TokenSourceFixed {
   abstract fetch(): Promise<TokenSourceResponseObject>;
@@ -45,18 +45,14 @@ export type TokenSourceOptions = {
   participantAttributes?: { [key: string]: string };
 
   agentName?: string;
+  agentMetadata?: string;
 };
 
 export abstract class TokenSourceConfigurable {
   abstract fetch(options: TokenSourceOptions): Promise<TokenSourceResponseObject>;
 }
 
-export type TokenSource = TokenSourceFixed | TokenSourceConfigurable;
-
-
-
-
-
+export type TokenSourceBase = TokenSourceFixed | TokenSourceConfigurable;
 
 function isResponseExpired(response: TokenSourceResponse) {
   const jwtPayload = decodeTokenPayload(response.participantToken);
@@ -81,7 +77,7 @@ type TokenPayload = JWTPayload & {
     canPublishData?: boolean;
     canSubscribe?: boolean;
   };
-  roomConfig?: RoomConfigurationPayload,
+  roomConfig?: RoomConfigurationPayload;
 };
 
 function decodeTokenPayload(token: string) {
@@ -92,7 +88,9 @@ function decodeTokenPayload(token: string) {
   const mappedPayload: TokenPayload = {
     ...rest,
     roomConfig: payload.roomConfig
-      ? RoomConfiguration.fromJson(payload.roomConfig as Record<string, any>) as RoomConfigurationPayload
+      ? (RoomConfiguration.fromJson(
+          payload.roomConfig as Record<string, any>,
+        ) as RoomConfigurationPayload)
       : undefined,
   };
 
@@ -118,6 +116,7 @@ export abstract class TokenSourceRefreshable extends TokenSourceConfigurable {
         case 'participantMetadata':
         case 'participantAttributes':
         case 'agentName':
+        case 'agentMetadata':
           if (this.cachedOptions[key] !== options[key]) {
             return false;
           }
@@ -143,7 +142,7 @@ export abstract class TokenSourceRefreshable extends TokenSourceConfigurable {
       return false;
     }
     return true;
-}
+  }
 
   getCachedResponseJwtPayload() {
     if (!this.cachedResponse) {
@@ -171,11 +170,9 @@ export abstract class TokenSourceRefreshable extends TokenSourceConfigurable {
   protected abstract update(options: TokenSourceOptions): Promise<TokenSourceResponse>;
 }
 
-
-
-
-
-type LiteralOrFn = TokenSourceResponseObject | (() => TokenSourceResponseObject | Promise<TokenSourceResponseObject>);
+type LiteralOrFn =
+  | TokenSourceResponseObject
+  | (() => TokenSourceResponseObject | Promise<TokenSourceResponseObject>);
 export class TokenSourceLiteral extends TokenSourceFixed {
   private literalOrFn: LiteralOrFn;
 
@@ -193,8 +190,9 @@ export class TokenSourceLiteral extends TokenSourceFixed {
   }
 }
 
-
-type CustomFn = (options: TokenSourceOptions) => TokenSourceResponseObject | Promise<TokenSourceResponseObject>;
+type CustomFn = (
+  options: TokenSourceOptions,
+) => TokenSourceResponseObject | Promise<TokenSourceResponseObject>;
 
 class TokenSourceCustom extends TokenSourceRefreshable {
   private customFn: CustomFn;
@@ -221,7 +219,6 @@ class TokenSourceCustom extends TokenSourceRefreshable {
   }
 }
 
-
 export type EndpointOptions = Omit<RequestInit, 'body'>;
 
 class TokenSourceEndpoint extends TokenSourceRefreshable {
@@ -243,16 +240,16 @@ class TokenSourceEndpoint extends TokenSourceRefreshable {
     request.participantIdentity = options.participantIdentity;
     request.participantMetadata = options.participantMetadata;
     request.participantAttributes = options.participantAttributes ?? {};
-    request.roomConfig = options.agentName ? (
-      new RoomConfiguration({
-        agents: [
-          new RoomAgentDispatch({
-            agentName: options.agentName,
-            metadata: '', // FIXME: how do I support this? Maybe make agentName -> agentToDispatch?
-          }),
-        ],
-      })
-    ) : undefined;
+    request.roomConfig = options.agentName
+      ? new RoomConfiguration({
+          agents: [
+            new RoomAgentDispatch({
+              agentName: options.agentName,
+              metadata: options.agentMetadata ?? '',
+            }),
+          ],
+        })
+      : undefined;
 
     const response = await fetch(this.url, {
       ...this.endpointOptions,

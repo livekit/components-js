@@ -1,16 +1,16 @@
-import { useEffect, useCallback, useMemo } from "react";
-import TypedEventEmitter, { EventMap } from "typed-emitter";
+import { useEffect, useCallback, useMemo } from 'react';
+import TypedEventEmitter, { EventMap } from 'typed-emitter';
 
 export function useEvents<
   Emitter extends TypedEventEmitter<EventMap>,
-  EmitterEventMap extends (Emitter extends TypedEventEmitter<infer EM> ? EM : never),
-  Event extends Parameters<Emitter["on"]>[0],
+  EmitterEventMap extends Emitter extends TypedEventEmitter<infer EM> ? EM : never,
+  Event extends Parameters<Emitter['on']>[0],
   Callback extends EmitterEventMap[Event],
 >(
   instance: Emitter | { internal: { emitter: Emitter } } | null | undefined,
   event: Event,
   handlerFn: Callback | undefined,
-  dependencies?: React.DependencyList
+  dependencies?: React.DependencyList,
 ) {
   const fallback = useMemo(() => () => {}, []);
   const wrappedCallback = useCallback(handlerFn ?? fallback, dependencies ?? []);

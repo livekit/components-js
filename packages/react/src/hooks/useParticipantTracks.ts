@@ -18,10 +18,12 @@ type UseParticipantTracksOptions = {
  */
 export function useParticipantTracks<TrackSource extends Track.Source>(
   sources: Array<TrackSource>,
-  optionsOrParticipantIdentity: UseParticipantTracksOptions | UseParticipantTracksOptions["participantIdentity"] = {},
+  optionsOrParticipantIdentity:
+    | UseParticipantTracksOptions
+    | UseParticipantTracksOptions['participantIdentity'] = {},
 ): Array<TrackReference> {
-  let participantIdentity: UseParticipantTracksOptions["participantIdentity"];
-  let room: UseParticipantTracksOptions["room"];
+  let participantIdentity: UseParticipantTracksOptions['participantIdentity'];
+  let room: UseParticipantTracksOptions['room'];
   if (typeof optionsOrParticipantIdentity === 'string') {
     participantIdentity = optionsOrParticipantIdentity;
   } else {

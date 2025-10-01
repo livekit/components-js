@@ -27,7 +27,7 @@ export type UseSessionMessagesReturn = {
   // internal: {
   //   emitter: TypedEventEmitter<MessagesCallbacks>;
   // };
-}
+};
 
 export enum MessagesEvent {
   MessageReceived = 'messageReceived',
@@ -47,8 +47,10 @@ export function useSessionMessages(session: UseSessionReturn): UseSessionMessage
   const chatOptions = useMemo(() => ({ room }), [room]);
   const chat = useChat(chatOptions);
 
-  const transcriptionMessages: Array<ReceivedUserTranscriptionMessage | ReceivedAgentTranscriptionMessage> = useMemo(() => {
-    return transcriptions.map(transcription => {
+  const transcriptionMessages: Array<
+    ReceivedUserTranscriptionMessage | ReceivedAgentTranscriptionMessage
+  > = useMemo(() => {
+    return transcriptions.map((transcription) => {
       switch (transcription.participantInfo.identity) {
         case room.localParticipant.identity:
           return {
@@ -68,9 +70,10 @@ export function useSessionMessages(session: UseSessionReturn): UseSessionMessage
 
             id: transcription.streamInfo.id,
             timestamp: transcription.streamInfo.timestamp,
-            from: agent.internal.agentParticipant?.identity === transcription.participantInfo.identity ? (
-              agent.internal.agentParticipant
-            ) : agent.internal.workerParticipant!,
+            from:
+              agent.internal.agentParticipant?.identity === transcription.participantInfo.identity
+                ? agent.internal.agentParticipant
+                : agent.internal.workerParticipant!,
           };
 
         default:
@@ -85,7 +88,7 @@ export function useSessionMessages(session: UseSessionReturn): UseSessionMessage
             id: transcription.streamInfo.id,
             timestamp: transcription.streamInfo.timestamp,
             from: Array.from(room.remoteParticipants.values()).find(
-              (p) => p.identity === transcription.participantInfo.identity
+              (p) => p.identity === transcription.participantInfo.identity,
             ),
           };
       }
@@ -93,16 +96,16 @@ export function useSessionMessages(session: UseSessionReturn): UseSessionMessage
   }, [transcriptions, room]);
 
   const receivedMessages = useMemo(() => {
-    const merged: Array<ReceivedMessage> = [
-      ...transcriptionMessages,
-      ...chat.chatMessages,
-    ];
+    const merged: Array<ReceivedMessage> = [...transcriptionMessages, ...chat.chatMessages];
     return merged.sort((a, b) => a.timestamp - b.timestamp);
   }, [transcriptionMessages, chat.chatMessages]);
 
-  return useMemo(() => ({
-    messages: receivedMessages,
-    send: chat.send,
-    isSending: chat.isSending,
-  }), [receivedMessages, chat.send, chat.isSending]);
+  return useMemo(
+    () => ({
+      messages: receivedMessages,
+      send: chat.send,
+      isSending: chat.isSending,
+    }),
+    [receivedMessages, chat.send, chat.isSending],
+  );
 }

@@ -37,9 +37,12 @@ type AgentSdkStates = 'initializing' | 'idle' | 'listening' | 'thinking' | 'spea
  *
  * Legacy useVoiceAssistant hook:
  *   disconnected -> connecting -> initializing -> listening/thinking/speaking
+ *
+ * @public
  * */
 export type AgentState = 'disconnected' | 'connecting' | 'failed' | AgentSdkStates;
 
+/** @public */
 export enum AgentEvent {
   CameraChanged = 'cameraChanged',
   MicrophoneChanged = 'microphoneChanged',
@@ -47,6 +50,7 @@ export enum AgentEvent {
   StateChanged = 'stateChanged',
 }
 
+/** @public */
 export type AgentCallbacks = {
   [AgentEvent.CameraChanged]: (newTrack: TrackReference | null) => void;
   [AgentEvent.MicrophoneChanged]: (newTrack: TrackReference | null) => void;
@@ -158,6 +162,8 @@ type AgentStateCases =
   | AgentStateAvailableListening
   | AgentStateUnAvailable
   | AgentStateFailed;
+
+/** @public */
 export type UseAgentReturn = AgentStateCases & AgentActions;
 
 const generateDerivedStateValues = <State extends AgentState>(state: State) =>
@@ -257,6 +263,7 @@ type SessionStub = Pick<UseSessionReturn, 'connectionState' | 'room' | 'internal
 
 /**
  * useAgent encapculates all agent state, normalizing some quirks around how LiveKit Agents work.
+ * @public
  */
 export function useAgent(session: SessionStub): UseAgentReturn {
   const {

@@ -9,16 +9,19 @@ import { useAgent } from './useAgent';
 import { TrackReference } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
 
+/** @public */
 export enum SessionEvent {
   ConnectionStateChanged = 'connectionStateChanged',
   MediaDevicesError = 'MediaDevicesError',
 }
 
+/** @public */
 export type SessionCallbacks = {
   [SessionEvent.ConnectionStateChanged]: (newAgentConnectionState: ConnectionState) => void;
   [SessionEvent.MediaDevicesError]: (error: Error) => void;
 };
 
+/** @public */
 export type SessionConnectOptions = {
   /** Optional abort signal which if triggered will terminate connecting even if it isn't complete */
   signal?: AbortSignal;
@@ -34,6 +37,7 @@ export type SessionConnectOptions = {
   };
 };
 
+/** @public */
 export type SwitchActiveDeviceOptions = {
   /**
    *  If true, adds an `exact` constraint to the getUserMedia request.
@@ -102,6 +106,7 @@ type SessionActions = {
   end: () => Promise<void>;
 };
 
+/** @public */
 export type UseSessionReturn = (
   | SessionStateConnecting
   | SessionStateConnected
@@ -124,6 +129,7 @@ type UseSessionFixedOptions = UseSessionCommonOptions;
 
 /**
  * A Session represents a manages connection to a Room which can contain Agents.
+ * @public
  */
 export function useSession(
   tokenSource: TokenSourceConfigurable,

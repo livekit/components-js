@@ -15,6 +15,7 @@ import { useTranscriptions } from './useTranscriptions';
 import { useChat } from './useChat';
 import { UseSessionReturn } from './useSession';
 
+/** @public */
 export type UseSessionMessagesReturn = {
   messages: Array<ReceivedMessage>;
 
@@ -29,15 +30,18 @@ export type UseSessionMessagesReturn = {
   // };
 };
 
+/** @public */
 export enum MessagesEvent {
   MessageReceived = 'messageReceived',
   Disconnected = 'disconnected',
 }
 
+/** @public */
 export type MessagesCallbacks = {
   [MessagesEvent.MessageReceived]: (message: ReceivedMessage) => void;
 };
 
+/** @public */
 export function useSessionMessages(session: UseSessionReturn): UseSessionMessagesReturn {
   const { room } = session;
 

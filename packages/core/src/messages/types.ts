@@ -5,7 +5,7 @@ export type { ChatMessage };
 
 export type SentMessage = ChatMessage;
 
-type ReceivedMessageWithType<Type extends string, Metadata extends {} = {}> = {
+type ReceivedMessageWithType<Type extends string, Metadata extends object = object> = {
   id: string;
   timestamp: number;
 

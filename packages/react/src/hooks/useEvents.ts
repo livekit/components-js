@@ -7,7 +7,7 @@ export function useEvents<
   Event extends Parameters<Emitter["on"]>[0],
   Callback extends EmitterEventMap[Event],
 >(
-  instance: Emitter | { subtle: { emitter: Emitter } } | null | undefined,
+  instance: Emitter | { internal: { emitter: Emitter } } | null | undefined,
   event: Event,
   handlerFn: Callback | undefined,
   dependencies?: React.DependencyList
@@ -20,8 +20,8 @@ export function useEvents<
     if (!instance) {
       return null;
     }
-    if ('subtle' in instance) {
-      return instance.subtle.emitter;
+    if ('internal' in instance) {
+      return instance.internal.emitter;
     }
     return instance;
   }, [instance]);

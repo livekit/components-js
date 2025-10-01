@@ -49,9 +49,9 @@ export type SwitchActiveDeviceOptions = {
 };
 
 type SessionStateCommon = {
-  subtle: {
+  room: Room;
+  internal: {
     emitter: TypedEventEmitter<SessionCallbacks>;
-    room: Room;
     tokenSource: TokenSource,
     agentConnectTimeoutMilliseconds?: number;
   };
@@ -201,8 +201,8 @@ export function useSession(
 
   const conversationState = useMemo((): SessionStateConnecting | SessionStateConnected | SessionStateDisconnected => {
     const common: SessionStateCommon = {
-      subtle: {
-        room,
+      room,
+      internal: {
         emitter,
         tokenSource,
         agentConnectTimeoutMilliseconds,

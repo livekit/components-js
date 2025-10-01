@@ -50,7 +50,7 @@ type AgentStateCommon = {
   // FIXME: maybe add some sort of schema to this?
   attributes: Record<string, string>;
 
-  subtle: {
+  internal: {
     emitter: TypedEventEmitter<AgentCallbacks>;
 
     agentParticipant: RemoteParticipant | null;
@@ -163,7 +163,7 @@ const useAgentTimeoutIdStore = create<{
   clearAgentTimeout: () => void;
   updateAgentTimeoutState: (agentState: AgentState) => void;
   updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => void;
-  subtle: {
+  internal: {
     agentTimeoutId: ReturnType<typeof setTimeout> | null;
     agentState: AgentState;
     agentParticipantExists: boolean;
@@ -171,7 +171,7 @@ const useAgentTimeoutIdStore = create<{
 }>((set, get) => {
   const startAgentConnectedTimeout = (agentConnectTimeoutMilliseconds?: number) => {
     return setTimeout(() => {
-      const { subtle: { agentState, agentParticipantExists } } = get();
+      const { internal: { agentState, agentParticipantExists } } = get();
       if (!agentParticipantExists) {
         set((old) => ({ ...old, agentTimeoutFailureReason: 'Agent did not join the room.' }));
         return;
@@ -189,15 +189,15 @@ const useAgentTimeoutIdStore = create<{
     agentTimeoutFailureReason: null,
     startAgentTimeout: (agentConnectTimeoutMilliseconds?: number) => {
       set((old) => {
-        if (old.subtle.agentTimeoutId) {
-          clearTimeout(old.subtle.agentTimeoutId);
+        if (old.internal.agentTimeoutId) {
+          clearTimeout(old.internal.agentTimeoutId);
         }
 
         return {
           ...old,
           agentTimeoutFailureReason: null,
-          subtle: {
-            ...old.subtle,
+          internal: {
+            ...old.internal,
             agentTimeoutId: startAgentConnectedTimeout(agentConnectTimeoutMilliseconds),
             agentState: 'connecting',
             agentParticipantExists: false,
@@ -207,14 +207,14 @@ const useAgentTimeoutIdStore = create<{
     },
     clearAgentTimeout: () => {
       set((old) => {
-        if (old.subtle.agentTimeoutId) {
-          clearTimeout(old.subtle.agentTimeoutId);
+        if (old.internal.agentTimeoutId) {
+          clearTimeout(old.internal.agentTimeoutId);
         }
         return {
           ...old,
           agentTimeoutFailureReason: null,
-          subtle: {
-            ...old.subtle,
+          internal: {
+            ...old.internal,
             agentTimeoutId: null,
             agentState: 'connecting',
             agentParticipantExists: false,
@@ -224,13 +224,13 @@ const useAgentTimeoutIdStore = create<{
     },
 
     updateAgentTimeoutState: (agentState: AgentState) => {
-      set((old) => ({ ...old, subtle: { ...old.subtle, agentState: agentState } }));
+      set((old) => ({ ...old, internal: { ...old.internal, agentState: agentState } }));
     },
     updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => {
-      set((old) => ({ ...old, subtle: { ...old.subtle, agentParticipantExists } }));
+      set((old) => ({ ...old, internal: { ...old.internal, agentParticipantExists } }));
     },
 
-    subtle: {
+    internal: {
       agentTimeoutId: null,
       agentState: 'connecting',
       agentParticipantExists: false,
@@ -238,13 +238,13 @@ const useAgentTimeoutIdStore = create<{
   };
 });
 
-type SessionStub = Pick<UseSessionReturn, 'connectionState' | 'subtle'>;
+type SessionStub = Pick<UseSessionReturn, 'connectionState' | 'room' | 'internal'>;
 
 /**
   * useAgent encapculates all agent state, normalizing some quirks around how LiveKit Agents work.
   */
 export function useAgent(session: SessionStub): UseAgentReturn {
-  const { room } = session.subtle;
+  const { room, internal: { agentConnectTimeoutMilliseconds } } = session;
 
   const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<AgentCallbacks>, []);
 
@@ -393,20 +393,20 @@ export function useAgent(session: SessionStub): UseAgentReturn {
       return;
     }
 
-    startAgentTimeout(session.subtle.agentConnectTimeoutMilliseconds);
+    startAgentTimeout(agentConnectTimeoutMilliseconds);
     return () => {
       clearAgentTimeout();
     };
-  }, [isSessionDisconnected, session.subtle.agentConnectTimeoutMilliseconds]);
+  }, [isSessionDisconnected, agentConnectTimeoutMilliseconds]);
 
   const agentState: AgentStateCases = useMemo(() => {
     const common: AgentStateCommon = {
       attributes: agentParticipantAttributes,
 
-      subtle: {
-        emitter,
+      internal: {
         agentParticipant,
         workerParticipant,
+        emitter,
       },
     };
 

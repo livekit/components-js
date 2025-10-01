@@ -24,7 +24,7 @@ export type UseSessionMessagesReturn = {
   send: (message: string, options?: SendTextOptions) => Promise<ReceivedChatMessage>;
 
   // FIXME: does there need to be a way to subscribe to individual messages?
-  // subtle: {
+  // internal: {
   //   emitter: TypedEventEmitter<MessagesCallbacks>;
   // };
 }
@@ -39,7 +39,7 @@ export type MessagesCallbacks = {
 };
 
 export function useSessionMessages(session: UseSessionReturn): UseSessionMessagesReturn {
-  const { room } = session.subtle;
+  const { room } = session;
 
   const agent = useAgent(session);
 
@@ -60,17 +60,17 @@ export function useSessionMessages(session: UseSessionReturn): UseSessionMessage
             from: room.localParticipant,
           };
 
-        case agent.subtle.agentParticipant?.identity:
-        case agent.subtle.workerParticipant?.identity:
+        case agent.internal.agentParticipant?.identity:
+        case agent.internal.workerParticipant?.identity:
           return {
             type: 'agentTranscript',
             message: transcription.text,
 
             id: transcription.streamInfo.id,
             timestamp: transcription.streamInfo.timestamp,
-            from: agent.subtle.agentParticipant?.identity === transcription.participantInfo.identity ? (
-              agent.subtle.agentParticipant
-            ) : agent.subtle.workerParticipant!,
+            from: agent.internal.agentParticipant?.identity === transcription.participantInfo.identity ? (
+              agent.internal.agentParticipant
+            ) : agent.internal.workerParticipant!,
           };
 
         default:

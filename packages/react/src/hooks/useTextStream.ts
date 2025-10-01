@@ -5,6 +5,7 @@ import { useEnsureRoom } from '../context';
 import { useConnectionState } from './useConnectionStatus';
 import { useObservableState } from './internal';
 
+/** @beta */
 export type UseTextStreamOptions = {
   room?: Room;
 };

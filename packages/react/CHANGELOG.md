@@ -1,5 +1,18 @@
 # @livekit/components-react
 
+## 2.9.15
+
+### Patch Changes
+
+- Fix `useParticipantTracks` to include local participant - [#1185](https://github.com/livekit/components-js/pull/1185) ([@mpnri](https://github.com/mpnri))
+
+- add useSequentialRoomConnectDisconnect to fix react useEffect room connection issue - [#1199](https://github.com/livekit/components-js/pull/1199) ([@1egoman](https://github.com/1egoman))
+
+- chore(react): deprecate legacy useTrackTranscriptions - [#1200](https://github.com/livekit/components-js/pull/1200) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`6f02e9f9b3e7737863d256b26a26ade914a5066a`](https://github.com/livekit/components-js/commit/6f02e9f9b3e7737863d256b26a26ade914a5066a), [`14064656e7f877d5eeacc04d6cc69186c25b7e24`](https://github.com/livekit/components-js/commit/14064656e7f877d5eeacc04d6cc69186c25b7e24)]:
+  - @livekit/components-core@0.12.10
+
 ## 2.9.14
 
 ### Patch Changes

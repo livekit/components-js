@@ -92,7 +92,12 @@ export function setupChatMessageHandler(room: Room) {
   const send = async (text: string, options: SendTextOptions): Promise<ReceivedChatMessage> => {
     const msg = await room.localParticipant.sendChatMessage(text, options);
     await room.localParticipant.sendText(text, options);
-    return { ...msg, from: room.localParticipant, attachedFiles: options.attachments };
+    return {
+      ...msg,
+      type: 'chatMessage',
+      from: room.localParticipant,
+      attachedFiles: options.attachments,
+    };
   };
 
   const edit = async (text: string, originalMsg: ChatMessage) => {

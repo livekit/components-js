@@ -57,3 +57,7 @@ export * from './useIsRecording';
 export * from './useTextStream';
 export * from './useTranscriptions';
 export * from './useSequentialRoomConnectDisconnect';
+export * from './useSession';
+export * from './useAgent';
+export * from './useEvents';
+export * from './useSessionMessages';

@@ -358,9 +358,9 @@ export function useSession(
     useMemo(
       () => ({
         connectionState: conversationState.connectionState,
-        subtle: {
+        room,
+        internal: {
           emitter,
-          room,
           tokenSource,
         },
       }),

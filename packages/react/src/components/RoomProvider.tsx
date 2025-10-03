@@ -5,13 +5,13 @@ import { RoomContext } from '../context';
 
 /** @public */
 export type RoomProviderPropsRoom = {
-  room: Room,
+  room: Room;
   children: React.ReactNode;
 };
 
 /** @public */
 export type RoomProviderPropsSession = {
-  session: UseSessionReturn,
+  session: UseSessionReturn;
   children: React.ReactNode;
 };
 
@@ -30,9 +30,5 @@ export function RoomProvider(props: RoomProviderProps) {
     room = props.room;
   }
 
-  return (
-    <RoomContext.Provider value={room}>
-      {props.children}
-    </RoomContext.Provider>
-  );
+  return <RoomContext.Provider value={room}>{props.children}</RoomContext.Provider>;
 }

@@ -1,5 +1,15 @@
 import type TypedEventEmitter from 'typed-emitter';
-import { Room, RoomEvent, ConnectionState, TrackPublishOptions, Track } from 'livekit-client';
+import {
+  Room,
+  RoomEvent,
+  ConnectionState,
+  TrackPublishOptions,
+  Track,
+  TokenSourceConfigurable,
+  TokenSourceFixed,
+  TokenSourceFetchOptions,
+  RoomOptions,
+} from 'livekit-client';
 import { EventEmitter } from 'events';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 

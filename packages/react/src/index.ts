@@ -10,9 +10,6 @@ export * from './assets/icons';
 
 export * from './assets/images';
 
-// FIXME: the below is temporary, at least until a new `livekit-client` package version is published
-export * from './TokenSource';
-
 // Re-exports from core
 export { setLogLevel, setLogExtension, isTrackReference } from '@livekit/components-core';
 export type {

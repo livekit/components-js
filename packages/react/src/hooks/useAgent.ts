@@ -28,16 +28,16 @@ type AgentSdkStates = 'initializing' | 'idle' | 'listening' | 'thinking' | 'spea
  * State representing the current status of the agent, whether it is ready for speach, etc
  *
  * For most agents (which have the preconnect audio buffer feature enabled), this is the lifecycle:
- *   connecting -> listening -> initializing/listening/thinking/speaking
+ *   connecting ➡️ listening ➡️ initializing/listening/thinking/speaking
  *
  * For agents without the preconnect audio feature enabled:
- *   connecting -> initializing -> idle/listening/thinking/speaking
+ *   connecting ➡️ initializing ➡️ idle/listening/thinking/speaking
  *
  * If an agent fails to connect:
- *   connecting -> listening/initializing -> failed
+ *   connecting ➡️ listening/initializing ➡️ failed
  *
  * Legacy useVoiceAssistant hook:
- *   disconnected -> connecting -> initializing -> listening/thinking/speaking
+ *   disconnected ➡️ connecting ➡️ initializing ➡️ listening/thinking/speaking
  *
  * @public
  * */

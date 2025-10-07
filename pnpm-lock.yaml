@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@livekit/protocol':
+      specifier: ^1.42.0
+      version: 1.42.0
     livekit-client:
       specifier: ^2.15.8
       version: 2.15.8
@@ -437,8 +440,8 @@ importers:
         specifier: workspace:*
         version: link:../styles
       '@livekit/protocol':
-        specifier: ^1.38.0
-        version: 1.39.3
+        specifier: 'catalog:'
+        version: 1.42.0
       '@microsoft/api-extractor':
         specifier: ^7.36.0
         version: 7.49.2(@types/node@24.3.1)
@@ -492,7 +495,7 @@ importers:
         version: 5.0.8(@types/react@18.3.18)(react@18.3.1)
     devDependencies:
       '@livekit/protocol':
-        specifier: ^1.42.0
+        specifier: 'catalog:'
         version: 1.42.0
       '@microsoft/api-extractor':
         specifier: ^7.35.0

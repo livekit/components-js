@@ -6,3 +6,4 @@ packages:
 
 catalog:
   livekit-client: ^2.15.8
+  "@livekit/protocol": ^1.42.0

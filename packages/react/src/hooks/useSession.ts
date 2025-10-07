@@ -11,12 +11,13 @@ import {
   RoomOptions,
 } from 'livekit-client';
 import { EventEmitter } from 'events';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { TokenSourceConfigurable, TokenSourceFixed, TokenSourceOptions } from '../TokenSource';
+import { useMaybeRoomContext } from '../context';
 import { useAgent } from './useAgent';
-import { log, TrackReference } from '@livekit/components-core';
+import { TrackReference } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
-import { roomOptionsStringifyReplacer } from '../utils';
 
 /** @public */
 export enum SessionEvent {
@@ -124,6 +125,8 @@ export type UseSessionReturn = (
   SessionActions;
 
 type UseSessionCommonOptions = {
+  room?: Room;
+
   /**
    * Amount of time in milliseonds the system will wait for an agent to join the room, before
    * transitioning to the "failure" state.
@@ -131,89 +134,8 @@ type UseSessionCommonOptions = {
   agentConnectTimeoutMilliseconds?: number;
 };
 
-type UseSessionFixedOptions = UseSessionCommonOptions; // & RoomOptionsTokenSourceFixed FIXME: add this!
-type UseSessionConfigurableOptions = UseSessionCommonOptions & TokenSourceFetchOptions; // & RoomOptionsTokenSourceConfigurable FIXME: replace this!
-
-/** Given two TokenSourceFetchOptions values, check to see if they are deep equal. */
-function areTokenSourceFetchOptionsEqual(
-  a: TokenSourceFetchOptions,
-  b: TokenSourceFetchOptions,
-) {
-  for (const key of Object.keys(a) as Array<keyof TokenSourceFetchOptions>) {
-    switch (key) {
-      case 'roomName':
-      case 'participantName':
-      case 'participantIdentity':
-      case 'participantMetadata':
-      case 'participantAttributes':
-      case 'agentName':
-      case 'agentMetadata':
-        if (a[key] !== b[key]) {
-          return false;
-        }
-        break;
-      default:
-        // ref: https://stackoverflow.com/a/58009992
-        const exhaustiveCheckedKey: never = key;
-        throw new Error(`Options key ${exhaustiveCheckedKey} not being checked for equality!`);
-    }
-  }
-
-  return true;
-}
-
-function extractTokenSourceFetchOptionsFromObject<
-  Rest extends object,
-  Input extends TokenSourceFetchOptions & Rest = TokenSourceFetchOptions & Rest,
->(input: Input): [TokenSourceFetchOptions, Rest] {
-  const output: Partial<Input> = { ...input };
-  const options: TokenSourceFetchOptions = {};
-
-  for (const key of Object.keys(input) as Array<keyof TokenSourceFetchOptions>) {
-    switch (key) {
-      case 'roomName':
-      case 'participantName':
-      case 'participantIdentity':
-      case 'participantMetadata':
-      case 'agentName':
-      case 'agentMetadata':
-        options[key] = input[key];
-        delete output[key];
-        break;
-
-      case 'participantAttributes':
-        options.participantAttributes = options.participantAttributes ?? {};
-        delete output.participantAttributes;
-        break;
-
-      default:
-        // ref: https://stackoverflow.com/a/58009992
-        key satisfies never;
-        break;
-    }
-  }
-
-  return [options, output as Rest];
-}
-
-function areRoomOptionsEqual(a: RoomOptions, b: RoomOptions) {
-  const [tokenSourceFetchOptionsA, restRoomOptionsA] = extractTokenSourceFetchOptionsFromObject(a);
-  const [tokenSourceFetchOptionsB, restRoomOptionsB] = extractTokenSourceFetchOptionsFromObject(b);
-
-  if (!areTokenSourceFetchOptionsEqual(tokenSourceFetchOptionsA, tokenSourceFetchOptionsB)) {
-    return false;
-  }
-
-  // FIXME: do this in a better way maybe?
-  // I stole this existing approach from useLiveKitRoom
-  const restRoomOptionsAHash = JSON.stringify(restRoomOptionsA, roomOptionsStringifyReplacer);
-  const restRoomOptionsBHash = JSON.stringify(restRoomOptionsB, roomOptionsStringifyReplacer);
-  if (restRoomOptionsAHash !== restRoomOptionsBHash) {
-    return false;
-  }
-
-  return true;
-}
+type UseSessionConfigurableOptions = UseSessionCommonOptions & TokenSourceOptions;
+type UseSessionFixedOptions = UseSessionCommonOptions;
 
 /**
  * A Session represents a manages connection to a Room which can contain Agents.
@@ -231,40 +153,13 @@ export function useSession(
   tokenSource: TokenSourceConfigurable | TokenSourceFixed,
   options: UseSessionConfigurableOptions | UseSessionFixedOptions = {},
 ): UseSessionReturn {
-  const { agentConnectTimeoutMilliseconds, ...restOptions } = options;
+  const { room: optionsRoom, agentConnectTimeoutMilliseconds, ...tokenSourceOptions } = options;
 
-  const roomOptions: RoomOptions = useMemo(() => {
-    if (tokenSource instanceof TokenSourceConfigurable) {
-      return { tokenSource, ...restOptions }; // as RoomOptionsTokenSourceConfigurable FIXME: add this!
-    } else if (tokenSource instanceof TokenSourceFixed) {
-      return { tokenSource, ...restOptions }; // as RoomOptionsTokenSourceFixed FIXME: add this!
-    } else {
-      throw new Error('Specified token source is neither fixed nor configurable - is this value valid?');
-    }
-  }, [tokenSource, restOptions]);
-
-  const [sessionActive, setSessionActive] = useState(false);
-
-  const previousRoomOptions = useRef(roomOptions);
-  const previousRoomValue = useRef<Room | null>(null);
-  const room = useMemo(() => {
-    const roomOptionsEqual = areRoomOptionsEqual(previousRoomOptions.current, roomOptions);
-
-    if (previousRoomValue.current) {
-      if (!roomOptionsEqual && sessionActive) {
-        log.warn("Warning: useSession tokenSource / options parameters changed while session is active - this won't do anything. If you are intending to change room options, stop the session first with `session.stop()`.");
-        return previousRoomValue.current;
-      }
-      if (roomOptionsEqual) {
-        return previousRoomValue.current;
-      }
-    }
-
-    const room = new Room(roomOptions);
-    previousRoomValue.current = room;
-    previousRoomOptions.current = roomOptions;
-    return room;
-  }, [roomOptions]);
+  const roomFromContext = useMaybeRoomContext();
+  const room = useMemo(
+    () => roomFromContext ?? optionsRoom ?? new Room(),
+    [roomFromContext, optionsRoom],
+  );
 
   const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<SessionCallbacks>, []);
 
@@ -476,16 +371,11 @@ export function useSession(
   const tokenSourceFetch = useCallback(() => {
     const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
     if (isConfigurable) {
-      return tokenSource.fetch(restOptions);
+      return tokenSource.fetch(tokenSourceOptions);
     } else {
       return tokenSource.fetch();
     }
-  }, [tokenSource, restOptions]);
-
-  const end = useCallback(async () => {
-    setSessionActive(false);
-    await room.disconnect();
-  }, [setSessionActive, room]);
+  }, [tokenSource]);
 
   const start = useCallback(
     async (connectOptions: SessionConnectOptions = {}) => {
@@ -496,13 +386,14 @@ export function useSession(
 
       await waitUntilDisconnected(signal);
 
-      setSessionActive(true);
-      const onSignalAbort = () => end();
+      const onSignalAbort = () => {
+        room.disconnect();
+      };
       signal?.addEventListener('abort', onSignalAbort);
 
       await Promise.all([
         // FIXME: swap the below line in once the new `livekit-client` changes are published
-        // room.connect(),
+        // room.connect(tokenSource, { tokenSourceOptions }),
         tokenSourceFetch().then(({ serverUrl, participantToken }) =>
           room.connect(serverUrl, participantToken),
         ),
@@ -522,18 +413,23 @@ export function useSession(
 
       signal?.removeEventListener('abort', onSignalAbort);
     },
-    [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected, agent.waitUntilAvailable, end],
+    [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected, agent.waitUntilAvailable],
   );
+
+  const end = useCallback(async () => {
+    await room.disconnect();
+  }, [room]);
 
   const prepareConnection = useCallback(async () => {
     const credentials = await tokenSourceFetch();
     // FIXME: swap the below line in once the new `livekit-client` changes are published
-    // await room.prepareConnection(),
+    // room.prepareConnection(tokenSource, { tokenSourceOptions }),
     await room.prepareConnection(credentials.serverUrl, credentials.participantToken);
   }, [tokenSourceFetch, room]);
   useEffect(() => {
     prepareConnection().catch((err) => {
-      log.warn('Room.prepareConnection failed:', err);
+      // FIXME: figure out a better logging solution?
+      console.warn('WARNING: Room.prepareConnection failed:', err);
     });
   }, [prepareConnection]);
 

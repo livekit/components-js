@@ -16,6 +16,7 @@ import { ParticipantAgentAttributes, TrackReference } from '@livekit/components-
 import { useParticipantTracks } from './useParticipantTracks';
 import { useRemoteParticipants } from './useRemoteParticipants';
 import { UseSessionReturn } from './useSession';
+import { useMaybeSessionContext } from '../context';
 
 // FIXME: make this 10 seconds once room dispatch booting info is discoverable
 const DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS = 20_000;
@@ -265,7 +266,15 @@ type SessionStub = Pick<UseSessionReturn, 'connectionState' | 'room' | 'internal
  * useAgent encapculates all agent state, normalizing some quirks around how LiveKit Agents work.
  * @public
  */
-export function useAgent(session: SessionStub): UseAgentReturn {
+export function useAgent(session?: SessionStub): UseAgentReturn {
+  const sessionFromContext = useMaybeSessionContext();
+  session = session ?? sessionFromContext;
+  if (!session) {
+    throw new Error(
+      'No session provided, make sure you are inside a Session context or pass the session explicitly',
+    );
+  }
+
   const {
     room,
     internal: { agentConnectTimeoutMilliseconds },

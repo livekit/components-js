@@ -31,4 +31,4 @@ export {
   ChatEntry,
   formatChatMessageLinks,
 } from '../components/ChatEntry';
-export * from './RoomProvider';
+export * from './SessionProvider';

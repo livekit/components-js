@@ -14,6 +14,7 @@ import { useAgent } from './useAgent';
 import { useTranscriptions } from './useTranscriptions';
 import { useChat } from './useChat';
 import { UseSessionReturn } from './useSession';
+import { useEnsureSession } from '../context';
 
 /** @public */
 export type UseSessionMessagesReturn = {
@@ -42,8 +43,8 @@ export type MessagesCallbacks = {
 };
 
 /** @public */
-export function useSessionMessages(session: UseSessionReturn): UseSessionMessagesReturn {
-  const { room } = session;
+export function useSessionMessages(session?: UseSessionReturn): UseSessionMessagesReturn {
+  const { room } = useEnsureSession(session);
 
   const agent = useAgent(session);
 

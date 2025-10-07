@@ -1,11 +1,13 @@
 import type TypedEventEmitter from 'typed-emitter';
 import {
+  Room,
   RoomEvent,
   ConnectionState,
   TrackPublishOptions,
   Track,
   TokenSourceConfigurable,
   TokenSourceFixed,
+  TokenSourceFetchOptions,
   RoomOptions,
 } from 'livekit-client';
 import { EventEmitter } from 'events';
@@ -15,7 +17,6 @@ import { useAgent } from './useAgent';
 import { log, TrackReference } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
 import { roomOptionsStringifyReplacer } from '../utils';
-import { Room, areTokenSourceFetchOptionsEqual, extractTokenSourceFetchOptionsFromObject, RoomOptionsLegacyOrTokenSourceFixed, RoomOptionsTokenSourceConfigurable } from '../TokenSource';
 
 /** @public */
 export enum SessionEvent {
@@ -55,7 +56,7 @@ export type SwitchActiveDeviceOptions = {
 };
 
 type SessionStateCommon = {
-  room: Room<TokenSourceFixed | TokenSourceConfigurable>;
+  room: Room;
   internal: {
     emitter: TypedEventEmitter<SessionCallbacks>;
     tokenSource: TokenSourceConfigurable | TokenSourceFixed;
@@ -130,8 +131,67 @@ type UseSessionCommonOptions = {
   agentConnectTimeoutMilliseconds?: number;
 };
 
-type UseSessionFixedOptions = UseSessionCommonOptions & RoomOptionsLegacyOrTokenSourceFixed;
-type UseSessionConfigurableOptions = UseSessionCommonOptions & RoomOptionsTokenSourceConfigurable;
+type UseSessionFixedOptions = UseSessionCommonOptions; // & RoomOptionsTokenSourceFixed FIXME: add this!
+type UseSessionConfigurableOptions = UseSessionCommonOptions & TokenSourceFetchOptions; // & RoomOptionsTokenSourceConfigurable FIXME: replace this!
+
+/** Given two TokenSourceFetchOptions values, check to see if they are deep equal. */
+function areTokenSourceFetchOptionsEqual(a: TokenSourceFetchOptions, b: TokenSourceFetchOptions) {
+  for (const key of Object.keys(a) as Array<keyof TokenSourceFetchOptions>) {
+    switch (key) {
+      case 'roomName':
+      case 'participantName':
+      case 'participantIdentity':
+      case 'participantMetadata':
+      case 'participantAttributes':
+      case 'agentName':
+      case 'agentMetadata':
+        if (a[key] !== b[key]) {
+          return false;
+        }
+        break;
+      default:
+        // ref: https://stackoverflow.com/a/58009992
+        const exhaustiveCheckedKey: never = key;
+        throw new Error(`Options key ${exhaustiveCheckedKey} not being checked for equality!`);
+    }
+  }
+
+  return true;
+}
+
+function extractTokenSourceFetchOptionsFromObject<
+  Rest extends object,
+  Input extends TokenSourceFetchOptions & Rest = TokenSourceFetchOptions & Rest,
+>(input: Input): [TokenSourceFetchOptions, Rest] {
+  const output: Partial<Input> = { ...input };
+  const options: TokenSourceFetchOptions = {};
+
+  for (const key of Object.keys(input) as Array<keyof TokenSourceFetchOptions>) {
+    switch (key) {
+      case 'roomName':
+      case 'participantName':
+      case 'participantIdentity':
+      case 'participantMetadata':
+      case 'agentName':
+      case 'agentMetadata':
+        options[key] = input[key];
+        delete output[key];
+        break;
+
+      case 'participantAttributes':
+        options.participantAttributes = options.participantAttributes ?? {};
+        delete output.participantAttributes;
+        break;
+
+      default:
+        // ref: https://stackoverflow.com/a/58009992
+        key satisfies never;
+        break;
+    }
+  }
+
+  return [options, output as Rest];
+}
 
 function areRoomOptionsEqual(a: RoomOptions, b: RoomOptions) {
   const [tokenSourceFetchOptionsA, restRoomOptionsA] = extractTokenSourceFetchOptionsFromObject(a);
@@ -168,12 +228,24 @@ export function useSession(
   tokenSource: TokenSourceConfigurable | TokenSourceFixed,
   options: UseSessionConfigurableOptions | UseSessionFixedOptions = {},
 ): UseSessionReturn {
-  const { agentConnectTimeoutMilliseconds, ...roomOptions } = options;
+  const { agentConnectTimeoutMilliseconds, ...restOptions } = options;
+
+  const roomOptions: RoomOptions = useMemo(() => {
+    if (tokenSource instanceof TokenSourceConfigurable) {
+      return { tokenSource, ...restOptions }; // as RoomOptionsTokenSourceConfigurable FIXME: add this!
+    } else if (tokenSource instanceof TokenSourceFixed) {
+      return { tokenSource, ...restOptions }; // as RoomOptionsTokenSourceFixed FIXME: add this!
+    } else {
+      throw new Error(
+        'Specified token source is neither fixed nor configurable - is this value valid?',
+      );
+    }
+  }, [tokenSource, restOptions]);
 
   const [sessionActive, setSessionActive] = useState(false);
 
   const previousRoomOptions = useRef(roomOptions);
-  const previousRoomValue = useRef<Room<TokenSourceFixed | TokenSourceConfigurable> | null>(null);
+  const previousRoomValue = useRef<Room | null>(null);
   const room = useMemo(() => {
     const roomOptionsEqual = areRoomOptionsEqual(previousRoomOptions.current, roomOptions);
 
@@ -189,11 +261,11 @@ export function useSession(
       }
     }
 
-    const room = new Room(tokenSource, roomOptions);
+    const room = new Room(roomOptions);
     previousRoomValue.current = room;
     previousRoomOptions.current = roomOptions;
     return room;
-  }, [tokenSource, roomOptions]);
+  }, [roomOptions]);
 
   const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<SessionCallbacks>, []);
 
@@ -402,6 +474,15 @@ export function useSession(
     ),
   );
 
+  const tokenSourceFetch = useCallback(() => {
+    const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
+    if (isConfigurable) {
+      return tokenSource.fetch(restOptions);
+    } else {
+      return tokenSource.fetch();
+    }
+  }, [tokenSource, restOptions]);
+
   const end = useCallback(async () => {
     setSessionActive(false);
     await room.disconnect();
@@ -421,7 +502,11 @@ export function useSession(
       signal?.addEventListener('abort', onSignalAbort);
 
       await Promise.all([
-        room.connectPatched(),
+        // FIXME: swap the below line in once the new `livekit-client` changes are published
+        // room.connect(),
+        tokenSourceFetch().then(({ serverUrl, participantToken }) =>
+          room.connect(serverUrl, participantToken),
+        ),
 
         // Start microphone (with preconnect buffer) by default
         tracks.microphone?.enabled
@@ -441,6 +526,7 @@ export function useSession(
     [
       room,
       waitUntilDisconnected,
+      tokenSourceFetch,
       waitUntilConnected,
       agent.waitUntilAvailable,
       end,
@@ -448,8 +534,11 @@ export function useSession(
   );
 
   const prepareConnection = useCallback(async () => {
-    await room.prepareConnection();
-  }, [room]);
+    const credentials = await tokenSourceFetch();
+    // FIXME: swap the below line in once the new `livekit-client` changes are published
+    // await room.prepareConnection(),
+    await room.prepareConnection(credentials.serverUrl, credentials.participantToken);
+  }, [tokenSourceFetch, room]);
   useEffect(() => {
     prepareConnection().catch((err) => {
       log.warn('Room.prepareConnection failed:', err);

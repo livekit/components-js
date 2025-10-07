@@ -8,12 +8,11 @@ import {
   TokenSourceConfigurable,
   TokenSourceFixed,
   TokenSourceFetchOptions,
-  RoomOptions,
+  RoomConnectOptions,
 } from 'livekit-client';
 import { EventEmitter } from 'events';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { TokenSourceConfigurable, TokenSourceFixed, TokenSourceOptions } from '../TokenSource';
 import { useMaybeRoomContext } from '../context';
 import { useAgent } from './useAgent';
 import { TrackReference } from '@livekit/components-core';
@@ -45,6 +44,9 @@ export type SessionConnectOptions = {
       publishOptions?: TrackPublishOptions;
     };
   };
+
+  /** Options for Room.connect(.., .., opts) */
+  roomConnectOptions?: RoomConnectOptions;
 };
 
 /** @public */
@@ -134,7 +136,7 @@ type UseSessionCommonOptions = {
   agentConnectTimeoutMilliseconds?: number;
 };
 
-type UseSessionConfigurableOptions = UseSessionCommonOptions & TokenSourceOptions;
+type UseSessionConfigurableOptions = UseSessionCommonOptions & { tokenFetchOptions: TokenSourceFetchOptions };
 type UseSessionFixedOptions = UseSessionCommonOptions;
 
 /**
@@ -153,7 +155,11 @@ export function useSession(
   tokenSource: TokenSourceConfigurable | TokenSourceFixed,
   options: UseSessionConfigurableOptions | UseSessionFixedOptions = {},
 ): UseSessionReturn {
-  const { room: optionsRoom, agentConnectTimeoutMilliseconds, ...tokenSourceOptions } = options;
+  const {
+    room: optionsRoom,
+    agentConnectTimeoutMilliseconds,
+    ...restOptions
+  } = options;
 
   const roomFromContext = useMaybeRoomContext();
   const room = useMemo(
@@ -368,20 +374,22 @@ export function useSession(
     ),
   );
 
-  const tokenSourceFetch = useCallback(() => {
+  const tokenSourceFetch = useCallback(async () => {
     const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
     if (isConfigurable) {
-      return tokenSource.fetch(tokenSourceOptions);
+      const { tokenFetchOptions } = restOptions as UseSessionConfigurableOptions;
+      return tokenSource.fetch(tokenFetchOptions);
     } else {
       return tokenSource.fetch();
     }
-  }, [tokenSource]);
+  }, [tokenSource, restOptions]);
 
   const start = useCallback(
     async (connectOptions: SessionConnectOptions = {}) => {
       const {
         signal,
         tracks = { microphone: { enabled: true, publishOptions: { preConnectBuffer: true } } },
+        roomConnectOptions,
       } = connectOptions;
 
       await waitUntilDisconnected(signal);
@@ -395,7 +403,7 @@ export function useSession(
         // FIXME: swap the below line in once the new `livekit-client` changes are published
         // room.connect(tokenSource, { tokenSourceOptions }),
         tokenSourceFetch().then(({ serverUrl, participantToken }) =>
-          room.connect(serverUrl, participantToken),
+          room.connect(serverUrl, participantToken, roomConnectOptions),
         ),
 
         // Start microphone (with preconnect buffer) by default

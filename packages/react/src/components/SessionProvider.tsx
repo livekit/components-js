@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { UseSessionReturn } from '../hooks';
-import { RoomContext, SessionContext } from '../context';
+import { RoomContext } from '../context';
 // NOTE: the below `useSession` is mentioned in a tsdoc comment
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useSession } from '../hooks';
+import { SessionContext } from '../context/session-context';
 
 /** @public */
 export type SessionProviderProps = {

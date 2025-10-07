@@ -135,7 +135,10 @@ type UseSessionFixedOptions = UseSessionCommonOptions; // & RoomOptionsTokenSour
 type UseSessionConfigurableOptions = UseSessionCommonOptions & TokenSourceFetchOptions; // & RoomOptionsTokenSourceConfigurable FIXME: replace this!
 
 /** Given two TokenSourceFetchOptions values, check to see if they are deep equal. */
-function areTokenSourceFetchOptionsEqual(a: TokenSourceFetchOptions, b: TokenSourceFetchOptions) {
+function areTokenSourceFetchOptionsEqual(
+  a: TokenSourceFetchOptions,
+  b: TokenSourceFetchOptions,
+) {
   for (const key of Object.keys(a) as Array<keyof TokenSourceFetchOptions>) {
     switch (key) {
       case 'roomName':
@@ -236,9 +239,7 @@ export function useSession(
     } else if (tokenSource instanceof TokenSourceFixed) {
       return { tokenSource, ...restOptions }; // as RoomOptionsTokenSourceFixed FIXME: add this!
     } else {
-      throw new Error(
-        'Specified token source is neither fixed nor configurable - is this value valid?',
-      );
+      throw new Error('Specified token source is neither fixed nor configurable - is this value valid?');
     }
   }, [tokenSource, restOptions]);
 
@@ -251,9 +252,7 @@ export function useSession(
 
     if (previousRoomValue.current) {
       if (!roomOptionsEqual && sessionActive) {
-        log.warn(
-          "Warning: useSession tokenSource / options parameters changed while session is active - this won't do anything. If you are intending to change room options, stop the session first with `session.stop()`.",
-        );
+        log.warn("Warning: useSession tokenSource / options parameters changed while session is active - this won't do anything. If you are intending to change room options, stop the session first with `session.stop()`.");
         return previousRoomValue.current;
       }
       if (roomOptionsEqual) {
@@ -523,14 +522,7 @@ export function useSession(
 
       signal?.removeEventListener('abort', onSignalAbort);
     },
-    [
-      room,
-      waitUntilDisconnected,
-      tokenSourceFetch,
-      waitUntilConnected,
-      agent.waitUntilAvailable,
-      end,
-    ],
+    [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected, agent.waitUntilAvailable, end],
   );
 
   const prepareConnection = useCallback(async () => {

@@ -4,71 +4,71 @@
 
 ```ts
 
-import { AudioAnalyserOptions } from 'livekit-client';
-import { AudioCaptureOptions } from 'livekit-client';
+import type { AudioAnalyserOptions } from 'livekit-client';
+import type { AudioCaptureOptions } from 'livekit-client';
 import { CaptureOptionsBySource } from '@livekit/components-core';
 import { ChatMessage } from '@livekit/components-core';
 import { ChatOptions } from '@livekit/components-core';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
-import { CreateLocalTracksOptions } from 'livekit-client';
-import { DataPublishOptions } from 'livekit-client';
-import { default as default_2 } from 'typed-emitter';
-import { DisconnectReason } from 'livekit-client';
+import type { CreateLocalTracksOptions } from 'livekit-client';
+import type { DataPublishOptions } from 'livekit-client';
+import type { DisconnectReason } from 'livekit-client';
 import { EventMap } from 'typed-emitter';
 import { GridLayoutDefinition } from '@livekit/components-core';
-import { GridLayoutInfo } from '@livekit/components-core';
-import { HTMLAttributes } from 'react';
+import type { GridLayoutInfo } from '@livekit/components-core';
+import type { HTMLAttributes } from 'react';
 import { isTrackReference } from '@livekit/components-core';
-import { JWTPayload } from 'jose';
-import { KrispNoiseFilterProcessor } from '@livekit/krisp-noise-filter';
+import type { KrispNoiseFilterProcessor } from '@livekit/krisp-noise-filter';
 import { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
-import { LocalTrack } from 'livekit-client';
+import type { LocalTrack } from 'livekit-client';
 import { LocalTrackPublication } from 'livekit-client';
 import { LocalUserChoices } from '@livekit/components-core';
 import { LocalVideoTrack } from 'livekit-client';
-import { MediaDeviceFailure } from 'livekit-client';
+import type { MediaDeviceFailure } from 'livekit-client';
 import { MessageDecoder } from '@livekit/components-core';
 import { MessageEncoder } from '@livekit/components-core';
-import { NoiseFilterOptions } from '@livekit/krisp-noise-filter';
+import type { NoiseFilterOptions } from '@livekit/krisp-noise-filter';
 import { Participant } from 'livekit-client';
 import { ParticipantClickEvent } from '@livekit/components-core';
-import { ParticipantEvent } from 'livekit-client';
+import type { ParticipantEvent } from 'livekit-client';
 import { ParticipantIdentifier } from '@livekit/components-core';
-import { ParticipantPermission } from '@livekit/protocol';
+import type { ParticipantPermission } from '@livekit/protocol';
 import { PinState } from '@livekit/components-core';
 import * as React_2 from 'react';
 import { ReceivedChatMessage } from '@livekit/components-core';
-import { ReceivedDataMessage } from '@livekit/components-core';
+import type { ReceivedDataMessage } from '@livekit/components-core';
 import { ReceivedMessage } from '@livekit/components-core';
 import { ReceivedTranscriptionSegment } from '@livekit/components-core';
-import { RemoteAudioTrack } from 'livekit-client';
+import type { RemoteAudioTrack } from 'livekit-client';
 import { RemoteParticipant } from 'livekit-client';
 import { Room } from 'livekit-client';
-import { RoomConfiguration } from '@livekit/protocol';
 import { RoomConnectOptions } from 'livekit-client';
-import { RoomEvent } from 'livekit-client';
-import { RoomOptions } from 'livekit-client';
-import { ScreenShareCaptureOptions } from 'livekit-client';
+import type { RoomEvent } from 'livekit-client';
+import type { RoomOptions } from 'livekit-client';
+import type { ScreenShareCaptureOptions } from 'livekit-client';
 import { SendTextOptions } from 'livekit-client';
 import { setLogExtension } from '@livekit/components-core';
 import { setLogLevel } from '@livekit/components-core';
 import { SetMediaDeviceOptions } from '@livekit/components-core';
-import { SourcesArray } from '@livekit/components-core';
-import { SVGProps } from 'react';
+import type { SourcesArray } from '@livekit/components-core';
+import type { SVGProps } from 'react';
 import { TextStreamData } from '@livekit/components-core';
-import { ToggleSource } from '@livekit/components-core';
-import { TokenSourceResponse } from '@livekit/protocol';
+import type { ToggleSource } from '@livekit/components-core';
+import { TokenSourceConfigurable } from 'livekit-client';
+import { TokenSourceFetchOptions } from 'livekit-client';
+import { TokenSourceFixed } from 'livekit-client';
 import { Track } from 'livekit-client';
-import { TrackProcessor } from 'livekit-client';
-import { TrackPublication } from 'livekit-client';
+import type { TrackProcessor } from 'livekit-client';
+import type { TrackPublication } from 'livekit-client';
 import { TrackPublishOptions } from 'livekit-client';
 import { TrackReference } from '@livekit/components-core';
 import { TrackReferenceOrPlaceholder } from '@livekit/components-core';
-import { TrackSourceWithOptions } from '@livekit/components-core';
-import { TranscriptionSegment } from 'livekit-client';
-import { VideoCaptureOptions } from 'livekit-client';
+import type { TrackSourceWithOptions } from '@livekit/components-core';
+import type { TranscriptionSegment } from 'livekit-client';
+import TypedEventEmitter from 'typed-emitter';
+import type { VideoCaptureOptions } from 'livekit-client';
 import { WidgetState } from '@livekit/components-core';
 
 // @public (undocumented)
@@ -168,9 +168,6 @@ export interface BarVisualizerProps extends React_2.HTMLProps<HTMLDivElement> {
     // (undocumented)
     trackRef?: TrackReferenceOrPlaceholder;
 }
-
-// @public (undocumented)
-export type CamelToSnakeCase<Str extends string> = Str extends `${infer First}${infer Rest}` ? `${First extends Capitalize<First> ? '_' : ''}${Lowercase<First>}${CamelToSnakeCase<Rest>}` : Str;
 
 // Warning: (ae-internal-missing-underscore) The name "CameraDisabledIcon" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -311,9 +308,6 @@ export interface DisconnectButtonProps extends React_2.ButtonHTMLAttributes<HTML
     // (undocumented)
     stopTracks?: boolean;
 }
-
-// @public (undocumented)
-export type EndpointOptions = Omit<RequestInit, 'body'>;
 
 // Warning: (ae-internal-missing-underscore) The name "FeatureFlags" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -647,11 +641,6 @@ export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
     childrenPosition?: 'before' | 'after';
 }
 
-// @public (undocumented)
-export type SandboxTokenServerOptions = {
-    baseUrl?: string;
-};
-
 // Warning: (ae-internal-missing-underscore) The name "ScreenShareIcon" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -677,7 +666,13 @@ export type SessionConnectOptions = {
             publishOptions?: TrackPublishOptions;
         };
     };
+    roomConnectOptions?: RoomConnectOptions;
 };
+
+// Warning: (ae-internal-missing-underscore) The name "SessionContext" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const SessionContext: React_2.Context<UseSessionReturn | undefined>;
 
 // @public (undocumented)
 export enum SessionEvent {
@@ -686,6 +681,15 @@ export enum SessionEvent {
     // (undocumented)
     MediaDevicesError = "MediaDevicesError"
 }
+
+// @public
+export function SessionProvider(props: SessionProviderProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export type SessionProviderProps = {
+    session: UseSessionReturn;
+    children: React_2.ReactNode;
+};
 
 export { setLogExtension }
 
@@ -711,73 +715,6 @@ export { TextStreamData }
 
 // @public
 export function Toast(props: React_2.HTMLAttributes<HTMLDivElement>): React_2.JSX.Element;
-
-// @public (undocumented)
-export type TokenSource = TokenSourceFixed | TokenSourceConfigurable;
-
-// @public (undocumented)
-export const TokenSource: {
-    literal(literalOrFn: LiteralOrFn): TokenSourceLiteral;
-    custom(customFn: CustomFn): TokenSourceCustom;
-    endpoint(url: string, options?: EndpointOptions): TokenSourceEndpoint;
-    sandboxTokenServer(sandboxId: string, options: SandboxTokenServerOptions): TokenSourceSandboxTokenServer;
-};
-
-// @public (undocumented)
-export abstract class TokenSourceConfigurable {
-    // (undocumented)
-    abstract fetch(options: TokenSourceOptions): Promise<TokenSourceResponseObject>;
-}
-
-// @public (undocumented)
-export abstract class TokenSourceFixed {
-    // (undocumented)
-    abstract fetch(): Promise<TokenSourceResponseObject>;
-}
-
-// @public (undocumented)
-export class TokenSourceLiteral extends TokenSourceFixed {
-    constructor(literalOrFn: LiteralOrFn);
-    // (undocumented)
-    fetch(): Promise<TokenSourceResponseObject>;
-}
-
-// @public (undocumented)
-export type TokenSourceOptions = {
-    roomName?: string;
-    participantName?: string;
-    participantIdentity?: string;
-    participantMetadata?: string;
-    participantAttributes?: {
-        [key: string]: string;
-    };
-    agentName?: string;
-    agentMetadata?: string;
-};
-
-// @public (undocumented)
-export abstract class TokenSourceRefreshable extends TokenSourceConfigurable {
-    // (undocumented)
-    fetch(options: TokenSourceOptions): Promise<TokenSourceResponseObject>;
-    // Warning: (ae-forgotten-export) The symbol "TokenPayload" needs to be exported by the entry point index.docs.d.ts
-    //
-    // (undocumented)
-    getCachedResponseJwtPayload(): TokenPayload | null;
-    // (undocumented)
-    protected isSameAsCachedOptions(options: TokenSourceOptions): boolean;
-    // (undocumented)
-    protected shouldUseCachedValue(options: TokenSourceOptions): boolean;
-    // (undocumented)
-    protected abstract update(options: TokenSourceOptions): Promise<TokenSourceResponse>;
-}
-
-// @public (undocumented)
-export type TokenSourceResponseObject = Required<NonNullable<ConstructorParameters<typeof TokenSourceResponse>[0]>>;
-
-// @public (undocumented)
-export class TokenSourceSandboxTokenServer extends TokenSourceEndpoint {
-    constructor(sandboxId: string, options: SandboxTokenServerOptions);
-}
 
 // @public
 export function TrackLoop({ tracks, ...props }: TrackLoopProps): React_2.JSX.Element;
@@ -847,7 +784,7 @@ export const UnfocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.
 // Warning: (ae-forgotten-export) The symbol "SessionStub" needs to be exported by the entry point index.docs.d.ts
 //
 // @public
-export function useAgent(session: SessionStub): UseAgentReturn;
+export function useAgent(session?: SessionStub): UseAgentReturn;
 
 // Warning: (ae-forgotten-export) The symbol "AgentStateCases" needs to be exported by the entry point index.docs.d.ts
 // Warning: (ae-forgotten-export) The symbol "AgentActions" needs to be exported by the entry point index.docs.d.ts
@@ -942,11 +879,14 @@ export function useEnsureParticipant(participant?: Participant): Participant;
 export function useEnsureRoom(room?: Room): Room;
 
 // @public
+export function useEnsureSession(session?: UseSessionReturn): UseSessionReturn;
+
+// @public
 export function useEnsureTrackRef(trackRef?: TrackReferenceOrPlaceholder): TrackReferenceOrPlaceholder;
 
 // @public (undocumented)
-export function useEvents<Emitter extends default_2<EventMap>, EmitterEventMap extends (Emitter extends default_2<infer EM> ? EM : never), Event extends Parameters<Emitter["on"]>[0], Callback extends EmitterEventMap[Event]>(instance: Emitter | {
-    subtle: {
+export function useEvents<Emitter extends TypedEventEmitter<EventMap>, EmitterEventMap extends Emitter extends TypedEventEmitter<infer EM> ? EM : never, Event extends Parameters<Emitter['on']>[0], Callback extends EmitterEventMap[Event]>(instance: Emitter | {
+    internal: {
         emitter: Emitter;
     };
 } | null | undefined, event: Event, handlerFn: Callback | undefined, dependencies?: React.DependencyList): void;
@@ -1066,6 +1006,9 @@ export function useMaybeParticipantContext(): Participant | undefined;
 export function useMaybeRoomContext(): Room | undefined;
 
 // @public
+export function useMaybeSessionContext(): UseSessionReturn | undefined;
+
+// @public
 export function useMaybeTrackRefContext(): TrackReferenceOrPlaceholder | undefined;
 
 // @public
@@ -1176,7 +1119,7 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
 // Warning: (ae-forgotten-export) The symbol "UseParticipantTracksOptions" needs to be exported by the entry point index.docs.d.ts
 //
 // @public
-export function useParticipantTracks<TrackSource extends Track.Source>(sources: Array<TrackSource>, optionsOrParticipantIdentity?: UseParticipantTracksOptions | UseParticipantTracksOptions["participantIdentity"]): Array<TrackReference>;
+export function useParticipantTracks<TrackSource extends Track.Source>(sources: Array<TrackSource>, optionsOrParticipantIdentity?: UseParticipantTracksOptions | UseParticipantTracksOptions['participantIdentity']): Array<TrackReference>;
 
 // @alpha
 export function usePersistentUserChoices(options?: UsePersistentUserChoicesOptions): {
@@ -1272,8 +1215,11 @@ export function useSession(tokenSource: TokenSourceConfigurable, options?: UseSe
 // @public (undocumented)
 export function useSession(tokenSource: TokenSourceFixed, options?: UseSessionFixedOptions): UseSessionReturn;
 
+// @public
+export function useSessionContext(): UseSessionReturn;
+
 // @public (undocumented)
-export function useSessionMessages(session: UseSessionReturn): UseSessionMessagesReturn;
+export function useSessionMessages(session?: UseSessionReturn): UseSessionMessagesReturn;
 
 // @public (undocumented)
 export type UseSessionMessagesReturn = {
@@ -1351,7 +1297,7 @@ export function useTextStream(topic: string, options?: UseTextStreamOptions): {
     textStreams: TextStreamData[];
 };
 
-// @public (undocumented)
+// @beta (undocumented)
 export type UseTextStreamOptions = {
     room?: Room;
 };
@@ -1437,12 +1383,6 @@ export interface UseVisualStableUpdateOptions {
 // @beta
 export function useVoiceAssistant(): VoiceAssistant;
 
-// Warning: (ae-forgotten-export) The symbol "ArrayValuesToSnakeCase" needs to be exported by the entry point index.docs.d.ts
-// Warning: (ae-forgotten-export) The symbol "ObjectKeysToSnakeCase" needs to be exported by the entry point index.docs.d.ts
-//
-// @public (undocumented)
-export type ValueToSnakeCase<Value> = Value extends Array<infer Item> ? ArrayValuesToSnakeCase<Item> : Value extends object ? ObjectKeysToSnakeCase<Value> : Value;
-
 // @public
 export function VideoConference({ chatMessageFormatter, chatMessageDecoder, chatMessageEncoder, SettingsComponent, ...props }: VideoConferenceProps): React_2.JSX.Element;
 
@@ -1507,10 +1447,6 @@ export { WidgetState }
 
 // Warnings were encountered during analysis:
 //
-// src/TokenSource.ts:303:3 - (ae-forgotten-export) The symbol "LiteralOrFn" needs to be exported by the entry point index.docs.d.ts
-// src/TokenSource.ts:313:3 - (ae-forgotten-export) The symbol "CustomFn" needs to be exported by the entry point index.docs.d.ts
-// src/TokenSource.ts:313:3 - (ae-forgotten-export) The symbol "TokenSourceCustom" needs to be exported by the entry point index.docs.d.ts
-// src/TokenSource.ts:322:3 - (ae-forgotten-export) The symbol "TokenSourceEndpoint" needs to be exported by the entry point index.docs.d.ts
 // src/context/layout-context.ts:10:3 - (ae-forgotten-export) The symbol "PinContextType" needs to be exported by the entry point index.docs.d.ts
 // src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "WidgetContextType" needs to be exported by the entry point index.docs.d.ts
 

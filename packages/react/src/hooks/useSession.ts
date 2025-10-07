@@ -136,7 +136,9 @@ type UseSessionCommonOptions = {
   agentConnectTimeoutMilliseconds?: number;
 };
 
-type UseSessionConfigurableOptions = UseSessionCommonOptions & { tokenFetchOptions: TokenSourceFetchOptions };
+type UseSessionConfigurableOptions = UseSessionCommonOptions & {
+  tokenFetchOptions: TokenSourceFetchOptions;
+};
 type UseSessionFixedOptions = UseSessionCommonOptions;
 
 /**
@@ -155,11 +157,7 @@ export function useSession(
   tokenSource: TokenSourceConfigurable | TokenSourceFixed,
   options: UseSessionConfigurableOptions | UseSessionFixedOptions = {},
 ): UseSessionReturn {
-  const {
-    room: optionsRoom,
-    agentConnectTimeoutMilliseconds,
-    ...restOptions
-  } = options;
+  const { room: optionsRoom, agentConnectTimeoutMilliseconds, ...restOptions } = options;
 
   const roomFromContext = useMaybeRoomContext();
   const room = useMemo(

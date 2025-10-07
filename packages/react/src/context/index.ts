@@ -16,7 +16,12 @@ export {
 } from './participant-context';
 export {} from './pin-context';
 export { RoomContext, useEnsureRoom, useMaybeRoomContext, useRoomContext } from './room-context';
-export { SessionContext, useEnsureSession, useMaybeSessionContext, useSessionContext } from './session-context';
+export {
+  SessionContext,
+  useEnsureSession,
+  useMaybeSessionContext,
+  useSessionContext,
+} from './session-context';
 export {
   TrackRefContext,
   useEnsureTrackRef,

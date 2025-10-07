@@ -1207,7 +1207,7 @@ export function useSession(tokenSource: TokenSourceConfigurable, options?: UseSe
 
 // Warning: (ae-forgotten-export) The symbol "UseSessionFixedOptions" needs to be exported by the entry point index.docs.d.ts
 //
-// @public (undocumented)
+// @public
 export function useSession(tokenSource: TokenSourceFixed, options?: UseSessionFixedOptions): UseSessionReturn;
 
 // @public

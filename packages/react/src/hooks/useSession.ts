@@ -149,6 +149,10 @@ export function useSession(
   tokenSource: TokenSourceConfigurable,
   options?: UseSessionConfigurableOptions,
 ): UseSessionReturn;
+/**
+ * A Session represents a manages connection to a Room which can contain Agents.
+ * @public
+ */
 export function useSession(
   tokenSource: TokenSourceFixed,
   options?: UseSessionFixedOptions,

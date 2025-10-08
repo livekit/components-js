@@ -35,9 +35,6 @@ export type SessionConnectOptions = {
   /** Optional abort signal which if triggered will terminate connecting even if it isn't complete */
   signal?: AbortSignal;
 
-  // FIXME: not sure about this pattern, background thinking is that it would be good to be able to
-  // abstract away enabling relevant media tracks to the caller so they don't have to interface with
-  // the room.
   tracks?: {
     microphone?: {
       enabled?: boolean;

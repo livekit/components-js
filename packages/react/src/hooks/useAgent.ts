@@ -47,7 +47,6 @@ export type AgentState = 'disconnected' | 'connecting' | 'failed' | AgentSdkStat
 export enum AgentEvent {
   CameraChanged = 'cameraChanged',
   MicrophoneChanged = 'microphoneChanged',
-  AttributesChanged = 'attributesChanged',
   StateChanged = 'stateChanged',
 }
 
@@ -55,7 +54,6 @@ export enum AgentEvent {
 export type AgentCallbacks = {
   [AgentEvent.CameraChanged]: (newTrack: TrackReference | null) => void;
   [AgentEvent.MicrophoneChanged]: (newTrack: TrackReference | null) => void;
-  [AgentEvent.AttributesChanged]: (newAttributes: Record<string, string>) => void;
   [AgentEvent.StateChanged]: (newAgentState: AgentState) => void;
 };
 
@@ -317,7 +315,6 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
 
     const handleAttributesChanged = (attributes: UseAgentReturn['attributes']) => {
       setAgentParticipantAttributes(attributes);
-      emitter.emit(AgentEvent.AttributesChanged, attributes);
     };
 
     agentParticipant.on(ParticipantEvent.AttributesChanged, handleAttributesChanged);

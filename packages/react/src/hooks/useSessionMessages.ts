@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
-// import type TypedEventEmitter from 'typed-emitter';
+import { useEffect, useMemo, useRef } from 'react';
+import type TypedEventEmitter from 'typed-emitter';
 import { SendTextOptions } from 'livekit-client';
-// import { EventEmitter } from "events";
+import { EventEmitter } from "events";
 import {
   ReceivedMessage,
   ReceivedChatMessage,
@@ -25,10 +25,9 @@ export type UseSessionMessagesReturn = {
 
   send: (message: string, options?: SendTextOptions) => Promise<ReceivedChatMessage>;
 
-  // FIXME: does there need to be a way to subscribe to individual messages?
-  // internal: {
-  //   emitter: TypedEventEmitter<MessagesCallbacks>;
-  // };
+  internal: {
+    emitter: TypedEventEmitter<MessagesCallbacks>;
+  };
 };
 
 /** @public */
@@ -45,6 +44,8 @@ export type MessagesCallbacks = {
 /** @public */
 export function useSessionMessages(session?: UseSessionReturn): UseSessionMessagesReturn {
   const { room } = useEnsureSession(session);
+
+  const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<MessagesCallbacks>, []);
 
   const agent = useAgent(session);
 
@@ -105,11 +106,24 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
     return merged.sort((a, b) => a.timestamp - b.timestamp);
   }, [transcriptionMessages, chat.chatMessages]);
 
+  const previouslyReceivedMessageIdsRef = useRef(new Set());
+  useEffect(() => {
+    for (const message of receivedMessages) {
+      if (previouslyReceivedMessageIdsRef.current.has(message.id)) {
+        continue;
+      }
+
+      previouslyReceivedMessageIdsRef.current.add(message.id);
+      emitter.emit(MessagesEvent.MessageReceived, message);
+    }
+  }, [receivedMessages]);
+
   return useMemo(
     () => ({
       messages: receivedMessages,
       send: chat.send,
       isSending: chat.isSending,
+      internal: { emitter },
     }),
     [receivedMessages, chat.send, chat.isSending],
   );

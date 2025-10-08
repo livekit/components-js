@@ -21,13 +21,24 @@ import { useLocalParticipant } from './useLocalParticipant';
 /** @public */
 export enum SessionEvent {
   ConnectionStateChanged = 'connectionStateChanged',
-  MediaDevicesError = 'MediaDevicesError',
+  /**
+   * Emits when an error is encountered while attempting to create a track.
+   * Use MediaDeviceFailure.getFailure(error) to get the reason of failure.
+   * args: (error: Error, kind: MediaDeviceKind)
+   */
+  MediaDevicesError = 'mediaDevicesError',
+  /**
+   * Emits when an error is received while decrypting frame received frame information.
+   * args: (error: Error)
+   */
+  EncryptionError = 'encryptionError',
 }
 
 /** @public */
 export type SessionCallbacks = {
   [SessionEvent.ConnectionStateChanged]: (newAgentConnectionState: ConnectionState) => void;
   [SessionEvent.MediaDevicesError]: (error: Error) => void;
+  [SessionEvent.EncryptionError]: (error: Error) => void;
 };
 
 /** @public */
@@ -212,6 +223,17 @@ export function useSession(
     room.on(RoomEvent.MediaDevicesError, handleMediaDevicesError);
     return () => {
       room.off(RoomEvent.MediaDevicesError, handleMediaDevicesError);
+    };
+  }, [room, emitter]);
+
+  useEffect(() => {
+    const handleEncryptionError = async (error: Error) => {
+      emitter.emit(SessionEvent.EncryptionError, error);
+    };
+
+    room.on(RoomEvent.EncryptionError, handleEncryptionError);
+    return () => {
+      room.off(RoomEvent.EncryptionError, handleEncryptionError);
     };
   }, [room, emitter]);
 

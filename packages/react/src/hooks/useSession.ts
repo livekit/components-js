@@ -136,9 +136,7 @@ type UseSessionCommonOptions = {
   agentConnectTimeoutMilliseconds?: number;
 };
 
-type UseSessionConfigurableOptions = UseSessionCommonOptions & {
-  tokenFetchOptions: TokenSourceFetchOptions;
-};
+type UseSessionConfigurableOptions = UseSessionCommonOptions & TokenSourceFetchOptions;
 type UseSessionFixedOptions = UseSessionCommonOptions;
 
 /**
@@ -379,7 +377,7 @@ export function useSession(
   const tokenSourceFetch = useCallback(async () => {
     const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
     if (isConfigurable) {
-      const { tokenFetchOptions } = restOptions as UseSessionConfigurableOptions;
+      const tokenFetchOptions = restOptions as UseSessionConfigurableOptions;
       return tokenSource.fetch(tokenFetchOptions);
     } else {
       return tokenSource.fetch();

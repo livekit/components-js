@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef } from 'react';
+import * as React from 'react';
 import type TypedEventEmitter from 'typed-emitter';
 import { SendTextOptions } from 'livekit-client';
-import { EventEmitter } from "events";
+import { EventEmitter } from 'events';
 import {
   ReceivedMessage,
   ReceivedChatMessage,
@@ -45,17 +45,20 @@ export type MessagesCallbacks = {
 export function useSessionMessages(session?: UseSessionReturn): UseSessionMessagesReturn {
   const { room } = useEnsureSession(session);
 
-  const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<MessagesCallbacks>, []);
+  const emitter = React.useMemo(
+    () => new EventEmitter() as TypedEventEmitter<MessagesCallbacks>,
+    [],
+  );
 
   const agent = useAgent(session);
 
   const transcriptions: Array<TextStreamData> = useTranscriptions({ room });
-  const chatOptions = useMemo(() => ({ room }), [room]);
+  const chatOptions = React.useMemo(() => ({ room }), [room]);
   const chat = useChat(chatOptions);
 
   const transcriptionMessages: Array<
     ReceivedUserTranscriptionMessage | ReceivedAgentTranscriptionMessage
-  > = useMemo(() => {
+  > = React.useMemo(() => {
     return transcriptions.map((transcription) => {
       switch (transcription.participantInfo.identity) {
         case room.localParticipant.identity:
@@ -101,13 +104,13 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
     });
   }, [transcriptions, room]);
 
-  const receivedMessages = useMemo(() => {
+  const receivedMessages = React.useMemo(() => {
     const merged: Array<ReceivedMessage> = [...transcriptionMessages, ...chat.chatMessages];
     return merged.sort((a, b) => a.timestamp - b.timestamp);
   }, [transcriptionMessages, chat.chatMessages]);
 
-  const previouslyReceivedMessageIdsRef = useRef(new Set());
-  useEffect(() => {
+  const previouslyReceivedMessageIdsRef = React.useRef(new Set());
+  React.useEffect(() => {
     for (const message of receivedMessages) {
       if (previouslyReceivedMessageIdsRef.current.has(message.id)) {
         continue;
@@ -118,7 +121,7 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
     }
   }, [receivedMessages]);
 
-  return useMemo(
+  return React.useMemo(
     () => ({
       messages: receivedMessages,
       send: chat.send,

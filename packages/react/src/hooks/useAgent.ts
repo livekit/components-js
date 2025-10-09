@@ -9,7 +9,7 @@ import {
 } from 'livekit-client';
 import type TypedEventEmitter from 'typed-emitter';
 import { EventEmitter } from 'events';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
 import { create } from 'zustand';
 import { ParticipantAgentAttributes, TrackReference } from '@livekit/components-core';
 
@@ -278,11 +278,11 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     internal: { agentConnectTimeoutMilliseconds },
   } = session;
 
-  const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<AgentCallbacks>, []);
+  const emitter = React.useMemo(() => new EventEmitter() as TypedEventEmitter<AgentCallbacks>, []);
 
   const roomRemoteParticipants = useRemoteParticipants({ room });
 
-  const agentParticipant = useMemo(() => {
+  const agentParticipant = React.useMemo(() => {
     return (
       roomRemoteParticipants.find(
         (p) =>
@@ -291,7 +291,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       ) ?? null
     );
   }, [roomRemoteParticipants]);
-  const workerParticipant = useMemo(() => {
+  const workerParticipant = React.useMemo(() => {
     if (!agentParticipant) {
       return null;
     }
@@ -305,10 +305,10 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
   }, [agentParticipant, roomRemoteParticipants]);
 
   // 1. Listen for agent participant attribute changes
-  const [agentParticipantAttributes, setAgentParticipantAttributes] = useState<
+  const [agentParticipantAttributes, setAgentParticipantAttributes] = React.useState<
     Record<string, string>
   >({});
-  useEffect(() => {
+  React.useEffect(() => {
     if (!agentParticipant) {
       return;
     }
@@ -333,30 +333,30 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     participantIdentity: workerParticipant?.identity,
   });
 
-  const videoTrack = useMemo(
+  const videoTrack = React.useMemo(
     () =>
       agentTracks.find((t) => t.source === Track.Source.Camera) ??
       workerTracks.find((t) => t.source === Track.Source.Camera) ??
       null,
     [agentTracks, workerTracks],
   );
-  useEffect(() => {
+  React.useEffect(() => {
     emitter.emit(AgentEvent.CameraChanged, videoTrack);
   }, [emitter, videoTrack]);
 
-  const audioTrack = useMemo(
+  const audioTrack = React.useMemo(
     () =>
       agentTracks.find((t) => t.source === Track.Source.Microphone) ??
       workerTracks.find((t) => t.source === Track.Source.Microphone) ??
       null,
     [agentTracks, workerTracks],
   );
-  useEffect(() => {
+  React.useEffect(() => {
     emitter.emit(AgentEvent.MicrophoneChanged, audioTrack);
   }, [emitter, audioTrack]);
 
-  const [roomConnectionState, setRoomConnectionState] = useState(room.state);
-  useEffect(() => {
+  const [roomConnectionState, setRoomConnectionState] = React.useState(room.state);
+  React.useEffect(() => {
     const handleConnectionStateChanged = (connectionState: ConnectionState) => {
       setRoomConnectionState(connectionState);
     };
@@ -367,10 +367,10 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     };
   }, [room]);
 
-  const [localMicTrack, setLocalMicTrack] = useState<LocalTrackPublication | null>(
+  const [localMicTrack, setLocalMicTrack] = React.useState<LocalTrackPublication | null>(
     () => room.localParticipant.getTrackPublication(Track.Source.Microphone) ?? null,
   );
-  useEffect(() => {
+  React.useEffect(() => {
     const handleLocalParticipantTrackPublished = () => {
       setLocalMicTrack(room.localParticipant.getTrackPublication(Track.Source.Microphone) ?? null);
     };
@@ -406,11 +406,11 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     updateAgentTimeoutParticipantExists,
   } = useAgentTimeoutIdStore();
 
-  const failureReasons = useMemo(() => {
+  const failureReasons = React.useMemo(() => {
     return agentTimeoutFailureReason ? [agentTimeoutFailureReason] : [];
   }, [agentTimeoutFailureReason]);
 
-  const [state, isBufferingSpeech] = useMemo(() => {
+  const [state, isBufferingSpeech] = React.useMemo(() => {
     if (failureReasons.length > 0) {
       return ['failed' as const, false];
     }
@@ -443,17 +443,17 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     agentParticipantAttributes,
   ]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     emitter.emit(AgentEvent.StateChanged, state);
     updateAgentTimeoutState(state);
   }, [emitter, state]);
-  useEffect(() => {
+  React.useEffect(() => {
     updateAgentTimeoutParticipantExists(agentParticipant !== null);
   }, [agentParticipant]);
 
   // When the session room begins connecting, start the agent timeout
   const isSessionDisconnected = session.connectionState === 'disconnected';
-  useEffect(() => {
+  React.useEffect(() => {
     if (isSessionDisconnected) {
       return;
     }
@@ -464,7 +464,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     };
   }, [isSessionDisconnected, agentConnectTimeoutMilliseconds]);
 
-  const agentState: AgentStateCases = useMemo(() => {
+  const agentState: AgentStateCases = React.useMemo(() => {
     const common: AgentStateCommon = {
       attributes: agentParticipantAttributes,
 
@@ -557,7 +557,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     isBufferingSpeech,
   ]);
 
-  const waitUntilAvailable = useCallback(
+  const waitUntilAvailable = React.useCallback(
     async (signal?: AbortSignal) => {
       const { isAvailable } = generateDerivedStateValues(state);
       if (isAvailable) {
@@ -590,7 +590,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     [state, emitter],
   );
 
-  const waitUntilCamera = useCallback(
+  const waitUntilCamera = React.useCallback(
     (signal?: AbortSignal) => {
       return new Promise<TrackReference>((resolve, reject) => {
         const stateChangedHandler = (camera: TrackReference | null) => {
@@ -617,7 +617,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     [emitter],
   );
 
-  const waitUntilMicrophone = useCallback(
+  const waitUntilMicrophone = React.useCallback(
     (signal?: AbortSignal) => {
       return new Promise<TrackReference>((resolve, reject) => {
         const stateChangedHandler = (microphone: TrackReference | null) => {
@@ -644,7 +644,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     [emitter],
   );
 
-  return useMemo(() => {
+  return React.useMemo(() => {
     return {
       ...agentState,
       waitUntilAvailable,

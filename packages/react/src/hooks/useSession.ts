@@ -1,3 +1,4 @@
+import * as React from 'react';
 import type TypedEventEmitter from 'typed-emitter';
 import {
   Room,
@@ -11,7 +12,6 @@ import {
   RoomConnectOptions,
 } from 'livekit-client';
 import { EventEmitter } from 'events';
-import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useMaybeRoomContext } from '../context';
 import { useAgent } from './useAgent';
@@ -170,14 +170,17 @@ export function useSession(
   const { room: optionsRoom, agentConnectTimeoutMilliseconds, ...restOptions } = options;
 
   const roomFromContext = useMaybeRoomContext();
-  const room = useMemo(
+  const room = React.useMemo(
     () => roomFromContext ?? optionsRoom ?? new Room(),
     [roomFromContext, optionsRoom],
   );
 
-  const emitter = useMemo(() => new EventEmitter() as TypedEventEmitter<SessionCallbacks>, []);
+  const emitter = React.useMemo(
+    () => new EventEmitter() as TypedEventEmitter<SessionCallbacks>,
+    [],
+  );
 
-  const generateDerivedConnectionStateValues = useCallback(
+  const generateDerivedConnectionStateValues = React.useCallback(
     <State extends UseSessionReturn['connectionState']>(connectionState: State) =>
       ({
         isConnected:
@@ -203,8 +206,8 @@ export function useSession(
     [],
   );
 
-  const [roomConnectionState, setRoomConnectionState] = useState(room.state);
-  useEffect(() => {
+  const [roomConnectionState, setRoomConnectionState] = React.useState(room.state);
+  React.useEffect(() => {
     const handleConnectionStateChanged = (connectionState: ConnectionState) => {
       setRoomConnectionState(connectionState);
     };
@@ -215,7 +218,7 @@ export function useSession(
     };
   }, [room]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleMediaDevicesError = async (error: Error) => {
       emitter.emit(SessionEvent.MediaDevicesError, error);
     };
@@ -226,7 +229,7 @@ export function useSession(
     };
   }, [room, emitter]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleEncryptionError = async (error: Error) => {
       emitter.emit(SessionEvent.EncryptionError, error);
     };
@@ -239,7 +242,7 @@ export function useSession(
 
   const { localParticipant } = useLocalParticipant({ room });
   const cameraPublication = localParticipant.getTrackPublication(Track.Source.Camera);
-  const localCamera = useMemo(() => {
+  const localCamera = React.useMemo(() => {
     if (!cameraPublication || cameraPublication.isMuted) {
       return null;
     }
@@ -250,7 +253,7 @@ export function useSession(
     };
   }, [localParticipant, cameraPublication, cameraPublication?.isMuted]);
   const microphonePublication = localParticipant.getTrackPublication(Track.Source.Microphone);
-  const localMicrophone = useMemo(() => {
+  const localMicrophone = React.useMemo(() => {
     if (!microphonePublication || microphonePublication.isMuted) {
       return null;
     }
@@ -261,7 +264,7 @@ export function useSession(
     };
   }, [localParticipant, microphonePublication, microphonePublication?.isMuted]);
 
-  const conversationState = useMemo(():
+  const conversationState = React.useMemo(():
     | SessionStateConnecting
     | SessionStateConnected
     | SessionStateDisconnected => {
@@ -327,11 +330,11 @@ export function useSession(
     localMicrophone,
     generateDerivedConnectionStateValues,
   ]);
-  useEffect(() => {
+  React.useEffect(() => {
     emitter.emit(SessionEvent.ConnectionStateChanged, conversationState.connectionState);
   }, [emitter, conversationState.connectionState]);
 
-  const waitUntilConnectionState = useCallback(
+  const waitUntilConnectionState = React.useCallback(
     async (state: UseSessionReturn['connectionState'], signal?: AbortSignal) => {
       if (conversationState.connectionState === state) {
         return;
@@ -362,7 +365,7 @@ export function useSession(
     [conversationState.connectionState, emitter],
   );
 
-  const waitUntilConnected = useCallback(
+  const waitUntilConnected = React.useCallback(
     async (signal?: AbortSignal) => {
       return waitUntilConnectionState(
         ConnectionState.Connected /* FIXME: should I check for other states too? */,
@@ -372,7 +375,7 @@ export function useSession(
     [waitUntilConnectionState],
   );
 
-  const waitUntilDisconnected = useCallback(
+  const waitUntilDisconnected = React.useCallback(
     async (signal?: AbortSignal) => {
       return waitUntilConnectionState(ConnectionState.Disconnected, signal);
     },
@@ -380,7 +383,7 @@ export function useSession(
   );
 
   const agent = useAgent(
-    useMemo(
+    React.useMemo(
       () => ({
         connectionState: conversationState.connectionState,
         room,
@@ -393,7 +396,7 @@ export function useSession(
     ),
   );
 
-  const tokenSourceFetch = useCallback(async () => {
+  const tokenSourceFetch = React.useCallback(async () => {
     const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
     if (isConfigurable) {
       const tokenFetchOptions = restOptions as UseSessionConfigurableOptions;
@@ -403,7 +406,7 @@ export function useSession(
     }
   }, [tokenSource, restOptions]);
 
-  const start = useCallback(
+  const start = React.useCallback(
     async (connectOptions: SessionConnectOptions = {}) => {
       const {
         signal,
@@ -443,24 +446,24 @@ export function useSession(
     [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected, agent.waitUntilAvailable],
   );
 
-  const end = useCallback(async () => {
+  const end = React.useCallback(async () => {
     await room.disconnect();
   }, [room]);
 
-  const prepareConnection = useCallback(async () => {
+  const prepareConnection = React.useCallback(async () => {
     const credentials = await tokenSourceFetch();
     // FIXME: swap the below line in once the new `livekit-client` changes are published
     // room.prepareConnection(tokenSource, { tokenSourceOptions }),
     await room.prepareConnection(credentials.serverUrl, credentials.participantToken);
   }, [tokenSourceFetch, room]);
-  useEffect(() => {
+  React.useEffect(() => {
     prepareConnection().catch((err) => {
       // FIXME: figure out a better logging solution?
       console.warn('WARNING: Room.prepareConnection failed:', err);
     });
   }, [prepareConnection]);
 
-  return useMemo(
+  return React.useMemo(
     () => ({
       ...conversationState,
 

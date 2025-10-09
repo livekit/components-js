@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo } from 'react';
+import * as React from 'react';
 import TypedEventEmitter, { EventMap } from 'typed-emitter';
 
 /** @public */
@@ -13,11 +13,11 @@ export function useEvents<
   handlerFn: Callback | undefined,
   dependencies?: React.DependencyList,
 ) {
-  const fallback = useMemo(() => () => {}, []);
-  const wrappedCallback = useCallback(handlerFn ?? fallback, dependencies ?? []);
+  const fallback = React.useMemo(() => () => {}, []);
+  const wrappedCallback = React.useCallback(handlerFn ?? fallback, dependencies ?? []);
   const callback = dependencies ? wrappedCallback : handlerFn;
 
-  const emitter = useMemo(() => {
+  const emitter = React.useMemo(() => {
     if (!instance) {
       return null;
     }
@@ -27,7 +27,7 @@ export function useEvents<
     return instance;
   }, [instance]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!emitter || !callback) {
       return;
     }

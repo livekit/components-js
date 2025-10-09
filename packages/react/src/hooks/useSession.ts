@@ -486,12 +486,17 @@ export function useSession(
     // room.prepareConnection(tokenSource, { tokenSourceOptions }),
     await room.prepareConnection(credentials.serverUrl, credentials.participantToken);
   }, [tokenSourceFetch, room]);
-  React.useEffect(() => {
-    prepareConnection().catch((err) => {
-      // FIXME: figure out a better logging solution?
-      console.warn('WARNING: Room.prepareConnection failed:', err);
-    });
-  }, [prepareConnection]);
+  React.useEffect(
+    () => {
+      prepareConnection().catch((err) => {
+        // FIXME: figure out a better logging solution?
+        console.warn('WARNING: Room.prepareConnection failed:', err);
+      });
+    },
+    [
+      /* note: no prepareConnection here, this effect should only ever run once! */
+    ],
+  );
 
   return React.useMemo(
     () => ({

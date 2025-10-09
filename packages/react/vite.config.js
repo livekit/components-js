@@ -1,14 +1,12 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import dts from 'vite-plugin-dts';
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   appType: 'custom',
   plugins: [
     // react(),
-    nodePolyfills(),
     dts({
       insertTypesEntry: true, // Create a `types` entry in package.json
       rollupTypes: false, // Bundle .d.ts files into a single declaration file

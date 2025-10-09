@@ -75,14 +75,11 @@ import { WidgetState } from '@livekit/components-core';
 export type AgentCallbacks = {
     [AgentEvent.CameraChanged]: (newTrack: TrackReference | null) => void;
     [AgentEvent.MicrophoneChanged]: (newTrack: TrackReference | null) => void;
-    [AgentEvent.AttributesChanged]: (newAttributes: Record<string, string>) => void;
     [AgentEvent.StateChanged]: (newAgentState: AgentState) => void;
 };
 
 // @public (undocumented)
 export enum AgentEvent {
-    // (undocumented)
-    AttributesChanged = "attributesChanged",
     // (undocumented)
     CameraChanged = "cameraChanged",
     // (undocumented)
@@ -655,6 +652,7 @@ export const ScreenShareStopIcon: (props: SVGProps<SVGSVGElement>) => React_2.JS
 export type SessionCallbacks = {
     [SessionEvent.ConnectionStateChanged]: (newAgentConnectionState: ConnectionState_2) => void;
     [SessionEvent.MediaDevicesError]: (error: Error) => void;
+    [SessionEvent.EncryptionError]: (error: Error) => void;
 };
 
 // @public (undocumented)
@@ -673,8 +671,8 @@ export type SessionConnectOptions = {
 export enum SessionEvent {
     // (undocumented)
     ConnectionStateChanged = "connectionStateChanged",
-    // (undocumented)
-    MediaDevicesError = "MediaDevicesError"
+    EncryptionError = "encryptionError",
+    MediaDevicesError = "mediaDevicesError"
 }
 
 // @public
@@ -884,7 +882,7 @@ export function useEvents<Emitter extends default_2<EventMap>, EmitterEventMap e
     internal: {
         emitter: Emitter;
     };
-} | null | undefined, event: Event, handlerFn: Callback | undefined, dependencies?: React.DependencyList): void;
+} | null | undefined, event: Event, handlerFn: Callback | undefined, dependencies?: React_2.DependencyList): void;
 
 // @alpha
 export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'user' | 'environment' | 'left' | 'right' | 'undefined';
@@ -1221,6 +1219,9 @@ export type UseSessionMessagesReturn = {
     messages: Array<ReceivedMessage>;
     isSending: boolean;
     send: (message: string, options?: SendTextOptions) => Promise<ReceivedChatMessage>;
+    internal: {
+        emitter: default_2<MessagesCallbacks>;
+    };
 };
 
 // Warning: (ae-forgotten-export) The symbol "SessionStateConnecting" needs to be exported by the entry point index.docs.d.ts

@@ -58,6 +58,12 @@ export * from './useTextStream';
 export * from './useTranscriptions';
 export * from './useSequentialRoomConnectDisconnect';
 export * from './useSession';
-export * from './useAgent';
+export {
+  type AgentState,
+  AgentEvent,
+  type AgentCallbacks,
+  type UseAgentReturn,
+  useAgent,
+} from './useAgent';
 export * from './useEvents';
 export * from './useSessionMessages';

@@ -14,7 +14,7 @@ import {
 import { EventEmitter } from 'events';
 
 import { useMaybeRoomContext } from '../context';
-import { useAgent } from './useAgent';
+import { AgentState, useAgent, useAgentTimeoutIdStore } from './useAgent';
 import { TrackReference } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
 
@@ -72,6 +72,12 @@ type SessionStateCommon = {
     emitter: TypedEventEmitter<SessionCallbacks>;
     tokenSource: TokenSourceConfigurable | TokenSourceFixed;
     agentConnectTimeoutMilliseconds?: number;
+
+    agentTimeoutFailureReason: string | null;
+    startAgentTimeout: (agentConnectTimeoutMilliseconds?: number) => void;
+    clearAgentTimeout: () => void;
+    updateAgentTimeoutState: (agentState: AgentState) => void;
+    updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => void;
   };
 };
 
@@ -264,17 +270,45 @@ export function useSession(
     };
   }, [localParticipant, microphonePublication, microphonePublication?.isMuted]);
 
+  const {
+    agentTimeoutFailureReason,
+    startAgentTimeout,
+    clearAgentTimeout,
+    updateAgentTimeoutState,
+    updateAgentTimeoutParticipantExists,
+  } = useAgentTimeoutIdStore();
+
+  const sessionInternal: UseSessionReturn['internal'] = React.useMemo(
+    () => ({
+      emitter,
+      tokenSource,
+      agentConnectTimeoutMilliseconds,
+
+      agentTimeoutFailureReason,
+      startAgentTimeout,
+      clearAgentTimeout,
+      updateAgentTimeoutState,
+      updateAgentTimeoutParticipantExists,
+    }),
+    [
+      emitter,
+      agentConnectTimeoutMilliseconds,
+      tokenSource,
+      agentTimeoutFailureReason,
+      startAgentTimeout,
+      clearAgentTimeout,
+      updateAgentTimeoutState,
+      updateAgentTimeoutParticipantExists,
+    ],
+  );
+
   const conversationState = React.useMemo(():
     | SessionStateConnecting
     | SessionStateConnected
     | SessionStateDisconnected => {
     const common: SessionStateCommon = {
       room,
-      internal: {
-        emitter,
-        tokenSource,
-        agentConnectTimeoutMilliseconds,
-      },
+      internal: sessionInternal,
     };
 
     switch (roomConnectionState) {
@@ -320,8 +354,7 @@ export function useSession(
         };
     }
   }, [
-    tokenSource,
-    agentConnectTimeoutMilliseconds,
+    sessionInternal,
     room,
     emitter,
     roomConnectionState,
@@ -387,12 +420,9 @@ export function useSession(
       () => ({
         connectionState: conversationState.connectionState,
         room,
-        internal: {
-          emitter,
-          tokenSource,
-        },
+        internal: sessionInternal,
       }),
-      [conversationState, emitter, room, tokenSource],
+      [conversationState, room, sessionInternal],
     ),
   );
 

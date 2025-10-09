@@ -10,7 +10,6 @@ import {
 import type TypedEventEmitter from 'typed-emitter';
 import { EventEmitter } from 'events';
 import * as React from 'react';
-import { create } from 'zustand';
 import { ParticipantAgentAttributes, TrackReference } from '@livekit/components-core';
 
 import { useParticipantTracks } from './useParticipantTracks';
@@ -172,91 +171,73 @@ const generateDerivedStateValues = <State extends AgentState>(state: State) =>
     isAvailable: State extends 'listening' | 'thinking' | 'speaking' ? true : false;
   };
 
-const useAgentTimeoutIdStore = create<{
+/** Internal hook used by useSession to store global agent state */
+export const useAgentTimeoutIdStore = (): {
   agentTimeoutFailureReason: string | null;
   startAgentTimeout: (agentConnectTimeoutMilliseconds?: number) => void;
   clearAgentTimeout: () => void;
   updateAgentTimeoutState: (agentState: AgentState) => void;
   updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => void;
-  internal: {
-    agentTimeoutId: ReturnType<typeof setTimeout> | null;
-    agentState: AgentState;
-    agentParticipantExists: boolean;
-  };
-}>((set, get) => {
+} => {
+  const [agentTimeoutFailureReason, setAgentTimeoutFailureReason] = React.useState<string | null>(
+    null,
+  );
+  const [agentTimeoutId, setAgentTimeoutId] = React.useState<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+
+  const agentStateRef = React.useRef<AgentState>('connecting');
+  const agentParticipantExistsRef = React.useRef(false);
+
   const startAgentConnectedTimeout = (agentConnectTimeoutMilliseconds?: number) => {
     return setTimeout(() => {
-      const {
-        internal: { agentState, agentParticipantExists },
-      } = get();
-      if (!agentParticipantExists) {
-        set((old) => ({ ...old, agentTimeoutFailureReason: 'Agent did not join the room.' }));
+      if (!agentParticipantExistsRef.current) {
+        setAgentTimeoutFailureReason('Agent did not join the room.');
         return;
       }
 
-      const { isAvailable } = generateDerivedStateValues(agentState);
+      const { isAvailable } = generateDerivedStateValues(agentStateRef.current);
       if (!isAvailable) {
-        set((old) => ({
-          ...old,
-          agentTimeoutFailureReason: 'Agent connected but did not complete initializing.',
-        }));
+        setAgentTimeoutFailureReason('Agent connected but did not complete initializing.');
         return;
       }
     }, agentConnectTimeoutMilliseconds ?? DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS);
   };
 
   return {
-    agentTimeoutFailureReason: null,
-    startAgentTimeout: (agentConnectTimeoutMilliseconds?: number) => {
-      set((old) => {
-        if (old.internal.agentTimeoutId) {
-          clearTimeout(old.internal.agentTimeoutId);
+    agentTimeoutFailureReason,
+    startAgentTimeout: React.useCallback(
+      (agentConnectTimeoutMilliseconds?: number) => {
+        if (agentTimeoutId) {
+          clearTimeout(agentTimeoutId);
         }
 
-        return {
-          ...old,
-          agentTimeoutFailureReason: null,
-          internal: {
-            ...old.internal,
-            agentTimeoutId: startAgentConnectedTimeout(agentConnectTimeoutMilliseconds),
-            agentState: 'connecting',
-            agentParticipantExists: false,
-          },
-        };
-      });
-    },
-    clearAgentTimeout: () => {
-      set((old) => {
-        if (old.internal.agentTimeoutId) {
-          clearTimeout(old.internal.agentTimeoutId);
-        }
-        return {
-          ...old,
-          agentTimeoutFailureReason: null,
-          internal: {
-            ...old.internal,
-            agentTimeoutId: null,
-            agentState: 'connecting',
-            agentParticipantExists: false,
-          },
-        };
-      });
-    },
+        setAgentTimeoutFailureReason(null);
+        setAgentTimeoutId(startAgentConnectedTimeout(agentConnectTimeoutMilliseconds));
+        agentStateRef.current = 'connecting';
+        agentParticipantExistsRef.current = false;
+      },
+      [agentTimeoutId],
+    ),
+    clearAgentTimeout: React.useCallback(() => {
+      if (agentTimeoutId) {
+        clearTimeout(agentTimeoutId);
+      }
 
-    updateAgentTimeoutState: (agentState: AgentState) => {
-      set((old) => ({ ...old, internal: { ...old.internal, agentState: agentState } }));
-    },
-    updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => {
-      set((old) => ({ ...old, internal: { ...old.internal, agentParticipantExists } }));
-    },
+      setAgentTimeoutFailureReason(null);
+      setAgentTimeoutId(null);
+      agentStateRef.current = 'connecting';
+      agentParticipantExistsRef.current = false;
+    }, [agentTimeoutId]),
 
-    internal: {
-      agentTimeoutId: null,
-      agentState: 'connecting',
-      agentParticipantExists: false,
-    },
+    updateAgentTimeoutState: React.useCallback((agentState: AgentState) => {
+      agentStateRef.current = agentState;
+    }, []),
+    updateAgentTimeoutParticipantExists: React.useCallback((agentParticipantExists: boolean) => {
+      agentParticipantExistsRef.current = agentParticipantExists;
+    }, []),
   };
-});
+};
 
 type SessionStub = Pick<UseSessionReturn, 'connectionState' | 'room' | 'internal'>;
 
@@ -275,7 +256,15 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
 
   const {
     room,
-    internal: { agentConnectTimeoutMilliseconds },
+    internal: {
+      agentConnectTimeoutMilliseconds,
+
+      agentTimeoutFailureReason,
+      startAgentTimeout,
+      clearAgentTimeout,
+      updateAgentTimeoutState,
+      updateAgentTimeoutParticipantExists,
+    },
   } = session;
 
   const emitter = React.useMemo(() => new EventEmitter() as TypedEventEmitter<AgentCallbacks>, []);
@@ -397,14 +386,6 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       );
     };
   }, [room.localParticipant]);
-
-  const {
-    agentTimeoutFailureReason,
-    startAgentTimeout,
-    clearAgentTimeout,
-    updateAgentTimeoutState,
-    updateAgentTimeoutParticipantExists,
-  } = useAgentTimeoutIdStore();
 
   const failureReasons = React.useMemo(() => {
     return agentTimeoutFailureReason ? [agentTimeoutFailureReason] : [];

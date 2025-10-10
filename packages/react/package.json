@@ -54,6 +54,8 @@
   "dependencies": {
     "@livekit/components-core": "workspace:*",
     "clsx": "2.1.1",
+    "events": "^3.3.0",
+    "jose": "^6.0.12",
     "usehooks-ts": "3.1.1"
   },
   "peerDependencies": {
@@ -69,13 +71,15 @@
     }
   },
   "devDependencies": {
-    "@livekit/protocol": "^1.23.0",
+    "@livekit/protocol": "catalog:",
     "@microsoft/api-extractor": "^7.35.0",
     "@size-limit/file": "^11.0.2",
     "@size-limit/webpack": "^11.0.2",
     "@size-limit/webpack-why": "^11.1.6",
     "@svgr/cli": "^8.0.0",
     "@testing-library/react": "^16.0.0",
+    "@types/events": "^3.0.3",
+    "@types/node": "^24.7.0",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-react": "^4.3.2",
@@ -85,6 +89,7 @@
     "react-dom": "^18.2.0",
     "rimraf": "^6.0.0",
     "size-limit": "^11.0.2",
+    "typed-emitter": "^2.1.0",
     "vite": "^6.0.0",
     "vite-plugin-dts": "^4.2.3",
     "vitest": "^3.0.0"

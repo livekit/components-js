@@ -1,5 +1,7 @@
 import type { Room } from 'livekit-client';
 import * as React from 'react';
+import { useMaybeSessionContext } from './session-context';
+import { UseSessionReturn } from '../hooks';
 
 /** @public */
 export const RoomContext = React.createContext<Room | undefined>(undefined);
@@ -39,4 +41,24 @@ export function useEnsureRoom(room?: Room) {
     );
   }
   return r;
+}
+
+/**
+ * Ensures that a room is provided, either via context or explicitly as room / session props of the
+ * consuming component.
+ * If no room can be found, an error is thrown.
+ * @public
+ */
+export function useEnsureRoomFromProps<P extends { room?: Room; session?: UseSessionReturn }>(
+  props: P,
+): Room {
+  const sessionContext = useMaybeSessionContext();
+  const roomContext = useMaybeRoomContext();
+  const room = props.session?.room ?? props.room ?? sessionContext?.room ?? roomContext;
+  if (!room) {
+    throw new Error(
+      'No room or session provided. Make sure you are inside a Room context, SessionProvider component, or pass the room or session explicitly as props',
+    );
+  }
+  return room;
 }

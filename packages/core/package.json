@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@livekit/components-styles": "workspace:*",
-    "@livekit/protocol": "^1.38.0",
+    "@livekit/protocol": "catalog:",
     "@microsoft/api-extractor": "^7.36.0",
     "@size-limit/file": "^11.0.2",
     "@size-limit/webpack": "^11.0.2",

@@ -2,6 +2,7 @@ import { RoomEvent, type Room } from 'livekit-client';
 import type { TextStreamInfo } from 'livekit-client/dist/src/room/types';
 import { from, scan, Subject, type Observable } from 'rxjs';
 import { share, tap } from 'rxjs/operators';
+import { ParticipantAgentAttributes } from '../helper';
 
 export interface TextStreamData {
   text: string;
@@ -57,7 +58,7 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
   const textStreamsSubject = new Subject<TextStreamData[]>();
   let textStreams: TextStreamData[] = [];
 
-  const segmentAttribute = 'lk.segment_id';
+  const segmentAttribute = ParticipantAgentAttributes.TranscriptionSegmentId;
 
   // Create shared observable and store in cache
   const sharedObservable = textStreamsSubject.pipe(

@@ -56,8 +56,7 @@
     "clsx": "2.1.1",
     "events": "^3.3.0",
     "jose": "^6.0.12",
-    "usehooks-ts": "3.1.1",
-    "zustand": "^5.0.8"
+    "usehooks-ts": "3.1.1"
   },
   "peerDependencies": {
     "@livekit/krisp-noise-filter": "^0.2.12 || ^0.3.0",

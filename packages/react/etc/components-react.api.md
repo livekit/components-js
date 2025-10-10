@@ -38,10 +38,12 @@ import { ParticipantIdentifier } from '@livekit/components-core';
 import { ParticipantPermission } from '@livekit/protocol';
 import { PinState } from '@livekit/components-core';
 import * as React_2 from 'react';
+import { ReceivedAgentTranscriptionMessage } from '@livekit/components-core';
 import { ReceivedChatMessage } from '@livekit/components-core';
 import { ReceivedDataMessage } from '@livekit/components-core';
 import { ReceivedMessage } from '@livekit/components-core';
 import { ReceivedTranscriptionSegment } from '@livekit/components-core';
+import { ReceivedUserTranscriptionMessage } from '@livekit/components-core';
 import { RemoteAudioTrack } from 'livekit-client';
 import { RemoteParticipant } from 'livekit-client';
 import { Room } from 'livekit-client';
@@ -612,7 +614,13 @@ export const QualityPoorIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.El
 // @internal (undocumented)
 export const QualityUnknownIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
+export { ReceivedAgentTranscriptionMessage }
+
 export { ReceivedChatMessage }
+
+export { ReceivedMessage }
+
+export { ReceivedUserTranscriptionMessage }
 
 // @public
 export function RoomAudioRenderer({ room, volume, muted }: RoomAudioRendererProps): React_2.JSX.Element;

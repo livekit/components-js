@@ -492,9 +492,6 @@ export type MessagesCallbacks = {
 
 // @public (undocumented)
 export enum MessagesEvent {
-    // (undocumented)
-    Disconnected = "disconnected",
-    // (undocumented)
     MessageReceived = "messageReceived"
 }
 

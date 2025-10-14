@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 2.9.16
+
+### Patch Changes
+
+- Add initial version of agents sdk (useSession, etc) - [#1207](https://github.com/livekit/components-js/pull/1207) ([@1egoman](https://github.com/1egoman))
+
+- Updated dependencies [[`f118da6e678c4a91be91c4dfc9b3b61eb7f64e2a`](https://github.com/livekit/components-js/commit/f118da6e678c4a91be91c4dfc9b3b61eb7f64e2a)]:
+  - @livekit/components-core@0.12.11
+
 ## 2.9.15
 
 ### Patch Changes

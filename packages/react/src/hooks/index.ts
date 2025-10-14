@@ -30,7 +30,7 @@ export { type UseRemoteParticipantOptions, useRemoteParticipant } from './useRem
 export { type UseRemoteParticipantsOptions, useRemoteParticipants } from './useRemoteParticipants';
 export { type UseRoomInfoOptions, useRoomInfo } from './useRoomInfo';
 export { useSortedParticipants } from './useSortedParticipants';
-export { useSpeakingParticipants, UseSpeakingParticipantsOptions } from './useSpeakingParticipants';
+export { useSpeakingParticipants, type UseSpeakingParticipantsOptions } from './useSpeakingParticipants';
 export { type UseStartAudioProps, useStartAudio } from './useStartAudio';
 export { type UseStartVideoProps, useStartVideo } from './useStartVideo';
 export { type UseSwipeOptions, useSwipe } from './useSwipe';

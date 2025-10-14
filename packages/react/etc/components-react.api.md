@@ -1244,7 +1244,12 @@ export type UseSessionReturn = (SessionStateConnecting | SessionStateConnected |
 export function useSortedParticipants(participants: Array<Participant>): Participant[];
 
 // @public
-export function useSpeakingParticipants(room?: Room): Participant[];
+export function useSpeakingParticipants(options?: UseSpeakingParticipantsOptions): Participant[];
+
+// @public (undocumented)
+export type UseSpeakingParticipantsOptions = {
+    room?: Room;
+};
 
 // @alpha
 export function useStartAudio({ room, props }: UseStartAudioProps): {

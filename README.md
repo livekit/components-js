@@ -29,7 +29,9 @@ First add the library to your project:
 npm i @livekit/components-react
 ```
 
-Next, [host an agent manually](https://docs.livekit.io/agents/start/voice-ai/) or via [LiveKit Cloud Agents](https://docs.livekit.io/agents/ops/deployment/), and give it the name "example agent"
+Next, you need a running agent. If you don't already have one, [it only takes a few minutes to set one up](https://docs.livekit.io/agents/start/voice-ai).
+
+The rest of this guide assumes your agent is configured for [explicit dispatch](https://docs.livekit.io/agents/worker/agent-dispatch/#explicit) with `agent_name="example agent"`.
 
 Then, you can use the agents sdk to connect and talk with your agent:
 

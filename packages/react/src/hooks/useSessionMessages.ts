@@ -32,8 +32,11 @@ export type UseSessionMessagesReturn = {
 
 /** @public */
 export enum MessagesEvent {
+  /**
+   * Emits when a new {@link ReceivedMessage} is received from a participant
+   * args: (message; ReceivedMessage)
+   */
   MessageReceived = 'messageReceived',
-  Disconnected = 'disconnected',
 }
 
 /** @public */

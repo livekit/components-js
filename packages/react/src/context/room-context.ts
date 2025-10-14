@@ -1,7 +1,5 @@
 import type { Room } from 'livekit-client';
 import * as React from 'react';
-import { useMaybeSessionContext } from './session-context';
-import { UseSessionReturn } from '../hooks';
 
 /** @public */
 export const RoomContext = React.createContext<Room | undefined>(undefined);

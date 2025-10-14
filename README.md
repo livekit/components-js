@@ -31,9 +31,9 @@ npm i @livekit/components-react
 
 Next, you need a running agent. If you don't already have one, [it only takes a few minutes to set one up](https://docs.livekit.io/agents/start/voice-ai).
 
-The rest of this guide assumes your agent is configured for [explicit dispatch](https://docs.livekit.io/agents/worker/agent-dispatch/#explicit) with `agent_name="example agent"`.
+The rest of this guide assumes your agent is configured for [explicit dispatch](https://docs.livekit.io/agents/worker/agent-dispatch/#explicit) with `agent_name="example-agent"`.
 
-Then, you can use the agents sdk to connect and talk with your agent:
+Then, you can use the agents sdk to connect and interact with your agent:
 
 ```tsx
 import { useEffect, useState } from "react";
@@ -56,7 +56,7 @@ const tokenSource = TokenSource.literal({
 
 export default function Example() {
   const session = useSession(tokenSource, {
-    agentName: 'example agent', /* <== Put your agent name here! */
+    agentName: 'example-agent', /* <== Put your agent name here! */
   });
 
   const toggleStarted = () => {

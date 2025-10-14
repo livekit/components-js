@@ -1,6 +1,7 @@
 import type { ToggleSource } from '@livekit/components-core';
 import { setupMediaToggle, setupManualToggle, log } from '@livekit/components-core';
 import * as React from 'react';
+import { type Room } from 'livekit-client';
 import type { TrackToggleProps } from '../components';
 import { useMaybeRoomContext } from '../context';
 import { mergeProps } from '../mergeProps';
@@ -8,7 +9,9 @@ import { useObservableState } from './internal';
 
 /** @public */
 export interface UseTrackToggleProps<T extends ToggleSource>
-  extends Omit<TrackToggleProps<T>, 'showIcon'> {}
+  extends Omit<TrackToggleProps<T>, 'showIcon'> {
+  room?: Room;
+}
 
 /**
  * The `useTrackToggle` hook is used to implement the `TrackToggle` component and returns state
@@ -28,19 +31,21 @@ export function useTrackToggle<T extends ToggleSource>({
   captureOptions,
   publishOptions,
   onDeviceError,
+  room,
   ...rest
 }: UseTrackToggleProps<T>) {
-  const room = useMaybeRoomContext();
-  const track = room?.localParticipant?.getTrackPublication(source);
+  const roomFromContext = useMaybeRoomContext();
+  const roomFallback = React.useMemo(() => room ?? roomFromContext, [room, roomFromContext]);
+  const track = roomFallback?.localParticipant?.getTrackPublication(source);
   /** `true` if a user interaction such as a click on the TrackToggle button has occurred. */
   const userInteractionRef = React.useRef(false);
 
   const { toggle, className, pendingObserver, enabledObserver } = React.useMemo(
     () =>
-      room
-        ? setupMediaToggle<T>(source, room, captureOptions, publishOptions, onDeviceError)
+      roomFallback
+        ? setupMediaToggle<T>(source, roomFallback, captureOptions, publishOptions, onDeviceError)
         : setupManualToggle(),
-    [room, source, JSON.stringify(captureOptions), publishOptions],
+    [roomFallback, source, JSON.stringify(captureOptions), publishOptions],
   );
 
   const pending = useObservableState(pendingObserver, false);

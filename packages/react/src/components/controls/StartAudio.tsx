@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { useRoomContext } from '../../context';
+import { useEnsureRoom } from '../../context';
 import { useStartAudio } from '../../hooks';
+import { Room } from 'livekit-client';
 
 /** @public */
 export interface AllowAudioPlaybackProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  room?: Room;
   label: string;
 }
 
@@ -26,7 +28,7 @@ export const StartAudio: (
   props: AllowAudioPlaybackProps & React.RefAttributes<HTMLButtonElement>,
 ) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLButtonElement, AllowAudioPlaybackProps>(
   function StartAudio({ label = 'Allow Audio', ...props }: AllowAudioPlaybackProps, ref) {
-    const room = useRoomContext();
+    const room = useEnsureRoom(props.room);
     const { mergedProps } = useStartAudio({ room, props });
 
     return (

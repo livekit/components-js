@@ -1,23 +1,17 @@
 import * as React from 'react';
 import { ConnectionState, ParticipantKind, Track } from 'livekit-client';
 import type { RemoteParticipant } from 'livekit-client';
-import type { ReceivedTranscriptionSegment, TrackReference } from '@livekit/components-core';
+import {
+  ParticipantAgentAttributes,
+  type ReceivedTranscriptionSegment,
+  type TrackReference,
+} from '@livekit/components-core';
 import { useRemoteParticipants } from './useRemoteParticipants';
 import { useParticipantTracks } from './useParticipantTracks';
 import { useTrackTranscription } from './useTrackTranscription';
 import { useConnectionState } from './useConnectionStatus';
 import { useParticipantAttributes } from './useParticipantAttributes';
-
-/**
- * @beta
- */
-export type AgentState =
-  | 'disconnected'
-  | 'connecting'
-  | 'initializing'
-  | 'listening'
-  | 'thinking'
-  | 'speaking';
+import { AgentState } from './useAgent';
 
 /**
  * @beta
@@ -49,7 +43,7 @@ export interface VoiceAssistant {
   agentAttributes: RemoteParticipant['attributes'] | undefined;
 }
 
-const state_attribute = 'lk.agent.state';
+const state_attribute = ParticipantAgentAttributes.AgentState;
 
 /**
  * This hook looks for the first agent-participant in the room.
@@ -63,11 +57,14 @@ const state_attribute = 'lk.agent.state';
 export function useVoiceAssistant(): VoiceAssistant {
   const remoteParticipants = useRemoteParticipants();
   const agent = remoteParticipants.find(
-    (p) => p.kind === ParticipantKind.AGENT && !('lk.publish_on_behalf' in p.attributes),
+    (p) =>
+      p.kind === ParticipantKind.AGENT &&
+      !(ParticipantAgentAttributes.PublishOnBehalf in p.attributes),
   );
   const worker = remoteParticipants.find(
     (p) =>
-      p.kind === ParticipantKind.AGENT && p.attributes['lk.publish_on_behalf'] === agent?.identity,
+      p.kind === ParticipantKind.AGENT &&
+      p.attributes[ParticipantAgentAttributes.PublishOnBehalf] === agent?.identity,
   );
   const agentTracks = useParticipantTracks(
     [Track.Source.Microphone, Track.Source.Camera],

@@ -30,7 +30,10 @@ export { type UseRemoteParticipantOptions, useRemoteParticipant } from './useRem
 export { type UseRemoteParticipantsOptions, useRemoteParticipants } from './useRemoteParticipants';
 export { type UseRoomInfoOptions, useRoomInfo } from './useRoomInfo';
 export { useSortedParticipants } from './useSortedParticipants';
-export { useSpeakingParticipants } from './useSpeakingParticipants';
+export {
+  useSpeakingParticipants,
+  type UseSpeakingParticipantsOptions,
+} from './useSpeakingParticipants';
 export { type UseStartAudioProps, useStartAudio } from './useStartAudio';
 export { type UseStartVideoProps, useStartVideo } from './useStartVideo';
 export { type UseSwipeOptions, useSwipe } from './useSwipe';
@@ -57,3 +60,13 @@ export * from './useIsRecording';
 export * from './useTextStream';
 export * from './useTranscriptions';
 export * from './useSequentialRoomConnectDisconnect';
+export * from './useSession';
+export {
+  type AgentState,
+  AgentEvent,
+  type AgentCallbacks,
+  type UseAgentReturn,
+  useAgent,
+} from './useAgent';
+export * from './useEvents';
+export * from './useSessionMessages';

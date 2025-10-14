@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import type { Participant, Room, ChatMessage, SendTextOptions } from 'livekit-client';
+import type { Room, SendTextOptions } from 'livekit-client';
 import { compareVersions, RoomEvent } from 'livekit-client';
 import { BehaviorSubject, Subject, scan, map, takeUntil, from, filter } from 'rxjs';
 import {
@@ -9,15 +9,10 @@ import {
   setupDataMessageHandler,
 } from '../observables/dataChannel';
 import { log } from '../logger';
+import { ChatMessage, ReceivedChatMessage } from '../messages/types';
 
 /** @public */
-export type { ChatMessage };
-
-/** @public */
-export interface ReceivedChatMessage extends ChatMessage {
-  from?: Participant;
-  attributes?: Record<string, string>;
-}
+export type { ChatMessage, ReceivedChatMessage };
 
 export interface LegacyChatMessage extends ChatMessage {
   ignoreLegacy?: boolean;
@@ -55,7 +50,9 @@ function isIgnorableChatMessage(msg: ReceivedChatMessage | LegacyReceivedChatMes
 }
 
 const decodeLegacyMsg = (message: Uint8Array) =>
-  JSON.parse(new TextDecoder().decode(message)) as LegacyReceivedChatMessage | ReceivedChatMessage;
+  JSON.parse(new TextDecoder().decode(message)) as
+    | LegacyReceivedChatMessage
+    | Exclude<ReceivedChatMessage, 'type'>;
 
 const encodeLegacyMsg = (message: LegacyChatMessage) =>
   new TextEncoder().encode(JSON.stringify(message));
@@ -93,8 +90,9 @@ export function setupChat(room: Room, options?: ChatOptions) {
             timestamp,
             message: chunk,
             from: room.getParticipantByIdentity(participantInfo.identity),
+            type: 'chatMessage',
             // editTimestamp: type === 'update' ? timestamp : undefined,
-          } as ReceivedChatMessage;
+          } satisfies ReceivedChatMessage;
         }),
       );
       streamObservable.subscribe({
@@ -111,7 +109,11 @@ export function setupChat(room: Room, options?: ChatOptions) {
           if (isIgnorableChatMessage(parsedMessage)) {
             return undefined;
           }
-          const newMessage: ReceivedChatMessage = { ...parsedMessage, from: msg.from };
+          const newMessage: ReceivedChatMessage = {
+            ...parsedMessage,
+            type: 'chatMessage',
+            from: msg.from,
+          };
           return newMessage;
         }),
         filter((msg) => !!msg),
@@ -169,6 +171,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
 
       const receivedChatMsg: ReceivedChatMessage = {
         ...chatMsg,
+        type: 'chatMessage',
         from: room.localParticipant,
         attributes: options.attributes,
       };

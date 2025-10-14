@@ -5,4 +5,5 @@ packages:
   - 'tooling/*'
 
 catalog:
-  livekit-client: ^2.13.3
+  livekit-client: ^2.15.8
+  "@livekit/protocol": ^1.42.0

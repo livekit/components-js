@@ -20,6 +20,7 @@ import { ParticipantPlaceholder } from '../../assets/images';
 import { LockLockedIcon, ScreenShareIcon } from '../../assets/icons';
 import { VideoTrack } from './VideoTrack';
 import { AudioTrack } from './AudioTrack';
+import { EmojiReaction } from './EmojiReaction';
 import { useParticipantTile } from '../../hooks';
 import { useIsEncrypted } from '../../hooks/useIsEncrypted';
 
@@ -139,9 +140,9 @@ export const ParticipantTile: (
             {children ?? (
               <>
                 {isTrackReference(trackReference) &&
-                (trackReference.publication?.kind === 'video' ||
-                  trackReference.source === Track.Source.Camera ||
-                  trackReference.source === Track.Source.ScreenShare) ? (
+                  (trackReference.publication?.kind === 'video' ||
+                    trackReference.source === Track.Source.Camera ||
+                    trackReference.source === Track.Source.ScreenShare) ? (
                   <VideoTrack
                     trackRef={trackReference}
                     onSubscriptionStatusChanged={handleSubscribe}
@@ -183,6 +184,7 @@ export const ParticipantTile: (
                 </div>
               </>
             )}
+            <EmojiReaction />
             <FocusToggle trackRef={trackReference} />
           </ParticipantContextIfNeeded>
         </TrackRefContextIfNeeded>

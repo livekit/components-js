@@ -779,10 +779,8 @@ export interface TrackTranscriptionOptions {
 // @internal (undocumented)
 export const UnfocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
-// Warning: (ae-forgotten-export) The symbol "SessionStub" needs to be exported by the entry point index.docs.d.ts
-//
 // @public
-export function useAgent(session?: SessionStub): UseAgentReturn;
+export function useAgent(session?: UseSessionReturn): UseAgentReturn;
 
 // Warning: (ae-forgotten-export) The symbol "AgentStateCases" needs to be exported by the entry point index.docs.d.ts
 // Warning: (ae-forgotten-export) The symbol "AgentActions" needs to be exported by the entry point index.docs.d.ts

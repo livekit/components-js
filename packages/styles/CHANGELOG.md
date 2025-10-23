@@ -1,5 +1,11 @@
 # @livekit/components-styles
 
+## 1.2.0
+
+### Minor Changes
+
+- Scope button and input styles to LiveKit classes within the data theme - [#1218](https://github.com/livekit/components-js/pull/1218) ([@lukasIO](https://github.com/lukasIO))
+
 ## 1.1.6
 
 ### Patch Changes

@@ -51,8 +51,8 @@ export enum AgentEvent {
 
 /** @public */
 export type AgentCallbacks = {
-  [AgentEvent.CameraChanged]: (newTrack: TrackReference | null) => void;
-  [AgentEvent.MicrophoneChanged]: (newTrack: TrackReference | null) => void;
+  [AgentEvent.CameraChanged]: (newTrack: TrackReference | undefined) => void;
+  [AgentEvent.MicrophoneChanged]: (newTrack: TrackReference | undefined) => void;
   [AgentEvent.StateChanged]: (newAgentState: AgentState) => void;
 };
 
@@ -79,8 +79,8 @@ type AgentStateAvailable = AgentStateCommon & {
    * connected yet? */
   isBufferingSpeech: false;
 
-  cameraTrack: TrackReference | null;
-  microphoneTrack: TrackReference | null;
+  cameraTrack?: TrackReference;
+  microphoneTrack?: TrackReference;
 };
 
 type AgentStateAvailableListening = AgentStateCommon & {
@@ -94,8 +94,8 @@ type AgentStateAvailableListening = AgentStateCommon & {
    * connected yet? */
   isBufferingSpeech: boolean;
 
-  cameraTrack: TrackReference | null;
-  microphoneTrack: TrackReference | null;
+  cameraTrack?: TrackReference;
+  microphoneTrack?: TrackReference;
 };
 
 type AgentStateUnAvailable = AgentStateCommon & {
@@ -109,8 +109,8 @@ type AgentStateUnAvailable = AgentStateCommon & {
    * connected yet? */
   isBufferingSpeech: false;
 
-  cameraTrack: TrackReference | null;
-  microphoneTrack: TrackReference | null;
+  cameraTrack?: TrackReference;
+  microphoneTrack?: TrackReference;
 };
 
 type AgentStateConnecting = AgentStateCommon & {
@@ -124,8 +124,8 @@ type AgentStateConnecting = AgentStateCommon & {
    * connected yet? */
   isBufferingSpeech: false;
 
-  cameraTrack: null;
-  microphoneTrack: null;
+  cameraTrack: undefined;
+  microphoneTrack: undefined;
 };
 
 type AgentStateFailed = AgentStateCommon & {
@@ -139,8 +139,8 @@ type AgentStateFailed = AgentStateCommon & {
    * connected yet? */
   isBufferingSpeech: false;
 
-  cameraTrack: null;
-  microphoneTrack: null;
+  cameraTrack: undefined;
+  microphoneTrack: undefined;
 };
 
 type AgentActions = {
@@ -325,8 +325,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
   const videoTrack = React.useMemo(
     () =>
       agentTracks.find((t) => t.source === Track.Source.Camera) ??
-      workerTracks.find((t) => t.source === Track.Source.Camera) ??
-      null,
+      workerTracks.find((t) => t.source === Track.Source.Camera),
     [agentTracks, workerTracks],
   );
   React.useEffect(() => {
@@ -336,8 +335,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
   const audioTrack = React.useMemo(
     () =>
       agentTracks.find((t) => t.source === Track.Source.Microphone) ??
-      workerTracks.find((t) => t.source === Track.Source.Microphone) ??
-      null,
+      workerTracks.find((t) => t.source === Track.Source.Microphone),
     [agentTracks, workerTracks],
   );
   React.useEffect(() => {
@@ -468,8 +466,8 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
           failureReasons: null,
 
           // Clear inner values if no longer connected
-          cameraTrack: null,
-          microphoneTrack: null,
+          cameraTrack: undefined,
+          microphoneTrack: undefined,
         };
 
       case 'initializing':
@@ -523,8 +521,8 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
           failureReasons,
 
           // Clear inner values if no longer connected
-          cameraTrack: null,
-          microphoneTrack: null,
+          cameraTrack: undefined,
+          microphoneTrack: undefined,
         };
     }
   }, [
@@ -574,7 +572,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
   const waitUntilCamera = React.useCallback(
     (signal?: AbortSignal) => {
       return new Promise<TrackReference>((resolve, reject) => {
-        const stateChangedHandler = (camera: TrackReference | null) => {
+        const stateChangedHandler = (camera: TrackReference | undefined) => {
           if (!camera) {
             return;
           }
@@ -601,7 +599,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
   const waitUntilMicrophone = React.useCallback(
     (signal?: AbortSignal) => {
       return new Promise<TrackReference>((resolve, reject) => {
-        const stateChangedHandler = (microphone: TrackReference | null) => {
+        const stateChangedHandler = (microphone: TrackReference | undefined) => {
           if (!microphone) {
             return;
           }

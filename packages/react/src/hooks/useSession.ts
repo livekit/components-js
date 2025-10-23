@@ -14,7 +14,7 @@ import {
 import { EventEmitter } from 'events';
 
 import { useMaybeRoomContext } from '../context';
-import { AgentState, useAgent, useAgentTimeoutIdStore } from './useAgent';
+import { AgentState, useAgentTimeoutIdStore } from './useAgent';
 import { TrackReference } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
 
@@ -415,17 +415,6 @@ export function useSession(
     [waitUntilConnectionState],
   );
 
-  const agent = useAgent(
-    React.useMemo(
-      () => ({
-        connectionState: conversationState.connectionState,
-        room,
-        internal: sessionInternal,
-      }),
-      [conversationState, room, sessionInternal],
-    ),
-  );
-
   const tokenSourceFetch = React.useCallback(async () => {
     const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
     if (isConfigurable) {
@@ -469,11 +458,10 @@ export function useSession(
       ]);
 
       await waitUntilConnected(signal);
-      await agent.waitUntilAvailable(signal);
 
       signal?.removeEventListener('abort', onSignalAbort);
     },
-    [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected, agent.waitUntilAvailable],
+    [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected],
   );
 
   const end = React.useCallback(async () => {

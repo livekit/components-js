@@ -239,13 +239,11 @@ export const useAgentTimeoutIdStore = (): {
   };
 };
 
-type SessionStub = Pick<UseSessionReturn, 'connectionState' | 'room' | 'internal'>;
-
 /**
  * useAgent encapculates all agent state, normalizing some quirks around how LiveKit Agents work.
  * @public
  */
-export function useAgent(session?: SessionStub): UseAgentReturn {
+export function useAgent(session?: UseSessionReturn): UseAgentReturn {
   const sessionFromContext = useMaybeSessionContext();
   session = session ?? sessionFromContext;
   if (!session) {

@@ -75,8 +75,8 @@ import { WidgetState } from '@livekit/components-core';
 
 // @public (undocumented)
 export type AgentCallbacks = {
-    [AgentEvent.CameraChanged]: (newTrack: TrackReference | null) => void;
-    [AgentEvent.MicrophoneChanged]: (newTrack: TrackReference | null) => void;
+    [AgentEvent.CameraChanged]: (newTrack: TrackReference | undefined) => void;
+    [AgentEvent.MicrophoneChanged]: (newTrack: TrackReference | undefined) => void;
     [AgentEvent.StateChanged]: (newAgentState: AgentState) => void;
 };
 

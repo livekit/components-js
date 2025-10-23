@@ -23,7 +23,6 @@ import { isTrackReference } from '@livekit/components-core';
 import { KrispNoiseFilterProcessor } from '@livekit/krisp-noise-filter';
 import { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
-import { LocalTrack } from 'livekit-client';
 import { LocalTrackPublication } from 'livekit-client';
 import { LocalUserChoices } from '@livekit/components-core';
 import { LocalVideoTrack } from 'livekit-client';
@@ -165,6 +164,8 @@ export interface BarVisualizerProps extends React_2.HTMLProps<HTMLDivElement> {
     options?: BarVisualizerOptions;
     state?: AgentState;
     // (undocumented)
+    track?: TrackReferenceOrPlaceholder | LocalAudioTrack | RemoteAudioTrack;
+    // @deprecated (undocumented)
     trackRef?: TrackReferenceOrPlaceholder;
 }
 
@@ -1147,7 +1148,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(en
 };
 
 // @public (undocumented)
-export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): LocalTrack<Track.Kind>[] | undefined;
+export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): (LocalAudioTrack | LocalVideoTrack)[] | undefined;
 
 // @public
 export function useRemoteParticipant(identifier: ParticipantIdentifier, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;

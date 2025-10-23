@@ -1,7 +1,6 @@
 import type {
   CreateLocalTracksOptions,
   LocalAudioTrack,
-  LocalTrack,
   LocalVideoTrack,
   TrackProcessor,
 } from 'livekit-client';
@@ -59,17 +58,19 @@ export function usePreviewTracks(
   options: CreateLocalTracksOptions,
   onError?: (err: Error) => void,
 ) {
-  const [tracks, setTracks] = React.useState<LocalTrack[]>();
+  const [tracks, setTracks] = React.useState<Array<LocalAudioTrack | LocalVideoTrack>>();
 
   const trackLock = React.useMemo(() => new Mutex(), []);
 
   React.useEffect(() => {
     let needsCleanup = false;
-    let localTracks: Array<LocalTrack> = [];
+    let localTracks: Array<LocalAudioTrack | LocalVideoTrack> = [];
     trackLock.lock().then(async (unlock) => {
       try {
         if (options.audio || options.video) {
-          localTracks = await createLocalTracks(options);
+          localTracks = (await createLocalTracks(options)) as Array<
+            LocalAudioTrack | LocalVideoTrack
+          >;
 
           if (needsCleanup) {
             localTracks.forEach((tr) => tr.stop());

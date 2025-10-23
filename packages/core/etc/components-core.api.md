@@ -11,6 +11,7 @@ import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState } from 'livekit-client';
 import { DataPacket_Kind } from 'livekit-client';
 import { DataPublishOptions } from 'livekit-client';
+import { Encryption_Type } from 'livekit-client';
 import { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
 import { LocalVideoTrack } from 'livekit-client';
@@ -114,7 +115,7 @@ export function createChatObserver(room: Room): Observable<[message: ChatMessage
 export function createConnectionQualityObserver(participant: Participant): Observable<ConnectionQuality>;
 
 // @public (undocumented)
-export function createDataObserver(room: Room): Observable<[payload: Uint8Array<ArrayBufferLike>, participant?: RemoteParticipant | undefined, kind?: DataPacket_Kind | undefined, topic?: string | undefined]>;
+export function createDataObserver(room: Room): Observable<[payload: Uint8Array<ArrayBufferLike>, participant?: RemoteParticipant | undefined, kind?: DataPacket_Kind | undefined, topic?: string | undefined, encryptionType?: Encryption_Type | undefined]>;
 
 // @public (undocumented)
 export const createDefaultGrammar: () => {
@@ -320,6 +321,20 @@ export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observabl
 // @public (undocumented)
 export function observeTrackEvents(track: TrackPublication, ...events: TrackEvent_2[]): Observable<TrackPublication>;
 
+// @public
+export enum ParticipantAgentAttributes {
+    // (undocumented)
+    AgentState = "lk.agent.state",
+    // (undocumented)
+    PublishOnBehalf = "lk.publish_on_behalf",
+    // (undocumented)
+    TranscribedTrackId = "lk.transcribed_track_id",
+    // (undocumented)
+    TranscriptionFinal = "lk.transcription_final",
+    // (undocumented)
+    TranscriptionSegmentId = "lk.segment_id"
+}
+
 // @public (undocumented)
 export function participantAttributesObserver(participant: Participant): Observable<{
     changed: Readonly<Record<string, string>>;
@@ -410,13 +425,18 @@ export const PIN_DEFAULT_STATE: PinState;
 // @public (undocumented)
 export type PinState = TrackReferenceOrPlaceholder[];
 
+// Warning: (ae-forgotten-export) The symbol "ReceivedMessageWithType" needs to be exported by the entry point index.d.ts
+//
 // @public (undocumented)
-export interface ReceivedChatMessage extends ChatMessage {
-    // (undocumented)
-    attributes?: Record<string, string>;
-    // (undocumented)
+export type ReceivedAgentTranscriptionMessage = ReceivedMessageWithType<'agentTranscript', {
+    message: string;
+}>;
+
+// @public (undocumented)
+export type ReceivedChatMessage = ReceivedMessageWithType<'chatMessage', ChatMessage & {
     from?: Participant;
-}
+    attributes?: Record<string, string>;
+}>;
 
 // @public (undocumented)
 export interface ReceivedDataMessage<T extends string | undefined = string> extends BaseDataMessage<T> {
@@ -425,10 +445,18 @@ export interface ReceivedDataMessage<T extends string | undefined = string> exte
 }
 
 // @public (undocumented)
+export type ReceivedMessage = ReceivedUserTranscriptionMessage | ReceivedAgentTranscriptionMessage | ReceivedChatMessage;
+
+// @public (undocumented)
 export type ReceivedTranscriptionSegment = TranscriptionSegment & {
     receivedAtMediaTimestamp: number;
     receivedAt: number;
 };
+
+// @public (undocumented)
+export type ReceivedUserTranscriptionMessage = ReceivedMessageWithType<'userTranscript', {
+    message: string;
+}>;
 
 // @public (undocumented)
 export function recordingStatusObservable(room: Room): Observable<boolean>;
@@ -478,6 +506,9 @@ export function selectGridLayout(layoutDefinitions: GridLayoutDefinition[], part
 
 // @public
 export function sendMessage(localParticipant: LocalParticipant, payload: Uint8Array, options?: DataPublishOptions): Promise<void>;
+
+// @public (undocumented)
+export type SentMessage = ChatMessage;
 
 // @public (undocumented)
 export function setDifference<T>(setA: Set<T>, setB: Set<T>): Set<T>;

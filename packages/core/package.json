@@ -35,7 +35,7 @@
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@floating-ui/dom": "1.6.13",
+    "@floating-ui/dom": "1.7.4",
     "loglevel": "1.9.1",
     "rxjs": "7.8.2"
   },

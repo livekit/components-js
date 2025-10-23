@@ -119,6 +119,7 @@ export function useMultibandTrackVolume(
 
   React.useEffect(() => {
     if (!track || !track?.mediaStream) {
+      setFrequencyBands((val) => val.slice().fill(0));
       return;
     }
     const { analyser, cleanup } = createAudioAnalyser(track, opts.analyserOptions);

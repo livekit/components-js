@@ -1,7 +1,6 @@
 import type {
   CreateLocalTracksOptions,
   LocalAudioTrack,
-  LocalTrack,
   LocalVideoTrack,
   TrackProcessor,
 } from 'livekit-client';

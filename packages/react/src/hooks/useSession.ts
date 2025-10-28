@@ -10,8 +10,6 @@ import {
   TokenSourceFixed,
   TokenSourceFetchOptions,
   RoomConnectOptions,
-  TokenPayload,
-  RoomConfigurationObject,
 } from 'livekit-client';
 import { EventEmitter } from 'events';
 
@@ -19,8 +17,6 @@ import { useMaybeRoomContext } from '../context';
 import { AgentState, useAgent, useAgentTimeoutIdStore } from './useAgent';
 import { TrackReference } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
-import { decodeJwt } from 'jose';
-import { RoomConfiguration } from '@livekit/protocol';
 
 /** @public */
 export enum SessionEvent {
@@ -156,22 +152,6 @@ type UseSessionCommonOptions = {
 
 type UseSessionConfigurableOptions = UseSessionCommonOptions & TokenSourceFetchOptions;
 type UseSessionFixedOptions = UseSessionCommonOptions;
-
-/** Given a LiveKit generated participant token, decodes and returns the associated {@link TokenPayload} data. */
-export function decodeTokenPayload(token: string) {
-  const payload = decodeJwt<Omit<TokenPayload, 'roomConfig'>>(token);
-
-  const { roomConfig, ...rest } = payload;
-
-  const mappedPayload: TokenPayload = {
-    ...rest,
-    roomConfig: roomConfig
-      ? (RoomConfiguration.fromJson(roomConfig as Record<string, any>) as RoomConfigurationObject)
-      : undefined,
-  };
-
-  return mappedPayload;
-}
 
 /**
  * A Session represents a manages connection to a Room which can contain Agents.

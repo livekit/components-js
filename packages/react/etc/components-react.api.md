@@ -58,7 +58,6 @@ import { SourcesArray } from '@livekit/components-core';
 import { SVGProps } from 'react';
 import { TextStreamData } from '@livekit/components-core';
 import { ToggleSource } from '@livekit/components-core';
-import { TokenPayload } from 'livekit-client';
 import { TokenSourceConfigurable } from 'livekit-client';
 import { TokenSourceFetchOptions } from 'livekit-client';
 import { TokenSourceFixed } from 'livekit-client';
@@ -300,9 +299,6 @@ export interface ControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> 
     // (undocumented)
     variation?: 'minimal' | 'verbose' | 'textOnly';
 }
-
-// @public
-export function decodeTokenPayload(token: string): TokenPayload;
 
 // @public
 export const DisconnectButton: (props: DisconnectButtonProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactNode;

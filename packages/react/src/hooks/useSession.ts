@@ -10,6 +10,7 @@ import {
   TokenSourceFixed,
   TokenSourceFetchOptions,
   RoomConnectOptions,
+  decodeTokenPayload,
 } from 'livekit-client';
 import { EventEmitter } from 'events';
 

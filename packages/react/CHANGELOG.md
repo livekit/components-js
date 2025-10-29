@@ -1,5 +1,22 @@
 # @livekit/components-react
 
+## 2.9.16
+
+### Patch Changes
+
+- allow localtrack passing on bar visualizer - [#1222](https://github.com/livekit/components-js/pull/1222) ([@lukasIO](https://github.com/lukasIO))
+
+- Ensure multibandvolume returns 0 if no track is passed - [#1223](https://github.com/livekit/components-js/pull/1223) ([@lukasIO](https://github.com/lukasIO))
+
+- Change useAgent to return undefined for nullable TrackReference values - [#1224](https://github.com/livekit/components-js/pull/1224) ([@1egoman](https://github.com/1egoman))
+
+- Make useSession wait for agent only if an agent was dispatched - [#1226](https://github.com/livekit/components-js/pull/1226) ([@1egoman](https://github.com/1egoman))
+
+- Add initial version of agents sdk (useSession, etc) - [#1207](https://github.com/livekit/components-js/pull/1207) ([@1egoman](https://github.com/1egoman))
+
+- Updated dependencies [[`f118da6e678c4a91be91c4dfc9b3b61eb7f64e2a`](https://github.com/livekit/components-js/commit/f118da6e678c4a91be91c4dfc9b3b61eb7f64e2a)]:
+  - @livekit/components-core@0.12.11
+
 ## 2.9.15
 
 ### Patch Changes

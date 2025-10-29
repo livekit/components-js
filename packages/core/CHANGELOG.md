@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.12.11
+
+### Patch Changes
+
+- Add initial version of agents sdk (useSession, etc) - [#1207](https://github.com/livekit/components-js/pull/1207) ([@1egoman](https://github.com/1egoman))
+
 ## 0.12.10
 
 ### Patch Changes

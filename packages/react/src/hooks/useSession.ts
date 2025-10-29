@@ -10,6 +10,7 @@ import {
   TokenSourceFixed,
   TokenSourceFetchOptions,
   RoomConnectOptions,
+  decodeTokenPayload,
 } from 'livekit-client';
 import { EventEmitter } from 'events';
 
@@ -451,12 +452,18 @@ export function useSession(
       };
       signal?.addEventListener('abort', onSignalAbort);
 
+      let tokenDispatchesAgent = false;
       await Promise.all([
         // FIXME: swap the below line in once the new `livekit-client` changes are published
         // room.connect(tokenSource, { tokenSourceOptions }),
-        tokenSourceFetch().then(({ serverUrl, participantToken }) =>
-          room.connect(serverUrl, participantToken, roomConnectOptions),
-        ),
+        tokenSourceFetch().then(({ serverUrl, participantToken }) => {
+          const participantTokenPayload = decodeTokenPayload(participantToken);
+          const participantTokenAgentDispatchCount =
+            participantTokenPayload.roomConfig?.agents?.length ?? 0;
+          tokenDispatchesAgent = participantTokenAgentDispatchCount > 0;
+
+          return room.connect(serverUrl, participantToken, roomConnectOptions);
+        }),
 
         // Start microphone (with preconnect buffer) by default
         tracks.microphone?.enabled
@@ -469,7 +476,9 @@ export function useSession(
       ]);
 
       await waitUntilConnected(signal);
-      await agent.waitUntilAvailable(signal);
+      if (tokenDispatchesAgent) {
+        await agent.waitUntilAvailable(signal);
+      }
 
       signal?.removeEventListener('abort', onSignalAbort);
     },

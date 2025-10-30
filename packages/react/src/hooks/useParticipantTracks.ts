@@ -12,8 +12,11 @@ type UseParticipantTracksOptions = {
 };
 
 /**
- * `useParticipantTracks` is a custom React that allows you to get tracks of a specific participant only, by specifiying the participant's identity.
- * If the participant identity is not passed the hook will try to get the participant from a participant context.
+ * Hook to acquire the tracks of a specific participant only. By default the hook will look in the component tree for a {@link ParticipantContext}.
+ * To specify a different participant, pass their `identity`.
+ *
+ * You may also filter the returned tracks by `Source` (e.g. `Camera`, `Microphone`, `ScreenShare`, etc).
+ *
  * @public
  */
 export function useParticipantTracks<TrackSource extends Track.Source>(

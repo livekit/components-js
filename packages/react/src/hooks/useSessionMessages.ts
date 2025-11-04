@@ -109,8 +109,28 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
 
   const receivedMessages = React.useMemo(() => {
     const merged: Array<ReceivedMessage> = [...transcriptionMessages, ...chat.chatMessages];
-    return merged.sort((a, b) => a.timestamp - b.timestamp);
+    return merged;
   }, [transcriptionMessages, chat.chatMessages]);
+
+  const [messageFirstReceivedTimeMap, setMessageFirstReceivedTime] = React.useState(
+    new Map<ReceivedMessage['id'], Date>(),
+  );
+  React.useEffect(() => {
+    setMessageFirstReceivedTime((oldMap) => {
+      const newMap = new Map(oldMap);
+
+      const now = new Date();
+      for (const message of receivedMessages) {
+        if (newMap.has(message.id)) {
+          continue;
+        }
+
+        newMap.set(message.id, now);
+      }
+
+      return newMap;
+    });
+  }, [receivedMessages]);
 
   const previouslyReceivedMessageIdsRef = React.useRef(new Set());
   React.useEffect(() => {
@@ -124,13 +144,25 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
     }
   }, [receivedMessages]);
 
+  const sortedReceivedMessages = React.useMemo(() => {
+    return receivedMessages.sort((a, b) => {
+      const aFirstReceivedAt = messageFirstReceivedTimeMap.get(a.id);
+      const bFirstReceivedAt = messageFirstReceivedTimeMap.get(b.id);
+      if (typeof aFirstReceivedAt === 'undefined' || typeof bFirstReceivedAt === 'undefined') {
+        return 0;
+      }
+
+      return aFirstReceivedAt.getTime() - bFirstReceivedAt.getTime();
+    });
+  }, [receivedMessages, messageFirstReceivedTimeMap]);
+
   return React.useMemo(
     () => ({
-      messages: receivedMessages,
+      messages: sortedReceivedMessages,
       send: chat.send,
       isSending: chat.isSending,
       internal: { emitter },
     }),
-    [receivedMessages, chat.send, chat.isSending],
+    [sortedReceivedMessages, chat.send, chat.isSending],
   );
 }

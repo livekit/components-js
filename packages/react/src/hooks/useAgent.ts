@@ -88,6 +88,12 @@ type AgentStateAvailable = AgentStateCommon & {
    * */
   canInteract: true;
 
+  /** Has the client disconnected from the agent either for an expected or unexpected reason? */
+  isFinished: false;
+
+  /** Is the agent currently connecting or setting itself up? */
+  isLoading: false;
+
   cameraTrack?: TrackReference;
   microphoneTrack?: TrackReference;
 };
@@ -106,6 +112,12 @@ type AgentStatePreConnectBuffering = AgentStateCommon & {
    * buffer could be active and recording user input before the agent actually connects.
    * */
   canInteract: true;
+
+  /** Has the client disconnected from the agent either for an expected or unexpected reason? */
+  isFinished: false;
+
+  /** Is the agent currently connecting or setting itself up? */
+  isLoading: false;
 
   cameraTrack?: TrackReference;
   microphoneTrack?: TrackReference;
@@ -126,12 +138,18 @@ type AgentStateUnAvailable = AgentStateCommon & {
    * */
   canInteract: false;
 
+  /** Has the client disconnected from the agent either for an expected or unexpected reason? */
+  isFinished: false;
+
+  /** Is the agent currently connecting or setting itself up? */
+  isLoading: true;
+
   cameraTrack?: TrackReference;
   microphoneTrack?: TrackReference;
 };
 
 type AgentStateConnecting = AgentStateCommon & {
-  state: 'disconnected' | 'connecting';
+  state: 'connecting';
   failureReasons: null;
 
   /** Is the agent connected to the client? */
@@ -144,6 +162,37 @@ type AgentStateConnecting = AgentStateCommon & {
    * buffer could be active and recording user input before the agent actually connects.
    * */
   canInteract: false;
+
+  /** Has the client disconnected from the agent either for an expected or unexpected reason? */
+  isFinished: false;
+
+  /** Is the agent currently connecting or setting itself up? */
+  isLoading: true;
+
+  cameraTrack: undefined;
+  microphoneTrack: undefined;
+};
+
+type AgentStateDisconnected = AgentStateCommon & {
+  state: 'disconnected';
+  failureReasons: null;
+
+  /** Is the agent connected to the client? */
+  isConnected: false;
+
+  /**
+   * Is the agent ready for user interaction?
+   *
+   * Note that this may not mean that the agent is actually connected - the audio pre-connect
+   * buffer could be active and recording user input before the agent actually connects.
+   * */
+  canInteract: false;
+
+  /** Has the client disconnected from the agent either for an expected or unexpected reason? */
+  isFinished: true;
+
+  /** Is the agent currently connecting or setting itself up? */
+  isLoading: false;
 
   cameraTrack: undefined;
   microphoneTrack: undefined;
@@ -164,6 +213,12 @@ type AgentStateFailed = AgentStateCommon & {
    * */
   canInteract: false;
 
+  /** Has the client disconnected from the agent either for an expected or unexpected reason? */
+  isFinished: true;
+
+  /** Is the agent currently connecting or setting itself up? */
+  isLoading: false;
+
   cameraTrack: undefined;
   microphoneTrack: undefined;
 };
@@ -180,6 +235,9 @@ type AgentActions = {
    * */
   waitUntilInteractable: (signal?: AbortSignal) => Promise<void>;
 
+  /** Returns a promise that resolves once the client has disconnected from the agent either for an expected or unexpected reason. */
+  waitUntilFinished: (signal?: AbortSignal) => Promise<void>;
+
   /** Returns a promise that resolves once the agent has published a camera track */
   waitUntilCamera: (signal?: AbortSignal) => Promise<TrackReference>;
 
@@ -189,6 +247,7 @@ type AgentActions = {
 
 type AgentStateCases =
   | AgentStateConnecting
+  | AgentStateDisconnected
   | AgentStateAvailable
   | AgentStatePreConnectBuffering
   | AgentStateUnAvailable
@@ -205,11 +264,15 @@ const generateDerivedStateValues = <State extends AgentState>(state: State) =>
       state === 'listening' ||
       state === 'thinking' ||
       state === 'speaking',
+    isFinished: state === 'disconnected' || state === 'failed',
+    isLoading: state === 'connecting' || state === 'initializing' || state === 'idle',
   }) as {
     isConnected: State extends 'listening' | 'thinking' | 'speaking' ? true : false;
     canInteract: State extends 'pre-connect-buffering' | 'listening' | 'thinking' | 'speaking'
       ? true
       : false;
+    isFinished: State extends 'disconnected' | 'failed' ? true : false;
+    isLoading: State extends 'connecting' | 'initializing' | 'idle' ? true : false;
   };
 
 /** Internal hook used by useSession to store global agent state */
@@ -494,6 +557,18 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
 
     switch (state) {
       case 'disconnected':
+        return {
+          ...common,
+
+          state,
+          ...generateDerivedStateValues(state),
+          failureReasons: null,
+
+          // Clear inner values if no longer connected
+          cameraTrack: undefined,
+          microphoneTrack: undefined,
+        };
+
       case 'connecting':
         return {
           ...common,
@@ -627,6 +702,39 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     [state, emitter],
   );
 
+  const waitUntilFinished = React.useCallback(
+    async (signal?: AbortSignal) => {
+      const { isFinished } = generateDerivedStateValues(state);
+      if (isFinished) {
+        return;
+      }
+
+      return new Promise<void>((resolve, reject) => {
+        const stateChangedHandler = (state: AgentState) => {
+          const { isFinished } = generateDerivedStateValues(state);
+          if (!isFinished) {
+            return;
+          }
+          cleanup();
+          resolve();
+        };
+        const abortHandler = () => {
+          cleanup();
+          reject(new Error('useAgent.waitUntilFinished - signal aborted'));
+        };
+
+        const cleanup = () => {
+          emitter.off(AgentEvent.StateChanged, stateChangedHandler);
+          signal?.removeEventListener('abort', abortHandler);
+        };
+
+        emitter.on(AgentEvent.StateChanged, stateChangedHandler);
+        signal?.addEventListener('abort', abortHandler);
+      });
+    },
+    [state, emitter],
+  );
+
   const waitUntilCamera = React.useCallback(
     (signal?: AbortSignal) => {
       return new Promise<TrackReference>((resolve, reject) => {
@@ -686,8 +794,9 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       ...agentState,
       waitUntilConnected,
       waitUntilInteractable,
+      waitUntilFinished,
       waitUntilCamera,
       waitUntilMicrophone,
     };
-  }, [agentState, waitUntilConnected, waitUntilInteractable, waitUntilCamera, waitUntilMicrophone]);
+  }, [agentState, waitUntilConnected, waitUntilInteractable, waitUntilFinished, waitUntilCamera, waitUntilMicrophone]);
 }

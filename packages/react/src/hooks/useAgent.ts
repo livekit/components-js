@@ -77,7 +77,7 @@ type AgentStateAvailable = AgentStateCommon & {
   state: 'listening' | 'thinking' | 'speaking';
   failureReasons: null;
 
-  /** Is the agent connected and available to receive user input? */
+  /** Is the agent connected to the client? */
   isConnected: true;
 
   /**
@@ -96,7 +96,7 @@ type AgentStatePreConnectBuffering = AgentStateCommon & {
   state: 'pre-connect-buffering';
   failureReasons: null;
 
-  /** Is the agent ready for user interaction? */
+  /** Is the agent connected to the client? */
   isConnected: false;
 
   /**
@@ -115,7 +115,7 @@ type AgentStateUnAvailable = AgentStateCommon & {
   state: 'initializing' | 'idle';
   failureReasons: null;
 
-  /** Is the agent ready for user interaction? */
+  /** Is the agent connected to the client? */
   isConnected: false;
 
   /**
@@ -134,7 +134,7 @@ type AgentStateConnecting = AgentStateCommon & {
   state: 'disconnected' | 'connecting';
   failureReasons: null;
 
-  /** Is the agent ready for user interaction? */
+  /** Is the agent connected to the client? */
   isConnected: false;
 
   /**
@@ -153,7 +153,7 @@ type AgentStateFailed = AgentStateCommon & {
   state: 'failed';
   failureReasons: Array<string>;
 
-  /** Is the agent ready for user interaction? */
+  /** Is the agent connected to the client? */
   isConnected: false;
 
   /**

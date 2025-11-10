@@ -654,7 +654,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
         };
         const abortHandler = () => {
           cleanup();
-          reject(new Error('useAgent.waitUntilAvailable - signal aborted'));
+          reject(new Error('useAgent.waitUntilConnected - signal aborted'));
         };
 
         const cleanup = () => {

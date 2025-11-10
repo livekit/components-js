@@ -155,6 +155,40 @@ type UseSessionConfigurableOptions = UseSessionCommonOptions & TokenSourceFetchO
 type UseSessionFixedOptions = UseSessionCommonOptions;
 
 /**
+ * Given two TokenSourceFetchOptions values, check to see if they are deep equal.
+ *
+ * FIXME: swap this for an import from livekit-client once
+ * https://github.com/livekit/client-sdk-js/pull/1733 is merged!
+ * */
+function areTokenSourceFetchOptionsEqual(a: TokenSourceFetchOptions, b: TokenSourceFetchOptions) {
+  const allKeysSet = new Set([...Object.keys(a), ...Object.keys(b)]) as Set<
+    keyof TokenSourceFetchOptions
+  >;
+
+  for (const key of allKeysSet) {
+    switch (key) {
+      case 'roomName':
+      case 'participantName':
+      case 'participantIdentity':
+      case 'participantMetadata':
+      case 'participantAttributes':
+      case 'agentName':
+      case 'agentMetadata':
+        if (a[key] !== b[key]) {
+          return false;
+        }
+        break;
+      default:
+        // ref: https://stackoverflow.com/a/58009992
+        const exhaustiveCheckedKey: never = key;
+        throw new Error(`Options key ${exhaustiveCheckedKey} not being checked for equality!`);
+    }
+  }
+
+  return true;
+}
+
+/**
  * A Session represents a manages connection to a Room which can contain Agents.
  * @public
  */
@@ -427,15 +461,46 @@ export function useSession(
     ),
   );
 
+  const [memoizedTokenFetchOptions, setMemoizedTokenFetchOptions] =
+    React.useState<TokenSourceFetchOptions | null>(() => {
+      const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
+      if (isConfigurable) {
+        return restOptions;
+      } else {
+        return null;
+      }
+    });
+  React.useEffect(() => {
+    const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
+    if (!isConfigurable) {
+      setMemoizedTokenFetchOptions(null);
+      return;
+    }
+
+    if (
+      memoizedTokenFetchOptions !== null &&
+      areTokenSourceFetchOptionsEqual(memoizedTokenFetchOptions, restOptions)
+    ) {
+      return;
+    }
+
+    const tokenFetchOptions = restOptions as UseSessionConfigurableOptions;
+    setMemoizedTokenFetchOptions(tokenFetchOptions);
+  }, [restOptions]);
+
   const tokenSourceFetch = React.useCallback(async () => {
     const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
     if (isConfigurable) {
-      const tokenFetchOptions = restOptions as UseSessionConfigurableOptions;
-      return tokenSource.fetch(tokenFetchOptions);
+      if (!memoizedTokenFetchOptions) {
+        throw new Error(
+          `AgentSession - memoized token fetch options are not set, but the passed tokenSource was an instance of TokenSourceConfigurable. If you are seeing this please make a new GitHub issue!`,
+        );
+      }
+      return tokenSource.fetch(memoizedTokenFetchOptions);
     } else {
       return tokenSource.fetch();
     }
-  }, [tokenSource, restOptions]);
+  }, [tokenSource, memoizedTokenFetchOptions]);
 
   const start = React.useCallback(
     async (connectOptions: SessionConnectOptions = {}) => {

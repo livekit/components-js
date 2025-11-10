@@ -192,7 +192,7 @@ function areTokenSourceFetchOptionsEqual(a: TokenSourceFetchOptions, b: TokenSou
  * tokenSource.fetch(...) with any fetch options */
 function useSessionTokenSourceFetch(
   tokenSource: TokenSourceConfigurable | TokenSourceFixed,
-  unstableRestOptions: TokenSourceFetchOptions,
+  unstableRestOptions: Exclude<UseSessionConfigurableOptions, keyof UseSessionCommonOptions>,
 ) {
   const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
 
@@ -217,8 +217,7 @@ function useSessionTokenSourceFetch(
       return;
     }
 
-    const tokenFetchOptions = unstableRestOptions as UseSessionConfigurableOptions;
-    setMemoizedTokenFetchOptions(tokenFetchOptions);
+    setMemoizedTokenFetchOptions(unstableRestOptions);
   }, [isConfigurable, unstableRestOptions]);
 
   const tokenSourceFetch = React.useCallback(async () => {

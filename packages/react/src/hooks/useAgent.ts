@@ -798,5 +798,12 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       waitUntilCamera,
       waitUntilMicrophone,
     };
-  }, [agentState, waitUntilConnected, waitUntilInteractable, waitUntilFinished, waitUntilCamera, waitUntilMicrophone]);
+  }, [
+    agentState,
+    waitUntilConnected,
+    waitUntilInteractable,
+    waitUntilFinished,
+    waitUntilCamera,
+    waitUntilMicrophone,
+  ]);
 }

@@ -482,7 +482,7 @@ export function useSession(
 
       signal?.removeEventListener('abort', onSignalAbort);
     },
-    [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected, agent.waitUntilAvailable],
+    [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected, agent.waitUntilConnected],
   );
 
   const end = React.useCallback(async () => {

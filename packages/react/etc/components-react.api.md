@@ -1148,7 +1148,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(en
 };
 
 // @public (undocumented)
-export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): (LocalVideoTrack | LocalAudioTrack)[] | undefined;
+export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): (LocalAudioTrack | LocalVideoTrack)[] | undefined;
 
 // @public
 export function useRemoteParticipant(identifier: ParticipantIdentifier, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;

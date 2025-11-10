@@ -92,7 +92,7 @@ export enum AgentEvent {
 // Warning: (ae-forgotten-export) The symbol "AgentSdkStates" needs to be exported by the entry point index.docs.d.ts
 //
 // @public
-export type AgentState = 'disconnected' | 'connecting' | 'failed' | AgentSdkStates;
+export type AgentState = 'disconnected' | 'connecting' | 'pre-connect-buffering' | 'failed' | AgentSdkStates;
 
 // @public (undocumented)
 export interface AllowAudioPlaybackProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -1148,7 +1148,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(en
 };
 
 // @public (undocumented)
-export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): (LocalAudioTrack | LocalVideoTrack)[] | undefined;
+export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): (LocalVideoTrack | LocalAudioTrack)[] | undefined;
 
 // @public
 export function useRemoteParticipant(identifier: ParticipantIdentifier, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;

@@ -477,7 +477,7 @@ export function useSession(
 
       await waitUntilConnected(signal);
       if (tokenDispatchesAgent) {
-        await agent.waitUntilAvailable(signal);
+        await agent.waitUntilConnected(signal);
       }
 
       signal?.removeEventListener('abort', onSignalAbort);

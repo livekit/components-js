@@ -239,7 +239,7 @@ export const useAgentTimeoutIdStore = (): {
 
       const { isConnected } = generateDerivedStateValues(agentStateRef.current);
       if (!isConnected) {
-        setAgentTimeoutFailureReason('Agent connected but did not complete initializing.');
+        setAgentTimeoutFailureReason('Agent joined the room but did not complete initializing.');
         return;
       }
     }, agentConnectTimeoutMilliseconds ?? DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS);

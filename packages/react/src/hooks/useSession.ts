@@ -158,7 +158,7 @@ type UseSessionFixedOptions = UseSessionCommonOptions;
  * Given two TokenSourceFetchOptions values, check to see if they are deep equal.
  *
  * FIXME: swap this for an import from livekit-client once
- * https://github.com/livekit/client-sdk-js/pull/1733 is merged!
+ * https://github.com/livekit/client-sdk-js/pull/1733 is merged and published!
  * */
 function areTokenSourceFetchOptionsEqual(a: TokenSourceFetchOptions, b: TokenSourceFetchOptions) {
   const allKeysSet = new Set([...Object.keys(a), ...Object.keys(b)]) as Set<
@@ -189,8 +189,11 @@ function areTokenSourceFetchOptionsEqual(a: TokenSourceFetchOptions, b: TokenSou
 }
 
 /** Internal hook used by useSession to manage creating a function that properly invokes
-  * tokenSource.fetch(...) with any fetch options */
-function useSessionTokenSourceFetch(tokenSource: TokenSourceConfigurable | TokenSourceFixed, unstableRestOptions: TokenSourceFetchOptions) {
+ * tokenSource.fetch(...) with any fetch options */
+function useSessionTokenSourceFetch(
+  tokenSource: TokenSourceConfigurable | TokenSourceFixed,
+  unstableRestOptions: TokenSourceFetchOptions,
+) {
   const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
 
   const [memoizedTokenFetchOptions, setMemoizedTokenFetchOptions] =

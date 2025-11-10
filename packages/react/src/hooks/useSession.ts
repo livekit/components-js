@@ -188,6 +188,52 @@ function areTokenSourceFetchOptionsEqual(a: TokenSourceFetchOptions, b: TokenSou
   return true;
 }
 
+/** Internal hook used by useSession to manage creating a function that properly invokes
+  * tokenSource.fetch(...) with any fetch options */
+function useSessionTokenSourceFetch(tokenSource: TokenSourceConfigurable | TokenSourceFixed, unstableRestOptions: TokenSourceFetchOptions) {
+  const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
+
+  const [memoizedTokenFetchOptions, setMemoizedTokenFetchOptions] =
+    React.useState<TokenSourceFetchOptions | null>(() => {
+      if (isConfigurable) {
+        return unstableRestOptions;
+      } else {
+        return null;
+      }
+    });
+  React.useEffect(() => {
+    if (!isConfigurable) {
+      setMemoizedTokenFetchOptions(null);
+      return;
+    }
+
+    if (
+      memoizedTokenFetchOptions !== null &&
+      areTokenSourceFetchOptionsEqual(memoizedTokenFetchOptions, unstableRestOptions)
+    ) {
+      return;
+    }
+
+    const tokenFetchOptions = unstableRestOptions as UseSessionConfigurableOptions;
+    setMemoizedTokenFetchOptions(tokenFetchOptions);
+  }, [isConfigurable, unstableRestOptions]);
+
+  const tokenSourceFetch = React.useCallback(async () => {
+    if (isConfigurable) {
+      if (!memoizedTokenFetchOptions) {
+        throw new Error(
+          `AgentSession - memoized token fetch options are not set, but the passed tokenSource was an instance of TokenSourceConfigurable. If you are seeing this please make a new GitHub issue!`,
+        );
+      }
+      return tokenSource.fetch(memoizedTokenFetchOptions);
+    } else {
+      return tokenSource.fetch();
+    }
+  }, [isConfigurable, tokenSource, memoizedTokenFetchOptions]);
+
+  return tokenSourceFetch;
+}
+
 /**
  * A Session represents a manages connection to a Room which can contain Agents.
  * @public
@@ -461,46 +507,7 @@ export function useSession(
     ),
   );
 
-  const [memoizedTokenFetchOptions, setMemoizedTokenFetchOptions] =
-    React.useState<TokenSourceFetchOptions | null>(() => {
-      const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
-      if (isConfigurable) {
-        return restOptions;
-      } else {
-        return null;
-      }
-    });
-  React.useEffect(() => {
-    const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
-    if (!isConfigurable) {
-      setMemoizedTokenFetchOptions(null);
-      return;
-    }
-
-    if (
-      memoizedTokenFetchOptions !== null &&
-      areTokenSourceFetchOptionsEqual(memoizedTokenFetchOptions, restOptions)
-    ) {
-      return;
-    }
-
-    const tokenFetchOptions = restOptions as UseSessionConfigurableOptions;
-    setMemoizedTokenFetchOptions(tokenFetchOptions);
-  }, [restOptions]);
-
-  const tokenSourceFetch = React.useCallback(async () => {
-    const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
-    if (isConfigurable) {
-      if (!memoizedTokenFetchOptions) {
-        throw new Error(
-          `AgentSession - memoized token fetch options are not set, but the passed tokenSource was an instance of TokenSourceConfigurable. If you are seeing this please make a new GitHub issue!`,
-        );
-      }
-      return tokenSource.fetch(memoizedTokenFetchOptions);
-    } else {
-      return tokenSource.fetch();
-    }
-  }, [tokenSource, memoizedTokenFetchOptions]);
+  const tokenSourceFetch = useSessionTokenSourceFetch(tokenSource, restOptions);
 
   const start = React.useCallback(
     async (connectOptions: SessionConnectOptions = {}) => {

@@ -40,7 +40,12 @@ type AgentSdkStates = 'initializing' | 'idle' | 'listening' | 'thinking' | 'spea
  *
  * @public
  * */
-export type AgentState = 'disconnected' | 'connecting' | 'failed' | 'pre-connect-buffering' | AgentSdkStates;
+export type AgentState =
+  | 'disconnected'
+  | 'connecting'
+  | 'pre-connect-buffering'
+  | 'failed'
+  | AgentSdkStates;
 
 /** @public */
 export enum AgentEvent {
@@ -76,11 +81,11 @@ type AgentStateAvailable = AgentStateCommon & {
   isConnected: true;
 
   /**
-    * Is the agent ready for user interaction?
-    *
-    * Note that this may not mean that the agent is actually connected - the audio pre-connect
-    * buffer could be active and recording user input before the agent actually connects.
-    * */
+   * Is the agent ready for user interaction?
+   *
+   * Note that this may not mean that the agent is actually connected - the audio pre-connect
+   * buffer could be active and recording user input before the agent actually connects.
+   * */
   canInteract: true;
 
   cameraTrack?: TrackReference;
@@ -95,11 +100,11 @@ type AgentStatePreConnectBuffering = AgentStateCommon & {
   isConnected: false;
 
   /**
-    * Is the agent ready for user interaction?
-    *
-    * Note that this may not mean that the agent is actually connected - the audio pre-connect
-    * buffer could be active and recording user input before the agent actually connects.
-    * */
+   * Is the agent ready for user interaction?
+   *
+   * Note that this may not mean that the agent is actually connected - the audio pre-connect
+   * buffer could be active and recording user input before the agent actually connects.
+   * */
   canInteract: true;
 
   cameraTrack?: TrackReference;
@@ -114,11 +119,11 @@ type AgentStateUnAvailable = AgentStateCommon & {
   isConnected: false;
 
   /**
-    * Is the agent ready for user interaction?
-    *
-    * Note that this may not mean that the agent is actually connected - the audio pre-connect
-    * buffer could be active and recording user input before the agent actually connects.
-    * */
+   * Is the agent ready for user interaction?
+   *
+   * Note that this may not mean that the agent is actually connected - the audio pre-connect
+   * buffer could be active and recording user input before the agent actually connects.
+   * */
   canInteract: false;
 
   cameraTrack?: TrackReference;
@@ -133,11 +138,11 @@ type AgentStateConnecting = AgentStateCommon & {
   isConnected: false;
 
   /**
-    * Is the agent ready for user interaction?
-    *
-    * Note that this may not mean that the agent is actually connected - the audio pre-connect
-    * buffer could be active and recording user input before the agent actually connects.
-    * */
+   * Is the agent ready for user interaction?
+   *
+   * Note that this may not mean that the agent is actually connected - the audio pre-connect
+   * buffer could be active and recording user input before the agent actually connects.
+   * */
   canInteract: false;
 
   cameraTrack: undefined;
@@ -152,11 +157,11 @@ type AgentStateFailed = AgentStateCommon & {
   isConnected: false;
 
   /**
-    * Is the agent ready for user interaction?
-    *
-    * Note that this may not mean that the agent is actually connected - the audio pre-connect
-    * buffer could be active and recording user input before the agent actually connects.
-    * */
+   * Is the agent ready for user interaction?
+   *
+   * Note that this may not mean that the agent is actually connected - the audio pre-connect
+   * buffer could be active and recording user input before the agent actually connects.
+   * */
   canInteract: false;
 
   cameraTrack: undefined;
@@ -168,11 +173,11 @@ type AgentActions = {
   waitUntilConnected: (signal?: AbortSignal) => Promise<void>;
 
   /**
-    * Returns a promise that resolves once the client is ready for user interaction.
-    *
-    * Note that this may not mean that the agent is actually connected - the audio pre-connect
-    * buffer could be active and recording user input before the agent actually connects.
-    * */
+   * Returns a promise that resolves once the client is ready for user interaction.
+   *
+   * Note that this may not mean that the agent is actually connected - the audio pre-connect
+   * buffer could be active and recording user input before the agent actually connects.
+   * */
   waitUntilInteractable: (signal?: AbortSignal) => Promise<void>;
 
   /** Returns a promise that resolves once the agent has published a camera track */
@@ -195,10 +200,16 @@ export type UseAgentReturn = AgentStateCases & AgentActions;
 const generateDerivedStateValues = <State extends AgentState>(state: State) =>
   ({
     isConnected: state === 'listening' || state === 'thinking' || state === 'speaking',
-    canInteract: state === 'pre-connect-buffering' || state === 'listening' || state === 'thinking' || state === 'speaking',
+    canInteract:
+      state === 'pre-connect-buffering' ||
+      state === 'listening' ||
+      state === 'thinking' ||
+      state === 'speaking',
   }) as {
     isConnected: State extends 'listening' | 'thinking' | 'speaking' ? true : false;
-    canInteract: State extends 'pre-connect-buffering' | 'listening' | 'thinking' | 'speaking' ? true : false;
+    canInteract: State extends 'pre-connect-buffering' | 'listening' | 'thinking' | 'speaking'
+      ? true
+      : false;
   };
 
 /** Internal hook used by useSession to store global agent state */
@@ -548,15 +559,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
           microphoneTrack: undefined,
         };
     }
-  }, [
-    agentParticipantAttributes,
-    emitter,
-    agentParticipant,
-
-    state,
-    videoTrack,
-    audioTrack,
-  ]);
+  }, [agentParticipantAttributes, emitter, agentParticipant, state, videoTrack, audioTrack]);
 
   const waitUntilConnected = React.useCallback(
     async (signal?: AbortSignal) => {

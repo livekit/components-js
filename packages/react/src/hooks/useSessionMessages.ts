@@ -112,9 +112,7 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
     return merged;
   }, [transcriptionMessages, chat.chatMessages]);
 
-  const messageFirstReceivedTimeMapRef = React.useRef(
-    new Map<ReceivedMessage['id'], Date>(),
-  );
+  const messageFirstReceivedTimeMapRef = React.useRef(new Map<ReceivedMessage['id'], Date>());
   const sortedReceivedMessages = React.useMemo(() => {
     const now = new Date();
     for (const message of receivedMessages) {

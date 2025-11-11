@@ -81,12 +81,12 @@ type AgentStateAvailable = AgentStateCommon & {
   isConnected: true;
 
   /**
-   * Is the agent ready for user interaction?
+   * Could the client be listening for user speech?
    *
    * Note that this may not mean that the agent is actually connected - the audio pre-connect
    * buffer could be active and recording user input before the agent actually connects.
    * */
-  canInteract: true;
+  canListen: true;
 
   /** Has the client disconnected from the agent either for an expected or unexpected reason? */
   isFinished: false;
@@ -106,12 +106,12 @@ type AgentStatePreConnectBuffering = AgentStateCommon & {
   isConnected: false;
 
   /**
-   * Is the agent ready for user interaction?
+   * Could the client be listening for user speech?
    *
    * Note that this may not mean that the agent is actually connected - the audio pre-connect
    * buffer could be active and recording user input before the agent actually connects.
    * */
-  canInteract: true;
+  canListen: true;
 
   /** Has the client disconnected from the agent either for an expected or unexpected reason? */
   isFinished: false;
@@ -131,12 +131,12 @@ type AgentStateUnAvailable = AgentStateCommon & {
   isConnected: false;
 
   /**
-   * Is the agent ready for user interaction?
+   * Could the client be listening for user speech?
    *
    * Note that this may not mean that the agent is actually connected - the audio pre-connect
    * buffer could be active and recording user input before the agent actually connects.
    * */
-  canInteract: false;
+  canListen: false;
 
   /** Has the client disconnected from the agent either for an expected or unexpected reason? */
   isFinished: false;
@@ -156,12 +156,12 @@ type AgentStateConnecting = AgentStateCommon & {
   isConnected: false;
 
   /**
-   * Is the agent ready for user interaction?
+   * Could the client be listening for user speech?
    *
    * Note that this may not mean that the agent is actually connected - the audio pre-connect
    * buffer could be active and recording user input before the agent actually connects.
    * */
-  canInteract: false;
+  canListen: false;
 
   /** Has the client disconnected from the agent either for an expected or unexpected reason? */
   isFinished: false;
@@ -181,12 +181,12 @@ type AgentStateDisconnected = AgentStateCommon & {
   isConnected: false;
 
   /**
-   * Is the agent ready for user interaction?
+   * Could the client be listening for user speech?
    *
    * Note that this may not mean that the agent is actually connected - the audio pre-connect
    * buffer could be active and recording user input before the agent actually connects.
    * */
-  canInteract: false;
+  canListen: false;
 
   /** Has the client disconnected from the agent either for an expected or unexpected reason? */
   isFinished: true;
@@ -206,12 +206,12 @@ type AgentStateFailed = AgentStateCommon & {
   isConnected: false;
 
   /**
-   * Is the agent ready for user interaction?
+   * Could the client be listening for user speech?
    *
    * Note that this may not mean that the agent is actually connected - the audio pre-connect
    * buffer could be active and recording user input before the agent actually connects.
    * */
-  canInteract: false;
+  canListen: false;
 
   /** Has the client disconnected from the agent either for an expected or unexpected reason? */
   isFinished: true;
@@ -228,12 +228,12 @@ type AgentActions = {
   waitUntilConnected: (signal?: AbortSignal) => Promise<void>;
 
   /**
-   * Returns a promise that resolves once the client is ready for user interaction.
+   * Returns a promise that resolves once the client could be listening for user speech (`canListen` is true)
    *
    * Note that this may not mean that the agent is actually connected - the audio pre-connect
    * buffer could be active and recording user input before the agent actually connects.
    * */
-  waitUntilInteractable: (signal?: AbortSignal) => Promise<void>;
+  waitUntilCouldBeListening: (signal?: AbortSignal) => Promise<void>;
 
   /** Returns a promise that resolves once the client has disconnected from the agent either for an expected or unexpected reason. */
   waitUntilFinished: (signal?: AbortSignal) => Promise<void>;
@@ -259,7 +259,7 @@ export type UseAgentReturn = AgentStateCases & AgentActions;
 const generateDerivedStateValues = <State extends AgentState>(state: State) =>
   ({
     isConnected: state === 'listening' || state === 'thinking' || state === 'speaking',
-    canInteract:
+    canListen:
       state === 'pre-connect-buffering' ||
       state === 'listening' ||
       state === 'thinking' ||
@@ -268,7 +268,7 @@ const generateDerivedStateValues = <State extends AgentState>(state: State) =>
     isLoading: state === 'connecting' || state === 'initializing' || state === 'idle',
   }) as {
     isConnected: State extends 'listening' | 'thinking' | 'speaking' ? true : false;
-    canInteract: State extends 'pre-connect-buffering' | 'listening' | 'thinking' | 'speaking'
+    canListen: State extends 'pre-connect-buffering' | 'listening' | 'thinking' | 'speaking'
       ? true
       : false;
     isFinished: State extends 'disconnected' | 'failed' ? true : false;
@@ -669,17 +669,17 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     [state, emitter],
   );
 
-  const waitUntilInteractable = React.useCallback(
+  const waitUntilCouldBeListening = React.useCallback(
     async (signal?: AbortSignal) => {
-      const { canInteract } = generateDerivedStateValues(state);
-      if (canInteract) {
+      const { canListen } = generateDerivedStateValues(state);
+      if (canListen) {
         return;
       }
 
       return new Promise<void>((resolve, reject) => {
         const stateChangedHandler = (state: AgentState) => {
-          const { canInteract } = generateDerivedStateValues(state);
-          if (!canInteract) {
+          const { canListen } = generateDerivedStateValues(state);
+          if (!canListen) {
             return;
           }
           cleanup();
@@ -687,7 +687,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
         };
         const abortHandler = () => {
           cleanup();
-          reject(new Error('useAgent.waitUntilInteractable - signal aborted'));
+          reject(new Error('useAgent.waitUntilCouldBeListening - signal aborted'));
         };
 
         const cleanup = () => {
@@ -793,7 +793,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     return {
       ...agentState,
       waitUntilConnected,
-      waitUntilInteractable,
+      waitUntilCouldBeListening,
       waitUntilFinished,
       waitUntilCamera,
       waitUntilMicrophone,
@@ -801,7 +801,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
   }, [
     agentState,
     waitUntilConnected,
-    waitUntilInteractable,
+    waitUntilCouldBeListening,
     waitUntilFinished,
     waitUntilCamera,
     waitUntilMicrophone,

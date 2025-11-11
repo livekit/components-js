@@ -85,7 +85,6 @@ type SessionStateCommon = {
 type SessionStateConnecting = SessionStateCommon & {
   connectionState: ConnectionState.Connecting;
   isConnected: false;
-  isReconnecting: false;
 
   local: {
     cameraTrack: null;
@@ -99,7 +98,6 @@ type SessionStateConnected = SessionStateCommon & {
     | ConnectionState.Reconnecting
     | ConnectionState.SignalReconnecting;
   isConnected: true;
-  isReconnecting: boolean;
 
   local: {
     cameraTrack: TrackReference | null;
@@ -110,7 +108,6 @@ type SessionStateConnected = SessionStateCommon & {
 type SessionStateDisconnected = SessionStateCommon & {
   connectionState: ConnectionState.Disconnected;
   isConnected: false;
-  isReconnecting: false;
 
   local: {
     cameraTrack: null;
@@ -194,17 +191,9 @@ export function useSession(
           connectionState === ConnectionState.Connected ||
           connectionState === ConnectionState.Reconnecting ||
           connectionState === ConnectionState.SignalReconnecting,
-        isReconnecting:
-          connectionState === ConnectionState.Reconnecting ||
-          connectionState === ConnectionState.SignalReconnecting,
       }) as {
         isConnected: State extends
           | ConnectionState.Connected
-          | ConnectionState.Reconnecting
-          | ConnectionState.SignalReconnecting
-          ? true
-          : false;
-        isReconnecting: State extends
           | ConnectionState.Reconnecting
           | ConnectionState.SignalReconnecting
           ? true

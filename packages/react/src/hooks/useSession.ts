@@ -435,9 +435,7 @@ export function useSession(
   }, [
     sessionInternal,
     room,
-    emitter,
     roomConnectionState,
-    localParticipant,
     localCamera,
     localMicrophone,
     generateDerivedConnectionStateValues,

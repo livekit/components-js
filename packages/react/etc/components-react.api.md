@@ -92,7 +92,7 @@ export enum AgentEvent {
 // Warning: (ae-forgotten-export) The symbol "AgentSdkStates" needs to be exported by the entry point index.docs.d.ts
 //
 // @public
-export type AgentState = 'disconnected' | 'connecting' | 'failed' | AgentSdkStates;
+export type AgentState = 'disconnected' | 'connecting' | 'pre-connect-buffering' | 'failed' | AgentSdkStates;
 
 // @public (undocumented)
 export interface AllowAudioPlaybackProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {

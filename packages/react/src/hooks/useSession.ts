@@ -478,7 +478,10 @@ export function useSession(
     emitter.emit(SessionEvent.ConnectionStateChanged, conversationState.connectionState);
   }, [emitter, conversationState.connectionState]);
 
-  const waitUntilConnectionState = useSessionWaitUntilConnectionState(emitter, conversationState.connectionState);
+  const waitUntilConnectionState = useSessionWaitUntilConnectionState(
+    emitter,
+    conversationState.connectionState,
+  );
 
   const waitUntilConnected = React.useCallback(
     async (signal?: AbortSignal) => {

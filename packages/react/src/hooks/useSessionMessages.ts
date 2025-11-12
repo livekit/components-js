@@ -109,12 +109,34 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
 
   const receivedMessages = React.useMemo(() => {
     const merged: Array<ReceivedMessage> = [...transcriptionMessages, ...chat.chatMessages];
-    return merged.sort((a, b) => a.timestamp - b.timestamp);
+    return merged;
   }, [transcriptionMessages, chat.chatMessages]);
+
+  const messageFirstReceivedTimeMapRef = React.useRef(new Map<ReceivedMessage['id'], Date>());
+  const sortedReceivedMessages = React.useMemo(() => {
+    const now = new Date();
+    for (const message of receivedMessages) {
+      if (messageFirstReceivedTimeMapRef.current.has(message.id)) {
+        continue;
+      }
+
+      messageFirstReceivedTimeMapRef.current.set(message.id, now);
+    }
+
+    return receivedMessages.sort((a, b) => {
+      const aFirstReceivedAt = messageFirstReceivedTimeMapRef.current.get(a.id);
+      const bFirstReceivedAt = messageFirstReceivedTimeMapRef.current.get(b.id);
+      if (typeof aFirstReceivedAt === 'undefined' || typeof bFirstReceivedAt === 'undefined') {
+        return 0;
+      }
+
+      return aFirstReceivedAt.getTime() - bFirstReceivedAt.getTime();
+    });
+  }, [receivedMessages]);
 
   const previouslyReceivedMessageIdsRef = React.useRef(new Set());
   React.useEffect(() => {
-    for (const message of receivedMessages) {
+    for (const message of sortedReceivedMessages) {
       if (previouslyReceivedMessageIdsRef.current.has(message.id)) {
         continue;
       }
@@ -122,15 +144,15 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
       previouslyReceivedMessageIdsRef.current.add(message.id);
       emitter.emit(MessagesEvent.MessageReceived, message);
     }
-  }, [receivedMessages]);
+  }, [sortedReceivedMessages]);
 
   return React.useMemo(
     () => ({
-      messages: receivedMessages,
+      messages: sortedReceivedMessages,
       send: chat.send,
       isSending: chat.isSending,
       internal: { emitter },
     }),
-    [receivedMessages, chat.send, chat.isSending],
+    [sortedReceivedMessages, chat.send, chat.isSending],
   );
 }

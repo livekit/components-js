@@ -185,6 +185,51 @@ function areTokenSourceFetchOptionsEqual(a: TokenSourceFetchOptions, b: TokenSou
   return true;
 }
 
+/** Internal hook used by useSession to manage creating a function which can be used to wait
+ * until the session is in a given state before resolving. */
+function useSessionWaitUntilConnectionState(
+  emitter: TypedEventEmitter<SessionCallbacks>,
+  connectionState: UseSessionReturn['connectionState'],
+) {
+  const connectionStateRef = React.useRef(connectionState);
+  React.useEffect(() => {
+    connectionStateRef.current = connectionState;
+  }, [connectionState]);
+
+  const waitUntilConnectionState = React.useCallback(
+    async (state: UseSessionReturn['connectionState'], signal?: AbortSignal) => {
+      if (connectionStateRef.current === state) {
+        return;
+      }
+
+      return new Promise<void>((resolve, reject) => {
+        const onceEventOccurred = (newState: UseSessionReturn['connectionState']) => {
+          if (newState !== state) {
+            return;
+          }
+          cleanup();
+          resolve();
+        };
+        const abortHandler = () => {
+          cleanup();
+          reject(new Error(`AgentSession.waitUntilRoomState(${state}, ...) - signal aborted`));
+        };
+
+        const cleanup = () => {
+          emitter.off(SessionEvent.ConnectionStateChanged, onceEventOccurred);
+          signal?.removeEventListener('abort', abortHandler);
+        };
+
+        emitter.on(SessionEvent.ConnectionStateChanged, onceEventOccurred);
+        signal?.addEventListener('abort', abortHandler);
+      });
+    },
+    [emitter],
+  );
+
+  return waitUntilConnectionState;
+}
+
 /** Internal hook used by useSession to manage creating a function that properly invokes
  * tokenSource.fetch(...) with any fetch options */
 function useSessionTokenSourceFetch(
@@ -433,36 +478,7 @@ export function useSession(
     emitter.emit(SessionEvent.ConnectionStateChanged, conversationState.connectionState);
   }, [emitter, conversationState.connectionState]);
 
-  const waitUntilConnectionState = React.useCallback(
-    async (state: UseSessionReturn['connectionState'], signal?: AbortSignal) => {
-      if (conversationState.connectionState === state) {
-        return;
-      }
-
-      return new Promise<void>((resolve, reject) => {
-        const onceEventOccurred = (newState: UseSessionReturn['connectionState']) => {
-          if (newState !== state) {
-            return;
-          }
-          cleanup();
-          resolve();
-        };
-        const abortHandler = () => {
-          cleanup();
-          reject(new Error(`AgentSession.waitUntilRoomState(${state}, ...) - signal aborted`));
-        };
-
-        const cleanup = () => {
-          emitter.off(SessionEvent.ConnectionStateChanged, onceEventOccurred);
-          signal?.removeEventListener('abort', abortHandler);
-        };
-
-        emitter.on(SessionEvent.ConnectionStateChanged, onceEventOccurred);
-        signal?.addEventListener('abort', abortHandler);
-      });
-    },
-    [conversationState.connectionState, emitter],
-  );
+  const waitUntilConnectionState = useSessionWaitUntilConnectionState(emitter, conversationState.connectionState);
 
   const waitUntilConnected = React.useCallback(
     async (signal?: AbortSignal) => {

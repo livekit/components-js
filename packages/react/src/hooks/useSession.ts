@@ -522,8 +522,6 @@ export function useSession(
 
       let tokenDispatchesAgent = false;
       await Promise.all([
-        // FIXME: swap the below line in once the new `livekit-client` changes are published
-        // room.connect(tokenSource, { tokenSourceOptions }),
         tokenSourceFetch().then(({ serverUrl, participantToken }) => {
           const participantTokenPayload = decodeTokenPayload(participantToken);
           const participantTokenAgentDispatchCount =
@@ -559,8 +557,6 @@ export function useSession(
 
   const prepareConnection = React.useCallback(async () => {
     const credentials = await tokenSourceFetch();
-    // FIXME: swap the below line in once the new `livekit-client` changes are published
-    // room.prepareConnection(tokenSource, { tokenSourceOptions }),
     await room.prepareConnection(credentials.serverUrl, credentials.participantToken);
   }, [tokenSourceFetch, room]);
   React.useEffect(

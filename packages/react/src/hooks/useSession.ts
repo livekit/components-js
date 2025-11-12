@@ -155,6 +155,84 @@ type UseSessionConfigurableOptions = UseSessionCommonOptions & TokenSourceFetchO
 type UseSessionFixedOptions = UseSessionCommonOptions;
 
 /**
+ * Given two TokenSourceFetchOptions values, check to see if they are deep equal.
+ *
+ * FIXME: swap this for an import from livekit-client once
+ * https://github.com/livekit/client-sdk-js/pull/1733 is merged and published!
+ * */
+function areTokenSourceFetchOptionsEqual(a: TokenSourceFetchOptions, b: TokenSourceFetchOptions) {
+  const allKeysSet = new Set([...Object.keys(a), ...Object.keys(b)]) as Set<
+    keyof TokenSourceFetchOptions
+  >;
+
+  for (const key of allKeysSet) {
+    switch (key) {
+      case 'roomName':
+      case 'participantName':
+      case 'participantIdentity':
+      case 'participantMetadata':
+      case 'participantAttributes':
+      case 'agentName':
+      case 'agentMetadata':
+        if (a[key] !== b[key]) {
+          return false;
+        }
+        break;
+      default:
+        // ref: https://stackoverflow.com/a/58009992
+        const exhaustiveCheckedKey: never = key;
+        throw new Error(`Options key ${exhaustiveCheckedKey} not being checked for equality!`);
+    }
+  }
+
+  return true;
+}
+
+/** Internal hook used by useSession to manage creating a function that properly invokes
+ * tokenSource.fetch(...) with any fetch options */
+function useSessionTokenSourceFetch(
+  tokenSource: TokenSourceConfigurable | TokenSourceFixed,
+  unstableRestOptions: Exclude<UseSessionConfigurableOptions, keyof UseSessionCommonOptions>,
+) {
+  const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
+
+  const memoizedTokenFetchOptionsRef = React.useRef<TokenSourceFetchOptions | null>(
+    isConfigurable ? unstableRestOptions : null,
+  );
+
+  React.useEffect(() => {
+    if (!isConfigurable) {
+      memoizedTokenFetchOptionsRef.current = null;
+      return;
+    }
+
+    if (
+      memoizedTokenFetchOptionsRef.current !== null &&
+      areTokenSourceFetchOptionsEqual(memoizedTokenFetchOptionsRef.current, unstableRestOptions)
+    ) {
+      return;
+    }
+
+    memoizedTokenFetchOptionsRef.current = unstableRestOptions;
+  }, [isConfigurable, unstableRestOptions]);
+
+  const tokenSourceFetch = React.useCallback(async () => {
+    if (isConfigurable) {
+      if (!memoizedTokenFetchOptionsRef.current) {
+        throw new Error(
+          `AgentSession - memoized token fetch options are not set, but the passed tokenSource was an instance of TokenSourceConfigurable. If you are seeing this please make a new GitHub issue!`,
+        );
+      }
+      return tokenSource.fetch(memoizedTokenFetchOptionsRef.current);
+    } else {
+      return tokenSource.fetch();
+    }
+  }, [isConfigurable, tokenSource]);
+
+  return tokenSourceFetch;
+}
+
+/**
  * A Session represents a manages connection to a Room which can contain Agents.
  * @public
  */
@@ -357,9 +435,7 @@ export function useSession(
   }, [
     sessionInternal,
     room,
-    emitter,
     roomConnectionState,
-    localParticipant,
     localCamera,
     localMicrophone,
     generateDerivedConnectionStateValues,
@@ -427,15 +503,7 @@ export function useSession(
     ),
   );
 
-  const tokenSourceFetch = React.useCallback(async () => {
-    const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
-    if (isConfigurable) {
-      const tokenFetchOptions = restOptions as UseSessionConfigurableOptions;
-      return tokenSource.fetch(tokenFetchOptions);
-    } else {
-      return tokenSource.fetch();
-    }
-  }, [tokenSource, restOptions]);
+  const tokenSourceFetch = useSessionTokenSourceFetch(tokenSource, restOptions);
 
   const start = React.useCallback(
     async (connectOptions: SessionConnectOptions = {}) => {
@@ -454,8 +522,6 @@ export function useSession(
 
       let tokenDispatchesAgent = false;
       await Promise.all([
-        // FIXME: swap the below line in once the new `livekit-client` changes are published
-        // room.connect(tokenSource, { tokenSourceOptions }),
         tokenSourceFetch().then(({ serverUrl, participantToken }) => {
           const participantTokenPayload = decodeTokenPayload(participantToken);
           const participantTokenAgentDispatchCount =
@@ -491,8 +557,6 @@ export function useSession(
 
   const prepareConnection = React.useCallback(async () => {
     const credentials = await tokenSourceFetch();
-    // FIXME: swap the below line in once the new `livekit-client` changes are published
-    // room.prepareConnection(tokenSource, { tokenSourceOptions }),
     await room.prepareConnection(credentials.serverUrl, credentials.participantToken);
   }, [tokenSourceFetch, room]);
   React.useEffect(

@@ -371,7 +371,7 @@ function useAgentWaitUntilDerivedStates(emitter: TypedEventEmitter<AgentCallback
         };
         const abortHandler = () => {
           cleanup();
-          reject(new Error('useAgent.waitUntilConnected - signal aborted'));
+          reject(new Error('useAgent(/* ... */).waitUntilConnected - signal aborted'));
         };
 
         const cleanup = () => {
@@ -404,7 +404,7 @@ function useAgentWaitUntilDerivedStates(emitter: TypedEventEmitter<AgentCallback
         };
         const abortHandler = () => {
           cleanup();
-          reject(new Error('useAgent.waitUntilCouldBeListening - signal aborted'));
+          reject(new Error('useAgent(/* ... */).waitUntilCouldBeListening - signal aborted'));
         };
 
         const cleanup = () => {
@@ -437,7 +437,7 @@ function useAgentWaitUntilDerivedStates(emitter: TypedEventEmitter<AgentCallback
         };
         const abortHandler = () => {
           cleanup();
-          reject(new Error('useAgent.waitUntilFinished - signal aborted'));
+          reject(new Error('useAgent(/* ... */).waitUntilFinished - signal aborted'));
         };
 
         const cleanup = () => {
@@ -799,7 +799,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
         };
         const abortHandler = () => {
           cleanup();
-          reject(new Error('useAgent.waitUntilCamera - signal aborted'));
+          reject(new Error('useAgent(/* ... */).waitUntilCamera - signal aborted'));
         };
 
         const cleanup = () => {
@@ -826,7 +826,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
         };
         const abortHandler = () => {
           cleanup();
-          reject(new Error('useAgent.waitUntilMicrophone - signal aborted'));
+          reject(new Error('useAgent(/* ... */).waitUntilMicrophone - signal aborted'));
         };
 
         const cleanup = () => {

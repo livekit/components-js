@@ -212,7 +212,11 @@ function useSessionWaitUntilConnectionState(
         };
         const abortHandler = () => {
           cleanup();
-          reject(new Error(`AgentSession.waitUntilRoomState(${state}, ...) - signal aborted`));
+          reject(
+            new Error(
+              `useSession(/* ... */).waitUntilConnectionState(${state}, /* signal */) - signal aborted`,
+            ),
+          );
         };
 
         const cleanup = () => {

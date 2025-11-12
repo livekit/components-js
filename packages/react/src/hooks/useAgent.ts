@@ -92,7 +92,7 @@ type AgentStateAvailable = AgentStateCommon & {
   isFinished: false;
 
   /** Is the agent currently connecting or setting itself up? */
-  isLoading: false;
+  isPending: false;
 
   cameraTrack?: TrackReference;
   microphoneTrack?: TrackReference;
@@ -117,7 +117,7 @@ type AgentStatePreConnectBuffering = AgentStateCommon & {
   isFinished: false;
 
   /** Is the agent currently connecting or setting itself up? */
-  isLoading: false;
+  isPending: false;
 
   cameraTrack?: TrackReference;
   microphoneTrack?: TrackReference;
@@ -142,7 +142,7 @@ type AgentStateUnAvailable = AgentStateCommon & {
   isFinished: false;
 
   /** Is the agent currently connecting or setting itself up? */
-  isLoading: true;
+  isPending: true;
 
   cameraTrack?: TrackReference;
   microphoneTrack?: TrackReference;
@@ -167,7 +167,7 @@ type AgentStateConnecting = AgentStateCommon & {
   isFinished: false;
 
   /** Is the agent currently connecting or setting itself up? */
-  isLoading: true;
+  isPending: true;
 
   cameraTrack: undefined;
   microphoneTrack: undefined;
@@ -192,7 +192,7 @@ type AgentStateDisconnected = AgentStateCommon & {
   isFinished: true;
 
   /** Is the agent currently connecting or setting itself up? */
-  isLoading: false;
+  isPending: false;
 
   cameraTrack: undefined;
   microphoneTrack: undefined;
@@ -217,7 +217,7 @@ type AgentStateFailed = AgentStateCommon & {
   isFinished: true;
 
   /** Is the agent currently connecting or setting itself up? */
-  isLoading: false;
+  isPending: false;
 
   cameraTrack: undefined;
   microphoneTrack: undefined;
@@ -265,14 +265,14 @@ const generateDerivedStateValues = <State extends AgentState>(state: State) =>
       state === 'thinking' ||
       state === 'speaking',
     isFinished: state === 'disconnected' || state === 'failed',
-    isLoading: state === 'connecting' || state === 'initializing' || state === 'idle',
+    isPending: state === 'connecting' || state === 'initializing' || state === 'idle',
   }) as {
     isConnected: State extends 'listening' | 'thinking' | 'speaking' ? true : false;
     canListen: State extends 'pre-connect-buffering' | 'listening' | 'thinking' | 'speaking'
       ? true
       : false;
     isFinished: State extends 'disconnected' | 'failed' ? true : false;
-    isLoading: State extends 'connecting' | 'initializing' | 'idle' ? true : false;
+    isPending: State extends 'connecting' | 'initializing' | 'idle' ? true : false;
   };
 
 /** Internal hook used by useSession to store global agent state */

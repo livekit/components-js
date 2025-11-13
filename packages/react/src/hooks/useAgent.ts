@@ -446,6 +446,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     emitter.emit(AgentEvent.MicrophoneChanged, audioTrack);
   }, [emitter, audioTrack]);
 
+  // Listen for room connection state updates
   const [roomConnectionState, setRoomConnectionState] = React.useState(room.state);
   React.useEffect(() => {
     const handleConnectionStateChanged = (connectionState: ConnectionState) => {
@@ -457,6 +458,37 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       room.off(RoomEvent.ConnectionStateChanged, handleConnectionStateChanged);
     };
   }, [room]);
+
+  // If the agent participant disconnects in the middle of a conversation unexpectedly, mark that as an explicit failure
+  const [agentDisconnectedFailureReason, setAgentDisconnectedFailureReason] = React.useState<
+    string | null
+  >(null);
+  React.useEffect(() => {
+    if (!agentParticipant) {
+      return;
+    }
+
+    const onParticipantDisconnect = (participant: RemoteParticipant) => {
+      if (participant.identity !== agentParticipant?.identity) {
+        return;
+      }
+      setAgentDisconnectedFailureReason('Agent left the room unexpectedly.');
+    };
+
+    room.on(RoomEvent.ParticipantDisconnected, onParticipantDisconnect);
+
+    return () => {
+      room.off(RoomEvent.ParticipantDisconnected, onParticipantDisconnect);
+    };
+  }, [agentParticipant, room]);
+
+  React.useEffect(() => {
+    if (roomConnectionState !== ConnectionState.Disconnected) {
+      return;
+    }
+    // Clear the agent disconnect failure state when the room disconnects
+    setAgentDisconnectedFailureReason(null);
+  }, [roomConnectionState]);
 
   const [localMicTrack, setLocalMicTrack] = React.useState<LocalTrackPublication | null>(
     () => room.localParticipant.getTrackPublication(Track.Source.Microphone) ?? null,
@@ -490,8 +522,15 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
   }, [room.localParticipant]);
 
   const failureReasons = React.useMemo(() => {
-    return agentTimeoutFailureReason ? [agentTimeoutFailureReason] : [];
-  }, [agentTimeoutFailureReason]);
+    const reasons = [];
+    if (agentTimeoutFailureReason) {
+      reasons.push(agentTimeoutFailureReason);
+    }
+    if (agentDisconnectedFailureReason) {
+      reasons.push(agentDisconnectedFailureReason);
+    }
+    return reasons;
+  }, [agentTimeoutFailureReason, agentDisconnectedFailureReason]);
 
   const state = React.useMemo(() => {
     if (failureReasons.length > 0) {

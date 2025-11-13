@@ -345,6 +345,119 @@ export const useAgentTimeoutIdStore = (): {
 
 type SessionStub = Pick<UseSessionReturn, 'connectionState' | 'room' | 'internal'>;
 
+/** Internal hook used by useAgent which generates a function that when called, will return a
+ * promise which resolves when agent.isAvailable is enabled. */
+function useAgentWaitUntilDerivedStates(
+  emitter: TypedEventEmitter<AgentCallbacks>,
+  state: AgentState,
+) {
+  const stateRef = React.useRef(state);
+  React.useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
+
+  const waitUntilConnected = React.useCallback(
+    async (signal?: AbortSignal) => {
+      const { isConnected } = generateDerivedStateValues(stateRef.current);
+      if (isConnected) {
+        return;
+      }
+
+      return new Promise<void>((resolve, reject) => {
+        const stateChangedHandler = (state: AgentState) => {
+          const { isConnected } = generateDerivedStateValues(state);
+          if (!isConnected) {
+            return;
+          }
+          cleanup();
+          resolve();
+        };
+        const abortHandler = () => {
+          cleanup();
+          reject(new Error('useAgent(/* ... */).waitUntilConnected - signal aborted'));
+        };
+
+        const cleanup = () => {
+          emitter.off(AgentEvent.StateChanged, stateChangedHandler);
+          signal?.removeEventListener('abort', abortHandler);
+        };
+
+        emitter.on(AgentEvent.StateChanged, stateChangedHandler);
+        signal?.addEventListener('abort', abortHandler);
+      });
+    },
+    [emitter],
+  );
+
+  const waitUntilCouldBeListening = React.useCallback(
+    async (signal?: AbortSignal) => {
+      const { canListen } = generateDerivedStateValues(stateRef.current);
+      if (canListen) {
+        return;
+      }
+
+      return new Promise<void>((resolve, reject) => {
+        const stateChangedHandler = (state: AgentState) => {
+          const { canListen } = generateDerivedStateValues(state);
+          if (!canListen) {
+            return;
+          }
+          cleanup();
+          resolve();
+        };
+        const abortHandler = () => {
+          cleanup();
+          reject(new Error('useAgent(/* ... */).waitUntilCouldBeListening - signal aborted'));
+        };
+
+        const cleanup = () => {
+          emitter.off(AgentEvent.StateChanged, stateChangedHandler);
+          signal?.removeEventListener('abort', abortHandler);
+        };
+
+        emitter.on(AgentEvent.StateChanged, stateChangedHandler);
+        signal?.addEventListener('abort', abortHandler);
+      });
+    },
+    [emitter],
+  );
+
+  const waitUntilFinished = React.useCallback(
+    async (signal?: AbortSignal) => {
+      const { isFinished } = generateDerivedStateValues(stateRef.current);
+      if (isFinished) {
+        return;
+      }
+
+      return new Promise<void>((resolve, reject) => {
+        const stateChangedHandler = (state: AgentState) => {
+          const { isFinished } = generateDerivedStateValues(state);
+          if (!isFinished) {
+            return;
+          }
+          cleanup();
+          resolve();
+        };
+        const abortHandler = () => {
+          cleanup();
+          reject(new Error('useAgent(/* ... */).waitUntilFinished - signal aborted'));
+        };
+
+        const cleanup = () => {
+          emitter.off(AgentEvent.StateChanged, stateChangedHandler);
+          signal?.removeEventListener('abort', abortHandler);
+        };
+
+        emitter.on(AgentEvent.StateChanged, stateChangedHandler);
+        signal?.addEventListener('abort', abortHandler);
+      });
+    },
+    [emitter],
+  );
+
+  return { waitUntilConnected, waitUntilCouldBeListening, waitUntilFinished };
+}
+
 /**
  * useAgent encapculates all agent state, normalizing some quirks around how LiveKit Agents work.
  * @public
@@ -675,104 +788,8 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     }
   }, [agentParticipantAttributes, emitter, agentParticipant, state, videoTrack, audioTrack]);
 
-  const waitUntilConnected = React.useCallback(
-    async (signal?: AbortSignal) => {
-      const { isConnected } = generateDerivedStateValues(state);
-      if (isConnected) {
-        return;
-      }
-
-      return new Promise<void>((resolve, reject) => {
-        const stateChangedHandler = (state: AgentState) => {
-          const { isConnected } = generateDerivedStateValues(state);
-          if (!isConnected) {
-            return;
-          }
-          cleanup();
-          resolve();
-        };
-        const abortHandler = () => {
-          cleanup();
-          reject(new Error('useAgent.waitUntilConnected - signal aborted'));
-        };
-
-        const cleanup = () => {
-          emitter.off(AgentEvent.StateChanged, stateChangedHandler);
-          signal?.removeEventListener('abort', abortHandler);
-        };
-
-        emitter.on(AgentEvent.StateChanged, stateChangedHandler);
-        signal?.addEventListener('abort', abortHandler);
-      });
-    },
-    [state, emitter],
-  );
-
-  const waitUntilCouldBeListening = React.useCallback(
-    async (signal?: AbortSignal) => {
-      const { canListen } = generateDerivedStateValues(state);
-      if (canListen) {
-        return;
-      }
-
-      return new Promise<void>((resolve, reject) => {
-        const stateChangedHandler = (state: AgentState) => {
-          const { canListen } = generateDerivedStateValues(state);
-          if (!canListen) {
-            return;
-          }
-          cleanup();
-          resolve();
-        };
-        const abortHandler = () => {
-          cleanup();
-          reject(new Error('useAgent.waitUntilCouldBeListening - signal aborted'));
-        };
-
-        const cleanup = () => {
-          emitter.off(AgentEvent.StateChanged, stateChangedHandler);
-          signal?.removeEventListener('abort', abortHandler);
-        };
-
-        emitter.on(AgentEvent.StateChanged, stateChangedHandler);
-        signal?.addEventListener('abort', abortHandler);
-      });
-    },
-    [state, emitter],
-  );
-
-  const waitUntilFinished = React.useCallback(
-    async (signal?: AbortSignal) => {
-      const { isFinished } = generateDerivedStateValues(state);
-      if (isFinished) {
-        return;
-      }
-
-      return new Promise<void>((resolve, reject) => {
-        const stateChangedHandler = (state: AgentState) => {
-          const { isFinished } = generateDerivedStateValues(state);
-          if (!isFinished) {
-            return;
-          }
-          cleanup();
-          resolve();
-        };
-        const abortHandler = () => {
-          cleanup();
-          reject(new Error('useAgent.waitUntilFinished - signal aborted'));
-        };
-
-        const cleanup = () => {
-          emitter.off(AgentEvent.StateChanged, stateChangedHandler);
-          signal?.removeEventListener('abort', abortHandler);
-        };
-
-        emitter.on(AgentEvent.StateChanged, stateChangedHandler);
-        signal?.addEventListener('abort', abortHandler);
-      });
-    },
-    [state, emitter],
-  );
+  const { waitUntilConnected, waitUntilCouldBeListening, waitUntilFinished } =
+    useAgentWaitUntilDerivedStates(emitter, state);
 
   const waitUntilCamera = React.useCallback(
     (signal?: AbortSignal) => {
@@ -786,7 +803,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
         };
         const abortHandler = () => {
           cleanup();
-          reject(new Error('useAgent.waitUntilCamera - signal aborted'));
+          reject(new Error('useAgent(/* ... */).waitUntilCamera - signal aborted'));
         };
 
         const cleanup = () => {
@@ -813,7 +830,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
         };
         const abortHandler = () => {
           cleanup();
-          reject(new Error('useAgent.waitUntilMicrophone - signal aborted'));
+          reject(new Error('useAgent(/* ... */).waitUntilMicrophone - signal aborted'));
         };
 
         const cleanup = () => {

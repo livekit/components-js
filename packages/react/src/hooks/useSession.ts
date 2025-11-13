@@ -279,7 +279,7 @@ function useSessionTokenSourceFetch(
 }
 
 /**
- * A Session represents a manages connection to a Room which can contain Agents.
+ * A Session represents a managed connection to a Room which can contain Agents.
  * @public
  */
 export function useSession(
@@ -287,7 +287,7 @@ export function useSession(
   options?: UseSessionConfigurableOptions,
 ): UseSessionReturn;
 /**
- * A Session represents a manages connection to a Room which can contain Agents.
+ * A Session represents a managed connection to a Room which can contain Agents.
  * @public
  */
 export function useSession(

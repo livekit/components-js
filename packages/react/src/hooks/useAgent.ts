@@ -347,7 +347,10 @@ type SessionStub = Pick<UseSessionReturn, 'connectionState' | 'room' | 'internal
 
 /** Internal hook used by useAgent which generates a function that when called, will return a
  * promise which resolves when agent.isAvailable is enabled. */
-function useAgentWaitUntilDerivedStates(emitter: TypedEventEmitter<AgentCallbacks>, state: AgentState) {
+function useAgentWaitUntilDerivedStates(
+  emitter: TypedEventEmitter<AgentCallbacks>,
+  state: AgentState,
+) {
   const stateRef = React.useRef(state);
   React.useEffect(() => {
     stateRef.current = state;
@@ -785,7 +788,8 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     }
   }, [agentParticipantAttributes, emitter, agentParticipant, state, videoTrack, audioTrack]);
 
-  const { waitUntilConnected, waitUntilCouldBeListening, waitUntilFinished } = useAgentWaitUntilDerivedStates(emitter, state);
+  const { waitUntilConnected, waitUntilCouldBeListening, waitUntilFinished } =
+    useAgentWaitUntilDerivedStates(emitter, state);
 
   const waitUntilCamera = React.useCallback(
     (signal?: AbortSignal) => {

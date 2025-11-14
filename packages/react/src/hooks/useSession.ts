@@ -19,7 +19,7 @@ import { AgentState, useAgent, useAgentTimeoutIdStore } from './useAgent';
 import { TrackReference } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
 
-/** @public */
+/** @beta */
 export enum SessionEvent {
   ConnectionStateChanged = 'connectionStateChanged',
   /**
@@ -35,14 +35,14 @@ export enum SessionEvent {
   EncryptionError = 'encryptionError',
 }
 
-/** @public */
+/** @beta */
 export type SessionCallbacks = {
   [SessionEvent.ConnectionStateChanged]: (newAgentConnectionState: ConnectionState) => void;
   [SessionEvent.MediaDevicesError]: (error: Error) => void;
   [SessionEvent.EncryptionError]: (error: Error) => void;
 };
 
-/** @public */
+/** @beta */
 export type SessionConnectOptions = {
   /** Optional abort signal which if triggered will terminate connecting even if it isn't complete */
   signal?: AbortSignal;
@@ -58,7 +58,7 @@ export type SessionConnectOptions = {
   roomConnectOptions?: RoomConnectOptions;
 };
 
-/** @public */
+/** @beta */
 export type SwitchActiveDeviceOptions = {
   /**
    *  If true, adds an `exact` constraint to the getUserMedia request.
@@ -130,7 +130,7 @@ type SessionActions = {
   end: () => Promise<void>;
 };
 
-/** @public */
+/** @beta */
 export type UseSessionReturn = (
   | SessionStateConnecting
   | SessionStateConnected
@@ -280,7 +280,7 @@ function useSessionTokenSourceFetch(
 
 /**
  * A Session represents a managed connection to a Room which can contain Agents.
- * @public
+ * @beta
  */
 export function useSession(
   tokenSource: TokenSourceConfigurable,
@@ -288,7 +288,7 @@ export function useSession(
 ): UseSessionReturn;
 /**
  * A Session represents a managed connection to a Room which can contain Agents.
- * @public
+ * @beta
  */
 export function useSession(
   tokenSource: TokenSourceFixed,

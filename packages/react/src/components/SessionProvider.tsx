@@ -3,7 +3,7 @@ import { UseSessionReturn } from '../hooks';
 import { RoomContext } from '../context';
 import { SessionContext } from '../context/session-context';
 
-/** @public */
+/** @beta */
 export type SessionProviderProps = {
   session: UseSessionReturn;
   children: React.ReactNode;
@@ -11,7 +11,7 @@ export type SessionProviderProps = {
 
 /**
  * The `SessionProvider` component instantiates a SessionContext from the return of useSession
- * @public
+ * @beta
  */
 export function SessionProvider(props: SessionProviderProps) {
   return (

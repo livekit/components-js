@@ -72,14 +72,14 @@ import { TranscriptionSegment } from 'livekit-client';
 import { VideoCaptureOptions } from 'livekit-client';
 import { WidgetState } from '@livekit/components-core';
 
-// @public (undocumented)
+// @beta (undocumented)
 export type AgentCallbacks = {
     [AgentEvent.CameraChanged]: (newTrack: TrackReference | undefined) => void;
     [AgentEvent.MicrophoneChanged]: (newTrack: TrackReference | undefined) => void;
     [AgentEvent.StateChanged]: (newAgentState: AgentState) => void;
 };
 
-// @public (undocumented)
+// @beta (undocumented)
 export enum AgentEvent {
     // (undocumented)
     CameraChanged = "cameraChanged",
@@ -91,7 +91,7 @@ export enum AgentEvent {
 
 // Warning: (ae-forgotten-export) The symbol "AgentSdkStates" needs to be exported by the entry point index.docs.d.ts
 //
-// @public
+// @beta
 export type AgentState = 'disconnected' | 'connecting' | 'pre-connect-buffering' | 'failed' | AgentSdkStates;
 
 // @public (undocumented)
@@ -486,12 +486,12 @@ export { MessageEncoder }
 // @public (undocumented)
 export type MessageFormatter = (message: string) => React_2.ReactNode;
 
-// @public (undocumented)
+// @beta (undocumented)
 export type MessagesCallbacks = {
     [MessagesEvent.MessageReceived]: (message: ReceivedMessage) => void;
 };
 
-// @public (undocumented)
+// @beta (undocumented)
 export enum MessagesEvent {
     MessageReceived = "messageReceived"
 }
@@ -654,14 +654,14 @@ export const ScreenShareIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.El
 // @internal (undocumented)
 export const ScreenShareStopIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
-// @public (undocumented)
+// @beta (undocumented)
 export type SessionCallbacks = {
     [SessionEvent.ConnectionStateChanged]: (newAgentConnectionState: ConnectionState_2) => void;
     [SessionEvent.MediaDevicesError]: (error: Error) => void;
     [SessionEvent.EncryptionError]: (error: Error) => void;
 };
 
-// @public (undocumented)
+// @beta (undocumented)
 export type SessionConnectOptions = {
     signal?: AbortSignal;
     tracks?: {
@@ -673,7 +673,7 @@ export type SessionConnectOptions = {
     roomConnectOptions?: RoomConnectOptions;
 };
 
-// @public (undocumented)
+// @beta (undocumented)
 export enum SessionEvent {
     // (undocumented)
     ConnectionStateChanged = "connectionStateChanged",
@@ -681,10 +681,10 @@ export enum SessionEvent {
     MediaDevicesError = "mediaDevicesError"
 }
 
-// @public
+// @beta
 export function SessionProvider(props: SessionProviderProps): React_2.JSX.Element;
 
-// @public (undocumented)
+// @beta (undocumented)
 export type SessionProviderProps = {
     session: UseSessionReturn;
     children: React_2.ReactNode;
@@ -705,7 +705,7 @@ export const StartAudio: (props: AllowAudioPlaybackProps & React_2.RefAttributes
 // @public
 export const StartMediaButton: (props: AllowMediaPlaybackProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactNode;
 
-// @public (undocumented)
+// @beta (undocumented)
 export type SwitchActiveDeviceOptions = {
     exact?: boolean;
 };
@@ -782,13 +782,13 @@ export const UnfocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.
 
 // Warning: (ae-forgotten-export) The symbol "SessionStub" needs to be exported by the entry point index.docs.d.ts
 //
-// @public
+// @beta
 export function useAgent(session?: SessionStub): UseAgentReturn;
 
 // Warning: (ae-forgotten-export) The symbol "AgentStateCases" needs to be exported by the entry point index.docs.d.ts
 // Warning: (ae-forgotten-export) The symbol "AgentActions" needs to be exported by the entry point index.docs.d.ts
 //
-// @public (undocumented)
+// @beta (undocumented)
 export type UseAgentReturn = AgentStateCases & AgentActions;
 
 // @alpha
@@ -877,7 +877,7 @@ export function useEnsureParticipant(participant?: Participant): Participant;
 // @public
 export function useEnsureRoom(room?: Room): Room;
 
-// @public
+// @beta
 export function useEnsureSession(session?: UseSessionReturn): UseSessionReturn;
 
 // @public
@@ -1004,7 +1004,7 @@ export function useMaybeParticipantContext(): Participant | undefined;
 // @public
 export function useMaybeRoomContext(): Room | undefined;
 
-// @public
+// @beta
 export function useMaybeSessionContext(): UseSessionReturn | undefined;
 
 // @public
@@ -1206,21 +1206,21 @@ export type UseSequentialRoomConnectDisconnectResults<R extends Room | undefined
 
 // Warning: (ae-forgotten-export) The symbol "UseSessionConfigurableOptions" needs to be exported by the entry point index.docs.d.ts
 //
-// @public
+// @beta
 export function useSession(tokenSource: TokenSourceConfigurable, options?: UseSessionConfigurableOptions): UseSessionReturn;
 
 // Warning: (ae-forgotten-export) The symbol "UseSessionFixedOptions" needs to be exported by the entry point index.docs.d.ts
 //
-// @public
+// @beta
 export function useSession(tokenSource: TokenSourceFixed, options?: UseSessionFixedOptions): UseSessionReturn;
 
-// @public
+// @beta
 export function useSessionContext(): UseSessionReturn;
 
-// @public (undocumented)
+// @beta (undocumented)
 export function useSessionMessages(session?: UseSessionReturn): UseSessionMessagesReturn;
 
-// @public (undocumented)
+// @beta (undocumented)
 export type UseSessionMessagesReturn = {
     messages: Array<ReceivedMessage>;
     isSending: boolean;
@@ -1235,7 +1235,7 @@ export type UseSessionMessagesReturn = {
 // Warning: (ae-forgotten-export) The symbol "SessionStateDisconnected" needs to be exported by the entry point index.docs.d.ts
 // Warning: (ae-forgotten-export) The symbol "SessionActions" needs to be exported by the entry point index.docs.d.ts
 //
-// @public (undocumented)
+// @beta (undocumented)
 export type UseSessionReturn = (SessionStateConnecting | SessionStateConnected | SessionStateDisconnected) & SessionActions;
 
 // @public

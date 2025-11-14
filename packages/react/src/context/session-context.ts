@@ -8,7 +8,7 @@ export const SessionContext = React.createContext<UseSessionReturn | undefined>(
 /**
  * Ensures that a session is provided via context.
  * If no session is provided, an error is thrown.
- * @public
+ * @beta
  */
 export function useSessionContext() {
   const ctx = React.useContext(SessionContext);
@@ -20,7 +20,7 @@ export function useSessionContext() {
 
 /**
  * Returns the session context if it exists, otherwise undefined.
- * @public
+ * @beta
  */
 export function useMaybeSessionContext() {
   return React.useContext(SessionContext);
@@ -29,7 +29,7 @@ export function useMaybeSessionContext() {
 /**
  * Ensures that a session is provided, either via context or explicitly as a parameter.
  * If no session is provided, an error is thrown.
- * @public
+ * @beta
  */
 export function useEnsureSession(session?: UseSessionReturn) {
   const context = useMaybeSessionContext();

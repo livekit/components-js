@@ -16,7 +16,7 @@ import { useChat } from './useChat';
 import { UseSessionReturn } from './useSession';
 import { useEnsureSession } from '../context';
 
-/** @public */
+/** @beta */
 export type UseSessionMessagesReturn = {
   messages: Array<ReceivedMessage>;
 
@@ -30,7 +30,7 @@ export type UseSessionMessagesReturn = {
   };
 };
 
-/** @public */
+/** @beta */
 export enum MessagesEvent {
   /**
    * Emits when a new message is received from a participant
@@ -39,12 +39,12 @@ export enum MessagesEvent {
   MessageReceived = 'messageReceived',
 }
 
-/** @public */
+/** @beta */
 export type MessagesCallbacks = {
   [MessagesEvent.MessageReceived]: (message: ReceivedMessage) => void;
 };
 
-/** @public */
+/** @beta */
 export function useSessionMessages(session?: UseSessionReturn): UseSessionMessagesReturn {
   const { room } = useEnsureSession(session);
 

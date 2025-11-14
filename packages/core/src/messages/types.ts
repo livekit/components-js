@@ -38,7 +38,7 @@ export type ReceivedAgentTranscriptionMessage = ReceivedMessageWithType<
   }
 >;
 
-/** @public */
+/** @beta */
 export type ReceivedMessage =
   | ReceivedUserTranscriptionMessage
   | ReceivedAgentTranscriptionMessage

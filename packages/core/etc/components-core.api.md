@@ -444,7 +444,7 @@ export interface ReceivedDataMessage<T extends string | undefined = string> exte
     from?: Participant;
 }
 
-// @public (undocumented)
+// @beta (undocumented)
 export type ReceivedMessage = ReceivedUserTranscriptionMessage | ReceivedAgentTranscriptionMessage | ReceivedChatMessage;
 
 // @public (undocumented)

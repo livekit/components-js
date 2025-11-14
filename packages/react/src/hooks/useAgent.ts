@@ -280,6 +280,7 @@ export const useAgentTimeoutIdStore = (): {
   agentTimeoutFailureReason: string | null;
   startAgentTimeout: (agentConnectTimeoutMilliseconds?: number) => void;
   clearAgentTimeout: () => void;
+  clearAgentTimeoutFailureReason: () => void;
   updateAgentTimeoutState: (agentState: AgentState) => void;
   updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => void;
 } => {
@@ -333,6 +334,9 @@ export const useAgentTimeoutIdStore = (): {
       agentStateRef.current = 'connecting';
       agentParticipantExistsRef.current = false;
     }, [agentTimeoutId]),
+    clearAgentTimeoutFailureReason: React.useCallback(() => {
+      setAgentTimeoutFailureReason(null);
+    }, []),
 
     updateAgentTimeoutState: React.useCallback((agentState: AgentState) => {
       agentStateRef.current = agentState;
@@ -479,6 +483,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       agentTimeoutFailureReason,
       startAgentTimeout,
       clearAgentTimeout,
+      clearAgentTimeoutFailureReason,
       updateAgentTimeoutState,
       updateAgentTimeoutParticipantExists,
     },
@@ -571,6 +576,15 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       room.off(RoomEvent.ConnectionStateChanged, handleConnectionStateChanged);
     };
   }, [room]);
+
+  // When the agent participant connects, reset the timeout failure state
+  React.useEffect(() => {
+    if (!agentParticipant) {
+      return;
+    }
+
+    clearAgentTimeoutFailureReason();
+  }, [agentParticipant]);
 
   // If the agent participant disconnects in the middle of a conversation unexpectedly, mark that as an explicit failure
   const [agentDisconnectedFailureReason, setAgentDisconnectedFailureReason] = React.useState<

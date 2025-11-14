@@ -77,6 +77,7 @@ type SessionStateCommon = {
     agentTimeoutFailureReason: string | null;
     startAgentTimeout: (agentConnectTimeoutMilliseconds?: number) => void;
     clearAgentTimeout: () => void;
+    clearAgentTimeoutFailureReason: () => void;
     updateAgentTimeoutState: (agentState: AgentState) => void;
     updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => void;
   };
@@ -391,6 +392,7 @@ export function useSession(
     agentTimeoutFailureReason,
     startAgentTimeout,
     clearAgentTimeout,
+    clearAgentTimeoutFailureReason,
     updateAgentTimeoutState,
     updateAgentTimeoutParticipantExists,
   } = useAgentTimeoutIdStore();
@@ -404,6 +406,7 @@ export function useSession(
       agentTimeoutFailureReason,
       startAgentTimeout,
       clearAgentTimeout,
+      clearAgentTimeoutFailureReason,
       updateAgentTimeoutState,
       updateAgentTimeoutParticipantExists,
     }),
@@ -414,6 +417,7 @@ export function useSession(
       agentTimeoutFailureReason,
       startAgentTimeout,
       clearAgentTimeout,
+      clearAgentTimeoutFailureReason,
       updateAgentTimeoutState,
       updateAgentTimeoutParticipantExists,
     ],

@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.9.17
+
+### Patch Changes
+
+- Ensure that if an agent connects after a timeout failure, the status doesn't get stuck in "failed" - [#1236](https://github.com/livekit/components-js/pull/1236) ([@1egoman](https://github.com/1egoman))
+
 ## 2.9.16
 
 ### Patch Changes

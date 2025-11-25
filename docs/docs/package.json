@@ -19,5 +19,8 @@
   "files": [
     "generated-docs",
     "meta-data.json"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }

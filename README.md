@@ -21,7 +21,88 @@ Use this SDK to add realtime video, audio and data features to your React app. B
 
 ![LiveKit Components Preview](./.github/assets/livekit-meet.jpg)
 
-## Quick Start
+## Agents Quick Start
+
+First add the library to your project:
+
+```shell
+npm i @livekit/components-react
+```
+
+Next, you need a running agent. If you don't already have one, [it only takes a few minutes to set one up](https://docs.livekit.io/agents/start/voice-ai).
+
+The rest of this guide assumes your agent is configured for [explicit dispatch](https://docs.livekit.io/agents/worker/agent-dispatch/#explicit) with `agent_name="example-agent"`.
+
+Then, you can use the agents sdk to connect and interact with your agent:
+
+```tsx
+import { useEffect, useState } from "react";
+import { TokenSource } from "livekit-client";
+import {
+  useSession,
+  useAgent,
+  SessionProvider,
+  VideoTrack,
+  StartAudio,
+  RoomAudioRenderer,
+} from "@livekit/components-react";
+
+// Generated credentials manually and put them here
+// Or, generate them another way: https://github.com/livekit/client-sdk-js?tab=readme-ov-file#generating-a-urltoken-with-tokensource
+const tokenSource = TokenSource.literal({
+  serverUrl: "wss://my-livekit-server",
+  participantToken: 'generated-jwt',
+});
+
+export default function Example() {
+  const session = useSession(tokenSource, {
+    agentName: 'example-agent', /* <== Put your agent name here! */
+  });
+
+  const toggleStarted = () => {
+    if (session.connectionState === 'disconnected') {
+      session.start();
+    } else {
+      session.end();
+    }
+  };
+
+  const agent = useAgent(session);
+
+  return (
+    <SessionProvider session={session}>
+      <button onClick={toggleStarted} disabled={session.connectionState === 'connecting'}>
+        {session.isConnected ? 'Disconnect' : 'Connect'}
+      </button>
+
+      {session.isConnected ? (
+        <div className="flex flex-col gap-4 p-4">
+          <span>
+            <strong>Connection State:</strong>
+            {session.connectionState}
+          </span>
+          <span>
+            <strong>Agent State:</strong>
+            {agent.state}
+          </span>
+
+          {session.local.cameraTrack ? (
+            <VideoTrack trackRef={session.local.cameraTrack} />
+          ) : null}
+          {agent.cameraTrack ? (
+            <VideoTrack trackRef={agent.cameraTrack} />
+          ) : null}
+    
+          <StartAudio label="Start audio" />
+          <RoomAudioRenderer />
+        </div>
+      ) : null}
+    </SessionProvider>
+  );
+}
+```
+
+### Video Conference Quick Start
 
 First add the library to your project:
 

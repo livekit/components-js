@@ -1,5 +1,11 @@
 # @livekit/components-core
 
+## 0.12.12
+
+### Patch Changes
+
+- Remove requirement for ReceivedChatMessage to have an explicit type key - [#1241](https://github.com/livekit/components-js/pull/1241) ([@1egoman](https://github.com/1egoman))
+
 ## 0.12.11
 
 ### Patch Changes

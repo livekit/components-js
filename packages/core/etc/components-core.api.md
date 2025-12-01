@@ -433,10 +433,9 @@ export type ReceivedAgentTranscriptionMessage = ReceivedMessageWithType<'agentTr
 }>;
 
 // @public (undocumented)
-export type ReceivedChatMessage = ReceivedMessageWithType<'chatMessage', ChatMessage & {
-    from?: Participant;
-    attributes?: Record<string, string>;
-}>;
+export type ReceivedChatMessage = Omit<ReceivedChatMessageWithRequiredType, 'type'> & {
+    type?: 'chatMessage';
+};
 
 // @public (undocumented)
 export interface ReceivedDataMessage<T extends string | undefined = string> extends BaseDataMessage<T> {

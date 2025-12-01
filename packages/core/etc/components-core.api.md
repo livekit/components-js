@@ -432,8 +432,6 @@ export type ReceivedAgentTranscriptionMessage = ReceivedMessageWithType<'agentTr
     message: string;
 }>;
 
-// Warning: (ae-forgotten-export) The symbol "ReceivedChatMessageWithRequiredType" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export type ReceivedChatMessage = Omit<ReceivedChatMessageWithRequiredType, 'type'> & {
     type?: 'chatMessage';

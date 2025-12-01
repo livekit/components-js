@@ -15,6 +15,7 @@ type ReceivedMessageWithType<Type extends string, Metadata extends object = obje
   attributes?: Record<string, string>;
 } & Metadata;
 
+/** @private */
 type ReceivedChatMessageWithRequiredType = ReceivedMessageWithType<
   'chatMessage',
   ChatMessage & {

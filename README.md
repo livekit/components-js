@@ -48,7 +48,7 @@ import {
 } from "@livekit/components-react";
 
 // Generated credentials manually and put them here
-// Or, generate them another way: FIXME: add docs link here!
+// Or, generate them another way: https://github.com/livekit/client-sdk-js?tab=readme-ov-file#generating-a-urltoken-with-tokensource
 const tokenSource = TokenSource.literal({
   serverUrl: "wss://my-livekit-server",
   participantToken: 'generated-jwt',

@@ -15,14 +15,18 @@ type ReceivedMessageWithType<Type extends string, Metadata extends object = obje
   attributes?: Record<string, string>;
 } & Metadata;
 
-/** @public */
-export type ReceivedChatMessage = ReceivedMessageWithType<
+type ReceivedChatMessageWithRequiredType = ReceivedMessageWithType<
   'chatMessage',
   ChatMessage & {
     from?: Participant;
     attributes?: Record<string, string>;
   }
 >;
+
+/** @public */
+export type ReceivedChatMessage = Omit<ReceivedChatMessageWithRequiredType, 'type'> & {
+  type?: 'chatMessage';
+};
 
 export type ReceivedUserTranscriptionMessage = ReceivedMessageWithType<
   'userTranscript',

@@ -432,11 +432,12 @@ export type ReceivedAgentTranscriptionMessage = ReceivedMessageWithType<'agentTr
     message: string;
 }>;
 
+// Warning: (ae-forgotten-export) The symbol "ReceivedChatMessageWithRequiredType" needs to be exported by the entry point index.d.ts
+//
 // @public (undocumented)
-export type ReceivedChatMessage = ReceivedMessageWithType<'chatMessage', ChatMessage & {
-    from?: Participant;
-    attributes?: Record<string, string>;
-}>;
+export type ReceivedChatMessage = Omit<ReceivedChatMessageWithRequiredType, 'type'> & {
+    type?: 'chatMessage';
+};
 
 // @public (undocumented)
 export interface ReceivedDataMessage<T extends string | undefined = string> extends BaseDataMessage<T> {

@@ -1,0 +1,305 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "@agents-ui",
+  "homepage": "https://ui.livekit.io",
+  "items": [
+    {
+      "name": "agent-audio-track",
+      "type": "registry:ui",
+      "title": "Agent Audio Track",
+      "description": "A track for audio media (microphone, camera, screen share) with appropriate icons and loading states.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-audio-track.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/agent-audio-track.tsx"
+        }
+      ],
+      "dependencies": ["@livekit/components-react"]
+    },
+    {
+      "name": "agent-video-track",
+      "type": "registry:ui",
+      "title": "Agent Video Track",
+      "description": "A track for video media (microphone, camera, screen share) with appropriate icons and loading states.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-video-track.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/agent-video-track.tsx"
+        }
+      ],
+      "dependencies": ["@livekit/components-react"]
+    },
+    {
+      "name": "agent-session-provider",
+      "type": "registry:ui",
+      "title": "Agent Session Provider",
+      "description": "A provider for the agent session (microphone, camera, screen share) with appropriate icons and loading states.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-session-provider.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/agent-session-provider.tsx"
+        }
+      ],
+      "dependencies": ["@livekit/components-react"]
+    },
+    {
+      "name": "agent-session-start-audio",
+      "type": "registry:ui",
+      "title": "Agent Session Start Audio",
+      "description": "A button for starting audio playback in the agent session.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-session-start-audio.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/agent-session-start-audio.tsx"
+        }
+      ],
+      "dependencies": ["@livekit/components-react", "livekit-client"],
+      "registryDependencies": ["button"]
+    },
+    {
+      "name": "agent-disconnect-button",
+      "type": "registry:ui",
+      "title": "Agent Session Disconnect",
+      "description": "A button for disconnecting the agent session.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-disconnect-button.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/agent-disconnect-button.tsx"
+        }
+      ],
+
+      "dependencies": ["class-variance-authority", "@livekit/components-react", "lucide-react"],
+      "registryDependencies": ["button"]
+    },
+    {
+      "name": "agent-session-audio",
+      "type": "registry:ui",
+      "title": "Agent Session Start Audio",
+      "description": "A button for starting audio playback in the agent session.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-session-audio.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/agent-session-audio.tsx"
+        }
+      ],
+      "dependencies": ["@livekit/components-react"]
+    },
+    {
+      "name": "agent-track-toggle",
+      "type": "registry:ui",
+      "title": "Agent Track Toggle",
+      "description": "A toggle button for controlling media tracks (microphone, camera, screen share) with appropriate icons and loading states.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-track-toggle.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/agent-track-toggle.tsx"
+        }
+      ],
+      "dependencies": [
+        "class-variance-authority",
+        "livekit-client",
+        "@livekit/components-react",
+        "lucide-react"
+      ],
+      "registryDependencies": ["toggle", "utils"]
+    },
+    {
+      "name": "agent-track-control",
+      "type": "registry:ui",
+      "title": "Agent Track Control",
+      "description": "A control for managing media tracks (microphone, camera, screen share) with appropriate icons and loading states.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-track-control.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/agent-track-control.tsx"
+        }
+      ],
+      "dependencies": [
+        "class-variance-authority",
+        "livekit-client",
+        "@livekit/components-react",
+        "lucide-react"
+      ],
+      "registryDependencies": ["select", "@agents-ui/agent-track-toggle", "utils"]
+    },
+    {
+      "name": "agent-control-bar",
+      "type": "registry:block",
+      "title": "Agent Control Bar",
+      "description": "A control bar for managing media tracks (microphone, camera, screen share) with appropriate icons and loading states.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-control-bar/agent-control-bar.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/agent-control-bar/agent-control-bar.tsx"
+        },
+        {
+          "path": "components/agents-ui/agent-control-bar/agent-chat-input.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/agent-control-bar/agent-chat-input.tsx"
+        },
+        {
+          "path": "components/agents-ui/agent-control-bar/hooks/use-input-controls.ts",
+          "type": "registry:hook",
+          "target": "components/agents-ui/agent-control-bar/hooks/use-input-controls.ts"
+        },
+        {
+          "path": "components/agents-ui/agent-control-bar/hooks/use-publish-permissions.ts",
+          "type": "registry:hook",
+          "target": "components/agents-ui/agent-control-bar/hooks/use-publish-permissions.ts"
+        }
+      ],
+      "dependencies": [
+        "class-variance-authority",
+        "livekit-client",
+        "motion",
+        "@livekit/components-react",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "toggle",
+        "@agents-ui/agent-track-control",
+        "@agents-ui/agent-track-toggle",
+        "@agents-ui/audio-bar-visualizer",
+        "utils"
+      ]
+    },
+    {
+      "name": "audio-bar-visualizer",
+      "type": "registry:ui",
+      "title": "Audio Bar Visualizer",
+      "description": "A linear bar visualizer for audio tracks.",
+      "files": [
+        {
+          "path": "components/agents-ui/audio-bar-visualizer/audio-bar-visualizer.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/audio-bar-visualizer/audio-bar-visualizer.tsx"
+        }
+      ],
+      "dependencies": [
+        "class-variance-authority",
+        "livekit-client",
+        "@livekit/components-react",
+        "lucide-react"
+      ],
+      "registryDependencies": ["clone-single-child", "utils"]
+    },
+    {
+      "name": "audio-radial-visualizer",
+      "type": "registry:ui",
+      "title": "Audio radial Visualizer",
+      "description": "A radial visualizer for audio tracks.",
+      "files": [
+        {
+          "path": "components/agents-ui/audio-radial-visualizer/audio-radial-visualizer.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/audio-radial-visualizer/audio-radial-visualizer.tsx"
+        }
+      ],
+      "dependencies": [
+        "class-variance-authority",
+        "livekit-client",
+        "@livekit/components-react",
+        "lucide-react"
+      ],
+      "registryDependencies": ["clone-single-child", "utils"]
+    },
+    {
+      "name": "audio-grid-visualizer",
+      "type": "registry:ui",
+      "title": "Audio Grid Visualizer",
+      "description": "A dot matrix grid visualizer for audio tracks.",
+      "files": [
+        {
+          "path": "components/agents-ui/audio-grid-visualizer/audio-grid-visualizer.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/audio-grid-visualizer/audio-grid-visualizer.tsx"
+        }
+      ],
+      "dependencies": [
+        "class-variance-authority",
+        "livekit-client",
+        "@livekit/components-react",
+        "lucide-react"
+      ],
+      "registryDependencies": ["clone-single-child", "utils"]
+    },
+    {
+      "name": "audio-oscilloscope-visualizer",
+      "type": "registry:ui",
+      "title": "Audio Oscilloscope Visualizer",
+      "description": "An oscilloscope visualizer for audio tracks.",
+      "files": [
+        {
+          "path": "components/agents-ui/audio-oscilloscope-visualizer/audio-oscilloscope-visualizer.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/audio-oscilloscope-visualizer/audio-oscilloscope-visualizer.tsx"
+        }
+      ],
+      "dependencies": [
+        "class-variance-authority",
+        "livekit-client",
+        "@livekit/components-react",
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": ["utils", "@agents-ui/react-shader"]
+    },
+    {
+      "name": "audio-aura-visualizer",
+      "type": "registry:ui",
+      "title": "Audio Aura Visualizer",
+      "description": "An aura visualizer for audio tracks.",
+      "files": [
+        {
+          "path": "components/agents-ui/audio-aura-visualizer/audio-aura-visualizer.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/audio-aura-visualizer/audio-aura-visualizer.tsx"
+        }
+      ],
+      "dependencies": [
+        "class-variance-authority",
+        "livekit-client",
+        "@livekit/components-react",
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": ["utils", "@agents-ui/react-shader"]
+    },
+    {
+      "name": "react-shader",
+      "type": "registry:ui",
+      "title": "React Shader",
+      "description": "A fork of https://github.com/rysana-ai/react-shaders.",
+      "files": [
+        {
+          "path": "components/agents-ui/react-shader/react-shader.tsx",
+          "type": "registry:ui",
+          "target": "components/agents-ui/react-shader/react-shader.tsx"
+        }
+      ]
+    },
+    {
+      "name": "clone-single-child",
+      "type": "registry:lib",
+      "title": "Clone Single Child",
+      "description": "A utility function for cloning a single child.",
+      "files": [
+        {
+          "path": "lib/clone-single-child.ts",
+          "type": "registry:lib",
+          "target": "lib/clone-single-child.ts"
+        }
+      ]
+    }
+  ]
+}

@@ -1,23 +1,19 @@
 'use client';
 
-import { LiveKitRoom, useToken, VideoConference, setLogLevel } from '@livekit/components-react';
+import { SessionProvider, useSession, VideoConference, setLogLevel } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import * as React from 'react';
-import { Room, ExternalE2EEKeyProvider } from 'livekit-client';
+import { Room, ExternalE2EEKeyProvider, TokenSource } from 'livekit-client';
 import { generateRandomUserId } from '../lib/helper';
 
 const E2EEExample: NextPage = () => {
-  const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
+  const params = React.useMemo(
+    () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
+    [],
+  );
   const roomName = params?.get('room') ?? 'test-room';
-  const userIdentity = React.useMemo(() => params?.get('user') ?? generateRandomUserId(), []);
+  const userIdentity = React.useMemo(() => params?.get('user') ?? generateRandomUserId(), [params]);
   setLogLevel('warn', { liveKitClientLogLevel: 'debug' });
-
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    userInfo: {
-      identity: userIdentity,
-      name: userIdentity,
-    },
-  });
 
   const keyProvider = React.useMemo(() => new ExternalE2EEKeyProvider(), []);
 
@@ -29,27 +25,44 @@ const E2EEExample: NextPage = () => {
         e2ee:
           typeof window !== 'undefined'
             ? {
-                keyProvider,
-                worker: new Worker(new URL('livekit-client/e2ee-worker', import.meta.url)),
-              }
+              keyProvider,
+              worker: new Worker(new URL('livekit-client/e2ee-worker', import.meta.url)),
+            }
             : undefined,
       }),
-    [],
+    [keyProvider],
   );
 
   room.setE2EEEnabled(true);
 
+  const tokenSource = React.useMemo(() => {
+    return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
+  }, []);
+
+  const session = useSession(tokenSource, {
+    roomName,
+    participantIdentity: userIdentity,
+    participantName: userIdentity,
+    room,
+  });
+
+  React.useEffect(() => {
+    session.start({
+      tracks: {
+        camera: { enabled: true },
+        microphone: { enabled: true },
+      },
+    });
+    return () => {
+      session.end();
+    };
+  }, [session]);
+
   return (
     <div data-lk-theme="default" style={{ height: '100vh' }}>
-      <LiveKitRoom
-        room={room}
-        video={true}
-        audio={true}
-        token={token}
-        serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-      >
+      <SessionProvider session={session}>
         <VideoConference />
-      </LiveKitRoom>
+      </SessionProvider>
     </div>
   );
 };

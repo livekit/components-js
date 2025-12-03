@@ -4,16 +4,16 @@ import * as React from 'react';
 import { setLogLevel } from '@livekit/components-core';
 import {
   GridLayout,
-  LiveKitRoom,
+  SessionProvider,
+  useSession,
   ParticipantTile,
   TrackRefContext,
   useLocalParticipant,
-  useToken,
   useTracks,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { ControlBarControls } from '@livekit/components-react';
-import { LocalVideoTrack, Track, TrackProcessor } from 'livekit-client';
+import { LocalVideoTrack, Track, TrackProcessor, TokenSource } from 'livekit-client';
 import { BackgroundBlur } from '@livekit/track-processors';
 
 function Stage() {
@@ -23,14 +23,18 @@ function Stage() {
   const [blurEnabled, setBlurEnabled] = React.useState(false);
   const [processorPending, setProcessorPending] = React.useState(false);
   const { cameraTrack } = useLocalParticipant();
-  const [blur] = React.useState(BackgroundBlur());
+  const [blur, setBlur] = React.useState<TrackProcessor<Track.Kind.Video> | undefined>();
+
+  React.useEffect(() => {
+    setBlur(BackgroundBlur());
+  }, []);
 
   React.useEffect(() => {
     const localCamTrack = cameraTrack?.track as LocalVideoTrack | undefined;
     if (localCamTrack) {
       setProcessorPending(true);
       try {
-        if (blurEnabled && !localCamTrack.getProcessor()) {
+        if (blurEnabled && !localCamTrack.getProcessor() && blur) {
           localCamTrack.setProcessor(blur);
         } else if (!blurEnabled) {
           localCamTrack.stopProcessor();
@@ -39,7 +43,7 @@ function Stage() {
         setProcessorPending(false);
       }
     }
-  }, [blurEnabled, cameraTrack]);
+  }, [blurEnabled, cameraTrack, blur]);
 
   return (
     <>
@@ -65,24 +69,33 @@ const ProcessorsExample: NextPage = () => {
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? 'test-identity';
 
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    userInfo: {
-      identity: userIdentity,
-      name: userIdentity,
-    },
+  const tokenSource = React.useMemo(() => {
+    return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
+  }, []);
+
+  const session = useSession(tokenSource, {
+    roomName,
+    participantIdentity: userIdentity,
+    participantName: userIdentity,
   });
+
+  React.useEffect(() => {
+    session.start({
+      tracks: {
+        camera: { enabled: true },
+        microphone: { enabled: false },
+      },
+    });
+    return () => {
+      session.end();
+    };
+  }, [session]);
 
   return (
     <div data-lk-theme="default" style={{ height: '100vh' }}>
-      <LiveKitRoom
-        video={true}
-        audio={false}
-        token={token}
-        connect={true}
-        serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-      >
+      <SessionProvider session={session}>
         <Stage />
-      </LiveKitRoom>
+      </SessionProvider>
     </div>
   );
 };

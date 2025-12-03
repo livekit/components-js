@@ -1,32 +1,45 @@
 'use client';
 
-import { AudioConference, LiveKitRoom, useToken } from '@livekit/components-react';
+import { AudioConference, SessionProvider, useSession } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';
-import { useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
+import { TokenSource } from 'livekit-client';
 
 const AudioExample: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
   const roomName = params?.get('room') ?? 'test-room';
   const [userIdentity] = useState(params?.get('user') ?? generateRandomUserId());
 
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    userInfo: {
-      identity: userIdentity,
-      name: userIdentity,
-    },
+  const tokenSource = useMemo(() => {
+    return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
+  }, []);
+
+  const session = useSession(tokenSource, {
+    roomName,
+    participantIdentity: userIdentity,
+    participantName: userIdentity,
   });
+
+  useEffect(() => {
+    session.start({
+      tracks: {
+        microphone: { enabled: true },
+      },
+      roomConnectOptions: {
+        autoSubscribe: true,
+      },
+    });
+    return () => {
+      session.end();
+    };
+  }, [session]);
 
   return (
     <div data-lk-theme="default">
-      <LiveKitRoom
-        video={false}
-        audio={true}
-        token={token}
-        serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-      >
+      <SessionProvider session={session}>
         <AudioConference />
-      </LiveKitRoom>
+      </SessionProvider>
     </div>
   );
 };

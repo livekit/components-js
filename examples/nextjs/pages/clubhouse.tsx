@@ -2,20 +2,20 @@
 
 import {
   ControlBar,
-  LiveKitRoom,
+  SessionProvider,
+  useSession,
   RoomAudioRenderer,
   RoomName,
   TrackLoop,
   TrackMutedIndicator,
   useIsMuted,
   useIsSpeaking,
-  useToken,
   useTrackRefContext,
   useTracks,
 } from '@livekit/components-react';
 import styles from '../styles/Clubhouse.module.scss';
-import { Track } from 'livekit-client';
-import { useMemo, useState } from 'react';
+import { Track, TokenSource } from 'livekit-client';
+import { useMemo, useState, useEffect } from 'react';
 import { generateRandomUserId } from '../lib/helper';
 
 const Clubhouse = () => {
@@ -23,31 +23,45 @@ const Clubhouse = () => {
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? generateRandomUserId();
 
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    userInfo: {
-      identity: userIdentity,
-      name: userIdentity,
-    },
+  const tokenSource = useMemo(() => {
+    return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
+  }, []);
+
+  const session = useSession(tokenSource, {
+    roomName,
+    participantIdentity: userIdentity,
+    participantName: userIdentity,
   });
 
   const [tryToConnect, setTryToConnect] = useState(false);
   const [connected, setConnected] = useState(false);
 
+  useEffect(() => {
+    if (tryToConnect) {
+      session.start({
+        tracks: {
+          microphone: { enabled: true },
+        },
+      });
+    } else {
+      session.end();
+    }
+  }, [tryToConnect, session]);
+
+  useEffect(() => {
+    if (session.connectionState === 'connected') {
+      setConnected(true);
+    } else {
+      setConnected(false);
+      if (session.connectionState === 'disconnected') {
+        setTryToConnect(false);
+      }
+    }
+  }, [session.connectionState]);
+
   return (
     <div data-lk-theme="default" className={styles.container}>
-      <LiveKitRoom
-        token={token}
-        serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-        connect={tryToConnect}
-        video={false}
-        audio={true}
-        // simulateParticipants={15}
-        onConnected={() => setConnected(true)}
-        onDisconnected={() => {
-          setTryToConnect(false);
-          setConnected(false);
-        }}
-      >
+      <SessionProvider session={session}>
         <div style={{ display: 'grid', placeContent: 'center', height: '100%' }}>
           <button
             className="lk-button"
@@ -70,7 +84,7 @@ const Clubhouse = () => {
           />
           <RoomAudioRenderer />
         </div>
-      </LiveKitRoom>
+      </SessionProvider>
     </div>
   );
 };
@@ -104,7 +118,7 @@ const CustomParticipantTile = () => {
       >
         <div
           className={styles.avatar}
-          // className="z-10 grid aspect-square items-center overflow-hidden rounded-full bg-beige transition-all will-change-transform"
+        // className="z-10 grid aspect-square items-center overflow-hidden rounded-full bg-beige transition-all will-change-transform"
         >
           <img
             src={`https://avatars.dicebear.com/api/avataaars/${id}.svg?mouth=default,smile,tongue&eyes=default,happy,hearts&eyebrows=default,defaultNatural,flatNatural`}

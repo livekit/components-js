@@ -1,16 +1,16 @@
 'use client';
 
 import {
-  LiveKitRoom,
-  useToken,
   useVoiceAssistant,
   BarVisualizer,
   RoomAudioRenderer,
   VoiceAssistantControlBar,
+  SessionProvider,
+  useSession,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
-import { useMemo, useState } from 'react';
-import { MediaDeviceFailure } from 'livekit-client';
+import { useMemo, useState, useEffect } from 'react';
+import { MediaDeviceFailure, TokenSource } from 'livekit-client';
 import styles from '../styles/VoiceAssistant.module.scss';
 import { generateRandomUserId } from '../lib/helper';
 
@@ -27,24 +27,32 @@ function SimpleVoiceAssistant() {
 }
 
 const VoiceAssistantExample: NextPage = () => {
-  const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
+  const params = useMemo(
+    () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
+    [],
+  );
   const roomName = useMemo(
     () => params?.get('room') ?? 'test-room-' + Math.random().toFixed(5),
-    [],
+    [params],
   );
   const [shouldConnect, setShouldConnect] = useState(false);
 
-  const tokenOptions = useMemo(() => {
-    const userId = params?.get('user') ?? generateRandomUserId();
-    return {
-      userInfo: {
-        identity: userId,
-        name: userId,
-      },
-    };
+  const tokenSource = useMemo(() => {
+    return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
   }, []);
 
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, tokenOptions);
+  const session = useSession(tokenSource, {
+    roomName,
+    participantIdentity: params?.get('user') ?? generateRandomUserId(),
+  });
+
+  useEffect(() => {
+    if (shouldConnect) {
+      session.start();
+    } else {
+      session.end();
+    }
+  }, [shouldConnect, session]);
 
   const onDeviceFailure = (e?: MediaDeviceFailure) => {
     console.error(e);
@@ -55,27 +63,21 @@ const VoiceAssistantExample: NextPage = () => {
 
   return (
     <main data-lk-theme="default" className={styles.main}>
-      <LiveKitRoom
-        audio={true}
-        token={token}
-        connect={shouldConnect}
-        serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-        onMediaDeviceFailure={onDeviceFailure}
-        onDisconnected={() => setShouldConnect(false)}
-        className={styles.room}
-      >
-        <div className={styles.inner}>
-          {shouldConnect ? (
-            <SimpleVoiceAssistant />
-          ) : (
-            <button className="lk-button" onClick={() => setShouldConnect(true)}>
-              Connect
-            </button>
-          )}
+      <SessionProvider session={session}>
+        <div className={styles.room}>
+          <div className={styles.inner}>
+            {shouldConnect ? (
+              <SimpleVoiceAssistant />
+            ) : (
+              <button className="lk-button" onClick={() => setShouldConnect(true)}>
+                Connect
+              </button>
+            )}
+          </div>
+          <VoiceAssistantControlBar />
+          <RoomAudioRenderer />
         </div>
-        <VoiceAssistantControlBar />
-        <RoomAudioRenderer />
-      </LiveKitRoom>
+      </SessionProvider>
     </main>
   );
 };

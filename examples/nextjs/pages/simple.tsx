@@ -4,17 +4,17 @@ import {
   ConnectionState,
   ControlBar,
   GridLayout,
-  LiveKitRoom,
+  SessionProvider,
+  useSession,
   ParticipantTile,
   RoomAudioRenderer,
   RoomName,
   TrackRefContext,
-  useToken,
   useTracks,
 } from '@livekit/components-react';
-import { Track } from 'livekit-client';
+import { Track, TokenSource } from 'livekit-client';
 import type { NextPage } from 'next';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import styles from '../styles/Simple.module.css';
 import { generateRandomUserId } from '../lib/helper';
 
@@ -25,16 +25,35 @@ const SimpleExample: NextPage = () => {
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
-  const userInfo = useMemo(() => {
-    return {
-      userInfo: {
-        identity: userIdentity,
-        name: userIdentity,
-      },
-    };
+  const tokenSource = useMemo(() => {
+    return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
   }, []);
 
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, userInfo);
+  const session = useSession(tokenSource, {
+    roomName,
+    participantIdentity: userIdentity,
+    participantName: userIdentity,
+  });
+
+  useEffect(() => {
+    if (connect) {
+      session.start({
+        tracks: {
+          microphone: { enabled: true },
+        },
+      });
+    } else {
+      session.end();
+    }
+  }, [connect, session]);
+
+  useEffect(() => {
+    if (session.connectionState === 'connected') {
+      setIsConnected(true);
+    } else {
+      setIsConnected(false);
+    }
+  }, [session.connectionState]);
 
   const handleDisconnect = () => {
     setConnect(false);
@@ -52,21 +71,13 @@ const SimpleExample: NextPage = () => {
             {connect ? 'Disconnect' : 'Connect'}
           </button>
         )}
-        <LiveKitRoom
-          token={token}
-          serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-          connect={connect}
-          onConnected={() => setIsConnected(true)}
-          onDisconnected={handleDisconnect}
-          audio={true}
-          video={true}
-        >
+        <SessionProvider session={session}>
           <RoomName />
           <ConnectionState />
           <RoomAudioRenderer />
           {isConnected && <Stage />}
           <ControlBar />
-        </LiveKitRoom>
+        </SessionProvider>
       </main>
     </div>
   );

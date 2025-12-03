@@ -1,38 +1,43 @@
 'use client';
 
 import {
-  LiveKitRoom,
+  SessionProvider,
+  useSession,
   ParticipantName,
   TrackMutedIndicator,
   RoomAudioRenderer,
   isTrackReference,
   useConnectionQualityIndicator,
   VideoTrack,
-  useToken,
   ControlBar,
   GridLayout,
   useTracks,
   TrackRefContext,
 } from '@livekit/components-react';
-import { ConnectionQuality, Room, Track } from 'livekit-client';
+import { ConnectionQuality, Room, Track, TokenSource } from 'livekit-client';
 import styles from '../styles/Simple.module.css';
 import myStyles from '../styles/Customize.module.css';
 import type { NextPage } from 'next';
-import { HTMLAttributes, useState } from 'react';
+import { HTMLAttributes, useState, useMemo, useEffect } from 'react';
 import { generateRandomUserId } from '../lib/helper';
 
 const CustomizeExample: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? generateRandomUserId();
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    userInfo: {
-      identity: userIdentity,
-      name: userIdentity,
-    },
-  });
 
   const [room] = useState(new Room());
+
+  const tokenSource = useMemo(() => {
+    return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
+  }, []);
+
+  const session = useSession(tokenSource, {
+    roomName,
+    participantIdentity: userIdentity,
+    participantName: userIdentity,
+    room,
+  });
 
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
@@ -40,6 +45,26 @@ const CustomizeExample: NextPage = () => {
     setConnect(false);
     setIsConnected(false);
   };
+
+  useEffect(() => {
+    if (connect) {
+      session.start({
+        tracks: {
+          microphone: { enabled: true },
+        },
+      });
+    } else {
+      session.end();
+    }
+  }, [connect, session]);
+
+  useEffect(() => {
+    if (session.connectionState === 'connected') {
+      setIsConnected(true);
+    } else {
+      setIsConnected(false);
+    }
+  }, [session.connectionState]);
 
   return (
     <div className={styles.container} data-lk-theme="default">
@@ -52,21 +77,12 @@ const CustomizeExample: NextPage = () => {
             {connect ? 'Disconnect' : 'Connect'}
           </button>
         )}
-        <LiveKitRoom
-          room={room}
-          token={token}
-          serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-          connect={connect}
-          onConnected={() => setIsConnected(true)}
-          onDisconnected={handleDisconnect}
-          audio={true}
-          video={true}
-        >
+        <SessionProvider session={session}>
           <RoomAudioRenderer />
           {/* Render a custom Stage component once connected */}
           {isConnected && <Stage />}
           <ControlBar />
-        </LiveKitRoom>
+        </SessionProvider>
       </main>
     </div>
   );
@@ -104,7 +120,7 @@ export function Stage() {
                     {/* In addition, we can still specify a style attribute and further customize the styles. */}
                     <ParticipantName
                       className={myStyles['my-participant-name']}
-                      // style={{ color: 'blue' }}
+                    // style={{ color: 'blue' }}
                     />
                     {/* Custom components: Here we replace the provided <ConnectionQualityIndicator />  with our own implementation. */}
                     <UserDefinedConnectionQualityIndicator />

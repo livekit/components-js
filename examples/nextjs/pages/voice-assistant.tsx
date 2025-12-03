@@ -56,6 +56,7 @@ const VoiceAssistantExample: NextPage = () => {
         console.error('Failed to end session:', err);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shouldConnect, session.start, session.end]);
 
   const onDeviceFailure = (e?: MediaDeviceFailure) => {

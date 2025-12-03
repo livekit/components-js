@@ -7,7 +7,10 @@ import { useMemo, useEffect } from 'react';
 import { TokenSource } from 'livekit-client';
 
 const MinimalExample: NextPage = () => {
-  const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
+  const params = useMemo(
+    () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
+    [],
+  );
   const roomName = params?.get('room') ?? 'test-room';
   setLogLevel('debug', { liveKitClientLogLevel: 'info' });
 
@@ -39,6 +42,7 @@ const MinimalExample: NextPage = () => {
         console.error('Failed to end session:', err);
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.start, session.end]);
 
   return (

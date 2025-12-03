@@ -49,6 +49,7 @@ const SimpleExample: NextPage = () => {
         console.error('Failed to end session:', err);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connect, session.start, session.end]);
 
   useEffect(() => {

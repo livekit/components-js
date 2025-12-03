@@ -93,6 +93,7 @@ const ProcessorsExample: NextPage = () => {
         console.error('Failed to end session:', err);
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.start, session.end]);
 
   return (

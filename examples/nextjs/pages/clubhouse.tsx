@@ -17,6 +17,7 @@ import styles from '../styles/Clubhouse.module.scss';
 import { Track, TokenSource } from 'livekit-client';
 import { useMemo, useState, useEffect } from 'react';
 import { generateRandomUserId } from '../lib/helper';
+import Image from 'next/image';
 
 const Clubhouse = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
@@ -50,6 +51,7 @@ const Clubhouse = () => {
         console.error('Failed to end session:', err);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tryToConnect, session.start, session.end]);
 
   useEffect(() => {
@@ -124,12 +126,13 @@ const CustomParticipantTile = () => {
           className={styles.avatar}
         // className="z-10 grid aspect-square items-center overflow-hidden rounded-full bg-beige transition-all will-change-transform"
         >
-          <img
+          <Image
             src={`https://avatars.dicebear.com/api/avataaars/${id}.svg?mouth=default,smile,tongue&eyes=default,happy,hearts&eyebrows=default,defaultNatural,flatNatural`}
             className="fade-in"
             width={150}
             height={150}
             alt={`Avatar of user: ${trackRef.participant.identity}`}
+            unoptimized
           />
         </div>
       </div>

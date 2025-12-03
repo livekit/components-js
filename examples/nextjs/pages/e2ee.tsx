@@ -7,13 +7,24 @@ import { Room, ExternalE2EEKeyProvider, TokenSource } from 'livekit-client';
 import { generateRandomUserId } from '../lib/helper';
 
 const E2EEExample: NextPage = () => {
-  const params = React.useMemo(
-    () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
-    [],
-  );
-  const roomName = params?.get('room') ?? 'test-room';
-  const userIdentity = React.useMemo(() => params?.get('user') ?? generateRandomUserId(), [params]);
+  const [roomName, setRoomName] = React.useState('test-room');
+  const [userIdentity, setUserIdentity] = React.useState(() => generateRandomUserId());
+  const [isReady, setIsReady] = React.useState(false);
+
   setLogLevel('warn', { liveKitClientLogLevel: 'debug' });
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const room = params.get('room');
+    const user = params.get('user');
+    if (room) {
+      setRoomName(room);
+    }
+    if (user) {
+      setUserIdentity(user);
+    }
+    setIsReady(true);
+  }, []);
 
   const keyProvider = React.useMemo(() => new ExternalE2EEKeyProvider(), []);
 
@@ -39,14 +50,20 @@ const E2EEExample: NextPage = () => {
     return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
   }, []);
 
-  const session = useSession(tokenSource, {
-    roomName,
-    participantIdentity: userIdentity,
-    participantName: userIdentity,
-    room,
-  });
+  const sessionOptions = React.useMemo(
+    () => ({
+      roomName,
+      participantIdentity: userIdentity,
+      participantName: userIdentity,
+      room,
+    }),
+    [roomName, userIdentity, room],
+  );
+
+  const session = useSession(tokenSource, sessionOptions);
 
   React.useEffect(() => {
+    if (!isReady) return;
     session.start({
       tracks: {
         camera: { enabled: true },
@@ -61,13 +78,15 @@ const E2EEExample: NextPage = () => {
       });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session.start, session.end]);
+  }, [isReady, session.start, session.end]);
 
   return (
     <div data-lk-theme="default" style={{ height: '100vh' }}>
-      <SessionProvider session={session}>
-        <VideoConference />
-      </SessionProvider>
+      {isReady && (
+        <SessionProvider session={session}>
+          <VideoConference />
+        </SessionProvider>
+      )}
     </div>
   );
 };

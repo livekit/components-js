@@ -1,7 +1,7 @@
 'use client';
 
 import {
-  useVoiceAssistant,
+  useAgent,
   BarVisualizer,
   RoomAudioRenderer,
   VoiceAssistantControlBar,
@@ -15,12 +15,12 @@ import styles from '../styles/VoiceAssistant.module.scss';
 import { generateRandomUserId } from '../lib/helper';
 
 function SimpleVoiceAssistant() {
-  const { state, audioTrack } = useVoiceAssistant();
+  const agent = useAgent();
   return (
     <BarVisualizer
-      state={state}
+      state={agent.state}
       barCount={7}
-      trackRef={audioTrack}
+      trackRef={agent.microphoneTrack}
       style={{ width: '75vw', height: '300px' }}
     />
   );

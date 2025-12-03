@@ -41,10 +41,6 @@ const CustomizeExample: NextPage = () => {
 
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  const handleDisconnect = () => {
-    setConnect(false);
-    setIsConnected(false);
-  };
 
   useEffect(() => {
     if (connect) {
@@ -68,6 +64,9 @@ const CustomizeExample: NextPage = () => {
       setIsConnected(true);
     } else {
       setIsConnected(false);
+      if (session.connectionState === 'disconnected') {
+        setConnect(false);
+      }
     }
   }, [session.connectionState]);
 

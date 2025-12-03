@@ -57,13 +57,11 @@ const SimpleExample: NextPage = () => {
       setIsConnected(true);
     } else {
       setIsConnected(false);
+      if (session.connectionState === 'disconnected') {
+        setConnect(false);
+      }
     }
   }, [session.connectionState]);
-
-  const handleDisconnect = () => {
-    setConnect(false);
-    setIsConnected(false);
-  };
 
   return (
     <div className={styles.container} data-lk-theme="default">

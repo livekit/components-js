@@ -7,6 +7,7 @@ import {
   VoiceAssistantControlBar,
   SessionProvider,
   useSession,
+  SessionEvent,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { useMemo, useState, useEffect } from 'react';
@@ -59,12 +60,26 @@ const VoiceAssistantExample: NextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shouldConnect, session.start, session.end]);
 
-  const onDeviceFailure = (e?: MediaDeviceFailure) => {
-    console.error(e);
-    alert(
-      'Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab',
-    );
-  };
+  useEffect(() => {
+    if (session.connectionState === 'disconnected') {
+      setShouldConnect(false);
+    }
+  }, [session.connectionState]);
+
+  useEffect(() => {
+    const handleMediaDevicesError = (error: Error) => {
+      const failure = MediaDeviceFailure.getFailure(error);
+      console.error(failure);
+      alert(
+        'Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab',
+      );
+    };
+
+    session.internal.emitter.on(SessionEvent.MediaDevicesError, handleMediaDevicesError);
+    return () => {
+      session.internal.emitter.off(SessionEvent.MediaDevicesError, handleMediaDevicesError);
+    };
+  }, [session]);
 
   return (
     <main data-lk-theme="default" className={styles.main}>

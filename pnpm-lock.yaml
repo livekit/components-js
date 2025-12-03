@@ -370,8 +370,8 @@ importers:
         specifier: '*'
         version: 0.0.1
       js-yaml:
-        specifier: ~3.14.0
-        version: 3.14.1
+        specifier: ~4.1.0
+        version: 4.1.0
       resolve:
         specifier: ~1.22.1
         version: 1.22.10

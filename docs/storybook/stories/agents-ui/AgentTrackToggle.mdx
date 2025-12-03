@@ -1,0 +1,37 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+import * as Stories from './AgentTrackToggle.stories';
+
+<Meta title="Agents UI/AgentTrackToggle/Overview" />
+
+# Agent Track Toggle
+
+The `AgentTrackToggle` component is used to toggle the camera, microphone, and screen share tracks.
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add @agents-ui/agent-track-toggle
+```
+
+## Implementation Example
+
+```tsx
+import { AgentTrackToggle } from '@agents-ui/agent-track-toggle';
+import { Track } from 'livekit-client';
+
+export default function Example() {
+  const [isPressed, setIsPressed] = React.useState(false);
+
+  return (
+    <AgentTrackToggle
+      source={Track.Source.Microphone}
+      pressed={isPressed}
+      onPressedChange={(pressed: boolean) => setIsPressed(pressed)}
+    />
+  );
+}
+```
+
+<Canvas of={Stories.Camera} meta={Stories.Camera.meta} />
+<Canvas of={Stories.Microphone} meta={Stories.Microphone.meta} />
+<Canvas of={Stories.ScreenShare} meta={Stories.ScreenShare.meta} />

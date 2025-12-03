@@ -16,7 +16,7 @@ import {
 import { Toggle, toggleVariants } from '@/components/ui/toggle';
 import { cn } from '@/lib/utils';
 
-export const agentToggleVariants = cva(['size-9'], {
+export const agentTrackToggleVariants = cva(['size-9'], {
   variants: {
     variant: {
       primary:
@@ -51,7 +51,7 @@ function getSourceIcon(source: Track.Source, enabled: boolean, pending = false) 
 }
 
 export type AgentTrackToggleProps = Omit<React.ComponentProps<typeof Toggle>, 'size' | 'variant'> &
-  VariantProps<typeof agentToggleVariants> & {
+  VariantProps<typeof agentTrackToggleVariants> & {
     source: Parameters<typeof useTrackToggle>[0]['source'];
     pending?: boolean;
     variant?: VariantProps<typeof toggleVariants>['variant'];
@@ -73,7 +73,7 @@ export function AgentTrackToggle({
       pressed={pressed ?? false}
       aria-label={`Toggle ${source}`}
       className={cn(
-        agentToggleVariants({
+        agentTrackToggleVariants({
           variant: source === Track.Source.ScreenShare ? 'secondary' : 'primary',
           className,
         }),

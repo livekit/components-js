@@ -1,10 +1,10 @@
 'use client';
 
-import { AudioConference, SessionProvider, useSession } from '@livekit/components-react';
+import { AudioConference, SessionProvider, useSession, SessionEvent } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';
 import { useMemo, useState, useEffect } from 'react';
-import { TokenSource } from 'livekit-client';
+import { TokenSource, MediaDeviceFailure } from 'livekit-client';
 
 const AudioExample: NextPage = () => {
   const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
@@ -39,6 +39,21 @@ const AudioExample: NextPage = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.start, session.end]);
+
+  useEffect(() => {
+    const handleMediaDevicesError = (error: Error) => {
+      const failure = MediaDeviceFailure.getFailure(error);
+      console.error(failure);
+      alert(
+        'Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab',
+      );
+    };
+
+    session.internal.emitter.on(SessionEvent.MediaDevicesError, handleMediaDevicesError);
+    return () => {
+      session.internal.emitter.off(SessionEvent.MediaDevicesError, handleMediaDevicesError);
+    };
+  }, [session]);
 
   return (
     <div data-lk-theme="default">

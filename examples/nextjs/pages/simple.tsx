@@ -11,8 +11,9 @@ import {
   RoomName,
   TrackRefContext,
   useTracks,
+  SessionEvent,
 } from '@livekit/components-react';
-import { Track, TokenSource } from 'livekit-client';
+import { Track, TokenSource, MediaDeviceFailure } from 'livekit-client';
 import type { NextPage } from 'next';
 import { useMemo, useState, useEffect } from 'react';
 import styles from '../styles/Simple.module.css';
@@ -23,7 +24,6 @@ const SimpleExample: NextPage = () => {
   const roomName = params?.get('room') ?? 'test-room';
   const userIdentity = params?.get('user') ?? generateRandomUserId();
   const [connect, setConnect] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
 
   const tokenSource = useMemo(() => {
     return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
@@ -53,15 +53,25 @@ const SimpleExample: NextPage = () => {
   }, [connect, session.start, session.end]);
 
   useEffect(() => {
-    if (session.connectionState === 'connected') {
-      setIsConnected(true);
-    } else {
-      setIsConnected(false);
-      if (session.connectionState === 'disconnected') {
-        setConnect(false);
-      }
+    if (session.connectionState === 'disconnected') {
+      setConnect(false);
     }
   }, [session.connectionState]);
+
+  useEffect(() => {
+    const handleMediaDevicesError = (error: Error) => {
+      const failure = MediaDeviceFailure.getFailure(error);
+      console.error(failure);
+      alert(
+        'Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab',
+      );
+    };
+
+    session.internal.emitter.on(SessionEvent.MediaDevicesError, handleMediaDevicesError);
+    return () => {
+      session.internal.emitter.off(SessionEvent.MediaDevicesError, handleMediaDevicesError);
+    };
+  }, [session]);
 
   return (
     <div className={styles.container} data-lk-theme="default">
@@ -69,7 +79,7 @@ const SimpleExample: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://livekit.io">LiveKit</a>
         </h1>
-        {!isConnected && (
+        {!session.isConnected && (
           <button className="lk-button" onClick={() => setConnect(!connect)}>
             {connect ? 'Disconnect' : 'Connect'}
           </button>
@@ -78,7 +88,7 @@ const SimpleExample: NextPage = () => {
           <RoomName />
           <ConnectionState />
           <RoomAudioRenderer />
-          {isConnected && <Stage />}
+          {session.isConnected && <Stage />}
           <ControlBar />
         </SessionProvider>
       </main>

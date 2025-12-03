@@ -13,8 +13,9 @@ import {
   GridLayout,
   useTracks,
   TrackRefContext,
+  SessionEvent,
 } from '@livekit/components-react';
-import { ConnectionQuality, Room, Track, TokenSource } from 'livekit-client';
+import { ConnectionQuality, Room, Track, TokenSource, MediaDeviceFailure } from 'livekit-client';
 import styles from '../styles/Simple.module.css';
 import myStyles from '../styles/Customize.module.css';
 import type { NextPage } from 'next';
@@ -40,7 +41,6 @@ const CustomizeExample: NextPage = () => {
   });
 
   const [connect, setConnect] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     if (connect) {
@@ -60,15 +60,25 @@ const CustomizeExample: NextPage = () => {
   }, [connect, session.start, session.end]);
 
   useEffect(() => {
-    if (session.connectionState === 'connected') {
-      setIsConnected(true);
-    } else {
-      setIsConnected(false);
-      if (session.connectionState === 'disconnected') {
-        setConnect(false);
-      }
+    if (session.connectionState === 'disconnected') {
+      setConnect(false);
     }
   }, [session.connectionState]);
+
+  useEffect(() => {
+    const handleMediaDevicesError = (error: Error) => {
+      const failure = MediaDeviceFailure.getFailure(error);
+      console.error(failure);
+      alert(
+        'Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab',
+      );
+    };
+
+    session.internal.emitter.on(SessionEvent.MediaDevicesError, handleMediaDevicesError);
+    return () => {
+      session.internal.emitter.off(SessionEvent.MediaDevicesError, handleMediaDevicesError);
+    };
+  }, [session]);
 
   return (
     <div className={styles.container} data-lk-theme="default">
@@ -76,7 +86,7 @@ const CustomizeExample: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://livekit.io">LiveKit</a>
         </h1>
-        {!isConnected && (
+        {!session.isConnected && (
           <button className="lk-button" onClick={() => setConnect(!connect)}>
             {connect ? 'Disconnect' : 'Connect'}
           </button>
@@ -84,7 +94,7 @@ const CustomizeExample: NextPage = () => {
         <SessionProvider session={session}>
           <RoomAudioRenderer />
           {/* Render a custom Stage component once connected */}
-          {isConnected && <Stage />}
+          {session.isConnected && <Stage />}
           <ControlBar />
         </SessionProvider>
       </main>

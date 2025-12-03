@@ -62,9 +62,11 @@ const MinimalExample: NextPage = () => {
 
   return (
     <div data-lk-theme="default" style={{ height: '100vh' }}>
-      <SessionProvider session={session}>
-        <VideoConference />
-      </SessionProvider>
+      {session.isConnected && (
+        <SessionProvider session={session}>
+          <VideoConference />
+        </SessionProvider>
+      )}
     </div>
   );
 };

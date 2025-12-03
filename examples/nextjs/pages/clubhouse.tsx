@@ -12,9 +12,10 @@ import {
   useIsSpeaking,
   useTrackRefContext,
   useTracks,
+  SessionEvent,
 } from '@livekit/components-react';
 import styles from '../styles/Clubhouse.module.scss';
-import { Track, TokenSource } from 'livekit-client';
+import { Track, TokenSource, MediaDeviceFailure } from 'livekit-client';
 import { useMemo, useState, useEffect } from 'react';
 import { generateRandomUserId } from '../lib/helper';
 import Image from 'next/image';
@@ -35,7 +36,6 @@ const Clubhouse = () => {
   });
 
   const [tryToConnect, setTryToConnect] = useState(false);
-  const [connected, setConnected] = useState(false);
 
   useEffect(() => {
     if (tryToConnect) {
@@ -55,15 +55,25 @@ const Clubhouse = () => {
   }, [tryToConnect, session.start, session.end]);
 
   useEffect(() => {
-    if (session.connectionState === 'connected') {
-      setConnected(true);
-    } else {
-      setConnected(false);
-      if (session.connectionState === 'disconnected') {
-        setTryToConnect(false);
-      }
+    if (session.connectionState === 'disconnected') {
+      setTryToConnect(false);
     }
   }, [session.connectionState]);
+
+  useEffect(() => {
+    const handleMediaDevicesError = (error: Error) => {
+      const failure = MediaDeviceFailure.getFailure(error);
+      console.error(failure);
+      alert(
+        'Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab',
+      );
+    };
+
+    session.internal.emitter.on(SessionEvent.MediaDevicesError, handleMediaDevicesError);
+    return () => {
+      session.internal.emitter.off(SessionEvent.MediaDevicesError, handleMediaDevicesError);
+    };
+  }, [session]);
 
   return (
     <div data-lk-theme="default" className={styles.container}>
@@ -79,7 +89,7 @@ const Clubhouse = () => {
           </button>
         </div>
 
-        <div className={styles.slider} style={{ bottom: connected ? '0px' : '-100%' }}>
+        <div className={styles.slider} style={{ bottom: session.isConnected ? '0px' : '-100%' }}>
           <h1>
             <RoomName />
           </h1>

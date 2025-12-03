@@ -10,10 +10,11 @@ import {
   TrackRefContext,
   useLocalParticipant,
   useTracks,
+  SessionEvent,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { ControlBarControls } from '@livekit/components-react';
-import { LocalVideoTrack, Track, TrackProcessor, TokenSource } from 'livekit-client';
+import { LocalVideoTrack, Track, TrackProcessor, TokenSource, MediaDeviceFailure } from 'livekit-client';
 import { BackgroundBlur } from '@livekit/track-processors';
 
 function Stage() {
@@ -95,6 +96,21 @@ const ProcessorsExample: NextPage = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.start, session.end]);
+
+  React.useEffect(() => {
+    const handleMediaDevicesError = (error: Error) => {
+      const failure = MediaDeviceFailure.getFailure(error);
+      console.error(failure);
+      alert(
+        'Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab',
+      );
+    };
+
+    session.internal.emitter.on(SessionEvent.MediaDevicesError, handleMediaDevicesError);
+    return () => {
+      session.internal.emitter.off(SessionEvent.MediaDevicesError, handleMediaDevicesError);
+    };
+  }, [session]);
 
   return (
     <div data-lk-theme="default" style={{ height: '100vh' }}>

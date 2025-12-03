@@ -11,6 +11,7 @@
     "tsx:check": "tsc --noEmit"
   },
   "dependencies": {
+    "@agents-ui": "workspace:*",
     "@livekit/components-react": "workspace:*",
     "@livekit/components-styles": "workspace:*",
     "livekit-client": "catalog:",

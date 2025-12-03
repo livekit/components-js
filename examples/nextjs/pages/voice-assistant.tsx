@@ -48,11 +48,15 @@ const VoiceAssistantExample: NextPage = () => {
 
   useEffect(() => {
     if (shouldConnect) {
-      session.start();
+      session.start().catch((err) => {
+        console.error('Failed to start session:', err);
+      });
     } else {
-      session.end();
+      session.end().catch((err) => {
+        console.error('Failed to end session:', err);
+      });
     }
-  }, [shouldConnect, session]);
+  }, [shouldConnect, session.start, session.end]);
 
   const onDeviceFailure = (e?: MediaDeviceFailure) => {
     console.error(e);

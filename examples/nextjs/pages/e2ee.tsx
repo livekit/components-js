@@ -52,11 +52,15 @@ const E2EEExample: NextPage = () => {
         camera: { enabled: true },
         microphone: { enabled: true },
       },
+    }).catch((err) => {
+      console.error('Failed to start session:', err);
     });
     return () => {
-      session.end();
+      session.end().catch((err) => {
+        console.error('Failed to end session:', err);
+      });
     };
-  }, [session]);
+  }, [session.start, session.end]);
 
   return (
     <div data-lk-theme="default" style={{ height: '100vh' }}>

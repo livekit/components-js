@@ -42,11 +42,15 @@ const Clubhouse = () => {
         tracks: {
           microphone: { enabled: true },
         },
+      }).catch((err) => {
+        console.error('Failed to start session:', err);
       });
     } else {
-      session.end();
+      session.end().catch((err) => {
+        console.error('Failed to end session:', err);
+      });
     }
-  }, [tryToConnect, session]);
+  }, [tryToConnect, session.start, session.end]);
 
   useEffect(() => {
     if (session.connectionState === 'connected') {

@@ -20,9 +20,12 @@ import styles from '../styles/Simple.module.css';
 import { generateRandomUserId } from '../lib/helper';
 
 const SimpleExample: NextPage = () => {
-  const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
+  const params = useMemo(
+    () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
+    [],
+  );
   const roomName = params?.get('room') ?? 'test-room';
-  const userIdentity = params?.get('user') ?? generateRandomUserId();
+  const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
   const [connect, setConnect] = useState(false);
 
   const tokenSource = useMemo(() => {
@@ -40,6 +43,7 @@ const SimpleExample: NextPage = () => {
       session.start({
         tracks: {
           microphone: { enabled: true },
+          camera: { enabled: true },
         },
       }).catch((err) => {
         console.error('Failed to start session:', err);

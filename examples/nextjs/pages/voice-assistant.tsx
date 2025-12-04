@@ -36,6 +36,7 @@ const VoiceAssistantExample: NextPage = () => {
     () => params?.get('room') ?? 'test-room-' + Math.random().toFixed(5),
     [params],
   );
+  const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
   const [shouldConnect, setShouldConnect] = useState(false);
 
   const tokenSource = useMemo(() => {
@@ -44,7 +45,7 @@ const VoiceAssistantExample: NextPage = () => {
 
   const session = useSession(tokenSource, {
     roomName,
-    participantIdentity: params?.get('user') ?? generateRandomUserId(),
+    participantIdentity: userIdentity,
   });
 
   useEffect(() => {

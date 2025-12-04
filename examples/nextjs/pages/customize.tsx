@@ -23,9 +23,12 @@ import { HTMLAttributes, useState, useMemo, useEffect } from 'react';
 import { generateRandomUserId } from '../lib/helper';
 
 const CustomizeExample: NextPage = () => {
-  const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
+  const params = useMemo(
+    () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
+    [],
+  );
   const roomName = params?.get('room') ?? 'test-room';
-  const userIdentity = params?.get('user') ?? generateRandomUserId();
+  const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
 
   const [room] = useState(new Room());
 

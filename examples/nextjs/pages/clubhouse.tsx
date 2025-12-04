@@ -18,12 +18,15 @@ import styles from '../styles/Clubhouse.module.scss';
 import { Track, TokenSource, MediaDeviceFailure } from 'livekit-client';
 import { useMemo, useState, useEffect } from 'react';
 import { generateRandomUserId } from '../lib/helper';
-import Image from 'next/image';
+import type { NextPage } from 'next';
 
-const Clubhouse = () => {
-  const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
+const Clubhouse: NextPage = () => {
+  const params = useMemo(
+    () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
+    [],
+  );
   const roomName = params?.get('room') ?? 'test-room';
-  const userIdentity = params?.get('user') ?? generateRandomUserId();
+  const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
 
   const tokenSource = useMemo(() => {
     return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
@@ -108,7 +111,7 @@ const Clubhouse = () => {
 const Stage = () => {
   const tracksReferences = useTracks([Track.Source.Microphone]);
   return (
-    <div className="">
+    <div>
       <div className={styles.stageGrid}>
         <TrackLoop tracks={tracksReferences}>
           <CustomParticipantTile></CustomParticipantTile>
@@ -128,21 +131,16 @@ const CustomParticipantTile = () => {
   return (
     <section className={styles['participant-tile']} title={trackRef.participant.name}>
       <div
-        // className={`rounded-full border-2 p-0.5 transition-colors duration-1000 ${
         className={styles['avatar-container']}
         style={{ borderColor: isSpeaking ? 'greenyellow' : 'transparent' }}
       >
-        <div
-          className={styles.avatar}
-        // className="z-10 grid aspect-square items-center overflow-hidden rounded-full bg-beige transition-all will-change-transform"
-        >
-          <Image
+        <div className={styles.avatar}>
+          <img
             src={`https://avatars.dicebear.com/api/avataaars/${id}.svg?mouth=default,smile,tongue&eyes=default,happy,hearts&eyebrows=default,defaultNatural,flatNatural`}
             className="fade-in"
             width={150}
             height={150}
             alt={`Avatar of user: ${trackRef.participant.identity}`}
-            unoptimized
           />
         </div>
       </div>

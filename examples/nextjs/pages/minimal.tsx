@@ -3,7 +3,7 @@
 import { SessionProvider, useSession, VideoConference, setLogLevel, SessionEvent } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { TokenSource, MediaDeviceFailure } from 'livekit-client';
 
 const MinimalExample: NextPage = () => {
@@ -14,10 +14,7 @@ const MinimalExample: NextPage = () => {
   const roomName = params?.get('room') ?? 'test-room';
   setLogLevel('debug', { liveKitClientLogLevel: 'info' });
 
-  const userIdentity = useMemo(
-    () => params?.get('user') ?? generateRandomUserId(),
-    [params],
-  );
+  const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
 
   const tokenSource = useMemo(() => {
     return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);

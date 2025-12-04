@@ -2,24 +2,24 @@
 
 import { SessionProvider, useSession, VideoConference, setLogLevel, SessionEvent } from '@livekit/components-react';
 import type { NextPage } from 'next';
-import * as React from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { Room, ExternalE2EEKeyProvider, TokenSource, MediaDeviceFailure } from 'livekit-client';
 import { generateRandomUserId } from '../lib/helper';
 
 const E2EEExample: NextPage = () => {
-  const params = React.useMemo(
+  const params = useMemo(
     () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
     [],
   );
   const roomName = params?.get('room') ?? 'test-room';
-  const userIdentity = React.useMemo(() => params?.get('user') ?? generateRandomUserId(), [params]);
+  const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
   setLogLevel('warn', { liveKitClientLogLevel: 'debug' });
 
-  const keyProvider = React.useMemo(() => new ExternalE2EEKeyProvider(), []);
+  const keyProvider = useMemo(() => new ExternalE2EEKeyProvider(), []);
 
   keyProvider.setKey('password');
 
-  const room = React.useMemo(
+  const room = useMemo(
     () =>
       new Room({
         e2ee:
@@ -33,7 +33,7 @@ const E2EEExample: NextPage = () => {
     [keyProvider],
   );
 
-  const tokenSource = React.useMemo(() => {
+  const tokenSource = useMemo(() => {
     return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
   }, []);
 
@@ -44,13 +44,13 @@ const E2EEExample: NextPage = () => {
     room,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       room.setE2EEEnabled(true);
     }
   }, [room]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     session.start({
       tracks: {
         camera: { enabled: true },
@@ -67,7 +67,7 @@ const E2EEExample: NextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.start, session.end]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleMediaDevicesError = (error: Error) => {
       const failure = MediaDeviceFailure.getFailure(error);
       console.error(failure);

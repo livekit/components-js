@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { setLogLevel } from '@livekit/components-core';
 import {
   GridLayout,
@@ -13,24 +13,24 @@ import {
   SessionEvent,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
-import { ControlBarControls } from '@livekit/components-react';
 import { LocalVideoTrack, Track, TrackProcessor, TokenSource, MediaDeviceFailure } from 'livekit-client';
 import { BackgroundBlur } from '@livekit/track-processors';
+import { generateRandomUserId } from '../lib/helper';
 
 function Stage() {
   const cameraTracks = useTracks([Track.Source.Camera]);
   const screenShareTrackRef = useTracks([Track.Source.ScreenShare])[0];
 
-  const [blurEnabled, setBlurEnabled] = React.useState(false);
-  const [processorPending, setProcessorPending] = React.useState(false);
+  const [blurEnabled, setBlurEnabled] = useState(false);
+  const [processorPending, setProcessorPending] = useState(false);
   const { cameraTrack } = useLocalParticipant();
-  const [blur, setBlur] = React.useState<TrackProcessor<Track.Kind.Video> | undefined>();
+  const [blur, setBlur] = useState<TrackProcessor<Track.Kind.Video> | undefined>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setBlur(BackgroundBlur());
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const localCamTrack = cameraTrack?.track as LocalVideoTrack | undefined;
     if (localCamTrack) {
       setProcessorPending(true);
@@ -66,11 +66,14 @@ function Stage() {
 }
 
 const ProcessorsExample: NextPage = () => {
-  const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
+  const params = useMemo(
+    () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
+    [],
+  );
   const roomName = params?.get('room') ?? 'test-room';
-  const userIdentity = params?.get('user') ?? 'test-identity';
+  const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
 
-  const tokenSource = React.useMemo(() => {
+  const tokenSource = useMemo(() => {
     return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
   }, []);
 
@@ -80,7 +83,7 @@ const ProcessorsExample: NextPage = () => {
     participantName: userIdentity,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     session.start({
       tracks: {
         camera: { enabled: true },
@@ -97,7 +100,7 @@ const ProcessorsExample: NextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.start, session.end]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleMediaDevicesError = (error: Error) => {
       const failure = MediaDeviceFailure.getFailure(error);
       console.error(failure);

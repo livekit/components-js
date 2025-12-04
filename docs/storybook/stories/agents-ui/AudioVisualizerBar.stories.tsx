@@ -1,0 +1,56 @@
+import React from 'react';
+import { StoryObj } from '@storybook/react-vite';
+import {
+  AgentSessionProvider,
+  useMicrophone,
+} from '../../.storybook/lk-decorators/AgentSessionProvider';
+import { AudioVisualizerBar, AudioVisualizerBarProps } from '@agents-ui';
+
+export default {
+  component: AudioVisualizerBar,
+  decorators: [AgentSessionProvider],
+  render: (args: AudioVisualizerBarProps) => {
+    const audioTrack = useMicrophone();
+
+    return <AudioVisualizerBar {...args} audioTrack={audioTrack} />;
+  },
+  args: {
+    size: 'xl',
+    barCount: 5,
+    state: 'connecting',
+  },
+  argTypes: {
+    size: {
+      options: ['icon', 'sm', 'md', 'lg', 'xl'],
+      control: { type: 'radio' },
+    },
+    state: {
+      options: [
+        'idle',
+        'disconnected',
+        'pre-connect-buffering',
+        'connecting',
+        'initializing',
+        'listening',
+        'thinking',
+        'speaking',
+        'failed',
+      ],
+      control: { type: 'radio' },
+    },
+    barCount: {
+      control: { type: 'range', min: 1, max: 24, step: 1 },
+    },
+    className: { control: { type: 'text' } },
+  },
+  parameters: {
+    layout: 'centered',
+    actions: {
+      handles: [],
+    },
+  },
+};
+
+export const Default: StoryObj<AudioVisualizerBarProps> = {
+  args: {},
+};

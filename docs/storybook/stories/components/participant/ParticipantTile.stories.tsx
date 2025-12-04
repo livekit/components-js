@@ -1,5 +1,5 @@
 import { ParticipantTile, ParticipantTileProps } from '@livekit/components-react';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 import { Track } from 'livekit-client';
 import * as React from 'react';
 import { LkParticipantContext, LkRoomContext } from '../../../.storybook/lk-decorators';

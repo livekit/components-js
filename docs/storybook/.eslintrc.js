@@ -4,7 +4,7 @@
  */
 module.exports = {
   root: true,
-  extends: ['custom'],
+  extends: ['custom', 'plugin:storybook/recommended'],
   rules: {
     'import/no-anonymous-default-export': [
       'warn',

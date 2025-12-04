@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { FocusLayoutContainerProps, FocusLayoutContainer } from '@livekit/components-react';
 import { LkLayoutContext, LkRoomContext } from '../../../.storybook/lk-decorators';
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-vite';
 
 const Story: Meta<typeof FocusLayoutContainer> = {
   component: FocusLayoutContainer,

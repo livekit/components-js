@@ -5,7 +5,7 @@ import {
   useLocalParticipant,
   useTracks,
 } from '@livekit/components-react';
-import { Decorator } from '@storybook/react';
+import { Decorator } from '@storybook/react-vite';
 import { Track } from 'livekit-client';
 
 /**

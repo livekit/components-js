@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { CarouselLayout, CarouselLayoutProps } from '@livekit/components-react';
 import { LkRoomContext } from '../../../.storybook/lk-decorators';
-import { Meta } from '@storybook/react';
+import { Meta } from '@storybook/react-vite';
 
 const Story: Meta<typeof CarouselLayout> = {
   component: CarouselLayout,

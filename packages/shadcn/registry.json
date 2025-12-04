@@ -113,6 +113,29 @@
         "lucide-react"
       ],
       "registryDependencies": ["utils"]
+    },
+    {
+      "name": "agent-audio-visualizer-radial",
+      "type": "registry:component",
+      "title": "Audio Radial Visualizer",
+      "description": "A radial bar visualizer for audio tracks.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-audio-visualizer-radial.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "hooks/agents-ui/use-agent-audio-visualizer-radial.ts",
+          "type": "registry:hook"
+        }
+      ],
+      "dependencies": [
+        "livekit-client@^2.0.0",
+        "@livekit/components-react@^2.0.0",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": ["utils"]
     }
   ]
 }

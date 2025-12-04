@@ -132,8 +132,29 @@
       "dependencies": [
         "livekit-client@^2.0.0",
         "@livekit/components-react@^2.0.0",
-        "class-variance-authority",
-        "lucide-react"
+        "class-variance-authority"
+      ],
+      "registryDependencies": ["utils"]
+    },
+    {
+      "name": "agent-audio-visualizer-grid",
+      "type": "registry:component",
+      "title": "Audio Grid Visualizer",
+      "description": "A grid visualizer for audio tracks.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-audio-visualizer-grid.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "hooks/agents-ui/use-agent-audio-visualizer-grid.ts",
+          "type": "registry:hook"
+        }
+      ],
+      "dependencies": [
+        "livekit-client@^2.0.0",
+        "@livekit/components-react@^2.0.0",
+        "class-variance-authority"
       ],
       "registryDependencies": ["utils"]
     }

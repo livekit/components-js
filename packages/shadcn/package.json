@@ -2,7 +2,8 @@
   "name": "@agents-ui",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "index.ts",
   "scripts": {
     "registry:build": "shadcn build --output ./dist",
     "registry:serve": "python3 -m http.server 3210 -d dist"

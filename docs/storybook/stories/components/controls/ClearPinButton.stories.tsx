@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 
 import { ClearPinButton, ClearPinButtonProps } from '@livekit/components-react';
 import { LkLayoutContext, LkRoomContext } from '../../../.storybook/lk-decorators';

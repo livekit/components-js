@@ -2,6 +2,9 @@
 /** Imports styles for all stories. Maybe this is not what we want.
  *  You can also import styles on a per story level. */
 import '@livekit/components-styles';
+import './tailwind.css';
+
+import { withThemeByClassName } from '@storybook/addon-themes';
 
 export const parameters = {
   viewMode: 'docs',
@@ -25,3 +28,13 @@ export const globalTypes = {
     },
   },
 };
+
+export const decorators = [
+  withThemeByClassName({
+    themes: {
+      light: '',
+      dark: 'dark',
+    },
+    defaultTheme: 'light',
+  }),
+];

@@ -157,6 +157,60 @@
         "class-variance-authority"
       ],
       "registryDependencies": ["utils"]
+    },
+    {
+      "name": "agent-avatar-video-track",
+      "type": "registry:component",
+      "title": "Agent Avatar Video Track",
+      "description": "A track for rendering an agent's avatar video track.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-avatar-video-track.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": ["@livekit/components-react@^2.0.0"]
+    },
+    {
+      "name": "agent-session-audio",
+      "type": "registry:component",
+      "title": "Agent Session Audio",
+      "description": "Ensures remote participants’ audio tracks (microphones and screen share) are audible.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-session-audio.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": ["@livekit/components-react@^2.0.0"]
+    },
+    {
+      "name": "agent-session-provider",
+      "type": "registry:component",
+      "title": "Agent Session Provider",
+      "description": "A component for providing an agent's session context and ensuring remote participants’ audio tracks (microphones and screen share) are audible.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-session-provider.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": ["@livekit/components-react@^2.0.0"],
+      "registryDependencies": ["@agents-ui/agent-session-audio"]
+    },
+    {
+      "name": "agent-session-start-audio-button",
+      "type": "registry:component",
+      "title": "Agent Session Start Audio Button",
+      "description": "A button for starting the agent's audio track when the browser blocks audio playback.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-session-start-audio-button.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": ["livekit-client@^2.0.0", "@livekit/components-react@^2.0.0"],
+      "registryDependencies": ["button"]
     }
   ]
 }

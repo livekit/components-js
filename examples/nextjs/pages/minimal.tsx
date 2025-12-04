@@ -1,6 +1,12 @@
 'use client';
 
-import { SessionProvider, useSession, VideoConference, setLogLevel, SessionEvent } from '@livekit/components-react';
+import {
+  SessionProvider,
+  useSession,
+  VideoConference,
+  setLogLevel,
+  SessionEvent,
+} from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';
 import { useMemo, useEffect, useState } from 'react';
@@ -27,13 +33,15 @@ const MinimalExample: NextPage = () => {
   });
 
   useEffect(() => {
-    session.start({
-      tracks: {
-        microphone: { enabled: false },
-      },
-    }).catch((err) => {
-      console.error('Failed to start session:', err);
-    });
+    session
+      .start({
+        tracks: {
+          microphone: { enabled: false },
+        },
+      })
+      .catch((err) => {
+        console.error('Failed to start session:', err);
+      });
     return () => {
       session.end().catch((err) => {
         console.error('Failed to end session:', err);

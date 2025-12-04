@@ -42,13 +42,15 @@ const Clubhouse: NextPage = () => {
 
   useEffect(() => {
     if (tryToConnect) {
-      session.start({
-        tracks: {
-          microphone: { enabled: true },
-        },
-      }).catch((err) => {
-        console.error('Failed to start session:', err);
-      });
+      session
+        .start({
+          tracks: {
+            microphone: { enabled: true },
+          },
+        })
+        .catch((err) => {
+          console.error('Failed to start session:', err);
+        });
     } else {
       session.end().catch((err) => {
         console.error('Failed to end session:', err);

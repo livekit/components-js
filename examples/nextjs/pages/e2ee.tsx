@@ -1,6 +1,12 @@
 'use client';
 
-import { SessionProvider, useSession, VideoConference, setLogLevel, SessionEvent } from '@livekit/components-react';
+import {
+  SessionProvider,
+  useSession,
+  VideoConference,
+  setLogLevel,
+  SessionEvent,
+} from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { useMemo, useEffect, useState } from 'react';
 import { Room, ExternalE2EEKeyProvider, TokenSource, MediaDeviceFailure } from 'livekit-client';
@@ -25,9 +31,9 @@ const E2EEExample: NextPage = () => {
         e2ee:
           typeof window !== 'undefined'
             ? {
-              keyProvider,
-              worker: new Worker(new URL('livekit-client/e2ee-worker', import.meta.url)),
-            }
+                keyProvider,
+                worker: new Worker(new URL('livekit-client/e2ee-worker', import.meta.url)),
+              }
             : undefined,
       }),
     [keyProvider],
@@ -51,14 +57,16 @@ const E2EEExample: NextPage = () => {
   }, [room]);
 
   useEffect(() => {
-    session.start({
-      tracks: {
-        camera: { enabled: true },
-        microphone: { enabled: true },
-      },
-    }).catch((err) => {
-      console.error('Failed to start session:', err);
-    });
+    session
+      .start({
+        tracks: {
+          camera: { enabled: true },
+          microphone: { enabled: true },
+        },
+      })
+      .catch((err) => {
+        console.error('Failed to start session:', err);
+      });
     return () => {
       session.end().catch((err) => {
         console.error('Failed to end session:', err);

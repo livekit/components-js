@@ -13,7 +13,13 @@ import {
   SessionEvent,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
-import { LocalVideoTrack, Track, TrackProcessor, TokenSource, MediaDeviceFailure } from 'livekit-client';
+import {
+  LocalVideoTrack,
+  Track,
+  TrackProcessor,
+  TokenSource,
+  MediaDeviceFailure,
+} from 'livekit-client';
 import { BackgroundBlur } from '@livekit/track-processors';
 import { generateRandomUserId } from '../lib/helper';
 
@@ -84,14 +90,16 @@ const ProcessorsExample: NextPage = () => {
   });
 
   useEffect(() => {
-    session.start({
-      tracks: {
-        camera: { enabled: true },
-        microphone: { enabled: false },
-      },
-    }).catch((err) => {
-      console.error('Failed to start session:', err);
-    });
+    session
+      .start({
+        tracks: {
+          camera: { enabled: true },
+          microphone: { enabled: false },
+        },
+      })
+      .catch((err) => {
+        console.error('Failed to start session:', err);
+      });
     return () => {
       session.end().catch((err) => {
         console.error('Failed to end session:', err);

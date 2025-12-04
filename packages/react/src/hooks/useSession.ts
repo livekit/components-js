@@ -99,9 +99,9 @@ type SessionStateConnecting = SessionStateCommon & {
 
 type SessionStateConnected = SessionStateCommon & {
   connectionState:
-  | ConnectionState.Connected
-  | ConnectionState.Reconnecting
-  | ConnectionState.SignalReconnecting;
+    | ConnectionState.Connected
+    | ConnectionState.Reconnecting
+    | ConnectionState.SignalReconnecting;
   isConnected: true;
 
   local: {
@@ -325,11 +325,11 @@ export function useSession(
           connectionState === ConnectionState.SignalReconnecting,
       }) as {
         isConnected: State extends
-        | ConnectionState.Connected
-        | ConnectionState.Reconnecting
-        | ConnectionState.SignalReconnecting
-        ? true
-        : false;
+          | ConnectionState.Connected
+          | ConnectionState.Reconnecting
+          | ConnectionState.SignalReconnecting
+          ? true
+          : false;
       },
     [],
   );
@@ -554,13 +554,17 @@ export function useSession(
         // Start microphone (with preconnect buffer) by default
         tracks.microphone?.enabled
           ? room.localParticipant.setMicrophoneEnabled(
-            true,
-            undefined,
-            tracks.microphone?.publishOptions ?? {},
-          )
+              true,
+              undefined,
+              tracks.microphone?.publishOptions ?? {},
+            )
           : Promise.resolve(),
         tracks.camera?.enabled
-          ? room.localParticipant.setCameraEnabled(true, undefined, tracks.camera?.publishOptions ?? {})
+          ? room.localParticipant.setCameraEnabled(
+              true,
+              undefined,
+              tracks.camera?.publishOptions ?? {},
+            )
           : Promise.resolve(),
       ]);
 

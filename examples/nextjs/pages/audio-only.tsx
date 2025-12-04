@@ -1,6 +1,11 @@
 'use client';
 
-import { AudioConference, SessionProvider, useSession, SessionEvent } from '@livekit/components-react';
+import {
+  AudioConference,
+  SessionProvider,
+  useSession,
+  SessionEvent,
+} from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';
 import { useMemo, useState, useEffect } from 'react';
@@ -25,16 +30,18 @@ const AudioExample: NextPage = () => {
   });
 
   useEffect(() => {
-    session.start({
-      tracks: {
-        microphone: { enabled: true },
-      },
-      roomConnectOptions: {
-        autoSubscribe: true,
-      },
-    }).catch((err) => {
-      console.error('Failed to start session:', err);
-    });
+    session
+      .start({
+        tracks: {
+          microphone: { enabled: true },
+        },
+        roomConnectOptions: {
+          autoSubscribe: true,
+        },
+      })
+      .catch((err) => {
+        console.error('Failed to start session:', err);
+      });
     return () => {
       session.end().catch((err) => {
         console.error('Failed to end session:', err);

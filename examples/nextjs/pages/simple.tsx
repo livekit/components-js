@@ -40,14 +40,16 @@ const SimpleExample: NextPage = () => {
 
   useEffect(() => {
     if (connect) {
-      session.start({
-        tracks: {
-          microphone: { enabled: true },
-          camera: { enabled: true },
-        },
-      }).catch((err) => {
-        console.error('Failed to start session:', err);
-      });
+      session
+        .start({
+          tracks: {
+            microphone: { enabled: true },
+            camera: { enabled: true },
+          },
+        })
+        .catch((err) => {
+          console.error('Failed to start session:', err);
+        });
     } else {
       session.end().catch((err) => {
         console.error('Failed to end session:', err);

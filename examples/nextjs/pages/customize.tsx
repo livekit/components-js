@@ -47,13 +47,15 @@ const CustomizeExample: NextPage = () => {
 
   useEffect(() => {
     if (connect) {
-      session.start({
-        tracks: {
-          microphone: { enabled: true },
-        },
-      }).catch((err) => {
-        console.error('Failed to start session:', err);
-      });
+      session
+        .start({
+          tracks: {
+            microphone: { enabled: true },
+          },
+        })
+        .catch((err) => {
+          console.error('Failed to start session:', err);
+        });
     } else {
       session.end().catch((err) => {
         console.error('Failed to end session:', err);
@@ -137,7 +139,7 @@ export function Stage() {
                     {/* In addition, we can still specify a style attribute and further customize the styles. */}
                     <ParticipantName
                       className={myStyles['my-participant-name']}
-                    // style={{ color: 'blue' }}
+                      // style={{ color: 'blue' }}
                     />
                     {/* Custom components: Here we replace the provided <ConnectionQualityIndicator />  with our own implementation. */}
                     <UserDefinedConnectionQualityIndicator />

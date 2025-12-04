@@ -5,4 +5,5 @@ export * from './components/agents-ui/agent-control-bar/agent-control-bar';
 export * from './components/agents-ui/audio-visualizer-bar/audio-visualizer-bar';
 export * from './components/agents-ui/audio-visualizer-radial/audio-visualizer-radial';
 export * from './components/agents-ui/audio-visualizer-grid/audio-visualizer-grid';
+export * from './components/agents-ui/audio-visualizer-wave/audio-visualizer-wave';
 export * from './components/agents-ui/react-shader/react-shader';

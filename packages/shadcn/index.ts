@@ -6,3 +6,4 @@ export * from './components/agents-ui/agent-control-bar';
 export * from './components/agents-ui/agent-audio-visualizer-radial';
 export * from './components/agents-ui/agent-audio-visualizer-grid';
 export * from './components/agents-ui/react-shader';
+export * from './components/agents-ui/agent-audio-visualizer-wave';

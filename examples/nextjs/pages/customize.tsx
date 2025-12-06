@@ -8,7 +8,6 @@ import {
   isTrackReference,
   useConnectionQualityIndicator,
   VideoTrack,
-  useToken,
   ControlBar,
   GridLayout,
   useTracks,
@@ -18,28 +17,99 @@ import { ConnectionQuality, Room, Track } from 'livekit-client';
 import styles from '../styles/Simple.module.css';
 import myStyles from '../styles/Customize.module.css';
 import type { NextPage } from 'next';
-import { HTMLAttributes, useState } from 'react';
+import { HTMLAttributes, useState, useCallback, useEffect } from 'react';
 import { generateRandomUserId } from '../lib/helper';
 
 const CustomizeExample: NextPage = () => {
-  const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
-  const roomName = params?.get('room') ?? 'test-room';
-  const userIdentity = params?.get('user') ?? generateRandomUserId();
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    userInfo: {
-      identity: userIdentity,
-      name: userIdentity,
-    },
-  });
-
-  const [room] = useState(new Room());
-
+  const [room] = useState(() => new Room());
+  const [token, setToken] = useState<string>();
   const [connect, setConnect] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  const handleDisconnect = () => {
+  const [error, setError] = useState<string>();
+  const [hasAudio, setHasAudio] = useState(false);
+  const [hasVideo, setHasVideo] = useState(false);
+
+  // Get room parameters once on mount
+  const [roomParams] = useState(() => {
+    if (typeof window === 'undefined') return { roomName: 'test-room', userIdentity: generateRandomUserId() };
+    const params = new URLSearchParams(window.location.search);
+    return {
+      roomName: params.get('room') ?? 'test-room',
+      userIdentity: params.get('user') ?? generateRandomUserId(),
+    };
+  });
+
+  // Check available devices on mount
+  useEffect(() => {
+    async function checkDevices() {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        setHasAudio(devices.some(device => device.kind === 'audioinput'));
+        setHasVideo(devices.some(device => device.kind === 'videoinput'));
+      } catch (e) {
+        console.warn('Unable to check media devices:', e);
+        setHasAudio(false);
+        setHasVideo(false);
+      }
+    }
+
+    // Only check devices if on client side and API is available
+    if (typeof window !== 'undefined' && navigator.mediaDevices) {
+      checkDevices();
+
+      // Listen for device changes
+      navigator.mediaDevices.addEventListener('devicechange', checkDevices);
+      return () => navigator.mediaDevices.removeEventListener('devicechange', checkDevices);
+    }
+  }, []);
+
+  // Fetch token only when connect button is clicked
+  const fetchToken = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT}?` +
+        `identity=${encodeURIComponent(roomParams.userIdentity)}&` +
+        `name=${encodeURIComponent(roomParams.userIdentity)}&` +
+        `roomName=${encodeURIComponent(roomParams.roomName)}`
+      );
+
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text || response.statusText);
+      }
+
+      const data = await response.json();
+      if (!data.accessToken) {
+        throw new Error('No access token received');
+      }
+
+      setToken(data.accessToken);
+      setConnect(true);
+      setError(undefined);
+    } catch (e) {
+      console.error('Error fetching token:', e);
+      setError(e instanceof Error ? e.message : 'Failed to get access token');
+      setConnect(false);
+    }
+  }, [roomParams]);
+
+  const handleDisconnect = useCallback(() => {
     setConnect(false);
     setIsConnected(false);
-  };
+    setToken(undefined);
+    setError(undefined);
+  }, []);
+
+  const handleError = useCallback((err: Error) => {
+    // Don't treat missing devices as a fatal error
+    if (err.name === 'NotFoundError' || err.name === 'NotAllowedError') {
+      console.warn('Media device error:', err);
+      return;
+    }
+    console.error('LiveKit error:', err);
+    setError(err.message);
+    handleDisconnect();
+  }, [handleDisconnect]);
 
   return (
     <div className={styles.container} data-lk-theme="default">
@@ -47,26 +117,53 @@ const CustomizeExample: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://livekit.io">LiveKit</a>
         </h1>
+
+        {!hasAudio && !hasVideo && (
+          <div style={{ backgroundColor: '#fff3cd', color: '#856404', padding: '1rem', borderRadius: '4px', margin: '1rem 0' }}>
+            No camera or microphone detected. You can still join but won't be able to share audio or video.
+          </div>
+        )}
+
+        {error && (
+          <div style={{ backgroundColor: '#f8d7da', color: '#721c24', padding: '1rem', borderRadius: '4px', margin: '1rem 0' }}>
+            Error: {error}
+          </div>
+        )}
+
         {!isConnected && (
-          <button className="lk-button" onClick={() => setConnect(!connect)}>
+          <button 
+            className="lk-button" 
+            onClick={token ? () => setConnect(true) : fetchToken}
+          >
             {connect ? 'Disconnect' : 'Connect'}
           </button>
         )}
-        <LiveKitRoom
-          room={room}
-          token={token}
-          serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-          connect={connect}
-          onConnected={() => setIsConnected(true)}
-          onDisconnected={handleDisconnect}
-          audio={true}
-          video={true}
-        >
-          <RoomAudioRenderer />
-          {/* Render a custom Stage component once connected */}
-          {isConnected && <Stage />}
-          <ControlBar />
-        </LiveKitRoom>
+
+        {token && (
+          <LiveKitRoom
+            room={room}
+            token={token}
+            serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
+            connect={connect}
+            onConnected={() => setIsConnected(true)}
+            onDisconnected={handleDisconnect}
+            onError={handleError}
+            // Only enable audio/video if devices are available
+            audio={hasAudio}
+            video={hasVideo}
+            options={{
+              audioCaptureDefaults: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                autoGainControl: true,
+              },
+            }}
+          >
+            <RoomAudioRenderer />
+            {isConnected && <Stage />}
+            <ControlBar />
+          </LiveKitRoom>
+        )}
       </main>
     </div>
   );

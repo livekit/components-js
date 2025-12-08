@@ -64,6 +64,8 @@ export type AgentCallbacks = {
 };
 
 type AgentStateCommon = {
+  name: Participant['name'];
+  metadata: Participant['metadata'];
   // FIXME: maybe add some sort of schema to this?
   attributes: Participant['attributes'];
 
@@ -732,10 +734,14 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
 
   const {
     identity: agentParticipantIdentity,
+    name: agentParticipantName,
+    metadata: agentParticipantMetadata,
   } = useParticipantInfo({ participant: agentParticipant ?? undefined });
 
   const agentState: AgentStateCases = React.useMemo(() => {
     const common: AgentStateCommon = {
+      name: agentParticipantName,
+      metadata: agentParticipantMetadata,
       attributes: agentParticipantAttributes,
 
       internal: {
@@ -832,6 +838,8 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     }
   }, [
     agentParticipantIdentity,
+    agentParticipantName,
+    agentParticipantMetadata,
     agentParticipantAttributes,
     emitter,
     agentParticipant,

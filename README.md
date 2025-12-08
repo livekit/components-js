@@ -67,6 +67,9 @@ export default function Example() {
     }
   };
 
+  const { messages, send, isSending } = useSessionMessages(session);
+  const [chatMessage, setChatMessage] = useState('');
+
   const agent = useAgent(session);
 
   return (
@@ -86,12 +89,35 @@ export default function Example() {
             {agent.state}
           </span>
 
+          {/* Local and agent camera feeds: */}
           {session.local.cameraTrack ? (
             <VideoTrack trackRef={session.local.cameraTrack} />
           ) : null}
           {agent.cameraTrack ? (
             <VideoTrack trackRef={agent.cameraTrack} />
           ) : null}
+
+          {/* Chat messages (including transcriptions): */}
+          <ul>
+            {messages.map(receivedMessage => (
+              <li key={receivedMessage.id}>{receivedMessage.message}</li>
+            ))}
+            <li className="flex items-center gap-1">
+              <input
+                type="text"
+                value={chatMessage}
+                onChange={e => setChatMessage(e.target.value)}
+                className="border border-2"
+              />
+              <button
+                disabled={isSending}
+                onClick={() => {
+                  send(chatMessage);
+                  setChatMessage('');
+                }}
+              >{isSending ? 'Sending' : 'Send'}</button>
+            </li>
+          </ul>
     
           <StartAudio label="Start audio" />
           <RoomAudioRenderer />

@@ -4,7 +4,7 @@
 import '@livekit/components-styles';
 import './tailwind.css';
 
-import { withThemeByClassName } from '@storybook/addon-themes';
+import { withNextThemes } from './lk-decorators/withNextThemes';
 
 export const parameters = {
   viewMode: 'docs',
@@ -30,11 +30,16 @@ export const globalTypes = {
 };
 
 export const decorators = [
-  withThemeByClassName({
+  withNextThemes({
     themes: {
       light: '',
       dark: 'dark',
+      system: 'system',
     },
-    defaultTheme: 'light',
+    defaultTheme: 'system',
+    // All next-themes properties can be configured directly here
+    enableSystem: true,
+    disableTransitionOnChange: true,
+    attribute: 'class',
   }),
 ];

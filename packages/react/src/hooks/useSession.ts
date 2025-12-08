@@ -367,7 +367,7 @@ export function useSession(
   const { localParticipant } = useLocalParticipant({ room });
   const cameraPublication = localParticipant.getTrackPublication(Track.Source.Camera);
   const localCamera = React.useMemo(() => {
-    if (!cameraPublication || cameraPublication.isMuted) {
+    if (!cameraPublication) {
       return undefined;
     }
     return {
@@ -378,7 +378,7 @@ export function useSession(
   }, [localParticipant, cameraPublication, cameraPublication?.isMuted]);
   const microphonePublication = localParticipant.getTrackPublication(Track.Source.Microphone);
   const localMicrophone = React.useMemo(() => {
-    if (!microphonePublication || microphonePublication.isMuted) {
+    if (!microphonePublication) {
       return undefined;
     }
     return {

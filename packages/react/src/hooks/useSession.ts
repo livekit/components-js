@@ -88,8 +88,8 @@ type SessionStateConnecting = SessionStateCommon & {
   isConnected: false;
 
   local: {
-    cameraTrack: null;
-    microphoneTrack: null;
+    cameraTrack: undefined;
+    microphoneTrack: undefined;
   };
 };
 
@@ -101,8 +101,8 @@ type SessionStateConnected = SessionStateCommon & {
   isConnected: true;
 
   local: {
-    cameraTrack: TrackReference | null;
-    microphoneTrack: TrackReference | null;
+    cameraTrack?: TrackReference;
+    microphoneTrack?: TrackReference;
   };
 };
 
@@ -111,8 +111,8 @@ type SessionStateDisconnected = SessionStateCommon & {
   isConnected: false;
 
   local: {
-    cameraTrack: null;
-    microphoneTrack: null;
+    cameraTrack: undefined;
+    microphoneTrack: undefined;
   };
 };
 
@@ -367,8 +367,8 @@ export function useSession(
   const { localParticipant } = useLocalParticipant({ room });
   const cameraPublication = localParticipant.getTrackPublication(Track.Source.Camera);
   const localCamera = React.useMemo(() => {
-    if (!cameraPublication || cameraPublication.isMuted) {
-      return null;
+    if (!cameraPublication) {
+      return undefined;
     }
     return {
       source: Track.Source.Camera,
@@ -378,8 +378,8 @@ export function useSession(
   }, [localParticipant, cameraPublication, cameraPublication?.isMuted]);
   const microphonePublication = localParticipant.getTrackPublication(Track.Source.Microphone);
   const localMicrophone = React.useMemo(() => {
-    if (!microphonePublication || microphonePublication.isMuted) {
-      return null;
+    if (!microphonePublication) {
+      return undefined;
     }
     return {
       source: Track.Source.Microphone,
@@ -441,8 +441,8 @@ export function useSession(
           ...generateDerivedConnectionStateValues(ConnectionState.Connecting),
 
           local: {
-            cameraTrack: null,
-            microphoneTrack: null,
+            cameraTrack: undefined,
+            microphoneTrack: undefined,
           },
         };
 
@@ -469,8 +469,8 @@ export function useSession(
           ...generateDerivedConnectionStateValues(ConnectionState.Disconnected),
 
           local: {
-            cameraTrack: null,
-            microphoneTrack: null,
+            cameraTrack: undefined,
+            microphoneTrack: undefined,
           },
         };
     }

@@ -157,6 +157,18 @@
         "class-variance-authority"
       ],
       "registryDependencies": ["utils"]
+    },
+    {
+      "name": "react-shader",
+      "type": "registry:component",
+      "title": "React Shader",
+      "description": "A shadertoy-like shader renderer component for React.",
+      "files": [
+        {
+          "path": "components/agents-ui/react-shader.tsx",
+          "type": "registry:component"
+        }
+      ]
     }
   ]
 }

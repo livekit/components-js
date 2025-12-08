@@ -6,6 +6,7 @@ import {
   RemoteParticipant,
   RoomEvent,
   Track,
+  Participant,
 } from 'livekit-client';
 import type TypedEventEmitter from 'typed-emitter';
 import { EventEmitter } from 'events';
@@ -16,6 +17,7 @@ import { useParticipantTracks } from './useParticipantTracks';
 import { useRemoteParticipants } from './useRemoteParticipants';
 import { UseSessionReturn } from './useSession';
 import { useMaybeSessionContext } from '../context';
+import { useParticipantInfo } from './useParticipantInfo';
 
 // FIXME: make this 10 seconds once room dispatch booting info is discoverable
 const DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS = 20_000;
@@ -77,6 +79,9 @@ type AgentStateAvailable = AgentStateCommon & {
   state: 'listening' | 'thinking' | 'speaking';
   failureReasons: null;
 
+  /** The client's assigned identity, coming from the JWT token. */
+  identity: Participant['identity'];
+
   /** Is the agent connected to the client? */
   isConnected: true;
 
@@ -101,6 +106,9 @@ type AgentStateAvailable = AgentStateCommon & {
 type AgentStatePreConnectBuffering = AgentStateCommon & {
   state: 'pre-connect-buffering';
   failureReasons: null;
+
+  /** The client's assigned identity, coming from the JWT token. */
+  identity: Participant['identity'];
 
   /** Is the agent connected to the client? */
   isConnected: false;
@@ -127,6 +135,9 @@ type AgentStateUnAvailable = AgentStateCommon & {
   state: 'initializing' | 'idle';
   failureReasons: null;
 
+  /** The client's assigned identity, coming from the JWT token. */
+  identity: Participant['identity'];
+
   /** Is the agent connected to the client? */
   isConnected: false;
 
@@ -151,6 +162,9 @@ type AgentStateUnAvailable = AgentStateCommon & {
 type AgentStateConnecting = AgentStateCommon & {
   state: 'connecting';
   failureReasons: null;
+
+  /** The client's assigned identity, coming from the JWT token. */
+  identity: undefined;
 
   /** Is the agent connected to the client? */
   isConnected: false;
@@ -177,6 +191,9 @@ type AgentStateDisconnected = AgentStateCommon & {
   state: 'disconnected';
   failureReasons: null;
 
+  /** The client's assigned identity, coming from the JWT token. */
+  identity: undefined;
+
   /** Is the agent connected to the client? */
   isConnected: false;
 
@@ -201,6 +218,9 @@ type AgentStateDisconnected = AgentStateCommon & {
 type AgentStateFailed = AgentStateCommon & {
   state: 'failed';
   failureReasons: Array<string>;
+
+  /** The client's assigned identity, coming from the JWT token. */
+  identity: undefined;
 
   /** Is the agent connected to the client? */
   isConnected: false;
@@ -710,6 +730,10 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     };
   }, [isSessionDisconnected, agentConnectTimeoutMilliseconds]);
 
+  const {
+    identity: agentParticipantIdentity,
+  } = useParticipantInfo({ participant: agentParticipant ?? undefined });
+
   const agentState: AgentStateCases = React.useMemo(() => {
     const common: AgentStateCommon = {
       attributes: agentParticipantAttributes,
@@ -725,6 +749,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       case 'disconnected':
         return {
           ...common,
+          identity: undefined,
 
           state,
           ...generateDerivedStateValues(state),
@@ -738,6 +763,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       case 'connecting':
         return {
           ...common,
+          identity: undefined,
 
           state,
           ...generateDerivedStateValues(state),
@@ -752,6 +778,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       case 'idle':
         return {
           ...common,
+          identity: agentParticipantIdentity!,
 
           state,
           ...generateDerivedStateValues(state),
@@ -764,6 +791,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       case 'pre-connect-buffering':
         return {
           ...common,
+          identity: agentParticipantIdentity!,
 
           state,
           ...generateDerivedStateValues(state),
@@ -778,6 +806,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       case 'speaking':
         return {
           ...common,
+          identity: agentParticipantIdentity!,
 
           state,
           ...generateDerivedStateValues(state),
@@ -790,6 +819,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       case 'failed':
         return {
           ...common,
+          identity: undefined,
 
           state: 'failed',
           ...generateDerivedStateValues('failed'),
@@ -800,7 +830,15 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
           microphoneTrack: undefined,
         };
     }
-  }, [agentParticipantAttributes, emitter, agentParticipant, state, videoTrack, audioTrack]);
+  }, [
+    agentParticipantIdentity,
+    agentParticipantAttributes,
+    emitter,
+    agentParticipant,
+    state,
+    videoTrack,
+    audioTrack,
+  ]);
 
   const { waitUntilConnected, waitUntilCouldBeListening, waitUntilFinished } =
     useAgentWaitUntilDerivedStates(emitter, state);

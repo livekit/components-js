@@ -65,7 +65,7 @@ export type AgentCallbacks = {
 
 type AgentStateCommon = {
   // FIXME: maybe add some sort of schema to this?
-  attributes: Record<string, string>;
+  attributes: Participant['attributes'];
 
   internal: {
     emitter: TypedEventEmitter<AgentCallbacks>;
@@ -537,8 +537,8 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
 
   // 1. Listen for agent participant attribute changes
   const [agentParticipantAttributes, setAgentParticipantAttributes] = React.useState<
-    Record<string, string>
-  >({});
+    Participant['attributes']
+  >(agentParticipant?.attributes ?? {});
   React.useEffect(() => {
     if (!agentParticipant) {
       return;

@@ -64,8 +64,6 @@ export type AgentCallbacks = {
 };
 
 type AgentStateCommon = {
-  name: Participant['name'];
-  metadata: Participant['metadata'];
   // FIXME: maybe add some sort of schema to this?
   attributes: Participant['attributes'];
 
@@ -83,6 +81,8 @@ type AgentStateAvailable = AgentStateCommon & {
 
   /** The client's assigned identity, coming from the JWT token. */
   identity: Participant['identity'];
+  name: Participant['name'];
+  metadata: Participant['metadata'];
 
   /** Is the agent connected to the client? */
   isConnected: true;
@@ -111,6 +111,8 @@ type AgentStatePreConnectBuffering = AgentStateCommon & {
 
   /** The client's assigned identity, coming from the JWT token. */
   identity: Participant['identity'];
+  name: Participant['name'];
+  metadata: Participant['metadata'];
 
   /** Is the agent connected to the client? */
   isConnected: false;
@@ -139,6 +141,8 @@ type AgentStateUnAvailable = AgentStateCommon & {
 
   /** The client's assigned identity, coming from the JWT token. */
   identity: Participant['identity'];
+  name: Participant['name'];
+  metadata: Participant['metadata'];
 
   /** Is the agent connected to the client? */
   isConnected: false;
@@ -167,6 +171,8 @@ type AgentStateConnecting = AgentStateCommon & {
 
   /** The client's assigned identity, coming from the JWT token. */
   identity: undefined;
+  name: undefined;
+  metadata: undefined;
 
   /** Is the agent connected to the client? */
   isConnected: false;
@@ -195,6 +201,8 @@ type AgentStateDisconnected = AgentStateCommon & {
 
   /** The client's assigned identity, coming from the JWT token. */
   identity: undefined;
+  name: undefined;
+  metadata: undefined;
 
   /** Is the agent connected to the client? */
   isConnected: false;
@@ -223,6 +231,8 @@ type AgentStateFailed = AgentStateCommon & {
 
   /** The client's assigned identity, coming from the JWT token. */
   identity: undefined;
+  name: undefined;
+  metadata: undefined;
 
   /** Is the agent connected to the client? */
   isConnected: false;
@@ -740,8 +750,6 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
 
   const agentState: AgentStateCases = React.useMemo(() => {
     const common: AgentStateCommon = {
-      name: agentParticipantName,
-      metadata: agentParticipantMetadata,
       attributes: agentParticipantAttributes,
 
       internal: {
@@ -756,6 +764,8 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
         return {
           ...common,
           identity: undefined,
+          name: undefined,
+          metadata: undefined,
 
           state,
           ...generateDerivedStateValues(state),
@@ -770,6 +780,8 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
         return {
           ...common,
           identity: undefined,
+          name: undefined,
+          metadata: undefined,
 
           state,
           ...generateDerivedStateValues(state),
@@ -785,6 +797,8 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
         return {
           ...common,
           identity: agentParticipantIdentity!,
+          name: agentParticipantName,
+          metadata: agentParticipantMetadata,
 
           state,
           ...generateDerivedStateValues(state),
@@ -798,6 +812,8 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
         return {
           ...common,
           identity: agentParticipantIdentity!,
+          name: agentParticipantName,
+          metadata: agentParticipantMetadata,
 
           state,
           ...generateDerivedStateValues(state),
@@ -813,6 +829,8 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
         return {
           ...common,
           identity: agentParticipantIdentity!,
+          name: agentParticipantName,
+          metadata: agentParticipantMetadata,
 
           state,
           ...generateDerivedStateValues(state),
@@ -826,6 +844,8 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
         return {
           ...common,
           identity: undefined,
+          name: undefined,
+          metadata: undefined,
 
           state: 'failed',
           ...generateDerivedStateValues('failed'),

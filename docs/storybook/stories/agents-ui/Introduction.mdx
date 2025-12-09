@@ -1,0 +1,45 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Agents UI/Introduction" />
+
+# Agents UI
+
+Agents UI is a set of components for building voice-first agents using LiveKit.
+
+## Setup
+
+Configure our registry in your project by adding the following to your projects `components.json` file:
+
+```json | components.json
+{
+  "registries": {
+    "@agents-ui": "https://ui.livekit.io/r/{name}.json"
+  }
+}
+```
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add @agents-ui/{componentName}
+```
+
+## Implementation Example
+
+```tsx
+import { useSession } from '@livekit/components-react';
+import { TokenSource } from 'livekit-client';
+import { AgentSessionProvider } from '@agents-ui/agent-session-provider';
+import { AgentControlBar } from '@agents-ui/agent-control-bar';
+
+export default function Example() {
+  // using a sandbox token server for prototyping
+  const session = useSession(TokenSource.sandboxTokenServer('token-XXXXXX'));
+
+  return (
+    <AgentSessionProvider session={session}>
+      <AgentControlBar />
+    </AgentSessionProvider>
+  );
+}
+```

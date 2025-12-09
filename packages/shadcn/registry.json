@@ -211,6 +211,20 @@
       ],
       "dependencies": ["livekit-client@^2.0.0", "@livekit/components-react@^2.0.0"],
       "registryDependencies": ["button"]
+    },
+    {
+      "name": "agent-chat-indicator",
+      "type": "registry:component",
+      "title": "Agent Chat Indicator",
+      "description": "A component for indicating the agent's chat status with a blinking dot. Useful for indicating the agent is thinking before generating a response.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-chat-indicator.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": ["motion", "class-variance-authority"],
+      "registryDependencies": ["utils"]
     }
   ]
 }

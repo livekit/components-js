@@ -1,45 +1,78 @@
 'use client';
 
 import {
-  LiveKitRoom,
+  SessionProvider,
+  useSession,
   ParticipantName,
   TrackMutedIndicator,
   RoomAudioRenderer,
   isTrackReference,
   useConnectionQualityIndicator,
   VideoTrack,
-  useToken,
   ControlBar,
   GridLayout,
   useTracks,
   TrackRefContext,
+  SessionEvent,
+  useEvents,
 } from '@livekit/components-react';
-import { ConnectionQuality, Room, Track } from 'livekit-client';
+import { ConnectionQuality, Room, Track, TokenSource, MediaDeviceFailure } from 'livekit-client';
 import styles from '../styles/Simple.module.css';
 import myStyles from '../styles/Customize.module.css';
 import type { NextPage } from 'next';
-import { HTMLAttributes, useState } from 'react';
+import { HTMLAttributes, useState, useMemo, useEffect } from 'react';
 import { generateRandomUserId } from '../lib/helper';
 
+const tokenSource = TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
+
 const CustomizeExample: NextPage = () => {
-  const params = typeof window !== 'undefined' ? new URLSearchParams(location.search) : null;
+  const params = useMemo(
+    () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
+    [],
+  );
   const roomName = params?.get('room') ?? 'test-room';
-  const userIdentity = params?.get('user') ?? generateRandomUserId();
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    userInfo: {
-      identity: userIdentity,
-      name: userIdentity,
-    },
+  const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
+
+  const session = useSession(tokenSource, {
+    roomName,
+    participantIdentity: userIdentity,
+    participantName: userIdentity,
   });
 
-  const [room] = useState(new Room());
-
   const [connect, setConnect] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
-  const handleDisconnect = () => {
-    setConnect(false);
-    setIsConnected(false);
-  };
+
+  useEffect(() => {
+    if (connect) {
+      session
+        .start({
+          tracks: {
+            microphone: { enabled: true },
+          },
+        })
+        .catch((err) => {
+          console.error('Failed to start session:', err);
+        });
+    } else {
+      session.end().catch((err) => {
+        console.error('Failed to end session:', err);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connect, session.start, session.end]);
+
+  useEffect(() => {
+    if (session.connectionState === 'disconnected') {
+      setConnect(false);
+    }
+  }, [session.connectionState]);
+
+  useEvents(session, SessionEvent.MediaDevicesError, (error) => {
+    const failure = MediaDeviceFailure.getFailure(error);
+    console.error(failure);
+    alert(
+      'Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab',
+    );
+  }, []);
 
   return (
     <div className={styles.container} data-lk-theme="default">
@@ -47,26 +80,17 @@ const CustomizeExample: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://livekit.io">LiveKit</a>
         </h1>
-        {!isConnected && (
+        {!session.isConnected && (
           <button className="lk-button" onClick={() => setConnect(!connect)}>
             {connect ? 'Disconnect' : 'Connect'}
           </button>
         )}
-        <LiveKitRoom
-          room={room}
-          token={token}
-          serverUrl={process.env.NEXT_PUBLIC_LK_SERVER_URL}
-          connect={connect}
-          onConnected={() => setIsConnected(true)}
-          onDisconnected={handleDisconnect}
-          audio={true}
-          video={true}
-        >
+        <SessionProvider session={session}>
           <RoomAudioRenderer />
           {/* Render a custom Stage component once connected */}
-          {isConnected && <Stage />}
+          {session.isConnected && <Stage />}
           <ControlBar />
-        </LiveKitRoom>
+        </SessionProvider>
       </main>
     </div>
   );

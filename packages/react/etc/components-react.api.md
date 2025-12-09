@@ -669,6 +669,10 @@ export type SessionConnectOptions = {
             enabled?: boolean;
             publishOptions?: TrackPublishOptions;
         };
+        camera?: {
+            enabled?: boolean;
+            publishOptions?: TrackPublishOptions;
+        };
     };
     roomConnectOptions?: RoomConnectOptions;
 };

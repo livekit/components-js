@@ -52,6 +52,10 @@ export type SessionConnectOptions = {
       enabled?: boolean;
       publishOptions?: TrackPublishOptions;
     };
+    camera?: {
+      enabled?: boolean;
+      publishOptions?: TrackPublishOptions;
+    };
   };
 
   /** Options for Room.connect(.., .., opts) */
@@ -553,6 +557,13 @@ export function useSession(
               true,
               undefined,
               tracks.microphone?.publishOptions ?? {},
+            )
+          : Promise.resolve(),
+        tracks.camera?.enabled
+          ? room.localParticipant.setCameraEnabled(
+              true,
+              undefined,
+              tracks.camera?.publishOptions ?? {},
             )
           : Promise.resolve(),
       ]);

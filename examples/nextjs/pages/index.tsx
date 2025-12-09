@@ -3,11 +3,12 @@
 import type { NextPage } from 'next';
 import styles from '../styles/Home.module.scss';
 import Head from 'next/head';
+import Image from 'next/image';
 
 const EXAMPLE_ROUTES = {
   voiceAssistant: {
-    title: 'AI Voice Assistant example',
-    href: () => `/voice-assistant`,
+    title: 'AI Agent example',
+    href: () => `/agent`,
   },
   minimal: { title: 'VideoConference example with minimal code', href: () => `/minimal` },
   simple: { title: 'Simple custom setup example', href: () => `/simple` },
@@ -40,10 +41,11 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <header style={{ maxWidth: '48ch' }}>
-          <img
-            style={{ width: '100%' }}
-            src="livekit-components-logo.png"
+          <Image
+            src="/livekit-components-logo.png"
             alt="LiveKit components text logo."
+            width={320}
+            height={38}
           />
           <p>Some simple sample apps to help you get started working with LiveKit Components.</p>
         </header>

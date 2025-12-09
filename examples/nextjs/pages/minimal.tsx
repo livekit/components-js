@@ -6,6 +6,7 @@ import {
   VideoConference,
   setLogLevel,
   SessionEvent,
+  useEvents,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { generateRandomUserId } from '../lib/helper';
@@ -50,20 +51,13 @@ const MinimalExample: NextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.start, session.end]);
 
-  useEffect(() => {
-    const handleMediaDevicesError = (error: Error) => {
-      const failure = MediaDeviceFailure.getFailure(error);
-      console.error(failure);
-      alert(
-        'Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab',
-      );
-    };
-
-    session.internal.emitter.on(SessionEvent.MediaDevicesError, handleMediaDevicesError);
-    return () => {
-      session.internal.emitter.off(SessionEvent.MediaDevicesError, handleMediaDevicesError);
-    };
-  }, [session]);
+  useEvents(session, SessionEvent.MediaDevicesError, (error) => {
+    const failure = MediaDeviceFailure.getFailure(error);
+    console.error(failure);
+    alert(
+      'Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab',
+    );
+  }, []);
 
   return (
     <div data-lk-theme="default" style={{ height: '100vh' }}>

@@ -28,7 +28,7 @@ function SimpleVoiceAssistant() {
   );
 }
 
-const VoiceAssistantExample: NextPage = () => {
+const AgentExample: NextPage = () => {
   const params = useMemo(
     () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
     [],
@@ -97,4 +97,4 @@ const VoiceAssistantExample: NextPage = () => {
   );
 };
 
-export default VoiceAssistantExample;
+export default AgentExample;

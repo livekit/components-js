@@ -225,6 +225,24 @@
       ],
       "dependencies": ["motion", "class-variance-authority"],
       "registryDependencies": ["utils"]
+    },
+    {
+      "name": "agent-chat-transcript",
+      "type": "registry:component",
+      "title": "Agent Chat Transcript",
+      "description": "A component for displaying the agent session's chat transcript.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-chat-transcript.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": ["@livekit/components-react@^2.0.0", "motion"],
+      "registryDependencies": [
+        "@ai-elements/message",
+        "@ai-elements/conversation",
+        "@agents-ui/agent-chat-indicator"
+      ]
     }
   ]
 }

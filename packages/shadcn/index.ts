@@ -6,6 +6,7 @@ export * from './components/agents-ui/agent-track-toggle';
 export * from './components/agents-ui/agent-track-control';
 export * from './components/agents-ui/agent-control-bar';
 export * from './components/agents-ui/agent-chat-indicator';
+export * from './components/agents-ui/agent-chat-transcript';
 export * from './components/agents-ui/agent-audio-visualizer-bar';
 export * from './components/agents-ui/agent-audio-visualizer-grid';
 export * from './components/agents-ui/agent-audio-visualizer-radial';

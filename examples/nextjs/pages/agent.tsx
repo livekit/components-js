@@ -16,13 +16,20 @@ import { MediaDeviceFailure, TokenSource } from 'livekit-client';
 import styles from '../styles/VoiceAssistant.module.scss';
 import { generateRandomUserId } from '../lib/helper';
 
-function SimpleVoiceAssistant() {
+function SimpleAgent() {
   const agent = useAgent();
+
+  useEffect(() => {
+    if (agent.state === 'failed') {
+      alert(`Agent error: ${agent.failureReasons.join(', ')}`);
+    }
+  }, [agent.state, agent.failureReasons]);
+
   return (
     <BarVisualizer
       state={agent.state}
       barCount={7}
-      trackRef={agent.microphoneTrack}
+      track={agent.microphoneTrack}
       style={{ width: '75vw', height: '300px' }}
     />
   );
@@ -40,15 +47,15 @@ const AgentExample: NextPage = () => {
     [params],
   );
   const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
-  const [shouldConnect, setShouldConnect] = useState(false);
 
   const session = useSession(tokenSource, {
     roomName,
     participantIdentity: userIdentity,
   });
 
+  const [started, setStarted] = useState(false);
   useEffect(() => {
-    if (shouldConnect) {
+    if (started) {
       session.start().catch((err) => {
         console.error('Failed to start session:', err);
       });
@@ -58,11 +65,11 @@ const AgentExample: NextPage = () => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shouldConnect, session.start, session.end]);
+  }, [started, session.start, session.end]);
 
   useEffect(() => {
     if (session.connectionState === 'disconnected') {
-      setShouldConnect(false);
+      setStarted(false);
     }
   }, [session.connectionState]);
 
@@ -79,10 +86,10 @@ const AgentExample: NextPage = () => {
       <SessionProvider session={session}>
         <div className={styles.room}>
           <div className={styles.inner}>
-            {shouldConnect ? (
-              <SimpleVoiceAssistant />
+            {started ? (
+              <SimpleAgent />
             ) : (
-              <button className="lk-button" onClick={() => setShouldConnect(true)}>
+              <button className="lk-button" onClick={() => setStarted(true)}>
                 Connect
               </button>
             )}

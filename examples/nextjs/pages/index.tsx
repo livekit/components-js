@@ -7,8 +7,8 @@ import Image from 'next/image';
 
 const EXAMPLE_ROUTES = {
   voiceAssistant: {
-    title: 'AI Voice Assistant example',
-    href: () => `/voice-assistant`,
+    title: 'AI Agent example',
+    href: () => `/agent`,
   },
   minimal: { title: 'VideoConference example with minimal code', href: () => `/minimal` },
   simple: { title: 'Simple custom setup example', href: () => `/simple` },

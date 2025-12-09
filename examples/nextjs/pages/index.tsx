@@ -42,11 +42,10 @@ const Home: NextPage = () => {
       <main className={styles.main}>
         <header style={{ maxWidth: '48ch' }}>
           <Image
-            style={{ width: '100%' }}
             src="/livekit-components-logo.png"
             alt="LiveKit components text logo."
-            width={500}
-            height={100}
+            width={320}
+            height={38}
           />
           <p>Some simple sample apps to help you get started working with LiveKit Components.</p>
         </header>

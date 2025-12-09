@@ -12,6 +12,8 @@ import { generateRandomUserId } from '../lib/helper';
 import { useMemo, useState, useEffect } from 'react';
 import { TokenSource, MediaDeviceFailure } from 'livekit-client';
 
+const tokenSource = TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
+
 const AudioExample: NextPage = () => {
   const params = useMemo(
     () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
@@ -19,10 +21,6 @@ const AudioExample: NextPage = () => {
   );
   const roomName = params?.get('room') ?? 'test-room';
   const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
-
-  const tokenSource = useMemo(() => {
-    return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
-  }, []);
 
   const session = useSession(tokenSource, {
     roomName,

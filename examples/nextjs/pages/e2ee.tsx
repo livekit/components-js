@@ -13,6 +13,8 @@ import { useMemo, useEffect, useState } from 'react';
 import { Room, ExternalE2EEKeyProvider, TokenSource, MediaDeviceFailure } from 'livekit-client';
 import { generateRandomUserId } from '../lib/helper';
 
+const tokenSource = TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
+
 const E2EEExample: NextPage = () => {
   const params = useMemo(
     () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
@@ -39,10 +41,6 @@ const E2EEExample: NextPage = () => {
       }),
     [keyProvider],
   );
-
-  const tokenSource = useMemo(() => {
-    return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
-  }, []);
 
   const session = useSession(tokenSource, {
     roomName,

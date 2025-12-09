@@ -20,6 +20,8 @@ import { useMemo, useState, useEffect } from 'react';
 import styles from '../styles/Simple.module.css';
 import { generateRandomUserId } from '../lib/helper';
 
+const tokenSource = TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
+
 const SimpleExample: NextPage = () => {
   const params = useMemo(
     () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
@@ -28,10 +30,6 @@ const SimpleExample: NextPage = () => {
   const roomName = params?.get('room') ?? 'test-room';
   const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
   const [connect, setConnect] = useState(false);
-
-  const tokenSource = useMemo(() => {
-    return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
-  }, []);
 
   const session = useSession(tokenSource, {
     roomName,

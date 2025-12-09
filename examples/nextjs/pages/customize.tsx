@@ -23,6 +23,8 @@ import type { NextPage } from 'next';
 import { HTMLAttributes, useState, useMemo, useEffect } from 'react';
 import { generateRandomUserId } from '../lib/helper';
 
+const tokenSource = TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
+
 const CustomizeExample: NextPage = () => {
   const params = useMemo(
     () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
@@ -32,10 +34,6 @@ const CustomizeExample: NextPage = () => {
   const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
 
   const [room] = useState(new Room());
-
-  const tokenSource = useMemo(() => {
-    return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
-  }, []);
 
   const session = useSession(tokenSource, {
     roomName,

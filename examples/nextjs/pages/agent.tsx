@@ -28,6 +28,8 @@ function SimpleVoiceAssistant() {
   );
 }
 
+const tokenSource = TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
+
 const AgentExample: NextPage = () => {
   const params = useMemo(
     () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
@@ -39,10 +41,6 @@ const AgentExample: NextPage = () => {
   );
   const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
   const [shouldConnect, setShouldConnect] = useState(false);
-
-  const tokenSource = useMemo(() => {
-    return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
-  }, []);
 
   const session = useSession(tokenSource, {
     roomName,

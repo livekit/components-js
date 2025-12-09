@@ -13,6 +13,8 @@ import { generateRandomUserId } from '../lib/helper';
 import { useMemo, useEffect, useState } from 'react';
 import { TokenSource, MediaDeviceFailure } from 'livekit-client';
 
+const tokenSource = TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
+
 const MinimalExample: NextPage = () => {
   const params = useMemo(
     () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
@@ -22,10 +24,6 @@ const MinimalExample: NextPage = () => {
   setLogLevel('debug', { liveKitClientLogLevel: 'info' });
 
   const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
-
-  const tokenSource = useMemo(() => {
-    return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
-  }, []);
 
   const session = useSession(tokenSource, {
     roomName,

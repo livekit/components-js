@@ -21,6 +21,8 @@ import { useMemo, useState, useEffect } from 'react';
 import { generateRandomUserId } from '../lib/helper';
 import type { NextPage } from 'next';
 
+const tokenSource = TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
+
 const Clubhouse: NextPage = () => {
   const params = useMemo(
     () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
@@ -28,10 +30,6 @@ const Clubhouse: NextPage = () => {
   );
   const roomName = params?.get('room') ?? 'test-room';
   const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
-
-  const tokenSource = useMemo(() => {
-    return TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
-  }, []);
 
   const session = useSession(tokenSource, {
     roomName,

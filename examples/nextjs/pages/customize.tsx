@@ -33,13 +33,10 @@ const CustomizeExample: NextPage = () => {
   const roomName = params?.get('room') ?? 'test-room';
   const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
 
-  const [room] = useState(new Room());
-
   const session = useSession(tokenSource, {
     roomName,
     participantIdentity: userIdentity,
     participantName: userIdentity,
-    room,
   });
 
   const [connect, setConnect] = useState(false);

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { LiveKitRoom } from '@livekit/components-react';
-import { Decorator } from '@storybook/react';
+import { Decorator } from '@storybook/react-vite';
 import { Room } from 'livekit-client';
 
 export type RoomContextSettings = Partial<{

@@ -2,6 +2,9 @@
 /** Imports styles for all stories. Maybe this is not what we want.
  *  You can also import styles on a per story level. */
 import '@livekit/components-styles';
+import './tailwind.css';
+
+import { withNextThemes } from './lk-decorators/withNextThemes';
 
 export const parameters = {
   viewMode: 'docs',
@@ -25,3 +28,18 @@ export const globalTypes = {
     },
   },
 };
+
+export const decorators = [
+  withNextThemes({
+    themes: {
+      light: '',
+      dark: 'dark',
+      system: 'system',
+    },
+    defaultTheme: 'system',
+    // All next-themes properties can be configured directly here
+    enableSystem: true,
+    disableTransitionOnChange: true,
+    attribute: 'class',
+  }),
+];

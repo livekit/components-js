@@ -112,7 +112,7 @@ export const BarVisualizer = /* @__PURE__ */ React.forwardRef<HTMLDivElement, Ba
     { state, options, barCount = 15, trackRef, track, children, ...props }: BarVisualizerProps,
     ref,
   ) {
-    const elementProps = mergeProps(props, { className: 'lk-audio-bar-visualizer' });
+    const elementProps = mergeProps(props, { className: 'lk-audio-visualizer-bar' });
     let targetTrack: TrackReferenceOrPlaceholder | LocalAudioTrack | RemoteAudioTrack | undefined =
       useMaybeTrackRefContext();
 

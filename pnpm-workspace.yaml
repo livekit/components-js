@@ -7,3 +7,4 @@ packages:
 catalog:
   livekit-client: ^2.16.0
   '@livekit/protocol': ^1.43.4
+  eslint: ^8.56.0

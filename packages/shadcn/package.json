@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@agents-ui",
   "version": "1.0.0",
   "description": "",
@@ -11,8 +12,13 @@
   "keywords": [],
   "author": "",
   "license": "Apache-2.0",
-  "dependencies": {
+  "peerDependencies": {
     "@livekit/components-react": "workspace:*",
+    "livekit-client": "catalog:",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
     "@livekit/protocol": "catalog:",
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-separator": "^1.1.8",
@@ -23,12 +29,9 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "jose": "^6.0.12",
-    "livekit-client": "catalog:",
     "livekit-server-sdk": "^2.13.2",
     "lucide-react": "^0.555.0",
     "motion": "^12.16.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
     "sonner": "^2.0.7",
     "streamdown": "^1.6.9",
     "tailwind-merge": "^3.3.0",
@@ -41,7 +44,7 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^8.56.0",
+    "eslint": "catalog:",
     "eslint-config-next": "15.5.2",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-import": "^2.31.0",

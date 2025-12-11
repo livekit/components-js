@@ -7,4 +7,5 @@ export * from './components/agents-ui/audio-visualizer-radial/audio-visualizer-r
 export * from './components/agents-ui/audio-visualizer-grid/audio-visualizer-grid';
 export * from './components/agents-ui/audio-visualizer-wave/audio-visualizer-wave';
 export * from './components/agents-ui/audio-visualizer-aura/audio-visualizer-aura';
+export * from './components/agents-ui/audio-visualizer-orb/audio-visualizer-orb';
 export * from './components/agents-ui/react-shader/react-shader';

@@ -15,7 +15,11 @@
         }
       ],
 
-      "dependencies": ["class-variance-authority", "@livekit/components-react", "lucide-react"],
+      "dependencies": [
+        "@livekit/components-react@^2.0.0",
+        "class-variance-authority",
+        "lucide-react"
+      ],
       "registryDependencies": ["button"]
     },
     {
@@ -30,9 +34,9 @@
         }
       ],
       "dependencies": [
+        "livekit-client@^2.0.0",
+        "@livekit/components-react@^2.0.0",
         "class-variance-authority",
-        "livekit-client",
-        "@livekit/components-react",
         "lucide-react"
       ],
       "registryDependencies": ["toggle", "utils"]
@@ -49,9 +53,9 @@
         }
       ],
       "dependencies": [
+        "livekit-client@^2.0.0",
+        "@livekit/components-react@^2.0.0",
         "class-variance-authority",
-        "livekit-client",
-        "@livekit/components-react",
         "lucide-react"
       ],
       "registryDependencies": ["select", "@agents-ui/agent-track-toggle", "utils"]
@@ -72,10 +76,10 @@
         }
       ],
       "dependencies": [
+        "livekit-client@^2.0.0",
+        "@livekit/components-react@^2.0.0",
         "class-variance-authority",
-        "livekit-client",
         "motion",
-        "@livekit/components-react",
         "lucide-react"
       ],
       "registryDependencies": [
@@ -89,7 +93,7 @@
     },
     {
       "name": "audio-visualizer-bar",
-      "type": "registry:block",
+      "type": "registry:component",
       "title": "Audio Bar Visualizer",
       "description": "A linear bar visualizer for audio tracks.",
       "files": [
@@ -103,9 +107,9 @@
         }
       ],
       "dependencies": [
+        "livekit-client@^2.0.0",
+        "@livekit/components-react@^2.0.0",
         "class-variance-authority",
-        "livekit-client",
-        "@livekit/components-react",
         "lucide-react"
       ],
       "registryDependencies": ["utils"]

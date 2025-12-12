@@ -1,0 +1,126 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "@agents-ui",
+  "homepage": "https://ui.livekit.io",
+  "items": [
+    {
+      "name": "agent-disconnect-button",
+      "type": "registry:component",
+      "title": "Agent Session Disconnect",
+      "description": "A button for disconnecting the agent session.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-disconnect-button.tsx",
+          "type": "registry:component"
+        }
+      ],
+
+      "dependencies": ["class-variance-authority", "@livekit/components-react", "lucide-react"],
+      "registryDependencies": ["button"]
+    },
+    {
+      "name": "agent-track-toggle",
+      "type": "registry:component",
+      "title": "Agent Track Toggle",
+      "description": "A toggle button for controlling media tracks (microphone, camera, screen share) with appropriate icons and loading states.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-track-toggle.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": [
+        "class-variance-authority",
+        "livekit-client",
+        "@livekit/components-react",
+        "lucide-react"
+      ],
+      "registryDependencies": ["toggle", "utils"]
+    },
+    {
+      "name": "agent-track-control",
+      "type": "registry:component",
+      "title": "Agent Track Control",
+      "description": "A control for managing media tracks (microphone, camera, screen share) with appropriate icons and loading states.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-track-control.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": [
+        "class-variance-authority",
+        "livekit-client",
+        "@livekit/components-react",
+        "lucide-react"
+      ],
+      "registryDependencies": ["select", "@agents-ui/agent-track-toggle", "utils"]
+    },
+    {
+      "name": "agent-control-bar",
+      "type": "registry:component",
+      "title": "Agent Control Bar",
+      "description": "A control bar for managing media tracks (microphone, camera, screen share) with appropriate icons and loading states.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-control-bar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "hooks/agents-ui/use-agent-control-bar.ts",
+          "type": "registry:hook"
+        }
+      ],
+      "dependencies": [
+        "class-variance-authority",
+        "livekit-client",
+        "motion",
+        "@livekit/components-react",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "toggle",
+        "@agents-ui/agent-track-control",
+        "@agents-ui/agent-track-toggle",
+        "@agents-ui/audio-visualizer-bar",
+        "utils"
+      ]
+    },
+    {
+      "name": "audio-visualizer-bar",
+      "type": "registry:block",
+      "title": "Audio Bar Visualizer",
+      "description": "A linear bar visualizer for audio tracks.",
+      "files": [
+        {
+          "path": "components/agents-ui/audio-visualizer-bar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "hooks/agents-ui/use-audio-visualizer-bar.ts",
+          "type": "registry:hook"
+        }
+      ],
+      "dependencies": [
+        "class-variance-authority",
+        "livekit-client",
+        "@livekit/components-react",
+        "lucide-react"
+      ],
+      "registryDependencies": ["@agents-ui/clone-single-child", "utils"]
+    },
+    {
+      "name": "clone-single-child",
+      "type": "registry:lib",
+      "title": "Clone Single Child",
+      "description": "A utility function for cloning a single child.",
+      "files": [
+        {
+          "path": "lib/clone-single-child.ts",
+          "type": "registry:lib"
+        }
+      ]
+    }
+  ]
+}

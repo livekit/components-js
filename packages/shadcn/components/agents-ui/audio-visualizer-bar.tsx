@@ -1,3 +1,5 @@
+'use client';
+
 import React, { type ReactNode, useMemo } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type LocalAudioTrack, type RemoteAudioTrack } from 'livekit-client';
@@ -8,7 +10,7 @@ import {
 } from '@livekit/components-react';
 import { cn } from '@/lib/utils';
 import { cloneSingleChild } from '@/lib/clone-single-child';
-import { useBarAnimator } from './hooks/useBarAnimator';
+import { useBarAnimator } from '@/hooks/agents-ui/use-audio-visualizer-bar';
 
 export const AudioVisualizerBarVariants = cva(
   [

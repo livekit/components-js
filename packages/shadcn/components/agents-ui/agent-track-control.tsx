@@ -10,7 +10,7 @@ import {
   useMediaDeviceSelect,
 } from '@livekit/components-react';
 
-import { AudioVisualizerBar } from '@/components/agents-ui/audio-visualizer-bar/audio-visualizer-bar';
+import { AudioVisualizerBar } from '@/components/agents-ui/audio-visualizer-bar';
 import { AgentTrackToggle } from '@/components/agents-ui/agent-track-toggle';
 import {
   Select,

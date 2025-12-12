@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, type HTMLAttributes, useState } from 'react';
 import { Track } from 'livekit-client';
 import { motion } from 'motion/react';

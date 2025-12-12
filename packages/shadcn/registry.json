@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "@agents-ui",
-  "homepage": "https://ui.livekit.io",
+  "homepage": "https://livekit.io/ui",
   "items": [
     {
       "name": "agent-disconnect-button",

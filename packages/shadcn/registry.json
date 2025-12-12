@@ -108,19 +108,7 @@
         "@livekit/components-react",
         "lucide-react"
       ],
-      "registryDependencies": ["@agents-ui/clone-single-child", "utils"]
-    },
-    {
-      "name": "clone-single-child",
-      "type": "registry:lib",
-      "title": "Clone Single Child",
-      "description": "A utility function for cloning a single child.",
-      "files": [
-        {
-          "path": "lib/clone-single-child.ts",
-          "type": "registry:lib"
-        }
-      ]
+      "registryDependencies": ["utils"]
     }
   ]
 }

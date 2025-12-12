@@ -4,15 +4,15 @@ import {
   AgentSessionProvider,
   useMicrophone,
 } from '../../.storybook/lk-decorators/AgentSessionProvider';
-import { AudioVisualizerBar, AudioVisualizerBarProps } from '@agents-ui';
+import { AgentAudioVisualizerBar, AgentAudioVisualizerBarProps } from '@agents-ui';
 
 export default {
-  component: AudioVisualizerBar,
+  component: AgentAudioVisualizerBar,
   decorators: [AgentSessionProvider],
-  render: (args: AudioVisualizerBarProps) => {
+  render: (args: AgentAudioVisualizerBarProps) => {
     const audioTrack = useMicrophone();
 
-    return <AudioVisualizerBar {...args} audioTrack={audioTrack} />;
+    return <AgentAudioVisualizerBar {...args} audioTrack={audioTrack} />;
   },
   args: {
     size: 'xl',
@@ -51,6 +51,6 @@ export default {
   },
 };
 
-export const Default: StoryObj<AudioVisualizerBarProps> = {
+export const Default: StoryObj<AgentAudioVisualizerBarProps> = {
   args: {},
 };

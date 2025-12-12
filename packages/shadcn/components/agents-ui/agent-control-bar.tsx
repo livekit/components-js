@@ -1,21 +1,24 @@
 'use client';
 
-import { type HTMLAttributes, useState } from 'react';
+import { useEffect, useRef, type HTMLAttributes, useState } from 'react';
 import { Track } from 'livekit-client';
 import { motion } from 'motion/react';
 import { useChat } from '@livekit/components-react';
-import { MessageSquareTextIcon } from 'lucide-react';
+import { Loader, MessageSquareTextIcon, SendHorizontal } from 'lucide-react';
+import { Toggle } from '@/components/ui/toggle';
+import { Button } from '@/components/ui/button';
 import {
   AgentTrackToggle,
   agentTrackToggleVariants,
 } from '@/components/agents-ui/agent-track-toggle';
 import { AgentTrackControl } from '@/components/agents-ui/agent-track-control';
-import { Toggle } from '@/components/ui/toggle';
+import { AgentDisconnectButton } from '@/components/agents-ui/agent-disconnect-button';
+import {
+  useInputControls,
+  usePublishPermissions,
+  type UseInputControlsProps,
+} from '@/hooks/agents-ui/use-agent-control-bar';
 import { cn } from '@/lib/utils';
-import { AgentChatInput } from './agent-chat-input';
-import { UseInputControlsProps, useInputControls } from './hooks/use-input-controls';
-import { usePublishPermissions } from './hooks/use-publish-permissions';
-import { AgentDisconnectButton } from '../agent-disconnect-button';
 
 const TOGGLE_VARIANT_1 = [
   '[&_[data-state=off]]:bg-accent [&_[data-state=off]]:hover:bg-foreground/10',
@@ -57,6 +60,71 @@ const MOTION_PROPS = {
     ease: 'easeOut',
   },
 };
+
+interface AgentChatInputProps {
+  chatOpen: boolean;
+  onSend?: (message: string) => void;
+  className?: string;
+}
+
+export function AgentChatInput({
+  chatOpen,
+  onSend = async () => {},
+  className,
+}: AgentChatInputProps) {
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [isSending, setIsSending] = useState(false);
+  const [message, setMessage] = useState<string>('');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      setIsSending(true);
+      await onSend(message);
+      setMessage('');
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const isDisabled = isSending || message.trim().length === 0;
+
+  useEffect(() => {
+    if (chatOpen) return;
+    // when not disabled refocus on input
+    inputRef.current?.focus();
+  }, [chatOpen]);
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className={cn('mb-3 flex grow items-end gap-2 rounded-md pl-1 text-sm', className)}
+    >
+      <textarea
+        autoFocus
+        ref={inputRef}
+        value={message}
+        disabled={!chatOpen}
+        placeholder="Type something..."
+        onChange={(e) => setMessage(e.target.value)}
+        className="field-sizing-content max-h-16 min-h-8 flex-1 py-2 [scrollbar-width:thin] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+      />
+      <Button
+        size="icon"
+        type="submit"
+        disabled={isDisabled}
+        variant={isDisabled ? 'secondary' : 'default'}
+        title={isSending ? 'Sending...' : 'Send'}
+        className="self-end disabled:cursor-not-allowed"
+      >
+        {isSending ? <Loader className="animate-spin" /> : <SendHorizontal />}
+      </Button>
+    </form>
+  );
+}
 
 export interface ControlBarControls {
   leave?: boolean;

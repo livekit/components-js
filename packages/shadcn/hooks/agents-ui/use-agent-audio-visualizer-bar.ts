@@ -18,11 +18,11 @@ function generateListeningSequenceBar(columns: number): number[][] {
   return [[center], [noIndex]];
 }
 
-export const useBarAnimator = (
+export function useAgentAudioVisualizerBarAnimator(
   state: AgentState | undefined,
   columns: number,
   interval: number,
-): number[] => {
+): number[] {
   const [index, setIndex] = useState(0);
   const [sequence, setSequence] = useState<number[][]>([[]]);
 
@@ -67,4 +67,4 @@ export const useBarAnimator = (
   }, [interval, columns, state, sequence.length]);
 
   return sequence[index % sequence.length];
-};
+}

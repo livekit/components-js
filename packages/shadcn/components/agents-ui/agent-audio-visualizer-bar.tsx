@@ -1,4 +1,13 @@
-import React, { type ReactNode, useMemo } from 'react';
+'use client';
+
+import React, {
+  type ReactNode,
+  type CSSProperties,
+  useMemo,
+  Children,
+  cloneElement,
+  isValidElement,
+} from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type LocalAudioTrack, type RemoteAudioTrack } from 'livekit-client';
 import {
@@ -6,11 +15,34 @@ import {
   type TrackReferenceOrPlaceholder,
   useMultibandTrackVolume,
 } from '@livekit/components-react';
+import { useAgentAudioVisualizerBarAnimator } from '@/hooks/agents-ui/use-agent-audio-visualizer-bar';
 import { cn } from '@/lib/utils';
-import { cloneSingleChild } from '@/lib/clone-single-child';
-import { useBarAnimator } from './hooks/useBarAnimator';
 
-export const AudioVisualizerBarVariants = cva(
+export function cloneSingleChild(
+  children: ReactNode | ReactNode[],
+  props?: Record<string, unknown>,
+  key?: unknown,
+) {
+  return Children.map(children, (child) => {
+    // Checking isValidElement is the safe way and avoids a typescript error too.
+    if (isValidElement(child) && Children.only(children)) {
+      const childProps = child.props as Record<string, unknown>;
+      if (childProps.className) {
+        // make sure we retain classnames of both passed props and child
+        props ??= {};
+        props.className = cn(childProps.className as string, props.className as string);
+        props.style = {
+          ...(childProps.style as CSSProperties),
+          ...(props.style as CSSProperties),
+        };
+      }
+      return cloneElement(child, { ...props, key: key ? String(key) : undefined });
+    }
+    return child;
+  });
+}
+
+export const AgentAudioVisualizerBarVariants = cva(
   [
     'relative flex items-center justify-center',
     '[&_>_*]:rounded-full [&_>_*]:transition-colors [&_>_*]:duration-250 [&_>_*]:ease-linear',
@@ -32,7 +64,7 @@ export const AudioVisualizerBarVariants = cva(
   },
 );
 
-export interface AudioVisualizerBarProps {
+export interface AgentAudioVisualizerBarProps {
   state?: AgentState;
   barCount?: number;
   audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
@@ -40,14 +72,14 @@ export interface AudioVisualizerBarProps {
   children?: ReactNode | ReactNode[];
 }
 
-export function AudioVisualizerBar({
+export function AgentAudioVisualizerBar({
   size,
   state,
   barCount,
   audioTrack,
   className,
   children,
-}: AudioVisualizerBarProps & VariantProps<typeof AudioVisualizerBarVariants>) {
+}: AgentAudioVisualizerBarProps & VariantProps<typeof AgentAudioVisualizerBarVariants>) {
   const _barCount = useMemo(() => {
     if (barCount) {
       return barCount;
@@ -82,14 +114,19 @@ export function AudioVisualizerBar({
     }
   }, [state, _barCount]);
 
-  const highlightedIndices = useBarAnimator(state, _barCount, sequencerInterval);
+  const highlightedIndices = useAgentAudioVisualizerBarAnimator(
+    state,
+    _barCount,
+    sequencerInterval,
+  );
+
   const bands = useMemo(
     () => (state === 'speaking' ? volumeBands : new Array(_barCount).fill(0)),
     [state, volumeBands, _barCount],
   );
 
   return (
-    <div className={cn(AudioVisualizerBarVariants({ size }), className)}>
+    <div className={cn(AgentAudioVisualizerBarVariants({ size }), className)}>
       {bands.map((band: number, idx: number) =>
         children ? (
           <React.Fragment key={idx}>

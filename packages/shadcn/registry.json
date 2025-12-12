@@ -87,22 +87,22 @@
         "toggle",
         "@agents-ui/agent-track-control",
         "@agents-ui/agent-track-toggle",
-        "@agents-ui/audio-visualizer-bar",
+        "@agents-ui/agent-audio-visualizer-bar",
         "utils"
       ]
     },
     {
-      "name": "audio-visualizer-bar",
+      "name": "agent-audio-visualizer-bar",
       "type": "registry:component",
       "title": "Audio Bar Visualizer",
       "description": "A linear bar visualizer for audio tracks.",
       "files": [
         {
-          "path": "components/agents-ui/audio-visualizer-bar.tsx",
+          "path": "components/agents-ui/agent-audio-visualizer-bar.tsx",
           "type": "registry:component"
         },
         {
-          "path": "hooks/agents-ui/use-audio-visualizer-bar.ts",
+          "path": "hooks/agents-ui/use-agent-audio-visualizer-bar.ts",
           "type": "registry:hook"
         }
       ],

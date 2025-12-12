@@ -10,7 +10,7 @@ import {
   useMediaDeviceSelect,
 } from '@livekit/components-react';
 
-import { AudioVisualizerBar } from '@/components/agents-ui/audio-visualizer-bar';
+import { AgentAudioVisualizerBar } from '@/components/agents-ui/agent-audio-visualizer-bar';
 import { AgentTrackToggle } from '@/components/agents-ui/agent-track-toggle';
 import {
   Select,
@@ -192,7 +192,7 @@ export function AgentTrackControl({
         className="peer/track group/track has-[.audiovisualizer]:w-auto has-[.audiovisualizer]:px-3 has-[~_button]:rounded-r-none has-[~_button]:pr-2 has-[~_button]:pl-3 has-[~_button]:border-r-0 focus:z-10"
       >
         {audioTrack && (
-          <AudioVisualizerBar
+          <AgentAudioVisualizerBar
             size="icon"
             barCount={3}
             audioTrack={audioTrack}
@@ -205,7 +205,7 @@ export function AgentTrackControl({
                 'data-lk-muted:bg-muted',
               ])}
             />
-          </AudioVisualizerBar>
+          </AgentAudioVisualizerBar>
         )}
       </AgentTrackToggle>
       {kind && (

@@ -15,7 +15,7 @@ import {
   type TrackReferenceOrPlaceholder,
   useMultibandTrackVolume,
 } from '@livekit/components-react';
-import { useBarAnimator } from '@/hooks/agents-ui/use-audio-visualizer-bar';
+import { useAgentAudioVisualizerBarAnimator } from '@/hooks/agents-ui/use-agent-audio-visualizer-bar';
 import { cn } from '@/lib/utils';
 
 export function cloneSingleChild(
@@ -42,7 +42,7 @@ export function cloneSingleChild(
   });
 }
 
-export const AudioVisualizerBarVariants = cva(
+export const AgentAudioVisualizerBarVariants = cva(
   [
     'relative flex items-center justify-center',
     '[&_>_*]:rounded-full [&_>_*]:transition-colors [&_>_*]:duration-250 [&_>_*]:ease-linear',
@@ -64,7 +64,7 @@ export const AudioVisualizerBarVariants = cva(
   },
 );
 
-export interface AudioVisualizerBarProps {
+export interface AgentAudioVisualizerBarProps {
   state?: AgentState;
   barCount?: number;
   audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
@@ -72,14 +72,14 @@ export interface AudioVisualizerBarProps {
   children?: ReactNode | ReactNode[];
 }
 
-export function AudioVisualizerBar({
+export function AgentAudioVisualizerBar({
   size,
   state,
   barCount,
   audioTrack,
   className,
   children,
-}: AudioVisualizerBarProps & VariantProps<typeof AudioVisualizerBarVariants>) {
+}: AgentAudioVisualizerBarProps & VariantProps<typeof AgentAudioVisualizerBarVariants>) {
   const _barCount = useMemo(() => {
     if (barCount) {
       return barCount;
@@ -114,14 +114,19 @@ export function AudioVisualizerBar({
     }
   }, [state, _barCount]);
 
-  const highlightedIndices = useBarAnimator(state, _barCount, sequencerInterval);
+  const highlightedIndices = useAgentAudioVisualizerBarAnimator(
+    state,
+    _barCount,
+    sequencerInterval,
+  );
+
   const bands = useMemo(
     () => (state === 'speaking' ? volumeBands : new Array(_barCount).fill(0)),
     [state, volumeBands, _barCount],
   );
 
   return (
-    <div className={cn(AudioVisualizerBarVariants({ size }), className)}>
+    <div className={cn(AgentAudioVisualizerBarVariants({ size }), className)}>
       {bands.map((band: number, idx: number) =>
         children ? (
           <React.Fragment key={idx}>

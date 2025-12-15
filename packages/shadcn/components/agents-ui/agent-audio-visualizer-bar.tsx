@@ -73,8 +73,8 @@ export interface AgentAudioVisualizerBarProps {
 }
 
 export function AgentAudioVisualizerBar({
-  size,
-  state,
+  size = 'md',
+  state = 'connecting',
   barCount,
   audioTrack,
   className,

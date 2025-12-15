@@ -7,6 +7,11 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+permissions:
+  id-token: write # Required for OIDC
+  contents: write # Required to create GH releases
+  pull-requests: write # Required to interact with PRs
+
 jobs:
   release:
     name: Release
@@ -15,9 +20,9 @@ jobs:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
       - name: Use Node.js 20
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
@@ -29,4 +34,3 @@ jobs:
           publish: pnpm ci:publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

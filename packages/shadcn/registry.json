@@ -64,7 +64,7 @@
       "name": "agent-control-bar",
       "type": "registry:component",
       "title": "Agent Control Bar",
-      "description": "A control bar for managing media tracks (microphone, camera, screen share) with appropriate icons and loading states.",
+      "description": "A control bar for managing media tracks (microphone, camera, screen share), disconnecting the agent session, and opening the chat input, with appropriate icons and loading states.",
       "files": [
         {
           "path": "components/agents-ui/agent-control-bar.tsx",
@@ -111,6 +111,50 @@
         "@livekit/components-react@^2.0.0",
         "class-variance-authority",
         "lucide-react"
+      ],
+      "registryDependencies": ["utils"]
+    },
+    {
+      "name": "agent-audio-visualizer-radial",
+      "type": "registry:component",
+      "title": "Audio Radial Visualizer",
+      "description": "A radial bar visualizer for audio tracks.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-audio-visualizer-radial.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "hooks/agents-ui/use-agent-audio-visualizer-radial.ts",
+          "type": "registry:hook"
+        }
+      ],
+      "dependencies": [
+        "livekit-client@^2.0.0",
+        "@livekit/components-react@^2.0.0",
+        "class-variance-authority"
+      ],
+      "registryDependencies": ["utils"]
+    },
+    {
+      "name": "agent-audio-visualizer-grid",
+      "type": "registry:component",
+      "title": "Audio Grid Visualizer",
+      "description": "A grid visualizer for audio tracks.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-audio-visualizer-grid.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "hooks/agents-ui/use-agent-audio-visualizer-grid.ts",
+          "type": "registry:hook"
+        }
+      ],
+      "dependencies": [
+        "livekit-client@^2.0.0",
+        "@livekit/components-react@^2.0.0",
+        "class-variance-authority"
       ],
       "registryDependencies": ["utils"]
     }

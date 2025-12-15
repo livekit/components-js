@@ -18,7 +18,7 @@ import {
 import { useAgentAudioVisualizerBarAnimator } from '@/hooks/agents-ui/use-agent-audio-visualizer-bar';
 import { cn } from '@/lib/utils';
 
-export function cloneSingleChild(
+function cloneSingleChild(
   children: ReactNode | ReactNode[],
   props?: Record<string, unknown>,
   key?: unknown,

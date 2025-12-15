@@ -6,8 +6,9 @@
   "type": "module",
   "main": "index.ts",
   "scripts": {
-    "registry:build": "shadcn build --output ./dist",
-    "registry:serve": "python3 -m http.server 3210 -d dist"
+    "registry:build": "rm -rf dist && shadcn build --output ./dist",
+    "registry:serve": "python3 -m http.server 3210 -d dist",
+    "registry:update": "pnpm registry:build && node --experimental-strip-types --env-file=.env.local ./scripts/update.ts"
   },
   "keywords": [],
   "author": "",

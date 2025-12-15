@@ -64,7 +64,7 @@
       "name": "agent-control-bar",
       "type": "registry:component",
       "title": "Agent Control Bar",
-      "description": "A control bar for managing media tracks (microphone, camera, screen share) with appropriate icons and loading states.",
+      "description": "A control bar for managing media tracks (microphone, camera, screen share), disconnecting the agent session, and opening the chat input, with appropriate icons and loading states.",
       "files": [
         {
           "path": "components/agents-ui/agent-control-bar.tsx",

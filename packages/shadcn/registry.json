@@ -172,19 +172,6 @@
       "dependencies": ["@livekit/components-react@^2.0.0"]
     },
     {
-      "name": "agent-session-audio",
-      "type": "registry:component",
-      "title": "Agent Session Audio",
-      "description": "Ensures remote participants’ audio tracks (microphones and screen share) are audible.",
-      "files": [
-        {
-          "path": "components/agents-ui/agent-session-audio.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "dependencies": ["@livekit/components-react@^2.0.0"]
-    },
-    {
       "name": "agent-session-provider",
       "type": "registry:component",
       "title": "Agent Session Provider",
@@ -195,8 +182,7 @@
           "type": "registry:component"
         }
       ],
-      "dependencies": ["@livekit/components-react@^2.0.0"],
-      "registryDependencies": ["@agents-ui/agent-session-audio"]
+      "dependencies": ["@livekit/components-react@^2.0.0"]
     },
     {
       "name": "agent-session-start-audio-button",

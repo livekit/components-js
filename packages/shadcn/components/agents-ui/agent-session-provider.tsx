@@ -1,21 +1,21 @@
-import { SessionProvider, type SessionProviderProps } from '@livekit/components-react';
-
 import {
-  AgentSessionAudio,
-  AgentSessionAudioProps,
-} from '@/components/agents-ui/agent-session-audio';
+  SessionProvider,
+  RoomAudioRenderer,
+  type SessionProviderProps,
+  type RoomAudioRendererProps,
+} from '@livekit/components-react';
 
-export type AgentSessionProviderProps = SessionProviderProps & AgentSessionAudioProps;
+export type AgentSessionProviderProps = SessionProviderProps & RoomAudioRendererProps;
 
 export function AgentSessionProvider({
   session,
   children,
-  ...audioProps
+  ...roomAudioRendererProps
 }: AgentSessionProviderProps) {
   return (
     <SessionProvider session={session}>
       {children}
-      <AgentSessionAudio {...audioProps} />
+      <RoomAudioRenderer {...roomAudioRendererProps} />
     </SessionProvider>
   );
 }

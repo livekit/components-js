@@ -159,19 +159,6 @@
       "registryDependencies": ["utils"]
     },
     {
-      "name": "agent-avatar-video-track",
-      "type": "registry:component",
-      "title": "Agent Avatar Video Track",
-      "description": "A track for rendering an agent's avatar video track.",
-      "files": [
-        {
-          "path": "components/agents-ui/agent-avatar-video-track.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "dependencies": ["@livekit/components-react@^2.0.0"]
-    },
-    {
       "name": "agent-session-provider",
       "type": "registry:component",
       "title": "Agent Session Provider",

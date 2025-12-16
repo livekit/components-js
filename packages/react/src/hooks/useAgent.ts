@@ -79,7 +79,7 @@ type AgentStateAvailable = AgentStateCommon & {
   state: 'listening' | 'thinking' | 'speaking';
   failureReasons: null;
 
-  /** The client's assigned identity, coming from the JWT token. */
+  /** The agent's assigned identity, coming from the JWT token. */
   identity: Participant['identity'];
   name: Participant['name'];
   metadata: Participant['metadata'];

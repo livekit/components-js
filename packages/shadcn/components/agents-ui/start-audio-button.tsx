@@ -2,17 +2,12 @@ import { useEnsureRoom, useStartAudio } from '@livekit/components-react';
 import { Button } from '@/components/ui/button';
 import { Room } from 'livekit-client';
 
-export interface AgentSessionStartAudioButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface StartAudioButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   room?: Room;
   label: string;
 }
 
-export function AgentSessionStartAudioButton({
-  label,
-  room,
-  ...props
-}: AgentSessionStartAudioButtonProps) {
+export function StartAudioButton({ label, room, ...props }: StartAudioButtonProps) {
   const roomEnsured = useEnsureRoom(room);
   const { mergedProps } = useStartAudio({ room: roomEnsured, props });
 

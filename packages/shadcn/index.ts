@@ -1,5 +1,5 @@
 export * from './components/agents-ui/agent-session-provider';
-export * from './components/agents-ui/agent-session-start-audio-button';
+export * from './components/agents-ui/start-audio-button';
 export * from './components/agents-ui/agent-disconnect-button';
 export * from './components/agents-ui/agent-track-toggle';
 export * from './components/agents-ui/agent-track-control';

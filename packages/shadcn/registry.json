@@ -185,13 +185,13 @@
       "dependencies": ["@livekit/components-react@^2.0.0"]
     },
     {
-      "name": "agent-session-start-audio-button",
+      "name": "start-audio-button",
       "type": "registry:component",
-      "title": "Agent Session Start Audio Button",
-      "description": "A button for starting the agent's audio track when the browser blocks audio playback.",
+      "title": "Start Audio Button",
+      "description": "A button for starting the agent session's audio track when the browser blocks audio playback.",
       "files": [
         {
-          "path": "components/agents-ui/agent-session-start-audio-button.tsx",
+          "path": "components/agents-ui/start-audio-button.tsx",
           "type": "registry:component"
         }
       ],

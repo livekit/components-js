@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
-import { AgentSessionStartAudioButton, type AgentSessionStartAudioButtonProps } from '@agents-ui';
+import { StartAudioButton, type StartAudioButtonProps } from '@agents-ui';
 
 export default {
-  component: AgentSessionStartAudioButton,
+  component: StartAudioButton,
   decorators: [AgentSessionProvider],
-  render: (args: AgentSessionStartAudioButtonProps) => {
+  render: (args: StartAudioButtonProps) => {
     return (
       <>
         <p>A button will be rendered below if audio playback is blocked.</p>
-        <AgentSessionStartAudioButton {...args} />
+        <StartAudioButton {...args} />
       </>
     );
   },
@@ -30,6 +30,6 @@ export default {
   },
 };
 
-export const Default: StoryObj<AgentSessionStartAudioButtonProps> = {
+export const Default: StoryObj<StartAudioButtonProps> = {
   args: {},
 };

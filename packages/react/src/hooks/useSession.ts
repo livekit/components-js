@@ -386,7 +386,7 @@ export function useSession(
       participant: localParticipant,
       publication: cameraPublication,
     };
-  }, [localParticipant, cameraPublication, cameraPublication?.isMuted]);
+  }, [localParticipant, cameraPublication]);
   const microphonePublication = localParticipant.getTrackPublication(Track.Source.Microphone);
   const localMicrophone = React.useMemo(() => {
     if (!microphonePublication) {
@@ -397,7 +397,7 @@ export function useSession(
       participant: localParticipant,
       publication: microphonePublication,
     };
-  }, [localParticipant, microphonePublication, microphonePublication?.isMuted]);
+  }, [localParticipant, microphonePublication]);
   const screenSharePublication = localParticipant.getTrackPublication(Track.Source.ScreenShare);
   const localScreenShare = React.useMemo(() => {
     if (!screenSharePublication) {
@@ -408,7 +408,7 @@ export function useSession(
       participant: localParticipant,
       publication: screenSharePublication,
     };
-  }, [localParticipant, screenSharePublication, screenSharePublication?.isMuted]);
+  }, [localParticipant, screenSharePublication]);
 
   const {
     agentTimeoutFailureReason,

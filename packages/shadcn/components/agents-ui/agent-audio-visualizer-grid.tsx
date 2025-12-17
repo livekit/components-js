@@ -159,7 +159,7 @@ const GridCell = memo(function GridCell({
 });
 
 export type AgentAudioVisualizerGridProps = GridOptions & {
-  state: AgentState;
+  state?: AgentState;
   audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
   className?: string;
   children?: ReactNode;
@@ -167,7 +167,7 @@ export type AgentAudioVisualizerGridProps = GridOptions & {
 
 export function AgentAudioVisualizerGrid({
   size = 'md',
-  state,
+  state = 'connecting',
   radius,
   rowCount: _rowCount = 5,
   columnCount: _columnCount = 5,

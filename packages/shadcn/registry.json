@@ -157,6 +157,65 @@
         "class-variance-authority"
       ],
       "registryDependencies": ["utils"]
+    },
+    {
+      "name": "agent-session-provider",
+      "type": "registry:component",
+      "title": "Agent Session Provider",
+      "description": "A component for providing an agent's session context and ensuring remote participants’ audio tracks (microphones and screen share) are audible.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-session-provider.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": ["@livekit/components-react@^2.0.0"]
+    },
+    {
+      "name": "start-audio-button",
+      "type": "registry:component",
+      "title": "Start Audio Button",
+      "description": "A button for starting the agent session's audio track when the browser blocks audio playback.",
+      "files": [
+        {
+          "path": "components/agents-ui/start-audio-button.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": ["livekit-client@^2.0.0", "@livekit/components-react@^2.0.0"],
+      "registryDependencies": ["button"]
+    },
+    {
+      "name": "agent-chat-indicator",
+      "type": "registry:component",
+      "title": "Agent Chat Indicator",
+      "description": "A component for indicating the agent's chat status with a blinking dot. Useful for indicating the agent is thinking before generating a response.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-chat-indicator.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": ["motion", "class-variance-authority"],
+      "registryDependencies": ["utils"]
+    },
+    {
+      "name": "agent-chat-transcript",
+      "type": "registry:component",
+      "title": "Agent Chat Transcript",
+      "description": "A component for displaying the agent session's chat transcript.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-chat-transcript.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": ["@livekit/components-react@^2.0.0", "motion"],
+      "registryDependencies": [
+        "@ai-elements/message",
+        "@ai-elements/conversation",
+        "@agents-ui/agent-chat-indicator"
+      ]
     }
   ]
 }

@@ -44,8 +44,8 @@ export interface AgentAudioVisualizerRadialProps {
 }
 
 export function AgentAudioVisualizerRadial({
-  size,
-  state,
+  size = 'md',
+  state = 'connecting',
   radius,
   barCount,
   audioTrack,

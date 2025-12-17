@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const motionAnimationProps = {

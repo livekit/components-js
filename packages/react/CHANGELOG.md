@@ -1,5 +1,17 @@
 # @livekit/components-react
 
+## 2.9.18
+
+### Patch Changes
+
+- Fix bug in useSession not exposing tracks when muted and switch empty value from null to undefined - [#1244](https://github.com/livekit/components-js/pull/1244) ([@1egoman](https://github.com/1egoman))
+
+- Add local screenshare track to useSession - [#1255](https://github.com/livekit/components-js/pull/1255) ([@1egoman](https://github.com/1egoman))
+
+- Update nextjs examples with useSession/useAgent hooks - [#1242](https://github.com/livekit/components-js/pull/1242) ([@pblazej](https://github.com/pblazej))
+
+- Add participant identity, name, and metadata to root useAgent() return value - [#1246](https://github.com/livekit/components-js/pull/1246) ([@1egoman](https://github.com/1egoman))
+
 ## 2.9.17
 
 ### Patch Changes

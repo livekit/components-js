@@ -56,6 +56,10 @@ export type SessionConnectOptions = {
       enabled?: boolean;
       publishOptions?: TrackPublishOptions;
     };
+    screenShare?: {
+      enabled?: boolean;
+      publishOptions?: TrackPublishOptions;
+    };
   };
 
   /** Options for Room.connect(.., .., opts) */
@@ -94,6 +98,7 @@ type SessionStateConnecting = SessionStateCommon & {
   local: {
     cameraTrack: undefined;
     microphoneTrack: undefined;
+    screenShareTrack: undefined;
   };
 };
 
@@ -107,6 +112,7 @@ type SessionStateConnected = SessionStateCommon & {
   local: {
     cameraTrack?: TrackReference;
     microphoneTrack?: TrackReference;
+    screenShareTrack?: TrackReference;
   };
 };
 
@@ -117,6 +123,7 @@ type SessionStateDisconnected = SessionStateCommon & {
   local: {
     cameraTrack: undefined;
     microphoneTrack: undefined;
+    screenShareTrack: undefined;
   };
 };
 
@@ -391,6 +398,17 @@ export function useSession(
       publication: microphonePublication,
     };
   }, [localParticipant, microphonePublication, microphonePublication?.isMuted]);
+  const screenSharePublication = localParticipant.getTrackPublication(Track.Source.ScreenShare);
+  const localScreenShare = React.useMemo(() => {
+    if (!screenSharePublication) {
+      return undefined;
+    }
+    return {
+      source: Track.Source.ScreenShare,
+      participant: localParticipant,
+      publication: screenSharePublication,
+    };
+  }, [localParticipant, screenSharePublication, screenSharePublication?.isMuted]);
 
   const {
     agentTimeoutFailureReason,
@@ -447,6 +465,7 @@ export function useSession(
           local: {
             cameraTrack: undefined,
             microphoneTrack: undefined,
+            screenShareTrack: undefined,
           },
         };
 
@@ -462,6 +481,7 @@ export function useSession(
           local: {
             cameraTrack: localCamera,
             microphoneTrack: localMicrophone,
+            screenShareTrack: localScreenShare,
           },
         };
 
@@ -475,6 +495,7 @@ export function useSession(
           local: {
             cameraTrack: undefined,
             microphoneTrack: undefined,
+            screenShareTrack: undefined,
           },
         };
     }
@@ -564,6 +585,13 @@ export function useSession(
               true,
               undefined,
               tracks.camera?.publishOptions ?? {},
+            )
+          : Promise.resolve(),
+        tracks.screenShare?.enabled
+          ? room.localParticipant.setScreenShareEnabled(
+              true,
+              undefined,
+              tracks.screenShare?.publishOptions ?? {},
             )
           : Promise.resolve(),
       ]);

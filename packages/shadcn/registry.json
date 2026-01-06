@@ -6,7 +6,7 @@
     {
       "name": "agent-disconnect-button",
       "type": "registry:component",
-      "title": "Agent Session Disconnect",
+      "title": "Agent Disconnect Button",
       "description": "A button for disconnecting the agent session.",
       "files": [
         {
@@ -94,7 +94,7 @@
     {
       "name": "agent-audio-visualizer-bar",
       "type": "registry:component",
-      "title": "Audio Bar Visualizer",
+      "title": "Agent Audio Visualizer Bar",
       "description": "A linear bar visualizer for audio tracks.",
       "files": [
         {
@@ -117,7 +117,7 @@
     {
       "name": "agent-audio-visualizer-radial",
       "type": "registry:component",
-      "title": "Audio Radial Visualizer",
+      "title": "Agent Audio Visualizer Radial",
       "description": "A radial bar visualizer for audio tracks.",
       "files": [
         {
@@ -139,7 +139,7 @@
     {
       "name": "agent-audio-visualizer-grid",
       "type": "registry:component",
-      "title": "Audio Grid Visualizer",
+      "title": "Agent Audio Visualizer Grid",
       "description": "A grid visualizer for audio tracks.",
       "files": [
         {

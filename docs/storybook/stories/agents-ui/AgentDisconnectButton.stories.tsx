@@ -12,9 +12,13 @@ export default {
   argTypes: {
     size: {
       options: ['default', 'sm', 'lg', 'icon', 'icon-sm', 'icon-lg'],
-      control: { type: 'select' },
+      control: { type: 'radio' },
     },
-    onClick: { action: 'onClick' },
+    variant: {
+      options: ['default', 'outline', 'destructive', 'ghost', 'link'],
+      control: { type: 'radio' },
+    },
+    disabled: { control: { type: 'boolean' } },
     className: { control: { type: 'text' } },
   },
   parameters: {

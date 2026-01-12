@@ -1,4 +1,6 @@
-import { useMemo } from 'react';
+'use client';
+
+import { type ComponentProps, useMemo } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type LocalAudioTrack, type RemoteAudioTrack } from 'livekit-client';
 import {
@@ -35,14 +37,58 @@ export const AgentAudioVisualizerRadialVariants = cva(
   },
 );
 
+/**
+ * Props for the AgentAudioVisualizerRadial component.
+ */
 export interface AgentAudioVisualizerRadialProps {
+  /**
+   * The size of the visualizer.
+   * @defaultValue 'md'
+   */
+  size?: 'icon' | 'sm' | 'md' | 'lg' | 'xl';
+  /**
+   * The current state of the agent. Determines the animation pattern.
+   * @defaultValue 'connecting'
+   */
   state?: AgentState;
+  /**
+   * The radius (distance from center) for the radial bars.
+   * If not provided, defaults based on size.
+   */
   radius?: number;
+  /**
+   * The number of bars to display around the circle.
+   * Should be divisible by 4 for optimal visual results.
+   * If not provided, defaults to 12 for 'icon'/'sm', 24 for others.
+   */
   barCount?: number;
+  /**
+   * The audio track to visualize. Can be a local/remote audio track or a track reference.
+   */
   audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
+  /**
+   * Additional CSS class names to apply to the container.
+   */
   className?: string;
 }
 
+/**
+ * A radial (circular) audio visualizer that responds to agent state and audio levels.
+ * Displays animated bars arranged in a circle that react to the current agent state
+ * and audio volume when speaking.
+ *
+ * @extends ComponentProps<'div'>
+ *
+ * @example
+ * ```tsx
+ * <AgentAudioVisualizerRadial
+ *   size="lg"
+ *   state="speaking"
+ *   barCount={24}
+ *   audioTrack={agentAudioTrack}
+ * />
+ * ```
+ */
 export function AgentAudioVisualizerRadial({
   size = 'md',
   state = 'connecting',
@@ -50,7 +96,10 @@ export function AgentAudioVisualizerRadial({
   barCount,
   audioTrack,
   className,
-}: AgentAudioVisualizerRadialProps & VariantProps<typeof AgentAudioVisualizerRadialVariants>) {
+  ...props
+}: AgentAudioVisualizerRadialProps &
+  ComponentProps<'div'> &
+  VariantProps<typeof AgentAudioVisualizerRadialVariants>) {
   const _barCount = useMemo(() => {
     if (barCount) {
       return barCount;
@@ -122,7 +171,10 @@ export function AgentAudioVisualizerRadial({
   }, [distanceFromCenter, _barCount]);
 
   return (
-    <div className={cn(AgentAudioVisualizerRadialVariants({ size }), 'relative', className)}>
+    <div
+      className={cn(AgentAudioVisualizerRadialVariants({ size }), 'relative', className)}
+      {...props}
+    >
       {bands.map((band, idx) => {
         const angle = (idx / _barCount) * Math.PI * 2;
 

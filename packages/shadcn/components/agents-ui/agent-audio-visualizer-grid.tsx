@@ -1,3 +1,5 @@
+'use client';
+
 import React, {
   type ReactNode,
   type CSSProperties,
@@ -6,6 +8,7 @@ import React, {
   Children,
   cloneElement,
   isValidElement,
+  type ComponentProps,
 } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
@@ -66,13 +69,41 @@ export const AgentAudioVisualizerGridVariants = cva(
   },
 );
 
+/**
+ * Configuration options for the grid visualizer.
+ */
 export interface GridOptions {
+  /**
+   * The radius for the animation spread effect.
+   */
   radius?: number;
+  /**
+   * The interval in milliseconds between animation frames.
+   * @defaultValue 100
+   */
   interval?: number;
+  /**
+   * The number of rows in the grid.
+   * @defaultValue 5
+   */
   rowCount?: number;
+  /**
+   * The number of columns in the grid.
+   * @defaultValue 5
+   */
   columnCount?: number;
+  /**
+   * A function to transform the style of each grid cell based on its position.
+   * Receives the cell index, row count, and column count as arguments.
+   */
   transformer?: (index: number, rowCount: number, columnCount: number) => CSSProperties;
+  /**
+   * Additional CSS class names to apply to the container.
+   */
   className?: string;
+  /**
+   * Custom children to render as grid cells.
+   */
   children?: ReactNode;
 }
 
@@ -158,13 +189,53 @@ const GridCell = memo(function GridCell({
   });
 });
 
+/**
+ * Props for the AgentAudioVisualizerGrid component.
+ */
 export type AgentAudioVisualizerGridProps = GridOptions & {
+  /**
+   * The size of the visualizer.
+   * @defaultValue 'md'
+   */
+  size?: 'icon' | 'sm' | 'md' | 'lg' | 'xl';
+  /**
+   * The current state of the agent. Determines the animation pattern.
+   * @defaultValue 'connecting'
+   */
   state?: AgentState;
+  /**
+   * The audio track to visualize. Can be a local/remote audio track or a track reference.
+   */
   audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
+  /**
+   * Additional CSS class names to apply to the container.
+   */
   className?: string;
+  /**
+   * Custom children to render as grid cells. Each child receives data-lk-index
+   * and data-lk-highlighted props.
+   */
   children?: ReactNode;
 } & VariantProps<typeof AgentAudioVisualizerGridVariants>;
 
+/**
+ * A grid-style audio visualizer that responds to agent state and audio levels.
+ * Displays an animated grid of cells that react to the current agent state
+ * and audio volume when speaking.
+ *
+ * @extends ComponentProps<'div'>
+ *
+ * @example
+ * ```tsx
+ * <AgentAudioVisualizerGrid
+ *   size="md"
+ *   state="speaking"
+ *   rowCount={5}
+ *   columnCount={5}
+ *   audioTrack={agentAudioTrack}
+ * />
+ * ```
+ */
 export function AgentAudioVisualizerGrid({
   size = 'md',
   state = 'connecting',
@@ -176,7 +247,9 @@ export function AgentAudioVisualizerGrid({
   className,
   children,
   audioTrack,
-}: AgentAudioVisualizerGridProps) {
+  style,
+  ...props
+}: AgentAudioVisualizerGridProps & ComponentProps<'div'>) {
   const { columnCount, rowCount, items } = useGrid(size, _columnCount, _rowCount);
   const highlightedCoordinate = useAgentAudioVisualizerGridAnimator(
     state,
@@ -194,7 +267,8 @@ export function AgentAudioVisualizerGrid({
   return (
     <div
       className={cn(AgentAudioVisualizerGridVariants({ size }), className)}
-      style={{ gridTemplateColumns: `repeat(${columnCount}, 1fr)` }}
+      style={{ ...style, gridTemplateColumns: `repeat(${columnCount}, 1fr)`, e }}
+      {...props}
     >
       {items.map((idx) => (
         <GridCell

@@ -6,8 +6,9 @@
   "type": "module",
   "main": "index.ts",
   "scripts": {
-    "registry:build": "rm -rf dist && shadcn build --output ./dist",
-    "registry:serve": "python3 -m http.server 3210 -d dist",
+    "registry:build": "rm -rf dist && shadcn build --output ./dist/r && pnpm registry:doc-gen",
+    "registry:serve": "python3 -m http.server 3210 -d dist/r",
+    "registry:doc-gen": "node --experimental-strip-types --env-file=.env.local ./scripts/doc-gen.ts",
     "registry:update": "pnpm registry:build && node --experimental-strip-types --env-file=.env.local ./scripts/update.ts"
   },
   "keywords": [],
@@ -52,6 +53,7 @@
     "eslint-plugin-prettier": "^5.5.0",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "react-docgen-typescript": "^2.4.0",
     "shadcn": "^3.5.1",
     "tailwindcss": "^4",
     "typescript": "^5"

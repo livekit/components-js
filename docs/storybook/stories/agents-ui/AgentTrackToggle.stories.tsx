@@ -28,7 +28,17 @@ export default {
       options: ['default', 'sm', 'lg'],
       control: { type: 'radio' },
     },
+    variant: {
+      options: ['default', 'outline'],
+    },
+    source: {
+      options: ['microphone', 'camera', 'screen_share'],
+      control: { type: 'select' },
+    },
     pending: { control: { type: 'boolean' } },
+    pressed: { control: { type: 'boolean' } },
+    disabled: { control: { type: 'boolean' } },
+    defaultPressed: { control: { type: 'boolean' } },
     className: { control: { type: 'text' } },
   },
   parameters: {

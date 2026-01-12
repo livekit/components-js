@@ -6,12 +6,6 @@ import {
 } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentControlBar, AgentControlBarProps } from '@agents-ui';
 
-// TODO: Add argTypes for 'saveUserChoices' prop - boolean to save user device preferences
-// TODO: Add argTypes for 'onDisconnect' prop - action callback when disconnect is clicked
-// TODO: Add argTypes for 'onIsChatOpenChange' prop - action callback when chat open state changes
-// TODO: Add argTypes for 'onDeviceError' prop - action callback when device error occurs
-// TODO: Add argTypes for 'className' prop - additional CSS classes for container
-
 interface Args {
   variant: 'default' | 'outline' | 'livekit';
   isChatOpen: boolean;

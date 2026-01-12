@@ -3,8 +3,6 @@ import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentChatIndicator, AgentChatIndicatorProps } from '@agents-ui';
 
-// TODO: Add argTypes for 'className' prop - additional CSS classes for customization
-
 export default {
   component: AgentChatIndicator,
   decorators: [AgentSessionProvider],

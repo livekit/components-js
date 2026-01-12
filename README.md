@@ -231,6 +231,7 @@ The highest priority is currently to get the core and react packages to a stable
 - **Internal Packages**
   - [Core](/packages/core/README.md)
   - [Styles](/packages/styles/README.md)
+  - [Shadcn](/packages/shadcn/README.md)
 
 <!--NAV_END-->
 <!--BEGIN_REPO_NAV-->

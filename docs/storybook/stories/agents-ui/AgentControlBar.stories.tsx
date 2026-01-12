@@ -6,28 +6,66 @@ import {
 } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentControlBar, AgentControlBarProps } from '@agents-ui';
 
+// TODO: Add argTypes for 'saveUserChoices' prop - boolean to save user device preferences
+// TODO: Add argTypes for 'onDisconnect' prop - action callback when disconnect is clicked
+// TODO: Add argTypes for 'onIsChatOpenChange' prop - action callback when chat open state changes
+// TODO: Add argTypes for 'onDeviceError' prop - action callback when device error occurs
+// TODO: Add argTypes for 'className' prop - additional CSS classes for container
+
+interface Args {
+  variant: 'default' | 'outline' | 'livekit';
+  isChatOpen: boolean;
+  isConnected: boolean;
+  'controls.microphone': boolean;
+  'controls.camera': boolean;
+  'controls.screenShare': boolean;
+  'controls.chat': boolean;
+  'controls.leave': boolean;
+}
+
 export default {
   component: AgentControlBar,
   decorators: [AgentSessionProvider],
-  render: (args: AgentControlBarProps) => {
+  render: (args: Args) => {
+    const props = {
+      variant: args.variant,
+      isChatOpen: args.isChatOpen,
+      isConnected: args.isConnected,
+      controls: {
+        microphone: args['controls.microphone'],
+        camera: args['controls.camera'],
+        screenShare: args['controls.screenShare'],
+        chat: args['controls.chat'],
+        leave: args['controls.leave'],
+      },
+    };
+
     useMicrophone();
-    return <AgentControlBar {...args} className="min-w-lg  mx-auto" />;
+    return <AgentControlBar {...props} className="min-w-lg  mx-auto" />;
   },
   args: {
+    variant: 'livekit',
+    isChatOpen: false,
     isConnected: true,
-    controls: {
-      microphone: true,
-      camera: true,
-      screenShare: true,
-      chat: true,
-      leave: true,
-    },
+    'controls.microphone': true,
+    'controls.camera': true,
+    'controls.screenShare': true,
+    'controls.chat': true,
+    'controls.leave': true,
     className: 'w-full',
   },
   argTypes: {
-    controls: { control: { type: 'object' } },
-    isConnected: { control: { type: 'boolean' } },
+    variant: {
+      options: ['default', 'outline', 'livekit'],
+      control: { type: 'radio' },
+    },
     isChatOpen: { control: { type: 'boolean' } },
+    isConnected: { control: { type: 'boolean' } },
+    'controls.microphone': { control: { type: 'boolean' } },
+    'controls.camera': { control: { type: 'boolean' } },
+    'controls.screenShare': { control: { type: 'boolean' } },
+    'controls.chat': { control: { type: 'boolean' } },
+    'controls.leave': { control: { type: 'boolean' } },
   },
   parameters: {
     layout: 'centered',

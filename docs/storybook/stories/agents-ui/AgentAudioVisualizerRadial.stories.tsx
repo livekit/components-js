@@ -6,6 +6,8 @@ import {
 } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentAudioVisualizerRadial, AgentAudioVisualizerRadialProps } from '@agents-ui';
 
+// TODO: Add argTypes for 'audioTrack' prop - currently handled in render function
+
 export default {
   component: AgentAudioVisualizerRadial,
   decorators: [AgentSessionProvider],

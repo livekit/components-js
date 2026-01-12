@@ -3,6 +3,9 @@ import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentChatTranscript, AgentChatTranscriptProps } from '@agents-ui';
 
+// TODO: Add argTypes for 'messages' prop - could add control for number of messages or empty state
+// TODO: Add argTypes for 'className' prop - additional CSS classes for container customization
+
 export default {
   component: AgentChatTranscript,
   decorators: [AgentSessionProvider],

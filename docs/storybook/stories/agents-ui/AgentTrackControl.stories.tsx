@@ -27,10 +27,15 @@ export default {
     );
   },
   argTypes: {
-    size: {
-      options: ['default', 'sm', 'lg'],
-      control: { type: 'radio' },
+    variant: {
+      options: ['default', 'outline'],
+      control: { type: 'select' },
     },
+    source: {
+      options: ['microphone', 'camera', 'screen_share'],
+      control: { type: 'select' },
+    },
+    pressed: { control: { type: 'boolean' } },
     pending: { control: { type: 'boolean' } },
     className: { control: { type: 'text' } },
   },

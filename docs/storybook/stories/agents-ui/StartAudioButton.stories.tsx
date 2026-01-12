@@ -3,6 +3,9 @@ import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { StartAudioButton, type StartAudioButtonProps } from '@agents-ui';
 
+// TODO: Add argTypes for 'room' prop - Room instance (difficult to control in Storybook but could document)
+// TODO: Add argTypes for 'disabled' prop - boolean to disable the button (inherited from ButtonHTMLAttributes)
+
 export default {
   component: StartAudioButton,
   decorators: [AgentSessionProvider],

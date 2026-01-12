@@ -6,6 +6,9 @@ import {
 } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentAudioVisualizerGrid, AgentAudioVisualizerGridProps } from '@agents-ui';
 
+// TODO: Add argTypes for 'transformer' prop - function to transform cell styles (demonstrated in Demo stories but not controllable)
+// TODO: Add argTypes for 'audioTrack' prop - currently handled in render function
+
 export default {
   component: AgentAudioVisualizerGrid,
   decorators: [AgentSessionProvider],

@@ -7,7 +7,7 @@
   "main": "index.ts",
   "scripts": {
     "registry:build": "rm -rf dist && shadcn build --output ./dist/r && pnpm registry:doc-gen",
-    "registry:serve": "python3 -m http.server 3210 -d dist/r",
+    "registry:serve": "python3 -m http.server 3210 -d ./dist",
     "registry:doc-gen": "node --experimental-strip-types --env-file=.env.local ./scripts/doc-gen.ts",
     "registry:update": "pnpm registry:build && node --experimental-strip-types --env-file=.env.local ./scripts/update.ts"
   },

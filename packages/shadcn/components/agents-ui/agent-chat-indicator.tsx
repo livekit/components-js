@@ -1,6 +1,6 @@
-import { type ComponentProps } from 'react';
-import { motion } from 'motion/react';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { motion, type HTMLMotionProps } from 'motion/react';
+
 import { cn } from '@/lib/utils';
 
 const motionAnimationProps = {
@@ -10,14 +10,14 @@ const motionAnimationProps = {
       scale: 0.1,
       transition: {
         duration: 0.1,
-        ease: 'linear',
+        ease: 'linear' as const,
       },
     },
     visible: {
       opacity: [0.5, 1],
       scale: [1, 1.2],
       transition: {
-        type: 'spring',
+        type: 'spring' as const,
         bounce: 0,
         duration: 0.5,
         repeat: Infinity,
@@ -74,12 +74,12 @@ export function AgentChatIndicator({
   className,
   ...props
 }: AgentChatIndicatorProps &
-  ComponentProps<'span'> &
+  HTMLMotionProps<'span'> &
   VariantProps<typeof agentChatIndicatorVariants>) {
   return (
     <motion.span
       {...motionAnimationProps}
-      transition={{ duration: 0.1, ease: 'linear' }}
+      transition={{ duration: 0.1, ease: 'linear' as const }}
       className={cn(agentChatIndicatorVariants({ size }), className)}
       {...props}
     />

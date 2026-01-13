@@ -1,11 +1,9 @@
 <!--BEGIN_BANNER_IMAGE-->
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="/.github/banner_dark.png">
   <source media="(prefers-color-scheme: light)" srcset="/.github/banner_light.png">
   <img style="width:100%;" alt="The LiveKit icon, the name of the repository and some sample code in the background." src="https://raw.githubusercontent.com/livekit/components-js/main/.github/banner_light.png">
 </picture>
-
 <!--END_BANNER_IMAGE-->
 
 <h1>
@@ -13,20 +11,53 @@
 </h1>
 
 <!--BEGIN_DESCRIPTION-->
-Use this SDK to add realtime video, audio and data features to your React app. By connecting to <a href="https://livekit.io/">LiveKit</a> Cloud or a self-hosted server, you can quickly build applications such as multi-modal AI, live streaming, or video calls with just a few lines of code.
+Use this SDK to add realtime, multi-modal, agentic experiences to your React app. By connecting to <a href="https://livekit.io/">LiveKit</a> Cloud or a self-hosted server, you can quickly build agentic experiences with just a few lines of code.
 <!--END_DESCRIPTION-->
 
 <br/>
 <br/>
 
-![LiveKit Components Preview](./.github/assets/livekit-meet.jpg)
+<picture>
+  <source srcset="./.github/assets/readme-hero-dark.webp" media="(prefers-color-scheme: dark)">
+  <source srcset="./.github/assets/readme-hero-light.webp" media="(prefers-color-scheme: light)">
+  <img src="./.github/assets/readme-hero-light.webp" alt="App screenshot">
+</picture>
 
-## Agents Quick Start
+## Agents UI Quick Start
 
-First add the library to your project:
+Agents UI is a set of open source [Shadcn](https://ui.shadcn.com/) components for building voice-first agents using LiveKit.
 
-```shell
-npm i @livekit/components-react
+You can find more information in the [Agents UI API references](https://docs.livekit.io/reference/components/shadcn/) and in the [Agents UI README](packages/shadcn/README.md).
+
+## Prerequisites {% #prerequisites %}
+
+Before installing Agents UI, make sure your environment meets the following requirements:
+
+- [Node.js](https://nodejs.org/), version 18 or later
+- [shadcn/ui](https://ui.shadcn.com/docs/installation/next) is installed in your project.
+
+> [!NOTE]
+> Running any install command will automatically install shadcn/ui for you.
+> Agents UI is built targeting React 19 (no forwardRef usage) and Tailwind CSS 4.
+
+### Installation
+
+First add the Agents UI registry to your components.json file:
+
+```json
+{
+  ...
+  "registries": {
+     ...
+    "@agents-ui": "https://livekit.io/ui/r/{name}.json"
+  }
+}
+```
+
+Then install the component you want to use from the CLI. Ensure you've navigated to the root of your project.
+
+```bash
+pnpm dlx shadcn@latest add @agents-ui/agent-session-provider @agents-ui/agent-control-bar @agents-ui/agent-chat-transcript @agents-ui/agent-audio-visualizer-bar
 ```
 
 Next, you need a running agent. If you don't already have one, [it only takes a few minutes to set one up](https://docs.livekit.io/agents/start/voice-ai).
@@ -36,27 +67,54 @@ The rest of this guide assumes your agent is configured for [explicit dispatch](
 Then, you can use the agents sdk to connect and interact with your agent:
 
 ```tsx
-import { useEffect, useState } from "react";
-import { TokenSource } from "livekit-client";
-import {
-  useSession,
-  useAgent,
-  SessionProvider,
-  VideoTrack,
-  StartAudio,
-  RoomAudioRenderer,
-} from "@livekit/components-react";
+'use client';
+
+import { TokenSource } from 'livekit-client';
+import { VideoTrack, useAgent, useSession, useSessionContext } from '@livekit/components-react';
+import { AgentSessionProvider } from '@/components/agents-ui/agent-session-provider';
+import { AgentControlBar } from '@/components/agents-ui/agent-control-bar';
+import { AgentChatTranscript } from '@/components/agents-ui/agent-chat-transcript';
+import { AgentAudioVisualizerBar } from '@/components/agents-ui/agent-audio-visualizer-bar';
+import { StartAudioButton } from '@/components/agents-ui/start-audio-button';
 
 // Generated credentials manually and put them here
 // Or, generate them another way: https://github.com/livekit/client-sdk-js?tab=readme-ov-file#generating-a-urltoken-with-tokensource
 const tokenSource = TokenSource.literal({
-  serverUrl: "wss://my-livekit-server",
+  serverUrl: 'wss://my-livekit-server',
   participantToken: 'generated-jwt',
 });
 
+function AgentUI() {
+  const session = useSessionContext();
+  const agent = useAgent(session);
+
+  return (
+    <div className="flex flex-col gap-4 p-4">
+      {/* Chat transcript */}
+      <AgentChatTranscript />
+
+      {/* Local camera feed: */}
+      {session.local.cameraTrack ? <VideoTrack trackRef={session.local.cameraTrack} /> : null}
+
+      {/* Agent camera feed */}
+      {agent.cameraTrack ? (
+        <VideoTrack trackRef={agent.cameraTrack} />
+      ) : (
+        <AgentAudioVisualizerBar />
+      )}
+
+      {/* Agent control bar for local audio */}
+      <AgentControlBar variant="livekit" isConnected={session.isConnected} />
+
+      {/* Renders a start audio button if the browser blocks autoplay of audio */}
+      <StartAudioButton label="Start audio" />
+    </div>
+  );
+}
+
 export default function Example() {
   const session = useSession(tokenSource, {
-    agentName: 'example-agent', /* <== Put your agent name here! */
+    agentName: 'example-agent' /* <== Put your agent name here! */,
   });
 
   const toggleStarted = () => {
@@ -67,99 +125,34 @@ export default function Example() {
     }
   };
 
-  const { messages, send, isSending } = useSessionMessages(session);
-  const [chatMessage, setChatMessage] = useState('');
-
-  const agent = useAgent(session);
-
   return (
-    <SessionProvider session={session}>
-      <button onClick={toggleStarted} disabled={session.connectionState === 'connecting'}>
-        {session.isConnected ? 'Disconnect' : 'Connect'}
-      </button>
-
+    <AgentSessionProvider session={session}>
       {session.isConnected ? (
-        <div className="flex flex-col gap-4 p-4">
-          <span>
-            <strong>Connection State:</strong>
-            {session.connectionState}
-          </span>
-          <span>
-            <strong>Agent State:</strong>
-            {agent.state}
-          </span>
-
-          {/* Local and agent camera feeds: */}
-          {session.local.cameraTrack ? (
-            <VideoTrack trackRef={session.local.cameraTrack} />
-          ) : null}
-          {agent.cameraTrack ? (
-            <VideoTrack trackRef={agent.cameraTrack} />
-          ) : null}
-
-          {/* Chat messages (including transcriptions): */}
-          <ul>
-            {messages.map(receivedMessage => (
-              <li key={receivedMessage.id}>{receivedMessage.message}</li>
-            ))}
-            <li className="flex items-center gap-1">
-              <input
-                type="text"
-                value={chatMessage}
-                onChange={e => setChatMessage(e.target.value)}
-                className="border border-2"
-              />
-              <button
-                disabled={isSending}
-                onClick={() => {
-                  send(chatMessage);
-                  setChatMessage('');
-                }}
-              >{isSending ? 'Sending' : 'Send'}</button>
-            </li>
-          </ul>
-    
-          <StartAudio label="Start audio" />
-          <RoomAudioRenderer />
-        </div>
-      ) : null}
-    </SessionProvider>
-  );
-}
-```
-
-### Video Conference Quick Start
-
-First add the library to your project:
-
-```shell
-npm i @livekit/components-react
-```
-
-Then use any of our pre-fabricated or helper components:
-
-```tsx
-import { LiveKitRoom, VideoConference } from '@livekit/components-react';
-
-const TOKEN = 'generated-jwt';
-const WS_URL = 'wss://my-livekit-server';
-
-export default function Example() {
-  return (
-    <LiveKitRoom token={TOKEN} serverUrl={WS_URL} connect={true}>
-      <VideoConference />
-    </LiveKitRoom>
+        <AgentUI />
+      ) : (
+        <button onClick={toggleStarted} disabled={session.connectionState === 'connecting'}>
+          Connect
+        </button>
+      )}
+    </AgentSessionProvider>
   );
 }
 ```
 
 ## Docs
 
-For more information checkout the [LiveKit Components Docs](https://docs.livekit.io/reference/components/react/)
+For more information checkout the
+
+- [Agents UI API references](https://docs.livekit.io/reference/components/shadcn/)
+- [LiveKit Components Docs](https://docs.livekit.io/reference/components/react/)
 
 ## Examples
 
-There are some basic examples of how to use and customize LiveKit components in this mono repo. They are located in the nextjs examples folder [`/examples/nextjs`](./examples/nextjs/). In order to set the examples up locally follow the [Development Setup](#development-setup).
+### Voice Agent Starter Application
+
+Check out our fully featured voice agent, quick start application built with React and LiveKit Components. The full implementation is available in the [livekit-examples/agent-starter-react](https://github.com/livekit-examples/agent-starter-react) repo. Give it a test drive by creating a sandbox voice agent in [LiveKit Cloud](https://cloud.livekit.io/projects/p_/sandbox/templates/agent-starter-react).
+
+### Video Conference Starter Application
 
 We also have a fully featured video conferencing application built on top of LiveKit Components. Start a video conference at [meet.livekit.io](https://meet.livekit.io) and take a look at the implementation in the [livekit-examples/meet](https://github.com/livekit-examples/meet) repo.
 
@@ -247,5 +240,4 @@ The highest priority is currently to get the core and react packages to a stable
 </tbody>
 </table>
 <!--END_REPO_NAV-->
-
 

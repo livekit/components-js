@@ -83,7 +83,7 @@ type TrackDeviceSelectProps = React.ComponentProps<typeof SelectTrigger> &
      * The variant of the select.
      * @defaultValue 'default'
      */
-    variant?: 'default' | 'outline';
+    variant?: 'default' | 'outline' | null;
     /**
      * The type of media device (audioinput or videoinput).
      */

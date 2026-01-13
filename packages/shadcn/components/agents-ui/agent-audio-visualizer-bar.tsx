@@ -46,17 +46,17 @@ function cloneSingleChild(
 export const AgentAudioVisualizerBarVariants = cva(
   [
     'relative flex items-center justify-center',
-    '[&_>_*]:rounded-full [&_>_*]:transition-colors [&_>_*]:duration-250 [&_>_*]:ease-linear',
-    '[&_>_*]:bg-transparent [&_>_*]:data-[lk-highlighted=true]:bg-current',
+    '*:rounded-full *:transition-colors *:duration-250 *:ease-linear',
+    '*:bg-transparent *:data-[lk-highlighted=true]:bg-current',
   ],
   {
     variants: {
       size: {
-        icon: ['h-[24px] gap-[2px]', '[&_>_*]:w-[4px] [&_>_*]:min-h-[4px]'],
-        sm: ['h-[56px] gap-[4px]', '[&_>_*]:w-[8px] [&_>_*]:min-h-[8px]'],
-        md: ['h-[112px] gap-[8px]', '[&_>_*]:w-[16px] [&_>_*]:min-h-[16px]'],
-        lg: ['h-[224px] gap-[16px]', '[&_>_*]:w-[32px] [&_>_*]:min-h-[32px]'],
-        xl: ['h-[448px] gap-[32px]', '[&_>_*]:w-[64px] [&_>_*]:min-h-[64px]'],
+        icon: ['h-[24px] gap-[2px]', '*:w-[4px] *:min-h-[4px]'],
+        sm: ['h-[56px] gap-[4px]', '*:w-[8px] *:min-h-[8px]'],
+        md: ['h-[112px] gap-[8px]', '*:w-[16px] *:min-h-[16px]'],
+        lg: ['h-[224px] gap-[16px]', '*:w-[32px] *:min-h-[32px]'],
+        xl: ['h-[448px] gap-[32px]', '*:w-[64px] *:min-h-[64px]'],
       },
     },
     defaultVariants: {

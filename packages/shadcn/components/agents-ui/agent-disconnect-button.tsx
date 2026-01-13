@@ -63,7 +63,7 @@ export function AgentDisconnectButton({
   };
 
   return (
-    <Button size={size} onClick={handleClick} {...props}>
+    <Button size={size} variant={variant} onClick={handleClick} {...props}>
       {icon ?? <PhoneOffIcon />}
       {children ?? <span className={cn(size?.includes('icon') && 'sr-only')}>END CALL</span>}
     </Button>

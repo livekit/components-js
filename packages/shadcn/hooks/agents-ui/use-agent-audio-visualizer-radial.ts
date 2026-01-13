@@ -69,5 +69,5 @@ export const useAgentAudioVisualizerRadialAnimator = (
     };
   }, [interval, barCount, state, sequence.length]);
 
-  return sequence[index % sequence.length];
+  return sequence[index % sequence.length] ?? [];
 };

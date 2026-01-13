@@ -66,21 +66,21 @@ export default {
 export const Demo1: StoryObj<AgentAudioVisualizerGridProps> = {
   args: {
     className:
-      'gap-4 [&_>_*]:size-1 [&_>_*]:rounded-full [&_>_*]:bg-foreground/10 [&_>_[data-lk-highlighted=true]]:bg-foreground [&_>_[data-lk-highlighted=true]]:scale-125 [&_>_[data-lk-highlighted=true]]:shadow-[0px_0px_10px_2px_rgba(255,255,255,0.4)]',
+      'gap-4 *:size-1 *:rounded-full *:bg-foreground/10 [&_>_[data-lk-highlighted=true]]:bg-foreground [&_>_[data-lk-highlighted=true]]:scale-125 [&_>_[data-lk-highlighted=true]]:shadow-[0px_0px_10px_2px_rgba(255,255,255,0.4)]',
   },
 };
 
 export const Demo2: StoryObj<AgentAudioVisualizerGridProps> = {
   args: {
     className:
-      'gap-2 [&_>_*]:w-4 [&_>_*]:h-1 [&_>_*]:bg-foreground/10 [&_>_[data-lk-highlighted=true]]:bg-[#F9B11F] [&_>_[data-lk-highlighted=true]]:shadow-[0px_0px_14.8px_2px_#F9B11F]',
+      'gap-2 *:w-4 *:h-1 *:bg-foreground/10 [&_>_[data-lk-highlighted=true]]:bg-[#F9B11F] [&_>_[data-lk-highlighted=true]]:shadow-[0px_0px_14.8px_2px_#F9B11F]',
   },
 };
 
 export const Demo3: StoryObj<AgentAudioVisualizerGridProps> = {
   args: {
     className:
-      'gap-4 [&_>_*]:size-2 [&_>_*]:rounded-full [&_>_*]:bg-foreground/10 [&_>_[data-lk-highlighted=true]]:bg-[#1F8CF9] [&_>_[data-lk-highlighted=true]]:shadow-[0px_0px_14.8px_2px_#1F8CF9]',
+      'gap-4 *:size-2 *:rounded-full *:bg-foreground/10 [&_>_[data-lk-highlighted=true]]:bg-[#1F8CF9] [&_>_[data-lk-highlighted=true]]:shadow-[0px_0px_14.8px_2px_#1F8CF9]',
     transformer: (index: number, rowCount: number, columnCount: number) => {
       const rowMidPoint = Math.floor(rowCount / 2);
       const distanceFromCenter = Math.sqrt(
@@ -99,6 +99,6 @@ export const Demo3: StoryObj<AgentAudioVisualizerGridProps> = {
 export const Demo4: StoryObj<AgentAudioVisualizerGridProps> = {
   args: {
     className:
-      'gap-x-2.5 gap-y-1 [&_>_*]:w-3 [&_>_*]:h-px [&_>_*]:my-2 [&_>_*]:rotate-45 [&_>_*]:bg-foreground/10 [&_>_*]:rotate-45 [&_>_*]:scale-100 [&_>_[data-lk-highlighted=true]]:bg-[#FFB6C1] [&_>_[data-lk-highlighted=true]]:shadow-[0px_0px_8px_2px_rgba(255,182,193,0.4)] [&_>_[data-lk-highlighted=true]]:rotate-[405deg] [&_>_[data-lk-highlighted=true]]:scale-200',
+      'gap-x-2.5 gap-y-1 *:w-3 *:h-px *:my-2 *:rotate-45 *:bg-foreground/10 *:rotate-45 *:scale-100 [&_>_[data-lk-highlighted=true]]:bg-[#FFB6C1] [&_>_[data-lk-highlighted=true]]:shadow-[0px_0px_8px_2px_rgba(255,182,193,0.4)] [&_>_[data-lk-highlighted=true]]:rotate-[405deg] [&_>_[data-lk-highlighted=true]]:scale-200',
   },
 };

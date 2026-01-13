@@ -110,5 +110,7 @@ export function useAgentAudioVisualizerGridAnimator(
     return () => clearInterval(indexInterval);
   }, [interval, columns, rows, state, sequence.length]);
 
-  return sequence[index % sequence.length];
+  return (
+    sequence[index % sequence.length] ?? { x: Math.floor(columns / 2), y: Math.floor(rows / 2) }
+  );
 }

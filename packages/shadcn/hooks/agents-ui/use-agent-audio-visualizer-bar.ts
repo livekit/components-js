@@ -66,5 +66,5 @@ export function useAgentAudioVisualizerBarAnimator(
     };
   }, [interval, columns, state, sequence.length]);
 
-  return sequence[index % sequence.length];
+  return sequence[index % sequence.length] ?? [];
 }

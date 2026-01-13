@@ -50,17 +50,17 @@ function cloneSingleChild(
 export const AgentAudioVisualizerGridVariants = cva(
   [
     'grid',
-    '[&_>_*]:size-1 [&_>_*]:rounded-full',
-    '[&_>_*]:bg-foreground/10 [&_>_[data-lk-highlighted=true]]:bg-foreground [&_>_[data-lk-highlighted=true]]:scale-125 [&_>_[data-lk-highlighted=true]]:shadow-[0px_0px_10px_2px_rgba(255,255,255,0.4)]',
+    '*:size-1 *:rounded-full',
+    '*:bg-foreground/10 [&_>_[data-lk-highlighted=true]]:bg-foreground [&_>_[data-lk-highlighted=true]]:scale-125 [&_>_[data-lk-highlighted=true]]:shadow-[0px_0px_10px_2px_rgba(255,255,255,0.4)]',
   ],
   {
     variants: {
       size: {
-        icon: ['gap-[2px] [&_>_*]:size-[4px]'],
-        sm: ['gap-[4px] [&_>_*]:size-[4px]'],
-        md: ['gap-[8px] [&_>_*]:size-[8px]'],
-        lg: ['gap-[8px] [&_>_*]:size-[8px]'],
-        xl: ['gap-[8px] [&_>_*]:size-[8px]'],
+        icon: ['gap-[2px] *:size-[4px]'],
+        sm: ['gap-[4px] *:size-[4px]'],
+        md: ['gap-[8px] *:size-[8px]'],
+        lg: ['gap-[8px] *:size-[8px]'],
+        xl: ['gap-[8px] *:size-[8px]'],
       },
     },
     defaultVariants: {
@@ -158,7 +158,7 @@ const GridCell = memo(function GridCell({
     const volumeChunks = 1 / (rowMidPoint + 1);
     const distanceToMid = Math.abs(rowMidPoint - y);
     const threshold = distanceToMid * volumeChunks;
-    const isHighlighted = volumeBands[index % columnCount] >= threshold;
+    const isHighlighted = (volumeBands[index % columnCount] ?? 0) >= threshold;
 
     return cloneSingleChild(children, {
       'data-lk-index': index,
@@ -267,7 +267,7 @@ export function AgentAudioVisualizerGrid({
   return (
     <div
       className={cn(AgentAudioVisualizerGridVariants({ size }), className)}
-      style={{ ...style, gridTemplateColumns: `repeat(${columnCount}, 1fr)`, e }}
+      style={{ ...style, gridTemplateColumns: `repeat(${columnCount}, 1fr)` }}
       {...props}
     >
       {items.map((idx) => (

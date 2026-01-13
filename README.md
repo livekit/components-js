@@ -1,11 +1,9 @@
 <!--BEGIN_BANNER_IMAGE-->
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="/.github/banner_dark.png">
   <source media="(prefers-color-scheme: light)" srcset="/.github/banner_light.png">
   <img style="width:100%;" alt="The LiveKit icon, the name of the repository and some sample code in the background." src="https://raw.githubusercontent.com/livekit/components-js/main/.github/banner_light.png">
 </picture>
-
 <!--END_BANNER_IMAGE-->
 
 <h1>
@@ -13,9 +11,7 @@
 </h1>
 
 <!--BEGIN_DESCRIPTION-->
-
 Use this SDK to add realtime, multi-modal, agentic experiences to your React app. By connecting to <a href="https://livekit.io/">LiveKit</a> Cloud or a self-hosted server, you can quickly build agentic experiences with just a few lines of code.
-
 <!--END_DESCRIPTION-->
 
 <br/>
@@ -71,29 +67,26 @@ The rest of this guide assumes your agent is configured for [explicit dispatch](
 Then, you can use the agents sdk to connect and interact with your agent:
 
 ```tsx
-import { useEffect, useState } from "react";
-import { TokenSource } from "livekit-client";
-import {
-  VideoTrack,
-  useAgent,
-  useSession,
-  useSessionContext,
-} from "@livekit/components-react";
+'use client';
+
+import { TokenSource } from 'livekit-client';
+import { VideoTrack, useAgent, useSession, useSessionContext } from '@livekit/components-react';
 import { AgentSessionProvider } from '@/components/agents-ui/agent-session-provider';
 import { AgentControlBar } from '@/components/agents-ui/agent-control-bar';
 import { AgentChatTranscript } from '@/components/agents-ui/agent-chat-transcript';
 import { AgentAudioVisualizerBar } from '@/components/agents-ui/agent-audio-visualizer-bar';
+import { StartAudioButton } from '@/components/agents-ui/start-audio-button';
 
 // Generated credentials manually and put them here
 // Or, generate them another way: https://github.com/livekit/client-sdk-js?tab=readme-ov-file#generating-a-urltoken-with-tokensource
 const tokenSource = TokenSource.literal({
-  serverUrl: "wss://my-livekit-server",
+  serverUrl: 'wss://my-livekit-server',
   participantToken: 'generated-jwt',
 });
 
 function AgentUI() {
-  const agent = useAgent(session);
   const session = useSessionContext();
+  const agent = useAgent(session);
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -101,29 +94,27 @@ function AgentUI() {
       <AgentChatTranscript />
 
       {/* Local camera feed: */}
-      {session.local.cameraTrack ? (
-        <VideoTrack trackRef={session.local.cameraTrack} />
-      ) : null}
+      {session.local.cameraTrack ? <VideoTrack trackRef={session.local.cameraTrack} /> : null}
 
       {/* Agent camera feed */}
       {agent.cameraTrack ? (
         <VideoTrack trackRef={agent.cameraTrack} />
       ) : (
         <AgentAudioVisualizerBar />
-      ) : null}
+      )}
 
       {/* Agent control bar for local audio */}
-      <AgentControlBar variant="livekit" />
+      <AgentControlBar variant="livekit" isConnected={session.isConnected} />
 
       {/* Renders a start audio button if the browser blocks autoplay of audio */}
-      <StartAudio label="Start audio" />
+      <StartAudioButton label="Start audio" />
     </div>
   );
 }
 
 export default function Example() {
   const session = useSession(tokenSource, {
-    agentName: 'example-agent', /* <== Put your agent name here! */
+    agentName: 'example-agent' /* <== Put your agent name here! */,
   });
 
   const toggleStarted = () => {
@@ -136,12 +127,13 @@ export default function Example() {
 
   return (
     <AgentSessionProvider session={session}>
-      <button onClick={toggleStarted} disabled={session.connectionState === 'connecting'}>
-        {session.isConnected ? 'Disconnect' : 'Connect'}
-      </button>
       {session.isConnected ? (
         <AgentUI />
-      ) : null}
+      ) : (
+        <button onClick={toggleStarted} disabled={session.connectionState === 'connecting'}>
+          Connect
+        </button>
+      )}
     </AgentSessionProvider>
   );
 }
@@ -235,10 +227,8 @@ The highest priority is currently to get the core and react packages to a stable
   - [Shadcn](/packages/shadcn/README.md)
 
 <!--NAV_END-->
-<!--BEGIN_REPO_NAV-->+
-
+<!--BEGIN_REPO_NAV-->
 <br/><table>
-
 <thead><tr><th colspan="2">LiveKit Ecosystem</th></tr></thead>
 <tbody>
 <tr><td>LiveKit SDKs</td><td><a href="https://github.com/livekit/client-sdk-js">Browser</a> · <a href="https://github.com/livekit/client-sdk-swift">iOS/macOS/visionOS</a> · <a href="https://github.com/livekit/client-sdk-android">Android</a> · <a href="https://github.com/livekit/client-sdk-flutter">Flutter</a> · <a href="https://github.com/livekit/client-sdk-react-native">React Native</a> · <a href="https://github.com/livekit/rust-sdks">Rust</a> · <a href="https://github.com/livekit/node-sdks">Node.js</a> · <a href="https://github.com/livekit/python-sdks">Python</a> · <a href="https://github.com/livekit/client-sdk-unity">Unity</a> · <a href="https://github.com/livekit/client-sdk-unity-web">Unity (WebGL)</a> · <a href="https://github.com/livekit/client-sdk-esp32">ESP32</a></td></tr><tr></tr>
@@ -250,3 +240,4 @@ The highest priority is currently to get the core and react packages to a stable
 </tbody>
 </table>
 <!--END_REPO_NAV-->
+

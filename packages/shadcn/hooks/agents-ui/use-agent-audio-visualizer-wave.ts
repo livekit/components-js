@@ -12,6 +12,7 @@ import {
   type TrackReferenceOrPlaceholder,
   useTrackVolume,
 } from '@livekit/components-react';
+import { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
 
 const DEFAULT_SPEED = 5;
 const DEFAULT_AMPLITUDE = 0.025;
@@ -36,7 +37,7 @@ function useAnimatedValue<T>(initialValue: T) {
 
 interface UseAgentAudioVisualizerWaveAnimatorArgs {
   state?: AgentState;
-  audioTrack?: TrackReferenceOrPlaceholder;
+  audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
 }
 
 export function useAgentAudioVisualizerWave({

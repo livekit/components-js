@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { type LocalAudioTrack, type RemoteAudioTrack } from 'livekit-client';
 import {
   type AnimationPlaybackControlsWithThen,
   type ValueAnimationTransition,
@@ -44,7 +45,7 @@ function useAnimatedValue<T>(initialValue: T) {
 
 export function useAgentAudioVisualizerAura(
   state: AgentState | undefined,
-  audioTrack: TrackReferenceOrPlaceholder,
+  audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder,
 ) {
   const [speed, setSpeed] = useState(DEFAULT_SPEED);
   const {

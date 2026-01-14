@@ -1,12 +1,25 @@
+/*
+ * Originally developed for Unicorn Studio
+ * https://unicorn.studio
+ *
+ * Licensed under the Polyform Non-Resale License 1.0.0
+ * https://polyformproject.org/licenses/non-resale/1.0.0/
+ *
+ * © 2026 UNCRN LLC
+ */
+
 'use client';
 
-import { useMemo, type ComponentProps } from 'react';
+import React, { useMemo, type ComponentProps } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
+import { type LocalAudioTrack, type RemoteAudioTrack } from 'livekit-client';
 import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/components-react';
 
 import { ReactShaderToy } from '@/components/agents-ui/react-shader-toy';
 import { useAgentAudioVisualizerAura } from '@/hooks/agents-ui/use-agent-audio-visualizer-aura';
 import { cn } from '@/lib/utils';
+
+const DEFAULT_COLOR = '#1FD5F9';
 
 function hexToRgb(hexColor: string) {
   try {
@@ -14,15 +27,17 @@ function hexToRgb(hexColor: string) {
 
     if (rgbColor) {
       const [, r, g, b] = rgbColor;
-      const color = [r, g, b].map((c) => parseInt(c, 16) / 255);
+      const color = [r, g, b].map((c = '00') => parseInt(c, 16) / 255);
 
       return color;
     }
   } catch (error) {
-    console.error(error);
+    console.error(
+      `Invalid hex color '${hexColor}'.\nFalling back to default color '${DEFAULT_COLOR}'.`,
+    );
   }
 
-  return [31.0 / 255, 213.0 / 255, 249.0 / 255];
+  return hexToRgb(DEFAULT_COLOR);
 }
 
 const shaderSource = `
@@ -194,7 +209,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
   }
 }`;
 
-export interface AuraShaderProps extends React.HTMLAttributes<HTMLDivElement> {
+interface AuraShaderProps {
   /**
    * Aurora wave speed
    * @default 1.0
@@ -262,14 +277,14 @@ export interface AuraShaderProps extends React.HTMLAttributes<HTMLDivElement> {
   themeMode?: 'dark' | 'light';
 }
 
-export function AuraShader({
+function AuraShader({
   shape = 1.0,
   speed = 1.0,
   amplitude = 0.5,
   frequency = 0.5,
   scale = 0.2,
   blur = 1.0,
-  color = '#1FD5F9', // LiveKit Blue,
+  color = DEFAULT_COLOR,
   colorShift = 1.0,
   brightness = 1.0,
   themeMode = typeof window !== 'undefined' && document.documentElement.classList.contains('dark')
@@ -323,7 +338,7 @@ export function AuraShader({
         onWarning={(warning) => {
           console.warn('Shader warning:', warning);
         }}
-        style={{ width: '100%', height: '100%' } as CSSStyleDeclaration}
+        style={{ width: '100%', height: '100%' }}
       />
     </div>
   );
@@ -347,21 +362,65 @@ export const AgentAudioVisualizerAuraVariants = cva(['aspect-square'], {
 });
 
 export interface AgentAudioVisualizerAuraProps {
+  /**
+   * The size of the visualizer.
+   * @defaultValue 'md'
+   */
+  size?: 'icon' | 'sm' | 'md' | 'lg' | 'xl';
+  /**
+   * Agent state
+   * @default 'connecting'
+   */
   state?: AgentState;
-  audioTrack: TrackReferenceOrPlaceholder;
+  /**
+   * The color of the aura in hex format.
+   * @defaultValue '#1FD5F9'
+   */
+  color?: string;
+  /**
+   * The color shift of the aura.
+   * @defaultValue 0.05
+   */
+  colorShift?: number;
+  /**
+   * The theme mode of the aura.
+   * @defaultValue 'dark'
+   */
+  themeMode?: 'dark' | 'light';
+  /**
+   * The audio track to visualize. Can be a local/remote audio track or a track reference.
+   */
+  audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
 }
 
+/**
+ * An shader-based audio visualizer that responds to agent state and audio levels.
+ * Displays an animated elliptical aura that reacts to the current agent state (connecting, thinking, speaking, etc.)
+ * and audio volume when speaking.
+ *
+ * @extends ComponentProps<'div'>
+ *
+ * @example
+ * ```tsx
+ * <AgentAudioVisualizerAura
+ *   size="md"
+ *   state="speaking"
+ *   audioTrack={agentAudioTrack}
+ * />
+ * ```
+ */
 export function AgentAudioVisualizerAura({
   size = 'md',
-  color,
-  state = 'speaking',
-  themeMode,
-  shape = 1,
+  state = 'connecting',
+  color = DEFAULT_COLOR,
   colorShift = 0.05,
   audioTrack,
+  themeMode,
   className,
+  ref,
+  ...props
 }: AgentAudioVisualizerAuraProps &
-  AuraShaderProps &
+  ComponentProps<'div'> &
   VariantProps<typeof AgentAudioVisualizerAuraVariants>) {
   const { speed, scale, amplitude, frequency, brightness } = useAgentAudioVisualizerAura(
     state,
@@ -370,8 +429,8 @@ export function AgentAudioVisualizerAura({
 
   return (
     <AuraShader
+      ref={ref}
       blur={0.2}
-      shape={shape}
       color={color}
       colorShift={colorShift}
       speed={speed}
@@ -385,6 +444,7 @@ export function AgentAudioVisualizerAura({
         'overflow-hidden rounded-full',
         className,
       )}
+      {...props}
     />
   );
 }

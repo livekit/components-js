@@ -19,9 +19,9 @@ export default {
   },
   args: {
     size: 'xl',
-    themeMode: 'dark',
     color: '#1FD5F9',
-    colorShift: 0.3,
+    colorShift: 0.1,
+    themeMode: 'dark',
     state: 'connecting',
   },
   argTypes: {

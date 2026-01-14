@@ -564,11 +564,11 @@ export function ReactShaderToy({
   };
 
   const onDeviceOrientationChange = ({ alpha, beta, gamma }: DeviceOrientationEvent) => {
-    uniformsRef.current.iDeviceOrientation.value = [
+    uniformsRef.current.iDeviceOrientation!.value = [
       alpha ?? 0,
       beta ?? 0,
       gamma ?? 0,
-      window.orientation || 0,
+      window.orientation ?? 0,
     ];
   };
 
@@ -865,14 +865,14 @@ export function ReactShaderToy({
       uniformsRef.current.iMouse.value[0] = lerpVal(
         // @ts-expect-error TODO: Deal with this.
         uniformsRef.current.iMouse.value[0],
-        lastMouseArrRef.current[0],
+        lastMouseArrRef.current[0] ?? 0,
         lerp,
       );
       // @ts-expect-error TODO: Deal with this.
       uniformsRef.current.iMouse.value[1] = lerpVal(
         // @ts-expect-error TODO: Deal with this.
         uniformsRef.current.iMouse.value[1],
-        lastMouseArrRef.current[1],
+        lastMouseArrRef.current[1] ?? 0,
         lerp,
       );
     }

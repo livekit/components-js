@@ -249,7 +249,7 @@
         "@livekit/components-react@^2.0.0",
         "class-variance-authority"
       ],
-      "registryDependencies": ["utils", "@agents-ui/react-shader"]
+      "registryDependencies": ["utils", "@agents-ui/react-shader-toy"]
     },
     {
       "name": "agent-audio-visualizer-aura",
@@ -271,7 +271,7 @@
         "@livekit/components-react@^2.0.0",
         "class-variance-authority"
       ],
-      "registryDependencies": ["utils", "@agents-ui/react-shader"]
+      "registryDependencies": ["utils", "@agents-ui/react-shader-toy"]
     }
   ]
 }

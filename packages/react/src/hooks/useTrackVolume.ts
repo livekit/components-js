@@ -133,16 +133,23 @@ export function useMultibandTrackVolume(
       for (let i = 0; i < dataArray.length; i++) {
         frequencies[i] = dataArray[i];
       }
-      frequencies = frequencies.slice(options.loPass, options.hiPass);
+      frequencies = frequencies.slice(opts.loPass, opts.hiPass);
 
       const normalizedFrequencies = normalizeFrequencies(frequencies); // is this needed ?
-      const chunkSize = Math.ceil(normalizedFrequencies.length / opts.bands); // we want logarithmic chunking here
+      const totalBins = normalizedFrequencies.length;
       const chunks: Array<number> = [];
       for (let i = 0; i < opts.bands; i++) {
-        const summedVolumes = normalizedFrequencies
-          .slice(i * chunkSize, (i + 1) * chunkSize)
-          .reduce((acc, val) => (acc += val), 0);
-        chunks.push(summedVolumes / chunkSize);
+        // Use proportional distribution to evenly divide bins across bands
+        const startIndex = Math.floor((i * totalBins) / opts.bands);
+        const endIndex = Math.floor(((i + 1) * totalBins) / opts.bands);
+        const chunk = normalizedFrequencies.slice(startIndex, endIndex);
+        const chunkLength = chunk.length;
+        if (chunkLength === 0) {
+          chunks.push(0);
+        } else {
+          const summedVolumes = chunk.reduce((acc, val) => (acc += val), 0);
+          chunks.push(summedVolumes / chunkLength);
+        }
       }
 
       setFrequencyBands(chunks);

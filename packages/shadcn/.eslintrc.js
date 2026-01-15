@@ -5,4 +5,9 @@
 module.exports = {
   root: true,
   extends: ['lk-custom'],
+  settings: {
+    react: {
+      version: '19',
+    },
+  },
 };

@@ -58,6 +58,9 @@ for (const file of files) {
 console.log('--------------------------------');
 console.log(`Writing prop-types.json to ${path.join(__dirname, '../dist', 'prop-types.json')}`);
 
-fs.writeFileSync(path.join(__dirname, '../dist', 'prop-types.json'), JSON.stringify(docs, null, 2));
+fs.writeFileSync(
+  path.join(__dirname, '../dist', 'prop-types.json'),
+  JSON.stringify(docs, null, 2) + '\n',
+);
 console.log('--------------------------------');
 console.log('Done');

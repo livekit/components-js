@@ -55,7 +55,7 @@ export interface UseInputControlsProps {
 }
 
 export interface UseInputControlsReturn {
-  micTrackRef: TrackReferenceOrPlaceholder;
+  micTrackRef?: TrackReferenceOrPlaceholder;
   microphoneToggle: ReturnType<typeof useTrackToggle<Track.Source.Microphone>>;
   cameraToggle: ReturnType<typeof useTrackToggle<Track.Source.Camera>>;
   screenShareToggle: ReturnType<typeof useTrackToggle<Track.Source.ScreenShare>>;

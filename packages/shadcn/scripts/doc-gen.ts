@@ -22,10 +22,12 @@ const parser = withDefaultConfig({
     if (prop.declarations !== undefined && prop.declarations.length > 0) {
       return prop.declarations.some((declaration) => {
         return (
+          declaration.name !== 'MotionProps' &&
           declaration.name !== 'DOMAttributes' &&
           declaration.name !== 'AriaAttributes' &&
           !declaration.name.endsWith('HTMLAttributes') &&
-          !declaration.fileName.includes('class-variance-authority')
+          !declaration.fileName.includes('/motion-dom') &&
+          !declaration.fileName.includes('/class-variance-authority')
         );
       });
     }

@@ -1,5 +1,6 @@
+import { type Ref } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { motion, type HTMLMotionProps } from 'motion/react';
+import { motion, type MotionProps } from 'motion/react';
 
 import { cn } from '@/lib/utils';
 
@@ -46,7 +47,7 @@ const agentChatIndicatorVariants = cva('bg-muted-foreground inline-block size-2.
 /**
  * Props for the AgentChatIndicator component.
  */
-export interface AgentChatIndicatorProps {
+export interface AgentChatIndicatorProps extends MotionProps {
   /**
    * The size of the indicator dot.
    * @defaultValue 'md'
@@ -56,6 +57,10 @@ export interface AgentChatIndicatorProps {
    * Additional CSS class names to apply to the indicator.
    */
   className?: string;
+  /**
+   * Allows getting a ref to the component instance.\nOnce the component unmounts, React will set `ref.current` to `null`\n(or call the ref with `null` if you passed a callback ref).\n@see {@link https://react.dev/learn/referencing-values-with-refs#refs-and-the-dom React Docs}
+   */
+  ref?: Ref<HTMLSpanElement>;
 }
 
 /**
@@ -73,9 +78,7 @@ export function AgentChatIndicator({
   size = 'md',
   className,
   ...props
-}: AgentChatIndicatorProps &
-  HTMLMotionProps<'span'> &
-  VariantProps<typeof agentChatIndicatorVariants>) {
+}: AgentChatIndicatorProps & VariantProps<typeof agentChatIndicatorVariants>) {
   return (
     <motion.span
       {...motionAnimationProps}

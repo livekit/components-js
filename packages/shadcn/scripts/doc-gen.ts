@@ -22,10 +22,12 @@ const parser = withDefaultConfig({
     if (prop.declarations !== undefined && prop.declarations.length > 0) {
       return prop.declarations.some((declaration) => {
         return (
+          declaration.name !== 'MotionProps' &&
           declaration.name !== 'DOMAttributes' &&
           declaration.name !== 'AriaAttributes' &&
           !declaration.name.endsWith('HTMLAttributes') &&
-          !declaration.fileName.includes('class-variance-authority')
+          !declaration.fileName.includes('/motion-dom') &&
+          !declaration.fileName.includes('/class-variance-authority')
         );
       });
     }
@@ -56,6 +58,9 @@ for (const file of files) {
 console.log('--------------------------------');
 console.log(`Writing prop-types.json to ${path.join(__dirname, '../dist', 'prop-types.json')}`);
 
-fs.writeFileSync(path.join(__dirname, '../dist', 'prop-types.json'), JSON.stringify(docs, null, 2));
+fs.writeFileSync(
+  path.join(__dirname, '../dist', 'prop-types.json'),
+  JSON.stringify(docs, null, 2) + '\n',
+);
 console.log('--------------------------------');
 console.log('Done');

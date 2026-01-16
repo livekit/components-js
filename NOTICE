@@ -11,3 +11,10 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+This product includes code from react-shaders (https://github.com/rysana-ai/react-shaders)
+
+   Copyright (c) 2018 Morgan Villedieu
+   Copyright (c) 2023 Rysana, Inc. (forked from the above)
+
+Licensed under the MIT License

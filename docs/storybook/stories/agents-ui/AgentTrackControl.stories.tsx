@@ -1,27 +1,26 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
-import {
-  AgentSessionProvider,
-  useMicrophone,
-} from '../../.storybook/lk-decorators/AgentSessionProvider';
+import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentTrackControl, type AgentTrackControlProps } from '@agents-ui';
+import { useSessionContext, useTrackToggle } from '@livekit/components-react';
 import { Track } from 'livekit-client';
 
 export default {
   component: AgentTrackControl,
   decorators: [AgentSessionProvider],
   render: (args: AgentTrackControlProps) => {
-    const [isPressed, setIsPressed] = React.useState(
-      args.source === Track.Source.Microphone ? true : false,
-    );
-
-    const microphoneTrack = useMicrophone();
+    const {
+      local: { microphoneTrack },
+    } = useSessionContext();
+    const microphoneToggle = useTrackToggle({
+      source: Track.Source.Microphone,
+    });
 
     return (
       <AgentTrackControl
         {...args}
-        pressed={isPressed}
-        onPressedChange={(pressed: boolean) => setIsPressed(pressed)}
+        pressed={microphoneToggle.enabled}
+        onPressedChange={microphoneToggle.toggle}
         audioTrack={args.source === Track.Source.Microphone ? microphoneTrack : undefined}
       />
     );
@@ -52,8 +51,9 @@ export const Default: StoryObj<AgentTrackControlProps> = {
     const [isCameraPressed, setIsCameraPressed] = React.useState(true);
     const [isMicrophonePressed, setIsMicrophonePressed] = React.useState(false);
     const [isScreenSharePressed, setIsScreenSharePressed] = React.useState(true);
-
-    const microphoneTrack = useMicrophone();
+    const {
+      local: { microphoneTrack },
+    } = useSessionContext();
 
     return (
       <div className="flex gap-2">
@@ -92,8 +92,9 @@ export const Outlined: StoryObj<AgentTrackControlProps> = {
     const [isCameraPressed, setIsCameraPressed] = React.useState(true);
     const [isMicrophonePressed, setIsMicrophonePressed] = React.useState(false);
     const [isScreenSharePressed, setIsScreenSharePressed] = React.useState(true);
-
-    const microphoneTrack = useMicrophone();
+    const {
+      local: { microphoneTrack },
+    } = useSessionContext();
 
     return (
       <div className="flex gap-2">

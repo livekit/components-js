@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.9.19
+
+### Patch Changes
+
+- Revert unintentional classname change on BarVisualizer - [#1271](https://github.com/livekit/components-js/pull/1271) ([@thomasyuill-livekit](https://github.com/thomasyuill-livekit))
+
 ## 2.9.18
 
 ### Patch Changes

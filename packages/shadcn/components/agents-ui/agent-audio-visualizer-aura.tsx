@@ -294,7 +294,6 @@ function AuraShader({
   className,
   ...props
 }: AuraShaderProps & ComponentProps<'div'>) {
-  const globalThis = typeof window !== 'undefined' ? window : global;
   const rgbColor = useMemo(() => hexToRgb(color), [color]);
 
   return (

@@ -95,7 +95,7 @@ export function useAgentAudioVisualizerWave({
   }, [state, setSpeed, animateAmplitude, animateFrequency, animateOpacity]);
 
   useEffect(() => {
-    if (state === 'speaking' && volume > 0) {
+    if (state === 'speaking') {
       animateAmplitude(0.015 + 0.4 * volume, { duration: 0 });
       animateFrequency(20 + 60 * volume, { duration: 0 });
     }

@@ -2,7 +2,7 @@
 
 // Copyright (c) 2018 Morgan Villedieu
 // Copyright (c) 2023 Rysana, Inc. (forked from the above)
-// Copyright (c) 2025 LiveKit, Inc. (forked from the above)
+// Copyright (c) 2026 LiveKit, Inc. (forked from the above)
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -48,48 +48,24 @@ const UNIFORM_CHANNEL = 'iChannel';
 const UNIFORM_CHANNELRESOLUTION = 'iChannelResolution';
 const UNIFORM_DEVICEORIENTATION = 'iDeviceOrientation';
 
-export type Vector2<T = number> = [T, T];
-export type Vector3<T = number> = [T, T, T];
-export type Vector4<T = number> = [T, T, T, T];
-// biome-ignore format:
-export type Matrix2<T = number> = [T, T, T, T];
-// biome-ignore format:
-export type Matrix3<T = number> = [T, T, T, T, T, T, T, T, T];
-// biome-ignore format:
-export type Matrix4<T = number> = [T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T];
-// export type Uniforms = {
-//   '1i': number;
-//   '2i': Vector2;
-//   '3i': Vector3;
-//   '4i': Vector4;
-//   '1f': number;
-//   '2f': Vector2;
-//   '3f': Vector3;
-//   '4f': Vector4;
-//   '1iv': Float32List;
-//   '2iv': Float32List;
-//   '3iv': Float32List;
-//   '4iv': Float32List;
-//   '1fv': Float32List;
-//   '2fv': Float32List;
-//   '3fv': Float32List;
-//   '4fv': Float32List;
-//   Matrix2fv: Float32List;
-//   Matrix3fv: Float32List;
-//   Matrix4fv: Float32List;
-// };
-export type UniformType = keyof Uniforms;
+type Vector2<T = number> = [T, T];
+type Vector3<T = number> = [T, T, T];
+type Vector4<T = number> = [T, T, T, T];
+type Matrix2<T = number> = [T, T, T, T];
+type Matrix3<T = number> = [T, T, T, T, T, T, T, T, T];
+type Matrix4<T = number> = [T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T];
+type UniformType = keyof Uniforms;
 
-export function isMatrixType(t: string, v: number[] | number): v is number[] {
+function isMatrixType(t: string, v: number[] | number): v is number[] {
   return t.includes('Matrix') && Array.isArray(v);
 }
-export function isVectorListType(t: string, v: number[] | number): v is number[] {
+function isVectorListType(t: string, v: number[] | number): v is number[] {
   return t.includes('v') && Array.isArray(v) && v.length > Number.parseInt(t.charAt(0));
 }
 function isVectorType(t: string, v: number[] | number): v is Vector4 {
   return !t.includes('v') && Array.isArray(v) && v.length > Number.parseInt(t.charAt(0));
 }
-export const processUniform = <T extends UniformType>(
+const processUniform = <T extends UniformType>(
   gl: WebGLRenderingContext,
   location: WebGLUniformLocation,
   t: T,
@@ -145,7 +121,7 @@ export const processUniform = <T extends UniformType>(
   }
 };
 
-export const uniformTypeToGLSLType = (t: string) => {
+const uniformTypeToGLSLType = (t: string) => {
   switch (t) {
     case '1f':
       return 'float';
@@ -192,17 +168,17 @@ export const uniformTypeToGLSLType = (t: string) => {
   }
 };
 
-export const LinearFilter = 9729;
-export const NearestFilter = 9728;
-export const LinearMipMapLinearFilter = 9987;
-export const NearestMipMapLinearFilter = 9986;
-export const LinearMipMapNearestFilter = 9985;
-export const NearestMipMapNearestFilter = 9984;
-export const MirroredRepeatWrapping = 33648;
-export const ClampToEdgeWrapping = 33071;
-export const RepeatWrapping = 10497;
+const LinearFilter = 9729;
+const NearestFilter = 9728;
+const LinearMipMapLinearFilter = 9987;
+const NearestMipMapLinearFilter = 9986;
+const LinearMipMapNearestFilter = 9985;
+const NearestMipMapNearestFilter = 9984;
+const MirroredRepeatWrapping = 33648;
+const ClampToEdgeWrapping = 33071;
+const RepeatWrapping = 10497;
 
-export class Texture {
+class Texture {
   gl: WebGLRenderingContext;
   url?: string;
   wrapS?: number;
@@ -390,12 +366,16 @@ export class Texture {
   };
 }
 
-export const log = (text: string) => `react-shaders: ${text}`;
+const log = (text: string) => `react-shaders: ${text}`;
 
-const latestPointerClientCoords = (e: MouseEvent | TouchEvent) => {
-  // @ts-expect-error TODO: Deal with this.
-  return [e.clientX || e.changedTouches[0].clientX, e.clientY || e.changedTouches[0].clientY];
-};
+const latestPointerClientCoords = (e: MouseEvent | TouchEvent) => {  
+  if ('changedTouches' in e) {  
+    const t = e.changedTouches[0];  
+    return [t?.clientX ?? 0, t?.clientY ?? 0];  
+  }  
+  return [e.clientX, e.clientY];  
+}
+
 const lerpVal = (v0: number, v1: number, t: number) => v0 * (1 - t) + v1 * t;
 const insertStringAtIndex = (currentString: string, string: string, index: number) =>
   index > 0
@@ -405,7 +385,7 @@ const insertStringAtIndex = (currentString: string, string: string, index: numbe
     : string + currentString;
 
 type Uniform = { type: string; value: number[] | number };
-export type Uniforms = Record<string, Uniform>;
+type Uniforms = Record<string, Uniform>;
 type TextureParams = {
   url: string;
   wrapS?: number;
@@ -675,10 +655,10 @@ export function ReactShaderToy({
     if (propUniforms) {
       for (const name of Object.keys(propUniforms)) {
         const uniform = propUniforms[name];
-        if (!uniform) return;
+        if (!uniform) continue;
         const { value, type } = uniform;
         const glslType = uniformTypeToGLSLType(type);
-        if (!glslType) return;
+        if (!glslType) continue;
         const tempObject: { arraySize?: string } = {};
         if (isMatrixType(type, value)) {
           const arrayLength = type.length;
@@ -772,7 +752,7 @@ export function ReactShaderToy({
     if (propUniforms) {
       for (const name of Object.keys(propUniforms)) {
         const currentUniform = propUniforms[name];
-        if (!currentUniform) return;
+        if (!currentUniform) continue;
         if (uniformsRef.current[name]?.isNeeded) {
           if (!shaderProgramRef.current) return;
           const customUniformLocation = gl.getUniformLocation(shaderProgramRef.current, name);

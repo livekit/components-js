@@ -23,11 +23,11 @@ export default {
   },
 };
 
-export const Default: StoryObj<ReactShaderProps> = {
+export const Default: StoryObj<ReactShaderToyProps> = {
   args: {},
 };
 
-export const Basic: StoryObj<ReactShaderProps> = {
+export const Basic: StoryObj<ReactShaderToyProps> = {
   args: {
     fs: `
       void main() {

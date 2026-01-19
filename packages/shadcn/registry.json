@@ -255,7 +255,7 @@
       "name": "agent-audio-visualizer-aura",
       "type": "registry:component",
       "title": "Agent Audio Visualizer Aura",
-      "description": "A aura visualizer for audio tracks.",
+      "description": "An aura visualizer for audio tracks.",
       "files": [
         {
           "path": "components/agents-ui/agent-audio-visualizer-aura.tsx",

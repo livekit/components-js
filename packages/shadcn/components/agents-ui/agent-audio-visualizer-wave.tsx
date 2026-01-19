@@ -176,7 +176,6 @@ function WaveShader({
   className,
   ...props
 }: WaveShaderProps & ComponentProps<'div'>) {
-  const globalThis = typeof window !== 'undefined' ? window : global;
   const rgbColor = useMemo(() => hexToRgb(color), [color]);
 
   return (
@@ -233,9 +232,6 @@ export interface AgentAudioVisualizerWaveProps {
    * @defaultValue 'speaking'
    */
   state?: AgentState;
-  /**
-   * The audio track to visualize. Can be a local/remote audio track or a track reference.
-   */
   /**
    * The color of the wave in hex format.
    * @defaultValue '#1FD5F9'
@@ -294,7 +290,7 @@ export function AgentAudioVisualizerWave({
   ComponentProps<'div'> &
   VariantProps<typeof AgentAudioVisualizerWaveVariants>) {
   const _lineWidth = useMemo(() => {
-    if (lineWidth) {
+    if (lineWidth !== undefined) {
       return lineWidth;
     }
     switch (size) {

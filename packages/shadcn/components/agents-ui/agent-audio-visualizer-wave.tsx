@@ -224,7 +224,7 @@ export const AgentAudioVisualizerWaveVariants = cva(['aspect-square'], {
 export interface AgentAudioVisualizerWaveProps {
   /**
    * The size of the visualizer.
-   * @defaultValue 'md'
+   * @defaultValue 'lg'
    */
   size?: 'icon' | 'sm' | 'md' | 'lg' | 'xl';
   /**

@@ -56,11 +56,11 @@ export const AgentAudioVisualizerGridVariants = cva(
   {
     variants: {
       size: {
-        icon: ['gap-[2px] *:size-[4px]'],
+        icon: ['gap-[2px] *:size-[2px]'],
         sm: ['gap-[4px] *:size-[4px]'],
         md: ['gap-[8px] *:size-[8px]'],
-        lg: ['gap-[8px] *:size-[8px]'],
-        xl: ['gap-[8px] *:size-[8px]'],
+        lg: ['gap-[12px] *:size-[12px]'],
+        xl: ['gap-[16px] *:size-[16px]'],
       },
     },
     defaultVariants: {

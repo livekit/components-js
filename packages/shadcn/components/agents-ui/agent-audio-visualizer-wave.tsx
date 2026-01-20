@@ -158,10 +158,10 @@ interface WaveShaderProps {
    */
   lineWidth?: number;
   /**
-   * Smoothing of the oscilloscope in pixels
+   * Blur of the oscilloscope in pixels
    * @default 0.5
    */
-  smoothing?: number;
+  blur?: number;
 }
 
 function WaveShader({
@@ -171,7 +171,7 @@ function WaveShader({
   amplitude = 0.02,
   frequency = 20.0,
   lineWidth = 2.0,
-  smoothing = 0.5,
+  blur = 0.5,
   ref,
   className,
   ...props
@@ -189,7 +189,7 @@ function WaveShader({
           uFrequency: { type: '1f', value: frequency },
           uMix: { type: '1f', value: mix },
           uLineWidth: { type: '1f', value: lineWidth },
-          uSmoothing: { type: '1f', value: smoothing },
+          uSmoothing: { type: '1f', value: blur },
           uColor: { type: '3fv', value: rgbColor },
         }}
         onError={(error) => {
@@ -243,10 +243,10 @@ export interface AgentAudioVisualizerWaveProps {
    */
   lineWidth?: number;
   /**
-   * The smoothing of the wave in pixels.
+   * The blur of the wave in pixels.
    * @defaultValue 0.5
    */
-  smoothing?: number;
+  blur?: number;
   /**
    * The audio track to visualize. Can be a local/remote audio track or a track reference.
    */
@@ -280,7 +280,7 @@ export function AgentAudioVisualizerWave({
   state = 'speaking',
   color,
   lineWidth,
-  smoothing,
+  blur,
   audioTrack,
   className,
   style,
@@ -315,7 +315,7 @@ export function AgentAudioVisualizerWave({
       amplitude={amplitude}
       frequency={frequency}
       lineWidth={_lineWidth}
-      smoothing={smoothing}
+      blur={blur}
       style={{ opacity, ...style }}
       className={cn(
         AgentAudioVisualizerWaveVariants({ size }),

@@ -18,7 +18,7 @@ export default {
     size: 'xl',
     lineWidth: 2,
     state: 'connecting',
-    smoothing: 0.1,
+    blur: 0.1,
     color: '#1FD5F9',
   },
   argTypes: {
@@ -43,7 +43,7 @@ export default {
     lineWidth: {
       control: { type: 'range', min: 1, max: 20, step: 1 },
     },
-    smoothing: {
+    blur: {
       control: { type: 'range', min: 0, max: 10, step: 0.5 },
     },
     color: {

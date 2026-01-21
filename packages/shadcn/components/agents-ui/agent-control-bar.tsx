@@ -73,11 +73,14 @@ function AgentChatInput({ chatOpen, onSend = async () => {}, className }: AgentC
   const [message, setMessage] = useState<string>('');
   const isDisabled = isSending || message.trim().length === 0;
 
-
   const handleSend = async () => {
+    if (isDisabled) {
+      return;
+    }
+
     try {
       setIsSending(true);
-      await onSend(message);
+      await onSend(message.trim());
       setMessage('');
     } catch (error) {
       console.error(error);
@@ -112,11 +115,11 @@ function AgentChatInput({ chatOpen, onSend = async () => {}, className }: AgentC
         autoFocus
         ref={inputRef}
         value={message}
-        disabled={!chatOpen}
+        disabled={!chatOpen || isSending}
         placeholder="Type something..."
         onKeyDown={handleKeyDown}
         onChange={(e) => setMessage(e.target.value)}
-        className="field-sizing-content max-h-16 min-h-8 flex-1 py-2 [scrollbar-width:thin] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+        className="field-sizing-content max-h-16 min-h-8 flex-1 py-2 [scrollbar-width:thin] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 resize-none"
       />
       <Button
         size="icon"

@@ -71,10 +71,10 @@ function AgentChatInput({ chatOpen, onSend = async () => {}, className }: AgentC
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [isSending, setIsSending] = useState(false);
   const [message, setMessage] = useState<string>('');
+  const isDisabled = isSending || message.trim().length === 0;
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
 
+  const handleSend = async () => {
     try {
       setIsSending(true);
       await onSend(message);
@@ -86,7 +86,17 @@ function AgentChatInput({ chatOpen, onSend = async () => {}, className }: AgentC
     }
   };
 
-  const isDisabled = isSending || message.trim().length === 0;
+  const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  const handleButtonClick = async () => {
+    if (isDisabled) return;
+    await handleSend();
+  };
 
   useEffect(() => {
     if (chatOpen) return;
@@ -95,8 +105,7 @@ function AgentChatInput({ chatOpen, onSend = async () => {}, className }: AgentC
   }, [chatOpen]);
 
   return (
-    <form
-      onSubmit={handleSubmit}
+    <div
       className={cn('mb-3 flex grow items-end gap-2 rounded-md pl-1 text-sm', className)}
     >
       <textarea
@@ -105,20 +114,22 @@ function AgentChatInput({ chatOpen, onSend = async () => {}, className }: AgentC
         value={message}
         disabled={!chatOpen}
         placeholder="Type something..."
+        onKeyDown={handleKeyDown}
         onChange={(e) => setMessage(e.target.value)}
         className="field-sizing-content max-h-16 min-h-8 flex-1 py-2 [scrollbar-width:thin] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
       />
       <Button
         size="icon"
-        type="submit"
+        type="button"
         disabled={isDisabled}
         variant={isDisabled ? 'secondary' : 'default'}
         title={isSending ? 'Sending...' : 'Send'}
+        onClick={handleButtonClick}
         className="self-end disabled:cursor-not-allowed"
       >
         {isSending ? <Loader className="animate-spin" /> : <SendHorizontal />}
       </Button>
-    </form>
+    </div>
   );
 }
 

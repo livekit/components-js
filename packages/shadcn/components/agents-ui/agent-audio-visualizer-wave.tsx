@@ -270,7 +270,7 @@ export interface AgentAudioVisualizerWaveProps {
  *   state="speaking"
  *   color="#1FD5F9"
  *   lineWidth={2}
- *   smoothing={0.5}
+ *   blur={0.5}
  *   audioTrack={audioTrack}
  * />
  * ```

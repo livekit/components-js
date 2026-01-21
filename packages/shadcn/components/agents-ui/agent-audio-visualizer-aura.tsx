@@ -363,7 +363,7 @@ export const AgentAudioVisualizerAuraVariants = cva(['aspect-square'], {
 export interface AgentAudioVisualizerAuraProps {
   /**
    * The size of the visualizer.
-   * @defaultValue 'md'
+   * @defaultValue 'lg'
    */
   size?: 'icon' | 'sm' | 'md' | 'lg' | 'xl';
   /**
@@ -409,7 +409,7 @@ export interface AgentAudioVisualizerAuraProps {
  * ```
  */
 export function AgentAudioVisualizerAura({
-  size = 'md',
+  size = 'lg',
   state = 'connecting',
   color = DEFAULT_COLOR,
   colorShift = 0.05,

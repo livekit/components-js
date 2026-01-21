@@ -15,12 +15,12 @@ export default {
     return <AgentAudioVisualizerGrid {...args} audioTrack={audioTrack} />;
   },
   args: {
-    default: 'lg',
+    size: 'lg',
     state: 'connecting',
     radius: 5,
     interval: 100,
-    rowCount: 10,
-    columnCount: 10,
+    rowCount: 9,
+    columnCount: 9,
   },
   argTypes: {
     size: {
@@ -60,6 +60,12 @@ export default {
     actions: {
       handles: [],
     },
+  },
+};
+
+export const Default: StoryObj<AgentAudioVisualizerGridProps> = {
+  args: {
+    
   },
 };
 

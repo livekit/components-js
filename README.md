@@ -29,7 +29,7 @@ Agents UI is a set of open source [Shadcn](https://ui.shadcn.com/) components fo
 
 You can find more information in the [Agents UI API references](https://docs.livekit.io/reference/components/shadcn/) and in the [Agents UI README](packages/shadcn/README.md).
 
-## Prerequisites {% #prerequisites %}
+## Prerequisites
 
 Before installing Agents UI, make sure your environment meets the following requirements:
 

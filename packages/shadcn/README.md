@@ -19,9 +19,10 @@ Located in `components/agents-ui/`, these are the primary components for buildin
 | `AgentDisconnectButton`      | Button to end the agent session                                                         |
 | `AgentChatTranscript`        | Displays the conversation transcript including voice transcriptions                     |
 | `AgentChatIndicator`         | Visual indicator for agent thinking/processing state                                    |
-| `AgentAudioVisualizerBar`    | Linear bar audio visualizer                                                             |
-| `AgentAudioVisualizerGrid`   | Grid-based audio visualizer                                                             |
-| `AgentAudioVisualizerRadial` | Radial/circular audio visualizer                                                        |
+| `AgentAudioVisualizerBar`    | Audio visualizer with horizontal set of animated bars                                   |
+| `AgentAudioVisualizerRadial` | Audio visualizer with a radial set of animated bars                                     |
+| `AgentAudioVisualizerWave`   | Audio visualizer with an animated wave                                                  |
+| `AgentAudioVisualizerAura`   | Audio visualizer with an animated aura ring                                             |
 | `StartAudioButton`           | Button to start audio when browser blocks autoplay                                      |
 
 ## Prerequisites
@@ -176,6 +177,10 @@ DEST_PROP_TYPES_PATH=/path/to/destination/prop-types.json
 - `livekit-client` - LiveKit client SDK
 - `react` ^19.0.0
 - `react-dom` ^19.0.0
+- `tailwindcss` ^4
+- `shadcn` ^3.5.1
+- `motion` ^12.16.0
+- `ai` ^5.0.105
 
 ## Reporting issues
 

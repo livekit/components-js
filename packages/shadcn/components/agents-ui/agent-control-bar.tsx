@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type ComponentProps } from 'react';
 import { useChat } from '@livekit/components-react';
 import { Track } from 'livekit-client';
 import { Loader, MessageSquareTextIcon, SendHorizontal } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, type MotionProps } from 'motion/react';
 
 import { cn } from '@/lib/utils';
 import { AgentDisconnectButton } from '@/components/agents-ui/agent-disconnect-button';
@@ -42,7 +42,7 @@ const LK_TOGGLE_VARIANT_2 = [
   'dark:data-[state=on]:bg-blue-500/20 dark:data-[state=on]:text-blue-300',
 ];
 
-const MOTION_PROPS = {
+const MOTION_PROPS: MotionProps = {
   variants: {
     hidden: {
       height: 0,

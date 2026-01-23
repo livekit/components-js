@@ -1,26 +1,28 @@
-// MIT License
+/* 
+MIT License
 
-// Copyright (c) 2018 Morgan Villedieu
-// Copyright (c) 2023 Rysana, Inc. (forked from the above)
-// Copyright (c) 2026 LiveKit, Inc. (forked from the above)
+Copyright (c) 2018 Morgan Villedieu
+Copyright (c) 2023 Rysana, Inc. (forked from the above)
+Copyright (c) 2026 LiveKit, Inc. (forked from the above)
 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 
 import React, { useEffect, useRef } from 'react';
 const PRECISIONS = ['lowp', 'mediump', 'highp'];
@@ -48,12 +50,7 @@ const UNIFORM_CHANNEL = 'iChannel';
 const UNIFORM_CHANNELRESOLUTION = 'iChannelResolution';
 const UNIFORM_DEVICEORIENTATION = 'iDeviceOrientation';
 
-type Vector2<T = number> = [T, T];
-type Vector3<T = number> = [T, T, T];
 type Vector4<T = number> = [T, T, T, T];
-type Matrix2<T = number> = [T, T, T, T];
-type Matrix3<T = number> = [T, T, T, T, T, T, T, T, T];
-type Matrix4<T = number> = [T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T];
 type UniformType = keyof Uniforms;
 
 function isMatrixType(t: string, v: number[] | number): v is number[] {
@@ -238,7 +235,6 @@ class Texture {
       true,
     );
     video.src = url;
-    // video.play(); // Not sure why this is here nor commented out. From STR.
     return video;
   };
   makePowerOf2 = <T extends HTMLCanvasElement | HTMLImageElement | ImageBitmap>(image: T): T => {
@@ -261,12 +257,9 @@ class Texture {
     }
     return image;
   };
-  load = async (
-    textureArgs: Texture,
-    // channelId: number // Not sure why this is here nor commented out. From STR.
-  ) => {
+  load = async (textureArgs: TextureParams) => {
     const { gl } = this;
-    const { url, wrapS, wrapT, minFilter, magFilter, flipY = -1 }: Texture = textureArgs;
+    const { url, wrapS, wrapT, minFilter, magFilter, flipY = -1 }: TextureParams = textureArgs;
     if (!url) {
       return Promise.reject(
         new Error(
@@ -368,13 +361,13 @@ class Texture {
 
 const log = (text: string) => `react-shaders: ${text}`;
 
-const latestPointerClientCoords = (e: MouseEvent | TouchEvent) => {  
-  if ('changedTouches' in e) {  
-    const t = e.changedTouches[0];  
-    return [t?.clientX ?? 0, t?.clientY ?? 0];  
-  }  
-  return [e.clientX, e.clientY];  
-}
+const latestPointerClientCoords = (e: MouseEvent | TouchEvent) => {
+  if ('changedTouches' in e) {
+    const t = e.changedTouches[0];
+    return [t?.clientX ?? 0, t?.clientY ?? 0];
+  }
+  return [e.clientX, e.clientY];
+};
 
 const lerpVal = (v0: number, v1: number, t: number) => v0 * (1 - t) + v1 * t;
 const insertStringAtIndex = (currentString: string, string: string, index: number) =>
@@ -496,7 +489,7 @@ export function ReactShaderToy({
   const canvasPositionRef = useRef<DOMRect | undefined>(undefined);
   const timerRef = useRef(0);
   const lastMouseArrRef = useRef<number[]>([0, 0]);
-  const texturesArrRef = useRef<WebGLTexture[]>([]);
+  const texturesArrRef = useRef<Texture[]>([]);
   const lastTimeRef = useRef(0);
   const resizeObserverRef = useRef<ResizeObserver | undefined>(undefined);
   const uniformsRef = useRef<
@@ -515,13 +508,17 @@ export function ReactShaderToy({
   });
   const propsUniformsRef = useRef<Uniforms | undefined>(propUniforms);
 
-  const setupChannelRes = ({ width, height }: Texture, id: number) => {
-    // @ts-expect-error TODO: Deal with this.
-    uniformsRef.current.iChannelResolution.value[id * 3] = width * devicePixelRatio;
-    // @ts-expect-error TODO: Deal with this.
-    uniformsRef.current.iChannelResolution.value[id * 3 + 1] = height * devicePixelRatio;
-    // @ts-expect-error TODO: Deal with this.
-    uniformsRef.current.iChannelResolution.value[id * 3 + 2] = 0;
+  const setupChannelRes = (texture: TextureParams | Texture, id: number) => {
+    const width = 'width' in texture ? (texture.width ?? 0) : 0;
+    const height = 'height' in texture ? (texture.height ?? 0) : 0;
+    const channelResUniform = uniformsRef.current.iChannelResolution;
+    if (!channelResUniform) return;
+    const channelResValue = Array.isArray(channelResUniform.value)
+      ? channelResUniform.value
+      : (channelResUniform.value = []);
+    channelResValue[id * 3] = width * devicePixelRatio;
+    channelResValue[id * 3 + 1] = height * devicePixelRatio;
+    channelResValue[id * 3 + 2] = 0;
   };
 
   const initWebGL = () => {
@@ -553,7 +550,7 @@ export function ReactShaderToy({
   };
 
   const mouseDown = (e: MouseEvent | TouchEvent) => {
-    const [clientX, clientY] = latestPointerClientCoords(e);
+    const [clientX = 0, clientY = 0] = latestPointerClientCoords(e);
     const mouseX = clientX - (canvasPositionRef.current?.left ?? 0) - window.pageXOffset;
     const mouseY =
       (canvasPositionRef.current?.height ?? 0) -
@@ -561,17 +558,20 @@ export function ReactShaderToy({
       (canvasPositionRef.current?.top ?? 0) -
       window.pageYOffset;
     mousedownRef.current = true;
-    // @ts-expect-error TODO: Deal with this.
-    uniformsRef.current.iMouse.value[2] = mouseX;
-    // @ts-expect-error TODO: Deal with this.
-    uniformsRef.current.iMouse.value[3] = mouseY;
+    const mouseValue = Array.isArray(uniformsRef.current.iMouse?.value)
+      ? uniformsRef.current.iMouse.value
+      : undefined;
+    if (mouseValue) {
+      mouseValue[2] = mouseX;
+      mouseValue[3] = mouseY;
+    }
     lastMouseArrRef.current[0] = mouseX;
     lastMouseArrRef.current[1] = mouseY;
   };
 
   const mouseMove = (e: MouseEvent | TouchEvent) => {
     canvasPositionRef.current = canvasRef.current?.getBoundingClientRect();
-    const [clientX, clientY] = latestPointerClientCoords(e);
+    const [clientX = 0, clientY = 0] = latestPointerClientCoords(e);
     const mouseX = clientX - (canvasPositionRef.current?.left ?? 0);
     const mouseY =
       (canvasPositionRef.current?.height ?? 0) - clientY - (canvasPositionRef.current?.top ?? 0);
@@ -579,18 +579,24 @@ export function ReactShaderToy({
       lastMouseArrRef.current[0] = mouseX;
       lastMouseArrRef.current[1] = mouseY;
     } else {
-      // @ts-expect-error TODO: Deal with this.
-      uniformsRef.current.iMouse.value[0] = mouseX;
-      // @ts-expect-error TODO: Deal with this.
-      uniformsRef.current.iMouse.value[1] = mouseY;
+      const mouseValue = Array.isArray(uniformsRef.current.iMouse?.value)
+        ? uniformsRef.current.iMouse.value
+        : undefined;
+      if (mouseValue) {
+        mouseValue[0] = mouseX;
+        mouseValue[1] = mouseY;
+      }
     }
   };
 
   const mouseUp = () => {
-    // @ts-expect-error TODO: Deal with this.
-    uniformsRef.current.iMouse.value[2] = 0;
-    // @ts-expect-error TODO: Deal with this.
-    uniformsRef.current.iMouse.value[3] = 0;
+    const mouseValue = Array.isArray(uniformsRef.current.iMouse?.value)
+      ? uniformsRef.current.iMouse.value
+      : undefined;
+    if (mouseValue) {
+      mouseValue[2] = 0;
+      mouseValue[3] = 0;
+    }
   };
 
   const onResize = () => {
@@ -689,18 +695,11 @@ export function ReactShaderToy({
           type: 'sampler2D',
           isNeeded: false,
         };
-        // Initialize array with 0s:
-        // @ts-expect-error TODO: Deal with this.
         setupChannelRes(texture, id);
         texturesArrRef.current[id] = new Texture(gl);
-        return (
-          texturesArrRef.current[id]
-            // @ts-expect-error TODO: Deal with this.
-            ?.load(texture, id)
-            .then((t: Texture) => {
-              setupChannelRes(t, id);
-            })
-        );
+        return texturesArrRef.current[id]?.load(texture).then((t: Texture) => {
+          setupChannelRes(t, id);
+        });
       });
       Promise.all(texturePromisesArr)
         .then(() => {
@@ -811,16 +810,14 @@ export function ReactShaderToy({
     }
     if (texturesArrRef.current.length > 0) {
       for (let index = 0; index < texturesArrRef.current.length; index++) {
-        // TODO: Don't use this casting if possible:
-        const texture = texturesArrRef.current[index] as Texture | undefined;
+        const texture = texturesArrRef.current[index];
         if (!texture) return;
         const { isVideo, _webglTexture, source, flipY, isLoaded } = texture;
         if (!isLoaded || !_webglTexture || !source) return;
         if (uniformsRef.current[`iChannel${index}`]?.isNeeded) {
           if (!shaderProgramRef.current) return;
           const iChannel = gl.getUniformLocation(shaderProgramRef.current, `iChannel${index}`);
-          // @ts-expect-error TODO: Fix. Can't index WebGL context with this dynamic value.
-          gl.activeTexture(gl[`TEXTURE${index}`]);
+          gl.activeTexture(gl.TEXTURE0 + index);
           gl.bindTexture(gl.TEXTURE_2D, _webglTexture);
           gl.uniform1i(iChannel, index);
           if (isVideo) {
@@ -840,21 +837,10 @@ export function ReactShaderToy({
     gl.vertexAttribPointer(vertexPositionAttributeRef.current ?? 0, 3, gl.FLOAT, false, 0, 0);
     setUniforms(timestamp);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    if (uniformsRef.current.iMouse?.isNeeded && lerp !== 1) {
-      // @ts-expect-error TODO: Deal with this.
-      uniformsRef.current.iMouse.value[0] = lerpVal(
-        // @ts-expect-error TODO: Deal with this.
-        uniformsRef.current.iMouse.value[0],
-        lastMouseArrRef.current[0] ?? 0,
-        lerp,
-      );
-      // @ts-expect-error TODO: Deal with this.
-      uniformsRef.current.iMouse.value[1] = lerpVal(
-        // @ts-expect-error TODO: Deal with this.
-        uniformsRef.current.iMouse.value[1],
-        lastMouseArrRef.current[1] ?? 0,
-        lerp,
-      );
+    const mouseValue = uniformsRef.current.iMouse?.value;
+    if (uniformsRef.current.iMouse?.isNeeded && lerp !== 1 && Array.isArray(mouseValue)) {
+      mouseValue[0] = lerpVal(mouseValue[0], lastMouseArrRef.current[0] ?? 0, lerp);
+      mouseValue[1] = lerpVal(mouseValue[1], lastMouseArrRef.current[1] ?? 0, lerp);
     }
     animFrameIdRef.current = requestAnimationFrame(drawScene);
   };

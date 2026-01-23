@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
-import {
-  AgentSessionProvider,
-  useMicrophone,
-} from '../../.storybook/lk-decorators/AgentSessionProvider';
+import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentAudioVisualizerGrid, AgentAudioVisualizerGridProps } from '@agents-ui';
+import { useSessionContext } from '@livekit/components-react';
 
 export default {
   component: AgentAudioVisualizerGrid,
   decorators: [AgentSessionProvider],
   render: (args: AgentAudioVisualizerGridProps) => {
-    const audioTrack = useMicrophone();
+    const {
+      local: { microphoneTrack },
+    } = useSessionContext();
 
-    return <AgentAudioVisualizerGrid {...args} audioTrack={audioTrack} />;
+    return <AgentAudioVisualizerGrid {...args} audioTrack={microphoneTrack} />;
   },
   args: {
     size: 'lg',

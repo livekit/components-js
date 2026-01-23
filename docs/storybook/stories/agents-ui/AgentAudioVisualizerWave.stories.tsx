@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
-import {
-  AgentSessionProvider,
-  useMicrophone,
-} from '../../.storybook/lk-decorators/AgentSessionProvider';
+import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentAudioVisualizerWave, AgentAudioVisualizerWaveProps } from '@agents-ui';
+import { useSessionContext } from '@livekit/components-react';
 
 export default {
   component: AgentAudioVisualizerWave,
   decorators: [AgentSessionProvider],
   render: (args: AgentAudioVisualizerWaveProps) => {
-    const audioTrack = useMicrophone();
+    const {
+      local: { microphoneTrack },
+    } = useSessionContext();
 
-    return <AgentAudioVisualizerWave {...args} audioTrack={audioTrack} />;
+    return <AgentAudioVisualizerWave {...args} audioTrack={microphoneTrack} />;
   },
   args: {
     size: 'xl',

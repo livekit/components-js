@@ -1,21 +1,23 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
-import {
-  AgentSessionProvider,
-  useMicrophone,
-} from '../../.storybook/lk-decorators/AgentSessionProvider';
+import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentAudioVisualizerAura, AgentAudioVisualizerAuraProps } from '@agents-ui';
 import { useTheme } from 'next-themes';
+import { useSessionContext } from '@livekit/components-react';
 
 export default {
   component: AgentAudioVisualizerAura,
   decorators: [AgentSessionProvider],
   render: (args: AgentAudioVisualizerAuraProps) => {
-    const audioTrack = useMicrophone();
+    const {
+      local: { microphoneTrack },
+    } = useSessionContext();
     const { theme } = useTheme();
     const themeMode = theme === 'dark' ? 'dark' : 'light';
 
-    return <AgentAudioVisualizerAura {...args} themeMode={themeMode} audioTrack={audioTrack} />;
+    return (
+      <AgentAudioVisualizerAura {...args} themeMode={themeMode} audioTrack={microphoneTrack} />
+    );
   },
   args: {
     size: 'xl',

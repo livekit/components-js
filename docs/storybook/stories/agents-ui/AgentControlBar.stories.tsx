@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
-import {
-  AgentSessionProvider,
-  useMicrophone,
-} from '../../.storybook/lk-decorators/AgentSessionProvider';
+import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentControlBar, AgentControlBarProps } from '@agents-ui';
 
 interface Args {
@@ -34,7 +31,6 @@ export default {
       },
     };
 
-    useMicrophone();
     return <AgentControlBar {...props} className="min-w-lg  mx-auto" />;
   },
   args: {

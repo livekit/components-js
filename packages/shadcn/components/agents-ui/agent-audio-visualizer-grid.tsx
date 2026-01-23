@@ -51,7 +51,7 @@ export const AgentAudioVisualizerGridVariants = cva(
   [
     'grid',
     '*:size-1 *:rounded-full',
-    '*:bg-foreground/10 [&_>_[data-lk-highlighted=true]]:bg-foreground [&_>_[data-lk-highlighted=true]]:scale-125 [&_>_[data-lk-highlighted=true]]:shadow-[0px_0px_10px_2px_rgba(255,255,255,0.4)]',
+    '*:bg-foreground/10 *:data-[lk-highlighted=true]:bg-foreground *:data-[lk-highlighted=true]:scale-125 *:data-[lk-highlighted=true]:shadow-[0px_0px_10px_2px_rgba(255,255,255,0.4)]',
   ],
   {
     variants: {

@@ -839,8 +839,10 @@ export function ReactShaderToy({
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     const mouseValue = uniformsRef.current.iMouse?.value;
     if (uniformsRef.current.iMouse?.isNeeded && lerp !== 1 && Array.isArray(mouseValue)) {
-      mouseValue[0] = lerpVal(mouseValue[0], lastMouseArrRef.current[0] ?? 0, lerp);
-      mouseValue[1] = lerpVal(mouseValue[1], lastMouseArrRef.current[1] ?? 0, lerp);
+      const currentX = mouseValue[0] ?? 0;
+      const currentY = mouseValue[1] ?? 0;
+      mouseValue[0] = lerpVal(currentX, lastMouseArrRef.current[0] ?? 0, lerp);
+      mouseValue[1] = lerpVal(currentY, lastMouseArrRef.current[1] ?? 0, lerp);
     }
     animFrameIdRef.current = requestAnimationFrame(drawScene);
   };

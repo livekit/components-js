@@ -3,10 +3,14 @@ import { render, screen } from '@testing-library/react';
 import { AgentSessionProvider } from './agent-session-provider';
 import * as LiveKitComponents from '@livekit/components-react';
 
+const roomAudioRendererMock = vi.fn((props: any) => (
+  <div data-testid="room-audio-renderer" {...props} />
+));
+
 // Mock the @livekit/components-react components
 vi.mock('@livekit/components-react', () => ({
   SessionProvider: ({ children }: any) => <div data-testid="session-provider">{children}</div>,
-  RoomAudioRenderer: (props: any) => <div data-testid="room-audio-renderer" {...props} />,
+  RoomAudioRenderer: (props: any) => roomAudioRendererMock(props),
 }));
 
 describe('AgentSessionProvider', () => {
@@ -61,8 +65,8 @@ describe('AgentSessionProvider', () => {
           <div>Content</div>
         </AgentSessionProvider>
       );
-      const audioRenderer = screen.getByTestId('room-audio-renderer');
-      expect(audioRenderer).toHaveAttribute('volume', '0.5');
+      const lastCall = roomAudioRendererMock.mock.calls.at(-1)?.[0] ?? {};
+      expect(lastCall).toEqual(expect.objectContaining({ volume: 0.5 }));
     });
 
     it('passes muted prop to RoomAudioRenderer', () => {
@@ -71,8 +75,8 @@ describe('AgentSessionProvider', () => {
           <div>Content</div>
         </AgentSessionProvider>
       );
-      const audioRenderer = screen.getByTestId('room-audio-renderer');
-      expect(audioRenderer).toHaveAttribute('muted');
+      const lastCall = roomAudioRendererMock.mock.calls.at(-1)?.[0] ?? {};
+      expect(lastCall).toEqual(expect.objectContaining({ muted: true }));
     });
 
     it('passes room prop to RoomAudioRenderer', () => {
@@ -144,9 +148,8 @@ describe('AgentSessionProvider', () => {
           <div>Content</div>
         </AgentSessionProvider>
       );
-      const audioRenderer = screen.getByTestId('room-audio-renderer');
-      expect(audioRenderer).toHaveAttribute('volume', '0.75');
-      expect(audioRenderer).toHaveAttribute('muted', 'false');
+      const lastCall = roomAudioRendererMock.mock.calls.at(-1)?.[0] ?? {};
+      expect(lastCall).toEqual(expect.objectContaining({ volume: 0.75, muted: false }));
     });
   });
 

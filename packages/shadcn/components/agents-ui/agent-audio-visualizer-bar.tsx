@@ -122,6 +122,7 @@ export function AgentAudioVisualizerBar({
   audioTrack,
   className,
   children,
+  style,
   ...props
 }: AgentAudioVisualizerBarProps &
   VariantProps<typeof AgentAudioVisualizerBarVariants> &
@@ -172,7 +173,11 @@ export function AgentAudioVisualizerBar({
   );
 
   return (
-    <div className={cn(AgentAudioVisualizerBarVariants({ size }), className)} {...props}>
+    <div
+      className={cn(AgentAudioVisualizerBarVariants({ size }), className)}
+      style={style}
+      {...props}
+    >
       {bands.map((band: number, idx: number) =>
         children ? (
           <React.Fragment key={idx}>

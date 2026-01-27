@@ -51,7 +51,7 @@ describe('AgentAudioVisualizerWave', () => {
       expect(visualizer).toHaveClass('h-[56px]');
     });
 
-    it('applies md size styles by default', () => {
+    it('applies lg size styles by default', () => {
       const { container } = render(<AgentAudioVisualizerWave />);
       const visualizer = container.firstChild;
       expect(visualizer).toHaveClass('h-[224px]');

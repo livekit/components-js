@@ -8,6 +8,7 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 

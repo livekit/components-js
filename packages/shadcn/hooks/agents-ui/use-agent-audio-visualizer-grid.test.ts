@@ -8,6 +8,7 @@ describe('useAgentAudioVisualizerGridAnimator', () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 

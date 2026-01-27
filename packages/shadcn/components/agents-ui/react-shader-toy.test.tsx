@@ -4,6 +4,8 @@ import { ReactShaderToy } from './react-shader-toy';
 
 describe('ReactShaderToy', () => {
   const getContextMock = vi.fn(() => null);
+  const originalRequestAnimationFrame = globalThis.requestAnimationFrame;
+  const originalCancelAnimationFrame = globalThis.cancelAnimationFrame;
 
   beforeEach(() => {
     vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(getContextMock as any);
@@ -15,6 +17,9 @@ describe('ReactShaderToy', () => {
   });
 
   afterEach(() => {
+    getContextMock.mockClear();
+    globalThis.requestAnimationFrame = originalRequestAnimationFrame;
+    globalThis.cancelAnimationFrame = originalCancelAnimationFrame;
     vi.restoreAllMocks();
   });
 

@@ -18,10 +18,11 @@ vi.mock('motion/react', () => ({
     set: vi.fn(),
   })),
   useMotionValueEvent: vi.fn(),
-  animate: vi.fn(() => ({
-    stop: vi.fn(),
-    then: vi.fn(),
-  })),
+  animate: vi.fn(() => {
+    const promise = Promise.resolve();
+    (promise as typeof promise & { stop?: () => void }).stop = vi.fn();
+    return promise;
+  }),
 }));
 
 describe('useAgentAudioVisualizerWave', () => {

@@ -19,6 +19,10 @@ describe('AgentSessionProvider', () => {
     state: 'disconnected',
   } as any;
 
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('Rendering', () => {
     it('renders children', () => {
       render(

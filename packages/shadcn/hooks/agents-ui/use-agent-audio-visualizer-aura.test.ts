@@ -22,7 +22,6 @@ vi.mock('motion/react', () => ({
   useMotionValueEvent: vi.fn(),
   animate: vi.fn(() => ({
     stop: vi.fn(),
-    then: vi.fn(),
   })),
 }));
 

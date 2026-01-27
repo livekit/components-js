@@ -8,6 +8,7 @@ describe('useAgentAudioVisualizerBarAnimator', () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 

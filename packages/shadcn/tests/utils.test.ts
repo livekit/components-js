@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { cn } from './utils';
+import { cn } from '@/lib/utils';
 
 describe('cn utility function', () => {
   describe('Basic Functionality', () => {
@@ -38,11 +38,7 @@ describe('cn utility function', () => {
     it('handles multiple conditional classes', () => {
       const isActive = false;
       const isDisabled = true;
-      const result = cn(
-        'base-class',
-        isActive && 'active',
-        isDisabled && 'disabled'
-      );
+      const result = cn('base-class', isActive && 'active', isDisabled && 'disabled');
       expect(result).toContain('base-class');
       expect(result).toContain('disabled');
       expect(result).not.toContain('active');
@@ -96,7 +92,7 @@ describe('cn utility function', () => {
         'base',
         ['array-1', 'array-2'],
         { 'object-1': true, 'object-2': false },
-        'string-1'
+        'string-1',
       );
       expect(result).toContain('base');
       expect(result).toContain('array-1');
@@ -116,7 +112,7 @@ describe('cn utility function', () => {
         variant === 'primary' && 'bg-blue-500',
         variant === 'secondary' && 'bg-gray-500',
         size === 'large' && 'p-4',
-        size === 'small' && 'p-2'
+        size === 'small' && 'p-2',
       );
       expect(result).toContain('button');
       expect(result).toContain('bg-blue-500');
@@ -146,7 +142,7 @@ describe('cn utility function', () => {
         variant === 'default' && 'bg-primary text-white',
         variant === 'outline' && 'border border-input',
         isActive && 'ring-2 ring-offset-2',
-        isDisabled && 'opacity-50 pointer-events-none'
+        isDisabled && 'opacity-50 pointer-events-none',
       );
       expect(result).toContain('inline-flex');
       expect(result).toContain('border');

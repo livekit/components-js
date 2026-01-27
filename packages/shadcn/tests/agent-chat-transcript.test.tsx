@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { AgentChatTranscript } from './agent-chat-transcript';
+import { AgentChatTranscript } from '@/components/agents-ui/agent-chat-transcript';
 
 vi.mock('@/components/ai-elements/conversation', () => ({
   Conversation: ({ children, ...props }: any) => (

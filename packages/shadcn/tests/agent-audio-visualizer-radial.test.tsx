@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { AgentAudioVisualizerRadial } from './agent-audio-visualizer-radial';
+import { AgentAudioVisualizerRadial } from '@/components/agents-ui/agent-audio-visualizer-radial';
 import * as LiveKitComponents from '@livekit/components-react';
 
 // Mock hooks
@@ -94,15 +94,13 @@ describe('AgentAudioVisualizerRadial', () => {
 
   describe('HTML Attributes', () => {
     it('accepts and applies className prop', () => {
-      const { container } = render(
-        <AgentAudioVisualizerRadial className="custom-class" />
-      );
+      const { container } = render(<AgentAudioVisualizerRadial className="custom-class" />);
       expect(container.firstChild).toHaveClass('custom-class');
     });
 
     it('accepts and applies style prop', () => {
       const { container } = render(
-        <AgentAudioVisualizerRadial style={{ backgroundColor: 'green' }} />
+        <AgentAudioVisualizerRadial style={{ backgroundColor: 'green' }} />,
       );
       expect(container.firstChild).toBeInTheDocument();
     });
@@ -157,7 +155,7 @@ describe('AgentAudioVisualizerRadial', () => {
           state="speaking"
           barCount={20}
           className="custom-class"
-        />
+        />,
       );
       const visualizer = container.querySelector('.relative.flex');
       expect(visualizer).toHaveClass('custom-class', 'h-[224px]');

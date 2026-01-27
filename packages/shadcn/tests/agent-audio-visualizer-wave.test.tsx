@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { AgentAudioVisualizerWave } from './agent-audio-visualizer-wave';
+import { AgentAudioVisualizerWave } from '@/components/agents-ui/agent-audio-visualizer-wave';
 
 // Mock the hooks and components
 vi.mock('@/hooks/agents-ui/use-agent-audio-visualizer-wave', () => ({
@@ -90,16 +90,12 @@ describe('AgentAudioVisualizerWave', () => {
 
   describe('HTML Attributes', () => {
     it('accepts and applies className prop', () => {
-      const { container } = render(
-        <AgentAudioVisualizerWave className="custom-class" />
-      );
+      const { container } = render(<AgentAudioVisualizerWave className="custom-class" />);
       expect(container.firstChild).toHaveClass('custom-class');
     });
 
     it('accepts and applies style prop', () => {
-      const { container } = render(
-        <AgentAudioVisualizerWave style={{ backgroundColor: 'red' }} />
-      );
+      const { container } = render(<AgentAudioVisualizerWave style={{ backgroundColor: 'red' }} />);
       expect(container.firstChild).toBeInTheDocument();
     });
 
@@ -116,9 +112,7 @@ describe('AgentAudioVisualizerWave', () => {
 
   describe('Combined Props', () => {
     it('applies size and className together', () => {
-      const { container } = render(
-        <AgentAudioVisualizerWave size="lg" className="custom-class" />
-      );
+      const { container } = render(<AgentAudioVisualizerWave size="lg" className="custom-class" />);
       const visualizer = container.firstChild;
       expect(visualizer).toHaveClass('h-[224px]', 'custom-class');
     });
@@ -130,7 +124,7 @@ describe('AgentAudioVisualizerWave', () => {
           state="speaking"
           color="#00FF00"
           className="test-class"
-        />
+        />,
       );
       expect(container.firstChild).toHaveClass('test-class', 'h-[112px]');
     });

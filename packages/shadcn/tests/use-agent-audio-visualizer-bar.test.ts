@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
-import { useAgentAudioVisualizerBarAnimator } from './use-agent-audio-visualizer-bar';
+import { renderHook } from '@testing-library/react';
+import { useAgentAudioVisualizerBarAnimator } from '@/hooks/agents-ui/use-agent-audio-visualizer-bar';
 
 describe('useAgentAudioVisualizerBarAnimator', () => {
   beforeEach(() => {
@@ -14,71 +14,57 @@ describe('useAgentAudioVisualizerBarAnimator', () => {
 
   describe('Basic Functionality', () => {
     it('returns an array', () => {
-      const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('connecting', 5, 100)
-      );
+      const { result } = renderHook(() => useAgentAudioVisualizerBarAnimator('connecting', 5, 100));
       expect(Array.isArray(result.current)).toBe(true);
     });
 
     it('returns correct number of columns for speaking state', () => {
       const columns = 5;
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('speaking', columns, 100)
+        useAgentAudioVisualizerBarAnimator('speaking', columns, 100),
       );
       expect(result.current.length).toBe(columns);
     });
 
     it('handles different column counts', () => {
-      const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('speaking', 7, 100)
-      );
+      const { result } = renderHook(() => useAgentAudioVisualizerBarAnimator('speaking', 7, 100));
       expect(result.current.length).toBe(7);
     });
   });
 
   describe('State-based Sequences', () => {
     it('generates sequence for connecting state', () => {
-      const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('connecting', 5, 100)
-      );
+      const { result } = renderHook(() => useAgentAudioVisualizerBarAnimator('connecting', 5, 100));
       expect(result.current).toBeDefined();
       expect(Array.isArray(result.current)).toBe(true);
     });
 
     it('generates sequence for initializing state', () => {
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('initializing', 5, 100)
+        useAgentAudioVisualizerBarAnimator('initializing', 5, 100),
       );
       expect(result.current).toBeDefined();
       expect(Array.isArray(result.current)).toBe(true);
     });
 
     it('generates sequence for thinking state', () => {
-      const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('thinking', 5, 100)
-      );
+      const { result } = renderHook(() => useAgentAudioVisualizerBarAnimator('thinking', 5, 100));
       expect(result.current).toBeDefined();
     });
 
     it('generates sequence for listening state', () => {
-      const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('listening', 5, 100)
-      );
+      const { result } = renderHook(() => useAgentAudioVisualizerBarAnimator('listening', 5, 100));
       expect(result.current).toBeDefined();
     });
 
     it('generates sequence for speaking state', () => {
-      const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('speaking', 5, 100)
-      );
+      const { result } = renderHook(() => useAgentAudioVisualizerBarAnimator('speaking', 5, 100));
       expect(result.current).toBeDefined();
       expect(result.current.length).toBe(5);
     });
 
     it('handles undefined state', () => {
-      const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator(undefined, 5, 100)
-      );
+      const { result } = renderHook(() => useAgentAudioVisualizerBarAnimator(undefined, 5, 100));
       expect(result.current).toBeDefined();
       expect(result.current.length).toBe(5);
     });
@@ -89,13 +75,13 @@ describe('useAgentAudioVisualizerBarAnimator', () => {
       const { result, rerender } = renderHook(
         ({ state, columns, interval }) =>
           useAgentAudioVisualizerBarAnimator(state, columns, interval),
-        { initialProps: { state: 'connecting' as const, columns: 5, interval: 100 } }
+        { initialProps: { state: 'connecting' as const, columns: 5, interval: 100 } },
       );
 
       const initial = result.current;
-      
+
       rerender({ state: 'listening' as const, columns: 5, interval: 100 });
-      
+
       // After state change, should reset
       expect(result.current).toBeDefined();
     });
@@ -104,13 +90,13 @@ describe('useAgentAudioVisualizerBarAnimator', () => {
       const { result, rerender } = renderHook(
         ({ state, columns, interval }) =>
           useAgentAudioVisualizerBarAnimator(state, columns, interval),
-        { initialProps: { state: 'speaking' as const, columns: 5, interval: 100 } }
+        { initialProps: { state: 'speaking' as const, columns: 5, interval: 100 } },
       );
 
       expect(result.current.length).toBe(5);
-      
+
       rerender({ state: 'speaking' as const, columns: 7, interval: 100 });
-      
+
       expect(result.current.length).toBe(7);
     });
   });
@@ -119,10 +105,10 @@ describe('useAgentAudioVisualizerBarAnimator', () => {
     it('generates valid indices for connecting state', () => {
       const columns = 3;
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('connecting', columns, 100)
+        useAgentAudioVisualizerBarAnimator('connecting', columns, 100),
       );
-      
-      result.current.forEach(index => {
+
+      result.current.forEach((index) => {
         expect(index).toBeGreaterThanOrEqual(0);
         expect(index).toBeLessThan(columns);
       });
@@ -131,9 +117,9 @@ describe('useAgentAudioVisualizerBarAnimator', () => {
     it('speaking state includes all column indices', () => {
       const columns = 5;
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('speaking', columns, 100)
+        useAgentAudioVisualizerBarAnimator('speaking', columns, 100),
       );
-      
+
       expect(result.current).toHaveLength(columns);
       expect(result.current).toEqual([0, 1, 2, 3, 4]);
     });
@@ -141,9 +127,9 @@ describe('useAgentAudioVisualizerBarAnimator', () => {
     it('generates center index for listening state', () => {
       const columns = 5;
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('listening', columns, 100)
+        useAgentAudioVisualizerBarAnimator('listening', columns, 100),
       );
-      
+
       expect(result.current).toBeDefined();
       // Listening state should have center index
       const centerIndex = Math.floor(columns / 2);
@@ -153,30 +139,28 @@ describe('useAgentAudioVisualizerBarAnimator', () => {
 
   describe('Return Value Validation', () => {
     it('never returns NaN values', () => {
-      const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('speaking', 5, 100)
-      );
-      
-      result.current.forEach(value => {
+      const { result } = renderHook(() => useAgentAudioVisualizerBarAnimator('speaking', 5, 100));
+
+      result.current.forEach((value) => {
         expect(Number.isNaN(value)).toBe(false);
       });
     });
 
     it('returns empty array for disconnected state', () => {
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('disconnected', 5, 100)
+        useAgentAudioVisualizerBarAnimator('disconnected', 5, 100),
       );
-      
+
       expect(result.current).toEqual([]);
     });
 
     it('returns array with valid indices', () => {
       const columns = 5;
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('speaking', columns, 100)
+        useAgentAudioVisualizerBarAnimator('speaking', columns, 100),
       );
-      
-      result.current.forEach(index => {
+
+      result.current.forEach((index) => {
         expect(typeof index).toBe('number');
         expect(index).toBeGreaterThanOrEqual(0);
         expect(index).toBeLessThan(columns);
@@ -186,37 +170,29 @@ describe('useAgentAudioVisualizerBarAnimator', () => {
 
   describe('Edge Cases', () => {
     it('handles single column', () => {
-      const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('speaking', 1, 100)
-      );
-      
+      const { result } = renderHook(() => useAgentAudioVisualizerBarAnimator('speaking', 1, 100));
+
       expect(result.current).toHaveLength(1);
       expect(result.current[0]).toBe(0);
     });
 
     it('handles large number of columns', () => {
-      const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('speaking', 100, 100)
-      );
-      
+      const { result } = renderHook(() => useAgentAudioVisualizerBarAnimator('speaking', 100, 100));
+
       expect(result.current).toHaveLength(100);
     });
 
     it('handles zero interval', () => {
-      const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('speaking', 5, 0)
-      );
-      
+      const { result } = renderHook(() => useAgentAudioVisualizerBarAnimator('speaking', 5, 0));
+
       expect(result.current).toBeDefined();
     });
   });
 
   describe('Hook Stability', () => {
     it('does not cause infinite re-renders', () => {
-      const { result } = renderHook(() =>
-        useAgentAudioVisualizerBarAnimator('speaking', 5, 100)
-      );
-      
+      const { result } = renderHook(() => useAgentAudioVisualizerBarAnimator('speaking', 5, 100));
+
       expect(result.current).toBeDefined();
     });
 
@@ -224,13 +200,13 @@ describe('useAgentAudioVisualizerBarAnimator', () => {
       const { result, rerender } = renderHook(
         ({ state, columns, interval }) =>
           useAgentAudioVisualizerBarAnimator(state, columns, interval),
-        { initialProps: { state: 'speaking' as const, columns: 5, interval: 100 } }
+        { initialProps: { state: 'speaking' as const, columns: 5, interval: 100 } },
       );
-      
+
       const firstResult = result.current;
-      
+
       rerender({ state: 'speaking' as const, columns: 5, interval: 100 });
-      
+
       expect(result.current).toEqual(firstResult);
     });
   });

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { AgentTrackToggle } from './agent-track-toggle';
+import { AgentTrackToggle } from '@/components/agents-ui/agent-track-toggle';
 
 describe('AgentTrackToggle', () => {
   describe('Rendering', () => {
@@ -25,34 +25,26 @@ describe('AgentTrackToggle', () => {
 
   describe('Source Icons', () => {
     it('shows microphone icon when source is microphone and pressed', () => {
-      const { container } = render(
-        <AgentTrackToggle source="microphone" pressed={true} />
-      );
+      const { container } = render(<AgentTrackToggle source="microphone" pressed={true} />);
       const button = screen.getByRole('button');
       // The icon is rendered inside the button
       expect(button.querySelector('svg')).toBeInTheDocument();
     });
 
     it('shows microphone-off icon when source is microphone and not pressed', () => {
-      const { container } = render(
-        <AgentTrackToggle source="microphone" pressed={false} />
-      );
+      const { container } = render(<AgentTrackToggle source="microphone" pressed={false} />);
       const button = screen.getByRole('button');
       expect(button.querySelector('svg')).toBeInTheDocument();
     });
 
     it('shows camera icon when source is camera and pressed', () => {
-      const { container } = render(
-        <AgentTrackToggle source="camera" pressed={true} />
-      );
+      const { container } = render(<AgentTrackToggle source="camera" pressed={true} />);
       const button = screen.getByRole('button');
       expect(button.querySelector('svg')).toBeInTheDocument();
     });
 
     it('shows monitor icon when source is screen_share', () => {
-      const { container } = render(
-        <AgentTrackToggle source="screen_share" pressed={true} />
-      );
+      const { container } = render(<AgentTrackToggle source="screen_share" pressed={true} />);
       const button = screen.getByRole('button');
       expect(button.querySelector('svg')).toBeInTheDocument();
     });
@@ -60,18 +52,14 @@ describe('AgentTrackToggle', () => {
 
   describe('Pending State', () => {
     it('shows loading icon when pending is true', () => {
-      const { container } = render(
-        <AgentTrackToggle source="microphone" pending={true} />
-      );
+      const { container } = render(<AgentTrackToggle source="microphone" pending={true} />);
       const button = screen.getByRole('button');
       const icon = button.querySelector('svg');
       expect(icon).toHaveClass('animate-spin');
     });
 
     it('does not show loading animation when pending is false', () => {
-      const { container } = render(
-        <AgentTrackToggle source="microphone" pending={false} />
-      );
+      const { container } = render(<AgentTrackToggle source="microphone" pending={false} />);
       const button = screen.getByRole('button');
       const icon = button.querySelector('svg');
       expect(icon).not.toHaveClass('animate-spin');
@@ -140,9 +128,7 @@ describe('AgentTrackToggle', () => {
     });
 
     it('accepts and applies style prop', () => {
-      render(
-        <AgentTrackToggle source="microphone" style={{ backgroundColor: 'red' }} />
-      );
+      render(<AgentTrackToggle source="microphone" style={{ backgroundColor: 'red' }} />);
       const toggle = screen.getByRole('button');
       expect(toggle).toBeInTheDocument();
     });
@@ -169,31 +155,24 @@ describe('AgentTrackToggle', () => {
     it('calls onPressedChange when toggled', async () => {
       const handlePressedChange = vi.fn();
       const user = userEvent.setup();
-      
-      render(
-        <AgentTrackToggle
-          source="microphone"
-          onPressedChange={handlePressedChange}
-        />
-      );
-      
+
+      render(<AgentTrackToggle source="microphone" onPressedChange={handlePressedChange} />);
+
       const toggle = screen.getByRole('button');
       await user.click(toggle);
-      
+
       expect(handlePressedChange).toHaveBeenCalledWith(true);
     });
 
     it('calls onClick handler when clicked', async () => {
       const handleClick = vi.fn();
       const user = userEvent.setup();
-      
-      render(
-        <AgentTrackToggle source="microphone" onClick={handleClick} />
-      );
-      
+
+      render(<AgentTrackToggle source="microphone" onClick={handleClick} />);
+
       const toggle = screen.getByRole('button');
       await user.click(toggle);
-      
+
       expect(handleClick).toHaveBeenCalled();
     });
 
@@ -201,19 +180,19 @@ describe('AgentTrackToggle', () => {
       const handlePressedChange = vi.fn();
       const handleClick = vi.fn();
       const user = userEvent.setup();
-      
+
       render(
         <AgentTrackToggle
           source="microphone"
           disabled
           onClick={handleClick}
           onPressedChange={handlePressedChange}
-        />
+        />,
       );
-      
+
       const toggle = screen.getByRole('button');
       await user.click(toggle);
-      
+
       expect(handleClick).not.toHaveBeenCalled();
       expect(handlePressedChange).not.toHaveBeenCalled();
     });
@@ -228,9 +207,9 @@ describe('AgentTrackToggle', () => {
           size="lg"
           pressed={true}
           className="custom-class"
-        />
+        />,
       );
-      
+
       const toggle = screen.getByRole('button');
       expect(toggle).toHaveClass('custom-class', 'border', 'h-10');
       expect(toggle).toHaveAttribute('aria-pressed', 'true');
@@ -238,16 +217,12 @@ describe('AgentTrackToggle', () => {
 
     it('works with pending and pressed states together', () => {
       const { container } = render(
-        <AgentTrackToggle
-          source="microphone"
-          pressed={true}
-          pending={true}
-        />
+        <AgentTrackToggle source="microphone" pressed={true} pending={true} />,
       );
-      
+
       const toggle = screen.getByRole('button');
       expect(toggle).toHaveAttribute('aria-pressed', 'true');
-      
+
       const icon = container.querySelector('svg');
       expect(icon).toHaveClass('animate-spin');
     });

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { AgentDisconnectButton } from './agent-disconnect-button';
+import { AgentDisconnectButton } from '@/components/agents-ui/agent-disconnect-button';
 import * as LiveKitComponents from '@livekit/components-react';
 
 // Mock the @livekit/components-react hooks
@@ -48,9 +48,7 @@ describe('AgentDisconnectButton', () => {
     });
 
     it('renders with custom icon when provided', () => {
-      render(
-        <AgentDisconnectButton icon={<span data-testid="custom-icon">X</span>} />
-      );
+      render(<AgentDisconnectButton icon={<span data-testid="custom-icon">X</span>} />);
       expect(screen.getByTestId('custom-icon')).toBeInTheDocument();
     });
   });
@@ -160,10 +158,10 @@ describe('AgentDisconnectButton', () => {
     it('calls end from useSessionContext when clicked', async () => {
       const user = userEvent.setup();
       render(<AgentDisconnectButton />);
-      
+
       const button = screen.getByRole('button');
       await user.click(button);
-      
+
       expect(mockEnd).toHaveBeenCalledTimes(1);
     });
 
@@ -171,10 +169,10 @@ describe('AgentDisconnectButton', () => {
       const handleClick = vi.fn();
       const user = userEvent.setup();
       render(<AgentDisconnectButton onClick={handleClick} />);
-      
+
       const button = screen.getByRole('button');
       await user.click(button);
-      
+
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
 
@@ -182,10 +180,10 @@ describe('AgentDisconnectButton', () => {
       const handleClick = vi.fn();
       const user = userEvent.setup();
       render(<AgentDisconnectButton onClick={handleClick} />);
-      
+
       const button = screen.getByRole('button');
       await user.click(button);
-      
+
       expect(handleClick).toHaveBeenCalledTimes(1);
       expect(mockEnd).toHaveBeenCalledTimes(1);
     });
@@ -194,10 +192,10 @@ describe('AgentDisconnectButton', () => {
       const handleClick = vi.fn();
       const user = userEvent.setup();
       render(<AgentDisconnectButton disabled onClick={handleClick} />);
-      
+
       const button = screen.getByRole('button');
       await user.click(button);
-      
+
       expect(handleClick).not.toHaveBeenCalled();
       expect(mockEnd).not.toHaveBeenCalled();
     });
@@ -206,15 +204,11 @@ describe('AgentDisconnectButton', () => {
   describe('Combined Props', () => {
     it('applies multiple props together', () => {
       render(
-        <AgentDisconnectButton
-          variant="outline"
-          size="lg"
-          className="custom-class"
-        >
+        <AgentDisconnectButton variant="outline" size="lg" className="custom-class">
           Leave
-        </AgentDisconnectButton>
+        </AgentDisconnectButton>,
       );
-      
+
       const button = screen.getByRole('button');
       expect(button).toHaveClass('custom-class', 'border', 'h-10');
       expect(screen.getByText('Leave')).toBeInTheDocument();

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { AgentAudioVisualizerBar } from './agent-audio-visualizer-bar';
+import { AgentAudioVisualizerBar } from '@/components/agents-ui/agent-audio-visualizer-bar';
 import * as LiveKitComponents from '@livekit/components-react';
 
 // Mock the @livekit/components-react hooks
@@ -45,7 +45,7 @@ describe('AgentAudioVisualizerBar', () => {
       const { container } = render(
         <AgentAudioVisualizerBar>
           <span className="custom-bar">Bar</span>
-        </AgentAudioVisualizerBar>
+        </AgentAudioVisualizerBar>,
       );
       const bars = container.querySelectorAll('.custom-bar');
       expect(bars.length).toBeGreaterThan(0);
@@ -161,36 +161,34 @@ describe('AgentAudioVisualizerBar', () => {
 
     it('uses multiband volume when speaking with audio track', () => {
       const mockTrack = {} as any;
-      vi.mocked(LiveKitComponents.useMultibandTrackVolume).mockReturnValue([0.5, 0.7, 0.3, 0.6, 0.4]);
-      
+      vi.mocked(LiveKitComponents.useMultibandTrackVolume).mockReturnValue([
+        0.5, 0.7, 0.3, 0.6, 0.4,
+      ]);
+
       const { container } = render(
-        <AgentAudioVisualizerBar state="speaking" audioTrack={mockTrack} />
+        <AgentAudioVisualizerBar state="speaking" audioTrack={mockTrack} />,
       );
-      
+
       expect(LiveKitComponents.useMultibandTrackVolume).toHaveBeenCalledWith(
         mockTrack,
         expect.objectContaining({
           bands: 5,
           loPass: 100,
           hiPass: 200,
-        })
+        }),
       );
     });
   });
 
   describe('HTML Attributes', () => {
     it('accepts and applies className prop', () => {
-      const { container } = render(
-        <AgentAudioVisualizerBar className="custom-class" />
-      );
+      const { container } = render(<AgentAudioVisualizerBar className="custom-class" />);
       const visualizer = container.querySelector('.custom-class');
       expect(visualizer).toBeInTheDocument();
     });
 
     it('accepts and applies style prop', () => {
-      const { container } = render(
-        <AgentAudioVisualizerBar style={{ backgroundColor: 'red' }} />
-      );
+      const { container } = render(<AgentAudioVisualizerBar style={{ backgroundColor: 'red' }} />);
       const visualizer = container.querySelector('.relative.flex');
       expect(visualizer).toBeInTheDocument();
     });
@@ -211,7 +209,7 @@ describe('AgentAudioVisualizerBar', () => {
     it('applies data-lk-index to each bar', () => {
       const { container } = render(<AgentAudioVisualizerBar barCount={3} />);
       const bars = container.querySelectorAll('[data-lk-index]');
-      
+
       expect(bars[0]).toHaveAttribute('data-lk-index', '0');
       expect(bars[1]).toHaveAttribute('data-lk-index', '1');
       expect(bars[2]).toHaveAttribute('data-lk-index', '2');
@@ -226,7 +224,7 @@ describe('AgentAudioVisualizerBar', () => {
     it('applies height style to bars', () => {
       const { container } = render(<AgentAudioVisualizerBar />);
       const bars = container.querySelectorAll('[data-lk-index]');
-      bars.forEach(bar => {
+      bars.forEach((bar) => {
         expect(bar).toHaveAttribute('style');
       });
     });
@@ -237,12 +235,12 @@ describe('AgentAudioVisualizerBar', () => {
       const { container } = render(
         <AgentAudioVisualizerBar barCount={2}>
           <span className="custom-bar">Custom</span>
-        </AgentAudioVisualizerBar>
+        </AgentAudioVisualizerBar>,
       );
-      
+
       const bars = container.querySelectorAll('.custom-bar');
       expect(bars.length).toBe(2);
-      bars.forEach(bar => {
+      bars.forEach((bar) => {
         expect(bar).toHaveAttribute('data-lk-index');
         expect(bar).toHaveAttribute('data-lk-highlighted');
       });
@@ -252,9 +250,9 @@ describe('AgentAudioVisualizerBar', () => {
       const { container } = render(
         <AgentAudioVisualizerBar barCount={1}>
           <div className="original-class">Bar</div>
-        </AgentAudioVisualizerBar>
+        </AgentAudioVisualizerBar>,
       );
-      
+
       const bar = container.querySelector('.original-class');
       expect(bar).toBeInTheDocument();
     });
@@ -262,9 +260,7 @@ describe('AgentAudioVisualizerBar', () => {
 
   describe('Combined Props', () => {
     it('applies size, state, and className together', () => {
-      vi.mocked(LiveKitComponents.useMultibandTrackVolume).mockReturnValue(
-        new Array(7).fill(0)
-      );
+      vi.mocked(LiveKitComponents.useMultibandTrackVolume).mockReturnValue(new Array(7).fill(0));
 
       const { container } = render(
         <AgentAudioVisualizerBar
@@ -272,12 +268,12 @@ describe('AgentAudioVisualizerBar', () => {
           state="speaking"
           className="custom-class"
           barCount={7}
-        />
+        />,
       );
-      
+
       const visualizer = container.querySelector('.custom-class');
       expect(visualizer).toHaveClass('h-[224px]');
-      
+
       const bars = container.querySelectorAll('[data-lk-index]');
       expect(bars).toHaveLength(7);
     });

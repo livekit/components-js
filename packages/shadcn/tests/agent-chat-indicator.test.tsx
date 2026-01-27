@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { AgentChatIndicator } from './agent-chat-indicator';
+import { AgentChatIndicator } from '@/components/agents-ui/agent-chat-indicator';
 
 describe('AgentChatIndicator', () => {
   describe('Rendering', () => {
@@ -88,12 +88,7 @@ describe('AgentChatIndicator', () => {
     });
 
     it('accepts transition props', () => {
-      render(
-        <AgentChatIndicator
-          transition={{ duration: 1.0 }}
-          data-testid="indicator"
-        />
-      );
+      render(<AgentChatIndicator transition={{ duration: 1.0 }} data-testid="indicator" />);
       const indicator = screen.getByTestId('indicator');
       expect(indicator).toBeInTheDocument();
     });
@@ -101,24 +96,13 @@ describe('AgentChatIndicator', () => {
 
   describe('Combined Props', () => {
     it('applies multiple size and className combinations', () => {
-      render(
-        <AgentChatIndicator
-          size="lg"
-          className="my-custom-class"
-          data-testid="indicator"
-        />
-      );
+      render(<AgentChatIndicator size="lg" className="my-custom-class" data-testid="indicator" />);
       const indicator = screen.getByTestId('indicator');
       expect(indicator).toHaveClass('size-6', 'my-custom-class');
     });
 
     it('merges custom className with default classes', () => {
-      render(
-        <AgentChatIndicator
-          className="custom-bg"
-          data-testid="indicator"
-        />
-      );
+      render(<AgentChatIndicator className="custom-bg" data-testid="indicator" />);
       const indicator = screen.getByTestId('indicator');
       expect(indicator).toHaveClass('custom-bg', 'rounded-full');
     });

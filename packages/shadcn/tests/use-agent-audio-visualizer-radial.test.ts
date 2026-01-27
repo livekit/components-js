@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
-import { useAgentAudioVisualizerRadialAnimator } from './use-agent-audio-visualizer-radial';
+import { renderHook } from '@testing-library/react';
+import { useAgentAudioVisualizerRadialAnimator } from '@/hooks/agents-ui/use-agent-audio-visualizer-radial';
 
 describe('useAgentAudioVisualizerRadialAnimator', () => {
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
   describe('Basic Functionality', () => {
     it('returns an array', () => {
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('connecting', 12, 100)
+        useAgentAudioVisualizerRadialAnimator('connecting', 12, 100),
       );
       expect(Array.isArray(result.current)).toBe(true);
     });
@@ -23,10 +23,10 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
     it('returns valid indices', () => {
       const barCount = 12;
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('connecting', barCount, 100)
+        useAgentAudioVisualizerRadialAnimator('connecting', barCount, 100),
       );
-      
-      result.current.forEach(index => {
+
+      result.current.forEach((index) => {
         expect(index).toBeGreaterThanOrEqual(0);
         expect(index).toBeLessThan(barCount);
       });
@@ -36,7 +36,7 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
   describe('State-based Sequences', () => {
     it('handles thinking state', () => {
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('thinking', 12, 100)
+        useAgentAudioVisualizerRadialAnimator('thinking', 12, 100),
       );
       expect(result.current).toBeDefined();
       expect(Array.isArray(result.current)).toBe(true);
@@ -44,21 +44,21 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
 
     it('handles connecting state', () => {
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('connecting', 12, 100)
+        useAgentAudioVisualizerRadialAnimator('connecting', 12, 100),
       );
       expect(result.current).toBeDefined();
     });
 
     it('handles initializing state', () => {
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('initializing', 12, 100)
+        useAgentAudioVisualizerRadialAnimator('initializing', 12, 100),
       );
       expect(result.current).toBeDefined();
     });
 
     it('handles listening state', () => {
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('listening', 12, 100)
+        useAgentAudioVisualizerRadialAnimator('listening', 12, 100),
       );
       expect(result.current).toBeDefined();
     });
@@ -66,7 +66,7 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
     it('handles speaking state', () => {
       const barCount = 12;
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('speaking', barCount, 100)
+        useAgentAudioVisualizerRadialAnimator('speaking', barCount, 100),
       );
       expect(result.current.length).toBe(barCount);
     });
@@ -74,7 +74,7 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
     it('handles undefined state', () => {
       const barCount = 12;
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator(undefined, barCount, 100)
+        useAgentAudioVisualizerRadialAnimator(undefined, barCount, 100),
       );
       expect(result.current.length).toBe(barCount);
     });
@@ -84,7 +84,7 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
     it('handles different bar counts', () => {
       const barCount = 16;
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('speaking', barCount, 100)
+        useAgentAudioVisualizerRadialAnimator('speaking', barCount, 100),
       );
       expect(result.current.length).toBe(barCount);
     });
@@ -92,7 +92,7 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
     it('speaking state includes all bars', () => {
       const barCount = 8;
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('speaking', barCount, 100)
+        useAgentAudioVisualizerRadialAnimator('speaking', barCount, 100),
       );
       expect(result.current).toHaveLength(barCount);
       expect(result.current).toEqual(Array.from({ length: barCount }, (_, i) => i));
@@ -102,17 +102,17 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
   describe('Return Value Validation', () => {
     it('never returns NaN values', () => {
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('speaking', 12, 100)
+        useAgentAudioVisualizerRadialAnimator('speaking', 12, 100),
       );
-      
-      result.current.forEach(value => {
+
+      result.current.forEach((value) => {
         expect(Number.isNaN(value)).toBe(false);
       });
     });
 
     it('returns empty array for disconnected state', () => {
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('disconnected', 12, 100)
+        useAgentAudioVisualizerRadialAnimator('disconnected', 12, 100),
       );
       expect(result.current).toEqual([]);
     });
@@ -120,10 +120,10 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
     it('all values are within barCount range', () => {
       const barCount = 12;
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('speaking', barCount, 100)
+        useAgentAudioVisualizerRadialAnimator('speaking', barCount, 100),
       );
-      
-      result.current.forEach(index => {
+
+      result.current.forEach((index) => {
         expect(index).toBeGreaterThanOrEqual(0);
         expect(index).toBeLessThan(barCount);
       });
@@ -133,7 +133,7 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
   describe('Edge Cases', () => {
     it('handles single bar', () => {
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('speaking', 1, 100)
+        useAgentAudioVisualizerRadialAnimator('speaking', 1, 100),
       );
       expect(result.current).toHaveLength(1);
       expect(result.current[0]).toBe(0);
@@ -142,15 +142,13 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
     it('handles large number of bars', () => {
       const barCount = 48;
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('speaking', barCount, 100)
+        useAgentAudioVisualizerRadialAnimator('speaking', barCount, 100),
       );
       expect(result.current).toHaveLength(barCount);
     });
 
     it('handles zero interval', () => {
-      const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('speaking', 12, 0)
-      );
+      const { result } = renderHook(() => useAgentAudioVisualizerRadialAnimator('speaking', 12, 0));
       expect(result.current).toBeDefined();
     });
   });
@@ -160,13 +158,13 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
       const { result, rerender } = renderHook(
         ({ state, barCount, interval }) =>
           useAgentAudioVisualizerRadialAnimator(state, barCount, interval),
-        { initialProps: { state: 'connecting' as const, barCount: 12, interval: 100 } }
+        { initialProps: { state: 'connecting' as const, barCount: 12, interval: 100 } },
       );
 
       const initial = result.current;
-      
+
       rerender({ state: 'listening' as const, barCount: 12, interval: 100 });
-      
+
       expect(result.current).toBeDefined();
     });
   });
@@ -174,14 +172,14 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
   describe('Hook Stability', () => {
     it('does not cause infinite re-renders', () => {
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('speaking', 12, 100)
+        useAgentAudioVisualizerRadialAnimator('speaking', 12, 100),
       );
       expect(result.current).toBeDefined();
     });
 
     it('maintains array structure', () => {
       const { result } = renderHook(() =>
-        useAgentAudioVisualizerRadialAnimator('connecting', 12, 100)
+        useAgentAudioVisualizerRadialAnimator('connecting', 12, 100),
       );
       expect(Array.isArray(result.current)).toBe(true);
     });

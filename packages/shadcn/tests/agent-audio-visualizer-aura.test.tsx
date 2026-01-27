@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { AgentAudioVisualizerAura } from './agent-audio-visualizer-aura';
+import { AgentAudioVisualizerAura } from '@/components/agents-ui/agent-audio-visualizer-aura';
 
 vi.mock('@/hooks/agents-ui/use-agent-audio-visualizer-aura', () => ({
   useAgentAudioVisualizerAura: vi.fn(() => ({

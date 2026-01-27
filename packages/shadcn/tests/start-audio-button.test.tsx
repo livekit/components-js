@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { StartAudioButton } from './start-audio-button';
+import { StartAudioButton } from '@/components/agents-ui/start-audio-button';
 import * as LiveKitComponents from '@livekit/components-react';
 
 // Mock the @livekit/components-react hooks
@@ -161,7 +161,7 @@ describe('StartAudioButton', () => {
     it('calls onClick handler when clicked', async () => {
       const handleClick = vi.fn();
       const user = userEvent.setup();
-      
+
       vi.mocked(LiveKitComponents.useStartAudio).mockReturnValue({
         mergedProps: { onClick: handleClick },
       });
@@ -169,14 +169,14 @@ describe('StartAudioButton', () => {
       render(<StartAudioButton label="Start" />);
       const button = screen.getByRole('button');
       await user.click(button);
-      
+
       expect(handleClick).toHaveBeenCalled();
     });
 
     it('does not call onClick when disabled', async () => {
       const handleClick = vi.fn();
       const user = userEvent.setup();
-      
+
       vi.mocked(LiveKitComponents.useStartAudio).mockReturnValue({
         mergedProps: { onClick: handleClick },
       });
@@ -184,7 +184,7 @@ describe('StartAudioButton', () => {
       render(<StartAudioButton label="Start" disabled />);
       const button = screen.getByRole('button');
       await user.click(button);
-      
+
       expect(handleClick).not.toHaveBeenCalled();
     });
   });
@@ -193,22 +193,22 @@ describe('StartAudioButton', () => {
     it('calls useEnsureRoom with provided room', () => {
       const mockRoom = {} as any;
       render(<StartAudioButton label="Start" room={mockRoom} />);
-      
+
       expect(LiveKitComponents.useEnsureRoom).toHaveBeenCalledWith(mockRoom);
     });
 
     it('calls useEnsureRoom with undefined when no room provided', () => {
       render(<StartAudioButton label="Start" />);
-      
+
       expect(LiveKitComponents.useEnsureRoom).toHaveBeenCalledWith(undefined);
     });
 
     it('calls useStartAudio with ensured room', () => {
       const mockRoom = {} as any;
       vi.mocked(LiveKitComponents.useEnsureRoom).mockReturnValue(mockRoom);
-      
+
       render(<StartAudioButton label="Start" room={mockRoom} />);
-      
+
       expect(LiveKitComponents.useStartAudio).toHaveBeenCalledWith({
         room: mockRoom,
         props: expect.any(Object),
@@ -224,13 +224,7 @@ describe('StartAudioButton', () => {
     });
 
     it('merges custom className with variant classes', () => {
-      render(
-        <StartAudioButton
-          label="Start"
-          variant="secondary"
-          className="my-custom-class"
-        />
-      );
+      render(<StartAudioButton label="Start" variant="secondary" className="my-custom-class" />);
       const button = screen.getByRole('button');
       expect(button).toHaveClass('bg-secondary', 'my-custom-class');
     });

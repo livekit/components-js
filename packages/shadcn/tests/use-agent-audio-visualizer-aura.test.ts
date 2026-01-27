@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
-import { useAgentAudioVisualizerAura } from './use-agent-audio-visualizer-aura';
+import { useAgentAudioVisualizerAura } from '@/hooks/agents-ui/use-agent-audio-visualizer-aura';
 import * as LiveKitComponents from '@livekit/components-react';
 
 // Mock the @livekit/components-react hooks
@@ -33,7 +33,7 @@ describe('useAgentAudioVisualizerAura', () => {
   describe('Basic Hook Behavior', () => {
     it('returns default values', () => {
       const { result } = renderHook(() => useAgentAudioVisualizerAura(undefined));
-      
+
       expect(result.current).toHaveProperty('speed');
       expect(result.current).toHaveProperty('scale');
       expect(result.current).toHaveProperty('amplitude');
@@ -43,7 +43,7 @@ describe('useAgentAudioVisualizerAura', () => {
 
     it('returns numeric values', () => {
       const { result } = renderHook(() => useAgentAudioVisualizerAura('idle'));
-      
+
       expect(typeof result.current.speed).toBe('number');
       expect(typeof result.current.scale).toBe('number');
       expect(typeof result.current.amplitude).toBe('number');
@@ -102,51 +102,46 @@ describe('useAgentAudioVisualizerAura', () => {
   describe('Audio Track Integration', () => {
     it('works without audio track', () => {
       const { result } = renderHook(() => useAgentAudioVisualizerAura('speaking'));
-      
+
       expect(result.current).toBeDefined();
       expect(LiveKitComponents.useTrackVolume).toHaveBeenCalled();
     });
 
     it('accepts audio track parameter', () => {
       const mockTrack = {} as any;
-      const { result } = renderHook(() => 
-        useAgentAudioVisualizerAura('speaking', mockTrack)
-      );
-      
+      const { result } = renderHook(() => useAgentAudioVisualizerAura('speaking', mockTrack));
+
       expect(result.current).toBeDefined();
       expect(LiveKitComponents.useTrackVolume).toHaveBeenCalledWith(
         mockTrack,
         expect.objectContaining({
           fftSize: 512,
           smoothingTimeConstant: 0.55,
-        })
+        }),
       );
     });
 
     it('uses track volume in speaking state', () => {
       vi.mocked(LiveKitComponents.useTrackVolume).mockReturnValue(0.8);
       const mockTrack = {} as any;
-      
-      const { result } = renderHook(() => 
-        useAgentAudioVisualizerAura('speaking', mockTrack)
-      );
-      
+
+      const { result } = renderHook(() => useAgentAudioVisualizerAura('speaking', mockTrack));
+
       expect(result.current).toBeDefined();
     });
   });
 
   describe('State Transitions', () => {
     it('updates values when state changes', async () => {
-      const { result, rerender } = renderHook(
-        ({ state }) => useAgentAudioVisualizerAura(state),
-        { initialProps: { state: 'idle' as const } }
-      );
-      
+      const { result, rerender } = renderHook(({ state }) => useAgentAudioVisualizerAura(state), {
+        initialProps: { state: 'idle' as const },
+      });
+
       const initialSpeed = result.current.speed;
       expect(initialSpeed).toBe(10);
-      
+
       rerender({ state: 'speaking' as const });
-      
+
       await waitFor(() => {
         expect(result.current.speed).toBe(70);
       });
@@ -158,15 +153,14 @@ describe('useAgentAudioVisualizerAura', () => {
     });
 
     it('transitions from listening to speaking', async () => {
-      const { result, rerender } = renderHook(
-        ({ state }) => useAgentAudioVisualizerAura(state),
-        { initialProps: { state: 'listening' as const } }
-      );
-      
+      const { result, rerender } = renderHook(({ state }) => useAgentAudioVisualizerAura(state), {
+        initialProps: { state: 'listening' as const },
+      });
+
       expect(result.current.speed).toBe(20);
-      
+
       rerender({ state: 'speaking' as const });
-      
+
       await waitFor(() => {
         expect(result.current.speed).toBe(70);
       });
@@ -176,8 +170,8 @@ describe('useAgentAudioVisualizerAura', () => {
   describe('Return Value Properties', () => {
     it('speed is always a positive number', () => {
       const states = ['idle', 'connecting', 'listening', 'thinking', 'speaking'] as const;
-      
-      states.forEach(state => {
+
+      states.forEach((state) => {
         const { result } = renderHook(() => useAgentAudioVisualizerAura(state));
         expect(result.current.speed).toBeGreaterThan(0);
       });
@@ -185,7 +179,7 @@ describe('useAgentAudioVisualizerAura', () => {
 
     it('all values are defined', () => {
       const { result } = renderHook(() => useAgentAudioVisualizerAura('speaking'));
-      
+
       expect(result.current.speed).toBeDefined();
       expect(result.current.scale).toBeDefined();
       expect(result.current.amplitude).toBeDefined();
@@ -195,7 +189,7 @@ describe('useAgentAudioVisualizerAura', () => {
 
     it('values are not NaN', () => {
       const { result } = renderHook(() => useAgentAudioVisualizerAura('speaking'));
-      
+
       expect(Number.isNaN(result.current.speed)).toBe(false);
       expect(Number.isNaN(result.current.scale)).toBe(false);
       expect(Number.isNaN(result.current.amplitude)).toBe(false);
@@ -206,20 +200,19 @@ describe('useAgentAudioVisualizerAura', () => {
 
   describe('Hook Stability', () => {
     it('returns stable values for same state', () => {
-      const { result, rerender } = renderHook(
-        ({ state }) => useAgentAudioVisualizerAura(state),
-        { initialProps: { state: 'idle' as const } }
-      );
-      
+      const { result, rerender } = renderHook(({ state }) => useAgentAudioVisualizerAura(state), {
+        initialProps: { state: 'idle' as const },
+      });
+
       const firstSpeed = result.current.speed;
       rerender({ state: 'idle' as const });
-      
+
       expect(result.current.speed).toBe(firstSpeed);
     });
 
     it('does not cause infinite re-renders', () => {
       const { result } = renderHook(() => useAgentAudioVisualizerAura('speaking'));
-      
+
       // If this test completes without timeout, the hook is stable
       expect(result.current).toBeDefined();
     });

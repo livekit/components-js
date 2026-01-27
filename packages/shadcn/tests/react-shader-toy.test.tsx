@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, waitFor } from '@testing-library/react';
-import { ReactShaderToy } from './react-shader-toy';
+import { ReactShaderToy } from '@/components/agents-ui/react-shader-toy';
 
 describe('ReactShaderToy', () => {
   const getContextMock = vi.fn(() => null);
@@ -25,18 +25,14 @@ describe('ReactShaderToy', () => {
 
   it('renders a canvas element', () => {
     const { container } = render(
-      <ReactShaderToy
-        fs="void mainImage(out vec4 fragColor, in vec2 fragCoord){ fragColor = vec4(1.0); }"
-      />,
+      <ReactShaderToy fs="void mainImage(out vec4 fragColor, in vec2 fragCoord){ fragColor = vec4(1.0); }" />,
     );
     expect(container.querySelector('canvas')).toBeInTheDocument();
   });
 
   it('requests a WebGL context on mount', async () => {
     render(
-      <ReactShaderToy
-        fs="void mainImage(out vec4 fragColor, in vec2 fragCoord){ fragColor = vec4(1.0); }"
-      />,
+      <ReactShaderToy fs="void mainImage(out vec4 fragColor, in vec2 fragCoord){ fragColor = vec4(1.0); }" />,
     );
 
     await waitFor(() => {

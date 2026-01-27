@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { AgentControlBar } from './agent-control-bar';
+import { AgentControlBar } from '@/components/agents-ui/agent-control-bar';
 import * as controlBarHooks from '@/hooks/agents-ui/use-agent-control-bar';
 
 const sendMock = vi.fn();

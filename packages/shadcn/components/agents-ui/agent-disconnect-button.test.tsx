@@ -227,12 +227,16 @@ describe('AgentDisconnectButton', () => {
       expect(LiveKitComponents.useSessionContext).toHaveBeenCalled();
     });
 
-    it('handles missing session context gracefully', () => {
+    it('handles missing session context gracefully', async () => {
       vi.mocked(LiveKitComponents.useSessionContext).mockReturnValue({
         end: undefined,
       } as any);
 
-      expect(() => render(<AgentDisconnectButton />)).not.toThrow();
+      const user = userEvent.setup();
+      render(<AgentDisconnectButton />);
+
+      const button = screen.getByRole('button');
+      await expect(user.click(button)).resolves.toBeUndefined();
     });
   });
 });

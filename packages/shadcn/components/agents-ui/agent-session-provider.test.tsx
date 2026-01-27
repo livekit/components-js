@@ -1,7 +1,11 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { AgentSessionProvider } from './agent-session-provider';
 import * as LiveKitComponents from '@livekit/components-react';
+
+const sessionProviderMock = vi.fn(({ children }: any) => (
+  <div data-testid="session-provider">{children}</div>
+));
 
 const roomAudioRendererMock = vi.fn((props: any) => (
   <div data-testid="room-audio-renderer" {...props} />
@@ -9,8 +13,9 @@ const roomAudioRendererMock = vi.fn((props: any) => (
 
 // Mock the @livekit/components-react components
 vi.mock('@livekit/components-react', () => ({
-  SessionProvider: ({ children }: any) => <div data-testid="session-provider">{children}</div>,
-  RoomAudioRenderer: (props: any) => roomAudioRendererMock(props),
+  SessionProvider: (props: any) => sessionProviderMock(props),
+  RoomAudioRenderer: (props: any) =>
+    (roomAudioRendererMock as unknown as (props: any, context?: any) => JSX.Element)(props, {}),
 }));
 
 describe('AgentSessionProvider', () => {
@@ -60,7 +65,8 @@ describe('AgentSessionProvider', () => {
           <div>Content</div>
         </AgentSessionProvider>
       );
-      expect(screen.getByTestId('session-provider')).toBeInTheDocument();
+      const lastCall = sessionProviderMock.mock.calls.at(-1)?.[0] ?? {};
+      expect(lastCall).toEqual(expect.objectContaining({ session }));
     });
 
     it('passes volume prop to RoomAudioRenderer', () => {
@@ -90,7 +96,10 @@ describe('AgentSessionProvider', () => {
           <div>Content</div>
         </AgentSessionProvider>
       );
-      expect(screen.getByTestId('room-audio-renderer')).toBeInTheDocument();
+      expect(roomAudioRendererMock).toHaveBeenCalledWith(
+        expect.objectContaining({ room: mockRoom }),
+        expect.anything()
+      );
     });
   });
 

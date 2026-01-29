@@ -223,10 +223,10 @@ export function PreJoin({
   onSubmit,
   onError,
   debug,
-  joinLabel = 'Join Room',
-  micLabel = 'Microphone',
-  camLabel = 'Camera',
-  userLabel = 'Username',
+  joinLabel = 'Войти в комнату',
+  micLabel = 'Микрофон',
+  camLabel = 'Камера',
+  userLabel = 'Имя пользователя',
   persistUserChoices = true,
   videoProcessor,
   ...htmlProps
@@ -424,13 +424,13 @@ export function PreJoin({
 
       {debug && (
         <>
-          <strong>User Choices:</strong>
+          <strong>Выбор пользователя:</strong>
           <ul className="lk-list" style={{ overflow: 'hidden', maxWidth: '15rem' }}>
-            <li>Username: {`${userChoices.username}`}</li>
-            <li>Video Enabled: {`${userChoices.videoEnabled}`}</li>
-            <li>Audio Enabled: {`${userChoices.audioEnabled}`}</li>
-            <li>Video Device: {`${userChoices.videoDeviceId}`}</li>
-            <li>Audio Device: {`${userChoices.audioDeviceId}`}</li>
+            <li>Имя пользователя: {`${userChoices.username}`}</li>
+            <li>Видео включено: {`${userChoices.videoEnabled}`}</li>
+            <li>Аудио включено: {`${userChoices.audioEnabled}`}</li>
+            <li>Видео-устройство: {`${userChoices.videoDeviceId}`}</li>
+            <li>Аудио-устройство: {`${userChoices.audioDeviceId}`}</li>
           </ul>
         </>
       )}

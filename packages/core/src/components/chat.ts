@@ -79,7 +79,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
   const finalMessageDecoder = options?.messageDecoder ?? decodeLegacyMsg;
   if (needsSetup) {
     room.registerTextStreamHandler(topic, async (reader, participantInfo) => {
-      const { id, timestamp } = reader.info;
+      const { id, timestamp, attributes } = reader.info;
       const streamObservable = from(reader).pipe(
         scan((acc: string, chunk: string) => {
           return acc + chunk;
@@ -91,7 +91,9 @@ export function setupChat(room: Room, options?: ChatOptions) {
             message: chunk,
             from: room.getParticipantByIdentity(participantInfo.identity),
             type: 'chatMessage',
-            // editTimestamp: type === 'update' ? timestamp : undefined,
+            attributes,
+            // NOTE: `attachedFiles` / `editTimestamp` purposefully not included here.
+            // More info: https://github.com/livekit/components-js/issues/1252#issuecomment-3836579966
           } satisfies ReceivedChatMessage;
         }),
       );

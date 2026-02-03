@@ -77,6 +77,7 @@ export interface AgentChatIndicatorProps extends MotionProps {
 export function AgentChatIndicator({
   size = 'md',
   className,
+  style,
   ...props
 }: AgentChatIndicatorProps & VariantProps<typeof agentChatIndicatorVariants>) {
   return (
@@ -84,6 +85,7 @@ export function AgentChatIndicator({
       {...motionAnimationProps}
       transition={{ duration: 0.1, ease: 'linear' as const }}
       className={cn(agentChatIndicatorVariants({ size }), className)}
+      style={style}
       {...props}
     />
   );

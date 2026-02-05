@@ -45,10 +45,19 @@ export type ChatOptions = {
 };
 
 const topicSubjectMap: WeakMap<Room, Map<string, Subject<ReceivedChatMessage>>> = new WeakMap();
-const streamIdToAttachments = new Map<string /* stream id */, Map<string /* attachment id */, Future<{
-  fileName: string;
-  buffer: Array<Uint8Array>;
-}, never>>>();
+const streamIdToAttachments = new Map<
+  string /* stream id */,
+  Map<
+    string /* attachment id */,
+    Future<
+      {
+        fileName: string;
+        buffer: Array<Uint8Array>;
+      },
+      never
+    >
+  >
+>();
 
 function isIgnorableChatMessage(msg: ReceivedChatMessage | LegacyReceivedChatMessage) {
   return (msg as LegacyChatMessage).ignoreLegacy == true;
@@ -88,9 +97,12 @@ export function setupChat(room: Room, options?: ChatOptions) {
 
       // Store a future for each attachment to be later resolved once the corresponding file data
       // stream completes.
-      const attachments = new Map((attachedStreamIds ?? []).map((id) => [id, (
-        new Future<{ fileName: string, buffer: Array<Uint8Array> }, never>()
-      )]));
+      const attachments = new Map(
+        (attachedStreamIds ?? []).map((id) => [
+          id,
+          new Future<{ fileName: string; buffer: Array<Uint8Array> }, never>(),
+        ]),
+      );
       streamIdToAttachments.set(id, attachments);
 
       const streamObservable = from(reader).pipe(
@@ -101,7 +113,10 @@ export function setupChat(room: Room, options?: ChatOptions) {
           // Aggregate all attachments into memory and transform them into a list of files
           return from(attachments.values()).pipe(
             mergeMap((attachment) => from(attachment.promise)),
-            scan((acc, attachment) => [...acc, new File(attachment.buffer, attachment.fileName)], [] as Array<File>),
+            scan(
+              (acc, attachment) => [...acc, new File(attachment.buffer, attachment.fileName)],
+              [] as Array<File>,
+            ),
             map((attachedFiles) => ({ chunk, attachedFiles })),
           );
         }),
@@ -124,7 +139,9 @@ export function setupChat(room: Room, options?: ChatOptions) {
     });
     room.registerByteStreamHandler(topic, async (reader) => {
       const { id: attachmentStreamId } = reader.info;
-      const foundStreamAttachmentPair = Array.from(streamIdToAttachments).find(([_streamId, attachments]) => attachments.has(attachmentStreamId));
+      const foundStreamAttachmentPair = Array.from(streamIdToAttachments).find(
+        ([_streamId, attachments]) => attachments.has(attachmentStreamId),
+      );
       if (!foundStreamAttachmentPair) {
         return;
       }

@@ -12,6 +12,7 @@ import {
   mergeMap,
   startWith,
   finalize,
+  of,
 } from 'rxjs';
 import {
   DataTopic,
@@ -121,16 +122,19 @@ export function setupChat(room: Room, options?: ChatOptions) {
           return acc + chunk;
         }),
         mergeMap((chunk: string) => {
-          // Aggregate all attachments into memory and transform them into a list of files
-          return from(attachments.values()).pipe(
-            mergeMap((attachment) => from(attachment.promise)),
-            scan(
-              (acc, attachment) => [...acc, new File(attachment.buffer, attachment.fileName)],
-              [] as Array<File>,
-            ),
-            startWith([]),
-            map((attachedFiles) => ({ chunk, attachedFiles })),
-          );
+          if (attachments.size === 0) {
+            return of({ chunk, attachedFiles: [] });
+          } else {
+            // Aggregate all attachments into memory and transform them into a list of files
+            return from(attachments.values()).pipe(
+              mergeMap((attachment) => from(attachment.promise)),
+              scan(
+                (acc, attachment) => [...acc, new File(attachment.buffer, attachment.fileName)],
+                [] as Array<File>,
+              ),
+              map((attachedFiles) => ({ chunk, attachedFiles })),
+            );
+          }
         }),
         map(({ chunk, attachedFiles }) => {
           return {

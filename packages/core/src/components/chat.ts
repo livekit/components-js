@@ -1,7 +1,17 @@
 /* eslint-disable camelcase */
 import type { Room, SendTextOptions } from 'livekit-client';
 import { compareVersions, RoomEvent } from 'livekit-client';
-import { BehaviorSubject, Subject, scan, map, takeUntil, from, filter, mergeMap } from 'rxjs';
+import {
+  BehaviorSubject,
+  Subject,
+  scan,
+  map,
+  takeUntil,
+  from,
+  filter,
+  mergeMap,
+  startWith,
+} from 'rxjs';
 import {
   DataTopic,
   LegacyDataTopic,
@@ -117,6 +127,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
               (acc, attachment) => [...acc, new File(attachment.buffer, attachment.fileName)],
               [] as Array<File>,
             ),
+            startWith([]),
             map((attachedFiles) => ({ chunk, attachedFiles })),
           );
         }),

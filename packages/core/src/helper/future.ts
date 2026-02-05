@@ -30,4 +30,3 @@ export class Future<T, E extends Error> {
     });
   }
 }
-

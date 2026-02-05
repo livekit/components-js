@@ -157,8 +157,8 @@ export function setupChat(room: Room, options?: ChatOptions) {
     // has initialized the attachment map (per client SDK sending implementation)
     room.registerByteStreamHandler(topic, async (reader) => {
       const { id: attachmentStreamId } = reader.info;
-      const foundStreamAttachmentPair = Array.from(streamIdToAttachments).find(
-        ([_streamId, attachments]) => attachments.has(attachmentStreamId),
+      const foundStreamAttachmentPair = Array.from(streamIdToAttachments).find(([, attachments]) =>
+        attachments.has(attachmentStreamId),
       );
       if (!foundStreamAttachmentPair) {
         return;

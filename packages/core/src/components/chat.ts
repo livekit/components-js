@@ -134,7 +134,10 @@ export function setupChat(room: Room, options?: ChatOptions) {
         }),
       );
       streamObservable.subscribe({
-        next: (value) => messageSubject.next(value),
+        next: (value) => {
+          messageSubject.next(value);
+          streamIdToAttachments.delete(id);
+        },
       });
     });
     room.registerByteStreamHandler(topic, async (reader) => {

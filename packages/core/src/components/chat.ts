@@ -150,6 +150,8 @@ export function setupChat(room: Room, options?: ChatOptions) {
         next: (value) => messageSubject.next(value),
       });
     });
+    // NOTE: Attachment byte streams are guaranteed to arrive after their parent text stream
+    // has initialized the attachment map (per client SDK sending implementation)
     room.registerByteStreamHandler(topic, async (reader) => {
       const { id: attachmentStreamId } = reader.info;
       const foundStreamAttachmentPair = Array.from(streamIdToAttachments).find(

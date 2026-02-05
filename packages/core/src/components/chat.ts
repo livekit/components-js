@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import type { Room, SendTextOptions } from 'livekit-client';
 import { compareVersions, RoomEvent } from 'livekit-client';
-import { BehaviorSubject, Subject, scan, map, takeUntil, from, filter } from 'rxjs';
+import { BehaviorSubject, Subject, scan, map, takeUntil, from, filter, mergeMap } from 'rxjs';
 import {
   DataTopic,
   LegacyDataTopic,
@@ -10,6 +10,7 @@ import {
 } from '../observables/dataChannel';
 import { log } from '../logger';
 import { ChatMessage, ReceivedChatMessage } from '../messages/types';
+import { Future } from '../helper/future';
 
 /** @public */
 export type { ChatMessage, ReceivedChatMessage };
@@ -44,6 +45,10 @@ export type ChatOptions = {
 };
 
 const topicSubjectMap: WeakMap<Room, Map<string, Subject<ReceivedChatMessage>>> = new WeakMap();
+const streamIdToAttachments = new Map<string /* stream id */, Map<string /* attachment id */, Future<{
+  fileName: string;
+  buffer: Array<Uint8Array>;
+}, never>>>();
 
 function isIgnorableChatMessage(msg: ReceivedChatMessage | LegacyReceivedChatMessage) {
   return (msg as LegacyChatMessage).ignoreLegacy == true;
@@ -79,24 +84,65 @@ export function setupChat(room: Room, options?: ChatOptions) {
   const finalMessageDecoder = options?.messageDecoder ?? decodeLegacyMsg;
   if (needsSetup) {
     room.registerTextStreamHandler(topic, async (reader, participantInfo) => {
-      const { id, timestamp } = reader.info;
+      const { id, timestamp, attributes, attachedStreamIds } = reader.info;
+
+      // Store a future for each attachment to be later resolved once the corresponding file data
+      // stream completes.
+      const attachments = new Map((attachedStreamIds ?? []).map((id) => [id, (
+        new Future<{ fileName: string, buffer: Array<Uint8Array> }, never>()
+      )]));
+      streamIdToAttachments.set(id, attachments);
+
       const streamObservable = from(reader).pipe(
         scan((acc: string, chunk: string) => {
           return acc + chunk;
         }),
-        map((chunk: string) => {
+        mergeMap((chunk: string) => {
+          // Aggregate all attachments into memory and transform them into a list of files
+          return from(attachments.values()).pipe(
+            mergeMap((attachment) => from(attachment.promise)),
+            scan((acc, attachment) => [...acc, new File(attachment.buffer, attachment.fileName)], [] as Array<File>),
+            map((attachedFiles) => ({ chunk, attachedFiles })),
+          );
+        }),
+        map(({ chunk, attachedFiles }) => {
           return {
             id,
             timestamp,
             message: chunk,
             from: room.getParticipantByIdentity(participantInfo.identity),
             type: 'chatMessage',
+            attributes,
+            attachedFiles,
             // editTimestamp: type === 'update' ? timestamp : undefined,
           } satisfies ReceivedChatMessage;
         }),
       );
       streamObservable.subscribe({
         next: (value) => messageSubject.next(value),
+      });
+    });
+    room.registerByteStreamHandler(topic, async (reader) => {
+      const { id: attachmentStreamId } = reader.info;
+      const foundStreamAttachmentPair = Array.from(streamIdToAttachments).find(([_streamId, attachments]) => attachments.has(attachmentStreamId));
+      if (!foundStreamAttachmentPair) {
+        return;
+      }
+      const streamId = foundStreamAttachmentPair[0];
+
+      const bufferList = [];
+      for await (const buffer of reader) {
+        bufferList.push(buffer);
+      }
+
+      const attachment = streamIdToAttachments.get(streamId)!.get(attachmentStreamId);
+      if (!attachment) {
+        return;
+      }
+
+      attachment.resolve?.({
+        fileName: reader.info.name,
+        buffer: bufferList,
       });
     });
 
@@ -204,6 +250,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
     messageSubject.complete();
     topicSubjectMap.delete(room);
     room.unregisterTextStreamHandler(topic);
+    room.unregisterByteStreamHandler(topic);
   }
   room.once(RoomEvent.Disconnected, destroy);
 

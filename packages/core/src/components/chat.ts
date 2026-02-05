@@ -11,6 +11,7 @@ import {
   filter,
   mergeMap,
   startWith,
+  finalize,
 } from 'rxjs';
 import {
   DataTopic,
@@ -143,12 +144,10 @@ export function setupChat(room: Room, options?: ChatOptions) {
             // editTimestamp: type === 'update' ? timestamp : undefined,
           } satisfies ReceivedChatMessage;
         }),
+        finalize(() => streamIdToAttachments.delete(id)),
       );
       streamObservable.subscribe({
-        next: (value) => {
-          messageSubject.next(value);
-          streamIdToAttachments.delete(id);
-        },
+        next: (value) => messageSubject.next(value),
       });
     });
     room.registerByteStreamHandler(topic, async (reader) => {

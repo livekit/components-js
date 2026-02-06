@@ -170,7 +170,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
         bufferList.push(buffer);
       }
 
-      const attachment = streamIdToAttachments.get(streamId)!.get(attachmentStreamId);
+      const attachment = streamIdToAttachments.get(streamId)?.get(attachmentStreamId);
       if (!attachment) {
         return;
       }

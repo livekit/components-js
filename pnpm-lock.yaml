@@ -7,8 +7,8 @@ settings:
 catalogs:
   default:
     '@livekit/protocol':
-      specifier: ^1.43.4
-      version: 1.43.4
+      specifier: ^1.44.0
+      version: 1.44.0
     eslint:
       specifier: ^8.56.0
       version: 8.57.1
@@ -367,7 +367,7 @@ importers:
         version: 10.1.8(eslint@9.35.0(jiti@2.6.1))
       eslint-plugin-import:
         specifier: ^2.31.0
-        version: 2.31.0(@typescript-eslint/parser@8.29.0(eslint@9.35.0(jiti@2.6.1))(typescript@5.8.2))(eslint@9.35.0(jiti@2.6.1))
+        version: 2.31.0(@typescript-eslint/parser@7.18.0(eslint@9.35.0(jiti@2.6.1))(typescript@5.8.2))(eslint-import-resolver-typescript@3.7.0)(eslint@9.35.0(jiti@2.6.1))
       eslint-plugin-prettier:
         specifier: ^5.5.0
         version: 5.5.4(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8(eslint@9.35.0(jiti@2.6.1)))(eslint@9.35.0(jiti@2.6.1))(prettier@3.5.3)
@@ -459,7 +459,7 @@ importers:
         version: link:../styles
       '@livekit/protocol':
         specifier: 'catalog:'
-        version: 1.43.4
+        version: 1.44.0
       '@microsoft/api-extractor':
         specifier: ^7.36.0
         version: 7.49.2(@types/node@24.7.0)
@@ -517,7 +517,7 @@ importers:
     devDependencies:
       '@livekit/protocol':
         specifier: 'catalog:'
-        version: 1.43.4
+        version: 1.44.0
       '@microsoft/api-extractor':
         specifier: ^7.35.0
         version: 7.49.2(@types/node@24.7.0)
@@ -592,7 +592,7 @@ importers:
         version: link:../react
       '@livekit/protocol':
         specifier: 'catalog:'
-        version: 1.43.4
+        version: 1.44.0
       '@radix-ui/react-select':
         specifier: ^2.2.6
         version: 2.2.6(@types/react-dom@19.1.9(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -680,7 +680,7 @@ importers:
         version: 10.1.8(eslint@8.57.1)
       eslint-plugin-import:
         specifier: ^2.31.0
-        version: 2.31.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.8.2))(eslint-import-resolver-typescript@3.7.0)(eslint@8.57.1)
+        version: 2.31.0(@typescript-eslint/parser@8.29.0(eslint@9.35.0(jiti@2.6.1))(typescript@5.8.2))(eslint@8.57.1)
       eslint-plugin-prettier:
         specifier: ^5.5.0
         version: 5.5.4(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8(eslint@8.57.1))(eslint@8.57.1)(prettier@3.5.3)
@@ -15118,7 +15118,7 @@ snapshots:
       is-glob: 4.0.3
       stable-hash: 0.0.4
     optionalDependencies:
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.8.2))(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.29.0(eslint@9.35.0(jiti@2.6.1))(typescript@5.8.2))(eslint@8.57.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -15166,16 +15166,6 @@ snapshots:
     optionalDependencies:
       '@typescript-eslint/parser': 8.29.0(eslint@9.35.0(jiti@2.6.1))(typescript@5.8.2)
       eslint: 8.57.1
-      eslint-import-resolver-node: 0.3.9
-    transitivePeerDependencies:
-      - supports-color
-
-  eslint-module-utils@2.12.0(@typescript-eslint/parser@8.29.0(eslint@9.35.0(jiti@2.6.1))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint@9.35.0(jiti@2.6.1)):
-    dependencies:
-      debug: 3.2.7
-    optionalDependencies:
-      '@typescript-eslint/parser': 8.29.0(eslint@9.35.0(jiti@2.6.1))(typescript@5.8.2)
-      eslint: 9.35.0(jiti@2.6.1)
       eslint-import-resolver-node: 0.3.9
     transitivePeerDependencies:
       - supports-color
@@ -15316,35 +15306,6 @@ snapshots:
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
       eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.29.0(eslint@9.35.0(jiti@2.6.1))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint@8.57.1)
-      hasown: 2.0.2
-      is-core-module: 2.16.1
-      is-glob: 4.0.3
-      minimatch: 3.1.2
-      object.fromentries: 2.0.8
-      object.groupby: 1.0.3
-      object.values: 1.2.1
-      semver: 6.3.1
-      string.prototype.trimend: 1.0.9
-      tsconfig-paths: 3.15.0
-    optionalDependencies:
-      '@typescript-eslint/parser': 8.29.0(eslint@9.35.0(jiti@2.6.1))(typescript@5.8.2)
-    transitivePeerDependencies:
-      - eslint-import-resolver-typescript
-      - eslint-import-resolver-webpack
-      - supports-color
-
-  eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.29.0(eslint@9.35.0(jiti@2.6.1))(typescript@5.8.2))(eslint@9.35.0(jiti@2.6.1)):
-    dependencies:
-      '@rtsao/scc': 1.1.0
-      array-includes: 3.1.8
-      array.prototype.findlastindex: 1.2.5
-      array.prototype.flat: 1.3.3
-      array.prototype.flatmap: 1.3.3
-      debug: 3.2.7
-      doctrine: 2.1.0
-      eslint: 9.35.0(jiti@2.6.1)
-      eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.29.0(eslint@9.35.0(jiti@2.6.1))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint@9.35.0(jiti@2.6.1))
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3

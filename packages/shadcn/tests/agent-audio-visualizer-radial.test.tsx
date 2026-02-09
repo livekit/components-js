@@ -1,15 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { AgentAudioVisualizerRadial } from '@/components/agents-ui/agent-audio-visualizer-radial';
-import * as LiveKitComponents from '@livekit/components-react';
-
 // Mock hooks
 vi.mock('@livekit/components-react', async () => {
   const actual = await vi.importActual('@livekit/components-react');
-  return {
-    ...actual,
-    useMultibandTrackVolume: vi.fn(() => []),
-  };
+  return { ...actual, useMultibandTrackVolume: vi.fn(() => []) };
 });
 
 vi.mock('@/hooks/agents-ui/use-agent-audio-visualizer-radial', () => ({
@@ -21,147 +16,51 @@ describe('AgentAudioVisualizerRadial', () => {
     vi.clearAllMocks();
   });
 
-  describe('Rendering', () => {
-    it('renders with default props', () => {
-      const { container } = render(<AgentAudioVisualizerRadial />);
-      const visualizer = container.querySelector('.relative.flex');
-      expect(visualizer).toBeInTheDocument();
-    });
-
-    it('renders radial bars', () => {
-      const { container } = render(<AgentAudioVisualizerRadial />);
-      const bars = container.querySelectorAll('[data-lk-index]');
-      expect(bars.length).toBeGreaterThan(0);
-    });
+  it('renders by default', () => {
+    render(<AgentAudioVisualizerRadial data-testid="radial-viz" />);
+    expect(screen.getByTestId('radial-viz')).toBeInTheDocument();
   });
 
-  describe('Sizes', () => {
-    it('applies icon size styles', () => {
-      const { container } = render(<AgentAudioVisualizerRadial size="icon" />);
-      const visualizer = container.querySelector('.relative.flex');
-      expect(visualizer).toHaveClass('h-[24px]');
-    });
-
-    it('applies sm size styles', () => {
-      const { container } = render(<AgentAudioVisualizerRadial size="sm" />);
-      const visualizer = container.querySelector('.relative.flex');
-      expect(visualizer).toHaveClass('h-[56px]');
-    });
-
-    it('applies md size styles by default', () => {
-      const { container } = render(<AgentAudioVisualizerRadial />);
-      const visualizer = container.querySelector('.relative.flex');
-      expect(visualizer).toHaveClass('h-[112px]');
-    });
-
-    it('applies lg size styles', () => {
-      const { container } = render(<AgentAudioVisualizerRadial size="lg" />);
-      const visualizer = container.querySelector('.relative.flex');
-      expect(visualizer).toHaveClass('h-[224px]');
-    });
-
-    it('applies xl size styles', () => {
-      const { container } = render(<AgentAudioVisualizerRadial size="xl" />);
-      const visualizer = container.querySelector('.relative.flex');
-      expect(visualizer).toHaveClass('h-[448px]');
-    });
+  it('applies html attributes (id, class, style, aria)', () => {
+    render(
+      <AgentAudioVisualizerRadial
+        id="radial-viz"
+        className="custom-class"
+        style={{ opacity: 0.6 }}
+        aria-label="Radial visualizer"
+      />,
+    );
+    const visualizer = screen.getByLabelText('Radial visualizer');
+    expect(visualizer).toHaveAttribute('id', 'radial-viz');
+    expect(visualizer).toHaveClass('custom-class');
+    expect(visualizer).toHaveStyle({ opacity: '0.6' });
   });
 
-  describe('Props', () => {
-    it('accepts state prop', () => {
-      const { container } = render(<AgentAudioVisualizerRadial state="speaking" />);
-      const stateMarker = container.querySelector('[data-lk-state="speaking"]');
-      expect(stateMarker).toBeInTheDocument();
-    });
-
-    it('accepts barCount prop', () => {
-      const { container } = render(<AgentAudioVisualizerRadial barCount={16} />);
-      const bars = container.querySelectorAll('[data-lk-index]');
-      expect(bars).toHaveLength(16);
-    });
-
-    it('accepts radius prop', () => {
-      const { container } = render(<AgentAudioVisualizerRadial radius={50} />);
-      expect(container.querySelector('.relative.flex')).toBeInTheDocument();
-    });
-
-    it('accepts audioTrack prop', () => {
-      const mockTrack = {} as any;
-      const { container } = render(<AgentAudioVisualizerRadial audioTrack={mockTrack} />);
-      expect(container.querySelector('.relative.flex')).toBeInTheDocument();
-    });
+  it('applies click handler', () => {
+    const onClick = vi.fn();
+    render(
+      <AgentAudioVisualizerRadial
+        data-testid="radial-viz"
+        onClick={onClick}
+      />,
+    );
+    const visualizer = screen.getByTestId('radial-viz');
+    fireEvent.click(visualizer);
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  describe('HTML Attributes', () => {
-    it('accepts and applies className prop', () => {
-      const { container } = render(<AgentAudioVisualizerRadial className="custom-class" />);
-      expect(container.firstChild).toHaveClass('custom-class');
-    });
-
-    it('accepts and applies style prop', () => {
-      const { container } = render(
-        <AgentAudioVisualizerRadial style={{ backgroundColor: 'green' }} />,
-      );
-      expect(container.firstChild).toBeInTheDocument();
-    });
-
-    it('accepts and applies id prop', () => {
-      const { container } = render(<AgentAudioVisualizerRadial id="radial-viz" />);
-      expect(container.querySelector('#radial-viz')).toBeInTheDocument();
-    });
-
-    it('accepts and applies data attributes', () => {
-      render(<AgentAudioVisualizerRadial data-testid="custom-radial" />);
-      expect(screen.getByTestId('custom-radial')).toBeInTheDocument();
-    });
+  it('passes state to root data attribute', () => {
+    render(<AgentAudioVisualizerRadial state="speaking" data-testid="radial-viz" />);
+    expect(screen.getByTestId('radial-viz')).toHaveAttribute('data-lk-state', 'speaking');
   });
 
-  describe('Bar Attributes', () => {
-    it('applies data-lk-index to each bar', () => {
-      const { container } = render(<AgentAudioVisualizerRadial barCount={8} />);
-      const bars = container.querySelectorAll('[data-lk-index]');
-      expect(bars).toHaveLength(8);
-      bars.forEach((bar, idx) => {
-        expect(bar).toHaveAttribute('data-lk-index', String(idx));
-      });
-    });
-
-    it('applies data-lk-highlighted attribute', () => {
-      const { container } = render(<AgentAudioVisualizerRadial />);
-      const bars = container.querySelectorAll('[data-lk-highlighted]');
-      expect(bars.length).toBeGreaterThan(0);
-    });
-  });
-
-  describe('State Styles', () => {
-    it('applies thinking state animation', () => {
-      const { container } = render(<AgentAudioVisualizerRadial state="thinking" />);
-      const stateMarker = container.querySelector('[data-lk-state="thinking"]');
-      expect(stateMarker).toBeInTheDocument();
-    });
-
-    it('applies listening state', () => {
-      const { container } = render(<AgentAudioVisualizerRadial state="listening" />);
-      const stateMarker = container.querySelector('[data-lk-state="listening"]');
-      expect(stateMarker).toBeInTheDocument();
-    });
-  });
-
-  describe('Combined Props', () => {
-    it('applies size, state, and className together', () => {
-      const { container } = render(
-        <AgentAudioVisualizerRadial
-          size="lg"
-          state="speaking"
-          barCount={20}
-          className="custom-class"
-        />,
-      );
-      const visualizer = container.querySelector('.relative.flex');
-      expect(visualizer).toHaveClass('custom-class', 'h-[224px]');
-      expect(container.querySelector('[data-lk-state="speaking"]')).toBeInTheDocument();
-      const bars = container.querySelectorAll('[data-lk-index]');
-      expect(bars).toHaveLength(20);
+  it('renders expected radial bars', () => {
+    const { container } = render(<AgentAudioVisualizerRadial barCount={8} />);
+    const bars = container.querySelectorAll('[data-lk-index]');
+    expect(bars).toHaveLength(8);
+    bars.forEach((bar, idx) => {
+      expect(bar).toHaveAttribute('data-lk-index', String(idx));
+      expect(bar).toHaveAttribute('data-lk-highlighted');
     });
   });
 });

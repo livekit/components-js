@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, screen, fireEvent } from '@testing-library/react';
 import { ReactShaderToy } from '@/components/agents-ui/react-shader-toy';
 
 describe('ReactShaderToy', () => {
@@ -28,6 +28,36 @@ describe('ReactShaderToy', () => {
       <ReactShaderToy fs="void mainImage(out vec4 fragColor, in vec2 fragCoord){ fragColor = vec4(1.0); }" />,
     );
     expect(container.querySelector('canvas')).toBeInTheDocument();
+  });
+
+  it('applies html attributes (id, class, style, aria)', () => {
+    render(
+      <ReactShaderToy
+        fs="void mainImage(out vec4 fragColor, in vec2 fragCoord){ fragColor = vec4(1.0); }"
+        id="shader-canvas"
+        className="custom-class"
+        style={{ opacity: 0.7 }}
+        aria-label="Shader canvas"
+      />,
+    );
+    const canvas = screen.getByLabelText('Shader canvas');
+    expect(canvas).toHaveAttribute('id', 'shader-canvas');
+    expect(canvas).toHaveClass('custom-class');
+    expect(canvas).toHaveStyle({ opacity: '0.7' });
+  });
+
+  it('applies click handler', () => {
+    const onClick = vi.fn();
+    render(
+      <ReactShaderToy
+        fs="void mainImage(out vec4 fragColor, in vec2 fragCoord){ fragColor = vec4(1.0); }"
+        data-testid="shader-canvas"
+        onClick={onClick}
+      />,
+    );
+    const canvas = screen.getByTestId('shader-canvas');
+    fireEvent.click(canvas);
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 
   it('requests a WebGL context on mount', async () => {

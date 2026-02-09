@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AgentControlBar } from '@/components/agents-ui/agent-control-bar';
 import * as controlBarHooks from '@/hooks/agents-ui/use-agent-control-bar';
@@ -92,6 +92,36 @@ describe('AgentControlBar', () => {
     expect(screen.getByTestId('track-toggle')).toBeInTheDocument();
     expect(screen.getByTestId('toggle')).toBeInTheDocument();
     expect(screen.getByTestId('disconnect-button')).toBeInTheDocument();
+  });
+
+  it('applies html attributes (id, class, style, aria)', () => {
+    render(
+      <AgentControlBar
+        isConnected
+        id="agent-controls"
+        className="custom-class"
+        style={{ opacity: 0.8 }}
+        aria-label="Custom controls label"
+      />,
+    );
+    const controls = screen.getByLabelText('Custom controls label');
+    expect(controls).toHaveAttribute('id', 'agent-controls');
+    expect(controls).toHaveClass('custom-class');
+    expect(controls).toHaveStyle({ opacity: '0.8' });
+  });
+
+  it('applies click handler', () => {
+    const onClick = vi.fn();
+    render(
+      <AgentControlBar
+        isConnected
+        data-testid="agent-controls"
+        onClick={onClick}
+      />,
+    );
+    const controls = screen.getByTestId('agent-controls');
+    fireEvent.click(controls);
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 
   it('disables disconnect when not connected', () => {

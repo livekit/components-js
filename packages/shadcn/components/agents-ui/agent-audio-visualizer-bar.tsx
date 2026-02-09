@@ -122,7 +122,6 @@ export function AgentAudioVisualizerBar({
   audioTrack,
   className,
   children,
-  style,
   ...props
 }: AgentAudioVisualizerBarProps &
   VariantProps<typeof AgentAudioVisualizerBarVariants> &
@@ -174,8 +173,8 @@ export function AgentAudioVisualizerBar({
 
   return (
     <div
+      data-lk-state={state}
       className={cn(AgentAudioVisualizerBarVariants({ size }), className)}
-      style={style}
       {...props}
     >
       {bands.map((band: number, idx: number) =>

@@ -97,7 +97,6 @@ export function AgentAudioVisualizerRadial({
   barCount,
   audioTrack,
   className,
-  style,
   ...props
 }: AgentAudioVisualizerRadialProps &
   ComponentProps<'div'> &
@@ -174,8 +173,8 @@ export function AgentAudioVisualizerRadial({
 
   return (
     <div
+      data-lk-state={state}
       className={cn(AgentAudioVisualizerRadialVariants({ size }), 'relative', className)}
-      style={style}
       {...props}
     >
       {bands.map((band, idx) => {

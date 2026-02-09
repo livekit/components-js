@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useAgentAudioVisualizerBarAnimator } from '@/hooks/agents-ui/use-agent-audio-visualizer-bar';
+import type { AgentState } from '@livekit/components-react';
 
 describe('useAgentAudioVisualizerBarAnimator', () => {
   beforeEach(() => {
@@ -75,15 +76,19 @@ describe('useAgentAudioVisualizerBarAnimator', () => {
       const { result, rerender } = renderHook(
         ({ state, columns, interval }) =>
           useAgentAudioVisualizerBarAnimator(state, columns, interval),
-        { initialProps: { state: 'connecting' as const, columns: 5, interval: 100 } },
+        { initialProps: { state: 'connecting' as AgentState, columns: 5, interval: 100 } },
       );
 
       const initial = result.current;
 
-      rerender({ state: 'listening' as const, columns: 5, interval: 100 });
+      rerender({ state: 'listening', columns: 5, interval: 100 });
 
-      // After state change, should reset
+      // After state change, sequence should reflect the new state
+      // and may differ from the initial sequence
       expect(result.current).toBeDefined();
+      expect(Array.isArray(result.current)).toBe(true);
+      // Verify listening state produces different sequence than connecting
+      expect(result.current).not.toEqual(initial);
     });
 
     it('resets index when columns change', () => {

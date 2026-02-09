@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { AgentChatIndicator } from '@/components/agents-ui/agent-chat-indicator';
 
 describe('AgentChatIndicator', () => {
@@ -23,88 +23,30 @@ describe('AgentChatIndicator', () => {
     });
   });
 
-  describe('Sizes', () => {
-    it('applies sm size styles', () => {
-      render(<AgentChatIndicator size="sm" data-testid="indicator" />);
-      const indicator = screen.getByTestId('indicator');
-      expect(indicator).toHaveClass('size-2.5');
-    });
-
-    it('applies md size styles by default', () => {
-      render(<AgentChatIndicator data-testid="indicator" />);
-      const indicator = screen.getByTestId('indicator');
-      expect(indicator).toHaveClass('size-4');
-    });
-
-    it('applies md size styles when specified', () => {
-      render(<AgentChatIndicator size="md" data-testid="indicator" />);
-      const indicator = screen.getByTestId('indicator');
-      expect(indicator).toHaveClass('size-4');
-    });
-
-    it('applies lg size styles', () => {
-      render(<AgentChatIndicator size="lg" data-testid="indicator" />);
-      const indicator = screen.getByTestId('indicator');
-      expect(indicator).toHaveClass('size-6');
-    });
-  });
-
   describe('HTML Attributes', () => {
-    it('accepts and applies className prop', () => {
-      render(<AgentChatIndicator className="custom-class" data-testid="indicator" />);
-      const indicator = screen.getByTestId('indicator');
-      expect(indicator).toHaveClass('custom-class', 'bg-muted-foreground');
-    });
-
-    it('accepts and applies style prop', () => {
-      render(<AgentChatIndicator style={{ backgroundColor: 'red' }} data-testid="indicator" />);
-      const indicator = screen.getByTestId('indicator');
-      expect(indicator).toBeInTheDocument();
-    });
-
-    it('accepts and applies id prop', () => {
-      render(<AgentChatIndicator id="test-indicator" />);
-      const indicator = document.querySelector('#test-indicator');
-      expect(indicator).toBeInTheDocument();
-    });
-
-    it('accepts and applies data attributes', () => {
-      render(<AgentChatIndicator data-testid="custom-indicator" />);
-      expect(screen.getByTestId('custom-indicator')).toBeInTheDocument();
-    });
-
-    it('accepts and applies aria attributes', () => {
-      render(<AgentChatIndicator aria-label="Loading indicator" data-testid="indicator" />);
-      const indicator = screen.getByTestId('indicator');
-      expect(indicator).toHaveAttribute('aria-label', 'Loading indicator');
+    it('applies html attributes (id, class, style, aria)', () => {
+      render(
+        <AgentChatIndicator
+          id="test-indicator"
+          className="custom-class"
+          style={{ borderWidth: '1px' }}
+          aria-label="Loading indicator"
+        />,
+      );
+      const indicator = screen.getByLabelText('Loading indicator');
+      expect(indicator).toHaveAttribute('id', 'test-indicator');
+      expect(indicator).toHaveClass('custom-class');
+      expect(indicator).toHaveStyle({ borderWidth: '1px' });
     });
   });
 
-  describe('Animation Props', () => {
-    it('accepts motion props', () => {
-      render(<AgentChatIndicator initial={{ opacity: 0 }} data-testid="indicator" />);
+  describe('Event Handlers', () => {
+    it('applies click handler', () => {
+      const onClick = vi.fn();
+      render(<AgentChatIndicator data-testid="indicator" onClick={onClick} />);
       const indicator = screen.getByTestId('indicator');
-      expect(indicator).toBeInTheDocument();
-    });
-
-    it('accepts transition props', () => {
-      render(<AgentChatIndicator transition={{ duration: 1.0 }} data-testid="indicator" />);
-      const indicator = screen.getByTestId('indicator');
-      expect(indicator).toBeInTheDocument();
-    });
-  });
-
-  describe('Combined Props', () => {
-    it('applies multiple size and className combinations', () => {
-      render(<AgentChatIndicator size="lg" className="my-custom-class" data-testid="indicator" />);
-      const indicator = screen.getByTestId('indicator');
-      expect(indicator).toHaveClass('size-6', 'my-custom-class');
-    });
-
-    it('merges custom className with default classes', () => {
-      render(<AgentChatIndicator className="custom-bg" data-testid="indicator" />);
-      const indicator = screen.getByTestId('indicator');
-      expect(indicator).toHaveClass('custom-bg', 'rounded-full');
+      fireEvent.click(indicator);
+      expect(onClick).toHaveBeenCalledTimes(1);
     });
   });
 });

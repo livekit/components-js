@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useAgentAudioVisualizerAura } from '@/hooks/agents-ui/use-agent-audio-visualizer-aura';
+import type { AgentState } from '@livekit/components-react';
 import * as LiveKitComponents from '@livekit/components-react';
 
 // Mock the @livekit/components-react hooks
@@ -28,6 +29,7 @@ vi.mock('motion/react', () => ({
 describe('useAgentAudioVisualizerAura', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(LiveKitComponents.useTrackVolume).mockReturnValue(0);
   });
 
   describe('Basic Hook Behavior', () => {
@@ -134,13 +136,13 @@ describe('useAgentAudioVisualizerAura', () => {
   describe('State Transitions', () => {
     it('updates values when state changes', async () => {
       const { result, rerender } = renderHook(({ state }) => useAgentAudioVisualizerAura(state), {
-        initialProps: { state: 'idle' as const },
+        initialProps: { state: 'idle' as AgentState },
       });
 
       const initialSpeed = result.current.speed;
       expect(initialSpeed).toBe(10);
 
-      rerender({ state: 'speaking' as const });
+      rerender({ state: 'speaking' as AgentState });
 
       await waitFor(() => {
         expect(result.current.speed).toBe(70);
@@ -154,12 +156,12 @@ describe('useAgentAudioVisualizerAura', () => {
 
     it('transitions from listening to speaking', async () => {
       const { result, rerender } = renderHook(({ state }) => useAgentAudioVisualizerAura(state), {
-        initialProps: { state: 'listening' as const },
+        initialProps: { state: 'listening' as AgentState },
       });
 
       expect(result.current.speed).toBe(20);
 
-      rerender({ state: 'speaking' as const });
+      rerender({ state: 'speaking' as AgentState });
 
       await waitFor(() => {
         expect(result.current.speed).toBe(70);

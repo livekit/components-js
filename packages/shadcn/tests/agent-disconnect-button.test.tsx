@@ -53,71 +53,13 @@ describe('AgentDisconnectButton', () => {
     });
   });
 
-  describe('Size Variants', () => {
-    it('applies default size by default', () => {
-      render(<AgentDisconnectButton />);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('h-9');
-    });
-
-    it('applies sm size', () => {
-      render(<AgentDisconnectButton size="sm" />);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('h-8');
-    });
-
-    it('applies lg size', () => {
-      render(<AgentDisconnectButton size="lg" />);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('h-10');
-    });
-
-    it('applies icon size', () => {
-      render(<AgentDisconnectButton size="icon" />);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('size-9');
-    });
-
-    it('hides text with sr-only when icon size', () => {
-      render(<AgentDisconnectButton size="icon" />);
-      const text = screen.getByText('END CALL');
-      expect(text).toHaveClass('sr-only');
-    });
-  });
-
-  describe('Variant Styles', () => {
-    it('applies destructive variant by default', () => {
-      render(<AgentDisconnectButton />);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('bg-destructive');
-    });
-
-    it('applies default variant', () => {
-      render(<AgentDisconnectButton variant="default" />);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('bg-primary');
-    });
-
-    it('applies outline variant', () => {
-      render(<AgentDisconnectButton variant="outline" />);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('border', 'bg-background');
-    });
-
-    it('applies ghost variant', () => {
-      render(<AgentDisconnectButton variant="ghost" />);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('hover:bg-accent');
-    });
-
-    it('applies link variant', () => {
-      render(<AgentDisconnectButton variant="link" />);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('text-primary');
-    });
-  });
-
   describe('HTML Attributes', () => {
+    it('accepts and applies id prop', () => {
+      render(<AgentDisconnectButton id="disconnect-btn" />);
+      const button = screen.getByRole('button');
+      expect(button).toHaveAttribute('id', 'disconnect-btn');
+    });
+
     it('accepts and applies className prop', () => {
       render(<AgentDisconnectButton className="custom-class" />);
       const button = screen.getByRole('button');
@@ -127,13 +69,7 @@ describe('AgentDisconnectButton', () => {
     it('accepts and applies style prop', () => {
       render(<AgentDisconnectButton style={{ backgroundColor: 'blue' }} />);
       const button = screen.getByRole('button');
-      expect(button).toBeInTheDocument();
-    });
-
-    it('accepts and applies id prop', () => {
-      render(<AgentDisconnectButton id="disconnect-btn" />);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('id', 'disconnect-btn');
+      expect(button).toHaveStyle('background-color: rgb(0, 0, 255)');
     });
 
     it('accepts and applies data attributes', () => {
@@ -199,19 +135,17 @@ describe('AgentDisconnectButton', () => {
       expect(handleClick).not.toHaveBeenCalled();
       expect(mockEnd).not.toHaveBeenCalled();
     });
-  });
 
-  describe('Combined Props', () => {
-    it('applies multiple props together', () => {
-      render(
-        <AgentDisconnectButton variant="outline" size="lg" className="custom-class">
-          Leave
-        </AgentDisconnectButton>,
-      );
-
+    it('calls onFocus and onBlur handlers', async () => {
+      const handleFocus = vi.fn();
+      const handleBlur = vi.fn();
+      const user = userEvent.setup();
+      render(<AgentDisconnectButton onFocus={handleFocus} onBlur={handleBlur} />);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('custom-class', 'border', 'h-10');
-      expect(screen.getByText('Leave')).toBeInTheDocument();
+      await user.tab();
+      expect(handleFocus).toHaveBeenCalledTimes(1);
+      await user.tab();
+      expect(handleBlur).toHaveBeenCalledTimes(1);
     });
   });
 

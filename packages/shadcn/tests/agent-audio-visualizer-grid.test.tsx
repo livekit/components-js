@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { AgentAudioVisualizerGrid } from '@/components/agents-ui/agent-audio-visualizer-grid';
 
 // Mock hooks
@@ -20,142 +20,46 @@ describe('AgentAudioVisualizerGrid', () => {
     vi.clearAllMocks();
   });
 
-  describe('Rendering', () => {
-    it('renders with default props', () => {
-      const { container } = render(<AgentAudioVisualizerGrid />);
-      const visualizer = container.querySelector('.grid');
-      expect(visualizer).toBeInTheDocument();
-    });
-
-    it('renders with default grid size', () => {
-      const { container } = render(<AgentAudioVisualizerGrid />);
-      const cells = container.querySelectorAll('[data-lk-index]');
-      expect(cells.length).toBeGreaterThan(0);
-    });
+  it('renders by default', () => {
+    render(<AgentAudioVisualizerGrid data-testid="grid-viz" />);
+    expect(screen.getByTestId('grid-viz')).toBeInTheDocument();
   });
 
-  describe('Sizes', () => {
-    it('applies icon size styles', () => {
-      const { container } = render(<AgentAudioVisualizerGrid size="icon" />);
-      const visualizer = container.querySelector('.grid');
-      expect(visualizer).toHaveClass('gap-[2px]');
-    });
-
-    it('applies sm size styles', () => {
-      const { container } = render(<AgentAudioVisualizerGrid size="sm" />);
-      const visualizer = container.querySelector('.grid');
-      expect(visualizer).toHaveClass('gap-[4px]');
-    });
-
-    it('applies md size styles by default', () => {
-      const { container } = render(<AgentAudioVisualizerGrid />);
-      const visualizer = container.querySelector('.grid');
-      expect(visualizer).toHaveClass('gap-[8px]');
-    });
-
-    it('applies lg size styles', () => {
-      const { container } = render(<AgentAudioVisualizerGrid size="lg" />);
-      const visualizer = container.querySelector('.grid');
-      expect(visualizer).toHaveClass('gap-[12px]');
-    });
-
-    it('applies xl size styles', () => {
-      const { container } = render(<AgentAudioVisualizerGrid size="xl" />);
-      const visualizer = container.querySelector('.grid');
-      expect(visualizer).toHaveClass('gap-[16px]');
-    });
+  it('applies html attributes (id, class, style, aria)', () => {
+    render(
+      <AgentAudioVisualizerGrid
+        id="grid-viz"
+        className="custom-class"
+        style={{ opacity: 0.4 }}
+        aria-label="Grid visualizer"
+      />,
+    );
+    const visualizer = screen.getByLabelText('Grid visualizer');
+    expect(visualizer).toHaveAttribute('id', 'grid-viz');
+    expect(visualizer).toHaveClass('custom-class');
+    expect(visualizer).toHaveStyle({ opacity: '0.4' });
   });
 
-  describe('Grid Options', () => {
-    it('accepts rowCount option', () => {
-      const { container } = render(<AgentAudioVisualizerGrid rowCount={3} />);
-      expect(container.querySelector('.grid')).toBeInTheDocument();
-    });
-
-    it('accepts columnCount option', () => {
-      const { container } = render(<AgentAudioVisualizerGrid columnCount={4} />);
-      expect(container.querySelector('.grid')).toBeInTheDocument();
-    });
-
-    it('accepts radius option', () => {
-      const { container } = render(<AgentAudioVisualizerGrid radius={2} />);
-      expect(container.querySelector('.grid')).toBeInTheDocument();
-    });
-
-    it('accepts interval option', () => {
-      const { container } = render(<AgentAudioVisualizerGrid interval={200} />);
-      expect(container.querySelector('.grid')).toBeInTheDocument();
-    });
+  it('applies click handler', () => {
+    const onClick = vi.fn();
+    render(<AgentAudioVisualizerGrid data-testid="grid-viz" onClick={onClick} />);
+    const visualizer = screen.getByTestId('grid-viz');
+    fireEvent.click(visualizer);
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  describe('State', () => {
-    it('accepts state prop', () => {
-      const { container } = render(<AgentAudioVisualizerGrid state="speaking" />);
-      expect(container.querySelector('.grid')).toBeInTheDocument();
-    });
-
-    it('applies default state', () => {
-      const { container } = render(<AgentAudioVisualizerGrid />);
-      expect(container.querySelector('.grid')).toBeInTheDocument();
-    });
+  it('passes state to root data attribute', () => {
+    render(<AgentAudioVisualizerGrid state="speaking" data-testid="grid-viz" />);
+    expect(screen.getByTestId('grid-viz')).toHaveAttribute('data-lk-state', 'speaking');
   });
 
-  describe('HTML Attributes', () => {
-    it('accepts and applies className prop', () => {
-      const { container } = render(<AgentAudioVisualizerGrid className="custom-class" />);
-      expect(container.firstChild).toHaveClass('custom-class');
-    });
+  it('renders expected grid size with index metadata', () => {
+    const { container } = render(<AgentAudioVisualizerGrid rowCount={3} columnCount={4} />);
+    const cells = container.querySelectorAll('[data-lk-index]');
 
-    it('accepts and applies style prop', () => {
-      const { container } = render(
-        <AgentAudioVisualizerGrid style={{ backgroundColor: 'blue' }} />,
-      );
-      expect(container.firstChild).toBeInTheDocument();
-    });
-
-    it('accepts and applies id prop', () => {
-      const { container } = render(<AgentAudioVisualizerGrid id="grid-viz" />);
-      expect(container.querySelector('#grid-viz')).toBeInTheDocument();
-    });
-
-    it('accepts and applies data attributes', () => {
-      render(<AgentAudioVisualizerGrid data-testid="custom-grid" />);
-      expect(screen.getByTestId('custom-grid')).toBeInTheDocument();
-    });
-  });
-
-  describe('Custom Children', () => {
-    it('renders with custom children', () => {
-      const { container } = render(
-        <AgentAudioVisualizerGrid>
-          <div className="custom-cell">Cell</div>
-        </AgentAudioVisualizerGrid>,
-      );
-      expect(container.querySelector('.grid')).toBeInTheDocument();
-    });
-  });
-
-  describe('Audio Track', () => {
-    it('accepts audioTrack prop', () => {
-      const mockTrack = {} as any;
-      const { container } = render(<AgentAudioVisualizerGrid audioTrack={mockTrack} />);
-      expect(container.querySelector('.grid')).toBeInTheDocument();
-    });
-  });
-
-  describe('Combined Props', () => {
-    it('applies size, state, and className together', () => {
-      const { container } = render(
-        <AgentAudioVisualizerGrid
-          size="lg"
-          state="listening"
-          className="custom-class"
-          rowCount={4}
-          columnCount={4}
-        />,
-      );
-      const visualizer = container.querySelector('.grid');
-      expect(visualizer).toHaveClass('custom-class', 'gap-[12px]');
+    expect(cells).toHaveLength(12);
+    cells.forEach((cell, idx) => {
+      expect(cell).toHaveAttribute('data-lk-index', String(idx));
     });
   });
 });

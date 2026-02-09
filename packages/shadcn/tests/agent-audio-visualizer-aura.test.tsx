@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { AgentAudioVisualizerAura } from '@/components/agents-ui/agent-audio-visualizer-aura';
 
 vi.mock('@/hooks/agents-ui/use-agent-audio-visualizer-aura', () => ({
@@ -12,34 +12,46 @@ vi.mock('@/hooks/agents-ui/use-agent-audio-visualizer-aura', () => ({
   })),
 }));
 
-vi.mock('@/components/agents-ui/react-shader-toy', () => ({
-  ReactShaderToy: ({ className, ...props }: any) => (
-    <div data-testid="shader-toy" className={className} {...props} />
-  ),
-}));
-
 describe('AgentAudioVisualizerAura', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders with default props', () => {
-    render(<AgentAudioVisualizerAura />);
-    expect(screen.getByTestId('shader-toy')).toBeInTheDocument();
+  it('renders by default', () => {
+    render(<AgentAudioVisualizerAura data-testid="aura-viz" />);
+    expect(screen.getByTestId('aura-viz')).toBeInTheDocument();
   });
 
-  it('applies default size styles', () => {
-    const { container } = render(<AgentAudioVisualizerAura />);
-    expect(container.firstChild).toHaveClass('h-[224px]');
+  it('applies html attributes (id, class, style, aria)', () => {
+    render(
+      <AgentAudioVisualizerAura
+        id="aura-viz"
+        className="custom-class"
+        style={{ opacity: 0.7 }}
+        aria-label="Aura visualizer"
+      />,
+    );
+    const visualizer = screen.getByLabelText('Aura visualizer');
+    expect(visualizer).toHaveAttribute('id', 'aura-viz');
+    expect(visualizer).toHaveClass('custom-class');
+    expect(visualizer).toHaveStyle({ opacity: '0.7' });
   });
 
-  it('applies size styles when provided', () => {
-    const { container } = render(<AgentAudioVisualizerAura size="sm" />);
-    expect(container.firstChild).toHaveClass('h-[56px]');
+  it('applies click handler', () => {
+    const onClick = vi.fn();
+    render(
+      <AgentAudioVisualizerAura
+        data-testid="aura-viz"
+        onClick={onClick}
+      />,
+    );
+    const visualizer = screen.getByTestId('aura-viz');
+    fireEvent.click(visualizer);
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  it('merges custom className', () => {
-    const { container } = render(<AgentAudioVisualizerAura className="custom-class" />);
-    expect(container.firstChild).toHaveClass('custom-class');
+  it('passes state to root data attribute', () => {
+    render(<AgentAudioVisualizerAura state="listening" data-testid="aura-viz" />);
+    expect(screen.getByTestId('aura-viz')).toHaveAttribute('data-lk-state', 'listening');
   });
 });

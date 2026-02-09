@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useAgentAudioVisualizerRadialAnimator } from '@/hooks/agents-ui/use-agent-audio-visualizer-radial';
+import type { AgentState } from '@livekit/components-react';
 
 describe('useAgentAudioVisualizerRadialAnimator', () => {
   beforeEach(() => {
@@ -155,17 +156,21 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
 
   describe('State Transitions', () => {
     it('resets index when state changes', async () => {
+      const barCount = 12;
       const { result, rerender } = renderHook(
         ({ state, barCount, interval }) =>
           useAgentAudioVisualizerRadialAnimator(state, barCount, interval),
-        { initialProps: { state: 'connecting' as const, barCount: 12, interval: 100 } },
+        { initialProps: { state: 'connecting' as AgentState, barCount, interval: 100 } },
       );
 
-      const initial = result.current;
+      const initialSequence = result.current;
 
-      rerender({ state: 'listening' as const, barCount: 12, interval: 100 });
+      rerender({ state: 'listening' as AgentState, barCount, interval: 100 });
 
-      expect(result.current).toBeDefined();
+      const divisor = barCount / 4;
+      const expectedSequence = Array.from({ length: Math.floor(barCount / divisor) }, (_, idx) => idx * divisor);
+      expect(result.current).toEqual(expectedSequence);
+      expect(result.current).not.toEqual(initialSequence);
     });
   });
 

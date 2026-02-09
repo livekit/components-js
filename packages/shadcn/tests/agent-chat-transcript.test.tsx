@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { AgentChatTranscript } from '@/components/agents-ui/agent-chat-transcript';
 
 vi.mock('@/components/ai-elements/conversation', () => ({
@@ -33,6 +33,34 @@ vi.mock('motion/react', () => ({
 }));
 
 describe('AgentChatTranscript', () => {
+  it('renders by default', () => {
+    render(<AgentChatTranscript data-testid="transcript" />);
+    expect(screen.getByTestId('transcript')).toBeInTheDocument();
+  });
+
+  it('applies html attributes (id, class, style, aria)', () => {
+    render(
+      <AgentChatTranscript
+        id="transcript"
+        className="custom-class"
+        style={{ opacity: 0.8 }}
+        aria-label="Agent transcript"
+      />,
+    );
+    const transcript = screen.getByLabelText('Agent transcript');
+    expect(transcript).toHaveAttribute('id', 'transcript');
+    expect(transcript).toHaveClass('custom-class');
+    expect(transcript).toHaveStyle({ opacity: '0.8' });
+  });
+
+  it('applies click handler', () => {
+    const onClick = vi.fn();
+    render(<AgentChatTranscript data-testid="transcript" onClick={onClick} />);
+    const transcript = screen.getByTestId('transcript');
+    fireEvent.click(transcript);
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
   it('renders messages with user/assistant origins', () => {
     render(
       <AgentChatTranscript

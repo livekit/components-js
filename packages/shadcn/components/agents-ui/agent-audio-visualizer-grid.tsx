@@ -266,6 +266,7 @@ export function AgentAudioVisualizerGrid({
 
   return (
     <div
+      data-lk-state={state}
       className={cn(AgentAudioVisualizerGridVariants({ size }), className)}
       style={{ ...style, gridTemplateColumns: `repeat(${columnCount}, 1fr)` }}
       {...props}

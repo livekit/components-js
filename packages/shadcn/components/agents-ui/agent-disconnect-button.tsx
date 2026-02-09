@@ -54,7 +54,6 @@ export function AgentDisconnectButton({
   variant = 'destructive',
   children,
   onClick,
-  style,
   ...props
 }: AgentDisconnectButtonProps) {
   const { end } = useSessionContext();
@@ -66,7 +65,7 @@ export function AgentDisconnectButton({
   };
 
   return (
-    <Button size={size} variant={variant} onClick={handleClick} style={style} {...props}>
+    <Button size={size} variant={variant} onClick={handleClick} {...props}>
       {icon ?? <PhoneOffIcon />}
       {children ?? <span className={cn(size?.includes('icon') && 'sr-only')}>END CALL</span>}
     </Button>

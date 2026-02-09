@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useAgentAudioVisualizerWave } from '@/hooks/agents-ui/use-agent-audio-visualizer-wave';
+import type { AgentState } from '@livekit/components-react';
 import * as LiveKitComponents from '@livekit/components-react';
 
 // Mock dependencies
@@ -118,15 +119,16 @@ describe('useAgentAudioVisualizerWave', () => {
     it('updates values when state changes', async () => {
       const { result, rerender } = renderHook(
         ({ state }) => useAgentAudioVisualizerWave({ state }),
-        { initialProps: { state: 'listening' as const } },
+        { initialProps: { state: 'listening' as AgentState } },
       );
 
       const initialSpeed = result.current.speed;
 
-      rerender({ state: 'speaking' as const });
+      rerender({ state: 'speaking' as AgentState });
 
       await waitFor(() => {
         expect(result.current.speed).toBeDefined();
+        expect(result.current.speed).not.toBe(initialSpeed);
       });
     });
   });

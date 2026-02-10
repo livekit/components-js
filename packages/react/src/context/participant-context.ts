@@ -2,7 +2,24 @@ import type { Participant } from 'livekit-client';
 import * as React from 'react';
 import { useMaybeTrackRefContext } from './track-reference-context';
 
-/** @public */
+/**
+ * Provides a `Participant` to the component tree. Used by {@link useParticipantAttributes}, {@link useParticipantTracks}, and {@link useParticipantInfo}.
+ *
+ * This context is provided automatically by the {@link ParticipantLoop} and {@link ParticipantTile} components.
+ *
+ * You may also provide one explicitly with {@link ParticipantContext.Provider}.
+ *
+ * @example
+ * ```tsx
+ * <ParticipantContext.Provider value={participant}>
+ *   {children}
+ * </ParticipantContext.Provider>
+ * ```
+ *
+ * Hooks to read the `Participant` from the context include {@link useParticipantContext}, {@link useMaybeParticipantContext}, and {@link useEnsureParticipant}.
+ *
+ * @public
+ */
 export const ParticipantContext = React.createContext<Participant | undefined>(undefined);
 
 /**

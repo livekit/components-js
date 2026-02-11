@@ -5,7 +5,7 @@
   position: relative;
 }
 
-.participants-toggle[data-lk-participant-count]::after {
+.participants-toggle[data-lk-participant-count]:not(.close-button)::after {
   content: attr(data-lk-participant-count);
   position: absolute;
   top: 0;

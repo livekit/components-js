@@ -1,6 +1,7 @@
 export * from './controls/ClearPinButton';
 export * from './ConnectionState';
 export * from './controls/ChatToggle';
+export * from './controls/ParticipantsToggle';
 export * from './controls/DisconnectButton';
 export * from './controls/FocusToggle';
 export * from './controls/MediaDeviceSelect';

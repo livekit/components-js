@@ -44,12 +44,8 @@ export function Participants({ ...props }: ParticipantsProps) {
           <li key={participant.identity} className="lk-participant-entry">
             <ParticipantContext.Provider value={participant}>
               <ParticipantName />
-              <TrackMutedIndicator
-                trackRef={{ participant, source: Track.Source.Microphone }}
-              />
-              <TrackMutedIndicator
-                trackRef={{ participant, source: Track.Source.Camera }}
-              />
+              <TrackMutedIndicator trackRef={{ participant, source: Track.Source.Microphone }} />
+              <TrackMutedIndicator trackRef={{ participant, source: Track.Source.Camera }} />
             </ParticipantContext.Provider>
           </li>
         ))}

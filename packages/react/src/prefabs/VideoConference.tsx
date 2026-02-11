@@ -157,7 +157,9 @@ export function VideoConference({
                 </FocusLayoutContainer>
               </div>
             )}
-            <ControlBar controls={{ participants: true, chat: true, settings: !!SettingsComponent }} />
+            <ControlBar
+              controls={{ participants: true, chat: true, settings: !!SettingsComponent }}
+            />
           </div>
           <Chat
             style={{ display: widgetState.showChat ? 'grid' : 'none' }}
@@ -165,9 +167,7 @@ export function VideoConference({
             messageEncoder={chatMessageEncoder}
             messageDecoder={chatMessageDecoder}
           />
-          <Participants
-            style={{ display: widgetState.showParticipants ? 'grid' : 'none' }}
-          />
+          <Participants style={{ display: widgetState.showParticipants ? 'grid' : 'none' }} />
           {SettingsComponent && (
             <div
               className="lk-settings-menu-modal"

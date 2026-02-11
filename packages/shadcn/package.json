@@ -9,7 +9,10 @@
     "registry:build": "rm -rf dist && shadcn build --output ./dist/r && pnpm registry:doc-gen",
     "registry:serve": "python3 -m http.server 3210 -d ./dist",
     "registry:doc-gen": "node --experimental-strip-types --env-file=.env.local ./scripts/doc-gen.ts",
-    "registry:update": "pnpm registry:build && node --experimental-strip-types --env-file=.env.local ./scripts/update.ts"
+    "registry:update": "pnpm registry:build && node --experimental-strip-types --env-file=.env.local ./scripts/update.ts",
+    "test": "vitest --run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -42,20 +45,28 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.2",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/node": "^22.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^4.3.2",
+    "@vitest/coverage-v8": "^3.2.4",
     "eslint": "catalog:",
     "eslint-config-next": "15.5.2",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.5.0",
+    "jsdom": "^26.0.0",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "react-docgen-typescript": "^2.4.0",
     "shadcn": "^3.5.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite": "^6.0.0",
+    "vitest": "^3.2.4"
   }
 }

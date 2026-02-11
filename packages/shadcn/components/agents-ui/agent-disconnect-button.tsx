@@ -59,7 +59,9 @@ export function AgentDisconnectButton({
   const { end } = useSessionContext();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     onClick?.(event);
-    end();
+    if (typeof end === 'function') {
+      end();
+    }
   };
 
   return (

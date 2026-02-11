@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, type ComponentPropsWithoutRef } from 'react';
 const PRECISIONS = ['lowp', 'mediump', 'highp'];
 const FS_MAIN_SHADER = `\nvoid main(void){
     vec4 color = vec4(0.0,0.0,0.0,1.0);
@@ -477,7 +477,8 @@ export function ReactShaderToy({
   onDoneLoadingTextures,
   onError = console.error,
   onWarning = console.warn,
-}: ReactShaderToyProps) {
+  ...canvasProps
+}: ReactShaderToyProps & ComponentPropsWithoutRef<'canvas'>) {
   // Refs for WebGL state
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const glRef = useRef<WebGLRenderingContext | null>(null);
@@ -939,5 +940,7 @@ export function ReactShaderToy({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Empty dependency array to run only once on mount
 
-  return <canvas ref={canvasRef} style={{ height: '100%', width: '100%', ...style }} />;
+  return (
+    <canvas ref={canvasRef} style={{ height: '100%', width: '100%', ...style }} {...canvasProps} />
+  );
 }

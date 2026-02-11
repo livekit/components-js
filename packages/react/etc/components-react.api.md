@@ -283,6 +283,7 @@ export type ControlBarControls = {
     screenShare?: boolean;
     leave?: boolean;
     settings?: boolean;
+    participants?: boolean;
 };
 
 // @public (undocumented)
@@ -552,6 +553,25 @@ export interface ParticipantNameProps extends React_2.HTMLAttributes<HTMLSpanEle
 //
 // @internal (undocumented)
 export const ParticipantPlaceholder: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// @public
+export function Participants({ ...props }: ParticipantsProps): React_2.JSX.Element;
+
+// Warning: (ae-internal-missing-underscore) The name "ParticipantsIcon" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export const ParticipantsIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// @public (undocumented)
+export interface ParticipantsProps extends React_2.HTMLAttributes<HTMLDivElement> {
+}
+
+// @public
+export const ParticipantsToggle: (props: ParticipantsToggleProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactNode;
+
+// @public (undocumented)
+export interface ParticipantsToggleProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
+}
 
 // @public
 export const ParticipantTile: (props: ParticipantTileProps & React_2.RefAttributes<HTMLDivElement>) => React_2.ReactNode;
@@ -1105,6 +1125,22 @@ export function useParticipants(options?: UseParticipantsOptions): (RemotePartic
 export interface UseParticipantsOptions {
     room?: Room;
     updateOnlyOn?: RoomEvent[];
+}
+
+// @public
+export function useParticipantsToggle({ props }: UseParticipantsToggleProps): {
+    mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
+        className: string;
+        onClick: () => void;
+        'aria-pressed': string;
+        'data-lk-participant-count': string;
+    };
+};
+
+// @public (undocumented)
+export interface UseParticipantsToggleProps {
+    // (undocumented)
+    props: React_2.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
 // @public

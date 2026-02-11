@@ -941,10 +941,6 @@ export function ReactShaderToy({
   }, []); // Empty dependency array to run only once on mount
 
   return (
-    <canvas
-      ref={canvasRef}
-      style={{ height: '100%', width: '100%', ...style }}
-      {...canvasProps}
-    />
+    <canvas ref={canvasRef} style={{ height: '100%', width: '100%', ...style }} {...canvasProps} />
   );
 }

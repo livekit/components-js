@@ -174,13 +174,12 @@ function WaveShader({
   blur = 0.5,
   ref,
   className,
-  style,
   ...props
 }: WaveShaderProps & ComponentProps<'div'>) {
   const rgbColor = useMemo(() => hexToRgb(color), [color]);
 
   return (
-    <div ref={ref} className={className} style={style} {...props}>
+    <div ref={ref} className={className} {...props}>
       <ReactShaderToy
         fs={shaderSource}
         devicePixelRatio={globalThis.devicePixelRatio ?? 1}

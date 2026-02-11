@@ -123,7 +123,6 @@ export function AgentTrackToggle({
   pressed,
   defaultPressed = false,
   className,
-  style,
   onPressedChange,
   ...props
 }: AgentTrackToggleProps) {
@@ -156,7 +155,6 @@ export function AgentTrackToggle({
           className,
         }),
       )}
-      style={style}
       {...props}
     >
       <IconComponent className={cn(pending && 'animate-spin')} />

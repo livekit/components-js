@@ -39,7 +39,7 @@ export default {
       control: { type: 'radio' },
     },
     barCount: {
-      control: { type: 'range', min: 4, max: 64, step: 4 },
+      control: { type: 'range', min: 4, max: 64, step: 1 },
     },
     radius: {
       control: { type: 'range', min: 1, max: 500, step: 1 },

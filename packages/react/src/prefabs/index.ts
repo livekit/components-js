@@ -1,4 +1,5 @@
 export { Chat, type ChatProps } from './Chat';
+export { Participants, type ParticipantsProps } from './Participants';
 export { PreJoin, type PreJoinProps, usePreviewDevice, usePreviewTracks } from './PreJoin';
 export { VideoConference, type VideoConferenceProps } from './VideoConference';
 export { ControlBar, type ControlBarProps, type ControlBarControls } from './ControlBar';

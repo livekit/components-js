@@ -9,6 +9,7 @@ export { default as LeaveIcon } from './LeaveIcon';
 export { default as LockLockedIcon } from './LockLockedIcon';
 export { default as MicDisabledIcon } from './MicDisabledIcon';
 export { default as MicIcon } from './MicIcon';
+export { default as ParticipantsIcon } from './ParticipantsIcon';
 export { default as QualityExcellentIcon } from './QualityExcellentIcon';
 export { default as QualityGoodIcon } from './QualityGoodIcon';
 export { default as QualityPoorIcon } from './QualityPoorIcon';

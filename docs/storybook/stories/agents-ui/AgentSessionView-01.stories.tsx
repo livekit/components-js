@@ -7,7 +7,9 @@ export default {
   component: AgentSessionView,
   decorators: [AgentSessionProvider],
   render: (args: AgentSessionViewProps) => <AgentSessionView {...args} />,
-  args: {},
+  args: {
+    className: 'h-screen w-screen',
+  },
   argTypes: {},
   parameters: {
     layout: 'centered',

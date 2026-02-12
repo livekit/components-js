@@ -288,6 +288,40 @@
       ],
       "dependencies": ["livekit-server-sdk", "@livekit/protocol"],
       "categories": ["agents", "api"]
+    },
+    {
+      "name": "agent-session-view-01",
+      "author": "LiveKit (https://livekit.io)",
+      "type": "registry:block",
+      "title": "Agent Session View",
+      "description": "A full-screen agent session block with transcript, controls, and I/O media tiles.",
+      "files": [
+        {
+          "path": "components/agents-ui/blocks/agent-session-view-01/agent-session-view.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/agents-ui/blocks/agent-session-view-01/audio-visualizer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/agents-ui/blocks/agent-session-view-01/tile-view.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "utils",
+        "@ai-elements/shimmer",
+        "@agents-ui/agent-control-bar",
+        "@agents-ui/agent-chat-transcript",
+        "@agents-ui/agent-audio-visualizer-aura",
+        "@agents-ui/agent-audio-visualizer-bar",
+        "@agents-ui/agent-audio-visualizer-grid",
+        "@agents-ui/agent-audio-visualizer-radial",
+        "@agents-ui/agent-audio-visualizer-wave"
+      ],
+      "dependencies": ["@livekit/components-react@^2.0.0", "livekit-client@^2.0.0", "motion"],
+      "categories": ["agents", "blocks"]
     }
   ]
 }

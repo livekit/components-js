@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AgentAudioVisualizerGrid } from '@/components/agents-ui/agent-audio-visualizer-grid';
+import { useMultibandTrackVolume } from '@livekit/components-react';
+import { useAgentAudioVisualizerGridAnimator } from '@/hooks/agents-ui/use-agent-audio-visualizer-grid';
 
 // Mock hooks
 vi.mock('@livekit/components-react', async () => {
@@ -12,12 +14,17 @@ vi.mock('@livekit/components-react', async () => {
 });
 
 vi.mock('@/hooks/agents-ui/use-agent-audio-visualizer-grid', () => ({
-  useAgentAudioVisualizerGridAnimator: vi.fn(() => []),
+  useAgentAudioVisualizerGridAnimator: vi.fn(() => ({ x: 0, y: 0 })),
 }));
 
 describe('AgentAudioVisualizerGrid', () => {
+  const mockUseMultibandTrackVolume = vi.mocked(useMultibandTrackVolume);
+  const mockUseAgentAudioVisualizerGridAnimator = vi.mocked(useAgentAudioVisualizerGridAnimator);
+
   beforeEach(() => {
     vi.clearAllMocks();
+    mockUseMultibandTrackVolume.mockReturnValue([]);
+    mockUseAgentAudioVisualizerGridAnimator.mockReturnValue({ x: 0, y: 0 });
   });
 
   it('renders by default', () => {
@@ -61,5 +68,46 @@ describe('AgentAudioVisualizerGrid', () => {
     cells.forEach((cell, idx) => {
       expect(cell).toHaveAttribute('data-lk-index', String(idx));
     });
+  });
+
+  it('highlights the animated coordinate for non-speaking states', () => {
+    mockUseAgentAudioVisualizerGridAnimator.mockReturnValue({ x: 1, y: 1 });
+
+    const { container } = render(
+      <AgentAudioVisualizerGrid state="connecting" rowCount={3} columnCount={3} />,
+    );
+    const cells = container.querySelectorAll('[data-lk-index]');
+
+    expect(cells[4]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[0]).toHaveAttribute('data-lk-highlighted', 'false');
+    expect(cells[8]).toHaveAttribute('data-lk-highlighted', 'false');
+  });
+
+  it('highlights cells from volume bands when speaking', () => {
+    mockUseMultibandTrackVolume.mockReturnValue([1, 0]);
+
+    const { container } = render(
+      <AgentAudioVisualizerGrid state="speaking" rowCount={3} columnCount={2} />,
+    );
+    const cells = container.querySelectorAll('[data-lk-index]');
+
+    expect(cells[0]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[1]).toHaveAttribute('data-lk-highlighted', 'false');
+    expect(cells[2]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[3]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[4]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[5]).toHaveAttribute('data-lk-highlighted', 'false');
+  });
+
+  it('preserves custom child classes for Tailwind shadow control', () => {
+    const { container } = render(
+      <AgentAudioVisualizerGrid>
+        <div className="shadow-none data-[lk-highlighted=true]:bg-foreground" />
+      </AgentAudioVisualizerGrid>,
+    );
+    const firstCell = container.querySelector('[data-lk-index="0"]');
+
+    expect(firstCell).toHaveClass('shadow-none');
+    expect(firstCell).toHaveClass('data-[lk-highlighted=true]:bg-foreground');
   });
 });

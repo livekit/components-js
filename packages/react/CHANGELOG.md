@@ -1,5 +1,14 @@
 # @livekit/components-react
 
+## 2.9.20
+
+### Patch Changes
+
+- Remove misleading useIsMuted docs example - [#1281](https://github.com/livekit/components-js/pull/1281) ([@1egoman](https://github.com/1egoman))
+
+- Updated dependencies [[`f40ba89c44b57ca8004d0ccc45ab3e63de0cd4e5`](https://github.com/livekit/components-js/commit/f40ba89c44b57ca8004d0ccc45ab3e63de0cd4e5)]:
+  - @livekit/components-core@0.12.13
+
 ## 2.9.19
 
 ### Patch Changes

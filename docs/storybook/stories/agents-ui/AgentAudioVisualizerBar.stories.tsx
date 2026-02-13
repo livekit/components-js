@@ -70,12 +70,3 @@ export const Demo1: StoryObj<AgentAudioVisualizerBarProps> = {
     color: '#F9B11F',
   },
 };
-
-export const Demo2: StoryObj<AgentAudioVisualizerBarProps> = {
-  args: {
-    color: '#1F8CF9',
-    children: (
-      <div className={cn(AgentAudioVisualizerBarElementVariants({ size: 'md' }), 'rounded-sm')} />
-    ),
-  },
-};

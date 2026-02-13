@@ -110,4 +110,15 @@ describe('AgentAudioVisualizerGrid', () => {
     expect(firstCell).toHaveClass('shadow-none');
     expect(firstCell).toHaveClass('data-[lk-highlighted=true]:bg-foreground');
   });
+
+  it('throws when children is not a single element', () => {
+    expect(() =>
+      render(
+        <AgentAudioVisualizerGrid>
+          <div />
+          <div />
+        </AgentAudioVisualizerGrid>,
+      ),
+    ).toThrow('AgentAudioVisualizerGrid children must be a single element.');
+  });
 });

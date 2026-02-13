@@ -89,4 +89,15 @@ describe('AgentAudioVisualizerBar', () => {
       expect(bar).toHaveAttribute('data-lk-index', String(idx));
     });
   });
+
+  it('throws when children is not a single element', () => {
+    expect(() =>
+      render(
+        <AgentAudioVisualizerBar barCount={3}>
+          <div />
+          <div />
+        </AgentAudioVisualizerBar>,
+      ),
+    ).toThrow('AgentAudioVisualizerBar children must be a single element.');
+  });
 });

@@ -8,7 +8,6 @@ import {
   useMaybeRoomContext,
   useMediaDeviceSelect,
 } from '@livekit/components-react';
-
 import { AgentAudioVisualizerBar } from '@/components/agents-ui/agent-audio-visualizer-bar';
 import { AgentTrackToggle } from '@/components/agents-ui/agent-track-toggle';
 import {
@@ -18,8 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { cn } from '@/lib/utils';
 import { toggleVariants } from '@/components/ui/toggle';
+import { cn } from '@/lib/utils';
 
 const selectVariants = cva(
   [
@@ -284,7 +283,7 @@ export function AgentTrackControl({
         pending={pending}
         disabled={disabled}
         onPressedChange={onPressedChange}
-        className="peer/track group/track has-[.audiovisualizer]:w-auto has-[.audiovisualizer]:px-3 has-[~_button]:rounded-r-none has-[~_button]:pr-2 has-[~_button]:pl-3 has-[~_button]:border-r-0 focus:z-10"
+        className="peer/track group/track focus:z-10 has-[.audiovisualizer]:w-auto has-[.audiovisualizer]:px-3 has-[~_button]:rounded-r-none has-[~_button]:border-r-0 has-[~_button]:pr-2 has-[~_button]:pl-3"
       >
         {audioTrack && (
           <AgentAudioVisualizerBar
@@ -296,7 +295,7 @@ export function AgentTrackControl({
           >
             <span
               className={cn([
-                'h-full w-0.5 origin-center',
+                'h-full min-h-0.5 w-0.5 origin-center',
                 'group-data-[state=on]/track:bg-foreground group-data-[state=off]/track:bg-destructive',
                 'data-lk-muted:bg-muted',
               ])}

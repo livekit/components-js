@@ -1,6 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { type ComponentProps, type ReactElement } from 'react';
 import { renderHook } from '@testing-library/react';
 import { useAgentAudioVisualizerGridAnimator } from '@/hooks/agents-ui/use-agent-audio-visualizer-grid';
+import { type AgentAudioVisualizerBarProps } from '@/components/agents-ui/agent-audio-visualizer-bar';
 
 describe('useAgentAudioVisualizerGridAnimator', () => {
   beforeEach(() => {
@@ -184,5 +186,14 @@ describe('useAgentAudioVisualizerGridAnimator', () => {
         y: expect.any(Number),
       });
     });
+  });
+});
+
+describe('AgentAudioVisualizerBar children typing', () => {
+  it('accepts a single div element', () => {
+    const singleDivChild = null as unknown as ReactElement<ComponentProps<'div'>, 'div'>;
+    const props: AgentAudioVisualizerBarProps = { children: singleDivChild };
+
+    expect(props.children).toBe(singleDivChild);
   });
 });

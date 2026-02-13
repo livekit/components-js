@@ -44,12 +44,7 @@ describe('AgentAudioVisualizerBar', () => {
 
   it('applies click handler', () => {
     const onClick = vi.fn();
-    render(
-      <AgentAudioVisualizerBar
-        data-testid="bar-viz"
-        onClick={onClick}
-      />,
-    );
+    render(<AgentAudioVisualizerBar data-testid="bar-viz" onClick={onClick} />);
     const visualizer = screen.getByTestId('bar-viz');
     fireEvent.click(visualizer);
     expect(onClick).toHaveBeenCalledTimes(1);
@@ -78,5 +73,31 @@ describe('AgentAudioVisualizerBar', () => {
       mockTrack,
       expect.objectContaining({ bands: 5, loPass: 100, hiPass: 200 }),
     );
+  });
+
+  it('accepts a single custom div child and clones it per bar', () => {
+    const { container } = render(
+      <AgentAudioVisualizerBar barCount={3}>
+        <div data-testid="custom-bar" className="custom-bar" />
+      </AgentAudioVisualizerBar>,
+    );
+    const bars = container.querySelectorAll('[data-testid="custom-bar"]');
+
+    expect(bars).toHaveLength(3);
+    bars.forEach((bar, idx) => {
+      expect(bar).toHaveClass('custom-bar');
+      expect(bar).toHaveAttribute('data-lk-index', String(idx));
+    });
+  });
+
+  it('throws when children is not a single element', () => {
+    expect(() =>
+      render(
+        <AgentAudioVisualizerBar barCount={3}>
+          <div />
+          <div />
+        </AgentAudioVisualizerBar>,
+      ),
+    ).toThrow('AgentAudioVisualizerBar children must be a single element.');
   });
 });

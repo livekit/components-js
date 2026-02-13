@@ -50,7 +50,7 @@ function cloneSingleChild(
 
 export const AgentAudioVisualizerGridCellVariants = cva(
   [
-    'w-1 h-1 rounded-full bg-current/10 place-content-center transition-all ease-out',
+    'w-1 h-1 rounded-full bg-current/10 place-self-center transition-all ease-out',
     'data-[lk-highlighted=true]:bg-current',
   ],
   {

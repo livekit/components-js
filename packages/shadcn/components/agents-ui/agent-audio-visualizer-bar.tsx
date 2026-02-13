@@ -69,10 +69,10 @@ export const AgentAudioVisualizerBarVariants = cva('relative flex items-center j
   variants: {
     size: {
       icon: 'h-[24px] gap-[2px]',
-      sm: '-[56px] gap-[4px]',
-      md: '-[112px] gap-[8px]',
-      lg: '-[224px] gap-[16px]',
-      xl: '-[448px] gap-[32px]',
+      sm: 'h-[56px] gap-[4px]',
+      md: 'h-[112px] gap-[8px]',
+      lg: 'h-[224px] gap-[16px]',
+      xl: 'h-[448px] gap-[32px]',
     },
   },
   defaultVariants: {

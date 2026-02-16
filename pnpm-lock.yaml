@@ -274,7 +274,7 @@ importers:
         version: 2.8.1
       usehooks-ts:
         specifier: 3.1.1
-        version: 3.1.1(react@18.3.1)
+        version: 3.1.1(react@19.2.0)
     devDependencies:
       '@livekit/protocol':
         specifier: 'catalog:'
@@ -296,7 +296,7 @@ importers:
         version: 8.1.0(typescript@5.8.2)
       '@testing-library/react':
         specifier: ^16.0.0
-        version: 16.2.0(@testing-library/dom@10.1.0)(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 16.2.0(@testing-library/dom@10.1.0)(@types/react-dom@19.1.9(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@types/events':
         specifier: ^3.0.3
         version: 3.0.3
@@ -304,11 +304,11 @@ importers:
         specifier: ^24.7.0
         version: 24.7.0
       '@types/react':
-        specifier: ^18.0.25
-        version: 18.3.18
+        specifier: ^19.0.0
+        version: 19.2.7
       '@types/react-dom':
-        specifier: ^18.0.8
-        version: 18.3.5(@types/react@18.3.18)
+        specifier: ^19.0.0
+        version: 19.1.9(@types/react@19.2.7)
       '@vitejs/plugin-react':
         specifier: ^4.3.2
         version: 4.3.4(vite@6.4.1(@types/node@24.7.0)(jiti@2.6.1)(lightningcss@1.30.2)(sass@1.84.0)(terser@5.38.1)(tsx@4.19.2)(yaml@2.4.5))
@@ -322,11 +322,11 @@ importers:
         specifier: ^26.0.0
         version: 26.0.0
       react:
-        specifier: ^18.2.0
-        version: 18.3.1
+        specifier: ^19.0.0
+        version: 19.2.0
       react-dom:
-        specifier: ^18.2.0
-        version: 18.3.1(react@18.3.1)
+        specifier: ^19.0.0
+        version: 19.2.0(react@19.2.0)
       rimraf:
         specifier: ^6.0.0
         version: 6.0.1
@@ -11850,16 +11850,6 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
 
-  '@testing-library/react@16.2.0(@testing-library/dom@10.1.0)(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@babel/runtime': 7.28.6
-      '@testing-library/dom': 10.1.0
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-    optionalDependencies:
-      '@types/react': 18.3.18
-      '@types/react-dom': 18.3.5(@types/react@18.3.18)
-
   '@testing-library/react@16.2.0(@testing-library/dom@10.1.0)(@types/react-dom@19.1.9(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
       '@babel/runtime': 7.28.6
@@ -18650,10 +18640,10 @@ snapshots:
     dependencies:
       react: 19.2.0
 
-  usehooks-ts@3.1.1(react@18.3.1):
+  usehooks-ts@3.1.1(react@19.2.0):
     dependencies:
       lodash.debounce: 4.0.8
-      react: 18.3.1
+      react: 19.2.0
 
   util-deprecate@1.0.2: {}
 

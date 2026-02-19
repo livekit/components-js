@@ -55,6 +55,11 @@ describe('AgentAudioVisualizerBar', () => {
     expect(screen.getByTestId('bar-viz')).toHaveAttribute('data-lk-state', 'thinking');
   });
 
+  it('applies color style from color prop', () => {
+    render(<AgentAudioVisualizerBar color="#123456" data-testid="bar-viz" />);
+    expect(screen.getByTestId('bar-viz')).toHaveStyle({ color: 'rgb(18, 52, 86)' });
+  });
+
   it('renders bars with index/highlight attributes', () => {
     const { container } = render(<AgentAudioVisualizerBar barCount={3} />);
     const bars = container.querySelectorAll('[data-lk-index]');

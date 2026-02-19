@@ -275,13 +275,13 @@
       "registryDependencies": ["utils", "@agents-ui/react-shader-toy"]
     },
     {
-      "name": "livekit-api-token-route",
+      "name": "nextjs-api-token-route",
       "type": "registry:page",
-      "title": "NextJS API route to get a LiveKit token",
-      "description": "The necessary NextJS API route to get a token for a LiveKit session.",
+      "title": "NextJS API route to get a LiveKit session token",
+      "description": "A NextJS API route to generate a LiveKit session token while keeping your API keys private.",
       "files": [
         {
-          "path": "components/agents-ui/livekit-api-token-route.ts",
+          "path": "components/agents-ui/nextjs-api-token-route.ts",
           "type": "registry:component",
           "target": "app/api/token/route.ts"
         }

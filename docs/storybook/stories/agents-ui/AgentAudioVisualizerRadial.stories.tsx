@@ -18,6 +18,7 @@ export default {
     size: 'lg',
     state: 'connecting',
     radius: undefined,
+    color: undefined,
   },
   argTypes: {
     size: {
@@ -44,6 +45,7 @@ export default {
     radius: {
       control: { type: 'range', min: 1, max: 500, step: 1 },
     },
+    color: { control: { type: 'color' } },
     className: { control: { type: 'text' } },
   },
   parameters: {

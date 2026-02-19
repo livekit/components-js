@@ -12,18 +12,20 @@ export default {
     const {
       local: { microphoneTrack },
     } = useSessionContext();
-    const { theme } = useTheme();
-    const themeMode = theme === 'dark' ? 'dark' : 'light';
+    const { resolvedTheme = 'dark' } = useTheme();
 
     return (
-      <AgentAudioVisualizerAura {...args} themeMode={themeMode} audioTrack={microphoneTrack} />
+      <AgentAudioVisualizerAura
+        {...args}
+        audioTrack={microphoneTrack}
+        themeMode={resolvedTheme as 'dark' | 'light'}
+      />
     );
   },
   args: {
     size: 'xl',
     color: '#1FD5F9',
     colorShift: 0.1,
-    themeMode: 'dark',
     state: 'connecting',
   },
   argTypes: {
@@ -49,7 +51,7 @@ export default {
       control: { type: 'color' },
     },
     colorShift: {
-      control: { type: 'range', min: 0, max: 1, step: 0.01 },
+      control: { type: 'range', min: 0, max: 2, step: 0.01 },
     },
     className: { control: { type: 'text' } },
   },

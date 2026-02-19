@@ -1,5 +1,13 @@
 # @livekit/components-core
 
+## 0.12.13
+
+### Patch Changes
+
+- Adds in support for attachments and attributes fields into data streams - [#1283](https://github.com/livekit/components-js/pull/1283) ([@1egoman](https://github.com/1egoman))
+
+- Update all livekit-client to not use internal exports - [#1289](https://github.com/livekit/components-js/pull/1289) ([@1egoman](https://github.com/1egoman))
+
 ## 0.12.12
 
 ### Patch Changes

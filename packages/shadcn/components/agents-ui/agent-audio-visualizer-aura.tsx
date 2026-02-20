@@ -1,12 +1,10 @@
-/*
- * Originally developed for Unicorn Studio
- * https://unicorn.studio
- *
- * Licensed under the Polyform Non-Resale License 1.0.0
- * https://polyformproject.org/licenses/non-resale/1.0.0/
- *
- * © 2026 UNCRN LLC
- */
+// Originally developed for Unicorn Studio
+// https://unicorn.studio
+//
+// Licensed under the Polyform Non-Resale License 1.0.0
+// https://polyformproject.org/licenses/non-resale/1.0.0/
+//
+// © 2026 UNCRN LLC
 
 'use client';
 

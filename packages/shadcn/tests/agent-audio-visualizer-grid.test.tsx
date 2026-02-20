@@ -60,6 +60,11 @@ describe('AgentAudioVisualizerGrid', () => {
     expect(screen.getByTestId('grid-viz')).toHaveAttribute('data-lk-state', 'speaking');
   });
 
+  it('applies color style from color prop', () => {
+    render(<AgentAudioVisualizerGrid color="#123456" data-testid="grid-viz" />);
+    expect(screen.getByTestId('grid-viz')).toHaveStyle({ color: 'rgb(18, 52, 86)' });
+  });
+
   it('renders expected grid size with index metadata', () => {
     const { container } = render(<AgentAudioVisualizerGrid rowCount={3} columnCount={4} />);
     const cells = container.querySelectorAll('[data-lk-index]');

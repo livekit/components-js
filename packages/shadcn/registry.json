@@ -83,12 +83,13 @@
         "lucide-react"
       ],
       "registryDependencies": [
+        "utils",
         "button",
         "toggle",
         "@agents-ui/agent-track-control",
         "@agents-ui/agent-track-toggle",
-        "@agents-ui/agent-audio-visualizer-bar",
-        "utils"
+        "@agents-ui/agent-disconnect-button",
+        "@agents-ui/agent-audio-visualizer-bar"
       ]
     },
     {
@@ -272,6 +273,21 @@
         "class-variance-authority"
       ],
       "registryDependencies": ["utils", "@agents-ui/react-shader-toy"]
+    },
+    {
+      "name": "nextjs-api-token-route",
+      "type": "registry:page",
+      "title": "NextJS API route to get a LiveKit session token",
+      "description": "A NextJS API route to generate a LiveKit session token while keeping your API keys private.",
+      "files": [
+        {
+          "path": "components/agents-ui/nextjs-api-token-route.ts",
+          "type": "registry:component",
+          "target": "app/api/token/route.ts"
+        }
+      ],
+      "dependencies": ["livekit-server-sdk", "@livekit/protocol"],
+      "categories": ["agents", "api"]
     }
   ]
 }

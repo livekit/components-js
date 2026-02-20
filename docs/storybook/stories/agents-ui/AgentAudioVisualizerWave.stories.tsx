@@ -20,6 +20,7 @@ export default {
     state: 'connecting',
     blur: 0.1,
     color: '#1FD5F9',
+    colorShift: 0.3,
   },
   argTypes: {
     size: {
@@ -48,6 +49,9 @@ export default {
     },
     color: {
       control: { type: 'color' },
+    },
+    colorShift: {
+      control: { type: 'range', min: 0, max: 2, step: 0.1 },
     },
   },
   parameters: {

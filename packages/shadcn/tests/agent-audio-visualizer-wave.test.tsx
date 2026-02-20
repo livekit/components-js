@@ -2,16 +2,23 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AgentAudioVisualizerWave } from '@/components/agents-ui/agent-audio-visualizer-wave';
 
+const mockReactShaderToy = vi.fn();
+
 // Mock the hooks and components
 vi.mock('@/hooks/agents-ui/use-agent-audio-visualizer-wave', () => ({
   useAgentAudioVisualizerWave: vi.fn(() => ({
     frequency: 1.0,
     amplitude: 0.5,
     speed: 1.0,
-    lineWidth: 2.0,
-    smoothing: 1.0,
-    brightness: 1.0,
+    opacity: 1.0,
   })),
+}));
+
+vi.mock('@/components/agents-ui/react-shader-toy', () => ({
+  ReactShaderToy: (props: Record<string, unknown>) => {
+    mockReactShaderToy(props);
+    return <div data-testid="shader-toy" />;
+  },
 }));
 
 describe('AgentAudioVisualizerWave', () => {
@@ -55,5 +62,16 @@ describe('AgentAudioVisualizerWave', () => {
   it('passes state to root data attribute', () => {
     render(<AgentAudioVisualizerWave state="speaking" data-testid="wave-viz" />);
     expect(screen.getByTestId('wave-viz')).toHaveAttribute('data-lk-state', 'speaking');
+  });
+
+  it('passes color and colorShift to shader uniforms', () => {
+    render(<AgentAudioVisualizerWave color="#123456" colorShift={0.25} data-testid="wave-viz" />);
+
+    const shaderProps = mockReactShaderToy.mock.calls[0]?.[0] as {
+      uniforms?: Record<string, { value: number | number[] }>;
+    };
+
+    expect(shaderProps.uniforms?.uColor?.value).toEqual([18 / 255, 52 / 255, 86 / 255]);
+    expect(shaderProps.uniforms?.uColorShift?.value).toBe(0.25);
   });
 });

@@ -2,26 +2,17 @@ import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { useSessionContext } from '@livekit/components-react';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
-import {
-  AgentAudioVisualizerBar,
-  AgentAudioVisualizerBarElementVariants,
-  AgentAudioVisualizerBarProps,
-} from '@agents-ui';
-import { cn } from '@/lib/utils';
+import { AgentAudioVisualizerBar, AgentAudioVisualizerBarProps } from '@agents-ui';
 
 export default {
   component: AgentAudioVisualizerBar,
   decorators: [AgentSessionProvider],
-  render: ({ color, ...args }: AgentAudioVisualizerBarProps & { color?: string }) => {
+  render: (args: AgentAudioVisualizerBarProps) => {
     const {
       local: { microphoneTrack },
     } = useSessionContext();
 
-    return (
-      <div style={{ color }}>
-        <AgentAudioVisualizerBar {...args} audioTrack={microphoneTrack} />
-      </div>
-    );
+    return <AgentAudioVisualizerBar {...args} audioTrack={microphoneTrack} />;
   },
   args: {
     size: 'xl',

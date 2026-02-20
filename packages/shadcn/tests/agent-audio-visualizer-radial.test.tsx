@@ -54,6 +54,11 @@ describe('AgentAudioVisualizerRadial', () => {
     expect(screen.getByTestId('radial-viz')).toHaveAttribute('data-lk-state', 'speaking');
   });
 
+  it('applies color style from color prop', () => {
+    render(<AgentAudioVisualizerRadial color="#123456" data-testid="radial-viz" />);
+    expect(screen.getByTestId('radial-viz')).toHaveStyle({ color: 'rgb(18, 52, 86)' });
+  });
+
   it('renders expected radial bars', () => {
     const { container } = render(<AgentAudioVisualizerRadial barCount={8} />);
     const bars = container.querySelectorAll('[data-lk-index]');

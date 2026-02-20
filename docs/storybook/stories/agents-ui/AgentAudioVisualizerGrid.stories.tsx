@@ -12,16 +12,12 @@ import { cn } from '@/lib/utils';
 export default {
   component: AgentAudioVisualizerGrid,
   decorators: [AgentSessionProvider],
-  render: ({ color, ...args }: AgentAudioVisualizerGridProps & { color?: string }) => {
+  render: (args: AgentAudioVisualizerGridProps) => {
     const {
       local: { microphoneTrack },
     } = useSessionContext();
 
-    return (
-      <div style={{ color }}>
-        <AgentAudioVisualizerGrid {...args} audioTrack={microphoneTrack} />
-      </div>
-    );
+    return <AgentAudioVisualizerGrid {...args} audioTrack={microphoneTrack} />;
   },
   args: {
     size: 'lg',

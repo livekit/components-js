@@ -1,0 +1,65 @@
+.participants {
+  display: grid;
+  grid-template-rows: var(--chat-header-height) 1fr;
+  width: clamp(200px, 55ch, 60ch);
+  background-color: var(--bg2);
+  border-left: 1px solid var(--border-color);
+}
+
+.participants-header {
+  height: var(--chat-header-height);
+  padding: 0.75rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .close-button {
+    position: absolute;
+    right: 0;
+    transform: translateX(-50%);
+    background-color: transparent;
+    &:hover {
+      background-color: var(--lk-control-active-hover-bg);
+    }
+  }
+}
+
+.participants-list {
+  display: flex;
+  width: 100%;
+  max-height: 100%;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow: auto;
+  padding: 0.25rem;
+}
+
+.participant-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--border-radius);
+
+  .participant-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .track-muted-indicator-camera,
+  .track-muted-indicator-microphone {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .participants {
+    position: fixed;
+    top: 0;
+    right: 0;
+    max-width: 100%;
+    bottom: var(--control-bar-height);
+  }
+}

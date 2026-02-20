@@ -1,6 +1,6 @@
 'use client';
 
-import { type ComponentProps, CSSProperties, useMemo } from 'react';
+import { type ComponentProps, type CSSProperties, useMemo } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type LocalAudioTrack, type RemoteAudioTrack } from 'livekit-client';
 import {
@@ -19,7 +19,7 @@ export const AgentAudioVisualizerRadialVariants = cva(
     '**:data-lk-index:rounded-full **:data-lk-index:transition-colors **:data-lk-index:duration-150 **:data-lk-index:ease-linear **:data-lk-index:data-[lk-highlighted=true]:bg-current',
     'has-data-[lk-state=connecting]:**:data-lk-index:duration-300',
     'has-data-[lk-state=initializing]:**:data-lk-index:duration-300',
-    'has-data-[lk-state=listening]:**:data-lk-index:duration-300 has-data-[lk-state=listening]:**:data-lk-index:duration-300',
+    'has-data-[lk-state=listening]:**:data-lk-index:duration-300',
     'has-data-[lk-state=thinking]:animate-spin has-data-[lk-state=thinking]:[animation-duration:5s] has-data-[lk-state=thinking]:**:data-lk-index:bg-current',
   ],
   {
@@ -53,10 +53,9 @@ export interface AgentAudioVisualizerRadialProps {
    */
   state?: AgentState;
   /**
-   * The color of the radial bars.
-   * @defaultValue '#1FD5F9'
+   * The color of the radial bars in hexidecimal format.
    */
-  color?: string;
+  color?: `#${string}`;
   /**
    * The radius (distance from center) for the radial bars.
    * If not provided, defaults based on size.

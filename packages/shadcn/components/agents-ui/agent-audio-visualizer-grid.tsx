@@ -199,10 +199,9 @@ export type AgentAudioVisualizerGridProps = GridOptions & {
    */
   state?: AgentState;
   /**
-   * The color of the grid cells.
-   * @defaultValue '#1FD5F9'
+   * The color of the grid cells in hexidecimal format.
    */
-  color?: string;
+  color?: `#${string}`;
   /**
    * The audio track to visualize. Can be a local/remote audio track or a track reference.
    */

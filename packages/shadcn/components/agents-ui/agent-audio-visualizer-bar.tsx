@@ -94,9 +94,9 @@ export interface AgentAudioVisualizerBarProps {
    */
   state?: AgentState;
   /**
-   * The color of the bars.
+   * The color of the bars in hexidecimal format.
    */
-  color?: string;
+  color?: `#${string}`;
   /**
    * The number of bars to display in the visualizer.
    * If not provided, defaults based on size: 3 for 'icon'/'sm', 5 for others.

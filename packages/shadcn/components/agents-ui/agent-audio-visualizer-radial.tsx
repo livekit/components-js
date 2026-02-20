@@ -53,10 +53,9 @@ export interface AgentAudioVisualizerRadialProps {
    */
   state?: AgentState;
   /**
-   * The color of the radial bars.
-   * @defaultValue '#1FD5F9'
+   * The color of the radial bars in hexidecimal format.
    */
-  color?: string;
+  color?: `#${string}`;
   /**
    * The radius (distance from center) for the radial bars.
    * If not provided, defaults based on size.

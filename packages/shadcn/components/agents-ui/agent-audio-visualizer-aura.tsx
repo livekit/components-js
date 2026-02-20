@@ -245,10 +245,10 @@ interface AuraShaderProps {
   blur?: number;
 
   /**
-   * Color of the aura
+   * Color of the aura in hexidecimal format.
    * @default '#1FD5F9'
    */
-  color?: string;
+  color?: `#${string}`;
 
   /**
    * Color variation across layers (0-1)
@@ -370,10 +370,10 @@ export interface AgentAudioVisualizerAuraProps {
    */
   state?: AgentState;
   /**
-   * The color of the aura in hex format.
+   * The color of the aura in hexidecimal format.
    * @defaultValue '#1FD5F9'
    */
-  color?: string;
+  color?: `#${string}`;
   /**
    * The color shift of the aura.
    * @defaultValue 0.05

@@ -169,10 +169,10 @@ interface WaveShaderProps {
    */
   frequency?: number;
   /**
-   * Color of the oscilloscope
+   * Color of the oscilloscope in hexidecimal format.
    * @default '#1FD5F9'
    */
-  color?: string;
+  color?: `#${string}`;
   /**
    * Hue shift amount applied toward the outside of the wave. Center remains at the base color.
    * @default 0.05
@@ -266,10 +266,10 @@ export interface AgentAudioVisualizerWaveProps {
    */
   state?: AgentState;
   /**
-   * The color of the wave in hex format.
+   * The color of the wave in hexidecimal format.
    * @defaultValue '#1FD5F9'
    */
-  color?: string;
+  color?: `#${string}`;
   /**
    * The color shift of the wave. Higher values increase hue variation toward the edges.
    * @defaultValue 0.05

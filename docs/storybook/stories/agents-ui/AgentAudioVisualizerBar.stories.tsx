@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
-import { useSessionContext } from '@livekit/components-react';
+import { useAgent } from '@livekit/components-react';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentAudioVisualizerBar, AgentAudioVisualizerBarProps } from '@agents-ui';
 
@@ -8,9 +8,7 @@ export default {
   component: AgentAudioVisualizerBar,
   decorators: [AgentSessionProvider],
   render: (args: AgentAudioVisualizerBarProps) => {
-    const {
-      local: { microphoneTrack },
-    } = useSessionContext();
+    const { microphoneTrack } = useAgent();
 
     return <AgentAudioVisualizerBar {...args} audioTrack={microphoneTrack} />;
   },

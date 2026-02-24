@@ -3,15 +3,13 @@ import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentAudioVisualizerAura, AgentAudioVisualizerAuraProps } from '@agents-ui';
 import { useTheme } from 'next-themes';
-import { useSessionContext } from '@livekit/components-react';
+import { useAgent } from '@livekit/components-react';
 
 export default {
   component: AgentAudioVisualizerAura,
   decorators: [AgentSessionProvider],
   render: (args: AgentAudioVisualizerAuraProps) => {
-    const {
-      local: { microphoneTrack },
-    } = useSessionContext();
+    const { microphoneTrack } = useAgent();
     const { resolvedTheme = 'dark' } = useTheme();
 
     return (

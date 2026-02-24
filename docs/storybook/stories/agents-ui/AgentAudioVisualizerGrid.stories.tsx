@@ -6,16 +6,14 @@ import {
   AgentAudioVisualizerGridProps,
   AgentAudioVisualizerGridCellVariants,
 } from '@agents-ui';
-import { useSessionContext } from '@livekit/components-react';
+import { useAgent } from '@livekit/components-react';
 import { cn } from '@/lib/utils';
 
 export default {
   component: AgentAudioVisualizerGrid,
   decorators: [AgentSessionProvider],
   render: (args: AgentAudioVisualizerGridProps) => {
-    const {
-      local: { microphoneTrack },
-    } = useSessionContext();
+    const { microphoneTrack } = useAgent();
 
     return <AgentAudioVisualizerGrid {...args} audioTrack={microphoneTrack} />;
   },

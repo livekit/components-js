@@ -2,16 +2,14 @@ import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentTrackControl, type AgentTrackControlProps } from '@agents-ui';
-import { useSessionContext, useTrackToggle } from '@livekit/components-react';
+import { useAgent, useTrackToggle } from '@livekit/components-react';
 import { Track } from 'livekit-client';
 
 export default {
   component: AgentTrackControl,
   decorators: [AgentSessionProvider],
   render: (args: AgentTrackControlProps) => {
-    const {
-      local: { microphoneTrack },
-    } = useSessionContext();
+    const { microphoneTrack } = useAgent();
     const microphoneToggle = useTrackToggle({
       source: Track.Source.Microphone,
     });
@@ -51,9 +49,7 @@ export const Default: StoryObj<AgentTrackControlProps> = {
     const [isCameraPressed, setIsCameraPressed] = React.useState(true);
     const [isMicrophonePressed, setIsMicrophonePressed] = React.useState(false);
     const [isScreenSharePressed, setIsScreenSharePressed] = React.useState(true);
-    const {
-      local: { microphoneTrack },
-    } = useSessionContext();
+    const { microphoneTrack } = useAgent();
 
     return (
       <div className="flex gap-2">
@@ -92,9 +88,7 @@ export const Outlined: StoryObj<AgentTrackControlProps> = {
     const [isCameraPressed, setIsCameraPressed] = React.useState(true);
     const [isMicrophonePressed, setIsMicrophonePressed] = React.useState(false);
     const [isScreenSharePressed, setIsScreenSharePressed] = React.useState(true);
-    const {
-      local: { microphoneTrack },
-    } = useSessionContext();
+    const { microphoneTrack } = useAgent();
 
     return (
       <div className="flex gap-2">

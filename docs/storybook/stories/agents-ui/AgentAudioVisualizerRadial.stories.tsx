@@ -2,15 +2,13 @@ import React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentAudioVisualizerRadial, AgentAudioVisualizerRadialProps } from '@agents-ui';
-import { useSessionContext } from '@livekit/components-react';
+import { useAgent } from '@livekit/components-react';
 
 export default {
   component: AgentAudioVisualizerRadial,
   decorators: [AgentSessionProvider],
   render: (args: AgentAudioVisualizerRadialProps) => {
-    const {
-      local: { microphoneTrack },
-    } = useSessionContext();
+    const { microphoneTrack } = useAgent();
 
     return <AgentAudioVisualizerRadial {...args} audioTrack={microphoneTrack} />;
   },

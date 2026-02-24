@@ -5,7 +5,7 @@ import {
   useTrackToggle,
   usePersistentUserChoices,
   useLocalParticipantPermissions,
-  useSessionContext,
+  useAgent,
 } from '@livekit/components-react';
 
 const trackSourceToProtocol = (source: Track.Source) => {
@@ -69,9 +69,7 @@ export function useInputControls({
   saveUserChoices = true,
   onDeviceError,
 }: UseInputControlsProps = {}): UseInputControlsReturn {
-  const {
-    local: { microphoneTrack },
-  } = useSessionContext();
+  const { microphoneTrack } = useAgent();
 
   const microphoneToggle = useTrackToggle({
     source: Track.Source.Microphone,

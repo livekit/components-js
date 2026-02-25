@@ -361,7 +361,6 @@ export function AgentAudioVisualizerWave({
       className={cn(
         AgentAudioVisualizerWaveVariants({ size }),
         'mask-[linear-gradient(90deg,transparent_0%,black_20%,black_80%,transparent_100%)]',
-        'overflow-hidden rounded-full',
         className,
       )}
       {...props}

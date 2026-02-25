@@ -19,9 +19,9 @@ const MotionAgentAudioVisualizerWave = motion.create(AgentAudioVisualizerWave);
 
 interface AudioVisualizerProps extends MotionProps {
   isChatOpen: boolean;
-  audioVisualizerColor?: `#${string}`;
   audioVisualizerType?: 'bar' | 'wave' | 'grid' | 'radial' | 'aura';
-  audioVisualizerAuraColorShift?: number;
+  audioVisualizerColor?: `#${string}`;
+  audioVisualizerColorShift?: number;
   audioVisualizerWaveLineWidth?: number;
   audioVisualizerGridRowCount?: number;
   audioVisualizerGridColumnCount?: number;
@@ -32,15 +32,15 @@ interface AudioVisualizerProps extends MotionProps {
 }
 
 export function AudioVisualizer({
-  audioVisualizerColor,
   audioVisualizerType = 'bar',
+  audioVisualizerColor,
+  audioVisualizerColorShift = 0.3,
   audioVisualizerBarCount = 5,
   audioVisualizerRadialRadius = 100,
   audioVisualizerRadialBarCount = 25,
   audioVisualizerGridRowCount = 15,
   audioVisualizerGridColumnCount = 15,
   audioVisualizerWaveLineWidth = 3,
-  audioVisualizerAuraColorShift = 0.3,
   isChatOpen,
   className,
   ...props
@@ -54,7 +54,7 @@ export function AudioVisualizer({
           state={state}
           audioTrack={audioTrack}
           color={audioVisualizerColor}
-          colorShift={audioVisualizerAuraColorShift}
+          colorShift={audioVisualizerColorShift}
           className={cn('size-[300px] md:size-[450px]', className)}
           {...props}
         />
@@ -67,6 +67,7 @@ export function AudioVisualizer({
             state={state}
             audioTrack={audioTrack}
             color={audioVisualizerColor}
+            colorShift={audioVisualizerColorShift}
             lineWidth={isChatOpen ? audioVisualizerWaveLineWidth * 2 : audioVisualizerWaveLineWidth}
             className="size-[300px] md:size-[450px]"
           />
@@ -89,6 +90,7 @@ export function AudioVisualizer({
         <MotionAgentAudioVisualizerGrid
           size={size}
           state={state}
+          color={audioVisualizerColor}
           audioTrack={audioTrack}
           rowCount={audioVisualizerGridRowCount}
           columnCount={audioVisualizerGridColumnCount}
@@ -106,6 +108,7 @@ export function AudioVisualizer({
           <MotionAgentAudioVisualizerRadial
             size="xl"
             state={state}
+            color={audioVisualizerColor}
             audioTrack={audioTrack}
             radius={audioVisualizerRadialRadius}
             barCount={audioVisualizerRadialBarCount}
@@ -136,6 +139,7 @@ export function AudioVisualizer({
         <MotionAgentAudioVisualizerBar
           size={size}
           state={state}
+          color={audioVisualizerColor}
           audioTrack={audioTrack}
           barCount={audioVisualizerBarCount}
           className={sizedClassName}

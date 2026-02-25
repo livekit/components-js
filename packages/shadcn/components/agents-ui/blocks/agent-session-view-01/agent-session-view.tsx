@@ -138,6 +138,8 @@ export interface AgentSessionViewProps {
   audioVisualizerType?: 'bar' | 'wave' | 'grid' | 'radial' | 'aura';
   /** Primary hex color used by supported audio visualizer variants. */
   audioVisualizerColor?: `#${string}`;
+  /** Hue shift intensity used by certain visualizers. */
+  audioVisualizerColorShift?: number;
   /** Number of bars to render when `audioVisualizerType` is `bar`. */
   audioVisualizerBarCount?: number;
   /** Number of rows in the visualizer when `audioVisualizerType` is `grid`. */
@@ -148,8 +150,6 @@ export interface AgentSessionViewProps {
   audioVisualizerRadialBarCount?: number;
   /** Base radius of the radial visualizer when `audioVisualizerType` is `radial`. */
   audioVisualizerRadialRadius?: number;
-  /** Hue shift intensity used by the aura visualizer when type is `aura`. */
-  audioVisualizerAuraColorShift?: number;
   /** Stroke width of the wave path when `audioVisualizerType` is `wave`. */
   audioVisualizerWaveLineWidth?: number;
   /** Optional class name merged onto the outer `<section>` container. */
@@ -165,12 +165,12 @@ export function AgentSessionView({
 
   audioVisualizerType,
   audioVisualizerColor,
+  audioVisualizerColorShift,
   audioVisualizerBarCount,
   audioVisualizerGridRowCount,
   audioVisualizerGridColumnCount,
   audioVisualizerRadialBarCount,
   audioVisualizerRadialRadius,
-  audioVisualizerAuraColorShift,
   audioVisualizerWaveLineWidth,
   className,
   ...props
@@ -225,15 +225,15 @@ export function AgentSessionView({
       {/* Tile layout */}
       <TileLayout
         chatOpen={chatOpen}
-        audioVisualizerColor={audioVisualizerColor}
         audioVisualizerType={audioVisualizerType}
+        audioVisualizerColor={audioVisualizerColor}
+        audioVisualizerColorShift={audioVisualizerColorShift}
         audioVisualizerBarCount={audioVisualizerBarCount}
         audioVisualizerRadialBarCount={audioVisualizerRadialBarCount}
         audioVisualizerRadialRadius={audioVisualizerRadialRadius}
         audioVisualizerGridRowCount={audioVisualizerGridRowCount}
         audioVisualizerGridColumnCount={audioVisualizerGridColumnCount}
         audioVisualizerWaveLineWidth={audioVisualizerWaveLineWidth}
-        audioVisualizerAuraColorShift={audioVisualizerAuraColorShift}
       />
       {/* Bottom */}
       <motion.div

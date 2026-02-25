@@ -70,9 +70,9 @@ export function useLocalTrackRef(source: Track.Source) {
 
 interface TileLayoutProps {
   chatOpen: boolean;
-  audioVisualizerColor?: `#${string}`;
   audioVisualizerType?: 'bar' | 'wave' | 'grid' | 'radial' | 'aura';
-  audioVisualizerAuraColorShift?: number;
+  audioVisualizerColor?: `#${string}`;
+  audioVisualizerColorShift?: number;
   audioVisualizerWaveLineWidth?: number;
   audioVisualizerGridRowCount?: number;
   audioVisualizerGridColumnCount?: number;
@@ -83,15 +83,15 @@ interface TileLayoutProps {
 
 export function TileLayout({
   chatOpen,
-  audioVisualizerColor,
   audioVisualizerType,
+  audioVisualizerColor,
+  audioVisualizerColorShift,
   audioVisualizerBarCount,
   audioVisualizerRadialBarCount,
   audioVisualizerRadialRadius,
   audioVisualizerGridRowCount,
   audioVisualizerGridColumnCount,
   audioVisualizerWaveLineWidth,
-  audioVisualizerAuraColorShift,
 }: TileLayoutProps) {
   const { videoTrack: agentVideoTrack } = useVoiceAssistant();
   const [screenShareTrack] = useTracks([Track.Source.ScreenShare]);
@@ -141,15 +141,15 @@ export function TileLayout({
                       ...ANIMATION_TRANSITION,
                       delay: animationDelay,
                     }}
-                    audioVisualizerColor={audioVisualizerColor}
                     audioVisualizerType={audioVisualizerType}
+                    audioVisualizerColor={audioVisualizerColor}
+                    audioVisualizerColorShift={audioVisualizerColorShift}
                     audioVisualizerBarCount={audioVisualizerBarCount}
                     audioVisualizerRadialBarCount={audioVisualizerRadialBarCount}
                     audioVisualizerRadialRadius={audioVisualizerRadialRadius}
                     audioVisualizerGridRowCount={audioVisualizerGridRowCount}
                     audioVisualizerGridColumnCount={audioVisualizerGridColumnCount}
                     audioVisualizerWaveLineWidth={audioVisualizerWaveLineWidth}
-                    audioVisualizerAuraColorShift={audioVisualizerAuraColorShift}
                     isChatOpen={chatOpen}
                     className={cn(
                       'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',

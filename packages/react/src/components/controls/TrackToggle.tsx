@@ -5,8 +5,10 @@ import { useTrackToggle } from '../../hooks';
 import { TrackPublishOptions } from 'livekit-client';
 
 /** @public */
-export interface TrackToggleProps<T extends ToggleSource>
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
+export interface TrackToggleProps<T extends ToggleSource> extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'onChange'
+> {
   source: T;
   showIcon?: boolean;
   initialState?: boolean;

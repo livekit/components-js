@@ -7,8 +7,7 @@ import type { UseParticipantInfoOptions } from '../../hooks';
 
 /** @public */
 export interface ParticipantNameProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
-    UseParticipantInfoOptions {}
+  extends React.HTMLAttributes<HTMLSpanElement>, UseParticipantInfoOptions {}
 
 /**
  * The `ParticipantName` component displays the name of the participant as a string within an HTML span element.

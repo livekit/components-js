@@ -53,9 +53,8 @@ export function useKrispNoiseFilter(options: useKrispNoiseFilterOptions = {}) {
 
   const setNoiseFilterEnabled = React.useCallback(async (enable: boolean) => {
     if (enable) {
-      const { KrispNoiseFilter, isKrispNoiseFilterSupported } = await import(
-        '@livekit/krisp-noise-filter'
-      );
+      const { KrispNoiseFilter, isKrispNoiseFilterSupported } =
+        await import('@livekit/krisp-noise-filter');
 
       if (!isKrispNoiseFilterSupported()) {
         log.warn('LiveKit-Krisp noise filter is not supported in this browser');

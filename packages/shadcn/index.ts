@@ -11,5 +11,5 @@ export * from './components/agents-ui/agent-audio-visualizer-grid';
 export * from './components/agents-ui/agent-audio-visualizer-radial';
 export * from './components/agents-ui/agent-audio-visualizer-wave';
 export * from './components/agents-ui/agent-audio-visualizer-aura';
-export * from './components/agents-ui/blocks/agent-session-view-01/agent-session-view';
 export * from './components/agents-ui/react-shader-toy';
+export * from './components/agents-ui/blocks/agent-session-view-01/components/agent-session-block';

@@ -241,7 +241,7 @@ export function TileLayout({
                     trackRef={cameraTrack || screenShareTrack}
                     width={(cameraTrack || screenShareTrack)?.publication.dimensions?.width ?? 0}
                     height={(cameraTrack || screenShareTrack)?.publication.dimensions?.height ?? 0}
-                    className="bg-muted rounded-md object-cover"
+                    className="bg-muted aspect-square size-[90px] rounded-md object-cover"
                   />
                 </motion.div>
               )}

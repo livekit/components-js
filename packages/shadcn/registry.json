@@ -297,16 +297,20 @@
       "description": "A full-screen agent session block with transcript, controls, and I/O media tiles.",
       "files": [
         {
-          "path": "components/agents-ui/blocks/agent-session-view-01/agent-session-view.tsx",
+          "path": "components/agents-ui/blocks/agent-session-view-01/components/agent-session-block.tsx",
           "type": "registry:component"
         },
         {
-          "path": "components/agents-ui/blocks/agent-session-view-01/audio-visualizer.tsx",
+          "path": "components/agents-ui/blocks/agent-session-view-01/components/audio-visualizer.tsx",
           "type": "registry:component"
         },
         {
-          "path": "components/agents-ui/blocks/agent-session-view-01/tile-view.tsx",
+          "path": "components/agents-ui/blocks/agent-session-view-01/components/tile-view.tsx",
           "type": "registry:component"
+        },
+        {
+          "path": "components/agents-ui/blocks/agent-session-view-01/index.ts",
+          "type": "registry:item"
         }
       ],
       "registryDependencies": [

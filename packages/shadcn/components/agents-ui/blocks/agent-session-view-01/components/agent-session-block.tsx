@@ -1,16 +1,15 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, type MotionProps, motion } from 'motion/react';
 import { useAgent, useSessionContext, useSessionMessages } from '@livekit/components-react';
-import { AnimatePresence, motion, type MotionProps } from 'motion/react';
-
-import { cn } from '@/lib/utils';
 import { AgentChatTranscript } from '@/components/agents-ui/agent-chat-transcript';
 import {
   AgentControlBar,
   type AgentControlBarControls,
 } from '@/components/agents-ui/agent-control-bar';
 import { Shimmer } from '@/components/ai-elements/shimmer';
+import { cn } from '@/lib/utils';
 import { TileLayout } from './tile-view';
 
 const MotionMessage = motion.create(Shimmer);
@@ -102,7 +101,7 @@ export function Fade({ top = false, bottom = false, className }: FadeProps) {
   );
 }
 
-export interface AgentSessionViewProps {
+export interface AgentSessionView_01Props {
   /**
    * Message shown above the controls before the first chat message is sent.
    *
@@ -156,7 +155,7 @@ export interface AgentSessionViewProps {
   className?: string;
 }
 
-export function AgentSessionView({
+export function AgentSessionView_01({
   preConnectMessage = 'Agent is listening, ask it a question',
   supportsChatInput = true,
   supportsVideoInput = true,
@@ -172,9 +171,10 @@ export function AgentSessionView({
   audioVisualizerRadialBarCount,
   audioVisualizerRadialRadius,
   audioVisualizerWaveLineWidth,
+  ref,
   className,
   ...props
-}: React.ComponentProps<'section'> & AgentSessionViewProps) {
+}: React.ComponentProps<'section'> & AgentSessionView_01Props) {
   const session = useSessionContext();
   const { messages } = useSessionMessages(session);
   const [chatOpen, setChatOpen] = useState(false);
@@ -200,6 +200,7 @@ export function AgentSessionView({
 
   return (
     <section
+      ref={ref}
       className={cn('bg-background relative z-10 h-full w-full overflow-hidden', className)}
       {...props}
     >

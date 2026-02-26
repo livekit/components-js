@@ -145,13 +145,7 @@ export function AudioVisualizer({
           className={sizedClassName}
           {...props}
         >
-          <span
-            className={cn([
-              'bg-muted min-h-2.5 w-2.5 rounded-full',
-              'origin-center transition-colors duration-250 ease-linear',
-              'data-[lk-highlighted=true]:bg-foreground data-[lk-muted=true]:bg-muted',
-            ])}
-          />
+          <span className="min-h-2.5 w-2.5 rounded-full transition-colors duration-250 ease-linear bg-current/10 data-[lk-highlighted=true]:bg-current" />
         </MotionAgentAudioVisualizerBar>
       );
     }

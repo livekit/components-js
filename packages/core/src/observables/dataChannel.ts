@@ -41,7 +41,9 @@ export interface BaseDataMessage<T extends string | undefined> {
   payload: Uint8Array;
 }
 
-export interface ReceivedDataMessage<T extends string | undefined = string>
+export interface ReceivedDataMessage<
+  T extends string | undefined = string,
+>
   extends BaseDataMessage<T> {
   from?: Participant;
 }

@@ -8,3 +8,4 @@ catalog:
   livekit-client: ^2.17.2
   '@livekit/protocol': ^1.44.0
   eslint: ^8.56.0
+  prettier: ^3.8.1

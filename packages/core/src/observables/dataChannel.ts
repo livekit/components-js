@@ -43,8 +43,7 @@ export interface BaseDataMessage<T extends string | undefined> {
 
 export interface ReceivedDataMessage<
   T extends string | undefined = string,
->
-  extends BaseDataMessage<T> {
+> extends BaseDataMessage<T> {
   from?: Participant;
 }
 

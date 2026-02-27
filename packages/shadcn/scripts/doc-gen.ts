@@ -7,9 +7,35 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 fs.mkdirSync(path.join(__dirname, '../dist'), { recursive: true });
 
+const agentsUiPath = path.join(__dirname, '../components/agents-ui');
+const blocksPath = path.join(agentsUiPath, 'blocks');
+
+function getAllTsxFiles(dir: string): string[] {
+  const results: string[] = [];
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results.push(...getAllTsxFiles(fullPath));
+    } else if (entry.name.endsWith('.tsx')) {
+      results.push(fullPath);
+    }
+  }
+  return results;
+}
+
 console.log('Generating documentation for components/agents-ui');
 
-const files = fs.readdirSync(path.join(__dirname, '../components/agents-ui'));
+const topLevelFiles = fs
+  .readdirSync(agentsUiPath)
+  .filter((f) => f.endsWith('.tsx'))
+  .map((f) => path.join(agentsUiPath, f));
+const blocksFiles = fs.existsSync(blocksPath)
+  ? getAllTsxFiles(blocksPath).filter((filePath) =>
+      path.basename(filePath, '.tsx').endsWith('-block'),
+    )
+  : [];
+const files = [...topLevelFiles, ...blocksFiles];
 const parser = withDefaultConfig({
   shouldExtractLiteralValuesFromEnum: true,
   shouldRemoveUndefinedFromOptional: true,
@@ -38,14 +64,9 @@ const parser = withDefaultConfig({
 console.log(`Found ${files.length} files`);
 
 const docs: Record<string, ComponentDoc> = {};
-for (const file of files) {
-  if (!file.endsWith('.tsx')) {
-    continue;
-  }
-
-  const fileName = file.replace('.tsx', '');
+for (const filePath of files) {
+  const fileName = path.basename(filePath, '.tsx');
   console.log(`Generating documentation for ${fileName}`);
-  const filePath = path.join(__dirname, '../components/agents-ui', file);
   const documentation = parser.parse(filePath);
 
   for (const doc of documentation) {

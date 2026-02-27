@@ -1,10 +1,14 @@
-// Originally developed for Unicorn Studio
-// https://unicorn.studio
-//
-// Licensed under the Polyform Non-Resale License 1.0.0
-// https://polyformproject.org/licenses/non-resale/1.0.0/
-//
-// © 2026 UNCRN LLC
+/**
+ * @license
+ *
+ * Originally developed for Unicorn Studio
+ * https://unicorn.studio
+ *
+ * Licensed under the Polyform Non-Resale License 1.0.0
+ * https://polyformproject.org/licenses/non-resale/1.0.0/
+ *
+ * © 2026 UNCRN LLC
+ */
 
 'use client';
 
@@ -437,11 +441,7 @@ export function AgentAudioVisualizerAura({
       amplitude={amplitude}
       frequency={frequency}
       brightness={brightness}
-      className={cn(
-        AgentAudioVisualizerAuraVariants({ size }),
-        'overflow-hidden rounded-full',
-        className,
-      )}
+      className={cn(AgentAudioVisualizerAuraVariants({ size }), className)}
       {...props}
     />
   );

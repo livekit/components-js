@@ -9,10 +9,6 @@ type ConnectionDetails = {
   participantToken: string;
 };
 
-type TokenRequestBody = {
-  room_config?: ConstructorParameters<typeof RoomConfiguration>[0];
-};
-
 // NOTE: you are expected to define the following environment variables in `.env.local`:
 const API_KEY = process.env.LIVEKIT_API_KEY;
 const API_SECRET = process.env.LIVEKIT_API_SECRET;
@@ -40,9 +36,9 @@ export async function POST(req: Request) {
     }
 
     // Parse room config from request body.
-    // This preserves agent dispatch fields like agent_name and agent_metadata.
-    const body = (await req.json()) as TokenRequestBody;
-    const roomConfig = body?.room_config;
+    const body = await req.json();
+    // Recreate the RoomConfiguration object from JSON object.
+    const roomConfig = RoomConfiguration.fromJson(body?.room_config, { ignoreUnknownFields: true });
 
     // Generate participant token
     const participantName = 'user';
@@ -77,7 +73,7 @@ export async function POST(req: Request) {
 function createParticipantToken(
   userInfo: AccessTokenOptions,
   roomName: string,
-  roomConfig?: ConstructorParameters<typeof RoomConfiguration>[0],
+  roomConfig: RoomConfiguration,
 ): Promise<string> {
   const at = new AccessToken(API_KEY, API_SECRET, {
     ...userInfo,
@@ -93,7 +89,7 @@ function createParticipantToken(
   at.addGrant(grant);
 
   if (roomConfig) {
-    at.roomConfig = new RoomConfiguration(roomConfig);
+    at.roomConfig = roomConfig;
   }
 
   return at.toJwt();

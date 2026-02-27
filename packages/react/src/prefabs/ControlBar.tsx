@@ -5,6 +5,7 @@ import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { TrackToggle } from '../components/controls/TrackToggle';
 import { ChatIcon, GearIcon, LeaveIcon } from '../assets/icons';
 import { ChatToggle } from '../components/controls/ChatToggle';
+import { EmojiReactionButton } from '../components/controls/EmojiReactionButton';
 import { useLocalParticipantPermissions, usePersistentUserChoices } from '../hooks';
 import { useMediaQuery } from '../hooks/internal';
 import { useMaybeLayoutContext } from '../context';
@@ -21,6 +22,7 @@ export type ControlBarControls = {
   screenShare?: boolean;
   leave?: boolean;
   settings?: boolean;
+  reactions?: boolean;
 };
 
 const trackSourceToProtocol = (source: Track.Source) => {
@@ -107,6 +109,7 @@ export function ControlBar({
     visibleControls.microphone ??= canPublishSource(Track.Source.Microphone);
     visibleControls.screenShare ??= canPublishSource(Track.Source.ScreenShare);
     visibleControls.chat ??= localPermissions.canPublishData && controls?.chat;
+    visibleControls.reactions ??= localPermissions.canPublishData && controls?.reactions;
   }
 
   const showIcon = React.useMemo(
@@ -208,6 +211,11 @@ export function ControlBar({
           {showIcon && <ChatIcon />}
           {showText && 'Chat'}
         </ChatToggle>
+      )}
+      {visibleControls.reactions && (
+        <EmojiReactionButton showIcon={showIcon} showText={showText}>
+          {showText && 'Reactions'}
+        </EmojiReactionButton>
       )}
       {visibleControls.settings && (
         <SettingsMenuToggle>

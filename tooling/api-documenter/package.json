@@ -22,7 +22,7 @@
   "dependencies": {
     "@microsoft/api-extractor-model": "^7.27.2",
     "@microsoft/tsdoc": "0.15.1",
-    "@rushstack/heft-node-rig": "^2.2.6",
+    "@rushstack/heft-node-rig": "^2.6.59",
     "@rushstack/node-core-library": "^5.0.0",
     "@rushstack/ts-command-line": "^4.15.0",
     "colors": "~1.4.0",

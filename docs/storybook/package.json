@@ -35,7 +35,7 @@
     "eslint-plugin-storybook": "10.1.4",
     "next-themes": "^0.4.6",
     "postcss": "^8.5.6",
-    "storybook": "^10.1.4",
+    "storybook": "^10.2.10",
     "tailwindcss": "^4.1.17",
     "tsx": "^4.0.0",
     "typescript": "5.8.2",

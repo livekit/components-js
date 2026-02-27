@@ -448,8 +448,8 @@ importers:
         specifier: 'catalog:'
         version: 2.17.2(@types/dom-mediacapture-record@1.0.22)
       loglevel:
-        specifier: 1.9.1
-        version: 1.9.1
+        specifier: 1.9.2
+        version: 1.9.2
       rxjs:
         specifier: 7.8.2
         version: 7.8.2
@@ -7372,10 +7372,6 @@ packages:
   log-symbols@6.0.0:
     resolution: {integrity: sha512-i24m8rpwhmPIS4zscNzK6MSEhk0DUWa/8iYQWxhffV8jkI4Phvs3F+quL5xvS0gdQR0FyTCMMH33Y78dDTzzIw==}
     engines: {node: '>=18'}
-
-  loglevel@1.9.1:
-    resolution: {integrity: sha512-hP3I3kCrDIMuRwAwHltphhDM1r8i55H33GgqjXbrisuJhF4kRhW1dNuxsRklp4bXl8DSdLaNLuiL4A/LWRfxvg==}
-    engines: {node: '>= 0.6.0'}
 
   loglevel@1.9.2:
     resolution: {integrity: sha512-HgMmCqIJSAKqo68l0rS2AanEWfkxaZ5wNiEFb5ggm08lDs9Xl2KxBlX3PTcaD2chBM1gXAYf491/M2Rv8Jwayg==}
@@ -18152,8 +18148,6 @@ snapshots:
     dependencies:
       chalk: 5.6.2
       is-unicode-supported: 1.3.0
-
-  loglevel@1.9.1: {}
 
   loglevel@1.9.2: {}
 

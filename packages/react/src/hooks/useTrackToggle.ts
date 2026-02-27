@@ -8,8 +8,10 @@ import { mergeProps } from '../mergeProps';
 import { useObservableState } from './internal';
 
 /** @public */
-export interface UseTrackToggleProps<T extends ToggleSource>
-  extends Omit<TrackToggleProps<T>, 'showIcon'> {
+export interface UseTrackToggleProps<T extends ToggleSource> extends Omit<
+  TrackToggleProps<T>,
+  'showIcon'
+> {
   room?: Room;
 }
 

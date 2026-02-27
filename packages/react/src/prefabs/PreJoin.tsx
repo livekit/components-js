@@ -27,8 +27,10 @@ import { roomOptionsStringifyReplacer } from '../utils';
  * Props for the PreJoin component.
  * @public
  */
-export interface PreJoinProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit' | 'onError'> {
+export interface PreJoinProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'onSubmit' | 'onError'
+> {
   /** This function is called with the `LocalUserChoices` if validation is passed. */
   onSubmit?: (values: LocalUserChoices) => void;
   /**

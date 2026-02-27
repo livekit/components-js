@@ -9,8 +9,7 @@ import { PaginationIndicator } from '../controls/PaginationIndicator';
 
 /** @public */
 export interface GridLayoutProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    Pick<UseParticipantsOptions, 'updateOnlyOn'> {
+  extends React.HTMLAttributes<HTMLDivElement>, Pick<UseParticipantsOptions, 'updateOnlyOn'> {
   children: React.ReactNode;
   tracks: TrackReferenceOrPlaceholder[];
 }

@@ -3,8 +3,9 @@ import * as React from 'react';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { DisconnectButton } from '../components/controls/DisconnectButton';
 import { TrackToggle } from '../components/controls/TrackToggle';
-import { ChatIcon, GearIcon, LeaveIcon } from '../assets/icons';
+import { ChatIcon, GearIcon, LeaveIcon, ParticipantsIcon } from '../assets/icons';
 import { ChatToggle } from '../components/controls/ChatToggle';
+import { ParticipantsToggle } from '../components/controls/ParticipantsToggle';
 import { useLocalParticipantPermissions, usePersistentUserChoices } from '../hooks';
 import { useMediaQuery } from '../hooks/internal';
 import { useMaybeLayoutContext } from '../context';
@@ -21,6 +22,7 @@ export type ControlBarControls = {
   screenShare?: boolean;
   leave?: boolean;
   settings?: boolean;
+  participants?: boolean;
 };
 
 const trackSourceToProtocol = (source: Track.Source) => {
@@ -74,14 +76,14 @@ export function ControlBar({
   onDeviceError,
   ...props
 }: ControlBarProps) {
-  const [isChatOpen, setIsChatOpen] = React.useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const layoutContext = useMaybeLayoutContext();
   React.useEffect(() => {
-    if (layoutContext?.widget.state?.showChat !== undefined) {
-      setIsChatOpen(layoutContext?.widget.state?.showChat);
-    }
-  }, [layoutContext?.widget.state?.showChat]);
-  const isTooLittleSpace = useMediaQuery(`(max-width: ${isChatOpen ? 1000 : 760}px)`);
+    const showChat = layoutContext?.widget.state?.showChat ?? false;
+    const showParticipants = layoutContext?.widget.state?.showParticipants ?? false;
+    setIsSidebarOpen(showChat || showParticipants);
+  }, [layoutContext?.widget.state?.showChat, layoutContext?.widget.state?.showParticipants]);
+  const isTooLittleSpace = useMediaQuery(`(max-width: ${isSidebarOpen ? 1000 : 760}px)`);
 
   const defaultVariation = isTooLittleSpace ? 'minimal' : 'verbose';
   variation ??= defaultVariation;
@@ -202,6 +204,12 @@ export function ControlBar({
         >
           {showText && (isScreenShareEnabled ? 'Stop screen share' : 'Share screen')}
         </TrackToggle>
+      )}
+      {visibleControls.participants && (
+        <ParticipantsToggle>
+          {showIcon && <ParticipantsIcon />}
+          {showText && 'Participants'}
+        </ParticipantsToggle>
       )}
       {visibleControls.chat && (
         <ChatToggle>

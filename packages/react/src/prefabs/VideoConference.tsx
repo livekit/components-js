@@ -22,6 +22,7 @@ import { useCreateLayoutContext } from '../context';
 import { usePinnedTracks, useTracks } from '../hooks';
 import { Chat } from './Chat';
 import { ControlBar } from './ControlBar';
+import { Participants } from './Participants';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 
 /**
@@ -64,6 +65,7 @@ export function VideoConference({
     showChat: false,
     unreadMessages: 0,
     showSettings: false,
+    showParticipants: false,
   });
   const lastAutoFocusedScreenShareTrack = React.useRef<TrackReferenceOrPlaceholder | null>(null);
 
@@ -155,7 +157,9 @@ export function VideoConference({
                 </FocusLayoutContainer>
               </div>
             )}
-            <ControlBar controls={{ chat: true, settings: !!SettingsComponent }} />
+            <ControlBar
+              controls={{ participants: true, chat: true, settings: !!SettingsComponent }}
+            />
           </div>
           <Chat
             style={{ display: widgetState.showChat ? 'grid' : 'none' }}
@@ -163,6 +167,7 @@ export function VideoConference({
             messageEncoder={chatMessageEncoder}
             messageDecoder={chatMessageDecoder}
           />
+          <Participants style={{ display: widgetState.showParticipants ? 'grid' : 'none' }} />
           {SettingsComponent && (
             <div
               className="lk-settings-menu-modal"

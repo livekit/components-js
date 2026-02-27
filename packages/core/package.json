@@ -52,9 +52,9 @@
     "eslint": "catalog:",
     "eslint-config-lk-custom": "workspace:*",
     "size-limit": "^11.0.2",
-    "tsup": "^8.0.0",
+    "tsup": "^8.5.1",
     "typescript": "5.8.2",
-    "vitest": "^3.0.0"
+    "vitest": "^4.0.18"
   },
   "engines": {
     "node": ">=18"

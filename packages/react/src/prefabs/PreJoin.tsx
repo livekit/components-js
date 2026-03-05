@@ -34,7 +34,7 @@ export interface PreJoinProps extends Omit<
   /** This function is called with the `LocalUserChoices` if validation is passed. */
   onSubmit?: (values: LocalUserChoices) => void;
   /**
-   * Provide your custom validation function. Only if validation is successful the user choices are past to the onSubmit callback.
+   * Provide your custom validation function. Only if validation is successful the user choices are passed to the onSubmit callback.
    */
   onValidate?: (values: LocalUserChoices) => boolean;
   onError?: (error: Error) => void;
@@ -206,7 +206,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
 
 /**
  * The `PreJoin` prefab component is normally presented to the user before he enters a room.
- * This component allows the user to check and select the preferred media device (camera und microphone).
+ * This component allows the user to check and select the preferred media device (camera and microphone).
  * On submit the user decisions are returned, which can then be passed on to the `LiveKitRoom` so that the user enters the room with the correct media devices.
  *
  * @remarks

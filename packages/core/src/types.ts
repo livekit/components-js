@@ -12,11 +12,13 @@ export type WidgetState = {
   showChat: boolean;
   unreadMessages: number;
   showSettings?: boolean;
+  showParticipants?: boolean;
 };
 export const WIDGET_DEFAULT_STATE: WidgetState = {
   showChat: false,
   unreadMessages: 0,
   showSettings: false,
+  showParticipants: false,
 };
 
 // ## Track Source Types

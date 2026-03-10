@@ -556,8 +556,8 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       return;
     }
 
-    const handleAttributesChanged = (attributes: UseAgentReturn['attributes']) => {
-      setAgentParticipantAttributes(attributes);
+    const handleAttributesChanged = (_changedAttributes: UseAgentReturn['attributes']) => {
+      setAgentParticipantAttributes({ ...agentParticipant.attributes });
     };
 
     agentParticipant.on(ParticipantEvent.AttributesChanged, handleAttributesChanged);

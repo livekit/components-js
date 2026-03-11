@@ -1,23 +1,23 @@
+import { ParticipantAgentAttributes, TrackReference } from '@livekit/components-core';
+import { EventEmitter } from 'events';
 import {
   ConnectionState,
   LocalTrackPublication,
+  Participant,
   ParticipantEvent,
   ParticipantKind,
   RemoteParticipant,
   RoomEvent,
   Track,
-  Participant,
 } from 'livekit-client';
-import type TypedEventEmitter from 'typed-emitter';
-import { EventEmitter } from 'events';
 import * as React from 'react';
-import { ParticipantAgentAttributes, TrackReference } from '@livekit/components-core';
+import type TypedEventEmitter from 'typed-emitter';
 
+import { useMaybeSessionContext } from '../context';
+import { useParticipantInfo } from './useParticipantInfo';
 import { useParticipantTracks } from './useParticipantTracks';
 import { useRemoteParticipants } from './useRemoteParticipants';
 import { UseSessionReturn } from './useSession';
-import { useMaybeSessionContext } from '../context';
-import { useParticipantInfo } from './useParticipantInfo';
 
 // FIXME: make this 10 seconds once room dispatch booting info is discoverable
 const DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS = 20_000;
@@ -556,7 +556,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       return;
     }
 
-    const handleAttributesChanged = (_changedAttributes: UseAgentReturn['attributes']) => {
+    const handleAttributesChanged = () => {
       setAgentParticipantAttributes({ ...agentParticipant.attributes });
     };
 

@@ -547,24 +547,9 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     );
   }, [agentParticipant, roomRemoteParticipants]);
 
-  // 1. Listen for agent participant attribute changes
-  const [agentParticipantAttributes, setAgentParticipantAttributes] = React.useState<
-    Participant['attributes']
-  >(agentParticipant?.attributes ?? {});
-  React.useEffect(() => {
-    if (!agentParticipant) {
-      return;
-    }
-
-    const handleAttributesChanged = () => {
-      setAgentParticipantAttributes({ ...agentParticipant.attributes });
-    };
-
-    agentParticipant.on(ParticipantEvent.AttributesChanged, handleAttributesChanged);
-    return () => {
-      agentParticipant.off(ParticipantEvent.AttributesChanged, handleAttributesChanged);
-    };
-  }, [agentParticipant, emitter]);
+  // 1. Derive attributes directly from the participant object
+  // Reactivity is already provided by useRemoteParticipants via RoomEvent.ParticipantAttributesChanged.
+  const agentParticipantAttributes = agentParticipant?.attributes ?? {};
 
   // 2. Listen for track updates
   const agentTracks = useParticipantTracks([Track.Source.Camera, Track.Source.Microphone], {

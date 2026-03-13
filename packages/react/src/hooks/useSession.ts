@@ -548,6 +548,8 @@ export function useSession(
 
   const tokenSourceFetch = useSessionTokenSourceFetch(tokenSource, restOptions);
 
+  const [wasSessionEndCalled, setWasSessionEndCalled] = React.useState(false);
+
   const start = React.useCallback(
     async (connectOptions: SessionConnectOptions = {}) => {
       const {
@@ -557,6 +559,7 @@ export function useSession(
       } = connectOptions;
 
       await waitUntilDisconnected(signal);
+      setWasSessionEndCalled(false);
 
       const onSignalAbort = () => {
         room.disconnect();
@@ -567,7 +570,9 @@ export function useSession(
         // on disconnection force a new token to be fetched in order to avoid reusing the same room right after
         // this works around the fact that agents won't rejoin a room that existed previously
         // and depends on the assumption that the endpoint will return a token for a different room
-        tokenSourceFetch(true);
+        if (!wasSessionEndCalled) {
+          tokenSourceFetch(true);
+        }
       };
       room.once(RoomEvent.Disconnected, onDisconnected);
 
@@ -613,10 +618,18 @@ export function useSession(
 
       signal?.removeEventListener('abort', onSignalAbort);
     },
-    [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected, agent.waitUntilConnected],
+    [
+      room,
+      waitUntilDisconnected,
+      tokenSourceFetch,
+      waitUntilConnected,
+      agent.waitUntilConnected,
+      wasSessionEndCalled,
+    ],
   );
 
   const end = React.useCallback(async () => {
+    setWasSessionEndCalled(true);
     tokenSourceFetch(true);
     await room.disconnect();
   }, [room, tokenSourceFetch]);

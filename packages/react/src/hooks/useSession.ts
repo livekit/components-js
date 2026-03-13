@@ -6,11 +6,12 @@ import {
   ConnectionState,
   TrackPublishOptions,
   Track,
-  TokenSourceConfigurable,
+  TokenSourceCached,
   TokenSourceFixed,
   TokenSourceFetchOptions,
   RoomConnectOptions,
   decodeTokenPayload,
+  TokenSourceConfigurable,
 } from 'livekit-client';
 import { EventEmitter } from 'events';
 
@@ -270,7 +271,7 @@ function useSessionTokenSourceFetch(
     ) {
       return;
     }
-
+    console.warn('updating unstable rest options to ', unstableRestOptions);
     memoizedTokenFetchOptionsRef.current = unstableRestOptions;
   }, [isConfigurable, unstableRestOptions]);
 
@@ -281,6 +282,7 @@ function useSessionTokenSourceFetch(
           `AgentSession - memoized token fetch options are not set, but the passed tokenSource was an instance of TokenSourceConfigurable. If you are seeing this please make a new GitHub issue!`,
         );
       }
+      console.warn('running token source fetch with options', memoizedTokenFetchOptionsRef.current);
       return tokenSource.fetch(memoizedTokenFetchOptionsRef.current);
     } else {
       return tokenSource.fetch();
@@ -568,6 +570,10 @@ export function useSession(
           const participantTokenAgentDispatchCount =
             participantTokenPayload.roomConfig?.agents?.length ?? 0;
           tokenDispatchesAgent = participantTokenAgentDispatchCount > 0;
+
+          if (tokenSource instanceof TokenSourceCached) {
+            tokenSource.invalidateCache();
+          }
 
           return room.connect(serverUrl, participantToken, roomConnectOptions);
         }),

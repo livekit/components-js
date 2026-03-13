@@ -7,11 +7,11 @@ import {
   TrackPublishOptions,
   Track,
   TokenSourceCached,
+  TokenSourceConfigurable,
   TokenSourceFixed,
   TokenSourceFetchOptions,
   RoomConnectOptions,
   decodeTokenPayload,
-  TokenSourceConfigurable,
 } from 'livekit-client';
 import { EventEmitter } from 'events';
 
@@ -271,7 +271,6 @@ function useSessionTokenSourceFetch(
     ) {
       return;
     }
-    console.warn('updating unstable rest options to ', unstableRestOptions);
     memoizedTokenFetchOptionsRef.current = unstableRestOptions;
   }, [isConfigurable, unstableRestOptions]);
 
@@ -282,7 +281,6 @@ function useSessionTokenSourceFetch(
           `AgentSession - memoized token fetch options are not set, but the passed tokenSource was an instance of TokenSourceConfigurable. If you are seeing this please make a new GitHub issue!`,
         );
       }
-      console.warn('running token source fetch with options', memoizedTokenFetchOptionsRef.current);
       return tokenSource.fetch(memoizedTokenFetchOptionsRef.current);
     } else {
       return tokenSource.fetch();

@@ -6,7 +6,6 @@ import {
   ConnectionState,
   TrackPublishOptions,
   Track,
-  TokenSourceCached,
   TokenSourceConfigurable,
   TokenSourceFixed,
   TokenSourceFetchOptions,
@@ -274,18 +273,21 @@ function useSessionTokenSourceFetch(
     memoizedTokenFetchOptionsRef.current = unstableRestOptions;
   }, [isConfigurable, unstableRestOptions]);
 
-  const tokenSourceFetch = React.useCallback(async () => {
-    if (isConfigurable) {
-      if (!memoizedTokenFetchOptionsRef.current) {
-        throw new Error(
-          `AgentSession - memoized token fetch options are not set, but the passed tokenSource was an instance of TokenSourceConfigurable. If you are seeing this please make a new GitHub issue!`,
-        );
+  const tokenSourceFetch = React.useCallback(
+    async (force?: boolean) => {
+      if (isConfigurable) {
+        if (!memoizedTokenFetchOptionsRef.current) {
+          throw new Error(
+            `AgentSession - memoized token fetch options are not set, but the passed tokenSource was an instance of TokenSourceConfigurable. If you are seeing this please make a new GitHub issue!`,
+          );
+        }
+        return tokenSource.fetch(memoizedTokenFetchOptionsRef.current, force);
+      } else {
+        return tokenSource.fetch();
       }
-      return tokenSource.fetch(memoizedTokenFetchOptionsRef.current);
-    } else {
-      return tokenSource.fetch();
-    }
-  }, [isConfigurable, tokenSource]);
+    },
+    [isConfigurable, tokenSource],
+  );
 
   return tokenSourceFetch;
 }
@@ -561,6 +563,14 @@ export function useSession(
       };
       signal?.addEventListener('abort', onSignalAbort);
 
+      const onDisconnected = () => {
+        // on disconnection force a new token to be fetched in order to avoid reusing the same room right after
+        // this works around the fact that agents won't rejoin a room that existed previously
+        // and depends on the assumption that the endpoint will return a token for a different room
+        tokenSourceFetch(true);
+      };
+      room.once(RoomEvent.Disconnected, onDisconnected);
+
       let tokenDispatchesAgent = false;
       await Promise.all([
         tokenSourceFetch().then(({ serverUrl, participantToken }) => {
@@ -568,10 +578,6 @@ export function useSession(
           const participantTokenAgentDispatchCount =
             participantTokenPayload.roomConfig?.agents?.length ?? 0;
           tokenDispatchesAgent = participantTokenAgentDispatchCount > 0;
-
-          if (tokenSource instanceof TokenSourceCached) {
-            tokenSource.invalidateCache();
-          }
 
           return room.connect(serverUrl, participantToken, roomConnectOptions);
         }),
@@ -611,8 +617,9 @@ export function useSession(
   );
 
   const end = React.useCallback(async () => {
+    tokenSourceFetch(true);
     await room.disconnect();
-  }, [room]);
+  }, [room, tokenSourceFetch]);
 
   const prepareConnection = React.useCallback(async () => {
     const credentials = await tokenSourceFetch();

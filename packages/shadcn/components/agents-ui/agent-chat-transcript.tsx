@@ -56,9 +56,9 @@ export function AgentChatTranscript({
       <ConversationContent>
         {messages.map((receivedMessage) => {
           const { id, timestamp, from, message } = receivedMessage;
-          const locale = navigator?.language ?? 'en-US';
-          const messageOrigin = from?.isLocal ? 'user' : 'assistant';
           const time = new Date(timestamp);
+          const messageOrigin = from?.isLocal ? 'user' : 'assistant';
+          const locale = typeof navigator !== 'undefined' ? navigator.language : 'en-US';
           const title = time.toLocaleTimeString(locale, { timeStyle: 'full' });
 
           return (

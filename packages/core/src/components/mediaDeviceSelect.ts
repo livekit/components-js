@@ -19,6 +19,19 @@ export type SetMediaDeviceOptions = {
   exact?: boolean;
 };
 
+/**
+ * Check if a MediaStreamTrack is using the system default device.
+ * Uses the deviceId from getSettings() instead of the label string,
+ * since labels are locale-dependent and can't be reliably matched.
+ */
+function isDefaultDevice(track: MediaStreamTrack): boolean {
+  try {
+    return track.getSettings().deviceId === 'default';
+  } catch {
+    return false;
+  }
+}
+
 export function setupDeviceSelector(
   kind: MediaDeviceKind,
   room: Room,
@@ -33,7 +46,7 @@ export function setupDeviceSelector(
       await localTrack.setDeviceId(options.exact ? { exact: id } : id);
       const actualId = await localTrack.getDeviceId(false);
       activeDeviceSubject.next(
-        id === 'default' && localTrack.mediaStreamTrack.label.startsWith('Default') ? id : actualId,
+        id === 'default' && isDefaultDevice(localTrack.mediaStreamTrack) ? id : actualId,
       );
     } else if (room) {
       const browser = getBrowser();
@@ -57,7 +70,7 @@ export function setupDeviceSelector(
       }
       const useDefault =
         (id === 'default' && !targetTrack) ||
-        (id === 'default' && targetTrack?.mediaStreamTrack.label.startsWith('Default'));
+        (id === 'default' && targetTrack && isDefaultDevice(targetTrack.mediaStreamTrack));
       activeDeviceSubject.next(useDefault ? id : actualDeviceId);
     }
   };

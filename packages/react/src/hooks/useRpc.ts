@@ -20,9 +20,11 @@ export type RpcMethodDescriptor<Input = string, Output = string> = {
 };
 
 /** @beta */
-export type RpcMethod<Input = unknown, Output = unknown> = RpcRawHandler | RpcMethodDescriptor<Input, Output>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type RpcMethod<Input = any, Output = any> = RpcRawHandler | RpcMethodDescriptor<Input, Output>;
 
-type PerformRpcDescriptor<Input = string, Output = string> = Omit<PerformRpcParams, 'payload'> & {
+/** @beta */
+export type PerformRpcDescriptor<Input = string, Output = string> = Omit<PerformRpcParams, 'payload'> & {
   parse?: (raw: string) => Output;
   serialize?: (val: Input) => string;
   payload: Input,
@@ -68,7 +70,7 @@ export const rpc = (() => {
     handler: (payload: Input, data: RpcInvocationData) => Promise<Output>,
   ): RpcMethodDescriptor<Input, Output>;
   /* Overload: payload mode (for performRpc) */
-  function json<Input, Output>(value: RpcJsonParams<Input>): PerformRpcDescriptor<Output>;
+  function json<Input, Output>(value: RpcJsonParams<Input>): PerformRpcDescriptor<Input, Output>;
   function json<Input, Output>(
     handlerOrValue: RpcJsonParams<Input> | ((payload: Input, data: RpcInvocationData) => Promise<Output>)
   ): RpcMethodDescriptor<Input, Output> | PerformRpcDescriptor<Input, Output> {
@@ -101,6 +103,16 @@ export type PerformRpcFn = {
 export type UseRpcReturn = {
   performRpc: PerformRpcFn;
 };
+
+function isUseSessionReturn(value: unknown): value is UseSessionReturn {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'room' in value &&
+    'connectionState' in value &&
+    'internal' in value
+  );
+}
 
 async function resolveHandler<Input, Output>(method: RpcMethod<Input, Output>, data: RpcInvocationData): Promise<string> {
   if (typeof method === 'function') {
@@ -167,11 +179,11 @@ async function resolveHandler<Input, Output>(method: RpcMethod<Input, Output>, d
  * @beta
  */
 export function useRpc(
+  session: UseSessionReturn,
   methods?: Record<string, RpcMethod>,
   options?: UseRpcOptions,
 ): UseRpcReturn;
 export function useRpc(
-  session?: UseSessionReturn,
   methods?: Record<string, RpcMethod>,
   options?: UseRpcOptions,
 ): UseRpcReturn;
@@ -180,14 +192,17 @@ export function useRpc(
   optionsOrMethods?: UseRpcOptions | Record<string, RpcMethod>,
   maybeOptions?: UseRpcOptions,
 ): UseRpcReturn {
-  let methods, options, session;
-  if (methodsOrSession?.room) {
-    session = methodsOrSession as UseSessionReturn;
-    methods = optionsOrMethods as Record<string, RpcMethod>;
-    options = maybeOptions!;
+  let methods: Record<string, RpcMethod> | undefined;
+  let options: UseRpcOptions | undefined;
+  let session: UseSessionReturn | undefined;
+
+  if (isUseSessionReturn(methodsOrSession)) {
+    session = methodsOrSession;
+    methods = optionsOrMethods as Record<string, RpcMethod> | undefined;
+    options = maybeOptions;
   } else {
-    methods = methodsOrSession as Record<string, RpcMethod>;
-    options = optionsOrMethods as UseRpcOptions;
+    methods = methodsOrSession;
+    options = optionsOrMethods as UseRpcOptions | undefined;
   }
 
   const { room } = useEnsureSession(session);

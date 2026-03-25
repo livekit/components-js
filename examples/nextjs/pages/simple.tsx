@@ -88,10 +88,7 @@ const SimpleExample: NextPage = () => {
     }),
   });
 
-  // const result = await performRpc(rpc.json<{ text: string }, { summary: string }>({
-  //   method: 'getUserLocation',
-  //   payload: { highAccuracy: true },
-  // });
+  const [participantIdentity, setParticipantIdentity] = useState('');
 
   return (
     <div className={styles.container} data-lk-theme="default">
@@ -104,6 +101,19 @@ const SimpleExample: NextPage = () => {
             {connect ? 'Disconnect' : 'Connect'}
           </button>
         )}
+
+        <input type="text" placeholder="participant id" value={participantIdentity} onChange={e => setParticipantIdentity(e.target.value)} />
+        <button onClick={async () => {
+          const result = await performRpc(rpc.json<{ highAccuracy: boolean }, { latitude: number; longitude: number }>({
+            destinationIdentity: participantIdentity,
+            method: 'getUserLocation',
+            payload: { highAccuracy: true },
+          }));
+          console.log('Result:', result);
+        }}>
+          Call getUserLocation
+        </button>
+
         <SessionProvider session={session}>
           <RoomName />
           <ConnectionState />

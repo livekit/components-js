@@ -21,13 +21,18 @@ export type RpcMethodDescriptor<Input = string, Output = string> = {
 
 /** @beta */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type RpcMethod<Input = any, Output = any> = RpcRawHandler | RpcMethodDescriptor<Input, Output>;
+export type RpcMethod<Input = any, Output = any> =
+  | RpcRawHandler
+  | RpcMethodDescriptor<Input, Output>;
 
 /** @beta */
-export type PerformRpcDescriptor<Input = string, Output = string> = Omit<PerformRpcParams, 'payload'> & {
+export type PerformRpcDescriptor<Input = string, Output = string> = Omit<
+  PerformRpcParams,
+  'payload'
+> & {
   parse?: (raw: string) => Output;
   serialize?: (val: Input) => string;
-  payload: Input,
+  payload: Input;
 };
 
 /** @beta */
@@ -39,7 +44,6 @@ export type UseRpcOptions = {
   /** Only accept RPCs from this participant. Others receive UNSUPPORTED_METHOD. */
   from?: string | Participant;
 };
-
 
 /**
  * Namespace for RPC helpers.
@@ -72,13 +76,15 @@ export const rpc = (() => {
   /* Overload: payload mode (for performRpc) */
   function json<Input, Output>(value: RpcJsonParams<Input>): PerformRpcDescriptor<Input, Output>;
   function json<Input, Output>(
-    handlerOrValue: RpcJsonParams<Input> | ((payload: Input, data: RpcInvocationData) => Promise<Output>)
+    handlerOrValue:
+      | RpcJsonParams<Input>
+      | ((payload: Input, data: RpcInvocationData) => Promise<Output>),
   ): RpcMethodDescriptor<Input, Output> | PerformRpcDescriptor<Input, Output> {
     if (typeof handlerOrValue === 'function') {
       return {
         parse: (raw: string) => JSON.parse(raw),
         serialize: (val: unknown) => JSON.stringify(val),
-        handler: handlerOrValue as RpcMethodDescriptor<Input, Output>["handler"],
+        handler: handlerOrValue as RpcMethodDescriptor<Input, Output>['handler'],
       };
     }
 
@@ -114,7 +120,10 @@ function isUseSessionReturn(value: unknown): value is UseSessionReturn {
   );
 }
 
-async function resolveHandler<Input, Output>(method: RpcMethod<Input, Output>, data: RpcInvocationData): Promise<string> {
+async function resolveHandler<Input, Output>(
+  method: RpcMethod<Input, Output>,
+  data: RpcInvocationData,
+): Promise<string> {
   if (typeof method === 'function') {
     return method(data);
   }
@@ -138,7 +147,7 @@ async function resolveHandler<Input, Output>(method: RpcMethod<Input, Output>, d
     } catch (e) {
       throw RpcError.builtIn('APPLICATION_ERROR', `Failed to serialize RPC response: ${e}`);
     }
-  } else if (typeof result !== "string") {
+  } else if (typeof result !== 'string') {
     throw RpcError.builtIn(
       'APPLICATION_ERROR',
       `Failed to serialize RPC response: return value from handler function not string. Did you mean to include a "serialize" RpcMethod key?`,
@@ -183,10 +192,7 @@ export function useRpc(
   methods?: Record<string, RpcMethod>,
   options?: UseRpcOptions,
 ): UseRpcReturn;
-export function useRpc(
-  methods?: Record<string, RpcMethod>,
-  options?: UseRpcOptions,
-): UseRpcReturn;
+export function useRpc(methods?: Record<string, RpcMethod>, options?: UseRpcOptions): UseRpcReturn;
 export function useRpc(
   methodsOrSession?: Record<string, RpcMethod> | UseSessionReturn,
   optionsOrMethods?: UseRpcOptions | Record<string, RpcMethod>,
@@ -235,7 +241,10 @@ export function useRpc(
         const from = optionsRef.current?.from;
         const fromIdentity = typeof from === 'string' ? from : from?.identity;
         if (fromIdentity && data.callerIdentity !== fromIdentity) {
-          throw RpcError.builtIn('UNSUPPORTED_METHOD', `Method not available for caller ${data.callerIdentity}`);
+          throw RpcError.builtIn(
+            'UNSUPPORTED_METHOD',
+            `Method not available for caller ${data.callerIdentity}`,
+          );
         }
 
         // Resolve the latest handler from the ref

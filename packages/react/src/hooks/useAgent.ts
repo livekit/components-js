@@ -72,6 +72,8 @@ type AgentStateCommon = {
 
     agentParticipant: RemoteParticipant | null;
     workerParticipant: RemoteParticipant | null;
+
+    session: UseSessionReturn;
   };
 };
 
@@ -741,6 +743,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
         agentParticipant,
         workerParticipant,
         emitter,
+        session: session! as UseSessionReturn,
       },
     };
 
@@ -848,6 +851,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     agentParticipantAttributes,
     emitter,
     agentParticipant,
+    session,
     state,
     videoTrack,
     audioTrack,

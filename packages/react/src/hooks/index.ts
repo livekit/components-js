@@ -82,8 +82,4 @@ export {
   rpc,
   useRpc,
 } from './useRpc';
-export {
-  type SchemaLike,
-  type ClientToolDefinition,
-  useClientTools,
-} from './useClientTools';
+export { type SchemaLike, type ClientToolDefinition, useClientTools } from './useClientTools';

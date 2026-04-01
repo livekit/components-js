@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { type RpcInvocationData } from 'livekit-client';
 
+import { log } from '@livekit/components-core';
+
 import type { UseAgentReturn } from './useAgent';
 import { useRpc, type RpcMethod } from './useRpc';
 
@@ -142,7 +144,15 @@ export function useClientTools(
       attributes[`${CLIENT_TOOL_ATTRIBUTE_PREFIX}${name}`] = JSON.stringify(manifest);
     }
 
-    room.localParticipant.setAttributes(attributes);
+    room.localParticipant.setAttributes(attributes).catch((e) => {
+      log.warn(
+        'useClientTools: Failed to set participant attributes. ' +
+          'This is likely because the token does not have the canUpdateOwnMetadata ' +
+          'permission. Client tools will not be advertised to the agent without ' +
+          'this permission.',
+      );
+      throw e;
+    });
 
     return () => {
       // Clear attributes on unmount

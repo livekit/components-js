@@ -10,19 +10,22 @@ import { useEnsureSession } from '../context';
 import type { UseSessionReturn } from './useSession';
 
 /** @beta */
-export type RpcRawHandler = (data: RpcInvocationData) => Promise<string>;
+export type RpcHandler<Input = any, Output = any> = (
+  payload: Input,
+  data: RpcInvocationData,
+) => Promise<Output>;
 
 /** @beta */
 export type RpcMethodDescriptor<Input = string, Output = string> = {
   parse?: (raw: string) => Input;
   serialize?: (val: Output) => string;
-  handler: (payload: Input, context: RpcInvocationData) => Promise<Output>;
+  handler: RpcHandler<Input, Output>;
 };
 
 /** @beta */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type RpcMethod<Input = any, Output = any> =
-  | RpcRawHandler
+  | RpcHandler<Input, Output>
   | RpcMethodDescriptor<Input, Output>;
 
 /** @beta */
@@ -43,6 +46,10 @@ export type RpcJsonParams<Input = unknown> = Omit<PerformRpcParams, 'payload'> &
 export type UseRpcOptions = {
   /** Only accept RPCs from this participant. Others receive UNSUPPORTED_METHOD. */
   from?: string | Participant;
+
+  defaultSerializer?: <Input, Output>(
+    handler: (payload: Input, data: RpcInvocationData) => Promise<Output>,
+  ) => RpcMethodDescriptor<Input, Output>;
 };
 
 /**
@@ -95,8 +102,35 @@ export const rpc = (() => {
     };
   }
 
+  /* Overload: handler mode (for useRpc methods record) */
+  function raw(
+    handler: (payload: string, data: RpcInvocationData) => Promise<string>,
+  ): RpcMethodDescriptor<string, string>;
+  /* Overload: payload mode (for performRpc) */
+  function raw(value: RpcJsonParams<string>): PerformRpcDescriptor<string, string>;
+  function raw(
+    handlerOrValue:
+      | RpcJsonParams<string>
+      | ((payload: string, data: RpcInvocationData) => Promise<string>),
+  ): RpcMethodDescriptor<string, string> | PerformRpcDescriptor<string, string> {
+    if (typeof handlerOrValue === 'function') {
+      return {
+        parse: (raw: string) => raw,
+        serialize: (val: string) => val,
+        handler: handlerOrValue,
+      };
+    }
+
+    return {
+      ...handlerOrValue,
+      parse: (raw: string) => raw,
+      serialize: (val: string) => val,
+    };
+  }
+
   return {
     json,
+    raw,
   };
 })();
 
@@ -120,14 +154,10 @@ function isUseSessionReturn(value: unknown): value is UseSessionReturn {
   );
 }
 
-async function resolveHandler<Input, Output>(
-  method: RpcMethod<Input, Output>,
+async function resolveDescriptor<Input, Output>(
+  method: RpcMethodDescriptor<Input, Output>,
   data: RpcInvocationData,
 ): Promise<string> {
-  if (typeof method === 'function') {
-    return method(data);
-  }
-
   let parsed: Input;
   if (method.parse) {
     try {
@@ -253,7 +283,12 @@ export function useRpc(
           throw RpcError.builtIn('APPLICATION_ERROR', `No handler registered for method "${name}"`);
         }
 
-        return resolveHandler(handler, data);
+        if (typeof handler === 'function') {
+          const serializer = options?.defaultSerializer ?? rpc.json;
+          return resolveDescriptor(serializer(handler), data);
+        } else {
+          return resolveDescriptor(handler, data);
+        }
       });
     }
 

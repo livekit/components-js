@@ -1,5 +1,12 @@
 # @agents-ui
 
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies [[`84df6f25c99a15d66b74e011f27d06ad9cee3c09`](https://github.com/livekit/components-js/commit/84df6f25c99a15d66b74e011f27d06ad9cee3c09), [`dd9a4f4d27d0d1462265e9fc83704d161eac06a2`](https://github.com/livekit/components-js/commit/dd9a4f4d27d0d1462265e9fc83704d161eac06a2)]:
+  - @livekit/components-react@2.9.21
+
 ## 1.0.3
 
 ### Patch Changes

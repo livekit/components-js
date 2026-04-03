@@ -1,5 +1,13 @@
 # @livekit/components-react
 
+## 2.9.21
+
+### Patch Changes
+
+- fix and simplify agent attribute update hook with direct participant reference - [#1307](https://github.com/livekit/components-js/pull/1307) ([@chenghao-mou](https://github.com/chenghao-mou))
+
+- Handle renamed e2ee -> encryption key in room options serializer - [#1312](https://github.com/livekit/components-js/pull/1312) ([@afgarcia86](https://github.com/afgarcia86))
+
 ## 2.9.20
 
 ### Patch Changes
@@ -1110,7 +1118,6 @@
 - GridLayout Revision. - [#326](https://github.com/livekit/components-js/pull/326) ([@Ocupe](https://github.com/Ocupe))
 
   Renaming:
-
   - `sortParticipantsByVolume` -> `sortParticipants`
 
 - Include room in dependency array in order to disconnect on room unmount - [#332](https://github.com/livekit/components-js/pull/332) ([@lukasIO](https://github.com/lukasIO))

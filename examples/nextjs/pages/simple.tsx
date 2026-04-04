@@ -13,6 +13,8 @@ import {
   useTracks,
   SessionEvent,
   useEvents,
+  useRpc,
+  rpc,
 } from '@livekit/components-react';
 import { Track, TokenSource, MediaDeviceFailure } from 'livekit-client';
 import type { NextPage } from 'next';
@@ -71,6 +73,23 @@ const SimpleExample: NextPage = () => {
     );
   }, []);
 
+  const { performRpc } = useRpc(session, {
+    getUserLocation: rpc.json(async (payload: { highAccuracy: boolean }, data) => {
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: payload.highAccuracy,
+          timeout: data.responseTimeout * 1000,
+        });
+      });
+      return {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      };
+    }),
+  });
+
+  const [participantIdentity, setParticipantIdentity] = useState('');
+
   return (
     <div className={styles.container} data-lk-theme="default">
       <main className={styles.main}>
@@ -82,6 +101,19 @@ const SimpleExample: NextPage = () => {
             {connect ? 'Disconnect' : 'Connect'}
           </button>
         )}
+
+        <input type="text" placeholder="participant id" value={participantIdentity} onChange={e => setParticipantIdentity(e.target.value)} />
+        <button onClick={async () => {
+          const result = await performRpc(rpc.json<{ highAccuracy: boolean }, { latitude: number; longitude: number }>({
+            destinationIdentity: participantIdentity,
+            method: 'getUserLocation',
+            payload: { highAccuracy: true },
+          }));
+          console.log('Result:', result);
+        }}>
+          Call getUserLocation
+        </button>
+
         <SessionProvider session={session}>
           <RoomName />
           <ConnectionState />

@@ -270,22 +270,24 @@ function useSessionTokenSourceFetch(
     ) {
       return;
     }
-
     memoizedTokenFetchOptionsRef.current = unstableRestOptions;
   }, [isConfigurable, unstableRestOptions]);
 
-  const tokenSourceFetch = React.useCallback(async () => {
-    if (isConfigurable) {
-      if (!memoizedTokenFetchOptionsRef.current) {
-        throw new Error(
-          `AgentSession - memoized token fetch options are not set, but the passed tokenSource was an instance of TokenSourceConfigurable. If you are seeing this please make a new GitHub issue!`,
-        );
+  const tokenSourceFetch = React.useCallback(
+    async (force?: boolean) => {
+      if (isConfigurable) {
+        if (!memoizedTokenFetchOptionsRef.current) {
+          throw new Error(
+            `AgentSession - memoized token fetch options are not set, but the passed tokenSource was an instance of TokenSourceConfigurable. If you are seeing this please make a new GitHub issue!`,
+          );
+        }
+        return tokenSource.fetch(memoizedTokenFetchOptionsRef.current, force);
+      } else {
+        return tokenSource.fetch();
       }
-      return tokenSource.fetch(memoizedTokenFetchOptionsRef.current);
-    } else {
-      return tokenSource.fetch();
-    }
-  }, [isConfigurable, tokenSource]);
+    },
+    [isConfigurable, tokenSource],
+  );
 
   return tokenSourceFetch;
 }
@@ -546,6 +548,8 @@ export function useSession(
 
   const tokenSourceFetch = useSessionTokenSourceFetch(tokenSource, restOptions);
 
+  const [wasSessionEndCalled, setWasSessionEndCalled] = React.useState(false);
+
   const start = React.useCallback(
     async (connectOptions: SessionConnectOptions = {}) => {
       const {
@@ -555,11 +559,22 @@ export function useSession(
       } = connectOptions;
 
       await waitUntilDisconnected(signal);
+      setWasSessionEndCalled(false);
 
       const onSignalAbort = () => {
         room.disconnect();
       };
       signal?.addEventListener('abort', onSignalAbort);
+
+      const onDisconnected = () => {
+        // on disconnection force a new token to be fetched in order to avoid reusing the same room right after
+        // this works around the fact that agents won't rejoin a room that existed previously
+        // and depends on the assumption that the endpoint will return a token for a different room
+        if (!wasSessionEndCalled) {
+          tokenSourceFetch(true);
+        }
+      };
+      room.once(RoomEvent.Disconnected, onDisconnected);
 
       let tokenDispatchesAgent = false;
       await Promise.all([
@@ -603,12 +618,21 @@ export function useSession(
 
       signal?.removeEventListener('abort', onSignalAbort);
     },
-    [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected, agent.waitUntilConnected],
+    [
+      room,
+      waitUntilDisconnected,
+      tokenSourceFetch,
+      waitUntilConnected,
+      agent.waitUntilConnected,
+      wasSessionEndCalled,
+    ],
   );
 
   const end = React.useCallback(async () => {
+    setWasSessionEndCalled(true);
+    tokenSourceFetch(true);
     await room.disconnect();
-  }, [room]);
+  }, [room, tokenSourceFetch]);
 
   const prepareConnection = React.useCallback(async () => {
     const credentials = await tokenSourceFetch();

@@ -184,7 +184,7 @@ export type UseRpcOptions<S extends Schema<any, any> = Schema<any, any>> = {
 // ---------------------------------------------------------------------------
 
 async function resolveWithSchema(
-  s: Schema<any, any>,
+  s: Omit<Schema<any, any>, 'symbol'>,
   handler: RpcHandler<any, any>,
   data: RpcInvocationData,
 ): Promise<string> {
@@ -232,7 +232,7 @@ export type UseRpcReturn = {
 type RpcMethodMap<S extends Schema<any, any>> = Record<
   string,
   | RpcHandler<SchemaInput<S>, SchemaOutput<S>>
-  | BoundSchema<Schema<any, any>, RpcHandler<any, any>>
+  | Omit<BoundSchema<Schema<any, any>, RpcHandler<any, any>>, 'symbol'>
 >;
 
 /**
@@ -328,13 +328,13 @@ export function useRpc(
           throw RpcError.builtIn('APPLICATION_ERROR', `No handler registered for method "${name}"`);
         }
 
-        if (isBoundSchema(entry)) {
-          // Entry carries its own schema — use it directly
-          return resolveWithSchema(entry, entry.value as RpcHandler<any, any>, data);
-        } else {
+        if (typeof entry === 'function') {
           // Plain handler — apply the default schema (json if unset)
           const s = optionsRef.current?.defaultSchema ?? schema.json();
           return resolveWithSchema(s, entry as RpcHandler<any, any>, data);
+        } else {
+          // Entry carries its own schema — use it directly
+          return resolveWithSchema(entry, entry.value as RpcHandler<any, any>, data);
         }
       });
     }

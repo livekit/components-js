@@ -13,6 +13,8 @@ import type { UseSessionReturn } from './useSession';
 // Schema types
 // ---------------------------------------------------------------------------
 
+export const SchemaSymbol = Symbol.for('lk.schema');
+
 /**
  * A bidirectional data format descriptor for RPC payloads.
  *
@@ -25,7 +27,7 @@ import type { UseSessionReturn } from './useSession';
  * @beta
  */
 export type Schema<Input = any, Output = any> = {
-  isSchema: true;
+  symbol: typeof SchemaSymbol;
   parse: (raw: string) => Input;
   serialize: (val: Output) => string;
 };
@@ -42,8 +44,8 @@ function isSchema(v: unknown): v is Schema<any, any> {
   return (
     typeof v === 'object' &&
     v !== null &&
-    'isSchema' in v &&
-    (v as Record<string, unknown>)['isSchema'] === true
+    'symbol' in v &&
+    (v as Record<string, unknown>)['symbol'] === SchemaSymbol
   );
 }
 
@@ -94,7 +96,7 @@ export const schema = (() => {
   ): BoundSchema<Schema<Input, Output>, Value>;
   function json<Input, Output, Value>(value?: Value): unknown {
     const s: Schema<Input, Output> = {
-      isSchema: true,
+      symbol: SchemaSymbol,
       parse: (raw: string) => JSON.parse(raw) as Input,
       serialize: (val: unknown) => JSON.stringify(val),
     };
@@ -110,7 +112,7 @@ export const schema = (() => {
   function raw<Value = unknown>(value: Value): BoundSchema<Schema<string, string>, Value>;
   function raw<Value>(value?: Value): unknown {
     const s: Schema<string, string> = {
-      isSchema: true,
+      symbol: SchemaSymbol,
       parse: (raw: string) => raw,
       serialize: (val: string) => val,
     };

@@ -9,140 +9,199 @@ import {
 import { useEnsureSession } from '../context';
 import type { UseSessionReturn } from './useSession';
 
+// ---------------------------------------------------------------------------
+// Schema types
+// ---------------------------------------------------------------------------
+
+/**
+ * A bidirectional data format descriptor for RPC payloads.
+ *
+ * - `parse(raw)` decodes an incoming wire string into `Input` (used by handlers)
+ * - `serialize(val)` encodes an `Output` value to a wire string (used by handlers)
+ *
+ * For symmetric schemas (`schema.raw`), `Input === Output === string`.
+ * For `schema.json`, both default to `any` so each handler can annotate its own types.
+ *
+ * @beta
+ */
+export type Schema<Input = any, Output = any> = {
+  isSchema: true;
+  parse: (raw: string) => Input;
+  serialize: (val: Output) => string;
+};
+
+/**
+ * A {@link Schema} with a bound value — used to associate a handler or payload
+ * with its schema in a single object.
+ *
+ * @beta
+ */
+export type BoundSchema<S extends Schema<any, any>, V> = S & { value: V };
+
+function isSchema(v: unknown): v is Schema<any, any> {
+  return (
+    typeof v === 'object' &&
+    v !== null &&
+    'isSchema' in v &&
+    (v as Record<string, unknown>)['isSchema'] === true
+  );
+}
+
+function isBoundSchema(v: unknown): v is BoundSchema<Schema<any, any>, unknown> {
+  return isSchema(v) && 'value' in (v as object);
+}
+
+// ---------------------------------------------------------------------------
+// schema namespace
+// ---------------------------------------------------------------------------
+
+/**
+ * Schema helpers for RPC payload encoding.
+ *
+ * Each function has three call forms:
+ * - **No argument** — returns a plain `Schema` for use as a `defaultSchema` option or manual use
+ * - **Handler argument** — infers `Input`/`Output` from the handler, returns a `BoundSchema`
+ *   for inline registration in {@link useRpc}
+ * - **Any other value** — returns a `BoundSchema` with that value attached (e.g. for `performRpc`)
+ *
+ * @example
+ * ```ts
+ * // Inline handler — types inferred
+ * useRpc({ myMethod: schema.json(async (payload: MyInput) => myOutput) });
+ *
+ * // Override default schema for all plain handlers in this hook
+ * useRpc({ myMethod: async (payload) => payload }, { defaultSchema: schema.raw() });
+ *
+ * // Manual schema instances
+ * const a = schema.raw();                             // Schema<string, string>
+ * const b = schema.json<{ foo: string }, { bar: string }>(); // Schema<{ foo: string }, { bar: string }>
+ * const c = schema.json<{ foo: string }, { bar: string }>(myPayload); // BoundSchema<..., typeof myPayload>
+ * ```
+ *
+ * @beta
+ */
+export const schema = (() => {
+  /**
+   * JSON schema — `JSON.parse` on the way in, `JSON.stringify` on the way out.
+   * Defaults to `any` so individual handlers can annotate their own payload types.
+   */
+  function json<Input, Output>(
+    handler: RpcHandler<Input, Output>,
+  ): BoundSchema<Schema<Input, Output>, RpcHandler<Input, Output>>;
+  function json<Input = any, Output = any>(): Schema<Input, Output>;
+  function json<Input = any, Output = any, Value = unknown>(
+    value: Value,
+  ): BoundSchema<Schema<Input, Output>, Value>;
+  function json<Input, Output, Value>(value?: Value): unknown {
+    const s: Schema<Input, Output> = {
+      isSchema: true,
+      parse: (raw: string) => JSON.parse(raw) as Input,
+      serialize: (val: unknown) => JSON.stringify(val),
+    };
+    if (typeof value === 'undefined') return s;
+    return { ...s, value };
+  }
+
+  /** Raw string schema — passes payloads through as plain strings with no encoding. */
+  function raw(
+    handler: RpcHandler<string, string>,
+  ): BoundSchema<Schema<string, string>, RpcHandler<string, string>>;
+  function raw(): Schema<string, string>;
+  function raw<Value = unknown>(value: Value): BoundSchema<Schema<string, string>, Value>;
+  function raw<Value>(value?: Value): unknown {
+    const s: Schema<string, string> = {
+      isSchema: true,
+      parse: (raw: string) => raw,
+      serialize: (val: string) => val,
+    };
+    if (typeof value === 'undefined') return s;
+    return { ...s, value };
+  }
+
+  return { json, raw };
+})();
+
+// ---------------------------------------------------------------------------
+// RPC types
+// ---------------------------------------------------------------------------
+
 /** @beta */
 export type RpcHandler<Input = any, Output = any> = (
   payload: Input,
   data: RpcInvocationData,
 ) => Promise<Output>;
 
-/** @beta */
-export type RpcMethodDescriptor<Input = string, Output = string> = {
-  parse?: (raw: string) => Input;
-  serialize?: (val: Output) => string;
-  handler: RpcHandler<Input, Output>;
-};
+// Extract Input/Output from a Schema type for use in method map constraints.
+type SchemaInput<S> = S extends Schema<infer I, any> ? I : any;
+type SchemaOutput<S> = S extends Schema<any, infer O> ? O : any;
 
-/** @beta */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+/**
+ * A method entry for {@link useRpc}: either a plain handler (typed by the
+ * `defaultSchema`) or a `BoundSchema` that carries its own schema alongside
+ * the handler.
+ *
+ * @beta
+ */
 export type RpcMethod<Input = any, Output = any> =
   | RpcHandler<Input, Output>
-  | RpcMethodDescriptor<Input, Output>;
+  | BoundSchema<Schema<Input, Output>, RpcHandler<Input, Output>>;
 
-/** @beta */
+/**
+ * Parameters for an outbound {@link PerformRpcFn} call.
+ *
+ * `schema` is from the *sender's* perspective: `parse` decodes the *response*
+ * (`Output`) and `serialize` encodes the *request* (`Input`). This is the
+ * type-flipped counterpart of the handler's schema — for symmetric schemas like
+ * `schema.json()` and `schema.raw()` the flip is invisible.
+ *
+ * @beta
+ */
 export type PerformRpcDescriptor<Input = string, Output = string> = Omit<
   PerformRpcParams,
   'payload'
 > & {
-  parse?: (raw: string) => Output;
-  serialize?: (val: Input) => string;
+  schema?: Schema<Output, Input>;
   payload: Input;
 };
 
-/** @beta */
-export type RpcJsonParams<Input = unknown> = Omit<PerformRpcParams, 'payload'> & { payload: Input };
-
-/** Options for {@link useRpc}.
- * @beta */
-export type UseRpcOptions = {
-  /** Only accept RPCs from this participant. Others receive UNSUPPORTED_METHOD. */
-  from?: string | Participant;
-
-  defaultSerializer?: <Input, Output>(
-    handler: (payload: Input, data: RpcInvocationData) => Promise<Output>,
-  ) => RpcMethodDescriptor<Input, Output>;
-};
-
 /**
- * Namespace for RPC helpers.
- *
- * `rpc.json` can be used in two ways:
- *
- * **Handler mode** (for registering methods via {@link useRpc}):
- * ```ts
- * useRpc({
- *   myMethod: rpc.json(async (payload: MyInput, ctx) => {
- *     return { result: 'value' };
- *   }),
- * });
- * ```
- *
- * **Payload mode** (for outbound calls via `performRpc`):
- * ```ts
- * const result = await performRpc(rpc.json<MyInput, MyOutput>(
- *   { destinationIdentity: '...', method: 'myMethod', payload: { key: 'value' } },
- * ));
- * ```
- *
+ * Options for {@link useRpc}.
  * @beta
  */
-export const rpc = (() => {
-  /* Overload: handler mode (for useRpc methods record) */
-  function json<Input, Output>(
-    handler: (payload: Input, data: RpcInvocationData) => Promise<Output>,
-  ): RpcMethodDescriptor<Input, Output>;
-  /* Overload: payload mode (for performRpc) */
-  function json<Input, Output>(value: RpcJsonParams<Input>): PerformRpcDescriptor<Input, Output>;
-  function json<Input, Output>(
-    handlerOrValue:
-      | RpcJsonParams<Input>
-      | ((payload: Input, data: RpcInvocationData) => Promise<Output>),
-  ): RpcMethodDescriptor<Input, Output> | PerformRpcDescriptor<Input, Output> {
-    if (typeof handlerOrValue === 'function') {
-      return {
-        parse: (raw: string) => JSON.parse(raw),
-        serialize: (val: unknown) => JSON.stringify(val),
-        handler: handlerOrValue as RpcMethodDescriptor<Input, Output>['handler'],
-      };
-    }
-
-    return {
-      ...handlerOrValue,
-      parse: (raw: string) => JSON.parse(raw),
-      serialize: (val: unknown) => JSON.stringify(val),
-    };
-  }
-
-  /* Overload: handler mode (for useRpc methods record) */
-  function raw(
-    handler: (payload: string, data: RpcInvocationData) => Promise<string>,
-  ): RpcMethodDescriptor<string, string>;
-  /* Overload: payload mode (for performRpc) */
-  function raw(value: RpcJsonParams<string>): PerformRpcDescriptor<string, string>;
-  function raw(
-    handlerOrValue:
-      | RpcJsonParams<string>
-      | ((payload: string, data: RpcInvocationData) => Promise<string>),
-  ): RpcMethodDescriptor<string, string> | PerformRpcDescriptor<string, string> {
-    if (typeof handlerOrValue === 'function') {
-      return {
-        parse: (raw: string) => raw,
-        serialize: (val: string) => val,
-        handler: handlerOrValue,
-      };
-    }
-
-    return {
-      ...handlerOrValue,
-      parse: (raw: string) => raw,
-      serialize: (val: string) => val,
-    };
-  }
-
-  return {
-    json,
-    raw,
-  };
-})();
-
-/** @beta */
-export type PerformRpcFn = {
-  <Input = string, Output = string>(params: PerformRpcDescriptor<Input, Output>): Promise<Output>;
+export type UseRpcOptions<S extends Schema<any, any> = Schema<any, any>> = {
+  /** Only accept RPCs from this participant. Others will receive UNSUPPORTED_METHOD. */
+  from?: string | Participant;
+  /**
+   * Schema applied to plain handler entries that don't carry their own schema.
+   * Defaults to `schema.json()`.
+   */
+  defaultSchema?: S;
 };
 
-/** @beta */
-export type UseRpcReturn = {
-  performRpc: PerformRpcFn;
-};
+// ---------------------------------------------------------------------------
+// Internal helpers
+// ---------------------------------------------------------------------------
+
+async function resolveWithSchema(
+  s: Schema<any, any>,
+  handler: RpcHandler<any, any>,
+  data: RpcInvocationData,
+): Promise<string> {
+  let parsed: unknown;
+  try {
+    parsed = s.parse(data.payload);
+  } catch (e) {
+    throw RpcError.builtIn('APPLICATION_ERROR', `Failed to parse RPC payload: ${e}`);
+  }
+
+  const result = await handler(parsed, data);
+
+  try {
+    return s.serialize(result);
+  } catch (e) {
+    throw RpcError.builtIn('APPLICATION_ERROR', `Failed to serialize RPC response: ${e}`);
+  }
+}
 
 function isUseSessionReturn(value: unknown): value is UseSessionReturn {
   return (
@@ -154,91 +213,77 @@ function isUseSessionReturn(value: unknown): value is UseSessionReturn {
   );
 }
 
-async function resolveDescriptor<Input, Output>(
-  method: RpcMethodDescriptor<Input, Output>,
-  data: RpcInvocationData,
-): Promise<string> {
-  let parsed: Input;
-  if (method.parse) {
-    try {
-      parsed = method.parse(data.payload);
-    } catch (e) {
-      throw RpcError.builtIn('APPLICATION_ERROR', `Failed to parse RPC payload: ${e}`);
-    }
-  } else {
-    parsed = data.payload as Input;
-  }
-
-  const result = await method.handler(parsed, data);
-
-  if (method.serialize) {
-    try {
-      return method.serialize(result);
-    } catch (e) {
-      throw RpcError.builtIn('APPLICATION_ERROR', `Failed to serialize RPC response: ${e}`);
-    }
-  } else if (typeof result !== 'string') {
-    throw RpcError.builtIn(
-      'APPLICATION_ERROR',
-      `Failed to serialize RPC response: return value from handler function not string. Did you mean to include a "serialize" RpcMethod key?`,
-    );
-  } else {
-    return result;
-  }
-}
-
 // ---------------------------------------------------------------------------
 // useRpc hook
 // ---------------------------------------------------------------------------
 
+/** @beta */
+export type PerformRpcFn = {
+  <Input = string, Output = string>(params: PerformRpcDescriptor<Input, Output>): Promise<Output>;
+};
+
+/** @beta */
+export type UseRpcReturn = {
+  performRpc: PerformRpcFn;
+};
+
+// The methods record — plain handler types are constrained by the default schema.
+type RpcMethodMap<S extends Schema<any, any>> = Record<
+  string,
+  | RpcHandler<SchemaInput<S>, SchemaOutput<S>>
+  | BoundSchema<Schema<any, any>, RpcHandler<any, any>>
+>;
+
 /**
  * Hook for declarative RPC method registration and outbound RPC calls.
  *
- * Registers handler functions for incoming RPC method calls and returns a `performRpc` function
- * for making outbound RPC calls to other participants.
- *
- * Handlers are registered on mount and unregistered on unmount. The effect lifecycle is driven
- * by the set of method names — handler function identity does not matter (they are captured by
- * ref), so inline functions work without `useCallback`.
+ * Registers handler functions for incoming RPC calls and returns a `performRpc`
+ * function for outbound calls. Handlers are registered on mount and unregistered
+ * on unmount. The effect lifecycle is driven by the set of method names — handler
+ * identity does not matter (captured by ref), so inline functions work without
+ * `useCallback`.
  *
  * @example
  * ```tsx
  * const { performRpc } = useRpc({
- *   // JSON handler via preset
- *   getUserLocation: rpc.json(async (payload: { highAccuracy: boolean }, ctx) => {
+ *   // Schema inferred from handler types
+ *   getUserLocation: schema.json(async (payload: { highAccuracy: boolean }) => {
  *     const pos = await getPosition(payload.highAccuracy);
  *     return { lat: pos.coords.latitude, lng: pos.coords.longitude };
  *   }),
  *
- *   // Raw string handler
- *   getTimezone: async (data) => Intl.DateTimeFormat().resolvedOptions().timeZone,
+ *   // Plain handler — uses default schema (json)
+ *   getTimezone: async () => Intl.DateTimeFormat().resolvedOptions().timeZone,
  * }, { from: session.agent });
  * ```
  *
  * @beta
  */
-export function useRpc(
+export function useRpc<S extends Schema<any, any> = Schema<any, any>>(
   session: UseSessionReturn,
-  methods?: Record<string, RpcMethod>,
-  options?: UseRpcOptions,
+  methods?: RpcMethodMap<S>,
+  options?: UseRpcOptions<S>,
 ): UseRpcReturn;
-export function useRpc(methods?: Record<string, RpcMethod>, options?: UseRpcOptions): UseRpcReturn;
+export function useRpc<S extends Schema<any, any> = Schema<any, any>>(
+  methods?: RpcMethodMap<S>,
+  options?: UseRpcOptions<S>,
+): UseRpcReturn;
 export function useRpc(
-  methodsOrSession?: Record<string, RpcMethod> | UseSessionReturn,
-  optionsOrMethods?: UseRpcOptions | Record<string, RpcMethod>,
-  maybeOptions?: UseRpcOptions,
+  methodsOrSession?: RpcMethodMap<any> | UseSessionReturn,
+  optionsOrMethods?: UseRpcOptions<any> | RpcMethodMap<any>,
+  maybeOptions?: UseRpcOptions<any>,
 ): UseRpcReturn {
-  let methods: Record<string, RpcMethod> | undefined;
-  let options: UseRpcOptions | undefined;
+  let methods: RpcMethodMap<any> | undefined;
+  let options: UseRpcOptions<any> | undefined;
   let session: UseSessionReturn | undefined;
 
   if (isUseSessionReturn(methodsOrSession)) {
     session = methodsOrSession;
-    methods = optionsOrMethods as Record<string, RpcMethod> | undefined;
+    methods = optionsOrMethods as RpcMethodMap<any> | undefined;
     options = maybeOptions;
   } else {
     methods = methodsOrSession;
-    options = optionsOrMethods as UseRpcOptions | undefined;
+    options = optionsOrMethods as UseRpcOptions<any> | undefined;
   }
 
   const { room } = useEnsureSession(session);
@@ -247,7 +292,7 @@ export function useRpc(
   const handlersRef = React.useRef(methods);
   handlersRef.current = methods;
 
-  // Ref that always holds the latest options (for participant filter)
+  // Ref that always holds the latest options (for participant filter and defaultSchema)
   const optionsRef = React.useRef(options);
   optionsRef.current = options;
 
@@ -277,17 +322,18 @@ export function useRpc(
           );
         }
 
-        // Resolve the latest handler from the ref
-        const handler = handlersRef.current?.[name];
-        if (!handler) {
+        const entry = handlersRef.current?.[name];
+        if (!entry) {
           throw RpcError.builtIn('APPLICATION_ERROR', `No handler registered for method "${name}"`);
         }
 
-        if (typeof handler === 'function') {
-          const serializer = options?.defaultSerializer ?? rpc.json;
-          return resolveDescriptor(serializer(handler), data);
+        if (isBoundSchema(entry)) {
+          // Entry carries its own schema — use it directly
+          return resolveWithSchema(entry, entry.value as RpcHandler<any, any>, data);
         } else {
-          return resolveDescriptor(handler, data);
+          // Plain handler — apply the default schema (json if unset)
+          const s = optionsRef.current?.defaultSchema ?? schema.json();
+          return resolveWithSchema(s, entry as RpcHandler<any, any>, data);
         }
       });
     }
@@ -299,13 +345,13 @@ export function useRpc(
     };
   }, [room, methodNamesEffectKey]);
 
-  // Stable performRpc function with overloads
+  // Stable performRpc function
   const performRpc: PerformRpcFn = React.useCallback(
     async <Input = string, Output = string>(params: PerformRpcDescriptor<Input, Output>) => {
       let serialized: string;
-      if (params.serialize) {
+      if (params.schema) {
         try {
-          serialized = params.serialize(params.payload);
+          serialized = params.schema.serialize(params.payload);
         } catch (e) {
           throw RpcError.builtIn('APPLICATION_ERROR', `Failed to serialize RPC payload: ${e}`);
         }
@@ -320,15 +366,14 @@ export function useRpc(
         responseTimeout: params.responseTimeout,
       });
 
-      if (params.parse) {
+      if (params.schema) {
         try {
-          return params.parse(rawResponse);
+          return params.schema.parse(rawResponse);
         } catch (e) {
-          throw RpcError.builtIn('APPLICATION_ERROR', `Failed to serialize RPC response: ${e}`);
+          throw RpcError.builtIn('APPLICATION_ERROR', `Failed to parse RPC response: ${e}`);
         }
-      } else {
-        return rawResponse as Output;
       }
+      return rawResponse as Output;
     },
     [room],
   );

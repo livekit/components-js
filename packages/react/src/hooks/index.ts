@@ -71,14 +71,14 @@ export {
 export * from './useEvents';
 export * from './useSessionMessages';
 export {
-  type RpcRawHandler,
-  type RpcMethodDescriptor,
+  type Schema,
+  type BoundSchema,
+  type RpcHandler,
   type RpcMethod,
   type PerformRpcDescriptor,
-  type RpcJsonParams,
   type UseRpcOptions,
   type PerformRpcFn,
   type UseRpcReturn,
-  rpc,
+  schema,
   useRpc,
 } from './useRpc';

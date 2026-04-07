@@ -149,21 +149,12 @@ export type RpcMethod<Input = any, Output = any> =
   | BoundSchema<Schema<Input, Output>, RpcHandler<Input, Output>>;
 
 /**
- * Parameters for an outbound {@link PerformRpcFn} call.
- *
- * `schema` is from the *sender's* perspective: `parse` decodes the *response*
- * (`Output`) and `serialize` encodes the *request* (`Input`). This is the
- * type-flipped counterpart of the handler's schema — for symmetric schemas like
- * `schema.json()` and `schema.raw()` the flip is invisible.
+ * Base RPC call parameters with an arbitrary payload type (used when the payload
+ * will be serialized by a schema).
  *
  * @beta
  */
-export type PerformRpcDescriptor<Input = string, Output = string> = Omit<
-  PerformRpcParams,
-  'payload'
-> & {
-  payload: BoundSchema<Schema<Output, Input>, Input> | string;
-};
+export type RpcCallParams = Omit<PerformRpcParams, 'payload'> & { payload: unknown };
 
 /**
  * Options for {@link useRpc}.
@@ -220,7 +211,10 @@ function isUseSessionReturn(value: unknown): value is UseSessionReturn {
 
 /** @beta */
 export type PerformRpcFn = {
-  <Input = string, Output = string>(params: PerformRpcDescriptor<Input, Output>): Promise<Output>;
+  /** Schema-wrapped call: payload is serialized and response is parsed by the schema. */
+  <Output = string>(params: BoundSchema<Schema<Output, any>, RpcCallParams>): Promise<Output>;
+  /** Plain call: payload is already a string, response is returned as a string. */
+  (params: PerformRpcParams): Promise<string>;
 };
 
 /** @beta */
@@ -348,33 +342,29 @@ export function useRpc(
 
   // Stable performRpc function
   const performRpc: PerformRpcFn = React.useCallback(
-    async <Input = string, Output = string>(params: PerformRpcDescriptor<Input, Output>) => {
-      let serialized: string;
-      if (isBoundSchema(params.payload)) {
+    async (params: BoundSchema<Schema<any, any>, RpcCallParams> | PerformRpcParams) => {
+      if (isBoundSchema(params)) {
+        const rpcParams = params.value as RpcCallParams;
+        let serialized: string;
         try {
-          serialized = params.payload.serialize(params.payload.value);
+          serialized = params.serialize(rpcParams.payload);
         } catch (e) {
           throw RpcError.builtIn('APPLICATION_ERROR', `Failed to serialize RPC payload: ${e}`);
         }
-      } else {
-        serialized = params.payload as string;
-      }
-
-      const rawResponse = await room.localParticipant.performRpc({
-        destinationIdentity: params.destinationIdentity,
-        method: params.method,
-        payload: serialized,
-        responseTimeout: params.responseTimeout,
-      });
-
-      if (isBoundSchema(params.payload)) {
+        const rawResponse = await room.localParticipant.performRpc({
+          destinationIdentity: rpcParams.destinationIdentity,
+          method: rpcParams.method,
+          payload: serialized,
+          responseTimeout: rpcParams.responseTimeout,
+        });
         try {
-          return params.payload.parse(rawResponse);
+          return params.parse(rawResponse);
         } catch (e) {
           throw RpcError.builtIn('APPLICATION_ERROR', `Failed to parse RPC response: ${e}`);
         }
+      } else {
+        return room.localParticipant.performRpc(params);
       }
-      return rawResponse as Output;
     },
     [room],
   );

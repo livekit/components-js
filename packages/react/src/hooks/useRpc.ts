@@ -162,8 +162,7 @@ export type PerformRpcDescriptor<Input = string, Output = string> = Omit<
   PerformRpcParams,
   'payload'
 > & {
-  schema?: Schema<Output, Input>;
-  payload: Input;
+  payload: BoundSchema<Schema<Output, Input>, Input> | string;
 };
 
 /**
@@ -351,9 +350,9 @@ export function useRpc(
   const performRpc: PerformRpcFn = React.useCallback(
     async <Input = string, Output = string>(params: PerformRpcDescriptor<Input, Output>) => {
       let serialized: string;
-      if (params.schema) {
+      if (isBoundSchema(params.payload)) {
         try {
-          serialized = params.schema.serialize(params.payload);
+          serialized = params.payload.serialize(params.payload.value);
         } catch (e) {
           throw RpcError.builtIn('APPLICATION_ERROR', `Failed to serialize RPC payload: ${e}`);
         }
@@ -368,9 +367,9 @@ export function useRpc(
         responseTimeout: params.responseTimeout,
       });
 
-      if (params.schema) {
+      if (isBoundSchema(params.payload)) {
         try {
-          return params.schema.parse(rawResponse);
+          return params.payload.parse(rawResponse);
         } catch (e) {
           throw RpcError.builtIn('APPLICATION_ERROR', `Failed to parse RPC response: ${e}`);
         }

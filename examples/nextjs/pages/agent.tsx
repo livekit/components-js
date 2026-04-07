@@ -42,11 +42,16 @@ const AgentExample: NextPage = () => {
     () => (typeof window !== 'undefined' ? new URLSearchParams(location.search) : null),
     [],
   );
-  const roomName = useMemo(
-    () => params?.get('room') ?? 'test-room-' + Math.random().toFixed(5),
-    [params],
-  );
+  const [roomName, setRoomName] = useState(() => params?.get('room') ?? 'test');
+
+  useEffect(() => {
+    if (!roomName) {
+      setRoomName('test-room-' + Math.random().toFixed(5));
+    }
+  }, []);
   const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
+
+  
 
   const session = useSession(tokenSource, {
     roomName,
@@ -86,6 +91,14 @@ const AgentExample: NextPage = () => {
       <SessionProvider session={session}>
         <div className={styles.room}>
           <div className={styles.inner}>
+            {!started && (
+              <button
+                className="lk-button"
+                onClick={() => setRoomName('test-room-' + Math.random().toFixed(5))}
+              >
+                New Room: {roomName}
+              </button>
+            )}
             {started ? (
               <SimpleAgent />
             ) : (

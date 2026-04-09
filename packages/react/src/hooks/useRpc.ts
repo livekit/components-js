@@ -1,19 +1,14 @@
 import * as React from 'react';
-import {
-  type Participant,
-  RpcError,
-  type RpcInvocationData,
-  type PerformRpcParams,
-} from 'livekit-client';
+import { RpcError, type RpcInvocationData, type PerformRpcParams } from 'livekit-client';
 
 import { useEnsureSession } from '../context';
-import type { UseSessionReturn } from './useSession';
+import { isUseSessionReturn, type UseSessionReturn } from './useSession';
 
 // ---------------------------------------------------------------------------
-// Serializer types
+// Serializer types + infrastructure
 // ---------------------------------------------------------------------------
 
-export const SerializerSymbol = Symbol.for('lk.serializer');
+const SerializerSymbol = Symbol.for('lk.serializer');
 
 /**
  * A bidirectional data format descriptor for RPC payloads.
@@ -45,10 +40,6 @@ function isSerializer(v: unknown): v is Serializer<any, any> {
 // Extract Input/Output from a Serializer type for use in handler/performRpc constraints.
 type SerializerInput<S> = S extends Serializer<infer Input, any> ? Input : any;
 type SerializerOutput<S> = S extends Serializer<any, infer Output> ? Output : any;
-
-// ---------------------------------------------------------------------------
-// serializer namespace
-// ---------------------------------------------------------------------------
 
 /**
  * Serializer helpers for RPC payload encoding.
@@ -122,47 +113,12 @@ export type RpcCallParams<Payload> = Omit<PerformRpcParams, 'payload'> & { paylo
  */
 export type UseRpcOptions<S extends Serializer<any, any> = Serializer<any, any>> = {
   /** Only accept RPCs from this participant. Others will receive UNSUPPORTED_METHOD. */
-  from?: string | Participant;
+  fromIdentity?: string;
   /**
    * Serializer applied to the data coming in and leaving the handler. Defaults to `serializers.json()`
    */
   serializer?: S;
 };
-
-// ---------------------------------------------------------------------------
-// Internal helpers
-// ---------------------------------------------------------------------------
-
-async function resolveWithSerializer<S extends Serializer<any, any>>(
-  serializer: S,
-  handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>,
-  data: RpcInvocationData,
-): Promise<string> {
-  let parsed;
-  try {
-    parsed = serializer.parse(data.payload);
-  } catch (e) {
-    throw RpcError.builtIn('APPLICATION_ERROR', `Failed to parse RPC payload: ${e}`);
-  }
-
-  const result = await handler(parsed, data);
-
-  try {
-    return serializer.serialize(result);
-  } catch (e) {
-    throw RpcError.builtIn('APPLICATION_ERROR', `Failed to serialize RPC response: ${e}`);
-  }
-}
-
-function isUseSessionReturn(value: unknown): value is UseSessionReturn {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    'room' in value &&
-    'connectionState' in value &&
-    'internal' in value
-  );
-}
 
 // ---------------------------------------------------------------------------
 // useRpc hook
@@ -202,13 +158,13 @@ export type UseRpcReturn = {
  *
  * @beta
  */
-export function useRpc<S extends Serializer<any, any> = Serializer<any, any>>(
+export function useRpc<S extends Serializer<any, any>>(
   session: UseSessionReturn,
   methodName: string,
   handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>,
   options?: UseRpcOptions<S>,
 ): UseRpcReturn;
-export function useRpc<S extends Serializer<any, any> = Serializer<any, any>>(
+export function useRpc<S extends Serializer<any, any>>(
   methodName: string,
   handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>,
   options?: UseRpcOptions<S>,
@@ -251,8 +207,7 @@ export function useRpc(
     }
 
     room.registerRpcMethod(methodName, async (data: RpcInvocationData) => {
-      const from = optionsRef.current?.from;
-      const fromIdentity = typeof from === 'string' ? from : from?.identity;
+      const fromIdentity = optionsRef.current?.fromIdentity;
       if (fromIdentity && data.callerIdentity !== fromIdentity) {
         throw RpcError.builtIn(
           'UNSUPPORTED_METHOD',
@@ -268,8 +223,22 @@ export function useRpc(
         );
       }
 
-      const s = optionsRef.current?.serializer ?? serializers.json();
-      return resolveWithSerializer(s, currentHandler, data);
+      const serializer = optionsRef.current?.serializer ?? serializers.json();
+
+      let parsed;
+      try {
+        parsed = serializer.parse(data.payload);
+      } catch (e) {
+        throw RpcError.builtIn('APPLICATION_ERROR', `Failed to parse RPC payload: ${e}`);
+      }
+
+      const result = await currentHandler(parsed, data);
+
+      try {
+        return serializer.serialize(result);
+      } catch (e) {
+        throw RpcError.builtIn('APPLICATION_ERROR', `Failed to serialize RPC response: ${e}`);
+      }
     });
 
     return () => {
@@ -279,11 +248,11 @@ export function useRpc(
 
   // Stable performRpc function
   const performRpc: PerformRpcFn = React.useCallback(
-    async (params: RpcCallParams<unknown>, s?: Serializer<any, any>) => {
-      if (isSerializer(s)) {
+    async (params: RpcCallParams<unknown>, serializer?: Serializer<any, any>) => {
+      if (isSerializer(serializer)) {
         let serialized: string;
         try {
-          serialized = s.serialize(params.payload);
+          serialized = serializer.serialize(params.payload);
         } catch (e) {
           throw RpcError.builtIn('APPLICATION_ERROR', `Failed to serialize RPC payload: ${e}`);
         }
@@ -294,7 +263,7 @@ export function useRpc(
           responseTimeout: params.responseTimeout,
         });
         try {
-          return s.parse(rawResponse);
+          return serializer.parse(rawResponse);
         } catch (e) {
           throw RpcError.builtIn('APPLICATION_ERROR', `Failed to parse RPC response: ${e}`);
         }

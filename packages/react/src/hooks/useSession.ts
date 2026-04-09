@@ -150,6 +150,16 @@ export type UseSessionReturn = (
 ) &
   SessionActions;
 
+export function isUseSessionReturn(value: unknown): value is UseSessionReturn {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'room' in value &&
+    'connectionState' in value &&
+    'internal' in value
+  );
+}
+
 type UseSessionCommonOptions = {
   room?: Room;
 

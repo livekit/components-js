@@ -108,7 +108,7 @@ export type RpcHandler<Input = any, Output = any> = (
 export type RpcCallParams<Payload> = Omit<PerformRpcParams, 'payload'> & { payload: Payload };
 
 /**
- * Options for {@link useRpc}.
+ * Options for {@link (useRpc:1)}.
  * @beta
  */
 export type UseRpcOptions<S extends Serializer<any, any> = Serializer<any, any>> = {
@@ -164,6 +164,7 @@ export function useRpc<S extends Serializer<any, any>>(
   handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>,
   options?: UseRpcOptions<S>,
 ): UseRpcReturn;
+/** @beta */
 export function useRpc<S extends Serializer<any, any>>(
   methodName: string,
   handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>,

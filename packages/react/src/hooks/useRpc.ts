@@ -248,7 +248,10 @@ export function useRpc(
 
   // Stable performRpc function
   const performRpc: PerformRpcFn = React.useCallback(
-    async (params: RpcCallParams<unknown>, serializer?: Serializer<any, any>) => {
+    async (
+      params: RpcCallParams<unknown>,
+      serializer: Serializer<any, any> = serializers.json(),
+    ) => {
       if (isSerializer(serializer)) {
         let serialized: string;
         try {

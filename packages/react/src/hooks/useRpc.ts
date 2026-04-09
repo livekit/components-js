@@ -21,8 +21,9 @@ export const SerializerSymbol = Symbol.for('lk.serializer');
  * - `parse(raw)` decodes an incoming wire string into `Input` (used by handlers)
  * - `serialize(val)` encodes an `Output` value to a wire string (used by handlers)
  *
- * For symmetric serializers (`serializer.raw`), `Input === Output === string`.
- * For `serializer.json`, both default to `any` so each handler can annotate its own types.
+ * For symmetric serializers (`serializers.raw`), `Input === Output === string`.
+ * For `serializers.json`, both default to `any` so each handler can annotate its own types.
+ * Use `serializers.custom` to supply your own `parse`/`serialize` pair.
  *
  * @beta
  */
@@ -58,16 +59,16 @@ type SerializerOutput<S> = S extends Serializer<any, infer Output> ? Output : an
  * useRpc(session, "myMethod", async (payload: MyInput) => myOutput);
  *
  * // Override default serializer for a handler
- * useRpc(session, "myMethod", async (payload) => payload, { serializer: serializer.raw() });
+ * useRpc(session, "myMethod", async (payload) => payload, { serializer: serializers.raw() });
  *
  * // Manual serializer instances
- * const a = serializer.raw(); // Serializer<string, string>
+ * const a = serializers.raw(); // Serializer<string, string>
  * const b = serializer.json<{ foo: string }, { bar: string }>(); // Serializer<{ foo: string }, { bar: string }>
  * ```
  *
  * @beta
  */
-export const serializer = (() => {
+export const serializers = (() => {
   /**
    * JSON serializer — `JSON.parse` on the way in, `JSON.stringify` on the way out.
    * Defaults to `any` so individual handlers can annotate their own payload types.
@@ -123,7 +124,7 @@ export type UseRpcOptions<S extends Serializer<any, any> = Serializer<any, any>>
   /** Only accept RPCs from this participant. Others will receive UNSUPPORTED_METHOD. */
   from?: string | Participant;
   /**
-   * Serializer applied to the data coming in and leaving the handler. Defaults to `serializer.json()`
+   * Serializer applied to the data coming in and leaving the handler. Defaults to `serializers.json()`
    */
   serializer?: S;
 };
@@ -133,13 +134,13 @@ export type UseRpcOptions<S extends Serializer<any, any> = Serializer<any, any>>
 // ---------------------------------------------------------------------------
 
 async function resolveWithSerializer<S extends Serializer<any, any>>(
-  s: S,
+  serializer: S,
   handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>,
   data: RpcInvocationData,
 ): Promise<string> {
   let parsed;
   try {
-    parsed = s.parse(data.payload);
+    parsed = serializer.parse(data.payload);
   } catch (e) {
     throw RpcError.builtIn('APPLICATION_ERROR', `Failed to parse RPC payload: ${e}`);
   }
@@ -147,7 +148,7 @@ async function resolveWithSerializer<S extends Serializer<any, any>>(
   const result = await handler(parsed, data);
 
   try {
-    return s.serialize(result);
+    return serializer.serialize(result);
   } catch (e) {
     throw RpcError.builtIn('APPLICATION_ERROR', `Failed to serialize RPC response: ${e}`);
   }
@@ -267,7 +268,7 @@ export function useRpc(
         );
       }
 
-      const s = optionsRef.current?.serializer ?? serializer.json();
+      const s = optionsRef.current?.serializer ?? serializers.json();
       return resolveWithSerializer(s, currentHandler, data);
     });
 

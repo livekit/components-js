@@ -373,6 +373,11 @@ export interface GridLayoutProps extends React_2.HTMLAttributes<HTMLDivElement>,
 
 export { isTrackReference }
 
+// Warning: (ae-internal-missing-underscore) The name "isUseSessionReturn" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export function isUseSessionReturn(value: unknown): value is UseSessionReturn;
+
 // @public (undocumented)
 export const LayoutContext: React_2.Context<LayoutContextType | undefined>;
 
@@ -1237,19 +1242,14 @@ export interface UseRoomInfoOptions {
 // Warning: (ae-forgotten-export) The symbol "SerializerOutput" needs to be exported by the entry point index.docs.d.ts
 //
 // @beta
-export function useRpc<S extends Serializer<any, any> = Serializer<any, any>>(session: UseSessionReturn, methodName: string, handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>, options?: UseRpcOptions<S>): UseRpcReturn;
+export function useRpc<S extends Serializer<any, any>>(session: UseSessionReturn, methodName: string, handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>, options?: UseRpcOptions<S>): UseRpcReturn;
 
-// Warning: (ae-incompatible-release-tags) The symbol "useRpc" is marked as @public, but its signature references "Serializer" which is marked as @beta
-// Warning: (ae-incompatible-release-tags) The symbol "useRpc" is marked as @public, but its signature references "RpcHandler" which is marked as @beta
-// Warning: (ae-incompatible-release-tags) The symbol "useRpc" is marked as @public, but its signature references "UseRpcOptions" which is marked as @beta
-// Warning: (ae-incompatible-release-tags) The symbol "useRpc" is marked as @public, but its signature references "UseRpcReturn" which is marked as @beta
-//
-// @public (undocumented)
-export function useRpc<S extends Serializer<any, any> = Serializer<any, any>>(methodName: string, handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>, options?: UseRpcOptions<S>): UseRpcReturn;
+// @beta (undocumented)
+export function useRpc<S extends Serializer<any, any>>(methodName: string, handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>, options?: UseRpcOptions<S>): UseRpcReturn;
 
 // @beta
 export type UseRpcOptions<S extends Serializer<any, any> = Serializer<any, any>> = {
-    from?: string | Participant;
+    fromIdentity?: string;
     serializer?: S;
 };
 

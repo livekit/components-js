@@ -35,6 +35,7 @@ import { ParticipantClickEvent } from '@livekit/components-core';
 import { ParticipantEvent } from 'livekit-client';
 import { ParticipantIdentifier } from '@livekit/components-core';
 import { ParticipantPermission } from '@livekit/protocol';
+import { PerformRpcParams } from 'livekit-client';
 import { PinState } from '@livekit/components-core';
 import * as React_2 from 'react';
 import { ReceivedAgentTranscriptionMessage } from '@livekit/components-core';
@@ -49,6 +50,7 @@ import { Room } from 'livekit-client';
 import { RoomConnectOptions } from 'livekit-client';
 import { RoomEvent } from 'livekit-client';
 import { RoomOptions } from 'livekit-client';
+import { RpcInvocationData } from 'livekit-client';
 import { ScreenShareCaptureOptions } from 'livekit-client';
 import { SendTextOptions } from 'livekit-client';
 import { setLogExtension } from '@livekit/components-core';
@@ -565,6 +567,12 @@ export interface ParticipantTileProps extends React_2.HTMLAttributes<HTMLDivElem
     trackRef?: TrackReferenceOrPlaceholder;
 }
 
+// @beta (undocumented)
+export type PerformRpcFn = {
+    <Output = string, Input = unknown>(params: RpcCallParams<Input>, serializer: Serializer<Output, Input>): Promise<Output>;
+    (params: PerformRpcParams): Promise<string>;
+};
+
 export { PinState }
 
 // @public
@@ -644,6 +652,14 @@ export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
     childrenPosition?: 'before' | 'after';
 }
 
+// @beta
+export type RpcCallParams<Payload> = Omit<PerformRpcParams, 'payload'> & {
+    payload: Payload;
+};
+
+// @beta (undocumented)
+export type RpcHandler<Input = any, Output = any> = (payload: Input, data: RpcInvocationData) => Promise<Output>;
+
 // Warning: (ae-internal-missing-underscore) The name "ScreenShareIcon" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -653,6 +669,20 @@ export const ScreenShareIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.El
 //
 // @internal (undocumented)
 export const ScreenShareStopIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// @beta
+export type Serializer<Input = any, Output = any> = {
+    symbol: typeof SerializerSymbol;
+    parse: (raw: string) => Input;
+    serialize: (val: Output) => string;
+};
+
+// @beta
+export const serializers: {
+    json: <Input = any, Output = any>() => Serializer<Input, Output>;
+    raw: () => Serializer<string, string>;
+    custom: <Input = any, Output = any>(params: Omit<Serializer<Input, Output>, "symbol">) => Serializer<Input, Output>;
+};
 
 // @beta (undocumented)
 export type SessionCallbacks = {
@@ -1202,6 +1232,31 @@ export interface UseRoomInfoOptions {
     // (undocumented)
     room?: Room;
 }
+
+// Warning: (ae-forgotten-export) The symbol "SerializerInput" needs to be exported by the entry point index.docs.d.ts
+// Warning: (ae-forgotten-export) The symbol "SerializerOutput" needs to be exported by the entry point index.docs.d.ts
+//
+// @beta
+export function useRpc<S extends Serializer<any, any> = Serializer<any, any>>(session: UseSessionReturn, methodName: string, handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>, options?: UseRpcOptions<S>): UseRpcReturn;
+
+// Warning: (ae-incompatible-release-tags) The symbol "useRpc" is marked as @public, but its signature references "Serializer" which is marked as @beta
+// Warning: (ae-incompatible-release-tags) The symbol "useRpc" is marked as @public, but its signature references "RpcHandler" which is marked as @beta
+// Warning: (ae-incompatible-release-tags) The symbol "useRpc" is marked as @public, but its signature references "UseRpcOptions" which is marked as @beta
+// Warning: (ae-incompatible-release-tags) The symbol "useRpc" is marked as @public, but its signature references "UseRpcReturn" which is marked as @beta
+//
+// @public (undocumented)
+export function useRpc<S extends Serializer<any, any> = Serializer<any, any>>(methodName: string, handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>, options?: UseRpcOptions<S>): UseRpcReturn;
+
+// @beta
+export type UseRpcOptions<S extends Serializer<any, any> = Serializer<any, any>> = {
+    from?: string | Participant;
+    serializer?: S;
+};
+
+// @beta (undocumented)
+export type UseRpcReturn = {
+    performRpc: PerformRpcFn;
+};
 
 // @public
 export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(room: R): UseSequentialRoomConnectDisconnectResults<R>;

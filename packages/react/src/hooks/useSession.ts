@@ -169,29 +169,24 @@ type UseSessionWithRoomOptions = {
   encryption?: never;
 };
 
-type UseSessionEncryptionOptions = {
-  enabled: true,
+type UseSessionEncryptionOptions =
+  | {
+      enabled: true;
 
-  /**
-   * Accepts a passphrase that's used to create the crypto keys.
-   * When passing in a string, PBKDF2 is used. (recommended for maximum compatibility across SDKs)
-   * When passing in an ArrayBuffer of cryptographically random numbers, HKDF is used.
-   *
-   * Note: Not all client SDKs support HKDF.
-   */
-  key: string | ArrayBuffer | BaseKeyProvider;
+      /**
+       * Accepts a passphrase that's used to create the crypto keys.
+       * When passing in a string, PBKDF2 is used. (recommended for maximum compatibility across SDKs)
+       * When passing in an ArrayBuffer of cryptographically random numbers, HKDF is used.
+       *
+       * Note: Not all client SDKs support HKDF.
+       */
+      key: string | ArrayBuffer | BaseKeyProvider;
 
-  /** An instance of the E2EE webworker, which must be constructed using your js build tool's
-   * webworker construction mechanism. */
-  worker: Worker;
-} | {
-  enabled: false
-
-  // // NOTE: leaving these optional here so a user can easily disable `enabled` by switching `enabled`
-  // // to false while leaving the other values in place.
-  // key?: string | ArrayBuffer | BaseKeyProvider;
-  // worker?: Worker;
-};
+      /** An instance of the E2EE webworker, which must be constructed using your js build tool's
+       * webworker construction mechanism. */
+      worker: Worker;
+    }
+  | { enabled: false };
 
 type UseSessionWithoutRoomOptions = {
   // NOTE: This must be here to make typescript go down this discriminated union branch when
@@ -204,7 +199,9 @@ type UseSessionWithoutRoomOptions = {
 
 type UseSessionRoomOptions = UseSessionWithRoomOptions | UseSessionWithoutRoomOptions;
 
-type UseSessionConfigurableOptions = UseSessionCommonOptions & UseSessionRoomOptions & TokenSourceFetchOptions;
+type UseSessionConfigurableOptions = UseSessionCommonOptions &
+  UseSessionRoomOptions &
+  TokenSourceFetchOptions;
 type UseSessionFixedOptions = UseSessionCommonOptions & UseSessionRoomOptions;
 
 /**
@@ -390,17 +387,13 @@ export function useSession(
           worker: encryptionWorker,
         };
       } else {
-        log.warn('useSession options encryption.enabled was set, but required keys encryption.key and encryption.worker were omitted.');
+        log.warn(
+          'useSession options encryption.enabled was set, but required keys encryption.key and encryption.worker were omitted.',
+        );
       }
     }
     return new Room(roomOptions);
-  }, [
-    roomFromContext,
-    optionsRoom,
-    encryptionEnabled,
-    encryptionKey,
-    encryptionWorker,
-  ]);
+  }, [roomFromContext, optionsRoom, encryptionEnabled, encryptionKey, encryptionWorker]);
 
   const emitter = React.useMemo(
     () => new EventEmitter() as TypedEventEmitter<SessionCallbacks>,
@@ -705,13 +698,7 @@ export function useSession(
 
       signal?.removeEventListener('abort', onSignalAbort);
     },
-    [
-      room,
-      waitUntilDisconnected,
-      tokenSourceFetch,
-      waitUntilConnected,
-      agent.waitUntilConnected,
-    ],
+    [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected, agent.waitUntilConnected],
   );
 
   const end = React.useCallback(async () => {
@@ -749,6 +736,14 @@ export function useSession(
 
       setEncryptionEnabled,
     }),
-    [conversationState, waitUntilConnected, waitUntilDisconnected, prepareConnection, start, end, setEncryptionEnabled],
+    [
+      conversationState,
+      waitUntilConnected,
+      waitUntilDisconnected,
+      prepareConnection,
+      start,
+      end,
+      setEncryptionEnabled,
+    ],
   );
 }

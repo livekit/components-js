@@ -150,6 +150,7 @@ export type UseSessionReturn = (
 ) &
   SessionActions;
 
+/** @internal */
 export function isUseSessionReturn(value: unknown): value is UseSessionReturn {
   return (
     typeof value === 'object' &&

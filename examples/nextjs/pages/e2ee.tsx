@@ -10,7 +10,7 @@ import {
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { useMemo, useEffect, useState } from 'react';
-import { Room, ExternalE2EEKeyProvider, TokenSource, MediaDeviceFailure } from 'livekit-client';
+import { TokenSource, MediaDeviceFailure } from 'livekit-client';
 import { generateRandomUserId } from '../lib/helper';
 
 const tokenSource = TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
@@ -24,36 +24,30 @@ const E2EEExample: NextPage = () => {
   const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
   setLogLevel('warn', { liveKitClientLogLevel: 'debug' });
 
-  const keyProvider = useMemo(() => new ExternalE2EEKeyProvider(), []);
-
-  keyProvider.setKey('password');
-
-  const room = useMemo(
-    () =>
-      new Room({
-        e2ee:
-          typeof window !== 'undefined'
-            ? {
-                keyProvider,
-                worker: new Worker(new URL('livekit-client/e2ee-worker', import.meta.url)),
-              }
-            : undefined,
-      }),
-    [keyProvider],
-  );
+  const [e2eeWebworker] = useState(() => {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+    return new Worker(new URL('livekit-client/e2ee-worker', import.meta.url))
+  });
 
   const session = useSession(tokenSource, {
     roomName,
     participantIdentity: userIdentity,
     participantName: userIdentity,
-    room,
+
+    encryption: typeof window !== 'undefined' ? {
+      enabled: true,
+      key: 'password',
+      worker: e2eeWebworker!,
+    } : { enabled: false },
   });
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      room.setE2EEEnabled(true);
+      session.setEncryptionEnabled(true);
     }
-  }, [room]);
+  }, [session]);
 
   useEffect(() => {
     session

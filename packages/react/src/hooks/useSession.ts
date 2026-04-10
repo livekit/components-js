@@ -11,12 +11,15 @@ import {
   TokenSourceFetchOptions,
   RoomConnectOptions,
   decodeTokenPayload,
+  BaseKeyProvider,
+  RoomOptions,
+  ExternalE2EEKeyProvider,
 } from 'livekit-client';
 import { EventEmitter } from 'events';
 
 import { useMaybeRoomContext } from '../context';
 import { AgentState, useAgent, useAgentTimeoutIdStore } from './useAgent';
-import { TrackReference } from '@livekit/components-core';
+import { TrackReference, log } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
 
 /** @beta */
@@ -129,9 +132,9 @@ type SessionStateDisconnected = SessionStateCommon & {
 
 type SessionActions = {
   /** Returns a promise that resolves once the room connects. */
-  waitUntilConnected: (signal?: AbortSignal) => void;
+  waitUntilConnected: (signal?: AbortSignal) => Promise<void>;
   /** Returns a promise that resolves once the room disconnects */
-  waitUntilDisconnected: (signal?: AbortSignal) => void;
+  waitUntilDisconnected: (signal?: AbortSignal) => Promise<void>;
 
   prepareConnection: () => Promise<void>;
 
@@ -140,6 +143,9 @@ type SessionActions = {
 
   /** Disconnect from the underlying room */
   end: () => Promise<void>;
+
+  /** Enable or disable E2EE. */
+  setEncryptionEnabled: (enabled: boolean) => Promise<void>;
 };
 
 /** @beta */
@@ -151,8 +157,6 @@ export type UseSessionReturn = (
   SessionActions;
 
 type UseSessionCommonOptions = {
-  room?: Room;
-
   /**
    * Amount of time in milliseonds the system will wait for an agent to join the room, before
    * transitioning to the "failure" state.
@@ -160,8 +164,48 @@ type UseSessionCommonOptions = {
   agentConnectTimeoutMilliseconds?: number;
 };
 
-type UseSessionConfigurableOptions = UseSessionCommonOptions & TokenSourceFetchOptions;
-type UseSessionFixedOptions = UseSessionCommonOptions;
+type UseSessionWithRoomOptions = {
+  room: Room;
+  encryption?: never;
+};
+
+type UseSessionEncryptionOptions = {
+  enabled: true,
+
+  /**
+   * Accepts a passphrase that's used to create the crypto keys.
+   * When passing in a string, PBKDF2 is used. (recommended for maximum compatibility across SDKs)
+   * When passing in an ArrayBuffer of cryptographically random numbers, HKDF is used.
+   *
+   * Note: Not all client SDKs support HKDF.
+   */
+  key: string | ArrayBuffer | BaseKeyProvider;
+
+  /** An instance of the E2EE webworker, which must be constructed using your js build tool's
+   * webworker construction mechanism. */
+  worker: Worker;
+} | {
+  enabled: false
+
+  // // NOTE: leaving these optional here so a user can easily disable `enabled` by switching `enabled`
+  // // to false while leaving the other values in place.
+  // key?: string | ArrayBuffer | BaseKeyProvider;
+  // worker?: Worker;
+};
+
+type UseSessionWithoutRoomOptions = {
+  // NOTE: This must be here to make typescript go down this discriminated union branch when
+  // "room" is omitted.
+  room?: never;
+
+  /** Configuration for room-level E2EE */
+  encryption?: UseSessionEncryptionOptions;
+};
+
+type UseSessionRoomOptions = UseSessionWithRoomOptions | UseSessionWithoutRoomOptions;
+
+type UseSessionConfigurableOptions = UseSessionCommonOptions & UseSessionRoomOptions & TokenSourceFetchOptions;
+type UseSessionFixedOptions = UseSessionCommonOptions & UseSessionRoomOptions;
 
 /**
  * Given two TokenSourceFetchOptions values, check to see if they are deep equal.
@@ -312,13 +356,51 @@ export function useSession(
   tokenSource: TokenSourceConfigurable | TokenSourceFixed,
   options: UseSessionConfigurableOptions | UseSessionFixedOptions = {},
 ): UseSessionReturn {
-  const { room: optionsRoom, agentConnectTimeoutMilliseconds, ...restOptions } = options;
+  const {
+    room: optionsRoom,
+    agentConnectTimeoutMilliseconds,
+    encryption: unstableEncryption,
+    ...unstableRestOptions
+  } = options;
+
+  const encryptionEnabled = unstableEncryption?.enabled ?? false;
+  const encryptionKey = unstableEncryption?.enabled ? unstableEncryption.key : null;
+  const encryptionWorker = unstableEncryption?.enabled ? unstableEncryption.worker : null;
 
   const roomFromContext = useMaybeRoomContext();
-  const room = React.useMemo(
-    () => roomFromContext ?? optionsRoom ?? new Room(),
-    [roomFromContext, optionsRoom],
-  );
+  const room = React.useMemo(() => {
+    const preGeneratedRoom = roomFromContext ?? optionsRoom;
+    if (preGeneratedRoom) {
+      return preGeneratedRoom;
+    }
+
+    const roomOptions: RoomOptions = {};
+    if (encryptionEnabled) {
+      if (encryptionKey && encryptionWorker) {
+        let keyProvider;
+        if (typeof encryptionKey === 'string' || encryptionKey instanceof ArrayBuffer) {
+          keyProvider = new ExternalE2EEKeyProvider();
+          keyProvider.setKey(encryptionKey);
+        } else {
+          keyProvider = encryptionKey;
+        }
+
+        roomOptions.encryption = {
+          keyProvider,
+          worker: encryptionWorker,
+        };
+      } else {
+        log.warn('useSession options encryption.enabled was set, but required keys encryption.key and encryption.worker were omitted.');
+      }
+    }
+    return new Room(roomOptions);
+  }, [
+    roomFromContext,
+    optionsRoom,
+    encryptionEnabled,
+    encryptionKey,
+    encryptionWorker,
+  ]);
 
   const emitter = React.useMemo(
     () => new EventEmitter() as TypedEventEmitter<SessionCallbacks>,
@@ -535,6 +617,11 @@ export function useSession(
     [waitUntilConnectionState],
   );
 
+  const setEncryptionEnabled = React.useCallback(
+    async (enabled: boolean) => room.setE2EEEnabled(enabled),
+    [room],
+  );
+
   const agent = useAgent(
     React.useMemo(
       () => ({
@@ -546,7 +633,7 @@ export function useSession(
     ),
   );
 
-  const tokenSourceFetch = useSessionTokenSourceFetch(tokenSource, restOptions);
+  const tokenSourceFetch = useSessionTokenSourceFetch(tokenSource, unstableRestOptions);
 
   const [wasSessionEndCalled, setWasSessionEndCalled] = React.useState(false);
 
@@ -660,7 +747,9 @@ export function useSession(
       prepareConnection,
       start,
       end,
+
+      setEncryptionEnabled,
     }),
-    [conversationState, waitUntilConnected, waitUntilDisconnected, prepareConnection, start, end],
+    [conversationState, waitUntilConnected, waitUntilDisconnected, prepareConnection, start, end, setEncryptionEnabled],
   );
 }

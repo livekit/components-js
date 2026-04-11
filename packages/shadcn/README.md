@@ -47,7 +47,7 @@ First add the Agents UI registry to your components.json file:
   ...
   "registries": {
      ...
-    "@agents-ui": "https://livekit.io/ui/r/{name}.json"
+    "@agents-ui": "https://livekit.com/ui/r/{name}.json"
   }
 }
 ```

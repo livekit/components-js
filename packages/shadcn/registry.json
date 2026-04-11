@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "@agents-ui",
-  "homepage": "https://livekit.io/ui",
+  "homepage": "https://livekit.com/ui",
   "items": [
     {
       "name": "agent-disconnect-button",
@@ -291,7 +291,7 @@
     },
     {
       "name": "agent-session-view-01",
-      "author": "LiveKit (https://livekit.io)",
+      "author": "LiveKit (https://livekit.com)",
       "type": "registry:block",
       "title": "Agent Session View",
       "description": "A full-screen agent session block with transcript, controls, and I/O media tiles.",

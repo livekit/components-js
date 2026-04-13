@@ -373,7 +373,7 @@ export function useSession(
       if (externalKeyProviderRef.current === null) {
         externalKeyProviderRef.current = new ExternalE2EEKeyProvider();
       }
-      externalKeyProviderRef.current.setKey(encryptionKey);
+      externalKeyProviderRef.current.setKey(encryptionKey).catch((e) => log.error(e));
       return externalKeyProviderRef.current;
     } else {
       return encryptionKey;

@@ -24,12 +24,12 @@ const E2EEExample: NextPage = () => {
   const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
   setLogLevel('warn', { liveKitClientLogLevel: 'debug' });
 
-  const e2eeWebworker = useMemo(() => {
+  const [e2eeWebworker] = useState(() => {
     if (typeof window === 'undefined') {
       return null;
     }
     return new Worker(new URL('livekit-client/e2ee-worker', import.meta.url));
-  }, []);
+  });
 
   const session = useSession(tokenSource, {
     roomName,

@@ -395,7 +395,6 @@ export function useSession(
     }
     const room = new Room(roomOptions);
     if (encryptionEnabled) {
-      console.warn('this should enable room encryption');
       room.setE2EEEnabled(true);
     }
     return room;

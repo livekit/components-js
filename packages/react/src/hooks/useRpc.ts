@@ -170,6 +170,10 @@ export function useRpc<S extends Serializer<any, any>>(
   handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>,
   options?: UseRpcOptions<S>,
 ): UseRpcReturn;
+/** @beta */
+export function useRpc(session: UseSessionReturn): UseRpcReturn;
+/** @beta */
+export function useRpc(): UseRpcReturn;
 export function useRpc(
   methodNameOrSession?: string | UseSessionReturn,
   handlerOrMethodName?: RpcHandler<any, any> | string,

@@ -171,8 +171,6 @@ type UseSessionWithRoomOptions = {
 
 type UseSessionEncryptionOptions =
   | {
-      enabled: true;
-
       /**
        * Accepts a passphrase that's used to create the crypto keys.
        * When passing in a string, PBKDF2 is used. (recommended for maximum compatibility across SDKs)
@@ -186,7 +184,10 @@ type UseSessionEncryptionOptions =
        * webworker construction mechanism. */
       worker: Worker;
     }
-  | { enabled: false };
+  | {
+      key?: undefined;
+      worker?: undefined;
+    };
 
 type UseSessionWithoutRoomOptions = {
   // NOTE: This must be here to make typescript go down this discriminated union branch when
@@ -360,40 +361,51 @@ export function useSession(
     ...unstableRestOptions
   } = options;
 
-  const encryptionEnabled = unstableEncryption?.enabled ?? false;
-  const encryptionKey = unstableEncryption?.enabled ? unstableEncryption.key : null;
-  const encryptionWorker = unstableEncryption?.enabled ? unstableEncryption.worker : null;
+  const encryptionKey = unstableEncryption?.key ?? null;
+  const encryptionWorker = unstableEncryption?.worker ?? null;
 
   const roomFromContext = useMaybeRoomContext();
+
   const room = React.useMemo(() => {
     const preGeneratedRoom = roomFromContext ?? optionsRoom;
     if (preGeneratedRoom) {
       return preGeneratedRoom;
     }
 
+    const encryptionEnabled = !!(encryptionKey && encryptionWorker);
+
     const roomOptions: RoomOptions = {};
     if (encryptionEnabled) {
-      if (encryptionKey && encryptionWorker) {
-        let keyProvider;
-        if (typeof encryptionKey === 'string' || encryptionKey instanceof ArrayBuffer) {
-          keyProvider = new ExternalE2EEKeyProvider();
-          keyProvider.setKey(encryptionKey);
-        } else {
-          keyProvider = encryptionKey;
-        }
-
-        roomOptions.encryption = {
-          keyProvider,
-          worker: encryptionWorker,
-        };
+      let keyProvider;
+      if (typeof encryptionKey === 'string' || encryptionKey instanceof ArrayBuffer) {
+        keyProvider = new ExternalE2EEKeyProvider();
+        keyProvider.setKey(encryptionKey);
       } else {
-        log.warn(
-          'useSession options encryption.enabled was set, but required keys encryption.key and encryption.worker were omitted.',
-        );
+        keyProvider = encryptionKey;
       }
+
+      roomOptions.encryption = {
+        keyProvider,
+        worker: encryptionWorker,
+      };
+    } else {
+      log.warn(
+        'useSession options encryption was set, but required keys encryption.key and encryption.worker were omitted.',
+      );
     }
-    return new Room(roomOptions);
-  }, [roomFromContext, optionsRoom, encryptionEnabled, encryptionKey, encryptionWorker]);
+    const room = new Room(roomOptions);
+    if (encryptionEnabled) {
+      console.warn('this should enable room encryption');
+      room.setE2EEEnabled(true);
+    }
+    return room;
+  }, [roomFromContext, optionsRoom, encryptionKey, encryptionWorker]);
+
+  React.useEffect(() => {
+    () => {
+      room.disconnect();
+    };
+  }, [room]);
 
   const emitter = React.useMemo(
     () => new EventEmitter() as TypedEventEmitter<SessionCallbacks>,
@@ -611,7 +623,7 @@ export function useSession(
   );
 
   const setEncryptionEnabled = React.useCallback(
-    async (enabled: boolean) => room.setE2EEEnabled(enabled),
+    async (enabled: boolean) => room.setE2EEEnabled(enabled).catch((e) => log.error(e)),
     [room],
   );
 

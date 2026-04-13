@@ -407,7 +407,7 @@ export function useSession(
   }, [roomFromContext, optionsRoom, keyProvider, encryptionWorker]);
 
   React.useEffect(() => {
-    () => {
+    return () => {
       room.disconnect();
     };
   }, [room]);
@@ -628,7 +628,7 @@ export function useSession(
   );
 
   const setEncryptionEnabled = React.useCallback(
-    async (enabled: boolean) => room.setE2EEEnabled(enabled).catch((e) => log.error(e)),
+    async (enabled: boolean) => room.setE2EEEnabled(enabled),
     [room],
   );
 

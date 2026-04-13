@@ -366,24 +366,30 @@ export function useSession(
 
   const roomFromContext = useMaybeRoomContext();
 
+  const externalKeyProviderRef = React.useRef<ExternalE2EEKeyProvider | null>(null);
+
+  const keyProvider = React.useMemo(() => {
+    if (typeof encryptionKey === 'string' || encryptionKey instanceof ArrayBuffer) {
+      if (externalKeyProviderRef.current === null) {
+        externalKeyProviderRef.current = new ExternalE2EEKeyProvider();
+      }
+      externalKeyProviderRef.current.setKey(encryptionKey);
+      return externalKeyProviderRef.current;
+    } else {
+      return encryptionKey;
+    }
+  }, [encryptionKey]);
+
   const room = React.useMemo(() => {
     const preGeneratedRoom = roomFromContext ?? optionsRoom;
     if (preGeneratedRoom) {
       return preGeneratedRoom;
     }
 
-    const encryptionEnabled = !!(encryptionKey && encryptionWorker);
+    const encryptionEnabled = !!(keyProvider && encryptionWorker);
 
     const roomOptions: RoomOptions = {};
     if (encryptionEnabled) {
-      let keyProvider;
-      if (typeof encryptionKey === 'string' || encryptionKey instanceof ArrayBuffer) {
-        keyProvider = new ExternalE2EEKeyProvider();
-        keyProvider.setKey(encryptionKey);
-      } else {
-        keyProvider = encryptionKey;
-      }
-
       roomOptions.encryption = {
         keyProvider,
         worker: encryptionWorker,
@@ -398,7 +404,7 @@ export function useSession(
       room.setE2EEEnabled(true);
     }
     return room;
-  }, [roomFromContext, optionsRoom, encryptionKey, encryptionWorker]);
+  }, [roomFromContext, optionsRoom, keyProvider, encryptionWorker]);
 
   React.useEffect(() => {
     () => {

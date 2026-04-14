@@ -130,7 +130,7 @@ export type UseRpcOptions<S extends Serializer<any, any> = Serializer<any, any>>
 // ---------------------------------------------------------------------------
 
 /** @beta */
-export type PerformRpcFn = {
+export type RpcCallFn = {
   /** Serializer-wrapped call: payload is serialized and response is parsed by the serializer. */
   <Output = string, Input = unknown>(
     params: RpcCallParams<Input>,
@@ -142,7 +142,7 @@ export type PerformRpcFn = {
 
 /** @beta */
 export type UseRpcReturn = {
-  performRpc: PerformRpcFn;
+  call: RpcCallFn;
 };
 
 /**
@@ -256,8 +256,8 @@ export function useRpc(
     };
   }, [room, methodName]);
 
-  // Stable performRpc function
-  const performRpc: PerformRpcFn = React.useCallback(
+  // Stable rpc calling function
+  const callRpc: RpcCallFn = React.useCallback(
     async (
       params: RpcCallParams<unknown>,
       serializer: Serializer<any, any> = serializers.json(),
@@ -287,5 +287,5 @@ export function useRpc(
     [room],
   );
 
-  return React.useMemo(() => ({ performRpc }), [performRpc]);
+  return React.useMemo(() => ({ call: callRpc }), [callRpc]);
 }

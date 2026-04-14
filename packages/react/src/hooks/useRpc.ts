@@ -41,6 +41,39 @@ function isSerializer(v: unknown): v is Serializer<any, any> {
 type SerializerInput<S> = S extends Serializer<infer Input, any> ? Input : any;
 type SerializerOutput<S> = S extends Serializer<any, infer Output> ? Output : any;
 
+/** @internal */
+function base<Input = any, Output = any>(
+  params: Omit<Serializer<Input, Output>, 'symbol'>,
+): Serializer<Input, Output> {
+  return { ...params, symbol: SerializerSymbol };
+}
+
+/**
+ * JSON serializer — `JSON.parse` on the way in, `JSON.stringify` on the way out.
+ * Defaults to `any` so individual handlers can annotate their own payload types.
+ */
+function json<Input = any, Output = any>(): Serializer<Input, Output> {
+  return base({
+    parse: (raw: string) => JSON.parse(raw) as Input,
+    serialize: (val: unknown) => JSON.stringify(val),
+  });
+}
+
+/** Raw string serializer — passes payloads through as plain strings with no encoding. */
+function raw() {
+  return base({
+    parse: (raw: string) => raw,
+    serialize: (val: string) => val,
+  });
+}
+
+/** Custom serializer - allows custom defined parse and serialize functions */
+function custom<Input = any, Output = any>(
+  params: Omit<Serializer<Input, Output>, 'symbol'>,
+): Serializer<Input, Output> {
+  return base(params);
+}
+
 /**
  * Serializer helpers for RPC payload encoding.
  *
@@ -59,35 +92,7 @@ type SerializerOutput<S> = S extends Serializer<any, infer Output> ? Output : an
  *
  * @beta
  */
-export const serializers = (() => {
-  /**
-   * JSON serializer — `JSON.parse` on the way in, `JSON.stringify` on the way out.
-   * Defaults to `any` so individual handlers can annotate their own payload types.
-   */
-  function json<Input = any, Output = any>(): Serializer<Input, Output> {
-    return custom({
-      parse: (raw: string) => JSON.parse(raw) as Input,
-      serialize: (val: unknown) => JSON.stringify(val),
-    });
-  }
-
-  /** Raw string serializer — passes payloads through as plain strings with no encoding. */
-  function raw() {
-    return custom({
-      parse: (raw: string) => raw,
-      serialize: (val: string) => val,
-    });
-  }
-
-  /** Custom serializer - allows custom defined parse and serialize functions */
-  function custom<Input = any, Output = any>(
-    params: Omit<Serializer<Input, Output>, 'symbol'>,
-  ): Serializer<Input, Output> {
-    return { ...params, symbol: SerializerSymbol };
-  }
-
-  return { json, raw, custom };
-})();
+export const serializers = { json, raw, custom };
 
 // ---------------------------------------------------------------------------
 // RPC types

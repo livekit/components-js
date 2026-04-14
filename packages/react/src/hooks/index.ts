@@ -75,7 +75,7 @@ export {
   type RpcHandler,
   type RpcCallParams,
   type UseRpcOptions,
-  type PerformRpcFn,
+  type RpcCallFn,
   type UseRpcReturn,
   serializers,
   useRpc,

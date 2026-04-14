@@ -572,12 +572,6 @@ export interface ParticipantTileProps extends React_2.HTMLAttributes<HTMLDivElem
     trackRef?: TrackReferenceOrPlaceholder;
 }
 
-// @beta (undocumented)
-export type PerformRpcFn = {
-    <Output = string, Input = unknown>(params: RpcCallParams<Input>, serializer: Serializer<Output, Input>): Promise<Output>;
-    (params: PerformRpcParams): Promise<string>;
-};
-
 export { PinState }
 
 // @public
@@ -657,6 +651,12 @@ export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
     childrenPosition?: 'before' | 'after';
 }
 
+// @beta (undocumented)
+export type RpcCallFn = {
+    <Output = string, Input = unknown>(params: RpcCallParams<Input>, serializer: Serializer<Output, Input>): Promise<Output>;
+    (params: PerformRpcParams): Promise<string>;
+};
+
 // @beta
 export type RpcCallParams<Payload> = Omit<PerformRpcParams, 'payload'> & {
     payload: Payload;
@@ -684,9 +684,9 @@ export type Serializer<Input = any, Output = any> = {
 
 // @beta
 export const serializers: {
-    json: <Input = any, Output = any>() => Serializer<Input, Output>;
-    raw: () => Serializer<string, string>;
-    custom: <Input = any, Output = any>(params: Omit<Serializer<Input, Output>, "symbol">) => Serializer<Input, Output>;
+    json: typeof json;
+    raw: typeof raw;
+    custom: typeof custom;
 };
 
 // @beta (undocumented)
@@ -1247,6 +1247,12 @@ export function useRpc<S extends Serializer<any, any>>(session: UseSessionReturn
 // @beta (undocumented)
 export function useRpc<S extends Serializer<any, any>>(methodName: string, handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>, options?: UseRpcOptions<S>): UseRpcReturn;
 
+// @beta (undocumented)
+export function useRpc(session: UseSessionReturn): UseRpcReturn;
+
+// @beta (undocumented)
+export function useRpc(): UseRpcReturn;
+
 // @beta
 export type UseRpcOptions<S extends Serializer<any, any> = Serializer<any, any>> = {
     fromIdentity?: string;
@@ -1255,7 +1261,7 @@ export type UseRpcOptions<S extends Serializer<any, any> = Serializer<any, any>>
 
 // @beta (undocumented)
 export type UseRpcReturn = {
-    performRpc: PerformRpcFn;
+    call: RpcCallFn;
 };
 
 // @public
@@ -1519,6 +1525,9 @@ export { WidgetState }
 //
 // src/context/layout-context.ts:10:3 - (ae-forgotten-export) The symbol "PinContextType" needs to be exported by the entry point index.docs.d.ts
 // src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "WidgetContextType" needs to be exported by the entry point index.docs.d.ts
+// src/hooks/useRpc.ts:95:25 - (ae-forgotten-export) The symbol "json" needs to be exported by the entry point index.docs.d.ts
+// src/hooks/useRpc.ts:95:25 - (ae-forgotten-export) The symbol "raw" needs to be exported by the entry point index.docs.d.ts
+// src/hooks/useRpc.ts:95:25 - (ae-forgotten-export) The symbol "custom" needs to be exported by the entry point index.docs.d.ts
 
 // (No @packageDocumentation comment for this package)
 

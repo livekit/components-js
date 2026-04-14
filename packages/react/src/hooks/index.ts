@@ -71,12 +71,10 @@ export {
 export * from './useEvents';
 export * from './useSessionMessages';
 export {
-  type Serializer,
   type RpcHandler,
   type RpcCallParams,
   type UseRpcOptions,
   type RpcCallFn,
   type UseRpcReturn,
-  serializers,
   useRpc,
 } from './useRpc';

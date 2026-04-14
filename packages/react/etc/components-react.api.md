@@ -675,20 +675,6 @@ export const ScreenShareIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.El
 // @internal (undocumented)
 export const ScreenShareStopIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
-// @beta
-export type Serializer<Input = any, Output = any> = {
-    symbol: typeof SerializerSymbol;
-    parse: (raw: string) => Input;
-    serialize: (val: Output) => string;
-};
-
-// @beta
-export const serializers: {
-    json: typeof json;
-    raw: typeof raw;
-    custom: typeof custom;
-};
-
 // @beta (undocumented)
 export type SessionCallbacks = {
     [SessionEvent.ConnectionStateChanged]: (newAgentConnectionState: ConnectionState_2) => void;
@@ -1525,9 +1511,6 @@ export { WidgetState }
 //
 // src/context/layout-context.ts:10:3 - (ae-forgotten-export) The symbol "PinContextType" needs to be exported by the entry point index.docs.d.ts
 // src/context/layout-context.ts:11:3 - (ae-forgotten-export) The symbol "WidgetContextType" needs to be exported by the entry point index.docs.d.ts
-// src/hooks/useRpc.ts:95:25 - (ae-forgotten-export) The symbol "json" needs to be exported by the entry point index.docs.d.ts
-// src/hooks/useRpc.ts:95:25 - (ae-forgotten-export) The symbol "raw" needs to be exported by the entry point index.docs.d.ts
-// src/hooks/useRpc.ts:95:25 - (ae-forgotten-export) The symbol "custom" needs to be exported by the entry point index.docs.d.ts
 
 // (No @packageDocumentation comment for this package)
 

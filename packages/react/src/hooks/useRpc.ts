@@ -1,98 +1,17 @@
 import * as React from 'react';
-import { RpcError, type RpcInvocationData, type PerformRpcParams } from 'livekit-client';
+import {
+  RpcError,
+  type RpcInvocationData,
+  type PerformRpcParams,
+  type Serializer,
+  isSerializer,
+  type SerializerInput,
+  type SerializerOutput,
+  serializers,
+} from 'livekit-client';
 
 import { useEnsureSession } from '../context';
 import { isUseSessionReturn, type UseSessionReturn } from './useSession';
-
-// ---------------------------------------------------------------------------
-// Serializer types + infrastructure
-// ---------------------------------------------------------------------------
-
-const SerializerSymbol = Symbol.for('lk.serializer');
-
-/**
- * A bidirectional data format descriptor for RPC payloads.
- *
- * - `parse(raw)` decodes an incoming wire string into `Input` (used by handlers)
- * - `serialize(val)` encodes an `Output` value to a wire string (used by handlers)
- *
- * For symmetric serializers (`serializers.raw`), `Input === Output === string`.
- * For `serializers.json`, both default to `any` so each handler can annotate its own types.
- * Use `serializers.custom` to supply your own `parse`/`serialize` pair.
- *
- * @beta
- */
-export type Serializer<Input = any, Output = any> = {
-  symbol: typeof SerializerSymbol;
-  parse: (raw: string) => Input;
-  serialize: (val: Output) => string;
-};
-
-function isSerializer(v: unknown): v is Serializer<any, any> {
-  return (
-    typeof v === 'object' &&
-    v !== null &&
-    'symbol' in v &&
-    (v as Record<string, unknown>)['symbol'] === SerializerSymbol
-  );
-}
-
-// Extract Input/Output from a Serializer type for use in handler/performRpc constraints.
-type SerializerInput<S> = S extends Serializer<infer Input, any> ? Input : any;
-type SerializerOutput<S> = S extends Serializer<any, infer Output> ? Output : any;
-
-/** @internal */
-function base<Input = any, Output = any>(
-  params: Omit<Serializer<Input, Output>, 'symbol'>,
-): Serializer<Input, Output> {
-  return { ...params, symbol: SerializerSymbol };
-}
-
-/**
- * JSON serializer — `JSON.parse` on the way in, `JSON.stringify` on the way out.
- * Defaults to `any` so individual handlers can annotate their own payload types.
- */
-function json<Input = any, Output = any>(): Serializer<Input, Output> {
-  return base({
-    parse: (raw: string) => JSON.parse(raw) as Input,
-    serialize: (val: unknown) => JSON.stringify(val),
-  });
-}
-
-/** Raw string serializer — passes payloads through as plain strings with no encoding. */
-function raw() {
-  return base({
-    parse: (raw: string) => raw,
-    serialize: (val: string) => val,
-  });
-}
-
-/** Custom serializer - allows custom defined parse and serialize functions */
-function custom<Input = any, Output = any>(
-  params: Omit<Serializer<Input, Output>, 'symbol'>,
-): Serializer<Input, Output> {
-  return base(params);
-}
-
-/**
- * Serializer helpers for RPC payload encoding.
- *
- * @example
- * ```ts
- * // Inline handler — types inferred
- * useRpc(session, "myMethod", async (payload: MyInput) => myOutput);
- *
- * // Override default serializer for a handler
- * useRpc(session, "myMethod", async (payload) => payload, { serializer: serializers.raw() });
- *
- * // Manual serializer instances
- * const a = serializers.raw(); // Serializer<string, string>
- * const b = serializer.json<{ foo: string }, { bar: string }>(); // Serializer<{ foo: string }, { bar: string }>
- * ```
- *
- * @beta
- */
-export const serializers = { json, raw, custom };
 
 // ---------------------------------------------------------------------------
 // RPC types

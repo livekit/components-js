@@ -35,6 +35,7 @@ import { ParticipantClickEvent } from '@livekit/components-core';
 import { ParticipantEvent } from 'livekit-client';
 import { ParticipantIdentifier } from '@livekit/components-core';
 import { ParticipantPermission } from '@livekit/protocol';
+import { PerformRpcParams } from 'livekit-client';
 import { PinState } from '@livekit/components-core';
 import * as React_2 from 'react';
 import { ReceivedAgentTranscriptionMessage } from '@livekit/components-core';
@@ -49,8 +50,12 @@ import { Room } from 'livekit-client';
 import { RoomConnectOptions } from 'livekit-client';
 import { RoomEvent } from 'livekit-client';
 import { RoomOptions } from 'livekit-client';
+import { RpcInvocationData } from 'livekit-client';
 import { ScreenShareCaptureOptions } from 'livekit-client';
 import { SendTextOptions } from 'livekit-client';
+import { Serializer } from 'livekit-client';
+import { SerializerInput } from 'livekit-client';
+import { SerializerOutput } from 'livekit-client';
 import { setLogExtension } from '@livekit/components-core';
 import { setLogLevel } from '@livekit/components-core';
 import { SetMediaDeviceOptions } from '@livekit/components-core';
@@ -371,6 +376,11 @@ export interface GridLayoutProps extends React_2.HTMLAttributes<HTMLDivElement>,
 
 export { isTrackReference }
 
+// Warning: (ae-internal-missing-underscore) The name "isUseSessionReturn" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export function isUseSessionReturn(value: unknown): value is UseSessionReturn;
+
 // @public (undocumented)
 export const LayoutContext: React_2.Context<LayoutContextType | undefined>;
 
@@ -643,6 +653,20 @@ export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
     // (undocumented)
     childrenPosition?: 'before' | 'after';
 }
+
+// @beta
+export type RpcCallParams<Payload> = Omit<PerformRpcParams, 'payload'> & {
+    payload: Payload;
+};
+
+// @beta (undocumented)
+export type RpcHandler<Input = any, Output = any> = (payload: Input, data: RpcInvocationData) => Promise<Output>;
+
+// @beta (undocumented)
+export type RpcPerformFn = {
+    <Output = string, Input = unknown>(params: RpcCallParams<Input>, serializer: Serializer<Output, Input>): Promise<Output>;
+    (params: PerformRpcParams): Promise<string>;
+};
 
 // Warning: (ae-internal-missing-underscore) The name "ScreenShareIcon" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -1202,6 +1226,29 @@ export interface UseRoomInfoOptions {
     // (undocumented)
     room?: Room;
 }
+
+// @beta
+export function useRpc<S extends Serializer<any, any>>(session: UseSessionReturn, methodName: string, handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>, options?: UseRpcOptions<S>): UseRpcReturn;
+
+// @beta (undocumented)
+export function useRpc<S extends Serializer<any, any>>(methodName: string, handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>, options?: UseRpcOptions<S>): UseRpcReturn;
+
+// @beta (undocumented)
+export function useRpc(session: UseSessionReturn): UseRpcReturn;
+
+// @beta (undocumented)
+export function useRpc(): UseRpcReturn;
+
+// @beta
+export type UseRpcOptions<S extends Serializer<any, any> = Serializer<any, any>> = {
+    fromIdentity?: string;
+    serializer?: S;
+};
+
+// @beta (undocumented)
+export type UseRpcReturn = {
+    perform: RpcPerformFn;
+};
 
 // @public
 export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(room: R): UseSequentialRoomConnectDisconnectResults<R>;

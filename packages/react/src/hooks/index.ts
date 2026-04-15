@@ -70,3 +70,11 @@ export {
 } from './useAgent';
 export * from './useEvents';
 export * from './useSessionMessages';
+export {
+  type RpcHandler,
+  type RpcCallParams,
+  type UseRpcOptions,
+  type RpcPerformFn,
+  type UseRpcReturn,
+  useRpc,
+} from './useRpc';

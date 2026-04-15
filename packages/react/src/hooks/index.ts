@@ -74,7 +74,7 @@ export {
   type RpcHandler,
   type RpcCallParams,
   type UseRpcOptions,
-  type RpcCallFn,
+  type RpcPerformFn,
   type UseRpcReturn,
   useRpc,
 } from './useRpc';

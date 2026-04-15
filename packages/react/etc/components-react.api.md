@@ -53,6 +53,9 @@ import { RoomOptions } from 'livekit-client';
 import { RpcInvocationData } from 'livekit-client';
 import { ScreenShareCaptureOptions } from 'livekit-client';
 import { SendTextOptions } from 'livekit-client';
+import { Serializer } from 'livekit-client';
+import { SerializerInput } from 'livekit-client';
+import { SerializerOutput } from 'livekit-client';
 import { setLogExtension } from '@livekit/components-core';
 import { setLogLevel } from '@livekit/components-core';
 import { SetMediaDeviceOptions } from '@livekit/components-core';
@@ -651,12 +654,6 @@ export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
     childrenPosition?: 'before' | 'after';
 }
 
-// @beta (undocumented)
-export type RpcCallFn = {
-    <Output = string, Input = unknown>(params: RpcCallParams<Input>, serializer: Serializer<Output, Input>): Promise<Output>;
-    (params: PerformRpcParams): Promise<string>;
-};
-
 // @beta
 export type RpcCallParams<Payload> = Omit<PerformRpcParams, 'payload'> & {
     payload: Payload;
@@ -664,6 +661,12 @@ export type RpcCallParams<Payload> = Omit<PerformRpcParams, 'payload'> & {
 
 // @beta (undocumented)
 export type RpcHandler<Input = any, Output = any> = (payload: Input, data: RpcInvocationData) => Promise<Output>;
+
+// @beta (undocumented)
+export type RpcPerformFn = {
+    <Output = string, Input = unknown>(params: RpcCallParams<Input>, serializer: Serializer<Output, Input>): Promise<Output>;
+    (params: PerformRpcParams): Promise<string>;
+};
 
 // Warning: (ae-internal-missing-underscore) The name "ScreenShareIcon" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -1224,9 +1227,6 @@ export interface UseRoomInfoOptions {
     room?: Room;
 }
 
-// Warning: (ae-forgotten-export) The symbol "SerializerInput" needs to be exported by the entry point index.docs.d.ts
-// Warning: (ae-forgotten-export) The symbol "SerializerOutput" needs to be exported by the entry point index.docs.d.ts
-//
 // @beta
 export function useRpc<S extends Serializer<any, any>>(session: UseSessionReturn, methodName: string, handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>, options?: UseRpcOptions<S>): UseRpcReturn;
 
@@ -1247,7 +1247,7 @@ export type UseRpcOptions<S extends Serializer<any, any> = Serializer<any, any>>
 
 // @beta (undocumented)
 export type UseRpcReturn = {
-    call: RpcCallFn;
+    perform: RpcPerformFn;
 };
 
 // @public

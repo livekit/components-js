@@ -11,12 +11,15 @@ import {
   TokenSourceFetchOptions,
   RoomConnectOptions,
   decodeTokenPayload,
+  BaseKeyProvider,
+  RoomOptions,
+  ExternalE2EEKeyProvider,
 } from 'livekit-client';
 import { EventEmitter } from 'events';
 
 import { useMaybeRoomContext } from '../context';
 import { AgentState, useAgent, useAgentTimeoutIdStore } from './useAgent';
-import { TrackReference } from '@livekit/components-core';
+import { TrackReference, log } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
 
 /** @beta */
@@ -129,9 +132,9 @@ type SessionStateDisconnected = SessionStateCommon & {
 
 type SessionActions = {
   /** Returns a promise that resolves once the room connects. */
-  waitUntilConnected: (signal?: AbortSignal) => void;
+  waitUntilConnected: (signal?: AbortSignal) => Promise<void>;
   /** Returns a promise that resolves once the room disconnects */
-  waitUntilDisconnected: (signal?: AbortSignal) => void;
+  waitUntilDisconnected: (signal?: AbortSignal) => Promise<void>;
 
   prepareConnection: () => Promise<void>;
 
@@ -140,6 +143,9 @@ type SessionActions = {
 
   /** Disconnect from the underlying room */
   end: () => Promise<void>;
+
+  /** Enable or disable E2EE. */
+  setEncryptionEnabled: (enabled: boolean) => Promise<void>;
 };
 
 /** @beta */
@@ -162,8 +168,6 @@ export function isUseSessionReturn(value: unknown): value is UseSessionReturn {
 }
 
 type UseSessionCommonOptions = {
-  room?: Room;
-
   /**
    * Amount of time in milliseonds the system will wait for an agent to join the room, before
    * transitioning to the "failure" state.
@@ -171,8 +175,46 @@ type UseSessionCommonOptions = {
   agentConnectTimeoutMilliseconds?: number;
 };
 
-type UseSessionConfigurableOptions = UseSessionCommonOptions & TokenSourceFetchOptions;
-type UseSessionFixedOptions = UseSessionCommonOptions;
+type UseSessionWithRoomOptions = {
+  room: Room;
+  encryption?: never;
+};
+
+type UseSessionEncryptionOptions =
+  | {
+      /**
+       * Accepts a passphrase that's used to create the crypto keys.
+       * When passing in a string, PBKDF2 is used. (recommended for maximum compatibility across SDKs)
+       * When passing in an ArrayBuffer of cryptographically random numbers, HKDF is used.
+       *
+       * Note: Not all client SDKs support HKDF.
+       */
+      key: string | ArrayBuffer | BaseKeyProvider;
+
+      /** An instance of the E2EE webworker, which must be constructed using your js build tool's
+       * webworker construction mechanism. */
+      worker: Worker;
+    }
+  | {
+      key?: undefined;
+      worker?: undefined;
+    };
+
+type UseSessionWithoutRoomOptions = {
+  // NOTE: This must be here to make typescript go down this discriminated union branch when
+  // "room" is omitted.
+  room?: never;
+
+  /** Configuration for room-level E2EE */
+  encryption?: UseSessionEncryptionOptions;
+};
+
+type UseSessionRoomOptions = UseSessionWithRoomOptions | UseSessionWithoutRoomOptions;
+
+type UseSessionConfigurableOptions = UseSessionCommonOptions &
+  UseSessionRoomOptions &
+  TokenSourceFetchOptions;
+type UseSessionFixedOptions = UseSessionCommonOptions & UseSessionRoomOptions;
 
 /**
  * Given two TokenSourceFetchOptions values, check to see if they are deep equal.
@@ -323,13 +365,63 @@ export function useSession(
   tokenSource: TokenSourceConfigurable | TokenSourceFixed,
   options: UseSessionConfigurableOptions | UseSessionFixedOptions = {},
 ): UseSessionReturn {
-  const { room: optionsRoom, agentConnectTimeoutMilliseconds, ...restOptions } = options;
+  const {
+    room: optionsRoom,
+    agentConnectTimeoutMilliseconds,
+    encryption: unstableEncryption,
+    ...unstableRestOptions
+  } = options;
+
+  const encryptionKey = unstableEncryption?.key ?? null;
+  const encryptionWorker = unstableEncryption?.worker ?? null;
 
   const roomFromContext = useMaybeRoomContext();
-  const room = React.useMemo(
-    () => roomFromContext ?? optionsRoom ?? new Room(),
-    [roomFromContext, optionsRoom],
-  );
+
+  const externalKeyProviderRef = React.useRef<ExternalE2EEKeyProvider | null>(null);
+
+  const keyProvider = React.useMemo(() => {
+    if (typeof encryptionKey === 'string' || encryptionKey instanceof ArrayBuffer) {
+      if (externalKeyProviderRef.current === null) {
+        externalKeyProviderRef.current = new ExternalE2EEKeyProvider();
+      }
+      externalKeyProviderRef.current.setKey(encryptionKey).catch((e) => log.error(e));
+      return externalKeyProviderRef.current;
+    } else {
+      return encryptionKey;
+    }
+  }, [encryptionKey]);
+
+  const room = React.useMemo(() => {
+    const preGeneratedRoom = roomFromContext ?? optionsRoom;
+    if (preGeneratedRoom) {
+      return preGeneratedRoom;
+    }
+
+    const encryptionEnabled = !!(keyProvider && encryptionWorker);
+
+    const roomOptions: RoomOptions = {};
+    if (encryptionEnabled) {
+      roomOptions.encryption = {
+        keyProvider,
+        worker: encryptionWorker,
+      };
+    } else {
+      log.warn(
+        'useSession options encryption was set, but required keys encryption.key and encryption.worker were omitted.',
+      );
+    }
+    const room = new Room(roomOptions);
+    if (encryptionEnabled) {
+      room.setE2EEEnabled(true);
+    }
+    return room;
+  }, [roomFromContext, optionsRoom, keyProvider, encryptionWorker]);
+
+  React.useEffect(() => {
+    return () => {
+      room.disconnect();
+    };
+  }, [room]);
 
   const emitter = React.useMemo(
     () => new EventEmitter() as TypedEventEmitter<SessionCallbacks>,
@@ -546,6 +638,11 @@ export function useSession(
     [waitUntilConnectionState],
   );
 
+  const setEncryptionEnabled = React.useCallback(
+    async (enabled: boolean) => room.setE2EEEnabled(enabled),
+    [room],
+  );
+
   const agent = useAgent(
     React.useMemo(
       () => ({
@@ -557,9 +654,9 @@ export function useSession(
     ),
   );
 
-  const tokenSourceFetch = useSessionTokenSourceFetch(tokenSource, restOptions);
+  const tokenSourceFetch = useSessionTokenSourceFetch(tokenSource, unstableRestOptions);
 
-  const [wasSessionEndCalled, setWasSessionEndCalled] = React.useState(false);
+  const wasSessionEndCalledRef = React.useRef(false);
 
   const start = React.useCallback(
     async (connectOptions: SessionConnectOptions = {}) => {
@@ -570,7 +667,7 @@ export function useSession(
       } = connectOptions;
 
       await waitUntilDisconnected(signal);
-      setWasSessionEndCalled(false);
+      wasSessionEndCalledRef.current = false;
 
       const onSignalAbort = () => {
         room.disconnect();
@@ -581,7 +678,7 @@ export function useSession(
         // on disconnection force a new token to be fetched in order to avoid reusing the same room right after
         // this works around the fact that agents won't rejoin a room that existed previously
         // and depends on the assumption that the endpoint will return a token for a different room
-        if (!wasSessionEndCalled) {
+        if (!wasSessionEndCalledRef.current) {
           tokenSourceFetch(true);
         }
       };
@@ -629,18 +726,11 @@ export function useSession(
 
       signal?.removeEventListener('abort', onSignalAbort);
     },
-    [
-      room,
-      waitUntilDisconnected,
-      tokenSourceFetch,
-      waitUntilConnected,
-      agent.waitUntilConnected,
-      wasSessionEndCalled,
-    ],
+    [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected, agent.waitUntilConnected],
   );
 
   const end = React.useCallback(async () => {
-    setWasSessionEndCalled(true);
+    wasSessionEndCalledRef.current = true;
     tokenSourceFetch(true);
     await room.disconnect();
   }, [room, tokenSourceFetch]);
@@ -671,7 +761,17 @@ export function useSession(
       prepareConnection,
       start,
       end,
+
+      setEncryptionEnabled,
     }),
-    [conversationState, waitUntilConnected, waitUntilDisconnected, prepareConnection, start, end],
+    [
+      conversationState,
+      waitUntilConnected,
+      waitUntilDisconnected,
+      prepareConnection,
+      start,
+      end,
+      setEncryptionEnabled,
+    ],
   );
 }

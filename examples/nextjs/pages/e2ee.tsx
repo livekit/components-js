@@ -10,7 +10,7 @@ import {
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { useMemo, useEffect, useState } from 'react';
-import { Room, ExternalE2EEKeyProvider, TokenSource, MediaDeviceFailure } from 'livekit-client';
+import { TokenSource, MediaDeviceFailure } from 'livekit-client';
 import { generateRandomUserId } from '../lib/helper';
 
 const tokenSource = TokenSource.endpoint(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT!);
@@ -24,36 +24,41 @@ const E2EEExample: NextPage = () => {
   const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
   setLogLevel('warn', { liveKitClientLogLevel: 'debug' });
 
-  const keyProvider = useMemo(() => new ExternalE2EEKeyProvider(), []);
-
-  keyProvider.setKey('password');
-
-  const room = useMemo(
-    () =>
-      new Room({
-        e2ee:
-          typeof window !== 'undefined'
-            ? {
-                keyProvider,
-                worker: new Worker(new URL('livekit-client/e2ee-worker', import.meta.url)),
-              }
-            : undefined,
-      }),
-    [keyProvider],
-  );
+  const [e2eeWebworker] = useState(() => {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+    return new Worker(new URL('livekit-client/e2ee-worker', import.meta.url));
+  });
 
   const session = useSession(tokenSource, {
     roomName,
     participantIdentity: userIdentity,
     participantName: userIdentity,
-    room,
+
+    encryption: e2eeWebworker
+      ? {
+          worker: e2eeWebworker,
+          key: 'test',
+        }
+      : undefined,
   });
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      room.setE2EEEnabled(true);
+  const [isEncryptionEnabled, setIsEncryptionEnabled] = useState(true);
+  const [isTogglingEncryption, setIsTogglingEncryption] = useState(false);
+
+  const toggleEncryption = async () => {
+    setIsTogglingEncryption(true);
+    try {
+      const next = !isEncryptionEnabled;
+      await session.setEncryptionEnabled(next);
+      setIsEncryptionEnabled(next);
+    } catch (err) {
+      console.error('Failed to toggle encryption:', err);
+    } finally {
+      setIsTogglingEncryption(false);
     }
-  }, [room]);
+  };
 
   useEffect(() => {
     session
@@ -74,18 +79,30 @@ const E2EEExample: NextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.start, session.end]);
 
-  useEvents(session, SessionEvent.MediaDevicesError, (error) => {
-    const failure = MediaDeviceFailure.getFailure(error);
-    console.error(failure);
-    alert(
-      'Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab',
-    );
-  }, []);
+  useEvents(
+    session,
+    SessionEvent.MediaDevicesError,
+    (error) => {
+      const failure = MediaDeviceFailure.getFailure(error);
+      console.error(failure);
+      alert(
+        'Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab',
+      );
+    },
+    [],
+  );
 
   return (
     <div data-lk-theme="default" style={{ height: '100vh' }}>
       {session.isConnected && (
         <SessionProvider session={session}>
+          <button
+            onClick={toggleEncryption}
+            disabled={isTogglingEncryption}
+            style={{ position: 'absolute', top: 10, right: 10, zIndex: 1 }}
+          >
+            {isEncryptionEnabled ? 'Disable encryption' : 'Enable encryption'}
+          </button>
           <VideoConference />
         </SessionProvider>
       )}

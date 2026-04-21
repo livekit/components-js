@@ -100,9 +100,19 @@ export function useKrispNoiseFilter(options: useKrispNoiseFilterOptions = {}) {
       const processor = KrispNoiseFilter(options.filterOptions);
       try {
         await track.setProcessor(processor);
-        if (cancelled) return;
+        // If the effect was cancelled while setProcessor was in flight, the
+        // processor landed on a track the hook no longer manages (e.g. the
+        // component unmounted with the track still alive via a caller-owned
+        // trackRef). Undo the attach so the track is left as we found it.
+        if (cancelled) {
+          await track.stopProcessor();
+          return;
+        }
         await processor.setEnabled(true);
-        if (cancelled) return;
+        if (cancelled) {
+          await track.stopProcessor();
+          return;
+        }
         setIsNoiseFilterEnabled(true);
       } catch (e: any) {
         setIsNoiseFilterEnabled(false);

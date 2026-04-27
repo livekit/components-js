@@ -14,6 +14,7 @@ import {
   BaseKeyProvider,
   RoomOptions,
   ExternalE2EEKeyProvider,
+  type BaseE2EEManager,
 } from 'livekit-client';
 import { EventEmitter } from 'events';
 
@@ -196,8 +197,16 @@ type UseSessionEncryptionOptions =
       worker: Worker;
     }
   | {
+      /**
+       * For React Native usage: Pass the e2eeManager obtained from the useRNE2EEManager hook
+       * in @livekit/react-native.
+       */
+      e2eeManager: BaseE2EEManager;
+    }
+  | {
       key?: undefined;
       worker?: undefined;
+      e2eeManager?: undefined;
     };
 
 type UseSessionWithoutRoomOptions = {
@@ -372,8 +381,18 @@ export function useSession(
     ...unstableRestOptions
   } = options;
 
-  const encryptionKey = unstableEncryption?.key ?? null;
-  const encryptionWorker = unstableEncryption?.worker ?? null;
+  const encryptionE2eeManager =
+    unstableEncryption && 'e2eeManager' in unstableEncryption
+      ? unstableEncryption.e2eeManager
+      : null;
+  const encryptionKey =
+    unstableEncryption && !('e2eeManager' in unstableEncryption)
+      ? (unstableEncryption.key ?? null)
+      : null;
+  const encryptionWorker =
+    unstableEncryption && !('e2eeManager' in unstableEncryption)
+      ? (unstableEncryption.worker ?? null)
+      : null;
 
   const roomFromContext = useMaybeRoomContext();
 
@@ -397,17 +416,23 @@ export function useSession(
       return preGeneratedRoom;
     }
 
-    const encryptionEnabled = !!(keyProvider && encryptionWorker);
+    const encryptionViaWorker = !!(keyProvider && encryptionWorker);
+    const encryptionViaManager = !!encryptionE2eeManager;
+    const encryptionEnabled = encryptionViaWorker || encryptionViaManager;
 
     const roomOptions: RoomOptions = {};
-    if (encryptionEnabled) {
+    if (encryptionViaWorker) {
       roomOptions.encryption = {
         keyProvider,
         worker: encryptionWorker,
       };
-    } else {
+    } else if (encryptionViaManager) {
+      roomOptions.encryption = {
+        e2eeManager: encryptionE2eeManager,
+      };
+    } else if (unstableEncryption !== undefined) {
       log.warn(
-        'useSession options encryption was set, but required keys encryption.key and encryption.worker were omitted.',
+        'useSession options encryption was set, but neither encryption.key with encryption.worker nor encryption.e2eeManager was provided.',
       );
     }
     const room = new Room(roomOptions);
@@ -415,7 +440,7 @@ export function useSession(
       room.setE2EEEnabled(true);
     }
     return room;
-  }, [roomFromContext, optionsRoom, keyProvider, encryptionWorker]);
+  }, [roomFromContext, optionsRoom, keyProvider, encryptionWorker, encryptionE2eeManager]);
 
   React.useEffect(() => {
     return () => {

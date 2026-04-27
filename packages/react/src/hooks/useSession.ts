@@ -198,8 +198,8 @@ type UseSessionEncryptionOptions =
     }
   | {
       /**
-       * For React Native usage: Pass the e2eeManager obtained from the useRNE2EEManager hook
-       * in @livekit/react-native.
+       * For React Native usage: Pass the e2eeManager obtained from the `useRNE2EEManager()` hook
+       * in the `\@livekit/react-native` package.
        */
       e2eeManager: BaseE2EEManager;
     }

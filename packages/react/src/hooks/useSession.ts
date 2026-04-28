@@ -195,8 +195,12 @@ type UseSessionEncryptionOptions =
       /** An instance of the E2EE webworker, which must be constructed using your js build tool's
        * webworker construction mechanism. */
       worker: Worker;
+
+      e2eeManager?: undefined;
     }
   | {
+      key?: undefined;
+      worker?: undefined;
       /**
        * For React Native usage: Pass the e2eeManager obtained from the `useRNE2EEManager()` hook
        * in the `\@livekit/react-native` package.

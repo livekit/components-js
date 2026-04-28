@@ -6,6 +6,7 @@
 
 import { AudioAnalyserOptions } from 'livekit-client';
 import { AudioCaptureOptions } from 'livekit-client';
+import { BaseE2EEManager } from 'livekit-client';
 import { BaseKeyProvider } from 'livekit-client';
 import { CaptureOptionsBySource } from '@livekit/components-core';
 import { ChatMessage } from '@livekit/components-core';

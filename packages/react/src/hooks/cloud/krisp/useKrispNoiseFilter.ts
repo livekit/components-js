@@ -48,6 +48,9 @@ export function useKrispNoiseFilter(options: useKrispNoiseFilterOptions = {}) {
     micPublication = options.trackRef.publication;
   }
 
+  const managedProcessorRef = React.useRef<KrispNoiseFilterProcessor | undefined>(undefined);
+  const managedProcessorTrackRef = React.useRef<LocalAudioTrack | undefined>(undefined);
+
   const setNoiseFilterEnabled = React.useCallback(async (enable: boolean) => {
     if (enable) {
       const { isKrispNoiseFilterSupported } = await import('@livekit/krisp-noise-filter');
@@ -105,12 +108,22 @@ export function useKrispNoiseFilter(options: useKrispNoiseFilterOptions = {}) {
         // component unmounted with the track still alive via a caller-owned
         // trackRef). Undo the attach so the track is left as we found it.
         if (cancelled) {
-          await track.stopProcessor();
+          if (track.getProcessor() === processor) {
+            await track.stopProcessor();
+          }
           return;
         }
+        managedProcessorRef.current = processor;
+        managedProcessorTrackRef.current = track;
         await processor.setEnabled(true);
         if (cancelled) {
-          await track.stopProcessor();
+          if (track.getProcessor() === processor) {
+            await track.stopProcessor();
+          }
+          if (managedProcessorRef.current === processor) {
+            managedProcessorRef.current = undefined;
+            managedProcessorTrackRef.current = undefined;
+          }
           return;
         }
         setIsNoiseFilterEnabled(true);
@@ -126,9 +139,29 @@ export function useKrispNoiseFilter(options: useKrispNoiseFilterOptions = {}) {
     };
   }, [shouldEnable, micPublication?.track, options.filterOptions]);
 
-  const processor =
+  React.useEffect(
+    () => () => {
+      const track = managedProcessorTrackRef.current;
+      const processor = managedProcessorRef.current;
+      if (!track || !processor) return;
+      if (track.getProcessor() === processor) {
+        track.stopProcessor().catch((e) => {
+          log.warn('Krisp hook: error detaching processor on cleanup', e);
+        });
+      }
+      managedProcessorRef.current = undefined;
+      managedProcessorTrackRef.current = undefined;
+    },
+    [micPublication?.track],
+  );
+
+  const trackProcessor =
     micPublication?.track instanceof LocalAudioTrack
-      ? (micPublication.track.getProcessor() as KrispNoiseFilterProcessor | undefined)
+      ? micPublication.track.getProcessor()
+      : undefined;
+  const processor =
+    trackProcessor?.name === 'livekit-noise-filter'
+      ? (trackProcessor as KrispNoiseFilterProcessor)
       : undefined;
 
   return {

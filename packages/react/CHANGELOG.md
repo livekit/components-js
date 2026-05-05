@@ -1,5 +1,19 @@
 # @livekit/components-react
 
+## 2.9.21
+
+### Patch Changes
+
+- Invalidate tokens originating from a cached token source after first usage - [#1309](https://github.com/livekit/components-js/pull/1309) ([@lukasIO](https://github.com/lukasIO))
+
+- Adds new "encryption" field to useSession - [#1317](https://github.com/livekit/components-js/pull/1317) ([@1egoman](https://github.com/1egoman))
+
+- fix and simplify agent attribute update hook with direct participant reference - [#1307](https://github.com/livekit/components-js/pull/1307) ([@chenghao-mou](https://github.com/chenghao-mou))
+
+- Handle renamed e2ee -> encryption key in room options serializer - [`dd9a4f4d27d0d1462265e9fc83704d161eac06a2`](https://github.com/livekit/components-js/commit/dd9a4f4d27d0d1462265e9fc83704d161eac06a2) ([@afgarcia86](https://github.com/afgarcia86))
+
+- Add new useRpc hook - [#1314](https://github.com/livekit/components-js/pull/1314) ([@1egoman](https://github.com/1egoman))
+
 ## 2.9.20
 
 ### Patch Changes
@@ -1110,7 +1124,6 @@
 - GridLayout Revision. - [#326](https://github.com/livekit/components-js/pull/326) ([@Ocupe](https://github.com/Ocupe))
 
   Renaming:
-
   - `sortParticipantsByVolume` -> `sortParticipants`
 
 - Include room in dependency array in order to disconnect on room unmount - [#332](https://github.com/livekit/components-js/pull/332) ([@lukasIO](https://github.com/lukasIO))

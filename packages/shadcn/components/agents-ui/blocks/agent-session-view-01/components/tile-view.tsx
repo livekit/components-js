@@ -69,7 +69,8 @@ export function useLocalTrackRef(source: Track.Source) {
 }
 
 interface TileLayoutProps {
-  chatOpen: boolean;
+  themeMode?: 'dark' | 'light';
+  isChatOpen: boolean;
   audioVisualizerType?: 'bar' | 'wave' | 'grid' | 'radial' | 'aura';
   audioVisualizerColor?: `#${string}`;
   audioVisualizerColorShift?: number;
@@ -82,7 +83,8 @@ interface TileLayoutProps {
 }
 
 export function TileLayout({
-  chatOpen,
+  themeMode,
+  isChatOpen,
   audioVisualizerType,
   audioVisualizerColor,
   audioVisualizerColorShift,
@@ -101,7 +103,7 @@ export function TileLayout({
   const isScreenShareEnabled = screenShareTrack && !screenShareTrack.publication.isMuted;
   const hasSecondTile = isCameraEnabled || isScreenShareEnabled;
 
-  const animationDelay = chatOpen ? 0 : 0.15;
+  const animationDelay = isChatOpen ? 0 : 0.15;
   const isAvatar = agentVideoTrack !== undefined;
   const videoWidth = agentVideoTrack?.publication.dimensions?.width ?? 0;
   const videoHeight = agentVideoTrack?.publication.dimensions?.height ?? 0;
@@ -114,9 +116,9 @@ export function TileLayout({
           <div
             className={cn([
               'grid',
-              !chatOpen && tileViewClassNames.agentChatClosed,
-              chatOpen && hasSecondTile && tileViewClassNames.agentChatOpenWithSecondTile,
-              chatOpen && !hasSecondTile && tileViewClassNames.agentChatOpenWithoutSecondTile,
+              !isChatOpen && tileViewClassNames.agentChatClosed,
+              isChatOpen && hasSecondTile && tileViewClassNames.agentChatOpenWithSecondTile,
+              isChatOpen && !hasSecondTile && tileViewClassNames.agentChatOpenWithoutSecondTile,
             ])}
           >
             <AnimatePresence mode="popLayout">
@@ -136,7 +138,7 @@ export function TileLayout({
                   <AudioVisualizer
                     key="audio-visualizer"
                     initial={{ scale: 1 }}
-                    animate={{ scale: chatOpen ? 0.2 : 1 }}
+                    animate={{ scale: isChatOpen ? 0.2 : 1 }}
                     transition={{
                       ...ANIMATION_TRANSITION,
                       delay: animationDelay,
@@ -150,11 +152,12 @@ export function TileLayout({
                     audioVisualizerGridRowCount={audioVisualizerGridRowCount}
                     audioVisualizerGridColumnCount={audioVisualizerGridColumnCount}
                     audioVisualizerWaveLineWidth={audioVisualizerWaveLineWidth}
-                    isChatOpen={chatOpen}
+                    themeMode={themeMode}
+                    isChatOpen={isChatOpen}
                     className={cn(
                       'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
                       'bg-background rounded-[50px] border border-transparent transition-[border,drop-shadow]',
-                      chatOpen && 'border-input shadow-2xl/10 delay-200',
+                      isChatOpen && 'border-input shadow-2xl/10 delay-200',
                     )}
                     style={{ color: audioVisualizerColor }}
                   />
@@ -177,7 +180,7 @@ export function TileLayout({
                     maskImage:
                       'radial-gradient(circle, rgba(0, 0, 0, 1) 0, rgba(0, 0, 0, 1) 500px, transparent 500px)',
                     filter: 'blur(0px)',
-                    borderRadius: chatOpen ? 6 : 12,
+                    borderRadius: isChatOpen ? 6 : 12,
                   }}
                   transition={{
                     ...ANIMATION_TRANSITION,
@@ -191,14 +194,14 @@ export function TileLayout({
                   }}
                   className={cn(
                     'overflow-hidden bg-black drop-shadow-xl/80',
-                    chatOpen ? 'h-[90px]' : 'h-auto w-full',
+                    isChatOpen ? 'h-[90px]' : 'h-auto w-full',
                   )}
                 >
                   <VideoTrack
                     width={videoWidth}
                     height={videoHeight}
                     trackRef={agentVideoTrack}
-                    className={cn(chatOpen && 'size-[90px] object-cover')}
+                    className={cn(isChatOpen && 'size-[90px] object-cover')}
                   />
                 </motion.div>
               )}
@@ -208,8 +211,8 @@ export function TileLayout({
           <div
             className={cn([
               'grid',
-              chatOpen && tileViewClassNames.secondTileChatOpen,
-              !chatOpen && tileViewClassNames.secondTileChatClosed,
+              isChatOpen && tileViewClassNames.secondTileChatOpen,
+              !isChatOpen && tileViewClassNames.secondTileChatClosed,
             ])}
           >
             {/* Camera & Screen Share */}

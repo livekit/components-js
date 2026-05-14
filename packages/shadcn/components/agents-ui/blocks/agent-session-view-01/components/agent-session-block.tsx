@@ -103,6 +103,12 @@ export function Fade({ top = false, bottom = false, className }: FadeProps) {
 
 export interface AgentSessionView_01Props {
   /**
+   * Theme mode forwarded to the aura visualizer (`audioVisualizerType="aura"`) so
+   * the shader's blend mode adapts to the theme mode.
+   * Ignored by other visualizer types.
+   */
+  themeMode?: 'dark' | 'light';
+  /**
    * Message shown above the controls before the first chat message is sent.
    *
    * @default 'Agent is listening, ask it a question'
@@ -171,6 +177,7 @@ export function AgentSessionView_01({
   audioVisualizerRadialBarCount,
   audioVisualizerRadialRadius,
   audioVisualizerWaveLineWidth,
+  themeMode,
   ref,
   className,
   ...props
@@ -226,6 +233,7 @@ export function AgentSessionView_01({
       {/* Tile layout */}
       <TileLayout
         chatOpen={chatOpen}
+        themeMode={themeMode}
         audioVisualizerType={audioVisualizerType}
         audioVisualizerColor={audioVisualizerColor}
         audioVisualizerColorShift={audioVisualizerColorShift}

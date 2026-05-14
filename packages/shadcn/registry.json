@@ -331,7 +331,7 @@
       "name": "all",
       "type": "registry:item",
       "title": "All",
-      "description": "Installs every component in the @agents-ui registry.",
+      "description": "Installs every component in the @agents-ui registry (excluding the nextjs-api-token-route).",
       "files": [],
       "registryDependencies": [
         "@agents-ui/agent-disconnect-button",
@@ -348,7 +348,6 @@
         "@agents-ui/agent-chat-indicator",
         "@agents-ui/agent-chat-transcript",
         "@agents-ui/react-shader-toy",
-        "@agents-ui/nextjs-api-token-route",
         "@agents-ui/agent-session-view-01"
       ]
     }

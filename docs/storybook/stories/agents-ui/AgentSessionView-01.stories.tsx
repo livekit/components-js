@@ -1,12 +1,18 @@
 import React from 'react';
 import { StoryObj } from '@storybook/react-vite';
+import { useTheme } from 'next-themes';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentSessionView_01, AgentSessionView_01Props } from '@agents-ui';
 
 export default {
   component: AgentSessionView_01,
   decorators: [AgentSessionProvider],
-  render: (args: AgentSessionView_01Props) => <AgentSessionView_01 {...args} />,
+  render: (args: AgentSessionView_01Props) => {
+    const { resolvedTheme = 'dark' } = useTheme();
+    return (
+      <AgentSessionView_01 themeMode={resolvedTheme as 'dark' | 'light'} {...args} />
+    );
+  },
   args: {
     className: 'h-screen w-screen',
     supportsChatInput: true,

@@ -326,6 +326,30 @@
       ],
       "dependencies": ["@livekit/components-react@^2.0.0", "livekit-client@^2.0.0", "motion"],
       "categories": ["agents", "blocks"]
+    },
+    {
+      "name": "all",
+      "type": "registry:item",
+      "title": "All",
+      "description": "Installs every component in the @agents-ui registry (excluding the nextjs-api-token-route).",
+      "files": [],
+      "registryDependencies": [
+        "@agents-ui/agent-disconnect-button",
+        "@agents-ui/agent-track-toggle",
+        "@agents-ui/agent-track-control",
+        "@agents-ui/agent-control-bar",
+        "@agents-ui/agent-audio-visualizer-bar",
+        "@agents-ui/agent-audio-visualizer-radial",
+        "@agents-ui/agent-audio-visualizer-grid",
+        "@agents-ui/agent-audio-visualizer-wave",
+        "@agents-ui/agent-audio-visualizer-aura",
+        "@agents-ui/agent-session-provider",
+        "@agents-ui/start-audio-button",
+        "@agents-ui/agent-chat-indicator",
+        "@agents-ui/agent-chat-transcript",
+        "@agents-ui/react-shader-toy",
+        "@agents-ui/agent-session-view-01"
+      ]
     }
   ]
 }

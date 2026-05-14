@@ -103,6 +103,12 @@ export function Fade({ top = false, bottom = false, className }: FadeProps) {
 
 export interface AgentSessionView_01Props {
   /**
+   * Theme mode forwarded to the aura visualizer (`audioVisualizerType="aura"`) so
+   * the shader's blend mode adapts to the theme mode.
+   * Ignored by other visualizer types.
+   */
+  themeMode?: 'dark' | 'light';
+  /**
    * Message shown above the controls before the first chat message is sent.
    *
    * @default 'Agent is listening, ask it a question'
@@ -161,7 +167,6 @@ export function AgentSessionView_01({
   supportsVideoInput = true,
   supportsScreenShare = true,
   isPreConnectBufferEnabled = true,
-
   audioVisualizerType,
   audioVisualizerColor,
   audioVisualizerColorShift,
@@ -171,13 +176,14 @@ export function AgentSessionView_01({
   audioVisualizerRadialBarCount,
   audioVisualizerRadialRadius,
   audioVisualizerWaveLineWidth,
+  themeMode,
   ref,
   className,
   ...props
 }: React.ComponentProps<'section'> & AgentSessionView_01Props) {
   const session = useSessionContext();
   const { messages } = useSessionMessages(session);
-  const [chatOpen, setChatOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { state: agentState } = useAgent();
 
@@ -209,7 +215,7 @@ export function AgentSessionView_01({
 
       <div className="absolute top-0 bottom-[135px] flex w-full flex-col md:bottom-[170px]">
         <AnimatePresence>
-          {chatOpen && (
+          {isChatOpen && (
             <motion.div
               {...CHAT_MOTION_PROPS}
               className="flex h-full w-full flex-col gap-4 space-y-3 transition-opacity duration-300 ease-out"
@@ -225,7 +231,8 @@ export function AgentSessionView_01({
       </div>
       {/* Tile layout */}
       <TileLayout
-        chatOpen={chatOpen}
+        isChatOpen={isChatOpen}
+        themeMode={themeMode}
         audioVisualizerType={audioVisualizerType}
         audioVisualizerColor={audioVisualizerColor}
         audioVisualizerColorShift={audioVisualizerColorShift}
@@ -262,10 +269,10 @@ export function AgentSessionView_01({
           <AgentControlBar
             variant="livekit"
             controls={controls}
-            isChatOpen={chatOpen}
+            isChatOpen={isChatOpen}
             isConnected={session.isConnected}
             onDisconnect={session.end}
-            onIsChatOpenChange={setChatOpen}
+            onIsChatOpenChange={setIsChatOpen}
           />
         </div>
       </motion.div>

@@ -60,7 +60,7 @@ export function useMediaDeviceSelect({
     roomFallback?.getActiveDevice(kind) ?? 'default',
   );
   const { className, activeDeviceObservable, setActiveMediaDevice } = React.useMemo(
-    () => setupDeviceSelector(kind, roomFallback),
+    () => setupDeviceSelector(kind, roomFallback, track),
     [kind, roomFallback, track],
   );
 

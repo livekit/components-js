@@ -41,12 +41,25 @@ export const VideoTrack: (
   ) {
     const trackReference = useEnsureTrackRef(trackRef);
 
-    const mediaEl = React.useRef<HTMLVideoElement>(null);
+    const mediaEl = React.useRef<HTMLVideoElement | null>(null);
     React.useImperativeHandle(ref, () => mediaEl.current as HTMLVideoElement);
 
-    const intersectionEntry = useHooks.useIntersectionObserver({ root: mediaEl.current });
+    const { ref: intersectionRef, entry: intersectionEntry } = useHooks.useIntersectionObserver({
+      root: null,
+    });
 
     const [debouncedIntersectionEntry] = useHooks.useDebounceValue(intersectionEntry, 3000);
+
+    const managedPublicationRef = React.useRef<RemoteTrackPublication | null>(null);
+    const manageSubscriptionRef = React.useRef(false);
+
+    React.useEffect(() => {
+      manageSubscriptionRef.current = !!manageSubscription;
+      managedPublicationRef.current =
+        trackReference.publication instanceof RemoteTrackPublication
+          ? trackReference.publication
+          : null;
+    }, [trackReference.publication, manageSubscription]);
 
     React.useEffect(() => {
       if (
@@ -57,7 +70,7 @@ export const VideoTrack: (
       ) {
         trackReference.publication.setSubscribed(false);
       }
-    }, [debouncedIntersectionEntry, trackReference, manageSubscription]);
+    }, [debouncedIntersectionEntry, intersectionEntry, trackReference, manageSubscription]);
 
     React.useEffect(() => {
       if (
@@ -68,6 +81,14 @@ export const VideoTrack: (
         trackReference.publication.setSubscribed(true);
       }
     }, [intersectionEntry, trackReference, manageSubscription]);
+
+    React.useEffect(() => {
+      return () => {
+        if (manageSubscriptionRef.current) {
+          managedPublicationRef.current?.setSubscribed(false);
+        }
+      };
+    }, []);
 
     const {
       elementProps,
@@ -87,6 +108,16 @@ export const VideoTrack: (
       onTrackClick?.({ participant: trackReference?.participant, track: pub });
     };
 
-    return <video ref={mediaEl} {...elementProps} muted={true} onClick={clickHandler}></video>;
+    return (
+      <video
+        ref={(el) => {
+          mediaEl.current = el;
+          intersectionRef(el);
+        }}
+        {...elementProps}
+        muted={true}
+        onClick={clickHandler}
+      ></video>
+    );
   },
 );

@@ -6,7 +6,7 @@ import { Room } from 'livekit-client';
 /** @public */
 export interface AllowAudioPlaybackProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   room?: Room;
-  label: string;
+  label?: string;
 }
 
 /**
@@ -27,7 +27,7 @@ export interface AllowAudioPlaybackProps extends React.ButtonHTMLAttributes<HTML
 export const StartAudio: (
   props: AllowAudioPlaybackProps & React.RefAttributes<HTMLButtonElement>,
 ) => React.ReactNode = /* @__PURE__ */ React.forwardRef<HTMLButtonElement, AllowAudioPlaybackProps>(
-  function StartAudio({ label = 'Allow Audio', ...props }: AllowAudioPlaybackProps, ref) {
+  function StartAudio({ label = 'Разрешить звук', ...props }: AllowAudioPlaybackProps, ref) {
     const room = useEnsureRoom(props.room);
     const { mergedProps } = useStartAudio({ room, props });
 

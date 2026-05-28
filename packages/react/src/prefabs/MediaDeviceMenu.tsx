@@ -3,8 +3,12 @@ import * as React from 'react';
 import { MediaDeviceSelect } from '../components/controls/MediaDeviceSelect';
 import type { LocalAudioTrack, LocalVideoTrack } from 'livekit-client';
 
-/** @public */
-export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface KindWithInitialSelection {
+  kind: MediaDeviceKind;
+  initialSelection?: string;
+}
+
+interface MediaDeviceMenuPropsSingleKind extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   kind?: MediaDeviceKind;
   initialSelection?: string;
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
@@ -20,6 +24,26 @@ export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLBut
    */
   requestPermissions?: boolean;
 }
+
+interface MediaDeviceMenuPropsMultiKind extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  kind?: KindWithInitialSelection[];
+  initialSelection?: undefined;
+  onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
+  tracks?: Partial<Record<MediaDeviceKind, LocalAudioTrack | LocalVideoTrack | undefined>>;
+  /**
+   * this will call getUserMedia if the permissions are not yet given to enumerate the devices with device labels.
+   * in some browsers multiple calls to getUserMedia result in multiple permission prompts.
+   * It's generally advised only flip this to true, once a (preview) track has been acquired successfully with the
+   * appropriate permissions.
+   *
+   * @see {@link PreJoin}
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices | MDN enumerateDevices}
+   */
+  requestPermissions?: boolean;
+}
+
+/** @public */
+export type MediaDeviceMenuProps = MediaDeviceMenuPropsSingleKind | MediaDeviceMenuPropsMultiKind;
 
 /**
  * The `MediaDeviceMenu` component is a button that opens a menu that lists
@@ -101,6 +125,26 @@ export function MediaDeviceMenu({
     };
   }, [handleClickOutside]);
 
+  // Normalize props to a consistent internal format
+  const kindsWithInitialSelection: KindWithInitialSelection[] = (() => {
+    if (kind === undefined) {
+      // Default to audio and video inputs when no kind is specified
+      return [{ kind: 'audioinput' as MediaDeviceKind }, { kind: 'videoinput' as MediaDeviceKind }];
+    } else if (Array.isArray(kind)) {
+      // multi-kind case: kind is KindWithInitialSelection[]
+      return kind;
+    } else {
+      // single kind case: kind is MediaDeviceKind, initialSelection is string | undefined
+      return [{ kind, initialSelection }];
+    }
+  })();
+
+  const kindLabels: Record<MediaDeviceKind, string> = {
+    audioinput: 'Audio inputs',
+    videoinput: 'Video inputs',
+    audiooutput: 'Audio outputs',
+  };
+
   return (
     <>
       <button
@@ -119,39 +163,23 @@ export function MediaDeviceMenu({
           ref={tooltip}
           style={{ visibility: isOpen ? 'visible' : 'hidden' }}
         >
-          {kind ? (
-            <MediaDeviceSelect
-              initialSelection={initialSelection}
-              onActiveDeviceChange={(deviceId) => handleActiveDeviceChange(kind, deviceId)}
-              onDeviceListChange={setDevices}
-              kind={kind}
-              track={tracks?.[kind]}
-              requestPermissions={needPermissions}
-            />
-          ) : (
-            <>
-              <div className="lk-device-menu-heading">Audio inputs</div>
+          {kindsWithInitialSelection.map((kindInfo, idx, arr) => (
+            <React.Fragment key={`device-group-${kindInfo.kind}`}>
+              {arr.length > 1 && idx < arr.length && (
+                <div className="lk-device-menu-heading">{kindLabels[kindInfo.kind]}</div>
+              )}
               <MediaDeviceSelect
-                kind="audioinput"
+                kind={kindInfo.kind}
+                initialSelection={kindInfo.initialSelection}
                 onActiveDeviceChange={(deviceId) =>
-                  handleActiveDeviceChange('audioinput', deviceId)
+                  handleActiveDeviceChange(kindInfo.kind, deviceId)
                 }
                 onDeviceListChange={setDevices}
-                track={tracks?.audioinput}
+                track={tracks?.[kindInfo.kind]}
                 requestPermissions={needPermissions}
               />
-              <div className="lk-device-menu-heading">Video inputs</div>
-              <MediaDeviceSelect
-                kind="videoinput"
-                onActiveDeviceChange={(deviceId) =>
-                  handleActiveDeviceChange('videoinput', deviceId)
-                }
-                onDeviceListChange={setDevices}
-                track={tracks?.videoinput}
-                requestPermissions={needPermissions}
-              />
-            </>
-          )}
+            </React.Fragment>
+          ))}
         </div>
       )}
     </>

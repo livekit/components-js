@@ -1,4 +1,4 @@
-import { useLayoutContext } from '../context';
+import { useMaybeLayoutContext } from '../context';
 import { mergeProps } from '../mergeProps';
 import * as React from 'react';
 
@@ -15,7 +15,8 @@ export interface UseSettingsToggleProps {
  * @alpha
  */
 export function useSettingsToggle({ props }: UseSettingsToggleProps) {
-  const { dispatch, state } = useLayoutContext().widget;
+  const layoutContext = useMaybeLayoutContext();
+  const { dispatch, state } = layoutContext?.widget ?? {};
   const className = 'lk-button lk-settings-toggle';
 
   const mergedProps = React.useMemo(() => {

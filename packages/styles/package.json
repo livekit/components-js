@@ -79,14 +79,14 @@
   "devDependencies": {
     "modern-normalize": "^3.0.0",
     "nodemon": "^3.0.0",
-    "postcss": "^8.4.17",
+    "postcss": "^8.5.15",
     "postcss-cli": "^11.0.0",
     "postcss-prefixer": "^3.0.0",
     "postcss-variables-prefixer": "^1.2.0",
     "rimraf": "^6.0.0",
     "sass": "^1.54.6",
     "typed-scss-modules": "^8.0.0",
-    "vitest": "^3.0.0"
+    "vitest": "^3.2.6"
   },
   "engines": {
     "node": ">=18"

@@ -30,7 +30,7 @@
     "unlink-local-client": "npm pkg delete \"pnpm.overrides.livekit-client\" && pnpm install"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.1",
+    "@changesets/cli": "^2.29.7",
     "@livekit/changesets-changelog-github": "^0.0.4",
     "@rushstack/heft": "^0.73.6",
     "glob": "^11.0.0",

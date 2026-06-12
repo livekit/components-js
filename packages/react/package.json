@@ -72,7 +72,7 @@
   },
   "devDependencies": {
     "@livekit/protocol": "catalog:",
-    "@microsoft/api-extractor": "^7.35.0",
+    "@microsoft/api-extractor": "^7.58.8",
     "@size-limit/file": "^11.0.2",
     "@size-limit/webpack": "^11.0.2",
     "@size-limit/webpack-why": "^11.1.6",

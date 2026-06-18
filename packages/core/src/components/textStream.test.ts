@@ -91,7 +91,7 @@ describe('setupTextStream ordering', () => {
 
   it('orders by first receipt of the segment, not by when its text finishes streaming (issue #1280)', async () => {
     const { room, open } = createMockRoom();
-    const emissions: TextStreamData[][] = [];
+    const emissions: Array<Array<TextStreamData>> = [];
     const sub = setupTextStream(room, TOPIC).subscribe((streams) => emissions.push(streams));
 
     // The user speaks first, so their transcription stream is opened first...
@@ -121,7 +121,7 @@ describe('setupTextStream ordering', () => {
 
   it('orders by local first-received time, not the sender-stamped timestamp (DL clock drift)', async () => {
     const { room, open } = createMockRoom();
-    const emissions: TextStreamData[][] = [];
+    const emissions: Array<Array<TextStreamData>> = [];
     const sub = setupTextStream(room, TOPIC).subscribe((streams) => emissions.push(streams));
 
     // First message opened locally, but its sender's clock is running far ahead (timestamp 9000).
@@ -154,7 +154,7 @@ describe('setupTextStream ordering', () => {
 
   it('keeps a transcription in place (and updates its text) when a later segment update arrives', async () => {
     const { room, open } = createMockRoom();
-    const emissions: TextStreamData[][] = [];
+    const emissions: Array<Array<TextStreamData>> = [];
     const sub = setupTextStream(room, TOPIC).subscribe((streams) => emissions.push(streams));
 
     // A transcription segment is created first.

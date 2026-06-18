@@ -43,11 +43,7 @@ class ControllableStream {
   }
 }
 
-function transcriptionInfo(
-  id: string,
-  segmentId: string,
-  timestamp: number,
-): TextStreamInfo {
+function transcriptionInfo(id: string, segmentId: string, timestamp: number): TextStreamInfo {
   return {
     id,
     topic: TOPIC,
@@ -100,9 +96,7 @@ describe('setupTextStream ordering', () => {
 
     // The user speaks first, so their transcription stream is opened first...
     now = 1_000;
-    const user = new ControllableStream(transcriptionInfo('user-1', 'seg-user', 1_000), [
-      'Hello',
-    ]);
+    const user = new ControllableStream(transcriptionInfo('user-1', 'seg-user', 1_000), ['Hello']);
     open(user, 'user');
 
     // ...then the agent replies, opening its stream a moment later.

@@ -54,7 +54,7 @@ export const VideoTrack: (
     const manageSubscriptionRef = React.useRef(false);
 
     React.useEffect(() => {
-      manageSubscriptionRef.current = !!manageSubscription;
+      manageSubscriptionRef.current = Boolean(manageSubscription);
       managedPublicationRef.current =
         trackReference.publication instanceof RemoteTrackPublication
           ? trackReference.publication

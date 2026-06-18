@@ -141,7 +141,7 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
       );
     }
 
-    return [...receivedMessages].sort((a, b) => {
+    return receivedMessages.slice().sort((a, b) => {
       const aFirstReceivedAt = messageFirstReceivedTimeMapRef.current.get(a.id);
       const bFirstReceivedAt = messageFirstReceivedTimeMapRef.current.get(b.id);
       if (typeof aFirstReceivedAt === 'undefined' || typeof bFirstReceivedAt === 'undefined') {

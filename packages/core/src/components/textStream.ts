@@ -79,7 +79,7 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
   // Array#sort is stable, so streams sharing a timestamp keep their insertion order.
   const emit = () => {
     textStreamsSubject.next(
-      [...textStreams].sort((a, b) => a.firstReceivedTime - b.firstReceivedTime),
+      textStreams.slice().sort((a, b) => a.firstReceivedTime - b.firstReceivedTime),
     );
   };
 

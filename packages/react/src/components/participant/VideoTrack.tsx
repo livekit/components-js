@@ -116,13 +116,6 @@ export const VideoTrack: (
       [intersectionRef],
     );
 
-    return (
-      <video
-        ref={setVideoRef}
-        {...elementProps}
-        muted={true}
-        onClick={clickHandler}
-      ></video>
-    );
+    return <video ref={setVideoRef} {...elementProps} muted={true} onClick={clickHandler}></video>;
   },
 );

@@ -108,12 +108,17 @@ export const VideoTrack: (
       onTrackClick?.({ participant: trackReference?.participant, track: pub });
     };
 
+    const setVideoRef = React.useCallback(
+      (el: HTMLVideoElement | null) => {
+        mediaEl.current = el;
+        intersectionRef(el);
+      },
+      [intersectionRef],
+    );
+
     return (
       <video
-        ref={(el) => {
-          mediaEl.current = el;
-          intersectionRef(el);
-        }}
+        ref={setVideoRef}
         {...elementProps}
         muted={true}
         onClick={clickHandler}

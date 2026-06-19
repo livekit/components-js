@@ -8,13 +8,13 @@ catalogs:
   default:
     '@livekit/protocol':
       specifier: ^1.44.0
-      version: 1.44.0
+      version: 1.47.0
     eslint:
       specifier: ^8.56.0
       version: 8.57.1
     livekit-client:
       specifier: ^2.18.2
-      version: 2.18.2
+      version: 2.19.2
     prettier:
       specifier: ^3.8.1
       version: 3.8.1
@@ -76,7 +76,7 @@ importers:
         version: link:../../packages/styles
       livekit-client:
         specifier: 'catalog:'
-        version: 2.18.2(@types/dom-mediacapture-record@1.0.22)
+        version: 2.19.2(@types/dom-mediacapture-record@1.0.22)
       react:
         specifier: ^19.0.0
         version: 19.2.4
@@ -161,13 +161,13 @@ importers:
         version: link:../../packages/styles
       '@livekit/track-processors':
         specifier: ^0.3.2
-        version: 0.3.3(livekit-client@2.18.2(@types/dom-mediacapture-record@1.0.22))
+        version: 0.3.3(livekit-client@2.19.2(@types/dom-mediacapture-record@1.0.22))
       livekit-client:
         specifier: 'catalog:'
-        version: 2.18.2(@types/dom-mediacapture-record@1.0.22)
+        version: 2.19.2(@types/dom-mediacapture-record@1.0.22)
       livekit-server-sdk:
         specifier: ^2.6.1
-        version: 2.14.2
+        version: 2.15.5
       next:
         specifier: ^15.5.19
         version: 15.5.19(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.84.0)
@@ -207,7 +207,7 @@ importers:
         version: 1.7.6
       livekit-client:
         specifier: 'catalog:'
-        version: 2.18.2(@types/dom-mediacapture-record@1.0.22)
+        version: 2.19.2(@types/dom-mediacapture-record@1.0.22)
       loglevel:
         specifier: 1.9.1
         version: 1.9.1
@@ -223,7 +223,7 @@ importers:
         version: link:../styles
       '@livekit/protocol':
         specifier: 'catalog:'
-        version: 1.44.0
+        version: 1.47.0
       '@microsoft/api-extractor':
         specifier: ^7.58.8
         version: 7.58.8(@types/node@25.9.3)
@@ -258,8 +258,8 @@ importers:
         specifier: workspace:*
         version: link:../core
       '@livekit/krisp-noise-filter':
-        specifier: ^0.2.12 || ^0.3.0
-        version: 0.2.12(livekit-client@2.18.2(@types/dom-mediacapture-record@1.0.22))
+        specifier: ^0.2.12 || ^0.3.0 || ^0.4.0
+        version: 0.2.12(livekit-client@2.19.2(@types/dom-mediacapture-record@1.0.22))
       clsx:
         specifier: 2.1.1
         version: 2.1.1
@@ -268,10 +268,10 @@ importers:
         version: 3.3.0
       jose:
         specifier: ^6.0.12
-        version: 6.1.3
+        version: 6.2.3
       livekit-client:
         specifier: 'catalog:'
-        version: 2.18.2(@types/dom-mediacapture-record@1.0.22)
+        version: 2.19.2(@types/dom-mediacapture-record@1.0.22)
       tslib:
         specifier: ^2.6.2
         version: 2.8.1
@@ -281,7 +281,7 @@ importers:
     devDependencies:
       '@livekit/protocol':
         specifier: 'catalog:'
-        version: 1.44.0
+        version: 1.47.0
       '@microsoft/api-extractor':
         specifier: ^7.58.8
         version: 7.58.8(@types/node@24.7.0)
@@ -356,7 +356,7 @@ importers:
         version: link:../react
       '@livekit/protocol':
         specifier: 'catalog:'
-        version: 1.44.0
+        version: 1.47.0
       '@radix-ui/react-select':
         specifier: ^2.2.6
         version: 2.2.6(@types/react-dom@19.1.9(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -383,13 +383,13 @@ importers:
         version: 2.1.1
       jose:
         specifier: ^6.0.12
-        version: 6.1.3
+        version: 6.2.3
       livekit-client:
         specifier: 'catalog:'
-        version: 2.18.2(@types/dom-mediacapture-record@1.0.22)
+        version: 2.19.2(@types/dom-mediacapture-record@1.0.22)
       livekit-server-sdk:
         specifier: ^2.13.2
-        version: 2.14.2
+        version: 2.15.5
       lucide-react:
         specifier: ^0.555.0
         version: 0.555.0(react@19.2.4)
@@ -1905,11 +1905,11 @@ packages:
   '@livekit/mutex@1.1.1':
     resolution: {integrity: sha512-EsshAucklmpuUAfkABPxJNhzj9v2sG7JuzFDL4ML1oJQSV14sqrpTYnsaOudMAw9yOaW53NU3QQTlUQoRs4czw==}
 
-  '@livekit/protocol@1.44.0':
-    resolution: {integrity: sha512-/vfhDUGcUKO8Q43r6i+5FrDhl5oZjm/X3U4x2Iciqvgn5C8qbj+57YPcWSJ1kyIZm5Cm6AV2nAPjMm3ETD/iyg==}
+  '@livekit/protocol@1.45.8':
+    resolution: {integrity: sha512-Q+l57E7w/xxOBFVWzdX5rkAZO7ffyF+rlDzNUYq2SU114+5aTyCq+PK4unaEVDNd4952Af7wteKr3sOgasGuaA==}
 
-  '@livekit/protocol@1.44.1':
-    resolution: {integrity: sha512-FEKP8LQVCaY99wIvNIj3Zym7zTLR/5nnxtHSUz/pECGtrbTg4Be8+Dgxi40FuGjIS5ctwbiZwCu8K7m4FlyZsw==}
+  '@livekit/protocol@1.47.0':
+    resolution: {integrity: sha512-oJW1OpVAQ+/QZlSnvwwAtkP0fJ6OerlL68k7DFxXScMqaKnkMncwffPOLHjLmem7xNpPUiD0tJ2KSDdsIrNcpQ==}
 
   '@livekit/track-processors@0.3.3':
     resolution: {integrity: sha512-C5mBWe34ie0pfhCf9zAD65D26ZytzW/xGrj8Zc1BGh5kLISFDVQlefO78LZWw9K5saTamk60O4fzSCKqWMPMLA==}
@@ -5993,8 +5993,8 @@ packages:
   jose@5.10.0:
     resolution: {integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==}
 
-  jose@6.1.3:
-    resolution: {integrity: sha512-0TpaTfihd4QMNwrz/ob2Bp7X04yuxJkjRGi4aKmOqwhov54i6u79oCv7T+C7lo70MKH6BesI3vscD1yb/yzKXQ==}
+  jose@6.2.3:
+    resolution: {integrity: sha512-YYVDInQKFJfR/xa3ojUTl8c2KoTwiL1R5Wg9YCydwH0x0B9grbzlg5HC7mMjCtUJjbQ/YnGEZIhI5tCgfTb4Hw==}
 
   joycon@3.1.1:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
@@ -6253,13 +6253,13 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  livekit-client@2.18.2:
-    resolution: {integrity: sha512-U8jHHySZzrNap9H9Gv3WuhZZety890RYmPfoRKiF2ymSTDyi5qAe4beR0SM6mfjkVAoChjhrSW0q7mdva7Ug2Q==}
+  livekit-client@2.19.2:
+    resolution: {integrity: sha512-Kvk07QYDWRAbmYNLRll04ZIuxMQobW/oLPYnmR1kCy8GGHpU0gqyHf704Rz+29zfy8IJZRjKqeVbzGSKn9sumw==}
     peerDependencies:
       '@types/dom-mediacapture-record': ^1
 
-  livekit-server-sdk@2.14.2:
-    resolution: {integrity: sha512-4mvPwxd3mjtB3ISTv6DHADaAPqTEw/zZWLDPTyPOGYR01hbedAhVBAMWSFrnVeQddqCiELfAqDkbFAR+B0CuVw==}
+  livekit-server-sdk@2.15.5:
+    resolution: {integrity: sha512-Uzs4tVebvY4/+pO9pG1nMMVRDZPnOJolZIOWIiSEnUXFBywq+eNWHrR8mplKL8Qn13mSTQLjKVXfGCGTAMQeYg==}
     engines: {node: '>=18'}
 
   load-tsconfig@0.2.5:
@@ -7530,8 +7530,8 @@ packages:
     resolution: {integrity: sha512-KrOH82c/W+GYQ0LHqtr3caRpM3ITglq3ljGUIb8LTki7ByacJZ9z+piSGiwZDsRyhQbYBOBJgr2k6X4BZXi3Kw==}
     hasBin: true
 
-  sdp@3.2.1:
-    resolution: {integrity: sha512-lwsAIzOPlH8/7IIjjz3K0zYBk7aBVVcvjMwt3M4fLxpjMYyy7i3I97SLHebgn4YBjirkzfp3RvRDWSKsh/+WFw==}
+  sdp@3.2.2:
+    resolution: {integrity: sha512-xZocWwfyp4hkbN4hLWxMjmv2Q8aNa9MhmOZ7L9aCZPT+dZsgRr6wZRrSYE3HTdyk/2pZKPSgqI7ns7Een1xMSA==}
 
   semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
@@ -8481,8 +8481,8 @@ packages:
       webpack-cli:
         optional: true
 
-  webrtc-adapter@9.0.3:
-    resolution: {integrity: sha512-5fALBcroIl31OeXAdd1YUntxiZl1eHlZZWzNg3U4Fn+J9/cGL3eT80YlrsWGvj2ojuz1rZr2OXkgCzIxAZ7vRQ==}
+  webrtc-adapter@9.0.5:
+    resolution: {integrity: sha512-U9vjByy/sK2OMXu5mmfuZFKTMIUQe34c0JXRO+oDrxJTsntdYT2iIFwYMOV7HhMTuktcZLGf2W1N/OcSf9ssWg==}
     engines: {node: '>=6.0.0', npm: '>=3.10.0'}
 
   whatwg-encoding@3.1.1:
@@ -9946,25 +9946,25 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@livekit/krisp-noise-filter@0.2.12(livekit-client@2.18.2(@types/dom-mediacapture-record@1.0.22))':
+  '@livekit/krisp-noise-filter@0.2.12(livekit-client@2.19.2(@types/dom-mediacapture-record@1.0.22))':
     dependencies:
-      livekit-client: 2.18.2(@types/dom-mediacapture-record@1.0.22)
+      livekit-client: 2.19.2(@types/dom-mediacapture-record@1.0.22)
 
   '@livekit/mutex@1.1.1': {}
 
-  '@livekit/protocol@1.44.0':
+  '@livekit/protocol@1.45.8':
     dependencies:
       '@bufbuild/protobuf': 1.10.1
 
-  '@livekit/protocol@1.44.1':
+  '@livekit/protocol@1.47.0':
     dependencies:
       '@bufbuild/protobuf': 1.10.1
 
-  '@livekit/track-processors@0.3.3(livekit-client@2.18.2(@types/dom-mediacapture-record@1.0.22))':
+  '@livekit/track-processors@0.3.3(livekit-client@2.19.2(@types/dom-mediacapture-record@1.0.22))':
     dependencies:
       '@mediapipe/holistic': 0.5.1675471629
       '@mediapipe/tasks-vision': 0.10.9
-      livekit-client: 2.18.2(@types/dom-mediacapture-record@1.0.22)
+      livekit-client: 2.19.2(@types/dom-mediacapture-record@1.0.22)
 
   '@manypkg/find-root@1.1.0':
     dependencies:
@@ -10109,7 +10109,7 @@ snapshots:
       express: 5.2.1
       express-rate-limit: 8.5.2(express@5.2.1)
       hono: 4.12.25
-      jose: 6.1.3
+      jose: 6.2.3
       json-schema-typed: 8.0.2
       pkce-challenge: 5.0.1
       raw-body: 3.0.2
@@ -15308,7 +15308,7 @@ snapshots:
 
   jose@5.10.0: {}
 
-  jose@6.1.3: {}
+  jose@6.2.3: {}
 
   joycon@3.1.1: {}
 
@@ -15525,23 +15525,23 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  livekit-client@2.18.2(@types/dom-mediacapture-record@1.0.22):
+  livekit-client@2.19.2(@types/dom-mediacapture-record@1.0.22):
     dependencies:
       '@livekit/mutex': 1.1.1
-      '@livekit/protocol': 1.44.0
+      '@livekit/protocol': 1.45.8
       '@types/dom-mediacapture-record': 1.0.22
       events: 3.3.0
-      jose: 6.1.3
+      jose: 6.2.3
       loglevel: 1.9.2
       sdp-transform: 2.15.0
       tslib: 2.8.1
       typed-emitter: 2.1.0
-      webrtc-adapter: 9.0.3
+      webrtc-adapter: 9.0.5
 
-  livekit-server-sdk@2.14.2:
+  livekit-server-sdk@2.15.5:
     dependencies:
       '@bufbuild/protobuf': 1.10.1
-      '@livekit/protocol': 1.44.1
+      '@livekit/protocol': 1.47.0
       camelcase-keys: 9.1.3
       jose: 5.10.0
 
@@ -17101,7 +17101,7 @@ snapshots:
 
   sdp-transform@2.15.0: {}
 
-  sdp@3.2.1: {}
+  sdp@3.2.2: {}
 
   semver@6.3.1: {}
 
@@ -18382,9 +18382,9 @@ snapshots:
       - postcss
       - uglify-js
 
-  webrtc-adapter@9.0.3:
+  webrtc-adapter@9.0.5:
     dependencies:
-      sdp: 3.2.1
+      sdp: 3.2.2
 
   whatwg-encoding@3.1.1:
     dependencies:

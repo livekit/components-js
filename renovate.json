@@ -6,17 +6,25 @@
     {
       "schedule": "before 6am on the first day of the month",
       "matchDepTypes": ["devDependencies"],
-      "matchUpdateTypes": ["patch", "minor"],
+      "matchPackageNames": ["!/^@livekit//", "!/^livekit-/"],
+      "matchUpdateTypes": ["patch", "minor", "pin", "digest"],
       "groupName": "devDependencies (non-major)"
     },
     {
       "schedule": "before 6am on the first day of the month",
-      "matchPackagePrefixes": ["@rushstack"],
+      "matchDepTypes": ["dependencies", "optionalDependencies", "peerDependencies"],
+      "matchPackageNames": ["!/^@livekit//", "!/^livekit-/"],
+      "matchUpdateTypes": ["patch", "minor", "pin", "digest"],
+      "groupName": "dependencies (non-major)"
+    },
+    {
+      "schedule": "before 6am on the first day of the month",
+      "matchPackageNames": ["/^@rushstack//"],
       "matchUpdateTypes": ["patch", "minor"],
       "groupName": "Rush stack (non-major)"
     },
     {
-      "matchPackagePrefixes": ["@livekit", "livekit-"],
+      "matchPackageNames": ["/^@livekit//", "/^livekit-/"],
       "matchUpdateTypes": ["patch", "minor"],
       "groupName": "LiveKit dependencies (non-major)"
     }

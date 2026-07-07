@@ -39,6 +39,8 @@ describe('useAgentAudioVisualizerMeshGradient', () => {
       expect(result.current).toHaveProperty('speed');
       expect(result.current).toHaveProperty('distortion');
       expect(result.current).toHaveProperty('swirl');
+      expect(result.current).toHaveProperty('scale');
+      expect(result.current).toHaveProperty('rotation');
     });
 
     it('returns numeric values', () => {
@@ -47,6 +49,8 @@ describe('useAgentAudioVisualizerMeshGradient', () => {
       expect(typeof result.current.speed).toBe('number');
       expect(typeof result.current.distortion).toBe('number');
       expect(typeof result.current.swirl).toBe('number');
+      expect(typeof result.current.scale).toBe('number');
+      expect(typeof result.current.rotation).toBe('number');
     });
   });
 
@@ -184,6 +188,8 @@ describe('useAgentAudioVisualizerMeshGradient', () => {
       expect(result.current.speed).toBeDefined();
       expect(result.current.distortion).toBeDefined();
       expect(result.current.swirl).toBeDefined();
+      expect(result.current.scale).toBeDefined();
+      expect(result.current.rotation).toBeDefined();
     });
 
     it('values are not NaN', () => {
@@ -192,6 +198,8 @@ describe('useAgentAudioVisualizerMeshGradient', () => {
       expect(Number.isNaN(result.current.speed)).toBe(false);
       expect(Number.isNaN(result.current.distortion)).toBe(false);
       expect(Number.isNaN(result.current.swirl)).toBe(false);
+      expect(Number.isNaN(result.current.scale)).toBe(false);
+      expect(Number.isNaN(result.current.rotation)).toBe(false);
     });
   });
 

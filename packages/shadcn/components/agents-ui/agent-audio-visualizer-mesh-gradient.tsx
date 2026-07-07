@@ -345,22 +345,22 @@ export function AgentAudioVisualizerMeshGradient({
 }: AgentAudioVisualizerMeshGradientProps &
   ComponentProps<'div'> &
   VariantProps<typeof AgentAudioVisualizerMeshGradientVariants>) {
-  const {
-    speed,
-    distortion: audioDistortion,
-    swirl: audioSwirl,
-  } = useAgentAudioVisualizerMeshGradient(state, audioTrack);
+  // const {
+  //   speed,
+  //   swirl: audioSwirl,
+  //   distortion: audioDistortion,
+  // } = useAgentAudioVisualizerMeshGradient(state, audioTrack);
 
   return (
     <MeshGradientShader
       ref={ref}
       data-lk-state={state}
       colors={colors}
+      speed={1}
+      swirl={swirl}
       grain={grain}
-      speed={speed}
-      distortion={audioDistortion * distortion}
-      swirl={audioSwirl * swirl}
       scale={scale}
+      distortion={distortion}
       rotation={rotation}
       className={cn(AgentAudioVisualizerMeshGradientVariants({ size }), className)}
       {...props}

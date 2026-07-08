@@ -38,12 +38,7 @@ describe('AgentAudioVisualizerRadial', () => {
 
   it('applies click handler', () => {
     const onClick = vi.fn();
-    render(
-      <AgentAudioVisualizerRadial
-        data-testid="radial-viz"
-        onClick={onClick}
-      />,
-    );
+    render(<AgentAudioVisualizerRadial data-testid="radial-viz" onClick={onClick} />);
     const visualizer = screen.getByTestId('radial-viz');
     fireEvent.click(visualizer);
     expect(onClick).toHaveBeenCalledTimes(1);

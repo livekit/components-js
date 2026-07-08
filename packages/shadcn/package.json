@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@agents-ui",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "",
   "type": "module",
   "main": "index.ts",
@@ -10,9 +10,11 @@
     "registry:serve": "python3 -m http.server 3210 -d ./dist",
     "registry:doc-gen": "node --experimental-strip-types --env-file=.env.local ./scripts/doc-gen.ts",
     "registry:update": "pnpm registry:build && node --experimental-strip-types --env-file=.env.local ./scripts/update.ts",
+    "shadcn:update": "pnpm dlx shadcn@latest add alert button button-group select separator sonner toggle tooltip @ai-elements/conversation @ai-elements/message @ai-elements/shimmer && pnpm format",
     "test": "vitest --run",
     "test:watch": "vitest",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "keywords": [],
   "author": "",
@@ -37,6 +39,8 @@
     "livekit-server-sdk": "^2.13.2",
     "lucide-react": "^0.555.0",
     "motion": "^12.16.0",
+    "next-themes": "^0.4.6",
+    "radix-ui": "^1.6.2",
     "sonner": "^2.0.7",
     "streamdown": "^2.3.0",
     "tailwind-merge": "^3.3.0",

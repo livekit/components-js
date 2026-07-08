@@ -46,8 +46,8 @@ export default {
 
 export const Default: StoryObj<AgentTrackControlProps> = {
   render: (args: AgentTrackControlProps) => {
-    const [isCameraPressed, setIsCameraPressed] = React.useState(true);
-    const [isMicrophonePressed, setIsMicrophonePressed] = React.useState(false);
+    const [isCameraPressed, setIsCameraPressed] = React.useState(false);
+    const [isMicrophonePressed, setIsMicrophonePressed] = React.useState(true);
     const [isScreenSharePressed, setIsScreenSharePressed] = React.useState(true);
     const { microphoneTrack } = useAgent();
 

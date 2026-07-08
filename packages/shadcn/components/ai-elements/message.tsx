@@ -1,14 +1,14 @@
 'use client';
 
-import type { ComponentProps, HTMLAttributes, ReactElement } from 'react';
-import { createContext, memo, useContext, useEffect, useState } from 'react';
-import type { FileUIPart, UIMessage } from 'ai';
-import { ChevronLeftIcon, ChevronRightIcon, PaperclipIcon, XIcon } from 'lucide-react';
-import { Streamdown } from 'streamdown';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup, ButtonGroupText } from '@/components/ui/button-group';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import type { FileUIPart, UIMessage } from 'ai';
+import { ChevronLeftIcon, ChevronRightIcon, PaperclipIcon, XIcon } from 'lucide-react';
+import type { ComponentProps, HTMLAttributes, ReactElement } from 'react';
+import { createContext, memo, useContext, useEffect, useState } from 'react';
+import { Streamdown } from 'streamdown';
 
 export type MessageProps = HTMLAttributes<HTMLDivElement> & {
   from: UIMessage['role'];
@@ -17,9 +17,9 @@ export type MessageProps = HTMLAttributes<HTMLDivElement> & {
 export const Message = ({ className, from, ...props }: MessageProps) => (
   <div
     className={cn(
-      'group flex w-full max-w-[80%] flex-col gap-2',
+      'group flex w-full max-w-[95%] flex-col gap-2',
       from === 'user' ? 'is-user ml-auto justify-end' : 'is-assistant',
-      className
+      className,
     )}
     {...props}
   />
@@ -30,10 +30,10 @@ export type MessageContentProps = HTMLAttributes<HTMLDivElement>;
 export const MessageContent = ({ children, className, ...props }: MessageContentProps) => (
   <div
     className={cn(
-      'is-user:dark flex w-fit flex-col gap-2 overflow-hidden text-sm',
-      'group-[.is-user]:bg-secondary group-[.is-user]:text-foreground group-[.is-user]:ml-auto group-[.is-user]:rounded-lg group-[.is-user]:px-4 group-[.is-user]:py-3',
+      'is-user:dark flex w-fit max-w-full min-w-0 flex-col gap-2 overflow-hidden text-sm',
+      'group-[.is-user]:ml-auto group-[.is-user]:rounded-lg group-[.is-user]:bg-secondary group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-foreground',
       'group-[.is-assistant]:text-foreground',
-      className
+      className,
     )}
     {...props}
   >
@@ -168,7 +168,7 @@ export const MessageBranchContent = ({ children, ...props }: MessageBranchConten
     <div
       className={cn(
         'grid gap-2 overflow-hidden [&>div]:pb-0',
-        index === currentBranch ? 'block' : 'hidden'
+        index === currentBranch ? 'block' : 'hidden',
       )}
       key={branch.key}
       {...props}
@@ -250,7 +250,7 @@ export const MessageBranchPage = ({ className, ...props }: MessageBranchPageProp
 
   return (
     <ButtonGroupText
-      className={cn('text-muted-foreground border-none bg-transparent shadow-none', className)}
+      className={cn('border-none bg-transparent text-muted-foreground shadow-none', className)}
       {...props}
     >
       {currentBranch + 1} of {totalBranches}
@@ -267,7 +267,7 @@ export const MessageResponse = memo(
       {...props}
     />
   ),
-  (prevProps, nextProps) => prevProps.children === nextProps.children
+  (prevProps, nextProps) => prevProps.children === nextProps.children,
 );
 
 MessageResponse.displayName = 'MessageResponse';
@@ -298,7 +298,7 @@ export function MessageAttachment({ data, className, onRemove, ...props }: Messa
           {onRemove && (
             <Button
               aria-label="Remove attachment"
-              className="bg-background/80 hover:bg-background absolute top-2 right-2 size-6 rounded-full p-0 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 [&>svg]:size-3"
+              className="absolute top-2 right-2 size-6 rounded-full bg-background/80 p-0 opacity-0 backdrop-blur-sm transition-opacity hover:bg-background group-hover:opacity-100 [&>svg]:size-3"
               onClick={(e) => {
                 e.stopPropagation();
                 onRemove();
@@ -315,7 +315,7 @@ export function MessageAttachment({ data, className, onRemove, ...props }: Messa
         <>
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="bg-muted text-muted-foreground flex size-full shrink-0 items-center justify-center rounded-lg">
+              <div className="flex size-full shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
                 <PaperclipIcon className="size-4" />
               </div>
             </TooltipTrigger>
@@ -326,7 +326,7 @@ export function MessageAttachment({ data, className, onRemove, ...props }: Messa
           {onRemove && (
             <Button
               aria-label="Remove attachment"
-              className="hover:bg-accent size-6 shrink-0 rounded-full p-0 opacity-0 transition-opacity group-hover:opacity-100 [&>svg]:size-3"
+              className="size-6 shrink-0 rounded-full p-0 opacity-0 transition-opacity hover:bg-accent group-hover:opacity-100 [&>svg]:size-3"
               onClick={(e) => {
                 e.stopPropagation();
                 onRemove();

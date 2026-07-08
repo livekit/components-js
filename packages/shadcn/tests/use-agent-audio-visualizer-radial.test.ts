@@ -168,7 +168,10 @@ describe('useAgentAudioVisualizerRadialAnimator', () => {
       rerender({ state: 'listening' as AgentState, barCount, interval: 100 });
 
       const divisor = barCount / 4;
-      const expectedSequence = Array.from({ length: Math.floor(barCount / divisor) }, (_, idx) => idx * divisor);
+      const expectedSequence = Array.from(
+        { length: Math.floor(barCount / divisor) },
+        (_, idx) => idx * divisor,
+      );
       expect(result.current).toEqual(expectedSequence);
       expect(result.current).not.toEqual(initialSequence);
     });

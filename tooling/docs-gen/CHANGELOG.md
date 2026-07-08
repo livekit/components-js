@@ -1,5 +1,12 @@
 # @livekit/components-docs-gen
 
+## 0.0.98
+
+### Patch Changes
+
+- Updated dependencies [[`87220e4dd61b926023ce0d041e6fcf310f515edf`](https://github.com/livekit/components-js/commit/87220e4dd61b926023ce0d041e6fcf310f515edf)]:
+  - @livekit/components-react@2.9.23
+
 ## 0.0.97
 
 ### Patch Changes

@@ -1,5 +1,17 @@
 # @livekit/components-react
 
+## 2.9.23
+
+### Patch Changes
+
+- Require `livekit-client >= 2.20.1`. That release ships the `NonSharedUint8Array` - [#1360](https://github.com/livekit/components-js/pull/1360) ([@1egoman](https://github.com/1egoman))
+  type declaration in its published types; earlier 2.19/2.20.0 builds referenced it
+  without shipping it, which broke type resolution for consumers (`skipLibCheck: false`)
+  and API Extractor. The local workaround shim is removed now that the type resolves
+  from livekit-client itself.
+- Updated dependencies [[`87220e4dd61b926023ce0d041e6fcf310f515edf`](https://github.com/livekit/components-js/commit/87220e4dd61b926023ce0d041e6fcf310f515edf)]:
+  - @livekit/components-core@0.12.14
+
 ## 2.9.22
 
 ### Patch Changes

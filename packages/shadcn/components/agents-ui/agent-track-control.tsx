@@ -92,6 +92,10 @@ type TrackDeviceSelectProps = React.ComponentProps<typeof SelectTrigger> &
      */
     track?: LocalAudioTrack | LocalVideoTrack | undefined;
     /**
+     * Whether a track of this kind has already been acquired/published elsewhere.
+     */
+    pressed?: boolean;
+    /**
      * Whether to request permissions for the media device.
      */
     requestPermissions?: boolean;
@@ -127,13 +131,14 @@ type TrackDeviceSelectProps = React.ComponentProps<typeof SelectTrigger> &
 function TrackDeviceSelect({
   kind,
   track,
+  pressed,
   size = 'default',
   variant = 'default',
-  className,
   requestPermissions = false,
   onMediaDeviceError,
   onDeviceListChange,
   onActiveDeviceChange,
+  className,
   ...props
 }: TrackDeviceSelectProps) {
   const room = useMaybeRoomContext();
@@ -150,6 +155,16 @@ function TrackDeviceSelect({
   useEffect(() => {
     onDeviceListChange?.(devices);
   }, [devices, onDeviceListChange]);
+
+  useEffect(() => {
+    // A track was already acquired elsewhere (e.g. session.start()), so permission is already
+    // granted — safe to fetch labeled devices without a second getUserMedia prompt. Without
+    // this, the list stays label-less until a page reload, since the device observer only
+    // re-fetches when `requestPermissions` changes value.
+    if (pressed) {
+      setRequestPermissionsState(true);
+    }
+  }, [pressed]);
 
   const handleOpenChange = (open: boolean) => {
     setOpen(open);
@@ -308,6 +323,7 @@ export function AgentTrackControl({
           size="sm"
           kind={kind}
           variant={variant}
+          pressed={pressed}
           requestPermissions={false}
           onMediaDeviceError={onMediaDeviceError}
           onActiveDeviceChange={onActiveDeviceChange}

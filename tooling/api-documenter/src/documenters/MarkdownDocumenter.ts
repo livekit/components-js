@@ -1158,7 +1158,15 @@ export class MarkdownDocumenter {
       if (apiParameter.tsdocParamBlock) {
         this._appendAndMergeSection(parameterDescription, apiParameter.tsdocParamBlock.content);
       }
-      const firstParameter: ExcerptToken = apiParameter.parameterTypeExcerpt.spannedTokens[0];
+      const firstParameter: ExcerptToken | undefined =
+        apiParameter.parameterTypeExcerpt.spannedTokens[0];
+      // api-extractor >=7.58 emits a phantom parameter entry with an empty type-token range for
+      // destructured object parameters (e.g. `function useChatToggle({ props }: UseChatToggleProps)`),
+      // in addition to the collapsed real parameter. Skip the phantom entry — reading `.kind` off the
+      // missing first token would otherwise crash doc generation.
+      if (firstParameter === undefined) {
+        continue;
+      }
       if (
         //@ts-ignore
         // apiParameter?._parent?.displayName === 'useParticipantTile' &&

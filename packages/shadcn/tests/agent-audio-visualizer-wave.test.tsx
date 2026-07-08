@@ -48,12 +48,7 @@ describe('AgentAudioVisualizerWave', () => {
 
   it('applies click handler', () => {
     const onClick = vi.fn();
-    render(
-      <AgentAudioVisualizerWave
-        data-testid="wave-viz"
-        onClick={onClick}
-      />,
-    );
+    render(<AgentAudioVisualizerWave data-testid="wave-viz" onClick={onClick} />);
     const visualizer = screen.getByTestId('wave-viz');
     fireEvent.click(visualizer);
     expect(onClick).toHaveBeenCalledTimes(1);

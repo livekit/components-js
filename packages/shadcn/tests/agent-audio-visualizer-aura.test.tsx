@@ -39,12 +39,7 @@ describe('AgentAudioVisualizerAura', () => {
 
   it('applies click handler', () => {
     const onClick = vi.fn();
-    render(
-      <AgentAudioVisualizerAura
-        data-testid="aura-viz"
-        onClick={onClick}
-      />,
-    );
+    render(<AgentAudioVisualizerAura data-testid="aura-viz" onClick={onClick} />);
     const visualizer = screen.getByTestId('aura-viz');
     fireEvent.click(visualizer);
     expect(onClick).toHaveBeenCalledTimes(1);

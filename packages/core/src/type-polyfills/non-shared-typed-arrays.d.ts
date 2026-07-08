@@ -11,5 +11,10 @@
 // a resolution shim (it never appears in our public API), and components-js forwards
 // consumer-supplied `Uint8Array` values unchanged, so tightening to the non-shared variant would
 // break our public payload signatures for no benefit.
-// See: https://github.com/livekit/client-sdk-js/blob/main/src/type-polyfills/non-shared-typed-arrays.d.ts
+//
+// This is a temporary workaround. The upstream fix (livekit/client-sdk-js#1997) ships the
+// `NonSharedUint8Array` declaration in livekit-client's published types; once a livekit-client
+// release containing it is out and this repo's `livekit-client` catalog entry is bumped to that
+// version, the type resolves from livekit-client itself and this file should be deleted.
+// See: https://github.com/livekit/client-sdk-js/pull/1997
 type NonSharedUint8Array = Uint8Array;

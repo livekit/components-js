@@ -1,5 +1,13 @@
 # @livekit/components-react
 
+## 2.9.22
+
+### Patch Changes
+
+- Fix `manageSubscription` on `VideoTrack` not following tile visibility - [#1347](https://github.com/livekit/components-js/pull/1347) ([@1egoman](https://github.com/1egoman))
+
+- Forward the local `track` to `setupDeviceSelector` in `useMediaDeviceSelect` so `setActiveMediaDevice` switches the microphone or camera in pre-join / preview mode (no connected room). - [#1330](https://github.com/livekit/components-js/pull/1330) ([@nikhilgupta58](https://github.com/nikhilgupta58))
+
 ## 2.9.21
 
 ### Patch Changes

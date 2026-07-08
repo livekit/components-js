@@ -76,8 +76,10 @@ vi.mock('@/components/ui/select', () => ({
 describe('AgentTrackControl', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // A single real device by default — tests that care about the zero-device edge case
+    // override this explicitly rather than relying on an empty list by accident.
     vi.mocked(LiveKitComponents.useMediaDeviceSelect).mockReturnValue({
-      devices: [],
+      devices: [{ deviceId: 'device-1', label: 'Built-in Mic' }],
       activeDeviceId: 'device-1',
       setActiveMediaDevice: setActiveMediaDeviceMock,
     } as any);
@@ -156,6 +158,40 @@ describe('AgentTrackControl', () => {
       const visualizer = screen.getByTestId('audio-visualizer');
       expect(visualizer).toHaveAttribute('data-state', 'disconnected');
       expect(visualizer).toHaveAttribute('data-has-track', 'false');
+    });
+
+    it('does not disable the toggle before permissions have ever been requested, even with no devices observed yet', () => {
+      vi.mocked(LiveKitComponents.useMediaDeviceSelect).mockReturnValue({
+        devices: [],
+        activeDeviceId: undefined,
+        setActiveMediaDevice: setActiveMediaDeviceMock,
+      } as any);
+
+      render(<AgentTrackControl kind="audioinput" source="microphone" pressed={false} />);
+
+      expect(screen.getByTestId('track-toggle')).not.toBeDisabled();
+    });
+
+    it('disables and forces the toggle off once a permission-gated check confirms there are no devices', () => {
+      vi.mocked(LiveKitComponents.useMediaDeviceSelect).mockReturnValue({
+        devices: [],
+        activeDeviceId: undefined,
+        setActiveMediaDevice: setActiveMediaDeviceMock,
+      } as any);
+
+      render(<AgentTrackControl kind="audioinput" source="microphone" pressed />);
+
+      const toggle = screen.getByTestId('track-toggle');
+      expect(toggle).toBeDisabled();
+      expect(toggle).toHaveAttribute('aria-pressed', 'false');
+    });
+
+    it('never requests mic/camera permission for screen share, which has no device kind', () => {
+      render(<AgentTrackControl kind={undefined as any} source="screen_share" pressed />);
+
+      expect(LiveKitComponents.useMediaDeviceSelect).toHaveBeenLastCalledWith(
+        expect.objectContaining({ requestPermissions: false }),
+      );
     });
   });
 

@@ -87,6 +87,12 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
               textStreams[index] = {
                 ...textStreams[index],
                 text: accumulatedText,
+                // Carry the latest streamInfo forward. Transcription updates for a
+                // segment arrive as separate streams sharing the same lk.segment_id;
+                // keeping the original streamInfo would freeze attributes that change
+                // over the segment's lifetime — notably lk.transcription_final flipping
+                // "false" -> "true" on the final user STT result.
+                streamInfo: reader.info,
               };
 
               // Emit the updated array

@@ -1,5 +1,15 @@
 # @livekit/components-core
 
+## 0.12.14
+
+### Patch Changes
+
+- Require `livekit-client >= 2.20.1`. That release ships the `NonSharedUint8Array` - [#1360](https://github.com/livekit/components-js/pull/1360) ([@1egoman](https://github.com/1egoman))
+  type declaration in its published types; earlier 2.19/2.20.0 builds referenced it
+  without shipping it, which broke type resolution for consumers (`skipLibCheck: false`)
+  and API Extractor. The local workaround shim is removed now that the type resolves
+  from livekit-client itself.
+
 ## 0.12.13
 
 ### Patch Changes
@@ -448,7 +458,6 @@
 - GridLayout Revision. - [#326](https://github.com/livekit/components-js/pull/326) ([@Ocupe](https://github.com/Ocupe))
 
   Renaming:
-
   - `sortParticipantsByVolume` -> `sortParticipants`
 
 - Rework useDataChannel API - [#340](https://github.com/livekit/components-js/pull/340) ([@lukasIO](https://github.com/lukasIO))

@@ -34,8 +34,9 @@ export class PluginLoader {
 
         // Load the package
         const entryPoint:
-          | { apiDocumenterPluginManifest?: IApiDocumenterPluginManifest }
-          | undefined = require(resolvedEntryPointPath);
+          { apiDocumenterPluginManifest?: IApiDocumenterPluginManifest } | undefined = require(
+          resolvedEntryPointPath,
+        );
 
         if (!entryPoint) {
           throw new Error('Invalid entry point');

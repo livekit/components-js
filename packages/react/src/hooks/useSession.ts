@@ -108,9 +108,7 @@ type SessionStateConnecting = SessionStateCommon & {
 
 type SessionStateConnected = SessionStateCommon & {
   connectionState:
-    | ConnectionState.Connected
-    | ConnectionState.Reconnecting
-    | ConnectionState.SignalReconnecting;
+    ConnectionState.Connected | ConnectionState.Reconnecting | ConnectionState.SignalReconnecting;
   isConnected: true;
 
   local: {
@@ -151,9 +149,7 @@ type SessionActions = {
 
 /** @beta */
 export type UseSessionReturn = (
-  | SessionStateConnecting
-  | SessionStateConnected
-  | SessionStateDisconnected
+  SessionStateConnecting | SessionStateConnected | SessionStateDisconnected
 ) &
   SessionActions;
 
@@ -580,9 +576,7 @@ export function useSession(
   );
 
   const conversationState = React.useMemo(():
-    | SessionStateConnecting
-    | SessionStateConnected
-    | SessionStateDisconnected => {
+    SessionStateConnecting | SessionStateConnected | SessionStateDisconnected => {
     const common: SessionStateCommon = {
       room,
       internal: sessionInternal,
@@ -775,9 +769,7 @@ export function useSession(
         console.warn('WARNING: Room.prepareConnection failed:', err);
       });
     },
-    [
-      /* note: no prepareConnection here, this effect should only ever run once! */
-    ],
+    [/* note: no prepareConnection here, this effect should only ever run once! */],
   );
 
   return React.useMemo(

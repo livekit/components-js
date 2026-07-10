@@ -215,12 +215,12 @@ export function AgentSessionView_01({
           {isChatOpen && (
             <motion.div
               {...CHAT_MOTION_PROPS}
-              className="flex h-full w-full flex-col gap-4 space-y-3 transition-opacity duration-300 ease-out"
+              className="h-full w-full transition-opacity duration-300 ease-out"
             >
               <AgentChatTranscript
                 agentState={agentState}
                 messages={messages}
-                className="mx-auto w-full max-w-2xl [&_.is-user>div]:rounded-[22px] [&>div>div]:px-4 [&>div>div]:pt-40 md:[&>div>div]:px-6"
+                className="mx-auto w-full max-w-2xl px-4 md:px-6 **:data-[slot=message-scroller-content]:pb-4 **:data-[slot=message-scroller-content]:pt-40"
               />
             </motion.div>
           )}
@@ -261,7 +261,6 @@ export function AgentSessionView_01({
           </AnimatePresence>
         )}
         <div className="bg-background relative mx-auto max-w-2xl pb-3 md:pb-12">
-          <Fade bottom className="absolute inset-x-0 top-0 h-4 -translate-y-full" />
           <AgentControlBar
             variant="livekit"
             controls={controls}

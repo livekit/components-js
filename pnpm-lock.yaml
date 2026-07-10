@@ -149,6 +149,9 @@ importers:
       tailwindcss:
         specifier: ^4.3.2
         version: 4.3.2
+      tslib:
+        specifier: ^2.6.2
+        version: 2.8.1
       tsx:
         specifier: ^4.0.0
         version: 4.23.0

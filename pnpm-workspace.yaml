@@ -6,6 +6,9 @@ packages:
 
 catalog:
   livekit-client: ^2.20.1
-  '@livekit/protocol': ^1.44.0
+  # Must match the exact @livekit/protocol version that livekit-client pins, so the
+  # workspace and livekit-client share a single copy. Mismatched versions cause
+  # structurally-incompatible protobuf types (e.g. TrackInfo) and break the build.
+  '@livekit/protocol': 1.46.6
   eslint: ^8.56.0
   prettier: ^3.8.1

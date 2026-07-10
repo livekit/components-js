@@ -76,8 +76,7 @@ function isIgnorableChatMessage(msg: ReceivedChatMessage | LegacyReceivedChatMes
 
 const decodeLegacyMsg = (message: Uint8Array) =>
   JSON.parse(new TextDecoder().decode(message)) as
-    | LegacyReceivedChatMessage
-    | Exclude<ReceivedChatMessage, 'type'>;
+    LegacyReceivedChatMessage | Exclude<ReceivedChatMessage, 'type'>;
 
 const encodeLegacyMsg = (message: LegacyChatMessage) =>
   new TextEncoder().encode(JSON.stringify(message));

@@ -245,6 +245,7 @@ function areTokenSourceFetchOptionsEqual(a: TokenSourceFetchOptions, b: TokenSou
       case 'participantAttributes':
       case 'agentName':
       case 'agentMetadata':
+      case 'deployment':
         if (a[key] !== b[key]) {
           return false;
         }

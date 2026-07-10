@@ -8,11 +8,8 @@ import {
   AgentControlBar,
   type AgentControlBarControls,
 } from '@/components/agents-ui/agent-control-bar';
-import { Shimmer } from '@/components/ai-elements/shimmer';
 import { cn } from '@/lib/utils';
 import { TileLayout } from './tile-view';
-
-const MotionMessage = motion.create(Shimmer);
 
 const BOTTOM_VIEW_MOTION_PROPS: MotionProps = {
   variants: {
@@ -252,15 +249,14 @@ export function AgentSessionView_01({
         {isPreConnectBufferEnabled && (
           <AnimatePresence>
             {messages.length === 0 && (
-              <MotionMessage
+              <motion.p
                 key="pre-connect-message"
-                duration={2}
                 aria-hidden={messages.length > 0}
                 {...SHIMMER_MOTION_PROPS}
-                className="pointer-events-none mx-auto block w-full max-w-2xl pb-4 text-center text-sm font-semibold"
+                className="shimmer shimmer-duration-2000 pointer-events-none mx-auto block w-full max-w-2xl pb-4 text-center text-sm font-semibold"
               >
                 {preConnectMessage}
-              </MotionMessage>
+              </motion.p>
             )}
           </AnimatePresence>
         )}

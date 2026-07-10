@@ -38,20 +38,10 @@ vi.mock('@/components/agents-ui/agent-chat-transcript', () => ({
   ),
 }));
 
-vi.mock('@/components/ai-elements/shimmer', () => ({
-  Shimmer: ({ children, ...props }: any) => (
-    <div data-testid="shimmer" {...props}>
-      {children}
-    </div>
-  ),
-}));
-
 vi.mock('motion/react', () => ({
   motion: {
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    create: (Component: any) => (props: any) => (
-      <Component {...props} data-testid="motion-shimmer" />
-    ),
+    p: ({ children, ...props }: any) => <p {...props}>{children}</p>,
   },
   AnimatePresence: ({ children }: any) => <>{children}</>,
 }));

@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import 'shadcn/tailwind.css';
 
 /* where to source the shadcn styles from */
 @source './**/*.{js,ts,jsx,tsx}';

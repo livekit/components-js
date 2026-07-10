@@ -2,26 +2,37 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AgentChatTranscript } from '@/components/agents-ui/agent-chat-transcript';
 
-vi.mock('@/components/ai-elements/conversation', () => ({
-  Conversation: ({ children, ...props }: any) => (
+vi.mock('@/components/ui/message-scroller', () => ({
+  MessageScrollerProvider: ({ children }: any) => <>{children}</>,
+  MessageScroller: ({ children, ...props }: any) => (
     <div data-testid="conversation" {...props}>
       {children}
     </div>
   ),
-  ConversationContent: ({ children }: any) => (
+  MessageScrollerViewport: ({ children }: any) => <>{children}</>,
+  MessageScrollerContent: ({ children }: any) => (
     <div data-testid="conversation-content">{children}</div>
   ),
-  ConversationScrollButton: () => <div data-testid="scroll-button" />,
+  MessageScrollerItem: ({ children }: any) => <>{children}</>,
+  MessageScrollerButton: () => <div data-testid="scroll-button" />,
 }));
 
-vi.mock('@/components/ai-elements/message', () => ({
-  Message: ({ children, from, title }: any) => (
-    <div data-testid="chat-message" data-from={from} data-title={title}>
+vi.mock('@/components/ui/message', () => ({
+  Message: ({ children, align, title }: any) => (
+    <div data-testid="chat-message" data-from={align === 'end' ? 'user' : 'assistant'} data-title={title}>
       {children}
     </div>
   ),
   MessageContent: ({ children }: any) => <div data-testid="message-content">{children}</div>,
-  MessageResponse: ({ children }: any) => <div data-testid="message-response">{children}</div>,
+}));
+
+vi.mock('@/components/ui/bubble', () => ({
+  Bubble: ({ children }: any) => <>{children}</>,
+  BubbleContent: ({ children }: any) => <div data-testid="message-response">{children}</div>,
+}));
+
+vi.mock('streamdown', () => ({
+  Streamdown: ({ children }: any) => <>{children}</>,
 }));
 
 vi.mock('@/components/agents-ui/agent-chat-indicator', () => ({

@@ -918,7 +918,7 @@ export function useEnsureSession(session?: UseSessionReturn): UseSessionReturn;
 export function useEnsureTrackRef(trackRef?: TrackReferenceOrPlaceholder): TrackReferenceOrPlaceholder;
 
 // @public (undocumented)
-export function useEvents<Emitter extends default_2<EventMap>, EmitterEventMap extends Emitter extends default_2<infer EM> ? EM : never, Event extends Parameters<Emitter['on']>[0], Callback extends EmitterEventMap[Event]>(instance: Emitter | {
+export function useEvents<Emitter extends default_2<EventMap>, EmitterEventMap extends (Emitter extends default_2<infer EM> ? EM : never), Event extends Parameters<Emitter['on']>[0], Callback extends EmitterEventMap[Event]>(instance: Emitter | {
     internal: {
         emitter: Emitter;
     };

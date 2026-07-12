@@ -19,7 +19,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.6",
+    "@babel/core": "^8.0.0",
     "@storybook/addon-docs": "^10.1.4",
     "@storybook/addon-links": "^10.1.4",
     "@storybook/addon-styling-webpack": "^3.0.0",

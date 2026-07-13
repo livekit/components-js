@@ -228,8 +228,8 @@ importers:
         specifier: ^7.58.8
         version: 7.58.8(@types/node@25.9.3)
       '@size-limit/file':
-        specifier: ^11.0.2
-        version: 11.1.6(size-limit@11.1.6)
+        specifier: ^12.0.0
+        version: 12.1.0(size-limit@11.1.6)
       '@size-limit/webpack':
         specifier: ^11.0.2
         version: 11.1.6(esbuild@0.27.3)(lightningcss@1.31.1)(postcss@8.5.15)(size-limit@11.1.6)
@@ -286,8 +286,8 @@ importers:
         specifier: ^7.58.8
         version: 7.58.8(@types/node@24.7.0)
       '@size-limit/file':
-        specifier: ^11.0.2
-        version: 11.1.6(size-limit@11.1.6)
+        specifier: ^12.0.0
+        version: 12.1.0(size-limit@11.1.6)
       '@size-limit/webpack':
         specifier: ^11.0.2
         version: 11.1.6(lightningcss@1.31.1)(size-limit@11.1.6)
@@ -3210,11 +3210,11 @@ packages:
   '@sinonjs/fake-timers@10.3.0':
     resolution: {integrity: sha512-V4BG07kuYSUkTCSBHG8G8TNhM+F19jXFWnQtzj+we8DrkpSBCee9Z3Ms8yiGer/dlmhe35/Xdgyo3/0rQKg7YA==}
 
-  '@size-limit/file@11.1.6':
-    resolution: {integrity: sha512-ojzzJMrTfcSECRnaTjGy0wNIolTCRdyqZTSWG9sG5XEoXG6PNgHXDDS6gf6YNxnqb+rWfCfVe93u6aKi3wEocQ==}
-    engines: {node: ^18.0.0 || >=20.0.0}
+  '@size-limit/file@12.1.0':
+    resolution: {integrity: sha512-eGwDcIufnNnvJRzv3liDOn6MAOGgmOTUdpeGQ2KuRTlgIgO54AJH1ilvktlJc6PIjNfwpYY0dOGyap1QgM1swQ==}
+    engines: {node: ^20.0.0 || ^22.0.0 || >=24.0.0}
     peerDependencies:
-      size-limit: 11.1.6
+      size-limit: 12.1.0
 
   '@size-limit/webpack-why@11.1.6':
     resolution: {integrity: sha512-WUSPuYu99zJ5RGZ4eT9sH1lbUJ08OQDGnX+xCTwsO1hXp7zWv0n+uIQ0klf1sALT01alB0etAnkk8uVE6UVrAA==}
@@ -11975,7 +11975,7 @@ snapshots:
     dependencies:
       '@sinonjs/commons': 3.0.1
 
-  '@size-limit/file@11.1.6(size-limit@11.1.6)':
+  '@size-limit/file@12.1.0(size-limit@11.1.6)':
     dependencies:
       size-limit: 11.1.6
 

@@ -231,8 +231,8 @@ importers:
         specifier: ^12.0.0
         version: 12.1.0(size-limit@11.1.6)
       '@size-limit/webpack':
-        specifier: ^11.0.2
-        version: 11.1.6(esbuild@0.27.3)(lightningcss@1.31.1)(postcss@8.5.15)(size-limit@11.1.6)
+        specifier: ^12.0.0
+        version: 12.1.0(esbuild@0.27.3)(lightningcss@1.31.1)(postcss@8.5.15)(size-limit@11.1.6)
       eslint:
         specifier: 'catalog:'
         version: 8.57.1
@@ -289,8 +289,8 @@ importers:
         specifier: ^12.0.0
         version: 12.1.0(size-limit@11.1.6)
       '@size-limit/webpack':
-        specifier: ^11.0.2
-        version: 11.1.6(lightningcss@1.31.1)(size-limit@11.1.6)
+        specifier: ^12.0.0
+        version: 12.1.0(lightningcss@1.31.1)(size-limit@11.1.6)
       '@size-limit/webpack-why':
         specifier: ^11.1.6
         version: 11.1.6(lightningcss@1.31.1)(size-limit@11.1.6)(webpack@5.107.2(lightningcss@1.31.1))
@@ -3223,11 +3223,11 @@ packages:
       size-limit: 11.1.6
       webpack: ^4.0.0 || ^5.0.0
 
-  '@size-limit/webpack@11.1.6':
-    resolution: {integrity: sha512-PTZCgwJsgdzdEj2wPFuLm0cCge8N2WbswMcKWNwMJibxQxPAmiF+sZ2F6GYBS7G7K3Fb4ovCliuN+wnnRACPNg==}
-    engines: {node: ^18.0.0 || >=20.0.0}
+  '@size-limit/webpack@12.1.0':
+    resolution: {integrity: sha512-3v/evOHskR0eVD6hpRO9jFpRPkpJb+GhqKJGxrqf1j1ZeoYu9A8v8iT3+U4TJOXTZbCbJ+Q6lWRBPFEcLZbNuw==}
+    engines: {node: ^20.0.0 || ^22.0.0 || >=24.0.0}
     peerDependencies:
-      size-limit: 11.1.6
+      size-limit: 12.1.0
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
@@ -7074,8 +7074,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  nanoid@5.0.9:
-    resolution: {integrity: sha512-Aooyr6MXU6HpvvWXKoVoXwKMs/KyVakWwg7xQfv5/S/RIgJMy0Ifa45H9qqYy7pTCszrHzP21Uk4PZq2HpEM8Q==}
+  nanoid@5.1.16:
+    resolution: {integrity: sha512-kVrnsrJqMR8+oLJnGEmSWw9BivK5mt7H3FZatVRjrc5wGqFYuBxX1yG7+A7Gi5AefkX6t/oCkizcQgpu0cY1dQ==}
     engines: {node: ^18 || >=20}
     hasBin: true
 
@@ -11999,9 +11999,9 @@ snapshots:
       - uglify-js
       - webpack-cli
 
-  '@size-limit/webpack@11.1.6(esbuild@0.27.3)(lightningcss@1.31.1)(postcss@8.5.15)(size-limit@11.1.6)':
+  '@size-limit/webpack@12.1.0(esbuild@0.27.3)(lightningcss@1.31.1)(postcss@8.5.15)(size-limit@11.1.6)':
     dependencies:
-      nanoid: 5.0.9
+      nanoid: 5.1.16
       size-limit: 11.1.6
       webpack: 5.107.2(esbuild@0.27.3)(lightningcss@1.31.1)(postcss@8.5.15)
     transitivePeerDependencies:
@@ -12019,9 +12019,9 @@ snapshots:
       - uglify-js
       - webpack-cli
 
-  '@size-limit/webpack@11.1.6(lightningcss@1.31.1)(size-limit@11.1.6)':
+  '@size-limit/webpack@12.1.0(lightningcss@1.31.1)(size-limit@11.1.6)':
     dependencies:
-      nanoid: 5.0.9
+      nanoid: 5.1.16
       size-limit: 11.1.6
       webpack: 5.107.2(lightningcss@1.31.1)
     transitivePeerDependencies:
@@ -17157,7 +17157,7 @@ snapshots:
 
   nanoid@3.3.13: {}
 
-  nanoid@5.0.9: {}
+  nanoid@5.1.16: {}
 
   nanospinner@1.2.2:
     dependencies:

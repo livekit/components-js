@@ -40,10 +40,20 @@
     "prettier": "catalog:",
     "turbo": "^2.1.1",
     "typescript": "5.8.2",
-    "typescript-eslint": "^8.24.0"
+    "typescript-eslint": "^8.58.0"
   },
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "pnpm@9.15.9"
+  "packageManager": "pnpm@9.15.9",
+  "pnpm": {
+    "overrides": {
+      "@typescript-eslint/eslint-plugin": "^8.58.0",
+      "@typescript-eslint/parser": "^8.58.0",
+      "@typescript-eslint/scope-manager": "^8.58.0",
+      "@typescript-eslint/types": "^8.58.0",
+      "@typescript-eslint/typescript-estree": "^8.58.0",
+      "@typescript-eslint/utils": "^8.58.0"
+    }
+  }
 }

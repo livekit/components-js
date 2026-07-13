@@ -9,3 +9,9 @@ catalog:
   '@livekit/protocol': ^1.44.0
   eslint: ^10.0.0
   prettier: ^3.8.1
+
+minimumReleaseAge: 2880
+minimumReleaseAgeExclude:
+  - '@livekit/*'
+  - livekit-client
+  - livekit-server-sdk

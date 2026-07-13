@@ -26,7 +26,8 @@
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.58.8",
-    "eslint": "^10.0.0"
+    "eslint": "^10.0.0",
+    "eslint-formatter-unix": "^9.0.1"
   },
   "keywords": [
     "docs",

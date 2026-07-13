@@ -85,6 +85,7 @@
     "@vitejs/plugin-react": "^4.3.2",
     "eslint": "catalog:",
     "eslint-config-lk-custom": "workspace:*",
+    "eslint-formatter-unix": "^9.0.1",
     "jsdom": "^26.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

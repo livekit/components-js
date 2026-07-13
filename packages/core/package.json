@@ -51,6 +51,7 @@
     "@size-limit/webpack": "^12.0.0",
     "eslint": "catalog:",
     "eslint-config-lk-custom": "workspace:*",
+    "eslint-formatter-unix": "^9.0.1",
     "size-limit": "^11.0.2",
     "tsup": "^8.5.1",
     "typescript": "5.8.2",

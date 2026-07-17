@@ -584,8 +584,8 @@ importers:
         specifier: ^1.0.6
         version: 1.0.6
       '@types/js-yaml':
-        specifier: 3.12.10
-        version: 3.12.10
+        specifier: 4.0.9
+        version: 4.0.9
       '@types/node':
         specifier: 24.13.3
         version: 24.13.3
@@ -3865,8 +3865,8 @@ packages:
   '@types/jest@30.0.0':
     resolution: {integrity: sha512-XTYugzhuwqWjws0CVz8QpM36+T+Dz5mTEBKhNs/esGLnCIlGdRy+Dq78NRjd7ls7r8BC8ZRMOrKlkO1hU0JOwA==}
 
-  '@types/js-yaml@3.12.10':
-    resolution: {integrity: sha512-/Mtaq/wf+HxXpvhzFYzrzCqNRcA958sW++7JOFC8nPrZcvfi/TrzOaaGbvt27ltJB2NQbHVAg5a1wUCsyMH7NA==}
+  '@types/js-yaml@4.0.9':
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
 
   '@types/jsesc@2.5.1':
     resolution: {integrity: sha512-9VN+6yxLOPLOav+7PwjZbxiID2bVaeq0ED4qSQmdQTdjnXJSaCVKTR58t15oqH1H5t8Ng2ZX1SabJVoN9Q34bw==}
@@ -12571,7 +12571,7 @@ snapshots:
       expect: 30.3.0
       pretty-format: 30.3.0
 
-  '@types/js-yaml@3.12.10': {}
+  '@types/js-yaml@4.0.9': {}
 
   '@types/jsesc@2.5.1': {}
 

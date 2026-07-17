@@ -33,7 +33,7 @@
   "devDependencies": {
     "@types/heft-jest": "^1.0.6",
     "@types/js-yaml": "3.12.10",
-    "@types/node": "20.17.29",
+    "@types/node": "24.13.3",
     "@types/resolve": "1.20.6",
     "eslint": "catalog:",
     "fast-glob": "^3.3.1",

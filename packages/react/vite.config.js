@@ -43,21 +43,16 @@ export default defineConfig({
           chunkFileNames: '[name]-[hash].mjs',
           dir: 'dist',
           codeSplitting: {
-            // Rollup's `manualChunks` object form pulled each listed module *and its
-            // dependency tree* into the chunk. Rolldown groups only capture modules
-            // that themselves match `test`, so recursion must be opted into.
-            includeDependenciesRecursively: true,
-
+            // Group by source directory: each `test` matches every module in the
+            // directory directly, so no recursion or priorities are needed (the
+            // directories are disjoint, so a module matches exactly one group).
+            // Modules shared across entries but outside these dirs are hoisted into
+            // their own chunk by Rolldown automatically.
             groups: [
-              { name: 'contexts', test: /\/src\/context\/index\.ts$/, priority: 5 },
-              {
-                name: 'room',
-                test: /\/src\/(hooks\/useLiveKitRoom\.ts|components\/LiveKitRoom\.tsx)$/,
-                priority: 4,
-              },
-              { name: 'hooks', test: /\/src\/hooks\/index\.ts$/, priority: 3 },
-              { name: 'components', test: /\/src\/components\/index\.ts$/, priority: 2 },
-              { name: 'prefabs', test: /\/src\/prefabs\/index\.ts$/, priority: 1 },
+              { name: 'contexts', test: /\/src\/context\// },
+              { name: 'hooks', test: /\/src\/hooks\// },
+              { name: 'components', test: /\/src\/components\// },
+              { name: 'prefabs', test: /\/src\/prefabs\// },
             ],
           },
         },

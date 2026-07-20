@@ -42,7 +42,7 @@ export default defineConfig({
           entryFileNames: '[name].mjs', // Use .mjs for ESM
           chunkFileNames: '[name]-[hash].mjs',
           dir: 'dist',
-          manualChunks: {
+          codeSplitting: {
             contexts: ['src/context/index.ts'],
             room: ['src/hooks/useLiveKitRoom.ts', 'src/components/LiveKitRoom.tsx'],
             hooks: ['src/hooks/index.ts'],

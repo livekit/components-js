@@ -35,7 +35,7 @@ export default {
     return <AgentSessionView_01 themeMode={resolvedTheme as 'dark' | 'light'} {...args} />;
   },
   args: {
-    className: 'h-screen w-screen',
+    className: 'h-screen w-full',
     supportsChatInput: true,
     supportsVideoInput: true,
     supportsScreenShare: true,

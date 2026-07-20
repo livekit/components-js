@@ -42,19 +42,13 @@ export default defineConfig({
           entryFileNames: '[name].mjs', // Use .mjs for ESM
           chunkFileNames: '[name]-[hash].mjs',
           dir: 'dist',
-          codeSplitting: {
-            // Group by source directory: each `test` matches every module in the
-            // directory directly, so no recursion or priorities are needed (the
-            // directories are disjoint, so a module matches exactly one group).
-            // Modules shared across entries but outside these dirs are hoisted into
-            // their own chunk by Rolldown automatically.
-            groups: [
-              { name: 'contexts', test: /\/src\/context\// },
-              { name: 'hooks', test: /\/src\/hooks\// },
-              { name: 'components', test: /\/src\/components\// },
-              { name: 'prefabs', test: /\/src\/prefabs\// },
-            ],
-          },
+          // codeSplitting: {
+          //   contexts: ['src/context/index.ts'],
+          //   room: ['src/hooks/useLiveKitRoom.ts', 'src/components/LiveKitRoom.tsx'],
+          //   hooks: ['src/hooks/index.ts'],
+          //   components: ['src/components/index.ts'],
+          //   prefabs: ['src/prefabs/index.ts'],
+          // },
         },
         {
           format: 'cjs',

@@ -1,32 +1,106 @@
 {
-  "extends": ["config:base"],
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", "group:monorepos", "group:recommended"],
   "rangeStrategy": "auto",
   "postUpdateOptions": ["pnpmDedupe"],
+  "schedule": ["before 6am on the first day of the month"],
+  "prConcurrentLimit": 10,
+  "prHourlyLimit": 0,
+  "rebaseWhen": "conflicted",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on the first day of the month"],
+    "automerge": true
+  },
   "packageRules": [
     {
-      "schedule": "before 6am on the first day of the month",
       "matchDepTypes": ["devDependencies"],
       "matchPackageNames": ["!/^@livekit//", "!/^livekit-/"],
       "matchUpdateTypes": ["patch", "minor", "pin", "digest"],
       "groupName": "devDependencies (non-major)"
     },
     {
-      "schedule": "before 6am on the first day of the month",
       "matchDepTypes": ["dependencies", "optionalDependencies", "peerDependencies"],
       "matchPackageNames": ["!/^@livekit//", "!/^livekit-/"],
       "matchUpdateTypes": ["patch", "minor", "pin", "digest"],
       "groupName": "dependencies (non-major)"
     },
     {
-      "schedule": "before 6am on the first day of the month",
-      "matchPackageNames": ["/^@rushstack//"],
-      "matchUpdateTypes": ["patch", "minor"],
-      "groupName": "Rush stack (non-major)"
+      "matchDepTypes": ["devDependencies"],
+      "matchPackageNames": ["!/^@livekit//", "!/^livekit-/"],
+      "matchUpdateTypes": ["major"],
+      "groupName": "devDependencies (major)"
+    },
+    {
+      "matchDepTypes": ["dependencies", "optionalDependencies", "peerDependencies"],
+      "matchPackageNames": ["!/^@livekit//", "!/^livekit-/"],
+      "matchUpdateTypes": ["major"],
+      "groupName": "dependencies (major)"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions"
+    },
+    {
+      "matchPackageNames": ["/eslint/", "/prettier/", "/^@eslint//", "/^typescript-eslint$/", "/^@typescript-eslint//"],
+      "groupName": "Linting & formatting"
+    },
+    {
+      "matchPackageNames": ["/^@storybook//", "/^storybook$/", "/^eslint-plugin-storybook$/"],
+      "groupName": "Storybook"
+    },
+    {
+      "matchPackageNames": ["/^@radix-ui//", "/^radix-ui$/"],
+      "groupName": "Radix UI"
+    },
+    {
+      "matchPackageNames": ["/^@testing-library//", "/^jsdom$/"],
+      "groupName": "Testing Library"
+    },
+    {
+      "matchPackageNames": ["/^vite$/", "/^@vitejs//", "/^vite-plugin/", "/^vitest$/", "/^@vitest//"],
+      "groupName": "Vite & Vitest"
+    },
+    {
+      "matchPackageNames": ["/^@microsoft//", "/^@rushstack//"],
+      "groupName": "Microsoft API tooling"
+    },
+    {
+      "matchPackageNames": ["/^@babel//", "/^babel-/"],
+      "groupName": "Babel"
+    },
+    {
+      "matchPackageNames": ["/^postcss/", "/^autoprefixer$/", "/^modern-normalize$/", "/^sass$/"],
+      "groupName": "PostCSS & CSS tooling"
+    },
+    {
+      "matchPackageNames": ["/^@size-limit//", "/^size-limit$/"],
+      "groupName": "size-limit"
+    },
+    {
+      "matchPackageNames": ["/tailwind/", "/^@tailwindcss//"],
+      "groupName": "Tailwind CSS"
+    },
+    {
+      "matchPackageNames": ["/^@types//"],
+      "groupName": "Type definitions",
+      "automerge": true
+    },
+    {
+      "matchPackageNames": ["/^react$/", "/^react-dom$/", "/^@types/react$/", "/^@types/react-dom$/"],
+      "groupName": "React"
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "matchPackageNames": ["!/^@livekit//", "!/^livekit-/"],
+      "matchUpdateTypes": ["patch", "minor", "pin", "digest"],
+      "automerge": true
     },
     {
       "matchPackageNames": ["/^@livekit//", "/^livekit-/"],
       "matchUpdateTypes": ["patch", "minor"],
-      "groupName": "LiveKit dependencies (non-major)"
+      "groupName": "LiveKit dependencies (non-major)",
+      "schedule": ["at any time"]
     }
   ]
 }

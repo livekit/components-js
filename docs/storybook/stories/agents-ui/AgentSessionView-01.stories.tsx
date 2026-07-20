@@ -35,7 +35,7 @@ export default {
     return <AgentSessionView_01 themeMode={resolvedTheme as 'dark' | 'light'} {...args} />;
   },
   args: {
-    className: 'h-screen w-full',
+    className: 'h-screen',
     supportsChatInput: true,
     supportsVideoInput: true,
     supportsScreenShare: true,
@@ -70,7 +70,7 @@ export default {
     audioVisualizerWaveLineWidth: { control: { type: 'range', min: 1, max: 10, step: 0.1 } },
   },
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
     actions: { handles: [] },
   },
 };

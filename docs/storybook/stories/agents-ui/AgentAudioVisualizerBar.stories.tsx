@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { useAgent } from '@livekit/components-react';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
-import { AgentAudioVisualizerBar, AgentAudioVisualizerBarProps } from '@agents-ui';
+import { AgentAudioVisualizerBar, AgentAudioVisualizerBarProps } from '@livekit/agents-ui';
 
 export default {
   component: AgentAudioVisualizerBar,

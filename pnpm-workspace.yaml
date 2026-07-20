@@ -4,6 +4,12 @@ packages:
   - 'docs/*'
   - 'tooling/*'
 
+allowBuilds:
+  '@parcel/watcher': false
+  esbuild: true
+  msw: false
+  sharp: false
+
 catalog:
   livekit-client: ^2.20.1
   # Must match the exact @livekit/protocol version that livekit-client pins, so the
@@ -18,3 +24,11 @@ minimumReleaseAgeExclude:
   - '@livekit/*'
   - livekit-client
   - livekit-server-sdk
+
+overrides:
+  '@typescript-eslint/eslint-plugin': ^8.58.0
+  '@typescript-eslint/parser': ^8.58.0
+  '@typescript-eslint/scope-manager': ^8.58.0
+  '@typescript-eslint/types': ^8.58.0
+  '@typescript-eslint/typescript-estree': ^8.58.0
+  '@typescript-eslint/utils': ^8.58.0

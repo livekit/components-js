@@ -73,7 +73,7 @@ importers:
 
   docs/storybook:
     dependencies:
-      '@agents-ui':
+      '@livekit/agents-ui':
         specifier: workspace:*
         version: link:../../packages/shadcn
       '@livekit/components-react':

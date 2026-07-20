@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
-import { AgentAudioVisualizerWave, AgentAudioVisualizerWaveProps } from '@agents-ui';
+import { AgentAudioVisualizerWave, AgentAudioVisualizerWaveProps } from '@livekit/agents-ui';
 import { useAgent } from '@livekit/components-react';
 
 export default {

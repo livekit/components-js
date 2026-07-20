@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
-import { StartAudioButton, type StartAudioButtonProps } from '@agents-ui';
+import { StartAudioButton, type StartAudioButtonProps } from '@livekit/agents-ui';
 
 export default {
   component: StartAudioButton,

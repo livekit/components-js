@@ -5,7 +5,7 @@ import {
   AgentAudioVisualizerGrid,
   AgentAudioVisualizerGridProps,
   AgentAudioVisualizerGridCellVariants,
-} from '@agents-ui';
+} from '@livekit/agents-ui';
 import { useAgent } from '@livekit/components-react';
 import { cn } from '@/lib/utils';
 

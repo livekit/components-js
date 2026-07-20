@@ -1,7 +1,7 @@
 import React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
-import { ReactShaderToy, ReactShaderToyProps } from '@agents-ui';
+import { ReactShaderToy, ReactShaderToyProps } from '@livekit/agents-ui';
 
 export default {
   component: ReactShaderToy,

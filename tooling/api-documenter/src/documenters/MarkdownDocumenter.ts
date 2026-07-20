@@ -74,7 +74,6 @@ import {
   getLinkToSourceOnGitHub,
   isNonDefaultOverload,
 } from '../livekitUtils/classifiers';
-import { MarkDocTag } from '../nodes/MarkDocTag';
 import { ParameterList } from '../nodes/ParameterList';
 import { ParameterItem } from '../nodes/ParameterItem';
 import { Callout } from '../nodes/Callout';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
-import { AgentControlBar, AgentControlBarProps } from '@agents-ui';
+import { AgentControlBar, AgentControlBarProps } from '@livekit/agents-ui';
 
 interface Args {
   variant: 'default' | 'outline' | 'livekit';

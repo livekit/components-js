@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
-import { AgentTrackToggle, AgentTrackToggleProps } from '@agents-ui';
+import { AgentTrackToggle, AgentTrackToggleProps } from '@livekit/agents-ui';
 import { Track } from 'livekit-client';
 
 export default {

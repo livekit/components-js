@@ -2,7 +2,7 @@ import React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { useTheme } from 'next-themes';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
-import { AgentSessionView_01, AgentSessionView_01Props } from '@agents-ui';
+import { AgentSessionView_01, AgentSessionView_01Props } from '@livekit/agents-ui';
 
 export default {
   component: AgentSessionView_01,

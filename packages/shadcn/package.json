@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@agents-ui",
+  "name": "@livekit/agents-ui",
   "version": "1.0.7",
   "description": "",
   "type": "module",

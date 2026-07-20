@@ -10,4 +10,13 @@ const lkCustom = require('eslint-config-lk-custom');
 module.exports = [
   { ignores: ['lib/**', 'temp/**', 'node_modules/**'] },
   ...lkCustom,
+  {
+    // Vendored fork of @microsoft/api-documenter: @virtual hook methods and CLI
+    // action constructors keep named parameters for documentation and override
+    // clarity even when the base implementation does not consume them. Unused
+    // variables/imports are still reported.
+    rules: {
+      '@typescript-eslint/no-unused-vars': ['error', { args: 'none', ignoreRestSiblings: true }],
+    },
+  },
 ];

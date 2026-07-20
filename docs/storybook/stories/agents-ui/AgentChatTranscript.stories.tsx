@@ -1,7 +1,7 @@
 import React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
-import { AgentChatTranscript, AgentChatTranscriptProps } from '@agents-ui';
+import { AgentChatTranscript, AgentChatTranscriptProps } from '@livekit/agents-ui';
 
 export default {
   component: AgentChatTranscript,

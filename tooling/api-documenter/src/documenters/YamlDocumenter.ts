@@ -3,7 +3,7 @@
 
 import * as path from 'path';
 
-import yaml = require('js-yaml');
+import * as yaml from 'js-yaml';
 import {
   JsonFile,
   JsonSchema,

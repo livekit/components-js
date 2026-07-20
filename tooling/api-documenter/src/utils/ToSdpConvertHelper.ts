@@ -16,7 +16,7 @@ import {
 } from '../yaml/ISDPYamlFile';
 import path from 'path';
 import { FileSystem, Encoding, NewlineKind } from '@rushstack/node-core-library';
-import yaml = require('js-yaml');
+import * as yaml from 'js-yaml';
 
 export function convertUDPYamlToSDP(folderPath: string): void {
   convert(folderPath, folderPath);

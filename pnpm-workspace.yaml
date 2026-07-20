@@ -13,7 +13,7 @@ catalog:
   eslint: ^10.0.0
   prettier: ^3.8.1
 
-minimumReleaseAge: 2880
+minimumReleaseAge: 14400
 minimumReleaseAgeExclude:
   - '@livekit/*'
   - livekit-client

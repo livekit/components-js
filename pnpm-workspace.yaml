@@ -9,7 +9,7 @@ allowBuilds:
   esbuild: true
   msw: false
   sharp: false
-  unrs-resolver: set this to true or false
+  unrs-resolver: false
 
 catalog:
   livekit-client: ^2.20.1

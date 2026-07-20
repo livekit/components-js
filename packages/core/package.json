@@ -54,7 +54,7 @@
     "eslint-formatter-unix": "^9.0.1",
     "size-limit": "^11.0.2",
     "tsup": "^8.5.1",
-    "typescript": "5.8.2",
+    "typescript": "7.0.2",
     "vitest": "^4.1.8"
   },
   "engines": {

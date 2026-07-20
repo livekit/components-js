@@ -38,7 +38,7 @@
     "storybook": "^10.1.4",
     "tailwindcss": "^4.1.17",
     "tsx": "^4.0.0",
-    "typescript": "5.8.2",
+    "typescript": "7.0.2",
     "vite": "^7.3.5",
     "webpack": "^5.107.2"
   }

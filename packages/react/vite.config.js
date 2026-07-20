@@ -36,7 +36,6 @@ export default defineConfig({
         'react-dom',
         'react/jsx-runtime',
       ],
-      preserveEntrySignatures: 'allow-extension',
       output: [
         {
           format: 'es',
@@ -47,7 +46,7 @@ export default defineConfig({
             // Rollup's `manualChunks` object form pulled each listed module *and its
             // dependency tree* into the chunk. Rolldown groups only capture modules
             // that themselves match `test`, so recursion must be opted into.
-            includeDependenciesRecursively: false,
+            includeDependenciesRecursively: true,
 
             groups: [
               { name: 'contexts', test: /\/src\/context\/index\.ts$/, priority: 5 },

@@ -7,6 +7,7 @@
   "prConcurrentLimit": 10,
   "prHourlyLimit": 0,
   "rebaseWhen": "conflicted",
+  "minimumReleaseAge": "10 days",
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": ["before 6am on the first day of the month"],
@@ -29,20 +30,26 @@
       "matchDepTypes": ["devDependencies"],
       "matchPackageNames": ["!/^@livekit//", "!/^livekit-/"],
       "matchUpdateTypes": ["major"],
-      "groupName": "devDependencies (major)"
+      "groupName": "devDependencies"
     },
     {
       "matchDepTypes": ["dependencies", "optionalDependencies", "peerDependencies"],
       "matchPackageNames": ["!/^@livekit//", "!/^livekit-/"],
       "matchUpdateTypes": ["major"],
-      "groupName": "dependencies (major)"
+      "groupName": "dependencies"
     },
     {
       "matchManagers": ["github-actions"],
       "groupName": "GitHub Actions"
     },
     {
-      "matchPackageNames": ["/eslint/", "/prettier/", "/^@eslint//", "/^typescript-eslint$/", "/^@typescript-eslint//"],
+      "matchPackageNames": [
+        "/eslint/",
+        "/prettier/",
+        "/^@eslint//",
+        "/^typescript-eslint$/",
+        "/^@typescript-eslint//"
+      ],
       "groupName": "Linting & formatting"
     },
     {
@@ -58,7 +65,13 @@
       "groupName": "Testing Library"
     },
     {
-      "matchPackageNames": ["/^vite$/", "/^@vitejs//", "/^vite-plugin/", "/^vitest$/", "/^@vitest//"],
+      "matchPackageNames": [
+        "/^vite$/",
+        "/^@vitejs//",
+        "/^vite-plugin/",
+        "/^vitest$/",
+        "/^@vitest//"
+      ],
       "groupName": "Vite & Vitest"
     },
     {
@@ -87,7 +100,12 @@
       "automerge": true
     },
     {
-      "matchPackageNames": ["/^react$/", "/^react-dom$/", "/^@types/react$/", "/^@types/react-dom$/"],
+      "matchPackageNames": [
+        "/^react$/",
+        "/^react-dom$/",
+        "/^@types/react$/",
+        "/^@types/react-dom$/"
+      ],
       "groupName": "React"
     },
     {
@@ -97,10 +115,24 @@
       "automerge": true
     },
     {
+      "matchPackageNames": [
+        "/^typescript$/",
+        "/^tslib$/",
+        "/^typescript-eslint$/",
+        "/^@typescript-eslint//"
+      ],
+      "groupName": "TypeScript",
+      "automerge": false
+    },
+    {
       "matchPackageNames": ["/^@livekit//", "/^livekit-/"],
       "matchUpdateTypes": ["patch", "minor"],
       "groupName": "LiveKit dependencies (non-major)",
       "schedule": ["at any time"]
+    },
+    {
+      "matchPackageNames": ["/^@livekit//", "/^livekit-/"],
+      "minimumReleaseAge": "0 days"
     }
   ]
 }

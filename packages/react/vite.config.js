@@ -36,6 +36,7 @@ export default defineConfig({
         'react-dom',
         'react/jsx-runtime',
       ],
+      preserveEntrySignatures: 'allow-extension',
       output: [
         {
           format: 'es',
@@ -43,11 +44,22 @@ export default defineConfig({
           chunkFileNames: '[name]-[hash].mjs',
           dir: 'dist',
           codeSplitting: {
-            contexts: ['src/context/index.ts'],
-            room: ['src/hooks/useLiveKitRoom.ts', 'src/components/LiveKitRoom.tsx'],
-            hooks: ['src/hooks/index.ts'],
-            components: ['src/components/index.ts'],
-            prefabs: ['src/prefabs/index.ts'],
+            // Rollup's `manualChunks` object form pulled each listed module *and its
+            // dependency tree* into the chunk. Rolldown groups only capture modules
+            // that themselves match `test`, so recursion must be opted into.
+            includeDependenciesRecursively: false,
+
+            groups: [
+              { name: 'contexts', test: /\/src\/context\/index\.ts$/, priority: 5 },
+              {
+                name: 'room',
+                test: /\/src\/(hooks\/useLiveKitRoom\.ts|components\/LiveKitRoom\.tsx)$/,
+                priority: 4,
+              },
+              { name: 'hooks', test: /\/src\/hooks\/index\.ts$/, priority: 3 },
+              { name: 'components', test: /\/src\/components\/index\.ts$/, priority: 2 },
+              { name: 'prefabs', test: /\/src\/prefabs\/index\.ts$/, priority: 1 },
+            ],
           },
         },
         {

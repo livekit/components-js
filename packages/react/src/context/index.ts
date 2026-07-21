@@ -1,4 +1,4 @@
-export {} from './chat-context';
+export { } from './chat-context';
 export type { LayoutContextType } from './layout-context';
 export {
   LayoutContext,
@@ -14,7 +14,7 @@ export {
   useMaybeParticipantContext,
   useParticipantContext,
 } from './participant-context';
-export {} from './pin-context';
+export { } from './pin-context';
 export { RoomContext, useEnsureRoom, useMaybeRoomContext, useRoomContext } from './room-context';
 export { useEnsureSession, useMaybeSessionContext, useSessionContext } from './session-context';
 export {
@@ -25,3 +25,4 @@ export {
 } from './track-reference-context';
 
 export { type FeatureFlags, useFeatureContext, LKFeatureContext } from './feature-context';
+export { EmojiReactionProvider, useEmojiReactionContext, type EmojiReaction } from './EmojiReactionContext';

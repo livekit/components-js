@@ -211,10 +211,11 @@
           "type": "registry:component"
         }
       ],
-      "dependencies": ["@livekit/components-react@^2.0.0", "motion"],
+      "dependencies": ["@livekit/components-react@^2.0.0", "motion", "streamdown"],
       "registryDependencies": [
-        "@ai-elements/message",
-        "@ai-elements/conversation",
+        "message",
+        "bubble",
+        "message-scroller",
         "@agents-ui/agent-chat-indicator"
       ]
     },
@@ -315,7 +316,6 @@
       ],
       "registryDependencies": [
         "utils",
-        "@ai-elements/shimmer",
         "@agents-ui/agent-control-bar",
         "@agents-ui/agent-chat-transcript",
         "@agents-ui/agent-audio-visualizer-aura",

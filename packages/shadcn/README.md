@@ -2,7 +2,7 @@
 
 Agents UI is the easiest way to build agentic voice applications faster on top of LiveKit primitives.
 
-Agents UI is a component library built on top of [shadcn/ui](https://ui.shadcn.com/) and [AI Elements](https://ai-sdk.dev/elements) to accelerate building agentic applications on top of LiveKit's real-time platform. It provides pre-built components like controling IO, managing sessions, rendering transcripts, visualing audio streams, and more.
+Agents UI is a component library built on top of [shadcn/ui](https://ui.shadcn.com/) to accelerate building agentic applications on top of LiveKit's real-time platform. It provides pre-built components like controling IO, managing sessions, rendering transcripts, visualing audio streams, and more.
 
 ## Components
 
@@ -103,7 +103,6 @@ After installation, no additional setup is needed. The component's styles (Tailw
 packages/shadcn/
 ├── components/
 │   ├── agents-ui/          # LiveKit agent-specific components
-│   ├── ai-elements/        # Reusable AI conversation components
 │   ├── ui/                 # Base UI primitives (shadcn/ui style)
 │   └── session-provider.tsx
 ├── hooks/

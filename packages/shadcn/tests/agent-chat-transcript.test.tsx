@@ -19,7 +19,11 @@ vi.mock('@/components/ui/message-scroller', () => ({
 
 vi.mock('@/components/ui/message', () => ({
   Message: ({ children, align, title }: any) => (
-    <div data-testid="chat-message" data-from={align === 'end' ? 'user' : 'assistant'} data-title={title}>
+    <div
+      data-testid="chat-message"
+      data-from={align === 'end' ? 'user' : 'assistant'}
+      data-title={title}
+    >
       {children}
     </div>
   ),

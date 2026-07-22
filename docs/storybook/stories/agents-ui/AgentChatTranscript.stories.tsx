@@ -1,4 +1,5 @@
 import React from 'react';
+import { SendHorizontal } from 'lucide-react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentChatTranscript, AgentChatTranscriptProps } from '@livekit/agents-ui';
@@ -101,18 +102,19 @@ export const InjectMessages: StoryObj<AgentChatTranscriptProps> = {
     };
 
     return (
-      <div className="w-96 h-dvh overflow-hidden mx-auto flex flex-col">
-        <div className="p-2 border-b">
+      <div className="w-96 h-dvh overflow-hidden mx-auto flex flex-col border">
+        <div className="flex-1 overflow-hidden">
+          <AgentChatTranscript {...args} messages={messages} className="**:data-[slot=message-scroller-content]:p-4"/>
+        </div>
+        <div className="p-2 border-t flex justify-end end bg-accent">
           <button
             type="button"
             onClick={addMessage}
-            className="px-3 py-1.5 text-sm rounded-md border bg-background hover:bg-accent"
+            className="grid size-8 place-content-center text-sm rounded-md border bg-background hover:bg-accent"
           >
-            Add message
+            <div className='sr-only'>Add message</div>
+            <SendHorizontal className="w-4 h-4" />
           </button>
-        </div>
-        <div className="flex-1 overflow-hidden">
-          <AgentChatTranscript {...args} messages={messages} />
         </div>
       </div>
     );

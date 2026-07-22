@@ -72,3 +72,49 @@ export default {
 export const Default: StoryObj<AgentChatTranscriptProps> = {
   args: {},
 };
+
+export const InjectMessages: StoryObj<AgentChatTranscriptProps> = {
+  args: {
+    messages: [],
+  },
+  render: (args: AgentChatTranscriptProps) => {
+    const [messages, setMessages] = React.useState<
+      NonNullable<AgentChatTranscriptProps['messages']>
+    >(args.messages ?? []);
+    const nextIsLocalRef = React.useRef(false);
+
+    const addMessage = () => {
+      const isLocal = nextIsLocalRef.current;
+      nextIsLocalRef.current = !isLocal;
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `${prev.length + 1}`,
+          timestamp: new Date().toISOString(),
+          from: { isLocal },
+          message: isLocal
+            ? 'This is a message from the user.'
+            : 'This is a message from the agent.',
+        },
+      ]);
+    };
+
+    return (
+      <div className="w-96 h-dvh overflow-hidden mx-auto flex flex-col">
+        <div className="p-2 border-b">
+          <button
+            type="button"
+            onClick={addMessage}
+            className="px-3 py-1.5 text-sm rounded-md border bg-background hover:bg-accent"
+          >
+            Add message
+          </button>
+        </div>
+        <div className="flex-1 overflow-hidden">
+          <AgentChatTranscript {...args} messages={messages} />
+        </div>
+      </div>
+    );
+  },
+};

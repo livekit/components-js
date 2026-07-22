@@ -211,11 +211,12 @@
           "type": "registry:component"
         }
       ],
-      "dependencies": ["@livekit/components-react@^2.0.0", "motion", "streamdown"],
+      "dependencies": ["@livekit/components-react@^2.0.0", "streamdown"],
       "registryDependencies": [
+        "message-scroller",
         "message",
         "bubble",
-        "message-scroller",
+        "marker",
         "@agents-ui/agent-chat-indicator"
       ]
     },

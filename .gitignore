@@ -11,3 +11,4 @@ generated/
 .env.*
 .next/
 next-env.d.ts
+*.tsbuildinfo

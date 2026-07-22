@@ -25,6 +25,8 @@ minimumReleaseAgeExclude:
   - '@livekit/*'
   - livekit-client
   - livekit-server-sdk
+  # Renovate security update: js-yaml@4.3.0
+  - js-yaml@4.3.0
 
 overrides:
   '@typescript-eslint/eslint-plugin': ^8.58.0

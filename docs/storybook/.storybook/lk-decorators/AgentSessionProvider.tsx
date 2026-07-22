@@ -1,23 +1,24 @@
 import React, { useEffect } from 'react';
 import { Decorator, StoryFn } from '@storybook/react-vite';
-import { SessionProvider, useSession } from '@livekit/components-react';
+import { SessionProvider,RoomAudioRenderer, useSession } from '@livekit/components-react';
 import { TokenSource } from 'livekit-client';
 
-const TOKEN_SOURCE = TokenSource.sandboxTokenServer(
-  import.meta.env.VITE_PUBLIC_LK_SANDBOX_TOKEN_SERVER_ID,
-);
+const TOKEN_SOURCE = TokenSource.endpoint('/api/agents-ui/token');
 
 export const AgentSessionProvider: Decorator = (Story: StoryFn) => {
   const session = useSession(TOKEN_SOURCE);
 
   useEffect(() => {
-    session.start();
+    void session.start().catch((error) => {
+      console.error('Failed to start LiveKit agent session:', error);
+    });
     return () => session.end();
   }, []);
 
   return (
     <SessionProvider session={session}>
       <Story />
+      <RoomAudioRenderer />
     </SessionProvider>
   );
 };

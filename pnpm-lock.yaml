@@ -82,9 +82,18 @@ importers:
       '@livekit/components-styles':
         specifier: workspace:*
         version: link:../../packages/styles
+      '@livekit/protocol':
+        specifier: 'catalog:'
+        version: 1.46.6
       livekit-client:
         specifier: 'catalog:'
         version: 2.20.2(@types/dom-mediacapture-record@1.0.22)
+      livekit-server-sdk:
+        specifier: ^2.17.0
+        version: 2.17.0
+      lucide-react:
+        specifier: ^1.24.0
+        version: 1.24.0(react@19.2.7)
       react:
         specifier: ^19.0.0
         version: 19.2.7

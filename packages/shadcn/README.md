@@ -144,16 +144,33 @@ You can find the components in [Storybook](http://localhost:6006) under the `Age
 
 ```bash
 # Build the shadcn registry
-pnpm registry:build
+pnpm shadcn:build
 
 # Serve the registry locally (http://localhost:3210)
-pnpm registry:serve
+pnpm shadcn:serve
 
 # Generate prop documentation
-pnpm registry:doc-gen
+pnpm shadcn:doc-gen
 
 # Build and deploy to configured destination paths
-pnpm registry:update
+pnpm shadcn:deploy
+```
+
+### Publishing downstream updates
+
+These scripts are maintainer-only release helpers. They require an authenticated `gh`
+CLI session with access to the target repositories, push branches to those
+repositories, and open GitHub PRs.
+
+```bash
+# Sync the registry into livekit-examples/agent-starter-react
+pnpm shadcn:publish:agent-starter-react
+
+# Sync the hosted registry and prop docs into livekit/web
+pnpm shadcn:publish:livekit-web
+
+# Run both downstream publish scripts
+pnpm shadcn:publish:all
 ```
 
 ### Environment Variables

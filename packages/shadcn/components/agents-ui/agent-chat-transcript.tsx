@@ -84,7 +84,7 @@ export function AgentChatTranscript({
   scrollMargin,
   scrollEdgeThreshold,
   preserveScrollOnPrepend,
-  scrollPreviousItemPeek = 20,
+  scrollPreviousItemPeek,
   defaultScrollPosition = 'last-anchor',
   scrollButtonRender,
   scrollButtonBehavior,

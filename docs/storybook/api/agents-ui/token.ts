@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { AccessToken, RoomAgentDispatch, RoomConfiguration } from 'livekit-server-sdk';
+import { createAgentToken } from './tokenCore';
 
 function sendResponse(res: VercelResponse, status: number, body: unknown, isJson: boolean) {
   res.setHeader('Cache-Control', 'no-store');
@@ -12,8 +12,9 @@ function sendResponse(res: VercelResponse, status: number, body: unknown, isJson
 }
 
 /**
- * Mirrors the local dev-only route in `.storybook/main.js`, so `AgentSessionView-01` can connect
- * to a real LiveKit room on the deployed Vercel preview, not just `pnpm dev:storybook`.
+ * Vercel Preview counterpart to the local dev-only route in `.storybook/main.js` — both share
+ * the token-minting logic in `tokenCore.ts`, so `AgentSessionView-01` can connect to a real
+ * LiveKit room on the deployed Vercel preview, not just `pnpm dev:storybook`.
  *
  * THIS ROUTE IS INSECURE: it has no authentication layer. It's intentionally allowed to run on
  * Vercel Preview deployments, but refuses to run on Vercel Production.
@@ -36,53 +37,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const LIVEKIT_URL = process.env.LIVEKIT_URL;
-    const API_KEY = process.env.LIVEKIT_API_KEY;
-    const API_SECRET = process.env.LIVEKIT_API_SECRET;
-    const AGENT_NAME = process.env.AGENT_NAME;
-
-    if (LIVEKIT_URL === undefined || LIVEKIT_URL === '') {
-      throw new Error('LIVEKIT_URL is not defined');
-    }
-    if (API_KEY === undefined || API_KEY === '') {
-      throw new Error('LIVEKIT_API_KEY is not defined');
-    }
-    if (API_SECRET === undefined || API_SECRET === '') {
-      throw new Error('LIVEKIT_API_SECRET is not defined');
-    }
-
-    const participantName = 'user';
-    const participantIdentity = `voice_assistant_user_${Math.floor(Math.random() * 10_000)}`;
-    const roomName = `voice_assistant_room_${Math.floor(Math.random() * 10_000)}`;
-    const token = new AccessToken(API_KEY, API_SECRET, {
-      identity: participantIdentity,
-      name: participantName,
-      ttl: '15m',
+    const body = await createAgentToken({
+      LIVEKIT_URL: process.env.LIVEKIT_URL,
+      LIVEKIT_API_KEY: process.env.LIVEKIT_API_KEY,
+      LIVEKIT_API_SECRET: process.env.LIVEKIT_API_SECRET,
+      AGENT_NAME: process.env.AGENT_NAME,
     });
-
-    token.addGrant({
-      room: roomName,
-      roomJoin: true,
-      canPublish: true,
-      canPublishData: true,
-      canSubscribe: true,
-    });
-
-    token.roomConfig = new RoomConfiguration({
-      agents: [new RoomAgentDispatch({ agentName: AGENT_NAME })],
-    });
-
-    sendResponse(
-      res,
-      200,
-      {
-        server_url: LIVEKIT_URL,
-        room_name: roomName,
-        participant_name: participantName,
-        participant_token: await token.toJwt(),
-      },
-      true,
-    );
+    sendResponse(res, 200, body, true);
   } catch (error) {
     console.error(error);
     const message = error instanceof Error ? error.message : String(error);

@@ -38,56 +38,21 @@ function createStorybookTokenRoutePlugin(env) {
         }
 
         try {
-          const { AccessToken, RoomAgentDispatch, RoomConfiguration } = await import(
-            'livekit-server-sdk'
+          // Loaded via Vite's SSR pipeline (rather than `require`/`import`) since this file is
+          // plain CommonJS and `tokenCore.ts` is TypeScript, shared with the Vercel Preview
+          // route in `../api/agents-ui/token.ts`.
+          const { createAgentToken } = await server.ssrLoadModule(
+            path.resolve(__dirname, '../api/agents-ui/tokenCore.ts'),
           );
-          const LIVEKIT_URL = env.LIVEKIT_URL;
-          const API_KEY = env.LIVEKIT_API_KEY;
-          const API_SECRET = env.LIVEKIT_API_SECRET;
-          const AGENT_NAME = env.AGENT_NAME;
 
-          if (LIVEKIT_URL === undefined || LIVEKIT_URL === '') {
-            throw new Error('LIVEKIT_URL is not defined');
-          }
-          if (API_KEY === undefined || API_KEY === '') {
-            throw new Error('LIVEKIT_API_KEY is not defined');
-          }
-          if (API_SECRET === undefined || API_SECRET === '') {
-            throw new Error('LIVEKIT_API_SECRET is not defined');
-          }
-
-          const participantName = 'user';
-          const participantIdentity = `voice_assistant_user_${Math.floor(Math.random() * 10_000)}`;
-          const roomName = `voice_assistant_room_${Math.floor(Math.random() * 10_000)}`;
-          const token = new AccessToken(API_KEY, API_SECRET, {
-            identity: participantIdentity,
-            name: participantName,
-            ttl: '15m',
+          const body = await createAgentToken({
+            LIVEKIT_URL: env.LIVEKIT_URL,
+            LIVEKIT_API_KEY: env.LIVEKIT_API_KEY,
+            LIVEKIT_API_SECRET: env.LIVEKIT_API_SECRET,
+            AGENT_NAME: env.AGENT_NAME,
           });
 
-          token.addGrant({
-            room: roomName,
-            roomJoin: true,
-            canPublish: true,
-            canPublishData: true,
-            canSubscribe: true,
-          });
-
-          token.roomConfig = new RoomConfiguration({
-            agents: [new RoomAgentDispatch({ agentName: AGENT_NAME })],
-          });
-
-          sendResponse(
-            res,
-            200,
-            {
-              server_url: LIVEKIT_URL,
-              room_name: roomName,
-              participant_name: participantName,
-              participant_token: await token.toJwt(),
-            },
-            true,
-          );
+          sendResponse(res, 200, body, true);
         } catch (error) {
           console.error(error);
           const message = error instanceof Error ? error.message : String(error);

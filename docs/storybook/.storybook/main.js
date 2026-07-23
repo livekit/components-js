@@ -1,37 +1,12 @@
 // @ts-check
 const path = require('path');
-const { RoomAgentDispatch } = require('@livekit/protocol');
 const TOKEN_ROUTE_PATH = '/api/agents-ui/token';
 
-function readRequestBody(req) {
-  return new Promise((resolve, reject) => {
-    const chunks = [];
-
-    req.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
-    req.on('error', reject);
-    req.on('end', () => {
-      try {
-        const rawBody = Buffer.concat(chunks).toString('utf8');
-        resolve(rawBody ? JSON.parse(rawBody) : {});
-      } catch (error) {
-        reject(error);
-      }
-    });
-  });
-}
-
-function sendJson(res, statusCode, data) {
-  res.statusCode = statusCode;
-  res.setHeader('Content-Type', 'application/json');
+function sendResponse(res, status, body, isJson) {
+  res.statusCode = status;
+  res.setHeader('Content-Type', isJson ? 'application/json' : 'text/plain; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store');
-  res.end(JSON.stringify(data));
-}
-
-function sendText(res, statusCode, text) {
-  res.statusCode = statusCode;
-  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-  res.setHeader('Cache-Control', 'no-store');
-  res.end(text);
+  res.end(isJson ? JSON.stringify(body) : String(body));
 }
 
 function createStorybookTokenRoutePlugin(env) {
@@ -48,26 +23,28 @@ function createStorybookTokenRoutePlugin(env) {
 
         if (req.method !== 'POST') {
           res.setHeader('Allow', 'POST');
-          sendText(res, 405, 'Method Not Allowed. Only POST requests are supported.');
+          sendResponse(res, 405, 'Method Not Allowed. Only POST requests are supported.', false);
           return;
         }
 
         if (env.NODE_ENV !== 'development') {
-          sendText(
+          sendResponse(
             res,
             500,
             'THIS API ROUTE IS INSECURE. DO NOT USE THIS ROUTE IN PRODUCTION WITHOUT AN AUTHENTICATION LAYER.',
+            false,
           );
           return;
         }
 
         try {
-          const { AccessToken } = await import('livekit-server-sdk');
-          const { RoomConfiguration } = await import('@livekit/protocol');
-          const AGENT_NAME = env.AGENT_NAME;
+          const { AccessToken, RoomAgentDispatch, RoomConfiguration } = await import(
+            'livekit-server-sdk'
+          );
           const LIVEKIT_URL = env.LIVEKIT_URL;
           const API_KEY = env.LIVEKIT_API_KEY;
           const API_SECRET = env.LIVEKIT_API_SECRET;
+          const AGENT_NAME = env.AGENT_NAME;
 
           if (LIVEKIT_URL === undefined || LIVEKIT_URL === '') {
             throw new Error('LIVEKIT_URL is not defined');
@@ -97,23 +74,24 @@ function createStorybookTokenRoutePlugin(env) {
           });
 
           token.roomConfig = new RoomConfiguration({
-            agents: [
-              new RoomAgentDispatch({
-                agentName: AGENT_NAME
-              })
-            ]
+            agents: [new RoomAgentDispatch({ agentName: AGENT_NAME })],
           });
 
-          sendJson(res, 200, {
-            server_url: LIVEKIT_URL,
-            room_name: roomName,
-            participant_name: participantName,
-            participant_token: await token.toJwt(),
-          });
+          sendResponse(
+            res,
+            200,
+            {
+              server_url: LIVEKIT_URL,
+              room_name: roomName,
+              participant_name: participantName,
+              participant_token: await token.toJwt(),
+            },
+            true,
+          );
         } catch (error) {
-          const message = error instanceof Error ? error.message : String(error);
           console.error(error);
-          sendText(res, 500, message);
+          const message = error instanceof Error ? error.message : String(error);
+          sendResponse(res, 500, message, false);
         }
       });
     },

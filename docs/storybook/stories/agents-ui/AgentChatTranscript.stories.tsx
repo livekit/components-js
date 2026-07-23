@@ -1,4 +1,5 @@
 import React from 'react';
+import { SendHorizontal } from 'lucide-react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentChatTranscript, AgentChatTranscriptProps } from '@livekit/agents-ui';
@@ -71,4 +72,51 @@ export default {
 
 export const Default: StoryObj<AgentChatTranscriptProps> = {
   args: {},
+};
+
+export const InjectMessages: StoryObj<AgentChatTranscriptProps> = {
+  args: {
+    messages: [],
+  },
+  render: (args: AgentChatTranscriptProps) => {
+    const [messages, setMessages] = React.useState<
+      NonNullable<AgentChatTranscriptProps['messages']>
+    >(args.messages ?? []);
+    const nextIsLocalRef = React.useRef(false);
+
+    const addMessage = () => {
+      const isLocal = nextIsLocalRef.current;
+      nextIsLocalRef.current = !isLocal;
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `${prev.length + 1}`,
+          timestamp: new Date().toISOString(),
+          from: { isLocal },
+          message: isLocal
+            ? 'This is a message from the user.'
+            : 'This is a message from the agent.',
+        },
+      ]);
+    };
+
+    return (
+      <div className="w-96 h-dvh overflow-hidden mx-auto flex flex-col border">
+        <div className="flex-1 overflow-hidden">
+          <AgentChatTranscript {...args} messages={messages} className="**:data-[slot=message-scroller-content]:p-4"/>
+        </div>
+        <div className="p-2 border-t flex justify-end end bg-accent">
+          <button
+            type="button"
+            onClick={addMessage}
+            className="grid size-8 place-content-center text-sm rounded-md border bg-background hover:bg-accent"
+          >
+            <div className='sr-only'>Add message</div>
+            <SendHorizontal className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    );
+  },
 };

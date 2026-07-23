@@ -5,6 +5,8 @@
   "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {
+    "build:deps": "pnpm --filter @livekit/component-docs-storybook^... build",
+    "predev": "pnpm build:deps",
     "build": "storybook build",
     "clean": "rm -rf .turbo && rm -rf node_modules",
     "dev": "storybook dev -p 6006",

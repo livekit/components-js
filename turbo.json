@@ -36,6 +36,9 @@
       "cache": false,
       "dependsOn": ["^build"]
     },
-    "api-check:update": {}
+    "api-check:update": {},
+    "shadcn:publish:all": {
+      "cache": false
+    }
   }
 }

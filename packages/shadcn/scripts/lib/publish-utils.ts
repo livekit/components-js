@@ -22,6 +22,18 @@ export function hasDiff(cwd: string): boolean {
   return runCapture(['git', 'status', '--porcelain'], { cwd }).length > 0;
 }
 
+export function installDependencies(cwd: string): void {
+  console.log('--------------------------------');
+  console.log('Installing dependencies');
+  run(['pnpm', 'install'], { cwd });
+}
+
+export function formatChanges(cwd: string): void {
+  console.log('--------------------------------');
+  console.log('Formatting changes');
+  run(['pnpm', 'format'], { cwd });
+}
+
 export function ghAuthPreflight(): void {
   try {
     execFileSync('gh', ['auth', 'status'], { stdio: 'ignore' });
@@ -133,16 +145,28 @@ export function cloneAndCreateBranch(
   repo: string,
   tmpDirPrefix: string,
   branchPrefix: string,
+  baseBranch: string,
 ): { tmpDir: string; branch: string } {
   const tmpDir = mkTempClone(tmpDirPrefix);
   console.log('--------------------------------');
   console.log(`Cloning ${repo} into ${tmpDir}`);
   run(['gh', 'repo', 'clone', repo, tmpDir]);
-  run(['git', 'fetch', 'origin', 'main'], { cwd: tmpDir });
-  run(['git', 'reset', '--hard', 'origin/main'], { cwd: tmpDir });
+  console.log(`Fetching latest origin/${baseBranch}`);
+  run(
+    [
+      'git',
+      'fetch',
+      '--prune',
+      'origin',
+      `+refs/heads/${baseBranch}:refs/remotes/origin/${baseBranch}`,
+    ],
+    {
+      cwd: tmpDir,
+    },
+  );
 
   const branch = branchName(branchPrefix);
-  run(['git', 'checkout', '-b', branch], { cwd: tmpDir });
+  run(['git', 'checkout', '-b', branch, `origin/${baseBranch}`], { cwd: tmpDir });
 
   return { tmpDir, branch };
 }

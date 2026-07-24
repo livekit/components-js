@@ -5,6 +5,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
   cloneAndCreateBranch,
   commitPushAndOpenPr,
+  formatChanges,
   ghAuthPreflight,
   hasDiff,
   isPortInUse,
@@ -21,6 +22,7 @@ const SHADCN_PKG_DIR = path.join(__dirname, '..');
 const REPO = 'livekit-examples/agent-starter-react';
 const PORT = 3210;
 const REGISTRY_URL = `http://localhost:${PORT}/r/{name}.json`;
+const BASE_BRANCH = 'main';
 const BRANCH_PREFIX = 'chore/update-agents-ui-registry';
 const COMMIT_MESSAGE = 'chore: sync agents-ui components from livekit/components-js';
 const PR_TITLE = 'chore: sync agents-ui components';
@@ -95,12 +97,13 @@ export async function publishAgentStarterReact(): Promise<{
     buildRegistry();
     server = await serveRegistry();
 
-    const cloned = cloneAndCreateBranch(REPO, 'agent-starter-react-', BRANCH_PREFIX);
+    const cloned = cloneAndCreateBranch(REPO, 'agent-starter-react-', BRANCH_PREFIX, BASE_BRANCH);
     tmpDir = cloned.tmpDir;
 
     pointComponentsJsonAtLocalRegistry(tmpDir);
     installComponents(tmpDir);
     revertComponentsJson(tmpDir);
+    formatChanges(tmpDir);
 
     if (!hasDiff(tmpDir)) {
       console.log('No changes after sync — skipping PR');
@@ -112,7 +115,7 @@ export async function publishAgentStarterReact(): Promise<{
       repo: REPO,
       cwd: tmpDir,
       branch: cloned.branch,
-      base: 'main',
+      base: BASE_BRANCH,
       title: PR_TITLE,
       body: buildPrBody(sourceSha),
       commitMessage: COMMIT_MESSAGE,

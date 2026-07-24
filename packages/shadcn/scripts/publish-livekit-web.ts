@@ -4,8 +4,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
   cloneAndCreateBranch,
   commitPushAndOpenPr,
+  formatChanges,
   ghAuthPreflight,
   hasDiff,
+  installDependencies,
   onInterrupt,
   removeTempDir,
   run,
@@ -16,6 +18,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SHADCN_PKG_DIR = path.join(__dirname, '..');
 const ENV_LOCAL_PATH = path.join(SHADCN_PKG_DIR, '.env.local');
 const REPO = 'livekit/web';
+const BASE_BRANCH = 'main';
 const BRANCH_PREFIX = 'chore/update-agents-ui-registry';
 const COMMIT_MESSAGE = 'chore(agents-ui): update registry + prop-types from @livekit/agents-ui';
 const PR_TITLE = 'chore(agents-ui): update registry + prop-types';
@@ -66,11 +69,13 @@ export async function publishLivekitWeb(): Promise<{
   const unregisterInterruptHandler = onInterrupt(cleanup);
 
   try {
-    const cloned = cloneAndCreateBranch(REPO, 'livekit-web-', BRANCH_PREFIX);
+    const cloned = cloneAndCreateBranch(REPO, 'livekit-web-', BRANCH_PREFIX, BASE_BRANCH);
     tmpDir = cloned.tmpDir;
 
     writeTempEnvLocal(tmpDir);
     deployRegistry();
+    installDependencies(tmpDir);
+    formatChanges(tmpDir);
 
     if (!hasDiff(tmpDir)) {
       console.log('No changes after sync — skipping PR');
@@ -82,7 +87,7 @@ export async function publishLivekitWeb(): Promise<{
       repo: REPO,
       cwd: tmpDir,
       branch: cloned.branch,
-      base: 'main',
+      base: BASE_BRANCH,
       title: PR_TITLE,
       body: buildPrBody(sourceSha),
       commitMessage: COMMIT_MESSAGE,

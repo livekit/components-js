@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AgentAudioVisualizerRadial } from '@/components/agents-ui/agent-audio-visualizer-radial';
+import * as LiveKitComponents from '@livekit/components-react';
 // Mock hooks
 vi.mock('@livekit/components-react', async () => {
   const actual = await vi.importActual('@livekit/components-react');
@@ -61,6 +62,32 @@ describe('AgentAudioVisualizerRadial', () => {
     bars.forEach((bar, idx) => {
       expect(bar).toHaveAttribute('data-lk-index', String(idx));
       expect(bar).toHaveAttribute('data-lk-highlighted');
+    });
+  });
+
+  it('uses volumeBands prop instead of the hook value when audioTrack is present', () => {
+    vi.mocked(LiveKitComponents.useMultibandTrackVolume).mockReturnValue([0, 0]);
+    const mockTrack = {} as any;
+    const { container } = render(
+      <AgentAudioVisualizerRadial
+        state="speaking"
+        audioTrack={mockTrack}
+        barCount={2}
+        volumeBands={[1, 0]}
+      />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    expect(bars[0]).not.toHaveStyle({ height: '0px' });
+    expect(bars[1]).toHaveStyle({ height: '0px' });
+  });
+
+  it('still zeroes bars when audioTrack is absent even if volumeBands is supplied', () => {
+    const { container } = render(
+      <AgentAudioVisualizerRadial state="speaking" barCount={2} volumeBands={[1, 1]} />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    bars.forEach((bar) => {
+      expect(bar).toHaveStyle({ height: '0px' });
     });
   });
 });

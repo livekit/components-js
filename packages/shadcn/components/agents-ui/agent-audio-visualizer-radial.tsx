@@ -72,6 +72,12 @@ export interface AgentAudioVisualizerRadialProps {
    */
   audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
   /**
+   * Precomputed per-bar volume values (0-1) to use instead of the values returned by
+   * `useMultibandTrackVolume` internally. Still only rendered while `audioTrack` is
+   * provided — passing volumeBands alone does not bypass this gate.
+   */
+  volumeBands?: number[];
+  /**
    * Additional CSS class names to apply to the container.
    */
   className?: string;
@@ -101,6 +107,7 @@ export function AgentAudioVisualizerRadial({
   radius,
   barCount,
   audioTrack,
+  volumeBands,
   className,
   style,
   ...props
@@ -120,11 +127,12 @@ export function AgentAudioVisualizerRadial({
     }
   }, [barCount, size]);
 
-  const volumeBands = useMultibandTrackVolume(audioTrack, {
+  const multibandVolume = useMultibandTrackVolume(audioTrack, {
     bands: _barCount,
     loPass: 100,
     hiPass: 200,
   });
+  const resolvedVolumeBands = volumeBands ?? multibandVolume;
 
   const sequencerInterval = useMemo(() => {
     switch (state) {
@@ -169,8 +177,8 @@ export function AgentAudioVisualizerRadial({
     sequencerInterval,
   );
   const bands = useMemo(
-    () => (audioTrack ? volumeBands : new Array(_barCount).fill(0)),
-    [audioTrack, volumeBands, _barCount],
+    () => (audioTrack ? resolvedVolumeBands : new Array(_barCount).fill(0)),
+    [audioTrack, resolvedVolumeBands, _barCount],
   );
 
   const dotSize = useMemo(() => {

@@ -3,6 +3,22 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { useAgentAudioVisualizerAura } from '@/hooks/agents-ui/use-agent-audio-visualizer-aura';
 import type { AgentState } from '@livekit/components-react';
 import * as LiveKitComponents from '@livekit/components-react';
+import { animate } from 'motion/react';
+
+// The `useMotionValueEvent`/`useMotionValue` mocks below don't propagate changes back into
+// React state, so `result.current.scale` never reflects volume-driven updates. Instead,
+// assert on the target value passed to the mocked `animate()` call, which is where the
+// resolved volume (from `volumeBands` or `useTrackVolume`) is actually used.
+function findImmediateAnimateCall(target: number) {
+  return vi
+    .mocked(animate)
+    .mock.calls.find(
+      ([, value, transition]) =>
+        typeof value === 'number' &&
+        (transition as { duration?: number } | undefined)?.duration === 0 &&
+        Math.abs(value - target) < 1e-9,
+    );
+}
 
 // Mock the @livekit/components-react hooks
 vi.mock('@livekit/components-react', async () => {
@@ -130,6 +146,32 @@ describe('useAgentAudioVisualizerAura', () => {
       const { result } = renderHook(() => useAgentAudioVisualizerAura('speaking', mockTrack));
 
       expect(result.current).toBeDefined();
+    });
+  });
+
+  describe('volumeBands override', () => {
+    it('averages multiple volumeBands values instead of using track volume', () => {
+      vi.mocked(LiveKitComponents.useTrackVolume).mockReturnValue(0);
+
+      renderHook(() => useAgentAudioVisualizerAura('speaking', undefined, [0.2, 0.6]));
+
+      expect(findImmediateAnimateCall(0.2 + 0.2 * 0.4)).toBeDefined();
+    });
+
+    it('uses the single value directly without averaging', () => {
+      vi.mocked(LiveKitComponents.useTrackVolume).mockReturnValue(0);
+
+      renderHook(() => useAgentAudioVisualizerAura('speaking', undefined, [0.9]));
+
+      expect(findImmediateAnimateCall(0.2 + 0.2 * 0.9)).toBeDefined();
+    });
+
+    it('falls back to track volume when volumeBands is not supplied', () => {
+      vi.mocked(LiveKitComponents.useTrackVolume).mockReturnValue(0.5);
+
+      renderHook(() => useAgentAudioVisualizerAura('speaking'));
+
+      expect(findImmediateAnimateCall(0.2 + 0.2 * 0.5)).toBeDefined();
     });
   });
 

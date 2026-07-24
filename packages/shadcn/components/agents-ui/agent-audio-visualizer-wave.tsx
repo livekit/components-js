@@ -290,6 +290,13 @@ export interface AgentAudioVisualizerWaveProps {
    */
   audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
   /**
+   * Precomputed volume value(s) to use instead of the audio volume computed internally
+   * from `audioTrack`. If multiple values are provided, they are averaged into a single
+   * volume value (unless the array has exactly one element, in which case that value is
+   * used directly).
+   */
+  volumeBands?: number[];
+  /**
    * Additional CSS class names to apply to the container.
    */
   className?: string;
@@ -322,6 +329,7 @@ export function AgentAudioVisualizerWave({
   lineWidth,
   blur,
   audioTrack,
+  volumeBands,
   className,
   ref,
   ...props
@@ -344,6 +352,7 @@ export function AgentAudioVisualizerWave({
   const { speed, amplitude, frequency, opacity } = useAgentAudioVisualizerWave({
     state,
     audioTrack,
+    volumeBands,
   });
 
   return (

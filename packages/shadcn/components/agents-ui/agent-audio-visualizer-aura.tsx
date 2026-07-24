@@ -392,6 +392,13 @@ export interface AgentAudioVisualizerAuraProps {
    * The audio track to visualize. Can be a local/remote audio track or a track reference.
    */
   audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
+  /**
+   * Precomputed volume value(s) to use instead of the audio volume computed internally
+   * from `audioTrack`. If multiple values are provided, they are averaged into a single
+   * volume value (unless the array has exactly one element, in which case that value is
+   * used directly).
+   */
+  volumeBands?: number[];
 }
 
 /**
@@ -416,6 +423,7 @@ export function AgentAudioVisualizerAura({
   color = DEFAULT_COLOR,
   colorShift = 0.05,
   audioTrack,
+  volumeBands,
   themeMode,
   className,
   ref,
@@ -426,6 +434,7 @@ export function AgentAudioVisualizerAura({
   const { speed, scale, amplitude, frequency, brightness } = useAgentAudioVisualizerAura(
     state,
     audioTrack,
+    volumeBands,
   );
 
   return (

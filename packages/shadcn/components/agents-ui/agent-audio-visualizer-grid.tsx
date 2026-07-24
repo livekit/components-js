@@ -207,6 +207,12 @@ export type AgentAudioVisualizerGridProps = GridOptions & {
    */
   audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
   /**
+   * Precomputed per-column volume values (0-1) to use instead of the values returned by
+   * `useMultibandTrackVolume` internally. Still only used while `state` is `'speaking'` —
+   * the existing state gate is not bypassed.
+   */
+  volumeBands?: number[];
+  /**
    * Additional CSS class names to apply to the container.
    */
   className?: string;
@@ -246,6 +252,7 @@ export function AgentAudioVisualizerGrid({
   className,
   children,
   audioTrack,
+  volumeBands,
   style,
   ...props
 }: AgentAudioVisualizerGridProps & ComponentProps<'div'>) {
@@ -257,11 +264,12 @@ export function AgentAudioVisualizerGrid({
     interval,
     radius,
   );
-  const volumeBands = useMultibandTrackVolume(audioTrack, {
+  const multibandVolume = useMultibandTrackVolume(audioTrack, {
     bands: columnCount,
     loPass: 100,
     hiPass: 200,
   });
+  const resolvedVolumeBands = volumeBands ?? multibandVolume;
 
   if (children && Array.isArray(children)) {
     throw new Error('AgentAudioVisualizerGrid children must be a single element.');
@@ -284,7 +292,7 @@ export function AgentAudioVisualizerGrid({
           interval={interval}
           rowCount={rowCount}
           columnCount={columnCount}
-          volumeBands={volumeBands}
+          volumeBands={resolvedVolumeBands}
           highlightedCoordinate={highlightedCoordinate}
         >
           {children ?? <div className={AgentAudioVisualizerGridCellVariants({ size })} />}

@@ -95,6 +95,27 @@ describe('AgentAudioVisualizerBar', () => {
     });
   });
 
+  it('uses volumeBands prop instead of the hook value when speaking', () => {
+    vi.mocked(LiveKitComponents.useMultibandTrackVolume).mockReturnValue([0.1, 0.1, 0.1]);
+    const { container } = render(
+      <AgentAudioVisualizerBar state="speaking" barCount={3} volumeBands={[1, 0.5, 0]} />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    expect(bars[0]).toHaveStyle({ height: '100%' });
+    expect(bars[1]).toHaveStyle({ height: '50%' });
+    expect(bars[2]).toHaveStyle({ height: '0%' });
+  });
+
+  it('still zeroes bars when not speaking even if volumeBands is supplied', () => {
+    const { container } = render(
+      <AgentAudioVisualizerBar state="connecting" barCount={3} volumeBands={[1, 1, 1]} />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    bars.forEach((bar) => {
+      expect(bar).toHaveStyle({ height: '0%' });
+    });
+  });
+
   it('throws when children is not a single element', () => {
     expect(() =>
       render(

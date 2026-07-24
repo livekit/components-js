@@ -107,10 +107,8 @@ export interface AgentAudioVisualizerBarProps {
    */
   audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
   /**
-   * Precomputed per-bar volume values (0-1) to use instead of the values returned by
-   * `useMultibandTrackVolume` internally. Still only rendered while `state` is `'speaking'` —
-   * the existing state gate is not bypassed. If the array length doesn't match the number of
-   * bars, it's trimmed or padded (by duplicating the last value) to match.
+   * Volume values (0-1) to use instead of the values computed from the audioTrack.
+   * The volumeBands.length should match barCount.
    */
   volumeBands?: number[];
   /**

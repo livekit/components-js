@@ -207,10 +207,8 @@ export type AgentAudioVisualizerGridProps = GridOptions & {
    */
   audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
   /**
-   * Precomputed per-column volume values (0-1) to use instead of the values returned by
-   * `useMultibandTrackVolume` internally. Still only used while `state` is `'speaking'` —
-   * the existing state gate is not bypassed. If the array length doesn't match the number
-   * of columns, it's trimmed or padded (by duplicating the last value) to match.
+   * Volume values (0-1) to use instead of the values computed from the audioTrack.
+   * The volumeBands.length should match columnCount.
    */
   volumeBands?: number[];
   /**

@@ -3,6 +3,7 @@ import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentAudioVisualizerRadial, AgentAudioVisualizerRadialProps } from '@livekit/agents-ui';
 import { useAgent } from '@livekit/components-react';
+import { useSimulatedVolumeBands } from './useSimulatedVolumeBands';
 
 export default {
   component: AgentAudioVisualizerRadial,
@@ -56,4 +57,26 @@ export default {
 
 export const Default: StoryObj<AgentAudioVisualizerRadialProps> = {
   args: {},
+};
+
+// Demonstrates the `volumeBands` override prop with a simulated speech waveform instead
+// of live audio. The array length doesn't need to match `barCount` — it's trimmed or
+// padded automatically.
+export const OverrideVolumeBands: StoryObj<AgentAudioVisualizerRadialProps> = {
+  args: {
+    state: 'speaking',
+    barCount: 24,
+  },
+  render: (args: AgentAudioVisualizerRadialProps) => {
+    const { microphoneTrack } = useAgent();
+    const volumeBands = useSimulatedVolumeBands(args.barCount ?? 24);
+
+    return (
+      <AgentAudioVisualizerRadial
+        {...args}
+        audioTrack={microphoneTrack}
+        volumeBands={volumeBands}
+      />
+    );
+  },
 };

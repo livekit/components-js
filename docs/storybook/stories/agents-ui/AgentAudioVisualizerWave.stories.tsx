@@ -3,6 +3,7 @@ import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentAudioVisualizerWave, AgentAudioVisualizerWaveProps } from '@livekit/agents-ui';
 import { useAgent } from '@livekit/components-react';
+import { useSimulatedVolumeBands } from './useSimulatedVolumeBands';
 
 export default {
   component: AgentAudioVisualizerWave,
@@ -62,4 +63,18 @@ export default {
 
 export const Default: StoryObj<AgentAudioVisualizerWaveProps> = {
   args: {},
+};
+
+// Demonstrates the `volume` override prop with a simulated speech waveform instead of
+// live audio.
+export const OverrideVolume: StoryObj<AgentAudioVisualizerWaveProps> = {
+  args: {
+    state: 'speaking',
+  },
+  render: (args: AgentAudioVisualizerWaveProps) => {
+    const { microphoneTrack } = useAgent();
+    const [volume] = useSimulatedVolumeBands(1);
+
+    return <AgentAudioVisualizerWave {...args} audioTrack={microphoneTrack} volume={volume} />;
+  },
 };

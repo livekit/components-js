@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AgentAudioVisualizerAura } from '@/components/agents-ui/agent-audio-visualizer-aura';
+import { useAgentAudioVisualizerAura } from '@/hooks/agents-ui/use-agent-audio-visualizer-aura';
 
 vi.mock('@/hooks/agents-ui/use-agent-audio-visualizer-aura', () => ({
   useAgentAudioVisualizerAura: vi.fn(() => ({
@@ -48,5 +49,11 @@ describe('AgentAudioVisualizerAura', () => {
   it('passes state to root data attribute', () => {
     render(<AgentAudioVisualizerAura state="listening" data-testid="aura-viz" />);
     expect(screen.getByTestId('aura-viz')).toHaveAttribute('data-lk-state', 'listening');
+  });
+
+  it('forwards volume to the underlying hook', () => {
+    render(<AgentAudioVisualizerAura state="speaking" volume={0.6} />);
+
+    expect(useAgentAudioVisualizerAura).toHaveBeenCalledWith('speaking', undefined, 0.6);
   });
 });

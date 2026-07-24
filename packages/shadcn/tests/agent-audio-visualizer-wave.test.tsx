@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AgentAudioVisualizerWave } from '@/components/agents-ui/agent-audio-visualizer-wave';
+import { useAgentAudioVisualizerWave } from '@/hooks/agents-ui/use-agent-audio-visualizer-wave';
 
 const mockReactShaderToy = vi.fn();
 
@@ -68,5 +69,13 @@ describe('AgentAudioVisualizerWave', () => {
 
     expect(shaderProps.uniforms?.uColor?.value).toEqual([18 / 255, 52 / 255, 86 / 255]);
     expect(shaderProps.uniforms?.uColorShift?.value).toBe(0.25);
+  });
+
+  it('forwards volume to the underlying hook', () => {
+    render(<AgentAudioVisualizerWave state="speaking" volume={0.6} />);
+
+    expect(useAgentAudioVisualizerWave).toHaveBeenCalledWith(
+      expect.objectContaining({ volume: 0.6 }),
+    );
   });
 });

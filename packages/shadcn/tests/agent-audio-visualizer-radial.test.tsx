@@ -5,7 +5,10 @@ import * as LiveKitComponents from '@livekit/components-react';
 // Mock hooks
 vi.mock('@livekit/components-react', async () => {
   const actual = await vi.importActual('@livekit/components-react');
-  return { ...actual, useMultibandTrackVolume: vi.fn(() => []) };
+  return {
+    ...actual,
+    useMultibandTrackVolume: vi.fn((_track, options) => new Array(options?.bands ?? 0).fill(0)),
+  };
 });
 
 vi.mock('@/hooks/agents-ui/use-agent-audio-visualizer-radial', () => ({
@@ -65,41 +68,28 @@ describe('AgentAudioVisualizerRadial', () => {
     });
   });
 
-  it('uses volumeBands prop instead of the hook value when audioTrack is present', () => {
+  it('uses volumeBands prop instead of the hook value', () => {
     vi.mocked(LiveKitComponents.useMultibandTrackVolume).mockReturnValue([0, 0]);
-    const mockTrack = {} as any;
     const { container } = render(
-      <AgentAudioVisualizerRadial
-        state="speaking"
-        audioTrack={mockTrack}
-        barCount={2}
-        volumeBands={[1, 0]}
-      />,
+      <AgentAudioVisualizerRadial state="speaking" barCount={2} volumeBands={[1, 0]} />,
     );
     const bars = container.querySelectorAll('[data-lk-index]');
     expect(bars[0]).not.toHaveStyle({ height: '0px' });
     expect(bars[1]).toHaveStyle({ height: '0px' });
   });
 
-  it('still zeroes bars when audioTrack is absent even if volumeBands is supplied', () => {
+  it('renders volumeBands even when audioTrack is absent', () => {
     const { container } = render(
-      <AgentAudioVisualizerRadial state="speaking" barCount={2} volumeBands={[1, 1]} />,
+      <AgentAudioVisualizerRadial state="speaking" barCount={2} volumeBands={[1, 0]} />,
     );
     const bars = container.querySelectorAll('[data-lk-index]');
-    bars.forEach((bar) => {
-      expect(bar).toHaveStyle({ height: '0px' });
-    });
+    expect(bars[0]).not.toHaveStyle({ height: '0px' });
+    expect(bars[1]).toHaveStyle({ height: '0px' });
   });
 
   it('trims excess volumeBands values to match barCount', () => {
-    const mockTrack = {} as any;
     const { container } = render(
-      <AgentAudioVisualizerRadial
-        state="speaking"
-        audioTrack={mockTrack}
-        barCount={2}
-        volumeBands={[1, 0, 1]}
-      />,
+      <AgentAudioVisualizerRadial state="speaking" barCount={2} volumeBands={[1, 0, 1]} />,
     );
     const bars = container.querySelectorAll('[data-lk-index]');
     expect(bars).toHaveLength(2);
@@ -108,14 +98,8 @@ describe('AgentAudioVisualizerRadial', () => {
   });
 
   it('pads volumeBands by duplicating the last value to match barCount', () => {
-    const mockTrack = {} as any;
     const { container } = render(
-      <AgentAudioVisualizerRadial
-        state="speaking"
-        audioTrack={mockTrack}
-        barCount={3}
-        volumeBands={[0, 1]}
-      />,
+      <AgentAudioVisualizerRadial state="speaking" barCount={3} volumeBands={[0, 1]} />,
     );
     const bars = container.querySelectorAll('[data-lk-index]');
     expect(bars).toHaveLength(3);

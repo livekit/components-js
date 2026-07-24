@@ -8,6 +8,7 @@ import {
 } from '@livekit/agents-ui';
 import { useAgent } from '@livekit/components-react';
 import { cn } from '@/lib/utils';
+import { useSimulatedVolumeBands } from './useSimulatedVolumeBands';
 
 export default {
   component: AgentAudioVisualizerGrid,
@@ -133,5 +134,23 @@ export const Demo4: StoryObj<AgentAudioVisualizerGridProps> = {
         )}
       />
     ),
+  },
+};
+
+// Demonstrates the `volumeBands` override prop with a simulated speech waveform instead
+// of live audio. The array length doesn't need to match `columnCount` — it's trimmed or
+// padded automatically.
+export const OverrideVolumeBands: StoryObj<AgentAudioVisualizerGridProps> = {
+  args: {
+    state: 'speaking',
+    columnCount: 9,
+  },
+  render: (args: AgentAudioVisualizerGridProps) => {
+    const { microphoneTrack } = useAgent();
+    const volumeBands = useSimulatedVolumeBands(args.columnCount ?? 9);
+
+    return (
+      <AgentAudioVisualizerGrid {...args} audioTrack={microphoneTrack} volumeBands={volumeBands} />
+    );
   },
 };

@@ -106,6 +106,19 @@ export function removeTempDir(dir: string | undefined): void {
   }
 }
 
+export function onInterrupt(cleanup: () => void): () => void {
+  const handler = () => {
+    cleanup();
+    process.exit(1);
+  };
+  process.once('SIGINT', handler);
+  process.once('SIGTERM', handler);
+  return () => {
+    process.off('SIGINT', handler);
+    process.off('SIGTERM', handler);
+  };
+}
+
 export async function promptYesNo(question: string): Promise<boolean> {
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
   try {

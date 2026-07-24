@@ -1,5 +1,6 @@
 {
   "$schema": "https://turborepo.org/schema.json",
+  "ui": "tui",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -38,7 +39,8 @@
     },
     "api-check:update": {},
     "shadcn:publish:all": {
-      "cache": false
+      "cache": false,
+      "interactive": true
     }
   }
 }

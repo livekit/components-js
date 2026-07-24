@@ -6,6 +6,7 @@ import {
   commitPushAndOpenPr,
   ghAuthPreflight,
   hasDiff,
+  onInterrupt,
   removeTempDir,
   run,
   runCapture,
@@ -58,6 +59,11 @@ export async function publishLivekitWeb(): Promise<{
   let tmpDir: string | undefined;
   const hadEnvLocal = fs.existsSync(ENV_LOCAL_PATH);
   const envBackup = hadEnvLocal ? fs.readFileSync(ENV_LOCAL_PATH, 'utf-8') : null;
+  const cleanup = () => {
+    restoreEnvLocal(hadEnvLocal, envBackup);
+    removeTempDir(tmpDir);
+  };
+  const unregisterInterruptHandler = onInterrupt(cleanup);
 
   try {
     const cloned = cloneAndCreateBranch(REPO, 'livekit-web-', BRANCH_PREFIX);
@@ -87,8 +93,8 @@ export async function publishLivekitWeb(): Promise<{
     }
     return { success: true, prUrl };
   } finally {
-    restoreEnvLocal(hadEnvLocal, envBackup);
-    removeTempDir(tmpDir);
+    unregisterInterruptHandler();
+    cleanup();
   }
 }
 

@@ -10,7 +10,7 @@
     "pretest": "pnpm build:deps",
     "shadcn:build": "pnpm test && rm -rf dist && shadcn build --output ./dist/r && pnpm shadcn:doc-gen",
     "shadcn:serve": "pnpm shadcn:build && python3 -m http.server 3210 -d ./dist",
-    "shadcn:doc-gen": "node --experimental-strip-types --env-file=.env.local ./scripts/doc-gen.ts",
+    "shadcn:doc-gen": "node --experimental-strip-types ./scripts/doc-gen.ts",
     "shadcn:deploy": "pnpm shadcn:build && node --experimental-strip-types --env-file=.env.local ./scripts/update.ts",
     "shadcn:publish:agent-starter-react": "node --experimental-strip-types ./scripts/publish-agent-starter-react.ts",
     "shadcn:publish:livekit-web": "node --experimental-strip-types ./scripts/publish-livekit-web.ts",

@@ -9,6 +9,7 @@ import {
   hasDiff,
   isPortInUse,
   killServer,
+  onInterrupt,
   removeTempDir,
   run,
   runCapture,
@@ -84,6 +85,11 @@ export async function publishAgentStarterReact(): Promise<{
 
   let server: ChildProcess | undefined;
   let tmpDir: string | undefined;
+  const cleanup = () => {
+    killServer(server);
+    removeTempDir(tmpDir);
+  };
+  const unregisterInterruptHandler = onInterrupt(cleanup);
 
   try {
     buildRegistry();
@@ -117,8 +123,8 @@ export async function publishAgentStarterReact(): Promise<{
     }
     return { success: true, prUrl };
   } finally {
-    killServer(server);
-    removeTempDir(tmpDir);
+    unregisterInterruptHandler();
+    cleanup();
   }
 }
 

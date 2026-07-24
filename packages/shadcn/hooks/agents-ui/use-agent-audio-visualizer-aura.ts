@@ -13,7 +13,6 @@ import {
   type TrackReferenceOrPlaceholder,
   useTrackVolume,
 } from '@livekit/components-react';
-import { resolveVolumeFromBands } from '@/lib/utils';
 
 const DEFAULT_SPEED = 10;
 const DEFAULT_AMPLITUDE = 2;
@@ -47,7 +46,7 @@ function useAnimatedValue<T>(initialValue: T) {
 export function useAgentAudioVisualizerAura(
   state: AgentState | undefined,
   audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder,
-  volumeBands?: number[],
+  volumeProp?: number,
 ) {
   const [speed, setSpeed] = useState(DEFAULT_SPEED);
   const {
@@ -63,7 +62,7 @@ export function useAgentAudioVisualizerAura(
     fftSize: 512,
     smoothingTimeConstant: 0.55,
   });
-  const volume = volumeBands?.length ? resolveVolumeFromBands(volumeBands) : trackVolume;
+  const volume = volumeProp ?? trackVolume;
 
   useEffect(() => {
     switch (state) {

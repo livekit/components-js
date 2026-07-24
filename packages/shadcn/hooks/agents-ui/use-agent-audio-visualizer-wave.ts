@@ -13,7 +13,6 @@ import {
   useTrackVolume,
 } from '@livekit/components-react';
 import { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
-import { resolveVolumeFromBands } from '@/lib/utils';
 
 const DEFAULT_SPEED = 5;
 const DEFAULT_AMPLITUDE = 0.025;
@@ -39,13 +38,13 @@ function useAnimatedValue<T>(initialValue: T) {
 interface UseAgentAudioVisualizerWaveAnimatorArgs {
   state?: AgentState;
   audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
-  volumeBands?: number[];
+  volume?: number;
 }
 
 export function useAgentAudioVisualizerWave({
   state,
   audioTrack,
-  volumeBands,
+  volume: volumeProp,
 }: UseAgentAudioVisualizerWaveAnimatorArgs) {
   const [speed, setSpeed] = useState(DEFAULT_SPEED);
   const { value: amplitude, animate: animateAmplitude } = useAnimatedValue(DEFAULT_AMPLITUDE);
@@ -56,7 +55,7 @@ export function useAgentAudioVisualizerWave({
     fftSize: 512,
     smoothingTimeConstant: 0.55,
   });
-  const volume = volumeBands?.length ? resolveVolumeFromBands(volumeBands) : trackVolume;
+  const volume = volumeProp ?? trackVolume;
 
   useEffect(() => {
     switch (state) {

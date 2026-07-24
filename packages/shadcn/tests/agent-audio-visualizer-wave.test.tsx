@@ -71,11 +71,11 @@ describe('AgentAudioVisualizerWave', () => {
     expect(shaderProps.uniforms?.uColorShift?.value).toBe(0.25);
   });
 
-  it('forwards volumeBands to the underlying hook', () => {
-    render(<AgentAudioVisualizerWave state="speaking" volumeBands={[0.2, 0.6]} />);
+  it('forwards volume to the underlying hook', () => {
+    render(<AgentAudioVisualizerWave state="speaking" volume={0.6} />);
 
     expect(useAgentAudioVisualizerWave).toHaveBeenCalledWith(
-      expect.objectContaining({ volumeBands: [0.2, 0.6] }),
+      expect.objectContaining({ volume: 0.6 }),
     );
   });
 });

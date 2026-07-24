@@ -8,7 +8,7 @@ import { animate } from 'motion/react';
 // The `useMotionValueEvent`/`useMotionValue` mocks below don't propagate changes back into
 // React state, so `result.current.scale` never reflects volume-driven updates. Instead,
 // assert on the target value passed to the mocked `animate()` call, which is where the
-// resolved volume (from `volumeBands` or `useTrackVolume`) is actually used.
+// resolved volume (from the `volume` prop or `useTrackVolume`) is actually used.
 function findImmediateAnimateCall(target: number) {
   return vi
     .mocked(animate)
@@ -149,24 +149,16 @@ describe('useAgentAudioVisualizerAura', () => {
     });
   });
 
-  describe('volumeBands override', () => {
-    it('averages multiple volumeBands values instead of using track volume', () => {
+  describe('volume override', () => {
+    it('uses the volume prop instead of track volume', () => {
       vi.mocked(LiveKitComponents.useTrackVolume).mockReturnValue(0);
 
-      renderHook(() => useAgentAudioVisualizerAura('speaking', undefined, [0.2, 0.6]));
+      renderHook(() => useAgentAudioVisualizerAura('speaking', undefined, 0.4));
 
       expect(findImmediateAnimateCall(0.2 + 0.2 * 0.4)).toBeDefined();
     });
 
-    it('uses the single value directly without averaging', () => {
-      vi.mocked(LiveKitComponents.useTrackVolume).mockReturnValue(0);
-
-      renderHook(() => useAgentAudioVisualizerAura('speaking', undefined, [0.9]));
-
-      expect(findImmediateAnimateCall(0.2 + 0.2 * 0.9)).toBeDefined();
-    });
-
-    it('falls back to track volume when volumeBands is not supplied', () => {
+    it('falls back to track volume when volume is not supplied', () => {
       vi.mocked(LiveKitComponents.useTrackVolume).mockReturnValue(0.5);
 
       renderHook(() => useAgentAudioVisualizerAura('speaking'));

@@ -51,9 +51,9 @@ describe('AgentAudioVisualizerAura', () => {
     expect(screen.getByTestId('aura-viz')).toHaveAttribute('data-lk-state', 'listening');
   });
 
-  it('forwards volumeBands to the underlying hook', () => {
-    render(<AgentAudioVisualizerAura state="speaking" volumeBands={[0.2, 0.6]} />);
+  it('forwards volume to the underlying hook', () => {
+    render(<AgentAudioVisualizerAura state="speaking" volume={0.6} />);
 
-    expect(useAgentAudioVisualizerAura).toHaveBeenCalledWith('speaking', undefined, [0.2, 0.6]);
+    expect(useAgentAudioVisualizerAura).toHaveBeenCalledWith('speaking', undefined, 0.6);
   });
 });

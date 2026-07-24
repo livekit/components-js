@@ -125,6 +125,42 @@ describe('AgentAudioVisualizerGrid', () => {
     expect(cells[5]).toHaveAttribute('data-lk-highlighted', 'false');
   });
 
+  it('trims excess volumeBands values to match columnCount', () => {
+    mockUseMultibandTrackVolume.mockReturnValue([0, 0]);
+
+    const { container } = render(
+      <AgentAudioVisualizerGrid
+        state="speaking"
+        rowCount={3}
+        columnCount={2}
+        volumeBands={[1, 0, 1]}
+      />,
+    );
+    const cells = container.querySelectorAll('[data-lk-index]');
+
+    expect(cells).toHaveLength(6);
+    expect(cells[0]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[1]).toHaveAttribute('data-lk-highlighted', 'false');
+    expect(cells[2]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[3]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[4]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[5]).toHaveAttribute('data-lk-highlighted', 'false');
+  });
+
+  it('pads volumeBands by duplicating the last value to match columnCount', () => {
+    mockUseMultibandTrackVolume.mockReturnValue([0, 0, 0]);
+
+    const { container } = render(
+      <AgentAudioVisualizerGrid state="speaking" rowCount={3} columnCount={3} volumeBands={[1]} />,
+    );
+    const cells = container.querySelectorAll('[data-lk-index]');
+
+    expect(cells).toHaveLength(9);
+    cells.forEach((cell) => {
+      expect(cell).toHaveAttribute('data-lk-highlighted', 'true');
+    });
+  });
+
   it('ignores volumeBands when not speaking (animator coordinate still applies)', () => {
     mockUseAgentAudioVisualizerGridAnimator.mockReturnValue({ x: 1, y: 1 });
 

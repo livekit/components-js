@@ -90,4 +90,37 @@ describe('AgentAudioVisualizerRadial', () => {
       expect(bar).toHaveStyle({ height: '0px' });
     });
   });
+
+  it('trims excess volumeBands values to match barCount', () => {
+    const mockTrack = {} as any;
+    const { container } = render(
+      <AgentAudioVisualizerRadial
+        state="speaking"
+        audioTrack={mockTrack}
+        barCount={2}
+        volumeBands={[1, 0, 1]}
+      />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    expect(bars).toHaveLength(2);
+    expect(bars[0]).not.toHaveStyle({ height: '0px' });
+    expect(bars[1]).toHaveStyle({ height: '0px' });
+  });
+
+  it('pads volumeBands by duplicating the last value to match barCount', () => {
+    const mockTrack = {} as any;
+    const { container } = render(
+      <AgentAudioVisualizerRadial
+        state="speaking"
+        audioTrack={mockTrack}
+        barCount={3}
+        volumeBands={[0, 1]}
+      />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    expect(bars).toHaveLength(3);
+    expect(bars[0]).toHaveStyle({ height: '0px' });
+    expect(bars[1]).not.toHaveStyle({ height: '0px' });
+    expect(bars[2]).not.toHaveStyle({ height: '0px' });
+  });
 });

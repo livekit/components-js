@@ -116,6 +116,28 @@ describe('AgentAudioVisualizerBar', () => {
     });
   });
 
+  it('trims excess volumeBands values to match barCount', () => {
+    const { container } = render(
+      <AgentAudioVisualizerBar state="speaking" barCount={2} volumeBands={[1, 0.5, 0]} />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    expect(bars).toHaveLength(2);
+    expect(bars[0]).toHaveStyle({ height: '100%' });
+    expect(bars[1]).toHaveStyle({ height: '50%' });
+  });
+
+  it('pads volumeBands by duplicating the last value to match barCount', () => {
+    const { container } = render(
+      <AgentAudioVisualizerBar state="speaking" barCount={4} volumeBands={[1, 0.5]} />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    expect(bars).toHaveLength(4);
+    expect(bars[0]).toHaveStyle({ height: '100%' });
+    expect(bars[1]).toHaveStyle({ height: '50%' });
+    expect(bars[2]).toHaveStyle({ height: '50%' });
+    expect(bars[3]).toHaveStyle({ height: '50%' });
+  });
+
   it('throws when children is not a single element', () => {
     expect(() =>
       render(

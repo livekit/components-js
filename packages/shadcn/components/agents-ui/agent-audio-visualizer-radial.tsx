@@ -8,7 +8,7 @@ import {
   type TrackReferenceOrPlaceholder,
   useMultibandTrackVolume,
 } from '@livekit/components-react';
-import { cn } from '@/lib/utils';
+import { cn, normalizeVolumeBands } from '@/lib/utils';
 import { useAgentAudioVisualizerRadialAnimator } from '@/hooks/agents-ui/use-agent-audio-visualizer-radial';
 
 export const AgentAudioVisualizerRadialVariants = cva(
@@ -74,7 +74,9 @@ export interface AgentAudioVisualizerRadialProps {
   /**
    * Precomputed per-bar volume values (0-1) to use instead of the values returned by
    * `useMultibandTrackVolume` internally. Still only rendered while `audioTrack` is
-   * provided — passing volumeBands alone does not bypass this gate.
+   * provided — passing volumeBands alone does not bypass this gate. If the array length
+   * doesn't match the number of bars, it's trimmed or padded (by duplicating the last
+   * value) to match.
    */
   volumeBands?: number[];
   /**
@@ -132,7 +134,9 @@ export function AgentAudioVisualizerRadial({
     loPass: 100,
     hiPass: 200,
   });
-  const resolvedVolumeBands = volumeBands ?? multibandVolume;
+  const resolvedVolumeBands = volumeBands
+    ? normalizeVolumeBands(volumeBands, _barCount)
+    : multibandVolume;
 
   const sequencerInterval = useMemo(() => {
     switch (state) {

@@ -17,7 +17,7 @@ import {
   useMultibandTrackVolume,
 } from '@livekit/components-react';
 import { useAgentAudioVisualizerBarAnimator } from '@/hooks/agents-ui/use-agent-audio-visualizer-bar';
-import { cn } from '@/lib/utils';
+import { cn, normalizeVolumeBands } from '@/lib/utils';
 
 function cloneSingleChild(
   children: ReactNode | ReactNode[],
@@ -109,7 +109,8 @@ export interface AgentAudioVisualizerBarProps {
   /**
    * Precomputed per-bar volume values (0-1) to use instead of the values returned by
    * `useMultibandTrackVolume` internally. Still only rendered while `state` is `'speaking'` —
-   * the existing state gate is not bypassed.
+   * the existing state gate is not bypassed. If the array length doesn't match the number of
+   * bars, it's trimmed or padded (by duplicating the last value) to match.
    */
   volumeBands?: number[];
   /**
@@ -171,7 +172,9 @@ export function AgentAudioVisualizerBar({
     loPass: 100,
     hiPass: 200,
   });
-  const resolvedVolumeBands = volumeBands ?? multibandVolume;
+  const resolvedVolumeBands = volumeBands
+    ? normalizeVolumeBands(volumeBands, _barCount)
+    : multibandVolume;
 
   const sequencerInterval = useMemo(() => {
     switch (state) {

@@ -21,7 +21,7 @@ import {
   type Coordinate,
   useAgentAudioVisualizerGridAnimator,
 } from '@/hooks/agents-ui/use-agent-audio-visualizer-grid';
-import { cn } from '@/lib/utils';
+import { cn, normalizeVolumeBands } from '@/lib/utils';
 
 function cloneSingleChild(
   children: ReactNode | ReactNode[],
@@ -209,7 +209,8 @@ export type AgentAudioVisualizerGridProps = GridOptions & {
   /**
    * Precomputed per-column volume values (0-1) to use instead of the values returned by
    * `useMultibandTrackVolume` internally. Still only used while `state` is `'speaking'` —
-   * the existing state gate is not bypassed.
+   * the existing state gate is not bypassed. If the array length doesn't match the number
+   * of columns, it's trimmed or padded (by duplicating the last value) to match.
    */
   volumeBands?: number[];
   /**
@@ -269,7 +270,9 @@ export function AgentAudioVisualizerGrid({
     loPass: 100,
     hiPass: 200,
   });
-  const resolvedVolumeBands = volumeBands ?? multibandVolume;
+  const resolvedVolumeBands = volumeBands
+    ? normalizeVolumeBands(volumeBands, columnCount)
+    : multibandVolume;
 
   if (children && Array.isArray(children)) {
     throw new Error('AgentAudioVisualizerGrid children must be a single element.');

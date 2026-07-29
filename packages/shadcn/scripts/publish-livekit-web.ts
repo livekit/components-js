@@ -6,6 +6,7 @@ import {
   commitPushAndOpenPr,
   formatChanges,
   ghAuthPreflight,
+  hasCliFlag,
   hasDiff,
   installDependencies,
   onInterrupt,
@@ -16,6 +17,7 @@ import {
 
 type PublishOptions = {
   registryAlreadyBuilt?: boolean;
+  autoApprove?: boolean;
 };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -49,6 +51,12 @@ function deployRegistry(registryAlreadyBuilt: boolean): void {
     console.log('Building and deploying registry');
     run(['pnpm', 'shadcn:deploy'], { cwd: SHADCN_PKG_DIR });
   }
+}
+
+function buildFormatDependencies(tmpDir: string): void {
+  console.log('--------------------------------');
+  console.log('Building @repo/prettier-plugin-markdoc (required by apps/docs format script)');
+  run(['pnpm', '--filter', '@repo/prettier-plugin-markdoc', 'build'], { cwd: tmpDir });
 }
 
 function restoreEnvLocal(hadEnvLocal: boolean, envBackup: string | null): void {
@@ -86,6 +94,7 @@ export async function publishLivekitWeb(options: PublishOptions = {}): Promise<{
     writeTempEnvLocal(tmpDir);
     deployRegistry(options.registryAlreadyBuilt ?? false);
     installDependencies(tmpDir);
+    buildFormatDependencies(tmpDir);
     formatChanges(tmpDir, ['pnpm', '--filter', 'www', '--filter', 'docs', 'format']);
 
     if (!hasDiff(tmpDir)) {
@@ -102,6 +111,7 @@ export async function publishLivekitWeb(options: PublishOptions = {}): Promise<{
       title: PR_TITLE,
       body: buildPrBody(sourceSha),
       commitMessage: COMMIT_MESSAGE,
+      autoApprove: options.autoApprove,
     });
 
     if (!prUrl) {
@@ -115,7 +125,7 @@ export async function publishLivekitWeb(options: PublishOptions = {}): Promise<{
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
-  publishLivekitWeb()
+  publishLivekitWeb({ autoApprove: hasCliFlag('-y', '--yes') })
     .then((result) => {
       console.log('Done', result);
     })

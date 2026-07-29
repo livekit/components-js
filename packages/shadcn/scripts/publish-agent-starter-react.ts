@@ -8,6 +8,7 @@ import {
   commitPushAndOpenPr,
   formatChanges,
   ghAuthPreflight,
+  hasCliFlag,
   hasDiff,
   isPortInUse,
   killServer,
@@ -20,6 +21,7 @@ import {
 
 type PublishOptions = {
   registryAlreadyBuilt?: boolean;
+  autoApprove?: boolean;
 };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -122,6 +124,7 @@ export async function publishAgentStarterReact(options: PublishOptions = {}): Pr
       title: PR_TITLE,
       body: buildPrBody(sourceSha),
       commitMessage: COMMIT_MESSAGE,
+      autoApprove: options.autoApprove,
     });
 
     if (!prUrl) {
@@ -135,7 +138,7 @@ export async function publishAgentStarterReact(options: PublishOptions = {}): Pr
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
-  publishAgentStarterReact()
+  publishAgentStarterReact({ autoApprove: hasCliFlag('-y', '--yes') })
     .then((result) => {
       console.log('Done', result);
     })

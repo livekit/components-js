@@ -124,6 +124,10 @@ export function removeTempDir(dir: string | undefined): void {
   }
 }
 
+export function hasCliFlag(...flags: string[]): boolean {
+  return process.argv.slice(2).some((arg) => flags.includes(arg));
+}
+
 export function onInterrupt(cleanup: () => void): () => void {
   const handler = () => {
     cleanup();
@@ -184,6 +188,7 @@ async function confirmPrCreation(opts: {
   base: string;
   title: string;
   body: string;
+  autoApprove?: boolean;
 }): Promise<boolean> {
   const diffStat = runCapture(['git', 'diff', '--stat'], { cwd: opts.cwd });
 
@@ -198,6 +203,11 @@ async function confirmPrCreation(opts: {
   for (const line of diffStat.split('\n')) console.log(`    ${line}`);
   console.log('--------------------------------');
 
+  if (opts.autoApprove) {
+    console.log('Auto-approved (-y)');
+    return true;
+  }
+
   return promptYesNo('Create this PR?');
 }
 
@@ -209,6 +219,7 @@ export async function commitPushAndOpenPr(opts: {
   title: string;
   body: string;
   commitMessage: string;
+  autoApprove?: boolean;
 }): Promise<string | undefined> {
   const confirmed = await confirmPrCreation(opts);
   if (!confirmed) {

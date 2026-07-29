@@ -23,6 +23,18 @@ import {
 } from '@/hooks/agents-ui/use-agent-audio-visualizer-grid';
 import { cn, normalizeVolumeBands } from '@/lib/utils';
 
+/**
+ * Resizes an array of per-band volume values to exactly `count` entries.
+ * Excess values are trimmed from the end; if there are too few, the last
+ * value is duplicated to fill the remainder. An empty array is padded with 0s.
+ */
+function normalizeVolumeBands(bands: number[], count: number): number[] {
+  if (bands.length === count) return bands;
+  if (bands.length > count) return bands.slice(0, count);
+  const lastValue = bands[bands.length - 1] ?? 0;
+  return [...bands, ...new Array(count - bands.length).fill(lastValue)];
+}
+
 function cloneSingleChild(
   children: ReactNode | ReactNode[],
   props?: Record<string, unknown>,

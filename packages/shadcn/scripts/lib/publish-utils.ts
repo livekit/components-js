@@ -22,16 +22,22 @@ export function hasDiff(cwd: string): boolean {
   return runCapture(['git', 'status', '--porcelain'], { cwd }).length > 0;
 }
 
+export function buildRegistry(shadcnPkgDir: string): void {
+  console.log('--------------------------------');
+  console.log('Building registry');
+  run(['pnpm', 'shadcn:build'], { cwd: shadcnPkgDir });
+}
+
 export function installDependencies(cwd: string): void {
   console.log('--------------------------------');
   console.log('Installing dependencies');
   run(['pnpm', 'install'], { cwd });
 }
 
-export function formatChanges(cwd: string): void {
+export function formatChanges(cwd: string, cmd: string[] = ['pnpm', 'format']): void {
   console.log('--------------------------------');
   console.log('Formatting changes');
-  run(['pnpm', 'format'], { cwd });
+  run(cmd, { cwd });
 }
 
 export function ghAuthPreflight(): void {

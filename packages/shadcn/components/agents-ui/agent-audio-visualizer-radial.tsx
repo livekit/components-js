@@ -8,7 +8,7 @@ import {
   type TrackReferenceOrPlaceholder,
   useMultibandTrackVolume,
 } from '@livekit/components-react';
-import { cn, normalizeVolumeBands } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { useAgentAudioVisualizerRadialAnimator } from '@/hooks/agents-ui/use-agent-audio-visualizer-radial';
 
 /**

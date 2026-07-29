@@ -21,7 +21,7 @@ import {
   type Coordinate,
   useAgentAudioVisualizerGridAnimator,
 } from '@/hooks/agents-ui/use-agent-audio-visualizer-grid';
-import { cn, normalizeVolumeBands } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 
 /**
  * Resizes an array of per-band volume values to exactly `count` entries.

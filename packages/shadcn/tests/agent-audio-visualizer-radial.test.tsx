@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { AgentAudioVisualizerRadial } from '@/components/agents-ui/agent-audio-visualizer-radial';
+import {
+  AgentAudioVisualizerRadial,
+  normalizeVolumeBands,
+} from '@/components/agents-ui/agent-audio-visualizer-radial';
 import * as LiveKitComponents from '@livekit/components-react';
 // Mock hooks
 vi.mock('@livekit/components-react', async () => {
@@ -106,5 +109,27 @@ describe('AgentAudioVisualizerRadial', () => {
     expect(bars[0]).toHaveStyle({ height: '0px' });
     expect(bars[1]).not.toHaveStyle({ height: '0px' });
     expect(bars[2]).not.toHaveStyle({ height: '0px' });
+  });
+});
+
+describe('normalizeVolumeBands', () => {
+  it('returns the array unchanged when the length already matches', () => {
+    expect(normalizeVolumeBands([0.1, 0.2, 0.3], 3)).toEqual([0.1, 0.2, 0.3]);
+  });
+
+  it('trims excess trailing values', () => {
+    expect(normalizeVolumeBands([0.1, 0.2, 0.3, 0.4], 2)).toEqual([0.1, 0.2]);
+  });
+
+  it('pads by duplicating the last value', () => {
+    expect(normalizeVolumeBands([0.1, 0.2], 4)).toEqual([0.1, 0.2, 0.2, 0.2]);
+  });
+
+  it('pads a single-element array by duplicating it', () => {
+    expect(normalizeVolumeBands([0.5], 3)).toEqual([0.5, 0.5, 0.5]);
+  });
+
+  it('pads an empty array with 0s', () => {
+    expect(normalizeVolumeBands([], 3)).toEqual([0, 0, 0]);
   });
 });

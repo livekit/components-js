@@ -38,6 +38,10 @@ const BRANCH_PREFIX = 'chore/update-agents-ui-registry';
 const COMMIT_MESSAGE = 'chore(agents-ui): update registry + prop-types from @livekit/agents-ui';
 const PR_TITLE = 'chore(agents-ui): update registry + prop-types';
 const APPS = ['www', 'docs'];
+// shadcn add doesn't know about pnpm's catalog: protocol — it overwrites these with a
+// concrete version pinned to whatever the @agents-ui registry entry declares. Restore
+// the workspace's catalog reference afterward so we don't fork these off the catalog.
+const CATALOG_DEPENDENCIES = ['@livekit/components-react', 'livekit-client'];
 
 function writeTempEnvLocal(tmpDir: string): void {
   console.log('--------------------------------');
@@ -64,6 +68,28 @@ function buildFormatDependencies(tmpDir: string): void {
   run(['pnpm', '--filter', '@repo/prettier-plugin-markdoc', 'build'], { cwd: tmpDir });
 }
 
+function restoreCatalogDependencies(packageJsonPath: string): void {
+  const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+  let changed = false;
+
+  for (const section of ['dependencies', 'devDependencies', 'peerDependencies']) {
+    const deps = pkg[section];
+    if (!deps) continue;
+    for (const name of CATALOG_DEPENDENCIES) {
+      if (name in deps && deps[name] !== 'catalog:') {
+        deps[name] = 'catalog:';
+        changed = true;
+      }
+    }
+  }
+
+  if (changed) {
+    console.log('--------------------------------');
+    console.log(`Restoring catalog: versions in ${packageJsonPath}`);
+    fs.writeFileSync(packageJsonPath, JSON.stringify(pkg, null, 2) + '\n');
+  }
+}
+
 function installAgentsUiComponents(tmpDir: string): void {
   const componentsJsonPaths = APPS.map((app) => path.join(tmpDir, 'apps', app, 'components.json'));
 
@@ -79,6 +105,19 @@ function installAgentsUiComponents(tmpDir: string): void {
 
   for (const app of APPS) {
     revertFile(tmpDir, path.join('apps', app, 'components.json'));
+  }
+
+  let restoredAnyCatalogVersion = false;
+  for (const app of APPS) {
+    const packageJsonPath = path.join(tmpDir, 'apps', app, 'package.json');
+    const before = fs.readFileSync(packageJsonPath, 'utf-8');
+    restoreCatalogDependencies(packageJsonPath);
+    if (fs.readFileSync(packageJsonPath, 'utf-8') !== before) {
+      restoredAnyCatalogVersion = true;
+    }
+  }
+  if (restoredAnyCatalogVersion) {
+    installDependencies(tmpDir);
   }
 }
 

@@ -11,7 +11,7 @@ import React, {
   useMemo,
 } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
-import { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
+import type { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
 import {
   type AgentState,
   type TrackReferenceOrPlaceholder,

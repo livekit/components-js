@@ -166,12 +166,41 @@ repositories, and open GitHub PRs.
 # Sync the registry into livekit-examples/agent-starter-react
 pnpm shadcn:publish:agent-starter-react
 
-# Sync the hosted registry and prop docs into livekit/web
+# Sync the hosted registry, prop docs, and installed @agents-ui components
+# in apps/www and apps/docs into livekit/web
 pnpm shadcn:publish:livekit-web
 
 # Run both downstream publish scripts
 pnpm shadcn:publish:all
 ```
+
+Each script clones the target repo into a temp directory, makes the change, and prints the
+repo, branch, title, body, and a `git diff --stat` summary before asking `Create this PR?
+(y/N)`. Pass `-y`/`--yes` to skip that prompt and auto-approve (still prints the summary
+first):
+
+```bash
+# From packages/shadcn — no -- needed
+pnpm shadcn:publish:livekit-web -y
+
+# From the repo root — shadcn:publish:all goes through turbo, which requires
+# -- to forward flags to the underlying task
+pnpm shadcn:publish:all -- -y
+```
+
+#### Dry run
+
+To see the full diff a run would produce — including the confirmation summary — without
+ever committing, pushing, or opening a PR, just answer `n` (or let it default) at the
+prompt. This still does all the real work (build, clone, install, format), it just stops
+before touching anything remote:
+
+```bash
+echo "n" | pnpm shadcn:publish:livekit-web
+```
+
+The temp clone, local registry server, and any `.env.local` changes are cleaned up
+automatically whether you confirm, decline, or `Ctrl-C` out mid-run.
 
 ### Environment Variables
 

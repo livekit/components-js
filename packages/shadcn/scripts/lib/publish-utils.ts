@@ -1,4 +1,4 @@
-import { execFileSync, type ChildProcess } from 'node:child_process';
+import { execFileSync, spawn, type ChildProcess } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -40,6 +40,31 @@ export function formatChanges(cwd: string, cmd: string[] = ['pnpm', 'format']): 
   run(cmd, { cwd });
 }
 
+export async function serveRegistry(shadcnPkgDir: string, port: number): Promise<ChildProcess> {
+  console.log('--------------------------------');
+  console.log(`Serving registry on port ${port}`);
+  const server = spawn('python3', ['-m', 'http.server', String(port), '-d', './dist'], {
+    cwd: shadcnPkgDir,
+    stdio: 'ignore',
+  });
+  await waitForHttp(`http://localhost:${port}/r/registry.json`);
+  return server;
+}
+
+export function pointRegistryAt(componentsJsonPath: string, registryUrl: string): void {
+  console.log('--------------------------------');
+  console.log(`Pointing ${componentsJsonPath} at ${registryUrl}`);
+  const componentsJson = JSON.parse(fs.readFileSync(componentsJsonPath, 'utf-8'));
+  componentsJson.registries['@agents-ui'] = registryUrl;
+  fs.writeFileSync(componentsJsonPath, JSON.stringify(componentsJson, null, 2) + '\n');
+}
+
+export function revertFile(cwd: string, relativePath: string): void {
+  console.log('--------------------------------');
+  console.log(`Reverting temporary change to ${relativePath}`);
+  run(['git', 'checkout', '--', relativePath], { cwd });
+}
+
 export function ghAuthPreflight(): void {
   try {
     execFileSync('gh', ['auth', 'status'], { stdio: 'ignore' });
@@ -58,6 +83,24 @@ export function isPortInUse(port: number): boolean {
     return pids.length > 0;
   } catch {
     return false;
+  }
+}
+
+/**
+ * killServer() sends SIGTERM without waiting for the process to actually exit, so a
+ * server killed at the end of one publish run may still hold the port for a moment
+ * when the next run starts (e.g. back-to-back in publish-downstream.ts). Poll instead
+ * of failing immediately on the first check.
+ */
+export async function waitForPortFree(port: number, timeoutMs = 5_000): Promise<void> {
+  const start = Date.now();
+  while (isPortInUse(port)) {
+    if (Date.now() - start > timeoutMs) {
+      throw new Error(
+        `Port ${port} is already in use. Stop any running shadcn:serve process and try again.`,
+      );
+    }
+    await new Promise((resolve) => setTimeout(resolve, 200));
   }
 }
 
@@ -141,14 +184,30 @@ export function onInterrupt(cleanup: () => void): () => void {
   };
 }
 
+// A second readline.createInterface() on process.stdin after closing the first one
+// never receives further input (it hangs indefinitely) — so when a single process
+// prompts more than once (e.g. publish-downstream.ts running both publish scripts
+// in-process), all prompts must share one interface, closed exactly once at exit
+// via closePromptInterface().
+let sharedPromptInterface: readline.Interface | undefined;
+
+function getPromptInterface(): readline.Interface {
+  sharedPromptInterface ??= readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  return sharedPromptInterface;
+}
+
+export function closePromptInterface(): void {
+  sharedPromptInterface?.close();
+  sharedPromptInterface = undefined;
+}
+
 export async function promptYesNo(question: string): Promise<boolean> {
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-  try {
-    const answer = await rl.question(`${question} (y/N): `);
-    return ['y', 'yes'].includes(answer.trim().toLowerCase());
-  } finally {
-    rl.close();
-  }
+  const rl = getPromptInterface();
+  const answer = await rl.question(`${question} (y/N): `);
+  return ['y', 'yes'].includes(answer.trim().toLowerCase());
 }
 
 export function cloneAndCreateBranch(
@@ -159,21 +218,24 @@ export function cloneAndCreateBranch(
 ): { tmpDir: string; branch: string } {
   const tmpDir = mkTempClone(tmpDirPrefix);
   console.log('--------------------------------');
-  console.log(`Cloning ${repo} into ${tmpDir}`);
-  run(['gh', 'repo', 'clone', repo, tmpDir]);
-  console.log(`Fetching latest origin/${baseBranch}`);
-  run(
-    [
-      'git',
-      'fetch',
-      '--prune',
-      'origin',
-      `+refs/heads/${baseBranch}:refs/remotes/origin/${baseBranch}`,
-    ],
-    {
-      cwd: tmpDir,
-    },
-  );
+  console.log(`Cloning ${repo} (${baseBranch}, depth 1) into ${tmpDir}`);
+  // Shallow, single-branch clone: this helper is only ever used to branch off the
+  // tip of baseBranch, diff, commit, and push — never git log/blame/tags. Don't
+  // reuse this path for a caller that needs history beyond HEAD.
+  run([
+    'gh',
+    'repo',
+    'clone',
+    repo,
+    tmpDir,
+    '--',
+    '--depth',
+    '1',
+    '--single-branch',
+    '--branch',
+    baseBranch,
+    '--no-tags',
+  ]);
 
   const branch = branchName(branchPrefix);
   run(['git', 'checkout', '-b', branch, `origin/${baseBranch}`], { cwd: tmpDir });

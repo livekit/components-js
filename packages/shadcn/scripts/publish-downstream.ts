@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { buildRegistry, hasCliFlag } from './lib/publish-utils.ts';
+import { buildRegistry, closePromptInterface, hasCliFlag } from './lib/publish-utils.ts';
 import { publishAgentStarterReact } from './publish-agent-starter-react.ts';
 import { publishLivekitWeb } from './publish-livekit-web.ts';
 
@@ -48,6 +48,7 @@ async function publishDownstream(autoApprove: boolean): Promise<Result[]> {
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   const autoApprove = hasCliFlag('-y', '--yes');
   const results = await publishDownstream(autoApprove);
+  closePromptInterface();
   printSummary(results);
   process.exitCode = results.some((r) => !r.success) ? 1 : 0;
 }

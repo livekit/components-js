@@ -11,7 +11,7 @@ import React, {
   useMemo,
 } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
-import { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
+import type { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
 import {
   type AgentState,
   type TrackReferenceOrPlaceholder,
@@ -28,7 +28,7 @@ import { cn } from '@/lib/utils';
  * Excess values are trimmed from the end; if there are too few, the last
  * value is duplicated to fill the remainder. An empty array is padded with 0s.
  */
-function normalizeVolumeBands(bands: number[], count: number): number[] {
+export function normalizeVolumeBands(bands: number[], count: number): number[] {
   if (bands.length === count) return bands;
   if (bands.length > count) return bands.slice(0, count);
   const lastValue = bands[bands.length - 1] ?? 0;

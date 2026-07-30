@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @license
  *
@@ -9,8 +11,6 @@
  *
  * © 2026 UNCRN LLC
  */
-
-'use client';
 
 import React, { useMemo, type ComponentProps } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';

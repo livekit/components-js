@@ -144,17 +144,63 @@ You can find the components in [Storybook](http://localhost:6006) under the `Age
 
 ```bash
 # Build the shadcn registry
-pnpm registry:build
+pnpm shadcn:build
 
 # Serve the registry locally (http://localhost:3210)
-pnpm registry:serve
+pnpm shadcn:serve
 
 # Generate prop documentation
-pnpm registry:doc-gen
+pnpm shadcn:doc-gen
 
 # Build and deploy to configured destination paths
-pnpm registry:update
+pnpm shadcn:deploy
 ```
+
+### Publishing downstream updates
+
+These scripts are maintainer-only release helpers. They require an authenticated `gh`
+CLI session with access to the target repositories, push branches to those
+repositories, and open GitHub PRs.
+
+```bash
+# Sync the registry into livekit-examples/agent-starter-react
+pnpm shadcn:publish:agent-starter-react
+
+# Sync the hosted registry, prop docs, and installed @agents-ui components
+# in apps/www and apps/docs into livekit/web
+pnpm shadcn:publish:livekit-web
+
+# Run both downstream publish scripts
+pnpm shadcn:publish:all
+```
+
+Each script clones the target repo into a temp directory, makes the change, and prints the
+repo, branch, title, body, and a `git diff --stat` summary before asking `Create this PR?
+(y/N)`. Pass `-y`/`--yes` to skip that prompt and auto-approve (still prints the summary
+first):
+
+```bash
+# From packages/shadcn — no -- needed
+pnpm shadcn:publish:livekit-web -y
+
+# From the repo root — shadcn:publish:all goes through turbo, which requires
+# -- to forward flags to the underlying task
+pnpm shadcn:publish:all -- -y
+```
+
+#### Dry run
+
+To see the full diff a run would produce — including the confirmation summary — without
+ever committing, pushing, or opening a PR, just answer `n` (or let it default) at the
+prompt. This still does all the real work (build, clone, install, format), it just stops
+before touching anything remote:
+
+```bash
+echo "n" | pnpm shadcn:publish:livekit-web
+```
+
+The temp clone, local registry server, and any `.env.local` changes are cleaned up
+automatically whether you confirm, decline, or `Ctrl-C` out mid-run.
 
 ### Environment Variables
 

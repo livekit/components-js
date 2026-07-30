@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { AgentAudioVisualizerGrid } from '@/components/agents-ui/agent-audio-visualizer-grid';
+import {
+  AgentAudioVisualizerGrid,
+  normalizeVolumeBands,
+} from '@/components/agents-ui/agent-audio-visualizer-grid';
 import { useMultibandTrackVolume } from '@livekit/components-react';
 import { useAgentAudioVisualizerGridAnimator } from '@/hooks/agents-ui/use-agent-audio-visualizer-grid';
 
@@ -200,5 +203,27 @@ describe('AgentAudioVisualizerGrid', () => {
         </AgentAudioVisualizerGrid>,
       ),
     ).toThrow('AgentAudioVisualizerGrid children must be a single element.');
+  });
+});
+
+describe('normalizeVolumeBands', () => {
+  it('returns the array unchanged when the length already matches', () => {
+    expect(normalizeVolumeBands([0.1, 0.2, 0.3], 3)).toEqual([0.1, 0.2, 0.3]);
+  });
+
+  it('trims excess trailing values', () => {
+    expect(normalizeVolumeBands([0.1, 0.2, 0.3, 0.4], 2)).toEqual([0.1, 0.2]);
+  });
+
+  it('pads by duplicating the last value', () => {
+    expect(normalizeVolumeBands([0.1, 0.2], 4)).toEqual([0.1, 0.2, 0.2, 0.2]);
+  });
+
+  it('pads a single-element array by duplicating it', () => {
+    expect(normalizeVolumeBands([0.5], 3)).toEqual([0.5, 0.5, 0.5]);
+  });
+
+  it('pads an empty array with 0s', () => {
+    expect(normalizeVolumeBands([], 3)).toEqual([0, 0, 0]);
   });
 });

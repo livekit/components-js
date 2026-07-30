@@ -1,24 +1,50 @@
-import { execSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-// copy .env.example to .env.local and edit DEST_REGISTRY_PATH
-if (!process.env.DEST_REGISTRY_PATH) {
-  throw new Error('DEST_REGISTRY_PATH is not set');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const SHADCN_PKG_DIR = path.join(__dirname, '..');
+
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`${name} is not set`);
+  }
+  return value;
+}
+
+const destRegistryPath = requireEnv('DEST_REGISTRY_PATH');
+const destPropTypesPath = requireEnv('DEST_PROP_TYPES_PATH');
+const registrySourcePath = path.join(SHADCN_PKG_DIR, 'dist/r');
+const propTypesSourcePath = path.join(SHADCN_PKG_DIR, 'dist/prop-types.json');
+
+function assertSafeCleanTarget(targetPath: string): void {
+  const resolvedPath = path.resolve(targetPath);
+  if (
+    resolvedPath === path.parse(resolvedPath).root ||
+    resolvedPath === SHADCN_PKG_DIR ||
+    resolvedPath === path.dirname(SHADCN_PKG_DIR)
+  ) {
+    throw new Error(`Refusing to clean unsafe DEST_REGISTRY_PATH: ${targetPath}`);
+  }
 }
 
 console.log('--------------------------------');
-console.log(`Cleaning ${process.env.DEST_REGISTRY_PATH}`);
-execSync(`rm -rf ${process.env.DEST_REGISTRY_PATH}/*`);
-console.log('--------------------------------');
-console.log(`Copying dist/r to ${process.env.DEST_REGISTRY_PATH}`);
-execSync(`cp -r dist/r/* ${process.env.DEST_REGISTRY_PATH}`);
-
-if (!process.env.DEST_PROP_TYPES_PATH) {
-  throw new Error('DEST_PROP_TYPES_PATH is not set');
+console.log(`Cleaning ${destRegistryPath}`);
+assertSafeCleanTarget(destRegistryPath);
+fs.mkdirSync(destRegistryPath, { recursive: true });
+for (const entry of fs.readdirSync(destRegistryPath)) {
+  fs.rmSync(path.join(destRegistryPath, entry), { recursive: true, force: true });
 }
 
 console.log('--------------------------------');
-console.log(`Copying dist/prop-types.json to ${process.env.DEST_PROP_TYPES_PATH}`);
-execSync(`cp dist/prop-types.json ${process.env.DEST_PROP_TYPES_PATH}`);
+console.log(`Copying dist/r to ${destRegistryPath}`);
+fs.cpSync(registrySourcePath, destRegistryPath, { recursive: true });
+
+console.log('--------------------------------');
+console.log(`Copying dist/prop-types.json to ${destPropTypesPath}`);
+fs.mkdirSync(path.dirname(destPropTypesPath), { recursive: true });
+fs.copyFileSync(propTypesSourcePath, destPropTypesPath);
 console.log('--------------------------------');
 
 console.log('Done');

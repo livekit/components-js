@@ -7,7 +7,7 @@ import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/comp
 import { ReactShaderToy } from '@/components/agents-ui/react-shader-toy';
 import { useAgentAudioVisualizerWave } from '@/hooks/agents-ui/use-agent-audio-visualizer-wave';
 import { cn } from '@/lib/utils';
-import { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
+import type { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
 
 const DEFAULT_COLOR = '#1FD5F9';
 

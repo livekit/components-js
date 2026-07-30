@@ -1,7 +1,7 @@
 import { type ComponentProps } from 'react';
 import { useEnsureRoom, useStartAudio } from '@livekit/components-react';
 import { Button } from '@/components/ui/button';
-import { Room } from 'livekit-client';
+import { type Room } from 'livekit-client';
 
 /**
  * Props for the StartAudioButton component.

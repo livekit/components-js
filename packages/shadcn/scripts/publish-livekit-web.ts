@@ -1,0 +1,207 @@
+import { type ChildProcess } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import {
+  buildRegistry,
+  cloneAndCreateBranch,
+  commitPushAndOpenPr,
+  closePromptInterface,
+  ghAuthPreflight,
+  hasCliFlag,
+  hasDiff,
+  installDependencies,
+  killServer,
+  onInterrupt,
+  pointRegistryAt,
+  removeTempDir,
+  revertFile,
+  run,
+  runCapture,
+  serveRegistry,
+  waitForPortFree,
+} from './lib/publish-utils.ts';
+
+type PublishOptions = {
+  registryAlreadyBuilt?: boolean;
+  autoApprove?: boolean;
+};
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const SHADCN_PKG_DIR = path.join(__dirname, '..');
+const ENV_LOCAL_PATH = path.join(SHADCN_PKG_DIR, '.env.local');
+const REPO = 'livekit/web';
+const PORT = 3210;
+const REGISTRY_URL = `http://localhost:${PORT}/r/{name}.json`;
+const BASE_BRANCH = 'main';
+const BRANCH_PREFIX = 'chore/update-agents-ui-registry';
+const COMMIT_MESSAGE = 'chore(agents-ui): update registry + prop-types from @livekit/agents-ui';
+const PR_TITLE = 'chore(agents-ui): update registry + prop-types';
+const APPS = ['www', 'docs'];
+// shadcn add doesn't know about pnpm's catalog: protocol — it overwrites these with a
+// concrete version pinned to whatever the @agents-ui registry entry declares. Restore
+// the workspace's catalog reference afterward so we don't fork these off the catalog.
+const CATALOG_DEPENDENCIES = ['@livekit/components-react', 'livekit-client'];
+
+function writeTempEnvLocal(tmpDir: string): void {
+  console.log('--------------------------------');
+  console.log('Pointing .env.local at the tmp livekit/web checkout');
+  const destRegistryPath = path.join(tmpDir, 'apps/www/agents-ui-registry');
+  const destPropTypesPath = path.join(tmpDir, 'apps/docs/lib/shadcn/prop-types.json');
+  fs.writeFileSync(
+    ENV_LOCAL_PATH,
+    `DEST_REGISTRY_PATH=${destRegistryPath}\nDEST_PROP_TYPES_PATH=${destPropTypesPath}\n`,
+  );
+}
+
+function copyRegistryFiles(): void {
+  console.log('--------------------------------');
+  console.log('Copying built registry into the tmp livekit/web checkout');
+  run(['node', '--experimental-strip-types', '--env-file=.env.local', './scripts/update.ts'], {
+    cwd: SHADCN_PKG_DIR,
+  });
+}
+
+function buildFormatDependencies(tmpDir: string): void {
+  console.log('--------------------------------');
+  console.log('Building @repo/prettier-plugin-markdoc (required by apps/docs format script)');
+  run(['pnpm', '--filter', '@repo/prettier-plugin-markdoc', 'build'], { cwd: tmpDir });
+}
+
+function restoreCatalogDependencies(packageJsonPath: string): void {
+  const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+  let changed = false;
+
+  for (const section of ['dependencies', 'devDependencies', 'peerDependencies']) {
+    const deps = pkg[section];
+    if (!deps) continue;
+    for (const name of CATALOG_DEPENDENCIES) {
+      if (name in deps && deps[name] !== 'catalog:') {
+        deps[name] = 'catalog:';
+        changed = true;
+      }
+    }
+  }
+
+  if (changed) {
+    console.log('--------------------------------');
+    console.log(`Restoring catalog: versions in ${packageJsonPath}`);
+    fs.writeFileSync(packageJsonPath, JSON.stringify(pkg, null, 2) + '\n');
+  }
+}
+
+function installAgentsUiComponents(tmpDir: string): void {
+  const componentsJsonPaths = APPS.map((app) => path.join(tmpDir, 'apps', app, 'components.json'));
+
+  for (const componentsJsonPath of componentsJsonPaths) {
+    pointRegistryAt(componentsJsonPath, REGISTRY_URL);
+  }
+
+  for (const app of APPS) {
+    console.log('--------------------------------');
+    console.log(`Installing agents-ui components in apps/${app}`);
+    run(['pnpm', '--filter', app, 'shadcn:install'], { cwd: tmpDir });
+  }
+
+  for (const app of APPS) {
+    revertFile(tmpDir, path.join('apps', app, 'components.json'));
+  }
+
+  let restoredAnyCatalogVersion = false;
+  for (const app of APPS) {
+    const packageJsonPath = path.join(tmpDir, 'apps', app, 'package.json');
+    const before = fs.readFileSync(packageJsonPath, 'utf-8');
+    restoreCatalogDependencies(packageJsonPath);
+    if (fs.readFileSync(packageJsonPath, 'utf-8') !== before) {
+      restoredAnyCatalogVersion = true;
+    }
+  }
+  if (restoredAnyCatalogVersion) {
+    installDependencies(tmpDir);
+  }
+}
+
+function restoreEnvLocal(hadEnvLocal: boolean, envBackup: string | null): void {
+  if (hadEnvLocal && envBackup !== null) {
+    fs.writeFileSync(ENV_LOCAL_PATH, envBackup);
+  } else {
+    fs.rmSync(ENV_LOCAL_PATH, { force: true });
+  }
+}
+
+function buildPrBody(sourceSha: string): string {
+  return `Updates \`apps/www/agents-ui-registry\`, \`apps/docs/lib/shadcn/prop-types.json\`, and the installed \`@agents-ui\` components in \`apps/www\` and \`apps/docs\` from the latest build of [livekit/components-js](https://github.com/livekit/components-js) at ${sourceSha}.\n\nGenerated by \`packages/shadcn/scripts/publish-livekit-web.ts\`.`;
+}
+
+export async function publishLivekitWeb(options: PublishOptions = {}): Promise<{
+  success: boolean;
+  skipped?: boolean;
+  prUrl?: string;
+}> {
+  ghAuthPreflight();
+  await waitForPortFree(PORT);
+
+  let server: ChildProcess | undefined;
+  let tmpDir: string | undefined;
+  const hadEnvLocal = fs.existsSync(ENV_LOCAL_PATH);
+  const envBackup = hadEnvLocal ? fs.readFileSync(ENV_LOCAL_PATH, 'utf-8') : null;
+  const cleanup = () => {
+    killServer(server);
+    restoreEnvLocal(hadEnvLocal, envBackup);
+    removeTempDir(tmpDir);
+  };
+  const unregisterInterruptHandler = onInterrupt(cleanup);
+
+  try {
+    if (!options.registryAlreadyBuilt) {
+      buildRegistry(SHADCN_PKG_DIR);
+    }
+    server = await serveRegistry(SHADCN_PKG_DIR, PORT);
+
+    const cloned = cloneAndCreateBranch(REPO, 'livekit-web-', BRANCH_PREFIX, BASE_BRANCH);
+    tmpDir = cloned.tmpDir;
+
+    writeTempEnvLocal(tmpDir);
+    copyRegistryFiles();
+    installDependencies(tmpDir);
+    buildFormatDependencies(tmpDir);
+    installAgentsUiComponents(tmpDir);
+
+    if (!hasDiff(tmpDir)) {
+      console.log('No changes after sync — skipping PR');
+      return { success: true, skipped: true };
+    }
+
+    const sourceSha = runCapture(['git', 'rev-parse', 'HEAD'], { cwd: SHADCN_PKG_DIR });
+    const prUrl = await commitPushAndOpenPr({
+      repo: REPO,
+      cwd: tmpDir,
+      branch: cloned.branch,
+      base: BASE_BRANCH,
+      title: PR_TITLE,
+      body: buildPrBody(sourceSha),
+      commitMessage: COMMIT_MESSAGE,
+      autoApprove: options.autoApprove,
+    });
+
+    if (!prUrl) {
+      return { success: true, skipped: true };
+    }
+    return { success: true, prUrl };
+  } finally {
+    unregisterInterruptHandler();
+    cleanup();
+  }
+}
+
+if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
+  publishLivekitWeb({ autoApprove: hasCliFlag('-y', '--yes') })
+    .then((result) => {
+      console.log('Done', result);
+    })
+    .catch((err) => {
+      console.error(err);
+      process.exitCode = 1;
+    })
+    .finally(() => closePromptInterface());
+}

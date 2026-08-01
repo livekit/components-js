@@ -39,7 +39,7 @@ importers:
         version: 0.2.0
       '@rushstack/heft':
         specifier: ^1.0.0
-        version: 1.2.19(@types/node@24.13.3)
+        version: 1.2.22(@types/node@24.13.3)
       glob:
         specifier: ^13.0.0
         version: 13.0.6
@@ -249,7 +249,7 @@ importers:
         version: 1.50.4
       '@microsoft/api-extractor':
         specifier: ^7.58.8
-        version: 7.58.9(@types/node@24.13.3)
+        version: 7.58.12(@types/node@24.13.3)
       '@size-limit/file':
         specifier: ^12.0.0
         version: 12.1.0(size-limit@12.1.0(jiti@2.7.0))
@@ -270,7 +270,7 @@ importers:
         version: 12.1.0(jiti@2.7.0)
       tsup:
         specifier: ^8.5.1
-        version: 8.5.1(@microsoft/api-extractor@7.58.9(@types/node@24.13.3))(jiti@2.7.0)(postcss@8.5.18)(supports-color@8.1.1)(tsx@4.23.0)(typescript@5.8.2)(yaml@2.9.0)
+        version: 8.5.1(@microsoft/api-extractor@7.58.12(@types/node@24.13.3))(jiti@2.7.0)(postcss@8.5.18)(supports-color@8.1.1)(tsx@4.23.0)(typescript@5.8.2)(yaml@2.9.0)
       typescript:
         specifier: 5.8.2
         version: 5.8.2
@@ -310,7 +310,7 @@ importers:
         version: 1.50.4
       '@microsoft/api-extractor':
         specifier: ^7.58.8
-        version: 7.58.9(@types/node@24.13.3)
+        version: 7.58.12(@types/node@24.13.3)
       '@size-limit/file':
         specifier: ^12.0.0
         version: 12.1.0(size-limit@12.1.0(jiti@2.7.0))
@@ -373,7 +373,7 @@ importers:
         version: 8.1.4(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0)
       vite-plugin-dts:
         specifier: ^5.0.0
-        version: 5.0.3(@microsoft/api-extractor@7.58.9(@types/node@24.13.3))(@rspack/core@1.7.12(@swc/helpers@0.5.15))(esbuild@0.28.1)(rolldown@1.1.5)(rollup@4.62.2)(supports-color@8.1.1)(typescript@5.8.2)(vite@8.1.4(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(webpack@5.108.4(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.18))
+        version: 5.0.3(@microsoft/api-extractor@7.58.12(@types/node@24.13.3))(@rspack/core@1.7.12(@swc/helpers@0.5.15))(esbuild@0.28.1)(rolldown@1.1.5)(rollup@4.62.2)(supports-color@8.1.1)(typescript@5.8.2)(vite@8.1.4(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(webpack@5.108.4(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.18))
       vitest:
         specifier: ^4.1.8
         version: 4.1.10(@edge-runtime/vm@3.2.0)(@opentelemetry/api@1.9.0)(@types/node@24.13.3)(@vitest/coverage-v8@4.1.10)(jsdom@29.1.1)(msw@2.15.0(@types/node@24.13.3)(typescript@5.8.2))(vite@8.1.4(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))
@@ -566,19 +566,19 @@ importers:
     dependencies:
       '@microsoft/api-extractor-model':
         specifier: ^7.27.2
-        version: 7.33.8(@types/node@24.13.3)
+        version: 7.33.10(@types/node@24.13.3)
       '@microsoft/tsdoc':
         specifier: 0.16.0
         version: 0.16.0
       '@rushstack/heft':
         specifier: ^0.67.2 || ^0.68.0 || ^0.73.0 || ^1.0.0
-        version: 1.2.19(@types/node@24.13.3)
+        version: 1.2.22(@types/node@24.13.3)
       '@rushstack/heft-node-rig':
         specifier: ^2.6.59
-        version: 2.11.42(@rushstack/heft@1.2.19(@types/node@24.13.3))(@types/node@24.13.3)(jiti@2.7.0)(supports-color@8.1.1)
+        version: 2.11.45(@rushstack/heft@1.2.22(@types/node@24.13.3))(@types/node@24.13.3)(jiti@2.7.0)(supports-color@8.1.1)
       '@rushstack/node-core-library':
         specifier: ^5.0.0
-        version: 5.23.1(@types/node@24.13.3)
+        version: 5.23.3(@types/node@24.13.3)
       '@rushstack/ts-command-line':
         specifier: ^4.15.0
         version: 4.23.7(@types/node@24.13.3)
@@ -631,7 +631,7 @@ importers:
     devDependencies:
       '@microsoft/api-extractor':
         specifier: ^7.58.8
-        version: 7.58.9(@types/node@24.13.3)
+        version: 7.58.12(@types/node@24.13.3)
       eslint:
         specifier: ^10.0.0
         version: 10.7.0(jiti@2.7.0)(supports-color@8.1.1)
@@ -1777,8 +1777,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@eslint-community/eslint-utils@4.9.1':
-    resolution: {integrity: sha512-phrYmNiYppR7znFEdqgfWHXR6NCkZEK7hwWDHZUjit/2/U0r6XvkDl0SYnoM51Hq7FhCGdLDT6zxCCOY1hexsQ==}
+  '@eslint-community/eslint-utils@4.10.1':
+    resolution: {integrity: sha512-cuadcxVFE8sDK6iWJbs8Sn0av2Nrh2QSGQhVlBW9AaAHqHwjWsZHT8LJ4hFGPh7ASBV2deFdM7H/DPjulmh8rg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
@@ -2307,11 +2307,11 @@ packages:
   '@mermaid-js/parser@1.2.0':
     resolution: {integrity: sha512-oYPyv8A4As1yH5Bx+04iQEQxXuIQDe0GKCNSRgao6z8AM9jixXIfP0vsppRLvGf+nKIOb9/LdpWA4YuJiVvESA==}
 
-  '@microsoft/api-extractor-model@7.33.8':
-    resolution: {integrity: sha512-aIcoQggPyer3B6Ze3usz0YWC/oBwUHfRH5ETUsr+oT2BRA6SfTJl7IKPcPZkX4UR+PohowzW4uMxsvjrn8vm+w==}
+  '@microsoft/api-extractor-model@7.33.10':
+    resolution: {integrity: sha512-uPUK17xGxeQ3av6TN7awp+dTTSTvx8fZC0XFL1gyt7hFapYuxND3XLXH8vkmI7UjfW92oogzFAFqHSifmJROaw==}
 
-  '@microsoft/api-extractor@7.58.9':
-    resolution: {integrity: sha512-S2UF4yza5GoxCmf7hJQNxJNZN9ltOVuOQv8Dy+Z21aol5ERoBNMdWcQHm4MJMPPItW4H/4rZD906iaf4mUojJA==}
+  '@microsoft/api-extractor@7.58.12':
+    resolution: {integrity: sha512-VNpgC/1LaroLbn+UKmwDYspq+9r3EHyj4vJ3qUy/g8vB0rKt+1Wgs7WFj/JGpgxhG8SNyXs1XwYwe7nqkk8IDg==}
     hasBin: true
 
   '@microsoft/tsdoc-config@0.18.1':
@@ -3817,19 +3817,19 @@ packages:
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
 
-  '@rushstack/heft-api-extractor-plugin@1.3.19':
-    resolution: {integrity: sha512-CNwJ94FH4Ne/tvZSAjqKGl1kv49zdooBLX1vRiMx3ZX9+455lFDzdJhplqMoxpcdI49pp33ZRe9RzjDsKctTfw==}
+  '@rushstack/heft-api-extractor-plugin@1.3.22':
+    resolution: {integrity: sha512-IdZ3rrdsswEbOXYmJUe4+vAqWKhEGwt18/ntIkIXpbpH7/plQxuIqpmnlRVF9cdivIb741AmzBS8fG8Fx23Y3A==}
     peerDependencies:
-      '@rushstack/heft': 1.2.19
+      '@rushstack/heft': 1.2.22
 
-  '@rushstack/heft-config-file@0.20.10':
-    resolution: {integrity: sha512-6UKD7PlaaiLN8tebLMeV8ixm/8NFdmv9biNnPIpHCEEQe8J1TdDDs1HJQ5XGVmIjqljknShPPgDIsHVvVO8ZTw==}
+  '@rushstack/heft-config-file@0.20.12':
+    resolution: {integrity: sha512-IFbjnQN/slbygZ/zINx5tp1XNKMkpIKOiQCNAy3plcGXTt4iH9CCyOvOct61z1ODI/lPoK1YDDLHCVatFqCXfw==}
     engines: {node: '>=10.13.0'}
 
-  '@rushstack/heft-jest-plugin@2.0.9':
-    resolution: {integrity: sha512-/uoCnPslFmuhf7t89+0698w2znQAHUfpG5pTFLiXAp7MnAJ21Msva0qVndsz8lnRe38CaNec6gQbulg6uvsOCw==}
+  '@rushstack/heft-jest-plugin@2.0.12':
+    resolution: {integrity: sha512-Z+DdZHMyPl3N7gmzDg2mDdAdofCNyaBWxt/58CVZncf5RHoSvh2mCzxtUIl8gefblPpky30wi1SW638gAPcQZw==}
     peerDependencies:
-      '@rushstack/heft': ^1.2.19
+      '@rushstack/heft': ^1.2.22
       '@types/jest': ^30.0.0
       jest-environment-jsdom: ^30.3.0
       jest-environment-node: ^30.3.0
@@ -3841,23 +3841,23 @@ packages:
       jest-environment-node:
         optional: true
 
-  '@rushstack/heft-lint-plugin@1.2.19':
-    resolution: {integrity: sha512-aW/8d33ZI0uGQbNdbNJRo9/d5NinajpoqqnsNpkWtT3Wp8wC6WZIAvn73fEaN+0ocXp20kdjjKX3F7YBH0/hMQ==}
+  '@rushstack/heft-lint-plugin@1.2.22':
+    resolution: {integrity: sha512-hspUoHH2aaqFYN7hB1wH5tKNbFVNDzu6o8lmBoVWhLw4GqsEIckgMm65pWHbB0/dWJ+5+2nluTpe2g+MryuGBg==}
     peerDependencies:
-      '@rushstack/heft': 1.2.19
+      '@rushstack/heft': 1.2.22
 
-  '@rushstack/heft-node-rig@2.11.42':
-    resolution: {integrity: sha512-nf0kw7Loa0MurNgCPP1+pGk0gTZGQpPwg5P9gIRI362aB/b+ZVD6mbOEGdtPl1QhgWakEBXj2hrCWONsa5gESQ==}
+  '@rushstack/heft-node-rig@2.11.45':
+    resolution: {integrity: sha512-Th4a+fB20CUtSt5iZi59dTX5ovIRlGfQmwAPReKjYwQ9AEahAtMCVodYLeyNA9q6NnbJNmCuwLLQFaESWn3D4g==}
     peerDependencies:
-      '@rushstack/heft': ^1.2.19
+      '@rushstack/heft': ^1.2.22
 
-  '@rushstack/heft-typescript-plugin@1.3.14':
-    resolution: {integrity: sha512-iVK9sTLlItYEbzbsmzq67O3Pn2Gre4SaQlMxAKDNaMcsArvs51UwtF5sp+bG7XEh72LtW+GNV7fJGCUUUVa1tA==}
+  '@rushstack/heft-typescript-plugin@1.3.17':
+    resolution: {integrity: sha512-AEZ8viO7uTO0Ep6I2qYkTyNC/flBBP1aek1pZVI4sWu6cyx9nPgSE0R7HmR8Mgt+HrE1Vc11iVVjH6CAwGu4iw==}
     peerDependencies:
-      '@rushstack/heft': 1.2.19
+      '@rushstack/heft': 1.2.22
 
-  '@rushstack/heft@1.2.19':
-    resolution: {integrity: sha512-2Q0VGzIbKq3Vcg00OGBrTXQ7vkRZxYT7YtjQBwo85McjyS7ATAlqDx+AHjGnkcJ59arnIj5lUKk0sbzUksj7hw==}
+  '@rushstack/heft@1.2.22':
+    resolution: {integrity: sha512-KqB6DlDOaOibpQDPAztwYrjoRQt/FRWsuu3m2kO6a2Y5Q9/AaAWVxVKJMjHlyMIgGI/Bkt7VXFmogE9lULox4w==}
     engines: {node: '>=10.13.0'}
     hasBin: true
 
@@ -3869,16 +3869,16 @@ packages:
       '@types/node':
         optional: true
 
-  '@rushstack/node-core-library@5.23.1':
-    resolution: {integrity: sha512-wlKmIKIYCKuCASbITvOxLZXepPbwXvrv7S6ig6XNWFchSyhL/E2txmVXspHY49Wu2dzf7nI27a2k/yV5BA3EiA==}
+  '@rushstack/node-core-library@5.23.3':
+    resolution: {integrity: sha512-f6uuza7Um65bwsIJgf0MRs7IPA5IG+A+zs1AYGQvpZmLjtTGdfHowhQw4kwF0pPhJCrU4UHNhK8Qa6tLygYZCA==}
     peerDependencies:
       '@types/node': '*'
     peerDependenciesMeta:
       '@types/node':
         optional: true
 
-  '@rushstack/operation-graph@0.6.9':
-    resolution: {integrity: sha512-HEAGS4IItOaklPwTI9Vwrqwk7218P3Es6acVI6j5E01JUa2cm1cLDbGYiIGx5qQN33aVx/+7wZX6zIim5SxMFA==}
+  '@rushstack/operation-graph@0.6.11':
+    resolution: {integrity: sha512-m/G3HtCqMi2D+vRoQKPKqyW8U1b7+Cb4PGpB73QWiLrARu34yGBcXiHzss2o3m7nhnT/MumJsdCO+8COsYmDBQ==}
     peerDependencies:
       '@types/node': '*'
     peerDependenciesMeta:
@@ -3904,8 +3904,8 @@ packages:
       '@types/node':
         optional: true
 
-  '@rushstack/terminal@0.24.0':
-    resolution: {integrity: sha512-8ZQS4MMaGsv27EXCBiH7WMPkRZrffeDoIevs6z9TM5dzqiY6+Hn4evfK/G+gvgBTjfvfkHIZPQQmalmI2sM4TQ==}
+  '@rushstack/terminal@0.24.2':
+    resolution: {integrity: sha512-KB7PpvzDyKMw/RGU3TxOwxTs3OwZ4gq6+WHlTJN/JfQH4ezliNtWIqver78jTaAJyz/ZAAlJGH7a/M1WyFLFSw==}
     peerDependencies:
       '@types/node': '*'
     peerDependenciesMeta:
@@ -3918,8 +3918,8 @@ packages:
   '@rushstack/ts-command-line@4.23.7':
     resolution: {integrity: sha512-Gr9cB7DGe6uz5vq2wdr89WbVDKz0UeuFEn5H2CfWDe7JvjFFaiV15gi6mqDBTbHhHCWS7w8mF1h3BnIfUndqdA==}
 
-  '@rushstack/ts-command-line@5.3.10':
-    resolution: {integrity: sha512-fwI076HYknC0IrMXdY6UmjDv+PH7NHhNJX3/pY2UblSE5XrXgndXZPiOe/6ZtuFpn6DvVDVNhtkIzQ+Qu/MhVQ==}
+  '@rushstack/ts-command-line@5.3.12':
+    resolution: {integrity: sha512-Vg2n24arSf7JvUNga2DMHYTbxnVq9L5OtVCp4Gfr8YC/kmL/bmdR8FQhGcpMzMYNY9Vdw3+TaimG11Sf+z1Tpw==}
 
   '@sec-ant/readable-stream@0.4.1':
     resolution: {integrity: sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==}
@@ -3935,8 +3935,8 @@ packages:
       react:
         optional: true
 
-  '@sinclair/typebox@0.34.50':
-    resolution: {integrity: sha512-ydBWw0G6WFwWHzh9RK4B5c690UkreOG0llq0r+DaI7LgKgxigf8mhHzIPI3S0850g1BPkq/zpuCfrq4QFgUlTQ==}
+  '@sinclair/typebox@0.34.52':
+    resolution: {integrity: sha512-XiMQh7qqVlxZzcVD+kkGMNGMzcTrDMLWI7S4x7z1MkCkbDPrekpZXEUK0eZqZFMuHQg2a2DZOcDIh9o5v3Gonw==}
 
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
@@ -4727,8 +4727,8 @@ packages:
     resolution: {integrity: sha512-8C71BQkGjiMmXtop7pHVJu1l2NNShFdkCyD6a2ezzs5vU/L3LRtb69EtcteFwz0mYMPzIgOw0n6OV4VBUWZd7A==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@ungap/structured-clone@1.3.2':
-    resolution: {integrity: sha512-5jsZFwgR5rTdKwidH9Qmat75RKwqfpKlWWB1frDkljN127mwqBu8K0PYo7/hFpF03IEJpfVPpCQDY/eDx3iHvA==}
+  '@ungap/structured-clone@1.3.3':
+    resolution: {integrity: sha512-60YRaenCQcVjYEKOcG824+DRGGIQ3VKErcBoAEDJZz5bKIs2ZG+X/H9Nk+Q6EVkwJk5QNApxbrc5QtBSwtrXAg==}
 
   '@unrs/resolver-binding-android-arm-eabi@1.12.2':
     resolution: {integrity: sha512-g5T90pqg1bo/7mytQx6F4iBNC0Wsh9cu+z9veDbFjc7HjpesJFWD7QMS0NGStXM075+7dJPPVvBbpZlnrdpi/w==}
@@ -6484,8 +6484,8 @@ packages:
   fast-string-width@3.0.2:
     resolution: {integrity: sha512-gX8LrtNEI5hq8DVUfRQMbr5lpaS4nMIWV+7XEbXk2b8kiQIizgnlr12B4dA3ZEx3308ze0O4Q1R+cHts8kyUJg==}
 
-  fast-uri@3.1.3:
-    resolution: {integrity: sha512-i70LwGWUduXqzicKXWshooq+sWL1K3WUU5rKZNG/0i3a1OSoX3HqhH5WbWwTmqWfor4urUakGPiRQcleRZTwOg==}
+  fast-uri@3.1.4:
+    resolution: {integrity: sha512-8JnbkQ4juDyvYs4mgFGQqg4yCYtFDtUtmp2QIQq11ZZe5CFQ5wcqm1rqDgAh/QdMySuBnPzMUiJUNZG5N/AiQw==}
 
   fast-wrap-ansi@0.2.2:
     resolution: {integrity: sha512-7F2Fl+TjRSenLqlU3UjSH0iyqopqoZIu7eZVpEirP2g1GtWa2G/ecEmBdgz31+Mxr+ELclgg6sokpSFIQiZ02Q==}
@@ -8715,8 +8715,8 @@ packages:
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
-  react-is@19.2.7:
-    resolution: {integrity: sha512-kZFnouyVv7eP/Phmrlo9FK+zcAdriZJvzxXHF1Sl1P377WSGe2G/JxVolhTrB/jeV47lKImhNUsijjHAAbcl/A==}
+  react-is@19.2.8:
+    resolution: {integrity: sha512-s5un28nYxKJw5gvUHyW5PCC28CvBqLu9r3cWgzHT4Vo/5fqqkFcdRYsGcKf50WMPpjjFZS5d76fn3YCo2njKwQ==}
 
   react-remove-scroll-bar@2.3.8:
     resolution: {integrity: sha512-9r+yi9+mgU33AKcj6IbT9oRCO78WriSj6t/cF8DWBZJ9aOGPOTEDvdUDz1FwKim7QXWwmHqtdHnRJfhAxEG46Q==}
@@ -11009,17 +11009,17 @@ snapshots:
   '@esbuild/win32-x64@0.28.1':
     optional: true
 
-  '@eslint-community/eslint-utils@4.9.1(eslint@10.7.0(jiti@2.7.0)(supports-color@5.5.0))':
+  '@eslint-community/eslint-utils@4.10.1(eslint@10.7.0(jiti@2.7.0)(supports-color@5.5.0))':
     dependencies:
       eslint: 10.7.0(jiti@2.7.0)(supports-color@5.5.0)
       eslint-visitor-keys: 3.4.3
 
-  '@eslint-community/eslint-utils@4.9.1(eslint@10.7.0(jiti@2.7.0)(supports-color@8.1.1))':
+  '@eslint-community/eslint-utils@4.10.1(eslint@10.7.0(jiti@2.7.0)(supports-color@8.1.1))':
     dependencies:
       eslint: 10.7.0(jiti@2.7.0)(supports-color@8.1.1)
       eslint-visitor-keys: 3.4.3
 
-  '@eslint-community/eslint-utils@4.9.1(eslint@9.37.0(jiti@2.7.0)(supports-color@8.1.1))':
+  '@eslint-community/eslint-utils@4.10.1(eslint@9.37.0(jiti@2.7.0)(supports-color@8.1.1))':
     dependencies:
       eslint: 9.37.0(jiti@2.7.0)(supports-color@8.1.1)
       eslint-visitor-keys: 3.4.3
@@ -11444,11 +11444,11 @@ snapshots:
 
   '@jest/schemas@30.0.5':
     dependencies:
-      '@sinclair/typebox': 0.34.50
+      '@sinclair/typebox': 0.34.52
 
   '@jest/schemas@30.4.1':
     dependencies:
-      '@sinclair/typebox': 0.34.50
+      '@sinclair/typebox': 0.34.52
 
   '@jest/snapshot-utils@30.3.0':
     dependencies:
@@ -11623,23 +11623,23 @@ snapshots:
     dependencies:
       '@chevrotain/types': 11.1.2
 
-  '@microsoft/api-extractor-model@7.33.8(@types/node@24.13.3)':
+  '@microsoft/api-extractor-model@7.33.10(@types/node@24.13.3)':
     dependencies:
       '@microsoft/tsdoc': 0.16.0
       '@microsoft/tsdoc-config': 0.18.1
-      '@rushstack/node-core-library': 5.23.1(@types/node@24.13.3)
+      '@rushstack/node-core-library': 5.23.3(@types/node@24.13.3)
     transitivePeerDependencies:
       - '@types/node'
 
-  '@microsoft/api-extractor@7.58.9(@types/node@24.13.3)':
+  '@microsoft/api-extractor@7.58.12(@types/node@24.13.3)':
     dependencies:
-      '@microsoft/api-extractor-model': 7.33.8(@types/node@24.13.3)
+      '@microsoft/api-extractor-model': 7.33.10(@types/node@24.13.3)
       '@microsoft/tsdoc': 0.16.0
       '@microsoft/tsdoc-config': 0.18.1
-      '@rushstack/node-core-library': 5.23.1(@types/node@24.13.3)
+      '@rushstack/node-core-library': 5.23.3(@types/node@24.13.3)
       '@rushstack/rig-package': 0.7.3
-      '@rushstack/terminal': 0.24.0(@types/node@24.13.3)
-      '@rushstack/ts-command-line': 5.3.10(@types/node@24.13.3)
+      '@rushstack/terminal': 0.24.2(@types/node@24.13.3)
+      '@rushstack/ts-command-line': 5.3.12(@types/node@24.13.3)
       diff: 8.0.4
       minimatch: 10.2.3
       resolve: 1.22.12
@@ -12985,32 +12985,32 @@ snapshots:
       - supports-color
       - typescript
 
-  '@rushstack/heft-api-extractor-plugin@1.3.19(@rushstack/heft@1.2.19(@types/node@24.13.3))(@types/node@24.13.3)':
+  '@rushstack/heft-api-extractor-plugin@1.3.22(@rushstack/heft@1.2.22(@types/node@24.13.3))(@types/node@24.13.3)':
     dependencies:
-      '@rushstack/heft': 1.2.19(@types/node@24.13.3)
-      '@rushstack/node-core-library': 5.23.1(@types/node@24.13.3)
+      '@rushstack/heft': 1.2.22(@types/node@24.13.3)
+      '@rushstack/node-core-library': 5.23.3(@types/node@24.13.3)
       semver: 7.7.4
     transitivePeerDependencies:
       - '@types/node'
 
-  '@rushstack/heft-config-file@0.20.10(@types/node@24.13.3)':
+  '@rushstack/heft-config-file@0.20.12(@types/node@24.13.3)':
     dependencies:
-      '@rushstack/node-core-library': 5.23.1(@types/node@24.13.3)
+      '@rushstack/node-core-library': 5.23.3(@types/node@24.13.3)
       '@rushstack/rig-package': 0.7.3
-      '@rushstack/terminal': 0.24.0(@types/node@24.13.3)
+      '@rushstack/terminal': 0.24.2(@types/node@24.13.3)
       jsonpath-plus: 10.3.0
     transitivePeerDependencies:
       - '@types/node'
 
-  '@rushstack/heft-jest-plugin@2.0.9(@rushstack/heft@1.2.19(@types/node@24.13.3))(@types/jest@30.0.0)(@types/node@24.13.3)(jest-environment-node@30.3.0)(supports-color@8.1.1)':
+  '@rushstack/heft-jest-plugin@2.0.12(@rushstack/heft@1.2.22(@types/node@24.13.3))(@types/jest@30.0.0)(@types/node@24.13.3)(jest-environment-node@30.3.0)(supports-color@8.1.1)':
     dependencies:
       '@jest/core': 30.3.0(supports-color@8.1.1)
       '@jest/reporters': 30.3.0(supports-color@8.1.1)
       '@jest/transform': 30.3.0(supports-color@8.1.1)
-      '@rushstack/heft': 1.2.19(@types/node@24.13.3)
-      '@rushstack/heft-config-file': 0.20.10(@types/node@24.13.3)
-      '@rushstack/node-core-library': 5.23.1(@types/node@24.13.3)
-      '@rushstack/terminal': 0.24.0(@types/node@24.13.3)
+      '@rushstack/heft': 1.2.22(@types/node@24.13.3)
+      '@rushstack/heft-config-file': 0.20.12(@types/node@24.13.3)
+      '@rushstack/node-core-library': 5.23.3(@types/node@24.13.3)
+      '@rushstack/terminal': 0.24.2(@types/node@24.13.3)
       jest-config: 30.3.0(@types/node@24.13.3)(supports-color@8.1.1)
       jest-resolve: 30.3.0
       jest-snapshot: 30.3.0(supports-color@8.1.1)
@@ -13025,24 +13025,24 @@ snapshots:
       - supports-color
       - ts-node
 
-  '@rushstack/heft-lint-plugin@1.2.19(@rushstack/heft@1.2.19(@types/node@24.13.3))(@types/node@24.13.3)':
+  '@rushstack/heft-lint-plugin@1.2.22(@rushstack/heft@1.2.22(@types/node@24.13.3))(@types/node@24.13.3)':
     dependencies:
-      '@rushstack/heft': 1.2.19(@types/node@24.13.3)
-      '@rushstack/node-core-library': 5.23.1(@types/node@24.13.3)
+      '@rushstack/heft': 1.2.22(@types/node@24.13.3)
+      '@rushstack/node-core-library': 5.23.3(@types/node@24.13.3)
       json-stable-stringify-without-jsonify: 1.0.1
       semver: 7.7.4
     transitivePeerDependencies:
       - '@types/node'
 
-  '@rushstack/heft-node-rig@2.11.42(@rushstack/heft@1.2.19(@types/node@24.13.3))(@types/node@24.13.3)(jiti@2.7.0)(supports-color@8.1.1)':
+  '@rushstack/heft-node-rig@2.11.45(@rushstack/heft@1.2.22(@types/node@24.13.3))(@types/node@24.13.3)(jiti@2.7.0)(supports-color@8.1.1)':
     dependencies:
-      '@microsoft/api-extractor': 7.58.9(@types/node@24.13.3)
+      '@microsoft/api-extractor': 7.58.12(@types/node@24.13.3)
       '@rushstack/eslint-config': 4.6.4(eslint@9.37.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.8.2)
-      '@rushstack/heft': 1.2.19(@types/node@24.13.3)
-      '@rushstack/heft-api-extractor-plugin': 1.3.19(@rushstack/heft@1.2.19(@types/node@24.13.3))(@types/node@24.13.3)
-      '@rushstack/heft-jest-plugin': 2.0.9(@rushstack/heft@1.2.19(@types/node@24.13.3))(@types/jest@30.0.0)(@types/node@24.13.3)(jest-environment-node@30.3.0)(supports-color@8.1.1)
-      '@rushstack/heft-lint-plugin': 1.2.19(@rushstack/heft@1.2.19(@types/node@24.13.3))(@types/node@24.13.3)
-      '@rushstack/heft-typescript-plugin': 1.3.14(@rushstack/heft@1.2.19(@types/node@24.13.3))(@types/node@24.13.3)
+      '@rushstack/heft': 1.2.22(@types/node@24.13.3)
+      '@rushstack/heft-api-extractor-plugin': 1.3.22(@rushstack/heft@1.2.22(@types/node@24.13.3))(@types/node@24.13.3)
+      '@rushstack/heft-jest-plugin': 2.0.12(@rushstack/heft@1.2.22(@types/node@24.13.3))(@types/jest@30.0.0)(@types/node@24.13.3)(jest-environment-node@30.3.0)(supports-color@8.1.1)
+      '@rushstack/heft-lint-plugin': 1.2.22(@rushstack/heft@1.2.22(@types/node@24.13.3))(@types/node@24.13.3)
+      '@rushstack/heft-typescript-plugin': 1.3.17(@rushstack/heft@1.2.22(@types/node@24.13.3))(@types/node@24.13.3)
       '@types/jest': 30.0.0
       eslint: 9.37.0(jiti@2.7.0)(supports-color@8.1.1)
       jest-environment-node: 30.3.0
@@ -13057,25 +13057,25 @@ snapshots:
       - supports-color
       - ts-node
 
-  '@rushstack/heft-typescript-plugin@1.3.14(@rushstack/heft@1.2.19(@types/node@24.13.3))(@types/node@24.13.3)':
+  '@rushstack/heft-typescript-plugin@1.3.17(@rushstack/heft@1.2.22(@types/node@24.13.3))(@types/node@24.13.3)':
     dependencies:
-      '@rushstack/heft': 1.2.19(@types/node@24.13.3)
-      '@rushstack/heft-config-file': 0.20.10(@types/node@24.13.3)
-      '@rushstack/node-core-library': 5.23.1(@types/node@24.13.3)
+      '@rushstack/heft': 1.2.22(@types/node@24.13.3)
+      '@rushstack/heft-config-file': 0.20.12(@types/node@24.13.3)
+      '@rushstack/node-core-library': 5.23.3(@types/node@24.13.3)
       '@types/tapable': 1.0.6
       semver: 7.7.4
       tapable: 1.1.3
     transitivePeerDependencies:
       - '@types/node'
 
-  '@rushstack/heft@1.2.19(@types/node@24.13.3)':
+  '@rushstack/heft@1.2.22(@types/node@24.13.3)':
     dependencies:
-      '@rushstack/heft-config-file': 0.20.10(@types/node@24.13.3)
-      '@rushstack/node-core-library': 5.23.1(@types/node@24.13.3)
-      '@rushstack/operation-graph': 0.6.9(@types/node@24.13.3)
+      '@rushstack/heft-config-file': 0.20.12(@types/node@24.13.3)
+      '@rushstack/node-core-library': 5.23.3(@types/node@24.13.3)
+      '@rushstack/operation-graph': 0.6.11(@types/node@24.13.3)
       '@rushstack/rig-package': 0.7.3
-      '@rushstack/terminal': 0.24.0(@types/node@24.13.3)
-      '@rushstack/ts-command-line': 5.3.10(@types/node@24.13.3)
+      '@rushstack/terminal': 0.24.2(@types/node@24.13.3)
+      '@rushstack/ts-command-line': 5.3.12(@types/node@24.13.3)
       '@types/tapable': 1.0.6
       fast-glob: 3.3.3
       git-repo-info: 2.1.1
@@ -13098,11 +13098,11 @@ snapshots:
     optionalDependencies:
       '@types/node': 24.13.3
 
-  '@rushstack/node-core-library@5.23.1(@types/node@24.13.3)':
+  '@rushstack/node-core-library@5.23.3(@types/node@24.13.3)':
     dependencies:
-      ajv: 8.18.0
-      ajv-draft-04: 1.0.0(ajv@8.18.0)
-      ajv-formats: 3.0.1(ajv@8.18.0)
+      ajv: 8.20.0
+      ajv-draft-04: 1.0.0(ajv@8.20.0)
+      ajv-formats: 3.0.1(ajv@8.20.0)
       fs-extra: 11.3.6
       import-lazy: 4.0.0
       jju: 1.4.0
@@ -13111,10 +13111,10 @@ snapshots:
     optionalDependencies:
       '@types/node': 24.13.3
 
-  '@rushstack/operation-graph@0.6.9(@types/node@24.13.3)':
+  '@rushstack/operation-graph@0.6.11(@types/node@24.13.3)':
     dependencies:
-      '@rushstack/node-core-library': 5.23.1(@types/node@24.13.3)
-      '@rushstack/terminal': 0.24.0(@types/node@24.13.3)
+      '@rushstack/node-core-library': 5.23.3(@types/node@24.13.3)
+      '@rushstack/terminal': 0.24.2(@types/node@24.13.3)
     optionalDependencies:
       '@types/node': 24.13.3
 
@@ -13134,9 +13134,9 @@ snapshots:
     optionalDependencies:
       '@types/node': 24.13.3
 
-  '@rushstack/terminal@0.24.0(@types/node@24.13.3)':
+  '@rushstack/terminal@0.24.2(@types/node@24.13.3)':
     dependencies:
-      '@rushstack/node-core-library': 5.23.1(@types/node@24.13.3)
+      '@rushstack/node-core-library': 5.23.3(@types/node@24.13.3)
       '@rushstack/problem-matcher': 0.2.1(@types/node@24.13.3)
       supports-color: 8.1.1
     optionalDependencies:
@@ -13153,9 +13153,9 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
-  '@rushstack/ts-command-line@5.3.10(@types/node@24.13.3)':
+  '@rushstack/ts-command-line@5.3.12(@types/node@24.13.3)':
     dependencies:
-      '@rushstack/terminal': 0.24.0(@types/node@24.13.3)
+      '@rushstack/terminal': 0.24.2(@types/node@24.13.3)
       '@types/argparse': 1.0.38
       argparse: 1.0.10
       string-argv: 0.3.2
@@ -13169,7 +13169,7 @@ snapshots:
       '@types/react': 19.2.17
       react: 19.2.7
 
-  '@sinclair/typebox@0.34.50': {}
+  '@sinclair/typebox@0.34.52': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
@@ -14367,7 +14367,7 @@ snapshots:
 
   '@typescript-eslint/utils@8.65.0(eslint@10.7.0(jiti@2.7.0)(supports-color@5.5.0))(supports-color@5.5.0)(typescript@5.8.2)':
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@10.7.0(jiti@2.7.0)(supports-color@5.5.0))
+      '@eslint-community/eslint-utils': 4.10.1(eslint@10.7.0(jiti@2.7.0)(supports-color@5.5.0))
       '@typescript-eslint/scope-manager': 8.65.0
       '@typescript-eslint/types': 8.65.0
       '@typescript-eslint/typescript-estree': 8.65.0(supports-color@5.5.0)(typescript@5.8.2)
@@ -14378,7 +14378,7 @@ snapshots:
 
   '@typescript-eslint/utils@8.65.0(eslint@10.7.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.4.2)':
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@10.7.0(jiti@2.7.0)(supports-color@8.1.1))
+      '@eslint-community/eslint-utils': 4.10.1(eslint@10.7.0(jiti@2.7.0)(supports-color@8.1.1))
       '@typescript-eslint/scope-manager': 8.65.0
       '@typescript-eslint/types': 8.65.0
       '@typescript-eslint/typescript-estree': 8.65.0(supports-color@8.1.1)(typescript@5.4.2)
@@ -14389,7 +14389,7 @@ snapshots:
 
   '@typescript-eslint/utils@8.65.0(eslint@10.7.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.8.2)':
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@10.7.0(jiti@2.7.0)(supports-color@8.1.1))
+      '@eslint-community/eslint-utils': 4.10.1(eslint@10.7.0(jiti@2.7.0)(supports-color@8.1.1))
       '@typescript-eslint/scope-manager': 8.65.0
       '@typescript-eslint/types': 8.65.0
       '@typescript-eslint/typescript-estree': 8.65.0(supports-color@8.1.1)(typescript@5.8.2)
@@ -14400,7 +14400,7 @@ snapshots:
 
   '@typescript-eslint/utils@8.65.0(eslint@9.37.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.8.2)':
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@9.37.0(jiti@2.7.0)(supports-color@8.1.1))
+      '@eslint-community/eslint-utils': 4.10.1(eslint@9.37.0(jiti@2.7.0)(supports-color@8.1.1))
       '@typescript-eslint/scope-manager': 8.65.0
       '@typescript-eslint/types': 8.65.0
       '@typescript-eslint/typescript-estree': 8.65.0(supports-color@8.1.1)(typescript@5.8.2)
@@ -14414,7 +14414,7 @@ snapshots:
       '@typescript-eslint/types': 8.65.0
       eslint-visitor-keys: 5.0.1
 
-  '@ungap/structured-clone@1.3.2': {}
+  '@ungap/structured-clone@1.3.3': {}
 
   '@unrs/resolver-binding-android-arm-eabi@1.12.2':
     optional: true
@@ -14795,9 +14795,9 @@ snapshots:
     optionalDependencies:
       ajv: 8.13.0
 
-  ajv-draft-04@1.0.0(ajv@8.18.0):
+  ajv-draft-04@1.0.0(ajv@8.20.0):
     optionalDependencies:
-      ajv: 8.18.0
+      ajv: 8.20.0
 
   ajv-formats@2.1.1(ajv@8.20.0):
     optionalDependencies:
@@ -14806,10 +14806,6 @@ snapshots:
   ajv-formats@3.0.1(ajv@8.13.0):
     optionalDependencies:
       ajv: 8.13.0
-
-  ajv-formats@3.0.1(ajv@8.18.0):
-    optionalDependencies:
-      ajv: 8.18.0
 
   ajv-formats@3.0.1(ajv@8.20.0):
     optionalDependencies:
@@ -14837,14 +14833,14 @@ snapshots:
   ajv@8.18.0:
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.1.3
+      fast-uri: 3.1.4
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
   ajv@8.20.0:
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.1.3
+      fast-uri: 3.1.4
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
@@ -16334,7 +16330,7 @@ snapshots:
 
   eslint-plugin-promise@7.2.1(eslint@9.37.0(jiti@2.7.0)(supports-color@8.1.1)):
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@9.37.0(jiti@2.7.0)(supports-color@8.1.1))
+      '@eslint-community/eslint-utils': 4.10.1(eslint@9.37.0(jiti@2.7.0)(supports-color@8.1.1))
       eslint: 9.37.0(jiti@2.7.0)(supports-color@8.1.1)
 
   eslint-plugin-react-hooks@7.1.1(eslint@10.7.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1):
@@ -16452,7 +16448,7 @@ snapshots:
 
   eslint@10.7.0(jiti@2.7.0)(supports-color@5.5.0):
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@10.7.0(jiti@2.7.0)(supports-color@5.5.0))
+      '@eslint-community/eslint-utils': 4.10.1(eslint@10.7.0(jiti@2.7.0)(supports-color@5.5.0))
       '@eslint-community/regexpp': 4.12.2
       '@eslint/config-array': 0.23.5(supports-color@5.5.0)
       '@eslint/config-helpers': 0.6.0
@@ -16489,7 +16485,7 @@ snapshots:
 
   eslint@10.7.0(jiti@2.7.0)(supports-color@8.1.1):
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@10.7.0(jiti@2.7.0)(supports-color@8.1.1))
+      '@eslint-community/eslint-utils': 4.10.1(eslint@10.7.0(jiti@2.7.0)(supports-color@8.1.1))
       '@eslint-community/regexpp': 4.12.2
       '@eslint/config-array': 0.23.5(supports-color@8.1.1)
       '@eslint/config-helpers': 0.6.0
@@ -16526,7 +16522,7 @@ snapshots:
 
   eslint@9.37.0(jiti@2.7.0)(supports-color@8.1.1):
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@9.37.0(jiti@2.7.0)(supports-color@8.1.1))
+      '@eslint-community/eslint-utils': 4.10.1(eslint@9.37.0(jiti@2.7.0)(supports-color@8.1.1))
       '@eslint-community/regexpp': 4.12.2
       '@eslint/config-array': 0.21.2(supports-color@8.1.1)
       '@eslint/config-helpers': 0.4.2
@@ -16737,7 +16733,7 @@ snapshots:
       fast-string-truncated-width: 3.0.3
     optional: true
 
-  fast-uri@3.1.3: {}
+  fast-uri@3.1.4: {}
 
   fast-wrap-ansi@0.2.2:
     dependencies:
@@ -17054,7 +17050,7 @@ snapshots:
     dependencies:
       '@types/hast': 3.0.5
       '@types/unist': 3.0.3
-      '@ungap/structured-clone': 1.3.2
+      '@ungap/structured-clone': 1.3.3
       hast-util-from-parse5: 8.0.3
       hast-util-to-parse5: 8.0.1
       html-void-elements: 3.0.0
@@ -17069,7 +17065,7 @@ snapshots:
   hast-util-sanitize@5.0.2:
     dependencies:
       '@types/hast': 3.0.5
-      '@ungap/structured-clone': 1.3.2
+      '@ungap/structured-clone': 1.3.3
       unist-util-position: 5.0.0
 
   hast-util-to-jsx-runtime@2.3.6(supports-color@8.1.1):
@@ -17796,7 +17792,7 @@ snapshots:
   jest-worker@30.3.0:
     dependencies:
       '@types/node': 24.13.3
-      '@ungap/structured-clone': 1.3.2
+      '@ungap/structured-clone': 1.3.3
       jest-util: 30.3.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
@@ -18254,7 +18250,7 @@ snapshots:
     dependencies:
       '@types/hast': 3.0.5
       '@types/mdast': 4.0.4
-      '@ungap/structured-clone': 1.3.2
+      '@ungap/structured-clone': 1.3.3
       devlop: 1.1.0
       micromark-util-sanitize-uri: 2.0.1
       trim-lines: 3.0.1
@@ -19260,7 +19256,7 @@ snapshots:
       '@jest/schemas': 30.4.1
       ansi-styles: 5.2.0
       react-is-18: react-is@18.3.1
-      react-is-19: react-is@19.2.7
+      react-is-19: react-is@19.2.8
 
   pretty-hrtime@1.0.3: {}
 
@@ -19413,7 +19409,7 @@ snapshots:
 
   react-is@18.3.1: {}
 
-  react-is@19.2.7: {}
+  react-is@19.2.8: {}
 
   react-remove-scroll-bar@2.3.8(@types/react@19.2.17)(react@19.2.7):
     dependencies:
@@ -20358,7 +20354,7 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  tsup@8.5.1(@microsoft/api-extractor@7.58.9(@types/node@24.13.3))(jiti@2.7.0)(postcss@8.5.18)(supports-color@8.1.1)(tsx@4.23.0)(typescript@5.8.2)(yaml@2.9.0):
+  tsup@8.5.1(@microsoft/api-extractor@7.58.12(@types/node@24.13.3))(jiti@2.7.0)(postcss@8.5.18)(supports-color@8.1.1)(tsx@4.23.0)(typescript@5.8.2)(yaml@2.9.0):
     dependencies:
       bundle-require: 5.1.0(esbuild@0.27.7)
       cac: 6.7.14
@@ -20378,7 +20374,7 @@ snapshots:
       tinyglobby: 0.2.17
       tree-kill: 1.2.2
     optionalDependencies:
-      '@microsoft/api-extractor': 7.58.9(@types/node@24.13.3)
+      '@microsoft/api-extractor': 7.58.12(@types/node@24.13.3)
       postcss: 8.5.18
       typescript: 5.8.2
     transitivePeerDependencies:
@@ -20583,7 +20579,7 @@ snapshots:
 
   unpipe@1.0.0: {}
 
-  unplugin-dts@1.0.3(@microsoft/api-extractor@7.58.9(@types/node@24.13.3))(@rspack/core@1.7.12(@swc/helpers@0.5.15))(esbuild@0.28.1)(rolldown@1.1.5)(rollup@4.62.2)(supports-color@8.1.1)(typescript@5.8.2)(vite@8.1.4(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(webpack@5.108.4(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.18)):
+  unplugin-dts@1.0.3(@microsoft/api-extractor@7.58.12(@types/node@24.13.3))(@rspack/core@1.7.12(@swc/helpers@0.5.15))(esbuild@0.28.1)(rolldown@1.1.5)(rollup@4.62.2)(supports-color@8.1.1)(typescript@5.8.2)(vite@8.1.4(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(webpack@5.108.4(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.18)):
     dependencies:
       '@rollup/pluginutils': 5.4.0(rollup@4.62.2)
       '@volar/typescript': 2.4.28
@@ -20595,7 +20591,7 @@ snapshots:
       typescript: 5.8.2
       unplugin: 2.3.11
     optionalDependencies:
-      '@microsoft/api-extractor': 7.58.9(@types/node@24.13.3)
+      '@microsoft/api-extractor': 7.58.12(@types/node@24.13.3)
       '@rspack/core': 1.7.12(@swc/helpers@0.5.15)
       esbuild: 0.28.1
       rolldown: 1.1.5
@@ -20713,11 +20709,11 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vite-plugin-dts@5.0.3(@microsoft/api-extractor@7.58.9(@types/node@24.13.3))(@rspack/core@1.7.12(@swc/helpers@0.5.15))(esbuild@0.28.1)(rolldown@1.1.5)(rollup@4.62.2)(supports-color@8.1.1)(typescript@5.8.2)(vite@8.1.4(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(webpack@5.108.4(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.18)):
+  vite-plugin-dts@5.0.3(@microsoft/api-extractor@7.58.12(@types/node@24.13.3))(@rspack/core@1.7.12(@swc/helpers@0.5.15))(esbuild@0.28.1)(rolldown@1.1.5)(rollup@4.62.2)(supports-color@8.1.1)(typescript@5.8.2)(vite@8.1.4(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(webpack@5.108.4(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.18)):
     dependencies:
-      unplugin-dts: 1.0.3(@microsoft/api-extractor@7.58.9(@types/node@24.13.3))(@rspack/core@1.7.12(@swc/helpers@0.5.15))(esbuild@0.28.1)(rolldown@1.1.5)(rollup@4.62.2)(supports-color@8.1.1)(typescript@5.8.2)(vite@8.1.4(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(webpack@5.108.4(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.18))
+      unplugin-dts: 1.0.3(@microsoft/api-extractor@7.58.12(@types/node@24.13.3))(@rspack/core@1.7.12(@swc/helpers@0.5.15))(esbuild@0.28.1)(rolldown@1.1.5)(rollup@4.62.2)(supports-color@8.1.1)(typescript@5.8.2)(vite@8.1.4(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(webpack@5.108.4(csso@5.0.5)(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.18))
     optionalDependencies:
-      '@microsoft/api-extractor': 7.58.9(@types/node@24.13.3)
+      '@microsoft/api-extractor': 7.58.12(@types/node@24.13.3)
       rollup: 4.62.2
       vite: 8.1.4(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0)
     transitivePeerDependencies:

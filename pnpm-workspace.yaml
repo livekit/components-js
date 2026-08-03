@@ -27,6 +27,8 @@ minimumReleaseAgeExclude:
   - livekit-server-sdk
   # Renovate security update: js-yaml@4.3.0
   - js-yaml@4.3.0
+  # Renovate security update: postcss@8.5.23
+  - postcss@8.5.23
 
 overrides:
   '@typescript-eslint/eslint-plugin': ^8.58.0

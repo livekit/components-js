@@ -6,6 +6,7 @@ import { AgentClient, AgentClientProps } from '@livekit/agents-ui';
 const TOKEN_SOURCE = TokenSource.endpoint('/api/agents-ui/token');
 
 export default {
+  title: 'agents-ui/Blocks/EmbedPopupView-01',
   component: AgentClient,
   render: (args: AgentClientProps) => (
     <div className="h-screen w-full">

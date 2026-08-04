@@ -10,6 +10,21 @@ export const parameters = {
   viewMode: 'docs',
   controls: { expanded: false },
   layout: 'fullscreen',
+  options: {
+    storySort: (a, b) => {
+      const AGENTS_UI_PREFIX = 'agents-ui/';
+      const BLOCKS_PREFIX = 'agents-ui/Blocks/';
+      const aIsAgentsUi = a.title.startsWith(AGENTS_UI_PREFIX);
+      const bIsAgentsUi = b.title.startsWith(AGENTS_UI_PREFIX);
+      if (!aIsAgentsUi || !bIsAgentsUi) return 0;
+
+      const aIsBlock = a.title.startsWith(BLOCKS_PREFIX);
+      const bIsBlock = b.title.startsWith(BLOCKS_PREFIX);
+      if (aIsBlock === bIsBlock) return 0;
+
+      return aIsBlock ? -1 : 1;
+    },
+  },
 };
 
 export const globalTypes = {

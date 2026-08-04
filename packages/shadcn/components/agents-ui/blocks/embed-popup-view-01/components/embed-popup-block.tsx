@@ -4,8 +4,17 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { type TokenSourceConfigurable, type TokenSourceFixed } from 'livekit-client';
 import { useSession } from '@livekit/components-react';
 import { AgentSessionProvider } from '@/components/agents-ui/agent-session-provider';
+import { type AgentControlBarControls } from '@/components/agents-ui/agent-control-bar';
 import { PopupView } from './popup-view';
 import { Trigger } from './trigger';
+
+const DEFAULT_CONTROLS: AgentControlBarControls = {
+  leave: false,
+  microphone: true,
+  chat: true,
+  camera: true,
+  screenShare: true,
+};
 
 export interface AgentClientError {
   title: string;
@@ -28,17 +37,17 @@ export interface AgentClientProps {
    */
   agentName?: string;
   /**
-   * @default true
+   * An object with the following keys: leave, microphone, screenShare, camera, chat. Each key maps to a boolean value that determines whether the control is displayed.
+   *
+   * @default {
+   *   leave: true,
+   *   microphone: true,
+   *   chat: false,
+   *   camera: false,
+   *   screenShare: false,
+   * }
    */
-  supportsChatInput?: boolean;
-  /**
-   * @default true
-   */
-  supportsVideoInput?: boolean;
-  /**
-   * @default true
-   */
-  supportsScreenShare?: boolean;
+  controls: AgentControlBarControls;
 }
 
 export function AgentClient({
@@ -46,12 +55,9 @@ export function AgentClient({
   color = '#3b82f6',
   logo,
   agentName = 'Agent',
-  supportsChatInput = true,
-  supportsVideoInput = true,
-  supportsScreenShare = true,
+  controls = DEFAULT_CONTROLS,
 }: AgentClientProps) {
   const session = useSession(tokenSource);
-
   const [popupOpen, setPopupOpen] = useState(false);
   const [error, setError] = useState<AgentClientError | null>(null);
 
@@ -66,6 +72,7 @@ export function AgentClient({
   // calls via a ref instead, and only react to popupOpen.
   const sessionRef = useRef(session);
   sessionRef.current = session;
+
   useEffect(() => {
     if (!popupOpen) return;
     let cancelled = false;
@@ -92,6 +99,11 @@ export function AgentClient({
     });
   }, []);
 
+  const finalControls = {
+    ...DEFAULT_CONTROLS,
+    ...controls,
+  };
+
   return (
     <AgentSessionProvider session={session}>
       <Trigger
@@ -108,9 +120,8 @@ export function AgentClient({
           logo={logo}
           color={color}
           error={error}
-          supportsChatInput={supportsChatInput}
-          supportsVideoInput={supportsVideoInput}
-          supportsScreenShare={supportsScreenShare}
+          controls={finalControls}
+          onDisconnect={handleToggle}
         />
       )}
     </AgentSessionProvider>

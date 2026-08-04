@@ -11,6 +11,14 @@ import {
 import { cn } from '@/lib/utils';
 import { TileLayout } from './tile-view';
 
+const DEFAULT_CONTROLS: AgentControlBarControls = {
+  leave: true,
+  microphone: true,
+  chat: true,
+  camera: true,
+  screenShare: true,
+};
+
 const BOTTOM_VIEW_MOTION_PROPS: MotionProps = {
   variants: {
     visible: {
@@ -112,23 +120,17 @@ export interface AgentSessionView_01Props {
    */
   preConnectMessage?: string;
   /**
-   * Enables or disables the chat toggle and transcript input controls.
+   * An object with the following keys: leave, microphone, screenShare, camera, chat. Each key maps to a boolean value that determines whether the control is displayed.
    *
-   * @default true
+   * @default {
+   *   leave: true,
+   *   microphone: true,
+   *   chat: false,
+   *   camera: false,
+   *   screenShare: false,
+   * }
    */
-  supportsChatInput?: boolean;
-  /**
-   * Enables or disables camera controls in the bottom control bar.
-   *
-   * @default true
-   */
-  supportsVideoInput?: boolean;
-  /**
-   * Enables or disables screen sharing controls in the bottom control bar.
-   *
-   * @default true
-   */
-  supportsScreenShare?: boolean;
+  controls: AgentControlBarControls;
   /**
    * Shows a pre-connect buffer state with a shimmer message before messages appear.
    *
@@ -156,13 +158,13 @@ export interface AgentSessionView_01Props {
   audioVisualizerWaveLineWidth?: number;
   /** Optional class name merged onto the outer `<section>` container. */
   className?: string;
+  /** Called when the user clicks the leave control, in addition to ending the session. */
+  onDisconnect?: () => void;
 }
 
 export function AgentSessionView_01({
   preConnectMessage = 'Agent is listening, ask it a question',
-  supportsChatInput = true,
-  supportsVideoInput = true,
-  supportsScreenShare = true,
+  controls = DEFAULT_CONTROLS,
   isPreConnectBufferEnabled = true,
   audioVisualizerType,
   audioVisualizerColor,
@@ -174,6 +176,7 @@ export function AgentSessionView_01({
   audioVisualizerRadialRadius,
   audioVisualizerWaveLineWidth,
   themeMode,
+  onDisconnect,
   ref,
   className,
   ...props
@@ -184,14 +187,6 @@ export function AgentSessionView_01({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { state: agentState } = useAgent();
 
-  const controls: AgentControlBarControls = {
-    leave: true,
-    microphone: true,
-    chat: supportsChatInput,
-    camera: supportsVideoInput,
-    screenShare: supportsScreenShare,
-  };
-
   useEffect(() => {
     const lastMessage = messages.at(-1);
     const lastMessageIsLocal = lastMessage?.from?.isLocal === true;
@@ -201,10 +196,18 @@ export function AgentSessionView_01({
     }
   }, [messages]);
 
+  const finalControls = {
+    ...DEFAULT_CONTROLS,
+    ...controls,
+  };
+
   return (
     <section
       ref={ref}
-      className={cn('bg-background relative z-10 h-full w-full overflow-hidden', className)}
+      className={cn(
+        '@container/agent-session-block bg-background relative z-10 h-full w-full overflow-hidden',
+        className,
+      )}
       {...props}
     >
       <Fade top className="absolute inset-x-4 top-0 z-10 h-40" />
@@ -241,7 +244,7 @@ export function AgentSessionView_01({
       {/* Bottom */}
       <motion.div
         {...BOTTOM_VIEW_MOTION_PROPS}
-        className="absolute inset-x-3 bottom-0 z-50 md:inset-x-12"
+        className="absolute inset-x-3 bottom-0 z-50 @md/agent-session-block:inset-x-12"
       >
         {/* Pre-connect message */}
         {isPreConnectBufferEnabled && (
@@ -258,13 +261,13 @@ export function AgentSessionView_01({
             )}
           </AnimatePresence>
         )}
-        <div className="bg-background relative mx-auto max-w-2xl pb-3 md:pb-12">
+        <div className="bg-background relative mx-auto max-w-2xl pb-3 @md/agent-session-block:pb-12">
           <AgentControlBar
             variant="livekit"
-            controls={controls}
+            controls={finalControls}
             isChatOpen={isChatOpen}
             isConnected={session.isConnected}
-            onDisconnect={session.end}
+            onDisconnect={onDisconnect ?? session.end}
             onIsChatOpenChange={setIsChatOpen}
           />
         </div>

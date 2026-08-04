@@ -3,19 +3,10 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { StartAudio } from '@livekit/components-react';
+import { type AgentControlBarControls } from '@/components/agents-ui/agent-control-bar';
 import { AgentSessionView_01 } from '@/components/agents-ui/blocks/agent-session-view-01/components/agent-session-block';
 import { cn } from '@/lib/utils';
 import type { AgentClientError } from './embed-popup-block';
-
-export interface PopupViewProps {
-  agentName?: string;
-  logo?: string;
-  color?: `#${string}`;
-  error: AgentClientError | null;
-  supportsChatInput?: boolean;
-  supportsVideoInput?: boolean;
-  supportsScreenShare?: boolean;
-}
 
 interface ErrorOverlayProps {
   logo?: string;
@@ -56,14 +47,22 @@ function ErrorOverlay({ logo, agentName, error }: ErrorOverlayProps) {
   );
 }
 
+export interface PopupViewProps {
+  agentName?: string;
+  logo?: string;
+  color?: `#${string}`;
+  error: AgentClientError | null;
+  controls: AgentControlBarControls;
+  onDisconnect?: () => void;
+}
+
 export function PopupView({
   agentName,
   logo,
   color,
   error,
-  supportsChatInput,
-  supportsVideoInput,
-  supportsScreenShare,
+  controls,
+  onDisconnect,
 }: PopupViewProps) {
   return (
     <motion.div
@@ -77,10 +76,10 @@ export function PopupView({
         <ErrorOverlay logo={logo} agentName={agentName} error={error} />
         <StartAudio label="Start audio" />
         <AgentSessionView_01
-          supportsChatInput={supportsChatInput}
-          supportsVideoInput={supportsVideoInput}
-          supportsScreenShare={supportsScreenShare}
+          controls={controls}
           audioVisualizerColor={color}
+          audioVisualizerBarCount={3}
+          onDisconnect={onDisconnect}
         />
       </div>
     </motion.div>

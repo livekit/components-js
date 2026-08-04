@@ -3,7 +3,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { PopupView } from '@/components/agents-ui/blocks/embed-popup-view-01/components/popup-view';
 
-const startAudioMock = vi.fn((props: any) => <div data-testid="start-audio" data-props={JSON.stringify(props)} />);
+const startAudioMock = vi.fn((props: any) => (
+  <div data-testid="start-audio" data-props={JSON.stringify(props)} />
+));
 
 const agentSessionViewMock = vi.fn((props: any) => (
   <div data-testid="agent-session-view" data-props={JSON.stringify(props)} />
@@ -13,9 +15,12 @@ vi.mock('@livekit/components-react', () => ({
   StartAudio: (props: any) => startAudioMock(props),
 }));
 
-vi.mock('@/components/agents-ui/blocks/agent-session-view-01/components/agent-session-block', () => ({
-  AgentSessionView_01: (props: any) => agentSessionViewMock(props),
-}));
+vi.mock(
+  '@/components/agents-ui/blocks/agent-session-view-01/components/agent-session-block',
+  () => ({
+    AgentSessionView_01: (props: any) => agentSessionViewMock(props),
+  }),
+);
 
 vi.mock('motion/react', () => ({
   motion: {

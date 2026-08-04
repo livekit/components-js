@@ -5,6 +5,7 @@ import { LiveAgentSessionProvider } from '../../.storybook/lk-decorators/LiveAge
 import { AgentSessionView_01, AgentSessionView_01Props } from '@livekit/agents-ui';
 
 export default {
+  title: 'agents-ui/Blocks/AgentSessionView-01',
   component: AgentSessionView_01,
   decorators: [LiveAgentSessionProvider],
   render: (args: AgentSessionView_01Props) => {

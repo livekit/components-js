@@ -46,7 +46,7 @@ const CATALOG_DEPENDENCIES = ['@livekit/components-react', 'livekit-client'];
 function writeTempEnvLocal(tmpDir: string): void {
   console.log('--------------------------------');
   console.log('Pointing .env.local at the tmp livekit/web checkout');
-  const destRegistryPath = path.join(tmpDir, 'apps/www/agents-ui-registry');
+  const destRegistryPath = path.join(tmpDir, 'apps/www/app/ui/r/_registry');
   const destPropTypesPath = path.join(tmpDir, 'apps/docs/lib/shadcn/prop-types.json');
   fs.writeFileSync(
     ENV_LOCAL_PATH,

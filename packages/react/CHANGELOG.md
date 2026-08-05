@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.9.24
+
+### Patch Changes
+
+- Preserve text stream attributes on transcript messages from `useSessionMessages` - [#1416](https://github.com/livekit/components-js/pull/1416) ([@theomonnom](https://github.com/theomonnom))
+
 ## 2.9.23
 
 ### Patch Changes

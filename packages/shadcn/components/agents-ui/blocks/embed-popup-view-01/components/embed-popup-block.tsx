@@ -16,12 +16,12 @@ const DEFAULT_CONTROLS: AgentControlBarControls = {
   screenShare: true,
 };
 
-export interface AgentClientError {
+export interface EmbedPopupViewError {
   title: string;
   description: string;
 }
 
-export interface AgentClientProps {
+export interface EmbedPopupViewProps {
   /**
    * @default 'Agent'
    */
@@ -53,7 +53,7 @@ export interface AgentClientProps {
    *   screenShare: false,
    * }
    */
-  controls: AgentControlBarControls;
+  controls?: AgentControlBarControls;
   /**
    * Brand color for the trigger bubble and audio visualizer.
    *
@@ -86,7 +86,7 @@ export interface AgentClientProps {
   audioVisualizerWaveLineWidth?: number;
 }
 
-export function AgentClient({
+export function EmbedPopupView_01({
   agentName = 'Agent',
   tokenSource,
   logo,
@@ -104,10 +104,10 @@ export function AgentClient({
   audioVisualizerRadialBarCount,
   audioVisualizerRadialRadius,
   audioVisualizerWaveLineWidth,
-}: AgentClientProps) {
+}: EmbedPopupViewProps) {
   const session = useSession(tokenSource);
   const [popupOpen, setPopupOpen] = useState(false);
-  const [error, setError] = useState<AgentClientError | null>(null);
+  const [error, setError] = useState<EmbedPopupViewError | null>(null);
 
   // Drive the session lifecycle off the popup-open state. Opening the popup
   // connects; closing it (or unmounting) tears the room down so we don't

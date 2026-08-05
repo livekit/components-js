@@ -2,11 +2,11 @@ import React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { useTheme } from 'next-themes';
 import { TokenSource } from 'livekit-client';
-import { AgentClient, AgentClientProps } from '@livekit/agents-ui';
+import { EmbedPopupView_01, EmbedPopupViewProps } from '@livekit/agents-ui';
 
 const TOKEN_SOURCE = TokenSource.endpoint('/api/agents-ui/token');
 
-interface Args extends Omit<AgentClientProps, 'tokenSource' | 'controls' | 'themeMode'> {
+interface Args extends Omit<EmbedPopupViewProps, 'tokenSource' | 'controls' | 'themeMode'> {
   'controls.leave': boolean;
   'controls.microphone': boolean;
   'controls.chat': boolean;
@@ -16,7 +16,7 @@ interface Args extends Omit<AgentClientProps, 'tokenSource' | 'controls' | 'them
 
 export default {
   title: 'agents-ui/Blocks/EmbedPopupView-01',
-  component: AgentClient,
+  component: EmbedPopupView_01,
   render: ({
     'controls.leave': leave,
     'controls.microphone': microphone,
@@ -28,7 +28,7 @@ export default {
     const { resolvedTheme = 'dark' } = useTheme();
     return (
       <div className="h-screen w-full">
-        <AgentClient
+        <EmbedPopupView_01
           {...args}
           tokenSource={TOKEN_SOURCE}
           themeMode={resolvedTheme as 'dark' | 'light'}
@@ -88,6 +88,6 @@ export default {
   },
 };
 
-export const Default: StoryObj<AgentClientProps> = {
+export const Default: StoryObj<EmbedPopupViewProps> = {
   args: {},
 };

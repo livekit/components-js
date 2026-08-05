@@ -11,18 +11,24 @@ export const parameters = {
   controls: { expanded: false },
   layout: 'fullscreen',
   options: {
+    // Ranks agents-ui/Blocks/* ahead of the rest of agents-ui/*, falling back to a plain
+    // alphabetical compare everywhere else. A comparator that returns 0 for "unrelated" pairs
+    // (relying on sort stability to preserve order) isn't transitive once combined with the
+    // strict Blocks-first rule, and Storybook's sort order for a non-transitive comparator is
+    // undefined - in practice that showed up as the Blocks group intermittently splitting
+    // apart or vanishing from the sidebar across reloads. Always returning a real total order
+    // (rank, then title) avoids that.
     storySort: (a, b) => {
-      const AGENTS_UI_PREFIX = 'agents-ui/';
-      const BLOCKS_PREFIX = 'agents-ui/Blocks/';
-      const aIsAgentsUi = a.title.startsWith(AGENTS_UI_PREFIX);
-      const bIsAgentsUi = b.title.startsWith(AGENTS_UI_PREFIX);
-      if (!aIsAgentsUi || !bIsAgentsUi) return 0;
-
-      const aIsBlock = a.title.startsWith(BLOCKS_PREFIX);
-      const bIsBlock = b.title.startsWith(BLOCKS_PREFIX);
-      if (aIsBlock === bIsBlock) return 0;
-
-      return aIsBlock ? -1 : 1;
+      const rank = (title) => {
+        if (!title.startsWith('agents-ui/')) return null;
+        return title.startsWith('agents-ui/Blocks/') ? 0 : 1;
+      };
+      const rankA = rank(a.title);
+      const rankB = rank(b.title);
+      if (rankA !== null && rankB !== null && rankA !== rankB) {
+        return rankA - rankB;
+      }
+      return a.title === b.title ? 0 : a.title.localeCompare(b.title, undefined, { numeric: true });
     },
   },
 };

@@ -14,7 +14,7 @@ export default {
     </div>
   ),
   args: {
-    color: '#3b82f6',
+    triggerColor: '',
     logo: '',
     agentName: 'Agent',
     supportsChatInput: true,

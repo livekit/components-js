@@ -50,18 +50,38 @@ function ErrorOverlay({ logo, agentName, error }: ErrorOverlayProps) {
 export interface PopupViewProps {
   agentName?: string;
   logo?: string;
-  color?: `#${string}`;
   error: AgentClientError | null;
   controls: AgentControlBarControls;
+  preConnectMessage?: string;
+  isPreConnectBufferEnabled?: boolean;
+  audioVisualizerType?: 'bar' | 'wave' | 'grid' | 'radial' | 'aura';
+  audioVisualizerColor?: `#${string}`;
+  audioVisualizerColorShift?: number;
+  audioVisualizerBarCount?: number;
+  audioVisualizerGridRowCount?: number;
+  audioVisualizerGridColumnCount?: number;
+  audioVisualizerRadialBarCount?: number;
+  audioVisualizerRadialRadius?: number;
+  audioVisualizerWaveLineWidth?: number;
   onDisconnect?: () => void;
 }
 
 export function PopupView({
   agentName,
   logo,
-  color,
   error,
   controls,
+  isPreConnectBufferEnabled,
+  preConnectMessage,
+  audioVisualizerType,
+  audioVisualizerColor,
+  audioVisualizerColorShift,
+  audioVisualizerBarCount = 3,
+  audioVisualizerGridRowCount,
+  audioVisualizerGridColumnCount,
+  audioVisualizerRadialBarCount,
+  audioVisualizerRadialRadius,
+  audioVisualizerWaveLineWidth,
   onDisconnect,
 }: PopupViewProps) {
   return (
@@ -77,8 +97,17 @@ export function PopupView({
         <StartAudio label="Start audio" />
         <AgentSessionView_01
           controls={controls}
-          audioVisualizerColor={color}
-          audioVisualizerBarCount={3}
+          isPreConnectBufferEnabled={isPreConnectBufferEnabled}
+          preConnectMessage={preConnectMessage}
+          audioVisualizerType={audioVisualizerType}
+          audioVisualizerColor={audioVisualizerColor}
+          audioVisualizerColorShift={audioVisualizerColorShift}
+          audioVisualizerBarCount={audioVisualizerBarCount}
+          audioVisualizerGridRowCount={audioVisualizerGridRowCount}
+          audioVisualizerGridColumnCount={audioVisualizerGridColumnCount}
+          audioVisualizerRadialBarCount={audioVisualizerRadialBarCount}
+          audioVisualizerRadialRadius={audioVisualizerRadialRadius}
+          audioVisualizerWaveLineWidth={audioVisualizerWaveLineWidth}
           onDisconnect={onDisconnect}
         />
       </div>

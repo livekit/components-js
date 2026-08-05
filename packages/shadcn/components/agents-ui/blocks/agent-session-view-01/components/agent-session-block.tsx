@@ -137,7 +137,6 @@ export interface AgentSessionView_01Props {
    * @default true
    */
   isPreConnectBufferEnabled?: boolean;
-
   /** Selects the visualizer style rendered in the main tile area. */
   audioVisualizerType?: 'bar' | 'wave' | 'grid' | 'radial' | 'aura';
   /** Primary hex color used by supported audio visualizer variants. */

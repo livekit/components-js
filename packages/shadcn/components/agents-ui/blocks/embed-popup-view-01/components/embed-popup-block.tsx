@@ -22,20 +22,26 @@ export interface AgentClientError {
 }
 
 export interface AgentClientProps {
-  /** Where to fetch a LiveKit session token from. See `useSession`'s `tokenSource` argument. */
-  tokenSource: TokenSourceConfigurable | TokenSourceFixed;
-  /**
-   * Brand color for the trigger bubble and audio visualizer.
-   *
-   * @default '#3b82f6'
-   */
-  color?: `#${string}`;
-  /** Logo shown in the trigger bubble in place of the default agent icon. */
-  logo?: string;
   /**
    * @default 'Agent'
    */
   agentName?: string;
+  /** Where to fetch a LiveKit session token from. See `useSession`'s `tokenSource` argument. */
+  tokenSource: TokenSourceConfigurable | TokenSourceFixed;
+  /** Logo shown in the trigger bubble in place of the default agent icon. */
+  logo?: string;
+  /**
+   * Theme mode forwarded to the aura visualizer (`audioVisualizerType="aura"`) so
+   * the shader's blend mode adapts to the theme mode.
+   * Ignored by other visualizer types.
+   */
+  themeMode?: 'dark' | 'light';
+  /**
+   * Message shown above the controls before the first chat message is sent.
+   *
+   * @default 'Agent is listening, ask it a question'
+   */
+  preConnectMessage?: string;
   /**
    * An object with the following keys: leave, microphone, screenShare, camera, chat. Each key maps to a boolean value that determines whether the control is displayed.
    *
@@ -48,14 +54,55 @@ export interface AgentClientProps {
    * }
    */
   controls: AgentControlBarControls;
+  /**
+   * Brand color for the trigger bubble and audio visualizer.
+   *
+   * @default '#3b82f6'
+   */
+  triggerColor?: `#${string}`;
+  /**
+   * Shows a pre-connect buffer state with a shimmer message before messages appear.
+   *
+   * @default true
+   */
+  isPreConnectBufferEnabled?: boolean;
+  /** Selects the visualizer style rendered in the main tile area. */
+  audioVisualizerType?: 'bar' | 'wave' | 'grid' | 'radial' | 'aura';
+  /** Primary hex color used by supported audio visualizer variants. */
+  audioVisualizerColor?: `#${string}`;
+  /** Hue shift intensity used by certain visualizers. */
+  audioVisualizerColorShift?: number;
+  /** Number of bars to render when `audioVisualizerType` is `bar`. */
+  audioVisualizerBarCount?: number;
+  /** Number of rows in the visualizer when `audioVisualizerType` is `grid`. */
+  audioVisualizerGridRowCount?: number;
+  /** Number of columns in the visualizer when `audioVisualizerType` is `grid`. */
+  audioVisualizerGridColumnCount?: number;
+  /** Number of radial bars when `audioVisualizerType` is `radial`. */
+  audioVisualizerRadialBarCount?: number;
+  /** Base radius of the radial visualizer when `audioVisualizerType` is `radial`. */
+  audioVisualizerRadialRadius?: number;
+  /** Stroke width of the wave path when `audioVisualizerType` is `wave`. */
+  audioVisualizerWaveLineWidth?: number;
 }
 
 export function AgentClient({
-  tokenSource,
-  color = '#3b82f6',
-  logo,
   agentName = 'Agent',
+  tokenSource,
+  logo,
   controls = DEFAULT_CONTROLS,
+  triggerColor,
+  isPreConnectBufferEnabled,
+  preConnectMessage,
+  audioVisualizerType,
+  audioVisualizerColor,
+  audioVisualizerColorShift,
+  audioVisualizerBarCount,
+  audioVisualizerGridRowCount,
+  audioVisualizerGridColumnCount,
+  audioVisualizerRadialBarCount,
+  audioVisualizerRadialRadius,
+  audioVisualizerWaveLineWidth,
 }: AgentClientProps) {
   const session = useSession(tokenSource);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -107,7 +154,7 @@ export function AgentClient({
   return (
     <AgentSessionProvider session={session}>
       <Trigger
-        color={color}
+        color={triggerColor}
         logo={logo}
         agentName={agentName}
         popupOpen={popupOpen}
@@ -116,10 +163,20 @@ export function AgentClient({
       />
       {popupOpen && (
         <PopupView
-          agentName={agentName}
           logo={logo}
-          color={color}
           error={error}
+          agentName={agentName}
+          isPreConnectBufferEnabled={isPreConnectBufferEnabled}
+          preConnectMessage={preConnectMessage}
+          audioVisualizerColor={audioVisualizerColor}
+          audioVisualizerType={audioVisualizerType}
+          audioVisualizerColorShift={audioVisualizerColorShift}
+          audioVisualizerBarCount={audioVisualizerBarCount}
+          audioVisualizerGridRowCount={audioVisualizerGridRowCount}
+          audioVisualizerGridColumnCount={audioVisualizerGridColumnCount}
+          audioVisualizerRadialBarCount={audioVisualizerRadialBarCount}
+          audioVisualizerRadialRadius={audioVisualizerRadialRadius}
+          audioVisualizerWaveLineWidth={audioVisualizerWaveLineWidth}
           controls={finalControls}
           onDisconnect={handleToggle}
         />

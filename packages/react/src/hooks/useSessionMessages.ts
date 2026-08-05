@@ -71,6 +71,7 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
 
             id: transcription.streamInfo.id,
             timestamp: transcription.streamInfo.timestamp,
+            attributes: transcription.streamInfo.attributes,
             from: room.localParticipant,
           };
 
@@ -82,6 +83,7 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
 
             id: transcription.streamInfo.id,
             timestamp: transcription.streamInfo.timestamp,
+            attributes: transcription.streamInfo.attributes,
             from:
               agent.internal.agentParticipant?.identity === transcription.participantInfo.identity
                 ? agent.internal.agentParticipant
@@ -99,6 +101,7 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
 
             id: transcription.streamInfo.id,
             timestamp: transcription.streamInfo.timestamp,
+            attributes: transcription.streamInfo.attributes,
             from: Array.from(room.remoteParticipants.values()).find(
               (p) => p.identity === transcription.participantInfo.identity,
             ),

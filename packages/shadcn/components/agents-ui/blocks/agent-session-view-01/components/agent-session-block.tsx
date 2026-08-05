@@ -130,7 +130,7 @@ export interface AgentSessionView_01Props {
    *   screenShare: false,
    * }
    */
-  controls: AgentControlBarControls;
+  controls?: AgentControlBarControls;
   /**
    * Shows a pre-connect buffer state with a shimmer message before messages appear.
    *

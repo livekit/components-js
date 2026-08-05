@@ -100,7 +100,7 @@ export function AudioVisualizer({
           radius={Math.round(
             Math.min(audioVisualizerGridRowCount, audioVisualizerGridColumnCount) / 4,
           )}
-          className={cn('size-[350px] gap-0 p-8 *:place-self-center md:size-[450px]', className)}
+          className={cn('size-[350px] gap-0 p-20 *:place-self-center md:size-[450px]', className)}
           {...props}
         />
       );

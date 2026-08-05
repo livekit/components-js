@@ -52,6 +52,7 @@ export interface PopupViewProps {
   logo?: string;
   error: AgentClientError | null;
   controls: AgentControlBarControls;
+  themeMode?: 'dark' | 'light';
   preConnectMessage?: string;
   isPreConnectBufferEnabled?: boolean;
   audioVisualizerType?: 'bar' | 'wave' | 'grid' | 'radial' | 'aura';
@@ -71,6 +72,7 @@ export function PopupView({
   logo,
   error,
   controls,
+  themeMode,
   isPreConnectBufferEnabled,
   preConnectMessage,
   audioVisualizerType,
@@ -97,6 +99,7 @@ export function PopupView({
         <StartAudio label="Start audio" />
         <AgentSessionView_01
           controls={controls}
+          themeMode={themeMode}
           isPreConnectBufferEnabled={isPreConnectBufferEnabled}
           preConnectMessage={preConnectMessage}
           audioVisualizerType={audioVisualizerType}

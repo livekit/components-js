@@ -92,6 +92,7 @@ export function AgentClient({
   logo,
   controls = DEFAULT_CONTROLS,
   triggerColor,
+  themeMode,
   isPreConnectBufferEnabled,
   preConnectMessage,
   audioVisualizerType,
@@ -166,6 +167,7 @@ export function AgentClient({
           logo={logo}
           error={error}
           agentName={agentName}
+          themeMode={themeMode}
           isPreConnectBufferEnabled={isPreConnectBufferEnabled}
           preConnectMessage={preConnectMessage}
           audioVisualizerColor={audioVisualizerColor}

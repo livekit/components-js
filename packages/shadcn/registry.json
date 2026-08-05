@@ -14,13 +14,14 @@
           "type": "registry:component"
         }
       ],
-
       "dependencies": [
         "@livekit/components-react@^2.0.0",
         "class-variance-authority",
         "lucide-react"
       ],
-      "registryDependencies": ["button"]
+      "registryDependencies": [
+        "button"
+      ]
     },
     {
       "name": "agent-track-toggle",
@@ -39,7 +40,10 @@
         "class-variance-authority",
         "lucide-react"
       ],
-      "registryDependencies": ["toggle", "utils"]
+      "registryDependencies": [
+        "toggle",
+        "utils"
+      ]
     },
     {
       "name": "agent-track-control",
@@ -58,7 +62,11 @@
         "class-variance-authority",
         "lucide-react"
       ],
-      "registryDependencies": ["select", "@agents-ui/agent-track-toggle", "utils"]
+      "registryDependencies": [
+        "select",
+        "@agents-ui/agent-track-toggle",
+        "utils"
+      ]
     },
     {
       "name": "agent-control-bar",
@@ -113,7 +121,9 @@
         "class-variance-authority",
         "lucide-react"
       ],
-      "registryDependencies": ["utils"]
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "agent-audio-visualizer-radial",
@@ -135,7 +145,9 @@
         "@livekit/components-react@^2.0.0",
         "class-variance-authority"
       ],
-      "registryDependencies": ["utils"]
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "agent-audio-visualizer-grid",
@@ -157,20 +169,24 @@
         "@livekit/components-react@^2.0.0",
         "class-variance-authority"
       ],
-      "registryDependencies": ["utils"]
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "agent-session-provider",
       "type": "registry:component",
       "title": "Agent Session Provider",
-      "description": "A component for providing an agent's session context and ensuring remote participants’ audio tracks (microphones and screen share) are audible.",
+      "description": "A component for providing an agent's session context and ensuring remote participants\u2019 audio tracks (microphones and screen share) are audible.",
       "files": [
         {
           "path": "components/agents-ui/agent-session-provider.tsx",
           "type": "registry:component"
         }
       ],
-      "dependencies": ["@livekit/components-react@^2.0.0"]
+      "dependencies": [
+        "@livekit/components-react@^2.0.0"
+      ]
     },
     {
       "name": "start-audio-button",
@@ -183,8 +199,13 @@
           "type": "registry:component"
         }
       ],
-      "dependencies": ["livekit-client@^2.0.0", "@livekit/components-react@^2.0.0"],
-      "registryDependencies": ["button"]
+      "dependencies": [
+        "livekit-client@^2.0.0",
+        "@livekit/components-react@^2.0.0"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
     },
     {
       "name": "agent-chat-indicator",
@@ -197,8 +218,13 @@
           "type": "registry:component"
         }
       ],
-      "dependencies": ["motion", "class-variance-authority"],
-      "registryDependencies": ["utils"]
+      "dependencies": [
+        "motion",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils"
+      ]
     },
     {
       "name": "agent-chat-transcript",
@@ -211,7 +237,10 @@
           "type": "registry:component"
         }
       ],
-      "dependencies": ["@livekit/components-react@^2.0.0", "streamdown"],
+      "dependencies": [
+        "@livekit/components-react@^2.0.0",
+        "streamdown"
+      ],
       "registryDependencies": [
         "message-scroller",
         "message",
@@ -252,7 +281,10 @@
         "@livekit/components-react@^2.0.0",
         "class-variance-authority"
       ],
-      "registryDependencies": ["utils", "@agents-ui/react-shader-toy"]
+      "registryDependencies": [
+        "utils",
+        "@agents-ui/react-shader-toy"
+      ]
     },
     {
       "name": "agent-audio-visualizer-aura",
@@ -274,24 +306,10 @@
         "@livekit/components-react@^2.0.0",
         "class-variance-authority"
       ],
-      "registryDependencies": ["utils", "@agents-ui/react-shader-toy"]
-    },
-    {
-      "name": "agent-expression",
-      "type": "registry:hook",
-      "title": "Agent Expression",
-      "description": "Hooks that turn an expressive agent's delivery into a normalized mood and a ready-to-use color, for driving any visualizer or UI.",
-      "files": [
-        {
-          "path": "hooks/agents-ui/use-expression.ts",
-          "type": "registry:hook"
-        },
-        {
-          "path": "lib/mood-color.ts",
-          "type": "registry:lib"
-        }
-      ],
-      "dependencies": ["@livekit/components-react@^2.0.0"]
+      "registryDependencies": [
+        "utils",
+        "@agents-ui/react-shader-toy"
+      ]
     },
     {
       "name": "nextjs-api-token-route",
@@ -305,8 +323,14 @@
           "target": "app/api/token/route.ts"
         }
       ],
-      "dependencies": ["livekit-server-sdk", "@livekit/protocol"],
-      "categories": ["agents", "api"]
+      "dependencies": [
+        "livekit-server-sdk",
+        "@livekit/protocol"
+      ],
+      "categories": [
+        "agents",
+        "api"
+      ]
     },
     {
       "name": "agent-session-view-01",
@@ -342,8 +366,15 @@
         "@agents-ui/agent-audio-visualizer-radial",
         "@agents-ui/agent-audio-visualizer-wave"
       ],
-      "dependencies": ["@livekit/components-react@^2.0.0", "livekit-client@^2.0.0", "motion"],
-      "categories": ["agents", "blocks"]
+      "dependencies": [
+        "@livekit/components-react@^2.0.0",
+        "livekit-client@^2.0.0",
+        "motion"
+      ],
+      "categories": [
+        "agents",
+        "blocks"
+      ]
     },
     {
       "name": "all",
@@ -361,7 +392,6 @@
         "@agents-ui/agent-audio-visualizer-grid",
         "@agents-ui/agent-audio-visualizer-wave",
         "@agents-ui/agent-audio-visualizer-aura",
-        "@agents-ui/agent-expression",
         "@agents-ui/agent-session-provider",
         "@agents-ui/start-audio-button",
         "@agents-ui/agent-chat-indicator",

@@ -80,7 +80,7 @@ export const AgentAudioVisualizerGridCellVariants = cva(
   },
 );
 
-export const AgentAudioVisualizerGridVariants = cva('grid', {
+export const AgentAudioVisualizerGridVariants = cva('grid transition-colors duration-250 ease-linear', {
   variants: {
     size: {
       icon: ['gap-[2px]'],

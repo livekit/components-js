@@ -277,6 +277,23 @@
       "registryDependencies": ["utils", "@agents-ui/react-shader-toy"]
     },
     {
+      "name": "agent-expression",
+      "type": "registry:hook",
+      "title": "Agent Expression",
+      "description": "Hooks that turn an expressive agent's delivery into a normalized mood and a ready-to-use color, for driving any visualizer or UI.",
+      "files": [
+        {
+          "path": "hooks/agents-ui/use-expression.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "lib/mood-color.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "dependencies": ["@livekit/components-react@^2.0.0"]
+    },
+    {
       "name": "nextjs-api-token-route",
       "type": "registry:page",
       "title": "NextJS API route to get a LiveKit session token",
@@ -344,6 +361,7 @@
         "@agents-ui/agent-audio-visualizer-grid",
         "@agents-ui/agent-audio-visualizer-wave",
         "@agents-ui/agent-audio-visualizer-aura",
+        "@agents-ui/agent-expression",
         "@agents-ui/agent-session-provider",
         "@agents-ui/start-audio-button",
         "@agents-ui/agent-chat-indicator",

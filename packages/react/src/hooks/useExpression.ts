@@ -96,10 +96,8 @@ export interface UseExpressionReturn {
  *
  * @example
  * ```tsx
- * const MOOD_COLORS = { excited: '#FF7A45', sad: '#2F54EB' };
- *
- * const { mood } = useExpression();
- * return <BarVisualizer color={mood ? MOOD_COLORS[mood] : '#1FD5F9'} />;
+ * const { mood, label } = useExpression();
+ * return <span title={label ?? undefined}>{mood ?? 'neutral'}</span>;
  * ```
  */
 export function useExpression(opts?: UseExpressionOptions): UseExpressionReturn {

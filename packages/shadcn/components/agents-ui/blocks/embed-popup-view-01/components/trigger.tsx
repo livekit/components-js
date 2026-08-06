@@ -55,18 +55,18 @@ export function Trigger({ logo, agentName, popupOpen, color, error, onToggle }: 
       <div
         className={cn(
           'absolute inset-0.5 z-10 grid place-items-center rounded-full transition-colors',
-          isConnecting && 'bg-background',
-          isDestructive && 'bg-destructive',
+          isConnecting && 'bg-background text-background',
+          isDestructive && 'bg-destructive text-white',
         )}
       >
         {isConnecting ? null : isError ? (
           // The spinning ring is the connecting signal; skip a centred glyph
           // so it reads as a clean spinner rather than a flashing X.
-          <XIcon className="size-5 text-background" aria-hidden="true" />
+          <XIcon className="size-5" aria-hidden="true" />
         ) : isConnected ? (
           // Crossed-out phone on the solid destructive disc signals
           // "click to end the call".
-          <PhoneOffIcon className="size-5 text-background" aria-hidden="true" />
+          <PhoneOffIcon className="size-5" aria-hidden="true" />
         ) : showLogo ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -79,7 +79,17 @@ export function Trigger({ logo, agentName, popupOpen, color, error, onToggle }: 
         ) : (
           // Pick black vs white based on the user-set brand color so the
           // icon stays readable across a bright yellow, deep navy, etc.
-          <BotIcon className="size-6 text-background" aria-hidden="true" />
+          <BotIcon
+            className="size-6 text-background"
+            aria-hidden="true"
+            style={
+              color
+                ? {
+                    color: `contrast-color(${color})`,
+                  }
+                : undefined
+            }
+          />
         )}
       </div>
     </Button>

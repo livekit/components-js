@@ -1,0 +1,1 @@
+{"version":3,"file":"useSettingsToggle.d.ts","sourceRoot":"","sources":["../../src/hooks/useSettingsToggle.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,KAAK,MAAM,OAAO,CAAC;AAE/B,aAAa;AACb,MAAM,WAAW,sBAAsB;IACrC,KAAK,EAAE,KAAK,CAAC,oBAAoB,CAAC,iBAAiB,CAAC,CAAC;CACtD;AAED;;;;;;GAMG;AACH,wBAAgB,iBAAiB,CAAC,EAAE,KAAK,EAAE,EAAE,sBAAsB;;;;;;EAelE"}

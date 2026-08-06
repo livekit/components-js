@@ -96,6 +96,9 @@ export enum AgentEvent {
     StateChanged = "stateChanged"
 }
 
+// @beta
+export type AgentMood = 'excited' | 'happy' | 'playful' | 'curious' | 'surprised' | 'hopeful' | 'empathetic' | 'sad' | 'angry' | 'anxious' | 'calm';
+
 // Warning: (ae-forgotten-export) The symbol "AgentSdkStates" needs to be exported by the entry point index.docs.d.ts
 //
 // @beta
@@ -308,6 +311,9 @@ export interface ControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> 
 }
 
 // @public
+export const DEFAULT_MOOD_TTL_TURNS = 2;
+
+// @public
 export const DisconnectButton: (props: DisconnectButtonProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactNode;
 
 // @public (undocumented)
@@ -315,6 +321,9 @@ export interface DisconnectButtonProps extends React_2.ButtonHTMLAttributes<HTML
     // (undocumented)
     stopTracks?: boolean;
 }
+
+// @public
+export const EXPRESSION_ATTRIBUTE = "lk.expression";
 
 // Warning: (ae-internal-missing-underscore) The name "FeatureFlags" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -528,6 +537,9 @@ export interface MultiBandTrackVolumeOptions {
     loPass?: number;
     updateInterval?: number;
 }
+
+// @beta
+export function parseExpression(segment: TextStreamData): UseExpressionReturn | null;
 
 // @public
 export const ParticipantAudioTile: (props: ParticipantTileProps & React_2.RefAttributes<HTMLDivElement>) => React_2.ReactNode;
@@ -923,6 +935,20 @@ export function useEvents<Emitter extends default_2<EventMap>, EmitterEventMap e
         emitter: Emitter;
     };
 } | null | undefined, event: Event, handlerFn: Callback | undefined, dependencies?: React_2.DependencyList): void;
+
+// @beta
+export function useExpression(opts?: UseExpressionOptions): UseExpressionReturn;
+
+// @beta (undocumented)
+export interface UseExpressionOptions extends UseTranscriptionsOptions {
+    ttlTurns?: number;
+}
+
+// @beta (undocumented)
+export interface UseExpressionReturn {
+    expression: string | null;
+    mood: AgentMood | null;
+}
 
 // @alpha
 export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'user' | 'environment' | 'left' | 'right' | 'undefined';

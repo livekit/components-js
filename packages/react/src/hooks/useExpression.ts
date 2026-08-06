@@ -9,9 +9,9 @@ export const EXPRESSION_ATTRIBUTE = 'lk.expression';
  * @beta
  * The agent's normalized emotional delivery.
  *
- * The raw label the TTS provider emits is not a fixed vocabulary: Fish Audio emits single words
+ * The wording the TTS provider emits is not a fixed vocabulary: Fish Audio emits single words
  * from a closed set, Inworld emits free-form English ("soft, with genuine care"), and models
- * routinely drift outside whichever set they were given. The agent normalizes that label to this
+ * routinely drift outside whichever set they were given. The agent normalizes that wording to this
  * enum before publishing it, so every client SDK reads the same values.
  */
 export type AgentMood =
@@ -40,7 +40,7 @@ const EXPRESSION_SETTLE_TICKS = 20;
 
 interface ExpressionPayload {
   mood: AgentMood | null;
-  label: string | null;
+  expression: string | null;
 }
 
 /**
@@ -54,12 +54,12 @@ export function parseExpression(segment: TextStreamData): ExpressionPayload | nu
   }
 
   try {
-    const { value, mood } = JSON.parse(raw) as { value?: string; mood?: AgentMood };
-    const label = value?.trim() || null;
-    if (!label && !mood) {
+    const parsed = JSON.parse(raw) as { expression?: string; mood?: AgentMood };
+    const expression = parsed.expression?.trim() || null;
+    if (!expression && !parsed.mood) {
       return null;
     }
-    return { mood: mood ?? null, label };
+    return { mood: parsed.mood ?? null, expression };
   } catch {
     return null;
   }
@@ -82,8 +82,8 @@ export interface UseExpressionOptions extends UseTranscriptionsOptions {
 export interface UseExpressionReturn {
   /** The normalized mood, or null when the agent hasn't expressed anything recently. */
   mood: AgentMood | null;
-  /** The raw provider label behind the mood, verbatim and free-form. */
-  label: string | null;
+  /** The provider's own delivery wording behind the mood, verbatim and free-form. */
+  expression: string | null;
 }
 
 /**
@@ -96,8 +96,8 @@ export interface UseExpressionReturn {
  *
  * @example
  * ```tsx
- * const { mood, label } = useExpression();
- * return <span title={label ?? undefined}>{mood ?? 'neutral'}</span>;
+ * const { mood, expression } = useExpression();
+ * return <span title={expression ?? undefined}>{mood ?? 'neutral'}</span>;
  * ```
  */
 export function useExpression(opts?: UseExpressionOptions): UseExpressionReturn {
@@ -108,7 +108,7 @@ export function useExpression(opts?: UseExpressionOptions): UseExpressionReturn 
   // The expression rides the stream's *closing* trailer, which livekit-client merges into the
   // streamInfo object we already hold, by mutation and without emitting. Nothing re-renders, so
   // the mood would otherwise only surface once the next segment starts: a full turn late. Poll
-  // briefly after each change, and only re-render when the label actually differs.
+  // briefly after each change, and only re-render when the expression actually differs.
   React.useEffect(() => {
     let ticks = 0;
     const id = setInterval(() => {
@@ -117,7 +117,7 @@ export function useExpression(opts?: UseExpressionOptions): UseExpressionReturn 
         for (const segment of segments) {
           const parsed = parseExpression(segment);
           if (parsed) {
-            latest = parsed.label;
+            latest = parsed.expression;
           }
         }
         return latest === previous ? previous : latest;
@@ -147,7 +147,7 @@ export function useExpression(opts?: UseExpressionOptions): UseExpressionReturn 
     }
 
     if (!current || (ttlTurns > 0 && turnsSince >= ttlTurns)) {
-      return { mood: null, label: null };
+      return { mood: null, expression: null };
     }
     return current;
     // `settled` is not read here: it exists to re-run this memo once the trailer lands

@@ -13,9 +13,11 @@ function segment(attributes?: Record<string, string>): TextStreamData {
 describe('parseExpression', () => {
   it('reads the mood the agent normalized', () => {
     const parsed = parseExpression(
-      segment({ [EXPRESSION_ATTRIBUTE]: '{"value":"soft, with genuine care","mood":"empathetic"}' }),
+      segment({
+        [EXPRESSION_ATTRIBUTE]: '{"expression":"soft, with genuine care","mood":"empathetic"}',
+      }),
     );
-    expect(parsed).toEqual({ mood: 'empathetic', label: 'soft, with genuine care' });
+    expect(parsed).toEqual({ mood: 'empathetic', expression: 'soft, with genuine care' });
   });
 
   it('returns null when the segment carries no expression', () => {
@@ -28,8 +30,10 @@ describe('parseExpression', () => {
     expect(parseExpression(segment({ [EXPRESSION_ATTRIBUTE]: '{}' }))).toBeNull();
   });
 
-  it('keeps the label when an older agent publishes no mood', () => {
-    const parsed = parseExpression(segment({ [EXPRESSION_ATTRIBUTE]: '{"value":"cheerful"}' }));
-    expect(parsed).toEqual({ mood: null, label: 'cheerful' });
+  it('keeps the wording when an agent publishes no mood', () => {
+    const parsed = parseExpression(
+      segment({ [EXPRESSION_ATTRIBUTE]: '{"expression":"cheerful"}' }),
+    );
+    expect(parsed).toEqual({ mood: null, expression: 'cheerful' });
   });
 });

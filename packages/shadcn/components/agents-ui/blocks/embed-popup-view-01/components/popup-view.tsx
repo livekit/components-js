@@ -92,9 +92,9 @@ export function PopupView({
       animate={{ opacity: 1, translateY: 0 }}
       exit={{ opacity: 0, translateY: 8 }}
       transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
-      className="fixed right-4 bottom-20 left-4 z-50 h-[480px] rounded-[28px] border drop-shadow-md md:left-auto md:w-[360px]"
+      className="fixed right-4 bottom-20 left-4 z-50 h-[480px] md:left-auto md:w-[360px]"
     >
-      <div className="relative flex h-full w-full flex-col overflow-hidden rounded-[28px]">
+      <div className="relative flex h-full w-full flex-col overflow-hidden rounded-[40px] border drop-shadow-md">
         <ErrorOverlay logo={logo} agentName={agentName} error={error} />
         <StartAudio label="Start audio" />
         <AgentSessionView_01

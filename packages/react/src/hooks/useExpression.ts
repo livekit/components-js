@@ -2,7 +2,10 @@ import * as React from 'react';
 import { useTranscriptions, type UseTranscriptionsOptions } from './useTranscriptions';
 import type { TextStreamData } from '@livekit/components-core';
 
-/** Published per transcript segment by Expressive Mode: the segment's leading delivery tag. */
+/**
+ * @beta
+ * Published per transcript segment by Expressive Mode: the segment's leading delivery tag.
+ **/
 export const EXPRESSION_ATTRIBUTE = 'lk.expression';
 
 /**
@@ -28,6 +31,7 @@ export type AgentMood =
   | 'calm';
 
 /**
+ * @beta
  * How many agent turns an expression survives before the mood decays back to null. Without decay,
  * one excited sentence would leave the UI excited for the rest of the session.
  */

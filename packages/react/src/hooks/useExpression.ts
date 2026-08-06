@@ -28,18 +28,21 @@ export type AgentMood =
   | 'calm';
 
 /**
- * How many agent turns an expression survives before the mood decays back to null.
- *
- * A feeling belongs to the moment that produced it. Without this, one excited sentence would leave
- * the UI excited for the rest of the session, including through turns the agent delivered flat.
+ * How many agent turns an expression survives before the mood decays back to null. Without decay,
+ * one excited sentence would leave the UI excited for the rest of the session.
  */
 export const DEFAULT_MOOD_TTL_TURNS = 2;
 
 const EXPRESSION_SETTLE_INTERVAL_MS = 150;
 const EXPRESSION_SETTLE_TICKS = 20;
 
-interface ExpressionPayload {
+/**
+ * @beta
+ */
+export interface UseExpressionReturn {
+  /** The normalized mood, or null when the agent hasn't expressed anything recently. */
   mood: AgentMood | null;
+  /** The provider's own delivery wording behind the mood, verbatim and free-form. */
   expression: string | null;
 }
 
@@ -47,7 +50,7 @@ interface ExpressionPayload {
  * @beta
  * The expression published on a transcript segment, or null when it carries none.
  */
-export function parseExpression(segment: TextStreamData): ExpressionPayload | null {
+export function parseExpression(segment: TextStreamData): UseExpressionReturn | null {
   const raw = segment.streamInfo.attributes?.[EXPRESSION_ATTRIBUTE];
   if (!raw) {
     return null;
@@ -78,16 +81,6 @@ export interface UseExpressionOptions extends UseTranscriptionsOptions {
 
 /**
  * @beta
- */
-export interface UseExpressionReturn {
-  /** The normalized mood, or null when the agent hasn't expressed anything recently. */
-  mood: AgentMood | null;
-  /** The provider's own delivery wording behind the mood, verbatim and free-form. */
-  expression: string | null;
-}
-
-/**
- * @beta
  * useExpression returns the agent's current emotional delivery, as published by Expressive Mode.
  *
  * Reads the transcript stream the session already subscribes to, so it adds no second text stream
@@ -113,13 +106,10 @@ export function useExpression(opts?: UseExpressionOptions): UseExpressionReturn 
     let ticks = 0;
     const id = setInterval(() => {
       setSettled((previous) => {
-        let latest: string | null = null;
-        for (const segment of segments) {
-          const parsed = parseExpression(segment);
-          if (parsed) {
-            latest = parsed.expression;
-          }
-        }
+        const latest = segments.reduce<string | null>(
+          (acc, segment) => parseExpression(segment)?.expression ?? acc,
+          null,
+        );
         return latest === previous ? previous : latest;
       });
       if (++ticks >= EXPRESSION_SETTLE_TICKS) {
@@ -130,7 +120,7 @@ export function useExpression(opts?: UseExpressionOptions): UseExpressionReturn 
   }, [segments]);
 
   return React.useMemo(() => {
-    let current: ExpressionPayload | null = null;
+    let current: UseExpressionReturn | null = null;
     let speaker: string | null = null;
     let turnsSince = 0;
 

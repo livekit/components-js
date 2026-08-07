@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { StartAudioButton } from '@/components/agents-ui/start-audio-button';
 import { type AgentControlBarControls } from '@/components/agents-ui/agent-control-bar';
 import { AgentSessionView_01 } from '@/components/agents-ui/blocks/agent-session-view-01/components/agent-session-block';
+import type { AudioVisualizerConfig } from '@/components/agents-ui/blocks/agent-session-view-01/components/audio-visualizer';
 import { cn } from '@/lib/utils';
 import type { EmbedPopupViewError } from './embed-popup-block';
 
@@ -56,15 +57,7 @@ export interface PopupViewProps {
   themeMode?: 'dark' | 'light';
   preConnectMessage?: string;
   isPreConnectBufferEnabled?: boolean;
-  audioVisualizerType?: 'bar' | 'wave' | 'grid' | 'radial' | 'aura';
-  audioVisualizerColor?: `#${string}`;
-  audioVisualizerColorShift?: number;
-  audioVisualizerBarCount?: number;
-  audioVisualizerGridRowCount?: number;
-  audioVisualizerGridColumnCount?: number;
-  audioVisualizerRadialBarCount?: number;
-  audioVisualizerRadialRadius?: number;
-  audioVisualizerWaveLineWidth?: number;
+  audioVisualizer?: AudioVisualizerConfig;
   onDisconnect?: () => void;
 }
 
@@ -76,15 +69,7 @@ export function PopupView({
   themeMode,
   isPreConnectBufferEnabled,
   preConnectMessage,
-  audioVisualizerType,
-  audioVisualizerColor,
-  audioVisualizerColorShift,
-  audioVisualizerBarCount = 3,
-  audioVisualizerGridRowCount,
-  audioVisualizerGridColumnCount,
-  audioVisualizerRadialBarCount,
-  audioVisualizerRadialRadius,
-  audioVisualizerWaveLineWidth,
+  audioVisualizer,
   onDisconnect,
 }: PopupViewProps) {
   return (
@@ -105,15 +90,7 @@ export function PopupView({
           themeMode={themeMode}
           isPreConnectBufferEnabled={isPreConnectBufferEnabled}
           preConnectMessage={preConnectMessage}
-          audioVisualizerType={audioVisualizerType}
-          audioVisualizerColor={audioVisualizerColor}
-          audioVisualizerColorShift={audioVisualizerColorShift}
-          audioVisualizerBarCount={audioVisualizerBarCount}
-          audioVisualizerGridRowCount={audioVisualizerGridRowCount}
-          audioVisualizerGridColumnCount={audioVisualizerGridColumnCount}
-          audioVisualizerRadialBarCount={audioVisualizerRadialBarCount}
-          audioVisualizerRadialRadius={audioVisualizerRadialRadius}
-          audioVisualizerWaveLineWidth={audioVisualizerWaveLineWidth}
+          audioVisualizer={audioVisualizer}
           onDisconnect={onDisconnect}
         />
       </div>

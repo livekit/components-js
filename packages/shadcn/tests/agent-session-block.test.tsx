@@ -109,45 +109,33 @@ describe('AgentSessionView_01', () => {
     });
   });
 
-  describe('supportsChatInput', () => {
-    it('passes chat: true to AgentControlBar by default', () => {
+  describe('controls', () => {
+    it('passes the default controls to AgentControlBar when unset', () => {
       render(<AgentSessionView_01 data-testid="session-view" />);
       const call = agentControlBarMock.mock.calls[0][0];
-      expect(call.controls).toEqual(
-        expect.objectContaining({ chat: true, leave: true, microphone: true }),
-      );
+      expect(call.controls).toEqual({
+        leave: true,
+        microphone: true,
+        chat: true,
+        camera: true,
+        screenShare: true,
+      });
     });
 
-    it('passes chat: false when supportsChatInput is false', () => {
-      render(<AgentSessionView_01 data-testid="session-view" supportsChatInput={false} />);
+    it('passes chat: false when controls.chat is false', () => {
+      render(<AgentSessionView_01 data-testid="session-view" controls={{ chat: false }} />);
       const call = agentControlBarMock.mock.calls[0][0];
       expect(call.controls.chat).toBe(false);
     });
-  });
 
-  describe('supportsVideoInput', () => {
-    it('passes camera: true to AgentControlBar by default', () => {
-      render(<AgentSessionView_01 data-testid="session-view" />);
-      const call = agentControlBarMock.mock.calls[0][0];
-      expect(call.controls.camera).toBe(true);
-    });
-
-    it('passes camera: false when supportsVideoInput is false', () => {
-      render(<AgentSessionView_01 data-testid="session-view" supportsVideoInput={false} />);
+    it('passes camera: false when controls.camera is false', () => {
+      render(<AgentSessionView_01 data-testid="session-view" controls={{ camera: false }} />);
       const call = agentControlBarMock.mock.calls[0][0];
       expect(call.controls.camera).toBe(false);
     });
-  });
 
-  describe('supportsScreenShare', () => {
-    it('passes screenShare: true to AgentControlBar by default', () => {
-      render(<AgentSessionView_01 data-testid="session-view" />);
-      const call = agentControlBarMock.mock.calls[0][0];
-      expect(call.controls.screenShare).toBe(true);
-    });
-
-    it('passes screenShare: false when supportsScreenShare is false', () => {
-      render(<AgentSessionView_01 data-testid="session-view" supportsScreenShare={false} />);
+    it('passes screenShare: false when controls.screenShare is false', () => {
+      render(<AgentSessionView_01 data-testid="session-view" controls={{ screenShare: false }} />);
       const call = agentControlBarMock.mock.calls[0][0];
       expect(call.controls.screenShare).toBe(false);
     });
@@ -253,13 +241,11 @@ describe('AgentSessionView_01', () => {
   });
 
   describe('control bar controls together', () => {
-    it('passes all controls false when all support props are false', () => {
+    it('merges partial controls overrides with the defaults', () => {
       render(
         <AgentSessionView_01
           data-testid="session-view"
-          supportsChatInput={false}
-          supportsVideoInput={false}
-          supportsScreenShare={false}
+          controls={{ chat: false, camera: false, screenShare: false }}
         />,
       );
       const call = agentControlBarMock.mock.calls[0][0];

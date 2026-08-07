@@ -7,6 +7,8 @@ const startMock = vi.fn().mockResolvedValue(undefined);
 const endMock = vi.fn().mockResolvedValue(undefined);
 const mockSession = { isConnected: false, start: startMock, end: endMock } as any;
 
+const useAgentMock = vi.fn(() => ({ isConnected: false }));
+
 const triggerMock = vi.fn((props: any) => (
   <button data-testid="trigger" onClick={props.onToggle}>
     trigger
@@ -19,6 +21,7 @@ const popupViewMock = vi.fn((props: any) => (
 
 vi.mock('@livekit/components-react', () => ({
   useSession: () => mockSession,
+  useAgent: () => useAgentMock(),
 }));
 
 vi.mock('@/components/agents-ui/agent-session-provider', () => ({
@@ -39,6 +42,7 @@ describe('EmbedPopupView_01', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockSession.isConnected = false;
+    useAgentMock.mockReturnValue({ isConnected: false });
   });
 
   it('renders the trigger but not the popup view when closed', () => {
@@ -68,11 +72,11 @@ describe('EmbedPopupView_01', () => {
     expect(screen.queryByTestId('popup-view')).not.toBeInTheDocument();
   });
 
-  it('forwards color, logo, and agentName to Trigger', () => {
+  it('forwards triggerColor as color, logo, and agentName to Trigger', () => {
     render(
       <EmbedPopupView_01
         tokenSource={tokenSource}
-        color="#ff00ff"
+        triggerColor="#ff00ff"
         logo="https://example.com/logo.png"
         agentName="Assistant"
       />,
@@ -87,29 +91,30 @@ describe('EmbedPopupView_01', () => {
     );
   });
 
-  it('applies default color and agentName when not provided', () => {
+  it('applies the default agentName when not provided', () => {
     render(<EmbedPopupView_01 tokenSource={tokenSource} />);
     const call = triggerMock.mock.calls[0][0];
-    expect(call).toEqual(expect.objectContaining({ color: '#3b82f6', agentName: 'Agent' }));
+    expect(call).toEqual(expect.objectContaining({ agentName: 'Agent' }));
+    expect(call.color).toBeUndefined();
   });
 
-  it('forwards supports* props to PopupView when open', async () => {
+  it('forwards merged controls to PopupView when open', async () => {
     render(
       <EmbedPopupView_01
         tokenSource={tokenSource}
-        supportsChatInput={false}
-        supportsVideoInput={false}
-        supportsScreenShare={false}
+        controls={{ chat: false, camera: false, screenShare: false }}
       />,
     );
     await act(async () => {
       screen.getByTestId('trigger').click();
     });
     const props = JSON.parse(screen.getByTestId('popup-view').getAttribute('data-props')!);
-    expect(props).toMatchObject({
-      supportsChatInput: false,
-      supportsVideoInput: false,
-      supportsScreenShare: false,
+    expect(props.controls).toEqual({
+      leave: false,
+      microphone: true,
+      chat: false,
+      camera: false,
+      screenShare: false,
     });
   });
 });

@@ -1,10 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type ComponentProps } from 'react';
+import { useAgent, useSession } from '@livekit/components-react';
 import { type TokenSourceConfigurable, type TokenSourceFixed } from 'livekit-client';
-import { useSession } from '@livekit/components-react';
-import { AgentSessionProvider } from '@/components/agents-ui/agent-session-provider';
+
 import { type AgentControlBarControls } from '@/components/agents-ui/agent-control-bar';
+import { AgentSessionProvider } from '@/components/agents-ui/agent-session-provider';
 import { PopupView } from './popup-view';
 import { Trigger } from './trigger';
 
@@ -21,19 +22,22 @@ export interface EmbedPopupViewError {
   description: string;
 }
 
+function TriggerProvider({ ...props }: ComponentProps<typeof Trigger>) {
+  const { isConnected } = useAgent();
+
+  return <Trigger {...props} isConnected={isConnected} />;
+}
+
 export interface EmbedPopupViewProps {
-  /**
-   * @default 'Agent'
-   */
+  /** Logo shown in the trigger bubble in place of the default agent icon. */
+  logo?: string;
+  /** @default 'Agent' */
   agentName?: string;
   /** Where to fetch a LiveKit session token from. See `useSession`'s `tokenSource` argument. */
   tokenSource: TokenSourceConfigurable | TokenSourceFixed;
-  /** Logo shown in the trigger bubble in place of the default agent icon. */
-  logo?: string;
   /**
-   * Theme mode forwarded to the aura visualizer (`audioVisualizerType="aura"`) so
-   * the shader's blend mode adapts to the theme mode.
-   * Ignored by other visualizer types.
+   * Theme mode forwarded to the aura visualizer (`audioVisualizerType="aura"`) so the shader's
+   * blend mode adapts to the theme mode. Ignored by other visualizer types.
    */
   themeMode?: 'dark' | 'light';
   /**
@@ -43,7 +47,8 @@ export interface EmbedPopupViewProps {
    */
   preConnectMessage?: string;
   /**
-   * An object with the following keys: leave, microphone, screenShare, camera, chat. Each key maps to a boolean value that determines whether the control is displayed.
+   * An object with the following keys: leave, microphone, screenShare, camera, chat. Each key maps
+   * to a boolean value that determines whether the control is displayed.
    *
    * @default {
    *   leave: true,
@@ -87,12 +92,12 @@ export interface EmbedPopupViewProps {
 }
 
 export function EmbedPopupView_01({
-  agentName = 'Agent',
-  tokenSource,
   logo,
-  controls = DEFAULT_CONTROLS,
-  triggerColor,
   themeMode,
+  tokenSource,
+  triggerColor,
+  agentName = 'Agent',
+  controls = DEFAULT_CONTROLS,
   isPreConnectBufferEnabled,
   preConnectMessage,
   audioVisualizerType,
@@ -107,7 +112,7 @@ export function EmbedPopupView_01({
 }: EmbedPopupViewProps) {
   const session = useSession(tokenSource);
   const [popupOpen, setPopupOpen] = useState(false);
-  const [error, setError] = useState<EmbedPopupViewError | null>(null);
+  const [error, setError] = useState<EmbedPopupViewError>();
 
   // Drive the session lifecycle off the popup-open state. Opening the popup
   // connects; closing it (or unmounting) tears the room down so we don't
@@ -142,7 +147,7 @@ export function EmbedPopupView_01({
   const handleToggle = useCallback(() => {
     setPopupOpen((open) => {
       const next = !open;
-      if (!next) setError(null);
+      if (!next) setError(undefined);
       return next;
     });
   }, []);
@@ -154,13 +159,14 @@ export function EmbedPopupView_01({
 
   return (
     <AgentSessionProvider session={session}>
-      <Trigger
-        color={triggerColor}
+      <TriggerProvider
         logo={logo}
-        agentName={agentName}
-        popupOpen={popupOpen}
         error={error}
+        color={triggerColor}
+        agentName={agentName}
+        isPressed={popupOpen}
         onToggle={handleToggle}
+        className="fixed right-4 bottom-4 z-50"
       />
       {popupOpen && (
         <PopupView

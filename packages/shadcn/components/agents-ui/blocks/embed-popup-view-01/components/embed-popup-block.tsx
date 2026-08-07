@@ -6,6 +6,7 @@ import { type TokenSourceConfigurable, type TokenSourceFixed } from 'livekit-cli
 
 import { type AgentControlBarControls } from '@/components/agents-ui/agent-control-bar';
 import { AgentSessionProvider } from '@/components/agents-ui/agent-session-provider';
+import type { AudioVisualizerConfig } from '@/components/agents-ui/blocks/agent-session-view-01/components/audio-visualizer';
 import { PopupView } from './popup-view';
 import { Trigger } from './trigger';
 
@@ -36,8 +37,8 @@ export interface EmbedPopupViewProps {
   /** Where to fetch a LiveKit session token from. See `useSession`'s `tokenSource` argument. */
   tokenSource: TokenSourceConfigurable | TokenSourceFixed;
   /**
-   * Theme mode forwarded to the aura visualizer (`audioVisualizerType="aura"`) so the shader's
-   * blend mode adapts to the theme mode. Ignored by other visualizer types.
+   * Theme mode forwarded to the aura visualizer (`audioVisualizer.type === 'aura'`) so the
+   * shader's blend mode adapts to the theme mode. Ignored by other visualizer types.
    */
   themeMode?: 'dark' | 'light';
   /**
@@ -71,24 +72,8 @@ export interface EmbedPopupViewProps {
    * @default true
    */
   isPreConnectBufferEnabled?: boolean;
-  /** Selects the visualizer style rendered in the main tile area. */
-  audioVisualizerType?: 'bar' | 'wave' | 'grid' | 'radial' | 'aura';
-  /** Primary hex color used by supported audio visualizer variants. */
-  audioVisualizerColor?: `#${string}`;
-  /** Hue shift intensity used by certain visualizers. */
-  audioVisualizerColorShift?: number;
-  /** Number of bars to render when `audioVisualizerType` is `bar`. */
-  audioVisualizerBarCount?: number;
-  /** Number of rows in the visualizer when `audioVisualizerType` is `grid`. */
-  audioVisualizerGridRowCount?: number;
-  /** Number of columns in the visualizer when `audioVisualizerType` is `grid`. */
-  audioVisualizerGridColumnCount?: number;
-  /** Number of radial bars when `audioVisualizerType` is `radial`. */
-  audioVisualizerRadialBarCount?: number;
-  /** Base radius of the radial visualizer when `audioVisualizerType` is `radial`. */
-  audioVisualizerRadialRadius?: number;
-  /** Stroke width of the wave path when `audioVisualizerType` is `wave`. */
-  audioVisualizerWaveLineWidth?: number;
+  /** Configures the visualizer style rendered in the main tile area. */
+  audioVisualizer?: AudioVisualizerConfig;
 }
 
 export function EmbedPopupView_01({
@@ -100,15 +85,10 @@ export function EmbedPopupView_01({
   controls = DEFAULT_CONTROLS,
   isPreConnectBufferEnabled,
   preConnectMessage,
-  audioVisualizerType,
-  audioVisualizerColor,
-  audioVisualizerColorShift,
-  audioVisualizerBarCount,
-  audioVisualizerGridRowCount,
-  audioVisualizerGridColumnCount,
-  audioVisualizerRadialBarCount,
-  audioVisualizerRadialRadius,
-  audioVisualizerWaveLineWidth,
+  audioVisualizer = {
+    type: 'bar',
+    size: 'lg',
+  },
 }: EmbedPopupViewProps) {
   const session = useSession(tokenSource);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -176,15 +156,7 @@ export function EmbedPopupView_01({
           themeMode={themeMode}
           isPreConnectBufferEnabled={isPreConnectBufferEnabled}
           preConnectMessage={preConnectMessage}
-          audioVisualizerColor={audioVisualizerColor}
-          audioVisualizerType={audioVisualizerType}
-          audioVisualizerColorShift={audioVisualizerColorShift}
-          audioVisualizerBarCount={audioVisualizerBarCount}
-          audioVisualizerGridRowCount={audioVisualizerGridRowCount}
-          audioVisualizerGridColumnCount={audioVisualizerGridColumnCount}
-          audioVisualizerRadialBarCount={audioVisualizerRadialBarCount}
-          audioVisualizerRadialRadius={audioVisualizerRadialRadius}
-          audioVisualizerWaveLineWidth={audioVisualizerWaveLineWidth}
+          audioVisualizer={audioVisualizer}
           controls={finalControls}
           onDisconnect={handleToggle}
         />

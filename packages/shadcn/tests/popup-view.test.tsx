@@ -47,14 +47,13 @@ describe('PopupView', () => {
     expect(screen.getByTestId('start-audio-button')).toBeInTheDocument();
   });
 
-  it('forwards audio visualizer props and controls to AgentSessionView_01', () => {
+  it('forwards the audioVisualizer config and controls to AgentSessionView_01', () => {
     render(
-      <PopupView controls={CONTROLS} audioVisualizerColor="#ff00ff" audioVisualizerType="wave" />,
+      <PopupView controls={CONTROLS} audioVisualizer={{ color: '#ff00ff', type: 'wave' }} />,
     );
     const props = JSON.parse(screen.getByTestId('agent-session-view').getAttribute('data-props')!);
     expect(props).toMatchObject({
-      audioVisualizerColor: '#ff00ff',
-      audioVisualizerType: 'wave',
+      audioVisualizer: { color: '#ff00ff', type: 'wave' },
       controls: CONTROLS,
     });
   });

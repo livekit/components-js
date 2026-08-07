@@ -9,6 +9,7 @@ import {
   type AgentControlBarControls,
 } from '@/components/agents-ui/agent-control-bar';
 import { cn } from '@/lib/utils';
+import { type AudioVisualizerConfig } from './audio-visualizer';
 import { TileLayout } from './tile-view';
 
 const DEFAULT_CONTROLS: AgentControlBarControls = {
@@ -108,7 +109,7 @@ export function Fade({ top = false, bottom = false, className }: FadeProps) {
 
 export interface AgentSessionView_01Props {
   /**
-   * Theme mode forwarded to the aura visualizer (`audioVisualizerType="aura"`) so
+   * Theme mode forwarded to the aura visualizer (`audioVisualizer.type === 'aura'`) so
    * the shader's blend mode adapts to the theme mode.
    * Ignored by other visualizer types.
    */
@@ -137,24 +138,8 @@ export interface AgentSessionView_01Props {
    * @default true
    */
   isPreConnectBufferEnabled?: boolean;
-  /** Selects the visualizer style rendered in the main tile area. */
-  audioVisualizerType?: 'bar' | 'wave' | 'grid' | 'radial' | 'aura';
-  /** Primary hex color used by supported audio visualizer variants. */
-  audioVisualizerColor?: `#${string}`;
-  /** Hue shift intensity used by certain visualizers. */
-  audioVisualizerColorShift?: number;
-  /** Number of bars to render when `audioVisualizerType` is `bar`. */
-  audioVisualizerBarCount?: number;
-  /** Number of rows in the visualizer when `audioVisualizerType` is `grid`. */
-  audioVisualizerGridRowCount?: number;
-  /** Number of columns in the visualizer when `audioVisualizerType` is `grid`. */
-  audioVisualizerGridColumnCount?: number;
-  /** Number of radial bars when `audioVisualizerType` is `radial`. */
-  audioVisualizerRadialBarCount?: number;
-  /** Base radius of the radial visualizer when `audioVisualizerType` is `radial`. */
-  audioVisualizerRadialRadius?: number;
-  /** Stroke width of the wave path when `audioVisualizerType` is `wave`. */
-  audioVisualizerWaveLineWidth?: number;
+  /** Configures the visualizer style rendered in the main tile area. */
+  audioVisualizer?: AudioVisualizerConfig;
   /** Optional class name merged onto the outer `<section>` container. */
   className?: string;
   /** Called when the user clicks the leave control, in addition to ending the session. */
@@ -165,15 +150,7 @@ export function AgentSessionView_01({
   preConnectMessage = 'Agent is listening, ask it a question',
   controls = DEFAULT_CONTROLS,
   isPreConnectBufferEnabled = true,
-  audioVisualizerType,
-  audioVisualizerColor,
-  audioVisualizerColorShift,
-  audioVisualizerBarCount,
-  audioVisualizerGridRowCount,
-  audioVisualizerGridColumnCount,
-  audioVisualizerRadialBarCount,
-  audioVisualizerRadialRadius,
-  audioVisualizerWaveLineWidth,
+  audioVisualizer,
   themeMode,
   onDisconnect,
   ref,
@@ -227,19 +204,8 @@ export function AgentSessionView_01({
       </AnimatePresence>
 
       {/* Tile layout */}
-      <TileLayout
-        isChatOpen={isChatOpen}
-        themeMode={themeMode}
-        audioVisualizerType={audioVisualizerType}
-        audioVisualizerColor={audioVisualizerColor}
-        audioVisualizerColorShift={audioVisualizerColorShift}
-        audioVisualizerBarCount={audioVisualizerBarCount}
-        audioVisualizerRadialBarCount={audioVisualizerRadialBarCount}
-        audioVisualizerRadialRadius={audioVisualizerRadialRadius}
-        audioVisualizerGridRowCount={audioVisualizerGridRowCount}
-        audioVisualizerGridColumnCount={audioVisualizerGridColumnCount}
-        audioVisualizerWaveLineWidth={audioVisualizerWaveLineWidth}
-      />
+      <TileLayout isChatOpen={isChatOpen} themeMode={themeMode} audioVisualizer={audioVisualizer} />
+
       {/* Bottom */}
       <motion.div
         {...BOTTOM_VIEW_MOTION_PROPS}

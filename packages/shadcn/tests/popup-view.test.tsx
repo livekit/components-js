@@ -3,16 +3,16 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { PopupView } from '@/components/agents-ui/blocks/embed-popup-view-01/components/popup-view';
 
-const startAudioMock = vi.fn((props: any) => (
-  <div data-testid="start-audio" data-props={JSON.stringify(props)} />
+const startAudioButtonMock = vi.fn((props: any) => (
+  <div data-testid="start-audio-button" data-props={JSON.stringify(props)} />
 ));
 
 const agentSessionViewMock = vi.fn((props: any) => (
   <div data-testid="agent-session-view" data-props={JSON.stringify(props)} />
 ));
 
-vi.mock('@livekit/components-react', () => ({
-  StartAudio: (props: any) => startAudioMock(props),
+vi.mock('@/components/agents-ui/start-audio-button', () => ({
+  StartAudioButton: (props: any) => startAudioButtonMock(props),
 }));
 
 vi.mock(
@@ -26,47 +26,52 @@ vi.mock('motion/react', () => ({
   motion: {
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   },
+  AnimatePresence: ({ children }: any) => <>{children}</>,
 }));
+
+const CONTROLS = {
+  leave: true,
+  microphone: true,
+  chat: true,
+  camera: true,
+  screenShare: true,
+};
 
 describe('PopupView', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders StartAudio', () => {
-    render(<PopupView error={null} />);
-    expect(screen.getByTestId('start-audio')).toBeInTheDocument();
+  it('renders the StartAudioButton', () => {
+    render(<PopupView controls={CONTROLS} />);
+    expect(screen.getByTestId('start-audio-button')).toBeInTheDocument();
   });
 
-  it('forwards supports* props and color to AgentSessionView_01', () => {
+  it('forwards audio visualizer props and controls to AgentSessionView_01', () => {
     render(
-      <PopupView
-        error={null}
-        color="#ff00ff"
-        supportsChatInput={false}
-        supportsVideoInput={true}
-        supportsScreenShare={false}
-      />,
+      <PopupView controls={CONTROLS} audioVisualizerColor="#ff00ff" audioVisualizerType="wave" />,
     );
     const props = JSON.parse(screen.getByTestId('agent-session-view').getAttribute('data-props')!);
     expect(props).toMatchObject({
       audioVisualizerColor: '#ff00ff',
-      supportsChatInput: false,
-      supportsVideoInput: true,
-      supportsScreenShare: false,
+      audioVisualizerType: 'wave',
+      controls: CONTROLS,
     });
   });
 
-  it('hides the error overlay when error is null', () => {
-    render(<PopupView error={null} />);
-    const overlay = screen.getByTestId('error-overlay');
-    expect(overlay).toHaveClass('opacity-0', 'pointer-events-none');
+  it('does not render the error overlay when there is no error', () => {
+    render(<PopupView controls={CONTROLS} />);
+    expect(screen.queryByTestId('error-overlay')).not.toBeInTheDocument();
   });
 
   it('shows the error title and description when an error is provided', () => {
-    render(<PopupView error={{ title: 'Could not connect', description: 'Network error' }} />);
-    const overlay = screen.getByTestId('error-overlay');
-    expect(overlay).toHaveClass('opacity-100');
+    render(
+      <PopupView
+        controls={CONTROLS}
+        error={{ title: 'Could not connect', description: 'Network error' }}
+      />,
+    );
+    expect(screen.getByTestId('error-overlay')).toBeInTheDocument();
     expect(screen.getByText('Could not connect')).toBeInTheDocument();
     expect(screen.getByText('Network error')).toBeInTheDocument();
   });
@@ -74,6 +79,7 @@ describe('PopupView', () => {
   it('renders the logo in the error overlay and falls back on load failure', () => {
     render(
       <PopupView
+        controls={CONTROLS}
         error={{ title: 'Could not connect', description: 'Network error' }}
         logo="https://example.com/logo.png"
         agentName="Rex"

@@ -1,17 +1,17 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion } from 'motion/react';
-import { StartAudio } from '@livekit/components-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { StartAudioButton } from '@/components/agents-ui/start-audio-button';
 import { type AgentControlBarControls } from '@/components/agents-ui/agent-control-bar';
 import { AgentSessionView_01 } from '@/components/agents-ui/blocks/agent-session-view-01/components/agent-session-block';
 import { cn } from '@/lib/utils';
-import type { AgentClientError } from './embed-popup-block';
+import type { EmbedPopupViewError } from './embed-popup-block';
 
 interface ErrorOverlayProps {
   logo?: string;
   agentName?: string;
-  error: AgentClientError | null;
+  error?: EmbedPopupViewError;
 }
 
 function ErrorOverlay({ logo, agentName, error }: ErrorOverlayProps) {
@@ -21,14 +21,15 @@ function ErrorOverlay({ logo, agentName, error }: ErrorOverlayProps) {
   }, [logo]);
   const showLogo = Boolean(logo) && !logoFailed;
 
-  return (
-    <div
+  return error ? (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       data-testid="error-overlay"
       // @ts-expect-error React's types lag the platform on `inert`.
       inert={error === null ? '' : undefined}
       className={cn(
         'bg-background absolute inset-0 z-50 flex h-full w-full flex-col items-center justify-center gap-5 px-6 text-center transition-opacity',
-        error === null ? 'pointer-events-none opacity-0' : 'opacity-100',
       )}
     >
       {showLogo ? (
@@ -43,14 +44,14 @@ function ErrorOverlay({ logo, agentName, error }: ErrorOverlayProps) {
       ) : null}
       <span className="text-foreground leading-tight font-medium text-pretty">{error?.title}</span>
       <span className="text-muted-foreground text-sm text-balance">{error?.description}</span>
-    </div>
-  );
+    </motion.div>
+  ) : null;
 }
 
 export interface PopupViewProps {
   agentName?: string;
   logo?: string;
-  error: AgentClientError | null;
+  error?: EmbedPopupViewError;
   controls: AgentControlBarControls;
   themeMode?: 'dark' | 'light';
   preConnectMessage?: string;
@@ -95,8 +96,10 @@ export function PopupView({
       className="fixed right-4 bottom-20 left-4 z-50 h-[480px] md:left-auto md:w-[360px]"
     >
       <div className="relative flex h-full w-full flex-col overflow-hidden rounded-[40px] border drop-shadow-md">
-        <ErrorOverlay logo={logo} agentName={agentName} error={error} />
-        <StartAudio label="Start audio" />
+        <AnimatePresence>
+          <ErrorOverlay logo={logo} agentName={agentName} error={error} />
+        </AnimatePresence>
+        <StartAudioButton label="Enable Audio" />
         <AgentSessionView_01
           controls={controls}
           themeMode={themeMode}

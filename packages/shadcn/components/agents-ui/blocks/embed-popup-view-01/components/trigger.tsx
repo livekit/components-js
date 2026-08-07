@@ -1,32 +1,41 @@
 'use client';
 
-import { cn } from '@/lib/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ComponentProps } from 'react';
 import { BotIcon, PhoneOffIcon, XIcon } from 'lucide-react';
-import { useAgent } from '@livekit/components-react';
-import { Button } from '@/components/ui/button';
-import type { AgentClientError } from './embed-popup-block';
 
-export interface TriggerProps {
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import type { EmbedPopupViewError } from './embed-popup-block';
+
+export interface TriggerProps extends ComponentProps<'button'> {
   /** Brand color used for the idle ring/disc and, via contrast, the fallback icon color. */
   logo?: string;
   color?: string;
   agentName?: string;
-  popupOpen: boolean;
-  error: AgentClientError | null;
+  isPressed?: boolean;
+  isConnected?: boolean;
+  error?: EmbedPopupViewError;
   onToggle: () => void;
 }
 
-export function Trigger({ logo, agentName, popupOpen, color, error, onToggle }: TriggerProps) {
-  const { isConnected: isAgentConnected } = useAgent();
+export function Trigger({
+  logo,
+  color,
+  error,
+  agentName,
+  isPressed = false,
+  isConnected = false,
+  onToggle,
+  className,
+  ...props
+}: TriggerProps) {
   const altText = agentName ? `${agentName} agent` : 'Open assistant';
-
-  const isError = popupOpen && error !== null;
-  const isConnected = popupOpen && error === null && isAgentConnected;
-  const isConnecting = popupOpen && !isError && !isConnected;
-  const isDestructive = isError || isConnected;
-
+  const isError = isPressed && error !== undefined;
+  const isActive = isPressed && error === undefined && isConnected;
+  const isConnecting = isPressed && !isError && !isActive;
+  const isDestructive = isError || isActive;
   const [logoFailed, setLogoFailed] = useState(false);
+
   useEffect(() => {
     setLogoFailed(false);
   }, [logo]);
@@ -38,16 +47,20 @@ export function Trigger({ logo, agentName, popupOpen, color, error, onToggle }: 
       size="lg"
       variant="ghost"
       onClick={onToggle}
-      aria-label={popupOpen ? 'Close assistant' : altText}
-      aria-expanded={popupOpen}
-      className="fixed right-4 bottom-4 z-50 m-0 block size-12 rounded-full p-0.5 drop-shadow-sm transition-transform duration-200 hover:scale-105 focus-visible:scale-105"
+      aria-label={isPressed ? 'Close assistant' : altText}
+      aria-expanded={isPressed}
+      className={cn(
+        'm-0 block size-12 rounded-full p-0.5 drop-shadow-sm transition-transform duration-200 hover:scale-105 focus-visible:scale-105',
+        className,
+      )}
+      {...props}
     >
       <div
         className={cn(
-          'absolute inset-0 rounded-full transition-colors bg-current',
+          'absolute inset-0 rounded-full bg-current transition-colors',
           isConnecting && 'animate-spin',
           isConnecting &&
-            'bg-current/30 bg-conic from-transparent via-current to-transparent from-30% via-50% to-70%',
+            'bg-current/30 bg-conic from-transparent from-30% via-current via-50% to-transparent to-70%',
           isDestructive && 'bg-transparent',
         )}
         style={{ color }}
@@ -63,7 +76,7 @@ export function Trigger({ logo, agentName, popupOpen, color, error, onToggle }: 
           // The spinning ring is the connecting signal; skip a centred glyph
           // so it reads as a clean spinner rather than a flashing X.
           <XIcon className="size-5" aria-hidden="true" />
-        ) : isConnected ? (
+        ) : isActive ? (
           // Crossed-out phone on the solid destructive disc signals
           // "click to end the call".
           <PhoneOffIcon className="size-5" aria-hidden="true" />
@@ -80,7 +93,7 @@ export function Trigger({ logo, agentName, popupOpen, color, error, onToggle }: 
           // Pick black vs white based on the user-set brand color so the
           // icon stays readable across a bright yellow, deep navy, etc.
           <BotIcon
-            className="size-6 text-background"
+            className="text-background size-6"
             aria-hidden="true"
             style={
               color

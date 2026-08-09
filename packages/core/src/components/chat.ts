@@ -112,7 +112,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
       const attachments = new Map(
         (attachedStreamIds ?? []).map((id) => [
           id,
-          new Future<{ fileName: string; buffer: Array<Uint8Array> }, never>(),
+          new Future<{ fileName: string; mimeType: string; buffer: Array<Uint8Array> }, never>(),
         ]),
       );
       streamIdToAttachments.set(id, attachments);

@@ -67,8 +67,8 @@ export function Trigger({
       />
       <div
         className={cn(
-          'absolute inset-0.5 z-10 grid place-items-center rounded-full transition-colors',
-          isConnecting && 'bg-background text-background',
+          'absolute z-10 grid place-items-center rounded-full transition-colors inset-0',
+          isConnecting && 'bg-background text-background inset-0.5',
           isDestructive && 'bg-destructive text-white',
         )}
       >

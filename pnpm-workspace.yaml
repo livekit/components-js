@@ -25,8 +25,8 @@ minimumReleaseAgeExclude:
   - '@livekit/*'
   - livekit-client
   - livekit-server-sdk
-  # Renovate security update: js-yaml@4.3.0
-  - js-yaml@4.3.0
+  # Renovate security update: js-yaml@4.3.0 || 4.3.1
+  - js-yaml@4.3.0 || 4.3.1
   # Renovate security update: postcss@8.5.23
   - postcss@8.5.23
 

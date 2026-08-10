@@ -58,6 +58,13 @@ describe('parseExpression', () => {
     );
     expect(parsed).toEqual({ mood: null, expression: 'cheerful' });
   });
+
+  it('normalizes blank wording to null', () => {
+    const parsed = parseExpression(
+      segment({ [EXPRESSION_ATTRIBUTE]: '{"expression":"   ","mood":"calm"}' }),
+    );
+    expect(parsed).toEqual({ mood: 'calm', expression: null });
+  });
 });
 
 describe('useAgentExpression', () => {

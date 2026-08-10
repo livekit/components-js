@@ -77,7 +77,7 @@ export function parseExpression(segment: TextStreamData): UseAgentExpressionRetu
 
   try {
     const parsed = JSON.parse(raw) as { expression?: string; mood?: AgentMood };
-    const expression = parsed.expression?.trim() ?? null;
+    const expression = parsed.expression?.trim() || null;
     if (!expression && !parsed.mood) {
       return null;
     }

@@ -1,7 +1,7 @@
-import * as React from 'react';
+import * as React  from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { useTheme } from 'next-themes';
-import { animate, useMotionValue, useMotionValueEvent } from 'motion/react';
+import { animate } from 'motion/react';
 import { useAgent, useAgentExpression, type AgentMood } from '@livekit/components-react';
 import { AgentAudioVisualizerAura } from '@livekit/agents-ui';
 import { LiveAgentSessionProvider } from '../../.storybook/lk-decorators/LiveAgentSessionProvider';
@@ -9,33 +9,58 @@ import { LiveAgentSessionProvider } from '../../.storybook/lk-decorators/LiveAge
 // Glue code: mapping mood -> color is deliberately kept out of the hook (state) and the
 // visualizer (presentation) — it's wiring for this example, not a shared utility.
 const MOOD_COLORS: Record<AgentMood, `#${string}`> = {
-  excited: '#FF6B35',
-  happy: '#FFD23F',
-  playful: '#EE4B8A',
-  curious: '#3AAED8',
-  surprised: '#B565F3',
-  hopeful: '#4ECDC4',
-  empathetic: '#6C8EBF',
-  sad: '#5C6B8A',
-  angry: '#E4572E',
-  anxious: '#9C6644',
+  angry: '#F5222D',
+  excited: '#FF7A45',
+  happy: '#FFC53D',
+  playful: '#F759AB',
+  surprised: '#B37FEB',
+  anxious: '#D46B08',
+  hopeful: '#52C41A',
+  empathetic: '#36CFC9',
+  curious: '#6600ff',
+  sad: '#2F54EB',
   calm: '#1FD5F9',
 };
 
-function useAnimatedColor(color: `#${string}`) {
-  const colorValue = useMotionValue(color);
-  const [animatedColor, setAnimatedColor] = React.useState(color);
+type RgbaString = `rgba(${number}, ${number}, ${number}, ${number}, )`;
 
-  useMotionValueEvent(colorValue, 'change', (latestColor) => {
-    setAnimatedColor(latestColor as `#${string}`);
-  });
+function rgbaToHex(colorString: RgbaString) {
+  const rgbaValues = colorString.match(/[\d.]+/g);
+  if (!rgbaValues) return null;
+
+  const { r, g, b } = {
+    r: parseInt(rgbaValues[0], 10),
+    g: parseInt(rgbaValues[1], 10),
+    b: parseInt(rgbaValues[2], 10),
+  };
+
+  const rHex = r.toString(16).padStart(2, '0');
+  const gHex = g.toString(16).padStart(2, '0');
+  const bHex = b.toString(16).padStart(2, '0');
+
+  return `#${rHex}${gHex}${bHex}`;
+}
+
+function useAnimatedColor(newColor: `#${string}`) {
+  const prevColor = React.useRef(newColor);
+  const [color, setColor] = React.useState(newColor);
 
   React.useEffect(() => {
-    const controls = animate(colorValue, color, { duration: 3, ease: 'easeInOut' });
+    const controls = animate(prevColor.current, newColor, {
+      duration: 1,
+      ease: 'linear',
+      onUpdate: (color: RgbaString) => {
+        if (color.startsWith('#')) {
+          return;
+        }
+        prevColor.current = newColor;
+        setColor(rgbaToHex(color));
+      },
+    });
     return () => controls.stop();
-  }, [color, colorValue]);
+  }, [newColor]);
 
-  return animatedColor;
+  return color;
 }
 
 /**
@@ -56,7 +81,7 @@ export const LiveAgent: StoryObj = {
     const { microphoneTrack } = useAgent();
     const { resolvedTheme = 'dark' } = useTheme();
     const { mood, expression } = useAgentExpression();
-    const targetColor = mood ? MOOD_COLORS[mood] : MOOD_COLORS.calm;
+    const targetColor = mood ? MOOD_COLORS[mood] : '#1FD5F9';
     const color = useAnimatedColor(targetColor);
 
     return (

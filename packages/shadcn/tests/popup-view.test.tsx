@@ -48,9 +48,7 @@ describe('PopupView', () => {
   });
 
   it('forwards the audioVisualizer config and controls to AgentSessionView_01', () => {
-    render(
-      <PopupView controls={CONTROLS} audioVisualizer={{ color: '#ff00ff', type: 'wave' }} />,
-    );
+    render(<PopupView controls={CONTROLS} audioVisualizer={{ color: '#ff00ff', type: 'wave' }} />);
     const props = JSON.parse(screen.getByTestId('agent-session-view').getAttribute('data-props')!);
     expect(props).toMatchObject({
       audioVisualizer: { color: '#ff00ff', type: 'wave' },

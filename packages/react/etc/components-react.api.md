@@ -96,6 +96,9 @@ export enum AgentEvent {
     StateChanged = "stateChanged"
 }
 
+// @beta
+export type AgentMood = 'excited' | 'happy' | 'playful' | 'curious' | 'surprised' | 'hopeful' | 'empathetic' | 'sad' | 'angry' | 'anxious' | 'calm';
+
 // Warning: (ae-forgotten-export) The symbol "AgentSdkStates" needs to be exported by the entry point index.docs.d.ts
 //
 // @beta
@@ -307,6 +310,9 @@ export interface ControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> 
     variation?: 'minimal' | 'verbose' | 'textOnly';
 }
 
+// @beta
+export const DEFAULT_MOOD_TTL_TURNS = 2;
+
 // @public
 export const DisconnectButton: (props: DisconnectButtonProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactNode;
 
@@ -315,6 +321,9 @@ export interface DisconnectButtonProps extends React_2.ButtonHTMLAttributes<HTML
     // (undocumented)
     stopTracks?: boolean;
 }
+
+// @beta
+export const EXPRESSION_ATTRIBUTE: 'lk.expression';
 
 // Warning: (ae-internal-missing-underscore) The name "FeatureFlags" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -528,6 +537,9 @@ export interface MultiBandTrackVolumeOptions {
     loPass?: number;
     updateInterval?: number;
 }
+
+// @beta
+export function parseExpression(segment: TextStreamData): UseAgentExpressionReturn | null;
 
 // @public
 export const ParticipantAudioTile: (props: ParticipantTileProps & React_2.RefAttributes<HTMLDivElement>) => React_2.ReactNode;
@@ -818,6 +830,20 @@ export const UnfocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.
 //
 // @beta
 export function useAgent(session?: SessionStub): UseAgentReturn;
+
+// @beta
+export function useAgentExpression(opts?: UseAgentExpressionOptions): UseAgentExpressionReturn;
+
+// @beta (undocumented)
+export interface UseAgentExpressionOptions extends UseTranscriptionsOptions {
+    ttlTurns?: number;
+}
+
+// @beta (undocumented)
+export interface UseAgentExpressionReturn {
+    expression: string | null;
+    mood: AgentMood | null;
+}
 
 // Warning: (ae-forgotten-export) The symbol "AgentStateCases" needs to be exported by the entry point index.docs.d.ts
 // Warning: (ae-forgotten-export) The symbol "AgentActions" needs to be exported by the entry point index.docs.d.ts

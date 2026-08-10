@@ -19,6 +19,7 @@
     "livekit-client": "catalog:",
     "livekit-server-sdk": "^2.17.0",
     "lucide-react": "^1.24.0",
+    "motion": "^12.16.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

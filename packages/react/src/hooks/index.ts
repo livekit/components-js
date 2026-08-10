@@ -58,6 +58,7 @@ export * from './useVoiceAssistant';
 export * from './useParticipantAttributes';
 export * from './useIsRecording';
 export * from './useTextStream';
+export * from './useAgentExpression';
 export * from './useTranscriptions';
 export * from './useSequentialRoomConnectDisconnect';
 export * from './useSession';

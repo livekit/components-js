@@ -7,8 +7,8 @@ const TOKEN_SOURCE = TokenSource.endpoint('/api/agents-ui/token');
 
 /**
  * Connects to a real local LiveKit project (via `LIVEKIT_URL`/`LIVEKIT_API_KEY`/
- * `LIVEKIT_API_SECRET`) and dispatches the agent named by `AGENT_NAME`. Only used by
- * `AgentSessionView-01`, so its full session view can be exercised against a real agent.
+ * `LIVEKIT_API_SECRET`) and dispatches the agent named by `AGENT_NAME`, so a story can be
+ * exercised against a real agent.
  */
 export const LiveAgentSessionProvider: Decorator = (Story: StoryFn) => {
   const session = useSession(TOKEN_SOURCE);

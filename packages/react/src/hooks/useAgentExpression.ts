@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { useTranscriptions, type UseTranscriptionsOptions } from './useTranscriptions';
 import type { TextStreamData } from '@livekit/components-core';
+import { ParticipantAgentAttributes } from '@livekit/components-core';
 
 /**
  * @beta
  * Published per transcript segment by Expressive Mode: the segment's leading delivery tag.
  **/
-export const EXPRESSION_ATTRIBUTE = 'lk.expression';
+export const EXPRESSION_ATTRIBUTE: 'lk.expression' = ParticipantAgentAttributes.Expression;
 
 /**
  * @beta
@@ -47,7 +48,7 @@ function expressionSettledKey(
 ) {
   const streamId =
     segment.streamInfo.id ??
-    segment.streamInfo.attributes?.['lk.segment_id'] ??
+    segment.streamInfo.attributes?.[ParticipantAgentAttributes.TranscriptionSegmentId] ??
     segmentIndex;
   return `${streamId}:${segment.participantInfo.identity}:${parsed.mood ?? ''}:${
     parsed.expression ?? ''

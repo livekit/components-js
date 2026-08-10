@@ -323,7 +323,7 @@ export interface DisconnectButtonProps extends React_2.ButtonHTMLAttributes<HTML
 }
 
 // @beta
-export const EXPRESSION_ATTRIBUTE = "lk.expression";
+export const EXPRESSION_ATTRIBUTE: 'lk.expression';
 
 // Warning: (ae-internal-missing-underscore) The name "FeatureFlags" should be prefixed with an underscore because the declaration is marked as @internal
 //

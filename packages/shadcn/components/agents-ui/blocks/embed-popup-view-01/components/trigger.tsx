@@ -8,13 +8,19 @@ import { Button } from '@/components/ui/button';
 import type { EmbedPopupViewError } from './embed-popup-block';
 
 export interface TriggerProps extends ComponentProps<'button'> {
-  /** Brand color used for the idle ring/disc and, via contrast, the fallback icon color. */
+  /** Logo image shown in place of the default bot icon. */
   logo?: string;
+  /** Brand color used for the idle ring/disc and, via contrast, the fallback icon color. */
   color?: string;
+  /** Used to build the default `aria-label` (e.g. "Rex agent") and image `alt` text. */
   agentName?: string;
+  /** Whether the popup is currently open. Drives the connecting/active/error visual states. */
   isPressed?: boolean;
+  /** Whether the agent session is connected. Only relevant while `isPressed` is true. */
   isConnected?: boolean;
+  /** Session error, if any. Only relevant while `isPressed` is true. */
   error?: EmbedPopupViewError;
+  /** Called when the trigger is clicked. */
   onToggle: () => void;
 }
 

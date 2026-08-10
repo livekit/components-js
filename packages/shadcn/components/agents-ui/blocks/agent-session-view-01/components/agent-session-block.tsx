@@ -9,7 +9,7 @@ import {
   type AgentControlBarControls,
 } from '@/components/agents-ui/agent-control-bar';
 import { cn } from '@/lib/utils';
-import { type AudioVisualizerConfig } from './audio-visualizer';
+import type { AudioVisualizerConfig } from '@/components/agents-ui/blocks/agent-session-view-01/components/audio-visualizer';
 import { TileLayout } from './tile-view';
 
 const DEFAULT_CONTROLS: AgentControlBarControls = {
@@ -138,7 +138,11 @@ export interface AgentSessionView_01Props {
    * @default true
    */
   isPreConnectBufferEnabled?: boolean;
-  /** Configures the visualizer style rendered in the main tile area. */
+  /**
+   * Configures the visualizer style rendered in the main tile area.
+   *
+   * @default { type: 'bar' }
+   */
   audioVisualizer?: AudioVisualizerConfig;
   /** Optional class name merged onto the outer `<section>` container. */
   className?: string;
@@ -150,7 +154,7 @@ export function AgentSessionView_01({
   preConnectMessage = 'Agent is listening, ask it a question',
   controls = DEFAULT_CONTROLS,
   isPreConnectBufferEnabled = true,
-  audioVisualizer,
+  audioVisualizer = { type: 'bar' },
   themeMode,
   onDisconnect,
   ref,

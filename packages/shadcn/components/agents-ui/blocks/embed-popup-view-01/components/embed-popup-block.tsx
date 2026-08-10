@@ -60,11 +60,7 @@ export interface EmbedPopupViewProps {
    * }
    */
   controls?: AgentControlBarControls;
-  /**
-   * Brand color for the trigger bubble and audio visualizer.
-   *
-   * @default '#3b82f6'
-   */
+  /** Brand color used for the trigger bubble's idle ring/disc and fallback icon contrast. */
   triggerColor?: `#${string}`;
   /**
    * Shows a pre-connect buffer state with a shimmer message before messages appear.
@@ -72,7 +68,11 @@ export interface EmbedPopupViewProps {
    * @default true
    */
   isPreConnectBufferEnabled?: boolean;
-  /** Configures the visualizer style rendered in the main tile area. */
+  /**
+   * Configures the visualizer style rendered in the main tile area.
+   *
+   * @default { type: 'bar', size: 'lg' }
+   */
   audioVisualizer?: AudioVisualizerConfig;
 }
 

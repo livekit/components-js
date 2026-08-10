@@ -3,4 +3,4 @@
 '@livekit/agents-ui': patch
 ---
 
-Add `useExpression` to the React SDK, reading the mood the agent publishes on `lk.expression`.
+Add `useAgentExpression` to the React SDK, reading the mood the agent publishes on `lk.expression`.

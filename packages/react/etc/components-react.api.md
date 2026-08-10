@@ -310,7 +310,7 @@ export interface ControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> 
     variation?: 'minimal' | 'verbose' | 'textOnly';
 }
 
-// @public
+// @beta
 export const DEFAULT_MOOD_TTL_TURNS = 2;
 
 // @public
@@ -322,7 +322,7 @@ export interface DisconnectButtonProps extends React_2.ButtonHTMLAttributes<HTML
     stopTracks?: boolean;
 }
 
-// @public
+// @beta
 export const EXPRESSION_ATTRIBUTE = "lk.expression";
 
 // Warning: (ae-internal-missing-underscore) The name "FeatureFlags" should be prefixed with an underscore because the declaration is marked as @internal
@@ -539,7 +539,7 @@ export interface MultiBandTrackVolumeOptions {
 }
 
 // @beta
-export function parseExpression(segment: TextStreamData): UseExpressionReturn | null;
+export function parseExpression(segment: TextStreamData): UseAgentExpressionReturn | null;
 
 // @public
 export const ParticipantAudioTile: (props: ParticipantTileProps & React_2.RefAttributes<HTMLDivElement>) => React_2.ReactNode;
@@ -831,6 +831,20 @@ export const UnfocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.
 // @beta
 export function useAgent(session?: SessionStub): UseAgentReturn;
 
+// @beta
+export function useAgentExpression(opts?: UseAgentExpressionOptions): UseAgentExpressionReturn;
+
+// @beta (undocumented)
+export interface UseAgentExpressionOptions extends UseTranscriptionsOptions {
+    ttlTurns?: number;
+}
+
+// @beta (undocumented)
+export interface UseAgentExpressionReturn {
+    expression: string | null;
+    mood: AgentMood | null;
+}
+
 // Warning: (ae-forgotten-export) The symbol "AgentStateCases" needs to be exported by the entry point index.docs.d.ts
 // Warning: (ae-forgotten-export) The symbol "AgentActions" needs to be exported by the entry point index.docs.d.ts
 //
@@ -935,20 +949,6 @@ export function useEvents<Emitter extends default_2<EventMap>, EmitterEventMap e
         emitter: Emitter;
     };
 } | null | undefined, event: Event, handlerFn: Callback | undefined, dependencies?: React_2.DependencyList): void;
-
-// @beta
-export function useExpression(opts?: UseExpressionOptions): UseExpressionReturn;
-
-// @beta (undocumented)
-export interface UseExpressionOptions extends UseTranscriptionsOptions {
-    ttlTurns?: number;
-}
-
-// @beta (undocumented)
-export interface UseExpressionReturn {
-    expression: string | null;
-    mood: AgentMood | null;
-}
 
 // @alpha
 export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'user' | 'environment' | 'left' | 'right' | 'undefined';

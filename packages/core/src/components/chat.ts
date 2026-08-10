@@ -9,6 +9,7 @@ import {
   takeUntil,
   from,
   filter,
+  concatMap,
   mergeMap,
   finalize,
   of,
@@ -63,6 +64,7 @@ const streamIdToAttachments = new Map<
     Future<
       {
         fileName: string;
+        mimeType: string;
         buffer: Array<Uint8Array>;
       },
       never
@@ -110,7 +112,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
       const attachments = new Map(
         (attachedStreamIds ?? []).map((id) => [
           id,
-          new Future<{ fileName: string; buffer: Array<Uint8Array> }, never>(),
+          new Future<{ fileName: string; mimeType: string; buffer: Array<Uint8Array> }, never>(),
         ]),
       );
       streamIdToAttachments.set(id, attachments);
@@ -125,9 +127,19 @@ export function setupChat(room: Room, options?: ChatOptions) {
           } else {
             // Aggregate all attachments into memory and transform them into a list of files
             return from(attachments.values()).pipe(
-              mergeMap((attachment) => from(attachment.promise)),
+              // `concatMap`, not `mergeMap`: `attachments` is built from `attachedStreamIds`, so it is
+              // already in the sender's order, but `mergeMap` emits each promise as it RESOLVES — which
+              // ordered `attachedFiles` by download completion (i.e. smallest file first). All the
+              // promises are in flight either way; `concatMap` only sequences the emissions.
+              concatMap((attachment) => from(attachment.promise)),
               scan(
-                (acc, attachment) => [...acc, new File(attachment.buffer, attachment.fileName)],
+                (acc, attachment) => [
+                  ...acc,
+                  // Preserve the MIME type: `new File(buffer, name)` leaves `File.type` empty, and
+                  // consumers (including `ChatEntry`) test `file.type.startsWith('image/')`, which could
+                  // never be true for a received attachment.
+                  new File(attachment.buffer, attachment.fileName, { type: attachment.mimeType }),
+                ],
                 [] as Array<File>,
               ),
               map((attachedFiles) => ({ chunk, attachedFiles })),
@@ -176,6 +188,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
 
       attachment.resolve?.({
         fileName: reader.info.name,
+        mimeType: reader.info.mimeType,
         buffer: bufferList,
       });
     });

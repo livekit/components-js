@@ -1,5 +1,14 @@
 # @agents-ui
 
+## 1.0.8
+
+### Patch Changes
+
+- Add `useAgentExpression` to the React SDK, reading the mood the agent publishes on `lk.expression`. - [#1415](https://github.com/livekit/components-js/pull/1415) ([@theomonnom](https://github.com/theomonnom))
+
+- Updated dependencies [[`e05b190`](https://github.com/livekit/components-js/commit/e05b190d9d6abb968a339105783d356b5ad02c2b), [`2da3e59`](https://github.com/livekit/components-js/commit/2da3e59e9854cde26cbeadcf8a5732ea42163bfa)]:
+  - @livekit/components-react@2.9.24
+
 ## 1.0.7
 
 ### Patch Changes

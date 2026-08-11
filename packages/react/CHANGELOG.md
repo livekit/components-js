@@ -1,5 +1,16 @@
 # @livekit/components-react
 
+## 2.9.24
+
+### Patch Changes
+
+- Add `useAgentExpression` to the React SDK, reading the mood the agent publishes on `lk.expression`. - [#1415](https://github.com/livekit/components-js/pull/1415) ([@theomonnom](https://github.com/theomonnom))
+
+- Preserve text stream attributes on transcript messages from `useSessionMessages` - [#1416](https://github.com/livekit/components-js/pull/1416) ([@theomonnom](https://github.com/theomonnom))
+
+- Updated dependencies [[`28b189b`](https://github.com/livekit/components-js/commit/28b189b49a344cc93c3a4dfeee7527ae4c250873), [`e05b190`](https://github.com/livekit/components-js/commit/e05b190d9d6abb968a339105783d356b5ad02c2b)]:
+  - @livekit/components-core@0.12.15
+
 ## 2.9.23
 
 ### Patch Changes

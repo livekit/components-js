@@ -1,5 +1,13 @@
 # @livekit/components-core
 
+## 0.12.15
+
+### Patch Changes
+
+- Preserve chat attachment order and MIME type. `setupChat` combined the per-attachment futures with `mergeMap`, which emits as each promise resolves — so `attachedFiles` was ordered by download completion (smallest file first) rather than the order the sender picked them; it now uses `concatMap`, which sequences the emissions of the already-in-flight promises. Received files were also reconstructed as `new File(buffer, fileName)` with no `type`, leaving `File.type` empty — so `ChatEntry`'s `file.type.startsWith('image/')` check could never be true for a received attachment and incoming images rendered as nothing. The byte stream's `mimeType` is now carried through to the `File`. - [#1419](https://github.com/livekit/components-js/pull/1419) ([@vgerasymenko](https://github.com/vgerasymenko))
+
+- Add `useAgentExpression` to the React SDK, reading the mood the agent publishes on `lk.expression`. - [#1415](https://github.com/livekit/components-js/pull/1415) ([@theomonnom](https://github.com/theomonnom))
+
 ## 0.12.14
 
 ### Patch Changes

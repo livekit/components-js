@@ -277,6 +277,28 @@
       "registryDependencies": ["utils", "@agents-ui/react-shader-toy"]
     },
     {
+      "name": "agent-audio-visualizer-orbit",
+      "type": "registry:component",
+      "title": "Agent Audio Visualizer Orbit",
+      "description": "An orbiting orb-cluster visualizer for audio tracks.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-audio-visualizer-orbit.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "hooks/agents-ui/use-agent-audio-visualizer-orbit.ts",
+          "type": "registry:hook"
+        }
+      ],
+      "dependencies": [
+        "livekit-client@^2.0.0",
+        "@livekit/components-react@^2.0.0",
+        "class-variance-authority"
+      ],
+      "registryDependencies": ["utils"]
+    },
+    {
       "name": "nextjs-api-token-route",
       "type": "registry:page",
       "title": "NextJS API route to get a LiveKit session token",
@@ -323,7 +345,8 @@
         "@agents-ui/agent-audio-visualizer-bar",
         "@agents-ui/agent-audio-visualizer-grid",
         "@agents-ui/agent-audio-visualizer-radial",
-        "@agents-ui/agent-audio-visualizer-wave"
+        "@agents-ui/agent-audio-visualizer-wave",
+        "@agents-ui/agent-audio-visualizer-orbit"
       ],
       "dependencies": ["@livekit/components-react@^2.0.0", "livekit-client@^2.0.0", "motion"],
       "categories": ["agents", "blocks"]
@@ -344,6 +367,7 @@
         "@agents-ui/agent-audio-visualizer-grid",
         "@agents-ui/agent-audio-visualizer-wave",
         "@agents-ui/agent-audio-visualizer-aura",
+        "@agents-ui/agent-audio-visualizer-orbit",
         "@agents-ui/agent-session-provider",
         "@agents-ui/start-audio-button",
         "@agents-ui/agent-chat-indicator",

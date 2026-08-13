@@ -13,9 +13,9 @@ import { Trigger } from './trigger';
 const DEFAULT_CONTROLS: AgentControlBarControls = {
   leave: false,
   microphone: true,
-  chat: true,
-  camera: true,
-  screenShare: true,
+  chat: false,
+  camera: false,
+  screenShare: false,
 };
 
 export interface EmbedPopupViewError {
@@ -51,13 +51,7 @@ export interface EmbedPopupViewProps {
    * An object with the following keys: leave, microphone, screenShare, camera, chat. Each key maps
    * to a boolean value that determines whether the control is displayed.
    *
-   * @default {
-   *   leave: true,
-   *   microphone: true,
-   *   chat: false,
-   *   camera: false,
-   *   screenShare: false,
-   * }
+   * @default { leave: false, microphone: true, chat: false, camera: false, screenShare: false }
    */
   controls?: AgentControlBarControls;
   /** Brand color used for the trigger bubble's idle ring/disc and fallback icon contrast. */

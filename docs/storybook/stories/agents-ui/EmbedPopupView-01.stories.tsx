@@ -34,9 +34,9 @@ export default {
     agentName: 'Agent',
     'controls.leave': false,
     'controls.microphone': true,
-    'controls.chat': true,
-    'controls.camera': true,
-    'controls.screenShare': true,
+    'controls.chat': false,
+    'controls.camera': false,
+    'controls.screenShare': false,
     isPreConnectBufferEnabled: true,
     preConnectMessage: 'Agent is listening, ask it a question',
   },
@@ -79,6 +79,16 @@ export default {
 };
 
 export const Default: StoryObj<EmbedPopupViewProps> = {};
+
+export const AllControls: StoryObj<EmbedPopupViewProps> = {
+  args: {
+    'controls.leave': true,
+    'controls.microphone': true,
+    'controls.chat': true,
+    'controls.camera': true,
+    'controls.screenShare': true,
+  },
+};
 
 export const Config: StoryObj<EmbedPopupViewProps> = {
   args: {

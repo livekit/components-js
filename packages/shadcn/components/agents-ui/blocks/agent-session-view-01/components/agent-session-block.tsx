@@ -15,9 +15,9 @@ import { TileLayout } from './tile-view';
 const DEFAULT_CONTROLS: AgentControlBarControls = {
   leave: true,
   microphone: true,
-  chat: true,
-  camera: true,
-  screenShare: true,
+  chat: false,
+  camera: false,
+  screenShare: false,
 };
 
 const BOTTOM_VIEW_MOTION_PROPS: MotionProps = {
@@ -121,7 +121,8 @@ export interface AgentSessionView_01Props {
    */
   preConnectMessage?: string;
   /**
-   * An object with the following keys: leave, microphone, screenShare, camera, chat. Each key maps to a boolean value that determines whether the control is displayed.
+   * An object with the following keys: leave, microphone, screenShare, camera, chat.
+   * Each key maps to a boolean value that determines whether the control is displayed.
    *
    * @default {
    *   leave: true,

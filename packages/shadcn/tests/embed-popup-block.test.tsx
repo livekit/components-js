@@ -98,13 +98,8 @@ describe('EmbedPopupView_01', () => {
     expect(call.color).toBeUndefined();
   });
 
-  it('forwards merged controls to PopupView when open', async () => {
-    render(
-      <EmbedPopupView_01
-        tokenSource={tokenSource}
-        controls={{ chat: false, camera: false, screenShare: false }}
-      />,
-    );
+  it('forwards the default controls to PopupView when unset', async () => {
+    render(<EmbedPopupView_01 tokenSource={tokenSource} />);
     await act(async () => {
       screen.getByTestId('trigger').click();
     });
@@ -113,6 +108,21 @@ describe('EmbedPopupView_01', () => {
       leave: false,
       microphone: true,
       chat: false,
+      camera: false,
+      screenShare: false,
+    });
+  });
+
+  it('forwards merged controls to PopupView when open', async () => {
+    render(<EmbedPopupView_01 tokenSource={tokenSource} controls={{ chat: true }} />);
+    await act(async () => {
+      screen.getByTestId('trigger').click();
+    });
+    const props = JSON.parse(screen.getByTestId('popup-view').getAttribute('data-props')!);
+    expect(props.controls).toEqual({
+      leave: false,
+      microphone: true,
+      chat: true,
       camera: false,
       screenShare: false,
     });

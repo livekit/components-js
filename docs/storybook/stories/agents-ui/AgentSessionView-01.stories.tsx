@@ -68,9 +68,9 @@ export default {
     className: 'h-screen',
     'controls.leave': true,
     'controls.microphone': true,
-    'controls.chat': true,
-    'controls.camera': true,
-    'controls.screenShare': true,
+    'controls.chat': false,
+    'controls.camera': false,
+    'controls.screenShare': false,
     isPreConnectBufferEnabled: true,
     preConnectMessage: 'Agent is listening, ask it a question',
     'audioVisualizer.type': 'bar',
@@ -110,4 +110,14 @@ export default {
 
 export const Default: StoryObj<AgentSessionView_01Props> = {
   args: {},
+};
+
+export const AllControls: StoryObj<AgentSessionView_01Props> = {
+  args: {
+    'controls.leave': true,
+    'controls.microphone': true,
+    'controls.chat': true,
+    'controls.camera': true,
+    'controls.screenShare': true,
+  },
 };

@@ -9,7 +9,16 @@ import {
   type AgentControlBarControls,
 } from '@/components/agents-ui/agent-control-bar';
 import { cn } from '@/lib/utils';
+import type { AudioVisualizerConfig } from '@/components/agents-ui/blocks/agent-session-view-01/components/audio-visualizer';
 import { TileLayout } from './tile-view';
+
+const DEFAULT_CONTROLS: AgentControlBarControls = {
+  leave: true,
+  microphone: true,
+  chat: false,
+  camera: false,
+  screenShare: false,
+};
 
 const BOTTOM_VIEW_MOTION_PROPS: MotionProps = {
   variants: {
@@ -100,7 +109,7 @@ export function Fade({ top = false, bottom = false, className }: FadeProps) {
 
 export interface AgentSessionView_01Props {
   /**
-   * Theme mode forwarded to the aura visualizer (`audioVisualizerType="aura"`) so
+   * Theme mode forwarded to the aura visualizer (`audioVisualizer.type === 'aura'`) so
    * the shader's blend mode adapts to the theme mode.
    * Ignored by other visualizer types.
    */
@@ -112,68 +121,43 @@ export interface AgentSessionView_01Props {
    */
   preConnectMessage?: string;
   /**
-   * Enables or disables the chat toggle and transcript input controls.
+   * An object with the following keys: leave, microphone, screenShare, camera, chat.
+   * Each key maps to a boolean value that determines whether the control is displayed.
    *
-   * @default true
+   * @default {
+   *   leave: true,
+   *   microphone: true,
+   *   chat: false,
+   *   camera: false,
+   *   screenShare: false,
+   * }
    */
-  supportsChatInput?: boolean;
-  /**
-   * Enables or disables camera controls in the bottom control bar.
-   *
-   * @default true
-   */
-  supportsVideoInput?: boolean;
-  /**
-   * Enables or disables screen sharing controls in the bottom control bar.
-   *
-   * @default true
-   */
-  supportsScreenShare?: boolean;
+  controls?: AgentControlBarControls;
   /**
    * Shows a pre-connect buffer state with a shimmer message before messages appear.
    *
    * @default true
    */
   isPreConnectBufferEnabled?: boolean;
-
-  /** Selects the visualizer style rendered in the main tile area. */
-  audioVisualizerType?: 'bar' | 'wave' | 'grid' | 'radial' | 'aura';
-  /** Primary hex color used by supported audio visualizer variants. */
-  audioVisualizerColor?: `#${string}`;
-  /** Hue shift intensity used by certain visualizers. */
-  audioVisualizerColorShift?: number;
-  /** Number of bars to render when `audioVisualizerType` is `bar`. */
-  audioVisualizerBarCount?: number;
-  /** Number of rows in the visualizer when `audioVisualizerType` is `grid`. */
-  audioVisualizerGridRowCount?: number;
-  /** Number of columns in the visualizer when `audioVisualizerType` is `grid`. */
-  audioVisualizerGridColumnCount?: number;
-  /** Number of radial bars when `audioVisualizerType` is `radial`. */
-  audioVisualizerRadialBarCount?: number;
-  /** Base radius of the radial visualizer when `audioVisualizerType` is `radial`. */
-  audioVisualizerRadialRadius?: number;
-  /** Stroke width of the wave path when `audioVisualizerType` is `wave`. */
-  audioVisualizerWaveLineWidth?: number;
+  /**
+   * Configures the visualizer style rendered in the main tile area.
+   *
+   * @default { type: 'bar' }
+   */
+  audioVisualizer?: AudioVisualizerConfig;
   /** Optional class name merged onto the outer `<section>` container. */
   className?: string;
+  /** Called when the user clicks the leave control, in addition to ending the session. */
+  onDisconnect?: () => void;
 }
 
 export function AgentSessionView_01({
   preConnectMessage = 'Agent is listening, ask it a question',
-  supportsChatInput = true,
-  supportsVideoInput = true,
-  supportsScreenShare = true,
+  controls = DEFAULT_CONTROLS,
   isPreConnectBufferEnabled = true,
-  audioVisualizerType,
-  audioVisualizerColor,
-  audioVisualizerColorShift,
-  audioVisualizerBarCount,
-  audioVisualizerGridRowCount,
-  audioVisualizerGridColumnCount,
-  audioVisualizerRadialBarCount,
-  audioVisualizerRadialRadius,
-  audioVisualizerWaveLineWidth,
+  audioVisualizer = { type: 'bar' },
   themeMode,
+  onDisconnect,
   ref,
   className,
   ...props
@@ -184,14 +168,6 @@ export function AgentSessionView_01({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { state: agentState } = useAgent();
 
-  const controls: AgentControlBarControls = {
-    leave: true,
-    microphone: true,
-    chat: supportsChatInput,
-    camera: supportsVideoInput,
-    screenShare: supportsScreenShare,
-  };
-
   useEffect(() => {
     const lastMessage = messages.at(-1);
     const lastMessageIsLocal = lastMessage?.from?.isLocal === true;
@@ -201,10 +177,18 @@ export function AgentSessionView_01({
     }
   }, [messages]);
 
+  const finalControls = {
+    ...DEFAULT_CONTROLS,
+    ...controls,
+  };
+
   return (
     <section
       ref={ref}
-      className={cn('bg-background relative z-10 h-full w-full overflow-hidden', className)}
+      className={cn(
+        '@container/agent-session-block bg-background relative z-10 h-full w-full overflow-hidden',
+        className,
+      )}
       {...props}
     >
       <Fade top className="absolute inset-x-4 top-0 z-10 h-40" />
@@ -225,23 +209,12 @@ export function AgentSessionView_01({
       </AnimatePresence>
 
       {/* Tile layout */}
-      <TileLayout
-        isChatOpen={isChatOpen}
-        themeMode={themeMode}
-        audioVisualizerType={audioVisualizerType}
-        audioVisualizerColor={audioVisualizerColor}
-        audioVisualizerColorShift={audioVisualizerColorShift}
-        audioVisualizerBarCount={audioVisualizerBarCount}
-        audioVisualizerRadialBarCount={audioVisualizerRadialBarCount}
-        audioVisualizerRadialRadius={audioVisualizerRadialRadius}
-        audioVisualizerGridRowCount={audioVisualizerGridRowCount}
-        audioVisualizerGridColumnCount={audioVisualizerGridColumnCount}
-        audioVisualizerWaveLineWidth={audioVisualizerWaveLineWidth}
-      />
+      <TileLayout isChatOpen={isChatOpen} themeMode={themeMode} audioVisualizer={audioVisualizer} />
+
       {/* Bottom */}
       <motion.div
         {...BOTTOM_VIEW_MOTION_PROPS}
-        className="absolute inset-x-3 bottom-0 z-50 md:inset-x-12"
+        className="absolute inset-x-3 bottom-0 z-50 @md/agent-session-block:inset-x-12"
       >
         {/* Pre-connect message */}
         {isPreConnectBufferEnabled && (
@@ -251,20 +224,20 @@ export function AgentSessionView_01({
                 key="pre-connect-message"
                 aria-hidden={messages.length > 0}
                 {...SHIMMER_MOTION_PROPS}
-                className="shimmer shimmer-duration-2000 pointer-events-none mx-auto block w-full max-w-2xl pb-4 text-center text-sm font-semibold"
+                className="shimmer shimmer-duration-2000 pointer-events-none mx-auto block w-full max-w-2xl pb-4 text-center text-sm text-muted-foreground"
               >
                 {preConnectMessage}
               </motion.p>
             )}
           </AnimatePresence>
         )}
-        <div className="bg-background relative mx-auto max-w-2xl pb-3 md:pb-12">
+        <div className="bg-background relative mx-auto max-w-2xl pb-3 @md/agent-session-block:pb-12">
           <AgentControlBar
             variant="livekit"
-            controls={controls}
+            controls={finalControls}
             isChatOpen={isChatOpen}
             isConnected={session.isConnected}
-            onDisconnect={session.end}
+            onDisconnect={onDisconnect ?? session.end}
             onIsChatOpenChange={setIsChatOpen}
           />
         </div>

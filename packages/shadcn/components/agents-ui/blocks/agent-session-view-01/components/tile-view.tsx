@@ -10,7 +10,7 @@ import { Track } from 'livekit-client';
 import { AnimatePresence, motion, type MotionProps } from 'motion/react';
 
 import { cn } from '@/lib/utils';
-import { AudioVisualizer } from './audio-visualizer';
+import { AudioVisualizer, type AudioVisualizerConfig } from './audio-visualizer';
 
 const ANIMATION_TRANSITION: MotionProps['transition'] = {
   type: 'spring',
@@ -71,30 +71,10 @@ export function useLocalTrackRef(source: Track.Source) {
 interface TileLayoutProps {
   themeMode?: 'dark' | 'light';
   isChatOpen: boolean;
-  audioVisualizerType?: 'bar' | 'wave' | 'grid' | 'radial' | 'aura';
-  audioVisualizerColor?: `#${string}`;
-  audioVisualizerColorShift?: number;
-  audioVisualizerWaveLineWidth?: number;
-  audioVisualizerGridRowCount?: number;
-  audioVisualizerGridColumnCount?: number;
-  audioVisualizerRadialBarCount?: number;
-  audioVisualizerRadialRadius?: number;
-  audioVisualizerBarCount?: number;
+  audioVisualizer?: AudioVisualizerConfig;
 }
 
-export function TileLayout({
-  themeMode,
-  isChatOpen,
-  audioVisualizerType,
-  audioVisualizerColor,
-  audioVisualizerColorShift,
-  audioVisualizerBarCount,
-  audioVisualizerRadialBarCount,
-  audioVisualizerRadialRadius,
-  audioVisualizerGridRowCount,
-  audioVisualizerGridColumnCount,
-  audioVisualizerWaveLineWidth,
-}: TileLayoutProps) {
+export function TileLayout({ themeMode, isChatOpen, audioVisualizer }: TileLayoutProps) {
   const { videoTrack: agentVideoTrack } = useVoiceAssistant();
   const [screenShareTrack] = useTracks([Track.Source.ScreenShare]);
   const cameraTrack: TrackReference | undefined = useLocalTrackRef(Track.Source.Camera);
@@ -143,15 +123,7 @@ export function TileLayout({
                       ...ANIMATION_TRANSITION,
                       delay: animationDelay,
                     }}
-                    audioVisualizerType={audioVisualizerType}
-                    audioVisualizerColor={audioVisualizerColor}
-                    audioVisualizerColorShift={audioVisualizerColorShift}
-                    audioVisualizerBarCount={audioVisualizerBarCount}
-                    audioVisualizerRadialBarCount={audioVisualizerRadialBarCount}
-                    audioVisualizerRadialRadius={audioVisualizerRadialRadius}
-                    audioVisualizerGridRowCount={audioVisualizerGridRowCount}
-                    audioVisualizerGridColumnCount={audioVisualizerGridColumnCount}
-                    audioVisualizerWaveLineWidth={audioVisualizerWaveLineWidth}
+                    audioVisualizer={audioVisualizer}
                     themeMode={themeMode}
                     isChatOpen={isChatOpen}
                     className={cn(
@@ -159,7 +131,7 @@ export function TileLayout({
                       'bg-background rounded-[50px] border border-transparent transition-[border,drop-shadow]',
                       isChatOpen && 'border-input shadow-2xl/10 delay-200',
                     )}
-                    style={{ color: audioVisualizerColor }}
+                    style={{ color: audioVisualizer?.color }}
                   />
                 </motion.div>
               )}

@@ -277,6 +277,28 @@
       "registryDependencies": ["utils", "@agents-ui/react-shader-toy"]
     },
     {
+      "name": "agent-audio-visualizer-mesh-gradient",
+      "type": "registry:component",
+      "title": "Agent Audio Visualizer Mesh Gradient",
+      "description": "A mesh gradient visualizer for audio tracks.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-audio-visualizer-mesh-gradient.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "hooks/agents-ui/use-agent-audio-visualizer-mesh-gradient.ts",
+          "type": "registry:hook"
+        }
+      ],
+      "dependencies": [
+        "livekit-client@^2.0.0",
+        "@livekit/components-react@^2.0.0",
+        "class-variance-authority"
+      ],
+      "registryDependencies": ["utils", "@agents-ui/react-shader-toy"]
+    },
+    {
       "name": "nextjs-api-token-route",
       "type": "registry:page",
       "title": "NextJS API route to get a LiveKit session token",
@@ -344,6 +366,7 @@
         "@agents-ui/agent-audio-visualizer-grid",
         "@agents-ui/agent-audio-visualizer-wave",
         "@agents-ui/agent-audio-visualizer-aura",
+        "@agents-ui/agent-audio-visualizer-mesh-gradient",
         "@agents-ui/agent-session-provider",
         "@agents-ui/start-audio-button",
         "@agents-ui/agent-chat-indicator",

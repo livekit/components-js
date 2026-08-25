@@ -356,6 +356,7 @@
         "utils",
         "button",
         "@agents-ui/agent-session-provider",
+        "@agents-ui/start-audio-button",
         "@agents-ui/agent-session-view-01"
       ],
       "dependencies": [

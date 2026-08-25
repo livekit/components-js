@@ -88,7 +88,7 @@ function getBarClassName(size: AgentAudioVisualizerBarProps['size']) {
   } else if (size == 'md') {
     return 'size-[350px] md:size-[450px]  *:min-h-[32px] *:w-[32px]';
   } else if (size == 'sm') {
-    return 'size-[300px] md:size-[450px] *:min-h-[16xpx] *:w-[16xpx]';
+    return 'size-[300px] md:size-[450px] *:min-h-[16px] *:w-[16px]';
   }
 
   return 'size-[300px] md:size-[450px] *:min-h-[4px] *:w-[4px]';

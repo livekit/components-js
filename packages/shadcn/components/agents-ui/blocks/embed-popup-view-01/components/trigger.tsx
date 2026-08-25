@@ -56,7 +56,7 @@ export function Trigger({
       aria-label={isPressed ? 'Close assistant' : altText}
       aria-expanded={isPressed}
       className={cn(
-        'm-0 block size-12 rounded-full p-0.5 drop-shadow-sm transition-transform duration-200 hover:scale-105 focus-visible:scale-105',
+        'relative m-0 block size-12 rounded-full p-0.5 drop-shadow-sm transition-transform duration-200 hover:scale-105 focus-visible:scale-105',
         className,
       )}
       {...props}

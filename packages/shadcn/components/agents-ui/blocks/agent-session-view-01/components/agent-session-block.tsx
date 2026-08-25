@@ -9,8 +9,26 @@ import {
   type AgentControlBarControls,
 } from '@/components/agents-ui/agent-control-bar';
 import { cn } from '@/lib/utils';
-import type { AudioVisualizerConfig } from '@/components/agents-ui/blocks/agent-session-view-01/components/audio-visualizer';
 import { TileLayout } from './tile-view';
+
+import { type AgentAudioVisualizerAuraProps } from '@/components/agents-ui/agent-audio-visualizer-aura';
+import { type AgentAudioVisualizerBarProps } from '@/components/agents-ui/agent-audio-visualizer-bar';
+import { type AgentAudioVisualizerGridProps } from '@/components/agents-ui/agent-audio-visualizer-grid';
+import { type AgentAudioVisualizerRadialProps } from '@/components/agents-ui/agent-audio-visualizer-radial';
+import { type AgentAudioVisualizerWaveProps } from '@/components/agents-ui/agent-audio-visualizer-wave';
+
+/**
+ * Configures the visualizer style rendered in the main tile area. `type` selects the
+ * visualizer, and the remaining fields are exactly the props of the matching
+ * `AgentAudioVisualizer*` component (e.g. `type: 'grid'` accepts `rowCount`/`columnCount`,
+ * `type: 'wave'` accepts `lineWidth`, etc).
+ */
+export type AudioVisualizerConfig =
+  | ({ type?: 'bar' } & AgentAudioVisualizerBarProps)
+  | ({ type: 'wave' } & AgentAudioVisualizerWaveProps)
+  | ({ type: 'grid' } & AgentAudioVisualizerGridProps)
+  | ({ type: 'radial' } & AgentAudioVisualizerRadialProps)
+  | ({ type: 'aura' } & AgentAudioVisualizerAuraProps);
 
 const DEFAULT_CONTROLS: AgentControlBarControls = {
   leave: true,

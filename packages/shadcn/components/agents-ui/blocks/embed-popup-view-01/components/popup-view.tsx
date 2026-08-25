@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { StartAudioButton } from '@/components/agents-ui/start-audio-button';
 import { type AgentControlBarControls } from '@/components/agents-ui/agent-control-bar';
 import { AgentSessionView_01 } from '@/components/agents-ui/blocks/agent-session-view-01/components/agent-session-block';
-import type { AudioVisualizerConfig } from '@/components/agents-ui/blocks/agent-session-view-01/components/audio-visualizer';
+import type { AudioVisualizerConfig } from '@/components/agents-ui/blocks/agent-session-view-01/components/agent-session-block';
 import { cn } from '@/lib/utils';
 import type { EmbedPopupViewError } from './embed-popup-block';
 

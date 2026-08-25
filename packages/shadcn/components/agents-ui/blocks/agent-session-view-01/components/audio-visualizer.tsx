@@ -32,26 +32,6 @@ const MotionAgentAudioVisualizerGrid = motion.create(AgentAudioVisualizerGrid);
 const MotionAgentAudioVisualizerRadial = motion.create(AgentAudioVisualizerRadial);
 const MotionAgentAudioVisualizerWave = motion.create(AgentAudioVisualizerWave);
 
-/**
- * Configures the visualizer style rendered in the main tile area. `type` selects the
- * visualizer, and the remaining fields are exactly the props of the matching
- * `AgentAudioVisualizer*` component (e.g. `type: 'grid'` accepts `rowCount`/`columnCount`,
- * `type: 'wave'` accepts `lineWidth`, etc).
- */
-export type AudioVisualizerConfig =
-  | ({ type?: 'bar' } & AgentAudioVisualizerBarProps)
-  | ({ type: 'wave' } & AgentAudioVisualizerWaveProps)
-  | ({ type: 'grid' } & AgentAudioVisualizerGridProps)
-  | ({ type: 'radial' } & AgentAudioVisualizerRadialProps)
-  | ({ type: 'aura' } & AgentAudioVisualizerAuraProps);
-
-interface AudioVisualizerProps extends MotionProps {
-  themeMode?: 'dark' | 'light';
-  isChatOpen: boolean;
-  audioVisualizer?: AudioVisualizerConfig;
-  className?: string;
-}
-
 function getGridSize(rowCount: number, columnCount: number): AgentAudioVisualizerBarProps['size'] {
   const totalCount = rowCount * columnCount;
 
@@ -94,14 +74,27 @@ function getBarClassName(size: AgentAudioVisualizerBarProps['size']) {
   return 'size-[300px] md:size-[450px] *:min-h-[4px] *:w-[4px]';
 }
 
+interface AudioVisualizerProps extends MotionProps {
+  isChatOpen: boolean;
+  type: 'bar' | 'wave' | 'grid' | 'radial' | 'aura';
+  config?:
+    | AgentAudioVisualizerBarProps
+    | AgentAudioVisualizerWaveProps
+    | AgentAudioVisualizerGridProps
+    | AgentAudioVisualizerRadialProps
+    | AgentAudioVisualizerAuraProps;
+  themeMode?: 'dark' | 'light';
+  className?: string;
+}
+
 export function AudioVisualizer({
   themeMode,
-  audioVisualizer,
+  type,
+  config,
   className,
   ...props
 }: AudioVisualizerProps) {
   const { state, audioTrack } = useVoiceAssistant();
-  const { type = 'bar', ...config } = audioVisualizer ?? {};
 
   // `state`/`audioTrack` always reflect the live agent session; any same-named field on
   // `config` is ignored by spreading it before these are set explicitly below.
@@ -136,12 +129,11 @@ export function AudioVisualizer({
         radius,
         rowCount = 15,
         columnCount = 15,
-        ...rest
       } = config as AgentAudioVisualizerGridProps;
 
       return (
         <MotionAgentAudioVisualizerGrid
-          {...rest}
+          {...config}
           size={size ?? getGridSize(rowCount, columnCount)}
           state={state}
           audioTrack={audioTrack}
@@ -154,11 +146,11 @@ export function AudioVisualizer({
       );
     }
     case 'radial': {
-      const { radius = 100, barCount = 25, ...rest } = config as AgentAudioVisualizerRadialProps;
+      const { radius = 100, barCount = 25 } = config as AgentAudioVisualizerRadialProps;
       return (
         <motion.div className={className} {...props}>
           <MotionAgentAudioVisualizerRadial
-            {...rest}
+            {...config}
             size="xl"
             state={state}
             radius={radius}
@@ -170,13 +162,13 @@ export function AudioVisualizer({
       );
     }
     default: {
-      const { size, barCount = 5, ...rest } = config as AgentAudioVisualizerBarProps;
+      const { size, barCount = 5 } = (config as AgentAudioVisualizerBarProps) ?? {};
       const _size = size ?? getBarSize(barCount);
       const sizedClassName = getBarClassName(_size);
 
       return (
         <MotionAgentAudioVisualizerBar
-          {...rest}
+          {...config}
           size={_size}
           state={state}
           barCount={barCount}

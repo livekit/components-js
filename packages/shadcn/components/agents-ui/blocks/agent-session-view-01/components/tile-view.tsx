@@ -8,9 +8,10 @@ import {
 } from '@livekit/components-react';
 import { Track } from 'livekit-client';
 import { AnimatePresence, motion, type MotionProps } from 'motion/react';
+import { type AudioVisualizerConfig } from './agent-session-block';
 
 import { cn } from '@/lib/utils';
-import { AudioVisualizer, type AudioVisualizerConfig } from './audio-visualizer';
+import { AudioVisualizer } from './audio-visualizer';
 
 const ANIMATION_TRANSITION: MotionProps['transition'] = {
   type: 'spring',
@@ -88,6 +89,8 @@ export function TileLayout({ themeMode, isChatOpen, audioVisualizer }: TileLayou
   const videoWidth = agentVideoTrack?.publication.dimensions?.width ?? 0;
   const videoHeight = agentVideoTrack?.publication.dimensions?.height ?? 0;
 
+  const { type: audioVisualizerType = 'bar', ...audioVisualizerConfig } = audioVisualizer ?? {};
+
   return (
     <div className="pointer-events-none absolute inset-x-0 top-8 bottom-32 z-50 md:top-12 md:bottom-40">
       <div className="relative mx-auto h-full max-w-2xl px-4 md:px-0">
@@ -123,7 +126,8 @@ export function TileLayout({ themeMode, isChatOpen, audioVisualizer }: TileLayou
                       ...ANIMATION_TRANSITION,
                       delay: animationDelay,
                     }}
-                    audioVisualizer={audioVisualizer}
+                    type={audioVisualizerType}
+                    config={audioVisualizerConfig}
                     themeMode={themeMode}
                     isChatOpen={isChatOpen}
                     className={cn(

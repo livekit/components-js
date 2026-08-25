@@ -6,7 +6,7 @@ import { type TokenSourceConfigurable, type TokenSourceFixed } from 'livekit-cli
 
 import { type AgentControlBarControls } from '@/components/agents-ui/agent-control-bar';
 import { AgentSessionProvider } from '@/components/agents-ui/agent-session-provider';
-import type { AudioVisualizerConfig } from '@/components/agents-ui/blocks/agent-session-view-01/components/audio-visualizer';
+import type { AudioVisualizerConfig } from '@/components/agents-ui/blocks/agent-session-view-01/components/agent-session-block';
 import { PopupView } from './popup-view';
 import { Trigger } from './trigger';
 

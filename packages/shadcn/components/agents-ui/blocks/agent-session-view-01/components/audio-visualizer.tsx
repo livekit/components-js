@@ -66,12 +66,12 @@ function getBarClassName(size: AgentAudioVisualizerBarProps['size']) {
   } else if (size == 'lg') {
     return 'size-[450px] *:min-h-[48px] *:w-[48px]';
   } else if (size == 'md') {
-    return 'size-[350px] md:size-[450px]  *:min-h-[32px] *:w-[32px]';
+    return 'size-[350px] @md/agent-session-block:size-[450px]  *:min-h-[32px] *:w-[32px]';
   } else if (size == 'sm') {
-    return 'size-[300px] md:size-[450px] *:min-h-[16px] *:w-[16px]';
+    return 'size-[300px] @md/agent-session-block:size-[450px] *:min-h-[16px] *:w-[16px]';
   }
 
-  return 'size-[300px] md:size-[450px] *:min-h-[4px] *:w-[4px]';
+  return 'size-[300px] @md/agent-session-block:size-[450px] *:min-h-[4px] *:w-[4px]';
 }
 
 interface AudioVisualizerProps extends MotionProps {
@@ -106,7 +106,7 @@ export function AudioVisualizer({
           state={state}
           themeMode={themeMode}
           audioTrack={audioTrack}
-          className={cn('size-[300px] md:size-[450px]', className)}
+          className={cn('size-[300px] @md/agent-session-block:size-[450px]', className)}
           {...props}
         />
       );
@@ -118,7 +118,7 @@ export function AudioVisualizer({
             {...config}
             state={state}
             audioTrack={audioTrack}
-            className="size-[300px] md:size-[450px]"
+            className="size-[300px] @md/agent-session-block:size-[450px]"
           />
         </motion.div>
       );
@@ -140,7 +140,10 @@ export function AudioVisualizer({
           rowCount={rowCount}
           columnCount={columnCount}
           radius={radius ?? Math.round(Math.min(rowCount, columnCount) / 4)}
-          className={cn('size-[350px] gap-0 p-20 *:place-self-center md:size-[450px]', className)}
+          className={cn(
+            'size-[350px] gap-0 p-20 *:place-self-center @md/agent-session-block:size-[450px]',
+            className,
+          )}
           {...props}
         />
       );

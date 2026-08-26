@@ -215,12 +215,12 @@ export function AgentSessionView_01({
         {isChatOpen && (
           <motion.div
             {...CHAT_MOTION_PROPS}
-            className="absolute inset-x-0 top-0 bottom-[135px] overflow-hidden md:bottom-[170px]"
+            className="absolute inset-x-0 top-0 bottom-[135px] overflow-hidden @md/agent-session-block:bottom-[170px]"
           >
             <AgentChatTranscript
               agentState={agentState}
               messages={messages}
-              className="mx-auto max-w-2xl **:data-[slot=message-scroller-content]:p-4 **:data-[slot=message-scroller-content]:pt-40! md:**:data-[slot=message-scroller-content]:p-6"
+              className="mx-auto max-w-2xl **:data-[slot=message-scroller-content]:p-4 **:data-[slot=message-scroller-content]:pt-40! @md/agent-session-block:**:data-[slot=message-scroller-content]:p-6"
             />
           </motion.div>
         )}

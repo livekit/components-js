@@ -329,6 +329,45 @@
       "categories": ["agents", "blocks"]
     },
     {
+      "name": "embed-popup-view-01",
+      "author": "LiveKit (https://livekit.com)",
+      "type": "registry:block",
+      "title": "Embed Popup View",
+      "description": "A floating chat-bubble trigger that expands into a compact agent session popup, suitable for embedding on any page.",
+      "files": [
+        {
+          "path": "components/agents-ui/blocks/embed-popup-view-01/components/embed-popup-block.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/agents-ui/blocks/embed-popup-view-01/components/trigger.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/agents-ui/blocks/embed-popup-view-01/components/popup-view.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/agents-ui/blocks/embed-popup-view-01/index.ts",
+          "type": "registry:item"
+        }
+      ],
+      "registryDependencies": [
+        "utils",
+        "button",
+        "@agents-ui/agent-session-provider",
+        "@agents-ui/start-audio-button",
+        "@agents-ui/agent-session-view-01"
+      ],
+      "dependencies": [
+        "@livekit/components-react@^2.0.0",
+        "livekit-client@^2.0.0",
+        "motion",
+        "lucide-react"
+      ],
+      "categories": ["agents", "blocks"]
+    },
+    {
       "name": "all",
       "type": "registry:item",
       "title": "All",
@@ -349,7 +388,8 @@
         "@agents-ui/agent-chat-indicator",
         "@agents-ui/agent-chat-transcript",
         "@agents-ui/react-shader-toy",
-        "@agents-ui/agent-session-view-01"
+        "@agents-ui/agent-session-view-01",
+        "@agents-ui/embed-popup-view-01"
       ]
     }
   ]

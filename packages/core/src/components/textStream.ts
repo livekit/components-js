@@ -120,9 +120,14 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
 
   observableCache.set(cacheKey, sharedObservable);
 
-  // Add cleanup when room is disconnected
+  // Reset the buffer when the room disconnects, but keep the cached observable.
+  // The subject is never completed and registration is refcounted by the `tap`
+  // above, so this observable stays usable on a reused room instance. Evicting
+  // it here would let a caller that arrives after the disconnect build a *second*
+  // observable for the same topic while an existing consumer still holds the
+  // first — on reconnect both re-register and livekit-client throws
+  // `DataStreamError: A text stream handler for topic "..." has already been set`.
   room.on(RoomEvent.Disconnected, () => {
-    getObservableCache().delete(cacheKey);
     textStreams = [];
     textStreamsSubject.next([]);
   });

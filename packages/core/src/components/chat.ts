@@ -162,6 +162,12 @@ export function setupChat(room: Room, options?: ChatOptions) {
       );
       streamObservable.subscribe({
         next: (value) => messageSubject.next(value),
+        error: (error) => {
+          // Keep an abnormally ended stream (e.g. the sending participant
+          // disconnected mid-stream) from rethrowing globally as an uncaught
+          // exception; `finalize` has already cleaned up its attachment state.
+          log.debug('chat text stream ended abnormally', error);
+        },
       });
     });
     // NOTE: Attachment byte streams are guaranteed to arrive after their parent text stream

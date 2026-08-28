@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, act } from '@testing-library/react';
 import React from 'react';
-import { EmbedPopupView_01 } from '@/components/agents-ui/blocks/embed-popup-view-01/components/embed-popup-block';
+import { AgentPopup_01 } from '@/components/agents-ui/blocks/agent-popup-01/components/agent-popup-block';
 
 const startMock = vi.fn().mockResolvedValue(undefined);
 const endMock = vi.fn().mockResolvedValue(undefined);
@@ -28,17 +28,17 @@ vi.mock('@/components/agents-ui/agent-session-provider', () => ({
   AgentSessionProvider: ({ children }: any) => <div data-testid="session-provider">{children}</div>,
 }));
 
-vi.mock('@/components/agents-ui/blocks/embed-popup-view-01/components/trigger', () => ({
+vi.mock('@/components/agents-ui/blocks/agent-popup-01/components/trigger', () => ({
   Trigger: (props: any) => triggerMock(props),
 }));
 
-vi.mock('@/components/agents-ui/blocks/embed-popup-view-01/components/popup-view', () => ({
+vi.mock('@/components/agents-ui/blocks/agent-popup-01/components/popup-view', () => ({
   PopupView: (props: any) => popupViewMock(props),
 }));
 
 const tokenSource = {} as any;
 
-describe('EmbedPopupView_01', () => {
+describe('AgentPopup_01', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockSession.isConnected = false;
@@ -46,13 +46,13 @@ describe('EmbedPopupView_01', () => {
   });
 
   it('renders the trigger but not the popup view when closed', () => {
-    render(<EmbedPopupView_01 tokenSource={tokenSource} />);
+    render(<AgentPopup_01 tokenSource={tokenSource} />);
     expect(screen.getByTestId('trigger')).toBeInTheDocument();
     expect(screen.queryByTestId('popup-view')).not.toBeInTheDocument();
   });
 
   it('starts the session and renders PopupView when the trigger is toggled open', async () => {
-    render(<EmbedPopupView_01 tokenSource={tokenSource} />);
+    render(<AgentPopup_01 tokenSource={tokenSource} />);
     await act(async () => {
       screen.getByTestId('trigger').click();
     });
@@ -61,7 +61,7 @@ describe('EmbedPopupView_01', () => {
   });
 
   it('ends the session when toggled closed again', async () => {
-    render(<EmbedPopupView_01 tokenSource={tokenSource} />);
+    render(<AgentPopup_01 tokenSource={tokenSource} />);
     await act(async () => {
       screen.getByTestId('trigger').click();
     });
@@ -74,7 +74,7 @@ describe('EmbedPopupView_01', () => {
 
   it('forwards triggerColor as color, logo, and agentName to Trigger', () => {
     render(
-      <EmbedPopupView_01
+      <AgentPopup_01
         tokenSource={tokenSource}
         triggerColor="#ff00ff"
         logo="https://example.com/logo.png"
@@ -92,14 +92,14 @@ describe('EmbedPopupView_01', () => {
   });
 
   it('applies the default agentName when not provided', () => {
-    render(<EmbedPopupView_01 tokenSource={tokenSource} />);
+    render(<AgentPopup_01 tokenSource={tokenSource} />);
     const call = triggerMock.mock.calls[0][0];
     expect(call).toEqual(expect.objectContaining({ agentName: 'Agent' }));
     expect(call.color).toBeUndefined();
   });
 
   it('forwards the default controls to PopupView when unset', async () => {
-    render(<EmbedPopupView_01 tokenSource={tokenSource} />);
+    render(<AgentPopup_01 tokenSource={tokenSource} />);
     await act(async () => {
       screen.getByTestId('trigger').click();
     });
@@ -114,7 +114,7 @@ describe('EmbedPopupView_01', () => {
   });
 
   it('forwards merged controls to PopupView when open', async () => {
-    render(<EmbedPopupView_01 tokenSource={tokenSource} controls={{ chat: true }} />);
+    render(<AgentPopup_01 tokenSource={tokenSource} controls={{ chat: true }} />);
     await act(async () => {
       screen.getByTestId('trigger').click();
     });

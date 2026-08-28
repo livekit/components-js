@@ -18,7 +18,7 @@ const DEFAULT_CONTROLS: AgentControlBarControls = {
   screenShare: false,
 };
 
-export interface EmbedPopupViewError {
+export interface AgentPopupError {
   title: string;
   description: string;
 }
@@ -29,7 +29,7 @@ function TriggerProvider({ ...props }: ComponentProps<typeof Trigger>) {
   return <Trigger {...props} isConnected={isConnected} />;
 }
 
-export interface EmbedPopupViewProps {
+export interface AgentPopupProps {
   /** Logo shown in the trigger bubble in place of the default agent icon. */
   logo?: string;
   /** @default 'Agent' */
@@ -70,7 +70,7 @@ export interface EmbedPopupViewProps {
   audioVisualizer?: AudioVisualizerConfig;
 }
 
-export function EmbedPopupView_01({
+export function AgentPopup_01({
   logo,
   themeMode,
   tokenSource,
@@ -83,10 +83,10 @@ export function EmbedPopupView_01({
     type: 'bar',
     size: 'lg',
   },
-}: EmbedPopupViewProps) {
+}: AgentPopupProps) {
   const session = useSession(tokenSource);
   const [popupOpen, setPopupOpen] = useState(false);
-  const [error, setError] = useState<EmbedPopupViewError>();
+  const [error, setError] = useState<AgentPopupError>();
 
   // Drive the session lifecycle off the popup-open state. Opening the popup
   // connects; closing it (or unmounting) tears the room down so we don't
@@ -106,7 +106,7 @@ export function EmbedPopupView_01({
     sessionRef.current.start().catch((cause) => {
       if (cancelled) return;
 
-      console.error('embed-popup-view-01: session.start failed:', cause);
+      console.error('agent-popup-01: session.start failed:', cause);
       setError({
         title: 'Could not connect to the agent',
         description: cause instanceof Error ? cause.message : String(cause),

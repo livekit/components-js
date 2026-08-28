@@ -2,12 +2,12 @@ import React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { useTheme } from 'next-themes';
 import { TokenSource } from 'livekit-client';
-import { EmbedPopupView_01, EmbedPopupViewProps } from '@livekit/agents-ui';
+import { AgentPopup_01, AgentPopupProps } from '@livekit/agents-ui';
 
 const TOKEN_SOURCE = TokenSource.endpoint('/api/agents-ui/token');
 
 interface Args extends Omit<
-  EmbedPopupViewProps,
+  AgentPopupProps,
   'tokenSource' | 'controls' | 'themeMode' | 'audioVisualizer'
 > {
   'controls.leave': boolean;
@@ -26,8 +26,8 @@ interface Args extends Omit<
 }
 
 export default {
-  title: 'agents-ui/Blocks/EmbedPopupView-01',
-  component: EmbedPopupView_01,
+  title: 'agents-ui/Blocks/AgentPopup-01',
+  component: AgentPopup_01,
   args: {
     triggerColor: '',
     logo: '',
@@ -63,7 +63,7 @@ export default {
     const { resolvedTheme = 'dark' } = useTheme();
     return (
       <div className="h-screen w-full">
-        <EmbedPopupView_01
+        <AgentPopup_01
           {...args}
           tokenSource={TOKEN_SOURCE}
           themeMode={resolvedTheme as 'dark' | 'light'}
@@ -78,9 +78,9 @@ export default {
   },
 };
 
-export const Default: StoryObj<EmbedPopupViewProps> = {};
+export const Default: StoryObj<AgentPopupProps> = {};
 
-export const AllControls: StoryObj<EmbedPopupViewProps> = {
+export const AllControls: StoryObj<AgentPopupProps> = {
   args: {
     'controls.leave': true,
     'controls.microphone': true,
@@ -90,7 +90,7 @@ export const AllControls: StoryObj<EmbedPopupViewProps> = {
   },
 };
 
-export const Config: StoryObj<EmbedPopupViewProps> = {
+export const Config: StoryObj<AgentPopupProps> = {
   args: {
     'audioVisualizer.type': 'bar',
     'audioVisualizer.color': undefined,
@@ -133,7 +133,7 @@ export const Config: StoryObj<EmbedPopupViewProps> = {
     const { resolvedTheme = 'dark' } = useTheme();
     return (
       <div className="h-screen w-full">
-        <EmbedPopupView_01
+        <AgentPopup_01
           {...args}
           tokenSource={TOKEN_SOURCE}
           themeMode={resolvedTheme as 'dark' | 'light'}
@@ -148,7 +148,7 @@ export const Config: StoryObj<EmbedPopupViewProps> = {
               columnCount,
               radius,
               lineWidth,
-            } as EmbedPopupViewProps['audioVisualizer']
+            } as AgentPopupProps['audioVisualizer']
           }
         />
       </div>

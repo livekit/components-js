@@ -5,7 +5,7 @@ import { BotIcon, PhoneOffIcon, XIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import type { EmbedPopupViewError } from './embed-popup-block';
+import type { AgentPopupError } from './agent-popup-block';
 
 export interface TriggerProps extends ComponentProps<'button'> {
   /** Logo image shown in place of the default bot icon. */
@@ -19,7 +19,7 @@ export interface TriggerProps extends ComponentProps<'button'> {
   /** Whether the agent session is connected. Only relevant while `isPressed` is true. */
   isConnected?: boolean;
   /** Session error, if any. Only relevant while `isPressed` is true. */
-  error?: EmbedPopupViewError;
+  error?: AgentPopupError;
   /** Called when the trigger is clicked. */
   onToggle: () => void;
 }

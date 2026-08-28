@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
-import { Trigger } from '@/components/agents-ui/blocks/embed-popup-view-01/components/trigger';
+import { Trigger } from '@/components/agents-ui/blocks/agent-popup-01/components/trigger';
 
 describe('Trigger', () => {
   it('calls onToggle when clicked', () => {

@@ -44,13 +44,14 @@ export function StartAudioButton({
   variant = 'default',
   label,
   room,
+  className,
   ...props
 }: StartAudioButtonProps) {
   const roomEnsured = useEnsureRoom(room);
   const { mergedProps } = useStartAudio({ room: roomEnsured, props });
 
   return (
-    <Button size={size} variant={variant} {...props} {...mergedProps}>
+    <Button size={size} variant={variant} {...props} {...mergedProps} className={className}>
       {label}
     </Button>
   );

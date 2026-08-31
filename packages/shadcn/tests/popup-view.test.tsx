@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
-import { PopupView } from '@/components/agents-ui/blocks/embed-popup-view-01/components/popup-view';
+import { PopupView } from '@/components/agents-ui/blocks/agent-popup-01/components/popup-view';
 
 const startAudioButtonMock = vi.fn((props: any) => (
   <div data-testid="start-audio-button" data-props={JSON.stringify(props)} />

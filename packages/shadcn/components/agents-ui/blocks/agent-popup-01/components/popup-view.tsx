@@ -7,12 +7,13 @@ import { type AgentControlBarControls } from '@/components/agents-ui/agent-contr
 import { AgentSessionView_01 } from '@/components/agents-ui/blocks/agent-session-view-01/components/agent-session-block';
 import type { AudioVisualizerConfig } from '@/components/agents-ui/blocks/agent-session-view-01/components/agent-session-block';
 import { cn } from '@/lib/utils';
-import type { EmbedPopupViewError } from './embed-popup-block';
+import type { AgentPopupError } from './agent-popup-block';
+import { Button } from '@/components/ui/button';
 
 interface ErrorOverlayProps {
   logo?: string;
   agentName?: string;
-  error?: EmbedPopupViewError;
+  error?: AgentPopupError;
 }
 
 function ErrorOverlay({ logo, agentName, error }: ErrorOverlayProps) {
@@ -52,7 +53,7 @@ function ErrorOverlay({ logo, agentName, error }: ErrorOverlayProps) {
 export interface PopupViewProps {
   agentName?: string;
   logo?: string;
-  error?: EmbedPopupViewError;
+  error?: AgentPopupError;
   controls: AgentControlBarControls;
   themeMode?: 'dark' | 'light';
   preConnectMessage?: string;
@@ -84,7 +85,7 @@ export function PopupView({
         <AnimatePresence>
           <ErrorOverlay logo={logo} agentName={agentName} error={error} />
         </AnimatePresence>
-        <StartAudioButton label="Enable Audio" />
+        <StartAudioButton label="Enable Audio" className="mx-4 mt-2 rounded-full" />
         <AgentSessionView_01
           controls={controls}
           themeMode={themeMode}

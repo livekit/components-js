@@ -51,7 +51,14 @@ export function StartAudioButton({
   const { mergedProps } = useStartAudio({ room: roomEnsured, props });
 
   return (
-    <Button size={size} variant={variant} {...props} {...mergedProps} className={className}>
+    <Button
+      size={size}
+      variant={variant}
+      {...props}
+      {...mergedProps}
+      // don't merge useStartAudio className
+      className={className}
+    >
       {label}
     </Button>
   );

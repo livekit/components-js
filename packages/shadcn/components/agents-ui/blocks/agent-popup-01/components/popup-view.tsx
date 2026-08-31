@@ -8,6 +8,7 @@ import { AgentSessionView_01 } from '@/components/agents-ui/blocks/agent-session
 import type { AudioVisualizerConfig } from '@/components/agents-ui/blocks/agent-session-view-01/components/agent-session-block';
 import { cn } from '@/lib/utils';
 import type { AgentPopupError } from './agent-popup-block';
+import { Button } from '@/components/ui/button';
 
 interface ErrorOverlayProps {
   logo?: string;
@@ -84,7 +85,7 @@ export function PopupView({
         <AnimatePresence>
           <ErrorOverlay logo={logo} agentName={agentName} error={error} />
         </AnimatePresence>
-        <StartAudioButton label="Enable Audio" />
+        <StartAudioButton label="Enable Audio" className="mx-4 mt-2 rounded-full" />
         <AgentSessionView_01
           controls={controls}
           themeMode={themeMode}

@@ -7,8 +7,8 @@ settings:
 catalogs:
   default:
     '@livekit/protocol':
-      specifier: 1.50.4
-      version: 1.50.4
+      specifier: 1.51.0
+      version: 1.51.0
     eslint:
       specifier: ^10.0.0
       version: 10.7.0
@@ -249,7 +249,7 @@ importers:
         version: link:../styles
       '@livekit/protocol':
         specifier: 'catalog:'
-        version: 1.50.4
+        version: 1.51.0
       '@microsoft/api-extractor':
         specifier: ^7.58.8
         version: 7.59.0(@types/node@24.13.3)
@@ -310,7 +310,7 @@ importers:
     devDependencies:
       '@livekit/protocol':
         specifier: 'catalog:'
-        version: 1.50.4
+        version: 1.51.0
       '@microsoft/api-extractor':
         specifier: ^7.58.8
         version: 7.59.0(@types/node@24.13.3)
@@ -388,7 +388,7 @@ importers:
         version: link:../react
       '@livekit/protocol':
         specifier: 'catalog:'
-        version: 1.50.4
+        version: 1.51.0
       '@radix-ui/react-select':
         specifier: ^2.2.6
         version: 2.3.6(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -2287,6 +2287,9 @@ packages:
 
   '@livekit/protocol@1.50.4':
     resolution: {integrity: sha512-L1uggNQAqyY21smQY8AllyOYbcv9Me9TaxwuLytL1R8ck9nbYPmQLNwEDi3pOFGAMa5F8I2nUi2Jc59W5awxlA==}
+
+  '@livekit/protocol@1.51.0':
+    resolution: {integrity: sha512-kEDEDaFvIcp5VlYBromdSKMJMEJKfPvXPfEaJPdEz1Qgo84gZAoLF2g58CcMlVYGsjrwE5XYgQxRS5B7KuEj3w==}
 
   '@livekit/track-processors@0.3.3':
     resolution: {integrity: sha512-C5mBWe34ie0pfhCf9zAD65D26ZytzW/xGrj8Zc1BGh5kLISFDVQlefO78LZWw9K5saTamk60O4fzSCKqWMPMLA==}
@@ -11674,7 +11677,7 @@ snapshots:
   '@livekit/krisp-noise-filter@0.4.3(livekit-client@2.22.1(@types/dom-mediacapture-record@1.0.22))':
     dependencies:
       '@livekit/mutex': 1.1.1
-      '@livekit/protocol': 1.50.4
+      '@livekit/protocol': 1.51.0
       livekit-client: 2.22.1(@types/dom-mediacapture-record@1.0.22)
 
   '@livekit/mutex@1.1.1': {}
@@ -11684,6 +11687,10 @@ snapshots:
       '@bufbuild/protobuf': 1.10.1
 
   '@livekit/protocol@1.50.4':
+    dependencies:
+      '@bufbuild/protobuf': 1.10.1
+
+  '@livekit/protocol@1.51.0':
     dependencies:
       '@bufbuild/protobuf': 1.10.1
 

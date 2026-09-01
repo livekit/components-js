@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import type { Room, SendTextOptions } from 'livekit-client';
+import type { Participant, Room, SendTextOptions } from 'livekit-client';
 import { compareVersions, DataStreamError, DataStreamErrorReason, RoomEvent } from 'livekit-client';
 import {
   BehaviorSubject,
@@ -59,17 +59,20 @@ export type ChatOptions = {
 const topicSubjectMap: WeakMap<Room, Map<string, Subject<ReceivedChatMessage>>> = new WeakMap();
 const streamIdToAttachments = new Map<
   string /* stream id */,
-  Map<
-    string /* attachment id */,
-    Future<
-      {
-        fileName: string;
-        mimeType: string;
-        buffer: Array<Uint8Array>;
-      },
-      Error
-    >
-  >
+  {
+    senderIdentity: string;
+    attachments: Map<
+      string /* attachment id */,
+      Future<
+        {
+          fileName: string;
+          mimeType: string;
+          buffer: Array<Uint8Array>;
+        },
+        Error
+      >
+    >;
+  }
 >();
 
 function isIgnorableChatMessage(msg: ReceivedChatMessage | LegacyReceivedChatMessage) {
@@ -110,12 +113,18 @@ export function setupChat(room: Room, options?: ChatOptions) {
       // Store a future for each attachment to be later resolved once the corresponding file data
       // stream completes.
       const attachments = new Map(
-        (attachedStreamIds ?? []).map((id) => [
-          id,
-          new Future<{ fileName: string; mimeType: string; buffer: Array<Uint8Array> }, Error>(),
-        ]),
+        (attachedStreamIds ?? []).map((id) => {
+          const future = new Future<
+            { fileName: string; mimeType: string; buffer: Array<Uint8Array> },
+            Error
+          >();
+          // Ignore emitting `unhandledRejection` if the promise rejects before
+          // the attachments `concatMap` switches to this promise.
+          future.promise.catch(() => {});
+          return [id, future] as const;
+        }),
       );
-      streamIdToAttachments.set(id, attachments);
+      streamIdToAttachments.set(id, { senderIdentity: participantInfo.identity, attachments });
 
       const streamObservable = from(reader).pipe(
         scan((acc: string, chunk: string) => {
@@ -182,8 +191,8 @@ export function setupChat(room: Room, options?: ChatOptions) {
     // has initialized the attachment map (per client SDK sending implementation)
     room.registerByteStreamHandler(topic, async (reader) => {
       const { id: attachmentStreamId } = reader.info;
-      const foundStreamAttachmentPair = Array.from(streamIdToAttachments).find(([, attachments]) =>
-        attachments.has(attachmentStreamId),
+      const foundStreamAttachmentPair = Array.from(streamIdToAttachments).find(([, entry]) =>
+        entry.attachments.has(attachmentStreamId),
       );
       if (!foundStreamAttachmentPair) {
         return;
@@ -202,12 +211,12 @@ export function setupChat(room: Room, options?: ChatOptions) {
         // pending future leaks its `streamIdToAttachments` entry.
         streamIdToAttachments
           .get(streamId)
-          ?.get(attachmentStreamId)
+          ?.attachments.get(attachmentStreamId)
           ?.reject?.(error instanceof Error ? error : new Error(String(error)));
         return;
       }
 
-      const attachment = streamIdToAttachments.get(streamId)?.get(attachmentStreamId);
+      const attachment = streamIdToAttachments.get(streamId)?.attachments.get(attachmentStreamId);
       if (!attachment) {
         return;
       }
@@ -317,6 +326,26 @@ export function setupChat(room: Room, options?: ChatOptions) {
     }
   };
 
+  const handleParticipantDisconnected = (participant: Participant) => {
+    for (const { senderIdentity, attachments } of streamIdToAttachments.values()) {
+      if (senderIdentity !== participant.identity) {
+        continue;
+      }
+      for (const attachment of attachments.values()) {
+        // A byte stream that never opened has no controller livekit-client
+        // could error - settle it here so the message pipeline reaches a
+        // terminal state instead of hanging. Settled futures ignore this.
+        attachment.reject?.(
+          new DataStreamError(
+            `Participant ${participant.identity} disconnected before sending all attachments`,
+            DataStreamErrorReason.AbnormalEnd,
+          ),
+        );
+      }
+    }
+  };
+  room.on(RoomEvent.ParticipantDisconnected, handleParticipantDisconnected);
+
   function destroy() {
     onDestroyObservable.next();
     onDestroyObservable.complete();
@@ -324,6 +353,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
     topicSubjectMap.delete(room);
     room.unregisterTextStreamHandler(topic);
     room.unregisterByteStreamHandler(topic);
+    room.off(RoomEvent.ParticipantDisconnected, handleParticipantDisconnected);
   }
   room.once(RoomEvent.Disconnected, destroy);
 

@@ -34,7 +34,6 @@ function createFakeRoom() {
   return {
     room,
     registerTextStreamHandler,
-    unregisterTextStreamHandler,
     disconnect: () => disconnectListeners.forEach((listener) => listener()),
     push: (topic: string, reader: unknown) => handlers.get(topic)?.(reader, { identity: 'agent' }),
   };
@@ -49,16 +48,19 @@ function fakeReader(id: string, chunks: string[]) {
   };
 }
 
+/** `from(reader)` walks the async iterator, so emissions land a few microtasks later. */
+const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
+
 const TOPIC = 'lk.transcription';
 
 describe('setupTextStream', () => {
-  it('keeps one observable per topic across a disconnect, so a later subscriber shares the handler', () => {
+  it('reuses one observable per room and topic across disconnect/reconnect', () => {
     const { room, registerTextStreamHandler, disconnect } = createFakeRoom();
 
-    // A consumer subscribes while connected.
+    // A consumer subscribes while connected, then the room disconnects and
+    // `useTextStream` drops the subscription.
     const first = setupTextStream(room, TOPIC);
-    first.subscribe().unsubscribe(); // disconnect makes every consumer unsubscribe
-
+    first.subscribe().unsubscribe();
     disconnect();
     registerTextStreamHandler.mockClear();
 
@@ -77,19 +79,31 @@ describe('setupTextStream', () => {
     subB.unsubscribe();
   });
 
-  it('clears buffered streams on disconnect', async () => {
-    const { room, disconnect, push } = createFakeRoom();
-    const emitted: number[] = [];
+  it('caches per room instance, so a second room gets its own observable', () => {
+    const a = createFakeRoom();
+    const b = createFakeRoom();
+
+    expect(setupTextStream(a.room, TOPIC)).not.toBe(setupTextStream(b.room, TOPIC));
+  });
+
+  it('starts each subscription window with an empty buffer', async () => {
+    const { room, push } = createFakeRoom();
 
     const stream = setupTextStream(room, TOPIC);
-    const sub = stream.subscribe((streams) => emitted.push(streams.length));
-
+    const before: number[] = [];
+    const firstSub = stream.subscribe((streams) => before.push(streams.length));
     await push(TOPIC, fakeReader('stream-1', ['hello']));
-    await Promise.resolve();
+    await flush();
+    expect(before.at(-1)).toBe(1);
+    firstSub.unsubscribe();
 
-    disconnect();
+    // Reconnect: the buffer from the previous window must not leak into this one.
+    const after: number[] = [];
+    const secondSub = stream.subscribe((streams) => after.push(streams.length));
+    await push(TOPIC, fakeReader('stream-2', ['world']));
+    await flush();
 
-    expect(emitted.at(-1)).toBe(0);
-    sub.unsubscribe();
+    expect(after).toEqual([1]);
+    secondSub.unsubscribe();
   });
 });

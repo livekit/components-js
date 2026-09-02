@@ -1,4 +1,4 @@
-import { RoomEvent, type Room, type TextStreamInfo } from 'livekit-client';
+import { type Room, type TextStreamInfo } from 'livekit-client';
 import { from, scan, Subject, type Observable } from 'rxjs';
 import { share, tap } from 'rxjs/operators';
 import { ParticipantAgentAttributes } from '../helper';
@@ -9,47 +9,25 @@ export interface TextStreamData {
   streamInfo: TextStreamInfo;
 }
 
-// Singleton getters for lazy initialization
-let observableCacheInstance: Map<string, Observable<TextStreamData[]>> | null = null;
-let roomInstanceMapInstance: WeakMap<Room, string> | null = null;
-let nextRoomId = 0;
+// One observable per room and topic. The outer map is weak so a room that is no
+// longer referenced takes its observables with it, while a reused room keeps
+// them across connect/disconnect cycles.
+const observableCache = new WeakMap<Room, Map<string, Observable<TextStreamData[]>>>();
 
-// Get or create the observable cache
-function getObservableCache(): Map<string, Observable<TextStreamData[]>> {
-  if (!observableCacheInstance) {
-    observableCacheInstance = new Map<string, Observable<TextStreamData[]>>();
+function getTopicCache(room: Room): Map<string, Observable<TextStreamData[]>> {
+  let topicCache = observableCache.get(room);
+  if (!topicCache) {
+    topicCache = new Map<string, Observable<TextStreamData[]>>();
+    observableCache.set(room, topicCache);
   }
-  return observableCacheInstance;
-}
-
-// Get or create the room instance map
-function getRoomInstanceMap(): WeakMap<Room, string> {
-  if (!roomInstanceMapInstance) {
-    roomInstanceMapInstance = new WeakMap<Room, string>();
-  }
-  return roomInstanceMapInstance;
-}
-
-// Helper to generate cache key
-function getCacheKey(room: Room, topic: string): string {
-  const instanceMap = getRoomInstanceMap();
-
-  // Get or create a unique ID for this room instance
-  let roomId = instanceMap.get(room);
-  if (!roomId) {
-    roomId = `room_${nextRoomId++}`;
-    instanceMap.set(room, roomId);
-  }
-
-  return `${roomId}:${topic}`;
+  return topicCache;
 }
 
 export function setupTextStream(room: Room, topic: string): Observable<TextStreamData[]> {
-  const cacheKey = getCacheKey(room, topic);
-  const observableCache = getObservableCache();
+  const topicCache = getTopicCache(room);
 
   // Check if we already have an observable for this room and topic
-  const existingObservable = observableCache.get(cacheKey);
+  const existingObservable = topicCache.get(topic);
   if (existingObservable) {
     return existingObservable;
   }
@@ -63,6 +41,10 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
   const sharedObservable = textStreamsSubject.pipe(
     tap({
       subscribe: () => {
+        // `share()` resets on refcount zero, so this runs once per subscription
+        // window: on the first subscriber, and again after every reconnect on a
+        // reused room. Each window starts from an empty buffer.
+        textStreams = [];
         room.registerTextStreamHandler(topic, async (reader, participantInfo) => {
           // Create an observable from the reader
           const streamObservable = from(reader).pipe(
@@ -118,19 +100,7 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
     share(),
   );
 
-  observableCache.set(cacheKey, sharedObservable);
-
-  // Reset the buffer when the room disconnects, but keep the cached observable.
-  // The subject is never completed and registration is refcounted by the `tap`
-  // above, so this observable stays usable on a reused room instance. Evicting
-  // it here would let a caller that arrives after the disconnect build a *second*
-  // observable for the same topic while an existing consumer still holds the
-  // first — on reconnect both re-register and livekit-client throws
-  // `DataStreamError: A text stream handler for topic "..." has already been set`.
-  room.on(RoomEvent.Disconnected, () => {
-    textStreams = [];
-    textStreamsSubject.next([]);
-  });
+  topicCache.set(topic, sharedObservable);
 
   return sharedObservable;
 }

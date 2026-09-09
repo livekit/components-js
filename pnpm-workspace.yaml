@@ -29,6 +29,8 @@ minimumReleaseAgeExclude:
   - js-yaml@4.3.0 || 4.3.1 || 4.3.2
   # Renovate security update: postcss@8.5.23
   - postcss@8.5.23
+  # Renovate security update: vitest@4.1.11
+  - vitest@4.1.11
 
 overrides:
   '@typescript-eslint/eslint-plugin': ^8.58.0

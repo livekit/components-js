@@ -34,7 +34,7 @@ export const StartMediaButton: (
 
     return (
       <button ref={ref} style={style} {...restProps}>
-        {label ?? `Start ${!canPlayAudio ? 'Audio' : 'Video'}`}
+        {label ?? `Включить ${!canPlayAudio ? 'Звук' : 'Видео'}`}
       </button>
     );
   },

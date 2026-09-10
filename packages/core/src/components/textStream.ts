@@ -2,6 +2,7 @@ import { RoomEvent, type Room, type TextStreamInfo } from 'livekit-client';
 import { from, scan, Subject, type Observable } from 'rxjs';
 import { share, tap } from 'rxjs/operators';
 import { ParticipantAgentAttributes } from '../helper';
+import { log } from '../logger';
 
 export interface TextStreamData {
   text: string;
@@ -74,40 +75,49 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
           const isTranscription = !!reader.info.attributes?.[segmentAttribute];
 
           // Subscribe to the stream and update our array when new chunks arrive
-          streamObservable.subscribe((accumulatedText) => {
-            // Find and update the stream in our array
-            const index = textStreams.findIndex(
-              (stream) =>
-                stream.streamInfo.id === reader.info.id ||
-                (isTranscription &&
-                  stream.streamInfo.attributes?.[segmentAttribute] ===
-                    reader.info.attributes?.[segmentAttribute]),
-            );
-            if (index !== -1) {
-              textStreams[index] = {
-                ...textStreams[index],
-                text: accumulatedText,
-                // Carry the latest streamInfo forward. Transcription updates for a
-                // segment arrive as separate streams sharing the same lk.segment_id;
-                // keeping the original streamInfo would freeze attributes that change
-                // over the segment's lifetime — notably lk.transcription_final flipping
-                // "false" -> "true" on the final user STT result.
-                streamInfo: reader.info,
-              };
+          streamObservable.subscribe({
+            next: (accumulatedText) => {
+              // Find and update the stream in our array
+              const index = textStreams.findIndex(
+                (stream) =>
+                  stream.streamInfo.id === reader.info.id ||
+                  (isTranscription &&
+                    stream.streamInfo.attributes?.[segmentAttribute] ===
+                      reader.info.attributes?.[segmentAttribute]),
+              );
+              if (index !== -1) {
+                textStreams[index] = {
+                  ...textStreams[index],
+                  text: accumulatedText,
+                  // Carry the latest streamInfo forward. Transcription updates for a
+                  // segment arrive as separate streams sharing the same lk.segment_id;
+                  // keeping the original streamInfo would freeze attributes that change
+                  // over the segment's lifetime — notably lk.transcription_final flipping
+                  // "false" -> "true" on the final user STT result.
+                  streamInfo: reader.info,
+                };
 
-              // Emit the updated array
-              textStreamsSubject.next([...textStreams]);
-            } else {
-              // Handle case where stream ID wasn't found (new stream)
-              textStreams.push({
-                text: accumulatedText,
-                participantInfo,
-                streamInfo: reader.info,
-              });
+                // Emit the updated array
+                textStreamsSubject.next([...textStreams]);
+              } else {
+                // Handle case where stream ID wasn't found (new stream)
+                textStreams.push({
+                  text: accumulatedText,
+                  participantInfo,
+                  streamInfo: reader.info,
+                });
 
-              // Emit the updated array with the new stream
-              textStreamsSubject.next([...textStreams]);
-            }
+                // Emit the updated array with the new stream
+                textStreamsSubject.next([...textStreams]);
+              }
+            },
+            error: (error) => {
+              // A stream that ends abnormally (e.g. the sending participant
+              // disconnected mid-stream) has already delivered its chunks through
+              // `next`; keep the accumulated text instead of letting RxJS rethrow
+              // the error globally as an uncaught exception.
+              log.debug('text stream ended abnormally', error);
+            },
           });
         });
       },

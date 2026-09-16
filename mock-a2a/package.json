@@ -1,0 +1,31 @@
+{
+  "name": "mock-a2a",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Mock LiveKit agent-run endpoint (native binding + A2A v1.0.1 projection) for client SDK development",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node --watch --experimental-strip-types --disable-warning=ExperimentalWarning --env-file-if-exists=.env src/server.ts",
+    "start": "node --experimental-strip-types --disable-warning=ExperimentalWarning --env-file-if-exists=.env src/server.ts",
+    "typecheck": "tsc --noEmit",
+    "token": "node --experimental-strip-types --disable-warning=ExperimentalWarning --env-file-if-exists=.env scripts/token.ts",
+    "smoke": "node --experimental-strip-types --disable-warning=ExperimentalWarning --env-file-if-exists=.env scripts/client.ts",
+    "format:write": "prettier --write \"{src,scripts}/**/*.ts\" README.md",
+    "format:check": "prettier --check \"{src,scripts}/**/*.ts\" README.md"
+  },
+  "dependencies": {
+    "@livekit/protocol": "1.51.0",
+    "express": "^5.2.1",
+    "livekit-server-sdk": "^2.18.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^24.0.0",
+    "prettier": "^3.8.1",
+    "typescript": "5.8.2"
+  }
+}

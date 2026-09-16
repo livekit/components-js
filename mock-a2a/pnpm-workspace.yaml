@@ -1,0 +1,7 @@
+# This package deliberately sits outside the repo's workspace (the root
+# pnpm-workspace.yaml globs only packages/*, examples/*, docs/*, tooling/*).
+#
+# Declaring an empty workspace here makes mock-a2a its own root, so pnpm stops walking up
+# the tree. Without this file, `pnpm install` run from here finds the repo root and
+# reinstalls all 11 workspace projects instead of this one.
+packages: []

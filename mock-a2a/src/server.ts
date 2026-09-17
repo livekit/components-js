@@ -1,26 +1,27 @@
 /**
- * Mock LiveKit agent-run endpoint.
+ * Mock LiveKit expert, served over A2A.
  *
- * Serves the native binding from "Delegation Model with A2A v2" and an A2A v1.0.1
- * projection of it, over one endpoint subtree, gated by a real LiveKit access token.
- * See README.md for the routes, the scenario triggers, and the places where this mock
- * had to assume something the design doc leaves open.
+ * Implements "LiveKit Agent Session Extension for A2A": plain A2A, plus the extension's
+ * four metadata keys and two data-part payloads when the client activates it with the
+ * A2A-Extensions header. See README.md for the routes, the scenario triggers, and what
+ * this mock had to assume.
  */
 
 import express from 'express';
 import type { NextFunction, Request, Response } from 'express';
+import { a2aRouter, cardRouter } from './a2a.ts';
 import { bearerAuth } from './auth.ts';
-import { a2aRouter, cardRouter } from './bindings/a2a.ts';
-import { nativeRouter } from './bindings/native.ts';
 import { config } from './config.ts';
-import { SessionStore } from './sessions.ts';
+import { ConversationStore } from './conversations.ts';
+import { EXTENSION_URI } from './extension.ts';
+import { rpcStatus } from './a2a-types.ts';
 
 export function createApp(): express.Express {
   const app = express();
   app.disable('x-powered-by');
   app.disable('etag');
 
-  const store = new SessionStore();
+  const store = new ConversationStore();
 
   // A2A v1.0.1 prefers application/a2a+json. Express 5 leaves req.body as `undefined`
   // (not {}) for a content type the parser does not claim, which turns a validation
@@ -40,12 +41,9 @@ export function createApp(): express.Express {
 
   app.use(bearerAuth());
   app.use(a2aRouter(store));
-  app.use(nativeRouter(store));
 
   app.use((req: Request, res: Response) => {
-    res.status(404).json({
-      error: { code: 'NOT_FOUND', message: `no route for ${req.method} ${req.path}` },
-    });
+    res.status(404).json(rpcStatus(5, `no route for ${req.method} ${req.path}`, 'ROUTE_NOT_FOUND'));
   });
 
   app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
@@ -54,9 +52,7 @@ export function createApp(): express.Express {
       res.end();
       return;
     }
-    res.status(500).json({
-      error: { code: 'INTERNAL', message: (err as Error)?.message ?? 'unknown error' },
-    });
+    res.status(500).json(rpcStatus(13, (err as Error)?.message ?? 'unknown error'));
   });
 
   return app;
@@ -65,21 +61,22 @@ export function createApp(): express.Express {
 function describe(): string {
   const lines = [
     `mock-a2a listening on http://localhost:${config.port}`,
-    `  endpoints        ${config.endpoints.join(', ')}`,
-    `  scenario         ${config.defaultScenario} (override with ?scenario=, metadata.mockScenario, or /fail //ask //slow ...)`,
-    `  event delay      ${config.eventDelayMs}ms`,
-    `  default values   ${config.omitDefaults ? 'OMITTED (strict canonical JSON)' : 'emitted explicitly'}`,
-    `  grant required   ${config.requireGrant || '(signature and expiry only)'}`,
+    `  endpoints     ${config.endpoints.join(', ')}`,
+    `  extension     ${EXTENSION_URI}`,
+    `                active per-request, when the client sends it in A2A-Extensions`,
+    `  scenario      ${config.defaultScenario} (override with ?scenario=, metadata.mockScenario, or /ask //say //end ...)`,
+    `  event delay   ${config.eventDelayMs}ms`,
+    `  say() text    ${config.a2aGreeting ? JSON.stringify(config.a2aGreeting) : '(disabled)'}`,
+    `  grant needed  ${config.requireGrant || '(signature and expiry only)'}`,
     '',
     'routes',
   ];
   for (const endpoint of config.endpoints) {
     lines.push(
-      `  POST /${endpoint}                       ours: RunRequest -> SSE of RunResponse`,
-      `  POST /${endpoint}:cancel                ours: CancelRunRequest`,
-      `  POST /${endpoint}/message:stream        A2A  SendMessageRequest -> SSE`,
-      `  POST /${endpoint}/message:send          A2A  SendMessageRequest -> Task`,
-      `  POST /${endpoint}/tasks/{id}:cancel     A2A  CancelTask -> Task`,
+      `  POST /${endpoint}/v1/message:stream        SendMessageRequest -> SSE`,
+      `  POST /${endpoint}/v1/message:send          SendMessageRequest -> Task`,
+      `  GET  /${endpoint}/v1/tasks/{id}            -> Task`,
+      `  POST /${endpoint}/v1/tasks/{id}:cancel     -> Task`,
       `  GET  /${endpoint}/.well-known/agent-card.json   the card (no auth)`,
     );
   }

@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@livekit/protocol':
-        specifier: 1.51.0
-        version: 1.51.0
       express:
         specifier: ^5.2.1
         version: 5.2.1
@@ -38,9 +35,6 @@ packages:
 
   '@livekit/protocol@1.48.0':
     resolution: {integrity: sha512-fYHYgltH6YavAsokl3qsHLkBdQeKCl4UORVTub5crS3t8JtKFZ0uinHDFQ+XXdNKS6Ub9gcOjV+UHcDiqnWXoQ==}
-
-  '@livekit/protocol@1.51.0':
-    resolution: {integrity: sha512-kEDEDaFvIcp5VlYBromdSKMJMEJKfPvXPfEaJPdEz1Qgo84gZAoLF2g58CcMlVYGsjrwE5XYgQxRS5B7KuEj3w==}
 
   '@types/body-parser@1.19.6':
     resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
@@ -355,10 +349,6 @@ snapshots:
   '@bufbuild/protobuf@1.10.1': {}
 
   '@livekit/protocol@1.48.0':
-    dependencies:
-      '@bufbuild/protobuf': 1.10.1
-
-  '@livekit/protocol@1.51.0':
     dependencies:
       '@bufbuild/protobuf': 1.10.1
 

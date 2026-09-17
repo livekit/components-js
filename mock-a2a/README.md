@@ -1,19 +1,19 @@
 # mock-a2a
 
-A mock LiveKit agent-run endpoint, for developing a client SDK against the protocol in
-_Delegation Model with A2A v2_ before the framework side of it exists.
+A mock LiveKit expert served over A2A, for developing a client SDK against the
+**LiveKit Agent Session Extension for A2A** before the framework side of it ships.
 
-It serves both bindings the design doc defines over one endpoint subtree, gated by a real
-LiveKit access token, and answers every turn with a canned scripted response you can steer
-from the chat box.
+The extension is plain A2A plus four metadata keys and two data-part payloads. It adds no
+RPC methods and no task states. This mock implements both halves of that promise:
 
-- **Native binding** — `POST /<endpoint>`, `RunRequest` in, server-sent `RunResponse`
-  events out, terminated by exactly one `RunComplete`.
-- **A2A binding** — the same engine projected onto **A2A v1.0.1**, so a third-party A2A
-  client can drive the same agent.
+- **activate it** (`A2A-Extensions: https://livekit.io/a2a/ext/agent-session/v1`) and you
+  get typed chat items, `lk/verbatim`, `lk/directive`, delegations with a conversation
+  attached, and `close`;
+- **don't**, and the same task streams as ordinary A2A — text parts on `WORKING` statuses
+  and an `answer` artifact — which is what a stock `a2a-sdk` client sees.
 
-Nothing here talks to LiveKit Cloud. The api key/secret are only used to verify the
-tokens your client presents.
+Nothing here talks to LiveKit Cloud; the api key/secret only verify the tokens your client
+presents.
 
 ## Quick start
 
@@ -27,289 +27,264 @@ pnpm dev                  # http://localhost:8787
 In another terminal:
 
 ```bash
-pnpm smoke                # drives both bindings and every error path; exits non-zero on failure
+pnpm smoke                # drives every behavior in the spec; exits non-zero on failure
 pnpm token                # print a token to paste into curl
 ```
 
-`pnpm install` works here without `--ignore-workspace` because this package carries its own
-`pnpm-workspace.yaml` with an empty `packages:` list, which stops pnpm walking up to the
-repo root. Without it, `pnpm install` run from this directory reinstalls all 11 workspace
-projects instead of this one.
-
-There is no build step: the server runs straight off TypeScript source via
-`node --experimental-strip-types`, the same way `packages/shadcn/scripts/*` do. Run
-`pnpm typecheck` for `tsc --noEmit`.
+`pnpm install` needs no flags: this package carries its own `pnpm-workspace.yaml` with an
+empty `packages:` list, which stops pnpm walking up to the repo root. There is no build
+step — the server runs straight off TypeScript via `node --experimental-strip-types`.
+`pnpm typecheck` runs `tsc --noEmit`.
 
 ## Routes
 
 ```
-POST /<endpoint>                            ours: RunRequest -> SSE of RunResponse
-POST /<endpoint>:cancel                     ours: CancelRunRequest -> 202
-POST /<endpoint>/message:stream             A2A  SendMessageRequest -> SSE of StreamResponse
-POST /<endpoint>/message:send               A2A  SendMessageRequest -> Task
-POST /<endpoint>/tasks/<id>:cancel          A2A  CancelTask -> Task
-GET  /<endpoint>/tasks/<id>:subscribe       A2A  501, not implemented
-GET  /<endpoint>/.well-known/agent-card.json    the card, where the doc places it (no auth)
-GET  /.well-known/agent-card.json               the card, host-rooted per RFC 8615 (no auth)
+POST /<endpoint>/v1/message:stream        SendMessageRequest -> SSE of StreamResponse
+POST /<endpoint>/v1/message:send          SendMessageRequest -> Task
+GET  /<endpoint>/v1/tasks/<id>            -> Task
+POST /<endpoint>/v1/tasks/<id>:cancel     CancelTaskRequest -> Task
+GET  /<endpoint>/.well-known/agent-card.json    the card (no auth)
+GET  /.well-known/agent-card.json               the card, host-rooted (no auth)
 ```
 
-`<endpoint>` defaults to `fare-desk`; set `MOCK_ENDPOINTS` to change or add more. Anything
-else 404s, so a typo in your client's URL fails loudly.
+`<endpoint>` defaults to `fare-desk` (`MOCK_ENDPOINTS` to change). The card's interface url
+is `<base>/<endpoint>/v1`, so an A2A client that reads the card and appends
+`/message:stream` lands on the right path without knowing about the prefix.
 
-Both cards are served because RFC 8615 well-known URIs are host-rooted — a conformant A2A
-client fetches the second — while the design doc places the card under the endpoint
-subtree, so a client built to the doc asks for the first.
+There is no `tasks/{id}:subscribe` — the spec does not define one, so it 404s.
 
-## Auth
+## What a run looks like
 
-`Authorization: Bearer <livekit-jwt>` on every route except the two card paths. The token's
-signature and expiry are verified with `TokenVerifier` against `LIVEKIT_API_KEY` /
-`LIVEKIT_API_SECRET`; a bad, wrong-key or expired token gets a 401. The card is
-unauthenticated on purpose — it is what a client reads _before_ it has a token.
+Activated, the default `full` scenario:
 
-If the request body omits `sessionId`, the token's `video.room` grant stands in.
+```
+1. task            TASK_STATE_SUBMITTED
+2. statusUpdate    WORKING  [verbatim]  item=message              "Fetching data, please wait"
+3. statusUpdate    WORKING              item=function_call        (no text: a tool call)
+4. statusUpdate    WORKING              item=function_call        (no text: a progress report)
+5. statusUpdate    WORKING              item=message              "Checking Tuesday's seats now."
+6. statusUpdate    WORKING              item=function_call_output (no text: a tool result)
+7. statusUpdate    WORKING              item=message              "Tuesday 09:40 is open; ..."
+8. artifactUpdate  name="answer" lastChunk=true
+9. statusUpdate    COMPLETED            item=message (the answer), + lk/directive if any
+```
+
+The same task unactivated collapses to what a plain A2A client can use — frames 3, 4 and 6
+carry no relayed text, so they are not sent at all:
+
+```
+1. task            TASK_STATE_SUBMITTED
+2. statusUpdate    WORKING   "Fetching data, please wait"
+3. statusUpdate    WORKING   "Checking Tuesday's seats now."
+4. statusUpdate    WORKING   "Tuesday 09:40 is open; ..."
+5. artifactUpdate  name="answer" lastChunk=true
+6. statusUpdate    COMPLETED
+```
+
+Order is fixed: the `Task` first, zero or more `WORKING` statuses, the `answer` artifact
+for `COMPLETED` and `INPUT_REQUIRED`, then the terminal status. A stream that ends without
+a terminal status is a failure.
+
+## The extension
+
+| Key (`lk/…` is the URI + `/` + the name) | Rides on                                              | Value                   |
+| ---------------------------------------- | ----------------------------------------------------- | ----------------------- |
+| `lk/kind`                                | message metadata                                      | `delegation` \| `close` |
+| `lk/kind`                                | part metadata, request                                | `chat_ctx`              |
+| `lk/kind`                                | part metadata, event                                  | `chat_item`             |
+| `lk/verbatim`                            | **status message** metadata, or **artifact** metadata | `true`                  |
+| `lk/directive`                           | **event** metadata, `COMPLETED` only                  | `{kind, reason}`        |
+| `lk/reason`                              | `CancelTaskRequest` metadata                          | string                  |
+
+Three different carriers, which is the easiest thing to get wrong: `lk/verbatim` sits on
+`statusUpdate.status.message.metadata` or on `artifactUpdate.artifact.metadata`, while
+`lk/directive` sits on `statusUpdate.metadata` — a sibling of `status`, not inside it.
+
+Activation is per request and strict. Send the URI in `A2A-Extensions`, and the server
+echoes the header back; the extension is active only if it does. Unactivated, `lk/*` keys
+and data parts are ignored on the way in and never sent on the way out — if you send a
+`chat_ctx` part without the header, the server logs a warning, because a forgotten header
+silently degrades a delegation into a plain text turn.
+
+### Chat items
+
+`chat_ctx` is `{"items": [...]}`; a `chat_item` part is one bare item.
+
+```jsonc
+{ "id": "item_9a", "type": "message", "role": "user",
+  "content": ["my flight to Tokyo is delayed"], "created_at": 1789012345.1 }
+
+{ "id": "item_c3", "type": "function_call", "call_id": "c-1", "name": "check_availability",
+  "arguments": "{\"date\": \"2026-09-22\"}", "update_of": "c-1", "created_at": 1789012349.2 }
+
+{ "id": "item_o1", "type": "function_call_output", "call_id": "c-1",
+  "name": "check_availability", "output": "{\"open\": true}", "is_error": false }
+
+{ "id": "item_h1", "type": "agent_handoff", "old_agent_id": "fare-desk",
+  "new_agent_id": "baggage-desk" }
+```
+
+This is **not** the canonical JSON of `livekit.agent.ChatContext.ChatItem`, though the spec
+says the protobuf will converge on it. Today they differ in every respect: a `type`
+discriminator instead of a protobuf oneof, `"user"` instead of `"USER"`, `content` as plain
+strings instead of `{text}` objects, and `created_at` as Unix **seconds** (fractional)
+instead of an RFC3339 `createdAt`. `src/chat-items.ts` is what gets deleted when they
+converge.
+
+The expert **deduplicates by item id**: send the whole conversation every time, and only
+the items it has not seen are added, in `created_at` order.
 
 ## Scenarios
 
-Every response path is reachable without restarting the server. Precedence:
+Selection order: `?scenario=` → `"mockScenario"` in the request metadata → a keyword as the
+first word of the text → `MOCK_SCENARIO` → `full`.
 
-1. `?scenario=<name>` on the query string
-2. `"mockScenario": "<name>"` inside the request's `metadata` JSON
-3. a keyword as the first word of the input text
-4. `MOCK_SCENARIO`, default `full`
+| keyword     | scenario             | what you get                                                                         |
+| ----------- | -------------------- | ------------------------------------------------------------------------------------ |
+| _(none)_    | `full`               | tool call, progress report, tool result, answer message, `COMPLETED`                 |
+| `/plain`    | `plain`              | one answer message                                                                   |
+| `/say`      | `verbatim`           | a `session.say()`-style message and a **verbatim answer artifact**                   |
+| `/end`      | `directive-end`      | `COMPLETED` carrying `lk/directive` `{end_session, caller_done}`                     |
+| `/escalate` | `directive-escalate` | `COMPLETED` carrying `lk/directive` `{escalate, …}`                                  |
+| `/ask`      | `input-required`     | `INPUT_REQUIRED` — terminal, and it **does** carry an answer artifact (the question) |
+| `/fail`     | `failed`             | `FAILED` — **no** artifact; the terminal status carries the reason as text           |
+| `/slow`     | `slow`               | 2s between items, so a `CancelTask` has somewhere to land                            |
+| `/handoff`  | `handoff`            | an `agent_handoff` item, which carries no text                                       |
+| `/toolonly` | `tool-only`          | a call and a result, nothing said on the way                                         |
+| `/chunks`   | `chunked`            | the answer artifact split across several `append` chunks                             |
 
-| keyword     | scenario         | what you get                                                                     |
-| ----------- | ---------------- | -------------------------------------------------------------------------------- |
-| _(none)_    | `full`           | tool call, a progress report, the tool result, an assistant message, `COMPLETED` |
-| `/plain`    | `plain`          | one assistant message, `COMPLETED`                                               |
-| `/typing`   | `typing`         | repeated `message` events sharing one id with growing text, `COMPLETED`          |
-| `/toolonly` | `tool-only`      | a tool call and result, no message, `COMPLETED`                                  |
-| `/handoff`  | `handoff`        | message, `AgentHandoff`, message, `COMPLETED`                                    |
-| `/slow`     | `slow`           | 2s between events, so a cancel has somewhere to land                             |
-| `/fail`     | `failed`         | `FAILED` with `error.code = TEXT_HANDLER_ERROR`                                  |
-| `/cancelme` | `canceled`       | `CANCELED` — the expert stopping its own work                                    |
-| `/ask`      | `input-required` | `INPUT_REQUIRED` carrying the question                                           |
-| `/stale`    | `stale`          | `FAILED` with `error.code = SESSION_STATE_NOT_FOUND`                             |
-| —           | `bare-message`   | A2A only: replies with one `message` frame and opens no task                     |
+`close` is not a scenario — it is `lk/kind: close` on the message.
+
+Because the keyword is read from the text part, a delegation that wants an **empty**
+instruction should select its scenario with `?scenario=` instead.
+
+## Recipes
 
 ```bash
 TOKEN=$(pnpm -s token)
+EXT='https://livekit.io/a2a/ext/agent-session/v1'
+V1=http://localhost:8787/fare-desk/v1
 
-# a full turn
-curl -N -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
-  -d '{"sessionId":"s1","requestId":"r1","agentName":"fare-desk","metadata":"{}","text":"how much to SFO?"}' \
-  http://localhost:8787/fare-desk
+# a person's message, extension active (-i to see the echoed A2A-Extensions header)
+curl -iN -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/a2a+json' \
+     -H "A2A-Extensions: $EXT" -H 'A2A-Version: 1.0' \
+     -d '{"message":{"messageId":"m1","contextId":"c1","role":"ROLE_USER",
+          "parts":[{"text":"how much to SFO?"}]}}' \
+     "$V1/message:stream"
 
-# force a failure
-curl -N -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
-  -d '{"sessionId":"s1","requestId":"r2","agentName":"fare-desk","metadata":"{}","text":"/fail"}' \
-  http://localhost:8787/fare-desk
-
-# a delegation instead of a text turn; an empty instruction means
-# "answer the last thing the user asked", read out of chatCtx
-curl -N -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
-  -d '{"sessionId":"s2","requestId":"r3","agentName":"fare-desk","metadata":"{}",
-       "delegation":{"instruction":"","chatCtx":{"items":[
-         {"message":{"id":"u1","role":"USER","content":[{"text":"how much to SFO?"}]}}]}}}' \
-  http://localhost:8787/fare-desk
-
-# cancel a run (best-effort; always 202, with a `stopped` flag)
-curl -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
-  -d '{"sessionId":"s1","requestId":"r1","reason":"user hung up"}' \
-  http://localhost:8787/fare-desk:cancel
-
-# the A2A binding
+# the same, unactivated: text parts and the answer artifact only
 curl -N -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/a2a+json' \
-  -d '{"message":{"messageId":"m1","contextId":"s3","role":"ROLE_USER",
-       "parts":[{"text":"how much to SFO?"}]},
-       "metadata":{"livekit.request_id":"r4"}}' \
-  http://localhost:8787/fare-desk/message:stream
+     -d '{"message":{"messageId":"m2","contextId":"c2","role":"ROLE_USER",
+          "parts":[{"text":"how much to SFO?"}]}}' \
+     "$V1/message:stream"
+
+# a delegation: an instruction plus the caller's conversation
+curl -N -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/a2a+json' \
+     -H "A2A-Extensions: $EXT" \
+     -d "{\"message\":{\"messageId\":\"m3\",\"contextId\":\"c3\",\"role\":\"ROLE_USER\",
+          \"metadata\":{\"$EXT/kind\":\"delegation\"},
+          \"parts\":[{\"text\":\"find the change fee\"},
+                     {\"data\":{\"items\":[{\"id\":\"item_9a\",\"type\":\"message\",
+                        \"role\":\"user\",\"content\":[\"my flight is delayed\"],
+                        \"created_at\":1789012345.1}]},
+                      \"metadata\":{\"$EXT/kind\":\"chat_ctx\"}}]}}" \
+     "$V1/message:stream"
+
+# end the conversation
+curl -N -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/a2a+json' \
+     -H "A2A-Extensions: $EXT" \
+     -d "{\"message\":{\"messageId\":\"m4\",\"contextId\":\"c3\",\"role\":\"ROLE_USER\",
+          \"metadata\":{\"$EXT/kind\":\"close\"},\"parts\":[{\"text\":\"\"}]}}" \
+     "$V1/message:stream"
+
+# cancel a running task, with a reason
+curl -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/a2a+json' \
+     -d "{\"$EXT/reason\":\"the user interrupted\"}" \
+     "$V1/tasks/TASK_ID:cancel"
 
 curl -s http://localhost:8787/fare-desk/.well-known/agent-card.json | jq
 ```
 
-## What `message:stream` sends
-
-```
-1. task            TASK_STATE_SUBMITTED
-2. statusUpdate    TASK_STATE_WORKING   "Fetching data, please wait"    <- MOCK_A2A_GREETING
-3. statusUpdate    TASK_STATE_WORKING   "Checking the fare table..."    <- a progress report
-4. statusUpdate    TASK_STATE_WORKING   "Mock reply from fare-desk..."  <- the assistant message
-5. artifactUpdate  name="answer" lastChunk=true                         <- RunComplete.text
-6. statusUpdate    TASK_STATE_COMPLETED                                 <- ends the task
-```
-
-The greeting on frame 2 is a `TaskStatusUpdateEvent` carrying a message, **not** a bare
-`Message` frame, and that is forced by the spec rather than a preference. A2A v1.0.1
-s3.1.2 gives a stream exactly two mutually exclusive shapes:
-
-> "If the agent returns a `Task`, the stream MUST begin with the Task object, followed by
-> zero or more `TaskStatusUpdateEvent` or `TaskArtifactUpdateEvent` objects."
->
-> "If the agent returns a `Message`, the stream MUST contain exactly one `Message` object
-> and then close immediately."
-
-So a `Message` frame cannot precede a task: emitting one commits the whole turn to the
-taskless shape and requires the stream to end. The spec's own channel for an interim line
-is the status event -- "Agents attach Messages to status update events to inform clients
-about task progress, request additional input, or provide informational updates."
-
-To see the taskless shape instead -- one `Message` frame, no task, stream closes:
-
-```bash
-curl -N -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/a2a+json' \
-  -d '{"message":{"messageId":"m1","contextId":"s1","role":"ROLE_USER",
-       "parts":[{"text":"hi"}]}}' \
-  'http://localhost:8787/fare-desk/message:stream?scenario=bare-message'
-```
-
-Note what the projection drops, per the doc's own list of what A2A cannot carry: the tool
-call and its result do not appear above, only the _progress report_ does, because a
-`FunctionCall` has no A2A equivalent while a report's text does. Frame 5 is the one place
-`RunComplete.text` survives.
-
 ## Environment
 
-| variable                 | default                      | meaning                                                                 |
-| ------------------------ | ---------------------------- | ----------------------------------------------------------------------- |
-| `LIVEKIT_API_KEY`        | _required_                   | verifies presented tokens                                               |
-| `LIVEKIT_API_SECRET`     | _required_                   | verifies presented tokens                                               |
-| `PORT`                   | `8787`                       |                                                                         |
-| `MOCK_ENDPOINTS`         | `fare-desk`                  | comma-separated endpoint names to serve                                 |
-| `MOCK_AGENT_DESCRIPTION` | _(a fare-desk blurb)_        | published in the agent card                                             |
-| `MOCK_EVENT_DELAY_MS`    | `250`                        | pause between streamed events                                           |
-| `MOCK_SCENARIO`          | `full`                       | default scenario                                                        |
-| `MOCK_OMIT_DEFAULTS`     | `0`                          | serialize strictly-canonical protobuf JSON (see below)                  |
-| `MOCK_REQUIRE_GRANT`     | _(none)_                     | also require this `VideoGrant` field, e.g. `canManageAgentSession`      |
-| `MOCK_A2A_GREETING`      | `Fetching data, please wait` | text sent as the first status event on `message:stream`; empty disables |
-| `MOCK_HEARTBEAT_MS`      | `20000`                      | SSE keepalive comment interval                                          |
+| variable                 | default                      | meaning                                                            |
+| ------------------------ | ---------------------------- | ------------------------------------------------------------------ |
+| `LIVEKIT_API_KEY`        | _required_                   | verifies presented tokens                                          |
+| `LIVEKIT_API_SECRET`     | _required_                   | verifies presented tokens                                          |
+| `PORT`                   | `8787`                       |                                                                    |
+| `MOCK_ENDPOINTS`         | `fare-desk`                  | comma-separated endpoint names to serve                            |
+| `MOCK_AGENT_DESCRIPTION` | _(a fare-desk blurb)_        | the card's description and skill description                       |
+| `MOCK_EVENT_DELAY_MS`    | `250`                        | pause between produced items                                       |
+| `MOCK_SCENARIO`          | `full`                       | default scenario                                                   |
+| `MOCK_A2A_GREETING`      | `Fetching data, please wait` | a `session.say()` message at the top of every task; empty disables |
+| `MOCK_REQUIRE_GRANT`     | _(none)_                     | also require this `VideoGrant` field, e.g. `canManageAgentSession` |
+| `MOCK_HEARTBEAT_MS`      | `20000`                      | SSE keepalive comment interval                                     |
 
-Note that Node's `--env-file` does **not** override variables already in your shell, so
-`MOCK_SCENARIO=plain pnpm dev` wins over the value in `.env`.
+Node's `--env-file` does **not** override variables already in your shell, so
+`MOCK_SCENARIO=plain pnpm dev` beats the value in `.env`.
 
 ## Notes for whoever writes the client
 
-`src/protocol.ts` is the piece worth reading first — the client needs its mirror image, and
-`decodeRunResponse()` there is the reference reader. The traps, all verified against
-`@livekit/protocol@1.51.0` / `@bufbuild/protobuf@1.10.x`:
-
-- **Canonical protobuf JSON omits default values.** `RunComplete.State.COMPLETED = 0`, so a
-  strictly-canonical server sends **no `state` field at all** on the success path — and
-  `ChatRole.DEVELOPER = 0` likewise. A reader must treat absent `state` as `COMPLETED` and
-  absent `role` as `DEVELOPER`. This mock emits defaults explicitly by default because it
-  is kinder to develop against; set `MOCK_OMIT_DEFAULTS=1` to get the strict form and prove
-  your client handles it:
-
-  ```
-  MOCK_OMIT_DEFAULTS=0   "complete":{"state":"COMPLETED","text":"...","sessionState":{...}}
-  MOCK_OMIT_DEFAULTS=1   "complete":{"text":"...","sessionState":{...}}
-  ```
-
-- **The generated agent types are namespaced.** `AgentSession.ChatMessage` is
-  `livekit.agent.ChatMessage`; a top-level `import { ChatMessage } from '@livekit/protocol'`
-  gives you `livekit.ChatMessage` (room chat), which is a different message and fails
-  silently.
-- **`ChatMessage.content[]`'s oneof group is named `payload`,** not `content`. Writing
-  `{ content: [{ content: { case: 'text', value: 'hi' } }] }` serializes to
-  `{"content":[{}]}` with no error. `ChatContext.items[]`'s group is `item`;
-  `AgentSessionState`'s is `data`.
-- **`fromJson` throws on unknown fields** unless you pass `{ ignoreUnknownFields: true }`.
-- **`AgentSessionState.version` is a `uint64`** — a JSON string on the wire (`"2"`), a
-  `bigint` in memory, so `JSON.stringify` on a raw message throws. Both string and number
-  are accepted on read. `snapshot`/`delta` are base64; `createdAt` is an RFC3339 `Z` string.
-- **`bufbuild` v1 and v2 differ.** v1 (what `@livekit/protocol` uses) has
-  `msg.toJson({ emitDefaultValues })` and `Type.fromJson(json, { ignoreUnknownFields })`.
-  v2 is functional and renames `emitDefaultValues` to `alwaysEmitImplicit`.
-- **`EventSource` is unusable** for either binding — it is GET-only and both bindings POST.
-  Use `fetch` plus `response.body.getReader()`; `scripts/client.ts` has a frame parser that
-  handles multi-line `data:`, CRLF, and the `: ping` keepalive.
-- **Errors before the stream opens are status codes; errors after it opens are in-band.**
-  A malformed body is a 400, a duplicate live `requestId` is a 409, but anything that goes
-  wrong once headers are out arrives as a `RunComplete` with `state: FAILED`.
-
-The mock also enforces the rules the types do not carry, because your client has to be
-built against them:
-
-- exactly one `complete` event, and it is last;
-- runs of one conversation are taken one at a time in arrival order, so the second ask
-  sees what the first did;
-- a `requestId` that is already live fails with 409;
-- a cancel is best-effort, and a cancelled run still reports what it did.
-
-## Gaps in the design doc, and what this mock assumed
-
-Worth raising with the doc's authors rather than discovering later.
-
-1. **The A2A routes are written with a `/v1` prefix**, which is A2A **v0.3.0** vocabulary.
-   A2A v1.0.0 (2026-03-12) renumbered the REST binding and v1.0.1 (2026-05-28) is current.
-   This mock serves v1.0.1 and drops the prefix — which is not a departure from the doc's
-   design: v1.0.1 gives every RPC a tenant-prefixed additional binding
-   (`post: "/{tenant}/message:stream"`), so `/fare-desk/message:stream` **is** the spec's
-   `/{tenant}/message:stream` with `tenant` = the endpoint name, and `AgentInterface` has a
-   `tenant` field to declare it. The doc's endpoint-owns-a-subtree design is conformant as
-   written; only `/v1` was stale. The doc cites no A2A version and links no spec, which is
-   what made this ambiguous.
-2. **`RunComplete.State.COMPLETED = 0`**, so canonical JSON drops `state` exactly when a
-   run succeeds. A2A deliberately avoids this by reserving 0 for `TASK_STATE_UNSPECIFIED`;
-   the native protocol probably should too.
-3. **The native cancel has no route.** s3's table lists only the bare `POST /<endpoint>`,
-   the A2A paths and the card, while s2 defines `CancelRunRequest` and requires a cancel be
-   a separate request. This mock serves `POST /<endpoint>:cancel`, mirroring A2A's own
-   colon-verb style, and returns 202 with `{"stopped": bool}`.
-4. **How the LiveKit token travels is undefined.** s3 only notes that an auth scheme needs
-   a real `AgentCard`. Assumed `Authorization: Bearer`, and the published card declares an
-   HTTP bearer JWT scheme to match. Which grant should gate a run is also unstated;
-   `MOCK_REQUIRE_GRANT=canManageAgentSession` is available but off by default.
-5. **`livekit.chat_ctx` is not a URI** and would not survive A2A extension negotiation.
-   This mock keys the chat-context data part under
-   `https://livekit.io/a2a/chat-ctx/v1` in the part's `metadata`, declares that URI in
-   `Message.extensions` and in the card's `capabilities.extensions`, and accepts the bare
-   `livekit.chat_ctx` key as an alias.
-6. **Nothing mints the A2A task id**, and whether a `text` input should open a task or reply
-   with a bare `Message` is unstated. This mock always opens a task, so status and artifact
-   events are valid; use `?scenario=bare-message` to get the taskless shape.
-7. **There is no delta field on `RunResponse`**, so whether a server may stream partial
-   messages is undefined — and that decides whether a client can render incremental text at
-   all. The `typing` scenario re-emits one `ChatMessage` id with growing content, which is
-   an interpretation, not something the doc sanctions.
-8. **`INPUT_REQUIRED` needs a resumption story.** A2A v1.0.1 removed the `final` flag, so
-   the only signals are the state plus the stream closing. A follow-up
-   `message:stream` carrying `taskId` continues the conversation here; native has no
-   equivalent because it finds the conversation by `sessionId`.
+- **`EventSource` is unusable** — it is GET-only and `message:stream` is a POST. Use `fetch`
+  plus `response.body.getReader()`; `scripts/client.ts` has a frame parser that handles
+  multi-line `data:`, CRLF, and the `: ping` keepalive.
+- **`COMPLETED` does not guarantee an `answer` artifact.** A `close` task completes without
+  one. Read the artifact if it arrives; do not wait for it.
+- **`INPUT_REQUIRED` is terminal** and _does_ carry an artifact — the answer is the
+  question. Nothing resumes; the reply is a new task, optionally naming the pending
+  question in `referenceTaskIds`.
+- **A second message queues, it never cancels.** The `Task` event for it arrives
+  immediately — that is what lets a caller send it at all — but its work starts only once
+  the running task has answered. For barge-in, send `CancelTask` first.
+- **A cancelled task still reports what landed**, as a text part on the terminal status.
+- **A progress report changes shape with the caller.** In a delegation the report's own
+  words are the relayed text (one item). For a person's message the report carries no text
+  and is followed by an ordinary assistant message with the phrased version (two items).
+  A client that renders tool progress must handle both.
+- **`lk/verbatim` means say it as written.** A chat client shows all relayed text as-is
+  anyway; a voice agent phrases everything else in its own voice.
+- Extension keys are full URIs, so build them once:
+  `const key = (n) => 'https://livekit.io/a2a/ext/agent-session/v1/' + n`.
 
 ## Known limitations
 
-- State is in memory. Restarting the server forgets every conversation.
-- `tasks/{id}:subscribe` (A2A resubscribe) returns 501. The doc says we need it "neither
-  yet".
-- The A2A projection drops what A2A cannot carry, deliberately and per the doc: the session
-  state (no field for it — the conversation is found by `contextId`), function calls, and
-  handoffs. A client that renders those uses the native binding.
-- `REJECTED -> FAILED` and `AUTH_REQUIRED -> INPUT_REQUIRED` do not round-trip; the
-  reverse mapping in `src/bindings/a2a-types.ts` is lossy by the doc's own design.
-- Not a conformance suite. To check the A2A projection against a real implementation, point
-  `@a2a-js/sdk`'s client at `/<endpoint>/message:stream` from a throwaway directory — not as
-  a dependency here, since it pulls `@bufbuild/protobuf` v2 alongside
-  `@livekit/protocol`'s v1.
+- State is in memory: restarting forgets every conversation.
+- No `tasks/{id}:subscribe`, no WebSocket binding, no queue bound — matching the spec's own
+  status section.
+- The card declares `securitySchemes` (bearer JWT), which the spec's example omits because
+  it does not address auth. Everything else about the card follows §3.1.
+- `referenceTaskIds` is accepted and tracked but not acted on; the spec makes it purely
+  informational.
+- Not a conformance suite. To check the plain-A2A half against a real implementation, point
+  `@a2a-js/sdk`'s client at `/fare-desk/v1/message:stream` from a throwaway directory.
+
+## A correction to earlier feedback
+
+An earlier version of this mock served these routes **without** the `/v1` segment, and its
+README argued the segment was stale A2A v0.3 vocabulary that v1.0 had removed. That was
+wrong, and if that argument reached the spec's authors it should be withdrawn.
+
+`/v1` belongs to the **interface base URL**, not to the method path. The card advertises
+`supportedInterfaces[0].url = https://host/fare-desk/v1`, and an A2A v1.0 client appends
+`/message:stream` to it — so the served path contains `/v1` while the client does exactly
+what v1.0 prescribes. (In v0.3 the segment really was part of the spec-defined path; v1.0
+moved it out. Both arrive at the same URL here, which is what made it easy to misread.)
 
 ## Layout
 
 ```
 src/
-  server.ts            express app, route order, listen
-  config.ts            env parsing
-  auth.ts              bearer verification
-  protocol.ts          the native wire protocol -- read this first
-  sse.ts               SSE framing, heartbeat, disconnect detection
-  sessions.ts          conversations, the per-session FIFO, live-run registry
-  engine.ts            RunRequest -> RunResponse events (binding-agnostic)
-  scenarios.ts         the canned scripts and their triggers
-  http.ts              shared endpoint/error helpers
-  bindings/native.ts   POST /<endpoint> and :cancel
-  bindings/a2a.ts      the A2A v1.0.1 projection
-  bindings/a2a-types.ts   A2A wire types, transcribed from the normative proto
-  bindings/agent-card.ts
+  extension.ts      the extension URI, its keys and values, header activation
+  chat-items.ts     the §3.7 item shapes, builders, dedup-by-id
+  a2a-types.ts      A2A v1.0.1 wire types, from the normative proto
+  agent-card.ts     the §3.1 card
+  conversations.ts  contexts, their tasks, the FIFO queue, close
+  engine.ts         a task: steps -> chat items + an outcome. Knows no A2A.
+  scenarios.ts      the canned scripts and their triggers
+  a2a.ts            request parsing, the §3.4 projection, the four routes
+  server.ts         route mounting and startup
+  auth.ts  config.ts  http.ts  sse.ts
 scripts/
-  token.ts             print an access token
-  client.ts            smoke suite and reference stream reader
+  token.ts          print an access token
+  client.ts         the smoke suite, and the reference stream reader
 ```

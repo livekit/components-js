@@ -24,12 +24,6 @@ function int(name: string, fallback: number): number {
   return parsed;
 }
 
-function flag(name: string, fallback: boolean): boolean {
-  const raw = process.env[name];
-  if (raw === undefined || raw === '') return fallback;
-  return raw === '1' || raw.toLowerCase() === 'true';
-}
-
 function list(name: string, fallback: string[]): string[] {
   const raw = process.env[name];
   if (raw === undefined || raw === '') return fallback;
@@ -49,19 +43,13 @@ export const config = Object.freeze({
     process.env.MOCK_AGENT_DESCRIPTION || 'Answers fare, baggage and change-fee questions.',
   eventDelayMs: int('MOCK_EVENT_DELAY_MS', 250),
   defaultScenario: process.env.MOCK_SCENARIO || 'full',
-  /**
-   * When true, responses are strictly-canonical protobuf JSON, which omits default
-   * values -- so a COMPLETED run carries no `state` field. See protocol.ts.
-   */
-  omitDefaults: flag('MOCK_OMIT_DEFAULTS', false),
   /** Optional VideoGrant field that must be present on the token. Empty = no gate. */
   requireGrant: process.env.MOCK_REQUIRE_GRANT || '',
   /** SSE keepalive comment interval. Node won't time a stream out, but proxies will. */
   heartbeatMs: int('MOCK_HEARTBEAT_MS', 20_000),
   /**
-   * Text sent on the A2A binding as soon as the task opens, before any engine work.
-   * Empty disables it. See bindings/a2a.ts for why this is a status event and not a
-   * bare Message frame.
+   * Text the expert says at the top of every task, as a session.say() message: a real
+   * chat item, carrying lk/verbatim. Empty disables it.
    */
   a2aGreeting:
     process.env.MOCK_A2A_GREETING === undefined

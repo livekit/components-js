@@ -1,11 +1,11 @@
 /**
  * Bearer auth.
  *
- * The design doc does not say how the LiveKit token travels -- s3 only notes that "an
- * auth scheme, or a second interface, needs a real AgentCard from the a2a module". This
- * mock assumes `Authorization: Bearer <livekit-jwt>`, which is what the agent card it
- * publishes declares (an HTTP bearer scheme with bearerFormat JWT), and verifies the
- * signature with the same api key/secret that minted it.
+ * The extension spec does not address auth at all. This mock assumes
+ * `Authorization: Bearer <livekit-jwt>`, which is what the agent card it publishes
+ * declares (an HTTP bearer scheme with bearerFormat JWT), and verifies the signature with
+ * the same api key/secret that minted the token. The card routes stay unauthenticated,
+ * since a client reads the card before it has a token.
  */
 
 import type { Request, RequestHandler, Response } from 'express';
@@ -23,20 +23,6 @@ export function forbidden(res: Response, message: string): void {
 
 export function grantsOf(res: Response): ClaimGrants | undefined {
   return res.locals.grants as ClaimGrants | undefined;
-}
-
-/**
- * s4 leaves the channel-to-conversation mapping to dispatch rather than the protocol
- * ("that mapping belongs to dispatch, and not to the protocol"). For a browser client the
- * token's room grant is the closest thing to a conversation id, so it stands in when a
- * request omits sessionId.
- */
-export function sessionIdHint(res: Response): string | undefined {
-  return grantsOf(res)?.video?.room || undefined;
-}
-
-export function callerIdentity(res: Response): string | undefined {
-  return grantsOf(res)?.sub;
 }
 
 export function bearerAuth(): RequestHandler {

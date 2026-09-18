@@ -7,8 +7,8 @@ settings:
 catalogs:
   default:
     '@livekit/protocol':
-      specifier: 1.51.0
-      version: 1.51.0
+      specifier: 1.52.0
+      version: 1.52.0
     eslint:
       specifier: ^10.0.0
       version: 10.9.0
@@ -249,7 +249,7 @@ importers:
         version: link:../styles
       '@livekit/protocol':
         specifier: 'catalog:'
-        version: 1.51.0
+        version: 1.52.0
       '@microsoft/api-extractor':
         specifier: ^7.58.8
         version: 7.59.0(@types/node@24.13.3)
@@ -310,7 +310,7 @@ importers:
     devDependencies:
       '@livekit/protocol':
         specifier: 'catalog:'
-        version: 1.51.0
+        version: 1.52.0
       '@microsoft/api-extractor':
         specifier: ^7.58.8
         version: 7.59.0(@types/node@24.13.3)
@@ -388,7 +388,7 @@ importers:
         version: link:../react
       '@livekit/protocol':
         specifier: 'catalog:'
-        version: 1.51.0
+        version: 1.52.0
       '@radix-ui/react-select':
         specifier: ^2.2.6
         version: 2.3.7(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -2291,6 +2291,9 @@ packages:
 
   '@livekit/protocol@1.51.0':
     resolution: {integrity: sha512-kEDEDaFvIcp5VlYBromdSKMJMEJKfPvXPfEaJPdEz1Qgo84gZAoLF2g58CcMlVYGsjrwE5XYgQxRS5B7KuEj3w==}
+
+  '@livekit/protocol@1.52.0':
+    resolution: {integrity: sha512-zIzWF1sB4Y7B+NsG8QJFUkTCKDGNS/+b8xYLoVsBPMDL4y1MNUCTi4Ld9fuiKe/Fm2T/N/fyhphkPBx+FlRwGw==}
 
   '@livekit/track-processors@0.3.3':
     resolution: {integrity: sha512-C5mBWe34ie0pfhCf9zAD65D26ZytzW/xGrj8Zc1BGh5kLISFDVQlefO78LZWw9K5saTamk60O4fzSCKqWMPMLA==}
@@ -5414,9 +5417,6 @@ packages:
   camelcase@6.3.0:
     resolution: {integrity: sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==}
     engines: {node: '>=10'}
-
-  caniuse-lite@1.0.30001809:
-    resolution: {integrity: sha512-xxWVywk6a6Arlk+hymeycyn/VgqEfLDxupvhH/xiY5SJ/18kmi9o6MiO320DCUzypORHLtvh0I4i04tUhCNHNQ==}
 
   caniuse-lite@1.0.30001810:
     resolution: {integrity: sha512-TITQPUkaz+aVk5GL6NhOdwk1aEaNTSDPsGFWrTuhKGtjTF70jL/Oht2W4c6rXUe5fu7Ie19VIahAXHIIiWWNeg==}
@@ -11695,7 +11695,7 @@ snapshots:
   '@livekit/krisp-noise-filter@0.4.3(livekit-client@2.22.3(@types/dom-mediacapture-record@1.0.22))':
     dependencies:
       '@livekit/mutex': 1.1.1
-      '@livekit/protocol': 1.51.0
+      '@livekit/protocol': 1.52.0
       livekit-client: 2.22.3(@types/dom-mediacapture-record@1.0.22)
 
   '@livekit/mutex@1.1.1': {}
@@ -11705,6 +11705,10 @@ snapshots:
       '@bufbuild/protobuf': 1.10.1
 
   '@livekit/protocol@1.51.0':
+    dependencies:
+      '@bufbuild/protobuf': 1.10.1
+
+  '@livekit/protocol@1.52.0':
     dependencies:
       '@bufbuild/protobuf': 1.10.1
 
@@ -15142,7 +15146,7 @@ snapshots:
   autoprefixer@10.5.4(postcss@8.5.26):
     dependencies:
       browserslist: 4.28.8
-      caniuse-lite: 1.0.30001809
+      caniuse-lite: 1.0.30001810
       fraction.js: 5.3.4
       picocolors: 1.1.1
       postcss: 8.5.26
@@ -15332,8 +15336,6 @@ snapshots:
   camelcase@5.3.1: {}
 
   camelcase@6.3.0: {}
-
-  caniuse-lite@1.0.30001809: {}
 
   caniuse-lite@1.0.30001810: {}
 

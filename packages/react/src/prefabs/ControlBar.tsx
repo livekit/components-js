@@ -56,7 +56,7 @@ export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
  * media devices (camera, microphone and screen share), open the `Chat` and leave the room.
  *
  * @remarks
- * This component is build with other LiveKit components like `TrackToggle`,
+ * This component is built with other LiveKit components like `TrackToggle`,
  * `DeviceSelectorButton`, `DisconnectButton` and `StartAudio`.
  *
  * @example

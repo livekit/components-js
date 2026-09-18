@@ -8,16 +8,6 @@
   font-family: var(--font-family);
   color: var(--fg);
 
-  button,
-  input {
-    font: inherit;
-    line-height: inherit;
-  }
-
-  .button {
-    user-select: none;
-  }
-
   .list {
     list-style: none;
     margin: 0;

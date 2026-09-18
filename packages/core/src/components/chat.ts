@@ -1,7 +1,18 @@
 /* eslint-disable camelcase */
-import type { Participant, Room, ChatMessage, SendTextOptions } from 'livekit-client';
+import type { Room, SendTextOptions } from 'livekit-client';
 import { compareVersions, RoomEvent } from 'livekit-client';
-import { BehaviorSubject, Subject, scan, map, takeUntil, from, filter } from 'rxjs';
+import {
+  BehaviorSubject,
+  Subject,
+  scan,
+  map,
+  takeUntil,
+  from,
+  filter,
+  mergeMap,
+  finalize,
+  of,
+} from 'rxjs';
 import {
   DataTopic,
   LegacyDataTopic,
@@ -9,15 +20,11 @@ import {
   setupDataMessageHandler,
 } from '../observables/dataChannel';
 import { log } from '../logger';
+import { ChatMessage, ReceivedChatMessage } from '../messages/types';
+import { Future } from '../helper/future';
 
 /** @public */
-export type { ChatMessage };
-
-/** @public */
-export interface ReceivedChatMessage extends ChatMessage {
-  from?: Participant;
-  attributes?: Record<string, string>;
-}
+export type { ChatMessage, ReceivedChatMessage };
 
 export interface LegacyChatMessage extends ChatMessage {
   ignoreLegacy?: boolean;
@@ -49,13 +56,28 @@ export type ChatOptions = {
 };
 
 const topicSubjectMap: WeakMap<Room, Map<string, Subject<ReceivedChatMessage>>> = new WeakMap();
+const streamIdToAttachments = new Map<
+  string /* stream id */,
+  Map<
+    string /* attachment id */,
+    Future<
+      {
+        fileName: string;
+        buffer: Array<Uint8Array>;
+      },
+      never
+    >
+  >
+>();
 
 function isIgnorableChatMessage(msg: ReceivedChatMessage | LegacyReceivedChatMessage) {
   return (msg as LegacyChatMessage).ignoreLegacy == true;
 }
 
 const decodeLegacyMsg = (message: Uint8Array) =>
-  JSON.parse(new TextDecoder().decode(message)) as LegacyReceivedChatMessage | ReceivedChatMessage;
+  JSON.parse(new TextDecoder().decode(message)) as
+    | LegacyReceivedChatMessage
+    | Exclude<ReceivedChatMessage, 'type'>;
 
 const encodeLegacyMsg = (message: LegacyChatMessage) =>
   new TextEncoder().encode(JSON.stringify(message));
@@ -82,23 +104,80 @@ export function setupChat(room: Room, options?: ChatOptions) {
   const finalMessageDecoder = options?.messageDecoder ?? decodeLegacyMsg;
   if (needsSetup) {
     room.registerTextStreamHandler(topic, async (reader, participantInfo) => {
-      const { id, timestamp } = reader.info;
+      const { id, timestamp, attributes, attachedStreamIds } = reader.info;
+
+      // Store a future for each attachment to be later resolved once the corresponding file data
+      // stream completes.
+      const attachments = new Map(
+        (attachedStreamIds ?? []).map((id) => [
+          id,
+          new Future<{ fileName: string; buffer: Array<Uint8Array> }, never>(),
+        ]),
+      );
+      streamIdToAttachments.set(id, attachments);
+
       const streamObservable = from(reader).pipe(
         scan((acc: string, chunk: string) => {
           return acc + chunk;
         }),
-        map((chunk: string) => {
+        mergeMap((chunk: string) => {
+          if (attachments.size === 0) {
+            return of({ chunk, attachedFiles: [] });
+          } else {
+            // Aggregate all attachments into memory and transform them into a list of files
+            return from(attachments.values()).pipe(
+              mergeMap((attachment) => from(attachment.promise)),
+              scan(
+                (acc, attachment) => [...acc, new File(attachment.buffer, attachment.fileName)],
+                [] as Array<File>,
+              ),
+              map((attachedFiles) => ({ chunk, attachedFiles })),
+            );
+          }
+        }),
+        map(({ chunk, attachedFiles }) => {
           return {
             id,
             timestamp,
             message: chunk,
             from: room.getParticipantByIdentity(participantInfo.identity),
+            type: 'chatMessage',
+            attributes,
+            attachedFiles,
             // editTimestamp: type === 'update' ? timestamp : undefined,
-          } as ReceivedChatMessage;
+          } satisfies ReceivedChatMessage;
         }),
+        finalize(() => streamIdToAttachments.delete(id)),
       );
       streamObservable.subscribe({
         next: (value) => messageSubject.next(value),
+      });
+    });
+    // NOTE: Attachment byte streams are guaranteed to arrive after their parent text stream
+    // has initialized the attachment map (per client SDK sending implementation)
+    room.registerByteStreamHandler(topic, async (reader) => {
+      const { id: attachmentStreamId } = reader.info;
+      const foundStreamAttachmentPair = Array.from(streamIdToAttachments).find(([, attachments]) =>
+        attachments.has(attachmentStreamId),
+      );
+      if (!foundStreamAttachmentPair) {
+        return;
+      }
+      const streamId = foundStreamAttachmentPair[0];
+
+      const bufferList = [];
+      for await (const buffer of reader) {
+        bufferList.push(buffer);
+      }
+
+      const attachment = streamIdToAttachments.get(streamId)?.get(attachmentStreamId);
+      if (!attachment) {
+        return;
+      }
+
+      attachment.resolve?.({
+        fileName: reader.info.name,
+        buffer: bufferList,
       });
     });
 
@@ -111,7 +190,11 @@ export function setupChat(room: Room, options?: ChatOptions) {
           if (isIgnorableChatMessage(parsedMessage)) {
             return undefined;
           }
-          const newMessage: ReceivedChatMessage = { ...parsedMessage, from: msg.from };
+          const newMessage: ReceivedChatMessage = {
+            ...parsedMessage,
+            type: 'chatMessage',
+            from: msg.from,
+          };
           return newMessage;
         }),
         filter((msg) => !!msg),
@@ -169,6 +252,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
 
       const receivedChatMsg: ReceivedChatMessage = {
         ...chatMsg,
+        type: 'chatMessage',
         from: room.localParticipant,
         attributes: options.attributes,
       };
@@ -201,6 +285,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
     messageSubject.complete();
     topicSubjectMap.delete(room);
     room.unregisterTextStreamHandler(topic);
+    room.unregisterByteStreamHandler(topic);
   }
   room.once(RoomEvent.Disconnected, destroy);
 

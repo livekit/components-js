@@ -12,7 +12,7 @@ export interface ChatToggleProps extends React.ButtonHTMLAttributes<HTMLButtonEl
  * @example
  * ```tsx
  * <LiveKitRoom>
- *   <ToggleChat />
+ *   <ChatToggle />
  * </LiveKitRoom>
  * ```
  * @public

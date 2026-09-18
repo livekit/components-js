@@ -6,8 +6,10 @@ import { useTrackToggle } from '../../hooks';
 import type { TrackPublishOptions } from 'livekit-client';
 
 /** @public */
-export interface TrackToggleProps<T extends ToggleSource>
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {
+export interface TrackToggleProps<T extends ToggleSource> extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'onChange'
+> {
   source: T;
   showIcon?: boolean;
   initialState?: boolean;
@@ -18,6 +20,8 @@ export interface TrackToggleProps<T extends ToggleSource>
    * The second function argument `isUserInitiated` is `true` if the change was initiated by a user interaction, such as a click.
    */
   onChange?: (enabled: boolean, isUserInitiated: boolean) => void;
+  /** Called when permission-denied state changes (also called on initial mount). */
+  onPermissionsChange?: (permissionDenied: boolean) => void;
   captureOptions?: CaptureOptionsBySource<T>;
   publishOptions?: TrackPublishOptions;
   onDeviceError?: (error: Error) => void;

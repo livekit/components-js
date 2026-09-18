@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StoryObj, Meta } from '@storybook/react';
+import { StoryObj, Meta } from '@storybook/react-vite';
 
 import { ParticipantName, ParticipantNameProps } from '@livekit/components-react';
 import { LkParticipantContext, LkRoomContext } from '../../../.storybook/lk-decorators';

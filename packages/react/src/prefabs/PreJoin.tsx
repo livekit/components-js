@@ -69,12 +69,14 @@ export type PreJoinValues = LocalUserChoices & {
  * Props for the PreJoin component.
  * @public
  */
-export interface PreJoinProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit' | 'onError'> {
+export interface PreJoinProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'onSubmit' | 'onError'
+> {
   /** This function is called with the `PreJoinValues` if validation is passed. */
   onSubmit?: (values: PreJoinValues) => void;
   /**
-   * Provide your custom validation function. Only if validation is successful the user choices are past to the onSubmit callback.
+   * Provide your custom validation function. Only if validation is successful the user choices are passed to the onSubmit callback.
    */
   onValidate?: (values: PreJoinValues) => boolean;
   /**
@@ -108,8 +110,8 @@ export function usePreviewTracks(
   onError?: (err: Error) => void,
   setPermissionErrors?: React.Dispatch<React.SetStateAction<{ audio?: Error; video?: Error }>>,
 ) {
-  const [audioTrack, setAudioTrack] = React.useState<LocalTrack | undefined>();
-  const [videoTrack, setVideoTrack] = React.useState<LocalTrack | undefined>();
+  const [audioTrack, setAudioTrack] = React.useState<LocalAudioTrack | undefined>();
+  const [videoTrack, setVideoTrack] = React.useState<LocalVideoTrack | undefined>();
 
   const [orphanTracks, setOrphanTracks] = React.useState<Track[]>([]);
 
@@ -138,8 +140,8 @@ export function usePreviewTracks(
   };
 
   // Store current tracks in refs to avoid dependency cycles
-  const audioTrackRef = React.useRef<LocalTrack | undefined>(audioTrack);
-  const videoTrackRef = React.useRef<LocalTrack | undefined>(videoTrack);
+  const audioTrackRef = React.useRef<LocalAudioTrack | undefined>(audioTrack);
+  const videoTrackRef = React.useRef<LocalVideoTrack | undefined>(videoTrack);
 
   // Update refs when state changes
   React.useEffect(() => {
@@ -152,10 +154,12 @@ export function usePreviewTracks(
 
   // Shared function to handle track creation and cleanup
   const handleTrackCreation = React.useCallback(
-    (
-      trackType: 'audio' | 'video',
-      trackOption: CreateLocalTracksOptions['audio'] | CreateLocalTracksOptions['video'] | false,
-      setTrack: React.Dispatch<React.SetStateAction<LocalTrack | undefined>>,
+    <T extends 'audio' | 'video'>(
+      trackType: T,
+      trackOption: CreateLocalTracksOptions[T] | false,
+      setTrack: React.Dispatch<
+        React.SetStateAction<T extends 'audio' ? LocalAudioTrack | undefined : LocalVideoTrack | undefined>
+      >,
       setPermissionErrors: React.Dispatch<React.SetStateAction<{ audio?: Error; video?: Error }>>,
     ) => {
       log.debug(`[PreJoin] handleTrackCreation called for ${trackType}`, { trackOption });
@@ -212,7 +216,11 @@ export function usePreviewTracks(
             if (currentTrack) {
               setOrphanTracks((prev) => [...prev, currentTrack]);
             }
-            setTrack(localTrack);
+            if (trackType === 'audio' && localTrack.kind === 'audio') {
+              setTrack(localTrack as T extends 'audio' ? LocalAudioTrack | undefined : never);
+            } else if (trackType === 'video' && localTrack.kind === 'video') {
+              setTrack(localTrack as T extends 'audio' ? never : LocalVideoTrack | undefined);
+            }
           }
         } catch (e: unknown) {
           log.error(`[PreJoin] Error creating ${trackType} track:`, e);
@@ -408,7 +416,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
 
 /**
  * The `PreJoin` prefab component is normally presented to the user before he enters a room.
- * This component allows the user to check and select the preferred media device (camera und microphone).
+ * This component allows the user to check and select the preferred media device (camera and microphone).
  * On submit the user decisions are returned, which can then be passed on to the `LiveKitRoom` so that the user enters the room with the correct media devices.
  *
  * @remarks

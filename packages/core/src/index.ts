@@ -4,6 +4,7 @@ export * from './helper';
 export * from './types';
 export * from './sorting';
 export * from './track-reference';
+export * from './messages';
 
 export * from './components/mediaToggle';
 export * from './components/mediaDeviceSelect';

@@ -6,6 +6,7 @@
 
 import { AudioAnalyserOptions } from 'livekit-client';
 import { AudioCaptureOptions } from 'livekit-client';
+import { BaseKeyProvider } from 'livekit-client';
 import { CaptureOptionsBySource } from '@livekit/components-core';
 import { ChatMessage } from '@livekit/components-core';
 import { ChatOptions } from '@livekit/components-core';
@@ -13,7 +14,9 @@ import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
 import { CreateLocalTracksOptions } from 'livekit-client';
 import { DataPublishOptions } from 'livekit-client';
+import { default as default_2 } from 'typed-emitter';
 import { DisconnectReason } from 'livekit-client';
+import { EventMap } from 'typed-emitter';
 import { GridLayoutDefinition } from '@livekit/components-core';
 import { GridLayoutInfo } from '@livekit/components-core';
 import { HTMLAttributes } from 'react';
@@ -21,7 +24,6 @@ import { isTrackReference } from '@livekit/components-core';
 import { KrispNoiseFilterProcessor } from '@livekit/krisp-noise-filter';
 import { LocalAudioTrack } from 'livekit-client';
 import { LocalParticipant } from 'livekit-client';
-import { LocalTrack } from 'livekit-client';
 import { LocalTrackPublication } from 'livekit-client';
 import { LocalUserChoices } from '@livekit/components-core';
 import { LocalVideoTrack } from 'livekit-client';
@@ -34,19 +36,27 @@ import { ParticipantClickEvent } from '@livekit/components-core';
 import { ParticipantEvent } from 'livekit-client';
 import { ParticipantIdentifier } from '@livekit/components-core';
 import { ParticipantPermission } from '@livekit/protocol';
+import { PerformRpcParams } from 'livekit-client';
 import { PinState } from '@livekit/components-core';
 import * as React_2 from 'react';
+import { ReceivedAgentTranscriptionMessage } from '@livekit/components-core';
 import { ReceivedChatMessage } from '@livekit/components-core';
 import { ReceivedDataMessage } from '@livekit/components-core';
+import { ReceivedMessage } from '@livekit/components-core';
 import { ReceivedTranscriptionSegment } from '@livekit/components-core';
+import { ReceivedUserTranscriptionMessage } from '@livekit/components-core';
 import { RemoteAudioTrack } from 'livekit-client';
 import { RemoteParticipant } from 'livekit-client';
 import { Room } from 'livekit-client';
 import { RoomConnectOptions } from 'livekit-client';
 import { RoomEvent } from 'livekit-client';
 import { RoomOptions } from 'livekit-client';
+import { RpcInvocationData } from 'livekit-client';
 import { ScreenShareCaptureOptions } from 'livekit-client';
 import { SendTextOptions } from 'livekit-client';
+import { Serializer } from 'livekit-client';
+import { SerializerInput } from 'livekit-client';
+import { SerializerOutput } from 'livekit-client';
 import { setLogExtension } from '@livekit/components-core';
 import { setLogLevel } from '@livekit/components-core';
 import { SetMediaDeviceOptions } from '@livekit/components-core';
@@ -54,6 +64,9 @@ import { SourcesArray } from '@livekit/components-core';
 import { SVGProps } from 'react';
 import { TextStreamData } from '@livekit/components-core';
 import { ToggleSource } from '@livekit/components-core';
+import { TokenSourceConfigurable } from 'livekit-client';
+import { TokenSourceFetchOptions } from 'livekit-client';
+import { TokenSourceFixed } from 'livekit-client';
 import { Track } from 'livekit-client';
 import { TrackProcessor } from 'livekit-client';
 import { TrackPublication } from 'livekit-client';
@@ -66,12 +79,33 @@ import { VideoCaptureOptions } from 'livekit-client';
 import { WidgetState } from '@livekit/components-core';
 
 // @beta (undocumented)
-export type AgentState = 'disconnected' | 'connecting' | 'initializing' | 'listening' | 'thinking' | 'speaking';
+export type AgentCallbacks = {
+    [AgentEvent.CameraChanged]: (newTrack: TrackReference | undefined) => void;
+    [AgentEvent.MicrophoneChanged]: (newTrack: TrackReference | undefined) => void;
+    [AgentEvent.StateChanged]: (newAgentState: AgentState) => void;
+};
+
+// @beta (undocumented)
+export enum AgentEvent {
+    // (undocumented)
+    CameraChanged = "cameraChanged",
+    // (undocumented)
+    MicrophoneChanged = "microphoneChanged",
+    // (undocumented)
+    StateChanged = "stateChanged"
+}
+
+// Warning: (ae-forgotten-export) The symbol "AgentSdkStates" needs to be exported by the entry point index.docs.d.ts
+//
+// @beta
+export type AgentState = 'disconnected' | 'connecting' | 'pre-connect-buffering' | 'failed' | AgentSdkStates;
 
 // @public (undocumented)
 export interface AllowAudioPlaybackProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
     // (undocumented)
     label: string;
+    // (undocumented)
+    room?: Room;
 }
 
 // @public (undocumented)
@@ -136,6 +170,8 @@ export interface BarVisualizerProps extends React_2.HTMLProps<HTMLDivElement> {
     options?: BarVisualizerOptions;
     state?: AgentState;
     // (undocumented)
+    track?: TrackReferenceOrPlaceholder | LocalAudioTrack | RemoteAudioTrack;
+    // @deprecated (undocumented)
     trackRef?: TrackReferenceOrPlaceholder;
 }
 
@@ -341,6 +377,11 @@ export interface GridLayoutProps extends React_2.HTMLAttributes<HTMLDivElement>,
 
 export { isTrackReference }
 
+// Warning: (ae-internal-missing-underscore) The name "isUseSessionReturn" should be prefixed with an underscore because the declaration is marked as @internal
+//
+// @internal (undocumented)
+export function isUseSessionReturn(value: unknown): value is UseSessionReturn;
+
 // @public (undocumented)
 export const LayoutContext: React_2.Context<LayoutContextType | undefined>;
 
@@ -455,6 +496,16 @@ export { MessageEncoder }
 
 // @public (undocumented)
 export type MessageFormatter = (message: string) => React_2.ReactNode;
+
+// @beta (undocumented)
+export type MessagesCallbacks = {
+    [MessagesEvent.MessageReceived]: (message: ReceivedMessage) => void;
+};
+
+// @beta (undocumented)
+export enum MessagesEvent {
+    MessageReceived = "messageReceived"
+}
 
 // Warning: (ae-internal-missing-underscore) The name "MicDisabledIcon" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -572,15 +623,23 @@ export const QualityPoorIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.El
 // @internal (undocumented)
 export const QualityUnknownIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
+export { ReceivedAgentTranscriptionMessage }
+
 export { ReceivedChatMessage }
 
+export { ReceivedMessage }
+
+export { ReceivedUserTranscriptionMessage }
+
 // @public
-export function RoomAudioRenderer({ volume, muted }: RoomAudioRendererProps): React_2.JSX.Element;
+export function RoomAudioRenderer({ room, volume, muted }: RoomAudioRendererProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface RoomAudioRendererProps {
     // @alpha
     muted?: boolean;
+    // (undocumented)
+    room?: Room;
     volume?: number;
 }
 
@@ -596,6 +655,20 @@ export interface RoomNameProps extends React_2.HTMLAttributes<HTMLSpanElement> {
     childrenPosition?: 'before' | 'after';
 }
 
+// @beta
+export type RpcCallParams<Payload> = Omit<PerformRpcParams, 'payload'> & {
+    payload: Payload;
+};
+
+// @beta (undocumented)
+export type RpcHandler<Input = any, Output = any> = (payload: Input, data: RpcInvocationData) => Promise<Output>;
+
+// @beta (undocumented)
+export type RpcPerformFn = {
+    <Output = string, Input = unknown>(params: RpcCallParams<Input>, serializer: Serializer<Output, Input>): Promise<Output>;
+    (params: PerformRpcParams): Promise<string>;
+};
+
 // Warning: (ae-internal-missing-underscore) The name "ScreenShareIcon" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -605,6 +678,50 @@ export const ScreenShareIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.El
 //
 // @internal (undocumented)
 export const ScreenShareStopIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// @beta (undocumented)
+export type SessionCallbacks = {
+    [SessionEvent.ConnectionStateChanged]: (newAgentConnectionState: ConnectionState_2) => void;
+    [SessionEvent.MediaDevicesError]: (error: Error) => void;
+    [SessionEvent.EncryptionError]: (error: Error) => void;
+};
+
+// @beta (undocumented)
+export type SessionConnectOptions = {
+    signal?: AbortSignal;
+    tracks?: {
+        microphone?: {
+            enabled?: boolean;
+            publishOptions?: TrackPublishOptions;
+        };
+        camera?: {
+            enabled?: boolean;
+            publishOptions?: TrackPublishOptions;
+        };
+        screenShare?: {
+            enabled?: boolean;
+            publishOptions?: TrackPublishOptions;
+        };
+    };
+    roomConnectOptions?: RoomConnectOptions;
+};
+
+// @beta (undocumented)
+export enum SessionEvent {
+    // (undocumented)
+    ConnectionStateChanged = "connectionStateChanged",
+    EncryptionError = "encryptionError",
+    MediaDevicesError = "mediaDevicesError"
+}
+
+// @beta
+export function SessionProvider(props: SessionProviderProps): React_2.JSX.Element;
+
+// @beta (undocumented)
+export type SessionProviderProps = {
+    session: UseSessionReturn;
+    children: React_2.ReactNode;
+};
 
 export { setLogExtension }
 
@@ -620,6 +737,11 @@ export const StartAudio: (props: AllowAudioPlaybackProps & React_2.RefAttributes
 
 // @public
 export const StartMediaButton: (props: AllowMediaPlaybackProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactNode;
+
+// @beta (undocumented)
+export type SwitchActiveDeviceOptions = {
+    exact?: boolean;
+};
 
 export { TextStreamData }
 
@@ -680,7 +802,7 @@ export interface TrackToggleProps<T extends ToggleSource> extends Omit<React_2.B
     source: T;
 }
 
-// @alpha (undocumented)
+// @alpha @deprecated (undocumented)
 export interface TrackTranscriptionOptions {
     bufferSize?: number;
     onTranscription?: (newSegments: TranscriptionSegment[]) => void;
@@ -690,6 +812,17 @@ export interface TrackTranscriptionOptions {
 //
 // @internal (undocumented)
 export const UnfocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
+
+// Warning: (ae-forgotten-export) The symbol "SessionStub" needs to be exported by the entry point index.docs.d.ts
+//
+// @beta
+export function useAgent(session?: SessionStub): UseAgentReturn;
+
+// Warning: (ae-forgotten-export) The symbol "AgentStateCases" needs to be exported by the entry point index.docs.d.ts
+// Warning: (ae-forgotten-export) The symbol "AgentActions" needs to be exported by the entry point index.docs.d.ts
+//
+// @beta (undocumented)
+export type UseAgentReturn = AgentStateCases & AgentActions;
 
 // @alpha
 export function useAudioPlayback(room?: Room): {
@@ -703,7 +836,9 @@ export function useAudioWaveform(trackOrTrackReference?: LocalAudioTrack | Remot
 };
 
 // @public
-export function useChat(options?: ChatOptions): {
+export function useChat(options?: ChatOptions & {
+    room?: Room;
+}): {
     send: (message: string, options?: SendTextOptions) => Promise<ReceivedChatMessage>;
     chatMessages: ReceivedChatMessage[];
     isSending: boolean;
@@ -775,8 +910,18 @@ export function useEnsureParticipant(participant?: Participant): Participant;
 // @public
 export function useEnsureRoom(room?: Room): Room;
 
+// @beta
+export function useEnsureSession(session?: UseSessionReturn): UseSessionReturn;
+
 // @public
 export function useEnsureTrackRef(trackRef?: TrackReferenceOrPlaceholder): TrackReferenceOrPlaceholder;
+
+// @public (undocumented)
+export function useEvents<Emitter extends default_2<EventMap>, EmitterEventMap extends Emitter extends default_2<infer EM> ? EM : never, Event extends Parameters<Emitter['on']>[0], Callback extends EmitterEventMap[Event]>(instance: Emitter | {
+    internal: {
+        emitter: Emitter;
+    };
+} | null | undefined, event: Event, handlerFn: Callback | undefined, dependencies?: React_2.DependencyList): void;
 
 // @alpha
 export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'user' | 'environment' | 'left' | 'right' | 'undefined';
@@ -892,6 +1037,9 @@ export function useMaybeParticipantContext(): Participant | undefined;
 // @public
 export function useMaybeRoomContext(): Room | undefined;
 
+// @beta
+export function useMaybeSessionContext(): UseSessionReturn | undefined;
+
 // @public
 export function useMaybeTrackRefContext(): TrackReferenceOrPlaceholder | undefined;
 
@@ -1000,8 +1148,10 @@ export interface UseParticipantTileProps<T extends HTMLElement> extends React_2.
     trackRef?: TrackReferenceOrPlaceholder;
 }
 
+// Warning: (ae-forgotten-export) The symbol "UseParticipantTracksOptions" needs to be exported by the entry point index.docs.d.ts
+//
 // @public
-export function useParticipantTracks(sources: Track.Source[], participantIdentity?: string): TrackReference[];
+export function useParticipantTracks<TrackSource extends Track.Source>(sources: Array<TrackSource>, optionsOrParticipantIdentity?: UseParticipantTracksOptions | UseParticipantTracksOptions['participantIdentity']): Array<TrackReference>;
 
 // @alpha
 export function usePersistentUserChoices(options?: UsePersistentUserChoicesOptions): {
@@ -1031,7 +1181,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(en
 };
 
 // @public (undocumented)
-export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): LocalTrack<Track.Kind>[] | undefined;
+export function usePreviewTracks(options: CreateLocalTracksOptions, onError?: (err: Error) => void): (LocalAudioTrack | LocalVideoTrack)[] | undefined;
 
 // @public
 export function useRemoteParticipant(identifier: ParticipantIdentifier, options?: UseRemoteParticipantOptions): RemoteParticipant | undefined;
@@ -1078,6 +1228,72 @@ export interface UseRoomInfoOptions {
     room?: Room;
 }
 
+// @beta
+export function useRpc<S extends Serializer<any, any>>(session: UseSessionReturn, methodName: string, handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>, options?: UseRpcOptions<S>): UseRpcReturn;
+
+// @beta (undocumented)
+export function useRpc<S extends Serializer<any, any>>(methodName: string, handler: RpcHandler<SerializerInput<S>, SerializerOutput<S>>, options?: UseRpcOptions<S>): UseRpcReturn;
+
+// @beta (undocumented)
+export function useRpc(session: UseSessionReturn): UseRpcReturn;
+
+// @beta (undocumented)
+export function useRpc(): UseRpcReturn;
+
+// @beta
+export type UseRpcOptions<S extends Serializer<any, any> = Serializer<any, any>> = {
+    fromIdentity?: string;
+    serializer?: S;
+};
+
+// @beta (undocumented)
+export type UseRpcReturn = {
+    perform: RpcPerformFn;
+};
+
+// @public
+export function useSequentialRoomConnectDisconnect<R extends Room | undefined>(room: R): UseSequentialRoomConnectDisconnectResults<R>;
+
+// @public (undocumented)
+export type UseSequentialRoomConnectDisconnectResults<R extends Room | undefined> = {
+    connect: typeof Room.prototype.connect & (R extends undefined ? null : unknown);
+    disconnect: typeof Room.prototype.disconnect & (R extends undefined ? null : unknown);
+};
+
+// Warning: (ae-forgotten-export) The symbol "UseSessionConfigurableOptions" needs to be exported by the entry point index.docs.d.ts
+//
+// @beta
+export function useSession(tokenSource: TokenSourceConfigurable, options?: UseSessionConfigurableOptions): UseSessionReturn;
+
+// Warning: (ae-forgotten-export) The symbol "UseSessionFixedOptions" needs to be exported by the entry point index.docs.d.ts
+//
+// @beta
+export function useSession(tokenSource: TokenSourceFixed, options?: UseSessionFixedOptions): UseSessionReturn;
+
+// @beta
+export function useSessionContext(): UseSessionReturn;
+
+// @beta (undocumented)
+export function useSessionMessages(session?: UseSessionReturn): UseSessionMessagesReturn;
+
+// @beta (undocumented)
+export type UseSessionMessagesReturn = {
+    messages: Array<ReceivedMessage>;
+    isSending: boolean;
+    send: (message: string, options?: SendTextOptions) => Promise<ReceivedChatMessage>;
+    internal: {
+        emitter: default_2<MessagesCallbacks>;
+    };
+};
+
+// Warning: (ae-forgotten-export) The symbol "SessionStateConnecting" needs to be exported by the entry point index.docs.d.ts
+// Warning: (ae-forgotten-export) The symbol "SessionStateConnected" needs to be exported by the entry point index.docs.d.ts
+// Warning: (ae-forgotten-export) The symbol "SessionStateDisconnected" needs to be exported by the entry point index.docs.d.ts
+// Warning: (ae-forgotten-export) The symbol "SessionActions" needs to be exported by the entry point index.docs.d.ts
+//
+// @beta (undocumented)
+export type UseSessionReturn = (SessionStateConnecting | SessionStateConnected | SessionStateDisconnected) & SessionActions;
+
 // @public
 export function useSelectedDevice({
   kind: 'videoinput' | 'audioinput';
@@ -1089,7 +1305,12 @@ export function useSelectedDevice({
 export function useSortedParticipants(participants: Array<Participant>): Participant[];
 
 // @public
-export function useSpeakingParticipants(): Participant[];
+export function useSpeakingParticipants(options?: UseSpeakingParticipantsOptions): Participant[];
+
+// @public (undocumented)
+export type UseSpeakingParticipantsOptions = {
+    room?: Room;
+};
 
 // @alpha
 export function useStartAudio({ room, props }: UseStartAudioProps): {
@@ -1142,8 +1363,13 @@ export type UseSwipeOptions = {
 };
 
 // @beta (undocumented)
-export function useTextStream(topic: string): {
+export function useTextStream(topic: string, options?: UseTextStreamOptions): {
     textStreams: TextStreamData[];
+};
+
+// @beta (undocumented)
+export type UseTextStreamOptions = {
+    room?: Room;
 };
 
 // @public
@@ -1180,7 +1406,7 @@ export type UseTracksOptions = {
 };
 
 // @public
-export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, publishOptions, onDeviceError, ...rest }: UseTrackToggleProps<T>): {
+export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, publishOptions, onDeviceError, room, ...rest }: UseTrackToggleProps<T>): {
     toggle: ((forceState?: boolean) => Promise<void>) | ((forceState?: boolean, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<boolean | undefined>);
     enabled: boolean;
     pending: boolean;
@@ -1190,9 +1416,11 @@ export function useTrackToggle<T extends ToggleSource>({ source, onChange, initi
 
 // @public (undocumented)
 export interface UseTrackToggleProps<T extends ToggleSource> extends Omit<TrackToggleProps<T>, 'showIcon'> {
+    // (undocumented)
+    room?: Room;
 }
 
-// @alpha (undocumented)
+// @alpha @deprecated (undocumented)
 export function useTrackTranscription(trackRef: TrackReferenceOrPlaceholder | undefined, options?: TrackTranscriptionOptions): {
     segments: ReceivedTranscriptionSegment[];
 };
@@ -1207,6 +1435,8 @@ export function useTranscriptions(opts?: UseTranscriptionsOptions): TextStreamDa
 export interface UseTranscriptionsOptions {
     // (undocumented)
     participantIdentities?: string[];
+    // (undocumented)
+    room?: Room;
     // (undocumented)
     trackSids?: string[];
 }

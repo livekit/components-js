@@ -13,46 +13,148 @@
 </h1>
 
 <!--BEGIN_DESCRIPTION-->
-Use this SDK to add realtime video, audio and data features to your React app. By connecting to <a href="https://livekit.io/">LiveKit</a> Cloud or a self-hosted server, you can quickly build applications such as multi-modal AI, live streaming, or video calls with just a few lines of code.
+Use this SDK to add realtime, multi-modal, agentic experiences to your React app. By connecting to <a href="https://livekit.io/">LiveKit</a> Cloud or a self-hosted server, you can quickly build agentic experiences with just a few lines of code.
 <!--END_DESCRIPTION-->
 
 <br/>
 <br/>
 
-![LiveKit Components Preview](./.github/assets/livekit-meet.jpg)
+<picture>
+  <source srcset="./.github/assets/readme-hero-dark.webp" media="(prefers-color-scheme: dark)">
+  <source srcset="./.github/assets/readme-hero-light.webp" media="(prefers-color-scheme: light)">
+  <img src="./.github/assets/readme-hero-light.webp" alt="App screenshot">
+</picture>
 
-## Quick Start
+## Agents UI Quick Start
 
-First add the library to your project:
+Agents UI is a set of open source [Shadcn](https://ui.shadcn.com/) components for building voice-first agents using LiveKit.
 
-```shell
-npm i @livekit/components-react
+You can find more information in the [Agents UI API references](https://docs.livekit.io/reference/components/shadcn/) and in the [Agents UI README](packages/shadcn/README.md).
+
+## Prerequisites
+
+Before installing Agents UI, make sure your environment meets the following requirements:
+
+- [Node.js](https://nodejs.org/), version 18 or later
+- [shadcn/ui](https://ui.shadcn.com/docs/installation/next) is installed in your project.
+
+> [!NOTE]
+> Running any install command will automatically install shadcn/ui for you.
+> Agents UI is built targeting React 19 (no forwardRef usage) and Tailwind CSS 4.
+
+### Installation
+
+First add the Agents UI registry to your components.json file:
+
+```json
+{
+  ...
+  "registries": {
+     ...
+    "@agents-ui": "https://livekit.io/ui/r/{name}.json"
+  }
+}
 ```
 
-Then use any of our pre-fabricated or helper components:
+Then install the component you want to use from the CLI. Ensure you've navigated to the root of your project.
+
+```bash
+pnpm dlx shadcn@latest add @agents-ui/agent-session-provider @agents-ui/agent-control-bar @agents-ui/agent-chat-transcript @agents-ui/agent-audio-visualizer-bar
+```
+
+Next, you need a running agent. If you don't already have one, [it only takes a few minutes to set one up](https://docs.livekit.io/agents/start/voice-ai).
+
+The rest of this guide assumes your agent is configured for [explicit dispatch](https://docs.livekit.io/agents/worker/agent-dispatch/#explicit) with `agent_name="example-agent"`.
+
+Then, you can use the agents sdk to connect and interact with your agent:
 
 ```tsx
-import { LiveKitRoom, VideoConference } from '@livekit/components-react';
+'use client';
 
-const TOKEN = 'generated-jwt';
-const WS_URL = 'wss://my-livekit-server';
+import { TokenSource } from 'livekit-client';
+import { VideoTrack, useAgent, useSession, useSessionContext } from '@livekit/components-react';
+import { AgentSessionProvider } from '@/components/agents-ui/agent-session-provider';
+import { AgentControlBar } from '@/components/agents-ui/agent-control-bar';
+import { AgentChatTranscript } from '@/components/agents-ui/agent-chat-transcript';
+import { AgentAudioVisualizerBar } from '@/components/agents-ui/agent-audio-visualizer-bar';
+import { StartAudioButton } from '@/components/agents-ui/start-audio-button';
+
+// Generated credentials manually and put them here
+// Or, generate them another way: https://github.com/livekit/client-sdk-js?tab=readme-ov-file#generating-a-urltoken-with-tokensource
+const tokenSource = TokenSource.literal({
+  serverUrl: 'wss://my-livekit-server',
+  participantToken: 'generated-jwt',
+});
+
+function AgentUI() {
+  const session = useSessionContext();
+  const agent = useAgent(session);
+
+  return (
+    <div className="flex flex-col gap-4 p-4">
+      {/* Chat transcript */}
+      <AgentChatTranscript />
+
+      {/* Local camera feed: */}
+      {session.local.cameraTrack ? <VideoTrack trackRef={session.local.cameraTrack} /> : null}
+
+      {/* Agent camera feed */}
+      {agent.cameraTrack ? (
+        <VideoTrack trackRef={agent.cameraTrack} />
+      ) : (
+        <AgentAudioVisualizerBar />
+      )}
+
+      {/* Agent control bar for local audio */}
+      <AgentControlBar variant="livekit" isConnected={session.isConnected} />
+
+      {/* Renders a start audio button if the browser blocks autoplay of audio */}
+      <StartAudioButton label="Start audio" />
+    </div>
+  );
+}
 
 export default function Example() {
+  const session = useSession(tokenSource, {
+    agentName: 'example-agent' /* <== Put your agent name here! */,
+  });
+
+  const toggleStarted = () => {
+    if (session.connectionState === 'disconnected') {
+      session.start();
+    } else {
+      session.end();
+    }
+  };
+
   return (
-    <LiveKitRoom token={TOKEN} serverUrl={WS_URL} connect={true}>
-      <VideoConference />
-    </LiveKitRoom>
+    <AgentSessionProvider session={session}>
+      {session.isConnected ? (
+        <AgentUI />
+      ) : (
+        <button onClick={toggleStarted} disabled={session.connectionState === 'connecting'}>
+          Connect
+        </button>
+      )}
+    </AgentSessionProvider>
   );
 }
 ```
 
 ## Docs
 
-For more information checkout the [LiveKit Components Docs](https://docs.livekit.io/reference/components/react/)
+For more information checkout the
+
+- [Agents UI API references](https://docs.livekit.io/reference/components/shadcn/)
+- [LiveKit Components Docs](https://docs.livekit.io/reference/components/react/)
 
 ## Examples
 
-There are some basic examples of how to use and customize LiveKit components in this mono repo. They are located in the nextjs examples folder [`/examples/nextjs`](./examples/nextjs/). In order to set the examples up locally follow the [Development Setup](#development-setup).
+### Voice Agent Starter Application
+
+Check out our fully featured voice agent, quick start application built with React and LiveKit Components. The full implementation is available in the [livekit-examples/agent-starter-react](https://github.com/livekit-examples/agent-starter-react) repo. Give it a test drive by creating a sandbox voice agent in [LiveKit Cloud](https://cloud.livekit.io/projects/p_/sandbox/templates/agent-starter-react).
+
+### Video Conference Starter Application
 
 We also have a fully featured video conferencing application built on top of LiveKit Components. Start a video conference at [meet.livekit.io](https://meet.livekit.io) and take a look at the implementation in the [livekit-examples/meet](https://github.com/livekit-examples/meet) repo.
 
@@ -124,20 +226,22 @@ The highest priority is currently to get the core and react packages to a stable
 - **Internal Packages**
   - [Core](/packages/core/README.md)
   - [Styles](/packages/styles/README.md)
+  - [Shadcn](/packages/shadcn/README.md)
 
 <!--NAV_END-->
 <!--BEGIN_REPO_NAV-->
 <br/><table>
 <thead><tr><th colspan="2">LiveKit Ecosystem</th></tr></thead>
 <tbody>
-<tr><td>LiveKit SDKs</td><td><a href="https://github.com/livekit/client-sdk-js">Browser</a> · <a href="https://github.com/livekit/client-sdk-swift">iOS/macOS/visionOS</a> · <a href="https://github.com/livekit/client-sdk-android">Android</a> · <a href="https://github.com/livekit/client-sdk-flutter">Flutter</a> · <a href="https://github.com/livekit/client-sdk-react-native">React Native</a> · <a href="https://github.com/livekit/rust-sdks">Rust</a> · <a href="https://github.com/livekit/node-sdks">Node.js</a> · <a href="https://github.com/livekit/python-sdks">Python</a> · <a href="https://github.com/livekit/client-sdk-unity">Unity</a> · <a href="https://github.com/livekit/client-sdk-unity-web">Unity (WebGL)</a> · <a href="https://github.com/livekit/client-sdk-esp32">ESP32</a></td></tr><tr></tr>
-<tr><td>Server APIs</td><td><a href="https://github.com/livekit/node-sdks">Node.js</a> · <a href="https://github.com/livekit/server-sdk-go">Golang</a> · <a href="https://github.com/livekit/server-sdk-ruby">Ruby</a> · <a href="https://github.com/livekit/server-sdk-kotlin">Java/Kotlin</a> · <a href="https://github.com/livekit/python-sdks">Python</a> · <a href="https://github.com/livekit/rust-sdks">Rust</a> · <a href="https://github.com/agence104/livekit-server-sdk-php">PHP (community)</a> · <a href="https://github.com/pabloFuente/livekit-server-sdk-dotnet">.NET (community)</a></td></tr><tr></tr>
+<tr><td>Agents SDKs</td><td><a href="https://github.com/livekit/agents">Python</a> · <a href="https://github.com/livekit/agents-js">Node.js</a></td></tr><tr></tr>
+<tr><td>LiveKit SDKs</td><td><a href="https://github.com/livekit/client-sdk-js">Browser</a> · <a href="https://github.com/livekit/client-sdk-swift">Swift</a> · <a href="https://github.com/livekit/client-sdk-android">Android</a> · <a href="https://github.com/livekit/client-sdk-flutter">Flutter</a> · <a href="https://github.com/livekit/client-sdk-react-native">React Native</a> · <a href="https://github.com/livekit/rust-sdks">Rust</a> · <a href="https://github.com/livekit/node-sdks">Node.js</a> · <a href="https://github.com/livekit/python-sdks">Python</a> · <a href="https://github.com/livekit/client-sdk-unity">Unity</a> · <a href="https://github.com/livekit/client-sdk-unity-web">Unity (WebGL)</a> · <a href="https://github.com/livekit/client-sdk-esp32">ESP32</a> · <a href="https://github.com/livekit/client-sdk-cpp">C++</a></td></tr><tr></tr>
+<tr><td>Starter Apps</td><td><a href="https://github.com/livekit-examples/agent-starter-python">Python Agent</a> · <a href="https://github.com/livekit-examples/agent-starter-node">TypeScript Agent</a> · <a href="https://github.com/livekit-examples/agent-starter-react">React App</a> · <a href="https://github.com/livekit-examples/agent-starter-swift">SwiftUI App</a> · <a href="https://github.com/livekit-examples/agent-starter-android">Android App</a> · <a href="https://github.com/livekit-examples/agent-starter-flutter">Flutter App</a> · <a href="https://github.com/livekit-examples/agent-starter-react-native">React Native App</a> · <a href="https://github.com/livekit-examples/agent-starter-embed">Web Embed</a></td></tr><tr></tr>
 <tr><td>UI Components</td><td><b>React</b> · <a href="https://github.com/livekit/components-android">Android Compose</a> · <a href="https://github.com/livekit/components-swift">SwiftUI</a> · <a href="https://github.com/livekit/components-flutter">Flutter</a></td></tr><tr></tr>
-<tr><td>Agents Frameworks</td><td><a href="https://github.com/livekit/agents">Python</a> · <a href="https://github.com/livekit/agents-js">Node.js</a> · <a href="https://github.com/livekit/agent-playground">Playground</a></td></tr><tr></tr>
-<tr><td>Services</td><td><a href="https://github.com/livekit/livekit">LiveKit server</a> · <a href="https://github.com/livekit/egress">Egress</a> · <a href="https://github.com/livekit/ingress">Ingress</a> · <a href="https://github.com/livekit/sip">SIP</a></td></tr><tr></tr>
-<tr><td>Resources</td><td><a href="https://docs.livekit.io">Docs</a> · <a href="https://github.com/livekit-examples">Example apps</a> · <a href="https://livekit.io/cloud">Cloud</a> · <a href="https://docs.livekit.io/home/self-hosting/deployment">Self-hosting</a> · <a href="https://github.com/livekit/livekit-cli">CLI</a></td></tr>
+<tr><td>Server APIs</td><td><a href="https://github.com/livekit/node-sdks">Node.js</a> · <a href="https://github.com/livekit/server-sdk-go">Golang</a> · <a href="https://github.com/livekit/server-sdk-ruby">Ruby</a> · <a href="https://github.com/livekit/server-sdk-kotlin">Java/Kotlin</a> · <a href="https://github.com/livekit/python-sdks">Python</a> · <a href="https://github.com/livekit/rust-sdks">Rust</a> · <a href="https://github.com/agence104/livekit-server-sdk-php">PHP (community)</a> · <a href="https://github.com/pabloFuente/livekit-server-sdk-dotnet">.NET (community)</a></td></tr><tr></tr>
+<tr><td>Resources</td><td><a href="https://docs.livekit.io">Docs</a> · <a href="https://docs.livekit.io/mcp">Docs MCP Server</a> · <a href="https://github.com/livekit/livekit-cli">CLI</a> · <a href="https://cloud.livekit.io">LiveKit Cloud</a></td></tr><tr></tr>
+<tr><td>LiveKit Server OSS</td><td><a href="https://github.com/livekit/livekit">LiveKit server</a> · <a href="https://github.com/livekit/egress">Egress</a> · <a href="https://github.com/livekit/ingress">Ingress</a> · <a href="https://github.com/livekit/sip">SIP</a></td></tr><tr></tr>
+<tr><td>Community</td><td><a href="https://community.livekit.io">Developer Community</a> · <a href="https://livekit.io/join-slack">Slack</a> · <a href="https://x.com/livekit">X</a> · <a href="https://www.youtube.com/@livekit_io">YouTube</a></td></tr>
 </tbody>
 </table>
 <!--END_REPO_NAV-->
-
 

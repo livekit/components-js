@@ -21,13 +21,7 @@ export interface UseIsMutedOptions {
  * const isMuted = useIsMuted(track);
  * ```
  *
- * @example With a track source / participant
- * ```tsx
- * const isMuted = useIsMuted('camera', { participant });
- * ```
- *
- * @param sourceOrTrackRef - Either a `TrackReference` or a `Track.Source` (see usage examples)
- * @param options - Additional options when using a `Track.Source`
+ * @param trackRef - A `TrackReference` indicating the track to monitor.
  * @returns boolean indicating if the track is muted
  *
  * @public

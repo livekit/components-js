@@ -31,4 +31,5 @@ export {
   type ChatEntryProps,
   ChatEntry,
   formatChatMessageLinks,
-} from '../components/ChatEntry';
+} from './ChatEntry';
+export * from './SessionProvider';

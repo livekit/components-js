@@ -5,8 +5,10 @@ import { RoomEvent, type LocalAudioTrack, type LocalVideoTrack } from 'livekit-c
 import { useMediaDeviceSelect } from '../../hooks';
 
 /** @public */
-export interface MediaDeviceSelectProps
-  extends Omit<React.HTMLAttributes<HTMLUListElement>, 'onError'> {
+export interface MediaDeviceSelectProps extends Omit<
+  React.HTMLAttributes<HTMLUListElement>,
+  'onError'
+> {
   kind: MediaDeviceKind;
   onActiveDeviceChange?: (deviceId: string) => void;
   onDeviceListChange?: (devices: MediaDeviceInfo[]) => void;

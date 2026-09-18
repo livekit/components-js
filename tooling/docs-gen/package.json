@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@livekit/components-docs-gen",
-  "version": "0.0.89",
+  "version": "0.0.95",
   "description": "Generate component docs.",
   "license": "Apache 2.0",
   "author": "LiveKit",
@@ -25,7 +25,8 @@
     "eslint-config-lk-custom": "workspace:*"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.35.2"
+    "@microsoft/api-extractor": "^7.35.2",
+    "eslint": "^8.56.0"
   },
   "keywords": [
     "docs",

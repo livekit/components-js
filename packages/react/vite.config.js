@@ -18,7 +18,7 @@ export default defineConfig({
     minify: 'esbuild',
     emptyOutDir: true,
     sourcemap: true,
-    target: 'modules',
+    target: 'es2020',
     modulePreload: { polyfill: false },
     lib: {
       entry: {

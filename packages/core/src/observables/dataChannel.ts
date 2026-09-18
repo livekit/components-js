@@ -41,8 +41,9 @@ export interface BaseDataMessage<T extends string | undefined> {
   payload: Uint8Array;
 }
 
-export interface ReceivedDataMessage<T extends string | undefined = string>
-  extends BaseDataMessage<T> {
+export interface ReceivedDataMessage<
+  T extends string | undefined = string,
+> extends BaseDataMessage<T> {
   from?: Participant;
 }
 
@@ -92,7 +93,12 @@ export function setupChatMessageHandler(room: Room) {
   const send = async (text: string, options: SendTextOptions): Promise<ReceivedChatMessage> => {
     const msg = await room.localParticipant.sendChatMessage(text, options);
     await room.localParticipant.sendText(text, options);
-    return { ...msg, from: room.localParticipant, attachedFiles: options.attachments };
+    return {
+      ...msg,
+      type: 'chatMessage',
+      from: room.localParticipant,
+      attachedFiles: options.attachments,
+    };
   };
 
   const edit = async (text: string, originalMsg: ChatMessage) => {

@@ -1,6 +1,6 @@
 {
   "name": "@livekit/components-core",
-  "version": "0.12.9",
+  "version": "0.12.13",
   "license": "Apache-2.0",
   "author": "LiveKit",
   "repository": {
@@ -35,7 +35,7 @@
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@floating-ui/dom": "1.6.13",
+    "@floating-ui/dom": "1.7.4",
     "loglevel": "1.9.1",
     "rxjs": "7.8.2"
   },
@@ -45,15 +45,16 @@
   },
   "devDependencies": {
     "@livekit/components-styles": "workspace:*",
-    "@livekit/protocol": "^1.38.0",
+    "@livekit/protocol": "catalog:",
     "@microsoft/api-extractor": "^7.36.0",
     "@size-limit/file": "^11.0.2",
     "@size-limit/webpack": "^11.0.2",
+    "eslint": "catalog:",
     "eslint-config-lk-custom": "workspace:*",
     "size-limit": "^11.0.2",
-    "tsup": "^8.0.0",
+    "tsup": "^8.5.1",
     "typescript": "5.8.2",
-    "vitest": "^3.0.0"
+    "vitest": "^4.0.18"
   },
   "engines": {
     "node": ">=18"

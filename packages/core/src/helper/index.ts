@@ -13,3 +13,4 @@ export {
 export { setDifference } from './set-helper';
 export { supportsScreenSharing } from './featureDetection';
 export * from './transcriptions';
+export * from './participant-attributes';

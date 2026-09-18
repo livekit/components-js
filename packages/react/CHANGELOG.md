@@ -1,5 +1,85 @@
 # @livekit/components-react
 
+## 2.9.20
+
+### Patch Changes
+
+- Remove misleading useIsMuted docs example - [#1281](https://github.com/livekit/components-js/pull/1281) ([@1egoman](https://github.com/1egoman))
+
+- Updated dependencies [[`f40ba89c44b57ca8004d0ccc45ab3e63de0cd4e5`](https://github.com/livekit/components-js/commit/f40ba89c44b57ca8004d0ccc45ab3e63de0cd4e5), [`176749aa10fc9807da985ec41b7442761c56f83b`](https://github.com/livekit/components-js/commit/176749aa10fc9807da985ec41b7442761c56f83b)]:
+  - @livekit/components-core@0.12.13
+
+## 2.9.19
+
+### Patch Changes
+
+- Revert unintentional classname change on BarVisualizer - [#1271](https://github.com/livekit/components-js/pull/1271) ([@thomasyuill-livekit](https://github.com/thomasyuill-livekit))
+
+## 2.9.18
+
+### Patch Changes
+
+- fix: useMultibandTrackVolume clipping - [#1265](https://github.com/livekit/components-js/pull/1265) ([@thomasyuill-livekit](https://github.com/thomasyuill-livekit))
+
+- Fix bug in useSession not exposing tracks when muted and switch empty value from null to undefined - [#1244](https://github.com/livekit/components-js/pull/1244) ([@1egoman](https://github.com/1egoman))
+
+- Add local screenshare track to useSession - [#1255](https://github.com/livekit/components-js/pull/1255) ([@1egoman](https://github.com/1egoman))
+
+- Update nextjs examples with useSession/useAgent hooks - [#1242](https://github.com/livekit/components-js/pull/1242) ([@pblazej](https://github.com/pblazej))
+
+- Add participant identity, name, and metadata to root useAgent() return value - [#1246](https://github.com/livekit/components-js/pull/1246) ([@1egoman](https://github.com/1egoman))
+
+## 2.9.17
+
+### Patch Changes
+
+- Ensure that if an agent connects after a timeout failure, the status doesn't get stuck in "failed" - [#1236](https://github.com/livekit/components-js/pull/1236) ([@1egoman](https://github.com/1egoman))
+
+- Updated dependencies [[`4149d81ab9b571021fe53c95bc69c7bf29aea5f6`](https://github.com/livekit/components-js/commit/4149d81ab9b571021fe53c95bc69c7bf29aea5f6)]:
+  - @livekit/components-core@0.12.12
+
+## 2.9.16
+
+### Patch Changes
+
+- allow localtrack passing on bar visualizer - [#1222](https://github.com/livekit/components-js/pull/1222) ([@lukasIO](https://github.com/lukasIO))
+
+- Ensure multibandvolume returns 0 if no track is passed - [#1223](https://github.com/livekit/components-js/pull/1223) ([@lukasIO](https://github.com/lukasIO))
+
+- Add new explicit agent 'pre-connect-buffering' state and new isConnected / canInteract booleans - [#1231](https://github.com/livekit/components-js/pull/1231) ([@1egoman](https://github.com/1egoman))
+
+- Change useAgent to return undefined for nullable TrackReference values - [#1224](https://github.com/livekit/components-js/pull/1224) ([@1egoman](https://github.com/1egoman))
+
+- Fix useSession return value stability - [#1230](https://github.com/livekit/components-js/pull/1230) ([@1egoman](https://github.com/1egoman))
+
+- Make useSession().start more stable - [#1233](https://github.com/livekit/components-js/pull/1233) ([@1egoman](https://github.com/1egoman))
+
+- Make useSession wait for agent only if an agent was dispatched - [#1226](https://github.com/livekit/components-js/pull/1226) ([@1egoman](https://github.com/1egoman))
+
+- Add explicit failure when agent disconnects from the room - [#1228](https://github.com/livekit/components-js/pull/1228) ([@1egoman](https://github.com/1egoman))
+
+- Add initial version of agents sdk (useSession, etc) - [#1207](https://github.com/livekit/components-js/pull/1207) ([@1egoman](https://github.com/1egoman))
+
+- Address useSession docstring typo - [#1234](https://github.com/livekit/components-js/pull/1234) ([@1egoman](https://github.com/1egoman))
+
+- Sort session messages by first received timestamp, not "timestamp" field - [#1229](https://github.com/livekit/components-js/pull/1229) ([@1egoman](https://github.com/1egoman))
+
+- Updated dependencies [[`f118da6e678c4a91be91c4dfc9b3b61eb7f64e2a`](https://github.com/livekit/components-js/commit/f118da6e678c4a91be91c4dfc9b3b61eb7f64e2a)]:
+  - @livekit/components-core@0.12.11
+
+## 2.9.15
+
+### Patch Changes
+
+- Fix `useParticipantTracks` to include local participant - [#1185](https://github.com/livekit/components-js/pull/1185) ([@mpnri](https://github.com/mpnri))
+
+- add useSequentialRoomConnectDisconnect to fix react useEffect room connection issue - [#1199](https://github.com/livekit/components-js/pull/1199) ([@1egoman](https://github.com/1egoman))
+
+- chore(react): deprecate legacy useTrackTranscriptions - [#1200](https://github.com/livekit/components-js/pull/1200) ([@lukasIO](https://github.com/lukasIO))
+
+- Updated dependencies [[`6f02e9f9b3e7737863d256b26a26ade914a5066a`](https://github.com/livekit/components-js/commit/6f02e9f9b3e7737863d256b26a26ade914a5066a), [`14064656e7f877d5eeacc04d6cc69186c25b7e24`](https://github.com/livekit/components-js/commit/14064656e7f877d5eeacc04d6cc69186c25b7e24)]:
+  - @livekit/components-core@0.12.10
+
 ## 2.9.14
 
 ### Patch Changes

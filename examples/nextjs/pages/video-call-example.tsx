@@ -8,7 +8,6 @@ import {
   MediaDeviceMenu,
   useDisconnectButton,
   PermissionsModal,
-  useTrackToggle,
   DevicePermissionError,
 } from '@livekit/components-react';
 import '@livekit/components-styles';
@@ -180,12 +179,8 @@ function ControlBar({
   hide?: boolean;
 }) {
   const { buttonProps: disconnectProps } = useDisconnectButton({});
-  const { permissionDenied: audioPermissionDenied } = useTrackToggle({
-    source: Track.Source.Microphone,
-  });
-  const { permissionDenied: videoPermissionDenied } = useTrackToggle({
-    source: Track.Source.Camera,
-  });
+  const [audioPermissionDenied, setAudioPermissionDenied] = useState(false);
+  const [videoPermissionDenied, setVideoPermissionDenied] = useState(false);
 
   const handleOpenPermissionModal = () => {
     onPermissionModalOpen?.({ audio: audioPermissionDenied, video: videoPermissionDenied });
@@ -198,7 +193,6 @@ function ControlBar({
       borderColor: '#ea4335',
     }),
   });
-
   if (hide) return null;
 
   return (
@@ -208,6 +202,7 @@ function ControlBar({
           source={Track.Source.Microphone}
           showIcon
           permissionDenied={audioPermissionDenied}
+          onPermissionsChange={setAudioPermissionDenied}
           onClick={audioPermissionDenied ? handleOpenPermissionModal : undefined}
           className={audioPermissionDenied ? 'permission-denied-toggle' : undefined}
         />
@@ -218,6 +213,7 @@ function ControlBar({
           source={Track.Source.Camera}
           showIcon
           permissionDenied={videoPermissionDenied}
+          onPermissionsChange={setVideoPermissionDenied}
           onClick={videoPermissionDenied ? handleOpenPermissionModal : undefined}
           className={videoPermissionDenied ? 'permission-denied-toggle' : undefined}
         />
@@ -440,6 +436,7 @@ function VideoCallExample() {
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPermissionModal, setShowPermissionModal] = useState(false);
+  const [callRejected, setCallRejected] = useState(false);
   const [deniedPermissions, setDeniedPermissions] = useState<{
     audio: boolean;
     video: boolean;

@@ -1,4 +1,4 @@
-export * from './components/index.js';
+export * from './components';
 
 export * from './hooks';
 
@@ -14,7 +14,10 @@ export * from './assets/images';
 export { setLogLevel, setLogExtension, isTrackReference } from '@livekit/components-core';
 export type {
   ChatMessage,
+  ReceivedMessage,
   ReceivedChatMessage,
+  ReceivedUserTranscriptionMessage,
+  ReceivedAgentTranscriptionMessage,
   MessageDecoder,
   MessageEncoder,
   LocalUserChoices,

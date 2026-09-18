@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-vite';
 
 import { AudioVisualizer, AudioVisualizerProps } from '@livekit/components-react';
 import { LkLocalMicTrackContext, LkRoomContext } from '../../../.storybook/lk-decorators';

@@ -1,5 +1,33 @@
 # @livekit/components-core
 
+## 0.12.13
+
+### Patch Changes
+
+- Adds in support for attachments and attributes fields into data streams - [#1283](https://github.com/livekit/components-js/pull/1283) ([@1egoman](https://github.com/1egoman))
+
+- Update all livekit-client to not use internal exports - [#1289](https://github.com/livekit/components-js/pull/1289) ([@1egoman](https://github.com/1egoman))
+
+## 0.12.12
+
+### Patch Changes
+
+- Remove requirement for ReceivedChatMessage to have an explicit type key - [#1241](https://github.com/livekit/components-js/pull/1241) ([@1egoman](https://github.com/1egoman))
+
+## 0.12.11
+
+### Patch Changes
+
+- Add initial version of agents sdk (useSession, etc) - [#1207](https://github.com/livekit/components-js/pull/1207) ([@1egoman](https://github.com/1egoman))
+
+## 0.12.10
+
+### Patch Changes
+
+- fix(core): prevent audio output switching on safari based browsers - [#1190](https://github.com/livekit/components-js/pull/1190) ([@lukasIO](https://github.com/lukasIO))
+
+- chore(react): deprecate legacy useTrackTranscriptions - [#1200](https://github.com/livekit/components-js/pull/1200) ([@lukasIO](https://github.com/lukasIO))
+
 ## 0.12.9
 
 ### Patch Changes

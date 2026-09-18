@@ -12,6 +12,9 @@
   border-radius: var(--border-radius);
   cursor: pointer;
   white-space: nowrap;
+  font-size: inherit;
+  line-height: inherit;
+  user-select: none;
 
   &:not(:disabled):hover {
     background-color: var(--control-hover-bg);

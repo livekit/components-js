@@ -7,6 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './'),
+      'next/server': path.resolve(__dirname, './tests/mocks/next-server.ts'),
     },
   },
   test: {
@@ -17,13 +18,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      exclude: [
-        'node_modules/',
-        'dist/',
-        '**/*.test.{ts,tsx}',
-        '**/*.config.{ts,js}',
-        'scripts/',
-      ],
+      exclude: ['node_modules/', 'dist/', '**/*.test.{ts,tsx}', '**/*.config.{ts,js}', 'scripts/'],
     },
   },
 });

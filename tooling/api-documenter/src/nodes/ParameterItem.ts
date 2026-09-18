@@ -1,7 +1,7 @@
 // Copyright (c) LiveKit. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
 
-import { IDocNodeParameters, DocNode, DocBlock } from '@microsoft/tsdoc';
+import { IDocNodeParameters, DocNode } from '@microsoft/tsdoc';
 import { CustomDocNodeKind } from './CustomDocNodeKind';
 
 /**

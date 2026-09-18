@@ -171,10 +171,6 @@ const uniformTypeToGLSLType = (t: string) => {
 const LinearFilter = 9729;
 const NearestFilter = 9728;
 const LinearMipMapLinearFilter = 9987;
-const NearestMipMapLinearFilter = 9986;
-const LinearMipMapNearestFilter = 9985;
-const NearestMipMapNearestFilter = 9984;
-const MirroredRepeatWrapping = 33648;
 const ClampToEdgeWrapping = 33071;
 const RepeatWrapping = 10497;
 
@@ -821,7 +817,9 @@ export function ReactShaderToy({
     }
     if (uniformsRef.current.iFrame?.isNeeded) {
       const timeDeltaUniform = gl.getUniformLocation(shaderProgramRef.current, UNIFORM_FRAME);
-      gl.uniform1i(timeDeltaUniform, (uniformsRef.current.iFrame.value as number)++);
+      const frame = uniformsRef.current.iFrame.value as number;
+      gl.uniform1i(timeDeltaUniform, frame);
+      uniformsRef.current.iFrame.value = frame + 1;
     }
     if (texturesArrRef.current.length > 0) {
       for (let index = 0; index < texturesArrRef.current.length; index++) {

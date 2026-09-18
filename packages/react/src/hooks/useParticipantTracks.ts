@@ -19,8 +19,7 @@ type UseParticipantTracksOptions = {
 export function useParticipantTracks<TrackSource extends Track.Source>(
   sources: Array<TrackSource>,
   optionsOrParticipantIdentity:
-    | UseParticipantTracksOptions
-    | UseParticipantTracksOptions['participantIdentity'] = {},
+    UseParticipantTracksOptions | UseParticipantTracksOptions['participantIdentity'] = {},
 ): Array<TrackReference> {
   let participantIdentity: UseParticipantTracksOptions['participantIdentity'];
   let room: UseParticipantTracksOptions['room'];

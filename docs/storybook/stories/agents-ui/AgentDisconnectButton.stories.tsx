@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
-import { AgentDisconnectButton, type AgentDisconnectButtonProps } from '@agents-ui';
+import { AgentDisconnectButton, type AgentDisconnectButtonProps } from '@livekit/agents-ui';
 
 export default {
   component: AgentDisconnectButton,

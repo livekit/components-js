@@ -1,5 +1,37 @@
 # @livekit/component-docs-storybook
 
+## 1.0.104
+
+### Patch Changes
+
+- Updated dependencies [[`e05b190`](https://github.com/livekit/components-js/commit/e05b190d9d6abb968a339105783d356b5ad02c2b), [`2da3e59`](https://github.com/livekit/components-js/commit/2da3e59e9854cde26cbeadcf8a5732ea42163bfa)]:
+  - @livekit/components-react@2.9.24
+  - @livekit/agents-ui@1.0.8
+
+## 1.0.103
+
+### Patch Changes
+
+- Updated dependencies [[`87220e4dd61b926023ce0d041e6fcf310f515edf`](https://github.com/livekit/components-js/commit/87220e4dd61b926023ce0d041e6fcf310f515edf)]:
+  - @livekit/components-react@2.9.23
+  - @agents-ui@1.0.7
+
+## 1.0.102
+
+### Patch Changes
+
+- Updated dependencies [[`4288fb709622d5f592b8f199429aadacef8d9b37`](https://github.com/livekit/components-js/commit/4288fb709622d5f592b8f199429aadacef8d9b37), [`d5b64eb6ad48a9dbb7753ddca2c71c0ef418b512`](https://github.com/livekit/components-js/commit/d5b64eb6ad48a9dbb7753ddca2c71c0ef418b512)]:
+  - @livekit/components-react@2.9.22
+  - @agents-ui@1.0.5
+
+## 1.0.101
+
+### Patch Changes
+
+- Updated dependencies [[`6a6af9ec1f6eb1dbf931041da4b239c14b9a02df`](https://github.com/livekit/components-js/commit/6a6af9ec1f6eb1dbf931041da4b239c14b9a02df), [`171d21aa24df8ff9259ade332aed4cfd5a33a9f1`](https://github.com/livekit/components-js/commit/171d21aa24df8ff9259ade332aed4cfd5a33a9f1), [`84df6f25c99a15d66b74e011f27d06ad9cee3c09`](https://github.com/livekit/components-js/commit/84df6f25c99a15d66b74e011f27d06ad9cee3c09), [`dd9a4f4d27d0d1462265e9fc83704d161eac06a2`](https://github.com/livekit/components-js/commit/dd9a4f4d27d0d1462265e9fc83704d161eac06a2), [`91bb48ce3da689e7a473ad16cd6fa708a20cea15`](https://github.com/livekit/components-js/commit/91bb48ce3da689e7a473ad16cd6fa708a20cea15)]:
+  - @livekit/components-react@2.9.21
+  - @agents-ui@1.0.4
+
 ## 1.0.100
 
 ### Patch Changes

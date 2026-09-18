@@ -22,8 +22,7 @@ export function PaginationControl({
   const [interactive, setInteractive] = React.useState(false);
   React.useEffect(() => {
     let subscription:
-      | ReturnType<ReturnType<typeof createInteractingObservable>['subscribe']>
-      | undefined;
+      ReturnType<ReturnType<typeof createInteractingObservable>['subscribe']> | undefined;
     if (connectedElement) {
       subscription = createInteractingObservable(connectedElement.current, 2000).subscribe(
         setInteractive,

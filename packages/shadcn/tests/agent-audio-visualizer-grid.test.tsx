@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { AgentAudioVisualizerGrid } from '@/components/agents-ui/agent-audio-visualizer-grid';
+import {
+  AgentAudioVisualizerGrid,
+  normalizeVolumeBands,
+} from '@/components/agents-ui/agent-audio-visualizer-grid';
 import { useMultibandTrackVolume } from '@livekit/components-react';
 import { useAgentAudioVisualizerGridAnimator } from '@/hooks/agents-ui/use-agent-audio-visualizer-grid';
 
@@ -104,6 +107,81 @@ describe('AgentAudioVisualizerGrid', () => {
     expect(cells[5]).toHaveAttribute('data-lk-highlighted', 'false');
   });
 
+  it('uses volumeBands prop instead of the hook value when speaking', () => {
+    mockUseMultibandTrackVolume.mockReturnValue([0, 0]);
+
+    const { container } = render(
+      <AgentAudioVisualizerGrid
+        state="speaking"
+        rowCount={3}
+        columnCount={2}
+        volumeBands={[1, 0]}
+      />,
+    );
+    const cells = container.querySelectorAll('[data-lk-index]');
+
+    expect(cells[0]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[1]).toHaveAttribute('data-lk-highlighted', 'false');
+    expect(cells[2]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[3]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[4]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[5]).toHaveAttribute('data-lk-highlighted', 'false');
+  });
+
+  it('trims excess volumeBands values to match columnCount', () => {
+    mockUseMultibandTrackVolume.mockReturnValue([0, 0]);
+
+    const { container } = render(
+      <AgentAudioVisualizerGrid
+        state="speaking"
+        rowCount={3}
+        columnCount={2}
+        volumeBands={[1, 0, 1]}
+      />,
+    );
+    const cells = container.querySelectorAll('[data-lk-index]');
+
+    expect(cells).toHaveLength(6);
+    expect(cells[0]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[1]).toHaveAttribute('data-lk-highlighted', 'false');
+    expect(cells[2]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[3]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[4]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[5]).toHaveAttribute('data-lk-highlighted', 'false');
+  });
+
+  it('pads volumeBands by duplicating the last value to match columnCount', () => {
+    mockUseMultibandTrackVolume.mockReturnValue([0, 0, 0]);
+
+    const { container } = render(
+      <AgentAudioVisualizerGrid state="speaking" rowCount={3} columnCount={3} volumeBands={[1]} />,
+    );
+    const cells = container.querySelectorAll('[data-lk-index]');
+
+    expect(cells).toHaveLength(9);
+    cells.forEach((cell) => {
+      expect(cell).toHaveAttribute('data-lk-highlighted', 'true');
+    });
+  });
+
+  it('ignores volumeBands when not speaking (animator coordinate still applies)', () => {
+    mockUseAgentAudioVisualizerGridAnimator.mockReturnValue({ x: 1, y: 1 });
+
+    const { container } = render(
+      <AgentAudioVisualizerGrid
+        state="connecting"
+        rowCount={3}
+        columnCount={3}
+        volumeBands={[1, 1, 1]}
+      />,
+    );
+    const cells = container.querySelectorAll('[data-lk-index]');
+
+    expect(cells[4]).toHaveAttribute('data-lk-highlighted', 'true');
+    expect(cells[0]).toHaveAttribute('data-lk-highlighted', 'false');
+    expect(cells[8]).toHaveAttribute('data-lk-highlighted', 'false');
+  });
+
   it('preserves custom child classes for Tailwind shadow control', () => {
     const { container } = render(
       <AgentAudioVisualizerGrid>
@@ -125,5 +203,27 @@ describe('AgentAudioVisualizerGrid', () => {
         </AgentAudioVisualizerGrid>,
       ),
     ).toThrow('AgentAudioVisualizerGrid children must be a single element.');
+  });
+});
+
+describe('normalizeVolumeBands', () => {
+  it('returns the array unchanged when the length already matches', () => {
+    expect(normalizeVolumeBands([0.1, 0.2, 0.3], 3)).toEqual([0.1, 0.2, 0.3]);
+  });
+
+  it('trims excess trailing values', () => {
+    expect(normalizeVolumeBands([0.1, 0.2, 0.3, 0.4], 2)).toEqual([0.1, 0.2]);
+  });
+
+  it('pads by duplicating the last value', () => {
+    expect(normalizeVolumeBands([0.1, 0.2], 4)).toEqual([0.1, 0.2, 0.2, 0.2]);
+  });
+
+  it('pads a single-element array by duplicating it', () => {
+    expect(normalizeVolumeBands([0.5], 3)).toEqual([0.5, 0.5, 0.5]);
+  });
+
+  it('pads an empty array with 0s', () => {
+    expect(normalizeVolumeBands([], 3)).toEqual([0, 0, 0]);
   });
 });

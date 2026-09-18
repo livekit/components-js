@@ -43,11 +43,7 @@ type AgentSdkStates = 'initializing' | 'idle' | 'listening' | 'thinking' | 'spea
  * @beta
  * */
 export type AgentState =
-  | 'disconnected'
-  | 'connecting'
-  | 'pre-connect-buffering'
-  | 'failed'
-  | AgentSdkStates;
+  'disconnected' | 'connecting' | 'pre-connect-buffering' | 'failed' | AgentSdkStates;
 
 /** @beta */
 export enum AgentEvent {

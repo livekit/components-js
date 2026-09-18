@@ -6,4 +6,6 @@ export enum ParticipantAgentAttributes {
   TranscriptionFinal = 'lk.transcription_final',
   TranscriptionSegmentId = 'lk.segment_id',
   TranscribedTrackId = 'lk.transcribed_track_id',
+
+  Expression = 'lk.expression',
 }

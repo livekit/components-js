@@ -42,12 +42,23 @@ export default defineConfig({
           entryFileNames: '[name].mjs', // Use .mjs for ESM
           chunkFileNames: '[name]-[hash].mjs',
           dir: 'dist',
-          manualChunks: {
-            contexts: ['src/context/index.ts'],
-            room: ['src/hooks/useLiveKitRoom.ts', 'src/components/LiveKitRoom.tsx'],
-            hooks: ['src/hooks/index.ts'],
-            components: ['src/components/index.ts'],
-            prefabs: ['src/prefabs/index.ts'],
+          codeSplitting: {
+            // Rollup's `manualChunks` object form pulled each listed module *and its
+            // dependency tree* into the chunk. Rolldown groups only capture modules
+            // that themselves match `test`, so recursion must be opted into.
+            includeDependenciesRecursively: true,
+
+            groups: [
+              {
+                name: 'room',
+                test: /\/src\/(hooks\/useLiveKitRoom\.ts|components\/LiveKitRoom\.tsx)$/,
+                priority: 6,
+              },
+              { name: 'contexts', test: /\/src\/context\/index\.ts$/, priority: 5 },
+              { name: 'hooks', test: /\/src\/hooks\/index\.ts$/, priority: 3 },
+              { name: 'components', test: /\/src\/components\/index\.ts$/, priority: 2 },
+              { name: 'prefabs', test: /\/src\/prefabs\/index\.ts$/, priority: 1 },
+            ],
           },
         },
         {

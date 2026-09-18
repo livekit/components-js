@@ -326,6 +326,8 @@ export enum ParticipantAgentAttributes {
     // (undocumented)
     AgentState = "lk.agent.state",
     // (undocumented)
+    Expression = "lk.expression",
+    // (undocumented)
     PublishOnBehalf = "lk.publish_on_behalf",
     // (undocumented)
     TranscribedTrackId = "lk.transcribed_track_id",

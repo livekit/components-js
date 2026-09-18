@@ -1,10 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { AgentAudioVisualizerRadial } from '@/components/agents-ui/agent-audio-visualizer-radial';
+import {
+  AgentAudioVisualizerRadial,
+  normalizeVolumeBands,
+} from '@/components/agents-ui/agent-audio-visualizer-radial';
+import * as LiveKitComponents from '@livekit/components-react';
 // Mock hooks
 vi.mock('@livekit/components-react', async () => {
   const actual = await vi.importActual('@livekit/components-react');
-  return { ...actual, useMultibandTrackVolume: vi.fn(() => []) };
+  return {
+    ...actual,
+    useMultibandTrackVolume: vi.fn((_track, options) => new Array(options?.bands ?? 0).fill(0)),
+  };
 });
 
 vi.mock('@/hooks/agents-ui/use-agent-audio-visualizer-radial', () => ({
@@ -38,12 +45,7 @@ describe('AgentAudioVisualizerRadial', () => {
 
   it('applies click handler', () => {
     const onClick = vi.fn();
-    render(
-      <AgentAudioVisualizerRadial
-        data-testid="radial-viz"
-        onClick={onClick}
-      />,
-    );
+    render(<AgentAudioVisualizerRadial data-testid="radial-viz" onClick={onClick} />);
     const visualizer = screen.getByTestId('radial-viz');
     fireEvent.click(visualizer);
     expect(onClick).toHaveBeenCalledTimes(1);
@@ -67,5 +69,67 @@ describe('AgentAudioVisualizerRadial', () => {
       expect(bar).toHaveAttribute('data-lk-index', String(idx));
       expect(bar).toHaveAttribute('data-lk-highlighted');
     });
+  });
+
+  it('uses volumeBands prop instead of the hook value', () => {
+    vi.mocked(LiveKitComponents.useMultibandTrackVolume).mockReturnValue([0, 0]);
+    const { container } = render(
+      <AgentAudioVisualizerRadial state="speaking" barCount={2} volumeBands={[1, 0]} />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    expect(bars[0]).not.toHaveStyle({ height: '0px' });
+    expect(bars[1]).toHaveStyle({ height: '0px' });
+  });
+
+  it('renders volumeBands even when audioTrack is absent', () => {
+    const { container } = render(
+      <AgentAudioVisualizerRadial state="speaking" barCount={2} volumeBands={[1, 0]} />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    expect(bars[0]).not.toHaveStyle({ height: '0px' });
+    expect(bars[1]).toHaveStyle({ height: '0px' });
+  });
+
+  it('trims excess volumeBands values to match barCount', () => {
+    const { container } = render(
+      <AgentAudioVisualizerRadial state="speaking" barCount={2} volumeBands={[1, 0, 1]} />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    expect(bars).toHaveLength(2);
+    expect(bars[0]).not.toHaveStyle({ height: '0px' });
+    expect(bars[1]).toHaveStyle({ height: '0px' });
+  });
+
+  it('pads volumeBands by duplicating the last value to match barCount', () => {
+    const { container } = render(
+      <AgentAudioVisualizerRadial state="speaking" barCount={3} volumeBands={[0, 1]} />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    expect(bars).toHaveLength(3);
+    expect(bars[0]).toHaveStyle({ height: '0px' });
+    expect(bars[1]).not.toHaveStyle({ height: '0px' });
+    expect(bars[2]).not.toHaveStyle({ height: '0px' });
+  });
+});
+
+describe('normalizeVolumeBands', () => {
+  it('returns the array unchanged when the length already matches', () => {
+    expect(normalizeVolumeBands([0.1, 0.2, 0.3], 3)).toEqual([0.1, 0.2, 0.3]);
+  });
+
+  it('trims excess trailing values', () => {
+    expect(normalizeVolumeBands([0.1, 0.2, 0.3, 0.4], 2)).toEqual([0.1, 0.2]);
+  });
+
+  it('pads by duplicating the last value', () => {
+    expect(normalizeVolumeBands([0.1, 0.2], 4)).toEqual([0.1, 0.2, 0.2, 0.2]);
+  });
+
+  it('pads a single-element array by duplicating it', () => {
+    expect(normalizeVolumeBands([0.5], 3)).toEqual([0.5, 0.5, 0.5]);
+  });
+
+  it('pads an empty array with 0s', () => {
+    expect(normalizeVolumeBands([], 3)).toEqual([0, 0, 0]);
   });
 });

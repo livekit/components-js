@@ -3,7 +3,7 @@
 
 import colors from 'colors';
 import * as path from 'path';
-import yaml = require('js-yaml');
+import * as yaml from 'js-yaml';
 
 import { ApiModel } from '@microsoft/api-extractor-model';
 import { FileSystem } from '@rushstack/node-core-library';

@@ -1,7 +1,7 @@
 import { type ComponentProps } from 'react';
 import { useEnsureRoom, useStartAudio } from '@livekit/components-react';
 import { Button } from '@/components/ui/button';
-import { Room } from 'livekit-client';
+import { type Room } from 'livekit-client';
 
 /**
  * Props for the StartAudioButton component.
@@ -44,13 +44,21 @@ export function StartAudioButton({
   variant = 'default',
   label,
   room,
+  className,
   ...props
 }: StartAudioButtonProps) {
   const roomEnsured = useEnsureRoom(room);
   const { mergedProps } = useStartAudio({ room: roomEnsured, props });
 
   return (
-    <Button size={size} variant={variant} {...props} {...mergedProps}>
+    <Button
+      size={size}
+      variant={variant}
+      {...props}
+      {...mergedProps}
+      // don't merge useStartAudio className
+      className={className}
+    >
       {label}
     </Button>
   );

@@ -30,15 +30,15 @@ describe('AgentDisconnectButton', () => {
       expect(button).toBeInTheDocument();
     });
 
-    it('displays default END CALL text', () => {
+    it('displays default End call text', () => {
       render(<AgentDisconnectButton />);
-      expect(screen.getByText('END CALL')).toBeInTheDocument();
+      expect(screen.getByText('End call')).toBeInTheDocument();
     });
 
     it('displays custom children when provided', () => {
       render(<AgentDisconnectButton>Custom Text</AgentDisconnectButton>);
       expect(screen.getByText('Custom Text')).toBeInTheDocument();
-      expect(screen.queryByText('END CALL')).not.toBeInTheDocument();
+      expect(screen.queryByText('End call')).not.toBeInTheDocument();
     });
 
     it('renders with default phone icon', () => {

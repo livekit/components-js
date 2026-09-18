@@ -24,12 +24,9 @@ const agentControlBarMock = vi.fn((props: any) => (
   <div data-testid="agent-control-bar" data-props={JSON.stringify(props)} />
 ));
 
-vi.mock(
-  '@/components/agents-ui/blocks/agent-session-view-01/components/tile-view',
-  () => ({
-    TileLayout: (props: any) => tileLayoutMock(props),
-  }),
-);
+vi.mock('@/components/agents-ui/blocks/agent-session-view-01/components/tile-view', () => ({
+  TileLayout: (props: any) => tileLayoutMock(props),
+}));
 
 vi.mock('@/components/agents-ui/agent-control-bar', () => ({
   AgentControlBar: (props: any) => agentControlBarMock(props),
@@ -41,20 +38,10 @@ vi.mock('@/components/agents-ui/agent-chat-transcript', () => ({
   ),
 }));
 
-vi.mock('@/components/ai-elements/shimmer', () => ({
-  Shimmer: ({ children, ...props }: any) => (
-    <div data-testid="shimmer" {...props}>
-      {children}
-    </div>
-  ),
-}));
-
 vi.mock('motion/react', () => ({
   motion: {
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    create: (Component: any) => (props: any) => (
-      <Component {...props} data-testid="motion-shimmer" />
-    ),
+    p: ({ children, ...props }: any) => <p {...props}>{children}</p>,
   },
   AnimatePresence: ({ children }: any) => <>{children}</>,
 }));
@@ -67,12 +54,7 @@ describe('AgentSessionView_01', () => {
 
   describe('style, className, and ref', () => {
     it('applies className to the section element', () => {
-      render(
-        <AgentSessionView_01
-          data-testid="session-view"
-          className="custom-section-class"
-        />,
-      );
+      render(<AgentSessionView_01 data-testid="session-view" className="custom-section-class" />);
       const section = screen.getByTestId('session-view');
       expect(section.tagName).toBe('SECTION');
       expect(section).toHaveClass('custom-section-class');
@@ -81,10 +63,7 @@ describe('AgentSessionView_01', () => {
 
     it('applies style to the section element', () => {
       render(
-        <AgentSessionView_01
-          data-testid="session-view"
-          style={{ opacity: 0.9, minHeight: 100 }}
-        />,
+        <AgentSessionView_01 data-testid="session-view" style={{ opacity: 0.9, minHeight: 100 }} />,
       );
       const section = screen.getByTestId('session-view');
       expect(section).toHaveStyle({ opacity: '0.9', minHeight: '100px' });
@@ -114,12 +93,7 @@ describe('AgentSessionView_01', () => {
 
   describe('preConnectMessage', () => {
     it('shows default pre-connect message when no messages and buffer enabled', () => {
-      render(
-        <AgentSessionView_01
-          data-testid="session-view"
-          isPreConnectBufferEnabled={true}
-        />,
-      );
+      render(<AgentSessionView_01 data-testid="session-view" isPreConnectBufferEnabled={true} />);
       expect(screen.getByText('Agent is listening, ask it a question')).toBeInTheDocument();
     });
 
@@ -135,62 +109,35 @@ describe('AgentSessionView_01', () => {
     });
   });
 
-  describe('supportsChatInput', () => {
-    it('passes chat: true to AgentControlBar by default', () => {
+  describe('controls', () => {
+    it('passes the default controls to AgentControlBar when unset', () => {
       render(<AgentSessionView_01 data-testid="session-view" />);
       const call = agentControlBarMock.mock.calls[0][0];
-      expect(call.controls).toEqual(
-        expect.objectContaining({ chat: true, leave: true, microphone: true }),
-      );
+      expect(call.controls).toEqual({
+        leave: true,
+        microphone: true,
+        chat: false,
+        camera: false,
+        screenShare: false,
+      });
     });
 
-    it('passes chat: false when supportsChatInput is false', () => {
-      render(
-        <AgentSessionView_01
-          data-testid="session-view"
-          supportsChatInput={false}
-        />,
-      );
+    it('passes chat: true when controls.chat is true', () => {
+      render(<AgentSessionView_01 data-testid="session-view" controls={{ chat: true }} />);
       const call = agentControlBarMock.mock.calls[0][0];
-      expect(call.controls.chat).toBe(false);
+      expect(call.controls.chat).toBe(true);
     });
-  });
 
-  describe('supportsVideoInput', () => {
-    it('passes camera: true to AgentControlBar by default', () => {
-      render(<AgentSessionView_01 data-testid="session-view" />);
+    it('passes camera: true when controls.camera is true', () => {
+      render(<AgentSessionView_01 data-testid="session-view" controls={{ camera: true }} />);
       const call = agentControlBarMock.mock.calls[0][0];
       expect(call.controls.camera).toBe(true);
     });
 
-    it('passes camera: false when supportsVideoInput is false', () => {
-      render(
-        <AgentSessionView_01
-          data-testid="session-view"
-          supportsVideoInput={false}
-        />,
-      );
-      const call = agentControlBarMock.mock.calls[0][0];
-      expect(call.controls.camera).toBe(false);
-    });
-  });
-
-  describe('supportsScreenShare', () => {
-    it('passes screenShare: true to AgentControlBar by default', () => {
-      render(<AgentSessionView_01 data-testid="session-view" />);
+    it('passes screenShare: true when controls.screenShare is true', () => {
+      render(<AgentSessionView_01 data-testid="session-view" controls={{ screenShare: true }} />);
       const call = agentControlBarMock.mock.calls[0][0];
       expect(call.controls.screenShare).toBe(true);
-    });
-
-    it('passes screenShare: false when supportsScreenShare is false', () => {
-      render(
-        <AgentSessionView_01
-          data-testid="session-view"
-          supportsScreenShare={false}
-        />,
-      );
-      const call = agentControlBarMock.mock.calls[0][0];
-      expect(call.controls.screenShare).toBe(false);
     });
   });
 
@@ -218,139 +165,94 @@ describe('AgentSessionView_01', () => {
     });
   });
 
-  describe('audioVisualizer props passed to TileLayout', () => {
-    it('passes audioVisualizerType to TileLayout', () => {
+  describe('audioVisualizer prop passed to TileLayout', () => {
+    it('passes audioVisualizer.type to TileLayout', () => {
+      render(<AgentSessionView_01 data-testid="session-view" audioVisualizer={{ type: 'aura' }} />);
+      const props = JSON.parse(screen.getByTestId('tile-layout').getAttribute('data-props')!);
+      expect(props.audioVisualizer.type).toBe('aura');
+    });
+
+    it('passes audioVisualizer.color to TileLayout', () => {
+      render(
+        <AgentSessionView_01 data-testid="session-view" audioVisualizer={{ color: '#ff00ff' }} />,
+      );
+      const props = JSON.parse(screen.getByTestId('tile-layout').getAttribute('data-props')!);
+      expect(props.audioVisualizer.color).toBe('#ff00ff');
+    });
+
+    it('passes audioVisualizer.colorShift to TileLayout for the wave type', () => {
       render(
         <AgentSessionView_01
           data-testid="session-view"
-          audioVisualizerType="aura"
+          audioVisualizer={{ type: 'wave', colorShift: 0.5 }}
         />,
       );
-      const props = JSON.parse(
-        screen.getByTestId('tile-layout').getAttribute('data-props')!,
-      );
-      expect(props.audioVisualizerType).toBe('aura');
+      const props = JSON.parse(screen.getByTestId('tile-layout').getAttribute('data-props')!);
+      expect(props.audioVisualizer.colorShift).toBe(0.5);
     });
 
-    it('passes audioVisualizerColor to TileLayout', () => {
+    it('passes audioVisualizer.barCount to TileLayout', () => {
+      render(<AgentSessionView_01 data-testid="session-view" audioVisualizer={{ barCount: 11 }} />);
+      const props = JSON.parse(screen.getByTestId('tile-layout').getAttribute('data-props')!);
+      expect(props.audioVisualizer.barCount).toBe(11);
+    });
+
+    it('passes audioVisualizer.rowCount and audioVisualizer.columnCount to TileLayout', () => {
       render(
         <AgentSessionView_01
           data-testid="session-view"
-          audioVisualizerColor="#ff00ff"
+          audioVisualizer={{ type: 'grid', rowCount: 8, columnCount: 12 }}
         />,
       );
-      const props = JSON.parse(
-        screen.getByTestId('tile-layout').getAttribute('data-props')!,
-      );
-      expect(props.audioVisualizerColor).toBe('#ff00ff');
+      const props = JSON.parse(screen.getByTestId('tile-layout').getAttribute('data-props')!);
+      expect(props.audioVisualizer.rowCount).toBe(8);
+      expect(props.audioVisualizer.columnCount).toBe(12);
     });
 
-    it('passes audioVisualizerColorShift to TileLayout', () => {
+    it('passes audioVisualizer.barCount and audioVisualizer.radius to TileLayout for the radial type', () => {
       render(
         <AgentSessionView_01
           data-testid="session-view"
-          audioVisualizerColorShift={0.5}
+          audioVisualizer={{ type: 'radial', barCount: 32, radius: 60 }}
         />,
       );
-      const props = JSON.parse(
-        screen.getByTestId('tile-layout').getAttribute('data-props')!,
-      );
-      expect(props.audioVisualizerColorShift).toBe(0.5);
+      const props = JSON.parse(screen.getByTestId('tile-layout').getAttribute('data-props')!);
+      expect(props.audioVisualizer.barCount).toBe(32);
+      expect(props.audioVisualizer.radius).toBe(60);
     });
 
-    it('passes audioVisualizerBarCount to TileLayout', () => {
+    it('passes audioVisualizer.lineWidth to TileLayout for the wave type', () => {
       render(
         <AgentSessionView_01
           data-testid="session-view"
-          audioVisualizerBarCount={11}
+          audioVisualizer={{ type: 'wave', lineWidth: 3 }}
         />,
       );
-      const props = JSON.parse(
-        screen.getByTestId('tile-layout').getAttribute('data-props')!,
-      );
-      expect(props.audioVisualizerBarCount).toBe(11);
+      const props = JSON.parse(screen.getByTestId('tile-layout').getAttribute('data-props')!);
+      expect(props.audioVisualizer.lineWidth).toBe(3);
     });
 
-    it('passes audioVisualizerGridRowCount and audioVisualizerGridColumnCount to TileLayout', () => {
-      render(
-        <AgentSessionView_01
-          data-testid="session-view"
-          audioVisualizerGridRowCount={8}
-          audioVisualizerGridColumnCount={12}
-        />,
-      );
-      const props = JSON.parse(
-        screen.getByTestId('tile-layout').getAttribute('data-props')!,
-      );
-      expect(props.audioVisualizerGridRowCount).toBe(8);
-      expect(props.audioVisualizerGridColumnCount).toBe(12);
-    });
-
-    it('passes audioVisualizerRadialBarCount and audioVisualizerRadialRadius to TileLayout', () => {
-      render(
-        <AgentSessionView_01
-          data-testid="session-view"
-          audioVisualizerRadialBarCount={32}
-          audioVisualizerRadialRadius={60}
-        />,
-      );
-      const props = JSON.parse(
-        screen.getByTestId('tile-layout').getAttribute('data-props')!,
-      );
-      expect(props.audioVisualizerRadialBarCount).toBe(32);
-      expect(props.audioVisualizerRadialRadius).toBe(60);
-    });
-
-    it('passes audioVisualizerWaveLineWidth to TileLayout', () => {
-      render(
-        <AgentSessionView_01
-          data-testid="session-view"
-          audioVisualizerWaveLineWidth={3}
-        />,
-      );
-      const props = JSON.parse(
-        screen.getByTestId('tile-layout').getAttribute('data-props')!,
-      );
-      expect(props.audioVisualizerWaveLineWidth).toBe(3);
-    });
-
-    it('passes all audio visualizer props to TileLayout when set', () => {
-      const visualizerProps = {
-        audioVisualizerType: 'grid' as const,
-        audioVisualizerColor: '#00ff00' as const,
-        audioVisualizerColorShift: 1,
-        audioVisualizerBarCount: 7,
-        audioVisualizerGridRowCount: 6,
-        audioVisualizerGridColumnCount: 8,
-        audioVisualizerRadialBarCount: 16,
-        audioVisualizerRadialRadius: 90,
-        audioVisualizerWaveLineWidth: 2,
+    it('passes the full audioVisualizer config to TileLayout when set', () => {
+      const audioVisualizer = {
+        type: 'grid' as const,
+        color: '#00ff00' as const,
+        rowCount: 6,
+        columnCount: 8,
       };
-      render(
-        <AgentSessionView_01 data-testid="session-view" {...visualizerProps} />,
-      );
-      const props = JSON.parse(
-        screen.getByTestId('tile-layout').getAttribute('data-props')!,
-      );
-      expect(props).toMatchObject(visualizerProps);
+      render(<AgentSessionView_01 data-testid="session-view" audioVisualizer={audioVisualizer} />);
+      const props = JSON.parse(screen.getByTestId('tile-layout').getAttribute('data-props')!);
+      expect(props.audioVisualizer).toMatchObject(audioVisualizer);
     });
   });
 
   describe('control bar controls together', () => {
-    it('passes all controls false when all support props are false', () => {
-      render(
-        <AgentSessionView_01
-          data-testid="session-view"
-          supportsChatInput={false}
-          supportsVideoInput={false}
-          supportsScreenShare={false}
-        />,
-      );
+    it('merges partial controls overrides with the defaults', () => {
+      render(<AgentSessionView_01 data-testid="session-view" controls={{ chat: true }} />);
       const call = agentControlBarMock.mock.calls[0][0];
       expect(call.controls).toEqual({
         leave: true,
         microphone: true,
-        chat: false,
+        chat: true,
         camera: false,
         screenShare: false,
       });

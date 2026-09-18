@@ -45,7 +45,5 @@ export type ReceivedAgentTranscriptionMessage = ReceivedMessageWithType<
 
 /** @beta */
 export type ReceivedMessage =
-  | ReceivedUserTranscriptionMessage
-  | ReceivedAgentTranscriptionMessage
-  | ReceivedChatMessage;
+  ReceivedUserTranscriptionMessage | ReceivedAgentTranscriptionMessage | ReceivedChatMessage;
 // TODO: images? attachments? rpc?

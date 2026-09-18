@@ -59,6 +59,7 @@ export * from './useVoiceAssistant';
 export * from './useParticipantAttributes';
 export * from './useIsRecording';
 export * from './useTextStream';
+export * from './useAgentExpression';
 export * from './useTranscriptions';
 export { useDeviceState } from './useDeviceState';
 export * from './useSequentialRoomConnectDisconnect';

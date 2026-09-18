@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
-import { AgentTrackControl, type AgentTrackControlProps } from '@agents-ui';
+import { AgentTrackControl, type AgentTrackControlProps } from '@livekit/agents-ui';
 import { useAgent, useTrackToggle } from '@livekit/components-react';
 import { Track } from 'livekit-client';
 
@@ -46,8 +46,8 @@ export default {
 
 export const Default: StoryObj<AgentTrackControlProps> = {
   render: (args: AgentTrackControlProps) => {
-    const [isCameraPressed, setIsCameraPressed] = React.useState(true);
-    const [isMicrophonePressed, setIsMicrophonePressed] = React.useState(false);
+    const [isCameraPressed, setIsCameraPressed] = React.useState(false);
+    const [isMicrophonePressed, setIsMicrophonePressed] = React.useState(true);
     const [isScreenSharePressed, setIsScreenSharePressed] = React.useState(true);
     const { microphoneTrack } = useAgent();
 

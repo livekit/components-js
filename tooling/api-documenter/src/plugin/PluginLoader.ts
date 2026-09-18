@@ -1,6 +1,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
 
+// Plugins are loaded from a path resolved at runtime, which requires a dynamic require().
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 import * as path from 'path';
 import * as resolve from 'resolve';
 
@@ -34,8 +37,9 @@ export class PluginLoader {
 
         // Load the package
         const entryPoint:
-          | { apiDocumenterPluginManifest?: IApiDocumenterPluginManifest }
-          | undefined = require(resolvedEntryPointPath);
+          { apiDocumenterPluginManifest?: IApiDocumenterPluginManifest } | undefined = require(
+          resolvedEntryPointPath,
+        );
 
         if (!entryPoint) {
           throw new Error('Invalid entry point');

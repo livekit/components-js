@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
-import { AgentAudioVisualizerAura, AgentAudioVisualizerAuraProps } from '@agents-ui';
+import { AgentAudioVisualizerAura, AgentAudioVisualizerAuraProps } from '@livekit/agents-ui';
 import { useTheme } from 'next-themes';
 import { useAgent } from '@livekit/components-react';
+import { useSimulatedVolumeBands } from './useSimulatedVolumeBands';
 
 export default {
   component: AgentAudioVisualizerAura,
@@ -63,4 +64,26 @@ export default {
 
 export const Default: StoryObj<AgentAudioVisualizerAuraProps> = {
   args: {},
+};
+
+// Demonstrates the `volume` override prop with a simulated speech waveform instead of
+// live audio.
+export const OverrideVolume: StoryObj<AgentAudioVisualizerAuraProps> = {
+  args: {
+    state: 'speaking',
+  },
+  render: (args: AgentAudioVisualizerAuraProps) => {
+    const { microphoneTrack } = useAgent();
+    const { resolvedTheme = 'dark' } = useTheme();
+    const [volume] = useSimulatedVolumeBands(1);
+
+    return (
+      <AgentAudioVisualizerAura
+        {...args}
+        audioTrack={microphoneTrack}
+        volume={volume}
+        themeMode={resolvedTheme as 'dark' | 'light'}
+      />
+    );
+  },
 };

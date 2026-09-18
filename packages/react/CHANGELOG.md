@@ -1,5 +1,50 @@
 # @livekit/components-react
 
+## 2.9.24
+
+### Patch Changes
+
+- Add `useAgentExpression` to the React SDK, reading the mood the agent publishes on `lk.expression`. - [#1415](https://github.com/livekit/components-js/pull/1415) ([@theomonnom](https://github.com/theomonnom))
+
+- Preserve text stream attributes on transcript messages from `useSessionMessages` - [#1416](https://github.com/livekit/components-js/pull/1416) ([@theomonnom](https://github.com/theomonnom))
+
+- Updated dependencies [[`28b189b`](https://github.com/livekit/components-js/commit/28b189b49a344cc93c3a4dfeee7527ae4c250873), [`e05b190`](https://github.com/livekit/components-js/commit/e05b190d9d6abb968a339105783d356b5ad02c2b)]:
+  - @livekit/components-core@0.12.15
+
+## 2.9.23
+
+### Patch Changes
+
+- Require `livekit-client >= 2.20.1`. That release ships the `NonSharedUint8Array` - [#1360](https://github.com/livekit/components-js/pull/1360) ([@1egoman](https://github.com/1egoman))
+  type declaration in its published types; earlier 2.19/2.20.0 builds referenced it
+  without shipping it, which broke type resolution for consumers (`skipLibCheck: false`)
+  and API Extractor. The local workaround shim is removed now that the type resolves
+  from livekit-client itself.
+- Updated dependencies [[`87220e4dd61b926023ce0d041e6fcf310f515edf`](https://github.com/livekit/components-js/commit/87220e4dd61b926023ce0d041e6fcf310f515edf)]:
+  - @livekit/components-core@0.12.14
+
+## 2.9.22
+
+### Patch Changes
+
+- Fix `manageSubscription` on `VideoTrack` not following tile visibility - [#1347](https://github.com/livekit/components-js/pull/1347) ([@1egoman](https://github.com/1egoman))
+
+- Forward the local `track` to `setupDeviceSelector` in `useMediaDeviceSelect` so `setActiveMediaDevice` switches the microphone or camera in pre-join / preview mode (no connected room). - [#1330](https://github.com/livekit/components-js/pull/1330) ([@nikhilgupta58](https://github.com/nikhilgupta58))
+
+## 2.9.21
+
+### Patch Changes
+
+- Invalidate tokens originating from a cached token source after first usage - [#1309](https://github.com/livekit/components-js/pull/1309) ([@lukasIO](https://github.com/lukasIO))
+
+- Adds new "encryption" field to useSession - [#1317](https://github.com/livekit/components-js/pull/1317) ([@1egoman](https://github.com/1egoman))
+
+- fix and simplify agent attribute update hook with direct participant reference - [#1307](https://github.com/livekit/components-js/pull/1307) ([@chenghao-mou](https://github.com/chenghao-mou))
+
+- Handle renamed e2ee -> encryption key in room options serializer - [`dd9a4f4d27d0d1462265e9fc83704d161eac06a2`](https://github.com/livekit/components-js/commit/dd9a4f4d27d0d1462265e9fc83704d161eac06a2) ([@afgarcia86](https://github.com/afgarcia86))
+
+- Add new useRpc hook - [#1314](https://github.com/livekit/components-js/pull/1314) ([@1egoman](https://github.com/1egoman))
+
 ## 2.9.20
 
 ### Patch Changes
@@ -1110,7 +1155,6 @@
 - GridLayout Revision. - [#326](https://github.com/livekit/components-js/pull/326) ([@Ocupe](https://github.com/Ocupe))
 
   Renaming:
-
   - `sortParticipantsByVolume` -> `sortParticipants`
 
 - Include room in dependency array in order to disconnect on room unmount - [#332](https://github.com/livekit/components-js/pull/332) ([@lukasIO](https://github.com/lukasIO))

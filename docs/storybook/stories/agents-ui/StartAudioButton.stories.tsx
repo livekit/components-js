@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
-import { StartAudioButton, type StartAudioButtonProps } from '@agents-ui';
+import { StartAudioButton, type StartAudioButtonProps } from '@livekit/agents-ui';
 
 export default {
   component: StartAudioButton,
   decorators: [AgentSessionProvider],
   render: (args: StartAudioButtonProps) => {
     return (
-      <>
+      <div className='space-y-2 flex flex-col align-center' >
         <p>A button will be rendered below if audio playback is blocked.</p>
         <StartAudioButton {...args} />
-      </>
+      </div>
     );
   },
   args: {

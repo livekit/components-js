@@ -6,6 +6,7 @@
 
 import { AudioAnalyserOptions } from 'livekit-client';
 import { AudioCaptureOptions } from 'livekit-client';
+import { BaseE2EEManager } from 'livekit-client';
 import { BaseKeyProvider } from 'livekit-client';
 import { CaptureOptionsBySource } from '@livekit/components-core';
 import { ChatMessage } from '@livekit/components-core';
@@ -95,6 +96,9 @@ export enum AgentEvent {
     StateChanged = "stateChanged"
 }
 
+// @beta
+export type AgentMood = 'excited' | 'happy' | 'playful' | 'curious' | 'surprised' | 'hopeful' | 'empathetic' | 'sad' | 'angry' | 'anxious' | 'calm';
+
 // Warning: (ae-forgotten-export) The symbol "AgentSdkStates" needs to be exported by the entry point index.docs.d.ts
 //
 // @beta
@@ -115,7 +119,7 @@ export interface AllowMediaPlaybackProps extends React_2.ButtonHTMLAttributes<HT
 }
 
 // @public
-export function AudioConference({ ...props }: AudioConferenceProps): React_2.JSX.Element;
+export function AudioConference(input: AudioConferenceProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface AudioConferenceProps extends React_2.HTMLAttributes<HTMLDivElement> {
@@ -186,7 +190,7 @@ export const CameraDisabledIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX
 export const CameraIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
-export function CarouselLayout({ tracks, orientation, ...props }: CarouselLayoutProps): React_2.JSX.Element;
+export function CarouselLayout(input: CarouselLayoutProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface CarouselLayoutProps extends React_2.HTMLAttributes<HTMLMediaElement> {
@@ -198,7 +202,7 @@ export interface CarouselLayoutProps extends React_2.HTMLAttributes<HTMLMediaEle
 }
 
 // @public
-export function Chat({ messageFormatter, messageDecoder, messageEncoder, channelTopic, ...props }: ChatProps): React_2.JSX.Element;
+export function Chat(input: ChatProps): React_2.JSX.Element;
 
 // Warning: (ae-internal-missing-underscore) The name "ChatCloseIcon" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -279,7 +283,7 @@ export interface ConnectionStatusProps extends React_2.HTMLAttributes<HTMLDivEle
 }
 
 // @public
-export function ControlBar({ variation, controls, saveUserChoices, onDeviceError, ...props }: ControlBarProps): React_2.JSX.Element;
+export function ControlBar(input: ControlBarProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export type ControlBarControls = {
@@ -306,6 +310,9 @@ export interface ControlBarProps extends React_2.HTMLAttributes<HTMLDivElement> 
     variation?: 'minimal' | 'verbose' | 'textOnly';
 }
 
+// @beta
+export const DEFAULT_MOOD_TTL_TURNS = 2;
+
 // @public
 export const DisconnectButton: (props: DisconnectButtonProps & React_2.RefAttributes<HTMLButtonElement>) => React_2.ReactNode;
 
@@ -314,6 +321,9 @@ export interface DisconnectButtonProps extends React_2.ButtonHTMLAttributes<HTML
     // (undocumented)
     stopTracks?: boolean;
 }
+
+// @beta
+export const EXPRESSION_ATTRIBUTE: 'lk.expression';
 
 // Warning: (ae-internal-missing-underscore) The name "FeatureFlags" should be prefixed with an underscore because the declaration is marked as @internal
 //
@@ -324,7 +334,7 @@ export interface FeatureFlags {
 }
 
 // @public
-export function FocusLayout({ trackRef, ...htmlProps }: FocusLayoutProps): React_2.JSX.Element;
+export function FocusLayout(input: FocusLayoutProps): React_2.JSX.Element;
 
 // @public
 export function FocusLayoutContainer(props: FocusLayoutContainerProps): React_2.JSX.Element;
@@ -363,7 +373,7 @@ export function formatChatMessageLinks(message: string): React_2.ReactNode;
 export const GearIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
-export function GridLayout({ tracks, ...props }: GridLayoutProps): React_2.JSX.Element;
+export function GridLayout(input: GridLayoutProps): React_2.JSX.Element;
 
 export { GridLayoutDefinition }
 
@@ -386,7 +396,7 @@ export function isUseSessionReturn(value: unknown): value is UseSessionReturn;
 export const LayoutContext: React_2.Context<LayoutContextType | undefined>;
 
 // @alpha (undocumented)
-export function LayoutContextProvider({ value, onPinChange, onWidgetChange, children, }: React_2.PropsWithChildren<LayoutContextProviderProps>): React_2.JSX.Element;
+export function LayoutContextProvider(input: React_2.PropsWithChildren<LayoutContextProviderProps>): React_2.JSX.Element;
 
 // @alpha (undocumented)
 export interface LayoutContextProviderProps {
@@ -452,7 +462,7 @@ export { LocalUserChoices }
 export const LockLockedIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 // @public
-export function MediaDeviceMenu({ kind, initialSelection, onActiveDeviceChange, tracks, requestPermissions, ...props }: MediaDeviceMenuProps): React_2.JSX.Element;
+export function MediaDeviceMenu(input: MediaDeviceMenuProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface MediaDeviceMenuProps extends React_2.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -528,6 +538,9 @@ export interface MultiBandTrackVolumeOptions {
     updateInterval?: number;
 }
 
+// @beta
+export function parseExpression(segment: TextStreamData): UseAgentExpressionReturn | null;
+
 // @public
 export const ParticipantAudioTile: (props: ParticipantTileProps & React_2.RefAttributes<HTMLDivElement>) => React_2.ReactNode;
 
@@ -544,7 +557,7 @@ export function ParticipantContextIfNeeded(props: React_2.PropsWithChildren<{
 export { ParticipantIdentifier }
 
 // @public
-export function ParticipantLoop({ participants, ...props }: ParticipantLoopProps): React_2.JSX.Element;
+export function ParticipantLoop(input: ParticipantLoopProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface ParticipantLoopProps {
@@ -579,7 +592,7 @@ export interface ParticipantTileProps extends React_2.HTMLAttributes<HTMLDivElem
 export { PinState }
 
 // @public
-export function PreJoin({ defaults, onValidate, onSubmit, onError, debug, joinLabel, micLabel, camLabel, userLabel, persistUserChoices, videoProcessor, ...htmlProps }: PreJoinProps): React_2.JSX.Element;
+export function PreJoin(input: PreJoinProps): React_2.JSX.Element;
 
 // @public
 export interface PreJoinProps extends Omit<React_2.HTMLAttributes<HTMLDivElement>, 'onSubmit' | 'onError'> {
@@ -632,7 +645,7 @@ export { ReceivedMessage }
 export { ReceivedUserTranscriptionMessage }
 
 // @public
-export function RoomAudioRenderer({ room, volume, muted }: RoomAudioRendererProps): React_2.JSX.Element;
+export function RoomAudioRenderer(input: RoomAudioRendererProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface RoomAudioRendererProps {
@@ -749,7 +762,7 @@ export { TextStreamData }
 export function Toast(props: React_2.HTMLAttributes<HTMLDivElement>): React_2.JSX.Element;
 
 // @public
-export function TrackLoop({ tracks, ...props }: TrackLoopProps): React_2.JSX.Element;
+export function TrackLoop(input: TrackLoopProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface TrackLoopProps {
@@ -818,6 +831,20 @@ export const UnfocusToggleIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.
 // @beta
 export function useAgent(session?: SessionStub): UseAgentReturn;
 
+// @beta
+export function useAgentExpression(opts?: UseAgentExpressionOptions): UseAgentExpressionReturn;
+
+// @beta (undocumented)
+export interface UseAgentExpressionOptions extends UseTranscriptionsOptions {
+    ttlTurns?: number;
+}
+
+// @beta (undocumented)
+export interface UseAgentExpressionReturn {
+    expression: string | null;
+    mood: AgentMood | null;
+}
+
 // Warning: (ae-forgotten-export) The symbol "AgentStateCases" needs to be exported by the entry point index.docs.d.ts
 // Warning: (ae-forgotten-export) The symbol "AgentActions" needs to be exported by the entry point index.docs.d.ts
 //
@@ -845,7 +872,7 @@ export function useChat(options?: ChatOptions & {
 };
 
 // @public
-export function useChatToggle({ props }: UseChatToggleProps): {
+export function useChatToggle(input: UseChatToggleProps): {
     mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
         className: string;
         onClick: () => void;
@@ -917,7 +944,7 @@ export function useEnsureSession(session?: UseSessionReturn): UseSessionReturn;
 export function useEnsureTrackRef(trackRef?: TrackReferenceOrPlaceholder): TrackReferenceOrPlaceholder;
 
 // @public (undocumented)
-export function useEvents<Emitter extends default_2<EventMap>, EmitterEventMap extends Emitter extends default_2<infer EM> ? EM : never, Event extends Parameters<Emitter['on']>[0], Callback extends EmitterEventMap[Event]>(instance: Emitter | {
+export function useEvents<Emitter extends default_2<EventMap>, EmitterEventMap extends (Emitter extends default_2<infer EM> ? EM : never), Event extends Parameters<Emitter['on']>[0], Callback extends EmitterEventMap[Event]>(instance: Emitter | {
     internal: {
         emitter: Emitter;
     };
@@ -933,7 +960,7 @@ export function useFacingMode(trackReference: TrackReferenceOrPlaceholder): 'use
 export function useFeatureContext<T extends boolean>(require?: T): FeatureContext<T>;
 
 // @public
-export function useFocusToggle({ trackRef, props }: UseFocusToggleProps): {
+export function useFocusToggle(input: UseFocusToggleProps): {
     mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
         className: string;
         onClick: (event: React_2.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
@@ -1044,13 +1071,13 @@ export function useMaybeSessionContext(): UseSessionReturn | undefined;
 export function useMaybeTrackRefContext(): TrackReferenceOrPlaceholder | undefined;
 
 // @public
-export function useMediaDevices({ kind, onError, }: {
+export function useMediaDevices(input: {
     kind: MediaDeviceKind;
     onError?: (e: Error) => void;
 }): MediaDeviceInfo[];
 
 // @public
-export function useMediaDeviceSelect({ kind, room, track, requestPermissions, onError, }: UseMediaDeviceSelectProps): {
+export function useMediaDeviceSelect(input: UseMediaDeviceSelectProps): {
     devices: MediaDeviceInfo[];
     className: string;
     activeDeviceId: string;
@@ -1133,7 +1160,7 @@ export interface UseParticipantsOptions {
 }
 
 // @public
-export function useParticipantTile<T extends HTMLElement>({ trackRef, onParticipantClick, disableSpeakingIndicator, htmlProps, }: UseParticipantTileProps<T>): {
+export function useParticipantTile<T extends HTMLElement>(input: UseParticipantTileProps<T>): {
     elementProps: React_2.HTMLAttributes<T>;
 };
 
@@ -1313,7 +1340,7 @@ export type UseSpeakingParticipantsOptions = {
 };
 
 // @alpha
-export function useStartAudio({ room, props }: UseStartAudioProps): {
+export function useStartAudio(input: UseStartAudioProps): {
     mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
         className: string;
         onClick: () => void;
@@ -1333,7 +1360,7 @@ export interface UseStartAudioProps {
 }
 
 // @alpha
-export function useStartVideo({ room, props }: UseStartVideoProps): {
+export function useStartVideo(input: UseStartVideoProps): {
     mergedProps: React_2.ButtonHTMLAttributes<HTMLButtonElement> & {
         className: string;
         onClick: () => void;
@@ -1406,7 +1433,7 @@ export type UseTracksOptions = {
 };
 
 // @public
-export function useTrackToggle<T extends ToggleSource>({ source, onChange, initialState, captureOptions, publishOptions, onDeviceError, room, ...rest }: UseTrackToggleProps<T>): {
+export function useTrackToggle<T extends ToggleSource>(input: UseTrackToggleProps<T>): {
     toggle: ((forceState?: boolean) => Promise<void>) | ((forceState?: boolean, captureOptions?: CaptureOptionsBySource<T> | undefined) => Promise<boolean | undefined>);
     enabled: boolean;
     pending: boolean;
@@ -1454,7 +1481,7 @@ export interface UseVisualStableUpdateOptions {
 export function useVoiceAssistant(): VoiceAssistant;
 
 // @public
-export function VideoConference({ chatMessageFormatter, chatMessageDecoder, chatMessageEncoder, SettingsComponent, ...props }: VideoConferenceProps): React_2.JSX.Element;
+export function VideoConference(input: VideoConferenceProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface VideoConferenceProps extends React_2.HTMLAttributes<HTMLDivElement> {
@@ -1493,7 +1520,7 @@ export interface VoiceAssistant {
 }
 
 // @beta (undocumented)
-export function VoiceAssistantControlBar({ controls, saveUserChoices, onDeviceError, ...props }: VoiceAssistantControlBarProps): React_2.JSX.Element;
+export function VoiceAssistantControlBar(input: VoiceAssistantControlBarProps): React_2.JSX.Element;
 
 // @beta (undocumented)
 export type VoiceAssistantControlBarControls = {

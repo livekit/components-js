@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { AgentAudioVisualizerBar } from '@/components/agents-ui/agent-audio-visualizer-bar';
+import {
+  AgentAudioVisualizerBar,
+  normalizeVolumeBands,
+} from '@/components/agents-ui/agent-audio-visualizer-bar';
 import * as LiveKitComponents from '@livekit/components-react';
 
 // Mock the @livekit/components-react hooks
@@ -95,6 +98,49 @@ describe('AgentAudioVisualizerBar', () => {
     });
   });
 
+  it('uses volumeBands prop instead of the hook value when speaking', () => {
+    vi.mocked(LiveKitComponents.useMultibandTrackVolume).mockReturnValue([0.1, 0.1, 0.1]);
+    const { container } = render(
+      <AgentAudioVisualizerBar state="speaking" barCount={3} volumeBands={[1, 0.5, 0]} />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    expect(bars[0]).toHaveStyle({ height: '100%' });
+    expect(bars[1]).toHaveStyle({ height: '50%' });
+    expect(bars[2]).toHaveStyle({ height: '0%' });
+  });
+
+  it('still zeroes bars when not speaking even if volumeBands is supplied', () => {
+    const { container } = render(
+      <AgentAudioVisualizerBar state="connecting" barCount={3} volumeBands={[1, 1, 1]} />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    bars.forEach((bar) => {
+      expect(bar).toHaveStyle({ height: '0%' });
+    });
+  });
+
+  it('trims excess volumeBands values to match barCount', () => {
+    const { container } = render(
+      <AgentAudioVisualizerBar state="speaking" barCount={2} volumeBands={[1, 0.5, 0]} />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    expect(bars).toHaveLength(2);
+    expect(bars[0]).toHaveStyle({ height: '100%' });
+    expect(bars[1]).toHaveStyle({ height: '50%' });
+  });
+
+  it('pads volumeBands by duplicating the last value to match barCount', () => {
+    const { container } = render(
+      <AgentAudioVisualizerBar state="speaking" barCount={4} volumeBands={[1, 0.5]} />,
+    );
+    const bars = container.querySelectorAll('[data-lk-index]');
+    expect(bars).toHaveLength(4);
+    expect(bars[0]).toHaveStyle({ height: '100%' });
+    expect(bars[1]).toHaveStyle({ height: '50%' });
+    expect(bars[2]).toHaveStyle({ height: '50%' });
+    expect(bars[3]).toHaveStyle({ height: '50%' });
+  });
+
   it('throws when children is not a single element', () => {
     expect(() =>
       render(
@@ -104,5 +150,27 @@ describe('AgentAudioVisualizerBar', () => {
         </AgentAudioVisualizerBar>,
       ),
     ).toThrow('AgentAudioVisualizerBar children must be a single element.');
+  });
+});
+
+describe('normalizeVolumeBands', () => {
+  it('returns the array unchanged when the length already matches', () => {
+    expect(normalizeVolumeBands([0.1, 0.2, 0.3], 3)).toEqual([0.1, 0.2, 0.3]);
+  });
+
+  it('trims excess trailing values', () => {
+    expect(normalizeVolumeBands([0.1, 0.2, 0.3, 0.4], 2)).toEqual([0.1, 0.2]);
+  });
+
+  it('pads by duplicating the last value', () => {
+    expect(normalizeVolumeBands([0.1, 0.2], 4)).toEqual([0.1, 0.2, 0.2, 0.2]);
+  });
+
+  it('pads a single-element array by duplicating it', () => {
+    expect(normalizeVolumeBands([0.5], 3)).toEqual([0.5, 0.5, 0.5]);
+  });
+
+  it('pads an empty array with 0s', () => {
+    expect(normalizeVolumeBands([], 3)).toEqual([0, 0, 0]);
   });
 });

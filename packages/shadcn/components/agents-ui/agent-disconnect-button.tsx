@@ -1,7 +1,7 @@
 'use client';
 
 import { type ComponentProps } from 'react';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button, type buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useSessionContext } from '@livekit/components-react';
 import { type VariantProps } from 'class-variance-authority';
@@ -11,8 +11,7 @@ import { PhoneOffIcon } from 'lucide-react';
  * Props for the AgentDisconnectButton component.
  */
 export interface AgentDisconnectButtonProps
-  extends ComponentProps<'button'>,
-    VariantProps<typeof buttonVariants> {
+  extends ComponentProps<'button'>, VariantProps<typeof buttonVariants> {
   /**
    * Custom icon to display. Defaults to PhoneOffIcon.
    */
@@ -67,7 +66,7 @@ export function AgentDisconnectButton({
   return (
     <Button size={size} variant={variant} onClick={handleClick} {...props}>
       {icon ?? <PhoneOffIcon />}
-      {children ?? <span className={cn(size?.includes('icon') && 'sr-only')}>END CALL</span>}
+      {children ?? <span className={cn(size?.includes('icon') && 'sr-only')}>End call</span>}
     </Button>
   );
 }

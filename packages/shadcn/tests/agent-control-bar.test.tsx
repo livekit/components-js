@@ -112,13 +112,7 @@ describe('AgentControlBar', () => {
 
   it('applies click handler', () => {
     const onClick = vi.fn();
-    render(
-      <AgentControlBar
-        isConnected
-        data-testid="agent-controls"
-        onClick={onClick}
-      />,
-    );
+    render(<AgentControlBar isConnected data-testid="agent-controls" onClick={onClick} />);
     const controls = screen.getByTestId('agent-controls');
     fireEvent.click(controls);
     expect(onClick).toHaveBeenCalledTimes(1);

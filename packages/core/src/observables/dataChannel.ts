@@ -29,7 +29,10 @@ export async function sendMessage(
 ) {
   const { reliable, destinationIdentities, topic } = options;
 
-  await localParticipant.publishData(payload, {
+  // `publishData` requires the non-shared `Uint8Array<ArrayBuffer>` variant (livekit-client >=2.19),
+  // but this helper intentionally accepts any consumer-supplied `Uint8Array` and forwards it
+  // unchanged (as it did before that type tightening). Data-channel payloads are not shared-backed.
+  await localParticipant.publishData(payload as Uint8Array<ArrayBuffer>, {
     destinationIdentities,
     topic,
     reliable,

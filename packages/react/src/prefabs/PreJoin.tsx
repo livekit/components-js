@@ -18,6 +18,7 @@ import * as React from 'react';
 import { getPrejoinTranslations, type PrejoinLanguage } from './prejoinTranslations';
 import { MediaDeviceMenu } from './MediaDeviceMenu';
 import { TrackToggle } from '../components/controls/TrackToggle';
+import { BarVisualizer } from '../components/participant/BarVisualizer';
 import type { LocalUserChoices } from '@livekit/components-core';
 import { log } from '@livekit/components-core';
 import { ParticipantPlaceholder } from '../assets/images';
@@ -814,7 +815,11 @@ export function PreJoin({
                 setAudioEnabled(enabled);
               }
             }}
-          />
+          >
+            {audioTrack && audioEnabled && (
+              <BarVisualizer track={audioTrack} barCount={7} options={{ minHeight: 5 }} />
+            )}
+          </TrackToggle>
           <div className="lk-button-group-menu-pre-join">
             <label className="lk-selected-device-label">
               {selectedAudioDevice?.label || micLabel}

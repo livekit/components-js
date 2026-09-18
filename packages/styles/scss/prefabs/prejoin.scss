@@ -90,6 +90,17 @@
     height: auto;
   }
 
+  /* Mic level meter inside the PreJoin audio toggle */
+  .button-group-pre-join .audio-bar-visualizer {
+    --va-bar-width: 2px;
+    --va-bar-gap: 3px;
+    --va-bar-border-radius: 1px;
+    width: auto;
+    height: 1rem;
+    margin-inline-start: 0.5rem;
+    background: transparent;
+  }
+
   .username-container {
     display: flex;
     flex-direction: column;

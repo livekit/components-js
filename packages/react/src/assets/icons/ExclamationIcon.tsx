@@ -10,10 +10,10 @@ const SvgExclamationIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={12} height={12} fill="currentColor" {...props}>
     <path
       fillRule="evenodd"
-      d="M6 1a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5A.5.5 0 0 1 6 1z"
+      d="M6 1a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5A.5.5 0 0 1 6 1"
       clipRule="evenodd"
     />
-    <path d="M6 9.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z" />
+    <path d="M6 9.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
   </svg>
 );
 export default SvgExclamationIcon;

@@ -41,14 +41,15 @@ import { useConnectionState } from './useConnectionStatus';
  */
 export function useChat(options?: ChatOptions & { room?: Room }) {
   const room = useEnsureRoom(options?.room);
+  const { channelTopic, updateChannelTopic, messageEncoder, messageDecoder } = options ?? {};
   const connectionState = useConnectionState(room);
   const isDisconnected = React.useMemo(
     () => connectionState === ConnectionState.Disconnected,
     [connectionState],
   ); // used to reset the messages on room disconnect
   const setup = React.useMemo<ReturnType<typeof setupChat>>(
-    () => setupChat(room, options),
-    [room, options, isDisconnected],
+    () => setupChat(room, { channelTopic, updateChannelTopic, messageEncoder, messageDecoder }),
+    [room, channelTopic, updateChannelTopic, messageEncoder, messageDecoder, isDisconnected],
   );
   const isSending = useObservableState(setup.isSendingObservable, false);
   const chatMessages = useObservableState<ReceivedChatMessage[]>(setup.messageObservable, []);

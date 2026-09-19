@@ -93,11 +93,8 @@ export function setupChat(room: Room, options?: ChatOptions) {
   const topic = options?.channelTopic ?? DataTopic.CHAT;
   const legacyTopic = options?.channelTopic ?? LegacyDataTopic.CHAT;
 
-  let needsSetup = false;
-  if (!topicSubjectMap.has(room)) {
-    needsSetup = true;
-  }
   const topicMap = topicSubjectMap.get(room) ?? new Map<string, Subject<ReceivedChatMessage>>();
+  const needsSetup = !topicMap.has(topic);
   const messageSubject = topicMap.get(topic) ?? new Subject<ReceivedChatMessage>();
   topicMap.set(topic, messageSubject);
   topicSubjectMap.set(room, topicMap);

@@ -80,6 +80,37 @@ describe('Test dividing list into pages.', () => {
 
 describe('Test updating the list based while considering pages.', () => {
   test.each([
+    { state: [1, 2], next: [3, 2], expected: [3, 2] },
+    { state: [1, 2, 3], next: [4, 2], expected: [4, 2] },
+    { state: [1, 2], next: [3, 2, 4], expected: [3, 2, 4] },
+  ])(
+    'Replaces items while retaining an unchanged tile: $state -> $next',
+    ({ state, next, expected }) => {
+      const previousState = [...state];
+      const nextState = [...next];
+
+      expect(updatePages(state, next, 2)).toStrictEqual(expected);
+      expect(state).toStrictEqual(previousState);
+      expect(next).toStrictEqual(nextState);
+    },
+  );
+
+  test('Replaces an unpublished track with its placeholder without moving other tiles', () => {
+    const first = mockTrackReferenceSubscribed('A', Track.Source.Camera);
+    const removed = mockTrackReferenceSubscribed('B', Track.Source.Camera);
+    const last = mockTrackReferenceSubscribed('C', Track.Source.Camera);
+    const placeholder = mockTrackReferencePlaceholder('B', Track.Source.Camera);
+    const state = [first, removed, last];
+    const next = [first, placeholder, last];
+
+    const result = updatePages<TrackReferenceOrPlaceholder>(state, next, 2);
+
+    expect(result).toStrictEqual(next);
+    expect(result[1]).toBe(placeholder);
+    expect(state).toStrictEqual([first, removed, last]);
+  });
+
+  test.each([
     {
       state: [1, 2, 3, 4, 5, 6],
       next: [2, 1, 3, 4, 5, 6],

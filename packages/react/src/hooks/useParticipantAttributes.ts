@@ -55,6 +55,7 @@ export function useParticipantAttribute(
     if (!p) {
       return;
     }
+    setAttribute(p.attributes[attributeKey]);
     const subscription = participantAttributesObserver(p).subscribe((val) => {
       if (val.changed[attributeKey] !== undefined) {
         setAttribute(val.attributes[attributeKey]);

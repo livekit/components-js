@@ -39,7 +39,7 @@ export function useSwipe(element: React.RefObject<HTMLElement>, options: UseSwip
   };
 
   const onTouchEnd = React.useCallback(() => {
-    if (!touchStart.current || !touchEnd.current) {
+    if (touchStart.current === null || touchEnd.current === null) {
       return;
     }
     const distance = touchStart.current - touchEnd.current;

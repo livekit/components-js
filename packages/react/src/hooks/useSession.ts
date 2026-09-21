@@ -634,6 +634,7 @@ export function useSession(
     roomConnectionState,
     localCamera,
     localMicrophone,
+    localScreenShare,
     generateDerivedConnectionStateValues,
   ]);
   React.useEffect(() => {

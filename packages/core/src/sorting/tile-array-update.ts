@@ -85,11 +85,9 @@ export function updatePages<T extends UpdatableItem>(
 ): T[] {
   let updatedList: T[] = refreshList(currentList, nextList);
 
-  if (updatedList.length < nextList.length) {
-    // Items got added: Find newly added items and add them to the end of the list.
-    const addedItems = differenceBy(nextList, updatedList, getTrackReferenceId);
-    updatedList = [...updatedList, ...addedItems];
-  }
+  // Add new items before swapping pages, even when other items were removed in the same update.
+  const addedItems = differenceBy(nextList, updatedList, getTrackReferenceId);
+  updatedList = [...updatedList, ...addedItems];
   const currentPages = divideIntoPages(updatedList, maxItemsOnPage);
   const nextPages = divideIntoPages(nextList, maxItemsOnPage);
 

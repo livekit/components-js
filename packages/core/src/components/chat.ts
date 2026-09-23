@@ -47,9 +47,19 @@ export type MessageEncoder = (message: LegacyChatMessage) => Uint8Array;
 export type MessageDecoder = (message: Uint8Array) => LegacyReceivedChatMessage;
 /** @public */
 export type ChatOptions = {
-  /** @deprecated the new chat API doesn't rely on encoders and decoders anymore and uses a dedicated chat API instead */
+  /**
+   * When passed to React's `useChat`, memoize this function with `useCallback` or define it
+   * outside the component. A new function reference on each render recreates chat setup
+   * and resets message history, which can cause a render loop.
+   * @deprecated the new chat API doesn't rely on encoders and decoders anymore and uses a dedicated chat API instead
+   */
   messageEncoder?: (message: LegacyChatMessage) => Uint8Array;
-  /** @deprecated the new chat API doesn't rely on encoders and decoders anymore and uses a dedicated chat API instead */
+  /**
+   * When passed to React's `useChat`, memoize this function with `useCallback` or define it
+   * outside the component. A new function reference on each render recreates chat setup
+   * and resets message history, which can cause a render loop.
+   * @deprecated the new chat API doesn't rely on encoders and decoders anymore and uses a dedicated chat API instead
+   */
   messageDecoder?: (message: Uint8Array) => LegacyReceivedChatMessage;
   channelTopic?: string;
   /** @deprecated the new chat API doesn't rely on update topics anymore and uses a dedicated chat API instead */

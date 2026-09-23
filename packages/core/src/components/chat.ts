@@ -56,7 +56,12 @@ export type ChatOptions = {
   updateChannelTopic?: string;
 };
 
-const topicSubjectMap: WeakMap<Room, Map<string, Subject<ReceivedChatMessage>>> = new WeakMap();
+type ChatTopicState = {
+  messageSubject: Subject<ReceivedChatMessage>;
+  onDestroyObservable: Subject<void>;
+};
+
+const topicSubjectMap: WeakMap<Room, Map<string, ChatTopicState>> = new WeakMap();
 const streamIdToAttachments = new Map<
   string /* stream id */,
   Map<
@@ -88,16 +93,33 @@ export function setupChat(room: Room, options?: ChatOptions) {
     room.serverInfo?.edition === 1 ||
     (!!room.serverInfo?.version && compareVersions(room.serverInfo?.version, '1.8.2') > 0);
 
-  const onDestroyObservable = new Subject<void>();
-
   const topic = options?.channelTopic ?? DataTopic.CHAT;
   const legacyTopic = options?.channelTopic ?? LegacyDataTopic.CHAT;
 
-  const topicMap = topicSubjectMap.get(room) ?? new Map<string, Subject<ReceivedChatMessage>>();
+  const isFirstTopicForRoom = !topicSubjectMap.has(room);
+  const topicMap = topicSubjectMap.get(room) ?? new Map<string, ChatTopicState>();
   const needsSetup = !topicMap.has(topic);
-  const messageSubject = topicMap.get(topic) ?? new Subject<ReceivedChatMessage>();
-  topicMap.set(topic, messageSubject);
+  const topicState = topicMap.get(topic) ?? {
+    messageSubject: new Subject<ReceivedChatMessage>(),
+    onDestroyObservable: new Subject<void>(),
+  };
+  const { messageSubject, onDestroyObservable } = topicState;
+  topicMap.set(topic, topicState);
   topicSubjectMap.set(room, topicMap);
+
+  if (isFirstTopicForRoom) {
+    room.once(RoomEvent.Disconnected, () => {
+      const topics = topicSubjectMap.get(room);
+      topicSubjectMap.delete(room);
+      topics?.forEach(({ messageSubject, onDestroyObservable }, chatTopic) => {
+        onDestroyObservable.next();
+        onDestroyObservable.complete();
+        messageSubject.complete();
+        room.unregisterTextStreamHandler(chatTopic);
+        room.unregisterByteStreamHandler(chatTopic);
+      });
+    });
+  }
 
   const finalMessageDecoder = options?.messageDecoder ?? decodeLegacyMsg;
   if (needsSetup) {
@@ -287,16 +309,6 @@ export function setupChat(room: Room, options?: ChatOptions) {
       isSending$.next(false);
     }
   };
-
-  function destroy() {
-    onDestroyObservable.next();
-    onDestroyObservable.complete();
-    messageSubject.complete();
-    topicSubjectMap.delete(room);
-    room.unregisterTextStreamHandler(topic);
-    room.unregisterByteStreamHandler(topic);
-  }
-  room.once(RoomEvent.Disconnected, destroy);
 
   return {
     messageObservable: messagesObservable,

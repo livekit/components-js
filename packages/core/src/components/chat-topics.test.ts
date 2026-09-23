@@ -100,4 +100,62 @@ describe('chat topics', () => {
       'private-chat',
     ]);
   });
+
+  it('shares one room teardown across repeated topics and reconnects without affecting other rooms', () => {
+    const room = new Room();
+    const otherRoom = new Room();
+    rooms.push(room, otherRoom);
+    const initialListeners = room.listenerCount(RoomEvent.Disconnected);
+    const unregisterText = vi.spyOn(room, 'unregisterTextStreamHandler');
+    const unregisterBytes = vi.spyOn(room, 'unregisterByteStreamHandler');
+    const otherMessages = vi.fn();
+    const otherComplete = vi.fn();
+    setupChat(otherRoom).messageObservable.subscribe({
+      next: otherMessages,
+      complete: otherComplete,
+    });
+
+    for (let cycle = 0; cycle < 2; cycle++) {
+      const completions = ['lk.chat', 'private-chat', 'private-chat'].map((channelTopic) => {
+        const complete = vi.fn();
+        setupChat(room, { channelTopic }).messageObservable.subscribe({ complete });
+        return complete;
+      });
+      expect(room.listenerCount(RoomEvent.Disconnected)).toBe(initialListeners + 1);
+      expect(room.listenerCount(RoomEvent.DataReceived)).toBe(2);
+
+      room.emit(RoomEvent.Disconnected);
+
+      completions.forEach((complete) => expect(complete).toHaveBeenCalledOnce());
+      expect(room.listenerCount(RoomEvent.Disconnected)).toBe(initialListeners);
+      expect(room.listenerCount(RoomEvent.DataReceived)).toBe(0);
+      expect(unregisterText.mock.calls.map(([topic]) => topic)).toEqual([
+        'lk.chat',
+        'private-chat',
+      ]);
+      expect(unregisterBytes.mock.calls.map(([topic]) => topic)).toEqual([
+        'lk.chat',
+        'private-chat',
+      ]);
+      unregisterText.mockClear();
+      unregisterBytes.mockClear();
+      room.emit(RoomEvent.Disconnected);
+      expect(unregisterText).not.toHaveBeenCalled();
+      expect(unregisterBytes).not.toHaveBeenCalled();
+    }
+
+    otherRoom.emit(
+      RoomEvent.DataReceived,
+      new TextEncoder().encode(
+        JSON.stringify({ id: 'other', timestamp: 1, message: 'still here' }),
+      ),
+      undefined,
+      DataPacket_Kind.RELIABLE,
+      'lk-chat-topic',
+    );
+    expect(otherMessages).toHaveBeenCalledExactlyOnceWith([
+      expect.objectContaining({ message: 'still here' }),
+    ]);
+    expect(otherComplete).not.toHaveBeenCalled();
+  });
 });

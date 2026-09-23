@@ -22,6 +22,7 @@ import { useMaybeRoomContext } from '../context';
 import { AgentState, useAgent, useAgentTimeoutIdStore } from './useAgent';
 import { TrackReference, log } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
+import { TextTransport } from '../text-transport/TextTransport';
 
 /** @beta */
 export enum SessionEvent {
@@ -79,23 +80,34 @@ export type SwitchActiveDeviceOptions = {
   exact?: boolean;
 };
 
-type SessionStateCommon = {
-  room: Room;
-  internal: {
-    emitter: TypedEventEmitter<SessionCallbacks>;
-    tokenSource: TokenSourceConfigurable | TokenSourceFixed;
-    agentConnectTimeoutMilliseconds?: number;
+/** @beta */
+export type SessionMode = 'rtc' | 'text';
 
-    agentTimeoutFailureReason: string | null;
-    startAgentTimeout: (agentConnectTimeoutMilliseconds?: number) => void;
-    clearAgentTimeout: () => void;
-    clearAgentTimeoutFailureReason: () => void;
-    updateAgentTimeoutState: (agentState: AgentState) => void;
-    updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => void;
-  };
+/** The `internal` bag shared by both modes. Kept uniform across modes so that session-dependent
+ * hooks (notably `useAgent`) work unchanged regardless of mode. */
+type SessionStateInternal = {
+  emitter: TypedEventEmitter<SessionCallbacks>;
+  tokenSource: TokenSourceConfigurable | TokenSourceFixed;
+  agentConnectTimeoutMilliseconds?: number;
+
+  agentTimeoutFailureReason: string | null;
+  startAgentTimeout: (agentConnectTimeoutMilliseconds?: number) => void;
+  clearAgentTimeout: () => void;
+  clearAgentTimeoutFailureReason: () => void;
+  updateAgentTimeoutState: (agentState: AgentState) => void;
+  updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => void;
 };
 
-type SessionStateConnecting = SessionStateCommon & {
+/** The mode-specific "handle" a session exposes: an RTC `Room`, or a text-mode `TextTransport`. */
+type SessionModeState<Mode extends SessionMode> = Mode extends 'text'
+  ? { mode: 'text'; textTransport: TextTransport }
+  : { mode: 'rtc'; room: Room };
+
+type SessionStateCommon<Mode extends SessionMode> = SessionModeState<Mode> & {
+  internal: SessionStateInternal;
+};
+
+type SessionStateConnecting<Mode extends SessionMode = 'rtc'> = SessionStateCommon<Mode> & {
   connectionState: ConnectionState.Connecting;
   isConnected: false;
 
@@ -106,7 +118,7 @@ type SessionStateConnecting = SessionStateCommon & {
   };
 };
 
-type SessionStateConnected = SessionStateCommon & {
+type SessionStateConnected<Mode extends SessionMode = 'rtc'> = SessionStateCommon<Mode> & {
   connectionState:
     ConnectionState.Connected | ConnectionState.Reconnecting | ConnectionState.SignalReconnecting;
   isConnected: true;
@@ -118,7 +130,7 @@ type SessionStateConnected = SessionStateCommon & {
   };
 };
 
-type SessionStateDisconnected = SessionStateCommon & {
+type SessionStateDisconnected<Mode extends SessionMode = 'rtc'> = SessionStateCommon<Mode> & {
   connectionState: ConnectionState.Disconnected;
   isConnected: false;
 
@@ -148,20 +160,27 @@ type SessionActions = {
 };
 
 /** @beta */
-export type UseSessionReturn = (
-  SessionStateConnecting | SessionStateConnected | SessionStateDisconnected
+export type UseSessionReturn<Mode extends SessionMode = 'rtc'> = (
+  SessionStateConnecting<Mode> | SessionStateConnected<Mode> | SessionStateDisconnected<Mode>
 ) &
   SessionActions;
 
 /** @internal */
-export function isUseSessionReturn(value: unknown): value is UseSessionReturn {
-  return (
+export function isUseSessionReturn<Mode extends SessionMode = 'rtc'>(value: unknown, mode?: Mode): value is UseSessionReturn<Mode> {
+  const isSessionReturn = (
     typeof value === 'object' &&
     value !== null &&
-    'room' in value &&
     'connectionState' in value &&
     'internal' in value
   );
+
+  switch (mode) {
+    case 'text':
+      return isSessionReturn && 'textTransport' in value;
+    case 'rtc':
+    default:
+      return isSessionReturn && 'room' in value;
+  }
 }
 
 type UseSessionCommonOptions = {
@@ -173,6 +192,7 @@ type UseSessionCommonOptions = {
 };
 
 type UseSessionWithRoomOptions = {
+  mode?: 'rtc';
   room: Room;
   encryption?: never;
 };
@@ -210,6 +230,8 @@ type UseSessionEncryptionOptions =
     };
 
 type UseSessionWithoutRoomOptions = {
+  mode?: 'rtc';
+
   // NOTE: This must be here to make typescript go down this discriminated union branch when
   // "room" is omitted.
   room?: never;
@@ -220,10 +242,34 @@ type UseSessionWithoutRoomOptions = {
 
 type UseSessionRoomOptions = UseSessionWithRoomOptions | UseSessionWithoutRoomOptions;
 
-type UseSessionConfigurableOptions = UseSessionCommonOptions &
+/** Options that select "text mode" — a subset of the session api served entirely over HTTP (A2A). */
+type UseSessionTextOptions = {
+  mode: 'text';
+
+  /**
+   * Fully-qualified base URL of the A2A `v1` interface, e.g.
+   * `http://localhost:8787/fare-desk/v1`.
+   */
+  baseUrl: string;
+
+  room?: never;
+  encryption?: never;
+};
+
+type UseSessionConfigurableRtcOptions = UseSessionCommonOptions &
   UseSessionRoomOptions &
   TokenSourceFetchOptions;
-type UseSessionFixedOptions = UseSessionCommonOptions & UseSessionRoomOptions;
+type UseSessionFixedRtcOptions = UseSessionCommonOptions & UseSessionRoomOptions;
+
+type UseSessionConfigurableTextOptions = UseSessionCommonOptions &
+  UseSessionTextOptions &
+  TokenSourceFetchOptions;
+type UseSessionFixedTextOptions = UseSessionCommonOptions & UseSessionTextOptions;
+
+type UseSessionConfigurableOptions =
+  | UseSessionConfigurableRtcOptions
+  | UseSessionConfigurableTextOptions;
+type UseSessionFixedOptions = UseSessionFixedRtcOptions | UseSessionFixedTextOptions;
 
 /**
  * Given two TokenSourceFetchOptions values, check to see if they are deep equal.
@@ -361,21 +407,69 @@ function useSessionTokenSourceFetch(
  */
 export function useSession(
   tokenSource: TokenSourceConfigurable,
-  options?: UseSessionConfigurableOptions,
-): UseSessionReturn;
+  options: UseSessionConfigurableTextOptions,
+): UseSessionReturn<'text'>;
 /**
  * A Session represents a managed connection to a Room which can contain Agents.
  * @beta
  */
 export function useSession(
   tokenSource: TokenSourceFixed,
-  options?: UseSessionFixedOptions,
-): UseSessionReturn;
+  options: UseSessionFixedTextOptions,
+): UseSessionReturn<'text'>;
+/**
+ * A Session represents a managed connection to a Room which can contain Agents.
+ * @beta
+ */
+export function useSession(
+  tokenSource: TokenSourceConfigurable,
+  options?: UseSessionConfigurableRtcOptions,
+): UseSessionReturn<'rtc'>;
+/**
+ * A Session represents a managed connection to a Room which can contain Agents.
+ * @beta
+ */
+export function useSession(
+  tokenSource: TokenSourceFixed,
+  options?: UseSessionFixedRtcOptions,
+): UseSessionReturn<'rtc'>;
 export function useSession(
   tokenSource: TokenSourceConfigurable | TokenSourceFixed,
   options: UseSessionConfigurableOptions | UseSessionFixedOptions = {},
-): UseSessionReturn {
+): UseSessionReturn<'rtc'> | UseSessionReturn<'text'> {
+  const isText = options.mode === 'text';
+
+  // NOTE: Both hooks are ALWAYS called (Rules of Hooks). Each is gated by `enabled` so that the
+  // inactive one performs no side effects (no network, no room connection). We cannot use a
+  // `switch` here because `mode` can in principle change across renders.
+  const rtcResult = useSessionRtc(
+    tokenSource,
+    (isText ? {} : options) as UseSessionConfigurableRtcOptions | UseSessionFixedRtcOptions,
+    !isText,
+  );
+  const textResult = useSessionText(
+    tokenSource,
+    (isText ? options : { mode: 'text', baseUrl: '' }) as
+      | UseSessionConfigurableTextOptions
+      | UseSessionFixedTextOptions,
+    isText,
+  );
+
+  return isText ? textResult : rtcResult;
+}
+
+/**
+ * The RTC implementation of useSession. This is the original useSession behavior. When `enabled` is
+ * false (because the session is in text mode) its network-effecting side effects are skipped.
+ * @internal
+ */
+export function useSessionRtc(
+  tokenSource: TokenSourceConfigurable | TokenSourceFixed,
+  options: UseSessionConfigurableRtcOptions | UseSessionFixedRtcOptions,
+  enabled: boolean,
+): UseSessionReturn<'rtc'> {
   const {
+    mode: _mode,
     room: optionsRoom,
     agentConnectTimeoutMilliseconds,
     encryption: unstableEncryption,
@@ -444,10 +538,13 @@ export function useSession(
   }, [roomFromContext, optionsRoom, keyProvider, encryptionWorker, encryptionE2eeManager]);
 
   React.useEffect(() => {
+    if (!enabled) {
+      return;
+    }
     return () => {
       room.disconnect();
     };
-  }, [room]);
+  }, [room, enabled]);
 
   const emitter = React.useMemo(
     () => new EventEmitter() as TypedEventEmitter<SessionCallbacks>,
@@ -550,7 +647,7 @@ export function useSession(
     updateAgentTimeoutParticipantExists,
   } = useAgentTimeoutIdStore();
 
-  const sessionInternal: UseSessionReturn['internal'] = React.useMemo(
+  const sessionInternal: SessionStateInternal = React.useMemo(
     () => ({
       emitter,
       tokenSource,
@@ -577,8 +674,11 @@ export function useSession(
   );
 
   const conversationState = React.useMemo(():
-    SessionStateConnecting | SessionStateConnected | SessionStateDisconnected => {
-    const common: SessionStateCommon = {
+    | SessionStateConnecting<'rtc'>
+    | SessionStateConnected<'rtc'>
+    | SessionStateDisconnected<'rtc'> => {
+    const common: SessionStateCommon<'rtc'> = {
+      mode: 'rtc',
       room,
       internal: sessionInternal,
     };
@@ -634,6 +734,7 @@ export function useSession(
     roomConnectionState,
     localCamera,
     localMicrophone,
+    localScreenShare,
     generateDerivedConnectionStateValues,
   ]);
   React.useEffect(() => {
@@ -765,13 +866,192 @@ export function useSession(
   }, [tokenSourceFetch, room]);
   React.useEffect(
     () => {
+      if (!enabled) {
+        return;
+      }
       prepareConnection().catch((err) => {
         // FIXME: figure out a better logging solution?
         console.warn('WARNING: Room.prepareConnection failed:', err);
       });
     },
-    [/* note: no prepareConnection here, this effect should only ever run once! */],
+    [/* note: no prepareConnection here, this effect should only ever run once! */ enabled],
   );
+
+  return React.useMemo(
+    () => ({
+      ...conversationState,
+
+      waitUntilConnected,
+      waitUntilDisconnected,
+
+      prepareConnection,
+      start,
+      end,
+
+      setEncryptionEnabled,
+    }),
+    [
+      conversationState,
+      waitUntilConnected,
+      waitUntilDisconnected,
+      prepareConnection,
+      start,
+      end,
+      setEncryptionEnabled,
+    ],
+  );
+}
+
+/**
+ * The text-mode implementation of useSession. A subset of the session api served over HTTP (A2A).
+ * When `enabled` is false (because the session is in RTC mode) it performs no side effects.
+ * @internal
+ */
+export function useSessionText(
+  tokenSource: TokenSourceConfigurable | TokenSourceFixed,
+  options: UseSessionConfigurableTextOptions | UseSessionFixedTextOptions,
+  enabled: boolean,
+): UseSessionReturn<'text'> {
+  const { mode: _mode, baseUrl, agentConnectTimeoutMilliseconds, ...unstableRestOptions } = options;
+
+  const emitter = React.useMemo(
+    () => new EventEmitter() as TypedEventEmitter<SessionCallbacks>,
+    [],
+  );
+
+  const tokenSourceFetch = useSessionTokenSourceFetch(
+    tokenSource,
+    unstableRestOptions as Exclude<UseSessionConfigurableOptions, keyof UseSessionCommonOptions>,
+  );
+
+  // A stable conversation id for the lifetime of this session.
+  const [contextId] = React.useState<string>(() => crypto.randomUUID());
+
+  const textTransport = React.useMemo(
+    () =>
+      new TextTransport({
+        baseUrl,
+        contextId,
+        getToken: async () => {
+          const credentials = await tokenSourceFetch();
+          return credentials.participantToken;
+        },
+      }),
+    [baseUrl, contextId, tokenSourceFetch],
+  );
+
+  const [connectionState, setConnectionState] = React.useState<ConnectionState>(
+    ConnectionState.Disconnected,
+  );
+  React.useEffect(() => {
+    emitter.emit(SessionEvent.ConnectionStateChanged, connectionState);
+  }, [emitter, connectionState]);
+
+  const waitUntilConnectionState = useSessionWaitUntilConnectionState(emitter, connectionState);
+  const waitUntilConnected = React.useCallback(
+    async (signal?: AbortSignal) => waitUntilConnectionState(ConnectionState.Connected, signal),
+    [waitUntilConnectionState],
+  );
+  const waitUntilDisconnected = React.useCallback(
+    async (signal?: AbortSignal) => waitUntilConnectionState(ConnectionState.Disconnected, signal),
+    [waitUntilConnectionState],
+  );
+
+  // "Connecting" in text mode == fetching the initial token. There is no persistent socket.
+  const start = React.useCallback(async () => {
+    if (!enabled) {
+      return;
+    }
+    setConnectionState(ConnectionState.Connecting);
+    try {
+      await textTransport.connect();
+      setConnectionState(ConnectionState.Connected);
+    } catch (err) {
+      setConnectionState(ConnectionState.Disconnected);
+      throw err;
+    }
+  }, [enabled, textTransport]);
+
+  const end = React.useCallback(async () => {
+    await textTransport.disconnect();
+    setConnectionState(ConnectionState.Disconnected);
+  }, [textTransport]);
+
+  // FIXME(text-mode): no equivalent of Room.prepareConnection / E2EE in text mode yet. These are
+  // no-ops for now and need to be figured out properly before release.
+  const prepareConnection = React.useCallback(async () => {}, []);
+  const setEncryptionEnabled = React.useCallback(async () => {}, []);
+
+  // NOTE: kept so that `internal` stays uniform across modes (useAgent reads these). None of this
+  // machinery actually runs in text mode.
+  const {
+    agentTimeoutFailureReason,
+    startAgentTimeout,
+    clearAgentTimeout,
+    clearAgentTimeoutFailureReason,
+    updateAgentTimeoutState,
+    updateAgentTimeoutParticipantExists,
+  } = useAgentTimeoutIdStore();
+
+  const sessionInternal: SessionStateInternal = React.useMemo(
+    () => ({
+      emitter,
+      tokenSource,
+      agentConnectTimeoutMilliseconds,
+
+      agentTimeoutFailureReason,
+      startAgentTimeout,
+      clearAgentTimeout,
+      clearAgentTimeoutFailureReason,
+      updateAgentTimeoutState,
+      updateAgentTimeoutParticipantExists,
+    }),
+    [
+      emitter,
+      tokenSource,
+      agentConnectTimeoutMilliseconds,
+      agentTimeoutFailureReason,
+      startAgentTimeout,
+      clearAgentTimeout,
+      clearAgentTimeoutFailureReason,
+      updateAgentTimeoutState,
+      updateAgentTimeoutParticipantExists,
+    ],
+  );
+
+  const conversationState = React.useMemo(():
+    | SessionStateConnecting<'text'>
+    | SessionStateConnected<'text'>
+    | SessionStateDisconnected<'text'> => {
+    const common: SessionStateCommon<'text'> = {
+      mode: 'text',
+      textTransport,
+      internal: sessionInternal,
+    };
+
+    const local = {
+      cameraTrack: undefined,
+      microphoneTrack: undefined,
+      screenShareTrack: undefined,
+    } as const;
+
+    switch (connectionState) {
+      case ConnectionState.Connecting:
+        return { ...common, connectionState: ConnectionState.Connecting, isConnected: false, local };
+      case ConnectionState.Connected:
+      case ConnectionState.Reconnecting:
+      case ConnectionState.SignalReconnecting:
+        return { ...common, connectionState, isConnected: true, local };
+      case ConnectionState.Disconnected:
+      default:
+        return {
+          ...common,
+          connectionState: ConnectionState.Disconnected,
+          isConnected: false,
+          local,
+        };
+    }
+  }, [connectionState, textTransport, sessionInternal]);
 
   return React.useMemo(
     () => ({

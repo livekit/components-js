@@ -6,6 +6,8 @@ export * from './prefabs';
 
 export * from './context';
 
+export * from './text-transport/TextTransport';
+
 export * from './assets/icons';
 
 export * from './assets/images';

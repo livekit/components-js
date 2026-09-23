@@ -8,6 +8,8 @@ import { useObservableState } from './internal';
 /** @beta */
 export type UseTextStreamOptions = {
   room?: Room;
+  /** When false, the hook subscribes to nothing and returns an empty result. Defaults to true. */
+  enabled?: boolean;
 };
 
 /**
@@ -21,13 +23,17 @@ export type UseTextStreamOptions = {
  * ```
  */
 export function useTextStream(topic: string, options?: UseTextStreamOptions) {
+  const enabled = options?.enabled ?? true;
   const room = useEnsureRoom(options?.room);
 
   const connectionState = useConnectionState(room);
   const isDisconnected = connectionState === ConnectionState.Disconnected;
 
-  const textStreamData = React.useMemo(() => setupTextStream(room, topic), [room, topic]);
-  const textStreamObservable = isDisconnected ? undefined : textStreamData;
+  const textStreamData = React.useMemo(
+    () => (enabled ? setupTextStream(room, topic) : undefined),
+    [room, topic, enabled],
+  );
+  const textStreamObservable = !enabled || isDisconnected ? undefined : textStreamData;
 
   const textStreams = useObservableState<TextStreamData[]>(textStreamObservable, []);
 

@@ -496,7 +496,9 @@ function useAgentWaitUntilDerivedStates(
  */
 export function useAgent(session?: SessionStub): UseAgentReturn {
   const sessionFromContext = useMaybeSessionContext();
-  session = session ?? sessionFromContext;
+  // FIXME(text-mode): the session context can now hold a text-mode session (which has no `room`).
+  // useAgent is RTC-only for now, so we cast; using useAgent in text mode is unsupported.
+  session = session ?? (sessionFromContext as SessionStub | undefined);
   if (!session) {
     throw new Error(
       'No session provided, make sure you are inside a Session context or pass the session explicitly',

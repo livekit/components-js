@@ -1,9 +1,11 @@
 import * as React from 'react';
 
-import { UseSessionReturn } from '../hooks/useSession';
+import { SessionMode, UseSessionReturn } from '../hooks/useSession';
 
 /** @internal */
-export const SessionContext = React.createContext<UseSessionReturn | undefined>(undefined);
+export const SessionContext = React.createContext<UseSessionReturn<SessionMode> | undefined>(
+  undefined,
+);
 
 /**
  * Ensures that a session is provided via context.
@@ -31,7 +33,7 @@ export function useMaybeSessionContext() {
  * If no session is provided, an error is thrown.
  * @beta
  */
-export function useEnsureSession(session?: UseSessionReturn) {
+export function useEnsureSession(session?: UseSessionReturn<SessionMode>) {
   const context = useMaybeSessionContext();
   const r = session ?? context;
   if (!r) {

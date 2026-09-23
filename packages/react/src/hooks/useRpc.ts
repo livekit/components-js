@@ -120,7 +120,9 @@ export function useRpc(
     options = optionsOrHandler as UseRpcOptions<any>;
   }
 
-  const { room } = useEnsureSession(session);
+  // FIXME(text-mode): useRpc is RTC-only for now; a text-mode session has no `room`. Cast so this
+  // compiles — using useRpc with a text-mode session is unsupported.
+  const { room } = useEnsureSession(session) as UseSessionReturn<'rtc'>;
 
   // Ref that always holds the latest handler — updated synchronously on render
   const handlerRef = React.useRef(handler);

@@ -21,6 +21,23 @@ export function createApp(): express.Express {
   app.disable('x-powered-by');
   app.disable('etag');
 
+  // Permissive CORS so a browser client (e.g. the components-js nextjs example running on a
+  // different origin) can call this dev mock. Handles the preflight before auth runs.
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin ?? '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Authorization, Content-Type, A2A-Extensions, A2A-Version',
+    );
+    res.setHeader('Access-Control-Expose-Headers', 'A2A-Extensions, A2A-Version');
+    if (req.method === 'OPTIONS') {
+      res.status(204).end();
+      return;
+    }
+    next();
+  });
+
   const store = new ConversationStore();
 
   // A2A v1.0.1 prefers application/a2a+json. Express 5 leaves req.body as `undefined`

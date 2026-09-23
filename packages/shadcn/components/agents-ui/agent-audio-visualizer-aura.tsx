@@ -23,6 +23,17 @@ import { cn } from '@/lib/utils';
 
 const DEFAULT_COLOR = '#1FD5F9';
 
+/**
+ * Upper bound for the pixel ratio the Aura shader renders at.
+ *
+ * The backing canvas scales in both dimensions, so fragment shader cost grows
+ * quadratically with the device pixel ratio (DPR 2 is 4x the pixels of DPR 1,
+ * DPR 3 is 9x). Aura's fragment shader runs multiple turbulence calculations
+ * per pixel across a 36-iteration loop, so the extra work above DPR 2 buys
+ * little visual gain on a continuously animated effect.
+ */
+const MAX_SHADER_PIXEL_RATIO = 2;
+
 function hexToRgb(hexColor: string) {
   try {
     const rgbColor = hexColor.match(/^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/);
@@ -297,12 +308,13 @@ function AuraShader({
   ...props
 }: AuraShaderProps & ComponentProps<'div'>) {
   const rgbColor = useMemo(() => hexToRgb(color), [color]);
+  const devicePixelRatio = Math.min(globalThis.devicePixelRatio ?? 1, MAX_SHADER_PIXEL_RATIO);
 
   return (
     <div ref={ref} className={className} {...props}>
       <ReactShaderToy
         fs={shaderSource}
-        devicePixelRatio={globalThis.devicePixelRatio ?? 1}
+        devicePixelRatio={devicePixelRatio}
         uniforms={{
           // Aurora wave speed
           uSpeed: { type: '1f', value: speed },

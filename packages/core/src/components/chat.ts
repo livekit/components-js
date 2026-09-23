@@ -111,10 +111,10 @@ export function setupChat(room: Room, options?: ChatOptions) {
     room.once(RoomEvent.Disconnected, () => {
       const topics = topicSubjectMap.get(room);
       topicSubjectMap.delete(room);
-      topics?.forEach(({ messageSubject, onDestroyObservable }, chatTopic) => {
-        onDestroyObservable.next();
-        onDestroyObservable.complete();
-        messageSubject.complete();
+      topics?.forEach(({ messageSubject: subject, onDestroyObservable: onDestroy }, chatTopic) => {
+        onDestroy.next();
+        onDestroy.complete();
+        subject.complete();
         room.unregisterTextStreamHandler(chatTopic);
         room.unregisterByteStreamHandler(chatTopic);
       });

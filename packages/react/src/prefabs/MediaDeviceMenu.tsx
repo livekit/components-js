@@ -130,7 +130,7 @@ export function MediaDeviceMenu({
             />
           ) : (
             <>
-              <div className="lk-device-menu-heading">Audio inputs</div>
+            <div className="lk-device-menu-heading">Аудио-устройства</div>
               <MediaDeviceSelect
                 kind="audioinput"
                 onActiveDeviceChange={(deviceId) =>
@@ -140,7 +140,7 @@ export function MediaDeviceMenu({
                 track={tracks?.audioinput}
                 requestPermissions={needPermissions}
               />
-              <div className="lk-device-menu-heading">Video inputs</div>
+            <div className="lk-device-menu-heading">Видео-устройства</div>
               <MediaDeviceSelect
                 kind="videoinput"
                 onActiveDeviceChange={(deviceId) =>

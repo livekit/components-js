@@ -1,0 +1,1 @@
+{"version":3,"file":"useObservableState.d.ts","sourceRoot":"","sources":["../../../src/hooks/internal/useObservableState.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,UAAU,EAAE,MAAM,MAAM,CAAC;AAEvC;;GAEG;AACH,wBAAgB,kBAAkB,CAAC,CAAC,EAClC,UAAU,EAAE,UAAU,CAAC,CAAC,CAAC,GAAG,SAAS,EACrC,SAAS,EAAE,CAAC,EACZ,0BAA0B,UAAO,KAalC"}

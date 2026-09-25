@@ -1,0 +1,1 @@
+{"version":3,"file":"useChatToggle.d.ts","sourceRoot":"","sources":["../../src/hooks/useChatToggle.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,KAAK,MAAM,OAAO,CAAC;AAE/B,cAAc;AACd,MAAM,WAAW,kBAAkB;IACjC,KAAK,EAAE,KAAK,CAAC,oBAAoB,CAAC,iBAAiB,CAAC,CAAC;CACtD;AAED;;;;;;GAMG;AACH,wBAAgB,aAAa,CAAC,EAAE,KAAK,EAAE,EAAE,kBAAkB;;;;;;;EAoB1D"}

@@ -133,6 +133,11 @@
     {
       "matchPackageNames": ["/^@livekit//", "/^livekit-/"],
       "minimumReleaseAge": "0 days"
+    },
+    {
+      "description": "@livekit/protocol must match the exact version livekit-client pins (see pnpm-workspace.yaml), so it is bumped by hand alongside livekit-client",
+      "matchPackageNames": ["@livekit/protocol"],
+      "enabled": false
     }
   ]
 }

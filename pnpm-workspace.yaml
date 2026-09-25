@@ -16,7 +16,9 @@ catalog:
   # Must match the exact @livekit/protocol version that livekit-client pins, so the
   # workspace and livekit-client share a single copy. Mismatched versions cause
   # structurally-incompatible protobuf types (e.g. TrackInfo) and break the build.
-  '@livekit/protocol': 1.52.1
+  # Renovate is configured not to bump this on its own (see renovate.json); update it
+  # by hand in the same change that bumps livekit-client.
+  '@livekit/protocol': 1.50.4
   eslint: ^10.0.0
   prettier: ^3.8.1
 

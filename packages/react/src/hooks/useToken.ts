@@ -35,6 +35,7 @@ export function useToken(
     if (options.userInfo?.identity === undefined) {
       return;
     }
+    let ignore = false;
     const tokenFetcher = async () => {
       log.debug('fetching token');
       const params = new URLSearchParams({ ...options.userInfo, roomName });
@@ -46,9 +47,14 @@ export function useToken(
         return;
       }
       const { accessToken } = await res.json();
-      setToken(accessToken);
+      if (!ignore) {
+        setToken(accessToken);
+      }
     };
     tokenFetcher();
+    return () => {
+      ignore = true;
+    };
   }, [tokenEndpoint, roomName, JSON.stringify(options)]);
   return token;
 }

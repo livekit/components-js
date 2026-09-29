@@ -11,6 +11,7 @@ export const createDefaultGrammar = () => {
 };
 
 export function tokenize<T extends TokenizeGrammar>(input: string, grammar: T) {
+  let lastEnd = 0;
   const matches = Object.entries(grammar)
     .map(([type, rx], weight) =>
       Array.from(input.matchAll(rx)).map(({ index, 0: content }) => ({
@@ -25,10 +26,11 @@ export function tokenize<T extends TokenizeGrammar>(input: string, grammar: T) {
       const d = a.index - b.index;
       return d !== 0 ? d : a.weight - b.weight;
     })
-    .filter(({ index }, i, arr) => {
-      if (i === 0) return true;
-      const prev = arr[i - 1];
-      return prev.index + prev.content.length <= index;
+    .filter(({ index, content }) => {
+      // Keep a match only if it starts after the end of the last kept match.
+      if (index < lastEnd) return false;
+      lastEnd = index + content.length;
+      return true;
     });
 
   const tokens = [];

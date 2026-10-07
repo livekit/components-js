@@ -1,17 +1,5 @@
 'use client';
 
-/**
- * @license
- *
- * Originally developed for Unicorn Studio
- * https://unicorn.studio
- *
- * Licensed under the Polyform Non-Resale License 1.0.0
- * https://polyformproject.org/licenses/non-resale/1.0.0/
- *
- * © 2026 UNCRN LLC
- */
-
 import React, { useMemo, type ComponentProps } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type LocalAudioTrack, type RemoteAudioTrack } from 'livekit-client';

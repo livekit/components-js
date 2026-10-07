@@ -1,5 +1,22 @@
 # @livekit/components-react
 
+## 2.9.25
+
+### Patch Changes
+
+- Keep chat setup stable when equivalent options are passed inline, preventing render loops and message history resets. - [#1450](https://github.com/livekit/components-js/pull/1450) ([@fatihcvs](https://github.com/fatihcvs))
+
+- Update the local screen share track returned by useSession when screen sharing starts or stops. - [#1447](https://github.com/livekit/components-js/pull/1447) ([@fatihcvs](https://github.com/fatihcvs))
+
+- Prevent outdated useToken requests from overwriting the token after the endpoint, room, or user changes. - [#1454](https://github.com/livekit/components-js/pull/1454) ([@fatihcvs](https://github.com/fatihcvs))
+
+- Detect horizontal swipes that start or end at a clientX coordinate of zero. - [#1452](https://github.com/livekit/components-js/pull/1452) ([@fatihcvs](https://github.com/fatihcvs))
+
+- Clear stale useParticipantAttribute values when switching to a participant or key without that attribute. - [#1453](https://github.com/livekit/components-js/pull/1453) ([@fatihcvs](https://github.com/fatihcvs))
+
+- Updated dependencies [[`baf02cd`](https://github.com/livekit/components-js/commit/baf02cd41feefc617673c2a707e94eb47a496dc0), [`6bf0e61`](https://github.com/livekit/components-js/commit/6bf0e61766a11cee198ab820b8310ca67fb682f3), [`e24c281`](https://github.com/livekit/components-js/commit/e24c281889f8017b0d49430db851927848df0c96), [`d4e449e`](https://github.com/livekit/components-js/commit/d4e449ee2606113df4358e9532e143512acb83c2)]:
+  - @livekit/components-core@0.12.16
+
 ## 2.9.24
 
 ### Patch Changes

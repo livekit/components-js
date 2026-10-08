@@ -73,6 +73,7 @@ export interface ParticipantTileProps extends React.HTMLAttributes<HTMLDivElemen
   disableSpeakingIndicator?: boolean;
 
   onParticipantClick?: (event: ParticipantClickEvent) => void;
+  placeholders?: { [index: string]: React.ReactNode };
 }
 
 /**
@@ -100,6 +101,7 @@ export const ParticipantTile: (
       children,
       onParticipantClick,
       disableSpeakingIndicator,
+      placeholders,
       ...htmlProps
     }: ParticipantTileProps,
     ref,
@@ -156,7 +158,9 @@ export const ParticipantTile: (
                   )
                 )}
                 <div className="lk-participant-placeholder">
-                  <ParticipantPlaceholder />
+                  {placeholders?.[trackReference.participant?.identity] ?? (
+                    <ParticipantPlaceholder />
+                  )}
                 </div>
                 <div className="lk-participant-metadata">
                   <div className="lk-participant-metadata-item">

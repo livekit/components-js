@@ -1322,6 +1322,13 @@ export type UseSessionMessagesReturn = {
 export type UseSessionReturn = (SessionStateConnecting | SessionStateConnected | SessionStateDisconnected) & SessionActions;
 
 // @public
+export function useSelectedDevice({
+  kind: 'videoinput' | 'audioinput';
+  track?: T;
+  deviceId?: string;
+}): { device: any, deviceError: any };
+
+// @public
 export function useSortedParticipants(participants: Array<Participant>): Participant[];
 
 // @public

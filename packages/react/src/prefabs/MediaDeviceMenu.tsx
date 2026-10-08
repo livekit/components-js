@@ -67,7 +67,7 @@ export function MediaDeviceMenu({
   React.useLayoutEffect(() => {
     let cleanup: ReturnType<typeof computeMenuPosition> | undefined;
     if (button.current && tooltip.current && (devices || updateRequired)) {
-      cleanup = computeMenuPosition(button.current, tooltip.current, (x, y) => {
+      cleanup = computeMenuPosition(button.current, tooltip.current, (x: number, y: number) => {
         if (tooltip.current) {
           Object.assign(tooltip.current.style, { left: `${x}px`, top: `${y}px` });
         }

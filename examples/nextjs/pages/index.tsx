@@ -28,6 +28,14 @@ const EXAMPLE_ROUTES = {
     title: 'Example usage of @livekit/track-processors for background blur',
     href: () => `/processors`,
   },
+  prejoin: {
+    title: 'Example usage of @livekit/prejoin',
+    href: () => `/prejoin`,
+  },
+  videoCall: {
+    title: 'Video call example (1:1 call structure)',
+    href: () => `/video-call-example`,
+  },
 } as const;
 
 const Home: NextPage = () => {

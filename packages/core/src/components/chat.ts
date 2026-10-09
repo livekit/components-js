@@ -72,9 +72,31 @@ type ChatTopicState = {
 };
 
 const topicSubjectMap: WeakMap<Room, Map<string, ChatTopicState>> = new WeakMap();
+
+/**
+ * Settles an attachment whose byte stream never opened because its sender
+ * left first. livekit-client raises nothing for a stream that never started,
+ * so there is no SDK error to pass along.
+ */
+class AttachmentNotReceivedError extends Error {
+  readonly participantIdentity: string;
+
+  readonly attachmentStreamId: string;
+
+  constructor(participantIdentity: string, attachmentStreamId: string) {
+    super(
+      `Participant ${participantIdentity} disconnected before sending attachment ${attachmentStreamId}`,
+    );
+    this.name = 'AttachmentNotReceivedError';
+    this.participantIdentity = participantIdentity;
+    this.attachmentStreamId = attachmentStreamId;
+  }
+}
+
 const streamIdToAttachments = new Map<
   string /* stream id */,
   {
+    room: Room;
     senderIdentity: string;
     attachments: Map<
       string /* attachment id */,
@@ -122,19 +144,17 @@ export function setupChat(room: Room, options?: ChatOptions) {
 
   if (isFirstTopicForRoom) {
     const handleParticipantDisconnected = (participant: Participant) => {
-      for (const { senderIdentity, attachments } of streamIdToAttachments.values()) {
-        if (senderIdentity !== participant.identity) {
+      for (const entry of streamIdToAttachments.values()) {
+        // Identities are only unique within a room.
+        if (entry.room !== room || entry.senderIdentity !== participant.identity) {
           continue;
         }
-        for (const attachment of attachments.values()) {
+        for (const [attachmentStreamId, attachment] of entry.attachments) {
           // A byte stream that never opened has no controller livekit-client
           // could error - settle it here so the message pipeline reaches a
           // terminal state instead of hanging. Settled futures ignore this.
           attachment.reject?.(
-            new DataStreamError(
-              `Participant ${participant.identity} disconnected before sending all attachments`,
-              DataStreamErrorReason.AbnormalEnd,
-            ),
+            new AttachmentNotReceivedError(participant.identity, attachmentStreamId),
           );
         }
       }
@@ -174,7 +194,11 @@ export function setupChat(room: Room, options?: ChatOptions) {
           return [id, future] as const;
         }),
       );
-      streamIdToAttachments.set(id, { senderIdentity: participantInfo.identity, attachments });
+      streamIdToAttachments.set(id, {
+        room,
+        senderIdentity: participantInfo.identity,
+        attachments,
+      });
 
       const streamObservable = from(reader).pipe(
         scan((acc: string, chunk: string) => {
@@ -228,7 +252,9 @@ export function setupChat(room: Room, options?: ChatOptions) {
           // A disconnect mid-stream is expected churn; anything else deserves
           // a visible warning.
           const abnormalEnd =
-            error instanceof DataStreamError && error.reason === DataStreamErrorReason.AbnormalEnd;
+            error instanceof AttachmentNotReceivedError ||
+            (error instanceof DataStreamError &&
+              error.reason === DataStreamErrorReason.AbnormalEnd);
           if (abnormalEnd) {
             log.debug('chat message stream ended abnormally', error);
           } else {
@@ -241,8 +267,8 @@ export function setupChat(room: Room, options?: ChatOptions) {
     // has initialized the attachment map (per client SDK sending implementation)
     room.registerByteStreamHandler(topic, async (reader) => {
       const { id: attachmentStreamId } = reader.info;
-      const foundStreamAttachmentPair = Array.from(streamIdToAttachments).find(([, entry]) =>
-        entry.attachments.has(attachmentStreamId),
+      const foundStreamAttachmentPair = Array.from(streamIdToAttachments).find(
+        ([, entry]) => entry.room === room && entry.attachments.has(attachmentStreamId),
       );
       if (!foundStreamAttachmentPair) {
         return;

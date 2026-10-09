@@ -223,7 +223,7 @@ describe('setupChat with attachments', () => {
       expect(emissions.flat()).toEqual([]);
       expect(debugSpy).toHaveBeenCalledWith(
         'chat message stream ended abnormally',
-        expect.any(DataStreamError),
+        expect.objectContaining({ name: 'AttachmentNotReceivedError' }),
       );
 
       // The pipeline stays healthy for the next message.
@@ -243,6 +243,57 @@ describe('setupChat with attachments', () => {
       subscription.unsubscribe();
     } finally {
       process.off('unhandledRejection', onUnhandled);
+      debugSpy.mockRestore();
+    }
+  });
+
+  it('leaves pending attachments in other rooms alone when a same-named participant leaves', async () => {
+    const debugSpy = vi.spyOn(log, 'debug').mockImplementation(() => {});
+    try {
+      const roomA = makeRoom();
+      const roomB = makeRoom();
+      const chatA = setupChat(roomA.room);
+      const chatB = setupChat(roomB.room);
+      const emissionsB: ReceivedChatMessage[][] = [];
+      const subscriptionA = chatA.messageObservable.subscribe(() => {});
+      const subscriptionB = chatB.messageObservable.subscribe((messages) => {
+        emissionsB.push(messages);
+      });
+
+      const textHandlerB = roomB.textHandlers.get('lk.chat');
+      const byteHandlerB = roomB.byteHandlers.get('lk.chat');
+      if (!textHandlerB || !byteHandlerB) {
+        throw new Error('chat stream handlers were not registered');
+      }
+
+      // Room B has a message waiting on its attachment from "agent".
+      await textHandlerB(textReader('msg-b', 'message in room B', ['att-b']), {
+        identity: 'agent',
+      });
+      await settle();
+
+      // A participant with the same identity leaves room A.
+      roomA.emitRoomEvent(RoomEvent.ParticipantDisconnected, { identity: 'agent' });
+      await settle();
+      expect(debugSpy).not.toHaveBeenCalledWith(
+        'chat message stream ended abnormally',
+        expect.objectContaining({ name: 'AttachmentNotReceivedError' }),
+      );
+
+      // Room B's attachment still arrives and completes its message.
+      await byteHandlerB(
+        byteReader('att-b', async function* () {
+          yield new TextEncoder().encode('file body');
+        }),
+      );
+      await vi.waitFor(() => {
+        const messages = emissionsB.at(-1) ?? [];
+        expect(messages.map((message) => message.message)).toEqual(['message in room B']);
+      });
+
+      subscriptionA.unsubscribe();
+      subscriptionB.unsubscribe();
+    } finally {
       debugSpy.mockRestore();
     }
   });

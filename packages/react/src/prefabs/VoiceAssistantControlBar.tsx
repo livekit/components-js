@@ -102,7 +102,7 @@ export function VoiceAssistantControlBar({
         </div>
       )}
 
-      {visibleControls.leave && <DisconnectButton>{'Disconnect'}</DisconnectButton>}
+      {visibleControls.leave && <DisconnectButton>{'Отключиться'}</DisconnectButton>}
       <StartMediaButton />
     </div>
   );

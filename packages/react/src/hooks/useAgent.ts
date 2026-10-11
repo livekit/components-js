@@ -20,7 +20,7 @@ import { useRemoteParticipants } from './useRemoteParticipants';
 import { UseSessionReturn } from './useSession';
 
 // FIXME: make this 10 seconds once room dispatch booting info is discoverable
-const DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS = 20_000;
+export const DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS = 20_000;
 
 /** @see https://github.com/livekit/agents/blob/65170238db197f62f479eb7aaef1c0e18bfad6e7/livekit-agents/livekit/agents/voice/events.py#L97 */
 type AgentSdkStates = 'initializing' | 'idle' | 'listening' | 'thinking' | 'speaking';

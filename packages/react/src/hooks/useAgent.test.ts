@@ -1,30 +1,8 @@
 import { act, cleanup, renderHook } from '@testing-library/react';
-import * as React from 'react';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
-import { useAgentTimeoutIdStore } from './useAgent';
+import { DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS, useAgentTimeoutIdStore } from './useAgent';
 
-const TIMEOUT_MS = 20_000;
-
-/** Mirrors how useAgent drives the agent timeout store from the session connection state. */
-function useAgentTimeoutHarness(isSessionDisconnected: boolean) {
-  const store = useAgentTimeoutIdStore();
-  const { startAgentTimeout, clearAgentTimeout } = store;
-
-  React.useEffect(() => {
-    if (isSessionDisconnected) {
-      return;
-    }
-
-    startAgentTimeout(TIMEOUT_MS);
-    return () => {
-      clearAgentTimeout();
-    };
-    // Intentionally matches useAgent's dependency list, which omits the store callbacks.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSessionDisconnected]);
-
-  return store;
-}
+const TIMEOUT_MS = DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS;
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -37,35 +15,26 @@ afterEach(() => {
 
 describe('useAgentTimeoutIdStore', () => {
   test('ending a session early clears its timeout so it cannot fail the next session', () => {
-    const { result, rerender } = renderHook(
-      ({ disconnected }) => useAgentTimeoutHarness(disconnected),
-      { initialProps: { disconnected: false } },
-    );
+    const { result } = renderHook(() => useAgentTimeoutIdStore());
 
-    // End the first session after 5s, then start a new one at 6s.
+    // Like useAgent's effect, hold on to the callbacks from the first render rather than reading
+    // the latest ones off result.current.
+    const { startAgentTimeout, clearAgentTimeout } = result.current;
+
+    // Start a session, end it after 5s, then start a new one at 6s.
+    act(() => startAgentTimeout(TIMEOUT_MS));
     act(() => vi.advanceTimersByTime(5_000));
-    rerender({ disconnected: true });
+    act(() => clearAgentTimeout());
     act(() => vi.advanceTimersByTime(1_000));
-    rerender({ disconnected: false });
+    act(() => startAgentTimeout(TIMEOUT_MS));
 
-    // At 20s the first session's timer would have fired.
-    act(() => vi.advanceTimersByTime(14_000 + 1));
+    // When the first session's timer would have fired, nothing should have failed.
+    act(() => vi.advanceTimersByTime(TIMEOUT_MS - 6_000 + 1));
     expect(result.current.agentTimeoutFailureReason).toBeNull();
 
-    // The second session's own timer should fire at 26s.
+    // The second session's own timer should fire 6s later.
     act(() => vi.advanceTimersByTime(6_000));
     expect(result.current.agentTimeoutFailureReason).toBe('Agent did not join the room.');
-  });
-
-  test('clearAgentTimeout from an earlier render still clears the active timer', () => {
-    const { result } = renderHook(() => useAgentTimeoutIdStore());
-    const staleClearAgentTimeout = result.current.clearAgentTimeout;
-
-    act(() => result.current.startAgentTimeout(TIMEOUT_MS));
-    act(() => staleClearAgentTimeout());
-
-    act(() => vi.advanceTimersByTime(TIMEOUT_MS + 1));
-    expect(result.current.agentTimeoutFailureReason).toBeNull();
   });
 
   test('start and clear callbacks keep the same identity across renders', () => {

@@ -315,9 +315,9 @@ export const useAgentTimeoutIdStore = (): {
   const [agentTimeoutFailureReason, setAgentTimeoutFailureReason] = React.useState<string | null>(
     null,
   );
-  const [agentTimeoutId, setAgentTimeoutId] = React.useState<ReturnType<typeof setTimeout> | null>(
-    null,
-  );
+  // Stored in a ref (not state) so that start / clear always see the current timer, even when
+  // called through a callback reference captured in an earlier render.
+  const agentTimeoutIdRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const agentStateRef = React.useRef<AgentState>('connecting');
   const agentParticipantExistsRef = React.useRef(false);
@@ -339,29 +339,26 @@ export const useAgentTimeoutIdStore = (): {
 
   return {
     agentTimeoutFailureReason,
-    startAgentTimeout: React.useCallback(
-      (agentConnectTimeoutMilliseconds?: number) => {
-        if (agentTimeoutId) {
-          clearTimeout(agentTimeoutId);
-        }
-
-        setAgentTimeoutFailureReason(null);
-        setAgentTimeoutId(startAgentConnectedTimeout(agentConnectTimeoutMilliseconds));
-        agentStateRef.current = 'connecting';
-        agentParticipantExistsRef.current = false;
-      },
-      [agentTimeoutId],
-    ),
-    clearAgentTimeout: React.useCallback(() => {
-      if (agentTimeoutId) {
-        clearTimeout(agentTimeoutId);
+    startAgentTimeout: React.useCallback((agentConnectTimeoutMilliseconds?: number) => {
+      if (agentTimeoutIdRef.current) {
+        clearTimeout(agentTimeoutIdRef.current);
       }
 
       setAgentTimeoutFailureReason(null);
-      setAgentTimeoutId(null);
+      agentTimeoutIdRef.current = startAgentConnectedTimeout(agentConnectTimeoutMilliseconds);
       agentStateRef.current = 'connecting';
       agentParticipantExistsRef.current = false;
-    }, [agentTimeoutId]),
+    }, []),
+    clearAgentTimeout: React.useCallback(() => {
+      if (agentTimeoutIdRef.current) {
+        clearTimeout(agentTimeoutIdRef.current);
+        agentTimeoutIdRef.current = null;
+      }
+
+      setAgentTimeoutFailureReason(null);
+      agentStateRef.current = 'connecting';
+      agentParticipantExistsRef.current = false;
+    }, []),
     clearAgentTimeoutFailureReason: React.useCallback(() => {
       setAgentTimeoutFailureReason(null);
     }, []),

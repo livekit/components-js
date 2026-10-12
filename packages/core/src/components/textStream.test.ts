@@ -1,6 +1,7 @@
 import { RoomEvent, type Room } from 'livekit-client';
 import { describe, expect, it, vi } from 'vitest';
-import { setupTextStream } from './textStream';
+import { log } from '../logger';
+import { setupTextStream, type TextStreamData } from './textStream';
 
 /**
  * Minimal stand-in for `Room` that mirrors livekit-client's one-handler-per-topic
@@ -105,5 +106,34 @@ describe('setupTextStream', () => {
 
     expect(after).toEqual([1]);
     secondSub.unsubscribe();
+  });
+
+  it('keeps the accumulated text when a stream ends abnormally instead of rethrowing', async () => {
+    const { room, push } = createFakeRoom();
+    const debugSpy = vi.spyOn(log, 'debug').mockImplementation(() => {});
+
+    const emissions: TextStreamData[][] = [];
+    const subscription = setupTextStream(room, TOPIC).subscribe((streams) => {
+      emissions.push(streams);
+    });
+
+    const abnormalEnd = new Error(
+      'Participant agent-x unexpectedly disconnected in the middle of sending data',
+    );
+    await push(TOPIC, {
+      info: { id: 'stream-1', attributes: {} },
+      async *[Symbol.asyncIterator]() {
+        yield 'Hello ';
+        yield 'world';
+        throw abnormalEnd;
+      },
+    });
+    await flush();
+
+    expect(emissions.at(-1)?.[0]?.text).toBe('Hello world');
+    expect(debugSpy).toHaveBeenCalledWith('text stream ended abnormally', abnormalEnd);
+
+    subscription.unsubscribe();
+    debugSpy.mockRestore();
   });
 });

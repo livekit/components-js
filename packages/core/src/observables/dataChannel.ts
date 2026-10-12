@@ -73,13 +73,16 @@ export function setupDataMessageHandler<T extends string>(
   );
 
   const isSending$ = new BehaviorSubject<boolean>(false);
+  let pendingSends = 0;
 
   const send = async (payload: Uint8Array, options: DataPublishOptions = {}) => {
+    pendingSends += 1;
     isSending$.next(true);
     try {
       await sendMessage(room.localParticipant, payload, { topic: topics[0], ...options });
     } finally {
-      isSending$.next(false);
+      pendingSends -= 1;
+      isSending$.next(pendingSends > 0);
     }
   };
 

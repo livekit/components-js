@@ -39,6 +39,14 @@ const makeRoom = () => {
     roomEvents.set(event, [...(roomEvents.get(event) ?? []), handler]);
     return room;
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const remove = (event: string, handler: (...args: any[]) => void) => {
+    roomEvents.set(
+      event,
+      (roomEvents.get(event) ?? []).filter((registered) => registered !== handler),
+    );
+    return room;
+  };
   const room = {
     serverInfo: { edition: 1 },
     registerTextStreamHandler: (topic: string, handler: TextStreamHandler) => {
@@ -54,7 +62,7 @@ const makeRoom = () => {
       byteHandlers.delete(topic);
     },
     on: record,
-    off: () => room,
+    off: remove,
     once: record,
     getParticipantByIdentity: () => undefined,
   } as unknown as Room;
@@ -63,7 +71,8 @@ const makeRoom = () => {
       handler(...args);
     }
   };
-  return { room, textHandlers, byteHandlers, emitRoomEvent };
+  const listenerCount = (event: string) => roomEvents.get(event)?.length ?? 0;
+  return { room, textHandlers, byteHandlers, emitRoomEvent, listenerCount };
 };
 
 const textReader = (id: string, text: string, attachedStreamIds: string[]): TextReader => ({
@@ -74,6 +83,19 @@ const textReader = (id: string, text: string, attachedStreamIds: string[]): Text
 });
 
 const settle = () => new Promise((resolve) => setTimeout(resolve, 10));
+
+/** A byte reader that records whether the handler started reading it. */
+const trackedByteReader = (id: string) => {
+  const reader = {
+    started: false,
+    info: { id, name: `${id}.bin`, mimeType: 'application/octet-stream' },
+    async *[Symbol.asyncIterator]() {
+      reader.started = true;
+      yield new TextEncoder().encode('file body');
+    },
+  };
+  return reader;
+};
 
 describe('setupChat with attachments', () => {
   it('settles the message pipeline when an attachment stream ends abnormally', async () => {
@@ -100,23 +122,22 @@ describe('setupChat with attachments', () => {
       await textHandler(textReader('msg-1', 'hello with attachment', ['att-1']), {
         identity: 'sender',
       });
+      const abnormalEnd = new DataStreamError(
+        'Participant sender unexpectedly disconnected in the middle of sending data',
+        DataStreamErrorReason.AbnormalEnd,
+      );
       await byteHandler({
         info: { id: 'att-1', name: 'photo.png', mimeType: 'image/png' },
         async *[Symbol.asyncIterator]() {
-          throw new DataStreamError(
-            'Participant sender unexpectedly disconnected in the middle of sending data',
-            DataStreamErrorReason.AbnormalEnd,
-          );
+          throw abnormalEnd;
         },
       });
       await settle();
 
       expect(unhandled).toEqual([]);
       expect(emissions.flat()).toEqual([]);
-      expect(debugSpy).toHaveBeenCalledWith(
-        'chat message stream ended abnormally',
-        expect.any(DataStreamError),
-      );
+      // The SDK's own error object is logged as is, with its reason and message.
+      expect(debugSpy).toHaveBeenCalledWith('chat message stream ended abnormally', abnormalEnd);
 
       // The pipeline stays healthy: a later message with a completing
       // attachment still delivers.
@@ -193,8 +214,9 @@ describe('setupChat with attachments', () => {
     };
     process.on('unhandledRejection', onUnhandled);
     const debugSpy = vi.spyOn(log, 'debug').mockImplementation(() => {});
+    const warnSpy = vi.spyOn(log, 'warn').mockImplementation(() => {});
     try {
-      const { room, textHandlers, byteHandlers, emitRoomEvent } = makeRoom();
+      const { room, textHandlers, byteHandlers, emitRoomEvent, listenerCount } = makeRoom();
       const emissions: ReceivedChatMessage[][] = [];
       const chat = setupChat(room);
       const subscription = chat.messageObservable.subscribe((messages) => {
@@ -209,22 +231,32 @@ describe('setupChat with attachments', () => {
 
       // The text arrives complete, but the sender drops before ever opening
       // the attachment byte stream - no controller exists for livekit-client
-      // to error, so only the disconnect event can settle the future.
+      // to error, so only the disconnect event can end the message.
       await textHandler(textReader('msg-gone', 'text arrived, attachment never did', ['att-x']), {
         identity: 'sender',
       });
       await settle();
+      expect(listenerCount(RoomEvent.ParticipantDisconnected)).toBe(1);
+
+      // Another participant leaving does not end it.
+      emitRoomEvent(RoomEvent.ParticipantDisconnected, { identity: 'someone-else' });
+      await settle();
+      expect(listenerCount(RoomEvent.ParticipantDisconnected)).toBe(1);
+
       emitRoomEvent(RoomEvent.ParticipantDisconnected, { identity: 'sender' });
       await settle();
 
       // Terminal state: the message is dropped (consistent with a mid-transfer
-      // attachment failure), nothing hangs, nothing rejects unhandled.
+      // attachment failure) and completes rather than errors, so nothing is
+      // logged or rejected and its listener and attachment entry are gone.
       expect(unhandled).toEqual([]);
       expect(emissions.flat()).toEqual([]);
-      expect(debugSpy).toHaveBeenCalledWith(
-        'chat message stream ended abnormally',
-        expect.objectContaining({ name: 'AttachmentNotReceivedError' }),
-      );
+      expect(debugSpy).not.toHaveBeenCalled();
+      expect(warnSpy).not.toHaveBeenCalled();
+      expect(listenerCount(RoomEvent.ParticipantDisconnected)).toBe(0);
+      const lateAttachment = trackedByteReader('att-x');
+      await byteHandler(lateAttachment);
+      expect(lateAttachment.started).toBe(false);
 
       // The pipeline stays healthy for the next message.
       await textHandler(textReader('msg-after', 'later message', ['att-y']), {
@@ -239,6 +271,105 @@ describe('setupChat with attachments', () => {
         const messages = emissions.at(-1) ?? [];
         expect(messages.map((message) => message.message)).toEqual(['later message']);
       });
+
+      subscription.unsubscribe();
+    } finally {
+      process.off('unhandledRejection', onUnhandled);
+      debugSpy.mockRestore();
+      warnSpy.mockRestore();
+    }
+  });
+
+  it('ends a message still waiting on an attachment when the local room disconnects', async () => {
+    const unhandled: unknown[] = [];
+    const onUnhandled = (reason: unknown) => {
+      unhandled.push(reason);
+    };
+    process.on('unhandledRejection', onUnhandled);
+    try {
+      const { room, textHandlers, byteHandlers, emitRoomEvent, listenerCount } = makeRoom();
+      const chat = setupChat(room);
+      const subscription = chat.messageObservable.subscribe(() => {});
+
+      const textHandler = textHandlers.get('lk.chat');
+      const byteHandler = byteHandlers.get('lk.chat');
+      if (!textHandler || !byteHandler) {
+        throw new Error('chat stream handlers were not registered');
+      }
+
+      await textHandler(textReader('msg-local', 'waiting on attachment', ['att-local']), {
+        identity: 'sender',
+      });
+      await settle();
+      expect(listenerCount(RoomEvent.ParticipantDisconnected)).toBe(1);
+
+      // On a local disconnect livekit-client drops open stream controllers
+      // without erroring them and emits no ParticipantDisconnected, so only
+      // the room's own disconnect can end the message.
+      emitRoomEvent(RoomEvent.Disconnected);
+      await settle();
+
+      expect(unhandled).toEqual([]);
+      expect(listenerCount(RoomEvent.ParticipantDisconnected)).toBe(0);
+      const lateAttachment = trackedByteReader('att-local');
+      await byteHandler(lateAttachment);
+      expect(lateAttachment.started).toBe(false);
+
+      subscription.unsubscribe();
+    } finally {
+      process.off('unhandledRejection', onUnhandled);
+    }
+  });
+
+  it('keeps the text already delivered when the sender leaves mid-stream', async () => {
+    const unhandled: unknown[] = [];
+    const onUnhandled = (reason: unknown) => {
+      unhandled.push(reason);
+    };
+    process.on('unhandledRejection', onUnhandled);
+    const debugSpy = vi.spyOn(log, 'debug').mockImplementation(() => {});
+    try {
+      const { room, textHandlers, emitRoomEvent } = makeRoom();
+      const emissions: ReceivedChatMessage[][] = [];
+      const chat = setupChat(room);
+      const subscription = chat.messageObservable.subscribe((messages) => {
+        emissions.push(messages);
+      });
+
+      const textHandler = textHandlers.get('lk.chat');
+      if (!textHandler) {
+        throw new Error('chat stream handlers were not registered');
+      }
+
+      let failRead: (error: Error) => void = () => {};
+      const pendingRead = new Promise<string>((_, reject) => {
+        failRead = reject;
+      });
+      await textHandler(
+        {
+          info: { id: 'msg-cut', timestamp: Date.now(), attributes: {} },
+          async *[Symbol.asyncIterator]() {
+            yield 'Hello ';
+            yield await pendingRead;
+          },
+        },
+        { identity: 'sender' },
+      );
+      await settle();
+
+      // Same order as livekit-client: the open stream is errored, then
+      // ParticipantDisconnected is emitted in the same tick.
+      failRead(
+        new DataStreamError(
+          'Participant sender unexpectedly disconnected in the middle of sending data',
+          DataStreamErrorReason.AbnormalEnd,
+        ),
+      );
+      emitRoomEvent(RoomEvent.ParticipantDisconnected, { identity: 'sender' });
+      await settle();
+
+      expect(unhandled).toEqual([]);
+      expect(emissions.at(-1)?.map((message) => message.message)).toEqual(['Hello ']);
 
       subscription.unsubscribe();
     } finally {
@@ -267,7 +398,7 @@ describe('setupChat with attachments', () => {
       }
 
       // Room B has a message waiting on its attachment from "agent".
-      await textHandlerB(textReader('msg-b', 'message in room B', ['att-b']), {
+      await textHandlerB(textReader('msg-room-b', 'message in room B', ['att-room-b']), {
         identity: 'agent',
       });
       await settle();
@@ -275,14 +406,11 @@ describe('setupChat with attachments', () => {
       // A participant with the same identity leaves room A.
       roomA.emitRoomEvent(RoomEvent.ParticipantDisconnected, { identity: 'agent' });
       await settle();
-      expect(debugSpy).not.toHaveBeenCalledWith(
-        'chat message stream ended abnormally',
-        expect.objectContaining({ name: 'AttachmentNotReceivedError' }),
-      );
+      expect(roomB.listenerCount(RoomEvent.ParticipantDisconnected)).toBe(1);
 
       // Room B's attachment still arrives and completes its message.
       await byteHandlerB(
-        byteReader('att-b', async function* () {
+        byteReader('att-room-b', async function* () {
           yield new TextEncoder().encode('file body');
         }),
       );

@@ -1,0 +1,1 @@
+{"version":3,"file":"useParticipantInfo.d.ts","sourceRoot":"","sources":["../../src/hooks/useParticipantInfo.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,WAAW,EAAE,MAAM,gBAAgB,CAAC;AAKlD;;;;;;;;;GASG;AACH,MAAM,WAAW,yBAAyB;IACxC,WAAW,CAAC,EAAE,WAAW,CAAC;CAC3B;AAED,cAAc;AACd,wBAAgB,kBAAkB,CAAC,KAAK,GAAE,yBAA8B;;;;EAavE"}

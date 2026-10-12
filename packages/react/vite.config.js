@@ -14,6 +14,9 @@ export default defineConfig({
       // outputDir: ['dist/esm', 'dist/cjs'], // Output .d.ts files for both formats
     }),
   ],
+  // Bundled UMD deps (loglevel) must take their CommonJS branch regardless of a global AMD
+  // loader at runtime; otherwise module.exports is never assigned (livekit/components-js#1428).
+  define: { 'define.amd': 'undefined' },
   build: {
     minify: 'esbuild',
     emptyOutDir: true,

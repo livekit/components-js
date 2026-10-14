@@ -1,4 +1,4 @@
-import { type LocalAudioTrack, type LocalVideoTrack } from 'livekit-client';
+import { type LocalAudioTrack, type LocalVideoTrack, TrackEvent } from 'livekit-client';
 import * as React from 'react';
 import { useMediaDevices } from './useMediaDevices';
 
@@ -45,7 +45,7 @@ export function useSelectedDevice<T extends LocalVideoTrack | LocalAudioTrack>({
   const getDeviceId = async () => {
     try {
       const newDeviceId = await track?.getDeviceId(false);
-      if (newDeviceId && localDeviceId !== newDeviceId) {
+      if (newDeviceId) {
         prevDeviceId.current = newDeviceId;
         setLocalDeviceId(newDeviceId);
       }
@@ -57,7 +57,13 @@ export function useSelectedDevice<T extends LocalVideoTrack | LocalAudioTrack>({
   };
 
   React.useEffect(() => {
-    if (track) getDeviceId();
+    if (!track) return;
+    getDeviceId();
+    // device can change on restart while the track object stays the same
+    track.on(TrackEvent.Restarted, getDeviceId);
+    return () => {
+      track.off(TrackEvent.Restarted, getDeviceId);
+    };
   }, [track]);
 
   React.useEffect(() => {

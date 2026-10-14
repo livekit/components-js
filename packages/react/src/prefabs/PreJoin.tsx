@@ -580,7 +580,10 @@ export function PreJoin({
     {
       audio: audioEnabled ? { deviceId: previewAudioDeviceId } : false,
       video: videoEnabled
-        ? { deviceId: previewVideoDeviceId, processor: videoProcessor }
+        ? previewVideoDeviceId === 'default'
+          ? // no camera is named 'default', so the browser would pick one arbitrarily
+            { facingMode: 'user', processor: videoProcessor }
+          : { deviceId: previewVideoDeviceId, processor: videoProcessor }
         : false,
     },
     onError,

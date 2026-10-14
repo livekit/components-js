@@ -85,7 +85,8 @@ export const MediaDeviceSelect: (
       onError: handleError,
     });
     React.useEffect(() => {
-      if (initialSelection !== undefined) {
+      // a passed track already runs on its device; restarting it can switch devices
+      if (initialSelection !== undefined && !track) {
         setActiveMediaDevice(initialSelection);
       }
     }, [setActiveMediaDevice]);

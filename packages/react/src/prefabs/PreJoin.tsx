@@ -563,11 +563,24 @@ export function PreJoin({
     saveUsername(username);
   }, [username, saveUsername]);
 
+  // read saved devices only when (re)enabling: the device menu switches the running track
+  // itself, so recreating it on every saved choice would reopen the device
+  const previewAudioDeviceId = React.useMemo(
+    () => initialUserChoices.audioDeviceId,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [audioEnabled],
+  );
+  const previewVideoDeviceId = React.useMemo(
+    () => initialUserChoices.videoDeviceId,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [videoEnabled],
+  );
+
   const tracks = usePreviewTracks(
     {
-      audio: audioEnabled ? { deviceId: initialUserChoices.audioDeviceId } : false,
+      audio: audioEnabled ? { deviceId: previewAudioDeviceId } : false,
       video: videoEnabled
-        ? { deviceId: initialUserChoices.videoDeviceId, processor: videoProcessor }
+        ? { deviceId: previewVideoDeviceId, processor: videoProcessor }
         : false,
     },
     onError,

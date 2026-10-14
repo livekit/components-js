@@ -1,8 +1,8 @@
+import { RoomEvent, type LocalAudioTrack, type LocalVideoTrack } from 'livekit-client';
 import * as React from 'react';
 import { useMaybeRoomContext } from '../../context';
-import { mergeProps } from '../../utils';
-import { RoomEvent, type LocalAudioTrack, type LocalVideoTrack } from 'livekit-client';
 import { useMediaDeviceSelect } from '../../hooks';
+import { mergeProps } from '../../utils';
 
 /** @public */
 export interface MediaDeviceSelectProps extends Omit<
@@ -18,6 +18,8 @@ export interface MediaDeviceSelectProps extends Omit<
    * will call `onDeviceSelectError` with the error in case this fails
    */
   exactMatch?: boolean;
+  /** shown for the browser's unnamed `default` device (e.g. Android) */
+  defaultDeviceLabel?: string;
   track?: LocalAudioTrack | LocalVideoTrack;
   /**
    * this will call getUserMedia if the permissions are not yet given to enumerate the devices with device labels.
@@ -55,6 +57,7 @@ export const MediaDeviceSelect: (
       onDeviceListChange,
       onDeviceSelectError,
       exactMatch,
+      defaultDeviceLabel = 'Default',
       track,
       requestPermissions,
       onError,
@@ -136,7 +139,7 @@ export const MediaDeviceSelect: (
             role="option"
           >
             <button className="lk-button" onClick={() => handleActiveDeviceChange(device.deviceId)}>
-              {device.label}
+              {device.deviceId === 'default' && !device.label ? defaultDeviceLabel : device.label}
             </button>
           </li>
         ))}

@@ -1,3 +1,5 @@
+import type { LocalUserChoices } from '@livekit/components-core';
+import { log } from '@livekit/components-core';
 import type {
   CreateLocalTracksOptions,
   LocalAudioTrack,
@@ -10,23 +12,21 @@ import {
   createLocalTracks,
   createLocalVideoTrack,
   facingModeFromLocalTrack,
+  Mutex,
   Track,
   VideoPresets,
-  Mutex,
 } from 'livekit-client';
 import * as React from 'react';
-import { getPrejoinTranslations, type PrejoinLanguage } from './prejoinTranslations';
-import { MediaDeviceMenu } from './MediaDeviceMenu';
+import { ParticipantPlaceholder } from '../assets/images';
 import { TrackToggle } from '../components/controls/TrackToggle';
 import { BarVisualizer } from '../components/participant/BarVisualizer';
-import type { LocalUserChoices } from '@livekit/components-core';
-import { log } from '@livekit/components-core';
-import { ParticipantPlaceholder } from '../assets/images';
 import { PermissionsModal } from '../components/PermissionsModal';
 import { useMediaDevices, usePersistentUserChoices } from '../hooks';
+import { useSelectedDevice } from '../hooks/useSelectedDevice';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 import { roomOptionsStringifyReplacer } from '../utils';
-import { useSelectedDevice } from '../hooks/useSelectedDevice';
+import { MediaDeviceMenu } from './MediaDeviceMenu';
+import { getPrejoinTranslations, type PrejoinLanguage } from './prejoinTranslations';
 
 // Device status type definition
 type DeviceStatus = 'available' | 'permission-denied' | 'no-devices' | 'disabled' | 'error';
@@ -159,7 +159,9 @@ export function usePreviewTracks(
       trackType: T,
       trackOption: CreateLocalTracksOptions[T] | false,
       setTrack: React.Dispatch<
-        React.SetStateAction<T extends 'audio' ? LocalAudioTrack | undefined : LocalVideoTrack | undefined>
+        React.SetStateAction<
+          T extends 'audio' ? LocalAudioTrack | undefined : LocalVideoTrack | undefined
+        >
       >,
       setPermissionErrors: React.Dispatch<React.SetStateAction<{ audio?: Error; video?: Error }>>,
     ) => {
@@ -658,6 +660,9 @@ export function PreJoin({
     }
   }, [videoTrack]);
 
+  const deviceLabel = (device?: MediaDeviceInfo) =>
+    device?.deviceId === 'default' && !device.label ? t.defaultDevice : device?.label;
+
   const audioTrack = React.useMemo(
     () => tracks?.filter((track) => track.kind === Track.Kind.Audio)[0] as LocalAudioTrack,
     [tracks],
@@ -822,11 +827,12 @@ export function PreJoin({
           </TrackToggle>
           <div className="lk-button-group-menu-pre-join">
             <label className="lk-selected-device-label">
-              {selectedAudioDevice?.label || micLabel}
+              {deviceLabel(selectedAudioDevice) || micLabel}
             </label>
           </div>
           <MediaDeviceMenu
             initialSelection={audioDeviceId}
+            defaultDeviceLabel={t.defaultDevice}
             kind="audioinput"
             disabled={Boolean(!selectedAudioDevice)}
             tracks={{ audioinput: audioTrack }}
@@ -858,11 +864,12 @@ export function PreJoin({
           />
           <div className="lk-button-group-menu-pre-join">
             <label className="lk-selected-device-label">
-              {selectedVideoDevice?.label || camLabel}
+              {deviceLabel(selectedVideoDevice) || camLabel}
             </label>
           </div>
           <MediaDeviceMenu
             initialSelection={videoDeviceId}
+            defaultDeviceLabel={t.defaultDevice}
             kind="videoinput"
             disabled={Boolean(!selectedVideoDevice)}
             tracks={{ videoinput: videoTrack }}

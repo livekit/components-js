@@ -136,6 +136,31 @@ async function createTracksPreferringFacingMode(options: CreateLocalTracksOption
   return tracks;
 }
 
+// preview tracks aren't published, so nothing restarts them when their device disconnects
+function useFallbackToDefaultDevice(
+  track: LocalAudioTrack | LocalVideoTrack | undefined,
+  setDeviceId: (id: string) => void,
+) {
+  React.useEffect(() => {
+    if (!track) return;
+    const onEnded = async () => {
+      try {
+        // non-exact: browser picks another device if there is no 'default'
+        await track.restartTrack({ deviceId: 'default' });
+        setDeviceId((await track.getDeviceId(false)) ?? 'default');
+      } catch (e) {
+        log.warn('failed to restart preview track on default device', e);
+      }
+      // Android WebView never fires devicechange
+      navigator.mediaDevices?.dispatchEvent(new Event('devicechange'));
+    };
+    track.on(TrackEvent.Ended, onEnded);
+    return () => {
+      track.off(TrackEvent.Ended, onEnded);
+    };
+  }, [track, setDeviceId]);
+}
+
 export function usePreviewTracks(
   options: CreateLocalTracksOptions,
   onError?: (err: Error) => void,
@@ -719,6 +744,9 @@ export function PreJoin({
     [tracks],
   );
 
+  useFallbackToDefaultDevice(audioTrack, setAudioDeviceId);
+  useFallbackToDefaultDevice(videoTrack, setVideoDeviceId);
+
   const { selectedDevice: selectedAudioDevice } = useSelectedDevice({
     kind: 'audioinput',
     track: audioTrack,
@@ -885,7 +913,7 @@ export function PreJoin({
             initialSelection={audioDeviceId}
             defaultDeviceLabel={t.defaultDevice}
             kind="audioinput"
-            disabled={Boolean(!selectedAudioDevice)}
+            disabled={!audioTrack}
             tracks={{ audioinput: audioTrack }}
             onActiveDeviceChange={(_, id) => setAudioDeviceId(id)}
           />
@@ -922,7 +950,7 @@ export function PreJoin({
             initialSelection={videoDeviceId}
             defaultDeviceLabel={t.defaultDevice}
             kind="videoinput"
-            disabled={Boolean(!selectedVideoDevice)}
+            disabled={!videoTrack}
             tracks={{ videoinput: videoTrack }}
             onActiveDeviceChange={(_, id) => setVideoDeviceId(id)}
           />

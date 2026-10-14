@@ -22,7 +22,7 @@ import { useMaybeRoomContext } from '../context';
 import { AgentState, useAgent, useAgentTimeoutIdStore } from './useAgent';
 import { TrackReference, log } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
-import { TextTransport } from '../text-transport/TextTransport';
+import { TextTransport, type TextTransportBaseUrl } from '../text-transport/TextTransport';
 
 /** @beta */
 export enum SessionEvent {
@@ -247,10 +247,12 @@ type UseSessionTextOptions = {
   mode: 'text';
 
   /**
-   * Fully-qualified base URL of the A2A `v1` interface, e.g.
-   * `http://localhost:8787/fare-desk/v1`.
+   * The A2A interface base URL (everything up to, but not including, `/v1`), or a callback that
+   * builds it from the project id derived from the token's server URL. The callback form lets the
+   * same code target the local mock and a real agent (and swap staging/production) — e.g.
+   * `(projectId) => \`https://${projectId}.staging.livekit.cloud/agents/<agent>/default/<endpoint>\``.
    */
-  baseUrl: string;
+  baseUrl: TextTransportBaseUrl;
 
   room?: never;
   encryption?: never;
@@ -932,10 +934,7 @@ export function useSessionText(
       new TextTransport({
         baseUrl,
         contextId,
-        getToken: async () => {
-          const credentials = await tokenSourceFetch();
-          return credentials.participantToken;
-        },
+        getCredentials: tokenSourceFetch,
       }),
     [baseUrl, contextId, tokenSourceFetch],
   );

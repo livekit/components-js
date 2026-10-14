@@ -1,14 +1,15 @@
 import { type ReceivedChatMessage } from '@livekit/components-core';
+import { type TokenSourceResponseObject } from 'livekit-client';
 
 /**
- * The A2A "LiveKit Agent Session" extension URI. Sending this in the `A2A-Extensions` request
- * header activates the extension; without it the server silently degrades to plain-text A2A.
+ * The A2A "LiveKit agents" extension URI. Sending this in the `A2A-Extensions` request header
+ * activates the extension; without it the server degrades to plain-text A2A.
  */
-export const AGENT_SESSION_EXTENSION_URI = 'https://livekit.io/a2a/ext/agent-session/v1';
+export const A2A_AGENTS_EXTENSION_URI = 'https://livekit.io/a2a/ext/agents/v1';
 
 /**
- * Attribute key used on {@link ReceivedChatMessage.attributes} to carry the A2A chat-item role
- * (`"user"`, `"assistant"`, ...) in text mode.
+ * Attribute key used on {@link ReceivedChatMessage.attributes} to carry the message role
+ * (`"user"`, `"assistant"`) in text mode.
  *
  * FIXME: this is a stopgap. `ReceivedMessage` has no first-class notion of a sender role, and in
  * text mode there are no `Participant` objects to hang identity off of. Downstream code has to read
@@ -17,16 +18,22 @@ export const AGENT_SESSION_EXTENSION_URI = 'https://livekit.io/a2a/ext/agent-ses
  */
 export const TEXT_CHAT_ROLE_ATTRIBUTE = 'lk.chat.role';
 
+/**
+ * Resolves the base URL of the A2A interface for a given project id. `/v1` is appended to the
+ * returned value. The project id is derived from the credentials' `serverUrl`.
+ *
+ * - For a real agent: `(projectId) => \`https://${projectId}.staging.livekit.cloud/agents/<agent>/default/<endpoint>\``
+ * - For the local mock: `() => 'http://localhost:8787/fare-desk'`
+ */
+export type TextTransportBaseUrl = string | ((projectId: string) => string);
+
 /** Options for constructing a {@link TextTransport}. */
 export type TextTransportOptions = {
-  /**
-   * Fully-qualified base URL of the A2A `v1` interface, e.g.
-   * `http://localhost:8787/fare-desk/v1`. `/message:stream` is appended to this.
-   */
-  baseUrl: string;
+  /** The A2A interface base URL, or a callback that builds it from the project id. */
+  baseUrl: TextTransportBaseUrl;
 
-  /** Returns a bearer token (a LiveKit participant token) used to authenticate requests. */
-  getToken: () => Promise<string>;
+  /** Returns the credentials (token + server url) used to authenticate and locate the agent. */
+  getCredentials: () => Promise<TokenSourceResponseObject>;
 
   /** Stable conversation id (A2A `contextId`). Ties multiple turns to one conversation. */
   contextId: string;
@@ -41,38 +48,52 @@ export type RequestMessageStreamOptions = {
   signal?: AbortSignal;
 };
 
-// A minimal, permissive view of the A2A frame shapes this prototype consumes. The real types
-// will live alongside the transport when this moves into client-sdk-js.
-type A2aChatItem = {
-  id: string;
-  type: string;
-  role?: string;
-  content?: Array<string>;
-  created_at?: number;
-};
-
+// A minimal, permissive view of the A2A ProtoJSON frame shapes this prototype consumes.
 type A2aPart = {
   text?: string;
-  data?: A2aChatItem | Record<string, unknown>;
+  data?: unknown;
   metadata?: Record<string, unknown>;
 };
 
-type A2aStreamFrame = {
+type A2aMessage = {
+  messageId?: string;
+  role?: string;
+  parts?: Array<A2aPart>;
+};
+
+type A2aStreamResponse = {
   task?: unknown;
   artifactUpdate?: unknown;
+  message?: A2aMessage;
   statusUpdate?: {
     status?: {
       state?: string;
-      message?: { parts?: Array<A2aPart> };
+      message?: A2aMessage;
     };
   };
 };
 
+// Each SSE `data:` frame is a JSON-RPC envelope wrapping a StreamResponse in `result`.
+type JsonRpcStreamFrame = {
+  result?: A2aStreamResponse;
+} & A2aStreamResponse;
+
+/** Derive the project id (first DNS label) from a LiveKit server URL. */
+function projectIdFromServerUrl(serverUrl: string): string {
+  try {
+    // wss:// -> https://, ws:// -> http://
+    const host = new URL(serverUrl.replace(/^ws/, 'http')).hostname;
+    return host.split('.')[0] ?? '';
+  } catch {
+    return '';
+  }
+}
+
 /**
- * A framework-agnostic transport that speaks the A2A `message:stream` protocol (plus the LiveKit
- * agent-session extension) over HTTP. It owns all protocol knowledge — auth, conversation id, SSE
- * framing, and mapping A2A chat items onto {@link ReceivedChatMessage} — so that consumers (e.g.
- * `useSessionMessages`) stay protocol-agnostic.
+ * A framework-agnostic transport that speaks the agents-2.0 A2A protocol (JSON-RPC over HTTP+SSE,
+ * plus the LiveKit agents extension). It owns all protocol knowledge — auth, conversation id, JSON-RPC
+ * framing, SSE parsing, and mapping A2A messages onto {@link ReceivedChatMessage} — so that consumers
+ * (e.g. `useSessionMessages`) stay protocol-agnostic.
  *
  * This is deliberately React-free. The intent is for it to eventually move into client-sdk-js and
  * be usable outside of React.
@@ -80,60 +101,80 @@ type A2aStreamFrame = {
 export class TextTransport {
   readonly contextId: string;
 
-  private baseUrl: string;
-  private getToken: () => Promise<string>;
+  private baseUrl: TextTransportBaseUrl;
+  private getCredentials: () => Promise<TokenSourceResponseObject>;
   private cachedToken: string | null = null;
+  private resolvedBaseUrl: string | null = null;
   private activeControllers = new Set<AbortController>();
+  private nextRequestId = 1;
 
   constructor(options: TextTransportOptions) {
-    this.baseUrl = options.baseUrl.replace(/\/$/, '');
-    this.getToken = options.getToken;
+    this.baseUrl = options.baseUrl;
+    this.getCredentials = options.getCredentials;
     this.contextId = options.contextId;
   }
 
-  /** Prime the transport by fetching (and caching) a token. Represents "connecting" in text mode. */
+  /** Prime the transport by fetching credentials and resolving the base URL. "Connecting" in text mode. */
   async connect(): Promise<void> {
-    this.cachedToken = await this.getToken();
+    const { serverUrl, participantToken } = await this.getCredentials();
+    this.cachedToken = participantToken;
+    const raw =
+      typeof this.baseUrl === 'function'
+        ? this.baseUrl(projectIdFromServerUrl(serverUrl))
+        : this.baseUrl;
+    this.resolvedBaseUrl = raw.replace(/\/$/, '');
   }
 
-  /** Abort any in-flight requests and drop the cached token. */
+  /** Abort any in-flight requests and drop the cached credentials. */
   async disconnect(): Promise<void> {
     for (const controller of this.activeControllers) {
       controller.abort();
     }
     this.activeControllers.clear();
     this.cachedToken = null;
+    this.resolvedBaseUrl = null;
   }
 
   /**
-   * POST a user message to `message:stream` and consume the SSE response, invoking
-   * `onMessage` for every message-kind chat item the agent produces. Resolves once the response
-   * stream is fully consumed (or rejects if it fails / is aborted).
+   * POST a user message (JSON-RPC `message/stream`) and consume the SSE response, invoking
+   * `onMessage` for every text message the agent produces. Resolves once the response stream is
+   * fully consumed (or rejects if it fails / is aborted).
    */
   async requestMessageStream(text: string, options: RequestMessageStreamOptions): Promise<void> {
-    const token = this.cachedToken ?? (await this.getToken());
+    if (!this.cachedToken || !this.resolvedBaseUrl) {
+      await this.connect();
+    }
+    const token = this.cachedToken!;
+    const baseUrl = this.resolvedBaseUrl!;
 
     const controller = new AbortController();
     this.activeControllers.add(controller);
     const onExternalAbort = () => controller.abort();
     options.signal?.addEventListener('abort', onExternalAbort);
 
+    this.nextRequestId += 1;
+    // NOTE: crypto.randomUUID is available in modern browsers and Node 19+.
+    const messageId = crypto.randomUUID();
     try {
-      const response = await fetch(`${this.baseUrl}/message:stream`, {
+      const response = await fetch(`${baseUrl}/v1`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/a2a+json',
-          'A2A-Extensions': AGENT_SESSION_EXTENSION_URI,
+          'A2A-Extensions': A2A_AGENTS_EXTENSION_URI,
           'A2A-Version': '1.0',
         },
         body: JSON.stringify({
-          message: {
-            // NOTE: crypto.randomUUID is available in modern browsers and Node 19+.
-            messageId: crypto.randomUUID(),
-            contextId: this.contextId,
-            role: 'ROLE_USER',
-            parts: [{ text }],
+          jsonrpc: '2.0',
+          id: this.nextRequestId,
+          method: 'message/stream',
+          params: {
+            message: {
+              messageId,
+              contextId: this.contextId,
+              role: 'ROLE_USER',
+              parts: [{ text }],
+            },
           },
         }),
         signal: controller.signal,
@@ -182,39 +223,46 @@ export class TextTransport {
       return;
     }
 
-    let frame: A2aStreamFrame;
+    let envelope: JsonRpcStreamFrame;
     try {
-      frame = JSON.parse(dataPayload) as A2aStreamFrame;
+      envelope = JSON.parse(dataPayload) as JsonRpcStreamFrame;
     } catch {
       return;
     }
+    console.log('FRAME', envelope);
 
-    const parts = frame.statusUpdate?.status?.message?.parts;
-    if (!parts) {
+    // Each SSE frame is a JSON-RPC envelope: unwrap `result` (fall back to a bare frame).
+    const frame: A2aStreamResponse = envelope.result ?? envelope;
+
+    // Agent turns arrive as text parts on a status-update message (or a bare `message`).
+    const message = frame.statusUpdate?.status?.message ?? frame.message;
+    if (!message?.parts) {
       return;
     }
 
-    for (const part of parts) {
-      const kind = part.metadata?.[`${AGENT_SESSION_EXTENSION_URI}/kind`];
-      if (kind !== 'chat_item') {
-        continue;
-      }
-      const item = part.data as A2aChatItem | undefined;
-
-      // TODO(text-mode): only `message` chat items are mapped for now. `function_call`,
-      // `function_call_output`, `agent_handoff`, artifact updates, and `lk/directive` events are
-      // all dropped. Supporting them requires extending the `ReceivedMessage` model.
-      if (!item || item.type !== 'message') {
-        continue;
-      }
-
-      onMessage({
-        id: item.id,
-        timestamp:
-          typeof item.created_at === 'number' ? Math.round(item.created_at * 1000) : Date.now(),
-        message: Array.isArray(item.content) ? item.content.join('') : String(item.content ?? ''),
-        attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: String(item.role ?? 'assistant') },
-      });
+    // TODO(text-mode): only text parts are mapped. Data parts (delegations/chat-ctx), artifacts,
+    // interruptions, and task lifecycle events are all dropped. Supporting them requires extending
+    // the `ReceivedMessage` model.
+    const text = message.parts
+      .filter((part) => typeof part.text === 'string' && part.text.length > 0)
+      .map((part) => part.text)
+      .join('');
+    if (!text) {
+      return;
     }
+
+    const roleRaw = message.role ?? '';
+    const role =
+      roleRaw === 'ROLE_AGENT' || roleRaw === 'agent' || roleRaw === 'assistant'
+        ? 'assistant'
+        : 'user';
+
+    onMessage({
+      // Messages have no timestamp on the wire; stamp with arrival time.
+      id: message.messageId ?? crypto.randomUUID(),
+      timestamp: Date.now(),
+      message: text,
+      attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: role },
+    });
   }
 }

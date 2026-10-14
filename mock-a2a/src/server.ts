@@ -90,8 +90,9 @@ function describe(): string {
   ];
   for (const endpoint of config.endpoints) {
     lines.push(
-      `  POST /${endpoint}/v1/message:stream        SendMessageRequest -> SSE`,
-      `  POST /${endpoint}/v1/message:send          SendMessageRequest -> Task`,
+      `  POST /${endpoint}/v1                       JSON-RPC (message/stream -> SSE, message/send -> Task)`,
+      `  POST /${endpoint}/v1/message:stream        [legacy] SendMessageRequest -> SSE`,
+      `  POST /${endpoint}/v1/message:send          [legacy] SendMessageRequest -> Task`,
       `  GET  /${endpoint}/v1/tasks/{id}            -> Task`,
       `  POST /${endpoint}/v1/tasks/{id}:cancel     -> Task`,
       `  GET  /${endpoint}/.well-known/agent-card.json   the card (no auth)`,

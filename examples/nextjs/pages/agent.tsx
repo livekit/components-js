@@ -20,8 +20,14 @@ import { generateRandomUserId } from '../lib/helper';
 
 type SessionMode = 'rtc' | 'text';
 
-const TEXT_MODE_BASE_URL =
-  process.env.NEXT_PUBLIC_LK_TEXT_BASE_URL ?? 'http://localhost:8787/fare-desk/v1';
+// The A2A interface base URL (everything up to, but not including, `/v1`). A callback form
+// receives the project id (derived from the token's server url), which lets the same code target
+// the local mock and a real staging/prod agent. For the local mock we ignore the project id.
+//
+//   mock:  () => 'http://localhost:8787/fare-desk'
+//   real:  (projectId) => `https://${projectId}.staging.livekit.cloud/agents/<agent>/default/<endpoint>`
+const textModeBaseUrl = (_projectId: string): string =>
+  process.env.NEXT_PUBLIC_LK_TEXT_BASE_URL ?? 'http://localhost:8787/fare-desk';
 
 function SimpleAgent() {
   const agent = useAgent();
@@ -134,7 +140,7 @@ const AgentExample: NextPage = () => {
   // a fresh start (there is no conversation migration yet), so the toggle is disabled once started.
   const session = useSession(
     tokenSource,
-    { mode: 'text', baseUrl: TEXT_MODE_BASE_URL, roomName, participantIdentity: userIdentity }
+    { mode: 'text', baseUrl: textModeBaseUrl, roomName, participantIdentity: userIdentity }
   );
 
   const [started, setStarted] = useState(false);

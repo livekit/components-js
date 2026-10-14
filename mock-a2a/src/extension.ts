@@ -12,7 +12,9 @@
 
 import type { Request, Response } from 'express';
 
-export const EXTENSION_URI = 'https://livekit.io/a2a/ext/agent-session/v1';
+// NOTE: aligned with agents-2.0 (livekit-agents/livekit/agents/a2a/extension.py → EXTENSION_URI).
+// Was `.../ext/agent-session/v1` in the original speculative spec.
+export const EXTENSION_URI = 'https://livekit.io/a2a/ext/agents/v1';
 
 /** Metadata keys are the URI, a slash, then the name. Written `lk/<name>` in the spec. */
 function key(name: string): string {

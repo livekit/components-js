@@ -1,0 +1,263 @@
+commit b77547362462e9606a558e3ef2b6a8c984e5295b
+Merge: ac6dc0d3 e03fcd84
+Author: Ryan Gaus <ryan.gaus@livekit.io>
+Date:   Wed Sep 23 13:35:26 2026 -0400
+
+    WIP on mock-a2a: ac6dc0d3 feat: add mock a2a fixture updates
+
+diff --cc packages/react/src/hooks/useSession.ts
+index f0dd118f,f0dd118f..70d475f6
+--- a/packages/react/src/hooks/useSession.ts
++++ b/packages/react/src/hooks/useSession.ts
+@@@ -79,11 -79,11 +79,32 @@@ export type SwitchActiveDeviceOptions 
+    exact?: boolean;
+  };
+  
+++type SessionMode = 'text' | 'rtc';
+++
+  type SessionStateCommon = {
+--  room: Room;
+    internal: {
+      emitter: TypedEventEmitter<SessionCallbacks>;
+      tokenSource: TokenSourceConfigurable | TokenSourceFixed;
+++  };
+++};
+++
+++type SessionStateRtcCommon = {
+++  room: Room;
+++  internal: SessionStateCommon['internal'] & {
+++    agentConnectTimeoutMilliseconds?: number;
+++
+++    agentTimeoutFailureReason: string | null;
+++    startAgentTimeout: (agentConnectTimeoutMilliseconds?: number) => void;
+++    clearAgentTimeout: () => void;
+++    clearAgentTimeoutFailureReason: () => void;
+++    updateAgentTimeoutState: (agentState: AgentState) => void;
+++    updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => void;
+++  };
+++};
+++
+++type SessionStateTextCommon = {
+++  room: Room;
+++  internal: SessionStateCommon['internal'] & {
+      agentConnectTimeoutMilliseconds?: number;
+  
+      agentTimeoutFailureReason: string | null;
+@@@ -95,7 -95,7 +116,7 @@@
+    };
+  };
+  
+--type SessionStateConnecting = SessionStateCommon & {
+++type SessionStateConnecting<Mode extends SessionMode = 'rtc'> = (Mode extends 'text' ? SessionStateTextCommon : SessionStateRtcCommon) & {
+    connectionState: ConnectionState.Connecting;
+    isConnected: false;
+  
+@@@ -106,7 -106,7 +127,7 @@@
+    };
+  };
+  
+--type SessionStateConnected = SessionStateCommon & {
+++type SessionStateConnected<Mode extends SessionMode = 'rtc'> = (Mode extends 'text' ? SessionStateTextCommon : SessionStateRtcCommon) & {
+    connectionState:
+      ConnectionState.Connected | ConnectionState.Reconnecting | ConnectionState.SignalReconnecting;
+    isConnected: true;
+@@@ -118,7 -118,7 +139,7 @@@
+    };
+  };
+  
+--type SessionStateDisconnected = SessionStateCommon & {
+++type SessionStateDisconnected<Mode extends SessionMode = 'rtc'> = (Mode extends 'text' ? SessionStateTextCommon : SessionStateRtcCommon) & {
+    connectionState: ConnectionState.Disconnected;
+    isConnected: false;
+  
+@@@ -148,13 -148,13 +169,13 @@@ type SessionActions = 
+  };
+  
+  /** @beta */
+--export type UseSessionReturn = (
+--  SessionStateConnecting | SessionStateConnected | SessionStateDisconnected
+++export type UseSessionReturn<Mode extends SessionMode = 'rtc'> = (
+++  SessionStateConnecting<Mode> | SessionStateConnected<Mode> | SessionStateDisconnected<Mode>
+  ) &
+    SessionActions;
+  
+  /** @internal */
+--export function isUseSessionReturn(value: unknown): value is UseSessionReturn {
+++export function isUseSessionReturn<Mode extends SessionMode = 'rtc'>(value: unknown): value is UseSessionReturn<Mode> {
+    return (
+      typeof value === 'object' &&
+      value !== null &&
+@@@ -173,6 -173,6 +194,7 @@@ type UseSessionCommonOptions = 
+  };
+  
+  type UseSessionWithRoomOptions = {
+++  mode?: 'rtc';
+    room: Room;
+    encryption?: never;
+  };
+@@@ -210,6 -210,6 +232,8 @@@ type UseSessionEncryptionOptions 
+      };
+  
+  type UseSessionWithoutRoomOptions = {
+++  mode?: 'text';
+++
+    // NOTE: This must be here to make typescript go down this discriminated union branch when
+    // "room" is omitted.
+    room?: never;
+@@@ -220,10 -220,10 +244,22 @@@
+  
+  type UseSessionRoomOptions = UseSessionWithRoomOptions | UseSessionWithoutRoomOptions;
+  
+--type UseSessionConfigurableOptions = UseSessionCommonOptions &
+--  UseSessionRoomOptions &
+--  TokenSourceFetchOptions;
+--type UseSessionFixedOptions = UseSessionCommonOptions & UseSessionRoomOptions;
+++type UseSessionTextOptions = {
+++  mode: 'text';
+++  textModeBaseUrl: string;
+++
+++  room?: never;
+++  encryption?: never;
+++};
+++
+++type UseSessionConfigurableTextOptions = UseSessionCommonOptions & UseSessionTextOptions & TokenSourceFetchOptions;
+++type UseSessionFixedTextOptions = UseSessionCommonOptions & UseSessionTextOptions;
+++
+++type UseSessionConfigurableRtcOptions = UseSessionCommonOptions & UseSessionRoomOptions & TokenSourceFetchOptions;
+++type UseSessionFixedRtcOptions = UseSessionCommonOptions & UseSessionRoomOptions;
+++
+++type UseSessionConfigurableOptions = UseSessionConfigurableRtcOptions | UseSessionConfigurableTextOptions;
+++type UseSessionFixedOptions = UseSessionFixedRtcOptions | UseSessionFixedTextOptions;
+  
+  /**
+   * Given two TokenSourceFetchOptions values, check to see if they are deep equal.
+@@@ -371,9 -371,9 +407,25 @@@ export function useSession
+    tokenSource: TokenSourceFixed,
+    options?: UseSessionFixedOptions,
+  ): UseSessionReturn;
+--export function useSession(
+++export function useSession<Options extends UseSessionConfigurableOptions | UseSessionFixedOptions>(
+    tokenSource: TokenSourceConfigurable | TokenSourceFixed,
+    options: UseSessionConfigurableOptions | UseSessionFixedOptions = {},
+++): UseSessionReturn {
+++// ): UseSessionReturn<Options['mode'] extends undefined ? 'rtc' : Options['mode']> {
+++  const { mode, ...restOptions } = options;
+++
+++  switch (mode ?? 'rtc') {
+++    case 'rtc':
+++      return useSessionRtc(tokenSource, restOptions);
+++    case 'text':
+++      // TODO add text mode impl
+++      return null as any;
+++  }
+++}
+++
+++export function useSessionRtc(
+++  tokenSource: TokenSourceConfigurable | TokenSourceFixed,
+++  options: Omit<UseSessionConfigurableRtcOptions | UseSessionFixedRtcOptions, 'mode'>,
+  ): UseSessionReturn {
+    const {
+      room: optionsRoom,
+@@@ -578,7 -578,7 +630,7 @@@
+  
+    const conversationState = React.useMemo(():
+      SessionStateConnecting | SessionStateConnected | SessionStateDisconnected => {
+--    const common: SessionStateCommon = {
+++    const common: SessionStateCommon & SessionStateRtcCommon = {
+        room,
+        internal: sessionInternal,
+      };
+@@@ -797,3 -797,3 +849,93 @@@
+      ],
+    );
+  }
+++
+++export function useSessionText(
+++  tokenSource: TokenSourceConfigurable | TokenSourceFixed,
+++  options: Omit<UseSessionConfigurableTextOptions | UseSessionFixedTextOptions, 'mode'>,
+++): UseSessionReturn<'text'> {
+++  const conversationState = React.useMemo(():
+++    SessionStateConnecting | SessionStateConnected | SessionStateDisconnected => {
+++    const common: SessionStateCommon = {
+++      room,
+++      internal: sessionInternal,
+++    };
+++
+++    switch (roomConnectionState) {
+++      case ConnectionState.Connecting:
+++        return {
+++          ...common,
+++
+++          connectionState: ConnectionState.Connecting,
+++          ...generateDerivedConnectionStateValues(ConnectionState.Connecting),
+++
+++          local: {
+++            cameraTrack: undefined,
+++            microphoneTrack: undefined,
+++            screenShareTrack: undefined,
+++          },
+++        };
+++
+++      case ConnectionState.Connected:
+++      case ConnectionState.Reconnecting:
+++      case ConnectionState.SignalReconnecting:
+++        return {
+++          ...common,
+++
+++          connectionState: roomConnectionState,
+++          ...generateDerivedConnectionStateValues(roomConnectionState),
+++
+++          local: {
+++            cameraTrack: localCamera,
+++            microphoneTrack: localMicrophone,
+++            screenShareTrack: localScreenShare,
+++          },
+++        };
+++
+++      case ConnectionState.Disconnected:
+++        return {
+++          ...common,
+++
+++          connectionState: ConnectionState.Disconnected,
+++          ...generateDerivedConnectionStateValues(ConnectionState.Disconnected),
+++
+++          local: {
+++            cameraTrack: undefined,
+++            microphoneTrack: undefined,
+++            screenShareTrack: undefined,
+++          },
+++        };
+++    }
+++  }, [
+++    sessionInternal,
+++    room,
+++    roomConnectionState,
+++    localCamera,
+++    localMicrophone,
+++    generateDerivedConnectionStateValues,
+++  ]);
+++
+++  return React.useMemo(
+++    () => ({
+++      ...conversationState,
+++
+++      waitUntilConnected: () => Promise.resolve(),
+++      waitUntilDisconnected: () => Promise.resolve(),
+++
+++      prepareConnection,
+++      start,
+++      end,
+++
+++      setEncryptionEnabled,
+++    }),
+++    [
+++      conversationState,
+++      waitUntilConnected,
+++      waitUntilDisconnected,
+++      prepareConnection,
+++      start,
+++      end,
+++      setEncryptionEnabled,
+++    ],
+++  );
+++}

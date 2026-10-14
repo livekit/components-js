@@ -62,16 +62,15 @@ function asObject(value: unknown): Record<string, unknown> {
     : {};
 }
 
-function parseSendMessage(req: Request, active: boolean): ParsedMessage {
-  const body = req.body as Partial<A2A.SendMessageRequest> | undefined;
-  if (!body || typeof body !== 'object') {
-    throw new RequestError(
-      400,
-      'INVALID_ARGUMENT',
-      'body must be a SendMessageRequest object, e.g. {"message":{...}}',
-    );
-  }
-  const message = body.message;
+/** The message carrier: `{message, metadata}`, from either a legacy body or a JSON-RPC `params`. */
+type SendMessageContainer = { message?: unknown; metadata?: unknown };
+
+function parseSendMessage(
+  container: SendMessageContainer,
+  req: Request,
+  active: boolean,
+): ParsedMessage {
+  const message = container.message as Partial<A2A.Message> | undefined;
   if (typeof message !== 'object' || message === null) {
     throw new RequestError(400, 'INVALID_ARGUMENT', 'message is required');
   }
@@ -91,7 +90,7 @@ function parseSendMessage(req: Request, active: boolean): ParsedMessage {
       : `lk-ctx-${crypto.randomUUID()}`;
 
   const messageMetadata = asObject(message.metadata);
-  const requestMetadata = asObject(body.metadata);
+  const requestMetadata = asObject(container.metadata);
 
   let kind: 'delegation' | 'close' | undefined;
   let chatCtx: ChatItem[] | undefined;
@@ -281,6 +280,7 @@ export function a2aRouter(store: ConversationStore): Router {
   const begin = (
     req: Request,
     res: Response,
+    container: SendMessageContainer,
   ): { parsed: ParsedMessage; active: boolean; taskId: string } | null => {
     if (!isServedEndpoint(req.params.endpoint)) {
       endpointNotFound(res, req.params.endpoint);
@@ -293,7 +293,7 @@ export function a2aRouter(store: ConversationStore): Router {
     res.setHeader(Ext.VERSION_HEADER, Ext.PROTOCOL_VERSION);
 
     try {
-      const parsed = parseSendMessage(req, active);
+      const parsed = parseSendMessage(container, req, active);
       return { parsed, active, taskId: crypto.randomUUID() };
     } catch (err) {
       const error = err as RequestError;
@@ -357,8 +357,17 @@ export function a2aRouter(store: ConversationStore): Router {
     return outcome;
   };
 
-  router.post('/:endpoint/v1/message\\:stream', (req: Request, res: Response) => {
-    const started = begin(req, res);
+  /**
+   * Run a task and stream StreamResponse frames. `wrap` lets the caller envelope each frame --
+   * identity for the legacy `message:stream` path, a JSON-RPC envelope for the `/v1` path.
+   */
+  const streamTask = (
+    req: Request,
+    res: Response,
+    container: SendMessageContainer,
+    wrap: (frame: A2A.StreamResponse) => unknown,
+  ): void => {
+    const started = begin(req, res, container);
     if (!started) return;
     const { parsed, active, taskId } = started;
     const { contextId } = parsed;
@@ -369,25 +378,22 @@ export function a2aRouter(store: ConversationStore): Router {
       once: true,
     });
 
+    const send = (frame: A2A.StreamResponse): void => stream.send(wrap(frame));
+
     // s3.4: the Task is the first event, always. It is sent BEFORE the work is queued --
     // s3.3 has the caller waiting only for this event before sending its next message,
     // which a queued task would otherwise never reach.
     const createdAt = A2A.nowIso();
     store.openTask(contextId, taskId, createdAt);
-    stream.send({
+    send({
       task: {
         id: taskId,
         contextId,
         status: { state: A2A.TaskState.SUBMITTED, timestamp: createdAt },
       },
-    } satisfies A2A.StreamResponse);
-
-    const projector = createProjector({
-      taskId,
-      contextId,
-      active,
-      send: (frame) => stream.send(frame),
     });
+
+    const projector = createProjector({ taskId, contextId, active, send });
 
     void store.enqueue(contextId, async () => {
       try {
@@ -397,10 +403,16 @@ export function a2aRouter(store: ConversationStore): Router {
         stream.end();
       }
     });
-  });
+  };
 
-  router.post('/:endpoint/v1/message\\:send', (req: Request, res: Response) => {
-    const started = begin(req, res);
+  /** Run a task and respond with a single Task (no streaming). `respond` envelopes the result. */
+  const sendTask = (
+    req: Request,
+    res: Response,
+    container: SendMessageContainer,
+    respond: (task: A2A.Task) => void,
+  ): void => {
+    const started = begin(req, res, container);
     if (!started) return;
     const { parsed, active, taskId } = started;
     const { contextId } = parsed;
@@ -441,11 +453,64 @@ export function a2aRouter(store: ConversationStore): Router {
           history,
         };
         if (terminal?.metadata) task.metadata = terminal.metadata;
-        res.status(200).json(task);
+        respond(task);
       })
       .catch((err: unknown) => {
         res.status(500).json(A2A.rpcStatus(13, (err as Error).message ?? 'unknown error'));
       });
+  };
+
+  // ---- Legacy A2A 1.0 REST-ish binding (colon verbs). Kept so existing tooling keeps working. ----
+  router.post('/:endpoint/v1/message\\:stream', (req: Request, res: Response) => {
+    streamTask(req, res, req.body as SendMessageContainer, (frame) => frame);
+  });
+
+  router.post('/:endpoint/v1/message\\:send', (req: Request, res: Response) => {
+    sendTask(req, res, req.body as SendMessageContainer, (task) => res.status(200).json(task));
+  });
+
+  // ---- JSON-RPC 2.0 binding (agents-2.0). A single endpoint; the method selects the action. ----
+  const JSONRPC_ACTIONS: Record<string, 'stream' | 'send'> = {
+    'message/stream': 'stream',
+    SendStreamingMessage: 'stream',
+    'message/send': 'send',
+    SendMessage: 'send',
+  };
+
+  router.post('/:endpoint/v1', (req: Request, res: Response) => {
+    if (!isServedEndpoint(req.params.endpoint)) {
+      endpointNotFound(res, req.params.endpoint);
+      return;
+    }
+
+    const body = asObject(req.body);
+    const id = (body.id as string | number | null | undefined) ?? null;
+    const method = String(body.method ?? '');
+    const action = JSONRPC_ACTIONS[method];
+    const params = asObject(body.params);
+    const container: SendMessageContainer = {
+      message: params.message,
+      metadata: params.metadata ?? body.metadata,
+    };
+
+    if (action === 'stream') {
+      streamTask(req, res, container, (frame) => ({ jsonrpc: '2.0', id, result: frame }));
+      return;
+    }
+    if (action === 'send') {
+      sendTask(req, res, container, (task) =>
+        res.status(200).json({ jsonrpc: '2.0', id, result: task }),
+      );
+      return;
+    }
+
+    // tasks/get, tasks/cancel, tasks/list, resubscribe, ... are not implemented on this path yet.
+    // The legacy REST routes below still serve tasks/get and tasks/cancel.
+    res.status(404).json({
+      jsonrpc: '2.0',
+      id,
+      error: { code: -32601, message: `method not found: ${method || '(none)'}` },
+    });
   });
 
   router.get('/:endpoint/v1/tasks/:id', (req: Request, res: Response) => {

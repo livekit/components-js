@@ -14,6 +14,7 @@ import {
   facingModeFromLocalTrack,
   Mutex,
   Track,
+  TrackEvent,
   VideoPresets,
 } from 'livekit-client';
 import * as React from 'react';
@@ -106,6 +107,35 @@ export interface PreJoinProps extends Omit<
 }
 
 /** @public */
+// Android picks any camera when facingMode is only a preference, so require it first and
+// fall back to the preference when no camera matches (e.g. desktop webcams).
+async function createTracksPreferringFacingMode(options: CreateLocalTracksOptions) {
+  const video = options.video;
+  if (typeof video !== 'object' || typeof video.facingMode !== 'string') {
+    return createLocalTracks(options);
+  }
+  let tracks: LocalTrack[];
+  try {
+    tracks = await createLocalTracks({
+      ...options,
+      video: {
+        ...video,
+        facingMode: { exact: video.facingMode } as unknown as typeof video.facingMode,
+      },
+    });
+  } catch (e) {
+    if (e instanceof Error && e.name === 'OverconstrainedError') {
+      return createLocalTracks(options);
+    }
+    throw e;
+  }
+  // restarts reuse these constraints; an exact facingMode would block switching cameras
+  tracks.forEach((track) => {
+    delete (track.constraints as MediaTrackConstraints).facingMode;
+  });
+  return tracks;
+}
+
 export function usePreviewTracks(
   options: CreateLocalTracksOptions,
   onError?: (err: Error) => void,
@@ -199,7 +229,7 @@ export function usePreviewTracks(
           };
 
           log.debug(`[PreJoin] Calling createLocalTracks for ${trackType}`, trackOptions);
-          const tracks = await createLocalTracks(trackOptions);
+          const tracks = await createTracksPreferringFacingMode(trackOptions);
           log.debug(`[PreJoin] Successfully created ${trackType} track`);
 
           // Check if cancelled after creating tracks
@@ -667,13 +697,18 @@ export function PreJoin({
     [tracks],
   );
 
-  const facingMode = React.useMemo(() => {
-    if (videoTrack) {
-      const { facingMode } = facingModeFromLocalTrack(videoTrack);
-      return facingMode;
-    } else {
-      return 'undefined';
+  const [facingMode, setFacingMode] = React.useState<string>('undefined');
+  React.useEffect(() => {
+    if (!videoTrack) {
+      setFacingMode('undefined');
+      return;
     }
+    const updateFacingMode = () => setFacingMode(facingModeFromLocalTrack(videoTrack).facingMode);
+    updateFacingMode();
+    videoTrack.on(TrackEvent.Restarted, updateFacingMode);
+    return () => {
+      videoTrack.off(TrackEvent.Restarted, updateFacingMode);
+    };
   }, [videoTrack]);
 
   const deviceLabel = (device?: MediaDeviceInfo) =>

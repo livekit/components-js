@@ -63,6 +63,8 @@ export function MediaDeviceMenu({
   React.useLayoutEffect(() => {
     if (isOpen) {
       setNeedPermissions(true);
+      // Android WebView never fires devicechange
+      navigator.mediaDevices?.dispatchEvent(new Event('devicechange'));
     }
   }, [isOpen]);
 

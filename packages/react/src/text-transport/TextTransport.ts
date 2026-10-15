@@ -61,19 +61,34 @@ type A2aPart = {
 
 type A2aMessage = {
   messageId?: string;
+  contextId?: string;
   role?: string;
   parts?: Array<A2aPart>;
 };
 
+type A2aArtifact = {
+  artifactId?: string;
+  name?: string;
+  parts?: Array<A2aPart>;
+};
+
 type A2aStreamResponse = {
-  task?: unknown;
-  artifactUpdate?: unknown;
+  task?: { contextId?: string };
   message?: A2aMessage;
   statusUpdate?: {
+    taskId?: string;
+    contextId?: string;
     status?: {
       state?: string;
       message?: A2aMessage;
     };
+  };
+  artifactUpdate?: {
+    taskId?: string;
+    contextId?: string;
+    artifact?: A2aArtifact;
+    append?: boolean;
+    lastChunk?: boolean;
   };
 };
 
@@ -81,6 +96,14 @@ type A2aStreamResponse = {
 type JsonRpcStreamFrame = {
   result?: A2aStreamResponse;
 } & A2aStreamResponse;
+
+/** Per-request parsing state (dedup + artifact accumulation), reset for each turn. */
+type TurnState = {
+  /** `${role}\n${text}` keys already emitted this turn — suppresses duplicate frames. */
+  seen: Set<string>;
+  /** Accumulated artifact (answer) text, keyed by taskId. */
+  artifactText: Map<string, string>;
+};
 
 /** Derive the project id (first DNS label) from a LiveKit server URL. */
 function projectIdFromServerUrl(serverUrl: string): string {
@@ -91,6 +114,12 @@ function projectIdFromServerUrl(serverUrl: string): string {
   } catch {
     return '';
   }
+}
+
+function normalizeRole(roleRaw: string | undefined): 'assistant' | 'user' {
+  return roleRaw === 'ROLE_AGENT' || roleRaw === 'agent' || roleRaw === 'assistant'
+    ? 'assistant'
+    : 'user';
 }
 
 /**
@@ -147,8 +176,8 @@ export class TextTransport {
 
   /**
    * POST a user message (JSON-RPC `message/stream`) and consume the SSE response, invoking
-   * `onMessage` for every text message the agent produces. Resolves once the response stream is
-   * fully consumed (or rejects if it fails / is aborted).
+   * `onMessage` for every message the agent produces. Resolves once the response stream is fully
+   * consumed (or rejects if it fails / is aborted).
    */
   async requestMessageStream(text: string, options: RequestMessageStreamOptions): Promise<void> {
     if (!this.cachedToken || !this.resolvedBaseUrl) {
@@ -172,6 +201,8 @@ export class TextTransport {
     if (this.currentContextId) {
       message.contextId = this.currentContextId;
     }
+
+    const turn: TurnState = { seen: new Set(), artifactText: new Map() };
 
     try {
       const response = await fetch(`${baseUrl}/v1`, {
@@ -212,11 +243,11 @@ export class TextTransport {
         while ((boundary = buffer.indexOf('\n\n')) !== -1) {
           const rawEvent = buffer.slice(0, boundary);
           buffer = buffer.slice(boundary + 2);
-          this.handleEvent(rawEvent, options.onMessage);
+          this.handleEvent(rawEvent, options.onMessage, turn);
         }
       }
       if (buffer.trim().length > 0) {
-        this.handleEvent(buffer, options.onMessage);
+        this.handleEvent(buffer, options.onMessage, turn);
       }
     } finally {
       options.signal?.removeEventListener('abort', onExternalAbort);
@@ -224,7 +255,11 @@ export class TextTransport {
     }
   }
 
-  private handleEvent(rawEvent: string, onMessage: (message: ReceivedChatMessage) => void) {
+  private handleEvent(
+    rawEvent: string,
+    onMessage: (message: ReceivedChatMessage) => void,
+    turn: TurnState,
+  ) {
     const dataPayload = rawEvent
       .split('\n')
       .filter((line) => line.startsWith('data:'))
@@ -245,35 +280,67 @@ export class TextTransport {
     // Each SSE frame is a JSON-RPC envelope: unwrap `result` (fall back to a bare frame).
     const frame: A2aStreamResponse = envelope.result ?? envelope;
 
-    // Agent turns arrive as text parts on a status-update message (or a bare `message`).
-    const message = frame.statusUpdate?.status?.message ?? frame.message;
-    if (!message?.parts) {
-      return;
+    // Capture the agent-assigned conversation id from the first frame that carries one, so later
+    // turns reuse it. The agent creates a thread on the first (contextId-less) message.
+    const contextId =
+      frame.task?.contextId ??
+      frame.statusUpdate?.contextId ??
+      frame.artifactUpdate?.contextId ??
+      frame.statusUpdate?.status?.message?.contextId ??
+      frame.message?.contextId;
+    if (contextId && !this.currentContextId) {
+      this.currentContextId = contextId;
     }
 
-    // TODO(text-mode): only text parts are mapped. Data parts (delegations/chat-ctx), artifacts,
-    // interruptions, and task lifecycle events are all dropped. Supporting them requires extending
-    // the `ReceivedMessage` model.
-    const text = message.parts
-      .filter((part) => typeof part.text === 'string' && part.text.length > 0)
-      .map((part) => part.text)
-      .join('');
-    if (!text) {
-      return;
+    // Emits a message, suppressing an exact (role, text) duplicate within this turn. This keeps the
+    // mock (which sends its answer as BOTH a status message and an artifact) from double-rendering,
+    // while a real agent's growing artifact chunks (distinct text, same id) still stream through.
+    const emit = (id: string, role: 'assistant' | 'user', content: string) => {
+      if (!content) {
+        return;
+      }
+      const key = `${role}\n${content}`;
+      if (turn.seen.has(key)) {
+        return;
+      }
+      turn.seen.add(key);
+      onMessage({
+        id,
+        // Messages have no timestamp on the wire; stamp with arrival time.
+        timestamp: Date.now(),
+        message: content,
+        attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: role },
+      });
+    };
+
+    // 1. Status-update / bare messages: progress and intermediate agent text (text parts only).
+    const statusMessage = frame.statusUpdate?.status?.message ?? frame.message;
+    if (statusMessage?.parts) {
+      const text = statusMessage.parts
+        .filter((part) => typeof part.text === 'string' && part.text.length > 0)
+        .map((part) => part.text)
+        .join('');
+      if (text) {
+        emit(statusMessage.messageId ?? crypto.randomUUID(), normalizeRole(statusMessage.role), text);
+      }
     }
 
-    const roleRaw = message.role ?? '';
-    const role =
-      roleRaw === 'ROLE_AGENT' || roleRaw === 'agent' || roleRaw === 'assistant'
-        ? 'assistant'
-        : 'user';
+    // 2. Artifact updates: the answer, streamed as append chunks. Accumulate per task and emit under
+    // a stable id so the chunks collapse into one updating bubble.
+    const artifactUpdate = frame.artifactUpdate;
+    if (artifactUpdate?.artifact?.parts) {
+      const taskId = artifactUpdate.taskId ?? 'artifact';
+      const chunk = artifactUpdate.artifact.parts
+        .filter((part) => typeof part.text === 'string' && part.text.length > 0)
+        .map((part) => part.text)
+        .join('');
+      const prior = artifactUpdate.append ? (turn.artifactText.get(taskId) ?? '') : '';
+      const accumulated = prior + chunk;
+      turn.artifactText.set(taskId, accumulated);
+      emit(`artifact:${taskId}`, 'assistant', accumulated);
+    }
 
-    onMessage({
-      // Messages have no timestamp on the wire; stamp with arrival time.
-      id: message.messageId ?? crypto.randomUUID(),
-      timestamp: Date.now(),
-      message: text,
-      attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: role },
-    });
+    // TODO(text-mode): data parts (delegations/chat-ctx), interruptions, directives, and task
+    // lifecycle/error states are still dropped. Supporting them requires extending `ReceivedMessage`.
   }
 }

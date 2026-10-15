@@ -926,17 +926,16 @@ export function useSessionText(
     unstableRestOptions as Exclude<UseSessionConfigurableOptions, keyof UseSessionCommonOptions>,
   );
 
-  // A stable conversation id for the lifetime of this session.
-  const [contextId] = React.useState<string>(() => crypto.randomUUID());
-
+  // NOTE: no client-generated contextId. The agent assigns a thread/contextId on the first message
+  // and the transport reuses it for the rest of the conversation. Passing an unknown contextId fails
+  // with `thread-not-found`.
   const textTransport = React.useMemo(
     () =>
       new TextTransport({
         baseUrl,
-        contextId,
         getCredentials: tokenSourceFetch,
       }),
-    [baseUrl, contextId, tokenSourceFetch],
+    [baseUrl, tokenSourceFetch],
   );
 
   const [connectionState, setConnectionState] = React.useState<ConnectionState>(

@@ -35,8 +35,12 @@ export type TextTransportOptions = {
   /** Returns the credentials (token + server url) used to authenticate and locate the agent. */
   getCredentials: () => Promise<TokenSourceResponseObject>;
 
-  /** Stable conversation id (A2A `contextId`). Ties multiple turns to one conversation. */
-  contextId: string;
+  /**
+   * Optional seed conversation id (A2A `contextId`). Normally leave this unset: the agent creates a
+   * thread on the first message and returns its id, which the transport then reuses for the rest of
+   * the conversation. Passing a `contextId` the server doesn't know about fails with `thread-not-found`.
+   */
+  contextId?: string;
 };
 
 /** Options passed to {@link TextTransport.requestMessageStream}. */
@@ -99,8 +103,6 @@ function projectIdFromServerUrl(serverUrl: string): string {
  * be usable outside of React.
  */
 export class TextTransport {
-  readonly contextId: string;
-
   private baseUrl: TextTransportBaseUrl;
   private getCredentials: () => Promise<TokenSourceResponseObject>;
   private cachedToken: string | null = null;
@@ -108,10 +110,18 @@ export class TextTransport {
   private activeControllers = new Set<AbortController>();
   private nextRequestId = 1;
 
+  // The conversation id. Undefined until the agent assigns one on the first message; reused after.
+  private currentContextId: string | undefined;
+
   constructor(options: TextTransportOptions) {
     this.baseUrl = options.baseUrl;
     this.getCredentials = options.getCredentials;
-    this.contextId = options.contextId;
+    this.currentContextId = options.contextId;
+  }
+
+  /** The conversation id, once the agent has assigned one. */
+  get contextId(): string | undefined {
+    return this.currentContextId;
   }
 
   /** Prime the transport by fetching credentials and resolving the base URL. "Connecting" in text mode. */
@@ -155,6 +165,14 @@ export class TextTransport {
     this.nextRequestId += 1;
     // NOTE: crypto.randomUUID is available in modern browsers and Node 19+.
     const messageId = crypto.randomUUID();
+
+    // Omit contextId until the agent has assigned one. Sending an unknown contextId fails with
+    // `thread-not-found`; omitting it makes the agent create a thread and return its id.
+    const message: Record<string, unknown> = { messageId, role: 'ROLE_USER', parts: [{ text }] };
+    if (this.currentContextId) {
+      message.contextId = this.currentContextId;
+    }
+
     try {
       const response = await fetch(`${baseUrl}/v1`, {
         method: 'POST',
@@ -168,14 +186,7 @@ export class TextTransport {
           jsonrpc: '2.0',
           id: this.nextRequestId,
           method: 'message/stream',
-          params: {
-            message: {
-              messageId,
-              contextId: this.contextId,
-              role: 'ROLE_USER',
-              parts: [{ text }],
-            },
-          },
+          params: { message },
         }),
         signal: controller.signal,
       });

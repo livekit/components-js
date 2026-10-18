@@ -64,26 +64,36 @@ type A2aMessage = {
 };
 
 type A2aArtifact = {
-  artifactId?: string;
-  name?: string;
+  artifactId: string;
+  name: string;
   parts?: Array<A2aPart>;
 };
 
 type A2aStreamResponse = {
-  task?: { contextId?: string };
+  task?: {
+    contextId: string;
+    id: string;
+    status: {
+      state: string | "TASK_STATE_SUBMITTED" | "TASK_STATE_COMPLETED";
+      timestamp?: string;
+    };
+  };
   statusUpdate?: {
-    taskId?: string;
-    contextId?: string;
-    status?: {
-      state?: string;
+    taskId: string;
+    contextId: string;
+    status: {
+      state: string | "TASK_STATE_SUBMITTED" | "TASK_STATE_COMPLETED";
+      timestamp?: string;
       message?: A2aMessage;
     };
   };
   artifactUpdate?: {
-    taskId?: string;
-    contextId?: string;
-    artifact?: A2aArtifact;
+    taskId: string;
+    contextId: string;
+    artifact: A2aArtifact;
+    /** Should the given data in `artifact` append or overwrite the artifact contents? */
     append?: boolean;
+    /** Is this the final chunk in the artifact? */
     lastChunk?: boolean;
   };
 };

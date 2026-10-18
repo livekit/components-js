@@ -20,14 +20,22 @@ import { generateRandomUserId } from '../lib/helper';
 
 type SessionMode = 'rtc' | 'text';
 
-// The A2A interface base URL (everything up to, but not including, `/v1`). A callback form
-// receives the project id (derived from the token's server url), which lets the same code target
-// the local mock and a real staging/prod agent. For the local mock we ignore the project id.
+// The A2A interface base URL (everything up to, but not including, `/v1`). The callback receives
+// the project id (the first DNS label of the token's server url), which lets the same code target a
+// real staging/prod agent or the local mock.
 //
-//   mock:  () => 'http://localhost:8787/fare-desk'
-//   real:  (projectId) => `https://${projectId}.staging.livekit.cloud/agents/<agent>/default/<endpoint>`
-const textModeBaseUrl = (_projectId: string): string =>
-  process.env.NEXT_PUBLIC_LK_TEXT_BASE_URL ?? 'http://localhost:8787/fare-desk';
+// Defaults to the staging `frontdesk` example agent (agent `dentist`, endpoint `frontend`). To use
+// the local mock instead, set NEXT_PUBLIC_LK_TEXT_BASE_URL=http://localhost:8787/fare-desk.
+const A2A_AGENT = process.env.NEXT_PUBLIC_LK_A2A_AGENT ?? 'dentist';
+const A2A_ENDPOINT = process.env.NEXT_PUBLIC_LK_A2A_ENDPOINT ?? 'frontend';
+const A2A_ENV = process.env.NEXT_PUBLIC_LK_A2A_ENV ?? 'staging';
+const textModeBaseUrl = (projectId: string): string => {
+  const override = process.env.NEXT_PUBLIC_LK_TEXT_BASE_URL;
+  if (override) {
+    return override; // e.g. the local mock: http://localhost:8787/fare-desk
+  }
+  return `https://${projectId}.${A2A_ENV}.livekit.cloud/agents/${A2A_AGENT}/default/${A2A_ENDPOINT}`;
+};
 
 function SimpleAgent() {
   const agent = useAgent();

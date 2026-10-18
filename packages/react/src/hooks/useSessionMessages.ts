@@ -239,27 +239,31 @@ function useSessionMessagesText(
         throw new Error('useSessionMessages: text transport is not available');
       }
 
-      const userMessage: ReceivedChatMessage = {
+      const initialUserMessage: ReceivedChatMessage = {
         id: crypto.randomUUID(),
         timestamp: Date.now(),
         message,
         attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: 'user' },
       };
-      upsertMessage(userMessage);
+      upsertMessage(initialUserMessage);
 
       setIsSending(true);
-      // Fire off the request stream but do not await it — messages arrive asynchronously via
-      // `upsertMessage`. We resolve immediately with the user's own message.
-      textTransport
-        .requestMessageStream(message, { onMessage: upsertMessage })
-        .catch((err) => {
+      const stream = textTransport.requestMessageStream(message);
+      (async () => {
+        try {
+          for await (const message of stream) {
+            upsertMessage(message);
+          }
+        } catch (err) {
+          // FIXME: figure out how to handle errors here, should these somehow put the agent into an
+          // errored state?
           log.warn('useSessionMessages: text message stream failed', err);
-        })
-        .finally(() => {
+        } finally {
           setIsSending(false);
-        });
+        }
+      })();
 
-      return userMessage;
+      return initialUserMessage;
     },
     [textTransport, upsertMessage],
   );

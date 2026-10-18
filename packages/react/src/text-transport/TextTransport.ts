@@ -45,9 +45,6 @@ export type TextTransportOptions = {
 
 /** Options passed to {@link TextTransport.requestMessageStream}. */
 export type RequestMessageStreamOptions = {
-  /** Invoked for every normalized message parsed out of the response stream. */
-  onMessage: (message: ReceivedChatMessage) => void;
-
   /** Optional external abort signal; aborting it terminates the in-flight request. */
   signal?: AbortSignal;
 };
@@ -92,10 +89,33 @@ type A2aStreamResponse = {
   };
 };
 
+const A2aStreamResponse = {
+  getContextId(response: A2aStreamResponse) {
+    return (
+      response.task?.contextId ??
+      response.statusUpdate?.contextId ??
+      response.artifactUpdate?.contextId ??
+      response.statusUpdate?.status?.message?.contextId ??
+      response.message?.contextId
+    );
+  },
+};
+
 // Each SSE `data:` frame is a JSON-RPC envelope wrapping a StreamResponse in `result`.
 type JsonRpcStreamFrame = {
-  result?: A2aStreamResponse;
-} & A2aStreamResponse;
+  id: number;
+  jsonrpc: "2.0";
+  result: A2aStreamResponse;
+};
+
+type StreamFrame = JsonRpcStreamFrame | A2aStreamResponse;
+
+const StreamFrame = {
+  /* Each SSE frame is a JSON-RPC envelope: unwrap `result` (fall back to a bare frame). **/
+  extractA2AStreamResponse(frame: StreamFrame): A2aStreamResponse {
+    return 'result' in frame ? frame.result : frame;
+  },
+};
 
 /** Per-request parsing state (dedup + artifact accumulation), reset for each turn. */
 type TurnState = {
@@ -175,11 +195,11 @@ export class TextTransport {
   }
 
   /**
-   * POST a user message (JSON-RPC `message/stream`) and consume the SSE response, invoking
-   * `onMessage` for every message the agent produces. Resolves once the response stream is fully
-   * consumed (or rejects if it fails / is aborted).
+   * POST a user message (JSON-RPC `message/stream`) and consume the SSE response, returning a
+   * stream containing an entry for every message the agent produces. Resolves once the response
+   * stream is fully consumed (or rejects if it fails / is aborted).
    */
-  async requestMessageStream(text: string, options: RequestMessageStreamOptions): Promise<void> {
+  async *requestMessageStream(text: string, options: RequestMessageStreamOptions = {}) {
     if (!this.cachedToken || !this.resolvedBaseUrl) {
       await this.connect();
     }
@@ -192,7 +212,6 @@ export class TextTransport {
     options.signal?.addEventListener('abort', onExternalAbort);
 
     this.nextRequestId += 1;
-    // NOTE: crypto.randomUUID is available in modern browsers and Node 19+.
     const messageId = crypto.randomUUID();
 
     // Omit contextId until the agent has assigned one. Sending an unknown contextId fails with
@@ -243,11 +262,11 @@ export class TextTransport {
         while ((boundary = buffer.indexOf('\n\n')) !== -1) {
           const rawEvent = buffer.slice(0, boundary);
           buffer = buffer.slice(boundary + 2);
-          this.handleEvent(rawEvent, options.onMessage, turn);
+          yield* this.handleEvent(rawEvent, turn);
         }
       }
       if (buffer.trim().length > 0) {
-        this.handleEvent(buffer, options.onMessage, turn);
+        yield* this.handleEvent(buffer, turn);
       }
     } finally {
       options.signal?.removeEventListener('abort', onExternalAbort);
@@ -255,11 +274,7 @@ export class TextTransport {
     }
   }
 
-  private handleEvent(
-    rawEvent: string,
-    onMessage: (message: ReceivedChatMessage) => void,
-    turn: TurnState,
-  ) {
+  private *handleEvent(rawEvent: string, turn: TurnState) {
     const dataPayload = rawEvent
       .split('\n')
       .filter((line) => line.startsWith('data:'))
@@ -269,65 +284,47 @@ export class TextTransport {
       return;
     }
 
-    let envelope: JsonRpcStreamFrame;
+    let envelope: StreamFrame;
     try {
-      envelope = JSON.parse(dataPayload) as JsonRpcStreamFrame;
+      envelope = JSON.parse(dataPayload) as StreamFrame;
     } catch {
       return;
     }
     console.log('FRAME', envelope);
 
-    // Each SSE frame is a JSON-RPC envelope: unwrap `result` (fall back to a bare frame).
-    const frame: A2aStreamResponse = envelope.result ?? envelope;
+    const response = StreamFrame.extractA2AStreamResponse(envelope);
 
     // Capture the agent-assigned conversation id from the first frame that carries one, so later
     // turns reuse it. The agent creates a thread on the first (contextId-less) message.
-    const contextId =
-      frame.task?.contextId ??
-      frame.statusUpdate?.contextId ??
-      frame.artifactUpdate?.contextId ??
-      frame.statusUpdate?.status?.message?.contextId ??
-      frame.message?.contextId;
+    const contextId = A2aStreamResponse.getContextId(response);
     if (contextId && !this.currentContextId) {
       this.currentContextId = contextId;
     }
 
-    // Emits a message, suppressing an exact (role, text) duplicate within this turn. This keeps the
-    // mock (which sends its answer as BOTH a status message and an artifact) from double-rendering,
-    // while a real agent's growing artifact chunks (distinct text, same id) still stream through.
-    const emit = (id: string, role: 'assistant' | 'user', content: string) => {
-      if (!content) {
-        return;
-      }
-      const key = `${role}\n${content}`;
-      if (turn.seen.has(key)) {
-        return;
-      }
-      turn.seen.add(key);
-      onMessage({
-        id,
-        // Messages have no timestamp on the wire; stamp with arrival time.
-        timestamp: Date.now(),
-        message: content,
-        attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: role },
-      });
-    };
 
     // 1. Status-update / bare messages: progress and intermediate agent text (text parts only).
-    const statusMessage = frame.statusUpdate?.status?.message ?? frame.message;
+    const statusMessage = response.statusUpdate?.status?.message ?? response.message;
     if (statusMessage?.parts) {
       const text = statusMessage.parts
         .filter((part) => typeof part.text === 'string' && part.text.length > 0)
         .map((part) => part.text)
         .join('');
       if (text) {
-        emit(statusMessage.messageId ?? crypto.randomUUID(), normalizeRole(statusMessage.role), text);
+        yield {
+          id: statusMessage.messageId ?? crypto.randomUUID(),
+          role: normalizeRole(statusMessage.role),
+          message: text,
+
+          // Messages have no timestamp on the wire; stamp with arrival time.
+          timestamp: Date.now(),
+          attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: normalizeRole(statusMessage.role) },
+        };
       }
     }
 
     // 2. Artifact updates: the answer, streamed as append chunks. Accumulate per task and emit under
     // a stable id so the chunks collapse into one updating bubble.
-    const artifactUpdate = frame.artifactUpdate;
+    const artifactUpdate = response.artifactUpdate;
     if (artifactUpdate?.artifact?.parts) {
       const taskId = artifactUpdate.taskId ?? 'artifact';
       const chunk = artifactUpdate.artifact.parts
@@ -337,7 +334,16 @@ export class TextTransport {
       const prior = artifactUpdate.append ? (turn.artifactText.get(taskId) ?? '') : '';
       const accumulated = prior + chunk;
       turn.artifactText.set(taskId, accumulated);
-      emit(`artifact:${taskId}`, 'assistant', accumulated);
+      if (accumulated.length > 0) {
+        yield {
+          id: `artifact:${taskId}`,
+          message: accumulated,
+
+          // Messages have no timestamp on the wire; stamp with arrival time.
+          timestamp: Date.now(),
+          attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: 'assistant' },
+        };
+      }
     }
 
     // TODO(text-mode): data parts (delegations/chat-ctx), interruptions, directives, and task

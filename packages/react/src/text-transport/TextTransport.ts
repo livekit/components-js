@@ -71,7 +71,6 @@ type A2aArtifact = {
 
 type A2aStreamResponse = {
   task?: { contextId?: string };
-  message?: A2aMessage;
   statusUpdate?: {
     taskId?: string;
     contextId?: string;
@@ -95,8 +94,7 @@ const A2aStreamResponse = {
       response.task?.contextId ??
       response.statusUpdate?.contextId ??
       response.artifactUpdate?.contextId ??
-      response.statusUpdate?.status?.message?.contextId ??
-      response.message?.contextId
+      response.statusUpdate?.status?.message?.contextId
     );
   },
 };
@@ -303,7 +301,7 @@ export class TextTransport {
 
 
     // 1. Status-update / bare messages: progress and intermediate agent text (text parts only).
-    const statusMessage = response.statusUpdate?.status?.message ?? response.message;
+    const statusMessage = response.statusUpdate?.status?.message;
     if (statusMessage?.parts) {
       const text = statusMessage.parts
         .filter((part) => typeof part.text === 'string' && part.text.length > 0)

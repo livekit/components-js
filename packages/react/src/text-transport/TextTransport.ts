@@ -92,7 +92,12 @@ enum A2aTaskState {
 
 
 type A2aStreamResponse = {
-  message?: string;
+  /**
+   * A bare, self-contained agent message with no task lifecycle. The LiveKit agent never emits this
+   * (it always wraps a turn in a task); it is the generic A2A "direct reply" profile, used by agents
+   * that don't speak the LiveKit a2a extension. Treat it as a complete message, not a delta.
+   */
+  message?: A2aMessage;
   task?: {
     contextId: string;
     id: string;
@@ -127,7 +132,8 @@ const A2aStreamResponse = {
       response.task?.contextId ??
       response.statusUpdate?.contextId ??
       response.artifactUpdate?.contextId ??
-      response.statusUpdate?.status?.message?.contextId
+      response.statusUpdate?.status?.message?.contextId ??
+      response.message?.contextId
     );
   },
 };
@@ -337,8 +343,29 @@ export class TextTransport {
       this.currentContextId = contextId;
     }
 
+    // 1. Bare message: a complete, self-contained agent message with no task lifecycle. Emitted by
+    // generic A2A agents that don't speak the LiveKit extension (the LiveKit agent never sends it).
+    const bareMessage = response.message;
+    if (bareMessage?.parts) {
+      const text = bareMessage.parts
+        .filter((part) => typeof part.text === 'string' && part.text.length > 0)
+        .map((part) => part.text)
+        .join('');
+      if (text) {
+        const role = normalizeRole(bareMessage.role);
+        yield {
+          id: bareMessage.messageId ?? crypto.randomUUID(),
+          role,
+          message: text,
 
-    // 1. Status-update / bare messages: progress and intermediate agent text (text parts only).
+          // Messages have no timestamp on the wire; stamp with arrival time.
+          timestamp: Date.now(),
+          attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: role },
+        };
+      }
+    }
+
+    // 2. Status-update messages: progress and intermediate agent text (text parts only).
     const statusMessage = response.statusUpdate?.status?.message;
     if (statusMessage?.parts) {
       const text = statusMessage.parts
@@ -358,7 +385,7 @@ export class TextTransport {
       }
     }
 
-    // 2. Artifact updates: the answer, streamed as append chunks. Accumulate per task and emit under
+    // 3. Artifact updates: the answer, streamed as append chunks. Accumulate per task and emit under
     // a stable id so the chunks collapse into one updating bubble.
     const artifactUpdate = response.artifactUpdate;
     if (artifactUpdate?.artifact?.parts) {

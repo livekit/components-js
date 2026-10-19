@@ -69,12 +69,41 @@ type A2aArtifact = {
   parts?: Array<A2aPart>;
 };
 
+enum A2aTaskState {
+  /** reserved (0); the codec treats it as working */
+  Unspecified = 'TASK_STATE_UNSPECIFIED',
+  /** Achnowledgement of task by agent */
+  Submitted = 'TASK_STATE_SUBMITTED',
+  /* Task is in progress (non terminal state) */
+  Working = 'TASK_STATE_WORKING',
+  /** The task is paused, awaiting user input (stream closes) */
+  InputRequired = 'TASK_STATE_INPUT_REQUIRED',
+  /** Pauses the task, awaiting auth */
+  AuthRequired = 'TASK_STATE_AUTH_REQUIRED',
+  /** Task is completed (terminal state) */
+  Completed = 'TASK_STATE_COMPLETED',
+  /** Task has failed (terminal state) */
+  Failed = 'TASK_STATE_FAILED',
+  /** Task is cancelled (terminal state) */
+  Cancelled = 'TASK_STATE_CANCELED',
+  /** Task is rejected (terminal state) */
+  Rejected = 'TASK_STATE_REJECTED',
+}
+
+const A2A_TASK_STATE_TERMINAL_STATES = [
+  A2aTaskState.Completed,
+  A2aTaskState.Failed,
+  A2aTaskState.Cancelled,
+  A2aTaskState.Rejected,
+];
+
 type A2aStreamResponse = {
+  message?: string;
   task?: {
     contextId: string;
     id: string;
     status: {
-      state: string | "TASK_STATE_SUBMITTED" | "TASK_STATE_COMPLETED";
+      state: A2aTaskState,
       timestamp?: string;
     };
   };
@@ -82,7 +111,7 @@ type A2aStreamResponse = {
     taskId: string;
     contextId: string;
     status: {
-      state: string | "TASK_STATE_SUBMITTED" | "TASK_STATE_COMPLETED";
+      state: A2aTaskState,
       timestamp?: string;
       message?: A2aMessage;
     };

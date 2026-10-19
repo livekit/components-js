@@ -90,12 +90,6 @@ enum A2aTaskState {
   Rejected = 'TASK_STATE_REJECTED',
 }
 
-const A2A_TASK_STATE_TERMINAL_STATES = [
-  A2aTaskState.Completed,
-  A2aTaskState.Failed,
-  A2aTaskState.Cancelled,
-  A2aTaskState.Rejected,
-];
 
 type A2aStreamResponse = {
   message?: string;
@@ -154,12 +148,10 @@ const StreamFrame = {
   },
 };
 
-/** Per-request parsing state (dedup + artifact accumulation), reset for each turn. */
+/** Per-request parsing state, reset for each turn. */
 type TurnState = {
-  /** `${role}\n${text}` keys already emitted this turn — suppresses duplicate frames. */
-  seen: Set<string>;
   /** Accumulated artifact (answer) text, keyed by taskId. */
-  artifactText: Map<string, string>;
+  artifactText: Map<string /* task id */, string>;
 };
 
 /** Derive the project id (first DNS label) from a LiveKit server URL. */
@@ -236,7 +228,7 @@ export class TextTransport {
    * stream containing an entry for every message the agent produces. Resolves once the response
    * stream is fully consumed (or rejects if it fails / is aborted).
    */
-  async *requestMessageStream(text: string, options: RequestMessageStreamOptions = {}) {
+  async requestMessageStream(text: string, options: RequestMessageStreamOptions = {}) {
     if (!this.cachedToken || !this.resolvedBaseUrl) {
       await this.connect();
     }
@@ -257,8 +249,6 @@ export class TextTransport {
     if (this.currentContextId) {
       message.contextId = this.currentContextId;
     }
-
-    const turn: TurnState = { seen: new Set(), artifactText: new Map() };
 
     try {
       const response = await fetch(`${baseUrl}/v1`, {
@@ -282,32 +272,41 @@ export class TextTransport {
         throw new Error(`TextTransport.requestMessageStream failed: HTTP ${response.status}`);
       }
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = '';
-
-      // eslint-disable-next-line no-constant-condition
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) {
-          break;
-        }
-        buffer += decoder.decode(value, { stream: true });
-
-        // SSE events are separated by a blank line.
-        let boundary: number;
-        while ((boundary = buffer.indexOf('\n\n')) !== -1) {
-          const rawEvent = buffer.slice(0, boundary);
-          buffer = buffer.slice(boundary + 2);
-          yield* this.handleEvent(rawEvent, turn);
-        }
-      }
-      if (buffer.trim().length > 0) {
-        yield* this.handleEvent(buffer, turn);
-      }
+      const body = response.body;
+      return this.processMessageStreamBody(body);
     } finally {
       options.signal?.removeEventListener('abort', onExternalAbort);
       this.activeControllers.delete(controller);
+    }
+  }
+
+  private async *processMessageStreamBody(body: ReadableStream<Uint8Array<ArrayBufferLike>>) {
+    const reader = body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    const turn: TurnState = {
+      artifactText: new Map(),
+    };
+
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+      buffer += decoder.decode(value, { stream: true });
+
+      // SSE events are separated by a blank line.
+      let boundary: number;
+      while ((boundary = buffer.indexOf('\n\n')) !== -1) {
+        const rawEvent = buffer.slice(0, boundary);
+        buffer = buffer.slice(boundary + 2);
+        yield* this.handleEvent(rawEvent, turn);
+      }
+    }
+    if (buffer.trim().length > 0) {
+      yield* this.handleEvent(buffer, turn);
     }
   }
 

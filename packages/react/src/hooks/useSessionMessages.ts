@@ -248,7 +248,9 @@ function useSessionMessagesText(
       upsertMessage(initialUserMessage);
 
       setIsSending(true);
-      const stream = textTransport.requestMessageStream(message);
+      const stream = await textTransport.requestMessageStream(message);
+      setIsSending(false);
+
       (async () => {
         try {
           for await (const message of stream) {
@@ -258,8 +260,6 @@ function useSessionMessagesText(
           // FIXME: figure out how to handle errors here, should these somehow put the agent into an
           // errored state?
           log.warn('useSessionMessages: text message stream failed', err);
-        } finally {
-          setIsSending(false);
         }
       })();
 

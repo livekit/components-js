@@ -70,6 +70,7 @@ export {
   useAgent,
 } from './useAgent';
 export * from './useEvents';
+export { type MessagesEvent, type MessagesCallbacks } from './useSessionMessageStore';
 export * from './useSessionMessages';
 export {
   type RpcHandler,

@@ -23,6 +23,7 @@ import { AgentState, useAgent, useAgentTimeoutIdStore } from './useAgent';
 import { TrackReference, log } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
 import { TextTransport, type TextTransportBaseUrl } from '../text-transport/TextTransport';
+import { useSessionMessageStore, type SessionMessageStore } from './useSessionMessageStore';
 
 /** @beta */
 export enum SessionEvent {
@@ -96,6 +97,10 @@ type SessionStateInternal = {
   clearAgentTimeoutFailureReason: () => void;
   updateAgentTimeoutState: (agentState: AgentState) => void;
   updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => void;
+
+  /** The shared, mode-independent message store. Both the rtc and text message branches write into
+   * this one instance, so messages persist across mode switches, reconnects and consumer remounts. */
+  messageStore: SessionMessageStore;
 };
 
 /** The mode-specific "handle" a session exposes: an RTC `Room`, or a text-mode `TextTransport`. */
@@ -441,6 +446,11 @@ export function useSession(
 ): UseSessionReturn<'rtc'> | UseSessionReturn<'text'> {
   const isText = options.mode === 'text';
 
+  // The shared message store is created ONCE here, in the delegator. The delegator is the only hook
+  // stable across both a mode switch and a consumer remount, so a store living here persists across
+  // both. It is threaded into both branches so they expose the SAME instance on `internal`.
+  const messageStore = useSessionMessageStore();
+
   // NOTE: Both hooks are ALWAYS called (Rules of Hooks). Each is gated by `enabled` so that the
   // inactive one performs no side effects (no network, no room connection). We cannot use a
   // `switch` here because `mode` can in principle change across renders.
@@ -448,6 +458,7 @@ export function useSession(
     tokenSource,
     (isText ? {} : options) as UseSessionConfigurableRtcOptions | UseSessionFixedRtcOptions,
     !isText,
+    messageStore,
   );
   const textResult = useSessionText(
     tokenSource,
@@ -455,6 +466,7 @@ export function useSession(
       | UseSessionConfigurableTextOptions
       | UseSessionFixedTextOptions,
     isText,
+    messageStore,
   );
 
   return isText ? textResult : rtcResult;
@@ -469,6 +481,7 @@ export function useSessionRtc(
   tokenSource: TokenSourceConfigurable | TokenSourceFixed,
   options: UseSessionConfigurableRtcOptions | UseSessionFixedRtcOptions,
   enabled: boolean,
+  messageStore: SessionMessageStore,
 ): UseSessionReturn<'rtc'> {
   const {
     mode: _mode,
@@ -661,6 +674,8 @@ export function useSessionRtc(
       clearAgentTimeoutFailureReason,
       updateAgentTimeoutState,
       updateAgentTimeoutParticipantExists,
+
+      messageStore,
     }),
     [
       emitter,
@@ -672,6 +687,7 @@ export function useSessionRtc(
       clearAgentTimeoutFailureReason,
       updateAgentTimeoutState,
       updateAgentTimeoutParticipantExists,
+      messageStore,
     ],
   );
 
@@ -860,7 +876,9 @@ export function useSessionRtc(
     wasSessionEndCalledRef.current = true;
     tokenSourceFetch(true);
     await room.disconnect();
-  }, [room, tokenSourceFetch]);
+    // Ending the session clears the shared transcript. Mode switches and reconnects do NOT.
+    messageStore.clear();
+  }, [room, tokenSourceFetch, messageStore.clear]);
 
   const prepareConnection = React.useCallback(async () => {
     const credentials = await tokenSourceFetch();
@@ -913,6 +931,7 @@ export function useSessionText(
   tokenSource: TokenSourceConfigurable | TokenSourceFixed,
   options: UseSessionConfigurableTextOptions | UseSessionFixedTextOptions,
   enabled: boolean,
+  messageStore: SessionMessageStore,
 ): UseSessionReturn<'text'> {
   const { mode: _mode, baseUrl, agentConnectTimeoutMilliseconds, ...unstableRestOptions } = options;
 
@@ -973,7 +992,9 @@ export function useSessionText(
   const end = React.useCallback(async () => {
     await textTransport.disconnect();
     setConnectionState(ConnectionState.Disconnected);
-  }, [textTransport]);
+    // Ending the session clears the shared transcript. Mode switches and reconnects do NOT.
+    messageStore.clear();
+  }, [textTransport, messageStore.clear]);
 
   // FIXME(text-mode): no equivalent of Room.prepareConnection / E2EE in text mode yet. These are
   // no-ops for now and need to be figured out properly before release.
@@ -1003,6 +1024,8 @@ export function useSessionText(
       clearAgentTimeoutFailureReason,
       updateAgentTimeoutState,
       updateAgentTimeoutParticipantExists,
+
+      messageStore,
     }),
     [
       emitter,
@@ -1014,6 +1037,7 @@ export function useSessionText(
       clearAgentTimeoutFailureReason,
       updateAgentTimeoutState,
       updateAgentTimeoutParticipantExists,
+      messageStore,
     ],
   );
 

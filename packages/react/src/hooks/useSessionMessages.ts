@@ -1,7 +1,6 @@
 import * as React from 'react';
 import type TypedEventEmitter from 'typed-emitter';
 import { Room, SendTextOptions, ConnectionState } from 'livekit-client';
-import { EventEmitter } from 'events';
 import {
   ReceivedMessage,
   ReceivedChatMessage,
@@ -15,6 +14,7 @@ import { useAgent } from './useAgent';
 import { useTranscriptions } from './useTranscriptions';
 import { useChat } from './useChat';
 import { SessionMode, UseSessionReturn } from './useSession';
+import { type MessagesCallbacks } from './useSessionMessageStore';
 import { useEnsureSession } from '../context';
 import { TEXT_CHAT_ROLE_ATTRIBUTE } from '../text-transport/TextTransport';
 
@@ -32,98 +32,49 @@ export type UseSessionMessagesReturn = {
   };
 };
 
-/** @beta */
-export enum MessagesEvent {
-  /**
-   * Emits when a new message is received from a participant
-   * args: (message: ReceivedMessage)
-   */
-  MessageReceived = 'messageReceived',
-}
-
-/** @beta */
-export type MessagesCallbacks = {
-  [MessagesEvent.MessageReceived]: (message: ReceivedMessage) => void;
-};
-
+/** The mode-specific branches only own `send`/`isSending`; the message list lives in the shared store. */
 type SessionMessagesBranchReturn = {
-  messages: Array<ReceivedMessage>;
   isSending: boolean;
   send: (message: string, options?: SendTextOptions) => Promise<ReceivedChatMessage>;
 };
 
 /** @beta */
 export function useSessionMessages(session?: UseSessionReturn<SessionMode>): UseSessionMessagesReturn {
-  const s = useEnsureSession(session);
-  const isTextMode = s.mode === 'text';
+  session = useEnsureSession(session);
+  const isTextMode = session.mode === 'text';
 
-  const emitter = React.useMemo(
-    () => new EventEmitter() as TypedEventEmitter<MessagesCallbacks>,
-    [],
-  );
+  // The single source of message state, owned by the session. It survives mode switches and remounts.
+  const store = session.internal.messageStore;
 
-  // NOTE: both branch hooks are always called (Rules of Hooks); each is gated by `enabled`.
-  const rtc = useSessionMessagesRtc(s, !isTextMode);
-  const text = useSessionMessagesText(s, isTextMode);
+  // NOTE: both branch hooks are always called (Rules of Hooks); each is gated by `enabled`. They write
+  // into `store` and expose only `send`/`isSending`.
+  const rtc = useSessionMessagesRtc(session, !isTextMode);
+  const text = useSessionMessagesText(session, isTextMode);
 
   const active = isTextMode ? text : rtc;
-  const receivedMessages = active.messages;
-
-  // Sort messages by the time they were first received. Shared between rtc and text mode so ordering
-  // behaves consistently across both.
-  const messageFirstReceivedTimeMapRef = React.useRef(new Map<ReceivedMessage['id'], Date>());
-  const sortedReceivedMessages = React.useMemo(() => {
-    const now = new Date();
-    for (const message of receivedMessages) {
-      if (messageFirstReceivedTimeMapRef.current.has(message.id)) {
-        continue;
-      }
-
-      messageFirstReceivedTimeMapRef.current.set(message.id, now);
-    }
-
-    return [...receivedMessages].sort((a, b) => {
-      const aFirstReceivedAt = messageFirstReceivedTimeMapRef.current.get(a.id);
-      const bFirstReceivedAt = messageFirstReceivedTimeMapRef.current.get(b.id);
-      if (typeof aFirstReceivedAt === 'undefined' || typeof bFirstReceivedAt === 'undefined') {
-        return 0;
-      }
-
-      return aFirstReceivedAt.getTime() - bFirstReceivedAt.getTime();
-    });
-  }, [receivedMessages]);
-
-  const previouslyReceivedMessageIdsRef = React.useRef(new Set());
-  React.useEffect(() => {
-    for (const message of sortedReceivedMessages) {
-      if (previouslyReceivedMessageIdsRef.current.has(message.id)) {
-        continue;
-      }
-
-      previouslyReceivedMessageIdsRef.current.add(message.id);
-      emitter.emit(MessagesEvent.MessageReceived, message);
-    }
-  }, [sortedReceivedMessages, emitter]);
 
   return React.useMemo(
     () => ({
-      messages: sortedReceivedMessages,
+      messages: store.messages,
       send: active.send,
       isSending: active.isSending,
-      internal: { emitter },
+      internal: { emitter: store.emitter },
     }),
-    [sortedReceivedMessages, active.send, active.isSending, emitter],
+    [store.messages, store.emitter, active.send, active.isSending],
   );
 }
 
 /**
- * The RTC (livekit room) implementation of useSessionMessages.
+ * The RTC (livekit room) implementation of useSessionMessages. Derives messages from the room's
+ * transcriptions + chat and mirrors them into the session's shared message store.
  * @internal
  */
 function useSessionMessagesRtc(
   session: UseSessionReturn<SessionMode>,
   enabled: boolean,
 ): SessionMessagesBranchReturn {
+  const store = session.internal.messageStore;
+
   // FIXME(text-mode): useAgent / useChat / useTranscriptions all require a Room, and Rules of Hooks
   // forces them to run even in text mode (where this branch is disabled). We hand them a synthetic,
   // never-connected Room purely to keep them from throwing. useAgent in particular cannot take an
@@ -201,37 +152,36 @@ function useSessionMessagesRtc(
     });
   }, [transcriptions, room, agent.internal.agentParticipant, agent.internal.workerParticipant]);
 
-  const receivedMessages = React.useMemo(() => {
-    const merged: Array<ReceivedMessage> = [...transcriptionMessages, ...chat.chatMessages];
-    return merged;
-  }, [transcriptionMessages, chat.chatMessages]);
+  // Mirror the derived messages into the shared store. Loop-safe: the deps are the input observables
+  // (stable references until their content changes), `upsertMessages` is a stable callback, and the
+  // store's equality short-circuit avoids redundant renders. Disabled branch (text mode / synthetic
+  // room) upserts nothing.
+  React.useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+    store.upsertMessages([...transcriptionMessages, ...chat.chatMessages]);
+  }, [enabled, transcriptionMessages, chat.chatMessages, store]);
 
   return React.useMemo(
-    () => ({ messages: receivedMessages, send: chat.send, isSending: chat.isSending }),
-    [receivedMessages, chat.send, chat.isSending],
+    () => ({ send: chat.send, isSending: chat.isSending }),
+    [chat.send, chat.isSending],
   );
 }
 
 /**
- * The text-mode (A2A over HTTP) implementation of useSessionMessages.
+ * The text-mode (A2A over HTTP) implementation of useSessionMessages. Upserts sent + streamed
+ * messages into the session's shared message store.
  * @internal
  */
 function useSessionMessagesText(
   session: UseSessionReturn<SessionMode>,
   enabled: boolean,
 ): SessionMessagesBranchReturn {
+  const store = session.internal.messageStore;
   const textTransport = session.mode === 'text' ? session.textTransport : null;
 
-  // Accumulate messages keyed by chat-item id. This dedups repeated items (e.g. the answer message
-  // appears on both WORKING and COMPLETED) and gives us update-in-place for free.
-  const messagesMapRef = React.useRef(new Map<string, ReceivedChatMessage>());
-  const [messages, setMessages] = React.useState<Array<ReceivedChatMessage>>([]);
   const [isSending, setIsSending] = React.useState(false);
-
-  const upsertMessage = React.useCallback((message: ReceivedChatMessage) => {
-    messagesMapRef.current.set(message.id, message);
-    setMessages(Array.from(messagesMapRef.current.values()));
-  }, []);
 
   const send = React.useCallback(
     async (message: string, _options?: SendTextOptions): Promise<ReceivedChatMessage> => {
@@ -245,7 +195,7 @@ function useSessionMessagesText(
         message,
         attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: 'user' },
       };
-      upsertMessage(initialUserMessage);
+      store.upsertMessage(initialUserMessage);
 
       setIsSending(true);
       const stream = await textTransport.requestMessageStream(message);
@@ -253,8 +203,8 @@ function useSessionMessagesText(
 
       (async () => {
         try {
-          for await (const message of stream) {
-            upsertMessage(message);
+          for await (const streamedMessage of stream) {
+            store.upsertMessage(streamedMessage);
           }
         } catch (err) {
           // FIXME: figure out how to handle errors here, should these somehow put the agent into an
@@ -265,7 +215,7 @@ function useSessionMessagesText(
 
       return initialUserMessage;
     },
-    [textTransport, upsertMessage],
+    [textTransport, store],
   );
 
   const disabledSend = React.useCallback(async (): Promise<ReceivedChatMessage> => {
@@ -274,10 +224,9 @@ function useSessionMessagesText(
 
   return React.useMemo(
     () => ({
-      messages: enabled ? messages : [],
       isSending: enabled ? isSending : false,
       send: enabled ? send : disabledSend,
     }),
-    [enabled, messages, isSending, send, disabledSend],
+    [enabled, isSending, send, disabledSend],
   );
 }

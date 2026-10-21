@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import type { Room, SendTextOptions } from 'livekit-client';
-import { compareVersions, RoomEvent } from 'livekit-client';
+import { compareVersions, DataStreamError, DataStreamErrorReason, RoomEvent } from 'livekit-client';
 import {
   BehaviorSubject,
   Subject,
@@ -23,6 +23,7 @@ import {
 import { log } from '../logger';
 import { ChatMessage, ReceivedChatMessage } from '../messages/types';
 import { Future } from '../helper/future';
+import { roomEventSelector } from '../observables/room';
 
 /** @public */
 export type { ChatMessage, ReceivedChatMessage };
@@ -82,7 +83,7 @@ const streamIdToAttachments = new Map<
         mimeType: string;
         buffer: Array<Uint8Array>;
       },
-      never
+      Error
     >
   >
 >();
@@ -139,12 +140,24 @@ export function setupChat(room: Room, options?: ChatOptions) {
       // Store a future for each attachment to be later resolved once the corresponding file data
       // stream completes.
       const attachments = new Map(
-        (attachedStreamIds ?? []).map((id) => [
-          id,
-          new Future<{ fileName: string; mimeType: string; buffer: Array<Uint8Array> }, never>(),
-        ]),
+        (attachedStreamIds ?? []).map((id) => {
+          const future = new Future<
+            { fileName: string; mimeType: string; buffer: Array<Uint8Array> },
+            Error
+          >();
+          // Ignore emitting `unhandledRejection` if the promise rejects before
+          // the attachments `concatMap` switches to this promise.
+          future.promise.catch(() => {});
+          return [id, future] as const;
+        }),
       );
       streamIdToAttachments.set(id, attachments);
+
+      // An attachment whose byte stream never opened has no controller for
+      // livekit-client to error, so end the message when its sender leaves.
+      const senderLeft$ = roomEventSelector(room, RoomEvent.ParticipantDisconnected).pipe(
+        filter(([participant]) => participant.identity === participantInfo.identity),
+      );
 
       const streamObservable = from(reader).pipe(
         scan((acc: string, chunk: string) => {
@@ -187,10 +200,29 @@ export function setupChat(room: Room, options?: ChatOptions) {
             // editTimestamp: type === 'update' ? timestamp : undefined,
           } satisfies ReceivedChatMessage;
         }),
+        takeUntil(senderLeft$),
+        // A local disconnect drops open stream controllers without erroring
+        // them, so end the message with the room as well.
+        takeUntil(onDestroyObservable),
         finalize(() => streamIdToAttachments.delete(id)),
       );
       streamObservable.subscribe({
         next: (value) => messageSubject.next(value),
+        error: (error) => {
+          // Keep a failed message (text stream errored, or an attachment
+          // future rejected) from rethrowing globally as an uncaught
+          // exception; `finalize` has already cleaned up its attachment state.
+          // A disconnect mid-stream is expected churn; anything else deserves
+          // a visible warning.
+          if (
+            error instanceof DataStreamError &&
+            error.reason === DataStreamErrorReason.AbnormalEnd
+          ) {
+            log.debug('chat message stream ended abnormally', error);
+          } else {
+            log.warn('chat message stream failed', error);
+          }
+        },
       });
     });
     // NOTE: Attachment byte streams are guaranteed to arrive after their parent text stream
@@ -206,8 +238,20 @@ export function setupChat(room: Room, options?: ChatOptions) {
       const streamId = foundStreamAttachmentPair[0];
 
       const bufferList = [];
-      for await (const buffer of reader) {
-        bufferList.push(buffer);
+      try {
+        for await (const buffer of reader) {
+          bufferList.push(buffer);
+        }
+      } catch (error) {
+        // Settle the attachment future so the message pipeline errors instead
+        // of hanging forever - its error callback logs and `finalize` cleans up
+        // the attachment state. Without this the rejection is unhandled and the
+        // pending future leaks its `streamIdToAttachments` entry.
+        streamIdToAttachments
+          .get(streamId)
+          ?.get(attachmentStreamId)
+          ?.reject?.(error instanceof Error ? error : new Error(String(error)));
+        return;
       }
 
       const attachment = streamIdToAttachments.get(streamId)?.get(attachmentStreamId);

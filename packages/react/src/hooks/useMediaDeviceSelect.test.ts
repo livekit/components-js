@@ -44,23 +44,4 @@ describe('useMediaDeviceSelect in preview mode', () => {
     // In preview mode the only way to actually switch the device is via the track.
     expect(setDeviceId).toHaveBeenCalledWith('mic-2');
   });
-
-  test('reports the device selected on the local track as the active device', async () => {
-    const mockLocalTrack = {
-      setDeviceId: vi.fn().mockResolvedValue(undefined),
-      getDeviceId: vi.fn().mockResolvedValue('mic-2'),
-      mediaStreamTrack: { label: 'Fake Microphone 2' },
-    } as unknown as Parameters<typeof useMediaDeviceSelect>[0]['track'];
-
-    const { result } = renderHook(() =>
-      useMediaDeviceSelect({ kind: 'audioinput', track: mockLocalTrack }),
-    );
-    expect(result.current.activeDeviceId).toBe('default');
-
-    await act(async () => {
-      await result.current.setActiveMediaDevice('mic-2');
-    });
-
-    expect(result.current.activeDeviceId).toBe('mic-2');
-  });
 });

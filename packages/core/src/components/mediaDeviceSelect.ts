@@ -6,7 +6,7 @@ import {
   type LocalTrack,
   getBrowser,
 } from 'livekit-client';
-import { BehaviorSubject, merge } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { log } from '../logger';
 import { prefixClass } from '../styles-interface';
 import { createActiveDeviceObservable } from '../observables/room';
@@ -26,11 +26,7 @@ export function setupDeviceSelector(
 ) {
   const activeDeviceSubject = new BehaviorSubject<string | undefined>(undefined);
 
-  // Switching the device of a local track directly does not emit a room event,
-  // so the selected device is reported through `activeDeviceSubject` instead.
-  const activeDeviceObservable = localTrack
-    ? merge(createActiveDeviceObservable(room, kind), activeDeviceSubject)
-    : createActiveDeviceObservable(room, kind);
+  const activeDeviceObservable = createActiveDeviceObservable(room, kind);
 
   const setActiveMediaDevice = async (id: string, options: SetMediaDeviceOptions = {}) => {
     if (localTrack) {

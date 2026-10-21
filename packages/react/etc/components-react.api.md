@@ -1092,7 +1092,7 @@ export interface UseMediaDeviceSelectProps {
     requestPermissions?: boolean;
     // (undocumented)
     room?: Room;
-    // (undocumented)
+    // @deprecated (undocumented)
     track?: LocalAudioTrack | LocalVideoTrack;
 }
 

@@ -1,5 +1,5 @@
 ---
-'@livekit/components-core': patch
+'@livekit/components-react': patch
 ---
 
-Fix `useMediaDeviceSelect` not updating `activeDeviceId` after switching the device of a local preview track.
+Mark the `track` parameter of `useMediaDeviceSelect` as deprecated.

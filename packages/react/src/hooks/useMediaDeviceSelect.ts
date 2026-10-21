@@ -8,6 +8,10 @@ import { useObservableState } from './internal';
 export interface UseMediaDeviceSelectProps {
   kind: MediaDeviceKind;
   room?: Room;
+  /**
+   * @deprecated Passing a local track is no longer needed. Without a `room`, the hook falls back to the room
+   * from the context or to a new, unconnected `Room`, and tracks the active device through that room.
+   */
   track?: LocalAudioTrack | LocalVideoTrack;
   /**
    * this will call getUserMedia if the permissions are not yet given to enumerate the devices with device labels.

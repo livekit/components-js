@@ -87,7 +87,7 @@ importers:
         version: 2.23.0(@types/dom-mediacapture-record@1.0.22)
       livekit-server-sdk:
         specifier: ^2.17.0
-        version: 2.19.1
+        version: 2.19.2
       lucide-react:
         specifier: ^1.24.0
         version: 1.33.0(react@19.2.8)
@@ -193,7 +193,7 @@ importers:
         version: 2.23.0(@types/dom-mediacapture-record@1.0.22)
       livekit-server-sdk:
         specifier: ^2.6.1
-        version: 2.19.1
+        version: 2.19.2
       next:
         specifier: ^15.5.24
         version: 15.5.24(@babel/core@8.0.1)(@opentelemetry/api@1.9.0)(@types/node@18.19.130)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.103.1)
@@ -424,7 +424,7 @@ importers:
         version: 2.23.0(@types/dom-mediacapture-record@1.0.22)
       livekit-server-sdk:
         specifier: ^2.13.2
-        version: 2.19.1
+        version: 2.19.2
       lucide-react:
         specifier: ^1.0.0
         version: 1.33.0(react@19.2.8)
@@ -7667,8 +7667,8 @@ packages:
     peerDependencies:
       '@types/dom-mediacapture-record': ^1
 
-  livekit-server-sdk@2.19.1:
-    resolution: {integrity: sha512-tqjM5oPDDNBrkb/64YReta9UWP32l1a2m0HHXq8WOuEzwxh4zsaXjeZZtPG4Er4eVAk4kjR+EMxH7lPKzg1g6g==}
+  livekit-server-sdk@2.19.2:
+    resolution: {integrity: sha512-aNb7iZOdMYWjg3X227GO9i/jWsqR6uiUa2le3T0JOaK+FwE3bMx+bEhHVoSioMFL4LQ4xk4ztz1H8TKxIPjq1w==}
     engines: {node: '>=19'}
 
   load-tsconfig@0.2.5:
@@ -18205,7 +18205,7 @@ snapshots:
       typed-emitter: 2.1.0
       webrtc-adapter: 9.0.6
 
-  livekit-server-sdk@2.19.1:
+  livekit-server-sdk@2.19.2:
     dependencies:
       '@bufbuild/protobuf': 1.10.1
       '@livekit/protocol': 1.51.0

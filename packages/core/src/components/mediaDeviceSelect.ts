@@ -4,7 +4,7 @@ import {
   type LocalVideoTrack,
   type Room,
   type LocalTrack,
-  getBrowser,
+  supportsSetSinkId,
 } from 'livekit-client';
 import { BehaviorSubject } from 'rxjs';
 import { log } from '../logger';
@@ -36,9 +36,8 @@ export function setupDeviceSelector(
         id === 'default' && localTrack.mediaStreamTrack.label.startsWith('Default') ? id : actualId,
       );
     } else if (room) {
-      const browser = getBrowser();
-      if (kind === 'audiooutput' && (browser?.name === 'Safari' || browser?.os === 'iOS')) {
-        log.warn(`Switching audio output device is not supported on Safari and iOS.`);
+      if (kind === 'audiooutput' && !supportsSetSinkId()) {
+        log.warn(`Switching audio output device is not supported on Safari using iOS <26.`);
         return;
       }
       log.debug(`Switching active device of kind "${kind}" with id ${id}.`);

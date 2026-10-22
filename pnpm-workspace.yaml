@@ -35,6 +35,8 @@ minimumReleaseAgeExclude:
   - vitest@4.1.11
   # Renovate security update: vite@8.1.6
   - vite@8.1.6
+  # Renovate security update: storybook@10.6.2
+  - storybook@10.6.2
 
 overrides:
   '@typescript-eslint/eslint-plugin': ^8.58.0

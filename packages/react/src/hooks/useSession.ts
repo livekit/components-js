@@ -109,6 +109,8 @@ type SessionModeState<Mode extends SessionMode> = Mode extends 'text'
   : { mode: 'rtc'; room: Room };
 
 type SessionStateCommon<Mode extends SessionMode> = SessionModeState<Mode> & {
+  /** The agent thread that this conversation belongs to. If unset, starts a new thread. */
+  threadId: string | null; // FIXME: consider making the fact this can be unset an implementation detail of useSession
   internal: SessionStateInternal;
 };
 
@@ -194,6 +196,9 @@ type UseSessionCommonOptions = {
    * transitioning to the "failure" state.
    */
   agentConnectTimeoutMilliseconds?: number;
+
+  /** The agent thread that this conversation belongs to. If left unset, starts a new thread. */
+  threadId?: string;
 };
 
 type UseSessionWithRoomOptions = {
@@ -451,6 +456,9 @@ export function useSession(
   // both. It is threaded into both branches so they expose the SAME instance on `internal`.
   const messageStore = useSessionMessageStore();
 
+  const [threadId, setThreadId] = React.useState(options.threadId ?? null);
+  React.useEffect(() => setThreadId(options.threadId ?? null), [options.threadId]);
+
   // NOTE: Both hooks are ALWAYS called (Rules of Hooks). Each is gated by `enabled` so that the
   // inactive one performs no side effects (no network, no room connection). We cannot use a
   // `switch` here because `mode` can in principle change across renders.
@@ -459,6 +467,8 @@ export function useSession(
     (isText ? {} : options) as UseSessionConfigurableRtcOptions | UseSessionFixedRtcOptions,
     !isText,
     messageStore,
+    threadId,
+    setThreadId,
   );
   const textResult = useSessionText(
     tokenSource,
@@ -467,6 +477,8 @@ export function useSession(
       | UseSessionFixedTextOptions,
     isText,
     messageStore,
+    threadId,
+    setThreadId,
   );
 
   return isText ? textResult : rtcResult;
@@ -482,9 +494,12 @@ export function useSessionRtc(
   options: UseSessionConfigurableRtcOptions | UseSessionFixedRtcOptions,
   enabled: boolean,
   messageStore: SessionMessageStore,
+  threadId: string | null,
+  setThreadId: (threadId: string | null) => void,
 ): UseSessionReturn<'rtc'> {
   const {
     mode: _mode,
+    threadId: _threadId,
     room: optionsRoom,
     agentConnectTimeoutMilliseconds,
     encryption: unstableEncryption,
@@ -697,6 +712,7 @@ export function useSessionRtc(
     | SessionStateDisconnected<'rtc'> => {
     const common: SessionStateCommon<'rtc'> = {
       mode: 'rtc',
+      threadId,
       room,
       internal: sessionInternal,
     };
@@ -747,6 +763,7 @@ export function useSessionRtc(
         };
     }
   }, [
+    threadId,
     sessionInternal,
     room,
     roomConnectionState,
@@ -932,8 +949,16 @@ export function useSessionText(
   options: UseSessionConfigurableTextOptions | UseSessionFixedTextOptions,
   enabled: boolean,
   messageStore: SessionMessageStore,
+  threadId: string | null,
+  setThreadId: (threadId: string | null) => void,
 ): UseSessionReturn<'text'> {
-  const { mode: _mode, baseUrl, agentConnectTimeoutMilliseconds, ...unstableRestOptions } = options;
+  const {
+    mode: _mode,
+    threadId: _threadId,
+    baseUrl,
+    agentConnectTimeoutMilliseconds,
+    ...unstableRestOptions
+  } = options;
 
   const emitter = React.useMemo(
     () => new EventEmitter() as TypedEventEmitter<SessionCallbacks>,
@@ -949,12 +974,18 @@ export function useSessionText(
   // and the transport reuses it for the rest of the conversation. Passing an unknown contextId fails
   // with `thread-not-found`.
   const textTransport = React.useMemo(
-    () =>
-      new TextTransport({
+    () => {
+      const textTransport = new TextTransport({
         baseUrl,
+        threadId: threadId ?? undefined,
         getCredentials: tokenSourceFetch,
-      }),
-    [baseUrl, tokenSourceFetch],
+      });
+
+      textTransport.on('threadStarted', setThreadId);
+
+      return textTransport;
+    },
+    [baseUrl, tokenSourceFetch, threadId],
   );
 
   const [connectionState, setConnectionState] = React.useState<ConnectionState>(
@@ -1049,6 +1080,7 @@ export function useSessionText(
       mode: 'text',
       textTransport,
       internal: sessionInternal,
+      threadId,
     };
 
     const local = {
@@ -1073,7 +1105,7 @@ export function useSessionText(
           local,
         };
     }
-  }, [connectionState, textTransport, sessionInternal]);
+  }, [threadId, connectionState, textTransport, sessionInternal]);
 
   return React.useMemo(
     () => ({

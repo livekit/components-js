@@ -1,5 +1,7 @@
 import { type ReceivedChatMessage } from '@livekit/components-core';
 import { type TokenSourceResponseObject } from 'livekit-client';
+import { EventEmitter } from 'events';
+import type TypedEmitter from 'typed-emitter';
 
 /**
  * The A2A "LiveKit agents" extension URI. Sending this in the `A2A-Extensions` request header
@@ -40,7 +42,7 @@ export type TextTransportOptions = {
    * thread on the first message and returns its id, which the transport then reuses for the rest of
    * the conversation. Passing a `contextId` the server doesn't know about fails with `thread-not-found`.
    */
-  contextId?: string;
+  threadId?: string;
 };
 
 /** Options passed to {@link TextTransport.requestMessageStream}. */
@@ -177,6 +179,10 @@ function normalizeRole(roleRaw: string | undefined): 'assistant' | 'user' {
     : 'user';
 }
 
+type TextTransportCallbacks = {
+  threadStarted: (threadId: string) => void;
+};
+
 /**
  * A framework-agnostic transport that speaks the agents-2.0 A2A protocol (JSON-RPC over HTTP+SSE,
  * plus the LiveKit agents extension). It owns all protocol knowledge — auth, conversation id, JSON-RPC
@@ -186,7 +192,7 @@ function normalizeRole(roleRaw: string | undefined): 'assistant' | 'user' {
  * This is deliberately React-free. The intent is for it to eventually move into client-sdk-js and
  * be usable outside of React.
  */
-export class TextTransport {
+export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextTransportCallbacks>) {
   private baseUrl: TextTransportBaseUrl;
   private getCredentials: () => Promise<TokenSourceResponseObject>;
   private cachedToken: string | null = null;
@@ -195,17 +201,18 @@ export class TextTransport {
   private nextRequestId = 1;
 
   // The conversation id. Undefined until the agent assigns one on the first message; reused after.
-  private currentContextId: string | undefined;
+  private _threadId: string | undefined;
 
   constructor(options: TextTransportOptions) {
+    super();
     this.baseUrl = options.baseUrl;
     this.getCredentials = options.getCredentials;
-    this.currentContextId = options.contextId;
+    this._threadId = options.threadId;
   }
 
-  /** The conversation id, once the agent has assigned one. */
-  get contextId(): string | undefined {
-    return this.currentContextId;
+  /** The thread id, once the agent has assigned one. */
+  get threadId(): string | undefined {
+    return this._threadId;
   }
 
   /** Prime the transport by fetching credentials and resolving the base URL. "Connecting" in text mode. */
@@ -252,8 +259,8 @@ export class TextTransport {
     // Omit contextId until the agent has assigned one. Sending an unknown contextId fails with
     // `thread-not-found`; omitting it makes the agent create a thread and return its id.
     const message: Record<string, unknown> = { messageId, role: 'ROLE_USER', parts: [{ text }] };
-    if (this.currentContextId) {
-      message.contextId = this.currentContextId;
+    if (this._threadId) {
+      message.contextId = this._threadId;
     }
 
     try {
@@ -339,8 +346,9 @@ export class TextTransport {
     // Capture the agent-assigned conversation id from the first frame that carries one, so later
     // turns reuse it. The agent creates a thread on the first (contextId-less) message.
     const contextId = A2aStreamResponse.getContextId(response);
-    if (contextId && !this.currentContextId) {
-      this.currentContextId = contextId;
+    if (contextId && !this._threadId) {
+      this._threadId = contextId;
+      this.emit('threadStarted', this._threadId);
     }
 
     // 1. Bare message: a complete, self-contained agent message with no task lifecycle. Emitted by

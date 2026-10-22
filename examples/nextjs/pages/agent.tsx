@@ -144,11 +144,19 @@ const AgentExample: NextPage = () => {
   }, []);
   const [userIdentity] = useState(() => params?.get('user') ?? generateRandomUserId());
 
+  const [threadId, setThreadId] = useState('');
+
   // NOTE: `mode` selects between the RTC and text-mode implementations. Switching mode is treated as
   // a fresh start (there is no conversation migration yet), so the toggle is disabled once started.
   const session = useSession(
     tokenSource,
-    { mode: 'text', baseUrl: textModeBaseUrl, roomName, participantIdentity: userIdentity }
+    {
+      mode: 'text',
+      threadId: threadId.length > 0 ? threadId : undefined,
+      baseUrl: textModeBaseUrl,
+      roomName,
+      participantIdentity: userIdentity,
+    }
   );
 
   const [started, setStarted] = useState(false);
@@ -193,9 +201,13 @@ const AgentExample: NextPage = () => {
               <div>
                 <TextChat />
                 {/* <SimpleAgent /> */}
+                <button className="lk-button" onClick={() => setStarted(false)}>
+                  Disconnect
+                </button>
               </div>
             ) : (
               <div style={{ marginTop: 24 }}>
+                <input type="text" value={threadId} onChange={(e) => setThreadId(e.target.value)} placeholder="Thread ID" />
                 <button className="lk-button" onClick={() => setStarted(true)}>
                   Connect
                 </button>

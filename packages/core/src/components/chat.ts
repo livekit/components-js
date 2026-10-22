@@ -268,6 +268,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
   );
 
   const isSending$ = new BehaviorSubject<boolean>(false);
+  let pendingSends = 0;
   const finalMessageEncoder = options?.messageEncoder ?? encodeLegacyMsg;
 
   const send = async (message: string, options?: SendTextOptions) => {
@@ -275,6 +276,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
       options = {};
     }
     options.topic ??= topic;
+    pendingSends += 1;
     isSending$.next(true);
 
     try {
@@ -316,7 +318,8 @@ export function setupChat(room: Room, options?: ChatOptions) {
 
       return receivedChatMsg;
     } finally {
-      isSending$.next(false);
+      pendingSends -= 1;
+      isSending$.next(pendingSends > 0);
     }
   };
 

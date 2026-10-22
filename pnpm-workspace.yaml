@@ -33,6 +33,8 @@ minimumReleaseAgeExclude:
   - postcss@8.5.23
   # Renovate security update: vitest@4.1.11
   - vitest@4.1.11
+  # Renovate security update: vite@8.1.6
+  - vite@8.1.6
 
 overrides:
   '@typescript-eslint/eslint-plugin': ^8.58.0

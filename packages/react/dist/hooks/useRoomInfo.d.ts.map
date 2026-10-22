@@ -1,0 +1,1 @@
+{"version":3,"file":"useRoomInfo.d.ts","sourceRoot":"","sources":["../../src/hooks/useRoomInfo.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,IAAI,EAAE,MAAM,gBAAgB,CAAC;AAK3C;;;;;;;;;;GAUG;AACH,MAAM,WAAW,kBAAkB;IACjC,IAAI,CAAC,EAAE,IAAI,CAAC;CACb;AAED,cAAc;AACd,wBAAgB,WAAW,CAAC,OAAO,GAAE,kBAAuB;;;EAS3D"}

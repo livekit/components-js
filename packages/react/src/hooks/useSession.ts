@@ -393,30 +393,26 @@ function withThreadIdMetadata(agentMetadata: string | undefined, threadId: strin
 }
 
 /**
- * A Session represents a managed connection to a Room which can contain Agents.
- * @beta
+ * Internal hook owning the live media/room half of a session: the WebRTC `Room`, its connection
+ * state, local tracks, agent dispatch, token fetching, and the start/end lifecycle. `useSession`
+ * composes this today; it may be exposed as a public `useSessionMedia` in the future.
+ *
+ * It takes the session's shared `messageStore` so the `internal` bag it builds (consumed by
+ * `useAgent` and re-exposed on the session) stays uniform. It does NOT touch the text transport —
+ * that conversation concern lives in `useSession`.
  */
-export function useSession(
-  tokenSource: TokenSourceConfigurable,
-  options?: UseSessionConfigurableOptions,
-): UseSessionReturn;
-/**
- * A Session represents a managed connection to a Room which can contain Agents.
- * @beta
- */
-export function useSession(
-  tokenSource: TokenSourceFixed,
-  options?: UseSessionFixedOptions,
-): UseSessionReturn;
-export function useSession(
+function useSessionMedia(
   tokenSource: TokenSourceConfigurable | TokenSourceFixed,
-  options: UseSessionConfigurableOptions | UseSessionFixedOptions = {},
-): UseSessionReturn {
+  options: UseSessionConfigurableOptions | UseSessionFixedOptions,
+  messageStore: SessionMessageStore,
+) {
   const {
     room: optionsRoom,
     agentConnectTimeoutMilliseconds,
     encryption: unstableEncryption,
-    textBaseUrl,
+    // `textBaseUrl` is a text-transport concern handled by useSession; pull it out so it never reaches
+    // the token fetch options (areTokenSourceFetchOptionsEqual throws on unknown keys).
+    textBaseUrl: _textBaseUrl,
     threadId,
     ...unstableRestOptions
   } = options;
@@ -493,24 +489,6 @@ export function useSession(
     [],
   );
 
-  const generateDerivedConnectionStateValues = React.useCallback(
-    <State extends UseSessionReturn['connectionState']>(connectionState: State) =>
-      ({
-        isConnected:
-          connectionState === ConnectionState.Connected ||
-          connectionState === ConnectionState.Reconnecting ||
-          connectionState === ConnectionState.SignalReconnecting,
-      }) as {
-        isConnected: State extends
-          | ConnectionState.Connected
-          | ConnectionState.Reconnecting
-          | ConnectionState.SignalReconnecting
-          ? true
-          : false;
-      },
-    [],
-  );
-
   const [roomConnectionState, setRoomConnectionState] = React.useState(room.state);
   React.useEffect(() => {
     const handleConnectionStateChanged = (connectionState: ConnectionState) => {
@@ -522,6 +500,10 @@ export function useSession(
       room.off(RoomEvent.ConnectionStateChanged, handleConnectionStateChanged);
     };
   }, [room]);
+
+  React.useEffect(() => {
+    emitter.emit(SessionEvent.ConnectionStateChanged, roomConnectionState);
+  }, [emitter, roomConnectionState]);
 
   React.useEffect(() => {
     const handleMediaDevicesError = async (error: Error) => {
@@ -589,8 +571,6 @@ export function useSession(
     updateAgentTimeoutParticipantExists,
   } = useAgentTimeoutIdStore();
 
-  const messageStore = useSessionMessageStore();
-
   // Carry the thread id in the agent dispatch metadata so the room's agent is dispatched against it.
   const tokenFetchOptions =
     typeof threadId === 'undefined'
@@ -603,11 +583,6 @@ export function useSession(
           ),
         };
   const tokenSourceFetch = useSessionTokenSourceFetch(tokenSource, tokenFetchOptions);
-
-  const textTransport = React.useMemo(
-    () => new TextTransport({ baseUrl: textBaseUrl, getCredentials: tokenSourceFetch, threadId }),
-    [textBaseUrl, tokenSourceFetch, threadId],
-  );
 
   const sessionInternal: UseSessionReturn['internal'] = React.useMemo(
     () => ({
@@ -638,76 +613,7 @@ export function useSession(
     ],
   );
 
-  const conversationState = React.useMemo(():
-    SessionStateConnecting | SessionStateConnected | SessionStateDisconnected => {
-    const common: SessionStateCommon = {
-      room,
-      textTransport,
-      internal: sessionInternal,
-    };
-
-    switch (roomConnectionState) {
-      case ConnectionState.Connecting:
-        return {
-          ...common,
-
-          connectionState: ConnectionState.Connecting,
-          ...generateDerivedConnectionStateValues(ConnectionState.Connecting),
-
-          local: {
-            cameraTrack: undefined,
-            microphoneTrack: undefined,
-            screenShareTrack: undefined,
-          },
-        };
-
-      case ConnectionState.Connected:
-      case ConnectionState.Reconnecting:
-      case ConnectionState.SignalReconnecting:
-        return {
-          ...common,
-
-          connectionState: roomConnectionState,
-          ...generateDerivedConnectionStateValues(roomConnectionState),
-
-          local: {
-            cameraTrack: localCamera,
-            microphoneTrack: localMicrophone,
-            screenShareTrack: localScreenShare,
-          },
-        };
-
-      case ConnectionState.Disconnected:
-        return {
-          ...common,
-
-          connectionState: ConnectionState.Disconnected,
-          ...generateDerivedConnectionStateValues(ConnectionState.Disconnected),
-
-          local: {
-            cameraTrack: undefined,
-            microphoneTrack: undefined,
-            screenShareTrack: undefined,
-          },
-        };
-    }
-  }, [
-    sessionInternal,
-    room,
-    textTransport,
-    roomConnectionState,
-    localCamera,
-    localMicrophone,
-    generateDerivedConnectionStateValues,
-  ]);
-  React.useEffect(() => {
-    emitter.emit(SessionEvent.ConnectionStateChanged, conversationState.connectionState);
-  }, [emitter, conversationState.connectionState]);
-
-  const waitUntilConnectionState = useSessionWaitUntilConnectionState(
-    emitter,
-    conversationState.connectionState,
-  );
+  const waitUntilConnectionState = useSessionWaitUntilConnectionState(emitter, roomConnectionState);
 
   const waitUntilConnected = React.useCallback(
     async (signal?: AbortSignal) => {
@@ -734,11 +640,11 @@ export function useSession(
   const agent = useAgent(
     React.useMemo(
       () => ({
-        connectionState: conversationState.connectionState,
+        connectionState: roomConnectionState,
         room,
         internal: sessionInternal,
       }),
-      [conversationState, room, sessionInternal],
+      [roomConnectionState, room, sessionInternal],
     ),
   );
 
@@ -815,13 +721,13 @@ export function useSession(
     [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected, agent.waitUntilConnected],
   );
 
+  // Media-only teardown: disconnect the room. The conversation teardown (text transport + message
+  // store) is composed on top in useSession's `end`.
   const end = React.useCallback(async () => {
     wasSessionEndCalledRef.current = true;
     tokenSourceFetch(true);
     await room.disconnect();
-    await textTransport.disconnect();
-    messageStore.clear();
-  }, [room, tokenSourceFetch, textTransport, messageStore.clear]);
+  }, [room, tokenSourceFetch]);
 
   const prepareConnection = React.useCallback(async () => {
     const credentials = await tokenSourceFetch();
@@ -870,6 +776,159 @@ export function useSession(
       cancelled = true;
     };
   }, [threadId, room, tokenSourceFetch]);
+
+  return {
+    room,
+    roomConnectionState,
+    localCamera,
+    localMicrophone,
+    localScreenShare,
+    internal: sessionInternal,
+    start,
+    end,
+    waitUntilConnected,
+    waitUntilDisconnected,
+    prepareConnection,
+    setEncryptionEnabled,
+    tokenSourceFetch,
+  };
+}
+
+/**
+ * A Session represents a managed connection to a Room which can contain Agents.
+ * @beta
+ */
+export function useSession(
+  tokenSource: TokenSourceConfigurable,
+  options?: UseSessionConfigurableOptions,
+): UseSessionReturn;
+/**
+ * A Session represents a managed connection to a Room which can contain Agents.
+ * @beta
+ */
+export function useSession(
+  tokenSource: TokenSourceFixed,
+  options?: UseSessionFixedOptions,
+): UseSessionReturn;
+export function useSession(
+  tokenSource: TokenSourceConfigurable | TokenSourceFixed,
+  options: UseSessionConfigurableOptions | UseSessionFixedOptions = {},
+): UseSessionReturn {
+  const { textBaseUrl, threadId } = options;
+
+  // The conversation (text) half of the session: the shared message store and the text transport.
+  const messageStore = useSessionMessageStore();
+
+  // The live media/room half of the session (see useSessionMedia).
+  const {
+    room,
+    roomConnectionState,
+    localCamera,
+    localMicrophone,
+    localScreenShare,
+    internal,
+    start,
+    end: endMedia,
+    waitUntilConnected,
+    waitUntilDisconnected,
+    prepareConnection,
+    setEncryptionEnabled,
+    tokenSourceFetch,
+  } = useSessionMedia(tokenSource, options, messageStore);
+
+  const textTransport = React.useMemo(
+    () => new TextTransport({ baseUrl: textBaseUrl, getCredentials: tokenSourceFetch, threadId }),
+    [textBaseUrl, tokenSourceFetch, threadId],
+  );
+
+  const generateDerivedConnectionStateValues = React.useCallback(
+    <State extends UseSessionReturn['connectionState']>(connectionState: State) =>
+      ({
+        isConnected:
+          connectionState === ConnectionState.Connected ||
+          connectionState === ConnectionState.Reconnecting ||
+          connectionState === ConnectionState.SignalReconnecting,
+      }) as {
+        isConnected: State extends
+          | ConnectionState.Connected
+          | ConnectionState.Reconnecting
+          | ConnectionState.SignalReconnecting
+          ? true
+          : false;
+      },
+    [],
+  );
+
+  const conversationState = React.useMemo(():
+    SessionStateConnecting | SessionStateConnected | SessionStateDisconnected => {
+    const common: SessionStateCommon = {
+      room,
+      textTransport,
+      internal,
+    };
+
+    switch (roomConnectionState) {
+      case ConnectionState.Connecting:
+        return {
+          ...common,
+
+          connectionState: ConnectionState.Connecting,
+          ...generateDerivedConnectionStateValues(ConnectionState.Connecting),
+
+          local: {
+            cameraTrack: undefined,
+            microphoneTrack: undefined,
+            screenShareTrack: undefined,
+          },
+        };
+
+      case ConnectionState.Connected:
+      case ConnectionState.Reconnecting:
+      case ConnectionState.SignalReconnecting:
+        return {
+          ...common,
+
+          connectionState: roomConnectionState,
+          ...generateDerivedConnectionStateValues(roomConnectionState),
+
+          local: {
+            cameraTrack: localCamera,
+            microphoneTrack: localMicrophone,
+            screenShareTrack: localScreenShare,
+          },
+        };
+
+      case ConnectionState.Disconnected:
+        return {
+          ...common,
+
+          connectionState: ConnectionState.Disconnected,
+          ...generateDerivedConnectionStateValues(ConnectionState.Disconnected),
+
+          local: {
+            cameraTrack: undefined,
+            microphoneTrack: undefined,
+            screenShareTrack: undefined,
+          },
+        };
+    }
+  }, [
+    internal,
+    room,
+    textTransport,
+    roomConnectionState,
+    localCamera,
+    localMicrophone,
+    localScreenShare,
+    generateDerivedConnectionStateValues,
+  ]);
+
+  // The public end: stop media, then tear down the conversation (abort text streams, clear transcript).
+  const end = React.useCallback(async () => {
+    await endMedia();
+    await textTransport.disconnect();
+    messageStore.clear();
+  }, [endMedia, textTransport, messageStore.clear]);
 
   return React.useMemo(
     () => ({

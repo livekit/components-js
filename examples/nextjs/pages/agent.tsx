@@ -18,8 +18,6 @@ import { MediaDeviceFailure, TokenSource } from 'livekit-client';
 import styles from '../styles/VoiceAssistant.module.scss';
 import { generateRandomUserId } from '../lib/helper';
 
-type SessionMode = 'rtc' | 'text';
-
 // The A2A interface base URL (everything up to, but not including, `/v1`). The callback receives
 // the project id (the first DNS label of the token's server url), which lets the same code target a
 // real staging/prod agent or the local mock.
@@ -146,18 +144,12 @@ const AgentExample: NextPage = () => {
 
   const [threadId, setThreadId] = useState('');
 
-  // NOTE: `mode` selects between the RTC and text-mode implementations. Switching mode is treated as
-  // a fresh start (there is no conversation migration yet), so the toggle is disabled once started.
-  const session = useSession(
-    tokenSource,
-    {
-      mode: 'text',
-      threadId: threadId.length > 0 ? threadId : undefined,
-      baseUrl: textModeBaseUrl,
-      roomName,
-      participantIdentity: userIdentity,
-    }
-  );
+  const session = useSession(tokenSource, {
+    threadId: threadId.length > 0 ? threadId : undefined,
+    textBaseUrl: textModeBaseUrl,
+    roomName,
+    participantIdentity: userIdentity,
+  });
 
   const [started, setStarted] = useState(false);
   useEffect(() => {

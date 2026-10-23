@@ -78,4 +78,19 @@ describe('AgentAudioVisualizerWave', () => {
       expect.objectContaining({ volume: 0.6 }),
     );
   });
+
+  it('pauses the shader for reduced motion and reuses unchanged uniforms', () => {
+    vi.mocked(useAgentAudioVisualizerWave).mockReturnValue({
+      reducedMotion: true,
+      speed: 0,
+      frequency: 10,
+      amplitude: 0.025,
+      opacity: 1,
+    });
+    const { rerender } = render(<AgentAudioVisualizerWave state="listening" />);
+    const firstProps = mockReactShaderToy.mock.calls.at(-1)![0];
+    expect(firstProps.paused).toBe(true);
+    rerender(<AgentAudioVisualizerWave state="listening" volume={1} />);
+    expect(mockReactShaderToy.mock.calls.at(-1)![0].uniforms).toBe(firstProps.uniforms);
+  });
 });

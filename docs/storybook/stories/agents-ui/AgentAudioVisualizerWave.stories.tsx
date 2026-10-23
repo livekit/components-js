@@ -7,7 +7,6 @@ import { useSimulatedVolumeBands } from './useSimulatedVolumeBands';
 
 export default {
   component: AgentAudioVisualizerWave,
-  decorators: [AgentSessionProvider],
   render: (args: AgentAudioVisualizerWaveProps) => {
     const { microphoneTrack } = useAgent();
 
@@ -62,12 +61,14 @@ export default {
 };
 
 export const Default: StoryObj<AgentAudioVisualizerWaveProps> = {
+  decorators: [AgentSessionProvider],
   args: {},
 };
 
 // Demonstrates the `volume` override prop with a simulated speech waveform instead of
 // live audio.
 export const OverrideVolume: StoryObj<AgentAudioVisualizerWaveProps> = {
+  decorators: [AgentSessionProvider],
   args: {
     state: 'speaking',
   },
@@ -76,5 +77,38 @@ export const OverrideVolume: StoryObj<AgentAudioVisualizerWaveProps> = {
     const [volume] = useSimulatedVolumeBands(1);
 
     return <AgentAudioVisualizerWave {...args} audioTrack={microphoneTrack} volume={volume} />;
+  },
+};
+
+// No room or microphone required. Change the browser's prefers-reduced-motion
+// emulation (or the OS preference) while this story is open to compare both modes.
+export const MotionPreferences: StoryObj<AgentAudioVisualizerWaveProps> = {
+  parameters: {
+    layout: 'padded',
+    docs: {
+      description: {
+        story:
+          'Enable prefers-reduced-motion in browser developer tools or your OS settings. The waves become still, state-specific silhouettes: no travel, pulsing, or volume-driven deformation. Change the preference without reloading to resume animation. Simulated volume needs no LiveKit connection.',
+      },
+    },
+  },
+  render: (args: AgentAudioVisualizerWaveProps) => {
+    const [volume] = useSimulatedVolumeBands(1);
+    return (
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {(['disconnected', 'listening', 'thinking', 'speaking'] as const).map((state) => (
+          <figure key={state} className="flex flex-col items-center rounded-lg border p-4">
+            <AgentAudioVisualizerWave
+              {...args}
+              size="md"
+              state={state}
+              volume={volume}
+              aria-hidden="true"
+            />
+            <figcaption className="text-sm capitalize">{state}</figcaption>
+          </figure>
+        ))}
+      </div>
+    );
   },
 };

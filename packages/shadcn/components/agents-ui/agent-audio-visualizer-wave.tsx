@@ -148,6 +148,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 }`;
 
 interface WaveShaderProps {
+  paused?: boolean;
   /**
    * Class name
    * @default ''
@@ -196,6 +197,7 @@ interface WaveShaderProps {
 }
 
 function WaveShader({
+  paused,
   speed = 10,
   color = '#1FD5F9',
   colorShift = 0.05,
@@ -209,22 +211,27 @@ function WaveShader({
   ...props
 }: WaveShaderProps & ComponentProps<'div'>) {
   const rgbColor = useMemo(() => hexToRgb(color), [color]);
+  const uniforms = useMemo(
+    () => ({
+      uSpeed: { type: '1f', value: speed },
+      uAmplitude: { type: '1f', value: amplitude },
+      uFrequency: { type: '1f', value: frequency },
+      uMix: { type: '1f', value: mix },
+      uLineWidth: { type: '1f', value: lineWidth },
+      uSmoothing: { type: '1f', value: blur },
+      uColor: { type: '3fv', value: rgbColor },
+      uColorShift: { type: '1f', value: colorShift },
+    }),
+    [speed, amplitude, frequency, mix, lineWidth, blur, rgbColor, colorShift],
+  );
 
   return (
     <div ref={ref} className={className} {...props}>
       <ReactShaderToy
+        paused={paused}
         fs={shaderSource}
         devicePixelRatio={globalThis.devicePixelRatio ?? 1}
-        uniforms={{
-          uSpeed: { type: '1f', value: speed },
-          uAmplitude: { type: '1f', value: amplitude },
-          uFrequency: { type: '1f', value: frequency },
-          uMix: { type: '1f', value: mix },
-          uLineWidth: { type: '1f', value: lineWidth },
-          uSmoothing: { type: '1f', value: blur },
-          uColor: { type: '3fv', value: rgbColor },
-          uColorShift: { type: '1f', value: colorShift },
-        }}
+        uniforms={uniforms}
         onError={(error) => {
           console.error('Shader error:', error);
         }}
@@ -303,6 +310,8 @@ export interface AgentAudioVisualizerWaveProps {
  * A wave-style audio visualizer that responds to agent state and audio levels.
  * Displays an animated wave that reacts to the current agent state (connecting, thinking, speaking, etc.)
  * and audio volume when speaking.
+ * Respects `prefers-reduced-motion` with a still, state-specific wave, without
+ * pulsing or volume-driven deformation. Preference changes apply without a reload.
  *
  * @extends ComponentProps<'div'>
  *
@@ -346,7 +355,7 @@ export function AgentAudioVisualizerWave({
     }
   }, [lineWidth, size]);
 
-  const { speed, amplitude, frequency, opacity } = useAgentAudioVisualizerWave({
+  const { speed, amplitude, frequency, opacity, reducedMotion } = useAgentAudioVisualizerWave({
     state,
     audioTrack,
     volume,
@@ -354,6 +363,7 @@ export function AgentAudioVisualizerWave({
 
   return (
     <WaveShader
+      paused={reducedMotion}
       ref={ref}
       data-lk-state={state}
       speed={speed}

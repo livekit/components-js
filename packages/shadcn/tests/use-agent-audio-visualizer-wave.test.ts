@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { useAgentAudioVisualizerWave } from '@/hooks/agents-ui/use-agent-audio-visualizer-wave';
 import type { AgentState } from '@livekit/components-react';
 import * as LiveKitComponents from '@livekit/components-react';
@@ -45,6 +45,43 @@ vi.mock('motion/react', () => ({
 describe('useAgentAudioVisualizerWave', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('stops running animations when reduced motion is enabled', () => {
+    let matches = false;
+    let change: () => void = () => {};
+    vi.stubGlobal('matchMedia', () => ({
+      get matches() {
+        return matches;
+      },
+      addEventListener: (_: string, listener: () => void) => {
+        change = listener;
+      },
+      removeEventListener: vi.fn(),
+    }));
+    const { rerender } = renderHook(
+      ({ volume }) => useAgentAudioVisualizerWave({ state: 'listening', volume }),
+      { initialProps: { volume: 0 } },
+    );
+    const controls = vi.mocked(animate).mock.results.map(({ value }) => value);
+    expect(controls.length).toBeGreaterThan(0);
+    act(() => {
+      matches = true;
+      change();
+    });
+    for (const control of controls) expect(control.stop).toHaveBeenCalled();
+    vi.mocked(animate).mockClear();
+    rerender({ volume: 1 });
+    expect(animate).not.toHaveBeenCalled();
+  });
+
+  it('stops active animations on unmount', () => {
+    const { unmount } = renderHook(() => useAgentAudioVisualizerWave({ state: 'thinking' }));
+    const controls = vi.mocked(animate).mock.results.map(({ value }) => value);
+    unmount();
+    for (const control of controls) expect(control.stop).toHaveBeenCalled();
   });
 
   describe('Basic Functionality', () => {

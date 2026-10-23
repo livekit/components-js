@@ -373,6 +373,26 @@ function useSessionTokenSourceFetch(
 }
 
 /**
+ * Encode the thread id into an agent-dispatch metadata string. The agents-2.0 worker reads the thread
+ * from `thread_id` of the JSON-decoded dispatch metadata (livekit-agents worker.py), so we merge
+ * `thread_id` into any existing metadata JSON.
+ */
+function withThreadIdMetadata(agentMetadata: string | undefined, threadId: string): string {
+  let base: Record<string, unknown> = {};
+  if (agentMetadata) {
+    try {
+      const parsed = JSON.parse(agentMetadata);
+      if (parsed && typeof parsed === 'object') {
+        base = parsed as Record<string, unknown>;
+      }
+    } catch {
+      // Non-JSON metadata can't carry a thread_id key; it is replaced.
+    }
+  }
+  return JSON.stringify({ ...base, thread_id: threadId });
+}
+
+/**
  * A Session represents a managed connection to a Room which can contain Agents.
  * @beta
  */
@@ -571,7 +591,18 @@ export function useSession(
 
   const messageStore = useSessionMessageStore();
 
-  const tokenSourceFetch = useSessionTokenSourceFetch(tokenSource, unstableRestOptions);
+  // Carry the thread id in the agent dispatch metadata so the room's agent is dispatched against it.
+  const tokenFetchOptions =
+    typeof threadId === 'undefined'
+      ? unstableRestOptions
+      : {
+          ...unstableRestOptions,
+          agentMetadata: withThreadIdMetadata(
+            (unstableRestOptions as TokenSourceFetchOptions).agentMetadata,
+            threadId,
+          ),
+        };
+  const tokenSourceFetch = useSessionTokenSourceFetch(tokenSource, tokenFetchOptions);
 
   const textTransport = React.useMemo(
     () => new TextTransport({ baseUrl: textBaseUrl, getCredentials: tokenSourceFetch, threadId }),
@@ -805,6 +836,40 @@ export function useSession(
     },
     [/* note: no prepareConnection here, this effect should only ever run once! */],
   );
+
+  // When the thread id changes on an active session, cycle the room so its agent is re-dispatched
+  // against the new thread: disconnect and mint a fresh token (with the new thread id in the dispatch
+  // metadata) in parallel, then reconnect. A disconnected session needs nothing — its next start()
+  // already uses the new thread id.
+  const previousThreadIdRef = React.useRef(threadId);
+  React.useEffect(() => {
+    if (previousThreadIdRef.current === threadId) {
+      return;
+    }
+    previousThreadIdRef.current = threadId;
+
+    if (room.state === ConnectionState.Disconnected) {
+      return;
+    }
+
+    let cancelled = false;
+    void (async () => {
+      try {
+        const [credentials] = await Promise.all([tokenSourceFetch(true), room.disconnect()]);
+        if (cancelled) {
+          return;
+        }
+        await room.connect(credentials.serverUrl, credentials.participantToken);
+      } catch (err) {
+        // FIXME: figure out a better logging solution?
+        console.warn('WARNING: useSession failed to reconnect after a thread id change:', err);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [threadId, room, tokenSourceFetch]);
 
   return React.useMemo(
     () => ({

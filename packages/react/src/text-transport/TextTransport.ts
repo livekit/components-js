@@ -31,8 +31,9 @@ export type TextTransportBaseUrl = string | ((projectId: string) => string);
 
 /** Options for constructing a {@link TextTransport}. */
 export type TextTransportOptions = {
-  /** The A2A interface base URL, or a callback that builds it from the project id. */
-  baseUrl: TextTransportBaseUrl;
+  /** The A2A interface base URL, or a callback that builds it from the project id. Optional so a
+   * voice-only session can still construct a transport; requestMessageStream fails if it is unset. */
+  baseUrl?: TextTransportBaseUrl;
 
   /** Returns the credentials (token + server url) used to authenticate and locate the agent. */
   getCredentials: () => Promise<TokenSourceResponseObject>;
@@ -92,6 +93,12 @@ enum A2aTaskState {
   Rejected = 'TASK_STATE_REJECTED',
 }
 
+// const A2A_TASK_STATE_TERMINAL_STATES = [
+//   A2aTaskState.Completed,
+//   A2aTaskState.Failed,
+//   A2aTaskState.Cancelled,
+//   A2aTaskState.Rejected,
+// ];
 
 type A2aStreamResponse = {
   /**
@@ -193,7 +200,7 @@ type TextTransportCallbacks = {
  * be usable outside of React.
  */
 export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextTransportCallbacks>) {
-  private baseUrl: TextTransportBaseUrl;
+  private baseUrl?: TextTransportBaseUrl;
   private getCredentials: () => Promise<TokenSourceResponseObject>;
   private cachedToken: string | null = null;
   private resolvedBaseUrl: string | null = null;
@@ -217,12 +224,16 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
 
   /** Prime the transport by fetching credentials and resolving the base URL. "Connecting" in text mode. */
   async connect(): Promise<void> {
+    const baseUrl = this.baseUrl;
+    if (typeof baseUrl === 'undefined') {
+      throw new Error(
+        'TextTransport: no baseUrl configured. Set `textBaseUrl` on useSession to send text messages.',
+      );
+    }
     const { serverUrl, participantToken } = await this.getCredentials();
     this.cachedToken = participantToken;
     const raw =
-      typeof this.baseUrl === 'function'
-        ? this.baseUrl(projectIdFromServerUrl(serverUrl))
-        : this.baseUrl;
+      typeof baseUrl === 'function' ? baseUrl(projectIdFromServerUrl(serverUrl)) : baseUrl;
     this.resolvedBaseUrl = raw.replace(/\/$/, '');
   }
 
@@ -350,6 +361,23 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
       this._threadId = contextId;
       this.emit('threadStarted', this._threadId);
     }
+
+    // // 1. Track task lifecycle
+    // if (response.task) {
+    //   if (!turn.task) {
+    //     turn.task = {
+    //       id: response.task.id,
+    //       startedAt: null,
+    //       endedAt: null,
+    //     };
+    //   }
+    //   if (response.task.status.state === A2aTaskState.Submitted && response.task.status.timestamp) {
+    //     turn.task.startedAt = new Date(response.task.status.timestamp);
+    //   }
+    //   if (A2A_TASK_STATE_TERMINAL_STATES.includes(response.task.status.state) && response.task.status.timestamp) {
+    //     turn.task.endedAt = new Date(response.task.status.timestamp);
+    //   }
+    // }
 
     // 1. Bare message: a complete, self-contained agent message with no task lifecycle. Emitted by
     // generic A2A agents that don't speak the LiveKit extension (the LiveKit agent never sends it).

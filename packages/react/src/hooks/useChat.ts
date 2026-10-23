@@ -39,24 +39,19 @@ import { useConnectionState } from './useConnectionStatus';
  * ```
  * @public
  */
-export function useChat(options?: ChatOptions & { room?: Room; enabled?: boolean }) {
-  const enabled = options?.enabled ?? true;
+export function useChat(options?: ChatOptions & { room?: Room }) {
   const room = useEnsureRoom(options?.room);
   const connectionState = useConnectionState(room);
   const isDisconnected = React.useMemo(
     () => connectionState === ConnectionState.Disconnected,
     [connectionState],
   ); // used to reset the messages on room disconnect
-  const setup = React.useMemo<ReturnType<typeof setupChat> | null>(
-    () => (enabled ? setupChat(room, options) : null),
-    [room, options, isDisconnected, enabled],
+  const setup = React.useMemo<ReturnType<typeof setupChat>>(
+    () => setupChat(room, options),
+    [room, options, isDisconnected],
   );
-  const isSending = useObservableState(setup?.isSendingObservable, false);
-  const chatMessages = useObservableState<ReceivedChatMessage[]>(setup?.messageObservable, []);
+  const isSending = useObservableState(setup.isSendingObservable, false);
+  const chatMessages = useObservableState<ReceivedChatMessage[]>(setup.messageObservable, []);
 
-  const disabledSend = React.useCallback(async (): Promise<never> => {
-    throw new Error('useChat: cannot send while disabled');
-  }, []);
-
-  return { send: setup?.send ?? disabledSend, chatMessages, isSending };
+  return { send: setup.send, chatMessages, isSending };
 }

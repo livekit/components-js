@@ -10,8 +10,6 @@ export interface UseTranscriptionsOptions {
   room?: Room;
   participantIdentities?: string[];
   trackSids?: string[];
-  /** When false, the hook subscribes to nothing and returns an empty result. Defaults to true. */
-  enabled?: boolean;
 }
 
 /**
@@ -26,10 +24,7 @@ export interface UseTranscriptionsOptions {
  */
 export function useTranscriptions(opts?: UseTranscriptionsOptions) {
   const { participantIdentities, trackSids } = opts ?? {};
-  const { textStreams } = useTextStream(DataTopic.TRANSCRIPTION, {
-    room: opts?.room,
-    enabled: opts?.enabled,
-  });
+  const { textStreams } = useTextStream(DataTopic.TRANSCRIPTION, { room: opts?.room });
 
   const filteredMessages = React.useMemo(
     () =>

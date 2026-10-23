@@ -22,6 +22,8 @@ import { useMaybeRoomContext } from '../context';
 import { AgentState, useAgent, useAgentTimeoutIdStore } from './useAgent';
 import { TrackReference, log } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
+import { TextTransport, type TextTransportBaseUrl } from '../text-transport/TextTransport';
+import { useSessionMessageStore, type SessionMessageStore } from './useSessionMessageStore';
 
 /** @beta */
 export enum SessionEvent {
@@ -81,6 +83,7 @@ export type SwitchActiveDeviceOptions = {
 
 type SessionStateCommon = {
   room: Room;
+  textTransport: TextTransport;
   internal: {
     emitter: TypedEventEmitter<SessionCallbacks>;
     tokenSource: TokenSourceConfigurable | TokenSourceFixed;
@@ -92,6 +95,8 @@ type SessionStateCommon = {
     clearAgentTimeoutFailureReason: () => void;
     updateAgentTimeoutState: (agentState: AgentState) => void;
     updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => void;
+
+    messageStore: SessionMessageStore;
   };
 };
 
@@ -170,6 +175,18 @@ type UseSessionCommonOptions = {
    * transitioning to the "failure" state.
    */
   agentConnectTimeoutMilliseconds?: number;
+
+  /**
+   * The A2A interface base URL (or a callback building it from the project id) for the session's
+   * text transport. Text messages sent via useSessionMessages go here, not the data channel.
+   */
+  textBaseUrl?: TextTransportBaseUrl;
+
+  /**
+   * An existing conversation/thread id to resume. Seeds the text transport's thread id; omit to let
+   * the agent create a new thread on the first message.
+   */
+  threadId?: string;
 };
 
 type UseSessionWithRoomOptions = {
@@ -379,6 +396,8 @@ export function useSession(
     room: optionsRoom,
     agentConnectTimeoutMilliseconds,
     encryption: unstableEncryption,
+    textBaseUrl,
+    threadId,
     ...unstableRestOptions
   } = options;
 
@@ -550,6 +569,15 @@ export function useSession(
     updateAgentTimeoutParticipantExists,
   } = useAgentTimeoutIdStore();
 
+  const messageStore = useSessionMessageStore();
+
+  const tokenSourceFetch = useSessionTokenSourceFetch(tokenSource, unstableRestOptions);
+
+  const textTransport = React.useMemo(
+    () => new TextTransport({ baseUrl: textBaseUrl, getCredentials: tokenSourceFetch, threadId }),
+    [textBaseUrl, tokenSourceFetch, threadId],
+  );
+
   const sessionInternal: UseSessionReturn['internal'] = React.useMemo(
     () => ({
       emitter,
@@ -562,6 +590,8 @@ export function useSession(
       clearAgentTimeoutFailureReason,
       updateAgentTimeoutState,
       updateAgentTimeoutParticipantExists,
+
+      messageStore,
     }),
     [
       emitter,
@@ -573,6 +603,7 @@ export function useSession(
       clearAgentTimeoutFailureReason,
       updateAgentTimeoutState,
       updateAgentTimeoutParticipantExists,
+      messageStore,
     ],
   );
 
@@ -580,6 +611,7 @@ export function useSession(
     SessionStateConnecting | SessionStateConnected | SessionStateDisconnected => {
     const common: SessionStateCommon = {
       room,
+      textTransport,
       internal: sessionInternal,
     };
 
@@ -631,6 +663,7 @@ export function useSession(
   }, [
     sessionInternal,
     room,
+    textTransport,
     roomConnectionState,
     localCamera,
     localMicrophone,
@@ -677,8 +710,6 @@ export function useSession(
       [conversationState, room, sessionInternal],
     ),
   );
-
-  const tokenSourceFetch = useSessionTokenSourceFetch(tokenSource, unstableRestOptions);
 
   const wasSessionEndCalledRef = React.useRef(false);
 
@@ -757,7 +788,9 @@ export function useSession(
     wasSessionEndCalledRef.current = true;
     tokenSourceFetch(true);
     await room.disconnect();
-  }, [room, tokenSourceFetch]);
+    await textTransport.disconnect();
+    messageStore.clear();
+  }, [room, tokenSourceFetch, textTransport, messageStore]);
 
   const prepareConnection = React.useCallback(async () => {
     const credentials = await tokenSourceFetch();

@@ -41,7 +41,9 @@ export type UseSessionMessagesReturn = {
 export function useSessionMessages(session?: UseSessionReturn): UseSessionMessagesReturn {
   const s = useEnsureSession(session);
   const { room, textTransport } = s;
-  const store = s.internal.messageStore;
+  // Destructure the stable store operations: the store object's identity changes whenever messages
+  // change, so depending on it directly would re-run effects / re-create callbacks on every message.
+  const { messages: storeMessages, upsertMessage, upsertMessages, emitter } = s.internal.messageStore;
 
   const agent = useAgent(session);
 
@@ -101,8 +103,8 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
   // Mirror transcriptions into the shared store. Loop-safe: deps are the memoized transcription
   // array (stable until it changes), and the store upsert short-circuits when nothing changed.
   React.useEffect(() => {
-    store.upsertMessages(transcriptionMessages);
-  }, [transcriptionMessages, store]);
+    upsertMessages(transcriptionMessages);
+  }, [transcriptionMessages, upsertMessages]);
 
   const [isSending, setIsSending] = React.useState(false);
 
@@ -114,7 +116,7 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
         message,
         attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: 'user' },
       };
-      store.upsertMessage(initialUserMessage);
+      upsertMessage(initialUserMessage);
 
       setIsSending(true);
       const stream = await textTransport.requestMessageStream(message);
@@ -123,7 +125,7 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
       (async () => {
         try {
           for await (const streamedMessage of stream) {
-            store.upsertMessage(streamedMessage);
+            upsertMessage(streamedMessage);
           }
         } catch (err) {
           // FIXME: figure out how to handle errors here, should these somehow put the agent into an
@@ -134,16 +136,16 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
 
       return initialUserMessage;
     },
-    [textTransport, store],
+    [textTransport, upsertMessage],
   );
 
   return React.useMemo(
     () => ({
-      messages: store.messages,
+      messages: storeMessages,
       send,
       isSending,
-      internal: { emitter: store.emitter },
+      internal: { emitter },
     }),
-    [store.messages, store.emitter, send, isSending],
+    [storeMessages, emitter, send, isSending],
   );
 }

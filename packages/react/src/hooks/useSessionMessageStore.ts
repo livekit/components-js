@@ -121,6 +121,9 @@ export function useSessionMessageStore(): SessionMessageStore {
   );
 
   const clear = React.useCallback(() => {
+    if (messagesMapRef.current.size === 0) {
+      return;
+    }
     messagesMapRef.current.clear();
     firstReceivedTimeMapRef.current.clear();
     seenIdsRef.current.clear();

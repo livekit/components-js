@@ -790,7 +790,7 @@ export function useSession(
     await room.disconnect();
     await textTransport.disconnect();
     messageStore.clear();
-  }, [room, tokenSourceFetch, textTransport, messageStore]);
+  }, [room, tokenSourceFetch, textTransport, messageStore.clear]);
 
   const prepareConnection = React.useCallback(async () => {
     const credentials = await tokenSourceFetch();

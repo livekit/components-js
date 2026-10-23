@@ -467,6 +467,9 @@ export interface ReactShaderToyProps {
    * reducing CPU/GPU usage when the shader is off-screen.
    */
   animateWhenNotVisible?: boolean;
+
+  /** Freeze shader time and draw only when uniforms, size, or visibility change. */
+  paused?: boolean;
 }
 
 export function ReactShaderToy({
@@ -484,6 +487,7 @@ export function ReactShaderToy({
   onError = console.error,
   onWarning = console.warn,
   animateWhenNotVisible = false,
+  paused = false,
   ...canvasProps
 }: ReactShaderToyProps & ComponentPropsWithoutRef<'canvas'>) {
   // Refs for WebGL state
@@ -496,6 +500,7 @@ export function ReactShaderToy({
   const initFrameIdRef = useRef<number | undefined>(undefined);
   const isVisibleRef = useRef(true);
   const animateWhenNotVisibleRef = useRef(animateWhenNotVisible);
+  const pausedRef = useRef(paused);
   const mousedownRef = useRef(false);
   const canvasPositionRef = useRef<DOMRect | undefined>(undefined);
   const timerRef = useRef(0);
@@ -624,6 +629,7 @@ export function ReactShaderToy({
       const rUniform = gl.getUniformLocation(shaderProgramRef.current, UNIFORM_RESOLUTION);
       gl.uniform2fv(rUniform, [gl.canvas.width, gl.canvas.height]);
     }
+    requestDraw();
   };
 
   const createShader = (type: number, shaderCodeAsText: string) => {
@@ -714,6 +720,7 @@ export function ReactShaderToy({
       });
       Promise.all(texturePromisesArr)
         .then(() => {
+          requestDraw();
           if (onDoneLoadingTextures) onDoneLoadingTextures();
         })
         .catch((e) => {
@@ -756,7 +763,8 @@ export function ReactShaderToy({
   const setUniforms = (timestamp: number) => {
     const gl = glRef.current;
     if (!gl || !shaderProgramRef.current) return;
-    const delta = lastTimeRef.current ? (timestamp - lastTimeRef.current) / 1000 : 0;
+    const delta =
+      !pausedRef.current && lastTimeRef.current ? (timestamp - lastTimeRef.current) / 1000 : 0;
     lastTimeRef.current = timestamp;
     const propUniforms = propsUniformsRef.current;
     if (propUniforms) {
@@ -842,8 +850,9 @@ export function ReactShaderToy({
   };
 
   const drawScene = (timestamp: number) => {
+    animFrameIdRef.current = undefined;
     const gl = glRef.current;
-    if (!gl) return;
+    if (!gl || !shaderProgramRef.current) return;
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBufferRef.current);
@@ -857,7 +866,17 @@ export function ReactShaderToy({
       mouseValue[0] = lerpVal(currentX, lastMouseArrRef.current[0] ?? 0, lerp);
       mouseValue[1] = lerpVal(currentY, lastMouseArrRef.current[1] ?? 0, lerp);
     }
-    if (animateWhenNotVisibleRef.current || isVisibleRef.current) {
+    if (!pausedRef.current) requestDraw();
+  };
+
+  // All draw requests share one slot, including initialization and observer callbacks.
+  const requestDraw = () => {
+    if (
+      glRef.current &&
+      shaderProgramRef.current &&
+      animFrameIdRef.current === undefined &&
+      (animateWhenNotVisibleRef.current || isVisibleRef.current)
+    ) {
       animFrameIdRef.current = requestAnimationFrame(drawScene);
     }
   };
@@ -905,13 +924,24 @@ export function ReactShaderToy({
 
   useEffect(() => {
     propsUniformsRef.current = propUniforms;
+    requestDraw();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propUniforms]);
+
+  useEffect(() => {
+    pausedRef.current = paused;
+    lastTimeRef.current = 0;
+    requestDraw();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused]);
 
   useEffect(() => {
     animateWhenNotVisibleRef.current = animateWhenNotVisible;
     if (animateWhenNotVisible) {
       isVisibleRef.current = true;
+      requestDraw();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animateWhenNotVisible]);
 
   // Intersection Observer: pause animation when off-screen when animateWhenNotVisible is false
@@ -923,7 +953,11 @@ export function ReactShaderToy({
         for (const entry of entries) {
           isVisibleRef.current = entry.isIntersecting;
           if (entry.isIntersecting) {
-            requestAnimationFrame(drawScene);
+            lastTimeRef.current = 0;
+            requestDraw();
+          } else {
+            cancelAnimationFrame(animFrameIdRef.current ?? 0);
+            animFrameIdRef.current = undefined;
           }
         }
       },
@@ -953,7 +987,7 @@ export function ReactShaderToy({
         processTextures();
         initShaders(preProcessFragment(fs || BASIC_FS), vs || BASIC_VS);
         initBuffers();
-        requestAnimationFrame(drawScene);
+        requestDraw();
         addEventListeners();
         onResize();
       }
@@ -974,10 +1008,12 @@ export function ReactShaderToy({
           }
         }
         shaderProgramRef.current = null;
+        glRef.current = null;
       }
       removeEventListeners();
       cancelAnimationFrame(initFrameIdRef.current ?? 0);
       cancelAnimationFrame(animFrameIdRef.current ?? 0);
+      animFrameIdRef.current = undefined;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Empty dependency array to run only once on mount

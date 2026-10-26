@@ -927,26 +927,24 @@ export function useSession(
   const end = React.useCallback(async () => {
     await endMedia();
     await textTransport.disconnect();
+  }, [endMedia, textTransport]);
+
+  // When the passed thread id changes, then clear the message store.
+  const previousLoadedThreadIdRef = React.useRef(threadId ?? null);
+  React.useEffect(() => {
+    if (threadId === previousLoadedThreadIdRef.current) {
+      return;
+    }
     messageStore.clear();
-  }, [endMedia, textTransport, messageStore.clear]);
+    previousLoadedThreadIdRef.current = threadId ?? null;
+  }, [threadId, messageStore.clear]);
 
   // Seed the transcript from the active thread's existing messages. When a threadId is provided we
   // fetch its full history (paginated to the start) and upsert it into the shared store; a session
   // with no threadId starts empty. Switching threadId drops the previous thread's transcript first.
-  const previousLoadedThreadIdRef = React.useRef<string | undefined>(undefined);
   React.useEffect(() => {
-    if (previousLoadedThreadIdRef.current === threadId) {
-      return;
-    }
-    const isThreadIdChange = typeof previousLoadedThreadIdRef.current !== 'undefined';
-    previousLoadedThreadIdRef.current = threadId;
-
     if (typeof threadId === 'undefined') {
       return;
-    }
-
-    if (isThreadIdChange) {
-      messageStore.clear();
     }
 
     const controller = new AbortController();

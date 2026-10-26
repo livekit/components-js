@@ -72,6 +72,19 @@ type A2aArtifact = {
   parts?: Array<A2aPart>;
 };
 
+// The `tasks/list` response shape (A2A ProtoJSON), used to load a thread's history.
+type A2aTask = {
+  id?: string;
+  contextId?: string;
+  status?: { state?: string; timestamp?: string; message?: A2aMessage };
+  history?: Array<A2aMessage>;
+};
+
+type A2aListTasksResponse = {
+  tasks?: Array<A2aTask>;
+  nextPageToken?: string;
+};
+
 enum A2aTaskState {
   /** reserved (0); the codec treats it as working */
   Unspecified = 'TASK_STATE_UNSPECIFIED',
@@ -184,6 +197,42 @@ function normalizeRole(roleRaw: string | undefined): 'assistant' | 'user' {
   return roleRaw === 'ROLE_AGENT' || roleRaw === 'agent' || roleRaw === 'assistant'
     ? 'assistant'
     : 'user';
+}
+
+const HISTORY_PAGE_SIZE = 100;
+// tasks/list defaults historyLength to 0 (no messages) when absent, so request a large window to get
+// each task's full per-turn history.
+const HISTORY_MESSAGE_LENGTH = 100_000;
+
+/** The A2A status timestamp (RFC3339) of a task as epoch ms, or 0 when absent/unparseable. */
+function taskTimestamp(task: A2aTask): number {
+  const raw = task.status?.timestamp;
+  const parsed = raw ? Date.parse(raw) : NaN;
+  return Number.isNaN(parsed) ? 0 : parsed;
+}
+
+/** Map an A2A message (text parts only) to a ReceivedChatMessage, or null when it carries no text. */
+function messageToReceivedChatMessage(
+  message: A2aMessage,
+  timestamp: number,
+): ReceivedChatMessage | null {
+  if (!message.parts) {
+    return null;
+  }
+  const text = message.parts
+    .filter((part) => typeof part.text === 'string' && part.text.length > 0)
+    .map((part) => part.text)
+    .join('');
+  if (!text) {
+    return null;
+  }
+  const role = normalizeRole(message.role);
+  return {
+    id: message.messageId ?? crypto.randomUUID(),
+    message: text,
+    timestamp: timestamp || Date.now(),
+    attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: role },
+  };
 }
 
 type TextTransportCallbacks = {
@@ -447,5 +496,110 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
 
     // TODO(text-mode): data parts (delegations/chat-ctx), interruptions, directives, and task
     // lifecycle/error states are still dropped. Supporting them requires extending `ReceivedMessage`.
+  }
+
+  /**
+   * Load the current thread's message history (A2A `tasks/list`, paginated to the start), oldest
+   * message first. Returns an empty array when there is no thread yet. Only `message`-kind text is
+   * mapped; tool calls, artifacts and other item kinds are skipped (same scope as the live stream).
+   *
+   * NOTE: this is the pragmatic interim path — `tasks/list` on the agent endpoint returns per-turn
+   * task history, which we flatten in task order. The canonical thread-history API is the agentstore
+   * `GetThreadItems`, not yet reachable from the browser; swapping to it stays internal to this method.
+   */
+  async loadThreadMessages(options: { signal?: AbortSignal } = {}): Promise<ReceivedChatMessage[]> {
+    if (!this._threadId) {
+      return [];
+    }
+    if (!this.cachedToken || !this.resolvedBaseUrl) {
+      await this.connect();
+    }
+    const token = this.cachedToken!;
+    const baseUrl = this.resolvedBaseUrl!;
+
+    const tasks: Array<A2aTask> = [];
+    let pageToken: string | undefined;
+    do {
+      const page = await this.requestTasksPage(baseUrl, token, pageToken, options.signal);
+      if (page.tasks) {
+        tasks.push(...page.tasks);
+      }
+      pageToken = page.nextPageToken || undefined;
+    } while (pageToken);
+
+    // Oldest turn first; each task's history is already in order.
+    tasks.sort((a, b) => taskTimestamp(a) - taskTimestamp(b));
+
+    const messages: Array<ReceivedChatMessage> = [];
+    for (const task of tasks) {
+      const timestamp = taskTimestamp(task);
+      for (const message of task.history ?? []) {
+        const received = messageToReceivedChatMessage(message, timestamp);
+        if (received) {
+          messages.push(received);
+        }
+      }
+      const statusMessage = task.status?.message;
+      if (statusMessage) {
+        const received = messageToReceivedChatMessage(statusMessage, timestamp);
+        if (received) {
+          messages.push(received);
+        }
+      }
+    }
+    return messages;
+  }
+
+  private async requestTasksPage(
+    baseUrl: string,
+    token: string,
+    pageToken: string | undefined,
+    signal: AbortSignal | undefined,
+  ): Promise<A2aListTasksResponse> {
+    const controller = new AbortController();
+    this.activeControllers.add(controller);
+    const onExternalAbort = () => controller.abort();
+    signal?.addEventListener('abort', onExternalAbort);
+
+    try {
+      const response = await fetch(`${baseUrl}/v1`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/a2a+json',
+          'A2A-Version': '1.0',
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: this.nextRequestId++,
+          method: 'tasks/list',
+          params: {
+            contextId: this._threadId,
+            historyLength: HISTORY_MESSAGE_LENGTH,
+            pageSize: HISTORY_PAGE_SIZE,
+            ...(pageToken ? { pageToken } : {}),
+          },
+        }),
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        throw new Error(`TextTransport.loadThreadMessages failed: HTTP ${response.status}`);
+      }
+
+      const envelope = (await response.json()) as {
+        result?: A2aListTasksResponse;
+        error?: unknown;
+      };
+      if (envelope.error) {
+        throw new Error(
+          `TextTransport.loadThreadMessages: JSON-RPC error ${JSON.stringify(envelope.error)}`,
+        );
+      }
+      return envelope.result ?? {};
+    } finally {
+      signal?.removeEventListener('abort', onExternalAbort);
+      this.activeControllers.delete(controller);
+    }
   }
 }

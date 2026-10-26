@@ -930,6 +930,44 @@ export function useSession(
     messageStore.clear();
   }, [endMedia, textTransport, messageStore.clear]);
 
+  // Seed the transcript from the active thread's existing messages. When a threadId is provided we
+  // fetch its full history (paginated to the start) and upsert it into the shared store; a session
+  // with no threadId starts empty. Switching threadId drops the previous thread's transcript first.
+  const previousLoadedThreadIdRef = React.useRef<string | undefined>(undefined);
+  React.useEffect(() => {
+    if (previousLoadedThreadIdRef.current === threadId) {
+      return;
+    }
+    const isThreadIdChange = typeof previousLoadedThreadIdRef.current !== 'undefined';
+    previousLoadedThreadIdRef.current = threadId;
+
+    if (typeof threadId === 'undefined') {
+      return;
+    }
+
+    if (isThreadIdChange) {
+      messageStore.clear();
+    }
+
+    const controller = new AbortController();
+    void (async () => {
+      try {
+        const history = await textTransport.loadThreadMessages({ signal: controller.signal });
+        if (!controller.signal.aborted) {
+          messageStore.upsertMessages(history);
+        }
+      } catch (err) {
+        if (!controller.signal.aborted) {
+          log.warn('useSession: failed to load thread history', err);
+        }
+      }
+    })();
+
+    return () => {
+      controller.abort();
+    };
+  }, [threadId, textTransport, messageStore.upsertMessages, messageStore.clear]);
+
   return React.useMemo(
     () => ({
       ...conversationState,

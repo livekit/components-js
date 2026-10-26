@@ -1,3 +1,4 @@
+import { ReducedMotionVisualizer } from '../../.storybook/lk-decorators/ReducedMotionVisualizer';
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
@@ -80,35 +81,11 @@ export const OverrideVolume: StoryObj<AgentAudioVisualizerWaveProps> = {
   },
 };
 
-// No room or microphone required. Change the browser's prefers-reduced-motion
-// emulation (or the OS preference) while this story is open to compare both modes.
-export const MotionPreferences: StoryObj<AgentAudioVisualizerWaveProps> = {
-  parameters: {
-    layout: 'padded',
-    docs: {
-      description: {
-        story:
-          'Enable prefers-reduced-motion in browser developer tools or your OS settings. The waves become still, state-specific silhouettes: no travel, pulsing, or volume-driven deformation. Change the preference without reloading to resume animation. Simulated volume needs no LiveKit connection.',
-      },
-    },
-  },
-  render: (args: AgentAudioVisualizerWaveProps) => {
-    const [volume] = useSimulatedVolumeBands(1);
-    return (
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {(['disconnected', 'listening', 'thinking', 'speaking'] as const).map((state) => (
-          <figure key={state} className="flex flex-col items-center rounded-lg border p-4">
-            <AgentAudioVisualizerWave
-              {...args}
-              size="md"
-              state={state}
-              volume={volume}
-              aria-hidden="true"
-            />
-            <figcaption className="text-sm capitalize">{state}</figcaption>
-          </figure>
-        ))}
-      </div>
-    );
-  },
+export const ReducedMotion: StoryObj<AgentAudioVisualizerWaveProps> = {
+  args: { state: 'listening', size: 'md' },
+  render: (args: AgentAudioVisualizerWaveProps) => (
+    <ReducedMotionVisualizer>
+      {(paused) => <AgentAudioVisualizerWave {...args} paused={paused} />}
+    </ReducedMotionVisualizer>
+  ),
 };

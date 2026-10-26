@@ -14,7 +14,6 @@
           "type": "registry:component"
         }
       ],
-
       "dependencies": [
         "@livekit/components-react@^2.0.0",
         "class-variance-authority",
@@ -113,7 +112,7 @@
         "class-variance-authority",
         "lucide-react"
       ],
-      "registryDependencies": ["utils"]
+      "registryDependencies": ["utils", "@agents-ui/agent-audio-visualizer-motion"]
     },
     {
       "name": "agent-audio-visualizer-radial",
@@ -135,7 +134,7 @@
         "@livekit/components-react@^2.0.0",
         "class-variance-authority"
       ],
-      "registryDependencies": ["utils"]
+      "registryDependencies": ["utils", "@agents-ui/agent-audio-visualizer-motion"]
     },
     {
       "name": "agent-audio-visualizer-grid",
@@ -157,13 +156,13 @@
         "@livekit/components-react@^2.0.0",
         "class-variance-authority"
       ],
-      "registryDependencies": ["utils"]
+      "registryDependencies": ["utils", "@agents-ui/agent-audio-visualizer-motion"]
     },
     {
       "name": "agent-session-provider",
       "type": "registry:component",
       "title": "Agent Session Provider",
-      "description": "A component for providing an agent's session context and ensuring remote participants’ audio tracks (microphones and screen share) are audible.",
+      "description": "A component for providing an agent's session context and ensuring remote participants\u2019 audio tracks (microphones and screen share) are audible.",
       "files": [
         {
           "path": "components/agents-ui/agent-session-provider.tsx",
@@ -252,7 +251,11 @@
         "@livekit/components-react@^2.0.0",
         "class-variance-authority"
       ],
-      "registryDependencies": ["utils", "@agents-ui/react-shader-toy"]
+      "registryDependencies": [
+        "utils",
+        "@agents-ui/react-shader-toy",
+        "@agents-ui/agent-audio-visualizer-motion"
+      ]
     },
     {
       "name": "agent-audio-visualizer-aura",
@@ -274,7 +277,11 @@
         "@livekit/components-react@^2.0.0",
         "class-variance-authority"
       ],
-      "registryDependencies": ["utils", "@agents-ui/react-shader-toy"]
+      "registryDependencies": [
+        "utils",
+        "@agents-ui/react-shader-toy",
+        "@agents-ui/agent-audio-visualizer-motion"
+      ]
     },
     {
       "name": "nextjs-api-token-route",
@@ -389,8 +396,27 @@
         "@agents-ui/agent-chat-transcript",
         "@agents-ui/react-shader-toy",
         "@agents-ui/agent-session-view-01",
-        "@agents-ui/agent-popup-01"
+        "@agents-ui/agent-popup-01",
+        "@agents-ui/agent-audio-visualizer-motion"
       ]
+    },
+    {
+      "name": "agent-audio-visualizer-motion",
+      "type": "registry:component",
+      "title": "Agent Audio Visualizer Motion",
+      "description": "Shared reduced-motion preference, playback controls, and text state for audio visualizers.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-audio-visualizer-motion.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "hooks/agents-ui/use-agent-audio-visualizer-motion.ts",
+          "type": "registry:hook"
+        }
+      ],
+      "dependencies": ["@livekit/components-react@^2.0.0"],
+      "registryDependencies": ["button", "utils"]
     }
   ]
 }

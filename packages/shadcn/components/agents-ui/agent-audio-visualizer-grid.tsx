@@ -1,5 +1,12 @@
 'use client';
 
+import { usePrefersReducedMotion } from '@/hooks/agents-ui/use-agent-audio-visualizer-motion';
+import {
+  AgentAudioVisualizerState,
+  visualizerContainerProps,
+  type AgentAudioVisualizerMotionProps,
+} from '@/components/agents-ui/agent-audio-visualizer-motion';
+
 import React, {
   type CSSProperties,
   Children,
@@ -199,60 +206,45 @@ const GridCell = memo(function GridCell({
 /**
  * Props for the AgentAudioVisualizerGrid component.
  */
-export type AgentAudioVisualizerGridProps = GridOptions & {
-  /**
-   * The size of the visualizer.
-   * @defaultValue 'md'
-   */
-  size?: 'icon' | 'sm' | 'md' | 'lg' | 'xl';
-  /**
-   * The current state of the agent. Determines the animation pattern.
-   * @defaultValue 'connecting'
-   */
-  state?: AgentState;
-  /**
-   * The color of the grid cells in hexidecimal format.
-   */
-  color?: `#${string}`;
-  /**
-   * The audio track to visualize. Can be a local/remote audio track or a track reference.
-   */
-  audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
-  /**
-   * Volume values (0-1) to use instead of the values computed from the audioTrack.
-   * The volumeBands.length should match columnCount.
-   */
-  volumeBands?: number[];
-  /**
-   * Additional CSS class names to apply to the container.
-   */
-  className?: string;
-  /**
-   * Custom element to render as grid cells. Each child receives data-lk-index
-   * and data-lk-highlighted props.
-   */
-  children?: ReactNode;
-} & VariantProps<typeof AgentAudioVisualizerGridVariants>;
+export type AgentAudioVisualizerGridProps = GridOptions &
+  AgentAudioVisualizerMotionProps & {
+    /**
+     * The size of the visualizer.
+     * @defaultValue 'md'
+     */
+    size?: 'icon' | 'sm' | 'md' | 'lg' | 'xl';
+    /**
+     * The current state of the agent. Determines the animation pattern.
+     * @defaultValue 'connecting'
+     */
+    state?: AgentState;
+    /**
+     * The color of the grid cells in hexidecimal format.
+     */
+    color?: `#${string}`;
+    /**
+     * The audio track to visualize. Can be a local/remote audio track or a track reference.
+     */
+    audioTrack?: LocalAudioTrack | RemoteAudioTrack | TrackReferenceOrPlaceholder;
+    /**
+     * Volume values (0-1) to use instead of the values computed from the audioTrack.
+     * The volumeBands.length should match columnCount.
+     */
+    volumeBands?: number[];
+    /**
+     * Additional CSS class names to apply to the container.
+     */
+    className?: string;
+    /**
+     * Custom element to render as grid cells. Each child receives data-lk-index
+     * and data-lk-highlighted props.
+     * While paused, custom children remain hidden for sizing. Control any
+     * animations owned by those children separately; the grid animator stops.
+     */
+    children?: ReactNode;
+  } & VariantProps<typeof AgentAudioVisualizerGridVariants>;
 
-/**
- * A grid-style audio visualizer that responds to agent state and audio levels.
- * Displays an animated grid of cells that react to the current agent state
- * and audio volume when speaking.
- *
- * @extends ComponentProps<'div'>
- *
- * @example
- * ```tsx
- * <AgentAudioVisualizerGrid
- *   size="md"
- *   state="speaking"
- *   rowCount={5}
- *   columnCount={5}
- *   audioTrack={agentAudioTrack}
- * />
- * ```
- */
-export function AgentAudioVisualizerGrid({
+function AgentAudioVisualizerGridAnimation({
   size = 'md',
   state = 'connecting',
   radius,
@@ -311,6 +303,94 @@ export function AgentAudioVisualizerGrid({
           {children ?? <div className={AgentAudioVisualizerGridCellVariants({ size })} />}
         </GridCell>
       ))}
+    </div>
+  );
+}
+
+/**
+ * A grid-style audio visualizer that responds to agent state and audio levels.
+ * Displays an animated grid of cells that react to the current agent state
+ * and audio volume when speaking.
+ *
+ * When paused, shows text state instead of animation. Use the shared motion hook
+ * and AgentAudioVisualizerToggle to place playback controls in your app.
+ *
+ * @extends ComponentProps<'div'>
+ *
+ * @example
+ * ```tsx
+ * <AgentAudioVisualizerGrid
+ *   size="md"
+ *   state="speaking"
+ *   rowCount={5}
+ *   columnCount={5}
+ *   audioTrack={agentAudioTrack}
+ * />
+ * ```
+ */
+export function AgentAudioVisualizerGrid({
+  paused,
+  pausedContent,
+  ...animationProps
+}: Parameters<typeof AgentAudioVisualizerGridAnimation>[0]) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  if (!(paused ?? prefersReducedMotion))
+    return <AgentAudioVisualizerGridAnimation {...animationProps} />;
+  const {
+    size = 'md',
+    state = 'connecting',
+    rowCount = 5,
+    columnCount = 5,
+    children,
+    className,
+    style,
+  } = animationProps;
+  const htmlProps = visualizerContainerProps(animationProps, [
+    'size',
+    'state',
+    'radius',
+    'color',
+    'rowCount',
+    'columnCount',
+    'interval',
+    'audioTrack',
+    'volumeBands',
+    'children',
+    'className',
+    'style',
+  ]);
+  return (
+    <div
+      {...htmlProps}
+      data-lk-state={state}
+      data-lk-paused="true"
+      className={cn(AgentAudioVisualizerGridVariants({ size }), 'relative min-w-max', className)}
+      style={{
+        ...style,
+        gridTemplateColumns: `repeat(${columnCount}, 1fr)`,
+        gridTemplateRows: `repeat(${rowCount}, auto)`,
+      }}
+    >
+      <div aria-hidden="true" className="invisible contents">
+        {Array.from({ length: rowCount * columnCount }, (_, index) => (
+          <div
+            key={index}
+            className="invisible place-self-center"
+            style={{
+              gridColumn: (index % columnCount) + 1,
+              gridRow: Math.floor(index / columnCount) + 1,
+            }}
+          >
+            {children ?? <div className={AgentAudioVisualizerGridCellVariants({ size })} />}
+          </div>
+        ))}
+      </div>
+      <div
+        className="flex items-center justify-center whitespace-nowrap text-sm text-foreground"
+        style={{ gridArea: '1 / 1 / -1 / -1' }}
+      >
+        {pausedContent !== undefined ? pausedContent : <AgentAudioVisualizerState state={state} />}
+      </div>
     </div>
   );
 }

@@ -1,5 +1,12 @@
 'use client';
 
+import { usePrefersReducedMotion } from '@/hooks/agents-ui/use-agent-audio-visualizer-motion';
+import {
+  AgentAudioVisualizerPaused,
+  visualizerContainerProps,
+  type AgentAudioVisualizerMotionProps,
+} from '@/components/agents-ui/agent-audio-visualizer-motion';
+
 import { type ComponentProps, type CSSProperties, useMemo } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type LocalAudioTrack, type RemoteAudioTrack } from 'livekit-client';
@@ -53,7 +60,7 @@ export const AgentAudioVisualizerRadialVariants = cva(
 /**
  * Props for the AgentAudioVisualizerRadial component.
  */
-export interface AgentAudioVisualizerRadialProps {
+export interface AgentAudioVisualizerRadialProps extends AgentAudioVisualizerMotionProps {
   /**
    * The size of the visualizer.
    * @defaultValue 'md'
@@ -94,24 +101,7 @@ export interface AgentAudioVisualizerRadialProps {
   className?: string;
 }
 
-/**
- * A radial (circular) audio visualizer that responds to agent state and audio levels.
- * Displays animated bars arranged in a circle that react to the current agent state
- * and audio volume when speaking.
- *
- * @extends ComponentProps<'div'>
- *
- * @example
- * ```tsx
- * <AgentAudioVisualizerRadial
- *   size="lg"
- *   state="speaking"
- *   barCount={24}
- *   audioTrack={agentAudioTrack}
- * />
- * ```
- */
-export function AgentAudioVisualizerRadial({
+function AgentAudioVisualizerRadialAnimation({
   size = 'md',
   state = 'connecting',
   color,
@@ -227,5 +217,55 @@ export function AgentAudioVisualizerRadial({
         );
       })}
     </div>
+  );
+}
+
+/**
+ * A radial (circular) audio visualizer that responds to agent state and audio levels.
+ * Displays animated bars arranged in a circle that react to the current agent state
+ * and audio volume when speaking.
+ *
+ * When paused, shows text state instead of animation. Use the shared motion hook
+ * and AgentAudioVisualizerToggle to place playback controls in your app.
+ *
+ * @extends ComponentProps<'div'>
+ *
+ * @example
+ * ```tsx
+ * <AgentAudioVisualizerRadial
+ *   size="lg"
+ *   state="speaking"
+ *   barCount={24}
+ *   audioTrack={agentAudioTrack}
+ * />
+ * ```
+ */
+export function AgentAudioVisualizerRadial({
+  paused,
+  pausedContent,
+  ...animationProps
+}: Parameters<typeof AgentAudioVisualizerRadialAnimation>[0]) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  if (!(paused ?? prefersReducedMotion))
+    return <AgentAudioVisualizerRadialAnimation {...animationProps} />;
+  const { size = 'md', state = 'connecting' } = animationProps;
+  const htmlProps = visualizerContainerProps(animationProps, [
+    'size',
+    'state',
+    'color',
+    'radius',
+    'barCount',
+    'audioTrack',
+    'volumeBands',
+    'children',
+  ]);
+  return (
+    <AgentAudioVisualizerPaused
+      {...htmlProps}
+      size={size}
+      state={state}
+      square={false}
+      pausedContent={pausedContent}
+    />
   );
 }

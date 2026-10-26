@@ -1,5 +1,12 @@
 'use client';
 
+import { usePrefersReducedMotion } from '@/hooks/agents-ui/use-agent-audio-visualizer-motion';
+import {
+  AgentAudioVisualizerPaused,
+  visualizerContainerProps,
+  type AgentAudioVisualizerMotionProps,
+} from '@/components/agents-ui/agent-audio-visualizer-motion';
+
 import { useMemo, type ComponentProps } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/components-react';
@@ -148,7 +155,6 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 }`;
 
 interface WaveShaderProps {
-  paused?: boolean;
   /**
    * Class name
    * @default ''
@@ -197,7 +203,6 @@ interface WaveShaderProps {
 }
 
 function WaveShader({
-  paused,
   speed = 10,
   color = '#1FD5F9',
   colorShift = 0.05,
@@ -211,27 +216,22 @@ function WaveShader({
   ...props
 }: WaveShaderProps & ComponentProps<'div'>) {
   const rgbColor = useMemo(() => hexToRgb(color), [color]);
-  const uniforms = useMemo(
-    () => ({
-      uSpeed: { type: '1f', value: speed },
-      uAmplitude: { type: '1f', value: amplitude },
-      uFrequency: { type: '1f', value: frequency },
-      uMix: { type: '1f', value: mix },
-      uLineWidth: { type: '1f', value: lineWidth },
-      uSmoothing: { type: '1f', value: blur },
-      uColor: { type: '3fv', value: rgbColor },
-      uColorShift: { type: '1f', value: colorShift },
-    }),
-    [speed, amplitude, frequency, mix, lineWidth, blur, rgbColor, colorShift],
-  );
 
   return (
     <div ref={ref} className={className} {...props}>
       <ReactShaderToy
-        paused={paused}
         fs={shaderSource}
         devicePixelRatio={globalThis.devicePixelRatio ?? 1}
-        uniforms={uniforms}
+        uniforms={{
+          uSpeed: { type: '1f', value: speed },
+          uAmplitude: { type: '1f', value: amplitude },
+          uFrequency: { type: '1f', value: frequency },
+          uMix: { type: '1f', value: mix },
+          uLineWidth: { type: '1f', value: lineWidth },
+          uSmoothing: { type: '1f', value: blur },
+          uColor: { type: '3fv', value: rgbColor },
+          uColorShift: { type: '1f', value: colorShift },
+        }}
         onError={(error) => {
           console.error('Shader error:', error);
         }}
@@ -261,7 +261,7 @@ export const AgentAudioVisualizerWaveVariants = cva(['aspect-square'], {
   },
 });
 
-export interface AgentAudioVisualizerWaveProps {
+export interface AgentAudioVisualizerWaveProps extends AgentAudioVisualizerMotionProps {
   /**
    * The size of the visualizer.
    * @defaultValue 'lg'
@@ -306,28 +306,7 @@ export interface AgentAudioVisualizerWaveProps {
   className?: string;
 }
 
-/**
- * A wave-style audio visualizer that responds to agent state and audio levels.
- * Displays an animated wave that reacts to the current agent state (connecting, thinking, speaking, etc.)
- * and audio volume when speaking.
- * Respects `prefers-reduced-motion` with a still, state-specific wave, without
- * pulsing or volume-driven deformation. Preference changes apply without a reload.
- *
- * @extends ComponentProps<'div'>
- *
- * @example ```tsx
- * <AgentAudioVisualizerWave
- *   size="lg"
- *   state="speaking"
- *   color="#1FD5F9"
- *   colorShift={0.3}
- *   lineWidth={2}
- *   blur={0.5}
- *   audioTrack={audioTrack}
- * />
- * ```
- */
-export function AgentAudioVisualizerWave({
+function AgentAudioVisualizerWaveAnimation({
   size = 'lg',
   state = 'speaking',
   color,
@@ -355,7 +334,7 @@ export function AgentAudioVisualizerWave({
     }
   }, [lineWidth, size]);
 
-  const { speed, amplitude, frequency, opacity, reducedMotion } = useAgentAudioVisualizerWave({
+  const { speed, amplitude, frequency, opacity } = useAgentAudioVisualizerWave({
     state,
     audioTrack,
     volume,
@@ -363,7 +342,6 @@ export function AgentAudioVisualizerWave({
 
   return (
     <WaveShader
-      paused={reducedMotion}
       ref={ref}
       data-lk-state={state}
       speed={speed}
@@ -380,6 +358,59 @@ export function AgentAudioVisualizerWave({
         className,
       )}
       {...props}
+    />
+  );
+}
+
+/**
+ * A wave-style audio visualizer that responds to agent state and audio levels.
+ * Displays an animated wave that reacts to the current agent state (connecting, thinking, speaking, etc.)
+ * and audio volume when speaking.
+ *
+ * When paused, shows text state instead of animation. Use the shared motion hook
+ * and AgentAudioVisualizerToggle to place playback controls in your app.
+ *
+ * @extends ComponentProps<'div'>
+ *
+ * @example ```tsx
+ * <AgentAudioVisualizerWave
+ *   size="lg"
+ *   state="speaking"
+ *   color="#1FD5F9"
+ *   colorShift={0.3}
+ *   lineWidth={2}
+ *   blur={0.5}
+ *   audioTrack={audioTrack}
+ * />
+ * ```
+ */
+export function AgentAudioVisualizerWave({
+  paused,
+  pausedContent,
+  ...animationProps
+}: Parameters<typeof AgentAudioVisualizerWaveAnimation>[0]) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  if (!(paused ?? prefersReducedMotion))
+    return <AgentAudioVisualizerWaveAnimation {...animationProps} />;
+  const { size = 'lg', state = 'speaking' } = animationProps;
+  const htmlProps = visualizerContainerProps(animationProps, [
+    'size',
+    'state',
+    'color',
+    'colorShift',
+    'lineWidth',
+    'blur',
+    'audioTrack',
+    'volume',
+    'children',
+  ]);
+  return (
+    <AgentAudioVisualizerPaused
+      {...htmlProps}
+      size={size}
+      state={state}
+      square={true}
+      pausedContent={pausedContent}
     />
   );
 }

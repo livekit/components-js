@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback, useSyncExternalStore } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import {
   type AnimationPlaybackControlsWithThen,
   type ValueAnimationTransition,
@@ -12,27 +12,12 @@ import {
   type TrackReferenceOrPlaceholder,
   useTrackVolume,
 } from '@livekit/components-react';
-import type { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
+import { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
 
 const DEFAULT_SPEED = 5;
 const DEFAULT_AMPLITUDE = 0.025;
 const DEFAULT_FREQUENCY = 10;
 const DEFAULT_TRANSITION: ValueAnimationTransition = { duration: 0.2, ease: 'easeOut' };
-
-const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
-
-function subscribeToReducedMotion(onChange: () => void) {
-  const media = window.matchMedia?.(REDUCED_MOTION_QUERY);
-  media?.addEventListener('change', onChange);
-  return () => media?.removeEventListener('change', onChange);
-}
-
-function getReducedMotion() {
-  return window.matchMedia?.(REDUCED_MOTION_QUERY).matches ?? false;
-}
-
-// Start still during hydration, before the browser preference is available.
-const getServerReducedMotion = () => true;
 
 function useAnimatedValue<T>(initialValue: T) {
   const [value, setValue] = useState(initialValue);
@@ -40,8 +25,7 @@ function useAnimatedValue<T>(initialValue: T) {
   const controlsRef = useRef<AnimationPlaybackControlsWithThen | null>(null);
   useMotionValueEvent(motionValue, 'change', (value) => setValue(value as T));
 
-  const stop = useCallback(() => controlsRef.current?.stop(), []);
-  useEffect(() => stop, [stop]);
+  useEffect(() => () => controlsRef.current?.stop(), []);
 
   const animateFn = useCallback(
     (targetValue: T | T[], transition: ValueAnimationTransition) => {
@@ -51,7 +35,7 @@ function useAnimatedValue<T>(initialValue: T) {
     [motionValue],
   );
 
-  return { value, stop, animate: animateFn };
+  return { value, controls: controlsRef, animate: animateFn };
 }
 
 interface UseAgentAudioVisualizerWaveAnimatorArgs {
@@ -65,23 +49,10 @@ export function useAgentAudioVisualizerWave({
   audioTrack,
   volume: volumeProp,
 }: UseAgentAudioVisualizerWaveAnimatorArgs) {
-  const reducedMotion = useSyncExternalStore(
-    subscribeToReducedMotion,
-    getReducedMotion,
-    getServerReducedMotion,
-  );
   const [speed, setSpeed] = useState(DEFAULT_SPEED);
-  const {
-    value: amplitude,
-    animate: animateAmplitude,
-    stop: stopAmplitude,
-  } = useAnimatedValue(DEFAULT_AMPLITUDE);
-  const {
-    value: frequency,
-    animate: animateFrequency,
-    stop: stopFrequency,
-  } = useAnimatedValue(DEFAULT_FREQUENCY);
-  const { value: opacity, animate: animateOpacity, stop: stopOpacity } = useAnimatedValue(1.0);
+  const { value: amplitude, animate: animateAmplitude } = useAnimatedValue(DEFAULT_AMPLITUDE);
+  const { value: frequency, animate: animateFrequency } = useAnimatedValue(DEFAULT_FREQUENCY);
+  const { value: opacity, animate: animateOpacity } = useAnimatedValue(1.0);
 
   const trackVolume = useTrackVolume(audioTrack as TrackReference, {
     fftSize: 512,
@@ -90,12 +61,6 @@ export function useAgentAudioVisualizerWave({
   const volume = volumeProp ?? trackVolume;
 
   useEffect(() => {
-    if (reducedMotion) {
-      stopAmplitude();
-      stopFrequency();
-      stopOpacity();
-      return;
-    }
     switch (state) {
       case 'disconnected':
         setSpeed(DEFAULT_SPEED);
@@ -133,56 +98,16 @@ export function useAgentAudioVisualizerWave({
         animateOpacity(1.0, DEFAULT_TRANSITION);
         return;
     }
-  }, [
-    state,
-    reducedMotion,
-    setSpeed,
-    animateAmplitude,
-    animateFrequency,
-    animateOpacity,
-    stopAmplitude,
-    stopFrequency,
-    stopOpacity,
-  ]);
+  }, [state, setSpeed, animateAmplitude, animateFrequency, animateOpacity]);
 
   useEffect(() => {
-    if (state === 'speaking' && !reducedMotion) {
+    if (state === 'speaking') {
       animateAmplitude(0.015 + 0.4 * volume, { duration: 0 });
       animateFrequency(20 + 60 * volume, { duration: 0 });
     }
-  }, [state, volume, reducedMotion, animateAmplitude, animateFrequency]);
-
-  if (reducedMotion) {
-    const inactive = state === 'disconnected' || state === 'idle' || state === 'failed';
-    const busy =
-      state === 'thinking' ||
-      state === 'connecting' ||
-      state === 'initializing' ||
-      state === 'pre-connect-buffering';
-    const speaking = state === 'speaking' || state === undefined;
-    // Keep the wave's visual language, with stable silhouettes instead of travel,
-    // pulsing, or volume-driven deformation. State changes still update immediately.
-    return {
-      reducedMotion,
-      speed: 0,
-      amplitude: inactive
-        ? 0
-        : busy
-          ? DEFAULT_AMPLITUDE / 4
-          : speaking
-            ? DEFAULT_AMPLITUDE * 3
-            : DEFAULT_AMPLITUDE,
-      frequency: busy
-        ? DEFAULT_FREQUENCY * 4
-        : speaking
-          ? DEFAULT_FREQUENCY * 2
-          : DEFAULT_FREQUENCY,
-      opacity: 1,
-    };
-  }
+  }, [state, volume, animateAmplitude, animateFrequency]);
 
   return {
-    reducedMotion,
     speed,
     amplitude,
     frequency,

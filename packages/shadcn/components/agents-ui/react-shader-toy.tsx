@@ -467,9 +467,6 @@ export interface ReactShaderToyProps {
    * reducing CPU/GPU usage when the shader is off-screen.
    */
   animateWhenNotVisible?: boolean;
-
-  /** Freeze shader time and draw only when uniforms, size, or visibility change. */
-  paused?: boolean;
 }
 
 export function ReactShaderToy({
@@ -487,7 +484,6 @@ export function ReactShaderToy({
   onError = console.error,
   onWarning = console.warn,
   animateWhenNotVisible = false,
-  paused = false,
   ...canvasProps
 }: ReactShaderToyProps & ComponentPropsWithoutRef<'canvas'>) {
   // Refs for WebGL state
@@ -500,7 +496,6 @@ export function ReactShaderToy({
   const initFrameIdRef = useRef<number | undefined>(undefined);
   const isVisibleRef = useRef(true);
   const animateWhenNotVisibleRef = useRef(animateWhenNotVisible);
-  const pausedRef = useRef(paused);
   const mousedownRef = useRef(false);
   const canvasPositionRef = useRef<DOMRect | undefined>(undefined);
   const timerRef = useRef(0);
@@ -763,8 +758,7 @@ export function ReactShaderToy({
   const setUniforms = (timestamp: number) => {
     const gl = glRef.current;
     if (!gl || !shaderProgramRef.current) return;
-    const delta =
-      !pausedRef.current && lastTimeRef.current ? (timestamp - lastTimeRef.current) / 1000 : 0;
+    const delta = lastTimeRef.current ? (timestamp - lastTimeRef.current) / 1000 : 0;
     lastTimeRef.current = timestamp;
     const propUniforms = propsUniformsRef.current;
     if (propUniforms) {
@@ -866,7 +860,7 @@ export function ReactShaderToy({
       mouseValue[0] = lerpVal(currentX, lastMouseArrRef.current[0] ?? 0, lerp);
       mouseValue[1] = lerpVal(currentY, lastMouseArrRef.current[1] ?? 0, lerp);
     }
-    if (!pausedRef.current) requestDraw();
+    requestDraw();
   };
 
   // All draw requests share one slot, including initialization and observer callbacks.
@@ -927,13 +921,6 @@ export function ReactShaderToy({
     requestDraw();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propUniforms]);
-
-  useEffect(() => {
-    pausedRef.current = paused;
-    lastTimeRef.current = 0;
-    requestDraw();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paused]);
 
   useEffect(() => {
     animateWhenNotVisibleRef.current = animateWhenNotVisible;

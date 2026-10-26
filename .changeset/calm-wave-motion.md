@@ -2,6 +2,6 @@
 '@livekit/agents-ui': patch
 ---
 
-Respect reduced-motion preferences in the wave audio visualizer. Render still,
-state-specific waves without pulsing or volume-driven deformation, respond to
-preference changes without reloading, and pause shader rendering between updates.
+Respect reduced motion across audio visualizers with paused text states and
+shared, composable play/pause controls. Pause only visualization, leave audio
+running, and respond to live browser preference changes.

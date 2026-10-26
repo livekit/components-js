@@ -11,6 +11,7 @@ import {
   TokenSourceFetchOptions,
   RoomConnectOptions,
   decodeTokenPayload,
+  areTokenSourceFetchOptionsEqual,
   BaseKeyProvider,
   RoomOptions,
   ExternalE2EEKeyProvider,
@@ -224,41 +225,6 @@ type UseSessionConfigurableOptions = UseSessionCommonOptions &
   UseSessionRoomOptions &
   TokenSourceFetchOptions;
 type UseSessionFixedOptions = UseSessionCommonOptions & UseSessionRoomOptions;
-
-/**
- * Given two TokenSourceFetchOptions values, check to see if they are deep equal.
- *
- * FIXME: swap this for an import from livekit-client once
- * https://github.com/livekit/client-sdk-js/pull/1733 is merged and published!
- * */
-function areTokenSourceFetchOptionsEqual(a: TokenSourceFetchOptions, b: TokenSourceFetchOptions) {
-  const allKeysSet = new Set([...Object.keys(a), ...Object.keys(b)]) as Set<
-    keyof TokenSourceFetchOptions
-  >;
-
-  for (const key of allKeysSet) {
-    switch (key) {
-      case 'roomName':
-      case 'participantName':
-      case 'participantIdentity':
-      case 'participantMetadata':
-      case 'participantAttributes':
-      case 'agentName':
-      case 'agentMetadata':
-      case 'deployment':
-        if (a[key] !== b[key]) {
-          return false;
-        }
-        break;
-      default:
-        // ref: https://stackoverflow.com/a/58009992
-        const exhaustiveCheckedKey: never = key;
-        throw new Error(`Options key ${exhaustiveCheckedKey} not being checked for equality!`);
-    }
-  }
-
-  return true;
-}
 
 /** Internal hook used by useSession to manage creating a function which can be used to wait
  * until the session is in a given state before resolving. */

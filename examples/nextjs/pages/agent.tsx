@@ -69,7 +69,7 @@ function TextChat() {
   };
 
   return (
-    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ width: 480, height: 800, display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div
           style={{
@@ -189,21 +189,24 @@ const AgentExample: NextPage = () => {
       <SessionProvider session={session}>
         <div className={styles.room}>
           <div className={styles.inner}>
-            {started ? (
-              <div>
-                <TextChat />
-                {/* <SimpleAgent /> */}
-                <button className="lk-button" onClick={() => setStarted(false)}>
-                  Disconnect
-                </button>
-              </div>
-            ) : (
-              <div style={{ marginTop: 24 }}>
-                <input type="text" value={threadId} onChange={(e) => setThreadId(e.target.value)} placeholder="Thread ID" />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: 480, height: 64 }}>
+              <input type="text" value={threadId} onChange={(e) => setThreadId(e.target.value)} placeholder="Thread ID" />
+              {started ? (
+                <div>
+                  <button className="lk-button" onClick={() => setStarted(false)}>
+                    Disconnect
+                  </button>
+                </div>
+              ) : (
                 <button className="lk-button" onClick={() => setStarted(true)}>
                   Connect
                 </button>
-              </div>
+              )}
+            </div>
+            {started ? (
+              <SimpleAgent />
+            ) : (
+              <TextChat />
             )}
           </div>
           {/* {mode === 'rtc' && ( */}

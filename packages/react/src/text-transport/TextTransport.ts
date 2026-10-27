@@ -507,7 +507,7 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
    * task history, which we flatten in task order. The canonical thread-history API is the agentstore
    * `GetThreadItems`, not yet reachable from the browser; swapping to it stays internal to this method.
    */
-  async loadThreadMessages(options: { signal?: AbortSignal } = {}): Promise<ReceivedChatMessage[]> {
+  async loadThreadMessages(options: { signal?: AbortSignal } = {}): Promise<Array<ReceivedChatMessage>> {
     if (!this._threadId) {
       return [];
     }

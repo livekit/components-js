@@ -24,6 +24,7 @@ import { TrackReference, log } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
 import { TextTransport, type TextTransportBaseUrl } from '../text-transport/TextTransport';
 import { useSessionMessageStore, type SessionMessageStore } from './useSessionMessageStore';
+import { useEvents } from './useEvents';
 
 /** @beta */
 export enum SessionEvent {
@@ -405,6 +406,7 @@ function useSessionMedia(
   tokenSource: TokenSourceConfigurable | TokenSourceFixed,
   options: UseSessionConfigurableOptions | UseSessionFixedOptions,
   messageStore: SessionMessageStore,
+  threadId?: string,
 ) {
   const {
     room: optionsRoom,
@@ -413,7 +415,7 @@ function useSessionMedia(
     // `textBaseUrl` is a text-transport concern handled by useSession; pull it out so it never reaches
     // the token fetch options (areTokenSourceFetchOptionsEqual throws on unknown keys).
     textBaseUrl: _textBaseUrl,
-    threadId,
+    threadId: _threadId,
     ...unstableRestOptions
   } = options;
 
@@ -814,7 +816,10 @@ export function useSession(
   tokenSource: TokenSourceConfigurable | TokenSourceFixed,
   options: UseSessionConfigurableOptions | UseSessionFixedOptions = {},
 ): UseSessionReturn {
-  const { textBaseUrl, threadId } = options;
+  const { textBaseUrl, threadId: userProvidedThreadId } = options;
+
+  const [threadId, setThreadId] = React.useState(userProvidedThreadId);
+  React.useEffect(() => setThreadId(userProvidedThreadId), [userProvidedThreadId]);
 
   // The conversation (text) half of the session: the shared message store and the text transport.
   const messageStore = useSessionMessageStore();
@@ -834,12 +839,16 @@ export function useSession(
     prepareConnection,
     setEncryptionEnabled,
     tokenSourceFetch,
-  } = useSessionMedia(tokenSource, options, messageStore);
+  } = useSessionMedia(tokenSource, options, messageStore, threadId);
 
   const textTransport = React.useMemo(
     () => new TextTransport({ baseUrl: textBaseUrl, getCredentials: tokenSourceFetch, threadId }),
     [textBaseUrl, tokenSourceFetch, threadId],
   );
+
+  useEvents(textTransport, 'threadStarted', (threadId: string) => {
+    setThreadId(threadId);
+  }, []);
 
   const generateDerivedConnectionStateValues = React.useCallback(
     <State extends UseSessionReturn['connectionState']>(connectionState: State) =>
@@ -929,41 +938,47 @@ export function useSession(
     await textTransport.disconnect();
   }, [endMedia, textTransport]);
 
-  // When the passed thread id changes, then clear the message store.
-  const previousLoadedThreadIdRef = React.useRef(threadId ?? null);
-  React.useEffect(() => {
-    if (threadId === previousLoadedThreadIdRef.current) {
-      return;
-    }
-    messageStore.clear();
-    previousLoadedThreadIdRef.current = threadId ?? null;
-  }, [threadId, messageStore.clear]);
-
   // Seed the transcript from the active thread's existing messages. When a threadId is provided we
   // fetch its full history (paginated to the start) and upsert it into the shared store; a session
   // with no threadId starts empty. Switching threadId drops the previous thread's transcript first.
+  const lastFetchedThreadIdRef = React.useRef(threadId);
+  const messagesEmpty = messageStore.messages.length === 0;
   React.useEffect(() => {
-    if (typeof threadId === 'undefined') {
+    const threadAddedToExistingSession = !messagesEmpty && typeof lastFetchedThreadIdRef.current === 'undefined' && typeof threadId !== 'undefined';
+    if (threadAddedToExistingSession) {
       return;
     }
 
     const controller = new AbortController();
-    void (async () => {
-      try {
-        const history = await textTransport.loadThreadMessages({ signal: controller.signal });
-        if (!controller.signal.aborted) {
-          messageStore.upsertMessages(history);
-        }
-      } catch (err) {
-        if (!controller.signal.aborted) {
-          log.warn('useSession: failed to load thread history', err);
-        }
-      }
-    })();
 
-    return () => {
-      controller.abort();
-    };
+    const threadChanged = typeof threadId !== 'undefined' && lastFetchedThreadIdRef.current !== threadId;
+    if (threadChanged) {
+      messageStore.clear();
+      lastFetchedThreadIdRef.current = threadId;
+
+      void (async () => {
+        try {
+          const history = await textTransport.loadThreadMessages({ signal: controller.signal });
+          if (!controller.signal.aborted) {
+            messageStore.upsertMessages(history);
+          }
+        } catch (err) {
+          if (!controller.signal.aborted) {
+            log.warn('useSession: failed to load thread history', err);
+          }
+        }
+      })();
+      return () => {
+        controller.abort();
+      };
+    }
+
+    const threadIdDropped = typeof threadId === 'undefined';
+    if (threadIdDropped) {
+      messageStore.clear();
+      lastFetchedThreadIdRef.current = undefined;
+    }
+    return;
   }, [threadId, textTransport, messageStore.upsertMessages, messageStore.clear]);
 
   return React.useMemo(

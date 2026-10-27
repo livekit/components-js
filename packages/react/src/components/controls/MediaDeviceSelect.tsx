@@ -84,11 +84,21 @@ export const MediaDeviceSelect: (
       requestPermissions,
       onError: handleError,
     });
+    const initialSelectionApplied = React.useRef(false);
     React.useEffect(() => {
-      // a passed track already runs on its device; restarting it can switch devices
-      if (initialSelection !== undefined && !track) {
-        setActiveMediaDevice(initialSelection);
-      }
+      if (initialSelection === undefined || initialSelectionApplied.current) return;
+      initialSelectionApplied.current = true;
+      (async () => {
+        // restarting a track already on the device would reopen it
+        if ((await track?.getDeviceId(false)) === initialSelection) return;
+        await setActiveMediaDevice(initialSelection);
+      })().catch((e) => {
+        if (e instanceof Error) {
+          onDeviceSelectError?.(e);
+        } else {
+          throw e;
+        }
+      });
     }, [setActiveMediaDevice]);
 
     React.useEffect(() => {

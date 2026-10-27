@@ -1,4 +1,9 @@
-import { computeMenuPosition, wasClickOutside, log } from '@livekit/components-core';
+import {
+  computeMenuPosition,
+  wasClickOutside,
+  log,
+  refreshMediaDevices,
+} from '@livekit/components-core';
 import * as React from 'react';
 import { MediaDeviceSelect } from '../components/controls/MediaDeviceSelect';
 import type { LocalAudioTrack, LocalVideoTrack } from 'livekit-client';
@@ -63,8 +68,7 @@ export function MediaDeviceMenu({
   React.useLayoutEffect(() => {
     if (isOpen) {
       setNeedPermissions(true);
-      // Android WebView never fires devicechange
-      navigator.mediaDevices?.dispatchEvent(new Event('devicechange'));
+      refreshMediaDevices();
     }
   }, [isOpen]);
 

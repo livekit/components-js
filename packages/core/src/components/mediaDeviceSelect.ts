@@ -28,7 +28,7 @@ export function setupDeviceSelector(
 ) {
   const activeDeviceSubject = new BehaviorSubject<string | undefined>(undefined);
 
-  // without a published track the room never reports device changes, so follow the track itself
+  // unpublished tracks never trigger room device events
   const trackDeviceObservable = localTrack
     ? trackEventSelector(localTrack, TrackEvent.Restarted).pipe(
         startWith(undefined),

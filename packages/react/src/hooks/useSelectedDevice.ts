@@ -59,7 +59,6 @@ export function useSelectedDevice<T extends LocalVideoTrack | LocalAudioTrack>({
   React.useEffect(() => {
     if (!track) return;
     getDeviceId();
-    // device can change on restart while the track object stays the same
     track.on(TrackEvent.Restarted, getDeviceId);
     return () => {
       track.off(TrackEvent.Restarted, getDeviceId);

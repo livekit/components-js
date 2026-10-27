@@ -40,6 +40,7 @@ export enum SessionEvent {
    * args: (error: Error)
    */
   EncryptionError = 'encryptionError',
+  ThreadStarted = 'threadStarted',
 }
 
 /** @beta */
@@ -848,6 +849,7 @@ export function useSession(
 
   useEvents(textTransport, 'threadStarted', (threadId: string) => {
     setThreadId(threadId);
+    internal.emitter.emit(SessionEvent.ThreadStarted, threadId);
   }, []);
 
   const generateDerivedConnectionStateValues = React.useCallback(

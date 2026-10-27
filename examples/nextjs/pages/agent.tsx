@@ -149,6 +149,7 @@ const AgentExample: NextPage = () => {
     textBaseUrl: textModeBaseUrl,
     roomName,
     participantIdentity: userIdentity,
+    agentName: "dentist",
   });
 
   const [started, setStarted] = useState(false);

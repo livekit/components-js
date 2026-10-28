@@ -13,11 +13,11 @@ import {
 import * as React from 'react';
 import type TypedEventEmitter from 'typed-emitter';
 
-import { useMaybeSessionContext } from '../context';
+import { useMaybeSessionContext, useMaybeThreadContext } from '../context';
 import { useParticipantInfo } from './useParticipantInfo';
 import { useParticipantTracks } from './useParticipantTracks';
 import { useRemoteParticipants } from './useRemoteParticipants';
-import { UseSessionReturn } from './useSession';
+import { isUseThreadReturn, type AgentHost, type UseThreadReturn } from './useThread';
 
 // FIXME: make this 10 seconds once room dispatch booting info is discoverable
 const DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS = 20_000;
@@ -375,8 +375,6 @@ export const useAgentTimeoutIdStore = (): {
   };
 };
 
-type SessionStub = Pick<UseSessionReturn, 'connectionState' | 'room' | 'internal'>;
-
 /** Internal hook used by useAgent which generates a function that when called, will return a
  * promise which resolves when agent.isAvailable is enabled. */
 function useAgentWaitUntilDerivedStates(
@@ -494,12 +492,25 @@ function useAgentWaitUntilDerivedStates(
  * useAgent encapculates all agent state, normalizing some quirks around how LiveKit Agents work.
  * @beta
  */
-export function useAgent(session?: SessionStub): UseAgentReturn {
+export function useAgent(hostOrThread?: AgentHost | UseThreadReturn): UseAgentReturn {
   const sessionFromContext = useMaybeSessionContext();
-  session = session ?? sessionFromContext;
-  if (!session) {
+  const threadFromContext = useMaybeThreadContext();
+
+  // Resolve the agent host — a live room, its connection state, and the agent-timeout controls:
+  //  - an explicit AgentHost (a call, or the composite session) is used directly;
+  //  - an explicit thread resolves to its active call;
+  //  - otherwise fall back to the session context (back-compat), then the thread context's active call.
+  let host: AgentHost | undefined;
+  if (hostOrThread && 'room' in hostOrThread) {
+    host = hostOrThread;
+  } else if (hostOrThread && isUseThreadReturn(hostOrThread)) {
+    host = hostOrThread.internal.activeCall ?? undefined;
+  } else {
+    host = sessionFromContext ?? threadFromContext?.internal.activeCall ?? undefined;
+  }
+  if (!host) {
     throw new Error(
-      'No session provided, make sure you are inside a Session context or pass the session explicitly',
+      'No agent host available. Pass a call or session, a thread with an active call, or render inside a Session or Thread provider whose thread has an active call.',
     );
   }
 
@@ -515,7 +526,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
       updateAgentTimeoutState,
       updateAgentTimeoutParticipantExists,
     },
-  } = session;
+  } = host;
 
   const emitter = React.useMemo(() => new EventEmitter() as TypedEventEmitter<AgentCallbacks>, []);
 
@@ -710,10 +721,10 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     updateAgentTimeoutParticipantExists(agentParticipant !== null);
   }, [agentParticipant]);
 
-  // When the session room begins connecting, start the agent timeout
-  const isSessionDisconnected = session.connectionState === 'disconnected';
+  // When the host room begins connecting, start the agent timeout
+  const isHostDisconnected = host.connectionState === ConnectionState.Disconnected;
   React.useEffect(() => {
-    if (isSessionDisconnected) {
+    if (isHostDisconnected) {
       return;
     }
 
@@ -721,7 +732,7 @@ export function useAgent(session?: SessionStub): UseAgentReturn {
     return () => {
       clearAgentTimeout();
     };
-  }, [isSessionDisconnected, agentConnectTimeoutMilliseconds]);
+  }, [isHostDisconnected, agentConnectTimeoutMilliseconds]);
 
   const {
     identity: agentParticipantIdentity,

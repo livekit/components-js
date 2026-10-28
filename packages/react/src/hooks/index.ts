@@ -63,6 +63,7 @@ export * from './useTranscriptions';
 export * from './useSequentialRoomConnectDisconnect';
 export * from './useSession';
 export * from './useThread';
+export * from './useCall';
 export {
   type AgentState,
   AgentEvent,

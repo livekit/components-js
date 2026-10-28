@@ -205,17 +205,15 @@ const AgentExample: NextPage = () => {
               )}
             </div>
             {started ? (
-              <SimpleAgent />
+              <div>
+                <SimpleAgent />
+                <VoiceAssistantControlBar />
+                <RoomAudioRenderer />
+              </div>
             ) : (
               <TextChat />
             )}
           </div>
-          {/* {mode === 'rtc' && ( */}
-          {/*   <> */}
-          {/*     <VoiceAssistantControlBar /> */}
-          {/*     <RoomAudioRenderer /> */}
-          {/*   </> */}
-          {/* )} */}
         </div>
       </SessionProvider>
     </main>

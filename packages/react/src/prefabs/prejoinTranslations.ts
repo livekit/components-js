@@ -4,6 +4,7 @@ export type PrejoinTranslations = {
   join: string;
   microphone: string;
   camera: string;
+  defaultDevice: string;
   username: string;
   ariaClose: string;
   permissionTitleBoth: string;
@@ -37,6 +38,7 @@ export const prejoinTranslations: Record<PrejoinLanguage, PrejoinTranslations> =
     join: 'Join Room',
     microphone: 'Microphone',
     camera: 'Camera',
+    defaultDevice: 'Default',
     username: 'Username',
     ariaClose: 'Close',
     permissionTitleBoth: 'Microphone & Camera Access Required',
@@ -71,6 +73,7 @@ export const prejoinTranslations: Record<PrejoinLanguage, PrejoinTranslations> =
     join: 'Raum betreten',
     microphone: 'Mikrofon',
     camera: 'Kamera',
+    defaultDevice: 'Standard',
     username: 'Benutzername',
     ariaClose: 'Schließen',
     permissionTitleBoth: 'Zugriff auf Mikrofon & Kamera erforderlich',

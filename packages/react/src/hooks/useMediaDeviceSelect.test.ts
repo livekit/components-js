@@ -29,6 +29,8 @@ describe('useMediaDeviceSelect in preview mode', () => {
     const mockLocalTrack = {
       setDeviceId,
       getDeviceId,
+      on: vi.fn(),
+      off: vi.fn(),
       mediaStreamTrack: { label: 'Fake Microphone 2' },
     } as unknown as Parameters<typeof useMediaDeviceSelect>[0]['track'];
 

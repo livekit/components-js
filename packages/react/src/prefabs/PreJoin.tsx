@@ -1,32 +1,34 @@
+import type { LocalUserChoices } from '@livekit/components-core';
+import { log, refreshMediaDevices } from '@livekit/components-core';
 import type {
   CreateLocalTracksOptions,
   LocalAudioTrack,
   LocalTrack,
   LocalVideoTrack,
   TrackProcessor,
+  VideoCaptureOptions,
 } from 'livekit-client';
 import {
   createLocalAudioTrack,
   createLocalTracks,
   createLocalVideoTrack,
   facingModeFromLocalTrack,
-  Track,
-  VideoPresets,
   Mutex,
+  Track,
+  TrackEvent,
+  VideoPresets,
 } from 'livekit-client';
 import * as React from 'react';
-import { getPrejoinTranslations, type PrejoinLanguage } from './prejoinTranslations';
-import { MediaDeviceMenu } from './MediaDeviceMenu';
+import { ParticipantPlaceholder } from '../assets/images';
 import { TrackToggle } from '../components/controls/TrackToggle';
 import { BarVisualizer } from '../components/participant/BarVisualizer';
-import type { LocalUserChoices } from '@livekit/components-core';
-import { log } from '@livekit/components-core';
-import { ParticipantPlaceholder } from '../assets/images';
 import { PermissionsModal } from '../components/PermissionsModal';
 import { useMediaDevices, usePersistentUserChoices } from '../hooks';
+import { useSelectedDevice } from '../hooks/useSelectedDevice';
 import { useWarnAboutMissingStyles } from '../hooks/useWarnAboutMissingStyles';
 import { roomOptionsStringifyReplacer } from '../utils';
-import { useSelectedDevice } from '../hooks/useSelectedDevice';
+import { MediaDeviceMenu } from './MediaDeviceMenu';
+import { getPrejoinTranslations, type PrejoinLanguage } from './prejoinTranslations';
 
 // Device status type definition
 type DeviceStatus = 'available' | 'permission-denied' | 'no-devices' | 'disabled' | 'error';
@@ -105,6 +107,91 @@ export interface PreJoinProps extends Omit<
   videoProcessor?: TrackProcessor<Track.Kind.Video>;
 }
 
+// Android ignores a facingMode preference; webcams have no facing info
+async function preferFrontCamera(
+  acquire: (facingMode: ConstrainDOMString) => Promise<LocalTrack[]>,
+) {
+  let tracks: LocalTrack[];
+  try {
+    tracks = await acquire({ exact: 'user' });
+  } catch (e) {
+    const name = (e as Error | undefined)?.name;
+    // missing or busy front camera
+    if (name !== 'OverconstrainedError' && name !== 'NotReadableError') throw e;
+    tracks = await acquire('user');
+  }
+  // would compete with deviceId on later restarts
+  tracks.forEach((track) => delete track.constraints.facingMode);
+  return tracks;
+}
+
+function createPreviewTracks(options: CreateLocalTracksOptions) {
+  const video = options.video;
+  if (typeof video !== 'object' || video.facingMode !== 'user') {
+    return createLocalTracks(options);
+  }
+  return preferFrontCamera((facingMode) =>
+    createLocalTracks({
+      ...options,
+      video: { ...video, facingMode: facingMode as VideoCaptureOptions['facingMode'] },
+    }),
+  );
+}
+
+async function restartOnFallbackDevice(track: LocalAudioTrack | LocalVideoTrack) {
+  const constraints = track.constraints;
+  if (track.kind === Track.Kind.Audio) {
+    // non-exact: any mic if there is no 'default'
+    constraints.deviceId = 'default';
+    return track.restartTrack();
+  }
+  delete constraints.deviceId;
+  await preferFrontCamera(async (facingMode) => {
+    constraints.facingMode = facingMode;
+    await track.restartTrack();
+    return [track];
+  });
+}
+
+// set when usePreviewTracks drops a track, which can precede the fallback's effect cleanup
+const discardedPreviewTracks = new WeakSet<LocalTrack>();
+
+// unpublished, so livekit won't restart them on disconnect
+function useFallbackDevice(
+  track: LocalAudioTrack | LocalVideoTrack | undefined,
+  setDeviceId: (id: string) => void,
+) {
+  React.useEffect(() => {
+    if (!track) return;
+    let cancelled = false;
+    const isDiscarded = () => cancelled || discardedPreviewTracks.has(track);
+    const onEnded = async () => {
+      // background: livekit re-acquires on return
+      if (document.visibilityState === 'hidden') return;
+      try {
+        const endedDeviceId = await track.getDeviceId(false);
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        // device still available
+        if (isDiscarded() || devices.some((d) => d.deviceId === endedDeviceId)) return;
+        await restartOnFallbackDevice(track);
+        if (isDiscarded()) {
+          track.stop();
+          return;
+        }
+        setDeviceId((await track.getDeviceId(false)) ?? 'default');
+      } catch (e) {
+        log.warn('failed to restart preview track on fallback device', e);
+      }
+      refreshMediaDevices();
+    };
+    track.on(TrackEvent.Ended, onEnded);
+    return () => {
+      cancelled = true;
+      track.off(TrackEvent.Ended, onEnded);
+    };
+  }, [track, setDeviceId]);
+}
+
 /** @public */
 export function usePreviewTracks(
   options: CreateLocalTracksOptions,
@@ -159,7 +246,9 @@ export function usePreviewTracks(
       trackType: T,
       trackOption: CreateLocalTracksOptions[T] | false,
       setTrack: React.Dispatch<
-        React.SetStateAction<T extends 'audio' ? LocalAudioTrack | undefined : LocalVideoTrack | undefined>
+        React.SetStateAction<
+          T extends 'audio' ? LocalAudioTrack | undefined : LocalVideoTrack | undefined
+        >
       >,
       setPermissionErrors: React.Dispatch<React.SetStateAction<{ audio?: Error; video?: Error }>>,
     ) => {
@@ -170,6 +259,7 @@ export function usePreviewTracks(
         const currentTrack = trackType === 'audio' ? audioTrackRef.current : videoTrackRef.current;
 
         if (currentTrack) {
+          discardedPreviewTracks.add(currentTrack);
           setOrphanTracks((prev) => [...prev, currentTrack]);
           setTrack(undefined);
         }
@@ -197,7 +287,7 @@ export function usePreviewTracks(
           };
 
           log.debug(`[PreJoin] Calling createLocalTracks for ${trackType}`, trackOptions);
-          const tracks = await createLocalTracks(trackOptions);
+          const tracks = await createPreviewTracks(trackOptions);
           log.debug(`[PreJoin] Successfully created ${trackType} track`);
 
           // Check if cancelled after creating tracks
@@ -215,6 +305,7 @@ export function usePreviewTracks(
               trackType === 'audio' ? audioTrackRef.current : videoTrackRef.current;
 
             if (currentTrack) {
+              discardedPreviewTracks.add(currentTrack);
               setOrphanTracks((prev) => [...prev, currentTrack]);
             }
             if (trackType === 'audio' && localTrack.kind === 'audio') {
@@ -266,6 +357,7 @@ export function usePreviewTracks(
       return () => {
         isCancelled = true;
         if (localTrack) {
+          discardedPreviewTracks.add(localTrack);
           localTrack.stop();
         }
       };
@@ -561,11 +653,20 @@ export function PreJoin({
     saveUsername(username);
   }, [username, saveUsername]);
 
+  // menu switches running tracks itself; recreate only on (re)enable
+  const previewDeviceIds = React.useRef({ audio: audioDeviceId, video: videoDeviceId });
+  if (!audioEnabled) previewDeviceIds.current.audio = audioDeviceId;
+  if (!videoEnabled) previewDeviceIds.current.video = videoDeviceId;
+  const { audio: previewAudioDeviceId, video: previewVideoDeviceId } = previewDeviceIds.current;
+
   const tracks = usePreviewTracks(
     {
-      audio: audioEnabled ? { deviceId: initialUserChoices.audioDeviceId } : false,
+      audio: audioEnabled ? { deviceId: previewAudioDeviceId } : false,
       video: videoEnabled
-        ? { deviceId: initialUserChoices.videoDeviceId, processor: videoProcessor }
+        ? previewVideoDeviceId === 'default'
+          ? // no camera is 'default'
+            { facingMode: 'user', processor: videoProcessor }
+          : { deviceId: previewVideoDeviceId, processor: videoProcessor }
         : false,
     },
     onError,
@@ -649,19 +750,30 @@ export function PreJoin({
     [tracks],
   );
 
-  const facingMode = React.useMemo(() => {
-    if (videoTrack) {
-      const { facingMode } = facingModeFromLocalTrack(videoTrack);
-      return facingMode;
-    } else {
-      return 'undefined';
+  const [facingMode, setFacingMode] = React.useState<string>('undefined');
+  React.useEffect(() => {
+    if (!videoTrack) {
+      setFacingMode('undefined');
+      return;
     }
+    const updateFacingMode = () => setFacingMode(facingModeFromLocalTrack(videoTrack).facingMode);
+    updateFacingMode();
+    videoTrack.on(TrackEvent.Restarted, updateFacingMode);
+    return () => {
+      videoTrack.off(TrackEvent.Restarted, updateFacingMode);
+    };
   }, [videoTrack]);
+
+  const deviceLabel = (device?: MediaDeviceInfo) =>
+    device?.deviceId === 'default' && !device.label ? t.defaultDevice : device?.label;
 
   const audioTrack = React.useMemo(
     () => tracks?.filter((track) => track.kind === Track.Kind.Audio)[0] as LocalAudioTrack,
     [tracks],
   );
+
+  useFallbackDevice(audioTrack, setAudioDeviceId);
+  useFallbackDevice(videoTrack, setVideoDeviceId);
 
   const { selectedDevice: selectedAudioDevice } = useSelectedDevice({
     kind: 'audioinput',
@@ -822,13 +934,13 @@ export function PreJoin({
           </TrackToggle>
           <div className="lk-button-group-menu-pre-join">
             <label className="lk-selected-device-label">
-              {selectedAudioDevice?.label || micLabel}
+              {deviceLabel(selectedAudioDevice) || micLabel}
             </label>
           </div>
           <MediaDeviceMenu
-            initialSelection={audioDeviceId}
+            defaultDeviceLabel={t.defaultDevice}
             kind="audioinput"
-            disabled={Boolean(!selectedAudioDevice)}
+            disabled={!audioTrack}
             tracks={{ audioinput: audioTrack }}
             onActiveDeviceChange={(_, id) => setAudioDeviceId(id)}
           />
@@ -858,13 +970,13 @@ export function PreJoin({
           />
           <div className="lk-button-group-menu-pre-join">
             <label className="lk-selected-device-label">
-              {selectedVideoDevice?.label || camLabel}
+              {deviceLabel(selectedVideoDevice) || camLabel}
             </label>
           </div>
           <MediaDeviceMenu
-            initialSelection={videoDeviceId}
+            defaultDeviceLabel={t.defaultDevice}
             kind="videoinput"
-            disabled={Boolean(!selectedVideoDevice)}
+            disabled={!videoTrack}
             tracks={{ videoinput: videoTrack }}
             onActiveDeviceChange={(_, id) => setVideoDeviceId(id)}
           />

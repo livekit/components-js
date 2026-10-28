@@ -1,4 +1,9 @@
-import { computeMenuPosition, wasClickOutside, log } from '@livekit/components-core';
+import {
+  computeMenuPosition,
+  wasClickOutside,
+  log,
+  refreshMediaDevices,
+} from '@livekit/components-core';
 import * as React from 'react';
 import { MediaDeviceSelect } from '../components/controls/MediaDeviceSelect';
 import type { LocalAudioTrack, LocalVideoTrack } from 'livekit-client';
@@ -7,6 +12,7 @@ import type { LocalAudioTrack, LocalVideoTrack } from 'livekit-client';
 export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   kind?: MediaDeviceKind;
   initialSelection?: string;
+  defaultDeviceLabel?: string;
   onActiveDeviceChange?: (kind: MediaDeviceKind, deviceId: string) => void;
   tracks?: Partial<Record<MediaDeviceKind, LocalAudioTrack | LocalVideoTrack | undefined>>;
   /**
@@ -39,6 +45,7 @@ export interface MediaDeviceMenuProps extends React.ButtonHTMLAttributes<HTMLBut
 export function MediaDeviceMenu({
   kind,
   initialSelection,
+  defaultDeviceLabel,
   onActiveDeviceChange,
   tracks,
   requestPermissions = false,
@@ -61,6 +68,7 @@ export function MediaDeviceMenu({
   React.useLayoutEffect(() => {
     if (isOpen) {
       setNeedPermissions(true);
+      refreshMediaDevices();
     }
   }, [isOpen]);
 
@@ -126,6 +134,7 @@ export function MediaDeviceMenu({
               onDeviceListChange={setDevices}
               kind={kind}
               track={tracks?.[kind]}
+              defaultDeviceLabel={defaultDeviceLabel}
               requestPermissions={needPermissions}
             />
           ) : (
@@ -138,6 +147,7 @@ export function MediaDeviceMenu({
                 }
                 onDeviceListChange={setDevices}
                 track={tracks?.audioinput}
+                defaultDeviceLabel={defaultDeviceLabel}
                 requestPermissions={needPermissions}
               />
               <div className="lk-device-menu-heading">Video inputs</div>
@@ -148,6 +158,7 @@ export function MediaDeviceMenu({
                 }
                 onDeviceListChange={setDevices}
                 track={tracks?.videoinput}
+                defaultDeviceLabel={defaultDeviceLabel}
                 requestPermissions={needPermissions}
               />
             </>

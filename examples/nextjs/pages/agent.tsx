@@ -5,12 +5,15 @@ import {
   BarVisualizer,
   RoomAudioRenderer,
   VoiceAssistantControlBar,
-  SessionProvider,
-  useSession,
-  useSessionMessages,
-  SessionEvent,
+  ThreadProvider,
+  RoomContext,
+  useThread,
+  useCall,
+  useThreadMessages,
+  CallEvent,
   useEvents,
   TEXT_CHAT_ROLE_ATTRIBUTE,
+  type UseCallReturn,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { useMemo, useState, useEffect } from 'react';
@@ -35,8 +38,9 @@ const textModeBaseUrl = (projectId: string): string => {
   return `https://${projectId}.${A2A_ENV}.livekit.cloud/agents/${A2A_AGENT}/default/${A2A_ENDPOINT}`;
 };
 
-function SimpleAgent() {
-  const agent = useAgent();
+// The voice half: agent state is derived from the call's room, so pass the call to useAgent directly.
+function SimpleAgent({ call }: { call: UseCallReturn }) {
+  const agent = useAgent(call);
 
   useEffect(() => {
     if (agent.state === 'failed') {
@@ -54,8 +58,9 @@ function SimpleAgent() {
   );
 }
 
+// The text half: reads and sends messages on the thread resolved from ThreadProvider.
 function TextChat() {
-  const { messages, send, isSending } = useSessionMessages();
+  const { messages, send, isSending } = useThreadMessages();
   const [draft, setDraft] = useState('');
 
   const onSubmit = (e: React.FormEvent) => {
@@ -144,37 +149,41 @@ const AgentExample: NextPage = () => {
 
   const [threadId, setThreadId] = useState('');
 
-  const session = useSession(tokenSource, {
+  // The durable conversation (text + history). Usable on its own for text-only.
+  const thread = useThread(tokenSource, {
     threadId: threadId.length > 0 ? threadId : undefined,
     textBaseUrl: textModeBaseUrl,
     roomName,
     participantIdentity: userIdentity,
-    agentName: "dentist",
+    agentName: 'dentist',
   });
+
+  // A voice call attached to the thread. Created up front; connected only while "started".
+  const call = useCall(thread, {});
 
   const [started, setStarted] = useState(false);
   useEffect(() => {
     if (started) {
-      session.start().catch((err) => {
-        console.error('Failed to start session:', err);
+      call.start().catch((err) => {
+        console.error('Failed to start call:', err);
       });
     } else {
-      session.end().catch((err) => {
-        console.error('Failed to end session:', err);
+      call.end().catch((err) => {
+        console.error('Failed to end call:', err);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [started, session.start, session.end]);
+  }, [started, call.start, call.end]);
 
   useEffect(() => {
-    if (session.connectionState === 'disconnected') {
+    if (call.connectionState === 'disconnected') {
       setStarted(false);
     }
-  }, [session.connectionState]);
+  }, [call.connectionState]);
 
   useEvents(
-    session,
-    SessionEvent.MediaDevicesError,
+    call,
+    CallEvent.MediaDevicesError,
     (error) => {
       const failure = MediaDeviceFailure.getFailure(error);
       console.error(failure);
@@ -187,7 +196,7 @@ const AgentExample: NextPage = () => {
 
   return (
     <main data-lk-theme="default" className={styles.main}>
-      <SessionProvider session={session}>
+      <ThreadProvider thread={thread}>
         <div className={styles.room}>
           <div className={styles.inner}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: 480, height: 64 }}>
@@ -205,17 +214,17 @@ const AgentExample: NextPage = () => {
               )}
             </div>
             {started ? (
-              <div>
-                <SimpleAgent />
+              <RoomContext.Provider value={call.room}>
+                <SimpleAgent call={call} />
                 <VoiceAssistantControlBar />
                 <RoomAudioRenderer />
-              </div>
+              </RoomContext.Provider>
             ) : (
               <TextChat />
             )}
           </div>
         </div>
-      </SessionProvider>
+      </ThreadProvider>
     </main>
   );
 };

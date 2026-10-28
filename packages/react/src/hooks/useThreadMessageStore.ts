@@ -18,14 +18,14 @@ export type MessagesCallbacks = {
 };
 
 /**
- * The shared, mode-independent message store owned by a session.
+ * The shared, mode-independent message store owned by a thread.
  *
- * Both the rtc and text message branches of `useSessionMessages` write into this one store, so that
- * switching a session's mode (text <-> rtc), reconnecting, or remounting the consuming component does
- * NOT clear the accumulated messages. It is exposed on `UseSessionReturn['internal']`.
+ * Both the call (voice transcriptions) and text message branches write into this one store, so that
+ * starting or ending a call, reconnecting, or remounting the consuming component does NOT clear the
+ * accumulated messages. It is exposed on `UseThreadReturn['internal']`.
  * @beta
  */
-export type SessionMessageStore = {
+export type ThreadMessageStore = {
   /** The accumulated messages, sorted by the time they were first received. */
   messages: Array<ReceivedMessage>;
 
@@ -43,12 +43,12 @@ export type SessionMessageStore = {
 };
 
 /**
- * Internal hook used by `useSession` to own the session's message state. Modeled on
+ * Internal hook used by `useThread` to own the thread's message state. Modeled on
  * `useAgentTimeoutIdStore`: it returns a stable set of operations plus a snapshot of the state, which
- * `useSession` places on `internal` so every mode and every consumer shares one instance.
+ * `useThread` places on `internal` so every mode and every consumer shares one instance.
  * @internal
  */
-export function useSessionMessageStore(): SessionMessageStore {
+export function useThreadMessageStore(): ThreadMessageStore {
   // The canonical collection, keyed by message id.
   const messagesMapRef = React.useRef(new Map<ReceivedMessage['id'], ReceivedMessage>());
   // The time each id was first seen, so ordering is stable as messages update in place.

@@ -12,7 +12,7 @@ import { EventEmitter } from 'events';
 
 import { log } from '@livekit/components-core';
 import { TextTransport, type TextTransportBaseUrl } from '../text-transport/TextTransport';
-import { useSessionMessageStore, type SessionMessageStore } from './useSessionMessageStore';
+import { useThreadMessageStore, type ThreadMessageStore } from './useThreadMessageStore';
 import { useEvents } from './useEvents';
 import type { AgentState } from './useAgent';
 
@@ -76,7 +76,7 @@ type ThreadStateCommon = {
     /** The shared credential fetch, reused by an attached call for its room token. */
     tokenSourceFetch: ThreadTokenSourceFetch;
     /** The shared, mode-independent message store. */
-    messageStore: SessionMessageStore;
+    messageStore: ThreadMessageStore;
     /** The call currently attached to this thread (registered by `useCall`), or null. */
     activeCall: AgentHost | null;
     /** Register (or clear, with null) the call attached to this thread. Used by `useCall`. */
@@ -251,7 +251,7 @@ export function useThread(
   React.useEffect(() => setThreadId(userProvidedThreadId), [userProvidedThreadId]);
 
   // The shared, mode-independent message store.
-  const messageStore = useSessionMessageStore();
+  const messageStore = useThreadMessageStore();
 
   const emitter = React.useMemo(
     () => new EventEmitter() as TypedEventEmitter<ThreadCallbacks>,

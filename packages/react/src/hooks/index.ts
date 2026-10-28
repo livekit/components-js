@@ -72,7 +72,8 @@ export {
   useAgent,
 } from './useAgent';
 export * from './useEvents';
-export { type MessagesEvent, type MessagesCallbacks } from './useSessionMessageStore';
+export { type MessagesEvent, type MessagesCallbacks } from './useThreadMessageStore';
+export * from './useThreadMessages';
 export * from './useSessionMessages';
 export {
   type RpcHandler,

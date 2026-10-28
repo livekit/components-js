@@ -1,22 +1,22 @@
 import { describe, test, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import type { ReceivedMessage } from '@livekit/components-core';
-import { useSessionMessageStore, MessagesEvent } from './useSessionMessageStore';
+import { useThreadMessageStore, MessagesEvent } from './useThreadMessageStore';
 
 function msg(id: string, message: string): ReceivedMessage {
   return { id, timestamp: Date.now(), message } as ReceivedMessage;
 }
 
-describe('useSessionMessageStore', () => {
+describe('useThreadMessageStore', () => {
   test('upserts and exposes messages', () => {
-    const { result } = renderHook(() => useSessionMessageStore());
+    const { result } = renderHook(() => useThreadMessageStore());
     act(() => result.current.upsertMessage(msg('a', 'hello')));
     expect(result.current.messages.map((m) => m.id)).toEqual(['a']);
     expect((result.current.messages[0] as { message: string }).message).toBe('hello');
   });
 
   test('dedups by id and updates in place, preserving first-received order', () => {
-    const { result } = renderHook(() => useSessionMessageStore());
+    const { result } = renderHook(() => useThreadMessageStore());
     act(() => result.current.upsertMessage(msg('a', 'first')));
     act(() => result.current.upsertMessage(msg('b', 'second')));
     // Update 'a' in place with a NEW object + new content.
@@ -28,7 +28,7 @@ describe('useSessionMessageStore', () => {
   });
 
   test('equality short-circuit: re-upserting the same reference does not re-render or re-emit', () => {
-    const { result } = renderHook(() => useSessionMessageStore());
+    const { result } = renderHook(() => useThreadMessageStore());
     const received: string[] = [];
     result.current.emitter.on(MessagesEvent.MessageReceived, (m) => received.push(m.id));
 
@@ -42,7 +42,7 @@ describe('useSessionMessageStore', () => {
   });
 
   test('emits MessageReceived exactly once per id', () => {
-    const { result } = renderHook(() => useSessionMessageStore());
+    const { result } = renderHook(() => useThreadMessageStore());
     const spy = vi.fn();
     result.current.emitter.on(MessagesEvent.MessageReceived, spy);
 
@@ -54,7 +54,7 @@ describe('useSessionMessageStore', () => {
   });
 
   test('clear() empties the store', () => {
-    const { result } = renderHook(() => useSessionMessageStore());
+    const { result } = renderHook(() => useThreadMessageStore());
     act(() => result.current.upsertMessages([msg('a', 'x'), msg('b', 'y')]));
     expect(result.current.messages).toHaveLength(2);
     act(() => result.current.clear());
@@ -62,7 +62,7 @@ describe('useSessionMessageStore', () => {
   });
 
   test('operation callbacks are stable across renders', () => {
-    const { result, rerender } = renderHook(() => useSessionMessageStore());
+    const { result, rerender } = renderHook(() => useThreadMessageStore());
     const first = {
       upsertMessage: result.current.upsertMessage,
       upsertMessages: result.current.upsertMessages,

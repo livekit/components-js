@@ -32,3 +32,4 @@ export {
   formatChatMessageLinks,
 } from './ChatEntry';
 export * from './SessionProvider';
+export * from './ThreadProvider';

@@ -17,6 +17,7 @@ export {
 export {} from './pin-context';
 export { RoomContext, useEnsureRoom, useMaybeRoomContext, useRoomContext } from './room-context';
 export { useEnsureSession, useMaybeSessionContext, useSessionContext } from './session-context';
+export { useEnsureThread, useMaybeThreadContext, useThreadContext } from './thread-context';
 export {
   TrackRefContext,
   useEnsureTrackRef,

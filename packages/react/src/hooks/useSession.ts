@@ -2,29 +2,21 @@ import * as React from 'react';
 import type TypedEventEmitter from 'typed-emitter';
 import {
   Room,
-  RoomEvent,
   ConnectionState,
   TrackPublishOptions,
-  Track,
   TokenSourceConfigurable,
   TokenSourceFixed,
   TokenSourceFetchOptions,
   RoomConnectOptions,
-  decodeTokenPayload,
   BaseKeyProvider,
-  RoomOptions,
-  ExternalE2EEKeyProvider,
   type BaseE2EEManager,
 } from 'livekit-client';
-import { EventEmitter } from 'events';
 
-import { useMaybeRoomContext } from '../context';
-import { AgentState, useAgent, useAgentTimeoutIdStore } from './useAgent';
-import { TrackReference, log } from '@livekit/components-core';
-import { useLocalParticipant } from './useLocalParticipant';
-import { TextTransport, type TextTransportBaseUrl } from '../text-transport/TextTransport';
-import { useSessionMessageStore, type SessionMessageStore } from './useSessionMessageStore';
-import { useEvents } from './useEvents';
+import { TrackReference } from '@livekit/components-core';
+import { AgentState } from './useAgent';
+import { useThread, type UseThreadReturn } from './useThread';
+import { useCall, type UseCallOptions } from './useCall';
+import { type TextTransportBaseUrl } from '../text-transport/TextTransport';
 
 /** @beta */
 export enum SessionEvent {
@@ -40,7 +32,6 @@ export enum SessionEvent {
    * args: (error: Error)
    */
   EncryptionError = 'encryptionError',
-  ThreadStarted = 'threadStarted',
 }
 
 /** @beta */
@@ -85,7 +76,6 @@ export type SwitchActiveDeviceOptions = {
 
 type SessionStateCommon = {
   room: Room;
-  textTransport: TextTransport;
   internal: {
     emitter: TypedEventEmitter<SessionCallbacks>;
     tokenSource: TokenSourceConfigurable | TokenSourceFixed;
@@ -98,7 +88,12 @@ type SessionStateCommon = {
     updateAgentTimeoutState: (agentState: AgentState) => void;
     updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => void;
 
-    messageStore: SessionMessageStore;
+    /**
+     * Back-reference to the durable thread this session composes. Used by `SessionProvider` and
+     * `useSessionMessages` to resolve the thread. Not part of the stable public surface.
+     * @internal
+     */
+    thread: UseThreadReturn;
   };
 };
 
@@ -245,560 +240,12 @@ type UseSessionConfigurableOptions = UseSessionCommonOptions &
 type UseSessionFixedOptions = UseSessionCommonOptions & UseSessionRoomOptions;
 
 /**
- * Given two TokenSourceFetchOptions values, check to see if they are deep equal.
- *
- * FIXME: swap this for an import from livekit-client once
- * https://github.com/livekit/client-sdk-js/pull/1733 is merged and published!
- * */
-function areTokenSourceFetchOptionsEqual(a: TokenSourceFetchOptions, b: TokenSourceFetchOptions) {
-  const allKeysSet = new Set([...Object.keys(a), ...Object.keys(b)]) as Set<
-    keyof TokenSourceFetchOptions
-  >;
-
-  for (const key of allKeysSet) {
-    switch (key) {
-      case 'roomName':
-      case 'participantName':
-      case 'participantIdentity':
-      case 'participantMetadata':
-      case 'participantAttributes':
-      case 'agentName':
-      case 'agentMetadata':
-      case 'deployment':
-        if (a[key] !== b[key]) {
-          return false;
-        }
-        break;
-      default:
-        // ref: https://stackoverflow.com/a/58009992
-        const exhaustiveCheckedKey: never = key;
-        throw new Error(`Options key ${exhaustiveCheckedKey} not being checked for equality!`);
-    }
-  }
-
-  return true;
-}
-
-/** Internal hook used by useSession to manage creating a function which can be used to wait
- * until the session is in a given state before resolving. */
-function useSessionWaitUntilConnectionState(
-  emitter: TypedEventEmitter<SessionCallbacks>,
-  connectionState: UseSessionReturn['connectionState'],
-) {
-  const connectionStateRef = React.useRef(connectionState);
-  React.useEffect(() => {
-    connectionStateRef.current = connectionState;
-  }, [connectionState]);
-
-  const waitUntilConnectionState = React.useCallback(
-    async (state: UseSessionReturn['connectionState'], signal?: AbortSignal) => {
-      if (connectionStateRef.current === state) {
-        return;
-      }
-
-      return new Promise<void>((resolve, reject) => {
-        const onceEventOccurred = (newState: UseSessionReturn['connectionState']) => {
-          if (newState !== state) {
-            return;
-          }
-          cleanup();
-          resolve();
-        };
-        const abortHandler = () => {
-          cleanup();
-          reject(
-            new Error(
-              `useSession(/* ... */).waitUntilConnectionState(${state}, /* signal */) - signal aborted`,
-            ),
-          );
-        };
-
-        const cleanup = () => {
-          emitter.off(SessionEvent.ConnectionStateChanged, onceEventOccurred);
-          signal?.removeEventListener('abort', abortHandler);
-        };
-
-        emitter.on(SessionEvent.ConnectionStateChanged, onceEventOccurred);
-        signal?.addEventListener('abort', abortHandler);
-      });
-    },
-    [emitter],
-  );
-
-  return waitUntilConnectionState;
-}
-
-/** Internal hook used by useSession to manage creating a function that properly invokes
- * tokenSource.fetch(...) with any fetch options */
-function useSessionTokenSourceFetch(
-  tokenSource: TokenSourceConfigurable | TokenSourceFixed,
-  unstableRestOptions: Exclude<UseSessionConfigurableOptions, keyof UseSessionCommonOptions>,
-) {
-  const isConfigurable = tokenSource instanceof TokenSourceConfigurable;
-
-  const memoizedTokenFetchOptionsRef = React.useRef<TokenSourceFetchOptions | null>(
-    isConfigurable ? unstableRestOptions : null,
-  );
-
-  React.useEffect(() => {
-    if (!isConfigurable) {
-      memoizedTokenFetchOptionsRef.current = null;
-      return;
-    }
-
-    if (
-      memoizedTokenFetchOptionsRef.current !== null &&
-      areTokenSourceFetchOptionsEqual(memoizedTokenFetchOptionsRef.current, unstableRestOptions)
-    ) {
-      return;
-    }
-    memoizedTokenFetchOptionsRef.current = unstableRestOptions;
-  }, [isConfigurable, unstableRestOptions]);
-
-  const tokenSourceFetch = React.useCallback(
-    async (force?: boolean) => {
-      if (isConfigurable) {
-        if (!memoizedTokenFetchOptionsRef.current) {
-          throw new Error(
-            `AgentSession - memoized token fetch options are not set, but the passed tokenSource was an instance of TokenSourceConfigurable. If you are seeing this please make a new GitHub issue!`,
-          );
-        }
-        return tokenSource.fetch(memoizedTokenFetchOptionsRef.current, force);
-      } else {
-        return tokenSource.fetch();
-      }
-    },
-    [isConfigurable, tokenSource],
-  );
-
-  return tokenSourceFetch;
-}
-
-/**
- * Encode the thread id into an agent-dispatch metadata string. The agents-2.0 worker reads the thread
- * from `thread_id` of the JSON-decoded dispatch metadata (livekit-agents worker.py), so we merge
- * `thread_id` into any existing metadata JSON.
- */
-function withThreadIdMetadata(agentMetadata: string | undefined, threadId: string): string {
-  let base: Record<string, unknown> = {};
-  if (agentMetadata) {
-    try {
-      const parsed = JSON.parse(agentMetadata);
-      if (parsed && typeof parsed === 'object') {
-        base = parsed as Record<string, unknown>;
-      }
-    } catch {
-      // Non-JSON metadata can't carry a thread_id key; it is replaced.
-    }
-  }
-  return JSON.stringify({ ...base, thread_id: threadId });
-}
-
-/**
- * Internal hook owning the live media/room half of a session: the WebRTC `Room`, its connection
- * state, local tracks, agent dispatch, token fetching, and the start/end lifecycle. `useSession`
- * composes this today; it may be exposed as a public `useSessionMedia` in the future.
- *
- * It takes the session's shared `messageStore` so the `internal` bag it builds (consumed by
- * `useAgent` and re-exposed on the session) stays uniform. It does NOT touch the text transport —
- * that conversation concern lives in `useSession`.
- */
-function useSessionMedia(
-  tokenSource: TokenSourceConfigurable | TokenSourceFixed,
-  options: UseSessionConfigurableOptions | UseSessionFixedOptions,
-  messageStore: SessionMessageStore,
-  threadId?: string,
-) {
-  const {
-    room: optionsRoom,
-    agentConnectTimeoutMilliseconds,
-    encryption: unstableEncryption,
-    // `textBaseUrl` is a text-transport concern handled by useSession; pull it out so it never reaches
-    // the token fetch options (areTokenSourceFetchOptionsEqual throws on unknown keys).
-    textBaseUrl: _textBaseUrl,
-    threadId: _threadId,
-    ...unstableRestOptions
-  } = options;
-
-  const encryptionE2eeManager =
-    unstableEncryption && 'e2eeManager' in unstableEncryption
-      ? unstableEncryption.e2eeManager
-      : null;
-  const encryptionKey =
-    unstableEncryption && !('e2eeManager' in unstableEncryption)
-      ? (unstableEncryption.key ?? null)
-      : null;
-  const encryptionWorker =
-    unstableEncryption && !('e2eeManager' in unstableEncryption)
-      ? (unstableEncryption.worker ?? null)
-      : null;
-
-  const roomFromContext = useMaybeRoomContext();
-
-  const externalKeyProviderRef = React.useRef<ExternalE2EEKeyProvider | null>(null);
-
-  const keyProvider = React.useMemo(() => {
-    if (typeof encryptionKey === 'string' || encryptionKey instanceof ArrayBuffer) {
-      if (externalKeyProviderRef.current === null) {
-        externalKeyProviderRef.current = new ExternalE2EEKeyProvider();
-      }
-      externalKeyProviderRef.current.setKey(encryptionKey).catch((e) => log.error(e));
-      return externalKeyProviderRef.current;
-    } else {
-      return encryptionKey;
-    }
-  }, [encryptionKey]);
-
-  const room = React.useMemo(() => {
-    const preGeneratedRoom = roomFromContext ?? optionsRoom;
-    if (preGeneratedRoom) {
-      return preGeneratedRoom;
-    }
-
-    const encryptionViaWorker = !!(keyProvider && encryptionWorker);
-    const encryptionViaManager = !!encryptionE2eeManager;
-    const encryptionEnabled = encryptionViaWorker || encryptionViaManager;
-
-    const roomOptions: RoomOptions = {};
-    if (encryptionViaWorker) {
-      roomOptions.encryption = {
-        keyProvider,
-        worker: encryptionWorker,
-      };
-    } else if (encryptionViaManager) {
-      roomOptions.encryption = {
-        e2eeManager: encryptionE2eeManager,
-      };
-    } else if (unstableEncryption !== undefined) {
-      log.warn(
-        'useSession options encryption was set, but neither encryption.key with encryption.worker nor encryption.e2eeManager was provided.',
-      );
-    }
-    const room = new Room(roomOptions);
-    if (encryptionEnabled) {
-      room.setE2EEEnabled(true);
-    }
-    return room;
-  }, [roomFromContext, optionsRoom, keyProvider, encryptionWorker, encryptionE2eeManager]);
-
-  React.useEffect(() => {
-    return () => {
-      room.disconnect();
-    };
-  }, [room]);
-
-  const emitter = React.useMemo(
-    () => new EventEmitter() as TypedEventEmitter<SessionCallbacks>,
-    [],
-  );
-
-  const [roomConnectionState, setRoomConnectionState] = React.useState(room.state);
-  React.useEffect(() => {
-    const handleConnectionStateChanged = (connectionState: ConnectionState) => {
-      setRoomConnectionState(connectionState);
-    };
-
-    room.on(RoomEvent.ConnectionStateChanged, handleConnectionStateChanged);
-    return () => {
-      room.off(RoomEvent.ConnectionStateChanged, handleConnectionStateChanged);
-    };
-  }, [room]);
-
-  React.useEffect(() => {
-    emitter.emit(SessionEvent.ConnectionStateChanged, roomConnectionState);
-  }, [emitter, roomConnectionState]);
-
-  React.useEffect(() => {
-    const handleMediaDevicesError = async (error: Error) => {
-      emitter.emit(SessionEvent.MediaDevicesError, error);
-    };
-
-    room.on(RoomEvent.MediaDevicesError, handleMediaDevicesError);
-    return () => {
-      room.off(RoomEvent.MediaDevicesError, handleMediaDevicesError);
-    };
-  }, [room, emitter]);
-
-  React.useEffect(() => {
-    const handleEncryptionError = async (error: Error) => {
-      emitter.emit(SessionEvent.EncryptionError, error);
-    };
-
-    room.on(RoomEvent.EncryptionError, handleEncryptionError);
-    return () => {
-      room.off(RoomEvent.EncryptionError, handleEncryptionError);
-    };
-  }, [room, emitter]);
-
-  const { localParticipant } = useLocalParticipant({ room });
-  const cameraPublication = localParticipant.getTrackPublication(Track.Source.Camera);
-  const localCamera = React.useMemo(() => {
-    if (!cameraPublication) {
-      return undefined;
-    }
-    return {
-      source: Track.Source.Camera,
-      participant: localParticipant,
-      publication: cameraPublication,
-    };
-  }, [localParticipant, cameraPublication]);
-  const microphonePublication = localParticipant.getTrackPublication(Track.Source.Microphone);
-  const localMicrophone = React.useMemo(() => {
-    if (!microphonePublication) {
-      return undefined;
-    }
-    return {
-      source: Track.Source.Microphone,
-      participant: localParticipant,
-      publication: microphonePublication,
-    };
-  }, [localParticipant, microphonePublication]);
-  const screenSharePublication = localParticipant.getTrackPublication(Track.Source.ScreenShare);
-  const localScreenShare = React.useMemo(() => {
-    if (!screenSharePublication) {
-      return undefined;
-    }
-    return {
-      source: Track.Source.ScreenShare,
-      participant: localParticipant,
-      publication: screenSharePublication,
-    };
-  }, [localParticipant, screenSharePublication]);
-
-  const {
-    agentTimeoutFailureReason,
-    startAgentTimeout,
-    clearAgentTimeout,
-    clearAgentTimeoutFailureReason,
-    updateAgentTimeoutState,
-    updateAgentTimeoutParticipantExists,
-  } = useAgentTimeoutIdStore();
-
-  // Carry the thread id in the agent dispatch metadata so the room's agent is dispatched against it.
-  const tokenFetchOptions =
-    typeof threadId === 'undefined'
-      ? unstableRestOptions
-      : {
-          ...unstableRestOptions,
-          agentMetadata: withThreadIdMetadata(
-            (unstableRestOptions as TokenSourceFetchOptions).agentMetadata,
-            threadId,
-          ),
-        };
-  const tokenSourceFetch = useSessionTokenSourceFetch(tokenSource, tokenFetchOptions);
-
-  const sessionInternal: UseSessionReturn['internal'] = React.useMemo(
-    () => ({
-      emitter,
-      tokenSource,
-      agentConnectTimeoutMilliseconds,
-
-      agentTimeoutFailureReason,
-      startAgentTimeout,
-      clearAgentTimeout,
-      clearAgentTimeoutFailureReason,
-      updateAgentTimeoutState,
-      updateAgentTimeoutParticipantExists,
-
-      messageStore,
-    }),
-    [
-      emitter,
-      agentConnectTimeoutMilliseconds,
-      tokenSource,
-      agentTimeoutFailureReason,
-      startAgentTimeout,
-      clearAgentTimeout,
-      clearAgentTimeoutFailureReason,
-      updateAgentTimeoutState,
-      updateAgentTimeoutParticipantExists,
-      messageStore,
-    ],
-  );
-
-  const waitUntilConnectionState = useSessionWaitUntilConnectionState(emitter, roomConnectionState);
-
-  const waitUntilConnected = React.useCallback(
-    async (signal?: AbortSignal) => {
-      return waitUntilConnectionState(
-        ConnectionState.Connected /* FIXME: should I check for other states too? */,
-        signal,
-      );
-    },
-    [waitUntilConnectionState],
-  );
-
-  const waitUntilDisconnected = React.useCallback(
-    async (signal?: AbortSignal) => {
-      return waitUntilConnectionState(ConnectionState.Disconnected, signal);
-    },
-    [waitUntilConnectionState],
-  );
-
-  const setEncryptionEnabled = React.useCallback(
-    async (enabled: boolean) => room.setE2EEEnabled(enabled),
-    [room],
-  );
-
-  const agent = useAgent(
-    React.useMemo(
-      () => ({
-        connectionState: roomConnectionState,
-        room,
-        internal: sessionInternal,
-      }),
-      [roomConnectionState, room, sessionInternal],
-    ),
-  );
-
-  const wasSessionEndCalledRef = React.useRef(false);
-
-  const start = React.useCallback(
-    async (connectOptions: SessionConnectOptions = {}) => {
-      const {
-        signal,
-        tracks = { microphone: { enabled: true, publishOptions: { preConnectBuffer: true } } },
-        roomConnectOptions,
-      } = connectOptions;
-
-      await waitUntilDisconnected(signal);
-      wasSessionEndCalledRef.current = false;
-
-      const onSignalAbort = () => {
-        room.disconnect();
-      };
-      signal?.addEventListener('abort', onSignalAbort);
-
-      const onDisconnected = () => {
-        // on disconnection force a new token to be fetched in order to avoid reusing the same room right after
-        // this works around the fact that agents won't rejoin a room that existed previously
-        // and depends on the assumption that the endpoint will return a token for a different room
-        if (!wasSessionEndCalledRef.current) {
-          tokenSourceFetch(true);
-        }
-      };
-      room.once(RoomEvent.Disconnected, onDisconnected);
-
-      let tokenDispatchesAgent = false;
-      await Promise.all([
-        tokenSourceFetch().then(({ serverUrl, participantToken }) => {
-          const participantTokenPayload = decodeTokenPayload(participantToken);
-          const participantTokenAgentDispatchCount =
-            participantTokenPayload.roomConfig?.agents?.length ?? 0;
-          tokenDispatchesAgent = participantTokenAgentDispatchCount > 0;
-
-          return room.connect(serverUrl, participantToken, roomConnectOptions);
-        }),
-
-        // Start microphone (with preconnect buffer) by default
-        tracks.microphone?.enabled
-          ? room.localParticipant.setMicrophoneEnabled(
-              true,
-              undefined,
-              tracks.microphone?.publishOptions ?? {},
-            )
-          : Promise.resolve(),
-        tracks.camera?.enabled
-          ? room.localParticipant.setCameraEnabled(
-              true,
-              undefined,
-              tracks.camera?.publishOptions ?? {},
-            )
-          : Promise.resolve(),
-        tracks.screenShare?.enabled
-          ? room.localParticipant.setScreenShareEnabled(
-              true,
-              undefined,
-              tracks.screenShare?.publishOptions ?? {},
-            )
-          : Promise.resolve(),
-      ]);
-
-      await waitUntilConnected(signal);
-      if (tokenDispatchesAgent) {
-        await agent.waitUntilConnected(signal);
-      }
-
-      signal?.removeEventListener('abort', onSignalAbort);
-    },
-    [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected, agent.waitUntilConnected],
-  );
-
-  // Media-only teardown: disconnect the room. The conversation teardown (text transport + message
-  // store) is composed on top in useSession's `end`.
-  const end = React.useCallback(async () => {
-    wasSessionEndCalledRef.current = true;
-    tokenSourceFetch(true);
-    await room.disconnect();
-  }, [room, tokenSourceFetch]);
-
-  const prepareConnection = React.useCallback(async () => {
-    const credentials = await tokenSourceFetch();
-    await room.prepareConnection(credentials.serverUrl, credentials.participantToken);
-  }, [tokenSourceFetch, room]);
-  React.useEffect(
-    () => {
-      prepareConnection().catch((err) => {
-        // FIXME: figure out a better logging solution?
-        console.warn('WARNING: Room.prepareConnection failed:', err);
-      });
-    },
-    [/* note: no prepareConnection here, this effect should only ever run once! */],
-  );
-
-  // When the thread id changes on an active session, cycle the room so its agent is re-dispatched
-  // against the new thread: disconnect and mint a fresh token (with the new thread id in the dispatch
-  // metadata) in parallel, then reconnect. A disconnected session needs nothing — its next start()
-  // already uses the new thread id.
-  const previousThreadIdRef = React.useRef(threadId);
-  React.useEffect(() => {
-    if (previousThreadIdRef.current === threadId) {
-      return;
-    }
-    previousThreadIdRef.current = threadId;
-
-    if (room.state === ConnectionState.Disconnected) {
-      return;
-    }
-
-    let cancelled = false;
-    void (async () => {
-      try {
-        const [credentials] = await Promise.all([tokenSourceFetch(true), room.disconnect()]);
-        if (cancelled) {
-          return;
-        }
-        await room.connect(credentials.serverUrl, credentials.participantToken);
-      } catch (err) {
-        // FIXME: figure out a better logging solution?
-        console.warn('WARNING: useSession failed to reconnect after a thread id change:', err);
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [threadId, room, tokenSourceFetch]);
-
-  return {
-    room,
-    roomConnectionState,
-    localCamera,
-    localMicrophone,
-    localScreenShare,
-    internal: sessionInternal,
-    start,
-    end,
-    waitUntilConnected,
-    waitUntilDisconnected,
-    prepareConnection,
-    setEncryptionEnabled,
-    tokenSourceFetch,
-  };
-}
-
-/**
  * A Session represents a managed connection to a Room which can contain Agents.
+ *
+ * It is a thin composite over {@link useThread} (the durable conversation: text transport, message
+ * store, thread id and history) and {@link useCall} (the live room: connection state, tracks, and the
+ * start/end lifecycle). The thread is exposed on `internal.thread` so `useSessionMessages` and
+ * `SessionProvider` can resolve it.
  * @beta
  */
 export function useSession(
@@ -817,75 +264,60 @@ export function useSession(
   tokenSource: TokenSourceConfigurable | TokenSourceFixed,
   options: UseSessionConfigurableOptions | UseSessionFixedOptions = {},
 ): UseSessionReturn {
-  const { textBaseUrl, threadId: userProvidedThreadId } = options;
-
-  const [threadId, setThreadId] = React.useState(userProvidedThreadId);
-  React.useEffect(() => setThreadId(userProvidedThreadId), [userProvidedThreadId]);
-
-  // The conversation (text) half of the session: the shared message store and the text transport.
-  const messageStore = useSessionMessageStore();
-
-  // The live media/room half of the session (see useSessionMedia).
   const {
+    agentConnectTimeoutMilliseconds,
     room,
-    roomConnectionState,
-    localCamera,
-    localMicrophone,
-    localScreenShare,
-    internal,
-    start,
-    end: endMedia,
-    waitUntilConnected,
-    waitUntilDisconnected,
-    prepareConnection,
-    setEncryptionEnabled,
-    tokenSourceFetch,
-  } = useSessionMedia(tokenSource, options, messageStore, threadId);
+    encryption,
+    textBaseUrl,
+    threadId,
+    ...tokenFetchOptions
+  } = options;
 
-  const textTransport = React.useMemo(
-    () => new TextTransport({ baseUrl: textBaseUrl, getCredentials: tokenSourceFetch, threadId }),
-    [textBaseUrl, tokenSourceFetch, threadId],
+  // The durable conversation half. The cast lets the one impl path call the overloaded `useThread`
+  // with a union tokenSource; `useThread` branches on `instanceof TokenSourceConfigurable` at runtime,
+  // so a fixed source is handled correctly regardless.
+  const thread = useThread(tokenSource as TokenSourceConfigurable, {
+    textBaseUrl,
+    threadId,
+    ...tokenFetchOptions,
+  });
+
+  // The live media/room half, attached to the thread.
+  const call = useCall(thread, {
+    agentConnectTimeoutMilliseconds,
+    room,
+    encryption,
+  } as UseCallOptions);
+
+  const sessionInternal = React.useMemo(
+    (): SessionStateCommon['internal'] => ({
+      emitter: call.internal.emitter,
+      tokenSource: thread.internal.tokenSource,
+      agentConnectTimeoutMilliseconds: call.internal.agentConnectTimeoutMilliseconds,
+
+      agentTimeoutFailureReason: call.internal.agentTimeoutFailureReason,
+      startAgentTimeout: call.internal.startAgentTimeout,
+      clearAgentTimeout: call.internal.clearAgentTimeout,
+      clearAgentTimeoutFailureReason: call.internal.clearAgentTimeoutFailureReason,
+      updateAgentTimeoutState: call.internal.updateAgentTimeoutState,
+      updateAgentTimeoutParticipantExists: call.internal.updateAgentTimeoutParticipantExists,
+
+      thread,
+    }),
+    [call.internal, thread],
   );
 
-  useEvents(textTransport, 'threadStarted', (threadId: string) => {
-    setThreadId(threadId);
-    internal.emitter.emit(SessionEvent.ThreadStarted, threadId);
-  }, []);
+  const sessionState = React.useMemo((): SessionStateConnecting
+    | SessionStateConnected
+    | SessionStateDisconnected => {
+    const common: SessionStateCommon = { room: call.room, internal: sessionInternal };
 
-  const generateDerivedConnectionStateValues = React.useCallback(
-    <State extends UseSessionReturn['connectionState']>(connectionState: State) =>
-      ({
-        isConnected:
-          connectionState === ConnectionState.Connected ||
-          connectionState === ConnectionState.Reconnecting ||
-          connectionState === ConnectionState.SignalReconnecting,
-      }) as {
-        isConnected: State extends
-          | ConnectionState.Connected
-          | ConnectionState.Reconnecting
-          | ConnectionState.SignalReconnecting
-          ? true
-          : false;
-      },
-    [],
-  );
-
-  const conversationState = React.useMemo(():
-    SessionStateConnecting | SessionStateConnected | SessionStateDisconnected => {
-    const common: SessionStateCommon = {
-      room,
-      textTransport,
-      internal,
-    };
-
-    switch (roomConnectionState) {
+    switch (call.connectionState) {
       case ConnectionState.Connecting:
         return {
           ...common,
-
           connectionState: ConnectionState.Connecting,
-          ...generateDerivedConnectionStateValues(ConnectionState.Connecting),
-
+          isConnected: false,
           local: {
             cameraTrack: undefined,
             microphoneTrack: undefined,
@@ -898,24 +330,16 @@ export function useSession(
       case ConnectionState.SignalReconnecting:
         return {
           ...common,
-
-          connectionState: roomConnectionState,
-          ...generateDerivedConnectionStateValues(roomConnectionState),
-
-          local: {
-            cameraTrack: localCamera,
-            microphoneTrack: localMicrophone,
-            screenShareTrack: localScreenShare,
-          },
+          connectionState: call.connectionState,
+          isConnected: true,
+          local: call.local,
         };
 
       case ConnectionState.Disconnected:
         return {
           ...common,
-
           connectionState: ConnectionState.Disconnected,
-          ...generateDerivedConnectionStateValues(ConnectionState.Disconnected),
-
+          isConnected: false,
           local: {
             cameraTrack: undefined,
             microphoneTrack: undefined,
@@ -923,87 +347,36 @@ export function useSession(
           },
         };
     }
-  }, [
-    internal,
-    room,
-    textTransport,
-    roomConnectionState,
-    localCamera,
-    localMicrophone,
-    localScreenShare,
-    generateDerivedConnectionStateValues,
-  ]);
+  }, [call, sessionInternal]);
 
-  // The public end: stop media, then tear down the conversation (abort text streams, clear transcript).
+  // The public end: stop the call, then tear down the thread's text transport (matches the former
+  // media-stop + text-transport-disconnect behavior).
   const end = React.useCallback(async () => {
-    await endMedia();
-    await textTransport.disconnect();
-  }, [endMedia, textTransport]);
-
-  // Seed the transcript from the active thread's existing messages. When a threadId is provided we
-  // fetch its full history (paginated to the start) and upsert it into the shared store; a session
-  // with no threadId starts empty. Switching threadId drops the previous thread's transcript first.
-  const lastFetchedThreadIdRef = React.useRef(threadId);
-  const messagesEmpty = messageStore.messages.length === 0;
-  React.useEffect(() => {
-    const threadAddedToExistingSession = !messagesEmpty && typeof lastFetchedThreadIdRef.current === 'undefined' && typeof threadId !== 'undefined';
-    if (threadAddedToExistingSession) {
-      return;
-    }
-
-    const controller = new AbortController();
-
-    const threadChanged = typeof threadId !== 'undefined' && lastFetchedThreadIdRef.current !== threadId;
-    if (threadChanged) {
-      messageStore.clear();
-      lastFetchedThreadIdRef.current = threadId;
-
-      void (async () => {
-        try {
-          const history = await textTransport.loadThreadMessages({ signal: controller.signal });
-          if (!controller.signal.aborted) {
-            messageStore.upsertMessages(history);
-          }
-        } catch (err) {
-          if (!controller.signal.aborted) {
-            log.warn('useSession: failed to load thread history', err);
-          }
-        }
-      })();
-      return () => {
-        controller.abort();
-      };
-    }
-
-    const threadIdDropped = typeof threadId === 'undefined';
-    if (threadIdDropped) {
-      messageStore.clear();
-      lastFetchedThreadIdRef.current = undefined;
-    }
-    return;
-  }, [threadId, textTransport, messageStore.upsertMessages, messageStore.clear]);
+    await call.end();
+    await thread.textTransport.disconnect();
+  }, [call.end, thread.textTransport]);
 
   return React.useMemo(
     () => ({
-      ...conversationState,
+      ...sessionState,
 
-      waitUntilConnected,
-      waitUntilDisconnected,
+      waitUntilConnected: call.waitUntilConnected,
+      waitUntilDisconnected: call.waitUntilDisconnected,
 
-      prepareConnection,
-      start,
+      prepareConnection: call.prepareConnection,
+      start: call.start,
       end,
 
-      setEncryptionEnabled,
+      setEncryptionEnabled: call.setEncryptionEnabled,
     }),
     [
-      conversationState,
-      waitUntilConnected,
-      waitUntilDisconnected,
-      prepareConnection,
-      start,
+      sessionState,
+      call.waitUntilConnected,
+      call.waitUntilDisconnected,
+      call.prepareConnection,
+      call.start,
       end,
-      setEncryptionEnabled,
+      call.setEncryptionEnabled,
     ],
   );
 }

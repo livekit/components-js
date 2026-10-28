@@ -1,20 +1,12 @@
 import * as React from 'react';
 import type TypedEventEmitter from 'typed-emitter';
 import { SendTextOptions } from 'livekit-client';
-import {
-  ReceivedMessage,
-  ReceivedChatMessage,
-  TextStreamData,
-  ReceivedUserTranscriptionMessage,
-  ReceivedAgentTranscriptionMessage,
-  log,
-} from '@livekit/components-core';
+import { ReceivedMessage, ReceivedChatMessage, log } from '@livekit/components-core';
 
-import { useAgent } from './useAgent';
-import { useTranscriptions } from './useTranscriptions';
 import { UseSessionReturn } from './useSession';
+import { UseThreadReturn } from './useThread';
 import type { MessagesCallbacks } from './useSessionMessageStore';
-import { useEnsureSession } from '../context';
+import { useMaybeSessionContext, useMaybeThreadContext } from '../context';
 import { TEXT_CHAT_ROLE_ATTRIBUTE } from '../text-transport/TextTransport';
 
 /** @beta */
@@ -32,79 +24,35 @@ export type UseSessionMessagesReturn = {
 };
 
 /**
- * The session's messages: voice transcriptions (data channel) combined with chat messages sent and
- * received over the session's TextTransport (A2A/HTTP). Chat is never sent over the data channel.
- * All messages are accumulated in the session's shared message store so they persist for the life of
- * the session.
+ * A session's messages: voice transcriptions (written into the shared store by the session's call) and
+ * chat messages sent and received over the thread's TextTransport (A2A/HTTP). Chat is never sent over
+ * the data channel. All messages live in the thread's shared message store so they persist for the life
+ * of the conversation.
+ *
+ * The thread is resolved from the passed session's `internal.thread` back-reference, or from a Thread
+ * or Session provider in context.
  * @beta
  */
 export function useSessionMessages(session?: UseSessionReturn): UseSessionMessagesReturn {
-  const s = useEnsureSession(session);
-  const { room, textTransport } = s;
+  const sessionFromContext = useMaybeSessionContext();
+  const threadFromContext = useMaybeThreadContext();
+
+  const thread: UseThreadReturn | undefined =
+    session?.internal.thread ?? threadFromContext ?? sessionFromContext?.internal.thread;
+  if (!thread) {
+    throw new Error(
+      'useSessionMessages: no session or thread available. Render inside a Session or Thread provider, or pass a session explicitly.',
+    );
+  }
+
+  const { textTransport } = thread;
   // Destructure the stable store operations: the store object's identity changes whenever messages
   // change, so depending on it directly would re-run effects / re-create callbacks on every message.
-  const { messages: storeMessages, upsertMessage, upsertMessages, emitter } = s.internal.messageStore;
-
-  const agent = useAgent(session);
-
-  const transcriptions: Array<TextStreamData> = useTranscriptions({ room });
-
-  const transcriptionMessages: Array<
-    ReceivedUserTranscriptionMessage | ReceivedAgentTranscriptionMessage
-  > = React.useMemo(() => {
-    return transcriptions.map((transcription) => {
-      switch (transcription.participantInfo.identity) {
-        case room.localParticipant.identity:
-          return {
-            type: 'userTranscript',
-            message: transcription.text,
-
-            id: transcription.streamInfo.id,
-            timestamp: transcription.streamInfo.timestamp,
-            attributes: transcription.streamInfo.attributes,
-            from: room.localParticipant,
-          };
-
-        case agent.internal.agentParticipant?.identity:
-        case agent.internal.workerParticipant?.identity:
-          return {
-            type: 'agentTranscript',
-            message: transcription.text,
-
-            id: transcription.streamInfo.id,
-            timestamp: transcription.streamInfo.timestamp,
-            attributes: transcription.streamInfo.attributes,
-            from:
-              agent.internal.agentParticipant?.identity === transcription.participantInfo.identity
-                ? agent.internal.agentParticipant
-                : agent.internal.workerParticipant!,
-          };
-
-        default:
-          // FIXME: what should happen if an associated participant is not found?
-          //
-          // For now, just assume it is an agent transcription, since maybe it is from an agent
-          // which disconencted from the room or something like that.
-          return {
-            type: 'agentTranscript',
-            message: transcription.text,
-
-            id: transcription.streamInfo.id,
-            timestamp: transcription.streamInfo.timestamp,
-            attributes: transcription.streamInfo.attributes,
-            from: Array.from(room.remoteParticipants.values()).find(
-              (p) => p.identity === transcription.participantInfo.identity,
-            ),
-          };
-      }
-    });
-  }, [transcriptions, room, agent.internal.agentParticipant, agent.internal.workerParticipant]);
-
-  // Mirror transcriptions into the shared store. Loop-safe: deps are the memoized transcription
-  // array (stable until it changes), and the store upsert short-circuits when nothing changed.
-  React.useEffect(() => {
-    upsertMessages(transcriptionMessages);
-  }, [transcriptionMessages, upsertMessages]);
+  const {
+    messages: storeMessages,
+    upsertMessage,
+    emitter,
+  } = thread.internal.messageStore;
 
   const [isSending, setIsSending] = React.useState(false);
 

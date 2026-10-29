@@ -6,8 +6,7 @@ import {
   type LocalTrack,
   getBrowser,
 } from 'livekit-client';
-import { BehaviorSubject, merge } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { BehaviorSubject, filter, merge } from 'rxjs';
 import { log } from '../logger';
 import { prefixClass } from '../styles-interface';
 import { createActiveDeviceObservable } from '../observables/room';

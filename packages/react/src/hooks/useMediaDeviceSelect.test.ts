@@ -43,5 +43,7 @@ describe('useMediaDeviceSelect in preview mode', () => {
 
     // In preview mode the only way to actually switch the device is via the track.
     expect(setDeviceId).toHaveBeenCalledWith('mic-2');
+    // And the hook must surface that device as active (Fixes #1472).
+    expect(result.current.activeDeviceId).toBe('mic-2');
   });
 });

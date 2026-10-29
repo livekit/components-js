@@ -41,9 +41,12 @@ export function createUrlRegExp(options: RegExOptions) {
   ).source;
   const host = '(?:(?:[a-z\\u00a1-\\uffff0-9][-_]*)*[a-z\\u00a1-\\uffff0-9]+)';
   const domain = '(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*';
-  const tld = `(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))\\.?`;
+  const tld = `(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))(?:\\.(?=[:/?#]))?`;
   const port = '(?::\\d{2,5})?';
-  const path = '(?:[/?#][^\\s"]*)?';
+  // a path keeps balanced parentheses but not the punctuation that ends a sentence around it
+  const parens = '\\([^\\s"()]*\\)';
+  const pathBody = `(?:[^\\s"()]|${parens})*(?:[^\\s"().,;:!?']|${parens})`;
+  const path = `(?:/(?:${pathBody})?|[?#]${pathBody})?`;
   const regex = `(?:${protocol}|www\\.)${auth}(?:localhost|${ip}|${host}${domain}${tld})${port}${path}`;
 
   return options.exact ? new RegExp(`(?:^${regex}$)`, 'i') : new RegExp(regex, 'ig');

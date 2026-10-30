@@ -6,7 +6,7 @@ import {
   type LocalTrack,
   getBrowser,
 } from 'livekit-client';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, filter, merge } from 'rxjs';
 import { log } from '../logger';
 import { prefixClass } from '../styles-interface';
 import { createActiveDeviceObservable } from '../observables/room';
@@ -26,7 +26,13 @@ export function setupDeviceSelector(
 ) {
   const activeDeviceSubject = new BehaviorSubject<string | undefined>(undefined);
 
-  const activeDeviceObservable = createActiveDeviceObservable(room, kind);
+  // Merge room ActiveDeviceChanged events with local-track selections.
+  // Preview / PreJoin paths call setDeviceId on a local track and never emit
+  // RoomEvent.ActiveDeviceChanged, so the subject is the only signal there.
+  const activeDeviceObservable = merge(
+    createActiveDeviceObservable(room, kind),
+    activeDeviceSubject.pipe(filter((id): id is string => id !== undefined)),
+  );
 
   const setActiveMediaDevice = async (id: string, options: SetMediaDeviceOptions = {}) => {
     if (localTrack) {

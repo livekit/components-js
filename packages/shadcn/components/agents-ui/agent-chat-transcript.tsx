@@ -31,7 +31,9 @@ export interface AgentChatTranscriptProps
    */
   autoScroll?: boolean;
   /**
-   * The scroll anchor to use when auto-scrolling.
+   * Which messages to use as scroll anchors when auto-scrolling.
+   * `true` and `'any'` anchor every message; `false` leaves messages unanchored.
+   * `'user'` anchors local messages; `'other'` anchors non-local messages.
    * @defaultValue false
    */
   scrollAnchor?: boolean | 'user' | 'other' | 'any';
@@ -118,6 +120,7 @@ export function AgentChatTranscript({
               let _scrollAnchor = false;
 
               if (
+                scrollAnchor === true ||
                 scrollAnchor === 'any' ||
                 (scrollAnchor === 'user' && isUser) ||
                 (scrollAnchor === 'other' && !isUser)

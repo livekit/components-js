@@ -1,3 +1,4 @@
+import { ReducedMotionVisualizer } from '../../.storybook/lk-decorators/ReducedMotionVisualizer';
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
@@ -12,7 +13,6 @@ import { useSimulatedVolumeBands } from './useSimulatedVolumeBands';
 
 export default {
   component: AgentAudioVisualizerGrid,
-  decorators: [AgentSessionProvider],
   render: (args: AgentAudioVisualizerGridProps) => {
     const { microphoneTrack } = useAgent();
 
@@ -70,10 +70,12 @@ export default {
 };
 
 export const Default: StoryObj<AgentAudioVisualizerGridProps> = {
+  decorators: [AgentSessionProvider],
   args: {},
 };
 
 export const Demo1: StoryObj<AgentAudioVisualizerGridProps> = {
+  decorators: [AgentSessionProvider],
   args: {
     className: 'gap-4',
     children: (
@@ -89,6 +91,7 @@ export const Demo1: StoryObj<AgentAudioVisualizerGridProps> = {
 };
 
 export const Demo2: StoryObj<AgentAudioVisualizerGridProps> = {
+  decorators: [AgentSessionProvider],
   args: {
     color: '#F9B11F',
     className: 'gap-2',
@@ -105,6 +108,7 @@ export const Demo2: StoryObj<AgentAudioVisualizerGridProps> = {
 };
 
 export const Demo3: StoryObj<AgentAudioVisualizerGridProps> = {
+  decorators: [AgentSessionProvider],
   args: {
     color: '#1F8CF9',
     className: 'gap-4',
@@ -121,6 +125,7 @@ export const Demo3: StoryObj<AgentAudioVisualizerGridProps> = {
 };
 
 export const Demo4: StoryObj<AgentAudioVisualizerGridProps> = {
+  decorators: [AgentSessionProvider],
   args: {
     color: '#FFB6C1',
     className: 'gap-x-2.5 gap-y-1',
@@ -141,6 +146,7 @@ export const Demo4: StoryObj<AgentAudioVisualizerGridProps> = {
 // of live audio. The array length doesn't need to match `columnCount` — it's trimmed or
 // padded automatically.
 export const OverrideVolumeBands: StoryObj<AgentAudioVisualizerGridProps> = {
+  decorators: [AgentSessionProvider],
   args: {
     state: 'speaking',
     columnCount: 9,
@@ -153,4 +159,13 @@ export const OverrideVolumeBands: StoryObj<AgentAudioVisualizerGridProps> = {
       <AgentAudioVisualizerGrid {...args} audioTrack={microphoneTrack} volumeBands={volumeBands} />
     );
   },
+};
+
+export const ReducedMotion: StoryObj<AgentAudioVisualizerGridProps> = {
+  args: { state: 'listening', size: 'md' },
+  render: (args: AgentAudioVisualizerGridProps) => (
+    <ReducedMotionVisualizer>
+      {(paused) => <AgentAudioVisualizerGrid {...args} paused={paused} />}
+    </ReducedMotionVisualizer>
+  ),
 };

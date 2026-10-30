@@ -1,3 +1,4 @@
+import { ReducedMotionVisualizer } from '../../.storybook/lk-decorators/ReducedMotionVisualizer';
 import * as React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
@@ -7,7 +8,6 @@ import { useSimulatedVolumeBands } from './useSimulatedVolumeBands';
 
 export default {
   component: AgentAudioVisualizerWave,
-  decorators: [AgentSessionProvider],
   render: (args: AgentAudioVisualizerWaveProps) => {
     const { microphoneTrack } = useAgent();
 
@@ -62,12 +62,14 @@ export default {
 };
 
 export const Default: StoryObj<AgentAudioVisualizerWaveProps> = {
+  decorators: [AgentSessionProvider],
   args: {},
 };
 
 // Demonstrates the `volume` override prop with a simulated speech waveform instead of
 // live audio.
 export const OverrideVolume: StoryObj<AgentAudioVisualizerWaveProps> = {
+  decorators: [AgentSessionProvider],
   args: {
     state: 'speaking',
   },
@@ -77,4 +79,13 @@ export const OverrideVolume: StoryObj<AgentAudioVisualizerWaveProps> = {
 
     return <AgentAudioVisualizerWave {...args} audioTrack={microphoneTrack} volume={volume} />;
   },
+};
+
+export const ReducedMotion: StoryObj<AgentAudioVisualizerWaveProps> = {
+  args: { state: 'listening', size: 'md' },
+  render: (args: AgentAudioVisualizerWaveProps) => (
+    <ReducedMotionVisualizer>
+      {(paused) => <AgentAudioVisualizerWave {...args} paused={paused} />}
+    </ReducedMotionVisualizer>
+  ),
 };

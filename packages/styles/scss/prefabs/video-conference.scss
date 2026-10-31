@@ -19,8 +19,17 @@
 .video-conference {
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: stretch;
   height: 100%;
+}
+
+.video-conference-content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  flex: 1;
 }
 
 .video-conference-inner {
@@ -28,6 +37,7 @@
   flex-direction: column;
   align-items: stretch;
   width: 100%;
+  flex: 1;
 }
 
 .settings-menu-modal {

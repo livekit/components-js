@@ -6,6 +6,7 @@ import type { HTMLAttributes } from 'react';
 
 import type { LiveKitRoomProps } from '../components';
 import { mergeProps } from '../mergeProps';
+import { DevicePermissionError } from '../prefabs/PreJoin';
 import { roomOptionsStringifyReplacer } from '../utils';
 
 const defaultRoomProps: Partial<LiveKitRoomProps> = {
@@ -68,19 +69,93 @@ export function useLiveKitRoom<T extends HTMLElement>(
     return mergeProps(rest, { className }) as HTMLAttributes<T>;
   }, [rest]);
 
+  // Utility to detect permission-denied style errors across browsers/wrappers
+  const isDeniedError = React.useCallback((err: Error): boolean => {
+    const name = (err.name || '').toLowerCase();
+    const message = (err.message || '').toLowerCase();
+    return (
+      name.includes('notallowed') ||
+      name.includes('permissiondenied') ||
+      name.includes('security') ||
+      message.includes('permission denied') ||
+      message.includes('denied by system') ||
+      message.includes('blocked')
+    );
+  }, []);
+
   React.useEffect(() => {
     if (!room) return;
     const onSignalConnected = () => {
       const localP = room.localParticipant;
 
       log.debug('trying to publish local tracks');
-      Promise.all([
-        localP.setMicrophoneEnabled(!!audio, typeof audio !== 'boolean' ? audio : undefined),
-        localP.setCameraEnabled(!!video, typeof video !== 'boolean' ? video : undefined),
-        localP.setScreenShareEnabled(!!screen, typeof screen !== 'boolean' ? screen : undefined),
-      ]).catch((e) => {
-        log.warn(e);
-        onError?.(e as Error);
+
+      // Handle each track type separately to provide granular error handling
+      const enableAudio = async () => {
+        if (audio) {
+          try {
+            await localP.setMicrophoneEnabled(true, typeof audio !== 'boolean' ? audio : undefined);
+          } catch (e) {
+            const error = e as Error;
+            log.warn('Failed to enable microphone:', error);
+
+            // Wrap permission errors with device context for better handling
+            const errorToReport = isDeniedError(error)
+              ? new DevicePermissionError(error, 'audio')
+              : error;
+
+            // Don't call onError here - will be called after all tracks are attempted
+            throw errorToReport;
+          }
+        }
+      };
+
+      const enableVideo = async () => {
+        if (video) {
+          try {
+            await localP.setCameraEnabled(true, typeof video !== 'boolean' ? video : undefined);
+          } catch (e) {
+            const error = e as Error;
+            log.warn('Failed to enable camera:', error);
+
+            // Wrap permission errors with device context for better handling
+            const errorToReport = isDeniedError(error)
+              ? new DevicePermissionError(error, 'video')
+              : error;
+
+            // Don't call onError here - will be called after all tracks are attempted
+            throw errorToReport;
+          }
+        }
+      };
+
+      const enableScreen = async () => {
+        if (screen) {
+          try {
+            await localP.setScreenShareEnabled(
+              true,
+              typeof screen !== 'boolean' ? screen : undefined,
+            );
+          } catch (e) {
+            log.warn('Failed to enable screen share:', e);
+            // Don't call onError here - will be called after all tracks are attempted
+            throw e as Error;
+          }
+        }
+      };
+
+      // Run all enables, then report errors after all attempts complete
+      Promise.allSettled([enableAudio(), enableVideo(), enableScreen()]).then((results) => {
+        const failures = results.filter((r) => r.status === 'rejected') as PromiseRejectedResult[];
+
+        if (failures.length > 0) {
+          log.debug(`${failures.length} track(s) failed to enable`);
+
+          // Call onError for each failure sequentially
+          failures.forEach((failure) => {
+            onError?.(failure.reason as Error);
+          });
+        }
       });
     };
 
@@ -123,6 +198,7 @@ export function useLiveKitRoom<T extends HTMLElement>(
     onMediaDeviceFailure,
     onConnected,
     onDisconnected,
+    isDeniedError,
   ]);
 
   React.useEffect(() => {

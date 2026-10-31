@@ -1,4 +1,5 @@
 @import '../preflight';
+@import '../components/controls/button';
 
 .prejoin {
   @extend %container-style;
@@ -19,7 +20,7 @@
     height: auto;
     aspect-ratio: 16 / 10;
     background-color: black;
-    border-radius: var(--lk-border-radius);
+    border-radius: var(--border-radius);
     overflow: hidden;
     video,
     .camera-off-note {
@@ -59,29 +60,45 @@
   }
 
   .button-group-container {
-    display: flex;
-    flex-wrap: nowrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
 
     > .button-group {
-      width: 50%;
-
-      > .button {
-        justify-content: left;
-      }
-
-      > .button:first-child {
-        width: 100%;
-      }
+      width: 100%;
     }
   }
-  @media (max-width: 400px) {
+
+  @media (max-width: 600px) {
     .button-group-container {
-      flex-wrap: wrap;
+      display: flex;
+      flex-direction: column;
+
       > .button-group {
         width: 100%;
       }
     }
+  }
+
+  .button-menu {
+    height: 100%;
+  }
+
+  /* Safari fix for button groups */
+  .button-group-pre-join,
+  .button-group-menu-pre-join {
+    height: auto;
+  }
+
+  /* Mic level meter inside the PreJoin audio toggle */
+  .button-group-pre-join .audio-bar-visualizer {
+    --va-bar-width: 2px;
+    --va-bar-gap: 3px;
+    --va-bar-border-radius: 1px;
+    width: auto;
+    height: 1rem;
+    margin-inline-start: 0.5rem;
+    background: transparent;
   }
 
   .username-container {
@@ -102,5 +119,44 @@
     &:hover {
       background-color: var(--control-hover-bg);
     }
+  }
+}
+
+.button-group-pre-join {
+  @extend .button-group;
+  flex-wrap: nowrap;
+  width: 100%;
+  gap: 0.5rem;
+
+  > .button-menu {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    height: 100%;
+  }
+}
+
+.button-group-menu-pre-join {
+  @extend .button-group-menu;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow: hidden;
+
+  > label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.button-menu {
+  @extend .button-menu;
+  &::after {
+    margin-left: 0;
   }
 }

@@ -1,0 +1,142 @@
+@import '../preflight';
+@import '../components/controls/button';
+
+.track-toggle-container {
+  position: relative;
+}
+
+.permission-denied {
+  --control-bg: #ea4335;
+  --control-hover-bg: #cd3a2e;
+  --control-active-bg: #ac3126;
+  --control-active-hover-bg: #cd3a2e;
+  border-color: #cd3a2e;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    --control-bg: var(--control-hover-bg);
+  }
+
+  &:active {
+    --control-bg: var(--control-active-bg);
+  }
+}
+
+.permission-warning-icon {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: #fa7b17;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.permission-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.permission-modal-content {
+  background-color: var(--bg4);
+  padding: 1.5rem;
+  border-radius: 32px;
+  max-width: 840px;
+  max-height: 100%;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow: scroll;
+
+  @media screen and (min-width: 600px) {
+    flex-direction: row;
+    gap: 2rem;
+    padding: 2rem;
+  }
+}
+
+.permission-modal-close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--control-fg);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: var(--control-active-hover-bg);
+  }
+}
+
+.permission-modal-image-container {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 8px;
+  margin: 0 auto;
+  flex-shrink: 1;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  @media screen and (min-width: 600px) {
+    flex-shrink: 0;
+    width: 240px;
+    height: 240px;
+  }
+}
+
+.permission-modal-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+
+  @media screen and (min-width: 600px) {
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+}
+
+.permission-modal-description {
+  margin: 0 0 1rem 0;
+  font-size: 1.15rem;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.permission-modal-instructions {
+  font-size: 1.15rem;
+  margin: 0 0 1rem 0;
+  padding-left: 1rem;
+  line-height: 1.5;
+
+  > li {
+    margin-bottom: 1rem;
+  }
+}

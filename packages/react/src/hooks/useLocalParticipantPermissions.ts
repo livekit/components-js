@@ -1,5 +1,5 @@
 import { participantPermissionObserver } from '@livekit/components-core';
-import type { ParticipantPermission } from '@livekit/protocol';
+import type { Participant } from 'livekit-client';
 import * as React from 'react';
 import { useRoomContext } from '../context';
 import { useObservableState } from './internal';
@@ -13,7 +13,7 @@ import { useObservableState } from './internal';
  * ```
  * @public
  */
-export function useLocalParticipantPermissions(): ParticipantPermission | undefined {
+export function useLocalParticipantPermissions(): Participant['permissions'] {
   const room = useRoomContext();
   const permissionObserver = React.useMemo(
     () => participantPermissionObserver(room.localParticipant),

@@ -1,3 +1,4 @@
+import { ReducedMotionVisualizer } from '../../.storybook/lk-decorators/ReducedMotionVisualizer';
 import React from 'react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
@@ -7,7 +8,6 @@ import { useSimulatedVolumeBands } from './useSimulatedVolumeBands';
 
 export default {
   component: AgentAudioVisualizerRadial,
-  decorators: [AgentSessionProvider],
   render: (args: AgentAudioVisualizerRadialProps) => {
     const { microphoneTrack } = useAgent();
 
@@ -56,6 +56,7 @@ export default {
 };
 
 export const Default: StoryObj<AgentAudioVisualizerRadialProps> = {
+  decorators: [AgentSessionProvider],
   args: {},
 };
 
@@ -63,6 +64,7 @@ export const Default: StoryObj<AgentAudioVisualizerRadialProps> = {
 // of live audio. The array length doesn't need to match `barCount` — it's trimmed or
 // padded automatically.
 export const OverrideVolumeBands: StoryObj<AgentAudioVisualizerRadialProps> = {
+  decorators: [AgentSessionProvider],
   args: {
     state: 'speaking',
     barCount: 24,
@@ -79,4 +81,13 @@ export const OverrideVolumeBands: StoryObj<AgentAudioVisualizerRadialProps> = {
       />
     );
   },
+};
+
+export const ReducedMotion: StoryObj<AgentAudioVisualizerRadialProps> = {
+  args: { state: 'listening', size: 'md' },
+  render: (args: AgentAudioVisualizerRadialProps) => (
+    <ReducedMotionVisualizer>
+      {(paused) => <AgentAudioVisualizerRadial {...args} paused={paused} />}
+    </ReducedMotionVisualizer>
+  ),
 };

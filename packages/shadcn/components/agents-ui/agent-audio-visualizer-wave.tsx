@@ -1,5 +1,12 @@
 'use client';
 
+import { usePrefersReducedMotion } from '@/hooks/agents-ui/use-agent-audio-visualizer-motion';
+import {
+  AgentAudioVisualizerPaused,
+  visualizerContainerProps,
+  type AgentAudioVisualizerMotionProps,
+} from '@/components/agents-ui/agent-audio-visualizer-motion';
+
 import { useMemo, type ComponentProps } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/components-react';
@@ -254,7 +261,7 @@ export const AgentAudioVisualizerWaveVariants = cva(['aspect-square'], {
   },
 });
 
-export interface AgentAudioVisualizerWaveProps {
+export interface AgentAudioVisualizerWaveProps extends AgentAudioVisualizerMotionProps {
   /**
    * The size of the visualizer.
    * @defaultValue 'lg'
@@ -299,26 +306,7 @@ export interface AgentAudioVisualizerWaveProps {
   className?: string;
 }
 
-/**
- * A wave-style audio visualizer that responds to agent state and audio levels.
- * Displays an animated wave that reacts to the current agent state (connecting, thinking, speaking, etc.)
- * and audio volume when speaking.
- *
- * @extends ComponentProps<'div'>
- *
- * @example ```tsx
- * <AgentAudioVisualizerWave
- *   size="lg"
- *   state="speaking"
- *   color="#1FD5F9"
- *   colorShift={0.3}
- *   lineWidth={2}
- *   blur={0.5}
- *   audioTrack={audioTrack}
- * />
- * ```
- */
-export function AgentAudioVisualizerWave({
+function AgentAudioVisualizerWaveAnimation({
   size = 'lg',
   state = 'speaking',
   color,
@@ -370,6 +358,59 @@ export function AgentAudioVisualizerWave({
         className,
       )}
       {...props}
+    />
+  );
+}
+
+/**
+ * A wave-style audio visualizer that responds to agent state and audio levels.
+ * Displays an animated wave that reacts to the current agent state (connecting, thinking, speaking, etc.)
+ * and audio volume when speaking.
+ *
+ * When paused, shows text state instead of animation. Use the shared motion hook
+ * and AgentAudioVisualizerToggle to place playback controls in your app.
+ *
+ * @extends ComponentProps<'div'>
+ *
+ * @example ```tsx
+ * <AgentAudioVisualizerWave
+ *   size="lg"
+ *   state="speaking"
+ *   color="#1FD5F9"
+ *   colorShift={0.3}
+ *   lineWidth={2}
+ *   blur={0.5}
+ *   audioTrack={audioTrack}
+ * />
+ * ```
+ */
+export function AgentAudioVisualizerWave({
+  paused,
+  pausedContent,
+  ...animationProps
+}: Parameters<typeof AgentAudioVisualizerWaveAnimation>[0]) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  if (!(paused ?? prefersReducedMotion))
+    return <AgentAudioVisualizerWaveAnimation {...animationProps} />;
+  const { size = 'lg', state = 'speaking' } = animationProps;
+  const htmlProps = visualizerContainerProps(animationProps, [
+    'size',
+    'state',
+    'color',
+    'colorShift',
+    'lineWidth',
+    'blur',
+    'audioTrack',
+    'volume',
+    'children',
+  ]);
+  return (
+    <AgentAudioVisualizerPaused
+      {...htmlProps}
+      size={size}
+      state={state}
+      square={true}
+      pausedContent={pausedContent}
     />
   );
 }

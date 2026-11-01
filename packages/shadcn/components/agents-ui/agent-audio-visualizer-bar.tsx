@@ -1,5 +1,12 @@
 'use client';
 
+import { usePrefersReducedMotion } from '@/hooks/agents-ui/use-agent-audio-visualizer-motion';
+import {
+  AgentAudioVisualizerPaused,
+  visualizerContainerProps,
+  type AgentAudioVisualizerMotionProps,
+} from '@/components/agents-ui/agent-audio-visualizer-motion';
+
 import React, {
   type CSSProperties,
   Children,
@@ -94,7 +101,7 @@ export const AgentAudioVisualizerBarVariants = cva('relative flex items-center j
 /**
  * Props for the AgentAudioVisualizerBar component.
  */
-export interface AgentAudioVisualizerBarProps {
+export interface AgentAudioVisualizerBarProps extends AgentAudioVisualizerMotionProps {
   /**
    * The size of the visualizer.
    * @defaultValue 'md'
@@ -134,23 +141,7 @@ export interface AgentAudioVisualizerBarProps {
   children?: ReactNode;
 }
 
-/**
- * A bar-style audio visualizer that responds to agent state and audio levels.
- * Displays animated bars that react to the current agent state (connecting, thinking, speaking, etc.)
- * and audio volume when speaking.
- *
- * @extends ComponentProps<'div'>
- *
- * @example
- * ```tsx
- * <AgentAudioVisualizerBar
- *   size="md"
- *   state="speaking"
- *   audioTrack={agentAudioTrack}
- * />
- * ```
- */
-export function AgentAudioVisualizerBar({
+function AgentAudioVisualizerBarAnimation({
   size = 'md',
   state = 'connecting',
   color,
@@ -243,5 +234,53 @@ export function AgentAudioVisualizerBar({
         ),
       )}
     </div>
+  );
+}
+
+/**
+ * A bar-style audio visualizer that responds to agent state and audio levels.
+ * Displays animated bars that react to the current agent state (connecting, thinking, speaking, etc.)
+ * and audio volume when speaking.
+ *
+ * When paused, shows text state instead of animation. Use the shared motion hook
+ * and AgentAudioVisualizerToggle to place playback controls in your app.
+ *
+ * @extends ComponentProps<'div'>
+ *
+ * @example
+ * ```tsx
+ * <AgentAudioVisualizerBar
+ *   size="md"
+ *   state="speaking"
+ *   audioTrack={agentAudioTrack}
+ * />
+ * ```
+ */
+export function AgentAudioVisualizerBar({
+  paused,
+  pausedContent,
+  ...animationProps
+}: Parameters<typeof AgentAudioVisualizerBarAnimation>[0]) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  if (!(paused ?? prefersReducedMotion))
+    return <AgentAudioVisualizerBarAnimation {...animationProps} />;
+  const { size = 'md', state = 'connecting' } = animationProps;
+  const htmlProps = visualizerContainerProps(animationProps, [
+    'size',
+    'state',
+    'color',
+    'barCount',
+    'audioTrack',
+    'volumeBands',
+    'children',
+  ]);
+  return (
+    <AgentAudioVisualizerPaused
+      {...htmlProps}
+      size={size}
+      state={state}
+      square={false}
+      pausedContent={pausedContent}
+    />
   );
 }

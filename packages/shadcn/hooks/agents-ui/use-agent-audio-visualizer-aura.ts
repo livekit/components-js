@@ -33,8 +33,11 @@ function useAnimatedValue<T>(initialValue: T) {
   const controlsRef = useRef<AnimationPlaybackControlsWithThen | null>(null);
   useMotionValueEvent(motionValue, 'change', (value) => setValue(value as T));
 
+  useEffect(() => () => controlsRef.current?.stop(), []);
+
   const animateFn = useCallback(
     (targetValue: T | T[], transition: ValueAnimationTransition) => {
+      controlsRef.current?.stop();
       controlsRef.current = animate(motionValue, targetValue, transition);
     },
     [motionValue],

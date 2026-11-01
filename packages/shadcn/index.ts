@@ -14,3 +14,10 @@ export * from './components/agents-ui/agent-audio-visualizer-aura';
 export * from './components/agents-ui/react-shader-toy';
 export * from './components/agents-ui/blocks/agent-session-view-01/components/agent-session-block';
 export * from './components/agents-ui/blocks/agent-popup-01/components/agent-popup-block';
+
+export * from './hooks/agents-ui/use-agent-audio-visualizer-motion';
+export {
+  AgentAudioVisualizerState,
+  AgentAudioVisualizerToggle,
+} from './components/agents-ui/agent-audio-visualizer-motion';
+export type { AgentAudioVisualizerMotionProps } from './components/agents-ui/agent-audio-visualizer-motion';

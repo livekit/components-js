@@ -253,4 +253,11 @@ describe('useAgentAudioVisualizerAura', () => {
       expect(result.current).toBeDefined();
     });
   });
+  it('stops active animations when the visualization is unmounted', () => {
+    const { unmount } = renderHook(() => useAgentAudioVisualizerAura('thinking'));
+    const controls = vi.mocked(animate).mock.results.map(({ value }) => value);
+    expect(controls.length).toBeGreaterThan(0);
+    unmount();
+    for (const control of controls) expect(control.stop).toHaveBeenCalled();
+  });
 });

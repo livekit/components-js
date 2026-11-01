@@ -1,5 +1,12 @@
 'use client';
 
+import { usePrefersReducedMotion } from '@/hooks/agents-ui/use-agent-audio-visualizer-motion';
+import {
+  AgentAudioVisualizerPaused,
+  visualizerContainerProps,
+  type AgentAudioVisualizerMotionProps,
+} from '@/components/agents-ui/agent-audio-visualizer-motion';
+
 import React, { useMemo, type ComponentProps } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type LocalAudioTrack, type RemoteAudioTrack } from 'livekit-client';
@@ -32,7 +39,7 @@ function hexToRgb(hexColor: string) {
 
       return color;
     }
-  } catch (error) {
+  } catch {
     console.error(
       `Invalid hex color '${hexColor}'.\nFalling back to default color '${DEFAULT_COLOR}'.`,
     );
@@ -362,7 +369,7 @@ export const AgentAudioVisualizerAuraVariants = cva(['aspect-square'], {
   },
 });
 
-export interface AgentAudioVisualizerAuraProps {
+export interface AgentAudioVisualizerAuraProps extends AgentAudioVisualizerMotionProps {
   /**
    * The size of the visualizer.
    * @defaultValue 'lg'
@@ -398,23 +405,7 @@ export interface AgentAudioVisualizerAuraProps {
   volume?: number;
 }
 
-/**
- * An shader-based audio visualizer that responds to agent state and audio levels.
- * Displays an animated elliptical aura that reacts to the current agent state (connecting, thinking, speaking, etc.)
- * and audio volume when speaking.
- *
- * @extends ComponentProps<'div'>
- *
- * @example
- * ```tsx
- * <AgentAudioVisualizerAura
- *   size="md"
- *   state="speaking"
- *   audioTrack={agentAudioTrack}
- * />
- * ```
- */
-export function AgentAudioVisualizerAura({
+function AgentAudioVisualizerAuraAnimation({
   size = 'lg',
   state = 'connecting',
   color = DEFAULT_COLOR,
@@ -449,6 +440,55 @@ export function AgentAudioVisualizerAura({
       brightness={brightness}
       className={cn(AgentAudioVisualizerAuraVariants({ size }), className)}
       {...props}
+    />
+  );
+}
+
+/**
+ * An shader-based audio visualizer that responds to agent state and audio levels.
+ * Displays an animated elliptical aura that reacts to the current agent state (connecting, thinking, speaking, etc.)
+ * and audio volume when speaking.
+ *
+ * When paused, shows text state instead of animation. Use the shared motion hook
+ * and AgentAudioVisualizerToggle to place playback controls in your app.
+ *
+ * @extends ComponentProps<'div'>
+ *
+ * @example
+ * ```tsx
+ * <AgentAudioVisualizerAura
+ *   size="md"
+ *   state="speaking"
+ *   audioTrack={agentAudioTrack}
+ * />
+ * ```
+ */
+export function AgentAudioVisualizerAura({
+  paused,
+  pausedContent,
+  ...animationProps
+}: Parameters<typeof AgentAudioVisualizerAuraAnimation>[0]) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  if (!(paused ?? prefersReducedMotion))
+    return <AgentAudioVisualizerAuraAnimation {...animationProps} />;
+  const { size = 'lg', state = 'connecting' } = animationProps;
+  const htmlProps = visualizerContainerProps(animationProps, [
+    'size',
+    'state',
+    'color',
+    'colorShift',
+    'audioTrack',
+    'volume',
+    'themeMode',
+    'children',
+  ]);
+  return (
+    <AgentAudioVisualizerPaused
+      {...htmlProps}
+      size={size}
+      state={state}
+      square={true}
+      pausedContent={pausedContent}
     />
   );
 }

@@ -5,8 +5,8 @@
   transform: translateX(-50%);
   display: flex;
   align-items: stretch;
-  background-color: var(--lk-control-bg);
-  border-radius: var(--lk-border-radius);
+  background-color: var(--control-bg);
+  border-radius: var(--border-radius);
   transition: opacity ease-in-out 0.15s;
   opacity: 0;
 
@@ -30,7 +30,7 @@
 
 .pagination-count {
   padding: 0.5rem 0.875rem;
-  border-inline: 1px solid var(--lk-bg);
+  border-inline: 1px solid var(--bg);
 }
 
 [data-user-interaction='true'].pagination-control {

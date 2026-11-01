@@ -87,3 +87,18 @@ export type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<
 
 export type AudioSource = Track.Source.Microphone | Track.Source.ScreenShareAudio;
 export type VideoSource = Track.Source.Camera | Track.Source.ScreenShare;
+
+/**
+ * Represents the status of a media device
+ * @public
+ */
+export type DeviceStatus = 'available' | 'permission-denied' | 'no-devices' | 'disabled' | 'error';
+
+/**
+ * Device status information for both audio and video devices
+ * @public
+ */
+export type DeviceStatusInfo = {
+  audio: DeviceStatus;
+  video: DeviceStatus;
+};

@@ -15,13 +15,15 @@ import { createMediaDeviceObserver } from '@livekit/components-core';
 export function useMediaDevices({
   kind,
   onError,
+  requestPermissions,
 }: {
   kind: MediaDeviceKind;
   onError?: (e: Error) => void;
+  requestPermissions?: boolean;
 }) {
   const deviceObserver = React.useMemo(
-    () => createMediaDeviceObserver(kind, onError),
-    [kind, onError],
+    () => createMediaDeviceObserver(kind, onError, requestPermissions),
+    [kind, onError, requestPermissions],
   );
   const devices = useObservableState(deviceObserver, [] as MediaDeviceInfo[]);
   return devices;

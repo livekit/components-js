@@ -4,6 +4,11 @@ packages:
   - 'docs/*'
   - 'tooling/*'
 
+# pnpm 11: keep large native downloads from timing out on slow networks.
+fetchTimeout: 1200000
+fetchRetries: 5
+networkConcurrency: 1
+
 allowBuilds:
   '@parcel/watcher': false
   esbuild: true

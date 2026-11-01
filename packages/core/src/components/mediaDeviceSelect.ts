@@ -5,11 +5,13 @@ import {
   type Room,
   type LocalTrack,
   getBrowser,
+  TrackEvent,
 } from 'livekit-client';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, EMPTY, merge, startWith, switchMap } from 'rxjs';
 import { log } from '../logger';
 import { prefixClass } from '../styles-interface';
 import { createActiveDeviceObservable } from '../observables/room';
+import { trackEventSelector } from '../observables/track';
 
 export type SetMediaDeviceOptions = {
   /**
@@ -26,7 +28,19 @@ export function setupDeviceSelector(
 ) {
   const activeDeviceSubject = new BehaviorSubject<string | undefined>(undefined);
 
-  const activeDeviceObservable = createActiveDeviceObservable(room, kind);
+  // unpublished tracks never trigger room device events
+  const trackDeviceObservable = localTrack
+    ? trackEventSelector(localTrack, TrackEvent.Restarted).pipe(
+        startWith(undefined),
+        switchMap(() => localTrack.getDeviceId(false)),
+      )
+    : EMPTY;
+
+  const activeDeviceObservable = merge(
+    createActiveDeviceObservable(room, kind),
+    activeDeviceSubject,
+    trackDeviceObservable,
+  );
 
   const setActiveMediaDevice = async (id: string, options: SetMediaDeviceOptions = {}) => {
     if (localTrack) {

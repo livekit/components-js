@@ -1,4 +1,3 @@
-import type { ParticipantPermission } from '@livekit/protocol';
 import {
   Participant,
   RemoteParticipant,
@@ -248,7 +247,7 @@ export function connectedParticipantObserver(
 
 export function participantPermissionObserver(
   participant: Participant,
-): Observable<ParticipantPermission | undefined> {
+): Observable<Participant['permissions'] | undefined> {
   const observer = participantEventSelector(
     participant,
     ParticipantEvent.ParticipantPermissionsChanged,

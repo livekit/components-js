@@ -1,5 +1,6 @@
 import { cssPrefix } from '../constants';
 import { createLocalStorageInterface } from './local-storage-helpers';
+import type { DeviceStatusInfo } from '../types';
 
 const USER_CHOICES_KEY = `${cssPrefix}-user-choices` as const;
 
@@ -34,6 +35,12 @@ export type LocalUserChoices = {
    * @defaultValue `''`
    */
   username: string;
+  /**
+   * The actual status of audio and video devices.
+   * This reflects the real device capabilities and permissions.
+   * @defaultValue `{ audio: 'disabled', video: 'disabled' }`
+   */
+  deviceStatus: DeviceStatusInfo;
 };
 
 export const defaultUserChoices: LocalUserChoices = {
@@ -42,6 +49,10 @@ export const defaultUserChoices: LocalUserChoices = {
   videoDeviceId: 'default',
   audioDeviceId: 'default',
   username: '',
+  deviceStatus: {
+    audio: 'disabled',
+    video: 'disabled',
+  },
 } as const;
 
 /**
@@ -91,6 +102,7 @@ export function loadUserChoices(
     videoDeviceId: defaults?.videoDeviceId ?? defaultUserChoices.videoDeviceId,
     audioDeviceId: defaults?.audioDeviceId ?? defaultUserChoices.audioDeviceId,
     username: defaults?.username ?? defaultUserChoices.username,
+    deviceStatus: defaults?.deviceStatus ?? defaultUserChoices.deviceStatus,
   };
 
   if (preventLoad) {

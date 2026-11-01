@@ -8,7 +8,7 @@ import {
   type RoomEventCallbacks,
 } from 'livekit-client';
 import type { Subscriber, Subscription } from 'rxjs';
-import { concat, filter, map, Observable, startWith } from 'rxjs';
+import { concat, filter, map, Observable, startWith, Subject } from 'rxjs';
 import { log } from '../logger';
 export function observeRoomEvents(room: Room, ...events: RoomEvent[]): Observable<Room> {
   const observable = new Observable<Room>((subscribe) => {
@@ -182,6 +182,13 @@ export function activeSpeakerObserver(room: Room) {
   );
 }
 
+const mediaDevicesRefresh = new Subject<void>();
+
+/** Re-enumerates devices where `devicechange` never fires (Android WebView). */
+export function refreshMediaDevices() {
+  mediaDevicesRefresh.next();
+}
+
 export function createMediaDeviceObserver(
   kind?: MediaDeviceKind,
   onError?: (e: Error) => void,
@@ -220,10 +227,12 @@ export function createMediaDeviceObserver(
       }
       navigator?.mediaDevices?.addEventListener('devicechange', onDeviceChange);
     }
+    const refreshSubscription = mediaDevicesRefresh.subscribe(onDeviceChange);
 
     // Return unsubscribe function that cleans up when the observable is unsubscribed
     return () => {
       navigator?.mediaDevices?.removeEventListener('devicechange', onDeviceChange);
+      refreshSubscription.unsubscribe();
     };
   });
 

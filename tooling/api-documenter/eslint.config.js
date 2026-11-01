@@ -8,7 +8,7 @@
 const lkCustom = require('eslint-config-lk-custom');
 
 module.exports = [
-  { ignores: ['lib/**', 'temp/**', 'node_modules/**'] },
+  { ignores: ['lib/**', 'temp/**', 'node_modules/**', '*.js'] },
   ...lkCustom,
   {
     // Vendored fork of @microsoft/api-documenter: @virtual hook methods and CLI

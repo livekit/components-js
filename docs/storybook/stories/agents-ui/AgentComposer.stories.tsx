@@ -9,6 +9,7 @@ import {
   AgentComposer,
   AgentComposerActions,
   AgentComposerCharacterCount,
+  AgentComposerField,
   AgentComposerInput,
   AgentComposerSubmit,
   AgentComposerProps,
@@ -62,20 +63,24 @@ function useMockChat({ sendDelay, failSend }: Pick<Args, 'sendDelay' | 'failSend
   return { messages, send, resend: deliver };
 }
 
+const FIELD_CLASS_NAME = 'rounded-lg border border-input p-2 pl-3';
+
 function MockChat({ placeholder, sendDelay, failSend, children, ...props }: Args) {
   const { messages, send, resend } = useMockChat({ sendDelay, failSend });
 
   return (
     <div className="flex h-[480px] w-96 flex-col gap-2">
       <AgentChatTranscript messages={messages} onResend={resend} className="flex-1" />
-      <AgentComposer {...props} onSend={send} className="rounded-lg border border-input p-2 pl-3">
-        {children ?? (
-          <>
-            <AgentComposerInput placeholder={placeholder} />
-            <AgentComposerSubmit />
-            <AgentComposerCharacterCount />
-          </>
-        )}
+      <AgentComposer {...props} onSend={send}>
+        <AgentComposerField className={FIELD_CLASS_NAME}>
+          {children ?? (
+            <>
+              <AgentComposerInput placeholder={placeholder} />
+              <AgentComposerSubmit />
+            </>
+          )}
+        </AgentComposerField>
+        <AgentComposerCharacterCount />
       </AgentComposer>
     </div>
   );
@@ -145,7 +150,6 @@ export const WithActions: StoryObj<Args> = {
         </button>
       </AgentComposerActions>
       <AgentComposerSubmit className="rounded-full" />
-      <AgentComposerCharacterCount />
     </MockChat>
   ),
 };
@@ -154,6 +158,11 @@ export const WithActions: StoryObj<Args> = {
 export const SessionChat: StoryObj<AgentComposerProps> = {
   decorators: [AgentSessionProvider],
   render: () => (
-    <AgentComposer className="w-96 rounded-lg border border-input p-2 pl-3 data-[disabled]:opacity-60" />
+    <AgentComposer className="w-96 data-[disabled]:opacity-60">
+      <AgentComposerField className={FIELD_CLASS_NAME}>
+        <AgentComposerInput />
+        <AgentComposerSubmit />
+      </AgentComposerField>
+    </AgentComposer>
   ),
 };

@@ -5,6 +5,7 @@ import { ConnectionState } from 'livekit-client';
 import {
   AgentComposer,
   AgentComposerActions,
+  AgentComposerField,
   AgentComposerInput,
   AgentComposerSubmit,
 } from '@/components/agents-ui/agent-composer';
@@ -212,11 +213,13 @@ describe('AgentComposer', () => {
   it('renders custom parts and actions', () => {
     render(
       <AgentComposer onSend={vi.fn()}>
-        <AgentComposerInput placeholder="Ask anything" aria-label="Ask the agent" />
-        <AgentComposerActions>
-          <button type="button">Attach</button>
-        </AgentComposerActions>
-        <AgentComposerSubmit aria-label="Send">Go</AgentComposerSubmit>
+        <AgentComposerField>
+          <AgentComposerInput placeholder="Ask anything" aria-label="Ask the agent" />
+          <AgentComposerActions>
+            <button type="button">Attach</button>
+          </AgentComposerActions>
+          <AgentComposerSubmit aria-label="Send">Go</AgentComposerSubmit>
+        </AgentComposerField>
       </AgentComposer>,
     );
 

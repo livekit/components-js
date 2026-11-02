@@ -280,4 +280,33 @@ describe('AgentChatTranscript failed messages', () => {
 
     expect(onResend).toHaveBeenCalledExactlyOnceWith('failed');
   });
+
+  it('shows a retried message as sending until it settles', () => {
+    const { rerender } = render(<AgentChatTranscript messages={messages} onResend={vi.fn()} />);
+    const withStatus = (status: 'sending' | 'sent' | 'failed') =>
+      messages.map((message) => (message.id === 'failed' ? { ...message, status } : message));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
+    rerender(<AgentChatTranscript messages={withStatus('sending')} onResend={vi.fn()} />);
+    expect(screen.getByText('Sending…')).toBeInTheDocument();
+
+    rerender(<AgentChatTranscript messages={withStatus('failed')} onResend={vi.fn()} />);
+    expect(screen.queryByText('Sending…')).not.toBeInTheDocument();
+    expect(screen.getByText('Not sent.')).toBeInTheDocument();
+
+    rerender(<AgentChatTranscript messages={withStatus('sent')} onResend={vi.fn()} />);
+    expect(screen.queryByText('Sending…')).not.toBeInTheDocument();
+    expect(screen.queryByText('Not sent.')).not.toBeInTheDocument();
+  });
+
+  it('keeps first sends quiet', () => {
+    render(
+      <AgentChatTranscript
+        messages={[{ ...messages[0], id: 'new', status: 'sending' }]}
+        onResend={vi.fn()}
+      />,
+    );
+
+    expect(screen.queryByText('Sending…')).not.toBeInTheDocument();
+  });
 });

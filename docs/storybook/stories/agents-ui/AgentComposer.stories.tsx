@@ -106,7 +106,10 @@ export default {
 
 export const Default: StoryObj<Args> = {};
 
-/** Every send fails. Turn off `failSend` in Controls, then click "Try again" on a message. */
+/**
+ * Every send fails. "Try again" shows the message sending, then failing again. Turn off `failSend`
+ * in Controls to watch a retry succeed.
+ */
 export const SendFails: StoryObj<Args> = {
   args: {
     failSend: true,

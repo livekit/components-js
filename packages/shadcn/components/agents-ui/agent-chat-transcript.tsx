@@ -1,8 +1,8 @@
 'use client';
 
-import { type ComponentProps, useEffect, useRef } from 'react';
+import { type ComponentProps, useEffect, useRef, useState } from 'react';
 import { type AgentState, type ReceivedMessage } from '@livekit/components-react';
-import { CircleAlertIcon } from 'lucide-react';
+import { CircleAlertIcon, LoaderIcon } from 'lucide-react';
 import { Streamdown } from 'streamdown';
 import { Bubble, BubbleContent } from '@/components/ui/bubble';
 import { Message, MessageContent, MessageFooter } from '@/components/ui/message';
@@ -64,7 +64,7 @@ export interface AgentChatTranscriptProps
   messages?: ReceivedMessage[];
   /**
    * Sends a failed message again, such as `resend` from `useSessionMessages`. When provided, failed
-   * messages show a retry button.
+   * messages show a retry button, and a retried message shows that it's sending until it settles.
    */
   onResend?: (messageId: string) => void;
   /**
@@ -125,6 +125,13 @@ export function AgentChatTranscript({
 }: AgentChatTranscriptProps) {
   const anchorsLocalMessages =
     scrollAnchor === true || scrollAnchor === 'any' || scrollAnchor === 'user';
+  // First sends stay quiet so they feel instant; only retries show that they're in progress
+  const [retriedIds, setRetriedIds] = useState<ReadonlySet<string>>(() => new Set());
+
+  const handleResend = (id: string) => {
+    setRetriedIds((previous) => new Set(previous).add(id));
+    onResend?.(id);
+  };
 
   return (
     <MessageScrollerProvider
@@ -171,6 +178,12 @@ export function AgentChatTranscript({
                           <Streamdown>{message}</Streamdown>
                         </BubbleContent>
                       </Bubble>
+                      {status === 'sending' && retriedIds.has(id) && (
+                        <MessageFooter className="text-muted-foreground gap-1.5">
+                          <LoaderIcon className="size-3.5 animate-spin" aria-hidden />
+                          <span>Sending…</span>
+                        </MessageFooter>
+                      )}
                       {status === 'failed' && (
                         <MessageFooter className="text-destructive gap-1.5">
                           <CircleAlertIcon className="size-3.5" aria-hidden />
@@ -178,7 +191,7 @@ export function AgentChatTranscript({
                           {onResend && (
                             <button
                               type="button"
-                              onClick={() => onResend(id)}
+                              onClick={() => handleResend(id)}
                               className="underline underline-offset-2 hover:no-underline"
                             >
                               Try again

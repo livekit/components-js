@@ -422,7 +422,7 @@ export type AgentComposerMicrophoneProps = Omit<
 
 /**
  * Turns the microphone on so the agent can hear you, and off again. It starts off and fills in
- * while listening, with the microphone's level beside the icon when the composer has a
+ * while listening, with the microphone's level before the icon when the composer has a
  * `microphoneTrack`. Renders nothing when the composer has no `onListeningChange`, which is set
  * for you without `onSend`.
  *
@@ -460,7 +460,6 @@ export function AgentComposerMicrophone({
     >
       {children ?? (
         <>
-          <MicIcon />
           {listening && microphoneTrack && (
             <AgentAudioVisualizerBar
               size="icon"
@@ -473,6 +472,7 @@ export function AgentComposerMicrophone({
               <span className="h-full min-h-0.5 w-0.5 origin-center rounded-full bg-current" />
             </AgentAudioVisualizerBar>
           )}
+          <MicIcon />
         </>
       )}
     </Toggle>

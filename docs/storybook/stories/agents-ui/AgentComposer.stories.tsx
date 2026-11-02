@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { type ReactNode, useState } from 'react';
 import { PaperclipIcon } from 'lucide-react';
 import { StoryObj } from '@storybook/react-vite';
 import { type ReceivedChatMessage } from '@livekit/components-react';
@@ -13,6 +13,7 @@ import {
   AgentComposerInput,
   AgentComposerSubmit,
   AgentComposerProps,
+  AgentTrackToggle,
 } from '@livekit/agents-ui';
 
 interface Args extends AgentComposerProps {
@@ -65,24 +66,56 @@ function useMockChat({ sendDelay, failSend }: Pick<Args, 'sendDelay' | 'failSend
 
 const FIELD_CLASS_NAME = 'rounded-lg border border-input p-2 pl-3';
 
-function MockChat({ placeholder, sendDelay, failSend, children, ...props }: Args) {
+interface MockChatProps extends Args {
+  /** Controls to the left of the field, outside it. */
+  leading?: ReactNode;
+  /** Controls inside the field, between the input and the send button. */
+  actions?: ReactNode;
+}
+
+function MockChat({
+  placeholder,
+  sendDelay,
+  failSend,
+  leading,
+  actions,
+  className,
+  ...props
+}: MockChatProps) {
   const { messages, send, resend } = useMockChat({ sendDelay, failSend });
 
   return (
     <div className="flex h-[480px] w-96 flex-col gap-2">
       <AgentChatTranscript messages={messages} onResend={resend} className="flex-1" />
-      <AgentComposer {...props} onSend={send}>
+      <AgentComposer
+        {...props}
+        onSend={send}
+        // A grid keeps leading controls beside the field, with the count under the field only
+        className={[leading && 'grid grid-cols-[auto_minmax(0,1fr)] gap-x-2', className]
+          .filter(Boolean)
+          .join(' ')}
+      >
+        {leading}
         <AgentComposerField className={FIELD_CLASS_NAME}>
-          {children ?? (
-            <>
-              <AgentComposerInput placeholder={placeholder} />
-              <AgentComposerSubmit />
-            </>
-          )}
+          <AgentComposerInput placeholder={placeholder} />
+          {actions}
+          <AgentComposerSubmit />
         </AgentComposerField>
-        <AgentComposerCharacterCount />
+        <AgentComposerCharacterCount className={leading ? 'col-start-2' : undefined} />
       </AgentComposer>
     </div>
+  );
+}
+
+function MicrophoneToggle() {
+  const [enabled, setEnabled] = useState(true);
+  return (
+    <AgentTrackToggle
+      source="microphone"
+      pressed={enabled}
+      onPressedChange={setEnabled}
+      aria-label={enabled ? 'Mute microphone' : 'Unmute microphone'}
+    />
   );
 }
 
@@ -136,21 +169,29 @@ export const Disabled: StoryObj<Args> = {
   },
 };
 
+/** An attach button outside the field, and a microphone toggle inside it beside the send button. */
 export const WithActions: StoryObj<Args> = {
   render: (args: Args) => (
-    <MockChat {...args}>
-      <AgentComposerInput placeholder={args.placeholder} />
-      <AgentComposerActions>
-        <button
-          type="button"
-          aria-label="Attach file"
-          className="text-muted-foreground hover:text-foreground rounded-md p-2"
-        >
-          <PaperclipIcon className="size-4" />
-        </button>
-      </AgentComposerActions>
-      <AgentComposerSubmit className="rounded-full" />
-    </MockChat>
+    <MockChat
+      {...args}
+      leading={
+        // Lines up with the send button, which sits inside the field's border and padding
+        <AgentComposerActions className="mb-[9px] self-end">
+          <button
+            type="button"
+            aria-label="Attach file"
+            className="text-muted-foreground hover:text-foreground hover:bg-accent flex size-9 cursor-pointer items-center justify-center rounded-md"
+          >
+            <PaperclipIcon className="size-4" />
+          </button>
+        </AgentComposerActions>
+      }
+      actions={
+        <AgentComposerActions>
+          <MicrophoneToggle />
+        </AgentComposerActions>
+      }
+    />
   ),
 };
 

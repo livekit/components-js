@@ -103,15 +103,14 @@ function AgentChatInput({ chatOpen, onSend = async () => {}, className }: AgentC
   };
 
   useEffect(() => {
-    if (chatOpen) return;
-    // when not disabled refocus on input
+    if (!chatOpen) return;
+    // the input is only enabled while chat is open, so focus it once it opens
     inputRef.current?.focus();
   }, [chatOpen]);
 
   return (
     <div className={cn('mb-3 flex grow items-end gap-2 rounded-md pl-1 text-sm', className)}>
       <textarea
-        autoFocus
         ref={inputRef}
         value={message}
         disabled={!chatOpen || isSending}

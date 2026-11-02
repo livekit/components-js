@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ConnectionState } from 'livekit-client';
@@ -15,11 +15,16 @@ const sendMock = vi.fn();
 const toggleMicrophoneMock = vi.fn();
 let connectionState = ConnectionState.Connected;
 let microphoneEnabled = false;
+let microphonePending = false;
 
 vi.mock('@livekit/components-react', () => ({
   useChat: () => ({ send: sendMock }),
   useConnectionState: () => connectionState,
-  useTrackToggle: () => ({ enabled: microphoneEnabled, toggle: toggleMicrophoneMock }),
+  useTrackToggle: () => ({
+    enabled: microphoneEnabled,
+    pending: microphonePending,
+    toggle: toggleMicrophoneMock,
+  }),
   useLocalParticipant: () => ({ localParticipant: {}, microphoneTrack: undefined }),
 }));
 
@@ -44,6 +49,8 @@ describe('AgentComposer', () => {
     toggleMicrophoneMock.mockReset();
     connectionState = ConnectionState.Connected;
     microphoneEnabled = false;
+    microphonePending = false;
+    window.sessionStorage.clear();
   });
 
   it('renders a labeled input and send button by default', () => {
@@ -340,6 +347,181 @@ describe('AgentComposer', () => {
       );
 
       expect(screen.getByRole('button', { name: 'Talk' })).toHaveAttribute('aria-pressed', 'true');
+    });
+  });
+
+  describe('microphone states', () => {
+    const blocked = Object.assign(new Error('Permission denied'), { name: 'NotAllowedError' });
+
+    it('shows a spinner and waits while the microphone starts', () => {
+      render(<AgentComposer onSend={vi.fn()} onListeningChange={vi.fn()} microphonePending />);
+
+      expect(getMicrophone()).toBeDisabled();
+      expect(getMicrophone()).toHaveAttribute('aria-busy', 'true');
+    });
+
+    it('says when the microphone is blocked, and tries again on click', async () => {
+      const user = userEvent.setup();
+      const onListeningChange = vi.fn();
+      render(
+        <AgentComposer
+          onSend={vi.fn()}
+          listening
+          onListeningChange={onListeningChange}
+          microphoneError={blocked}
+        />,
+      );
+
+      const microphone = screen.getByRole('button', { name: 'Microphone blocked' });
+      expect(microphone).toHaveAttribute('aria-pressed', 'false');
+
+      await user.click(microphone);
+      expect(onListeningChange).toHaveBeenCalledExactlyOnceWith(true);
+    });
+
+    it('calls other failures unavailable', () => {
+      render(
+        <AgentComposer
+          onSend={vi.fn()}
+          onListeningChange={vi.fn()}
+          microphoneError={new Error('No device')}
+        />,
+      );
+
+      expect(screen.getByRole('button', { name: 'Microphone unavailable' })).toBeInTheDocument();
+    });
+
+    it("reports the session's microphone failing to start, then clears it on retry", async () => {
+      const user = userEvent.setup();
+      const onMicrophoneError = vi.fn();
+      toggleMicrophoneMock.mockRejectedValueOnce(blocked);
+      render(<AgentComposer onMicrophoneError={onMicrophoneError} />);
+
+      await user.click(getMicrophone());
+      const microphone = await screen.findByRole('button', { name: 'Microphone blocked' });
+      expect(onMicrophoneError).toHaveBeenCalledExactlyOnceWith(blocked);
+
+      await user.click(microphone);
+      expect(getMicrophone()).toBeInTheDocument();
+      expect(toggleMicrophoneMock).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('Enter on touch screens', () => {
+    const originalMatchMedia = window.matchMedia;
+    const useCoarsePointer = () => {
+      window.matchMedia = vi.fn((query: string) => ({
+        matches: query === '(pointer: coarse)',
+        media: query,
+      })) as unknown as typeof window.matchMedia;
+    };
+
+    afterEach(() => {
+      window.matchMedia = originalMatchMedia;
+    });
+
+    it('adds a new line instead of sending', async () => {
+      useCoarsePointer();
+      const user = userEvent.setup();
+      const onSend = vi.fn();
+      render(<AgentComposer onSend={onSend} />);
+
+      await user.type(getInput(), 'One{Enter}Two');
+
+      expect(onSend).not.toHaveBeenCalled();
+      expect(getInput()).toHaveValue('One\nTwo');
+    });
+
+    it('sends when sendOnEnter is set', async () => {
+      useCoarsePointer();
+      const user = userEvent.setup();
+      const onSend = vi.fn();
+      render(
+        <AgentComposer onSend={onSend}>
+          <AgentComposerInput sendOnEnter />
+        </AgentComposer>,
+      );
+
+      await user.type(getInput(), 'Hello{Enter}');
+
+      await waitFor(() => expect(onSend).toHaveBeenCalledWith('Hello'));
+    });
+  });
+
+  it('uses custom labels', () => {
+    render(
+      <AgentComposer
+        onSend={vi.fn()}
+        listening
+        onListeningChange={vi.fn()}
+        maxLength={10}
+        labels={{
+          message: 'Mensaje',
+          send: 'Enviar',
+          listen: 'Escuchar',
+          listening: 'Escuchando…',
+          characterCount: (length, max) => `${length} de ${max}`,
+        }}
+      />,
+    );
+
+    const input = screen.getByRole('textbox', { name: 'Mensaje' });
+    expect(input).toHaveAttribute('placeholder', 'Escuchando…');
+    expect(input).toHaveAccessibleDescription('0 de 10');
+    expect(screen.getByRole('button', { name: 'Enviar' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Escuchar' })).toBeInTheDocument();
+  });
+
+  it('says it is connecting while the session connects', () => {
+    connectionState = ConnectionState.Connecting;
+    render(<AgentComposer placeholder="Type something..." />);
+
+    expect(getInput()).toHaveAttribute('placeholder', 'Connecting…');
+  });
+
+  describe('stopping a reply', () => {
+    it('turns the send button into a stop button while the agent replies', async () => {
+      const user = userEvent.setup();
+      const onStop = vi.fn();
+      render(<AgentComposer onSend={vi.fn()} responding onStop={onStop} />);
+
+      await user.click(screen.getByRole('button', { name: 'Stop' }));
+      expect(onStop).toHaveBeenCalledOnce();
+
+      await user.type(getInput(), 'Wait');
+      expect(screen.queryByRole('button', { name: 'Stop' })).not.toBeInTheDocument();
+      expect(getSubmit()).toBeEnabled();
+    });
+
+    it('keeps the send button without onStop', () => {
+      render(<AgentComposer onSend={vi.fn()} responding />);
+
+      expect(screen.queryByRole('button', { name: 'Stop' })).not.toBeInTheDocument();
+    });
+  });
+
+  describe('drafts', () => {
+    it('keeps unsent text across remounts and clears it after sending', async () => {
+      const user = userEvent.setup();
+      const { unmount } = render(<AgentComposer onSend={vi.fn()} draftKey="thread-1" />);
+      await user.type(getInput(), 'Half a thought');
+      unmount();
+
+      render(<AgentComposer onSend={vi.fn()} draftKey="thread-1" />);
+      expect(getInput()).toHaveValue('Half a thought');
+
+      await user.type(getInput(), '{Enter}');
+      expect(window.sessionStorage.getItem('thread-1')).toBeNull();
+    });
+
+    it('keeps drafts separate by key', async () => {
+      const user = userEvent.setup();
+      const { unmount } = render(<AgentComposer onSend={vi.fn()} draftKey="thread-1" />);
+      await user.type(getInput(), 'For thread one');
+      unmount();
+
+      render(<AgentComposer onSend={vi.fn()} draftKey="thread-2" />);
+      expect(getInput()).toHaveValue('');
     });
   });
 });

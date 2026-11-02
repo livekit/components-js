@@ -6,6 +6,7 @@ import {
   useContext,
   useId,
   useRef,
+  useState,
   type ComponentProps,
   type KeyboardEvent,
   type RefObject,
@@ -17,7 +18,7 @@ import {
   useTrackToggle,
 } from '@livekit/components-react';
 import { ConnectionState, Track } from 'livekit-client';
-import { ArrowUpIcon, MicIcon } from 'lucide-react';
+import { ArrowUpIcon, LoaderIcon, MicIcon, MicOffIcon, SquareIcon } from 'lucide-react';
 import { Slot } from 'radix-ui';
 
 import { cn } from '@/lib/utils';
@@ -30,12 +31,58 @@ import {
   type UseAgentComposerReturn,
 } from '@/hooks/agents-ui/use-agent-composer';
 
+/**
+ * Text the composer shows and announces. Pass any of these to `AgentComposer`'s `labels` to
+ * translate or reword them.
+ */
+export interface AgentComposerLabels {
+  /** The input's accessible name. */
+  message: string;
+  /** The input's placeholder while the microphone is on. */
+  listening: string;
+  /** The input's placeholder while the session connects. */
+  connecting: string;
+  /** The send button's accessible name. */
+  send: string;
+  /** The stop button's accessible name. */
+  stop: string;
+  /** The microphone button's accessible name. */
+  listen: string;
+  /** Shown when the browser or the user blocked microphone access. */
+  microphoneBlocked: string;
+  /** Shown when the microphone couldn't start for another reason, such as having none. */
+  microphoneUnavailable: string;
+  /** Read by screen readers for the character count. */
+  characterCount: (length: number, maxLength: number) => string;
+  /** Read by screen readers for the character count past `maxLength`. */
+  overLimit: (over: number, maxLength: number) => string;
+}
+
+export const defaultAgentComposerLabels: AgentComposerLabels = {
+  message: 'Message',
+  listening: 'Listening…',
+  connecting: 'Connecting…',
+  send: 'Send message',
+  stop: 'Stop',
+  listen: 'Listen',
+  microphoneBlocked: 'Microphone blocked',
+  microphoneUnavailable: 'Microphone unavailable',
+  characterCount: (length, maxLength) => `${length} of ${maxLength} characters`,
+  overLimit: (over, maxLength) => `${over} characters over the ${maxLength} limit`,
+};
+
 interface AgentComposerContextValue extends UseAgentComposerReturn {
   inputRef: RefObject<HTMLTextAreaElement | null>;
   characterCountId: string;
+  labels: AgentComposerLabels;
+  connecting: boolean;
   listening?: boolean;
   onListeningChange?: (listening: boolean) => void;
   microphoneTrack?: MicrophoneTrack;
+  microphonePending?: boolean;
+  microphoneError?: unknown;
+  responding?: boolean;
+  onStop?: () => void;
 }
 
 type MicrophoneTrack = ComponentProps<typeof AgentAudioVisualizerBar>['audioTrack'];
@@ -81,13 +128,26 @@ export interface AgentComposerProps
    * Without `onSend`, it's the session's microphone.
    */
   microphoneTrack?: MicrophoneTrack;
+  /** Whether the microphone is starting or stopping. Without `onSend`, it's set for you. */
+  microphonePending?: boolean;
+  /**
+   * Why the microphone couldn't start, such as a `NotAllowedError` when access is blocked. Without
+   * `onSend`, it's set for you.
+   */
+  microphoneError?: unknown;
+  /** Called when the session's microphone can't start. Only used without `onSend`. */
+  onMicrophoneError?: (error: unknown) => void;
+  /**
+   * Whether the agent is replying. With `onStop`, the send button becomes a stop button while the
+   * input is empty.
+   */
+  responding?: boolean;
+  /** Stops the agent's reply, such as by interrupting it. */
+  onStop?: () => void;
   /** Placeholder text for the default layout's input. */
   placeholder?: string;
-  /**
-   * Placeholder text for the default layout's input while listening.
-   * @defaultValue 'Listening…'
-   */
-  listeningPlaceholder?: string;
+  /** Text the composer shows and announces. */
+  labels?: Partial<AgentComposerLabels>;
   /**
    * Render as the child element instead of a `<form>`.
    * @defaultValue false
@@ -103,17 +163,24 @@ function AgentComposerRoot({
   disabled,
   maxLength,
   onError,
+  draftKey,
   listening,
   onListeningChange,
   microphoneTrack,
+  microphonePending,
+  microphoneError,
+  responding,
+  onStop,
   placeholder,
-  listeningPlaceholder,
+  labels: labelsProp,
+  connecting = false,
   asChild = false,
   className,
   children,
   onSubmit,
   ...props
-}: AgentComposerProps & Pick<UseAgentComposerProps, 'onSend'>) {
+}: Omit<AgentComposerProps, 'onMicrophoneError'> &
+  Pick<UseAgentComposerProps, 'onSend'> & { connecting?: boolean }) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const characterCountId = useId();
   const composer = useAgentComposer({
@@ -124,7 +191,9 @@ function AgentComposerRoot({
     disabled,
     maxLength,
     onError,
+    draftKey,
   });
+  const labels = { ...defaultAgentComposerLabels, ...labelsProp };
   const Comp = asChild ? Slot.Root : 'form';
   const isOverLimit = composer.remaining !== undefined && composer.remaining < 0;
 
@@ -142,9 +211,15 @@ function AgentComposerRoot({
         ...composer,
         inputRef,
         characterCountId,
+        labels,
+        connecting,
         listening,
         onListeningChange,
         microphoneTrack,
+        microphonePending,
+        microphoneError,
+        responding,
+        onStop,
       }}
     >
       <Comp
@@ -152,6 +227,7 @@ function AgentComposerRoot({
         data-disabled={composer.disabled ? '' : undefined}
         data-over-limit={isOverLimit ? '' : undefined}
         data-listening={listening ? '' : undefined}
+        data-responding={responding ? '' : undefined}
         onSubmit={handleSubmit}
         className={cn('flex flex-col gap-1.5 text-sm', className)}
         {...props}
@@ -159,20 +235,14 @@ function AgentComposerRoot({
         {children ??
           (maxLength === undefined ? (
             <AgentComposerField>
-              <AgentComposerInput
-                placeholder={placeholder}
-                listeningPlaceholder={listeningPlaceholder}
-              />
+              <AgentComposerInput placeholder={placeholder} />
               <AgentComposerMicrophone />
               <AgentComposerSubmit />
             </AgentComposerField>
           ) : (
             // Two rows, so the count has room beside the buttons
             <AgentComposerField className="flex-col items-stretch gap-1">
-              <AgentComposerInput
-                placeholder={placeholder}
-                listeningPlaceholder={listeningPlaceholder}
-              />
+              <AgentComposerInput placeholder={placeholder} />
               <div className="flex items-center justify-end gap-2">
                 <AgentComposerCharacterCount />
                 <AgentComposerMicrophone />
@@ -189,11 +259,20 @@ function SessionChatComposer({
   disabled,
   listening,
   onListeningChange,
+  onMicrophoneError,
   ...props
 }: AgentComposerProps) {
   const { send } = useChat();
   const connectionState = useConnectionState();
-  const microphone = useTrackToggle({ source: Track.Source.Microphone });
+  const [microphoneError, setMicrophoneError] = useState<unknown>();
+  const handleMicrophoneError = (error: unknown) => {
+    setMicrophoneError(error);
+    onMicrophoneError?.(error);
+  };
+  const microphone = useTrackToggle({
+    source: Track.Source.Microphone,
+    onDeviceError: handleMicrophoneError,
+  });
   const { localParticipant, microphoneTrack } = useLocalParticipant();
 
   const handleSend = async (message: string) => {
@@ -205,10 +284,16 @@ function SessionChatComposer({
       {...props}
       onSend={handleSend}
       disabled={disabled || connectionState !== ConnectionState.Connected}
+      connecting={
+        connectionState === ConnectionState.Connecting ||
+        connectionState === ConnectionState.Reconnecting ||
+        connectionState === ConnectionState.SignalReconnecting
+      }
       listening={listening ?? microphone.enabled}
       onListeningChange={(next) => {
         onListeningChange?.(next);
-        microphone.toggle(next);
+        setMicrophoneError(undefined);
+        Promise.resolve(microphone.toggle(next)).catch(handleMicrophoneError);
       }}
       microphoneTrack={
         props.microphoneTrack ??
@@ -218,19 +303,23 @@ function SessionChatComposer({
           source: Track.Source.Microphone,
         })
       }
+      microphonePending={props.microphonePending ?? microphone.pending}
+      microphoneError={props.microphoneError ?? microphoneError}
     />
   );
 }
 
 /**
  * A text input for sending messages to an agent, with microphone and send buttons. Enter sends and
- * Shift+Enter adds a new line. With `maxLength`, the buttons and a character count move to a row
- * below the input. Pass parts as children to change the layout: `AgentComposerField` holds
- * `AgentComposerInput`, `AgentComposerActions`, `AgentComposerCharacterCount`,
- * `AgentComposerMicrophone`, and `AgentComposerSubmit`.
+ * Shift+Enter adds a new line; on touch screens, Return adds a new line and the button sends. With
+ * `maxLength`, the buttons and a character count move to a row below the input. Pass parts as
+ * children to change the layout: `AgentComposerField` holds `AgentComposerInput`,
+ * `AgentComposerActions`, `AgentComposerCharacterCount`, `AgentComposerMicrophone`, and
+ * `AgentComposerSubmit`.
  *
  * Use `data-disabled` to style the disabled state, `data-over-limit` for a message longer than
- * `maxLength`, and `data-listening` while the microphone is on.
+ * `maxLength`, `data-listening` while the microphone is on, and `data-responding` while the agent
+ * replies.
  *
  * @extends ComponentProps<'form'>
  *
@@ -252,12 +341,12 @@ function SessionChatComposer({
  * </AgentComposer>
  * ```
  */
-export function AgentComposer(props: AgentComposerProps) {
+export function AgentComposer({ onMicrophoneError, ...props }: AgentComposerProps) {
   // Switching between the two remounts the composer, so pick one for its lifetime
   if (props.onSend) {
     return <AgentComposerRoot {...props} onSend={props.onSend} />;
   }
-  return <SessionChatComposer {...props} />;
+  return <SessionChatComposer {...props} onMicrophoneError={onMicrophoneError} />;
 }
 
 /**
@@ -299,14 +388,19 @@ export interface AgentComposerInputProps extends Omit<
   'value' | 'defaultValue' | 'maxLength'
 > {
   /**
-   * Placeholder text while the microphone is on. Typing still works while listening.
-   * @defaultValue 'Listening…'
+   * Whether Enter sends. When unset, Enter sends unless the device has a touch screen and no
+   * mouse, where Return adds a new line like other messaging apps.
    */
-  listeningPlaceholder?: string;
+  sendOnEnter?: boolean;
+}
+
+function prefersNewLineOnEnter() {
+  return typeof window !== 'undefined' && !!window.matchMedia?.('(pointer: coarse)').matches;
 }
 
 /**
- * The composer's text field. It grows with its content and takes all textarea props.
+ * The composer's text field. It grows with its content and takes all textarea props. Its
+ * placeholder changes while the session connects and while the microphone is on.
  *
  * @extends ComponentProps<'textarea'>
  */
@@ -317,8 +411,8 @@ export function AgentComposerInput({
   onChange,
   onKeyDown,
   placeholder,
-  listeningPlaceholder = 'Listening…',
-  'aria-label': ariaLabel = 'Message',
+  sendOnEnter,
+  'aria-label': ariaLabel,
   ...props
 }: AgentComposerInputProps) {
   const {
@@ -328,6 +422,8 @@ export function AgentComposerInput({
     remaining,
     inputRef,
     characterCountId,
+    labels,
+    connecting,
     listening,
     disabled: composerDisabled,
   } = useAgentComposerContext('AgentComposerInput');
@@ -347,13 +443,13 @@ export function AgentComposerInput({
     // Enter also confirms an input method editor's suggestion (Japanese, Chinese, and others).
     // Safari reports those keypresses with keyCode 229 rather than `isComposing`.
     const isComposing = event.nativeEvent.isComposing || event.keyCode === 229;
-    if (event.key === 'Enter' && !event.shiftKey && !isComposing) {
-      event.preventDefault();
-      // Go through the form so Enter and the send button share one path, including `onSubmit`
-      const form = event.currentTarget.form;
-      if (form) form.requestSubmit();
-      else submit();
-    }
+    if (event.key !== 'Enter' || event.shiftKey || isComposing) return;
+    if (!(sendOnEnter ?? !prefersNewLineOnEnter())) return;
+    event.preventDefault();
+    // Go through the form so Enter and the send button share one path, including `onSubmit`
+    const form = event.currentTarget.form;
+    if (form) form.requestSubmit();
+    else submit();
   };
 
   return (
@@ -362,8 +458,8 @@ export function AgentComposerInput({
       data-slot="agent-composer-input"
       rows={1}
       value={value}
-      placeholder={listening ? listeningPlaceholder : placeholder}
-      aria-label={ariaLabel}
+      placeholder={connecting ? labels.connecting : listening ? labels.listening : placeholder}
+      aria-label={ariaLabel ?? labels.message}
       aria-invalid={(remaining !== undefined && remaining < 0) || undefined}
       aria-describedby={remaining !== undefined ? characterCountId : undefined}
       disabled={disabled || composerDisabled}
@@ -423,8 +519,9 @@ export type AgentComposerMicrophoneProps = Omit<
 /**
  * Turns the microphone on so the agent can hear you, and off again. It starts off and fills in
  * while listening, with the microphone's level before the icon when the composer has a
- * `microphoneTrack`. Renders nothing when the composer has no `onListeningChange`, which is set
- * for you without `onSend`.
+ * `microphoneTrack`. It shows a spinner while the microphone starts, and a crossed-out icon when it
+ * can't, which you can click to try again. Renders nothing when the composer has no
+ * `onListeningChange`, which is set for you without `onSend`.
  *
  * @extends ComponentProps<typeof Toggle>
  */
@@ -432,49 +529,72 @@ export function AgentComposerMicrophone({
   disabled,
   className,
   children,
-  'aria-label': ariaLabel = 'Listen',
+  'aria-label': ariaLabel,
   ...props
 }: AgentComposerMicrophoneProps) {
   const {
     listening = false,
     onListeningChange,
     microphoneTrack,
+    microphonePending,
+    microphoneError,
+    labels,
     disabled: composerDisabled,
   } = useAgentComposerContext('AgentComposerMicrophone');
   if (!onListeningChange) return null;
 
+  const errorLabel =
+    microphoneError === undefined
+      ? undefined
+      : // Browsers reject with a DOMException, which isn't always an `Error` subclass
+        typeof microphoneError === 'object' &&
+          microphoneError !== null &&
+          'name' in microphoneError &&
+          microphoneError.name === 'NotAllowedError'
+        ? labels.microphoneBlocked
+        : labels.microphoneUnavailable;
+
   return (
     <Toggle
       data-slot="agent-composer-microphone"
-      pressed={listening}
+      data-error={errorLabel ? '' : undefined}
+      pressed={listening && !errorLabel}
       onPressedChange={onListeningChange}
-      disabled={disabled || composerDisabled}
-      aria-label={ariaLabel}
+      disabled={disabled || composerDisabled || microphonePending}
+      aria-busy={microphonePending || undefined}
+      aria-label={ariaLabel ?? errorLabel ?? labels.listen}
+      title={errorLabel}
       className={cn(
         'text-muted-foreground hover:bg-accent hover:text-foreground h-9 min-w-9 cursor-pointer self-end',
         'data-[state=on]:bg-primary data-[state=on]:text-primary-foreground',
         'data-[state=on]:hover:bg-primary/90 data-[state=on]:hover:text-primary-foreground',
+        'data-error:text-destructive data-error:hover:text-destructive',
         className,
       )}
       {...props}
     >
-      {children ?? (
-        <>
-          {listening && microphoneTrack && (
-            <AgentAudioVisualizerBar
-              size="icon"
-              barCount={3}
-              state="speaking"
-              audioTrack={microphoneTrack}
-              aria-hidden
-              className="flex h-4 w-auto items-center gap-0.5"
-            >
-              <span className="h-full min-h-0.5 w-0.5 origin-center rounded-full bg-current" />
-            </AgentAudioVisualizerBar>
-          )}
-          <MicIcon />
-        </>
-      )}
+      {children ??
+        (microphonePending ? (
+          <LoaderIcon className="animate-spin" />
+        ) : errorLabel ? (
+          <MicOffIcon />
+        ) : (
+          <>
+            {listening && microphoneTrack && (
+              <AgentAudioVisualizerBar
+                size="icon"
+                barCount={3}
+                state="speaking"
+                audioTrack={microphoneTrack}
+                aria-hidden
+                className="flex h-4 w-auto items-center gap-0.5"
+              >
+                <span className="h-full min-h-0.5 w-0.5 origin-center rounded-full bg-current" />
+              </AgentAudioVisualizerBar>
+            )}
+            <MicIcon />
+          </>
+        ))}
     </Toggle>
   );
 }
@@ -485,7 +605,8 @@ export function AgentComposerMicrophone({
 export type AgentComposerSubmitProps = ComponentProps<typeof Button>;
 
 /**
- * The composer's send button. Pass children to replace the icon.
+ * The composer's send button. Pass children to replace the icon. While the agent is `responding`
+ * and the input is empty, it becomes a stop button that calls `onStop`.
  *
  * @extends ComponentProps<typeof Button>
  */
@@ -495,10 +616,30 @@ export function AgentComposerSubmit({
   size = 'icon',
   className,
   children,
-  'aria-label': ariaLabel = 'Send message',
+  'aria-label': ariaLabel,
   ...props
 }: AgentComposerSubmitProps) {
-  const { canSubmit } = useAgentComposerContext('AgentComposerSubmit');
+  const { canSubmit, value, responding, onStop, labels } =
+    useAgentComposerContext('AgentComposerSubmit');
+
+  if (responding && onStop && value.trim().length === 0) {
+    return (
+      <Button
+        type="button"
+        data-slot="agent-composer-stop"
+        size={size}
+        disabled={disabled}
+        variant={variant ?? 'default'}
+        aria-label={labels.stop}
+        onClick={onStop}
+        className={cn('self-end', className)}
+        {...props}
+      >
+        <SquareIcon className="size-3 fill-current" />
+      </Button>
+    );
+  }
+
   const isDisabled = disabled || !canSubmit;
 
   return (
@@ -508,7 +649,7 @@ export function AgentComposerSubmit({
       size={size}
       disabled={isDisabled}
       variant={variant ?? (isDisabled ? 'secondary' : 'default')}
-      aria-label={ariaLabel}
+      aria-label={ariaLabel ?? labels.send}
       className={cn('self-end disabled:cursor-not-allowed', className)}
       {...props}
     >
@@ -532,7 +673,7 @@ export function AgentComposerCharacterCount({
   className,
   ...props
 }: AgentComposerCharacterCountProps) {
-  const { remaining, maxLength, characterCountId } = useAgentComposerContext(
+  const { remaining, maxLength, characterCountId, labels } = useAgentComposerContext(
     'AgentComposerCharacterCount',
   );
   if (remaining === undefined || maxLength === undefined) return null;
@@ -555,8 +696,8 @@ export function AgentComposerCharacterCount({
       </span>
       <span className="sr-only">
         {isOverLimit
-          ? `${-remaining} characters over the ${maxLength} limit`
-          : `${length} of ${maxLength} characters`}
+          ? labels.overLimit(-remaining, maxLength)
+          : labels.characterCount(length, maxLength)}
       </span>
     </div>
   );

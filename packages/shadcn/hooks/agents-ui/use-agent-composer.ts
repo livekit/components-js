@@ -21,6 +21,11 @@ export interface UseAgentComposerProps {
   maxLength?: number;
   /** Called when `onSend` rejects. */
   onError?: (error: unknown) => void;
+  /**
+   * Keeps unsent text in session storage under this key, so it survives the composer closing or
+   * the page reloading. Use a key per conversation. Only for uncontrolled composers.
+   */
+  draftKey?: string;
 }
 
 export interface UseAgentComposerReturn {
@@ -34,6 +39,24 @@ export interface UseAgentComposerReturn {
   maxLength?: number;
   /** Characters left before `maxLength`, negative when over it. Undefined without `maxLength`. */
   remaining?: number;
+}
+
+function readDraft(key: string) {
+  try {
+    return window.sessionStorage.getItem(key) ?? undefined;
+  } catch {
+    // Storage can be unavailable, such as in private windows or during server rendering
+    return undefined;
+  }
+}
+
+function writeDraft(key: string, value: string) {
+  try {
+    if (value) window.sessionStorage.setItem(key, value);
+    else window.sessionStorage.removeItem(key);
+  } catch {
+    // Drafts are a convenience, so a failed write is fine to skip
+  }
 }
 
 /**
@@ -54,17 +77,23 @@ export function useAgentComposer({
   disabled = false,
   maxLength,
   onError,
+  draftKey,
 }: UseAgentComposerProps): UseAgentComposerReturn {
-  const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
+  const [uncontrolledValue, setUncontrolledValue] = useState(
+    () => (draftKey && readDraft(draftKey)) || defaultValue,
+  );
   const isControlled = valueProp !== undefined;
   const value = isControlled ? valueProp : uncontrolledValue;
 
   const setValue = useCallback(
     (next: string) => {
-      if (!isControlled) setUncontrolledValue(next);
+      if (!isControlled) {
+        setUncontrolledValue(next);
+        if (draftKey) writeDraft(draftKey, next);
+      }
       onValueChange?.(next);
     },
-    [isControlled, onValueChange],
+    [isControlled, draftKey, onValueChange],
   );
 
   const message = value.trim();

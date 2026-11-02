@@ -29,7 +29,7 @@ export default {
       control: { type: 'radio' },
     },
     variant: {
-      options: ['default', 'outline', 'ghost'],
+      options: ['default', 'outline'],
     },
     source: {
       options: ['microphone', 'camera', 'screen_share'],
@@ -84,40 +84,6 @@ export const Default: StoryObj<AgentTrackToggleProps> = {
 export const Outlined: StoryObj<AgentTrackToggleProps> = {
   args: {
     variant: 'outline',
-  },
-  render: (args: AgentTrackToggleProps) => {
-    const [isCameraPressed, setIsCameraPressed] = React.useState(true);
-    const [isMicrophonePressed, setIsMicrophonePressed] = React.useState(false);
-    const [isScreenSharePressed, setIsScreenSharePressed] = React.useState(true);
-
-    return (
-      <div className="flex gap-2">
-        <AgentTrackToggle
-          {...args}
-          source={Track.Source.Microphone}
-          pressed={isMicrophonePressed}
-          onPressedChange={(pressed: boolean) => setIsMicrophonePressed(pressed)}
-        />
-        <AgentTrackToggle
-          {...args}
-          source={Track.Source.Camera}
-          pressed={isCameraPressed}
-          onPressedChange={(pressed: boolean) => setIsCameraPressed(pressed)}
-        />
-        <AgentTrackToggle
-          {...args}
-          source={Track.Source.ScreenShare}
-          pressed={isScreenSharePressed}
-          onPressedChange={(pressed: boolean) => setIsScreenSharePressed(pressed)}
-        />
-      </div>
-    );
-  },
-};
-
-export const Ghost: StoryObj<AgentTrackToggleProps> = {
-  args: {
-    variant: 'ghost',
   },
   render: (args: AgentTrackToggleProps) => {
     const [isCameraPressed, setIsCameraPressed] = React.useState(true);

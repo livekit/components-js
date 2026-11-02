@@ -9,6 +9,7 @@ import { motion, type MotionProps } from 'motion/react';
 import { cn } from '@/lib/utils';
 import {
   AgentComposer,
+  AgentComposerField,
   AgentComposerInput,
   AgentComposerSubmit,
 } from '@/components/agents-ui/agent-composer';
@@ -88,8 +89,10 @@ function AgentChatInput({ chatOpen, onSend, className }: AgentChatInputProps) {
       onError={console.error}
       className={cn('mb-3 grow rounded-md pl-1', className)}
     >
-      <AgentComposerInput ref={inputRef} placeholder="Type something..." />
-      <AgentComposerSubmit />
+      <AgentComposerField>
+        <AgentComposerInput ref={inputRef} placeholder="Type something..." />
+        <AgentComposerSubmit />
+      </AgentComposerField>
     </AgentComposer>
   );
 }

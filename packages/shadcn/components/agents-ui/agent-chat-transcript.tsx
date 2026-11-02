@@ -192,7 +192,7 @@ export function AgentChatTranscript({
                             <button
                               type="button"
                               onClick={() => handleResend(id)}
-                              className="underline underline-offset-2 hover:no-underline"
+                              className="cursor-pointer underline underline-offset-2 hover:no-underline"
                             >
                               Try again
                             </button>

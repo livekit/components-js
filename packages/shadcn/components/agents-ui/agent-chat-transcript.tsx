@@ -175,7 +175,12 @@ export function AgentChatTranscript({
                         variant={isUser ? 'secondary' : 'ghost'}
                       >
                         <BubbleContent>
-                          <Streamdown>{message}</Streamdown>
+                          {/* Typed text, not Markdown, so its line breaks stay as written */}
+                          {isUser ? (
+                            <div className="whitespace-pre-wrap">{message}</div>
+                          ) : (
+                            <Streamdown>{message}</Streamdown>
+                          )}
                         </BubbleContent>
                       </Bubble>
                       {status === 'sending' && retriedIds.has(id) && (

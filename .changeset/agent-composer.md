@@ -10,4 +10,6 @@ next message right away. Enter no longer sends while an input method editor is c
 
 `AgentChatTranscript` marks messages that failed to send, and shows a "Try again" button when you
 pass `onResend`. A retried message shows that it's sending until it goes through or fails again.
-`AgentSessionView_01` passes `resend` from `useSessionMessages`.
+Your own messages show as plain text, so line breaks
+from Shift+Enter stay as you typed them. `AgentSessionView_01` passes `resend` from
+`useSessionMessages`.

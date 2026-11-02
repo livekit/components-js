@@ -51,17 +51,18 @@ describe('useMediaDeviceSelect in preview mode', () => {
 describe('useMediaDeviceSelect in room mode', () => {
   test('emits activeDeviceId only once per room device switch', async () => {
     // Track room event listeners and their emissions.
-    const eventListeners = new Map<string, Set<Function>>();
+    type RoomListener = (...args: unknown[]) => void;
+    const eventListeners = new Map<string, Set<RoomListener>>();
     const activeDeviceChangedEmissions: string[] = [];
-    
-    const on = vi.fn((event: string, listener: Function) => {
+
+    const on = vi.fn((event: string, listener: RoomListener) => {
       if (!eventListeners.has(event)) eventListeners.set(event, new Set());
       eventListeners.get(event)!.add(listener);
     });
-    const off = vi.fn((event: string, listener: Function) => {
+    const off = vi.fn((event: string, listener: RoomListener) => {
       eventListeners.get(event)?.delete(listener);
     });
-    
+
     const switchActiveDevice = vi.fn(async (kind: MediaDeviceKind, deviceId: string) => {
       // Simulate the room's ActiveDeviceChanged event that switchActiveDevice triggers.
       // The event string is 'activeDeviceChanged' (camelCase).
@@ -71,9 +72,9 @@ describe('useMediaDeviceSelect in room mode', () => {
         listener(kind, deviceId);
       });
     });
-    
+
     const getActiveDevice = vi.fn().mockReturnValue('mic-3');
-    
+
     const mockRoom = {
       switchActiveDevice,
       getActiveDevice,
@@ -87,7 +88,9 @@ describe('useMediaDeviceSelect in room mode', () => {
     } as unknown as Parameters<typeof useMediaDeviceSelect>[0]['room'];
 
     // Room mode: provide a room but no track.
-    const { result } = renderHook(() => useMediaDeviceSelect({ kind: 'audioinput', room: mockRoom }));
+    const { result } = renderHook(() =>
+      useMediaDeviceSelect({ kind: 'audioinput', room: mockRoom }),
+    );
 
     // Wait for initial setup and subscription.
     await act(async () => {

@@ -158,6 +158,34 @@ describe('AgentComposer', () => {
     expect(getSubmit()).toBeDisabled();
   });
 
+  it('counts down to maxLength and below it without cutting off typing', async () => {
+    const user = userEvent.setup();
+    render(<AgentComposer onSend={vi.fn()} maxLength={5} />);
+
+    expect(getInput()).toHaveAccessibleDescription('5 characters left');
+    expect(screen.queryByText('Message is too long')).not.toBeInTheDocument();
+
+    await user.type(getInput(), 'Hello');
+    expect(getInput()).toHaveAccessibleDescription('0 characters left');
+    expect(getSubmit()).toBeEnabled();
+
+    await user.type(getInput(), ' there');
+    expect(getInput()).toHaveValue('Hello there');
+    expect(getInput()).toHaveAccessibleDescription(/^Message is too long\s*-6 characters left$/);
+    expect(getInput()).toBeInvalid();
+    expect(getSubmit()).toBeDisabled();
+
+    await user.type(getInput(), '{Backspace>6/}');
+    expect(screen.queryByText('Message is too long')).not.toBeInTheDocument();
+    expect(getSubmit()).toBeEnabled();
+  });
+
+  it('shows no character count without maxLength', () => {
+    render(<AgentComposer onSend={vi.fn()} />);
+
+    expect(screen.queryByText(/characters left/)).not.toBeInTheDocument();
+  });
+
   it('supports a controlled value', async () => {
     const user = userEvent.setup();
     const onValueChange = vi.fn();

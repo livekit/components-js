@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useId,
   useRef,
   type ComponentProps,
   type KeyboardEvent,
@@ -24,6 +25,7 @@ import {
 
 interface AgentComposerContextValue extends UseAgentComposerReturn {
   inputRef: RefObject<HTMLTextAreaElement | null>;
+  characterCountId: string;
 }
 
 // `FormEvent` in older React types and `SubmitEvent` in newer ones
@@ -74,6 +76,7 @@ function AgentComposerRoot({
   ...props
 }: AgentComposerProps & Pick<UseAgentComposerProps, 'onSend'>) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const characterCountId = useId();
   const composer = useAgentComposer({
     onSend,
     value,
@@ -84,6 +87,7 @@ function AgentComposerRoot({
     onError,
   });
   const Comp = asChild ? Slot.Root : 'form';
+  const isOverLimit = composer.remaining !== undefined && composer.remaining < 0;
 
   const handleSubmit = (event: FormSubmitEvent) => {
     onSubmit?.(event);
@@ -94,18 +98,20 @@ function AgentComposerRoot({
   };
 
   return (
-    <AgentComposerContext.Provider value={{ ...composer, inputRef }}>
+    <AgentComposerContext.Provider value={{ ...composer, inputRef, characterCountId }}>
       <Comp
         data-slot="agent-composer"
         data-disabled={composer.disabled ? '' : undefined}
+        data-over-limit={isOverLimit ? '' : undefined}
         onSubmit={handleSubmit}
-        className={cn('flex items-end gap-2 text-sm', className)}
+        className={cn('flex flex-wrap items-end gap-2 text-sm', className)}
         {...props}
       >
         {children ?? (
           <>
             <AgentComposerInput />
             <AgentComposerSubmit />
+            <AgentComposerCharacterCount />
           </>
         )}
       </Comp>
@@ -135,7 +141,8 @@ function SessionChatComposer({ disabled, ...props }: AgentComposerProps) {
  * adds a new line. Pass `AgentComposerInput`, `AgentComposerActions`, and `AgentComposerSubmit` as
  * children to change the layout.
  *
- * Use `data-disabled` to style the disabled state.
+ * Use `data-disabled` to style the disabled state, and `data-over-limit` for a message longer than
+ * `maxLength`.
  *
  * @extends ComponentProps<'form'>
  *
@@ -143,10 +150,11 @@ function SessionChatComposer({ disabled, ...props }: AgentComposerProps) {
  * ```tsx
  * <AgentComposer />
  *
- * <AgentComposer onSend={handleSend}>
+ * <AgentComposer onSend={handleSend} maxLength={500}>
  *   <AgentComposerInput placeholder="Ask anything" />
  *   <AgentComposerActions>{actions}</AgentComposerActions>
  *   <AgentComposerSubmit />
+ *   <AgentComposerCharacterCount />
  * </AgentComposer>
  * ```
  */
@@ -184,8 +192,9 @@ export function AgentComposerInput({
     value,
     setValue,
     submit,
-    maxLength,
+    remaining,
     inputRef,
+    characterCountId,
     disabled: composerDisabled,
   } = useAgentComposerContext('AgentComposerInput');
 
@@ -219,8 +228,9 @@ export function AgentComposerInput({
       data-slot="agent-composer-input"
       rows={1}
       value={value}
-      maxLength={maxLength}
       aria-label={ariaLabel}
+      aria-invalid={(remaining !== undefined && remaining < 0) || undefined}
+      aria-describedby={remaining !== undefined ? characterCountId : undefined}
       disabled={disabled || composerDisabled}
       onChange={(event) => {
         onChange?.(event);
@@ -302,5 +312,45 @@ export function AgentComposerSubmit({
     >
       {children ?? <SendHorizontal />}
     </Button>
+  );
+}
+
+/**
+ * Props for the AgentComposerCharacterCount component.
+ */
+export type AgentComposerCharacterCountProps = ComponentProps<'div'>;
+
+/**
+ * Shows how many characters are left before `maxLength`, in a row of its own below the input. The
+ * count goes negative past the limit, alongside an error message. Renders nothing without
+ * `maxLength`.
+ *
+ * @extends ComponentProps<'div'>
+ */
+export function AgentComposerCharacterCount({
+  className,
+  ...props
+}: AgentComposerCharacterCountProps) {
+  const { remaining, characterCountId } = useAgentComposerContext('AgentComposerCharacterCount');
+  if (remaining === undefined) return null;
+  const isOverLimit = remaining < 0;
+
+  return (
+    <div
+      id={characterCountId}
+      data-slot="agent-composer-character-count"
+      data-over-limit={isOverLimit ? '' : undefined}
+      className={cn(
+        'text-muted-foreground data-over-limit:text-destructive flex basis-full justify-between gap-2 text-xs',
+        className,
+      )}
+      {...props}
+    >
+      <span>{isOverLimit && 'Message is too long'}</span>
+      <span className="tabular-nums" aria-hidden>
+        {remaining}
+      </span>
+      <span className="sr-only">{`${remaining} characters left`}</span>
+    </div>
   );
 }

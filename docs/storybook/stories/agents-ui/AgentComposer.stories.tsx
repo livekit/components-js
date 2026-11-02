@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { PlusIcon } from 'lucide-react';
 import { StoryObj } from '@storybook/react-vite';
-import { type ReceivedChatMessage } from '@livekit/components-react';
+import {
+  type ReceivedChatMessage,
+  useAgent,
+  useSessionContext,
+  useSessionMessages,
+} from '@livekit/components-react';
 import { createLocalAudioTrack, type LocalAudioTrack, Participant, Room } from 'livekit-client';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import {
@@ -203,10 +208,33 @@ export const WithActions: StoryObj<Args> = {
   ),
 };
 
-/** Without `onSend`, messages go to the session's chat. The composer stays disabled until the session connects. */
-export const SessionChat: StoryObj<AgentComposerProps> = {
+function LiveAgentChat() {
+  const session = useSessionContext();
+  const { messages, resend } = useSessionMessages(session);
+  const { state: agentState } = useAgent();
+
+  return (
+    <div className="flex h-[480px] w-96 flex-col gap-2">
+      <AgentChatTranscript
+        messages={messages}
+        agentState={agentState}
+        onResend={(id) => resend(id).catch(() => {})}
+        className="flex-1"
+      />
+      <AgentComposer
+        placeholder="Type something..."
+        className={`data-[disabled]:opacity-60 ${COMPOSER_CLASS_NAME}`}
+      />
+    </div>
+  );
+}
+
+/**
+ * The composer with no props, talking to an agent in the shared LiveKit sandbox: typed messages go
+ * to the session's chat and the microphone turns on the session's microphone. It stays disabled
+ * until the session connects, which needs `VITE_PUBLIC_LK_SANDBOX_TOKEN_SERVER_ID` in `.env`.
+ */
+export const LiveAgent: StoryObj<AgentComposerProps> = {
   decorators: [AgentSessionProvider],
-  render: () => (
-    <AgentComposer className={`w-96 data-[disabled]:opacity-60 ${COMPOSER_CLASS_NAME}`} />
-  ),
+  render: () => <LiveAgentChat />,
 };

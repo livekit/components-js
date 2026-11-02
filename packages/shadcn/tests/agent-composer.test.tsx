@@ -167,25 +167,27 @@ describe('AgentComposer', () => {
     expect(getSubmit()).toBeDisabled();
   });
 
-  it('counts down to maxLength and below it without cutting off typing', async () => {
+  it('counts toward maxLength and past it without cutting off typing', async () => {
     const user = userEvent.setup();
     render(<AgentComposer onSend={vi.fn()} maxLength={5} />);
 
-    expect(getInput()).toHaveAccessibleDescription('5 characters left');
-    expect(screen.queryByText('Message is too long')).not.toBeInTheDocument();
+    expect(getInput()).toHaveAccessibleDescription('0 of 5 characters');
+    expect(screen.getByText('0/5')).toBeInTheDocument();
 
     await user.type(getInput(), 'Hello');
-    expect(getInput()).toHaveAccessibleDescription('0 characters left');
+    expect(getInput()).toHaveAccessibleDescription('5 of 5 characters');
     expect(getSubmit()).toBeEnabled();
 
     await user.type(getInput(), ' there');
     expect(getInput()).toHaveValue('Hello there');
-    expect(getInput()).toHaveAccessibleDescription(/^Message is too long\s*-6 characters left$/);
+    expect(screen.getByText('11/5')).toBeInTheDocument();
+    expect(getInput()).toHaveAccessibleDescription('6 characters over the 5 limit');
     expect(getInput()).toBeInvalid();
     expect(getSubmit()).toBeDisabled();
 
     await user.type(getInput(), '{Backspace>6/}');
-    expect(screen.queryByText('Message is too long')).not.toBeInTheDocument();
+    expect(getInput()).toHaveAccessibleDescription('5 of 5 characters');
+    expect(getInput()).toBeValid();
     expect(getSubmit()).toBeEnabled();
   });
 
@@ -193,14 +195,14 @@ describe('AgentComposer', () => {
     render(<AgentComposer onSend={vi.fn()} maxLength={5} />);
 
     const field = getInput().closest('[data-slot="agent-composer-field"]');
-    expect(field).toContainElement(screen.getByText('5 characters left'));
+    expect(field).toContainElement(screen.getByText('0/5'));
     expect(field).toContainElement(getSubmit());
   });
 
   it('shows no character count without maxLength', () => {
     render(<AgentComposer onSend={vi.fn()} />);
 
-    expect(screen.queryByText(/characters left/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/characters/)).not.toBeInTheDocument();
   });
 
   it('supports a controlled value', async () => {

@@ -523,8 +523,8 @@ export function AgentComposerSubmit({
 export type AgentComposerCharacterCountProps = ComponentProps<'div'>;
 
 /**
- * Shows how many characters are left before `maxLength`, usually beside the buttons. The count
- * goes negative past the limit, after an error message. Renders nothing without `maxLength`.
+ * Shows the message's length against `maxLength`, like "12/200", usually beside the buttons. It
+ * turns red past the limit. Renders nothing without `maxLength`.
  *
  * @extends ComponentProps<'div'>
  */
@@ -532,9 +532,12 @@ export function AgentComposerCharacterCount({
   className,
   ...props
 }: AgentComposerCharacterCountProps) {
-  const { remaining, characterCountId } = useAgentComposerContext('AgentComposerCharacterCount');
-  if (remaining === undefined) return null;
+  const { remaining, maxLength, characterCountId } = useAgentComposerContext(
+    'AgentComposerCharacterCount',
+  );
+  if (remaining === undefined || maxLength === undefined) return null;
   const isOverLimit = remaining < 0;
+  const length = maxLength - remaining;
 
   return (
     <div
@@ -547,11 +550,14 @@ export function AgentComposerCharacterCount({
       )}
       {...props}
     >
-      {isOverLimit && <span>Message is too long</span>}
       <span className="tabular-nums" aria-hidden>
-        {remaining}
+        {length}/{maxLength}
       </span>
-      <span className="sr-only">{`${remaining} characters left`}</span>
+      <span className="sr-only">
+        {isOverLimit
+          ? `${-remaining} characters over the ${maxLength} limit`
+          : `${length} of ${maxLength} characters`}
+      </span>
     </div>
   );
 }

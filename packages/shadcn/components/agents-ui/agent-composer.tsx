@@ -10,7 +10,12 @@ import {
   type KeyboardEvent,
   type RefObject,
 } from 'react';
-import { useChat, useConnectionState, useTrackToggle } from '@livekit/components-react';
+import {
+  useChat,
+  useConnectionState,
+  useLocalParticipant,
+  useTrackToggle,
+} from '@livekit/components-react';
 import { ConnectionState, Track } from 'livekit-client';
 import { ArrowUpIcon, MicIcon } from 'lucide-react';
 import { Slot } from 'radix-ui';
@@ -18,6 +23,7 @@ import { Slot } from 'radix-ui';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
+import { AgentAudioVisualizerBar } from '@/components/agents-ui/agent-audio-visualizer-bar';
 import {
   useAgentComposer,
   type UseAgentComposerProps,
@@ -29,7 +35,10 @@ interface AgentComposerContextValue extends UseAgentComposerReturn {
   characterCountId: string;
   listening?: boolean;
   onListeningChange?: (listening: boolean) => void;
+  microphoneTrack?: MicrophoneTrack;
 }
+
+type MicrophoneTrack = ComponentProps<typeof AgentAudioVisualizerBar>['audioTrack'];
 
 // `FormEvent` in older React types and `SubmitEvent` in newer ones
 type FormSubmitEvent = Parameters<NonNullable<ComponentProps<'form'>['onSubmit']>>[0];
@@ -67,8 +76,18 @@ export interface AgentComposerProps
    * microphone on or off. With `onSend`, pass it to show the microphone.
    */
   onListeningChange?: (listening: boolean) => void;
+  /**
+   * The microphone's audio, so `AgentComposerMicrophone` can show its level while listening.
+   * Without `onSend`, it's the session's microphone.
+   */
+  microphoneTrack?: MicrophoneTrack;
   /** Placeholder text for the default layout's input. */
   placeholder?: string;
+  /**
+   * Placeholder text for the default layout's input while listening.
+   * @defaultValue 'Listening…'
+   */
+  listeningPlaceholder?: string;
   /**
    * Render as the child element instead of a `<form>`.
    * @defaultValue false
@@ -86,7 +105,9 @@ function AgentComposerRoot({
   onError,
   listening,
   onListeningChange,
+  microphoneTrack,
   placeholder,
+  listeningPlaceholder,
   asChild = false,
   className,
   children,
@@ -117,12 +138,20 @@ function AgentComposerRoot({
 
   return (
     <AgentComposerContext.Provider
-      value={{ ...composer, inputRef, characterCountId, listening, onListeningChange }}
+      value={{
+        ...composer,
+        inputRef,
+        characterCountId,
+        listening,
+        onListeningChange,
+        microphoneTrack,
+      }}
     >
       <Comp
         data-slot="agent-composer"
         data-disabled={composer.disabled ? '' : undefined}
         data-over-limit={isOverLimit ? '' : undefined}
+        data-listening={listening ? '' : undefined}
         onSubmit={handleSubmit}
         className={cn('flex flex-col gap-1.5 text-sm', className)}
         {...props}
@@ -130,14 +159,20 @@ function AgentComposerRoot({
         {children ??
           (maxLength === undefined ? (
             <AgentComposerField>
-              <AgentComposerInput placeholder={placeholder} />
+              <AgentComposerInput
+                placeholder={placeholder}
+                listeningPlaceholder={listeningPlaceholder}
+              />
               <AgentComposerMicrophone />
               <AgentComposerSubmit />
             </AgentComposerField>
           ) : (
             // Two rows, so the count has room beside the buttons
             <AgentComposerField className="flex-col items-stretch gap-1">
-              <AgentComposerInput placeholder={placeholder} />
+              <AgentComposerInput
+                placeholder={placeholder}
+                listeningPlaceholder={listeningPlaceholder}
+              />
               <div className="flex items-center justify-end gap-2">
                 <AgentComposerCharacterCount />
                 <AgentComposerMicrophone />
@@ -159,6 +194,7 @@ function SessionChatComposer({
   const { send } = useChat();
   const connectionState = useConnectionState();
   const microphone = useTrackToggle({ source: Track.Source.Microphone });
+  const { localParticipant, microphoneTrack } = useLocalParticipant();
 
   const handleSend = async (message: string) => {
     await send(message);
@@ -174,6 +210,14 @@ function SessionChatComposer({
         onListeningChange?.(next);
         microphone.toggle(next);
       }}
+      microphoneTrack={
+        props.microphoneTrack ??
+        (microphoneTrack && {
+          participant: localParticipant,
+          publication: microphoneTrack,
+          source: Track.Source.Microphone,
+        })
+      }
     />
   );
 }
@@ -185,8 +229,8 @@ function SessionChatComposer({
  * `AgentComposerInput`, `AgentComposerActions`, `AgentComposerCharacterCount`,
  * `AgentComposerMicrophone`, and `AgentComposerSubmit`.
  *
- * Use `data-disabled` to style the disabled state, and `data-over-limit` for a message longer than
- * `maxLength`.
+ * Use `data-disabled` to style the disabled state, `data-over-limit` for a message longer than
+ * `maxLength`, and `data-listening` while the microphone is on.
  *
  * @extends ComponentProps<'form'>
  *
@@ -250,10 +294,16 @@ export function AgentComposerField({
 /**
  * Props for the AgentComposerInput component.
  */
-export type AgentComposerInputProps = Omit<
+export interface AgentComposerInputProps extends Omit<
   ComponentProps<'textarea'>,
   'value' | 'defaultValue' | 'maxLength'
->;
+> {
+  /**
+   * Placeholder text while the microphone is on. Typing still works while listening.
+   * @defaultValue 'Listening…'
+   */
+  listeningPlaceholder?: string;
+}
 
 /**
  * The composer's text field. It grows with its content and takes all textarea props.
@@ -266,6 +316,8 @@ export function AgentComposerInput({
   className,
   onChange,
   onKeyDown,
+  placeholder,
+  listeningPlaceholder = 'Listening…',
   'aria-label': ariaLabel = 'Message',
   ...props
 }: AgentComposerInputProps) {
@@ -276,6 +328,7 @@ export function AgentComposerInput({
     remaining,
     inputRef,
     characterCountId,
+    listening,
     disabled: composerDisabled,
   } = useAgentComposerContext('AgentComposerInput');
 
@@ -309,6 +362,7 @@ export function AgentComposerInput({
       data-slot="agent-composer-input"
       rows={1}
       value={value}
+      placeholder={listening ? listeningPlaceholder : placeholder}
       aria-label={ariaLabel}
       aria-invalid={(remaining !== undefined && remaining < 0) || undefined}
       aria-describedby={remaining !== undefined ? characterCountId : undefined}
@@ -368,8 +422,9 @@ export type AgentComposerMicrophoneProps = Omit<
 
 /**
  * Turns the microphone on so the agent can hear you, and off again. It starts off and fills in
- * while listening. Renders nothing when the composer has no `onListeningChange`, which is set for
- * you without `onSend`.
+ * while listening, with the microphone's level beside the icon when the composer has a
+ * `microphoneTrack`. Renders nothing when the composer has no `onListeningChange`, which is set
+ * for you without `onSend`.
  *
  * @extends ComponentProps<typeof Toggle>
  */
@@ -383,6 +438,7 @@ export function AgentComposerMicrophone({
   const {
     listening = false,
     onListeningChange,
+    microphoneTrack,
     disabled: composerDisabled,
   } = useAgentComposerContext('AgentComposerMicrophone');
   if (!onListeningChange) return null;
@@ -395,14 +451,30 @@ export function AgentComposerMicrophone({
       disabled={disabled || composerDisabled}
       aria-label={ariaLabel}
       className={cn(
-        'text-muted-foreground hover:bg-accent hover:text-foreground size-9 cursor-pointer self-end',
+        'text-muted-foreground hover:bg-accent hover:text-foreground h-9 min-w-9 cursor-pointer self-end',
         'data-[state=on]:bg-primary data-[state=on]:text-primary-foreground',
         'data-[state=on]:hover:bg-primary/90 data-[state=on]:hover:text-primary-foreground',
         className,
       )}
       {...props}
     >
-      {children ?? <MicIcon />}
+      {children ?? (
+        <>
+          <MicIcon />
+          {listening && microphoneTrack && (
+            <AgentAudioVisualizerBar
+              size="icon"
+              barCount={3}
+              state="speaking"
+              audioTrack={microphoneTrack}
+              aria-hidden
+              className="flex h-4 w-auto items-center gap-0.5"
+            >
+              <span className="h-full min-h-0.5 w-0.5 origin-center rounded-full bg-current" />
+            </AgentAudioVisualizerBar>
+          )}
+        </>
+      )}
     </Toggle>
   );
 }

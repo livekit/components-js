@@ -81,7 +81,7 @@
         "lucide-react",
         "radix-ui"
       ],
-      "registryDependencies": ["utils", "button", "toggle"]
+      "registryDependencies": ["utils", "button", "toggle", "@agents-ui/agent-audio-visualizer-bar"]
     },
     {
       "name": "agent-control-bar",

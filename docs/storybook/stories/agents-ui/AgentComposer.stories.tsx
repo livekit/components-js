@@ -8,6 +8,7 @@ import {
   AgentChatTranscript,
   AgentComposer,
   AgentComposerActions,
+  AgentComposerCharacterCount,
   AgentComposerInput,
   AgentComposerSubmit,
   AgentComposerProps,
@@ -72,6 +73,7 @@ function MockChat({ placeholder, sendDelay, failSend, children, ...props }: Args
           <>
             <AgentComposerInput placeholder={placeholder} />
             <AgentComposerSubmit />
+            <AgentComposerCharacterCount />
           </>
         )}
       </AgentComposer>
@@ -116,6 +118,7 @@ export const SendFails: StoryObj<Args> = {
   },
 };
 
+/** Typing past the limit is allowed. The count goes negative and sending is off until you trim it. */
 export const MaxLength: StoryObj<Args> = {
   args: {
     maxLength: 20,
@@ -142,6 +145,7 @@ export const WithActions: StoryObj<Args> = {
         </button>
       </AgentComposerActions>
       <AgentComposerSubmit className="rounded-full" />
+      <AgentComposerCharacterCount />
     </MockChat>
   ),
 };

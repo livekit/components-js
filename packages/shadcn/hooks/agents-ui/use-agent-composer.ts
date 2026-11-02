@@ -14,7 +14,10 @@ export interface UseAgentComposerProps {
   onValueChange?: (value: string) => void;
   /** Prevents sending. */
   disabled?: boolean;
-  /** The maximum number of characters in a message. */
+  /**
+   * The maximum number of characters in a message. Typing past it is allowed, but sending isn't
+   * until the message is short enough.
+   */
   maxLength?: number;
   /** Called when `onSend` rejects. */
   onError?: (error: unknown) => void;
@@ -29,6 +32,8 @@ export interface UseAgentComposerReturn {
   canSubmit: boolean;
   disabled: boolean;
   maxLength?: number;
+  /** Characters left before `maxLength`, negative when over it. Undefined without `maxLength`. */
+  remaining?: number;
 }
 
 /**
@@ -63,8 +68,8 @@ export function useAgentComposer({
   );
 
   const message = value.trim();
-  const canSubmit =
-    !disabled && message.length > 0 && (maxLength === undefined || message.length <= maxLength);
+  const remaining = maxLength === undefined ? undefined : maxLength - message.length;
+  const canSubmit = !disabled && message.length > 0 && (remaining === undefined || remaining >= 0);
 
   const submit = useCallback(() => {
     if (!canSubmit) return;
@@ -75,5 +80,5 @@ export function useAgentComposer({
       .catch((error: unknown) => onError?.(error));
   }, [canSubmit, message, onSend, onError, setValue]);
 
-  return { value, setValue, submit, canSubmit, disabled, maxLength };
+  return { value, setValue, submit, canSubmit, disabled, maxLength, remaining };
 }

@@ -273,7 +273,8 @@ interface AuraShaderProps {
    * Display mode for different backgrounds
    * - 'dark': Optimized for dark backgrounds (default)
    * - 'light': Optimized for light/white backgrounds (inverts colors)
-   * @default 'dark'
+   *
+   * When omitted, follows the `dark` class on `<html>`.
    */
   themeMode?: 'dark' | 'light';
 }
@@ -406,8 +407,8 @@ export interface AgentAudioVisualizerAuraProps {
    */
   colorShift?: number;
   /**
-   * The theme mode of the aura.
-   * @defaultValue 'dark'
+   * The theme mode of the aura. When omitted, follows the `dark` class on `<html>` and updates
+   * when it changes. Pass it explicitly if your app marks dark mode another way.
    */
   themeMode?: 'dark' | 'light';
   /**

@@ -12,7 +12,7 @@ import {
 } from 'react';
 import { useChat, useConnectionState } from '@livekit/components-react';
 import { ConnectionState } from 'livekit-client';
-import { SendHorizontal } from 'lucide-react';
+import { ArrowUpIcon } from 'lucide-react';
 import { Slot } from 'radix-ui';
 
 import { cn } from '@/lib/utils';
@@ -347,7 +347,7 @@ export function AgentComposerSubmit({
       className={cn('self-end disabled:cursor-not-allowed', className)}
       {...props}
     >
-      {children ?? <SendHorizontal />}
+      {children ?? <ArrowUpIcon />}
     </Button>
   );
 }

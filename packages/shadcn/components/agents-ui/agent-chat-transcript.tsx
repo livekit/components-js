@@ -67,11 +67,38 @@ export interface AgentChatTranscriptProps
    * messages show a retry button, and a retried message shows that it's sending until it settles.
    */
   onResend?: (messageId: string) => void;
+  /** Text the transcript shows and announces. */
+  labels?: Partial<AgentChatTranscriptLabels>;
   /**
    * Additional CSS class names to apply to the conversation container.
    */
   className?: string;
 }
+
+/**
+ * Text the transcript shows and announces. Pass any of these to `AgentChatTranscript`'s `labels`
+ * to translate or reword them.
+ */
+export interface AgentChatTranscriptLabels {
+  /** Under a message that couldn't send. */
+  failed: string;
+  /** The button that sends a failed message again. */
+  retry: string;
+  /** Under a retried message while it sends. */
+  sending: string;
+  /** Announced to screen readers when a message can't send. */
+  failedAnnouncement: string;
+  /** Beside the indicator while the agent is thinking. */
+  thinking: string;
+}
+
+export const defaultAgentChatTranscriptLabels: AgentChatTranscriptLabels = {
+  failed: "Couldn't send.",
+  retry: 'Try again',
+  sending: 'Sending…',
+  failedAnnouncement: "Message couldn't send",
+  thinking: 'Thinking...',
+};
 
 function ScrollToEndOnLocalMessage({ messages }: { messages: ReceivedMessage[] }) {
   const { scrollToEnd } = useMessageScroller();
@@ -120,13 +147,18 @@ export function AgentChatTranscript({
   agentState,
   messages = [],
   onResend,
+  labels: labelsProp,
   className,
   ...props
 }: AgentChatTranscriptProps) {
+  const labels = { ...defaultAgentChatTranscriptLabels, ...labelsProp };
   const anchorsLocalMessages =
     scrollAnchor === true || scrollAnchor === 'any' || scrollAnchor === 'user';
   // First sends stay quiet so they feel instant; only retries show that they're in progress
   const [retriedIds, setRetriedIds] = useState<ReadonlySet<string>>(() => new Set());
+  const lastFailedMessage = messages
+    .filter((message) => 'status' in message && message.status === 'failed')
+    .at(-1);
 
   const handleResend = (id: string) => {
     setRetriedIds((previous) => new Set(previous).add(id));
@@ -142,6 +174,12 @@ export function AgentChatTranscript({
       scrollPreviousItemPeek={scrollPreviousItemPeek}
     >
       {autoScroll && !anchorsLocalMessages && <ScrollToEndOnLocalMessage messages={messages} />}
+      <div aria-live="polite" className="sr-only">
+        {lastFailedMessage && (
+          // A retry empties this while it sends, so failing again adds a new announcement
+          <span key={lastFailedMessage.id}>{labels.failedAnnouncement}</span>
+        )}
+      </div>
       <MessageScroller className={className} {...props}>
         <MessageScrollerViewport preserveScrollOnPrepend={preserveScrollOnPrepend}>
           <MessageScrollerContent
@@ -186,20 +224,20 @@ export function AgentChatTranscript({
                       {status === 'sending' && retriedIds.has(id) && (
                         <MessageFooter className="text-muted-foreground gap-1.5">
                           <LoaderIcon className="size-3.5 animate-spin" aria-hidden />
-                          <span>Sending…</span>
+                          <span>{labels.sending}</span>
                         </MessageFooter>
                       )}
                       {status === 'failed' && (
                         <MessageFooter className="text-destructive gap-1.5">
                           <CircleAlertIcon className="size-3.5" aria-hidden />
-                          <span>{"Couldn't send."}</span>
+                          <span>{labels.failed}</span>
                           {onResend && (
                             <button
                               type="button"
                               onClick={() => handleResend(id)}
                               className="cursor-pointer underline underline-offset-2 hover:no-underline"
                             >
-                              Try again
+                              {labels.retry}
                             </button>
                           )}
                         </MessageFooter>
@@ -217,7 +255,7 @@ export function AgentChatTranscript({
                   <MarkerIcon>
                     <AgentChatIndicator size="sm" />
                   </MarkerIcon>
-                  <MarkerContent className="shimmer">Thinking...</MarkerContent>
+                  <MarkerContent className="shimmer">{labels.thinking}</MarkerContent>
                 </Marker>
               </MessageScrollerItem>
             )}

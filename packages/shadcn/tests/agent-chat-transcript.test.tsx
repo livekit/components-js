@@ -323,4 +323,38 @@ describe('AgentChatTranscript failed messages', () => {
 
     expect(screen.queryByText('Sending…')).not.toBeInTheDocument();
   });
+
+  it('uses custom labels', () => {
+    render(
+      <AgentChatTranscript
+        messages={messages}
+        onResend={vi.fn()}
+        labels={{ failed: 'No se pudo enviar.', retry: 'Reintentar' }}
+      />,
+    );
+
+    expect(screen.getByText('No se pudo enviar.')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reintentar' })).toBeInTheDocument();
+  });
+
+  it('announces a message that fails, and again if a retry fails', () => {
+    const withStatus = (status: 'sending' | 'failed') =>
+      messages.map((message) => (message.id === 'failed' ? { ...message, status } : message));
+    const { rerender, container } = render(
+      <AgentChatTranscript messages={withStatus('sending')} onResend={vi.fn()} />,
+    );
+    const region = container.querySelector('[aria-live="polite"]');
+    expect(region).toBeEmptyDOMElement();
+
+    rerender(<AgentChatTranscript messages={withStatus('failed')} onResend={vi.fn()} />);
+    const firstAnnouncement = region?.firstElementChild;
+    expect(firstAnnouncement).toHaveTextContent("Message couldn't send");
+
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
+    rerender(<AgentChatTranscript messages={withStatus('sending')} onResend={vi.fn()} />);
+    rerender(<AgentChatTranscript messages={withStatus('failed')} onResend={vi.fn()} />);
+    // A new node, so screen readers announce it again
+    expect(region?.firstElementChild).toHaveTextContent("Message couldn't send");
+    expect(region?.firstElementChild).not.toBe(firstAnnouncement);
+  });
 });

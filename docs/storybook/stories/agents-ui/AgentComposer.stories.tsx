@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PlusIcon } from 'lucide-react';
 import { StoryObj } from '@storybook/react-vite';
 import {
@@ -25,6 +25,8 @@ interface Args extends AgentComposerProps {
   placeholder: string;
   sendDelay: number;
   failSend: boolean;
+  /** How long the mock agent takes to reply, in milliseconds. 0 means it doesn't reply. */
+  replyDelay: number;
 }
 
 const LOCAL_PARTICIPANT = new Room().localParticipant;
@@ -36,7 +38,11 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  * Mirrors what `useChat` does with a real session: a sent message shows up right away as
  * `sending`, then becomes `sent` or `failed`.
  */
-function useMockChat({ sendDelay, failSend }: Pick<Args, 'sendDelay' | 'failSend'>) {
+function useMockChat({
+  sendDelay,
+  failSend,
+  replyDelay,
+}: Pick<Args, 'sendDelay' | 'failSend' | 'replyDelay'>) {
   const [messages, setMessages] = useState<ReceivedChatMessage[]>([
     {
       id: 'greeting',
@@ -51,10 +57,37 @@ function useMockChat({ sendDelay, failSend }: Pick<Args, 'sendDelay' | 'failSend
       previous.map((message) => (message.id === id ? { ...message, status } : message)),
     );
 
+  const [responding, setResponding] = useState(false);
+  const replyTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const reply = () => {
+    if (!replyDelay) return;
+    clearTimeout(replyTimeout.current);
+    setResponding(true);
+    replyTimeout.current = setTimeout(() => {
+      setResponding(false);
+      setMessages((previous) => [
+        ...previous,
+        {
+          id: crypto.randomUUID(),
+          timestamp: Date.now(),
+          message: 'Here’s my answer.',
+          from: AGENT_PARTICIPANT,
+        },
+      ]);
+    }, replyDelay);
+  };
+
+  const stop = () => {
+    clearTimeout(replyTimeout.current);
+    setResponding(false);
+  };
+
   const deliver = async (id: string) => {
     setStatus(id, 'sending');
     await wait(sendDelay);
     setStatus(id, failSend ? 'failed' : 'sent');
+    if (!failSend) reply();
   };
 
   const send = async (message: string) => {
@@ -66,12 +99,18 @@ function useMockChat({ sendDelay, failSend }: Pick<Args, 'sendDelay' | 'failSend
     await deliver(id);
   };
 
-  return { messages, send, resend: deliver };
+  return { messages, send, resend: deliver, responding, stop };
 }
 
-/** Opens your real microphone while listening, so the button shows its level. */
-function useMicrophoneWhile(listening: boolean) {
+/**
+ * Opens your real microphone while listening, so the button shows its level, a spinner while it
+ * starts, and an error if you block access.
+ */
+function useMockMicrophone(initialError?: unknown) {
+  const [listening, setListening] = useState(false);
   const [track, setTrack] = useState<LocalAudioTrack>();
+  const [error, setError] = useState<unknown>(initialError);
+  const pending = listening && !track && error === undefined;
 
   useEffect(() => {
     if (!listening) return;
@@ -83,8 +122,11 @@ function useMicrophoneWhile(listening: boolean) {
         if (cancelled) created.stop();
         else setTrack(created);
       })
-      // Without microphone access, the button still toggles, just without a level
-      .catch(() => {});
+      .catch((reason: unknown) => {
+        if (cancelled) return;
+        setError(reason);
+        setListening(false);
+      });
     return () => {
       cancelled = true;
       opened?.stop();
@@ -92,27 +134,44 @@ function useMicrophoneWhile(listening: boolean) {
     };
   }, [listening]);
 
-  return track;
+  const handleListeningChange = (next: boolean) => {
+    setError(undefined);
+    setListening(next);
+  };
+
+  return { listening, onListeningChange: handleListeningChange, track, pending, error };
 }
 
 // Styles the default layout's field from outside, since the stories don't pass their own parts
 const COMPOSER_CLASS_NAME =
   '*:data-[slot=agent-composer-field]:rounded-lg *:data-[slot=agent-composer-field]:border *:data-[slot=agent-composer-field]:border-input *:data-[slot=agent-composer-field]:p-2 *:data-[slot=agent-composer-field]:pl-3';
 
-function MockChat({ sendDelay, failSend, children, ...props }: Args) {
-  const { messages, send, resend } = useMockChat({ sendDelay, failSend });
-  const [listening, setListening] = useState(false);
-  const microphoneTrack = useMicrophoneWhile(listening);
+function MockChat({ sendDelay, failSend, replyDelay, microphoneError, children, ...props }: Args) {
+  const { messages, send, resend, responding, stop } = useMockChat({
+    sendDelay,
+    failSend,
+    replyDelay,
+  });
+  const microphone = useMockMicrophone(microphoneError);
 
   return (
     <div className="flex h-[480px] w-96 flex-col gap-2">
-      <AgentChatTranscript messages={messages} onResend={resend} className="flex-1" />
+      <AgentChatTranscript
+        messages={messages}
+        onResend={resend}
+        agentState={responding ? 'thinking' : 'listening'}
+        className="flex-1"
+      />
       <AgentComposer
+        listening={microphone.listening}
+        onListeningChange={microphone.onListeningChange}
+        microphoneTrack={microphone.track}
+        microphonePending={microphone.pending}
+        microphoneError={microphone.error}
+        responding={responding}
+        onStop={stop}
         {...props}
         onSend={send}
-        listening={listening}
-        onListeningChange={setListening}
-        microphoneTrack={microphoneTrack}
         className={COMPOSER_CLASS_NAME}
       >
         {children}
@@ -136,12 +195,14 @@ export default {
     placeholder: 'Type something...',
     sendDelay: 800,
     failSend: false,
+    replyDelay: 0,
     disabled: false,
   },
   argTypes: {
     placeholder: { control: 'text' },
     sendDelay: { control: { type: 'number', min: 0, step: 200 } },
     failSend: { control: 'boolean' },
+    replyDelay: { control: { type: 'number', min: 0, step: 500 } },
     disabled: { control: 'boolean' },
     maxLength: { control: 'number' },
   },
@@ -175,6 +236,33 @@ export const MaxLength: StoryObj<Args> = {
 export const Disabled: StoryObj<Args> = {
   args: {
     disabled: true,
+  },
+};
+
+/**
+ * The agent takes a few seconds to reply. While it does, the send button becomes a stop button
+ * until you start typing.
+ */
+export const StopReply: StoryObj<Args> = {
+  args: {
+    replyDelay: 4000,
+  },
+};
+
+/**
+ * The microphone couldn't start because access is blocked. Clicking it asks for your microphone
+ * again.
+ */
+export const MicrophoneBlocked: StoryObj<Args> = {
+  args: {
+    microphoneError: Object.assign(new Error('Permission denied'), { name: 'NotAllowedError' }),
+  },
+};
+
+/** Unsent text is kept per `draftKey`, so it survives a reload. Type something, then reload. */
+export const Draft: StoryObj<Args> = {
+  args: {
+    draftKey: 'storybook-agent-composer-draft',
   },
 };
 

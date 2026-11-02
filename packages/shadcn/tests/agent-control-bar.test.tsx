@@ -176,7 +176,7 @@ describe('AgentControlBar', () => {
 
     const input = screen.getByPlaceholderText('Type something...');
     await user.type(input, 'Hello world');
-    await user.click(screen.getByTitle('Send'));
+    await user.click(screen.getByRole('button', { name: 'Send message' }));
 
     await waitFor(() => {
       expect(sendMock).toHaveBeenCalledWith('Hello world');

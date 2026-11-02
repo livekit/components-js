@@ -17,6 +17,7 @@ vi.mock('@/components/ui/message', () => ({
     </div>
   ),
   MessageContent: ({ children }: any) => <div data-testid="message-content">{children}</div>,
+  MessageFooter: ({ children }: any) => <div data-testid="message-footer">{children}</div>,
 }));
 
 vi.mock('@/components/ui/bubble', () => ({
@@ -249,5 +250,34 @@ describe('AgentChatTranscript scroll anchors', () => {
     const indicator = screen.getByRole('status').closest('[data-slot="message-scroller-item"]');
     expect(indicator).toHaveAttribute('data-scroll-anchor', 'false');
     expect(indicator).not.toHaveAttribute('data-message-id');
+  });
+});
+
+describe('AgentChatTranscript failed messages', () => {
+  const messages: ReceivedMessage[] = [
+    { id: 'sent', timestamp: 1, from: { isLocal: true } as any, message: 'Sent', status: 'sent' },
+    {
+      id: 'failed',
+      timestamp: 2,
+      from: { isLocal: true } as any,
+      message: 'Failed',
+      status: 'failed',
+    },
+  ];
+
+  it('marks failed messages as not sent', () => {
+    render(<AgentChatTranscript messages={messages} />);
+
+    expect(screen.getAllByText('Not sent.')).toHaveLength(1);
+    expect(screen.queryByRole('button', { name: 'Try again' })).not.toBeInTheDocument();
+  });
+
+  it('resends a failed message', () => {
+    const onResend = vi.fn();
+    render(<AgentChatTranscript messages={messages} onResend={onResend} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
+
+    expect(onResend).toHaveBeenCalledExactlyOnceWith('failed');
   });
 });

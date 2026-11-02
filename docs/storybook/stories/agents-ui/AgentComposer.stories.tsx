@@ -1,5 +1,5 @@
 import React, { type ReactNode, useState } from 'react';
-import { PaperclipIcon } from 'lucide-react';
+import { MicIcon, PlusIcon } from 'lucide-react';
 import { StoryObj } from '@storybook/react-vite';
 import { type ReceivedChatMessage } from '@livekit/components-react';
 import { Participant, Room } from 'livekit-client';
@@ -13,7 +13,6 @@ import {
   AgentComposerInput,
   AgentComposerSubmit,
   AgentComposerProps,
-  AgentTrackToggle,
 } from '@livekit/agents-ui';
 
 interface Args extends AgentComposerProps {
@@ -107,16 +106,19 @@ function MockChat({
   );
 }
 
-function MicrophoneToggle() {
-  const [enabled, setEnabled] = useState(true);
+/** Off until you turn it on to talk, rather than a mute switch that's on by default. */
+function ListenToggle() {
+  const [listening, setListening] = useState(false);
   return (
-    <AgentTrackToggle
-      source="microphone"
-      variant="ghost"
-      pressed={enabled}
-      onPressedChange={setEnabled}
-      aria-label={enabled ? 'Mute microphone' : 'Unmute microphone'}
-    />
+    <button
+      type="button"
+      aria-label="Listen"
+      aria-pressed={listening}
+      onClick={() => setListening((value) => !value)}
+      className="text-muted-foreground hover:bg-accent hover:text-foreground aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:hover:bg-primary/90 aria-pressed:hover:text-primary-foreground flex size-9 cursor-pointer items-center justify-center rounded-md transition-colors"
+    >
+      <MicIcon className="size-4" />
+    </button>
   );
 }
 
@@ -170,7 +172,7 @@ export const Disabled: StoryObj<Args> = {
   },
 };
 
-/** An attach button outside the field, and a microphone toggle inside it beside the send button. */
+/** An attach button outside the field, and a listen toggle inside it beside the send button. */
 export const WithActions: StoryObj<Args> = {
   render: (args: Args) => (
     <MockChat
@@ -183,13 +185,13 @@ export const WithActions: StoryObj<Args> = {
             aria-label="Attach file"
             className="text-muted-foreground hover:text-foreground hover:bg-accent flex size-9 cursor-pointer items-center justify-center rounded-md"
           >
-            <PaperclipIcon className="size-4" />
+            <PlusIcon className="size-4" />
           </button>
         </AgentComposerActions>
       }
       actions={
         <AgentComposerActions>
-          <MicrophoneToggle />
+          <ListenToggle />
         </AgentComposerActions>
       }
     />

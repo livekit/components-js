@@ -3,6 +3,7 @@ export * from './components/agents-ui/start-audio-button';
 export * from './components/agents-ui/agent-disconnect-button';
 export * from './components/agents-ui/agent-track-toggle';
 export * from './components/agents-ui/agent-track-control';
+export * from './components/agents-ui/agent-composer';
 export * from './components/agents-ui/agent-control-bar';
 export * from './components/agents-ui/agent-chat-indicator';
 export * from './components/agents-ui/agent-chat-transcript';

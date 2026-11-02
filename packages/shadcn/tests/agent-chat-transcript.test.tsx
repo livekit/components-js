@@ -279,10 +279,10 @@ describe('AgentChatTranscript failed messages', () => {
     },
   ];
 
-  it('marks failed messages as not sent', () => {
+  it("marks messages that couldn't send", () => {
     render(<AgentChatTranscript messages={messages} />);
 
-    expect(screen.getAllByText('Not sent.')).toHaveLength(1);
+    expect(screen.getAllByText("Couldn't send.")).toHaveLength(1);
     expect(screen.queryByRole('button', { name: 'Try again' })).not.toBeInTheDocument();
   });
 
@@ -306,11 +306,11 @@ describe('AgentChatTranscript failed messages', () => {
 
     rerender(<AgentChatTranscript messages={withStatus('failed')} onResend={vi.fn()} />);
     expect(screen.queryByText('Sending…')).not.toBeInTheDocument();
-    expect(screen.getByText('Not sent.')).toBeInTheDocument();
+    expect(screen.getByText("Couldn't send.")).toBeInTheDocument();
 
     rerender(<AgentChatTranscript messages={withStatus('sent')} onResend={vi.fn()} />);
     expect(screen.queryByText('Sending…')).not.toBeInTheDocument();
-    expect(screen.queryByText('Not sent.')).not.toBeInTheDocument();
+    expect(screen.queryByText("Couldn't send.")).not.toBeInTheDocument();
   });
 
   it('keeps first sends quiet', () => {

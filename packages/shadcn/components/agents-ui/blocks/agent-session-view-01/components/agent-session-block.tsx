@@ -210,6 +210,7 @@ export function AgentSessionView_01({
             <AgentChatTranscript
               agentState={agentState}
               messages={messages}
+              scrollToEndOnLocalMessage
               className="mx-auto max-w-2xl **:data-[slot=message-scroller-content]:p-4 **:data-[slot=message-scroller-content]:pt-40! @md/agent-session-block:**:data-[slot=message-scroller-content]:p-6"
             />
           </motion.div>

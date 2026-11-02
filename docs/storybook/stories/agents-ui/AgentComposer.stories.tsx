@@ -66,19 +66,17 @@ function useMockChat({ sendDelay, failSend }: Pick<Args, 'sendDelay' | 'failSend
 const FIELD_CLASS_NAME = 'rounded-lg border border-input p-2 pl-3';
 
 interface MockChatProps extends Args {
-  /** Controls to the left of the field, outside it. */
-  leading?: ReactNode;
-  /** Controls inside the field, between the input and the send button. */
-  actions?: ReactNode;
+  /** Replaces the field's contents. */
+  field?: ReactNode;
+  fieldClassName?: string;
 }
 
 function MockChat({
   placeholder,
   sendDelay,
   failSend,
-  leading,
-  actions,
-  className,
+  field,
+  fieldClassName = FIELD_CLASS_NAME,
   ...props
 }: MockChatProps) {
   const { messages, send, resend } = useMockChat({ sendDelay, failSend });
@@ -86,21 +84,16 @@ function MockChat({
   return (
     <div className="flex h-[480px] w-96 flex-col gap-2">
       <AgentChatTranscript messages={messages} onResend={resend} className="flex-1" />
-      <AgentComposer
-        {...props}
-        onSend={send}
-        // A grid keeps leading controls beside the field, with the count under the field only
-        className={[leading && 'grid grid-cols-[auto_minmax(0,1fr)] gap-x-2', className]
-          .filter(Boolean)
-          .join(' ')}
-      >
-        {leading}
-        <AgentComposerField className={FIELD_CLASS_NAME}>
-          <AgentComposerInput placeholder={placeholder} />
-          {actions}
-          <AgentComposerSubmit />
+      <AgentComposer {...props} onSend={send}>
+        <AgentComposerField className={fieldClassName}>
+          {field ?? (
+            <>
+              <AgentComposerInput placeholder={placeholder} />
+              <AgentComposerSubmit />
+            </>
+          )}
         </AgentComposerField>
-        <AgentComposerCharacterCount className={leading ? 'col-start-2' : undefined} />
+        <AgentComposerCharacterCount />
       </AgentComposer>
     </div>
   );
@@ -172,27 +165,31 @@ export const Disabled: StoryObj<Args> = {
   },
 };
 
-/** An attach button outside the field, and a listen toggle inside it beside the send button. */
+/** A row of controls inside the field, below the input: attach on the left, listen and send on the right. */
 export const WithActions: StoryObj<Args> = {
   render: (args: Args) => (
     <MockChat
       {...args}
-      leading={
-        // Lines up with the send button, which sits inside the field's border and padding
-        <AgentComposerActions className="mb-[9px] self-end">
-          <button
-            type="button"
-            aria-label="Attach file"
-            className="text-muted-foreground hover:text-foreground hover:bg-accent flex size-9 cursor-pointer items-center justify-center rounded-md"
-          >
-            <PlusIcon className="size-4" />
-          </button>
-        </AgentComposerActions>
-      }
-      actions={
-        <AgentComposerActions>
-          <ListenToggle />
-        </AgentComposerActions>
+      fieldClassName="flex-col items-stretch gap-1 rounded-lg border border-input p-2"
+      field={
+        <>
+          <AgentComposerInput placeholder={args.placeholder} className="px-2" />
+          <div className="flex items-center justify-between gap-2">
+            <AgentComposerActions>
+              <button
+                type="button"
+                aria-label="Attach file"
+                className="text-muted-foreground hover:text-foreground hover:bg-accent flex size-9 cursor-pointer items-center justify-center rounded-md"
+              >
+                <PlusIcon className="size-4" />
+              </button>
+            </AgentComposerActions>
+            <AgentComposerActions>
+              <ListenToggle />
+              <AgentComposerSubmit />
+            </AgentComposerActions>
+          </div>
+        </>
       }
     />
   ),

@@ -66,6 +66,15 @@ export const Default: StoryObj<AgentAudioVisualizerAuraProps> = {
   args: {},
 };
 
+// Omits `themeMode`, so Aura follows the `dark` class that the theme toolbar sets on `<html>`.
+export const PageTheme: StoryObj<AgentAudioVisualizerAuraProps> = {
+  render: (args: AgentAudioVisualizerAuraProps) => {
+    const { microphoneTrack } = useAgent();
+
+    return <AgentAudioVisualizerAura {...args} audioTrack={microphoneTrack} />;
+  },
+};
+
 // Demonstrates the `volume` override prop with a simulated speech waveform instead of
 // live audio.
 export const OverrideVolume: StoryObj<AgentAudioVisualizerAuraProps> = {

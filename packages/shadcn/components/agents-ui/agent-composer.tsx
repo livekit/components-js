@@ -104,13 +104,15 @@ function AgentComposerRoot({
         data-disabled={composer.disabled ? '' : undefined}
         data-over-limit={isOverLimit ? '' : undefined}
         onSubmit={handleSubmit}
-        className={cn('flex flex-wrap items-end gap-2 text-sm', className)}
+        className={cn('flex flex-col gap-1.5 text-sm', className)}
         {...props}
       >
         {children ?? (
           <>
-            <AgentComposerInput />
-            <AgentComposerSubmit />
+            <AgentComposerField>
+              <AgentComposerInput />
+              <AgentComposerSubmit />
+            </AgentComposerField>
             <AgentComposerCharacterCount />
           </>
         )}
@@ -138,8 +140,9 @@ function SessionChatComposer({ disabled, ...props }: AgentComposerProps) {
 
 /**
  * A text input for sending messages to an agent, with a send button. Enter sends and Shift+Enter
- * adds a new line. Pass `AgentComposerInput`, `AgentComposerActions`, and `AgentComposerSubmit` as
- * children to change the layout.
+ * adds a new line. Pass parts as children to change the layout: `AgentComposerField` holds the row
+ * with `AgentComposerInput`, `AgentComposerActions`, and `AgentComposerSubmit`, and
+ * `AgentComposerCharacterCount` goes below it.
  *
  * Use `data-disabled` to style the disabled state, and `data-over-limit` for a message longer than
  * `maxLength`.
@@ -151,9 +154,11 @@ function SessionChatComposer({ disabled, ...props }: AgentComposerProps) {
  * <AgentComposer />
  *
  * <AgentComposer onSend={handleSend} maxLength={500}>
- *   <AgentComposerInput placeholder="Ask anything" />
- *   <AgentComposerActions>{actions}</AgentComposerActions>
- *   <AgentComposerSubmit />
+ *   <AgentComposerField className="rounded-lg border p-2">
+ *     <AgentComposerInput placeholder="Ask anything" />
+ *     <AgentComposerActions>{actions}</AgentComposerActions>
+ *     <AgentComposerSubmit />
+ *   </AgentComposerField>
  *   <AgentComposerCharacterCount />
  * </AgentComposer>
  * ```
@@ -164,6 +169,38 @@ export function AgentComposer(props: AgentComposerProps) {
     return <AgentComposerRoot {...props} onSend={props.onSend} />;
   }
   return <SessionChatComposer {...props} />;
+}
+
+/**
+ * Props for the AgentComposerField component.
+ */
+export interface AgentComposerFieldProps extends ComponentProps<'div'> {
+  /**
+   * Render as the child element instead of a `<div>`.
+   * @defaultValue false
+   */
+  asChild?: boolean;
+}
+
+/**
+ * The row that holds the input, actions, and send button. Style it as the visible text box, so
+ * `AgentComposerCharacterCount` sits outside it.
+ *
+ * @extends ComponentProps<'div'>
+ */
+export function AgentComposerField({
+  asChild = false,
+  className,
+  ...props
+}: AgentComposerFieldProps) {
+  const Comp = asChild ? Slot.Root : 'div';
+  return (
+    <Comp
+      data-slot="agent-composer-field"
+      className={cn('flex items-end gap-2', className)}
+      {...props}
+    />
+  );
 }
 
 /**
@@ -321,7 +358,7 @@ export function AgentComposerSubmit({
 export type AgentComposerCharacterCountProps = ComponentProps<'div'>;
 
 /**
- * Shows how many characters are left before `maxLength`, in a row of its own below the input. The
+ * Shows how many characters are left before `maxLength`. Place it below `AgentComposerField`. The
  * count goes negative past the limit, alongside an error message. Renders nothing without
  * `maxLength`.
  *
@@ -341,7 +378,7 @@ export function AgentComposerCharacterCount({
       data-slot="agent-composer-character-count"
       data-over-limit={isOverLimit ? '' : undefined}
       className={cn(
-        'text-muted-foreground data-over-limit:text-destructive flex basis-full justify-between gap-2 text-xs',
+        'text-muted-foreground data-over-limit:text-destructive flex justify-between gap-2 text-xs',
         className,
       )}
       {...props}

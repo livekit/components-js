@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, type ComponentProps } from 'react';
+import React, { useMemo, useSyncExternalStore, type ComponentProps } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type LocalAudioTrack, type RemoteAudioTrack } from 'livekit-client';
 import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/components-react';
@@ -278,6 +278,28 @@ interface AuraShaderProps {
   themeMode?: 'dark' | 'light';
 }
 
+function subscribeToDocumentTheme(onChange: () => void) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  return () => observer.disconnect();
+}
+
+function getDocumentThemeMode() {
+  return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+}
+
+function getServerThemeMode() {
+  return 'light' as const;
+}
+
+/**
+ * Follows the `dark` class on `<html>` (the shadcn/ui convention), so Aura updates when the page
+ * theme changes. The server snapshot is `'light'`.
+ */
+function useDocumentThemeMode() {
+  return useSyncExternalStore(subscribeToDocumentTheme, getDocumentThemeMode, getServerThemeMode);
+}
+
 function AuraShader({
   shape = 1.0,
   speed = 1.0,
@@ -288,13 +310,13 @@ function AuraShader({
   color = DEFAULT_COLOR,
   colorShift = 1.0,
   brightness = 1.0,
-  themeMode = typeof window !== 'undefined' && document.documentElement.classList.contains('dark')
-    ? 'dark'
-    : 'light',
+  themeMode: themeModeProp,
   ref,
   className,
   ...props
 }: AuraShaderProps & ComponentProps<'div'>) {
+  const documentThemeMode = useDocumentThemeMode();
+  const themeMode = themeModeProp ?? documentThemeMode;
   const rgbColor = useMemo(() => hexToRgb(color), [color]);
   const devicePixelRatio = Math.min(globalThis.devicePixelRatio ?? 1, MAX_SHADER_PIXEL_RATIO);
 

@@ -1,7 +1,23 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { AgentAudioVisualizerAura } from '@/components/agents-ui/agent-audio-visualizer-aura';
 import { useAgentAudioVisualizerAura } from '@/hooks/agents-ui/use-agent-audio-visualizer-aura';
+
+const mockReactShaderToy = vi.fn();
+
+vi.mock('@/components/agents-ui/react-shader-toy', () => ({
+  ReactShaderToy: (props: Record<string, unknown>) => {
+    mockReactShaderToy(props);
+    return <div data-testid="shader-toy" />;
+  },
+}));
+
+function lastUModeValue() {
+  const shaderProps = mockReactShaderToy.mock.calls.at(-1)?.[0] as {
+    uniforms?: Record<string, { value: number | number[] }>;
+  };
+  return shaderProps.uniforms?.uMode?.value;
+}
 
 vi.mock('@/hooks/agents-ui/use-agent-audio-visualizer-aura', () => ({
   useAgentAudioVisualizerAura: vi.fn(() => ({
@@ -55,5 +71,39 @@ describe('AgentAudioVisualizerAura', () => {
     render(<AgentAudioVisualizerAura state="speaking" volume={0.6} />);
 
     expect(useAgentAudioVisualizerAura).toHaveBeenCalledWith('speaking', undefined, 0.6);
+  });
+
+  describe('theme mode', () => {
+    afterEach(() => {
+      document.documentElement.classList.remove('dark');
+    });
+
+    it('uses light mode when <html> has no dark class', () => {
+      render(<AgentAudioVisualizerAura />);
+      expect(lastUModeValue()).toBe(1.0);
+    });
+
+    it('uses dark mode when <html> has the dark class', () => {
+      document.documentElement.classList.add('dark');
+      render(<AgentAudioVisualizerAura />);
+      expect(lastUModeValue()).toBe(0.0);
+    });
+
+    it('follows the dark class when the page theme changes', async () => {
+      render(<AgentAudioVisualizerAura />);
+      expect(lastUModeValue()).toBe(1.0);
+
+      document.documentElement.classList.add('dark');
+      await waitFor(() => expect(lastUModeValue()).toBe(0.0));
+
+      document.documentElement.classList.remove('dark');
+      await waitFor(() => expect(lastUModeValue()).toBe(1.0));
+    });
+
+    it('prefers the themeMode prop over the page theme', () => {
+      document.documentElement.classList.add('dark');
+      render(<AgentAudioVisualizerAura themeMode="light" />);
+      expect(lastUModeValue()).toBe(1.0);
+    });
   });
 });

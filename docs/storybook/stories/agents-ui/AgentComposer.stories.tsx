@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PlusIcon } from 'lucide-react';
 import { StoryObj } from '@storybook/react-vite';
 import { type ReceivedChatMessage } from '@livekit/components-react';
-import { Participant, Room } from 'livekit-client';
+import { createLocalAudioTrack, type LocalAudioTrack, Participant, Room } from 'livekit-client';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import {
   AgentChatTranscript,
@@ -64,6 +64,32 @@ function useMockChat({ sendDelay, failSend }: Pick<Args, 'sendDelay' | 'failSend
   return { messages, send, resend: deliver };
 }
 
+/** Opens your real microphone while listening, so the button shows its level. */
+function useMicrophoneWhile(listening: boolean) {
+  const [track, setTrack] = useState<LocalAudioTrack>();
+
+  useEffect(() => {
+    if (!listening) return;
+    let cancelled = false;
+    let opened: LocalAudioTrack | undefined;
+    createLocalAudioTrack()
+      .then((created) => {
+        opened = created;
+        if (cancelled) created.stop();
+        else setTrack(created);
+      })
+      // Without microphone access, the button still toggles, just without a level
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+      opened?.stop();
+      setTrack(undefined);
+    };
+  }, [listening]);
+
+  return track;
+}
+
 // Styles the default layout's field from outside, since the stories don't pass their own parts
 const COMPOSER_CLASS_NAME =
   '*:data-[slot=agent-composer-field]:rounded-lg *:data-[slot=agent-composer-field]:border *:data-[slot=agent-composer-field]:border-input *:data-[slot=agent-composer-field]:p-2 *:data-[slot=agent-composer-field]:pl-3';
@@ -71,6 +97,7 @@ const COMPOSER_CLASS_NAME =
 function MockChat({ sendDelay, failSend, children, ...props }: Args) {
   const { messages, send, resend } = useMockChat({ sendDelay, failSend });
   const [listening, setListening] = useState(false);
+  const microphoneTrack = useMicrophoneWhile(listening);
 
   return (
     <div className="flex h-[480px] w-96 flex-col gap-2">
@@ -80,6 +107,7 @@ function MockChat({ sendDelay, failSend, children, ...props }: Args) {
         onSend={send}
         listening={listening}
         onListeningChange={setListening}
+        microphoneTrack={microphoneTrack}
         className={COMPOSER_CLASS_NAME}
       >
         {children}

@@ -20,6 +20,7 @@ vi.mock('@livekit/components-react', () => ({
   useChat: () => ({ send: sendMock }),
   useConnectionState: () => connectionState,
   useTrackToggle: () => ({ enabled: microphoneEnabled, toggle: toggleMicrophoneMock }),
+  useLocalParticipant: () => ({ localParticipant: {}, microphoneTrack: undefined }),
 }));
 
 function deferred() {
@@ -299,6 +300,31 @@ describe('AgentComposer', () => {
       await user.click(getMicrophone());
 
       expect(onListeningChange).toHaveBeenCalledExactlyOnceWith(true);
+    });
+
+    it('changes the placeholder while listening', () => {
+      const { rerender, container } = render(
+        <AgentComposer
+          onSend={vi.fn()}
+          placeholder="Type something..."
+          listening={false}
+          onListeningChange={vi.fn()}
+        />,
+      );
+      expect(getInput()).toHaveAttribute('placeholder', 'Type something...');
+      expect(container.firstElementChild).not.toHaveAttribute('data-listening');
+
+      rerender(
+        <AgentComposer
+          onSend={vi.fn()}
+          placeholder="Type something..."
+          listening
+          onListeningChange={vi.fn()}
+        />,
+      );
+      expect(getInput()).toHaveAttribute('placeholder', 'Listening…');
+      expect(getInput()).toBeEnabled();
+      expect(container.firstElementChild).toHaveAttribute('data-listening');
     });
 
     it('can be placed in a custom layout', () => {

@@ -11,7 +11,7 @@ import {
 } from 'react';
 import { useChat, useConnectionState } from '@livekit/components-react';
 import { ConnectionState } from 'livekit-client';
-import { Loader, SendHorizontal } from 'lucide-react';
+import { SendHorizontal } from 'lucide-react';
 import { Slot } from 'radix-ui';
 
 import { cn } from '@/lib/utils';
@@ -47,9 +47,9 @@ export interface AgentComposerProps
     Omit<ComponentProps<'form'>, 'onError' | 'defaultValue'>,
     Partial<Omit<UseAgentComposerProps, 'onSend'>> {
   /**
-   * Sends the message. If it rejects, the text is restored and `data-status` becomes `error`.
-   * When omitted, messages go to the session's chat, and the composer is disabled until the
-   * session connects.
+   * Sends the message. The composer clears right away without waiting for it, so show sending and
+   * failed states with the message itself. When omitted, messages go to the session's chat, where
+   * each one has a `status`, and the composer is disabled until the session connects.
    */
   onSend?: UseAgentComposerProps['onSend'];
   /**
@@ -97,7 +97,6 @@ function AgentComposerRoot({
     <AgentComposerContext.Provider value={{ ...composer, inputRef }}>
       <Comp
         data-slot="agent-composer"
-        data-status={composer.status}
         data-disabled={composer.disabled ? '' : undefined}
         onSubmit={handleSubmit}
         className={cn('flex items-end gap-2 text-sm', className)}
@@ -136,7 +135,7 @@ function SessionChatComposer({ disabled, ...props }: AgentComposerProps) {
  * adds a new line. Pass `AgentComposerInput`, `AgentComposerActions`, and `AgentComposerSubmit` as
  * children to change the layout.
  *
- * Use `data-status` (`idle`, `sending`, or `error`) and `data-disabled` to style each state.
+ * Use `data-disabled` to style the disabled state.
  *
  * @extends ComponentProps<'form'>
  *
@@ -274,8 +273,7 @@ export function AgentComposerActions({
 export type AgentComposerSubmitProps = ComponentProps<typeof Button>;
 
 /**
- * The composer's send button. Shows a spinner while a message is sending. Pass children to
- * replace the icon.
+ * The composer's send button. Pass children to replace the icon.
  *
  * @extends ComponentProps<typeof Button>
  */
@@ -288,7 +286,7 @@ export function AgentComposerSubmit({
   'aria-label': ariaLabel = 'Send message',
   ...props
 }: AgentComposerSubmitProps) {
-  const { canSubmit, status } = useAgentComposerContext('AgentComposerSubmit');
+  const { canSubmit } = useAgentComposerContext('AgentComposerSubmit');
   const isDisabled = disabled || !canSubmit;
 
   return (
@@ -302,8 +300,7 @@ export function AgentComposerSubmit({
       className={cn('self-end disabled:cursor-not-allowed', className)}
       {...props}
     >
-      {children ??
-        (status === 'sending' ? <Loader className="animate-spin" /> : <SendHorizontal />)}
+      {children ?? <SendHorizontal />}
     </Button>
   );
 }

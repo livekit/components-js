@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { PaperclipIcon } from 'lucide-react';
 import { StoryObj } from '@storybook/react-vite';
+import { type ReceivedChatMessage } from '@livekit/components-react';
+import { Participant, Room } from 'livekit-client';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import {
+  AgentChatTranscript,
   AgentComposer,
   AgentComposerActions,
   AgentComposerInput,
@@ -16,25 +19,55 @@ interface Args extends AgentComposerProps {
   failSend: boolean;
 }
 
+const LOCAL_PARTICIPANT = new Room().localParticipant;
+const AGENT_PARTICIPANT = new Participant('mock-agent-sid', 'agent', 'Agent');
+
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-/** Sends with a delay so the sending state is visible, and lists what was sent. */
-function MockComposer({ placeholder, sendDelay, failSend, children, ...props }: Args) {
-  const [sent, setSent] = useState<string[]>([]);
+/**
+ * Mirrors what `useChat` does with a real session: a sent message shows up right away as
+ * `sending`, then becomes `sent` or `failed`.
+ */
+function useMockChat({ sendDelay, failSend }: Pick<Args, 'sendDelay' | 'failSend'>) {
+  const [messages, setMessages] = useState<ReceivedChatMessage[]>([
+    {
+      id: 'greeting',
+      timestamp: Date.now(),
+      message: 'Hi! How can I help?',
+      from: AGENT_PARTICIPANT,
+    },
+  ]);
 
-  const handleSend = async (message: string) => {
+  const setStatus = (id: string, status: ReceivedChatMessage['status']) =>
+    setMessages((previous) =>
+      previous.map((message) => (message.id === id ? { ...message, status } : message)),
+    );
+
+  const deliver = async (id: string) => {
+    setStatus(id, 'sending');
     await wait(sendDelay);
-    if (failSend) throw new Error('Mock send failed');
-    setSent((previous) => [...previous, message]);
+    setStatus(id, failSend ? 'failed' : 'sent');
   };
 
+  const send = async (message: string) => {
+    const id = crypto.randomUUID();
+    setMessages((previous) => [
+      ...previous,
+      { id, timestamp: Date.now(), message, from: LOCAL_PARTICIPANT, status: 'sending' },
+    ]);
+    await deliver(id);
+  };
+
+  return { messages, send, resend: deliver };
+}
+
+function MockChat({ placeholder, sendDelay, failSend, children, ...props }: Args) {
+  const { messages, send, resend } = useMockChat({ sendDelay, failSend });
+
   return (
-    <div className="flex w-96 flex-col gap-4">
-      <AgentComposer
-        {...props}
-        onSend={handleSend}
-        className="rounded-lg border border-input p-2 pl-3 data-[status=error]:border-destructive"
-      >
+    <div className="flex h-[480px] w-96 flex-col gap-2">
+      <AgentChatTranscript messages={messages} onResend={resend} className="flex-1" />
+      <AgentComposer {...props} onSend={send} className="rounded-lg border border-input p-2 pl-3">
         {children ?? (
           <>
             <AgentComposerInput placeholder={placeholder} />
@@ -42,13 +75,6 @@ function MockComposer({ placeholder, sendDelay, failSend, children, ...props }: 
           </>
         )}
       </AgentComposer>
-      <ol aria-label="Sent messages" className="text-muted-foreground list-decimal pl-5 text-sm">
-        {sent.map((message, index) => (
-          <li key={index} className="whitespace-pre-wrap">
-            {message}
-          </li>
-        ))}
-      </ol>
     </div>
   );
 }
@@ -56,7 +82,7 @@ function MockComposer({ placeholder, sendDelay, failSend, children, ...props }: 
 export default {
   component: AgentComposer,
   subcomponents: { AgentComposerInput, AgentComposerActions, AgentComposerSubmit },
-  render: (args: Args) => <MockComposer {...args} />,
+  render: (args: Args) => <MockChat {...args} />,
   args: {
     placeholder: 'Type something...',
     sendDelay: 800,
@@ -80,15 +106,10 @@ export default {
 
 export const Default: StoryObj<Args> = {};
 
+/** Every send fails. Turn off `failSend` in Controls, then click "Try again" on a message. */
 export const SendFails: StoryObj<Args> = {
   args: {
     failSend: true,
-  },
-};
-
-export const SlowSend: StoryObj<Args> = {
-  args: {
-    sendDelay: 3000,
   },
 };
 
@@ -106,7 +127,7 @@ export const Disabled: StoryObj<Args> = {
 
 export const WithActions: StoryObj<Args> = {
   render: (args: Args) => (
-    <MockComposer {...args}>
+    <MockChat {...args}>
       <AgentComposerInput placeholder={args.placeholder} />
       <AgentComposerActions>
         <button
@@ -118,7 +139,7 @@ export const WithActions: StoryObj<Args> = {
         </button>
       </AgentComposerActions>
       <AgentComposerSubmit className="rounded-full" />
-    </MockComposer>
+    </MockChat>
   ),
 };
 

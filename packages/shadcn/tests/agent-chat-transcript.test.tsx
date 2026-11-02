@@ -137,6 +137,79 @@ const messages: ReceivedMessage[] = [
   { id: 'unspecified', timestamp: 2, message: 'Message without sender' },
 ];
 
+describe('AgentChatTranscript scroll on send', () => {
+  const remoteMessage = messages[1]!;
+  const newLocalMessage: ReceivedMessage = {
+    id: 'new-local',
+    timestamp: 3,
+    from: { isLocal: true } as ReceivedMessage['from'],
+    message: 'New local message',
+  };
+  const newRemoteMessage: ReceivedMessage = {
+    id: 'new-remote',
+    timestamp: 3,
+    from: { isLocal: false } as ReceivedMessage['from'],
+    message: 'New remote message',
+  };
+
+  // Gives the viewport room to scroll, then scrolls away from the end the way a reader would.
+  function scrollUp() {
+    const viewport = screen.getByRole('region', { name: 'Messages' });
+    Object.defineProperty(viewport, 'scrollHeight', { configurable: true, value: 1000 });
+    Object.defineProperty(viewport, 'clientHeight', { configurable: true, value: 100 });
+    fireEvent.wheel(viewport);
+    vi.mocked(HTMLElement.prototype.scrollTo).mockClear();
+  }
+
+  it('scrolls to the end when a local message arrives after the reader scrolls up', () => {
+    const { rerender } = render(<AgentChatTranscript messages={[remoteMessage]} />);
+    scrollUp();
+
+    rerender(<AgentChatTranscript messages={[remoteMessage, newLocalMessage]} />);
+
+    expect(HTMLElement.prototype.scrollTo).toHaveBeenCalledWith(
+      expect.objectContaining({ top: 900 }),
+    );
+  });
+
+  it('stays put when a remote message arrives after the reader scrolls up', () => {
+    const { rerender } = render(<AgentChatTranscript messages={[remoteMessage]} />);
+    scrollUp();
+
+    rerender(<AgentChatTranscript messages={[remoteMessage, newRemoteMessage]} />);
+
+    expect(HTMLElement.prototype.scrollTo).not.toHaveBeenCalled();
+  });
+
+  it('stays put when a local message arrives with autoScroll off', () => {
+    const { rerender } = render(
+      <AgentChatTranscript messages={[remoteMessage]} autoScroll={false} />,
+    );
+    scrollUp();
+
+    rerender(
+      <AgentChatTranscript messages={[remoteMessage, newLocalMessage]} autoScroll={false} />,
+    );
+
+    expect(HTMLElement.prototype.scrollTo).not.toHaveBeenCalled();
+  });
+
+  it('scrolls once per local message as its text updates', () => {
+    const { rerender } = render(
+      <AgentChatTranscript messages={[remoteMessage, newLocalMessage]} />,
+    );
+    scrollUp();
+
+    rerender(
+      <AgentChatTranscript
+        messages={[remoteMessage, { ...newLocalMessage, message: 'New local message, updated' }]}
+      />,
+    );
+
+    expect(HTMLElement.prototype.scrollTo).not.toHaveBeenCalled();
+  });
+});
+
 describe('AgentChatTranscript scroll anchors', () => {
   function anchorFlags() {
     return messages.map(({ message }) =>

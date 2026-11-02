@@ -28,8 +28,6 @@ function ErrorOverlay({ logo, agentName, error }: ErrorOverlayProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       data-testid="error-overlay"
-      // @ts-expect-error React's types lag the platform on `inert`.
-      inert={error === null ? '' : undefined}
       className={cn(
         'bg-background absolute inset-0 z-50 flex h-full w-full flex-col items-center justify-center gap-5 px-6 text-center transition-opacity',
       )}

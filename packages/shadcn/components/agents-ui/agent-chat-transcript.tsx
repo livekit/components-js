@@ -1,6 +1,6 @@
 'use client';
 
-import { type ComponentProps } from 'react';
+import { type ComponentProps, useEffect, useRef } from 'react';
 import { type AgentState, type ReceivedMessage } from '@livekit/components-react';
 import { Streamdown } from 'streamdown';
 import { Bubble, BubbleContent } from '@/components/ui/bubble';
@@ -13,6 +13,7 @@ import {
   MessageScrollerItem,
   MessageScrollerProvider,
   MessageScrollerViewport,
+  useMessageScroller,
 } from '@/components/ui/message-scroller';
 import { AgentChatIndicator } from '@/components/agents-ui/agent-chat-indicator';
 
@@ -27,6 +28,8 @@ export interface AgentChatTranscriptProps
     ComponentProps<typeof MessageScrollerContent> {
   /**
    * Whether to automatically scroll to the bottom of the transcript when new messages are added.
+   * Sending a message also jumps to the bottom, even if the reader had scrolled up, unless
+   * `scrollAnchor` already anchors local messages.
    * @defaultValue true
    */
   autoScroll?: boolean;
@@ -64,6 +67,22 @@ export interface AgentChatTranscriptProps
   className?: string;
 }
 
+function ScrollToEndOnLocalMessage({ messages }: { messages: ReceivedMessage[] }) {
+  const { scrollToEnd } = useMessageScroller();
+  const lastMessage = messages.at(-1);
+  const lastLocalMessageId = lastMessage?.from?.isLocal ? lastMessage.id : undefined;
+  // Seeded with the current message so mounting doesn't scroll; `defaultScrollPosition` covers that
+  const handledMessageIdRef = useRef(lastLocalMessageId);
+
+  useEffect(() => {
+    if (!lastLocalMessageId || lastLocalMessageId === handledMessageIdRef.current) return;
+    handledMessageIdRef.current = lastLocalMessageId;
+    scrollToEnd();
+  }, [lastLocalMessageId, scrollToEnd]);
+
+  return null;
+}
+
 /**
  * A chat transcript component that displays a conversation between the user and agent.
  * Shows messages with timestamps and origin indicators, plus a thinking indicator
@@ -97,6 +116,9 @@ export function AgentChatTranscript({
   className,
   ...props
 }: AgentChatTranscriptProps) {
+  const anchorsLocalMessages =
+    scrollAnchor === true || scrollAnchor === 'any' || scrollAnchor === 'user';
+
   return (
     <MessageScrollerProvider
       autoScroll={autoScroll}
@@ -105,6 +127,7 @@ export function AgentChatTranscript({
       scrollEdgeThreshold={scrollEdgeThreshold}
       scrollPreviousItemPeek={scrollPreviousItemPeek}
     >
+      {autoScroll && !anchorsLocalMessages && <ScrollToEndOnLocalMessage messages={messages} />}
       <MessageScroller className={className} {...props}>
         <MessageScrollerViewport preserveScrollOnPrepend={preserveScrollOnPrepend}>
           <MessageScrollerContent

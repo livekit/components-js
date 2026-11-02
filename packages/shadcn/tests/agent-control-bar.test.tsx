@@ -151,6 +151,25 @@ describe('AgentControlBar', () => {
     warnSpy.mockRestore();
   });
 
+  it('focuses the chat input when chat opens', () => {
+    const { rerender } = render(<AgentControlBar isChatOpen={false} />);
+    const input = screen.getByPlaceholderText('Type something...');
+    expect(input).not.toHaveFocus();
+
+    rerender(<AgentControlBar isChatOpen />);
+    expect(input).toHaveFocus();
+  });
+
+  it('focuses the chat input when chat is open on mount', () => {
+    render(<AgentControlBar isChatOpen />);
+    expect(screen.getByPlaceholderText('Type something...')).toHaveFocus();
+  });
+
+  it('does not focus the chat input when chat is closed on mount', () => {
+    render(<AgentControlBar isChatOpen={false} />);
+    expect(screen.getByPlaceholderText('Type something...')).not.toHaveFocus();
+  });
+
   it('sends chat messages when chat is open', async () => {
     const user = userEvent.setup();
     render(<AgentControlBar isChatOpen />);

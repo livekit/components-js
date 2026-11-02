@@ -2,9 +2,10 @@
 
 import { type ComponentProps, useEffect, useRef } from 'react';
 import { type AgentState, type ReceivedMessage } from '@livekit/components-react';
+import { CircleAlertIcon } from 'lucide-react';
 import { Streamdown } from 'streamdown';
 import { Bubble, BubbleContent } from '@/components/ui/bubble';
-import { Message, MessageContent } from '@/components/ui/message';
+import { Message, MessageContent, MessageFooter } from '@/components/ui/message';
 import { Marker, MarkerContent, MarkerIcon } from '@/components/ui/marker';
 import {
   MessageScroller,
@@ -62,6 +63,11 @@ export interface AgentChatTranscriptProps
    */
   messages?: ReceivedMessage[];
   /**
+   * Sends a failed message again, such as `resend` from `useSessionMessages`. When provided, failed
+   * messages show a retry button.
+   */
+  onResend?: (messageId: string) => void;
+  /**
    * Additional CSS class names to apply to the conversation container.
    */
   className?: string;
@@ -113,6 +119,7 @@ export function AgentChatTranscript({
   spacerClassName,
   agentState,
   messages = [],
+  onResend,
   className,
   ...props
 }: AgentChatTranscriptProps) {
@@ -136,6 +143,7 @@ export function AgentChatTranscript({
           >
             {messages.map((receivedMessage) => {
               const { id, timestamp, from, message } = receivedMessage;
+              const status = 'status' in receivedMessage ? receivedMessage.status : undefined;
               const time = new Date(timestamp);
               const isUser = from?.isLocal;
               const locale = typeof navigator !== 'undefined' ? navigator.language : 'en-US';
@@ -153,7 +161,7 @@ export function AgentChatTranscript({
 
               return (
                 <MessageScrollerItem key={id} messageId={id} scrollAnchor={_scrollAnchor}>
-                  <Message align={isUser ? 'end' : 'start'} title={title}>
+                  <Message align={isUser ? 'end' : 'start'} title={title} data-status={status}>
                     <MessageContent>
                       <Bubble
                         align={isUser ? 'end' : 'start'}
@@ -163,6 +171,21 @@ export function AgentChatTranscript({
                           <Streamdown>{message}</Streamdown>
                         </BubbleContent>
                       </Bubble>
+                      {status === 'failed' && (
+                        <MessageFooter className="text-destructive gap-1.5">
+                          <CircleAlertIcon className="size-3.5" aria-hidden />
+                          <span>Not sent.</span>
+                          {onResend && (
+                            <button
+                              type="button"
+                              onClick={() => onResend(id)}
+                              className="underline underline-offset-2 hover:no-underline"
+                            >
+                              Try again
+                            </button>
+                          )}
+                        </MessageFooter>
+                      )}
                     </MessageContent>
                   </Message>
                 </MessageScrollerItem>

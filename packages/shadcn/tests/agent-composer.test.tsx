@@ -101,27 +101,23 @@ describe('AgentComposer', () => {
     expect(getInput()).toHaveFocus();
   });
 
-  it('allows typing while sending but not a second send', async () => {
+  it('sends the next message without waiting for the previous one', async () => {
     const user = userEvent.setup();
     const pending = deferred();
     const onSend = vi.fn(() => pending.promise);
     render(<AgentComposer onSend={onSend} />);
 
     await user.type(getInput(), 'First{Enter}');
-    expect(getForm()).toHaveAttribute('data-status', 'sending');
-
+    expect(getInput()).toHaveValue('');
     await user.type(getInput(), 'Second{Enter}');
-    expect(getInput()).toHaveValue('Second');
-    expect(onSend).toHaveBeenCalledTimes(1);
 
-    await act(async () => pending.resolve());
-    expect(getForm()).toHaveAttribute('data-status', 'idle');
-
-    await user.type(getInput(), '{Enter}');
+    expect(onSend).toHaveBeenCalledTimes(2);
     expect(onSend).toHaveBeenLastCalledWith('Second');
+    expect(getInput()).not.toBeDisabled();
+    await act(async () => pending.resolve());
   });
 
-  it('restores the message and reports the error when sending fails', async () => {
+  it('stays cleared and reports the error when sending fails', async () => {
     const user = userEvent.setup();
     const error = new Error('Network error');
     const onError = vi.fn();
@@ -129,22 +125,26 @@ describe('AgentComposer', () => {
 
     await user.type(getInput(), 'Hello{Enter}');
 
-    await waitFor(() => expect(getForm()).toHaveAttribute('data-status', 'error'));
-    expect(getInput()).toHaveValue('Hello');
-    expect(onError).toHaveBeenCalledWith(error);
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
+    expect(getInput()).toHaveValue('');
   });
 
-  it('keeps text typed while sending when the send fails', async () => {
+  it('reports errors that onSend throws synchronously', async () => {
     const user = userEvent.setup();
-    const pending = deferred();
-    render(<AgentComposer onSend={() => pending.promise} />);
+    const error = new Error('Not connected');
+    const onError = vi.fn();
+    render(
+      <AgentComposer
+        onSend={() => {
+          throw error;
+        }}
+        onError={onError}
+      />,
+    );
 
-    await user.type(getInput(), 'First{Enter}');
-    await user.type(getInput(), 'Second');
-    await act(async () => pending.reject(new Error('Network error')));
+    await user.type(getInput(), 'Hello{Enter}');
 
-    expect(getForm()).toHaveAttribute('data-status', 'error');
-    expect(getInput()).toHaveValue('Second');
+    await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
   });
 
   it('does not send messages longer than maxLength', async () => {

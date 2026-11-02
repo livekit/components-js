@@ -271,3 +271,28 @@ export const ScrollOnSend: StoryObj<AgentChatTranscriptProps> = {
     );
   },
 };
+
+/** A message that failed to send. "Try again" logs to the Actions panel. */
+export const FailedMessage: StoryObj<AgentChatTranscriptProps> = {
+  args: {
+    agentState: 'listening',
+    messages: [
+      {
+        id: 'agent',
+        timestamp: new Date().toISOString(),
+        from: { isLocal: false },
+        message: 'Hi! How can I help?',
+      },
+      {
+        id: 'failed',
+        timestamp: new Date().toISOString(),
+        from: { isLocal: true },
+        message: "What's the weather like today?",
+        status: 'failed',
+      },
+    ],
+  },
+  argTypes: {
+    onResend: { action: 'onResend' },
+  },
+};

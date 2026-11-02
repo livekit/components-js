@@ -235,7 +235,7 @@
           "type": "registry:component"
         }
       ],
-      "dependencies": ["@livekit/components-react@^2.0.0", "streamdown"],
+      "dependencies": ["@livekit/components-react@^2.0.0", "lucide-react", "streamdown"],
       "registryDependencies": [
         "message-scroller",
         "message",

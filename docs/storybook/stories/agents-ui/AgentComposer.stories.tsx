@@ -1,5 +1,5 @@
-import React, { type ReactNode, useState } from 'react';
-import { MicIcon, PlusIcon } from 'lucide-react';
+import React, { useState } from 'react';
+import { PlusIcon } from 'lucide-react';
 import { StoryObj } from '@storybook/react-vite';
 import { type ReceivedChatMessage } from '@livekit/components-react';
 import { Participant, Room } from 'livekit-client';
@@ -11,6 +11,7 @@ import {
   AgentComposerCharacterCount,
   AgentComposerField,
   AgentComposerInput,
+  AgentComposerMicrophone,
   AgentComposerSubmit,
   AgentComposerProps,
 } from '@livekit/agents-ui';
@@ -63,61 +64,40 @@ function useMockChat({ sendDelay, failSend }: Pick<Args, 'sendDelay' | 'failSend
   return { messages, send, resend: deliver };
 }
 
-const FIELD_CLASS_NAME = 'rounded-lg border border-input p-2 pl-3';
+// Styles the default layout's field from outside, since the stories don't pass their own parts
+const COMPOSER_CLASS_NAME =
+  '*:data-[slot=agent-composer-field]:rounded-lg *:data-[slot=agent-composer-field]:border *:data-[slot=agent-composer-field]:border-input *:data-[slot=agent-composer-field]:p-2 *:data-[slot=agent-composer-field]:pl-3';
 
-interface MockChatProps extends Args {
-  /** Replaces the field's contents. */
-  field?: ReactNode;
-  fieldClassName?: string;
-}
-
-function MockChat({
-  placeholder,
-  sendDelay,
-  failSend,
-  field,
-  fieldClassName = FIELD_CLASS_NAME,
-  ...props
-}: MockChatProps) {
+function MockChat({ sendDelay, failSend, children, ...props }: Args) {
   const { messages, send, resend } = useMockChat({ sendDelay, failSend });
+  const [listening, setListening] = useState(false);
 
   return (
     <div className="flex h-[480px] w-96 flex-col gap-2">
       <AgentChatTranscript messages={messages} onResend={resend} className="flex-1" />
-      <AgentComposer {...props} onSend={send}>
-        <AgentComposerField className={fieldClassName}>
-          {field ?? (
-            <>
-              <AgentComposerInput placeholder={placeholder} />
-              <AgentComposerSubmit />
-            </>
-          )}
-        </AgentComposerField>
-        <AgentComposerCharacterCount />
+      <AgentComposer
+        {...props}
+        onSend={send}
+        listening={listening}
+        onListeningChange={setListening}
+        className={COMPOSER_CLASS_NAME}
+      >
+        {children}
       </AgentComposer>
     </div>
   );
 }
 
-/** Off until you turn it on to talk, rather than a mute switch that's on by default. */
-function ListenToggle() {
-  const [listening, setListening] = useState(false);
-  return (
-    <button
-      type="button"
-      aria-label="Listen"
-      aria-pressed={listening}
-      onClick={() => setListening((value) => !value)}
-      className="text-muted-foreground hover:bg-accent hover:text-foreground aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:hover:bg-primary/90 aria-pressed:hover:text-primary-foreground flex size-9 cursor-pointer items-center justify-center rounded-md transition-colors"
-    >
-      <MicIcon className="size-4" />
-    </button>
-  );
-}
-
 export default {
   component: AgentComposer,
-  subcomponents: { AgentComposerInput, AgentComposerActions, AgentComposerSubmit },
+  subcomponents: {
+    AgentComposerField,
+    AgentComposerInput,
+    AgentComposerActions,
+    AgentComposerMicrophone,
+    AgentComposerSubmit,
+    AgentComposerCharacterCount,
+  },
   render: (args: Args) => <MockChat {...args} />,
   args: {
     placeholder: 'Type something...',
@@ -165,33 +145,33 @@ export const Disabled: StoryObj<Args> = {
   },
 };
 
-/** A row of controls inside the field, below the input: attach on the left, listen and send on the right. */
+/** Custom parts: an attach button on the left of the lower row, with the count, microphone, and send on the right. */
 export const WithActions: StoryObj<Args> = {
+  args: {
+    maxLength: 200,
+  },
   render: (args: Args) => (
-    <MockChat
-      {...args}
-      fieldClassName="flex-col items-stretch gap-1 rounded-lg border border-input p-2"
-      field={
-        <>
-          <AgentComposerInput placeholder={args.placeholder} className="px-2" />
-          <div className="flex items-center justify-between gap-2">
-            <AgentComposerActions>
-              <button
-                type="button"
-                aria-label="Attach file"
-                className="text-muted-foreground hover:text-foreground hover:bg-accent flex size-9 cursor-pointer items-center justify-center rounded-md"
-              >
-                <PlusIcon className="size-4" />
-              </button>
-            </AgentComposerActions>
-            <AgentComposerActions>
-              <ListenToggle />
-              <AgentComposerSubmit />
-            </AgentComposerActions>
-          </div>
-        </>
-      }
-    />
+    <MockChat {...args}>
+      <AgentComposerField className="flex-col items-stretch gap-1 !pl-2">
+        <AgentComposerInput placeholder={args.placeholder} className="px-1" />
+        <div className="flex items-center justify-between gap-2">
+          <AgentComposerActions>
+            <button
+              type="button"
+              aria-label="Attach file"
+              className="text-muted-foreground hover:text-foreground hover:bg-accent flex size-9 cursor-pointer items-center justify-center rounded-md"
+            >
+              <PlusIcon className="size-4" />
+            </button>
+          </AgentComposerActions>
+          <AgentComposerActions className="gap-2">
+            <AgentComposerCharacterCount />
+            <AgentComposerMicrophone />
+            <AgentComposerSubmit />
+          </AgentComposerActions>
+        </div>
+      </AgentComposerField>
+    </MockChat>
   ),
 };
 
@@ -199,11 +179,6 @@ export const WithActions: StoryObj<Args> = {
 export const SessionChat: StoryObj<AgentComposerProps> = {
   decorators: [AgentSessionProvider],
   render: () => (
-    <AgentComposer className="w-96 data-[disabled]:opacity-60">
-      <AgentComposerField className={FIELD_CLASS_NAME}>
-        <AgentComposerInput />
-        <AgentComposerSubmit />
-      </AgentComposerField>
-    </AgentComposer>
+    <AgentComposer className={`w-96 data-[disabled]:opacity-60 ${COMPOSER_CLASS_NAME}`} />
   ),
 };

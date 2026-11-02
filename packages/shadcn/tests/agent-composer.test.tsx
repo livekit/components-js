@@ -7,15 +7,19 @@ import {
   AgentComposerActions,
   AgentComposerField,
   AgentComposerInput,
+  AgentComposerMicrophone,
   AgentComposerSubmit,
 } from '@/components/agents-ui/agent-composer';
 
 const sendMock = vi.fn();
+const toggleMicrophoneMock = vi.fn();
 let connectionState = ConnectionState.Connected;
+let microphoneEnabled = false;
 
 vi.mock('@livekit/components-react', () => ({
   useChat: () => ({ send: sendMock }),
   useConnectionState: () => connectionState,
+  useTrackToggle: () => ({ enabled: microphoneEnabled, toggle: toggleMicrophoneMock }),
 }));
 
 function deferred() {
@@ -30,12 +34,15 @@ function deferred() {
 
 const getInput = () => screen.getByRole('textbox', { name: 'Message' });
 const getSubmit = () => screen.getByRole('button', { name: 'Send message' });
+const getMicrophone = () => screen.getByRole('button', { name: 'Listen' });
 const getForm = () => getInput().closest('form')!;
 
 describe('AgentComposer', () => {
   beforeEach(() => {
     sendMock.mockReset();
+    toggleMicrophoneMock.mockReset();
     connectionState = ConnectionState.Connected;
+    microphoneEnabled = false;
   });
 
   it('renders a labeled input and send button by default', () => {
@@ -181,6 +188,14 @@ describe('AgentComposer', () => {
     expect(getSubmit()).toBeEnabled();
   });
 
+  it('puts the character count inside the field with the buttons', () => {
+    render(<AgentComposer onSend={vi.fn()} maxLength={5} />);
+
+    const field = getInput().closest('[data-slot="agent-composer-field"]');
+    expect(field).toContainElement(screen.getByText('5 characters left'));
+    expect(field).toContainElement(getSubmit());
+  });
+
   it('shows no character count without maxLength', () => {
     render(<AgentComposer onSend={vi.fn()} />);
 
@@ -247,6 +262,56 @@ describe('AgentComposer', () => {
 
       expect(getInput()).toBeDisabled();
       expect(getSubmit()).toBeDisabled();
+      expect(getMicrophone()).toBeDisabled();
+    });
+
+    it("turns the session's microphone on and off", async () => {
+      const user = userEvent.setup();
+      const { rerender } = render(<AgentComposer />);
+      expect(getMicrophone()).toHaveAttribute('aria-pressed', 'false');
+
+      await user.click(getMicrophone());
+      expect(toggleMicrophoneMock).toHaveBeenLastCalledWith(true);
+
+      microphoneEnabled = true;
+      rerender(<AgentComposer />);
+      expect(getMicrophone()).toHaveAttribute('aria-pressed', 'true');
+
+      await user.click(getMicrophone());
+      expect(toggleMicrophoneMock).toHaveBeenLastCalledWith(false);
+    });
+  });
+
+  describe('microphone', () => {
+    it('is hidden without onListeningChange when using onSend', () => {
+      render(<AgentComposer onSend={vi.fn()} />);
+
+      expect(screen.queryByRole('button', { name: 'Listen' })).not.toBeInTheDocument();
+    });
+
+    it('reports listening changes', async () => {
+      const user = userEvent.setup();
+      const onListeningChange = vi.fn();
+      render(
+        <AgentComposer onSend={vi.fn()} listening={false} onListeningChange={onListeningChange} />,
+      );
+
+      await user.click(getMicrophone());
+
+      expect(onListeningChange).toHaveBeenCalledExactlyOnceWith(true);
+    });
+
+    it('can be placed in a custom layout', () => {
+      render(
+        <AgentComposer onSend={vi.fn()} listening onListeningChange={vi.fn()}>
+          <AgentComposerField>
+            <AgentComposerInput />
+            <AgentComposerMicrophone aria-label="Talk" />
+          </AgentComposerField>
+        </AgentComposer>,
+      );
+
+      expect(screen.getByRole('button', { name: 'Talk' })).toHaveAttribute('aria-pressed', 'true');
     });
   });
 });

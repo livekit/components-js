@@ -10,13 +10,14 @@ import {
   type KeyboardEvent,
   type RefObject,
 } from 'react';
-import { useChat, useConnectionState } from '@livekit/components-react';
-import { ConnectionState } from 'livekit-client';
-import { ArrowUpIcon } from 'lucide-react';
+import { useChat, useConnectionState, useTrackToggle } from '@livekit/components-react';
+import { ConnectionState, Track } from 'livekit-client';
+import { ArrowUpIcon, MicIcon } from 'lucide-react';
 import { Slot } from 'radix-ui';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { Toggle } from '@/components/ui/toggle';
 import {
   useAgentComposer,
   type UseAgentComposerProps,
@@ -26,6 +27,8 @@ import {
 interface AgentComposerContextValue extends UseAgentComposerReturn {
   inputRef: RefObject<HTMLTextAreaElement | null>;
   characterCountId: string;
+  listening?: boolean;
+  onListeningChange?: (listening: boolean) => void;
 }
 
 // `FormEvent` in older React types and `SubmitEvent` in newer ones
@@ -55,6 +58,18 @@ export interface AgentComposerProps
    */
   onSend?: UseAgentComposerProps['onSend'];
   /**
+   * Whether the microphone is on, so the agent can hear you. Without `onSend`, it follows the
+   * session's microphone.
+   */
+  listening?: boolean;
+  /**
+   * Called when `AgentComposerMicrophone` is toggled. Without `onSend`, it turns the session's
+   * microphone on or off. With `onSend`, pass it to show the microphone.
+   */
+  onListeningChange?: (listening: boolean) => void;
+  /** Placeholder text for the default layout's input. */
+  placeholder?: string;
+  /**
    * Render as the child element instead of a `<form>`.
    * @defaultValue false
    */
@@ -69,6 +84,9 @@ function AgentComposerRoot({
   disabled,
   maxLength,
   onError,
+  listening,
+  onListeningChange,
+  placeholder,
   asChild = false,
   className,
   children,
@@ -98,7 +116,9 @@ function AgentComposerRoot({
   };
 
   return (
-    <AgentComposerContext.Provider value={{ ...composer, inputRef, characterCountId }}>
+    <AgentComposerContext.Provider
+      value={{ ...composer, inputRef, characterCountId, listening, onListeningChange }}
+    >
       <Comp
         data-slot="agent-composer"
         data-disabled={composer.disabled ? '' : undefined}
@@ -107,23 +127,38 @@ function AgentComposerRoot({
         className={cn('flex flex-col gap-1.5 text-sm', className)}
         {...props}
       >
-        {children ?? (
-          <>
+        {children ??
+          (maxLength === undefined ? (
             <AgentComposerField>
-              <AgentComposerInput />
+              <AgentComposerInput placeholder={placeholder} />
+              <AgentComposerMicrophone />
               <AgentComposerSubmit />
             </AgentComposerField>
-            <AgentComposerCharacterCount />
-          </>
-        )}
+          ) : (
+            // Two rows, so the count has room beside the buttons
+            <AgentComposerField className="flex-col items-stretch gap-1">
+              <AgentComposerInput placeholder={placeholder} />
+              <div className="flex items-center justify-end gap-2">
+                <AgentComposerCharacterCount />
+                <AgentComposerMicrophone />
+                <AgentComposerSubmit />
+              </div>
+            </AgentComposerField>
+          ))}
       </Comp>
     </AgentComposerContext.Provider>
   );
 }
 
-function SessionChatComposer({ disabled, ...props }: AgentComposerProps) {
+function SessionChatComposer({
+  disabled,
+  listening,
+  onListeningChange,
+  ...props
+}: AgentComposerProps) {
   const { send } = useChat();
   const connectionState = useConnectionState();
+  const microphone = useTrackToggle({ source: Track.Source.Microphone });
 
   const handleSend = async (message: string) => {
     await send(message);
@@ -134,15 +169,21 @@ function SessionChatComposer({ disabled, ...props }: AgentComposerProps) {
       {...props}
       onSend={handleSend}
       disabled={disabled || connectionState !== ConnectionState.Connected}
+      listening={listening ?? microphone.enabled}
+      onListeningChange={(next) => {
+        onListeningChange?.(next);
+        microphone.toggle(next);
+      }}
     />
   );
 }
 
 /**
- * A text input for sending messages to an agent, with a send button. Enter sends and Shift+Enter
- * adds a new line. Pass parts as children to change the layout: `AgentComposerField` holds the row
- * with `AgentComposerInput`, `AgentComposerActions`, and `AgentComposerSubmit`, and
- * `AgentComposerCharacterCount` goes below it.
+ * A text input for sending messages to an agent, with microphone and send buttons. Enter sends and
+ * Shift+Enter adds a new line. With `maxLength`, the buttons and a character count move to a row
+ * below the input. Pass parts as children to change the layout: `AgentComposerField` holds
+ * `AgentComposerInput`, `AgentComposerActions`, `AgentComposerCharacterCount`,
+ * `AgentComposerMicrophone`, and `AgentComposerSubmit`.
  *
  * Use `data-disabled` to style the disabled state, and `data-over-limit` for a message longer than
  * `maxLength`.
@@ -154,12 +195,16 @@ function SessionChatComposer({ disabled, ...props }: AgentComposerProps) {
  * <AgentComposer />
  *
  * <AgentComposer onSend={handleSend} maxLength={500}>
- *   <AgentComposerField className="rounded-lg border p-2">
+ *   <AgentComposerField className="flex-col items-stretch rounded-lg border p-2">
  *     <AgentComposerInput placeholder="Ask anything" />
- *     <AgentComposerActions>{actions}</AgentComposerActions>
- *     <AgentComposerSubmit />
+ *     <div className="flex items-center justify-between">
+ *       <AgentComposerActions>{actions}</AgentComposerActions>
+ *       <AgentComposerActions>
+ *         <AgentComposerCharacterCount />
+ *         <AgentComposerSubmit />
+ *       </AgentComposerActions>
+ *     </div>
  *   </AgentComposerField>
- *   <AgentComposerCharacterCount />
  * </AgentComposer>
  * ```
  */
@@ -183,8 +228,7 @@ export interface AgentComposerFieldProps extends ComponentProps<'div'> {
 }
 
 /**
- * The row that holds the input, actions, and send button. Style it as the visible text box, so
- * `AgentComposerCharacterCount` sits outside it.
+ * The visible text box that holds the input and buttons. Style it with a border or background.
  *
  * @extends ComponentProps<'div'>
  */
@@ -315,6 +359,55 @@ export function AgentComposerActions({
 }
 
 /**
+ * Props for the AgentComposerMicrophone component.
+ */
+export type AgentComposerMicrophoneProps = Omit<
+  ComponentProps<typeof Toggle>,
+  'pressed' | 'defaultPressed' | 'onPressedChange'
+>;
+
+/**
+ * Turns the microphone on so the agent can hear you, and off again. It starts off and fills in
+ * while listening. Renders nothing when the composer has no `onListeningChange`, which is set for
+ * you without `onSend`.
+ *
+ * @extends ComponentProps<typeof Toggle>
+ */
+export function AgentComposerMicrophone({
+  disabled,
+  className,
+  children,
+  'aria-label': ariaLabel = 'Listen',
+  ...props
+}: AgentComposerMicrophoneProps) {
+  const {
+    listening = false,
+    onListeningChange,
+    disabled: composerDisabled,
+  } = useAgentComposerContext('AgentComposerMicrophone');
+  if (!onListeningChange) return null;
+
+  return (
+    <Toggle
+      data-slot="agent-composer-microphone"
+      pressed={listening}
+      onPressedChange={onListeningChange}
+      disabled={disabled || composerDisabled}
+      aria-label={ariaLabel}
+      className={cn(
+        'text-muted-foreground hover:bg-accent hover:text-foreground size-9 cursor-pointer self-end',
+        'data-[state=on]:bg-primary data-[state=on]:text-primary-foreground',
+        'data-[state=on]:hover:bg-primary/90 data-[state=on]:hover:text-primary-foreground',
+        className,
+      )}
+      {...props}
+    >
+      {children ?? <MicIcon />}
+    </Toggle>
+  );
+}
+
+/**
  * Props for the AgentComposerSubmit component.
  */
 export type AgentComposerSubmitProps = ComponentProps<typeof Button>;
@@ -358,9 +451,8 @@ export function AgentComposerSubmit({
 export type AgentComposerCharacterCountProps = ComponentProps<'div'>;
 
 /**
- * Shows how many characters are left before `maxLength`. Place it below `AgentComposerField`. The
- * count goes negative past the limit, alongside an error message. Renders nothing without
- * `maxLength`.
+ * Shows how many characters are left before `maxLength`, usually beside the buttons. The count
+ * goes negative past the limit, after an error message. Renders nothing without `maxLength`.
  *
  * @extends ComponentProps<'div'>
  */
@@ -378,12 +470,12 @@ export function AgentComposerCharacterCount({
       data-slot="agent-composer-character-count"
       data-over-limit={isOverLimit ? '' : undefined}
       className={cn(
-        'text-muted-foreground data-over-limit:text-destructive flex justify-between gap-2 text-xs',
+        'text-muted-foreground data-over-limit:text-destructive flex items-center gap-2 text-xs',
         className,
       )}
       {...props}
     >
-      <span>{isOverLimit && 'Message is too long'}</span>
+      {isOverLimit && <span>Message is too long</span>}
       <span className="tabular-nums" aria-hidden>
         {remaining}
       </span>

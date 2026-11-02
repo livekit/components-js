@@ -253,6 +253,20 @@ describe('AgentChatTranscript scroll anchors', () => {
   });
 });
 
+describe('AgentChatTranscript message text', () => {
+  it('keeps line breaks in user messages', () => {
+    render(
+      <AgentChatTranscript
+        messages={[{ id: 'user', timestamp: 1, from: { isLocal: true } as any, message: 'a\nb' }]}
+      />,
+    );
+
+    const text = screen.getByTestId('message-response').firstElementChild;
+    expect(text?.textContent).toBe('a\nb');
+    expect(text).toHaveClass('whitespace-pre-wrap');
+  });
+});
+
 describe('AgentChatTranscript failed messages', () => {
   const messages: ReceivedMessage[] = [
     { id: 'sent', timestamp: 1, from: { isLocal: true } as any, message: 'Sent', status: 'sent' },

@@ -272,15 +272,24 @@ export function PreJoin({
     saveUsername(username);
   }, [username, saveUsername]);
 
-  const tracks = usePreviewTracks(
-    {
-      audio: audioEnabled ? { deviceId: initialUserChoices.audioDeviceId } : false,
+  // Device ids only matter when a preview track is (re)created. Switching devices on an existing
+  // track goes through `MediaDeviceSelect` -> `track.setDeviceId()`, so changing the selected device
+  // must not change these options. Otherwise both preview tracks get torn down and recreated on
+  // every selection. Read the latest ids from a ref so that re-enabling a track uses the current choice.
+  const deviceIdsRef = React.useRef({ audioDeviceId, videoDeviceId });
+  deviceIdsRef.current = { audioDeviceId, videoDeviceId };
+
+  const previewTrackOptions = React.useMemo(
+    () => ({
+      audio: audioEnabled ? { deviceId: deviceIdsRef.current.audioDeviceId } : false,
       video: videoEnabled
-        ? { deviceId: initialUserChoices.videoDeviceId, processor: videoProcessor }
+        ? { deviceId: deviceIdsRef.current.videoDeviceId, processor: videoProcessor }
         : false,
-    },
-    onError,
+    }),
+    [audioEnabled, videoEnabled, videoProcessor],
   );
+
+  const tracks = usePreviewTracks(previewTrackOptions, onError);
 
   const videoEl = React.useRef(null);
 

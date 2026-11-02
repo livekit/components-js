@@ -81,10 +81,20 @@ export const MediaDeviceSelect: (
       requestPermissions,
       onError: handleError,
     });
+    // Apply `initialSelection` once on mount. `setActiveMediaDevice` changes identity whenever the
+    // `track` prop changes, and re-applying the initial selection then would undo the user's choice.
+    const appliedInitialSelection = React.useRef(false);
     React.useEffect(() => {
-      if (initialSelection !== undefined) {
-        setActiveMediaDevice(initialSelection);
+      if (appliedInitialSelection.current || typeof initialSelection === 'undefined') {
+        return;
       }
+      appliedInitialSelection.current = true;
+      // Don't restart a track that is already on the requested device. The restart is
+      // non-exact, so the browser may resolve it to a different device.
+      if (track && track.mediaStreamTrack?.getSettings?.().deviceId === initialSelection) {
+        return;
+      }
+      setActiveMediaDevice(initialSelection);
     }, [setActiveMediaDevice]);
 
     React.useEffect(() => {

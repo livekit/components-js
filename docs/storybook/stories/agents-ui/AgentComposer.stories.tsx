@@ -112,6 +112,7 @@ function MicrophoneToggle() {
   return (
     <AgentTrackToggle
       source="microphone"
+      variant="ghost"
       pressed={enabled}
       onPressedChange={setEnabled}
       aria-label={enabled ? 'Mute microphone' : 'Unmute microphone'}

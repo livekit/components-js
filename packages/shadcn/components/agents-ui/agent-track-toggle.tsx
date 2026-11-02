@@ -36,6 +36,13 @@ export const agentTrackToggleVariants = cva(['size-9'], {
         'data-[state=on]:hover:bg-foreground/10 data-[state=on]:hover:border-foreground/12',
         'dark:data-[state=on]:hover:bg-foreground/10',
       ],
+      ghost: [
+        'data-[state=on]:bg-transparent data-[state=on]:text-foreground',
+        'data-[state=on]:hover:bg-accent data-[state=on]:hover:text-foreground',
+        'data-[state=off]:text-destructive',
+        'data-[state=off]:hover:bg-destructive/10 data-[state=off]:hover:text-destructive',
+        'data-[state=off]:focus-visible:ring-destructive/30',
+      ],
     },
   },
   defaultVariants: {
@@ -70,10 +77,10 @@ export type AgentTrackToggleProps = VariantProps<typeof agentTrackToggleVariants
      */
     size?: 'sm' | 'default' | 'lg';
     /**
-     * The variant of the toggle.
+     * The variant of the toggle. `ghost` has no background until hovered.
      * @defaultValue 'default'
      */
-    variant?: 'default' | 'outline';
+    variant?: 'default' | 'outline' | 'ghost';
     /**
      * The track source to toggle (Microphone, Camera, or ScreenShare).
      */
@@ -143,7 +150,8 @@ export function AgentTrackToggle({
   return (
     <Toggle
       size={size}
-      variant={variant}
+      // The base toggle has no ghost style; the classes below supply it
+      variant={variant === 'ghost' ? 'default' : variant}
       pressed={isControlled ? pressed : undefined}
       defaultPressed={isControlled ? undefined : defaultPressed}
       aria-label={`Toggle ${source}`}

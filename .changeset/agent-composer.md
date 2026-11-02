@@ -16,3 +16,5 @@ pass `onResend`. A retried message shows that it's sending until it goes through
 Your own messages show as plain text, so line breaks
 from Shift+Enter stay as you typed them. `AgentSessionView_01` passes `resend` from
 `useSessionMessages`.
+
+`AgentTrackToggle` has a new `ghost` variant with no background until hovered.

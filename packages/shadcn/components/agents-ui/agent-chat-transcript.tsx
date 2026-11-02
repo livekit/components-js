@@ -28,6 +28,8 @@ export interface AgentChatTranscriptProps
     ComponentProps<typeof MessageScrollerContent> {
   /**
    * Whether to automatically scroll to the bottom of the transcript when new messages are added.
+   * Sending a message also jumps to the bottom, even if the reader had scrolled up, unless
+   * `scrollAnchor` already anchors local messages.
    * @defaultValue true
    */
   autoScroll?: boolean;
@@ -38,12 +40,6 @@ export interface AgentChatTranscriptProps
    * @defaultValue false
    */
   scrollAnchor?: boolean | 'user' | 'other' | 'any';
-  /**
-   * Whether to jump to the end of the transcript when a new local message arrives, even if the
-   * reader has scrolled up. Has no effect when `scrollAnchor` already anchors local messages.
-   * @defaultValue false
-   */
-  scrollToEndOnLocalMessage?: boolean;
   /**
    * The scroll button render function
    */
@@ -71,22 +67,6 @@ export interface AgentChatTranscriptProps
   className?: string;
 }
 
-/**
- * A chat transcript component that displays a conversation between the user and agent.
- * Shows messages with timestamps and origin indicators, plus a thinking indicator
- * when the agent is processing.
- *
- * @extends ComponentProps<'div'>, ComponentProps<typeof MessageScrollerProvider>, ComponentProps<typeof MessageScrollerViewport>, ComponentProps<typeof MessageScrollerContent>
- *
- *
- * @example
- * ```tsx
- * <AgentChatTranscript
- *   agentState={agentState}
- *   messages={chatMessages}
- * />
- * ```
- */
 function ScrollToEndOnLocalMessage({ messages }: { messages: ReceivedMessage[] }) {
   const { scrollToEnd } = useMessageScroller();
   const lastMessage = messages.at(-1);
@@ -103,9 +83,24 @@ function ScrollToEndOnLocalMessage({ messages }: { messages: ReceivedMessage[] }
   return null;
 }
 
+/**
+ * A chat transcript component that displays a conversation between the user and agent.
+ * Shows messages with timestamps and origin indicators, plus a thinking indicator
+ * when the agent is processing.
+ *
+ * @extends ComponentProps<'div'>, ComponentProps<typeof MessageScrollerProvider>, ComponentProps<typeof MessageScrollerViewport>, ComponentProps<typeof MessageScrollerContent>
+ *
+ *
+ * @example
+ * ```tsx
+ * <AgentChatTranscript
+ *   agentState={agentState}
+ *   messages={chatMessages}
+ * />
+ * ```
+ */
 export function AgentChatTranscript({
   scrollAnchor,
-  scrollToEndOnLocalMessage = false,
   autoScroll = true,
   scrollMargin,
   scrollEdgeThreshold,
@@ -132,9 +127,7 @@ export function AgentChatTranscript({
       scrollEdgeThreshold={scrollEdgeThreshold}
       scrollPreviousItemPeek={scrollPreviousItemPeek}
     >
-      {scrollToEndOnLocalMessage && !anchorsLocalMessages && (
-        <ScrollToEndOnLocalMessage messages={messages} />
-      )}
+      {autoScroll && !anchorsLocalMessages && <ScrollToEndOnLocalMessage messages={messages} />}
       <MessageScroller className={className} {...props}>
         <MessageScrollerViewport preserveScrollOnPrepend={preserveScrollOnPrepend}>
           <MessageScrollerContent

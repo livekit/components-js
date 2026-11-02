@@ -137,7 +137,7 @@ const messages: ReceivedMessage[] = [
   { id: 'unspecified', timestamp: 2, message: 'Message without sender' },
 ];
 
-describe('AgentChatTranscript scrollToEndOnLocalMessage', () => {
+describe('AgentChatTranscript scroll on send', () => {
   const remoteMessage = messages[1]!;
   const newLocalMessage: ReceivedMessage = {
     id: 'new-local',
@@ -162,14 +162,10 @@ describe('AgentChatTranscript scrollToEndOnLocalMessage', () => {
   }
 
   it('scrolls to the end when a local message arrives after the reader scrolls up', () => {
-    const { rerender } = render(
-      <AgentChatTranscript messages={[remoteMessage]} scrollToEndOnLocalMessage />,
-    );
+    const { rerender } = render(<AgentChatTranscript messages={[remoteMessage]} />);
     scrollUp();
 
-    rerender(
-      <AgentChatTranscript messages={[remoteMessage, newLocalMessage]} scrollToEndOnLocalMessage />,
-    );
+    rerender(<AgentChatTranscript messages={[remoteMessage, newLocalMessage]} />);
 
     expect(HTMLElement.prototype.scrollTo).toHaveBeenCalledWith(
       expect.objectContaining({ top: 900 }),
@@ -177,40 +173,36 @@ describe('AgentChatTranscript scrollToEndOnLocalMessage', () => {
   });
 
   it('stays put when a remote message arrives after the reader scrolls up', () => {
-    const { rerender } = render(
-      <AgentChatTranscript messages={[remoteMessage]} scrollToEndOnLocalMessage />,
-    );
+    const { rerender } = render(<AgentChatTranscript messages={[remoteMessage]} />);
     scrollUp();
 
-    rerender(
-      <AgentChatTranscript
-        messages={[remoteMessage, newRemoteMessage]}
-        scrollToEndOnLocalMessage
-      />,
-    );
+    rerender(<AgentChatTranscript messages={[remoteMessage, newRemoteMessage]} />);
 
     expect(HTMLElement.prototype.scrollTo).not.toHaveBeenCalled();
   });
 
-  it('stays put when a local message arrives without the prop', () => {
-    const { rerender } = render(<AgentChatTranscript messages={[remoteMessage]} />);
+  it('stays put when a local message arrives with autoScroll off', () => {
+    const { rerender } = render(
+      <AgentChatTranscript messages={[remoteMessage]} autoScroll={false} />,
+    );
     scrollUp();
 
-    rerender(<AgentChatTranscript messages={[remoteMessage, newLocalMessage]} />);
+    rerender(
+      <AgentChatTranscript messages={[remoteMessage, newLocalMessage]} autoScroll={false} />,
+    );
 
     expect(HTMLElement.prototype.scrollTo).not.toHaveBeenCalled();
   });
 
   it('scrolls once per local message as its text updates', () => {
     const { rerender } = render(
-      <AgentChatTranscript messages={[remoteMessage, newLocalMessage]} scrollToEndOnLocalMessage />,
+      <AgentChatTranscript messages={[remoteMessage, newLocalMessage]} />,
     );
     scrollUp();
 
     rerender(
       <AgentChatTranscript
         messages={[remoteMessage, { ...newLocalMessage, message: 'New local message, updated' }]}
-        scrollToEndOnLocalMessage
       />,
     );
 

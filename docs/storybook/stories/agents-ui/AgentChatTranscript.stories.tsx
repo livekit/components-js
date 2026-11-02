@@ -15,7 +15,7 @@ export default {
   },
   args: {
     agentState: 'thinking',
-    scrollToEndOnLocalMessage: false,
+    autoScroll: true,
     messages: [
       {
         id: '1',
@@ -51,7 +51,7 @@ export default {
     ],
   },
   argTypes: {
-    scrollToEndOnLocalMessage: { control: 'boolean' },
+    autoScroll: { control: 'boolean' },
     agentState: {
       control: 'radio',
       options: [
@@ -200,7 +200,7 @@ export const BooleanScrollAnchor: StoryObj<AgentChatTranscriptProps> = {
   },
 };
 
-const scrollToEndMessages: Messages = Array.from({ length: 12 }, (_, index) => ({
+const scrollOnSendMessages: Messages = Array.from({ length: 12 }, (_, index) => ({
   id: `history-${index}`,
   timestamp: index * 1000,
   from: { isLocal: index % 2 === 0 } as Messages[number]['from'],
@@ -208,22 +208,21 @@ const scrollToEndMessages: Messages = Array.from({ length: 12 }, (_, index) => (
 }));
 
 // Uses local messages only: no session provider, microphone, or credentials.
-export const ScrollToEndOnLocalMessage: StoryObj<AgentChatTranscriptProps> = {
+export const ScrollOnSend: StoryObj<AgentChatTranscriptProps> = {
   args: {
     agentState: undefined,
-    scrollToEndOnLocalMessage: true,
   },
   parameters: {
     layout: 'padded',
     docs: {
       description: {
         story:
-          'Scroll up, then add a user message: the transcript jumps to the end. Scroll up and add an agent message: it stays put. Turn off scrollToEndOnLocalMessage to compare.',
+          'Scroll up, then add a user message: the transcript jumps to the end. Scroll up and add an agent message: it stays put. Turning off autoScroll turns this off too.',
       },
     },
   },
   render: (args: AgentChatTranscriptProps) => {
-    const [messages, setMessages] = React.useState(scrollToEndMessages);
+    const [messages, setMessages] = React.useState(scrollOnSendMessages);
     const addMessage = (isLocal: boolean) => {
       setMessages((previous) => [
         ...previous,
@@ -256,7 +255,7 @@ export const ScrollToEndOnLocalMessage: StoryObj<AgentChatTranscriptProps> = {
           <button
             type="button"
             className="rounded-md border px-3 py-2"
-            onClick={() => setMessages(scrollToEndMessages)}
+            onClick={() => setMessages(scrollOnSendMessages)}
           >
             Reset messages
           </button>

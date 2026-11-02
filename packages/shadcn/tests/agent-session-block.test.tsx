@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { AgentSessionView_01 } from '@/components/agents-ui/blocks/agent-session-view-01/components/agent-session-block';
 
@@ -33,12 +33,8 @@ vi.mock('@/components/agents-ui/agent-control-bar', () => ({
 }));
 
 vi.mock('@/components/agents-ui/agent-chat-transcript', () => ({
-  AgentChatTranscript: ({ className, scrollToEndOnLocalMessage }: any) => (
-    <div
-      data-testid="agent-chat-transcript"
-      data-scroll-to-end-on-local-message={String(scrollToEndOnLocalMessage)}
-      className={className}
-    />
+  AgentChatTranscript: ({ className }: any) => (
+    <div data-testid="agent-chat-transcript" className={className} />
   ),
 }));
 
@@ -260,18 +256,6 @@ describe('AgentSessionView_01', () => {
         camera: false,
         screenShare: false,
       });
-    });
-  });
-
-  describe('transcript', () => {
-    it('jumps the transcript to the end on local messages once chat opens', () => {
-      render(<AgentSessionView_01 controls={{ chat: true }} />);
-      act(() => agentControlBarMock.mock.calls[0][0].onIsChatOpenChange(true));
-
-      expect(screen.getByTestId('agent-chat-transcript')).toHaveAttribute(
-        'data-scroll-to-end-on-local-message',
-        'true',
-      );
     });
   });
 });

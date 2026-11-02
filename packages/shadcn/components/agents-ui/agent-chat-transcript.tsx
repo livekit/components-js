@@ -192,7 +192,7 @@ export function AgentChatTranscript({
                       {status === 'failed' && (
                         <MessageFooter className="text-destructive gap-1.5">
                           <CircleAlertIcon className="size-3.5" aria-hidden />
-                          <span>Not sent.</span>
+                          <span>{"Couldn't send."}</span>
                           {onResend && (
                             <button
                               type="button"

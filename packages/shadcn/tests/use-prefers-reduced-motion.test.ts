@@ -89,6 +89,18 @@ describe('visualizer sequences with reduced motion', () => {
     expect(result.current).toEqual(first);
   });
 
+  it('goes back to the first frame when reduced motion turns on mid-sequence', () => {
+    const setReducedMotion = mockReducedMotion(false);
+    vi.useFakeTimers();
+    const { result } = renderHook(() => useAgentAudioVisualizerBarAnimator('connecting', 5, 100));
+
+    act(() => vi.advanceTimersByTime(250));
+    expect(result.current).not.toEqual([0, 4]);
+
+    act(() => setReducedMotion(true));
+    expect(result.current).toEqual([0, 4]);
+  });
+
   it('starts stepping again when reduced motion turns off', () => {
     const setReducedMotion = mockReducedMotion(true);
     vi.useFakeTimers();

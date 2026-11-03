@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useRef, useSyncExternalStore, type ComponentProps } from 'react';
+import React, { useSyncExternalStore, type ComponentProps } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type LocalAudioTrack, type RemoteAudioTrack } from 'livekit-client';
 import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/components-react';
 
 import { ReactShaderToy } from '@/components/agents-ui/react-shader-toy';
 import { useAgentAudioVisualizerAura } from '@/hooks/agents-ui/use-agent-audio-visualizer-aura';
-import { useShaderColor } from '@/hooks/agents-ui/use-shader-color';
+import { subscribeToThemeChanges, useShaderColor } from '@/hooks/agents-ui/use-shader-color';
 import { cn } from '@/lib/utils';
 
 const DEFAULT_COLOR = '#1FD5F9';
@@ -273,12 +273,6 @@ interface AuraShaderProps {
   themeMode?: 'dark' | 'light';
 }
 
-function subscribeToDocumentTheme(onChange: () => void) {
-  const observer = new MutationObserver(onChange);
-  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-  return () => observer.disconnect();
-}
-
 function getDocumentThemeMode() {
   return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 }
@@ -292,7 +286,8 @@ function getServerThemeMode() {
  * theme changes. The server snapshot is `'light'`.
  */
 function useDocumentThemeMode() {
-  return useSyncExternalStore(subscribeToDocumentTheme, getDocumentThemeMode, getServerThemeMode);
+  // The same theme-change signal the color uses, so the mode and the color update together
+  return useSyncExternalStore(subscribeToThemeChanges, getDocumentThemeMode, getServerThemeMode);
 }
 
 function AuraShader({
@@ -312,13 +307,16 @@ function AuraShader({
 }: AuraShaderProps & ComponentProps<'div'>) {
   const documentThemeMode = useDocumentThemeMode();
   const themeMode = themeModeProp ?? documentThemeMode;
-  const colorProbe = useRef<HTMLSpanElement>(null);
-  const rgbColor = useShaderColor(color, colorProbe, DEFAULT_COLOR);
+  const { rgb: rgbColor, probe: colorProbe } = useShaderColor(color, DEFAULT_COLOR);
   const devicePixelRatio = Math.min(globalThis.devicePixelRatio ?? 1, MAX_SHADER_PIXEL_RATIO);
 
   return (
     <div ref={ref} className={className} {...props}>
-      <span ref={colorProbe} hidden style={{ color }} />
+      {colorProbe && (
+        <span hidden style={colorProbe.parentStyle}>
+          <span ref={colorProbe.ref} style={colorProbe.style} />
+        </span>
+      )}
       <ReactShaderToy
         fs={shaderSource}
         devicePixelRatio={devicePixelRatio}

@@ -99,8 +99,12 @@ export function useAgentAudioVisualizerGridAnimator(
   }, [state, rows, columns, radius]);
 
   useEffect(() => {
+    if (state === 'speaking') {
+      return;
+    }
     // With reduced motion, hold the sequence's first frame instead of stepping through it
-    if (state === 'speaking' || reducedMotion) {
+    if (reducedMotion) {
+      setIndex(0);
       return;
     }
 

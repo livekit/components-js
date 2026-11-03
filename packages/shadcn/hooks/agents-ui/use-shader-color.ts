@@ -1,6 +1,20 @@
-import { type RefObject, useLayoutEffect, useMemo, useState } from 'react';
+import {
+  type CSSProperties,
+  type RefObject,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 type RGB = [number, number, number];
+
+/**
+ * The probe's parent color. A color the browser can't use, such as an undefined `var()`, makes the
+ * probe inherit it, which marks the color as unresolved.
+ */
+const UNRESOLVED_SENTINEL = 'rgb(1, 2, 3)';
+const UNRESOLVED_SENTINEL_HEX = '#010203';
 
 function hexToRgb(color: string): RGB | null {
   const match = color.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
@@ -25,8 +39,12 @@ function paintedRgb(color: string): RGB | null {
   }
   if (!canvasContext) return null;
 
-  canvasContext.clearRect(0, 0, 1, 1);
+  // The canvas ignores a color it can't parse and keeps the previous one, so start from a known one
+  canvasContext.fillStyle = UNRESOLVED_SENTINEL_HEX;
   canvasContext.fillStyle = color;
+  if (canvasContext.fillStyle === UNRESOLVED_SENTINEL_HEX) return null;
+
+  canvasContext.clearRect(0, 0, 1, 1);
   canvasContext.fillRect(0, 0, 1, 1);
   const [r = 0, g = 0, b = 0, a = 0] = canvasContext.getImageData(0, 0, 1, 1).data;
   return a === 0 ? null : [r / 255, g / 255, b / 255];
@@ -34,18 +52,36 @@ function paintedRgb(color: string): RGB | null {
 
 function computedRgb(element: HTMLElement): RGB | null {
   const computed = getComputedStyle(element).color;
-  if (!computed) return null;
+  if (!computed || computed === UNRESOLVED_SENTINEL) return null;
 
-  const rgb = computed.match(/^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/);
-  if (rgb) return [Number(rgb[1]) / 255, Number(rgb[2]) / 255, Number(rgb[3]) / 255];
+  const rgb = computed.match(
+    /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)(?:[\s,/]+([\d.]+%?))?/,
+  );
+  if (rgb) {
+    // A fully transparent color has nothing to draw with
+    if (rgb[4] !== undefined && parseFloat(rgb[4]) === 0) return null;
+    return [Number(rgb[1]) / 255, Number(rgb[2]) / 255, Number(rgb[3]) / 255];
+  }
   return paintedRgb(computed);
 }
 
-function subscribeToThemeChanges(onChange: () => void) {
-  // Themes usually switch with a class or data attribute on <html> or <body>, or follow the system
+// Attributes that themes usually switch on <html> or <body>
+const THEME_ATTRIBUTES = ['class', 'data-theme', 'data-mode', 'data-color-scheme', 'data-lk-theme'];
+
+/**
+ * Calls `onChange` when the page theme may have changed: a theme attribute or `<html>`'s inline
+ * style (where some apps set variables) changes, or the system color scheme does.
+ */
+export function subscribeToThemeChanges(onChange: () => void) {
   const observer = new MutationObserver(onChange);
-  observer.observe(document.documentElement, { attributes: true });
-  if (document.body) observer.observe(document.body, { attributes: true });
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: [...THEME_ATTRIBUTES, 'style'],
+  });
+  if (document.body) {
+    // Not <body>'s style, which scroll locking and dialogs change often
+    observer.observe(document.body, { attributes: true, attributeFilter: THEME_ATTRIBUTES });
+  }
 
   const colorScheme = window.matchMedia?.('(prefers-color-scheme: dark)');
   colorScheme?.addEventListener('change', onChange);
@@ -57,26 +93,44 @@ function subscribeToThemeChanges(onChange: () => void) {
 }
 
 /**
- * Resolves a CSS color to the 0–1 RGB triple a shader uniform needs.
+ * Resolves a CSS color to the 0–1 RGB triple a shader uniform needs, falling back to `fallback`
+ * when it can't be resolved.
  *
- * Hex colors convert directly. Anything else, such as `var(--primary)` or `oklch()`, is read from
- * `element`'s computed `color`, so set `color` on that element to the same value. It's read again
- * when the page theme changes, so a theme variable follows light and dark mode.
+ * Hex colors convert directly. Anything else, such as `var(--primary)` or `oklch()`, is read from a
+ * hidden probe rendered inside the component, so theme variables resolve where the component sits.
+ * It's read again when the page theme changes, so a theme variable follows light and dark mode.
+ *
+ * Render the probe when `probe` is set:
+ *
+ * ```tsx
+ * {probe && (
+ *   <span hidden style={probe.parentStyle}>
+ *     <span ref={probe.ref} style={probe.style} />
+ *   </span>
+ * )}
+ * ```
  */
 export function useShaderColor(
   color: string,
-  element: RefObject<HTMLElement | null>,
   fallback: string,
-): RGB {
+): {
+  rgb: RGB;
+  probe: {
+    ref: RefObject<HTMLSpanElement | null>;
+    style: CSSProperties;
+    parentStyle: CSSProperties;
+  } | null;
+} {
   const hex = useMemo(() => hexToRgb(color), [color]);
   const fallbackRgb = useMemo<RGB>(() => hexToRgb(fallback) ?? [0, 0, 0], [fallback]);
   const [resolved, setResolved] = useState<RGB | null>(null);
+  const probeRef = useRef<HTMLSpanElement>(null);
 
   useLayoutEffect(() => {
     if (hexToRgb(color)) return;
 
     const resolve = () => {
-      const next = element.current ? computedRgb(element.current) : null;
+      const next = probeRef.current ? computedRgb(probeRef.current) : null;
       setResolved((prev) =>
         prev && next && prev.every((channel, idx) => channel === next[idx]) ? prev : next,
       );
@@ -84,7 +138,11 @@ export function useShaderColor(
 
     resolve();
     return subscribeToThemeChanges(resolve);
-  }, [color, element]);
+  }, [color]);
 
-  return hex ?? resolved ?? fallbackRgb;
+  const probe = hex
+    ? null
+    : { ref: probeRef, style: { color }, parentStyle: { color: UNRESOLVED_SENTINEL } };
+
+  return { rgb: hex ?? resolved ?? fallbackRgb, probe };
 }

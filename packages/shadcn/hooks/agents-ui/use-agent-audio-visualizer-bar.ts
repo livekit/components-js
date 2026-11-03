@@ -47,7 +47,10 @@ export function useAgentAudioVisualizerBarAnimator(
   const animationFrameId = useRef<number | null>(null);
   useEffect(() => {
     // With reduced motion, hold the sequence's first frame instead of stepping through it
-    if (reducedMotion) return;
+    if (reducedMotion) {
+      setIndex(0);
+      return;
+    }
 
     let startTime = performance.now();
 

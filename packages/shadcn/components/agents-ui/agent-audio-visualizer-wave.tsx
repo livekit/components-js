@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef, type ComponentProps } from 'react';
+import { useMemo, type ComponentProps } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/components-react';
 
@@ -190,12 +190,15 @@ function WaveShader({
   className,
   ...props
 }: WaveShaderProps & ComponentProps<'div'>) {
-  const colorProbe = useRef<HTMLSpanElement>(null);
-  const rgbColor = useShaderColor(color, colorProbe, DEFAULT_COLOR);
+  const { rgb: rgbColor, probe: colorProbe } = useShaderColor(color, DEFAULT_COLOR);
 
   return (
     <div ref={ref} className={className} {...props}>
-      <span ref={colorProbe} hidden style={{ color }} />
+      {colorProbe && (
+        <span hidden style={colorProbe.parentStyle}>
+          <span ref={colorProbe.ref} style={colorProbe.style} />
+        </span>
+      )}
       <ReactShaderToy
         fs={shaderSource}
         devicePixelRatio={globalThis.devicePixelRatio ?? 1}

@@ -2,15 +2,27 @@ import { useSyncExternalStore } from 'react';
 
 const QUERY = '(prefers-reduced-motion: reduce)';
 
+// Created once per `matchMedia` and reused, since the visualizers read it on every animation frame
+let cachedMatchMedia: typeof window.matchMedia | undefined;
+let cachedQuery: MediaQueryList | null = null;
+
+function getMediaQuery() {
+  if (typeof window === 'undefined' || !window.matchMedia) return null;
+  if (cachedMatchMedia !== window.matchMedia) {
+    cachedMatchMedia = window.matchMedia;
+    cachedQuery = window.matchMedia(QUERY);
+  }
+  return cachedQuery;
+}
+
 function subscribe(onChange: () => void) {
-  if (typeof window === 'undefined' || !window.matchMedia) return () => {};
-  const mediaQuery = window.matchMedia(QUERY);
-  mediaQuery.addEventListener('change', onChange);
-  return () => mediaQuery.removeEventListener('change', onChange);
+  const query = getMediaQuery();
+  query?.addEventListener('change', onChange);
+  return () => query?.removeEventListener('change', onChange);
 }
 
 function getSnapshot() {
-  return typeof window !== 'undefined' && !!window.matchMedia && window.matchMedia(QUERY).matches;
+  return getMediaQuery()?.matches ?? false;
 }
 
 function getServerSnapshot() {

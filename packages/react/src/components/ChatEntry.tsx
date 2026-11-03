@@ -98,7 +98,7 @@ export function formatChatMessageLinks(message: string): React.ReactNode {
       const content = tok.content.toString();
       const href =
         tok.type === `url`
-          ? /^http(s?):\/\//.test(content)
+          ? /^https?:\/\//i.test(content)
             ? content
             : `https://${content}`
           : `mailto:${content}`;

@@ -3,17 +3,22 @@
 import { useEffect, useRef, useState, type ComponentProps } from 'react';
 import { useChat } from '@livekit/components-react';
 import { Track } from 'livekit-client';
-import { Loader, MessageSquareTextIcon, SendHorizontal } from 'lucide-react';
+import { MessageSquareTextIcon } from 'lucide-react';
 import { motion, type MotionProps } from 'motion/react';
 
 import { cn } from '@/lib/utils';
+import {
+  AgentComposer,
+  AgentComposerField,
+  AgentComposerInput,
+  AgentComposerSubmit,
+} from '@/components/agents-ui/agent-composer';
 import { AgentDisconnectButton } from '@/components/agents-ui/agent-disconnect-button';
 import { AgentTrackControl } from '@/components/agents-ui/agent-track-control';
 import {
   AgentTrackToggle,
   agentTrackToggleVariants,
 } from '@/components/agents-ui/agent-track-toggle';
-import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
 import {
   useInputControls,
@@ -64,42 +69,28 @@ const MOTION_PROPS: MotionProps = {
 
 interface AgentChatInputProps {
   chatOpen: boolean;
-  onSend?: (message: string) => void;
+  onSend: (message: string) => Promise<void>;
+  restoreFailedMessages: boolean;
   className?: string;
 }
 
-function AgentChatInput({ chatOpen, onSend = async () => {}, className }: AgentChatInputProps) {
+function AgentChatInput({
+  chatOpen,
+  onSend,
+  restoreFailedMessages,
+  className,
+}: AgentChatInputProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [isSending, setIsSending] = useState(false);
-  const [message, setMessage] = useState<string>('');
-  const isDisabled = isSending || message.trim().length === 0;
+  const [value, setValue] = useState('');
 
-  const handleSend = async () => {
-    if (isDisabled) {
-      return;
-    }
-
+  const handleSend = async (message: string) => {
     try {
-      setIsSending(true);
-      await onSend(message.trim());
-      setMessage('');
+      await onSend(message);
     } catch (error) {
-      console.error(error);
-    } finally {
-      setIsSending(false);
+      // Put it back so it isn't lost, unless something new has been typed since
+      if (restoreFailedMessages) setValue((current) => (current === '' ? message : current));
+      throw error;
     }
-  };
-
-  const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
-  };
-
-  const handleButtonClick = async () => {
-    if (isDisabled) return;
-    await handleSend();
   };
 
   useEffect(() => {
@@ -109,28 +100,19 @@ function AgentChatInput({ chatOpen, onSend = async () => {}, className }: AgentC
   }, [chatOpen]);
 
   return (
-    <div className={cn('mb-3 flex grow items-end gap-2 rounded-md pl-1 text-sm', className)}>
-      <textarea
-        ref={inputRef}
-        value={message}
-        disabled={!chatOpen || isSending}
-        placeholder="Type something..."
-        onKeyDown={handleKeyDown}
-        onChange={(e) => setMessage(e.target.value)}
-        className="field-sizing-content max-h-16 min-h-8 flex-1 resize-none py-2 [scrollbar-width:thin] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-      />
-      <Button
-        size="icon"
-        type="button"
-        disabled={isDisabled}
-        variant={isDisabled ? 'secondary' : 'default'}
-        title={isSending ? 'Sending...' : 'Send'}
-        onClick={handleButtonClick}
-        className="self-end disabled:cursor-not-allowed"
-      >
-        {isSending ? <Loader className="animate-spin" /> : <SendHorizontal />}
-      </Button>
-    </div>
+    <AgentComposer
+      value={value}
+      onValueChange={setValue}
+      onSend={handleSend}
+      disabled={!chatOpen}
+      onError={console.error}
+      className={cn('mb-3 grow rounded-md pl-1', className)}
+    >
+      <AgentComposerField>
+        <AgentComposerInput ref={inputRef} placeholder="Type something..." />
+        <AgentComposerSubmit />
+      </AgentComposerField>
+    </AgentComposer>
   );
 }
 
@@ -207,6 +189,14 @@ export interface AgentControlBarProps extends UseInputControlsProps {
    * @default false
    */
   isChatOpen?: boolean;
+  /**
+   * Whether to put a message back in the chat input when it fails to send, if nothing new has been
+   * typed. Turn it off when a transcript already shows failed messages with a retry, such as
+   * `AgentChatTranscript` with `onResend`, so there's one way to resend.
+   *
+   * @default true
+   */
+  restoreFailedMessages?: boolean;
   /** The callback for when the user disconnects. */
   onDisconnect?: () => void;
   /** The callback for when the chat is opened or closed. */
@@ -245,6 +235,7 @@ export function AgentControlBar({
   isChatOpen = false,
   isConnected = false,
   saveUserChoices = true,
+  restoreFailedMessages = true,
   onDisconnect,
   onDeviceError,
   onIsChatOpenChange,
@@ -303,6 +294,7 @@ export function AgentControlBar({
         <AgentChatInput
           chatOpen={isChatOpen || isChatOpenUncontrolled}
           onSend={handleSendMessage}
+          restoreFailedMessages={restoreFailedMessages}
           className={cn(variant === 'livekit' && '[&_button]:rounded-full')}
         />
       </motion.div>

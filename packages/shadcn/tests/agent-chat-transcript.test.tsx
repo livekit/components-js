@@ -17,6 +17,7 @@ vi.mock('@/components/ui/message', () => ({
     </div>
   ),
   MessageContent: ({ children }: any) => <div data-testid="message-content">{children}</div>,
+  MessageFooter: ({ children }: any) => <div data-testid="message-footer">{children}</div>,
 }));
 
 vi.mock('@/components/ui/bubble', () => ({
@@ -249,5 +250,143 @@ describe('AgentChatTranscript scroll anchors', () => {
     const indicator = screen.getByRole('status').closest('[data-slot="message-scroller-item"]');
     expect(indicator).toHaveAttribute('data-scroll-anchor', 'false');
     expect(indicator).not.toHaveAttribute('data-message-id');
+  });
+});
+
+describe('AgentChatTranscript message text', () => {
+  it('keeps line breaks in user messages', () => {
+    render(
+      <AgentChatTranscript
+        messages={[{ id: 'user', timestamp: 1, from: { isLocal: true } as any, message: 'a\nb' }]}
+      />,
+    );
+
+    const text = screen.getByTestId('message-response').firstElementChild;
+    expect(text?.textContent).toBe('a\nb');
+    expect(text).toHaveClass('whitespace-pre-wrap');
+  });
+});
+
+describe('AgentChatTranscript failed messages', () => {
+  const messages: ReceivedMessage[] = [
+    { id: 'sent', timestamp: 1, from: { isLocal: true } as any, message: 'Sent', status: 'sent' },
+    {
+      id: 'failed',
+      timestamp: 2,
+      from: { isLocal: true } as any,
+      message: 'Failed',
+      status: 'failed',
+    },
+  ];
+
+  it("marks messages that couldn't send", () => {
+    render(<AgentChatTranscript messages={messages} />);
+
+    expect(screen.getAllByText("Couldn't send.")).toHaveLength(1);
+    expect(screen.queryByRole('button', { name: 'Try again' })).not.toBeInTheDocument();
+  });
+
+  it('resends a failed message', () => {
+    const onResend = vi.fn();
+    render(<AgentChatTranscript messages={messages} onResend={onResend} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
+
+    expect(onResend).toHaveBeenCalledExactlyOnceWith('failed');
+  });
+
+  it('shows a retried message as sending until it settles', () => {
+    const { rerender } = render(<AgentChatTranscript messages={messages} onResend={vi.fn()} />);
+    const withStatus = (status: 'sending' | 'sent' | 'failed') =>
+      messages.map((message) => (message.id === 'failed' ? { ...message, status } : message));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
+    rerender(<AgentChatTranscript messages={withStatus('sending')} onResend={vi.fn()} />);
+    expect(screen.getByText('Sending…')).toBeInTheDocument();
+
+    rerender(<AgentChatTranscript messages={withStatus('failed')} onResend={vi.fn()} />);
+    expect(screen.queryByText('Sending…')).not.toBeInTheDocument();
+    expect(screen.getByText("Couldn't send.")).toBeInTheDocument();
+
+    rerender(<AgentChatTranscript messages={withStatus('sent')} onResend={vi.fn()} />);
+    expect(screen.queryByText('Sending…')).not.toBeInTheDocument();
+    expect(screen.queryByText("Couldn't send.")).not.toBeInTheDocument();
+  });
+
+  it('keeps first sends quiet', () => {
+    render(
+      <AgentChatTranscript
+        messages={[{ ...messages[0], id: 'new', status: 'sending' }]}
+        onResend={vi.fn()}
+      />,
+    );
+
+    expect(screen.queryByText('Sending…')).not.toBeInTheDocument();
+  });
+
+  it('uses custom labels', () => {
+    render(
+      <AgentChatTranscript
+        messages={messages}
+        onResend={vi.fn()}
+        labels={{ failed: 'No se pudo enviar.', retry: 'Reintentar' }}
+      />,
+    );
+
+    expect(screen.getByText('No se pudo enviar.')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reintentar' })).toBeInTheDocument();
+  });
+
+  it('announces a message that fails, and again if a retry fails', () => {
+    const withStatus = (status: 'sending' | 'failed') =>
+      messages.map((message) => (message.id === 'failed' ? { ...message, status } : message));
+    const { rerender, container } = render(
+      <AgentChatTranscript messages={withStatus('sending')} onResend={vi.fn()} />,
+    );
+    const region = container.querySelector('[aria-live="polite"]');
+    expect(region).toBeEmptyDOMElement();
+
+    rerender(<AgentChatTranscript messages={withStatus('failed')} onResend={vi.fn()} />);
+    const firstAnnouncement = region?.firstElementChild;
+    expect(firstAnnouncement).toHaveTextContent("Message couldn't send");
+
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
+    rerender(<AgentChatTranscript messages={withStatus('sending')} onResend={vi.fn()} />);
+    rerender(<AgentChatTranscript messages={withStatus('failed')} onResend={vi.fn()} />);
+    // A new node, so screen readers announce it again
+    expect(region?.firstElementChild).toHaveTextContent("Message couldn't send");
+    expect(region?.firstElementChild).not.toBe(firstAnnouncement);
+  });
+
+  it("doesn't announce an older failure when a newer one is retried", () => {
+    const older = { ...messages[1], id: 'older' };
+    const withStatus = (status: 'sending' | 'failed') => [
+      older,
+      { ...messages[1], id: 'newer', status },
+    ];
+    const { rerender, container } = render(
+      <AgentChatTranscript messages={withStatus('sending')} onResend={vi.fn()} />,
+    );
+    const region = container.querySelector('[aria-live="polite"]');
+
+    rerender(<AgentChatTranscript messages={withStatus('failed')} onResend={vi.fn()} />);
+    expect(region).toHaveTextContent("Message couldn't send");
+
+    rerender(<AgentChatTranscript messages={withStatus('sending')} onResend={vi.fn()} />);
+    expect(region).toBeEmptyDOMElement();
+  });
+
+  it("doesn't announce failures already on screen", () => {
+    const { container } = render(<AgentChatTranscript messages={messages} onResend={vi.fn()} />);
+
+    expect(container.querySelector('[aria-live="polite"]')).toBeEmptyDOMElement();
+  });
+
+  it('uses the default for a label passed as undefined', () => {
+    render(
+      <AgentChatTranscript messages={messages} onResend={vi.fn()} labels={{ retry: undefined }} />,
+    );
+
+    expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument();
   });
 });

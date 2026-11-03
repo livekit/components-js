@@ -61,6 +61,29 @@
       "registryDependencies": ["select", "@agents-ui/agent-track-toggle", "utils"]
     },
     {
+      "name": "agent-composer",
+      "type": "registry:component",
+      "title": "Agent Composer",
+      "description": "A text input for sending chat messages to an agent, with a send button, composable parts, and a headless hook.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-composer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "hooks/agents-ui/use-agent-composer.ts",
+          "type": "registry:hook"
+        }
+      ],
+      "dependencies": [
+        "livekit-client@^2.0.0",
+        "@livekit/components-react@^2.0.0",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "registryDependencies": ["utils", "button", "toggle", "@agents-ui/agent-audio-visualizer-bar"]
+    },
+    {
       "name": "agent-control-bar",
       "type": "registry:component",
       "title": "Agent Control Bar",
@@ -89,7 +112,8 @@
         "@agents-ui/agent-track-control",
         "@agents-ui/agent-track-toggle",
         "@agents-ui/agent-disconnect-button",
-        "@agents-ui/agent-audio-visualizer-bar"
+        "@agents-ui/agent-audio-visualizer-bar",
+        "@agents-ui/agent-composer"
       ]
     },
     {
@@ -211,7 +235,7 @@
           "type": "registry:component"
         }
       ],
-      "dependencies": ["@livekit/components-react@^2.0.0", "streamdown"],
+      "dependencies": ["@livekit/components-react@^2.0.0", "lucide-react", "streamdown"],
       "registryDependencies": [
         "message-scroller",
         "message",

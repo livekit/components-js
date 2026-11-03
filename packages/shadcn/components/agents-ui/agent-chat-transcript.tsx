@@ -100,6 +100,46 @@ export const defaultAgentChatTranscriptLabels: AgentChatTranscriptLabels = {
   thinking: 'Thinking...',
 };
 
+/** Fills in defaults for any label that's missing or `undefined`, such as an untranslated one. */
+function withDefaultLabels(
+  labels: Partial<AgentChatTranscriptLabels> = {},
+): AgentChatTranscriptLabels {
+  return {
+    failed: labels.failed ?? defaultAgentChatTranscriptLabels.failed,
+    retry: labels.retry ?? defaultAgentChatTranscriptLabels.retry,
+    sending: labels.sending ?? defaultAgentChatTranscriptLabels.sending,
+    failedAnnouncement:
+      labels.failedAnnouncement ?? defaultAgentChatTranscriptLabels.failedAnnouncement,
+    thinking: labels.thinking ?? defaultAgentChatTranscriptLabels.thinking,
+  };
+}
+
+/**
+ * The message to announce as failed: the latest one that failed since the last render, kept while
+ * it stays failed. Messages that were already failed, such as an older one left after a retry,
+ * aren't announced again.
+ */
+function useNewlyFailedMessage(messages: ReceivedMessage[]) {
+  const failedIds = messages
+    .filter((message) => 'status' in message && message.status === 'failed')
+    .map((message) => message.id);
+  // Seeded with what's already failed, so mounting doesn't announce old failures
+  const previousFailedIdsRef = useRef(new Set(failedIds));
+  const [announced, setAnnounced] = useState<{ id: string; key: number }>();
+  const failedIdsKey = failedIds.join('\n');
+
+  useEffect(() => {
+    const ids = failedIdsKey ? failedIdsKey.split('\n') : [];
+    const newlyFailedId = ids.filter((id) => !previousFailedIdsRef.current.has(id)).at(-1);
+    previousFailedIdsRef.current = new Set(ids);
+    if (newlyFailedId) {
+      setAnnounced((previous) => ({ id: newlyFailedId, key: (previous?.key ?? 0) + 1 }));
+    }
+  }, [failedIdsKey]);
+
+  return announced && failedIds.includes(announced.id) ? announced : undefined;
+}
+
 function ScrollToEndOnLocalMessage({ messages }: { messages: ReceivedMessage[] }) {
   const { scrollToEnd } = useMessageScroller();
   const lastMessage = messages.at(-1);
@@ -151,14 +191,12 @@ export function AgentChatTranscript({
   className,
   ...props
 }: AgentChatTranscriptProps) {
-  const labels = { ...defaultAgentChatTranscriptLabels, ...labelsProp };
+  const labels = withDefaultLabels(labelsProp);
   const anchorsLocalMessages =
     scrollAnchor === true || scrollAnchor === 'any' || scrollAnchor === 'user';
   // First sends stay quiet so they feel instant; only retries show that they're in progress
   const [retriedIds, setRetriedIds] = useState<ReadonlySet<string>>(() => new Set());
-  const lastFailedMessage = messages
-    .filter((message) => 'status' in message && message.status === 'failed')
-    .at(-1);
+  const failure = useNewlyFailedMessage(messages);
 
   const handleResend = (id: string) => {
     setRetriedIds((previous) => new Set(previous).add(id));
@@ -175,9 +213,9 @@ export function AgentChatTranscript({
     >
       {autoScroll && !anchorsLocalMessages && <ScrollToEndOnLocalMessage messages={messages} />}
       <div aria-live="polite" className="sr-only">
-        {lastFailedMessage && (
-          // A retry empties this while it sends, so failing again adds a new announcement
-          <span key={lastFailedMessage.id}>{labels.failedAnnouncement}</span>
+        {failure && (
+          // A new node for each failure, so failing again after a retry announces again
+          <span key={`failed-${failure.key}`}>{labels.failedAnnouncement}</span>
         )}
       </div>
       <MessageScroller className={className} {...props}>

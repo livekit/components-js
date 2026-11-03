@@ -21,6 +21,8 @@ and `AgentComposerCharacterCount` parts and a headless `useAgentComposer` hook.
 - Enter sends and Shift+Enter adds a new line; on touch screens, Return adds a new line. Enter no
   longer sends while an input method editor is composing.
 - `labels` rewords or translates its text.
+- Without `onSend`, the microphone button hides when the participant can't publish audio.
+- Calling `preventDefault` in `onSubmit` cancels the send.
 
 `AgentControlBar` now uses it for its chat input.
 

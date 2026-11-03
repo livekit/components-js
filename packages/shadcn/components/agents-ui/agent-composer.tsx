@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useId,
   useRef,
   useState,
@@ -15,6 +16,7 @@ import {
   useChat,
   useConnectionState,
   useLocalParticipant,
+  useLocalParticipantPermissions,
   useTrackToggle,
 } from '@livekit/components-react';
 import { ConnectionState, Track } from 'livekit-client';
@@ -70,6 +72,29 @@ export const defaultAgentComposerLabels: AgentComposerLabels = {
   characterCount: (length, maxLength) => `${length} of ${maxLength} characters`,
   overLimit: (over, maxLength) => `${over} characters over the ${maxLength} limit`,
 };
+
+/**
+ * The microphone's `TrackSource` in the LiveKit protocol, as permissions list it. Spelled out to
+ * avoid importing the protocol package, which is large.
+ */
+const MICROPHONE_SOURCE = 2;
+
+/** Fills in defaults for any label that's missing or `undefined`, such as an untranslated one. */
+function withDefaultLabels(labels: Partial<AgentComposerLabels> = {}): AgentComposerLabels {
+  return {
+    message: labels.message ?? defaultAgentComposerLabels.message,
+    listening: labels.listening ?? defaultAgentComposerLabels.listening,
+    connecting: labels.connecting ?? defaultAgentComposerLabels.connecting,
+    send: labels.send ?? defaultAgentComposerLabels.send,
+    stop: labels.stop ?? defaultAgentComposerLabels.stop,
+    listen: labels.listen ?? defaultAgentComposerLabels.listen,
+    microphoneBlocked: labels.microphoneBlocked ?? defaultAgentComposerLabels.microphoneBlocked,
+    microphoneUnavailable:
+      labels.microphoneUnavailable ?? defaultAgentComposerLabels.microphoneUnavailable,
+    characterCount: labels.characterCount ?? defaultAgentComposerLabels.characterCount,
+    overLimit: labels.overLimit ?? defaultAgentComposerLabels.overLimit,
+  };
+}
 
 interface AgentComposerContextValue extends UseAgentComposerReturn {
   inputRef: RefObject<HTMLTextAreaElement | null>;
@@ -193,13 +218,16 @@ function AgentComposerRoot({
     onError,
     draftKey,
   });
-  const labels = { ...defaultAgentComposerLabels, ...labelsProp };
+  const labels = withDefaultLabels(labelsProp);
   const Comp = asChild ? Slot.Root : 'form';
   const isOverLimit = composer.remaining !== undefined && composer.remaining < 0;
 
   const handleSubmit = (event: FormSubmitEvent) => {
     onSubmit?.(event);
+    // `onSubmit` can cancel the send with `preventDefault`, as Enter's `onKeyDown` can
+    const canceled = event.defaultPrevented;
     event.preventDefault();
+    if (canceled) return;
     // Keep focus in the input when the send button is clicked
     inputRef.current?.focus();
     composer.submit();
@@ -265,15 +293,27 @@ function SessionChatComposer({
   const { send } = useChat();
   const connectionState = useConnectionState();
   const [microphoneError, setMicrophoneError] = useState<unknown>();
-  const handleMicrophoneError = (error: unknown) => {
+  // `useTrackToggle` keeps the first `onDeviceError` it's given, so read the latest prop from a ref
+  const onMicrophoneErrorRef = useRef(onMicrophoneError);
+  useEffect(() => {
+    onMicrophoneErrorRef.current = onMicrophoneError;
+  });
+  const handleMicrophoneError = useCallback((error: unknown) => {
     setMicrophoneError(error);
-    onMicrophoneError?.(error);
-  };
+    onMicrophoneErrorRef.current?.(error);
+  }, []);
   const microphone = useTrackToggle({
     source: Track.Source.Microphone,
     onDeviceError: handleMicrophoneError,
   });
   const { localParticipant, microphoneTrack } = useLocalParticipant();
+  const permissions = useLocalParticipantPermissions();
+  // Until the server sends permissions, assume the microphone is allowed, so it doesn't pop in later
+  const canPublishMicrophone =
+    !permissions ||
+    (permissions.canPublish &&
+      (permissions.canPublishSources.length === 0 ||
+        permissions.canPublishSources.includes(MICROPHONE_SOURCE)));
 
   const handleSend = async (message: string) => {
     await send(message);
@@ -290,11 +330,16 @@ function SessionChatComposer({
         connectionState === ConnectionState.SignalReconnecting
       }
       listening={listening ?? microphone.enabled}
-      onListeningChange={(next) => {
-        onListeningChange?.(next);
-        setMicrophoneError(undefined);
-        Promise.resolve(microphone.toggle(next)).catch(handleMicrophoneError);
-      }}
+      // Leaving this out hides the microphone button when the token can't publish audio
+      onListeningChange={
+        canPublishMicrophone
+          ? (next) => {
+              onListeningChange?.(next);
+              setMicrophoneError(undefined);
+              Promise.resolve(microphone.toggle(next)).catch(handleMicrophoneError);
+            }
+          : undefined
+      }
       microphoneTrack={
         props.microphoneTrack ??
         (microphoneTrack && {
@@ -448,7 +493,8 @@ export function AgentComposerInput({
     event.preventDefault();
     // Go through the form so Enter and the send button share one path, including `onSubmit`
     const form = event.currentTarget.form;
-    if (form) form.requestSubmit();
+    // Safari before 16 has no `requestSubmit`
+    if (form && typeof form.requestSubmit === 'function') form.requestSubmit();
     else submit();
   };
 
@@ -619,16 +665,23 @@ export function AgentComposerSubmit({
   'aria-label': ariaLabel,
   ...props
 }: AgentComposerSubmitProps) {
-  const { canSubmit, value, responding, onStop, labels } =
-    useAgentComposerContext('AgentComposerSubmit');
+  const {
+    canSubmit,
+    value,
+    responding,
+    onStop,
+    labels,
+    disabled: composerDisabled,
+  } = useAgentComposerContext('AgentComposerSubmit');
 
+  // `children` and `aria-label` describe sending, so Stop keeps its own icon and label
   if (responding && onStop && value.trim().length === 0) {
     return (
       <Button
         type="button"
         data-slot="agent-composer-stop"
         size={size}
-        disabled={disabled}
+        disabled={disabled || composerDisabled}
         variant={variant ?? 'default'}
         aria-label={labels.stop}
         onClick={onStop}

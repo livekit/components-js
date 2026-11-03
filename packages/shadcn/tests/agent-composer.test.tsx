@@ -16,16 +16,23 @@ const toggleMicrophoneMock = vi.fn();
 let connectionState = ConnectionState.Connected;
 let microphoneEnabled = false;
 let microphonePending = false;
+let permissions: { canPublish: boolean; canPublishSources: number[] } | undefined;
+// `useTrackToggle` keeps the first `onDeviceError` it's given, so the mock does too
+let firstOnDeviceError: ((error: unknown) => void) | undefined;
 
 vi.mock('@livekit/components-react', () => ({
   useChat: () => ({ send: sendMock }),
   useConnectionState: () => connectionState,
-  useTrackToggle: () => ({
-    enabled: microphoneEnabled,
-    pending: microphonePending,
-    toggle: toggleMicrophoneMock,
-  }),
+  useTrackToggle: ({ onDeviceError }: { onDeviceError?: (error: unknown) => void }) => {
+    firstOnDeviceError ??= onDeviceError;
+    return {
+      enabled: microphoneEnabled,
+      pending: microphonePending,
+      toggle: toggleMicrophoneMock,
+    };
+  },
   useLocalParticipant: () => ({ localParticipant: {}, microphoneTrack: undefined }),
+  useLocalParticipantPermissions: () => permissions,
 }));
 
 function deferred() {
@@ -50,6 +57,8 @@ describe('AgentComposer', () => {
     connectionState = ConnectionState.Connected;
     microphoneEnabled = false;
     microphonePending = false;
+    permissions = undefined;
+    firstOnDeviceError = undefined;
     window.sessionStorage.clear();
   });
 
@@ -523,5 +532,94 @@ describe('AgentComposer', () => {
       render(<AgentComposer onSend={vi.fn()} draftKey="thread-2" />);
       expect(getInput()).toHaveValue('');
     });
+  });
+
+  it('lets onSubmit cancel the send', async () => {
+    const user = userEvent.setup();
+    const onSend = vi.fn();
+    render(<AgentComposer onSend={onSend} onSubmit={(event) => event.preventDefault()} />);
+
+    await user.type(getInput(), 'Hello{Enter}');
+    await user.type(getInput(), '!');
+    await user.click(getSubmit());
+
+    expect(onSend).not.toHaveBeenCalled();
+    expect(getInput()).toHaveValue('Hello!');
+  });
+
+  it('sends on Enter without requestSubmit, as in Safari before 16', async () => {
+    const user = userEvent.setup();
+    const onSend = vi.fn();
+    const requestSubmit = HTMLFormElement.prototype.requestSubmit;
+    // @ts-expect-error -- removed to stand in for an older browser
+    delete HTMLFormElement.prototype.requestSubmit;
+    try {
+      render(<AgentComposer onSend={onSend} />);
+      await user.type(getInput(), 'Hello{Enter}');
+    } finally {
+      HTMLFormElement.prototype.requestSubmit = requestSubmit;
+    }
+
+    expect(onSend).toHaveBeenCalledWith('Hello');
+  });
+
+  it('uses the default for a label passed as undefined', () => {
+    render(
+      <AgentComposer
+        onSend={vi.fn()}
+        maxLength={10}
+        labels={{ send: undefined, characterCount: undefined }}
+      />,
+    );
+
+    expect(getSubmit()).toBeInTheDocument();
+    expect(screen.getByText('0 of 10 characters')).toBeInTheDocument();
+  });
+
+  it('disables the stop button while the composer is disabled', () => {
+    render(<AgentComposer onSend={vi.fn()} responding onStop={vi.fn()} disabled />);
+
+    expect(screen.getByRole('button', { name: 'Stop' })).toBeDisabled();
+  });
+
+  describe('microphone permission', () => {
+    it("hides the microphone when the token can't publish audio", () => {
+      permissions = { canPublish: true, canPublishSources: [1] };
+      render(<AgentComposer />);
+
+      expect(screen.queryByRole('button', { name: 'Listen' })).not.toBeInTheDocument();
+    });
+
+    it('shows the microphone when the token can publish audio', () => {
+      permissions = { canPublish: true, canPublishSources: [2] };
+      render(<AgentComposer />);
+
+      expect(getMicrophone()).toBeInTheDocument();
+    });
+  });
+
+  it('reports microphone errors to the latest onMicrophoneError', () => {
+    const first = vi.fn();
+    const latest = vi.fn();
+    const { rerender } = render(<AgentComposer onMicrophoneError={first} />);
+    rerender(<AgentComposer onMicrophoneError={latest} />);
+
+    act(() => firstOnDeviceError?.(new Error('No device')));
+
+    expect(first).not.toHaveBeenCalled();
+    expect(latest).toHaveBeenCalledOnce();
+  });
+
+  it('loads the draft for a new draftKey', async () => {
+    const user = userEvent.setup();
+    window.sessionStorage.setItem('thread-2', 'For thread two');
+    const { rerender } = render(<AgentComposer onSend={vi.fn()} draftKey="thread-1" />);
+    await user.type(getInput(), 'For thread one');
+
+    rerender(<AgentComposer onSend={vi.fn()} draftKey="thread-2" />);
+    expect(getInput()).toHaveValue('For thread two');
+
+    rerender(<AgentComposer onSend={vi.fn()} draftKey="thread-3" />);
+    expect(getInput()).toHaveValue('');
   });
 });

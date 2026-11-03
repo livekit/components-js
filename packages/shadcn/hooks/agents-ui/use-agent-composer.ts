@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
 export interface UseAgentComposerProps {
   /**
@@ -79,11 +79,22 @@ export function useAgentComposer({
   onError,
   draftKey,
 }: UseAgentComposerProps): UseAgentComposerReturn {
-  const [uncontrolledValue, setUncontrolledValue] = useState(
-    () => (draftKey && readDraft(draftKey)) || defaultValue,
-  );
+  const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
   const isControlled = valueProp !== undefined;
   const value = isControlled ? valueProp : uncontrolledValue;
+
+  // Drafts load after mount, so the first render matches server-rendered HTML. A new `draftKey`
+  // loads that conversation's draft, or clears the field if it has none.
+  const loadedDraftKeyRef = useRef<string | undefined>(undefined);
+  useLayoutEffect(() => {
+    if (!draftKey || isControlled || loadedDraftKeyRef.current === draftKey) return;
+
+    const isFirstLoad = loadedDraftKeyRef.current === undefined;
+    loadedDraftKeyRef.current = draftKey;
+    const draft = readDraft(draftKey);
+    if (draft !== undefined) setUncontrolledValue(draft);
+    else if (!isFirstLoad) setUncontrolledValue('');
+  }, [draftKey, isControlled]);
 
   const setValue = useCallback(
     (next: string) => {

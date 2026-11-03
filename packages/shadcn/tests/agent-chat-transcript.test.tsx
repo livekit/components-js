@@ -357,4 +357,36 @@ describe('AgentChatTranscript failed messages', () => {
     expect(region?.firstElementChild).toHaveTextContent("Message couldn't send");
     expect(region?.firstElementChild).not.toBe(firstAnnouncement);
   });
+
+  it("doesn't announce an older failure when a newer one is retried", () => {
+    const older = { ...messages[1], id: 'older' };
+    const withStatus = (status: 'sending' | 'failed') => [
+      older,
+      { ...messages[1], id: 'newer', status },
+    ];
+    const { rerender, container } = render(
+      <AgentChatTranscript messages={withStatus('sending')} onResend={vi.fn()} />,
+    );
+    const region = container.querySelector('[aria-live="polite"]');
+
+    rerender(<AgentChatTranscript messages={withStatus('failed')} onResend={vi.fn()} />);
+    expect(region).toHaveTextContent("Message couldn't send");
+
+    rerender(<AgentChatTranscript messages={withStatus('sending')} onResend={vi.fn()} />);
+    expect(region).toBeEmptyDOMElement();
+  });
+
+  it("doesn't announce failures already on screen", () => {
+    const { container } = render(<AgentChatTranscript messages={messages} onResend={vi.fn()} />);
+
+    expect(container.querySelector('[aria-live="polite"]')).toBeEmptyDOMElement();
+  });
+
+  it('uses the default for a label passed as undefined', () => {
+    render(
+      <AgentChatTranscript messages={messages} onResend={vi.fn()} labels={{ retry: undefined }} />,
+    );
+
+    expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument();
+  });
 });

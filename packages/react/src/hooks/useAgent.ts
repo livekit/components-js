@@ -17,7 +17,8 @@ import { useMaybeSessionContext, useMaybeThreadContext } from '../context';
 import { useParticipantInfo } from './useParticipantInfo';
 import { useParticipantTracks } from './useParticipantTracks';
 import { useRemoteParticipants } from './useRemoteParticipants';
-import { isUseThreadReturn, type AgentHost, type UseThreadReturn } from './useThread';
+import { isUseThreadReturn, type ActiveCall, type UseThreadReturn } from './useThread';
+import { isUseSessionReturn, UseSessionReturn } from './useSession';
 
 // FIXME: make this 10 seconds once room dispatch booting info is discoverable
 const DEFAULT_AGENT_CONNECT_TIMEOUT_MILLISECONDS = 20_000;
@@ -284,6 +285,8 @@ type AgentStateCases =
 /** @beta */
 export type UseAgentReturn = AgentStateCases & AgentActions;
 
+type SessionStub = Pick<UseSessionReturn, 'connectionState' | 'room' | 'internal'>;
+
 const generateDerivedStateValues = <State extends AgentState>(state: State) =>
   ({
     isConnected: state === 'listening' || state === 'thinking' || state === 'speaking',
@@ -488,29 +491,49 @@ function useAgentWaitUntilDerivedStates(
   return { waitUntilConnected, waitUntilCouldBeListening, waitUntilFinished };
 }
 
+/** Takes a legacy {@link UseSessionReturn} and converts it into an internal {@link ActiveCall} */
+function convertSessionToActiveCall(session: SessionStub): ActiveCall {
+  return {
+    room: session.room,
+    connectionState: session.connectionState,
+    internal: {
+      agentConnectTimeoutMilliseconds: session.internal.agentConnectTimeoutMilliseconds,
+
+      agentTimeoutFailureReason: session.internal.agentTimeoutFailureReason,
+      startAgentTimeout: session.internal.startAgentTimeout,
+      clearAgentTimeout: session.internal.clearAgentTimeout,
+      clearAgentTimeoutFailureReason: session.internal.clearAgentTimeoutFailureReason,
+      updateAgentTimeoutState: session.internal.updateAgentTimeoutState,
+      updateAgentTimeoutParticipantExists: session.internal.updateAgentTimeoutParticipantExists,
+    },
+  };
+}
+
 /**
  * useAgent encapculates all agent state, normalizing some quirks around how LiveKit Agents work.
  * @beta
  */
-export function useAgent(hostOrThread?: AgentHost | UseThreadReturn): UseAgentReturn {
+export function useAgent(threadOrSession?: UseThreadReturn | SessionStub): UseAgentReturn {
   const sessionFromContext = useMaybeSessionContext();
   const threadFromContext = useMaybeThreadContext();
 
-  // Resolve the agent host — a live room, its connection state, and the agent-timeout controls:
+  // Resolve the active call — a live room, its connection state, and the agent-timeout controls:
   //  - an explicit AgentHost (a call, or the composite session) is used directly;
   //  - an explicit thread resolves to its active call;
   //  - otherwise fall back to the session context (back-compat), then the thread context's active call.
-  let host: AgentHost | undefined;
-  if (hostOrThread && 'room' in hostOrThread) {
-    host = hostOrThread;
-  } else if (hostOrThread && isUseThreadReturn(hostOrThread)) {
-    host = hostOrThread.internal.activeCall ?? undefined;
-  } else {
-    host = sessionFromContext ?? threadFromContext?.internal.activeCall ?? undefined;
+  let activeCall: ActiveCall | undefined;
+  if (threadOrSession && isUseThreadReturn(threadOrSession)) {
+    activeCall = threadOrSession.internal.activeCall ?? undefined;
+  } else if (threadOrSession && isUseSessionReturn(threadOrSession)) {
+    activeCall = convertSessionToActiveCall(threadOrSession);
+  } else if (threadFromContext) {
+    activeCall = threadFromContext?.internal.activeCall ?? undefined;
+  } else if (sessionFromContext) {
+    activeCall = convertSessionToActiveCall(sessionFromContext);
   }
-  if (!host) {
+  if (!activeCall) {
     throw new Error(
-      'No agent host available. Pass a call or session, a thread with an active call, or render inside a Session or Thread provider whose thread has an active call.',
+      'No thread (or legacy session) provided, make sure you are inside a Thread context or pass the thread explicitly',
     );
   }
 
@@ -526,7 +549,7 @@ export function useAgent(hostOrThread?: AgentHost | UseThreadReturn): UseAgentRe
       updateAgentTimeoutState,
       updateAgentTimeoutParticipantExists,
     },
-  } = host;
+  } = activeCall;
 
   const emitter = React.useMemo(() => new EventEmitter() as TypedEventEmitter<AgentCallbacks>, []);
 
@@ -722,7 +745,7 @@ export function useAgent(hostOrThread?: AgentHost | UseThreadReturn): UseAgentRe
   }, [agentParticipant]);
 
   // When the host room begins connecting, start the agent timeout
-  const isHostDisconnected = host.connectionState === ConnectionState.Disconnected;
+  const isHostDisconnected = activeCall.connectionState === ConnectionState.Disconnected;
   React.useEffect(() => {
     if (isHostDisconnected) {
       return;

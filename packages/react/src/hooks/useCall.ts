@@ -27,7 +27,7 @@ import { useEnsureThread } from '../context/thread-context';
 import { useAgent, useAgentTimeoutIdStore, type AgentState } from './useAgent';
 import { useLocalParticipant } from './useLocalParticipant';
 import { useTranscriptions } from './useTranscriptions';
-import { isUseThreadReturn, type AgentHost, type UseThreadReturn } from './useThread';
+import { isUseThreadReturn, type ActiveCall, type UseThreadReturn } from './useThread';
 
 /** @beta */
 export enum CallEvent {
@@ -421,17 +421,17 @@ export function useCall(
 
   // The host `useAgent` derives its state from: a live room + connection state + the agent-timeout
   // controls. Expose it so the attached thread (and thus `useAgent(thread)`) can resolve this call.
-  const agentHost: AgentHost = React.useMemo(
+  const activeCall: ActiveCall = React.useMemo(
     () => ({ room, connectionState: roomConnectionState, internal: callInternal }),
     [room, roomConnectionState, callInternal],
   );
 
   React.useEffect(() => {
-    registerCall(agentHost);
+    registerCall(activeCall);
     return () => {
       registerCall(null);
     };
-  }, [registerCall, agentHost]);
+  }, [registerCall, activeCall]);
 
   const waitUntilConnectionState = useCallWaitUntilConnectionState(emitter, roomConnectionState);
 
@@ -457,7 +457,7 @@ export function useCall(
     [room],
   );
 
-  const agent = useAgent(agentHost);
+  const agent = useAgent(thread);
 
   // // Mirror voice transcriptions (data channel) into the thread's shared store, so the thread's
   // // transcript holds both chat and call transcripts. This is the call's write side; `useThreadMessages`

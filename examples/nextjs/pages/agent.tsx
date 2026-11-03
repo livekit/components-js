@@ -14,6 +14,7 @@ import {
   useEvents,
   TEXT_CHAT_ROLE_ATTRIBUTE,
   type UseCallReturn,
+  UseThreadReturn,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { useMemo, useState, useEffect } from 'react';
@@ -39,8 +40,8 @@ const textModeBaseUrl = (projectId: string): string => {
 };
 
 // The voice half: agent state is derived from the call's room, so pass the call to useAgent directly.
-function SimpleAgent({ call }: { call: UseCallReturn }) {
-  const agent = useAgent(call);
+function SimpleAgent({ thread }: { thread: UseThreadReturn }) {
+  const agent = useAgent(thread);
 
   useEffect(() => {
     if (agent.state === 'failed') {
@@ -215,7 +216,7 @@ const AgentExample: NextPage = () => {
             </div>
             {started ? (
               <RoomContext.Provider value={call.room}>
-                <SimpleAgent call={call} />
+                <SimpleAgent thread={thread} />
                 <VoiceAssistantControlBar />
                 <RoomAudioRenderer />
               </RoomContext.Provider>

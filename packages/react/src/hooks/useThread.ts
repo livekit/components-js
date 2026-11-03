@@ -37,7 +37,7 @@ export type ThreadTokenSourceFetch = (force?: boolean) => Promise<TokenSourceRes
  * `useAgent(thread)` can resolve one.
  * @beta
  */
-export type AgentHost = {
+export type ActiveCall = {
   room: Room;
   connectionState: ConnectionState;
   internal: {
@@ -78,9 +78,9 @@ type ThreadStateCommon = {
     /** The shared, mode-independent message store. */
     messageStore: ThreadMessageStore;
     /** The call currently attached to this thread (registered by `useCall`), or null. */
-    activeCall: AgentHost | null;
+    activeCall: ActiveCall | null;
     /** Register (or clear, with null) the call attached to this thread. Used by `useCall`. */
-    registerCall: (host: AgentHost | null) => void;
+    registerCall: (host: ActiveCall | null) => void;
   };
 };
 
@@ -260,8 +260,8 @@ export function useThread(
 
   // The call attached to this thread, registered by `useCall`, so `useAgent(thread)` can resolve a
   // host. A thread with no active call drives no agent state (that is a voice/room concern).
-  const [activeCall, setActiveCall] = React.useState<AgentHost | null>(null);
-  const registerCall = React.useCallback((host: AgentHost | null) => {
+  const [activeCall, setActiveCall] = React.useState<ActiveCall | null>(null);
+  const registerCall = React.useCallback((host: ActiveCall | null) => {
     setActiveCall(host);
   }, []);
 

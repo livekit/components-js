@@ -70,6 +70,12 @@ export interface AgentChatTranscriptProps
   /** Text the transcript shows and announces. */
   labels?: Partial<AgentChatTranscriptLabels>;
   /**
+   * Which new messages from others to announce to screen readers. `'typed'` skips spoken
+   * transcripts, for sessions where the agent's voice already says them aloud.
+   * @defaultValue 'all'
+   */
+  announceMessages?: 'all' | 'typed' | 'none';
+  /**
    * Additional CSS class names to apply to the conversation container.
    */
   className?: string;
@@ -90,6 +96,11 @@ export interface AgentChatTranscriptLabels {
   failedAnnouncement: string;
   /** Beside the indicator while the agent is thinking. */
   thinking: string;
+  /**
+   * Announced to screen readers for a new message from the agent or another participant. Gets the
+   * text to read and the message it's from.
+   */
+  messageAnnouncement: (text: string, message: ReceivedMessage) => string;
 }
 
 export const defaultAgentChatTranscriptLabels: AgentChatTranscriptLabels = {
@@ -98,6 +109,8 @@ export const defaultAgentChatTranscriptLabels: AgentChatTranscriptLabels = {
   sending: 'Sending…',
   failedAnnouncement: "Message couldn't send",
   thinking: 'Thinking...',
+  messageAnnouncement: (text, { from }) =>
+    `${(from && !from.isAgent && (from.name || from.identity)) || 'Agent'}: ${text}`,
 };
 
 /** Fills in defaults for any label that's missing or `undefined`, such as an untranslated one. */
@@ -111,6 +124,8 @@ function withDefaultLabels(
     failedAnnouncement:
       labels.failedAnnouncement ?? defaultAgentChatTranscriptLabels.failedAnnouncement,
     thinking: labels.thinking ?? defaultAgentChatTranscriptLabels.thinking,
+    messageAnnouncement:
+      labels.messageAnnouncement ?? defaultAgentChatTranscriptLabels.messageAnnouncement,
   };
 }
 
@@ -138,6 +153,104 @@ function useNewlyFailedMessage(messages: ReceivedMessage[]) {
   }, [failedIdsKey]);
 
   return announced && failedIds.includes(announced.id) ? announced : undefined;
+}
+
+/**
+ * How long a message has to stop changing before it's announced, so streaming text isn't read word
+ * by word.
+ */
+const ANNOUNCE_SETTLE_MS = 1000;
+
+/**
+ * Reads Markdown as plain text: keeps the words of links, emphasis, and code, and drops the
+ * punctuation around them that screen readers would read aloud. Leaves lone symbols such as
+ * `5 * 3` or `user_id` alone.
+ */
+function toSpokenText(markdown: string) {
+  return markdown
+    .replace(/^\s*```.*$/gm, '')
+    .replace(/`([^`\n]+)`/g, '$1')
+    .replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/(\*\*|__|~~)(?=\S)([^\n]*?\S)\1/g, '$2')
+    .replace(/(^|[^\w*])\*(?=\S)([^*\n]*?\S)\*(?![\w*])/g, '$1$2')
+    .replace(/(^|[^\w])_(?=\S)([^_\n]*?\S)_(?!\w)/g, '$1$2')
+    .replace(/^\s{0,3}(#{1,6}|>|[-*+])\s+/gm, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Transcription updates for one segment arrive as new streams with new IDs, so key them by
+ * segment to see them as one growing message.
+ */
+function announcementKey(message: ReceivedMessage) {
+  return message.attributes?.['lk.segment_id'] ?? message.id;
+}
+
+/**
+ * What to announce for messages from the agent and other participants once they stop changing.
+ * Each announcement has a new `key`, so rendering it as a new node announces it even if the text
+ * repeats.
+ */
+function useMessageAnnouncement(
+  messages: ReceivedMessage[],
+  labels: AgentChatTranscriptLabels,
+  announceMessages: 'all' | 'typed' | 'none',
+) {
+  const remoteMessages = messages.filter(
+    (message) =>
+      !message.from?.isLocal &&
+      announceMessages !== 'none' &&
+      (announceMessages === 'all' || message.type === undefined || message.type === 'chatMessage'),
+  );
+  // How much of each message's spoken text has been announced, and whether its sender has been.
+  // Seeded with what's already on screen, so mounting doesn't read out the history.
+  const [announced] = useState(
+    () =>
+      new Map(
+        remoteMessages.map((message) => [
+          announcementKey(message),
+          { length: toSpokenText(message.message).length, named: false },
+        ]),
+      ),
+  );
+  const [announcement, setAnnouncement] = useState<{ key: number; text: string }>();
+  const latestRef = useRef({ remoteMessages, labels });
+  useEffect(() => {
+    latestRef.current = { remoteMessages, labels };
+  });
+
+  // Restarts the wait only when a message arrives or changes, not on every render
+  const changeKey = remoteMessages
+    .map((message) => `${announcementKey(message)}:${message.message.length}`)
+    .join('\n');
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const { remoteMessages, labels } = latestRef.current;
+      const parts: string[] = [];
+
+      for (const message of remoteMessages) {
+        const key = announcementKey(message);
+        const spoken = toSpokenText(message.message);
+        const previous = announced.get(key) ?? { length: 0, named: false };
+        if (spoken.length <= previous.length) continue;
+
+        // A message that keeps going after a pause announces only what's new
+        const text = spoken.slice(previous.length).trim();
+        if (text) parts.push(previous.named ? text : labels.messageAnnouncement(text, message));
+        announced.set(key, { length: spoken.length, named: true });
+      }
+
+      if (parts.length > 0) {
+        setAnnouncement((previous) => ({ key: (previous?.key ?? 0) + 1, text: parts.join(' ') }));
+      }
+    }, ANNOUNCE_SETTLE_MS);
+
+    return () => clearTimeout(timer);
+  }, [changeKey, announced]);
+
+  return announcement;
 }
 
 function ScrollToEndOnLocalMessage({ messages }: { messages: ReceivedMessage[] }) {
@@ -188,6 +301,7 @@ export function AgentChatTranscript({
   messages = [],
   onResend,
   labels: labelsProp,
+  announceMessages = 'all',
   className,
   ...props
 }: AgentChatTranscriptProps) {
@@ -197,6 +311,7 @@ export function AgentChatTranscript({
   // First sends stay quiet so they feel instant; only retries show that they're in progress
   const [retriedIds, setRetriedIds] = useState<ReadonlySet<string>>(() => new Set());
   const failure = useNewlyFailedMessage(messages);
+  const messageAnnouncement = useMessageAnnouncement(messages, labels, announceMessages);
 
   const handleResend = (id: string) => {
     setRetriedIds((previous) => new Set(previous).add(id));
@@ -213,6 +328,9 @@ export function AgentChatTranscript({
     >
       {autoScroll && !anchorsLocalMessages && <ScrollToEndOnLocalMessage messages={messages} />}
       <div aria-live="polite" className="sr-only">
+        {messageAnnouncement && (
+          <span key={`message-${messageAnnouncement.key}`}>{messageAnnouncement.text}</span>
+        )}
         {failure && (
           // A new node for each failure, so failing again after a retry announces again
           <span key={`failed-${failure.key}`}>{labels.failedAnnouncement}</span>

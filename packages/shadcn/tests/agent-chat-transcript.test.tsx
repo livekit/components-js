@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { act, render, screen, fireEvent, cleanup } from '@testing-library/react';
 import type { ReceivedMessage } from '@livekit/components-react';
 import {
   AgentChatTranscript,
@@ -388,5 +388,206 @@ describe('AgentChatTranscript failed messages', () => {
     );
 
     expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument();
+  });
+});
+
+describe('AgentChatTranscript new message announcements', () => {
+  const agent = { isLocal: false } as any;
+  const user = { isLocal: true } as any;
+  const agentMessage = (id: string, message: string): ReceivedMessage => ({
+    id,
+    timestamp: 1,
+    type: 'agentTranscript',
+    from: agent,
+    message,
+  });
+  const region = (container: HTMLElement) => container.querySelector('[aria-live="polite"]');
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("doesn't announce messages already on screen", () => {
+    const { container } = render(<AgentChatTranscript messages={[agentMessage('a', 'Hello')]} />);
+
+    act(() => vi.advanceTimersByTime(2000));
+    expect(region(container)).toBeEmptyDOMElement();
+  });
+
+  it('announces a new agent message once it stops changing', () => {
+    const { container, rerender } = render(<AgentChatTranscript messages={[]} />);
+
+    rerender(<AgentChatTranscript messages={[agentMessage('a', 'Hello')]} />);
+    act(() => vi.advanceTimersByTime(500));
+    rerender(<AgentChatTranscript messages={[agentMessage('a', 'Hello, how can I help?')]} />);
+    act(() => vi.advanceTimersByTime(500));
+    expect(region(container)).toBeEmptyDOMElement();
+
+    act(() => vi.advanceTimersByTime(500));
+    expect(region(container)).toHaveTextContent('Agent: Hello, how can I help?');
+  });
+
+  it('announces only the new text when a message keeps going after a pause', () => {
+    const { container, rerender } = render(<AgentChatTranscript messages={[]} />);
+
+    rerender(<AgentChatTranscript messages={[agentMessage('a', 'First sentence.')]} />);
+    act(() => vi.advanceTimersByTime(1000));
+    rerender(
+      <AgentChatTranscript messages={[agentMessage('a', 'First sentence. Second sentence.')]} />,
+    );
+    act(() => vi.advanceTimersByTime(1000));
+
+    expect(region(container)).toHaveTextContent(/^Second sentence\.$/);
+  });
+
+  it("doesn't announce your own messages", () => {
+    const { container, rerender } = render(<AgentChatTranscript messages={[]} />);
+
+    rerender(
+      <AgentChatTranscript
+        messages={[{ id: 'u', timestamp: 1, from: user, message: 'Hi', status: 'sent' }]}
+      />,
+    );
+    act(() => vi.advanceTimersByTime(2000));
+    expect(region(container)).toBeEmptyDOMElement();
+  });
+
+  it('reads Markdown as plain text', () => {
+    const { container, rerender } = render(<AgentChatTranscript messages={[]} />);
+
+    rerender(
+      <AgentChatTranscript
+        messages={[agentMessage('a', '**Done.** See [the docs](https://example.com) for `setup`.')]}
+      />,
+    );
+    act(() => vi.advanceTimersByTime(1000));
+    expect(region(container)).toHaveTextContent('Agent: Done. See the docs for setup.');
+  });
+
+  it('uses a custom announcement label', () => {
+    const { container, rerender } = render(
+      <AgentChatTranscript messages={[]} labels={{ messageAnnouncement: (m) => `Ava: ${m}` }} />,
+    );
+
+    rerender(
+      <AgentChatTranscript
+        messages={[agentMessage('a', 'Hi')]}
+        labels={{ messageAnnouncement: (m) => `Ava: ${m}` }}
+      />,
+    );
+    act(() => vi.advanceTimersByTime(1000));
+    expect(region(container)).toHaveTextContent('Ava: Hi');
+  });
+
+  it('treats transcript updates for one segment as one message', () => {
+    const segment = (id: string, message: string): ReceivedMessage => ({
+      ...agentMessage(id, message),
+      attributes: { 'lk.segment_id': 'segment-1' },
+    });
+    const { container, rerender } = render(<AgentChatTranscript messages={[]} />);
+
+    rerender(<AgentChatTranscript messages={[segment('stream-1', 'First sentence.')]} />);
+    act(() => vi.advanceTimersByTime(1000));
+    rerender(
+      <AgentChatTranscript messages={[segment('stream-2', 'First sentence. Second sentence.')]} />,
+    );
+    act(() => vi.advanceTimersByTime(1000));
+
+    expect(region(container)).toHaveTextContent(/^Second sentence\.$/);
+  });
+
+  it('keeps text after a pause that starts like a list item', () => {
+    const { container, rerender } = render(<AgentChatTranscript messages={[]} />);
+
+    rerender(<AgentChatTranscript messages={[agentMessage('a', 'The total is')]} />);
+    act(() => vi.advanceTimersByTime(1000));
+    rerender(
+      <AgentChatTranscript messages={[agentMessage('a', 'The total is 42. Anything else?')]} />,
+    );
+    act(() => vi.advanceTimersByTime(1000));
+
+    expect(region(container)).toHaveTextContent(/^42\. Anything else\?$/);
+  });
+
+  it('keeps lone Markdown symbols', () => {
+    const { container, rerender } = render(<AgentChatTranscript messages={[]} />);
+
+    rerender(<AgentChatTranscript messages={[agentMessage('a', 'Set user_id to 5 * 3.')]} />);
+    act(() => vi.advanceTimersByTime(1000));
+
+    expect(region(container)).toHaveTextContent('Agent: Set user_id to 5 * 3.');
+  });
+
+  it('names a participant who is not an agent', () => {
+    const { container, rerender } = render(<AgentChatTranscript messages={[]} />);
+
+    rerender(
+      <AgentChatTranscript
+        messages={[
+          {
+            id: 'b',
+            timestamp: 1,
+            from: { isLocal: false, isAgent: false, name: 'Bob' } as any,
+            message: 'Hi all',
+          },
+        ]}
+      />,
+    );
+    act(() => vi.advanceTimersByTime(1000));
+
+    expect(region(container)).toHaveTextContent('Bob: Hi all');
+  });
+
+  it('names the sender of a message that was mid-stream on mount', () => {
+    const { container, rerender } = render(
+      <AgentChatTranscript messages={[agentMessage('a', 'Here are')]} />,
+    );
+
+    rerender(<AgentChatTranscript messages={[agentMessage('a', 'Here are three options')]} />);
+    act(() => vi.advanceTimersByTime(1000));
+
+    expect(region(container)).toHaveTextContent('Agent: three options');
+  });
+
+  it("skips spoken transcripts with announceMessages='typed'", () => {
+    const typed: ReceivedMessage = { id: 't', timestamp: 2, from: agent, message: 'Typed reply' };
+    const { container, rerender } = render(
+      <AgentChatTranscript messages={[]} announceMessages="typed" />,
+    );
+
+    rerender(
+      <AgentChatTranscript
+        messages={[agentMessage('a', 'Spoken reply'), typed]}
+        announceMessages="typed"
+      />,
+    );
+    act(() => vi.advanceTimersByTime(1000));
+
+    expect(region(container)).toHaveTextContent(/^Agent: Typed reply$/);
+  });
+
+  it('announces nothing with announceMessages="none"', () => {
+    const { container, rerender } = render(
+      <AgentChatTranscript messages={[]} announceMessages="none" />,
+    );
+
+    rerender(<AgentChatTranscript messages={[agentMessage('a', 'Hi')]} announceMessages="none" />);
+    act(() => vi.advanceTimersByTime(1000));
+
+    expect(region(container)).toBeEmptyDOMElement();
+  });
+
+  it('uses the default announcement label when passed undefined', () => {
+    const labels = { messageAnnouncement: undefined };
+    const { container, rerender } = render(<AgentChatTranscript messages={[]} labels={labels} />);
+
+    rerender(<AgentChatTranscript messages={[agentMessage('a', 'Hi')]} labels={labels} />);
+    act(() => vi.advanceTimersByTime(1000));
+
+    expect(region(container)).toHaveTextContent('Agent: Hi');
   });
 });

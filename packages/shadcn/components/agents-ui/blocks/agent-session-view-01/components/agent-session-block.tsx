@@ -212,6 +212,8 @@ export function AgentSessionView_01({
               messages={messages}
               // A failed resend marks the message failed again, so there's nothing more to handle
               onResend={(id) => resend(id).catch(() => {})}
+              // The agent's voice already says its transcripts aloud
+              announceMessages="typed"
               className="mx-auto max-w-2xl **:data-[slot=message-scroller-content]:p-4 **:data-[slot=message-scroller-content]:pt-40! @md/agent-session-block:**:data-[slot=message-scroller-content]:p-6"
             />
           </motion.div>

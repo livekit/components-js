@@ -210,6 +210,8 @@ export function AgentSessionView_01({
             <AgentChatTranscript
               agentState={agentState}
               messages={messages}
+              // The agent's voice already says its transcripts aloud
+              announceMessages="typed"
               className="mx-auto max-w-2xl **:data-[slot=message-scroller-content]:p-4 **:data-[slot=message-scroller-content]:pt-40! @md/agent-session-block:**:data-[slot=message-scroller-content]:p-6"
             />
           </motion.div>

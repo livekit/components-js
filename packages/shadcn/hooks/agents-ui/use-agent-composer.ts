@@ -15,8 +15,9 @@ export interface UseAgentComposerProps {
   /** Prevents sending. */
   disabled?: boolean;
   /**
-   * The maximum number of characters in a message. Typing past it is allowed, but sending isn't
-   * until the message is short enough.
+   * The maximum number of characters in a message, counted as people see them, so an emoji counts
+   * once. Leading and trailing spaces don't count, since they aren't sent. Typing past it is allowed,
+   * but sending isn't until the message is short enough.
    */
   maxLength?: number;
   /** Called when `onSend` rejects. */
@@ -57,6 +58,19 @@ function writeDraft(key: string, value: string) {
   } catch {
     // Drafts are a convenience, so a failed write is fine to skip
   }
+}
+
+const graphemes =
+  typeof Intl !== 'undefined' && 'Segmenter' in Intl
+    ? new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+    : undefined;
+
+/**
+ * Counts characters as people see them, so an emoji or an accented letter counts once, not as the
+ * two or more code units JavaScript's `length` gives.
+ */
+function countCharacters(text: string) {
+  return graphemes ? Array.from(graphemes.segment(text)).length : Array.from(text).length;
 }
 
 /**
@@ -108,7 +122,7 @@ export function useAgentComposer({
   );
 
   const message = value.trim();
-  const remaining = maxLength === undefined ? undefined : maxLength - message.length;
+  const remaining = maxLength === undefined ? undefined : maxLength - countCharacters(message);
   const canSubmit = !disabled && message.length > 0 && (remaining === undefined || remaining >= 0);
 
   const submit = useCallback(() => {

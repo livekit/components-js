@@ -534,6 +534,15 @@ describe('AgentComposer', () => {
     });
   });
 
+  it('counts an emoji as one character', async () => {
+    const user = userEvent.setup();
+    render(<AgentComposer onSend={vi.fn()} maxLength={10} />);
+
+    await user.type(getInput(), 'Hi 👋🏽 é');
+
+    expect(screen.getByText('6/10')).toBeInTheDocument();
+  });
+
   it('lets onSubmit cancel the send', async () => {
     const user = userEvent.setup();
     const onSend = vi.fn();

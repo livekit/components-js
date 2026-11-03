@@ -70,11 +70,28 @@ const MOTION_PROPS: MotionProps = {
 interface AgentChatInputProps {
   chatOpen: boolean;
   onSend: (message: string) => Promise<void>;
+  restoreFailedMessages: boolean;
   className?: string;
 }
 
-function AgentChatInput({ chatOpen, onSend, className }: AgentChatInputProps) {
+function AgentChatInput({
+  chatOpen,
+  onSend,
+  restoreFailedMessages,
+  className,
+}: AgentChatInputProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [value, setValue] = useState('');
+
+  const handleSend = async (message: string) => {
+    try {
+      await onSend(message);
+    } catch (error) {
+      // Put it back so it isn't lost, unless something new has been typed since
+      if (restoreFailedMessages) setValue((current) => (current === '' ? message : current));
+      throw error;
+    }
+  };
 
   useEffect(() => {
     if (!chatOpen) return;
@@ -84,7 +101,9 @@ function AgentChatInput({ chatOpen, onSend, className }: AgentChatInputProps) {
 
   return (
     <AgentComposer
-      onSend={onSend}
+      value={value}
+      onValueChange={setValue}
+      onSend={handleSend}
       disabled={!chatOpen}
       onError={console.error}
       className={cn('mb-3 grow rounded-md pl-1', className)}
@@ -170,6 +189,14 @@ export interface AgentControlBarProps extends UseInputControlsProps {
    * @default false
    */
   isChatOpen?: boolean;
+  /**
+   * Whether to put a message back in the chat input when it fails to send, if nothing new has been
+   * typed. Turn it off when a transcript already shows failed messages with a retry, such as
+   * `AgentChatTranscript` with `onResend`, so there's one way to resend.
+   *
+   * @default true
+   */
+  restoreFailedMessages?: boolean;
   /** The callback for when the user disconnects. */
   onDisconnect?: () => void;
   /** The callback for when the chat is opened or closed. */
@@ -208,6 +235,7 @@ export function AgentControlBar({
   isChatOpen = false,
   isConnected = false,
   saveUserChoices = true,
+  restoreFailedMessages = true,
   onDisconnect,
   onDeviceError,
   onIsChatOpenChange,
@@ -266,6 +294,7 @@ export function AgentControlBar({
         <AgentChatInput
           chatOpen={isChatOpen || isChatOpenUncontrolled}
           onSend={handleSendMessage}
+          restoreFailedMessages={restoreFailedMessages}
           className={cn(variant === 'livekit' && '[&_button]:rounded-full')}
         />
       </motion.div>

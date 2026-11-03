@@ -1,34 +1,16 @@
 'use client';
 
-import { useMemo, type ComponentProps } from 'react';
+import { useMemo, useRef, type ComponentProps } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/components-react';
 
 import { ReactShaderToy } from '@/components/agents-ui/react-shader-toy';
 import { useAgentAudioVisualizerWave } from '@/hooks/agents-ui/use-agent-audio-visualizer-wave';
+import { useShaderColor } from '@/hooks/agents-ui/use-shader-color';
 import { cn } from '@/lib/utils';
 import type { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
 
 const DEFAULT_COLOR = '#1FD5F9';
-
-function hexToRgb(hexColor: string) {
-  try {
-    const rgbColor = hexColor.match(/^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/);
-
-    if (rgbColor) {
-      const [, r, g, b] = rgbColor;
-      const color = [r, g, b].map((c = '00') => parseInt(c, 16) / 255);
-
-      return color;
-    }
-  } catch {
-    console.error(
-      `Invalid hex color '${hexColor}'.\nFalling back to default color '${DEFAULT_COLOR}'.`,
-    );
-  }
-
-  return hexToRgb(DEFAULT_COLOR);
-}
 
 const shaderSource = `
 const float TAU = 6.28318530718;
@@ -169,10 +151,10 @@ interface WaveShaderProps {
    */
   frequency?: number;
   /**
-   * Color of the oscilloscope in hexidecimal format.
+   * Color of the oscilloscope. Any CSS color, including theme variables such as `var(--primary)`.
    * @default '#1FD5F9'
    */
-  color?: `#${string}`;
+  color?: string;
   /**
    * Hue shift amount applied toward the outside of the wave. Center remains at the base color.
    * @default 0.05
@@ -197,7 +179,7 @@ interface WaveShaderProps {
 
 function WaveShader({
   speed = 10,
-  color = '#1FD5F9',
+  color = DEFAULT_COLOR,
   colorShift = 0.05,
   mix = 1.0,
   amplitude = 0.02,
@@ -208,10 +190,12 @@ function WaveShader({
   className,
   ...props
 }: WaveShaderProps & ComponentProps<'div'>) {
-  const rgbColor = useMemo(() => hexToRgb(color), [color]);
+  const colorProbe = useRef<HTMLSpanElement>(null);
+  const rgbColor = useShaderColor(color, colorProbe, DEFAULT_COLOR);
 
   return (
     <div ref={ref} className={className} {...props}>
+      <span ref={colorProbe} hidden style={{ color }} />
       <ReactShaderToy
         fs={shaderSource}
         devicePixelRatio={globalThis.devicePixelRatio ?? 1}
@@ -266,10 +250,11 @@ export interface AgentAudioVisualizerWaveProps {
    */
   state?: AgentState;
   /**
-   * The color of the wave in hexidecimal format.
+   * The color of the wave. Any CSS color, including theme variables such as `var(--primary)`,
+   * which follow the page's light and dark mode.
    * @defaultValue '#1FD5F9'
    */
-  color?: `#${string}`;
+  color?: string;
   /**
    * The color shift of the wave. Higher values increase hue variation toward the edges.
    * @defaultValue 0.05

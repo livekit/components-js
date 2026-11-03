@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { type AgentState } from '@livekit/components-react';
+import { usePrefersReducedMotion } from '@/hooks/agents-ui/use-prefers-reduced-motion';
 
 function generateConnectingSequenceBar(columns: number): number[][] {
   const seq = [];
@@ -25,6 +26,7 @@ export function useAgentAudioVisualizerBarAnimator(
 ): number[] {
   const [index, setIndex] = useState(0);
   const [sequence, setSequence] = useState<number[][]>([[]]);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     if (state === 'thinking') {
@@ -44,6 +46,9 @@ export function useAgentAudioVisualizerBarAnimator(
 
   const animationFrameId = useRef<number | null>(null);
   useEffect(() => {
+    // With reduced motion, hold the sequence's first frame instead of stepping through it
+    if (reducedMotion) return;
+
     let startTime = performance.now();
 
     const animate = (time: DOMHighResTimeStamp) => {
@@ -64,7 +69,7 @@ export function useAgentAudioVisualizerBarAnimator(
         cancelAnimationFrame(animationFrameId.current);
       }
     };
-  }, [interval, columns, state, sequence.length]);
+  }, [interval, columns, state, sequence.length, reducedMotion]);
 
   return sequence[index % sequence.length] ?? [];
 }

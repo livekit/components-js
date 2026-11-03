@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useMemo, useSyncExternalStore, type ComponentProps } from 'react';
+import React, { useRef, useSyncExternalStore, type ComponentProps } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type LocalAudioTrack, type RemoteAudioTrack } from 'livekit-client';
 import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/components-react';
 
 import { ReactShaderToy } from '@/components/agents-ui/react-shader-toy';
 import { useAgentAudioVisualizerAura } from '@/hooks/agents-ui/use-agent-audio-visualizer-aura';
+import { useShaderColor } from '@/hooks/agents-ui/use-shader-color';
 import { cn } from '@/lib/utils';
 
 const DEFAULT_COLOR = '#1FD5F9';
@@ -21,25 +22,6 @@ const DEFAULT_COLOR = '#1FD5F9';
  * little visual gain on a continuously animated effect.
  */
 const MAX_SHADER_PIXEL_RATIO = 2;
-
-function hexToRgb(hexColor: string) {
-  try {
-    const rgbColor = hexColor.match(/^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/);
-
-    if (rgbColor) {
-      const [, r, g, b] = rgbColor;
-      const color = [r, g, b].map((c = '00') => parseInt(c, 16) / 255);
-
-      return color;
-    }
-  } catch (error) {
-    console.error(
-      `Invalid hex color '${hexColor}'.\nFalling back to default color '${DEFAULT_COLOR}'.`,
-    );
-  }
-
-  return hexToRgb(DEFAULT_COLOR);
-}
 
 const shaderSource = `
 const float TAU = 6.283185;
@@ -260,10 +242,10 @@ interface AuraShaderProps {
   blur?: number;
 
   /**
-   * Color of the aura in hexidecimal format.
+   * Color of the aura. Any CSS color, including theme variables such as `var(--primary)`.
    * @default '#1FD5F9'
    */
-  color?: `#${string}`;
+  color?: string;
 
   /**
    * Color variation across layers (0-1)
@@ -330,11 +312,13 @@ function AuraShader({
 }: AuraShaderProps & ComponentProps<'div'>) {
   const documentThemeMode = useDocumentThemeMode();
   const themeMode = themeModeProp ?? documentThemeMode;
-  const rgbColor = useMemo(() => hexToRgb(color), [color]);
+  const colorProbe = useRef<HTMLSpanElement>(null);
+  const rgbColor = useShaderColor(color, colorProbe, DEFAULT_COLOR);
   const devicePixelRatio = Math.min(globalThis.devicePixelRatio ?? 1, MAX_SHADER_PIXEL_RATIO);
 
   return (
     <div ref={ref} className={className} {...props}>
+      <span ref={colorProbe} hidden style={{ color }} />
       <ReactShaderToy
         fs={shaderSource}
         devicePixelRatio={devicePixelRatio}
@@ -366,7 +350,7 @@ function AuraShader({
           // Display mode: 0=dark background, 1=light background
           uMode: { type: '1f', value: themeMode === 'light' ? 1.0 : 0.0 },
           // Color
-          uColor: { type: '3fv', value: rgbColor ?? [0, 0.7, 1] },
+          uColor: { type: '3fv', value: rgbColor },
         }}
         onError={(error) => {
           console.error('Shader error:', error);
@@ -409,10 +393,11 @@ export interface AgentAudioVisualizerAuraProps {
    */
   state?: AgentState;
   /**
-   * The color of the aura in hexidecimal format.
+   * The color of the aura. Any CSS color, including theme variables such as `var(--primary)`,
+   * which follow the page's light and dark mode.
    * @defaultValue '#1FD5F9'
    */
-  color?: `#${string}`;
+  color?: string;
   /**
    * The color shift of the aura.
    * @defaultValue 0.05

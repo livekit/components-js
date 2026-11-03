@@ -14,7 +14,8 @@ and `AgentComposerCharacterCount` parts and a headless `useAgentComposer` hook.
   `onSend`, pass `listening`, `onListeningChange`, `microphoneTrack`, `microphonePending`, and
   `microphoneError` to use it.
 - With `maxLength`, a count like "12/200" sits beside the buttons in a row below the input; typing
-  past the limit is allowed, the count turns red, and sending waits until the message fits.
+  past the limit is allowed, the count turns red, and sending waits until the message fits. Emoji
+  and accented letters count as one character.
 - Pass `responding` and `onStop` to turn the send button into a stop button while the agent
   replies.
 - Pass `draftKey` to keep unsent text across reloads.

@@ -249,6 +249,8 @@ export function AgentSessionView_01({
             isConnected={session.isConnected}
             onDisconnect={onDisconnect ?? session.end}
             onIsChatOpenChange={setIsChatOpen}
+            // The transcript shows failed messages with "Try again", so one way to resend is enough
+            restoreFailedMessages={false}
           />
         </div>
       </motion.div>

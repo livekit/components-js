@@ -25,7 +25,9 @@ and `AgentComposerCharacterCount` parts and a headless `useAgentComposer` hook.
 - Without `onSend`, the microphone button hides when the participant can't publish audio.
 - Calling `preventDefault` in `onSubmit` cancels the send.
 
-`AgentControlBar` now uses it for its chat input.
+`AgentControlBar` now uses it for its chat input. A message that fails to send goes back in the
+input, unless something new has been typed. `restoreFailedMessages={false}` turns this off for a
+transcript that already offers a retry, as `AgentSessionView_01` does.
 
 `AgentChatTranscript` marks messages that failed to send, announces them to screen readers, and
 shows a "Try again" button when you pass `onResend`. A retried message shows that it's sending until

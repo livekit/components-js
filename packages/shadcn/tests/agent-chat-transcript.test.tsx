@@ -471,4 +471,90 @@ describe('AgentChatTranscript new message announcements', () => {
 
     expect(region(container)).toHaveTextContent('Agent: Hi');
   });
+
+  it('announces a rewritten message again in full', () => {
+    const { container, rerender } = render(<AgentChatTranscript messages={[]} />);
+
+    rerender(<AgentChatTranscript messages={[agentMessage('a', 'Meet at 5')]} />);
+    act(() => vi.advanceTimersByTime(1000));
+    rerender(<AgentChatTranscript messages={[agentMessage('a', 'Meet at 6')]} />);
+    act(() => vi.advanceTimersByTime(1000));
+
+    expect(region(container)).toHaveTextContent(/^Agent: Meet at 6$/);
+  });
+
+  it("doesn't announce history that loads after mount", () => {
+    const { container, rerender } = render(<AgentChatTranscript messages={[]} />);
+
+    rerender(
+      <AgentChatTranscript
+        messages={[agentMessage('a', 'One'), agentMessage('b', 'Two'), agentMessage('c', 'Three')]}
+      />,
+    );
+    act(() => vi.advanceTimersByTime(2000));
+
+    expect(region(container)).toBeEmptyDOMElement();
+  });
+
+  it("doesn't announce earlier messages loaded above the conversation", () => {
+    const { container, rerender } = render(
+      <AgentChatTranscript messages={[agentMessage('b', 'Latest')]} />,
+    );
+
+    rerender(
+      <AgentChatTranscript
+        messages={[agentMessage('a', 'Earlier'), agentMessage('b', 'Latest')]}
+      />,
+    );
+    act(() => vi.advanceTimersByTime(2000));
+
+    expect(region(container)).toBeEmptyDOMElement();
+  });
+
+  it("doesn't let one long reply hold back another message", () => {
+    const person: ReceivedMessage = {
+      id: 'p',
+      timestamp: 1,
+      from: { isLocal: false, isAgent: false, name: 'Bob' } as any,
+      message: 'Quick question',
+    };
+    const { container, rerender } = render(<AgentChatTranscript messages={[]} />);
+
+    let reply = 'Streaming';
+    rerender(<AgentChatTranscript messages={[person, agentMessage('a', reply)]} />);
+    for (let tick = 0; tick < 3; tick++) {
+      act(() => vi.advanceTimersByTime(500));
+      reply += ' more';
+      rerender(<AgentChatTranscript messages={[person, agentMessage('a', reply)]} />);
+    }
+
+    expect(region(container)).toHaveTextContent(/^Bob: Quick question$/);
+  });
+
+  it('waits for an unfinished link before announcing', () => {
+    const { container, rerender } = render(<AgentChatTranscript messages={[]} />);
+
+    rerender(<AgentChatTranscript messages={[agentMessage('a', 'See [the docs](https://exa')]} />);
+    act(() => vi.advanceTimersByTime(1500));
+    expect(region(container)).toBeEmptyDOMElement();
+
+    rerender(
+      <AgentChatTranscript
+        messages={[agentMessage('a', 'See [the docs](https://example.com).')]}
+      />,
+    );
+    act(() => vi.advanceTimersByTime(1000));
+    expect(region(container)).toHaveTextContent(/^Agent: See the docs\.$/);
+  });
+
+  it('announces an unfinished link after waiting a while', () => {
+    const { container, rerender } = render(<AgentChatTranscript messages={[]} />);
+
+    rerender(<AgentChatTranscript messages={[agentMessage('a', 'Use `npm')]} />);
+    act(() => vi.advanceTimersByTime(3000));
+    expect(region(container)).toBeEmptyDOMElement();
+
+    act(() => vi.advanceTimersByTime(1000));
+    expect(region(container)).toHaveTextContent('Agent: Use `npm');
+  });
 });

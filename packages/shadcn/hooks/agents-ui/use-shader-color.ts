@@ -65,21 +65,35 @@ function computedRgb(element: HTMLElement): RGB | null {
   return paintedRgb(computed);
 }
 
-// Attributes that themes usually switch on <html> or <body>
+// Attributes that themes usually switch, on <html>, <body>, or a wrapper element
 const THEME_ATTRIBUTES = ['class', 'data-theme', 'data-mode', 'data-color-scheme', 'data-lk-theme'];
 
 /**
- * Calls `onChange` when the page theme may have changed: a theme attribute or `<html>`'s inline
- * style (where some apps set variables) changes, or the system color scheme does.
+ * Calls `onChange` when the page theme may have changed: a theme attribute or inline style (where
+ * some apps set variables) changes on `<html>`, or the system color scheme does.
+ *
+ * With `element`, it also watches every element around it, for themes scoped to a wrapper rather
+ * than the whole page. Changes elsewhere on the page are ignored.
  */
-export function subscribeToThemeChanges(onChange: () => void) {
-  const observer = new MutationObserver(onChange);
+export function subscribeToThemeChanges(onChange: () => void, element?: Element | null) {
+  const observer = new MutationObserver((records) => {
+    const affectsTheme = records.some(({ target, attributeName }) => {
+      if (target === document.documentElement) return true;
+      // <body>'s style changes often for scroll locking and dialogs, and rarely sets a theme
+      if (target === document.body && attributeName === 'style') return false;
+      // The element's own style changes only with the color, which already reads it again
+      return (
+        target === document.body || (!!element && target !== element && target.contains(element))
+      );
+    });
+    if (affectsTheme) onChange();
+  });
   observer.observe(document.documentElement, {
     attributes: true,
     attributeFilter: [...THEME_ATTRIBUTES, 'style'],
+    subtree: !!element,
   });
-  if (document.body) {
-    // Not <body>'s style, which scroll locking and dialogs change often
+  if (!element && document.body) {
     observer.observe(document.body, { attributes: true, attributeFilter: THEME_ATTRIBUTES });
   }
 
@@ -98,7 +112,8 @@ export function subscribeToThemeChanges(onChange: () => void) {
  *
  * Hex colors convert directly. Anything else, such as `var(--primary)` or `oklch()`, is read from a
  * hidden probe rendered inside the component, so theme variables resolve where the component sits.
- * It's read again when the page theme changes, so a theme variable follows light and dark mode.
+ * It's read again when the theme changes, on the page or on any element around the component, so a
+ * theme variable follows light and dark mode.
  *
  * Render the probe when `probe` is set:
  *
@@ -137,7 +152,7 @@ export function useShaderColor(
     };
 
     resolve();
-    return subscribeToThemeChanges(resolve);
+    return subscribeToThemeChanges(resolve, probeRef.current);
   }, [color]);
 
   const probe = hex

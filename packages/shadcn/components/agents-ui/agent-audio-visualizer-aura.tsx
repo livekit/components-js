@@ -8,6 +8,7 @@ import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/comp
 import { ReactShaderToy } from '@/components/agents-ui/react-shader-toy';
 import { useAgentAudioVisualizerAura } from '@/hooks/agents-ui/use-agent-audio-visualizer-aura';
 import { subscribeToThemeChanges, useShaderColor } from '@/hooks/agents-ui/use-shader-color';
+import { usePrefersReducedMotion } from '@/hooks/agents-ui/use-prefers-reduced-motion';
 import { cn } from '@/lib/utils';
 
 const DEFAULT_COLOR = '#1FD5F9';
@@ -268,13 +269,21 @@ interface AuraShaderProps {
    * - 'dark': Optimized for dark backgrounds (default)
    * - 'light': Optimized for light/white backgrounds (inverts colors)
    *
-   * When omitted, follows the `dark` class on `<html>`.
+   * When omitted, follows the page's theme on `<html>`.
    */
   themeMode?: 'dark' | 'light';
 }
 
+const DARK_THEME_ATTRIBUTES = ['data-theme', 'data-mode', 'data-color-scheme', 'data-lk-theme'];
+
 function getDocumentThemeMode() {
-  return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+  const html = document.documentElement;
+  const isDark =
+    html.classList.contains('dark') ||
+    DARK_THEME_ATTRIBUTES.some((attribute) => html.getAttribute(attribute) === 'dark') ||
+    // Theme libraries such as next-themes also set `color-scheme`
+    getComputedStyle(html).colorScheme === 'dark';
+  return isDark ? 'dark' : 'light';
 }
 
 function getServerThemeMode() {
@@ -282,8 +291,9 @@ function getServerThemeMode() {
 }
 
 /**
- * Follows the `dark` class on `<html>` (the shadcn/ui convention), so Aura updates when the page
- * theme changes. The server snapshot is `'light'`.
+ * Follows the page's theme on `<html>`: the `dark` class (the shadcn/ui convention), a `dark` theme
+ * attribute such as `data-theme="dark"`, or `color-scheme: dark`. Updates when it changes. The server
+ * snapshot is `'light'`.
  */
 function useDocumentThemeMode() {
   // The same theme-change signal the color uses, so the mode and the color update together
@@ -308,6 +318,7 @@ function AuraShader({
   const documentThemeMode = useDocumentThemeMode();
   const themeMode = themeModeProp ?? documentThemeMode;
   const { rgb: rgbColor, probe: colorProbe } = useShaderColor(color, DEFAULT_COLOR);
+  const reducedMotion = usePrefersReducedMotion();
   const devicePixelRatio = Math.min(globalThis.devicePixelRatio ?? 1, MAX_SHADER_PIXEL_RATIO);
 
   return (
@@ -319,6 +330,8 @@ function AuraShader({
       )}
       <ReactShaderToy
         fs={shaderSource}
+        // Still and silent frames look the same, so only redraw when something changes
+        paused={reducedMotion}
         devicePixelRatio={devicePixelRatio}
         uniforms={{
           // Aurora wave speed
@@ -402,8 +415,9 @@ export interface AgentAudioVisualizerAuraProps {
    */
   colorShift?: number;
   /**
-   * The theme mode of the aura. When omitted, follows the `dark` class on `<html>` and updates
-   * when it changes. Pass it explicitly if your app marks dark mode another way.
+   * The theme mode of the aura. When omitted, follows the page's theme on `<html>` (a `dark`
+   * class, a `dark` theme attribute such as `data-theme="dark"`, or `color-scheme: dark`) and
+   * updates when it changes. Pass it explicitly if your app marks dark mode another way.
    */
   themeMode?: 'dark' | 'light';
   /**

@@ -76,6 +76,22 @@ describe('AgentAudioVisualizerAura', () => {
   describe('theme mode', () => {
     afterEach(() => {
       document.documentElement.classList.remove('dark');
+      document.documentElement.removeAttribute('data-theme');
+      document.documentElement.style.colorScheme = '';
+    });
+
+    it('uses dark mode for data-theme="dark"', async () => {
+      render(<AgentAudioVisualizerAura />);
+
+      document.documentElement.setAttribute('data-theme', 'dark');
+      await waitFor(() => expect(lastUModeValue()).toBe(0.0));
+    });
+
+    it('uses dark mode for color-scheme: dark', async () => {
+      render(<AgentAudioVisualizerAura />);
+
+      document.documentElement.style.colorScheme = 'dark';
+      await waitFor(() => expect(lastUModeValue()).toBe(0.0));
     });
 
     it('uses light mode when <html> has no dark class', () => {

@@ -56,6 +56,37 @@ describe('useShaderColor', () => {
     expect(rgb()).toEqual([0, 0, 1]);
   });
 
+  it('reads the color again when a wrapper around it changes theme', async () => {
+    render(
+      <div data-testid="wrapper">
+        <ShaderColor color="rgb(255, 0, 0)" />
+      </div>,
+    );
+    const probe = screen.getByTestId('shader').querySelector<HTMLElement>('span span')!;
+
+    probe.style.color = 'rgb(0, 0, 255)';
+    await act(async () => {
+      screen.getByTestId('wrapper').setAttribute('data-theme', 'dark');
+      await Promise.resolve();
+    });
+    expect(rgb()).toEqual([0, 0, 1]);
+  });
+
+  it('ignores theme changes elsewhere on the page', async () => {
+    const elsewhere = document.createElement('div');
+    document.body.appendChild(elsewhere);
+    render(<ShaderColor color="rgb(255, 0, 0)" />);
+    const probe = screen.getByTestId('shader').querySelector<HTMLElement>('span span')!;
+
+    probe.style.color = 'rgb(0, 0, 255)';
+    await act(async () => {
+      elsewhere.setAttribute('data-theme', 'dark');
+      await Promise.resolve();
+    });
+    expect(rgb()).toEqual([1, 0, 0]);
+    elsewhere.remove();
+  });
+
   it("uses the fallback for a color the browser can't use", () => {
     render(<ShaderColor color="#12345" />);
     expect(rgb()).toEqual(FALLBACK_RGB);

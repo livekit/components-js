@@ -467,6 +467,12 @@ export interface ReactShaderToyProps {
    * reducing CPU/GPU usage when the shader is off-screen.
    */
   animateWhenNotVisible?: boolean;
+
+  /**
+   * When true, the shader stops redrawing every frame and draws only when its uniforms change, such
+   * as for reduced motion. Time-based uniforms like `iTime` stop advancing in between.
+   */
+  paused?: boolean;
 }
 
 export function ReactShaderToy({
@@ -484,6 +490,7 @@ export function ReactShaderToy({
   onError = console.error,
   onWarning = console.warn,
   animateWhenNotVisible = false,
+  paused = false,
   ...canvasProps
 }: ReactShaderToyProps & ComponentPropsWithoutRef<'canvas'>) {
   // Refs for WebGL state
@@ -496,6 +503,7 @@ export function ReactShaderToy({
   const initFrameIdRef = useRef<number | undefined>(undefined);
   const isVisibleRef = useRef(true);
   const animateWhenNotVisibleRef = useRef(animateWhenNotVisible);
+  const pausedRef = useRef(paused);
   const mousedownRef = useRef(false);
   const canvasPositionRef = useRef<DOMRect | undefined>(undefined);
   const timerRef = useRef(0);
@@ -756,7 +764,9 @@ export function ReactShaderToy({
   const setUniforms = (timestamp: number) => {
     const gl = glRef.current;
     if (!gl || !shaderProgramRef.current) return;
-    const delta = lastTimeRef.current ? (timestamp - lastTimeRef.current) / 1000 : 0;
+    // Time stands still while paused, so the shader picks up where it left off
+    const delta =
+      lastTimeRef.current && !pausedRef.current ? (timestamp - lastTimeRef.current) / 1000 : 0;
     lastTimeRef.current = timestamp;
     const propUniforms = propsUniformsRef.current;
     if (propUniforms) {
@@ -857,9 +867,16 @@ export function ReactShaderToy({
       mouseValue[0] = lerpVal(currentX, lastMouseArrRef.current[0] ?? 0, lerp);
       mouseValue[1] = lerpVal(currentY, lastMouseArrRef.current[1] ?? 0, lerp);
     }
-    if (animateWhenNotVisibleRef.current || isVisibleRef.current) {
+    if (!pausedRef.current && (animateWhenNotVisibleRef.current || isVisibleRef.current)) {
       animFrameIdRef.current = requestAnimationFrame(drawScene);
     }
+  };
+
+  /** Draws one frame on the next animation frame, replacing any frame already scheduled. */
+  const requestDraw = () => {
+    if (!glRef.current) return;
+    cancelAnimationFrame(animFrameIdRef.current ?? 0);
+    animFrameIdRef.current = requestAnimationFrame(drawScene);
   };
 
   const addEventListeners = () => {
@@ -905,7 +922,21 @@ export function ReactShaderToy({
 
   useEffect(() => {
     propsUniformsRef.current = propUniforms;
+    // While paused, a change to the uniforms is the only reason to draw
+    if (pausedRef.current) requestDraw();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propUniforms]);
+
+  useEffect(() => {
+    pausedRef.current = paused;
+    // Resuming restarts the loop without counting the paused time; pausing lets it stop after the
+    // current frame
+    if (!paused) {
+      lastTimeRef.current = 0;
+      requestDraw();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused]);
 
   useEffect(() => {
     animateWhenNotVisibleRef.current = animateWhenNotVisible;
@@ -922,9 +953,8 @@ export function ReactShaderToy({
       (entries) => {
         for (const entry of entries) {
           isVisibleRef.current = entry.isIntersecting;
-          if (entry.isIntersecting) {
-            requestAnimationFrame(drawScene);
-          }
+          // Replaces any scheduled frame, so coming into view doesn't start a second loop
+          if (entry.isIntersecting) requestDraw();
         }
       },
       { threshold: 0 },
@@ -953,7 +983,7 @@ export function ReactShaderToy({
         processTextures();
         initShaders(preProcessFragment(fs || BASIC_FS), vs || BASIC_VS);
         initBuffers();
-        requestAnimationFrame(drawScene);
+        requestDraw();
         addEventListeners();
         onResize();
       }

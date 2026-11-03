@@ -7,6 +7,7 @@ import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/comp
 import { ReactShaderToy } from '@/components/agents-ui/react-shader-toy';
 import { useAgentAudioVisualizerWave } from '@/hooks/agents-ui/use-agent-audio-visualizer-wave';
 import { useShaderColor } from '@/hooks/agents-ui/use-shader-color';
+import { usePrefersReducedMotion } from '@/hooks/agents-ui/use-prefers-reduced-motion';
 import { cn } from '@/lib/utils';
 import type { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
 
@@ -191,6 +192,7 @@ function WaveShader({
   ...props
 }: WaveShaderProps & ComponentProps<'div'>) {
   const { rgb: rgbColor, probe: colorProbe } = useShaderColor(color, DEFAULT_COLOR);
+  const reducedMotion = usePrefersReducedMotion();
 
   return (
     <div ref={ref} className={className} {...props}>
@@ -201,6 +203,8 @@ function WaveShader({
       )}
       <ReactShaderToy
         fs={shaderSource}
+        // Still and silent frames look the same, so only redraw when something changes
+        paused={reducedMotion}
         devicePixelRatio={globalThis.devicePixelRatio ?? 1}
         uniforms={{
           uSpeed: { type: '1f', value: speed },

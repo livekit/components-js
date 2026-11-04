@@ -51,6 +51,8 @@ export function useThreadMessages(thread?: UseThreadReturn): UseThreadMessagesRe
     upsertMessage,
     emitter,
   } = resolvedThread.internal.messageStore;
+  // The shared text-mode response lifecycle, read by `useAgent` (idle → thinking → typing → idle).
+  const { setTextAgentState } = resolvedThread.internal;
 
   const [isSending, setIsSending] = React.useState(false);
 
@@ -64,25 +66,42 @@ export function useThreadMessages(thread?: UseThreadReturn): UseThreadMessagesRe
       };
       upsertMessage(initialUserMessage);
 
+      // The in-flight POST stays `idle`; only once the server has accepted the send (the request
+      // resolves) do we move to `thinking`. `try/finally` also guarantees `isSending` is reset if the
+      // request throws.
       setIsSending(true);
-      const stream = await textTransport.requestMessageStream(message);
-      setIsSending(false);
+      let stream: Awaited<ReturnType<typeof textTransport.requestMessageStream>>;
+      try {
+        stream = await textTransport.requestMessageStream(message);
+      } finally {
+        setIsSending(false);
+      }
+      setTextAgentState('thinking');
 
       (async () => {
+        let sawChunk = false;
         try {
           for await (const streamedMessage of stream) {
+            // The first streamed chunk means the response has started coming back.
+            if (!sawChunk) {
+              setTextAgentState('typing');
+              sawChunk = true;
+            }
             upsertMessage(streamedMessage);
           }
         } catch (err) {
           // FIXME: figure out how to handle errors here, should these somehow put the agent into an
           // errored state?
           log.warn('useThreadMessages: text message stream failed', err);
+        } finally {
+          // The response is fully streamed (or failed) — back to idle.
+          setTextAgentState('idle');
         }
       })();
 
       return initialUserMessage;
     },
-    [textTransport, upsertMessage],
+    [textTransport, upsertMessage, setTextAgentState],
   );
 
   return React.useMemo(

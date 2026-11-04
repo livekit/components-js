@@ -31,14 +31,15 @@ export type ThreadCallbacks = {
 export type ThreadTokenSourceFetch = (force?: boolean) => Promise<TokenSourceResponseObject>;
 
 /**
- * The minimal surface `useAgent` needs to derive agent state: a live `Room`, its connection state,
- * and the agent-connect-timeout controls. A `useCall` return and the composite `useSession` return
- * both satisfy it; a `useThread` exposes its active call's host (if any) on `internal.activeCall`, so
- * `useAgent(thread)` can resolve one.
+ * The minimal surface `useAgent` needs to derive agent state from an attached call: the call's
+ * connection state and the agent-connect-timeout controls. The call's `Room` is NOT part of this —
+ * the thread owns the single canonical `Room` (`internal.room`), which an attached call registers via
+ * `registerCall`. A `useCall` return and the composite `useSession` return both drive this; a
+ * `useThread` exposes its active call (if any) on `internal.activeCall`, so `useAgent(thread)` can
+ * resolve one.
  * @beta
  */
 export type ActiveCall = {
-  room: Room;
   connectionState: ConnectionState;
   internal: {
     agentConnectTimeoutMilliseconds?: number;
@@ -51,6 +52,16 @@ export type ActiveCall = {
     updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => void;
   };
 };
+
+/**
+ * The agent's text-mode response lifecycle, shared across the thread's consumers:
+ *   - `idle`: at rest (nothing in flight).
+ *   - `thinking`: a sent message has reached the server and we are awaiting the response.
+ *   - `typing`: the response is streaming back (the text-mode equivalent of voice `speaking`).
+ * Driven by `useThreadMessages().send()`; read by `useAgent` when no call is connected.
+ * @beta
+ */
+export type ThreadTextAgentState = 'idle' | 'thinking' | 'typing';
 
 /**
  * The thread's readiness lifecycle. A thread has no persistent socket (text is request/response per
@@ -77,10 +88,23 @@ type ThreadStateCommon = {
     tokenSourceFetch: ThreadTokenSourceFetch;
     /** The shared, mode-independent message store. */
     messageStore: ThreadMessageStore;
+    /**
+     * The single canonical `Room` for this thread. When a call is attached it is that call's room
+     * (registered via `registerCall`); otherwise it is a disconnected placeholder, so `useAgent` can
+     * run its room-derived hooks even for a call-less, text-only thread.
+     */
+    room: Room;
     /** The call currently attached to this thread (registered by `useCall`), or null. */
     activeCall: ActiveCall | null;
-    /** Register (or clear, with null) the call attached to this thread. Used by `useCall`. */
-    registerCall: (host: ActiveCall | null) => void;
+    /**
+     * Register (or clear, with null) the call attached to this thread, together with its room (which
+     * becomes `internal.room` while attached). Used by `useCall`.
+     */
+    registerCall: (call: ActiveCall | null, room?: Room | null) => void;
+    /** The shared text-mode response lifecycle, driven by `useThreadMessages().send()`. */
+    textAgentState: ThreadTextAgentState;
+    /** Set the shared text-mode response lifecycle. Used by `useThreadMessages().send()`. */
+    setTextAgentState: (state: ThreadTextAgentState) => void;
   };
 };
 
@@ -258,12 +282,30 @@ export function useThread(
     [],
   );
 
-  // The call attached to this thread, registered by `useCall`, so `useAgent(thread)` can resolve a
-  // host. A thread with no active call drives no agent state (that is a voice/room concern).
+  // The single canonical room for this thread. Until a call attaches, it is a disconnected
+  // placeholder so `useAgent` (which runs unconditional room-derived hooks) works for a text-only
+  // thread; a never-connected room yields no remote participants and no tracks, exactly as text mode
+  // wants. When a call attaches, `registerCall` swaps in the call's room.
+  const placeholderRoom = React.useMemo(() => new Room(), []);
+  React.useEffect(() => {
+    return () => {
+      placeholderRoom.disconnect();
+    };
+  }, [placeholderRoom]);
+
+  // The call attached to this thread, registered by `useCall`, so `useAgent(thread)` can resolve it.
+  // A thread with no active call drives no voice agent state (that is a call/room concern).
   const [activeCall, setActiveCall] = React.useState<ActiveCall | null>(null);
-  const registerCall = React.useCallback((host: ActiveCall | null) => {
-    setActiveCall(host);
+  const [callRoom, setCallRoom] = React.useState<Room | null>(null);
+  const registerCall = React.useCallback((call: ActiveCall | null, room?: Room | null) => {
+    setActiveCall(call);
+    setCallRoom(room ?? null);
   }, []);
+  const room = callRoom ?? placeholderRoom;
+
+  // The shared text-mode response lifecycle (idle → thinking → typing → idle), driven by
+  // `useThreadMessages().send()` and read by `useAgent` when no call is connected.
+  const [textAgentState, setTextAgentState] = React.useState<ThreadTextAgentState>('idle');
 
   const {
     // `textBaseUrl`/`threadId` are thread concerns; strip them so they never reach the token fetch
@@ -364,10 +406,23 @@ export function useThread(
       tokenSource,
       tokenSourceFetch,
       messageStore,
+      room,
       activeCall,
       registerCall,
+      textAgentState,
+      setTextAgentState,
     }),
-    [emitter, tokenSource, tokenSourceFetch, messageStore, activeCall, registerCall],
+    [
+      emitter,
+      tokenSource,
+      tokenSourceFetch,
+      messageStore,
+      room,
+      activeCall,
+      registerCall,
+      textAgentState,
+      setTextAgentState,
+    ],
   );
 
   return React.useMemo((): UseThreadReturn => {

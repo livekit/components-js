@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { describe, test, expect, vi } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import type { ReceivedChatMessage } from '@livekit/components-core';
@@ -28,9 +29,11 @@ function makeFakeTextTransport(reply: ReceivedChatMessage) {
   };
 }
 
-/** Build a thread-shaped object backed by a real message store (so reads/writes are exercised). */
+/** Build a thread-shaped object backed by a real message store (so reads/writes are exercised) and a
+ * real text-agent-state so send()'s idle → thinking → typing → idle transitions are observable. */
 function useFakeThread(textTransport: unknown): UseThreadReturn {
   const messageStore = useThreadMessageStore();
+  const [textAgentState, setTextAgentState] = React.useState<'idle' | 'thinking' | 'typing'>('idle');
   return {
     status: 'ready',
     threadId: undefined,
@@ -40,8 +43,11 @@ function useFakeThread(textTransport: unknown): UseThreadReturn {
       tokenSource: {},
       tokenSourceFetch: async () => ({ serverUrl: '', participantToken: '' }),
       messageStore,
+      room: {},
       activeCall: null,
       registerCall: () => {},
+      textAgentState,
+      setTextAgentState,
     },
   } as unknown as UseThreadReturn;
 }
@@ -74,6 +80,53 @@ describe('useThreadMessages', () => {
     await waitFor(() => {
       expect(result.current.messages.map((m) => m.id)).toContain('agent-1');
     });
+  });
+
+  test('send() drives the thread text-agent state: thinking → typing → idle', async () => {
+    // A gated transport: the stream blocks before its first chunk and before completing, so each
+    // transition can be observed deterministically.
+    let releaseFirstChunk!: () => void;
+    const firstChunkGate = new Promise<void>((resolve) => {
+      releaseFirstChunk = resolve;
+    });
+    let releaseEnd!: () => void;
+    const endGate = new Promise<void>((resolve) => {
+      releaseEnd = resolve;
+    });
+    const tt = {
+      requestMessageStream: vi.fn(async function* () {
+        await firstChunkGate;
+        yield agentReply('gated-1', 'streaming…');
+        await endGate;
+      }),
+      disconnect: vi.fn(async () => {}),
+    };
+
+    const { result } = renderHook(() => {
+      const thread = useFakeThread(tt);
+      const messages = useThreadMessages(thread);
+      return { thread, messages };
+    });
+
+    expect(result.current.thread.internal.textAgentState).toBe('idle');
+
+    // The server has accepted the send, but no chunk has streamed yet → thinking.
+    await act(async () => {
+      await result.current.messages.send('hi');
+    });
+    expect(result.current.thread.internal.textAgentState).toBe('thinking');
+
+    // First chunk streams back → typing.
+    await act(async () => {
+      releaseFirstChunk();
+    });
+    await waitFor(() => expect(result.current.thread.internal.textAgentState).toBe('typing'));
+
+    // Stream completes → idle.
+    await act(async () => {
+      releaseEnd();
+    });
+    await waitFor(() => expect(result.current.thread.internal.textAgentState).toBe('idle'));
   });
 });
 

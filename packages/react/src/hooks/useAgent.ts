@@ -38,13 +38,20 @@ type AgentSdkStates = 'initializing' | 'idle' | 'listening' | 'thinking' | 'spea
  * If an agent fails to connect:
  *   connecting ➡️ pre-connect-buffering/initializing ➡️ failed
  *
+ * For a call-less (text-only) thread, there is no room to connect, so agent state reflects the text
+ * response lifecycle instead:
+ *   idle ➡️ thinking ➡️ typing ➡️ idle
+ *
  * Legacy useVoiceAssistant hook:
  *   disconnected ➡️ connecting ➡️ initializing ➡️ listening/thinking/speaking
  *
  * @beta
  * */
 export type AgentState =
-  'disconnected' | 'connecting' | 'pre-connect-buffering' | 'failed' | AgentSdkStates;
+  // `disconnected` is retained for back-compat (e.g. the legacy useVoiceAssistant), but the current
+  // useAgent never emits it — its at-rest state is `idle`. `typing` is the text-mode equivalent of
+  // `speaking`.
+  'disconnected' | 'connecting' | 'pre-connect-buffering' | 'failed' | 'typing' | AgentSdkStates;
 
 /** @beta */
 export enum AgentEvent {
@@ -252,6 +259,32 @@ type AgentStateFailed = AgentStateCommon & {
   microphoneTrack: undefined;
 };
 
+/**
+ * The agent state for a call-less (text-only) thread. There is no live room, so there is no agent
+ * participant, no identity and no tracks, and none of the connection-oriented flags are set. The
+ * `state` reflects the text response lifecycle driven by `useThreadMessages().send()`.
+ *
+ * NOTE: `thinking` is included here (not only `idle`/`typing`) because the text lifecycle is
+ * idle → thinking → typing → idle; a call-less `thinking` has no room, unlike the voice `thinking` in
+ * {@link AgentStateAvailable}.
+ */
+type AgentStateTextMode = AgentStateCommon & {
+  state: 'idle' | 'thinking' | 'typing';
+  failureReasons: null;
+
+  identity: undefined;
+  name: undefined;
+  metadata: undefined;
+
+  isConnected: false;
+  canListen: false;
+  isFinished: false;
+  isPending: false;
+
+  cameraTrack: undefined;
+  microphoneTrack: undefined;
+};
+
 type AgentActions = {
   /** Returns a promise that resolves once the agent is connected and available for user input */
   waitUntilConnected: (signal?: AbortSignal) => Promise<void>;
@@ -280,7 +313,8 @@ type AgentStateCases =
   | AgentStateAvailable
   | AgentStatePreConnectBuffering
   | AgentStateUnAvailable
-  | AgentStateFailed;
+  | AgentStateFailed
+  | AgentStateTextMode;
 
 /** @beta */
 export type UseAgentReturn = AgentStateCases & AgentActions;
@@ -491,10 +525,10 @@ function useAgentWaitUntilDerivedStates(
   return { waitUntilConnected, waitUntilCouldBeListening, waitUntilFinished };
 }
 
-/** Takes a legacy {@link UseSessionReturn} and converts it into an internal {@link ActiveCall} */
+/** Takes a legacy {@link UseSessionReturn} and converts it into an internal {@link ActiveCall} (the
+ * room is not part of it — it is resolved from the session's composed thread's `internal.room`). */
 function convertSessionToActiveCall(session: SessionStub): ActiveCall {
   return {
-    room: session.room,
     connectionState: session.connectionState,
     internal: {
       agentConnectTimeoutMilliseconds: session.internal.agentConnectTimeoutMilliseconds,
@@ -517,39 +551,45 @@ export function useAgent(threadOrSession?: UseThreadReturn | SessionStub): UseAg
   const sessionFromContext = useMaybeSessionContext();
   const threadFromContext = useMaybeThreadContext();
 
-  // Resolve the active call — a live room, its connection state, and the agent-timeout controls:
-  //  - an explicit AgentHost (a call, or the composite session) is used directly;
-  //  - an explicit thread resolves to its active call;
-  //  - otherwise fall back to the session context (back-compat), then the thread context's active call.
+  // Resolve the thread (always required) and its attached call (optional — a text-only thread has
+  // none):
+  //  - an explicit thread is used directly, its active call (if any) from `internal.activeCall`;
+  //  - an explicit legacy session resolves to its composed thread + a converted active call;
+  //  - otherwise fall back to the thread context, then the session context.
+  let thread: UseThreadReturn | undefined;
   let activeCall: ActiveCall | undefined;
   if (threadOrSession && isUseThreadReturn(threadOrSession)) {
+    thread = threadOrSession;
     activeCall = threadOrSession.internal.activeCall ?? undefined;
   } else if (threadOrSession && isUseSessionReturn(threadOrSession)) {
+    thread = threadOrSession.internal.thread;
     activeCall = convertSessionToActiveCall(threadOrSession);
   } else if (threadFromContext) {
-    activeCall = threadFromContext?.internal.activeCall ?? undefined;
+    thread = threadFromContext;
+    activeCall = threadFromContext.internal.activeCall ?? undefined;
   } else if (sessionFromContext) {
+    thread = sessionFromContext.internal.thread;
     activeCall = convertSessionToActiveCall(sessionFromContext);
   }
-  if (!activeCall) {
+  if (!thread) {
     throw new Error(
       'No thread (or legacy session) provided, make sure you are inside a Thread context or pass the thread explicitly',
     );
   }
 
-  const {
-    room,
-    internal: {
-      agentConnectTimeoutMilliseconds,
+  // The single canonical room lives on the thread: an attached call registers its room there, and a
+  // call-less thread exposes a disconnected placeholder. Every room-derived hook below runs against it
+  // unconditionally (a never-connected placeholder simply yields no participants/tracks).
+  const room = thread.internal.room;
 
-      agentTimeoutFailureReason,
-      startAgentTimeout,
-      clearAgentTimeout,
-      clearAgentTimeoutFailureReason,
-      updateAgentTimeoutState,
-      updateAgentTimeoutParticipantExists,
-    },
-  } = activeCall;
+  // The text-mode response lifecycle (idle → thinking → typing → idle), used when no call is connected.
+  const textAgentState = thread.internal.textAgentState;
+
+  // The agent-timeout controls only exist when a call is attached; a text-only thread has no
+  // connection to time out, so they are absent and the timeout wiring below no-ops.
+  const callInternal = activeCall?.internal;
+  const agentConnectTimeoutMilliseconds = callInternal?.agentConnectTimeoutMilliseconds;
+  const agentTimeoutFailureReason = callInternal?.agentTimeoutFailureReason ?? null;
 
   const emitter = React.useMemo(() => new EventEmitter() as TypedEventEmitter<AgentCallbacks>, []);
 
@@ -630,8 +670,8 @@ export function useAgent(threadOrSession?: UseThreadReturn | SessionStub): UseAg
       return;
     }
 
-    clearAgentTimeoutFailureReason();
-  }, [agentParticipant]);
+    callInternal?.clearAgentTimeoutFailureReason();
+  }, [agentParticipant, callInternal]);
 
   // If the agent participant disconnects in the middle of a conversation unexpectedly, mark that as an explicit failure
   const [agentDisconnectedFailureReason, setAgentDisconnectedFailureReason] = React.useState<
@@ -706,12 +746,24 @@ export function useAgent(threadOrSession?: UseThreadReturn | SessionStub): UseAg
     return reasons;
   }, [agentTimeoutFailureReason, agentDisconnectedFailureReason]);
 
-  const state = React.useMemo(() => {
+  // A call "connected" (driving voice state) means it is attached and not disconnected. Note a call
+  // can be attached but disconnected (e.g. before `start()` or after `end()`); that is treated as text
+  // mode, which is why this keys on the connection state, not mere attachment.
+  const callConnected =
+    typeof activeCall !== 'undefined' && activeCall.connectionState !== ConnectionState.Disconnected;
+
+  const state = React.useMemo((): AgentState => {
     if (failureReasons.length > 0) {
       return 'failed';
     }
 
-    let state: AgentState = 'disconnected';
+    // No connected call → reflect the thread's text response lifecycle (idle | thinking | typing).
+    if (!callConnected) {
+      return textAgentState;
+    }
+
+    // A call is connected → the voice lifecycle. The at-rest base is `idle` (never `disconnected`).
+    let state: AgentState = 'idle';
 
     if (roomConnectionState !== ConnectionState.Disconnected) {
       state = 'connecting';
@@ -730,6 +782,8 @@ export function useAgent(threadOrSession?: UseThreadReturn | SessionStub): UseAg
     return state;
   }, [
     failureReasons,
+    callConnected,
+    textAgentState,
     roomConnectionState,
     localMicTrack,
     agentParticipant,
@@ -738,24 +792,26 @@ export function useAgent(threadOrSession?: UseThreadReturn | SessionStub): UseAg
 
   React.useEffect(() => {
     emitter.emit(AgentEvent.StateChanged, state);
-    updateAgentTimeoutState(state);
-  }, [emitter, state]);
+    callInternal?.updateAgentTimeoutState(state);
+  }, [emitter, state, callInternal]);
   React.useEffect(() => {
-    updateAgentTimeoutParticipantExists(agentParticipant !== null);
-  }, [agentParticipant]);
+    callInternal?.updateAgentTimeoutParticipantExists(agentParticipant !== null);
+  }, [agentParticipant, callInternal]);
 
-  // When the host room begins connecting, start the agent timeout
-  const isHostDisconnected = activeCall.connectionState === ConnectionState.Disconnected;
+  // When the attached call's room begins connecting, start the agent timeout. Without a call there is
+  // nothing to time out.
+  const isHostDisconnected =
+    !activeCall || activeCall.connectionState === ConnectionState.Disconnected;
   React.useEffect(() => {
-    if (isHostDisconnected) {
+    if (isHostDisconnected || !callInternal) {
       return;
     }
 
-    startAgentTimeout(agentConnectTimeoutMilliseconds);
+    callInternal.startAgentTimeout(agentConnectTimeoutMilliseconds);
     return () => {
-      clearAgentTimeout();
+      callInternal.clearAgentTimeout();
     };
-  }, [isHostDisconnected, agentConnectTimeoutMilliseconds]);
+  }, [isHostDisconnected, agentConnectTimeoutMilliseconds, callInternal]);
 
   const {
     identity: agentParticipantIdentity,
@@ -774,23 +830,46 @@ export function useAgent(threadOrSession?: UseThreadReturn | SessionStub): UseAg
       },
     };
 
+    if (state === 'failed') {
+      return {
+        ...common,
+        identity: undefined,
+        name: undefined,
+        metadata: undefined,
+
+        state: 'failed',
+        ...generateDerivedStateValues('failed'),
+        failureReasons,
+
+        // Clear inner values if no longer connected
+        cameraTrack: undefined,
+        microphoneTrack: undefined,
+      };
+    }
+
+    // No connected call → text mode. `state` is one of idle | thinking | typing; there is no agent
+    // participant, no identity, no tracks, and none of the connection flags are set.
+    if (!callConnected) {
+      return {
+        ...common,
+        identity: undefined,
+        name: undefined,
+        metadata: undefined,
+
+        state: state as AgentStateTextMode['state'],
+        failureReasons: null,
+        isConnected: false,
+        canListen: false,
+        isFinished: false,
+        isPending: false,
+
+        cameraTrack: undefined,
+        microphoneTrack: undefined,
+      };
+    }
+
+    // A call is connected → the voice lifecycle.
     switch (state) {
-      case 'disconnected':
-        return {
-          ...common,
-          identity: undefined,
-          name: undefined,
-          metadata: undefined,
-
-          state,
-          ...generateDerivedStateValues(state),
-          failureReasons: null,
-
-          // Clear inner values if no longer connected
-          cameraTrack: undefined,
-          microphoneTrack: undefined,
-        };
-
       case 'connecting':
         return {
           ...common,
@@ -855,18 +934,22 @@ export function useAgent(threadOrSession?: UseThreadReturn | SessionStub): UseAg
           microphoneTrack: audioTrack,
         };
 
-      case 'failed':
+      default:
+        // Unreachable: when a call is connected, `state` is always a voice state (the text states and
+        // `disconnected` are handled above). Fall back to a safe idle.
         return {
           ...common,
           identity: undefined,
           name: undefined,
           metadata: undefined,
 
-          state: 'failed',
-          ...generateDerivedStateValues('failed'),
-          failureReasons,
+          state: 'idle',
+          failureReasons: null,
+          isConnected: false,
+          canListen: false,
+          isFinished: false,
+          isPending: false,
 
-          // Clear inner values if no longer connected
           cameraTrack: undefined,
           microphoneTrack: undefined,
         };
@@ -878,6 +961,9 @@ export function useAgent(threadOrSession?: UseThreadReturn | SessionStub): UseAg
     agentParticipantAttributes,
     emitter,
     agentParticipant,
+    workerParticipant,
+    callConnected,
+    failureReasons,
     state,
     videoTrack,
     audioTrack,

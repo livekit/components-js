@@ -59,9 +59,12 @@ function SimpleAgent({ thread }: { thread: UseThreadReturn }) {
   );
 }
 
-// The text half: reads and sends messages on the thread resolved from ThreadProvider.
+// The text half: reads and sends messages on the thread resolved from ThreadProvider. The agent's
+// text-mode state (idle → thinking → typing → idle) is driven by send() and surfaced via useAgent,
+// which works here even though no call is connected.
 function TextChat() {
   const { messages, send, isSending } = useThreadMessages();
+  const agent = useAgent();
   const [draft, setDraft] = useState('');
 
   const onSubmit = (e: React.FormEvent) => {
@@ -77,6 +80,14 @@ function TextChat() {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ width: 480, height: 800, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{ fontSize: 13, opacity: 0.7 }}>
+          Agent:{' '}
+          {agent.state === 'thinking'
+            ? 'thinking…'
+            : agent.state === 'typing'
+              ? 'typing…'
+              : agent.state}
+        </div>
         <div
           style={{
             overflowY: 'auto',

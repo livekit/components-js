@@ -235,7 +235,7 @@ export function useCall(
     (isUseThreadReturn(threadOrOptions) ? maybeOptions : (threadOrOptions as UseCallOptions)) ?? {};
 
   const thread = useEnsureThread(explicitThread);
-  const { tokenSourceFetch, messageStore, registerCall } = thread.internal;
+  const { tokenSourceFetch, registerCall } = thread.internal;
   const threadId = thread.threadId;
 
   const {
@@ -419,19 +419,22 @@ export function useCall(
     ],
   );
 
-  // The host `useAgent` derives its state from: a live room + connection state + the agent-timeout
-  // controls. Expose it so the attached thread (and thus `useAgent(thread)`) can resolve this call.
+  // `useAgent` derives its voice state from: the thread's canonical room (which we register below) +
+  // this call's connection state + the agent-timeout controls. Expose the latter two so the attached
+  // thread (and thus `useAgent(thread)`) can resolve this call.
   const activeCall: ActiveCall = React.useMemo(
-    () => ({ room, connectionState: roomConnectionState, internal: callInternal }),
-    [room, roomConnectionState, callInternal],
+    () => ({ connectionState: roomConnectionState, internal: callInternal }),
+    [roomConnectionState, callInternal],
   );
 
+  // Register this call on the thread, making the thread's canonical `internal.room` be this call's
+  // room while attached (and restoring the thread's placeholder room on unmount).
   React.useEffect(() => {
-    registerCall(activeCall);
+    registerCall(activeCall, room);
     return () => {
-      registerCall(null);
+      registerCall(null, null);
     };
-  }, [registerCall, activeCall]);
+  }, [registerCall, activeCall, room]);
 
   const waitUntilConnectionState = useCallWaitUntilConnectionState(emitter, roomConnectionState);
 

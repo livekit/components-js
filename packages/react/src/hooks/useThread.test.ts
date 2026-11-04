@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useThread, isUseThreadReturn, type AgentHost } from './useThread';
+import { useThread, isUseThreadReturn, type ActiveCall } from './useThread';
 import { isUseSessionReturn } from './useSession';
 
 describe('useThread', () => {
@@ -12,24 +12,39 @@ describe('useThread', () => {
     expect(result.current.threadId).toBeUndefined();
     expect(result.current.textTransport).toBeDefined();
     expect(result.current.internal.messageStore).toBeDefined();
+    // The thread always exposes a canonical (placeholder) room and an idle text-agent state.
+    expect(result.current.internal.room).toBeDefined();
+    expect(result.current.internal.textAgentState).toBe('idle');
+    expect(typeof result.current.internal.setTextAgentState).toBe('function');
     expect(result.current.internal.activeCall).toBeNull();
     expect(typeof result.current.internal.registerCall).toBe('function');
   });
 
-  test('registerCall updates the active call host exposed on internal', () => {
+  test('registerCall updates the active call exposed on internal', () => {
     const { result } = renderHook(() => useThread({} as never, {}));
 
-    const fakeHost = {
-      room: {},
+    const fakeCall = {
       connectionState: 'disconnected',
       internal: {},
-    } as unknown as AgentHost;
+    } as unknown as ActiveCall;
 
-    act(() => result.current.internal.registerCall(fakeHost));
-    expect(result.current.internal.activeCall).toBe(fakeHost);
+    act(() => result.current.internal.registerCall(fakeCall));
+    expect(result.current.internal.activeCall).toBe(fakeCall);
 
     act(() => result.current.internal.registerCall(null));
     expect(result.current.internal.activeCall).toBeNull();
+  });
+
+  test('setTextAgentState updates the shared text-agent state on internal', () => {
+    const { result } = renderHook(() => useThread({} as never, {}));
+
+    expect(result.current.internal.textAgentState).toBe('idle');
+    act(() => result.current.internal.setTextAgentState('thinking'));
+    expect(result.current.internal.textAgentState).toBe('thinking');
+    act(() => result.current.internal.setTextAgentState('typing'));
+    expect(result.current.internal.textAgentState).toBe('typing');
+    act(() => result.current.internal.setTextAgentState('idle'));
+    expect(result.current.internal.textAgentState).toBe('idle');
   });
 });
 

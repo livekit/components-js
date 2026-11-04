@@ -5,10 +5,8 @@ import type { ReceivedChatMessage } from '@livekit/components-core';
 
 import { useThreadMessageStore } from './useThreadMessageStore';
 import { useThreadMessages } from './useThreadMessages';
-import { useSessionMessages } from './useSessionMessages';
 import { TEXT_CHAT_ROLE_ATTRIBUTE } from '../text-transport/TextTransport';
 import type { UseThreadReturn } from './useThread';
-import type { UseSessionReturn } from './useSession';
 
 function agentReply(id: string, message: string): ReceivedChatMessage {
   return {
@@ -127,27 +125,5 @@ describe('useThreadMessages', () => {
       releaseEnd();
     });
     await waitFor(() => expect(result.current.thread.internal.textAgentState).toBe('idle'));
-  });
-});
-
-describe('useSessionMessages (deprecated alias)', () => {
-  test('resolves the thread from session.internal.thread and delegates', async () => {
-    const reply = agentReply('agent-2', 'delegated');
-    const tt = makeFakeTextTransport(reply);
-
-    const { result } = renderHook(() => {
-      const thread = useFakeThread(tt);
-      const session = { internal: { thread } } as unknown as UseSessionReturn;
-      return useSessionMessages(session);
-    });
-
-    await act(async () => {
-      await result.current.send('yo');
-    });
-
-    expect(tt.requestMessageStream).toHaveBeenCalledWith('yo');
-    await waitFor(() => {
-      expect(result.current.messages.map((m) => m.id)).toContain('agent-2');
-    });
   });
 });

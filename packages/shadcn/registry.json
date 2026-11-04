@@ -221,6 +221,34 @@
       ]
     },
     {
+      "name": "agent-card",
+      "type": "registry:component",
+      "title": "Agent Card",
+      "description": "A labeled card for something the agent shows in the conversation, with label and value rows, marks, and a total.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["utils"]
+    },
+    {
+      "name": "agent-status-line",
+      "type": "registry:component",
+      "title": "Agent Status Line",
+      "description": "A one-line status card for something the agent did, with a mark, a status, and an optional change from one value to another.",
+      "files": [
+        {
+          "path": "components/agents-ui/agent-status-line.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["utils", "@agents-ui/agent-card"]
+    },
+    {
       "name": "react-shader-toy",
       "type": "registry:component",
       "title": "React Shader Toy",
@@ -387,6 +415,8 @@
         "@agents-ui/start-audio-button",
         "@agents-ui/agent-chat-indicator",
         "@agents-ui/agent-chat-transcript",
+        "@agents-ui/agent-card",
+        "@agents-ui/agent-status-line",
         "@agents-ui/react-shader-toy",
         "@agents-ui/agent-session-view-01",
         "@agents-ui/agent-popup-01"

@@ -17,6 +17,11 @@ time, doubling the work.
 Aura's theme mode, when `themeMode` isn't set, also follows a `dark` theme attribute such as
 `data-theme="dark"` and `color-scheme: dark`, along with the `dark` class.
 
-`ReactShaderToy` takes `paused`, which draws only when its uniforms change.
+Aura and Wave have a fallback for browsers without WebGL, where they used to render nothing. Aura
+shows a still glow and Wave a flat line, in the same color, growing and fading with the agent's
+state.
+
+`ReactShaderToy` takes `paused`, which draws only when its uniforms change, and `onUnsupported`,
+called when WebGL isn't available or the shader fails to compile.
 
 Aura and Wave now list `motion` as a registry dependency, which they already needed.

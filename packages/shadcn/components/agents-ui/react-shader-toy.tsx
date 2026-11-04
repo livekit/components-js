@@ -462,6 +462,12 @@ export interface ReactShaderToyProps {
   onWarning?: (warning: string) => void;
 
   /**
+   * Called when the shader can't run, because the browser has no WebGL or the shader fails to
+   * compile. Nothing is drawn after that, so use it to show something else in its place.
+   */
+  onUnsupported?: () => void;
+
+  /**
    * When true, the animation loop runs even when the canvas is not visible in the viewport.
    * When false (default), animation runs only while visible (uses Intersection Observer),
    * reducing CPU/GPU usage when the shader is off-screen.
@@ -489,6 +495,7 @@ export function ReactShaderToy({
   onDoneLoadingTextures,
   onError = console.error,
   onWarning = console.warn,
+  onUnsupported,
   animateWhenNotVisible = false,
   paused = false,
   ...canvasProps
@@ -650,13 +657,14 @@ export function ReactShaderToy({
     return shader;
   };
 
+  /** Returns whether the program linked, so it can be drawn with */
   const initShaders = (fragmentShader: string, vertexShader: string) => {
     const gl = glRef.current;
-    if (!gl) return;
+    if (!gl) return false;
     const fragmentShaderObj = createShader(gl.FRAGMENT_SHADER, fragmentShader);
     const vertexShaderObj = createShader(gl.VERTEX_SHADER, vertexShader);
     shaderProgramRef.current = gl.createProgram();
-    if (!shaderProgramRef.current || !vertexShaderObj || !fragmentShaderObj) return;
+    if (!shaderProgramRef.current || !vertexShaderObj || !fragmentShaderObj) return false;
     gl.attachShader(shaderProgramRef.current, vertexShaderObj);
     gl.attachShader(shaderProgramRef.current, fragmentShaderObj);
     gl.linkProgram(shaderProgramRef.current);
@@ -666,7 +674,7 @@ export function ReactShaderToy({
           `Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgramRef.current)}`,
         ),
       );
-      return;
+      return false;
     }
     gl.useProgram(shaderProgramRef.current);
     vertexPositionAttributeRef.current = gl.getAttribLocation(
@@ -674,6 +682,7 @@ export function ReactShaderToy({
       'aVertexPosition',
     );
     gl.enableVertexAttribArray(vertexPositionAttributeRef.current);
+    return true;
   };
 
   const processCustomUniforms = () => {
@@ -969,24 +978,30 @@ export function ReactShaderToy({
     const textures = texturesArrRef.current;
 
     function init() {
+      if (!canvasRef.current) return;
       initWebGL();
       const gl = glRef.current;
-      if (gl && canvasRef.current) {
-        gl.clearColor(...clearColor);
-        gl.clearDepth(1.0);
-        gl.enable(gl.DEPTH_TEST);
-        gl.depthFunc(gl.LEQUAL);
-        gl.viewport(0, 0, canvasRef.current.width, canvasRef.current.height);
-        canvasRef.current.height = canvasRef.current.clientHeight;
-        canvasRef.current.width = canvasRef.current.clientWidth;
-        processCustomUniforms();
-        processTextures();
-        initShaders(preProcessFragment(fs || BASIC_FS), vs || BASIC_VS);
-        initBuffers();
-        requestDraw();
-        addEventListeners();
-        onResize();
+      if (!gl) {
+        onUnsupported?.();
+        return;
       }
+      gl.clearColor(...clearColor);
+      gl.clearDepth(1.0);
+      gl.enable(gl.DEPTH_TEST);
+      gl.depthFunc(gl.LEQUAL);
+      gl.viewport(0, 0, canvasRef.current.width, canvasRef.current.height);
+      canvasRef.current.height = canvasRef.current.clientHeight;
+      canvasRef.current.width = canvasRef.current.clientWidth;
+      processCustomUniforms();
+      processTextures();
+      if (!initShaders(preProcessFragment(fs || BASIC_FS), vs || BASIC_VS)) {
+        onUnsupported?.();
+        return;
+      }
+      initBuffers();
+      requestDraw();
+      addEventListeners();
+      onResize();
     }
 
     initFrameIdRef.current = requestAnimationFrame(init);

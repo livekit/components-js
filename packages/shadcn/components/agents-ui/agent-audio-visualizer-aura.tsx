@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useSyncExternalStore, type ComponentProps } from 'react';
+import React, { useState, useSyncExternalStore, type ComponentProps } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type LocalAudioTrack, type RemoteAudioTrack } from 'livekit-client';
 import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/components-react';
@@ -319,7 +319,25 @@ function AuraShader({
   const themeMode = themeModeProp ?? documentThemeMode;
   const { rgb: rgbColor, probe: colorProbe } = useShaderColor(color, DEFAULT_COLOR);
   const reducedMotion = usePrefersReducedMotion();
+  const [isUnsupported, setIsUnsupported] = useState(false);
   const devicePixelRatio = Math.min(globalThis.devicePixelRatio ?? 1, MAX_SHADER_PIXEL_RATIO);
+
+  if (isUnsupported) {
+    return (
+      <div ref={ref} className={cn('flex items-center justify-center', className)} {...props}>
+        {/* Without WebGL, a still glow that grows and brightens with the same values */}
+        <div
+          data-slot="aura-fallback"
+          className="aspect-square rounded-full"
+          style={{
+            width: `${Math.min(scale * 250, 100)}%`,
+            background: `radial-gradient(closest-side, ${color}, transparent)`,
+            opacity: Math.min(brightness / 1.5, 1),
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div ref={ref} className={className} {...props}>
@@ -329,6 +347,7 @@ function AuraShader({
         </span>
       )}
       <ReactShaderToy
+        onUnsupported={() => setIsUnsupported(true)}
         fs={shaderSource}
         // Still and silent frames look the same, so only redraw when something changes
         paused={reducedMotion}

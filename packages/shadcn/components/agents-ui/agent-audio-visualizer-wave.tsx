@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, type ComponentProps } from 'react';
+import { useMemo, useState, type ComponentProps } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/components-react';
 
@@ -193,6 +193,20 @@ function WaveShader({
 }: WaveShaderProps & ComponentProps<'div'>) {
   const { rgb: rgbColor, probe: colorProbe } = useShaderColor(color, DEFAULT_COLOR);
   const reducedMotion = usePrefersReducedMotion();
+  const [isUnsupported, setIsUnsupported] = useState(false);
+
+  if (isUnsupported) {
+    return (
+      <div ref={ref} className={cn('flex items-center', className)} {...props}>
+        {/* Without WebGL, a flat line at the same width and opacity */}
+        <div
+          data-slot="wave-fallback"
+          className="w-full"
+          style={{ height: lineWidth, backgroundColor: color, opacity: mix }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div ref={ref} className={className} {...props}>
@@ -202,6 +216,7 @@ function WaveShader({
         </span>
       )}
       <ReactShaderToy
+        onUnsupported={() => setIsUnsupported(true)}
         fs={shaderSource}
         // Still and silent frames look the same, so only redraw when something changes
         paused={reducedMotion}

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import { AgentAudioVisualizerWave } from '@/components/agents-ui/agent-audio-visualizer-wave';
 import { useAgentAudioVisualizerWave } from '@/hooks/agents-ui/use-agent-audio-visualizer-wave';
 
@@ -77,5 +77,19 @@ describe('AgentAudioVisualizerWave', () => {
     expect(useAgentAudioVisualizerWave).toHaveBeenCalledWith(
       expect.objectContaining({ volume: 0.6 }),
     );
+  });
+
+  it('shows a flat line in the wave color without WebGL', () => {
+    const { container } = render(
+      <AgentAudioVisualizerWave color="#123456" lineWidth={3} data-testid="wave-viz" />,
+    );
+    const { onUnsupported } = mockReactShaderToy.mock.calls.at(-1)?.[0] as {
+      onUnsupported: () => void;
+    };
+    act(() => onUnsupported());
+
+    expect(screen.queryByTestId('shader-toy')).not.toBeInTheDocument();
+    const line = container.querySelector('[data-slot="wave-fallback"]');
+    expect(line).toHaveStyle({ height: '3px', backgroundColor: '#123456', opacity: '1' });
   });
 });

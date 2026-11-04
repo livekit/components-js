@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { act, render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { AgentAudioVisualizerAura } from '@/components/agents-ui/agent-audio-visualizer-aura';
 import { useAgentAudioVisualizerAura } from '@/hooks/agents-ui/use-agent-audio-visualizer-aura';
 
@@ -120,6 +120,29 @@ describe('AgentAudioVisualizerAura', () => {
       document.documentElement.classList.add('dark');
       render(<AgentAudioVisualizerAura themeMode="light" />);
       expect(lastUModeValue()).toBe(1.0);
+    });
+  });
+
+  describe('without WebGL', () => {
+    function reportUnsupported() {
+      const { onUnsupported } = mockReactShaderToy.mock.calls.at(-1)?.[0] as {
+        onUnsupported: () => void;
+      };
+      act(() => onUnsupported());
+    }
+
+    it('shows a still glow in the aura color', () => {
+      const { container } = render(
+        <AgentAudioVisualizerAura color="#123456" state="listening" data-testid="aura-viz" />,
+      );
+      reportUnsupported();
+
+      expect(screen.queryByTestId('shader-toy')).not.toBeInTheDocument();
+      expect(screen.getByTestId('aura-viz')).toHaveAttribute('data-lk-state', 'listening');
+      const glow = container.querySelector('[data-slot="aura-fallback"]');
+      expect(glow?.getAttribute('style')).toContain('rgb(18, 52, 86)');
+      // Scale 0.2 and brightness 0.8 from the mocked hook
+      expect(glow).toHaveStyle({ width: '50%', opacity: String(0.8 / 1.5) });
     });
   });
 });

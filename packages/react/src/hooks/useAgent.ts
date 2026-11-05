@@ -591,6 +591,15 @@ export function useAgent(threadOrSession?: UseThreadReturn | SessionStub): UseAg
   const agentConnectTimeoutMilliseconds = callInternal?.agentConnectTimeoutMilliseconds;
   const agentTimeoutFailureReason = callInternal?.agentTimeoutFailureReason ?? null;
 
+  // `callInternal`'s identity churns: arming the timeout updates the store, whose new callbacks
+  // round-trip back here through the thread's registered call. Reading it through a ref keeps the
+  // timeout effects below off its identity, so they don't re-arm the timeout on every change (which
+  // would be an infinite update loop).
+  const callInternalRef = React.useRef(callInternal);
+  React.useEffect(() => {
+    callInternalRef.current = callInternal;
+  });
+
   const emitter = React.useMemo(() => new EventEmitter() as TypedEventEmitter<AgentCallbacks>, []);
 
   const roomRemoteParticipants = useRemoteParticipants({ room });
@@ -670,8 +679,8 @@ export function useAgent(threadOrSession?: UseThreadReturn | SessionStub): UseAg
       return;
     }
 
-    callInternal?.clearAgentTimeoutFailureReason();
-  }, [agentParticipant, callInternal]);
+    callInternalRef.current?.clearAgentTimeoutFailureReason();
+  }, [agentParticipant]);
 
   // If the agent participant disconnects in the middle of a conversation unexpectedly, mark that as an explicit failure
   const [agentDisconnectedFailureReason, setAgentDisconnectedFailureReason] = React.useState<
@@ -792,26 +801,31 @@ export function useAgent(threadOrSession?: UseThreadReturn | SessionStub): UseAg
 
   React.useEffect(() => {
     emitter.emit(AgentEvent.StateChanged, state);
-    callInternal?.updateAgentTimeoutState(state);
-  }, [emitter, state, callInternal]);
+    callInternalRef.current?.updateAgentTimeoutState(state);
+  }, [emitter, state]);
   React.useEffect(() => {
-    callInternal?.updateAgentTimeoutParticipantExists(agentParticipant !== null);
-  }, [agentParticipant, callInternal]);
+    callInternalRef.current?.updateAgentTimeoutParticipantExists(agentParticipant !== null);
+  }, [agentParticipant]);
 
   // When the attached call's room begins connecting, start the agent timeout. Without a call there is
-  // nothing to time out.
+  // nothing to time out. Keyed on the connection state (via isHostDisconnected), NOT on callInternal's
+  // identity — see the callInternalRef note above.
   const isHostDisconnected =
     !activeCall || activeCall.connectionState === ConnectionState.Disconnected;
   React.useEffect(() => {
-    if (isHostDisconnected || !callInternal) {
+    if (isHostDisconnected) {
+      return;
+    }
+    const callInternalNow = callInternalRef.current;
+    if (!callInternalNow) {
       return;
     }
 
-    callInternal.startAgentTimeout(agentConnectTimeoutMilliseconds);
+    callInternalNow.startAgentTimeout(agentConnectTimeoutMilliseconds);
     return () => {
-      callInternal.clearAgentTimeout();
+      callInternalNow.clearAgentTimeout();
     };
-  }, [isHostDisconnected, agentConnectTimeoutMilliseconds, callInternal]);
+  }, [isHostDisconnected, agentConnectTimeoutMilliseconds]);
 
   const {
     identity: agentParticipantIdentity,

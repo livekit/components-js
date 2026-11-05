@@ -74,8 +74,8 @@ export type ThreadTextAgentState = 'idle' | 'thinking' | 'typing';
 export type ThreadStatus = 'idle' | 'loadingHistory' | 'ready';
 
 type ThreadStateCommon = {
-  /** The active conversation/thread id (A2A `contextId`), or undefined before one is established. */
-  threadId: string | undefined;
+  /** The active conversation/thread id (A2A `contextId`), or null before one is established. */
+  threadId: string | null;
 
   /** The text transport this thread sends and receives chat over. */
   textTransport: TextTransport;
@@ -271,8 +271,10 @@ export function useThread(
 ): UseThreadReturn {
   const { textBaseUrl, threadId: userProvidedThreadId } = options;
 
-  const [threadId, setThreadId] = React.useState(userProvidedThreadId);
-  React.useEffect(() => setThreadId(userProvidedThreadId), [userProvidedThreadId]);
+  // The thread id is null until one is established (either provided here or assigned by the transport
+  // on the first message). The public surface exposes `string | null`.
+  const [threadId, setThreadId] = React.useState<string | null>(userProvidedThreadId ?? null);
+  React.useEffect(() => setThreadId(userProvidedThreadId ?? null), [userProvidedThreadId]);
 
   // The shared, mode-independent message store.
   const messageStore = useThreadMessageStore();
@@ -318,7 +320,7 @@ export function useThread(
   // Carry the thread id in the agent dispatch metadata so an attached call's agent is dispatched
   // against this thread (the room token is fetched through the same credential).
   const tokenFetchOptions =
-    typeof threadId === 'undefined'
+    threadId === null
       ? unstableRestOptions
       : {
           ...unstableRestOptions,
@@ -330,7 +332,12 @@ export function useThread(
   const tokenSourceFetch = useThreadTokenSourceFetch(tokenSource, tokenFetchOptions);
 
   const textTransport = React.useMemo(
-    () => new TextTransport({ baseUrl: textBaseUrl, getCredentials: tokenSourceFetch, threadId }),
+    () =>
+      new TextTransport({
+        baseUrl: textBaseUrl,
+        getCredentials: tokenSourceFetch,
+        threadId: threadId ?? undefined,
+      }),
     [textBaseUrl, tokenSourceFetch, threadId],
   );
 
@@ -349,13 +356,11 @@ export function useThread(
   // Seed the transcript from the active thread's existing messages. When a threadId is provided we
   // fetch its full history (paginated to the start) and upsert it into the shared store; a thread with
   // no threadId starts empty. Switching threadId drops the previous thread's transcript first.
-  const lastFetchedThreadIdRef = React.useRef(threadId);
+  const lastFetchedThreadIdRef = React.useRef<string | null>(threadId);
   const messagesEmpty = messageStore.messages.length === 0;
   React.useEffect(() => {
     const threadAddedToExistingSession =
-      !messagesEmpty &&
-      typeof lastFetchedThreadIdRef.current === 'undefined' &&
-      typeof threadId !== 'undefined';
+      !messagesEmpty && lastFetchedThreadIdRef.current === null && threadId !== null;
     if (threadAddedToExistingSession) {
       setStatus('ready');
       return;
@@ -363,8 +368,7 @@ export function useThread(
 
     const controller = new AbortController();
 
-    const threadChanged =
-      typeof threadId !== 'undefined' && lastFetchedThreadIdRef.current !== threadId;
+    const threadChanged = threadId !== null && lastFetchedThreadIdRef.current !== threadId;
     if (threadChanged) {
       messageStore.clear();
       lastFetchedThreadIdRef.current = threadId;
@@ -391,10 +395,10 @@ export function useThread(
       };
     }
 
-    const threadIdDropped = typeof threadId === 'undefined';
+    const threadIdDropped = threadId === null;
     if (threadIdDropped) {
       messageStore.clear();
-      lastFetchedThreadIdRef.current = undefined;
+      lastFetchedThreadIdRef.current = null;
     }
     setStatus('ready');
     return;

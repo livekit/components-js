@@ -1,5 +1,4 @@
 import * as React from 'react';
-import type TypedEventEmitter from 'typed-emitter';
 import {
   Room,
   ConnectionState,
@@ -10,15 +9,16 @@ import {
   type BaseE2EEManager,
 } from 'livekit-client';
 
-import { TrackReference } from '@livekit/components-core';
-import { AgentState } from './useAgent';
 import { useThread, isUseThreadReturn, type UseThreadReturn } from './useThread';
 import { useEnsureThread } from '../context/thread-context';
 import {
   useSessionCall,
-  type SessionCallbacks,
-  type SessionConnectOptions,
   type SessionCallOptions,
+  type SessionCallStateCommon,
+  type SessionCallStateConnecting,
+  type SessionCallStateConnected,
+  type SessionCallStateDisconnected,
+  type SessionCallActions,
 } from './useSessionCall';
 import { type TextTransportBaseUrl } from '../text-transport/TextTransport';
 
@@ -41,87 +41,37 @@ export type SwitchActiveDeviceOptions = {
   exact?: boolean;
 };
 
-type SessionStateCommon = {
-  room: Room;
-  internal: {
-    emitter: TypedEventEmitter<SessionCallbacks>;
-    tokenSource: TokenSourceConfigurable | TokenSourceFixed;
-    agentConnectTimeoutMilliseconds?: number;
+// The session-only additions to the call layer's `internal`. The call fields (room, connectionState,
+// isConnected, local, emitter, agent-timeout controls) are defined once in `useSessionCall`; a session
+// is that call plus a durable thread, so it only adds the thread back-reference and token source here.
+type SessionInternalExtra = {
+  tokenSource: TokenSourceConfigurable | TokenSourceFixed;
 
-    agentTimeoutFailureReason: string | null;
-    startAgentTimeout: (agentConnectTimeoutMilliseconds?: number) => void;
-    clearAgentTimeout: () => void;
-    clearAgentTimeoutFailureReason: () => void;
-    updateAgentTimeoutState: (agentState: AgentState) => void;
-    updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => void;
-
-    /**
-     * Back-reference to the durable thread this session composes (created internally in the legacy
-     * form, or the thread the session is attached to). Used by `SessionProvider` and
-     * `useSessionMessages` to resolve the thread. Not part of the stable public surface.
-     * @internal
-     */
-    thread: UseThreadReturn;
-  };
+  /**
+   * Back-reference to the durable thread this session composes (created internally in the legacy
+   * form, or the thread the session is attached to). Used by `SessionProvider` and
+   * `useSessionMessages` to resolve the thread. Not part of the stable public surface.
+   * @internal
+   */
+  thread: UseThreadReturn;
 };
 
-type SessionStateConnecting = SessionStateCommon & {
-  connectionState: ConnectionState.Connecting;
-  isConnected: false;
-
-  local: {
-    cameraTrack: undefined;
-    microphoneTrack: undefined;
-    screenShareTrack: undefined;
-  };
+// A call state type with the session-only `internal` fields folded in, so the call types in
+// `useSessionCall` remain the single source of truth for the shared call fields.
+type WithSessionInternal<T extends SessionCallStateCommon> = Omit<T, 'internal'> & {
+  internal: T['internal'] & SessionInternalExtra;
 };
 
-type SessionStateConnected = SessionStateCommon & {
-  connectionState:
-    ConnectionState.Connected | ConnectionState.Reconnecting | ConnectionState.SignalReconnecting;
-  isConnected: true;
-
-  local: {
-    cameraTrack?: TrackReference;
-    microphoneTrack?: TrackReference;
-    screenShareTrack?: TrackReference;
-  };
-};
-
-type SessionStateDisconnected = SessionStateCommon & {
-  connectionState: ConnectionState.Disconnected;
-  isConnected: false;
-
-  local: {
-    cameraTrack: undefined;
-    microphoneTrack: undefined;
-    screenShareTrack: undefined;
-  };
-};
-
-type SessionActions = {
-  /** Returns a promise that resolves once the room connects. */
-  waitUntilConnected: (signal?: AbortSignal) => Promise<void>;
-  /** Returns a promise that resolves once the room disconnects */
-  waitUntilDisconnected: (signal?: AbortSignal) => Promise<void>;
-
-  prepareConnection: () => Promise<void>;
-
-  /** Connect to the underlying room and dispatch any agents */
-  start: (options?: SessionConnectOptions) => Promise<void>;
-
-  /** Disconnect from the underlying room */
-  end: () => Promise<void>;
-
-  /** Enable or disable E2EE. */
-  setEncryptionEnabled: (enabled: boolean) => Promise<void>;
-};
+type SessionStateCommon = WithSessionInternal<SessionCallStateCommon>;
+type SessionStateConnecting = WithSessionInternal<SessionCallStateConnecting>;
+type SessionStateConnected = WithSessionInternal<SessionCallStateConnected>;
+type SessionStateDisconnected = WithSessionInternal<SessionCallStateDisconnected>;
 
 /** @beta */
 export type UseSessionReturn = (
   SessionStateConnecting | SessionStateConnected | SessionStateDisconnected
 ) &
-  SessionActions;
+  SessionCallActions;
 
 /** @internal */
 export function isUseSessionReturn(value: unknown): value is UseSessionReturn {

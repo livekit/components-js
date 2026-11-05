@@ -75,7 +75,13 @@ export type SessionConnectOptions = {
   roomConnectOptions?: RoomConnectOptions;
 };
 
-type SessionCallStateCommon = {
+/**
+ * The common shape of the call layer (room + the call's `internal`). `useSession` builds its own state
+ * types on top of these (adding the thread-level `internal` fields), so these are the single source of
+ * truth for the call fields.
+ * @internal
+ */
+export type SessionCallStateCommon = {
   room: Room;
   internal: {
     emitter: TypedEventEmitter<SessionCallbacks>;
@@ -90,7 +96,8 @@ type SessionCallStateCommon = {
   };
 };
 
-type SessionCallStateConnecting = SessionCallStateCommon & {
+/** @internal */
+export type SessionCallStateConnecting = SessionCallStateCommon & {
   connectionState: ConnectionState.Connecting;
   isConnected: false;
 
@@ -101,7 +108,8 @@ type SessionCallStateConnecting = SessionCallStateCommon & {
   };
 };
 
-type SessionCallStateConnected = SessionCallStateCommon & {
+/** @internal */
+export type SessionCallStateConnected = SessionCallStateCommon & {
   connectionState:
     | ConnectionState.Connected
     | ConnectionState.Reconnecting
@@ -115,7 +123,8 @@ type SessionCallStateConnected = SessionCallStateCommon & {
   };
 };
 
-type SessionCallStateDisconnected = SessionCallStateCommon & {
+/** @internal */
+export type SessionCallStateDisconnected = SessionCallStateCommon & {
   connectionState: ConnectionState.Disconnected;
   isConnected: false;
 
@@ -126,7 +135,8 @@ type SessionCallStateDisconnected = SessionCallStateCommon & {
   };
 };
 
-type SessionCallActions = {
+/** @internal */
+export type SessionCallActions = {
   /** Returns a promise that resolves once the room connects. */
   waitUntilConnected: (signal?: AbortSignal) => Promise<void>;
   /** Returns a promise that resolves once the room disconnects */

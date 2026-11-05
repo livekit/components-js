@@ -9,7 +9,7 @@ describe('useThread', () => {
     const { result } = renderHook(() => useThread({} as never, {}));
 
     expect(result.current.status).toBe('ready');
-    expect(result.current.threadId).toBeUndefined();
+    expect(result.current.threadId).toBeNull();
     expect(result.current.textTransport).toBeDefined();
     expect(result.current.internal.messageStore).toBeDefined();
     // The thread always exposes a canonical (placeholder) room and an idle text-agent state.

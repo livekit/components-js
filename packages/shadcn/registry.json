@@ -14,7 +14,6 @@
           "type": "registry:component"
         }
       ],
-
       "dependencies": [
         "@livekit/components-react@^2.0.0",
         "class-variance-authority",
@@ -113,7 +112,7 @@
         "class-variance-authority",
         "lucide-react"
       ],
-      "registryDependencies": ["utils"]
+      "registryDependencies": ["utils", "@agents-ui/use-prefers-reduced-motion"]
     },
     {
       "name": "agent-audio-visualizer-radial",
@@ -135,7 +134,7 @@
         "@livekit/components-react@^2.0.0",
         "class-variance-authority"
       ],
-      "registryDependencies": ["utils"]
+      "registryDependencies": ["utils", "@agents-ui/use-prefers-reduced-motion"]
     },
     {
       "name": "agent-audio-visualizer-grid",
@@ -157,7 +156,7 @@
         "@livekit/components-react@^2.0.0",
         "class-variance-authority"
       ],
-      "registryDependencies": ["utils"]
+      "registryDependencies": ["utils", "@agents-ui/use-prefers-reduced-motion"]
     },
     {
       "name": "agent-session-provider",
@@ -233,6 +232,18 @@
       ]
     },
     {
+      "name": "use-prefers-reduced-motion",
+      "type": "registry:hook",
+      "title": "Use Prefers Reduced Motion",
+      "description": "A hook that tracks whether the user asked the system to reduce motion.",
+      "files": [
+        {
+          "path": "hooks/agents-ui/use-prefers-reduced-motion.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
       "name": "agent-audio-visualizer-wave",
       "type": "registry:component",
       "title": "Agent Audio Visualizer Wave",
@@ -250,9 +261,14 @@
       "dependencies": [
         "livekit-client@^2.0.0",
         "@livekit/components-react@^2.0.0",
-        "class-variance-authority"
+        "class-variance-authority",
+        "motion"
       ],
-      "registryDependencies": ["utils", "@agents-ui/react-shader-toy"]
+      "registryDependencies": [
+        "utils",
+        "@agents-ui/react-shader-toy",
+        "@agents-ui/use-prefers-reduced-motion"
+      ]
     },
     {
       "name": "agent-audio-visualizer-aura",
@@ -272,9 +288,14 @@
       "dependencies": [
         "livekit-client@^2.0.0",
         "@livekit/components-react@^2.0.0",
-        "class-variance-authority"
+        "class-variance-authority",
+        "motion"
       ],
-      "registryDependencies": ["utils", "@agents-ui/react-shader-toy"]
+      "registryDependencies": [
+        "utils",
+        "@agents-ui/react-shader-toy",
+        "@agents-ui/use-prefers-reduced-motion"
+      ]
     },
     {
       "name": "nextjs-api-token-route",

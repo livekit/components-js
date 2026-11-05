@@ -13,6 +13,7 @@ import {
   useTrackVolume,
 } from '@livekit/components-react';
 import { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
+import { usePrefersReducedMotion } from '@/hooks/agents-ui/use-prefers-reduced-motion';
 
 const DEFAULT_SPEED = 5;
 const DEFAULT_AMPLITUDE = 0.025;
@@ -56,46 +57,48 @@ export function useAgentAudioVisualizerWave({
     smoothingTimeConstant: 0.55,
   });
   const volume = volumeProp ?? trackVolume;
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
+    // With reduced motion, the wave holds still between states: no scrolling, no pulsing, and each
+    // state's look applies at once. It still follows the agent's voice while speaking.
+    const transition = reducedMotion ? { duration: 0 } : DEFAULT_TRANSITION;
+    const pulse = (duration: number) =>
+      reducedMotion
+        ? animateOpacity(0.65, transition)
+        : animateOpacity([1.0, 0.3], { duration, repeat: Infinity, repeatType: 'mirror' });
+    const scroll = (value: number) => setSpeed(reducedMotion ? 0 : value);
+
     switch (state) {
       case 'disconnected':
-        setSpeed(DEFAULT_SPEED);
-        animateAmplitude(0, DEFAULT_TRANSITION);
-        animateFrequency(0, DEFAULT_TRANSITION);
-        animateOpacity(1.0, DEFAULT_TRANSITION);
+        scroll(DEFAULT_SPEED);
+        animateAmplitude(0, transition);
+        animateFrequency(0, transition);
+        animateOpacity(1.0, transition);
         return;
       case 'listening':
-        setSpeed(DEFAULT_SPEED);
-        animateAmplitude(DEFAULT_AMPLITUDE, DEFAULT_TRANSITION);
-        animateFrequency(DEFAULT_FREQUENCY, DEFAULT_TRANSITION);
-        animateOpacity([1.0, 0.3], {
-          duration: 0.75,
-          repeat: Infinity,
-          repeatType: 'mirror',
-        });
+        scroll(DEFAULT_SPEED);
+        animateAmplitude(DEFAULT_AMPLITUDE, transition);
+        animateFrequency(DEFAULT_FREQUENCY, transition);
+        pulse(0.75);
         return;
       case 'thinking':
       case 'connecting':
       case 'initializing':
-        setSpeed(DEFAULT_SPEED * 4);
-        animateAmplitude(DEFAULT_AMPLITUDE / 4, DEFAULT_TRANSITION);
-        animateFrequency(DEFAULT_FREQUENCY * 4, DEFAULT_TRANSITION);
-        animateOpacity([1.0, 0.3], {
-          duration: 0.4,
-          repeat: Infinity,
-          repeatType: 'mirror',
-        });
+        scroll(DEFAULT_SPEED * 4);
+        animateAmplitude(DEFAULT_AMPLITUDE / 4, transition);
+        animateFrequency(DEFAULT_FREQUENCY * 4, transition);
+        pulse(0.4);
         return;
       case 'speaking':
       default:
-        setSpeed(DEFAULT_SPEED * 2);
-        animateAmplitude(DEFAULT_AMPLITUDE, DEFAULT_TRANSITION);
-        animateFrequency(DEFAULT_FREQUENCY, DEFAULT_TRANSITION);
-        animateOpacity(1.0, DEFAULT_TRANSITION);
+        scroll(DEFAULT_SPEED * 2);
+        animateAmplitude(DEFAULT_AMPLITUDE, transition);
+        animateFrequency(DEFAULT_FREQUENCY, transition);
+        animateOpacity(1.0, transition);
         return;
     }
-  }, [state, setSpeed, animateAmplitude, animateFrequency, animateOpacity]);
+  }, [state, reducedMotion, setSpeed, animateAmplitude, animateFrequency, animateOpacity]);
 
   useEffect(() => {
     if (state === 'speaking') {

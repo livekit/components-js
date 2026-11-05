@@ -378,6 +378,21 @@ const insertStringAtIndex = (currentString: string, string: string, index: numbe
 
 type Uniform = { type: string; value: number[] | number };
 type Uniforms = Record<string, Uniform>;
+
+function haveSameUniformValues(a: Uniforms | undefined, b: Uniforms | undefined) {
+  if (a === b) return true;
+  if (!a || !b) return false;
+  const names = Object.keys(b);
+  if (Object.keys(a).length !== names.length) return false;
+  return names.every((name) => {
+    const valueA = a[name]?.value;
+    const valueB = b[name]?.value;
+    if (Array.isArray(valueA) && Array.isArray(valueB)) {
+      return valueA.length === valueB.length && valueA.every((value, idx) => value === valueB[idx]);
+    }
+    return a[name]?.type === b[name]?.type && valueA === valueB;
+  });
+}
 type TextureParams = {
   url: string;
   wrapS?: number;
@@ -462,11 +477,23 @@ export interface ReactShaderToyProps {
   onWarning?: (warning: string) => void;
 
   /**
+   * Called when the shader can't run, because the browser has no WebGL or the shader fails to
+   * compile. Nothing is drawn after that, so use it to show something else in its place.
+   */
+  onUnsupported?: () => void;
+
+  /**
    * When true, the animation loop runs even when the canvas is not visible in the viewport.
    * When false (default), animation runs only while visible (uses Intersection Observer),
    * reducing CPU/GPU usage when the shader is off-screen.
    */
   animateWhenNotVisible?: boolean;
+
+  /**
+   * When true, the shader stops redrawing every frame and draws only when its uniforms change, such
+   * as for reduced motion. Time-based uniforms like `iTime` stop advancing in between.
+   */
+  paused?: boolean;
 }
 
 export function ReactShaderToy({
@@ -483,7 +510,9 @@ export function ReactShaderToy({
   onDoneLoadingTextures,
   onError = console.error,
   onWarning = console.warn,
+  onUnsupported,
   animateWhenNotVisible = false,
+  paused = false,
   ...canvasProps
 }: ReactShaderToyProps & ComponentPropsWithoutRef<'canvas'>) {
   // Refs for WebGL state
@@ -496,6 +525,7 @@ export function ReactShaderToy({
   const initFrameIdRef = useRef<number | undefined>(undefined);
   const isVisibleRef = useRef(true);
   const animateWhenNotVisibleRef = useRef(animateWhenNotVisible);
+  const pausedRef = useRef(paused);
   const mousedownRef = useRef(false);
   const canvasPositionRef = useRef<DOMRect | undefined>(undefined);
   const timerRef = useRef(0);
@@ -624,6 +654,8 @@ export function ReactShaderToy({
       const rUniform = gl.getUniformLocation(shaderProgramRef.current, UNIFORM_RESOLUTION);
       gl.uniform2fv(rUniform, [gl.canvas.width, gl.canvas.height]);
     }
+    // Resizing clears the canvas, and while paused no loop draws it again
+    if (pausedRef.current) requestDraw();
   };
 
   const createShader = (type: number, shaderCodeAsText: string) => {
@@ -642,13 +674,14 @@ export function ReactShaderToy({
     return shader;
   };
 
+  /** Returns whether the program linked, so it can be drawn with */
   const initShaders = (fragmentShader: string, vertexShader: string) => {
     const gl = glRef.current;
-    if (!gl) return;
+    if (!gl) return false;
     const fragmentShaderObj = createShader(gl.FRAGMENT_SHADER, fragmentShader);
     const vertexShaderObj = createShader(gl.VERTEX_SHADER, vertexShader);
     shaderProgramRef.current = gl.createProgram();
-    if (!shaderProgramRef.current || !vertexShaderObj || !fragmentShaderObj) return;
+    if (!shaderProgramRef.current || !vertexShaderObj || !fragmentShaderObj) return false;
     gl.attachShader(shaderProgramRef.current, vertexShaderObj);
     gl.attachShader(shaderProgramRef.current, fragmentShaderObj);
     gl.linkProgram(shaderProgramRef.current);
@@ -658,7 +691,7 @@ export function ReactShaderToy({
           `Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgramRef.current)}`,
         ),
       );
-      return;
+      return false;
     }
     gl.useProgram(shaderProgramRef.current);
     vertexPositionAttributeRef.current = gl.getAttribLocation(
@@ -666,6 +699,7 @@ export function ReactShaderToy({
       'aVertexPosition',
     );
     gl.enableVertexAttribArray(vertexPositionAttributeRef.current);
+    return true;
   };
 
   const processCustomUniforms = () => {
@@ -756,7 +790,9 @@ export function ReactShaderToy({
   const setUniforms = (timestamp: number) => {
     const gl = glRef.current;
     if (!gl || !shaderProgramRef.current) return;
-    const delta = lastTimeRef.current ? (timestamp - lastTimeRef.current) / 1000 : 0;
+    // Time stands still while paused, so the shader picks up where it left off
+    const delta =
+      lastTimeRef.current && !pausedRef.current ? (timestamp - lastTimeRef.current) / 1000 : 0;
     lastTimeRef.current = timestamp;
     const propUniforms = propsUniformsRef.current;
     if (propUniforms) {
@@ -857,9 +893,16 @@ export function ReactShaderToy({
       mouseValue[0] = lerpVal(currentX, lastMouseArrRef.current[0] ?? 0, lerp);
       mouseValue[1] = lerpVal(currentY, lastMouseArrRef.current[1] ?? 0, lerp);
     }
-    if (animateWhenNotVisibleRef.current || isVisibleRef.current) {
+    if (!pausedRef.current && (animateWhenNotVisibleRef.current || isVisibleRef.current)) {
       animFrameIdRef.current = requestAnimationFrame(drawScene);
     }
+  };
+
+  /** Draws one frame on the next animation frame, replacing any frame already scheduled. */
+  const requestDraw = () => {
+    if (!glRef.current) return;
+    cancelAnimationFrame(animFrameIdRef.current ?? 0);
+    animFrameIdRef.current = requestAnimationFrame(drawScene);
   };
 
   const addEventListeners = () => {
@@ -904,8 +947,30 @@ export function ReactShaderToy({
   };
 
   useEffect(() => {
+    const previous = propsUniformsRef.current;
     propsUniformsRef.current = propUniforms;
+    // While paused, a change to the uniforms is the only reason to draw. Uniforms usually arrive as
+    // a new object on every render, so compare their values. Off screen, coming into view draws.
+    if (
+      pausedRef.current &&
+      (animateWhenNotVisibleRef.current || isVisibleRef.current) &&
+      !haveSameUniformValues(previous, propUniforms)
+    ) {
+      requestDraw();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propUniforms]);
+
+  useEffect(() => {
+    pausedRef.current = paused;
+    // Resuming restarts the loop without counting the paused time; pausing lets it stop after the
+    // current frame
+    if (!paused) {
+      lastTimeRef.current = 0;
+      requestDraw();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused]);
 
   useEffect(() => {
     animateWhenNotVisibleRef.current = animateWhenNotVisible;
@@ -922,9 +987,8 @@ export function ReactShaderToy({
       (entries) => {
         for (const entry of entries) {
           isVisibleRef.current = entry.isIntersecting;
-          if (entry.isIntersecting) {
-            requestAnimationFrame(drawScene);
-          }
+          // Replaces any scheduled frame, so coming into view doesn't start a second loop
+          if (entry.isIntersecting) requestDraw();
         }
       },
       { threshold: 0 },
@@ -939,24 +1003,30 @@ export function ReactShaderToy({
     const textures = texturesArrRef.current;
 
     function init() {
+      if (!canvasRef.current) return;
       initWebGL();
       const gl = glRef.current;
-      if (gl && canvasRef.current) {
-        gl.clearColor(...clearColor);
-        gl.clearDepth(1.0);
-        gl.enable(gl.DEPTH_TEST);
-        gl.depthFunc(gl.LEQUAL);
-        gl.viewport(0, 0, canvasRef.current.width, canvasRef.current.height);
-        canvasRef.current.height = canvasRef.current.clientHeight;
-        canvasRef.current.width = canvasRef.current.clientWidth;
-        processCustomUniforms();
-        processTextures();
-        initShaders(preProcessFragment(fs || BASIC_FS), vs || BASIC_VS);
-        initBuffers();
-        requestAnimationFrame(drawScene);
-        addEventListeners();
-        onResize();
+      if (!gl) {
+        onUnsupported?.();
+        return;
       }
+      gl.clearColor(...clearColor);
+      gl.clearDepth(1.0);
+      gl.enable(gl.DEPTH_TEST);
+      gl.depthFunc(gl.LEQUAL);
+      gl.viewport(0, 0, canvasRef.current.width, canvasRef.current.height);
+      canvasRef.current.height = canvasRef.current.clientHeight;
+      canvasRef.current.width = canvasRef.current.clientWidth;
+      processCustomUniforms();
+      processTextures();
+      if (!initShaders(preProcessFragment(fs || BASIC_FS), vs || BASIC_VS)) {
+        onUnsupported?.();
+        return;
+      }
+      initBuffers();
+      requestDraw();
+      addEventListeners();
+      onResize();
     }
 
     initFrameIdRef.current = requestAnimationFrame(init);

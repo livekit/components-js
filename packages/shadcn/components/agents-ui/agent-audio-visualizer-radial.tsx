@@ -32,7 +32,7 @@ export const AgentAudioVisualizerRadialVariants = cva(
     'has-data-[lk-state=connecting]:**:data-lk-index:duration-300',
     'has-data-[lk-state=initializing]:**:data-lk-index:duration-300',
     'has-data-[lk-state=listening]:**:data-lk-index:duration-300',
-    'has-data-[lk-state=thinking]:animate-spin has-data-[lk-state=thinking]:[animation-duration:5s] has-data-[lk-state=thinking]:**:data-lk-index:bg-current',
+    'has-data-[lk-state=thinking]:motion-safe:animate-spin has-data-[lk-state=thinking]:[animation-duration:5s] has-data-[lk-state=thinking]:**:data-lk-index:bg-current',
   ],
   {
     variants: {
@@ -65,9 +65,10 @@ export interface AgentAudioVisualizerRadialProps {
    */
   state?: AgentState;
   /**
-   * The color of the radial bars in hexidecimal format.
+   * The color of the radial bars. Any CSS color, including theme variables such as
+   * `var(--primary)`. Defaults to the current text color.
    */
-  color?: `#${string}`;
+  color?: string;
   /**
    * The radius (distance from center) for the radial bars.
    * If not provided, defaults based on size.

@@ -1,17 +1,23 @@
 'use client';
 
-import React, { useState, useSyncExternalStore, type ComponentProps } from 'react';
+import React, {
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type ComponentProps,
+} from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type LocalAudioTrack, type RemoteAudioTrack } from 'livekit-client';
 import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/components-react';
 
 import { ReactShaderToy } from '@/components/agents-ui/react-shader-toy';
 import { useAgentAudioVisualizerAura } from '@/hooks/agents-ui/use-agent-audio-visualizer-aura';
-import { subscribeToThemeChanges, useShaderColor } from '@/hooks/agents-ui/use-shader-color';
 import { usePrefersReducedMotion } from '@/hooks/agents-ui/use-prefers-reduced-motion';
 import { cn } from '@/lib/utils';
 
-const DEFAULT_COLOR = '#1FD5F9';
+// #1FD5F9, the default color, which the root's `text-[#1FD5F9]` class sets
+const DEFAULT_RGB = [0x1f / 255, 0xd5 / 255, 0xf9 / 255];
 
 /**
  * Upper bound for the pixel ratio the Aura shader renders at.
@@ -243,8 +249,8 @@ interface AuraShaderProps {
   blur?: number;
 
   /**
-   * Color of the aura. Any CSS color, including theme variables such as `var(--primary)`.
-   * @default '#1FD5F9'
+   * Color of the aura. Any CSS color, including theme variables such as `var(--primary)`. When
+   * omitted, uses the text color set on the component, such as a `text-primary` class.
    */
   color?: string;
 
@@ -269,21 +275,19 @@ interface AuraShaderProps {
    * - 'dark': Optimized for dark backgrounds (default)
    * - 'light': Optimized for light/white backgrounds (inverts colors)
    *
-   * When omitted, follows the page's theme on `<html>`.
+   * When omitted, follows the `dark` class on `<html>`.
    */
   themeMode?: 'dark' | 'light';
 }
 
-const DARK_THEME_ATTRIBUTES = ['data-theme', 'data-mode', 'data-color-scheme', 'data-lk-theme'];
+function subscribeToDocumentTheme(onChange: () => void) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  return () => observer.disconnect();
+}
 
 function getDocumentThemeMode() {
-  const html = document.documentElement;
-  const isDark =
-    html.classList.contains('dark') ||
-    DARK_THEME_ATTRIBUTES.some((attribute) => html.getAttribute(attribute) === 'dark') ||
-    // Theme libraries such as next-themes also set `color-scheme`
-    getComputedStyle(html).colorScheme === 'dark';
-  return isDark ? 'dark' : 'light';
+  return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 }
 
 function getServerThemeMode() {
@@ -291,13 +295,49 @@ function getServerThemeMode() {
 }
 
 /**
- * Follows the page's theme on `<html>`: the `dark` class (the shadcn/ui convention), a `dark` theme
- * attribute such as `data-theme="dark"`, or `color-scheme: dark`. Updates when it changes. The server
- * snapshot is `'light'`.
+ * Follows the `dark` class on `<html>` (the shadcn/ui convention), so Aura updates when the page
+ * theme changes. The server snapshot is `'light'`.
  */
 function useDocumentThemeMode() {
-  // The same theme-change signal the color uses, so the mode and the color update together
-  return useSyncExternalStore(subscribeToThemeChanges, getDocumentThemeMode, getServerThemeMode);
+  return useSyncExternalStore(subscribeToDocumentTheme, getDocumentThemeMode, getServerThemeMode);
+}
+
+const COLOR_PROBE_STYLE = {
+  // Browsers report a color mixed in sRGB as `color(srgb r g b)`, with 0–1 channels, whatever
+  // format the color itself is in
+  color: 'color-mix(in srgb, currentColor 100%, transparent)',
+  // Fires `transitionend` whenever the color changes, such as with the theme
+  transition: 'color 1ms',
+};
+
+/**
+ * Reads the text color from a probe rendered inside the component, as the 0–1 RGB a shader uniform
+ * needs, and reads it again when it changes.
+ */
+function useCurrentColorRgb() {
+  const probeRef = useRef<HTMLSpanElement>(null);
+  const [rgb, setRgb] = useState(DEFAULT_RGB);
+
+  useLayoutEffect(() => {
+    const probe = probeRef.current;
+    if (!probe) return;
+
+    const read = () => {
+      const channels = getComputedStyle(probe)
+        .color.match(/^color\(srgb ([-\d.e]+) ([-\d.e]+) ([-\d.e]+)/)
+        ?.slice(1)
+        // Colors outside sRGB, such as a vivid `oklch()`, have channels outside 0–1
+        .map((channel) => Math.min(Math.max(Number(channel), 0), 1));
+      if (!channels) return;
+      setRgb((prev) => (prev.every((channel, idx) => channel === channels[idx]) ? prev : channels));
+    };
+
+    read();
+    probe.addEventListener('transitionend', read);
+    return () => probe.removeEventListener('transitionend', read);
+  }, []);
+
+  return { probeRef, rgb };
 }
 
 function AuraShader({
@@ -307,31 +347,39 @@ function AuraShader({
   frequency = 0.5,
   scale = 0.2,
   blur = 1.0,
-  color = DEFAULT_COLOR,
+  color,
   colorShift = 1.0,
   brightness = 1.0,
   themeMode: themeModeProp,
   ref,
   className,
+  style,
   ...props
 }: AuraShaderProps & ComponentProps<'div'>) {
   const documentThemeMode = useDocumentThemeMode();
   const themeMode = themeModeProp ?? documentThemeMode;
-  const { rgb: rgbColor, probe: colorProbe } = useShaderColor(color, DEFAULT_COLOR);
+  const { probeRef, rgb: rgbColor } = useCurrentColorRgb();
   const reducedMotion = usePrefersReducedMotion();
   const [isUnsupported, setIsUnsupported] = useState(false);
   const devicePixelRatio = Math.min(globalThis.devicePixelRatio ?? 1, MAX_SHADER_PIXEL_RATIO);
+  const rootClassName = cn('text-[#1FD5F9]', className);
+  const rootStyle = { ...style, color };
 
   if (isUnsupported) {
     return (
-      <div ref={ref} className={cn('flex items-center justify-center', className)} {...props}>
+      <div
+        ref={ref}
+        className={cn('flex items-center justify-center', rootClassName)}
+        style={rootStyle}
+        {...props}
+      >
         {/* Without WebGL, a still glow that grows and brightens with the same values */}
         <div
           data-slot="aura-fallback"
           className="aspect-square rounded-full"
           style={{
             width: `${Math.min(scale * 250, 100)}%`,
-            background: `radial-gradient(closest-side, ${color}, transparent)`,
+            background: 'radial-gradient(closest-side, currentColor, transparent)',
             opacity: Math.min(brightness / 1.5, 1),
           }}
         />
@@ -340,12 +388,8 @@ function AuraShader({
   }
 
   return (
-    <div ref={ref} className={className} {...props}>
-      {colorProbe && (
-        <span hidden style={colorProbe.parentStyle}>
-          <span ref={colorProbe.ref} style={colorProbe.style} />
-        </span>
-      )}
+    <div ref={ref} className={rootClassName} style={rootStyle} {...props}>
+      <span ref={probeRef} aria-hidden="true" className="absolute" style={COLOR_PROBE_STYLE} />
       <ReactShaderToy
         onUnsupported={() => setIsUnsupported(true)}
         fs={shaderSource}
@@ -424,7 +468,8 @@ export interface AgentAudioVisualizerAuraProps {
   state?: AgentState;
   /**
    * The color of the aura. Any CSS color, including theme variables such as `var(--primary)`,
-   * which follow the page's light and dark mode.
+   * which follow the page's light and dark mode. You can also set it with a text color class, such
+   * as `text-primary`. Alpha is ignored; set `opacity` on the visualizer instead.
    * @defaultValue '#1FD5F9'
    */
   color?: string;
@@ -434,9 +479,8 @@ export interface AgentAudioVisualizerAuraProps {
    */
   colorShift?: number;
   /**
-   * The theme mode of the aura. When omitted, follows the page's theme on `<html>` (a `dark`
-   * class, a `dark` theme attribute such as `data-theme="dark"`, or `color-scheme: dark`) and
-   * updates when it changes. Pass it explicitly if your app marks dark mode another way.
+   * The theme mode of the aura. When omitted, follows the `dark` class on `<html>` and updates
+   * when it changes. Pass it explicitly if your app marks dark mode another way.
    */
   themeMode?: 'dark' | 'light';
   /**
@@ -468,7 +512,7 @@ export interface AgentAudioVisualizerAuraProps {
 export function AgentAudioVisualizerAura({
   size = 'lg',
   state = 'connecting',
-  color = DEFAULT_COLOR,
+  color,
   colorShift = 0.05,
   audioTrack,
   volume,

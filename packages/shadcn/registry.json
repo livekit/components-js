@@ -244,18 +244,6 @@
       ]
     },
     {
-      "name": "use-shader-color",
-      "type": "registry:hook",
-      "title": "Use Shader Color",
-      "description": "A hook that resolves any CSS color, including theme variables, to RGB for a shader.",
-      "files": [
-        {
-          "path": "hooks/agents-ui/use-shader-color.ts",
-          "type": "registry:hook"
-        }
-      ]
-    },
-    {
       "name": "agent-audio-visualizer-wave",
       "type": "registry:component",
       "title": "Agent Audio Visualizer Wave",
@@ -279,8 +267,7 @@
       "registryDependencies": [
         "utils",
         "@agents-ui/react-shader-toy",
-        "@agents-ui/use-prefers-reduced-motion",
-        "@agents-ui/use-shader-color"
+        "@agents-ui/use-prefers-reduced-motion"
       ]
     },
     {
@@ -307,8 +294,7 @@
       "registryDependencies": [
         "utils",
         "@agents-ui/react-shader-toy",
-        "@agents-ui/use-prefers-reduced-motion",
-        "@agents-ui/use-shader-color"
+        "@agents-ui/use-prefers-reduced-motion"
       ]
     },
     {

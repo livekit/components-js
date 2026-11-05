@@ -34,7 +34,7 @@ export type ThreadTokenSourceFetch = (force?: boolean) => Promise<TokenSourceRes
  * The minimal surface `useAgent` needs to derive agent state from an attached call: the call's
  * connection state and the agent-connect-timeout controls. The call's `Room` is NOT part of this —
  * the thread owns the single canonical `Room` (`internal.room`), which an attached call registers via
- * `registerCall`. A `useCall` return and the composite `useSession` return both drive this; a
+ * `registerCall`. A `useSessionCall` return and the composite `useSession` return both drive this; a
  * `useThread` exposes its active call (if any) on `internal.activeCall`, so `useAgent(thread)` can
  * resolve one.
  * @beta
@@ -94,11 +94,11 @@ type ThreadStateCommon = {
      * run its room-derived hooks even for a call-less, text-only thread.
      */
     room: Room;
-    /** The call currently attached to this thread (registered by `useCall`), or null. */
+    /** The call currently attached to this thread (registered by `useSessionCall`), or null. */
     activeCall: ActiveCall | null;
     /**
      * Register (or clear, with null) the call attached to this thread, together with its room (which
-     * becomes `internal.room` while attached). Used by `useCall`.
+     * becomes `internal.room` while attached). Used by `useSessionCall`.
      */
     registerCall: (call: ActiveCall | null, room?: Room | null) => void;
     /** The shared text-mode response lifecycle, driven by `useThreadMessages().send()`. */
@@ -247,7 +247,7 @@ function withThreadIdMetadata(agentMetadata: string | undefined, threadId: strin
 
 /**
  * A Thread is a durable conversation with an agent (one A2A `contextId` / `AT_…` thread). It owns the
- * text transport, the shared message store, the thread id, and the thread's history; a voice `useCall`
+ * text transport, the shared message store, the thread id, and the thread's history; a voice `useSession`
  * attaches to it for a live room. `useSession` composes a thread and a call together.
  * @beta
  */
@@ -257,7 +257,7 @@ export function useThread(
 ): UseThreadReturn;
 /**
  * A Thread is a durable conversation with an agent (one A2A `contextId` / `AT_…` thread). It owns the
- * text transport, the shared message store, the thread id, and the thread's history; a voice `useCall`
+ * text transport, the shared message store, the thread id, and the thread's history; a voice `useSession`
  * attaches to it for a live room. `useSession` composes a thread and a call together.
  * @beta
  */
@@ -293,7 +293,7 @@ export function useThread(
     };
   }, [placeholderRoom]);
 
-  // The call attached to this thread, registered by `useCall`, so `useAgent(thread)` can resolve it.
+  // The call attached to this thread, registered by `useSessionCall`, so `useAgent(thread)` can resolve it.
   // A thread with no active call drives no voice agent state (that is a call/room concern).
   const [activeCall, setActiveCall] = React.useState<ActiveCall | null>(null);
   const [callRoom, setCallRoom] = React.useState<Room | null>(null);

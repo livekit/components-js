@@ -16,21 +16,20 @@ import {
 import { EventEmitter } from 'events';
 import {
   TrackReference,
-  TextStreamData,
-  ReceivedUserTranscriptionMessage,
-  ReceivedAgentTranscriptionMessage,
+  // TextStreamData,
+  // ReceivedUserTranscriptionMessage,
+  // ReceivedAgentTranscriptionMessage,
   log,
 } from '@livekit/components-core';
 
 import { useMaybeRoomContext } from '../context';
-import { useEnsureThread } from '../context/thread-context';
 import { useAgent, useAgentTimeoutIdStore, type AgentState } from './useAgent';
 import { useLocalParticipant } from './useLocalParticipant';
-import { useTranscriptions } from './useTranscriptions';
-import { isUseThreadReturn, type ActiveCall, type UseThreadReturn } from './useThread';
+// import { useTranscriptions } from './useTranscriptions';
+import { type ActiveCall, type UseThreadReturn } from './useThread';
 
 /** @beta */
-export enum CallEvent {
+export enum SessionEvent {
   ConnectionStateChanged = 'connectionStateChanged',
   /**
    * Emits when an error is encountered while attempting to create a track.
@@ -46,14 +45,14 @@ export enum CallEvent {
 }
 
 /** @beta */
-export type CallCallbacks = {
-  [CallEvent.ConnectionStateChanged]: (newConnectionState: ConnectionState) => void;
-  [CallEvent.MediaDevicesError]: (error: Error) => void;
-  [CallEvent.EncryptionError]: (error: Error) => void;
+export type SessionCallbacks = {
+  [SessionEvent.ConnectionStateChanged]: (newConnectionState: ConnectionState) => void;
+  [SessionEvent.MediaDevicesError]: (error: Error) => void;
+  [SessionEvent.EncryptionError]: (error: Error) => void;
 };
 
 /** @beta */
-export type CallConnectOptions = {
+export type SessionConnectOptions = {
   /** Optional abort signal which if triggered will terminate connecting even if it isn't complete */
   signal?: AbortSignal;
 
@@ -76,10 +75,10 @@ export type CallConnectOptions = {
   roomConnectOptions?: RoomConnectOptions;
 };
 
-type CallStateCommon = {
+type SessionCallStateCommon = {
   room: Room;
   internal: {
-    emitter: TypedEventEmitter<CallCallbacks>;
+    emitter: TypedEventEmitter<SessionCallbacks>;
     agentConnectTimeoutMilliseconds?: number;
 
     agentTimeoutFailureReason: string | null;
@@ -91,7 +90,7 @@ type CallStateCommon = {
   };
 };
 
-type CallStateConnecting = CallStateCommon & {
+type SessionCallStateConnecting = SessionCallStateCommon & {
   connectionState: ConnectionState.Connecting;
   isConnected: false;
 
@@ -102,7 +101,7 @@ type CallStateConnecting = CallStateCommon & {
   };
 };
 
-type CallStateConnected = CallStateCommon & {
+type SessionCallStateConnected = SessionCallStateCommon & {
   connectionState:
     | ConnectionState.Connected
     | ConnectionState.Reconnecting
@@ -116,7 +115,7 @@ type CallStateConnected = CallStateCommon & {
   };
 };
 
-type CallStateDisconnected = CallStateCommon & {
+type SessionCallStateDisconnected = SessionCallStateCommon & {
   connectionState: ConnectionState.Disconnected;
   isConnected: false;
 
@@ -127,7 +126,7 @@ type CallStateDisconnected = CallStateCommon & {
   };
 };
 
-type CallActions = {
+type SessionCallActions = {
   /** Returns a promise that resolves once the room connects. */
   waitUntilConnected: (signal?: AbortSignal) => Promise<void>;
   /** Returns a promise that resolves once the room disconnects */
@@ -136,7 +135,7 @@ type CallActions = {
   prepareConnection: () => Promise<void>;
 
   /** Connect to the underlying room and dispatch any agents */
-  start: (options?: CallConnectOptions) => Promise<void>;
+  start: (options?: SessionConnectOptions) => Promise<void>;
 
   /** Disconnect from the underlying room */
   end: () => Promise<void>;
@@ -145,16 +144,23 @@ type CallActions = {
   setEncryptionEnabled: (enabled: boolean) => Promise<void>;
 };
 
-/** @beta */
-export type UseCallReturn = (CallStateConnecting | CallStateConnected | CallStateDisconnected) &
-  CallActions;
+/**
+ * The call half of a session: a live `Room`, its connection state, local tracks, and the start/end
+ * lifecycle. Assembled (together with the thread's durable surface) into {@link UseSessionReturn}.
+ * @internal
+ */
+export type SessionCallReturn = (
+  SessionCallStateConnecting | SessionCallStateConnected | SessionCallStateDisconnected
+) &
+  SessionCallActions;
 
-type UseCallWithRoomOptions = {
+type SessionCallWithRoomOptions = {
   room: Room;
   encryption?: never;
 };
 
-type UseCallEncryptionOptions =
+/** @beta */
+export type SessionCallEncryptionOptions =
   | {
       /**
        * Accepts a passphrase that's used to create the crypto keys.
@@ -186,16 +192,16 @@ type UseCallEncryptionOptions =
       e2eeManager?: undefined;
     };
 
-type UseCallWithoutRoomOptions = {
+type SessionCallWithoutRoomOptions = {
   // NOTE: This must be here to make typescript go down this discriminated union branch when
   // "room" is omitted.
   room?: never;
 
   /** Configuration for room-level E2EE */
-  encryption?: UseCallEncryptionOptions;
+  encryption?: SessionCallEncryptionOptions;
 };
 
-type UseCallCommonOptions = {
+type SessionCallCommonOptions = {
   /**
    * Amount of time in milliseonds the system will wait for an agent to join the room, before
    * transitioning to the "failure" state.
@@ -203,38 +209,27 @@ type UseCallCommonOptions = {
   agentConnectTimeoutMilliseconds?: number;
 };
 
-/** @beta */
-export type UseCallOptions = UseCallCommonOptions &
-  (UseCallWithRoomOptions | UseCallWithoutRoomOptions);
-
 /**
- * A Call is a live, transient WebRTC connection (a `Room`) attached to a thread, into which the
- * thread's agent is dispatched. It owns the room, the connection state, local tracks, and the
- * start/end lifecycle; the durable conversation (text transport, message store, thread id) lives in
- * the `useThread` it is attached to.
- *
- * The thread is taken from the argument, or from `ThreadContext` when omitted (throwing if neither is
- * present, exactly like `useEnsureThread`).
+ * The call-layer options for {@link useSession} when it is attached to a thread (the room + encryption
+ * + agent-timeout concerns). The durable options (token fetch, text base url, thread id) belong to the
+ * `useThread` the session attaches to.
  * @beta
  */
-export function useCall(options?: UseCallOptions): UseCallReturn;
-/**
- * A Call is a live, transient WebRTC connection (a `Room`) attached to a thread, into which the
- * thread's agent is dispatched. It owns the room, the connection state, local tracks, and the
- * start/end lifecycle; the durable conversation (text transport, message store, thread id) lives in
- * the `useThread` it is attached to.
- * @beta
- */
-export function useCall(thread: UseThreadReturn, options?: UseCallOptions): UseCallReturn;
-export function useCall(
-  threadOrOptions?: UseThreadReturn | UseCallOptions,
-  maybeOptions?: UseCallOptions,
-): UseCallReturn {
-  const explicitThread = isUseThreadReturn(threadOrOptions) ? threadOrOptions : undefined;
-  const options: UseCallOptions =
-    (isUseThreadReturn(threadOrOptions) ? maybeOptions : (threadOrOptions as UseCallOptions)) ?? {};
+export type SessionCallOptions = SessionCallCommonOptions &
+  (SessionCallWithRoomOptions | SessionCallWithoutRoomOptions);
 
-  const thread = useEnsureThread(explicitThread);
+/**
+ * The call machinery behind {@link useSession}: it owns the `Room`, the connection state, local tracks,
+ * and the start/end lifecycle, and registers itself on the given thread (so `useAgent(thread)` can
+ * resolve it). The durable conversation (text transport, message store, thread id) lives on the
+ * `thread` passed in. `useSession` resolves the thread (creating one in the legacy form, or taking an
+ * existing one when attached) and calls this.
+ * @internal
+ */
+export function useSessionCall(
+  thread: UseThreadReturn,
+  options: SessionCallOptions = {},
+): SessionCallReturn {
   const { tokenSourceFetch, registerCall } = thread.internal;
   const threadId = thread.threadId;
 
@@ -295,7 +290,7 @@ export function useCall(
       };
     } else if (unstableEncryption !== undefined) {
       log.warn(
-        'useCall options encryption was set, but neither encryption.key with encryption.worker nor encryption.e2eeManager was provided.',
+        'useSession options encryption was set, but neither encryption.key with encryption.worker nor encryption.e2eeManager was provided.',
       );
     }
     const room = new Room(roomOptions);
@@ -311,7 +306,10 @@ export function useCall(
     };
   }, [room]);
 
-  const emitter = React.useMemo(() => new EventEmitter() as TypedEventEmitter<CallCallbacks>, []);
+  const emitter = React.useMemo(
+    () => new EventEmitter() as TypedEventEmitter<SessionCallbacks>,
+    [],
+  );
 
   const [roomConnectionState, setRoomConnectionState] = React.useState(room.state);
   React.useEffect(() => {
@@ -326,12 +324,12 @@ export function useCall(
   }, [room]);
 
   React.useEffect(() => {
-    emitter.emit(CallEvent.ConnectionStateChanged, roomConnectionState);
+    emitter.emit(SessionEvent.ConnectionStateChanged, roomConnectionState);
   }, [emitter, roomConnectionState]);
 
   React.useEffect(() => {
     const handleMediaDevicesError = async (error: Error) => {
-      emitter.emit(CallEvent.MediaDevicesError, error);
+      emitter.emit(SessionEvent.MediaDevicesError, error);
     };
 
     room.on(RoomEvent.MediaDevicesError, handleMediaDevicesError);
@@ -342,7 +340,7 @@ export function useCall(
 
   React.useEffect(() => {
     const handleEncryptionError = async (error: Error) => {
-      emitter.emit(CallEvent.EncryptionError, error);
+      emitter.emit(SessionEvent.EncryptionError, error);
     };
 
     room.on(RoomEvent.EncryptionError, handleEncryptionError);
@@ -436,7 +434,7 @@ export function useCall(
     };
   }, [registerCall, activeCall, room]);
 
-  const waitUntilConnectionState = useCallWaitUntilConnectionState(emitter, roomConnectionState);
+  const waitUntilConnectionState = useSessionCallWaitUntilConnectionState(emitter, roomConnectionState);
 
   const waitUntilConnected = React.useCallback(
     async (signal?: AbortSignal) => {
@@ -526,7 +524,7 @@ export function useCall(
   const wasCallEndCalledRef = React.useRef(false);
 
   const start = React.useCallback(
-    async (connectOptions: CallConnectOptions = {}) => {
+    async (connectOptions: SessionConnectOptions = {}) => {
       const {
         signal,
         tracks = { microphone: { enabled: true, publishOptions: { preConnectBuffer: true } } },
@@ -641,7 +639,7 @@ export function useCall(
         await room.connect(credentials.serverUrl, credentials.participantToken);
       } catch (err) {
         // FIXME: figure out a better logging solution?
-        console.warn('WARNING: useCall failed to reconnect after a thread id change:', err);
+        console.warn('WARNING: useSessionCall failed to reconnect after a thread id change:', err);
       }
     })();
 
@@ -651,7 +649,7 @@ export function useCall(
   }, [threadId, room, tokenSourceFetch]);
 
   const generateDerivedConnectionStateValues = React.useCallback(
-    <State extends UseCallReturn['connectionState']>(connectionState: State) =>
+    <State extends SessionCallReturn['connectionState']>(connectionState: State) =>
       ({
         isConnected:
           connectionState === ConnectionState.Connected ||
@@ -669,10 +667,10 @@ export function useCall(
   );
 
   const callState = React.useMemo(():
-    | CallStateConnecting
-    | CallStateConnected
-    | CallStateDisconnected => {
-    const common: CallStateCommon = {
+    | SessionCallStateConnecting
+    | SessionCallStateConnected
+    | SessionCallStateDisconnected => {
+    const common: SessionCallStateCommon = {
       room,
       internal: callInternal,
     };
@@ -757,11 +755,11 @@ export function useCall(
   );
 }
 
-/** Internal hook used by useCall to create a function which can be used to wait until the call is in a
- * given connection state before resolving. */
-function useCallWaitUntilConnectionState(
-  emitter: TypedEventEmitter<CallCallbacks>,
-  connectionState: UseCallReturn['connectionState'],
+/** Internal hook used by useSessionCall to create a function which can be used to wait until the call
+ * is in a given connection state before resolving. */
+function useSessionCallWaitUntilConnectionState(
+  emitter: TypedEventEmitter<SessionCallbacks>,
+  connectionState: SessionCallReturn['connectionState'],
 ) {
   const connectionStateRef = React.useRef(connectionState);
   React.useEffect(() => {
@@ -769,13 +767,13 @@ function useCallWaitUntilConnectionState(
   }, [connectionState]);
 
   return React.useCallback(
-    async (state: UseCallReturn['connectionState'], signal?: AbortSignal) => {
+    async (state: SessionCallReturn['connectionState'], signal?: AbortSignal) => {
       if (connectionStateRef.current === state) {
         return;
       }
 
       return new Promise<void>((resolve, reject) => {
-        const onceEventOccurred = (newState: UseCallReturn['connectionState']) => {
+        const onceEventOccurred = (newState: SessionCallReturn['connectionState']) => {
           if (newState !== state) {
             return;
           }
@@ -786,17 +784,17 @@ function useCallWaitUntilConnectionState(
           cleanup();
           reject(
             new Error(
-              `useCall(/* ... */).waitUntilConnectionState(${state}, /* signal */) - signal aborted`,
+              `useSession(/* ... */).waitUntilConnectionState(${state}, /* signal */) - signal aborted`,
             ),
           );
         };
 
         const cleanup = () => {
-          emitter.off(CallEvent.ConnectionStateChanged, onceEventOccurred);
+          emitter.off(SessionEvent.ConnectionStateChanged, onceEventOccurred);
           signal?.removeEventListener('abort', abortHandler);
         };
 
-        emitter.on(CallEvent.ConnectionStateChanged, onceEventOccurred);
+        emitter.on(SessionEvent.ConnectionStateChanged, onceEventOccurred);
         signal?.addEventListener('abort', abortHandler);
       });
     },

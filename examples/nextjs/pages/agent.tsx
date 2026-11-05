@@ -8,12 +8,11 @@ import {
   ThreadProvider,
   RoomContext,
   useThread,
-  useCall,
+  useSession,
   useThreadMessages,
-  CallEvent,
+  SessionEvent,
   useEvents,
   TEXT_CHAT_ROLE_ATTRIBUTE,
-  type UseCallReturn,
   UseThreadReturn,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
@@ -170,8 +169,8 @@ const AgentExample: NextPage = () => {
     agentName: 'dentist',
   });
 
-  // A voice call attached to the thread. Created up front; connected only while "started".
-  const call = useCall(thread, {});
+  // A voice session attached to the thread. Created up front; connected only while "started".
+  const call = useSession(thread);
 
   const [started, setStarted] = useState(false);
   useEffect(() => {
@@ -195,7 +194,7 @@ const AgentExample: NextPage = () => {
 
   useEvents(
     call,
-    CallEvent.MediaDevicesError,
+    SessionEvent.MediaDevicesError,
     (error) => {
       const failure = MediaDeviceFailure.getFailure(error);
       console.error(failure);

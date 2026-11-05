@@ -3,67 +3,34 @@ import type TypedEventEmitter from 'typed-emitter';
 import {
   Room,
   ConnectionState,
-  TrackPublishOptions,
   TokenSourceConfigurable,
   TokenSourceFixed,
   TokenSourceFetchOptions,
-  RoomConnectOptions,
   BaseKeyProvider,
   type BaseE2EEManager,
 } from 'livekit-client';
 
 import { TrackReference } from '@livekit/components-core';
 import { AgentState } from './useAgent';
-import { useThread, type UseThreadReturn } from './useThread';
-import { useCall, type UseCallOptions } from './useCall';
+import { useThread, isUseThreadReturn, type UseThreadReturn } from './useThread';
+import { useEnsureThread } from '../context/thread-context';
+import {
+  useSessionCall,
+  type SessionCallbacks,
+  type SessionConnectOptions,
+  type SessionCallOptions,
+} from './useSessionCall';
 import { type TextTransportBaseUrl } from '../text-transport/TextTransport';
 
-/** @beta */
-export enum SessionEvent {
-  ConnectionStateChanged = 'connectionStateChanged',
-  /**
-   * Emits when an error is encountered while attempting to create a track.
-   * Use MediaDeviceFailure.getFailure(error) to get the reason of failure.
-   * args: (error: Error, kind: MediaDeviceKind)
-   */
-  MediaDevicesError = 'mediaDevicesError',
-  /**
-   * Emits when an error is received while decrypting frame received frame information.
-   * args: (error: Error)
-   */
-  EncryptionError = 'encryptionError',
-}
-
-/** @beta */
-export type SessionCallbacks = {
-  [SessionEvent.ConnectionStateChanged]: (newAgentConnectionState: ConnectionState) => void;
-  [SessionEvent.MediaDevicesError]: (error: Error) => void;
-  [SessionEvent.EncryptionError]: (error: Error) => void;
-};
-
-/** @beta */
-export type SessionConnectOptions = {
-  /** Optional abort signal which if triggered will terminate connecting even if it isn't complete */
-  signal?: AbortSignal;
-
-  tracks?: {
-    microphone?: {
-      enabled?: boolean;
-      publishOptions?: TrackPublishOptions;
-    };
-    camera?: {
-      enabled?: boolean;
-      publishOptions?: TrackPublishOptions;
-    };
-    screenShare?: {
-      enabled?: boolean;
-      publishOptions?: TrackPublishOptions;
-    };
-  };
-
-  /** Options for Room.connect(.., .., opts) */
-  roomConnectOptions?: RoomConnectOptions;
-};
+// The call layer (room, connection, tracks, start/end) now lives in `useSessionCall`; its event and
+// option types are part of the session's public surface, so re-export them from here.
+export { SessionEvent } from './useSessionCall';
+export type {
+  SessionCallbacks,
+  SessionConnectOptions,
+  SessionCallOptions,
+  SessionCallEncryptionOptions,
+} from './useSessionCall';
 
 /** @beta */
 export type SwitchActiveDeviceOptions = {
@@ -89,7 +56,8 @@ type SessionStateCommon = {
     updateAgentTimeoutParticipantExists: (agentParticipantExists: boolean) => void;
 
     /**
-     * Back-reference to the durable thread this session composes. Used by `SessionProvider` and
+     * Back-reference to the durable thread this session composes (created internally in the legacy
+     * form, or the thread the session is attached to). Used by `SessionProvider` and
      * `useSessionMessages` to resolve the thread. Not part of the stable public surface.
      * @internal
      */
@@ -166,32 +134,8 @@ export function isUseSessionReturn(value: unknown): value is UseSessionReturn {
   );
 }
 
-type UseSessionCommonOptions = {
-  /**
-   * Amount of time in milliseonds the system will wait for an agent to join the room, before
-   * transitioning to the "failure" state.
-   */
-  agentConnectTimeoutMilliseconds?: number;
-
-  /**
-   * The A2A interface base URL (or a callback building it from the project id) for the session's
-   * text transport. Text messages sent via useSessionMessages go here, not the data channel.
-   */
-  textBaseUrl?: TextTransportBaseUrl;
-
-  /**
-   * An existing conversation/thread id to resume. Seeds the text transport's thread id; omit to let
-   * the agent create a new thread on the first message.
-   */
-  threadId?: string;
-};
-
-type UseSessionWithRoomOptions = {
-  room: Room;
-  encryption?: never;
-};
-
-type UseSessionEncryptionOptions =
+/** @beta */
+export type UseSessionEncryptionOptions =
   | {
       /**
        * Accepts a passphrase that's used to create the crypto keys.
@@ -223,6 +167,31 @@ type UseSessionEncryptionOptions =
       e2eeManager?: undefined;
     };
 
+type UseSessionCommonOptions = {
+  /**
+   * Amount of time in milliseonds the system will wait for an agent to join the room, before
+   * transitioning to the "failure" state.
+   */
+  agentConnectTimeoutMilliseconds?: number;
+
+  /**
+   * The A2A interface base URL (or a callback building it from the project id) for the session's
+   * text transport. Text messages sent via useSessionMessages go here, not the data channel.
+   */
+  textBaseUrl?: TextTransportBaseUrl;
+
+  /**
+   * An existing conversation/thread id to resume. Seeds the text transport's thread id; omit to let
+   * the agent create a new thread on the first message.
+   */
+  threadId?: string;
+};
+
+type UseSessionWithRoomOptions = {
+  room: Room;
+  encryption?: never;
+};
+
 type UseSessionWithoutRoomOptions = {
   // NOTE: This must be here to make typescript go down this discriminated union branch when
   // "room" is omitted.
@@ -234,18 +203,41 @@ type UseSessionWithoutRoomOptions = {
 
 type UseSessionRoomOptions = UseSessionWithRoomOptions | UseSessionWithoutRoomOptions;
 
-type UseSessionConfigurableOptions = UseSessionCommonOptions &
+/** @beta */
+export type UseSessionConfigurableOptions = UseSessionCommonOptions &
   UseSessionRoomOptions &
   TokenSourceFetchOptions;
-type UseSessionFixedOptions = UseSessionCommonOptions & UseSessionRoomOptions;
+/** @beta */
+export type UseSessionFixedOptions = UseSessionCommonOptions & UseSessionRoomOptions;
 
 /**
- * A Session represents a managed connection to a Room which can contain Agents.
+ * A Session is a live, managed connection to a Room that can contain Agents, bound to a durable thread.
  *
- * It is a thin composite over {@link useThread} (the durable conversation: text transport, message
- * store, thread id and history) and {@link useCall} (the live room: connection state, tracks, and the
- * start/end lifecycle). The thread is exposed on `internal.thread` so `useSessionMessages` and
- * `SessionProvider` can resolve it.
+ * It owns the room, the connection state, local tracks, and the start/end lifecycle (the call layer),
+ * over a {@link useThread} (the durable conversation: text transport, message store, thread id and
+ * history). The thread is exposed on `internal.thread` so `useSessionMessages` and `SessionProvider`
+ * can resolve it.
+ *
+ * It has two forms:
+ *  - **attached** (preferred): pass a `thread` (or render inside a Thread provider and omit it) plus
+ *    call options. The session drives the call over that externally-owned thread, so you can also use
+ *    `useThread`, `useThreadMessages` and `useAgent` against the same thread.
+ *  - **legacy** (`@deprecated`): pass a `tokenSource` plus options; the session creates and owns its
+ *    own thread internally. Migrate by lifting a `useThread(tokenSource, …)` above and passing it in.
+ *
+ * NOTE: a given component must use ONE form consistently — do not switch a call site between the token
+ * source form and the thread/options form across renders (it selects a different internal hook; the
+ * hook throws a clear error if it detects a switch).
+ * @beta
+ */
+export function useSession(
+  thread: UseThreadReturn,
+  options?: SessionCallOptions,
+): UseSessionReturn;
+/**
+ * @deprecated Pass a `useThread(tokenSource, …)` to `useSession` instead of a token source. The legacy
+ * form creates and owns its thread internally; the attached form lets the thread be shared with
+ * `useThread` / `useThreadMessages` / `useAgent`.
  * @beta
  */
 export function useSession(
@@ -253,41 +245,80 @@ export function useSession(
   options?: UseSessionConfigurableOptions,
 ): UseSessionReturn;
 /**
- * A Session represents a managed connection to a Room which can contain Agents.
+ * @deprecated Pass a `useThread(tokenSource, …)` to `useSession` instead of a token source.
  * @beta
  */
 export function useSession(
   tokenSource: TokenSourceFixed,
   options?: UseSessionFixedOptions,
 ): UseSessionReturn;
+/**
+ * A Session attached to the thread from a Thread provider in context.
+ * @beta
+ */
+export function useSession(options?: SessionCallOptions): UseSessionReturn;
 export function useSession(
-  tokenSource: TokenSourceConfigurable | TokenSourceFixed,
-  options: UseSessionConfigurableOptions | UseSessionFixedOptions = {},
+  arg1?: TokenSourceConfigurable | TokenSourceFixed | UseThreadReturn | SessionCallOptions,
+  arg2?: UseSessionConfigurableOptions | UseSessionFixedOptions | SessionCallOptions,
 ): UseSessionReturn {
-  const {
-    agentConnectTimeoutMilliseconds,
-    room,
-    encryption,
-    textBaseUrl,
-    threadId,
-    ...tokenFetchOptions
-  } = options;
+  // The legacy form is detected by a token source as the first argument; everything else is the
+  // attached form (an explicit thread, context thread, or just call options).
+  const isLegacy =
+    arg1 instanceof TokenSourceConfigurable || arg1 instanceof TokenSourceFixed;
 
-  // The durable conversation half. The cast lets the one impl path call the overloaded `useThread`
-  // with a union tokenSource; `useThread` branches on `instanceof TokenSourceConfigurable` at runtime,
-  // so a fixed source is handled correctly regardless.
-  const thread = useThread(tokenSource as TokenSourceConfigurable, {
-    textBaseUrl,
-    threadId,
-    ...tokenFetchOptions,
-  });
+  // The form drives a conditional hook call below, so it must be stable for a component's lifetime.
+  // Capture it on the first render and throw a clear error if a later render switches forms (otherwise
+  // React would surface a cryptic "rendered more/fewer hooks" error).
+  const initialIsLegacyRef = React.useRef(isLegacy);
+  if (initialIsLegacyRef.current !== isLegacy) {
+    throw new Error(
+      'useSession: the argument form must not change between renders. A component must consistently ' +
+        'call useSession with either a token source (legacy) or a thread / options (attached) — not ' +
+        'switch between them.',
+    );
+  }
+
+  // Whether end() should also tear down the thread's text transport: only in the legacy form, where
+  // the session owns the thread. In the attached form the thread is owned by the caller, so end() only
+  // disconnects the call.
+  const sessionOwnsThread = isLegacy;
+
+  let thread: UseThreadReturn;
+  let callOptions: SessionCallOptions;
+  if (isLegacy) {
+    const tokenSource = arg1 as TokenSourceConfigurable | TokenSourceFixed;
+    const {
+      agentConnectTimeoutMilliseconds,
+      room,
+      encryption,
+      textBaseUrl,
+      threadId,
+      ...tokenFetchOptions
+    } = (arg2 ?? {}) as UseSessionConfigurableOptions | UseSessionFixedOptions;
+
+    callOptions = { agentConnectTimeoutMilliseconds, room, encryption } as SessionCallOptions;
+
+    // The cast lets the one impl path call the overloaded `useThread` with a union tokenSource;
+    // `useThread` branches on `instanceof TokenSourceConfigurable` at runtime, so a fixed source is
+    // handled correctly regardless.
+    // Stable branch: see the `initialIsLegacyRef` guard above.
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    thread = useThread(tokenSource as TokenSourceConfigurable, {
+      textBaseUrl,
+      threadId,
+      ...tokenFetchOptions,
+    });
+  } else {
+    const explicitThread = isUseThreadReturn(arg1) ? (arg1 as UseThreadReturn) : undefined;
+    callOptions = ((isUseThreadReturn(arg1) ? arg2 : arg1) as SessionCallOptions | undefined) ?? {};
+
+    // Stable branch: see the `initialIsLegacyRef` guard above.
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    thread = useEnsureThread(explicitThread);
+  }
 
   // The live media/room half, attached to the thread.
-  const call = useCall(thread, {
-    agentConnectTimeoutMilliseconds,
-    room,
-    encryption,
-  } as UseCallOptions);
+  const call = useSessionCall(thread, callOptions);
 
   const sessionInternal = React.useMemo(
     (): SessionStateCommon['internal'] => ({
@@ -349,12 +380,15 @@ export function useSession(
     }
   }, [call, sessionInternal]);
 
-  // The public end: stop the call, then tear down the thread's text transport (matches the former
-  // media-stop + text-transport-disconnect behavior).
+  // The public end: stop the call. In the legacy form (the session owns its thread) also tear down the
+  // thread's text transport, matching the former media-stop + text-transport-disconnect behavior. In
+  // the attached form the thread is owned by the caller, so end() must not touch it.
   const end = React.useCallback(async () => {
     await call.end();
-    await thread.textTransport.disconnect();
-  }, [call.end, thread.textTransport]);
+    if (sessionOwnsThread) {
+      await thread.textTransport.disconnect();
+    }
+  }, [call.end, thread.textTransport, sessionOwnsThread]);
 
   return React.useMemo(
     () => ({

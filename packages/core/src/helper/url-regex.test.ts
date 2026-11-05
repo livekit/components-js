@@ -33,4 +33,12 @@ describe('url-regex', () => {
     // Invalid URLs
     expect(createUrlRegExp({}).test('livekitcom')).toBe(false);
   });
+
+  test('should not backtrack for long on a long word with no url in it', () => {
+    for (const text of ['a'.repeat(3000), 'x:'.repeat(1500)]) {
+      const start = performance.now();
+      expect(text.match(createUrlRegExp({}))).toBeNull();
+      expect(performance.now() - start).toBeLessThan(1000);
+    }
+  });
 });

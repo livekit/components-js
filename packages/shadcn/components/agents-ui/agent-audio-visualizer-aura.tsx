@@ -306,8 +306,6 @@ const COLOR_PROBE_STYLE = {
   // Browsers report a color mixed in sRGB as `color(srgb r g b)`, with 0–1 channels, whatever
   // format the color itself is in
   color: 'color-mix(in srgb, currentColor 100%, transparent)',
-  // Fires `transitionend` whenever the color changes, such as with the theme
-  transition: 'color 1ms',
 };
 
 /**
@@ -322,6 +320,10 @@ function useCurrentColorRgb() {
     const probe = probeRef.current;
     if (!probe) return;
 
+    // Fires `transitionend` whenever the color changes, such as with the theme. Important, so it
+    // outlasts the `transition: none !important` that theme switchers such as next-themes add
+    probe.style.setProperty('transition', 'color 1ms', 'important');
+
     const read = () => {
       const channels = getComputedStyle(probe)
         .color.match(/^color\(srgb ([-\d.e]+) ([-\d.e]+) ([-\d.e]+)/)
@@ -332,9 +334,15 @@ function useCurrentColorRgb() {
       setRgb((prev) => (prev.every((channel, idx) => channel === channels[idx]) ? prev : channels));
     };
 
+    // Keeps the probe's transition from reaching `onTransitionEnd` handlers around the component
+    const onTransitionEnd = (event: TransitionEvent) => {
+      event.stopPropagation();
+      read();
+    };
+
     read();
-    probe.addEventListener('transitionend', read);
-    return () => probe.removeEventListener('transitionend', read);
+    probe.addEventListener('transitionend', onTransitionEnd);
+    return () => probe.removeEventListener('transitionend', onTransitionEnd);
   }, []);
 
   return { probeRef, rgb };
@@ -363,7 +371,7 @@ function AuraShader({
   const [isUnsupported, setIsUnsupported] = useState(false);
   const devicePixelRatio = Math.min(globalThis.devicePixelRatio ?? 1, MAX_SHADER_PIXEL_RATIO);
   const rootClassName = cn('text-[#1FD5F9]', className);
-  const rootStyle = { ...style, color };
+  const rootStyle = color === undefined ? style : { ...style, color };
 
   if (isUnsupported) {
     return (

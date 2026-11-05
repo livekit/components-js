@@ -378,6 +378,21 @@ const insertStringAtIndex = (currentString: string, string: string, index: numbe
 
 type Uniform = { type: string; value: number[] | number };
 type Uniforms = Record<string, Uniform>;
+
+function haveSameUniformValues(a: Uniforms | undefined, b: Uniforms | undefined) {
+  if (a === b) return true;
+  if (!a || !b) return false;
+  const names = Object.keys(b);
+  if (Object.keys(a).length !== names.length) return false;
+  return names.every((name) => {
+    const valueA = a[name]?.value;
+    const valueB = b[name]?.value;
+    if (Array.isArray(valueA) && Array.isArray(valueB)) {
+      return valueA.length === valueB.length && valueA.every((value, idx) => value === valueB[idx]);
+    }
+    return a[name]?.type === b[name]?.type && valueA === valueB;
+  });
+}
 type TextureParams = {
   url: string;
   wrapS?: number;
@@ -639,6 +654,8 @@ export function ReactShaderToy({
       const rUniform = gl.getUniformLocation(shaderProgramRef.current, UNIFORM_RESOLUTION);
       gl.uniform2fv(rUniform, [gl.canvas.width, gl.canvas.height]);
     }
+    // Resizing clears the canvas, and while paused no loop draws it again
+    if (pausedRef.current) requestDraw();
   };
 
   const createShader = (type: number, shaderCodeAsText: string) => {
@@ -930,9 +947,17 @@ export function ReactShaderToy({
   };
 
   useEffect(() => {
+    const previous = propsUniformsRef.current;
     propsUniformsRef.current = propUniforms;
-    // While paused, a change to the uniforms is the only reason to draw
-    if (pausedRef.current) requestDraw();
+    // While paused, a change to the uniforms is the only reason to draw. Uniforms usually arrive as
+    // a new object on every render, so compare their values. Off screen, coming into view draws.
+    if (
+      pausedRef.current &&
+      (animateWhenNotVisibleRef.current || isVisibleRef.current) &&
+      !haveSameUniformValues(previous, propUniforms)
+    ) {
+      requestDraw();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propUniforms]);
 

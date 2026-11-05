@@ -109,6 +109,31 @@ describe('AgentAudioVisualizerAura', () => {
       expect(screen.getByTestId('aura-viz').style.color).toBe('var(--primary)');
     });
 
+    it('keeps a text color set through style', () => {
+      render(<AgentAudioVisualizerAura style={{ color: 'var(--brand)' }} data-testid="aura-viz" />);
+      expect(screen.getByTestId('aura-viz').style.color).toBe('var(--brand)');
+    });
+
+    it('keeps its color transition when the page turns transitions off', () => {
+      const { container } = render(<AgentAudioVisualizerAura />);
+      const probe = container.querySelector<HTMLElement>('span[aria-hidden]')!;
+      expect(probe.style.getPropertyPriority('transition')).toBe('important');
+    });
+
+    it("keeps the probe's transitionend from reaching handlers around it", () => {
+      const onTransitionEnd = vi.fn();
+      const { container } = render(
+        <div onTransitionEnd={onTransitionEnd}>
+          <AgentAudioVisualizerAura />
+        </div>,
+      );
+      fireEvent(
+        container.querySelector('span[aria-hidden]')!,
+        new Event('transitionend', { bubbles: true }),
+      );
+      expect(onTransitionEnd).not.toHaveBeenCalled();
+    });
+
     it('passes the text color to the shader, clamped to sRGB', () => {
       mockProbeColor('color(srgb -0.2 0.5 1.1)');
       render(<AgentAudioVisualizerAura />);

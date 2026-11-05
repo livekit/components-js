@@ -1,5 +1,24 @@
 # @agents-ui
 
+## 1.0.9
+
+### Patch Changes
+
+- Small fixes across Agents UI: - [#1495](https://github.com/livekit/components-js/pull/1495) ([@jeffdaley](https://github.com/jeffdaley))
+
+  - Focus the chat input when the control bar's chat opens.
+  - Have the Aura visualizer follow changes to the page's `dark` class, and keep its light-mode color
+    consistent across agent states. Resting states no longer wash out to a lighter blue, and pulses
+    fade lighter toward the background.
+  - Jump `AgentChatTranscript` to the end when you send a message after scrolling up, unless
+    `autoScroll` is off or `scrollAnchor` already anchors your messages.
+  - Remove an unreachable `inert` check from the `AgentPopup_01` error overlay.
+
+- Honor `scrollAnchor={true}` in the chat transcript as an alias for `'any'`, - [#1478](https://github.com/livekit/components-js/pull/1478) ([@mtb24](https://github.com/mtb24))
+  anchoring every message while preserving the existing sender-specific modes.
+- Updated dependencies [[`6be1b95`](https://github.com/livekit/components-js/commit/6be1b9528db0b234e5d2231ce696500d141850f0), [`2a4e3fc`](https://github.com/livekit/components-js/commit/2a4e3fcc2697b6f1d2671e21757e6109c2aaf9d0), [`cf1c4f6`](https://github.com/livekit/components-js/commit/cf1c4f694e0e56e9a3aeffd5bd98f47418a00f2e), [`d3e5c8a`](https://github.com/livekit/components-js/commit/d3e5c8ab0a6c26da732d0ac335c91d947150f648), [`f3c995c`](https://github.com/livekit/components-js/commit/f3c995cb6734e3feaeb92abe8f29c5337a242295), [`af10b16`](https://github.com/livekit/components-js/commit/af10b169a751a74b9c89ae60bd05845c63dc021e), [`0360cd5`](https://github.com/livekit/components-js/commit/0360cd5f9c2917f583779cf4fbba60c7a9f4343b), [`21c767b`](https://github.com/livekit/components-js/commit/21c767b62a0b3a0078189720dba1e12d8781c54b), [`536b054`](https://github.com/livekit/components-js/commit/536b0547005672d7899cb77d775075bc65853fd5), [`3f74806`](https://github.com/livekit/components-js/commit/3f74806f1c8484b2eb2fd40773dd1be80760750c)]:
+  - @livekit/components-react@2.9.25
+
 ## 1.0.8
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@livekit/agents-ui",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "",
   "type": "module",
   "main": "index.ts",

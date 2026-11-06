@@ -106,12 +106,59 @@ enum A2aTaskState {
   Rejected = 'TASK_STATE_REJECTED',
 }
 
-// const A2A_TASK_STATE_TERMINAL_STATES = [
-//   A2aTaskState.Completed,
-//   A2aTaskState.Failed,
-//   A2aTaskState.Cancelled,
-//   A2aTaskState.Rejected,
-// ];
+/**
+ * A normalized text-turn lifecycle state (an {@link A2aTaskState}, without the wire spelling). Surfaced
+ * to consumers so they don't have to speak the raw A2A enum. `working` covers submitted/working, the
+ * terminal states are `completed`/`failed`/`canceled`, and `input-required`/`auth-required` are the
+ * paused states (the stream closes awaiting more input).
+ */
+export type TextTurnState =
+  | 'working'
+  | 'input-required'
+  | 'auth-required'
+  | 'completed'
+  | 'failed'
+  | 'canceled';
+
+/** Map a raw A2A task state onto the normalized {@link TextTurnState}. */
+function normalizeTaskState(state: A2aTaskState): TextTurnState {
+  switch (state) {
+    case A2aTaskState.InputRequired:
+      return 'input-required';
+    case A2aTaskState.AuthRequired:
+      return 'auth-required';
+    case A2aTaskState.Completed:
+      return 'completed';
+    case A2aTaskState.Failed:
+    case A2aTaskState.Rejected:
+      return 'failed';
+    case A2aTaskState.Cancelled:
+      return 'canceled';
+    case A2aTaskState.Submitted:
+    case A2aTaskState.Working:
+    case A2aTaskState.Unspecified:
+    default:
+      return 'working';
+  }
+}
+
+/** A single delta of message text produced during a text turn; maps onto a ReceivedChatMessage. */
+export type TextTurnMessage = {
+  id: string;
+  role?: 'assistant' | 'user';
+  message: string;
+  timestamp: number;
+  attributes?: Record<string, string>;
+};
+
+/**
+ * An item yielded while consuming a text turn ({@link TextTransport.requestMessageStream}): either a
+ * message delta to upsert, or a turn-state transition (so the caller can reflect input-required /
+ * failed / completed, which the plain message stream can't express).
+ */
+export type TextTurnStreamItem =
+  | { kind: 'message'; message: TextTurnMessage }
+  | { kind: 'taskState'; state: TextTurnState };
 
 type A2aStreamResponse = {
   /**
@@ -353,7 +400,9 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
     }
   }
 
-  private async *processMessageStreamBody(body: ReadableStream<Uint8Array<ArrayBufferLike>>) {
+  private async *processMessageStreamBody(
+    body: ReadableStream<Uint8Array<ArrayBufferLike>>,
+  ): AsyncGenerator<TextTurnStreamItem> {
     const reader = body.getReader();
     const decoder = new TextDecoder();
     let buffer = '';
@@ -383,7 +432,7 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
     }
   }
 
-  private *handleEvent(rawEvent: string, turn: TurnState) {
+  private *handleEvent(rawEvent: string, turn: TurnState): Generator<TextTurnStreamItem> {
     const dataPayload = rawEvent
       .split('\n')
       .filter((line) => line.startsWith('data:'))
@@ -411,23 +460,6 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
       this.emit('threadStarted', this._threadId);
     }
 
-    // // 1. Track task lifecycle
-    // if (response.task) {
-    //   if (!turn.task) {
-    //     turn.task = {
-    //       id: response.task.id,
-    //       startedAt: null,
-    //       endedAt: null,
-    //     };
-    //   }
-    //   if (response.task.status.state === A2aTaskState.Submitted && response.task.status.timestamp) {
-    //     turn.task.startedAt = new Date(response.task.status.timestamp);
-    //   }
-    //   if (A2A_TASK_STATE_TERMINAL_STATES.includes(response.task.status.state) && response.task.status.timestamp) {
-    //     turn.task.endedAt = new Date(response.task.status.timestamp);
-    //   }
-    // }
-
     // 1. Bare message: a complete, self-contained agent message with no task lifecycle. Emitted by
     // generic A2A agents that don't speak the LiveKit extension (the LiveKit agent never sends it).
     const bareMessage = response.message;
@@ -439,13 +471,16 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
       if (text) {
         const role = normalizeRole(bareMessage.role);
         yield {
-          id: bareMessage.messageId ?? crypto.randomUUID(),
-          role,
-          message: text,
+          kind: 'message',
+          message: {
+            id: bareMessage.messageId ?? crypto.randomUUID(),
+            role,
+            message: text,
 
-          // Messages have no timestamp on the wire; stamp with arrival time.
-          timestamp: Date.now(),
-          attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: role },
+            // Messages have no timestamp on the wire; stamp with arrival time.
+            timestamp: Date.now(),
+            attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: role },
+          },
         };
       }
     }
@@ -459,13 +494,16 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
         .join('');
       if (text) {
         yield {
-          id: statusMessage.messageId ?? crypto.randomUUID(),
-          role: normalizeRole(statusMessage.role),
-          message: text,
+          kind: 'message',
+          message: {
+            id: statusMessage.messageId ?? crypto.randomUUID(),
+            role: normalizeRole(statusMessage.role),
+            message: text,
 
-          // Messages have no timestamp on the wire; stamp with arrival time.
-          timestamp: Date.now(),
-          attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: normalizeRole(statusMessage.role) },
+            // Messages have no timestamp on the wire; stamp with arrival time.
+            timestamp: Date.now(),
+            attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: normalizeRole(statusMessage.role) },
+          },
         };
       }
     }
@@ -484,18 +522,29 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
       turn.artifactText.set(taskId, accumulated);
       if (accumulated.length > 0) {
         yield {
-          id: `artifact:${taskId}`,
-          message: accumulated,
+          kind: 'message',
+          message: {
+            id: `artifact:${taskId}`,
+            message: accumulated,
 
-          // Messages have no timestamp on the wire; stamp with arrival time.
-          timestamp: Date.now(),
-          attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: 'assistant' },
+            // Messages have no timestamp on the wire; stamp with arrival time.
+            timestamp: Date.now(),
+            attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: 'assistant' },
+          },
         };
       }
     }
 
-    // TODO(text-mode): data parts (delegations/chat-ctx), interruptions, directives, and task
-    // lifecycle/error states are still dropped. Supporting them requires extending `ReceivedMessage`.
+    // 4. Task lifecycle: surface the turn's state transitions so the caller can reflect
+    // input-required / failed / completed (yielded after any message in the same frame, so an
+    // input-required prompt's text is upserted before the paused state is signalled).
+    const taskState = response.task?.status?.state ?? response.statusUpdate?.status?.state;
+    if (taskState) {
+      yield { kind: 'taskState', state: normalizeTaskState(taskState) };
+    }
+
+    // TODO(text-mode): data parts (delegations/chat-ctx), interruptions, and directives are still
+    // dropped. Supporting them requires extending `ReceivedMessage`.
   }
 
   /**

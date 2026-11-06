@@ -21,7 +21,7 @@ function agentReply(id: string, message: string): ReceivedChatMessage {
 function makeFakeTextTransport(reply: ReceivedChatMessage) {
   return {
     requestMessageStream: vi.fn(async function* () {
-      yield reply;
+      yield { kind: 'message', message: reply };
     }),
     disconnect: vi.fn(async () => {}),
   };
@@ -31,10 +31,13 @@ function makeFakeTextTransport(reply: ReceivedChatMessage) {
  * real text-agent-state so send()'s idle → thinking → typing → idle transitions are observable. */
 function useFakeThread(textTransport: unknown): UseThreadReturn {
   const messageStore = useThreadMessageStore();
-  const [textAgentState, setTextAgentState] = React.useState<'idle' | 'thinking' | 'typing'>('idle');
+  const [textAgentState, setTextAgentState] = React.useState<
+    'idle' | 'thinking' | 'typing' | 'input-required'
+  >('idle');
+  const [textAgentFailureReason, setTextAgentFailureReason] = React.useState<string | null>(null);
   return {
     status: 'ready',
-    threadId: undefined,
+    threadId: null,
     textTransport,
     internal: {
       emitter: {},
@@ -46,6 +49,8 @@ function useFakeThread(textTransport: unknown): UseThreadReturn {
       registerCall: () => {},
       textAgentState,
       setTextAgentState,
+      textAgentFailureReason,
+      setTextAgentFailureReason,
     },
   } as unknown as UseThreadReturn;
 }
@@ -94,7 +99,7 @@ describe('useThreadMessages', () => {
     const tt = {
       requestMessageStream: vi.fn(async function* () {
         await firstChunkGate;
-        yield agentReply('gated-1', 'streaming…');
+        yield { kind: 'message', message: agentReply('gated-1', 'streaming…') };
         await endGate;
       }),
       disconnect: vi.fn(async () => {}),
@@ -125,5 +130,54 @@ describe('useThreadMessages', () => {
       releaseEnd();
     });
     await waitFor(() => expect(result.current.thread.internal.textAgentState).toBe('idle'));
+  });
+
+  test('a failed task state surfaces as a text failure reason (and settles to idle)', async () => {
+    const tt = {
+      requestMessageStream: vi.fn(async function* () {
+        yield { kind: 'taskState', state: 'failed' };
+      }),
+      disconnect: vi.fn(async () => {}),
+    };
+
+    const { result } = renderHook(() => {
+      const thread = useFakeThread(tt);
+      const messages = useThreadMessages(thread);
+      return { thread, messages };
+    });
+
+    await act(async () => {
+      await result.current.messages.send('hi');
+    });
+
+    await waitFor(() =>
+      expect(result.current.thread.internal.textAgentFailureReason).not.toBeNull(),
+    );
+    expect(result.current.thread.internal.textAgentState).toBe('idle');
+  });
+
+  test('an input-required task state settles the turn to input-required', async () => {
+    const tt = {
+      requestMessageStream: vi.fn(async function* () {
+        yield { kind: 'message', message: agentReply('q-1', 'what is your name?') };
+        yield { kind: 'taskState', state: 'input-required' };
+      }),
+      disconnect: vi.fn(async () => {}),
+    };
+
+    const { result } = renderHook(() => {
+      const thread = useFakeThread(tt);
+      const messages = useThreadMessages(thread);
+      return { thread, messages };
+    });
+
+    await act(async () => {
+      await result.current.messages.send('hi');
+    });
+
+    await waitFor(() =>
+      expect(result.current.thread.internal.textAgentState).toBe('input-required'),
+    );
+    expect(result.current.thread.internal.textAgentFailureReason).toBeNull();
   });
 });

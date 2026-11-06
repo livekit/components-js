@@ -51,8 +51,9 @@ export function useThreadMessages(thread?: UseThreadReturn): UseThreadMessagesRe
     upsertMessage,
     emitter,
   } = resolvedThread.internal.messageStore;
-  // The shared text-mode response lifecycle, read by `useAgent` (idle → thinking → typing → idle).
-  const { setTextAgentState } = resolvedThread.internal;
+  // The shared text-mode response lifecycle, read by `useAgent` (idle → thinking → typing → idle), plus
+  // the text-turn failure signal (folded into `useAgent().failureReasons`).
+  const { setTextAgentState, setTextAgentFailureReason } = resolvedThread.internal;
 
   const [isSending, setIsSending] = React.useState(false);
 
@@ -66,13 +67,20 @@ export function useThreadMessages(thread?: UseThreadReturn): UseThreadMessagesRe
       };
       upsertMessage(initialUserMessage);
 
+      // Starting a new turn clears any prior failure, so a text failure is not terminal.
+      setTextAgentFailureReason(null);
+
       // The in-flight POST stays `idle`; only once the server has accepted the send (the request
-      // resolves) do we move to `thinking`. `try/finally` also guarantees `isSending` is reset if the
-      // request throws.
+      // resolves) do we move to `thinking`. `try/finally` guarantees `isSending` is reset if the
+      // request throws; a POST failure surfaces as a failed turn (and still propagates to the caller).
       setIsSending(true);
       let stream: Awaited<ReturnType<typeof textTransport.requestMessageStream>>;
       try {
         stream = await textTransport.requestMessageStream(message);
+      } catch (err) {
+        setTextAgentState('idle');
+        setTextAgentFailureReason(err instanceof Error ? err.message : 'Failed to send message.');
+        throw err;
       } finally {
         setIsSending(false);
       }
@@ -80,28 +88,45 @@ export function useThreadMessages(thread?: UseThreadReturn): UseThreadMessagesRe
 
       (async () => {
         let sawChunk = false;
+        // The turn's resting state once the stream closes: `idle`, unless it paused for input.
+        let pendingState: 'idle' | 'input-required' = 'idle';
+        let failureReason: string | null = null;
         try {
-          for await (const streamedMessage of stream) {
-            // The first streamed chunk means the response has started coming back.
+          for await (const item of stream) {
+            if (item.kind === 'taskState') {
+              if (item.state === 'input-required' || item.state === 'auth-required') {
+                pendingState = 'input-required';
+              } else if (item.state === 'failed') {
+                failureReason = 'The agent was unable to complete the request.';
+              }
+              // `working` / `completed` / `canceled` need no resting-state change here.
+              continue;
+            }
+
+            // The first streamed message means the response has started coming back.
             if (!sawChunk) {
               setTextAgentState('typing');
               sawChunk = true;
             }
-            upsertMessage(streamedMessage);
+            upsertMessage(item.message);
           }
         } catch (err) {
-          // FIXME: figure out how to handle errors here, should these somehow put the agent into an
-          // errored state?
+          failureReason = err instanceof Error ? err.message : 'The message stream failed.';
           log.warn('useThreadMessages: text message stream failed', err);
         } finally {
-          // The response is fully streamed (or failed) — back to idle.
-          setTextAgentState('idle');
+          if (failureReason) {
+            setTextAgentFailureReason(failureReason);
+            setTextAgentState('idle');
+          } else {
+            // Fully streamed (or paused awaiting input) — settle to the resting state.
+            setTextAgentState(pendingState);
+          }
         }
       })();
 
       return initialUserMessage;
     },
-    [textTransport, upsertMessage, setTextAgentState],
+    [textTransport, upsertMessage, setTextAgentState, setTextAgentFailureReason],
   );
 
   return React.useMemo(

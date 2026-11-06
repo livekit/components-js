@@ -58,10 +58,16 @@ export type ActiveCall = {
  *   - `idle`: at rest (nothing in flight).
  *   - `thinking`: a sent message has reached the server and we are awaiting the response.
  *   - `typing`: the response is streaming back (the text-mode equivalent of voice `speaking`).
+ *   - `input-required`: the turn paused awaiting more user input (the stream closed). Sending the next
+ *     message resumes it.
  * Driven by `useThreadMessages().send()`; read by `useAgent` when no call is connected.
+ *
+ * A failed turn is surfaced separately via `internal.textAgentFailureReason` (folded into
+ * `useAgent().failureReasons`), not as a value here, so it can carry a reason and be cleared on the
+ * next send. Unlike a voice failure, a text failure is NOT terminal: the next send clears it.
  * @beta
  */
-export type ThreadTextAgentState = 'idle' | 'thinking' | 'typing';
+export type ThreadTextAgentState = 'idle' | 'thinking' | 'typing' | 'input-required';
 
 /**
  * The thread's readiness lifecycle. A thread has no persistent socket (text is request/response per
@@ -105,6 +111,14 @@ type ThreadStateCommon = {
     textAgentState: ThreadTextAgentState;
     /** Set the shared text-mode response lifecycle. Used by `useThreadMessages().send()`. */
     setTextAgentState: (state: ThreadTextAgentState) => void;
+    /**
+     * The reason the last text turn failed, or null. Driven by `useThreadMessages().send()` and folded
+     * into `useAgent().failureReasons` (so a text failure surfaces as `state: 'failed'`). Cleared at
+     * the start of the next send, so text failures are not terminal.
+     */
+    textAgentFailureReason: string | null;
+    /** Set (or clear, with null) the last text-turn failure reason. Used by `useThreadMessages().send()`. */
+    setTextAgentFailureReason: (reason: string | null) => void;
   };
 };
 
@@ -308,6 +322,8 @@ export function useThread(
   // The shared text-mode response lifecycle (idle → thinking → typing → idle), driven by
   // `useThreadMessages().send()` and read by `useAgent` when no call is connected.
   const [textAgentState, setTextAgentState] = React.useState<ThreadTextAgentState>('idle');
+  // The last text-turn failure reason (folded into useAgent().failureReasons), cleared on next send.
+  const [textAgentFailureReason, setTextAgentFailureReason] = React.useState<string | null>(null);
 
   const {
     // `textBaseUrl`/`threadId` are thread concerns; strip them so they never reach the token fetch
@@ -415,6 +431,8 @@ export function useThread(
       registerCall,
       textAgentState,
       setTextAgentState,
+      textAgentFailureReason,
+      setTextAgentFailureReason,
     }),
     [
       emitter,
@@ -426,6 +444,8 @@ export function useThread(
       registerCall,
       textAgentState,
       setTextAgentState,
+      textAgentFailureReason,
+      setTextAgentFailureReason,
     ],
   );
 

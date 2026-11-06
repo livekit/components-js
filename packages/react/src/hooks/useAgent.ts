@@ -41,6 +41,8 @@ type AgentSdkStates = 'initializing' | 'idle' | 'listening' | 'thinking' | 'spea
  * For a call-less (text-only) thread, there is no room to connect, so agent state reflects the text
  * response lifecycle instead:
  *   idle ➡️ thinking ➡️ typing ➡️ idle
+ * A turn can also pause awaiting more input (`input-required`), or fail (`failed`, surfaced via
+ * `failureReasons`). Unlike a voice failure, a text failure is not terminal — the next send clears it.
  *
  * Legacy useVoiceAssistant hook:
  *   disconnected ➡️ connecting ➡️ initializing ➡️ listening/thinking/speaking
@@ -50,8 +52,14 @@ type AgentSdkStates = 'initializing' | 'idle' | 'listening' | 'thinking' | 'spea
 export type AgentState =
   // `disconnected` is retained for back-compat (e.g. the legacy useVoiceAssistant), but the current
   // useAgent never emits it — its at-rest state is `idle`. `typing` is the text-mode equivalent of
-  // `speaking`.
-  'disconnected' | 'connecting' | 'pre-connect-buffering' | 'failed' | 'typing' | AgentSdkStates;
+  // `speaking`; `input-required` is a paused text turn awaiting more user input.
+  | 'disconnected'
+  | 'connecting'
+  | 'pre-connect-buffering'
+  | 'failed'
+  | 'typing'
+  | 'input-required'
+  | AgentSdkStates;
 
 /** @beta */
 export enum AgentEvent {
@@ -266,10 +274,11 @@ type AgentStateFailed = AgentStateCommon & {
  *
  * NOTE: `thinking` is included here (not only `idle`/`typing`) because the text lifecycle is
  * idle → thinking → typing → idle; a call-less `thinking` has no room, unlike the voice `thinking` in
- * {@link AgentStateAvailable}.
+ * {@link AgentStateAvailable}. `input-required` is a paused turn awaiting more user input. A failed text
+ * turn is reported as {@link AgentStateFailed} (via `failureReasons`), not here.
  */
 type AgentStateTextMode = AgentStateCommon & {
-  state: 'idle' | 'thinking' | 'typing';
+  state: 'idle' | 'thinking' | 'typing' | 'input-required';
   failureReasons: null;
 
   identity: undefined;
@@ -584,6 +593,8 @@ export function useAgent(threadOrSession?: UseThreadReturn | SessionStub): UseAg
 
   // The text-mode response lifecycle (idle → thinking → typing → idle), used when no call is connected.
   const textAgentState = thread.internal.textAgentState;
+  // A failed text turn, folded into `failureReasons` below so it surfaces as `state: 'failed'`.
+  const textAgentFailureReason = thread.internal.textAgentFailureReason;
 
   // The agent-timeout controls only exist when a call is attached; a text-only thread has no
   // connection to time out, so they are absent and the timeout wiring below no-ops.
@@ -752,8 +763,13 @@ export function useAgent(threadOrSession?: UseThreadReturn | SessionStub): UseAg
     if (agentDisconnectedFailureReason) {
       reasons.push(agentDisconnectedFailureReason);
     }
+    // A failed text turn (no call connected) surfaces here too, so text and voice failures share the
+    // same `state: 'failed'` path.
+    if (textAgentFailureReason) {
+      reasons.push(textAgentFailureReason);
+    }
     return reasons;
-  }, [agentTimeoutFailureReason, agentDisconnectedFailureReason]);
+  }, [agentTimeoutFailureReason, agentDisconnectedFailureReason, textAgentFailureReason]);
 
   // A call "connected" (driving voice state) means it is attached and not disconnected. Note a call
   // can be attached but disconnected (e.g. before `start()` or after `end()`); that is treated as text

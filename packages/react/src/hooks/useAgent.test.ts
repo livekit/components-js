@@ -38,6 +38,36 @@ describe('useAgent (call-less / text-mode thread)', () => {
     expect(result.current.agent.state).toBe('idle');
   });
 
+  test('reflects a paused (input-required) text turn', () => {
+    const { result } = renderHook(() => {
+      const thread = useThread({} as never, {});
+      const agent = useAgent(thread);
+      return { thread, agent };
+    });
+
+    act(() => result.current.thread.internal.setTextAgentState('input-required'));
+    expect(result.current.agent.state).toBe('input-required');
+    expect(result.current.agent.isConnected).toBe(false);
+    expect(result.current.agent.failureReasons).toBeNull();
+  });
+
+  test('a text failure reason surfaces as failed, and is non-terminal (clears)', () => {
+    const { result } = renderHook(() => {
+      const thread = useThread({} as never, {});
+      const agent = useAgent(thread);
+      return { thread, agent };
+    });
+
+    act(() => result.current.thread.internal.setTextAgentFailureReason('boom'));
+    expect(result.current.agent.state).toBe('failed');
+    expect(result.current.agent.failureReasons).toContain('boom');
+
+    // A text failure is not terminal: clearing the reason returns to the text lifecycle.
+    act(() => result.current.thread.internal.setTextAgentFailureReason(null));
+    expect(result.current.agent.state).toBe('idle');
+    expect(result.current.agent.failureReasons).toBeNull();
+  });
+
   test('throws when no thread (and no session) is available', () => {
     expect(() => renderHook(() => useAgent())).toThrow(/No thread/);
   });

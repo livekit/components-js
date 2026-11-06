@@ -492,6 +492,8 @@ export function useSessionCall(
             timestamp: transcription.streamInfo.timestamp,
             attributes: transcription.streamInfo.attributes,
             from: room.localParticipant,
+            origin: 'user',
+            role: 'user',
           };
 
         case agent.internal.agentParticipant?.identity:
@@ -507,6 +509,8 @@ export function useSessionCall(
               agent.internal.agentParticipant?.identity === transcription.participantInfo.identity
                 ? agent.internal.agentParticipant
                 : agent.internal.workerParticipant!,
+            origin: 'agent',
+            role: 'assistant',
           };
 
         default:
@@ -524,6 +528,8 @@ export function useSessionCall(
             from: Array.from(room.remoteParticipants.values()).find(
               (p) => p.identity === transcription.participantInfo.identity,
             ),
+            origin: 'agent',
+            role: 'assistant',
           };
       }
     });

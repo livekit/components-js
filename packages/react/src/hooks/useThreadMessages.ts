@@ -6,7 +6,6 @@ import { ReceivedMessage, ReceivedChatMessage, log } from '@livekit/components-c
 import { UseThreadReturn } from './useThread';
 import type { MessagesCallbacks } from './useThreadMessageStore';
 import { useMaybeSessionContext, useMaybeThreadContext } from '../context';
-import { TEXT_CHAT_ROLE_ATTRIBUTE } from '../text-transport/TextTransport';
 
 /** @beta */
 export type UseThreadMessagesReturn = {
@@ -63,7 +62,8 @@ export function useThreadMessages(thread?: UseThreadReturn): UseThreadMessagesRe
         id: crypto.randomUUID(),
         timestamp: Date.now(),
         message,
-        attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: 'user' },
+        origin: 'user',
+        role: 'user',
       };
       upsertMessage(initialUserMessage);
 

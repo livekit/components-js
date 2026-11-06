@@ -31,9 +31,11 @@ export interface LegacyChatMessage extends ChatMessage {
   ignoreLegacy?: boolean;
 }
 
-export interface LegacyReceivedChatMessage extends ReceivedChatMessage {
+// A type alias (not `interface extends`) because ReceivedChatMessage is a discriminated union (on the
+// message sender), which an interface cannot extend.
+export type LegacyReceivedChatMessage = ReceivedChatMessage & {
   ignoreLegacy?: boolean;
-}
+};
 
 /**
  * @public

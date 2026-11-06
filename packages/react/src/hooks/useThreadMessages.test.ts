@@ -5,7 +5,6 @@ import type { ReceivedChatMessage } from '@livekit/components-core';
 
 import { useThreadMessageStore } from './useThreadMessageStore';
 import { useThreadMessages } from './useThreadMessages';
-import { TEXT_CHAT_ROLE_ATTRIBUTE } from '../text-transport/TextTransport';
 import type { UseThreadReturn } from './useThread';
 
 function agentReply(id: string, message: string): ReceivedChatMessage {
@@ -13,7 +12,8 @@ function agentReply(id: string, message: string): ReceivedChatMessage {
     id,
     timestamp: Date.now(),
     message,
-    attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: 'agent' },
+    origin: 'agent',
+    role: 'assistant',
   };
 }
 
@@ -72,9 +72,7 @@ describe('useThreadMessages', () => {
     });
 
     // The user's message is upserted immediately.
-    const userMessages = result.current.messages.filter(
-      (m) => (m as ReceivedChatMessage).attributes?.[TEXT_CHAT_ROLE_ATTRIBUTE] === 'user',
-    );
+    const userMessages = result.current.messages.filter((m) => m.origin === 'user');
     expect(userMessages).toHaveLength(1);
     expect((userMessages[0] as ReceivedChatMessage).message).toBe('hello');
     expect(tt.requestMessageStream).toHaveBeenCalledWith('hello');

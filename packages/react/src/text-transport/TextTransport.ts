@@ -1,4 +1,4 @@
-import { type ReceivedChatMessage } from '@livekit/components-core';
+import { type ReceivedChatMessage, type MessageSender } from '@livekit/components-core';
 import { type TokenSourceResponseObject } from 'livekit-client';
 import { EventEmitter } from 'events';
 import type TypedEmitter from 'typed-emitter';
@@ -8,17 +8,6 @@ import type TypedEmitter from 'typed-emitter';
  * activates the extension; without it the server degrades to plain-text A2A.
  */
 export const A2A_AGENTS_EXTENSION_URI = 'https://livekit.io/a2a/ext/agents/v1';
-
-/**
- * Attribute key used on {@link ReceivedChatMessage.attributes} to carry the message role
- * (`"user"`, `"assistant"`) in text mode.
- *
- * FIXME: this is a stopgap. `ReceivedMessage` has no first-class notion of a sender role, and in
- * text mode there are no `Participant` objects to hang identity off of. Downstream code has to read
- * this attribute to tell user messages from agent messages. This should be replaced with a proper
- * message-model change before text mode ships.
- */
-export const TEXT_CHAT_ROLE_ATTRIBUTE = 'lk.chat.role';
 
 /**
  * Resolves the base URL of the A2A interface for a given project id. `/v1` is appended to the
@@ -142,14 +131,14 @@ function normalizeTaskState(state: A2aTaskState): TextTurnState {
   }
 }
 
-/** A single delta of message text produced during a text turn; maps onto a ReceivedChatMessage. */
+/** A single delta of message text produced during a text turn; maps onto a ReceivedChatMessage. The
+ * sender is carried as the first-class {@link MessageSender} (`origin` / `role`). */
 export type TextTurnMessage = {
   id: string;
-  role?: 'assistant' | 'user';
   message: string;
   timestamp: number;
   attributes?: Record<string, string>;
-};
+} & MessageSender;
 
 /**
  * An item yielded while consuming a text turn ({@link TextTransport.requestMessageStream}): either a
@@ -246,6 +235,16 @@ function normalizeRole(roleRaw: string | undefined): 'assistant' | 'user' {
     : 'user';
 }
 
+/** The first-class {@link MessageSender} for an A2A role: agent text is the assistant, everything else
+ * is the user. */
+function senderFromRole(
+  role: 'assistant' | 'user',
+): { origin: 'user'; role: 'user' } | { origin: 'agent'; role: 'assistant' } {
+  return role === 'assistant'
+    ? { origin: 'agent', role: 'assistant' }
+    : { origin: 'user', role: 'user' };
+}
+
 const HISTORY_PAGE_SIZE = 100;
 // tasks/list defaults historyLength to 0 (no messages) when absent, so request a large window to get
 // each task's full per-turn history.
@@ -278,7 +277,7 @@ function messageToReceivedChatMessage(
     id: message.messageId ?? crypto.randomUUID(),
     message: text,
     timestamp: timestamp || Date.now(),
-    attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: role },
+    ...senderFromRole(role),
   };
 }
 
@@ -474,12 +473,11 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
           kind: 'message',
           message: {
             id: bareMessage.messageId ?? crypto.randomUUID(),
-            role,
             message: text,
 
             // Messages have no timestamp on the wire; stamp with arrival time.
             timestamp: Date.now(),
-            attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: role },
+            ...senderFromRole(role),
           },
         };
       }
@@ -497,12 +495,11 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
           kind: 'message',
           message: {
             id: statusMessage.messageId ?? crypto.randomUUID(),
-            role: normalizeRole(statusMessage.role),
             message: text,
 
             // Messages have no timestamp on the wire; stamp with arrival time.
             timestamp: Date.now(),
-            attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: normalizeRole(statusMessage.role) },
+            ...senderFromRole(normalizeRole(statusMessage.role)),
           },
         };
       }
@@ -529,7 +526,8 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
 
             // Messages have no timestamp on the wire; stamp with arrival time.
             timestamp: Date.now(),
-            attributes: { [TEXT_CHAT_ROLE_ATTRIBUTE]: 'assistant' },
+            origin: 'agent',
+            role: 'assistant',
           },
         };
       }

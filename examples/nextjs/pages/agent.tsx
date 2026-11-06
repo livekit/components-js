@@ -12,7 +12,6 @@ import {
   useThreadMessages,
   SessionEvent,
   useEvents,
-  TEXT_CHAT_ROLE_ATTRIBUTE,
   UseThreadReturn,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
@@ -104,8 +103,8 @@ function TextChat() {
             <span style={{ opacity: 0.6 }}>No messages yet. Say hello 👋</span>
           ) : (
             messages.map((message) => {
-              const role = message.attributes?.[TEXT_CHAT_ROLE_ATTRIBUTE] ?? 'agent';
-              const isUser = role === 'user';
+              const isUser = message.origin === 'user';
+              const role = message.origin ?? 'agent';
               return (
                 <div
                   key={message.id}

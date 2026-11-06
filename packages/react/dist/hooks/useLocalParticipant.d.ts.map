@@ -1,0 +1,1 @@
+{"version":3,"file":"useLocalParticipant.d.ts","sourceRoot":"","sources":["../../src/hooks/useLocalParticipant.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,gBAAgB,EAAE,gBAAgB,EAAE,IAAI,EAAE,MAAM,gBAAgB,CAAC;AAI/E,cAAc;AACd,MAAM,WAAW,0BAA0B;IACzC;;OAEG;IACH,IAAI,CAAC,EAAE,IAAI,CAAC;CACb;AAED;;;;;;;;;GASG;AACH,wBAAgB,mBAAmB,CAAC,OAAO,GAAE,0BAA+B;;;;;;;;;EAgD3E"}

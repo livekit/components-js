@@ -390,6 +390,8 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/a2a+json',
+          // message/stream replies over SSE; advertise that we accept the event stream.
+          Accept: 'text/event-stream',
           'A2A-Extensions': A2A_AGENTS_EXTENSION_URI,
           'A2A-Version': '1.0',
         },

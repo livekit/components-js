@@ -71,16 +71,21 @@ export function useMediaTrackBySourceOrName(
 
   React.useEffect(() => {
     // Set the orientation of the video track.
-    // TODO: This does not handle changes in orientation after a track got published (e.g when rotating a phone camera from portrait to landscape).
-    if (
-      typeof publication?.dimensions?.width === 'number' &&
-      typeof publication?.dimensions?.height === 'number'
-    ) {
-      const orientation_ =
-        publication.dimensions.width > publication.dimensions.height ? 'landscape' : 'portrait';
-      setOrientation(orientation_);
-    }
-  }, [publication]);
+    // rendered frames over published dimensions; senders can rotate mid-call
+    const element = options.element?.current;
+    const updateOrientation = () => {
+      const { width, height } =
+        element instanceof HTMLVideoElement && element.videoWidth > 0
+          ? { width: element.videoWidth, height: element.videoHeight }
+          : (publication?.dimensions ?? {});
+      if (typeof width === 'number' && typeof height === 'number') {
+        setOrientation(width > height ? 'landscape' : 'portrait');
+      }
+    };
+    updateOrientation();
+    element?.addEventListener('resize', updateOrientation);
+    return () => element?.removeEventListener('resize', updateOrientation);
+  }, [publication, options.element]);
 
   return {
     publication,

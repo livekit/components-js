@@ -39,6 +39,16 @@ export type TextTransportOptions = {
 export type RequestMessageStreamOptions = {
   /** Optional external abort signal; aborting it terminates the in-flight request. */
   signal?: AbortSignal;
+
+  /**
+   * The A2A task to continue (or interrupt): referencing a prior turn's task id resumes that task
+   * instead of starting a fresh turn. The intended use is replying to an `input-required` turn, or
+   * interrupting one that is still running.
+   *
+   * NOTE: sourcing the task id (and exposing continuation through `useAgent` / the thread) is a
+   * follow-up; for now the caller must supply it. Omit to start a new turn.
+   */
+  taskId?: string;
 };
 
 // A minimal, permissive view of the A2A ProtoJSON frame shapes this prototype consumes.
@@ -367,6 +377,11 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
     const message: Record<string, unknown> = { messageId, role: 'ROLE_USER', parts: [{ text }] };
     if (this._threadId) {
       message.contextId = this._threadId;
+    }
+    // Continue (or interrupt) a specific task rather than starting a new turn — e.g. replying to an
+    // input-required turn.
+    if (options.taskId) {
+      message.taskId = options.taskId;
     }
 
     try {

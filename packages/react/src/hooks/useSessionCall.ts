@@ -16,16 +16,16 @@ import {
 import { EventEmitter } from 'events';
 import {
   TrackReference,
-  // TextStreamData,
-  // ReceivedUserTranscriptionMessage,
-  // ReceivedAgentTranscriptionMessage,
+  TextStreamData,
+  ReceivedUserTranscriptionMessage,
+  ReceivedAgentTranscriptionMessage,
   log,
 } from '@livekit/components-core';
 
 import { useMaybeRoomContext } from '../context';
 import { useAgent, useAgentTimeoutIdStore, type AgentState } from './useAgent';
 import { useLocalParticipant } from './useLocalParticipant';
-// import { useTranscriptions } from './useTranscriptions';
+import { useTranscriptions } from './useTranscriptions';
 import { type ActiveCall, type UseThreadReturn } from './useThread';
 
 /** @beta */
@@ -240,7 +240,7 @@ export function useSessionCall(
   thread: UseThreadReturn,
   options: SessionCallOptions = {},
 ): SessionCallReturn {
-  const { tokenSourceFetch, registerCall } = thread.internal;
+  const { tokenSourceFetch, registerCall, messageStore } = thread.internal;
   const threadId = thread.threadId;
 
   const {
@@ -470,66 +470,70 @@ export function useSessionCall(
 
   const agent = useAgent(thread);
 
-  // // Mirror voice transcriptions (data channel) into the thread's shared store, so the thread's
-  // // transcript holds both chat and call transcripts. This is the call's write side; `useThreadMessages`
-  // // only reads the store.
-  // const transcriptions: Array<TextStreamData> = useTranscriptions({ room });
-  // const transcriptionMessages: Array<
-  //   ReceivedUserTranscriptionMessage | ReceivedAgentTranscriptionMessage
-  // > = React.useMemo(() => {
-  //   return transcriptions.map((transcription) => {
-  //     switch (transcription.participantInfo.identity) {
-  //       case room.localParticipant.identity:
-  //         return {
-  //           type: 'userTranscript',
-  //           message: transcription.text,
+  // Mirror voice transcriptions (data channel) into the thread's shared store, so the thread's
+  // transcript holds both chat and call transcripts. This is the call's write side; `useThreadMessages`
+  // only reads the store.
+  //
+  // NOTE: these transcriptions are only in the shared store for the life of this call — the thread's
+  // history fetch (A2A `tasks/list`) does not include them, so leaving and reloading the thread drops
+  // them. Re-enabled for now to match the Rust `forward_call` behavior (one combined feed per session).
+  const transcriptions: Array<TextStreamData> = useTranscriptions({ room });
+  const transcriptionMessages: Array<
+    ReceivedUserTranscriptionMessage | ReceivedAgentTranscriptionMessage
+  > = React.useMemo(() => {
+    return transcriptions.map((transcription) => {
+      switch (transcription.participantInfo.identity) {
+        case room.localParticipant.identity:
+          return {
+            type: 'userTranscript',
+            message: transcription.text,
 
-  //           id: transcription.streamInfo.id,
-  //           timestamp: transcription.streamInfo.timestamp,
-  //           attributes: transcription.streamInfo.attributes,
-  //           from: room.localParticipant,
-  //         };
+            id: transcription.streamInfo.id,
+            timestamp: transcription.streamInfo.timestamp,
+            attributes: transcription.streamInfo.attributes,
+            from: room.localParticipant,
+          };
 
-  //       case agent.internal.agentParticipant?.identity:
-  //       case agent.internal.workerParticipant?.identity:
-  //         return {
-  //           type: 'agentTranscript',
-  //           message: transcription.text,
+        case agent.internal.agentParticipant?.identity:
+        case agent.internal.workerParticipant?.identity:
+          return {
+            type: 'agentTranscript',
+            message: transcription.text,
 
-  //           id: transcription.streamInfo.id,
-  //           timestamp: transcription.streamInfo.timestamp,
-  //           attributes: transcription.streamInfo.attributes,
-  //           from:
-  //             agent.internal.agentParticipant?.identity === transcription.participantInfo.identity
-  //               ? agent.internal.agentParticipant
-  //               : agent.internal.workerParticipant!,
-  //         };
+            id: transcription.streamInfo.id,
+            timestamp: transcription.streamInfo.timestamp,
+            attributes: transcription.streamInfo.attributes,
+            from:
+              agent.internal.agentParticipant?.identity === transcription.participantInfo.identity
+                ? agent.internal.agentParticipant
+                : agent.internal.workerParticipant!,
+          };
 
-  //       default:
-  //         // FIXME: what should happen if an associated participant is not found?
-  //         //
-  //         // For now, just assume it is an agent transcription, since maybe it is from an agent
-  //         // which disconencted from the room or something like that.
-  //         return {
-  //           type: 'agentTranscript',
-  //           message: transcription.text,
+        default:
+          // FIXME: what should happen if an associated participant is not found?
+          //
+          // For now, just assume it is an agent transcription, since maybe it is from an agent
+          // which disconencted from the room or something like that.
+          return {
+            type: 'agentTranscript',
+            message: transcription.text,
 
-  //           id: transcription.streamInfo.id,
-  //           timestamp: transcription.streamInfo.timestamp,
-  //           attributes: transcription.streamInfo.attributes,
-  //           from: Array.from(room.remoteParticipants.values()).find(
-  //             (p) => p.identity === transcription.participantInfo.identity,
-  //           ),
-  //         };
-  //     }
-  //   });
-  // }, [transcriptions, room, agent.internal.agentParticipant, agent.internal.workerParticipant]);
+            id: transcription.streamInfo.id,
+            timestamp: transcription.streamInfo.timestamp,
+            attributes: transcription.streamInfo.attributes,
+            from: Array.from(room.remoteParticipants.values()).find(
+              (p) => p.identity === transcription.participantInfo.identity,
+            ),
+          };
+      }
+    });
+  }, [transcriptions, room, agent.internal.agentParticipant, agent.internal.workerParticipant]);
 
-  // // Loop-safe: deps are the memoized transcription array (stable until it changes), and the store
-  // // upsert short-circuits when nothing changed.
-  // React.useEffect(() => {
-  //   messageStore.upsertMessages(transcriptionMessages);
-  // }, [transcriptionMessages, messageStore.upsertMessages]);
+  // Loop-safe: deps are the memoized transcription array (stable until it changes), and the store
+  // upsert short-circuits when nothing changed.
+  React.useEffect(() => {
+    messageStore.upsertMessages(transcriptionMessages);
+  }, [transcriptionMessages, messageStore.upsertMessages]);
 
   const wasCallEndCalledRef = React.useRef(false);
 

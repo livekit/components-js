@@ -203,7 +203,7 @@ export interface IYamlItem {
    * by setting the relevant `overridden.${lang}` property.
    *
    * NOTE: Corresponds to `ItemViewModel.Overridden` in DocFX.
-   * NOTE: Corresponds to `ItemViewModel.OverriddenInDevLangs` in DocFX when `overriden.${lang}` is used.
+   * NOTE: Corresponds to `ItemViewModel.OverriddenInDevLangs` in DocFX when `overridden.${lang}` is used.
    */
   overridden?: string;
   'overridden.typeScript'?: string;

@@ -191,6 +191,12 @@ export function setupChat(room: Room, options?: ChatOptions) {
       );
       streamObservable.subscribe({
         next: (value) => messageSubject.next(value),
+        // Handle read errors — e.g. the sender disconnecting mid-stream — so RxJS
+        // does not report them by rethrowing globally from a timer, where they
+        // surface as an uncaught exception no application code can catch. Every
+        // error is treated the same; `finalize` has already cleaned up the
+        // stream's attachment-map entry.
+        error: (error) => log.warn('chat message stream failed', error),
       });
     });
     // NOTE: Attachment byte streams are guaranteed to arrive after their parent text stream

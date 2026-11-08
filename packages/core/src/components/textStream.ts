@@ -147,7 +147,10 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
             },
             // Mark the stream failed, keeping whatever text arrived before the error.
             // A stream that fails before emitting still surfaces as a failed entry so
-            // consumers can see it rather than have it silently disappear.
+            // consumers can see it rather than have it silently disappear. Handling the
+            // error here is also what stops RxJS from rethrowing it globally as an
+            // uncaught exception. Every error is treated the same — the failure is
+            // surfaced through the data, so consumers decide what it means.
             error: (error: Error) => {
               const index = indexOfStream();
               if (index === -1) {

@@ -3,19 +3,42 @@ import { from, scan, Subject, type Observable } from 'rxjs';
 import { share, tap } from 'rxjs/operators';
 import { ParticipantAgentAttributes } from '../helper';
 
-/**
- * Lifecycle of a text stream:
- * - `pending`: the stream is open and still receiving chunks.
- * - `complete`: the writer closed the stream cleanly, so its text is whole.
- * - `failed`: reading the stream errored (most commonly a `DataStreamError` with
- *   reason `AbnormalEnd` when the sender disconnects mid-stream). The text
- *   accumulated before the failure is kept, but it may be incomplete.
- */
-export type TextStreamData = {
+/** Fields shared by every {@link TextStreamData} variant, regardless of status. */
+interface TextStreamDataCommon {
   text: string;
   participantInfo: { identity: string }; // Replace with the correct type from livekit-client
   streamInfo: TextStreamInfo;
-} & ({ status: 'pending' | 'complete' } | { status: 'failed'; error: Error });
+}
+
+/** A stream that is open and still receiving chunks. */
+type TextStreamDataPending = TextStreamDataCommon & { status: 'pending' };
+
+/** A stream the writer closed cleanly, so its text is whole. */
+type TextStreamDataComplete = TextStreamDataCommon & { status: 'complete' };
+
+/**
+ * A stream whose read errored — most commonly a `DataStreamError` with reason
+ * `AbnormalEnd` when the sender disconnects mid-stream. The text accumulated
+ * before the failure is kept on `text`, but it may be incomplete.
+ */
+type TextStreamDataFailed = TextStreamDataCommon & { status: 'failed'; error: Error };
+
+/**
+ * A stream entry from before `status` existed, carrying no status at all. Kept so
+ * code that reads `TextStreamData` without touching `status` keeps type-checking.
+ */
+type TextStreamDataLegacy = TextStreamDataCommon & { status?: never };
+
+/**
+ * One text stream, discriminated by its `status`:
+ * - {@link TextStreamDataPending}: open and still receiving chunks.
+ * - {@link TextStreamDataComplete}: closed cleanly by the writer; text is whole.
+ * - {@link TextStreamDataFailed}: the read errored; `error` holds why and `text`
+ *   keeps whatever arrived first.
+ * - {@link TextStreamDataLegacy}: no status, for backward compatibility.
+ */
+export type TextStreamData =
+  TextStreamDataPending | TextStreamDataComplete | TextStreamDataFailed | TextStreamDataLegacy;
 
 // One observable per room and topic. The outer map is weak so a room that is no
 // longer referenced takes its observables with it, while a reused room keeps

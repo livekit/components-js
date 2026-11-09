@@ -220,16 +220,5 @@ describe('AgentControlBar', () => {
 
       expect(input).toHaveValue('Second');
     });
-
-    it('leaves the input empty with restoreFailedMessages off', async () => {
-      const user = userEvent.setup();
-      render(<AgentControlBar isChatOpen restoreFailedMessages={false} />);
-      const input = screen.getByPlaceholderText('Type something...');
-
-      await user.type(input, 'Hello world{Enter}');
-
-      await waitFor(() => expect(console.error).toHaveBeenCalled());
-      expect(input).toHaveValue('');
-    });
   });
 });

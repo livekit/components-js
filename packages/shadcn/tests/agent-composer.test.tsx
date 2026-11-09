@@ -142,7 +142,7 @@ describe('AgentComposer', () => {
     await act(async () => pending.resolve());
   });
 
-  it('stays cleared and reports the error when sending fails', async () => {
+  it('puts the message back and reports the error when sending fails', async () => {
     const user = userEvent.setup();
     const error = new Error('Network error');
     const onError = vi.fn();
@@ -151,7 +151,35 @@ describe('AgentComposer', () => {
     await user.type(getInput(), 'Hello{Enter}');
 
     await waitFor(() => expect(onError).toHaveBeenCalledWith(error));
-    expect(getInput()).toHaveValue('');
+    expect(getInput()).toHaveValue('Hello');
+  });
+
+  it('keeps anything typed since a message that fails', async () => {
+    const user = userEvent.setup();
+    const pending = deferred();
+    render(<AgentComposer onSend={() => pending.promise} />);
+
+    await user.type(getInput(), 'First{Enter}');
+    await user.type(getInput(), 'Second');
+    await act(async () => pending.reject(new Error('Network error')));
+
+    expect(getInput()).toHaveValue('Second');
+  });
+
+  it('puts a failed message back through onValueChange when controlled', async () => {
+    const user = userEvent.setup();
+    const onValueChange = vi.fn();
+    render(
+      <AgentComposer
+        value="Hello"
+        onValueChange={onValueChange}
+        onSend={() => Promise.reject(new Error('Network error'))}
+      />,
+    );
+
+    await user.type(getInput(), '{Enter}');
+
+    await waitFor(() => expect(onValueChange.mock.calls).toEqual([[''], ['Hello']]));
   });
 
   it('reports errors that onSend throws synchronously', async () => {

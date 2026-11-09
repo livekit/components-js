@@ -133,9 +133,9 @@ export interface AgentComposerProps
     Omit<ComponentProps<'form'>, 'onError' | 'defaultValue'>,
     Partial<Omit<UseAgentComposerProps, 'onSend'>> {
   /**
-   * Sends the message. The composer clears right away without waiting for it, so show sending and
-   * failed states with the message itself. When omitted, messages go to the session's chat, where
-   * each one has a `status`, and the composer is disabled until the session connects.
+   * Sends the message. The composer clears right away without waiting for it, and a message that
+   * fails goes back in the composer. When omitted, messages go to the session's chat, and the
+   * composer is disabled until the session connects.
    */
   onSend?: UseAgentComposerProps['onSend'];
   /**

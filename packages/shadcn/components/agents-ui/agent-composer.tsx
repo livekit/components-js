@@ -10,6 +10,7 @@ import {
   useState,
   type ComponentProps,
   type KeyboardEvent,
+  type ReactNode,
   type RefObject,
 } from 'react';
 import {
@@ -74,6 +75,42 @@ export const defaultAgentComposerLabels: AgentComposerLabels = {
 };
 
 /**
+ * Icons the composer's buttons show. Pass any of these to `AgentComposer`'s `icons` to replace
+ * them.
+ */
+export interface AgentComposerIcons {
+  /** The send button. */
+  send: ReactNode;
+  /** The stop button, while the agent replies. */
+  stop: ReactNode;
+  /** The microphone button. */
+  microphone: ReactNode;
+  /** The microphone button while the microphone starts or stops. */
+  microphonePending: ReactNode;
+  /** The microphone button when the microphone is blocked or unavailable. */
+  microphoneError: ReactNode;
+}
+
+export const defaultAgentComposerIcons: AgentComposerIcons = {
+  send: <ArrowUpIcon />,
+  stop: <SquareIcon className="size-3 fill-current" />,
+  microphone: <MicIcon />,
+  microphonePending: <LoaderIcon className="animate-spin" />,
+  microphoneError: <MicOffIcon />,
+};
+
+/** Fills in defaults for any icon that's missing or `undefined`. */
+function withDefaultIcons(icons: Partial<AgentComposerIcons> = {}): AgentComposerIcons {
+  return {
+    send: icons.send ?? defaultAgentComposerIcons.send,
+    stop: icons.stop ?? defaultAgentComposerIcons.stop,
+    microphone: icons.microphone ?? defaultAgentComposerIcons.microphone,
+    microphonePending: icons.microphonePending ?? defaultAgentComposerIcons.microphonePending,
+    microphoneError: icons.microphoneError ?? defaultAgentComposerIcons.microphoneError,
+  };
+}
+
+/**
  * The microphone's `TrackSource` in the LiveKit protocol, as permissions list it. Spelled out to
  * avoid importing the protocol package, which is large.
  */
@@ -100,6 +137,7 @@ interface AgentComposerContextValue extends UseAgentComposerReturn {
   inputRef: RefObject<HTMLTextAreaElement | null>;
   characterCountId: string;
   labels: AgentComposerLabels;
+  icons: AgentComposerIcons;
   connecting: boolean;
   listening?: boolean;
   onListeningChange?: (listening: boolean) => void;
@@ -173,6 +211,8 @@ export interface AgentComposerProps
   placeholder?: string;
   /** Text the composer shows and announces. */
   labels?: Partial<AgentComposerLabels>;
+  /** Icons the composer's buttons show. */
+  icons?: Partial<AgentComposerIcons>;
   /**
    * Render as the child element instead of a `<form>`.
    * @defaultValue false
@@ -198,6 +238,7 @@ function AgentComposerRoot({
   onStop,
   placeholder,
   labels: labelsProp,
+  icons: iconsProp,
   connecting = false,
   asChild = false,
   className,
@@ -219,6 +260,7 @@ function AgentComposerRoot({
     draftKey,
   });
   const labels = withDefaultLabels(labelsProp);
+  const icons = withDefaultIcons(iconsProp);
   const Comp = asChild ? Slot.Root : 'form';
   const isOverLimit = composer.remaining !== undefined && composer.remaining < 0;
 
@@ -240,6 +282,7 @@ function AgentComposerRoot({
         inputRef,
         characterCountId,
         labels,
+        icons,
         connecting,
         listening,
         onListeningChange,
@@ -566,8 +609,9 @@ export type AgentComposerMicrophoneProps = Omit<
  * Turns the microphone on so the agent can hear you, and off again. It starts off and fills in
  * while listening, with the microphone's level before the icon when the composer has a
  * `microphoneTrack`. It shows a spinner while the microphone starts, and a crossed-out icon when it
- * can't, which you can click to try again. Renders nothing when the composer has no
- * `onListeningChange`, which is set for you without `onSend`.
+ * can't, which you can click to try again. `AgentComposer`'s `icons` replaces each of these icons,
+ * and children replace them all. Renders nothing when the composer has no `onListeningChange`,
+ * which is set for you without `onSend`.
  *
  * @extends ComponentProps<typeof Toggle>
  */
@@ -585,6 +629,7 @@ export function AgentComposerMicrophone({
     microphonePending,
     microphoneError,
     labels,
+    icons,
     disabled: composerDisabled,
   } = useAgentComposerContext('AgentComposerMicrophone');
   if (!onListeningChange) return null;
@@ -621,9 +666,9 @@ export function AgentComposerMicrophone({
     >
       {children ??
         (microphonePending ? (
-          <LoaderIcon className="animate-spin" />
+          icons.microphonePending
         ) : errorLabel ? (
-          <MicOffIcon />
+          icons.microphoneError
         ) : (
           <>
             {listening && microphoneTrack && (
@@ -638,7 +683,7 @@ export function AgentComposerMicrophone({
                 <span className="h-full min-h-0.5 w-0.5 origin-center rounded-full bg-current" />
               </AgentAudioVisualizerBar>
             )}
-            <MicIcon />
+            {icons.microphone}
           </>
         ))}
     </Toggle>
@@ -651,8 +696,9 @@ export function AgentComposerMicrophone({
 export type AgentComposerSubmitProps = ComponentProps<typeof Button>;
 
 /**
- * The composer's send button. Pass children to replace the icon. While the agent is `responding`
- * and the input is empty, it becomes a stop button that calls `onStop`.
+ * The composer's send button. Pass children, or `icons.send` to `AgentComposer`, to replace the
+ * icon. While the agent is `responding` and the input is empty, it becomes a stop button that calls
+ * `onStop`, showing `icons.stop`.
  *
  * @extends ComponentProps<typeof Button>
  */
@@ -671,6 +717,7 @@ export function AgentComposerSubmit({
     responding,
     onStop,
     labels,
+    icons,
     disabled: composerDisabled,
   } = useAgentComposerContext('AgentComposerSubmit');
 
@@ -688,7 +735,7 @@ export function AgentComposerSubmit({
         className={cn('self-end', className)}
         {...props}
       >
-        <SquareIcon className="size-3 fill-current" />
+        {icons.stop}
       </Button>
     );
   }
@@ -706,7 +753,7 @@ export function AgentComposerSubmit({
       className={cn('self-end disabled:cursor-not-allowed', className)}
       {...props}
     >
-      {children ?? <ArrowUpIcon />}
+      {children ?? icons.send}
     </Button>
   );
 }

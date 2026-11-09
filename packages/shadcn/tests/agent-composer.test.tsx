@@ -537,6 +537,68 @@ describe('AgentComposer', () => {
     });
   });
 
+  describe('icons', () => {
+    const icon = (name: string) => <svg data-testid={name} />;
+
+    it('replaces the send and stop icons', async () => {
+      const user = userEvent.setup();
+      render(
+        <AgentComposer
+          onSend={vi.fn()}
+          responding
+          onStop={vi.fn()}
+          icons={{ send: icon('send'), stop: icon('stop') }}
+        />,
+      );
+
+      expect(screen.getByRole('button', { name: 'Stop' })).toContainElement(
+        screen.getByTestId('stop'),
+      );
+      await user.type(getInput(), 'Hi');
+      expect(getSubmit()).toContainElement(screen.getByTestId('send'));
+    });
+
+    it('replaces each microphone icon', () => {
+      const icons = {
+        microphone: icon('microphone'),
+        microphonePending: icon('pending'),
+        microphoneError: icon('error'),
+      };
+      const { rerender } = render(
+        <AgentComposer onSend={vi.fn()} onListeningChange={vi.fn()} icons={icons} />,
+      );
+      expect(getMicrophone()).toContainElement(screen.getByTestId('microphone'));
+
+      rerender(
+        <AgentComposer
+          onSend={vi.fn()}
+          onListeningChange={vi.fn()}
+          microphonePending
+          icons={icons}
+        />,
+      );
+      expect(getMicrophone()).toContainElement(screen.getByTestId('pending'));
+
+      rerender(
+        <AgentComposer
+          onSend={vi.fn()}
+          onListeningChange={vi.fn()}
+          microphoneError={new Error('No device')}
+          icons={icons}
+        />,
+      );
+      expect(screen.getByRole('button', { name: 'Microphone unavailable' })).toContainElement(
+        screen.getByTestId('error'),
+      );
+    });
+
+    it('uses the default for an icon passed as undefined', () => {
+      render(<AgentComposer onSend={vi.fn()} icons={{ send: undefined }} />);
+
+      expect(getSubmit().querySelector('svg')).toBeInTheDocument();
+    });
+  });
+
   describe('drafts', () => {
     it('keeps unsent text across remounts and clears it after sending', async () => {
       const user = userEvent.setup();

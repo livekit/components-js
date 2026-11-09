@@ -35,8 +35,8 @@ const AGENT_PARTICIPANT = new Participant('mock-agent-sid', 'agent', 'Agent');
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
- * Mirrors what `useChat` does with a real session: a sent message shows up right away as
- * `sending`, then becomes `sent` or `failed`.
+ * Mirrors what `useChat` does with a real session: a message shows up once it's sent, and a send
+ * that fails rejects.
  */
 function useMockChat({
   sendDelay,
@@ -51,11 +51,6 @@ function useMockChat({
       from: AGENT_PARTICIPANT,
     },
   ]);
-
-  const setStatus = (id: string, status: ReceivedChatMessage['status']) =>
-    setMessages((previous) =>
-      previous.map((message) => (message.id === id ? { ...message, status } : message)),
-    );
 
   const [responding, setResponding] = useState(false);
   const replyTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -83,23 +78,17 @@ function useMockChat({
     setResponding(false);
   };
 
-  const deliver = async (id: string) => {
-    setStatus(id, 'sending');
-    await wait(sendDelay);
-    setStatus(id, failSend ? 'failed' : 'sent');
-    if (!failSend) reply();
-  };
-
   const send = async (message: string) => {
-    const id = crypto.randomUUID();
+    await wait(sendDelay);
+    if (failSend) throw new Error("Couldn't send");
     setMessages((previous) => [
       ...previous,
-      { id, timestamp: Date.now(), message, from: LOCAL_PARTICIPANT, status: 'sending' },
+      { id: crypto.randomUUID(), timestamp: Date.now(), message, from: LOCAL_PARTICIPANT },
     ]);
-    await deliver(id);
+    reply();
   };
 
-  return { messages, send, resend: deliver, responding, stop };
+  return { messages, send, responding, stop };
 }
 
 /**
@@ -147,7 +136,7 @@ const COMPOSER_CLASS_NAME =
   '*:data-[slot=agent-composer-field]:rounded-lg *:data-[slot=agent-composer-field]:border *:data-[slot=agent-composer-field]:border-input *:data-[slot=agent-composer-field]:p-2 *:data-[slot=agent-composer-field]:pl-3';
 
 function MockChat({ sendDelay, failSend, replyDelay, microphoneError, children, ...props }: Args) {
-  const { messages, send, resend, responding, stop } = useMockChat({
+  const { messages, send, responding, stop } = useMockChat({
     sendDelay,
     failSend,
     replyDelay,
@@ -158,7 +147,6 @@ function MockChat({ sendDelay, failSend, replyDelay, microphoneError, children, 
     <div className="flex h-[480px] w-96 flex-col gap-2">
       <AgentChatTranscript
         messages={messages}
-        onResend={resend}
         agentState={responding ? 'thinking' : 'listening'}
         className="flex-1"
       />
@@ -205,6 +193,7 @@ export default {
     replyDelay: { control: { type: 'number', min: 0, step: 500 } },
     disabled: { control: 'boolean' },
     maxLength: { control: 'number' },
+    onError: { action: 'onError' },
   },
   parameters: {
     layout: 'centered',
@@ -217,8 +206,8 @@ export default {
 export const Default: StoryObj<Args> = {};
 
 /**
- * Every send fails. "Try again" shows the message sending, then failing again. Turn off `failSend`
- * in Controls to watch a retry succeed.
+ * Every send fails. The message goes back in the composer, and `onError` logs to the Actions panel,
+ * where an app would show a toast.
  */
 export const SendFails: StoryObj<Args> = {
   args: {
@@ -298,17 +287,12 @@ export const WithActions: StoryObj<Args> = {
 
 function LiveAgentChat() {
   const session = useSessionContext();
-  const { messages, resend } = useSessionMessages(session);
+  const { messages } = useSessionMessages(session);
   const { state: agentState } = useAgent();
 
   return (
     <div className="flex h-[480px] w-96 flex-col gap-2">
-      <AgentChatTranscript
-        messages={messages}
-        agentState={agentState}
-        onResend={(id) => resend(id).catch(() => {})}
-        className="flex-1"
-      />
+      <AgentChatTranscript messages={messages} agentState={agentState} className="flex-1" />
       <AgentComposer
         placeholder="Type something..."
         className={`data-[disabled]:opacity-60 ${COMPOSER_CLASS_NAME}`}

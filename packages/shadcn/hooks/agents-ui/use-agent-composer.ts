@@ -2,8 +2,8 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
 export interface UseAgentComposerProps {
   /**
-   * Sends the message. The composer clears right away and doesn't wait for it, so show sending and
-   * failed states with the message itself, as `useChat` does with each message's `status`.
+   * Sends the message. The composer clears right away and doesn't wait for it. If it rejects, the
+   * message goes back in the composer, unless something new has been typed, and `onError` is called.
    */
   onSend: (message: string) => void | Promise<void>;
   /** The text in the composer, when controlled. */
@@ -20,7 +20,7 @@ export interface UseAgentComposerProps {
    * but sending isn't until the message is short enough.
    */
   maxLength?: number;
-  /** Called when `onSend` rejects. */
+  /** Called when `onSend` rejects, such as to show a toast. */
   onError?: (error: unknown) => void;
   /**
    * Keeps unsent text in session storage under this key, so it survives the composer closing or
@@ -75,7 +75,8 @@ function countCharacters(text: string) {
 
 /**
  * Headless state for a message composer. Sending clears the text right away, without waiting for
- * the send to finish, so you can send the next message immediately.
+ * the send to finish, so you can send the next message immediately. A message that fails to send
+ * goes back in the composer, unless something new has been typed.
  *
  * @example
  * ```tsx
@@ -96,6 +97,9 @@ export function useAgentComposer({
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
   const isControlled = valueProp !== undefined;
   const value = isControlled ? valueProp : uncontrolledValue;
+  // The latest text, so a failed send can tell whether something new has been typed since
+  const valueRef = useRef(value);
+  valueRef.current = value;
 
   // Drafts load after mount, so the first render matches server-rendered HTML. A new `draftKey`
   // loads that conversation's draft, or clears the field if it has none.
@@ -129,9 +133,14 @@ export function useAgentComposer({
     if (!canSubmit) return;
 
     setValue('');
+    valueRef.current = '';
     Promise.resolve()
       .then(() => onSend(message))
-      .catch((error: unknown) => onError?.(error));
+      .catch((error: unknown) => {
+        // Put it back so it isn't lost, unless something new has been typed since
+        if (valueRef.current === '') setValue(message);
+        onError?.(error);
+      });
   }, [canSubmit, message, onSend, onError, setValue]);
 
   return { value, setValue, submit, canSubmit, disabled, maxLength, remaining };

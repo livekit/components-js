@@ -181,7 +181,7 @@ export function AgentSessionView_01({
   ...props
 }: React.ComponentProps<'section'> & AgentSessionView_01Props) {
   const session = useSessionContext();
-  const { messages, resend } = useSessionMessages(session);
+  const { messages } = useSessionMessages(session);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const { state: agentState } = useAgent();
 
@@ -210,8 +210,6 @@ export function AgentSessionView_01({
             <AgentChatTranscript
               agentState={agentState}
               messages={messages}
-              // A failed resend marks the message failed again, so there's nothing more to handle
-              onResend={(id) => resend(id).catch(() => {})}
               className="mx-auto max-w-2xl **:data-[slot=message-scroller-content]:p-4 **:data-[slot=message-scroller-content]:pt-40! @md/agent-session-block:**:data-[slot=message-scroller-content]:p-6"
             />
           </motion.div>
@@ -249,8 +247,6 @@ export function AgentSessionView_01({
             isConnected={session.isConnected}
             onDisconnect={onDisconnect ?? session.end}
             onIsChatOpenChange={setIsChatOpen}
-            // The transcript shows failed messages with "Try again", so one way to resend is enough
-            restoreFailedMessages={false}
           />
         </div>
       </motion.div>

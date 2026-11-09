@@ -110,11 +110,6 @@ describe('AgentSessionView_01', () => {
   });
 
   describe('controls', () => {
-    it('leaves resending failed messages to the transcript', () => {
-      render(<AgentSessionView_01 data-testid="session-view" />);
-      expect(agentControlBarMock.mock.calls[0][0].restoreFailedMessages).toBe(false);
-    });
-
     it('passes the default controls to AgentControlBar when unset', () => {
       render(<AgentSessionView_01 data-testid="session-view" />);
       const call = agentControlBarMock.mock.calls[0][0];

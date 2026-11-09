@@ -7,7 +7,9 @@ Add `AgentComposer`, a text input for sending messages to an agent, with `AgentC
 and `AgentComposerCharacterCount` parts and a headless `useAgentComposer` hook.
 
 - It sends through the session's chat by default and clears as soon as you send, so you can send
-  the next message right away. While the session connects, it's disabled and says so.
+  the next message right away. A message that fails to send goes back in the input, unless
+  something new has been typed, and `onError` reports the error, such as for a toast. While the
+  session connects, it's disabled and says so.
 - Its microphone button turns the session's microphone on so the agent can hear you, shows the
   microphone's level while it's on, and changes the placeholder to "Listening…". It shows a spinner
   while the microphone starts, and says when access is blocked or there's no microphone. With
@@ -25,12 +27,7 @@ and `AgentComposerCharacterCount` parts and a headless `useAgentComposer` hook.
 - Without `onSend`, the microphone button hides when the participant can't publish audio.
 - Calling `preventDefault` in `onSubmit` cancels the send.
 
-`AgentControlBar` now uses it for its chat input. A message that fails to send goes back in the
-input, unless something new has been typed. `restoreFailedMessages={false}` turns this off for a
-transcript that already offers a retry, as `AgentSessionView_01` does.
+`AgentControlBar` now uses it for its chat input.
 
-`AgentChatTranscript` marks messages that failed to send, announces them to screen readers, and
-shows a "Try again" button when you pass `onResend`. A retried message shows that it's sending until
-it goes through or fails again. Your own messages show as plain text, so line breaks from
-Shift+Enter stay as you typed them. `labels` rewords or translates its text. `AgentSessionView_01`
-passes `resend` from `useSessionMessages`.
+`AgentChatTranscript` shows your own messages as plain text, so line breaks from Shift+Enter stay as
+you typed them. `labels` rewords or translates its text.

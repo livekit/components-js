@@ -1,11 +1,10 @@
 'use client';
 
-import { type ComponentProps, useEffect, useRef, useState } from 'react';
+import { type ComponentProps, useEffect, useRef } from 'react';
 import { type AgentState, type ReceivedMessage } from '@livekit/components-react';
-import { CircleAlertIcon, LoaderIcon } from 'lucide-react';
 import { Streamdown } from 'streamdown';
 import { Bubble, BubbleContent } from '@/components/ui/bubble';
-import { Message, MessageContent, MessageFooter } from '@/components/ui/message';
+import { Message, MessageContent } from '@/components/ui/message';
 import { Marker, MarkerContent, MarkerIcon } from '@/components/ui/marker';
 import {
   MessageScroller,
@@ -62,11 +61,6 @@ export interface AgentChatTranscriptProps
    * @defaultValue []
    */
   messages?: ReceivedMessage[];
-  /**
-   * Sends a failed message again, such as `resend` from `useSessionMessages`. When provided, failed
-   * messages show a retry button, and a retried message shows that it's sending until it settles.
-   */
-  onResend?: (messageId: string) => void;
   /** Text the transcript shows and announces. */
   labels?: Partial<AgentChatTranscriptLabels>;
   /**
@@ -80,23 +74,11 @@ export interface AgentChatTranscriptProps
  * to translate or reword them.
  */
 export interface AgentChatTranscriptLabels {
-  /** Under a message that couldn't send. */
-  failed: string;
-  /** The button that sends a failed message again. */
-  retry: string;
-  /** Under a retried message while it sends. */
-  sending: string;
-  /** Announced to screen readers when a message can't send. */
-  failedAnnouncement: string;
   /** Beside the indicator while the agent is thinking. */
   thinking: string;
 }
 
 export const defaultAgentChatTranscriptLabels: AgentChatTranscriptLabels = {
-  failed: "Couldn't send.",
-  retry: 'Try again',
-  sending: 'Sending…',
-  failedAnnouncement: "Message couldn't send",
   thinking: 'Thinking...',
 };
 
@@ -105,39 +87,8 @@ function withDefaultLabels(
   labels: Partial<AgentChatTranscriptLabels> = {},
 ): AgentChatTranscriptLabels {
   return {
-    failed: labels.failed ?? defaultAgentChatTranscriptLabels.failed,
-    retry: labels.retry ?? defaultAgentChatTranscriptLabels.retry,
-    sending: labels.sending ?? defaultAgentChatTranscriptLabels.sending,
-    failedAnnouncement:
-      labels.failedAnnouncement ?? defaultAgentChatTranscriptLabels.failedAnnouncement,
     thinking: labels.thinking ?? defaultAgentChatTranscriptLabels.thinking,
   };
-}
-
-/**
- * The message to announce as failed: the latest one that failed since the last render, kept while
- * it stays failed. Messages that were already failed, such as an older one left after a retry,
- * aren't announced again.
- */
-function useNewlyFailedMessage(messages: ReceivedMessage[]) {
-  const failedIds = messages
-    .filter((message) => 'status' in message && message.status === 'failed')
-    .map((message) => message.id);
-  // Seeded with what's already failed, so mounting doesn't announce old failures
-  const previousFailedIdsRef = useRef(new Set(failedIds));
-  const [announced, setAnnounced] = useState<{ id: string; key: number }>();
-  const failedIdsKey = failedIds.join('\n');
-
-  useEffect(() => {
-    const ids = failedIdsKey ? failedIdsKey.split('\n') : [];
-    const newlyFailedId = ids.filter((id) => !previousFailedIdsRef.current.has(id)).at(-1);
-    previousFailedIdsRef.current = new Set(ids);
-    if (newlyFailedId) {
-      setAnnounced((previous) => ({ id: newlyFailedId, key: (previous?.key ?? 0) + 1 }));
-    }
-  }, [failedIdsKey]);
-
-  return announced && failedIds.includes(announced.id) ? announced : undefined;
 }
 
 function ScrollToEndOnLocalMessage({ messages }: { messages: ReceivedMessage[] }) {
@@ -186,7 +137,6 @@ export function AgentChatTranscript({
   spacerClassName,
   agentState,
   messages = [],
-  onResend,
   labels: labelsProp,
   className,
   ...props
@@ -194,14 +144,6 @@ export function AgentChatTranscript({
   const labels = withDefaultLabels(labelsProp);
   const anchorsLocalMessages =
     scrollAnchor === true || scrollAnchor === 'any' || scrollAnchor === 'user';
-  // First sends stay quiet so they feel instant; only retries show that they're in progress
-  const [retriedIds, setRetriedIds] = useState<ReadonlySet<string>>(() => new Set());
-  const failure = useNewlyFailedMessage(messages);
-
-  const handleResend = (id: string) => {
-    setRetriedIds((previous) => new Set(previous).add(id));
-    onResend?.(id);
-  };
 
   return (
     <MessageScrollerProvider
@@ -212,12 +154,6 @@ export function AgentChatTranscript({
       scrollPreviousItemPeek={scrollPreviousItemPeek}
     >
       {autoScroll && !anchorsLocalMessages && <ScrollToEndOnLocalMessage messages={messages} />}
-      <div aria-live="polite" className="sr-only">
-        {failure && (
-          // A new node for each failure, so failing again after a retry announces again
-          <span key={`failed-${failure.key}`}>{labels.failedAnnouncement}</span>
-        )}
-      </div>
       <MessageScroller className={className} {...props}>
         <MessageScrollerViewport preserveScrollOnPrepend={preserveScrollOnPrepend}>
           <MessageScrollerContent
@@ -226,7 +162,6 @@ export function AgentChatTranscript({
           >
             {messages.map((receivedMessage) => {
               const { id, timestamp, from, message } = receivedMessage;
-              const status = 'status' in receivedMessage ? receivedMessage.status : undefined;
               const time = new Date(timestamp);
               const isUser = from?.isLocal;
               const locale = typeof navigator !== 'undefined' ? navigator.language : 'en-US';
@@ -244,7 +179,7 @@ export function AgentChatTranscript({
 
               return (
                 <MessageScrollerItem key={id} messageId={id} scrollAnchor={_scrollAnchor}>
-                  <Message align={isUser ? 'end' : 'start'} title={title} data-status={status}>
+                  <Message align={isUser ? 'end' : 'start'} title={title}>
                     <MessageContent>
                       <Bubble
                         align={isUser ? 'end' : 'start'}
@@ -259,27 +194,6 @@ export function AgentChatTranscript({
                           )}
                         </BubbleContent>
                       </Bubble>
-                      {status === 'sending' && retriedIds.has(id) && (
-                        <MessageFooter className="text-muted-foreground gap-1.5">
-                          <LoaderIcon className="size-3.5 animate-spin" aria-hidden />
-                          <span>{labels.sending}</span>
-                        </MessageFooter>
-                      )}
-                      {status === 'failed' && (
-                        <MessageFooter className="text-destructive gap-1.5">
-                          <CircleAlertIcon className="size-3.5" aria-hidden />
-                          <span>{labels.failed}</span>
-                          {onResend && (
-                            <button
-                              type="button"
-                              onClick={() => handleResend(id)}
-                              className="cursor-pointer underline underline-offset-2 hover:no-underline"
-                            >
-                              {labels.retry}
-                            </button>
-                          )}
-                        </MessageFooter>
-                      )}
                     </MessageContent>
                   </Message>
                 </MessageScrollerItem>

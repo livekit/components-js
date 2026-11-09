@@ -78,9 +78,11 @@ describe('chat topics', () => {
       },
     } as TextStreamReader;
     handler(reader, { identity: 'sender' });
+    // The message streams in as `pending` and then settles to `complete`, so
+    // assert on the final emission rather than a single call.
     await vi.waitFor(() =>
-      expect(privateMessages).toHaveBeenCalledExactlyOnceWith([
-        expect.objectContaining({ id: 'private-message', message: 'hello' }),
+      expect(privateMessages).toHaveBeenLastCalledWith([
+        expect.objectContaining({ id: 'private-message', message: 'hello', status: 'complete' }),
       ]),
     );
     expect(publicMessages).not.toHaveBeenCalled();

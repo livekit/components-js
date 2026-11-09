@@ -2,7 +2,7 @@ import { Encryption_Type } from '@livekit/protocol';
 import { Room, RoomEvent, type TextStreamInfo } from 'livekit-client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Future } from '../helper/future';
-import { log } from '../logger';
+import type { ReceivedChatMessage } from '../messages/types';
 import { setupChat } from './chat';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -20,7 +20,7 @@ describe('chat text stream errors', () => {
     vi.restoreAllMocks();
   });
 
-  it('logs and does not rethrow globally when a chat text stream ends abnormally', async () => {
+  it('surfaces a failed message instead of rethrowing when a chat text stream ends abnormally', async () => {
     const room = new Room();
     rooms.push(room);
 
@@ -32,10 +32,10 @@ describe('chat text stream errors', () => {
     ) => {
       textHandler = handler;
     }) as any);
-    const warnSpy = vi.spyOn(log, 'warn').mockImplementation(() => {});
 
     const { messageObservable } = setupChat(room);
-    const subscription = messageObservable.subscribe(() => {});
+    let latest: ReceivedChatMessage[] = [];
+    const subscription = messageObservable.subscribe((messages) => (latest = messages));
     expect(textHandler).toBeDefined();
 
     // Without the error handler this error is rethrown globally from a timer and
@@ -55,7 +55,10 @@ describe('chat text stream errors', () => {
     );
     await flush();
 
-    expect(warnSpy).toHaveBeenCalledWith('chat message stream failed', error);
+    expect(latest).toHaveLength(1);
+    expect(latest[0].message).toBe('partial message');
+    expect(latest[0].status).toBe('failed');
+    expect(latest[0].status === 'failed' && latest[0].error).toBe(error);
     subscription.unsubscribe();
   });
 });

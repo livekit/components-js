@@ -311,7 +311,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
   let pendingSends = 0;
   const finalMessageEncoder = options?.messageEncoder ?? encodeLegacyMsg;
 
-  const send = async (message: string, options?: SendTextOptions) => {
+  const send = async (message: string, options?: SendTextOptions): Promise<ReceivedChatMessage> => {
     if (!options) {
       options = {};
     }

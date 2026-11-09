@@ -23,7 +23,8 @@ and `AgentComposerCharacterCount` parts and a headless `useAgentComposer` hook.
 - Pass `draftKey` to keep unsent text across reloads.
 - Enter sends and Shift+Enter adds a new line; on touch screens, Return adds a new line. Enter no
   longer sends while an input method editor is composing.
-- `labels` rewords or translates its text.
+- `labels` rewords or translates its text, and `icons` replaces the send, stop, and microphone
+  icons.
 - Without `onSend`, the microphone button hides when the participant can't publish audio.
 - Calling `preventDefault` in `onSubmit` cancels the send.
 

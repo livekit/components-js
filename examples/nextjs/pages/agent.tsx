@@ -81,9 +81,9 @@ function TextChat() {
         <div style={{ fontSize: 13, opacity: 0.7 }}>
           Agent:{' '}
           {agent.state === 'thinking'
-            ? 'thinking…'
+            ? 'thinking...'
             : agent.state === 'typing'
-              ? 'typing…'
+              ? 'typing...'
               : agent.state}
         </div>
         <div

@@ -73,11 +73,11 @@ export type ThreadTextAgentState = 'idle' | 'thinking' | 'typing' | 'input-requi
  * The thread's readiness lifecycle. A thread has no persistent socket (text is request/response per
  * turn), so this reflects credential/history readiness rather than a connection:
  *   - `idle`: initial, before the first readiness pass.
- *   - `loadingHistory`: an existing thread's history is being fetched.
+ *   - `loading-history`: an existing thread's history is being fetched.
  *   - `ready`: ready to send and receive (history, if any, has loaded).
  * @beta
  */
-export type ThreadStatus = 'idle' | 'loadingHistory' | 'ready';
+export type ThreadStatus = 'idle' | 'loading-history' | 'ready';
 
 type ThreadStateCommon = {
   /** The active conversation/thread id (A2A `contextId`), or null before one is established. */
@@ -125,7 +125,7 @@ type ThreadStateCommon = {
 /** @beta */
 export type UseThreadReturn =
   | ({ status: 'idle' } & ThreadStateCommon)
-  | ({ status: 'loadingHistory' } & ThreadStateCommon)
+  | ({ status: 'loading-history' } & ThreadStateCommon)
   | ({ status: 'ready' } & ThreadStateCommon);
 
 /** @internal */
@@ -388,7 +388,7 @@ export function useThread(
     if (threadChanged) {
       messageStore.clear();
       lastFetchedThreadIdRef.current = threadId;
-      setStatus('loadingHistory');
+      setStatus('loading-history');
 
       void (async () => {
         try {
@@ -459,8 +459,8 @@ export function useThread(
     switch (status) {
       case 'idle':
         return { ...common, status: 'idle' };
-      case 'loadingHistory':
-        return { ...common, status: 'loadingHistory' };
+      case 'loading-history':
+        return { ...common, status: 'loading-history' };
       case 'ready':
         return { ...common, status: 'ready' };
     }

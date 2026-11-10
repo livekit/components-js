@@ -62,10 +62,9 @@ function SimpleAgent({ thread }: { thread: UseThreadReturn }) {
 // which works here even though no call is connected.
 function TextChat() {
   const { messages, send, isSending } = useThreadMessages();
-  const agent = useAgent();
   const [draft, setDraft] = useState('');
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     const text = draft.trim();
     if (!text) {
@@ -76,67 +75,58 @@ function TextChat() {
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ width: 480, height: 800, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <div style={{ fontSize: 13, opacity: 0.7 }}>
-          Agent:{' '}
-          {agent.state === 'thinking'
-            ? 'thinking...'
-            : agent.state === 'typing'
-              ? 'typing...'
-              : agent.state}
-        </div>
-        <div
-          style={{
-            overflowY: 'auto',
-            border: '1px solid rgba(255,255,255,0.2)',
-            borderRadius: 8,
-            padding: 12,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 8,
-            flexGrow: 1,
-            flexShrink: 1,
-          }}
-        >
-          {messages.length === 0 ? (
-            <span style={{ opacity: 0.6 }}>No messages yet. Say hello 👋</span>
-          ) : (
-            messages.map((message) => {
-              const isUser = message.origin === 'user';
-              const role = message.origin ?? 'agent';
-              return (
-                <div
-                  key={message.id}
-                  style={{
-                    alignSelf: isUser ? 'flex-end' : 'flex-start',
-                    background: isUser ? '#1f6feb' : 'rgba(255,255,255,0.1)',
-                    borderRadius: 8,
-                    padding: '6px 10px',
-                    maxWidth: '80%',
-                  }}
-                >
-                  <div style={{ fontSize: 11, opacity: 0.7 }}>{role}</div>
-                  <div>{'message' in message ? message.message : ''}</div>
-                </div>
-              );
-            })
-          )}
-        </div>
-        <form onSubmit={onSubmit} style={{ display: 'flex', gap: 8 }}>
-          <input
-            className="lk-form-control"
-            style={{ flex: 1 }}
-            value={draft}
-            placeholder="Type a message (e.g. how much to SFO?)"
-            onChange={(e) => setDraft(e.target.value)}
-          />
-          <button className="lk-button" type="submit" disabled={isSending}>
-            {isSending ? 'Sending…' : 'Send'}
-          </button>
-        </form>
+    <>
+      <div
+        style={{
+          overflowY: 'auto',
+          border: '1px solid rgba(255,255,255,0.2)',
+          borderRadius: 8,
+          padding: 12,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 8,
+          flexGrow: 1,
+          flexShrink: 1,
+        }}
+      >
+        {messages.length === 0 ? (
+          <span style={{ opacity: 0.6 }}>No messages yet. Say hello 👋</span>
+        ) : (
+          messages.map((message) => {
+            const isUser = message.origin === 'user';
+            const role = message.origin ?? 'agent';
+            return (
+              <div
+                key={message.id}
+                style={{
+                  alignSelf: isUser ? 'flex-end' : 'flex-start',
+                  background: isUser ? '#1f6feb' : 'rgba(255,255,255,0.1)',
+                  borderRadius: 8,
+                  padding: '6px 10px',
+                  maxWidth: '80%',
+                }}
+              >
+                <div style={{ fontSize: 11, opacity: 0.7 }}>{role}</div>
+                <div>{'message' in message ? message.message : ''}</div>
+              </div>
+            );
+          })
+        )}
       </div>
-    </div>
+
+      <form onSubmit={onSubmit} style={{ display: 'flex', gap: 8 }}>
+        <input
+          className="lk-form-control"
+          style={{ flex: 1 }}
+          value={draft}
+          placeholder="Type a message (e.g. how much to SFO?)"
+          onChange={(e) => setDraft(e.target.value)}
+        />
+        <button className="lk-button" type="submit" disabled={isSending}>
+          {isSending ? 'Sending...' : 'Send'}
+        </button>
+      </form>
+    </>
   );
 }
 
@@ -185,6 +175,8 @@ const AgentExample: NextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [started, call.start, call.end]);
 
+  const agent = useAgent(thread);
+
   useEffect(() => {
     if (call.connectionState === 'disconnected') {
       setStarted(false);
@@ -223,15 +215,28 @@ const AgentExample: NextPage = () => {
                 </button>
               )}
             </div>
-            {started ? (
-              <RoomContext.Provider value={call.room}>
-                <SimpleAgent thread={thread} />
-                <VoiceAssistantControlBar />
-                <RoomAudioRenderer />
-              </RoomContext.Provider>
-            ) : (
-              <TextChat />
-            )}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: 480, height: 800, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ fontSize: 13, opacity: 0.7 }}>
+                  Agent:{' '}
+                  {agent.state === 'thinking'
+                    ? 'thinking...'
+                    : agent.state === 'typing'
+                      ? 'typing...'
+                      : agent.state},
+                  Reported thread id:{' '}{thread.threadId ?? 'N/A'}
+                </div>
+                {started ? (
+                  <RoomContext.Provider value={call.room}>
+                    <SimpleAgent thread={thread} />
+                    <VoiceAssistantControlBar />
+                    <RoomAudioRenderer />
+                  </RoomContext.Provider>
+                ) : (
+                  <TextChat />
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </ThreadProvider>

@@ -214,12 +214,12 @@ const AgentExample: NextPage = () => {
               {started ? (
                 <div>
                   <button className="lk-button" onClick={() => setStarted(false)}>
-                    Disconnect
+                    End call
                   </button>
                 </div>
               ) : (
                 <button className="lk-button" onClick={() => setStarted(true)}>
-                  Connect
+                  Start call
                 </button>
               )}
             </div>

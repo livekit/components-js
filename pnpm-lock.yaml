@@ -87,7 +87,7 @@ importers:
         version: 2.23.0(@types/dom-mediacapture-record@1.0.22)
       livekit-server-sdk:
         specifier: ^2.17.0
-        version: 2.19.2
+        version: 2.19.3
       lucide-react:
         specifier: ^1.24.0
         version: 1.61.0(@types/react@19.2.18)(react@19.2.8)
@@ -193,7 +193,7 @@ importers:
         version: 2.23.0(@types/dom-mediacapture-record@1.0.22)
       livekit-server-sdk:
         specifier: ^2.6.1
-        version: 2.19.2
+        version: 2.19.3
       next:
         specifier: ^15.5.28
         version: 15.5.28(@babel/core@8.0.7)(@opentelemetry/api@1.9.0)(@types/node@18.19.130)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.103.1)
@@ -424,7 +424,7 @@ importers:
         version: 2.23.0(@types/dom-mediacapture-record@1.0.22)
       livekit-server-sdk:
         specifier: ^2.13.2
-        version: 2.19.2
+        version: 2.19.3
       lucide-react:
         specifier: ^1.0.0
         version: 1.61.0(@types/react@19.2.18)(react@19.2.8)
@@ -2298,11 +2298,11 @@ packages:
   '@livekit/protocol@1.50.4':
     resolution: {integrity: sha512-L1uggNQAqyY21smQY8AllyOYbcv9Me9TaxwuLytL1R8ck9nbYPmQLNwEDi3pOFGAMa5F8I2nUi2Jc59W5awxlA==}
 
-  '@livekit/protocol@1.51.0':
-    resolution: {integrity: sha512-kEDEDaFvIcp5VlYBromdSKMJMEJKfPvXPfEaJPdEz1Qgo84gZAoLF2g58CcMlVYGsjrwE5XYgQxRS5B7KuEj3w==}
-
   '@livekit/protocol@1.52.1':
     resolution: {integrity: sha512-X8DxKlNbzk6Lh+v630+mjdFHSotdAFwIyzxSRSUql2DbTxCnlpa7JsvFGc6Na3mXiex2OFh0iiQtWwOBP0rIYA==}
+
+  '@livekit/protocol@1.53.0':
+    resolution: {integrity: sha512-dM562Q7sEQbJ9ZghjIpcVuRxRApGNwJW/JfXRub+dJT8J1cC2Tep0SyYkDzOawix7+0x969fnjXt0qEZOxkjbQ==}
 
   '@livekit/track-processors@0.3.3':
     resolution: {integrity: sha512-C5mBWe34ie0pfhCf9zAD65D26ZytzW/xGrj8Zc1BGh5kLISFDVQlefO78LZWw9K5saTamk60O4fzSCKqWMPMLA==}
@@ -7398,8 +7398,8 @@ packages:
     peerDependencies:
       '@types/dom-mediacapture-record': ^1
 
-  livekit-server-sdk@2.19.2:
-    resolution: {integrity: sha512-aNb7iZOdMYWjg3X227GO9i/jWsqR6uiUa2le3T0JOaK+FwE3bMx+bEhHVoSioMFL4LQ4xk4ztz1H8TKxIPjq1w==}
+  livekit-server-sdk@2.19.3:
+    resolution: {integrity: sha512-DRcTr/aU2759IW9aJRnM+fL3kRFbDuS7DSfwSRRP7NBByWbD58EsdGkzYFZa1Ka4g7ks1HPvEQaAmE5b6WHNPQ==}
     engines: {node: '>=19'}
 
   load-tsconfig@0.2.5:
@@ -11449,11 +11449,11 @@ snapshots:
     dependencies:
       '@bufbuild/protobuf': 1.10.1
 
-  '@livekit/protocol@1.51.0':
+  '@livekit/protocol@1.52.1':
     dependencies:
       '@bufbuild/protobuf': 1.10.1
 
-  '@livekit/protocol@1.52.1':
+  '@livekit/protocol@1.53.0':
     dependencies:
       '@bufbuild/protobuf': 1.10.1
 
@@ -17671,10 +17671,10 @@ snapshots:
       typed-emitter: 2.1.0
       webrtc-adapter: 9.0.6
 
-  livekit-server-sdk@2.19.2:
+  livekit-server-sdk@2.19.3:
     dependencies:
       '@bufbuild/protobuf': 1.10.1
-      '@livekit/protocol': 1.51.0
+      '@livekit/protocol': 1.53.0
       jose: 5.10.0
 
   load-tsconfig@0.2.5: {}

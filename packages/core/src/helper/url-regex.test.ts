@@ -35,10 +35,12 @@ describe('url-regex', () => {
   });
 
   test('should not backtrack for long on a long word with no url in it', () => {
+    // the backtracking pattern takes 8s+ on each input, the current one tens of ms, so the
+    // bound leaves room for a slow CI worker
     for (const text of ['a'.repeat(3000), 'x:'.repeat(1500)]) {
       const start = performance.now();
       expect(text.match(createUrlRegExp({}))).toBeNull();
-      expect(performance.now() - start).toBeLessThan(1000);
+      expect(performance.now() - start).toBeLessThan(5000);
     }
   });
 });

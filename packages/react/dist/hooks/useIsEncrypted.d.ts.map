@@ -1,0 +1,1 @@
+{"version":3,"file":"useIsEncrypted.d.ts","sourceRoot":"","sources":["../../src/hooks/useIsEncrypted.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,WAAW,EAAE,IAAI,EAAE,MAAM,gBAAgB,CAAC;AAKxD;;GAEG;AACH,MAAM,WAAW,qBAAqB;IACpC,IAAI,CAAC,EAAE,IAAI,CAAC;CACb;AAED;;GAEG;AACH,wBAAgB,cAAc,CAAC,WAAW,CAAC,EAAE,WAAW,EAAE,OAAO,GAAE,qBAA0B,WAW5F"}

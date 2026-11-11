@@ -1,0 +1,1 @@
+{"version":3,"file":"useMediaDevices.d.ts","sourceRoot":"","sources":["../../src/hooks/useMediaDevices.ts"],"names":[],"mappings":"AAIA;;;;;;;;;GASG;AACH,wBAAgB,eAAe,CAAC,EAC9B,IAAI,EACJ,OAAO,GACR,EAAE;IACD,IAAI,EAAE,eAAe,CAAC;IACtB,OAAO,CAAC,EAAE,CAAC,CAAC,EAAE,KAAK,KAAK,IAAI,CAAC;CAC9B,qBAOA"}

@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import type { Room, SendTextOptions } from 'livekit-client';
+import type { Room, SendTextOptions, TextStreamInfo } from 'livekit-client';
 import { compareVersions, RoomEvent } from 'livekit-client';
 import {
   BehaviorSubject,
@@ -69,7 +69,23 @@ export type ChatOptions = {
 type ChatTopicState = {
   messageSubject: Subject<ReceivedChatMessage>;
   onDestroyObservable: Subject<void>;
+  /** Messages sent from this client that haven't been sent successfully yet, kept for `resend`. */
+  unsentMessages: Map<
+    string,
+    { message: ReceivedChatMessage; options: SendTextOptions; isSending: boolean }
+  >;
 };
+
+let localMessageCount = 0;
+
+/**
+ * `sendText` only returns the stream id once sending finishes, so a message sent from this client
+ * gets its own id up front and keeps it, whether it's sending, sent, or failed.
+ */
+function createLocalMessageId() {
+  localMessageCount += 1;
+  return `local-${Date.now().toString(36)}-${localMessageCount}`;
+}
 
 const topicSubjectMap: WeakMap<Room, Map<string, ChatTopicState>> = new WeakMap();
 const streamIdToAttachments = new Map<
@@ -112,8 +128,9 @@ export function setupChat(room: Room, options?: ChatOptions) {
   const topicState = topicMap.get(topic) ?? {
     messageSubject: new Subject<ReceivedChatMessage>(),
     onDestroyObservable: new Subject<void>(),
+    unsentMessages: new Map(),
   };
-  const { messageSubject, onDestroyObservable } = topicState;
+  const { messageSubject, onDestroyObservable, unsentMessages } = topicState;
   topicMap.set(topic, topicState);
   topicSubjectMap.set(room, topicMap);
 
@@ -254,11 +271,14 @@ export function setupChat(room: Room, options?: ChatOptions) {
         const replaceIndex = acc.findIndex((msg) => msg.id === value.id);
         if (replaceIndex > -1) {
           const originalMsg = acc[replaceIndex];
-          acc[replaceIndex] = {
-            ...value,
-            timestamp: originalMsg.timestamp,
-            editTimestamp: value.timestamp,
-          };
+          // A status change on a message sent from this client isn't an edit
+          acc[replaceIndex] = value.status
+            ? value
+            : {
+                ...value,
+                timestamp: originalMsg.timestamp,
+                editTimestamp: value.timestamp,
+              };
         }
         return [...acc];
       }
@@ -271,37 +291,36 @@ export function setupChat(room: Room, options?: ChatOptions) {
   let pendingSends = 0;
   const finalMessageEncoder = options?.messageEncoder ?? encodeLegacyMsg;
 
-  const send = async (message: string, options?: SendTextOptions) => {
-    if (!options) {
-      options = {};
-    }
-    options.topic ??= topic;
+  /**
+   * Adds the message as `sending`, then marks it `sent` or `failed`. Rejects if sending fails,
+   * leaving the failed message in place for `resend`.
+   */
+  const deliver = async (unsentMessage: ReceivedChatMessage, options: SendTextOptions) => {
+    const { id, message } = unsentMessage;
+    unsentMessages.set(id, { message: unsentMessage, options, isSending: true });
     pendingSends += 1;
     isSending$.next(true);
+    messageSubject.next({ ...unsentMessage, status: 'sending' });
 
     try {
-      const info = await room.localParticipant.sendText(message, options);
+      let info: TextStreamInfo;
+      try {
+        info = await room.localParticipant.sendText(message, options);
+      } catch (error) {
+        unsentMessages.set(id, { message: unsentMessage, options, isSending: false });
+        messageSubject.next({ ...unsentMessage, status: 'failed' });
+        throw error;
+      }
+
+      unsentMessages.delete(id);
+      const receivedChatMsg: ReceivedChatMessage = { ...unsentMessage, status: 'sent' };
+      messageSubject.next(receivedChatMsg);
 
       const legacyChatMsg: LegacyChatMessage = {
         id: info.id,
-        timestamp: Date.now(),
+        timestamp: unsentMessage.timestamp,
         message,
       };
-
-      const chatMsg: ChatMessage = {
-        ...legacyChatMsg,
-        attachedFiles: options.attachments,
-      };
-
-      const receivedChatMsg: ReceivedChatMessage = {
-        ...chatMsg,
-        type: 'chatMessage',
-        from: room.localParticipant,
-        attributes: options.attributes,
-      };
-
-      messageSubject.next(receivedChatMsg);
-
       const encodedLegacyMsg = finalMessageEncoder({
         ...legacyChatMsg,
         ignoreLegacy: serverSupportsDataStreams(),
@@ -323,9 +342,43 @@ export function setupChat(room: Room, options?: ChatOptions) {
     }
   };
 
+  /** Sends a message. It appears in the messages right away with a `sending` status. */
+  const send = async (message: string, options?: SendTextOptions) => {
+    if (!options) {
+      options = {};
+    }
+    options.topic ??= topic;
+
+    return deliver(
+      {
+        id: createLocalMessageId(),
+        timestamp: Date.now(),
+        message,
+        attachedFiles: options.attachments,
+        type: 'chatMessage',
+        from: room.localParticipant,
+        attributes: options.attributes,
+      },
+      options,
+    );
+  };
+
+  /** Sends a failed message again, keeping its id and place in the messages. */
+  const resend = async (messageId: string) => {
+    const unsent = unsentMessages.get(messageId);
+    if (!unsent) {
+      throw new Error(`No failed message with id ${messageId} to resend`);
+    }
+    if (unsent.isSending) {
+      throw new Error(`Message ${messageId} is already sending`);
+    }
+    return deliver(unsent.message, unsent.options);
+  };
+
   return {
     messageObservable: messagesObservable,
     isSendingObservable: isSending$,
     send,
+    resend,
   };
 }

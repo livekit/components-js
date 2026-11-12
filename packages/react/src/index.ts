@@ -14,6 +14,7 @@ export * from './assets/images';
 export { setLogLevel, setLogExtension, isTrackReference } from '@livekit/components-core';
 export type {
   ChatMessage,
+  ChatMessageStatus,
   ReceivedMessage,
   ReceivedChatMessage,
   ReceivedUserTranscriptionMessage,

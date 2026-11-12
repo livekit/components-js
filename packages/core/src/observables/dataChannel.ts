@@ -13,6 +13,7 @@ import { ReceivedChatMessage } from '../components/chat';
 export const DataTopic = {
   CHAT: 'lk.chat',
   TRANSCRIPTION: 'lk.transcription',
+  REACTIONS: 'lk.reactions',
 } as const;
 
 /** @deprecated */

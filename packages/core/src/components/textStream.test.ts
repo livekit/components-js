@@ -1,6 +1,6 @@
 import { RoomEvent, type Room } from 'livekit-client';
 import { describe, expect, it, vi } from 'vitest';
-import { setupTextStream } from './textStream';
+import { setupTextStream, type TextStreamData } from './textStream';
 
 /**
  * Minimal stand-in for `Room` that mirrors livekit-client's one-handler-per-topic
@@ -44,6 +44,17 @@ function fakeReader(id: string, chunks: string[]) {
     info: { id, attributes: {} },
     async *[Symbol.asyncIterator]() {
       for (const chunk of chunks) yield chunk;
+    },
+  };
+}
+
+/** A reader that yields its chunks and then errors, mirroring a mid-stream disconnect. */
+function failingReader(id: string, chunks: string[], error: Error) {
+  return {
+    info: { id, attributes: {} },
+    async *[Symbol.asyncIterator]() {
+      for (const chunk of chunks) yield chunk;
+      throw error;
     },
   };
 }
@@ -103,7 +114,71 @@ describe('setupTextStream', () => {
     await push(TOPIC, fakeReader('stream-2', ['world']));
     await flush();
 
-    expect(after).toEqual([1]);
+    // The second window sees only its own stream — never the previous window's — so
+    // every emission has length 1 (the stream emits once while pending and again on
+    // completion, both carrying the single stream).
+    expect(after.length).toBeGreaterThan(0);
+    expect(after.every((length) => length === 1)).toBe(true);
     secondSub.unsubscribe();
+  });
+
+  it('reports pending while chunks arrive, then complete when the reader finishes', async () => {
+    const { room, push } = createFakeRoom();
+
+    const stream = setupTextStream(room, TOPIC);
+    const statuses: TextStreamData['status'][] = [];
+    let latest: TextStreamData[] = [];
+    const sub = stream.subscribe((streams) => {
+      latest = streams;
+      if (streams[0]) statuses.push(streams[0].status);
+    });
+
+    await push(TOPIC, fakeReader('stream-1', ['Hello ', 'world']));
+    await flush();
+
+    expect(statuses[0]).toBe('pending');
+    expect(statuses.at(-1)).toBe('complete');
+    expect(latest).toHaveLength(1);
+    expect(latest[0].text).toBe('Hello world');
+    sub.unsubscribe();
+  });
+
+  it('marks a stream failed and keeps its accumulated text when the reader errors', async () => {
+    const { room, push } = createFakeRoom();
+
+    const stream = setupTextStream(room, TOPIC);
+    let latest: TextStreamData[] = [];
+    const sub = stream.subscribe((streams) => (latest = streams));
+
+    // Without an error handler on the subscribe, RxJS rethrows this globally from a
+    // timer (uncatchable); this test fails on the unfixed code with that uncaught error.
+    const error = new Error(
+      'Participant agent-x unexpectedly disconnected in the middle of sending data',
+    );
+    await push(TOPIC, failingReader('stream-1', ['Hello from ', 'the agent'], error));
+    await flush();
+
+    expect(latest).toHaveLength(1);
+    expect(latest[0].text).toBe('Hello from the agent');
+    expect(latest[0].status).toBe('failed');
+    expect(latest[0].status === 'failed' && latest[0].error).toBe(error);
+    sub.unsubscribe();
+  });
+
+  it('surfaces a stream that fails before emitting any chunk as a failed entry', async () => {
+    const { room, push } = createFakeRoom();
+
+    const stream = setupTextStream(room, TOPIC);
+    let latest: TextStreamData[] = [];
+    const sub = stream.subscribe((streams) => (latest = streams));
+
+    const error = new Error('abnormal end before any data');
+    await push(TOPIC, failingReader('stream-1', [], error));
+    await flush();
+
+    expect(latest).toHaveLength(1);
+    expect(latest[0].status).toBe('failed');
+    expect(latest[0].text).toBe('');
+    sub.unsubscribe();
   });
 });

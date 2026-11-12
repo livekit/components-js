@@ -31,9 +31,11 @@ export interface LegacyChatMessage extends ChatMessage {
   ignoreLegacy?: boolean;
 }
 
-export interface LegacyReceivedChatMessage extends ReceivedChatMessage {
+// A type intersection rather than `interface extends`, because `ReceivedChatMessage`
+// is now a discriminated union and an interface can only extend an object type.
+export type LegacyReceivedChatMessage = ReceivedChatMessage & {
   ignoreLegacy?: boolean;
-}
+};
 
 /**
  * @public
@@ -189,8 +191,46 @@ export function setupChat(room: Room, options?: ChatOptions) {
         }),
         finalize(() => streamIdToAttachments.delete(id)),
       );
+      // Track the latest message so completion and failure can re-emit it with a
+      // terminal status, the same way `setupTextStream` carries a stream's text
+      // forward across its lifecycle.
+      let lastMessage: ReceivedChatMessage | undefined;
       streamObservable.subscribe({
-        next: (value) => messageSubject.next(value),
+        next: (value) => {
+          lastMessage = { ...value, status: 'pending' };
+          messageSubject.next(lastMessage);
+        },
+        // A clean close means the message is whole. Nothing was received for a
+        // stream that completes with no chunks, so there is nothing to re-emit.
+        complete: () => {
+          if (lastMessage) {
+            messageSubject.next({ ...lastMessage, status: 'complete' });
+          }
+        },
+        // Surface the failure through the message — keeping whatever text and
+        // attachments arrived — instead of letting RxJS rethrow it globally from a
+        // timer as an uncaught exception. A message that fails before any chunk
+        // still surfaces as a failed entry so it isn't silently dropped. Every
+        // error is treated the same; `finalize` has already cleaned up the
+        // stream's attachment-map entry.
+        error: (error) => {
+          const base =
+            lastMessage ??
+            ({
+              id,
+              timestamp,
+              message: '',
+              from: room.getParticipantByIdentity(participantInfo.identity),
+              type: 'chatMessage',
+              attributes,
+              attachedFiles: [],
+            } satisfies ReceivedChatMessage);
+          messageSubject.next({
+            ...base,
+            status: 'failed',
+            error: error instanceof Error ? error : new Error(String(error)),
+          });
+        },
       });
     });
     // NOTE: Attachment byte streams are guaranteed to arrive after their parent text stream
@@ -271,7 +311,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
   let pendingSends = 0;
   const finalMessageEncoder = options?.messageEncoder ?? encodeLegacyMsg;
 
-  const send = async (message: string, options?: SendTextOptions) => {
+  const send = async (message: string, options?: SendTextOptions): Promise<ReceivedChatMessage> => {
     if (!options) {
       options = {};
     }

@@ -2,7 +2,67 @@ import { Encryption_Type } from '@livekit/protocol';
 import { Room, RoomEvent, type TextStreamInfo } from 'livekit-client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Future } from '../helper/future';
+import type { ReceivedChatMessage } from '../messages/types';
 import { setupChat } from './chat';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+type ChatTextStreamHandler = (reader: any, participantInfo: { identity: string }) => Promise<void>;
+
+/** `from(reader)` walks the async iterator, so emissions land a few microtasks later. */
+const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+describe('chat text stream errors', () => {
+  const rooms: Room[] = [];
+
+  afterEach(() => {
+    rooms.forEach((room) => room.emit(RoomEvent.Disconnected));
+    rooms.length = 0;
+    vi.restoreAllMocks();
+  });
+
+  it('surfaces a failed message instead of rethrowing when a chat text stream ends abnormally', async () => {
+    const room = new Room();
+    rooms.push(room);
+
+    // Capture the handler setupChat registers so we can drive it directly.
+    let textHandler: ChatTextStreamHandler | undefined;
+    vi.spyOn(room, 'registerTextStreamHandler').mockImplementation(((
+      _topic: string,
+      handler: ChatTextStreamHandler,
+    ) => {
+      textHandler = handler;
+    }) as any);
+
+    const { messageObservable } = setupChat(room);
+    let latest: ReceivedChatMessage[] = [];
+    const subscription = messageObservable.subscribe((messages) => (latest = messages));
+    expect(textHandler).toBeDefined();
+
+    // Without the error handler this error is rethrown globally from a timer and
+    // fails the test run as an uncaught exception.
+    const error = new Error(
+      'Participant sender unexpectedly disconnected in the middle of sending data',
+    );
+    await textHandler!(
+      {
+        info: { id: 'msg-1', timestamp: Date.now(), attributes: {}, attachedStreamIds: [] },
+        async *[Symbol.asyncIterator]() {
+          yield 'partial message';
+          throw error;
+        },
+      },
+      { identity: 'sender' },
+    );
+    await flush();
+
+    expect(latest).toHaveLength(1);
+    expect(latest[0].message).toBe('partial message');
+    expect(latest[0].status).toBe('failed');
+    expect(latest[0].status === 'failed' && latest[0].error).toBe(error);
+    subscription.unsubscribe();
+  });
+});
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 describe('chat sending state', () => {
   const rooms: Room[] = [];

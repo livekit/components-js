@@ -1,5 +1,5 @@
 import React from 'react';
-import { SendHorizontal } from 'lucide-react';
+import { ArrowUpIcon } from 'lucide-react';
 import { StoryObj } from '@storybook/react-vite';
 import { AgentSessionProvider } from '../../.storybook/lk-decorators/AgentSessionProvider';
 import { AgentChatTranscript, AgentChatTranscriptProps } from '@livekit/agents-ui';
@@ -120,7 +120,7 @@ export const InjectMessages: StoryObj<AgentChatTranscriptProps> = {
             className="grid size-8 place-content-center text-sm rounded-md border bg-background hover:bg-accent"
           >
             <div className="sr-only">Add message</div>
-            <SendHorizontal className="w-4 h-4" />
+            <ArrowUpIcon className="w-4 h-4" />
           </button>
         </div>
       </div>

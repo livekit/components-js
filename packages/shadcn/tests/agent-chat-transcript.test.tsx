@@ -251,3 +251,25 @@ describe('AgentChatTranscript scroll anchors', () => {
     expect(indicator).not.toHaveAttribute('data-message-id');
   });
 });
+
+describe('AgentChatTranscript message text', () => {
+  it('keeps line breaks in user messages', () => {
+    render(
+      <AgentChatTranscript
+        messages={[{ id: 'user', timestamp: 1, from: { isLocal: true } as any, message: 'a\nb' }]}
+      />,
+    );
+
+    const text = screen.getByTestId('message-response').firstElementChild;
+    expect(text?.textContent).toBe('a\nb');
+    expect(text).toHaveClass('whitespace-pre-wrap');
+  });
+});
+
+describe('AgentChatTranscript labels', () => {
+  it('uses a custom thinking label', () => {
+    render(<AgentChatTranscript agentState="thinking" labels={{ thinking: 'Pensando...' }} />);
+
+    expect(screen.getByText('Pensando...')).toBeInTheDocument();
+  });
+});

@@ -34,13 +34,15 @@ export function createUrlRegExp(options: RegExOptions) {
   };
 
   const protocol = `(?:(?:[a-z]+:)?//)?`;
-  const auth = '(?:\\S+(?::\\S*)?@)?';
+  const auth = '(?:\\S+@)?';
   const ip = new RegExp(
     '(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}',
     'g',
   ).source;
-  const host = '(?:(?:[a-z\\u00a1-\\uffff0-9][-_]*)*[a-z\\u00a1-\\uffff0-9]+)';
-  const domain = '(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*';
+  // each label is written so that a run of letters can be split only one way; the nested
+  // `(?:x[-_]*)*x+` form backtracks for seconds on a long word with no dot
+  const host = '(?:[a-z\\u00a1-\\uffff0-9]+(?:[-_]+[a-z\\u00a1-\\uffff0-9]+)*)';
+  const domain = '(?:\\.[a-z\\u00a1-\\uffff0-9]+(?:-+[a-z\\u00a1-\\uffff0-9]+)*)*';
   const tld = `(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))(?:\\.(?=[:/?#]))?`;
   const port = '(?::\\d{2,5})?';
   // a path keeps balanced parentheses but not the punctuation that ends a sentence around it

@@ -62,4 +62,14 @@ describe('Email regex tests', () => {
       t.expect(createEmailRegExp({ exact: true }).test(fixture)).toBeFalsy();
     }
   });
+
+  test('does not backtrack for long on a long word with no address in it', (t) => {
+    // the uncapped pattern takes 6s+ on each input, the capped one tens of ms, so the bound leaves
+    // room for a slow CI worker
+    for (const text of ['a'.repeat(60000), 'a.'.repeat(45000)]) {
+      const start = performance.now();
+      t.expect(text.match(createEmailRegExp())).toBeNull();
+      t.expect(performance.now() - start).toBeLessThan(5000);
+    }
+  });
 });

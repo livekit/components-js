@@ -21,7 +21,7 @@ A collection of small examples bundled in a [Next.js](https://nextjs.org/) app. 
 
 To get up and running make sure to first follow the [Setup Monorepo instructions](/README.md#setup-monorepo) the root level of this repository to create all locally linked dependencies within the monoerepo.
 
-Copy the the contents of `.env.example` in to a newly created `.env.local` file and adjust the values accordingly to your livekit server setup.
+Copy the contents of `.env.example` in to a newly created `.env.local` file and adjust the values accordingly to your livekit server setup.
 
 ## Run Examples
 

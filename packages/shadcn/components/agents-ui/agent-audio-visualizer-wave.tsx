@@ -1,34 +1,17 @@
 'use client';
 
-import { useMemo, type ComponentProps } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { type AgentState, type TrackReferenceOrPlaceholder } from '@livekit/components-react';
 
 import { ReactShaderToy } from '@/components/agents-ui/react-shader-toy';
 import { useAgentAudioVisualizerWave } from '@/hooks/agents-ui/use-agent-audio-visualizer-wave';
+import { usePrefersReducedMotion } from '@/hooks/agents-ui/use-prefers-reduced-motion';
 import { cn } from '@/lib/utils';
 import type { LocalAudioTrack, RemoteAudioTrack } from 'livekit-client';
 
-const DEFAULT_COLOR = '#1FD5F9';
-
-function hexToRgb(hexColor: string) {
-  try {
-    const rgbColor = hexColor.match(/^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/);
-
-    if (rgbColor) {
-      const [, r, g, b] = rgbColor;
-      const color = [r, g, b].map((c = '00') => parseInt(c, 16) / 255);
-
-      return color;
-    }
-  } catch {
-    console.error(
-      `Invalid hex color '${hexColor}'.\nFalling back to default color '${DEFAULT_COLOR}'.`,
-    );
-  }
-
-  return hexToRgb(DEFAULT_COLOR);
-}
+// #1FD5F9, the default color, which the root's `text-[#1FD5F9]` class sets
+const DEFAULT_RGB = [0x1f / 255, 0xd5 / 255, 0xf9 / 255];
 
 const shaderSource = `
 const float TAU = 6.28318530718;
@@ -169,10 +152,10 @@ interface WaveShaderProps {
    */
   frequency?: number;
   /**
-   * Color of the oscilloscope in hexidecimal format.
-   * @default '#1FD5F9'
+   * Color of the oscilloscope. Any CSS color, including theme variables such as `var(--primary)`.
+   * When omitted, uses the text color set on the component, such as a `text-primary` class.
    */
-  color?: `#${string}`;
+  color?: string;
   /**
    * Hue shift amount applied toward the outside of the wave. Center remains at the base color.
    * @default 0.05
@@ -195,9 +178,55 @@ interface WaveShaderProps {
   blur?: number;
 }
 
+const COLOR_PROBE_STYLE = {
+  // Browsers report a color mixed in sRGB as `color(srgb r g b)`, with 0–1 channels, whatever
+  // format the color itself is in
+  color: 'color-mix(in srgb, currentColor 100%, transparent)',
+};
+
+/**
+ * Reads the text color from a probe rendered inside the component, as the 0–1 RGB a shader uniform
+ * needs, and reads it again when it changes.
+ */
+function useCurrentColorRgb() {
+  const probeRef = useRef<HTMLSpanElement>(null);
+  const [rgb, setRgb] = useState(DEFAULT_RGB);
+
+  useLayoutEffect(() => {
+    const probe = probeRef.current;
+    if (!probe) return;
+
+    // Fires `transitionend` whenever the color changes, such as with the theme. Important, so it
+    // outlasts the `transition: none !important` that theme switchers such as next-themes add
+    probe.style.setProperty('transition', 'color 1ms', 'important');
+
+    const read = () => {
+      const channels = getComputedStyle(probe)
+        .color.match(/^color\(srgb ([-\d.e]+) ([-\d.e]+) ([-\d.e]+)/)
+        ?.slice(1)
+        // Colors outside sRGB, such as a vivid `oklch()`, have channels outside 0–1
+        .map((channel) => Math.min(Math.max(Number(channel), 0), 1));
+      if (!channels) return;
+      setRgb((prev) => (prev.every((channel, idx) => channel === channels[idx]) ? prev : channels));
+    };
+
+    // Keeps the probe's transition from reaching `onTransitionEnd` handlers around the component
+    const onTransitionEnd = (event: TransitionEvent) => {
+      event.stopPropagation();
+      read();
+    };
+
+    read();
+    probe.addEventListener('transitionend', onTransitionEnd);
+    return () => probe.removeEventListener('transitionend', onTransitionEnd);
+  }, []);
+
+  return { probeRef, rgb };
+}
+
 function WaveShader({
   speed = 10,
-  color = '#1FD5F9',
+  color,
   colorShift = 0.05,
   mix = 1.0,
   amplitude = 0.02,
@@ -206,14 +235,41 @@ function WaveShader({
   blur = 0.5,
   ref,
   className,
+  style,
   ...props
 }: WaveShaderProps & ComponentProps<'div'>) {
-  const rgbColor = useMemo(() => hexToRgb(color), [color]);
+  const { probeRef, rgb: rgbColor } = useCurrentColorRgb();
+  const reducedMotion = usePrefersReducedMotion();
+  const [isUnsupported, setIsUnsupported] = useState(false);
+  const rootClassName = cn('text-[#1FD5F9]', className);
+  const rootStyle = color === undefined ? style : { ...style, color };
+
+  if (isUnsupported) {
+    return (
+      <div
+        ref={ref}
+        className={cn('flex items-center', rootClassName)}
+        style={rootStyle}
+        {...props}
+      >
+        {/* Without WebGL, a flat line at the same width and opacity */}
+        <div
+          data-slot="wave-fallback"
+          className="w-full bg-current"
+          style={{ height: lineWidth, opacity: mix }}
+        />
+      </div>
+    );
+  }
 
   return (
-    <div ref={ref} className={className} {...props}>
+    <div ref={ref} className={rootClassName} style={rootStyle} {...props}>
+      <span ref={probeRef} aria-hidden="true" className="absolute" style={COLOR_PROBE_STYLE} />
       <ReactShaderToy
+        onUnsupported={() => setIsUnsupported(true)}
         fs={shaderSource}
+        // Still and silent frames look the same, so only redraw when something changes
+        paused={reducedMotion}
         devicePixelRatio={globalThis.devicePixelRatio ?? 1}
         uniforms={{
           uSpeed: { type: '1f', value: speed },
@@ -266,10 +322,12 @@ export interface AgentAudioVisualizerWaveProps {
    */
   state?: AgentState;
   /**
-   * The color of the wave in hexidecimal format.
+   * The color of the wave. Any CSS color, including theme variables such as `var(--primary)`,
+   * which follow the page's light and dark mode. You can also set it with a text color class, such
+   * as `text-primary`. Alpha is ignored; set `opacity` on the visualizer instead.
    * @defaultValue '#1FD5F9'
    */
-  color?: `#${string}`;
+  color?: string;
   /**
    * The color shift of the wave. Higher values increase hue variation toward the edges.
    * @defaultValue 0.05

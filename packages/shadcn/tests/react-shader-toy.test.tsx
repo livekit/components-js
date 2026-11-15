@@ -70,6 +70,18 @@ describe('ReactShaderToy', () => {
     });
   });
 
+  it('calls onUnsupported when the browser has no WebGL', async () => {
+    const onUnsupported = vi.fn();
+    render(
+      <ReactShaderToy
+        fs="void mainImage(out vec4 fragColor, in vec2 fragCoord){ fragColor = vec4(1.0); }"
+        onUnsupported={onUnsupported}
+      />,
+    );
+
+    await waitFor(() => expect(onUnsupported).toHaveBeenCalledTimes(1));
+  });
+
   it('applies custom inline styles', () => {
     const { container } = render(
       <ReactShaderToy

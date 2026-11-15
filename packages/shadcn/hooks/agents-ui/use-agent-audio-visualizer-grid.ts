@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { type AgentState } from '@livekit/components-react';
+import { usePrefersReducedMotion } from '@/hooks/agents-ui/use-prefers-reduced-motion';
 
 export interface Coordinate {
   x: number;
@@ -77,6 +78,7 @@ export function useAgentAudioVisualizerGridAnimator(
       y: Math.floor(rows / 2),
     },
   ]);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const clampedRadius = radius
@@ -100,6 +102,11 @@ export function useAgentAudioVisualizerGridAnimator(
     if (state === 'speaking') {
       return;
     }
+    // With reduced motion, hold the sequence's first frame instead of stepping through it
+    if (reducedMotion) {
+      setIndex(0);
+      return;
+    }
 
     const indexInterval = setInterval(() => {
       setIndex((prev) => {
@@ -108,7 +115,7 @@ export function useAgentAudioVisualizerGridAnimator(
     }, interval);
 
     return () => clearInterval(indexInterval);
-  }, [interval, columns, rows, state, sequence.length]);
+  }, [interval, columns, rows, state, sequence.length, reducedMotion]);
 
   return (
     sequence[index % sequence.length] ?? { x: Math.floor(columns / 2), y: Math.floor(rows / 2) }

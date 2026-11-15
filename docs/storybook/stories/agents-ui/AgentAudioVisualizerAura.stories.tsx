@@ -75,6 +75,14 @@ export const PageTheme: StoryObj<AgentAudioVisualizerAuraProps> = {
   },
 };
 
+// Takes its color from a theme variable, which changes with the theme toolbar.
+export const ThemeColor: StoryObj<AgentAudioVisualizerAuraProps> = {
+  args: {
+    color: 'var(--chart-1)',
+  },
+  render: PageTheme.render,
+};
+
 // Demonstrates the `volume` override prop with a simulated speech waveform instead of
 // live audio.
 export const OverrideVolume: StoryObj<AgentAudioVisualizerAuraProps> = {

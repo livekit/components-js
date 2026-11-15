@@ -1,9 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useAgentAudioVisualizerWave } from '@/hooks/agents-ui/use-agent-audio-visualizer-wave';
 import type { AgentState } from '@livekit/components-react';
 import * as LiveKitComponents from '@livekit/components-react';
 import { animate } from 'motion/react';
+import { usePrefersReducedMotion } from '@/hooks/agents-ui/use-prefers-reduced-motion';
 
 // The `useMotionValueEvent`/`useMotionValue` mocks below don't propagate changes back into
 // React state, so `result.current.amplitude`/`frequency` never reflect volume-driven updates.
@@ -40,6 +41,10 @@ vi.mock('motion/react', () => ({
     (promise as typeof promise & { stop?: () => void }).stop = vi.fn();
     return promise;
   }),
+}));
+
+vi.mock('@/hooks/agents-ui/use-prefers-reduced-motion', () => ({
+  usePrefersReducedMotion: vi.fn(() => false),
 }));
 
 describe('useAgentAudioVisualizerWave', () => {
@@ -200,6 +205,38 @@ describe('useAgentAudioVisualizerWave', () => {
       rerender({ state: 'listening' as const });
 
       expect(result.current.speed).toBe(firstSpeed);
+    });
+  });
+  describe('Reduced motion', () => {
+    beforeEach(() => {
+      vi.mocked(usePrefersReducedMotion).mockReturnValue(true);
+    });
+
+    afterEach(() => {
+      vi.mocked(usePrefersReducedMotion).mockReturnValue(false);
+    });
+
+    it('stops drifting in every state', () => {
+      const states = ['idle', 'connecting', 'listening', 'thinking', 'speaking'] as const;
+
+      states.forEach((state) => {
+        const { result } = renderHook(() => useAgentAudioVisualizerWave({ state }));
+        expect(result.current.speed).toBe(0);
+      });
+    });
+
+    it('holds a steady opacity instead of pulsing', () => {
+      renderHook(() => useAgentAudioVisualizerWave({ state: 'thinking' }));
+
+      const targets = vi.mocked(animate).mock.calls.map(([, value]) => value);
+      expect(targets.some(Array.isArray)).toBe(false);
+    });
+
+    it('applies each state at once', () => {
+      renderHook(() => useAgentAudioVisualizerWave({ state: 'listening' }));
+
+      const transitions = vi.mocked(animate).mock.calls.map(([, , transition]) => transition);
+      expect(transitions.every((transition) => transition?.duration === 0)).toBe(true);
     });
   });
 });

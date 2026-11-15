@@ -1,9 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useAgentAudioVisualizerAura } from '@/hooks/agents-ui/use-agent-audio-visualizer-aura';
 import type { AgentState } from '@livekit/components-react';
 import * as LiveKitComponents from '@livekit/components-react';
 import { animate } from 'motion/react';
+import { usePrefersReducedMotion } from '@/hooks/agents-ui/use-prefers-reduced-motion';
 
 // The `useMotionValueEvent`/`useMotionValue` mocks below don't propagate changes back into
 // React state, so `result.current.scale` never reflects volume-driven updates. Instead,
@@ -40,6 +41,10 @@ vi.mock('motion/react', () => ({
   animate: vi.fn(() => ({
     stop: vi.fn(),
   })),
+}));
+
+vi.mock('@/hooks/agents-ui/use-prefers-reduced-motion', () => ({
+  usePrefersReducedMotion: vi.fn(() => false),
 }));
 
 describe('useAgentAudioVisualizerAura', () => {
@@ -251,6 +256,38 @@ describe('useAgentAudioVisualizerAura', () => {
 
       // If this test completes without timeout, the hook is stable
       expect(result.current).toBeDefined();
+    });
+  });
+  describe('Reduced motion', () => {
+    beforeEach(() => {
+      vi.mocked(usePrefersReducedMotion).mockReturnValue(true);
+    });
+
+    afterEach(() => {
+      vi.mocked(usePrefersReducedMotion).mockReturnValue(false);
+    });
+
+    it('stops drifting in every state', () => {
+      const states = ['idle', 'connecting', 'listening', 'thinking', 'speaking'] as const;
+
+      states.forEach((state) => {
+        const { result } = renderHook(() => useAgentAudioVisualizerAura(state));
+        expect(result.current.speed).toBe(0);
+      });
+    });
+
+    it('holds a steady brightness instead of pulsing', () => {
+      renderHook(() => useAgentAudioVisualizerAura('thinking'));
+
+      const targets = vi.mocked(animate).mock.calls.map(([, value]) => value);
+      expect(targets.some(Array.isArray)).toBe(false);
+    });
+
+    it('applies each state at once', () => {
+      renderHook(() => useAgentAudioVisualizerAura('listening'));
+
+      const transitions = vi.mocked(animate).mock.calls.map(([, , transition]) => transition);
+      expect(transitions.every((transition) => transition?.duration === 0)).toBe(true);
     });
   });
 });

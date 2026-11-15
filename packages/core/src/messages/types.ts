@@ -1,4 +1,5 @@
 import type { Participant, ChatMessage } from 'livekit-client';
+import type { TextStreamStatus } from '../components/textStream';
 
 /** @public */
 export type { ChatMessage };
@@ -30,16 +31,23 @@ type ReceivedChatMessageCommon = Omit<ReceivedChatMessageWithRequiredType, 'type
 };
 
 /** A message still streaming in. */
-type ReceivedChatMessageStreaming = ReceivedChatMessageCommon & { status: 'streaming' };
+type ReceivedChatMessageStreaming = ReceivedChatMessageCommon & {
+  status: TextStreamStatus.Streaming;
+};
 
 /** A message whose stream the sender closed cleanly. */
-type ReceivedChatMessageComplete = ReceivedChatMessageCommon & { status: 'complete' };
+type ReceivedChatMessageComplete = ReceivedChatMessageCommon & {
+  status: TextStreamStatus.Complete;
+};
 
 /**
  * A message whose stream read errored — most commonly when the sender disconnects
  * mid-stream. Whatever text and attachments arrived before the failure are kept.
  */
-type ReceivedChatMessageFailed = ReceivedChatMessageCommon & { status: 'failed'; error: Error };
+type ReceivedChatMessageFailed = ReceivedChatMessageCommon & {
+  status: TextStreamStatus.Failed;
+  error: Error;
+};
 
 /**
  * A message carrying no status, so code that builds or reads a

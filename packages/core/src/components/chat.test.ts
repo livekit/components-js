@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Future } from '../helper/future';
 import type { ReceivedChatMessage } from '../messages/types';
 import { setupChat } from './chat';
+import { TextStreamStatus } from './textStream';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type ChatTextStreamHandler = (reader: any, participantInfo: { identity: string }) => Promise<void>;
@@ -57,8 +58,8 @@ describe('chat text stream errors', () => {
 
     expect(latest).toHaveLength(1);
     expect(latest[0].message).toBe('partial message');
-    expect(latest[0].status).toBe('failed');
-    expect(latest[0].status === 'failed' && latest[0].error).toBe(error);
+    expect(latest[0].status).toBe(TextStreamStatus.Failed);
+    expect(latest[0].status === TextStreamStatus.Failed && latest[0].error).toBe(error);
     subscription.unsubscribe();
   });
 });

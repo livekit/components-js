@@ -1,6 +1,6 @@
 import { RoomEvent, type Room } from 'livekit-client';
 import { describe, expect, it, vi } from 'vitest';
-import { setupTextStream, type TextStreamData } from './textStream';
+import { setupTextStream, TextStreamStatus, type TextStreamData } from './textStream';
 
 /**
  * Minimal stand-in for `Room` that mirrors livekit-client's one-handler-per-topic
@@ -136,8 +136,8 @@ describe('setupTextStream', () => {
     await push(TOPIC, fakeReader('stream-1', ['Hello ', 'world']));
     await flush();
 
-    expect(statuses[0]).toBe('streaming');
-    expect(statuses.at(-1)).toBe('complete');
+    expect(statuses[0]).toBe(TextStreamStatus.Streaming);
+    expect(statuses.at(-1)).toBe(TextStreamStatus.Complete);
     expect(latest).toHaveLength(1);
     expect(latest[0].text).toBe('Hello world');
     sub.unsubscribe();
@@ -160,8 +160,8 @@ describe('setupTextStream', () => {
 
     expect(latest).toHaveLength(1);
     expect(latest[0].text).toBe('Hello from the agent');
-    expect(latest[0].status).toBe('failed');
-    expect(latest[0].status === 'failed' && latest[0].error).toBe(error);
+    expect(latest[0].status).toBe(TextStreamStatus.Failed);
+    expect(latest[0].status === TextStreamStatus.Failed && latest[0].error).toBe(error);
     sub.unsubscribe();
   });
 
@@ -177,7 +177,7 @@ describe('setupTextStream', () => {
     await flush();
 
     expect(latest).toHaveLength(1);
-    expect(latest[0].status).toBe('failed');
+    expect(latest[0].status).toBe(TextStreamStatus.Failed);
     expect(latest[0].text).toBe('');
     sub.unsubscribe();
   });

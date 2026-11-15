@@ -2,6 +2,7 @@ import { DataPacket_Kind, Encryption_Type } from '@livekit/protocol';
 import { Room, RoomEvent, type TextStreamReader } from 'livekit-client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { setupChat } from './chat';
+import { TextStreamStatus } from './textStream';
 
 describe('chat topics', () => {
   const rooms: Room[] = [];
@@ -82,7 +83,11 @@ describe('chat topics', () => {
     // assert on the final emission rather than a single call.
     await vi.waitFor(() =>
       expect(privateMessages).toHaveBeenLastCalledWith([
-        expect.objectContaining({ id: 'private-message', message: 'hello', status: 'complete' }),
+        expect.objectContaining({
+          id: 'private-message',
+          message: 'hello',
+          status: TextStreamStatus.Complete,
+        }),
       ]),
     );
     expect(publicMessages).not.toHaveBeenCalled();

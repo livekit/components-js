@@ -3,6 +3,20 @@ import { from, scan, Subject, type Observable } from 'rxjs';
 import { share, tap } from 'rxjs/operators';
 import { ParticipantAgentAttributes } from '../helper';
 
+/**
+ * The lifecycle of a text stream — and of anything built on one, like a received
+ * chat message.
+ * @public
+ */
+export enum TextStreamStatus {
+  /** The stream is open and still receiving chunks. */
+  Streaming = 'streaming',
+  /** The writer closed the stream cleanly, so its text is whole. */
+  Complete = 'complete',
+  /** Reading the stream errored, so its text may be incomplete. */
+  Failed = 'failed',
+}
+
 /** Fields shared by every {@link TextStreamData} variant, regardless of status. */
 interface TextStreamDataCommon {
   text: string;
@@ -11,17 +25,20 @@ interface TextStreamDataCommon {
 }
 
 /** A stream that is open and still receiving chunks. */
-type TextStreamDataStreaming = TextStreamDataCommon & { status: 'streaming' };
+type TextStreamDataStreaming = TextStreamDataCommon & { status: TextStreamStatus.Streaming };
 
 /** A stream the writer closed cleanly, so its text is whole. */
-type TextStreamDataComplete = TextStreamDataCommon & { status: 'complete' };
+type TextStreamDataComplete = TextStreamDataCommon & { status: TextStreamStatus.Complete };
 
 /**
  * A stream whose read errored — most commonly a `DataStreamError` with reason
  * `AbnormalEnd` when the sender disconnects mid-stream. The text accumulated
  * before the failure is kept on `text`, but it may be incomplete.
  */
-type TextStreamDataFailed = TextStreamDataCommon & { status: 'failed'; error: Error };
+type TextStreamDataFailed = TextStreamDataCommon & {
+  status: TextStreamStatus.Failed;
+  error: Error;
+};
 
 /**
  * A stream entry from before `status` existed, carrying no status at all. Kept so
@@ -110,7 +127,7 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
               const index = indexOfStream();
               if (index !== -1) {
                 textStreams[index] = {
-                  status: 'streaming',
+                  status: TextStreamStatus.Streaming,
                   text: accumulatedText,
                   participantInfo: textStreams[index].participantInfo,
                   // Carry the latest streamInfo forward. Keeping the original would
@@ -122,7 +139,7 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
               } else {
                 // Stream id wasn't found (new stream)
                 textStreams.push({
-                  status: 'streaming',
+                  status: TextStreamStatus.Streaming,
                   text: accumulatedText,
                   participantInfo,
                   streamInfo: reader.info,
@@ -138,7 +155,7 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
               if (index === -1) return;
               const existing = textStreams[index];
               textStreams[index] = {
-                status: 'complete',
+                status: TextStreamStatus.Complete,
                 text: existing.text,
                 participantInfo: existing.participantInfo,
                 streamInfo: reader.info,
@@ -155,7 +172,7 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
               const index = indexOfStream();
               if (index === -1) {
                 textStreams.push({
-                  status: 'failed',
+                  status: TextStreamStatus.Failed,
                   text: '',
                   participantInfo,
                   streamInfo: reader.info,
@@ -164,7 +181,7 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
               } else {
                 const existing = textStreams[index];
                 textStreams[index] = {
-                  status: 'failed',
+                  status: TextStreamStatus.Failed,
                   text: existing.text,
                   participantInfo: existing.participantInfo,
                   streamInfo: reader.info,

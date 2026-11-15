@@ -22,6 +22,7 @@ import {
 } from '../observables/dataChannel';
 import { log } from '../logger';
 import { ChatMessage, ReceivedChatMessage } from '../messages/types';
+import { TextStreamStatus } from './textStream';
 import { Future } from '../helper/future';
 
 /** @public */
@@ -197,14 +198,14 @@ export function setupChat(room: Room, options?: ChatOptions) {
       let lastMessage: ReceivedChatMessage | undefined;
       streamObservable.subscribe({
         next: (value) => {
-          lastMessage = { ...value, status: 'streaming' };
+          lastMessage = { ...value, status: TextStreamStatus.Streaming };
           messageSubject.next(lastMessage);
         },
         // A clean close means the message is whole. Nothing was received for a
         // stream that completes with no chunks, so there is nothing to re-emit.
         complete: () => {
           if (lastMessage) {
-            messageSubject.next({ ...lastMessage, status: 'complete' });
+            messageSubject.next({ ...lastMessage, status: TextStreamStatus.Complete });
           }
         },
         // Surface the failure through the message — keeping whatever text and
@@ -227,7 +228,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
             } satisfies ReceivedChatMessage);
           messageSubject.next({
             ...base,
-            status: 'failed',
+            status: TextStreamStatus.Failed,
             error: error instanceof Error ? error : new Error(String(error)),
           });
         },

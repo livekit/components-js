@@ -21,11 +21,11 @@ describe('chat text stream errors', () => {
     vi.restoreAllMocks();
   });
 
-  it('surfaces a failed message instead of rethrowing when a chat text stream ends abnormally', async () => {
+  /** Set up chat on a fresh room, capturing the text stream handler it registers. */
+  function setupChatCapturingHandler() {
     const room = new Room();
     rooms.push(room);
 
-    // Capture the handler setupChat registers so we can drive it directly.
     let textHandler: ChatTextStreamHandler | undefined;
     vi.spyOn(room, 'registerTextStreamHandler').mockImplementation(((
       _topic: string,
@@ -38,13 +38,24 @@ describe('chat text stream errors', () => {
     let latest: ReceivedChatMessage[] = [];
     const subscription = messageObservable.subscribe((messages) => (latest = messages));
     expect(textHandler).toBeDefined();
+    return {
+      textHandler: textHandler!,
+      subscription,
+      get latest() {
+        return latest;
+      },
+    };
+  }
+
+  it('surfaces a failed message instead of rethrowing when a chat text stream ends abnormally', async () => {
+    const chat = setupChatCapturingHandler();
 
     // Without the error handler this error is rethrown globally from a timer and
     // fails the test run as an uncaught exception.
     const error = new Error(
       'Participant sender unexpectedly disconnected in the middle of sending data',
     );
-    await textHandler!(
+    await chat.textHandler(
       {
         info: { id: 'msg-1', timestamp: Date.now(), attributes: {}, attachedStreamIds: [] },
         async *[Symbol.asyncIterator]() {
@@ -56,11 +67,29 @@ describe('chat text stream errors', () => {
     );
     await flush();
 
-    expect(latest).toHaveLength(1);
-    expect(latest[0].message).toBe('partial message');
-    expect(latest[0].status).toBe(TextStreamStatus.Failed);
-    expect(latest[0].status === TextStreamStatus.Failed && latest[0].error).toBe(error);
-    subscription.unsubscribe();
+    expect(chat.latest).toHaveLength(1);
+    expect(chat.latest[0].message).toBe('partial message');
+    expect(chat.latest[0].status).toBe(TextStreamStatus.Failed);
+    expect(chat.latest[0].status === TextStreamStatus.Failed && chat.latest[0].error).toBe(error);
+    chat.subscription.unsubscribe();
+  });
+
+  it('emits no message when a chat text stream fails before any chunk', async () => {
+    const chat = setupChatCapturingHandler();
+
+    await chat.textHandler(
+      {
+        info: { id: 'msg-1', timestamp: Date.now(), attributes: {}, attachedStreamIds: [] },
+        async *[Symbol.asyncIterator]() {
+          throw new Error('abnormal end before any data');
+        },
+      },
+      { identity: 'sender' },
+    );
+    await flush();
+
+    expect(chat.latest).toEqual([]);
+    chat.subscription.unsubscribe();
   });
 });
 /* eslint-enable @typescript-eslint/no-explicit-any */

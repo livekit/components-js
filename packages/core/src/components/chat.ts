@@ -210,24 +210,14 @@ export function setupChat(room: Room, options?: ChatOptions) {
         },
         // Surface the failure through the message — keeping whatever text and
         // attachments arrived — instead of letting RxJS rethrow it globally from a
-        // timer as an uncaught exception. A message that fails before any chunk
-        // still surfaces as a failed entry so it isn't silently dropped. Every
-        // error is treated the same; `finalize` has already cleaned up the
-        // stream's attachment-map entry.
+        // timer as an uncaught exception. Every error is treated the same;
+        // `finalize` has already cleaned up the stream's attachment-map entry. Like
+        // `complete`, a message that never received anything is not emitted: it
+        // would only render as an empty bubble.
         error: (error) => {
-          const base =
-            lastMessage ??
-            ({
-              id,
-              timestamp,
-              message: '',
-              from: room.getParticipantByIdentity(participantInfo.identity),
-              type: 'chatMessage',
-              attributes,
-              attachedFiles: [],
-            } satisfies ReceivedChatMessage);
+          if (!lastMessage) return;
           messageSubject.next({
-            ...base,
+            ...lastMessage,
             status: TextStreamStatus.Failed,
             error: error instanceof Error ? error : new Error(String(error)),
           });

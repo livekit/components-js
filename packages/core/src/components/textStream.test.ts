@@ -165,20 +165,20 @@ describe('setupTextStream', () => {
     sub.unsubscribe();
   });
 
-  it('surfaces a stream that fails before emitting any chunk as a failed entry', async () => {
+  it('adds no entry for a stream that fails before emitting any chunk', async () => {
     const { room, push } = createFakeRoom();
 
     const stream = setupTextStream(room, TOPIC);
     let latest: TextStreamData[] = [];
     const sub = stream.subscribe((streams) => (latest = streams));
 
+    // Without an error handler this would still rethrow globally, so this also
+    // checks that an early failure is swallowed rather than surfaced as uncaught.
     const error = new Error('abnormal end before any data');
     await push(TOPIC, failingReader('stream-1', [], error));
     await flush();
 
-    expect(latest).toHaveLength(1);
-    expect(latest[0].status).toBe(TextStreamStatus.Failed);
-    expect(latest[0].text).toBe('');
+    expect(latest).toEqual([]);
     sub.unsubscribe();
   });
 });

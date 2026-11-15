@@ -163,31 +163,23 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
               emit();
             },
             // Mark the stream failed, keeping whatever text arrived before the error.
-            // A stream that fails before emitting still surfaces as a failed entry so
-            // consumers can see it rather than have it silently disappear. Handling the
-            // error here is also what stops RxJS from rethrowing it globally as an
-            // uncaught exception. Every error is treated the same — the failure is
-            // surfaced through the data, so consumers decide what it means.
+            // Handling the error here is also what stops RxJS from rethrowing it
+            // globally as an uncaught exception. Every error is treated the same —
+            // the failure is surfaced through the data, so consumers decide what it
+            // means. Like `complete`, a stream that never received a chunk has no
+            // entry and adds none: an empty failed entry would only render as an
+            // empty transcript or message.
             error: (error: Error) => {
               const index = indexOfStream();
-              if (index === -1) {
-                textStreams.push({
-                  status: TextStreamStatus.Failed,
-                  text: '',
-                  participantInfo,
-                  streamInfo: reader.info,
-                  error,
-                });
-              } else {
-                const existing = textStreams[index];
-                textStreams[index] = {
-                  status: TextStreamStatus.Failed,
-                  text: existing.text,
-                  participantInfo: existing.participantInfo,
-                  streamInfo: reader.info,
-                  error,
-                };
-              }
+              if (index === -1) return;
+              const existing = textStreams[index];
+              textStreams[index] = {
+                status: TextStreamStatus.Failed,
+                text: existing.text,
+                participantInfo: existing.participantInfo,
+                streamInfo: reader.info,
+                error,
+              };
               emit();
             },
           });

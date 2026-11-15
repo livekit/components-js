@@ -286,6 +286,8 @@ export function setupChat(room: Room, options?: ChatOptions) {
             ...parsedMessage,
             type: 'chatMessage',
             from: msg.from,
+            // A legacy data packet arrives in one piece, so it is always whole.
+            status: TextStreamStatus.Complete,
           };
           return newMessage;
         }),
@@ -349,6 +351,8 @@ export function setupChat(room: Room, options?: ChatOptions) {
         type: 'chatMessage',
         from: room.localParticipant,
         attributes: options.attributes,
+        // `sendText` has resolved, so the local copy of the message is whole.
+        status: TextStreamStatus.Complete,
       };
 
       messageSubject.next(receivedChatMsg);

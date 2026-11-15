@@ -142,6 +142,24 @@ describe('chat sending state', () => {
     vi.restoreAllMocks();
   });
 
+  it('marks a sent message complete, both as returned and in the message list', async () => {
+    const room = new Room();
+    rooms.push(room);
+    vi.spyOn(room.localParticipant, 'sendText').mockResolvedValue(streamInfo);
+    vi.spyOn(room.localParticipant, 'publishData').mockResolvedValue();
+    const { send, messageObservable } = setupChat(room);
+    let latest: ReceivedChatMessage[] = [];
+    const subscription = messageObservable.subscribe((messages) => (latest = messages));
+
+    const sent = await send('hello');
+
+    expect(sent.status).toBe(TextStreamStatus.Complete);
+    expect(latest).toEqual([
+      expect.objectContaining({ message: 'hello', status: TextStreamStatus.Complete }),
+    ]);
+    subscription.unsubscribe();
+  });
+
   it.each(['resolve', 'reject'] as const)(
     'keeps sending state true when an overlapping text send finishes with %s',
     async (outcome) => {

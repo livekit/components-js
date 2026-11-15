@@ -68,19 +68,32 @@ export type ReceivedChatMessage =
   | ReceivedChatMessageFailed
   | ReceivedChatMessageLegacy;
 
+/**
+ * The lifecycle of the transcription stream a transcript message came from: the
+ * {@link TextStreamData} `status` (and `error`, once failed), carried through.
+ * Transcripts built without a status carry none.
+ */
+type TranscriptionStatusFields =
+  | { status: TextStreamStatus.Streaming }
+  | { status: TextStreamStatus.Complete }
+  | { status: TextStreamStatus.Failed; error: Error }
+  | { status?: never };
+
 export type ReceivedUserTranscriptionMessage = ReceivedMessageWithType<
   'userTranscript',
   {
     message: string;
   }
->;
+> &
+  TranscriptionStatusFields;
 
 export type ReceivedAgentTranscriptionMessage = ReceivedMessageWithType<
   'agentTranscript',
   {
     message: string;
   }
->;
+> &
+  TranscriptionStatusFields;
 
 /** @beta */
 export type ReceivedMessage =

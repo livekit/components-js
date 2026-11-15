@@ -11,7 +11,7 @@ interface TextStreamDataCommon {
 }
 
 /** A stream that is open and still receiving chunks. */
-type TextStreamDataPending = TextStreamDataCommon & { status: 'pending' };
+type TextStreamDataStreaming = TextStreamDataCommon & { status: 'streaming' };
 
 /** A stream the writer closed cleanly, so its text is whole. */
 type TextStreamDataComplete = TextStreamDataCommon & { status: 'complete' };
@@ -31,14 +31,14 @@ type TextStreamDataLegacy = TextStreamDataCommon & { status?: never };
 
 /**
  * One text stream, discriminated by its `status`:
- * - {@link TextStreamDataPending}: open and still receiving chunks.
+ * - {@link TextStreamDataStreaming}: open and still receiving chunks.
  * - {@link TextStreamDataComplete}: closed cleanly by the writer; text is whole.
  * - {@link TextStreamDataFailed}: the read errored; `error` holds why and `text`
  *   keeps whatever arrived first.
  * - {@link TextStreamDataLegacy}: no status, for backward compatibility.
  */
 export type TextStreamData =
-  TextStreamDataPending | TextStreamDataComplete | TextStreamDataFailed | TextStreamDataLegacy;
+  TextStreamDataStreaming | TextStreamDataComplete | TextStreamDataFailed | TextStreamDataLegacy;
 
 // One observable per room and topic. The outer map is weak so a room that is no
 // longer referenced takes its observables with it, while a reused room keeps
@@ -110,7 +110,7 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
               const index = indexOfStream();
               if (index !== -1) {
                 textStreams[index] = {
-                  status: 'pending',
+                  status: 'streaming',
                   text: accumulatedText,
                   participantInfo: textStreams[index].participantInfo,
                   // Carry the latest streamInfo forward. Keeping the original would
@@ -122,7 +122,7 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
               } else {
                 // Stream id wasn't found (new stream)
                 textStreams.push({
-                  status: 'pending',
+                  status: 'streaming',
                   text: accumulatedText,
                   participantInfo,
                   streamInfo: reader.info,

@@ -30,7 +30,7 @@ type ReceivedChatMessageCommon = Omit<ReceivedChatMessageWithRequiredType, 'type
 };
 
 /** A message still streaming in. */
-type ReceivedChatMessagePending = ReceivedChatMessageCommon & { status: 'pending' };
+type ReceivedChatMessageStreaming = ReceivedChatMessageCommon & { status: 'streaming' };
 
 /** A message whose stream the sender closed cleanly. */
 type ReceivedChatMessageComplete = ReceivedChatMessageCommon & { status: 'complete' };
@@ -50,12 +50,12 @@ type ReceivedChatMessageLegacy = ReceivedChatMessageCommon & { status?: never };
 /**
  * @public
  * A received chat message, discriminated by its `status` the same way
- * {@link TextStreamData} is: `pending` while streaming, `complete` once the
+ * {@link TextStreamData} is: `streaming` while chunks arrive, `complete` once the
  * sender closes the stream cleanly, and `failed` (with the `error`) if the read
  * errors. Messages from before `status` existed carry none.
  */
 export type ReceivedChatMessage =
-  | ReceivedChatMessagePending
+  | ReceivedChatMessageStreaming
   | ReceivedChatMessageComplete
   | ReceivedChatMessageFailed
   | ReceivedChatMessageLegacy;

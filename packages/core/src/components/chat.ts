@@ -197,7 +197,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
       let lastMessage: ReceivedChatMessage | undefined;
       streamObservable.subscribe({
         next: (value) => {
-          lastMessage = { ...value, status: 'pending' };
+          lastMessage = { ...value, status: 'streaming' };
           messageSubject.next(lastMessage);
         },
         // A clean close means the message is whole. Nothing was received for a

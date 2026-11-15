@@ -115,14 +115,14 @@ describe('setupTextStream', () => {
     await flush();
 
     // The second window sees only its own stream — never the previous window's — so
-    // every emission has length 1 (the stream emits once while pending and again on
+    // every emission has length 1 (the stream emits once while streaming and again on
     // completion, both carrying the single stream).
     expect(after.length).toBeGreaterThan(0);
     expect(after.every((length) => length === 1)).toBe(true);
     secondSub.unsubscribe();
   });
 
-  it('reports pending while chunks arrive, then complete when the reader finishes', async () => {
+  it('reports streaming while chunks arrive, then complete when the reader finishes', async () => {
     const { room, push } = createFakeRoom();
 
     const stream = setupTextStream(room, TOPIC);
@@ -136,7 +136,7 @@ describe('setupTextStream', () => {
     await push(TOPIC, fakeReader('stream-1', ['Hello ', 'world']));
     await flush();
 
-    expect(statuses[0]).toBe('pending');
+    expect(statuses[0]).toBe('streaming');
     expect(statuses.at(-1)).toBe('complete');
     expect(latest).toHaveLength(1);
     expect(latest[0].text).toBe('Hello world');

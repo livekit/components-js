@@ -77,7 +77,7 @@ export function divideIntoPages<T>(list: T[], maxElementsOnPage: number): Array<
   return pages;
 }
 
-/** Divide the list of elements into pages and and check if pages need updating. */
+/** Divide the list of elements into pages and check if pages need updating. */
 export function updatePages<T extends UpdatableItem>(
   currentList: T[],
   nextList: T[],

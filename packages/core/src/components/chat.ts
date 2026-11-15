@@ -310,7 +310,11 @@ export function setupChat(room: Room, options?: ChatOptions) {
           acc[replaceIndex] = {
             ...value,
             timestamp: originalMsg.timestamp,
-            editTimestamp: value.timestamp,
+            // Only a change to the text is an edit. A stream re-emits its message
+            // unchanged when it completes or fails, just to update `status`, and
+            // that must not mark the message as edited.
+            editTimestamp:
+              value.message !== originalMsg.message ? value.timestamp : originalMsg.editTimestamp,
           };
         }
         return [...acc];

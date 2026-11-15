@@ -1,5 +1,5 @@
 ---
-'@livekit/components-core': patch
+'@livekit/components-core': minor
 '@livekit/components-react': patch
 ---
 

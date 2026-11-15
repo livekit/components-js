@@ -13,6 +13,7 @@ import {
   mergeMap,
   finalize,
   of,
+  tap,
 } from 'rxjs';
 import {
   DataTopic,
@@ -149,10 +150,17 @@ export function setupChat(room: Room, options?: ChatOptions) {
       );
       streamIdToAttachments.set(id, attachments);
 
+      // The text received so far. Tracked separately from the emitted message
+      // because, with attachments, `mergeMap` holds each chunk until an attachment
+      // resolves — so if the stream fails first, the emitted message lags (or
+      // doesn't exist yet) and its text would otherwise be lost.
+      let receivedText: string | undefined;
+
       const streamObservable = from(reader).pipe(
         scan((acc: string, chunk: string) => {
           return acc + chunk;
         }),
+        tap((text) => (receivedText = text)),
         mergeMap((chunk: string) => {
           if (attachments.size === 0) {
             return of({ chunk, attachedFiles: [] });
@@ -212,12 +220,24 @@ export function setupChat(room: Room, options?: ChatOptions) {
         // attachments arrived — instead of letting RxJS rethrow it globally from a
         // timer as an uncaught exception. Every error is treated the same;
         // `finalize` has already cleaned up the stream's attachment-map entry. Like
-        // `complete`, a message that never received anything is not emitted: it
+        // `complete`, a message that never received any text is not emitted: it
         // would only render as an empty bubble.
         error: (error) => {
-          if (!lastMessage) return;
+          if (typeof receivedText === 'undefined') return;
+          const base =
+            lastMessage ??
+            ({
+              id,
+              timestamp,
+              message: receivedText,
+              from: room.getParticipantByIdentity(participantInfo.identity),
+              type: 'chatMessage',
+              attributes,
+              attachedFiles: [],
+            } satisfies ReceivedChatMessage);
           messageSubject.next({
-            ...lastMessage,
+            ...base,
+            message: receivedText,
             status: TextStreamStatus.Failed,
             error: error instanceof Error ? error : new Error(String(error)),
           });

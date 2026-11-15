@@ -74,6 +74,38 @@ describe('chat text stream errors', () => {
     chat.subscription.unsubscribe();
   });
 
+  it('keeps the received text when a stream with attachments fails before they resolve', async () => {
+    const chat = setupChatCapturingHandler();
+
+    // The attachment's byte stream never arrives, so no message has been emitted
+    // yet when the text stream fails.
+    const error = new Error('sender disconnected');
+    await chat.textHandler(
+      {
+        info: {
+          id: 'msg-1',
+          timestamp: Date.now(),
+          attributes: {},
+          attachedStreamIds: ['attachment-1'],
+        },
+        async *[Symbol.asyncIterator]() {
+          yield 'look at ';
+          yield 'this';
+          throw error;
+        },
+      },
+      { identity: 'sender' },
+    );
+    await flush();
+
+    expect(chat.latest).toHaveLength(1);
+    expect(chat.latest[0].message).toBe('look at this');
+    expect(chat.latest[0].attachedFiles).toEqual([]);
+    expect(chat.latest[0].status).toBe(TextStreamStatus.Failed);
+    expect(chat.latest[0].status === TextStreamStatus.Failed && chat.latest[0].error).toBe(error);
+    chat.subscription.unsubscribe();
+  });
+
   it('emits no message when a chat text stream fails before any chunk', async () => {
     const chat = setupChatCapturingHandler();
 

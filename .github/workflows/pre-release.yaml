@@ -1,0 +1,27 @@
+# On demand: open an rc PR from the branch the workflow is run on. It
+# carries every package with a pending changeset, and the fixed groups
+# they are in, each at its own rc version and pinned to each other. The
+# levels come from the changesets. Merging the PR tags 1.6.0-rc.1; the
+# next run numbers rc.2. Changesets stay pending for the final release.
+name: Pre-release PR
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # the tags number the rc
+      - uses: livekit/verwalter@359985c1e5567b17ae84db0241fbb305c383f89e # v0.30.0
+        with:
+          command: pre-release
+          args: --target ${{ github.ref_name }}
+          app-client-id: ${{ secrets.VERWALTER_RELEASE_CLIENT_ID }}
+          app-private-key: ${{ secrets.VERWALTER_RELEASE_APP_KEY }}

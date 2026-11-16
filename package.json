@@ -20,7 +20,6 @@
     "lint": "turbo run lint -- --quiet",
     "preinstall": "npx only-allow pnpm",
     "shadcn:publish:all": "turbo run shadcn:publish:all --filter=@livekit/agents-ui... --ui=tui",
-    "ci:publish": "turbo run build --filter=./packages/* && pnpm gen:docs && changeset publish",
     "start:next": "turbo run start --filter=@livekit/component-example-next...",
     "test": "turbo run test",
     "tooling:update-readme-nav": "node tooling/readme-manager/update-nav-in-readmes.js",
@@ -31,8 +30,6 @@
     "unlink-local-client": "npm pkg delete \"pnpm.overrides.livekit-client\" && pnpm install"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.29.7",
-    "@livekit/changesets-changelog-github": "^0.2.0",
     "@rushstack/heft": "^1.0.0",
     "glob": "^14.0.0",
     "globals": "^17.0.0",

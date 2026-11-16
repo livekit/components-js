@@ -1,0 +1,14 @@
+#:schema https://raw.githubusercontent.com/livekit/verwalter/main/schemas/v1.json
+
+[workspace]
+members = ["packages/*", "docs/*"]
+
+[versioning]
+files = ["package.json"]
+
+[release]
+tag = "{package}@{version}"
+
+[publish]
+registry = "npm"
+workspace = "pnpm -r publish --access public --no-git-checks"

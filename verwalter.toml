@@ -12,3 +12,10 @@ tag = "{package}@{version}"
 [publish]
 registry = "npm"
 workspace = "pnpm -r publish --access public --no-git-checks"
+
+# Private: never tagged or published. The entry keeps its version and
+# changelog moving, as changesets did. The shadcn registry deploy reads them.
+[packages."@livekit/agents-ui"]
+path = "packages/shadcn"
+release.mode = "none"
+publish.registry = "none"

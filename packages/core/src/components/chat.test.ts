@@ -126,6 +126,30 @@ describe('chat text stream errors', () => {
     chat.subscription.unsubscribe();
   });
 
+  it('does not mark a multi-chunk message edited as its chunks arrive', async () => {
+    const chat = setupChatCapturingHandler();
+
+    await chat.textHandler(
+      {
+        info: { id: 'msg-1', timestamp: Date.now(), attributes: {}, attachedStreamIds: [] },
+        async *[Symbol.asyncIterator]() {
+          yield 'hello ';
+          yield 'world';
+        },
+      },
+      { identity: 'sender' },
+    );
+    await flush();
+
+    expect(chat.latest).toHaveLength(1);
+    expect(chat.latest[0]).toMatchObject({
+      message: 'hello world',
+      status: TextStreamStatus.Complete,
+    });
+    expect(chat.latest[0].editTimestamp).toBeUndefined();
+    chat.subscription.unsubscribe();
+  });
+
   it('emits no message when a chat text stream fails before any chunk', async () => {
     const chat = setupChatCapturingHandler();
 

@@ -115,6 +115,15 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
                     reader.info.attributes?.[segmentAttribute]),
             );
 
+          // The index of this reader's entry, but only while this reader still
+          // owns it. In a merged transcription segment a newer reader takes the
+          // entry over, so an older reader that ends afterwards must not set the
+          // segment's status (or roll back its streamInfo).
+          const indexOwnedByReader = () => {
+            const index = indexOfStream();
+            return index !== -1 && textStreams[index].streamInfo.id === reader.info.id ? index : -1;
+          };
+
           const emit = () => textStreamsSubject.next([...textStreams]);
 
           // Subscribe to the stream and update our array as its lifecycle advances.
@@ -151,14 +160,14 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
             // was received for a stream that completes with no chunks, so there is no
             // entry to mark and nothing to add.
             complete: () => {
-              const index = indexOfStream();
+              const index = indexOwnedByReader();
               if (index === -1) return;
               const existing = textStreams[index];
               textStreams[index] = {
                 status: TextStreamStatus.Complete,
                 text: existing.text,
                 participantInfo: existing.participantInfo,
-                streamInfo: reader.info,
+                streamInfo: existing.streamInfo,
               };
               emit();
             },
@@ -169,16 +178,16 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
             // means. Like `complete`, a stream that never received a chunk has no
             // entry and adds none: an empty failed entry would only render as an
             // empty transcript or message.
-            error: (error: Error) => {
-              const index = indexOfStream();
+            error: (error: unknown) => {
+              const index = indexOwnedByReader();
               if (index === -1) return;
               const existing = textStreams[index];
               textStreams[index] = {
                 status: TextStreamStatus.Failed,
                 text: existing.text,
                 participantInfo: existing.participantInfo,
-                streamInfo: reader.info,
-                error,
+                streamInfo: existing.streamInfo,
+                error: error instanceof Error ? error : new Error(String(error)),
               };
               emit();
             },

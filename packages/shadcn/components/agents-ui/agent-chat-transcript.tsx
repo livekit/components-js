@@ -110,6 +110,11 @@ export function AgentChatTranscript({
             aria-busy={agentState === 'thinking'}
           >
             {messages.map((receivedMessage) => {
+              // Only text-bearing messages (chat + transcripts) render as bubbles; tool calls,
+              // handoffs and config updates have no `message` text.
+              if (!('message' in receivedMessage)) {
+                return null;
+              }
               const { id, timestamp, from, message } = receivedMessage;
               const time = new Date(timestamp);
               const isUser = from?.isLocal;

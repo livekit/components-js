@@ -35,12 +35,33 @@ export type ThreadMessageStore = {
   /** Upsert many messages in a single state commit (used by the rtc derive effect). */
   upsertMessages: (messages: Array<ReceivedMessage>) => void;
 
+  /**
+   * Insert older messages (given oldest first) ahead of everything already in the store, e.g. a page of
+   * history. A message whose id is already present is updated in place and keeps its position.
+   */
+  prependMessages: (messages: Array<ReceivedMessage>) => void;
+
+  /**
+   * Replace the store's contents with `messages` (given oldest first), e.g. after re-fetching history.
+   * MessageReceived only fires for ids the store has never seen.
+   */
+  replaceMessages: (messages: Array<ReceivedMessage>) => void;
+
   /** Remove all accumulated messages. */
   clear: () => void;
 
   /** Fires `MessagesEvent.MessageReceived` once per message, at the single write point. */
   emitter: TypedEventEmitter<MessagesCallbacks>;
 };
+
+/** Record `id` as seen; returns true the first time it is seen. */
+function markSeen(seen: Set<ReceivedMessage['id']>, id: ReceivedMessage['id']) {
+  if (seen.has(id)) {
+    return false;
+  }
+  seen.add(id);
+  return true;
+}
 
 /**
  * Internal hook used by `useThread` to own the thread's message state. Modeled on
@@ -63,37 +84,12 @@ export function useThreadMessageStore(): ThreadMessageStore {
 
   const [messages, setMessages] = React.useState<Array<ReceivedMessage>>([]);
 
-  const upsertMessages = React.useCallback(
-    (incoming: Array<ReceivedMessage>) => {
+  // Publish the map as a list sorted by first-received time, then emit MessageReceived for the ids
+  // seen for the first time in this commit.
+  const commit = React.useCallback(
+    (newlySeenIds: Array<ReceivedMessage['id']>) => {
       const map = messagesMapRef.current;
       const firstReceived = firstReceivedTimeMapRef.current;
-      const seen = seenIdsRef.current;
-      const now = new Date();
-
-      let changed = false;
-      const newlySeenIds: Array<ReceivedMessage['id']> = [];
-
-      for (const message of incoming) {
-        // Reference-equal to what we already hold => nothing to do. This is the equality
-        // short-circuit that keeps the rtc derive effect from causing redundant renders: memoized
-        // transcription/chat objects keep their reference until their content actually changes.
-        if (map.get(message.id) === message) {
-          continue;
-        }
-        map.set(message.id, message);
-        changed = true;
-        if (!firstReceived.has(message.id)) {
-          firstReceived.set(message.id, now);
-        }
-        if (!seen.has(message.id)) {
-          seen.add(message.id);
-          newlySeenIds.push(message.id);
-        }
-      }
-
-      if (!changed) {
-        return;
-      }
 
       const sorted = Array.from(map.values()).sort((a, b) => {
         const aFirst = firstReceived.get(a.id);
@@ -115,6 +111,98 @@ export function useThreadMessageStore(): ThreadMessageStore {
     [emitter],
   );
 
+  const upsertMessages = React.useCallback(
+    (incoming: Array<ReceivedMessage>) => {
+      const map = messagesMapRef.current;
+      const firstReceived = firstReceivedTimeMapRef.current;
+      const now = new Date();
+
+      let changed = false;
+      const newlySeenIds: Array<ReceivedMessage['id']> = [];
+
+      for (const message of incoming) {
+        // Reference-equal to what we already hold => nothing to do. This is the equality
+        // short-circuit that keeps the rtc derive effect from causing redundant renders: memoized
+        // transcription/chat objects keep their reference until their content actually changes.
+        if (map.get(message.id) === message) {
+          continue;
+        }
+        map.set(message.id, message);
+        changed = true;
+        if (!firstReceived.has(message.id)) {
+          firstReceived.set(message.id, now);
+        }
+        if (markSeen(seenIdsRef.current, message.id)) {
+          newlySeenIds.push(message.id);
+        }
+      }
+
+      if (!changed) {
+        return;
+      }
+      commit(newlySeenIds);
+    },
+    [commit],
+  );
+
+  const prependMessages = React.useCallback(
+    (incoming: Array<ReceivedMessage>) => {
+      const map = messagesMapRef.current;
+      const firstReceived = firstReceivedTimeMapRef.current;
+
+      // New ids get first-received times just before the store's earliest, keeping their given order.
+      const newMessages = incoming.filter((message) => !map.has(message.id));
+      let earliest = Date.now();
+      for (const time of firstReceived.values()) {
+        earliest = Math.min(earliest, time.getTime());
+      }
+      newMessages.forEach((message, index) => {
+        firstReceived.set(message.id, new Date(earliest - (newMessages.length - index)));
+      });
+
+      let changed = false;
+      const newlySeenIds: Array<ReceivedMessage['id']> = [];
+      for (const message of incoming) {
+        if (map.get(message.id) === message) {
+          continue;
+        }
+        map.set(message.id, message);
+        changed = true;
+        if (markSeen(seenIdsRef.current, message.id)) {
+          newlySeenIds.push(message.id);
+        }
+      }
+
+      if (!changed) {
+        return;
+      }
+      commit(newlySeenIds);
+    },
+    [commit],
+  );
+
+  const replaceMessages = React.useCallback(
+    (incoming: Array<ReceivedMessage>) => {
+      const map = messagesMapRef.current;
+      const firstReceived = firstReceivedTimeMapRef.current;
+      map.clear();
+      firstReceived.clear();
+
+      // Strictly increasing first-received times, so the given order is the stored order.
+      const base = Date.now() - incoming.length;
+      const newlySeenIds: Array<ReceivedMessage['id']> = [];
+      incoming.forEach((message, index) => {
+        map.set(message.id, message);
+        firstReceived.set(message.id, new Date(base + index));
+        if (markSeen(seenIdsRef.current, message.id)) {
+          newlySeenIds.push(message.id);
+        }
+      });
+      commit(newlySeenIds);
+    },
+    [commit],
+  );
+
   const upsertMessage = React.useCallback(
     (message: ReceivedMessage) => upsertMessages([message]),
     [upsertMessages],
@@ -131,7 +219,15 @@ export function useThreadMessageStore(): ThreadMessageStore {
   }, []);
 
   return React.useMemo(
-    () => ({ messages, upsertMessage, upsertMessages, clear, emitter }),
-    [messages, upsertMessage, upsertMessages, clear, emitter],
+    () => ({
+      messages,
+      upsertMessage,
+      upsertMessages,
+      prependMessages,
+      replaceMessages,
+      clear,
+      emitter,
+    }),
+    [messages, upsertMessage, upsertMessages, prependMessages, replaceMessages, clear, emitter],
   );
 }

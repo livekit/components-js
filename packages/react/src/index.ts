@@ -8,6 +8,8 @@ export * from './context';
 
 export * from './text-transport/TextTransport';
 
+export * from './thread-client/ThreadClient';
+
 export * from './assets/icons';
 
 export * from './assets/images';

@@ -4,7 +4,7 @@ import {
   ThreadClient,
   ThreadClientError,
   publicApiUrlFromServerUrl,
-  threadItemToReceivedChatMessage,
+  threadItemToReceivedMessage,
 } from './ThreadClient';
 
 type Call = { url: URL; init: RequestInit };
@@ -179,10 +179,12 @@ describe('ThreadClient', () => {
   });
 });
 
-describe('threadItemToReceivedChatMessage', () => {
+describe('threadItemToReceivedMessage', () => {
+  const createdAt = '2026-11-19T10:00:00Z';
+
   test('maps user / assistant text messages onto origin + role', () => {
     expect(
-      threadItemToReceivedChatMessage({
+      threadItemToReceivedMessage({
         messageId: 'm1',
         seq: '3',
         item: {
@@ -190,20 +192,21 @@ describe('threadItemToReceivedChatMessage', () => {
             id: 'item-1',
             role: 'ASSISTANT',
             content: [{ text: 'Hello ' }, { text: 'there' }],
-            createdAt: '2026-11-19T10:00:00Z',
+            createdAt,
           },
         },
       }),
     ).toEqual({
       id: 'item-1',
       message: 'Hello there',
-      timestamp: Date.parse('2026-11-19T10:00:00Z'),
+      timestamp: Date.parse(createdAt),
       origin: 'agent',
       role: 'assistant',
     });
 
+    // Without an inner id, the item falls back to messageId-seq.
     expect(
-      threadItemToReceivedChatMessage({
+      threadItemToReceivedMessage({
         messageId: 'm2',
         seq: 4,
         item: { message: { role: 'USER', content: [{ text: 'hi' }] } },
@@ -211,15 +214,61 @@ describe('threadItemToReceivedChatMessage', () => {
     ).toMatchObject({ id: 'm2-4', message: 'hi', origin: 'user', role: 'user' });
   });
 
-  test('skips non-message items, system messages and empty text', () => {
-    expect(threadItemToReceivedChatMessage({ item: { functionCall: { name: 'f' } } })).toBeNull();
+  test('exposes system and developer messages under origin: system', () => {
     expect(
-      threadItemToReceivedChatMessage({
-        item: { message: { role: 'SYSTEM', content: [{ text: 'x' }] } },
+      threadItemToReceivedMessage({
+        item: { message: { id: 's', role: 'SYSTEM', content: [{ text: 'be nice' }] } },
       }),
-    ).toBeNull();
+    ).toMatchObject({ id: 's', message: 'be nice', origin: 'system', role: 'system' });
     expect(
-      threadItemToReceivedChatMessage({ item: { message: { role: 'USER', content: [] } } }),
-    ).toBeNull();
+      threadItemToReceivedMessage({
+        item: { message: { id: 'd', role: 'DEVELOPER', content: [{ text: 'tools...' }] } },
+      }),
+    ).toMatchObject({ origin: 'system', role: 'developer' });
+  });
+
+  test('maps tool calls, their output, handoffs and config updates to their own variants', () => {
+    expect(
+      threadItemToReceivedMessage({
+        item: {
+          functionCall: { id: 'fc', callId: 'c1', name: 'lookup', arguments: '{"q":1}', createdAt },
+        },
+      }),
+    ).toEqual({
+      type: 'functionCall',
+      id: 'fc',
+      timestamp: Date.parse(createdAt),
+      callId: 'c1',
+      name: 'lookup',
+      arguments: '{"q":1}',
+      origin: 'agent',
+      role: 'assistant',
+    });
+
+    expect(
+      threadItemToReceivedMessage({
+        item: { functionCallOutput: { id: 'fo', callId: 'c1', name: 'lookup', output: 'ok' } },
+      }),
+    ).toMatchObject({ type: 'functionCallOutput', callId: 'c1', output: 'ok', isError: false });
+
+    expect(
+      threadItemToReceivedMessage({ item: { agentHandoff: { id: 'h', newAgentId: 'billing' } } }),
+    ).toMatchObject({ type: 'agentHandoff', oldAgentId: null, newAgentId: 'billing' });
+
+    expect(
+      threadItemToReceivedMessage({
+        item: { agentConfigUpdate: { id: 'u', toolsAdded: ['refund'] } },
+      }),
+    ).toMatchObject({
+      type: 'agentConfigUpdate',
+      instructions: null,
+      toolsAdded: ['refund'],
+      toolsRemoved: [],
+    });
+  });
+
+  test('returns null only for an item with no known kind', () => {
+    expect(threadItemToReceivedMessage({ messageId: 'm', seq: 1 })).toBeNull();
+    expect(threadItemToReceivedMessage({ item: {} })).toBeNull();
   });
 });

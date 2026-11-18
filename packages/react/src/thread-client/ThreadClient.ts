@@ -1,4 +1,4 @@
-import type { ReceivedChatMessage } from '@livekit/components-core';
+import type { MessageSender, ReceivedMessage } from '@livekit/components-core';
 
 /**
  * A thread (`AT_…`) as the LiveKit Cloud Public API returns it: the protojson form of
@@ -66,7 +66,13 @@ export type AgentChatItem = {
     newAgentId?: string;
     createdAt?: string;
   };
-  agentConfigUpdate?: Record<string, unknown>;
+  agentConfigUpdate?: {
+    id?: string;
+    instructions?: string | null;
+    toolsAdded?: Array<string>;
+    toolsRemoved?: Array<string>;
+    createdAt?: string;
+  };
 };
 
 /** One chat item of one agent in a thread (`livekit.agent.AgentThread.Item`). @beta */
@@ -518,42 +524,103 @@ function errorFromResponse(status: number, text: string): ThreadClientError {
   return new ThreadClientError(status, code ?? codeFromHttpStatus(status), message);
 }
 
+/** An RFC3339 timestamp as epoch ms, or 0 when absent or unparseable. */
+function epochMilliseconds(timestamp: string | undefined): number {
+  const parsed = timestamp ? Date.parse(timestamp) : NaN;
+  return Number.isNaN(parsed) ? 0 : parsed;
+}
+
+/** The {@link MessageSender} of a chat message role. */
+function senderFromChatRole(role: AgentChatRole | undefined): MessageSender {
+  switch (role) {
+    case 'USER':
+      return { origin: 'user', role: 'user' };
+    case 'ASSISTANT':
+      return { origin: 'agent', role: 'assistant' };
+    case 'SYSTEM':
+      return { origin: 'system', role: 'system' };
+    case 'DEVELOPER':
+      return { origin: 'system', role: 'developer' };
+    default:
+      return {};
+  }
+}
+
+/** Everything the agent itself produced (tool calls, handoffs, config updates) is sent by the agent. */
+const AGENT_SENDER = { origin: 'agent', role: 'assistant' } as const;
+
 /**
- * Map a thread chat item onto a {@link ReceivedChatMessage}, or null when it isn't a user/assistant
- * text message (function calls, handoffs, config updates and developer/system messages are skipped).
+ * Map a thread chat item onto a {@link ReceivedMessage}: text messages (from any role, including system
+ * and developer instructions) become chat messages, and every other item kind maps to its own variant.
+ * Returns null only for an item that carries no known kind.
  * @beta
  */
-export function threadItemToReceivedChatMessage(item: AgentThreadItem): ReceivedChatMessage | null {
-  const message = item.item?.message;
-  if (!message) {
-    return null;
+export function threadItemToReceivedMessage(item: AgentThreadItem): ReceivedMessage | null {
+  const chatItem = item.item;
+  // Items without an inner id fall back to their position in the agent's history.
+  const fallbackId = `${item.messageId ?? ''}-${item.seq ?? ''}`;
+
+  if (chatItem?.message) {
+    const message = chatItem.message;
+    return {
+      id: message.id || fallbackId,
+      message: (message.content ?? []).map((content) => content.text ?? '').join(''),
+      timestamp: epochMilliseconds(message.createdAt),
+      ...senderFromChatRole(message.role),
+    };
   }
 
-  let sender: { origin: 'user'; role: 'user' } | { origin: 'agent'; role: 'assistant' };
-  switch (message.role) {
-    case 'USER':
-      sender = { origin: 'user', role: 'user' };
-      break;
-    case 'ASSISTANT':
-      sender = { origin: 'agent', role: 'assistant' };
-      break;
-    default:
-      return null;
+  if (chatItem?.functionCall) {
+    const call = chatItem.functionCall;
+    return {
+      type: 'functionCall',
+      id: call.id || fallbackId,
+      timestamp: epochMilliseconds(call.createdAt),
+      callId: call.callId ?? '',
+      name: call.name ?? '',
+      arguments: call.arguments ?? '',
+      ...AGENT_SENDER,
+    };
   }
 
-  const text = (message.content ?? [])
-    .map((content) => content.text ?? '')
-    .filter((text) => text.length > 0)
-    .join('');
-  if (!text) {
-    return null;
+  if (chatItem?.functionCallOutput) {
+    const output = chatItem.functionCallOutput;
+    return {
+      type: 'functionCallOutput',
+      id: output.id || fallbackId,
+      timestamp: epochMilliseconds(output.createdAt),
+      callId: output.callId ?? '',
+      name: output.name ?? '',
+      output: output.output ?? '',
+      isError: output.isError ?? false,
+      ...AGENT_SENDER,
+    };
   }
 
-  const createdAt = message.createdAt ? Date.parse(message.createdAt) : NaN;
-  return {
-    id: message.id || `${item.messageId ?? ''}-${item.seq ?? ''}`,
-    message: text,
-    timestamp: Number.isNaN(createdAt) ? 0 : createdAt,
-    ...sender,
-  };
+  if (chatItem?.agentHandoff) {
+    const handoff = chatItem.agentHandoff;
+    return {
+      type: 'agentHandoff',
+      id: handoff.id || fallbackId,
+      timestamp: epochMilliseconds(handoff.createdAt),
+      oldAgentId: handoff.oldAgentId ?? null,
+      newAgentId: handoff.newAgentId ?? '',
+      ...AGENT_SENDER,
+    };
+  }
+
+  if (chatItem?.agentConfigUpdate) {
+    const update = chatItem.agentConfigUpdate;
+    return {
+      type: 'agentConfigUpdate',
+      id: update.id || fallbackId,
+      timestamp: epochMilliseconds(update.createdAt),
+      instructions: update.instructions ?? null,
+      toolsAdded: update.toolsAdded ?? [],
+      toolsRemoved: update.toolsRemoved ?? [],
+      ...AGENT_SENDER,
+    };
+  }
+
+  return null;
 }

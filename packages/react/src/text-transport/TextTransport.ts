@@ -1,7 +1,13 @@
-import { type ReceivedChatMessage, type MessageSender } from '@livekit/components-core';
+import {
+  type ReceivedChatMessage,
+  type ReceivedMessage,
+  type MessageSender,
+} from '@livekit/components-core';
 import { type TokenSourceResponseObject } from 'livekit-client';
 import { EventEmitter } from 'events';
 import type TypedEmitter from 'typed-emitter';
+
+import { ThreadClient, threadItemToReceivedMessage } from '../thread-client/ThreadClient';
 
 /**
  * The A2A "LiveKit agents" extension URI. Sending this in the `A2A-Extensions` request header
@@ -33,6 +39,30 @@ export type TextTransportOptions = {
    * the conversation. Passing a `contextId` the server doesn't know about fails with `thread-not-found`.
    */
   threadId?: string;
+
+  /**
+   * Overrides the Public API base URL used to read thread history, which is otherwise derived from the
+   * credentials' `serverUrl` (e.g. to point at a local mock).
+   */
+  publicApiUrl?: string;
+};
+
+/** Options passed to {@link TextTransport.loadThreadMessagesPage}. */
+export type LoadThreadMessagesPageOptions = {
+  /** Items per page. */
+  pageSize: number;
+  /** The cursor of the page to load (an `olderCursor` from a previous page); omit for the latest. */
+  cursor?: string;
+  /** Only this agent's items; omit for every agent's. */
+  agent?: string;
+  signal?: AbortSignal;
+};
+
+/** A page of thread history, oldest message first. */
+export type ThreadMessagesPage = {
+  messages: Array<ReceivedMessage>;
+  /** The cursor of the next older page, or null when this page reaches the start of the thread. */
+  olderCursor: string | null;
 };
 
 /** Options passed to {@link TextTransport.requestMessageStream}. */
@@ -112,12 +142,7 @@ enum A2aTaskState {
  * paused states (the stream closes awaiting more input).
  */
 export type TextTurnState =
-  | 'working'
-  | 'input-required'
-  | 'auth-required'
-  | 'completed'
-  | 'failed'
-  | 'canceled';
+  'working' | 'input-required' | 'auth-required' | 'completed' | 'failed' | 'canceled';
 
 /** Map a raw A2A task state onto the normalized {@link TextTurnState}. */
 function normalizeTaskState(state: A2aTaskState): TextTurnState {
@@ -156,8 +181,7 @@ export type TextTurnMessage = {
  * failed / completed, which the plain message stream can't express).
  */
 export type TextTurnStreamItem =
-  | { kind: 'message'; message: TextTurnMessage }
-  | { kind: 'taskState'; state: TextTurnState };
+  { kind: 'message'; message: TextTurnMessage } | { kind: 'taskState'; state: TextTurnState };
 
 type A2aStreamResponse = {
   /**
@@ -170,7 +194,7 @@ type A2aStreamResponse = {
     contextId: string;
     id: string;
     status: {
-      state: A2aTaskState,
+      state: A2aTaskState;
       timestamp?: string;
     };
   };
@@ -178,7 +202,7 @@ type A2aStreamResponse = {
     taskId: string;
     contextId: string;
     status: {
-      state: A2aTaskState,
+      state: A2aTaskState;
       timestamp?: string;
       message?: A2aMessage;
     };
@@ -209,7 +233,7 @@ const A2aStreamResponse = {
 // Each SSE `data:` frame is a JSON-RPC envelope wrapping a StreamResponse in `result`.
 type JsonRpcStreamFrame = {
   id: number;
-  jsonrpc: "2.0";
+  jsonrpc: '2.0';
   result: A2aStreamResponse;
 };
 
@@ -315,11 +339,66 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
   // The conversation id. Undefined until the agent assigns one on the first message; reused after.
   private _threadId: string | undefined;
 
+  private publicApiUrl?: string;
+  // Reads thread history from the Public API. Built on first use, because its base url comes from the
+  // credentials' server url.
+  private threadClient: ThreadClient | null = null;
+
   constructor(options: TextTransportOptions) {
     super();
     this.baseUrl = options.baseUrl;
     this.getCredentials = options.getCredentials;
     this._threadId = options.threadId;
+    this.publicApiUrl = options.publicApiUrl;
+  }
+
+  private async getThreadClient(): Promise<ThreadClient> {
+    if (!this.threadClient) {
+      const { serverUrl } = await this.getCredentials();
+      // Each request asks for the current token, so a refreshed one (e.g. after the thread id is added
+      // to its grant) is picked up.
+      this.threadClient = new ThreadClient(
+        serverUrl,
+        async () => (await this.getCredentials()).participantToken,
+        { baseUrl: this.publicApiUrl },
+      );
+    }
+    return this.threadClient;
+  }
+
+  /**
+   * Load one page of the current thread's history (its chat items, via the Public API), newest page
+   * first: omit `cursor` for the latest page, then pass each page's `olderCursor` to page back. Every
+   * item kind is returned (text, tool calls, handoffs, …), oldest first within the page. Returns an
+   * empty page when there is no thread yet.
+   */
+  async loadThreadMessagesPage(
+    options: LoadThreadMessagesPageOptions,
+  ): Promise<ThreadMessagesPage> {
+    if (!this._threadId) {
+      return { messages: [], olderCursor: null };
+    }
+    const threadClient = await this.getThreadClient();
+    const page = await threadClient.items(
+      this._threadId,
+      {
+        sortOrder: 'desc',
+        limit: options.pageSize,
+        pageToken: options.cursor,
+        agent: options.agent,
+      },
+      options.signal,
+    );
+
+    const messages: Array<ReceivedMessage> = [];
+    // The page arrives newest first; return it oldest first.
+    for (const item of [...page.results].reverse()) {
+      const message = threadItemToReceivedMessage(item);
+      if (message) {
+        messages.push(message);
+      }
+    }
+    return { messages, olderCursor: page.nextPageToken };
   }
 
   /** The thread id, once the agent has assigned one. */
@@ -571,7 +650,9 @@ export class TextTransport extends (EventEmitter as new () => TypedEmitter<TextT
    * task history, which we flatten in task order. The canonical thread-history API is the agentstore
    * `GetThreadItems`, not yet reachable from the browser; swapping to it stays internal to this method.
    */
-  async loadThreadMessages(options: { signal?: AbortSignal } = {}): Promise<Array<ReceivedChatMessage>> {
+  async loadThreadMessages(
+    options: { signal?: AbortSignal } = {},
+  ): Promise<Array<ReceivedChatMessage>> {
     if (!this._threadId) {
       return [];
     }

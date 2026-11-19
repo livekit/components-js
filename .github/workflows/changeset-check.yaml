@@ -1,0 +1,22 @@
+# Fails a contributor PR that changes a versioned package without a
+# changeset, with a comment that links to a prefilled changeset file.
+# The `internal` label (config: [check] exempt_label) skips the check.
+name: Changeset check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: livekit/verwalter@39e3d7c57c2b6d96cf2d4b7771f3ab199490faba # v0.31.0
+        with:
+          command: check

@@ -1,0 +1,30 @@
+# Keeps one release PR open while changesets are pending. Runs on every
+# push to main and regenerates the release branch from main.
+name: Release PRs
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: release-prs
+  cancel-in-progress: true
+
+jobs:
+  pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # the commit that added a changeset gives its changelog line the PR and author
+      - uses: livekit/verwalter@39e3d7c57c2b6d96cf2d4b7771f3ab199490faba # v0.31.0
+        with:
+          command: pr
+          # A GitHub App token lets the release PRs trigger CI; the default
+          # github.token does not. Without these secrets, github.token is used.
+          app-client-id: ${{ secrets.VERWALTER_RELEASE_CLIENT_ID }}
+          app-private-key: ${{ secrets.VERWALTER_RELEASE_APP_KEY }}

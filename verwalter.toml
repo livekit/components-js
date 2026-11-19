@@ -1,0 +1,20 @@
+#:schema https://raw.githubusercontent.com/livekit/verwalter/main/schemas/v1.json
+
+[workspace]
+members = ["packages/*", "docs/*"]
+
+[versioning]
+files = ["package.json"]
+
+[release]
+tag = "{package}@{version}"
+
+[publish]
+registry = "npm"
+
+# Private: never tagged or published. The entry keeps its version and
+# changelog moving, as changesets did. The shadcn registry deploy reads them.
+[packages."@livekit/agents-ui"]
+path = "packages/shadcn"
+release.mode = "none"
+publish.registry = "none"

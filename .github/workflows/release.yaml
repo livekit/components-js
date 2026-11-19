@@ -1,36 +1,109 @@
+# After a release PR merges: tag and create the GitHub releases, then
+# build and publish to npm, then assert the end state. The step that
+# cannot be undone comes last.
 name: Release
 
 on:
-  push:
-    branches:
-      - main
-
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+  # No `branches` filter: an rc PR from pre-release.yaml targets the branch
+  # the workflow was run on. The condition on the first job decides which
+  # PRs release.
+  pull_request:
+    types: [closed]
+  # A failed job is re-run with "Re-run failed jobs" on the run itself:
+  # that keeps the merge commit. This trigger is for a run that needs a
+  # fixed workflow file from the branch. `verwalter release` resumes from
+  # the current state (tags, releases) and skips what is done. With
+  # `package`, that package is reported again even when complete, so the
+  # publish job runs for it.
+  workflow_dispatch:
+    inputs:
+      package:
+        description: Only this package; always reported to the publish job.
+        required: false
+        default: ''
+      ref:
+        description: Commit or tag to build and publish. Set it to the release tag when the tag exists. Empty is the branch head.
+        required: false
+        default: ''
 
 permissions:
-  id-token: write # Required for OIDC
-  contents: write # Required to create GH releases
-  pull-requests: write # Required to interact with PRs
+  contents: write
+  id-token: write # trusted publishing
 
 jobs:
   release:
-    name: Release
+    # Only a release PR the tool opened: the branch prefix alone would let
+    # any pushed `release/*` branch trigger a publish.
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/') && github.event.pull_request.user.login == 'verwalter-release[bot]' && contains(github.event.pull_request.body, '<!-- verwalter release -->'))
     runs-on: ubuntu-latest
+    outputs:
+      released: ${{ steps.verwalter.outputs.released }}
+      releases: ${{ steps.verwalter.outputs.releases }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The merge commit itself: a push to main right after the merge
+          # must not move the tags. On a run by hand, `ref` is the released
+          # tag: the branch head can hold newer source.
+          ref: ${{ github.event.pull_request.merge_commit_sha || inputs.ref || github.sha }}
+          fetch-depth: 0
+      - id: verwalter
+        uses: livekit/verwalter@39e3d7c57c2b6d96cf2d4b7771f3ab199490faba # v0.31.0
+        with:
+          command: release
+          args: ${{ inputs.package && format('--package {0}', inputs.package) || '' }}
+
+  # A version npm already has is skipped, so a re-run of this job is safe.
+  publish:
+    needs: release
+    if: needs.release.outputs.released == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    # One publish at a time: npm moves `latest` to the version that was
+    # published last. A waiting job checks out after the running one ends,
+    # so it sees the newer tags.
+    concurrency:
+      group: npm-publish
+      cancel-in-progress: false
+      queue: max
+    permissions:
+      contents: write # the tool flips draft releases after the publish
+      id-token: write # trusted publishing
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha || inputs.ref || github.sha }}
+          fetch-depth: 0 # tags decide what is published
       - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
-      - name: Use Node.js 20
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      # No registry-url: with trusted publishing, setup-node would write a
+      # placeholder token that the publish falls back to.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           cache: 'pnpm'
-      - name: Install dependencies
-        run: pnpm install
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
-        with:
-          # This expects you to have a script called release which does a build for your packages and calls changeset publish
-          publish: pnpm ci:publish
+      - run: pnpm install
+      - run: pnpm turbo run build --filter='./packages/*'
+      - run: pnpm gen:docs
+      - uses: livekit/verwalter@39e3d7c57c2b6d96cf2d4b7771f3ab199490faba # v0.31.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+        with:
+          command: publish
+          releases: ${{ needs.release.outputs.releases }}
+
+  # The end state, asserted: `status --check` fails when a tag is not on
+  # the remote, a GitHub release is missing or still a draft, or npm does
+  # not have the version. A step that was skipped without an error ends here.
+  verify:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # reads only. A draft release is visible only with write access
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha || inputs.ref || github.sha }}
+          fetch-depth: 0
+      - uses: livekit/verwalter@39e3d7c57c2b6d96cf2d4b7771f3ab199490faba # v0.31.0
+        with:
+          command: status
+          args: --check

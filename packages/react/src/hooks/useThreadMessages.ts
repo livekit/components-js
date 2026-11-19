@@ -5,10 +5,15 @@ import { ReceivedMessage, ReceivedChatMessage, log } from '@livekit/components-c
 
 import { UseThreadReturn } from './useThread';
 import type { MessagesCallbacks } from './useThreadMessageStore';
+import type { ThreadHistoryRefreshOptions } from './useThreadHistory';
 import { useMaybeSessionContext, useMaybeThreadContext } from '../context';
 
-/** @beta */
-export type UseThreadMessagesReturn = {
+type UseThreadMessagesCommon = {
+  /**
+   * The thread's transcript, oldest first: loaded history plus everything sent and received live. Every
+   * kind is included (text, transcripts, tool calls, handoffs, config updates, and system/developer
+   * messages); filter on `type` / `origin` to show a subset.
+   */
   messages: Array<ReceivedMessage>;
 
   /** Is a send operation currently in progress? */
@@ -16,16 +21,98 @@ export type UseThreadMessagesReturn = {
 
   send: (message: string, options?: SendTextOptions) => Promise<ReceivedChatMessage>;
 
+  /**
+   * Load the next older page of history and insert it ahead of `messages`. Does nothing unless `status` is
+   * `ready` or `error` and `hasOlder` is true; after a failed `loadOlder`, calling it again retries.
+   */
+  loadOlder: () => Promise<void>;
+
+  /**
+   * Re-fetch history from the server and replace `messages` with it. `mode: 'loaded'` (the default)
+   * re-fetches as many pages as are loaded; `mode: 'latest'` resets to just the latest page. `messages`
+   * stays as-is until the refresh completes, and is untouched if it fails.
+   */
+  refresh: (options?: ThreadHistoryRefreshOptions) => Promise<void>;
+
   internal: {
     emitter: TypedEventEmitter<MessagesCallbacks>;
   };
 };
+
+/** History fetching is turned off (the thread's `history.pageSize` is 0). */
+type UseThreadMessagesDisabled = UseThreadMessagesCommon & {
+  status: 'disabled';
+  hasOlder: false;
+  error: null;
+};
+
+/**
+ * No history has been fetched: the thread has no id yet (it is created by the first send), or its
+ * first page is about to be requested.
+ */
+type UseThreadMessagesIdle = UseThreadMessagesCommon & {
+  status: 'idle';
+  hasOlder: false;
+  error: null;
+};
+
+/** The latest page of history is being fetched; `messages` holds only what arrived live so far. */
+type UseThreadMessagesLoading = UseThreadMessagesCommon & {
+  status: 'loading';
+  hasOlder: false;
+  error: null;
+};
+
+/** History is loaded. `hasOlder` says whether `loadOlder` can page further back. */
+type UseThreadMessagesReady = UseThreadMessagesCommon & {
+  status: 'ready';
+  hasOlder: boolean;
+  error: null;
+};
+
+/** An older page of history is being fetched (after `loadOlder`). */
+type UseThreadMessagesLoadingOlder = UseThreadMessagesCommon & {
+  status: 'loading-older';
+  hasOlder: true;
+  error: null;
+};
+
+/** History is being re-fetched (after `refresh`); `messages` keeps showing the current transcript. */
+type UseThreadMessagesRefreshing = UseThreadMessagesCommon & {
+  status: 'refreshing';
+  hasOlder: boolean;
+  error: null;
+};
+
+/**
+ * The last history request failed. `messages` keeps whatever had loaded; `hasOlder` is kept, so
+ * `loadOlder` retries a failed older page and `refresh` retries a failed first page.
+ */
+type UseThreadMessagesError = UseThreadMessagesCommon & {
+  status: 'error';
+  hasOlder: boolean;
+  error: Error;
+};
+
+/** @beta */
+export type UseThreadMessagesReturn =
+  | UseThreadMessagesDisabled
+  | UseThreadMessagesIdle
+  | UseThreadMessagesLoading
+  | UseThreadMessagesReady
+  | UseThreadMessagesLoadingOlder
+  | UseThreadMessagesRefreshing
+  | UseThreadMessagesError;
 
 /**
  * A thread's messages: chat messages sent and received over the thread's TextTransport (A2A/HTTP), plus
  * any voice transcriptions an attached call has written into the shared store. Chat is never sent over
  * the data channel. All messages live in the thread's shared message store so they persist for the life
  * of the conversation.
+ *
+ * History is fetched lazily: the first `useThreadMessages` to mount for a thread loads its latest page
+ * (`useThread` alone never fetches it). Older pages load on demand with `loadOlder`. The paging state
+ * is shared by every `useThreadMessages` of the thread, configured by `useThread`'s `history` option.
  *
  * The thread is resolved from the argument, or from a Thread or Session provider in context.
  * @beta
@@ -45,14 +132,17 @@ export function useThreadMessages(thread?: UseThreadReturn): UseThreadMessagesRe
   const { textTransport } = resolvedThread;
   // Destructure the stable store operations: the store object's identity changes whenever messages
   // change, so depending on it directly would re-run effects / re-create callbacks on every message.
-  const {
-    messages: storeMessages,
-    upsertMessage,
-    emitter,
-  } = resolvedThread.internal.messageStore;
+  const { messages: storeMessages, upsertMessage, emitter } = resolvedThread.internal.messageStore;
   // The shared text-mode response lifecycle, read by `useAgent` (idle → thinking → typing → idle), plus
   // the text-turn failure signal (folded into `useAgent().failureReasons`).
-  const { setTextAgentState, setTextAgentFailureReason } = resolvedThread.internal;
+  const { setTextAgentState, setTextAgentFailureReason, history } = resolvedThread.internal;
+  const { ensureLoaded, loadOlder, refresh } = history;
+
+  // Load the latest page of history once this thread has an id and nothing has been fetched. It no-ops
+  // otherwise, and concurrent consumers share the one request.
+  React.useEffect(() => {
+    void ensureLoaded();
+  }, [ensureLoaded, history.status, resolvedThread.threadId]);
 
   const [isSending, setIsSending] = React.useState(false);
 
@@ -129,13 +219,47 @@ export function useThreadMessages(thread?: UseThreadReturn): UseThreadMessagesRe
     [textTransport, upsertMessage, setTextAgentState, setTextAgentFailureReason],
   );
 
-  return React.useMemo(
-    () => ({
+  return React.useMemo((): UseThreadMessagesReturn => {
+    const common: UseThreadMessagesCommon = {
       messages: storeMessages,
       send,
       isSending,
+      loadOlder,
+      refresh,
       internal: { emitter },
-    }),
-    [storeMessages, emitter, send, isSending],
-  );
+    };
+    switch (history.status) {
+      case 'disabled':
+      case 'idle':
+      case 'loading':
+        return { ...common, status: history.status, hasOlder: false, error: null };
+      case 'ready':
+      case 'refreshing':
+        return {
+          ...common,
+          status: history.status,
+          hasOlder: history.olderCursor !== null,
+          error: null,
+        };
+      case 'loading-older':
+        return { ...common, status: 'loading-older', hasOlder: true, error: null };
+      case 'error':
+        return {
+          ...common,
+          status: 'error',
+          hasOlder: history.olderCursor !== null,
+          error: history.error,
+        };
+    }
+  }, [
+    storeMessages,
+    send,
+    isSending,
+    loadOlder,
+    refresh,
+    emitter,
+    history.status,
+    history.olderCursor,
+    history.error,
+  ]);
 }

@@ -51,6 +51,16 @@ function useFakeThread(textTransport: unknown): UseThreadReturn {
       setTextAgentState,
       textAgentFailureReason,
       setTextAgentFailureReason,
+      // History fetching is covered in useThreadMessages.history.test.ts; keep it off here.
+      history: {
+        status: 'disabled',
+        olderCursor: null,
+        error: null,
+        ensureLoaded: async () => {},
+        loadOlder: async () => {},
+        refresh: async () => {},
+        onThreadStarted: () => {},
+      },
     },
   } as unknown as UseThreadReturn;
 }

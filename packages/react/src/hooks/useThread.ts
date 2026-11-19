@@ -10,10 +10,14 @@ import {
 } from 'livekit-client';
 import { EventEmitter } from 'events';
 
-import { log } from '@livekit/components-core';
 import { TextTransport, type TextTransportBaseUrl } from '../text-transport/TextTransport';
 import { useThreadMessageStore, type ThreadMessageStore } from './useThreadMessageStore';
 import { useEvents } from './useEvents';
+import {
+  useThreadHistory,
+  DEFAULT_THREAD_HISTORY_PAGE_SIZE,
+  type ThreadHistory,
+} from './useThreadHistory';
 import type { AgentState } from './useAgent';
 
 /** @beta */
@@ -71,13 +75,13 @@ export type ThreadTextAgentState = 'idle' | 'thinking' | 'typing' | 'input-requi
 
 /**
  * The thread's readiness lifecycle. A thread has no persistent socket (text is request/response per
- * turn), so this reflects credential/history readiness rather than a connection:
+ * turn), so this is not a connection state:
  *   - `idle`: initial, before the first readiness pass.
- *   - `loading-history`: an existing thread's history is being fetched.
- *   - `ready`: ready to send and receive (history, if any, has loaded).
+ *   - `ready`: ready to send and receive.
+ * History loading is reported separately, by `useThreadMessages().status`.
  * @beta
  */
-export type ThreadStatus = 'idle' | 'loading-history' | 'ready';
+export type ThreadStatus = 'idle' | 'ready';
 
 type ThreadStateCommon = {
   /** The active conversation/thread id (A2A `contextId`), or null before one is established. */
@@ -119,14 +123,17 @@ type ThreadStateCommon = {
     textAgentFailureReason: string | null;
     /** Set (or clear, with null) the last text-turn failure reason. Used by `useThreadMessages().send()`. */
     setTextAgentFailureReason: (reason: string | null) => void;
+    /**
+     * The thread's history paging, shared by every `useThreadMessages` so they don't fight. Nothing is
+     * fetched until a `useThreadMessages` mounts.
+     */
+    history: ThreadHistory;
   };
 };
 
 /** @beta */
 export type UseThreadReturn =
-  | ({ status: 'idle' } & ThreadStateCommon)
-  | ({ status: 'loading-history' } & ThreadStateCommon)
-  | ({ status: 'ready' } & ThreadStateCommon);
+  ({ status: 'idle' } & ThreadStateCommon) | ({ status: 'ready' } & ThreadStateCommon);
 
 /** @internal */
 export function isUseThreadReturn(value: unknown): value is UseThreadReturn {
@@ -148,10 +155,25 @@ type UseThreadCommonOptions = {
   textBaseUrl?: TextTransportBaseUrl;
 
   /**
-   * An existing conversation/thread id to resume. Seeds the text transport's thread id and loads that
-   * thread's history; omit to let the agent create a new thread on the first message.
+   * An existing conversation/thread id to resume. Seeds the text transport's thread id (its history is
+   * loaded once a `useThreadMessages` mounts); omit to let the agent create a new thread on the first
+   * message.
    */
   threadId?: string;
+
+  /** How thread history is fetched. Shared by every `useThreadMessages` of the thread. */
+  history?: {
+    /**
+     * Items fetched per page: the latest page first, then older pages on demand. Defaults to 100;
+     * 0 disables history fetching. Every item kind counts (text, tool calls, handoffs, …).
+     */
+    pageSize?: number;
+    /**
+     * Overrides the Public API base URL that history is read from, which is otherwise derived from the
+     * credentials' server url (e.g. to point at a local mock).
+     */
+    publicApiUrl?: string;
+  };
 };
 
 /** @beta */
@@ -283,7 +305,9 @@ export function useThread(
   tokenSource: TokenSourceConfigurable | TokenSourceFixed,
   options: UseThreadConfigurableOptions | UseThreadFixedOptions = {},
 ): UseThreadReturn {
-  const { textBaseUrl, threadId: userProvidedThreadId } = options;
+  const { textBaseUrl, threadId: userProvidedThreadId, history: historyOptions } = options;
+  const historyPageSize = historyOptions?.pageSize ?? DEFAULT_THREAD_HISTORY_PAGE_SIZE;
+  const publicApiUrl = historyOptions?.publicApiUrl;
 
   // The thread id is null until one is established (either provided here or assigned by the transport
   // on the first message). The public surface exposes `string | null`.
@@ -293,10 +317,7 @@ export function useThread(
   // The shared, mode-independent message store.
   const messageStore = useThreadMessageStore();
 
-  const emitter = React.useMemo(
-    () => new EventEmitter() as TypedEventEmitter<ThreadCallbacks>,
-    [],
-  );
+  const emitter = React.useMemo(() => new EventEmitter() as TypedEventEmitter<ThreadCallbacks>, []);
 
   // The single canonical room for this thread. Until a call attaches, it is a disconnected
   // placeholder so `useAgent` (which runs unconditional room-derived hooks) works for a text-only
@@ -326,10 +347,11 @@ export function useThread(
   const [textAgentFailureReason, setTextAgentFailureReason] = React.useState<string | null>(null);
 
   const {
-    // `textBaseUrl`/`threadId` are thread concerns; strip them so they never reach the token fetch
-    // options (areTokenSourceFetchOptionsEqual throws on unknown keys).
+    // `textBaseUrl`/`threadId`/`history` are thread concerns; strip them so they never reach the token
+    // fetch options (areTokenSourceFetchOptionsEqual throws on unknown keys).
     textBaseUrl: _textBaseUrl,
     threadId: _threadId,
+    history: _history,
     ...unstableRestOptions
   } = options;
 
@@ -353,72 +375,38 @@ export function useThread(
         baseUrl: textBaseUrl,
         getCredentials: tokenSourceFetch,
         threadId: threadId ?? undefined,
+        publicApiUrl,
       }),
-    [textBaseUrl, tokenSourceFetch, threadId],
+    [textBaseUrl, tokenSourceFetch, threadId, publicApiUrl],
   );
+
+  // History paging, shared by every useThreadMessages. It also owns the transcript's lifecycle across
+  // thread switches (a switch drops the previous thread's messages).
+  const history = useThreadHistory({
+    threadId,
+    textTransport,
+    messageStore,
+    pageSize: historyPageSize,
+    agent: (unstableRestOptions as TokenSourceFetchOptions).agentName,
+  });
+  const { onThreadStarted } = history;
 
   useEvents(
     textTransport,
     'threadStarted',
     (newThreadId: string) => {
+      // The first send created this thread, so there is no older history to fetch.
+      onThreadStarted(newThreadId);
       setThreadId(newThreadId);
       emitter.emit(ThreadEvent.ThreadStarted, newThreadId);
     },
-    [],
+    [onThreadStarted],
   );
 
   const [status, setStatus] = React.useState<ThreadStatus>('idle');
-
-  // Seed the transcript from the active thread's existing messages. When a threadId is provided we
-  // fetch its full history (paginated to the start) and upsert it into the shared store; a thread with
-  // no threadId starts empty. Switching threadId drops the previous thread's transcript first.
-  const lastFetchedThreadIdRef = React.useRef<string | null>(threadId);
-  const messagesEmpty = messageStore.messages.length === 0;
   React.useEffect(() => {
-    const threadAddedToExistingSession =
-      !messagesEmpty && lastFetchedThreadIdRef.current === null && threadId !== null;
-    if (threadAddedToExistingSession) {
-      setStatus('ready');
-      return;
-    }
-
-    const controller = new AbortController();
-
-    const threadChanged = threadId !== null && lastFetchedThreadIdRef.current !== threadId;
-    if (threadChanged) {
-      messageStore.clear();
-      lastFetchedThreadIdRef.current = threadId;
-      setStatus('loading-history');
-
-      void (async () => {
-        try {
-          const history = await textTransport.loadThreadMessages({ signal: controller.signal });
-          if (!controller.signal.aborted) {
-            messageStore.upsertMessages(history);
-          }
-        } catch (err) {
-          if (!controller.signal.aborted) {
-            log.warn('useThread: failed to load thread history', err);
-          }
-        } finally {
-          if (!controller.signal.aborted) {
-            setStatus('ready');
-          }
-        }
-      })();
-      return () => {
-        controller.abort();
-      };
-    }
-
-    const threadIdDropped = threadId === null;
-    if (threadIdDropped) {
-      messageStore.clear();
-      lastFetchedThreadIdRef.current = null;
-    }
     setStatus('ready');
-    return;
-  }, [threadId, textTransport, messageStore.upsertMessages, messageStore.clear]);
+  }, []);
 
   const internal = React.useMemo(
     () => ({
@@ -433,6 +421,7 @@ export function useThread(
       setTextAgentState,
       textAgentFailureReason,
       setTextAgentFailureReason,
+      history,
     }),
     [
       emitter,
@@ -446,6 +435,7 @@ export function useThread(
       setTextAgentState,
       textAgentFailureReason,
       setTextAgentFailureReason,
+      history,
     ],
   );
 
@@ -459,8 +449,6 @@ export function useThread(
     switch (status) {
       case 'idle':
         return { ...common, status: 'idle' };
-      case 'loading-history':
-        return { ...common, status: 'loading-history' };
       case 'ready':
         return { ...common, status: 'ready' };
     }

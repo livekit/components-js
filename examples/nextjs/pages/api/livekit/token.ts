@@ -63,6 +63,28 @@ function roomConfigClaim(roomConfigPayload: unknown): Record<string, unknown> | 
 }
 
 /**
+ * The thread id the browser's `useThread` put in the agent dispatch metadata (`{ "thread_id": ... }`),
+ * or null when the conversation has no thread yet.
+ */
+function threadIdFromRoomConfig(roomConfig: Record<string, unknown> | undefined): string | null {
+  const agents = Array.isArray(roomConfig?.agents) ? roomConfig.agents : [];
+  for (const agent of agents as Array<{ metadata?: unknown }>) {
+    if (typeof agent.metadata !== 'string') {
+      continue;
+    }
+    try {
+      const threadId = (JSON.parse(agent.metadata) as { thread_id?: unknown }).thread_id;
+      if (typeof threadId === 'string' && threadId.length > 0) {
+        return threadId;
+      }
+    } catch {
+      // Not JSON; it can't carry a thread id.
+    }
+  }
+  return null;
+}
+
+/**
  * Mint a LiveKit JWT by hand.
  *
  * We can't use `AccessToken` from `livekit-server-sdk` here because it can only add the `video`
@@ -77,7 +99,15 @@ function roomConfigClaim(roomConfigPayload: unknown): Record<string, unknown> | 
 function mintToken(
   key: string,
   secret: string,
-  opts: { identity: string; name?: string; metadata?: string; roomName: string; ttlSeconds?: number; roomConfig?: any },
+  opts: {
+    identity: string;
+    name?: string;
+    metadata?: string;
+    roomName: string;
+    ttlSeconds?: number;
+    roomConfig?: any;
+    threadId?: string | null;
+  },
 ): string {
   const now = Math.floor(Date.now() / 1000);
   const header = { alg: 'HS256', typ: 'JWT' };
@@ -101,6 +131,17 @@ function mintToken(
     roomConfig: opts.roomConfig,
     // agents-2.0 A2A auth: the project principal, allowed to call any agent in the project.
     agentEndpoint: { call: true },
+    // Thread history (the Public API's thread items), scoped to this user. Listing/creating is by scope,
+    // but reading a thread needs its id in `threadIds`: a scope-only grant can't read even a thread it
+    // created. The browser re-fetches its token once it has a thread id, so this fills in then.
+    agentThread: {
+      scope: opts.identity,
+      threadIds: opts.threadId ? [opts.threadId] : [],
+      list: true,
+      create: true,
+      read: true,
+      write: true,
+    },
   };
 
   const signingInput = `${base64url(JSON.stringify(header))}.${base64url(JSON.stringify(payload))}`;
@@ -138,7 +179,16 @@ export default async function handleToken(req: NextApiRequest, res: NextApiRespo
     const metadata = body.participant_metadata;
     const roomConfig = roomConfigClaim(body.room_config);
 
-    const token = mintToken(apiKey, apiSecret, { identity, name, metadata, roomName, roomConfig });
+    const threadId = threadIdFromRoomConfig(roomConfig);
+
+    const token = mintToken(apiKey, apiSecret, {
+      identity,
+      name,
+      metadata,
+      roomName,
+      roomConfig,
+      threadId,
+    });
 
     // Return response in TokenSourceResponse format (snake_case)
     const response: TokenSourceResponse = {

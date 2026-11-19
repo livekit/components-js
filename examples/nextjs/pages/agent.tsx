@@ -13,6 +13,7 @@ import {
   SessionEvent,
   useEvents,
   UseThreadReturn,
+  type ReceivedMessage,
 } from '@livekit/components-react';
 import type { NextPage } from 'next';
 import { useMemo, useState, useEffect } from 'react';
@@ -57,12 +58,57 @@ function SimpleAgent({ thread }: { thread: UseThreadReturn }) {
   );
 }
 
+// How each kind of message renders. Text and transcripts show their text; the rest of the agent's
+// chat context (tool calls, their output, handoffs, config updates) shows a compact one-line summary.
+function MessageBody({ message }: { message: ReceivedMessage }) {
+  switch (message.type) {
+    case 'functionCall':
+      return (
+        <code style={{ fontSize: 12 }}>
+          🔧 {message.name}({message.arguments})
+        </code>
+      );
+    case 'functionCallOutput':
+      return (
+        <code style={{ fontSize: 12, color: message.isError ? '#ff7b72' : undefined }}>
+          ↳ {message.name}: {message.output}
+        </code>
+      );
+    case 'agentHandoff':
+      return (
+        <span style={{ fontSize: 12, opacity: 0.8 }}>
+          handoff: {message.oldAgentId ?? '(start)'} → {message.newAgentId}
+        </span>
+      );
+    case 'agentConfigUpdate':
+      return (
+        <span style={{ fontSize: 12, opacity: 0.8 }}>
+          config updated
+          {message.toolsAdded.length > 0 ? ` +${message.toolsAdded.join(', +')}` : ''}
+          {message.toolsRemoved.length > 0 ? ` -${message.toolsRemoved.join(', -')}` : ''}
+          {message.instructions !== null ? ' (new instructions)' : ''}
+        </span>
+      );
+    default:
+      // chatMessage (the default when `type` is absent), userTranscript and agentTranscript.
+      return <div>{message.message}</div>;
+  }
+}
+
 // The text half: reads and sends messages on the thread resolved from ThreadProvider. The agent's
 // text-mode state (idle → thinking → typing → idle) is driven by send() and surfaced via useAgent,
 // which works here even though no call is connected.
+//
+// Mounting this is what loads the thread's history: the latest page first, older pages on demand.
 function TextChat() {
-  const { messages, send, isSending } = useThreadMessages();
+  const chat = useThreadMessages();
+  const { messages, send, isSending, loadOlder, refresh } = chat;
   const [draft, setDraft] = useState('');
+  const [showSystem, setShowSystem] = useState(false);
+
+  const visibleMessages = showSystem
+    ? messages
+    : messages.filter((message) => message.origin !== 'system');
 
   const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,8 +120,42 @@ function TextChat() {
     send(text).catch((err) => console.error('Failed to send text message:', err));
   };
 
+  const historyBusy =
+    chat.status === 'loading' || chat.status === 'loading-older' || chat.status === 'refreshing';
+
   return (
     <>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
+        <span style={{ opacity: 0.7, flexGrow: 1 }}>
+          History: {chat.status}
+          {chat.status === 'error' ? ` (${chat.error.message})` : ''}
+        </span>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <input
+            type="checkbox"
+            checked={showSystem}
+            onChange={(e) => setShowSystem(e.target.checked)}
+          />
+          system messages
+        </label>
+        <button
+          className="lk-button"
+          disabled={historyBusy || chat.status === 'disabled'}
+          onClick={() => refresh().catch((err) => console.error('Failed to refresh:', err))}
+        >
+          Refresh
+        </button>
+        <button
+          className="lk-button"
+          disabled={historyBusy || chat.status === 'disabled'}
+          onClick={() =>
+            refresh({ mode: 'latest' }).catch((err) => console.error('Failed to refresh:', err))
+          }
+        >
+          Reset to latest
+        </button>
+      </div>
+
       <div
         style={{
           overflowY: 'auto',
@@ -89,25 +169,44 @@ function TextChat() {
           flexShrink: 1,
         }}
       >
-        {messages.length === 0 ? (
+        {chat.hasOlder ? (
+          <button
+            className="lk-button"
+            style={{ alignSelf: 'center' }}
+            disabled={chat.status === 'loading-older'}
+            onClick={() => loadOlder().catch((err) => console.error('Failed to load older:', err))}
+          >
+            {chat.status === 'loading-older' ? 'Loading older...' : 'Load older'}
+          </button>
+        ) : null}
+
+        {chat.status === 'loading' ? (
+          <span style={{ opacity: 0.6 }}>Loading history...</span>
+        ) : visibleMessages.length === 0 ? (
           <span style={{ opacity: 0.6 }}>No messages yet. Say hello 👋</span>
         ) : (
-          messages.map((message) => {
+          visibleMessages.map((message) => {
             const isUser = message.origin === 'user';
-            const role = message.origin ?? 'agent';
+            const label = message.origin === 'system' ? message.role : (message.origin ?? 'agent');
+            const isText = !message.type || 'message' in message;
             return (
               <div
                 key={message.id}
                 style={{
                   alignSelf: isUser ? 'flex-end' : 'flex-start',
-                  background: isUser ? '#1f6feb' : 'rgba(255,255,255,0.1)',
+                  background: isUser
+                    ? '#1f6feb'
+                    : isText
+                      ? 'rgba(255,255,255,0.1)'
+                      : 'rgba(255,255,255,0.04)',
                   borderRadius: 8,
                   padding: '6px 10px',
                   maxWidth: '80%',
+                  opacity: message.origin === 'system' ? 0.7 : 1,
                 }}
               >
-                <div style={{ fontSize: 11, opacity: 0.7 }}>{role}</div>
-                <div>{'message' in message ? message.message : ''}</div>
+                <div style={{ fontSize: 11, opacity: 0.7 }}>{label}</div>
+                <MessageBody message={message} />
               </div>
             );
           })
@@ -149,6 +248,12 @@ const AgentExample: NextPage = () => {
 
   const [threadId, setThreadId] = useState('');
 
+  // History page size, e.g. ?historyPageSize=5 to try "Load older" on a short thread (0 turns history
+  // off). Unset uses the default (100).
+  const historyPageSize = params?.get('historyPageSize')
+    ? Number(params.get('historyPageSize'))
+    : undefined;
+
   // The durable conversation (text + history). Usable on its own for text-only.
   const thread = useThread(tokenSource, {
     threadId: threadId.length > 0 ? threadId : undefined,
@@ -156,6 +261,7 @@ const AgentExample: NextPage = () => {
     roomName,
     participantIdentity: userIdentity,
     agentName: 'dentist',
+    history: { pageSize: historyPageSize },
   });
 
   // A voice session attached to the thread. Created up front; connected only while "started".

@@ -1,5 +1,12 @@
 # @livekit/components-core
 
+## 0.12.17
+
+### Patch Changes
+
+- Stop the chat email regex from freezing the page on a long word with no `@` in it. - [#1512](https://github.com/livekit/components-js/pull/1512) ([@ANDROIDHASSAN](https://github.com/ANDROIDHASSAN))
+- Stop the chat link regex from freezing the page on a long word with no dot in it. - [#1499](https://github.com/livekit/components-js/pull/1499) ([@ANDROIDHASSAN](https://github.com/ANDROIDHASSAN))
+
 ## 0.12.16
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @livekit/components-react
 
+## 2.9.26
+
+### Patch Changes
+
+- Updated dependencies: @livekit/components-core@0.12.17
+
 ## 2.9.25
 
 ### Patch Changes

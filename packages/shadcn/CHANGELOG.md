@@ -1,5 +1,14 @@
 # @agents-ui
 
+## 1.0.10
+
+### Patch Changes
+
+- Fix `ReactShaderToy` drawing every frame twice. Its setup code and its visibility observer each - [#1514](https://github.com/livekit/components-js/pull/1514) ([@thomasyuill-livekit](https://github.com/thomasyuill-livekit))
+  started a draw loop. All shader visualizers (Aura, Wave) did double the GPU work until the canvas
+  left the screen and came back.
+- Updated dependencies: @livekit/components-react@2.9.26
+
 ## 1.0.9
 
 ### Patch Changes

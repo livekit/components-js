@@ -21,7 +21,7 @@ This file holds what is specific to this repository.
 | ---------------------- | ------------------------- | -------------------------------------------------------------------------------------------- |
 | `changeset-check.yaml` | A PR is opened or updated | Fails a PR that changes a package without a changeset. The `internal` label skips the check. |
 | `release-pr.yaml`      | A push to `main`          | Keeps the release PR `release/main` current.                                                 |
-| `release.yaml`         | The release PR merges     | Tags, creates the GitHub releases, builds, publishes to npm, then checks the end state.      |
+| `release.yaml`         | The release PR merges     | Tags, creates the GitHub releases, builds, publishes each package to npm, then checks the end state.      |
 | `pre-release.yaml`     | Run by hand               | Opens an rc PR into the branch it was run on.                                                |
 
 ## Release

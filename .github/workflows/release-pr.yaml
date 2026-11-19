@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0 # the commit that added a changeset gives its changelog line the PR and author
-      - uses: livekit/verwalter@359985c1e5567b17ae84db0241fbb305c383f89e # v0.30.0
+      - uses: livekit/verwalter@39e3d7c57c2b6d96cf2d4b7771f3ab199490faba # v0.31.0
         with:
           command: pr
           # A GitHub App token lets the release PRs trigger CI; the default

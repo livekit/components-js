@@ -11,7 +11,8 @@ tag = "{package}@{version}"
 
 [publish]
 registry = "npm"
-workspace = "pnpm -r publish --access public --no-git-checks"
+# `{npm_tag}` is `next` for an rc and `latest-N` for a maintenance release.
+workspace = "pnpm -r publish --access public --no-git-checks --tag {npm_tag}"
 
 # Private: never tagged or published. The entry keeps its version and
 # changelog moving, as changesets did. The shadcn registry deploy reads them.

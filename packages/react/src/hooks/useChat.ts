@@ -15,7 +15,9 @@ import { useConnectionState } from './useConnectionStatus';
  *
  * @returns An object containing:
  * - `chatMessages` - Array of received chat messages
- * - `send` - Function to send a new message
+ * - `send` - Function to send a new message. It appears in `chatMessages` right away with a
+ *   `status` of `sending`, then `sent` or `failed`.
+ * - `resend` - Function to send a failed message again, by id
  * - `isSending` - Boolean indicating if a message is currently being sent
  *
  * @example
@@ -54,5 +56,5 @@ export function useChat(options?: ChatOptions & { room?: Room }) {
   const isSending = useObservableState(setup.isSendingObservable, false);
   const chatMessages = useObservableState<ReceivedChatMessage[]>(setup.messageObservable, []);
 
-  return { send: setup.send, chatMessages, isSending };
+  return { send: setup.send, resend: setup.resend, chatMessages, isSending };
 }

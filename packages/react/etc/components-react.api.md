@@ -10,6 +10,7 @@ import { BaseE2EEManager } from 'livekit-client';
 import { BaseKeyProvider } from 'livekit-client';
 import { CaptureOptionsBySource } from '@livekit/components-core';
 import { ChatMessage } from '@livekit/components-core';
+import { ChatMessageStatus } from '@livekit/components-core';
 import { ChatOptions } from '@livekit/components-core';
 import { ConnectionQuality } from 'livekit-client';
 import { ConnectionState as ConnectionState_2 } from 'livekit-client';
@@ -226,6 +227,8 @@ export interface ChatEntryProps extends React_2.HTMLAttributes<HTMLLIElement> {
 export const ChatIcon: (props: SVGProps<SVGSVGElement>) => React_2.JSX.Element;
 
 export { ChatMessage }
+
+export { ChatMessageStatus }
 
 // @public (undocumented)
 export interface ChatProps extends React_2.HTMLAttributes<HTMLDivElement>, ChatOptions {
@@ -867,6 +870,7 @@ export function useChat(options?: ChatOptions & {
     room?: Room;
 }): {
     send: (message: string, options?: SendTextOptions) => Promise<ReceivedChatMessage>;
+    resend: (messageId: string) => Promise<ReceivedChatMessage>;
     chatMessages: ReceivedChatMessage[];
     isSending: boolean;
 };
@@ -1308,6 +1312,7 @@ export type UseSessionMessagesReturn = {
     messages: Array<ReceivedMessage>;
     isSending: boolean;
     send: (message: string, options?: SendTextOptions) => Promise<ReceivedChatMessage>;
+    resend: (messageId: string) => Promise<ReceivedChatMessage>;
     internal: {
         emitter: default_2<MessagesCallbacks>;
     };

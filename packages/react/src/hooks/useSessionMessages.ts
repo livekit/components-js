@@ -25,6 +25,9 @@ export type UseSessionMessagesReturn = {
 
   send: (message: string, options?: SendTextOptions) => Promise<ReceivedChatMessage>;
 
+  /** Sends a failed message again, keeping its place in `messages`. */
+  resend: (messageId: string) => Promise<ReceivedChatMessage>;
+
   internal: {
     emitter: TypedEventEmitter<MessagesCallbacks>;
   };
@@ -153,9 +156,10 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
     () => ({
       messages: sortedReceivedMessages,
       send: chat.send,
+      resend: chat.resend,
       isSending: chat.isSending,
       internal: { emitter },
     }),
-    [sortedReceivedMessages, chat.send, chat.isSending],
+    [sortedReceivedMessages, chat.send, chat.resend, chat.isSending],
   );
 }

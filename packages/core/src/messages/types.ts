@@ -15,12 +15,21 @@ type ReceivedMessageWithType<Type extends string, Metadata extends object = obje
   attributes?: Record<string, string>;
 } & Metadata;
 
+/**
+ * Where a message sent from this client is in delivery. `sent` means the LiveKit server accepted
+ * it, not that other participants have read it.
+ * @public
+ */
+export type ChatMessageStatus = 'sending' | 'sent' | 'failed';
+
 /** @private */
 type ReceivedChatMessageWithRequiredType = ReceivedMessageWithType<
   'chatMessage',
   ChatMessage & {
     from?: Participant;
     attributes?: Record<string, string>;
+    /** Set only on messages sent from this client. */
+    status?: ChatMessageStatus;
   }
 >;
 

@@ -243,6 +243,7 @@ function useSessionWaitUntilConnectionState(
 
   const waitUntilConnectionState = React.useCallback(
     async (state: UseSessionReturn['connectionState'], signal?: AbortSignal) => {
+      if (signal?.aborted) throw signal.reason ?? new Error('Session wait aborted');
       if (connectionStateRef.current === state) {
         return;
       }
@@ -733,6 +734,10 @@ export function useSession(
         if (tokenDispatchesAgent) {
           await agent.waitUntilConnected(startup.signal);
         }
+      } catch (error) {
+        // Late credentials must not start a connection after capture/startup has failed.
+        startup.abort(error);
+        throw error;
       } finally {
         if (room.state === ConnectionState.Disconnected) {
           room.off(RoomEvent.Disconnected, onDisconnected);

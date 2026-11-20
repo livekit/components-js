@@ -13,6 +13,7 @@ import {
   mergeMap,
   finalize,
   of,
+  tap,
 } from 'rxjs';
 import {
   DataTopic,
@@ -22,6 +23,7 @@ import {
 } from '../observables/dataChannel';
 import { log } from '../logger';
 import { ChatMessage, ReceivedChatMessage } from '../messages/types';
+import { TextStreamStatus } from './textStream';
 import { Future } from '../helper/future';
 
 /** @public */
@@ -31,9 +33,11 @@ export interface LegacyChatMessage extends ChatMessage {
   ignoreLegacy?: boolean;
 }
 
-export interface LegacyReceivedChatMessage extends ReceivedChatMessage {
+// A type intersection rather than `interface extends`, because `ReceivedChatMessage`
+// is now a discriminated union and an interface can only extend an object type.
+export type LegacyReceivedChatMessage = ReceivedChatMessage & {
   ignoreLegacy?: boolean;
-}
+};
 
 /**
  * @public
@@ -146,10 +150,17 @@ export function setupChat(room: Room, options?: ChatOptions) {
       );
       streamIdToAttachments.set(id, attachments);
 
+      // The text received so far. Tracked separately from the emitted message
+      // because, with attachments, `mergeMap` holds each chunk until an attachment
+      // resolves — so if the stream fails first, the emitted message lags (or
+      // doesn't exist yet) and its text would otherwise be lost.
+      let receivedText: string | undefined;
+
       const streamObservable = from(reader).pipe(
         scan((acc: string, chunk: string) => {
           return acc + chunk;
         }),
+        tap((text) => (receivedText = text)),
         mergeMap((chunk: string) => {
           if (attachments.size === 0) {
             return of({ chunk, attachedFiles: [] });
@@ -189,8 +200,48 @@ export function setupChat(room: Room, options?: ChatOptions) {
         }),
         finalize(() => streamIdToAttachments.delete(id)),
       );
+      // Track the latest message so completion and failure can re-emit it with a
+      // terminal status, the same way `setupTextStream` carries a stream's text
+      // forward across its lifecycle.
+      let lastMessage: ReceivedChatMessage | undefined;
       streamObservable.subscribe({
-        next: (value) => messageSubject.next(value),
+        next: (value) => {
+          lastMessage = { ...value, status: TextStreamStatus.Streaming };
+          messageSubject.next(lastMessage);
+        },
+        // A clean close means the message is whole. Nothing was received for a
+        // stream that completes with no chunks, so there is nothing to re-emit.
+        complete: () => {
+          if (lastMessage) {
+            messageSubject.next({ ...lastMessage, status: TextStreamStatus.Complete });
+          }
+        },
+        // Surface the failure through the message — keeping whatever text and
+        // attachments arrived — instead of letting RxJS rethrow it globally from a
+        // timer as an uncaught exception. Every error is treated the same;
+        // `finalize` has already cleaned up the stream's attachment-map entry. Like
+        // `complete`, a message that never received any text is not emitted: it
+        // would only render as an empty bubble.
+        error: (error) => {
+          if (typeof receivedText === 'undefined') return;
+          const base =
+            lastMessage ??
+            ({
+              id,
+              timestamp,
+              message: receivedText,
+              from: room.getParticipantByIdentity(participantInfo.identity),
+              type: 'chatMessage',
+              attributes,
+              attachedFiles: [],
+            } satisfies ReceivedChatMessage);
+          messageSubject.next({
+            ...base,
+            message: receivedText,
+            status: TextStreamStatus.Failed,
+            error: error instanceof Error ? error : new Error(String(error)),
+          });
+        },
       });
     });
     // NOTE: Attachment byte streams are guaranteed to arrive after their parent text stream
@@ -235,6 +286,8 @@ export function setupChat(room: Room, options?: ChatOptions) {
             ...parsedMessage,
             type: 'chatMessage',
             from: msg.from,
+            // A legacy data packet arrives in one piece, so it is always whole.
+            status: TextStreamStatus.Complete,
           };
           return newMessage;
         }),
@@ -257,7 +310,15 @@ export function setupChat(room: Room, options?: ChatOptions) {
           acc[replaceIndex] = {
             ...value,
             timestamp: originalMsg.timestamp,
-            editTimestamp: value.timestamp,
+            // Only a change to an already-finished message is an edit. While the
+            // message is still streaming, each new chunk changes its text; and when
+            // the stream ends it re-emits the message unchanged just to update
+            // `status`. Neither should mark the message as edited.
+            editTimestamp:
+              originalMsg.status !== TextStreamStatus.Streaming &&
+              value.message !== originalMsg.message
+                ? value.timestamp
+                : originalMsg.editTimestamp,
           };
         }
         return [...acc];
@@ -271,7 +332,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
   let pendingSends = 0;
   const finalMessageEncoder = options?.messageEncoder ?? encodeLegacyMsg;
 
-  const send = async (message: string, options?: SendTextOptions) => {
+  const send = async (message: string, options?: SendTextOptions): Promise<ReceivedChatMessage> => {
     if (!options) {
       options = {};
     }
@@ -298,6 +359,8 @@ export function setupChat(room: Room, options?: ChatOptions) {
         type: 'chatMessage',
         from: room.localParticipant,
         attributes: options.attributes,
+        // `sendText` has resolved, so the local copy of the message is whole.
+        status: TextStreamStatus.Complete,
       };
 
       messageSubject.next(receivedChatMsg);

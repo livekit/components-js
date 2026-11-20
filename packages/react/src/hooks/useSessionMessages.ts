@@ -6,6 +6,7 @@ import {
   ReceivedMessage,
   ReceivedChatMessage,
   TextStreamData,
+  TextStreamStatus,
   ReceivedUserTranscriptionMessage,
   ReceivedAgentTranscriptionMessage,
 } from '@livekit/components-core';
@@ -63,11 +64,19 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
     ReceivedUserTranscriptionMessage | ReceivedAgentTranscriptionMessage
   > = React.useMemo(() => {
     return transcriptions.map((transcription) => {
+      // Carry the stream's status through, so consumers can tell a transcript that
+      // is still arriving, finished, or cut off (e.g. the agent disconnected).
+      const statusFields =
+        transcription.status === TextStreamStatus.Failed
+          ? { status: transcription.status, error: transcription.error }
+          : { status: transcription.status };
+
       switch (transcription.participantInfo.identity) {
         case room.localParticipant.identity:
           return {
             type: 'userTranscript',
             message: transcription.text,
+            ...statusFields,
 
             id: transcription.streamInfo.id,
             timestamp: transcription.streamInfo.timestamp,
@@ -80,6 +89,7 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
           return {
             type: 'agentTranscript',
             message: transcription.text,
+            ...statusFields,
 
             id: transcription.streamInfo.id,
             timestamp: transcription.streamInfo.timestamp,
@@ -98,6 +108,7 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
           return {
             type: 'agentTranscript',
             message: transcription.text,
+            ...statusFields,
 
             id: transcription.streamInfo.id,
             timestamp: transcription.streamInfo.timestamp,

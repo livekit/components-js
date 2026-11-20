@@ -9,6 +9,7 @@ import {
 import { BehaviorSubject, filter, map } from 'rxjs';
 import { createChatObserver, createDataObserver } from './room';
 import { ReceivedChatMessage } from '../components/chat';
+import { TextStreamStatus } from '../components/textStream';
 
 export const DataTopic = {
   CHAT: 'lk.chat',
@@ -100,6 +101,7 @@ export function setupChatMessageHandler(room: Room) {
       type: 'chatMessage',
       from: room.localParticipant,
       attachedFiles: options.attachments,
+      status: TextStreamStatus.Complete,
     };
   };
 

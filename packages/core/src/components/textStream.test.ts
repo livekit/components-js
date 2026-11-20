@@ -1,6 +1,7 @@
 import { RoomEvent, type Room } from 'livekit-client';
 import { describe, expect, it, vi } from 'vitest';
-import { setupTextStream } from './textStream';
+import { Future } from '../helper/future';
+import { setupTextStream, TextStreamStatus, type TextStreamData } from './textStream';
 
 /**
  * Minimal stand-in for `Room` that mirrors livekit-client's one-handler-per-topic
@@ -44,6 +45,17 @@ function fakeReader(id: string, chunks: string[]) {
     info: { id, attributes: {} },
     async *[Symbol.asyncIterator]() {
       for (const chunk of chunks) yield chunk;
+    },
+  };
+}
+
+/** A reader that yields its chunks and then errors, mirroring a mid-stream disconnect. */
+function failingReader(id: string, chunks: string[], error: Error) {
+  return {
+    info: { id, attributes: {} },
+    async *[Symbol.asyncIterator]() {
+      for (const chunk of chunks) yield chunk;
+      throw error;
     },
   };
 }
@@ -103,7 +115,137 @@ describe('setupTextStream', () => {
     await push(TOPIC, fakeReader('stream-2', ['world']));
     await flush();
 
-    expect(after).toEqual([1]);
+    // The second window sees only its own stream — never the previous window's — so
+    // every emission has length 1 (the stream emits once while streaming and again on
+    // completion, both carrying the single stream).
+    expect(after.length).toBeGreaterThan(0);
+    expect(after.every((length) => length === 1)).toBe(true);
     secondSub.unsubscribe();
+  });
+
+  it('reports streaming while chunks arrive, then complete when the reader finishes', async () => {
+    const { room, push } = createFakeRoom();
+
+    const stream = setupTextStream(room, TOPIC);
+    const statuses: TextStreamData['status'][] = [];
+    let latest: TextStreamData[] = [];
+    const sub = stream.subscribe((streams) => {
+      latest = streams;
+      if (streams[0]) statuses.push(streams[0].status);
+    });
+
+    await push(TOPIC, fakeReader('stream-1', ['Hello ', 'world']));
+    await flush();
+
+    expect(statuses[0]).toBe(TextStreamStatus.Streaming);
+    expect(statuses.at(-1)).toBe(TextStreamStatus.Complete);
+    expect(latest).toHaveLength(1);
+    expect(latest[0].text).toBe('Hello world');
+    sub.unsubscribe();
+  });
+
+  it('marks a stream failed and keeps its accumulated text when the reader errors', async () => {
+    const { room, push } = createFakeRoom();
+
+    const stream = setupTextStream(room, TOPIC);
+    let latest: TextStreamData[] = [];
+    const sub = stream.subscribe((streams) => (latest = streams));
+
+    // Without an error handler on the subscribe, RxJS rethrows this globally from a
+    // timer (uncatchable); this test fails on the unfixed code with that uncaught error.
+    const error = new Error(
+      'Participant agent-x unexpectedly disconnected in the middle of sending data',
+    );
+    await push(TOPIC, failingReader('stream-1', ['Hello from ', 'the agent'], error));
+    await flush();
+
+    expect(latest).toHaveLength(1);
+    expect(latest[0].text).toBe('Hello from the agent');
+    expect(latest[0].status).toBe(TextStreamStatus.Failed);
+    expect(latest[0].status === TextStreamStatus.Failed && latest[0].error).toBe(error);
+    sub.unsubscribe();
+  });
+
+  it.each(['completes', 'fails'] as const)(
+    'ignores an older segment reader that %s after a newer one has taken over',
+    async (outcome) => {
+      const { room, push } = createFakeRoom();
+      const stream = setupTextStream(room, TOPIC);
+      let latest: TextStreamData[] = [];
+      const sub = stream.subscribe((streams) => (latest = streams));
+
+      // Both readers carry the same segment id, so they share one entry. Each
+      // yields a chunk, then waits until released.
+      const segmentReader = (id: string, chunk: string, release: Future<void, never>) => ({
+        info: { id, attributes: { 'lk.segment_id': 'segment-1' } },
+        async *[Symbol.asyncIterator]() {
+          yield chunk;
+          await release.promise;
+          if (outcome === 'fails' && id === 'older') throw 'not an Error';
+        },
+      });
+      const releaseOlder = new Future<void, never>();
+      const releaseNewer = new Future<void, never>();
+
+      await push(TOPIC, segmentReader('older', 'hel', releaseOlder));
+      await flush();
+      await push(TOPIC, segmentReader('newer', 'hello', releaseNewer));
+      await flush();
+
+      // The older reader ends while the newer one is still streaming.
+      releaseOlder.resolve?.();
+      await flush();
+
+      expect(latest).toHaveLength(1);
+      expect(latest[0]).toMatchObject({
+        status: TextStreamStatus.Streaming,
+        text: 'hello',
+        streamInfo: { id: 'newer' },
+      });
+
+      releaseNewer.resolve?.();
+      await flush();
+      expect(latest[0]).toMatchObject({ status: TextStreamStatus.Complete, text: 'hello' });
+      sub.unsubscribe();
+    },
+  );
+
+  it('wraps a non-Error read failure in an Error', async () => {
+    const { room, push } = createFakeRoom();
+    const stream = setupTextStream(room, TOPIC);
+    let latest: TextStreamData[] = [];
+    const sub = stream.subscribe((streams) => (latest = streams));
+
+    await push(TOPIC, {
+      info: { id: 'stream-1', attributes: {} },
+      async *[Symbol.asyncIterator]() {
+        yield 'partial';
+        throw 'not an Error';
+      },
+    });
+    await flush();
+
+    expect(latest[0].status).toBe(TextStreamStatus.Failed);
+    const { error } = latest[0] as Extract<TextStreamData, { status: TextStreamStatus.Failed }>;
+    expect(error).toBeInstanceOf(Error);
+    expect(error.message).toBe('not an Error');
+    sub.unsubscribe();
+  });
+
+  it('adds no entry for a stream that fails before emitting any chunk', async () => {
+    const { room, push } = createFakeRoom();
+
+    const stream = setupTextStream(room, TOPIC);
+    let latest: TextStreamData[] = [];
+    const sub = stream.subscribe((streams) => (latest = streams));
+
+    // Without an error handler this would still rethrow globally, so this also
+    // checks that an early failure is swallowed rather than surfaced as uncaught.
+    const error = new Error('abnormal end before any data');
+    await push(TOPIC, failingReader('stream-1', [], error));
+    await flush();
+
+    expect(latest).toEqual([]);
+    sub.unsubscribe();
   });
 });

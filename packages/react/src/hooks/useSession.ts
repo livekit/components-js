@@ -23,6 +23,7 @@ import { useMaybeRoomContext } from '../context';
 import { AgentState, useAgent, useAgentTimeoutIdStore } from './useAgent';
 import { TrackReference, log } from '@livekit/components-core';
 import { useLocalParticipant } from './useLocalParticipant';
+import { connectSessionWithTracks } from './sessionPublication';
 
 /** @beta */
 export enum SessionEvent {
@@ -138,7 +139,10 @@ type SessionActions = {
 
   prepareConnection: () => Promise<void>;
 
-  /** Connect to the underlying room and dispatch any agents */
+  /**
+   * Connect to the room and dispatch agents while acquiring requested media in parallel.
+   * Supported SDKs reserve initial publications without waiting for device access.
+   */
   start: (options?: SessionConnectOptions) => Promise<void>;
 
   /** Disconnect from the underlying room */
@@ -648,6 +652,19 @@ export function useSession(
   const tokenSourceFetch = useSessionTokenSourceFetch(tokenSource, unstableRestOptions);
 
   const wasSessionEndCalledRef = React.useRef(false);
+  const startupAbortRef = React.useRef<AbortController | null>(null);
+  const disconnectListenerRef = React.useRef<(() => void) | null>(null);
+  React.useEffect(
+    () => () => {
+      if (startupAbortRef.current) {
+        startupAbortRef.current.abort();
+        void room.disconnect();
+      }
+      if (disconnectListenerRef.current)
+        room.off(RoomEvent.Disconnected, disconnectListenerRef.current);
+    },
+    [room],
+  );
 
   const start = React.useCallback(
     async (connectOptions: SessionConnectOptions = {}) => {
@@ -660,12 +677,19 @@ export function useSession(
       await waitUntilDisconnected(signal);
       wasSessionEndCalledRef.current = false;
 
+      const startup = new AbortController();
+      startupAbortRef.current?.abort();
+      startupAbortRef.current = startup;
       const onSignalAbort = () => {
-        room.disconnect();
+        startup.abort(signal?.reason);
+        void room.disconnect();
       };
-      signal?.addEventListener('abort', onSignalAbort);
+      signal?.addEventListener('abort', onSignalAbort, { once: true });
+      if (signal?.aborted) onSignalAbort();
 
       const onDisconnected = () => {
+        if (disconnectListenerRef.current === onDisconnected) disconnectListenerRef.current = null;
+        startup.abort();
         // on disconnection force a new token to be fetched in order to avoid reusing the same room right after
         // this works around the fact that agents won't rejoin a room that existed previously
         // and depends on the assumption that the endpoint will return a token for a different room
@@ -673,55 +697,58 @@ export function useSession(
           tokenSourceFetch(true);
         }
       };
+      if (disconnectListenerRef.current)
+        room.off(RoomEvent.Disconnected, disconnectListenerRef.current);
+      disconnectListenerRef.current = onDisconnected;
       room.once(RoomEvent.Disconnected, onDisconnected);
 
       let tokenDispatchesAgent = false;
-      await Promise.all([
-        tokenSourceFetch().then(({ serverUrl, participantToken }) => {
-          const participantTokenPayload = decodeTokenPayload(participantToken);
-          const participantTokenAgentDispatchCount =
-            participantTokenPayload.roomConfig?.agents?.length ?? 0;
-          tokenDispatchesAgent = participantTokenAgentDispatchCount > 0;
+      try {
+        await connectSessionWithTracks(
+          room,
+          async (initialPublications) => {
+            const { serverUrl, participantToken } = await tokenSourceFetch();
+            if (startup.signal.aborted) throw startup.signal.reason;
+            const participantTokenPayload = decodeTokenPayload(participantToken);
+            tokenDispatchesAgent = (participantTokenPayload.roomConfig?.agents?.length ?? 0) > 0;
+            await room.connect(serverUrl, participantToken, {
+              ...roomConnectOptions,
+              ...(initialPublications.length > 0
+                ? {
+                    initialPublications: [
+                      ...((
+                        roomConnectOptions as { initialPublications?: typeof initialPublications }
+                      )?.initialPublications ?? []),
+                      ...initialPublications,
+                    ],
+                  }
+                : {}),
+            });
+          },
+          tracks,
+          startup.signal,
+        );
 
-          return room.connect(serverUrl, participantToken, roomConnectOptions);
-        }),
-
-        // Start microphone (with preconnect buffer) by default
-        tracks.microphone?.enabled
-          ? room.localParticipant.setMicrophoneEnabled(
-              true,
-              undefined,
-              tracks.microphone?.publishOptions ?? {},
-            )
-          : Promise.resolve(),
-        tracks.camera?.enabled
-          ? room.localParticipant.setCameraEnabled(
-              true,
-              undefined,
-              tracks.camera?.publishOptions ?? {},
-            )
-          : Promise.resolve(),
-        tracks.screenShare?.enabled
-          ? room.localParticipant.setScreenShareEnabled(
-              true,
-              undefined,
-              tracks.screenShare?.publishOptions ?? {},
-            )
-          : Promise.resolve(),
-      ]);
-
-      await waitUntilConnected(signal);
-      if (tokenDispatchesAgent) {
-        await agent.waitUntilConnected(signal);
+        await waitUntilConnected(startup.signal);
+        if (tokenDispatchesAgent) {
+          await agent.waitUntilConnected(startup.signal);
+        }
+      } finally {
+        if (room.state === ConnectionState.Disconnected) {
+          room.off(RoomEvent.Disconnected, onDisconnected);
+          if (disconnectListenerRef.current === onDisconnected)
+            disconnectListenerRef.current = null;
+        }
+        signal?.removeEventListener('abort', onSignalAbort);
+        if (startupAbortRef.current === startup) startupAbortRef.current = null;
       }
-
-      signal?.removeEventListener('abort', onSignalAbort);
     },
     [room, waitUntilDisconnected, tokenSourceFetch, waitUntilConnected, agent.waitUntilConnected],
   );
 
   const end = React.useCallback(async () => {
     wasSessionEndCalledRef.current = true;
+    startupAbortRef.current?.abort();
     tokenSourceFetch(true);
     await room.disconnect();
   }, [room, tokenSourceFetch]);

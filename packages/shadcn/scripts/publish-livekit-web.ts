@@ -43,6 +43,14 @@ const AGENTS_UI_PACKAGE_NAME = '@repo/agents-ui';
 // concrete version pinned to whatever the @agents-ui registry entry declares. Restore
 // the workspace's catalog reference afterward so we don't fork these off the catalog.
 const CATALOG_DEPENDENCIES = ['@livekit/components-react', 'livekit-client'];
+// The public shadcn registry now imports `cn` from the `cn` package: lib/utils.ts becomes
+// `export { cn } from "cn"` and the ui components import "cn" directly. The livekit/web
+// build adds the `shadcn` class inside `twMerge(clsx(inputs))` in lib/utils.ts, so every
+// `cn` call must go through that file. Keep livekit/web's copy of it, point the "cn"
+// imports back at it, and drop the added dependency.
+const UTILS_PATH = path.join(AGENTS_UI_PACKAGE_DIR, 'src/lib/utils.ts');
+const UTILS_ALIAS = '@/lib/utils';
+const UNWANTED_DEPENDENCIES = ['cn'];
 
 function writeTempEnvLocal(tmpDir: string): void {
   console.log('--------------------------------');
@@ -63,7 +71,7 @@ function copyRegistryFiles(): void {
   });
 }
 
-function restoreCatalogDependencies(packageJsonPath: string): void {
+function restoreDependencies(packageJsonPath: string): void {
   const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
   let changed = false;
 
@@ -76,12 +84,34 @@ function restoreCatalogDependencies(packageJsonPath: string): void {
         changed = true;
       }
     }
+    for (const name of UNWANTED_DEPENDENCIES) {
+      if (name in deps) {
+        delete deps[name];
+        changed = true;
+      }
+    }
   }
 
   if (changed) {
     console.log('--------------------------------');
-    console.log(`Restoring catalog: versions in ${packageJsonPath}`);
+    console.log(`Restoring dependencies in ${packageJsonPath}`);
     fs.writeFileSync(packageJsonPath, JSON.stringify(pkg, null, 2) + '\n');
+  }
+}
+
+function restoreUtilsImports(dir: string): void {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const entryPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      restoreUtilsImports(entryPath);
+    } else if (/\.tsx?$/.test(entry.name)) {
+      const before = fs.readFileSync(entryPath, 'utf-8');
+      const after = before.replace(/(\bfrom\s+)(['"])cn\2/g, `$1$2${UTILS_ALIAS}$2`);
+      if (after !== before) {
+        console.log(`Restoring ${UTILS_ALIAS} import in ${entryPath}`);
+        fs.writeFileSync(entryPath, after);
+      }
+    }
   }
 }
 
@@ -91,16 +121,26 @@ function installAgentsUiComponents(tmpDir: string): void {
 
   console.log('--------------------------------');
   console.log(`Installing agents-ui components in ${AGENTS_UI_PACKAGE_DIR}`);
-  run(['pnpm', '--filter', AGENTS_UI_PACKAGE_NAME, 'run', 'update'], { cwd: tmpDir });
+  // These are the steps of livekit/web's `update` script, run one at a time so that
+  // the files shadcn must not change are restored before the build.
+  const packageDir = path.join(tmpDir, AGENTS_UI_PACKAGE_DIR);
+  run(['pnpm', 'dlx', 'shadcn@latest', 'add', '--yes', '--overwrite', '@agents-ui/all'], {
+    cwd: packageDir,
+  });
 
   revertFile(tmpDir, path.join(AGENTS_UI_PACKAGE_DIR, 'components.json'));
+  revertFile(tmpDir, UTILS_PATH);
+  restoreUtilsImports(path.join(packageDir, 'src'));
 
-  const packageJsonPath = path.join(tmpDir, AGENTS_UI_PACKAGE_DIR, 'package.json');
+  const packageJsonPath = path.join(packageDir, 'package.json');
   const before = fs.readFileSync(packageJsonPath, 'utf-8');
-  restoreCatalogDependencies(packageJsonPath);
+  restoreDependencies(packageJsonPath);
   if (fs.readFileSync(packageJsonPath, 'utf-8') !== before) {
     installDependencies(tmpDir);
   }
+
+  run(['pnpm', '--filter', AGENTS_UI_PACKAGE_NAME, 'run', 'codegen'], { cwd: tmpDir });
+  run(['pnpm', '--filter', AGENTS_UI_PACKAGE_NAME, 'run', 'format'], { cwd: tmpDir });
 }
 
 function restoreEnvLocal(hadEnvLocal: boolean, envBackup: string | null): void {

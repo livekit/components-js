@@ -60,8 +60,13 @@ export function useMediaDeviceSelect({
   );
   const devices = useObservableState(deviceObserver, [] as MediaDeviceInfo[]);
   // Active device management.
+  // With a local track, its current device is the source of truth (the unconnected fallback room
+  // knows nothing about it).
   const [currentDeviceId, setCurrentDeviceId] = React.useState<string>(
-    roomFallback?.getActiveDevice(kind) ?? 'default',
+    () =>
+      track?.mediaStreamTrack?.getSettings?.().deviceId ??
+      roomFallback?.getActiveDevice(kind) ??
+      'default',
   );
   const { className, activeDeviceObservable, setActiveMediaDevice } = React.useMemo(
     () => setupDeviceSelector(kind, roomFallback, track),

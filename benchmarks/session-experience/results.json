@@ -1,0 +1,763 @@
+{
+  "baselineRef": "87c7326ebf320efbccdcb29655d1ca8d7f1b79a9",
+  "browserVersion": "158.0.8127.36",
+  "repetitions": 10,
+  "methodology": "Actual React useSession, same companion SDK build; delayed credential HTTP response and getUserMedia, client TCP signaling + UDP ICE/DTLS/SRTP/RTCP/SCTP RTT relays; agent directly connected to local SFU. Warm agent returns deterministic tones, no STT/LLM/TTS; loaded app, no production authentication or bundle-load measurement.",
+  "summary": [
+    {
+      "name": "nearby-fast-device",
+      "networkRttMs": 20,
+      "tokenDelayMs": 80,
+      "captureDelayMs": 0,
+      "prepared": false,
+      "count": 10,
+      "metrics": {
+        "captureReadyMs": {
+          "p50": 10,
+          "p95": 11
+        },
+        "feedbackUiMs": {
+          "p50": 81,
+          "p95": 82
+        },
+        "credentialsMs": {
+          "p50": 82,
+          "p95": 83
+        },
+        "micPublishedMs": {
+          "p50": 180,
+          "p95": 409
+        },
+        "roomConnectedMs": {
+          "p50": 226,
+          "p95": 456
+        },
+        "userTrackSubscribedMs": {
+          "p50": 226,
+          "p95": 457
+        },
+        "sessionStartResolvedMs": {
+          "p50": 230,
+          "p95": 462
+        },
+        "connectedUiMs": {
+          "p50": 249,
+          "p95": 486
+        },
+        "readyToTalkUiMs": {
+          "p50": 249,
+          "p95": 486
+        },
+        "agentTrackSubscribedMs": {
+          "p50": 266,
+          "p95": 496
+        },
+        "greetingSentMs": {
+          "p50": 279,
+          "p95": 508
+        },
+        "micDecodedAtAgentMs": {
+          "p50": 323,
+          "p95": 551
+        },
+        "greetingAudioMs": {
+          "p50": 372,
+          "p95": 590
+        },
+        "responseSentMs": {
+          "p50": 378,
+          "p95": 607
+        },
+        "responseAudioMs": {
+          "p50": 487,
+          "p95": 703
+        },
+        "observedMediaRttMs": {
+          "p50": 21,
+          "p95": 22
+        }
+      }
+    },
+    {
+      "name": "nearby-fast-device",
+      "networkRttMs": 20,
+      "tokenDelayMs": 80,
+      "captureDelayMs": 0,
+      "prepared": true,
+      "count": 10,
+      "metrics": {
+        "captureReadyMs": {
+          "p50": 10,
+          "p95": 12
+        },
+        "feedbackUiMs": {
+          "p50": 80,
+          "p95": 84
+        },
+        "credentialsMs": {
+          "p50": 83,
+          "p95": 84
+        },
+        "roomConnectedMs": {
+          "p50": 225,
+          "p95": 239
+        },
+        "userTrackSubscribedMs": {
+          "p50": 226,
+          "p95": 240
+        },
+        "micPublishedMs": {
+          "p50": 232,
+          "p95": 246
+        },
+        "sessionStartResolvedMs": {
+          "p50": 233,
+          "p95": 248
+        },
+        "agentTrackSubscribedMs": {
+          "p50": 246,
+          "p95": 256
+        },
+        "connectedUiMs": {
+          "p50": 255,
+          "p95": 266
+        },
+        "readyToTalkUiMs": {
+          "p50": 261,
+          "p95": 279
+        },
+        "greetingSentMs": {
+          "p50": 254,
+          "p95": 268
+        },
+        "micDecodedAtAgentMs": {
+          "p50": 303,
+          "p95": 313
+        },
+        "greetingAudioMs": {
+          "p50": 346,
+          "p95": 370
+        },
+        "responseSentMs": {
+          "p50": 359,
+          "p95": 368
+        },
+        "responseAudioMs": {
+          "p50": 459,
+          "p95": 484
+        },
+        "observedMediaRttMs": {
+          "p50": 21,
+          "p95": 22
+        }
+      }
+    },
+    {
+      "name": "remote-fast-device",
+      "networkRttMs": 150,
+      "tokenDelayMs": 80,
+      "captureDelayMs": 0,
+      "prepared": false,
+      "count": 10,
+      "metrics": {
+        "captureReadyMs": {
+          "p50": 10,
+          "p95": 11
+        },
+        "feedbackUiMs": {
+          "p50": 78,
+          "p95": 82
+        },
+        "credentialsMs": {
+          "p50": 82,
+          "p95": 83
+        },
+        "roomConnectedMs": {
+          "p50": 414,
+          "p95": 655
+        },
+        "userTrackSubscribedMs": {
+          "p50": 415,
+          "p95": 656
+        },
+        "agentTrackSubscribedMs": {
+          "p50": 431,
+          "p95": 670
+        },
+        "greetingSentMs": {
+          "p50": 434,
+          "p95": 669
+        },
+        "micPublishedMs": {
+          "p50": 443,
+          "p95": 682
+        },
+        "sessionStartResolvedMs": {
+          "p50": 445,
+          "p95": 684
+        },
+        "connectedUiMs": {
+          "p50": 446,
+          "p95": 684
+        },
+        "readyToTalkUiMs": {
+          "p50": 468,
+          "p95": 699
+        },
+        "micDecodedAtAgentMs": {
+          "p50": 489,
+          "p95": 729
+        },
+        "greetingAudioMs": {
+          "p50": 523,
+          "p95": 760
+        },
+        "responseSentMs": {
+          "p50": 545,
+          "p95": 783
+        },
+        "responseAudioMs": {
+          "p50": 646,
+          "p95": 885
+        },
+        "observedMediaRttMs": {
+          "p50": 152,
+          "p95": 153
+        }
+      }
+    },
+    {
+      "name": "remote-fast-device",
+      "networkRttMs": 150,
+      "tokenDelayMs": 80,
+      "captureDelayMs": 0,
+      "prepared": true,
+      "count": 10,
+      "metrics": {
+        "captureReadyMs": {
+          "p50": 10,
+          "p95": 13
+        },
+        "feedbackUiMs": {
+          "p50": 78,
+          "p95": 83
+        },
+        "credentialsMs": {
+          "p50": 83,
+          "p95": 84
+        },
+        "roomConnectedMs": {
+          "p50": 414,
+          "p95": 666
+        },
+        "userTrackSubscribedMs": {
+          "p50": 415,
+          "p95": 667
+        },
+        "micPublishedMs": {
+          "p50": 424,
+          "p95": 676
+        },
+        "sessionStartResolvedMs": {
+          "p50": 426,
+          "p95": 679
+        },
+        "greetingSentMs": {
+          "p50": 436,
+          "p95": 685
+        },
+        "agentTrackSubscribedMs": {
+          "p50": 438,
+          "p95": 686
+        },
+        "connectedUiMs": {
+          "p50": 445,
+          "p95": 688
+        },
+        "readyToTalkUiMs": {
+          "p50": 453,
+          "p95": 705
+        },
+        "micDecodedAtAgentMs": {
+          "p50": 492,
+          "p95": 741
+        },
+        "greetingAudioMs": {
+          "p50": 530,
+          "p95": 785
+        },
+        "responseSentMs": {
+          "p50": 548,
+          "p95": 792
+        },
+        "responseAudioMs": {
+          "p50": 648,
+          "p95": 901
+        },
+        "observedMediaRttMs": {
+          "p50": 153,
+          "p95": 154
+        }
+      }
+    },
+    {
+      "name": "remote-slow-device",
+      "networkRttMs": 150,
+      "tokenDelayMs": 80,
+      "captureDelayMs": 800,
+      "prepared": false,
+      "count": 10,
+      "metrics": {
+        "feedbackUiMs": {
+          "p50": 26,
+          "p95": 33
+        },
+        "credentialsMs": {
+          "p50": 83,
+          "p95": 84
+        },
+        "roomConnectedMs": {
+          "p50": 413,
+          "p95": 638
+        },
+        "userTrackSubscribedMs": {
+          "p50": 415,
+          "p95": 640
+        },
+        "connectedUiMs": {
+          "p50": 443,
+          "p95": 666
+        },
+        "captureReadyMs": {
+          "p50": 824,
+          "p95": 825
+        },
+        "agentTrackSubscribedMs": {
+          "p50": 1052,
+          "p95": 1061
+        },
+        "greetingSentMs": {
+          "p50": 1064,
+          "p95": 1074
+        },
+        "micPublishedMs": {
+          "p50": 1087,
+          "p95": 1096
+        },
+        "sessionStartResolvedMs": {
+          "p50": 1089,
+          "p95": 1099
+        },
+        "micDecodedAtAgentMs": {
+          "p50": 1114,
+          "p95": 1166
+        },
+        "readyToTalkUiMs": {
+          "p50": 1114,
+          "p95": 1126
+        },
+        "responseSentMs": {
+          "p50": 1168,
+          "p95": 1224
+        },
+        "greetingAudioMs": {
+          "p50": 1161,
+          "p95": 1193
+        },
+        "responseAudioMs": {
+          "p50": 1265,
+          "p95": 1332
+        },
+        "observedMediaRttMs": {
+          "p50": 152,
+          "p95": 153
+        }
+      }
+    },
+    {
+      "name": "remote-slow-device",
+      "networkRttMs": 150,
+      "tokenDelayMs": 80,
+      "captureDelayMs": 800,
+      "prepared": true,
+      "count": 10,
+      "metrics": {
+        "feedbackUiMs": {
+          "p50": 25,
+          "p95": 29
+        },
+        "credentialsMs": {
+          "p50": 83,
+          "p95": 83
+        },
+        "roomConnectedMs": {
+          "p50": 419,
+          "p95": 643
+        },
+        "userTrackSubscribedMs": {
+          "p50": 420,
+          "p95": 644
+        },
+        "greetingSentMs": {
+          "p50": 441,
+          "p95": 651
+        },
+        "agentTrackSubscribedMs": {
+          "p50": 434,
+          "p95": 650
+        },
+        "connectedUiMs": {
+          "p50": 442,
+          "p95": 668
+        },
+        "greetingAudioMs": {
+          "p50": 538,
+          "p95": 731
+        },
+        "captureReadyMs": {
+          "p50": 818,
+          "p95": 838
+        },
+        "micPublishedMs": {
+          "p50": 892,
+          "p95": 916
+        },
+        "sessionStartResolvedMs": {
+          "p50": 894,
+          "p95": 918
+        },
+        "readyToTalkUiMs": {
+          "p50": 908,
+          "p95": 925
+        },
+        "micDecodedAtAgentMs": {
+          "p50": 952,
+          "p95": 973
+        },
+        "responseSentMs": {
+          "p50": 1009,
+          "p95": 1029
+        },
+        "responseAudioMs": {
+          "p50": 1138,
+          "p95": 1160
+        },
+        "observedMediaRttMs": {
+          "p50": 152,
+          "p95": 153
+        }
+      }
+    },
+    {
+      "name": "slow-credentials",
+      "networkRttMs": 150,
+      "tokenDelayMs": 1000,
+      "captureDelayMs": 0,
+      "prepared": false,
+      "count": 10,
+      "metrics": {
+        "captureReadyMs": {
+          "p50": 10,
+          "p95": 13
+        },
+        "feedbackUiMs": {
+          "p50": 79,
+          "p95": 84
+        },
+        "credentialsMs": {
+          "p50": 1004,
+          "p95": 1005
+        },
+        "roomConnectedMs": {
+          "p50": 1350,
+          "p95": 1698
+        },
+        "userTrackSubscribedMs": {
+          "p50": 1351,
+          "p95": 1699
+        },
+        "greetingSentMs": {
+          "p50": 1365,
+          "p95": 1712
+        },
+        "agentTrackSubscribedMs": {
+          "p50": 1366,
+          "p95": 1711
+        },
+        "micPublishedMs": {
+          "p50": 1378,
+          "p95": 1717
+        },
+        "sessionStartResolvedMs": {
+          "p50": 1380,
+          "p95": 1719
+        },
+        "connectedUiMs": {
+          "p50": 1378,
+          "p95": 1734
+        },
+        "readyToTalkUiMs": {
+          "p50": 1401,
+          "p95": 1734
+        },
+        "micDecodedAtAgentMs": {
+          "p50": 1424,
+          "p95": 1766
+        },
+        "greetingAudioMs": {
+          "p50": 1469,
+          "p95": 1803
+        },
+        "responseSentMs": {
+          "p50": 1480,
+          "p95": 1821
+        },
+        "responseAudioMs": {
+          "p50": 1583,
+          "p95": 1926
+        },
+        "observedMediaRttMs": {
+          "p50": 153,
+          "p95": 159
+        }
+      }
+    },
+    {
+      "name": "slow-credentials",
+      "networkRttMs": 150,
+      "tokenDelayMs": 1000,
+      "captureDelayMs": 0,
+      "prepared": true,
+      "count": 10,
+      "metrics": {
+        "captureReadyMs": {
+          "p50": 11,
+          "p95": 14
+        },
+        "feedbackUiMs": {
+          "p50": 79,
+          "p95": 85
+        },
+        "credentialsMs": {
+          "p50": 1004,
+          "p95": 1005
+        },
+        "roomConnectedMs": {
+          "p50": 1355,
+          "p95": 1583
+        },
+        "userTrackSubscribedMs": {
+          "p50": 1356,
+          "p95": 1584
+        },
+        "micPublishedMs": {
+          "p50": 1364,
+          "p95": 1592
+        },
+        "sessionStartResolvedMs": {
+          "p50": 1367,
+          "p95": 1595
+        },
+        "greetingSentMs": {
+          "p50": 1373,
+          "p95": 1610
+        },
+        "connectedUiMs": {
+          "p50": 1387,
+          "p95": 1610
+        },
+        "agentTrackSubscribedMs": {
+          "p50": 1376,
+          "p95": 1611
+        },
+        "readyToTalkUiMs": {
+          "p50": 1390,
+          "p95": 1610
+        },
+        "micDecodedAtAgentMs": {
+          "p50": 1431,
+          "p95": 1667
+        },
+        "greetingAudioMs": {
+          "p50": 1471,
+          "p95": 1700
+        },
+        "responseSentMs": {
+          "p50": 1488,
+          "p95": 1724
+        },
+        "responseAudioMs": {
+          "p50": 1591,
+          "p95": 1822
+        },
+        "observedMediaRttMs": {
+          "p50": 154,
+          "p95": 156
+        }
+      }
+    },
+    {
+      "name": "permission-prompt",
+      "networkRttMs": 150,
+      "tokenDelayMs": 80,
+      "captureDelayMs": 2000,
+      "prepared": false,
+      "count": 10,
+      "metrics": {
+        "feedbackUiMs": {
+          "p50": 29,
+          "p95": 33
+        },
+        "credentialsMs": {
+          "p50": 83,
+          "p95": 85
+        },
+        "roomConnectedMs": {
+          "p50": 423,
+          "p95": 431
+        },
+        "userTrackSubscribedMs": {
+          "p50": 424,
+          "p95": 432
+        },
+        "connectedUiMs": {
+          "p50": 451,
+          "p95": 462
+        },
+        "captureReadyMs": {
+          "p50": 2024,
+          "p95": 2029
+        },
+        "agentTrackSubscribedMs": {
+          "p50": 2261,
+          "p95": 2267
+        },
+        "greetingSentMs": {
+          "p50": 2270,
+          "p95": 2276
+        },
+        "micPublishedMs": {
+          "p50": 2292,
+          "p95": 2298
+        },
+        "sessionStartResolvedMs": {
+          "p50": 2295,
+          "p95": 2300
+        },
+        "readyToTalkUiMs": {
+          "p50": 2320,
+          "p95": 2330
+        },
+        "micDecodedAtAgentMs": {
+          "p50": 2319,
+          "p95": 2370
+        },
+        "greetingAudioMs": {
+          "p50": 2368,
+          "p95": 2396
+        },
+        "responseSentMs": {
+          "p50": 2374,
+          "p95": 2426
+        },
+        "responseAudioMs": {
+          "p50": 2472,
+          "p95": 2531
+        },
+        "observedMediaRttMs": {
+          "p50": 154,
+          "p95": 155
+        }
+      }
+    },
+    {
+      "name": "permission-prompt",
+      "networkRttMs": 150,
+      "tokenDelayMs": 80,
+      "captureDelayMs": 2000,
+      "prepared": true,
+      "count": 10,
+      "metrics": {
+        "feedbackUiMs": {
+          "p50": 24,
+          "p95": 31
+        },
+        "credentialsMs": {
+          "p50": 83,
+          "p95": 84
+        },
+        "roomConnectedMs": {
+          "p50": 426,
+          "p95": 681
+        },
+        "userTrackSubscribedMs": {
+          "p50": 427,
+          "p95": 682
+        },
+        "greetingSentMs": {
+          "p50": 446,
+          "p95": 698
+        },
+        "agentTrackSubscribedMs": {
+          "p50": 440,
+          "p95": 700
+        },
+        "connectedUiMs": {
+          "p50": 451,
+          "p95": 706
+        },
+        "greetingAudioMs": {
+          "p50": 528,
+          "p95": 790
+        },
+        "captureReadyMs": {
+          "p50": 2024,
+          "p95": 2028
+        },
+        "micPublishedMs": {
+          "p50": 2099,
+          "p95": 2104
+        },
+        "sessionStartResolvedMs": {
+          "p50": 2100,
+          "p95": 2107
+        },
+        "readyToTalkUiMs": {
+          "p50": 2112,
+          "p95": 2124
+        },
+        "micDecodedAtAgentMs": {
+          "p50": 2159,
+          "p95": 2166
+        },
+        "responseSentMs": {
+          "p50": 2212,
+          "p95": 2222
+        },
+        "responseAudioMs": {
+          "p50": 2310,
+          "p95": 2345
+        },
+        "observedMediaRttMs": {
+          "p50": 154,
+          "p95": 155
+        }
+      }
+    }
+  ],
+  "collectedAt": "2026-11-20",
+  "sdkCommit": "13d5dd8eb88257fd93595abbf8678dcaedf8ec94",
+  "componentsSourceCommit": "c1ce6a87064b39f5e9f713ce02fe9214ee15e543",
+  "nodeVersion": "v22.22.0",
+  "platform": "Darwin/arm64",
+  "sfuVersion": "1.13.10",
+  "agentReactionMs": 50,
+  "agentPlacement": "Direct to local SFU; only the user connection passes through the TCP/UDP latency relays.",
+  "rawSamples": "samples.csv",
+  "sampleCount": 100,
+  "warmupsExcluded": 10,
+  "p50Definition": "nearest-rank: sorted[ceil(n * 0.50) - 1]",
+  "p95Definition": "nearest-rank: sorted[ceil(n * 0.95) - 1]; with ten samples this is the observed maximum",
+  "audioMeasurement": "Decoded 440 Hz greeting / 1170 Hz response reaching a running WebAudio analyser. Muted sink; physical speaker output not measured.",
+  "uiMeasurement": "Actual useSession hook and React status changes, observed after two requestAnimationFrame callbacks; already-loaded app."
+}

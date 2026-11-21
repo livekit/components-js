@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { act, render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AgentControlBar } from '@/components/agents-ui/agent-control-bar';
 import * as controlBarHooks from '@/hooks/agents-ui/use-agent-control-bar';
@@ -176,10 +176,49 @@ describe('AgentControlBar', () => {
 
     const input = screen.getByPlaceholderText('Type something...');
     await user.type(input, 'Hello world');
-    await user.click(screen.getByTitle('Send'));
+    await user.click(screen.getByRole('button', { name: 'Send message' }));
 
     await waitFor(() => {
       expect(sendMock).toHaveBeenCalledWith('Hello world');
+    });
+  });
+
+  describe('when sending fails', () => {
+    beforeEach(() => {
+      sendMock.mockRejectedValueOnce(new Error('Data channel closed'));
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      vi.mocked(console.error).mockRestore();
+    });
+
+    it('puts the message back in the input', async () => {
+      const user = userEvent.setup();
+      render(<AgentControlBar isChatOpen />);
+      const input = screen.getByPlaceholderText('Type something...');
+
+      await user.type(input, 'Hello world{Enter}');
+
+      await waitFor(() => expect(input).toHaveValue('Hello world'));
+    });
+
+    it('keeps anything typed since', async () => {
+      const user = userEvent.setup();
+      let rejectSend!: (error: Error) => void;
+      sendMock.mockReset().mockReturnValueOnce(
+        new Promise((_, reject) => {
+          rejectSend = reject;
+        }),
+      );
+      render(<AgentControlBar isChatOpen />);
+      const input = screen.getByPlaceholderText('Type something...');
+
+      await user.type(input, 'First{Enter}');
+      await user.type(input, 'Second');
+      await act(async () => rejectSend(new Error('Data channel closed')));
+
+      expect(input).toHaveValue('Second');
     });
   });
 });

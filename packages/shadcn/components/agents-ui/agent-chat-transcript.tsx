@@ -61,10 +61,34 @@ export interface AgentChatTranscriptProps
    * @defaultValue []
    */
   messages?: ReceivedMessage[];
+  /** Text the transcript shows and announces. */
+  labels?: Partial<AgentChatTranscriptLabels>;
   /**
    * Additional CSS class names to apply to the conversation container.
    */
   className?: string;
+}
+
+/**
+ * Text the transcript shows and announces. Pass any of these to `AgentChatTranscript`'s `labels`
+ * to translate or reword them.
+ */
+export interface AgentChatTranscriptLabels {
+  /** Beside the indicator while the agent is thinking. */
+  thinking: string;
+}
+
+export const defaultAgentChatTranscriptLabels: AgentChatTranscriptLabels = {
+  thinking: 'Thinking...',
+};
+
+/** Fills in defaults for any label that's missing or `undefined`, such as an untranslated one. */
+function withDefaultLabels(
+  labels: Partial<AgentChatTranscriptLabels> = {},
+): AgentChatTranscriptLabels {
+  return {
+    thinking: labels.thinking ?? defaultAgentChatTranscriptLabels.thinking,
+  };
 }
 
 function ScrollToEndOnLocalMessage({ messages }: { messages: ReceivedMessage[] }) {
@@ -113,9 +137,11 @@ export function AgentChatTranscript({
   spacerClassName,
   agentState,
   messages = [],
+  labels: labelsProp,
   className,
   ...props
 }: AgentChatTranscriptProps) {
+  const labels = withDefaultLabels(labelsProp);
   const anchorsLocalMessages =
     scrollAnchor === true || scrollAnchor === 'any' || scrollAnchor === 'user';
 
@@ -160,7 +186,12 @@ export function AgentChatTranscript({
                         variant={isUser ? 'secondary' : 'ghost'}
                       >
                         <BubbleContent>
-                          <Streamdown>{message}</Streamdown>
+                          {/* Typed text, not Markdown, so its line breaks stay as written */}
+                          {isUser ? (
+                            <div className="whitespace-pre-wrap">{message}</div>
+                          ) : (
+                            <Streamdown>{message}</Streamdown>
+                          )}
                         </BubbleContent>
                       </Bubble>
                     </MessageContent>
@@ -176,7 +207,7 @@ export function AgentChatTranscript({
                   <MarkerIcon>
                     <AgentChatIndicator size="sm" />
                   </MarkerIcon>
-                  <MarkerContent className="shimmer">Thinking...</MarkerContent>
+                  <MarkerContent className="shimmer">{labels.thinking}</MarkerContent>
                 </Marker>
               </MessageScrollerItem>
             )}

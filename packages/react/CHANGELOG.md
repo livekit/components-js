@@ -1,5 +1,12 @@
 # @livekit/components-react
 
+## 2.9.27
+
+### Patch Changes
+
+- Surface text and chat stream lifecycle, and stop uncaught `DataStreamError`s. `TextStreamData` (`useTextStream`/`useTranscriptions`) and `ReceivedChatMessage` (`useChat`) now each carry a `status` (`TextStreamStatus` and `ReceivedMessageStatus` respectively: `Streaming`/`Complete`/`Failed`), with the error exposed on failed entries. - [#1508](https://github.com/livekit/components-js/pull/1508) ([@1egoman](https://github.com/1egoman))
+- Updated dependencies: @livekit/components-core@0.13.0
+
 ## 2.9.26
 
 ### Patch Changes

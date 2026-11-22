@@ -31,8 +31,14 @@ function transcriptionStatusFields(transcription: TextStreamData) {
       return { status: ReceivedMessageStatus.Complete } as const;
     case TextStreamStatus.Failed:
       return { status: ReceivedMessageStatus.Failed, error: transcription.error } as const;
-    default:
+    case undefined:
+      // Built without a status, so the transcript carries none either.
       return {};
+    default: {
+      // Fails to compile if a new TextStreamStatus is added but not mapped above.
+      const unhandled: never = transcription;
+      throw new Error(`Unhandled text stream status: ${JSON.stringify(unhandled)}`);
+    }
   }
 }
 

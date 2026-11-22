@@ -6,6 +6,8 @@ import {
   ReceivedMessage,
   ReceivedChatMessage,
   TextStreamData,
+  TextStreamStatus,
+  ReceivedMessageStatus,
   ReceivedUserTranscriptionMessage,
   ReceivedAgentTranscriptionMessage,
 } from '@livekit/components-core';
@@ -15,6 +17,30 @@ import { useTranscriptions } from './useTranscriptions';
 import { useChat } from './useChat';
 import { UseSessionReturn } from './useSession';
 import { useEnsureSession } from '../context';
+
+/**
+ * Carry a transcription stream's status onto its transcript message, so consumers
+ * can tell a transcript that is still arriving, whole, or cut off (e.g. the agent
+ * disconnected).
+ */
+function transcriptionStatusFields(transcription: TextStreamData) {
+  switch (transcription.status) {
+    case TextStreamStatus.Streaming:
+      return { status: ReceivedMessageStatus.Streaming } as const;
+    case TextStreamStatus.Complete:
+      return { status: ReceivedMessageStatus.Complete } as const;
+    case TextStreamStatus.Failed:
+      return { status: ReceivedMessageStatus.Failed, error: transcription.error } as const;
+    case undefined:
+      // Built without a status, so the transcript carries none either.
+      return {};
+    default: {
+      // Fails to compile if a new TextStreamStatus is added but not mapped above.
+      const unhandled: never = transcription;
+      throw new Error(`Unhandled text stream status: ${JSON.stringify(unhandled)}`);
+    }
+  }
+}
 
 /** @beta */
 export type UseSessionMessagesReturn = {
@@ -63,11 +89,14 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
     ReceivedUserTranscriptionMessage | ReceivedAgentTranscriptionMessage
   > = React.useMemo(() => {
     return transcriptions.map((transcription) => {
+      const statusFields = transcriptionStatusFields(transcription);
+
       switch (transcription.participantInfo.identity) {
         case room.localParticipant.identity:
           return {
             type: 'userTranscript',
             message: transcription.text,
+            ...statusFields,
 
             id: transcription.streamInfo.id,
             timestamp: transcription.streamInfo.timestamp,
@@ -80,6 +109,7 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
           return {
             type: 'agentTranscript',
             message: transcription.text,
+            ...statusFields,
 
             id: transcription.streamInfo.id,
             timestamp: transcription.streamInfo.timestamp,
@@ -98,6 +128,7 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
           return {
             type: 'agentTranscript',
             message: transcription.text,
+            ...statusFields,
 
             id: transcription.streamInfo.id,
             timestamp: transcription.streamInfo.timestamp,

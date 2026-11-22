@@ -3,11 +3,59 @@ import { from, scan, Subject, type Observable } from 'rxjs';
 import { share, tap } from 'rxjs/operators';
 import { ParticipantAgentAttributes } from '../helper';
 
-export interface TextStreamData {
+/**
+ * The lifecycle of a text stream — and of anything built on one, like a received
+ * chat message.
+ * @public
+ */
+export enum TextStreamStatus {
+  /** The stream is open and still receiving chunks. */
+  Streaming = 'streaming',
+  /** The writer closed the stream cleanly, so its text is whole. */
+  Complete = 'complete',
+  /** Reading the stream errored, so its text may be incomplete. */
+  Failed = 'failed',
+}
+
+/** Fields shared by every {@link TextStreamData} variant, regardless of status. */
+interface TextStreamDataCommon {
   text: string;
   participantInfo: { identity: string }; // Replace with the correct type from livekit-client
   streamInfo: TextStreamInfo;
 }
+
+/** A stream that is open and still receiving chunks. */
+type TextStreamDataStreaming = TextStreamDataCommon & { status: TextStreamStatus.Streaming };
+
+/** A stream the writer closed cleanly, so its text is whole. */
+type TextStreamDataComplete = TextStreamDataCommon & { status: TextStreamStatus.Complete };
+
+/**
+ * A stream whose read errored — most commonly a `DataStreamError` with reason
+ * `AbnormalEnd` when the sender disconnects mid-stream. The text accumulated
+ * before the failure is kept on `text`, but it may be incomplete.
+ */
+type TextStreamDataFailed = TextStreamDataCommon & {
+  status: TextStreamStatus.Failed;
+  error: Error;
+};
+
+/**
+ * A stream entry from before `status` existed, carrying no status at all. Kept so
+ * code that reads `TextStreamData` without touching `status` keeps type-checking.
+ */
+type TextStreamDataLegacy = TextStreamDataCommon & { status?: never };
+
+/**
+ * One text stream, discriminated by its `status`:
+ * - {@link TextStreamDataStreaming}: open and still receiving chunks.
+ * - {@link TextStreamDataComplete}: closed cleanly by the writer; text is whole.
+ * - {@link TextStreamDataFailed}: the read errored; `error` holds why and `text`
+ *   keeps whatever arrived first.
+ * - {@link TextStreamDataLegacy}: no status, for backward compatibility.
+ */
+export type TextStreamData =
+  TextStreamDataStreaming | TextStreamDataComplete | TextStreamDataFailed | TextStreamDataLegacy;
 
 // One observable per room and topic. The outer map is weak so a room that is no
 // longer referenced takes its observables with it, while a reused room keeps
@@ -55,41 +103,94 @@ export function setupTextStream(room: Room, topic: string): Observable<TextStrea
 
           const isTranscription = !!reader.info.attributes?.[segmentAttribute];
 
-          // Subscribe to the stream and update our array when new chunks arrive
-          streamObservable.subscribe((accumulatedText) => {
-            // Find and update the stream in our array
-            const index = textStreams.findIndex(
+          // Locate this reader's entry. Transcription updates for a segment arrive
+          // as separate streams sharing the same lk.segment_id, so they merge into
+          // a single entry; everything else is keyed by stream id.
+          const indexOfStream = () =>
+            textStreams.findIndex(
               (stream) =>
                 stream.streamInfo.id === reader.info.id ||
                 (isTranscription &&
                   stream.streamInfo.attributes?.[segmentAttribute] ===
                     reader.info.attributes?.[segmentAttribute]),
             );
-            if (index !== -1) {
+
+          // The index of this reader's entry, but only while this reader still
+          // owns it. In a merged transcription segment a newer reader takes the
+          // entry over, so an older reader that ends afterwards must not set the
+          // segment's status (or roll back its streamInfo).
+          const indexOwnedByReader = () => {
+            const index = indexOfStream();
+            return index !== -1 && textStreams[index].streamInfo.id === reader.info.id ? index : -1;
+          };
+
+          const emit = () => textStreamsSubject.next([...textStreams]);
+
+          // Subscribe to the stream and update our array as its lifecycle advances.
+          // The `error` handler is essential: without it RxJS reports the unhandled
+          // observable error by rethrowing it globally from a timer, so a benign
+          // mid-stream disconnect surfaces as an uncaught DataStreamError that no
+          // application code can catch.
+          streamObservable.subscribe({
+            next: (accumulatedText) => {
+              const index = indexOfStream();
+              if (index !== -1) {
+                textStreams[index] = {
+                  status: TextStreamStatus.Streaming,
+                  text: accumulatedText,
+                  participantInfo: textStreams[index].participantInfo,
+                  // Carry the latest streamInfo forward. Keeping the original would
+                  // freeze attributes that change over a segment's lifetime — notably
+                  // lk.transcription_final flipping "false" -> "true" on the final
+                  // user STT result.
+                  streamInfo: reader.info,
+                };
+              } else {
+                // Stream id wasn't found (new stream)
+                textStreams.push({
+                  status: TextStreamStatus.Streaming,
+                  text: accumulatedText,
+                  participantInfo,
+                  streamInfo: reader.info,
+                });
+              }
+              emit();
+            },
+            // A clean close from the writer means the stream's text is whole. Nothing
+            // was received for a stream that completes with no chunks, so there is no
+            // entry to mark and nothing to add.
+            complete: () => {
+              const index = indexOwnedByReader();
+              if (index === -1) return;
+              const existing = textStreams[index];
               textStreams[index] = {
-                ...textStreams[index],
-                text: accumulatedText,
-                // Carry the latest streamInfo forward. Transcription updates for a
-                // segment arrive as separate streams sharing the same lk.segment_id;
-                // keeping the original streamInfo would freeze attributes that change
-                // over the segment's lifetime — notably lk.transcription_final flipping
-                // "false" -> "true" on the final user STT result.
-                streamInfo: reader.info,
+                status: TextStreamStatus.Complete,
+                text: existing.text,
+                participantInfo: existing.participantInfo,
+                streamInfo: existing.streamInfo,
               };
-
-              // Emit the updated array
-              textStreamsSubject.next([...textStreams]);
-            } else {
-              // Handle case where stream ID wasn't found (new stream)
-              textStreams.push({
-                text: accumulatedText,
-                participantInfo,
-                streamInfo: reader.info,
-              });
-
-              // Emit the updated array with the new stream
-              textStreamsSubject.next([...textStreams]);
-            }
+              emit();
+            },
+            // Mark the stream failed, keeping whatever text arrived before the error.
+            // Handling the error here is also what stops RxJS from rethrowing it
+            // globally as an uncaught exception. Every error is treated the same —
+            // the failure is surfaced through the data, so consumers decide what it
+            // means. Like `complete`, a stream that never received a chunk has no
+            // entry and adds none: an empty failed entry would only render as an
+            // empty transcript or message.
+            error: (error: unknown) => {
+              const index = indexOwnedByReader();
+              if (index === -1) return;
+              const existing = textStreams[index];
+              textStreams[index] = {
+                status: TextStreamStatus.Failed,
+                text: existing.text,
+                participantInfo: existing.participantInfo,
+                streamInfo: existing.streamInfo,
+                error: error instanceof Error ? error : new Error(String(error)),
+              };
+              emit();
+            },
           });
         });
       },

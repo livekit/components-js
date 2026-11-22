@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Future } from '../helper/future';
 import type { ReceivedChatMessage } from '../messages/types';
 import { setupChat } from './chat';
-import { TextStreamStatus } from './textStream';
+import { ReceivedMessageStatus } from '../messages/types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type ChatTextStreamHandler = (reader: any, participantInfo: { identity: string }) => Promise<void>;
@@ -69,8 +69,10 @@ describe('chat text stream errors', () => {
 
     expect(chat.latest).toHaveLength(1);
     expect(chat.latest[0].message).toBe('partial message');
-    expect(chat.latest[0].status).toBe(TextStreamStatus.Failed);
-    expect(chat.latest[0].status === TextStreamStatus.Failed && chat.latest[0].error).toBe(error);
+    expect(chat.latest[0].status).toBe(ReceivedMessageStatus.Failed);
+    expect(chat.latest[0].status === ReceivedMessageStatus.Failed && chat.latest[0].error).toBe(
+      error,
+    );
     chat.subscription.unsubscribe();
   });
 
@@ -101,8 +103,10 @@ describe('chat text stream errors', () => {
     expect(chat.latest).toHaveLength(1);
     expect(chat.latest[0].message).toBe('look at this');
     expect(chat.latest[0].attachedFiles).toEqual([]);
-    expect(chat.latest[0].status).toBe(TextStreamStatus.Failed);
-    expect(chat.latest[0].status === TextStreamStatus.Failed && chat.latest[0].error).toBe(error);
+    expect(chat.latest[0].status).toBe(ReceivedMessageStatus.Failed);
+    expect(chat.latest[0].status === ReceivedMessageStatus.Failed && chat.latest[0].error).toBe(
+      error,
+    );
     chat.subscription.unsubscribe();
   });
 
@@ -121,7 +125,7 @@ describe('chat text stream errors', () => {
     await flush();
 
     expect(chat.latest).toHaveLength(1);
-    expect(chat.latest[0].status).toBe(TextStreamStatus.Complete);
+    expect(chat.latest[0].status).toBe(ReceivedMessageStatus.Complete);
     expect(chat.latest[0].editTimestamp).toBeUndefined();
     chat.subscription.unsubscribe();
   });
@@ -144,7 +148,7 @@ describe('chat text stream errors', () => {
     expect(chat.latest).toHaveLength(1);
     expect(chat.latest[0]).toMatchObject({
       message: 'hello world',
-      status: TextStreamStatus.Complete,
+      status: ReceivedMessageStatus.Complete,
     });
     expect(chat.latest[0].editTimestamp).toBeUndefined();
     chat.subscription.unsubscribe();
@@ -197,9 +201,9 @@ describe('chat sending state', () => {
 
     const sent = await send('hello');
 
-    expect(sent.status).toBe(TextStreamStatus.Complete);
+    expect(sent.status).toBe(ReceivedMessageStatus.Complete);
     expect(latest).toEqual([
-      expect.objectContaining({ message: 'hello', status: TextStreamStatus.Complete }),
+      expect.objectContaining({ message: 'hello', status: ReceivedMessageStatus.Complete }),
     ]);
     subscription.unsubscribe();
   });

@@ -7,6 +7,7 @@ import {
   ReceivedChatMessage,
   TextStreamData,
   TextStreamStatus,
+  ReceivedMessageStatus,
   ReceivedUserTranscriptionMessage,
   ReceivedAgentTranscriptionMessage,
 } from '@livekit/components-core';
@@ -16,6 +17,24 @@ import { useTranscriptions } from './useTranscriptions';
 import { useChat } from './useChat';
 import { UseSessionReturn } from './useSession';
 import { useEnsureSession } from '../context';
+
+/**
+ * Carry a transcription stream's status onto its transcript message, so consumers
+ * can tell a transcript that is still arriving, whole, or cut off (e.g. the agent
+ * disconnected).
+ */
+function transcriptionStatusFields(transcription: TextStreamData) {
+  switch (transcription.status) {
+    case TextStreamStatus.Streaming:
+      return { status: ReceivedMessageStatus.Streaming } as const;
+    case TextStreamStatus.Complete:
+      return { status: ReceivedMessageStatus.Complete } as const;
+    case TextStreamStatus.Failed:
+      return { status: ReceivedMessageStatus.Failed, error: transcription.error } as const;
+    default:
+      return {};
+  }
+}
 
 /** @beta */
 export type UseSessionMessagesReturn = {
@@ -64,12 +83,7 @@ export function useSessionMessages(session?: UseSessionReturn): UseSessionMessag
     ReceivedUserTranscriptionMessage | ReceivedAgentTranscriptionMessage
   > = React.useMemo(() => {
     return transcriptions.map((transcription) => {
-      // Carry the stream's status through, so consumers can tell a transcript that
-      // is still arriving, finished, or cut off (e.g. the agent disconnected).
-      const statusFields =
-        transcription.status === TextStreamStatus.Failed
-          ? { status: transcription.status, error: transcription.error }
-          : { status: transcription.status };
+      const statusFields = transcriptionStatusFields(transcription);
 
       switch (transcription.participantInfo.identity) {
         case room.localParticipant.identity:

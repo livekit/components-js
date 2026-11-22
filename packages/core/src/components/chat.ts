@@ -22,8 +22,7 @@ import {
   setupDataMessageHandler,
 } from '../observables/dataChannel';
 import { log } from '../logger';
-import { ChatMessage, ReceivedChatMessage } from '../messages/types';
-import { TextStreamStatus } from './textStream';
+import { ChatMessage, ReceivedChatMessage, ReceivedMessageStatus } from '../messages/types';
 import { Future } from '../helper/future';
 
 /** @public */
@@ -206,14 +205,14 @@ export function setupChat(room: Room, options?: ChatOptions) {
       let lastMessage: ReceivedChatMessage | undefined;
       streamObservable.subscribe({
         next: (value) => {
-          lastMessage = { ...value, status: TextStreamStatus.Streaming };
+          lastMessage = { ...value, status: ReceivedMessageStatus.Streaming };
           messageSubject.next(lastMessage);
         },
         // A clean close means the message is whole. Nothing was received for a
         // stream that completes with no chunks, so there is nothing to re-emit.
         complete: () => {
           if (lastMessage) {
-            messageSubject.next({ ...lastMessage, status: TextStreamStatus.Complete });
+            messageSubject.next({ ...lastMessage, status: ReceivedMessageStatus.Complete });
           }
         },
         // Surface the failure through the message — keeping whatever text and
@@ -238,7 +237,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
           messageSubject.next({
             ...base,
             message: receivedText,
-            status: TextStreamStatus.Failed,
+            status: ReceivedMessageStatus.Failed,
             error: error instanceof Error ? error : new Error(String(error)),
           });
         },
@@ -287,7 +286,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
             type: 'chatMessage',
             from: msg.from,
             // A legacy data packet arrives in one piece, so it is always whole.
-            status: TextStreamStatus.Complete,
+            status: ReceivedMessageStatus.Complete,
           };
           return newMessage;
         }),
@@ -315,7 +314,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
             // the stream ends it re-emits the message unchanged just to update
             // `status`. Neither should mark the message as edited.
             editTimestamp:
-              originalMsg.status !== TextStreamStatus.Streaming &&
+              originalMsg.status !== ReceivedMessageStatus.Streaming &&
               value.message !== originalMsg.message
                 ? value.timestamp
                 : originalMsg.editTimestamp,
@@ -360,7 +359,7 @@ export function setupChat(room: Room, options?: ChatOptions) {
         from: room.localParticipant,
         attributes: options.attributes,
         // `sendText` has resolved, so the local copy of the message is whole.
-        status: TextStreamStatus.Complete,
+        status: ReceivedMessageStatus.Complete,
       };
 
       messageSubject.next(receivedChatMsg);

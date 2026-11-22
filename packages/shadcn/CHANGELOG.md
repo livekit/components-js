@@ -1,5 +1,11 @@
 # @agents-ui
 
+## 1.0.11
+
+### Patch Changes
+
+- Updated dependencies: @livekit/components-react@2.9.27
+
 ## 1.0.10
 
 ### Patch Changes

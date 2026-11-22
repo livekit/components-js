@@ -44,6 +44,7 @@ import { ReceivedAgentTranscriptionMessage } from '@livekit/components-core';
 import { ReceivedChatMessage } from '@livekit/components-core';
 import { ReceivedDataMessage } from '@livekit/components-core';
 import { ReceivedMessage } from '@livekit/components-core';
+import { ReceivedMessageStatus } from '@livekit/components-core';
 import { ReceivedTranscriptionSegment } from '@livekit/components-core';
 import { ReceivedUserTranscriptionMessage } from '@livekit/components-core';
 import { RemoteAudioTrack } from 'livekit-client';
@@ -64,6 +65,7 @@ import { SetMediaDeviceOptions } from '@livekit/components-core';
 import { SourcesArray } from '@livekit/components-core';
 import { SVGProps } from 'react';
 import { TextStreamData } from '@livekit/components-core';
+import { TextStreamStatus } from '@livekit/components-core';
 import { ToggleSource } from '@livekit/components-core';
 import { TokenSourceConfigurable } from 'livekit-client';
 import { TokenSourceFetchOptions } from 'livekit-client';
@@ -642,6 +644,8 @@ export { ReceivedChatMessage }
 
 export { ReceivedMessage }
 
+export { ReceivedMessageStatus }
+
 export { ReceivedUserTranscriptionMessage }
 
 // @public
@@ -757,6 +761,8 @@ export type SwitchActiveDeviceOptions = {
 };
 
 export { TextStreamData }
+
+export { TextStreamStatus }
 
 // @public
 export function Toast(props: React_2.HTMLAttributes<HTMLDivElement>): React_2.JSX.Element;

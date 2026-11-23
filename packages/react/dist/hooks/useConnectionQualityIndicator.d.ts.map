@@ -1,0 +1,1 @@
+{"version":3,"file":"useConnectionQualityIndicator.d.ts","sourceRoot":"","sources":["../../src/hooks/useConnectionQualityIndicator.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,WAAW,EAAE,MAAM,gBAAgB,CAAC;AAKlD,cAAc;AACd,MAAM,WAAW,iCAAiC;IAChD,WAAW,CAAC,EAAE,WAAW,CAAC;CAC3B;AAED;;;;;;;;;GASG;AACH,wBAAgB,6BAA6B,CAAC,OAAO,GAAE,iCAAsC;;;EAW5F"}

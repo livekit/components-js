@@ -14,6 +14,7 @@ import { ReceivedMessageStatus } from '../messages/types';
 export const DataTopic = {
   CHAT: 'lk.chat',
   TRANSCRIPTION: 'lk.transcription',
+  REACTIONS: 'lk.reactions',
 } as const;
 
 /** @deprecated */

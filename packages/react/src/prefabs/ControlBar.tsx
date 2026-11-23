@@ -156,6 +156,7 @@ export function ControlBar({
         <div className="lk-button-group">
           <TrackToggle
             source={Track.Source.Microphone}
+            aria-label="Microphone"
             showIcon={showIcon}
             onChange={microphoneOnChange}
             onDeviceError={(error) => onDeviceError?.({ source: Track.Source.Microphone, error })}
@@ -176,6 +177,7 @@ export function ControlBar({
         <div className="lk-button-group">
           <TrackToggle
             source={Track.Source.Camera}
+            aria-label="Camera"
             showIcon={showIcon}
             onChange={cameraOnChange}
             onDeviceError={(error) => onDeviceError?.({ source: Track.Source.Camera, error })}
@@ -196,6 +198,7 @@ export function ControlBar({
         <TrackToggle
           source={Track.Source.ScreenShare}
           captureOptions={{ audio: true, selfBrowserSurface: 'include' }}
+          aria-label={isScreenShareEnabled ? 'Stop screen share' : 'Share screen'}
           showIcon={showIcon}
           onChange={onScreenShareChange}
           onDeviceError={(error) => onDeviceError?.({ source: Track.Source.ScreenShare, error })}
@@ -204,19 +207,19 @@ export function ControlBar({
         </TrackToggle>
       )}
       {visibleControls.chat && (
-        <ChatToggle>
+        <ChatToggle aria-label="Chat">
           {showIcon && <ChatIcon />}
           {showText && 'Chat'}
         </ChatToggle>
       )}
       {visibleControls.settings && (
-        <SettingsMenuToggle>
+        <SettingsMenuToggle aria-label="Settings">
           {showIcon && <GearIcon />}
           {showText && 'Settings'}
         </SettingsMenuToggle>
       )}
       {visibleControls.leave && (
-        <DisconnectButton>
+        <DisconnectButton aria-label="Leave">
           {showIcon && <LeaveIcon />}
           {showText && 'Leave'}
         </DisconnectButton>

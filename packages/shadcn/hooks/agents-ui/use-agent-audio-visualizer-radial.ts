@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useReducedMotion } from 'motion/react';
 import { type AgentState } from '@livekit/components-react';
 
 function findGcdLessThan(columns: number, max: number = columns): number {
@@ -45,6 +46,7 @@ export const useAgentAudioVisualizerRadialAnimator = (
   interval: number,
 ): number[] => {
   const [index, setIndex] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
   const [sequence, setSequence] = useState<number[][]>([[]]);
 
   useEffect(() => {
@@ -64,6 +66,13 @@ export const useAgentAudioVisualizerRadialAnimator = (
 
   const animationFrameId = useRef<number | null>(null);
   useEffect(() => {
+    // Under prefers-reduced-motion, hold the first frame of each state's
+    // sequence instead of cycling through it. The highlighted bars still
+    // change with the agent state, but nothing chases across the visualizer.
+    if (prefersReducedMotion) {
+      return;
+    }
+
     let startTime = performance.now();
 
     const animate = (time: DOMHighResTimeStamp) => {
@@ -84,7 +93,7 @@ export const useAgentAudioVisualizerRadialAnimator = (
         cancelAnimationFrame(animationFrameId.current);
       }
     };
-  }, [interval, barCount, state, sequence.length]);
+  }, [interval, barCount, state, sequence.length, prefersReducedMotion]);
 
   return sequence[index % sequence.length] ?? [];
 };

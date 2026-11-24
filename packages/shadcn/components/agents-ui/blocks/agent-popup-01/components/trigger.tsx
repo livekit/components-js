@@ -64,7 +64,7 @@ export function Trigger({
       <div
         className={cn(
           'absolute inset-0 rounded-full bg-current transition-colors',
-          isConnecting && 'animate-spin',
+          isConnecting && 'motion-safe:animate-spin',
           isConnecting &&
             'bg-current/30 bg-conic from-transparent from-30% via-current via-50% to-transparent to-70%',
           isDestructive && 'bg-transparent',

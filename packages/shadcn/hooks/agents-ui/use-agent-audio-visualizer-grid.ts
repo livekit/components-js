@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useReducedMotion } from 'motion/react';
 import { type AgentState } from '@livekit/components-react';
 
 export interface Coordinate {
@@ -71,6 +72,7 @@ export function useAgentAudioVisualizerGridAnimator(
   radius?: number,
 ): Coordinate {
   const [index, setIndex] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
   const [sequence, setSequence] = useState<Coordinate[]>(() => [
     {
       x: Math.floor(columns / 2),
@@ -97,7 +99,9 @@ export function useAgentAudioVisualizerGridAnimator(
   }, [state, rows, columns, radius]);
 
   useEffect(() => {
-    if (state === 'speaking') {
+    // Under prefers-reduced-motion, hold the first frame of each state's
+    // sequence instead of cycling through it.
+    if (state === 'speaking' || prefersReducedMotion) {
       return;
     }
 
@@ -108,7 +112,7 @@ export function useAgentAudioVisualizerGridAnimator(
     }, interval);
 
     return () => clearInterval(indexInterval);
-  }, [interval, columns, rows, state, sequence.length]);
+  }, [interval, columns, rows, state, sequence.length, prefersReducedMotion]);
 
   return (
     sequence[index % sequence.length] ?? { x: Math.floor(columns / 2), y: Math.floor(rows / 2) }

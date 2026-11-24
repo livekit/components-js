@@ -111,7 +111,8 @@
         "livekit-client@^2.0.0",
         "@livekit/components-react@^2.0.0",
         "class-variance-authority",
-        "lucide-react"
+        "lucide-react",
+        "motion"
       ],
       "registryDependencies": ["utils"]
     },
@@ -133,7 +134,8 @@
       "dependencies": [
         "livekit-client@^2.0.0",
         "@livekit/components-react@^2.0.0",
-        "class-variance-authority"
+        "class-variance-authority",
+        "motion"
       ],
       "registryDependencies": ["utils"]
     },
@@ -155,7 +157,8 @@
       "dependencies": [
         "livekit-client@^2.0.0",
         "@livekit/components-react@^2.0.0",
-        "class-variance-authority"
+        "class-variance-authority",
+        "motion"
       ],
       "registryDependencies": ["utils"]
     },

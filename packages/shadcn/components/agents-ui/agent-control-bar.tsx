@@ -3,17 +3,22 @@
 import { useEffect, useRef, useState, type ComponentProps } from 'react';
 import { useChat } from '@livekit/components-react';
 import { Track } from 'livekit-client';
-import { Loader, MessageSquareTextIcon, SendHorizontal } from 'lucide-react';
+import { MessageSquareTextIcon } from 'lucide-react';
 import { motion, type MotionProps } from 'motion/react';
 
 import { cn } from '@/lib/utils';
+import {
+  AgentComposer,
+  AgentComposerField,
+  AgentComposerInput,
+  AgentComposerSubmit,
+} from '@/components/agents-ui/agent-composer';
 import { AgentDisconnectButton } from '@/components/agents-ui/agent-disconnect-button';
 import { AgentTrackControl } from '@/components/agents-ui/agent-track-control';
 import {
   AgentTrackToggle,
   agentTrackToggleVariants,
 } from '@/components/agents-ui/agent-track-toggle';
-import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
 import {
   useInputControls,
@@ -64,43 +69,12 @@ const MOTION_PROPS: MotionProps = {
 
 interface AgentChatInputProps {
   chatOpen: boolean;
-  onSend?: (message: string) => void;
+  onSend: (message: string) => Promise<void>;
   className?: string;
 }
 
-function AgentChatInput({ chatOpen, onSend = async () => {}, className }: AgentChatInputProps) {
+function AgentChatInput({ chatOpen, onSend, className }: AgentChatInputProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [isSending, setIsSending] = useState(false);
-  const [message, setMessage] = useState<string>('');
-  const isDisabled = isSending || message.trim().length === 0;
-
-  const handleSend = async () => {
-    if (isDisabled) {
-      return;
-    }
-
-    try {
-      setIsSending(true);
-      await onSend(message.trim());
-      setMessage('');
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsSending(false);
-    }
-  };
-
-  const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
-  };
-
-  const handleButtonClick = async () => {
-    if (isDisabled) return;
-    await handleSend();
-  };
 
   useEffect(() => {
     if (!chatOpen) return;
@@ -109,28 +83,17 @@ function AgentChatInput({ chatOpen, onSend = async () => {}, className }: AgentC
   }, [chatOpen]);
 
   return (
-    <div className={cn('mb-3 flex grow items-end gap-2 rounded-md pl-1 text-sm', className)}>
-      <textarea
-        ref={inputRef}
-        value={message}
-        disabled={!chatOpen || isSending}
-        placeholder="Type something..."
-        onKeyDown={handleKeyDown}
-        onChange={(e) => setMessage(e.target.value)}
-        className="field-sizing-content max-h-16 min-h-8 flex-1 resize-none py-2 [scrollbar-width:thin] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-      />
-      <Button
-        size="icon"
-        type="button"
-        disabled={isDisabled}
-        variant={isDisabled ? 'secondary' : 'default'}
-        title={isSending ? 'Sending...' : 'Send'}
-        onClick={handleButtonClick}
-        className="self-end disabled:cursor-not-allowed"
-      >
-        {isSending ? <Loader className="animate-spin" /> : <SendHorizontal />}
-      </Button>
-    </div>
+    <AgentComposer
+      onSend={onSend}
+      disabled={!chatOpen}
+      onError={console.error}
+      className={cn('mb-3 grow rounded-md pl-1', className)}
+    >
+      <AgentComposerField>
+        <AgentComposerInput ref={inputRef} placeholder="Type something..." />
+        <AgentComposerSubmit />
+      </AgentComposerField>
+    </AgentComposer>
   );
 }
 

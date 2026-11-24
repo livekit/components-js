@@ -32,7 +32,7 @@ export const AgentAudioVisualizerRadialVariants = cva(
     'has-data-[lk-state=connecting]:**:data-lk-index:duration-300',
     'has-data-[lk-state=initializing]:**:data-lk-index:duration-300',
     'has-data-[lk-state=listening]:**:data-lk-index:duration-300',
-    'has-data-[lk-state=thinking]:animate-spin has-data-[lk-state=thinking]:[animation-duration:5s] has-data-[lk-state=thinking]:**:data-lk-index:bg-current',
+    'has-data-[lk-state=thinking]:motion-safe:animate-spin has-data-[lk-state=thinking]:[animation-duration:5s] has-data-[lk-state=thinking]:**:data-lk-index:bg-current',
   ],
   {
     variants: {

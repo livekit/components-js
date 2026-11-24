@@ -57,13 +57,13 @@ describe('Trigger', () => {
 
   it('shows the connecting spinner when pressed, not connected, and there is no error', () => {
     render(<Trigger color="#3b82f6" isPressed={true} isConnected={false} onToggle={vi.fn()} />);
-    const ring = screen.getByRole('button').querySelector('.animate-spin');
+    const ring = screen.getByRole('button').querySelector('.motion-safe\\:animate-spin');
     expect(ring).not.toBeNull();
   });
 
   it('does not show the connecting spinner when connected', () => {
     render(<Trigger color="#3b82f6" isPressed={true} isConnected={true} onToggle={vi.fn()} />);
-    const ring = screen.getByRole('button').querySelector('.animate-spin');
+    const ring = screen.getByRole('button').querySelector('.motion-safe\\:animate-spin');
     expect(ring).toBeNull();
   });
 
@@ -77,7 +77,7 @@ describe('Trigger', () => {
         onToggle={vi.fn()}
       />,
     );
-    const ring = screen.getByRole('button').querySelector('.animate-spin');
+    const ring = screen.getByRole('button').querySelector('.motion-safe\\:animate-spin');
     expect(ring).toBeNull();
   });
 });

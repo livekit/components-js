@@ -1,6 +1,6 @@
 import { type Ref, type ComponentProps } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { motion, type MotionProps } from 'motion/react';
+import { motion, useReducedMotion, type MotionProps } from 'motion/react';
 
 import { cn } from '@/lib/utils';
 
@@ -29,6 +29,27 @@ const motionAnimationProps = {
   initial: 'hidden',
   animate: 'visible',
   exit: 'hidden',
+};
+
+// Under prefers-reduced-motion the dot fades in and holds: no scale, no loop.
+const reducedMotionAnimationProps = {
+  ...motionAnimationProps,
+  variants: {
+    hidden: {
+      opacity: 0,
+      transition: {
+        duration: 0.1,
+        ease: 'linear' as const,
+      },
+    },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.2,
+        ease: 'linear' as const,
+      },
+    },
+  },
 };
 
 const agentChatIndicatorVariants = cva('bg-muted-foreground inline-block size-2.5 rounded-full', {
@@ -81,9 +102,11 @@ export function AgentChatIndicator({
 }: AgentChatIndicatorProps &
   ComponentProps<'span'> &
   VariantProps<typeof agentChatIndicatorVariants>) {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <motion.span
-      {...motionAnimationProps}
+      {...(prefersReducedMotion ? reducedMotionAnimationProps : motionAnimationProps)}
       transition={{ duration: 0.1, ease: 'linear' as const }}
       className={cn(agentChatIndicatorVariants({ size }), className)}
       {...props}

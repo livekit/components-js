@@ -1,5 +1,6 @@
 import {
   type Room,
+  ConnectionState,
   Track,
   type LocalTrack,
   type LocalTrackPublication,
@@ -18,15 +19,27 @@ interface PublicationIntent {
   format?: { channelCount: 1 | 2 } | { width: number; height: number; frameRate?: number };
   publishOptions?: TrackPublishOptions;
 }
-type PreparingRoom = Room & { preparePublication?: (intent: PublicationIntent) => Reservation };
+// Versioned, non-public SDK integration. No preparation members appear on Room's API.
+const sessionPublicationKey = Symbol.for('livekit.internal.sessionPublication.v1');
+interface SessionPublicationBridge {
+  prepare(intent: PublicationIntent): Reservation;
+  connect(
+    url: string,
+    token: string,
+    options: Parameters<Room['connect']>[2],
+    reservations: Reservation[],
+  ): Promise<void>;
+}
+type PreparingRoom = Room & { [sessionPublicationKey]?: SessionPublicationBridge };
 
 /** Connects immediately while capture and prepared publication proceed independently. */
 export async function connectSessionWithTracks(
   room: Room,
-  connect: (reservations: Reservation[]) => Promise<void>,
+  connect: (connectRoom: Room['connect']) => Promise<void>,
   tracks: NonNullable<SessionConnectOptions['tracks']>,
   signal: AbortSignal,
 ): Promise<void> {
+  const bridge = (room as PreparingRoom)[sessionPublicationKey];
   const reservations: Reservation[] = [];
   const captures = new Set<LocalTrack>();
   let cancelled = signal.aborted;
@@ -47,7 +60,8 @@ export async function connectSessionWithTracks(
   try {
     if (cancelled) throw abortError();
     const prepare = (intent: PublicationIntent) => {
-      const reservation = (room as PreparingRoom).preparePublication?.(intent);
+      const reservation =
+        room.state === ConnectionState.Disconnected ? bridge?.prepare(intent) : undefined;
       if (reservation) reservations.push(reservation);
       return reservation;
     };
@@ -87,7 +101,11 @@ export async function connectSessionWithTracks(
     };
 
     // Invoke connection first. Neither credential acquisition nor JOIN waits for getUserMedia.
-    const connecting = connect(reservations);
+    const connecting = connect((url, token, options) =>
+      bridge
+        ? bridge.connect(url, token, options, reservations)
+        : room.connect(url, token, options),
+    );
     await Promise.race([
       Promise.all([
         connecting,

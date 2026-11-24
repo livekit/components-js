@@ -112,9 +112,9 @@ try {
             const controller = new AbortController();
             await connectSessionWithTracks(
               room,
-              async (plans) => {
+              async (connectRoom) => {
                 if (early) await delay(900);
-                return room.connect(url, tokens[0], { initialPublications: plans });
+                return connectRoom(url, tokens[0]);
               },
               {
                 microphone: { enabled: true, publishOptions: { preConnectBuffer: true } },

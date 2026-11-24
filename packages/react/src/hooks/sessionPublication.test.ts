@@ -1,4 +1,10 @@
-import { Room, Track, type LocalTrack, type LocalTrackPublication } from 'livekit-client';
+import {
+  ConnectionState,
+  Room,
+  Track,
+  type LocalTrack,
+  type LocalTrackPublication,
+} from 'livekit-client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { connectSessionWithTracks } from './sessionPublication';
 
@@ -20,10 +26,14 @@ function setup() {
   const cancel = vi.fn(async () => {});
   const reservation = { attachTrack, cancel };
   const prepare = vi.fn(() => reservation);
-  Object.defineProperty(room, 'preparePublication', { value: prepare, configurable: true });
+  const connectNative = vi.fn(async () => {});
+  Object.defineProperty(room, Symbol.for('livekit.internal.sessionPublication.v1'), {
+    value: { prepare, connect: connectNative },
+    configurable: true,
+  });
   const capture = vi.spyOn(room.localParticipant, 'createTracks').mockReturnValue(captured.promise);
   vi.spyOn(room, 'disconnect').mockResolvedValue(undefined);
-  const connect = vi.fn(async () => {});
+  const connect = vi.fn(async (_connectRoom: Room['connect']) => {});
   return {
     room,
     controller,
@@ -31,6 +41,7 @@ function setup() {
     captured,
     capture,
     prepare,
+    connectNative,
     attachTrack,
     cancel,
     reservation,
@@ -49,7 +60,11 @@ describe('Session publication startup', () => {
       { microphone: { enabled: true, publishOptions: options } },
       f.controller.signal,
     );
-    expect(f.connect).toHaveBeenCalledWith([f.reservation]);
+    expect(f.connect).toHaveBeenCalledWith(expect.any(Function));
+    await f.connect.mock.calls[0][0]('wss://example.test', 'token');
+    expect(f.connectNative).toHaveBeenCalledWith('wss://example.test', 'token', undefined, [
+      f.reservation,
+    ]);
     expect(f.connect.mock.invocationCallOrder[0]).toBeLessThan(
       f.capture.mock.invocationCallOrder[0],
     );
@@ -154,13 +169,15 @@ describe('Session publication startup', () => {
   it('does not capture disabled sources', async () => {
     const f = setup();
     await connectSessionWithTracks(f.room, f.connect, {}, f.controller.signal);
-    expect(f.connect).toHaveBeenCalledWith([]);
+    expect(f.connect).toHaveBeenCalledWith(expect.any(Function));
     expect(f.prepare).not.toHaveBeenCalled();
     expect(f.capture).not.toHaveBeenCalled();
   });
   it('retains ordinary publication on older SDKs', async () => {
     const f = setup();
-    Object.defineProperty(f.room, 'preparePublication', { value: undefined });
+    Object.defineProperty(f.room, Symbol.for('livekit.internal.sessionPublication.v1'), {
+      value: undefined,
+    });
     const microphone = vi
       .spyOn(f.room.localParticipant, 'setMicrophoneEnabled')
       .mockResolvedValue(undefined);
@@ -170,9 +187,24 @@ describe('Session publication startup', () => {
       { microphone: { enabled: true } },
       f.controller.signal,
     );
-    expect(f.connect).toHaveBeenCalledWith([]);
+    expect(f.connect).toHaveBeenCalledWith(expect.any(Function));
     expect(microphone).toHaveBeenCalledWith(true, undefined, {});
     expect(f.capture).not.toHaveBeenCalled();
+  });
+  it('uses ordinary publication when the supplied room is already connected', async () => {
+    const f = setup();
+    f.room.state = ConnectionState.Connected;
+    const microphone = vi
+      .spyOn(f.room.localParticipant, 'setMicrophoneEnabled')
+      .mockResolvedValue(undefined);
+    await connectSessionWithTracks(
+      f.room,
+      f.connect,
+      { microphone: { enabled: true } },
+      f.controller.signal,
+    );
+    expect(f.prepare).not.toHaveBeenCalled();
+    expect(microphone).toHaveBeenCalledWith(true, undefined, {});
   });
   it('rejects an already aborted start without joining or capturing', async () => {
     const f = setup();

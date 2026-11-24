@@ -74,7 +74,9 @@ describe('useSession local screen share', () => {
 describe('useSession startup cancellation', () => {
   test('late credentials cannot connect after microphone permission failure', async () => {
     const room = new Room();
-    Object.defineProperty(room, 'preparePublication', { value: undefined });
+    Object.defineProperty(room, Symbol.for('livekit.internal.sessionPublication.v1'), {
+      value: undefined,
+    });
     vi.spyOn(room, 'prepareConnection').mockResolvedValue(undefined);
     vi.spyOn(room, 'disconnect').mockResolvedValue(undefined);
     const connect = vi.spyOn(room, 'connect').mockResolvedValue(undefined);

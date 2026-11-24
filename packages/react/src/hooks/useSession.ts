@@ -707,24 +707,12 @@ export function useSession(
       try {
         await connectSessionWithTracks(
           room,
-          async (initialPublications) => {
+          async (connectRoom) => {
             const { serverUrl, participantToken } = await tokenSourceFetch();
             if (startup.signal.aborted) throw startup.signal.reason;
             const participantTokenPayload = decodeTokenPayload(participantToken);
             tokenDispatchesAgent = (participantTokenPayload.roomConfig?.agents?.length ?? 0) > 0;
-            await room.connect(serverUrl, participantToken, {
-              ...roomConnectOptions,
-              ...(initialPublications.length > 0
-                ? {
-                    initialPublications: [
-                      ...((
-                        roomConnectOptions as { initialPublications?: typeof initialPublications }
-                      )?.initialPublications ?? []),
-                      ...initialPublications,
-                    ],
-                  }
-                : {}),
-            });
+            await connectRoom(serverUrl, participantToken, roomConnectOptions);
           },
           tracks,
           startup.signal,

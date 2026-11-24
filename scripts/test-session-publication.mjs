@@ -105,7 +105,11 @@ try {
           const client = room.engine.client;
           const send = client.sendRequest.bind(client);
           client.sendRequest = (m, ...a) => {
-            trace.push({ type: m.case, at: performance.now() });
+            trace.push({
+              type: m.case,
+              source: m.case === 'addTrack' ? m.value.source : undefined,
+              at: performance.now(),
+            });
             return send(m, ...a);
           };
           try {
@@ -151,6 +155,7 @@ try {
                 .filter((m) => m.type === 'addTrack' || m.type === 'offer')
                 .map((m) => ({
                   type: m.type,
+                  source: m.source,
                   afterReady: m.at >= Math.max(captureAt, connectedAt),
                 })),
               agentKind: [...room.remoteParticipants.values()][0]?.kind,
@@ -170,10 +175,9 @@ try {
       assert.ok(result.decoded, 'agent receives both microphone and camera media');
       assert.ok(result.bufferEnded, 'preconnect stream closes when the agent subscribes');
       if (early) assert.ok(result.bufferBytes > 0, 'early microphone samples reach the agent');
-      assert.ok(
-        result.signals.every((signal) => !signal.afterReady),
-        'attachment must not register or renegotiate',
-      );
+      // Microphone is prepared; camera uses ordinary publication and may need a later offer.
+      assert.equal(result.signals.filter((signal) => signal.type === 'addTrack').length, 1);
+      assert.equal(result.signals.find((signal) => signal.type === 'addTrack').source, 1);
     } finally {
       await page.close();
     }

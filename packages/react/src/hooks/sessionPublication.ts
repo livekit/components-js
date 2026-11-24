@@ -9,14 +9,14 @@ import {
 import type { SessionConnectOptions } from './useSession';
 
 // Optional capability bridge: components continues to support SDK releases without reservations.
-// Keep these structural types internal until the SDK API is released as stable.
+// Checked against the SDK source contract by scripts/check-session-publication-contract.mjs.
 interface Reservation {
   attachTrack(track: LocalTrack): Promise<LocalTrackPublication>;
   cancel(): Promise<void>;
 }
 interface PublicationIntent {
-  source: Track.Source.Microphone | Track.Source.Camera;
-  format?: { channelCount: 1 | 2 } | { width: number; height: number; frameRate?: number };
+  source: Track.Source.Microphone;
+  format?: { channelCount: 1 | 2 };
   publishOptions?: TrackPublishOptions;
 }
 // Versioned, non-public SDK integration. No preparation members appear on Room's API.
@@ -27,7 +27,7 @@ interface SessionPublicationBridge {
     url: string,
     token: string,
     options: Parameters<Room['connect']>[2],
-    reservations: Reservation[],
+    reservations: readonly Reservation[],
   ): Promise<void>;
 }
 type PreparingRoom = Room & { [sessionPublicationKey]?: SessionPublicationBridge };
@@ -71,16 +71,8 @@ export async function connectSessionWithTracks(
           publishOptions: tracks.microphone.publishOptions,
         })
       : undefined;
-    // Resolution is a declared envelope; never query a device to discover it before JOIN.
-    const resolution = room.options.videoCaptureDefaults?.resolution;
-    const camera =
-      tracks.camera?.enabled && resolution
-        ? prepare({
-            source: Track.Source.Camera,
-            format: resolution,
-            publishOptions: tracks.camera.publishOptions,
-          })
-        : undefined;
+    // Camera constraints are ideal, not guaranteed. Keep ordinary camera publication until
+    // mismatched/rotated capture formats have a validated latency-safe reservation fallback.
 
     const capture = async (
       source: Track.Source.Microphone | Track.Source.Camera,
@@ -119,13 +111,11 @@ export async function connectSessionWithTracks(
               )
           : undefined,
         tracks.camera?.enabled
-          ? camera
-            ? capture(Track.Source.Camera, camera)
-            : room.localParticipant.setCameraEnabled(
-                true,
-                undefined,
-                tracks.camera.publishOptions ?? {},
-              )
+          ? room.localParticipant.setCameraEnabled(
+              true,
+              undefined,
+              tracks.camera.publishOptions ?? {},
+            )
           : undefined,
         tracks.screenShare?.enabled
           ? room.localParticipant.setScreenShareEnabled(

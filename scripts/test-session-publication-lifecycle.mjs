@@ -5,9 +5,18 @@ import { readFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { createRequire } from 'node:module';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 const sdk = path.resolve(
   process.env.LIVEKIT_SDK_DIR ?? process.env.LIVEKIT_JS_SDK_DIR ?? '../client-sdk-js',
+);
+execFileSync(
+  process.execPath,
+  [new URL('./check-session-publication-contract.mjs', import.meta.url).pathname],
+  {
+    env: { ...process.env, LIVEKIT_SDK_DIR: sdk },
+    stdio: 'inherit',
+  },
 );
 const requireSDK = createRequire(path.join(sdk, 'package.json'));
 const { chromium } = requireSDK('playwright');
@@ -50,6 +59,8 @@ try {
       ['audio', 'video', 'both'].map((kind) => ({ singlePeerConnection, kind })),
     ),
     { singlePeerConnection: true, kind: 'video', h264Backup: true },
+    { singlePeerConnection: true, kind: 'video', mismatchedCamera: true },
+    { singlePeerConnection: true, kind: 'audio', preparationFailure: true },
     { singlePeerConnection: true, kind: 'audio', legacy: true },
     { singlePeerConnection: true, kind: 'audio', cancel: true },
   ]) {
@@ -99,6 +110,8 @@ try {
           let firstCapture;
           navigator.mediaDevices.getUserMedia = async (...args) => {
             await delay(650);
+            if (scenario.mismatchedCamera && args[0].video)
+              args[0].video = { width: { exact: 480 }, height: { exact: 640 } };
             const stream = await gum(...args);
             firstCapture ??= performance.now();
             captured.push(...stream.getTracks());
@@ -117,6 +130,17 @@ try {
               registeredCodecs.push(message.value.simulcastCodecs.map((codec) => codec.codec));
             return send(message, ...args);
           };
+          const setCodecs = RTCRtpTransceiver.prototype.setCodecPreferences;
+          let injectedFailure = false;
+          if (scenario.preparationFailure) {
+            RTCRtpTransceiver.prototype.setCodecPreferences = function (...args) {
+              if (!injectedFailure && this.direction === 'sendonly' && !this.sender.track) {
+                injectedFailure = true;
+                throw new Error('injected trackless sender preparation failure');
+              }
+              return setCodecs.apply(this, args);
+            };
+          }
           const controller = new AbortController();
           try {
             await subscriber.connect(url, tokens[1]);
@@ -183,6 +207,9 @@ try {
               received: remote.length,
               addTracks: signalTypes.filter((type) => type === 'addTrack').length,
               registeredCodecs,
+              injectedFailure,
+              stateCallback: typeof publisher.engine.pcManager.onStateChange === 'function',
+              cameraSettings: captured.find((track) => track.kind === 'video')?.getSettings(),
               publicPreparation: 'preparePublication' in publisher,
             };
           } finally {
@@ -190,6 +217,7 @@ try {
             await subscriber.dispose();
             captured.forEach((track) => track.stop());
             navigator.mediaDevices.getUserMedia = gum;
+            RTCRtpTransceiver.prototype.setCodecPreferences = setCodecs;
           }
         },
         { scenario, tokens, url: process.env.LIVEKIT_URL ?? 'ws://127.0.0.1:7880' },
@@ -204,9 +232,20 @@ try {
         assert.equal(result.received, result.publications);
         assert.equal(result.publicPreparation, false);
         if (scenario.h264Backup) assert.deepEqual(result.registeredCodecs, [['h264', 'vp8']]);
+        if (scenario.preparationFailure) {
+          assert.equal(result.injectedFailure, true);
+          assert.equal(result.stateCallback, true);
+        }
+        if (scenario.mismatchedCamera) {
+          assert.equal(result.cameraSettings.width, 480);
+          assert.equal(result.cameraSettings.height, 640);
+        }
         assert.equal(
           result.addTracks === 0,
-          scenario.singlePeerConnection && !scenario.legacy && !scenario.h264Backup,
+          scenario.singlePeerConnection &&
+            !scenario.legacy &&
+            !scenario.preparationFailure &&
+            scenario.kind === 'audio',
         );
       }
     } finally {

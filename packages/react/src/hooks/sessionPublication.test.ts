@@ -33,7 +33,7 @@ function setup() {
   });
   const capture = vi.spyOn(room.localParticipant, 'createTracks').mockReturnValue(captured.promise);
   vi.spyOn(room, 'disconnect').mockResolvedValue(undefined);
-  const connect = vi.fn(async (_connectRoom: Room['connect']) => {});
+  const connect = vi.fn<(connectRoom: Room['connect']) => Promise<void>>(async () => {});
   return {
     room,
     controller,
@@ -79,30 +79,25 @@ describe('Session publication startup', () => {
     expect(f.track.stop).not.toHaveBeenCalled();
     expect(f.cancel).toHaveBeenCalledOnce();
   });
-  it('prepares camera encodings from configured resolution without requesting the camera', async () => {
+  it('uses ordinary camera publication even with an ideal configured resolution', async () => {
     const f = setup();
     f.room.options.videoCaptureDefaults = {
       resolution: { width: 1280, height: 720, frameRate: 30 },
     };
-    const options = {
-      videoCodec: 'h264' as const,
-      simulcast: false,
-      videoEncoding: { maxBitrate: 700000 },
-    };
-    const starting = connectSessionWithTracks(
+    const options = { videoCodec: 'h264' as const, simulcast: false };
+    const camera = vi
+      .spyOn(f.room.localParticipant, 'setCameraEnabled')
+      .mockResolvedValue(undefined);
+    await connectSessionWithTracks(
       f.room,
       f.connect,
       { camera: { enabled: true, publishOptions: options } },
       f.controller.signal,
     );
-    expect(f.prepare).toHaveBeenCalledWith({
-      source: Track.Source.Camera,
-      format: { width: 1280, height: 720, frameRate: 30 },
-      publishOptions: options,
-    });
-    expect(f.capture).toHaveBeenCalledWith({ audio: false, video: true });
-    f.captured.resolve([f.track]);
-    await starting;
+    expect(f.prepare).not.toHaveBeenCalled();
+    expect(f.capture).not.toHaveBeenCalled();
+    expect(camera).toHaveBeenCalledWith(true, undefined, options);
+    expect(f.connect).toHaveBeenCalledOnce();
   });
   it('aborts startup promptly and stops a capture that resolves after end', async () => {
     const f = setup();
@@ -165,6 +160,37 @@ describe('Session publication startup', () => {
     await expect(starting).rejects.toThrow('publication rejected');
     expect(f.track.stop).toHaveBeenCalledOnce();
     expect(f.cancel).toHaveBeenCalledOnce();
+  });
+  it('stops Session-owned capture on publication timeout without an abort', async () => {
+    vi.useFakeTimers();
+    try {
+      const f = setup();
+      f.attachTrack.mockImplementation(
+        () =>
+          new Promise((_, reject) => {
+            setTimeout(
+              () => reject(new DOMException('publication timeout', 'TimeoutError')),
+              15000,
+            );
+          }),
+      );
+      const starting = connectSessionWithTracks(
+        f.room,
+        f.connect,
+        { microphone: { enabled: true } },
+        f.controller.signal,
+      );
+      const rejected = expect(starting).rejects.toThrow('publication timeout');
+      f.captured.resolve([f.track]);
+      await vi.advanceTimersByTimeAsync(15000);
+      await rejected;
+      expect(f.controller.signal.aborted).toBe(false);
+      expect(f.track.stop).toHaveBeenCalledOnce();
+      expect(f.room.disconnect).toHaveBeenCalledOnce();
+      expect(f.cancel).toHaveBeenCalledOnce();
+    } finally {
+      vi.useRealTimers();
+    }
   });
   it('does not capture disabled sources', async () => {
     const f = setup();
